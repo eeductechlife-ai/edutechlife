@@ -21,10 +21,10 @@ const NeuroEntornoPage = () => {
   return (
     <>
       <SEO
-        title={t('seo.neuroentorno.title')}
-        description={t('seo.neuroentorno.desc')}
+        title={t("seo.neuroentorno.title")}
+        description={t("seo.neuroentorno.desc")}
       />
-      <Suspense fallback={<PageLoader message="Cargando Neuro Entorno..." />}>
+      <Suspense fallback={<PageLoader message={t("page_loader.neuro")} />}>
         <NeuroEntorno onBack={handleBack} onNavigate={handleNavigate} />
       </Suspense>
     </>

@@ -1,0 +1,301 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 20
+
+jobs:
+  smoke:
+    name: Smoke Test (fast gate)
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    defaults:
+      run:
+        working-directory: edutechlife-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-frontend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-frontend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
+
+      - name: Cache Vite deps
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-frontend/node_modules/.vite
+          key: vite-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - run: npm run test:smoke
+      - run: npm run build -- --logLevel error
+        timeout-minutes: 5
+
+  lint:
+    name: Lint + Typecheck
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: edutechlife-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-frontend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-frontend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - run: npm run lint
+      - run: npm run typecheck
+
+  test:
+    name: Tests
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: edutechlife-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-frontend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-frontend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - run: npm test
+
+  security:
+    name: Security Audit
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: edutechlife-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-frontend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-frontend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: npm audit
+        run: npm audit --audit-level=critical || echo "::warning::Critical vulnerabilities found"
+
+  e2e:
+    name: E2E (Chromium)
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: edutechlife-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-frontend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-frontend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Start Vite dev server
+        run: npx vite --port 5174 &
+        timeout-minutes: 1
+
+      - name: Wait for dev server
+        run: |
+          for i in $(seq 1 30); do
+            curl -s -o /dev/null http://localhost:5174 && break
+            sleep 2
+          done
+
+      - name: Run E2E tests
+        run: npx playwright test --project=chromium
+
+  coverage:
+    name: Coverage Report
+    needs: [backend, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install backend deps
+        run: cd edutechlife-backend && npm ci
+
+      - name: Install frontend deps
+        run: cd edutechlife-frontend && npm ci
+
+      - name: Backend coverage
+        run: cd edutechlife-backend && npm run test:coverage
+
+      - name: Frontend coverage
+        run: cd edutechlife-frontend && npx vitest run --coverage --reporter=verbose 2>&1 | tail -20
+
+  lighthouse:
+    name: Lighthouse CI
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: edutechlife-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-frontend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-frontend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - run: npm run build -- --logLevel error
+
+      - name: Run Lighthouse CI
+        run: npx @lhci/cli@latest autorun
+        timeout-minutes: 5
+
+  budget:
+    name: Performance Budget
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: edutechlife-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-frontend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-frontend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - run: npm run build -- --logLevel error
+      - run: npm run check-budget
+
+  backend:
+    name: Backend Tests + Lint
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: edutechlife-backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-backend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-backend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-backend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - run: node -c src/index.js
+      - run: npm test

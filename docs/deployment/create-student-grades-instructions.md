@@ -3,7 +3,7 @@
 ## 📋 Pasos a seguir:
 
 ### 1. Ir a Supabase Dashboard
-- URL: https://app.supabase.com/project/srirrwpgswlnuqfgtule
+- URL: https://app.supabase.com/project/YOUR_PROJECT_REF
 - Iniciar sesión con las credenciales del proyecto
 
 ### 2. Abrir SQL Editor
@@ -226,7 +226,7 @@ WHERE tablename = 'student_grades';
 
 ### Variables de entorno necesarias (en `.env.local`):
 ```
-VITE_SUPABASE_URL=https://srirrwpgswlnuqfgtule.supabase.co
+VITE_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
 VITE_SUPABASE_ANON_KEY=tu_anon_key_aquí
 VITE_DEEPSEEK_API_KEY=tu_deepseek_api_key_aquí
 ```

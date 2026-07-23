@@ -1,11 +1,37 @@
 .vercel
 .github/deploy_key
 .github/deploy_key.pub
+
+# Environment variables — ALL variants
 .env
-.env.local
+.env.*
+!.env.example
+.envrc
+.envrc.*
+.flaskenv
 
 # Generated / runtime artifacts (should not be tracked)
 .claude-flow/data/
 .claude-flow/sessions/
 bundle-stats.html
 repomix-output.xml
+
+# Security credentials
+*.key
+*.pem
+*.crt
+*.cert
+*.p12
+*.pfx
+*.keystore
+*.jks
+id_rsa*
+id_ed25519*
+*.p8
+service-account*.json
+credentials*.json
+*.cred
+*.secret
+api-keys.json
+oauth-*.json
+token-*.json

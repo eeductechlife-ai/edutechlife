@@ -8,9 +8,9 @@
 
 ## 🚀 PASO 1: ACCEDER A SUPABASE DASHBOARD
 
-1. **Abre:** https://app.supabase.com/project/srirrwpgswlnuqfgtule
-2. **Inicia sesión** con tus credenciales
-3. **Verifica** que estás en el proyecto correcto: `srirrwpgswlnuqfgtule`
+1. **Abre:** https://app.supabase.com/project/YOUR_PROJECT_REF
+2. Inicia sesión con tus credenciales
+3. **Verifica** que estás en el proyecto correcto: `YOUR_PROJECT_REF`
 
 ## 🚀 PASO 2: NAVEGAR A JWT SETTINGS
 

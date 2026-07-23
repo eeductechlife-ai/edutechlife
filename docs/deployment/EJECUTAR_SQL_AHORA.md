@@ -16,7 +16,7 @@
 ## 🎯 ACCIÓN REQUERIDA AHORA
 
 ### PASO 1: Abrir Supabase Dashboard
-**URL:** https://app.supabase.com/project/srirrwpgswlnuqfgtule
+**URL:** https://app.supabase.com/project/YOUR_PROJECT_REF
 
 ### PASO 2: Ir a SQL Editor
 1. En el menú lateral, haz clic en **"SQL Editor"**
@@ -103,6 +103,6 @@ node scripts/quick-test.js
 
 **🎯 ¡EJECUTA EL SQL AHORA MISMO Y CONTINUAMOS CON CLERK JWT!**
 
-**URL para ejecutar:** https://app.supabase.com/project/srirrwpgswlnuqfgtule/sql
+**URL para ejecutar:** https://app.supabase.com/project/YOUR_PROJECT_REF/sql
 
 **Archivo a copiar:** `IALAB_PREMIUM_SCHEMA_ADAPTADO.sql`

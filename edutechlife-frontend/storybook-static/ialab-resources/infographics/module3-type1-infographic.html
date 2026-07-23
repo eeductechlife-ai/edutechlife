@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casos de Uso en la Industria - IALab EdutechLife</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); min-height: 100vh; padding: 20px; }
+        .infographic { max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 8px 32px rgba(45, 122, 148, 0.12); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #66CCCC 0%, #B2D8E5 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+        .header .subtitle { font-size: 14px; opacity: 0.9; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section-title { font-family: 'Montserrat', sans-serif; color: #2D7A94; font-size: 18px; font-weight: 600; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #B2D8E5; }
+        .industry-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .industry-card { background: linear-gradient(135deg, #f8fbfe 0%, #e8f4f8 100%); border-radius: 12px; padding: 20px; border: 1px solid #B2D8E5; transition: all 0.3s ease; }
+        .industry-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(102, 204, 204, 0.2); }
+        .industry-icon { font-size: 36px; margin-bottom: 12px; }
+        .industry-card h4 { font-family: 'Montserrat', sans-serif; color: #2D7A94; font-size: 14px; margin-bottom: 10px; }
+        .industry-card ul { padding-left: 18px; color: #5a6c7d; font-size: 12px; line-height: 1.8; }
+        .use-cases { background: #f0f9f9; border-radius: 12px; padding: 25px; margin-top: 20px; }
+        .use-case { display: flex; align-items: center; margin-bottom: 15px; padding: 12px; background: white; border-radius: 8px; }
+        .use-case-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #66CCCC, #B2D8E5); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 15px; }
+        .use-case-content h5 { color: #2D7A94; font-family: 'Montserrat', sans-serif; font-size: 13px; margin-bottom: 4px; }
+        .use-case-content p { color: #5a6c7d; font-size: 12px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .stat-box { background: linear-gradient(135deg, #e8f4f8 0%, #f5fafc 100%); padding: 20px; border-radius: 12px; text-align: center; }
+        .stat-number { font-family: 'Montserrat', sans-serif; font-size: 28px; font-weight: 700; color: #2D7A94; }
+        .stat-label { font-size: 11px; color: #5a6c7d; margin-top: 5px; }
+        .footer { background: #f8fbfe; padding: 20px 30px; text-align: center; border-top: 1px solid #e8f0f5; }
+        .footer p { color: #5a6c7d; font-size: 12px; }
+        .footer .brand { font-family: 'Montserrat', sans-serif; color: #2D7A94; font-weight: 600; }
+        @media (max-width: 768px) { .industry-grid, .stats-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="infographic">
+        <div class="header">
+            <h1>Casos de Uso en la Industria</h1>
+            <div class="subtitle">Módulo 3: Aplicaciones Prácticas • IALab EdutechLife</div>
+        </div>
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">🏭 Aplicaciones por Sector</h2>
+                <div class="industry-grid">
+                    <div class="industry-card">
+                        <div class="industry-icon">🏥</div>
+                        <h4>Salud</h4>
+                        <ul>
+                            <li>Diagnóstico辅助</li>
+                            <li>Análisis de imágenes médicas</li>
+                            <li>Chatbots de triage</li>
+                            <li>Investigación de fármacos</li>
+                        </ul>
+                    </div>
+                    <div class="industry-card">
+                        <div class="industry-icon">🏦</div>
+                        <h4>Finanzas</h4>
+                        <ul>
+                            <li>Detección de fraude</li>
+                            <li>Análisis de riesgo crediticio</li>
+                            <li>Predicción de mercados</li>
+                            <li>Asesores virtuales</li>
+                        </ul>
+                    </div>
+                    <div class="industry-card">
+                        <div class="industry-icon">🛒</div>
+                        <h4>E-commerce</h4>
+                        <ul>
+                            <li>Recomendaciones personalizadas</li>
+                            <li>Chatbots de venta</li>
+                            <li>Optimización de inventario</li>
+                            <li>Personalización de contenido</li>
+                        </ul>
+                    </div>
+                    <div class="industry-card">
+                        <div class="industry-icon">🎓</div>
+                        <h4>Educación</h4>
+                        <ul>
+                            <li>Tutores inteligentes</li>
+                            <li>Generación de contenido</li>
+                            <li>Evaluación automática</li>
+                            <li>Adaptación al estudiante</li>
+                        </ul>
+                    </div>
+                    <div class="industry-card">
+                        <div class="industry-icon">🎬</div>
+                        <h4>Marketing</h4>
+                        <ul>
+                            <li>Copywriting automatizado</li>
+                            <li>Segmentación de audiencia</li>
+                            <li>Análisis de sentimiento</li>
+                            <li>Generación de imágenes</li>
+                        </ul>
+                    </div>
+                    <div class="industry-card">
+                        <div class="industry-icon">🏭</div>
+                        <h4>Manufactura</h4>
+                        <ul>
+                            <li>Predictive maintenance</li>
+                            <li>Control de calidad</li>
+                            <li>Optimización de procesos</li>
+                            <li>Diseño de productos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2 class="section-title">📈 Impacto y Estadísticas</h2>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">40%</div>
+                        <div class="stat-label">Reducción de costos</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">3x</div>
+                        <div class="stat-label">Aumento en productividad</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">85%</div>
+                        <div class="stat-label">Precisión en diagnósticos</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Disponibilidad</div>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2 class="section-title">💼 Casos de Éxito</h2>
+                <div class="use-cases">
+                    <div class="use-case">
+                        <div class="use-case-icon">🏥</div>
+                        <div class="use-case-content">
+                            <h5>Mayo Clinic - Diagnóstico辅助</h5>
+                            <p>IA que asiste a médicos con 95% de precisión en detección de enfermedades</p>
+                        </div>
+                    </div>
+                    <div class="use-case">
+                        <div class="use-case-icon">🏦</div>
+                        <div class="use-case-content">
+                            <h5>JPMorgan - COIN</h5>
+                            <p>Sistema que analiza documentos legales en segundos, reduciendo 360,000 horas de trabajo</p>
+                        </div>
+                    </div>
+                    <div class="use-case">
+                        <div class="use-case-icon">🛒</div>
+                        <div class="use-case-content">
+                            <h5>Amazon - Recomendaciones</h5>
+                            <p>35% de ventas derivadas del sistema de recomendaciones con IA</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p><span class="brand">IALab</span> • Inteligencia Artificial Aplicada • 12 Horas • <span class="brand">EdutechLife</span></p>
+        </div>
+    </div>
+</body>
+</html>

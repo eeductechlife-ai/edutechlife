@@ -1,4 +1,5 @@
 const request = require('supertest');
+const express = require('express');
 const app = require('../../app');
 
 describe('GET /api/stripe/plans', () => {
@@ -31,6 +32,14 @@ describe('POST /api/stripe/create-checkout-session', () => {
     expect(res.status).toBe(401);
     expect(res.body.error).toContain('token');
   });
+
+  it('returns 401 with invalid auth token and no planId', async () => {
+    const res = await request(app)
+      .post('/api/stripe/create-checkout-session')
+      .set('Authorization', 'Bearer invalid-token')
+      .send({});
+    expect(res.status).toBe(401);
+  });
 });
 
 describe('POST /api/stripe/webhook', () => {
@@ -41,5 +50,20 @@ describe('POST /api/stripe/webhook', () => {
       .send({ type: 'checkout.session.completed' });
     expect(res.status).toBe(200);
     expect(res.body.received).toBe(true);
+  });
+
+  it('returns 200 for missing stripe config', async () => {
+    const originalKey = process.env.STRIPE_SECRET_KEY;
+    delete process.env.STRIPE_SECRET_KEY;
+
+    const res = await request(app)
+      .post('/api/stripe/webhook')
+      .set('Content-Type', 'application/json')
+      .send({ type: 'checkout.session.completed' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.received).toBe(true);
+
+    if (originalKey) process.env.STRIPE_SECRET_KEY = originalKey;
   });
 });

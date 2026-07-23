@@ -30,4 +30,11 @@ describe('requireAuth via HTTP', () => {
     expect(res.status).toBe(401);
     expect(res.body.error).toBe('Token inválido o expirado');
   });
+
+  it('returns 401 when auth header is empty', async () => {
+    const res = await request(testApp)
+      .get('/api/protected')
+      .set('Authorization', '');
+    expect(res.status).toBe(401);
+  });
 });

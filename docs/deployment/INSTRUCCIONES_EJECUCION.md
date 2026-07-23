@@ -28,7 +28,7 @@ Has implementado un **sistema Premium SaaS completo** para IALab que incluye:
 
 1. Ve a **Supabase Dashboard**:
    ```
-   https://app.supabase.com/project/srirrwpgswlnuqfgtule
+    https://app.supabase.com/project/YOUR_PROJECT_REF
    ```
 
 2. Navega a **Settings → API**

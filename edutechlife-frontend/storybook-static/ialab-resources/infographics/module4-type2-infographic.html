@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Evaluación y Certificación - IALab EdutechLife</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); min-height: 100vh; padding: 20px; }
+        .infographic { max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 8px 32px rgba(45, 122, 148, 0.12); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #B2D8E5 0%, #2D7A94 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+        .header .subtitle { font-size: 14px; opacity: 0.9; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section-title { font-family: 'Montserrat', sans-serif; color: #2D7A94; font-size: 18px; font-weight: 600; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #B2D8E5; }
+        .eval-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+        .eval-module { background: linear-gradient(135deg, #e8f4f8 0%, #f5fafc 100%); border-radius: 12px; padding: 20px; text-align: center; border: 2px solid #B2D8E5; }
+        .eval-module.completed { background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-color: #28a745; }
+        .eval-module.active { background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%); border-color: #ffc107; }
+        .module-num { font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 700; color: #2D7A94; margin-bottom: 8px; }
+        .eval-module.completed .module-num { color: #28a745; }
+        .eval-module.active .module-num { color: #d39e00; }
+        .module-name { font-family: 'Montserrat', sans-serif; font-size: 12px; color: #5a6c7d; margin-bottom: 8px; }
+        .module-status { font-size: 11px; font-weight: 600; }
+        .eval-module.completed .module-status { color: #28a745; }
+        .eval-module.active .module-status { color: #d39e00; }
+        .eval-module .module-status { color: #6c757d; }
+        .process-steps { display: flex; gap: 10px; margin: 20px 0; }
+        .step { flex: 1; background: #f8fbfe; border-radius: 10px; padding: 15px; text-align: center; border: 1px solid #e8f0f5; }
+        .step-num { width: 28px; height: 28px; background: linear-gradient(135deg, #2D7A94, #4DA8C4); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px; margin: 0 auto 8px; }
+        .step p { font-size: 11px; color: #5a6c7d; }
+        .requirements { background: linear-gradient(135deg, #f0f9f9 0%, #e8f8f8 100%); border-radius: 12px; padding: 20px; }
+        .requirements h4 { font-family: 'Montserrat', sans-serif; color: #2D7A94; margin-bottom: 15px; font-size: 14px; }
+        .req-item { display: flex; align-items: center; margin-bottom: 12px; }
+        .req-icon { width: 24px; height: 24px; background: #66CCCC; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 12px; }
+        .req-item span { color: #5a6c7d; font-size: 13px; }
+        .certificate { background: linear-gradient(135deg, #2D7A94, #4DA8C4); border-radius: 12px; padding: 30px; text-align: center; color: white; margin-top: 20px; }
+        .certificate h4 { font-family: 'Montserrat', sans-serif; font-size: 18px; margin-bottom: 10px; }
+        .certificate p { font-size: 13px; opacity: 0.9; }
+        .certificate .badge { font-size: 48px; margin-bottom: 15px; }
+        .footer { background: #f8fbfe; padding: 20px 30px; text-align: center; border-top: 1px solid #e8f0f5; }
+        .footer p { color: #5a6c7d; font-size: 12px; }
+        .footer .brand { font-family: 'Montserrat', sans-serif; color: #2D7A94; font-weight: 600; }
+        @media (max-width: 768px) { .eval-grid, .process-steps { grid-template-columns: 1fr; flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="infographic">
+        <div class="header">
+            <h1>Guía de Evaluación y Certificación</h1>
+            <div class="subtitle">Módulo 4: Proyecto Final • IALab EdutechLife</div>
+        </div>
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">📊 Estado de Evaluaciones por Módulo</h2>
+                <div class="eval-grid">
+                    <div class="eval-module completed">
+                        <div class="module-num">1</div>
+                        <div class="module-name">Fundamentos de IA</div>
+                        <div class="module-status">✓ Completada</div>
+                    </div>
+                    <div class="eval-module completed">
+                        <div class="module-num">2</div>
+                        <div class="module-name">Técnicas Avanzadas</div>
+                        <div class="module-status">✓ Completada</div>
+                    </div>
+                    <div class="eval-module completed">
+                        <div class="module-num">3</div>
+                        <div class="module-name">Aplicaciones Prácticas</div>
+                        <div class="module-status">✓ Completada</div>
+                    </div>
+                    <div class="eval-module active">
+                        <div class="module-num">4</div>
+                        <div class="module-name">Proyecto Final</div>
+                        <div class="module-status">⏳ En progreso</div>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2 class="section-title">🎯 Proceso de Certificación</h2>
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <p>Completa las 4 evaluaciones (60% c/u)</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <p>Entrega tu proyecto final</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <p>Recibe retroalimentación</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <p>Descarga tu certificado</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2 class="section-title">📋 Requisitos para Certificación</h2>
+                <div class="requirements">
+                    <h4>Para obtener tu certificado necesitas:</h4>
+                    <div class="req-item"><div class="req-icon">✓</div><span>Completar las 4 evaluaciones de módulo (mín. 60% c/u)</span></div>
+                    <div class="req-item"><div class="req-icon">✓</div><span>Entregar el proyecto final del Módulo 4</span></div>
+                    <div class="req-item"><div class="req-icon">✓</div><span>Haber interactuado con el laboratorio de prompts</span></div>
+                    <div class="req-item"><div class="req-icon">✓</div><span>Llenar la encuesta de satisfacción</div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="certificate">
+                    <div class="badge">🏆</div>
+                    <h4>¡Felicidades! Tu Certificado</h4>
+                    <p>Al completar todos los requisitos, recibirás tu certificado digital de completion del curso IALab - Inteligencia Artificial Aplicada de EdutechLife.</p>
+                    <p style="margin-top: 10px; font-size: 12px;">Incluye ID único y verificación online</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p><span class="brand">IALab</span> • Inteligencia Artificial Aplicada • 12 Horas • <span class="brand">EdutechLife</span></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -200,7 +200,7 @@ El JWT debe contener:
 
 ## CONTACTOS
 
-- **Supabase Project:** `srirrwpgswlnuqfgtule`
+- **Supabase Project:** `YOUR_PROJECT_REF`
 - **Clerk Template:** `'supabase'` (name, no ID)
 - **Archivo SQL:** `IALAB_PREMIUM_SCHEMA_ADAPTADO.sql`
 - **Hook principal:** `useSupabase()` en `src/hooks/useSupabase.js`

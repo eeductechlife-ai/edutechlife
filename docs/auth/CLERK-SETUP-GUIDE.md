@@ -47,20 +47,20 @@ npm install -g supabase
 ### 3.2 Deploy de la función
 ```bash
 cd /Users/home/Desktop/edutechlife
-npx supabase functions deploy clerk-webhook --project-ref srirrwpgswlnuqfgtule
+npx supabase functions deploy clerk-webhook --project-ref YOUR_PROJECT_REF
 ```
 
 ### 3.3 Configurar variables de entorno en Supabase
 
-Ir a [Supabase Dashboard → Settings → Edge Functions](https://supabase.com/dashboard/project/srirrwpgswlnuqfgtule/settings/functions)
+Ir a [Supabase Dashboard → Settings → Edge Functions](https://supabase.com/dashboard/project/YOUR_PROJECT_REF/settings/functions)
 
 Agregar las siguientes variables:
 
 | Variable | Valor |
 |----------|-------|
-| `SUPABASE_URL` | `https://srirrwpgswlnuqfgtule.supabase.co` |
+| `SUPABASE_URL` | `https://YOUR-PROJECT.supabase.co` |
 | `SUPABASE_SERVICE_ROLE_KEY` | La Service Role Key de Supabase (se encuentra en Settings → API) |
-| `CLERK_WEBHOOK_SECRET` | `whsec_...` (se obtiene después de crear el webhook en Clerk, Paso 4) |
+| `CLERK_WEBHOOK_SECRET` | `whsec_YOUR_WEBHOOK_SECRET` (se obtiene después de crear el webhook en Clerk, Paso 4) |
 
 ---
 
@@ -70,7 +70,7 @@ Agregar las siguientes variables:
 2. Click en **Webhooks** en el menú lateral
 3. Click en **Add Endpoint**
 4. Configurar:
-   - **Endpoint URL:** `https://srirrwpgswlnuqfgtule.supabase.co/functions/v1/clerk-webhook`
+   - **Endpoint URL:** `https://YOUR-PROJECT.supabase.co/functions/v1/clerk-webhook`
    - **Events:** Seleccionar solo `user.created`
 5. Click en **Create**
 6. Copiar el **Signing Secret** que aparece (empieza con `whsec_`)

@@ -3772,6 +3772,25 @@ export type TranslationKeys = {
   "welcome.signin_title": string;
   "welcome.signup_subtitle": string;
   "welcome.signup_title": string;
+
+  "nav.close_aria": string;
+  "nav.home_desc": string;
+  "notfound.button": string;
+  "esencia.carousel_aria": string;
+  "esencia.slide_prev_aria": string;
+  "esencia.slide_next_aria": string;
+  "aliados.marquee_aria": string;
+  "loading.status_start": string;
+  "loading.status_vak": string;
+  "loading.status_ai": string;
+  "loading.status_done": string;
+  "loading.feature_ai": string;
+  "loading.feature_vak": string;
+  "loading.feature_cert": string;
+  "page_loader.vak": string;
+  "page_loader.admin": string;
+  "page_loader.auth": string;
+  "page_loader.permisos": string;
 };
 
 export type TranslationKey = keyof TranslationKeys;
@@ -7553,4 +7572,23 @@ const translationKeySet: Record<string, true> = {
   "welcome.signin_title": true,
   "welcome.signup_subtitle": true,
   "welcome.signup_title": true,
+
+  "nav.close_aria": true,
+  "nav.home_desc": true,
+  "notfound.button": true,
+  "esencia.carousel_aria": true,
+  "esencia.slide_prev_aria": true,
+  "esencia.slide_next_aria": true,
+  "aliados.marquee_aria": true,
+  "loading.status_start": true,
+  "loading.status_vak": true,
+  "loading.status_ai": true,
+  "loading.status_done": true,
+  "loading.feature_ai": true,
+  "loading.feature_vak": true,
+  "loading.feature_cert": true,
+  "page_loader.vak": true,
+  "page_loader.admin": true,
+  "page_loader.auth": true,
+  "page_loader.permisos": true,
 };

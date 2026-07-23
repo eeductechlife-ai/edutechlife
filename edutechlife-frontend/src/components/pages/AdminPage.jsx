@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { useAuth } from "@clerk/react";
 import { useNavigate } from "react-router-dom";
 import { PageLoader } from "../LoadingScreen";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const AdminDashboard = lazy(() => import("../adminDashboard"));
 
@@ -12,6 +13,7 @@ const AdminDashboard = lazy(() => import("../adminDashboard"));
  * Protegida: Requiere autenticación + rol 'admin'
  */
 const AdminPage = () => {
+  const { t } = useTranslation();
   const { signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -25,7 +27,7 @@ const AdminPage = () => {
   };
 
   return (
-    <Suspense fallback={<PageLoader message="Cargando Admin Dashboard..." />}>
+    <Suspense fallback={<PageLoader message={t("page_loader.admin")} />}>
       <AdminDashboard onLogout={handleLogout} onBack={handleBack} />
     </Suspense>
   );

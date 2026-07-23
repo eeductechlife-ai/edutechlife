@@ -168,7 +168,7 @@ const Aliados = memo(() => {
             <div
               className="flex gap-4 py-2"
               role="list"
-              aria-label="Logos de aliados"
+              aria-label={t("aliados.marquee_aria")}
               style={{
                 animation: isPaused ? "none" : "marquee 40s linear infinite",
               }}

@@ -4,14 +4,14 @@
 
 ### 1. Acceso a Dashboards
 - **Clerk Dashboard**: https://dashboard.clerk.com
-- **Supabase Dashboard**: https://app.supabase.com/project/srirrwpgswlnuqfgtule
+- **Supabase Dashboard**: https://app.supabase.com/project/YOUR_PROJECT_REF
 
 ### 2. Credenciales Actuales (del archivo `.env.local`)
 ```
-VITE_CLERK_PUBLISHABLE_KEY=pk_test_c3RhYmxlLW1pbmstNzEuY2xlcmsuYWNjb3VudHMuZGV2JA
-VITE_CLERK_SECRET_KEY=sk_test_***_REEMPLAZA_CON_TU_CLAVE_REAL
-VITE_SUPABASE_URL=https://srirrwpgswlnuqfgtule.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyaXJyd3Bnc3dsbnVxZmd0dWxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNTE5MjcsImV4cCI6MjA5MDkyNzkyN30.ElxGbhsfncV2m3OVr3P5X3HqAfwGMbAOGBEGzKqRV0A
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_YOUR_PUBLISHABLE_KEY_HERE
+VITE_CLERK_SECRET_KEY=sk_test_YOUR_SECRET_KEY_HERE
+VITE_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 ```
 
 ## 🚀 PASO 1: Configurar JWT Template en Clerk
@@ -48,7 +48,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 ## 🚀 PASO 2: Configurar JWT en Supabase
 
 ### 2.1 Ir a Supabase Dashboard
-1. Accede a https://app.supabase.com/project/srirrwpgswlnuqfgtule
+1. Accede a https://app.supabase.com/project/YOUR_PROJECT_REF
 2. Ve a **Authentication** → **Providers**
 3. Busca **JWT Settings**
 

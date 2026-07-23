@@ -475,4 +475,48 @@ describe('GET /api/ialab/resources', () => {
       expect(r.type).toBe('pdf');
     }
   });
+
+  it('returns all resources when moduleId has no matches', async () => {
+    const res = await request(app).get('/api/ialab/resources?moduleId=nonexistent');
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
 });
+
+describe('POST /api/ialab/prompts with mocked deepseek', () => {
+  const mockChat = vi.fn();
+
+  function createMockedApp() {
+    const deepseekPath = require.resolve('../../services/deepseek');
+    const ialabPath = require.resolve('../../routes/ialab');
+    delete require.cache[deepseekPath];
+    delete require.cache[ialabPath];
+    require.cache[deepseekPath] = {
+      id: deepseekPath,
+      filename: deepseekPath,
+      loaded: true,
+      exports: {
+        chat: mockChat,
+        validateMessages: () => null,
+        chatStream: () => {},
+        buildPayload: () => {},
+        fetchWithRetry: () => {},
+      },
+    };
+    const app = express();
+    app.use(express.json({ limit: '1mb' }));
+    app.use('/api/ialab', require('../../routes/ialab'));
+    return app;
+  }
+
+  it('returns 400 when deepseek returns error in response', async () => {
+    mockChat.mockResolvedValue({ error: { message: 'Rate limit exceeded' } });
+    const res = await request(createMockedApp())
+      .post('/api/ialab/prompts')
+      .send({ prompt: 'test prompt' });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('Rate limit');
+  });
+});
+
+

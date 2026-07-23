@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metodología de Proyectos IA - IALab EdutechLife</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%); min-height: 100vh; padding: 20px; }
+        .infographic { max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 8px 32px rgba(45, 122, 148, 0.12); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #66CCCC 0%, #B2D8E5 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+        .header .subtitle { font-size: 14px; opacity: 0.9; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 30px; }
+        .section-title { font-family: 'Montserrat', sans-serif; color: #2D7A94; font-size: 18px; font-weight: 600; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #B2D8E5; }
+        .phases { display: flex; gap: 10px; margin: 20px 0; }
+        .phase { flex: 1; background: linear-gradient(135deg, #e8f4f8 0%, #f5fafc 100%); border-radius: 12px; padding: 20px 15px; text-align: center; border: 2px solid #B2D8E5; }
+        .phase-num { width: 32px; height: 32px; background: linear-gradient(135deg, #2D7A94, #4DA8C4); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; margin: 0 auto 10px; }
+        .phase h4 { font-family: 'Montserrat', sans-serif; color: #2D7A94; font-size: 12px; margin-bottom: 8px; }
+        .phase p { color: #5a6c7d; font-size: 11px; line-height: 1.5; }
+        .step-list { list-style: none; }
+        .step-item { display: flex; align-items: flex-start; margin-bottom: 15px; padding: 15px; background: #f8fbfe; border-radius: 10px; border-left: 3px solid #66CCCC; }
+        .step-item .icon { font-size: 24px; margin-right: 12px; }
+        .step-item h5 { font-family: 'Montserrat', sans-serif; color: #2D7A94; font-size: 13px; margin-bottom: 4px; }
+        .step-item p { color: #5a6c7d; font-size: 12px; }
+        .checklist { background: linear-gradient(135deg, #f0f9f9 0%, #e8f8f8 100%); border-radius: 12px; padding: 20px; }
+        .checklist h4 { font-family: 'Montserrat', sans-serif; color: #2D7A94; margin-bottom: 15px; font-size: 14px; }
+        .check-item { display: flex; align-items: center; margin-bottom: 10px; }
+        .check-box { width: 20px; height: 20px; border: 2px solid #66CCCC; border-radius: 4px; margin-right: 12px; display: flex; align-items: center; justify-content: center; color: #66CCCC; }
+        .check-item span { color: #5a6c7d; font-size: 13px; }
+        .tip-box { background: linear-gradient(135deg, #fff8e8 0%, #fff5dc 100%); border-radius: 12px; padding: 20px; border-left: 4px solid #f39c12; }
+        .tip-box h4 { font-family: 'Montserrat', sans-serif; color: #f39c12; font-size: 14px; margin-bottom: 10px; }
+        .tip-box p { color: #5a6c7d; font-size: 13px; line-height: 1.6; }
+        .footer { background: #f8fbfe; padding: 20px 30px; text-align: center; border-top: 1px solid #e8f0f5; }
+        .footer p { color: #5a6c7d; font-size: 12px; }
+        .footer .brand { font-family: 'Montserrat', sans-serif; color: #2D7A94; font-weight: 600; }
+        @media (max-width: 768px) { .phases { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="infographic">
+        <div class="header">
+            <h1>Metodología de Proyectos IA</h1>
+            <div class="subtitle">Módulo 3: Aplicaciones Prácticas • IALab EdutechLife</div>
+        </div>
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">📊 Las 5 Fases del Proyecto</h2>
+                <div class="phases">
+                    <div class="phase">
+                        <div class="phase-num">1</div>
+                        <h4>Definición</h4>
+                        <p>Identificar problema y objetivos</p>
+                    </div>
+                    <div class="phase">
+                        <div class="phase-num">2</div>
+                        <h4>Datos</h4>
+                        <p>Recopilar y preparar datos</p>
+                    </div>
+                    <div class="phase">
+                        <div class="phase-num">3</div>
+                        <h4>Modelo</h4>
+                        <p>Entrenar y validar modelo</p>
+                    </div>
+                    <div class="phase">
+                        <div class="phase-num">4</div>
+                        <h4>Despliegue</h4>
+                        <p>Implementar en producción</p>
+                    </div>
+                    <div class="phase">
+                        <div class="phase-num">5</div>
+                        <h4>Mantenimiento</h4>
+                        <p>Monitorear y mejorar</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2 class="section-title">🔍 Detalle de cada Fase</h2>
+                <ul class="step-list">
+                    <li class="step-item">
+                        <div class="icon">📌</div>
+                        <div>
+                            <h5>Fase 1: Definición del Problema</h5>
+                            <p>Define el problema a resolver, establece KPIs claros, identifica restricciones y recursos disponibles.</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="icon">📁</div>
+                        <div>
+                            <h5>Fase 2: Recopilación de Datos</h5>
+                            <p>Identifica fuentes de datos, limpia y normaliza datos, crea conjuntos de entrenamiento y prueba.</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="icon">🤖</div>
+                        <div>
+                            <h5>Fase 3: Desarrollo del Modelo</h5>
+                            <p>Selecciona algoritmos, entrena el modelo, evalúa resultados y ajusta hiperparámetros.</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="icon">🚀</div>
+                        <div>
+                            <h5>Fase 4: Despliegue</h5>
+                            <p>Configura infraestructura, implementa API, integra con sistemas existentes.</p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="icon">📈</div>
+                        <div>
+                            <h5>Fase 5: Monitoreo y Mantenimiento</h5>
+                            <p>Monitorea performance, detecta drift, reentrena modelo periódicamente.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="section">
+                <h2 class="section-title">✅ Checklist de Proyecto</h2>
+                <div class="checklist">
+                    <h4>Antes de comenzar tu proyecto:</h4>
+                    <div class="check-item"><div class="check-box">✓</div><span>Tengo un problema claro y medible</span></div>
+                    <div class="check-item"><div class="check-box">✓</div><span>Identifiqué los datos necesarios</span></div>
+                    <div class="check-item"><div class="check-box">✓</div><span>Tengo acceso a las herramientas</span></div>
+                    <div class="check-item"><div class="check-box">✓</div><span>Definí métricas de éxito</span></div>
+                    <div class="check-item"><div class="check-box">✓</div><span>Tengo el tiempo estimado</span></div>
+                    <div class="check-item"><div class="check-box">✓</div><span>Identifiqué stakeholders</span></div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="tip-box">
+                    <h4>💡 Consejo Professional</h4>
+                    <p>Comienza con un MVP (Minimum Viable Product). No intentes resolver todo desde el principio. Es mejor iterar rápidamente con versiones pequeñas que fallar en un proyecto ambicioso.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p><span class="brand">IALab</span> • Inteligencia Artificial Aplicada • 12 Horas • <span class="brand">EdutechLife</span></p>
+        </div>
+    </div>
+</body>
+</html>

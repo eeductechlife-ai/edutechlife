@@ -1,0 +1,1 @@
+const o="focus:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2 transition-all",r="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-corporate/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)]";export{o as F,r as G};

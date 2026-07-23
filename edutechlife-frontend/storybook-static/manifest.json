@@ -1,0 +1,21 @@
+{
+  "name": "Edutechlife",
+  "short_name": "Edutechlife",
+  "description": "Edutechlife — Leading the Future of Education with Pedagogy and AI. Educación del Futuro con Pedagogía e Inteligencia Artificial.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#004B63",
+  "orientation": "any",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "technology"],
+  "prefer_related_applications": false
+}

@@ -1,0 +1,216 @@
+{
+  "gpt_configuration": {
+    "metadata": {
+      "template_name": "GPT Configuration Template Pro",
+      "module": "2 - Potencia ChatGPT",
+      "version": "2.0",
+      "created_by": "EdutechLife IALab",
+      "corporate_color": "#66CCCC",
+      "last_updated": "2024-01-15"
+    },
+    
+    "basic_configuration": {
+      "name": "Nombre_del_GPT",
+      "description": "Descripción clara del propósito y funcionalidad",
+      "instructions": {
+        "role": "Especificar el rol principal del GPT",
+        "expertise_level": "Nivel de experiencia (Principiante, Intermedio, Experto)",
+        "communication_style": "Estilo de comunicación (Formal, Casual, Técnico, Empático)",
+        "tone": "Tono general (Profesional, Amigable, Autoritativo, Motivacional)"
+      },
+      "capabilities": [
+        "Capacidad 1: Descripción detallada",
+        "Capacidad 2: Descripción detallada",
+        "Capacidad 3: Descripción detallada"
+      ],
+      "limitations": [
+        "Limitación 1: Áreas donde no debe operar",
+        "Limitación 2: Restricciones éticas o legales",
+        "Limitación 3: Limitaciones técnicas"
+      ]
+    },
+    
+    "advanced_features": {
+      "knowledge_base": {
+        "uploaded_files": [
+          {
+            "filename": "documento.pdf",
+            "purpose": "Para qué se usa este documento",
+            "coverage": "Qué áreas cubre"
+          }
+        ],
+        "web_browsing": {
+          "enabled": true,
+          "domains_allowed": ["dominio1.com", "dominio2.com"],
+          "search_parameters": {
+            "depth": "profundidad de búsqueda",
+            "recency": "actualidad de la información"
+          }
+        }
+      },
+      
+      "function_calling": {
+        "enabled": true,
+        "available_functions": [
+          {
+            "name": "nombre_funcion",
+            "description": "Qué hace la función",
+            "parameters": {
+              "param1": "tipo y descripción",
+              "param2": "tipo y descripción"
+            },
+            "return_type": "qué devuelve",
+            "use_case": "cuándo se debe usar"
+          }
+        ]
+      },
+      
+      "custom_actions": [
+        {
+          "trigger": "Evento o condición que activa la acción",
+          "action": "Qué hace el GPT",
+          "parameters": "Parámetros necesarios",
+          "output": "Resultado esperado"
+        }
+      ]
+    },
+    
+    "conversation_flow": {
+      "greeting_message": "Mensaje inicial cuando un usuario inicia conversación",
+      "fallback_responses": [
+        "Respuesta cuando no entiende: 'Respuesta 1'",
+        "Respuesta cuando no puede ayudar: 'Respuesta 2'",
+        "Respuesta para preguntas fuera de alcance: 'Respuesta 3'"
+      ],
+      "escalation_protocol": {
+        "when_to_escalate": "Condiciones para escalar a humano",
+        "escalation_message": "Mensaje al usuario durante escalación",
+        "handoff_procedure": "Procedimiento de transferencia"
+      }
+    },
+    
+    "performance_metrics": {
+      "quality_metrics": {
+        "accuracy_target": 95,
+        "response_time_target": "30 segundos",
+        "user_satisfaction_target": 90,
+        "completion_rate_target": 85
+      },
+      "monitoring": {
+        "logs_enabled": true,
+        "analytics_tracked": [
+          "número_de_conversaciones",
+          "temas_más_comunes",
+          "tasa_de_resolución",
+          "feedback_usuario"
+        ],
+        "alert_thresholds": {
+          "error_rate": 5,
+          "timeout_rate": 10,
+          "escalation_rate": 15
+        }
+      }
+    },
+    
+    "training_data": {
+      "example_conversations": [
+        {
+          "user_input": "Ejemplo de entrada de usuario",
+          "ideal_response": "Respuesta ideal del GPT",
+          "context": "Contexto de la conversación",
+          "difficulty_level": "Fácil/Medio/Difícil"
+        }
+      ],
+      "edge_cases": [
+        {
+          "scenario": "Caso límite o situación difícil",
+          "handling_strategy": "Cómo debe manejarlo el GPT",
+          "expected_outcome": "Resultado esperado"
+        }
+      ]
+    },
+    
+    "compliance_and_ethics": {
+      "data_privacy": {
+        "gdr_compliant": true,
+        "data_retention_policy": "Política de retención de datos",
+        "user_consent_required": true
+      },
+      "ethical_guidelines": [
+        "No generar contenido dañino o peligroso",
+        "Respetar derechos de autor",
+        "Evitar sesgos en las respuestas",
+        "Transparencia sobre limitaciones"
+      ],
+      "content_moderation": {
+        "filters_enabled": true,
+        "blocked_topics": ["lista de temas bloqueados"],
+        "sensitive_content_handling": "Cómo manejar contenido sensible"
+      }
+    },
+    
+    "deployment_configuration": {
+      "environment": "Producción/Pruebas/Desarrollo",
+      "access_control": {
+        "public_access": true,
+        "authentication_required": false,
+        "user_roles": ["roles permitidos"]
+      },
+      "scaling": {
+        "max_concurrent_users": 100,
+        "auto_scaling_enabled": true,
+        "performance_tiers": ["niveles de rendimiento"]
+      }
+    },
+    
+    "maintenance_and_updates": {
+      "update_schedule": "Frecuencia de actualizaciones",
+      "versioning_policy": "Política de versionado",
+      "backup_procedure": "Procedimiento de backup",
+      "rollback_plan": "Plan de reversión en caso de problemas"
+    },
+    
+    "documentation": {
+      "user_guide": "URL o referencia a guía de usuario",
+      "api_documentation": "URL de documentación API",
+      "troubleshooting_guide": "Guía de solución de problemas",
+      "contact_support": "Información de contacto de soporte"
+    }
+  },
+  
+  "examples": {
+    "marketing_gpt": {
+      "name": "Asistente de Marketing Digital",
+      "description": "GPT especializado en estrategias de marketing digital y análisis de campañas",
+      "instructions": "Eres un experto en marketing digital con 8 años de experiencia. Ayudas a empresas a optimizar sus campañas publicitarias, analizar métricas y desarrollar estrategias de crecimiento.",
+      "capabilities": [
+        "Análisis de métricas de campañas",
+        "Optimización de presupuestos publicitarios",
+        "Creación de estrategias de contenido",
+        "Análisis de competencia"
+      ]
+    },
+    
+    "technical_support_gpt": {
+      "name": "Soporte Técnico Avanzado",
+      "description": "GPT para resolver problemas técnicos complejos",
+      "instructions": "Eres un ingeniero de soporte técnico nivel 3. Resuelves problemas complejos, proporcionas soluciones detalladas y guías paso a paso.",
+      "capabilities": [
+        "Diagnóstico de problemas técnicos",
+        "Guías de solución paso a paso",
+        "Análisis de logs y errores",
+        "Recomendaciones de mejores prácticas"
+      ]
+    }
+  },
+  
+  "best_practices": [
+    "Mantener instrucciones claras y concisas",
+    "Probar extensivamente antes de producción",
+    "Documentar todas las configuraciones",
+    "Monitorear métricas de rendimiento regularmente",
+    "Actualizar basado en feedback de usuarios"
+  ],
+  
+  "notes": "Este template sigue las mejores prácticas de EdutechLife para configuración de GPTs. Personalizar según necesidades específicas."
+}

@@ -17,16 +17,49 @@ const smartboardRoutes = require('./routes/smartboard');
 const stripeRoutes = require('./routes/stripe');
 const { webhookHandler } = require('./routes/stripe');
 
+const CSP_DIRECTIVES = {
+  defaultSrc: ["'self'"],
+  scriptSrc: ["'self'",
+    'https://edutechlife.co',
+    'https://*.clerk.accounts.dev',
+    'https://challenges.cloudflare.com',
+  ],
+  styleSrc: ["'self'",
+    'https://fonts.googleapis.com',
+    'https://edutechlife.co',
+  ],
+  imgSrc: ["'self'", 'data:', 'blob:',
+    'https://edutechlife.co',
+    'https://*.supabase.co',
+  ],
+  connectSrc: ["'self'",
+    'https://edutechlife.co',
+    'https://*.clerk.accounts.dev',
+    'https://*.supabase.co',
+    'https://api.stripe.com',
+    'https://challenges.cloudflare.com',
+    'wss://*.clerk.accounts.dev',
+  ],
+  fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
+  frameSrc: ["'self'", 'https://challenges.cloudflare.com'],
+  objectSrc: ["'none'"],
+  mediaSrc: ["'self'", 'blob:'],
+  upgradeInsecureRequests: null,
+};
+
 const ALLOWED_ORIGINS = [
   'https://edutechlife.co',
   'https://www.edutechlife.co',
   'https://edutechlife-api.vercel.app',
 ];
 
+// Precompile regex for performance (avoid recompilation per request)
+const LOCALHOST_REGEX = /^https?:\/\/(localhost|127\.0\.0\.1):(3000|5173|3001)$/;
+
 const isAllowed = (origin) => {
   if (!origin) return true;
   if (ALLOWED_ORIGINS.includes(origin)) return true;
-  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true;
+  if (process.env.NODE_ENV === 'development' && LOCALHOST_REGEX.test(origin)) return true;
   return false;
 };
 
@@ -40,7 +73,10 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: { directives: CSP_DIRECTIVES },
+  crossOriginEmbedderPolicy: false,
+}));
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customCss: '.swagger-ui .topbar { display: none }',

@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, useCallback } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Icon } from "../utils/iconMapping.jsx";
 import FloatingParticles from "./FloatingParticles";
@@ -8,6 +8,11 @@ const Esencia = memo(() => {
   const { t } = useTranslation();
   const prefersReducedMotion = useReducedMotion();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [erroredSlides, setErroredSlides] = useState({});
+  const handleImageError = useCallback(
+    (index) => setErroredSlides((prev) => ({ ...prev, [index]: true })),
+    [],
+  );
 
   const slides = [
     {
@@ -196,7 +201,7 @@ const Esencia = memo(() => {
               className="relative bg-petroleum rounded-2xl overflow-hidden shadow-premium-lg h-full min-h-[400px] lg:min-h-[460px]"
               role="region"
               aria-roledescription="carousel"
-              aria-label="Galería de imágenes"
+              aria-label={t("esencia.carousel_aria")}
             >
               <div className="absolute inset-0">
                 {slides.map((slide, index) => (
@@ -208,15 +213,22 @@ const Esencia = memo(() => {
                         : "opacity-0 scale-105"
                     }`}
                   >
-                    <img
-                      src={slide.image}
-                      alt={slide.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.target.style.display = "none";
-                      }}
-                    />
+                    {erroredSlides[index] ? (
+                      <div className="w-full h-full bg-gradient-to-br from-petroleum-dark to-primary-light flex items-center justify-center">
+                        <Icon
+                          name="fa-image"
+                          className="text-white/30 text-6xl"
+                        />
+                      </div>
+                    ) : (
+                      <img
+                        src={slide.image}
+                        alt={slide.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        onError={() => handleImageError(index)}
+                      />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-petroleum via-petroleum/30 to-transparent" />
                   </div>
                 ))}
@@ -237,7 +249,7 @@ const Esencia = memo(() => {
                   )
                 }
                 className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all active:scale-[0.9]"
-                aria-label="Slide anterior"
+                aria-label={t("esencia.slide_prev_aria")}
               >
                 <Icon name="fa-chevron-left" />
               </button>
@@ -246,7 +258,7 @@ const Esencia = memo(() => {
                   setCurrentSlide((prev) => (prev + 1) % slides.length)
                 }
                 className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all active:scale-[0.9]"
-                aria-label="Siguiente slide"
+                aria-label={t("esencia.slide_next_aria")}
               >
                 <Icon name="fa-chevron-right" />
               </button>

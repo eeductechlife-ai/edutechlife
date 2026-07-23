@@ -8,7 +8,7 @@
 ## PASOS A SEGUIR (EJECUTAR EN ORDEN)
 
 ### 1. EJECUTAR SQL EN SUPABASE (AHORA MISMO)
-**URL:** https://supabase.com/dashboard/project/srirrwpgswlnuqfgtule
+**URL:** https://supabase.com/dashboard/project/YOUR_PROJECT_REF
 1. Ir a **SQL Editor**
 2. Copiar TODO el contenido de `IALAB_PREMIUM_SCHEMA_ADAPTADO.sql`
 3. Pegar en editor
@@ -82,7 +82,7 @@ student_sessions | X         | true    | 2
 - Verificar en Table Editor que existen las 5 tablas
 
 ## CONTACTOS RÁPIDOS
-- **Supabase Project:** srirrwpgswlnuqfgtule
+- **Supabase Project:** YOUR_PROJECT_REF
 - **Clerk Template ID:** jtmp_3CIqFjJN9WJsV1qPT5VTW09gA7e
 - **Service Role Key:** Ya configurado en .env.local
 - **Archivo SQL:** `IALAB_PREMIUM_SCHEMA_ADAPTADO.sql`

@@ -1,18 +1,21 @@
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import FloatingParticles from "./FloatingParticles";
+import { useTranslation } from "../i18n/I18nProvider";
 
 const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
+  const { t } = useTranslation();
   const [progress, setProgress] = useState(30);
-  const [statusText, setStatusText] = useState("Preparando tu experiencia...");
+  const [statusText, setStatusText] = useState(t("loading.status_start"));
   const [isExiting, setIsExiting] = useState(false);
 
-  // Mensajes honestos y de marca (sin "arranque de motores" ficticio)
-  const loadingSteps = [
-    { progress: 30, text: "Preparando tu experiencia..." },
-    { progress: 60, text: "Personalizando con metodología VAK..." },
-    { progress: 85, text: "Activando tus tutores con IA..." },
-    { progress: 100, text: "¡Todo listo!" },
+  const getLoadingSteps = () => [
+    { progress: 30, text: t("loading.status_start") },
+    { progress: 60, text: t("loading.status_vak") },
+    { progress: 85, text: t("loading.status_ai") },
+    { progress: 100, text: t("loading.status_done") },
   ];
+  const loadingSteps = getLoadingSteps();
 
   useEffect(() => {
     // Arranca en el primer paso de inmediato: evita el frío "0%"
@@ -122,7 +125,7 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
             >
               <i className="fa-solid fa-robot" style={{ color: "#004B63" }} />
             </div>
-            <span>IA Integrada</span>
+            <span>{t("loading.feature_ai")}</span>
           </div>
           <div className="feature-item premium">
             <div
@@ -135,7 +138,7 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
             >
               <i className="fa-solid fa-brain" style={{ color: "#004B63" }} />
             </div>
-            <span>VAK Metodología</span>
+            <span>{t("loading.feature_vak")}</span>
           </div>
           <div className="feature-item premium">
             <div
@@ -148,7 +151,7 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
             >
               <i className="fa-solid fa-award" style={{ color: "#004B63" }} />
             </div>
-            <span>Certificaciones</span>
+            <span>{t("loading.feature_cert")}</span>
           </div>
         </div>
       </div>
@@ -179,19 +182,49 @@ const MiniLoader = ({ size = "md", color = "primary" }) => {
   );
 };
 
-const PageLoader = ({ message = "Cargando..." }) => {
+const PageLoader = ({ message }) => {
+  if (!message) message = "Cargando...";
   return (
     <div className="page-loader">
-      <div className="page-loader-content">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="page-loader-content"
+      >
         <div className="loader-spinner">
-          <div className="spinner-ring" />
-          <div className="spinner-ring ring-2" />
-          <div className="spinner-core">
+          <motion.div
+            className="spinner-ring"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.div
+            className="spinner-ring ring-2"
+            animate={{ rotate: -360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.div
+            className="spinner-core"
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
             <i className="fa-solid fa-graduation-cap" />
-          </div>
+          </motion.div>
         </div>
-        <span className="loader-message">{message}</span>
-      </div>
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={message}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3 }}
+            className="loader-message"
+          >
+            {message}
+          </motion.span>
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 };

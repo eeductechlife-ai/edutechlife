@@ -1,3 +1,33 @@
 .vercel
+
+# Environment variables — ALL variants
 .env
-.env.local
+.env.*
+!.env.example
+.envrc
+.envrc.*
+.flaskenv
+
+# Security credentials
+*.key
+*.pem
+*.crt
+*.cert
+*.p12
+*.pfx
+*.keystore
+*.jks
+id_rsa*
+id_ed25519*
+*.p8
+service-account*.json
+credentials*.json
+*.cred
+*.secret
+api-keys.json
+oauth-*.json
+token-*.json
+
+# Build
+dist/
+build/

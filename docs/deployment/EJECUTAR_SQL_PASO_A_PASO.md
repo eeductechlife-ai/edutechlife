@@ -6,7 +6,7 @@ Tienes que ejecutar **28 statements DDL** (CREATE/ALTER) manualmente en Supabase
 
 ## 🚀 PASO 1: ACCEDER A SUPABASE DASHBOARD
 
-1. **Abre**: https://app.supabase.com/project/srirrwpgswlnuqfgtule
+1. **Abre**: https://app.supabase.com/project/YOUR_PROJECT_REF
 2. **Inicia sesión** con tus credenciales
 3. Ve a **SQL Editor** en el menú lateral
 
@@ -240,7 +240,7 @@ ORDER BY tablename, indexname;
 ### Si tienes errores al ejecutar SQL:
 
 1. **Copia el error exacto**
-2. **Verifica** que estás en el proyecto correcto: `srirrwpgswlnuqfgtule`
+2. **Verifica** que estás en el proyecto correcto: `YOUR_PROJECT_REF`
 3. **Intenta** ejecutar por bloques (Opción B)
 4. **Consulta** la documentación de Supabase: https://supabase.com/docs
 

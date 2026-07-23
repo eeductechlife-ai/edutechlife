@@ -1609,6 +1609,10 @@
   "consultoria.b2b.feature3_title": "Dedicated Support",
   "consultoria.b2b.feature3_desc": "Need help? Schedule a session with our B2B consultants.",
   "page_loader.consulting_b2b": "Loading B2B Consulting...",
+  "page_loader.vak": "Loading VAK Diagnosis...",
+  "page_loader.admin": "Loading Admin Dashboard...",
+  "page_loader.auth": "Checking authentication...",
+  "page_loader.permisos": "Checking permissions...",
   "smartboard.loading": "Loading SmartBoard...",
   "smartboard.stats_title": "SmartBoard Stats",
   "smartboard.stats_desc": "Progress, performance and activity on the educational platform",
@@ -3737,6 +3741,25 @@
   "ialab.signup_form_title": "Register for IA Lab Academic",
   "ialab.signup_form_desc": "Complete the form for adults (18+)",
   "ialab.signup_terms": "By registering, you accept our <a href=\"#\" class=\"text-[#004B63] hover:underline\">Terms of Service</a> and <a href=\"#\" class=\"text-[#004B63] hover:underline\">Privacy Policy</a>.",
+
+  "nav.close_aria": "Close menu",
+  "nav.home_desc": "Home",
+
+  "notfound.button": "Back to home",
+
+  "esencia.carousel_aria": "Image gallery",
+  "esencia.slide_prev_aria": "Previous slide",
+  "esencia.slide_next_aria": "Next slide",
+
+  "aliados.marquee_aria": "Partner logos",
+
+  "loading.status_start": "Preparing your experience...",
+  "loading.status_vak": "Personalizing with VAK methodology...",
+  "loading.status_ai": "Activating your AI tutors...",
+  "loading.status_done": "All set!",
+  "loading.feature_ai": "Integrated AI",
+  "loading.feature_vak": "VAK Methodology",
+  "loading.feature_cert": "Certifications",
 
   "seo.home.title": "Home",
   "seo.home.desc": "Leading the Future of Education with Pedagogy and Artificial Intelligence. AI-powered courses, diagnostics, and educational tools.",

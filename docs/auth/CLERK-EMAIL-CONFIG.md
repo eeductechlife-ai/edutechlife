@@ -10,7 +10,7 @@ El email verification está activado correctamente. Ahora necesitas configurar e
 
 La key actual en `.env` es:
 ```
-VITE_CLERK_PUBLISHABLE_KEY=pk_test_c3RhYmxlLW1pbmstNzEuY2xlcmsuYWNjb3VudHMuZGV2JA
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_YOUR_PUBLISHABLE_KEY_HERE
 ```
 
 **Verificación:** Esta key parece correcta. El formato `pk_test_<base64>` es válido.
@@ -60,13 +60,13 @@ Para confirmar que funciona, verifica en [Clerk Dashboard → API Keys](https://
 
 ```bash
 cd /Users/home/Desktop/edutechlife
-npx supabase functions deploy clerk-webhook --project-ref srirrwpgswlnuqfgtule
+npx supabase functions deploy clerk-webhook --project-ref YOUR_PROJECT_REF
 ```
 
 ### 3.2 Configurar Webhook en Clerk
 
 1. **Clerk Dashboard** → **Webhooks** → **Add Endpoint**
-2. **Endpoint URL:** `https://srirrwpgswlnuqfgtule.supabase.co/functions/v1/clerk-webhook`
+2. **Endpoint URL:** `https://YOUR-PROJECT.supabase.co/functions/v1/clerk-webhook`
 3. **Eventos:**
    - ✅ `user.created`
    - ✅ `user.updated`
@@ -79,8 +79,8 @@ npx supabase functions deploy clerk-webhook --project-ref srirrwpgswlnuqfgtule
 
 | Variable | Valor |
 |----------|-------|
-| `CLERK_WEBHOOK_SECRET` | `whsec_...` (del paso 3.2) |
-| `SUPABASE_URL` | `https://srirrwpgswlnuqfgtule.supabase.co` |
+| `CLERK_WEBHOOK_SECRET` | `whsec_YOUR_WEBHOOK_SECRET` (del paso 3.2) |
+| `SUPABASE_URL` | `https://YOUR-PROJECT.supabase.co` |
 | `SUPABASE_SERVICE_ROLE_KEY` | Tu service role key de Supabase |
 
 ---
@@ -117,7 +117,7 @@ Verifica los logs de Clerk para ver si los emails se envían correctamente.
 
 ### Supabase Logs
 ```bash
-npx supabase functions serve --project-ref srirrwpgswlnuqfgtule
+npx supabase functions serve --project-ref YOUR_PROJECT_REF
 ```
 
 ### Browser Console
