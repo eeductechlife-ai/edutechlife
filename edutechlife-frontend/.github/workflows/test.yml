@@ -30,6 +30,10 @@ jobs:
         env:
           VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
 
+      - name: Performance Budget
+        working-directory: ./edutechlife-frontend
+        run: node scripts/check-budget.mjs
+
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
