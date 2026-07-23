@@ -213,7 +213,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@solana/web3.js': '/Users/home/Desktop/edutechlife/edutechlife-frontend/src/solana-stub.js'
+      '@solana/web3.js': path.resolve(__dirname, './src/solana-stub.js')
     }
   },
   preview: {
