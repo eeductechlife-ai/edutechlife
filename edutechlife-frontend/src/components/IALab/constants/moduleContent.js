@@ -1,6 +1,4 @@
 export {
-  default,
-  moduleContent,
   getModuleContent,
   getModuleLessons,
   getModuleLearningPoints,
