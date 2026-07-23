@@ -1,10 +1,13 @@
 # Dependencies
 node_modules/
 
-# Environment variables
+# Environment variables — ALL variants
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+.envrc
+.envrc.*
+.flaskenv
 
 # Build outputs
 dist/
@@ -27,4 +30,47 @@ npm-debug.log*
 # Cache
 .cache/
 .vercel
-.github/workflows/ci.yml
+
+# === SECURITY CREDENTIALS ===
+# SSH / TLS / Certificates
+*.key
+*.pem
+*.crt
+*.cert
+*.p12
+*.pfx
+*.keystore
+*.jks
+id_rsa*
+id_ed25519*
+*.p8
+*.pub
+
+# Service accounts & credentials
+service-account*.json
+credentials*.json
+*.cred
+*.secret
+**/service-account-keys/**
+**/gcp-credentials/**
+**/aws-credentials/**
+**/service-keys/**
+api-keys.json
+oauth-*.json
+token-*.json
+
+# Security scan reports
+security-report*
+vulnerability-report*
+snyk-report*
+trivy-*
+
+# Terraform state (may contain secrets)
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+terraform.rc
+.terraformrc
