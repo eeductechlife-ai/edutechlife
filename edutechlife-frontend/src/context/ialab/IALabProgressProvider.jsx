@@ -11,12 +11,11 @@ import { useProgressContext } from "../ProgressContext";
 import { useNotification } from "../NotificationContext";
 import { useActivityTracker } from "../../hooks/useActivityTracker";
 import { useTranslation } from "../../i18n/I18nProvider";
-import { moduleContent } from "../../components/IALab/constants/moduleContent";
 import {
-  getModules,
-  getAllLessons,
-  modules as STATIC_MODULES,
-} from "@/data/ialab";
+  getModuleContent,
+  getModuleLessons,
+} from "../../components/IALab/constants/moduleContent";
+import { getModules, modules as STATIC_MODULES } from "@/data/ialab";
 import { LAST_MODULE_ID } from "@/constants/ialab";
 import { useIALabStore } from "../../store/ialabStore";
 
@@ -250,9 +249,7 @@ export function IALabProgressProvider({ children }) {
   }, [checkCourseCompletion]);
 
   const moduleLessons = useMemo(() => {
-    const lessons = getAllLessons(locale);
-    if (activeMod === 1) return lessons[1];
-    return moduleContent[activeMod]?.lessons || [];
+    return getModuleLessons(activeMod, locale);
   }, [activeMod, locale]);
 
   const contextValue = useMemo(
@@ -280,7 +277,7 @@ export function IALabProgressProvider({ children }) {
       modules: getModules(locale),
       LAST_MODULE_ID,
       moduleLessons,
-      moduleContent,
+      moduleContent: getModuleContent(locale),
       isModuleLocked,
       isEvaluationLocked,
       getCurrentModule,
@@ -321,7 +318,7 @@ export function IALabProgressProvider({ children }) {
       userId,
       completedCommunity,
       moduleLessons,
-      moduleContent,
+      locale,
       syncMarkVideoComplete,
       syncMarkModuleComplete,
       syncMarkExamComplete,

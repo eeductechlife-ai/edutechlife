@@ -1,9 +1,9 @@
 import { CONTENT_ES } from "./contentEs.js";
+import { CONTENT_EN } from "./contentEn.js";
 
 export { CONTENT_ES } from "./contentEs.js";
 export { CONTENT_EN } from "./contentEn.js";
 export {
-  getModuleContent,
   getModuleLessons,
   getModuleLearningPoints,
   getModuleOverviewData,
@@ -11,5 +11,6 @@ export {
   getModuleAccordionContent,
 } from "./selectors.js";
 
-export const moduleContent = CONTENT_ES;
-export default moduleContent;
+export const getModuleContent = (locale = "es") => {
+  return locale === "en" ? CONTENT_EN : CONTENT_ES;
+};

@@ -1,52 +1,78 @@
-import { useState, useEffect, useRef, useMemo, useCallback, lazy, Suspense, memo, Fragment } from 'react'
-import PropTypes from 'prop-types';
-import { motion, useReducedMotion } from 'framer-motion';
-import { Icon } from '../../utils/iconMapping.jsx';
-import { useIALabProgressContext } from '../../context/IALabContext';
-import { useIALabStore } from '../../store/ialabStore';
-import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
-import { getResourcesForTopic } from './constants/moduleResources';
-import { useTranslation } from '../../i18n/I18nProvider';
-import ModuleHeaderSection from './module/ModuleHeaderSection';
-import ModuleBookmarkFilter from './module/ModuleBookmarkFilter';
-import ModuleTopicAccordion from './module/ModuleTopicAccordion';
+import {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  lazy,
+  Suspense,
+  memo,
+  Fragment,
+} from "react";
+import PropTypes from "prop-types";
+import { motion, useReducedMotion } from "framer-motion";
+import { Icon } from "../../utils/iconMapping.jsx";
+import { useIALabProgressContext } from "../../context/IALabContext";
+import { useIALabStore } from "../../store/ialabStore";
+import { useIALabProgress } from "../../hooks/IALab/useIALabProgress";
+import { getResourcesForTopic } from "./constants/moduleResources";
+import { useTranslation } from "../../i18n/I18nProvider";
+import ModuleHeaderSection from "./module/ModuleHeaderSection";
+import ModuleBookmarkFilter from "./module/ModuleBookmarkFilter";
+import ModuleTopicAccordion from "./module/ModuleTopicAccordion";
 
-const ResourceViewerModal = lazy(() => import('./ResourceViewerModal'));
+const ResourceViewerModal = lazy(() => import("./ResourceViewerModal"));
 
 const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const prefersReducedMotion = useReducedMotion();
-  const { activeMod, modules, moduleContent, completedExams, challengeScores, moduleProgress, markResourceAsViewed: markResourceInContext } = useIALabProgressContext();
+  const {
+    activeMod,
+    modules,
+    moduleContent,
+    completedExams,
+    challengeScores,
+    moduleProgress,
+    markResourceAsViewed: markResourceInContext,
+  } = useIALabProgressContext();
   const { trackResourceViewed } = useIALabProgress();
-  const lessonProgress = useIALabStore(s => s.lessonProgress);
-  
+  const lessonProgress = useIALabStore((s) => s.lessonProgress);
+
   // Estado para el acordeón de temas
   const [expandedTopic, setExpandedTopic] = useState(0);
   const [viewedIds, setViewedIds] = useState([]);
-  
+
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [filterType, setFilterType] = useState('all');
+  const [filterType, setFilterType] = useState("all");
   const [justCompletedId, setJustCompletedId] = useState(null);
-  const storeToggleBookmark = useIALabStore(s => s.toggleBookmark);
+  const storeToggleBookmark = useIALabStore((s) => s.toggleBookmark);
   const [bookmarkedIds, setBookmarkedIds] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('ialab_bookmarked_resources') || '[]'); }
-    catch { return []; }
+    try {
+      return JSON.parse(
+        localStorage.getItem("ialab_bookmarked_resources") || "[]",
+      );
+    } catch {
+      return [];
+    }
   });
   const [showBookmarked, setShowBookmarked] = useState(false);
 
-  const toggleBookmark = useCallback((resourceId, e) => {
-    e.stopPropagation();
-    storeToggleBookmark(resourceId);
-    setBookmarkedIds((prev) =>
-      prev.includes(resourceId)
-        ? prev.filter((id) => id !== resourceId)
-        : [...prev, resourceId]
-    );
-  }, [storeToggleBookmark]);
+  const toggleBookmark = useCallback(
+    (resourceId, e) => {
+      e.stopPropagation();
+      storeToggleBookmark(resourceId);
+      setBookmarkedIds((prev) =>
+        prev.includes(resourceId)
+          ? prev.filter((id) => id !== resourceId)
+          : [...prev, resourceId],
+      );
+    },
+    [storeToggleBookmark],
+  );
 
   // Estado para el modal de recursos
   const [viewerModalOpen, setViewerModalOpen] = useState(false);
-  const immersiveModalOpen = useIALabStore(s => s.immersiveModalOpen);
+  const immersiveModalOpen = useIALabStore((s) => s.immersiveModalOpen);
   useEffect(() => {
     if (viewerModalOpen && !immersiveModalOpen) {
       useIALabStore.getState().setImmersiveModalOpen(true);
@@ -60,22 +86,36 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   const [activeResourceIndex, setActiveResourceIndex] = useState(0);
 
   const onActionRef = useRef(onAction);
-  useEffect(() => { onActionRef.current = onAction; }, [onAction]);
+  useEffect(() => {
+    onActionRef.current = onAction;
+  }, [onAction]);
   const onToggleForumRef = useRef(onToggleForum);
-  useEffect(() => { onToggleForumRef.current = onToggleForum; }, [onToggleForum]);
+  useEffect(() => {
+    onToggleForumRef.current = onToggleForum;
+  }, [onToggleForum]);
 
   const module1Data = {
     badge: {
       duration: "2h",
     },
     icon: "fa-terminal",
-    title: t('ialab.module_overview.module1_title'),
-    description: t('ialab.module_overview.module1_description'),
+    title: t("ialab.module_overview.module1_title"),
+    description: t("ialab.module_overview.module1_description"),
     missionIcon: "fa-bullseye",
-    mission: t('ialab.module_overview.module1_mission'),
+    mission: t("ialab.module_overview.module1_mission"),
     topics: [
-      { title: t('ialab.module_overview.topic_1_title'), icon: "fa-brain", resources: 2, duration: "20 min" },
-      { title: t('ialab.module_overview.topic_2_title'), icon: "fa-comments", resources: 3, duration: "20 min" },
+      {
+        title: t("ialab.module_overview.topic_1_title"),
+        icon: "fa-brain",
+        resources: 2,
+        duration: "20 min",
+      },
+      {
+        title: t("ialab.module_overview.topic_2_title"),
+        icon: "fa-comments",
+        resources: 3,
+        duration: "20 min",
+      },
     ],
   };
 
@@ -86,13 +126,13 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     if (isModule1) return module1Data;
     return {
       badge: {
-        duration: modules[activeMod - 1]?.duration || '2h',
+        duration: modules[activeMod - 1]?.duration || "2h",
       },
-      icon: modules[activeMod - 1]?.icon || 'fa-book',
-      title: dynamicContent?.title || '',
-      description: dynamicContent?.description || '',
+      icon: modules[activeMod - 1]?.icon || "fa-book",
+      title: dynamicContent?.title || "",
+      description: dynamicContent?.description || "",
       missionIcon: "fa-bullseye",
-      mission: dynamicContent?.mission || '',
+      mission: dynamicContent?.mission || "",
       topics: dynamicContent?.topics || [],
     };
   }, [isModule1, activeMod, modules, dynamicContent]);
@@ -100,92 +140,108 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   const bookmarkedResources = useMemo(() => {
     const result = [];
     moduleData.topics.forEach((topic) => {
-      const tr = getResourcesForTopic(topic.title);
+      const tr = getResourcesForTopic(topic.title, locale);
       if (!tr?.resources) return;
       tr.resources.forEach((r) => {
         if (bookmarkedIds.includes(r.id)) result.push(r);
       });
     });
     return result;
-  }, [bookmarkedIds, moduleData.topics]);
+  }, [bookmarkedIds, moduleData.topics, locale]);
 
   const resourcesByTopic = useMemo(() => {
     const map = {};
-    moduleData.topics.forEach(t => { map[t.title] = getResourcesForTopic(t.title); });
+    moduleData.topics.forEach((t) => {
+      map[t.title] = getResourcesForTopic(t.title, locale);
+    });
     return map;
-  }, [moduleData.topics]);
+  }, [moduleData.topics, locale]);
 
   // Lista plana de todos los recursos en orden (para bloqueo secuencial)
   const allResourcesOrdered = useMemo(() => {
     const result = [];
     moduleData.topics.forEach((topic, tIdx) => {
-      const tr = getResourcesForTopic(topic.title);
+      const tr = getResourcesForTopic(topic.title, locale);
       (tr?.resources || []).forEach((res, rIdx) => {
-        result.push({ ...res, topicTitle: topic.title, topicIndex: tIdx, resourceIndex: rIdx });
+        result.push({
+          ...res,
+          topicTitle: topic.title,
+          topicIndex: tIdx,
+          resourceIndex: rIdx,
+        });
       });
     });
     return result;
-  }, [moduleData.topics]);
+  }, [moduleData.topics, locale]);
 
   // Índice del primer recurso no visto (el siguiente que debe ver)
   const nextResourceGlobalIndex = useMemo(() => {
-    return allResourcesOrdered.findIndex(r => !viewedIds.includes(r.id));
+    return allResourcesOrdered.findIndex((r) => !viewedIds.includes(r.id));
   }, [allResourcesOrdered, viewedIds]);
 
   // Función: ¿este recurso está bloqueado?
   const isResourceLocked = (topicIdx, resIdx, resourceId) => {
     if (viewedIds.includes(resourceId)) return false;
     const flatIdx = allResourcesOrdered.findIndex(
-      r => r.topicIndex === topicIdx && r.resourceIndex === resIdx
+      (r) => r.topicIndex === topicIdx && r.resourceIndex === resIdx,
     );
     if (flatIdx === -1) return false;
     return flatIdx > nextResourceGlobalIndex;
   };
-  
+
   // Admin bypass: el usuario johnbeltran22 (dev) puede ver todos los recursos sin restricciones
-  const isAdmin = useIALabStore(s => s.userRole === 'admin');
+  const isAdmin = useIALabStore((s) => s.userRole === "admin");
 
-  const calculateTopicDuration = useCallback((topicTitle) => {
-    const topicData = resourcesByTopic[topicTitle];
-    if (!topicData?.resources) return "20 min";
-    let totalSeconds = 0;
-    topicData.resources.forEach(resource => {
-      if (resource.type === 'video' && resource.duration) {
-        const parts = resource.duration.split(':').map(Number);
-        if (parts.length === 3) totalSeconds += parts[0] * 3600 + parts[1] * 60 + parts[2];
-        else if (parts.length === 2) totalSeconds += parts[0] * 60 + parts[1];
-      }
-      if (resource.estimatedTime) {
-        const match = resource.estimatedTime.match(/(\d+)\s*(minutos|minutes|min|mins)/i);
-        if (match) totalSeconds += parseInt(match[1]) * 60;
-      }
-      if (resource.type === 'pdf' && resource.pages) {
-        totalSeconds += resource.pages * 2 * 60;
-      }
-    });
-    if (totalSeconds === 0) return "20 min";
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    if (hours > 0) return `${hours}h ${minutes}min`;
-    return `${Math.max(minutes, 1)} min`;
-  }, [resourcesByTopic]);
-
-  const handleMarkAsViewed = useCallback(async (resourceId) => {
-    if (resourceId && activeMod) {
-      markResourceInContext(activeMod, resourceId);
-      const resourceType = 'document';
-      await trackResourceViewed(activeMod, resourceId, resourceType);
-      setViewedIds((prev) => {
-        if (!prev.includes(resourceId)) {
-          useIALabStore.getState().addViewedResource(resourceId);
-          setJustCompletedId(resourceId);
-          setTimeout(() => setJustCompletedId(null), 1000);
-          return [...prev, resourceId];
+  const calculateTopicDuration = useCallback(
+    (topicTitle) => {
+      const topicData = resourcesByTopic[topicTitle];
+      if (!topicData?.resources) return "20 min";
+      let totalSeconds = 0;
+      topicData.resources.forEach((resource) => {
+        if (resource.type === "video" && resource.duration) {
+          const parts = resource.duration.split(":").map(Number);
+          if (parts.length === 3)
+            totalSeconds += parts[0] * 3600 + parts[1] * 60 + parts[2];
+          else if (parts.length === 2) totalSeconds += parts[0] * 60 + parts[1];
         }
-        return prev;
+        if (resource.estimatedTime) {
+          const match = resource.estimatedTime.match(
+            /(\d+)\s*(minutos|minutes|min|mins)/i,
+          );
+          if (match) totalSeconds += parseInt(match[1]) * 60;
+        }
+        if (resource.type === "pdf" && resource.pages) {
+          totalSeconds += resource.pages * 2 * 60;
+        }
       });
-    }
-  }, [activeMod, markResourceInContext, trackResourceViewed]);
+      if (totalSeconds === 0) return "20 min";
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      if (hours > 0) return `${hours}h ${minutes}min`;
+      return `${Math.max(minutes, 1)} min`;
+    },
+    [resourcesByTopic],
+  );
+
+  const handleMarkAsViewed = useCallback(
+    async (resourceId) => {
+      if (resourceId && activeMod) {
+        markResourceInContext(activeMod, resourceId);
+        const resourceType = "document";
+        await trackResourceViewed(activeMod, resourceId, resourceType);
+        setViewedIds((prev) => {
+          if (!prev.includes(resourceId)) {
+            useIALabStore.getState().addViewedResource(resourceId);
+            setJustCompletedId(resourceId);
+            setTimeout(() => setJustCompletedId(null), 1000);
+            return [...prev, resourceId];
+          }
+          return prev;
+        });
+      }
+    },
+    [activeMod, markResourceInContext, trackResourceViewed],
+  );
 
   const handlePreviousResource = useCallback(() => {
     if (activeResourceIndex > 0) {
@@ -208,11 +264,12 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   }, [activeResourceIndex, currentTopicResources]);
 
   useEffect(() => {
-    const updateViewed = () => setViewedIds(useIALabStore.getState().getViewedResources());
+    const updateViewed = () =>
+      setViewedIds(useIALabStore.getState().getViewedResources());
     updateViewed();
     const unsub = useIALabStore.subscribe(
       (s) => s._viewedResourcesVersion,
-      updateViewed
+      updateViewed,
     );
     return unsub;
   }, []);
@@ -220,18 +277,19 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   // Los recursos ya vistos SIEMPRE se pueden reabrir haciendo clic en ellos.
   // Auto-avance: al completar un tema, abrir el siguiente para mantener el flujo
   useEffect(() => {
-    if (expandedTopic === null || expandedTopic >= moduleData.topics.length - 1) return;
+    if (expandedTopic === null || expandedTopic >= moduleData.topics.length - 1)
+      return;
     const currentTopic = moduleData.topics[expandedTopic];
-    const tr = getResourcesForTopic(currentTopic.title);
-    const ids = tr?.resources?.map(r => r.id) || [];
-    const allDone = ids.length > 0 && ids.every(id => viewedIds.includes(id));
+    const tr = getResourcesForTopic(currentTopic.title, locale);
+    const ids = tr?.resources?.map((r) => r.id) || [];
+    const allDone = ids.length > 0 && ids.every((id) => viewedIds.includes(id));
     if (allDone) {
       const timer = setTimeout(() => {
-        setExpandedTopic(prev => (prev !== null ? prev + 1 : null));
+        setExpandedTopic((prev) => (prev !== null ? prev + 1 : null));
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [viewedIds, expandedTopic, moduleData.topics]);
+  }, [viewedIds, expandedTopic, moduleData.topics, locale]);
 
   useEffect(() => {
     const handleOpenTopic = () => {
@@ -239,14 +297,15 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
 
       for (let tIdx = 0; tIdx < moduleData.topics.length; tIdx++) {
         const topic = moduleData.topics[tIdx];
-        const tr = getResourcesForTopic(topic.title);
+        const tr = getResourcesForTopic(topic.title, locale);
         const resources = tr?.resources || [];
         for (const resource of resources) {
           if (!viewed.includes(resource.id)) {
             setExpandedTopic(tIdx);
             setTimeout(() => {
-              document.querySelector('[class*="flex flex-col gap-3 mt-4"]')
-                ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              document
+                .querySelector('[class*="flex flex-col gap-3 mt-4"]')
+                ?.scrollIntoView({ behavior: "smooth", block: "start" });
             }, 350);
             return;
           }
@@ -256,18 +315,18 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
       if (!moduleProgress?.[activeMod]?.community) {
         onToggleForumRef.current?.(true);
       } else if (!challengeScores?.[activeMod]) {
-        onActionRef.current?.('OPEN_CHALLENGE');
+        onActionRef.current?.("OPEN_CHALLENGE");
       } else if (!completedExams?.[activeMod]) {
-        onActionRef.current?.('OPEN_QUIZ');
+        onActionRef.current?.("OPEN_QUIZ");
       }
     };
-    window.addEventListener('ialab:openTopic', handleOpenTopic);
-    return () => window.removeEventListener('ialab:openTopic', handleOpenTopic);
-  }, [moduleData, activeMod]);
+    window.addEventListener("ialab:openTopic", handleOpenTopic);
+    return () => window.removeEventListener("ialab:openTopic", handleOpenTopic);
+  }, [moduleData, activeMod, locale]);
 
-    return (
-      <Fragment>
-        <motion.div
+  return (
+    <Fragment>
+      <motion.div
         whileHover={prefersReducedMotion ? {} : { scale: 1.01 }}
         transition={{ duration: 0.2 }}
         className="relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm p-5 md:p-8 overflow-hidden dark:bg-slate-800 dark:border-slate-700/60"
@@ -275,117 +334,132 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
         <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-petroleum/6 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
         <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-petroleum/4 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
 
-          
-{/* Contenido principal con icono destacado */}
-           <div className="flex flex-col md:flex-row gap-3 items-start">
-              {/* Icono destacado - Izquierda */}
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-petroleum to-petroleum-dark shadow-sm flex items-center justify-center text-white flex-shrink-0">
-                <Icon name={moduleData.icon} className="text-xl" aria-hidden="true" />
-              </div>
-              
-              {/* Texto principal */}
-              <div className="flex-1">
-                <ModuleHeaderSection
-                  moduleData={moduleData}
-                  activeMod={activeMod}
-                  isDescriptionExpanded={isDescriptionExpanded}
-                  setIsDescriptionExpanded={setIsDescriptionExpanded}
-                  lessonProgress={lessonProgress}
+        {/* Contenido principal con icono destacado */}
+        <div className="flex flex-col md:flex-row gap-3 items-start">
+          {/* Icono destacado - Izquierda */}
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-petroleum to-petroleum-dark shadow-sm flex items-center justify-center text-white flex-shrink-0">
+            <Icon
+              name={moduleData.icon}
+              className="text-xl"
+              aria-hidden="true"
+            />
+          </div>
+
+          {/* Texto principal */}
+          <div className="flex-1">
+            <ModuleHeaderSection
+              moduleData={moduleData}
+              activeMod={activeMod}
+              isDescriptionExpanded={isDescriptionExpanded}
+              setIsDescriptionExpanded={setIsDescriptionExpanded}
+              lessonProgress={lessonProgress}
+            />
+
+            {allResourcesOrdered.length > 0 &&
+              (() => {
+                const total = allResourcesOrdered.length;
+                const viewed = allResourcesOrdered.filter((r) =>
+                  viewedIds.includes(r.id),
+                ).length;
+                const pct = Math.round((viewed / total) * 100);
+                return (
+                  <div className="mt-4 mb-1">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <Icon
+                          name="fa-chart-line"
+                          className="text-[10px] text-petroleum"
+                        />
+                        {t("ialab.module.progress_title")}
+                      </span>
+                      <span className="text-[10px] font-bold text-petroleum">
+                        {viewed}/{total} &middot; {pct}%
+                      </span>
+                    </div>
+                    <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-500 ease-out"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })()}
+
+            {/* Temas en columna única - Tarjetas premium */}
+            <div className="flex flex-col gap-3 mt-4">
+              {bookmarkedResources.length > 0 && (
+                <ModuleBookmarkFilter
+                  bookmarkedResources={bookmarkedResources}
+                  showBookmarked={showBookmarked}
+                  setShowBookmarked={setShowBookmarked}
+                  toggleBookmark={toggleBookmark}
+                  setSelectedResource={setSelectedResource}
+                  setSelectedResourceType={setSelectedResourceType}
+                  setViewerModalOpen={setViewerModalOpen}
                   t={t}
                 />
-
-                {allResourcesOrdered.length > 0 && (() => {
-                  const total = allResourcesOrdered.length;
-                  const viewed = allResourcesOrdered.filter(r => viewedIds.includes(r.id)).length;
-                  const pct = Math.round((viewed / total) * 100);
-                  return (
-                    <div className="mt-4 mb-1">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-                          <Icon name="fa-chart-line" className="text-[10px] text-petroleum" />
-                          {t('ialab.module.progress_title')}
-                        </span>
-                        <span className="text-[10px] font-bold text-petroleum">{viewed}/{total} &middot; {pct}%</span>
-                      </div>
-                      <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-500 ease-out"
-                          style={{ width: `${pct}%` }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })()}
-                
-                {/* Temas en columna única - Tarjetas premium */}
-                <div className="flex flex-col gap-3 mt-4">
-                  {bookmarkedResources.length > 0 && (
-                    <ModuleBookmarkFilter
-                      bookmarkedResources={bookmarkedResources}
-                      showBookmarked={showBookmarked}
-                      setShowBookmarked={setShowBookmarked}
-                      toggleBookmark={toggleBookmark}
-                      setSelectedResource={setSelectedResource}
-                      setSelectedResourceType={setSelectedResourceType}
-                      setViewerModalOpen={setViewerModalOpen}
-                      t={t}
-                    />
-                  )}
-                  <ModuleTopicAccordion
-                    moduleData={moduleData}
-                    expandedTopic={expandedTopic}
-                    setExpandedTopic={setExpandedTopic}
-                    filterType={filterType}
-                    setFilterType={setFilterType}
-                    resourcesByTopic={resourcesByTopic}
-                    viewedIds={viewedIds}
-                    isAdmin={isAdmin}
-                    isResourceLocked={isResourceLocked}
-                    calculateTopicDuration={calculateTopicDuration}
-                    toggleBookmark={toggleBookmark}
-                    prefersReducedMotion={prefersReducedMotion}
-                    activeMod={activeMod}
-                    setSelectedResource={setSelectedResource}
-                    setSelectedResourceType={setSelectedResourceType}
-                    setCurrentTopicResources={setCurrentTopicResources}
-                    setActiveResourceIndex={setActiveResourceIndex}
-                    setViewerModalOpen={setViewerModalOpen}
-                    justCompletedId={justCompletedId}
-                    bookmarkedIds={bookmarkedIds}
-                    t={t}
-                  />
-                </div>
-              </div>
+              )}
+              <ModuleTopicAccordion
+                moduleData={moduleData}
+                expandedTopic={expandedTopic}
+                setExpandedTopic={setExpandedTopic}
+                filterType={filterType}
+                setFilterType={setFilterType}
+                resourcesByTopic={resourcesByTopic}
+                viewedIds={viewedIds}
+                isAdmin={isAdmin}
+                isResourceLocked={isResourceLocked}
+                calculateTopicDuration={calculateTopicDuration}
+                toggleBookmark={toggleBookmark}
+                prefersReducedMotion={prefersReducedMotion}
+                activeMod={activeMod}
+                setSelectedResource={setSelectedResource}
+                setSelectedResourceType={setSelectedResourceType}
+                setCurrentTopicResources={setCurrentTopicResources}
+                setActiveResourceIndex={setActiveResourceIndex}
+                setViewerModalOpen={setViewerModalOpen}
+                justCompletedId={justCompletedId}
+                bookmarkedIds={bookmarkedIds}
+                t={t}
+              />
             </div>
+          </div>
+        </div>
 
-            {/* Elemento decorativo de borde superior */}
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
-         </motion.div>
+        {/* Elemento decorativo de borde superior */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
+      </motion.div>
 
-          {/* Modal de Recursos */}
-          <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm"><div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin" /></div>}>
-            <ResourceViewerModal
-              isOpen={viewerModalOpen}
-              onClose={() => {
-                setViewerModalOpen(false);
-                setSelectedResource(null);
-                setSelectedResourceType(null);
-                setCurrentTopicResources([]);
-                setActiveResourceIndex(0);
-              }}
-              resource={selectedResource}
-              resourceType={selectedResourceType}
-              onMarkAsViewed={handleMarkAsViewed}
-              onPreviousResource={handlePreviousResource}
-              onNextResource={handleNextResource}
-              currentIndex={activeResourceIndex}
-              totalResources={currentTopicResources.length}
-            />
-          </Suspense>
-      </Fragment>
-    );
-  };
-
+      {/* Modal de Recursos */}
+      <Suspense
+        fallback={
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+            <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin" />
+          </div>
+        }
+      >
+        <ResourceViewerModal
+          isOpen={viewerModalOpen}
+          onClose={() => {
+            setViewerModalOpen(false);
+            setSelectedResource(null);
+            setSelectedResourceType(null);
+            setCurrentTopicResources([]);
+            setActiveResourceIndex(0);
+          }}
+          resource={selectedResource}
+          resourceType={selectedResourceType}
+          onMarkAsViewed={handleMarkAsViewed}
+          onPreviousResource={handlePreviousResource}
+          onNextResource={handleNextResource}
+          currentIndex={activeResourceIndex}
+          totalResources={currentTopicResources.length}
+        />
+      </Suspense>
+    </Fragment>
+  );
+};
 
 ModuleOverviewCard.propTypes = {
   onAction: PropTypes.func,
