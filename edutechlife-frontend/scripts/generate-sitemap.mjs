@@ -55,6 +55,10 @@ ${urls}
 </urlset>
 `
 
-const out = join(__dirname, '../dist/sitemap.xml')
-writeFileSync(out, xml)
-console.log(`[sitemap] ✅ ${out}`)
+const distOut = join(__dirname, '../dist/sitemap.xml')
+writeFileSync(distOut, xml)
+console.log(`[sitemap] ✅ ${distOut}`)
+
+const publicOut = join(__dirname, '../public/sitemap.xml')
+writeFileSync(publicOut, xml)
+console.log(`[sitemap] ✅ ${publicOut}`)
