@@ -1,4 +1,5 @@
 import { memo, useState, useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   GraduationCap,
   Globe,
@@ -15,6 +16,7 @@ import { useTranslation } from "../i18n/I18nProvider";
 
 const Aliados = memo(() => {
   const { t } = useTranslation();
+  const prefersReducedMotion = useReducedMotion();
   const sectionRef = useRef(null);
   const marqueeRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -125,7 +127,13 @@ const Aliados = memo(() => {
       />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-10">
+        <motion.div
+          initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
+          whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-10"
+        >
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="w-10 h-[2px] bg-gradient-to-r from-transparent to-primary-light" />
             <span className="text-sm font-bold text-primary-light uppercase tracking-widest block mb-2">
@@ -139,9 +147,15 @@ const Aliados = memo(() => {
               {t("aliados.title_highlight")}
             </span>
           </h2>
-        </div>
+        </motion.div>
 
-        <div className="relative">
+        <motion.div
+          initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
+          whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          className="relative"
+        >
           <div className="absolute left-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
 
@@ -190,7 +204,7 @@ const Aliados = memo(() => {
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <style>{`
