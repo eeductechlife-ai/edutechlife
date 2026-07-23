@@ -1,25 +1,13 @@
 import { memo, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Icon } from "../utils/iconMapping.jsx";
 import FloatingParticles from "./FloatingParticles";
 import { useTranslation } from "../i18n/I18nProvider";
 
 const Esencia = memo(() => {
   const { t } = useTranslation();
+  const prefersReducedMotion = useReducedMotion();
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.1 },
-    );
-    const section = document.getElementById("esencia");
-    if (section) observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
 
   const slides = [
     {
@@ -88,8 +76,12 @@ const Esencia = memo(() => {
       />
 
       <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 py-12">
-        <div
-          className={`text-center mb-8 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+        <motion.div
+          initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
+          whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-8"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-petroleum tracking-tighter mb-4">
             {t("esencia.title_before")}{" "}
@@ -100,10 +92,13 @@ const Esencia = memo(() => {
           <p className="text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
             {t("esencia.subtitle")}
           </p>
-        </div>
+        </motion.div>
 
-        <div
-          className={`transition-all duration-1000 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+        <motion.div
+          initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
+          whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
             {values.map((value, index) => (
@@ -131,10 +126,14 @@ const Esencia = memo(() => {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <div
-          className={`grid grid-cols-1 lg:grid-cols-3 gap-6 mt-10 transition-all duration-1000 delay-400 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+        <motion.div
+          initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
+          whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-10"
         >
           <div className="space-y-5">
             <div className="group bg-gradient-to-br from-petroleum to-primary-light rounded-xl p-5 text-white shadow-premium-lg hover:shadow-premium transition-all duration-500 hover:-translate-y-1">
@@ -253,7 +252,7 @@ const Esencia = memo(() => {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
