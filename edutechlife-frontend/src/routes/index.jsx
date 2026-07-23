@@ -62,6 +62,10 @@ const SmartBoardStatsPage = lazy(
   () => import("../components/pages/SmartBoardStatsPage"),
 );
 const IALabDashboard = lazy(() => import("../components/IALab/IALabDashboard"));
+import DashboardSkeleton from "../components/skeletons/DashboardSkeleton";
+import IALabSkeleton from "../components/skeletons/IALabSkeleton";
+import SmartBoardSkeleton from "../components/skeletons/SmartBoardSkeleton";
+import VAKSkeleton from "../components/skeletons/VAKSkeleton";
 
 // Componente wrapper para IALabSignUpPage que maneja navegación
 const IALabSignUpPageWrapper = () => {
@@ -207,7 +211,7 @@ const AppRoutes = () => {
         <Route
           path="vak"
           element={
-            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+            <Suspense fallback={<VAKSkeleton />}>
               <VAKDiagnosisPage variant="premium" />
             </Suspense>
           }
@@ -216,7 +220,7 @@ const AppRoutes = () => {
         <Route
           path="vak-simple"
           element={
-            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+            <Suspense fallback={<VAKSkeleton />}>
               <VAKDiagnosisPage variant="simple" />
             </Suspense>
           }
@@ -225,7 +229,7 @@ const AppRoutes = () => {
         <Route
           path="vak-premium"
           element={
-            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+            <Suspense fallback={<VAKSkeleton />}>
               <VAKDiagnosisPage variant="premium" />
             </Suspense>
           }
@@ -265,7 +269,7 @@ const AppRoutes = () => {
         <Route
           path="smartboard"
           element={
-            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+            <Suspense fallback={<SmartBoardSkeleton />}>
               <SmartBoardLandingPage />
             </Suspense>
           }
@@ -284,7 +288,7 @@ const AppRoutes = () => {
           path="ialab"
           element={
             <RoleProtectedRoute requiredRole="ialab">
-              <Suspense fallback={<SkeletonLoader type="card" />}>
+              <Suspense fallback={<IALabSkeleton />}>
                 <IALabDashboard />
               </Suspense>
             </RoleProtectedRoute>
@@ -294,7 +298,7 @@ const AppRoutes = () => {
           path="ialab/:moduleId"
           element={
             <RoleProtectedRoute requiredRole="ialab">
-              <Suspense fallback={<SkeletonLoader type="card" />}>
+              <Suspense fallback={<IALabSkeleton />}>
                 <AILabPage />
               </Suspense>
             </RoleProtectedRoute>
@@ -305,7 +309,7 @@ const AppRoutes = () => {
           path="smartboard/app"
           element={
             <RoleProtectedRoute requiredRole="smartboard">
-              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+              <Suspense fallback={<SmartBoardSkeleton />}>
                 <SmartBoardPage />
               </Suspense>
             </RoleProtectedRoute>
@@ -327,7 +331,7 @@ const AppRoutes = () => {
           path="smartboard/estadisticas"
           element={
             <RoleProtectedRoute requiredRole="smartboard">
-              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+              <Suspense fallback={<SmartBoardSkeleton />}>
                 <SmartBoardStatsPage />
               </Suspense>
             </RoleProtectedRoute>
