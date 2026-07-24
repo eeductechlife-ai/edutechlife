@@ -94,7 +94,7 @@ app.use('/api/ialab/prompts', deepseekLimiter);
 app.use('/api/voice-token', authLimiter);
 app.use('/api/smartboard/data', requireAuth);
 app.use('/api/smartboard/progress', requireAuth);
-app.use('/api/smartboard/chat', deepseekLimiter);
+app.use('/api/smartboard/chat', requireAuth, deepseekLimiter);
 app.use('/api/ialab/progress', requireAuth);
 app.use('/api/ialab/templates', requireAuth);
 

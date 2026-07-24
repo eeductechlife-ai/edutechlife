@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const supabase = require('../db/supabase');
-const { chat, validateMessages } = require('../services/deepseek');
+const { chat, chatStream, validateMessages } = require('../services/deepseek');
+const { requireAuth } = require('../middleware/auth');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -46,6 +47,10 @@ Reglas importantes:
  */
 router.get('/data/:userId', async (req, res) => {
   const { userId } = req.params;
+
+  if (req.userId !== userId) {
+    return res.status(403).json({ error: 'Acceso denegado — no puedes acceder a datos de otro usuario' });
+  }
 
   try {
     const { data, error } = await supabase
@@ -114,7 +119,7 @@ router.get('/data/:userId', async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.post('/chat', async (req, res) => {
+router.post('/chat', requireAuth, async (req, res) => {
   const { messages, context } = req.body;
 
   const validationError = validateMessages(messages);
@@ -144,6 +149,69 @@ router.post('/chat', async (req, res) => {
   } catch (e) {
     console.error('Error calling Dani AI:', e);
     res.status(500).json({ error: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/smartboard/chat/stream:
+ *   post:
+ *     summary: Enviar mensaje al tutor virtual Dani con streaming
+ *     tags: [SmartBoard]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               messages:
+ *                 type: array
+ *               context:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Streaming de respuesta del tutor
+ *       400:
+ *         description: Error de validación
+ *       500:
+ *         description: Error del servidor
+ */
+router.post('/chat/stream', requireAuth, async (req, res) => {
+  const { messages, context } = req.body;
+
+  const validationError = validateMessages(messages);
+  if (validationError) return res.status(400).json({ error: validationError });
+
+  if (!DEEPSEEK_API_KEY) {
+    return res.status(500).json({ error: 'API key not configured on server' });
+  }
+
+  const systemPrompt = context
+    ? `${DANI_SYSTEM_PROMPT}\n\nContexto actual:\n${context}`
+    : DANI_SYSTEM_PROMPT;
+
+  const msgs = [
+    { role: 'system', content: systemPrompt },
+    ...messages,
+  ];
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  try {
+    await chatStream(DEEPSEEK_API_KEY, { messages: msgs }, (chunk) => {
+      res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
+    });
+    res.write('data: [DONE]\n\n');
+    res.end();
+  } catch (e) {
+    console.error('Error calling Dani AI (stream):', e);
+    res.write(`data: ${JSON.stringify({ error: e.message })}\n\n`);
+    res.end();
   }
 });
 
@@ -192,6 +260,10 @@ router.post('/chat', async (req, res) => {
  */
 router.get('/progress/:userId', async (req, res) => {
   const { userId } = req.params;
+
+  if (req.userId !== userId) {
+    return res.status(403).json({ error: 'Acceso denegado — no puedes acceder a datos de otro usuario' });
+  }
 
   try {
     const { data, error } = await supabase

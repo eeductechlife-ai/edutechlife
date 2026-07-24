@@ -91,17 +91,14 @@ const CinematicContent = ({
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
                 <Suspense fallback={<SectionFallback tab="noticias" />}>
-                  {isPremium ? (
+                  <PremiumGate
+                    icon="📰"
+                    title={PREMIUM_FEATURES.noticias.title}
+                    description={PREMIUM_FEATURES.noticias.description}
+                    isPremium={isPremium}
+                  >
                     <NewsTechFeed />
-                  ) : (
-                    <PremiumGate
-                      icon="📰"
-                      title={PREMIUM_FEATURES.noticias.title}
-                      description={PREMIUM_FEATURES.noticias.description}
-                    >
-                      <NewsTechFeed />
-                    </PremiumGate>
-                  )}
+                  </PremiumGate>
                 </Suspense>
               </motion.div>
             </motion.div>
@@ -221,17 +218,14 @@ const CinematicContent = ({
               transition={sharedTransition}
             >
               <Suspense fallback={<SectionFallback tab="noticias" />}>
-                {isPremium ? (
+                <PremiumGate
+                  icon={PREMIUM_FEATURES.noticias.icon}
+                  title={PREMIUM_FEATURES.noticias.title}
+                  description={PREMIUM_FEATURES.noticias.description}
+                  isPremium={isPremium}
+                >
                   <NewsTechFeed />
-                ) : (
-                  <PremiumGate
-                    icon={PREMIUM_FEATURES.noticias.icon}
-                    title={PREMIUM_FEATURES.noticias.title}
-                    description={PREMIUM_FEATURES.noticias.description}
-                  >
-                    <NewsTechFeed />
-                  </PremiumGate>
-                )}
+                </PremiumGate>
               </Suspense>
             </motion.div>
           </DashboardErrorBoundary>
@@ -359,17 +353,14 @@ const CinematicContent = ({
               transition={sharedTransition}
             >
               <Suspense fallback={<SectionFallback tab="libros" />}>
-                {isPremium ? (
+                <PremiumGate
+                  icon={PREMIUM_FEATURES.libros.icon}
+                  title={PREMIUM_FEATURES.libros.title}
+                  description={PREMIUM_FEATURES.libros.description}
+                  isPremium={isPremium}
+                >
                   <SmartBookReader />
-                ) : (
-                  <PremiumGate
-                    icon={PREMIUM_FEATURES.libros.icon}
-                    title={PREMIUM_FEATURES.libros.title}
-                    description={PREMIUM_FEATURES.libros.description}
-                  >
-                    <SmartBookReader />
-                  </PremiumGate>
-                )}
+                </PremiumGate>
               </Suspense>
             </motion.div>
           </DashboardErrorBoundary>
@@ -454,22 +445,16 @@ const CinematicContent = ({
               transition={sharedTransition}
               className="h-full"
             >
-              {isPremium ? (
+              <PremiumGate
+                icon={PREMIUM_FEATURES.analitica.icon}
+                title={PREMIUM_FEATURES.analitica.title}
+                description={PREMIUM_FEATURES.analitica.description}
+                isPremium={isPremium}
+              >
                 <Suspense fallback={<SectionFallback tab="analitica" />}>
                   <SmartBoardAnalytics />
                 </Suspense>
-              ) : (
-                <PremiumGate
-                  icon={PREMIUM_FEATURES.analitica.icon}
-                  title={PREMIUM_FEATURES.analitica.title}
-                  description={PREMIUM_FEATURES.analitica.description}
-                >
-                  <div className="flex flex-col items-center justify-center min-h-[300px] text-center p-8">
-                    <span className="text-6xl mb-4">📈</span>
-                    <p className="text-sm text-[#64748B]">Analítica Avanzada</p>
-                  </div>
-                </PremiumGate>
-              )}
+              </PremiumGate>
             </motion.div>
           </DashboardErrorBoundary>
         );
