@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 
@@ -33,3 +34,12 @@ export default function SmartBoardVakBadge({ icon, label, gradient, shadowColor,
     </motion.div>
   );
 }
+
+SmartBoardVakBadge.propTypes = {
+  icon: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  gradient: PropTypes.string.isRequired,
+  shadowColor: PropTypes.string,
+  style: PropTypes.object,
+  delay: PropTypes.number,
+};

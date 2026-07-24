@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import MagneticButton from '../MagneticButton';
 import { fadeInUp, containerVariants, cardVariants } from './SmartBoardShared';
@@ -11,13 +12,14 @@ const STEP_GRADIENTS = [
 ];
 
 export default function SmartBoardComoFuncionaSection({ t, pasos, handleCta }) {
+  const prefersReducedMotion = useReducedMotion();
   return (
-    <section id="como-funciona" className="relative w-full overflow-hidden bg-white py-12 lg:py-16 scroll-mt-20">
+    <section id="como-funciona" role="region" aria-label="Cómo funciona SmartBoard" className="relative w-full overflow-hidden bg-white py-12 lg:py-16 scroll-mt-20">
       <div className="absolute top-[30%] left-[10%] w-44 h-44 bg-primary-light/6 rounded-full blur-[80px] animate-orb-3" />
       <div className="absolute bottom-[20%] right-[10%] w-48 h-48 bg-mint/6 rounded-full blur-[80px] animate-orb-2" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-        <motion.div {...fadeInUp} className="text-center mb-10">
+        <motion.div {...(!prefersReducedMotion ? fadeInUp : {})} className="text-center mb-10">
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-mint/10 to-primary-light/10 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3 border border-mint/10">
             <Icon name="fa-rocket-launch" className="text-mint text-xs" />
             {t('smartboard.landing_how_badge')}
@@ -32,9 +34,9 @@ export default function SmartBoardComoFuncionaSection({ t, pasos, handleCta }) {
           <div className="absolute left-1/2 top-12 bottom-12 w-0.5 bg-gradient-to-b from-primary-light via-corporate to-mint lg:opacity-20 opacity-25" style={{ transform: 'translateX(-50%)' }} />
 
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
+            variants={prefersReducedMotion ? undefined : containerVariants}
+            initial={prefersReducedMotion ? false : "hidden"}
+            whileInView={prefersReducedMotion ? undefined : "visible"}
             viewport={{ once: true, margin: '-50px' }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4"
           >
@@ -60,10 +62,10 @@ export default function SmartBoardComoFuncionaSection({ t, pasos, handleCta }) {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+          whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ type: 'spring', stiffness: 100, damping: 16, delay: 0.4 }}
+          transition={prefersReducedMotion ? undefined : { type: 'spring', stiffness: 100, damping: 16, delay: 0.4 }}
           className="text-center mt-10"
         >
           <MagneticButton onClick={handleCta}
@@ -78,3 +80,9 @@ export default function SmartBoardComoFuncionaSection({ t, pasos, handleCta }) {
     </section>
   );
 }
+
+SmartBoardComoFuncionaSection.propTypes = {
+  t: PropTypes.func.isRequired,
+  pasos: PropTypes.array.isRequired,
+  handleCta: PropTypes.func.isRequired,
+};

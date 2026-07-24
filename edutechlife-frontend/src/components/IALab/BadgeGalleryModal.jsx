@@ -27,7 +27,7 @@ const BadgeGalleryModal = ({ isOpen, onClose }) => {
       }
     });
     return { earned: earnedList, locked: lockedList };
-  }, [badges, badgesDates]);
+  }, [badges, badgesDates, BADGE_INFO]);
 
   return (
     <AnimatePresence>

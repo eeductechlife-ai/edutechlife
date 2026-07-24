@@ -1,6 +1,8 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import PropTypes from 'prop-types';
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion';
 
 export default function SmartBoardTilt3D({ children, className = '', intensity = 7, style = {} }) {
+  const prefersReducedMotion = useReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 350, damping: 25 });
@@ -16,12 +18,19 @@ export default function SmartBoardTilt3D({ children, className = '', intensity =
 
   return (
     <motion.div
-      onMouseMove={handleMove}
-      onMouseLeave={() => { x.set(0); y.set(0); }}
-      style={{ rotateX, rotateY, transformStyle: 'preserve-3d', perspective: 1000, ...style }}
+      onMouseMove={prefersReducedMotion ? undefined : handleMove}
+      onMouseLeave={prefersReducedMotion ? undefined : () => { x.set(0); y.set(0); }}
+      style={prefersReducedMotion ? { ...style } : { rotateX, rotateY, transformStyle: 'preserve-3d', perspective: 1000, ...style }}
       className={className}
     >
       {children}
     </motion.div>
   );
 }
+
+SmartBoardTilt3D.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+  intensity: PropTypes.number,
+  style: PropTypes.object,
+};

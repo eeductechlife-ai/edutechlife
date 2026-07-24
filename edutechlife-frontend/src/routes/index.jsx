@@ -62,7 +62,7 @@ const SmartBoardStatsPage = lazy(
   () => import("../components/pages/SmartBoardStatsPage"),
 );
 const IALabDashboard = lazy(() => import("../components/IALab/IALabDashboard"));
-import DashboardSkeleton from "../components/skeletons/DashboardSkeleton";
+import SectionErrorBoundary from "../components/IALab/SectionErrorBoundary";
 import IALabSkeleton from "../components/skeletons/IALabSkeleton";
 import SmartBoardSkeleton from "../components/skeletons/SmartBoardSkeleton";
 import VAKSkeleton from "../components/skeletons/VAKSkeleton";
@@ -251,9 +251,11 @@ const AppRoutes = () => {
         <Route
           path="conoce-smartboard"
           element={
-            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-              <SmartBoardInfoPage />
-            </Suspense>
+            <SectionErrorBoundary name="SmartBoardInfo">
+              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+                <SmartBoardInfoPage />
+              </Suspense>
+            </SectionErrorBoundary>
           }
         />
 
@@ -269,18 +271,22 @@ const AppRoutes = () => {
         <Route
           path="smartboard"
           element={
-            <Suspense fallback={<SmartBoardSkeleton />}>
-              <SmartBoardLandingPage />
-            </Suspense>
+            <SectionErrorBoundary name="SmartBoardLanding">
+              <Suspense fallback={<SmartBoardSkeleton />}>
+                <SmartBoardLandingPage />
+              </Suspense>
+            </SectionErrorBoundary>
           }
         />
 
         <Route
           path="smartboard/padres"
           element={
-            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-              <SmartBoardParentDashboard />
-            </Suspense>
+            <SectionErrorBoundary name="SmartBoardParentDashboard">
+              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+                <SmartBoardParentDashboard />
+              </Suspense>
+            </SectionErrorBoundary>
           }
         />
 
@@ -309,9 +315,11 @@ const AppRoutes = () => {
           path="smartboard/app"
           element={
             <RoleProtectedRoute requiredRole="smartboard">
-              <Suspense fallback={<SmartBoardSkeleton />}>
-                <SmartBoardPage />
-              </Suspense>
+              <SectionErrorBoundary name="SmartBoardApp">
+                <Suspense fallback={<SmartBoardSkeleton />}>
+                  <SmartBoardPage />
+                </Suspense>
+              </SectionErrorBoundary>
             </RoleProtectedRoute>
           }
         />
@@ -331,9 +339,11 @@ const AppRoutes = () => {
           path="smartboard/estadisticas"
           element={
             <RoleProtectedRoute requiredRole="smartboard">
-              <Suspense fallback={<SmartBoardSkeleton />}>
-                <SmartBoardStatsPage />
-              </Suspense>
+              <SectionErrorBoundary name="SmartBoardStats">
+                <Suspense fallback={<SmartBoardSkeleton />}>
+                  <SmartBoardStatsPage />
+                </Suspense>
+              </SectionErrorBoundary>
             </RoleProtectedRoute>
           }
         />
@@ -350,9 +360,11 @@ const AppRoutes = () => {
         <Route
           path="sign-up/smartboard"
           element={
-            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-              <SmartBoardSignUpPageWrapper />
-            </Suspense>
+            <SectionErrorBoundary name="SmartBoardSignUp">
+              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+                <SmartBoardSignUpPageWrapper />
+              </Suspense>
+            </SectionErrorBoundary>
           }
         />
 

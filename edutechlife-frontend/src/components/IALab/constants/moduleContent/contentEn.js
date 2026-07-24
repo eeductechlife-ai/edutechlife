@@ -8,31 +8,31 @@
 const CONTENT_EN = {
   1: {
     objective:
-      "Develop prompt engineering skills to get accurate AI results in real-world contexts.",
+      "Master the art of forging precise instructions with AI as a digital artisan apprentice, creating prompts any model understands perfectly.",
     learningPoints: [
-      { text: "Giving clear instructions to AI", icon: "fa-bullseye" },
+      { text: "Forge clear instructions like a master artisan", icon: "fa-bullseye" },
       {
-        text: "Improving questions and answers",
+        text: "Refine questions and answers with surgical precision",
         icon: "fa-wand-magic-sparkles",
       },
-      { text: "Detecting and fixing errors", icon: "fa-exclamation-triangle" },
-      { text: "Applying AI in study and work", icon: "fa-rocket" },
+      { text: "Detect and fix imperfections in your creations", icon: "fa-exclamation-triangle" },
+      { text: "Apply your artisan craft in study and work", icon: "fa-rocket" },
     ],
     overviewData: {
-      title: "Master the Instructions",
+      title: "The Digital Artisan's Workshop",
       description:
-        "Learn to communicate with AI like a professional. From fundamentals to advanced techniques that will transform how you work.",
+        "Every artisan starts with basic tools and, with practice, becomes a master. Here you'll learn to sculpt instructions that AI understands perfectly. From fundamentals to advanced techniques that will transform how you work with artificial intelligence.",
       mission:
-        "Complete each lesson and multimedia resource (videos, guides, and labs). Every step brings you 20% closer to your certification. Clear instructions are your superpower!",
+        "Your mission as an artisan: complete each lesson and multimedia resource (videos, guides, and labs). Every tool you master brings you 20% closer to your certification. Precise instructions are your quality seal!",
       topics: [
         {
-          title: "Introduction to Generative Artificial Intelligence",
+          title: "The Artisan's Foundations: What is Generative AI?",
           icon: "fa-brain",
           resources: 2,
           duration: "20 min",
         },
         {
-          title: "What is a Prompt?",
+          title: "The Artisan's Chisel: What is a Prompt?",
           icon: "fa-comments",
           resources: 3,
           duration: "20 min",
@@ -45,34 +45,34 @@ const CONTENT_EN = {
 
   2: {
     objective:
-      "Become a ChatGPT expert and create intelligent assistants that automate your daily work.",
+      "Design and build intelligent systems with ChatGPT: from foundations to full automation of your daily work as a true digital architect.",
     learningPoints: [
-      { text: "Master advanced System Prompts", icon: "fa-sliders" },
-      { text: "Connect GPT with external APIs", icon: "fa-code" },
-      { text: "Create your own custom GPT", icon: "fa-robot" },
-      { text: "Automate workflows", icon: "fa-cog" },
+      { text: "Design master blueprints with advanced System Prompts", icon: "fa-sliders" },
+      { text: "Connect structures with external APIs", icon: "fa-code" },
+      { text: "Build your own custom GPT as an architectural module", icon: "fa-robot" },
+      { text: "Automate complete construction workflows", icon: "fa-cog" },
     ],
     overviewData: {
-      title: "ChatGPT Without Limits",
+      title: "The Digital Architect's Construction Site",
       description:
-        "In this module, you will unlock the true potential of ChatGPT. From setting up professional system prompts to creating custom GPTs that work for you.",
+        "Welcome to the masterpiece of automation. Here you won't just use ChatGPT — you'll build with it. Learn to design system prompts like architectural blueprints, use integrated tools as scaffolding, create GPTs as construction modules, and connect everything with external APIs to raise digital structures that work on their own.",
       mission:
-        "Complete each lesson and master the world's most used AI. Each completed resource brings you closer to a professional level. Take your skills to the next level!",
+        "Your mission as an architect: complete each lesson and master the art of building with ChatGPT. Every structure you design brings you closer to your automation architect certification. Build your digital masterpiece!",
       topics: [
         {
-          title: "Complete ChatGPT Guide",
+          title: "The Architect's Blueprints: Complete ChatGPT Guide",
           icon: "fa-book-open",
           resources: 3,
           duration: "20 min",
         },
         {
-          title: "Workflow Templates",
+          title: "The Architect's Scaffolding: Integrated Tools",
           icon: "fa-layer-group",
           resources: 2,
           duration: "20 min",
         },
         {
-          title: "Function Calling and OpenAI APIs",
+          title: "The Building's Facade: GPTs and Function Calling",
           icon: "fa-code",
           resources: 2,
           duration: "20 min",
@@ -82,10 +82,10 @@ const CONTENT_EN = {
     lessons: [
       {
         id: 1,
-        title: "Complete ChatGPT Guide",
-        description: "The ultimate guide to mastering ChatGPT",
+        title: "The Architect's Blueprints: Complete ChatGPT Guide",
+        description: "The foundations of every great digital construction",
         detailedDescription:
-          "Access the Complete ChatGPT Guide from Edutechlife: a comprehensive resource covering everything from fundamentals to advanced techniques. Learn to leverage every model, set up effective conversations, and master best practices for professional results.",
+          "Every building starts with a blueprint. In this lesson, you'll learn the complete architecture of ChatGPT: from available models to professional prompt engineering best practices. Learn to select the right tool for each phase of your construction and lay the foundations of your automation projects.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-book-open",
@@ -94,10 +94,10 @@ const CONTENT_EN = {
       },
       {
         id: 2,
-        title: "Workflow Templates",
-        description: "Create automations that work for you",
+        title: "The Architect's Scaffolding: Integrated Tools",
+        description: "The tools that raise your digital construction",
         detailedDescription:
-          "Discover ChatGPT's arsenal of tools: web search, Python data analysis, image generation, and more. Learn to combine them to create powerful automations.",
+          "An architect doesn't build with bare hands — they use cranes, scaffolding, and specialized tools. Discover ChatGPT's arsenal: Web Search, Data Analysis with Python, DALL-E 3, Canvas, and Projects. Learn to combine them to build powerful automations that multiply your productivity.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -106,10 +106,10 @@ const CONTENT_EN = {
       },
       {
         id: 3,
-        title: "Function Calling and OpenAI APIs",
-        description: "Connect ChatGPT to the real world",
+        title: "The Building's Facade: GPTs and Function Calling",
+        description: "Connect your work to the real world",
         detailedDescription:
-          "Take ChatGPT to the next level: connect it with APIs, databases, and external services. Create automated workflows that solve real problems.",
+          "The facade is what the world sees, but behind it lies a complex structure that holds it up. Take your constructions to the next level: connect custom GPTs with APIs, databases, and external services. Create automated workflows that solve real problems while you design the next project.",
         duration: "20 min",
         format: "Video",
         icon: "fa-code",
@@ -119,108 +119,117 @@ const CONTENT_EN = {
     ],
     accordionContent: {
       1: {
-        objective: "🎯 Main Objective",
+        objective: "🎯 The Architect's Foundations",
         objectiveDesc:
-          "Master ChatGPT completely through Edutechlife's comprehensive guide, from fundamentals to advanced techniques.",
+          "Master the fundamentals of ChatGPT like an architect masters construction principles: from models to professional prompt engineering techniques.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Understand the architecture and evolution of GPT models",
+            text: "Understand GPT model architecture and evolution as a master blueprint",
           },
           {
             icon: "fa-check",
-            text: "Apply professional prompt engineering techniques",
+            text: "Apply professional prompt engineering techniques as construction tools",
           },
           {
             icon: "fa-check",
-            text: "Select the optimal model based on cost and capability",
+            text: "Select the optimal model based on cost and capability — the right material for each job",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Using the most expensive model for simple tasks",
+            text: "Using the most expensive model for simple tasks — like using a pile driver for a picture frame",
           },
-          { icon: "fa-times", text: "Ignoring context limits (tokens)" },
-          { icon: "fa-times", text: "Not keeping up with new model updates" },
+          {
+            icon: "fa-times",
+            text: "Ignoring context limits — like building without measuring the land",
+          },
+          {
+            icon: "fa-times",
+            text: "Not keeping up with new model updates — an ignorant architect builds castles of cards",
+          },
         ],
         example: {
           label: "Practical example",
-          weak: "❌ Generic usage: Using GPT-4 for simple tasks that GPT-3.5 handles just as well",
+          weak: "❌ Amateur: Using GPT-4 for everything, even tasks GPT-3.5 handles in seconds",
           strong:
-            "✅ Smart usage: GPT-3.5 for quick summaries, GPT-4 for complex analysis and deep reasoning",
+            "✅ Architect: GPT-3.5 for quick drafts and summaries, GPT-4 for complex structural analysis and deep reasoning — the right material for each layer of construction",
         },
       },
       2: {
-        objective: "🏗️ Integrated Tools: The Complete ChatGPT Ecosystem",
+        objective: "🏗️ The Architect's Scaffolding: The Tool Ecosystem",
         objectiveDesc:
-          "Master all of ChatGPT's integrated tools: Web Search, Code Interpreter, DALL-E 3, Canvas, and Projects. Learn to combine them in professional workflows.",
+          "Master all of ChatGPT's integrated tools like an architect masters their workshop: Web Search, Code Interpreter, DALL-E 3, Canvas, and Projects. Learn to combine them in professional construction workflows.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Identify when to use each integrated tool",
+            text: "Identify when to use each tool like an architect picks the right instrument",
           },
           {
             icon: "fa-check",
-            text: "Combine multiple tools in a single workflow",
+            text: "Combine multiple tools in a single workflow like phases of construction",
           },
           {
             icon: "fa-check",
-            text: "Create automations that solve real problems",
+            text: "Create automations that solve real problems — your finished building",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Using DALL-E 3 for long text or brand logos",
+            text: "Using DALL-E 3 for long text or brand logos — like using a chisel as a hammer",
           },
           {
             icon: "fa-times",
-            text: "Relying on training data for current information",
+            text: "Relying on training data for current information — like building with outdated blueprints",
           },
           {
             icon: "fa-times",
-            text: "Not organizing projects by specific goals",
+            text: "Not organizing projects by specific goals — like mixing materials from 5 different sites",
           },
         ],
         example: {
           label: "Integrated workflow example",
-          weak: "❌ Isolated: Asking for updated data without enabling Web Search → outdated results",
+          weak: "❌ Isolated: Asking for updated data without enabling Web Search → outdated results like a building without foundations",
           strong:
-            "✅ Integrated: Search current data (Browse) → analyze with Python (Code Interpreter) → generate infographic (DALL-E 3) → edit in Canvas",
+            "✅ Integrated: Search current data (Browse) → analyze with Python (Code Interpreter) → generate infographic (DALL-E 3) → edit in Canvas — a construction in 4 perfectly orchestrated phases",
         },
       },
       3: {
-        objective: "⚡ Function Calling: Connect ChatGPT to the Real World",
+        objective: "⚡ The Building's Facade: Function Calling",
         objectiveDesc:
-          "Integrate ChatGPT with external APIs so it can query data, execute actions, and automate complete workflows.",
+          "Integrate your ChatGPT constructions with the outside world through APIs so they can query data, execute actions, and automate complete workflows.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Configure Function Calling with the OpenAI API",
+            text: "Configure Function Calling with the OpenAI API like digital plumbing systems",
           },
           {
             icon: "fa-check",
-            text: "Define functions with clear JSON schemas",
+            text: "Define functions with clear JSON schemas — the blueprints of your connections",
           },
-          { icon: "fa-check", text: "Create multi-step automated workflows" },
+          { icon: "fa-check", text: "Create multi-step automated workflows that run 24/7" },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Not validating API responses before using them",
+            text: "Not validating API responses before using them — like not inspecting construction materials",
           },
           {
             icon: "fa-times",
-            text: "Sending sensitive data without authentication",
+            text: "Sending sensitive data without authentication — like leaving doors open at your construction site",
           },
-          { icon: "fa-times", text: "Not handling connection errors properly" },
+          {
+            icon: "fa-times",
+            text: "Not handling connection errors properly — like having no earthquake contingency plan",
+          },
         ],
         example: {
           label: "Practical example",
-          weak: "❌ Basic prompt: What's the weather today?",
+          weak: "❌ Basic prompt: What's the weather today? — like asking the weather by looking out the window",
           strong:
-            "✅ Function Calling: ChatGPT detects the intent, calls the weather API, receives JSON data, and generates: The current weather in Bogotá is 18°C with 65% humidity. We recommend bringing an umbrella due to 80% rain probability this afternoon.",
+            "✅ Function Calling: ChatGPT detects the intent, calls the weather API, receives JSON data, and generates: The current weather in Bogotá is 18°C with 65% humidity. We recommend bringing an umbrella due to 80% rain probability this afternoon. An elegant facade connecting to live real-world data.",
         },
       },
     },
@@ -228,34 +237,34 @@ const CONTENT_EN = {
 
   3: {
     objective:
-      "Use Google Gemini to research deeply, verify data, and analyze information like a professional.",
+      "Wield your digital magnifying glass: investigate deeply, verify every clue, and analyze information with the precision of a master detective.",
     learningPoints: [
-      { text: "Analyze text, images, and code together", icon: "fa-cubes" },
-      { text: "Get real-time data", icon: "fa-signal" },
-      { text: "Research topics in depth", icon: "fa-search" },
-      { text: "Verify information with AI", icon: "fa-shield-alt" },
+      { text: "Analyze text, images, and code as a single body of evidence", icon: "fa-cubes" },
+      { text: "Pull fresh clues from the real world in real-time", icon: "fa-signal" },
+      { text: "Dig until you find the truth — deep investigations no other detective can match", icon: "fa-search" },
+      { text: "Separate facts from hallucinations with AI-powered forensic verification", icon: "fa-shield-alt" },
     ],
     overviewData: {
-      title: "Elite Research with Gemini",
+      title: "The Data Detective: Elite Research with Gemini",
       description:
-        "In this module, you will master Google Gemini for advanced research. Learn to cross-reference real-time data, analyze multiple formats, and verify information with precision.",
+        "Welcome to the digital detective academy. Here you'll learn to cross-reference clues in real-time, analyze any type of evidence (text, image, audio, video), and verify every fact with the precision of a data forensics expert.",
       mission:
-        "Become an elite researcher. Master Google Gemini and discover how to cross-reference data, verify sources, and create professional reports with AI.",
+        "Your mission: become the world's best data detective. Master Google Gemini to cross-reference clues, verify every source, and deliver reports any CEO would sign. Every lesson brings you closer to your digital detective badge.",
       topics: [
         {
-          title: "Introduction to Google Gemini",
+          title: "The Multimodal Detective Awakens",
           icon: "fa-google",
           resources: 3,
           duration: "20 min",
         },
         {
-          title: "Multimodal Reasoning and Grounding",
+          title: "Grounding: When Evidence Touches the Real World",
           icon: "fa-layer-group",
           resources: 3,
           duration: "20 min",
         },
         {
-          title: "Deep Research and Fact-Checking with AI",
+          title: "Deep Research: The Forensic Toolkit",
           icon: "fa-search",
           resources: 3,
           duration: "20 min",
@@ -265,10 +274,10 @@ const CONTENT_EN = {
     lessons: [
       {
         id: 1,
-        title: "Introduction to Google Gemini",
-        description: "Gemini: the AI that sees, reads, and listens",
+        title: "The Multimodal Detective Awakens",
+        description: "Gemini: your all-terrain magnifying glass that sees, reads, and listens simultaneously",
         detailedDescription:
-          "Gemini is Google's multimodal AI that processes text, images, audio, and video simultaneously. Learn to use it to analyze, create, and solve complex problems.",
+          "Imagine a magnifying glass that doesn't just see images — it reads documents, listens to audio, and analyzes video, all at the same time. That's Gemini. In this lesson, you'll learn to wield this multimodal superpower to analyze, create, and crack cases that used to require 4 different tools.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-google",
@@ -277,10 +286,10 @@ const CONTENT_EN = {
       },
       {
         id: 2,
-        title: "Multimodal Reasoning and Grounding",
-        description: "Analyze images, text, and data together",
+        title: "Grounding: When Evidence Touches the Real World",
+        description: "Connect your magnifying glass to solid ground: live data from the real world",
         detailedDescription:
-          "Learn to combine images, documents, and live data. Gemini analyzes everything simultaneously to give you answers with verifiable real-world sources.",
+          "What good is a magnifying glass if you can't verify what you see? Grounding connects Gemini to live internet information. Learn to combine images, documents, and real-time data to get answers that aren't just smart — they're verifiable.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -289,10 +298,10 @@ const CONTENT_EN = {
       },
       {
         id: 3,
-        title: "Deep Research and Fact-Checking with AI",
-        description: "Research like a professional",
+        title: "Deep Research: The Forensic Toolkit",
+        description: "Dig until you find the truth with deep investigation tools",
         detailedDescription:
-          "Master AI-powered research: deep research, automatic data verification, and generation of technical reports with cited and verifiable sources.",
+          "The most complex cases demand the most powerful tools. Master deep research with AI: Deep Research to explore topics in their entirety, automatic fact-checking to verify every source, and technical report generation any expert would endorse.",
         duration: "20 min",
         format: "Video",
         icon: "fa-search",
@@ -302,111 +311,111 @@ const CONTENT_EN = {
     ],
     accordionContent: {
       1: {
-        objective: "🎯 Main Objective",
+        objective: "🎯 Main Objective: Activate Your Multimodal Magnifying Glass",
         objectiveDesc:
-          "Learn about Google Gemini, its multimodal capabilities, and how it differs from other AI models.",
+          "Meet your new secret weapon: discover what makes Gemini unique, how it processes multiple types of evidence, and why it outperforms other models in multimodal investigation.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Understand Gemini's multimodal architecture",
+            text: "Understand how Gemini processes text, images, audio, and video as a single language",
           },
           {
             icon: "fa-check",
-            text: "Set up Gemini Advanced and Google AI Studio",
+            text: "Configure your arsenal: Gemini Advanced, Google AI Studio, and every detective tool available",
           },
           {
             icon: "fa-check",
-            text: "Compare Gemini with ChatGPT and other models",
+            text: "Know exactly when to use Gemini vs. other models — the right tool for every case",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Using Gemini as if it were just a chatbot",
+            text: "Treating Gemini like a regular chatbot — like using a scalpel to cut bread",
           },
           {
             icon: "fa-times",
-            text: "Not leveraging its image analysis capabilities",
+            text: "Ignoring its visual analysis power — the richest evidence is often in images",
           },
-          { icon: "fa-times", text: "Ignoring grounding with Google Search" },
+          { icon: "fa-times", text: "Not using grounding — it's like investigating with your eyes closed" },
         ],
         example: {
           label: "Practical example",
-          weak: "❌ Basic usage: Asking what Gemini is",
+          weak: "❌ Novice: Asking 'What is Gemini?' — like a tourist asking for the time",
           strong:
-            "✅ Advanced usage: Upload an image of a financial chart, request trend analysis, cross-reference with real-time search data, and generate an executive report",
+            "✅ Detective: Upload a financial chart, request trend analysis with historical data correlation, cross-reference with real-time economic indicators search, and receive an executive report ready for your board meeting",
         },
       },
       2: {
-        objective: "🔬 Multimodal Reasoning: See, Read, and Analyze",
+        objective: "🔬 Multimodal Reasoning: The Digital Detective's Superpower",
         objectiveDesc:
-          "Master Gemini's ability to process text, images, audio, and code simultaneously with real-time grounding.",
+          "Unlock the ability to process multiple types of evidence simultaneously: text, images, audio, and code. Like having 4 detectives working in parallel within a single mind.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Analyze images and documents with Gemini",
+            text: "Analyze images and documents like a digital forensics expert",
           },
           {
             icon: "fa-check",
-            text: "Use grounding for up-to-date internet data",
+            text: "Use grounding for fresh internet data — live information, not frozen knowledge",
           },
           {
             icon: "fa-check",
-            text: "Combine multiple inputs in a single analysis",
+            text: "Fuse text, image, audio, and code into a single coherent analysis",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Uploading low-quality images without context",
+            text: "Uploading blurry evidence without context — detectives work with clear clues",
           },
           {
             icon: "fa-times",
-            text: "Blindly trusting grounding without verification",
+            text: "Blindly trusting grounding without verification — even the best source can be wrong",
           },
           {
             icon: "fa-times",
-            text: "Not specifying the expected type of analysis",
+            text: "Not telling Gemini what analysis you need — like asking a forensics expert 'look at this'",
           },
         ],
         example: {
           label: "Practical example",
-          weak: "❌ Vague prompt: Analyze this image",
+          weak: "❌ Novice: 'Analyze this image' — no context, no instructions, no direction",
           strong:
-            "✅ Multimodal prompt: Analyze this technical architecture diagram. Identify the components, explain the data flow, suggest scalability improvements, and compare with the AWS 2024 reference architecture.",
+            "✅ Detective: 'Analyze this architecture diagram as if you were a systems auditor. Identify every component, trace the data flow, flag scalability vulnerabilities, and compare against the AWS 2024 standard. Deliver a 3-paragraph executive report with action priorities.'",
         },
       },
       3: {
-        objective: "🔍 Deep Research: Expert-Level Investigation",
+        objective: "🔍 Deep Research: The Forensic Investigator's Arsenal",
         objectiveDesc:
-          "Use Gemini for deep research with verifiable sources, automatic fact-checking, and technical report generation.",
+          "When simple cases turn complex, you need Deep Research. Learn to harness Gemini's power for exhaustive investigations with verifiable sources, automatic fact-checking, and technical reports any expert would respect.",
         achievements: [
-          { icon: "fa-check", text: "Run Deep Research with cited sources" },
+          { icon: "fa-check", text: "Execute deep investigations that cross-reference dozens of sources automatically" },
           {
             icon: "fa-check",
-            text: "Verify information with automatic fact-checking",
+            text: "Verify every fact instantly — your safety net against misinformation",
           },
           {
             icon: "fa-check",
-            text: "Generate technical reports with references",
+            text: "Produce consultant-level reports with verifiable references and exact citations",
           },
         ],
         warnings: [
-          { icon: "fa-times", text: "Not verifying the sources Gemini cites" },
+          { icon: "fa-times", text: "Accepting unverified sources — even the best detective double-checks" },
           {
             icon: "fa-times",
-            text: "Accepting the first answer without digging deeper",
+            text: "Stopping at the first answer — the truth is usually in the second layer",
           },
           {
             icon: "fa-times",
-            text: "Not cross-referencing information with primary sources",
+            text: "Not cross-referencing with primary sources — quality investigation works with original documents",
           },
         ],
         example: {
           label: "Practical example",
-          weak: "❌ Surface level: What are the AI trends in 2025?",
+          weak: "❌ Novice: 'What are the AI trends in 2026?' — a question anyone can Google",
           strong:
-            "✅ Deep Research: Research the top 5 generative AI trends in 2025. For each: primary source, adoption data, real use cases, identified risks, and 3-year projection. Include verifiable URLs.",
+            "✅ Detective: 'Conduct a forensic investigation of the top 5 generative AI trends in 2026. For each trend: verified primary source, quantitative enterprise adoption data, 2 real company use cases, identified risks with criticality level, and 3-year projection with sources. Deliver as an executive report with verifiable links to every source.'",
         },
       },
     },
@@ -414,34 +423,34 @@ const CONTENT_EN = {
 
   4: {
     objective:
-      "Transform documents and sources into podcasts, summaries, and actionable knowledge in minutes.",
+      "Turn documents into gold: podcasts that sound like professional radio, summaries that cut to the chase, and answers that cite every source without making things up.",
     learningPoints: [
-      { text: "Select and curate your sources", icon: "fa-book-open" },
-      { text: "Synthesize documents with AI", icon: "fa-file-alt" },
-      { text: "Create podcasts from your files", icon: "fa-microphone" },
-      { text: "Manage intelligent documentation", icon: "fa-folder-open" },
+      { text: "Curate your sources like a jeweler picks gemstones", icon: "fa-book-open" },
+      { text: "Distill documents into pure knowledge with AI", icon: "fa-file-alt" },
+      { text: "Create radio-quality podcasts from your files", icon: "fa-microphone" },
+      { text: "Manage your digital library with superhuman intelligence", icon: "fa-folder-open" },
     ],
     overviewData: {
-      title: "Your First AI Notebook",
+      title: "Your Document Alchemy Lab",
       description:
-        "In this module, you will transform any document into useful knowledge. From intelligent summaries to AI-generated podcasts, all from a single tool.",
+        "In this module, you will become a digital alchemist: your PDFs, articles, and notes hold hidden potential you never imagined. Learn to extract, transform, and share them in formats that captivate, educate, and transform.",
       mission:
-        "Master the art of transforming documents into knowledge. Turn PDFs into intelligent summaries, podcasts, and personalized research assistants.",
+        "Become a digital alchemist: your PDFs, articles, and notes hold hidden potential you never imagined. Learn to extract, transform, and share them in ways that captivate, educate, and transform.",
       topics: [
         {
-          title: "What is NotebookLM and how is it used?",
+          title: "The Document Alchemist: Your First Spell with NotebookLM",
           icon: "fa-microphone",
           resources: 3,
           duration: "20 min",
         },
         {
-          title: "Source Curation and Document Synthesis",
+          title: "The Art of Curation: How to Choose and Synthesize Sources",
           icon: "fa-book-open",
           resources: 3,
           duration: "20 min",
         },
         {
-          title: "Audio Overviews and AI Document Management",
+          title: "The Secret Formula: Audio Overviews and Document Management",
           icon: "fa-podcast",
           resources: 3,
           duration: "20 min",
@@ -451,10 +460,10 @@ const CONTENT_EN = {
     lessons: [
       {
         id: 1,
-        title: "What is NotebookLM and how is it used?",
-        description: "Your AI research assistant",
+        title: "The Document Alchemist: Your First Spell with NotebookLM",
+        description: "Where PDFs come to life",
         detailedDescription:
-          "Discover NotebookLM, Google's tool that turns your PDFs, articles, and notes into a personal assistant that responds with exact citations from your documents.",
+          "Meet NotebookLM, Google's tool that turns your PDFs, articles, and notes into a personal assistant that responds with exact citations. It doesn't hallucinate. It doesn't make things up. It's your librarian with superpowers.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-microphone",
@@ -463,10 +472,10 @@ const CONTENT_EN = {
       },
       {
         id: 2,
-        title: "Source Curation and Document Synthesis",
-        description: "Organize your research like a pro",
+        title: "The Art of Curation: How to Choose and Synthesize Sources",
+        description: "Quality over quantity, always",
         detailedDescription:
-          "Learn to select the best sources, organize them by topic, and connect ideas across documents to create professional-level summaries and analyses.",
+          "Learn to select the best sources like a jeweler picks gemstones, organize them by topic, and weave ideas across documents to create professional-level summaries and analyses.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-book-open",
@@ -475,10 +484,10 @@ const CONTENT_EN = {
       },
       {
         id: 3,
-        title: "Audio Overviews and AI Document Management",
-        description: "Turn PDFs into podcasts",
+        title: "The Secret Formula: Audio Overviews and Document Management",
+        description: "Your documents speak for themselves",
         detailedDescription:
-          "Transform your documents into podcast conversations with two AI voices. Ideal for learning on the go. Manage your knowledge library intelligently.",
+          "Transform your documents into podcast conversations with two AI voices. A sonic experience that sounds like professional radio. Perfect for learning on the go. Manage your digital library with superhuman intelligence.",
         duration: "20 min",
         format: "Video",
         icon: "fa-podcast",
@@ -488,111 +497,114 @@ const CONTENT_EN = {
     ],
     accordionContent: {
       1: {
-        objective: "🎯 Main Objective",
+        objective: "🎯 The First Spell",
         objectiveDesc:
-          "Understand what NotebookLM is, how it works, and why it's revolutionary for personal knowledge management.",
+          "Discover the hidden power of NotebookLM: how an assistant that only talks about what it knows is revolutionizing personal knowledge management.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Understand the concept of AI based on your own sources",
+            text: "Understand why AI based on your own sources is more trustworthy",
           },
           {
             icon: "fa-check",
-            text: "Create your first notebook with documents",
+            text: "Create your first notebook and watch documents come to life",
           },
           {
             icon: "fa-check",
-            text: "Differentiate NotebookLM from generic chatbots",
+            text: "Tell the difference between an expert librarian (NotebookLM) and a generic chatbot",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Uploading documents without curating or organizing them",
+            text: "Uploading documents without any order — like stuffing a drawer full of papers",
           },
           {
             icon: "fa-times",
-            text: "Expecting it to work without quality sources",
+            text: "Expecting magic without putting quality sources in the cauldron",
           },
           {
             icon: "fa-times",
-            text: "Not understanding it only responds based on your sources",
+            text: "Forgetting it only responds with what YOU give it — garbage in, garbage out",
           },
         ],
         example: {
           label: "Practical example",
-          weak: "❌ Empty notebook: No sources uploaded, no context",
+          weak: "❌ Sarah uploaded 50 disorganized PDFs and got confusing answers. Garbage in, garbage out.",
           strong:
-            "✅ Powerful notebook: 5 academic research PDFs + 3 industry articles = Expert assistant that responds with verbatim citations from your documents",
+            "✅ Felipe selected 5 key papers, organized them by topic, added context — and his notebook became an expert assistant that answered with exact citations. The difference: quality over quantity.",
         },
       },
       2: {
-        objective: "📚 Source Curation: Quality over Quantity",
+        objective: "📚 Curation: The Art of Choosing Well",
         objectiveDesc:
-          "Learn to select, organize, and synthesize documents to maximize the value of your research notebook.",
+          "Discover why a handful of well-chosen sources is worth more than an entire library in disarray.",
         achievements: [
-          { icon: "fa-check", text: "Select relevant and reliable sources" },
           {
             icon: "fa-check",
-            text: "Organize documents by thematic categories",
+            text: "Select sources like a wine taster chooses their vintage",
           },
           {
             icon: "fa-check",
-            text: "Generate cross-syntheses across multiple sources",
+            text: "Organize documents by themes so connections emerge naturally",
+          },
+          {
+            icon: "fa-check",
+            text: "Create cross-source syntheses that bridge ideas like a knowledge highway",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Uploading 50 documents without quality filtering",
+            text: "Uploading 50 documents without filtering — more is not better, it's noise",
           },
           {
             icon: "fa-times",
-            text: "Mixing contradictory sources without context",
+            text: "Mixing contradictory sources without context, like mixing oil and water",
           },
-          { icon: "fa-times", text: "Not updating sources regularly" },
+          { icon: "fa-times", text: "Letting sources grow stale — knowledge expires" },
         ],
         example: {
           label: "Practical example",
-          weak: "❌ Without curation: Uploading everything I find about AI",
+          weak: "❌ Without curation: Uploading everything I find about AI — no filter, no order, no criteria",
           strong:
-            "✅ With curation: 10 papers selected by relevance, organized by topic (ethics, technical, applications), with context notes for each group",
+            "✅ With curation: 10 papers selected by relevance, organized by topic (ethics, technical, applications), with context notes for each group — like a library curated by an expert",
         },
       },
       3: {
-        objective: "🎙️ Audio Overviews: Your Knowledge in Podcast Format",
+        objective: "🎙️ Audio Overviews: Your Documents on the Radio",
         objectiveDesc:
-          "Transform complex documents into engaging audio conversations generated by AI with two virtual hosts.",
+          "Transform complex documents into fascinating audio conversations generated by AI with two virtual hosts that sound like a real show.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Generate Audio Overviews from your documents",
+            text: "Generate Audio Overviews from your documents and hear them come alive",
           },
-          { icon: "fa-check", text: "Customize the podcast tone and focus" },
+          { icon: "fa-check", text: "Customize the tone: deep academic or casual chat — you choose" },
           {
             icon: "fa-check",
-            text: "Use audio for review and mobile learning",
+            text: "Turn studying into an audio experience you can take anywhere",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Expecting perfect audio with short documents",
+            text: "Expecting a 30-minute podcast from just 2 paragraphs of source material",
           },
           {
             icon: "fa-times",
-            text: "Not reviewing generated content before sharing",
+            text: "Not reviewing the content before sharing — every alchemist verifies their potion",
           },
           {
             icon: "fa-times",
-            text: "Using only audio without supplementing with written summaries",
+            text: "Using only audio without written summaries — the two formats amplify each other",
           },
         ],
         example: {
           label: "Practical example",
-          weak: "❌ Generic audio: Vague conversation about the topic",
+          weak: "❌ Generic audio: Two voices reading the document with no spark or structure",
           strong:
-            "✅ Focused audio: 15-minute podcast where two hosts discuss key findings from 5 papers on neuroplasticity, with practical examples and clear analogies",
+            "✅ Focused audio: 15-minute podcast where two hosts discuss key findings from 5 papers on neuroplasticity, with practical examples, analogies, and even an 'aha!' moment that makes it unforgettable",
         },
       },
     },
@@ -600,34 +612,34 @@ const CONTENT_EN = {
 
   5: {
     objective:
-      "Learn to use AI responsibly, ethically, and legally with frameworks that companies demand today.",
+      "Master the 4 ethical pillars that companies demand today and become the guardian who ensures AI serves humanity.",
     learningPoints: [
-      { text: "Detect algorithmic biases", icon: "fa-shield-check" },
-      { text: "Know current AI regulations", icon: "fa-briefcase" },
-      { text: "Protect data and privacy", icon: "fa-lock" },
-      { text: "Create ethical AI protocols", icon: "fa-clipboard-check" },
+      { text: "Detect algorithmic biases like a guardian", icon: "fa-shield-check" },
+      { text: "Master AI regulations that protect millions", icon: "fa-briefcase" },
+      { text: "Shield data and privacy from threats", icon: "fa-lock" },
+      { text: "Create ethical protocols that save reputations", icon: "fa-clipboard-check" },
     ],
     overviewData: {
-      title: "Responsible and Ethical AI",
+      title: "The Guardian's Code: Ethical AI Mastery",
       description:
-        "In this final module, you will develop critical thinking about the ethical impacts of AI. Learn to identify biases, comply with regulations, and create responsible AI frameworks.",
+        "Every time you use AI, you're making ethical decisions — whether you know it or not. Are your uploaded files protected? Is the output fair for everyone? Who's accountable if something goes wrong? This module isn't just theory — it's your training to become an AI guardian.",
       mission:
-        "Become an ethical and responsible AI professional. This module completes your global certification with the skills companies are looking for today.",
+        "Become the guardian AI needs. Complete your global certification with the ethical skills that separate responsible professionals from those who risk their careers.",
       topics: [
         {
-          title: "Ethics in Artificial Intelligence",
+          title: "The Guardian's Vow: 4 Sacred Principles",
           icon: "fa-balance-scale",
           resources: 3,
           duration: "20 min",
         },
         {
-          title: "Algorithmic Biases and Fairness",
+          title: "The Mirror of Truth: Is Your AI Fair?",
           icon: "fa-exclamation-triangle",
           resources: 3,
           duration: "20 min",
         },
         {
-          title: "Privacy, Regulation, and Responsible AI",
+          title: "The Guardian's Legacy: Navigating the Law",
           icon: "fa-shield-alt",
           resources: 2,
           duration: "20 min",
@@ -637,10 +649,10 @@ const CONTENT_EN = {
     lessons: [
       {
         id: 1,
-        title: "Ethics in Artificial Intelligence",
-        description: "Ethical foundations for using generative AI",
+        title: "The Guardian's Vow: 4 Sacred Principles",
+        description: "The ethical foundations every AI guardian must know",
         detailedDescription:
-          "Ethical foundations for using generative AI. Understand the principles of transparency, fairness, accountability, and privacy that every professional must apply when working with AI.",
+          "Welcome to guardian training. Before you use any AI tool, there are 4 principles you must engrave in your professional DNA: transparency, fairness, accountability, and privacy. These aren't abstract theory — they're the shield that protects your users, your organization, and your reputation.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-balance-scale",
@@ -649,10 +661,10 @@ const CONTENT_EN = {
       },
       {
         id: 2,
-        title: "Algorithmic Biases and Fairness",
-        description: "Identify and mitigate biases in AI systems",
+        title: "The Mirror of Truth: Is Your AI Fair?",
+        description: "Detect and destroy hidden biases in algorithms",
         detailedDescription:
-          "Identify and mitigate biases in AI systems. Learn to detect algorithmic discrimination, understand its causes, and apply strategies to create fairer and more inclusive systems.",
+          "Every algorithm inherits the prejudices of its creators and its data. In this lesson, you'll become a bias hunter: learn to detect algorithmic discrimination, understand its root causes, and apply fairness strategies that make your systems truly inclusive.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-exclamation-triangle",
@@ -661,10 +673,10 @@ const CONTENT_EN = {
       },
       {
         id: 3,
-        title: "Privacy, Regulation, and Responsible AI",
-        description: "Legal framework and best practices for ethical AI",
+        title: "The Guardian's Legacy: Navigating the Law",
+        description: "The legal framework and best practices every guardian must master",
         detailedDescription:
-          "Legal framework and best practices for ethical AI. Learn about current regulations (EU AI Act, local laws), data protection, and how to design AI governance frameworks in your organization.",
+          "Wanting to do right isn't enough — you need to know the law. From the EU AI Act to local regulations, data protection to corporate governance, this lesson gives you the legal map to navigate AI without putting anyone at risk.",
         duration: "20 min",
         format: "Video",
         icon: "fa-shield-alt",
@@ -674,96 +686,105 @@ const CONTENT_EN = {
     ],
     accordionContent: {
       1: {
-        objective: "🎯 Main Objective",
+        objective: "🛡️ The Guardian's Ethical Oath",
         objectiveDesc:
-          "Develop a solid ethical framework for using generative AI that protects users, organizations, and society.",
+          "Develop a bulletproof ethical framework for generative AI that protects users, organizations, and society from the invisible risks of technology.",
         achievements: [
           {
             icon: "fa-check",
-            text: "Understand the fundamental ethical principles of AI",
+            text: "Internalize the 4 sacred pillars of the AI guardian",
           },
           {
             icon: "fa-check",
-            text: "Identify ethical dilemmas in real-world cases",
+            text: "Detect ethical dilemmas in real-world cases before they cause harm",
           },
           {
             icon: "fa-check",
-            text: "Apply an ethical checklist before using AI",
+            text: "Apply a fail-safe ethical checklist before every AI interaction",
           },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Using AI without considering the impact on people",
+            text: "Using AI as a weapon without a shield — ignoring the impact on people",
           },
           {
             icon: "fa-times",
-            text: "Assuming AI is neutral because it's technology",
+            text: "Believing AI is neutral — unguarded technology is dangerous",
           },
-          { icon: "fa-times", text: "Ignoring unintended consequences" },
+          { icon: "fa-times", text: "Ignoring unintended consequences until it's too late" },
         ],
         example: {
-          label: "Real ethical case",
-          weak: "❌ Unethical: Generating fake content with AI and publishing it as real",
+          label: "The Guardian vs. The Reckless",
+          weak: "❌ The reckless: A student used AI to generate an entire essay without verification. The AI invented data, fake citations, and non-existent references. The professor caught everything, and the student lost all academic credibility.",
           strong:
-            "✅ Ethical: Always disclosing when AI is used, verifying generated information, respecting copyright, and protecting personal data",
+            "✅ The guardian: A student used AI as an assistant, verified every source with real data, disclosed AI use to the professor, and submitted an impeccable paper. Result: deep learning + professor trust + perfect grade.",
         },
       },
       2: {
-        objective: "⚖️ Algorithmic Biases: The Invisible Enemy",
+        objective: "🔍 The Bias Hunter: Find the Invisible Enemy",
         objectiveDesc:
-          "Learn to detect, understand, and mitigate the biases that AI systems inherit from their training data.",
+          "Train your guardian eye to detect, understand, and eliminate the biases that AI systems inherit from their training data — before they cause harm.",
         achievements: [
-          { icon: "fa-check", text: "Identify types of algorithmic biases" },
-          { icon: "fa-check", text: "Analyze real cases of AI discrimination" },
-          { icon: "fa-check", text: "Apply bias mitigation techniques" },
+          {
+            icon: "fa-check",
+            text: "Identify 7 types of algorithmic biases like a forensic expert",
+          },
+          {
+            icon: "fa-check",
+            text: "Analyze real cases where AI discriminated — and understand why",
+          },
+          {
+            icon: "fa-check",
+            text: "Apply surgical bias mitigation techniques",
+          },
         ],
         warnings: [
           {
             icon: "fa-times",
-            text: "Trusting results without verifying fairness",
+            text: "Blindly trusting AI results without verifying fairness",
           },
-          { icon: "fa-times", text: "Using non-representative training data" },
-          { icon: "fa-times", text: "Not auditing AI outputs regularly" },
+          { icon: "fa-times", text: "Feeding AI training data that excludes entire groups" },
+          { icon: "fa-times", text: "Never auditing AI outputs — silence is not safety" },
         ],
         example: {
-          label: "Real bias case",
-          weak: "❌ Biased: AI recruiting tool that rejects candidates based on gender, trained on biased historical data",
+          label: "The AI That Discriminated Without Knowing It",
+          weak: "❌ Biased: A hiring AI learned from 10 years of historical data where only men held certain positions. It automatically began filtering out women — not out of malice, but from corrupted data.",
           strong:
-            "✅ Fair: Audit the training dataset, include fairness variables, test with diverse groups, and review results periodically",
+            "✅ Fair: The audit team detected the bias in the testing phase, retrained the model with balanced data, included fairness variables, and established quarterly audits. The AI now selects without prejudice.",
         },
       },
       3: {
-        objective: "🔒 Regulation and Governance: The Legal Framework of AI",
+        objective: "📜 The Guardian's Code: Laws That Protect Millions",
         objectiveDesc:
-          "Learn about current AI regulations and how to design governance protocols that protect your organization.",
+          "Learn the regulations governing AI worldwide and design governance protocols that shield your organization from legal and reputational risks.",
         achievements: [
-          { icon: "fa-check", text: "Know the European Union AI Act" },
+          { icon: "fa-check", text: "Master the European Union AI Act like a compliance expert" },
           {
             icon: "fa-check",
-            text: "Understand privacy and transparency obligations",
+            text: "Understand legal obligations for privacy and transparency",
           },
           {
             icon: "fa-check",
-            text: "Design an ethical AI protocol for your organization",
+            text: "Design an ethical AI protocol worthy of a guardian",
           },
         ],
         warnings: [
-          { icon: "fa-times", text: "Ignoring current AI regulations" },
+          { icon: "fa-times", text: "Ignoring current AI regulations — ignorance is no defense" },
           {
             icon: "fa-times",
-            text: "Not protecting personal data in AI processes",
+            text: "Processing personal data with AI without legal protection",
           },
           {
             icon: "fa-times",
-            text: "Implementing AI without governance policies",
+            text: "Implementing AI in your organization without governance policies",
           },
         ],
         example: {
-          label: "Protocol example",
-          weak: "❌ No protocol: Using AI for everything without supervision or audits",
+          label: "Two Worlds, One Algorithm",
+          weak: "❌ No protocol: A startup deployed customer service chatbots without ethical oversight. Within 48 hours, the chatbot had insulted clients in 3 different languages, violated privacy norms, and triggered a PR crisis.",
           strong:
-            "✅ With protocol: AI ethics committee, quarterly audits, privacy checklist before each implementation, transparent disclosure to end users",
+            "✅ With protocol: An AI ethics committee approved every implementation, quarterly audits caught problems before they reached the public, a mandatory privacy checklist before every deployment, and transparent disclosure to end users. Result: customer trust, zero incidents.",
         },
       },
     },

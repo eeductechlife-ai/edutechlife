@@ -50,9 +50,11 @@ const IALabSidebar = () => {
       role="navigation"
       aria-label={t('sidebar.panel_aria')}
       style={{ width: isCollapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH }}
-      className="relative flex-shrink-0 border-r border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-800 shadow-sm transition-[width] duration-300"
+      className="relative flex-shrink-0 border-r border-petroleum/15 dark:border-petroleum/25 bg-white/90 dark:bg-slate-800/90 backdrop-blur-lg shadow-[0_0_15px_rgba(0,75,99,0.06)] transition-[width] duration-300"
     >
-      <div className="h-full overflow-y-auto overflow-x-hidden">
+      <div className="h-full overflow-y-auto overflow-x-hidden relative">
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-petroleum/30 via-corporate/30 to-transparent pointer-events-none z-10" />
+        <div className="absolute -bottom-20 -left-10 w-32 h-32 bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -right-6 top-2 z-50 group/toggle">
           <motion.button
             onClick={toggleSidebar}
@@ -60,7 +62,7 @@ const IALabSidebar = () => {
               h-14 pl-4 pr-5 rounded-r-2xl rounded-l-none
               bg-white/95 dark:bg-slate-800/95
               backdrop-blur-lg
-              border-2 border-slate-200/60 dark:border-slate-700/60 border-l-0
+              border-2 border-petroleum/15 dark:border-petroleum/30 border-l-0
               shadow-xl hover:shadow-[0_0_25px_rgba(0,75,99,0.15)] dark:hover:shadow-[0_0_25px_rgba(0,188,212,0.1)]
               transition-all duration-200
               hover:bg-gradient-to-r hover:from-petroleum/15 hover:to-white/95

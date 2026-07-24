@@ -40,15 +40,15 @@ const InteractiveViewer = ({ resource }) => {
             {resource.description || t('ialab.interactive_viewer.default_desc')}
           </p>
 
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-petroleum/25 dark:border-petroleum/40 shadow-sm mb-6">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200/60 dark:border-slate-700/60 shadow-sm mb-6">
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-medium text-petroleum/80">{t('ialab.interactive_viewer.simulation_active')}</span>
-              <span className="text-xs px-2 py-1 bg-emerald-100 text-emerald-700 rounded">{t('ialab.interactive_viewer.real_time')}</span>
+              <span className="text-xs px-2 py-1 bg-gradient-to-r from-emerald-50 to-emerald-100/80 border border-emerald-200/50 text-emerald-700 rounded-lg">{t('ialab.interactive_viewer.real_time')}</span>
             </div>
             
             <div className="h-32 bg-gradient-to-r from-petroleum/5 to-corporate/5 rounded-lg border border-petroleum/25 flex items-center justify-center">
               <div className="text-center">
-                <Icon name="fa-spinner" className="text-[#06B6D4] text-2xl mb-2 animate-spin" />
+                <Icon name="fa-spinner" className="text-corporate text-2xl mb-2 animate-spin" />
                 <p className="text-sm text-petroleum/70">{t('ialab.interactive_viewer.loading_experience')}</p>
               </div>
             </div>

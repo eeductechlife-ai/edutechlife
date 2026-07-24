@@ -29,18 +29,15 @@ export function primeSpeech() {
 }
 
 export function retrySpeech() {
-  if (window.speechSynthesis) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance("");
-    utterance.volume = 0;
-    window.speechSynthesis.speak(utterance);
-    window.speechSynthesis.cancel();
-  }
+  primeSpeech();
 }
 
+const EMOJI_HARDCODED = /[😊🔥🧠🎉💙📚💭🌟📅💬🎯🤔📖🔬🌍🎨💻🤖⭐💎📰✨]/gu;
+
 export function stripEmoji(text) {
-  return text.replace(
-    /[😊🔥🧠🎉💙📚💭🌟📅💬🎯🤔📖🔬🌍🎨💻🤖⭐💎📰✨]/gu,
-    "",
-  ).trim();
+  try {
+    return text.replace(/\p{Emoji}/gu, '').trim();
+  } catch {
+    return text.replace(EMOJI_HARDCODED, '').trim();
+  }
 }

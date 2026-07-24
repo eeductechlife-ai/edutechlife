@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "../../../../i18n/I18nProvider";
 import DaniAvatar from "../../dani/DaniAvatar";
 import ChartRenderer from "../../dani/ChartRenderer";
 import VideoEmbed from "../../dani/VideoEmbed";
@@ -7,6 +8,7 @@ import MessageBubble from "../../dani/MessageBubble";
 
 const DaniChatMessages = memo(
   ({ daniChatHistory, streamingMessage, isTyping, darkMode, messagesEndRef }) => {
+    const { t } = useTranslation();
     return (
       <div
         className={`flex-1 overflow-y-auto p-4 space-y-2 ${
@@ -14,13 +16,13 @@ const DaniChatMessages = memo(
         }`}
         role="log"
         aria-live="polite"
-        aria-label="Mensajes del chat"
+        aria-label={t('dani.messages_label')}
       >
         {daniChatHistory.map((msg, index) => {
           if (msg.type === "chart") {
             return (
               <ChartRenderer
-                key={index}
+                key={msg.id || msg.timestamp || index}
                 chartData={msg.data}
                 darkMode={darkMode}
               />
@@ -29,7 +31,7 @@ const DaniChatMessages = memo(
           if (msg.type === "video") {
             return (
               <VideoEmbed
-                key={index}
+                key={msg.id || msg.timestamp || index}
                 videoData={msg.data}
                 darkMode={darkMode}
               />
@@ -37,7 +39,7 @@ const DaniChatMessages = memo(
           }
           return (
             <MessageBubble
-              key={index}
+              key={msg.id || msg.timestamp || index}
               message={msg}
               isDani={msg.role === "assistant"}
               darkMode={darkMode}
@@ -50,7 +52,7 @@ const DaniChatMessages = memo(
             animate={{ opacity: 1, y: 0, scale: 1 }}
             className="flex justify-start mb-4"
           >
-            <div className="mr-3 mt-1 flex-shrink-0">
+            <div className="mr-3 mt-1 flex-shrink-0" aria-hidden="true">
               <DaniAvatar />
             </div>
             <div
@@ -66,6 +68,7 @@ const DaniChatMessages = memo(
                   className="inline-block w-1.5 h-4 bg-[#4DA8C4] ml-0.5 align-middle"
                   animate={{ opacity: [1, 0] }}
                   transition={{ duration: 0.6, repeat: Infinity }}
+                  aria-label={t('dani.status_writing')}
                 />
               </p>
             </div>
@@ -84,7 +87,7 @@ const DaniChatMessages = memo(
                   : "bg-white border border-[#E2E8F0]"
               }`}
             >
-              <div className="flex gap-1">
+              <div className="flex gap-1" aria-label={t('dani.status_writing')}>
                 {[0, 1, 2].map((i) => (
                   <motion.div
                     key={i}

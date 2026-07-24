@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { motion } from "framer-motion";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { sanitize } from "../../utils/sanitize";
@@ -7,6 +8,8 @@ export default function SmartBoardQueEsSection({ t }) {
   return (
     <section
       id="que-es"
+      role="region"
+      aria-label="¿Qué es SmartBoard?"
       className="relative w-full overflow-hidden bg-white py-12 lg:py-16 scroll-mt-20"
     >
       <div className="absolute top-[30%] right-[10%] w-48 h-48 bg-mint/8 rounded-full blur-[80px]" />
@@ -127,3 +130,7 @@ export default function SmartBoardQueEsSection({ t }) {
     </section>
   );
 }
+
+SmartBoardQueEsSection.propTypes = {
+  t: PropTypes.func.isRequired,
+};

@@ -124,6 +124,12 @@ export default {
           'text-sub': 'var(--brand-text-sub)',
           'text-inverse': 'var(--brand-text-inverse)',
           border: 'var(--brand-border)',
+          petroleum: '#004B63',
+          'primary-light': '#4DA8C4',
+          teal: '#2DD4BF',
+          coral: '#F472B6',
+          amber: '#F59E0B',
+          sky: '#38BDF8',
         },
       },
         fontFamily: {
@@ -206,6 +212,9 @@ export default {
         'glass-border': 'var(--shadow-glass-border)',
         'premium': 'var(--shadow-premium)',
         'premium-lg': 'var(--shadow-premium-lg)',
+        'premium-xl': '0 12px 60px rgba(0, 75, 99, 0.25)',
+        'glow': '0 0 20px rgba(45, 212, 191, 0.3)',
+        'glow-lg': '0 0 40px rgba(45, 212, 191, 0.4)',
         'inner-glow': 'var(--shadow-inner-glow)',
         'outer-glow': 'var(--shadow-outer-glow)',
         // Fase 1 · Sombras de marca (ver src/styles/tokens.css)
@@ -261,6 +270,9 @@ export default {
         'premium-pulse': 'premium-pulse 3s ease-in-out infinite',
         'glass-shimmer': 'glass-shimmer 2s ease-in-out infinite',
         'text-glow': 'text-glow 2s ease-in-out infinite',
+        'float': 'float 3s ease-in-out infinite',
+        'shimmer': 'shimmer 2s linear infinite',
+        'pulse-soft': 'pulse 3s ease-in-out infinite',
       },
       keyframes: {
         'grid-move': {
@@ -376,6 +388,14 @@ export default {
           '50%': { 
             textShadow: '0 0 20px var(--color-accent), 0 0 40px var(--color-accent)'
           },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        shimmer: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
         },
       },
       transitionProperty: {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import PropTypes from 'prop-types';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useIALabProgressContext, useIALabUIContext } from '../../../context/IALabContext';
 import { useIALabStore } from '../../../store/ialabStore';
 import { speakTextConversational, stopSpeech, prefetchTts } from '../../../utils/speech';
@@ -47,12 +47,14 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   const ttsQueueRef = useRef([]);
   const ttsPlayingRef = useRef(false);
   const pendingSentenceRef = useRef('');
+  const fallbackTypingRef = useRef(null);
 
   const studentName = user?.firstName || user?.full_name || '';
   const currentModule = modules.find(m => m.id === activeMod);
   const userLevel = completedModules.length;
   const conversationRef = useRef(conversation);
   conversationRef.current = conversation;
+  const prefersReducedMotion = useReducedMotion();
 
   const voice = useValerioVoice(isOpen, setUserInput, locale);
 
@@ -65,7 +67,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     if (ttsPlayingRef.current || ttsQueueRef.current.length === 0) return;
     ttsPlayingRef.current = true;
     const text = ttsQueueRef.current.shift();
-    speakTextConversational(cleanTextForTTS(text), 'valerio', () => {
+    speakTextConversational(cleanTextForTTS(text), 'valerio', {}, () => {
       ttsPlayingRef.current = false;
       if (ttsQueueRef.current.length === 0) {
         setValerioState('idle');
@@ -119,6 +121,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       ttsQueueRef.current = [];
       ttsPlayingRef.current = false;
       pendingSentenceRef.current = '';
+      if (fallbackTypingRef.current) clearTimeout(fallbackTypingRef.current);
       endSession(conversationRef.current);
       stopSpeech();
     };
@@ -183,7 +186,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       if (!alreadyWelcomed) {
         useIALabStore.getState().setValerioWelcomed();
         const introGreeting = t('ialab.valerio.intro_greeting');
-        speakTextConversational(introGreeting, 'valerio', () => setValerioState('idle'));
+        speakTextConversational(introGreeting, 'valerio', {}, () => setValerioState('idle'));
         const welcomeMessage = buildContextualWelcome({ locale, studentName, currentModule, userLevel, activeMod });
         setMessage(welcomeMessage);
         setConversation([{
@@ -196,7 +199,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         const greeting = studentName
           ? t('ialab.valerio.greeting_name', { name: studentName })
           : t('ialab.valerio.greeting_anon');
-        speakTextConversational(greeting, 'valerio', () => setValerioState('idle'));
+        speakTextConversational(greeting, 'valerio', {}, () => setValerioState('idle'));
       }
     }
   }, [isOpen]);
@@ -233,38 +236,55 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 
     const controller = new AbortController();
     abortRef.current = controller;
-    const timeoutId = setTimeout(() => controller.abort(), 35000);
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
 
     try {
       firstChunkRef.current = false;
       pendingSentenceRef.current = '';
       let fullResponse = '';
-      await callDeepseekStream(
-        messages,
-        { temperature: 0.7, maxTokens: 2000 },
-        false,
-        (chunk) => {
-          fullResponse += chunk;
-          if (!firstChunkRef.current && chunk.trim()) {
-            firstChunkRef.current = true;
-            setValerioState('speaking');
-          }
-          setStreamingMessage(fullResponse);
 
-          pendingSentenceRef.current += chunk;
-          while (true) {
-            const match = pendingSentenceRef.current.match(/[.!?…](?:\s|$|[\n\r])/);
-            if (!match) break;
-            const endIdx = match.index + 1;
-            const sentence = pendingSentenceRef.current.slice(0, endIdx).trim();
-            pendingSentenceRef.current = pendingSentenceRef.current.slice(endIdx + match[0].length);
-            if (sentence.length >= 5) {
-              ttsQueueRef.current.push(sentence);
-              processTtsQueue();
+      let retries = 0;
+      const maxRetries = 1;
+
+      while (true) {
+        try {
+          await callDeepseekStream(
+            messages,
+            { temperature: 0.7, maxTokens: 2000, signal: controller.signal },
+            false,
+            (chunk) => {
+              fullResponse += chunk;
+              if (!firstChunkRef.current && chunk.trim()) {
+                firstChunkRef.current = true;
+                setValerioState('speaking');
+              }
+              setStreamingMessage(fullResponse);
+
+              pendingSentenceRef.current += chunk;
+              while (true) {
+                const match = pendingSentenceRef.current.match(/[.!?…](?:\s|$|[\n\r])/);
+                if (!match) break;
+                const endIdx = match.index + 1;
+                const sentence = pendingSentenceRef.current.slice(0, endIdx).trim();
+                pendingSentenceRef.current = pendingSentenceRef.current.slice(endIdx + match[0].length);
+                if (sentence.length >= 5) {
+                  ttsQueueRef.current.push(sentence);
+                  processTtsQueue();
+                }
+              }
             }
+          );
+          break;
+        } catch (err) {
+          if (retries < maxRetries && (err.name === 'AbortError' || err.name === 'TimeoutError')) {
+            retries++;
+            if (import.meta.env.DEV) console.warn(`⚠️ Reintentando (${retries}/${maxRetries})...`);
+            await new Promise(r => setTimeout(r, 2000));
+            continue;
           }
+          throw err;
         }
-      );
+      }
 
       clearTimeout(timeoutId);
 
@@ -306,10 +326,26 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       };
 
       setConversation(prev => [...prev, valerioMessage]);
-      setMessage(fallbackResponse);
-      setStreamingMessage('');
 
-      speakTextConversational(cleanTextForTTS(fallbackResponse), 'valerio', () => setValerioState('idle'));
+      let charIndex = 0;
+      const typingSpeed = 15;
+      setStreamingMessage('');
+      setValerioState('speaking');
+      if (fallbackTypingRef.current) clearTimeout(fallbackTypingRef.current);
+
+      const typeNextChar = () => {
+        if (charIndex < fallbackResponse.length) {
+          setStreamingMessage(fallbackResponse.slice(0, charIndex + 1));
+          charIndex++;
+          fallbackTypingRef.current = setTimeout(typeNextChar, typingSpeed);
+        } else {
+          fallbackTypingRef.current = null;
+          setStreamingMessage('');
+          setMessage(fallbackResponse);
+          speakTextConversational(cleanTextForTTS(fallbackResponse), 'valerio', {}, () => setValerioState('idle'));
+        }
+      };
+      typeNextChar();
     } finally {
       setIsProcessing(false);
       abortRef.current = null;
@@ -367,9 +403,9 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     <SectionErrorBoundary name="ValerioPanel">
     <div className="fixed right-0 top-0 bottom-0 z-[90] flex flex-col" role="dialog" aria-label={t('ialab.valerio.panel_aria')} onKeyDown={(e) => { if (e.key === 'Escape') { stopSpeech(); onClose(); } }}>
       <motion.div
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        initial={prefersReducedMotion ? false : { x: '100%' }}
+        animate={prefersReducedMotion ? false : { x: 0 }}
+        transition={prefersReducedMotion ? undefined : { type: 'spring', stiffness: 300, damping: 30 }}
         className="relative w-[380px] max-md:w-[85vw] h-full bg-white shadow-2xl flex flex-col z-10"
         role="document"
         style={{ willChange: 'transform' }}

@@ -1,14 +1,14 @@
 const RESOURCES_ES = {
-  // MÓDULO 1: INGENIERÍA DE PROMPTS
-  "Introducción a la Inteligencia Artificial Generativa": {
-    title: "De Cero a Experto en IA",
+  // MÓDULO 1: EL ARTESANO DIGITAL — INGENIERÍA DE PROMPTS
+  "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?": {
+    title: "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?",
     description:
-      "Descubre cómo la IA generativa está transformando la educación, los negocios y la vida diaria. Aprende desde cero qué es, cómo funciona y por qué es la habilidad más demandada del momento.",
+      "Todo artesano conoce su material prima. Descubre qué es la IA Generativa, cómo funciona y por qué dominarla es la herramienta más valiosa en el taller del artesano digital.",
     learningObjectives: [
-      "Comprender qué es la IA Generativa y cómo funciona",
-      "Diferenciar entre IA débil (narrow) y IA fuerte (general)",
-      "Identificar aplicaciones prácticas en educación y negocios",
-      "Reconocer los límites éticos y técnicos actuales",
+      "Comprender qué es la IA Generativa y cómo funciona — la materia prima del artesano",
+      "Diferenciar entre IA débil (narrow) y IA fuerte (general) como un maestro distingue sus herramientas",
+      "Identificar aplicaciones prácticas en educación y negocios para saber dónde aplicar tu oficio",
+      "Reconocer los límites éticos y técnicos actuales — todo artesano conoce el alcance de sus herramientas",
     ],
     estimatedTime: "16 minutos",
     difficulty: "Principiante",
@@ -17,19 +17,19 @@ const RESOURCES_ES = {
         id: "intro-video-1",
         type: "video",
         title: "Qué es la I.A y como esta cambiando el mundo",
-        url: "https://www.youtube.com/embed/6f-FwOE5wIY",
-        duration: "6:06",
-        thumbnail: "https://img.youtube.com/vi/6f-FwOE5wIY/maxresdefault.jpg",
+        url: "https://www.youtube.com/embed/Gq6qG_oK6HY",
+        duration: "6:11",
+        thumbnail: "https://img.youtube.com/vi/Gq6qG_oK6HY/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Aprende en solo 6 minutos cómo construir prompts que la IA entiende a la primera. Con ejemplos visuales claros.",
+          "Descubre qué es la inteligencia artificial, cómo funciona y el impacto que está teniendo en el mundo actual. La introducción perfecta para tu taller de artesano digital.",
       },
       {
         id: "intro-ova-1",
         type: "ova_interactive",
         title: "Comienzos de la Inteligencia Artificial",
         description:
-          "Explora los orígenes de la inteligencia artificial con 5 actividades interactivas que te llevarán desde Alan Turing hasta ChatGPT.",
+          "Explora los orígenes de la inteligencia artificial con 5 actividades interactivas que te llevarán desde Alan Turing hasta ChatGPT. Como conocer la historia de tu oficio antes de tomar las herramientas.",
         estimatedTime: "10 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -39,12 +39,14 @@ const RESOURCES_ES = {
     ],
   },
 
-  "¿Qué es un Prompt?": {
-    title: "El Arte de Dar Instrucciones a la IA",
+  "El Cincel del Artesano: ¿Qué es un Prompt?": {
+    title: "El Cincel del Artesano: ¿Qué es un Prompt?",
     description:
-      "Domina el arte de comunicarte con la IA: aprende a escribir instrucciones claras que te den respuestas precisas y útiles en segundos.",
+      "El cincel es la herramienta más básica del escultor — y también la más importante. Domina el arte de escribir instrucciones precisas que la IA entiende a la perfección.",
     learningObjectives: [
-      "Comprender qué es un prompt y cómo usarlo para comunicarte efectivamente con la IA",
+      "Comprender qué es un prompt y cómo usarlo como la herramienta principal del artesano digital",
+      "Dominar la anatomía de una instrucción: contexto, intención, formato y restricciones",
+      "Practicar el arte de la claridad — menos ambigüedad, más precisión, mejores resultados",
     ],
     estimatedTime: "15 minutos",
     difficulty: "Principiante",
@@ -52,13 +54,13 @@ const RESOURCES_ES = {
       {
         id: "prompt-video-1",
         type: "video",
-        title: "Como crear un buen prompt",
-        url: "https://www.youtube.com/embed/jnePzCTKEqs?start=3",
-        duration: "4:30",
-        thumbnail: "https://img.youtube.com/vi/jnePzCTKEqs/maxresdefault.jpg",
+        title: "Cómo Crear Prompts Efectivos: La Fórmula para Dominar la IA",
+        url: "https://www.youtube.com/embed/kvQkEIuuFbU",
+        duration: "4:34",
+        thumbnail: "https://img.youtube.com/vi/kvQkEIuuFbU/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Entiende la IA generativa con ejemplos visuales y prácticos que puedes aplicar desde hoy.",
+          "Aprende la fórmula definitiva para crear prompts efectivos y dominar la inteligencia artificial. Como un maestro artesano compartiendo sus secretos de taller.",
       },
       {
         id: "prompt-guide-1",
@@ -69,7 +71,7 @@ const RESOURCES_ES = {
         format: "PDF",
         size: "249 KB",
         description:
-          "Tu manual de referencia con técnicas comprobadas y ejemplos listos para copiar y pegar.",
+          "Tu manual de referencia del artesano: técnicas comprobadas, ejemplos listos para usar y secretos del oficio que transformarán tu forma de trabajar con IA.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -78,7 +80,7 @@ const RESOURCES_ES = {
         type: "ova_interactive",
         title: "Cómo comunicarte con la IA (prompts)",
         description:
-          "Pon en práctica lo aprendido: escribe tus propios prompts y recibe feedback inmediato. Laboratorio guiado por Valerio.",
+          "Pon en práctica lo aprendido: esculpe tus propios prompts y recibe feedback inmediato. El taller del artesano donde cada práctica te acerca a la maestría.",
         estimatedTime: "10 minutos",
         difficulty: "Principiante",
         fullscreen: true,
@@ -87,17 +89,17 @@ const RESOURCES_ES = {
   },
 
   // ============================================================================
-  // MÓDULO 2: POTENCIA CHATGPT
+  // MÓDULO 2: EL ARQUITECTO DE AUTOMATIZACIÓN — POTENCIA CHATGPT
   // ============================================================================
-  "Guía Completa de ChatGPT": {
-    title: "Guía Completa de ChatGPT",
+  "Los Planos del Arquitecto: Guía Completa de ChatGPT": {
+    title: "Los Planos del Arquitecto: Guía Completa de ChatGPT",
     description:
-      "Todo lo que necesitas para dominar ChatGPT en un solo lugar: desde lo básico hasta técnicas que te harán destacar.",
+      "Todo gran edificio comienza con un plano maestro. Conoce la arquitectura completa de ChatGPT: modelos, interfaz, técnicas de prompt engineering y las mejores prácticas del oficio de arquitecto digital.",
     learningObjectives: [
-      "Navegar eficientemente por la interfaz de ChatGPT",
-      "Configurar conversaciones para diferentes propósitos",
-      "Aplicar técnicas de prompt engineering específicas para ChatGPT",
-      "Identificar las limitaciones y mejores usos de ChatGPT",
+      "Navegar la interfaz de ChatGPT como un arquitecto conoce su estudio",
+      "Configurar conversaciones como planos detallados para cada propósito",
+      "Aplicar técnicas de prompt engineering como herramientas de construcción profesional",
+      "Seleccionar el modelo óptimo como un arquitecto elige el material correcto para cada obra",
     ],
     estimatedTime: "26 minutos",
     difficulty: "Principiante",
@@ -111,7 +113,7 @@ const RESOURCES_ES = {
         thumbnail: "https://img.youtube.com/vi/iOlo-K7yj2M/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Aprende a usar ChatGPT como un profesional desde el primer minuto, incluso si nunca lo has abierto.",
+          "Aprende a usar ChatGPT como un arquitecto usa sus planos: desde el primer trazo hasta la obra terminada, incluso si nunca lo has abierto antes.",
       },
       {
         id: "chatgpt-guide-modulo2",
@@ -122,7 +124,7 @@ const RESOURCES_ES = {
         format: "PDF",
         size: "4.2 MB",
         description:
-          "Tu guía definitiva de ChatGPT: tips, trucos y ejemplos prácticos organizados para consulta rápida.",
+          "El manual del arquitecto: tips, trucos y ejemplos prácticos organizados para construir cualquier proyecto con ChatGPT. Consulta rápida para profesionales de la construcción digital.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -131,7 +133,7 @@ const RESOURCES_ES = {
         type: "ova_interactive",
         title: "Explora el Ecosistema ChatGPT",
         description:
-          "Viaje interactivo por el universo ChatGPT: descubre cada herramienta, aprende a combinarlas y conviértete en un usuario avanzado.",
+          "Recorrido interactivo por el universo ChatGPT: descubre cada herramienta, aprende a combinarlas y conviértete en un arquitecto de automatización. El tour completo de tu nueva obra.",
         estimatedTime: "20 minutos",
         difficulty: "Principiante",
         interactiveElements: 5,
@@ -141,15 +143,15 @@ const RESOURCES_ES = {
     ],
   },
 
-  "Plantillas de Flujos de Trabajo": {
-    title: "Plantillas de Flujos de Trabajo",
+  "El Andamio del Arquitecto: Herramientas Integradas": {
+    title: "El Andamio del Arquitecto: Herramientas Integradas",
     description:
-      "Aprende a usar las 5 herramientas ocultas de ChatGPT que multiplicarán tu productividad. Automatiza tareas en minutos.",
+      "Un arquitecto no construye solo con las manos — usa andamios, grúas y herramientas especializadas. Descubre las 5 herramientas integradas de ChatGPT que multiplicarán tu productividad.",
     learningObjectives: [
-      "Identificar las 5 herramientas clave del ecosistema ChatGPT",
-      "Seleccionar la herramienta correcta según el tipo de tarea",
-      "Combinar múltiples herramientas en flujos de trabajo eficientes",
-      "Resolver escenarios reales usando las herramientas integradas",
+      "Identificar las 5 herramientas clave del ecosistema ChatGPT y cuándo usar cada una",
+      "Seleccionar la herramienta correcta como un arquitecto elige el material adecuado",
+      "Combinar múltiples herramientas en flujos de trabajo eficientes y automatizados",
+      "Resolver escenarios reales usando las herramientas integradas como un maestro de obra",
     ],
     estimatedTime: "25 minutos",
     difficulty: "Intermedio",
@@ -163,7 +165,7 @@ const RESOURCES_ES = {
         format: "PDF",
         size: "4.8 MB",
         description:
-          "Descubre cómo Búsqueda Web, Análisis de Datos, DALL-E 3 y Canvas trabajan juntos para resolver problemas complejos.",
+          "Descubre cómo Búsqueda Web, Análisis de Datos, DALL-E 3 y Canvas trabajan juntos como un equipo de construcción para resolver problemas complejos.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -172,7 +174,7 @@ const RESOURCES_ES = {
         type: "ova_interactive",
         title: "Laboratorio: Herramientas ChatGPT",
         description:
-          "Explora cada herramienta de ChatGPT con ejercicios prácticos y audio guiado. Completa el desafío para demostrar tu dominio.",
+          "Explora cada herramienta de ChatGPT con ejercicios prácticos y audio guiado. Como un arquitecto probando sus herramientas antes de la gran obra. Completa el desafío para demostrar tu maestría.",
         estimatedTime: "25 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -182,15 +184,15 @@ const RESOURCES_ES = {
     ],
   },
 
-  "Function Calling y APIs de OpenAI": {
-    title: "Function Calling y APIs de OpenAI",
+  "La Fachada del Edificio: GPTs y Function Calling": {
+    title: "La Fachada del Edificio: GPTs y Function Calling",
     description:
-      "Crea tu propio asistente IA a medida. Aprende a construir GPTs que trabajan para ti mientras tú te enfocas en lo importante.",
+      "La fachada es lo que el mundo ve — pero detrás hay una estructura compleja que la sostiene. Construye GPTs personalizados con conexiones a APIs externas que funcionan como la infraestructura invisible de tu obra maestra.",
     learningObjectives: [
-      "Crear GPTs personalizados para necesidades específicas",
-      "Configurar acciones para conectar con APIs externas",
-      "Compartir y utilizar GPTs de la comunidad",
-      "Evaluar cuándo usar un GPT personalizado vs ChatGPT estándar",
+      "Crear GPTs personalizados como módulos de construcción reutilizables",
+      "Configurar acciones Function Calling para conectar con APIs externas",
+      "Compartir tus creaciones y aprender de la comunidad de arquitectos digitales",
+      "Evaluar cuándo usar un GPT personalizado vs. la construcción estándar de ChatGPT",
     ],
     estimatedTime: "25 minutos",
     difficulty: "Avanzado",
@@ -203,7 +205,7 @@ const RESOURCES_ES = {
         format: "JPEG",
         size: "2.1 MB",
         description:
-          "Guía visual rápida para crear, configurar y publicar tu primer GPT personalizado.",
+          "Guía visual rápida para construir, configurar y publicar tu primer GPT personalizado. Los planos ejecutivos del arquitecto digital.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -212,7 +214,7 @@ const RESOURCES_ES = {
         type: "ova_interactive",
         title: "Laboratorio: Construye un GPT",
         description:
-          "Manos a la obra: crea un GPT desde cero con ejercicios guiados y retroalimentación en cada paso.",
+          "Manos a la obra: construye un GPT desde cero con ejercicios guiados y retroalimentación en cada paso. Como el arquitecto que supervisa cada detalle de su creación.",
         estimatedTime: "25 minutos",
         difficulty: "Avanzado",
         interactiveElements: 8,
@@ -226,14 +228,14 @@ const RESOURCES_ES = {
   // MÓDULO 3: DOMINA GEMINI
   // ============================================================================
   "Introducción a Google Gemini": {
-    title: "Introducción a Google Gemini",
+    title: "El Despertar de la Lupa Multimodal",
     description:
-      "Conoce Gemini, la IA de Google que entiende texto, imágenes, audio y video al mismo tiempo. Un solo asistente para todo.",
+      "Tu primera misión como detective: conocer a tu nueva arma secreta. Gemini es la IA que procesa texto, imágenes, audio y video en un solo movimiento. Una lupa. Todos los formatos.",
     learningObjectives: [
-      "Comprender las capacidades multimodales de Gemini",
-      "Utilizar Gemini con diferentes tipos de entrada",
-      "Comparar Gemini con otros modelos de IA",
-      "Aplicar Gemini en contextos creativos y analíticos",
+      "Descubrir el poder de procesar cualquier tipo de evidencia en una sola herramienta",
+      "Interrogar a Gemini con fotos, documentos, audios y videos como un investigador experto",
+      "Saber exactamente por qué Gemini gana en casos multimodales vs. otros modelos",
+      "Usar Gemini para análisis forense y creación de contenido de alto impacto",
     ],
     estimatedTime: "29 minutos",
     difficulty: "Principiante",
@@ -241,24 +243,24 @@ const RESOURCES_ES = {
       {
         id: "gemini-video-1",
         type: "video",
-        title: "Aprende de Gemini",
+        title: "Gemini en 14 Minutos: Curso de Introducción Acelerado",
         url: "https://www.youtube.com/embed/Y5-5dI3Iero",
         duration: "14:10",
         thumbnail: "https://img.youtube.com/vi/Y5-5dI3Iero/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Descubre todo lo que Gemini puede hacer: desde analizar imágenes hasta escribir código. La demo completa en un video claro y didáctico.",
+          "Descubre el poder de tu nueva lupa: desde analizar imágenes como un forense hasta escribir código como un desarrollador. Todo lo que Gemini puede hacer por ti, explicado en 14 minutos.",
       },
       {
         id: "gemini-guide-1",
         type: "pdf",
-        title: "Introducción a Gemini",
+        title: "Manual de Campo: Introducción a Gemini",
         url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%203/2-%20guia_edutechlife_modulo3_gemini.pdf",
         pages: 11,
         format: "PDF",
         size: "2.8 MB",
         description:
-          "Tu guía esencial de Gemini: aprende a usarlo para estudiar, trabajar y crear contenido de forma más inteligente.",
+          "El manual de campo del detective: aprende a usar Gemini para estudiar, trabajar y crear contenido con la precisión de un investigador profesional.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -266,14 +268,14 @@ const RESOURCES_ES = {
   },
 
   "Razonamiento Multimodal y Grounding": {
-    title: "Razonamiento Multimodal y Grounding",
+    title: "Grounding: La Conexión con el Mundo Real",
     description:
-      "Lleva Gemini a donde trabajas: aprende a usarlo dentro de Google Docs, Sheets y Gmail para multiplicar tu velocidad.",
+      "Gemini no flota en el aire — se conecta con tus herramientas diarias. Aprende a integrarlo en Google Docs, Sheets y Gmail para multiplicar tu velocidad de investigación.",
     learningObjectives: [
-      "Usar Gemini dentro de Google Docs para redacción",
-      "Analizar datos con Gemini en Google Sheets",
-      "Gestionar correos electrónicos con Gemini en Gmail",
-      "Crear presentaciones asistidas por Gemini",
+      "Redactar informes de investigación con Gemini como coautor",
+      "Convertir datos crudos en evidencia procesable directamente en Sheets",
+      "Dominar tu bandeja de entrada: que Gemini filtre, resuma y priorice por ti",
+      "Generar presentaciones de alto impacto con la ayuda de Gemini",
     ],
     estimatedTime: "40 minutos",
     difficulty: "Intermedio",
@@ -281,22 +283,22 @@ const RESOURCES_ES = {
       {
         id: "workspace-template-1",
         type: "pdf",
-        title: "Gemini a la Práctica",
+        title: "Gemini a la Práctica: Ejercicios de Campo",
         url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%203/3%20Gemini_Research_Mastery.pdf",
         pages: 10,
         format: "PDF",
         size: "3.2 MB",
         description:
-          "Domina Gemini con ejercicios prácticos y casos de aplicación real para potenciar tu productividad.",
+          "El cuaderno de ejercicios del detective: domina Gemini con casos prácticos y aplicaciones reales que multiplican tu productividad.",
         thumbnailType: "premium",
         immersiveView: true,
       },
       {
         id: "workspace-ova-1",
         type: "ova_interactive",
-        title: "Gemini: Recorrido Interactivo",
+        title: "Misión Interactiva: Domina el Ecosistema Gemini",
         description:
-          "Explora la arquitectura de Gemini, su capacidad multimodal, Deep Research y la integración con Google Workspace en un recorrido interactivo con audio y quiz final.",
+          "Recorrido interactivo por la arquitectura de tu nueva arma secreta: capacidades multimodales, Deep Research e integración Workspace. Incluye audio guiado y examen final para certificar tu rango de detective.",
         estimatedTime: "25 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -307,14 +309,14 @@ const RESOURCES_ES = {
   },
 
   "Deep Research y Fact-Checking con IA": {
-    title: "Deep Research y Fact-Checking con IA",
+    title: "Deep Research: La Caja Negra del Detective",
     description:
-      "Descubre cómo profesionales de diferentes industrias están usando Gemini para destacar. Casos reales y resultados comprobados.",
+      "Los casos más impresionantes no se resuelven con suerte — se resuelven con método. Descubre cómo investigadores, marketeros, programadores y educadores usan Gemini para encontrar lo que nadie más encuentra.",
     learningObjectives: [
-      "Aplicar Gemini en estrategias de marketing",
-      "Usar Gemini para asistencia en programación",
-      "Implementar Gemini en procesos educativos",
-      "Leverage Gemini para investigación académica",
+      "Diseñar estrategias de marketing basadas en datos de investigación profunda",
+      "Depurar y optimizar código con la asistencia de un detective digital",
+      "Crear experiencias educativas que parecen investigaciones interactivas",
+      "Realizar investigación académica con la profundidad de un doctorando y la velocidad de la IA",
     ],
     estimatedTime: "42 minutos",
     difficulty: "Avanzado",
@@ -322,32 +324,32 @@ const RESOURCES_ES = {
       {
         id: "gemini-cases-video-1",
         type: "video",
-        title: "Gemini en Acción: Casos Reales",
+        title: "Casos Reales: Detectives Digitales en Acción",
         url: "https://www.youtube.com/embed/XAshixrvG5k",
         duration: "2:41",
         thumbnail: "https://img.youtube.com/vi/XAshixrvG5k/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Empresas y profesionales comparten cómo Gemini transformó su forma de trabajar. Resultados que inspiran.",
+          "Empresas y profesionales revelan cómo Gemini transformó su forma de investigar. Resultados que parecen magia — pero son método.",
       },
       {
         id: "gemini-cases-guide-1",
         type: "image",
-        title: "Domina el Ecosistema de Gemini",
+        title: "Mapa del Ecosistema Gemini: Tu Guía Visual de Investigación",
         url: "https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/modulo%203/3-infografia.png",
         format: "PNG",
         size: "1.2 MB",
         description:
-          "Infografía completa del ecosistema Gemini: herramientas, capacidades y casos de uso en un vistazo.",
+          "Mapa visual completo del arsenal del detective: herramientas, capacidades y casos de uso en una sola infografía. Imprime, pega en tu pared, conviértete en un experto.",
         thumbnailType: "premium",
         immersiveView: true,
       },
       {
         id: "gemini-cases-ova-1",
         type: "ova_interactive",
-        title: "Laboratorio: Casos Prácticos",
+        title: "Laboratorio: Resuelve el Caso — 6 Desafíos",
         description:
-          "Enfréntate a 6 desafíos del mundo real y resuélvelos usando Gemini como tu asistente experto.",
+          "Enfréntate a 6 casos reales — desde analizar un contrato hasta verificar una noticia falsa — y resuélvelos usando Gemini como tu asistente de investigación.",
         estimatedTime: "25 minutos",
         difficulty: "Avanzado",
         interactiveElements: 6,
@@ -358,17 +360,17 @@ const RESOURCES_ES = {
   },
 
   // ============================================================================
-  // MÓDULO 4: NOTEBOOKLM
+  // MÓDULO 4: EL ALQUIMISTA DEL CONOCIMIENTO — NOTEBOOKLM
   // ============================================================================
   "¿Qué es NotebookLM y para qué sirve?": {
-    title: "¿Qué es NotebookLM y para qué sirve?",
+    title: "El Alquimista de Documentos: Tu Primer Hechizo con NotebookLM",
     description:
-      "La herramienta secreta de Google para investigadores: sube tus PDFs y obtén respuestas precisas con citas textuales. Sin inventos.",
+      "La herramienta secreta de Google para alquimistas digitales: sube tus PDFs y obtén respuestas precisas con citas textuales. Tu bibliotecario personal con superpoderes de IA.",
     learningObjectives: [
-      "Crear notebooks con fuentes personalizadas",
-      "Hacer preguntas específicas sobre tus documentos",
-      "Generar resúmenes inteligentes de contenido",
-      "Comparar información entre múltiples fuentes",
+      "Construir tu primera biblioteca inteligente donde los documentos cobran vida",
+      "Interrogar tus fuentes como un detective que busca la verdad",
+      "Destilar montañas de texto en resúmenes que van al grano",
+      "Comparar información entre múltiples fuentes con precisión quirúrgica",
     ],
     estimatedTime: "28 minutos",
     difficulty: "Principiante",
@@ -382,7 +384,7 @@ const RESOURCES_ES = {
         thumbnail: "https://img.youtube.com/vi/PV0oNcmIYII/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Descubre en 12 minutos cómo tus documentos cobran vida: haz preguntas, obtén resúmenes y verifica cada dato con citas exactas.",
+          "Descubre en 12 minutos cómo tus documentos cobran vida: haz preguntas, obtén resúmenes y verifica cada dato con citas exactas. La alquimia digital comienza aquí.",
       },
       {
         id: "notebooklm-guide-1",
@@ -393,7 +395,7 @@ const RESOURCES_ES = {
         format: "PDF",
         size: "2.3 MB",
         description:
-          "La guía definitiva para dominar NotebookLM: desde tu primer cuaderno hasta técnicas avanzadas de investigación.",
+          "El grimorio del alquimista: 10 páginas para dominar NotebookLM desde tu primer cuaderno hasta técnicas avanzadas de investigación.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -402,7 +404,7 @@ const RESOURCES_ES = {
         type: "ova_interactive",
         title: "Laboratorio: Crea tu Notebook",
         description:
-          "7 preguntas que te convertirán en experto en NotebookLM. Completa el desafío con Valerio como tu guía personal.",
+          "7 preguntas que te convertirán en experto en NotebookLM. Completa el desafío con Valerio como tu guía personal en este viaje alquímico.",
         estimatedTime: "15 minutos",
         difficulty: "Intermedio",
         interactiveElements: 7,
@@ -413,14 +415,14 @@ const RESOURCES_ES = {
   },
 
   "Curaduría de Fuentes y Síntesis de Documentos": {
-    title: "Curaduría de Fuentes y Síntesis de Documentos",
+    title: "El Arte de la Curaduría: Cómo Elegir y Sintetizar Fuentes",
     description:
-      "Convierte montañas de documentos en resúmenes, preguntas frecuentes y reportes ejecutivos con un solo clic.",
+      "Convierte montañas de documentos en resúmenes, preguntas frecuentes y reportes ejecutivos que parecen obra de un equipo de analistas.",
     learningObjectives: [
-      "Generar resúmenes ejecutivos automáticos",
-      "Crear FAQs basadas en tus documentos",
-      "Conectar respuestas a fuentes originales",
-      "Validar la precisión de la información generada",
+      "Generar resúmenes ejecutivos que parecen escritos por un equipo de analistas",
+      "Crear FAQs que anticipan cada pregunta antes de que la formules",
+      "Conectar cada respuesta a su fuente original con precisión quirúrgica",
+      "Validar que la información generada es tan precisa como tu criterio",
     ],
     estimatedTime: "20 minutos",
     difficulty: "Intermedio",
@@ -433,7 +435,7 @@ const RESOURCES_ES = {
         format: "JPEG",
         size: "2.5 MB",
         description:
-          "Infografía sobre técnicas avanzadas de resumen y análisis con NotebookLM.",
+          "Infografía sobre técnicas avanzadas de resumen y análisis con NotebookLM. El mapa del tesoro del alquimista documental.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -446,14 +448,14 @@ const RESOURCES_ES = {
         format: "PDF",
         size: "2.5 MB",
         description:
-          "Plantillas profesionales de resumen para cada tipo de documento: académico, empresarial, técnico y más.",
+          "Plantillas profesionales de resumen para cada tipo de documento: académico, empresarial, técnico y más. El kit de herramientas del alquimista.",
       },
       {
         id: "notebook-summary-ova-1",
         type: "ova_interactive",
         title: "Simulador: Análisis de Documentos",
         description:
-          "Simulador práctico: toma documentos reales y genera resúmenes de nivel profesional en minutos.",
+          "Simulador práctico: toma documentos reales y genera resúmenes de nivel profesional en minutos. Pon a prueba tus habilidades alquímicas.",
         estimatedTime: "20 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -464,14 +466,14 @@ const RESOURCES_ES = {
   },
 
   "Audio Overviews y Gestión Documental con IA": {
-    title: "Audio Overviews y Gestión Documental con IA",
+    title: "La Fórmula Secreta: Audio Overviews y Gestión Documental",
     description:
-      "Convierte tus apuntes en podcasts profesionales: dos voces IA conversan sobre tus documentos mientras tú escuchas.",
+      "Convierte tus apuntes en podcasts que suenan a radio profesional: dos voces IA conversan sobre tus documentos como si fueran viejos amigos.",
     learningObjectives: [
-      "Generar Audio Overviews de tus notebooks",
-      "Personalizar el estilo y tono del audio",
-      "Usar audio para aprendizaje y repaso",
-      "Compartir Audio Overviews con equipos",
+      "Dar vida a tus documentos con Audio Overviews que parecen programa de radio",
+      "Afilar el tono: sé académico, conversacional o divulgativo según tu audiencia",
+      "Aprender mientras te mueves: convertir el estudio en experiencia auditiva",
+      "Compartir tus creaciones sonoras con equipos enteros",
     ],
     estimatedTime: "47 minutos",
     difficulty: "Avanzado",
@@ -485,14 +487,14 @@ const RESOURCES_ES = {
         thumbnail: "https://img.youtube.com/vi/JdiLO6z9oXY/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Descubre cómo crear podcasts a partir de tus PDFs. Ideal para aprender mientras viajas, haces ejercicio o descansas.",
+          "Descubre cómo crear podcasts a partir de tus PDFs. Ideal para aprender mientras viajas, haces ejercicio o descansas. El sonido de la alquimia.",
       },
       {
         id: "notebook-audio-guide-1",
         type: "ova_interactive",
         title: "Notebook LM",
         description:
-          "Curso completo de NotebookLM: 6 módulos interactivos con ejercicios prácticos y un desafío final. Conviértete en un experto.",
+          "Curso completo de NotebookLM: 6 módulos interactivos con ejercicios prácticos y un desafío final para convertirte en un maestro alquimista.",
         estimatedTime: "30 minutos",
         difficulty: "Intermedio",
         interactiveElements: 6,
@@ -504,7 +506,7 @@ const RESOURCES_ES = {
         type: "ova_interactive",
         title: "Laboratorio: Crea tu Podcast IA",
         description:
-          "Crea tu primer podcast IA: elige el tema, personaliza el tono y escucha el resultado en minutos.",
+          "Crea tu primer podcast IA: elige el tema, personaliza el tono y escucha el resultado en minutos. La alquimia del audio en tus manos.",
         estimatedTime: "15 minutos",
         difficulty: "Avanzado",
         interactiveElements: 3,
@@ -518,14 +520,14 @@ const RESOURCES_ES = {
   // MÓDULO 5: ÉTICA Y PRIVACIDAD
   // ============================================================================
   "Ética en la Inteligencia Artificial": {
-    title: "Ética en la Inteligencia Artificial",
+    title: "El Escudo del Guardián: Los 4 Principios Sagrados",
     description:
-      "Aprende a reconocer y mitigar los sesgos inherentes en los modelos de IA generativa.",
+      "Los 4 pilares que separan a los profesionales responsables de los imprudentes. Transparencia, equidad, responsabilidad y privacidad — tu armadura ética completa.",
     learningObjectives: [
-      "Identificar tipos comunes de sesgos en IA",
-      "Detectar sesgos en respuestas generadas",
-      "Aplicar estrategias para reducir sesgos",
-      "Evaluar la equidad de resultados de IA",
+      "Reconocer los 7 tipos de sesgos que acechan en cada modelo de IA",
+      "Desarrollar un sexto sentido para detectar sesgos en respuestas de IA",
+      "Aplicar estrategias de justicia algorítmica como un guardián experto",
+      "Evaluar la equidad de resultados con precisión forense",
     ],
     estimatedTime: "17 minutos",
     difficulty: "Intermedio",
@@ -539,7 +541,7 @@ const RESOURCES_ES = {
         thumbnail: "https://img.youtube.com/vi/QAyIrImVUx8/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Descubre cómo los sesgos invisibles afectan cada respuesta de IA y aprende a detectarlos antes de que afecten tu trabajo.",
+          "En solo 1:56, descubre los 4 pilares que todo guardián de IA debe conocer. Un video corto que cambiará tu perspectiva para siempre.",
       },
       {
         id: "bias-guide-1",
@@ -550,7 +552,7 @@ const RESOURCES_ES = {
         format: "PDF",
         size: "2.6 MB",
         description:
-          "Aprende el método paso a paso para identificar, analizar y corregir sesgos en cualquier sistema de IA.",
+          "9 páginas que condensan todo lo que necesitas saber para blindar éticamente tu relación con la IA. Lectura obligatoria para guardianes.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -559,7 +561,7 @@ const RESOURCES_ES = {
         type: "ova_interactive",
         title: "Laboratorio: Detecta el Sesgo",
         description:
-          "Pon a prueba tu ojo crítico: analiza respuestas de IA reales e identifica los sesgos ocultos. Laboratorio guiado por Valerio.",
+          "Pon a prueba tu ojo de guardián: analiza respuestas de IA reales y descubre los sesgos que la mayoría de la gente nunca notaría. 6 desafíos que agudizarán tu instinto.",
         estimatedTime: "15 minutos",
         difficulty: "Intermedio",
         interactiveElements: 6,
@@ -570,14 +572,14 @@ const RESOURCES_ES = {
   },
 
   "Sesgos Algorítmicos y Equidad": {
-    title: "Sesgos Algorítmicos y Equidad",
+    title: "El Espejo de la Verdad: ¿Tu IA es Justa para Todos?",
     description:
-      "Estrategias prácticas para proteger tus datos personales y corporativos al usar herramientas de IA.",
+      "¿Sabías que tu IA puede estar discriminando sin que lo sepas? Aprende a blindar tus datos y tus algoritmos contra los sesgos más peligrosos.",
     learningObjectives: [
-      "Comprender cómo las IA procesan tus datos",
-      "Identificar riesgos de privacidad",
-      "Aplicar mejores prácticas de protección",
-      "Configurar opciones de privacidad en herramientas de IA",
+      "Descifrar el viaje oculto de tus datos dentro de los sistemas de IA",
+      "Detectar vulnerabilidades de privacidad que otros pasan por alto",
+      "Implementar blindajes de protección nivel guardián",
+      "Configurar herramientas de IA con la seguridad de un experto en ciberseguridad",
     ],
     estimatedTime: "29 minutos",
     difficulty: "Intermedio",
@@ -591,7 +593,7 @@ const RESOURCES_ES = {
         thumbnail: "https://img.youtube.com/vi/ADvjzvJjx5c/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Todo lo que necesitas saber para usar la IA sin poner en riesgo tus datos personales. Guía práctica y directa.",
+          "9:20 que pueden salvar tu reputación. Descubre los riesgos de privacidad que acechan en cada herramienta de IA y cómo neutralizarlos.",
       },
       {
         id: "privacy-guide-1",
@@ -602,7 +604,7 @@ const RESOURCES_ES = {
         format: "PDF",
         size: "3.8 MB",
         description:
-          "Checklist práctico de 7 pasos para blindar tu privacidad mientras aprovechas al máximo la inteligencia artificial.",
+          "Checklist práctico de 7 pasos para blindar tu privacidad mientras aprovechas al máximo la inteligencia artificial. Tu manual de supervivencia digital.",
         thumbnailType: "premium",
         immersiveView: true,
       },
@@ -611,7 +613,7 @@ const RESOURCES_ES = {
         type: "ova_interactive",
         title: "Simulador: Evaluación de Riesgos",
         description:
-          "Simulador interactivo: enfréntate a escenarios reales de riesgo y aprende a proteger tus datos. Incluye juego de estrellas éticas.",
+          "Enfréntate a escenarios reales de riesgo y aprende a proteger tus datos como un guardián. Incluye el juego de estrellas éticas que pondrá a prueba tus decisiones.",
         estimatedTime: "20 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
@@ -622,14 +624,14 @@ const RESOURCES_ES = {
   },
 
   "Privacidad, Regulación y IA Responsable": {
-    title: "Privacidad, Regulación y IA Responsable",
+    title: "El Legado del Guardián: Navegando la Ley",
     description:
-      "Marco ético para el uso responsable de IA en educación, trabajo y vida personal.",
+      "Las leyes de IA están cambiando el mundo. Desde el AI Act de la UE hasta las regulaciones locales, conoce las reglas del juego y conviértete en un referente de gobernanza ética.",
     learningObjectives: [
-      "Aplicar principios éticos al usar IA",
-      "Reconocer usos inapropiados de IA",
-      "Promover transparencia en el uso de IA",
-      "Desarrollar políticas de uso responsable",
+      "Aplicar principios éticos con la autoridad de un guardián certificado",
+      "Detectar y detener usos inapropiados de IA antes de que escalen",
+      "Liderar con transparencia: convertir la divulgación ética en tu sello personal",
+      "Diseñar políticas de uso responsable que protejan a toda tu organización",
     ],
     estimatedTime: "31 minutos",
     difficulty: "Avanzado",
@@ -643,14 +645,14 @@ const RESOURCES_ES = {
         thumbnail: "https://img.youtube.com/vi/idplIgnLStI/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Aprende los principios éticos esenciales para usar la IA con responsabilidad. La guía que todo profesional debe conocer.",
+          "6:05 que condensan todo lo que necesitas saber para implementar IA ética en el mundo real. La guía definitiva para guardianes.",
       },
       {
         id: "ethics-ova-1",
         type: "ova_interactive",
         title: "Laboratorio: dilemas Éticos",
         description:
-          "Resuelve dilemas éticos reales relacionados con el uso de IA.",
+          "Enfréntate a 8 dilemas éticos reales donde no hay respuestas fáciles. Cada decisión que tomes tendrá consecuencias. ¿Estás listo para ser guardián?",
         estimatedTime: "25 minutos",
         difficulty: "Avanzado",
         interactiveElements: 8,

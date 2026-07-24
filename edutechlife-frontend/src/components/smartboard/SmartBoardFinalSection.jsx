@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
@@ -9,7 +10,7 @@ export default function SmartBoardFinalSection({ t, faqItems, handleCta }) {
   const [activeFaq, setActiveFaq] = useState(null);
 
   return (
-    <section className="relative w-full overflow-hidden bg-gradient-to-br from-petroleum via-petroleum-darker to-petroleum-dark py-14 lg:py-20">
+    <section role="region" aria-label="Comienza con SmartBoard" className="relative w-full overflow-hidden bg-gradient-to-br from-petroleum via-petroleum-darker to-petroleum-dark py-14 lg:py-20">
       <div className="absolute top-[10%] right-[10%] w-64 h-64 bg-primary-light/12 rounded-full blur-[100px] animate-orb-1" />
       <div className="absolute bottom-[10%] left-[5%] w-56 h-56 bg-mint/8 rounded-full blur-[100px] animate-orb-2" />
       <FloatingParticles count={20} className="z-0" />
@@ -44,7 +45,7 @@ export default function SmartBoardFinalSection({ t, faqItems, handleCta }) {
           className="max-w-2xl mx-auto"
         >
           <h3 className="text-lg font-black text-white text-center mb-6 flex items-center justify-center gap-2">
-            <Icon name="fa-circle-question" className="text-primary-light text-sm" />
+            <Icon name="fa-circle-question" className="text-primary-light text-sm" aria-hidden="true" />
             {t('smartboard.landing_faq_title')}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint">{t('smartboard.landing_faq_title_highlight')}</span>
           </h3>
@@ -67,7 +68,7 @@ export default function SmartBoardFinalSection({ t, faqItems, handleCta }) {
                       activeFaq === i ? 'bg-primary-light/20' : 'bg-white/5'
                     }`}
                   >
-                    <Icon name="fa-chevron-down" className="text-white/60 text-[10px]" />
+                    <Icon name="fa-chevron-down" className="text-white/60 text-[10px]" aria-hidden="true" />
                   </motion.div>
                 </button>
                 <AnimatePresence>
@@ -96,3 +97,9 @@ export default function SmartBoardFinalSection({ t, faqItems, handleCta }) {
     </section>
   );
 }
+
+SmartBoardFinalSection.propTypes = {
+  t: PropTypes.func.isRequired,
+  faqItems: PropTypes.array.isRequired,
+  handleCta: PropTypes.func.isRequired,
+};

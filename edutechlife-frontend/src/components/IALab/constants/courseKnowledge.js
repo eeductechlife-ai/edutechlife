@@ -11,24 +11,24 @@
 const COURSE_KNOWLEDGE = [
   {
     id: 1,
-    title: "Ingeniería de Prompts",
+    title: "El Artesano Digital: El Arte de Forjar Prompts",
     objective:
-      "Desarrolla habilidades de prompt engineering para obtener resultados precisos de la IA en contextos reales.",
+      "Domina el arte de forjar instrucciones precisas con la IA como aprendiz de artesano digital, creando prompts que cualquier modelo entienda a la perfección.",
     description:
-      "En este módulo, hemos diseñado una ruta estratégica que te llevará desde los fundamentos de la Inteligencia Artificial Generativa hasta la creación de instrucciones de alto impacto.",
+      "Bienvenido al taller del artesano digital. Aquí no memorizarás teoría abstracta — aprenderás a esculpir instrucciones con la precisión de un maestro orfebre. Cada prompt es una herramienta, y cada herramienta tiene su técnica. Desde los fundamentos de la IA Generativa hasta el dominio de instrucciones de alto impacto, este módulo es tu banco de trabajo.",
     challenge:
-      "¡Llegó el momento de la práctica! Aplica todo lo aprendido en este módulo resolviendo un caso real. Atrévete a consolidar tu aprendizaje, supera el reto y lleva tus conocimientos al siguiente nivel.",
+      "MISIÓN DEL ARTESANO: 'La Obra Maestra'. Ha llegado el momento de demostrar tu oficio. Toma un problema real de tu vida profesional o académica y diseña una secuencia de prompts tan precisa que cualquier modelo de IA ejecute la tarea a la perfección sin necesidad de correcciones. El sello del verdadero artesano.",
     topics: [
       {
-        title: "Introducción a la Inteligencia Artificial Generativa",
+        title: "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?",
         description:
-          "Conceptos básicos, historia y aplicaciones prácticas de la inteligencia artificial generativa en el mundo moderno.",
+          "Antes de esculpir, hay que conocer el material. Así como un carpintero entiende la madera o un herrero el acero, tú aprenderás los fundamentos de la IA Generativa: su historia, sus capacidades y sus límites. Este es el primer golpe de cincel en tu viaje como artesano digital.",
         difficulty: "Principiante",
         learningObjectives: [
-          "Comprender qué es la IA Generativa y cómo funciona",
-          "Diferenciar entre IA débil (narrow) y IA fuerte (general)",
-          "Identificar aplicaciones prácticas en educación y negocios",
-          "Reconocer los límites éticos y técnicos actuales",
+          "Comprender qué es la IA Generativa y cómo funciona — la materia prima del artesano",
+          "Diferenciar entre IA débil (narrow) y IA fuerte (general) como un maestro distingue sus herramientas",
+          "Identificar aplicaciones prácticas en educación y negocios para saber dónde aplicar tu oficio",
+          "Reconocer los límites éticos y técnicos actuales — todo artesano conoce el alcance de sus herramientas",
         ],
         resources: [
           {
@@ -44,12 +44,14 @@ const COURSE_KNOWLEDGE = [
         ],
       },
       {
-        title: "¿Qué es un Prompt?",
+        title: "El Cincel del Artesano: ¿Qué es un Prompt?",
         description:
-          "Un prompt es la instrucción o mensaje que le damos a la IA para que realice una tarea específica. Es la clave para comunicarnos efectivamente con modelos como ChatGPT.",
+          "Un prompt es tu cincel — la herramienta fundamental con la que das forma a las respuestas de la IA. Así como un escultor no culpa al mármol, un artesano digital no culpa al modelo: aprende a tallar instrucciones con precisión milimétrica para que la IA ejecute exactamente lo que necesitas.",
         difficulty: "Principiante",
         learningObjectives: [
-          "Comprender qué es un prompt y cómo usarlo para comunicarte efectivamente con la IA",
+          "Comprender qué es un prompt y cómo usarlo como la herramienta principal del artesano digital",
+          "Dominar la anatomía de una instrucción: contexto, intención, formato y restricciones",
+          "Practicar el arte de la claridad — menos ambigüedad, más precisión, mejores resultados",
         ],
         resources: [
           {
@@ -65,23 +67,23 @@ const COURSE_KNOWLEDGE = [
   },
   {
     id: 2,
-    title: "Potencia ChatGPT",
+    title: "El Arquitecto de Automatización: Potencia ChatGPT",
     objective:
-      "Domina ChatGPT a nivel profesional: crea asistentes inteligentes, automatiza tareas y multiplica tu productividad.",
+      "Diseña y construye sistemas inteligentes con ChatGPT: desde los cimientos hasta la automatización completa de tu trabajo diario como un verdadero arquitecto digital.",
     description:
-      "Conviértete en un experto en ChatGPT: configura prompts profesionales, crea GPTs personalizados y automatiza tu trabajo diario.",
+      "Bienvenido a la obra. Aquí no solo usarás ChatGPT — lo construirás. Así como un arquitecto diseña planos antes de levantar un edificio, tú aprenderás a estructurar soluciones de IA desde los cimientos: prompts de sistema profesionales, herramientas integradas, GPTs personalizados y conexiones con el mundo real a través de APIs.",
     challenge:
-      "Crea un GPT personalizado para automatizar una tarea de tu área profesional y conéctalo con una API externa usando Function Calling.",
+      "MISIÓN DEL ARQUITECTO: 'El Edificio Inteligente'. Tu misión es diseñar y construir un sistema completo de automatización usando ChatGPT: combina prompts de sistema, herramientas integradas, un GPT personalizado y conexión con API externa. El resultado debe ser un flujo de trabajo autónomo que resuelva un problema real de tu área profesional.",
     topics: [
       {
-        title: "ChatGPT de la A a la Z",
+        title: "Los Planos del Arquitecto: Guía Completa de ChatGPT",
         description:
-          "Recurso integral de Edutechlife que cubre todos los aspectos de ChatGPT: desde la interfaz básica hasta técnicas avanzadas de prompt engineering y automatización.",
+          "Todo gran edificio comienza con un plano maestro. En esta lección, conocerás los cimientos de ChatGPT: su arquitectura, sus modelos, su interfaz y las mejores prácticas para sentar las bases de tus construcciones digitales.",
         difficulty: "Principiante",
         learningObjectives: [
-          "Navegar eficientemente por la interfaz de ChatGPT",
-          "Configurar conversaciones para diferentes propósitos",
-          "Aplicar técnicas de prompt engineering específicas para ChatGPT",
+          "Navegar la interfaz de ChatGPT como un arquitecto conoce su estudio",
+          "Configurar conversaciones como planos detallados para cada propósito",
+          "Aplicar técnicas de prompt engineering como herramientas de construcción profesional",
         ],
         resources: [
           {
@@ -94,14 +96,14 @@ const COURSE_KNOWLEDGE = [
         ],
       },
       {
-        title: "Automatiza tu Trabajo con IA",
+        title: "El Andamio del Arquitecto: Herramientas Integradas",
         description:
-          "Descubre las herramientas integradas de ChatGPT y aprende a crear flujos de trabajo automatizados que potencien tu productividad.",
+          "Un arquitecto no construye solo con sus manos — usa andamios, grúas y herramientas especializadas. Descubre el arsenal de herramientas integradas de ChatGPT: Búsqueda Web, Análisis de Datos, DALL-E 3, Canvas y más. Aprende a combinarlas como un maestro de obra para construir flujos de trabajo que multiplican tu productividad.",
         difficulty: "Intermedio",
         learningObjectives: [
-          "Identificar las 5 herramientas clave del ecosistema ChatGPT",
-          "Seleccionar la herramienta correcta según el tipo de tarea",
-          "Combinar múltiples herramientas en flujos de trabajo eficientes",
+          "Identificar las 5 herramientas clave del ecosistema ChatGPT y cuándo usar cada una",
+          "Seleccionar la herramienta correcta como un arquitecto elige el material adecuado",
+          "Combinar múltiples herramientas en flujos de trabajo eficientes y automatizados",
         ],
         resources: [
           {
@@ -113,14 +115,14 @@ const COURSE_KNOWLEDGE = [
         ],
       },
       {
-        title: "Conecta ChatGPT con el Mundo Real",
+        title: "La Fachada del Edificio: GPTs y Function Calling",
         description:
-          "Descubre cómo crear y usar GPTs personalizados y acciones para automatizar tareas complejas con APIs externas.",
+          "La fachada es lo que el mundo ve — pero detrás hay una estructura compleja que la sostiene. Aprende a construir GPTs personalizados con acciones que se conectan al mundo real a través de APIs. Tu obra maestra de arquitectura digital, lista para interactuar con cualquier sistema externo.",
         difficulty: "Avanzado",
         learningObjectives: [
-          "Crear GPTs personalizados para necesidades específicas",
-          "Configurar acciones para conectar con APIs externas",
-          "Compartir y utilizar GPTs de la comunidad",
+          "Crear GPTs personalizados como módulos de construcción reutilizables",
+          "Configurar acciones Function Calling para conectar con APIs externas",
+          "Compartir tus creaciones y aprender de la comunidad de arquitectos digitales",
         ],
         resources: [
           {
@@ -136,90 +138,90 @@ const COURSE_KNOWLEDGE = [
   },
   {
     id: 3,
-    title: "Rastreo Profundo con Gemini",
+    title: "El Detective de Datos: Rastreo Profundo con Gemini",
     objective:
-      "Domina Google Gemini para investigar, verificar datos y analizar información como un profesional de élite.",
+      "Empuña la lupa de la IA: investiga, verifica y analiza con Gemini como el mejor detective digital del mundo.",
     description:
-      "Domina Google Gemini: investiga a fondo, cruza datos en tiempo real, analiza múltiples formatos y verifica información como un profesional.",
+      "Gira la lupa de Google Gemini y descubre cómo los datos cobran vida. Aprende a cruzar pistas en tiempo real, analizar cualquier formato y separar la verdad de la ficción con precisión de detective.",
     challenge:
-      "Usa Gemini Deep Research para investigar un tema de actualidad, verifica cada fuente citada y presenta un informe profesional con conclusiones propias.",
+      "MISIÓN: 'La Investigación Definitiva'. El mundo está lleno de información contradictoria. Tu misión: usar Gemini Deep Research para separar los hechos de la ficción, verificar cada fuente y presentar un informe que cualquier CEO firmaría sin dudar.",
     topics: [
       {
-        title: "Gemini: La IA que Ve, Lee y Escucha",
+        title: "El Superpoder Multimodal: Ve lo que Nadie Más Puede Ver",
         description:
-          "Conoce Gemini, la IA multimodal de Google capaz de procesar texto, imágenes, audio y video simultáneamente.",
+          "¿Qué pasaría si tu lupa pudiera leer, escuchar y ver al mismo tiempo? Gemini procesa texto, imágenes, audio y video como un investigador sobrehumano. Una sola herramienta. Múltiples dimensiones.",
         difficulty: "Principiante",
         learningObjectives: [
-          "Comprender las capacidades multimodales de Gemini",
-          "Utilizar Gemini con diferentes tipos de entrada",
-          "Comparar Gemini con otros modelos de IA",
+          "Desbloquear el poder de procesar texto, imágenes, audio y video en una sola conversación",
+          "Interrogar a Gemini con cualquier tipo de evidencia: texto, imagen, audio o video",
+          "Descubrir por qué Gemini ve el mundo diferente a ChatGPT, Claude y otros modelos",
         ],
         resources: [
-          { type: "video", title: "Introducción a Gemini", duration: "14:10" },
-          { type: "pdf", title: "Manual de Gemini", pages: 16 },
-          { type: "ova", title: "Laboratorio: Experimenta con Multimodalidad" },
+          { type: "video", title: "Gemini en 14 Minutos: Tu Primera Inmersión", duration: "14:10" },
+          { type: "pdf", title: "El Compendio del Detective: 16 Páginas de Poder Multimodal", pages: 16 },
+          { type: "ova", title: "Laboratorio: Pon a Prueba tu Lupa Multimodal" },
         ],
       },
       {
-        title: "Imágenes + Texto + Datos en Vivo",
+        title: "Grounding: Cuando la IA Toca el Mundo Real",
         description:
-          "Aprende a integrar Gemini en Google Docs, Sheets, Gmail y otras herramientas de Workspace.",
+          "Gemini no solo piensa — también toca la tierra firme. Aprende a enraizarlo en Google Docs, Sheets, Gmail y todo Workspace. Datos vivos. Respuestas frescas. Cero conjeturas.",
         difficulty: "Intermedio",
         learningObjectives: [
-          "Usar Gemini dentro de Google Docs para redacción",
-          "Analizar datos con Gemini en Google Sheets",
-          "Gestionar correos electrónicos con Gemini en Gmail",
+          "Redactar documentos impecables con Gemini como tu coautor invisible",
+          "Convertir hojas de cálculo en pistas visuales que revelan patrones ocultos",
+          "Dominar tu bandeja de entrada: Gemini resume, redacta y prioriza por ti",
         ],
         resources: [
           {
             type: "video",
-            title: "Gemini + Google Workspace: Tutorial Completo",
+            title: "Gemini en tu Oficina: Tutorial Definitivo de Workspace",
             duration: "20:15",
           },
-          { type: "document", title: "Plantillas para Google Workspace" },
-          { type: "ova", title: "Gemini: Recorrido Interactivo" },
+          { type: "document", title: "Kit de Supervivencia: Plantillas para Google Workspace" },
+          { type: "ova", title: "Gemini: Misión Interactiva — Explora y Domina" },
         ],
       },
       {
-        title: "Investiga como un Detective Digital",
+        title: "El Arte de la Investigación: Convierte Datos en Verdades Ocultas",
         description:
-          "Casos reales de uso profesional de Gemini en marketing, programación, educación e investigación.",
+          "Los mejores detectives del mundo digital ya usan Gemini. Descubre casos reales en marketing, programación, educación e investigación donde la IA resolvió lo que parecía imposible.",
         difficulty: "Avanzado",
         learningObjectives: [
-          "Aplicar Gemini en estrategias de marketing",
-          "Usar Gemini para asistencia en programación",
-          "Implementar Gemini en procesos educativos",
+          "Diseñar campañas que la competencia no ve venir, respaldadas por datos en tiempo real",
+          "Depurar, optimizar y documentar código como si tuvieras un senior desarrollador a tu lado 24/7",
+          "Transformar cualquier tema en una investigación interactiva que tus estudiantes recordarán",
         ],
         resources: [
           {
             type: "video",
-            title: "Casos de Éxito con Gemini",
+            title: "Casos que Inspiran: Detectives Reales, Resultados Reales",
             duration: "16:30",
           },
-          { type: "pdf", title: "Guía de Casos de Uso", pages: 24 },
-          { type: "ova", title: "Laboratorio: Casos Prácticos" },
+          { type: "pdf", title: "Archivo de Casos: 24 Páginas de Misiones Cumplidas", pages: 24 },
+          { type: "ova", title: "Laboratorio: Resuelve el Caso — 6 Desafíos Reales" },
         ],
       },
     ],
   },
   {
     id: 4,
-    title: "Inmersión NotebookLM",
+    title: "El Alquimista del Conocimiento: NotebookLM",
     objective:
-      "Transforma PDFs y documentos en resúmenes inteligentes, podcasts y asistentes de investigación personalizados.",
+      "Convierte documentos en oro: podcasts que cautivan, resúmenes que iluminan y un asistente que solo habla de lo que sabe.",
     description:
-      "Descubre cómo convertir tus PDFs y apuntes en conocimiento interactivo. Crea resúmenes automáticos, podcasts generados por IA y asistentes de investigación personalizados.",
-    challenge: "Genera un podcast analizando 5 papers sobre neuro-plasticidad.",
+      "Imagina un bibliotecario que ha leído cada palabra de tus PDFs, los entiende a profundidad y te responde con citas exactas. Sin alucinaciones. Sin inventos. Eso es NotebookLM: la herramienta de Google que transforma documentos en conocimiento vivo.",
+    challenge: "MISIÓN: Crea un programa de radio científico. Convierte 5 papers sobre neuroplasticidad en un podcast de 15 minutos que hasta tu abuela entendería.",
     topics: [
       {
-        title: "¿Qué es NotebookLM?",
+        title: "El Alquimista de Documentos: Convierte PDFs en Oro de Conocimiento",
         description:
-          "Descubre NotebookLM, la herramienta de Google para investigación asistida por IA con fuentes personalizadas.",
+          "Conoce a tu nuevo superpoder: NotebookLM, el asistente de Google que lee todas tus fuentes y te responde solo con información verificada. No es un chatbot cualquiera — es tu bibliotecario personal con memoria impecable.",
         difficulty: "Principiante",
         learningObjectives: [
-          "Crear notebooks con fuentes personalizadas",
-          "Hacer preguntas específicas sobre tus documentos",
-          "Generar resúmenes inteligentes de contenido",
+          "Construir tu primera biblioteca inteligente donde los documentos cobran vida",
+          "Interrogar tus fuentes como un detective que busca la verdad",
+          "Destilar montañas de texto en resúmenes que van al grano",
         ],
         resources: [
           {
@@ -232,14 +234,14 @@ const COURSE_KNOWLEDGE = [
         ],
       },
       {
-        title: "Organiza tu Investigación como un Pro",
+        title: "El Arte de la Curaduría: Calidad sobre Cantidad",
         description:
-          "Aprende a generar resúmenes, FAQ y briefings conectados a tus fuentes originales.",
+          "Aprende a seleccionar fuentes como un joyero elige gemas, organizarlas por temas y conectar ideas entre documentos para crear resúmenes y análisis de nivel profesional.",
         difficulty: "Intermedio",
         learningObjectives: [
-          "Generar resúmenes ejecutivos automáticos",
-          "Crear FAQs basadas en tus documentos",
-          "Conectar respuestas a fuentes originales",
+          "Generar resúmenes ejecutivos que parecen escritos por un equipo de analistas",
+          "Crear FAQs que anticipan cada pregunta antes de que la formules",
+          "Conectar cada respuesta a su fuente original con precisión quirúrgica",
         ],
         resources: [
           {
@@ -252,14 +254,14 @@ const COURSE_KNOWLEDGE = [
         ],
       },
       {
-        title: "De PDF a Podcast en un Clic",
+        title: "La Magia del Audio: Tus Documentos Hablan por Sí Solos",
         description:
-          "Explora la función de Audio Overview que convierte tus notas en conversaciones de podcast generadas por IA.",
+          "Explora la función de Audio Overview que convierte tus notas en conversaciones de podcast generadas por IA. Dos voces, una conversación, cero jerga innecesaria.",
         difficulty: "Avanzado",
         learningObjectives: [
-          "Generar Audio Overviews de tus notebooks",
-          "Personalizar el estilo y tono del audio",
-          "Usar audio para aprendizaje y repaso",
+          "Dar vida a tus documentos con Audio Overviews que parecen programa de radio",
+          "Afinar el tono: sé académico, conversacional o divulgativo según tu audiencia",
+          "Aprender mientras te mueves: convertir el estudio en experiencia auditiva",
         ],
         resources: [
           { type: "video", title: "Crea tu propio podcast", duration: "2:16" },
@@ -271,23 +273,23 @@ const COURSE_KNOWLEDGE = [
   },
   {
     id: 5,
-    title: "Ética Aplicada a IA Generativa",
+    title: "El Escudo del Guardián: Ética Aplicada a IA Generativa",
     objective:
-      "Aprende a usar la IA de forma responsable, ética y legal con frameworks que las empresas exigen hoy.",
+      "Domina los 4 pilares éticos que las empresas buscan hoy y conviértete en el guardián que asegura que la IA sirva a la humanidad.",
     description:
-      "En este módulo final, desarrollarás pensamiento crítico sobre los impactos éticos de la IA. Aprenderás a identificar sesgos, cumplir regulaciones y crear frameworks de IA responsable.",
+      "Cada decisión que tomas con IA tiene un impacto real. En este módulo final, te entrenarás para identificar sesgos ocultos, navegar regulaciones complejas y construir frameworks éticos que protejan a usuarios, organizaciones y a ti mismo.",
     challenge:
-      "Analiza un caso real de sesgo algorítmico en IA y propón un protocolo ético para prevenir y mitigar este tipo de discriminación.",
+      "MISIÓN CRÍTICA: El Algoritmo Invisible. En alguna parte del mundo, un algoritmo está tomando decisiones que arruinan vidas — rechazando préstamos, filtrando currículos, decidiendo sentencias. Tu misión: localizar un caso real de sesgo algorítmico, diseccionarlo con evidencia y diseñar un protocolo ético blindado que prevenga que vuelva a ocurrir.",
     topics: [
       {
-        title: "Ética en IA: Lo Esencial",
+        title: "El Voto del Guardián: Los 4 Principios Sagrados",
         description:
-          "Fundamentos éticos para el uso de IA generativa: transparencia, equidad, responsabilidad y privacidad.",
+          "Antes de tocar una línea de código o escribir un prompt, hay 4 principios que separan a un profesional ético de uno imprudente. Transparencia, equidad, responsabilidad y privacidad — no son teoría, son tu escudo.",
         difficulty: "Intermedio",
         learningObjectives: [
-          "Comprender los principios éticos fundamentales de la IA",
-          "Identificar dilemas éticos en casos reales",
-          "Aplicar un checklist ético antes de usar IA",
+          "Internalizar los 4 pilares éticos que definen a un guardián de IA",
+          "Detectar dilemas éticos en casos reales antes de que escalen",
+          "Aplicar un checklist ético infalible antes de cada uso de IA",
         ],
         resources: [
           { type: "video", title: "Los Pilares de la I.A", duration: "1:56" },
@@ -300,14 +302,14 @@ const COURSE_KNOWLEDGE = [
         ],
       },
       {
-        title: "¿Es Justa tu IA? Descúbrelo",
+        title: "El Espejo de la Verdad: ¿Tu IA es Justa para Todos?",
         description:
-          "Estrategias prácticas para proteger tus datos personales y corporativos al usar herramientas de IA.",
+          "Tu IA solo es tan buena como los datos que la alimentan. Y los datos tienen prejuicios. Aprende a proteger tus datos personales y corporativos como un guardián blindaría su fortaleza.",
         difficulty: "Intermedio",
         learningObjectives: [
-          "Comprender cómo las IA procesan tus datos",
-          "Identificar riesgos de privacidad",
-          "Aplicar mejores prácticas de protección",
+          "Descifrar cómo las IA procesan y almacenan tus datos",
+          "Identificar vulnerabilidades de privacidad antes de que otros las exploten",
+          "Implementar blindajes de protección que superen los estándares de la industria",
         ],
         resources: [
           {
@@ -320,14 +322,14 @@ const COURSE_KNOWLEDGE = [
         ],
       },
       {
-        title: "Protege tus Datos en la Era de la IA",
+        title: "El Legado del Guardián: Construyendo un Futuro Ético",
         description:
-          "Marco ético para el uso responsable de IA en educación, trabajo y vida personal.",
+          "La IA no es buena ni mala — es poder. Y el poder sin ética es peligroso. Este marco te enseñará a usar la IA en educación, trabajo y vida con la responsabilidad de quien sabe que sus decisiones importan.",
         difficulty: "Avanzado",
         learningObjectives: [
-          "Aplicar principios éticos al usar IA",
-          "Reconocer usos inapropiados de IA",
-          "Promover transparencia en el uso de IA",
+          "Aplicar principios éticos como un guardián en cada interacción con IA",
+          "Reconocer y detener usos inapropiados de IA antes de que causen daño",
+          "Liderar con el ejemplo: promover transparencia y rendición de cuentas",
         ],
         resources: [
           {

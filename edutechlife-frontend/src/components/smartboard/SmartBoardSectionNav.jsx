@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 export default function SmartBoardSectionNav({
   currentStep,
   totalSteps,
@@ -7,7 +9,7 @@ export default function SmartBoardSectionNav({
   return (
     <div className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-xl border-b border-petroleum/5 shadow-premium">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 sm:py-3.5 overflow-x-auto scrollbar-none">
-        <nav className="flex items-center gap-1.5 sm:gap-2 min-w-max justify-center">
+        <nav className="flex items-center gap-1.5 sm:gap-2 min-w-max justify-center" role="navigation" aria-label="Secciones del sitio">
           {stepLabels.map((label, idx) => (
             <button
               key={idx}
@@ -29,3 +31,10 @@ export default function SmartBoardSectionNav({
     </div>
   );
 }
+
+SmartBoardSectionNav.propTypes = {
+  currentStep: PropTypes.number.isRequired,
+  totalSteps: PropTypes.number.isRequired,
+  stepLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onGoToStep: PropTypes.func.isRequired,
+};

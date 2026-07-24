@@ -1,12 +1,33 @@
 import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "../../../i18n/I18nProvider";
+import {
+  Smile, Frown, AlertTriangle, AlertCircle, HelpCircle,
+  Heart, FileText, MessageSquare,
+} from "lucide-react";
 import QuickActions from "../dani/QuickActions";
 import RecentTopics from "../dani/RecentTopics";
 import DaniChatHeader from "./components/DaniChatHeader";
 import DaniChatMessages from "./components/DaniChatMessages";
 import useDaniChat from "./useDaniChat";
 
+const MOOD_ICONS = {
+  feliz: Smile,
+  triste: Frown,
+  enojado: AlertTriangle,
+  ansioso: AlertCircle,
+  confundido: HelpCircle,
+};
+const MOOD_COLORS = {
+  feliz: "text-green-500",
+  triste: "text-blue-400",
+  enojado: "text-red-400",
+  ansioso: "text-amber-400",
+  confundido: "text-[#64748B]",
+};
+
 const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
+  const { t } = useTranslation();
   const {
     focusTrapRef,
     isSpeaking,
@@ -52,7 +73,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
         ref={focusTrapRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Chat con Dani"
+        aria-label={t('dani.chat_title')}
         onClick={onClose}
         onKeyDown={(e) => {
           if (e.key === "Escape") onClose();
@@ -90,22 +111,22 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
               className="mx-4 mt-2 px-4 py-3 bg-red-50 border border-red-300 rounded-xl"
             >
               <div className="flex items-start gap-3">
-                <span className="text-2xl">🆘</span>
+                <AlertCircle className="text-red-500 mt-0.5" size={22} aria-hidden="true" />
                 <div className="flex-1">
                   <p className="text-sm font-bold text-red-800 mb-1">
-                    Líneas de ayuda disponibles
+                    {t('dani.crisis_title')}
                   </p>
                   <p className="text-xs text-red-700 leading-relaxed">
-                    <strong>Línea 106</strong> — Atención en salud mental (24/7)
+                    <strong>{t('dani.crisis_line1')}</strong>
                     {" | "}
-                    <strong>Línea 123</strong> — Emergencias{" | "}
-                    <strong>Línea 141</strong> — ICBF
+                    <strong>{t('dani.crisis_line2')}</strong>{" | "}
+                    <strong>{t('dani.crisis_line3')}</strong>
                   </p>
                 </div>
                 <button
                   onClick={() => setShowCrisisResources(false)}
                   className="text-red-400 hover:text-red-600 text-sm"
-                  aria-label="Cerrar"
+                  aria-label={t('dani.close')}
                 >
                   ✕
                 </button>
@@ -121,14 +142,14 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
               className="mx-4 mt-2 px-3 py-2 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 rounded-xl"
             >
               <div className="flex items-center gap-2">
-                <span className="text-lg">🤗</span>
+                <Heart className="text-[#004B63]" size={20} aria-hidden="true" />
                 <p className="text-xs text-[#004B63] flex-1">
-                  Parece que no te sientes muy bien... ¿Quieres hablar de eso?
+                  {t('dani.emotional_banner')}
                 </p>
                 <button
                   onClick={() => setShowEmotionalBanner(false)}
                   className="text-[#64748B] hover:text-[#004B63] text-xs"
-                  aria-label="Cerrar"
+                  aria-label={t('dani.close')}
                 >
                   ✕
                 </button>
@@ -144,35 +165,18 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                   : "border-[#E2E8F0] bg-white/50"
               }`}
             >
-              <span className="text-[10px] text-[#64748B] mr-1">Estado:</span>
-              {studentMoodHistory.slice(-5).map((m, i) => (
-                <span
-                  key={i}
-                  className={`text-xs ${
-                    m.mood === "feliz"
-                      ? "text-green-500"
-                      : m.mood === "triste"
-                        ? "text-blue-400"
-                        : m.mood === "enojado"
-                          ? "text-red-400"
-                          : m.mood === "ansioso"
-                            ? "text-amber-400"
-                            : "text-[#64748B]"
-                  }`}
-                >
-                  {m.mood === "feliz"
-                    ? "😊"
-                    : m.mood === "triste"
-                      ? "😢"
-                      : m.mood === "enojado"
-                        ? "😤"
-                        : m.mood === "ansioso"
-                          ? "😰"
-                          : m.mood === "confundido"
-                            ? "🤔"
-                            : "💭"}
-                </span>
-              ))}
+              <span className="text-[10px] text-[#64748B] mr-1">{t('dani.mood_label')}</span>
+              {studentMoodHistory.slice(-5).map((m, i) => {
+                const MoodIcon = MOOD_ICONS[m.mood] || MessageSquare;
+                return (
+                  <span
+                    key={i}
+                    className={MOOD_COLORS[m.mood] || "text-[#64748B]"}
+                  >
+                    <MoodIcon size={14} aria-hidden="true" />
+                  </span>
+                );
+              })}
             </div>
           )}
 
@@ -184,15 +188,15 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
               className="mx-4 mt-2 px-3 py-2 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 rounded-xl"
             >
               <div className="flex items-center gap-2">
-                <span className="text-lg">📄</span>
+                <FileText className="text-[#004B63]" size={18} aria-hidden="true" />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-bold text-[#004B63] truncate">
-                    Analizando: {documentForDani.title || "Documento"}
+                    {t('dani.document_analyzing')} {documentForDani.title || t('dani.document_summary')}
                   </p>
                   <p className="text-[10px] text-[#64748B]">
                     {documentForDani.score != null
-                      ? `Puntuación: ${documentForDani.score}/100`
-                      : "Resumen de estudio"}
+                      ? `${t('dani.document_score')} ${documentForDani.score}/100`
+                      : t('dani.document_summary')}
                     {documentForDani.subject
                       ? ` • ${documentForDani.subject}`
                       : ""}
@@ -201,7 +205,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                 <button
                   onClick={() => setDocumentForDani(null)}
                   className="text-[#64748B] hover:text-[#004B63] text-xs"
-                  aria-label="Cerrar documento"
+                  aria-label={t('dani.document_close')}
                 >
                   ✕
                 </button>
@@ -240,7 +244,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                 onKeyPress={(e) =>
                   e.key === "Enter" && handleSendMessage(inputText)
                 }
-                placeholder="Pregúntale a Dani..."
+                placeholder={t('dani.placeholder')}
                 autoFocus
                 className={`flex-1 px-4 py-3 rounded-full text-sm focus:outline-none focus:border-[#4DA8C4] placeholder-[#64748B] ${
                   darkMode
@@ -251,6 +255,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
               <motion.button
                 onClick={handleMicClick}
                 disabled={isTyping}
+                aria-label={isListening ? t('dani.mic_stop') : t('dani.mic_start')}
                 className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
                   isListening
                     ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
@@ -258,7 +263,6 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                title={isListening ? "Toca para detener" : "Hablar con Dani"}
               >
                 <svg
                   className="w-5 h-5"
@@ -277,6 +281,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
               <motion.button
                 onClick={() => handleSendMessage(inputText)}
                 disabled={!inputText.trim() || isTyping}
+                aria-label={t('dani.send')}
                 className="w-12 h-12 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] text-white rounded-full flex items-center justify-center disabled:opacity-50 shadow-lg flex-shrink-0"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "../../../i18n/I18nProvider";
 import { callDeepseek, callDeepseekStream } from "../../../utils/api";
 import {
   PROMPT_DANI_EXPERTO,
@@ -33,6 +34,7 @@ import { trackTopicFromMessage } from "./daniChatTopics";
 
 export default function useDaniChat({ isOpen, onClose, activeTab }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     daniChatHistory,
     addDaniMessage,
@@ -85,21 +87,17 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
     const hour = now.getHours();
     const greeting =
       hour < 12
-        ? "¡Buenos días"
+        ? t('dani.welcome_morning')
         : hour < 18
-          ? "¡Buenas tardes"
-          : "¡Buenas noches";
+          ? t('dani.welcome_afternoon')
+          : t('dani.welcome_evening');
 
     const parts = [];
 
-    parts.push(`${greeting}! Soy Dani, tu mentor virtual.`);
+    parts.push(greeting);
 
-    if (streak.current >= 5) {
-      parts.push(
-        `Llevas ${streak.current} días seguidos, ¡qué impresionante! 🔥`,
-      );
-    } else if (streak.current >= 2) {
-      parts.push(`Ya llevas ${streak.current} días de racha, ¡sigue así!`);
+    if (streak.current >= 2) {
+      parts.push(t('dani.welcome_streak', { days: streak.current }));
     }
 
     const tabMessages = {
@@ -173,11 +171,11 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
     }
 
     if (!parts.some((p) => p.includes("¿"))) {
-      parts.push("¿En qué te gustaría que te ayude hoy? 😊");
+      parts.push(t('dani.welcome_first'));
     }
 
     return parts.join(" ");
-  }, [streak, vakResult, calendarEvents, activeTab]);
+  }, [streak, vakResult, calendarEvents, activeTab, t]);
 
   useEffect(() => {
     localStorage.setItem("edutechlife_dani_voice", voiceEnabled);
@@ -278,6 +276,7 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
       setDaniMood("thinking");
 
       try {
+        const currentMood = daniMood;
         const hasDocumentContext = !!documentForDani;
         let systemPrompt = hasDocumentContext
           ? PROMPT_TUTOR_TAREAS
@@ -379,13 +378,12 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
             fullResponse += chunk;
             setDaniMood("explaining");
             setStreamingMessage(fullResponse);
-            setDaniMood("explaining");
 
             processStreamChunkVoice(chunk, {
               pendingSentenceRef,
               voiceEnabled,
               isSpeakingRef,
-              daniMood,
+              daniMood: currentMood,
               setIsSpeaking,
               setVoiceBlocked,
             });
@@ -396,7 +394,7 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
         speakRemainingText(remaining, {
           voiceEnabled,
           isSpeakingRef,
-          daniMood,
+          daniMood: currentMood,
           setIsSpeaking,
           setVoiceBlocked,
         });
@@ -449,14 +447,11 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
         trackTopicFromMessage(userMessage, extractTopic, trackAcademicTopic);
       } catch (error) {
         console.error("Error calling Dani:", error);
-        const errorMsg = error.message?.includes("400")
-          ? "El servidor no entendió el mensaje. ¿Puedes intentar de nuevo?"
-          : error.message?.includes("500")
-            ? "El servidor está teniendo problemas. Vuelve a intentar en un momento."
-            : error.message?.includes("timeout") ||
-                error.message?.includes("Tiempo de espera")
-              ? "La respuesta tardó demasiado. ¿Puedes repetirlo?"
-              : "Ups, tuve un problema de conexión. ¿Puedes intentar de nuevo? 🙏";
+        const errorMsg = error.message?.includes("400") || error.message?.includes("500")
+          ? t('dani.error_generic')
+          : error.message?.includes("timeout") || error.message?.includes("Tiempo de espera")
+            ? t('dani.error_timeout')
+            : t('dani.error_network');
         addDaniMessage({
           role: "assistant",
           text: errorMsg,
@@ -477,6 +472,8 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
       setVoiceBlocked,
       socraticMode,
       documentForDani,
+      daniMood,
+      t,
     ],
   );
 

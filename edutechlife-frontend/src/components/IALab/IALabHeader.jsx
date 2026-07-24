@@ -32,10 +32,11 @@ const IALabHeader = () => {
 
   // Notificación al ganar insignias
   useEffect(() => {
+    const badgeInfo = getBadgeInfo(locale);
     const handleBadges = (e) => {
       const badgeIds = e.detail?.badges || [];
       badgeIds.forEach(id => {
-        const info = BADGE_INFO?.[id];
+        const info = badgeInfo?.[id];
         if (!info) return;
         createNotification({
           type: 'success',
@@ -47,7 +48,7 @@ const IALabHeader = () => {
     };
     window.addEventListener('ialab:badgesAwarded', handleBadges);
     return () => window.removeEventListener('ialab:badgesAwarded', handleBadges);
-  }, [createNotification]);
+  }, [createNotification, locale]);
 
   return (
     <header className="h-16 flex items-center justify-between px-6 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 w-full shadow-sm">

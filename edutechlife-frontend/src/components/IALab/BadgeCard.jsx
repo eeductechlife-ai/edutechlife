@@ -54,7 +54,7 @@ const cardVariants = {
 
 const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 0 }) => {
   const prefersReducedMotion = useReducedMotion();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
 
   if (!prefersReducedMotion) {
     cardVariants.visible = (i) => ({
@@ -131,7 +131,7 @@ const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 
           transition={{ delay: 0.5, duration: 0.3 }}
           className="text-[9px] text-emerald-600 dark:text-emerald-400 mt-1.5 font-medium"
         >
-          {new Date(dateEarned).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+          {new Date(dateEarned).toLocaleDateString(locale === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
         </motion.span>
       )}
       {!earned && (

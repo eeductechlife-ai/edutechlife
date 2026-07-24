@@ -1,14 +1,16 @@
-import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { fadeInUp, containerVariants, cardVariants } from './SmartBoardShared';
 
 export default function SmartBoardVakStylesSection({ t, vakStyles }) {
+  const prefersReducedMotion = useReducedMotion();
   return (
-    <section id="estilos-vak" className="relative w-full overflow-hidden bg-gradient-to-b from-petroleum/3 to-white py-12 lg:py-16 scroll-mt-20">
+    <section id="estilos-vak" role="region" aria-label="Estilos de aprendizaje VAK" className="relative w-full overflow-hidden bg-gradient-to-b from-petroleum/3 to-white py-12 lg:py-16 scroll-mt-20">
       <div className="absolute top-[10%] right-[15%] w-40 h-40 bg-primary-light/10 rounded-full blur-[80px]" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-        <motion.div {...fadeInUp} className="text-center mb-8">
+          <motion.div {...(!prefersReducedMotion ? fadeInUp : {})} className="text-center mb-8">
           <span className="badge-clay inline-block px-3.5 py-1 rounded-full bg-primary-light/10 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3">
             {t('smartboard.landing_vak_badge')}
           </span>
@@ -22,9 +24,9 @@ export default function SmartBoardVakStylesSection({ t, vakStyles }) {
         </motion.div>
 
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
+          variants={prefersReducedMotion ? undefined : containerVariants}
+          initial={prefersReducedMotion ? false : "hidden"}
+          whileInView={prefersReducedMotion ? undefined : "visible"}
           viewport={{ once: true, margin: '-50px' }}
           className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5 items-start"
         >
@@ -32,11 +34,11 @@ export default function SmartBoardVakStylesSection({ t, vakStyles }) {
             <motion.div
               key={style.key}
               variants={cardVariants}
-              animate={{
+              animate={prefersReducedMotion ? false : {
                 y: [0, -5, 0],
                 transition: { duration: 3.5 + idx * 0.3, delay: idx * 0.2, repeat: Infinity, ease: 'easeInOut' },
               }}
-              style={{ willChange: 'transform' }} className="group relative card-clay-white bg-white rounded-2xl border border-white/40 shadow-sm hover:shadow-premium-lg transition-all duration-500 overflow-hidden"
+              style={{ willChange: prefersReducedMotion ? 'auto' : 'transform' }} className="group relative card-clay-white bg-white rounded-2xl border border-white/40 shadow-sm hover:shadow-premium-lg transition-all duration-500 overflow-hidden"
             >
               <div className="absolute top-0 left-0 right-0 h-1" style={{ background: `linear-gradient(135deg, ${style.color}, ${style.color}88)` }} />
               <div className="p-5 lg:p-6">
@@ -61,3 +63,8 @@ export default function SmartBoardVakStylesSection({ t, vakStyles }) {
     </section>
   );
 }
+
+SmartBoardVakStylesSection.propTypes = {
+  t: PropTypes.func.isRequired,
+  vakStyles: PropTypes.array.isRequired,
+};

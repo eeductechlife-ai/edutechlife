@@ -28,6 +28,11 @@ export const cleanTextForTTS = (text) => {
   clean = clean.replace(/[\uFE0F\uFE0E]/g, '')
   clean = clean.replace(/[\u{1F3FB}-\u{1F3FF}]/gu, '')
 
+  clean = clean.replace(/["""'']/g, ' ')
+  clean = clean.replace(/[()\[\]{}]/g, ' ')
+  clean = clean.replace(/[;:]+/g, '.')
+  clean = clean.replace(/#{2,}/g, ' ')
+  clean = clean.replace(/(?<!\w)\/(?!\w)/g, ' ')
   clean = clean.replace(/[*_~]{2,}/g, '')
   clean = clean.replace(/[▓░▒█▲▼◆■●○]{2,}/g, '')
   clean = clean.replace(/\|{2,}/g, '')

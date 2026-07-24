@@ -150,6 +150,7 @@ export type TranslationKeys = {
   "aliados.category_sena": string;
   "aliados.category_steam": string;
   "aliados.category_unesco": string;
+  "aliados.marquee_aria": string;
   "aliados.title_before": string;
   "aliados.title_highlight": string;
   "automation.architect.back_dashboard": string;
@@ -520,6 +521,54 @@ export type TranslationKeys = {
   "course_completion.title": string;
   "course_completion.view_cert": string;
   "course_completion.yes": string;
+  "dani.chart_title": string;
+  "dani.chat_title": string;
+  "dani.close": string;
+  "dani.conversation_count": string;
+  "dani.crisis_line1": string;
+  "dani.crisis_line2": string;
+  "dani.crisis_line3": string;
+  "dani.crisis_title": string;
+  "dani.document_analyzing": string;
+  "dani.document_close": string;
+  "dani.document_score": string;
+  "dani.document_summary": string;
+  "dani.emotional_banner": string;
+  "dani.empty_chat": string;
+  "dani.error_generic": string;
+  "dani.error_network": string;
+  "dani.error_timeout": string;
+  "dani.messages_label": string;
+  "dani.mic_start": string;
+  "dani.mic_stop": string;
+  "dani.mood_label": string;
+  "dani.placeholder": string;
+  "dani.quick_explain": string;
+  "dani.quick_help": string;
+  "dani.quick_motivate": string;
+  "dani.quick_plan": string;
+  "dani.quick_support": string;
+  "dani.quick_vak": string;
+  "dani.send": string;
+  "dani.socratic_label": string;
+  "dani.socratic_off": string;
+  "dani.socratic_on": string;
+  "dani.status_ready": string;
+  "dani.status_speaking": string;
+  "dani.status_writing": string;
+  "dani.streak_label": string;
+  "dani.title": string;
+  "dani.topic_recent": string;
+  "dani.video_title": string;
+  "dani.voice_blocked": string;
+  "dani.voice_disable": string;
+  "dani.voice_enable": string;
+  "dani.welcome_afternoon": string;
+  "dani.welcome_evening": string;
+  "dani.welcome_first": string;
+  "dani.welcome_morning": string;
+  "dani.welcome_return": string;
+  "dani.welcome_streak": string;
   "dashboard.accept_challenge": string;
   "dashboard.activity_trends": string;
   "dashboard.avg_day": string;
@@ -563,6 +612,7 @@ export type TranslationKeys = {
   "ecosystem.subtitle": string;
   "ecosystem.title_before": string;
   "ecosystem.title_highlight": string;
+  "esencia.carousel_aria": string;
   "esencia.mission_badge": string;
   "esencia.mission_tagline": string;
   "esencia.mission_text": string;
@@ -575,6 +625,8 @@ export type TranslationKeys = {
   "esencia.slide_6_title": string;
   "esencia.slide_7_title": string;
   "esencia.slide_8_title": string;
+  "esencia.slide_next_aria": string;
+  "esencia.slide_prev_aria": string;
   "esencia.subtitle": string;
   "esencia.title_before": string;
   "esencia.title_highlight": string;
@@ -1571,6 +1623,7 @@ export type TranslationKeys = {
   "ialab.leaderboard_modal.close_aria": string;
   "ialab.menu_aria": string;
   "ialab.module.lessons": string;
+  "ialab.module.module_label": string;
   "ialab.module.progress_title": string;
   "ialab.module_actions.attempts_left": string;
   "ialab.module_actions.challenge": string;
@@ -2056,6 +2109,11 @@ export type TranslationKeys = {
   "ialab.valerio.message_valerio": string;
   "ialab.valerio.message_you": string;
   "ialab.valerio.module_label": string;
+  "ialab.valerio.ova_intro_1": string;
+  "ialab.valerio.ova_intro_2": string;
+  "ialab.valerio.ova_intro_3": string;
+  "ialab.valerio.ova_intro_4": string;
+  "ialab.valerio.ova_intro_5": string;
   "ialab.valerio.panel_aria": string;
   "ialab.valerio.quick_actions_title": string;
   "ialab.valerio.quick_explain_topic": string;
@@ -2120,6 +2178,11 @@ export type TranslationKeys = {
   "ialab.viewer_modal.type_resource": string;
   "ialab.viewer_modal.type_video": string;
   "ialab.viewer_modal.unmute": string;
+  "ialab.viewer_modal.video_error_embed": string;
+  "ialab.viewer_modal.video_error_html5": string;
+  "ialab.viewer_modal.video_error_invalid": string;
+  "ialab.viewer_modal.video_error_not_found": string;
+  "ialab.viewer_modal.video_error_unknown": string;
   "ialab.viewer_modal.video_unavailable": string;
   "ialab.viewer_modal.volume": string;
   "ialab.viewer_modal.warning_no_skip": string;
@@ -2202,6 +2265,13 @@ export type TranslationKeys = {
   "leaderboard.streak": string;
   "leaderboard.title": string;
   "leaderboard.you_label": string;
+  "loading.feature_ai": string;
+  "loading.feature_cert": string;
+  "loading.feature_vak": string;
+  "loading.status_ai": string;
+  "loading.status_done": string;
+  "loading.status_start": string;
+  "loading.status_vak": string;
   "metodo.cta_text": string;
   "metodo.form_email_label": string;
   "metodo.form_email_placeholder": string;
@@ -2400,10 +2470,12 @@ export type TranslationKeys = {
   "modals.settings.user_options_aria": string;
   "modals.settings.user_profile_title": string;
   "modals.settings.view_privacy_policy": string;
+  "nav.close_aria": string;
   "nav.contact": string;
   "nav.contact_subtitle": string;
   "nav.contact_title": string;
   "nav.home_aria": string;
+  "nav.home_desc": string;
   "nav.ialab_pro": string;
   "nav.login": string;
   "nav.logo_alt": string;
@@ -2412,6 +2484,7 @@ export type TranslationKeys = {
   "nav.send_message": string;
   "nav.smartboard": string;
   "nav.whatsapp": string;
+  "notfound.button": string;
   "notification.clear_all": string;
   "notification.close_aria": string;
   "notification.confirm_clear": string;
@@ -3042,12 +3115,16 @@ export type TranslationKeys = {
   "ova.tour.title": string;
   "ova.tour.valerio_quiz_text": string;
   "ova.tour.welcome_audio": string;
+  "page_loader.admin": string;
   "page_loader.ailab": string;
+  "page_loader.auth": string;
   "page_loader.consulting": string;
   "page_loader.consulting_b2b": string;
   "page_loader.neuro": string;
+  "page_loader.permisos": string;
   "page_loader.projects": string;
   "page_loader.redirect": string;
+  "page_loader.vak": string;
   "pricing.annual": string;
   "pricing.badge": string;
   "pricing.cta_button": string;
@@ -3576,11 +3653,11 @@ export type TranslationKeys = {
   "streak.tier_encendida": string;
   "streak.tier_imparable": string;
   "streak.xp": string;
-  time_avg: string;
-  time_days_active: string;
-  time_title: string;
-  time_today: string;
-  time_week: string;
+  "time_avg": string;
+  "time_days_active": string;
+  "time_title": string;
+  "time_today": string;
+  "time_week": string;
   "vak.ui.accept_and_continue": string;
   "vak.ui.accept_data_policy": string;
   "vak.ui.accessibility_label": string;
@@ -3772,25 +3849,6 @@ export type TranslationKeys = {
   "welcome.signin_title": string;
   "welcome.signup_subtitle": string;
   "welcome.signup_title": string;
-
-  "nav.close_aria": string;
-  "nav.home_desc": string;
-  "notfound.button": string;
-  "esencia.carousel_aria": string;
-  "esencia.slide_prev_aria": string;
-  "esencia.slide_next_aria": string;
-  "aliados.marquee_aria": string;
-  "loading.status_start": string;
-  "loading.status_vak": string;
-  "loading.status_ai": string;
-  "loading.status_done": string;
-  "loading.feature_ai": string;
-  "loading.feature_vak": string;
-  "loading.feature_cert": string;
-  "page_loader.vak": string;
-  "page_loader.admin": string;
-  "page_loader.auth": string;
-  "page_loader.permisos": string;
 };
 
 export type TranslationKey = keyof TranslationKeys;
@@ -3950,6 +4008,7 @@ const translationKeySet: Record<string, true> = {
   "aliados.category_sena": true,
   "aliados.category_steam": true,
   "aliados.category_unesco": true,
+  "aliados.marquee_aria": true,
   "aliados.title_before": true,
   "aliados.title_highlight": true,
   "automation.architect.back_dashboard": true,
@@ -4320,6 +4379,54 @@ const translationKeySet: Record<string, true> = {
   "course_completion.title": true,
   "course_completion.view_cert": true,
   "course_completion.yes": true,
+  "dani.chart_title": true,
+  "dani.chat_title": true,
+  "dani.close": true,
+  "dani.conversation_count": true,
+  "dani.crisis_line1": true,
+  "dani.crisis_line2": true,
+  "dani.crisis_line3": true,
+  "dani.crisis_title": true,
+  "dani.document_analyzing": true,
+  "dani.document_close": true,
+  "dani.document_score": true,
+  "dani.document_summary": true,
+  "dani.emotional_banner": true,
+  "dani.empty_chat": true,
+  "dani.error_generic": true,
+  "dani.error_network": true,
+  "dani.error_timeout": true,
+  "dani.messages_label": true,
+  "dani.mic_start": true,
+  "dani.mic_stop": true,
+  "dani.mood_label": true,
+  "dani.placeholder": true,
+  "dani.quick_explain": true,
+  "dani.quick_help": true,
+  "dani.quick_motivate": true,
+  "dani.quick_plan": true,
+  "dani.quick_support": true,
+  "dani.quick_vak": true,
+  "dani.send": true,
+  "dani.socratic_label": true,
+  "dani.socratic_off": true,
+  "dani.socratic_on": true,
+  "dani.status_ready": true,
+  "dani.status_speaking": true,
+  "dani.status_writing": true,
+  "dani.streak_label": true,
+  "dani.title": true,
+  "dani.topic_recent": true,
+  "dani.video_title": true,
+  "dani.voice_blocked": true,
+  "dani.voice_disable": true,
+  "dani.voice_enable": true,
+  "dani.welcome_afternoon": true,
+  "dani.welcome_evening": true,
+  "dani.welcome_first": true,
+  "dani.welcome_morning": true,
+  "dani.welcome_return": true,
+  "dani.welcome_streak": true,
   "dashboard.accept_challenge": true,
   "dashboard.activity_trends": true,
   "dashboard.avg_day": true,
@@ -4363,6 +4470,7 @@ const translationKeySet: Record<string, true> = {
   "ecosystem.subtitle": true,
   "ecosystem.title_before": true,
   "ecosystem.title_highlight": true,
+  "esencia.carousel_aria": true,
   "esencia.mission_badge": true,
   "esencia.mission_tagline": true,
   "esencia.mission_text": true,
@@ -4375,6 +4483,8 @@ const translationKeySet: Record<string, true> = {
   "esencia.slide_6_title": true,
   "esencia.slide_7_title": true,
   "esencia.slide_8_title": true,
+  "esencia.slide_next_aria": true,
+  "esencia.slide_prev_aria": true,
   "esencia.subtitle": true,
   "esencia.title_before": true,
   "esencia.title_highlight": true,
@@ -5371,6 +5481,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.leaderboard_modal.close_aria": true,
   "ialab.menu_aria": true,
   "ialab.module.lessons": true,
+  "ialab.module.module_label": true,
   "ialab.module.progress_title": true,
   "ialab.module_actions.attempts_left": true,
   "ialab.module_actions.challenge": true,
@@ -5856,6 +5967,11 @@ const translationKeySet: Record<string, true> = {
   "ialab.valerio.message_valerio": true,
   "ialab.valerio.message_you": true,
   "ialab.valerio.module_label": true,
+  "ialab.valerio.ova_intro_1": true,
+  "ialab.valerio.ova_intro_2": true,
+  "ialab.valerio.ova_intro_3": true,
+  "ialab.valerio.ova_intro_4": true,
+  "ialab.valerio.ova_intro_5": true,
   "ialab.valerio.panel_aria": true,
   "ialab.valerio.quick_actions_title": true,
   "ialab.valerio.quick_explain_topic": true,
@@ -5920,6 +6036,11 @@ const translationKeySet: Record<string, true> = {
   "ialab.viewer_modal.type_resource": true,
   "ialab.viewer_modal.type_video": true,
   "ialab.viewer_modal.unmute": true,
+  "ialab.viewer_modal.video_error_embed": true,
+  "ialab.viewer_modal.video_error_html5": true,
+  "ialab.viewer_modal.video_error_invalid": true,
+  "ialab.viewer_modal.video_error_not_found": true,
+  "ialab.viewer_modal.video_error_unknown": true,
   "ialab.viewer_modal.video_unavailable": true,
   "ialab.viewer_modal.volume": true,
   "ialab.viewer_modal.warning_no_skip": true,
@@ -6002,6 +6123,13 @@ const translationKeySet: Record<string, true> = {
   "leaderboard.streak": true,
   "leaderboard.title": true,
   "leaderboard.you_label": true,
+  "loading.feature_ai": true,
+  "loading.feature_cert": true,
+  "loading.feature_vak": true,
+  "loading.status_ai": true,
+  "loading.status_done": true,
+  "loading.status_start": true,
+  "loading.status_vak": true,
   "metodo.cta_text": true,
   "metodo.form_email_label": true,
   "metodo.form_email_placeholder": true,
@@ -6200,10 +6328,12 @@ const translationKeySet: Record<string, true> = {
   "modals.settings.user_options_aria": true,
   "modals.settings.user_profile_title": true,
   "modals.settings.view_privacy_policy": true,
+  "nav.close_aria": true,
   "nav.contact": true,
   "nav.contact_subtitle": true,
   "nav.contact_title": true,
   "nav.home_aria": true,
+  "nav.home_desc": true,
   "nav.ialab_pro": true,
   "nav.login": true,
   "nav.logo_alt": true,
@@ -6212,6 +6342,7 @@ const translationKeySet: Record<string, true> = {
   "nav.send_message": true,
   "nav.smartboard": true,
   "nav.whatsapp": true,
+  "notfound.button": true,
   "notification.clear_all": true,
   "notification.close_aria": true,
   "notification.confirm_clear": true,
@@ -6842,12 +6973,16 @@ const translationKeySet: Record<string, true> = {
   "ova.tour.title": true,
   "ova.tour.valerio_quiz_text": true,
   "ova.tour.welcome_audio": true,
+  "page_loader.admin": true,
   "page_loader.ailab": true,
+  "page_loader.auth": true,
   "page_loader.consulting": true,
   "page_loader.consulting_b2b": true,
   "page_loader.neuro": true,
+  "page_loader.permisos": true,
   "page_loader.projects": true,
   "page_loader.redirect": true,
+  "page_loader.vak": true,
   "pricing.annual": true,
   "pricing.badge": true,
   "pricing.cta_button": true,
@@ -7376,11 +7511,11 @@ const translationKeySet: Record<string, true> = {
   "streak.tier_encendida": true,
   "streak.tier_imparable": true,
   "streak.xp": true,
-  time_avg: true,
-  time_days_active: true,
-  time_title: true,
-  time_today: true,
-  time_week: true,
+  "time_avg": true,
+  "time_days_active": true,
+  "time_title": true,
+  "time_today": true,
+  "time_week": true,
   "vak.ui.accept_and_continue": true,
   "vak.ui.accept_data_policy": true,
   "vak.ui.accessibility_label": true,
@@ -7572,23 +7707,4 @@ const translationKeySet: Record<string, true> = {
   "welcome.signin_title": true,
   "welcome.signup_subtitle": true,
   "welcome.signup_title": true,
-
-  "nav.close_aria": true,
-  "nav.home_desc": true,
-  "notfound.button": true,
-  "esencia.carousel_aria": true,
-  "esencia.slide_prev_aria": true,
-  "esencia.slide_next_aria": true,
-  "aliados.marquee_aria": true,
-  "loading.status_start": true,
-  "loading.status_vak": true,
-  "loading.status_ai": true,
-  "loading.status_done": true,
-  "loading.feature_ai": true,
-  "loading.feature_vak": true,
-  "loading.feature_cert": true,
-  "page_loader.vak": true,
-  "page_loader.admin": true,
-  "page_loader.auth": true,
-  "page_loader.permisos": true,
 };

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { cn } from '../../forum/forumDesignSystem';
@@ -28,8 +29,8 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
     <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-auto">
       <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-800 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
-            <Icon name="fa-image" className="text-petroleum w-5 h-5" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-petroleum to-corporate shadow-sm flex items-center justify-center">
+            <Icon name="fa-image" className="text-white w-5 h-5" />
           </div>
           <div>
             <h4 className="font-semibold text-petroleum">{resource.title}</h4>
@@ -40,6 +41,7 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
         </div>
 
         <div className="flex items-center gap-3 flex-shrink-0">
+          <motion.div whileHover={{ scale: 1.03 }} transition={{ type: 'spring', stiffness: 300, damping: 24 }}>
           <a
             href={resource.url}
             download
@@ -48,13 +50,14 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
             <Icon name="fa-download" className="w-4 h-4" />
             {t('ialab.viewer_modal.download')}
           </a>
+          </motion.div>
         </div>
       </div>
 
       <div className="flex-1 relative bg-transparent">
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-petroleum/25 border-t-[#004B63] rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-petroleum/20 border-t-petroleum rounded-full animate-spin"></div>
           </div>
         )}
 

@@ -52,8 +52,9 @@ export function processStreamChunkVoice(
   },
 ) {
   pendingSentenceRef.current += chunk;
-  while (true) {
-    const match = pendingSentenceRef.current.match(/[.!?](?:\s|$)/);
+  let safety = 0;
+  while (safety < 100) {
+    const match = pendingSentenceRef.current.match(/(?<!\d)[.!?](?:\s|$)/);
     if (!match) break;
     const endIdx = match.index + 1;
     const sentence = pendingSentenceRef.current.slice(0, endIdx).trim();
@@ -68,6 +69,7 @@ export function processStreamChunkVoice(
         setVoiceBlocked,
       });
     }
+    safety++;
   }
 }
 
@@ -89,6 +91,8 @@ function speakSentence(
   sentence,
   { setIsSpeaking, isSpeakingRef, daniMood, setVoiceBlocked },
 ) {
+  // NOTE: daniMood comes from a callback closure and may be stale.
+  // The caller in useDaniChat.js should capture the current mood in a local variable.
   setIsSpeaking(true);
   isSpeakingRef.current = true;
   const cleanSentence = stripEmoji(sentence);

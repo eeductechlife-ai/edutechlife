@@ -14,10 +14,18 @@ const MissionsView = memo(function MissionsView({
           {t("smartboard.missions_view_title")}
         </h3>
         <span className="text-sm text-[#64748B]">
-          {missions.filter((m) => m.completed).length}/{missions.length}
+          {missions.length > 0 ? `${missions.filter((m) => m.completed).length}/${missions.length}` : "0/0"}
         </span>
       </div>
-      {missions.map((mission, index) => (
+      {missions.length === 0 ? (
+        <div className="text-center py-12 px-4">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
+            <span className="text-3xl">🚀</span>
+          </div>
+          <p className="text-[#64748B] font-medium">No hay misiones disponibles aún</p>
+          <p className="text-[#94A3B8] text-sm mt-1">Completa actividades para desbloquear nuevas misiones</p>
+        </div>
+      ) : missions.map((mission, index) => (
         <motion.div
           key={mission.id}
           initial={{ opacity: 0, y: 20 }}

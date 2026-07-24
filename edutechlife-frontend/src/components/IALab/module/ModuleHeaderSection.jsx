@@ -12,11 +12,16 @@ const ModuleHeaderSection = ({
   const { t, locale } = useTranslation();
   return (
     <>
+      <div className="flex items-center gap-2 mb-1.5">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-petroleum/10 to-corporate/10 text-[10px] font-bold text-petroleum uppercase tracking-[0.18em]">
+          {t("ialab.module.module_label", { number: activeMod })}
+        </span>
+      </div>
       <div className="flex items-center gap-3 mb-2">
         <h2 className="text-xl md:text-2xl font-bold text-petroleum leading-tight dark:text-petroleum font-montserrat">
           {moduleData.title}
         </h2>
-        <span className="px-2.5 py-1 bg-slate-100 dark:bg-slate-700 text-petroleum dark:text-petroleum text-[10px] font-bold rounded-lg border border-slate-200/60 dark:border-slate-600">
+        <span className="px-3 py-1.5 bg-gradient-to-br from-petroleum/10 to-corporate/5 text-petroleum text-[10px] font-bold rounded-lg border border-petroleum/10 shadow-sm">
           {moduleData.badge.duration}
         </span>
         {(() => {
@@ -44,9 +49,20 @@ const ModuleHeaderSection = ({
       {moduleData.description.split(". ").length > 1 && (
         <button
           onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-          className="text-xs font-semibold text-corporate hover:text-petroleum transition-colors mb-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 rounded"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-corporate hover:text-petroleum transition-colors mb-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 rounded group/see"
         >
           {isDescriptionExpanded ? t("ialab.see_less") : t("ialab.see_more")}
+          <svg
+            className={`w-3 h-3 transition-all duration-300 group-hover/see:translate-y-0.5 ${isDescriptionExpanded ? "rotate-180" : ""}`}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
         </button>
       )}
     </>

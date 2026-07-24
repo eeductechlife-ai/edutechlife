@@ -96,7 +96,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
       }
     });
     return { earned: earnedList, locked: lockedList, total: Object.keys(BADGE_INFO).length };
-  }, [badges, badgesDates]);
+  }, [badges, badgesDates, BADGE_INFO]);
 
   const fetchLeaderboard = useCallback(async () => {
     if (!supabase) return;

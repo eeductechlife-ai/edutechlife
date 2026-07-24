@@ -102,7 +102,7 @@ export const injectSessionContext = () => {
   try {
     const raw = localStorage.getItem(MEMORY_KEY)
     if (!raw) return null
-    const history = JSON.parse(raw)
+    const history = JSON.parse(raw).filter(s => s && s.messageCount > 0 && s.topics && s.topics.length > 0)
     if (history.length === 0) return null
 
     const recent = history.slice(-3).reverse()

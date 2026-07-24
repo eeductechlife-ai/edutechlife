@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import MagneticButton from '../MagneticButton';
@@ -5,7 +6,7 @@ import { fadeInUp, containerVariants, childVariant } from './SmartBoardShared';
 
 export default function SmartBoardPlanesSection({ t, pricingPlans, paymentMethods, guarantee, handleCta }) {
   return (
-    <section id="planes" className="relative w-full overflow-hidden bg-gradient-to-b from-bg-light to-white py-12 lg:py-16 scroll-mt-20">
+    <section id="planes" role="region" aria-label="Planes y precios" className="relative w-full overflow-hidden bg-gradient-to-b from-bg-light to-white py-12 lg:py-16 scroll-mt-20">
       <div className="absolute top-[15%] right-[15%] w-56 h-56 bg-mint/8 rounded-full blur-[80px] animate-orb-2" />
       <div className="absolute bottom-[10%] left-[10%] w-44 h-44 bg-primary-light/6 rounded-full blur-[80px] animate-orb-1" />
 
@@ -129,3 +130,11 @@ export default function SmartBoardPlanesSection({ t, pricingPlans, paymentMethod
     </section>
   );
 }
+
+SmartBoardPlanesSection.propTypes = {
+  t: PropTypes.func.isRequired,
+  pricingPlans: PropTypes.array.isRequired,
+  paymentMethods: PropTypes.array.isRequired,
+  guarantee: PropTypes.object.isRequired,
+  handleCta: PropTypes.func.isRequired,
+};

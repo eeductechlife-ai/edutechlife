@@ -133,6 +133,8 @@ export function useYouTubeDuration(videoUrl) {
       if (playerRef.current) {
         try { playerRef.current.destroy(); } catch {}
       }
+      const container = document.getElementById(containerId);
+      if (container) container.remove();
     };
   }, [videoUrl, extractVideoId]);
 

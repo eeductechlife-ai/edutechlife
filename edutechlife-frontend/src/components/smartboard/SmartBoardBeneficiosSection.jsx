@@ -1,8 +1,10 @@
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import PropTypes from 'prop-types';
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { fadeInUp, containerVariants, childVariant } from "./SmartBoardShared";
 
 const TiltCard = ({ children, className = "" }) => {
+  const prefersReducedMotion = useReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 300, damping: 20 });
@@ -12,16 +14,16 @@ const TiltCard = ({ children, className = "" }) => {
 
   return (
     <motion.div
-      onMouseMove={(e) => {
+      onMouseMove={prefersReducedMotion ? undefined : (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         x.set((e.clientX - rect.left) / rect.width - 0.5);
         y.set((e.clientY - rect.top) / rect.height - 0.5);
       }}
-      onMouseLeave={() => {
+      onMouseLeave={prefersReducedMotion ? undefined : () => {
         x.set(0);
         y.set(0);
       }}
-      style={{
+      style={prefersReducedMotion ? {} : {
         rotateX,
         rotateY,
         transformStyle: "preserve-3d",
@@ -33,6 +35,11 @@ const TiltCard = ({ children, className = "" }) => {
       {children}
     </motion.div>
   );
+};
+
+TiltCard.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
 };
 
 const BENEFIT_GRADIENTS = [
@@ -56,10 +63,17 @@ const BENEFIT_GRADIENTS = [
   },
 ];
 
+SmartBoardBeneficiosSection.propTypes = {
+  t: PropTypes.func.isRequired,
+  beneficios: PropTypes.array.isRequired,
+};
+
 export default function SmartBoardBeneficiosSection({ t, beneficios }) {
   return (
     <section
       id="beneficios"
+      role="region"
+      aria-label="Beneficios de SmartBoard"
       className="relative w-full overflow-hidden bg-white py-12 lg:py-16 scroll-mt-20"
     >
       <div className="absolute top-[20%] left-[5%] w-56 h-56 bg-primary-light/6 rounded-full blur-[80px] animate-orb-1" />

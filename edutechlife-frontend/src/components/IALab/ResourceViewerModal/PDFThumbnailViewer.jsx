@@ -50,14 +50,14 @@ const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
       <div className="flex justify-between items-center mb-2 px-1 gap-3">
         <button
           onClick={openFullScreen}
-          className="text-sm font-medium text-petroleum bg-petroleum/10 hover:bg-petroleum/12 py-1.5 px-3 rounded-md transition-colors flex items-center gap-2"
+          className="text-sm font-medium text-petroleum border border-slate-200 dark:border-slate-600 hover:bg-petroleum/5 hover:border-corporate/30 py-1.5 px-3 rounded-xl transition-all duration-200 flex items-center gap-2"
         >
           <Icon name="fa-external-link-alt" className="w-3.5 h-3.5" />
           {t('ialab.viewer_modal.open_new_tab')}
           <Icon name="fa-arrow-up-right-from-square" className="w-3 h-3" />
         </button>
         {!completedRef.current && !hasScrolledEnough && (
-          <span className="text-xs text-corporate bg-corporate/10 px-3 py-1 rounded-full font-medium flex-shrink-0">
+          <span className="text-xs text-corporate bg-corporate/10 px-3 py-1 rounded-full font-medium flex-shrink-0 backdrop-blur-sm">
             {t('ialab.viewer_modal.scroll_to_end')}
           </span>
         )}

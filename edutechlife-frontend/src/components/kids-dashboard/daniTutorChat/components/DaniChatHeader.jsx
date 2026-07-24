@@ -1,5 +1,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "../../../../i18n/I18nProvider";
+import { Volume2, VolumeX, Flame, Brain, MessageSquare } from "lucide-react";
 import DaniAvatar from "../../dani/DaniAvatar";
 
 const DaniChatHeader = memo(
@@ -14,25 +16,27 @@ const DaniChatHeader = memo(
     socraticMode,
     setSocraticMode,
   }) => {
+    const { t } = useTranslation();
     return (
       <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-4 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
           <DaniAvatar />
           <div>
-            <h3 className="text-white font-bold text-lg">Dani</h3>
-            <p className="text-white/80 text-xs">
+            <h3 className="text-white font-bold text-lg">{t('dani.title')}</h3>
+            <p className="text-white/80 text-xs" aria-live="polite">
               {isSpeaking
-                ? "Hablando..."
+                ? t('dani.status_speaking')
                 : isTyping
-                  ? "Escribiendo..."
-                  : "Tu mentor virtual"}
+                  ? t('dani.status_writing')
+                  : t('dani.status_ready')}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {conversationCount > 0 && (
-            <div className="bg-white/15 rounded-full px-2.5 py-1 text-white text-[10px] font-medium">
-              💬 {conversationCount}
+            <div className="bg-white/15 rounded-full px-2.5 py-1 text-white text-[10px] font-medium flex items-center gap-1">
+              <MessageSquare size={12} aria-hidden="true" />
+              {conversationCount}
             </div>
           )}
           <motion.button
@@ -44,22 +48,24 @@ const DaniChatHeader = memo(
             }`}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            title={
+            aria-label={
               voiceBlocked
-                ? "Voz bloqueada por el navegador — toca para re-intentar"
+                ? t('dani.voice_blocked')
                 : voiceEnabled
-                  ? "Desactivar voz"
-                  : "Activar voz"
+                  ? t('dani.voice_disable')
+                  : t('dani.voice_enable')
             }
+            aria-pressed={voiceEnabled}
           >
-            {voiceBlocked ? "🔇" : voiceEnabled ? "🔊" : "🔇"}
+            {voiceBlocked ? <VolumeX size={18} aria-hidden="true" /> : voiceEnabled ? <Volume2 size={18} aria-hidden="true" /> : <VolumeX size={18} aria-hidden="true" />}
             {voiceBlocked && (
               <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-400 rounded-full animate-pulse" />
             )}
           </motion.button>
           {streak.current > 0 && (
             <div className="bg-white/20 rounded-full px-3 py-1 text-white text-xs font-bold flex items-center gap-1">
-              🔥 {streak.current}
+              <Flame size={16} className="text-orange-400" aria-hidden="true" />
+              {streak.current}
             </div>
           )}
           <motion.button
@@ -71,12 +77,10 @@ const DaniChatHeader = memo(
             }`}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            title={
-              "Modo Socrático: guía con preguntas — " +
-              (socraticMode ? "ACTIVADO" : "DESACTIVADO")
-            }
+            aria-label={socraticMode ? t('dani.socratic_on') : t('dani.socratic_off')}
+            aria-pressed={socraticMode}
           >
-            {socraticMode ? "🧠" : "💬"}
+            {socraticMode ? <Brain size={18} aria-hidden="true" /> : <MessageSquare size={18} aria-hidden="true" />}
           </motion.button>
         </div>
       </div>

@@ -1,9 +1,20 @@
-import { motion } from "framer-motion";
+import PropTypes from 'prop-types';
+import { motion, useReducedMotion } from "framer-motion";
 import FloatingParticles from "../FloatingParticles";
 import MagneticButton from "../MagneticButton";
 import { Icon } from "../../utils/iconMapping.jsx";
 import SmartBoardTilt3D from "./SmartBoardTilt3D";
 import SmartBoardVakBadge from "./SmartBoardVakBadge";
+
+SmartBoardHeroSection.propTypes = {
+  t: PropTypes.func.isRequired,
+  onBack: PropTypes.func,
+  inView: PropTypes.bool,
+  countStudents: PropTypes.number,
+  countImprovement: PropTypes.number,
+  countHours: PropTypes.number,
+  handleCta: PropTypes.func.isRequired,
+};
 
 const springUp = (delay = 0) => ({
   initial: { opacity: 0, y: 30 },
@@ -20,6 +31,8 @@ export default function SmartBoardHeroSection({
   countHours,
   handleCta,
 }) {
+  const prefersReducedMotion = useReducedMotion();
+
   const STATS = [
     {
       value: `+${countStudents.toLocaleString()}`,
@@ -128,7 +141,7 @@ export default function SmartBoardHeroSection({
   ];
 
   return (
-    <section className="relative w-full py-16 lg:py-20 flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-white via-[#F0F9FF] to-white">
+    <section role="region" aria-label="SmartBoard Hero" className="relative w-full py-16 lg:py-20 flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-white via-[#F0F9FF] to-white">
       {onBack && (
         <button
           onClick={() => onBack()}
@@ -151,7 +164,7 @@ export default function SmartBoardHeroSection({
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
           <div className="lg:col-span-3">
             <motion.div
-              {...springUp(0)}
+              {...(!prefersReducedMotion ? springUp(0) : {})}
               className="flex flex-col items-center lg:items-start text-center lg:text-left"
             >
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-petroleum tracking-tight leading-[1.05] mb-4 max-w-4xl">
@@ -165,7 +178,7 @@ export default function SmartBoardHeroSection({
               </h1>
 
               <motion.p
-                {...springUp(0.12)}
+                {...(!prefersReducedMotion ? springUp(0.12) : {})}
                 className="text-sm sm:text-base text-slate-500 leading-relaxed max-w-2xl mb-6"
               >
                 {t("smartboard.landing_hero_desc")}
@@ -173,9 +186,9 @@ export default function SmartBoardHeroSection({
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+              animate={prefersReducedMotion ? false : (inView ? { opacity: 1, y: 0 } : {})}
+              transition={prefersReducedMotion ? undefined : {
                 type: "spring",
                 stiffness: 100,
                 damping: 18,
@@ -190,9 +203,9 @@ export default function SmartBoardHeroSection({
                 {PAIN_POINTS.map((tag, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={inView ? { opacity: 1, x: 0 } : {}}
-                    transition={{
+                    initial={prefersReducedMotion ? false : { opacity: 0, x: -20 }}
+                    animate={prefersReducedMotion ? false : (inView ? { opacity: 1, x: 0 } : {})}
+                    transition={prefersReducedMotion ? undefined : {
                       type: "spring",
                       stiffness: 120,
                       damping: 14,
@@ -212,6 +225,7 @@ export default function SmartBoardHeroSection({
                         name={tag.icon}
                         className="text-sm"
                         style={{ color: PAIN_COLORS[i].accent }}
+                        aria-hidden="true"
                       />
                     </div>
                     <div className="min-w-0">
@@ -231,9 +245,9 @@ export default function SmartBoardHeroSection({
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }}
+              animate={prefersReducedMotion ? false : (inView ? { opacity: 1, y: 0 } : {})}
+              transition={prefersReducedMotion ? undefined : {
                 type: "spring",
                 stiffness: 80,
                 damping: 14,
@@ -263,9 +277,9 @@ export default function SmartBoardHeroSection({
               className="relative w-[320px] h-[320px] xl:w-[360px] xl:h-[360px] shrink-0"
             >
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={inView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.8 }}
+                animate={prefersReducedMotion ? false : (inView ? { opacity: 1, scale: 1 } : {})}
+                transition={prefersReducedMotion ? undefined : { duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 style={{ transform: "translateZ(-40px)" }}
                 className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-light/20 via-corporate/10 to-mint/15 blur-[80px]"
               />
@@ -304,12 +318,12 @@ export default function SmartBoardHeroSection({
                         strokeWidth="0.5"
                         strokeDasharray={`${4 + i * 2} ${6 + i * 2}`}
                         initial={{ rotate: 0, opacity: 0.15 }}
-                        animate={{ rotate: 360, opacity: [0.08, 0.18, 0.08] }}
+                        animate={prefersReducedMotion ? { rotate: 0, opacity: 0.15 } : { rotate: 360, opacity: [0.08, 0.18, 0.08] }}
                         style={{
-                          willChange: "transform",
+                          willChange: prefersReducedMotion ? "auto" : "transform",
                           transformOrigin: "150px 150px",
                         }}
-                        transition={{
+                        transition={prefersReducedMotion ? undefined : {
                           rotate: {
                             duration: 25 + i * 12,
                             repeat: Infinity,
@@ -329,9 +343,9 @@ export default function SmartBoardHeroSection({
               </div>
 
               <motion.div
-                initial={{ scale: 0, rotate: -30 }}
-                animate={inView ? { scale: 1, rotate: 0 } : {}}
-                transition={{
+                initial={prefersReducedMotion ? false : { scale: 0, rotate: -30 }}
+                animate={prefersReducedMotion ? false : (inView ? { scale: 1, rotate: 0 } : {})}
+                transition={prefersReducedMotion ? undefined : {
                   type: "spring",
                   stiffness: 70,
                   damping: 10,
@@ -345,14 +359,14 @@ export default function SmartBoardHeroSection({
               >
                 <div className="absolute inset-2 rounded-full bg-white/[0.06] ring-2 ring-white/20" />
                 <motion.div
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{
+                  animate={prefersReducedMotion ? false : { scale: [1, 1.05, 1] }}
+                  transition={prefersReducedMotion ? undefined : {
                     duration: 4,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
                   style={{
-                    willChange: "transform",
+                    willChange: prefersReducedMotion ? "auto" : "transform",
                     transformStyle: "preserve-3d",
                   }}
                 >
@@ -360,10 +374,11 @@ export default function SmartBoardHeroSection({
                     style={{ transform: "translateZ(10px)" }}
                     className="flex flex-col items-center gap-1"
                   >
-                    <Icon
-                      name="fa-brain"
-                      className="text-[10rem] xl:text-[14rem] text-white/95"
-                    />
+                      <Icon
+                        name="fa-brain"
+                        className="text-[10rem] xl:text-[14rem] text-white/95"
+                        aria-hidden="true"
+                      />
                     <span className="text-[9px] font-bold text-white/70 uppercase tracking-[0.2em]">
                       {t("smartboard.landing_hero_brain_label")}
                     </span>
@@ -374,8 +389,8 @@ export default function SmartBoardHeroSection({
                   <motion.div
                     key={i}
                     className={`absolute rounded-full ${dot.color} ${dot.className}`}
-                    animate={{ opacity: [0.1, 0.5, 0.1] }}
-                    transition={{
+                    animate={prefersReducedMotion ? false : { opacity: [0.1, 0.5, 0.1] }}
+                    transition={prefersReducedMotion ? undefined : {
                       duration: 3,
                       repeat: Infinity,
                       ease: "easeInOut",
@@ -393,9 +408,9 @@ export default function SmartBoardHeroSection({
 
               <motion.div
                 className="absolute -top-3 right-2 z-20"
-                initial={{ opacity: 0, y: 10 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+                animate={prefersReducedMotion ? false : (inView ? { opacity: 1, y: 0 } : {})}
+                transition={prefersReducedMotion ? undefined : {
                   type: "spring",
                   stiffness: 100,
                   damping: 14,
@@ -403,32 +418,33 @@ export default function SmartBoardHeroSection({
                 }}
               >
                 <motion.div
-                  animate={{
+                  animate={prefersReducedMotion ? false : {
                     rotate: [0, 15, 0, -15, 0],
                     scale: [1, 1.2, 1, 1.2, 1],
                   }}
-                  transition={{
+                  transition={prefersReducedMotion ? undefined : {
                     duration: 5,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
                   style={{
-                    willChange: "transform",
+                    willChange: prefersReducedMotion ? "auto" : "transform",
                     transformStyle: "preserve-3d",
                   }}
                 >
-                  <Icon
-                    name="fa-star"
-                    className="text-xl text-corporate drop-shadow-lg"
-                  />
+                      <Icon
+                        name="fa-star"
+                        className="text-xl text-corporate drop-shadow-lg"
+                        aria-hidden="true"
+                      />
                 </motion.div>
               </motion.div>
 
               <motion.div
                 className="absolute -bottom-3 left-6 z-20"
-                initial={{ opacity: 0, y: 10 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+                animate={prefersReducedMotion ? false : (inView ? { opacity: 1, y: 0 } : {})}
+                transition={prefersReducedMotion ? undefined : {
                   type: "spring",
                   stiffness: 100,
                   damping: 14,
@@ -436,29 +452,30 @@ export default function SmartBoardHeroSection({
                 }}
               >
                 <motion.div
-                  animate={{ rotate: [0, -15, 0, 15, 0], y: [0, -5, 0, -5, 0] }}
-                  transition={{
+                  animate={prefersReducedMotion ? false : { rotate: [0, -15, 0, 15, 0], y: [0, -5, 0, -5, 0] }}
+                  transition={prefersReducedMotion ? undefined : {
                     duration: 6,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
                   style={{
-                    willChange: "transform",
+                    willChange: prefersReducedMotion ? "auto" : "transform",
                     transformStyle: "preserve-3d",
                   }}
                 >
-                  <Icon
-                    name="fa-rocket-launch"
-                    className="text-xl text-mint drop-shadow-lg"
-                  />
+                      <Icon
+                        name="fa-rocket-launch"
+                        className="text-xl text-mint drop-shadow-lg"
+                        aria-hidden="true"
+                      />
                 </motion.div>
               </motion.div>
             </SmartBoardTilt3D>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+              animate={prefersReducedMotion ? false : (inView ? { opacity: 1, y: 0 } : {})}
+              transition={prefersReducedMotion ? undefined : {
                 type: "spring",
                 stiffness: 90,
                 damping: 16,

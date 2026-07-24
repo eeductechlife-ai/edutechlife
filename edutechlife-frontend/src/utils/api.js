@@ -141,7 +141,7 @@ export async function callDeepseekStream(messagesOrPrompt, systemPromptOrOpts = 
         };
         // onChunk might be the third arg if opts was null
         const chunkCb = (typeof systemPromptOrOpts === 'function') ? systemPromptOrOpts : onChunk;
-        return streamFetch(url, payload, chunkCb, opts.isJson ?? legacyIsJson);
+        return streamFetch(url, payload, chunkCb, opts.isJson ?? legacyIsJson, opts.signal);
     } else {
         // Legacy format: callDeepseekStream(prompt, systemPrompt, isJson, onChunk)
         const promptText = messagesOrPrompt;
@@ -159,12 +159,18 @@ export async function callDeepseekStream(messagesOrPrompt, systemPromptOrOpts = 
     }
 }
 
-async function streamFetch(url, payload, onChunk, isJson) {
+async function streamFetch(url, payload, onChunk, isJson, externalSignal) {
     return new Promise((resolve, reject) => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => {
             controller.abort(new Error('Timeout agotado: el servidor tardo demasiado en responder'));
-        }, 30000);
+        }, 60000);
+
+        if (externalSignal) {
+            externalSignal.addEventListener('abort', () => {
+                try { controller.abort(externalSignal.reason) } catch {}
+            });
+        }
 
         fetch(url, { 
             method: 'POST', 

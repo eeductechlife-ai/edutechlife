@@ -25,6 +25,9 @@ const ResourceViewerModal = lazy(() => import("./ResourceViewerModal"));
 
 const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   const { t, locale } = useTranslation();
+  if (import.meta.env.DEV) {
+    console.debug(`[IALab] ModuleOverviewCard locale: ${locale}`);
+  }
   const prefersReducedMotion = useReducedMotion();
   const {
     activeMod,
@@ -326,13 +329,14 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
 
   return (
     <Fragment>
-      <motion.div
-        whileHover={prefersReducedMotion ? {} : { scale: 1.01 }}
-        transition={{ duration: 0.2 }}
-        className="relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm p-5 md:p-8 overflow-hidden dark:bg-slate-800 dark:border-slate-700/60"
-      >
-        <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-petroleum/6 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
-        <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-petroleum/4 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
+      <div className="p-[1.5px] rounded-[2rem] bg-gradient-to-b from-petroleum/20 via-petroleum/10 to-corporate/5 relative overflow-hidden">
+        <div className="absolute -top-6 -right-6 w-40 h-40 bg-gradient-to-br from-petroleum/10 to-corporate/6 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-6 -left-6 w-40 h-40 bg-gradient-to-tr from-petroleum/8 to-corporate/6 rounded-full blur-3xl pointer-events-none" />
+        <motion.div
+          whileHover={prefersReducedMotion ? {} : { scale: 1.01 }}
+          transition={{ duration: 0.2 }}
+          className="relative z-10 bg-white rounded-[calc(2rem-1.5px)] shadow-sm p-5 md:p-8 overflow-hidden dark:bg-slate-800"
+        >
 
         {/* Contenido principal con icono destacado */}
         <div className="flex flex-col md:flex-row gap-3 items-start">
@@ -427,9 +431,11 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
           </div>
         </div>
 
-        {/* Elemento decorativo de borde superior */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-[calc(2rem-1.5px)]" />
       </motion.div>
+      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-petroleum/5 via-transparent to-corporate/5 rounded-t-[2rem] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-corporate/5 via-transparent to-petroleum/5 rounded-b-[2rem] pointer-events-none" />
+    </div>
 
       {/* Modal de Recursos */}
       <Suspense

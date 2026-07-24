@@ -30,6 +30,7 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
   const [showControls, setShowControls] = useState(true);
   const [ccActive, setCcActive] = useState(false);
   const [hasEnded, setHasEnded] = useState(false);
+  const [playerError, setPlayerError] = useState(null);
   const hideTimer = useRef(null);
   const progressTimer = useRef(null);
 
@@ -60,6 +61,17 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
             e.target.playVideo();
             setDuration(e.target.getDuration());
             setVolume(e.target.getVolume());
+            setPlayerError(null);
+          },
+          onError: (e) => {
+            const msg = {
+              2: t('ialab.viewer_modal.video_error_invalid'),
+              5: t('ialab.viewer_modal.video_error_html5'),
+              100: t('ialab.viewer_modal.video_error_not_found'),
+              101: t('ialab.viewer_modal.video_error_embed'),
+              150: t('ialab.viewer_modal.video_error_embed'),
+            }[e.data] || t('ialab.viewer_modal.video_error_unknown');
+            setPlayerError(msg);
           },
           onStateChange: (e) => {
             setPlaying(e.data === window.YT.PlayerState.PLAYING);
@@ -208,7 +220,19 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
     >
       <div ref={containerRef} className="w-full h-full" />
 
-      {buffering && playing && (
+      {playerError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#0A1729] to-[#004B63] rounded-2xl z-10">
+          <div className="text-center p-8 max-w-md">
+            <div className="w-16 h-16 mx-auto mb-4 bg-white/10 rounded-2xl flex items-center justify-center">
+              <Icon name="fa-triangle-exclamation" className="text-3xl text-white/50" />
+            </div>
+            <p className="text-white/80 text-sm font-medium mb-1">{playerError}</p>
+            <p className="text-white/50 text-xs">{t('ialab.viewer_modal.video_unavailable')}</p>
+          </div>
+        </div>
+      )}
+
+      {buffering && playing && !playerError && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="w-10 h-10 border-2 border-white/30 border-t-white rounded-full animate-spin" />
         </div>
@@ -228,13 +252,13 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
         <div className="bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-8 pb-3 px-4">
           <div className="group/progress relative mb-2 cursor-default">
             <div className="h-1 bg-white/20 rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-[#00BCD4] to-[#4DA8C4] rounded-full transition-all duration-100" style={{ width: `${progress}%` }} />
+              <div className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-100" style={{ width: `${progress}%` }} />
             </div>
-            <div className="absolute -top-1.5 left-0 w-3 h-3 bg-[#00BCD4] rounded-full shadow-lg" style={{ left: `calc(${progress}% - 6px)` }} />
+            <div className="absolute -top-1.5 left-0 w-3 h-3 bg-corporate rounded-full shadow-lg" style={{ left: `calc(${progress}% - 6px)` }} />
           </div>
 
           <div className="flex items-center gap-3">
-            <button onClick={togglePlay} className="w-8 h-8 flex items-center justify-center text-white hover:text-[#00BCD4] transition-colors" aria-label={playing ? t('ialab.viewer_modal.pause') : t('ialab.viewer_modal.play')}>
+            <button onClick={togglePlay} className="w-8 h-8 flex items-center justify-center text-white hover:text-corporate transition-colors" aria-label={playing ? t('ialab.viewer_modal.pause') : t('ialab.viewer_modal.play')}>
               {playing ? (
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1" /><rect x="14" y="4" width="4" height="16" rx="1" /></svg>
               ) : (
@@ -248,7 +272,7 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
               </button>
               <div className="w-0 group-hover/vol:w-16 overflow-hidden transition-all duration-200">
                 <input type="range" min={0} max={100} value={muted ? 0 : volume} onChange={(e) => changeVolume(Number(e.target.value))}
-                  className="w-16 h-1 accent-[#00BCD4] cursor-pointer" aria-label={t('ialab.viewer_modal.volume')} />
+                  className="w-16 h-1 accent-corporate cursor-pointer" aria-label={t('ialab.viewer_modal.volume')} />
               </div>
             </div>
 
@@ -263,11 +287,11 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
                 {rate}x
               </button>
               {showSpeed && (
-                <div className="absolute bottom-full right-0 mb-2 bg-[#0A1729] border border-white/10 rounded-xl p-1.5 shadow-2xl min-w-[100px]">
+                <div className="absolute bottom-full right-0 mb-2 bg-slate-900 border border-white/10 rounded-xl p-1.5 shadow-2xl min-w-[100px]">
                   <p className="text-[9px] text-white/40 uppercase tracking-wider px-2 pb-1">{t('ialab.viewer_modal.speed')}</p>
                   {SPEEDS.map(s => (
                     <button key={s} onClick={() => changeRate(s)}
-                      className={`block w-full text-left px-3 py-1.5 text-xs rounded-lg transition-colors ${rate === s ? 'bg-[#00BCD4]/20 text-[#00BCD4] font-bold' : 'text-white/70 hover:bg-white/10'}`}>
+                      className={`block w-full text-left px-3 py-1.5 text-xs rounded-lg transition-colors ${rate === s ? 'bg-corporate/20 text-corporate font-bold' : 'text-white/70 hover:bg-white/10'}`}>
                       {s}x
                     </button>
                   ))}
@@ -276,7 +300,7 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
             </div>
 
             <button onClick={toggleCaptions} className="w-7 h-7 flex items-center justify-center transition-colors" aria-label={t('ialab.viewer_modal.cc')} title={t('ialab.viewer_modal.cc')}>
-              <Icon name="fa-closed-captioning" className={`text-[10px] ${ccActive ? 'text-[#00BCD4]' : 'text-white/70 hover:text-white'}`} />
+              <Icon name="fa-closed-captioning" className={`text-[10px] ${ccActive ? 'text-corporate' : 'text-white/70 hover:text-white'}`} />
             </button>
 
             <button onClick={goFullscreen} className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white transition-colors" aria-label={t('ialab.viewer_modal.fullscreen')}>

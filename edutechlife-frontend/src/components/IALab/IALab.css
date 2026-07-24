@@ -181,6 +181,15 @@
   animation: shimmer-pulse 1s ease-out forwards;
 }
 
+@keyframes shimmer-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer-slide 2s ease-in-out infinite;
+}
+
 /* Forum animations */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(10px); }
