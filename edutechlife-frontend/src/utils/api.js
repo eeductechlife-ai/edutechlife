@@ -267,6 +267,9 @@ async function streamFetch(
                   if (parsed.chunk) {
                     fullText += parsed.chunk;
                     if (onChunk) onChunk(parsed.chunk);
+                  } else if (parsed.crisisAlert) {
+                    // Pass crisis alerts through onChunk with special marker
+                    if (onChunk) onChunk(JSON.stringify({ __crisisAlert: parsed.crisisAlert }));
                   }
                 } catch (e) {
                   // Skip parsing errors

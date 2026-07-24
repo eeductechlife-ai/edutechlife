@@ -2,6 +2,8 @@ const { Router } = require('express');
 const supabase = require('../db/supabase');
 const { chat, chatStream, validateMessages } = require('../services/deepseek');
 const { requireAuth } = require('../middleware/auth');
+const { detectCrisis } = require('../services/crisisDetection');
+const { sendCrisisAlert, logCrisisIncident } = require('../services/emailService');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -180,13 +182,64 @@ router.post('/chat', requireAuth, async (req, res) => {
  *         description: Error del servidor
  */
 router.post('/chat/stream', requireAuth, async (req, res) => {
-  const { messages, context } = req.body;
+  const { messages, context, language = 'es' } = req.body;
+  const userId = req.userId;
 
   const validationError = validateMessages(messages);
   if (validationError) return res.status(400).json({ error: validationError });
 
   if (!DEEPSEEK_API_KEY) {
     return res.status(500).json({ error: 'API key not configured on server' });
+  }
+
+  // Extract latest user message for crisis detection
+  const lastUserMessage = messages.filter(m => m.role === 'user').pop()?.content || '';
+
+  // Detect crisis indicators
+  const crisisDetection = detectCrisis(lastUserMessage, language);
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  // If high-risk crisis detected, handle escalation
+  if (crisisDetection.level === 'high') {
+    try {
+      // Get parent email from parent_consents table
+      const { data: consentData, error: consentError } = await supabase
+        .from('parent_consents')
+        .select('parent_email, student_age')
+        .eq('student_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (consentData && consentData.parent_email) {
+        // Send crisis alert to parent
+        const emailResult = await sendCrisisAlert(
+          consentData.parent_email,
+          'Estudiante', // Would come from user metadata
+          consentData.student_age,
+          lastUserMessage,
+          'high'
+        );
+
+        // Log incident to database
+        await logCrisisIncident(
+          supabase,
+          userId,
+          consentData.student_age,
+          lastUserMessage,
+          'high',
+          consentData.parent_email
+        );
+
+        console.log('[Crisis Escalation] Email sent:', emailResult);
+      }
+    } catch (e) {
+      console.error('[Crisis Escalation Error]', e);
+      // Don't fail the chat request if escalation fails
+    }
   }
 
   const systemPrompt = context
@@ -198,14 +251,16 @@ router.post('/chat/stream', requireAuth, async (req, res) => {
     ...messages,
   ];
 
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
-
   try {
     await chatStream(DEEPSEEK_API_KEY, { messages: msgs }, (chunk) => {
       res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
     });
+
+    // Send crisis alert flag to client if detected
+    if (crisisDetection.level !== 'none') {
+      res.write(`data: ${JSON.stringify({ crisisAlert: crisisDetection.level })}\n\n`);
+    }
+
     res.write('data: [DONE]\n\n');
     res.end();
   } catch (e) {

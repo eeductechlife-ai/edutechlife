@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@clerk/react";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import { callDeepseek, callDeepseekStream } from "../../../utils/api";
+import { callDeepseek, callDeepseekStream, callDaniChatStream } from "../../../utils/api";
 import {
   PROMPT_DANI_EXPERTO,
   PROMPT_TUTOR_TAREAS,
@@ -35,6 +36,7 @@ import { trackTopicFromMessage } from "./daniChatTopics";
 export default function useDaniChat({ isOpen, onClose, activeTab }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { getToken } = useAuth();
   const {
     daniChatHistory,
     addDaniMessage,
@@ -74,6 +76,7 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceBlocked, setVoiceBlocked] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [crisisAlertLevel, setCrisisAlertLevel] = useState(null);
   const messagesEndRef = useRef(null);
   const hasSentWelcome = useRef(false);
   const isSpeakingRef = useRef(false);
@@ -367,14 +370,34 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
         let fullResponse = "";
         pendingSentenceRef.current = "";
 
-        await callDeepseekStream(
+        // Get auth token and use authenticated SmartBoard Dani endpoint
+        const token = await getToken();
+        if (!token) {
+          throw new Error('No auth token — user must be logged in');
+        }
+
+        await callDaniChatStream(
           messages,
           {
             temperature: 0.7,
             maxTokens: 800,
+            token,
           },
-          false,
-          (chunk) => {
+          (data) => {
+            // Handle crisis alerts (passed as JSON stringified objects)
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.__crisisAlert) {
+                setCrisisAlertLevel(parsed.__crisisAlert);
+                setShowCrisisResources(true);
+                return; // Don't add to chat
+              }
+            } catch {
+              // Not JSON, continue as normal chunk
+            }
+
+            // Normal chunk handling
+            const chunk = data;
             fullResponse += chunk;
             setDaniMood("explaining");
             setStreamingMessage(fullResponse);
@@ -527,5 +550,6 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
     handleSendMessage,
     isListening,
     handleMicClick,
+    crisisAlertLevel,
   };
 }

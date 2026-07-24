@@ -9,6 +9,7 @@ import QuickActions from "../dani/QuickActions";
 import RecentTopics from "../dani/RecentTopics";
 import DaniChatHeader from "./components/DaniChatHeader";
 import DaniChatMessages from "./components/DaniChatMessages";
+import CrisisResourcesModal from "../CrisisResourcesModal";
 import useDaniChat from "./useDaniChat";
 
 const MOOD_ICONS = {
@@ -58,6 +59,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     handleSendMessage,
     isListening,
     handleMicClick,
+    crisisAlertLevel,
   } = useDaniChat({ isOpen, onClose, activeTab });
 
   if (!isOpen) return null;
@@ -304,6 +306,12 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
           </div>
         </motion.div>
       </motion.div>
+
+      <CrisisResourcesModal
+        isOpen={showCrisisResources}
+        onClose={() => setShowCrisisResources(false)}
+        crisisLevel={crisisAlertLevel}
+      />
     </AnimatePresence>
   );
 });
