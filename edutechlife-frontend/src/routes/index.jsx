@@ -61,6 +61,9 @@ const SmartBoardParentDashboard = lazy(
 const SmartBoardStatsPage = lazy(
   () => import("../components/pages/SmartBoardStatsPage"),
 );
+const SmartBoardConsentGate = lazy(
+  () => import("../components/kids-dashboard/SmartBoardConsentGate"),
+);
 const IALabDashboard = lazy(() => import("../components/IALab/IALabDashboard"));
 import SectionErrorBoundary from "../components/IALab/SectionErrorBoundary";
 import IALabSkeleton from "../components/skeletons/IALabSkeleton";
@@ -274,6 +277,17 @@ const AppRoutes = () => {
             <SectionErrorBoundary name="SmartBoardLanding">
               <Suspense fallback={<SmartBoardSkeleton />}>
                 <SmartBoardLandingPage />
+              </Suspense>
+            </SectionErrorBoundary>
+          }
+        />
+
+        <Route
+          path="smartboard/consent"
+          element={
+            <SectionErrorBoundary name="SmartBoardConsentGate">
+              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+                <SmartBoardConsentGate />
               </Suspense>
             </SectionErrorBoundary>
           }

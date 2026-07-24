@@ -299,4 +299,77 @@ router.get('/progress/:userId', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/smartboard/parental-consent:
+ *   post:
+ *     summary: Registrar consentimiento parental para menores
+ *     tags: [SmartBoard]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               parentEmail:
+ *                 type: string
+ *               studentAge:
+ *                 type: integer
+ *               timestamp:
+ *                 type: string
+ *                 format: date-time
+ *     responses:
+ *       201:
+ *         description: Consentimiento registrado exitosamente
+ *       400:
+ *         description: Datos inválidos
+ *       500:
+ *         description: Error del servidor
+ */
+router.post('/parental-consent', requireAuth, async (req, res) => {
+  const { parentEmail, studentAge, timestamp } = req.body;
+  const userId = req.userId;
+
+  if (!parentEmail || !studentAge) {
+    return res.status(400).json({ error: 'parentEmail and studentAge are required' });
+  }
+
+  // Basic email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(parentEmail)) {
+    return res.status(400).json({ error: 'Invalid email format' });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('parent_consents')
+      .insert([
+        {
+          student_id: userId,
+          parent_email: parentEmail,
+          student_age: studentAge,
+          consent_timestamp: timestamp || new Date().toISOString(),
+          verification_status: 'pending'
+        }
+      ])
+      .select();
+
+    if (error) {
+      console.error('Error inserting parental consent:', error);
+      return res.status(500).json({ error: 'Failed to save parental consent' });
+    }
+
+    res.status(201).json({
+      message: 'Parental consent registered successfully',
+      data: data[0]
+    });
+  } catch (e) {
+    console.error('Error processing parental consent:', e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 module.exports = router;
