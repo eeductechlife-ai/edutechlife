@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { CATEGORY_MAP, CATEGORIES, PREMIUM_TABS } from "../kidsDashboardConfig";
+import { glow } from "../smartboardTheme";
 
 const MobileBottomBar = ({
   activeTab,
@@ -23,15 +24,16 @@ const MobileBottomBar = ({
       animate={{ y: 0 }}
       className={`md:hidden fixed bottom-0 left-0 right-0 backdrop-blur-xl border-t z-50 transition-colors duration-500 ${
         darkMode
-          ? "bg-[#1E293B]/90 border-[#334155]/50"
+          ? "bg-[#151F32]/90 border-[#2A3A54]/60"
           : "bg-white/90 border-[#E2E8F0]"
       }`}
+      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <nav className="flex justify-around items-center py-1 px-2">
+      <nav className="flex justify-around items-center py-1.5 px-2">
         {CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat.id;
-          const anyPremiumInCategory = cat.tabs.some((t) =>
-            PREMIUM_TABS.includes(t),
+          const anyPremiumInCategory = cat.tabs.some((tb) =>
+            PREMIUM_TABS.includes(tb),
           );
           const locked = anyPremiumInCategory && !isPremium;
           return (
@@ -42,28 +44,34 @@ const MobileBottomBar = ({
                   activeCategory === cat.id ? activeTab : getFirstTab(cat.id),
                 )
               }
-              whileTap={{ scale: 0.9 }}
-              className={`relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all min-w-[56px] ${
+              whileTap={{ scale: 0.88 }}
+              aria-label={cat.label}
+              aria-current={isActive ? "page" : undefined}
+              className={`relative flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-2xl transition-all min-w-[58px] ${
                 isActive
-                  ? "text-white shadow-sm"
+                  ? "text-white"
                   : darkMode
                     ? "text-[#64748B]"
                     : "text-[#94A3B8]"
               }`}
               style={
                 isActive
-                  ? {
-                      background: `linear-gradient(135deg, ${cat.color}, ${cat.color}dd)`,
-                    }
+                  ? { background: cat.gradient, boxShadow: glow(cat.glowColor, 0.5) }
                   : {}
               }
             >
-              <span className="text-xl">{cat.icon}</span>
-              <span className="text-[9px] font-semibold whitespace-nowrap">
+              <motion.span
+                className="text-xl"
+                animate={isActive ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+                transition={{ duration: 0.4 }}
+              >
+                {cat.icon}
+              </motion.span>
+              <span className="text-[9px] font-bold whitespace-nowrap">
                 {cat.label}
               </span>
               {locked && (
-                <span className="text-[8px] absolute top-0 right-1">🔒</span>
+                <span className="text-[8px] absolute top-0.5 right-1">🔒</span>
               )}
             </motion.button>
           );

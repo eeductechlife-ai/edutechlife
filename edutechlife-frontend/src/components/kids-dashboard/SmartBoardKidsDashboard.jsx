@@ -12,6 +12,7 @@ import PremiumSidebar from "./components/PremiumSidebar";
 import MobileBottomBar from "./components/MobileBottomBar";
 import CinematicContent from "./components/CinematicContent";
 import { CATEGORIES, TOP_BAR_LABELS } from "./kidsDashboardConfig";
+import { SB_GRADIENTS, glow } from "./smartboardTheme";
 
 const SmartBoardKidsDashboard = () => {
   const { t } = useTranslation();
@@ -197,16 +198,33 @@ const SmartBoardKidsDashboard = () => {
                 : "bg-white/80 border-[#E2E8F0]/50"
             }`}
           >
-            <h1
-              className={`text-xl font-bold transition-colors duration-500 ${darkMode ? "text-white" : "text-[#004B63]"}`}
-            >
-              <span className="flex items-center gap-2">
-                <span className="text-base">
-                  {CATEGORIES.find((c) => c.tabs.includes(activeTab))?.icon}
-                </span>
-                <span>{TOP_BAR_LABELS[activeTab] || activeTab}</span>
-              </span>
-            </h1>
+            {(() => {
+              const activeCat = CATEGORIES.find((c) =>
+                c.tabs.includes(activeTab),
+              );
+              return (
+                <div className="flex items-center gap-3">
+                  <motion.span
+                    key={activeCat?.id}
+                    initial={{ scale: 0.6, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", damping: 14 }}
+                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-lg flex-shrink-0"
+                    style={{
+                      background: activeCat?.gradient || SB_GRADIENTS.brand,
+                      boxShadow: glow(activeCat?.glowColor || "#00B4D8", 0.4),
+                    }}
+                  >
+                    {activeCat?.icon}
+                  </motion.span>
+                  <h1
+                    className={`text-xl font-black tracking-tight transition-colors duration-500 ${darkMode ? "text-white" : "text-[#00303F]"}`}
+                  >
+                    {TOP_BAR_LABELS[activeTab] || activeTab}
+                  </h1>
+                </div>
+              );
+            })()}
 
             <div className="flex items-center gap-3">
               {/* Dani Quick Access */}
@@ -214,13 +232,14 @@ const SmartBoardKidsDashboard = () => {
                 id="openDaniChat"
                 type="button"
                 onClick={() => setIsDaniOpen(true)}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 8px 25px rgba(77,168,196,0.4)",
-                }}
+                whileHover={{ scale: 1.05, y: -1 }}
                 whileTap={{ scale: 0.92 }}
                 aria-label={t("smartboard.talk_dani")}
-                className="relative flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer select-none"
+                className="relative flex items-center gap-2 px-5 py-2.5 text-white rounded-full text-sm font-bold transition-all cursor-pointer select-none"
+                style={{
+                  background: SB_GRADIENTS.brand,
+                  boxShadow: glow("#0096C7", 0.45),
+                }}
               >
                 <motion.span
                   animate={{ rotate: [0, -10, 10, -10, 0] }}
@@ -245,44 +264,56 @@ const SmartBoardKidsDashboard = () => {
 
               {/* Streak Display */}
               <motion.div
-                className={`px-3 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition-colors duration-500 ${
-                  darkMode ? "bg-[#334155]" : "bg-[#F8FAFC]"
-                }`}
-                whileHover={{ scale: 1.02 }}
+                className="hidden sm:flex px-2.5 py-1.5 rounded-2xl items-center gap-2 transition-colors duration-500"
+                style={{
+                  background: darkMode
+                    ? "linear-gradient(135deg, rgba(251,133,0,0.18), rgba(255,209,102,0.12))"
+                    : "linear-gradient(135deg, rgba(251,133,0,0.12), rgba(255,209,102,0.10))",
+                }}
+                whileHover={{ scale: 1.03, y: -1 }}
                 title={t("smartboard.streak_title")}
               >
-                <span className="text-sm">🔥</span>
-                <span
-                  className={`text-xs font-bold ${darkMode ? "text-[#FFD166]" : "text-[#FF8E53]"}`}
-                >
-                  {streak.current}
+                <span className="w-7 h-7 rounded-lg flex items-center justify-center text-sm bg-white/40">
+                  🔥
                 </span>
-                <span
-                  className={`text-[10px] ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
-                >
-                  {t("smartboard.days")}
+                <span className="leading-none">
+                  <span className="block text-sm font-black text-[#FB8500]">
+                    {streak.current}
+                  </span>
+                  <span
+                    className={`block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+                  >
+                    {t("smartboard.days")}
+                  </span>
                 </span>
               </motion.div>
 
               {/* Points Display */}
               <motion.div
-                className={`px-4 py-2 rounded-full flex items-center gap-2 shadow-sm transition-colors duration-500 ${
-                  darkMode ? "bg-[#334155]" : "bg-[#F8FAFC]"
-                }`}
-                whileHover={{ scale: 1.02 }}
+                className="flex px-2.5 py-1.5 rounded-2xl items-center gap-2 transition-colors duration-500"
+                style={{
+                  background: darkMode
+                    ? "linear-gradient(135deg, rgba(0,150,199,0.20), rgba(72,202,228,0.12))"
+                    : "linear-gradient(135deg, rgba(0,150,199,0.12), rgba(72,202,228,0.10))",
+                }}
+                whileHover={{ scale: 1.03, y: -1 }}
                 aria-live="polite"
                 aria-atomic="true"
               >
-                <span className="text-[#FFD166] font-bold text-lg">💎</span>
-                <span
-                  className={`text-sm font-bold transition-colors duration-500 ${darkMode ? "text-white" : "text-[#004B63]"}`}
-                >
-                  {totalPoints.toLocaleString()}
+                <span className="w-7 h-7 rounded-lg flex items-center justify-center text-sm bg-white/40">
+                  💎
                 </span>
-                <span
-                  className={`text-[10px] ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
-                >
-                  {t("smartboard.points_display")}
+                <span className="leading-none">
+                  <span
+                    className={`block text-sm font-black ${darkMode ? "text-white" : "text-[#00303F]"}`}
+                  >
+                    {totalPoints.toLocaleString()}
+                  </span>
+                  <span
+                    className={`block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+                  >
+                    {t("smartboard.points_display")}
+                  </span>
                 </span>
               </motion.div>
             </div>
