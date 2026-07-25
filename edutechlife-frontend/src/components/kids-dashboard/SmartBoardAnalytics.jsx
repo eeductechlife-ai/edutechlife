@@ -2,11 +2,12 @@ import { useState, useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, ScatterChart, Scatter, CartesianGrid, Cell } from 'recharts';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
+import { useTranslation } from '../../i18n/I18nProvider';
 
 const dc = (dm, l, d) => dm ? d : l;
 const COLORS = ['#4DA8C4', '#66CCCC', '#FF6B9D', '#FFD166', '#A855F7', '#22C55E'];
 
-const weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+const getWeekDays = (t) => [t('analytics.week_mon'), t('analytics.week_tue'), t('analytics.week_wed'), t('analytics.week_thu'), t('analytics.week_fri'), t('analytics.week_sat'), t('analytics.week_sun')];
 const subjects = ['Mat', 'Len', 'Cie', 'Soc', 'Ing'];
 
 const MetricCard = memo(({ icon, title, children, darkMode, color = '#4DA8C4' }) => (
@@ -26,18 +27,20 @@ const MetricCard = memo(({ icon, title, children, darkMode, color = '#4DA8C4' })
 ));
 
 const SmartBoardAnalytics = memo(() => {
+  const { t } = useTranslation();
   const { darkMode: dm, totalPoints, streak, missions } = useSmartBoardKids();
+  const weekDays = getWeekDays(t);
 
   const subjectData = useMemo(() => [
-    { name: 'Matemáticas', value: 78, color: '#4DA8C4' },
-    { name: 'Lenguaje', value: 92, color: '#FF6B9D' },
-    { name: 'Ciencias', value: 65, color: '#66CCCC' },
-    { name: 'Sociales', value: 88, color: '#FFD166' },
-    { name: 'Inglés', value: 72, color: '#A855F7' },
-  ], []);
+    { name: t('analytics.subject_math'), value: 78, color: '#4DA8C4' },
+    { name: t('analytics.subject_language'), value: 92, color: '#FF6B9D' },
+    { name: t('analytics.subject_science'), value: 65, color: '#66CCCC' },
+    { name: t('analytics.subject_social'), value: 88, color: '#FFD166' },
+    { name: t('analytics.subject_english'), value: 72, color: '#A855F7' },
+  ], [t]);
 
   const weeklyData = useMemo(() =>
-    weekDays.map((day, i) => ({ name: day, value: Math.floor(Math.random() * 120) + 30 })), []);
+    weekDays.map((day, i) => ({ name: day, value: Math.floor(Math.random() * 120) + 30 })), [weekDays]);
 
   const predictionData = useMemo(() =>
     ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Proy.'].map((name, i) => ({
@@ -56,13 +59,13 @@ const SmartBoardAnalytics = memo(() => {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#A855F7] to-[#22C55E] flex items-center justify-center text-lg shadow-md">📈</div>
         <div>
-          <h3 className={`text-lg font-bold ${dc(dm, 'text-[#E2F0FF]', 'text-[#004B63]')}`}>Analítica Avanzada</h3>
-          <p className={`text-xs ${dc(dm, 'text-[#94A3B8]', 'text-[#64748B]')}`}>Rendimiento, predicciones y hábitos de estudio</p>
+          <h3 className={`text-lg font-bold ${dc(dm, 'text-[#E2F0FF]', 'text-[#004B63]')}`}>{t('analytics.title')}</h3>
+          <p className={`text-xs ${dc(dm, 'text-[#94A3B8]', 'text-[#64748B]')}`}>{t('analytics.subtitle')}</p>
         </div>
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <MetricCard icon="🚀" title="Velocidad de Aprendizaje" darkMode={dm} color="#4DA8C4">
+        <MetricCard icon="🚀" title={t('analytics.metric_speed')} darkMode={dm} color="#4DA8C4">
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={weeklyData}>
               <XAxis dataKey="name" tick={{ fontSize: 10 }} />
@@ -75,10 +78,10 @@ const SmartBoardAnalytics = memo(() => {
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-          <p className={`text-xs text-center mt-2 ${dc(dm, 'text-[#94A3B8]', 'text-[#64748B]')}`}>Minutos de estudio por día</p>
+          <p className={`text-xs text-center mt-2 ${dc(dm, 'text-[#94A3B8]', 'text-[#64748B]')}`}>{t('analytics.metric_speed_desc')}</p>
         </MetricCard>
 
-        <MetricCard icon="🔥" title="Heatmap de Materias" darkMode={dm} color="#FF6B9D">
+        <MetricCard icon="🔥" title={t('analytics.metric_heatmap')} darkMode={dm} color="#FF6B9D">
           <div className="overflow-x-auto">
             <div className="grid grid-cols-6 gap-1 min-w-[250px]">
               <div className="text-[10px] text-[#64748B] font-medium"></div>
@@ -106,7 +109,7 @@ const SmartBoardAnalytics = memo(() => {
           </div>
         </MetricCard>
 
-        <MetricCard icon="🎯" title="Predicción de Rendimiento" darkMode={dm} color="#A855F7">
+        <MetricCard icon="🎯" title={t('analytics.metric_prediction')} darkMode={dm} color="#A855F7">
           <ResponsiveContainer width="100%" height={180}>
             <LineChart data={predictionData}>
               <XAxis dataKey="name" tick={{ fontSize: 10 }} />
@@ -120,7 +123,7 @@ const SmartBoardAnalytics = memo(() => {
           </p>
         </MetricCard>
 
-        <MetricCard icon="⏱️" title="Tiempo vs Resultados" darkMode={dm} color="#22C55E">
+        <MetricCard icon="⏱️" title={t('analytics.metric_time')} darkMode={dm} color="#22C55E">
           <ResponsiveContainer width="100%" height={180}>
             <ScatterChart>
               <CartesianGrid strokeDasharray="3 3" stroke={dm ? '#334155' : '#E2E8F0'} />
@@ -133,7 +136,7 @@ const SmartBoardAnalytics = memo(() => {
           <p className={`text-xs text-center mt-2 ${dc(dm, 'text-[#94A3B8]', 'text-[#64748B]')}`}>Correlación: más tiempo = mejores resultados</p>
         </MetricCard>
 
-        <MetricCard icon="💪" title="Racha por Materia" darkMode={dm} color="#FFD166" className="md:col-span-2">
+        <MetricCard icon="💪" title={t('analytics.metric_streak')} darkMode={dm} color="#FFD166" className="md:col-span-2">
           <div className="space-y-3">
             {subjectData.map((subj, i) => (
               <div key={subj.name} className="flex items-center gap-3">
