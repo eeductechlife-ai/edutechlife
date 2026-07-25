@@ -3854,5 +3854,19 @@
   "smartboard.habeas_parent_email_invalid": "Invalid email. Please check and try again",
   "smartboard.talk_dani": "Talk to Dani",
   "smartboard.dani_reminder_open": "Dani wants to help you. Open chat",
-  "smartboard.close_reminder": "Close reminder"
+  "smartboard.close_reminder": "Close reminder",
+  "scanner.subject_math": "Mathematics",
+  "scanner.subject_language": "Language",
+  "scanner.subject_science": "Science",
+  "scanner.subject_history": "History",
+  "scanner.subject_english": "English",
+  "scanner.subject_art": "Art",
+  "scanner.age_6_8": "6-8 years",
+  "scanner.age_9_11": "9-11 years",
+  "scanner.age_12_14": "12-14 years",
+  "scanner.age_15_17": "15-17 years",
+  "scanner.stage_reading": "Reading your material...",
+  "scanner.stage_processing": "Teacher is preparing your summary...",
+  "scanner.error_analysis": "Could not analyze material. Try another file or clearer image.",
+  "scanner.summary_title": "Study Summary"
 }

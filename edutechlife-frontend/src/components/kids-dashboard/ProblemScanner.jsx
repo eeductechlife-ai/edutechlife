@@ -1,23 +1,25 @@
 import { useState, useRef, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useTranslation } from "../../i18n/I18nProvider";
 import { getFileIcon } from "../../utils/documentParser";
 import { generateStudySummary } from "../../services/documentSummaryAI";
 import ScannerSummaryResult from "./ScannerSummaryResult";
 
-const sbj = [
-  { v: "matematicas", l: "Matemáticas", i: "🔢" },
-  { v: "lenguaje", l: "Lenguaje", i: "📖" },
-  { v: "ciencias", l: "Ciencias", i: "🔬" },
-  { v: "historia", l: "Historia", i: "🏛️" },
-  { v: "ingles", l: "Inglés", i: "🌎" },
-  { v: "arte", l: "Arte", i: "🎨" },
+const getSubjects = (t) => [
+  { v: "matematicas", l: t("scanner.subject_math"), i: "🔢" },
+  { v: "lenguaje", l: t("scanner.subject_language"), i: "📖" },
+  { v: "ciencias", l: t("scanner.subject_science"), i: "🔬" },
+  { v: "historia", l: t("scanner.subject_history"), i: "🏛️" },
+  { v: "ingles", l: t("scanner.subject_english"), i: "🌎" },
+  { v: "arte", l: t("scanner.subject_art"), i: "🎨" },
 ];
-const ages = [
-  { v: "6-8", l: "6-8 años" },
-  { v: "9-11", l: "9-11 años" },
-  { v: "12-14", l: "12-14 años" },
-  { v: "15-17", l: "15-17 años" },
+
+const getAges = (t) => [
+  { v: "6-8", l: t("scanner.age_6_8") },
+  { v: "9-11", l: t("scanner.age_9_11") },
+  { v: "12-14", l: t("scanner.age_12_14") },
+  { v: "15-17", l: t("scanner.age_15_17") },
 ];
 const gd = "bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]";
 const gd2 = "bg-gradient-to-r from-[#004B63] to-[#4DA8C4]";
@@ -34,7 +36,10 @@ const fmtSize = (b) => {
 };
 
 const ProblemScanner = memo(() => {
+  const { t } = useTranslation();
   const { setDocumentForDani, darkMode: dm } = useSmartBoardKids();
+  const sbj = getSubjects(t);
+  const ages = getAges(t);
   const [mode, setMode] = useState("scan");
   const [img, setImg] = useState(null);
   const [file, setFile] = useState(null);
@@ -76,7 +81,7 @@ const ProblemScanner = memo(() => {
     setMode("processing");
     setError("");
     setProgress(10);
-    setStage("Leyendo tu material...");
+    setStage(t("scanner.stage_reading"));
 
     try {
       const { extractDocumentText } =
@@ -85,7 +90,7 @@ const ProblemScanner = memo(() => {
       const text = await extractDocumentText(file);
       setOcrText(text);
       setProgress(65);
-      setStage("El profesor está preparando tu resumen...");
+      setStage(t("scanner.stage_processing"));
 
       const result = await generateStudySummary(text, {
         subject: sl,
@@ -97,7 +102,7 @@ const ProblemScanner = memo(() => {
     } catch (e) {
       setError(
         e.message ||
-          "No se pudo analizar el material. Intenta con otro archivo o una imagen más clara.",
+          t("scanner.error_analysis"),
       );
       setMode("scan");
     }
@@ -108,7 +113,7 @@ const ProblemScanner = memo(() => {
     setDocumentForDani({
       type: "document_summary",
       subject: sl,
-      title: summary?.title || "Resumen de estudio",
+      title: summary?.title || t("scanner.summary_title"),
       summary: `El estudiante subió material de ${sl || "estudio"}${
         summary?.title ? ` sobre "${summary.title}"` : ""
       }${desc ? `. Nota: ${desc}` : ""}. Ya tiene un resumen y quiere profundizar o resolver dudas.`,

@@ -3854,5 +3854,19 @@
   "smartboard.habeas_parent_email_invalid": "Email inválido. Por favor, verifica y intenta de nuevo",
   "smartboard.talk_dani": "Hablar con Dani",
   "smartboard.dani_reminder_open": "Dani quiere ayudarte. Abre el chat",
-  "smartboard.close_reminder": "Cerrar recordatorio"
+  "smartboard.close_reminder": "Cerrar recordatorio",
+  "scanner.subject_math": "Matemáticas",
+  "scanner.subject_language": "Lenguaje",
+  "scanner.subject_science": "Ciencias",
+  "scanner.subject_history": "Historia",
+  "scanner.subject_english": "Inglés",
+  "scanner.subject_art": "Arte",
+  "scanner.age_6_8": "6-8 años",
+  "scanner.age_9_11": "9-11 años",
+  "scanner.age_12_14": "12-14 años",
+  "scanner.age_15_17": "15-17 años",
+  "scanner.stage_reading": "Leyendo tu material...",
+  "scanner.stage_processing": "El profesor está preparando tu resumen...",
+  "scanner.error_analysis": "No se pudo analizar el material. Intenta con otro archivo o una imagen más clara.",
+  "scanner.summary_title": "Resumen de estudio"
 }
