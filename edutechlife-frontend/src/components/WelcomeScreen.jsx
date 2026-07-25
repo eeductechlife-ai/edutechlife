@@ -156,17 +156,20 @@ const WelcomeScreen = ({ onNavigate }) => {
             {/* Clerk Form */}
             <div className="w-full min-h-[480px] flex items-center justify-center">
               {isSignUpMode ? (
-                <SignUp 
+                <SignUp
+                  routing="virtual"
                   fallbackRedirectUrl={returnTo}
                   signInUrl="/login"
+                  signUpUrl="/sign-up/ialab"
                   appearance={clerkAppearance}
                   localization={clerkLocale}
                   afterSignUpUrl={returnTo}
                 />
               ) : (
-                <SignIn 
+                <SignIn
+                  routing="virtual"
                   fallbackRedirectUrl={returnTo}
-                  signUpUrl="/login?action=signup"
+                  signUpUrl="/sign-up/ialab"
                   appearance={clerkAppearance}
                   localization={clerkLocale}
                 />

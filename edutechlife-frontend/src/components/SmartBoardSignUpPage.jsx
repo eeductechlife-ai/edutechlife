@@ -240,7 +240,9 @@ const SmartBoardSignUpPage = () => {
                       transition={{ duration: 0.25 }}
                     >
                       <SignIn
+                        routing="virtual"
                         signUpUrl="/sign-up/smartboard"
+                        signInUrl="/sign-up/smartboard"
                         afterSignInUrl="/smartboard"
                         fallbackRedirectUrl={returnTo}
                         appearance={clerkAppearance}
@@ -255,7 +257,9 @@ const SmartBoardSignUpPage = () => {
                       transition={{ duration: 0.25 }}
                     >
                       <SignUp
+                        routing="virtual"
                         signInUrl="/sign-up/smartboard"
+                        signUpUrl="/sign-up/smartboard"
                         afterSignUpUrl="/smartboard/consent"
                         fallbackRedirectUrl={returnTo}
                         appearance={clerkAppearance}

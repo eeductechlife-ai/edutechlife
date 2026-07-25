@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
+import ModuleNavItem from './ModuleNavItem';
 
 const SidebarModuleList = ({
   modules, activeMod, calculateModuleScore, isModuleLocked, goToModule,
@@ -30,37 +31,16 @@ const SidebarModuleList = ({
         const isActive = activeMod === mod.id;
 
         return (
-          <motion.button
-            key={mod.id}
-            role="listitem"
-            variants={moduleItemVariants}
-            onClick={() => !locked && goToModule(mod.id)}
-            className={`w-full group flex items-center gap-2 min-h-[44px] p-2.5 rounded-xl transition-all duration-300 ${isActive ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md shadow-petroleum/15 dark:shadow-petroleum/30' : 'hover:bg-petroleum/10 dark:hover:bg-petroleum/20 text-slate-700 dark:text-slate-300'} focus:outline-none focus:ring-2 focus:ring-petroleum/30 dark:focus:ring-petroleum/50 focus:ring-offset-1`}
-            disabled={locked}
-            aria-current={isActive ? 'page' : undefined}
-            aria-label={`${locked ? 'Módulo bloqueado: ' : ''}${mod.title}`}
-          >
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${isActive ? 'bg-white/20' : 'bg-petroleum/8 dark:bg-petroleum/20 group-hover:bg-petroleum/15'}`}>
-              <span className={`${isActive ? 'text-white' : 'text-petroleum dark:text-[#4DA8C4]'} text-sm font-bold`}>{mod.id}</span>
-            </div>
-            <div className="flex-1 min-w-0 text-left">
-              <p className="font-semibold text-sm truncate group-hover:text-petroleum dark:group-hover:text-[#4DA8C4] transition-colors">{mod.title}</p>
-              {modScore > 0 && (
-                <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full transition-all duration-500 ${isActive ? 'bg-white/60' : 'bg-corporate'}`}
-                    style={{ width: `${modScore}%` }}
-                  />
-                </div>
-              )}
-            </div>
-            {locked && (
-              <Icon name="fa-lock" className="text-xs text-petroleum/40 dark:text-slate-500" aria-hidden="true" />
-            )}
-            {!locked && modScore >= 80 && (
-              <Icon name="fa-check" className="text-xs text-emerald-500" aria-hidden="true" />
-            )}
-          </motion.button>
+          <motion.div key={mod.id} role="listitem" variants={moduleItemVariants}>
+            <ModuleNavItem
+              mod={mod}
+              isActive={isActive}
+              isLocked={locked}
+              score={modScore}
+              variant="expanded"
+              onClick={goToModule}
+            />
+          </motion.div>
         );
       })}
     </motion.div>

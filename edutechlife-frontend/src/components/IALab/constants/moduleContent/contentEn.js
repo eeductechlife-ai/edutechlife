@@ -19,7 +19,7 @@ const CONTENT_EN = {
       { text: "Apply your artisan craft in study and work", icon: "fa-rocket" },
     ],
     overviewData: {
-      title: "The Digital Artisan's Workshop",
+      title: "The Digital Artisan: Prompt Engineering — The Foundation of Every AI Interaction",
       description:
         "Every artisan starts with basic tools and, with practice, becomes a master. Here you'll learn to sculpt instructions that AI understands perfectly. From fundamentals to advanced techniques that will transform how you work with artificial intelligence.",
       mission:
@@ -53,7 +53,7 @@ const CONTENT_EN = {
       { text: "Automate complete construction workflows", icon: "fa-cog" },
     ],
     overviewData: {
-      title: "The Digital Architect's Construction Site",
+      title: "The Digital Architect: ChatGPT & Automation — Build Your Own Work Ecosystem",
       description:
         "Welcome to the masterpiece of automation. Here you won't just use ChatGPT — you'll build with it. Learn to design system prompts like architectural blueprints, use integrated tools as scaffolding, create GPTs as construction modules, and connect everything with external APIs to raise digital structures that work on their own.",
       mission:
@@ -431,7 +431,7 @@ const CONTENT_EN = {
       { text: "Manage your digital library with superhuman intelligence", icon: "fa-folder-open" },
     ],
     overviewData: {
-      title: "Your Document Alchemy Lab",
+      title: "The Digital Alchemist: NotebookLM — Where Your Documents Become Knowledge",
       description:
         "In this module, you will become a digital alchemist: your PDFs, articles, and notes hold hidden potential you never imagined. Learn to extract, transform, and share them in formats that captivate, educate, and transform.",
       mission:
@@ -620,7 +620,7 @@ const CONTENT_EN = {
       { text: "Create ethical protocols that save reputations", icon: "fa-clipboard-check" },
     ],
     overviewData: {
-      title: "The Guardian's Code: Ethical AI Mastery",
+      title: "The Digital Guardian: AI Ethics & Governance — The Mark of a Responsible Professional",
       description:
         "Every time you use AI, you're making ethical decisions — whether you know it or not. Are your uploaded files protected? Is the output fair for everyone? Who's accountable if something goes wrong? This module isn't just theory — it's your training to become an AI guardian.",
       mission:

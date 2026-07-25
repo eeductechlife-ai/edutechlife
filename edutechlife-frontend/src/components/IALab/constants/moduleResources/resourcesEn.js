@@ -227,8 +227,8 @@ const RESOURCES_EN = {
   // ============================================================================
   // MODULE 3: MASTER GEMINI
   // ============================================================================
-  "Introduction to Google Gemini": {
-    title: "The Multimodal Magnifying Glass Awakens",
+  "The Multimodal Detective Awakens": {
+    title: "The Multimodal Detective Awakens",
     description:
       "Your first mission as a detective: meet your new secret weapon. Gemini is the AI that processes text, images, audio, and video in a single move. One magnifying glass. Every format.",
     learningObjectives: [
@@ -279,8 +279,8 @@ const RESOURCES_EN = {
     ],
   },
 
-  "Multimodal Reasoning and Grounding": {
-    title: "Grounding: The Connection to the Real World",
+  "Grounding: When Evidence Touches the Real World": {
+    title: "Grounding: When Evidence Touches the Real World",
     description:
       "Gemini doesn't float in the air — it connects to your daily tools. Learn to integrate it into Google Docs, Sheets, and Gmail to multiply your investigation speed.",
     learningObjectives: [
@@ -328,8 +328,8 @@ const RESOURCES_EN = {
     ],
   },
 
-  "Deep Research and Fact-Checking with AI": {
-    title: "Deep Research: The Detective's Black Box",
+  "Deep Research: The Forensic Toolkit": {
+    title: "Deep Research: The Forensic Toolkit",
     description:
       "The most impressive cases aren't solved by luck — they're solved by method. Discover how investigators, marketers, programmers, and educators use Gemini to find what no one else can.",
     learningObjectives: [
@@ -383,7 +383,7 @@ const RESOURCES_EN = {
   // ============================================================================
   // MODULE 4: THE KNOWLEDGE ALCHEMIST — NOTEBOOKLM
   // ============================================================================
-  "What is NotebookLM and how is it used?": {
+  "The Document Alchemist: Your First Spell with NotebookLM": {
     title: "The Document Alchemist: Your First Spell with NotebookLM",
     description:
       "Google's secret tool for digital alchemists: upload your PDFs and get precise answers with verbatim citations. Your personal librarian with AI superpowers.",
@@ -435,7 +435,7 @@ const RESOURCES_EN = {
     ],
   },
 
-  "Source Curation and Document Synthesis": {
+  "The Art of Curation: How to Choose and Synthesize Sources": {
     title: "The Art of Curation: How to Choose and Synthesize Sources",
     description:
       "Turn mountains of documents into summaries, FAQs, and executive reports that look like the work of a team of analysts.",
@@ -486,7 +486,7 @@ const RESOURCES_EN = {
     ],
   },
 
-  "Audio Overviews and AI Document Management": {
+  "The Secret Formula: Audio Overviews and Document Management": {
     title: "The Secret Formula: Audio Overviews and Document Management",
     description:
       "Turn your notes into podcasts that sound like professional radio: two AI voices discuss your documents like old friends.",
@@ -540,8 +540,8 @@ const RESOURCES_EN = {
   // ============================================================================
   // MODULE 5: ETHICS AND PRIVACY
   // ============================================================================
-  "Ethics in Artificial Intelligence": {
-    title: "The Guardian's Shield: 4 Sacred Principles",
+  "The Guardian's Vow: 4 Sacred Principles": {
+    title: "The Guardian's Vow: 4 Sacred Principles",
     description:
       "The 4 pillars that separate responsible professionals from reckless ones. Transparency, fairness, accountability, and privacy — your complete ethical armor.",
     learningObjectives: [
@@ -592,7 +592,7 @@ const RESOURCES_EN = {
     ],
   },
 
-  "Algorithmic Biases and Fairness": {
+  "The Mirror of Truth: Is Your AI Fair?": {
     title: "The Mirror of Truth: Is Your AI Fair?",
     description:
       "Did you know your AI could be discriminating without you knowing? Learn to shield your data and algorithms against the most dangerous biases.",
@@ -609,9 +609,9 @@ const RESOURCES_EN = {
         id: "privacy-video-1",
         type: "video",
         title: "Privacy and AI: What You Need to Know",
-        url: "https://www.youtube.com/embed/ADvjzvJjx5c",
+        url: "https://www.youtube.com/embed/BoR5KjsRK9U",
         duration: "9:20",
-        thumbnail: "https://img.youtube.com/vi/ADvjzvJjx5c/maxresdefault.jpg",
+        thumbnail: "https://img.youtube.com/vi/BoR5KjsRK9U/maxresdefault.jpg",
         provider: "youtube",
         description:
           "9:20 that can save your reputation. Discover the privacy risks lurking in every AI tool and how to neutralize them.",
@@ -644,7 +644,7 @@ const RESOURCES_EN = {
     ],
   },
 
-  "Privacy, Regulation, and Responsible AI": {
+  "The Guardian's Legacy: Navigating the Law": {
     title: "The Guardian's Legacy: Navigating the Law",
     description:
       "AI laws are changing the world. From the EU AI Act to local regulations, know the rules of the game and become a benchmark for ethical governance.",

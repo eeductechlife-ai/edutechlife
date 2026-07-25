@@ -1,5 +1,15 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  GraduationCap,
+  Flame,
+  Gem,
+  Users,
+  LogOut,
+  Lock,
+  Star,
+  ChevronDown,
+} from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import {
   CATEGORY_MAP,
@@ -57,22 +67,25 @@ const PremiumSidebar = ({
             initial={{ scale: 0, rotate: -30 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: "spring", damping: 12 }}
-            className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
-            style={{ background: SB_GRADIENTS.brand, boxShadow: glow("#00B4D8", 0.5) }}
+            className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 text-white"
+            style={{
+              background: SB_GRADIENTS.brand,
+              boxShadow: `${glow("#00B4D8", 0.5)}, inset 0 1px 0 rgba(255,255,255,0.4)`,
+            }}
           >
-            🎓
+            <GraduationCap className="w-6 h-6" strokeWidth={2.2} />
           </motion.div>
-          <div className="leading-tight">
+          <div className="leading-none">
             <h2
-              className="text-lg font-black bg-clip-text text-transparent"
+              className="text-lg font-black tracking-tight bg-clip-text text-transparent"
               style={{ backgroundImage: SB_GRADIENTS.brand }}
             >
               SmartBoard
             </h2>
             <p
-              className={`text-[10px] font-semibold -mt-0.5 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+              className={`text-[9px] font-black uppercase tracking-[0.2em] mt-1 ${darkMode ? "text-[#48CAE4]" : "text-[#0096C7]"}`}
             >
-              2.0
+              Versión 2.0
             </p>
           </div>
         </div>
@@ -80,27 +93,30 @@ const PremiumSidebar = ({
         {/* Stat chips */}
         <div className="flex items-center gap-2 mt-3">
           <div
-            className="flex-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl"
+            className="flex-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-[#FB8500]/15"
             style={{
               background:
-                "linear-gradient(135deg, rgba(251,133,0,0.14), rgba(255,209,102,0.14))",
+                "linear-gradient(135deg, rgba(251,133,0,0.14), rgba(255,209,102,0.12))",
             }}
           >
-            <span className="text-sm">🔥</span>
-            <span className="font-black text-sm text-[#FB8500]">
+            <Flame className="w-4 h-4 text-[#FB8500]" strokeWidth={2.4} />
+            <span className="font-black text-sm text-[#FB8500] tabular-nums">
               {streak?.current ?? 0}
             </span>
           </div>
           <div
-            className="flex-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl"
+            className="flex-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-[#0096C7]/15"
             style={{
               background:
-                "linear-gradient(135deg, rgba(0,150,199,0.14), rgba(72,202,228,0.14))",
+                "linear-gradient(135deg, rgba(0,150,199,0.14), rgba(72,202,228,0.12))",
             }}
           >
-            <span className="text-sm">💎</span>
+            <Gem
+              className={`w-4 h-4 ${darkMode ? "text-[#48CAE4]" : "text-[#0096C7]"}`}
+              strokeWidth={2.4}
+            />
             <span
-              className={`font-black text-sm ${darkMode ? "text-[#48CAE4]" : "text-[#0096C7]"}`}
+              className={`font-black text-sm tabular-nums ${darkMode ? "text-[#48CAE4]" : "text-[#0096C7]"}`}
             >
               {totalPoints?.toLocaleString() || 0}
             </span>
@@ -144,22 +160,28 @@ const PremiumSidebar = ({
                 }
               >
                 <span
-                  className={`w-8 h-8 rounded-xl flex items-center justify-center text-lg flex-shrink-0 ${
-                    hasActiveTab ? "bg-white/20" : darkMode ? "bg-[#1E293B]" : "bg-[#F1F5F9]"
+                  className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                    hasActiveTab
+                      ? "bg-white/20 text-white"
+                      : darkMode
+                        ? "bg-[#1E293B] text-[#94A3B8]"
+                        : "bg-[#F1F5F9] text-[#475569]"
                   }`}
                 >
-                  {cat.icon}
+                  <cat.Icon className="w-[18px] h-[18px]" strokeWidth={2.3} />
                 </span>
                 <span className="flex-1 text-left">{cat.label}</span>
                 {anyPremiumInCategory && !isPremium && (
-                  <span className="text-[10px]">🔒</span>
+                  <Lock
+                    className={`w-3.5 h-3.5 ${hasActiveTab ? "text-white/80" : "text-[#94A3B8]"}`}
+                  />
                 )}
                 <motion.span
                   animate={{ rotate: showChildren ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
-                  className="text-[10px] opacity-60"
+                  className="opacity-60 flex items-center"
                 >
-                  ▾
+                  <ChevronDown className="w-4 h-4" />
                 </motion.span>
               </motion.button>
 
@@ -216,10 +238,13 @@ const PremiumSidebar = ({
                               {CATEGORY_TAB_LABELS[tabId] || tabId}
                             </span>
                             {isPremiumTab && !isPremium && (
-                              <span className="text-[9px]">🔒</span>
+                              <Lock className="w-3 h-3 text-[#94A3B8]" />
                             )}
                             {isPremiumTab && isPremium && (
-                              <span className="text-[9px]">⭐</span>
+                              <Star
+                                className="w-3 h-3 text-[#FFB703]"
+                                fill="#FFB703"
+                              />
                             )}
                           </motion.button>
                         );
@@ -247,8 +272,8 @@ const PremiumSidebar = ({
               : "text-[#475569] hover:bg-[#F1F5F9]"
           }`}
         >
-          <span className="w-8 h-8 rounded-xl flex items-center justify-center text-lg bg-gradient-to-br from-[#9D4EDD]/15 to-[#C77DFF]/15">
-            👨‍👩‍👧
+          <span className="w-8 h-8 rounded-xl flex items-center justify-center bg-gradient-to-br from-[#9D4EDD]/15 to-[#C77DFF]/15 text-[#9D4EDD]">
+            <Users className="w-[18px] h-[18px]" strokeWidth={2.3} />
           </span>
           <span>{t("smartboard.tab_parents")}</span>
         </motion.button>
@@ -262,7 +287,7 @@ const PremiumSidebar = ({
           }`}
         >
           <span className="w-8 h-8 rounded-xl flex items-center justify-center">
-            🚪
+            <LogOut className="w-[18px] h-[18px]" strokeWidth={2.3} />
           </span>
           <span>{t("smartboard.logout")}</span>
         </motion.button>

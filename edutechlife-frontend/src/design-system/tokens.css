@@ -358,11 +358,11 @@
   /* Brand colors (source of truth for IALab components) */
   --ialab-petroleum: #004B63;
   --ialab-petroleum-dark: #0A3550;
-  --ialab-cyan: #0097A7; /* Mejorado para contraste WCAG AA */
-  --ialab-cyan-dark: #007C8A;
+  --ialab-cyan: var(--color-corporate);
+  --ialab-cyan-dark: var(--color-corporate-dark);
   --ialab-navy: #0D2B5B;
   --ialab-teal: #2596be;
-  --ialab-focus-ring: 0 0 0 3px rgba(0, 151, 167, 0.4);
+  --ialab-focus-ring: 0 0 0 3px rgba(0, 188, 212, 0.4);
 
   /* Surfaces */
   --ialab-bg: #F8FAFC;
@@ -404,7 +404,7 @@
 
   /* ==================== ACCESSIBILITY TOKENS ==================== */
 
-  --a11y-focus-ring-color: #0097A7;
+  --a11y-focus-ring-color: var(--color-corporate);
   --a11y-focus-ring-width: 3px;
   --a11y-focus-ring-offset: 2px;
   --a11y-skip-link-bg: #004B63;

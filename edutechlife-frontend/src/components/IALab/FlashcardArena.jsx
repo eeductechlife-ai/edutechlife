@@ -1,7 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from '../../i18n/I18nProvider';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
+import { useSM2Flashcard } from '../../hooks/IALab/useSM2Flashcard';
 
 const MODULE_FLASHCARDS_ES = {
   1: [
@@ -99,41 +100,64 @@ const MODULE_FLASHCARDS_EN = {
   ],
 };
 
+const RATING_ACTIONS = [
+  { rating: 0, labelKey: 'flashcard.rating_again', className: 'border-red-300 text-red-600 hover:bg-red-50', icon: 'fa-xmark' },
+  { rating: 1, labelKey: 'flashcard.rating_hard', className: 'border-amber-300 text-amber-600 hover:bg-amber-50', icon: 'fa-minus' },
+  { rating: 2, labelKey: 'flashcard.rating_good', className: 'border-emerald-300 text-emerald-600 hover:bg-emerald-50', icon: 'fa-check' },
+  { rating: 3, labelKey: 'flashcard.rating_easy', className: 'border-petroleum/30 text-petroleum hover:bg-petroleum/5', icon: 'fa-rocket' },
+];
+
 export function FlashcardArena({ moduleId }) {
   const { t, locale } = useTranslation();
   const isEn = locale === 'en';
   const MODULE_FLASHCARDS = isEn ? MODULE_FLASHCARDS_EN : MODULE_FLASHCARDS_ES;
-  const cards = MODULE_FLASHCARDS[moduleId] || MODULE_FLASHCARDS[1];
+  const allCards = MODULE_FLASHCARDS[moduleId] || MODULE_FLASHCARDS[1];
+  const { rateCard, getCardStats, getDueCards, resetModule, state } = useSM2Flashcard(moduleId);
+
+  const sortedCards = useMemo(() => {
+    const due = getDueCards(allCards);
+    const reviewed = allCards.filter(c => !due.find(d => d.id === c.id));
+    reviewed.sort((a, b) => {
+      const aDate = getCardStats(a.id).nextReviewDate || '';
+      const bDate = getCardStats(b.id).nextReviewDate || '';
+      return aDate.localeCompare(bDate);
+    });
+    return [...due, ...reviewed];
+  }, [allCards, getDueCards, state]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [direction, setDirection] = useState(0);
+  const [ratedCount, setRatedCount] = useState(0);
   const [allReviewed, setAllReviewed] = useState(false);
 
-  const currentCard = cards[currentIndex];
+  const currentCard = sortedCards[currentIndex];
 
   const goToNext = useCallback(() => {
-    if (currentIndex >= cards.length - 1) {
+    if (currentIndex >= sortedCards.length - 1) {
       setAllReviewed(true);
       return;
     }
     setDirection(1);
     setIsFlipped(false);
     setCurrentIndex(prev => prev + 1);
-  }, [currentIndex, cards.length]);
+  }, [currentIndex, sortedCards.length]);
 
-  const goToPrev = useCallback(() => {
-    if (currentIndex <= 0) return;
-    setDirection(-1);
-    setIsFlipped(false);
-    setCurrentIndex(prev => prev - 1);
-  }, [currentIndex]);
+  const handleRate = useCallback((rating) => {
+    if (!currentCard) return;
+    rateCard(currentCard.id, rating);
+    setRatedCount(prev => prev + 1);
+    goToNext();
+  }, [currentCard, rateCard, goToNext]);
 
   const resetCards = useCallback(() => {
+    resetModule();
     setCurrentIndex(0);
     setIsFlipped(false);
     setDirection(0);
     setAllReviewed(false);
-  }, []);
+    setRatedCount(0);
+  }, [resetModule]);
 
   if (allReviewed) {
     return (
@@ -142,7 +166,7 @@ export function FlashcardArena({ moduleId }) {
           <Icon name="fa-check" className="text-petroleum text-3xl" aria-hidden="true" />
         </div>
         <h3 className="text-lg font-bold text-petroleum">{t('flashcard.mastered_title')}</h3>
-        <p className="text-sm text-petroleum/70 mt-1 mb-4">{t('flashcard.completed_desc', { count: cards.length })}</p>
+        <p className="text-sm text-petroleum/70 mt-1 mb-4">{t('flashcard.completed_desc', { count: allCards.length })}</p>
         <button
           onClick={resetCards}
           className="px-4 py-2 rounded-xl bg-petroleum/10 text-petroleum text-sm font-semibold hover:bg-petroleum/20 transition-colors"
@@ -154,16 +178,24 @@ export function FlashcardArena({ moduleId }) {
     );
   }
 
+  if (!currentCard) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+        <p className="text-sm text-petroleum/70">{t('flashcard.no_cards')}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-lg mx-auto">
       <div className="flex items-center justify-between text-sm text-petroleum/70 mb-4" role="status" aria-live="polite">
         <span className="flex items-center gap-1.5">
           <Icon name="fa-layer-group" className="text-corporate" aria-hidden="true" />
-          {t('flashcard.progress', { current: currentIndex + 1, total: cards.length })}
+          {t('flashcard.progress', { current: currentIndex + 1, total: sortedCards.length })}
         </span>
         <span className="flex items-center gap-1.5">
           <Icon name="fa-clock" className="text-petroleum" aria-hidden="true" />
-          {t('flashcard.remaining', { count: cards.length - currentIndex - 1 })}
+          {t('flashcard.remaining', { count: sortedCards.length - currentIndex - 1 })}
         </span>
       </div>
 
@@ -209,22 +241,21 @@ export function FlashcardArena({ moduleId }) {
       </div>
 
       {isFlipped && (
-        <div className="flex justify-center gap-3 mt-6">
-          <button
-            onClick={goToPrev}
-            disabled={currentIndex === 0}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-petroleum/20 text-petroleum text-sm font-semibold hover:bg-petroleum/5 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            <Icon name="fa-arrow-left" className="text-xs" aria-hidden="true" />
-            {t('flashcard.prev_btn')}
-          </button>
-          <button
-            onClick={goToNext}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-petroleum text-white text-sm font-semibold hover:bg-petroleum-dark transition-all"
-          >
-            {t('flashcard.next_btn')}
-            <Icon name="fa-arrow-right" className="text-xs" aria-hidden="true" />
-          </button>
+        <div className="flex flex-col items-center gap-3 mt-6">
+          <div className="flex justify-center gap-2">
+            {RATING_ACTIONS.map(({ rating, labelKey, className, icon }) => (
+              <button
+                key={rating}
+                onClick={() => handleRate(rating)}
+                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 text-xs font-semibold transition-all active:scale-[0.95] ${className}`}
+                title={t(labelKey)}
+              >
+                <Icon name={icon} className="text-xs" aria-hidden="true" />
+                {t(labelKey)}
+              </button>
+            ))}
+          </div>
+          <p className="text-[10px] text-petroleum/40">{t('flashcard.rating_hint')}</p>
         </div>
       )}
 

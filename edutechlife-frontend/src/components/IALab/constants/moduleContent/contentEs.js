@@ -29,7 +29,7 @@ const CONTENT_ES = {
       { text: "Aplicar tu oficio artesanal en estudio y trabajo", icon: "fa-rocket" },
     ],
     overviewData: {
-      title: "El Taller del Artesano Digital",
+      title: "El Artesano Digital: Ingeniería de Prompts — La Base de Toda Interacción con IA",
       description:
         "Todo artesano comienza con las herramientas básicas y, con práctica, se convierte en maestro. Aquí aprenderás a esculpir instrucciones que la IA entiende a la perfección. Desde los fundamentos hasta técnicas avanzadas que transformarán tu forma de trabajar con inteligencia artificial.",
       mission:
@@ -66,7 +66,7 @@ const CONTENT_ES = {
       { text: "Automatizar flujos de obra completos", icon: "fa-cog" },
     ],
     overviewData: {
-      title: "La Obra del Arquitecto Digital",
+      title: "El Arquitecto Digital: ChatGPT y Automatización — Construye tu Propio Ecosistema de Trabajo",
       description:
         "Bienvenido a la obra maestra de la automatización. Aquí no solo usarás ChatGPT — construirás con él. Aprenderás a diseñar prompts de sistema como si trazaras planos, a usar herramientas integradas como andamios, a crear GPTs como módulos de construcción y a conectar todo con APIs externas para levantar estructuras digitales que trabajan solas.",
       mission:
@@ -457,7 +457,7 @@ const CONTENT_ES = {
       { text: "Gestionar tu biblioteca digital con inteligencia sobrehumana", icon: "fa-folder-open" },
     ],
     overviewData: {
-      title: "Tu Laboratorio de Transformación Documental",
+      title: "El Alquimista Digital: NotebookLM — Donde tus Documentos se Convierten en Conocimiento",
       description:
         "En este módulo, te convertirás en un alquimista digital: tus PDFs, artículos y apuntes tienen un potencial oculto que ni imaginas. Aprende a extraerlo, transformarlo y compartirlo en formatos que cautivan, educan y transforman.",
       mission:
@@ -646,7 +646,7 @@ const CONTENT_ES = {
       { text: "Crear protocolos éticos que salvan reputaciones", icon: "fa-clipboard-check" },
     ],
     overviewData: {
-      title: "El Arte de la Guardia Ética",
+      title: "El Guardián Digital: Ética y Gobernanza de IA — El Sello del Profesional Responsable",
       description:
         "Cada vez que usas IA, estás tomando decisiones éticas — aunque no lo sepas. ¿Los datos que subes están protegidos? ¿El resultado es justo para todos? ¿Sabes quién es responsable si algo sale mal? Este módulo no es solo teoría: es tu entrenamiento para convertirte en un guardián de la IA.",
       mission:

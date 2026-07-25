@@ -1,3 +1,11 @@
+import {
+  Home,
+  BookOpen,
+  PencilRuler,
+  BarChart3,
+  Gamepad2,
+} from "lucide-react";
+
 export const CATEGORY_MAP = {
   inicio: "home",
   materias: "learn",
@@ -21,6 +29,7 @@ export const CATEGORIES = [
   {
     id: "home",
     icon: "🏠",
+    Icon: Home,
     label: "Inicio",
     color: "#0096C7",
     gradient: "linear-gradient(135deg, #0077B6 0%, #00B4D8 60%, #48CAE4 100%)",
@@ -31,6 +40,7 @@ export const CATEGORIES = [
   {
     id: "learn",
     icon: "📚",
+    Icon: BookOpen,
     label: "Aprender",
     color: "#06D6A0",
     gradient: "linear-gradient(135deg, #06D6A0 0%, #1B9AAA 60%, #118AB2 100%)",
@@ -41,6 +51,7 @@ export const CATEGORIES = [
   {
     id: "practice",
     icon: "✏️",
+    Icon: PencilRuler,
     label: "Practicar",
     color: "#FF6B9D",
     gradient: "linear-gradient(135deg, #EF476F 0%, #FF6B9D 55%, #FF8FA3 100%)",
@@ -51,6 +62,7 @@ export const CATEGORIES = [
   {
     id: "progress",
     icon: "📊",
+    Icon: BarChart3,
     label: "Progreso",
     color: "#FB8500",
     gradient: "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
@@ -61,6 +73,7 @@ export const CATEGORIES = [
   {
     id: "explore",
     icon: "🎮",
+    Icon: Gamepad2,
     label: "Explorar",
     color: "#9D4EDD",
     gradient: "linear-gradient(135deg, #7B2FF7 0%, #9D4EDD 55%, #C77DFF 100%)",

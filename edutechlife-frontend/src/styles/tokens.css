@@ -27,7 +27,7 @@
   /* Petróleo — color de texto/marca principal, más oscuro */
   --brand-ink: var(--color-petroleum);
   /* Azul corporativo — color primario de acción (botones, links) */
-  --brand-primary: var(--color-primary-corporate);
+  --brand-primary: var(--color-corporate);
   /* Menta — acento secundario, usado en gradientes y highlights */
   --brand-mint: var(--color-mint);
   /* Cian corporativo — usado en IALab y algunos CTAs */

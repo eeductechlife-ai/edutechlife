@@ -225,12 +225,12 @@ const RESOURCES_ES = {
   },
 
   // ============================================================================
-  // MÓDULO 3: DOMINA GEMINI
+  // MÓDULO 3: EL DETECTIVE DE DATOS — GEMINI
   // ============================================================================
-  "Introducción a Google Gemini": {
-    title: "El Despertar de la Lupa Multimodal",
+  "El Despertar del Detective Multimodal": {
+    title: "El Despertar del Detective Multimodal",
     description:
-      "Tu primera misión como detective: conocer a tu nueva arma secreta. Gemini es la IA que procesa texto, imágenes, audio y video en un solo movimiento. Una lupa. Todos los formatos.",
+      "Tu primera misión como detective: conocer a tu nueva arma secreta. Gemini es la IA que procesa texto, imágenes, audio y video en un solo movimiento. Una lupa multimodal. Todos los formatos.",
     learningObjectives: [
       "Descubrir el poder de procesar cualquier tipo de evidencia en una sola herramienta",
       "Interrogar a Gemini con fotos, documentos, audios y videos como un investigador experto",
@@ -267,8 +267,8 @@ const RESOURCES_ES = {
     ],
   },
 
-  "Razonamiento Multimodal y Grounding": {
-    title: "Grounding: La Conexión con el Mundo Real",
+  "Grounding: Cuando la Evidencia Toca Tierra": {
+    title: "Grounding: Cuando la Evidencia Toca Tierra",
     description:
       "Gemini no flota en el aire — se conecta con tus herramientas diarias. Aprende a integrarlo en Google Docs, Sheets y Gmail para multiplicar tu velocidad de investigación.",
     learningObjectives: [
@@ -308,8 +308,8 @@ const RESOURCES_ES = {
     ],
   },
 
-  "Deep Research y Fact-Checking con IA": {
-    title: "Deep Research: La Caja Negra del Detective",
+  "Deep Research: La Caja de Herramientas Forenses": {
+    title: "Deep Research: La Caja de Herramientas Forenses",
     description:
       "Los casos más impresionantes no se resuelven con suerte — se resuelven con método. Descubre cómo investigadores, marketeros, programadores y educadores usan Gemini para encontrar lo que nadie más encuentra.",
     learningObjectives: [
@@ -362,7 +362,7 @@ const RESOURCES_ES = {
   // ============================================================================
   // MÓDULO 4: EL ALQUIMISTA DEL CONOCIMIENTO — NOTEBOOKLM
   // ============================================================================
-  "¿Qué es NotebookLM y para qué sirve?": {
+  "El Alquimista de Documentos: Tu Primer Hechizo con NotebookLM": {
     title: "El Alquimista de Documentos: Tu Primer Hechizo con NotebookLM",
     description:
       "La herramienta secreta de Google para alquimistas digitales: sube tus PDFs y obtén respuestas precisas con citas textuales. Tu bibliotecario personal con superpoderes de IA.",
@@ -414,7 +414,7 @@ const RESOURCES_ES = {
     ],
   },
 
-  "Curaduría de Fuentes y Síntesis de Documentos": {
+  "El Arte de la Curaduría: Cómo Elegir y Sintetizar Fuentes": {
     title: "El Arte de la Curaduría: Cómo Elegir y Sintetizar Fuentes",
     description:
       "Convierte montañas de documentos en resúmenes, preguntas frecuentes y reportes ejecutivos que parecen obra de un equipo de analistas.",
@@ -465,7 +465,7 @@ const RESOURCES_ES = {
     ],
   },
 
-  "Audio Overviews y Gestión Documental con IA": {
+  "La Fórmula Secreta: Audio Overviews y Gestión Documental": {
     title: "La Fórmula Secreta: Audio Overviews y Gestión Documental",
     description:
       "Convierte tus apuntes en podcasts que suenan a radio profesional: dos voces IA conversan sobre tus documentos como si fueran viejos amigos.",
@@ -519,8 +519,8 @@ const RESOURCES_ES = {
   // ============================================================================
   // MÓDULO 5: ÉTICA Y PRIVACIDAD
   // ============================================================================
-  "Ética en la Inteligencia Artificial": {
-    title: "El Escudo del Guardián: Los 4 Principios Sagrados",
+  "El Voto del Guardián: Los 4 Principios Sagrados": {
+    title: "El Voto del Guardián: Los 4 Principios Sagrados",
     description:
       "Los 4 pilares que separan a los profesionales responsables de los imprudentes. Transparencia, equidad, responsabilidad y privacidad — tu armadura ética completa.",
     learningObjectives: [
@@ -571,8 +571,8 @@ const RESOURCES_ES = {
     ],
   },
 
-  "Sesgos Algorítmicos y Equidad": {
-    title: "El Espejo de la Verdad: ¿Tu IA es Justa para Todos?",
+  "El Espejo de la Verdad: ¿Tu IA es Justa?": {
+    title: "El Espejo de la Verdad: ¿Tu IA es Justa?",
     description:
       "¿Sabías que tu IA puede estar discriminando sin que lo sepas? Aprende a blindar tus datos y tus algoritmos contra los sesgos más peligrosos.",
     learningObjectives: [
@@ -588,9 +588,9 @@ const RESOURCES_ES = {
         id: "privacy-video-1",
         type: "video",
         title: "Privacidad y IA: Lo que Debes Saber",
-        url: "https://www.youtube.com/embed/ADvjzvJjx5c",
+        url: "https://www.youtube.com/embed/BoR5KjsRK9U",
         duration: "9:20",
-        thumbnail: "https://img.youtube.com/vi/ADvjzvJjx5c/maxresdefault.jpg",
+        thumbnail: "https://img.youtube.com/vi/BoR5KjsRK9U/maxresdefault.jpg",
         provider: "youtube",
         description:
           "9:20 que pueden salvar tu reputación. Descubre los riesgos de privacidad que acechan en cada herramienta de IA y cómo neutralizarlos.",
@@ -623,7 +623,7 @@ const RESOURCES_ES = {
     ],
   },
 
-  "Privacidad, Regulación y IA Responsable": {
+  "El Legado del Guardián: Navegando la Ley": {
     title: "El Legado del Guardián: Navegando la Ley",
     description:
       "Las leyes de IA están cambiando el mundo. Desde el AI Act de la UE hasta las regulaciones locales, conoce las reglas del juego y conviértete en un referente de gobernanza ética.",

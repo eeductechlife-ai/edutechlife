@@ -5,6 +5,7 @@ import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabC
 import { useIALabStore } from '../../store/ialabStore';
 import { useTranslation } from '../../i18n/I18nProvider';
 import useInfographicCompletion from '../../hooks/IALab/useInfographicCompletion';
+import ModuleNavItem from './sidebar/ModuleNavItem';
 const StudyPlannerModal = lazy(() => import('./StudyPlannerModal'));
 
 const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenProfile, onOpenHistory, onOpenHelp }) => {
@@ -139,31 +140,15 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             const isLocked = isModuleLocked(mod.id);
             const isActive = activeMod === mod.id;
             return (
-              <button key={mod.id}
-                onClick={() => { if (!isLocked) { setActiveMod(mod.id); closeMobileMenu(); } }}
-                disabled={isLocked}
-                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px] ${
-                  isActive ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm'
-                  : 'text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10'
-                }`}>
-                <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold ${
-                  isActive ? 'bg-white/20 text-white'
-                  : isLocked ? 'bg-slate-100 dark:bg-slate-700 text-slate-600'
-                  : modScore >= 80 ? 'bg-emerald-100 text-emerald-600'
-                  : 'bg-petroleum/8 dark:bg-petroleum/20 text-petroleum dark:text-petroleum'
-                }`}>{mod.id}</div>
-                <div className="flex-1 min-w-0 text-left">
-                  <p className={`truncate ${isActive ? 'text-white' : ''}`}>{mod.title}</p>
-                  {modScore > 0 && (
-                    <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden mt-1">
-                      <div className={`h-full rounded-full transition-all duration-500 ${isActive ? 'bg-white/60' : 'bg-corporate'}`}
-                           style={{ width: `${modScore}%` }} />
-                    </div>
-                  )}
-                </div>
-                {isLocked && <Icon name="fa-lock" className="text-xs text-slate-600" />}
-                {!isLocked && modScore >= 80 && <Icon name="fa-check" className="text-xs text-emerald-500" />}
-              </button>
+              <ModuleNavItem
+                key={mod.id}
+                mod={mod}
+                isActive={isActive}
+                isLocked={isLocked}
+                score={modScore}
+                variant="expanded"
+                onClick={(id) => { setActiveMod(id); closeMobileMenu(); }}
+              />
             );
           })}
         </div>

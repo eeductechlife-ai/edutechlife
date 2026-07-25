@@ -146,7 +146,9 @@ const IALabSignUpPage = ({ onBack }) => {
               {/* Clerk SignUp Component - Premium */}
               <div className="w-full min-h-[500px] sm:min-h-[550px] py-6 sm:py-8">
                 <SignUp
+                  routing="virtual"
                   signInUrl="/login"
+                  signUpUrl="/sign-up/ialab"
                   afterSignUpUrl="/ialab"
                   fallbackRedirectUrl={returnTo}
                   localization={locale === "en" ? enUS : esES}

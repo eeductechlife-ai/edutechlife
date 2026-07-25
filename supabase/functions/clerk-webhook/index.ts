@@ -77,7 +77,9 @@ serve(async (req) => {
     const unsafeMetadata = userData.unsafe_metadata || {}
     const platform = unsafeMetadata.platform || ''
     const userType = unsafeMetadata.user_type || 'student'
-    const role = platform === 'smartboard' ? 'smartboard' : userType
+    const role = platform === 'smartboard' ? 'smartboard' :
+                 platform === 'ialab' ? 'ialab' :
+                 userType
 
     // Sincronizar publicMetadata con Clerk via API (si hay secret key configurada)
     if (clerkSecretKey && eventType === 'user.created') {

@@ -36,6 +36,10 @@ export const I18nProvider = ({ children }) => {
   const [translations, setTranslations] = useState(null);
 
   useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
+  useEffect(() => {
     localeModules[locale]()
       .then(mod => setTranslations(mod.default || mod))
       .catch(() => setTranslations(null));
@@ -58,7 +62,20 @@ export const I18nProvider = ({ children }) => {
     return interpolate(value, params);
   }, [translations, locale]);
 
-  const value = useMemo(() => ({ locale, setLocale, t }), [locale, setLocale, t]);
+  const pluralize = useCallback((key, count, params) => {
+    if (!translations) return key;
+    const pluralKey = count === 1 ? key : `${key}_plural`;
+    const value = translations[pluralKey];
+    if (value === undefined) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`[i18n] Missing translation key: ${pluralKey} for locale: ${locale}`);
+      }
+      return `${key}:${count}`;
+    }
+    return interpolate(value, { ...params, count });
+  }, [translations, locale]);
+
+  const value = useMemo(() => ({ locale, setLocale, t, pluralize }), [locale, setLocale, t, pluralize]);
 
   return (
     <I18nContext.Provider value={value}>

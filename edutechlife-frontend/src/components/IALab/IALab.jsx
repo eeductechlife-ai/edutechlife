@@ -11,7 +11,7 @@ import {
   useLayoutEffect,
   memo,
 } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useClerk } from "@clerk/react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
@@ -120,7 +120,11 @@ const IALabContent = memo(function () {
   const [isForumOpen, setIsForumOpen] = useState(false);
   const [toast, setToast] = useState(null);
 
-  const [viewSection, setViewSection] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewSection = searchParams.get('tab') || null;
+  const setViewSection = useCallback((tabId) => {
+    setSearchParams(tabId ? { tab: tabId } : {}, { replace: true });
+  }, [setSearchParams]);
   const [examRefreshKey, setExamRefreshKey] = useState(0);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);

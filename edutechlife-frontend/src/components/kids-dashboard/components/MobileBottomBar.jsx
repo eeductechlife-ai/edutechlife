@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Lock } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { CATEGORY_MAP, CATEGORIES, PREMIUM_TABS } from "../kidsDashboardConfig";
 import { glow } from "../smartboardTheme";
@@ -61,17 +62,20 @@ const MobileBottomBar = ({
               }
             >
               <motion.span
-                className="text-xl"
-                animate={isActive ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+                className="flex items-center justify-center"
+                animate={isActive ? { scale: [1, 1.18, 1] } : { scale: 1 }}
                 transition={{ duration: 0.4 }}
               >
-                {cat.icon}
+                <cat.Icon
+                  className="w-[22px] h-[22px]"
+                  strokeWidth={isActive ? 2.6 : 2.2}
+                />
               </motion.span>
               <span className="text-[9px] font-bold whitespace-nowrap">
                 {cat.label}
               </span>
               {locked && (
-                <span className="text-[8px] absolute top-0.5 right-1">🔒</span>
+                <Lock className="w-2.5 h-2.5 absolute top-0.5 right-1 opacity-70" />
               )}
             </motion.button>
           );

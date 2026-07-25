@@ -1,26 +1,30 @@
 import React, { forwardRef, useState, useId } from 'react';
 import PropTypes from 'prop-types';
 
-const TooltipIcon = forwardRef(function TooltipIcon({ label, children, premium }, ref) {
+const TooltipIcon = forwardRef(function TooltipIcon({ label, children, premium, decorative }, ref) {
   const [isFocused, setIsFocused] = useState(false);
   const tipId = useId();
+  const wrapperProps = decorative ? {
+    ref,
+    className: "relative group/tip flex items-center justify-center",
+  } : {
+    ref,
+    className: "relative group/tip flex items-center justify-center",
+    tabIndex: 0,
+    role: "button",
+    "aria-describedby": tipId,
+    onFocus: () => setIsFocused(true),
+    onBlur: () => setIsFocused(false),
+    onKeyDown: (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const interactive = e.currentTarget.querySelector('button, [role="button"], [tabindex]:not([tabindex="-1"])');
+        interactive?.click();
+      }
+    },
+  };
   return (
-    <div
-      ref={ref}
-      className="relative group/tip flex items-center justify-center"
-      tabIndex={0}
-      role="button"
-      aria-describedby={tipId}
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          const interactive = e.currentTarget.querySelector('button, [role="button"], [tabindex]:not([tabindex="-1"])');
-          interactive?.click();
-        }
-      }}
-    >
+    <div {...wrapperProps}>
       {children}
       {premium ? (
         <div id={tipId} className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-3 py-2 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm border border-petroleum/20 dark:border-petroleum/40 rounded-xl opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible group-focus-within/tip:opacity-100 group-focus-within/tip:visible transition-all duration-200 whitespace-nowrap z-[60] shadow-xl shadow-petroleum/10 pointer-events-none min-w-[140px]" role="tooltip">
@@ -40,6 +44,7 @@ const TooltipIcon = forwardRef(function TooltipIcon({ label, children, premium }
 TooltipIcon.propTypes = {
   label: PropTypes.node,
   premium: PropTypes.bool,
+  decorative: PropTypes.bool,
 };
 
 export default TooltipIcon;

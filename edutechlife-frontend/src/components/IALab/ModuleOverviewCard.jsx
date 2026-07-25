@@ -16,6 +16,7 @@ import { useIALabProgressContext } from "../../context/IALabContext";
 import { useIALabStore } from "../../store/ialabStore";
 import { useIALabProgress } from "../../hooks/IALab/useIALabProgress";
 import { getResourcesForTopic } from "./constants/moduleResources";
+import { getAllLessons } from "../../data/ialab";
 import { useTranslation } from "../../i18n/I18nProvider";
 import ModuleHeaderSection from "./module/ModuleHeaderSection";
 import ModuleBookmarkFilter from "./module/ModuleBookmarkFilter";
@@ -45,7 +46,6 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   const [expandedTopic, setExpandedTopic] = useState(0);
   const [viewedIds, setViewedIds] = useState([]);
 
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [filterType, setFilterType] = useState("all");
   const [justCompletedId, setJustCompletedId] = useState(null);
   const storeToggleBookmark = useIALabStore((s) => s.toggleBookmark);
@@ -97,36 +97,9 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     onToggleForumRef.current = onToggleForum;
   }, [onToggleForum]);
 
-  const module1Data = {
-    badge: {
-      duration: "2h",
-    },
-    icon: "fa-terminal",
-    title: t("ialab.module_overview.module1_title"),
-    description: t("ialab.module_overview.module1_description"),
-    missionIcon: "fa-bullseye",
-    mission: t("ialab.module_overview.module1_mission"),
-    topics: [
-      {
-        title: t("ialab.module_overview.topic_1_title"),
-        icon: "fa-brain",
-        resources: 2,
-        duration: "20 min",
-      },
-      {
-        title: t("ialab.module_overview.topic_2_title"),
-        icon: "fa-comments",
-        resources: 3,
-        duration: "20 min",
-      },
-    ],
-  };
-
-  const isModule1 = activeMod === 1;
   const dynamicContent = moduleContent[activeMod]?.overviewData;
 
   const moduleData = useMemo(() => {
-    if (isModule1) return module1Data;
     return {
       badge: {
         duration: modules[activeMod - 1]?.duration || "2h",
@@ -138,7 +111,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
       mission: dynamicContent?.mission || "",
       topics: dynamicContent?.topics || [],
     };
-  }, [isModule1, activeMod, modules, dynamicContent]);
+  }, [activeMod, modules, dynamicContent]);
 
   const bookmarkedResources = useMemo(() => {
     const result = [];
@@ -335,28 +308,35 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
         <motion.div
           whileHover={prefersReducedMotion ? {} : { scale: 1.01 }}
           transition={{ duration: 0.2 }}
-          className="relative z-10 bg-white rounded-[calc(2rem-1.5px)] shadow-sm p-5 md:p-8 overflow-hidden dark:bg-slate-800"
+          className="relative z-10 bg-white rounded-[calc(2rem-1.5px)] shadow-sm p-4 md:p-6 overflow-hidden dark:bg-slate-800"
         >
 
-        {/* Contenido principal con icono destacado */}
-        <div className="flex flex-col md:flex-row gap-3 items-start">
-          {/* Icono destacado - Izquierda */}
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-petroleum to-petroleum-dark shadow-sm flex items-center justify-center text-white flex-shrink-0">
-            <Icon
-              name={moduleData.icon}
-              className="text-xl"
-              aria-hidden="true"
-            />
+        {/* Contenido principal */}
+        <div className="flex flex-col gap-3">
+          {/* Badges superior derecha */}
+          <div className="flex items-center justify-end gap-2">
+            <span className="px-3 py-1.5 bg-gradient-to-br from-petroleum/10 to-corporate/5 text-petroleum text-[10px] font-bold rounded-lg border border-petroleum/10 shadow-sm">
+              {moduleData.badge.duration}
+            </span>
+            {(() => {
+              const prog = lessonProgress[activeMod] || {};
+              const total = (getAllLessons(locale)[activeMod] || []).length;
+              const done = Object.values(prog).filter(
+                (s) => s === "completed",
+              ).length;
+              if (!total) return null;
+              return (
+                <span
+                  className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border ${done === total ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-blue-50 text-blue-700 border-blue-200"}`}
+                >
+                  {t("ialab.module.lessons", { done, total })}
+                </span>
+              );
+            })()}
           </div>
 
-          {/* Texto principal */}
-          <div className="flex-1">
-            <ModuleHeaderSection
+          <ModuleHeaderSection
               moduleData={moduleData}
-              activeMod={activeMod}
-              isDescriptionExpanded={isDescriptionExpanded}
-              setIsDescriptionExpanded={setIsDescriptionExpanded}
-              lessonProgress={lessonProgress}
             />
 
             {allResourcesOrdered.length > 0 &&
@@ -367,7 +347,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                 ).length;
                 const pct = Math.round((viewed / total) * 100);
                 return (
-                  <div className="mt-4 mb-1">
+                  <div>
                     <div className="flex items-center justify-between mb-1.5">
                       <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                         <Icon
@@ -391,7 +371,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
               })()}
 
             {/* Temas en columna única - Tarjetas premium */}
-            <div className="flex flex-col gap-3 mt-4">
+            <div className="flex flex-col gap-3">
               {bookmarkedResources.length > 0 && (
                 <ModuleBookmarkFilter
                   bookmarkedResources={bookmarkedResources}
@@ -428,7 +408,6 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                 t={t}
               />
             </div>
-          </div>
         </div>
 
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-[calc(2rem-1.5px)]" />

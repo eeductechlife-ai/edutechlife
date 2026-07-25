@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import TooltipIcon from './SidebarTooltipIcon';
+import ModuleNavItem from './ModuleNavItem';
 
 const formatPoints = (pts) => {
   if (pts >= 1000) return `${(pts / 1000).toFixed(1).replace('.0', '')}k`;
@@ -32,7 +33,7 @@ const SidebarCollapsed = ({
       </div>
     </div>
 
-    <TooltipIcon label={t('sidebar.completed_pct', { pct: Math.round(courseProgress) })} premium>
+    <TooltipIcon decorative label={t('sidebar.completed_pct', { pct: Math.round(courseProgress) })} premium>
       <div className="w-full h-[60px] flex items-center justify-center flex-shrink-0 relative group" role="progressbar" aria-valuenow={Math.round(courseProgress)} aria-valuemin="0" aria-valuemax="100">
         <div className="relative w-12 h-12 transition-transform duration-200 group-hover:scale-110 group-active:scale-95">
           <svg className="w-12 h-12 -rotate-90" viewBox="0 0 120 120">
@@ -63,60 +64,39 @@ const SidebarCollapsed = ({
 
     <div className="flex flex-col items-center gap-1.5 w-full">
 
-      <TooltipIcon label={t('sidebar.level_label', { level: getLevel() })} premium>
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-          className="w-full min-h-[48px] rounded-xl bg-white/75 dark:bg-slate-700/35 backdrop-blur-md border border-petroleum/15 dark:border-petroleum/25 shadow-[0_2px_8px_rgba(0,75,99,0.06),inset_0_1px_0_rgba(255,255,255,0.12)] flex flex-col items-center justify-center gap-0 flex-shrink-0 group"
-        >
-          <div className="flex flex-col items-center justify-center gap-0">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm">
-              <Icon name="fa-graduation-cap" className="text-white text-xs" aria-hidden="true" />
-            </div>
-            <span className="text-[10px] font-bold text-petroleum dark:text-[#4DA8C4] mt-0.5 leading-tight">{t('sidebar.level', { level: getLevel() })}</span>
+      <TooltipIcon decorative label={t('sidebar.level_label', { level: getLevel() })} premium>
+        <div className="flex flex-col items-center gap-0">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm">
+            <Icon name="fa-graduation-cap" className="text-white text-xs" aria-hidden="true" />
           </div>
-        </motion.div>
+          <span className="text-[10px] font-bold text-petroleum dark:text-[#4DA8C4] mt-0.5 leading-tight">{t('sidebar.level', { level: getLevel() })}</span>
+        </div>
       </TooltipIcon>
 
-      <TooltipIcon label={`${t('sidebar.streak_days', { streak })}${isStreakAtRisk() && streak > 0 ? ` — ${t('sidebar.streak_study_today')}` : ''}`} premium>
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-          className="w-full min-h-[48px] rounded-xl bg-white/75 dark:bg-slate-700/35 backdrop-blur-md border border-petroleum/15 dark:border-petroleum/25 shadow-[0_2px_8px_rgba(0,75,99,0.06),inset_0_1px_0_rgba(255,255,255,0.12)] flex flex-col items-center justify-center gap-0 flex-shrink-0 relative group"
-        >
-          <div className="flex flex-col items-center justify-center gap-0">
-            <motion.div
-              animate={streak > 0 ? { scale: [1, 1.08, 1] } : {}}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-sm">
-                <Icon name="fa-fire" className="text-white text-xs" aria-hidden="true" />
-              </div>
-            </motion.div>
-            <span className={`text-[10px] font-bold mt-0.5 leading-tight ${streak >= 3 ? 'text-orange-600' : 'text-slate-500'}`}>{streak}</span>
-          </div>
+      <TooltipIcon decorative label={`${t('sidebar.streak_days', { streak })}${isStreakAtRisk() && streak > 0 ? ` — ${t('sidebar.streak_study_today')}` : ''}`} premium>
+        <div className="flex flex-col items-center gap-0">
+          <motion.div
+            animate={streak > 0 ? { scale: [1, 1.08, 1] } : {}}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-sm">
+              <Icon name="fa-fire" className="text-white text-xs" aria-hidden="true" />
+            </div>
+          </motion.div>
+          <span className={`text-[10px] font-bold mt-0.5 leading-tight ${streak >= 3 ? 'text-orange-600' : 'text-slate-500'}`}>{streak}</span>
           {isStreakAtRisk() && streak > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+            <span className="absolute top-0.5 right-0 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
           )}
-        </motion.div>
+        </div>
       </TooltipIcon>
 
-      <TooltipIcon label={t('sidebar.points_accumulated', { points: formatPoints(getTotalPoints()) })} premium>
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-          className="w-full min-h-[48px] rounded-xl bg-white/75 dark:bg-slate-700/35 backdrop-blur-md border border-petroleum/15 dark:border-petroleum/25 shadow-[0_2px_8px_rgba(0,75,99,0.06),inset_0_1px_0_rgba(255,255,255,0.12)] flex flex-col items-center justify-center gap-0 flex-shrink-0 group"
-        >
-          <div className="flex flex-col items-center justify-center gap-0">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm">
-              <Icon name="fa-award" className="text-white text-xs" aria-hidden="true" />
-            </div>
-            <span className="text-[10px] font-bold text-petroleum dark:text-[#4DA8C4] mt-0.5 leading-tight">{formatPoints(getTotalPoints())}</span>
+      <TooltipIcon decorative label={t('sidebar.points_accumulated', { points: formatPoints(getTotalPoints()) })} premium>
+        <div className="flex flex-col items-center gap-0">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm">
+            <Icon name="fa-award" className="text-white text-xs" aria-hidden="true" />
           </div>
-        </motion.div>
+          <span className="text-[10px] font-bold text-petroleum dark:text-[#4DA8C4] mt-0.5 leading-tight">{formatPoints(getTotalPoints())}</span>
+        </div>
       </TooltipIcon>
 
     </div>
@@ -126,18 +106,18 @@ const SidebarCollapsed = ({
       <div className="absolute w-1 h-1 rounded-full bg-petroleum/30 dark:bg-petroleum/50" />
     </div>
 
-    <TooltipIcon label={t('sidebar.modules')}>
+    <TooltipIcon decorative label={t('sidebar.modules')}>
       <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm flex-shrink-0">
         <Icon name="fa-layer-group" className="text-white text-[11px]" aria-hidden="true" />
       </div>
     </TooltipIcon>
 
+    <h2 className="sr-only">{t('sidebar.modules')}</h2>
     <div className="flex flex-col gap-1 w-full" role="list">
       {modules.map((mod) => {
         const locked = isModuleLocked(mod.id);
         const isActive = activeMod === mod.id;
         const modScore = calculateModuleScore(mod.id);
-        const completed = modScore >= 80 && !locked;
         return (
           <div key={mod.id} role="listitem">
             <TooltipIcon
@@ -154,31 +134,14 @@ const SidebarCollapsed = ({
               </div>
             }
           >
-            <motion.button
-              onClick={() => !locked && goToModule(mod.id)}
-              disabled={locked}
-              whileHover={locked ? {} : { scale: 1.05 }}
-              whileTap={locked ? {} : { scale: 0.95 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-              className={`relative w-full min-h-[44px] rounded-lg flex items-center justify-center gap-2 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 flex-shrink-0 ${
-                isActive
-                  ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-[0_4px_12px_rgba(0,75,99,0.25)]'
-                  : 'text-petroleum/50 dark:text-slate-500 hover:text-petroleum dark:hover:text-[#4DA8C4]'
-              } ${locked ? 'opacity-35 cursor-not-allowed' : 'cursor-pointer'}`}
-              aria-current={isActive ? 'page' : undefined}
-              aria-label={`${mod.title}${locked ? ` (${t('sidebar.locked')})` : ''}`}
-            >
-              {isActive && (
-                <motion.div layoutId="activeModuleBar" className="absolute -left-1.5 w-[3px] h-5 rounded-full bg-gradient-to-b from-petroleum-dark to-corporate shadow-sm" />
-              )}
-              <span className="text-base font-extrabold">{mod.id}</span>
-              {locked && <Icon name="fa-lock" className="text-xs text-petroleum/40 dark:text-slate-500" aria-hidden="true" />}
-              {completed && (
-                <div className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 flex items-center justify-center shadow-sm ring-1 ring-white dark:ring-slate-800">
-                  <Icon name="fa-check" className="text-[6px] text-white" aria-hidden="true" />
-                </div>
-              )}
-            </motion.button>
+            <ModuleNavItem
+              mod={mod}
+              isActive={isActive}
+              isLocked={locked}
+              score={modScore}
+              variant="compact"
+              onClick={goToModule}
+            />
           </TooltipIcon>
           </div>
         );

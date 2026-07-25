@@ -11,6 +11,7 @@ import DaniTutorChat from "./daniTutorChat";
 import PremiumSidebar from "./components/PremiumSidebar";
 import MobileBottomBar from "./components/MobileBottomBar";
 import CinematicContent from "./components/CinematicContent";
+import { Bot, Flame, Gem } from "lucide-react";
 import { CATEGORIES, TOP_BAR_LABELS } from "./kidsDashboardConfig";
 import { SB_GRADIENTS, glow } from "./smartboardTheme";
 
@@ -202,6 +203,7 @@ const SmartBoardKidsDashboard = () => {
               const activeCat = CATEGORIES.find((c) =>
                 c.tabs.includes(activeTab),
               );
+              const ActiveIcon = activeCat?.Icon || Bot;
               return (
                 <div className="flex items-center gap-3">
                   <motion.span
@@ -209,19 +211,26 @@ const SmartBoardKidsDashboard = () => {
                     initial={{ scale: 0.6, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: "spring", damping: 14 }}
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-lg flex-shrink-0"
+                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0"
                     style={{
                       background: activeCat?.gradient || SB_GRADIENTS.brand,
-                      boxShadow: glow(activeCat?.glowColor || "#00B4D8", 0.4),
+                      boxShadow: `${glow(activeCat?.glowColor || "#00B4D8", 0.4)}, inset 0 1px 0 rgba(255,255,255,0.35)`,
                     }}
                   >
-                    {activeCat?.icon}
+                    <ActiveIcon className="w-[21px] h-[21px]" strokeWidth={2.3} />
                   </motion.span>
-                  <h1
-                    className={`text-xl font-black tracking-tight transition-colors duration-500 ${darkMode ? "text-white" : "text-[#00303F]"}`}
-                  >
-                    {TOP_BAR_LABELS[activeTab] || activeTab}
-                  </h1>
+                  <div className="leading-none">
+                    <span
+                      className={`block text-[10px] font-black uppercase tracking-[0.14em] mb-0.5 ${darkMode ? "text-[#5C7386]" : "text-[#93A6B2]"}`}
+                    >
+                      {activeCat?.label}
+                    </span>
+                    <h1
+                      className={`text-xl font-black tracking-tight transition-colors duration-500 ${darkMode ? "text-white" : "text-[#00303F]"}`}
+                    >
+                      {TOP_BAR_LABELS[activeTab] || activeTab}
+                    </h1>
+                  </div>
                 </div>
               );
             })()}
