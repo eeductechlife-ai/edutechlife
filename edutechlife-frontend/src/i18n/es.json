@@ -3889,5 +3889,9 @@
   "analytics.week_fri": "Vie",
   "analytics.week_sat": "Sáb",
   "analytics.week_sun": "Dom",
-  "analytics.session": "Sesión"
+  "analytics.session": "Sesión",
+  "flashcards.placeholder": "Ej: Fotosíntesis, Verbos en inglés, Tabla periódica...",
+  "calendar.activity_title_placeholder": "Título de la actividad...",
+  "calendar.activity_desc_placeholder": "Descripción (opcional)...",
+  "dani.chat_placeholder": "Ej: No entiendo la parte de las fracciones..."
 }
