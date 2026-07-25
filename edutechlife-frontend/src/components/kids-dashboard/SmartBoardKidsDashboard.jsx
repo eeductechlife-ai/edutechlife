@@ -4,6 +4,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useClerk } from "@clerk/react";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { useA11y } from "../../hooks/useA11y";
+import "../../styles/a11y.css";
 import ParticlesBackground from "./ParticlesBackground";
 import DaniTutorChat from "./daniTutorChat";
 import PremiumSidebar from "./components/PremiumSidebar";
@@ -13,6 +15,7 @@ import { CATEGORIES, TOP_BAR_LABELS } from "./kidsDashboardConfig";
 
 const SmartBoardKidsDashboard = () => {
   const { t } = useTranslation();
+  const { reducedMotion, highContrast, getAnimationDuration } = useA11y();
   const [activeTab, setActiveTab] = useState("inicio");
   useEffect(() => {
     try {
@@ -306,6 +309,7 @@ const SmartBoardKidsDashboard = () => {
               setShowDaniReminder(false);
               setIsDaniOpen(true);
             }}
+            aria-label={t("smartboard.dani_reminder_open")}
             className="fixed bottom-24 md:bottom-6 left-6 z-50 flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl shadow-xl cursor-pointer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -314,6 +318,7 @@ const SmartBoardKidsDashboard = () => {
               className="text-xl"
               animate={{ rotate: [0, -10, 10, -10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+              aria-hidden="true"
             >
               🤖
             </motion.span>
@@ -328,6 +333,7 @@ const SmartBoardKidsDashboard = () => {
                 e.stopPropagation();
                 setShowDaniReminder(false);
               }}
+              aria-label={t("smartboard.close_reminder")}
               className="text-white/50 hover:text-white text-sm ml-2"
             >
               ✕

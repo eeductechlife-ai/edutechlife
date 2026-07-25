@@ -3496,11 +3496,6 @@
   "header.light_mode": "Activate light mode",
   "header.dark_mode": "Activate dark mode",
   "header.notifications_forum": "{count} forum notifications",
-  "ialab.module_overview.module1_title": "The Digital Artisan's Workshop",
-  "ialab.module_overview.module1_description": "Every artisan starts with basic tools and, with practice, becomes a master. Here you'll learn to sculpt instructions that AI understands perfectly. From fundamentals to advanced techniques that will transform how you work with artificial intelligence.",
-  "ialab.module_overview.module1_mission": "Your mission as an artisan: complete each lesson and multimedia resource (videos, guides, and labs). Every tool you master brings you 20% closer to your certification. Precise instructions are your quality seal!",
-  "ialab.module_overview.topic_1_title": "The Artisan's Foundations: What is Generative AI?",
-  "ialab.module_overview.topic_2_title": "The Artisan's Chisel: What is a Prompt?",
   "ialab.module_info.objective": "Develop ",
   "ialab.module_info.objective_highlight": "prompt engineering",
   "ialab.module_info.objective_suffix": " skills to obtain precise AI results in real contexts.",
@@ -3854,5 +3849,10 @@
   "dani.topic_recent": "Recent topics:",
   "dani.chart_title": "Chart",
   "dani.video_title": "Video",
-  "dani.empty_chat": "Start a conversation! Ask me anything about your studies."
+  "dani.empty_chat": "Start a conversation! Ask me anything about your studies.",
+  "smartboard.habeas_parent_email_required": "Guardian email is required",
+  "smartboard.habeas_parent_email_invalid": "Invalid email. Please check and try again",
+  "smartboard.talk_dani": "Talk to Dani",
+  "smartboard.dani_reminder_open": "Dani wants to help you. Open chat",
+  "smartboard.close_reminder": "Close reminder"
 }

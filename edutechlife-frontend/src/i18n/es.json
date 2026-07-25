@@ -3496,11 +3496,6 @@
   "header.light_mode": "Activar modo claro",
   "header.dark_mode": "Activar modo oscuro",
   "header.notifications_forum": "{count} notificaciones del foro",
-  "ialab.module_overview.module1_title": "El Taller del Artesano Digital",
-  "ialab.module_overview.module1_description": "Todo artesano comienza con las herramientas básicas y, con práctica, se convierte en maestro. Aquí aprenderás a esculpir instrucciones que la IA entiende a la perfección. Desde los fundamentos hasta técnicas avanzadas que transformarán tu forma de trabajar con inteligencia artificial.",
-  "ialab.module_overview.module1_mission": "Tu misión como artesano: completa cada lección y recurso multimedia (videos, guías y laboratorios). Cada herramienta que domines te acerca un 20% más a tu certificación. ¡Las instrucciones precisas son tu sello de calidad!",
-  "ialab.module_overview.topic_1_title": "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?",
-  "ialab.module_overview.topic_2_title": "El Cincel del Artesano: ¿Qué es un Prompt?",
   "ialab.module_info.objective": "Desarrolla habilidades de ",
   "ialab.module_info.objective_highlight": "prompt engineering",
   "ialab.module_info.objective_suffix": " para obtener resultados precisos de la IA en contextos reales.",
@@ -3854,5 +3849,10 @@
   "dani.topic_recent": "Recientes:",
   "dani.chart_title": "Gráfico",
   "dani.video_title": "Video",
-  "dani.empty_chat": "¡Empieza una conversación! Pregúntame lo que quieras sobre tus estudios."
+  "dani.empty_chat": "¡Empieza una conversación! Pregúntame lo que quieras sobre tus estudios.",
+  "smartboard.habeas_parent_email_required": "Email del acudiente requerido",
+  "smartboard.habeas_parent_email_invalid": "Email inválido. Por favor, verifica y intenta de nuevo",
+  "smartboard.talk_dani": "Hablar con Dani",
+  "smartboard.dani_reminder_open": "Dani quiere ayudarte. Abre el chat",
+  "smartboard.close_reminder": "Cerrar recordatorio"
 }
