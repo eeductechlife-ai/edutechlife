@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { Sun, CloudSun, Moon, Gem, Eye, Ear, Zap, Target, Bot } from 'lucide-react';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
 import DaniAvatar3D from './DaniAvatar3D';
 import { useNavigate } from 'react-router-dom';
@@ -16,19 +17,26 @@ const HeroSection = memo(() => {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return '¡Buenos días! ☀️';
-    if (hour < 18) return '¡Buenas tardes! 🌤';
-    return '¡Buenas noches! 🌙';
+    if (hour < 12) return { text: '¡Buenos días!', Icon: Sun };
+    if (hour < 18) return { text: '¡Buenas tardes!', Icon: CloudSun };
+    return { text: '¡Buenas noches!', Icon: Moon };
   };
 
   const getVAKMessage = () => {
-    if (!vakResult) return 'Descubre tu estilo de aprendizaje';
+    if (!vakResult)
+      return { label: 'Descubre tu estilo de aprendizaje', Icon: Target };
     const style = vakResult.predominantStyle;
-    if (style === 'visual') return 'Tu superpoder es la VISIÓN 👁️';
-    if (style === 'auditivo') return 'Tu superpoder es el OÍDO 👂';
-    if (style === 'kinestésico') return 'Tu superpoder es el MOVIMIENTO 🏃';
-    return 'Tienes un estilo único 🎯';
+    if (style === 'visual')
+      return { label: 'Tu superpoder es la VISIÓN', Icon: Eye };
+    if (style === 'auditivo')
+      return { label: 'Tu superpoder es el OÍDO', Icon: Ear };
+    if (style === 'kinestésico')
+      return { label: 'Tu superpoder es el MOVIMIENTO', Icon: Zap };
+    return { label: 'Tienes un estilo único', Icon: Target };
   };
+
+  const greeting = getGreeting();
+  const vak = getVAKMessage();
 
   const floatAnim = reduce
     ? {}
@@ -115,7 +123,8 @@ const HeroSection = memo(() => {
             transition={{ delay: 0.5 }}
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white/90 text-xs md:text-sm font-semibold mb-3"
           >
-            {getGreeting()}
+            <greeting.Icon className="w-4 h-4" strokeWidth={2.4} />
+            {greeting.text}
           </motion.span>
 
           <motion.h2
@@ -138,9 +147,12 @@ const HeroSection = memo(() => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.7 }}
-            className="text-white/90 text-lg md:text-xl font-medium mb-6"
+            className="flex items-center justify-center md:justify-start gap-2.5 text-white/90 text-lg md:text-xl font-medium mb-6"
           >
-            {getVAKMessage()}
+            <span className="w-8 h-8 rounded-xl flex items-center justify-center bg-white/18 text-white flex-shrink-0">
+              <vak.Icon className="w-5 h-5" strokeWidth={2.4} />
+            </span>
+            {vak.label}
           </motion.p>
 
           {/* Quick Stats — glass chips with glow */}
@@ -154,14 +166,17 @@ const HeroSection = memo(() => {
               className="flex items-center gap-2.5 pl-2 pr-4 py-2 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25"
               style={{ boxShadow: glow(SB_COLORS.gold, 0.35) }}
             >
-              <span className="w-9 h-9 rounded-xl flex items-center justify-center text-lg bg-white/20">
-                💎
+              <span
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-white"
+                style={{ background: SB_GRADIENTS.gold, color: '#5A3A00' }}
+              >
+                <Gem className="w-5 h-5" strokeWidth={2.4} />
               </span>
               <span className="leading-tight text-left">
-                <span className="block text-white font-black text-lg">
+                <span className="block text-white font-black text-lg tabular-nums">
                   {totalPoints.toLocaleString()}
                 </span>
-                <span className="block text-white/70 text-[11px] font-semibold -mt-0.5">
+                <span className="block text-white/70 text-[10px] font-bold uppercase tracking-wider -mt-0.5">
                   puntos
                 </span>
               </span>
@@ -172,14 +187,17 @@ const HeroSection = memo(() => {
                 className="flex items-center gap-2.5 pl-2 pr-4 py-2 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25"
                 style={{ boxShadow: glow(SB_COLORS.cyan, 0.35) }}
               >
-                <span className="w-9 h-9 rounded-xl flex items-center justify-center text-lg bg-white/20">
-                  🧠
+                <span
+                  className="w-9 h-9 rounded-xl flex items-center justify-center text-white"
+                  style={{ background: 'linear-gradient(135deg, #9D4EDD, #C77DFF)' }}
+                >
+                  <vak.Icon className="w-5 h-5" strokeWidth={2.4} />
                 </span>
                 <span className="leading-tight text-left">
                   <span className="block text-white font-black text-base">
                     {vakResult.predominantStyle.toUpperCase()}
                   </span>
-                  <span className="block text-white/70 text-[11px] font-semibold -mt-0.5">
+                  <span className="block text-white/70 text-[10px] font-bold uppercase tracking-wider -mt-0.5">
                     tu estilo
                   </span>
                 </span>
@@ -203,11 +221,12 @@ const HeroSection = memo(() => {
             style={{ background: SB_GRADIENTS.gold, boxShadow: glow(SB_COLORS.amber, 0.5) }}
           >
             <motion.span
-              className="text-2xl"
+              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ background: 'rgba(1,26,36,0.12)' }}
               animate={reduce ? {} : { rotate: [0, -12, 12, -12, 0] }}
               transition={{ duration: 1.6, repeat: Infinity, repeatDelay: 2.5 }}
             >
-              🤖
+              <Bot className="w-6 h-6" strokeWidth={2.3} />
             </motion.span>
             <span className="text-left">
               <span className="block font-black">Hablar conmigo</span>

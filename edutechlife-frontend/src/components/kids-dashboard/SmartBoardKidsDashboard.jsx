@@ -251,6 +251,7 @@ const SmartBoardKidsDashboard = () => {
                 }}
               >
                 <motion.span
+                  className="flex items-center justify-center"
                   animate={{ rotate: [0, -10, 10, -10, 0] }}
                   transition={{
                     duration: 1.5,
@@ -258,7 +259,7 @@ const SmartBoardKidsDashboard = () => {
                     repeatDelay: 3,
                   }}
                 >
-                  🤖
+                  <Bot className="w-[18px] h-[18px]" strokeWidth={2.4} />
                 </motion.span>
                 <span className="hidden md:block">
                   {t("smartboard.talk_dani")}
@@ -282,11 +283,14 @@ const SmartBoardKidsDashboard = () => {
                 whileHover={{ scale: 1.03, y: -1 }}
                 title={t("smartboard.streak_title")}
               >
-                <span className="w-7 h-7 rounded-lg flex items-center justify-center text-sm bg-white/40">
-                  🔥
+                <span
+                  className="w-7 h-7 rounded-lg flex items-center justify-center text-white"
+                  style={{ background: "linear-gradient(135deg, #FB8500, #F3722C)" }}
+                >
+                  <Flame className="w-4 h-4" strokeWidth={2.4} />
                 </span>
                 <span className="leading-none">
-                  <span className="block text-sm font-black text-[#FB8500]">
+                  <span className="block text-sm font-black text-[#FB8500] tabular-nums">
                     {streak.current}
                   </span>
                   <span
@@ -309,12 +313,15 @@ const SmartBoardKidsDashboard = () => {
                 aria-live="polite"
                 aria-atomic="true"
               >
-                <span className="w-7 h-7 rounded-lg flex items-center justify-center text-sm bg-white/40">
-                  💎
+                <span
+                  className="w-7 h-7 rounded-lg flex items-center justify-center text-white"
+                  style={{ background: SB_GRADIENTS.brand }}
+                >
+                  <Gem className="w-4 h-4" strokeWidth={2.4} />
                 </span>
                 <span className="leading-none">
                   <span
-                    className={`block text-sm font-black ${darkMode ? "text-white" : "text-[#00303F]"}`}
+                    className={`block text-sm font-black tabular-nums ${darkMode ? "text-white" : "text-[#00303F]"}`}
                   >
                     {totalPoints.toLocaleString()}
                   </span>
