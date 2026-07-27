@@ -1,6 +1,7 @@
 import { useState, useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, ScatterChart, Scatter, CartesianGrid, Cell } from 'recharts';
+import { LineChart as LineChartIcon, Gauge, Grid3x3, Target, Clock, Award } from 'lucide-react';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
 import { useTranslation } from '../../i18n/I18nProvider';
 
@@ -10,15 +11,15 @@ const COLORS = ['#4DA8C4', '#66CCCC', '#FF6B9D', '#FFD166', '#A855F7', '#22C55E'
 const getWeekDays = (t) => [t('analytics.week_mon'), t('analytics.week_tue'), t('analytics.week_wed'), t('analytics.week_thu'), t('analytics.week_fri'), t('analytics.week_sat'), t('analytics.week_sun')];
 const subjects = ['Mat', 'Len', 'Cie', 'Soc', 'Ing'];
 
-const MetricCard = memo(({ icon, title, children, darkMode, color = '#4DA8C4' }) => (
+const MetricCard = memo(({ Icon, title, children, darkMode, color = '#0096C7' }) => (
   <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-    className={`rounded-2xl border overflow-hidden ${dc(darkMode, 'bg-[#1E293B] border-[#334155]', 'bg-white border-[#E2E8F0] shadow-sm')}`}
+    className={`rounded-2xl border overflow-hidden ${dc(darkMode, 'bg-[#151F32] border-[#2A3A54]', 'bg-white border-[#E2E8F0] shadow-[0_10px_30px_-18px_rgba(0,48,63,0.35)]')}`}
   >
-    <div className="flex items-center gap-3 p-4 border-b" style={{ borderColor: darkMode ? '#334155' : '#E2E8F0' }}>
-      <div className="w-8 h-8 rounded-lg flex items-center justify-center text-base" style={{ background: `${color}20` }}>
-        {icon}
+    <div className="flex items-center gap-3 p-4 border-b" style={{ borderColor: darkMode ? '#2A3A54' : '#E2E8F0' }}>
+      <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white" style={{ background: `linear-gradient(135deg, ${color}, ${color}bb)`, boxShadow: `0 6px 16px -6px ${color}88` }}>
+        {Icon && <Icon className="w-[18px] h-[18px]" strokeWidth={2.4} />}
       </div>
-      <h3 className={`text-sm font-bold ${dc(darkMode, 'text-white', 'text-[#004B63]')}`}>{title}</h3>
+      <h3 className={`text-sm font-black tracking-tight ${dc(darkMode, 'text-white', 'text-[#00303F]')}`}>{title}</h3>
     </div>
     <div className="p-4">
       {children}
@@ -57,15 +58,15 @@ const SmartBoardAnalytics = memo(() => {
   return (
     <div className="space-y-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#A855F7] to-[#22C55E] flex items-center justify-center text-lg shadow-md">📈</div>
+        <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#9D4EDD] to-[#06D6A0] flex items-center justify-center text-white shadow-[0_10px_24px_-8px_rgba(157,78,221,0.6)]"><LineChartIcon className="w-5 h-5" strokeWidth={2.4} /></div>
         <div>
-          <h3 className={`text-lg font-bold ${dc(dm, 'text-[#E2F0FF]', 'text-[#004B63]')}`}>{t('analytics.title')}</h3>
-          <p className={`text-xs ${dc(dm, 'text-[#94A3B8]', 'text-[#64748B]')}`}>{t('analytics.subtitle')}</p>
+          <h3 className={`text-lg font-black tracking-tight ${dc(dm, 'text-[#E2F0FF]', 'text-[#00303F]')}`}>{t('analytics.title')}</h3>
+          <p className={`text-xs font-medium ${dc(dm, 'text-[#94A3B8]', 'text-[#64748B]')}`}>{t('analytics.subtitle')}</p>
         </div>
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <MetricCard icon="🚀" title={t('analytics.metric_speed')} darkMode={dm} color="#4DA8C4">
+        <MetricCard Icon={Gauge} title={t('analytics.metric_speed')} darkMode={dm} color="#0096C7">
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={weeklyData}>
               <XAxis dataKey="name" tick={{ fontSize: 10 }} />
@@ -81,7 +82,7 @@ const SmartBoardAnalytics = memo(() => {
           <p className={`text-xs text-center mt-2 ${dc(dm, 'text-[#94A3B8]', 'text-[#64748B]')}`}>{t('analytics.metric_speed_desc')}</p>
         </MetricCard>
 
-        <MetricCard icon="🔥" title={t('analytics.metric_heatmap')} darkMode={dm} color="#FF6B9D">
+        <MetricCard Icon={Grid3x3} title={t('analytics.metric_heatmap')} darkMode={dm} color="#FF6B9D">
           <div className="overflow-x-auto">
             <div className="grid grid-cols-6 gap-1 min-w-[250px]">
               <div className="text-[10px] text-[#64748B] font-medium"></div>
@@ -109,7 +110,7 @@ const SmartBoardAnalytics = memo(() => {
           </div>
         </MetricCard>
 
-        <MetricCard icon="🎯" title={t('analytics.metric_prediction')} darkMode={dm} color="#A855F7">
+        <MetricCard Icon={Target} title={t('analytics.metric_prediction')} darkMode={dm} color="#9D4EDD">
           <ResponsiveContainer width="100%" height={180}>
             <LineChart data={predictionData}>
               <XAxis dataKey="name" tick={{ fontSize: 10 }} />
@@ -123,7 +124,7 @@ const SmartBoardAnalytics = memo(() => {
           </p>
         </MetricCard>
 
-        <MetricCard icon="⏱️" title={t('analytics.metric_time')} darkMode={dm} color="#22C55E">
+        <MetricCard Icon={Clock} title={t('analytics.metric_time')} darkMode={dm} color="#06D6A0">
           <ResponsiveContainer width="100%" height={180}>
             <ScatterChart>
               <CartesianGrid strokeDasharray="3 3" stroke={dm ? '#334155' : '#E2E8F0'} />
@@ -136,7 +137,7 @@ const SmartBoardAnalytics = memo(() => {
           <p className={`text-xs text-center mt-2 ${dc(dm, 'text-[#94A3B8]', 'text-[#64748B]')}`}>Correlación: más tiempo = mejores resultados</p>
         </MetricCard>
 
-        <MetricCard icon="💪" title={t('analytics.metric_streak')} darkMode={dm} color="#FFD166" className="md:col-span-2">
+        <MetricCard Icon={Award} title={t('analytics.metric_streak')} darkMode={dm} color="#FB8500" className="md:col-span-2">
           <div className="space-y-3">
             {subjectData.map((subj, i) => (
               <div key={subj.name} className="flex items-center gap-3">

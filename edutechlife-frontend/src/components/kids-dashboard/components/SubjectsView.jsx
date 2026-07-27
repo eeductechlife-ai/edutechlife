@@ -6,7 +6,7 @@ const SubjectsView = memo(function SubjectsView({ subjects }) {
   const { t } = useTranslation();
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-bold text-[#004B63]">
+      <h3 className="text-lg font-black tracking-tight text-[#00303F]">
         {t("smartboard.subjects_view_title")}
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -16,32 +16,38 @@ const SubjectsView = memo(function SubjectsView({ subjects }) {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.05 }}
-            className="bg-white p-5 rounded-xl border border-[#E2E8F0] hover:shadow-md transition-all"
+            whileHover={{ y: -3 }}
+            className="bg-white p-5 rounded-2xl border border-[#E2E8F0] shadow-[0_10px_30px_-18px_rgba(0,48,63,0.35)] hover:shadow-[0_18px_40px_-18px_rgba(0,48,63,0.4)] transition-all"
           >
             <div className="flex items-center gap-3 mb-3">
               <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-                style={{ backgroundColor: `${subject.color}20` }}
+                className="w-11 h-11 rounded-xl flex items-center justify-center text-xl"
+                style={{
+                  background: `linear-gradient(135deg, ${subject.color}26, ${subject.color}14)`,
+                  boxShadow: `inset 0 1px 0 rgba(255,255,255,0.5)`,
+                }}
               >
                 {subject.icon}
               </div>
-              <h4 className="font-semibold text-[#004B63]">{subject.name}</h4>
+              <h4 className="font-bold text-[#00303F]">{subject.name}</h4>
             </div>
-            <div className="w-full h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-[#EDF3F7] rounded-full overflow-hidden">
               <motion.div
                 className="h-full rounded-full"
-                style={{ backgroundColor: subject.color }}
+                style={{
+                  background: `linear-gradient(90deg, ${subject.color}, ${subject.color}bb)`,
+                }}
                 initial={{ width: 0 }}
                 animate={{ width: `${subject.progress}%` }}
                 transition={{ duration: 1, ease: "easeOut" }}
               />
             </div>
             <div className="flex justify-between items-center mt-2">
-              <span className="text-xs text-[#64748B]">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#93A6B2]">
                 {t("smartboard.progress")}
               </span>
               <span
-                className="text-xs font-bold"
+                className="text-sm font-black tabular-nums"
                 style={{ color: subject.color }}
               >
                 {subject.progress}%

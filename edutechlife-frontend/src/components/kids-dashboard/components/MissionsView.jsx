@@ -1,6 +1,8 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
+import { Rocket, CheckCircle2, Gem } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
+import { SB_GRADIENTS, glow } from "../smartboardTheme";
 
 const MissionsView = memo(function MissionsView({
   missions,
@@ -10,19 +12,22 @@ const MissionsView = memo(function MissionsView({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-lg font-bold text-[#004B63]">
+        <h3 className="text-lg font-black tracking-tight text-[#00303F]">
           {t("smartboard.missions_view_title")}
         </h3>
-        <span className="text-sm text-[#64748B]">
+        <span className="text-sm font-bold text-[#64748B] tabular-nums">
           {missions.length > 0 ? `${missions.filter((m) => m.completed).length}/${missions.length}` : "0/0"}
         </span>
       </div>
       {missions.length === 0 ? (
         <div className="text-center py-12 px-4">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
-            <span className="text-3xl">🚀</span>
+          <div
+            className="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center text-white"
+            style={{ background: SB_GRADIENTS.explore, boxShadow: glow("#9D4EDD", 0.4) }}
+          >
+            <Rocket className="w-8 h-8" strokeWidth={2.2} />
           </div>
-          <p className="text-[#64748B] font-medium">No hay misiones disponibles aún</p>
+          <p className="text-[#64748B] font-semibold">No hay misiones disponibles aún</p>
           <p className="text-[#94A3B8] text-sm mt-1">Completa actividades para desbloquear nuevas misiones</p>
         </div>
       ) : missions.map((mission, index) => (
@@ -40,14 +45,18 @@ const MissionsView = memo(function MissionsView({
           <div className="flex items-center gap-4">
             <div
               className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
-                mission.completed ? "bg-green-100" : "bg-[#F8FAFC]"
+                mission.completed ? "bg-green-100 text-green-600" : "bg-[#F4F9FC]"
               }`}
             >
-              {mission.completed ? "✅" : mission.icon}
+              {mission.completed ? (
+                <CheckCircle2 className="w-6 h-6" strokeWidth={2.4} />
+              ) : (
+                mission.icon
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <h4
-                className={`font-semibold ${mission.completed ? "text-green-600 line-through" : "text-[#004B63]"}`}
+                className={`font-bold ${mission.completed ? "text-green-600 line-through" : "text-[#00303F]"}`}
               >
                 {mission.title}
               </h4>
@@ -55,16 +64,17 @@ const MissionsView = memo(function MissionsView({
             </div>
             <div className="text-right">
               <span
-                className={`text-sm font-bold ${mission.completed ? "text-green-500" : "text-[#4DA8C4]"}`}
+                className={`inline-flex items-center gap-1 text-sm font-black tabular-nums ${mission.completed ? "text-green-500" : "text-[#0096C7]"}`}
               >
-                +{mission.xp} pts
+                <Gem className="w-3.5 h-3.5" strokeWidth={2.4} />+{mission.xp}
               </span>
               {!mission.completed && (
                 <motion.button
                   onClick={() => onCompleteMission(mission.id)}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.05, y: -1 }}
                   whileTap={{ scale: 0.95 }}
-                  className="block mt-1 px-3 py-1 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white text-xs rounded-full font-semibold"
+                  className="block mt-1 px-3 py-1.5 text-white text-xs rounded-full font-bold"
+                  style={{ background: SB_GRADIENTS.brand, boxShadow: glow("#0096C7", 0.4) }}
                 >
                   {t("smartboard.complete_btn")}
                 </motion.button>

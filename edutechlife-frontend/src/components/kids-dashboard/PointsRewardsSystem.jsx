@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Check, Gem } from 'lucide-react';
 import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
 import { useTranslation } from '../../i18n/I18nProvider';
 
@@ -20,8 +21,8 @@ const RewardCard = memo(({ reward, isUnlocked, canAfford, onUnlock }) => (
     onClick={() => !isUnlocked && canAfford && onUnlock(reward)}
   >
     {isUnlocked && (
-      <div className="absolute top-2 right-2 w-6 h-6 bg-[#66CCCC] rounded-full flex items-center justify-center">
-        <span className="text-white text-xs">✓</span>
+      <div className="absolute top-2 right-2 w-6 h-6 bg-[#06D6A0] rounded-full flex items-center justify-center text-white">
+        <Check className="w-3.5 h-3.5" strokeWidth={3} />
       </div>
     )}
     
@@ -37,8 +38,8 @@ const RewardCard = memo(({ reward, isUnlocked, canAfford, onUnlock }) => (
       {reward.description}
     </p>
     
-    <div className="flex items-center justify-center gap-1 text-sm font-bold text-[#FFD166]">
-      <span>💎</span>
+    <div className="flex items-center justify-center gap-1 text-sm font-black text-[#FB8500] tabular-nums">
+      <Gem className="w-4 h-4" strokeWidth={2.4} />
       <span>{reward.cost}</span>
     </div>
   </motion.div>
