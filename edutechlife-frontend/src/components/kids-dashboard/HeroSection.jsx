@@ -1,10 +1,24 @@
-import { memo } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import { Sun, CloudSun, Moon, Gem, Eye, Ear, Zap, Target, Bot } from 'lucide-react';
-import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
-import DaniAvatar3D from './DaniAvatar3D';
-import { useNavigate } from 'react-router-dom';
-import { SB_GRADIENTS, SB_COLORS, glow } from './smartboardTheme';
+import { memo } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  Sun,
+  CloudSun,
+  Moon,
+  Gem,
+  Eye,
+  Ear,
+  Zap,
+  Target,
+  Bot,
+} from "lucide-react";
+import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import DaniAvatar3D from "./DaniAvatar3D";
+import { SB_GRADIENTS, SB_COLORS, glow } from "./smartboardTheme";
+
+// Opens the Dani chat dialog. The dashboard listens for this event so Dani
+// only ever appears as a modal dialog, from any entry point.
+const openDani = () =>
+  window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
 
 // ==========================================
 // Hero Section 2.0 — Dani as Absolute Protagonist
@@ -12,27 +26,26 @@ import { SB_GRADIENTS, SB_COLORS, glow } from './smartboardTheme';
 // ==========================================
 const HeroSection = memo(() => {
   const { totalPoints, vakResult } = useSmartBoardKids();
-  const navigate = useNavigate();
   const reduce = useReducedMotion();
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return { text: '¡Buenos días!', Icon: Sun };
-    if (hour < 18) return { text: '¡Buenas tardes!', Icon: CloudSun };
-    return { text: '¡Buenas noches!', Icon: Moon };
+    if (hour < 12) return { text: "¡Buenos días!", Icon: Sun };
+    if (hour < 18) return { text: "¡Buenas tardes!", Icon: CloudSun };
+    return { text: "¡Buenas noches!", Icon: Moon };
   };
 
   const getVAKMessage = () => {
     if (!vakResult)
-      return { label: 'Descubre tu estilo de aprendizaje', Icon: Target };
+      return { label: "Descubre tu estilo de aprendizaje", Icon: Target };
     const style = vakResult.predominantStyle;
-    if (style === 'visual')
-      return { label: 'Tu superpoder es la VISIÓN', Icon: Eye };
-    if (style === 'auditivo')
-      return { label: 'Tu superpoder es el OÍDO', Icon: Ear };
-    if (style === 'kinestésico')
-      return { label: 'Tu superpoder es el MOVIMIENTO', Icon: Zap };
-    return { label: 'Tienes un estilo único', Icon: Target };
+    if (style === "visual")
+      return { label: "Tu superpoder es la VISIÓN", Icon: Eye };
+    if (style === "auditivo")
+      return { label: "Tu superpoder es el OÍDO", Icon: Ear };
+    if (style === "kinestésico")
+      return { label: "Tu superpoder es el MOVIMIENTO", Icon: Zap };
+    return { label: "Tienes un estilo único", Icon: Target };
   };
 
   const greeting = getGreeting();
@@ -40,7 +53,10 @@ const HeroSection = memo(() => {
 
   const floatAnim = reduce
     ? {}
-    : { y: [0, -14, 0], transition: { duration: 6, repeat: Infinity, ease: 'easeInOut' } };
+    : {
+        y: [0, -14, 0],
+        transition: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+      };
 
   return (
     <motion.div
@@ -57,16 +73,24 @@ const HeroSection = memo(() => {
       <motion.div
         aria-hidden="true"
         className="absolute -top-20 -right-16 w-72 h-72 rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(255,209,102,0.35), transparent 70%)' }}
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,209,102,0.35), transparent 70%)",
+        }}
         animate={reduce ? {} : { scale: [1, 1.2, 1], opacity: [0.6, 0.9, 0.6] }}
-        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         aria-hidden="true"
         className="absolute -bottom-24 -left-10 w-80 h-80 rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(72,202,228,0.4), transparent 70%)' }}
-        animate={reduce ? {} : { scale: [1, 1.25, 1], opacity: [0.5, 0.8, 0.5] }}
-        transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
+        style={{
+          background:
+            "radial-gradient(circle, rgba(72,202,228,0.4), transparent 70%)",
+        }}
+        animate={
+          reduce ? {} : { scale: [1, 1.25, 1], opacity: [0.5, 0.8, 0.5] }
+        }
+        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* Dotted grid overlay */}
@@ -74,21 +98,31 @@ const HeroSection = memo(() => {
         aria-hidden="true"
         className="absolute inset-0 opacity-[0.12] pointer-events-none"
         style={{
-          backgroundImage: 'radial-gradient(circle at center, #FFFFFF 1.2px, transparent 1.2px)',
-          backgroundSize: '26px 26px',
+          backgroundImage:
+            "radial-gradient(circle at center, #FFFFFF 1.2px, transparent 1.2px)",
+          backgroundSize: "26px 26px",
         }}
       />
 
       {/* Floating sparkles */}
       {!reduce &&
-        ['✨', '⭐', '🌟'].map((s, i) => (
+        ["✨", "⭐", "🌟"].map((s, i) => (
           <motion.span
             key={i}
             aria-hidden="true"
             className="absolute text-xl md:text-2xl select-none pointer-events-none"
             style={{ top: `${18 + i * 26}%`, right: `${8 + i * 6}%` }}
-            animate={{ y: [0, -10, 0], rotate: [0, 12, 0], opacity: [0.6, 1, 0.6] }}
-            transition={{ duration: 4 + i, repeat: Infinity, ease: 'easeInOut', delay: i * 0.6 }}
+            animate={{
+              y: [0, -10, 0],
+              rotate: [0, 12, 0],
+              opacity: [0.6, 1, 0.6],
+            }}
+            transition={{
+              duration: 4 + i,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.6,
+            }}
           >
             {s}
           </motion.span>
@@ -99,16 +133,26 @@ const HeroSection = memo(() => {
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: 'spring', damping: 15, stiffness: 200, delay: 0.3 }}
+          transition={{
+            type: "spring",
+            damping: 15,
+            stiffness: 200,
+            delay: 0.3,
+          }}
           whileHover={{ scale: 1.05 }}
           className="relative flex-shrink-0"
         >
           <motion.div
             aria-hidden="true"
             className="absolute inset-0 rounded-full blur-2xl"
-            style={{ background: 'radial-gradient(circle, rgba(255,209,102,0.55), transparent 65%)' }}
-            animate={reduce ? {} : { scale: [1, 1.15, 1], opacity: [0.6, 1, 0.6] }}
-            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+            style={{
+              background:
+                "radial-gradient(circle, rgba(255,209,102,0.55), transparent 65%)",
+            }}
+            animate={
+              reduce ? {} : { scale: [1, 1.15, 1], opacity: [0.6, 1, 0.6] }
+            }
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.div className="relative" animate={floatAnim}>
             <DaniAvatar3D mood="happy" size="xl" />
@@ -133,7 +177,7 @@ const HeroSection = memo(() => {
             transition={{ delay: 0.6 }}
             className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-3 leading-[1.1] tracking-tight"
           >
-            Soy{' '}
+            Soy{" "}
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: SB_GRADIENTS.gold }}
@@ -168,7 +212,7 @@ const HeroSection = memo(() => {
             >
               <span
                 className="w-9 h-9 rounded-xl flex items-center justify-center text-white"
-                style={{ background: SB_GRADIENTS.gold, color: '#5A3A00' }}
+                style={{ background: SB_GRADIENTS.gold, color: "#5A3A00" }}
               >
                 <Gem className="w-5 h-5" strokeWidth={2.4} />
               </span>
@@ -189,7 +233,9 @@ const HeroSection = memo(() => {
               >
                 <span
                   className="w-9 h-9 rounded-xl flex items-center justify-center text-white"
-                  style={{ background: 'linear-gradient(135deg, #9D4EDD, #C77DFF)' }}
+                  style={{
+                    background: "linear-gradient(135deg, #9D4EDD, #C77DFF)",
+                  }}
                 >
                   <vak.Icon className="w-5 h-5" strokeWidth={2.4} />
                 </span>
@@ -216,13 +262,16 @@ const HeroSection = memo(() => {
           <motion.button
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate('/smartboard?tab=dani')}
+            onClick={openDani}
             className="group px-7 py-4 rounded-2xl font-bold text-[#00303F] flex items-center gap-3 transition-shadow"
-            style={{ background: SB_GRADIENTS.gold, boxShadow: glow(SB_COLORS.amber, 0.5) }}
+            style={{
+              background: SB_GRADIENTS.gold,
+              boxShadow: glow(SB_COLORS.amber, 0.5),
+            }}
           >
             <motion.span
               className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(1,26,36,0.12)' }}
+              style={{ background: "rgba(1,26,36,0.12)" }}
               animate={reduce ? {} : { rotate: [0, -12, 12, -12, 0] }}
               transition={{ duration: 1.6, repeat: Infinity, repeatDelay: 2.5 }}
             >
@@ -241,6 +290,6 @@ const HeroSection = memo(() => {
   );
 });
 
-HeroSection.displayName = 'HeroSection';
+HeroSection.displayName = "HeroSection";
 
 export default HeroSection;

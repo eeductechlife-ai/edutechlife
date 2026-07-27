@@ -2,17 +2,9 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/react";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import { callDeepseek, callDeepseekStream, callDaniChatStream } from "../../../utils/api";
-import {
-  PROMPT_DANI_EXPERTO,
-  PROMPT_TUTOR_TAREAS,
-  PROMPT_DANI_SOCRATICO,
-} from "../../../constants/prompts";
+import { callDaniChatStream } from "../../../utils/api";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
-import {
-  speakTextConversational,
-  stopSpeech,
-} from "../../../utils/speech";
+import { speakTextConversational, stopSpeech } from "../../../utils/speech";
 import useFocusTrap from "../../../hooks/useFocusTrap";
 import { inferMoodFromText, extractTopic } from "../dani/chatUtils";
 import { getVoiceOverrides, primeSpeech } from "./DaniVoiceController";
@@ -90,17 +82,17 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
     const hour = now.getHours();
     const greeting =
       hour < 12
-        ? t('dani.welcome_morning')
+        ? t("dani.welcome_morning")
         : hour < 18
-          ? t('dani.welcome_afternoon')
-          : t('dani.welcome_evening');
+          ? t("dani.welcome_afternoon")
+          : t("dani.welcome_evening");
 
     const parts = [];
 
     parts.push(greeting);
 
     if (streak.current >= 2) {
-      parts.push(t('dani.welcome_streak', { days: streak.current }));
+      parts.push(t("dani.welcome_streak", { days: streak.current }));
     }
 
     const tabMessages = {
@@ -174,7 +166,7 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
     }
 
     if (!parts.some((p) => p.includes("¿"))) {
-      parts.push(t('dani.welcome_first'));
+      parts.push(t("dani.welcome_first"));
     }
 
     return parts.join(" ");
@@ -281,47 +273,41 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
       try {
         const currentMood = daniMood;
         const hasDocumentContext = !!documentForDani;
-        let systemPrompt = hasDocumentContext
-          ? PROMPT_TUTOR_TAREAS
-          : PROMPT_DANI_EXPERTO;
+
+        // Dani's identity + safety prompt lives on the server. The client only
+        // supplies STUDENT CONTEXT (data) so responses stay personalized.
+        const contextParts = [];
+
+        const baseContext = buildDaniContext();
+        if (baseContext) contextParts.push(baseContext);
 
         const memoryInjection = buildMemoryInjection();
-        if (memoryInjection) {
-          systemPrompt += "\n\n" + memoryInjection;
-        }
+        if (memoryInjection) contextParts.push(memoryInjection);
 
-        const cs = daniMemory?.studentProfile?.communicationStyle;
-        if (cs === "shy") {
-          systemPrompt +=
-            "\n\n## ADAPTACIÓN\nEste estudiante es reservado. Sé paciente, usa preguntas abiertas y celebra cada intento.";
-        } else if (cs === "direct") {
-          systemPrompt +=
-            "\n\n## ADAPTACIÓN\nEste estudiante es directo. Ve al grano, respuestas concisas.";
-        } else if (cs === "playful") {
-          systemPrompt +=
-            "\n\n## ADAPTACIÓN\nEste estudiante es juguetón. Usa emojis, mantén un tono alegre.";
-        } else if (cs === "curious") {
-          systemPrompt +=
-            "\n\n## ADAPTACIÓN\nEste estudiante es curioso. Ofrece datos interesantes, invita a explorar.";
-        }
-
-        if (socraticMode) {
-          systemPrompt += `\n\n${PROMPT_DANI_SOCRATICO}`;
-        }
-
-        let contextInfo = buildDaniContext();
+        const csHint = {
+          shy: "Estilo del estudiante: reservado. Sé paciente, usa preguntas abiertas y celebra cada intento.",
+          direct:
+            "Estilo del estudiante: directo. Ve al grano con respuestas concisas.",
+          playful:
+            "Estilo del estudiante: juguetón. Usa emojis y un tono alegre.",
+          curious:
+            "Estilo del estudiante: curioso. Ofrece datos interesantes e invita a explorar.",
+        }[daniMemory?.studentProfile?.communicationStyle];
+        if (csHint) contextParts.push(csHint);
 
         if (hasDocumentContext) {
-          contextInfo += `\n\n## ANÁLISIS DE DOCUMENTO DEL ESTUDIANTE\n`;
-          contextInfo += `Título: ${documentForDani.title || "Documento"}\n`;
-          contextInfo += `Materia: ${documentForDani.subject || "General"}\n`;
-          contextInfo += `Resumen: ${documentForDani.summary || ""}\n`;
-          contextInfo += `Fortalezas: ${documentForDani.strengths?.join(", ") || ""}\n`;
-          contextInfo += `Áreas de mejora: ${documentForDani.improvements?.join(", ") || ""}\n`;
-          contextInfo += `Puntuación: ${documentForDani.score}/100\n`;
-          contextInfo += `Dificultad: ${documentForDani.difficulty || "N/A"}\n`;
-          contextInfo += `\nPreguntas guía para la tutoría:\n${documentForDani.tutoringQuestions?.map((q, i) => `${i + 1}. ${q}`).join("\n") || ""}\n`;
-          contextInfo += `\nIMPORTANTE: El estudiante acaba de subir este documento. Usa el análisis para guiar la tutoría. Pregúntale qué parte quiere mejorar o qué no entiende.`;
+          contextParts.push(
+            `ANÁLISIS DE DOCUMENTO DEL ESTUDIANTE\n` +
+              `Título: ${documentForDani.title || "Documento"}\n` +
+              `Materia: ${documentForDani.subject || "General"}\n` +
+              `Resumen: ${documentForDani.summary || ""}\n` +
+              `Fortalezas: ${documentForDani.strengths?.join(", ") || ""}\n` +
+              `Áreas de mejora: ${documentForDani.improvements?.join(", ") || ""}\n` +
+              `Puntuación: ${documentForDani.score}/100\n` +
+              `Dificultad: ${documentForDani.difficulty || "N/A"}\n` +
+              `Preguntas guía:\n${documentForDani.tutoringQuestions?.map((q, i) => `${i + 1}. ${q}`).join("\n") || ""}\n` +
+              `IMPORTANTE: El estudiante acaba de subir este documento. Usa el análisis para guiar la tutoría; pregúntale qué parte quiere mejorar o qué no entiende.`,
+          );
         }
 
         const mood = inferMoodFromText(userMessage.text);
@@ -329,37 +315,26 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
         if (isEmotionalBannerNeeded(mood)) {
           setShowEmotionalBanner(true);
           const supportPrompt = getMoodSupportPrompt(mood, userMessage.text);
-          if (supportPrompt) systemPrompt += supportPrompt;
+          if (supportPrompt) contextParts.push(supportPrompt.trim());
         }
 
         if (isCrisisAlert(mood)) {
           setShowCrisisResources(true);
         }
 
-        const messages = [{ role: "system", content: systemPrompt }];
+        const context = contextParts.filter(Boolean).join("\n\n");
 
-        if (contextInfo) {
-          messages.push({
-            role: "user",
-            content: `[INFORMACIÓN DEL ESTUDIANTE - USA ESTO PARA PERSONALIZAR TU RESPUESTA]\n${contextInfo}\n\nNota: Esta información se actualiza en cada mensaje. No la repitas textualmente en tu respuesta, úsala para adaptar tu tono y sugerencias.`,
-          });
-        }
+        // Conversation = recent history + optional crisis nudge + current message.
+        // No system message — the server owns Dani's system prompt.
+        const messages = daniChatHistory
+          .slice(-15)
+          .filter((msg) => typeof msg.text === "string" && msg.text.trim())
+          .map((msg) => ({ role: msg.role, content: msg.text }));
 
         if (isCrisisAlert(mood)) {
           const crisisMsg = getCrisisUserMessage(mood);
-          if (crisisMsg) {
-            messages.push({
-              role: "user",
-              content: crisisMsg,
-            });
-          }
+          if (crisisMsg) messages.push({ role: "user", content: crisisMsg });
         }
-
-        const history = daniChatHistory.slice(-15).map((msg) => ({
-          role: msg.role,
-          content: msg.text,
-        }));
-        messages.push(...history);
 
         messages.push({ role: "user", content: userMessage.text });
 
@@ -367,13 +342,19 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
           setDocumentForDani(null);
         }
 
+        const language =
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("edutechlife_locale") === "en"
+            ? "en"
+            : "es";
+
         let fullResponse = "";
         pendingSentenceRef.current = "";
 
         // Get auth token and use authenticated SmartBoard Dani endpoint
         const token = await getToken();
         if (!token) {
-          throw new Error('No auth token — user must be logged in');
+          throw new Error("No auth token — user must be logged in");
         }
 
         await callDaniChatStream(
@@ -382,6 +363,9 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
             temperature: 0.7,
             maxTokens: 800,
             token,
+            context,
+            socratic: socraticMode,
+            language,
           },
           (data) => {
             // Handle crisis alerts (passed as JSON stringified objects)
@@ -470,11 +454,13 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
         trackTopicFromMessage(userMessage, extractTopic, trackAcademicTopic);
       } catch (error) {
         console.error("Error calling Dani:", error);
-        const errorMsg = error.message?.includes("400") || error.message?.includes("500")
-          ? t('dani.error_generic')
-          : error.message?.includes("timeout") || error.message?.includes("Tiempo de espera")
-            ? t('dani.error_timeout')
-            : t('dani.error_network');
+        const errorMsg =
+          error.message?.includes("400") || error.message?.includes("500")
+            ? t("dani.error_generic")
+            : error.message?.includes("timeout") ||
+                error.message?.includes("Tiempo de espera")
+              ? t("dani.error_timeout")
+              : t("dani.error_network");
         addDaniMessage({
           role: "assistant",
           text: errorMsg,
@@ -517,7 +503,12 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
   );
 
   const handleMicClick = useCallback(() => {
-    handleMicClickFn({ isListening, setInputText, handleSendMessage, setIsListening });
+    handleMicClickFn({
+      isListening,
+      setInputText,
+      handleSendMessage,
+      setIsListening,
+    });
   }, [isListening, handleSendMessage]);
 
   return {

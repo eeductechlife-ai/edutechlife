@@ -269,7 +269,10 @@ async function streamFetch(
                     if (onChunk) onChunk(parsed.chunk);
                   } else if (parsed.crisisAlert) {
                     // Pass crisis alerts through onChunk with special marker
-                    if (onChunk) onChunk(JSON.stringify({ __crisisAlert: parsed.crisisAlert }));
+                    if (onChunk)
+                      onChunk(
+                        JSON.stringify({ __crisisAlert: parsed.crisisAlert }),
+                      );
                   }
                 } catch (e) {
                   // Skip parsing errors
@@ -341,6 +344,9 @@ export async function callDaniChatStream(messages, opts = {}, onChunk) {
     messages,
     temperature: opts.temperature ?? 0.7,
     maxTokens: opts.maxTokens ?? 800,
+    context: opts.context,
+    socratic: opts.socratic ?? false,
+    language: opts.language ?? "es",
   };
 
   const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};

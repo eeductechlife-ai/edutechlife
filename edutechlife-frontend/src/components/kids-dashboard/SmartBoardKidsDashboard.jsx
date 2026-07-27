@@ -49,6 +49,14 @@ const SmartBoardKidsDashboard = () => {
     navigate("/");
   }, [signOut, navigate]);
 
+  // Dani opens ONLY as a modal dialog. Any entry point (hero CTA, deep links,
+  // other components) requests it through this global event.
+  useEffect(() => {
+    const open = () => setIsDaniOpen(true);
+    window.addEventListener("smartboard:open-dani", open);
+    return () => window.removeEventListener("smartboard:open-dani", open);
+  }, []);
+
   // Proactive Dani reminder after inactivity
   useEffect(() => {
     const lastDani = parseInt(
@@ -79,6 +87,11 @@ const SmartBoardKidsDashboard = () => {
   // Handle URL tab parameter
   useEffect(() => {
     const tab = searchParams.get("tab");
+    // Dani is a dialog, not a tab — a ?tab=dani deep link opens the modal.
+    if (tab === "dani") {
+      setIsDaniOpen(true);
+      return;
+    }
     if (
       tab &&
       [
@@ -217,7 +230,10 @@ const SmartBoardKidsDashboard = () => {
                       boxShadow: `${glow(activeCat?.glowColor || "#00B4D8", 0.4)}, inset 0 1px 0 rgba(255,255,255,0.35)`,
                     }}
                   >
-                    <ActiveIcon className="w-[21px] h-[21px]" strokeWidth={2.3} />
+                    <ActiveIcon
+                      className="w-[21px] h-[21px]"
+                      strokeWidth={2.3}
+                    />
                   </motion.span>
                   <div className="leading-none">
                     <span
@@ -285,7 +301,9 @@ const SmartBoardKidsDashboard = () => {
               >
                 <span
                   className="w-7 h-7 rounded-lg flex items-center justify-center text-white"
-                  style={{ background: "linear-gradient(135deg, #FB8500, #F3722C)" }}
+                  style={{
+                    background: "linear-gradient(135deg, #FB8500, #F3722C)",
+                  }}
                 >
                   <Flame className="w-4 h-4" strokeWidth={2.4} />
                 </span>
