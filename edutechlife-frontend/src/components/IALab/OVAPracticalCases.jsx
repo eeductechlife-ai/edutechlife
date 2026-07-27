@@ -15,7 +15,7 @@ import {
   Star,
   Building2,
 } from "lucide-react";
-import { challenges } from "../../data/ova/practicalCases";
+import { challenges, learningObjectives } from "../../data/ova/practicalCases";
 import { OVAIntro, OVAValerioBar } from "./shared";
 
 const OVAPracticalCases = ({ onComplete }) => {

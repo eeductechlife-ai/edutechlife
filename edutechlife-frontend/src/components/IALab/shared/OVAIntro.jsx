@@ -1,31 +1,36 @@
-import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types';
-import { motion } from 'framer-motion';
-import { Icon } from '../../../utils/iconMapping.jsx';
-import { speakTextConversational, stopSpeech } from '../../../utils/speech';
-import { useTranslation } from '../../../i18n/I18nProvider';
-import { cn } from '../../forum/forumDesignSystem';
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { motion } from "framer-motion";
+import { Icon } from "../../../utils/iconMapping.jsx";
+import { speakTextConversational, stopSpeech } from "../../../utils/speech";
+import { useTranslation } from "../../../i18n/I18nProvider";
+import { cn } from "../../forum/forumDesignSystem";
 
 const OVAIntro = ({
-  icon = 'fa-brain',
+  icon = "fa-brain",
   badge,
   title,
   description,
   audioText,
   onStart,
   startLabel,
+  objectives,
 }) => {
   const { t, locale } = useTranslation();
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    return () => { stopSpeech(); };
+    return () => {
+      stopSpeech();
+    };
   }, []);
 
   useEffect(() => {
     if (audioText && !started) {
-      speakTextConversational(audioText, 'valerio', () => setAudioPlaying(false));
+      speakTextConversational(audioText, "valerio", () =>
+        setAudioPlaying(false),
+      );
       setAudioPlaying(true);
     }
   }, []);
@@ -47,7 +52,7 @@ const OVAIntro = ({
       >
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-50 dark:bg-cyan-900/20 text-corporate font-semibold text-xs uppercase tracking-wider border border-cyan-200 dark:border-cyan-700 mb-6">
           <Icon name={icon} className="text-sm" />
-          <span>{badge || t('ialab.ova.badge')}</span>
+          <span>{badge || t("ialab.ova.badge")}</span>
         </div>
 
         <motion.div
@@ -75,10 +80,41 @@ const OVAIntro = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.4 }}
-            className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-lg mx-auto mb-8 leading-relaxed"
+            className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-lg mx-auto mb-6 leading-relaxed"
           >
             {description}
           </motion.p>
+        )}
+
+        {objectives && objectives.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45, duration: 0.4 }}
+            className="max-w-lg mx-auto mb-8 text-left"
+          >
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-corporate/10 text-corporate font-semibold text-[10px] uppercase tracking-wider mb-3 border border-corporate/20">
+              <span>Objetivos de aprendizaje</span>
+            </div>
+            <div className="space-y-2">
+              {objectives.map((obj, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 + i * 0.08, duration: 0.3 }}
+                  className="flex items-start gap-2.5 p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-900/20 border border-emerald-500/20"
+                >
+                  <div className="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
+                    {i + 1}
+                  </div>
+                  <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300 leading-relaxed">
+                    {obj}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
         )}
 
         <motion.div
@@ -93,7 +129,7 @@ const OVAIntro = ({
           >
             <span className="flex items-center gap-2">
               <Icon name="fa-play" className="text-sm" />
-              {startLabel || t('ialab.ova.start')}
+              {startLabel || t("ialab.ova.start")}
             </span>
           </button>
 
@@ -104,22 +140,27 @@ const OVAIntro = ({
                   stopSpeech();
                   setAudioPlaying(false);
                 } else {
-                  speakTextConversational(audioText, 'valerio', () => setAudioPlaying(false));
+                  speakTextConversational(audioText, "valerio", () =>
+                    setAudioPlaying(false),
+                  );
                   setAudioPlaying(true);
                 }
               }}
               className={cn(
-                'px-6 py-3 rounded-2xl font-semibold text-xs sm:text-sm transition-all border-2',
+                "px-6 py-3 rounded-2xl font-semibold text-xs sm:text-sm transition-all border-2",
                 audioPlaying
-                  ? 'bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700 text-red-600 dark:text-red-400'
-                  : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-corporate'
+                  ? "bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700 text-red-600 dark:text-red-400"
+                  : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-corporate",
               )}
             >
               <span className="flex items-center gap-2">
-                <Icon name={audioPlaying ? 'fa-stop-circle' : 'fa-volume-up'} className="text-sm" />
+                <Icon
+                  name={audioPlaying ? "fa-stop-circle" : "fa-volume-up"}
+                  className="text-sm"
+                />
                 {audioPlaying
-                  ? t('ialab.voice_reader.stop')
-                  : t('ialab.voice_reader.listen')}
+                  ? t("ialab.voice_reader.stop")
+                  : t("ialab.voice_reader.listen")}
               </span>
             </button>
           )}
@@ -129,7 +170,6 @@ const OVAIntro = ({
   );
 };
 
-
 OVAIntro.propTypes = {
   icon: PropTypes.string,
   badge: PropTypes.string,
@@ -138,6 +178,7 @@ OVAIntro.propTypes = {
   audioText: PropTypes.string,
   onStart: PropTypes.func,
   startLabel: PropTypes.string,
+  objectives: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default OVAIntro;

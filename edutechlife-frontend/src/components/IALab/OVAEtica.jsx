@@ -30,6 +30,7 @@ import { stopSpeech } from "../../utils/speech";
 import { useOVATranslations } from "../../hooks/useOVATranslations";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { OVAIntro } from "./shared";
+import { learningObjectives } from "../../data/ova/biasLab";
 import VoiceReader from "./VoiceReader";
 import QuizScreen from "./ova-etica/QuizScreen";
 import CertificateScreen from "./ova-etica/CertificateScreen";
@@ -432,6 +433,7 @@ export default function OVAEtica({ onComplete }) {
               title={`${texts.welcome_title_1} ${texts.welcome_title_2}`}
               description={texts.welcome_desc}
               onStart={() => setScreen("m1")}
+              objectives={learningObjectives}
             />
             <div className="flex justify-center mt-6">
               <VoiceReader text={texts.welcome_voice} />

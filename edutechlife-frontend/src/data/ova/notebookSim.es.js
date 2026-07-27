@@ -1,3 +1,23 @@
+export const learningObjectives = [
+  "Simular el uso de NotebookLM para organizar información",
+  "Practicar la carga y análisis de documentos en un entorno virtual",
+  "Desarrollar habilidades de síntesis de información con IA",
+  "Evaluar la calidad de las respuestas basadas en fuentes propias",
+];
+
+export const furtherReading = [
+  {
+    title: "NotebookLM Help Center",
+    url: "https://support.google.com/notebooklm/",
+    description: "Centro de ayuda oficial de NotebookLM.",
+  },
+  {
+    title: "AI-Powered Research Tools Comparison",
+    url: "https://www.edutechlife.com/blog/ai-research-tools",
+    description: "Comparativa de herramientas de investigación con IA.",
+  },
+];
+
 export const contentScreens = [
   {
     id: "sourcing",

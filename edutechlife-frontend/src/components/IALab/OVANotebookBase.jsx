@@ -154,6 +154,7 @@ export default function OVANotebookBase({
           audioText={tk("welcome_audio")}
           onStart={startGame}
           startLabel={tk("start_cta")}
+          objectives={data?.learningObjectives}
         />
       </div>
     );

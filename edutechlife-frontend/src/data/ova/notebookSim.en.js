@@ -1,3 +1,23 @@
+export const learningObjectives = [
+  "Simulate using NotebookLM to organize information",
+  "Practice uploading and analyzing documents in a virtual environment",
+  "Develop information synthesis skills with AI",
+  "Evaluate the quality of responses based on your own sources",
+];
+
+export const furtherReading = [
+  {
+    title: "NotebookLM Help Center",
+    url: "https://support.google.com/notebooklm/",
+    description: "Official NotebookLM help center.",
+  },
+  {
+    title: "AI-Powered Research Tools Comparison",
+    url: "https://www.edutechlife.com/blog/ai-research-tools",
+    description: "Comparison of AI research tools.",
+  },
+];
+
 export const contentScreens = [
   {
     id: "sourcing",

@@ -1,3 +1,23 @@
+export const learningObjectives = [
+  "Comprender el concepto de IA basada en fuentes propias",
+  "Aprender a crear y gestionar notebooks en NotebookLM",
+  "Diferenciar NotebookLM de chatbots tradicionales",
+  "Aplicar estrategias de investigación con documentos propios",
+];
+
+export const furtherReading = [
+  {
+    title: "NotebookLM Guide — Google",
+    url: "https://notebooklm.google.com/",
+    description: "Plataforma oficial de NotebookLM de Google.",
+  },
+  {
+    title: "How to Use NotebookLM for Research",
+    url: "https://blog.google/technology/ai/notebooklm/",
+    description: "Guía oficial de Google sobre cómo usar NotebookLM.",
+  },
+];
+
 export const contentScreens = [
   {
     id: "intro",

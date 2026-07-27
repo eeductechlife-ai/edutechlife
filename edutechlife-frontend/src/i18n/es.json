@@ -3753,18 +3753,13 @@
   "ialab.signup_form_title": "Regístrate en IA Lab Academic",
   "ialab.signup_form_desc": "Completa el formulario para adultos (18+ años)",
   "ialab.signup_terms": "Al registrarte, aceptas nuestros <a href=\"#\" class=\"text-[#004B63] hover:underline\">Términos de servicio</a> y <a href=\"#\" class=\"text-[#004B63] hover:underline\">Política de privacidad</a>.",
-
   "nav.close_aria": "Cerrar menú",
   "nav.home_desc": "Inicio",
-
   "notfound.button": "Volver al inicio",
-
   "esencia.carousel_aria": "Galería de imágenes",
   "esencia.slide_prev_aria": "Slide anterior",
   "esencia.slide_next_aria": "Siguiente slide",
-
   "aliados.marquee_aria": "Logos de aliados",
-
   "loading.status_start": "Preparando tu experiencia...",
   "loading.status_vak": "Personalizando con metodología VAK...",
   "loading.status_ai": "Activando tus tutores con IA...",
@@ -3772,7 +3767,6 @@
   "loading.feature_ai": "IA Integrada",
   "loading.feature_vak": "VAK Metodología",
   "loading.feature_cert": "Certificaciones",
-
   "seo.home.title": "Inicio",
   "seo.home.desc": "Liderando la Educación del Futuro con Pedagogía e Inteligencia Artificial. Cursos, diagnósticos y herramientas educativas impulsadas por IA.",
   "seo.ialab_academic.title": "IALab Academic",
@@ -3807,7 +3801,6 @@
   "seo.signup_smartboard.desc": "Crea tu cuenta SmartBoard by Edutechlife. Aprendizaje interactivo para niños con herramientas educativas impulsadas por IA.",
   "seo.smartboard_parents.title": "SmartBoard Padres",
   "seo.smartboard_parents.desc": "Panel de control parental para SmartBoard. Monitorea el progreso educativo de tus hijos con Edutechlife.",
-
   "dani.title": "Dani",
   "dani.chat_title": "Chat con Dani",
   "dani.status_speaking": "Hablando...",
@@ -3858,7 +3851,6 @@
   "dani.empty_chat": "¡Empieza una conversación! Pregúntame lo que quieras sobre tus estudios.",
   "smartboard.habeas_parent_email_required": "Email del acudiente requerido",
   "smartboard.habeas_parent_email_invalid": "Email inválido. Por favor, verifica y intenta de nuevo",
-  "smartboard.talk_dani": "Hablar con Dani",
   "smartboard.dani_reminder_open": "Dani quiere ayudarte. Abre el chat",
   "smartboard.close_reminder": "Cerrar recordatorio",
   "scanner.subject_math": "Matemáticas",
@@ -3899,5 +3891,16 @@
   "flashcards.placeholder": "Ej: Fotosíntesis, Verbos en inglés, Tabla periódica...",
   "calendar.activity_title_placeholder": "Título de la actividad...",
   "calendar.activity_desc_placeholder": "Descripción (opcional)...",
-  "dani.chat_placeholder": "Ej: No entiendo la parte de las fracciones..."
+  "dani.chat_placeholder": "Ej: No entiendo la parte de las fracciones...",
+  "ova.buildgpt.learning_obj_1": "Crear GPTs personalizados con instrucciones y bases de conocimiento específicas",
+  "ova.buildgpt.learning_obj_2": "Conectar GPTs a APIs y servicios externos mediante Acciones",
+  "ova.buildgpt.learning_obj_3": "Diseñar flujos de trabajo automatizados para tareas educativas",
+  "ova.buildgpt.learning_obj_4": "Evaluar consideraciones éticas al implementar GPTs personalizados",
+  "ova.gemini.learning_obj_1": "Comprender la arquitectura de Gemini y sus capacidades multimodales nativas",
+  "ova.gemini.learning_obj_2": "Aplicar técnicas de investigación profunda para investigación académica",
+  "ova.gemini.learning_obj_3": "Aprovechar la integración de Gemini con Google Workspace",
+  "ova.gemini.learning_obj_4": "Evaluar aplicaciones de procesamiento multimodal en tiempo real",
+  "ova.introprompt.learning_obj_1": "Entender qué es un prompt y su importancia en la comunicación con IA",
+  "ova.introprompt.learning_obj_2": "Identificar la anatomía del prompt: rol, contexto, tarea, formato",
+  "ova.introprompt.learning_obj_3": "Aplicar técnicas de ingeniería de prompts para mejores resultados"
 }

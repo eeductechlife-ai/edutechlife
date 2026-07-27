@@ -24,6 +24,7 @@ import {
   IDEAL_SOURCES,
   FORMATS,
   CHECKLIST_ITEMS,
+  learningObjectives,
 } from "../../data/ova/podcastStudio";
 
 const getRecommendations = (contentType, goal, docCount) => {

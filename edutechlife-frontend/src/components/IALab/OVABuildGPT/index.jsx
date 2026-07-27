@@ -72,6 +72,12 @@ export default function OVABuildGPT({ onComplete }) {
           audioText={t("ova.buildgpt.welcome_audio")}
           onStart={() => setScreen("slides")}
           startLabel={t("ova.buildgpt.start")}
+          objectives={[
+            t("ova.buildgpt.learning_obj_1"),
+            t("ova.buildgpt.learning_obj_2"),
+            t("ova.buildgpt.learning_obj_3"),
+            t("ova.buildgpt.learning_obj_4"),
+          ]}
         />
       </div>
     );
