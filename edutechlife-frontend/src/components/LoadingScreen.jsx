@@ -51,29 +51,34 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
       {/* Floating Particles - Enhanced 3D */}
       <FloatingParticles count={24} className="z-1" />
 
-      {/* Additional 3D Floating Elements - Corporate colors only */}
+      {/* Additional 3D Floating Elements - Brand colors only */}
       <div
-        className="absolute top-[20%] left-[10%] w-4 h-4 bg-[#4DA8C4]/20 rounded-full animate-[float-3d_22s_ease-in-out_infinite]"
+        className="absolute top-[20%] left-[10%] w-4 h-4 bg-primary-light/20 rounded-full animate-[float-3d_22s_ease-in-out_infinite]"
         style={{ animationDelay: "-2s" }}
       />
       <div
-        className="absolute top-[60%] right-[15%] w-3 h-3 bg-[#66CCCC]/25 rounded-full animate-[float-3d_28s_ease-in-out_infinite]"
+        className="absolute top-[60%] right-[15%] w-3 h-3 bg-mint/25 rounded-full animate-[float-3d_28s_ease-in-out_infinite]"
         style={{ animationDelay: "-4s" }}
       />
       <div
-        className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-[#B2D8E5]/20 rounded-full animate-[float-3d_25s_ease-in-out_infinite]"
+        className="absolute bottom-[30%] left-[20%] w-2 h-2 bg-soft-blue/20 rounded-full animate-[float-3d_25s_ease-in-out_infinite]"
         style={{ animationDelay: "-1s" }}
       />
       <div
-        className="absolute top-[40%] left-[25%] w-3 h-3 bg-[#4DA8C4]/15 rounded-full animate-[float-3d_30s_ease-in-out_infinite]"
+        className="absolute top-[40%] left-[25%] w-3 h-3 bg-primary-light/15 rounded-full animate-[float-3d_30s_ease-in-out_infinite]"
         style={{ animationDelay: "-3s" }}
       />
       <div
-        className="absolute top-[25%] right-[30%] w-2 h-2 bg-[#66CCCC]/20 rounded-full animate-[float-3d_20s_ease-in-out_infinite]"
+        className="absolute top-[25%] right-[30%] w-2 h-2 bg-mint/20 rounded-full animate-[float-3d_20s_ease-in-out_infinite]"
         style={{ animationDelay: "-5s" }}
       />
 
-      <div className="loading-content">
+      <motion.div
+        initial={{ opacity: 0, y: 30, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="loading-content"
+      >
         <div className="loading-brand">
           <div className="brand-logo">
             <img
@@ -115,52 +120,36 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
 
         <div className="loading-features">
           <div className="feature-item premium">
-            <div
-              className="feature-icon"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(0, 75, 99, 0.1) 0%, rgba(77, 168, 196, 0.15) 100%)",
-                border: "1px solid rgba(0, 75, 99, 0.2)",
-              }}
-            >
-              <i className="fa-solid fa-robot" style={{ color: "#004B63" }} />
+            <div className="feature-icon bg-gradient-to-br from-petroleum/10 to-primary-light/[0.15] border border-petroleum/20">
+              <i className="fa-solid fa-robot text-petroleum" />
             </div>
             <span>{t("loading.feature_ai")}</span>
           </div>
           <div className="feature-item premium">
-            <div
-              className="feature-icon"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(0, 75, 99, 0.1) 0%, rgba(77, 168, 196, 0.15) 100%)",
-                border: "1px solid rgba(0, 75, 99, 0.2)",
-              }}
-            >
-              <i className="fa-solid fa-brain" style={{ color: "#004B63" }} />
+            <div className="feature-icon bg-gradient-to-br from-petroleum/10 to-primary-light/[0.15] border border-petroleum/20">
+              <i className="fa-solid fa-brain text-petroleum" />
             </div>
             <span>{t("loading.feature_vak")}</span>
           </div>
           <div className="feature-item premium">
-            <div
-              className="feature-icon"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(0, 75, 99, 0.1) 0%, rgba(77, 168, 196, 0.15) 100%)",
-                border: "1px solid rgba(0, 75, 99, 0.2)",
-              }}
-            >
-              <i className="fa-solid fa-award" style={{ color: "#004B63" }} />
+            <div className="feature-icon bg-gradient-to-br from-petroleum/10 to-primary-light/[0.15] border border-petroleum/20">
+              <i className="fa-solid fa-award text-petroleum" />
             </div>
             <span>{t("loading.feature_cert")}</span>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="loading-bg">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.5 }}
+        className="loading-bg"
+      >
         <div className="bg-orb orb-1" />
         <div className="bg-orb orb-2" />
         <div className="bg-orb orb-3" />
-      </div>
+      </motion.div>
     </div>
   );
 };
