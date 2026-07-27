@@ -5,6 +5,7 @@ import { StudentProvider } from "./context/StudentContext";
 import { useAuth as useClerkAuth } from "@clerk/react";
 import { initSupabaseClient } from "./lib/supabase";
 import CustomCursor from "./components/CustomCursor";
+import GlobalErrorBoundary from "./components/common/GlobalErrorBoundary";
 
 const LoadingScreen = lazy(() => import("./components/LoadingScreen"));
 const NicoModern = lazy(() => import("./components/Nico/NicoModern"));
@@ -34,28 +35,30 @@ const App = () => {
   }, []);
 
   return (
-    <StudentProvider>
-      <div
-        className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]"
-        style={{ fontFamily: "'Montserrat', sans-serif" }}
-      >
-        <CustomCursor />
-        {isLoading && (
-          <Suspense fallback={null}>
-            <LoadingScreen
-              onComplete={() => setIsLoading(false)}
-              minDuration={800}
-            />
-          </Suspense>
-        )}
-        <AppRoutes />
-        {!isIALabRoute && !isSmartBoardRoute && !isVAKRoute && (
-          <Suspense fallback={null}>
-            <NicoModern />
-          </Suspense>
-        )}
-      </div>
-    </StudentProvider>
+    <GlobalErrorBoundary>
+      <StudentProvider>
+        <div
+          className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]"
+          style={{ fontFamily: "'Montserrat', sans-serif" }}
+        >
+          <CustomCursor />
+          {isLoading && (
+            <Suspense fallback={null}>
+              <LoadingScreen
+                onComplete={() => setIsLoading(false)}
+                minDuration={800}
+              />
+            </Suspense>
+          )}
+          <AppRoutes />
+          {!isIALabRoute && !isSmartBoardRoute && !isVAKRoute && (
+            <Suspense fallback={null}>
+              <NicoModern />
+            </Suspense>
+          )}
+        </div>
+      </StudentProvider>
+    </GlobalErrorBoundary>
   );
 };
 

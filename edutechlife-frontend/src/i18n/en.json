@@ -1135,7 +1135,6 @@
   "ova.risksim.completion_title": "Ethics Activated!",
   "ova.risksim.completion_desc": "You have completed the risk assessment simulator.",
   "ova.risksim.mark_complete": "Mark as completed",
-  "ova.risksim.badge": "AI Ethics",
   "ova.risksim.back_stars": "Back to stars",
   "ova.risksim.modal_button": "Got it",
   "ova.risksim.fallback_feedback": "Incorrect. Remember to apply critical thinking.",
@@ -3766,7 +3765,6 @@
 
   "aliados.marquee_aria": "Partner logos",
 
-  "loading.ova": "Loading lab...",
   "loading.status_start": "Preparing your experience...",
   "loading.status_vak": "Personalizing with VAK methodology...",
   "loading.status_ai": "Activating your AI tutors...",

@@ -13,12 +13,8 @@ import {
 } from "lucide-react";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import DaniAvatar3D from "./DaniAvatar3D";
+import { useNavigate } from "react-router-dom";
 import { SB_GRADIENTS, SB_COLORS, glow } from "./smartboardTheme";
-
-// Opens the Dani chat dialog. The dashboard listens for this event so Dani
-// only ever appears as a modal dialog, from any entry point.
-const openDani = () =>
-  window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
 
 // ==========================================
 // Hero Section 2.0 — Dani as Absolute Protagonist
@@ -26,6 +22,7 @@ const openDani = () =>
 // ==========================================
 const HeroSection = memo(() => {
   const { totalPoints, vakResult } = useSmartBoardKids();
+  const navigate = useNavigate();
   const reduce = useReducedMotion();
 
   const getGreeting = () => {
@@ -262,7 +259,7 @@ const HeroSection = memo(() => {
           <motion.button
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
-            onClick={openDani}
+            onClick={() => navigate("/smartboard?tab=dani")}
             className="group px-7 py-4 rounded-2xl font-bold text-[#00303F] flex items-center gap-3 transition-shadow"
             style={{
               background: SB_GRADIENTS.gold,

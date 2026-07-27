@@ -47,6 +47,7 @@ const DailyPlan = lazy(() => import("./DailyPlan"));
 const ModuleActions = lazy(() => import("./ModuleActions"));
 const IALabTour = lazy(() => import("./IALabTour"));
 const AchievementToast = lazy(() => import("./AchievementToast"));
+const IALabSandbox = lazy(() => import("./IALabSandbox"));
 import OfflineBanner from "./OfflineBanner";
 import GlobalSearchBar from "./GlobalSearchBar";
 import {
@@ -91,6 +92,11 @@ const IALabContent = memo(function () {
     { id: "contenido", label: t("ialab.tab_content") },
     { id: "actividades", label: t("ialab.tab_activities") },
     { id: "herramientas", label: t("ialab.tab_tools") },
+    {
+      id: "sandbox",
+      label: t("ialab.sandbox.title") || "Practice",
+      icon: "FlaskConical",
+    },
   ];
   const { user } = useIALabUIContext();
   const { toasts: achievementToasts, removeToast: removeAchievementToast } =
@@ -121,10 +127,13 @@ const IALabContent = memo(function () {
   const [toast, setToast] = useState(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const viewSection = searchParams.get('tab') || null;
-  const setViewSection = useCallback((tabId) => {
-    setSearchParams(tabId ? { tab: tabId } : {}, { replace: true });
-  }, [setSearchParams]);
+  const viewSection = searchParams.get("tab") || null;
+  const setViewSection = useCallback(
+    (tabId) => {
+      setSearchParams(tabId ? { tab: tabId } : {}, { replace: true });
+    },
+    [setSearchParams],
+  );
   const [examRefreshKey, setExamRefreshKey] = useState(0);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -565,6 +574,26 @@ const IALabContent = memo(function () {
                       title={t("ialab.tools_unavailable")}
                     >
                       <ToolTutorAccordion onAction={handleAction} />
+                    </SectionErrorBoundary>
+                  </Suspense>
+                </div>
+              </AnimatedSection>
+
+              <AnimatedSection show={viewSection === "sandbox"} loading={false}>
+                <div
+                  id="panel-sandbox"
+                  role="tabpanel"
+                  aria-labelledby="tab-sandbox"
+                >
+                  <Suspense
+                    fallback={
+                      <div className="p-8 text-center text-slate-400">
+                        Loading...
+                      </div>
+                    }
+                  >
+                    <SectionErrorBoundary name="IALabSandbox">
+                      <IALabSandbox />
                     </SectionErrorBoundary>
                   </Suspense>
                 </div>

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
-import SectionErrorBoundary from "./SectionErrorBoundary";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { cn } from "../forum/forumDesignSystem";
@@ -70,19 +69,17 @@ const OvaEdutechlife = ({ onComplete }) => {
 
   if (screen === "intro") {
     return (
-      <SectionErrorBoundary name="OvaEdutechlife/Intro">
-        <div className="w-full h-full bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-2xl">
-          <OVAIntro
-            icon="fa-brain"
-            badge={t("ova.tour.interactive_badge")}
-            title={t("ova.tour.title")}
-            description={t("ova.tour.description")}
-            audioText={t("ova.tour.welcome_audio")}
-            onStart={() => setScreen("slides")}
-            startLabel={t("ova.tour.start_btn")}
-          />
-        </div>
-      </SectionErrorBoundary>
+      <div className="w-full h-full bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-2xl">
+        <OVAIntro
+          icon="fa-brain"
+          badge={t("ova.tour.interactive_badge")}
+          title={t("ova.tour.title")}
+          description={t("ova.tour.description")}
+          audioText={t("ova.tour.welcome_audio")}
+          onStart={() => setScreen("slides")}
+          startLabel={t("ova.tour.start_btn")}
+        />
+      </div>
     );
   }
 
@@ -104,44 +101,42 @@ const OvaEdutechlife = ({ onComplete }) => {
   };
 
   return (
-    <SectionErrorBoundary name="OvaEdutechlife/Main">
-      <OVALayout
-        icon="fa-brain"
-        title={t("ova.tour.title")}
-        tabs={GEMINI_SLIDE_TABS}
-        currentTab={currentTabId}
-        onTabChange={(idx) => goToSlide(idx)}
-        valerioText={getValerioText()}
-        valerioAutoPlay={false}
-        showNav={!isQuizComplete}
-        nextLabel={t("ova.nav.next")}
-        prevLabel={t("ova.nav.prev")}
-      >
-        <div className="max-w-3xl mx-auto">
-          {currentSlide < 4 ? (
-            <OvaGeminiSlides
-              currentSlide={currentSlide}
-              slideContent={slideContent}
-              slideDescs={slideDescs}
-              slideTitles={slideTitles}
-            />
-          ) : (
-            <OvaGeminiQuiz
-              quiz={quiz}
-              selectedAnswers={selectedAnswers}
-              showResults={showResults}
-              isAllCorrect={isPassed}
-              answeredCount={answeredCount}
-              totalQuestions={totalQuestions}
-              correctCount={correctCount}
-              handleAnswerSelect={handleAnswerSelect}
-              handleCheckAnswers={handleCheckAnswers}
-              handleComplete={handleComplete}
-            />
-          )}
-        </div>
-      </OVALayout>
-    </SectionErrorBoundary>
+    <OVALayout
+      icon="fa-brain"
+      title={t("ova.tour.title")}
+      tabs={GEMINI_SLIDE_TABS}
+      currentTab={currentTabId}
+      onTabChange={(idx) => goToSlide(idx)}
+      valerioText={getValerioText()}
+      valerioAutoPlay={false}
+      showNav={!isQuizComplete}
+      nextLabel={t("ova.nav.next")}
+      prevLabel={t("ova.nav.prev")}
+    >
+      <div className="max-w-3xl mx-auto">
+        {currentSlide < 4 ? (
+          <OvaGeminiSlides
+            currentSlide={currentSlide}
+            slideContent={slideContent}
+            slideDescs={slideDescs}
+            slideTitles={slideTitles}
+          />
+        ) : (
+          <OvaGeminiQuiz
+            quiz={quiz}
+            selectedAnswers={selectedAnswers}
+            showResults={showResults}
+            isAllCorrect={isPassed}
+            answeredCount={answeredCount}
+            totalQuestions={totalQuestions}
+            correctCount={correctCount}
+            handleAnswerSelect={handleAnswerSelect}
+            handleCheckAnswers={handleCheckAnswers}
+            handleComplete={handleComplete}
+          />
+        )}
+      </div>
+    </OVALayout>
   );
 };
 

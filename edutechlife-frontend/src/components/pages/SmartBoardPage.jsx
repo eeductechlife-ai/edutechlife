@@ -1,23 +1,25 @@
 import { lazy, Suspense } from "react";
-import { SmartBoardKidsProvider } from "../../context/SmartBoardKidsContext";
+import { useAuth } from "@clerk/react";
+import { useNavigate } from "react-router-dom";
 import { PageLoader } from "../LoadingScreen";
 import { useTranslation } from "../../i18n/I18nProvider";
 
-// The SmartBoard student app renders the full kids dashboard (2.0) — the same
-// rich experience as /smartboard, so both entry points stay in sync.
-const SmartBoardKidsDashboard = lazy(
-  () => import("../kids-dashboard/SmartBoardKidsDashboard"),
-);
+const SmartBoardDashboard = lazy(() => import("../smartBoardDashboard"));
 
 const SmartBoardPage = () => {
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/");
+  };
+
   return (
-    <SmartBoardKidsProvider>
-      <Suspense fallback={<PageLoader message={t("smartboard.loading")} />}>
-        <SmartBoardKidsDashboard />
-      </Suspense>
-    </SmartBoardKidsProvider>
+    <Suspense fallback={<PageLoader message={t("smartboard.loading")} />}>
+      <SmartBoardDashboard onNavigate={navigate} onLogout={handleLogout} />
+    </Suspense>
   );
 };
 

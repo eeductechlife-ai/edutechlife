@@ -1135,7 +1135,6 @@
   "ova.risksim.completion_title": "¡Ética Activada!",
   "ova.risksim.completion_desc": "Has completado el simulador de evaluación de riesgos.",
   "ova.risksim.mark_complete": "Marcar como visto",
-  "ova.risksim.badge": "Ética IA",
   "ova.risksim.back_stars": "Volver a estrellas",
   "ova.risksim.modal_button": "Entendido",
   "ova.risksim.fallback_feedback": "Incorrecto. Recuerda aplicar el pensamiento crítico.",
@@ -3766,7 +3765,6 @@
 
   "aliados.marquee_aria": "Logos de aliados",
 
-  "loading.ova": "Cargando laboratorio...",
   "loading.status_start": "Preparando tu experiencia...",
   "loading.status_vak": "Personalizando con metodología VAK...",
   "loading.status_ai": "Activando tus tutores con IA...",

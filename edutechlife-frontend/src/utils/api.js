@@ -344,9 +344,6 @@ export async function callDaniChatStream(messages, opts = {}, onChunk) {
     messages,
     temperature: opts.temperature ?? 0.7,
     maxTokens: opts.maxTokens ?? 800,
-    context: opts.context,
-    socratic: opts.socratic ?? false,
-    language: opts.language ?? "es",
   };
 
   const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};

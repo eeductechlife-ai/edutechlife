@@ -389,10 +389,6 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         setConversation((prev) => [...prev, valerioMessage]);
         setMessage(fullResponse);
         setStreamingMessage("");
-
-        speakTextConversational(cleanTextForTTS(fullResponse), "valerio", () =>
-          setValerioState("idle"),
-        );
       } catch (error) {
         clearTimeout(timeoutId);
         if (error.name === "AbortError") {

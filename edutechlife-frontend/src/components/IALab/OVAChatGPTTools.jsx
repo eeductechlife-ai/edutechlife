@@ -44,14 +44,14 @@ const WelcomeScreen = ({ onNext }) => {
   const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-[fadeIn_0.8s_ease-out_forwards] px-4 py-8 bg-white dark:bg-slate-800">
-      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-petroleum-dark dark:text-slate-100 font-semibold text-sm mb-4">
-        <Bot size={16} className="text-corporate" />
+      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-[#13374b] dark:text-slate-100 font-semibold text-sm mb-4">
+        <Bot size={16} className="text-[#259eb5]" />
         <span>{t("ova.chatgpttools.lab_badge")}</span>
       </div>
-      <div className="w-16 h-16 bg-gradient-to-br from-corporate to-petroleum-dark rounded-2xl flex items-center justify-center shadow-lg shadow-corporate/20 mb-6">
+      <div className="w-16 h-16 bg-gradient-to-br from-[#259eb5] to-[#13374b] rounded-2xl flex items-center justify-center shadow-lg shadow-[#259eb5]/20 mb-6">
         <Zap className="text-white w-8 h-8" />
       </div>
-      <h1 className="text-3xl md:text-5xl font-black mb-3 leading-tight tracking-tight text-petroleum-dark dark:text-slate-100">
+      <h1 className="text-3xl md:text-5xl font-black mb-3 leading-tight tracking-tight text-[#13374b] dark:text-slate-100">
         {t("ova.chatgpttools.welcome_title")}
       </h1>
       <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-light mb-2">
@@ -63,7 +63,7 @@ const WelcomeScreen = ({ onNext }) => {
       <VoiceReader text={t("ova.chatgpttools.welcome_voice")} />
       <button
         onClick={onNext}
-        className="mt-4 px-8 py-4 bg-gradient-to-r from-corporate to-petroleum-dark text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3"
+        className="mt-4 px-8 py-4 bg-gradient-to-r from-[#259eb5] to-[#13374b] text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3"
       >
         <Play size={20} />
         {t("ova.chatgpttools.start_btn")}
@@ -128,14 +128,12 @@ export default function OVAChatGPTTools({ onComplete }) {
     <div className="min-h-screen bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-sans p-4 md:p-8">
       <nav className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-corporate rounded-xl flex items-center justify-center shadow-lg shadow-corporate/20">
+          <div className="w-10 h-10 bg-[#259eb5] rounded-xl flex items-center justify-center shadow-lg shadow-[#259eb5]/20">
             <Zap className="text-white w-6 h-6" />
           </div>
           <span className="text-3xl font-black tracking-tight">
-            <span className="text-corporate">Edu</span>
-            <span className="text-petroleum-dark dark:text-slate-100">
-              techlife
-            </span>
+            <span className="text-[#259eb5]">Edu</span>
+            <span className="text-[#13374b] dark:text-slate-100">techlife</span>
           </span>
         </div>
         <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-700/30 px-6 py-2.5 rounded-2xl border border-slate-100 dark:border-slate-600 shadow-sm">
@@ -143,7 +141,7 @@ export default function OVAChatGPTTools({ onComplete }) {
             {t("ova.chatgpttools.nav_ecosystem")}
           </span>
           <div className="h-4 w-[2px] bg-slate-200 dark:bg-slate-600"></div>
-          <span className="text-sm font-bold text-corporate">
+          <span className="text-sm font-bold text-[#259eb5]">
             {t("ova.chatgpttools.nav_module")}
           </span>
         </div>
@@ -158,7 +156,7 @@ export default function OVAChatGPTTools({ onComplete }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
-              <div className="bg-petroleum-dark text-white p-6 md:p-8 rounded-[2rem] shadow-2xl mb-8 relative overflow-hidden">
+              <div className="bg-[#13374b] text-white p-6 md:p-8 rounded-[2rem] shadow-2xl mb-8 relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
                   <BookOpen size={140} />
                 </div>
@@ -194,7 +192,7 @@ export default function OVAChatGPTTools({ onComplete }) {
                     key={tool.id}
                     whileHover={{ y: -6 }}
                     onClick={() => openTool(idx)}
-                    className={`group relative text-left bg-white dark:bg-slate-800 p-6 rounded-2xl border-2 transition-all duration-300 shadow-sm hover:shadow-xl ${viewedTools.includes(idx) ? "border-emerald-200 dark:border-emerald-400" : "border-slate-100 dark:border-slate-600 hover:border-corporate"}`}
+                    className={`group relative text-left bg-white dark:bg-slate-800 p-6 rounded-2xl border-2 transition-all duration-300 shadow-sm hover:shadow-xl ${viewedTools.includes(idx) ? "border-emerald-200 dark:border-emerald-400" : "border-slate-100 dark:border-slate-600 hover:border-[#259eb5]"}`}
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-700/30 group-hover:bg-cyan-50 dark:group-hover:bg-cyan-900/30 transition-colors">
@@ -210,13 +208,13 @@ export default function OVAChatGPTTools({ onComplete }) {
                         </div>
                       )}
                     </div>
-                    <h3 className="text-xl font-black text-petroleum-dark dark:text-slate-100 mb-2 group-hover:text-corporate transition-colors">
+                    <h3 className="text-xl font-black text-[#13374b] dark:text-slate-100 mb-2 group-hover:text-[#259eb5] transition-colors">
                       {tool.title}
                     </h3>
                     <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4 line-clamp-2">
                       {tool.desc}
                     </p>
-                    <div className="flex items-center gap-1.5 text-corporate font-black text-[11px] uppercase tracking-widest">
+                    <div className="flex items-center gap-1.5 text-[#259eb5] font-black text-[11px] uppercase tracking-widest">
                       {t("ova.chatgpttools.explore_btn")}{" "}
                       <ChevronRight
                         size={14}
@@ -229,7 +227,7 @@ export default function OVAChatGPTTools({ onComplete }) {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   onClick={() => setShowQuiz(true)}
-                  className="lg:col-span-1 md:col-span-2 bg-gradient-to-br from-corporate to-petroleum-dark p-6 rounded-2xl shadow-xl text-white group overflow-hidden relative"
+                  className="lg:col-span-1 md:col-span-2 bg-gradient-to-br from-[#259eb5] to-[#13374b] p-6 rounded-2xl shadow-xl text-white group overflow-hidden relative"
                 >
                   <div className="absolute top-0 right-0 p-6 opacity-10 transform group-hover:scale-125 transition-transform">
                     <Trophy size={120} />
@@ -246,7 +244,7 @@ export default function OVAChatGPTTools({ onComplete }) {
                         {t("ova.chatgpttools.challenge_desc")}
                       </p>
                     </div>
-                    <div className="bg-white text-petroleum-dark dark:text-slate-100 font-black py-3 px-6 rounded-xl inline-flex items-center justify-center gap-2 group-hover:bg-cyan-50 dark:group-hover:bg-cyan-900/30 transition-colors text-sm">
+                    <div className="bg-white text-[#13374b] dark:text-slate-100 font-black py-3 px-6 rounded-xl inline-flex items-center justify-center gap-2 group-hover:bg-cyan-50 dark:group-hover:bg-cyan-900/30 transition-colors text-sm">
                       {t("ova.chatgpttools.challenge_start")} <Play size={16} />
                     </div>
                   </div>
@@ -269,7 +267,7 @@ export default function OVAChatGPTTools({ onComplete }) {
                         setShowQuiz(false);
                         stopSpeech();
                       }}
-                      className="text-slate-600 dark:text-slate-300 hover:text-petroleum-dark dark:hover:text-slate-100 flex items-center gap-1 font-bold transition-colors text-xs"
+                      className="text-slate-600 dark:text-slate-300 hover:text-[#13374b] dark:hover:text-slate-100 flex items-center gap-1 font-bold transition-colors text-xs"
                     >
                       <ChevronLeft size={16} /> {t("ova.chatgpttools.quit_btn")}
                     </button>
@@ -277,15 +275,15 @@ export default function OVAChatGPTTools({ onComplete }) {
                       {quizScenarios.map((_, i) => (
                         <div
                           key={i}
-                          className={`h-1.5 rounded-full transition-all duration-500 ${i === quizStep ? "w-10 bg-corporate" : i < quizStep ? "w-6 bg-emerald-400" : "w-4 bg-slate-100 dark:bg-slate-700"}`}
+                          className={`h-1.5 rounded-full transition-all duration-500 ${i === quizStep ? "w-10 bg-[#259eb5]" : i < quizStep ? "w-6 bg-emerald-400" : "w-4 bg-slate-100 dark:bg-slate-700"}`}
                         />
                       ))}
                     </div>
                   </div>
-                  <h2 className="text-[10px] font-black text-corporate uppercase tracking-widest mb-3">
+                  <h2 className="text-[10px] font-black text-[#259eb5] uppercase tracking-widest mb-3">
                     {t("ova.chatgpttools.case_label", { num: quizStep + 1 })}
                   </h2>
-                  <p className="text-xl md:text-2xl font-black text-petroleum-dark dark:text-slate-100 mb-6 leading-tight">
+                  <p className="text-xl md:text-2xl font-black text-[#13374b] dark:text-slate-100 mb-6 leading-tight">
                     {quizScenarios[quizStep].question}
                   </p>
                   <div className="space-y-3">
@@ -296,7 +294,7 @@ export default function OVAChatGPTTools({ onComplete }) {
                         "w-full p-4 rounded-xl border-2 text-left font-bold transition-all flex items-center justify-between text-sm ";
                       if (!feedback)
                         btnClass +=
-                          "border-slate-100 dark:border-slate-600 hover:border-corporate hover:bg-slate-50 dark:hover:bg-slate-700/30";
+                          "border-slate-100 dark:border-slate-600 hover:border-[#259eb5] hover:bg-slate-50 dark:hover:bg-slate-700/30";
                       else if (isCorrect)
                         btnClass +=
                           "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300";
@@ -353,7 +351,7 @@ export default function OVAChatGPTTools({ onComplete }) {
                       </div>
                       <button
                         onClick={nextQuestion}
-                        className="w-full mt-4 bg-petroleum-dark text-white py-3 rounded-lg font-black hover:bg-corporate transition-colors shadow text-xs flex items-center justify-center gap-2"
+                        className="w-full mt-4 bg-[#13374b] text-white py-3 rounded-lg font-black hover:bg-[#259eb5] transition-colors shadow text-xs flex items-center justify-center gap-2"
                       >
                         {quizStep < quizScenarios.length - 1
                           ? t("ova.chatgpttools.next_btn")
@@ -366,12 +364,12 @@ export default function OVAChatGPTTools({ onComplete }) {
               ) : (
                 <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] p-8 shadow-xl text-center border border-slate-100 dark:border-slate-600">
                   <div className="inline-flex items-center justify-center w-24 h-24 bg-cyan-50 dark:bg-cyan-900/20 rounded-full mb-6 relative">
-                    <Trophy className="text-corporate w-12 h-12" />
+                    <Trophy className="text-[#259eb5] w-12 h-12" />
                     <div className="absolute top-0 right-0 bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-black border-4 border-white dark:border-slate-800 shadow">
                       {score}
                     </div>
                   </div>
-                  <h2 className="text-2xl font-black text-petroleum-dark dark:text-slate-100 mb-3">
+                  <h2 className="text-2xl font-black text-[#13374b] dark:text-slate-100 mb-3">
                     {t("ova.chatgpttools.report_title")}
                   </h2>
                   <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">
@@ -381,8 +379,8 @@ export default function OVAChatGPTTools({ onComplete }) {
                     })}
                   </p>
                   <div className="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-2xl mb-6 text-left">
-                    <h3 className="font-black text-petroleum-dark dark:text-slate-100 mb-3 flex items-center gap-2 text-sm">
-                      <Award className="text-corporate" size={18} />{" "}
+                    <h3 className="font-black text-[#13374b] dark:text-slate-100 mb-3 flex items-center gap-2 text-sm">
+                      <Award className="text-[#259eb5]" size={18} />{" "}
                       {t("ova.chatgpttools.profile_label")}
                     </h3>
                     {score === 5 ? (
@@ -409,14 +407,14 @@ export default function OVAChatGPTTools({ onComplete }) {
                         setSelectedAnswer(null);
                         setShowQuiz(false);
                       }}
-                      className="bg-corporate text-white px-8 py-3 rounded-xl font-black shadow shadow-corporate/30 hover:bg-petroleum-dark transition-colors text-sm flex items-center justify-center gap-2"
+                      className="bg-[#259eb5] text-white px-8 py-3 rounded-xl font-black shadow shadow-[#259eb5]/30 hover:bg-[#13374b] transition-colors text-sm flex items-center justify-center gap-2"
                     >
                       <RefreshCcw size={16} />{" "}
                       {t("ova.chatgpttools.restart_btn")}
                     </button>
                     <button
                       onClick={() => setShowQuiz(false)}
-                      className="bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-8 py-3 rounded-xl font-black hover:border-petroleum-dark dark:hover:border-slate-100 transition-colors text-sm"
+                      className="bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 px-8 py-3 rounded-xl font-black hover:border-[#13374b] dark:hover:border-slate-100 transition-colors text-sm"
                     >
                       {t("ova.chatgpttools.back_btn")}
                     </button>
@@ -437,7 +435,7 @@ export default function OVAChatGPTTools({ onComplete }) {
             role="dialog"
             aria-modal="true"
             aria-label={tools[activeModal].title}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-petroleum-dark/80 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#13374b]/80 backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -466,10 +464,10 @@ export default function OVAChatGPTTools({ onComplete }) {
                       />
                     </div>
                     <div>
-                      <h1 className="text-2xl md:text-3xl font-black text-petroleum-dark dark:text-slate-100">
+                      <h1 className="text-2xl md:text-3xl font-black text-[#13374b] dark:text-slate-100">
                         {tools[activeModal].title}
                       </h1>
-                      <div className="flex items-center gap-1.5 text-corporate font-black uppercase tracking-widest text-[10px] mt-0.5">
+                      <div className="flex items-center gap-1.5 text-[#259eb5] font-black uppercase tracking-widest text-[10px] mt-0.5">
                         <Zap size={12} />{" "}
                         {t("ova.chatgpttools.modal_ecosystem")}
                       </div>
@@ -517,8 +515,8 @@ export default function OVAChatGPTTools({ onComplete }) {
                   </div>
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-2xl mb-6">
-                  <h3 className="flex items-center gap-1.5 font-black text-petroleum-dark dark:text-slate-100 mb-4 uppercase tracking-widest text-[10px]">
-                    <Lightbulb size={14} className="text-corporate" />{" "}
+                  <h3 className="flex items-center gap-1.5 font-black text-[#13374b] dark:text-slate-100 mb-4 uppercase tracking-widest text-[10px]">
+                    <Lightbulb size={14} className="text-[#259eb5]" />{" "}
                     {t("ova.chatgpttools.modal_usecases")}
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -527,7 +525,7 @@ export default function OVAChatGPTTools({ onComplete }) {
                         key={i}
                         className="bg-white dark:bg-slate-700 p-3 rounded-xl shadow-sm border border-slate-100 dark:border-slate-500 flex items-center gap-2 font-bold text-slate-600 dark:text-slate-300 text-xs"
                       >
-                        <span className="text-corporate font-black">
+                        <span className="text-[#259eb5] font-black">
                           {i + 1}.
                         </span>{" "}
                         {u}
@@ -535,7 +533,7 @@ export default function OVAChatGPTTools({ onComplete }) {
                     ))}
                   </div>
                 </div>
-                <div className="bg-petroleum-dark rounded-2xl p-6 text-white">
+                <div className="bg-[#13374b] rounded-2xl p-6 text-white">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-400">
                       {t("ova.chatgpttools.modal_prompt")}

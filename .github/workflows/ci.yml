@@ -10,7 +10,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-<<<<<<< HEAD
 env:
   NODE_VERSION: 20
 
@@ -22,22 +21,11 @@ jobs:
     defaults:
       run:
         working-directory: edutechlife-frontend
-=======
-jobs:
-  frontend:
-    name: Frontend (lint, typecheck, test, build)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: edutechlife-frontend
-
->>>>>>> 34b3ca5 (fix: add cleanTextForTTS to strip markdown/emojis before TTS for valerio)
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-<<<<<<< HEAD
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           cache-dependency-path: edutechlife-frontend/package-lock.json
@@ -290,31 +278,11 @@ jobs:
     defaults:
       run:
         working-directory: edutechlife-backend
-=======
-          node-version: 20
-          cache: 'npm'
-          cache-dependency-path: edutechlife-frontend/package-lock.json
-
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run typecheck
-      - run: npm run test:smoke
-      - run: npm run build
-
-  backend:
-    name: Backend (syntax, lint)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: edutechlife-backend
-
->>>>>>> 34b3ca5 (fix: add cleanTextForTTS to strip markdown/emojis before TTS for valerio)
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-<<<<<<< HEAD
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           cache-dependency-path: edutechlife-backend/package-lock.json
@@ -331,22 +299,3 @@ jobs:
 
       - run: node -c src/index.js
       - run: npm test
-=======
-          node-version: 20
-          cache: 'npm'
-          cache-dependency-path: edutechlife-backend/package-lock.json
-
-      - run: npm ci
-      - run: node -c src/index.js
-      - run: node -c src/app.js
-      - name: Validate backend structure
-        run: |
-          node -e "
-            const fs = require('fs');
-            const routesDir = './src/routes';
-            if (fs.existsSync(routesDir)) {
-              const files = fs.readdirSync(routesDir).filter(f => f.endsWith('.js'));
-              console.log('Routes found:', files.join(', '));
-            }
-          "
->>>>>>> 34b3ca5 (fix: add cleanTextForTTS to strip markdown/emojis before TTS for valerio)

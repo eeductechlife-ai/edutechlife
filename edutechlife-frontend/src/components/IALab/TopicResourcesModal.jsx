@@ -41,6 +41,7 @@ const TopicResourcesModal = ({
   const [immersivePdfModalOpen, setImmersivePdfModalOpen] = useState(false);
   const [immersivePdfResource, setImmersivePdfResource] = useState(null);
   const [viewedIds, setViewedIds] = useState([]);
+  const [isLoadingResources, setIsLoadingResources] = useState(true);
   const modalRef = useRef(null);
   const {
     isFullscreen: isModalFullscreen,
@@ -163,6 +164,12 @@ const TopicResourcesModal = ({
       setSelectedResourceType(resources[newIndex].type);
     }
   };
+
+  useEffect(() => {
+    if (resources.length > 0) {
+      setIsLoadingResources(false);
+    }
+  }, [resources.length]);
 
   if (!topicData || !topicResources) {
     return null;
@@ -342,204 +349,231 @@ const TopicResourcesModal = ({
                 </div>
               </div>
 
-              <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white border-b border-petroleum/25">
-                {topicResources.learningObjectives &&
-                  topicResources.learningObjectives.length > 0 && (
-                    <div className="mb-4">
-                      <h4 className="font-semibold text-petroleum mb-2 flex items-center gap-2 text-sm sm:text-base">
-                        <div className="w-6 h-6 rounded-md bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
-                          <Icon
-                            name="fa-bullseye"
-                            className="text-petroleum w-3.5 h-3.5 sm:w-4 sm:h-4"
-                          />
+              {isLoadingResources && (
+                <div className="p-6 space-y-6 animate-pulse">
+                  <div className="h-6 w-48 bg-slate-200 rounded-lg" />
+                  <div className="h-4 w-72 bg-slate-100 rounded" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div
+                        key={i}
+                        className="rounded-xl bg-slate-100 p-4 space-y-3"
+                      >
+                        <div className="h-5 w-32 bg-slate-200 rounded" />
+                        <div className="h-4 w-full bg-slate-200/50 rounded" />
+                        <div className="h-4 w-3/4 bg-slate-200/50 rounded" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {!isLoadingResources && (
+                <>
+                  <div className="px-4 sm:px-6 py-3 sm:py-4 bg-white border-b border-petroleum/25">
+                    {topicResources.learningObjectives &&
+                      topicResources.learningObjectives.length > 0 && (
+                        <div className="mb-4">
+                          <h4 className="font-semibold text-petroleum mb-2 flex items-center gap-2 text-sm sm:text-base">
+                            <div className="w-6 h-6 rounded-md bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
+                              <Icon
+                                name="fa-bullseye"
+                                className="text-petroleum w-3.5 h-3.5 sm:w-4 sm:h-4"
+                              />
+                            </div>
+                            {t("ialab.topic_resources.learning_objective")}
+                          </h4>
+                          <p className="text-sm sm:text-base text-petroleum/70 leading-relaxed ml-7">
+                            {topicResources.learningObjectives[0]}
+                          </p>
                         </div>
-                        {t("ialab.topic_resources.learning_objective")}
-                      </h4>
-                      <p className="text-sm sm:text-base text-petroleum/70 leading-relaxed ml-7">
-                        {topicResources.learningObjectives[0]}
-                      </p>
-                    </div>
-                  )}
-                <p className="text-sm sm:text-base text-petroleum/70 leading-relaxed">
-                  {topicResources.description}
-                </p>
-              </div>
-
-              {resources.length > 0 &&
-                (() => {
-                  const typeCounts = {};
-                  resources.forEach((r) => {
-                    typeCounts[r.type] = (typeCounts[r.type] || 0) + 1;
-                  });
-                  const sortedTypes = Object.entries(typeCounts).sort(
-                    (a, b) => b[1] - a[1],
-                  );
-                  return (
-                    <div className="px-6 py-3 border-b border-petroleum/25 flex flex-wrap items-center gap-2">
-                      {sortedTypes.map(([type, count]) => {
-                        const cfg = RESOURCE_TYPE_CONFIG[type] || {
-                          label: type,
-                          color: "#64748B",
-                          bg: "bg-slate-100",
-                        };
-                        return (
-                          <span
-                            key={type}
-                            className={cn(
-                              "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium",
-                              cfg.bg,
-                            )}
-                            style={{ color: cfg.color }}
-                          >
-                            <Icon
-                              name={cfg.icon || "fa-file"}
-                              className="w-3 h-3"
-                            />
-                            {cfg.label}
-                            <span className="font-bold">{count}</span>
-                          </span>
-                        );
-                      })}
-                    </div>
-                  );
-                })()}
-
-              <div className="overflow-hidden">
-                <div className="px-6 pt-4 pb-4 border-b border-petroleum/25">
-                  <ResourceSelector
-                    resources={resources}
-                    activeResourceIndex={activeResourceIndex}
-                    completedIds={viewedIds}
-                    onResourceSelect={(index) => {
-                      setActiveResourceIndex(index);
-                      handleOpenViewerModal(index);
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-petroleum/25 bg-white flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div
-                    className={cn(
-                      "w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0",
-                      "bg-gradient-to-br from-petroleum/10 to-corporate/10 text-petroleum text-sm sm:text-lg",
-                    )}
-                  >
-                    {resources[activeResourceIndex]?.type === "video" ? (
-                      <Icon
-                        name="fa-video"
-                        className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
-                      />
-                    ) : resources[activeResourceIndex]?.type === "document" ||
-                      resources[activeResourceIndex]?.type === "documento" ||
-                      resources[activeResourceIndex]?.type === "pdf" ||
-                      resources[activeResourceIndex]?.type ===
-                        "pdf-thumbnail" ? (
-                      <Icon
-                        name="fa-file-lines"
-                        className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
-                      />
-                    ) : resources[activeResourceIndex]?.type === "image" ||
-                      resources[activeResourceIndex]?.type === "imagen" ? (
-                      <Icon
-                        name="fa-image"
-                        className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
-                      />
-                    ) : resources[activeResourceIndex]?.type === "ova" ||
-                      resources[activeResourceIndex]?.type ===
-                        "ova-thumbnail" ||
-                      resources[activeResourceIndex]?.type ===
-                        "ova_interactive" ? (
-                      <Icon
-                        name="fa-brain"
-                        className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
-                      />
-                    ) : resources[activeResourceIndex]?.type ===
-                        "interactive" ||
-                      resources[activeResourceIndex]?.type === "interactivo" ? (
-                      <Icon
-                        name="fa-puzzle-piece"
-                        className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
-                      />
-                    ) : (
-                      <Icon
-                        name="fa-file"
-                        className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
-                      />
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <h4 className="font-semibold text-petroleum text-xs sm:text-sm truncate">
-                      {resources[activeResourceIndex]?.title ||
-                        t("ialab.topic_resources.select_resource")}
-                    </h4>
-                    <div className="flex items-center gap-1 sm:gap-2 text-xs text-petroleum/60">
-                      {resources[activeResourceIndex]?.type === "video" && (
-                        <span>
-                          {durationLoading
-                            ? t("common.loading")
-                            : youtubeDuration ||
-                              resources[activeResourceIndex]?.duration}
-                        </span>
                       )}
-                      {resources[activeResourceIndex]?.format && (
-                        <span>{resources[activeResourceIndex]?.format}</span>
-                      )}
+                    <p className="text-sm sm:text-base text-petroleum/70 leading-relaxed">
+                      {topicResources.description}
+                    </p>
+                  </div>
+
+                  {resources.length > 0 &&
+                    (() => {
+                      const typeCounts = {};
+                      resources.forEach((r) => {
+                        typeCounts[r.type] = (typeCounts[r.type] || 0) + 1;
+                      });
+                      const sortedTypes = Object.entries(typeCounts).sort(
+                        (a, b) => b[1] - a[1],
+                      );
+                      return (
+                        <div className="px-6 py-3 border-b border-petroleum/25 flex flex-wrap items-center gap-2">
+                          {sortedTypes.map(([type, count]) => {
+                            const cfg = RESOURCE_TYPE_CONFIG[type] || {
+                              label: type,
+                              color: "#64748B",
+                              bg: "bg-slate-100",
+                            };
+                            return (
+                              <span
+                                key={type}
+                                className={cn(
+                                  "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium",
+                                  cfg.bg,
+                                )}
+                                style={{ color: cfg.color }}
+                              >
+                                <Icon
+                                  name={cfg.icon || "fa-file"}
+                                  className="w-3 h-3"
+                                />
+                                {cfg.label}
+                                <span className="font-bold">{count}</span>
+                              </span>
+                            );
+                          })}
+                        </div>
+                      );
+                    })()}
+
+                  <div className="overflow-hidden">
+                    <div className="px-6 pt-4 pb-4 border-b border-petroleum/25">
+                      <ResourceSelector
+                        resources={resources}
+                        activeResourceIndex={activeResourceIndex}
+                        completedIds={viewedIds}
+                        onResourceSelect={(index) => {
+                          setActiveResourceIndex(index);
+                          handleOpenViewerModal(index);
+                        }}
+                      />
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                  <button
-                    onClick={() => {
-                      if (activeResourceIndex > 0) {
-                        const newIndex = activeResourceIndex - 1;
-                        setActiveResourceIndex(newIndex);
-                        handleOpenViewerModal(newIndex);
-                      }
-                    }}
-                    disabled={activeResourceIndex <= 0}
-                    className={cn(
-                      "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
-                      activeResourceIndex <= 0
-                        ? "text-petroleum/50 cursor-not-allowed opacity-40"
-                        : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow",
-                    )}
-                    aria-label={t("ialab.viewer_modal.previous_aria")}
-                  >
-                    <Icon
-                      name="fa-chevron-left"
-                      className="w-4 h-4 sm:w-5 sm:h-5"
-                    />
-                  </button>
-                  <div className="px-3 py-1 bg-gradient-to-br from-petroleum/10 to-corporate/10 text-petroleum rounded-full text-sm font-medium">
-                    {activeResourceIndex + 1} / {resources.length}
+                  <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-petroleum/25 bg-white flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div
+                        className={cn(
+                          "w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0",
+                          "bg-gradient-to-br from-petroleum/10 to-corporate/10 text-petroleum text-sm sm:text-lg",
+                        )}
+                      >
+                        {resources[activeResourceIndex]?.type === "video" ? (
+                          <Icon
+                            name="fa-video"
+                            className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
+                          />
+                        ) : resources[activeResourceIndex]?.type ===
+                            "document" ||
+                          resources[activeResourceIndex]?.type ===
+                            "documento" ||
+                          resources[activeResourceIndex]?.type === "pdf" ||
+                          resources[activeResourceIndex]?.type ===
+                            "pdf-thumbnail" ? (
+                          <Icon
+                            name="fa-file-lines"
+                            className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
+                          />
+                        ) : resources[activeResourceIndex]?.type === "image" ||
+                          resources[activeResourceIndex]?.type === "imagen" ? (
+                          <Icon
+                            name="fa-image"
+                            className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
+                          />
+                        ) : resources[activeResourceIndex]?.type === "ova" ||
+                          resources[activeResourceIndex]?.type ===
+                            "ova-thumbnail" ||
+                          resources[activeResourceIndex]?.type ===
+                            "ova_interactive" ? (
+                          <Icon
+                            name="fa-brain"
+                            className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
+                          />
+                        ) : resources[activeResourceIndex]?.type ===
+                            "interactive" ||
+                          resources[activeResourceIndex]?.type ===
+                            "interactivo" ? (
+                          <Icon
+                            name="fa-puzzle-piece"
+                            className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
+                          />
+                        ) : (
+                          <Icon
+                            name="fa-file"
+                            className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
+                          />
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-semibold text-petroleum text-xs sm:text-sm truncate">
+                          {resources[activeResourceIndex]?.title ||
+                            t("ialab.topic_resources.select_resource")}
+                        </h4>
+                        <div className="flex items-center gap-1 sm:gap-2 text-xs text-petroleum/60">
+                          {resources[activeResourceIndex]?.type === "video" && (
+                            <span>
+                              {durationLoading
+                                ? t("common.loading")
+                                : youtubeDuration ||
+                                  resources[activeResourceIndex]?.duration}
+                            </span>
+                          )}
+                          {resources[activeResourceIndex]?.format && (
+                            <span>
+                              {resources[activeResourceIndex]?.format}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                      <button
+                        onClick={() => {
+                          if (activeResourceIndex > 0) {
+                            const newIndex = activeResourceIndex - 1;
+                            setActiveResourceIndex(newIndex);
+                            handleOpenViewerModal(newIndex);
+                          }
+                        }}
+                        disabled={activeResourceIndex <= 0}
+                        className={cn(
+                          "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
+                          activeResourceIndex <= 0
+                            ? "text-petroleum/50 cursor-not-allowed opacity-40"
+                            : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow",
+                        )}
+                        aria-label={t("ialab.viewer_modal.previous_aria")}
+                      >
+                        <Icon
+                          name="fa-chevron-left"
+                          className="w-4 h-4 sm:w-5 sm:h-5"
+                        />
+                      </button>
+                      <div className="px-3 py-1 bg-gradient-to-br from-petroleum/10 to-corporate/10 text-petroleum rounded-full text-sm font-medium">
+                        {activeResourceIndex + 1} / {resources.length}
+                      </div>
+                      <button
+                        onClick={() => {
+                          if (activeResourceIndex < resources.length - 1) {
+                            const newIndex = activeResourceIndex + 1;
+                            setActiveResourceIndex(newIndex);
+                            handleOpenViewerModal(newIndex);
+                          }
+                        }}
+                        disabled={activeResourceIndex >= resources.length - 1}
+                        className={cn(
+                          "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
+                          activeResourceIndex >= resources.length - 1
+                            ? "text-petroleum/50 cursor-not-allowed opacity-40"
+                            : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow",
+                        )}
+                        aria-label={t("ialab.viewer_modal.next_aria")}
+                      >
+                        <Icon
+                          name="fa-chevron-right"
+                          className="w-4 h-4 sm:w-5 sm:h-5"
+                        />
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    onClick={() => {
-                      if (activeResourceIndex < resources.length - 1) {
-                        const newIndex = activeResourceIndex + 1;
-                        setActiveResourceIndex(newIndex);
-                        handleOpenViewerModal(newIndex);
-                      }
-                    }}
-                    disabled={activeResourceIndex >= resources.length - 1}
-                    className={cn(
-                      "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
-                      activeResourceIndex >= resources.length - 1
-                        ? "text-petroleum/50 cursor-not-allowed opacity-40"
-                        : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow",
-                    )}
-                    aria-label={t("ialab.viewer_modal.next_aria")}
-                  >
-                    <Icon
-                      name="fa-chevron-right"
-                      className="w-4 h-4 sm:w-5 sm:h-5"
-                    />
-                  </button>
-                </div>
-              </div>
+                </>
+              )}
             </motion.div>
           </div>
 

@@ -40,8 +40,11 @@ const Logo = () => (
       <div className="absolute inset-0 bg-gradient-to-tr from-petroleum to-corporate rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
       <BrainCircuit className="w-5 h-5 text-white relative z-10" />
     </div>
-    <div className="text-xl tracking-tighter flex items-center lowercase">
-      <span className="font-black text-petroleum">edutech</span>
+    <div
+      className="text-xl tracking-tighter flex items-center lowercase"
+      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+    >
+      <span className="font-[900] text-petroleum">edutech</span>
       <span className="font-[400] text-corporate">life</span>
     </div>
   </div>
@@ -131,7 +134,7 @@ const ModuleHistory = ({ texts }) => {
                 <div className="p-2 bg-gradient-to-br from-petroleum to-corporate text-white rounded-lg shadow-md">
                   {sections[active].icon}
                 </div>
-                <h4 className="text-petroleum font-black text-lg leading-none uppercase tracking-tighter">
+                <h4 className="text-petroleum font-[900] text-lg leading-none uppercase tracking-tighter">
                   {sections[active].t}
                 </h4>
               </div>
@@ -168,7 +171,7 @@ const ModuleHistory = ({ texts }) => {
 const PromptConcept = ({ texts }) => (
   <div className="space-y-4 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
     <div className="p-5 bg-[#F0F9FF] rounded-[2rem] border-2 border-white dark:border-slate-700 shadow-md relative overflow-hidden">
-      <h4 className="text-petroleum font-black text-xl mb-3 tracking-tighter leading-none lowercase">
+      <h4 className="text-petroleum font-[900] text-xl mb-3 tracking-tighter leading-none lowercase">
         {texts.prompt_title}
       </h4>
       <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-bold text-sm max-w-2xl">
@@ -239,7 +242,7 @@ const ModuleAnatomy = ({ texts }) => {
       <div className="bg-petroleum text-white p-5 rounded-[1.8rem] shadow-lg relative min-h-[180px] flex flex-col justify-center border-b-2 border-corporate">
         {sel ? (
           <div className="animate-[slideInRight_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-            <h5 className="text-corporate font-black text-xs uppercase tracking-[0.3em] mb-3">
+            <h5 className="text-corporate font-[900] text-xs uppercase tracking-[0.3em] mb-3">
               {texts.anatomy_element_label} {sel.k}
             </h5>
             <p className="text-base text-white leading-relaxed font-medium">
@@ -301,7 +304,7 @@ const TechniquesSection = ({ texts }) => (
           {s.i}
         </div>
         <div>
-          <h5 className="font-black text-petroleum text-xs uppercase mb-1 tracking-tighter leading-none">
+          <h5 className="font-[900] text-petroleum text-xs uppercase mb-1 tracking-tighter leading-none">
             {s.t}
           </h5>
           <p className="text-xs text-slate-500 dark:text-slate-300 font-medium leading-relaxed">
@@ -330,7 +333,7 @@ const ErrorSection = ({ texts }) => (
         <div className="w-8 h-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
           {e.i}
         </div>
-        <h5 className="font-black text-petroleum text-xs uppercase tracking-widest leading-none mb-1">
+        <h5 className="font-[900] text-petroleum text-xs uppercase tracking-widest leading-none mb-1">
           {e.t}
         </h5>
         <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed font-medium">
@@ -447,7 +450,7 @@ export default function OVAEtica({ onComplete }) {
                 <div className="bg-[#F0F9FF] dark:bg-blue-900/30 text-petroleum p-4 rounded-[1.5rem] shadow-sm group-hover:scale-110 transition-transform">
                   <BookOpen className="w-6 h-6" />
                 </div>
-                <span className="font-black text-petroleum text-xs uppercase tracking-[0.1em] leading-tight">
+                <span className="font-[900] text-petroleum text-xs uppercase tracking-[0.1em] leading-tight">
                   {screensData[id].title}
                 </span>
                 {completed.includes(id) && (
@@ -618,10 +621,10 @@ export default function OVAEtica({ onComplete }) {
           {screen.startsWith("m") && (
             <div className="mb-4 flex flex-col md:flex-row justify-between items-start md:items-end gap-2 border-b border-slate-50 dark:border-slate-700 pb-4">
               <div className="space-y-1">
-                <div className="flex items-center gap-1.5 text-corporate font-black text-[10px] tracking-[0.3em] uppercase">
+                <div className="flex items-center gap-1.5 text-corporate font-[900] text-[10px] tracking-[0.3em] uppercase">
                   <Sparkles className="w-3 h-3" /> {texts.edutechlife_master}
                 </div>
-                <h1 className="text-xl md:text-2xl font-black text-petroleum tracking-tighter leading-tight">
+                <h1 className="text-xl md:text-2xl font-[900] text-petroleum tracking-tighter leading-tight">
                   {screensData[screen].title}
                 </h1>
               </div>
@@ -684,7 +687,7 @@ export default function OVAEtica({ onComplete }) {
                   stopSpeech();
                 }
               }}
-              className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl font-black text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em]"
+              className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em]"
             >
               {texts.btn_next} <ArrowRightCircle className="w-4 h-4" />
             </button>
@@ -712,7 +715,7 @@ export default function OVAEtica({ onComplete }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between border-b-2 border-slate-50 dark:border-slate-700 pb-4">
-              <h3 className="font-black text-slate-300 dark:text-slate-500 text-xs tracking-[0.3em] uppercase">
+              <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.3em] uppercase">
                 {texts.sidebar_title}
               </h3>
               <div className="flex items-center gap-1.5 text-[10px] font-black text-petroleum">
@@ -734,7 +737,7 @@ export default function OVAEtica({ onComplete }) {
                       setScreen(id);
                       setIsMenuOpen(false);
                     }}
-                    className={`p-3 rounded-xl text-left text-xs font-black transition-all group w-full ${isCurrent ? "bg-petroleum text-white shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
+                    className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? "bg-petroleum text-white shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
                   >
                     <div className="flex items-center gap-3">
                       {id.startsWith("m") ? (

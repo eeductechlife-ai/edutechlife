@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import { motion } from "framer-motion";
 import { useTranslation } from "../../i18n/I18nProvider";
 import {
   Briefcase,
@@ -77,11 +76,7 @@ const OVAPracticalCases = ({ onComplete }) => {
 
   if (screen === "intro") {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full h-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center rounded-2xl"
-      >
+      <div className="w-full h-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center rounded-2xl">
         <OVAIntro
           icon="fa-briefcase"
           badge={t("ova.practical.badge")}
@@ -91,7 +86,7 @@ const OVAPracticalCases = ({ onComplete }) => {
           onStart={() => setScreen("slides")}
           startLabel={t("ova.practical.start_btn")}
         />
-      </motion.div>
+      </div>
     );
   }
 
@@ -99,12 +94,7 @@ const OVAPracticalCases = ({ onComplete }) => {
   const isCorrect = selectedAnswer === challenges[currentChallenge].correct;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="w-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 text-slate-800 font-sans flex flex-col md:flex-row overflow-hidden relative min-h-[500px] rounded-2xl"
-    >
+    <div className="w-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 text-slate-800 font-sans flex flex-col md:flex-row overflow-hidden relative min-h-[500px] rounded-2xl">
       <aside className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-full border-r border-cyan-100 dark:border-gray-700">
         <div className="p-6 text-center border-b border-cyan-50 dark:border-gray-700">
           <div className="flex items-center gap-2 justify-center select-none">
@@ -416,7 +406,7 @@ const OVAPracticalCases = ({ onComplete }) => {
       </main>
 
       <OVAValerioBar text={getValerioText()} />
-    </motion.div>
+    </div>
   );
 };
 

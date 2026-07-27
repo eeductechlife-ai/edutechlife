@@ -17,28 +17,63 @@
  * Side effects: localStorage reads/writes via ls.get/ls.set/ls.remove,
  *   window.dispatchEvent('ialab:attemptsUpdated')
  */
-import { LS_KEYS, INITIAL_MODULE_PROGRESS, MODULE_RESOURCE_COUNTS, RESOURCE_MODULE_MAP } from '@/constants/ialab';
-import { ls, calcModuleScore } from '@/utils/ialab';
+import {
+  LS_KEYS,
+  INITIAL_MODULE_PROGRESS,
+  MODULE_RESOURCE_COUNTS,
+  RESOURCE_MODULE_MAP,
+} from "@/constants/ialab";
+import { ls, calcModuleScore } from "@/utils/ialab";
+
+function resolveProgressConflict(local, remote) {
+  if (!local) return remote || local;
+  if (!remote) return local;
+
+  const localTime = local.lastSyncedAt
+    ? new Date(local.lastSyncedAt).getTime()
+    : 0;
+  const remoteTime = remote.lastSyncedAt
+    ? new Date(remote.lastSyncedAt).getTime()
+    : 0;
+
+  if (localTime > remoteTime) return local;
+  if (remoteTime > localTime) return remote;
+
+  const localScore = local.courseProgress || 0;
+  const remoteScore = remote.courseProgress || 0;
+
+  return localScore >= remoteScore ? local : remote;
+}
 
 export const createPersistenceSlice = (set, get) => ({
   syncFromPersistence: (data) => {
     const state = get();
 
-    let persistedExams = { ...(data.completedExams || {}), ...state.completedExams };
+    let persistedExams = {
+      ...(data.completedExams || {}),
+      ...state.completedExams,
+    };
     if (Object.keys(persistedExams).length === 0) {
       persistedExams = ls.get(LS_KEYS.COMPLETED_EXAMS, {});
     }
 
     const storeProgress = state.courseProgress;
     const incomingProgress = data.courseProgress;
-    const effectiveProgress = (storeProgress > 0 && incomingProgress > 0)
-      ? Math.max(storeProgress, incomingProgress)
-      : (storeProgress > 0 ? storeProgress : (incomingProgress > 0 ? incomingProgress : 0));
+    const resolvedProgress = resolveProgressConflict(
+      { courseProgress: storeProgress, lastSyncedAt: state.lastActivityDate },
+      {
+        courseProgress: incomingProgress,
+        lastSyncedAt: data.lastSyncedAt || data.gamification?.lastActivityDate,
+      },
+    );
+    const effectiveProgress = resolvedProgress.courseProgress || 0;
 
     const localGamification = {
-      xp: state.xp, streak: state.streak,
+      xp: state.xp,
+      streak: state.streak,
       lastActivityDate: state.lastActivityDate,
-      badges: state.badges, badgesDates: state.badgesDates,
+      badges: state.badges,
+      badgesDates: state.badgesDates,
       lessonProgress: state.lessonProgress,
       checkpointAnswers: state.checkpointAnswers,
       forumPostCount: state.forumPostCount,
@@ -46,24 +81,59 @@ export const createPersistenceSlice = (set, get) => ({
       startDate: state.startDate,
     };
     const remoteGamification = data.gamification;
-    const mergedGamification = remoteGamification ? {
-      xp: Math.max(localGamification.xp, remoteGamification.xp || 0),
-      streak: Math.max(localGamification.streak, remoteGamification.streak || 0),
-      lastActivityDate: [localGamification.lastActivityDate, remoteGamification.lastActivityDate].filter(Boolean).sort().pop() || null,
-      badges: [...new Set([...(localGamification.badges || []), ...(remoteGamification.badges || [])])],
-      badgesDates: { ...(remoteGamification.badgesDates || {}), ...(localGamification.badgesDates || {}) },
-      lessonProgress: { ...(remoteGamification.lessonProgress || {}), ...(localGamification.lessonProgress || {}) },
-      checkpointAnswers: { ...(remoteGamification.checkpointAnswers || {}), ...(localGamification.checkpointAnswers || {}) },
-      forumPostCount: Math.max(localGamification.forumPostCount || 0, remoteGamification.forumPostCount || 0),
-      forumCommentCount: Math.max(localGamification.forumCommentCount || 0, remoteGamification.forumCommentCount || 0),
-      startDate: remoteGamification.startDate || localGamification.startDate,
-    } : localGamification;
+    const mergedGamification = remoteGamification
+      ? {
+          xp: Math.max(localGamification.xp, remoteGamification.xp || 0),
+          streak: Math.max(
+            localGamification.streak,
+            remoteGamification.streak || 0,
+          ),
+          lastActivityDate:
+            [
+              localGamification.lastActivityDate,
+              remoteGamification.lastActivityDate,
+            ]
+              .filter(Boolean)
+              .sort()
+              .pop() || null,
+          badges: [
+            ...new Set([
+              ...(localGamification.badges || []),
+              ...(remoteGamification.badges || []),
+            ]),
+          ],
+          badgesDates: {
+            ...(remoteGamification.badgesDates || {}),
+            ...(localGamification.badgesDates || {}),
+          },
+          lessonProgress: {
+            ...(remoteGamification.lessonProgress || {}),
+            ...(localGamification.lessonProgress || {}),
+          },
+          checkpointAnswers: {
+            ...(remoteGamification.checkpointAnswers || {}),
+            ...(localGamification.checkpointAnswers || {}),
+          },
+          forumPostCount: Math.max(
+            localGamification.forumPostCount || 0,
+            remoteGamification.forumPostCount || 0,
+          ),
+          forumCommentCount: Math.max(
+            localGamification.forumCommentCount || 0,
+            remoteGamification.forumCommentCount || 0,
+          ),
+          startDate:
+            remoteGamification.startDate || localGamification.startDate,
+        }
+      : localGamification;
     set({
       completedModules: data.completedModules ?? state.completedModules,
       completedVideos: data.completedVideos ?? state.completedVideos,
       completedExams: persistedExams,
-      completedInfographics: data.completedInfographics ?? state.completedInfographics,
-      completedActivities: data.completedActivities ?? state.completedActivities,
+      completedInfographics:
+        data.completedInfographics ?? state.completedInfographics,
+      completedActivities:
+        data.completedActivities ?? state.completedActivities,
       challengeScores: data.challengeScores ?? state.challengeScores,
       completedCommunity: data.completedCommunity ?? state.completedCommunity,
       courseProgress: effectiveProgress,
@@ -81,20 +151,25 @@ export const createPersistenceSlice = (set, get) => ({
       checkpointAnswers: mergedGamification.checkpointAnswers,
       forumPostCount: mergedGamification.forumPostCount,
       forumCommentCount: mergedGamification.forumCommentCount,
-      startDate: mergedGamification.startDate || state.startDate || new Date().toISOString(),
+      startDate:
+        mergedGamification.startDate ||
+        state.startDate ||
+        new Date().toISOString(),
     });
 
     const currentModuleProgress = get().moduleProgress;
     const hasAnyViewed = Object.values(currentModuleProgress).some(
-      m => (m.viewedResources?.length || 0) > 0
+      (m) => (m.viewedResources?.length || 0) > 0,
     );
     if (!hasAnyViewed) {
       const flatViewed = get().getViewedResources();
       if (Array.isArray(flatViewed) && flatViewed.length > 0) {
-        const rebuiltProgress = JSON.parse(JSON.stringify(INITIAL_MODULE_PROGRESS));
+        const rebuiltProgress = JSON.parse(
+          JSON.stringify(INITIAL_MODULE_PROGRESS),
+        );
         const completedMods = get().completedModules || [];
 
-        flatViewed.forEach(id => {
+        flatViewed.forEach((id) => {
           const modId = RESOURCE_MODULE_MAP[id];
           if (modId && rebuiltProgress[modId]) {
             if (!rebuiltProgress[modId].viewedResources.includes(id)) {
@@ -109,7 +184,8 @@ export const createPersistenceSlice = (set, get) => ({
           const total = MODULE_RESOURCE_COUNTS[mid] || 8;
           const pct = Math.round((viewed.length / total) * 100);
           mod.resourcesPct = pct;
-          mod.resourcesCompleted = completedMods.includes(mid) || viewed.length >= total;
+          mod.resourcesCompleted =
+            completedMods.includes(mid) || viewed.length >= total;
           mod.currentScore = calcModuleScore(mod);
         });
 
@@ -119,8 +195,10 @@ export const createPersistenceSlice = (set, get) => ({
   },
 
   clearProgressFromStorage: () => {
-    Object.values(LS_KEYS).forEach(key => ls.remove(key));
-    try { localStorage.removeItem('ialab-store'); } catch {}
+    Object.values(LS_KEYS).forEach((key) => ls.remove(key));
+    try {
+      localStorage.removeItem("ialab-store");
+    } catch {}
   },
 
   getBookmarkedResources: () => ls.get(LS_KEYS.BOOKMARKED_RESOURCES, []),
@@ -133,7 +211,10 @@ export const createPersistenceSlice = (set, get) => ({
   },
   removeBookmarkedResource: (id) => {
     const bookmarked = get().getBookmarkedResources();
-    ls.set(LS_KEYS.BOOKMARKED_RESOURCES, bookmarked.filter((b) => b !== id));
+    ls.set(
+      LS_KEYS.BOOKMARKED_RESOURCES,
+      bookmarked.filter((b) => b !== id),
+    );
   },
   toggleBookmark: (id) => {
     const bookmarked = get().getBookmarkedResources();
@@ -168,7 +249,7 @@ export const createPersistenceSlice = (set, get) => ({
 
   // ==================== LÍMITE DE INTENTOS ====================
   _attemptOps: (prefix) => {
-    const isAdmin = get().userRole === 'admin';
+    const isAdmin = get().userRole === "admin";
     return {
       getRemainingAttempts: (moduleId) => {
         if (isAdmin) return 99;
@@ -203,21 +284,29 @@ export const createPersistenceSlice = (set, get) => ({
     };
   },
 
-  getChallengeRemainingAttempts: (moduleId) => get()._attemptOps('challenge').getRemainingAttempts(moduleId),
-  getNextAttemptTime: (moduleId) => get()._attemptOps('challenge').getNextAttemptTime(moduleId),
-  canAttemptChallengeRetry: (moduleId) => get()._attemptOps('challenge').canAttemptRetry(moduleId),
+  getChallengeRemainingAttempts: (moduleId) =>
+    get()._attemptOps("challenge").getRemainingAttempts(moduleId),
+  getNextAttemptTime: (moduleId) =>
+    get()._attemptOps("challenge").getNextAttemptTime(moduleId),
+  canAttemptChallengeRetry: (moduleId) =>
+    get()._attemptOps("challenge").canAttemptRetry(moduleId),
   decrementChallengeAttempt: (moduleId) => {
-    const result = get()._attemptOps('challenge').decrementAttempt(moduleId);
-    if (typeof window !== 'undefined') window.dispatchEvent(new Event('ialab:attemptsUpdated'));
+    const result = get()._attemptOps("challenge").decrementAttempt(moduleId);
+    if (typeof window !== "undefined")
+      window.dispatchEvent(new Event("ialab:attemptsUpdated"));
     return result;
   },
 
-  getExamRemainingAttempts: (moduleId) => get()._attemptOps('exam').getRemainingAttempts(moduleId),
-  getExamNextAttemptTime: (moduleId) => get()._attemptOps('exam').getNextAttemptTime(moduleId),
-  canAttemptExamRetry: (moduleId) => get()._attemptOps('exam').canAttemptRetry(moduleId),
+  getExamRemainingAttempts: (moduleId) =>
+    get()._attemptOps("exam").getRemainingAttempts(moduleId),
+  getExamNextAttemptTime: (moduleId) =>
+    get()._attemptOps("exam").getNextAttemptTime(moduleId),
+  canAttemptExamRetry: (moduleId) =>
+    get()._attemptOps("exam").canAttemptRetry(moduleId),
   decrementExamAttempt: (moduleId) => {
-    const result = get()._attemptOps('exam').decrementAttempt(moduleId);
-    if (typeof window !== 'undefined') window.dispatchEvent(new Event('ialab:attemptsUpdated'));
+    const result = get()._attemptOps("exam").decrementAttempt(moduleId);
+    if (typeof window !== "undefined")
+      window.dispatchEvent(new Event("ialab:attemptsUpdated"));
     return result;
   },
 });

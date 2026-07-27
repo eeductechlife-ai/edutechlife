@@ -220,14 +220,14 @@ const getScoreLabel = (score, t) => {
 
 const Welcome = ({ onNext, t }) => (
   <div className="flex flex-col items-center justify-center min-h-[60vh] text-center ialab-animate-fade-in px-4 py-8">
-    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-petroleum-dark font-semibold text-sm mb-4">
-      <SvgShield className="w-4 h-4 text-corporate" />
+    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#13374b] font-semibold text-sm mb-4">
+      <SvgShield className="w-4 h-4 text-[#259eb5]" />
       <span>{t("ialab.ethics_explorer.badge")}</span>
     </div>
-    <div className="w-16 h-16 bg-gradient-to-br from-corporate to-petroleum-dark rounded-2xl flex items-center justify-center shadow-lg shadow-corporate/20 mb-6">
+    <div className="w-16 h-16 bg-gradient-to-br from-[#259eb5] to-[#13374b] rounded-2xl flex items-center justify-center shadow-lg shadow-[#259eb5]/20 mb-6">
       <SvgSearch className="text-white w-8 h-8" />
     </div>
-    <h1 className="text-3xl md:text-5xl font-black mb-3 leading-tight tracking-tight text-petroleum-dark">
+    <h1 className="text-3xl md:text-5xl font-black mb-3 leading-tight tracking-tight text-[#13374b]">
       {t("ialab.ethics_explorer.title")}
     </h1>
     <p className="text-lg md:text-xl text-slate-500 font-light mb-2">
@@ -239,7 +239,7 @@ const Welcome = ({ onNext, t }) => (
     <VoiceReader text={t("ialab.ethics_explorer.welcome_desc")} />
     <button
       onClick={onNext}
-      className="mt-4 px-8 py-4 bg-gradient-to-r from-corporate to-petroleum-dark text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3"
+      className="mt-4 px-8 py-4 bg-gradient-to-r from-[#259eb5] to-[#13374b] text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3"
     >
       <SvgPlay className="w-5 h-5" />
       {t("ialab.ethics_explorer.start")}
@@ -296,11 +296,11 @@ export default function EthicsExplorer() {
     return (
       <div className="ialab-animate-fade-in px-4 py-8 max-w-3xl mx-auto">
         <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-petroleum-dark font-semibold text-sm mb-4">
-            <SvgPaste className="w-4 h-4 text-corporate" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#13374b] font-semibold text-sm mb-4">
+            <SvgPaste className="w-4 h-4 text-[#259eb5]" />
             <span>{t("ialab.ethics_explorer.paste_btn")}</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-petroleum-dark mb-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#13374b] mb-2">
             {t("ialab.ethics_explorer.paste_title")}
           </h2>
           <p className="text-slate-500 text-sm mb-4">
@@ -314,7 +314,7 @@ export default function EthicsExplorer() {
           onChange={(e) => setRespuesta(e.target.value)}
           placeholder={t("ialab.ethics_explorer.paste_placeholder")}
           aria-label={t("ialab.ethics_explorer.paste_title")}
-          className="w-full h-44 p-5 rounded-2xl border-2 border-slate-200 focus:border-corporate focus:ring-2 focus:ring-corporate/20 outline-none resize-none text-sm text-slate-700 placeholder:text-slate-300 transition-all"
+          className="w-full h-44 p-5 rounded-2xl border-2 border-slate-200 focus:border-[#259eb5] focus:ring-2 focus:ring-[#259eb5]/20 outline-none resize-none text-sm text-slate-700 placeholder:text-slate-300 transition-all"
         />
 
         <div className="flex flex-wrap gap-2 mt-4 mb-6">
@@ -342,7 +342,7 @@ export default function EthicsExplorer() {
           onClick={() => setStep("evaluate")}
           className={`w-full py-4 rounded-2xl font-bold transition-all text-sm flex items-center justify-center gap-2 ${
             hasText
-              ? "bg-gradient-to-r from-corporate to-petroleum-dark text-white shadow-lg hover:shadow-xl"
+              ? "bg-gradient-to-r from-[#259eb5] to-[#13374b] text-white shadow-lg hover:shadow-xl"
               : "bg-slate-100 text-slate-600 cursor-not-allowed"
           }`}
         >
@@ -358,11 +358,11 @@ export default function EthicsExplorer() {
     return (
       <div className="ialab-animate-fade-in px-4 py-8 max-w-3xl mx-auto">
         <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-petroleum-dark font-semibold text-sm mb-4">
-            <SvgSearch className="w-4 h-4 text-corporate" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#13374b] font-semibold text-sm mb-4">
+            <SvgSearch className="w-4 h-4 text-[#259eb5]" />
             <span>{t("ialab.ethics_explorer.evaluate_title")}</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-petroleum-dark mb-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#13374b] mb-2">
             {t("ialab.ethics_explorer.evaluate_desc")}
           </h2>
           <p className="text-slate-500 text-sm mb-4">
@@ -374,7 +374,7 @@ export default function EthicsExplorer() {
         <div className="flex items-center gap-2 mb-6 bg-slate-50 p-3 rounded-2xl">
           <div className="flex-1 bg-slate-200 h-2 rounded-full overflow-hidden">
             <div
-              className="bg-corporate h-full rounded-full transition-all duration-500"
+              className="bg-[#259eb5] h-full rounded-full transition-all duration-500"
               style={{ width: `${(evaluatedCount / totalFilters) * 100}%` }}
             />
           </div>
@@ -396,7 +396,7 @@ export default function EthicsExplorer() {
                     {f.icono || <SvgSearch className="w-5 h-5" />}
                   </div>
                   <div>
-                    <h3 className="font-bold text-sm text-petroleum-dark">
+                    <h3 className="font-bold text-sm text-[#13374b]">
                       {f.titulo}
                     </h3>
                     <p className="text-xs text-slate-500">{f.pregunta}</p>
@@ -473,7 +473,7 @@ export default function EthicsExplorer() {
           >
             <button
               onClick={() => setStep("report")}
-              className="w-full py-4 bg-gradient-to-r from-corporate to-petroleum-dark text-white rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm"
+              className="w-full py-4 bg-gradient-to-r from-[#259eb5] to-[#13374b] text-white rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm"
             >
               {t("ialab.ethics_explorer.view_report")}{" "}
               <SvgChevronRight className="w-5 h-5" />
@@ -488,11 +488,11 @@ export default function EthicsExplorer() {
     return (
       <div className="ialab-animate-fade-in px-4 py-8 max-w-3xl mx-auto">
         <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-petroleum-dark font-semibold text-sm mb-4">
-            <SvgShield className="w-4 h-4 text-corporate" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-[#13374b] font-semibold text-sm mb-4">
+            <SvgShield className="w-4 h-4 text-[#259eb5]" />
             <span>{t("ialab.ethics_explorer.report_badge")}</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-petroleum-dark mb-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#13374b] mb-2">
             {t("ialab.ethics_explorer.report_title")}
           </h2>
           <p className="text-slate-500 text-sm mb-4">
@@ -576,7 +576,7 @@ export default function EthicsExplorer() {
                           <SvgX className="w-4 h-4" />
                         )}
                       </div>
-                      <span className="font-bold text-sm text-petroleum-dark">
+                      <span className="font-bold text-sm text-[#13374b]">
                         {f.titulo}
                       </span>
                     </div>
@@ -606,7 +606,7 @@ export default function EthicsExplorer() {
         </div>
 
         <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 mb-6">
-          <h3 className="font-bold text-sm text-petroleum-dark mb-3">
+          <h3 className="font-bold text-sm text-[#13374b] mb-3">
             {t("ialab.ethics_explorer.reflection_question")}
           </h3>
           <p className="text-xs text-slate-500 mb-3">
@@ -617,11 +617,11 @@ export default function EthicsExplorer() {
             onChange={(e) => setReflexion(e.target.value)}
             placeholder={t("ialab.ethics_explorer.reflection_placeholder")}
             aria-label={t("ialab.ethics_explorer.reflection_question")}
-            className="w-full h-24 p-4 rounded-xl border-2 border-slate-200 focus:border-corporate focus:ring-2 focus:ring-corporate/20 outline-none resize-none text-sm text-slate-700 placeholder:text-slate-300 transition-all"
+            className="w-full h-24 p-4 rounded-xl border-2 border-slate-200 focus:border-[#259eb5] focus:ring-2 focus:ring-[#259eb5]/20 outline-none resize-none text-sm text-slate-700 placeholder:text-slate-300 transition-all"
           />
         </div>
 
-        <div className="bg-gradient-to-r from-petroleum-dark to-corporate rounded-2xl p-6 text-white text-center mb-6">
+        <div className="bg-gradient-to-r from-[#13374b] to-[#259eb5] rounded-2xl p-6 text-white text-center mb-6">
           <SvgShield className="w-10 h-10 mx-auto mb-2 opacity-50" />
           <p className="text-xs font-medium text-cyan-200">
             {t("ialab.ethics_explorer.remember_message")}
@@ -635,14 +635,14 @@ export default function EthicsExplorer() {
               setEvaluaciones({});
               setReflexion("");
             }}
-            className="px-8 py-3 bg-gradient-to-r from-corporate to-petroleum-dark text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 text-sm"
+            className="px-8 py-3 bg-gradient-to-r from-[#259eb5] to-[#13374b] text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 text-sm"
           >
             <SvgPaste className="w-4 h-4" />
             {t("ialab.ethics_explorer.analyze_another")}
           </button>
           <button
             onClick={reset}
-            className="px-8 py-3 bg-white border-2 border-slate-200 text-slate-700 rounded-xl font-bold hover:border-petroleum-dark transition-all flex items-center justify-center gap-2 text-sm"
+            className="px-8 py-3 bg-white border-2 border-slate-200 text-slate-700 rounded-xl font-bold hover:border-[#13374b] transition-all flex items-center justify-center gap-2 text-sm"
           >
             <SvgRefresh className="w-4 h-4" />
             {t("ialab.ethics_explorer.restart")}

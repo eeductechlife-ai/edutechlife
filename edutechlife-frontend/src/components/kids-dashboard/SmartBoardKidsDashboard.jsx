@@ -49,14 +49,6 @@ const SmartBoardKidsDashboard = () => {
     navigate("/");
   }, [signOut, navigate]);
 
-  // Dani opens ONLY as a modal dialog. Any entry point (hero CTA, deep links,
-  // other components) requests it through this global event.
-  useEffect(() => {
-    const open = () => setIsDaniOpen(true);
-    window.addEventListener("smartboard:open-dani", open);
-    return () => window.removeEventListener("smartboard:open-dani", open);
-  }, []);
-
   // Proactive Dani reminder after inactivity
   useEffect(() => {
     const lastDani = parseInt(
@@ -87,11 +79,6 @@ const SmartBoardKidsDashboard = () => {
   // Handle URL tab parameter
   useEffect(() => {
     const tab = searchParams.get("tab");
-    // Dani is a dialog, not a tab — a ?tab=dani deep link opens the modal.
-    if (tab === "dani") {
-      setIsDaniOpen(true);
-      return;
-    }
     if (
       tab &&
       [

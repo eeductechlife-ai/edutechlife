@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import PropTypes from "prop-types";
-import { motion } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { GraduationCap, Star } from "lucide-react";
 import { OVAIntro, OVAValerioBar } from "../shared";
@@ -64,12 +63,7 @@ export default function OVABuildGPT({ onComplete }) {
 
   if (screen === "intro") {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="min-h-screen bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center"
-      >
+      <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <OVAIntro
           icon="fa-robot"
           badge={t("ova.buildgpt.badge")}
@@ -79,19 +73,14 @@ export default function OVABuildGPT({ onComplete }) {
           onStart={() => setScreen("slides")}
           startLabel={t("ova.buildgpt.start")}
         />
-      </motion.div>
+      </div>
     );
   }
 
   const ScreenComponent = screens[currentScreen];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="min-h-screen bg-gradient-to-br from-cyan-50 to-white dark:from-slate-900 dark:to-slate-800 font-sans selection:bg-corporate selection:text-white"
-    >
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-white dark:from-slate-900 dark:to-slate-800 font-sans selection:bg-corporate selection:text-white">
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 transform scale-75 origin-left sm:scale-100 transition-transform">
@@ -154,6 +143,6 @@ export default function OVABuildGPT({ onComplete }) {
       </footer>
 
       <OVAValerioBar text={getValerioText()} />
-    </motion.div>
+    </div>
   );
 }

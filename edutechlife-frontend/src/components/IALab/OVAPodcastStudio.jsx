@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "../../i18n/I18nProvider";
-import SectionErrorBoundary from "./SectionErrorBoundary";
 import {
   Monitor,
   Play,
@@ -119,16 +118,14 @@ export default function OVAPodcastStudio({ onComplete }) {
 
   if (step === "intro") {
     return (
-      <SectionErrorBoundary name="OVAPodcastStudio/Intro">
-        <OVAIntro
-          icon="fa-brain"
-          badge={t("ova.podcaststudio.badge_assistant")}
-          title={t("ova.podcaststudio.title")}
-          description={t("ova.podcaststudio.subtitle")}
-          onStart={handleStart}
-          startLabel={t("ova.podcaststudio.start_btn")}
-        />
-      </SectionErrorBoundary>
+      <OVAIntro
+        icon="fa-brain"
+        badge={t("ova.podcaststudio.badge_assistant")}
+        title={t("ova.podcaststudio.title")}
+        description={t("ova.podcaststudio.subtitle")}
+        onStart={handleStart}
+        startLabel={t("ova.podcaststudio.start_btn")}
+      />
     );
   }
 
@@ -138,7 +135,7 @@ export default function OVAPodcastStudio({ onComplete }) {
     const showCount = contentType && goal && !docCount;
 
     return (
-      <SectionErrorBoundary name="OVAPodcastStudio/Questions">
+      <>
         <div className="ialab-animate-fade-in px-4 py-8">
           <div className="max-w-3xl mx-auto text-center mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-petroleum dark:text-slate-100 font-semibold text-sm mb-4">
@@ -233,7 +230,7 @@ export default function OVAPodcastStudio({ onComplete }) {
           </div>
         </div>
         <OVAValerioBar text={getValerioText()} />
-      </SectionErrorBoundary>
+      </>
     );
   }
 
@@ -244,7 +241,7 @@ export default function OVAPodcastStudio({ onComplete }) {
     const dCount = DOC_COUNTS.find((t) => t.id === docCount);
 
     return (
-      <SectionErrorBoundary name="OVAPodcastStudio/Plan">
+      <>
         <div className="ialab-animate-fade-in px-4 py-8">
           <div className="max-w-3xl mx-auto text-center mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 dark:text-emerald-300 font-semibold text-sm mb-4">
@@ -379,14 +376,14 @@ export default function OVAPodcastStudio({ onComplete }) {
           </div>
         </div>
         <OVAValerioBar text={getValerioText()} />
-      </SectionErrorBoundary>
+      </>
     );
   }
 
   const progress = Math.round((checkedCount / CHECKLIST_ITEMS.length) * 100);
 
   return (
-    <SectionErrorBoundary name="OVAPodcastStudio/Checklist">
+    <>
       <div className="ialab-animate-fade-in px-4 py-8">
         <div className="max-w-3xl mx-auto text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-petroleum dark:text-slate-100 font-semibold text-sm mb-4">
@@ -474,6 +471,6 @@ export default function OVAPodcastStudio({ onComplete }) {
         </div>
       </div>
       <OVAValerioBar text={getValerioText()} />
-    </SectionErrorBoundary>
+    </>
   );
 }

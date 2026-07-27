@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import { motion } from "framer-motion";
 import SectionErrorBoundary from "./SectionErrorBoundary";
 import { GLASS_CARD, FOCUS_RING } from "./constants/styles";
 import { useTranslation } from "../../i18n/I18nProvider";
@@ -221,12 +220,7 @@ export default function OVARiskSimulator({ onComplete }) {
 
   return (
     <SectionErrorBoundary name="OVARiskSimulator">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="w-full relative min-h-[500px]"
-      >
+      <div className="w-full relative min-h-[500px]">
         <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#EAEAEA_1px,transparent_1px),linear-gradient(to_bottom,#EAEAEA_1px,transparent_1px)] bg-[length:50px_50px]" />
         <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(0,188,212,0.15)_0%,rgba(255,255,255,0)_70%)]" />
         <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(10,53,80,0.08)_0%,rgba(255,255,255,0)_70%)]" />
@@ -355,7 +349,7 @@ export default function OVARiskSimulator({ onComplete }) {
         </footer>
 
         {renderModal()}
-      </motion.div>
+      </div>
     </SectionErrorBoundary>
   );
 }

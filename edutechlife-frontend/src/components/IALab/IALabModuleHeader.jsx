@@ -1,13 +1,36 @@
-import PropTypes from 'prop-types';
-import { motion } from 'framer-motion';
-import { useIALabProgressContext } from '../../context/IALabContext';
-import { useTranslation } from '../../i18n/I18nProvider';
+import PropTypes from "prop-types";
+import { motion } from "framer-motion";
+import { useIALabProgressContext } from "../../context/IALabContext";
+import { useTranslation } from "../../i18n/I18nProvider";
+import { useAdaptivePath } from "../../hooks/IALab/useAdaptivePath";
+
+function AdaptiveHint({ currentModuleId }) {
+  const { needsReview, nextRecommended } = useAdaptivePath();
+
+  if (needsReview.includes(currentModuleId)) {
+    return (
+      <div className="mt-3 rounded-lg bg-amber-50 border border-amber-200 p-3 text-sm text-amber-700">
+        Review recommended — your last score was below 60%
+      </div>
+    );
+  }
+
+  if (nextRecommended > currentModuleId) {
+    return (
+      <div className="mt-3 rounded-lg bg-green-50 border border-green-200 p-3 text-sm text-green-700">
+        Ready for Module {nextRecommended}
+      </div>
+    );
+  }
+
+  return null;
+}
 
 const IALabModuleHeader = ({ onAction }) => {
   const { t } = useTranslation();
   const { activeMod, modules, courseProgress } = useIALabProgressContext();
-  const curr = modules.find(m => m.id === activeMod) || modules[0];
-  
+  const curr = modules.find((m) => m.id === activeMod) || modules[0];
+
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
@@ -17,18 +40,28 @@ const IALabModuleHeader = ({ onAction }) => {
       <div className="bg-gradient-to-r from-petroleum to-corporate py-3 px-4 md:py-3.5 md:px-5">
         <div className="flex items-center gap-2.5">
           <div className="w-12 h-12 bg-white/15 rounded-full flex flex-col items-center justify-center shadow-inner flex-shrink-0">
-            <div className="text-lg font-bold text-white leading-none">{activeMod}</div>
-            <div className="text-[9px] font-semibold text-white/70 uppercase tracking-wide leading-none mt-0.5">{t('ialab.module_header.module')}</div>
+            <div className="text-lg font-bold text-white leading-none">
+              {activeMod}
+            </div>
+            <div className="text-[9px] font-semibold text-white/70 uppercase tracking-wide leading-none mt-0.5">
+              {t("ialab.module_header.module")}
+            </div>
           </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-white leading-tight font-montserrat">{curr?.title}</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-white leading-tight font-montserrat">
+              {curr?.title}
+            </h1>
           </div>
         </div>
+        <AdaptiveHint currentModuleId={activeMod} />
       </div>
     </motion.div>
   );
 };
 
+AdaptiveHint.propTypes = {
+  currentModuleId: PropTypes.number.isRequired,
+};
 
 IALabModuleHeader.propTypes = {
   onAction: PropTypes.func,

@@ -158,28 +158,48 @@ export function IALabProgressProvider({ children }) {
           if (typeof score === "number") {
             try {
               syncMarkExamComplete(moduleId, score);
-            } catch (e) {}
+            } catch (e) {
+              console.error(
+                `[IALabProgressProvider] syncMarkExamComplete failed for module ${moduleId}:`,
+                e,
+              );
+            }
           }
           break;
         case "challenge":
           if (typeof score === "number" && score >= 80) {
             try {
               syncMarkChallengeComplete(moduleId, score);
-            } catch (e) {}
+            } catch (e) {
+              console.error(
+                `[IALabProgressProvider] syncMarkChallengeComplete failed for module ${moduleId}:`,
+                e,
+              );
+            }
           }
           break;
         case "community":
           if (value) {
             try {
               syncMarkCommunityComplete(moduleId);
-            } catch (e) {}
+            } catch (e) {
+              console.error(
+                `[IALabProgressProvider] syncMarkCommunityComplete failed for module ${moduleId}:`,
+                e,
+              );
+            }
           }
           break;
         case "resourcesCompleted":
           if (value) {
             try {
               syncMarkActivityComplete(`m${moduleId}_resources`);
-            } catch (e) {}
+            } catch (e) {
+              console.error(
+                `[IALabProgressProvider] syncMarkActivityComplete failed for module ${moduleId}:`,
+                e,
+              );
+            }
           }
           break;
       }
@@ -230,7 +250,12 @@ export function IALabProgressProvider({ children }) {
       if (mod?.resourcesCompleted) {
         try {
           syncMarkActivityComplete(`m${moduleId}_resources`);
-        } catch (e) {}
+        } catch (e) {
+          console.error(
+            `[IALabProgressProvider] syncMarkActivityComplete failed for module ${moduleId}:`,
+            e,
+          );
+        }
       }
     },
     [moduleProgress, syncMarkActivityComplete],
