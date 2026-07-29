@@ -451,7 +451,7 @@ const SmartBoardAnalytics = memo(() => {
               <p
                 className={`text-lg font-black ${dc(dm, "text-white", "text-[#004B63]")}`}
               >
-                {streak || 0}
+                {streak?.current || 0}
               </p>
               <p
                 className={`text-[10px] ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
