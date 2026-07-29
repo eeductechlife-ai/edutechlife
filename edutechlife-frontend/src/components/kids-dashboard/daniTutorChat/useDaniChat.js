@@ -59,6 +59,8 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
     daniMemory,
     updateDaniMemory,
     buildMemoryInjection,
+    missions,
+    subjects,
     subscriptionTier,
   } = useSmartBoardKids();
 
@@ -118,44 +120,32 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
     const tabContext = tabMessages[activeTab] || "";
     if (tabContext) parts.push(tabContext);
 
-    const savedMissions = localStorage.getItem("edutechlife_missions");
-    if (savedMissions) {
-      try {
-        const allMissions = JSON.parse(savedMissions);
-        const pending = allMissions.filter((m) => !m.completed);
-        if (pending.length > 0) {
-          const names = pending
-            .slice(0, 3)
-            .map((m) => `"${m.title}"`)
-            .join(", ");
-          const missionText =
-            pending.length === 1
-              ? `Tienes 1 misión pendiente: ${names}.`
-              : `Tienes ${pending.length} misiones pendientes: ${names}${pending.length > 3 ? " y más." : "."}`;
-          parts.push(missionText);
-          parts.push("¿Quieres que empecemos con alguna?");
-        }
-      } catch (e) {}
+    const pendingMissions = (missions || []).filter((m) => !m.completed);
+    if (pendingMissions.length > 0) {
+      const names = pendingMissions
+        .slice(0, 3)
+        .map((m) => `"${m.title}"`)
+        .join(", ");
+      const missionText =
+        pendingMissions.length === 1
+          ? `Tienes 1 misión pendiente: ${names}.`
+          : `Tienes ${pendingMissions.length} misiones pendientes: ${names}${pendingMissions.length > 3 ? " y más." : "."}`;
+      parts.push(missionText);
+      parts.push("¿Quieres que empecemos con alguna?");
     }
 
     if (!parts.some((p) => p.includes("misiones"))) {
-      const savedSubjects = localStorage.getItem("edutechlife_subjects");
-      if (savedSubjects) {
-        try {
-          const allSubjects = JSON.parse(savedSubjects);
-          const lowProgress = allSubjects.filter(
-            (s) => s.progress > 0 && s.progress < 50,
-          );
-          if (lowProgress.length > 0) {
-            const names = lowProgress
-              .slice(0, 3)
-              .map((s) => `${s.name} (${s.progress}%)`)
-              .join(", ");
-            parts.push(
-              `Noté que ${names} necesitan un poco más de práctica. ¿Quieres repasar algún tema en específico?`,
-            );
-          }
-        } catch (e) {}
+      const lowProgress = (subjects || []).filter(
+        (s) => (s.progress || 0) > 0 && (s.progress || 0) < 50,
+      );
+      if (lowProgress.length > 0) {
+        const names = lowProgress
+          .slice(0, 3)
+          .map((s) => `${s.name} (${s.progress}%)`)
+          .join(", ");
+        parts.push(
+          `Noté que ${names} necesitan un poco más de práctica. ¿Quieres repasar algún tema en específico?`,
+        );
       }
     }
 
