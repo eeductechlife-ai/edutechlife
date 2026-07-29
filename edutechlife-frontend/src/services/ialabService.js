@@ -1,29 +1,37 @@
-import { API_BASE_URL as CONFIG_API_URL } from '../config/api';
+import { API_BASE_URL as CONFIG_API_URL } from "../config/api";
+import { withRetry } from "../utils/asyncHelpers";
 
-const API_BASE_URL = CONFIG_API_URL ? `${CONFIG_API_URL}/api` : 'http://localhost:3001/api';
+const API_BASE_URL = CONFIG_API_URL
+  ? `${CONFIG_API_URL}/api`
+  : "http://localhost:3001/api";
 
 // Función para manejar errores de fetch
 const handleResponse = async (response) => {
   if (!response.ok) {
     const error = await response.json().catch(() => ({
-      error: `HTTP error! status: ${response.status}`
+      error: `HTTP error! status: ${response.status}`,
     }));
     throw new Error(error.error || `HTTP error! status: ${response.status}`);
   }
   return response.json();
 };
 
+const fetchWithRetry = withRetry(async (url, options) => {
+  const res = await fetch(url, options);
+  return handleResponse(res);
+});
+
 // Helper para detectar errores de aborto y manejarlos silenciosamente
-const isAbortError = (error) => error?.name === 'AbortError';
+const isAbortError = (error) => error?.name === "AbortError";
 
 // Servicio de Templates
 export const ialabTemplatesService = {
   saveTemplate: async (templateData, signal) => {
     try {
       const response = await fetch(`${API_BASE_URL}/ialab/templates`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(templateData),
         signal,
@@ -31,7 +39,7 @@ export const ialabTemplatesService = {
       return handleResponse(response);
     } catch (error) {
       if (isAbortError(error)) return;
-      console.error('Error saving template:', error);
+      console.error("Error saving template:", error);
       throw error;
     }
   },
@@ -39,50 +47,57 @@ export const ialabTemplatesService = {
   getUserTemplates: async (userId, filters = {}, signal) => {
     try {
       const queryParams = new URLSearchParams();
-      if (filters.category) queryParams.append('category', filters.category);
-      if (filters.difficulty) queryParams.append('difficulty', filters.difficulty);
+      if (filters.category) queryParams.append("category", filters.category);
+      if (filters.difficulty)
+        queryParams.append("difficulty", filters.difficulty);
       const queryString = queryParams.toString();
-      const url = `${API_BASE_URL}/ialab/templates/${userId}${queryString ? `?${queryString}` : ''}`;
+      const url = `${API_BASE_URL}/ialab/templates/${userId}${queryString ? `?${queryString}` : ""}`;
       const response = await fetch(url, { signal });
       return handleResponse(response);
     } catch (error) {
       if (isAbortError(error)) return;
-      console.error('Error fetching user templates:', error);
+      console.error("Error fetching user templates:", error);
       throw error;
     }
   },
 
   updateTemplate: async (templateId, templateData, signal) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/ialab/templates/${templateId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${API_BASE_URL}/ialab/templates/${templateId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(templateData),
+          signal,
         },
-        body: JSON.stringify(templateData),
-        signal,
-      });
+      );
       return handleResponse(response);
     } catch (error) {
       if (isAbortError(error)) return;
-      console.error('Error updating template:', error);
+      console.error("Error updating template:", error);
       throw error;
     }
   },
 
   deleteTemplate: async (templateId, signal) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/ialab/templates/${templateId}`, {
-        method: 'DELETE',
-        signal,
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/ialab/templates/${templateId}`,
+        {
+          method: "DELETE",
+          signal,
+        },
+      );
       return handleResponse(response);
     } catch (error) {
       if (isAbortError(error)) return;
-      console.error('Error deleting template:', error);
+      console.error("Error deleting template:", error);
       throw error;
     }
-  }
+  },
 };
 
 // Servicio de Evaluación de Prompts
@@ -90,9 +105,9 @@ export const ialabEvaluationService = {
   evaluatePrompt: async (prompt, criteria, signal) => {
     try {
       const response = await fetch(`${API_BASE_URL}/ialab/evaluate-prompt`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ prompt, criteria }),
         signal,
@@ -100,23 +115,23 @@ export const ialabEvaluationService = {
       return handleResponse(response);
     } catch (error) {
       if (isAbortError(error)) return;
-      console.error('Error evaluating prompt:', error);
+      console.error("Error evaluating prompt:", error);
       throw error;
     }
   },
 
   evaluatePromptWithIALabCriteria: async (prompt, signal) => {
     const ialabCriteria = {
-      clarity: 'Clarity and specificity for AI understanding',
-      structure: 'Logical structure and flow',
-      completeness: 'Completeness of required information',
-      tone: 'Appropriate tone for educational context',
-      actionability: 'Clear actionable requests for the AI',
-      creativity: 'Innovative approach to prompt design',
-      reusability: 'Potential for reuse in different contexts'
+      clarity: "Clarity and specificity for AI understanding",
+      structure: "Logical structure and flow",
+      completeness: "Completeness of required information",
+      tone: "Appropriate tone for educational context",
+      actionability: "Clear actionable requests for the AI",
+      creativity: "Innovative approach to prompt design",
+      reusability: "Potential for reuse in different contexts",
     };
     return ialabEvaluationService.evaluatePrompt(prompt, ialabCriteria, signal);
-  }
+  },
 };
 
 // Servicio de Recursos del Curso
@@ -124,15 +139,16 @@ export const ialabResourcesService = {
   getResources: async (filters = {}, signal) => {
     try {
       const queryParams = new URLSearchParams();
-      if (filters.moduleId) queryParams.append('moduleId', filters.moduleId);
-      if (filters.resourceType) queryParams.append('resourceType', filters.resourceType);
+      if (filters.moduleId) queryParams.append("moduleId", filters.moduleId);
+      if (filters.resourceType)
+        queryParams.append("resourceType", filters.resourceType);
       const queryString = queryParams.toString();
-      const url = `${API_BASE_URL}/ialab/resources${queryString ? `?${queryString}` : ''}`;
+      const url = `${API_BASE_URL}/ialab/resources${queryString ? `?${queryString}` : ""}`;
       const response = await fetch(url, { signal });
       return handleResponse(response);
     } catch (error) {
       if (isAbortError(error)) return;
-      console.error('Error fetching resources:', error);
+      console.error("Error fetching resources:", error);
       throw error;
     }
   },
@@ -153,20 +169,20 @@ export const ialabResourcesService = {
       }
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = resourceUrl.split('/').pop() || 'resource';
+      a.download = resourceUrl.split("/").pop() || "resource";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-      return { success: true, message: 'Resource downloaded successfully' };
+      return { success: true, message: "Resource downloaded successfully" };
     } catch (error) {
       if (isAbortError(error)) return;
-      console.error('Error downloading resource:', error);
+      console.error("Error downloading resource:", error);
       throw error;
     }
-  }
+  },
 };
 
 // Servicio de Progreso del Curso
@@ -174,9 +190,9 @@ export const ialabProgressService = {
   saveProgress: async (progressData, signal) => {
     try {
       const response = await fetch(`${API_BASE_URL}/ialab/progress`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(progressData),
         signal,
@@ -184,18 +200,20 @@ export const ialabProgressService = {
       return handleResponse(response);
     } catch (error) {
       if (isAbortError(error)) return;
-      console.error('Error saving progress:', error);
+      console.error("Error saving progress:", error);
       throw error;
     }
   },
 
   getProgress: async (userId, signal) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/ialab/progress/${userId}`, { signal });
+      const response = await fetch(`${API_BASE_URL}/ialab/progress/${userId}`, {
+        signal,
+      });
       return handleResponse(response);
     } catch (error) {
       if (isAbortError(error)) return;
-      console.error('Error fetching progress:', error);
+      console.error("Error fetching progress:", error);
       throw error;
     }
   },
@@ -206,10 +224,10 @@ export const ialabProgressService = {
       moduleId,
       completed: completed || false,
       score: score || 0,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
     return ialabProgressService.saveProgress(progressData, signal);
-  }
+  },
 };
 
 // Servicio de Generación de Prompts
@@ -217,9 +235,9 @@ export const ialabPromptService = {
   generatePrompt: async (templateType, parameters, signal) => {
     try {
       const response = await fetch(`${API_BASE_URL}/ialab/prompts`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ templateType, parameters }),
         signal,
@@ -227,28 +245,36 @@ export const ialabPromptService = {
       return handleResponse(response);
     } catch (error) {
       if (isAbortError(error)) return;
-      console.error('Error generating prompt:', error);
+      console.error("Error generating prompt:", error);
       throw error;
     }
   },
 
   generateMarketAnalysisPrompt: async (industry, targetAudience, signal) => {
-    return ialabPromptService.generatePrompt('market_analysis', {
-      industry,
-      targetAudience,
-      depth: 'comprehensive',
-      format: 'executive_report'
-    }, signal);
+    return ialabPromptService.generatePrompt(
+      "market_analysis",
+      {
+        industry,
+        targetAudience,
+        depth: "comprehensive",
+        format: "executive_report",
+      },
+      signal,
+    );
   },
 
   generateEducationalContentPrompt: async (topic, audience, length, signal) => {
-    return ialabPromptService.generatePrompt('educational_content', {
-      topic,
-      audience,
-      length: length || 'medium',
-      tone: 'professional_accessible'
-    }, signal);
-  }
+    return ialabPromptService.generatePrompt(
+      "educational_content",
+      {
+        topic,
+        audience,
+        length: length || "medium",
+        tone: "professional_accessible",
+      },
+      signal,
+    );
+  },
 };
 
 // Servicio unificado de IALab
@@ -262,10 +288,16 @@ const ialabService = {
   // Métodos de utilidad
   getCurrentUserId: () => {
     let storedUserId;
-    try { storedUserId = localStorage.getItem('ialab_user_id'); } catch { storedUserId = null; }
+    try {
+      storedUserId = localStorage.getItem("ialab_user_id");
+    } catch {
+      storedUserId = null;
+    }
     if (!storedUserId) {
       const newUserId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      try { localStorage.setItem('ialab_user_id', newUserId); } catch {}
+      try {
+        localStorage.setItem("ialab_user_id", newUserId);
+      } catch {}
       return newUserId;
     }
     return storedUserId;
@@ -273,12 +305,11 @@ const ialabService = {
 
   // Inicializar servicios
   initialize: () => {
-
     return {
       userId: ialabService.getCurrentUserId(),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-  }
+  },
 };
 
 export default ialabService;

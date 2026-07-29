@@ -1,60 +1,61 @@
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL } from "../config/api";
+import { withRetry, deduplicate } from "../utils/asyncHelpers";
 const API_URL = `${API_BASE_URL}/api/chat`;
 
 const VALERIO_SYSTEM_PROMPT = `Eres Valerio, el tutor experto de Edutechlife. Evalúa el prompt del alumno. Debes responder estrictamente en formato JSON con estas llaves: "score" (0-100), "feedback" (3 consejos breves), "improvedPrompt" (el prompt optimizado) y "level" (Novato, Pro, Maestro). Responde únicamente con JSON válido, sin texto adicional.`;
 
 const MODULE_CONTEXT = {
   1: {
-    title: 'Ingeniería de Prompts',
+    title: "Ingeniería de Prompts",
     criteria: [
-      'Claridad en la instrucción',
-      'Contexto proporcionado',
-      'Especificidad de la tarea',
-      'Uso de técnicas avanzadas (CoT, Few-shot)',
+      "Claridad en la instrucción",
+      "Contexto proporcionado",
+      "Especificidad de la tarea",
+      "Uso de técnicas avanzadas (CoT, Few-shot)",
     ],
   },
   2: {
-    title: 'Potencia ChatGPT',
+    title: "Potencia ChatGPT",
     criteria: [
-      'Optimización de System Prompts',
-      'Uso de GPTs personalizados',
-      'Function Calling efectivo',
-      'Integración con herramientas externas',
+      "Optimización de System Prompts",
+      "Uso de GPTs personalizados",
+      "Function Calling efectivo",
+      "Integración con herramientas externas",
     ],
   },
   3: {
-    title: 'Gemini Deep Research',
+    title: "Gemini Deep Research",
     criteria: [
-      'Razonamiento multimodal',
-      'Calidad de investigación',
-      'Fact-checking y validación',
-      'Profundidad del análisis',
+      "Razonamiento multimodal",
+      "Calidad de investigación",
+      "Fact-checking y validación",
+      "Profundidad del análisis",
     ],
   },
   4: {
-    title: 'Notebook LM Mastery',
+    title: "Notebook LM Mastery",
     criteria: [
-      'Curaduría de fuentes',
-      'Síntesis de conocimiento',
-      'Audio Overviews efectivos',
-      'Gestión documental',
+      "Curaduría de fuentes",
+      "Síntesis de conocimiento",
+      "Audio Overviews efectivos",
+      "Gestión documental",
     ],
   },
   5: {
-    title: 'Examen Final Integrador',
+    title: "Examen Final Integrador",
     criteria: [
-      'Integración de herramientas',
-      'Innovación de la solución',
-      'Viabilidad del proyecto',
-      'Calidad de presentación',
+      "Integración de herramientas",
+      "Innovación de la solución",
+      "Viabilidad del proyecto",
+      "Calidad de presentación",
     ],
   },
 };
 
 export const EvaluationLevels = {
-  NOVICE: 'Novato',
-  PRO: 'Pro',
-  MASTER: 'Maestro',
+  NOVICE: "Novato",
+  PRO: "Pro",
+  MASTER: "Maestro",
 };
 
 const getModuleContext = (moduleId) => {
@@ -63,13 +64,13 @@ const getModuleContext = (moduleId) => {
 
 const buildEvaluationPrompt = (studentPrompt, moduleId) => {
   const context = getModuleContext(moduleId);
-  
+
   return `
 Evalúa el siguiente prompt de un estudiante de Edutechlife.
 
 MÓDULO: ${context.title}
 CRITERIOS DE EVALUACIÓN:
-${context.criteria.map((c, i) => `${i + 1}. ${c}`).join('\n')}
+${context.criteria.map((c, i) => `${i + 1}. ${c}`).join("\n")}
 
 PROMPT DEL ALUMNO:
 ---
@@ -86,11 +87,11 @@ IMPORTANTE: Responde ÚNICAMENTE con JSON válido en este formato exacto:
 `;
 };
 
-export const evaluateWithDeepseek = async (studentPrompt, moduleId = 1) => {
+const _evaluateWithDeepseek = async (studentPrompt, moduleId = 1) => {
   if (!studentPrompt || studentPrompt.trim().length === 0) {
     return {
       success: false,
-      error: 'El prompt no puede estar vacío',
+      error: "El prompt no puede estar vacío",
     };
   }
 
@@ -98,19 +99,19 @@ export const evaluateWithDeepseek = async (studentPrompt, moduleId = 1) => {
 
   try {
     const response = await fetch(API_URL, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: 'deepseek-chat',
+        model: "deepseek-chat",
         messages: [
           {
-            role: 'system',
+            role: "system",
             content: VALERIO_SYSTEM_PROMPT,
           },
           {
-            role: 'user',
+            role: "user",
             content: evaluationPrompt,
           },
         ],
@@ -122,23 +123,27 @@ export const evaluateWithDeepseek = async (studentPrompt, moduleId = 1) => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error?.message || `API error: ${response.status}`);
+      throw new Error(
+        errorData.error?.message || `API error: ${response.status}`,
+      );
     }
 
     const data = await response.json();
     const content = data.result || data.choices?.[0]?.message?.content;
 
     if (!content) {
-      throw new Error('Respuesta vacía de la API');
+      throw new Error("Respuesta vacía de la API");
     }
 
     const parsed = JSON.parse(content);
-    
+
     return {
       success: true,
       data: {
         score: Math.min(100, Math.max(0, parsed.score || 0)),
-        feedback: Array.isArray(parsed.feedback) ? parsed.feedback.slice(0, 3) : [],
+        feedback: Array.isArray(parsed.feedback)
+          ? parsed.feedback.slice(0, 3)
+          : [],
         improvedPrompt: parsed.improvedPrompt || studentPrompt,
         level: parsed.level || EvaluationLevels.NOVICE,
         moduleId,
@@ -146,10 +151,10 @@ export const evaluateWithDeepseek = async (studentPrompt, moduleId = 1) => {
       },
     };
   } catch (error) {
-    console.error('Error en evaluación Deepseek:', error);
+    console.error("Error en evaluación Deepseek:", error);
     return {
       success: false,
-      error: error.message || 'Error al evaluar el prompt',
+      error: error.message || "Error al evaluar el prompt",
     };
   }
 };
@@ -157,15 +162,20 @@ export const evaluateWithDeepseek = async (studentPrompt, moduleId = 1) => {
 const generateDemoResponse = (studentPrompt, moduleId) => {
   const context = getModuleContext(moduleId);
   const promptLength = studentPrompt.length;
-  
+
   let score = 50;
   let level = EvaluationLevels.NOVICE;
-  
+
   if (promptLength > 100) score += 15;
   if (promptLength > 200) score += 15;
-  if (studentPrompt.includes('por favor') || studentPrompt.includes('Por favor')) score += 10;
-  if (studentPrompt.includes('contexto') || studentPrompt.includes('ejemplo')) score += 10;
-  
+  if (
+    studentPrompt.includes("por favor") ||
+    studentPrompt.includes("Por favor")
+  )
+    score += 10;
+  if (studentPrompt.includes("contexto") || studentPrompt.includes("ejemplo"))
+    score += 10;
+
   if (score >= 80) level = EvaluationLevels.MASTER;
   else if (score >= 60) level = EvaluationLevels.PRO;
 
@@ -174,9 +184,9 @@ const generateDemoResponse = (studentPrompt, moduleId) => {
     data: {
       score: Math.min(100, score),
       feedback: [
-        'Añade contexto específico para mejorar la respuesta',
-        'Considera usar ejemplos Few-shot para tareas complejas',
-        'Incluye restricciones claras para delimitar el alcance',
+        "Añade contexto específico para mejorar la respuesta",
+        "Considera usar ejemplos Few-shot para tareas complejas",
+        "Incluye restricciones claras para delimitar el alcance",
       ],
       improvedPrompt: `${studentPrompt}\n\n[Optimizado por Valerio]`,
       level,
@@ -187,12 +197,16 @@ const generateDemoResponse = (studentPrompt, moduleId) => {
   };
 };
 
-export const evaluateAndSave = async (studentPrompt, moduleId, userId = null) => {
+export const evaluateAndSave = async (
+  studentPrompt,
+  moduleId,
+  userId = null,
+) => {
   const result = await evaluateWithDeepseek(studentPrompt, moduleId);
-  
+
   if (result.success && result.data) {
-    const { saveProgress, PROGRESS_STATUS } = await import('../lib/progress');
-    
+    const { saveProgress, PROGRESS_STATUS } = await import("../lib/progress");
+
     const progressResult = await saveProgress(
       moduleId,
       PROGRESS_STATUS.COMPLETED,
@@ -204,7 +218,7 @@ export const evaluateAndSave = async (studentPrompt, moduleId, userId = null) =>
         improvedPrompt: result.data.improvedPrompt,
         evaluatedAt: result.data.evaluatedAt,
       },
-      userId
+      userId,
     );
 
     return {
@@ -217,38 +231,41 @@ export const evaluateAndSave = async (studentPrompt, moduleId, userId = null) =>
   return result;
 };
 
+const evaluateWithRetry = withRetry(_evaluateWithDeepseek, { attempts: 2 });
+export const evaluateWithDeepseek = deduplicate(evaluateWithRetry, {
+  key: (prompt) => prompt,
+});
+
 export const getEvaluationHistory = async (moduleId) => {
-  const { supabase } = await import('../lib/supabase');
-  
+  const { supabase } = await import("../lib/supabase");
+
   try {
     // SOLUCIÓN TEMPORAL: Desactivar consultas que causan error 406
-
-
 
     // Usar datos simulados para desarrollo
     const simulatedHistory = [
       {
         score: 85,
-        level: 'Avanzado',
+        level: "Avanzado",
         evaluatedAt: new Date(Date.now() - 86400000).toISOString(),
-        simulated: true
+        simulated: true,
       },
       {
         score: 72,
-        level: 'Intermedio',
+        level: "Intermedio",
         evaluatedAt: new Date(Date.now() - 172800000).toISOString(),
-        simulated: true
+        simulated: true,
       },
       {
         score: 65,
-        level: 'Intermedio',
+        level: "Intermedio",
         evaluatedAt: new Date(Date.now() - 259200000).toISOString(),
-        simulated: true
-      }
+        simulated: true,
+      },
     ];
 
     return simulatedHistory;
-    
+
     /*
     // CÓDIGO ORIGINAL (descomentar cuando RLS esté configurado):
     // Asegurar que moduleId sea número
@@ -277,7 +294,7 @@ export const getEvaluationHistory = async (moduleId) => {
       })) || [];
     */
   } catch (error) {
-    console.error('Error obteniendo historial de evaluaciones:', error);
+    console.error("Error obteniendo historial de evaluaciones:", error);
     return [];
   }
 };

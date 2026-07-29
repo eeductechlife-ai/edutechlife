@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Icon } from '../../utils/iconMapping';
-import { CATEGORY_COLORS, CATEGORY_LABELS } from '../../data/newsData';
+import { useState, memo } from "react";
+import { motion } from "framer-motion";
+import { Icon } from "../../utils/iconMapping";
+import { CATEGORY_COLORS, CATEGORY_LABELS } from "../../data/newsData";
 
 const getCategoryIcon = (category) => {
   const map = {
-    'did-you-know': 'fa-lightbulb',
-    'new-tools': 'fa-rocket',
-    'dani-tips': 'fa-star',
+    "did-you-know": "fa-lightbulb",
+    "new-tools": "fa-rocket",
+    "dani-tips": "fa-star",
   };
-  return map[category] || 'fa-newspaper';
+  return map[category] || "fa-newspaper";
 };
 
-export default function NewsCard({ article, isRead, onRead, onOpen }) {
+const NewsCard = memo(function NewsCard({ article, isRead, onRead, onOpen }) {
   const [imgError, setImgError] = useState(false);
 
   const handleOpen = () => {
@@ -23,7 +23,7 @@ export default function NewsCard({ article, isRead, onRead, onOpen }) {
   return (
     <motion.div
       whileHover={{ y: -4, scale: 1.02 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className="bg-white rounded-2xl overflow-hidden shadow-lg border border-[#E2E8F0]/50 group cursor-pointer"
       onClick={handleOpen}
     >
@@ -39,7 +39,10 @@ export default function NewsCard({ article, isRead, onRead, onOpen }) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#004B63]/5 to-[#4DA8C4]/5">
-            <Icon name={getCategoryIcon(article.category)} className="w-16 h-16 text-[#4DA8C4]/30" />
+            <Icon
+              name={getCategoryIcon(article.category)}
+              className="w-16 h-16 text-[#4DA8C4]/30"
+            />
           </div>
         )}
 
@@ -75,7 +78,7 @@ export default function NewsCard({ article, isRead, onRead, onOpen }) {
 
         <h3
           className={`text-sm font-bold mb-2 line-clamp-2 leading-snug ${
-            isRead ? 'text-[#64748B]' : 'text-[#004B63]'
+            isRead ? "text-[#64748B]" : "text-[#004B63]"
           }`}
         >
           {article.title}
@@ -94,4 +97,6 @@ export default function NewsCard({ article, isRead, onRead, onOpen }) {
       </div>
     </motion.div>
   );
-}
+});
+
+export default NewsCard;

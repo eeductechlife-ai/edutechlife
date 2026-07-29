@@ -20,7 +20,7 @@ import {
 } from "./useSmartBoardPersistence";
 import { useSmartBoardActions } from "./useSmartBoardActions";
 
-const SmartBoardKidsContext = createContext();
+export const SmartBoardKidsContext = createContext();
 
 export const useSmartBoardKids = () => {
   const context = useContext(SmartBoardKidsContext);
