@@ -1,9 +1,18 @@
-import { memo } from "react";
+import { memo, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import {
-  Smile, Frown, AlertTriangle, AlertCircle, HelpCircle,
-  Heart, FileText, MessageSquare,
+  Smile,
+  Frown,
+  AlertTriangle,
+  AlertCircle,
+  HelpCircle,
+  Heart,
+  FileText,
+  MessageSquare,
+  X,
+  Send,
+  Mic,
 } from "lucide-react";
 import QuickActions from "../dani/QuickActions";
 import RecentTopics from "../dani/RecentTopics";
@@ -29,6 +38,16 @@ const MOOD_COLORS = {
 
 const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
   const { t } = useTranslation();
+  const inputRef = useRef(null);
+  const maxChars = 500;
+
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      const timer = setTimeout(() => inputRef.current.focus(), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   const {
     focusTrapRef,
     isSpeaking,
@@ -75,7 +94,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
         ref={focusTrapRef}
         role="dialog"
         aria-modal="true"
-        aria-label={t('dani.chat_title')}
+        aria-label={t("dani.chat_title")}
         onClick={onClose}
         onKeyDown={(e) => {
           if (e.key === "Escape") onClose();
@@ -103,6 +122,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
             streak={streak}
             socraticMode={socraticMode}
             setSocraticMode={setSocraticMode}
+            onClose={onClose}
           />
 
           {showCrisisResources && (
@@ -113,22 +133,27 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
               className="mx-4 mt-2 px-4 py-3 bg-red-50 border border-red-300 rounded-xl"
             >
               <div className="flex items-start gap-3">
-                <AlertCircle className="text-red-500 mt-0.5" size={22} aria-hidden="true" />
+                <AlertCircle
+                  className="text-red-500 mt-0.5"
+                  size={22}
+                  aria-hidden="true"
+                />
                 <div className="flex-1">
                   <p className="text-sm font-bold text-red-800 mb-1">
-                    {t('dani.crisis_title')}
+                    {t("dani.crisis_title")}
                   </p>
                   <p className="text-xs text-red-700 leading-relaxed">
-                    <strong>{t('dani.crisis_line1')}</strong>
+                    <strong>{t("dani.crisis_line1")}</strong>
                     {" | "}
-                    <strong>{t('dani.crisis_line2')}</strong>{" | "}
-                    <strong>{t('dani.crisis_line3')}</strong>
+                    <strong>{t("dani.crisis_line2")}</strong>
+                    {" | "}
+                    <strong>{t("dani.crisis_line3")}</strong>
                   </p>
                 </div>
                 <button
                   onClick={() => setShowCrisisResources(false)}
                   className="text-red-400 hover:text-red-600 text-sm"
-                  aria-label={t('dani.close')}
+                  aria-label={t("dani.close")}
                 >
                   ✕
                 </button>
@@ -144,14 +169,18 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
               className="mx-4 mt-2 px-3 py-2 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 rounded-xl"
             >
               <div className="flex items-center gap-2">
-                <Heart className="text-[#004B63]" size={20} aria-hidden="true" />
+                <Heart
+                  className="text-[#004B63]"
+                  size={20}
+                  aria-hidden="true"
+                />
                 <p className="text-xs text-[#004B63] flex-1">
-                  {t('dani.emotional_banner')}
+                  {t("dani.emotional_banner")}
                 </p>
                 <button
                   onClick={() => setShowEmotionalBanner(false)}
                   className="text-[#64748B] hover:text-[#004B63] text-xs"
-                  aria-label={t('dani.close')}
+                  aria-label={t("dani.close")}
                 >
                   ✕
                 </button>
@@ -167,7 +196,9 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                   : "border-[#E2E8F0] bg-white/50"
               }`}
             >
-              <span className="text-[10px] text-[#64748B] mr-1">{t('dani.mood_label')}</span>
+              <span className="text-[10px] text-[#64748B] mr-1">
+                {t("dani.mood_label")}
+              </span>
               {studentMoodHistory.slice(-5).map((m, i) => {
                 const MoodIcon = MOOD_ICONS[m.mood] || MessageSquare;
                 return (
@@ -190,15 +221,20 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
               className="mx-4 mt-2 px-3 py-2 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 rounded-xl"
             >
               <div className="flex items-center gap-2">
-                <FileText className="text-[#004B63]" size={18} aria-hidden="true" />
+                <FileText
+                  className="text-[#004B63]"
+                  size={18}
+                  aria-hidden="true"
+                />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-bold text-[#004B63] truncate">
-                    {t('dani.document_analyzing')} {documentForDani.title || t('dani.document_summary')}
+                    {t("dani.document_analyzing")}{" "}
+                    {documentForDani.title || t("dani.document_summary")}
                   </p>
                   <p className="text-[10px] text-[#64748B]">
                     {documentForDani.score != null
-                      ? `${t('dani.document_score')} ${documentForDani.score}/100`
-                      : t('dani.document_summary')}
+                      ? `${t("dani.document_score")} ${documentForDani.score}/100`
+                      : t("dani.document_summary")}
                     {documentForDani.subject
                       ? ` • ${documentForDani.subject}`
                       : ""}
@@ -207,7 +243,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                 <button
                   onClick={() => setDocumentForDani(null)}
                   className="text-[#64748B] hover:text-[#004B63] text-xs"
-                  aria-label={t('dani.document_close')}
+                  aria-label={t("dani.document_close")}
                 >
                   ✕
                 </button>
@@ -238,70 +274,102 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                 : "bg-white border-[#E2E8F0]"
             }`}
           >
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={(e) =>
-                  e.key === "Enter" && handleSendMessage(inputText)
-                }
-                placeholder={t('dani.placeholder')}
-                autoFocus
-                className={`flex-1 px-4 py-3 rounded-full text-sm focus:outline-none focus:border-[#4DA8C4] placeholder-[#64748B] ${
-                  darkMode
-                    ? "bg-[#1E293B] border border-[#334155] text-[#E2F0FF] focus:border-[#4DA8C4]"
-                    : "bg-[#F8FAFC] border border-[#E2E8F0] text-[#004B63]"
-                }`}
-              />
-              <motion.button
-                onClick={handleMicClick}
-                disabled={isTyping}
-                aria-label={isListening ? t('dani.mic_stop') : t('dani.mic_start')}
-                className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
-                  isListening
-                    ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
-                    : "bg-[#F8FAFC] border border-[#E2E8F0] text-[#64748B] hover:bg-[#E2E8F0]"
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+            <div className="flex flex-col gap-1.5">
+              <div className="flex gap-2 items-end">
+                <div className="flex-1 relative">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={inputText}
+                    onChange={(e) => {
+                      if (e.target.value.length <= maxChars) {
+                        setInputText(e.target.value);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage(inputText);
+                      }
+                    }}
+                    placeholder={
+                      activeTab === "examenes"
+                        ? t("dani.placeholder_exam") ||
+                          "Pregúntame sobre el examen..."
+                        : activeTab === "materias"
+                          ? t("dani.placeholder_subject") ||
+                            "¿Qué materia quieres estudiar?"
+                          : t("dani.placeholder")
+                    }
+                    maxLength={maxChars}
+                    className={`w-full px-4 py-3 pr-10 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/50 placeholder-[#64748B] transition-all ${
+                      darkMode
+                        ? "bg-[#1E293B] border border-[#334155] text-[#E2F0FF]"
+                        : "bg-[#F8FAFC] border border-[#E2E8F0] text-[#004B63]"
+                    }`}
                   />
-                </svg>
-              </motion.button>
-              <motion.button
-                onClick={() => handleSendMessage(inputText)}
-                disabled={!inputText.trim() || isTyping}
-                aria-label={t('dani.send')}
-                className="w-12 h-12 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] text-white rounded-full flex items-center justify-center disabled:opacity-50 shadow-lg flex-shrink-0"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                  {inputText.length > 0 && (
+                    <motion.button
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.5 }}
+                      onClick={() => setInputText("")}
+                      className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center ${
+                        darkMode
+                          ? "text-[#64748B] hover:text-white"
+                          : "text-[#94A3B8] hover:text-[#004B63]"
+                      }`}
+                      aria-label={t("dani.clear_input") || "Limpiar"}
+                    >
+                      <X size={14} strokeWidth={2.5} />
+                    </motion.button>
+                  )}
+                </div>
+                <motion.button
+                  onClick={handleMicClick}
+                  disabled={isTyping}
+                  aria-label={
+                    isListening ? t("dani.mic_stop") : t("dani.mic_start")
+                  }
+                  className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all ${
+                    isListening
+                      ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
+                      : darkMode
+                        ? "bg-[#1E293B] border border-[#334155] text-[#64748B] hover:bg-[#334155]"
+                        : "bg-[#F8FAFC] border border-[#E2E8F0] text-[#64748B] hover:bg-[#E2E8F0]"
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                  />
-                </svg>
-              </motion.button>
+                  <Mic size={20} strokeWidth={2} />
+                </motion.button>
+                <motion.button
+                  onClick={() => handleSendMessage(inputText)}
+                  disabled={!inputText.trim() || isTyping}
+                  aria-label={t("dani.send")}
+                  className="w-12 h-12 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl flex items-center justify-center disabled:opacity-40 shadow-lg flex-shrink-0"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Send size={20} strokeWidth={2} />
+                </motion.button>
+              </div>
+              <div className="flex items-center justify-between px-1">
+                {inputText.length > 0 && (
+                  <span
+                    className={`text-[10px] font-medium transition-colors ${
+                      inputText.length > maxChars * 0.9
+                        ? "text-red-500"
+                        : inputText.length > maxChars * 0.75
+                          ? "text-amber-500"
+                          : "text-[#64748B]"
+                    }`}
+                  >
+                    {inputText.length}/{maxChars}
+                  </span>
+                )}
+                <span />
+              </div>
             </div>
           </div>
         </motion.div>
