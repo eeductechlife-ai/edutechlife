@@ -7,10 +7,12 @@ import FloatingParticles from "./FloatingParticles";
 import { sanitize } from "../utils/sanitize";
 import SEO from "./SEO";
 
-const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
-  const { t, locale } = useTranslation();
+const CustomSignUpForm = ({ onBack, returnTo }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { signUp, setActive } = useAuth();
+
+  const defaultReturnTo = returnTo || "/ialab";
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -37,7 +39,9 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
 
   const validateForm = () => {
     if (!formData.firstName.trim()) {
-      setError(t("signup.error.first_name_required") || "First name is required");
+      setError(
+        t("signup.error.first_name_required") || "First name is required",
+      );
       return false;
     }
     if (!formData.lastName.trim()) {
@@ -61,11 +65,16 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
       return false;
     }
     if (formData.password.length < 8) {
-      setError(t("signup.error.password_min_length") || "Password must be at least 8 characters");
+      setError(
+        t("signup.error.password_min_length") ||
+          "Password must be at least 8 characters",
+      );
       return false;
     }
-    if (formData.phone.trim() && !/^[\d\s\-\+\(\)]{7,}$/.test(formData.phone)) {
-      setError(t("signup.error.phone_invalid") || "Invalid phone number format");
+    if (formData.phone.trim() && !/^[\d\s+()/-]{7,}$/.test(formData.phone)) {
+      setError(
+        t("signup.error.phone_invalid") || "Invalid phone number format",
+      );
       return false;
     }
     return true;
@@ -120,11 +129,14 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
                 age_range: "18+",
                 registration_source: "ialab_signup",
               }),
-            }
+            },
           );
 
           if (!syncResponse.ok) {
-            console.warn("Failed to sync user to Supabase:", await syncResponse.text());
+            console.warn(
+              "Failed to sync user to Supabase:",
+              await syncResponse.text(),
+            );
             // Continue anyway - Clerk user is created
           }
         } catch (syncErr) {
@@ -139,23 +151,23 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
         setSuccess(true);
         setTimeout(() => {
           setActive({ session: result.createdSessionId });
-          navigate(returnTo);
+          navigate(defaultReturnTo);
         }, 2000);
       } else if (result.status === "complete") {
         // Registration complete
         setSuccess(true);
         setTimeout(() => {
           setActive({ session: result.createdSessionId });
-          navigate(returnTo);
+          navigate(defaultReturnTo);
         }, 2000);
       }
     } catch (err) {
       console.error("Sign-up error:", err);
       setError(
         err.errors?.[0]?.message ||
-        err.message ||
-        t("signup.error.registration_failed") ||
-        "Registration failed. Please try again."
+          err.message ||
+          t("signup.error.registration_failed") ||
+          "Registration failed. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -282,7 +294,10 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
               </div>
 
               {/* Form */}
-              <form onSubmit={handleSignUp} className="w-full max-w-sm space-y-4">
+              <form
+                onSubmit={handleSignUp}
+                className="w-full max-w-sm space-y-4"
+              >
                 {/* Error Message */}
                 {error && (
                   <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
@@ -308,7 +323,10 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    placeholder={t("signup.placeholder.first_name") || "Enter your first name"}
+                    placeholder={
+                      t("signup.placeholder.first_name") ||
+                      "Enter your first name"
+                    }
                     disabled={loading}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004B63] disabled:bg-gray-100"
                   />
@@ -324,7 +342,10 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    placeholder={t("signup.placeholder.last_name") || "Enter your last name"}
+                    placeholder={
+                      t("signup.placeholder.last_name") ||
+                      "Enter your last name"
+                    }
                     disabled={loading}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004B63] disabled:bg-gray-100"
                   />
@@ -340,7 +361,9 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
                     name="username"
                     value={formData.username}
                     onChange={handleInputChange}
-                    placeholder={t("signup.placeholder.username") || "Choose a username"}
+                    placeholder={
+                      t("signup.placeholder.username") || "Choose a username"
+                    }
                     disabled={loading}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004B63] disabled:bg-gray-100"
                   />
@@ -356,7 +379,9 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    placeholder={t("signup.placeholder.phone") || "+1 (555) 123-4567"}
+                    placeholder={
+                      t("signup.placeholder.phone") || "+1 (555) 123-4567"
+                    }
                     disabled={loading}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004B63] disabled:bg-gray-100"
                   />
@@ -372,7 +397,9 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    placeholder={t("signup.placeholder.email") || "Enter your email"}
+                    placeholder={
+                      t("signup.placeholder.email") || "Enter your email"
+                    }
                     disabled={loading}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004B63] disabled:bg-gray-100"
                   />
@@ -389,7 +416,9 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
                       name="password"
                       value={formData.password}
                       onChange={handleInputChange}
-                      placeholder={t("signup.placeholder.password") || "Create a password"}
+                      placeholder={
+                        t("signup.placeholder.password") || "Create a password"
+                      }
                       disabled={loading}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004B63] disabled:bg-gray-100 pr-10"
                     />
@@ -406,7 +435,8 @@ const CustomSignUpForm = ({ onBack, returnTo = "/ialab" }) => {
                     </button>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
-                    {t("signup.info.password_min_length") || "At least 8 characters"}
+                    {t("signup.info.password_min_length") ||
+                      "At least 8 characters"}
                   </p>
                 </div>
 
