@@ -2,12 +2,14 @@ const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
+const crypto = require('crypto');
 const sanitizeMiddleware = require('./middleware/sanitize');
 const { requireAuth } = require('./middleware/auth');
 const { apiLimiter, deepseekLimiter, authLimiter } = require('./middleware/rateLimiter');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./docs/swagger');
+const logger = require('./utils/logger');
 const healthRoutes = require('./routes/health');
 const chatRoutes = require('./routes/chat');
 const ialabRoutes = require('./routes/ialab');
@@ -65,6 +67,7 @@ const isAllowed = (origin) => {
 
 const app = express();
 
+app.set('etag', 'strong');
 app.use(compression());
 app.use(cors({
   origin: (origin, callback) => callback(null, isAllowed(origin)),
@@ -77,6 +80,16 @@ app.use(helmet({
   contentSecurityPolicy: { directives: CSP_DIRECTIVES },
   crossOriginEmbedderPolicy: false,
 }));
+
+app.use((req, res, next) => {
+  req.id = crypto.randomUUID().slice(0, 8);
+  req.log = {
+    info: (msg, meta) => logger.info(msg, { requestId: req.id, ...meta }),
+    warn: (msg, meta) => logger.warn(msg, { requestId: req.id, ...meta }),
+    error: (msg, meta) => logger.error(msg, { requestId: req.id, ...meta }),
+  };
+  next();
+});
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customCss: '.swagger-ui .topbar { display: none }',

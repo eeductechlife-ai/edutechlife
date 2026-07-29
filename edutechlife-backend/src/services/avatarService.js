@@ -20,21 +20,24 @@ function downloadImage(url) {
 async function generateAvatar(tutorName) {
   const prompt = `Professional portrait of a ${tutorName}, professor style, 40 years old, well-groomed beard, warm friendly expression, high quality photography, cinematic lighting, depth of field, soft studio lighting, premium avatar, minimalist background, professional headshot, 8k quality`
 
-  const output = await replicate.run(
-    'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
-    {
-      input: {
-        prompt: prompt,
-        negative_prompt: 'cartoon, anime, illustration, drawing, painting, ugly, distorted, low quality',
-        width: 512,
-        height: 512,
-        num_outputs: 1,
-        num_inference_steps: 25,
-        guidance_scale: 7.5,
-        scheduler: 'DPMSolverMultistep',
+  const output = await Promise.race([
+    replicate.run(
+      'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
+      {
+        input: {
+          prompt: prompt,
+          negative_prompt: 'cartoon, anime, illustration, drawing, painting, ugly, distorted, low quality',
+          width: 512,
+          height: 512,
+          num_outputs: 1,
+          num_inference_steps: 25,
+          guidance_scale: 7.5,
+          scheduler: 'DPMSolverMultistep',
+        }
       }
-    }
-  )
+    ),
+    new Promise((_, reject) => setTimeout(() => reject(new Error('Avatar generation timed out')), 120000))
+  ]);
 
   const imageUrl = output[0]
   const imageBuffer = await downloadImage(imageUrl)

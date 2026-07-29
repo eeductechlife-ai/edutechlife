@@ -47,7 +47,7 @@ Reglas importantes:
  *       500:
  *         description: Error del servidor
  */
-router.get('/data/:userId', async (req, res) => {
+router.get('/data/:userId', requireAuth, async (req, res) => {
   const { userId } = req.params;
 
   if (req.userId !== userId) {
@@ -198,6 +198,12 @@ router.post('/chat/stream', requireAuth, async (req, res) => {
   // Detect crisis indicators
   const crisisDetection = detectCrisis(lastUserMessage, language);
 
+  let streamClosed = false;
+  req.on('close', () => {
+    streamClosed = true;
+    res.end();
+  });
+
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
@@ -253,10 +259,11 @@ router.post('/chat/stream', requireAuth, async (req, res) => {
 
   try {
     await chatStream(DEEPSEEK_API_KEY, { messages: msgs }, (chunk) => {
+      if (streamClosed) return;
       res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
     });
 
-    // Send crisis alert flag to client if detected
+    if (streamClosed) return;
     if (crisisDetection.level !== 'none') {
       res.write(`data: ${JSON.stringify({ crisisAlert: crisisDetection.level })}\n\n`);
     }
@@ -264,6 +271,7 @@ router.post('/chat/stream', requireAuth, async (req, res) => {
     res.write('data: [DONE]\n\n');
     res.end();
   } catch (e) {
+    if (streamClosed) return;
     console.error('Error calling Dani AI (stream):', e);
     res.write(`data: ${JSON.stringify({ error: e.message })}\n\n`);
     res.end();
@@ -313,7 +321,7 @@ router.post('/chat/stream', requireAuth, async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.get('/progress/:userId', async (req, res) => {
+router.get('/progress/:userId', requireAuth, async (req, res) => {
   const { userId } = req.params;
 
   if (req.userId !== userId) {

@@ -158,47 +158,34 @@ router.post('/stream', async (req, res) => {
   if (validationError) return res.status(400).json({ error: validationError });
   if (!checkApiKey(req, res)) return;
 
+  let streamClosed = false;
+  req.on('close', () => {
+    streamClosed = true;
+    res.end();
+  });
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
   try {
-    const response = await chatStream(DEEPSEEK_API_KEY, { messages: msgs, isJson, temperature, maxTokens, model });
+    await chatStream(DEEPSEEK_API_KEY, { messages: msgs, isJson, temperature, maxTokens, model }, (chunk) => {
+      if (streamClosed) return;
+      res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
+    });
 
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-
-    const decoder = new TextDecoder();
-    let buffer = '';
-
-    try {
-      for await (const chunk of response.body) {
-        buffer += decoder.decode(chunk, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || '';
-
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const data = line.slice(6);
-            if (data === '[DONE]') {
-              res.write('data: [DONE]\n\n');
-              res.end();
-              return;
-            }
-            try {
-              const parsed = JSON.parse(data);
-              const content = parsed.choices?.[0]?.delta?.content;
-              if (content) {
-                res.write(`data: ${JSON.stringify({ chunk: content })}\n\n`);
-              }
-            } catch { /* skip parse errors for incomplete chunks */ }
-          }
-        }
-      }
-    } catch (e) {
-      console.error('Stream processing error:', e);
-    }
+    if (streamClosed) return;
+    res.write('data: [DONE]\n\n');
     res.end();
   } catch (e) {
+    if (streamClosed) return;
     console.error('Error in streaming:', e);
-    res.status(500).json({ error: e.message });
+    if (res.headersSent) {
+      res.write(`data: ${JSON.stringify({ error: e.message })}\n\n`);
+      res.end();
+    } else {
+      res.status(500).json({ error: e.message });
+    }
   }
 });
 

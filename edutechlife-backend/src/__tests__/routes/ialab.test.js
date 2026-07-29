@@ -489,8 +489,10 @@ describe('POST /api/ialab/prompts with mocked deepseek', () => {
   function createMockedApp() {
     const deepseekPath = require.resolve('../../services/deepseek');
     const ialabPath = require.resolve('../../routes/ialab');
+    const promptsPath = require.resolve('../../routes/ialab/prompts');
     delete require.cache[deepseekPath];
     delete require.cache[ialabPath];
+    delete require.cache[promptsPath];
     require.cache[deepseekPath] = {
       id: deepseekPath,
       filename: deepseekPath,

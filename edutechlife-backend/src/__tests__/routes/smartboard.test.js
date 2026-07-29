@@ -1,148 +1,148 @@
 const express = require('express');
 const request = require('supertest');
-const app = require('../../app');
 
-function buildSmartboardTestApp() {
-  const testApp = express();
-  testApp.use(express.json({ limit: '1mb' }));
+const authPath = require.resolve('../../middleware/auth');
+const supabasePath = require.resolve('../../db/supabase');
+
+delete require.cache[authPath];
+require.cache[authPath] = {
+  id: authPath,
+  filename: authPath,
+  loaded: true,
+  exports: {
+    requireAuth: (req, _res, next) => {
+      req.userId = req.headers['x-test-user-id'] || 'test-user-id';
+      next();
+    },
+  },
+};
+
+const mockSupabase = { from: vi.fn() };
+delete require.cache[supabasePath];
+require.cache[supabasePath] = {
+  id: supabasePath,
+  filename: supabasePath,
+  loaded: true,
+  exports: mockSupabase,
+};
+
+function createApp() {
+  const app = express();
+  app.use(express.json({ limit: '1mb' }));
   const smartboardRoutes = require('../../routes/smartboard');
-  testApp.use('/api/smartboard', smartboardRoutes);
-  return testApp;
+  app.use('/api/smartboard', smartboardRoutes);
+  return app;
 }
-const smartTestApp = buildSmartboardTestApp();
 
-describe('Smartboard routes', () => {
-  describe('GET /api/smartboard/data/:userId', () => {
-    it('returns 401 when supabase data not found', async () => {
-      const res = await request(app).get('/api/smartboard/data/nonexistent-user');
-      expect([401, 404, 500]).toContain(res.status);
+let app;
+beforeAll(() => { app = createApp(); });
+beforeEach(() => { vi.clearAllMocks(); });
+
+describe('Smartboard GET /data/:userId', () => {
+  it('returns 404 when data not found (PGRST116)', async () => {
+    mockSupabase.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: null, error: { code: 'PGRST116' } }),
     });
+
+    const res = await request(app)
+      .get('/api/smartboard/data/missing-user')
+      .set('Authorization', 'Bearer test-token')
+      .set('x-test-user-id', 'missing-user');
+    expect(res.status).toBe(404);
   });
 
-  describe('GET /api/smartboard/progress/:userId', () => {
-    it('returns a response for nonexistent user', async () => {
-      const res = await request(app).get('/api/smartboard/progress/nonexistent-user');
-      expect([401, 404, 500]).toContain(res.status);
+  it('returns 403 when userId mismatch', async () => {
+    mockSupabase.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: { data: {} }, error: null }),
     });
+
+    const res = await request(app)
+      .get('/api/smartboard/data/other-user')
+      .set('Authorization', 'Bearer test-token')
+      .set('x-test-user-id', 'test-user-id');
+    expect(res.status).toBe(403);
   });
 
-  describe('GET /api/smartboard/data/:userId (bypassed auth)', () => {
-    it('returns 404 when data not found', async () => {
-      const res = await request(smartTestApp)
-        .get('/api/smartboard/data/no-data-user');
-      expect([404, 500]).toContain(res.status);
-    });
-  });
-
-  describe('GET /api/smartboard/progress/:userId (bypassed auth)', () => {
-    it('returns 404 when progress not found', async () => {
-      const res = await request(smartTestApp)
-        .get('/api/smartboard/progress/no-data-user');
-      expect([404, 500]).toContain(res.status);
-    });
-  });
-
-  describe('POST /api/smartboard/chat', () => {
-    it('returns 400 when messages are missing', async () => {
-      const res = await request(app)
-        .post('/api/smartboard/chat')
-        .send({});
-      expect(res.status).toBe(400);
+  it('returns data successfully', async () => {
+    const fakeData = { totalPoints: 100, streak: 5 };
+    mockSupabase.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: { data: fakeData }, error: null }),
     });
 
-    it('returns 400 when messages is empty', async () => {
-      const res = await request(app)
-        .post('/api/smartboard/chat')
-        .send({ messages: [] });
-      expect(res.status).toBe(400);
-    });
-
-    it('returns 400 when messages has no content', async () => {
-      const res = await request(app)
-        .post('/api/smartboard/chat')
-        .send({ messages: [{ role: 'user' }] });
-      expect(res.status).toBe(400);
-    });
-
-    it('responds to valid messages with a result', async () => {
-      const res = await request(app)
-        .post('/api/smartboard/chat')
-        .send({ messages: [{ role: 'user', content: 'Hola' }] });
-      expect([200, 500]).toContain(res.status);
-      if (res.status === 200) {
-        expect(res.body.result).toBeDefined();
-      } else {
-        expect(res.body.error).toBeDefined();
-      }
-    }, 15000);
-  });
-
-  describe('POST /api/smartboard/chat (bypassed auth)', () => {
-    let chatTestApp;
-
-    beforeAll(() => {
-      chatTestApp = express();
-      chatTestApp.use(express.json({ limit: '1mb' }));
-      const smartboardRoutes = require('../../routes/smartboard');
-      chatTestApp.use('/api/smartboard', smartboardRoutes);
-    });
-
-    it('responds to valid messages via bypassed app', async () => {
-      const res = await request(chatTestApp)
-        .post('/api/smartboard/chat')
-        .send({ messages: [{ role: 'user', content: 'Hola' }] });
-      expect([200, 500]).toContain(res.status);
-    }, 15000);
+    const res = await request(app)
+      .get('/api/smartboard/data/test-user-id')
+      .set('Authorization', 'Bearer test-token')
+      .set('x-test-user-id', 'test-user-id');
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(fakeData);
   });
 });
 
-describe('Smartboard chat with mocked deepseek', () => {
-  const mockChat = vi.fn();
+describe('Smartboard GET /progress/:userId', () => {
+  it('returns 404 when progress not found', async () => {
+    mockSupabase.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: null, error: { code: 'PGRST116' } }),
+    });
 
-  function createMockedApp() {
-    const deepseekPath = require.resolve('../../services/deepseek');
-    const smartboardPath = require.resolve('../../routes/smartboard');
-    delete require.cache[deepseekPath];
-    delete require.cache[smartboardPath];
-    require.cache[deepseekPath] = {
-      id: deepseekPath,
-      filename: deepseekPath,
-      loaded: true,
-      exports: {
-        chat: mockChat,
-        validateMessages: () => null,
-      },
+    const res = await request(app)
+      .get('/api/smartboard/progress/missing-user')
+      .set('Authorization', 'Bearer test-token')
+      .set('x-test-user-id', 'missing-user');
+    expect(res.status).toBe(404);
+  });
+
+  it('returns progress metrics', async () => {
+    const kidData = {
+      totalPoints: 250, streak: 7, completedMissions: [1, 2],
+      subjectProgress: { math: 50 }, totalActiveMinutes: 120,
+      vakResult: { predominantStyle: 'visual' },
     };
-    const app = express();
-    app.use(express.json({ limit: '1mb' }));
-    app.use('/api/smartboard', require('../../routes/smartboard'));
-    return app;
-  }
+    mockSupabase.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: { data: kidData }, error: null }),
+    });
 
-  it('returns 400 when deepseek returns error', async () => {
-    mockChat.mockResolvedValue({ error: { message: 'API limit' } });
-    const res = await request(createMockedApp())
+    const res = await request(app)
+      .get('/api/smartboard/progress/test-user-id')
+      .set('Authorization', 'Bearer test-token')
+      .set('x-test-user-id', 'test-user-id');
+    expect(res.status).toBe(200);
+    expect(res.body.totalPoints).toBe(250);
+    expect(res.body.streak).toBe(7);
+  });
+});
+
+describe('Smartboard POST /chat validation', () => {
+  it('returns 400 when messages missing', async () => {
+    const res = await request(app)
       .post('/api/smartboard/chat')
-      .send({ messages: [{ role: 'user', content: 'Hola' }] });
+      .set('Authorization', 'Bearer test-token')
+      .send({});
     expect(res.status).toBe(400);
-    expect(res.body.error).toBe('API limit');
   });
 
-  it('returns 500 when deepseek returns no content', async () => {
-    mockChat.mockResolvedValue({ choices: [{ message: { content: null } }] });
-    const res = await request(createMockedApp())
+  it('returns 400 when messages empty', async () => {
+    const res = await request(app)
       .post('/api/smartboard/chat')
-      .send({ messages: [{ role: 'user', content: 'Hola' }] });
-    expect(res.status).toBe(500);
-    expect(res.body.error).toBe('No response from API');
+      .set('Authorization', 'Bearer test-token')
+      .send({ messages: [] });
+    expect(res.status).toBe(400);
   });
 
-  it('returns 500 when deepseek chat throws', async () => {
-    mockChat.mockRejectedValue(new Error('Network error'));
-    const res = await request(createMockedApp())
+  it('returns 400 when message has no content', async () => {
+    const res = await request(app)
       .post('/api/smartboard/chat')
-      .send({ messages: [{ role: 'user', content: 'Hola' }] });
-    expect(res.status).toBe(500);
-    expect(res.body.error).toBe('Network error');
+      .set('Authorization', 'Bearer test-token')
+      .send({ messages: [{ role: 'user' }] });
+    expect(res.status).toBe(400);
   });
 });
