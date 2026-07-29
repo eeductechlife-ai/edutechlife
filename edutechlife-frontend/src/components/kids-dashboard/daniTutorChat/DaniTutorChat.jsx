@@ -1,4 +1,4 @@
-import { memo, useRef, useEffect } from "react";
+import { memo, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import {
@@ -20,6 +20,7 @@ import DaniChatHeader from "./components/DaniChatHeader";
 import DaniChatMessages from "./components/DaniChatMessages";
 import CrisisResourcesModal from "../CrisisResourcesModal";
 import useDaniChat from "./useDaniChat";
+import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 
 const MOOD_ICONS = {
   feliz: Smile,
@@ -38,8 +39,16 @@ const MOOD_COLORS = {
 
 const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
   const { t } = useTranslation();
+  const { studentAge } = useSmartBoardKids();
+  const isKid = studentAge && studentAge <= 11;
   const inputRef = useRef(null);
   const maxChars = 500;
+
+  const kidErrorMessages = useMemo(() => ({
+    generic: "¡Ups! Dani se quedó pensando. ¿Puedes intentar de nuevo?",
+    timeout: "Dani está pensando muy profundo... Espera un poco y vuelve a intentar.",
+    network: "¡Oh! Parece que el internet se fue de paseo. Revisa tu conexión y vuelve a intentar.",
+  }), []);
 
   useEffect(() => {
     if (isOpen && inputRef.current) {

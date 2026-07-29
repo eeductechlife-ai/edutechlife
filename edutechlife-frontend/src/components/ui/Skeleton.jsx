@@ -3,6 +3,7 @@ export default function Skeleton({
   height,
   rounded = "lg",
   className = "",
+  shimmer = true,
 }) {
   const roundedMap = {
     sm: "rounded-sm",
@@ -14,7 +15,7 @@ export default function Skeleton({
 
   return (
     <div
-      className={`animate-pulse bg-gray-200 dark:bg-slate-700 ${roundedMap[rounded] || roundedMap.lg} ${className}`}
+      className={`bg-gray-200 dark:bg-slate-700 ${roundedMap[rounded] || roundedMap.lg} ${shimmer ? "skeleton-shimmer" : "animate-pulse"} ${className}`}
       style={{ width, height }}
       aria-hidden="true"
     />

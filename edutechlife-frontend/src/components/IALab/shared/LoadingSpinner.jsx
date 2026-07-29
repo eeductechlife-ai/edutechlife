@@ -14,7 +14,10 @@ const LoadingSpinner = memo(({ onRetry, loadingText = 'Cargando...', retryText =
   }, []);
   return (
     <div role="status" aria-live="polite" className="flex flex-col items-center justify-center py-12">
-      <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum dark:border-corporate/30 dark:border-t-corporate rounded-full animate-spin mb-4" />
+      <div className="spinner-premium w-9 h-9 mb-4">
+        <div className="spinner-ring" />
+        <div className="spinner-ring" />
+      </div>
       <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{loadingText}</p>
       {showTimeout && onRetry && (
         <button
@@ -31,3 +34,14 @@ LoadingSpinner.displayName = 'LoadingSpinner';
 
 export default LoadingSpinner;
 export { LoadingSpinner };
+
+export function LoadingFallback() {
+  return (
+    <div className="flex items-center justify-center py-12" role="status" aria-label="Loading">
+      <div className="spinner-premium w-8 h-8">
+        <div className="spinner-ring" />
+        <div className="spinner-ring" />
+      </div>
+    </div>
+  );
+}

@@ -38,8 +38,11 @@ const SmartBoardConsentGate = () => {
     setIsLoading(true);
 
     try {
-      // Calculate student age from birth date (if available)
-      const studentAge = 13; // Placeholder — get from Clerk metadata if available
+      // Calculate student age from Clerk publicMetadata
+      const birthYear = user?.publicMetadata?.birthYear;
+      const studentAge = birthYear
+        ? new Date().getFullYear() - Number(birthYear)
+        : user?.publicMetadata?.age || 13;
 
       // If minor, send parental consent to backend
       if (data.parentEmail) {
@@ -99,7 +102,11 @@ const SmartBoardConsentGate = () => {
     <>
       {showModal && user && (
         <SmartBoardHabeasDataModal
-          studentAge={13} // Get from user metadata in real implementation
+          studentAge={
+            user?.publicMetadata?.birthYear
+              ? new Date().getFullYear() - Number(user.publicMetadata.birthYear)
+              : user?.publicMetadata?.age || 13
+          }
           onClose={handleCloseModal}
           onAccept={handleAcceptConsent}
         />

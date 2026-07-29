@@ -136,6 +136,23 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     const submitResult = await submitQuiz();
     setIsSubmitting(false);
 
+    // Registro silencioso de conceptos fallados en el sistema adaptativo (aditivo)
+    // Usa el topic de cada pregunta para agrupar errores por concepto pedagógico
+    try {
+      const stAdaptive = useIALabStore.getState();
+      if (typeof stAdaptive.recordError === 'function' && Array.isArray(quizQuestions)) {
+        quizQuestions.forEach((q) => {
+          const answered = quizAnswers?.[q.id];
+          if (answered && q.correctAnswer && answered !== q.correctAnswer) {
+            const concept = q.topic || `module-${activeMod}-q${q.id}`;
+            stAdaptive.recordError(concept, q.question?.slice(0, 120) || '');
+          }
+        });
+      }
+    } catch (e) {
+      /* silent — no debe interrumpir flujo del quiz */
+    }
+
     if (!practiceMode && submitResult?.result) {
       const { score, passed } = submitResult.result;
       const st = useIALabStore.getState();
@@ -175,7 +192,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         metadata: { moduleId: activeMod, score: submitResult.result.score, type: 'exam' },
       });
     }
-  }, [practiceMode, submitQuiz, activeMod, markExamComplete, t, createNotification]);
+  }, [practiceMode, submitQuiz, activeMod, markExamComplete, t, createNotification, quizQuestions, quizAnswers]);
 
   const handleSubmit = useCallback(async () => {
     if (isSubmitting) return;

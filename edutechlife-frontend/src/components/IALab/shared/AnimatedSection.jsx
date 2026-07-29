@@ -13,7 +13,14 @@ export function AnimatedSection({ show, children, skeleton, loading }) {
     <AnimatePresence>
       {(show || show === undefined) && (
         <motion.div key={loading ? 'skeleton' : 'content'} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
-          {loading ? (skeleton || <div className="animate-pulse h-20 bg-slate-100 dark:bg-gray-800 rounded-xl" />) : (
+          {loading ? (skeleton || (
+            <div className="space-y-3 p-4">
+              <div className="skeleton-shimmer bg-gray-200 dark:bg-slate-700 h-5 w-2/3 rounded-lg" />
+              <div className="skeleton-shimmer bg-gray-200 dark:bg-slate-700 h-4 w-full rounded-lg" />
+              <div className="skeleton-shimmer bg-gray-200 dark:bg-slate-700 h-4 w-4/5 rounded-lg" />
+              <div className="skeleton-shimmer bg-gray-200 dark:bg-slate-700 h-20 w-full rounded-xl" />
+            </div>
+          )) : (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}>
               {children}
             </motion.div>

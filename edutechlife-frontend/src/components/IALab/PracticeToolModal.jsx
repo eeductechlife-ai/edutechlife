@@ -5,6 +5,7 @@ import { useIALabProgressContext } from "../../context/IALabContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { Icon } from "../../utils/iconMapping.jsx";
 import SectionErrorBoundary from "./SectionErrorBoundary";
+import { LoadingFallback } from "./shared/LoadingSpinner";
 
 const ReactivePromptStation = lazy(() => import("./ReactivePromptStation"));
 const IALabInteractionAdvisor = lazy(() => import("./IALabInteractionAdvisor"));
@@ -13,12 +14,6 @@ const EthicsExplorer = lazy(() => import("./EthicsExplorer"));
 const OVAGeminiDeepResearch = lazy(() => import("./OVAGeminiDeepResearch"));
 const CapsulasConocimiento = lazy(() => import("./CapsulasConocimiento"));
 const IALabTutoriasVirtuales = lazy(() => import("./IALabTutoriasVirtuales"));
-
-const LoadingFallback = () => (
-  <div className="flex items-center justify-center py-20">
-    <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin" />
-  </div>
-);
 
 const MODULE_TOOL_CONFIG = {
   1: { titleKey: "ialab.tool_tutor.tool_title", icon: "fa-wand-sparkles" },

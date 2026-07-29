@@ -17,6 +17,7 @@ const voiceRoutes = require('./routes/voice');
 const ttsRoutes = require('./routes/tts');
 const smartboardRoutes = require('./routes/smartboard');
 const stripeRoutes = require('./routes/stripe');
+const authRoutes = require('./routes/auth');
 const { webhookHandler } = require('./routes/stripe');
 
 const CSP_DIRECTIVES = {
@@ -118,6 +119,7 @@ app.use('/api/voice-token', voiceRoutes);
 app.use('/api/tts', ttsRoutes);
 app.use('/api/smartboard', smartboardRoutes);
 app.use('/api/stripe', stripeRoutes);
+app.use('/api/auth', authRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

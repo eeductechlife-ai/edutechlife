@@ -6,6 +6,15 @@ import { statusConfig } from './data/landingPageData';
 import { fadeInUp } from './constants/landingAnimations';
 import ErrorBoundary from '../../components/forum/ErrorBoundary';
 import { useTranslation } from '../../i18n/I18nProvider';
+import LevelBadge from './LevelBadge';
+
+const progressToLevel = (progress = 0) => {
+  if (progress <= 0) return 0;
+  if (progress < 25) return 1;
+  if (progress < 50) return 2;
+  if (progress < 75) return 3;
+  return 4;
+};
 
 const CourseCard = ({ course, isSignedIn }) => {
   const navigate = useNavigate();
@@ -129,7 +138,16 @@ const CourseCard = ({ course, isSignedIn }) => {
         {course.status === 'active' && course.progress > 0 && (
           <div className="mb-3">
             <div className="flex items-center justify-between text-[10px] md:text-xs text-slate-500 mb-1">
-              <span>{t('ialab.course_card.progress')}</span>
+              <span className="flex items-center gap-1.5">
+                {t('ialab.course_card.progress')}
+                <LevelBadge
+                  level={progressToLevel(course.progress)}
+                  size="sm"
+                  compact
+                  showStars={false}
+                  animated={false}
+                />
+              </span>
               <span className="font-semibold text-petroleum">{course.progress}%</span>
             </div>
             <div className="h-1.5 bg-petroleum/10 rounded-full overflow-hidden">

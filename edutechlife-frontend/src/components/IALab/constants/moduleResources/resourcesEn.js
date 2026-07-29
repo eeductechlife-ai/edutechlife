@@ -85,6 +85,18 @@ const RESOURCES_EN = {
         difficulty: "Beginner",
         fullscreen: true,
       },
+      {
+        id: "prompt-lab-ova-1",
+        type: "ova_interactive",
+        title: "Live Prompt Laboratory",
+        description:
+          "The digital artisan's workbench: write real prompts, run them against the model, and refine until you get the exact result. Four proven techniques plus a final challenge.",
+        estimatedTime: "15 minutes",
+        difficulty: "Intermediate",
+        interactiveElements: 5,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
     ],
   },
 
@@ -176,6 +188,34 @@ const RESOURCES_EN = {
         description:
           "Explore each ChatGPT tool with practical exercises and guided audio. Like an architect testing their tools before the big project. Complete the challenge to prove your mastery.",
         estimatedTime: "25 minutes",
+        difficulty: "Intermediate",
+        interactiveElements: 5,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
+    ],
+  },
+
+  "The Architect's Flow: Real-World Automation": {
+    title: "The Architect's Flow: Real-World Automation",
+    description:
+      "Tool theory comes to life when you orchestrate them into real flows. Discover how marketers, educators and entrepreneurs use ChatGPT in chains to multiply their productivity by 10.",
+    learningObjectives: [
+      "Understand the ideal automation framework: input → orchestration → output",
+      "Analyze 3 real cases of flows in marketing, education and entrepreneurship",
+      "Recognize orchestration patterns between integrated tools",
+      "Design your own automation flow adapted to your context",
+    ],
+    estimatedTime: "22 minutes",
+    difficulty: "Intermediate",
+    resources: [
+      {
+        id: "automation-flows-ova-1",
+        type: "ova_interactive",
+        title: "Real-World Automation Flows",
+        description:
+          "Framework + 3 practical cases: how a marketer, educator and entrepreneur use ChatGPT's integrated tools in flows that multiply their productivity.",
+        estimatedTime: "22 minutes",
         difficulty: "Intermediate",
         interactiveElements: 5,
         thumbnailType: "premium",
@@ -537,6 +577,34 @@ const RESOURCES_EN = {
     ],
   },
 
+  "The Master Alchemist: Complete Document-to-Podcast Flow": {
+    title: "The Master Alchemist: Complete Document-to-Podcast Flow",
+    description:
+      "Close the circle: connect analysis, synthesis and audio into an integrated flow. How researchers, educators and companies transform mountains of documents into captivating podcasts.",
+    learningObjectives: [
+      "Master the ideal flow: sources → synthesis → podcast",
+      "Analyze 3 real cases of document-to-podcast transformation",
+      "Recognize orchestration patterns between NotebookLM tools",
+      "Design your own document-to-podcast flow adapted to your context",
+    ],
+    estimatedTime: "24 minutes",
+    difficulty: "Advanced",
+    resources: [
+      {
+        id: "document-mastery-ova-1",
+        type: "ova_interactive",
+        title: "Document Mastery: From Paper to Podcast",
+        description:
+          "Framework + 3 practical cases: researcher, educator, enterprise. How to transform complex documents into listenable podcasts without losing depth.",
+        estimatedTime: "24 minutes",
+        difficulty: "Advanced",
+        interactiveElements: 5,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
+    ],
+  },
+
   // ============================================================================
   // MODULE 5: ETHICS AND PRIVACY
   // ============================================================================
@@ -677,6 +745,18 @@ const RESOURCES_EN = {
         estimatedTime: "25 minutes",
         difficulty: "Advanced",
         interactiveElements: 8,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
+      {
+        id: "ethics-cases-ova-1",
+        type: "ova_interactive",
+        title: "Applied Ethics: Practical Cases",
+        description:
+          "A 5-question framework plus 3 real AI cases: hiring, healthcare, and copyright. Make decisions and discover how an ethical guardian thinks.",
+        estimatedTime: "20 minutes",
+        difficulty: "Advanced",
+        interactiveElements: 6,
         thumbnailType: "premium",
         fullscreen: true,
       },

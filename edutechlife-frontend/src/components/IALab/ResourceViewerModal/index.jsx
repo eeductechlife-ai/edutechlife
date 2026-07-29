@@ -5,6 +5,7 @@ import React, {
   useCallback,
   Suspense,
 } from "react";
+import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Icon } from "../../../utils/iconMapping.jsx";
@@ -111,6 +112,24 @@ const ResourceViewerModal = ({
     setIsMarkedAsViewed(false);
   }, [resource?.id]);
 
+  // Auto-tracking silencioso para el sistema adaptativo (aditivo, no altera UX)
+  const recordAdaptiveView = useIALabStore((s) => s.recordView);
+  const scheduleAdaptiveReview = useIALabStore((s) => s.scheduleReview);
+  useEffect(() => {
+    if (!isOpen || !resource?.id || !recordAdaptiveView) return;
+    const openedAt = Date.now();
+    recordAdaptiveView(resource.id, {
+      type: resourceType || resource.type || 'resource',
+    });
+    return () => {
+      // Al cerrar, si estuvo >30s, programa un repaso en Box 1
+      const timeSpent = Date.now() - openedAt;
+      if (timeSpent > 30000 && scheduleAdaptiveReview) {
+        scheduleAdaptiveReview(resource.id, 1);
+      }
+    };
+  }, [isOpen, resource?.id, resourceType, recordAdaptiveView, scheduleAdaptiveReview]);
+
   const handleMarkAsViewed = useCallback(async () => {
     setIsMarkedAsViewed(true);
     const currentMod = useIALabStore.getState().activeMod || activeMod;
@@ -120,6 +139,31 @@ const ResourceViewerModal = ({
     if (resource?.id && currentMod) {
       markResourceInContext(currentMod, resource.id);
       const rt = resource.type || "document";
+      // Recompensa XP silenciosa la primera vez que se marca como visto (aditivo, idempotente)
+      try {
+        const XP_KEY = 'ialab_resource_xp_awarded';
+        const awarded = JSON.parse(localStorage.getItem(XP_KEY) || '{}');
+        if (!awarded[resource.id]) {
+          const XP_BY_TYPE = {
+            ova_interactive: 15,
+            lab: 15,
+            video: 5,
+            document: 8,
+            documento: 8,
+            pdf: 8,
+            'pdf-thumbnail': 8,
+            infographic: 6,
+            reading: 6,
+            interactive: 10,
+            interactivo: 10,
+          };
+          const xp = XP_BY_TYPE[rt] || 5;
+          const st = useIALabStore.getState();
+          if (typeof st.addXp === 'function') st.addXp(xp);
+          awarded[resource.id] = { xp, ts: Date.now() };
+          localStorage.setItem(XP_KEY, JSON.stringify(awarded));
+        }
+      } catch (e) { /* silent — no romper flujo si storage falla */ }
       await trackResourceViewed(currentMod, resource.id, rt);
       if (recordLastTopic) {
         const typeLabels = {
@@ -316,7 +360,7 @@ const ResourceViewerModal = ({
         exit: { opacity: 0, scale: 0.95, y: 20, transition: { duration: 0.2 } },
       };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
@@ -606,7 +650,8 @@ const ResourceViewerModal = ({
           </div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 

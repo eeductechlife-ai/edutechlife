@@ -4,6 +4,7 @@ import { useIALabStore } from "../../store/ialabStore";
 import SectionErrorBoundary from "./SectionErrorBoundary";
 import useFocusTrap from "../../hooks/useFocusTrap";
 import { cn } from "../forum/forumDesignSystem";
+import { LoadingFallback } from "./shared/LoadingSpinner";
 
 const IALabEvaluationModal = lazy(() => import("./IALabEvaluationModal"));
 const IALabQuizModal = lazy(() => import("./IALabQuizModal"));
@@ -20,12 +21,6 @@ const SettingsSupportModal = lazy(
   () => import("../modals/SettingsSupportModal"),
 );
 const PracticeToolModal = lazy(() => import("./PracticeToolModal"));
-
-const LoadingFallback = () => (
-  <div className="flex items-center justify-center py-12">
-    <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin" />
-  </div>
-);
 
 function FocusTrapModal({ isOpen, children, className }) {
   const trapRef = useFocusTrap(isOpen);

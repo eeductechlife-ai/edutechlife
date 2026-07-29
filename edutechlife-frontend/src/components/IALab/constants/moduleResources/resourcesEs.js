@@ -85,6 +85,18 @@ const RESOURCES_ES = {
         difficulty: "Principiante",
         fullscreen: true,
       },
+      {
+        id: "prompt-lab-ova-1",
+        type: "ova_interactive",
+        title: "Laboratorio de Prompts en Vivo",
+        description:
+          "El banco de trabajo del artesano digital: escribe prompts reales, ejecútalos contra el modelo y refina hasta lograr el resultado exacto. Cuatro técnicas comprobadas más un reto final.",
+        estimatedTime: "15 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 5,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
     ],
   },
 
@@ -176,6 +188,34 @@ const RESOURCES_ES = {
         description:
           "Explora cada herramienta de ChatGPT con ejercicios prácticos y audio guiado. Como un arquitecto probando sus herramientas antes de la gran obra. Completa el desafío para demostrar tu maestría.",
         estimatedTime: "25 minutos",
+        difficulty: "Intermedio",
+        interactiveElements: 5,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
+    ],
+  },
+
+  "El Flujo del Arquitecto: Automatización en el Mundo Real": {
+    title: "El Flujo del Arquitecto: Automatización en el Mundo Real",
+    description:
+      "La teoría de herramientas cobra vida cuando las orquestas en flujos reales. Descubre cómo marketeros, educadores y emprendedores usan ChatGPT en cadena para multiplicar su productividad por 10.",
+    learningObjectives: [
+      "Entender el framework ideal de automatización: entrada → orquestación → salida",
+      "Analizar 3 casos reales de flujos en marketing, educación y emprendimiento",
+      "Reconocer patrones de orquestación entre herramientas integradas",
+      "Diseñar tu propio flujo de automatización adaptado a tu contexto",
+    ],
+    estimatedTime: "22 minutos",
+    difficulty: "Intermedio",
+    resources: [
+      {
+        id: "automation-flows-ova-1",
+        type: "ova_interactive",
+        title: "Flujos de Automatización en el Mundo Real",
+        description:
+          "Framework + 3 casos prácticos: cómo un marketero, educador y emprendedor usan las herramientas integradas de ChatGPT en flujos que multiplican su productividad.",
+        estimatedTime: "22 minutos",
         difficulty: "Intermedio",
         interactiveElements: 5,
         thumbnailType: "premium",
@@ -516,6 +556,34 @@ const RESOURCES_ES = {
     ],
   },
 
+  "El Maestro Alquimista: Flujo Completo Documento-Podcast": {
+    title: "El Maestro Alquimista: Flujo Completo Documento-Podcast",
+    description:
+      "Cierra el círculo: conecta análisis, síntesis y audio en un flujo integrado. Cómo investigadores, educadores y empresas transforman montañas de documentos en podcasts que cautivan.",
+    learningObjectives: [
+      "Dominar el flujo ideal: fuentes → síntesis → podcast",
+      "Analizar 3 casos reales de transformación documento-a-podcast",
+      "Reconocer patrones de orquestación entre herramientas NotebookLM",
+      "Diseñar tu propio flujo de documento-a-podcast adaptado a tu contexto",
+    ],
+    estimatedTime: "24 minutos",
+    difficulty: "Avanzado",
+    resources: [
+      {
+        id: "document-mastery-ova-1",
+        type: "ova_interactive",
+        title: "Dominio del Documento: Del Papel al Podcast",
+        description:
+          "Framework + 3 casos prácticos: investigador, educador, empresa. Cómo transformar documentos complejos en podcasts escuchables sin perder profundidad.",
+        estimatedTime: "24 minutos",
+        difficulty: "Avanzado",
+        interactiveElements: 5,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
+    ],
+  },
+
   // ============================================================================
   // MÓDULO 5: ÉTICA Y PRIVACIDAD
   // ============================================================================
@@ -656,6 +724,18 @@ const RESOURCES_ES = {
         estimatedTime: "25 minutos",
         difficulty: "Avanzado",
         interactiveElements: 8,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
+      {
+        id: "ethics-cases-ova-1",
+        type: "ova_interactive",
+        title: "Casos Prácticos de Ética Aplicada",
+        description:
+          "Un framework de 5 preguntas más 3 casos reales de IA en el mundo: contratación, salud y derechos de autor. Toma decisiones y descubre cómo piensa un guardián ético.",
+        estimatedTime: "20 minutos",
+        difficulty: "Avanzado",
+        interactiveElements: 6,
         thumbnailType: "premium",
         fullscreen: true,
       },

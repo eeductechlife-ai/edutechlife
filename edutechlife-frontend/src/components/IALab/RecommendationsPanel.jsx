@@ -5,6 +5,7 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import usePersonalizedRecommendations from '../../hooks/IALab/usePersonalizedRecommendations';
 import { useTranslation } from '../../i18n/I18nProvider';
+import AdaptiveRecommendations from './AdaptiveRecommendations';
 
 const URGENCY_CONFIG = {
   high: {
@@ -62,6 +63,13 @@ const RecommendationsPanel = ({ onAction, isLoading }) => {
       window.dispatchEvent(new CustomEvent('ialab:switchTab', { detail: 'contenido' }));
     }
   }, [onAction, setActiveModAction, setVisitedModules]);
+
+  // Handler para las recomendaciones adaptivas (spaced repetition + struggles)
+  // Reutiliza el mismo evento de tab que las recomendaciones existentes
+  const handleAdaptiveClick = useCallback((rec) => {
+    window.dispatchEvent(new CustomEvent('ialab:switchTab', { detail: 'contenido' }));
+    window.dispatchEvent(new CustomEvent('ialab:openResource', { detail: { resourceId: rec.itemId, source: 'adaptive' } }));
+  }, []);
 
   if (isLoading) {
     return (
@@ -121,6 +129,10 @@ const RecommendationsPanel = ({ onAction, isLoading }) => {
             transition={{ duration: 0.2, ease: 'easeInOut' }}
           >
             <div className="flex flex-col gap-3 pt-2">
+              <AdaptiveRecommendations
+                maxItems={2}
+                onItemClick={handleAdaptiveClick}
+              />
               {(['high', 'medium', 'low']).map(urgency => {
                 const recs = limitedRecs[urgency];
                 if (recs.length === 0) return null;

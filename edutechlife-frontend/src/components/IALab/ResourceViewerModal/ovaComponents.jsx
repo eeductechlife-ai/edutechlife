@@ -15,6 +15,10 @@ const OVARiskSimulator = lazy(() => import('../OVARiskSimulator.jsx'));
 const OVAEthicalDilemmas = lazy(() => import('../OVAEthicalDilemmas.jsx'));
 const OvaEdutechlife = lazy(() => import('../OvaEdutechlife.jsx'));
 const OVAPracticalCases = lazy(() => import('../OVAPracticalCases.jsx'));
+const OVAPromptLab = lazy(() => import('../OVAPromptLab.jsx'));
+const OVAEthicsCases = lazy(() => import('../OVAEthicsCases.jsx'));
+const OVAAutomationFlows = lazy(() => import('../OVAAutomationFlows.jsx'));
+const OVADocumentMastery = lazy(() => import('../OVADocumentMastery.jsx'));
 
 export const OVA_COMPONENTS = {
   'workflow-ova-herramientas': OVAChatGPTTools,
@@ -32,6 +36,10 @@ export const OVA_COMPONENTS = {
   'notebook-audio-ova-1': OVAPodcastStudio,
   'bias-ova-1': OVABiasLab,
   'privacy-ova-1': OVARiskSimulator,
+  'prompt-lab-ova-1': OVAPromptLab,
+  'ethics-cases-ova-1': OVAEthicsCases,
+  'automation-flows-ova-1': OVAAutomationFlows,
+  'document-mastery-ova-1': OVADocumentMastery,
 };
 
 export function renderOVAById(resourceId, resource, handleAutoComplete, handleClose) {

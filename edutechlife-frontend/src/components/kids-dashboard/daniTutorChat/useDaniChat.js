@@ -38,6 +38,14 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { getToken } = useAuth();
+  const { studentAge } = useSmartBoardKids();
+  const isKid = studentAge && studentAge <= 11;
+
+  const kidErrorMessages = {
+    generic: "¡Ups! Dani se quedó pensando. ¿Puedes intentar de nuevo?",
+    timeout: "Dani está pensando muy profundo... Espera un poco y vuelve a intentar.",
+    network: "¡Oh! Parece que el internet se fue de paseo. Revisa tu conexión y vuelve a intentar.",
+  };
   const {
     daniChatHistory,
     addDaniMessage,
@@ -461,8 +469,14 @@ export default function useDaniChat({ isOpen, onClose, activeTab }) {
         trackTopicFromMessage(userMessage, extractTopic, trackAcademicTopic);
       } catch (error) {
         console.error("Error calling Dani:", error);
-        const errorMsg =
-          error.message?.includes("400") || error.message?.includes("500")
+        const errorMsg = isKid
+          ? error.message?.includes("400") || error.message?.includes("500")
+            ? kidErrorMessages.generic
+            : error.message?.includes("timeout") ||
+                error.message?.includes("Tiempo de espera")
+              ? kidErrorMessages.timeout
+              : kidErrorMessages.network
+          : error.message?.includes("400") || error.message?.includes("500")
             ? t("dani.error_generic")
             : error.message?.includes("timeout") ||
                 error.message?.includes("Tiempo de espera")
