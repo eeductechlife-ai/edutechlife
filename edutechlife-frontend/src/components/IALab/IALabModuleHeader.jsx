@@ -2,29 +2,6 @@ import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { useIALabProgressContext } from "../../context/IALabContext";
 import { useTranslation } from "../../i18n/I18nProvider";
-import { useAdaptivePath } from "../../hooks/IALab/useAdaptivePath";
-
-function AdaptiveHint({ currentModuleId }) {
-  const { needsReview, nextRecommended } = useAdaptivePath();
-
-  if (needsReview.includes(currentModuleId)) {
-    return (
-      <div className="mt-3 rounded-lg bg-amber-50 border border-amber-200 p-3 text-sm text-amber-700">
-        Review recommended — your last score was below 60%
-      </div>
-    );
-  }
-
-  if (nextRecommended > currentModuleId) {
-    return (
-      <div className="mt-3 rounded-lg bg-green-50 border border-green-200 p-3 text-sm text-green-700">
-        Ready for Module {nextRecommended}
-      </div>
-    );
-  }
-
-  return null;
-}
 
 const IALabModuleHeader = ({ onAction }) => {
   const { t } = useTranslation();
@@ -53,14 +30,9 @@ const IALabModuleHeader = ({ onAction }) => {
             </h1>
           </div>
         </div>
-        <AdaptiveHint currentModuleId={activeMod} />
       </div>
     </motion.div>
   );
-};
-
-AdaptiveHint.propTypes = {
-  currentModuleId: PropTypes.number.isRequired,
 };
 
 IALabModuleHeader.propTypes = {

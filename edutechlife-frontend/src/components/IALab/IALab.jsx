@@ -42,12 +42,12 @@ import { createSlideVariants } from "./IALabAnimations";
 const preloadForum = () => import("./IALabForumOptimized");
 const IALabForumOptimized = lazy(preloadForum);
 const ModuleOverviewCard = lazy(() => import("./ModuleOverviewCard"));
-const ToolTutorAccordion = lazy(() => import("./ToolTutorAccordion"));
 const DailyPlan = lazy(() => import("./DailyPlan"));
 const ModuleActions = lazy(() => import("./ModuleActions"));
+const ModulePractice = lazy(() => import("./ModulePractice"));
 const IALabTour = lazy(() => import("./IALabTour"));
 const AchievementToast = lazy(() => import("./AchievementToast"));
-const IALabSandbox = lazy(() => import("./IALabSandbox"));
+
 import OfflineBanner from "./OfflineBanner";
 import GlobalSearchBar from "./GlobalSearchBar";
 import {
@@ -91,12 +91,7 @@ const IALabContent = memo(function () {
     { id: "objetivos", label: t("ialab.tab_objectives") },
     { id: "contenido", label: t("ialab.tab_content") },
     { id: "actividades", label: t("ialab.tab_activities") },
-    { id: "herramientas", label: t("ialab.tab_tools") },
-    {
-      id: "sandbox",
-      label: t("ialab.sandbox.title") || "Practice",
-      icon: "FlaskConical",
-    },
+    { id: "practica", label: t("ialab.tab_practice") },
   ];
   const { user } = useIALabUIContext();
   const { toasts: achievementToasts, removeToast: removeAchievementToast } =
@@ -148,6 +143,7 @@ const IALabContent = memo(function () {
       return () => clearTimeout(timer);
     }
   }, [activeMod]);
+  const isScrollingRef = useRef(false);
   const { openUserProfile } = useClerk();
   const {
     containerRef,
@@ -203,6 +199,16 @@ const IALabContent = memo(function () {
   const handleOpenProfile = () => {
     closeMobileMenu();
     openUserProfile();
+  };
+
+  const handleOpenHistory = () => {
+    closeMobileMenu();
+    useIALabStore.getState().setShowHistoryModal(true);
+  };
+
+  const handleOpenHelp = () => {
+    closeMobileMenu();
+    useIALabStore.getState().setShowHelpModal(true);
   };
 
   // Escuchar eventos de examen completado para forzar refresco UI
@@ -281,18 +287,23 @@ const IALabContent = memo(function () {
     containerRef.current = el;
   }, []);
   const resetViewSection = useCallback(() => setViewSection(null), []);
-  const { handleTouchStart: swipeStart, handleTouchEnd: swipeEnd } =
-    useSwipeNavigation({
-      onSwipeLeft: () => activeMod < 5 && setActiveModStore(activeMod + 1),
-      onSwipeRight: () => activeMod > 1 && setActiveModStore(activeMod - 1),
-      threshold: SWIPE_THRESHOLD,
-    });
+  const {
+    handleTouchStart: swipeStart,
+    handleTouchMove: swipeMove,
+    handleTouchEnd: swipeEnd,
+  } = useSwipeNavigation({
+    onSwipeLeft: () => activeMod < 5 && setActiveModStore(activeMod + 1),
+    onSwipeRight: () => activeMod > 1 && setActiveModStore(activeMod - 1),
+    threshold: SWIPE_THRESHOLD,
+    isScrollingRef,
+  });
 
   return (
     <div
       data-testid="ialab-container"
       className={`flex flex-col h-dvh bg-bg-light touch-manipulation${isDarkMode ? " dark" : ""}`}
       onTouchStart={swipeStart}
+      onTouchMove={swipeMove}
       onTouchEnd={swipeEnd}
     >
       <MobileHeader
@@ -326,6 +337,8 @@ const IALabContent = memo(function () {
           toggleDarkMode={toggleDarkMode}
           isDarkMode={isDarkMode}
           handleOpenProfile={handleOpenProfile}
+          handleOpenHistory={handleOpenHistory}
+          handleOpenHelp={handleOpenHelp}
         />
 
         <SkipLink />
@@ -541,7 +554,29 @@ const IALabContent = memo(function () {
                 </AnimatedSection>
               </div>
 
-              {/* 5. FORO DEL MÓDULO */}
+              {/* 5. PRÁCTICA DEL MÓDULO */}
+              <AnimatedSection
+                show={viewSection === null || viewSection === "practica"}
+                loading={isLoadingProgress || isModuleTransitioning}
+                skeleton={<ModuleActionsSkeleton />}
+              >
+                <div
+                  id="panel-practica"
+                  role="tabpanel"
+                  aria-labelledby="tab-practica"
+                >
+                  <Suspense fallback={null}>
+                    <SectionErrorBoundary>
+                      <ModulePractice
+                        onAction={handleAction}
+                        activeMod={activeMod}
+                      />
+                    </SectionErrorBoundary>
+                  </Suspense>
+                </div>
+              </AnimatedSection>
+
+              {/* 6. FORO DEL MÓDULO */}
               {(viewSection === null || viewSection === "actividades") &&
                 isForumOpen && (
                   <div id="forum-section">
@@ -556,48 +591,6 @@ const IALabContent = memo(function () {
                     </SectionErrorBoundary>
                   </div>
                 )}
-
-              {/* Herramientas + Tutorías */}
-              <AnimatedSection
-                show={viewSection === null || viewSection === "herramientas"}
-                loading={isLoadingProgress || isModuleTransitioning}
-                skeleton={<ToolsSkeleton />}
-              >
-                <div
-                  id="panel-herramientas"
-                  role="tabpanel"
-                  aria-labelledby="tab-herramientas"
-                >
-                  <Suspense fallback={<ToolsSkeleton />}>
-                    <SectionErrorBoundary
-                      name="ToolTutorAccordion"
-                      title={t("ialab.tools_unavailable")}
-                    >
-                      <ToolTutorAccordion onAction={handleAction} />
-                    </SectionErrorBoundary>
-                  </Suspense>
-                </div>
-              </AnimatedSection>
-
-              <AnimatedSection show={viewSection === "sandbox"} loading={false}>
-                <div
-                  id="panel-sandbox"
-                  role="tabpanel"
-                  aria-labelledby="tab-sandbox"
-                >
-                  <Suspense
-                    fallback={
-                      <div className="p-8 text-center text-slate-400">
-                        Loading...
-                      </div>
-                    }
-                  >
-                    <SectionErrorBoundary name="IALabSandbox">
-                      <IALabSandbox />
-                    </SectionErrorBoundary>
-                  </Suspense>
-                </div>
-              </AnimatedSection>
             </motion.div>
           </AnimatePresence>
         </main>

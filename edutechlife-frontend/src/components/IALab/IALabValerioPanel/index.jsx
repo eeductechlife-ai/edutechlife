@@ -24,6 +24,7 @@ import SectionErrorBoundary from "../SectionErrorBoundary";
 import { useValerioVoice } from "./useValerioVoice";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import ValerioPanelHeader from "./ValerioPanelHeader";
+import ValerioContextBar from "./ValerioContextBar";
 import ValerioQuickActions from "./ValerioQuickActions";
 import ValerioConversationArea from "./ValerioConversationArea";
 import ValerioChatInput from "./ValerioChatInput";
@@ -37,6 +38,7 @@ import {
   endSession,
   updateSession,
 } from "../../../services/valerioMemory";
+import { ALL_LESSONS, ALL_LESSONS_EN } from "../../../data/ialab";
 
 const VALERIO_MEMORY_KEY = "ialab_valerio_conversation";
 
@@ -73,6 +75,12 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   const studentName = user?.firstName || user?.full_name || "";
   const currentModule = modules.find((m) => m.id === activeMod);
   const userLevel = completedModules.length;
+  const lastVisitedLesson = useIALabStore((s) => s.lastVisitedLesson);
+  const lessonProgress = useIALabStore((s) => s.lessonProgress);
+  const currentLesson =
+    lastVisitedLesson?.moduleId === activeMod
+      ? { ...lastVisitedLesson, lesson: null, progress: 0 }
+      : null;
   const conversationRef = useRef(conversation);
   conversationRef.current = conversation;
   const prefersReducedMotion = useReducedMotion();
@@ -89,6 +97,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         userLevel,
         completedModules,
         t,
+        currentLesson,
       }),
     [
       locale,
@@ -96,6 +105,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       studentName,
       userLevel,
       completedModules?.length,
+      currentLesson?.lessonId,
     ],
   );
 
@@ -198,14 +208,24 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     const isEn = locale === "en";
+    const lessons = currentModule
+      ? (isEn ? ALL_LESSONS_EN : ALL_LESSONS)?.[currentModule.id] || []
+      : [];
+    const currentLessonData = currentLesson?.lessonId
+      ? lessons.find((l) => l.id === currentLesson.lessonId)
+      : null;
+    const lessonTitle = currentLessonData?.title || "";
+    const topicRef = lessonTitle
+      ? `"${currentModule?.title}" > "${lessonTitle}"`
+      : `"${currentModule?.title}"`;
     const actions = [
       {
         id: "explain_topic",
         label: t("ialab.valerio.quick_explain_topic"),
         icon: "fa-book",
         prompt: isEn
-          ? `Explain the main topic of the "${currentModule?.title}" module clearly and concisely.`
-          : `Explica el tema principal del módulo "${currentModule?.title}" de manera clara y concisa.`,
+          ? `Explain the main topic of ${topicRef} clearly and concisely.`
+          : `Explica el tema principal de ${topicRef} de manera clara y concisa.`,
       },
       {
         id: "give_example",
@@ -228,12 +248,12 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         label: t("ialab.valerio.quick_study_tips"),
         icon: "fa-graduation-cap",
         prompt: isEn
-          ? `Give me study tips for the "${currentModule?.title}" module (level ${userLevel < 3 ? "beginner" : userLevel < 6 ? "intermediate" : "advanced"}).`
-          : `Dame consejos de estudio para el módulo "${currentModule?.title}" (nivel ${userLevel < 3 ? "principiante" : userLevel < 6 ? "intermedio" : "avanzado"}).`,
+          ? `Give me study tips for the "${currentModule?.title}" module (level ${userLevel < 3 ? "beginner" : userLevel < 6 ? "intermediate" : "advanced"}). I am currently on the lesson "${lessonTitle || currentModule?.title}".`
+          : `Dame consejos de estudio para el módulo "${currentModule?.title}" (nivel ${userLevel < 3 ? "principiante" : userLevel < 6 ? "intermedio" : "avanzado"}). Estoy en la lección "${lessonTitle || currentModule?.title}".`,
       },
     ];
     setQuickActions(actions);
-  }, [currentModule, userLevel, locale]);
+  }, [currentModule, userLevel, locale, currentLesson?.lessonId]);
 
   useEffect(() => {
     if (isOpen && !welcomeSpokenRef.current) {
@@ -497,7 +517,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   if (!currentModule) {
     return (
       <div className="fixed right-0 top-0 bottom-0 z-[90] flex flex-col">
-        <div className="relative w-[380px] max-md:w-[85vw] h-full bg-white shadow-2xl flex flex-col items-center justify-center p-8 z-10">
+        <div className="relative w-[85vw] max-w-[380px] h-full bg-white shadow-2xl flex flex-col items-center justify-center p-8 z-10">
           <div className="w-12 h-12 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin mb-4" />
           <p className="text-slate-500 text-sm font-medium">
             {t("ialab.valerio.loading")}
@@ -528,7 +548,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
               ? undefined
               : { type: "spring", stiffness: 300, damping: 30 }
           }
-          className="relative w-[380px] max-md:w-[85vw] h-full bg-white shadow-2xl flex flex-col z-10"
+          className="relative w-full sm:w-[85vw] sm:max-w-[380px] h-full bg-white shadow-2xl flex flex-col z-10"
           role="document"
           style={{ willChange: "transform" }}
         >
@@ -541,6 +561,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
           />
 
           <div className="flex-1 overflow-hidden flex flex-col">
+            <ValerioContextBar currentModule={currentModule} />
             <ValerioQuickActions
               quickActions={quickActions}
               onAction={handleQuickAction}

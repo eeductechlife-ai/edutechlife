@@ -1,18 +1,23 @@
-import { useState, useRef, useEffect } from 'react'
-import PropTypes from 'prop-types';
-import { Icon } from '../../../utils/iconMapping.jsx';
-import { useTranslation } from '../../../i18n/I18nProvider';
+import { useState, useRef, useEffect } from "react";
+import PropTypes from "prop-types";
+import { Icon } from "../../../utils/iconMapping.jsx";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 const formatTime = (s) => {
-  if (!s || isNaN(s)) return '0:00';
+  if (!s || isNaN(s)) return "0:00";
   const m = Math.floor(s / 60);
   const sec = Math.floor(s % 60);
-  return `${m}:${sec.toString().padStart(2, '0')}`;
+  return `${m}:${sec.toString().padStart(2, "0")}`;
 };
 
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
-const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded }) => {
+const VideoViewer = ({
+  resource,
+  youtubeDuration,
+  durationLoading,
+  onVideoEnded,
+}) => {
   const { t, locale } = useTranslation();
   const containerRef = useRef(null);
   const playerRef = useRef(null);
@@ -34,27 +39,43 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
   const hideTimer = useRef(null);
   const progressTimer = useRef(null);
 
-  const videoId = resource?.url?.match(/(?:embed\/|watch\?v=)([a-zA-Z0-9_-]+)/)?.[1];
+  const videoId = resource?.url?.match(
+    /(?:embed\/|watch\?v=)([a-zA-Z0-9_-]+)/,
+  )?.[1];
 
   useEffect(() => {
     if (!videoId || !containerRef.current) return;
 
     // Suprimir errores de postMessage cross-origin de YouTube (bug conocido del iframe API)
     const suppressPostMsgError = (e) => {
-      if (e.data && typeof e.data === 'string' && e.data.includes('www-widgetapi')) {
+      if (
+        e.data &&
+        typeof e.data === "string" &&
+        e.data.includes("www-widgetapi")
+      ) {
         e.stopImmediatePropagation();
       }
     };
-    window.addEventListener('message', suppressPostMsgError, true);
+    window.addEventListener("message", suppressPostMsgError, true);
 
     const init = () => {
-      if (playerRef.current) try { playerRef.current.destroy(); } catch {}
+      if (playerRef.current)
+        try {
+          playerRef.current.destroy();
+        } catch {}
       playerRef.current = new window.YT.Player(containerRef.current, {
-        height: '100%', width: '100%',
+        height: "100%",
+        width: "100%",
         videoId,
         playerVars: {
-          autoplay: 1, controls: 0, rel: 0, modestbranding: 1, disablekb: 1,
-          enablejsapi: 1, origin: window.location.origin, cc_load_policy: 0,
+          autoplay: 1,
+          controls: 0,
+          rel: 0,
+          modestbranding: 1,
+          disablekb: 1,
+          enablejsapi: 1,
+          origin: window.location.origin,
+          cc_load_policy: 0,
         },
         events: {
           onReady: (e) => {
@@ -64,21 +85,27 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
             setPlayerError(null);
           },
           onError: (e) => {
-            const msg = {
-              2: t('ialab.viewer_modal.video_error_invalid'),
-              5: t('ialab.viewer_modal.video_error_html5'),
-              100: t('ialab.viewer_modal.video_error_not_found'),
-              101: t('ialab.viewer_modal.video_error_embed'),
-              150: t('ialab.viewer_modal.video_error_embed'),
-            }[e.data] || t('ialab.viewer_modal.video_error_unknown');
+            const msg =
+              {
+                2: t("ialab.viewer_modal.video_error_invalid"),
+                5: t("ialab.viewer_modal.video_error_html5"),
+                100: t("ialab.viewer_modal.video_error_not_found"),
+                101: t("ialab.viewer_modal.video_error_embed"),
+                150: t("ialab.viewer_modal.video_error_embed"),
+              }[e.data] || t("ialab.viewer_modal.video_error_unknown");
             setPlayerError(msg);
           },
           onStateChange: (e) => {
             setPlaying(e.data === window.YT.PlayerState.PLAYING);
             setBuffering(e.data === window.YT.PlayerState.BUFFERING);
-            if (e.data === window.YT.PlayerState.ENDED) { setHasEnded(true); endedRef.current?.(); }
+            if (e.data === window.YT.PlayerState.ENDED) {
+              setHasEnded(true);
+              endedRef.current?.();
+            }
             if (e.data === window.YT.PlayerState.PLAYING) {
-              try { setDuration(playerRef.current.getDuration()); } catch {}
+              try {
+                setDuration(playerRef.current.getDuration());
+              } catch {}
               clearInterval(progressTimer.current);
               progressTimer.current = setInterval(() => {
                 try {
@@ -94,18 +121,34 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
         },
       });
     };
-    if (window.YT && window.YT.Player && window.YT.loaded) { init(); return; }
-    const tag = document.createElement('script');
+    if (window.YT && window.YT.Player && window.YT.loaded) {
+      init();
+      return;
+    }
+    const tag = document.createElement("script");
     tag.src = `https://www.youtube.com/iframe_api?origin=${encodeURIComponent(window.location.origin)}`;
     document.head.appendChild(tag);
     const ci = setInterval(() => {
-      if (window.YT && window.YT.Player && window.YT.loaded) { clearInterval(ci); init(); }
+      if (window.YT && window.YT.Player && window.YT.loaded) {
+        clearInterval(ci);
+        init();
+      }
     }, 200);
-    return () => { clearInterval(ci); if (progressTimer.current) clearInterval(progressTimer.current); if (playerRef.current) try { playerRef.current.destroy(); } catch {} window.removeEventListener('message', suppressPostMsgError, true); };
+    return () => {
+      clearInterval(ci);
+      if (progressTimer.current) clearInterval(progressTimer.current);
+      if (playerRef.current)
+        try {
+          playerRef.current.destroy();
+        } catch {}
+      window.removeEventListener("message", suppressPostMsgError, true);
+    };
   }, [videoId]);
 
   useEffect(() => {
-    return () => { if (progressTimer.current) clearInterval(progressTimer.current); };
+    return () => {
+      if (progressTimer.current) clearInterval(progressTimer.current);
+    };
   }, [progressTimer]);
 
   const togglePlay = () => {
@@ -118,21 +161,33 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
 
   const changeRate = (r) => {
     if (!playerRef.current) return;
-    try { playerRef.current.setPlaybackRate(r); setRate(r); } catch {}
+    try {
+      playerRef.current.setPlaybackRate(r);
+      setRate(r);
+    } catch {}
     setShowSpeed(false);
   };
 
   const toggleMute = () => {
     if (!playerRef.current) return;
     try {
-      if (muted) { playerRef.current.unMute(); setMuted(false); }
-      else { playerRef.current.mute(); setMuted(true); }
+      if (muted) {
+        playerRef.current.unMute();
+        setMuted(false);
+      } else {
+        playerRef.current.mute();
+        setMuted(true);
+      }
     } catch {}
   };
 
   const changeVolume = (v) => {
     if (!playerRef.current) return;
-    try { playerRef.current.setVolume(v); setVolume(v); if (v > 0) setMuted(false); } catch {}
+    try {
+      playerRef.current.setVolume(v);
+      setVolume(v);
+      if (v > 0) setMuted(false);
+    } catch {}
   };
 
   const seek = () => {
@@ -150,7 +205,8 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
       }
     } catch {}
     try {
-      const el = containerRef.current?.querySelector('iframe') || containerRef.current;
+      const el =
+        containerRef.current?.querySelector("iframe") || containerRef.current;
       if (el && document.fullscreenElement) document.exitFullscreen();
       else if (el) el.requestFullscreen?.();
     } catch {}
@@ -160,16 +216,20 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
     if (!playerRef.current) return;
     try {
       if (ccActive) {
-        playerRef.current.unloadModule('captions');
+        playerRef.current.unloadModule("captions");
         setCcActive(false);
       } else {
-        playerRef.current.loadModule('captions');
+        playerRef.current.loadModule("captions");
         setTimeout(() => {
           try {
-            const tracks = playerRef.current?.getOption('captions', 'tracklist') || [];
-            const es = tracks.find(t => t.languageCode === (locale === 'en' ? 'en' : 'es'));
-            if (es) playerRef.current?.setOption('captions', 'track', es);
-            else if (tracks.length > 0) playerRef.current?.setOption('captions', 'track', tracks[0]);
+            const tracks =
+              playerRef.current?.getOption("captions", "tracklist") || [];
+            const es = tracks.find(
+              (t) => t.languageCode === (locale === "en" ? "en" : "es"),
+            );
+            if (es) playerRef.current?.setOption("captions", "track", es);
+            else if (tracks.length > 0)
+              playerRef.current?.setOption("captions", "track", tracks[0]);
           } catch {}
         }, 300);
         setCcActive(true);
@@ -177,26 +237,42 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
     } catch {}
   };
 
-  const handleMouseMove = () => {
+  const handleInteraction = () => {
     setShowControls(true);
     if (hideTimer.current) clearTimeout(hideTimer.current);
-    hideTimer.current = setTimeout(() => setShowControls(false), 3000);
+    hideTimer.current = setTimeout(() => setShowControls(false), 4000);
   };
+  const handleMouseMove = handleInteraction;
+  const handleTouchControl = handleInteraction;
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   useEffect(() => {
     const h = (e) => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")
+        return;
       switch (e.key) {
-        case ' ': case 'k': e.preventDefault(); togglePlay(); break;
-        case 'm': e.preventDefault(); toggleMute(); break;
-        case 'f': e.preventDefault(); goFullscreen(); break;
-        case 'c': e.preventDefault(); toggleCaptions(); break;
+        case " ":
+        case "k":
+          e.preventDefault();
+          togglePlay();
+          break;
+        case "m":
+          e.preventDefault();
+          toggleMute();
+          break;
+        case "f":
+          e.preventDefault();
+          goFullscreen();
+          break;
+        case "c":
+          e.preventDefault();
+          toggleCaptions();
+          break;
       }
     };
-    window.addEventListener('keydown', h);
-    return () => window.removeEventListener('keydown', h);
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
   }, [playing, muted, duration, currentTime, ccActive]);
 
   if (!videoId) {
@@ -206,7 +282,9 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
           <div className="w-20 h-20 mx-auto mb-4 bg-white/10 rounded-full flex items-center justify-center">
             <Icon name="fa-video-slash" className="text-3xl text-white/50" />
           </div>
-          <p className="text-white/70 text-sm">{t('ialab.viewer_modal.video_unavailable')}</p>
+          <p className="text-white/70 text-sm">
+            {t("ialab.viewer_modal.video_unavailable")}
+          </p>
         </div>
       </div>
     );
@@ -216,6 +294,7 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
     <div
       className="relative w-full h-full bg-black rounded-2xl overflow-hidden group select-none"
       onMouseMove={handleMouseMove}
+      onTouchStart={handleTouchControl}
       onMouseLeave={() => setShowControls(false)}
     >
       <div ref={containerRef} className="w-full h-full" />
@@ -224,10 +303,17 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#0A1729] to-[#004B63] rounded-2xl z-10">
           <div className="text-center p-8 max-w-md">
             <div className="w-16 h-16 mx-auto mb-4 bg-white/10 rounded-2xl flex items-center justify-center">
-              <Icon name="fa-triangle-exclamation" className="text-3xl text-white/50" />
+              <Icon
+                name="fa-triangle-exclamation"
+                className="text-3xl text-white/50"
+              />
             </div>
-            <p className="text-white/80 text-sm font-medium mb-1">{playerError}</p>
-            <p className="text-white/50 text-xs">{t('ialab.viewer_modal.video_unavailable')}</p>
+            <p className="text-white/80 text-sm font-medium mb-1">
+              {playerError}
+            </p>
+            <p className="text-white/50 text-xs">
+              {t("ialab.viewer_modal.video_unavailable")}
+            </p>
           </div>
         </div>
       )}
@@ -248,50 +334,109 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
         </div>
       )}
 
-      <div className={`absolute bottom-0 left-0 right-0 transition-opacity duration-300 ${showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div
+        className={`absolute bottom-0 left-0 right-0 transition-opacity duration-300 ${showControls ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+      >
         <div className="bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-8 pb-3 px-4">
           <div className="group/progress relative mb-2 cursor-default">
-            <div className="h-1 bg-white/20 rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-100" style={{ width: `${progress}%` }} />
+            <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-100"
+                style={{ width: `${progress}%` }}
+              />
             </div>
-            <div className="absolute -top-1.5 left-0 w-3 h-3 bg-corporate rounded-full shadow-lg" style={{ left: `calc(${progress}% - 6px)` }} />
+            <div
+              className="absolute -top-2 left-0 w-4 h-4 bg-corporate rounded-full shadow-lg ring-2 ring-white/30"
+              style={{ left: `calc(${progress}% - 6px)` }}
+            />
           </div>
 
-          <div className="flex items-center gap-3">
-            <button onClick={togglePlay} className="w-8 h-8 flex items-center justify-center text-white hover:text-corporate transition-colors" aria-label={playing ? t('ialab.viewer_modal.pause') : t('ialab.viewer_modal.play')}>
+          <div className="flex items-center gap-1 sm:gap-3">
+            <button
+              onClick={togglePlay}
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center text-white hover:text-corporate transition-colors"
+              aria-label={
+                playing
+                  ? t("ialab.viewer_modal.pause")
+                  : t("ialab.viewer_modal.play")
+              }
+            >
               {playing ? (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1" /><rect x="14" y="4" width="4" height="16" rx="1" /></svg>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <rect x="6" y="4" width="4" height="16" rx="1" />
+                  <rect x="14" y="4" width="4" height="16" rx="1" />
+                </svg>
               ) : (
                 <Icon name="fa-play" className="text-sm" />
               )}
             </button>
 
-            <div className="flex items-center gap-1.5 group/vol">
-              <button onClick={toggleMute} className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white transition-colors" aria-label={muted ? t('ialab.viewer_modal.unmute') : t('ialab.viewer_modal.mute')}>
-                <Icon name={muted || volume === 0 ? 'fa-volume-mute' : 'fa-volume-up'} className="text-[10px]" />
+            <div className="flex items-center gap-1 sm:gap-1.5 group/vol">
+              <button
+                onClick={toggleMute}
+                className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center text-white/70 hover:text-white transition-colors"
+                aria-label={
+                  muted
+                    ? t("ialab.viewer_modal.unmute")
+                    : t("ialab.viewer_modal.mute")
+                }
+              >
+                <Icon
+                  name={
+                    muted || volume === 0 ? "fa-volume-mute" : "fa-volume-up"
+                  }
+                  className="text-[10px]"
+                />
               </button>
               <div className="w-0 group-hover/vol:w-16 overflow-hidden transition-all duration-200">
-                <input type="range" min={0} max={100} value={muted ? 0 : volume} onChange={(e) => changeVolume(Number(e.target.value))}
-                  className="w-16 h-1 accent-corporate cursor-pointer" aria-label={t('ialab.viewer_modal.volume')} />
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={muted ? 0 : volume}
+                  onChange={(e) => changeVolume(Number(e.target.value))}
+                  className="w-16 h-1 accent-corporate cursor-pointer"
+                  aria-label={t("ialab.viewer_modal.volume")}
+                />
               </div>
             </div>
 
             <span className="text-xs text-white/70 font-mono whitespace-nowrap">
-              {formatTime(currentTime)} / {durationLoading ? '...' : formatTime(duration) || (youtubeDuration || resource.duration || '0:00')}
+              {formatTime(currentTime)} /{" "}
+              {durationLoading
+                ? "..."
+                : formatTime(duration) ||
+                  youtubeDuration ||
+                  resource.duration ||
+                  "0:00"}
             </span>
 
             <div className="flex-1" />
 
             <div className="relative">
-              <button onClick={() => setShowSpeed(!showSpeed)} className="px-2 h-7 text-[11px] font-bold text-white/70 hover:text-white rounded-md hover:bg-white/10 transition-colors" aria-label={t('ialab.viewer_modal.speed_label')}>
+              <button
+                onClick={() => setShowSpeed(!showSpeed)}
+                className="px-3 h-11 min-h-[44px] text-[11px] font-bold text-white/70 hover:text-white rounded-md hover:bg-white/10 transition-colors"
+                aria-label={t("ialab.viewer_modal.speed_label")}
+              >
                 {rate}x
               </button>
               {showSpeed && (
                 <div className="absolute bottom-full right-0 mb-2 bg-slate-900 border border-white/10 rounded-xl p-1.5 shadow-2xl min-w-[100px]">
-                  <p className="text-[9px] text-white/40 uppercase tracking-wider px-2 pb-1">{t('ialab.viewer_modal.speed')}</p>
-                  {SPEEDS.map(s => (
-                    <button key={s} onClick={() => changeRate(s)}
-                      className={`block w-full text-left px-3 py-1.5 text-xs rounded-lg transition-colors ${rate === s ? 'bg-corporate/20 text-corporate font-bold' : 'text-white/70 hover:bg-white/10'}`}>
+                  <p className="text-[9px] text-white/40 uppercase tracking-wider px-2 pb-1">
+                    {t("ialab.viewer_modal.speed")}
+                  </p>
+                  {SPEEDS.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => changeRate(s)}
+                      className={`block w-full text-left px-3 py-1.5 text-xs rounded-lg transition-colors ${rate === s ? "bg-corporate/20 text-corporate font-bold" : "text-white/70 hover:bg-white/10"}`}
+                    >
                       {s}x
                     </button>
                   ))}
@@ -299,11 +444,23 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
               )}
             </div>
 
-            <button onClick={toggleCaptions} className="w-7 h-7 flex items-center justify-center transition-colors" aria-label={t('ialab.viewer_modal.cc')} title={t('ialab.viewer_modal.cc')}>
-              <Icon name="fa-closed-captioning" className={`text-[10px] ${ccActive ? 'text-corporate' : 'text-white/70 hover:text-white'}`} />
+            <button
+              onClick={toggleCaptions}
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors"
+              aria-label={t("ialab.viewer_modal.cc")}
+              title={t("ialab.viewer_modal.cc")}
+            >
+              <Icon
+                name="fa-closed-captioning"
+                className={`text-[10px] ${ccActive ? "text-corporate" : "text-white/70 hover:text-white"}`}
+              />
             </button>
 
-            <button onClick={goFullscreen} className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white transition-colors" aria-label={t('ialab.viewer_modal.fullscreen')}>
+            <button
+              onClick={goFullscreen}
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center text-white/70 hover:text-white transition-colors"
+              aria-label={t("ialab.viewer_modal.fullscreen")}
+            >
               <Icon name="fa-expand" className="text-[10px]" />
             </button>
           </div>
@@ -312,13 +469,12 @@ const VideoViewer = ({ resource, youtubeDuration, durationLoading, onVideoEnded 
 
       {!hasEnded && (
         <div className="absolute top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-corporate/10 border border-corporate/20 rounded-lg text-xs font-medium text-corporate shadow-sm z-10 backdrop-blur-sm">
-          {t('ialab.viewer_modal.warning_no_skip')}
+          {t("ialab.viewer_modal.warning_no_skip")}
         </div>
       )}
     </div>
   );
 };
-
 
 VideoViewer.propTypes = {
   resource: PropTypes.object,

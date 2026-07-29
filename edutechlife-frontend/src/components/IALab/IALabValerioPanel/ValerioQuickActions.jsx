@@ -1,12 +1,25 @@
-import PropTypes from 'prop-types';
-import { Icon } from '../../../utils/iconMapping.jsx';
-import { useTranslation } from '../../../i18n/I18nProvider';
+import PropTypes from "prop-types";
+import { Icon } from "../../../utils/iconMapping.jsx";
+import { useTranslation } from "../../../i18n/I18nProvider";
+import { useIALabStore } from "../../../store/ialabStore";
 
 const ValerioQuickActions = ({ quickActions, onAction, disabled }) => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const lastVisitedLesson = useIALabStore((s) => s.lastVisitedLesson);
+  const hasLessonContext = lastVisitedLesson?.lessonId != null;
+
   return (
     <div className="p-4 border-b border-slate-100">
-      <h3 className="text-sm font-medium text-slate-600 mb-3">{t('ialab.valerio.quick_actions_title')}</h3>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-medium text-slate-600">
+          {t("ialab.valerio.quick_actions_title")}
+        </h3>
+        {hasLessonContext && (
+          <span className="text-[10px] text-corporate font-medium px-2 py-0.5 rounded-full bg-corporate/5">
+            {locale === "en" ? "In-lesson" : "En lección"}
+          </span>
+        )}
+      </div>
       <div className="grid grid-cols-2 gap-2">
         {quickActions.map((action) => (
           <button
@@ -23,7 +36,6 @@ const ValerioQuickActions = ({ quickActions, onAction, disabled }) => {
     </div>
   );
 };
-
 
 ValerioQuickActions.propTypes = {
   quickActions: PropTypes.array,

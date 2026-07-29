@@ -52,7 +52,7 @@ const ResourceViewerModal = ({
   const { trackResourceViewed } = useIALabProgress();
 
   const [isMarkedAsViewed, setIsMarkedAsViewed] = useState(false);
-  const [isOvaFullscreen, setIsOvaFullscreen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const modalRef = useRef(null);
   const focusTrapRef = useFocusTrap(isOpen);
@@ -83,8 +83,8 @@ const ResourceViewerModal = ({
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape" && isOpen) {
-        if (isOvaFullscreen) {
-          setIsOvaFullscreen(false);
+        if (isFullscreen) {
+          setIsFullscreen(false);
         } else {
           handleClose();
         }
@@ -92,7 +92,7 @@ const ResourceViewerModal = ({
     };
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [isOpen, onClose, isOvaFullscreen]);
+  }, [isOpen, onClose, isFullscreen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -329,16 +329,32 @@ const ResourceViewerModal = ({
             className="fixed inset-0 z-[200] backdrop-blur-md bg-black/40"
             onClick={handleClose}
           />
-          <div className="fixed inset-0 z-[201] flex items-center justify-center p-2 sm:p-4 pointer-events-none">
+          <div
+            className={cn(
+              "fixed inset-0 z-[201] pointer-events-none",
+              isFullscreen
+                ? "p-0"
+                : "flex items-center justify-center p-0 sm:p-2",
+            )}
+          >
             <div
-              className="w-full max-w-6xl h-full mx-2 sm:mx-4 p-[1.5px] rounded-[2rem] bg-gradient-to-b from-petroleum/20 via-petroleum/10 to-corporate/5 relative overflow-hidden shadow-[0_20px_25px_-5px_rgba(0,75,99,0.18),0_8px_10px_-6px_rgba(0,75,99,0.12)]"
+              className={cn(
+                "h-full relative overflow-hidden",
+                isFullscreen
+                  ? "w-full"
+                  : "w-full max-w-6xl max-sm:max-w-full mx-0 sm:mx-2 p-0 sm:p-[1.5px] sm:rounded-[2rem] sm:bg-gradient-to-b from-petroleum/20 via-petroleum/10 to-corporate/5 shadow-[0_20px_25px_-5px_rgba(0,75,99,0.18),0_8px_10px_-6px_rgba(0,75,99,0.12)]",
+              )}
               style={{
-                height: "calc(100dvh - 2rem)",
-                maxHeight: "calc(100dvh - 2rem)",
+                height: isFullscreen ? "100dvh" : "calc(100dvh - 2rem)",
+                maxHeight: isFullscreen ? "100dvh" : "calc(100dvh - 2rem)",
               }}
             >
-              <div className="absolute -top-10 -right-10 w-48 h-48 bg-gradient-to-br from-petroleum/8 to-corporate/5 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-gradient-to-tr from-petroleum/6 to-corporate/5 rounded-full blur-3xl pointer-events-none" />
+              {!isFullscreen && (
+                <>
+                  <div className="absolute -top-10 -right-10 w-48 h-48 bg-gradient-to-br from-petroleum/8 to-corporate/5 rounded-full blur-3xl pointer-events-none" />
+                  <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-gradient-to-tr from-petroleum/6 to-corporate/5 rounded-full blur-3xl pointer-events-none" />
+                </>
+              )}
               <motion.div
                 ref={(node) => {
                   modalRef.current = node;
@@ -351,10 +367,18 @@ const ResourceViewerModal = ({
                 role="dialog"
                 aria-modal="true"
                 aria-label={resource.title}
-                className="relative z-10 bg-white dark:bg-slate-800 rounded-[calc(2rem-1.5px)] flex flex-col h-full overflow-hidden pointer-events-auto"
+                className={cn(
+                  "relative z-10 bg-white dark:bg-slate-800 flex flex-col h-full overflow-hidden pointer-events-auto",
+                  isFullscreen ? "" : "sm:rounded-[calc(2rem-1.5px)]",
+                )}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-petroleum to-corporate rounded-t-[calc(2rem-1.5px)] z-10" />
+                <div
+                  className={cn(
+                    "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-petroleum to-corporate z-10",
+                    isFullscreen ? "" : "sm:rounded-t-[calc(2rem-1.5px)]",
+                  )}
+                />
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-800">
                   <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-petroleum to-corporate shadow-sm flex items-center justify-center flex-shrink-0">
@@ -411,7 +435,21 @@ const ResourceViewerModal = ({
                       </div>
                     </div>
                   </div>
-                  <div className="flex-shrink-0 mt-3 sm:mt-0 ml-0 sm:ml-2">
+                  <div className="flex-shrink-0 mt-3 sm:mt-0 ml-0 sm:ml-2 flex items-center gap-2">
+                    <button
+                      onClick={() => setIsFullscreen((prev) => !prev)}
+                      className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-petroleum hover:border-petroleum/30 hover:bg-petroleum/5 transition-all duration-200 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+                      aria-label={
+                        isFullscreen
+                          ? t("ialab.viewer_modal.fullscreen_exit")
+                          : t("ialab.viewer_modal.fullscreen_enter")
+                      }
+                    >
+                      <Icon
+                        name={isFullscreen ? "fa-compress" : "fa-expand"}
+                        className="w-4 h-4"
+                      />
+                    </button>
                     <button
                       onClick={handleClose}
                       className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-petroleum hover:border-petroleum/30 hover:bg-petroleum/5 transition-all duration-200 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
@@ -453,7 +491,7 @@ const ResourceViewerModal = ({
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setShowNotes((s) => !s)}
-                        className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium border ${
+                        className={`px-3 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px] border ${
                           showNotes
                             ? "bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm border-transparent"
                             : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 text-petroleum/70 hover:bg-petroleum/5 hover:text-petroleum transition-all duration-200"
@@ -464,7 +502,7 @@ const ResourceViewerModal = ({
                           name="fa-note-sticky"
                           className="w-3 h-3 sm:w-4 sm:h-4"
                         />
-                        <span className="hidden sm:inline">
+                        <span className="inline">
                           {t("ialab.viewer_modal.notes")}
                         </span>
                       </button>
@@ -475,7 +513,7 @@ const ResourceViewerModal = ({
                           onClick={onPreviousResource}
                           disabled={currentIndex <= 0}
                           className={cn(
-                            "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium",
+                            "px-4 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px]",
                             currentIndex <= 0
                               ? "text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-40"
                               : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-petroleum/70 hover:bg-petroleum/5 hover:border-corporate/30 hover:shadow-sm transition-all duration-200",
@@ -486,25 +524,25 @@ const ResourceViewerModal = ({
                             name="fa-chevron-left"
                             className="w-3 h-3 sm:w-4 sm:h-4"
                           />
-                          <span className="hidden sm:inline">
+                          <span className="inline">
                             {t("ialab.viewer_modal.previous")}
                           </span>
                         </button>
-                        <div className="px-4 py-1.5 sm:px-5 sm:py-2 bg-gradient-to-br from-petroleum/10 to-corporate/10 rounded-full text-petroleum font-bold text-sm sm:text-base shadow-sm">
+                        <div className="px-4 py-2 sm:px-5 sm:py-2.5 bg-gradient-to-br from-petroleum/10 to-corporate/10 rounded-full text-petroleum font-bold text-sm sm:text-base shadow-sm">
                           {currentIndex + 1} / {totalResources}
                         </div>
                         <button
                           onClick={onNextResource}
                           disabled={currentIndex >= totalResources - 1}
                           className={cn(
-                            "px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium",
+                            "px-4 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px]",
                             currentIndex >= totalResources - 1
                               ? "text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-40"
                               : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-petroleum/70 hover:bg-petroleum/5 hover:border-corporate/30 hover:shadow-sm transition-all duration-200",
                           )}
                           aria-label={t("ialab.viewer_modal.next_aria")}
                         >
-                          <span className="hidden sm:inline">
+                          <span className="inline">
                             {t("ialab.viewer_modal.next")}
                           </span>
                           <Icon
@@ -552,7 +590,7 @@ const ResourceViewerModal = ({
                       <button
                         onClick={handleMarkAsViewed}
                         aria-label={t("ialab.viewer_modal.mark_viewed")}
-                        className="px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base w-full sm:w-auto justify-center border-none bg-gradient-to-r from-petroleum to-corporate hover:from-corporate-deep hover:to-corporate-darker text-white shadow-md hover:shadow-lg"
+                        className="px-4 py-3 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base min-h-[44px] w-full sm:w-auto justify-center border-none bg-gradient-to-r from-petroleum to-corporate hover:from-corporate-deep hover:to-corporate-darker text-white shadow-md hover:shadow-lg"
                       >
                         <Icon
                           name="fa-check"
@@ -566,26 +604,6 @@ const ResourceViewerModal = ({
               </motion.div>
             </div>
           </div>
-          {isOvaFullscreen && (
-            <div className="fixed inset-0 z-[400] bg-white dark:bg-slate-900 flex flex-col">
-              <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
-                <span className="text-sm font-medium text-slate-500 dark:text-slate-400 truncate mr-4">
-                  {resource?.title}
-                </span>
-                <button
-                  onClick={() => setIsOvaFullscreen(false)}
-                  className="px-5 py-2.5 bg-petroleum hover:bg-petroleum-dark text-white rounded-xl flex items-center gap-2 font-medium transition-colors shadow-md border-none flex-shrink-0"
-                  aria-label={t("ialab.viewer_modal.fullscreen_exit")}
-                >
-                  <Icon name="fa-compress" className="w-4 h-4" />
-                  <span>{t("ialab.viewer_modal.fullscreen_exit_btn")}</span>
-                </button>
-              </div>
-              <div className="flex-1 overflow-auto bg-white dark:bg-slate-800">
-                {renderViewer()}
-              </div>
-            </div>
-          )}
         </>
       )}
     </AnimatePresence>

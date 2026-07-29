@@ -1,7 +1,7 @@
-import { useIALabStore } from "../../../store/ialabStore"
-import { analyzeQuizFailures } from "../../../utils/ialab"
-import COURSE_KNOWLEDGE from "../constants/courseKnowledge"
-import { injectSessionContext } from "../../../services/valerioMemory"
+import { useIALabStore } from "../../../store/ialabStore";
+import { analyzeQuizFailures } from "../../../utils/ialab";
+import COURSE_KNOWLEDGE from "../constants/courseKnowledge";
+import { injectSessionContext } from "../../../services/valerioMemory";
 
 const PROMPT_VALERIO_DOCENTE_ES = `Eres Valerio, el coach de IA de Edutechlife.
 
@@ -29,7 +29,7 @@ INSTRUCCIONES:
 7. Sé cálido y motivador, como un coach personal
 8. Usa el nombre del estudiante de forma natural y esporádica. No lo repitas en cada respuesta ni de forma forzada. Úsalo como lo haría un coach real: para dar apertura, reconocer un logro, o generar cercanía cuando sea pertinente.
 9. IMPORTANTE — SIEMPRE completa tus respuestas. Nunca cortes una respuesta a mitad. Si estás explicando algo, termina la explicación completamente.
-10. IMPORTANTE — No uses caracteres que un sistema de texto a voz leería en voz alta: evita comillas dobles o simples, asteriscos, guiones medios sueltos, barras inclinadas, numerales, corchetes o paréntesis en el texto de tus respuestas. Tus respuestas deben sonar naturales al ser leídas en voz alta. Usa lenguaje natural sin formato especial.`
+10. IMPORTANTE — No uses caracteres que un sistema de texto a voz leería en voz alta: evita comillas dobles o simples, asteriscos, guiones medios sueltos, barras inclinadas, numerales, corchetes o paréntesis en el texto de tus respuestas. Tus respuestas deben sonar naturales al ser leídas en voz alta. Usa lenguaje natural sin formato especial.`;
 
 const PROMPT_VALERIO_DOCENTE_EN = `You are Valerio, the AI coach from Edutechlife.
 
@@ -56,51 +56,77 @@ INSTRUCTIONS:
 7. Be warm and motivating, like a personal coach
 8. Use the student's name naturally and sparingly. Do not repeat it in every answer or force it. Use it as a real coach would: to open a conversation, acknowledge an achievement, or create rapport when appropriate.
 9. IMPORTANT — ALWAYS complete your responses. Never cut off a response mid-sentence. If you are explaining something, finish the explanation completely.
-10. IMPORTANT — Do not use characters that a text-to-speech system would read aloud: avoid double or single quotation marks, asterisks, standalone hyphens, forward slashes, hash signs, brackets or parentheses in your response text. Your responses should sound natural when read aloud. Use natural language without special formatting.`
+10. IMPORTANT — Do not use characters that a text-to-speech system would read aloud: avoid double or single quotation marks, asterisks, standalone hyphens, forward slashes, hash signs, brackets or parentheses in your response text. Your responses should sound natural when read aloud. Use natural language without special formatting.`;
 
-export const buildValerioSystemPrompt = ({ locale, currentModule, modules, studentName, userLevel, completedModules, t }) => {
-  const isEn = locale === "en"
-  const store = useIALabStore.getState()
-  const currentModuleId = currentModule?.id || 1
-  const currentModuleData = COURSE_KNOWLEDGE.find(m => m.id === currentModuleId)
+export const buildValerioSystemPrompt = ({
+  locale,
+  currentModule,
+  modules,
+  studentName,
+  userLevel,
+  completedModules,
+  t,
+  currentLesson,
+}) => {
+  const isEn = locale === "en";
+  const store = useIALabStore.getState();
+  const currentModuleId = currentModule?.id || 1;
+  const currentModuleData = COURSE_KNOWLEDGE.find(
+    (m) => m.id === currentModuleId,
+  );
   const moduleContent = currentModuleData
     ? JSON.stringify(currentModuleData, null, 2)
-    : isEn ? "No module information available." : "No hay información del módulo disponible."
+    : isEn
+      ? "No module information available."
+      : "No hay información del módulo disponible.";
 
-  const prompt = isEn ? PROMPT_VALERIO_DOCENTE_EN : PROMPT_VALERIO_DOCENTE_ES
+  const prompt = isEn ? PROMPT_VALERIO_DOCENTE_EN : PROMPT_VALERIO_DOCENTE_ES;
 
-  const moduleScores = []
+  const moduleScores = [];
   for (let i = 1; i <= 5; i++) {
-    const score = store.calculateModuleScore(i)
-    const modInfo = modules.find(m => m.id === i)
-    moduleScores.push(`${modInfo?.title || `Module ${i}`}: ${score}%`)
+    const score = store.calculateModuleScore(i);
+    const modInfo = modules.find((m) => m.id === i);
+    moduleScores.push(`${modInfo?.title || `Module ${i}`}: ${score}%`);
   }
 
-  const weakTopicsByModule = analyzeQuizFailures(store.storageGet)
-  const weakTopicsStr = Object.entries(weakTopicsByModule)
-    .map(([modId, topics]) => {
-      const modInfo = modules.find(m => m.id === Number(modId))
-      const topicsStr = Object.entries(topics)
-        .map(([topic, count]) => `${topic} (${count} ${t("valerio.failures")})`)
-        .join(", ")
-      return `${modInfo?.title || `Module ${modId}`}: ${topicsStr}`
-    })
-    .join("\n") || t("valerio.none_identified")
+  const weakTopicsByModule = analyzeQuizFailures(store.storageGet);
+  const weakTopicsStr =
+    Object.entries(weakTopicsByModule)
+      .map(([modId, topics]) => {
+        const modInfo = modules.find((m) => m.id === Number(modId));
+        const topicsStr = Object.entries(topics)
+          .map(
+            ([topic, count]) => `${topic} (${count} ${t("valerio.failures")})`,
+          )
+          .join(", ");
+        return `${modInfo?.title || `Module ${modId}`}: ${topicsStr}`;
+      })
+      .join("\n") || t("valerio.none_identified");
 
   const lastActivityStr = store.lastActivityDate
-    ? new Date(store.lastActivityDate).toLocaleDateString(isEn ? "en-US" : "es-CO", { year: "numeric", month: "short", day: "numeric" })
-    : t("valerio.no_activity")
+    ? new Date(store.lastActivityDate).toLocaleDateString(
+        isEn ? "en-US" : "es-CO",
+        { year: "numeric", month: "short", day: "numeric" },
+      )
+    : t("valerio.no_activity");
 
-  const weeklyXP = store.getWeeklyXP()
+  const weeklyXP = store.getWeeklyXP();
 
-  const streakStatus = store.streak > 0
-    ? `${store.streak} ${t("valerio.days")}${store.isStreakAtRisk() ? ` (${t("valerio.at_risk")})` : " ✅"}`
-    : t("valerio.no_streak")
+  const streakStatus =
+    store.streak > 0
+      ? `${store.streak} ${t("valerio.days")}${store.isStreakAtRisk() ? ` (${t("valerio.at_risk")})` : " ✅"}`
+      : t("valerio.no_streak");
 
-  const sessionContext = injectSessionContext()
+  const sessionContext = injectSessionContext();
   const sessionStr = sessionContext
     ? `\n\n## ${t("valerio.session_history") || "Sesiones anteriores"}:\n${sessionContext}`
-    : ""
+    : "";
+
+  const lessonStr = currentLesson?.lessonId
+    ? `\n\n## ${isEn ? "Current Lesson" : "Lección Actual"}:
+${isEn ? "Lesson ID" : "ID de Lección"}: ${currentLesson.lessonId}
+${isEn ? "The student is currently viewing this lesson. Use this context to provide targeted help." : "El estudiante está viendo esta lección actualmente. Usa este contexto para brindar ayuda específica."}`
+    : "";
 
   return `${prompt}${sessionStr}
 
@@ -121,75 +147,95 @@ ${t("valerio.module_scores")}:
 ${moduleScores.join("\n")}
 
 ${t("valerio.weak_topics")}:
-${weakTopicsStr}`
-}
+${weakTopicsStr}${lessonStr}`;
+};
 
-import { searchKnowledgeBase } from "../../../data/valerioKnowledgeBase"
-import { smartFallback } from "../../../hooks/IALab/useValerioFallback"
+import { searchKnowledgeBase } from "../../../data/valerioKnowledgeBase";
+import { smartFallback } from "../../../hooks/IALab/useValerioFallback";
 
-export const generateFallbackResponse = (inputText, locale, { currentModule, userLevel }) => {
-  const kbResult = searchKnowledgeBase(inputText, locale)
-  if (kbResult) return kbResult.answer
+export const generateFallbackResponse = (
+  inputText,
+  locale,
+  { currentModule, userLevel },
+) => {
+  const kbResult = searchKnowledgeBase(inputText, locale);
+  if (kbResult) return kbResult.answer;
 
-  return smartFallback(inputText, locale, { currentModule, userLevel })
-}
+  return smartFallback(inputText, locale, { currentModule, userLevel });
+};
 
-export const buildContextualWelcome = ({ locale, studentName, currentModule, userLevel, activeMod }) => {
-  const isEn = locale === "en"
-  const store = useIALabStore.getState()
-  const name = studentName || (isEn ? "Student" : "Estudiante")
-  const moduleTitle = currentModule?.title || (isEn ? "this module" : "este módulo")
-  const levelLabel = userLevel < 3
-    ? (isEn ? "beginner" : "principiante")
-    : userLevel < 6
-      ? (isEn ? "intermediate" : "intermedio")
-      : (isEn ? "advanced" : "avanzado")
+export const buildContextualWelcome = ({
+  locale,
+  studentName,
+  currentModule,
+  userLevel,
+  activeMod,
+}) => {
+  const isEn = locale === "en";
+  const store = useIALabStore.getState();
+  const name = studentName || (isEn ? "Student" : "Estudiante");
+  const moduleTitle =
+    currentModule?.title || (isEn ? "this module" : "este módulo");
+  const levelLabel =
+    userLevel < 3
+      ? isEn
+        ? "beginner"
+        : "principiante"
+      : userLevel < 6
+        ? isEn
+          ? "intermediate"
+          : "intermedio"
+        : isEn
+          ? "advanced"
+          : "avanzado";
 
-  const modScore = store.calculateModuleScore(activeMod)
-  const isModComplete = modScore >= 80
-  const overallPct = store.courseProgress
-  const streakNum = store.streak
-  const atRisk = store.isStreakAtRisk()
+  const modScore = store.calculateModuleScore(activeMod);
+  const isModComplete = modScore >= 80;
+  const overallPct = store.courseProgress;
+  const streakNum = store.streak;
+  const atRisk = store.isStreakAtRisk();
 
   const daysSinceLast = store.lastActivityDate
-    ? Math.floor((Date.now() - new Date(store.lastActivityDate).getTime()) / 86400000)
-    : null
+    ? Math.floor(
+        (Date.now() - new Date(store.lastActivityDate).getTime()) / 86400000,
+      )
+    : null;
 
   if (isEn) {
     if (daysSinceLast !== null && daysSinceLast >= 3) {
-      return `Welcome back, ${name}! It's been ${daysSinceLast} days — great to see you again. You're working on "${moduleTitle}" at ${levelLabel} level. Need a refresher or want to keep moving forward?`
+      return `Welcome back, ${name}! It's been ${daysSinceLast} days — great to see you again. You're working on "${moduleTitle}" at ${levelLabel} level. Need a refresher or want to keep moving forward?`;
     }
     if (streakNum > 0 && atRisk) {
-      return `Hey ${name}! Your ${streakNum}-day streak is at risk today. How about one quick activity to keep it going? You're in "${moduleTitle}" at ${levelLabel} level — let's do this!`
+      return `Hey ${name}! Your ${streakNum}-day streak is at risk today. How about one quick activity to keep it going? You're in "${moduleTitle}" at ${levelLabel} level — let's do this!`;
     }
     if (streakNum >= 5) {
-      return `Wow, ${streakNum} days in a row, ${name}! Your consistency is amazing. You're making great progress in "${moduleTitle}" (${levelLabel} level). What would you like to work on today?`
+      return `Wow, ${streakNum} days in a row, ${name}! Your consistency is amazing. You're making great progress in "${moduleTitle}" (${levelLabel} level). What would you like to work on today?`;
     }
     if (isModComplete && overallPct < 100) {
-      const recModule = store.getDailyRoute()?.nextModule
-      return `Awesome, ${name}! You aced this module 🎉. Overall you're at ${overallPct}% of the course. ${recModule ? `Ready to jump into "${recModule.title}"?` : "Ready for the next challenge?"} Ask me anything!`
+      const recModule = store.getDailyRoute()?.nextModule;
+      return `Awesome, ${name}! You aced this module 🎉. Overall you're at ${overallPct}% of the course. ${recModule ? `Ready to jump into "${recModule.title}"?` : "Ready for the next challenge?"} Ask me anything!`;
     }
     if (overallPct >= 80) {
-      return `You're almost there, ${name}! ${overallPct}% complete — just the final stretch left. Keep pushing, and let me know if you need help with anything!`
+      return `You're almost there, ${name}! ${overallPct}% complete — just the final stretch left. Keep pushing, and let me know if you need help with anything!`;
     }
-    return `Hello${studentName ? ", " + studentName : ""}! I'm Valerio, your coach. I see you're in "${moduleTitle}" — great topic! You're at ${levelLabel} level, and we'll explore it together. Ask me anything: explain a topic, give you an example, or help you with the challenge. Where would you like to start?`
+    return `Hello${studentName ? ", " + studentName : ""}! I'm Valerio, your coach. I see you're in "${moduleTitle}" — great topic! You're at ${levelLabel} level, and we'll explore it together. Ask me anything: explain a topic, give you an example, or help you with the challenge. Where would you like to start?`;
   }
 
   if (daysSinceLast !== null && daysSinceLast >= 3) {
-    return `¡Bienvenido de vuelta, ${name}! Hacía ${daysSinceLast} días — qué gusto verte de nuevo. Estás en "${moduleTitle}" nivel ${levelLabel}. ¿Necesitas un repaso o quieres seguir avanzando?`
+    return `¡Bienvenido de vuelta, ${name}! Hacía ${daysSinceLast} días — qué gusto verte de nuevo. Estás en "${moduleTitle}" nivel ${levelLabel}. ¿Necesitas un repaso o quieres seguir avanzando?`;
   }
   if (streakNum > 0 && atRisk) {
-    return `¡Oye ${name}! Tu racha de ${streakNum} días está en riesgo hoy. ¿Qué tal una actividad rápida para mantenerla? Estás en "${moduleTitle}" nivel ${levelLabel} — ¡vamos!`
+    return `¡Oye ${name}! Tu racha de ${streakNum} días está en riesgo hoy. ¿Qué tal una actividad rápida para mantenerla? Estás en "${moduleTitle}" nivel ${levelLabel} — ¡vamos!`;
   }
   if (streakNum >= 5) {
-    return `¡${streakNum} días seguidos, ${name}! Tu constancia es increíble. Vas muy bien en "${moduleTitle}" (nivel ${levelLabel}). ¿En qué te gustaría trabajar hoy?`
+    return `¡${streakNum} días seguidos, ${name}! Tu constancia es increíble. Vas muy bien en "${moduleTitle}" (nivel ${levelLabel}). ¿En qué te gustaría trabajar hoy?`;
   }
   if (isModComplete && overallPct < 100) {
-    const recModule = store.getDailyRoute()?.nextModule
-    return `¡${name}, dominaste este módulo! 🎉 Llevas ${overallPct}% del curso. ${recModule ? `¿Listo para saltar a "${recModule.title}"?` : "¿Listo para el siguiente reto?"} ¡Pregúntame lo que quieras!`
+    const recModule = store.getDailyRoute()?.nextModule;
+    return `¡${name}, dominaste este módulo! 🎉 Llevas ${overallPct}% del curso. ${recModule ? `¿Listo para saltar a "${recModule.title}"?` : "¿Listo para el siguiente reto?"} ¡Pregúntame lo que quieras!`;
   }
   if (overallPct >= 80) {
-    return `Ya casi terminas, ${name}! ${overallPct}% completado — solo queda el empujón final. ¡Sigue así y cuéntame si necesitas ayuda con algo!`
+    return `Ya casi terminas, ${name}! ${overallPct}% completado — solo queda el empujón final. ¡Sigue así y cuéntame si necesitas ayuda con algo!`;
   }
-  return `¡Hola${studentName ? ", " + studentName : ""}! Soy Valerio, tu coach. Veo que estás en "${moduleTitle}" — ¡qué tema tan interesante! Estás en nivel ${levelLabel}, y lo exploraremos juntos. Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, o ayudarte con el desafío. ¿Por dónde te gustaría empezar?`
-}
+  return `¡Hola${studentName ? ", " + studentName : ""}! Soy Valerio, tu coach. Veo que estás en "${moduleTitle}" — ¡qué tema tan interesante! Estás en nivel ${levelLabel}, y lo exploraremos juntos. Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, o ayudarte con el desafío. ¿Por dónde te gustaría empezar?`;
+};
