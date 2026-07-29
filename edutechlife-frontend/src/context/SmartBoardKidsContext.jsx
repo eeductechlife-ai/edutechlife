@@ -398,6 +398,11 @@ export const SmartBoardKidsProvider = ({ children }) => {
   }, [computedUpcomingDeadlines]);
 
   const value = {
+    // Loading & connectivity
+    dataLoaded,
+    syncLoading,
+    isConnected,
+
     // Dani
     daniChatHistory,
     daniMood,

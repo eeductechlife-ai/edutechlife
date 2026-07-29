@@ -21,6 +21,8 @@ import {
   Target,
   Clock,
   Award,
+  Sparkles,
+  BookOpen,
 } from "lucide-react";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
@@ -158,6 +160,55 @@ const SmartBoardAnalytics = memo(() => {
     [sessions],
   );
 
+  const hasData = (sessions?.length || 0) > 0 || (totalPoints || 0) > 0;
+
+  if (!hasData) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col items-center justify-center py-20 text-center space-y-4"
+      >
+        <motion.div
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          className="w-20 h-20 rounded-3xl bg-gradient-to-br from-[#4DA8C4] to-[#06D6A0] flex items-center justify-center text-white shadow-[0_16px_40px_-12px_rgba(77,168,196,0.5)]"
+        >
+          <Sparkles className="w-9 h-9" strokeWidth={2} />
+        </motion.div>
+        <div>
+          <h3
+            className={`text-xl font-black ${dc(dm, "text-white", "text-[#00303F]")}`}
+          >
+            {t("analytics.empty_title") || "¡Empieza a estudiar!"}
+          </h3>
+          <p
+            className={`text-sm mt-1 max-w-sm ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+          >
+            {t("analytics.empty_desc") ||
+              "Completa misiones, estudia materias y gana puntos para ver tus estadísticas aquí."}
+          </p>
+        </div>
+        <div className="flex items-center gap-3 text-xs font-medium text-[#4DA8C4]">
+          <span className="flex items-center gap-1">
+            <BookOpen className="w-3.5 h-3.5" />
+            {t("analytics.empty_hint_study") || "Estudia"}
+          </span>
+          <span className="w-1 h-1 rounded-full bg-[#4DA8C4]/30" />
+          <span className="flex items-center gap-1">
+            <Award className="w-3.5 h-3.5" />
+            {t("analytics.empty_hint_missions") || "Completa misiones"}
+          </span>
+          <span className="w-1 h-1 rounded-full bg-[#4DA8C4]/30" />
+          <span className="flex items-center gap-1">
+            <Gauge className="w-3.5 h-3.5" />
+            {t("analytics.empty_hint_progress") || "Gana puntos"}
+          </span>
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <motion.div
@@ -189,32 +240,47 @@ const SmartBoardAnalytics = memo(() => {
           darkMode={dm}
           color="#0096C7"
         >
-          <ResponsiveContainer width="100%" height={180}>
-            <BarChart data={weeklyData}>
-              <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-              <YAxis tick={{ fontSize: 10 }} />
-              <Tooltip />
-              <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                {weeklyData.map((entry, idx) => (
-                  <Cell
-                    key={idx}
-                    fill={
-                      (entry.pct || 0) > 70
-                        ? "#22C55E"
-                        : (entry.pct || 0) > 30
-                          ? "#4DA8C4"
-                          : "#EF4444"
-                    }
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-          <p
-            className={`text-xs text-center mt-2 ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
-          >
-            {t("analytics.metric_speed_desc")}
-          </p>
+          {weeklyData.some((d) => d.value > 0) ? (
+            <>
+              <ResponsiveContainer width="100%" height={180}>
+                <BarChart data={weeklyData}>
+                  <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} />
+                  <Tooltip />
+                  <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                    {weeklyData.map((entry, idx) => (
+                      <Cell
+                        key={idx}
+                        fill={
+                          (entry.pct || 0) > 70
+                            ? "#22C55E"
+                            : (entry.pct || 0) > 30
+                              ? "#4DA8C4"
+                              : "#EF4444"
+                        }
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+              <p
+                className={`text-xs text-center mt-2 ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+              >
+                {t("analytics.metric_speed_desc")}
+              </p>
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-[180px] text-center">
+              <p
+                className={`text-sm font-semibold ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+              >
+                Sin datos esta semana
+              </p>
+              <p className="text-[10px] mt-1 text-[#94A3B8]">
+                Estudia para ver tu progreso diario
+              </p>
+            </div>
+          )}
         </MetricCard>
 
         <MetricCard

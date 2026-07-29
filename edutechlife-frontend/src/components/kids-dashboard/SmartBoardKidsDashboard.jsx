@@ -11,9 +11,10 @@ import DaniTutorChat from "./daniTutorChat";
 import PremiumSidebar from "./components/PremiumSidebar";
 import MobileBottomBar from "./components/MobileBottomBar";
 import CinematicContent from "./components/CinematicContent";
-import { Bot, Flame, Gem } from "lucide-react";
+import { Bot, Flame, Gem, Wifi, WifiOff, CloudSync } from "lucide-react";
 import { CATEGORIES, TOP_BAR_LABELS } from "./kidsDashboardConfig";
 import { SB_GRADIENTS, glow } from "./smartboardTheme";
+import SmartBoardLoadingSkeleton from "./SmartBoardLoadingSkeleton";
 
 const SmartBoardKidsDashboard = () => {
   const { t } = useTranslation();
@@ -38,6 +39,9 @@ const SmartBoardKidsDashboard = () => {
     lastUnlockedReward,
     streak,
     subscriptionTier,
+    dataLoaded,
+    syncLoading,
+    isConnected,
   } = useSmartBoardKids();
   const prefersReducedMotion = useReducedMotion();
   const navigate = useNavigate();
@@ -105,6 +109,14 @@ const SmartBoardKidsDashboard = () => {
     }
   }, [searchParams]);
 
+  if (!dataLoaded || syncLoading) {
+    return (
+      <div className={`${darkMode ? "bg-[#0F172A]" : "bg-[#F8FAFC]"}`}>
+        <SmartBoardLoadingSkeleton darkMode={darkMode} />
+      </div>
+    );
+  }
+
   return (
     <div
       className={`relative min-h-screen overflow-hidden transition-colors duration-500 ${
@@ -120,6 +132,30 @@ const SmartBoardKidsDashboard = () => {
           : {}
       }
     >
+      {/* Connectivity Indicator */}
+      {!isConnected && (
+        <motion.div
+          initial={{ y: -40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-[#FB8500] to-[#F3722C] text-white px-4 py-1.5 flex items-center justify-center gap-2 text-xs font-semibold"
+        >
+          <WifiOff className="w-3.5 h-3.5" />
+          Modo offline — los cambios se sincronizarán cuando tengas conexión
+        </motion.div>
+      )}
+
+      {/* Sync indicator */}
+      {syncLoading && dataLoaded && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed top-2 right-2 z-[60] flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#4DA8C4]/20 text-[#4DA8C4] text-[10px] font-semibold backdrop-blur-sm"
+        >
+          <CloudSync className="w-3 h-3 animate-spin" />
+          Sincronizando...
+        </motion.div>
+      )}
+
       {/* Unlock Notification */}
       <AnimatePresence>
         {lastUnlockedReward && (
