@@ -1,28 +1,41 @@
-import { useState, useEffect, useRef } from "react"
-import useSmartBoardSync from "../hooks/useSmartBoardSync"
+import { useState, useEffect, useRef } from "react";
+import useSmartBoardSync from "../hooks/useSmartBoardSync";
 
-const LS_PREFIX = "edutechlife_"
+const LS_PREFIX = "edutechlife_";
 
 export const getLocalStorage = (key, fallback) => {
   try {
-    const saved = localStorage.getItem(`${LS_PREFIX}${key}`)
-    return saved ? JSON.parse(saved) : fallback
+    const saved = localStorage.getItem(`${LS_PREFIX}${key}`);
+    return saved ? JSON.parse(saved) : fallback;
   } catch {
-    return fallback
+    return fallback;
   }
-}
+};
 
-export const setLocalStorage = (key, value) => {
+const pendingWrites = {};
+let writeTimer = null;
+
+const flushWrites = () => {
+  const batch = { ...pendingWrites };
+  Object.keys(batch).forEach((k) => delete pendingWrites[k]);
+  writeTimer = null;
   try {
-    localStorage.setItem(`${LS_PREFIX}${key}`, JSON.stringify(value))
+    Object.entries(batch).forEach(([key, value]) => {
+      localStorage.setItem(`${LS_PREFIX}${key}`, JSON.stringify(value));
+    });
   } catch {
     // localStorage lleno, ignorar
   }
-}
+};
+
+export const setLocalStorage = (key, value) => {
+  pendingWrites[key] = value;
+  if (!writeTimer) writeTimer = setTimeout(flushWrites, 50);
+};
 
 export const useSmartBoardPersistence = (setters) => {
-  const settersRef = useRef(setters)
-  settersRef.current = setters
+  const settersRef = useRef(setters);
+  settersRef.current = setters;
   const {
     loadData,
     saveData,
@@ -30,11 +43,11 @@ export const useSmartBoardPersistence = (setters) => {
     userId,
     isLoading: syncLoading,
     isConnected,
-  } = useSmartBoardSync()
-  const [dataLoaded, setDataLoaded] = useState(false)
+  } = useSmartBoardSync();
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
-    if (!userId || dataLoaded || syncLoading) return
+    if (!userId || dataLoaded || syncLoading) return;
 
     const loadAllData = async () => {
       try {
@@ -69,7 +82,7 @@ export const useSmartBoardPersistence = (setters) => {
           setExamMaterials,
           setSmartBookHistory,
           setPlanCompletedActivities,
-        } = settersRef.current
+        } = settersRef.current;
 
         const localData = {
           daniChatHistory: getLocalStorage(`dani_chat_${userId}`, []),
@@ -115,61 +128,61 @@ export const useSmartBoardPersistence = (setters) => {
 
           // Backward-compat: try per-user key first, fall back to global
           flashcardDecks: (() => {
-            const perUser = getLocalStorage(`flashcards_${userId}`, undefined)
-            if (perUser !== undefined) return perUser
-            return getLocalStorage("flashcards", [])
+            const perUser = getLocalStorage(`flashcards_${userId}`, undefined);
+            if (perUser !== undefined) return perUser;
+            return getLocalStorage("flashcards", []);
           })(),
           exams: (() => {
-            const perUser = getLocalStorage(`exams_${userId}`, undefined)
-            if (perUser !== undefined) return perUser
-            return getLocalStorage("exams", [])
+            const perUser = getLocalStorage(`exams_${userId}`, undefined);
+            if (perUser !== undefined) return perUser;
+            return getLocalStorage("exams", []);
           })(),
           examMaterials: (() => {
             const perUser = getLocalStorage(
               `exam_materials_${userId}`,
               undefined,
-            )
-            if (perUser !== undefined) return perUser
-            return getLocalStorage("exam_materials", {})
+            );
+            if (perUser !== undefined) return perUser;
+            return getLocalStorage("exam_materials", {});
           })(),
           smartBookHistory: (() => {
-            const perUser = getLocalStorage(`smartbooks_${userId}`, undefined)
-            if (perUser !== undefined) return perUser
-            return getLocalStorage("smartbooks", [])
+            const perUser = getLocalStorage(`smartbooks_${userId}`, undefined);
+            if (perUser !== undefined) return perUser;
+            return getLocalStorage("smartbooks", []);
           })(),
           planCompletedActivities: (() => {
             const perUser = getLocalStorage(
               `plan_completed_${userId}`,
               undefined,
-            )
-            if (perUser !== undefined) return perUser
-            return getLocalStorage("plan_completed", [])
+            );
+            if (perUser !== undefined) return perUser;
+            return getLocalStorage("plan_completed", []);
           })(),
-        }
+        };
 
-        let merged = localData
-        let remoteData = null
+        let merged = localData;
+        let remoteData = null;
         if (navigator.onLine) {
-          remoteData = await loadData()
+          remoteData = await loadData();
           if (remoteData) {
-            merged = mergeWithLocal(localData, remoteData)
+            merged = mergeWithLocal(localData, remoteData);
           }
         }
 
-        setDaniChatHistory(merged.daniChatHistory || [])
-        setStudentMoodHistory(merged.studentMoodHistory || [])
-        setAcademicTopics(merged.academicTopics || [])
-        setConversationCount(merged.conversationCount || 0)
-        setStudentAge(merged.studentAge || null)
-        setTotalPoints(merged.totalPoints || 0)
-        setPointsHistory(merged.pointsHistory || [])
-        setUnlockedRewards(merged.unlockedRewards || [])
-        setTotalActiveMinutes(merged.totalActiveMinutes || 0)
-        setSessions(merged.sessions || [])
+        setDaniChatHistory(merged.daniChatHistory || []);
+        setStudentMoodHistory(merged.studentMoodHistory || []);
+        setAcademicTopics(merged.academicTopics || []);
+        setConversationCount(merged.conversationCount || 0);
+        setStudentAge(merged.studentAge || null);
+        setTotalPoints(merged.totalPoints || 0);
+        setPointsHistory(merged.pointsHistory || []);
+        setUnlockedRewards(merged.unlockedRewards || []);
+        setTotalActiveMinutes(merged.totalActiveMinutes || 0);
+        setSessions(merged.sessions || []);
         setStreak(
           merged.streak || { current: 0, longest: 0, lastActive: null },
-        )
-        setStreakLog(merged.streakLog || [])
+        );
+        setStreakLog(merged.streakLog || []);
         setDaniMemory(
           merged.daniMemory || {
             conversations: [],
@@ -183,38 +196,38 @@ export const useSmartBoardPersistence = (setters) => {
             interactionCount: 0,
             lastSessionSummary: null,
           },
-        )
-        setSubjectTime(merged.subjectTime || {})
-        setCalendarEvents(merged.calendarEvents || [])
-        setReadNews(merged.readNews || [])
-        if (merged.missions?.length) setMissions(merged.missions)
-        if (merged.subjects?.length) setSubjects(merged.subjects)
-        setUploadedActivities(merged.uploadedActivities || [])
-        setAnalyzedActivities(merged.analyzedActivities || [])
-        setDarkMode(!!merged.darkMode)
-        setAvatarAnimado(!!merged.avatarAnimado)
-        setFondoGalaxia(!!merged.fondoGalaxia)
+        );
+        setSubjectTime(merged.subjectTime || {});
+        setCalendarEvents(merged.calendarEvents || []);
+        setReadNews(merged.readNews || []);
+        if (merged.missions?.length) setMissions(merged.missions);
+        if (merged.subjects?.length) setSubjects(merged.subjects);
+        setUploadedActivities(merged.uploadedActivities || []);
+        setAnalyzedActivities(merged.analyzedActivities || []);
+        setDarkMode(!!merged.darkMode);
+        setAvatarAnimado(!!merged.avatarAnimado);
+        setFondoGalaxia(!!merged.fondoGalaxia);
         if (merged.subscriptionTier === "premium")
-          setSubscriptionTier("premium")
-        if (merged.vakResult) setVakResult(merged.vakResult)
-        setFlashcardDecks(merged.flashcardDecks || [])
-        setExams(merged.exams || [])
-        setExamMaterials(merged.examMaterials || {})
-        setSmartBookHistory(merged.smartBookHistory || [])
-        setPlanCompletedActivities(merged.planCompletedActivities || [])
+          setSubscriptionTier("premium");
+        if (merged.vakResult) setVakResult(merged.vakResult);
+        setFlashcardDecks(merged.flashcardDecks || []);
+        setExams(merged.exams || []);
+        setExamMaterials(merged.examMaterials || {});
+        setSmartBookHistory(merged.smartBookHistory || []);
+        setPlanCompletedActivities(merged.planCompletedActivities || []);
 
         if (!remoteData && navigator.onLine) {
-          saveData(merged)
+          saveData(merged);
         }
       } catch (error) {
-        console.error("Error cargando datos SmartBoard:", error)
+        console.error("Error cargando datos SmartBoard:", error);
       } finally {
-        setDataLoaded(true)
+        setDataLoaded(true);
       }
-    }
+    };
 
-    loadAllData()
-  }, [userId, syncLoading])
+    loadAllData();
+  }, [userId, syncLoading]);
 
   return {
     dataLoaded,
@@ -224,5 +237,5 @@ export const useSmartBoardPersistence = (setters) => {
     userId,
     isConnected,
     syncLoading,
-  }
-}
+  };
+};

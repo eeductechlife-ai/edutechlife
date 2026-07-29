@@ -32,6 +32,7 @@ import { createNavigationSlice } from "./slices/navigationSlice";
 import { createSynthesizerSlice } from "./slices/synthesizerSlice";
 import { createCertificateSlice } from "./slices/certificateSlice";
 import { createSeguridadSlice } from "./slices/seguridadSlice";
+import { createAdaptiveSlice } from "./slices/adaptiveSlice";
 
 /**
  * @typedef {Object} Module
@@ -84,6 +85,7 @@ export const useIALabStore = create(
       ...createCertificateSlice(set, get),
       ...createSeguridadSlice(set, get),
       ...createUiSlice(set, get),
+      ...createAdaptiveSlice(set, get),
 
       contentReviews: {},
 

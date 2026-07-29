@@ -5,7 +5,7 @@ import { StudentProvider } from "./context/StudentContext";
 import { useAuth as useClerkAuth } from "@clerk/react";
 import { initSupabaseClient } from "./lib/supabase";
 import CustomCursor from "./components/CustomCursor";
-import GlobalErrorBoundary from "./components/common/GlobalErrorBoundary";
+import AppErrorBoundary from "./components/common/ErrorBoundary";
 
 const LoadingScreen = lazy(() => import("./components/LoadingScreen"));
 const NicoModern = lazy(() => import("./components/Nico/NicoModern"));
@@ -35,7 +35,7 @@ const App = () => {
   }, []);
 
   return (
-    <GlobalErrorBoundary>
+    <AppErrorBoundary variant="fullscreen">
       <StudentProvider>
         <div
           className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]"
@@ -58,7 +58,7 @@ const App = () => {
           )}
         </div>
       </StudentProvider>
-    </GlobalErrorBoundary>
+    </AppErrorBoundary>
   );
 };
 

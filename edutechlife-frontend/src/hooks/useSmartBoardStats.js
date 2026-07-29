@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
+import { useUser } from "@clerk/react";
 
-const PREFIX = 'edutechlife';
-const DEFAULT_USER_ID = 'student';
-const DAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+const PREFIX = "edutechlife";
+const DEFAULT_USER_ID = "student";
+const DAYS = ["L", "M", "M", "J", "V", "S", "D"];
 
 const getItem = (key) => {
   try {
@@ -15,7 +16,7 @@ const getItem = (key) => {
 
 const getInt = (key) => {
   try {
-    return parseInt(localStorage.getItem(key) || '0', 10);
+    return parseInt(localStorage.getItem(key) || "0", 10);
   } catch {
     return 0;
   }
@@ -34,31 +35,37 @@ const getLevel = (points) => {
   return 1;
 };
 
-const loadFromStorage = () => {
-  const uid = DEFAULT_USER_ID;
-
+const loadFromStorage = (uid) => {
   const missions = getItem(`${PREFIX}_missions_${uid}`) || [];
   const subjects = getItem(`${PREFIX}_subjects_${uid}`) || [];
   const totalPoints = getInt(`${PREFIX}_points_${uid}`);
   const totalActiveMinutes = getInt(`${PREFIX}_minutes_${uid}`);
 
   // parse dates properly after JSON serialization
-  const sessions = (getItem(`${PREFIX}_sessions_${uid}`) || []).map(s => ({
+  const sessions = (getItem(`${PREFIX}_sessions_${uid}`) || []).map((s) => ({
     ...s,
     start: s.start ? new Date(s.start) : null,
     end: s.end ? new Date(s.end) : null,
   }));
-  const streak = getItem(`${PREFIX}_streak_${uid}`) || { current: 0, longest: 0, lastActive: null };
+  const streak = getItem(`${PREFIX}_streak_${uid}`) || {
+    current: 0,
+    longest: 0,
+    lastActive: null,
+  };
   const streakLog = getItem(`${PREFIX}_streak_log_${uid}`) || [];
   const vakResult = getItem(`${PREFIX}_vak_${uid}`) || null;
 
   // Progreso General
-  const progresoGeneral = subjects.length > 0
-    ? Math.round(subjects.reduce((sum, s) => sum + (s.progress || 0), 0) / subjects.length)
-    : 0;
+  const progresoGeneral =
+    subjects.length > 0
+      ? Math.round(
+          subjects.reduce((sum, s) => sum + (s.progress || 0), 0) /
+            subjects.length,
+        )
+      : 0;
 
   // Misiones
-  const misionesC = missions.filter(m => m.completed).length;
+  const misionesC = missions.filter((m) => m.completed).length;
   const misionesT = missions.length;
 
   // Tiempo
@@ -75,10 +82,10 @@ const loadFromStorage = () => {
   const nivel = getLevel(totalPoints);
 
   // Materias
-  const materias = subjects.map(s => ({
+  const materias = subjects.map((s) => ({
     nombre: s.name,
     progreso: s.progress || 0,
-    color: s.color || '#4DA8C4',
+    color: s.color || "#4DA8C4",
   }));
 
   // Actividad Semanal
@@ -92,21 +99,27 @@ const loadFromStorage = () => {
   for (let i = 0; i < 7; i++) {
     const d = new Date(monday);
     d.setDate(monday.getDate() + i);
-    weekDates.push(d.toISOString().split('T')[0]);
+    weekDates.push(d.toISOString().split("T")[0]);
   }
 
   const byDay = {};
-  weekDates.forEach(d => { byDay[d] = 0; });
+  weekDates.forEach((d) => {
+    byDay[d] = 0;
+  });
 
-  sessions.forEach(s => {
-    const sd = s.date || (s.start ? s.start.toISOString().split('T')[0] : null);
+  sessions.forEach((s) => {
+    const sd = s.date || (s.start ? s.start.toISOString().split("T")[0] : null);
     if (sd && byDay[sd] !== undefined) {
       byDay[sd] += s.duration || 5;
     }
   });
 
-  streakLog.forEach(entry => {
-    if (entry.date && byDay[entry.date] !== undefined && byDay[entry.date] === 0) {
+  streakLog.forEach((entry) => {
+    if (
+      entry.date &&
+      byDay[entry.date] !== undefined &&
+      byDay[entry.date] === 0
+    ) {
       byDay[entry.date] = Math.max(byDay[entry.date], 15);
     }
   });
@@ -119,30 +132,70 @@ const loadFromStorage = () => {
   }));
 
   // Logros dinámicos basados en datos reales
-  const completedMissions = missions.filter(m => m.completed);
+  const completedMissions = missions.filter((m) => m.completed);
   const logros = [];
 
   if (completedMissions.length >= misionesT && misionesT > 0)
-    logros.push({ icon: 'Trophy', title: 'Estrella del Mes', desc: 'Completaste todas las misiones' });
+    logros.push({
+      icon: "Trophy",
+      title: "Estrella del Mes",
+      desc: "Completaste todas las misiones",
+    });
   if (completedMissions.length >= 5)
-    logros.push({ icon: 'Rocket', title: 'Rápido Aprendiz', desc: `${completedMissions.length} misiones completadas` });
+    logros.push({
+      icon: "Rocket",
+      title: "Rápido Aprendiz",
+      desc: `${completedMissions.length} misiones completadas`,
+    });
   if (totalPoints >= 500)
-    logros.push({ icon: 'Gem', title: 'Acumulador', desc: `${totalPoints} puntos acumulados` });
+    logros.push({
+      icon: "Gem",
+      title: "Acumulador",
+      desc: `${totalPoints} puntos acumulados`,
+    });
   if (streak.current >= 7)
-    logros.push({ icon: 'Clock', title: 'Consistente', desc: `${streak.current} días seguidos activo` });
+    logros.push({
+      icon: "Clock",
+      title: "Consistente",
+      desc: `${streak.current} días seguidos activo`,
+    });
   if (streak.current >= 3 && streak.current < 7)
-    logros.push({ icon: 'Flame', title: 'Racha Activa', desc: `${streak.current} días de racha` });
+    logros.push({
+      icon: "Flame",
+      title: "Racha Activa",
+      desc: `${streak.current} días de racha`,
+    });
   if (vakResult)
-    logros.push({ icon: 'Brain', title: 'Conoces tu Estilo', desc: `Perfil ${vakResult.predominantStyle}` });
+    logros.push({
+      icon: "Brain",
+      title: "Conoces tu Estilo",
+      desc: `Perfil ${vakResult.predominantStyle}`,
+    });
   if (totalActiveMinutes >= 600)
-    logros.push({ icon: 'Timer', title: 'Dedicado', desc: `Más de ${horas}h de estudio` });
+    logros.push({
+      icon: "Timer",
+      title: "Dedicado",
+      desc: `Más de ${horas}h de estudio`,
+    });
   if (nivel >= 5)
-    logros.push({ icon: 'Star', title: 'Nivel Avanzado', desc: `Nivel ${nivel} alcanzado` });
+    logros.push({
+      icon: "Star",
+      title: "Nivel Avanzado",
+      desc: `Nivel ${nivel} alcanzado`,
+    });
   if (totalPoints >= 1000)
-    logros.push({ icon: 'Target', title: 'Preciso', desc: 'Más de 1000 puntos acumulados' });
+    logros.push({
+      icon: "Target",
+      title: "Preciso",
+      desc: "Más de 1000 puntos acumulados",
+    });
 
   if (logros.length === 0) {
-    logros.push({ icon: 'Compass', title: 'Explorador', desc: 'Comienza tu viaje de aprendizaje' });
+    logros.push({
+      icon: "Compass",
+      title: "Explorador",
+      desc: "Comienza tu viaje de aprendizaje",
+    });
   }
 
   return {
@@ -159,25 +212,27 @@ const loadFromStorage = () => {
   };
 };
 
-export const useSmartBoardStats = () => {
-  const [stats, setStats] = useState(loadFromStorage);
+export const useSmartBoardStats = (userId) => {
+  const { user } = useUser();
+  const uid = userId || user?.id || DEFAULT_USER_ID;
+  const [stats, setStats] = useState(() => loadFromStorage(uid));
   const [isLive, setIsLive] = useState(false);
 
   const refresh = useCallback(() => {
-    setStats(loadFromStorage());
+    setStats(loadFromStorage(uid));
     setIsLive(true);
     const t = setTimeout(() => setIsLive(false), 3000);
     return () => clearTimeout(t);
-  }, []);
+  }, [uid]);
 
   useEffect(() => {
     const onStorage = (e) => {
       if (e.key && e.key.startsWith(PREFIX)) refresh();
     };
-    window.addEventListener('storage', onStorage);
+    window.addEventListener("storage", onStorage);
     const interval = setInterval(refresh, 10000);
     return () => {
-      window.removeEventListener('storage', onStorage);
+      window.removeEventListener("storage", onStorage);
       clearInterval(interval);
     };
   }, [refresh]);
