@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
-import CustomSignUpForm from "./CustomSignUpForm";
+import SupabaseSignUpForm from "./SupabaseSignUpForm";
 import SEO from "./SEO";
 
 const IALabSignUpPage = ({ onBack }) => {
@@ -22,7 +21,7 @@ const IALabSignUpPage = ({ onBack }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <CustomSignUpForm onBack={handleBackToLogin} returnTo={returnTo} />
+      <SupabaseSignUpForm onBack={handleBackToLogin} returnTo={returnTo} />
     </motion.div>
   );
 };

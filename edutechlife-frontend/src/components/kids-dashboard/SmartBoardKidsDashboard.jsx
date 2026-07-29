@@ -443,7 +443,11 @@ const SmartBoardKidsDashboard = () => {
       <div className="fixed bottom-20 md:bottom-6 right-6 z-40 flex flex-col gap-2">
         <motion.button
           onClick={() => {
-            if (window.confirm("¿Estás seguro de que quieres eliminar todos tus datos? Esta acción no se puede deshacer.")) {
+            if (
+              window.confirm(
+                "¿Estás seguro de que quieres eliminar todos tus datos? Esta acción no se puede deshacer.",
+              )
+            ) {
               const userId = localStorage.getItem("edutechlife_user_id");
               if (userId) {
                 fetch(
@@ -453,13 +457,15 @@ const SmartBoardKidsDashboard = () => {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ userId }),
                   },
-                ).then(() => {
-                  localStorage.clear();
-                  window.location.href = "/";
-                }).catch(() => {
-                  localStorage.clear();
-                  window.location.href = "/";
-                });
+                )
+                  .then(() => {
+                    localStorage.clear();
+                    window.location.href = "/";
+                  })
+                  .catch(() => {
+                    localStorage.clear();
+                    window.location.href = "/";
+                  });
               }
             }
           }}
@@ -469,7 +475,15 @@ const SmartBoardKidsDashboard = () => {
           className="min-w-[44px] min-h-[44px] px-3 py-2 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/40 hover:text-red-200 text-[10px] font-semibold backdrop-blur-sm border border-red-500/30 transition-all flex items-center gap-1.5"
           title="Eliminar mis datos (GDPR / COPPA)"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden="true"
+          >
             <polyline points="3 6 5 6 21 6" />
             <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" />
             <path d="M10 3h4a1 1 0 011 1v2H9V4a1 1 0 011-1z" />
@@ -485,7 +499,6 @@ const SmartBoardKidsDashboard = () => {
             isOpen={isDaniOpen}
             onClose={() => setIsDaniOpen(false)}
             activeTab={activeTab}
-            isKid={isKid}
           />
         )}
       </AnimatePresence>

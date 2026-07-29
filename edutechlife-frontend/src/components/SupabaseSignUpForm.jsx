@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@clerk/react";
 import { Brain, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
 import FloatingParticles from "./FloatingParticles";
 import { sanitize } from "../utils/sanitize";
 import SEO from "./SEO";
 
-const CustomSignUpForm = ({ onBack, returnTo }) => {
+const SupabaseSignUpForm = ({ onBack, returnTo }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { signUp, setActive } = useAuth();
 
   const defaultReturnTo = returnTo || "/ialab";
 
@@ -89,90 +87,50 @@ const CustomSignUpForm = ({ onBack, returnTo }) => {
     setError("");
 
     try {
-      // Check if Clerk is properly configured
-      if (!signUp) {
+      // Register user directly via backend (Supabase Auth)
+      const registerResponse = await fetch(
+        `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            username: formData.username,
+            phone_number: formData.phone || null,
+            user_type: "adult",
+            platform: "ialab",
+            age_range: "18+",
+            registration_source: "ialab_signup",
+          }),
+        },
+      );
+
+      if (!registerResponse.ok) {
+        const errorData = await registerResponse.json();
         throw new Error(
-          "Clerk not configured. Please ensure VITE_CLERK_PUBLISHABLE_KEY is set in .env",
+          errorData.error || "Registration failed. Please try again.",
         );
       }
 
-      // Create user with Clerk
-      const result = await signUp.create({
-        emailAddress: formData.email,
-        password: formData.password,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        username: formData.username,
-        unsafeMetadata: {
-          user_type: "adult",
-          platform: "ialab",
-          age_range: "18+",
-          registration_source: "ialab_signup",
-        },
-      });
+      const result = await registerResponse.json();
 
-      // Get the Clerk user ID for syncing
-      const clerkUserId = result.createdUserId;
-
-      // Sync user to Supabase
-      if (clerkUserId) {
-        try {
-          const syncResponse = await fetch(
-            `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/auth/sync-user`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                clerk_id: clerkUserId,
-                email: formData.email,
-                first_name: formData.firstName,
-                last_name: formData.lastName,
-                username: formData.username,
-                phone_number: formData.phone || null,
-                user_type: "adult",
-                platform: "ialab",
-                age_range: "18+",
-                registration_source: "ialab_signup",
-              }),
-            },
-          );
-
-          if (!syncResponse.ok) {
-            console.warn(
-              "Failed to sync user to Supabase:",
-              await syncResponse.text(),
-            );
-            // Continue anyway - Clerk user is created
-          }
-        } catch (syncErr) {
-          console.warn("Error syncing to Supabase:", syncErr);
-          // Continue anyway - Clerk user is created
+      setSuccess(true);
+      setTimeout(() => {
+        // Store auth token if provided
+        if (result.access_token) {
+          localStorage.setItem("auth_token", result.access_token);
         }
-      }
-
-      // If email verification is enabled, prompt to verify
-      if (result.status === "missing_requirements") {
-        // Email verification required
-        setSuccess(true);
-        setTimeout(() => {
-          setActive({ session: result.createdSessionId });
-          navigate(defaultReturnTo);
-        }, 2000);
-      } else if (result.status === "complete") {
-        // Registration complete
-        setSuccess(true);
-        setTimeout(() => {
-          setActive({ session: result.createdSessionId });
-          navigate(defaultReturnTo);
-        }, 2000);
-      }
+        navigate(defaultReturnTo);
+      }, 2000);
     } catch (err) {
       console.error("Sign-up error:", err);
       setError(
-        err.errors?.[0]?.message ||
-          err.message ||
+        err.message ||
           t("signup.error.registration_failed") ||
           "Registration failed. Please try again.",
       );
@@ -290,7 +248,7 @@ const CustomSignUpForm = ({ onBack, returnTo }) => {
               </div>
             </div>
 
-            {/* Right Side - Custom Sign-Up Form */}
+            {/* Right Side - Form */}
             <div className="lg:w-3/5 p-8 lg:p-12 flex flex-col justify-center items-center">
               {/* Header */}
               <div className="mb-6 text-center w-full">
@@ -476,4 +434,4 @@ const CustomSignUpForm = ({ onBack, returnTo }) => {
   );
 };
 
-export default CustomSignUpForm;
+export default SupabaseSignUpForm;

@@ -1,9 +1,16 @@
 import { memo, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "../../../../i18n/I18nProvider";
-import { Volume2, VolumeX, Flame, Brain, MessageSquare, X, Flag } from "lucide-react";
+import {
+  Volume2,
+  VolumeX,
+  Flame,
+  Brain,
+  MessageSquare,
+  X,
+  Flag,
+} from "lucide-react";
 import DaniAvatar from "../../dani/DaniAvatar";
-import { useSmartBoardKids } from "../../../../context/SmartBoardKidsContext";
 
 const DaniChatHeader = memo(
   ({
@@ -19,12 +26,11 @@ const DaniChatHeader = memo(
     onClose,
   }) => {
     const { t } = useTranslation();
-    const { studentAge } = useSmartBoardKids();
     const [showReport, setShowReport] = useState(false);
-    const isKid = studentAge && studentAge <= 11;
 
     const handleReport = () => {
-      const msg = "🚨 Un estudiante ha reportado un mensaje inapropiado en el chat con Dani.";
+      const msg =
+        "🚨 Un estudiante ha reportado un mensaje inapropiado en el chat con Dani.";
       try {
         fetch(
           `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/smartboard/report`,
