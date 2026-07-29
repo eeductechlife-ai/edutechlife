@@ -14,12 +14,12 @@ export const GamificationProvider = ({ children }) => {
   const ctx = useContext(SmartBoardKidsContext);
   const value = useMemo(
     () => ({
-      totalPoints: ctx.totalPoints,
-      streak: ctx.streak,
-      missions: ctx.missions,
-      streakLog: ctx.streakLog,
+      totalPoints: ctx?.totalPoints || 0,
+      streak: ctx?.streak || { current: 0, longest: 0, lastActive: null },
+      missions: ctx?.missions || [],
+      streakLog: ctx?.streakLog || [],
     }),
-    [ctx.totalPoints, ctx.streak, ctx.missions, ctx.streakLog],
+    [ctx?.totalPoints, ctx?.streak, ctx?.missions, ctx?.streakLog],
   );
   return (
     <GamificationContext.Provider value={value}>

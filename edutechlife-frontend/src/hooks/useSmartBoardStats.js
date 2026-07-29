@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useUser } from "@clerk/react";
 
 const PREFIX = "edutechlife";
@@ -217,12 +217,24 @@ export const useSmartBoardStats = (userId) => {
   const uid = userId || user?.id || DEFAULT_USER_ID;
   const [stats, setStats] = useState(() => loadFromStorage(uid));
   const [isLive, setIsLive] = useState(false);
+  const mountedRef = useRef(true);
+  const liveTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      if (liveTimeoutRef.current) clearTimeout(liveTimeoutRef.current);
+    };
+  }, []);
 
   const refresh = useCallback(() => {
     setStats(loadFromStorage(uid));
     setIsLive(true);
-    const t = setTimeout(() => setIsLive(false), 3000);
-    return () => clearTimeout(t);
+    if (liveTimeoutRef.current) clearTimeout(liveTimeoutRef.current);
+    liveTimeoutRef.current = setTimeout(() => {
+      if (mountedRef.current) setIsLive(false);
+    }, 3000);
   }, [uid]);
 
   useEffect(() => {
@@ -234,6 +246,7 @@ export const useSmartBoardStats = (userId) => {
     return () => {
       window.removeEventListener("storage", onStorage);
       clearInterval(interval);
+      if (liveTimeoutRef.current) clearTimeout(liveTimeoutRef.current);
     };
   }, [refresh]);
 

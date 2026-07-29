@@ -55,28 +55,26 @@ const SmartBoardKidsDashboard = () => {
 
   // Proactive Dani reminder after inactivity
   useEffect(() => {
-    const lastDani = parseInt(
-      localStorage.getItem("edutechlife_last_dani_close") || "0",
-      10,
-    );
+    if (isDaniOpen) {
+      setShowDaniReminder(false);
+      localStorage.removeItem("edutechlife_last_dani_close");
+      return;
+    }
+
+    const closeTime = localStorage.getItem("edutechlife_last_dani_close");
+    if (!closeTime) {
+      localStorage.setItem(
+        "edutechlife_last_dani_close",
+        Date.now().toString(),
+      );
+      return;
+    }
+
+    const lastDani = parseInt(closeTime, 10);
     const elapsed = Date.now() - lastDani;
     if (lastDani > 0 && elapsed > 300000 && elapsed < 3600000) {
       const timer = setTimeout(() => setShowDaniReminder(true), 5000);
       return () => clearTimeout(timer);
-    }
-  }, [isDaniOpen]);
-
-  useEffect(() => {
-    if (isDaniOpen) {
-      setShowDaniReminder(false);
-      localStorage.removeItem("edutechlife_last_dani_close");
-    } else {
-      if (!localStorage.getItem("edutechlife_last_dani_close")) {
-        localStorage.setItem(
-          "edutechlife_last_dani_close",
-          Date.now().toString(),
-        );
-      }
     }
   }, [isDaniOpen]);
 
@@ -109,7 +107,7 @@ const SmartBoardKidsDashboard = () => {
     }
   }, [searchParams]);
 
-  if (!dataLoaded || syncLoading) {
+  if (!dataLoaded) {
     return (
       <div className={`${darkMode ? "bg-[#0F172A]" : "bg-[#F8FAFC]"}`}>
         <SmartBoardLoadingSkeleton darkMode={darkMode} />

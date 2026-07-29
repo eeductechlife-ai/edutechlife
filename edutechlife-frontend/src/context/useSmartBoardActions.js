@@ -6,11 +6,13 @@ export const useSmartBoardActions = (stateAndSetters) => {
   ref.current = stateAndSetters;
 
   const addPoints = useCallback((points, reason) => {
+    const safePoints = Math.max(0, parseInt(points, 10) || 0);
+    if (safePoints === 0 && points !== 0) return;
     const { setTotalPoints, setPointsHistory } = ref.current;
-    setTotalPoints((prev) => prev + points);
+    setTotalPoints((prev) => prev + safePoints);
     setPointsHistory((prev) => [
       ...prev,
-      { points, reason, timestamp: new Date() },
+      { points: safePoints, reason, timestamp: new Date() },
     ]);
   }, []);
 
@@ -23,7 +25,7 @@ export const useSmartBoardActions = (stateAndSetters) => {
     );
     const mission = missions.find((m) => m.id === missionId);
     if (mission && !mission.completed) {
-      addPoints(mission.xp, `Misión completada: ${mission.title}`);
+      addPoints(mission.xp || 0, `Misión completada: ${mission.title || ""}`);
     }
   }, []);
 

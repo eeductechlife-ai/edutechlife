@@ -207,8 +207,9 @@ export const useSmartBoardPersistence = (setters) => {
         setDarkMode(!!merged.darkMode);
         setAvatarAnimado(!!merged.avatarAnimado);
         setFondoGalaxia(!!merged.fondoGalaxia);
-        if (merged.subscriptionTier === "premium")
-          setSubscriptionTier("premium");
+        setSubscriptionTier(
+          merged.subscriptionTier === "premium" ? "premium" : "basic",
+        );
         if (merged.vakResult) setVakResult(merged.vakResult);
         setFlashcardDecks(merged.flashcardDecks || []);
         setExams(merged.exams || []);
