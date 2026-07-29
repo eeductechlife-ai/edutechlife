@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { stopSpeech } from "../../utils/speech";
 import { tools, quizScenarios } from "../../data/ova/chatGPTTools";
+import { OVAIntro } from "./shared";
 
 const iconMap = { Globe, Code, ImageIcon, Layout, Cpu };
 
@@ -40,41 +41,12 @@ const ToolIcon = ({ icon, iconColor, className }) => {
   );
 };
 
-const WelcomeScreen = ({ onNext }) => {
-  const { t } = useTranslation();
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-[fadeIn_0.8s_ease-out_forwards] px-4 py-8 bg-white dark:bg-slate-800">
-      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-[#13374b] dark:text-slate-100 font-semibold text-sm mb-4">
-        <Bot size={16} className="text-[#259eb5]" />
-        <span>{t("ova.chatgpttools.lab_badge")}</span>
-      </div>
-      <div className="w-16 h-16 bg-gradient-to-br from-[#259eb5] to-[#13374b] rounded-2xl flex items-center justify-center shadow-lg shadow-[#259eb5]/20 mb-6">
-        <Zap className="text-white w-8 h-8" />
-      </div>
-      <h1 className="text-3xl md:text-5xl font-black mb-3 leading-tight tracking-tight text-[#13374b] dark:text-slate-100">
-        {t("ova.chatgpttools.welcome_title")}
-      </h1>
-      <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-light mb-2">
-        {t("ova.chatgpttools.welcome_subtitle")}
-      </p>
-      <p className="text-slate-600 dark:text-slate-400 max-w-xl mb-4">
-        {t("ova.chatgpttools.welcome_desc")}
-      </p>
-      <VoiceReader text={t("ova.chatgpttools.welcome_voice")} />
-      <button
-        onClick={onNext}
-        className="mt-4 px-8 py-4 bg-gradient-to-r from-[#259eb5] to-[#13374b] text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all flex items-center gap-3"
-      >
-        <Play size={20} />
-        {t("ova.chatgpttools.start_btn")}
-      </button>
-    </div>
-  );
-};
+
 
 ToolIcon.propTypes = {
   icon: PropTypes.string,
   iconColor: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default function OVAChatGPTTools({ onComplete }) {
@@ -101,7 +73,23 @@ export default function OVAChatGPTTools({ onComplete }) {
   const progress = Math.round((viewedTools.length / tools.length) * 100);
 
   if (screen === "welcome")
-    return <WelcomeScreen onNext={() => setScreen("dashboard")} />;
+    return (
+      <OVAIntro
+        icon="fa-brain"
+        badge={t("ova.chatgpttools.lab_badge")}
+        title={t("ova.chatgpttools.welcome_title")}
+        description={t("ova.chatgpttools.welcome_desc")}
+        audioText={t("ova.chatgpttools.welcome_voice")}
+        onStart={() => setScreen("dashboard")}
+        startLabel={t("ova.chatgpttools.start_btn")}
+        objectives={[
+          t("ova.chatgpttools.learning_obj_1"),
+          t("ova.chatgpttools.learning_obj_2"),
+          t("ova.chatgpttools.learning_obj_3"),
+          t("ova.chatgpttools.learning_obj_4"),
+        ]}
+      />
+    );
 
   const openTool = (idx) => {
     setActiveModal(idx);
@@ -174,7 +162,14 @@ export default function OVAChatGPTTools({ onComplete }) {
                       </span>
                       <span className="text-xl font-black">{progress}%</span>
                     </div>
-                    <div className="w-full bg-white/20 h-1.5 rounded-full overflow-hidden">
+                    <div
+                      role="progressbar"
+                      aria-valuenow={progress}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label={t("ova.chatgpttools.progress_label")}
+                      className="w-full bg-white/20 h-1.5 rounded-full overflow-hidden"
+                    >
                       <motion.div
                         className="bg-cyan-400 h-full"
                         initial={{ opacity: 0 }}
@@ -563,3 +558,7 @@ export default function OVAChatGPTTools({ onComplete }) {
     </div>
   );
 }
+
+OVAChatGPTTools.propTypes = {
+  onComplete: PropTypes.func,
+};

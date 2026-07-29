@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import OVANotebookBase from './OVANotebookBase';
 import { contentScreens, questionsData } from '../../data/ova/notebookLab';
 
@@ -10,3 +11,7 @@ export default function OVANotebookLab(props) {
     />
   );
 }
+
+OVANotebookLab.propTypes = {
+  onComplete: PropTypes.func,
+};

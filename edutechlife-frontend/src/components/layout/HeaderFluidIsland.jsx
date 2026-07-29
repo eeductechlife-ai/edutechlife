@@ -50,7 +50,7 @@ const loginOptions = [
   },
 ];
 
-const HeaderFluidIsland = () => {
+const HeaderFluidIsland = ({ onOpenMobileMenu }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isSignedIn } = useAuth();
@@ -58,7 +58,6 @@ const HeaderFluidIsland = () => {
   const location = useLocation();
 
   const prefersReducedMotion = useReducedMotion();
-  const [navExpanded, setNavExpanded] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
   const loginDropdownRef = useRef(null);
@@ -76,29 +75,9 @@ const HeaderFluidIsland = () => {
   }, []);
 
   useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === "Escape" && navExpanded) setNavExpanded(false);
-    };
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [navExpanded]);
-
-  useEffect(() => {
-    setNavExpanded(false);
     setContactModalOpen(false);
     setLoginDropdownOpen(false);
   }, [location.pathname]);
-
-  useEffect(() => {
-    if (navExpanded) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [navExpanded]);
 
   const shouldShow = () => {
     if (
@@ -117,11 +96,10 @@ const HeaderFluidIsland = () => {
 
   const headerContent = (
     <>
-      <div className="flex items-center justify-between px-4 md:px-6 h-16">
+      <div className="flex items-center md:gap-32 px-4 md:px-6 h-16">
         <button
           onClick={() => {
             navigate("/");
-            setNavExpanded(false);
           }}
           aria-label={t("nav.home_aria")}
           className="outline-none border-none bg-transparent p-0 flex-shrink-0"
@@ -129,10 +107,10 @@ const HeaderFluidIsland = () => {
           <img
             src="/images/logo-edutechlife.webp"
             alt="Edutechlife"
-            className="w-20 sm:w-24 object-contain"
+            className="w-16 sm:w-20 md:w-24 object-contain"
             style={{
-              height: "80px",
-              transform: "scale(1.6)",
+              height: "40px",
+              transform: "scale(1.3)",
               transformOrigin: "left center",
             }}
             onError={(e) => {
@@ -141,7 +119,7 @@ const HeaderFluidIsland = () => {
           />
         </button>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3 ml-auto">
           <LocaleSwitcher />
           {isSignedIn && clerkUser ? (
             <UserDropdownMenuPremium
@@ -230,120 +208,23 @@ const HeaderFluidIsland = () => {
           </button>
         </div>
 
-        <div className="flex md:hidden items-center gap-2">
+        <div className="flex md:hidden items-center gap-2 ml-auto">
           <LocaleSwitcher />
           <button
-            onClick={() => setNavExpanded(!navExpanded)}
-            className="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-petroleum/5 transition-all duration-300 active:scale-[0.9]"
-            aria-label={navExpanded ? t("nav.close_aria") : t("nav.menu_aria")}
+            onClick={() => onOpenMobileMenu?.()}
+            className="relative w-11 h-11 flex items-center justify-center rounded-full hover:bg-petroleum/5 transition-all duration-300 active:scale-[0.9]"
+            aria-label={t("nav.menu_aria")}
           >
             <div className="relative w-5 h-5">
-              <motion.span
-                animate={
-                  prefersReducedMotion
-                    ? {}
-                    : { rotate: navExpanded ? 45 : 0, y: navExpanded ? 0 : -5 }
-                }
-                className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full"
-                style={{ top: "50%", marginTop: "-1px" }}
-                transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-              />
-              <motion.span
-                animate={
-                  prefersReducedMotion ? {} : { opacity: navExpanded ? 0 : 1 }
-                }
-                className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full"
-                style={{ top: "50%", marginTop: "-1px" }}
-                transition={{ duration: 0.2 }}
-              />
-              <motion.span
-                animate={
-                  prefersReducedMotion
-                    ? {}
-                    : { rotate: navExpanded ? -45 : 0, y: navExpanded ? 0 : 5 }
-                }
-                className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full"
-                style={{ top: "50%", marginTop: "-1px" }}
-                transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-              />
+              <span className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full" style={{ top: "50%", marginTop: "-1px", transform: "translateY(-5px)" }} />
+              <span className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full" style={{ top: "50%", marginTop: "-1px" }} />
+              <span className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full" style={{ top: "50%", marginTop: "-1px", transform: "translateY(5px)" }} />
             </div>
           </button>
         </div>
       </div>
 
-      <AnimatePresence>
-        {navExpanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-            className="overflow-hidden border-t border-gray-100/50"
-          >
-            <div className="px-6 py-8 space-y-3">
-              <button
-                onClick={() => {
-                  navigate("/");
-                  setNavExpanded(false);
-                }}
-                className="w-full text-left px-4 py-3 rounded-xl transition-all text-gray-700 hover:bg-gray-50"
-              >
-                <div className="text-sm font-semibold">{t("nav.home")}</div>
-                <div className="text-xs text-gray-400 mt-0.5">
-                  {t("nav.home_desc")}
-                </div>
-              </button>
 
-              <div className="flex flex-col gap-3 pt-4 border-t border-gray-100/50">
-                {isSignedIn && clerkUser ? (
-                  <UserDropdownMenuPremium
-                    userInfo={clerkUser}
-                    onNavigate={navigate}
-                  />
-                ) : (
-                  <div className="space-y-1">
-                    {loginOptions.map((opt) => (
-                      <button
-                        key={opt.id}
-                        onClick={() => {
-                          navigate(opt.path);
-                          setNavExpanded(false);
-                        }}
-                        className="w-full py-3 px-4 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-xl transition-colors flex items-center gap-3"
-                      >
-                        {opt.icon}
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                <button
-                  onClick={() => {
-                    setContactModalOpen(true);
-                    setNavExpanded(false);
-                  }}
-                  className="w-full py-3 px-4 text-sm font-semibold text-white bg-gradient-to-r from-[#66CCCC] to-[#4DA8C4] rounded-xl hover:from-[#4DA8C4] hover:to-[#66CCCC] transition-all active:scale-[0.98] flex items-center justify-center gap-2"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-                  {t("nav.contact")}
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 
@@ -351,20 +232,7 @@ const HeaderFluidIsland = () => {
     <>
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
         <motion.header
-          initial={false}
-          animate={
-            prefersReducedMotion
-              ? {}
-              : {
-                  borderRadius: navExpanded ? "1.5rem" : "9999px",
-                  marginTop: navExpanded ? "1rem" : "1rem",
-                  width: navExpanded
-                    ? "min(95vw, 1200px)"
-                    : "min(90vw, 1200px)",
-                }
-          }
-          transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-          className={`pointer-events-auto relative bg-transparent backdrop-blur-none border border-white/10 shadow-lg shadow-black/5 ${navExpanded ? "overflow-hidden" : ""}`}
+          className="pointer-events-auto relative w-full md:w-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-white/10 shadow-lg shadow-black/5 rounded-none md:rounded-full"
         >
           {headerContent}
         </motion.header>

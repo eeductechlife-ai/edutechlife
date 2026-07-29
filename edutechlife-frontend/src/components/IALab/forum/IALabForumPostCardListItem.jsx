@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import { useAuth } from '../../../context/AuthContext';
 import useForumProfile from '../../../hooks/IALab/forum/useForumProfile';
+import IALabForumUserHoverCard from './IALabForumUserHoverCard';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
 const BOOKMARKS_KEY = 'ialab_forum_bookmarks';
@@ -133,9 +134,11 @@ const IALabForumPostCard = ({
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
-              <span className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">
-                {profile.full_name || post.user_name || t('ialab.forum.post_card.user_fallback')}
-              </span>
+              <IALabForumUserHoverCard userId={post.user_id}>
+                <span className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">
+                  {profile.full_name || post.user_name || t('ialab.forum.post_card.user_fallback')}
+                </span>
+              </IALabForumUserHoverCard>
               {profile.title && !['Estudiante', 'Student'].includes(profile.title) && (
                 <span className="px-1.5 py-0.5 bg-petroleum/5 text-petroleum text-[9px] font-medium rounded-full flex-shrink-0">
                   {profile.title}

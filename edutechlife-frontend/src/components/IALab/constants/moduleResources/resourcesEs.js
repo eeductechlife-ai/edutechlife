@@ -108,9 +108,9 @@ const RESOURCES_ES = {
         id: "chatgpt-video-1",
         type: "video",
         title: "ChatGPT desde Cero en 6 Minutos",
-        url: "https://www.youtube.com/embed/iOlo-K7yj2M",
+        url: "https://www.youtube.com/embed/yQKR-jRF5pQ",
         duration: "5:43",
-        thumbnail: "https://img.youtube.com/vi/iOlo-K7yj2M/maxresdefault.jpg",
+        thumbnail: "https://img.youtube.com/vi/yQKR-jRF5pQ/maxresdefault.jpg",
         provider: "youtube",
         description:
           "Aprende a usar ChatGPT como un arquitecto usa sus planos: desde el primer trazo hasta la obra terminada, incluso si nunca lo has abierto antes.",
@@ -243,13 +243,13 @@ const RESOURCES_ES = {
       {
         id: "gemini-video-1",
         type: "video",
-        title: "Gemini en 14 Minutos: Curso de Introducción Acelerado",
+        title: "Gemini: Curso de Introducción Acelerado",
         url: "https://www.youtube.com/embed/Y5-5dI3Iero",
-        duration: "14:10",
+        duration: "7:34",
         thumbnail: "https://img.youtube.com/vi/Y5-5dI3Iero/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Descubre el poder de tu nueva lupa: desde analizar imágenes como un forense hasta escribir código como un desarrollador. Todo lo que Gemini puede hacer por ti, explicado en 14 minutos.",
+          "Descubre el poder de tu nueva lupa: desde analizar imágenes como un forense hasta escribir código como un desarrollador. Todo lo que Gemini puede hacer por ti, explicado en 7 minutos.",
       },
       {
         id: "gemini-guide-1",
@@ -380,11 +380,11 @@ const RESOURCES_ES = {
         type: "video",
         title: "Primeros Pasos con NotebookLM",
         url: "https://www.youtube.com/embed/PV0oNcmIYII",
-        duration: "12:30",
+        duration: "10:15",
         thumbnail: "https://img.youtube.com/vi/PV0oNcmIYII/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Descubre en 12 minutos cómo tus documentos cobran vida: haz preguntas, obtén resúmenes y verifica cada dato con citas exactas. La alquimia digital comienza aquí.",
+          "Descubre en 10 minutos cómo tus documentos cobran vida: haz preguntas, obtén resúmenes y verifica cada dato con citas exactas. La alquimia digital comienza aquí.",
       },
       {
         id: "notebooklm-guide-1",

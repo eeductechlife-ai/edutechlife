@@ -18,10 +18,6 @@ import {
 } from "../../data/ova/ethicalDilemmas";
 import { OVAIntro, OVAValerioBar } from "./shared";
 
-OVAEthicalDilemmas.propTypes = {
-  onComplete: PropTypes.func,
-};
-
 export default function OVAEthicalDilemmas({ onComplete }) {
   const { t } = useTranslation();
   const certCompletedRef = useRef(false);
@@ -108,6 +104,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
           audioText={t("ova.ethical_dilemmas.intro_audio")}
           onStart={() => setScreen("slides")}
           startLabel={t("ova.ethical_dilemmas.start_btn")}
+          objectives={learningObjectives}
         />
       </div>
     );
@@ -115,7 +112,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
 
   return (
     <div className="w-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 text-slate-800 font-sans flex flex-col md:flex-row overflow-hidden relative min-h-[500px] rounded-2xl">
-      <aside className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-full border-r border-cyan-100 dark:border-gray-700">
+        <aside className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-full border-r border-cyan-100 dark:border-gray-700" aria-label={t("ova.ethical_dilemmas.sidebar_subtitle")}>
         <div className="p-6 text-center border-b border-cyan-50 dark:border-gray-700">
           <div className="flex items-center gap-2 justify-center select-none">
             <div className="relative w-9 h-9 flex items-center justify-center">
@@ -204,7 +201,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
 
           {activeSection === "dilemmas" && (
             <div className="animate-[fadeIn_0.6s_ease-out_forwards] flex flex-col h-full">
-              <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-black text-petroleum dark:text-slate-100 font-montserrat">
                   {t("ova.ethical_dilemmas.dilemmas_title", "Dilemas Éticos")}
                 </h2>
@@ -212,10 +209,11 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                   <span className="text-sm text-slate-500 dark:text-slate-400">
                     {currentDilemma + 1} / {totalDilemmas}
                   </span>
-                  <div className="flex gap-1">
+                  <div className="flex gap-1" role="group" aria-label={t("ova.ethical_dilemmas.dilemmas_title")}>
                     {dilemmas.map((_, i) => (
                       <div
                         key={i}
+                        aria-hidden="true"
                         className={`w-2.5 h-2.5 rounded-full transition-all ${answers[i]?.correct ? "bg-emerald-400" : answers[i] ? "bg-rose-400" : i === currentDilemma ? "bg-corporate scale-125" : "bg-slate-200 dark:bg-slate-600"}`}
                       />
                     ))}
@@ -423,6 +421,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                         onClick={() =>
                           setOpenAccordion(isOpen ? null : item.id)
                         }
+                        aria-expanded={isOpen}
                         className="w-full text-left p-4 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 flex justify-between items-center font-bold text-petroleum dark:text-slate-100 text-base"
                       >
                         <span>
@@ -479,3 +478,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
     </div>
   );
 }
+
+OVAEthicalDilemmas.propTypes = {
+  onComplete: PropTypes.func,
+};

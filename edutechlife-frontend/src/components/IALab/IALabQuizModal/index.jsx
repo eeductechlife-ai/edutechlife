@@ -237,10 +237,9 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         background: `repeating-linear-gradient(45deg, var(--color-petroleum), var(--color-petroleum) 2px, transparent 2px, transparent 60px)`,
       }}
     >
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center overflow-hidden max-w-full">
         <span
-          className="text-petroleum text-8xl font-bold transform -rotate-12 select-none"
-          style={{ whiteSpace: 'nowrap' }}
+          className="text-petroleum text-8xl md:text-9xl font-bold -rotate-12 select-none whitespace-nowrap"
         >
           {t('ialab.quiz.watermark')}
         </span>

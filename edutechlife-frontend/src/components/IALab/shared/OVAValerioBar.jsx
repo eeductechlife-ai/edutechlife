@@ -63,6 +63,7 @@ const OVAValerioBar = ({ text, autoPlay = false }) => {
         )}>
           <button
             onClick={togglePlay}
+            aria-label={isPlaying ? t('ialab.voice_reader.stop') : t('ialab.voice_reader.listen')}
             className={cn(
               'min-w-[44px] min-h-[44px] flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
               isPlaying
@@ -101,6 +102,7 @@ const OVAValerioBar = ({ text, autoPlay = false }) => {
 
           <button
             onClick={() => setIsMinimized(!isMinimized)}
+            aria-label={isMinimized ? t('ialab.voice_reader.title') : t('ialab.voice_reader.listen')}
             className="min-w-[44px] min-h-[44px] p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             <Icon

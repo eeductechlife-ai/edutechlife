@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 
@@ -21,3 +22,8 @@ export default function XPTracker({ xp, maxXp }) {
     </div>
   );
 }
+
+XPTracker.propTypes = {
+  xp: PropTypes.number.isRequired,
+  maxXp: PropTypes.number.isRequired,
+};

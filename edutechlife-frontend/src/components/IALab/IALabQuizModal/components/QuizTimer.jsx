@@ -11,13 +11,13 @@ const QuizTimer = forwardRef(function QuizTimer({ timeElapsed, suggestedTime, cu
     <div ref={ref} className="bg-gradient-to-r from-petroleum to-corporate px-6 py-4 flex items-center justify-between z-50">
       <button
         onClick={onClose}
-        className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-colors"
+        className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 px-2 sm:px-3 py-2 rounded-lg transition-colors"
       >
         <Icon name="fa-arrow-left" className="text-sm" aria-hidden="true" />
-        <span className="text-sm font-medium">{t('ialab.quiz.exit')}</span>
+        <span className="hidden sm:inline text-sm font-medium">{t('ialab.quiz.exit')}</span>
       </button>
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-2 sm:gap-6 flex-wrap sm:flex-nowrap justify-end">
         {isTimerRunning && (
           <div
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${
@@ -34,21 +34,21 @@ const QuizTimer = forwardRef(function QuizTimer({ timeElapsed, suggestedTime, cu
           </div>
         )}
 
-        <label className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 cursor-pointer hover:bg-white/20 transition-colors select-none">
+        <label className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg bg-white/10 border border-white/20 cursor-pointer hover:bg-white/20 transition-colors select-none">
           <input
             type="checkbox"
             checked={practiceMode}
             onChange={onTogglePractice}
             className="w-3.5 h-3.5 rounded border-white/30 bg-white/10 text-petroleum focus:ring-petroleum focus:ring-offset-0"
           />
-          <span className="text-[11px] font-medium text-white/80">{t('ialab.quiz.practice')}</span>
+          <span className="hidden sm:inline text-[11px] font-medium text-white/80">{t('ialab.quiz.practice')}</span>
         </label>
 
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-white/80">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="hidden sm:inline text-sm text-white/80">
             {t('ialab.quiz.question_count', { current: currentQuestion + 1, total: totalQuestions })}
           </span>
-          <div className="w-32 h-2 bg-white/20 rounded-full overflow-hidden">
+          <div className="w-16 sm:w-32 h-2 bg-white/20 rounded-full overflow-hidden">
             <div
               className="h-full bg-petroleum transition-all duration-500"
               style={{ width: `${((currentQuestion + 1) / totalQuestions) * 100}%` }}

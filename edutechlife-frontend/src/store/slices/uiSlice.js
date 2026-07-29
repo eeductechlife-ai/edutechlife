@@ -29,4 +29,9 @@ export const createUiSlice = (set, get) => ({
   setShowHistoryModal: (v) => set({ showHistoryModal: v }),
   showHelpModal: false,
   setShowHelpModal: (v) => set({ showHelpModal: v }),
+
+  practiceToolOpen: false,
+  activePracticeTool: null,
+  setPracticeTool: (type) => set({ practiceToolOpen: true, activePracticeTool: type }),
+  closePracticeTool: () => set({ practiceToolOpen: false, activePracticeTool: null }),
 });

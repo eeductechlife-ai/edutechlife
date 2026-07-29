@@ -58,7 +58,7 @@ const BadgeGalleryModal = ({ isOpen, onClose }) => {
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+                className="min-w-[44px] min-h-[44px] w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
                 aria-label={t('common.close')}
               >
                 <X className="w-4 h-4 text-slate-500" />

@@ -19,11 +19,11 @@ export default function ModuleMakeZapier({ onNext, addXp }) {
     <div className="max-w-4xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
       <h2 className="text-3xl font-bold text-petroleum mb-2">{t('ova.buildgpt.api_title')}</h2>
       <p className="text-gray-600 dark:text-slate-300 mb-6">{t('ova.buildgpt.api_desc')}</p>
-      <div className="flex gap-4 mb-6">
-        <button onClick={() => setTab('make')} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'make' ? 'bg-petroleum text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-petroleum'}`}>
+      <div className="flex gap-4 mb-6" role="tablist">
+        <button onClick={() => setTab('make')} role="tab" aria-selected={tab === 'make'} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'make' ? 'bg-petroleum text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-petroleum'}`}>
           <Workflow className="inline mr-2" size={20}/> {t('ova.buildgpt.api_rest')}
         </button>
-        <button onClick={() => setTab('zapier')} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'zapier' ? 'bg-corporate text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-corporate'}`}>
+        <button onClick={() => setTab('zapier')} role="tab" aria-selected={tab === 'zapier'} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'zapier' ? 'bg-corporate text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-corporate'}`}>
           <Zap className="inline mr-2" size={20}/> {t('ova.buildgpt.api_webhooks')}
         </button>
       </div>

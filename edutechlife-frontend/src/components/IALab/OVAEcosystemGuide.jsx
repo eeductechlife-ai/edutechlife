@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../i18n/I18nProvider";
+import SectionErrorBoundary from "./SectionErrorBoundary";
 import {
   BrainCircuit,
   ChevronRight,
@@ -276,9 +277,9 @@ const ChallengeScreen = () => {
             </button>
           ))}
         </div>
-      </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4">
@@ -341,16 +342,16 @@ const ConclusionScreen = () => {
   );
 };
 
-const screensData = {
-  m1: { title: "Evolución del Motor de IA" },
-  m2: { title: "Modos de Operación" },
-  m3: { title: "Caja de Herramientas" },
-  m4: { title: "Conectividad y Automatización" },
-  m5: { title: "Estrategias Exclusivas ChatGPT" },
-  m6: { title: "¿Qué Perfil Eres?" },
-  m7: { title: "Reto Práctico" },
-  m8: { title: "Conclusión" },
-};
+const screensData = (t) => ({
+  m1: { title: t("ova.ecosystem.menu_title_m1") },
+  m2: { title: t("ova.ecosystem.menu_title_m2") },
+  m3: { title: t("ova.ecosystem.menu_title_m3") },
+  m4: { title: t("ova.ecosystem.menu_title_m4") },
+  m5: { title: t("ova.ecosystem.menu_title_m5") },
+  m6: { title: t("ova.ecosystem.menu_title_m6") },
+  m7: { title: t("ova.ecosystem.menu_title_m7") },
+  m8: { title: t("ova.ecosystem.menu_title_m8") },
+});
 
 OVAEcosystemGuide.propTypes = {
   onComplete: PropTypes.func,
@@ -369,6 +370,7 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
   const curIdx = nav.indexOf(screen);
 
   const sections = infographicData.sections;
+  const resolvedScreensData = screensData(t);
 
   useEffect(() => {
     if (screen === "m8" && !m8AutoCompletedRef.current) {
@@ -434,15 +436,13 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
             <OVAIntro
               icon="fa-brain"
               badge={t("ova.ecosystem.lab_badge")}
-              title="Dominando el Ecosistema ChatGPT"
+              title={t("ova.ecosystem.guide_title")}
               description={t("ova.ecosystem.welcome_desc")}
+              audioText={t("ova.ecosystem.welcome_voice")}
               onStart={nextScreen}
               startLabel={t("ova.ecosystem.start_btn")}
               objectives={learningObjectives}
             />
-            <div className="flex justify-center mt-6">
-              <VoiceReader text={t("ova.ecosystem.welcome_voice")} />
-            </div>
           </>
         );
       case "m1":
@@ -523,6 +523,7 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
   };
 
   return (
+    <SectionErrorBoundary name="OVAEcosystemGuide">
     <div className="w-full bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-blue-100 dark:selection:bg-blue-900">
       <header className="sticky top-0 w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl border-b z-50 px-4 py-3 flex justify-between items-center shadow-sm">
         <Logo />
@@ -534,7 +535,7 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
           )}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Menú de navegación"
+            aria-label={t("ova.ecosystem.menu_aria")}
             className="min-w-[44px] min-h-[44px] p-2.5 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-all border border-slate-100 dark:border-slate-700"
           >
             <Menu className="w-5 h-5 text-petroleum" />
@@ -550,7 +551,7 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
                 <Sparkles className="w-3 h-3" /> {t("ova.introprompt.master")}
               </div>
               <h1 className="text-lg md:text-xl font-[900] text-petroleum tracking-tighter leading-tight">
-                {screensData[screen]?.title}
+                {resolvedScreensData[screen]?.title}
               </h1>
             </div>
           )}
@@ -652,7 +653,7 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
                         >
                           {id === "welcome"
                             ? t("ova.introprompt.menu_welcome")
-                            : screensData[id]?.title}
+                            : resolvedScreensData[id]?.title}
                         </div>
                         <div className="mt-1.5 w-full h-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                           <div
@@ -672,5 +673,6 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
         </div>
       )}
     </div>
+    </SectionErrorBoundary>
   );
 }

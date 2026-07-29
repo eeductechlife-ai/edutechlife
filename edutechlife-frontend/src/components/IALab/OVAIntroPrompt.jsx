@@ -224,11 +224,16 @@ export default function OVAIntroPrompt({ onComplete, onClose }) {
             badge={t('ova.introprompt.lab_title')}
             title={`${t('ova.introprompt.welcome_title1')} ${t('ova.introprompt.welcome_title2')}`}
             description={t('ova.introprompt.welcome_desc')}
+            audioText={t('ova.introprompt.welcome_audio')}
             onStart={nextScreen}
+            startLabel={t('ova.introprompt.start')}
+            objectives={[
+              t('ova.introprompt.learning_obj_1'),
+              t('ova.introprompt.learning_obj_2'),
+              t('ova.introprompt.learning_obj_3'),
+              t('ova.introprompt.learning_obj_4'),
+            ]}
           />
-          <div className="flex justify-center mt-6">
-            <VoiceReader text={t('ova.introprompt.welcome_audio')} />
-          </div>
         </>
       );
       case 'm1': return (
@@ -330,7 +335,7 @@ export default function OVAIntroPrompt({ onComplete, onClose }) {
         <div className="flex justify-center border-t border-slate-100 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90">
           <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
             <button onClick={() => { if (curIdx > 1) setScreen(nav[curIdx - 1]); stopSpeech(); }} aria-label={t('ova.nav.prev_aria')} className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700" disabled={curIdx <= 1}><ChevronLeft className="w-5 h-5" /></button>
-            <div className="flex gap-1.5">{nav.slice(1).map((_, i) => <div key={i} className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === curIdx ? 'w-8 bg-petroleum' : completed.includes(nav[i + 1]) ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />)}</div>
+            <div className="flex gap-1.5" role="group" aria-label={t('ova.introprompt.map')}>{nav.slice(1).map((_, i) => <div key={i} aria-hidden="true" className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === curIdx ? 'w-8 bg-petroleum' : completed.includes(nav[i + 1]) ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />)}</div>
             <button onClick={isLastScreen ? () => { onClose?.(); } : nextScreen} className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-petroleum to-corporate text-white'}`}>
               {isLastScreen ? t('ova.introprompt.finish_btn') : t('ova.introprompt.next')} <ArrowRightCircle className="w-4 h-4" />
             </button>
@@ -345,8 +350,13 @@ export default function OVAIntroPrompt({ onComplete, onClose }) {
       )}
 
       {isMenuOpen && (
-        <div className="fixed inset-0 z-[100] bg-slate-900/60 dark:bg-slate-950/60 backdrop-blur-md" onClick={() => setIsMenuOpen(false)}>
-          <div className="absolute right-0 h-full w-[300px] bg-white dark:bg-slate-800 shadow-2xl p-6 flex flex-col gap-4 animate-[slideInRight_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]" onClick={e => e.stopPropagation()}>
+          <div className="fixed inset-0 z-[100] bg-slate-900/60 dark:bg-slate-950/60 backdrop-blur-md" onClick={() => setIsMenuOpen(false)} aria-hidden="true">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('ova.introprompt.map')}
+            className="absolute right-0 h-full w-[300px] bg-white dark:bg-slate-800 shadow-2xl p-6 flex flex-col gap-4 animate-[slideInRight_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]"
+            onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b-2 border-slate-50 dark:border-slate-700 pb-4">
               <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.3em] uppercase">{t('ova.introprompt.map')}</h3>
               <div className="flex items-center gap-1.5 text-[10px] font-black text-petroleum">

@@ -6,7 +6,7 @@ import { useIALabStore } from '../../store/ialabStore';
 import { useTranslation } from '../../i18n/I18nProvider';
 import useInfographicCompletion from '../../hooks/IALab/useInfographicCompletion';
 import ModuleNavItem from './sidebar/ModuleNavItem';
-const StudyPlannerModal = lazy(() => import('./StudyPlannerModal'));
+const StudyCalendarSection = lazy(() => import('./StudyCalendarSection'));
 
 const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenProfile, onOpenHistory, onOpenHelp }) => {
   const { t } = useTranslation();
@@ -253,9 +253,31 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
         </button>
       </div>
 
-      <Suspense fallback={null}>
-        <StudyPlannerModal isOpen={showStudyPlanner} onClose={() => setShowStudyPlanner(false)} />
-      </Suspense>
+      {showStudyPlanner && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4">
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setShowStudyPlanner(false)} />
+          <div
+            className="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden max-h-[90vh] flex flex-col"
+            onClick={e => e.stopPropagation()}
+            role="dialog" aria-modal="true" aria-label={t('ialab.study_planner.title')}
+          >
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-700">
+              <div className="flex items-center gap-2">
+                <Icon name="fa-calendar" className="text-petroleum text-sm" />
+                <h2 className="text-sm font-bold text-petroleum">{t('ialab.study_planner.title')}</h2>
+              </div>
+              <button onClick={() => setShowStudyPlanner(false)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label={t('ialab.study_planner.close_aria')}>
+                <Icon name="fa-times" className="text-slate-600 dark:text-slate-400 text-sm" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              <Suspense fallback={<div className="p-8 text-center text-sm text-slate-500">{t('common.loading')}</div>}>
+                <StudyCalendarSection />
+              </Suspense>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

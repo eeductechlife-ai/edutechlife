@@ -368,7 +368,7 @@ export default function EthicsExplorer() {
           <p className="text-slate-500 text-sm mb-4">
             {t("ialab.ethics_explorer.evaluate_hint")}
           </p>
-          <VoiceReader text="Ahora vamos a aplicar 5 filtros éticos a la respuesta. Para cada uno, elige entre Sí, Parcialmente o No según tu criterio. Sé honesto en tu evaluación." />
+          <VoiceReader text={t("ialab.ethics_explorer.voice_instruction")} />
         </div>
 
         <div className="flex items-center gap-2 mb-6 bg-slate-50 p-3 rounded-2xl">
@@ -499,7 +499,7 @@ export default function EthicsExplorer() {
             {t("ialab.ethics_explorer.report_desc")}
           </p>
           <VoiceReader
-            text={`El score ético de esta respuesta es ${score} sobre 100. Categoría: ${getScoreLabel(score, t)}. Revisa cada filtro para ver las recomendaciones específicas.`}
+            text={t("ialab.ethics_explorer.voice_result", { score, label: getScoreLabel(score, t) })}
           />
         </div>
 

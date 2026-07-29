@@ -97,7 +97,15 @@ const IALabTour = ({ hasStartedCourse }) => {
     if (stepIndex < 0 || stepIndex >= STEPS.length) return;
     const result = findTarget(stepIndex);
     if (!result) return;
-    result.el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+    const tooltipHeight = 180;
+    const gap = 12;
+    const rect = result.rect;
+    const roomBelow = window.innerHeight - rect.bottom;
+    if (roomBelow < tooltipHeight + gap) {
+      result.el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+    } else {
+      result.el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+    }
   }, [findTarget]);
 
   const measureTarget = useCallback(() => {
@@ -115,48 +123,79 @@ const IALabTour = ({ hasStartedCourse }) => {
     setTargetRect(rect);
 
     const tooltipWidth = 288;
+    const tooltipHeight = 180;
     const gap = 12;
-    let top = rect.bottom + gap;
     let left = Math.max(16, Math.min(rect.left + rect.width / 2 - tooltipWidth / 2, window.innerWidth - tooltipWidth - 16));
 
-    const wouldOverflow = top + 200 > window.innerHeight;
-    if (wouldOverflow) {
-      top = rect.top - gap - 160;
+    const overflowsBelow = rect.bottom + gap + tooltipHeight > window.innerHeight;
+    const overflowsAbove = rect.top - gap - tooltipHeight < 0;
+
+    let top;
+    if (!overflowsBelow) {
+      top = rect.bottom + gap;
+    } else if (!overflowsAbove) {
+      top = rect.top - gap - tooltipHeight;
+    } else {
+      top = Math.max(10, window.innerHeight - tooltipHeight - 10);
     }
 
     setTooltipPos({ top, left });
   }, [measureTarget]);
 
+  const startTour = useCallback(() => {
+    localStorage.removeItem(TOUR_KEY);
+    retryCount.current = 0;
+    const attempt = () => {
+      const result = findTarget(0);
+      if (result && result.rect.width > 0) {
+        const scrollContainer = result.el.closest('.overflow-y-auto') || window;
+        scrollContainerRef.current = scrollContainer;
+        setStep(0);
+        setTimeout(() => setReady(true), 300);
+      } else if (retryCount.current < MAX_RETRIES) {
+        retryCount.current += 1;
+        setTimeout(attempt, RETRY_INTERVAL);
+      }
+    };
+    scrollToTarget(0);
+    attempt();
+  }, [findTarget, scrollToTarget]);
+
+  const findNextValidStep = useCallback((fromStep) => {
+    for (let i = fromStep; i < STEPS.length; i++) {
+      const result = findTarget(i);
+      if (result) return i;
+    }
+    return -1;
+  }, [STEPS, findTarget]);
+
   useEffect(() => {
     const done = localStorage.getItem(TOUR_KEY);
-    if (done || hasStartedCourse) return;
+    if (!done) {
+      const timer = setTimeout(startTour, INITIAL_DELAY);
+      return () => clearTimeout(timer);
+    }
+  }, [startTour]);
 
-    const timer = setTimeout(() => {
-      retryCount.current = 0;
-      const attempt = () => {
-        const result = findTarget(0);
-        if (result && result.rect.width > 0) {
-          const scrollContainer = result.el.closest('.overflow-y-auto') || window;
-          scrollContainerRef.current = scrollContainer;
-          setReady(true);
-        } else if (retryCount.current < MAX_RETRIES) {
-          retryCount.current += 1;
-          setTimeout(attempt, RETRY_INTERVAL);
-        }
-      };
-      scrollToTarget(0);
-      setStep(0);
-      attempt();
-    }, INITIAL_DELAY);
-
-    return () => clearTimeout(timer);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const handler = () => startTour();
+    window.addEventListener('ialab:restartTour', handler);
+    return () => window.removeEventListener('ialab:restartTour', handler);
+  }, [startTour]);
 
   useEffect(() => {
     if (step < 0 || step >= STEPS.length) {
       setReady(false);
       setTargetRect(null);
       setTooltipPos(null);
+      return;
+    }
+
+    const valid = findTarget(step);
+    if (!valid) {
+      const next = findNextValidStep(step + 1);
+      if (next >= 0) setStep(next);
+      else { localStorage.setItem(TOUR_KEY, 'true'); setStep(-1); }
       return;
     }
 
@@ -169,10 +208,10 @@ const IALabTour = ({ hasStartedCourse }) => {
     const timer = setTimeout(() => {
       updatePosition();
       setReady(true);
-    }, 500);
+    }, 700);
 
     return () => clearTimeout(timer);
-  }, [step, updatePosition, scrollToTarget]);
+  }, [step, updatePosition, scrollToTarget, findNextValidStep, findTarget]);
 
   useEffect(() => {
     if (!ready || step < 0) return;
@@ -207,8 +246,9 @@ const IALabTour = ({ hasStartedCourse }) => {
   }, [ready, step, updatePosition, findTarget]);
 
   const handleNext = () => {
-    if (step < STEPS.length - 1) {
-      setStep(step + 1);
+    const next = findNextValidStep(step + 1);
+    if (next >= 0) {
+      setStep(next);
     } else {
       localStorage.setItem(TOUR_KEY, 'true');
       setStep(-1);
@@ -223,13 +263,14 @@ const IALabTour = ({ hasStartedCourse }) => {
   if (!ready || step < 0 || step >= STEPS.length) return null;
 
   const current = STEPS[step];
-  const isLast = step === STEPS.length - 1;
+  const nextValid = findNextValidStep(step + 1);
+  const isLast = nextValid < 0;
 
   return (
     <>
       <div
-        className="fixed inset-0 z-[60] cursor-pointer"
-        onClick={handleSkip}
+        className="fixed inset-0 z-[60]"
+        onClick={(e) => e.stopPropagation()}
       />
 
       {targetRect && (

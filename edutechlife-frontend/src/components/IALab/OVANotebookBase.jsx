@@ -13,6 +13,7 @@ import {
   Play,
 } from "lucide-react";
 import { OVAIntro, OVAValerioBar } from "./shared";
+import SectionErrorBoundary from "./SectionErrorBoundary";
 
 const EdutechLogo = ({ size = "large" }) => {
   const isLarge = size === "large";
@@ -239,12 +240,19 @@ export default function OVANotebookBase({
                 </span>
               </div>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner">
               <div
-                className="bg-gradient-to-r from-corporate to-petroleum h-full rounded-full transition-all duration-500 ease-out"
-                style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-              />
-            </div>
+                role="progressbar"
+                aria-valuenow={currentStep}
+                aria-valuemin={0}
+                aria-valuemax={totalSteps}
+                aria-label={tk("progress_label")}
+                className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner"
+              >
+                <div
+                  className="bg-gradient-to-r from-corporate to-petroleum h-full rounded-full transition-all duration-500 ease-out"
+                  style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+                />
+              </div>
             <div className="flex flex-col lg:flex-row gap-8">
               <div className="w-full lg:w-2/5 flex flex-col gap-6">
                 <div
@@ -360,10 +368,11 @@ export default function OVANotebookBase({
               >
                 <ArrowLeft size={20} />
               </button>
-              <div className="flex gap-2">
+              <div className="flex gap-2" role="group" aria-label={tk("progress_label")}>
                 {contentScreens.map((_, i) => (
                   <div
                     key={i}
+                    aria-hidden="true"
                     className={`h-1.5 rounded-full transition-all duration-700 ${i === contentIdx ? "w-8 bg-petroleum dark:bg-slate-100" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
                   />
                 ))}
@@ -376,7 +385,7 @@ export default function OVANotebookBase({
                 <ArrowRight size={18} />
               </button>
             </div>
-            <footer className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-600 text-center">
+            <footer className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-600 text-center" aria-label={tk("footer")}>
               <p className="text-slate-600 dark:text-slate-300 text-xs">
                 {tk("footer")}
               </p>
@@ -389,11 +398,12 @@ export default function OVANotebookBase({
   }
 
   const currentQ = questionsData[currentQIndex];
-  return (
-    <div className="w-full relative min-h-[400px]">
-      <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[length:50px_50px]" />
-      <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(0,188,212,0.15)_0%,rgba(255,255,255,0)_70%)]" />
-      <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(0,75,99,0.08)_0%,rgba(255,255,255,0)_70%)]" />
+    return (
+      <SectionErrorBoundary name="OVANotebookBase">
+      <div className="w-full relative min-h-[400px]">
+        <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[length:50px_50px]" />
+        <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(0,188,212,0.15)_0%,rgba(255,255,255,0)_70%)]" />
+        <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(0,75,99,0.08)_0%,rgba(255,255,255,0)_70%)]" />
       <div className="w-full py-6 px-4 relative z-10" key={currentQ.id}>
         <div className="w-full max-w-6xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
           <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
@@ -414,7 +424,14 @@ export default function OVANotebookBase({
               </span>
             </div>
           </div>
-          <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner">
+          <div
+            role="progressbar"
+            aria-valuenow={1 + contentScreens.length + currentQIndex}
+            aria-valuemin={0}
+            aria-valuemax={totalSteps}
+            aria-label={tk("progress_label")}
+            className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner"
+          >
             <div
               className="bg-gradient-to-r from-corporate to-petroleum h-full rounded-full transition-all duration-500 ease-out"
               style={{
@@ -513,13 +530,14 @@ export default function OVANotebookBase({
                 </div>
                 {!isAnswered && (
                   <div className="mt-6 flex flex-col items-start gap-3 animate-[fadeIn_0.6s_ease-out_forwards]">
-                    <button
-                      onClick={() => setShowHint(!showHint)}
-                      className="flex items-center gap-2 px-4 py-2 bg-gray-200/40 dark:bg-slate-700/40 hover:bg-gray-200 dark:hover:bg-slate-700 border border-corporate/30 rounded-xl text-petroleum dark:text-slate-100 font-semibold text-sm transition-all duration-300"
-                    >
-                      <Lightbulb size={16} />
-                      {showHint ? tk("hide_hint") : tk("show_hint")}
-                    </button>
+                          <button
+                              onClick={() => setShowHint(!showHint)}
+                              aria-expanded={showHint}
+                              className="flex items-center gap-2 px-4 py-2 bg-gray-200/40 dark:bg-slate-700/40 hover:bg-gray-200 dark:hover:bg-slate-700 border border-corporate/30 rounded-xl text-petroleum dark:text-slate-100 font-semibold text-sm transition-all duration-300"
+                            >
+                              <Lightbulb size={16} />
+                              {showHint ? tk("hide_hint") : tk("show_hint")}
+                            </button>
                     {showHint && (
                       <div className="w-full p-4 bg-emerald-50 dark:bg-emerald-900/30 border border-corporate/50 rounded-xl text-petroleum dark:text-slate-100 text-sm md:text-base font-medium animate-[fadeIn_0.6s_ease-out_forwards] shadow-inner">
                         <span className="text-corporate font-bold mr-2">
@@ -546,7 +564,7 @@ export default function OVANotebookBase({
               </div>
             </div>
           </div>
-          <footer className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-600 text-center">
+          <footer className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-600 text-center" aria-label={tk("footer")}>
             <p className="text-slate-600 dark:text-slate-300 text-xs">
               {tk("footer")}
             </p>
@@ -555,6 +573,7 @@ export default function OVANotebookBase({
       </div>
       <OVAValerioBar text={getValerioText()} />
     </div>
+    </SectionErrorBoundary>
   );
 }
 

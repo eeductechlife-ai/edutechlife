@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../../i18n/I18nProvider';
 import { HelpCircle, Users, RefreshCw, CheckCircle2, XCircle } from 'lucide-react';
@@ -101,7 +102,14 @@ export default function ExpandedQuiz({ questions }) {
         <span className="ml-auto text-[10px] font-black text-slate-400">{step + 1}/{questions.length}</span>
       </div>
 
-      <div className="flex gap-1.5">
+      <div
+        className="flex gap-1.5"
+        role="progressbar"
+        aria-valuenow={step + 1}
+        aria-valuemin={1}
+        aria-valuemax={questions.length}
+        aria-label="Quiz progress"
+      >
         {questions.map((_, i) => (
           <div
             key={i}
@@ -133,6 +141,7 @@ export default function ExpandedQuiz({ questions }) {
                   whileHover={!showFeedback ? { scale: 1.01 } : {}}
                   whileTap={!showFeedback ? { scale: 0.99 } : {}}
                   disabled={showFeedback}
+                  aria-pressed={isSelected}
                   className={`w-full p-4 rounded-xl border-2 text-left text-xs font-medium transition-all flex items-start gap-3 ${
                     isWrong
                       ? 'bg-red-50 border-red-300 dark:bg-red-900/20 dark:border-red-700'
@@ -185,3 +194,14 @@ export default function ExpandedQuiz({ questions }) {
     </div>
   );
 }
+
+ExpandedQuiz.propTypes = {
+  questions: PropTypes.arrayOf(PropTypes.shape({
+    question: PropTypes.string.isRequired,
+    options: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      score: PropTypes.number.isRequired,
+      feedback: PropTypes.string.isRequired,
+    })).isRequired,
+  })),
+};

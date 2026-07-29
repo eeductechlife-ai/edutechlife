@@ -67,13 +67,14 @@ const FinalChallenge = () => {
         </div>
         {!revealed && (
           <button onClick={() => setRevealed(true)}
+            aria-expanded={revealed}
             className="w-full py-4 bg-gradient-to-r from-petroleum to-corporate text-white font-black rounded-xl flex items-center justify-center gap-2 text-sm uppercase tracking-wider shadow-lg mt-3">
             <ArrowLeftRight className="w-5 h-5" /> {t('ova.introprompt.challenge_reveal')}
           </button>
         )}
         {revealed && (
-          <div className="p-4 bg-petroleum text-white rounded-xl text-center mt-3">
-            <Rocket className="w-8 h-8 mx-auto mb-2 text-corporate" />
+          <div role="alert" className="p-4 bg-petroleum text-white rounded-xl text-center mt-3">
+            <Rocket className="w-8 h-8 mx-auto mb-2 text-corporate" aria-hidden="true" />
             <p className="font-bold text-sm text-white leading-relaxed">{t('ova.introprompt.challenge_complete')}</p>
           </div>
         )}

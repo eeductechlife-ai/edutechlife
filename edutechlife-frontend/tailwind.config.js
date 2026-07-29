@@ -125,7 +125,7 @@ export default {
           'text-inverse': 'var(--brand-text-inverse)',
           border: 'var(--brand-border)',
           petroleum: '#004B63',
-          'primary-light': '#4DA8C4',
+        'primary-light': '#0097A7',
           teal: '#2DD4BF',
           coral: '#F472B6',
           amber: '#F59E0B',

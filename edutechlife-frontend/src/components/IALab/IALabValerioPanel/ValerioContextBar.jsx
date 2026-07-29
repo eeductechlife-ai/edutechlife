@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useIALabStore } from "../../../store/ialabStore";
 import { getAllLessons } from "../../../data/ialab";
 import { useTranslation } from "../../../i18n/I18nProvider";
@@ -59,6 +60,13 @@ const ValerioContextBar = ({ currentModule }) => {
       </a>
     </div>
   );
+};
+
+ValerioContextBar.propTypes = {
+  currentModule: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    title: PropTypes.string,
+  }),
 };
 
 export default ValerioContextBar;

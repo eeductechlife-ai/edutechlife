@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../../i18n/I18nProvider';
 import { ChevronDown, Lightbulb } from 'lucide-react';
@@ -27,6 +28,7 @@ export default function EvolutionTimeline({ items }) {
             />
             <button
               onClick={() => setExpanded(isOpen ? null : i)}
+              aria-expanded={isOpen}
               className="w-full text-left"
             >
               <div className={`bg-white dark:bg-slate-800 rounded-xl border-2 transition-all p-4 ${isOpen ? 'border-corporate shadow-md' : 'border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600'}`}>
@@ -73,3 +75,12 @@ export default function EvolutionTimeline({ items }) {
     </div>
   );
 }
+
+EvolutionTimeline.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    date: PropTypes.string,
+    text: PropTypes.string.isRequired,
+    extendedText: PropTypes.string.isRequired,
+  })),
+};

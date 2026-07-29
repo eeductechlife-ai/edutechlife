@@ -66,6 +66,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   const welcomeSpokenRef = useRef(false);
   const abortRef = useRef(null);
   const warmupDoneRef = useRef(false);
+  const warmupRef = useRef(null);
   const firstChunkRef = useRef(false);
   const ttsQueueRef = useRef([]);
   const ttsPlayingRef = useRef(false);
@@ -123,6 +124,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   }, []);
 
   useEffect(() => {
+    let warmupTimeoutId;
     if (isOpen) {
       startSession(activeMod);
       if (!warmupDoneRef.current) {
@@ -131,6 +133,9 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
           import.meta.env.VITE_API_BASE_URL ||
           import.meta.env.VITE_API_URL ||
           "https://edutechlife-backend.onrender.com";
+        const controller = new AbortController();
+        warmupRef.current = controller;
+        warmupTimeoutId = setTimeout(() => controller.abort(), 12000);
         fetch(`${baseUrl}/api/chat/stream`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -139,7 +144,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
             temperature: 0.5,
             maxTokens: 10,
           }),
-          signal: AbortSignal.timeout(12000),
+          signal: controller.signal,
         })
           .then((r) => r.body?.cancel?.())
           .catch(() => {});
@@ -151,7 +156,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
             voice: { languageCode: "es-US", name: "es-US-Neural2-C" },
             audioConfig: { audioEncoding: "MP3" },
           }),
-          signal: AbortSignal.timeout(12000),
+          signal: controller.signal,
         })
           .then((r) => r.body?.cancel?.())
           .catch(() => {});
@@ -171,6 +176,8 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       setValerioState("idle");
     }
     return () => {
+      clearTimeout(warmupTimeoutId);
+      warmupRef.current?.abort();
       ttsQueueRef.current = [];
       ttsPlayingRef.current = false;
       pendingSentenceRef.current = "";
@@ -196,14 +203,24 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(VALERIO_MEMORY_KEY, JSON.stringify(conversation));
-    } catch {
-      /* ignore */
-    }
-    if (conversation.length > 0) {
-      updateSession({ messageCount: conversation.length });
-    }
+    const timer = setTimeout(() => {
+      try {
+        localStorage.setItem(VALERIO_MEMORY_KEY, JSON.stringify(conversation));
+      } catch {
+        /* ignore */
+      }
+      if (conversation.length > 0) {
+        updateSession({ messageCount: conversation.length });
+      }
+    }, 3000);
+    return () => {
+      clearTimeout(timer);
+      try {
+        localStorage.setItem(VALERIO_MEMORY_KEY, JSON.stringify(conversation));
+      } catch {
+        /* ignore */
+      }
+    };
   }, [conversation]);
 
   useEffect(() => {

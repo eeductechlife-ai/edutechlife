@@ -35,13 +35,13 @@ export function SubmitConfirmDialog({ isOpen, unansweredCount, onConfirm, onCanc
             <div className="flex gap-3">
               <button
                 onClick={onCancel}
-                className="flex-1 py-2.5 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-sm font-medium"
+                className="flex-1 py-3 min-h-[44px] border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-sm font-medium"
               >
                 {t('ialab.quiz.confirm_review')}
               </button>
               <button
                 onClick={onConfirm}
-                className="flex-1 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all text-sm font-medium"
+                className="flex-1 py-3 min-h-[44px] bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all text-sm font-medium"
               >
                 {t('ialab.quiz.confirm_submit')}
               </button>

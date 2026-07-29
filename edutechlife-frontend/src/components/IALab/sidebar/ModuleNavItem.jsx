@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping';
 
@@ -80,5 +81,22 @@ const ModuleNavItem = ({
 };
 
 ModuleNavItem.displayName = 'ModuleNavItem';
+
+ModuleNavItem.propTypes = {
+  mod: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    title: PropTypes.string,
+  }).isRequired,
+  isActive: PropTypes.bool,
+  isLocked: PropTypes.bool,
+  score: PropTypes.number,
+  variant: PropTypes.oneOf(['expanded', 'compact']),
+  onClick: PropTypes.func,
+  motionVariants: PropTypes.object,
+  whileHover: PropTypes.object,
+  whileTap: PropTypes.object,
+  className: PropTypes.string,
+  children: PropTypes.node,
+};
 
 export default ModuleNavItem;

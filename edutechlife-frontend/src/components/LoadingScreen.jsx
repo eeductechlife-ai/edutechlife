@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import FloatingParticles from "./FloatingParticles";
 import { useTranslation } from "../i18n/I18nProvider";
+import { Icon } from "../utils/iconMapping.jsx";
 
 const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
   const { t } = useTranslation();
@@ -107,7 +108,7 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
                 <span className="dot" />
               </div>
             ) : (
-              <i className="fa-solid fa-check" />
+              <Icon name="fa-check" className="w-5 h-5 text-[#4DA8C4]" />
             )}
           </div>
           <span className="status-text">{statusText}</span>
@@ -123,7 +124,7 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
                 border: "1px solid rgba(0, 75, 99, 0.2)",
               }}
             >
-              <i className="fa-solid fa-robot" style={{ color: "#004B63" }} />
+              <Icon name="fa-robot" className="w-6 h-6" style={{ color: "#004B63" }} />
             </div>
             <span>{t("loading.feature_ai")}</span>
           </div>
@@ -136,7 +137,7 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
                 border: "1px solid rgba(0, 75, 99, 0.2)",
               }}
             >
-              <i className="fa-solid fa-brain" style={{ color: "#004B63" }} />
+              <Icon name="fa-brain" className="w-6 h-6" style={{ color: "#004B63" }} />
             </div>
             <span>{t("loading.feature_vak")}</span>
           </div>
@@ -149,7 +150,7 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
                 border: "1px solid rgba(0, 75, 99, 0.2)",
               }}
             >
-              <i className="fa-solid fa-award" style={{ color: "#004B63" }} />
+              <Icon name="fa-award" className="w-6 h-6" style={{ color: "#004B63" }} />
             </div>
             <span>{t("loading.feature_cert")}</span>
           </div>
@@ -209,7 +210,7 @@ const PageLoader = ({ message }) => {
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           >
-            <i className="fa-solid fa-graduation-cap" />
+            <Icon name="fa-graduation-cap" className="w-5 h-5 text-petroleum" />
           </motion.div>
         </div>
         <AnimatePresence mode="wait">

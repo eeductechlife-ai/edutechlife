@@ -308,8 +308,8 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
             <div className="fixed inset-0 pointer-events-none z-[101] opacity-[0.03] select-none" style={{
               background: `repeating-linear-gradient(45deg, var(--color-petroleum), var(--color-petroleum) 2px, transparent 2px, transparent 60px)`,
             }}>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-petroleum text-8xl font-bold transform -rotate-12 select-none" style={{ whiteSpace: 'nowrap' }}>
+              <div className="absolute inset-0 flex items-center justify-center overflow-hidden max-w-full">
+                <span className="text-petroleum text-8xl md:text-9xl font-bold -rotate-12 select-none whitespace-nowrap">
                   EDUTECHLIFE
                 </span>
               </div>

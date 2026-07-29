@@ -65,6 +65,7 @@ const SmartBoardConsentGate = lazy(
   () => import("../components/kids-dashboard/SmartBoardConsentGate"),
 );
 const IALabDashboard = lazy(() => import("../components/IALab/IALabDashboard"));
+const PublicProfilePage = lazy(() => import("../components/userProfilePublic/PublicProfilePage"));
 import SectionErrorBoundary from "../components/IALab/SectionErrorBoundary";
 import IALabSkeleton from "../components/skeletons/IALabSkeleton";
 import SmartBoardSkeleton from "../components/skeletons/SmartBoardSkeleton";
@@ -396,6 +397,15 @@ const AppRoutes = () => {
           element={
             <Suspense fallback={<PageLoader message={t("common.loading")} />}>
               <WelcomeScreen />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="profile/:userId"
+          element={
+            <Suspense fallback={<IALabSkeleton />}>
+              <PublicProfilePage />
             </Suspense>
           }
         />

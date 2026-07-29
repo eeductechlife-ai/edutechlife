@@ -159,19 +159,27 @@ export const useIALabProgress = () => {
           if (cancelledRef.current) return;
           const breakdown = moduleBreakdowns[modId];
           if (breakdown) {
-            if (breakdown.exam.passed)
+            if (breakdown.exam.passed) {
+              if (cancelledRef.current) return;
               updateModuleActivity(modId, "exam", true, breakdown.exam.score);
-            if (breakdown.challenge.score > 0)
+            }
+            if (breakdown.challenge.score > 0) {
+              if (cancelledRef.current) return;
               updateModuleActivity(
                 modId,
                 "challenge",
                 true,
                 breakdown.challenge.score,
               );
-            if (breakdown.resources.earned > 0)
+            }
+            if (breakdown.resources.earned > 0) {
+              if (cancelledRef.current) return;
               updateModuleActivity(modId, "resourcesCompleted", true);
-            if (breakdown.community.commented)
+            }
+            if (breakdown.community.commented) {
+              if (cancelledRef.current) return;
               updateModuleActivity(modId, "community", true);
+            }
           }
         }
 

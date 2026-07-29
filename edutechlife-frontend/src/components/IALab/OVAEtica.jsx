@@ -169,6 +169,10 @@ const ModuleHistory = ({ texts }) => {
   );
 };
 
+ModuleHistory.propTypes = {
+  texts: PropTypes.object.isRequired,
+};
+
 const PromptConcept = ({ texts }) => (
   <div className="space-y-4 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
     <div className="p-5 bg-[#F0F9FF] rounded-[2rem] border-2 border-white dark:border-slate-700 shadow-md relative overflow-hidden">
@@ -189,6 +193,10 @@ const PromptConcept = ({ texts }) => (
     </div>
   </div>
 );
+
+PromptConcept.propTypes = {
+  texts: PropTypes.object.isRequired,
+};
 
 const ModuleAnatomy = ({ texts }) => {
   const [sel, setSel] = useState(null);
@@ -263,6 +271,10 @@ const ModuleAnatomy = ({ texts }) => {
   );
 };
 
+ModuleAnatomy.propTypes = {
+  texts: PropTypes.object.isRequired,
+};
+
 const TechniquesSection = ({ texts }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards] slide-in-from-bottom">
     {[
@@ -317,6 +329,10 @@ const TechniquesSection = ({ texts }) => (
   </div>
 );
 
+TechniquesSection.propTypes = {
+  texts: PropTypes.object.isRequired,
+};
+
 const ErrorSection = ({ texts }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
     {[
@@ -345,9 +361,15 @@ const ErrorSection = ({ texts }) => (
   </div>
 );
 
+ErrorSection.propTypes = {
+  texts: PropTypes.object.isRequired,
+};
+
 Button.propTypes = {
+  children: PropTypes.node,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 export default function OVAEtica({ onComplete }) {
@@ -432,12 +454,10 @@ export default function OVAEtica({ onComplete }) {
               badge={texts.welcome_label}
               title={`${texts.welcome_title_1} ${texts.welcome_title_2}`}
               description={texts.welcome_desc}
+              audioText={texts.welcome_voice}
               onStart={() => setScreen("m1")}
               objectives={learningObjectives}
             />
-            <div className="flex justify-center mt-6">
-              <VoiceReader text={texts.welcome_voice} />
-            </div>
           </>
         );
       case "menu":
@@ -595,7 +615,14 @@ export default function OVAEtica({ onComplete }) {
             <span className="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">
               {texts.progress_label}
             </span>
-            <div className="w-24 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-50 dark:border-slate-700 shadow-inner">
+            <div
+              role="progressbar"
+              aria-valuenow={xp}
+              aria-valuemin={0}
+              aria-valuemax={totalXp}
+              aria-label={texts.progress_label}
+              className="w-24 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-50 dark:border-slate-700 shadow-inner"
+            >
               <div
                 className="h-full bg-gradient-to-r from-petroleum to-corporate transition-all duration-1000 ease-out shadow-lg"
                 style={{ width: `${(xp / totalXp) * 100}%` }}
@@ -673,6 +700,7 @@ export default function OVAEtica({ onComplete }) {
               {nav.map((_, i) => (
                 <div
                   key={i}
+                  aria-hidden="true"
                   className={`h-1.5 rounded-full transition-all duration-700 ${i === curIdx ? "w-10 bg-petroleum" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
                 ></div>
               ))}
@@ -795,3 +823,7 @@ export default function OVAEtica({ onComplete }) {
     </div>
   );
 }
+
+OVAEtica.propTypes = {
+  onComplete: PropTypes.func,
+};

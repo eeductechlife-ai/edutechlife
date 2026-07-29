@@ -30,7 +30,7 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
       <nav aria-label={t('ialab.breadcrumb.aria_label')} className={`mb-2 ${className}`}>
       <ol className={`flex items-center gap-1.5 ${size}`}>
         {visibleSegments.map((seg, i) => (
-          <Fragment key={i}>
+          <Fragment key={seg.onClick ? seg.label : seg.label + i}>
             {i > 0 && (
               <li className="text-slate-300 dark:text-slate-600" aria-hidden="true">{separator}</li>
             )}
@@ -38,7 +38,7 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
               {seg.onClick ? (
                 <button
                   onClick={seg.onClick}
-                  className="font-medium text-slate-500 hover:text-petroleum dark:text-slate-400 dark:hover:text-corporate transition-colors cursor-pointer truncate max-w-[120px] inline-block align-bottom"
+                  className="font-medium text-slate-500 hover:text-petroleum dark:text-slate-400 dark:hover:text-corporate transition-colors cursor-pointer truncate max-w-[120px] sm:max-w-[200px] inline-block align-bottom py-1"
                 >
                   {seg.icon && <Icon name={seg.icon} className="text-[9px] mr-1 inline" />}
                   {seg.label}
@@ -46,7 +46,7 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
               ) : seg.href ? (
                 <a
                   href={seg.href}
-                  className="font-medium text-slate-500 hover:text-petroleum dark:text-slate-400 dark:hover:text-corporate transition-colors truncate max-w-[120px] inline-block align-bottom"
+                  className="font-medium text-slate-500 hover:text-petroleum dark:text-slate-400 dark:hover:text-corporate transition-colors truncate max-w-[120px] sm:max-w-[200px] inline-block align-bottom py-1"
                 >
                   {seg.icon && <Icon name={seg.icon} className="text-[9px] mr-1 inline" />}
                   {seg.label}

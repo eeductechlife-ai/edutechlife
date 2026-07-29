@@ -23,7 +23,7 @@ const MobileDrawer = ({
         role="dialog"
         aria-modal="true"
         aria-label={t("ialab.nav_menu_aria")}
-        className={`fixed top-0 right-0 z-[1002] h-dvh w-80 bg-white shadow-2xl md:hidden flex flex-col ${drawerClosing ? "animate-slide-out" : "animate-slide-in"}`}
+        className={`fixed top-0 right-0 z-[1002] h-dvh w-[85vw] max-w-sm bg-white shadow-2xl md:hidden flex flex-col ${drawerClosing ? "animate-slide-out" : "animate-slide-in"}`}
         style={{ willChange: "transform" }}
       >
         <div className="p-4 border-b border-[#4DA8C4]/20 flex items-center justify-between flex-shrink-0">
@@ -31,12 +31,7 @@ const MobileDrawer = ({
             <img
               src="/images/logo-edutechlife.webp"
               alt={t("nav.logo_alt")}
-              className="w-24 object-contain"
-              style={{
-                height: "80px",
-                transform: "scale(1.8)",
-                transformOrigin: "left center",
-              }}
+              className="w-32 h-auto object-contain"
             />
           </div>
           <div className="flex items-center gap-1">
@@ -70,30 +65,6 @@ const MobileDrawer = ({
                 userInfo={clerkUser}
                 onNavigate={navigate}
               />
-            </div>
-          )}
-
-          {!isSignedIn && (
-            <div className="mb-6 pb-4 border-b border-[#4DA8C4]/20 space-y-2">
-              <button
-                onClick={() => {
-                  onClose();
-                  navigate("/login");
-                }}
-                className="w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full shadow-md hover:shadow-lg transition-all"
-              >
-                <i className="fa-solid fa-right-to-bracket mr-2"></i>
-                {t("nav.login")}
-              </button>
-              <button
-                onClick={() => {
-                  onClose();
-                  setShowLeadCaptureModal(true);
-                }}
-                className="w-full py-3 text-sm font-semibold text-[#004B63] border-2 border-[#4DA8C4]/30 rounded-full hover:border-[#4DA8C4] transition-colors"
-              >
-                {t("header.request_demo")}
-              </button>
             </div>
           )}
 

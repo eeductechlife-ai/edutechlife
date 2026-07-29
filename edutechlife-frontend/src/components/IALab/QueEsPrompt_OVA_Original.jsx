@@ -333,8 +333,15 @@ const QueEsPrompt_OVA_Original = ({ onClose, onComplete }) => {
        <div className="flex items-center gap-8">
          <div className="hidden lg:flex flex-col items-end">
              <span className="text-[9px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest mb-1">{t('ialab.que_es_prompt.progress')}</span>
-            <div className="w-32 h-2 bg-slate-100 dark:bg-slate-700/50 rounded-full overflow-hidden border border-slate-50 dark:border-slate-700 shadow-inner">
-             <div className="h-full bg-gradient-to-r from-[#0D2B5B] to-[#00B4D8] transition-all duration-1000 ease-out shadow-lg" style={{ width: `${(completed.length/6)*100}%` }}></div>
+            <div
+              role="progressbar"
+              aria-valuenow={completed.length}
+              aria-valuemin={0}
+              aria-valuemax={6}
+              aria-label={t('ialab.que_es_prompt.progress')}
+              className="w-32 h-2 bg-slate-100 dark:bg-slate-700/50 rounded-full overflow-hidden border border-slate-50 dark:border-slate-700 shadow-inner"
+            >
+              <div className="h-full bg-gradient-to-r from-[#0D2B5B] to-[#00B4D8] transition-all duration-1000 ease-out shadow-lg" style={{ width: `${(completed.length/6)*100}%` }}></div>
            </div>
          </div>
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menú de navegación" className="p-3 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-[1.2rem] transition-all shadow-sm border border-slate-100 dark:border-slate-600"><Menu className="w-6 h-6 text-[#0D2B5B]" /></button>
@@ -395,9 +402,13 @@ const QueEsPrompt_OVA_Original = ({ onClose, onComplete }) => {
               <ChevronLeft className="w-6 h-6" />
            </button>
            
-           <div className="flex gap-3">
-             {nav.map((_, i) => (
-                <div key={i} className={`h-2 rounded-full transition-all duration-700 ${i === curIdx ? 'w-16 bg-[#0D2B5B]' : 'w-2.5 bg-slate-200 dark:bg-slate-600'}`}></div>
+            <div className="flex gap-3" role="group" aria-label="Navigation steps">
+              {nav.map((_, i) => (
+                 <div
+                   key={i}
+                   aria-current={i === curIdx ? 'step' : undefined}
+                   className={`h-2 rounded-full transition-all duration-700 ${i === curIdx ? 'w-16 bg-[#0D2B5B]' : 'w-2.5 bg-slate-200 dark:bg-slate-600'}`}
+                 ></div>
              ))}
            </div>
 
@@ -429,4 +440,10 @@ const QueEsPrompt_OVA_Original = ({ onClose, onComplete }) => {
    </div>
  );
 };
+
+QueEsPrompt_OVA_Original.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  onComplete: PropTypes.func,
+};
+
 export default QueEsPrompt_OVA_Original;

@@ -28,6 +28,15 @@ export default function handleGlobalAction(action, data, store) {
     case 'OPEN_COMMUNITY':
       window.dispatchEvent(new CustomEvent('ialab:switchTab', { detail: 'comunidad' }));
       break;
+    case 'OPEN_TOOL_PROMPTS':
+      store.setPracticeTool('prompts');
+      break;
+    case 'OPEN_FLASHCARDS':
+      store.setPracticeTool('flashcards');
+      break;
+    case 'OPEN_TUTORING':
+      store.setPracticeTool('tutoring');
+      break;
     default:
       console.warn('Acción global no manejada:', action, data);
   }

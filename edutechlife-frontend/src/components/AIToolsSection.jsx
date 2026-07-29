@@ -13,6 +13,7 @@ function AIToolsSection() {
   const [isHovered, setIsHovered] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [isVideoError, setIsVideoError] = useState(false);
+  const [isMobileVideoVisible, setIsMobileVideoVisible] = useState(false);
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ function AIToolsSection() {
 
   const [isHoveredSmartboard, setIsHoveredSmartboard] = useState(false);
   const [isVideoErrorSmartboard, setIsVideoErrorSmartboard] = useState(false);
+  const [isMobileVideoSmartboard, setIsMobileVideoSmartboard] = useState(false);
   const videoRefSmartboard = useRef(null);
 
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
@@ -38,9 +40,16 @@ function AIToolsSection() {
     [],
   );
 
-  const showVideo = isDesktop && isHovered && !isVideoError;
+  const handleClick = useCallback(() => {
+    if (!isDesktop) setIsMobileVideoVisible((prev) => !prev);
+  }, [isDesktop]);
+  const handleClickSmartboard = useCallback(() => {
+    if (!isDesktop) setIsMobileVideoSmartboard((prev) => !prev);
+  }, [isDesktop]);
+
+  const showVideo = !isVideoError && (isDesktop ? isHovered : isMobileVideoVisible);
   const showVideoSmartboard =
-    isDesktop && isHoveredSmartboard && !isVideoErrorSmartboard;
+    !isVideoErrorSmartboard && (isDesktop ? isHoveredSmartboard : isMobileVideoSmartboard);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -164,18 +173,34 @@ function AIToolsSection() {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {/* Card 1: AI Lab Academic (Main Dark) — hover overlays video */}
+          {/* Card 1: AI Lab Academic (Main Dark) */}
           <motion.div
             variants={itemVariants}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={handleClick}
             tabIndex={0}
             role="button"
             onFocus={handleMouseEnter}
             onBlur={handleMouseLeave}
             className="col-span-1 md:col-span-2 rounded-2xl bg-gradient-to-b from-[#004B63] to-[#003545] p-[1px] relative overflow-hidden cursor-pointer shadow-lg group"
           >
-            <div className="rounded-[calc(1.5rem-1px)] bg-gradient-to-b from-[#003d52] to-[#002a38] p-8 flex flex-col h-full">
+            {!isVideoError && (
+              <video
+                ref={videoRef}
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                onError={() => setIsVideoError(true)}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                  showVideo ? 'opacity-100 z-20' : 'opacity-0 z-0'
+                }`}
+              >
+                <source src="/dashboard.mp4" type="video/mp4" />
+              </video>
+            )}
+            <div className="relative z-10 rounded-[calc(1.5rem-1px)] p-8 flex flex-col h-full bg-gradient-to-b from-[#003d52] to-[#002a38]">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-14 h-14 rounded-xl bg-cyan-400/15 flex items-center justify-center flex-shrink-0">
                   <Icon
@@ -226,26 +251,15 @@ function AIToolsSection() {
             <AnimatePresence>
               {showVideo && (
                 <motion.div
-                  key="video"
+                  key="overlay"
                   initial={prefersReducedMotion ? {} : { opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={prefersReducedMotion ? {} : { opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="absolute inset-0"
+                  className="absolute inset-0 z-30 pointer-events-none"
                 >
-                  <video
-                    ref={videoRef}
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    onError={() => setIsVideoError(true)}
-                    className="w-full h-full object-cover"
-                  >
-                    <source src="/dashboard.mp4" type="video/mp4" />
-                  </video>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#003d52]/80 via-transparent to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 flex justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#003d52]/80 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 flex justify-center pointer-events-auto">
                     <a
                       href={tools[0].path}
                       onClick={(e) => {
@@ -349,18 +363,35 @@ function AIToolsSection() {
             </div>
           </motion.div>
 
-          {/* Card 4: SmartBoard (Horizontal) — hover overlays video */}
+          {/* Card 4: SmartBoard (Horizontal) */}
           <motion.div
             variants={itemVariants}
             onMouseEnter={handleMouseEnterSmartboard}
             onMouseLeave={handleMouseLeaveSmartboard}
+            onClick={handleClickSmartboard}
             tabIndex={0}
             role="button"
             onFocus={handleMouseEnterSmartboard}
             onBlur={handleMouseLeaveSmartboard}
-            className="col-span-1 md:col-span-2 card-clay bg-primary-light/5 p-8 flex flex-col relative overflow-hidden cursor-pointer"
+            className="col-span-1 md:col-span-2 card-clay bg-primary-light/5 relative overflow-hidden cursor-pointer"
           >
-            <div className="flex flex-col h-full">
+            {!isVideoErrorSmartboard && (
+              <video
+                ref={videoRefSmartboard}
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                onError={() => setIsVideoErrorSmartboard(true)}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                  showVideoSmartboard ? 'opacity-100 z-20' : 'opacity-0 z-0'
+                }`}
+              >
+                <source src="/smarboard.mp4" type="video/mp4" />
+                <source src="/smarboard.mov" type="video/quicktime" />
+              </video>
+            )}
+            <div className="relative z-10 p-8 flex flex-col h-full">
               <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className="flex items-center gap-5 flex-1 min-w-0">
                   <div className="w-14 h-14 rounded-xl bg-primary-light/15 flex items-center justify-center flex-shrink-0">
@@ -399,27 +430,15 @@ function AIToolsSection() {
             <AnimatePresence>
               {showVideoSmartboard && (
                 <motion.div
-                  key="video-smartboard"
+                  key="overlay-smartboard"
                   initial={prefersReducedMotion ? {} : { opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={prefersReducedMotion ? {} : { opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="absolute inset-0"
+                  className="absolute inset-0 z-30 pointer-events-none"
                 >
-                  <video
-                    ref={videoRefSmartboard}
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    onError={() => setIsVideoErrorSmartboard(true)}
-                    className="w-full h-full object-cover"
-                  >
-                    <source src="/smarboard.mp4" type="video/mp4" />
-                    <source src="/smarboard.mov" type="video/quicktime" />
-                  </video>
-                  <div className="absolute inset-0 bg-gradient-to-t from-petroleum/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 flex justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-t from-petroleum/60 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 flex justify-center pointer-events-auto">
                     <a
                       href={tools[3].path}
                       onClick={(e) => {

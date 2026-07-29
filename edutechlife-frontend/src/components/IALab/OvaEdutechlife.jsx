@@ -5,6 +5,7 @@ import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { cn } from "../forum/forumDesignSystem";
 import { OVALayout, OVAIntro } from "./shared";
+import SectionErrorBoundary from "./SectionErrorBoundary";
 import OvaGeminiSlides from "./ova/OvaGeminiSlides";
 import OvaGeminiQuiz from "./ova/OvaGeminiQuiz";
 import {
@@ -78,6 +79,12 @@ const OvaEdutechlife = ({ onComplete }) => {
           audioText={t("ova.tour.welcome_audio")}
           onStart={() => setScreen("slides")}
           startLabel={t("ova.tour.start_btn")}
+          objectives={[
+            t("ova.tour.learning_obj_1"),
+            t("ova.tour.learning_obj_2"),
+            t("ova.tour.learning_obj_3"),
+            t("ova.tour.learning_obj_4"),
+          ]}
         />
       </div>
     );
@@ -101,6 +108,7 @@ const OvaEdutechlife = ({ onComplete }) => {
   };
 
   return (
+    <SectionErrorBoundary name="OvaEdutechlife">
     <OVALayout
       icon="fa-brain"
       title={t("ova.tour.title")}
@@ -137,6 +145,7 @@ const OvaEdutechlife = ({ onComplete }) => {
         )}
       </div>
     </OVALayout>
+    </SectionErrorBoundary>
   );
 };
 

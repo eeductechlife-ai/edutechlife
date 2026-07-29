@@ -52,7 +52,7 @@ const DetectAndFix = () => {
           const isCorrectOpt = showFix && i === R[round].correctIdx;
           const isWrong = isSelected && !correct;
           return (
-            <button key={i} onClick={() => handleSelect(i)}
+            <button key={i} onClick={() => handleSelect(i)} aria-pressed={isSelected}
               className={`w-full p-3 rounded-xl border-2 text-left text-xs font-medium transition-all flex items-center justify-between gap-2 ${isCorrectOpt ? 'bg-green-50 border-green-500 text-green-700' : isWrong ? 'bg-red-50 border-red-500 text-red-700' : isSelected ? 'border-corporate bg-blue-50' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-slate-200'}`}>
               <span>{opt}</span>
               {isCorrectOpt && <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />}
@@ -62,7 +62,7 @@ const DetectAndFix = () => {
         })}
       </div>
       {showFix && (
-        <div className="p-4 bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-700 rounded-xl">
+        <div role="alert" className="p-4 bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-700 rounded-xl">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle2 className="w-4 h-4 text-green-600" />
             <span className="text-[10px] font-black text-green-700 dark:text-green-300 uppercase tracking-wider">{t('ova.introprompt.detect_fix_label')}</span>

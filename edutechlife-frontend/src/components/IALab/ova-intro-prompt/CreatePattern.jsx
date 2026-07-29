@@ -38,9 +38,9 @@ const CreatePattern = () => {
     <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4">
       <div className="flex items-center gap-2 justify-between">
         <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">{t('ova.introprompt.create_step')} {step + 1} / 6</span>
-        <div className="flex gap-1">
+        <div className="flex gap-1" role="group" aria-label={t('ova.introprompt.create_step')}>
           {createSteps.map((s, i) => (
-            <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-6 bg-petroleum' : i < step ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />
+            <div key={i} aria-hidden="true" className={`h-1.5 rounded-full transition-all ${i === step ? 'w-6 bg-petroleum' : i < step ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'}`} />
           ))}
         </div>
       </div>
@@ -58,6 +58,7 @@ const CreatePattern = () => {
         <p className="text-sm text-petroleum dark:text-corporate font-mono font-medium leading-relaxed">{t(`ova.introprompt.create_${cs.key}_example`)}</p>
       </div>
       <button onClick={() => setStep(step + 1)}
+        aria-label={t('ova.introprompt.create_next')}
         className="w-full py-3 bg-gradient-to-r from-petroleum to-corporate text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider">
         {t('ova.introprompt.create_next')} <ChevronRight className="w-4 h-4" />
       </button>

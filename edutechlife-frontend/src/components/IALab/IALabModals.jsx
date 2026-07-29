@@ -232,7 +232,7 @@ const ModalsSection = ({ handleGlobalAction, activeMod, completedExams }) => {
           {isOpen && children}
         </FocusTrapModal>
       ))}
-      <Suspense fallback={null}>
+      <Suspense fallback={<LoadingFallback />}>
         <PracticeToolModal
           isOpen={practiceToolOpen}
           toolType={activePracticeTool}

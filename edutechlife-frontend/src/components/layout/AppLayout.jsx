@@ -83,7 +83,7 @@ const AppLayout = () => {
           />
         </div>
 
-        <HeaderFluidIsland />
+        <HeaderFluidIsland onOpenMobileMenu={() => setMobileMenuOpen(true)} />
 
         {(mobileMenuOpen || drawerClosing) && (
           <MobileDrawer

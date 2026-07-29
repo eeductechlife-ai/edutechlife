@@ -147,12 +147,14 @@ export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
                 <button
                   key={i}
                   onClick={() => selected === null && handleAnswer(i)}
+                  aria-pressed={selected === i}
                   className={btnClass}
                   disabled={selected !== null}
                 >
                   <div className="flex items-start gap-3">
                     <div
                       className={`w-6 h-6 rounded-full border flex items-center justify-center flex-shrink-0 mt-0.5 ${selected !== null && i === questions[currentQ].answer ? "bg-green-500 border-green-500 text-white" : "border-gray-300 dark:border-slate-500"}`}
+                      aria-hidden="true"
                     >
                       {selected !== null &&
                         i === questions[currentQ].answer && <Check size={14} />}
@@ -165,7 +167,7 @@ export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
           </div>
         </Card>
       ) : (
-        <Card className="text-center animate-[scaleIn_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
+        <Card className="text-center animate-[scaleIn_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]" aria-live="polite">
           <div className="w-24 h-24 mx-auto bg-gradient-to-tr from-corporate to-petroleum rounded-full flex items-center justify-center text-white text-4xl mb-6 shadow-lg shadow-cyan-200">
             <Award size={48} />
           </div>

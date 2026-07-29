@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import PropTypes from 'prop-types'
 import { Trophy, CheckCircle2, Star } from 'lucide-react'
 
 const CertificateScreen = ({ texts, quizScore }) => {
@@ -23,7 +24,7 @@ const CertificateScreen = ({ texts, quizScore }) => {
           </div>
           <div className="flex justify-center gap-1.5 mb-5">
             {[1,2,3,4,5].map(i => (
-              <motion.div key={i} initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} transition={{ delay: i * 0.12, type: 'spring', stiffness: 300 }}>
+              <motion.div key={i} aria-hidden="true" initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} transition={{ delay: i * 0.12, type: 'spring', stiffness: 300 }}>
                 <Star className={`w-7 h-7 ${i <= quizScore ? 'text-amber-400 fill-amber-400 drop-shadow-sm' : 'text-slate-200 dark:text-slate-600'}`} />
               </motion.div>
             ))}
@@ -38,5 +39,10 @@ const CertificateScreen = ({ texts, quizScore }) => {
     </div>
   );
 };
+
+CertificateScreen.propTypes = {
+  texts: PropTypes.object.isRequired,
+  quizScore: PropTypes.number,
+}
 
 export default CertificateScreen

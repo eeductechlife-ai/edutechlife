@@ -1,6 +1,89 @@
 const MEMORY_KEY = 'ialab_valerio_session'
 const SESSION_KEY = 'ialab_valerio_active_session'
 
+// ── Supabase sync layer ────────────────────────────────────────────────
+
+export const isSupabaseSyncAvailable =
+  typeof window !== 'undefined' &&
+  !!window.Clerk?.session?.user?.id
+
+const getUserId = () => {
+  try {
+    return window.Clerk?.session?.user?.id || 'anonymous'
+  } catch {
+    return 'anonymous'
+  }
+}
+
+export const syncMemoryToSupabase = async (supabaseClient) => {
+  try {
+    const raw = localStorage.getItem(MEMORY_KEY)
+    if (!raw) return { success: true, count: 0 }
+    const sessions = JSON.parse(raw)
+    if (!Array.isArray(sessions) || sessions.length === 0)
+      return { success: true, count: 0 }
+
+    const userId = getUserId()
+    const rows = sessions.map((s) => ({
+      id: s.id,
+      user_id: userId,
+      session_id: s.id,
+      summary: s,
+      topics: s.topics || [],
+      created_at: s.date || new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }))
+
+    const { error } = await supabaseClient
+      .from('valerio_memory')
+      .upsert(rows, { onConflict: 'id' })
+
+    if (error) throw error
+    return { success: true, count: rows.length }
+  } catch (err) {
+    console.warn('[valerioMemory] Supabase sync failed:', err.message)
+    return { success: false, error: err }
+  }
+}
+
+export const loadMemoryFromSupabase = async (supabaseClient) => {
+  try {
+    const userId = getUserId()
+
+    const { data, error } = await supabaseClient
+      .from('valerio_memory')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(50)
+
+    if (error) throw error
+    if (!data || data.length === 0) return { success: true, count: 0 }
+
+    const remoteSessions = data.map((r) => r.summary).filter(Boolean)
+
+    const raw = localStorage.getItem(MEMORY_KEY)
+    const localSessions = raw ? JSON.parse(raw) : []
+    const localMap = new Map(
+      localSessions.map((s) => [s.id, s])
+    )
+
+    for (const s of remoteSessions) {
+      localMap.set(s.id, s)
+    }
+
+    const merged = Array.from(localMap.values()).slice(-20)
+    localStorage.setItem(MEMORY_KEY, JSON.stringify(merged))
+
+    return { success: true, count: remoteSessions.length }
+  } catch (err) {
+    console.warn('[valerioMemory] Supabase load failed:', err.message)
+    return { success: false, error: err }
+  }
+}
+
+// ── End Supabase sync layer ────────────────────────────────────────────
+
 export const startSession = (moduleId) => {
   const session = {
     id: `session_${Date.now()}`,

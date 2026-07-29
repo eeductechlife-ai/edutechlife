@@ -57,6 +57,7 @@ const QuizScreen = ({ texts, onNext, addXp, onScore }) => {
               key={i}
               onClick={() => handleSelect(i)}
               whileTap={{ scale: 0.97 }}
+              aria-pressed={selected === i}
               animate={isCorrect ? { scale: [1, 1.02, 1], transition: { duration: 0.4 } } : isWrong ? { x: [0, -4, 4, -2, 2, 0], transition: { duration: 0.4 } } : {}}
               className={`p-4 rounded-2xl text-left text-sm font-bold border-2 transition-all flex items-center justify-between gap-3 ${isCorrect ? 'bg-green-50 border-green-500 text-green-700 shadow-md' : isWrong ? 'bg-red-50 border-red-500 text-red-700 shadow-md' : showFeedback ? 'bg-slate-50 border-transparent opacity-50' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate'}`}
             >
@@ -69,18 +70,26 @@ const QuizScreen = ({ texts, onNext, addXp, onScore }) => {
       </div>
       {showFeedback && (
         <motion.div
+          role="alert"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className="p-5 bg-slate-100 dark:bg-slate-700 rounded-[2rem]"
         >
           <p className="text-xs font-bold leading-relaxed">{questions[currentQ].f}</p>
-          <button onClick={handleNext} className="mt-4 w-full py-3 bg-petroleum text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs">{currentQ === 4 ? texts.quiz_label_see_results : texts.quiz_label_continue} <ChevronRight size={14} /></button>
+          <button onClick={handleNext} aria-label={currentQ === 4 ? texts.quiz_label_see_results : texts.quiz_label_continue} className="mt-4 w-full py-3 bg-petroleum text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs">{currentQ === 4 ? texts.quiz_label_see_results : texts.quiz_label_continue} <ChevronRight size={14} /></button>
         </motion.div>
       )}
     </div>
   );
 };
+
+QuizScreen.propTypes = {
+  texts: PropTypes.object.isRequired,
+  onNext: PropTypes.func.isRequired,
+  addXp: PropTypes.func.isRequired,
+  onScore: PropTypes.func.isRequired,
+}
 
 Button.propTypes = {
   onClick: PropTypes.func,

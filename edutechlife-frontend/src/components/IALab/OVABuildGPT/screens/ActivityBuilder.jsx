@@ -44,10 +44,10 @@ export default function ActivityBuilder({ onNext, addXp }) {
         <p className="text-gray-600 dark:text-slate-300 mt-2">{t('ova.buildgpt.activity_desc')}</p>
       </div>
       <Card className="mb-8">
-        <div className="flex justify-between items-center mb-8 relative">
+        <div className="flex justify-between items-center mb-8 relative" role="group" aria-label={t('ova.buildgpt.activity_title')}>
           <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-100 dark:bg-slate-700/50 -z-10 -translate-y-1/2"></div>
           {[1, 2, 3].map(i => (
-            <div key={i} className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition-colors ${step >= i ? 'bg-corporate text-white' : 'bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300'}`}>
+            <div key={i} aria-current={step === i ? 'step' : undefined} className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition-colors ${step >= i ? 'bg-corporate text-white' : 'bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300'}`}>
               {i}
             </div>
           ))}
@@ -57,7 +57,7 @@ export default function ActivityBuilder({ onNext, addXp }) {
             <h3 className="text-xl font-bold text-center mb-6 text-slate-700 dark:text-slate-300">{t('ova.buildgpt.activity_step1')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {triggers.map(t => (
-                <button key={t.id} onClick={() => handleSelect('trigger', t.text)} className="p-6 border-2 border-slate-100 dark:border-slate-700 rounded-xl hover:border-corporate hover:bg-cyan-50 dark:hover:bg-cyan-900/20 flex flex-col items-center gap-3 transition-all">
+                <button key={t.id} onClick={() => handleSelect('trigger', t.text)} aria-pressed={selections.trigger === t.text} className="p-6 border-2 border-slate-100 dark:border-slate-700 rounded-xl hover:border-corporate hover:bg-cyan-50 dark:hover:bg-cyan-900/20 flex flex-col items-center gap-3 transition-all">
                   <t.icon size={32} className="text-petroleum" />
                   <span className="font-semibold text-slate-700 dark:text-slate-300">{t.text}</span>
                 </button>
@@ -70,7 +70,7 @@ export default function ActivityBuilder({ onNext, addXp }) {
             <h3 className="text-xl font-bold text-center mb-6 text-slate-700 dark:text-slate-300">{t('ova.buildgpt.activity_step2')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {actions.map(a => (
-                <button key={a.id} onClick={() => handleSelect('ai', a.text)} className="p-6 border-2 border-slate-100 dark:border-slate-700 rounded-xl hover:border-corporate hover:bg-green-50 dark:hover:bg-green-900/20 flex flex-col items-center gap-3 transition-all">
+                <button key={a.id} onClick={() => handleSelect('ai', a.text)} aria-pressed={selections.ai === a.text} className="p-6 border-2 border-slate-100 dark:border-slate-700 rounded-xl hover:border-corporate hover:bg-green-50 dark:hover:bg-green-900/20 flex flex-col items-center gap-3 transition-all">
                   <a.icon size={32} className="text-corporate" />
                   <span className="font-semibold text-slate-700 dark:text-slate-300">{a.text}</span>
                 </button>
@@ -83,7 +83,7 @@ export default function ActivityBuilder({ onNext, addXp }) {
             <h3 className="text-xl font-bold text-center mb-6 text-slate-700 dark:text-slate-300">{t('ova.buildgpt.activity_step3')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {destinations.map(d => (
-                <button key={d.id} onClick={() => handleSelect('dest', d.text)} className="p-6 border-2 border-slate-100 dark:border-slate-700 rounded-xl hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 flex flex-col items-center gap-3 transition-all">
+                <button key={d.id} onClick={() => handleSelect('dest', d.text)} aria-pressed={selections.dest === d.text} className="p-6 border-2 border-slate-100 dark:border-slate-700 rounded-xl hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 flex flex-col items-center gap-3 transition-all">
                   <d.icon size={32} className="text-purple-600" />
                   <span className="font-semibold text-slate-700 dark:text-slate-300">{d.text}</span>
                 </button>

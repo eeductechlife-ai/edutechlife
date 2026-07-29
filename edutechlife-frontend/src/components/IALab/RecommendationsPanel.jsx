@@ -153,7 +153,7 @@ const RecommendationsPanel = ({ onAction, isLoading }) => {
                                 {rec.action && (
                                   <button
                                     onClick={() => handleAction(rec)}
-                                    className={`flex-shrink-0 text-[10px] font-medium ${cfg.btnText} ${cfg.btnBg} px-2 py-0.5 rounded-md border ${cfg.btnBorder} ${cfg.btnHover} transition-colors active:scale-95 -mt-0.5`}
+                                    className={`flex-shrink-0 text-[10px] font-medium ${cfg.btnText} ${cfg.btnBg} px-3 py-2 min-h-[44px] rounded-md border ${cfg.btnBorder} ${cfg.btnHover} transition-colors active:scale-95`}
                                   >
                                     <Icon name="fa-arrow-right" className="text-[8px] mr-0.5" />{rec.action.label}
                                   </button>

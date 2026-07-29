@@ -91,6 +91,7 @@ export default function OvaGeminiQuiz({
                       key={opt.id}
                       onClick={() => handleAnswerSelect(qIdx, opt.id)}
                       disabled={showResults}
+                      aria-pressed={isSelected}
                       className={cn(
                         'w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border-2 transition-all text-xs sm:text-sm font-medium',
                         optionStyle,
@@ -148,7 +149,7 @@ export default function OvaGeminiQuiz({
           {t('ova.quiz.check_answers')}
         </motion.button>
       ) : (
-        <div className="mt-4 sm:mt-6 space-y-3">
+        <div className="mt-4 sm:mt-6 space-y-3" aria-live="polite">
           <div className="flex items-center justify-between px-4 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border border-cyan-100 dark:border-cyan-800">
             <span className="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-200">
               {t('ova.quiz.result_label')}

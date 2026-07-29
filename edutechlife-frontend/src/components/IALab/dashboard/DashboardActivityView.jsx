@@ -87,12 +87,12 @@ function DashboardActivityView() {
         <div className="space-y-2">
           {modules.map(m => (
             <div key={m.id} className="flex items-center gap-3">
-              <span className="text-xs font-bold text-slate-500 w-8">M{m.id}</span>
+              <span className="text-xs font-bold text-slate-500 min-w-[24px] w-8">M{m.id}</span>
               <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
                 <div className="h-full rounded-full bg-corporate transition-all duration-500"
                   style={{ width: `${Math.max(0, m.score)}%` }} />
               </div>
-              <span className="text-xs font-bold text-petroleum w-10 text-right">{m.score || 0}%</span>
+              <span className="text-xs font-bold text-petroleum min-w-[32px] w-10 text-right">{m.score || 0}%</span>
             </div>
           ))}
         </div>

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { forwardRef, memo } from 'react';
 import { motion } from 'framer-motion';
 import IALabMobileMenu from '../IALabMobileMenu';
@@ -28,6 +29,20 @@ export const MobileMenuOverlay = forwardRef(function MobileMenuOverlay({ showMob
     </div>
   ) : null;
 });
+
+MobileMenuOverlay.propTypes = {
+  showMobileMenu: PropTypes.bool,
+  mobileMenuClosing: PropTypes.bool,
+  closeMobileMenu: PropTypes.func,
+  MOBILE_MENU_WIDTH: PropTypes.number,
+  SPRING_DAMPING: PropTypes.number,
+  SPRING_STIFFNESS: PropTypes.number,
+  toggleDarkMode: PropTypes.func,
+  isDarkMode: PropTypes.bool,
+  handleOpenProfile: PropTypes.func,
+  handleOpenHistory: PropTypes.func,
+  handleOpenHelp: PropTypes.func,
+};
 
 const Memoized = memo(MobileMenuOverlay);
 export default Memoized;

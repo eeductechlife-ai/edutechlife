@@ -19,9 +19,16 @@ export const Card = ({ children, className = '' }) => (
 );
 
 Button.propTypes = {
+  children: PropTypes.node,
   onClick: PropTypes.func,
   variant: PropTypes.string,
+  className: PropTypes.string,
   icon: PropTypes.elementType,
   disabled: PropTypes.bool,
+};
+
+Card.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
 };
 

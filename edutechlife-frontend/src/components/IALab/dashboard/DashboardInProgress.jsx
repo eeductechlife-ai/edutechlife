@@ -12,6 +12,7 @@ import DashboardTabs from './DashboardTabs';
 import DashboardModuleList from './DashboardModuleList';
 import DashboardActivityView from './DashboardActivityView';
 
+
 const MODULES = [1, 2, 3, 4, 5];
 const IDLE_TIMEOUT = 10000;
 
@@ -132,7 +133,9 @@ function DashboardInProgress() {
         <div className="grid grid-cols-[280px_1fr] gap-8 p-7 max-md:grid-cols-1 max-md:p-5 max-md:gap-5">
           <div className="flex flex-col items-center">
             <div className="relative w-[170px] h-[170px] max-md:w-[140px] max-md:h-[140px]">
-              <svg viewBox="0 0 150 150" className="w-full h-full -rotate-90" data-testid="progress-ring">
+              <svg viewBox="0 0 150 150" className="w-full h-full -rotate-90" data-testid="progress-ring"
+                role="progressbar" aria-valuenow={courseProgress} aria-valuemin="0" aria-valuemax="100"
+                aria-label={t('dashboard.global_progress', { pct: courseProgress })}>
                 <circle cx="75" cy="75" r="70" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
                 <circle cx="75" cy="75" r="70" fill="none" stroke="#00BCD4" strokeWidth="8" strokeLinecap="round"
                   strokeDasharray={2 * Math.PI * 70} strokeDashoffset={2 * Math.PI * 70 * (1 - courseProgress / 100)} />
@@ -198,6 +201,7 @@ function DashboardInProgress() {
                 { icon: 'fa-chart-line', value: `${stats.avgScore}%`, label: t('dashboard.avg_score') },
               ].map(s => (
                 <motion.div key={s.icon} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}
+                  role="region" aria-label={s.label}
                   className="bg-white/10 backdrop-blur rounded-[14px] py-3.5 px-2 text-center border border-white/[0.06]">
                   <div className="w-[30px] h-[30px] rounded-xl bg-corporate/15 flex items-center justify-center mx-auto mb-1.5">
                     <Icon name={s.icon} className="w-3.5 h-3.5 text-corporate" />
@@ -211,12 +215,17 @@ function DashboardInProgress() {
         </div>
       </section>
 
+
       <DashboardTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {activeTab === 'modules' ? (
-        <DashboardModuleList />
+        <div role="tabpanel" id="tabpanel-modules" aria-labelledby="tab-modules">
+          <DashboardModuleList />
+        </div>
       ) : (
-        <DashboardActivityView />
+        <div role="tabpanel" id="tabpanel-activity" aria-labelledby="tab-activity">
+          <DashboardActivityView />
+        </div>
       )}
     </div>
   );

@@ -3,17 +3,21 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping.jsx';
 import useForumComments from '../../../hooks/IALab/forum/useForumComments';
+import useForumVotes from '../../../hooks/IALab/forum/useForumVotes';
+import IALabForumVoteButtons from './IALabForumVoteButtons';
+import IALabForumBestAnswer from './IALabForumBestAnswer';
 import IALabForumCommentThread from './IALabForumCommentThread';
 import IALabForumRichEditor from './IALabForumRichEditor';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
 const IALabForumPostDetail = ({ post, onBack, onAction }) => {
   const { comments, isLoading, loadComments, addComment } = useForumComments();
+  const { voteStates, loadVotes, toggleVote } = useForumVotes();
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (post?.id) loadComments(post.id);
-  }, [post?.id, loadComments]);
+    if (post?.id) { loadComments(post.id); loadVotes([post.id]); }
+  }, [post?.id, loadComments, loadVotes]);
 
   const handleAddComment = async (content) => {
     if (!content?.trim()) return;
@@ -49,13 +53,15 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
         </div>
 
         <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">{post.title}</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-wrap">{post.content}</p>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-wrap break-words">{post.content}</p>
 
         <div className="flex items-center gap-3 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
-          <div className="flex items-center gap-1.5 text-xs text-slate-600">
-            <Icon name="fa-heart" />
-            <span>{t('ialab.forum.detail.likes_count', { count: post.upvotes || 0 })}</span>
-          </div>
+          <IALabForumVoteButtons
+            postId={post.id}
+            upvotes={post.upvotes || 0}
+            voteState={voteStates[post.id]}
+            onVote={() => toggleVote(post.id, post.upvotes)}
+          />
           <div className="flex items-center gap-1.5 text-xs text-slate-600">
             <Icon name="fa-comment" />
             <span>{t('ialab.forum.detail.comments_count', { count: post.comment_count || 0 })}</span>
@@ -79,11 +85,17 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
             <div className="w-6 h-6 border-2 border-petroleum/20 border-t-petroleum rounded-full animate-spin" />
           </div>
         ) : (
-          <IALabForumCommentThread
+          <IALabForumBestAnswer
+            postId={post.id}
+            postAuthorId={post.user_id}
             comments={comments[post.id] || []}
-            onReply={handleAddReply}
-            depth={0}
-          />
+          >
+            <IALabForumCommentThread
+              comments={comments[post.id] || []}
+              onReply={handleAddReply}
+              depth={0}
+            />
+          </IALabForumBestAnswer>
         )}
 
         <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">

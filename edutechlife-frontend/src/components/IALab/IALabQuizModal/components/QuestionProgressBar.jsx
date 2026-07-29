@@ -15,7 +15,7 @@ export function QuestionProgressBar({ quizQuestions, quizAnswers, currentQuestio
           <button
             key={q.id}
             onClick={() => onSelectQuestion(idx)}
-            className={`w-8 h-8 rounded-lg text-xs font-bold transition-all duration-200 flex items-center justify-center flex-shrink-0 ${
+            className={`w-11 h-11 rounded-lg text-xs font-bold transition-all duration-200 flex items-center justify-center flex-shrink-0 ${
               idx === currentQuestion
                 ? 'ring-2 ring-corporate ring-offset-1 dark:ring-offset-slate-800'
                 : ''

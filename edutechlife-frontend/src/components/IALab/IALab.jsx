@@ -5,6 +5,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useMemo,
   lazy,
   Suspense,
   useRef,
@@ -84,15 +85,17 @@ import MobileHeader from "./shared/MobileHeader";
 import MobileInfoBar from "./shared/MobileInfoBar";
 import ToastNotification from "./shared/ToastNotification";
 
+const createTABS = (t) => [
+  { id: null, label: t("ialab.tab_all") },
+  { id: "objetivos", label: t("ialab.tab_objectives") },
+  { id: "contenido", label: t("ialab.tab_content") },
+  { id: "actividades", label: t("ialab.tab_activities") },
+  { id: "practica", label: t("ialab.tab_practice") },
+];
+
 const IALabContent = memo(function () {
   const { t, locale } = useTranslation();
-  const TABS = [
-    { id: null, label: t("ialab.tab_all") },
-    { id: "objetivos", label: t("ialab.tab_objectives") },
-    { id: "contenido", label: t("ialab.tab_content") },
-    { id: "actividades", label: t("ialab.tab_activities") },
-    { id: "practica", label: t("ialab.tab_practice") },
-  ];
+  const TABS = useMemo(() => createTABS(t), [t]);
   const { user } = useIALabUIContext();
   const { toasts: achievementToasts, removeToast: removeAchievementToast } =
     useAchievementNotifications(useIALabStore);
@@ -219,15 +222,19 @@ const IALabContent = memo(function () {
   }, []);
 
   useEffect(() => {
+    let rafId;
     const forceScrollToTop = () => {
-      requestAnimationFrame(() => {
+      rafId = requestAnimationFrame(() => {
         const mainEl = document.querySelector("main");
         if (mainEl) mainEl.scrollTop = 0;
       });
     };
     forceScrollToTop();
     window.addEventListener("popstate", forceScrollToTop);
-    return () => window.removeEventListener("popstate", forceScrollToTop);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("popstate", forceScrollToTop);
+    };
   }, []);
 
   // Escucha evento para abrir la comunidad
@@ -409,10 +416,12 @@ const IALabContent = memo(function () {
                 >
                   <Suspense fallback={<RouteSkeleton />}>
                     <SectionErrorBoundary name="DailyPlan">
+                      <div data-tour="tour-ruta">
                       <DailyPlan
                         onAction={handleAction}
                         isLoading={isLoadingProgress}
                       />
+                      </div>
                     </SectionErrorBoundary>
                   </Suspense>
                 </motion.div>
@@ -494,6 +503,7 @@ const IALabContent = memo(function () {
                     id="panel-objetivos"
                     role="tabpanel"
                     aria-labelledby="tab-objetivos"
+                    data-tour="tour-objetivos"
                   >
                     <SectionErrorBoundary
                       name="ModuleInfoSection"
@@ -514,9 +524,10 @@ const IALabContent = memo(function () {
                     id="panel-contenido"
                     role="tabpanel"
                     aria-labelledby="tab-contenido"
+                    data-tour="tour-temas"
                   >
                     <Suspense fallback={<ModuleOverviewSkeleton />}>
-                      <SectionErrorBoundary>
+                      <SectionErrorBoundary name="ModuleOverviewCard">
                         <ModuleOverviewCard
                           onAction={handleAction}
                           onToggleForum={setIsForumOpen}
@@ -536,9 +547,10 @@ const IALabContent = memo(function () {
                     id="panel-actividades"
                     role="tabpanel"
                     aria-labelledby="tab-actividades"
+                    data-tour="tour-actividades"
                   >
                     <Suspense fallback={<ModuleActionsSkeleton />}>
-                      <SectionErrorBoundary>
+                      <SectionErrorBoundary name="ModuleActions">
                         <ModuleActions
                           onAction={handleAction}
                           activeMod={activeMod}
@@ -564,9 +576,10 @@ const IALabContent = memo(function () {
                   id="panel-practica"
                   role="tabpanel"
                   aria-labelledby="tab-practica"
+                  data-tour="tour-herramientas"
                 >
                   <Suspense fallback={null}>
-                    <SectionErrorBoundary>
+                    <SectionErrorBoundary name="ModulePractice">
                       <ModulePractice
                         onAction={handleAction}
                         activeMod={activeMod}
@@ -580,7 +593,7 @@ const IALabContent = memo(function () {
               {(viewSection === null || viewSection === "actividades") &&
                 isForumOpen && (
                   <div id="forum-section">
-                    <SectionErrorBoundary>
+                    <SectionErrorBoundary name="Forum">
                       <Suspense
                         fallback={
                           <div className="h-20 bg-white/50 rounded-xl animate-pulse" />
@@ -607,7 +620,7 @@ const IALabContent = memo(function () {
         t={t}
       />
 
-      <Suspense fallback={null}>
+      <Suspense fallback={<div className="h-20 bg-white/50 rounded-xl animate-pulse" />}>
         {showValerioPanel && (
           <IALabValerioPanel
             isOpen={showValerioPanel}
@@ -620,7 +633,7 @@ const IALabContent = memo(function () {
       <OfflineBanner />
 
       {/* Tour interactivo contextual */}
-      <Suspense fallback={null}>
+      <Suspense fallback={<div className="h-20 bg-white/50 rounded-xl animate-pulse" />}>
         <IALabTour hasStartedCourse={hasStartedCourse} />
       </Suspense>
 
@@ -643,7 +656,7 @@ const IALab = () => {
   return (
     <IALabProvider>
       <A11yProvider>
-        <SectionErrorBoundary>
+        <SectionErrorBoundary name="IALabContent">
           <IALabContent />
         </SectionErrorBoundary>
       </A11yProvider>

@@ -11,6 +11,8 @@ import { useIALabStore } from "../../../store/ialabStore";
 import { getAnalyzingMsgs } from "./ialabAnalyzingMsgs";
 
 export function useIALabUI(onBack) {
+  const onBackRef = useRef(onBack);
+  useEffect(() => { onBackRef.current = onBack; }, [onBack]);
   const { t } = useTranslation();
   const { user: clerkUser } = useUser();
   const { signOut: clerkSignOut } = useClerk();
@@ -27,14 +29,6 @@ export function useIALabUI(onBack) {
   const setVisibleAccordions = useIALabStore((s) => s.setVisibleAccordions);
   const insightsExpanded = useIALabStore((s) => s.insightsExpanded);
   const setInsightsExpanded = useIALabStore((s) => s.setInsightsExpanded);
-  const input = useIALabStore((s) => s.input);
-  const setInput = useIALabStore((s) => s.setInput);
-  const genData = useIALabStore((s) => s.genData);
-  const setGenData = useIALabStore((s) => s.setGenData);
-  const loading = useIALabStore((s) => s.loading);
-  const setLoading = useIALabStore((s) => s.setLoading);
-  const loadMsg = useIALabStore((s) => s.loadMsg);
-  const setLoadMsg = useIALabStore((s) => s.setLoadMsg);
   const coachQ = useIALabStore((s) => s.coachQ);
   const setCoachQ = useIALabStore((s) => s.setCoachQ);
   const coachMsg = useIALabStore((s) => s.coachMsg);
@@ -392,14 +386,6 @@ export function useIALabUI(onBack) {
       setVisibleAccordions,
       insightsExpanded,
       setInsightsExpanded,
-      input,
-      setInput,
-      genData,
-      setGenData,
-      loading,
-      setLoading,
-      loadMsg,
-      setLoadMsg,
       coachQ,
       setCoachQ,
       coachMsg,
@@ -446,7 +432,7 @@ export function useIALabUI(onBack) {
       user,
       isLoaded: authLoaded,
       signOut,
-      onBack,
+      onBack: (...args) => onBackRef.current?.(...args),
       msgs: getAnalyzingMsgs(t),
       generateCertificate,
     }),
@@ -456,10 +442,6 @@ export function useIALabUI(onBack) {
       openAccordions,
       visibleAccordions,
       insightsExpanded,
-      input,
-      genData,
-      loading,
-      loadMsg,
       coachQ,
       coachMsg,
       coachLoad,
@@ -487,7 +469,6 @@ export function useIALabUI(onBack) {
       user,
       authLoaded,
       signOut,
-      onBack,
       generateCertificate,
     ],
   );

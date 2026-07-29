@@ -2,10 +2,6 @@ import { useIALabStore } from '../ialabStore';
 
 beforeEach(() => {
   useIALabStore.setState({
-    input: '',
-    genData: null,
-    loading: false,
-    loadMsg: '',
     coachQ: '',
     coachMsg: '',
     coachLoad: false,
@@ -13,44 +9,6 @@ beforeEach(() => {
     avatarState: 'idle',
     showValerioDrawer: false,
     isSynthesizerOpen: false,
-  });
-});
-
-describe('synthesizerSlice — generation state', () => {
-  test('input initializes empty', () => {
-    expect(useIALabStore.getState().input).toBe('');
-  });
-
-  test('setInput updates input', () => {
-    useIALabStore.getState().setInput('test prompt');
-    expect(useIALabStore.getState().input).toBe('test prompt');
-  });
-
-  test('genData initializes as null', () => {
-    expect(useIALabStore.getState().genData).toBeNull();
-  });
-
-  test('setGenData updates genData', () => {
-    useIALabStore.getState().setGenData({ result: 'ok' });
-    expect(useIALabStore.getState().genData).toEqual({ result: 'ok' });
-  });
-
-  test('loading initializes as false', () => {
-    expect(useIALabStore.getState().loading).toBe(false);
-  });
-
-  test('setLoading toggles', () => {
-    useIALabStore.getState().setLoading(true);
-    expect(useIALabStore.getState().loading).toBe(true);
-  });
-
-  test('loadMsg initializes empty', () => {
-    expect(useIALabStore.getState().loadMsg).toBe('');
-  });
-
-  test('setLoadMsg updates', () => {
-    useIALabStore.getState().setLoadMsg('Loading...');
-    expect(useIALabStore.getState().loadMsg).toBe('Loading...');
   });
 });
 

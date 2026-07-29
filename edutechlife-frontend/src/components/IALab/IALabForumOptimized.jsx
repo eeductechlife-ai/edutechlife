@@ -159,11 +159,12 @@ const IALabForumOptimized = ({
     return (
         <motion.div
             whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -4 }}
+            whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
             transition={{ duration: 0.2 }}
             className={cn(
                 "relative z-10 bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100",
                 "flex flex-col",
-                compact ? "h-96" : "h-fit",
+                compact ? "max-h-[50dvh] h-fit min-h-[200px]" : "h-fit",
                 className
             )}
             {...rest}
@@ -334,7 +335,8 @@ const IALabForumOptimized = ({
                                                 isLiked ? "text-red-500" : "text-slate-500",
                                                 "hover:text-red-500",
                                                 "transition-colors",
-                                                "disabled:opacity-50 disabled:cursor-not-allowed"
+                                                "disabled:opacity-50 disabled:cursor-not-allowed",
+                                                "min-h-[44px]"
                                             )}
                                         >
                                             {isLoadingLike ? (

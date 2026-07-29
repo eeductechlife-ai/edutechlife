@@ -34,7 +34,7 @@ export default function DashboardModuleRow({ id, title, icon, approved, unlocked
         <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.95 }}
           transition={{ type: 'spring', stiffness: 500, damping: 12 }}
           onClick={onNavigate}
-          className="flex-shrink-0 bg-corporate text-white text-xs font-bold px-5 py-2 rounded-xl flex items-center gap-1.5 shadow-sm hover:shadow-md transition-all">
+          className="flex-shrink-0 bg-corporate text-white text-xs font-bold px-5 py-3 min-h-[44px] rounded-xl flex items-center gap-1.5 shadow-sm hover:shadow-md transition-all">
           {t(approved ? 'dashboard.review_btn' : 'dashboard.continue_btn')} <Icon name="fa-arrow-right" className="w-3 h-3" />
         </motion.button>
       ) : (

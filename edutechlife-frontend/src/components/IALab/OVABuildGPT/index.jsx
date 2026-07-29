@@ -24,10 +24,6 @@ const screens = [
 
 const totalXp = 1000;
 
-OVABuildGPT.propTypes = {
-  onComplete: PropTypes.func,
-};
-
 export default function OVABuildGPT({ onComplete }) {
   const { t, locale } = useTranslation();
   const certCompletedRef = useRef(false);
@@ -116,7 +112,14 @@ export default function OVABuildGPT({ onComplete }) {
             </div>
           )}
         </div>
-        <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-700/50">
+        <div
+          role="progressbar"
+          aria-valuenow={xp}
+          aria-valuemin={0}
+          aria-valuemax={totalXp}
+          aria-label={t("ova.buildgpt.step", { current: currentScreen + 1, total: screens.length })}
+          className="h-1.5 w-full bg-slate-100 dark:bg-slate-700/50"
+        >
           <div
             className="h-full bg-gradient-to-r from-corporate to-petroleum transition-all duration-1000 ease-out"
             style={{ width: `${(xp / totalXp) * 100}%` }}
@@ -152,3 +155,7 @@ export default function OVABuildGPT({ onComplete }) {
     </div>
   );
 }
+
+OVABuildGPT.propTypes = {
+  onComplete: PropTypes.func,
+};

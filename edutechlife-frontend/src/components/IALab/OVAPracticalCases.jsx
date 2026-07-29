@@ -85,6 +85,7 @@ const OVAPracticalCases = ({ onComplete }) => {
           audioText={t("ova.practical.audio_text")}
           onStart={() => setScreen("slides")}
           startLabel={t("ova.practical.start_btn")}
+          objectives={learningObjectives}
         />
       </div>
     );
@@ -95,7 +96,7 @@ const OVAPracticalCases = ({ onComplete }) => {
 
   return (
     <div className="w-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 text-slate-800 font-sans flex flex-col md:flex-row overflow-hidden relative min-h-[500px] rounded-2xl">
-      <aside className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-full border-r border-cyan-100 dark:border-gray-700">
+      <aside className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-full border-r border-cyan-100 dark:border-gray-700" aria-label={t("ova.practical.sidebar_badge")}>
         <div className="p-6 text-center border-b border-cyan-50 dark:border-gray-700">
           <div className="flex items-center gap-2 justify-center select-none">
             <div className="relative w-9 h-9 flex items-center justify-center">
@@ -203,10 +204,11 @@ const OVAPracticalCases = ({ onComplete }) => {
                 </span>
               </div>
             </div>
-            <div className="flex gap-1">
+            <div className="flex gap-1" role="group" aria-label={t("ova.practical.progress")}>
               {challenges.map((_, i) => (
                 <div
                   key={i}
+                  aria-hidden="true"
                   className={`w-2.5 h-2.5 rounded-full transition-all ${
                     answers[i]?.correct
                       ? "bg-emerald-400"
@@ -400,7 +402,7 @@ const OVAPracticalCases = ({ onComplete }) => {
             </div>
           </div>
         </div>
-        <footer className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4">
+        <footer className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4" aria-label={t("ova.practical.footer")}>
           {t("ova.practical.footer")}
         </footer>
       </main>

@@ -13,6 +13,7 @@ import {
   FileText,
 } from "lucide-react";
 import { OVAIntro, OVAValerioBar } from "./shared";
+import SectionErrorBoundary from "./SectionErrorBoundary";
 import {
   CONTENT_TYPES,
   GOALS,
@@ -119,14 +120,23 @@ export default function OVAPodcastStudio({ onComplete }) {
 
   if (step === "intro") {
     return (
+      <SectionErrorBoundary name="OVAPodcastStudio">
       <OVAIntro
         icon="fa-brain"
         badge={t("ova.podcaststudio.badge_assistant")}
         title={t("ova.podcaststudio.title")}
-        description={t("ova.podcaststudio.subtitle")}
+        description={t("ova.podcaststudio.welcome_desc")}
+        audioText={t("ova.podcaststudio.welcome_voice")}
         onStart={handleStart}
         startLabel={t("ova.podcaststudio.start_btn")}
+        objectives={[
+          t("ova.podcaststudio.learning_obj_1"),
+          t("ova.podcaststudio.learning_obj_2"),
+          t("ova.podcaststudio.learning_obj_3"),
+          t("ova.podcaststudio.learning_obj_4"),
+        ]}
       />
+    </SectionErrorBoundary>
     );
   }
 
@@ -136,6 +146,7 @@ export default function OVAPodcastStudio({ onComplete }) {
     const showCount = contentType && goal && !docCount;
 
     return (
+      <SectionErrorBoundary name="OVAPodcastStudio">
       <>
         <div className="ialab-animate-fade-in px-4 py-8">
           <div className="max-w-3xl mx-auto text-center mb-8">
@@ -232,6 +243,7 @@ export default function OVAPodcastStudio({ onComplete }) {
         </div>
         <OVAValerioBar text={getValerioText()} />
       </>
+    </SectionErrorBoundary>
     );
   }
 
@@ -242,6 +254,7 @@ export default function OVAPodcastStudio({ onComplete }) {
     const dCount = DOC_COUNTS.find((t) => t.id === docCount);
 
     return (
+      <SectionErrorBoundary name="OVAPodcastStudio">
       <>
         <div className="ialab-animate-fade-in px-4 py-8">
           <div className="max-w-3xl mx-auto text-center mb-8">
@@ -378,12 +391,14 @@ export default function OVAPodcastStudio({ onComplete }) {
         </div>
         <OVAValerioBar text={getValerioText()} />
       </>
+    </SectionErrorBoundary>
     );
   }
 
   const progress = Math.round((checkedCount / CHECKLIST_ITEMS.length) * 100);
 
   return (
+    <SectionErrorBoundary name="OVAPodcastStudio">
     <>
       <div className="ialab-animate-fade-in px-4 py-8">
         <div className="max-w-3xl mx-auto text-center mb-8">
@@ -391,17 +406,17 @@ export default function OVAPodcastStudio({ onComplete }) {
             <Monitor className="w-4 h-4 text-corporate" />
             <span>{t("ova.podcaststudio.badge_checklist")}</span>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-petroleum dark:text-slate-100 mb-2">
-            {t("ova.podcaststudio.checklist_title")}
-          </h2>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">
-            {t("ova.podcaststudio.checklist_desc")}
-          </p>
-        </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-petroleum dark:text-slate-100 mb-2">
+              {t("ova.podcaststudio.checklist_title")}
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">
+              {t("ova.podcaststudio.checklist_desc")}
+            </p>
+          </div>
 
-        <StepIndicator current={3} total={3} />
+          <StepIndicator current={3} total={3} />
 
-        <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto" role="group" aria-label={t("ova.podcaststudio.checklist_title")}>
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-600 shadow-sm mb-6">
             <div className="flex justify-between items-center mb-4">
               <span className="text-sm font-bold text-petroleum dark:text-slate-100">
@@ -411,7 +426,14 @@ export default function OVAPodcastStudio({ onComplete }) {
                 {checkedCount}/{CHECKLIST_ITEMS.length}
               </span>
             </div>
-            <div className="w-full bg-slate-100 dark:bg-slate-700/50 rounded-full h-2.5 overflow-hidden">
+            <div
+              role="progressbar"
+              aria-valuenow={checkedCount}
+              aria-valuemin={0}
+              aria-valuemax={CHECKLIST_ITEMS.length}
+              aria-label={t("ova.podcaststudio.progress_label")}
+              className="w-full bg-slate-100 dark:bg-slate-700/50 rounded-full h-2.5 overflow-hidden"
+            >
               <div
                 className="bg-gradient-to-r from-corporate to-petroleum h-full rounded-full transition-all duration-500"
                 style={{ width: `${progress}%` }}
@@ -419,11 +441,12 @@ export default function OVAPodcastStudio({ onComplete }) {
             </div>
           </div>
 
-          <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-8">
             {CHECKLIST_ITEMS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => toggleCheck(item.id)}
+                aria-pressed={!!checked[item.id]}
                 className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all text-left ${
                   checked[item.id]
                     ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-300"
@@ -449,8 +472,8 @@ export default function OVAPodcastStudio({ onComplete }) {
           </div>
 
           {checkedCount === CHECKLIST_ITEMS.length && (
-            <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 text-center mb-6 ialab-animate-fade-in">
-              <div className="text-4xl mb-3">🎉</div>
+            <div role="alert" className="p-6 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 text-center mb-6 ialab-animate-fade-in">
+              <div className="text-4xl mb-3" aria-hidden="true">🎉</div>
               <h3 className="text-lg font-bold text-emerald-800 dark:text-emerald-200 mb-2">
                 {t("ova.podcaststudio.completed_title")}
               </h3>
@@ -473,5 +496,10 @@ export default function OVAPodcastStudio({ onComplete }) {
       </div>
       <OVAValerioBar text={getValerioText()} />
     </>
+    </SectionErrorBoundary>
   );
 }
+
+OVAPodcastStudio.propTypes = {
+  onComplete: PropTypes.func,
+};

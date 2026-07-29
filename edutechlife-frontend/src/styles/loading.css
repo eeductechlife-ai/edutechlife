@@ -592,6 +592,9 @@
 
 .loader-message {
   font-family: "Open Sans", sans-serif;
+  font-size: 0.95rem;
+  color: #4da8c4;
+}
 
 /* =========================
    SKELETON LOADERS
@@ -742,6 +745,4 @@
   50% {
     transform: scaleY(1);
   }
-}
-
 }

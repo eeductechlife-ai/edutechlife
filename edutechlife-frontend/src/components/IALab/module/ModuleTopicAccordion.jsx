@@ -9,23 +9,9 @@ import {
   getResourceTypesForTopic,
   countResourcesByType,
 } from "../constants/moduleResources";
-
-const getResourceIcon = (type) => {
-  if (type === "video") return "fa-video";
-  if (type === "pdf" || type === "document") return "fa-file-lines";
-  if (type === "ova" || type === "ova_interactive") return "fa-brain";
-  if (type === "image") return "fa-image";
-  return "fa-file";
-};
-
-const getResourceMeta = (res, t) => {
-  if (res.type === "video") return res.duration || "";
-  if (res.pages) return t("ialab.resource_pages", { pages: res.pages });
-  if (res.estimatedTime) return res.estimatedTime;
-  if (res.format) return res.format;
-  if (res.size) return res.size;
-  return "";
-};
+import TopicHeader from "./TopicHeader";
+import ResourceItem from "./ResourceItem";
+import ModuleProgressBar from "./ModuleProgressBar";
 
 const ModuleTopicAccordion = ({
   moduleData,
@@ -68,107 +54,16 @@ const ModuleTopicAccordion = ({
         const topicDuration = calculateTopicDuration(tema.title);
         return (
           <Fragment key={index}>
-            <div className="relative p-[1.5px] rounded-2xl bg-gradient-to-b from-slate-100/80 to-transparent dark:from-slate-700/40">
-              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-petroleum/[0.04] to-corporate/[0.02] rounded-full blur-2xl pointer-events-none" />
-              <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-gradient-to-tr from-petroleum/[0.03] to-corporate/[0.02] rounded-full blur-2xl pointer-events-none" />
-              <div
-                className={`absolute top-0 left-0 right-0 h-1.5 rounded-t-2xl transition-all duration-300 z-10 ${
-                  isTopicCompleted
-                    ? "bg-emerald-400"
-                    : "bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate"
-                }`}
-              />
-              <motion.button
-                data-testid={`topic-btn-${index}`}
-                whileHover={prefersReducedMotion ? {} : { scale: 1.005 }}
-                whileTap={prefersReducedMotion ? {} : { scale: 0.99 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                onClick={() => {
-                  setExpandedTopic((prev) => (prev === index ? null : index));
-                }}
-                aria-expanded={expandedTopic === index}
-                aria-controls={`topic-content-${index}`}
-                className={`group flex items-center gap-4 w-full px-5 py-4 bg-white dark:bg-slate-800 rounded-[calc(2rem-1.5px)] shadow-sm hover:shadow-lg hover:shadow-petroleum/5 transition-all duration-300 cursor-pointer text-left border border-transparent hover:border-petroleum/20 dark:hover:border-petroleum/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 ${
-                  isTopicCompleted
-                    ? "bg-gradient-to-r from-emerald-50/30 to-transparent dark:from-emerald-900/10"
-                    : ""
-                }`}
-                aria-label={t("ialab.topic.resources_aria", {
-                  title: tema.title,
-                })}
-              >
-                <div
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm transition-all duration-300 ${
-                    isTopicCompleted
-                      ? "bg-emerald-100 dark:bg-emerald-900/30"
-                      : "bg-gradient-to-br from-petroleum/15 to-corporate/15 group-hover:from-petroleum/20 group-hover:to-corporate/20 dark:from-petroleum/20 dark:to-corporate/20"
-                  }`}
-                >
-                  <Icon
-                    name={tema.icon}
-                    className={`text-xl ${
-                      isTopicCompleted
-                        ? "text-emerald-600 dark:text-emerald-400"
-                        : "text-petroleum dark:text-corporate"
-                    }`}
-                    aria-hidden="true"
-                  />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <h4
-                    className={`text-base font-semibold truncate transition-colors duration-300 flex items-center gap-2 font-montserrat ${
-                      isTopicCompleted
-                        ? "text-emerald-700 dark:text-emerald-400"
-                        : "text-slate-800 group-hover:text-petroleum dark:text-slate-100"
-                    }`}
-                  >
-                    {tema.title}
-                    {isTopicCompleted && (
-                      <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 dark:bg-emerald-900/40 dark:text-emerald-400 px-1.5 py-0.5 rounded-md flex-shrink-0">
-                        {t("ialab.completed")}
-                      </span>
-                    )}
-                  </h4>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-petroleum dark:text-petroleum bg-gradient-to-r from-petroleum/[0.06] to-transparent">
-                      <Icon
-                        name="fa-file"
-                        className="w-3 h-3"
-                        aria-hidden="true"
-                      />
-                      {tema.resources} {t("ialab.resources_label")}
-                    </span>
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium text-corporate bg-corporate/10 dark:bg-corporate/20">
-                      <Icon
-                        name="fa-clock"
-                        className="w-3 h-3"
-                        aria-hidden="true"
-                      />
-                      {topicDuration}
-                    </span>
-                  </div>
-                </div>
-
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ml-2 ${
-                    expandedTopic === index
-                      ? "bg-petroleum/10 rotate-180 dark:bg-petroleum/20"
-                      : "bg-corporate/15 group-hover:scale-110 group-hover:bg-petroleum/15 dark:bg-corporate/20"
-                  }`}
-                >
-                  <Icon
-                    name="fa-chevron-down"
-                    className={`w-3.5 h-3.5 transition-colors ${
-                      expandedTopic === index
-                        ? "text-petroleum"
-                        : "text-corporate"
-                    }`}
-                    aria-hidden="true"
-                  />
-                </div>
-              </motion.button>
-            </div>
+            <TopicHeader
+              tema={tema}
+              index={index}
+              expandedTopic={expandedTopic}
+              setExpandedTopic={setExpandedTopic}
+              isTopicCompleted={isTopicCompleted}
+              topicDuration={topicDuration}
+              prefersReducedMotion={prefersReducedMotion}
+              t={t}
+            />
 
             <AnimatePresence>
               {expandedTopic === index && topicResources?.resources && (
@@ -193,7 +88,7 @@ const ModuleTopicAccordion = ({
                     };
                     return (
                       <div
-                        className="flex gap-1.5 pl-14 pr-4 pb-2 flex-wrap"
+                        className="flex gap-1.5 pl-14 md:pl-8 lg:pl-14 pr-4 pb-2 flex-wrap"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <button
@@ -216,7 +111,7 @@ const ModuleTopicAccordion = ({
                     );
                   })()}
                   <motion.div
-                    className="pl-14 pr-4 pb-2 space-y-1.5"
+                    className="pl-14 md:pl-8 lg:pl-14 pr-4 pb-2 space-y-1.5"
                     variants={{
                       hidden: { opacity: 0 },
                       visible: {
@@ -239,195 +134,48 @@ const ModuleTopicAccordion = ({
                         const resourceLocked = isAdmin
                           ? false
                           : isResourceLocked(index, resIndex, resource.id);
-                        const isNextToView =
-                          !resourceLocked && !isResourceCompleted;
                         return (
-                          <motion.div
+                          <ResourceItem
                             key={resource.id}
-                            variants={{
-                              hidden: { opacity: 0, x: -8 },
-                              visible: {
-                                opacity: 1,
-                                x: 0,
-                                transition: {
-                                  type: "spring",
-                                  stiffness: 300,
-                                  damping: 24,
-                                },
-                              },
+                            resource={resource}
+                            isResourceCompleted={isResourceCompleted}
+                            resourceLocked={resourceLocked}
+                            justCompletedId={justCompletedId}
+                            bookmarkedIds={bookmarkedIds}
+                            toggleBookmark={toggleBookmark}
+                            prefersReducedMotion={prefersReducedMotion}
+                            t={t}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              useIALabStore.getState().setLastVisitedLesson(
+                                activeMod,
+                                index + 1,
+                              );
+                              const allResources =
+                                topicResources?.resources || [];
+                              const idx = allResources.findIndex(
+                                (r) => r.id === resource.id,
+                              );
+                              setSelectedResource(resource);
+                              setSelectedResourceType(resource.type);
+                              setCurrentTopicResources(allResources);
+                              setActiveResourceIndex(idx >= 0 ? idx : 0);
+                              setViewerModalOpen(true);
                             }}
-                          >
-                            <motion.button
-                              data-testid={`resource-btn-${resource.id}`}
-                              whileHover={
-                                prefersReducedMotion || resourceLocked
-                                  ? {}
-                                  : { x: 3 }
-                              }
-                              transition={{
-                                type: "spring",
-                                stiffness: 300,
-                                damping: 24,
-                              }}
-                              onClick={
-                                resourceLocked
-                                  ? undefined
-                                  : (e) => {
-                                      e.stopPropagation();
-                                      const allResources =
-                                        topicResources?.resources || [];
-                                      const idx = allResources.findIndex(
-                                        (r) => r.id === resource.id,
-                                      );
-                                      setSelectedResource(resource);
-                                      setSelectedResourceType(resource.type);
-                                      setCurrentTopicResources(allResources);
-                                      setActiveResourceIndex(
-                                        idx >= 0 ? idx : 0,
-                                      );
-                                      setViewerModalOpen(true);
-                                    }
-                              }
-                              className={`group/res relative overflow-hidden rounded-xl border transition-all duration-300 text-left ${
-                                isResourceCompleted
-                                  ? "bg-emerald-50/40 border-emerald-200/40 cursor-pointer"
-                                  : resourceLocked
-                                    ? "bg-slate-50/50 border-slate-200/40 cursor-not-allowed opacity-60 dark:bg-slate-800/40 dark:border-slate-700/30"
-                                    : "bg-white dark:bg-slate-800 border-slate-200/60 dark:border-slate-700/50 hover:border-corporate/40 hover:shadow-lg hover:shadow-corporate/5 cursor-pointer"
-                              } ${justCompletedId === resource.id ? "ialab-animate-shimmer-pulse" : ""}`}
-                            >
-                              {!isResourceCompleted && !resourceLocked && (
-                                <div className="absolute inset-0 bg-gradient-to-r from-corporate/[0.03] to-transparent opacity-0 group-hover/res:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                              )}
-                              <div className="relative flex items-center gap-3 p-3">
-                                <div
-                                  className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-                                    resourceLocked
-                                      ? "bg-slate-100 dark:bg-slate-700"
-                                      : isResourceCompleted
-                                        ? "bg-emerald-100 dark:bg-emerald-900/30"
-                                        : "bg-gradient-to-br from-petroleum/10 to-corporate/10 group-hover/res:from-petroleum/15 group-hover/res:to-corporate/15 dark:from-petroleum/20 dark:to-corporate/20"
-                                  }`}
-                                >
-                                  <Icon
-                                    name={
-                                      resourceLocked
-                                        ? "fa-lock"
-                                        : getResourceIcon(resource.type)
-                                    }
-                                    className={`w-4 h-4 ${
-                                      resourceLocked
-                                        ? "text-slate-300 dark:text-slate-500"
-                                        : isResourceCompleted
-                                          ? "text-emerald-600 dark:text-emerald-400"
-                                          : "text-petroleum"
-                                    }`}
-                                    aria-hidden="true"
-                                  />
-                                </div>
-                                <div className="flex-1 min-w-0 text-left">
-                                  <p
-                                    className={`text-sm font-medium truncate transition-colors ${
-                                      isResourceCompleted
-                                        ? "text-emerald-700 dark:text-emerald-400"
-                                        : resourceLocked
-                                          ? "text-slate-400"
-                                          : "text-slate-700 group-hover/res:text-petroleum dark:text-slate-200 dark:group-hover/res:text-petroleum"
-                                    }`}
-                                  >
-                                    {resource.title}
-                                  </p>
-                                  {getResourceMeta(resource, t) && (
-                                    <p
-                                      className={`text-xs mt-0.5 ${resourceLocked ? "text-slate-300" : "text-slate-600 dark:text-slate-400"}`}
-                                    >
-                                      {getResourceMeta(resource, t)}
-                                    </p>
-                                  )}
-                                </div>
-                                <span
-                                  className={`text-[10px] font-semibold px-3 py-1 rounded-full transition-all flex-shrink-0 ${
-                                    isResourceCompleted
-                                      ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
-                                      : resourceLocked
-                                        ? "bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500"
-                                        : "bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm"
-                                  }`}
-                                >
-                                  {isResourceCompleted
-                                    ? t("ialab.status.viewed")
-                                    : resourceLocked
-                                      ? t("ialab.status.locked")
-                                      : t("ialab.status.start_here")}
-                                </span>
-                                <div
-                                  onClick={(e) =>
-                                    toggleBookmark(resource.id, e)
-                                  }
-                                  onKeyDown={(e) => {
-                                    if (
-                                      e.key === "Enter" ||
-                                      e.key === " "
-                                    ) {
-                                      e.preventDefault();
-                                      toggleBookmark(resource.id, e);
-                                    }
-                                  }}
-                                  role="button"
-                                  tabIndex={0}
-                                  className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 cursor-pointer"
-                                  aria-label={
-                                    bookmarkedIds.includes(resource.id)
-                                      ? t("ialab.bookmark.remove")
-                                      : t("ialab.bookmark.save")
-                                  }
-                                >
-                                  <Icon
-                                    name="fa-bookmark"
-                                    className={`text-sm transition-all duration-300 ${
-                                      bookmarkedIds.includes(resource.id)
-                                        ? "text-amber-500 drop-shadow-sm"
-                                        : "text-slate-300 group-hover/res:text-amber-400 dark:text-slate-600"
-                                    }`}
-                                    aria-hidden="true"
-                                  />
-                                </div>
-                              </div>
-                            </motion.button>
-                          </motion.div>
+                          />
                         );
                       })}
                   </motion.div>
 
                   {totalResources > 0 && (
-                    <div className="pl-14 pr-4 pb-3 space-y-3">
+                    <div className="pl-14 md:pl-8 lg:pl-14 pr-4 pb-3 space-y-3">
                       <div className="flex items-center gap-3">
-                        <div
-                          className="flex-1 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden shadow-inner"
-                          role="progressbar"
-                          aria-valuenow={Math.round(
-                            (topicCompletedCount / totalResources) * 100,
-                          )}
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          aria-label={t("ialab.topic.progress_aria", {
-                            completed: topicCompletedCount,
-                            total: totalResources,
-                          })}
-                        >
-                          <motion.div
-                            className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full relative overflow-hidden"
-                            initial={{ width: 0 }}
-                            animate={{
-                              width: `${Math.round((topicCompletedCount / totalResources) * 100)}%`,
-                            }}
-                            transition={{
-                              duration: 0.6,
-                              ease: [0.32, 0.72, 0, 1],
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
-                          </motion.div>
+                        <div className="flex-1" role="none">
+                          <ModuleProgressBar
+                            viewedCount={topicCompletedCount}
+                            totalCount={totalResources}
+                            t={t}
+                          />
                         </div>
                         <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">
                           {t("ialab.topic.completed", {

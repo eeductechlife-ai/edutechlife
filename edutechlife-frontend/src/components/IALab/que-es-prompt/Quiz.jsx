@@ -72,6 +72,7 @@ const Quiz = ({ onComplete }) => {
           <button
             key={i}
             onClick={() => handleSelect(i)}
+            aria-pressed={selected === i}
             className={`p-4 rounded-2xl text-left text-sm font-bold border-2 transition-all ${
               showFeedback
                 ? i === questions[currentQ].c ? 'bg-green-50 dark:bg-green-900/30 border-green-500 text-green-700 dark:text-green-300' : selected === i ? 'bg-red-50 dark:bg-red-900/30 border-red-500 text-red-700 dark:text-red-300' : 'bg-slate-50 dark:bg-slate-700/30 border-transparent opacity-50'
@@ -83,7 +84,7 @@ const Quiz = ({ onComplete }) => {
         ))}
       </div>
       {showFeedback && (
-        <div className="p-5 bg-slate-100 dark:bg-slate-700/50 rounded-[2rem] animate-[slideInFromTop_0.4s_cubic-bezier(0.16,1,0.3,1)_forwards]">
+        <div role="alert" className="p-5 bg-slate-100 dark:bg-slate-700/50 rounded-[2rem] animate-[slideInFromTop_0.4s_cubic-bezier(0.16,1,0.3,1)_forwards]">
           <p className="text-xs font-bold leading-relaxed">{questions[currentQ].f}</p>
           <button onClick={handleNext} className="mt-4 w-full py-3 bg-[#0D2B5B] text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs">
             {currentQ === 4 ? t('ialab.que_es_prompt.quiz_see_results') : t('ialab.que_es_prompt.quiz_continue')} <ChevronRight size={14}/>

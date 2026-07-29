@@ -125,6 +125,7 @@ const OVAIntro = ({
         >
           <button
             onClick={handleStart}
+            aria-label={startLabel || t("ialab.ova.start")}
             className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-corporate to-petroleum text-white font-bold text-sm shadow-lg shadow-corporate/25 hover:shadow-xl hover:shadow-corporate/30 hover:-translate-y-0.5 transition-all"
           >
             <span className="flex items-center gap-2">
@@ -146,6 +147,7 @@ const OVAIntro = ({
                   setAudioPlaying(true);
                 }
               }}
+              aria-label={audioPlaying ? t("ialab.voice_reader.stop") : t("ialab.voice_reader.listen")}
               className={cn(
                 "px-6 py-3 rounded-2xl font-semibold text-xs sm:text-sm transition-all border-2",
                 audioPlaying

@@ -157,7 +157,7 @@ const COURSE_KNOWLEDGE = [
           "Descubrir por qué Gemini ve el mundo diferente a ChatGPT, Claude y otros modelos",
         ],
         resources: [
-          { type: "video", title: "Gemini en 14 Minutos: Tu Primera Inmersión", duration: "14:10" },
+          { type: "video", title: "Gemini: Tu Primera Inmersión", duration: "7:34" },
           { type: "pdf", title: "El Compendio del Detective: 16 Páginas de Poder Multimodal", pages: 16 },
           { type: "ova", title: "Laboratorio: Pon a Prueba tu Lupa Multimodal" },
         ],
@@ -227,7 +227,7 @@ const COURSE_KNOWLEDGE = [
           {
             type: "video",
             title: "Primeros Pasos con NotebookLM",
-            duration: "12:30",
+            duration: "10:15",
           },
           { type: "pdf", title: "Guía de NotebookLM", pages: 14 },
           { type: "ova", title: "Laboratorio: Crea tu Notebook" },

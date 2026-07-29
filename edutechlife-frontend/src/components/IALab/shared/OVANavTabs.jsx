@@ -26,6 +26,7 @@ const OVANavTabs = ({
         {showNav && currentIndex > 0 ? (
           <button
             onClick={onPrev}
+            aria-label={prevLabel || t('ova.nav.prev')}
             className="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-corporate transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <Icon name="fa-chevron-left" className="text-xs" />
@@ -36,11 +37,13 @@ const OVANavTabs = ({
         )}
 
         {showTabs && (
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2" role="tablist">
             {tabs.map((tab, idx) => (
               <button
                 key={tab.id || idx}
                 onClick={() => onTabChange?.(idx)}
+                role="tab"
+                aria-selected={tab.id === activeTab || idx === currentIndex}
                 className={cn(
                   'relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl transition-all',
                   tab.id === activeTab || idx === currentIndex
@@ -58,6 +61,7 @@ const OVANavTabs = ({
         {showNav && currentIndex < totalTabs - 1 ? (
           <button
             onClick={onNext}
+            aria-label={nextLabel || t('ova.nav.next')}
             className="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-corporate transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             {nextLabel || t('ova.nav.next')}

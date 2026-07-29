@@ -70,20 +70,19 @@ const IALabHeader = () => {
         )}
       </div>
 
-      {/* Barra de búsqueda global e idioma */}
+      {/* Barra de búsqueda global */}
       <div className="hidden md:flex items-center gap-3">
         <GlobalSearchBar />
-        <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
-        <LocaleSwitcher />
       </div>
 
       <div className="flex items-center gap-4">
+        <LocaleSwitcher />
         {/* Campana de notificaciones */}
         <div className="relative">
           <button
             ref={notifTriggerRef}
             onClick={() => setNotifOpen(!notifOpen)}
-            className={`relative flex items-center justify-center p-2 rounded-xl border bg-white dark:bg-slate-800 transition-all duration-200 group ${
+            className={`relative flex items-center justify-center p-2 min-w-[44px] min-h-[44px] rounded-xl border bg-white dark:bg-slate-800 transition-all duration-200 group ${
               notifOpen
                 ? 'border-petroleum/30 dark:border-petroleum/40 shadow-sm bg-gradient-to-br from-petroleum/5 to-corporate/5'
                 : 'border-transparent hover:border-petroleum/20 dark:hover:border-petroleum/40 hover:shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700'
@@ -124,7 +123,7 @@ const IALabHeader = () => {
 
         <button
           onClick={toggleDarkMode}
-          className={`relative flex items-center justify-center p-2 rounded-xl border transition-all duration-200 group ${isDarkMode ? 'bg-amber-400/10 border-amber-400/30' : 'border-transparent hover:border-petroleum/20 hover:shadow-sm hover:bg-slate-50 dark:hover:border-petroleum/40 dark:hover:bg-slate-700'}`}
+          className={`relative flex items-center justify-center p-2 min-w-[44px] min-h-[44px] rounded-xl border transition-all duration-200 group ${isDarkMode ? 'bg-amber-400/10 border-amber-400/30' : 'border-transparent hover:border-petroleum/20 hover:shadow-sm hover:bg-slate-50 dark:hover:border-petroleum/40 dark:hover:bg-slate-700'}`}
           aria-label={isDarkMode ? t('header.light_mode') : t('header.dark_mode')}
         >
           <Icon name={isDarkMode ? 'fa-sun' : 'fa-moon'} className={`text-lg transition-all duration-200 ${isDarkMode ? 'text-amber-400' : 'text-corporate group-hover:text-petroleum'}`} aria-hidden="true" />

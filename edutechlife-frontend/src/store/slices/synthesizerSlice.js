@@ -1,13 +1,4 @@
 export const createSynthesizerSlice = (set, get) => ({
-  input: '',
-  setInput: (v) => set({ input: v }),
-  genData: null,
-  setGenData: (v) => set({ genData: v }),
-  loading: false,
-  setLoading: (v) => set({ loading: v }),
-  loadMsg: '',
-  setLoadMsg: (v) => set({ loadMsg: v }),
-
   coachQ: '',
   setCoachQ: (v) => set({ coachQ: v }),
   coachMsg: '',

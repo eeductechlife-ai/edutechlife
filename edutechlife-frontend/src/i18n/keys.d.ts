@@ -1927,6 +1927,10 @@ export type TranslationKeys = {
   "ialab.status.locked": string;
   "ialab.status.start_here": string;
   "ialab.status.viewed": string;
+  "ialab.study_calendar.deadlines": string;
+  "ialab.study_calendar.no_deadlines": string;
+  "ialab.study_calendar.pending_exam": string;
+  "ialab.study_calendar.pending_challenge": string;
   "ialab.study_planner.active_days": string;
   "ialab.study_planner.auto_save": string;
   "ialab.study_planner.close_aria": string;
@@ -2056,6 +2060,8 @@ export type TranslationKeys = {
   "ialab.topic_resources.select_resource": string;
   "ialab.tour.aria_label": string;
   "ialab.tour.next": string;
+  "ialab.tour.restart_title": string;
+  "ialab.tour.restart_aria": string;
   "ialab.tour.skip": string;
   "ialab.tour.start": string;
   "ialab.tour.step_0_desc": string;

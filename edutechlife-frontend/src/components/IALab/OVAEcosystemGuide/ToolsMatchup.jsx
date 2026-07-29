@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../../../i18n/I18nProvider';
 import { Search, Layout, Database, CheckCircle2 } from 'lucide-react';
@@ -51,6 +52,7 @@ export default function ToolsMatchup({ items }) {
                 onClick={() => handleToolClick(i)}
                 whileHover={!matched ? { scale: 1.02 } : {}}
                 whileTap={!matched ? { scale: 0.98 } : {}}
+                aria-pressed={selected === i}
                 className={`w-full p-3 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${matched ? 'bg-green-50 border-green-300 dark:bg-green-900/20 dark:border-green-700' : selected === i ? 'bg-blue-50 border-corporate' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate/50'}`}
               >
                 {matched ? (
@@ -101,3 +103,11 @@ export default function ToolsMatchup({ items }) {
     </div>
   );
 }
+
+ToolsMatchup.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+  })),
+};

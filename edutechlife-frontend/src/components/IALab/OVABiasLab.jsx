@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 import VoiceReader from "./VoiceReader";
 import SectionErrorBoundary from "./SectionErrorBoundary";
 import { FOCUS_RING } from "./constants/styles";
@@ -18,7 +19,8 @@ import {
   Gamepad2,
 } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
-import { contentData, gameData } from "../../data/ova/biasLab";
+import { contentData, gameData, learningObjectives } from "../../data/ova/biasLab";
+import { OVAIntro } from "./shared";
 
 const BrainIcon = ({ className = "" }) => (
   <svg
@@ -54,6 +56,7 @@ const EdutechLogo = () => (
 export default function OVABiasLab({ onComplete }) {
   const { t } = useTranslation();
   const certCompletedRef = useRef(false);
+  const [showWelcome, setShowWelcome] = useState(true);
   const [activeSection, setActiveSection] = useState("intro");
   const [shuffledCases, setShuffledCases] = useState([]);
   const [shuffledConcepts, setShuffledConcepts] = useState([]);
@@ -100,13 +103,30 @@ export default function OVABiasLab({ onComplete }) {
     { id: "game", icon: <Gamepad2 size={18} /> },
   ];
 
+  if (showWelcome) {
+    return (
+      <SectionErrorBoundary name="OVABiasLab">
+        <OVAIntro
+          icon="fa-brain"
+          badge={t("ova.biaslab.badge")}
+          title={t("ova.biaslab.welcome_title")}
+          description={t("ova.biaslab.welcome_desc")}
+          audioText={t("ova.biaslab.welcome_voice")}
+          onStart={() => setShowWelcome(false)}
+          startLabel={t("ova.biaslab.start_btn")}
+          objectives={learningObjectives}
+        />
+      </SectionErrorBoundary>
+    );
+  }
+
   return (
     <SectionErrorBoundary name="OVABiasLab">
       <div className="w-full bg-blue-50 dark:bg-slate-900 text-slate-800 font-sans flex flex-col md:flex-row overflow-hidden relative min-h-[500px]">
         <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#EAEAEA_1px,transparent_1px),linear-gradient(to_bottom,#EAEAEA_1px,transparent_1px)] bg-[length:50px_50px]" />
         <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(0,188,212,0.15)_0%,rgba(255,255,255,0)_70%)]" />
         <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(10,53,80,0.08)_0%,rgba(255,255,255,0)_70%)]" />
-        <aside className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-screen border-r border-blue-100">
+        <aside role="dialog" aria-modal="false" aria-label={t("ova.biaslab.sidebar_subtitle")} className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-screen border-r border-blue-100">
           <div className="p-6 text-center border-b border-blue-50">
             <EdutechLogo />
             <p className="text-[10px] uppercase mt-2 text-slate-600 dark:text-slate-300 font-bold tracking-[0.2em]">
@@ -118,6 +138,7 @@ export default function OVABiasLab({ onComplete }) {
               <button
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
+                aria-current={activeSection === item.id ? "true" : undefined}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl ${FOCUS_RING} min-w-max md:min-w-0 ${activeSection === item.id ? "bg-gradient-to-r from-corporate to-petroleum-dark text-white font-semibold shadow-lg" : "text-slate-500 dark:text-slate-400 hover:bg-corporate/10 hover:text-petroleum"}`}
               >
                 {item.icon}
@@ -285,6 +306,7 @@ export default function OVABiasLab({ onComplete }) {
                             key={item.id}
                             disabled={matchedPairs.includes(item.id)}
                             onClick={() => setSelectedCase(item)}
+                            aria-pressed={selectedCase?.id === item.id}
                             className={`w-full p-4 text-left text-sm rounded-2xl border-2 ${FOCUS_RING} ${matchedPairs.includes(item.id) ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 text-emerald-700 dark:text-emerald-300 opacity-50" : selectedCase?.id === item.id ? "border-corporate bg-[#E0F7FA] shadow-md scale-105" : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate"} ${isError && selectedCase?.id === item.id ? "animate-[shake_0.4s_ease-in-out] border-rose-400 bg-rose-50 dark:bg-rose-900/20" : ""}`}
                           >
                             {item.case}
@@ -297,6 +319,8 @@ export default function OVABiasLab({ onComplete }) {
                             key={item.id}
                             disabled={matchedPairs.includes(item.id)}
                             onClick={() => setSelectedConcept(item)}
+                            aria-pressed={selectedConcept?.id === item.id}
+                            aria-label={item.concept}
                             className={`w-full p-4 text-center font-bold rounded-2xl border-2 ${FOCUS_RING} ${matchedPairs.includes(item.id) ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 text-emerald-700 dark:text-emerald-300 opacity-50" : selectedConcept?.id === item.id ? "border-corporate bg-[#E0F7FA] shadow-md scale-105" : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate"} ${isError && selectedConcept?.id === item.id ? "animate-[shake_0.4s_ease-in-out] border-rose-400 bg-rose-50 dark:bg-rose-900/20" : ""}`}
                           >
                             {item.concept}
@@ -328,7 +352,7 @@ export default function OVABiasLab({ onComplete }) {
               </div>
             )}
           </div>
-          <footer className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4">
+          <footer className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4" aria-label={t("ova.biaslab.footer")}>
             {t("ova.biaslab.footer")}
           </footer>
         </main>
@@ -336,3 +360,7 @@ export default function OVABiasLab({ onComplete }) {
     </SectionErrorBoundary>
   );
 }
+
+OVABiasLab.propTypes = {
+  onComplete: PropTypes.func,
+};

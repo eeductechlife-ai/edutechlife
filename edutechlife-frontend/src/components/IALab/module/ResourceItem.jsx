@@ -131,7 +131,7 @@ const ResourceItem = ({
           }}
           role="button"
           tabIndex={0}
-          className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 cursor-pointer"
+          className="flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 cursor-pointer"
           aria-label={
             bookmarkedIds.includes(resource.id)
               ? t("ialab.bookmark.remove")

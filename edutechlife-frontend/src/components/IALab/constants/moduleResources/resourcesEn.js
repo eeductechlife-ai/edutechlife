@@ -108,9 +108,9 @@ const RESOURCES_EN = {
         id: "chatgpt-video-1",
         type: "video",
         title: "ChatGPT from Scratch in 6 Minutes",
-        url: "https://www.youtube.com/embed/iOlo-K7yj2M",
+        url: "https://www.youtube.com/embed/yQKR-jRF5pQ",
         duration: "5:43",
-        thumbnail: "https://img.youtube.com/vi/iOlo-K7yj2M/maxresdefault.jpg",
+        thumbnail: "https://img.youtube.com/vi/yQKR-jRF5pQ/maxresdefault.jpg",
         provider: "youtube",
         description:
           "Learn to use ChatGPT like an architect uses their blueprints: from the first sketch to the finished structure, even if you've never opened it before.",
@@ -243,13 +243,13 @@ const RESOURCES_EN = {
       {
         id: "gemini-video-1",
         type: "video",
-        title: "Gemini in 14 Minutes: Accelerated Detective Training",
+        title: "Gemini: Accelerated Detective Training",
         url: "https://www.youtube.com/embed/XV-2xnFMJqI",
-        duration: "14:10",
+        duration: "7:34",
         thumbnail: "https://img.youtube.com/vi/XV-2xnFMJqI/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Discover the power of your new magnifying glass: from analyzing images like a forensics expert to writing code like a developer. Everything Gemini can do for you, explained in 14 minutes.",
+          "Discover the power of your new magnifying glass: from analyzing images like a forensics expert to writing code like a developer. Everything Gemini can do for you, explained in 7 minutes.",
       },
       {
         id: "gemini-guide-1",
@@ -401,11 +401,11 @@ const RESOURCES_EN = {
         type: "video",
         title: "First Steps with NotebookLM",
         url: "https://www.youtube.com/embed/PV0oNcmIYII",
-        duration: "12:30",
+        duration: "10:15",
         thumbnail: "https://img.youtube.com/vi/PV0oNcmIYII/maxresdefault.jpg",
         provider: "youtube",
         description:
-          "Discover in 12 minutes how your documents come to life: ask questions, get summaries, and verify every fact with exact citations. Digital alchemy starts here.",
+          "Discover in 10 minutes how your documents come to life: ask questions, get summaries, and verify every fact with exact citations. Digital alchemy starts here.",
       },
       {
         id: "notebooklm-guide-1",

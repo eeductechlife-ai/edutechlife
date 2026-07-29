@@ -1,3 +1,5 @@
+import { modules, modules_en } from "../../../data/ialab";
+
 const SECTION_DATA_ES = {
   videos: {
     id: 'videos',
@@ -44,28 +46,24 @@ const SECTION_DATA_EN = {
   },
 };
 
-const MODULE_DATA_ES = [
-  { id: 1, title: 'Introducción a IA Generativa', level: 'Principiante', progress: 100, locked: false },
-  { id: 2, title: 'Fundamentos de Machine Learning', level: 'Principiante', progress: 100, locked: false },
-  { id: 3, title: 'Redes Neuronales', level: 'Intermedio', progress: 30, locked: true },
-  { id: 4, title: 'Deep Learning Avanzado', level: 'Avanzado', progress: 0, locked: true },
-  { id: 5, title: 'Proyecto Final', level: 'Avanzado', progress: 0, locked: true },
-];
+const deriveModuleData = (source) =>
+  source.map((m) => ({
+    id: m.id,
+    title: m.title,
+    level: m.level,
+    progress: 0,
+    locked: true,
+  }));
 
-const MODULE_DATA_EN = [
-  { id: 1, title: 'Introduction to Generative AI', level: 'Beginner', progress: 100, locked: false },
-  { id: 2, title: 'Machine Learning Fundamentals', level: 'Beginner', progress: 100, locked: false },
-  { id: 3, title: 'Neural Networks', level: 'Intermediate', progress: 30, locked: true },
-  { id: 4, title: 'Advanced Deep Learning', level: 'Advanced', progress: 0, locked: true },
-  { id: 5, title: 'Final Project', level: 'Advanced', progress: 0, locked: true },
-];
+const MODULE_DATA_ES = deriveModuleData(modules);
+const MODULE_DATA_EN = deriveModuleData(modules_en);
 
 export const COURSE_DATA = {
-  duration: '2h',
-  level: 'Intermedio',
+  duration: modules[0]?.duration || '2h',
+  level: modules[0]?.level || 'Intermedio',
   rating: '4.8',
-  videos: 42,
-  proyectos: 5,
+  videos: modules.reduce((sum, m) => sum + (m.videos || 0), 0),
+  proyectos: modules.reduce((sum, m) => sum + (m.projects || 0), 0),
 };
 
 const getData = (locale = 'es') => locale === 'en'

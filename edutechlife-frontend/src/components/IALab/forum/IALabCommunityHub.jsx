@@ -9,6 +9,8 @@ import IALabForumFilterBar from './IALabForumFilterBar';
 import IALabForumSearchBar from './IALabForumSearchBar';
 import IALabForumPostList from './IALabForumPostList';
 import IALabForumPostDetail from './IALabForumPostDetail';
+import IALabForumBestAnswer from './IALabForumBestAnswer';
+import IALabForumVoteButtons from './IALabForumVoteButtons';
 import IALabForumNotifications from './IALabForumNotifications';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
@@ -39,13 +41,15 @@ const IALabCommunityHub = ({ onAction }) => {
       <div className="absolute -top-6 -right-6 w-48 h-48 bg-gradient-to-br from-petroleum/5 to-corporate/3 rounded-full blur-2xl pointer-events-none" />
       <div className="absolute -bottom-6 -left-6 w-36 h-36 bg-gradient-to-tr from-petroleum/3 to-corporate/2 rounded-full blur-2xl pointer-events-none" />
 
-      <div className="relative">
+      <div className="relative overflow-hidden">
         {selectedPost ? (
-          <IALabForumPostDetail
-            post={selectedPost}
-            onBack={handleBackToList}
-            onAction={onAction}
-          />
+          <IALabForumBestAnswer postId={selectedPost.id} postAuthorId={selectedPost.user_id} comments={[]}>
+            <IALabForumPostDetail
+              post={selectedPost}
+              onBack={handleBackToList}
+              onAction={onAction}
+            />
+          </IALabForumBestAnswer>
         ) : (
           <>
             <div className="flex items-center justify-between mb-4">

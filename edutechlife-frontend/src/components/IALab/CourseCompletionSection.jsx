@@ -128,7 +128,7 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
             whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
             whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
             onClick={onViewCertificate}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white rounded-xl text-petroleum font-bold text-xs shadow-md hover:shadow-lg transition-all duration-300"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] bg-white rounded-xl text-petroleum font-bold text-xs shadow-md hover:shadow-lg transition-all duration-300"
           >
             <Icon name="fa-award" className="text-sm" />
             {t('course_completion.view_cert')}

@@ -134,7 +134,7 @@ const GlobalSearchBar = forwardRef(function GlobalSearchBar({ mobile, onClose },
     return (
       <div ref={ref} role="dialog" aria-modal="true" aria-label={t('ialab.search_aria')} className="fixed inset-0 z-[1002] bg-white dark:bg-slate-900 flex flex-col">
         <div className="flex items-center gap-3 p-4 border-b border-slate-200 dark:border-slate-700">
-          <button onClick={onClose} className="w-9 h-9 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 -ml-1" aria-label={t('ialab.global_search.close_aria')}>
+          <button onClick={onClose} className="w-11 h-11 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 -ml-1" aria-label={t('ialab.global_search.close_aria')}>
             <Icon name="fa-arrow-left" className="text-lg" aria-hidden="true" />
           </button>
           <div className="flex-1 relative">

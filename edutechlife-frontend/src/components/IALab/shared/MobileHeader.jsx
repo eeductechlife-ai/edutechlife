@@ -43,6 +43,7 @@ const MobileHeader = ({
           aria-label={t("ialab.menu_aria")}
           aria-controls="ialab-mobile-menu"
           aria-expanded="false"
+          data-tour="tour-undermenu-mobile"
         >
           <svg
             className="w-6 h-6 text-petroleum dark:text-corporate"

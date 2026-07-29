@@ -46,6 +46,7 @@ const IALabSidebar = () => {
 
   return (
     <motion.aside
+      id="ialab-sidebar-panel"
       data-testid="ialab-sidebar"
       role="navigation"
       aria-label={t('sidebar.panel_aria')}
@@ -74,6 +75,7 @@ const IALabSidebar = () => {
             whileTap={{ scale: 0.95 }}
             aria-label={isCollapsed ? t('sidebar.expand') : t('sidebar.collapse')}
             aria-expanded={!isCollapsed}
+            aria-controls="ialab-sidebar-panel"
           >
             <div className="absolute -left-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <div className="w-2 h-2 bg-petroleum/20 dark:bg-corporate/30 rotate-45" />

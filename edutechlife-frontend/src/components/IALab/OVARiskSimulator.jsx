@@ -7,6 +7,7 @@ import VoiceReader from "./VoiceReader";
 import { Brain, Award, Star, Scale, Shield, Search } from "lucide-react";
 import { gameData, accordionData, mitigations } from "../../data/ova/riskSim";
 import useFocusTrap from "../../hooks/useFocusTrap";
+import { OVAIntro } from "./shared";
 
 const EdutechLogo = () => (
   <div className="flex items-center gap-2 select-none">
@@ -21,13 +22,10 @@ const EdutechLogo = () => (
   </div>
 );
 
-OVARiskSimulator.propTypes = {
-  onComplete: PropTypes.func,
-};
-
 export default function OVARiskSimulator({ onComplete }) {
   const { t } = useTranslation();
   const certCompletedRef = useRef(false);
+  const [showWelcome, setShowWelcome] = useState(true);
   const [activeTab, setActiveTab] = useState("content");
   const [openAccordion, setOpenAccordion] = useState(null);
   const [openModal, setOpenModal] = useState(null);
@@ -68,6 +66,7 @@ export default function OVARiskSimulator({ onComplete }) {
           <div key={id} className={`${GLASS_CARD} rounded-xl overflow-hidden`}>
             <button
               onClick={() => setOpenAccordion(isOpen ? null : id)}
+              aria-expanded={isOpen}
               className={`w-full text-left p-4 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 flex justify-between items-center font-bold text-petroleum-dark dark:text-slate-100 text-base ${FOCUS_RING}`}
             >
               <span>
@@ -120,6 +119,7 @@ export default function OVARiskSimulator({ onComplete }) {
             </h3>
             <button
               onClick={() => setOpenModal(null)}
+              aria-label={t("common.close")}
               className={`text-gray-400 hover:text-red-500 text-2xl ${FOCUS_RING} rounded-lg`}
             >
               &times;
@@ -152,6 +152,7 @@ export default function OVARiskSimulator({ onComplete }) {
               <button
                 key={i}
                 onClick={() => setStarIndex(i)}
+                aria-pressed={solvedStars.includes(i)}
                 className={`text-5xl focus:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2 rounded-xl transition-all duration-300 hover:scale-110 ${solvedStars.includes(i) ? "text-yellow-400 opacity-70 pointer-events-none" : "text-gray-400 hover:text-yellow-400"}`}
                 disabled={solvedStars.includes(i)}
               >
@@ -197,15 +198,16 @@ export default function OVARiskSimulator({ onComplete }) {
             </button>
           ))}
         </div>
-        {showFeedback && (
-          <div
-            className={`mt-6 p-4 rounded-xl font-medium max-w-xl mx-auto ${selectedAnswer === data.correct ? "bg-emerald-100 text-emerald-800 border border-emerald-300" : "bg-red-100 text-red-800 border border-red-300"}`}
-          >
-            {selectedAnswer === data.correct
-              ? data.feedback
-              : t("ova.risksim.fallback_feedback")}
-          </div>
-        )}
+          {showFeedback && (
+            <div
+              role="alert"
+              className={`mt-6 p-4 rounded-xl font-medium max-w-xl mx-auto ${selectedAnswer === data.correct ? "bg-emerald-100 text-emerald-800 border border-emerald-300" : "bg-red-100 text-red-800 border border-red-300"}`}
+            >
+              {selectedAnswer === data.correct
+                ? data.feedback
+                : t("ova.risksim.fallback_feedback")}
+            </div>
+          )}
         {showFeedback && (
           <button
             onClick={resetGame}
@@ -217,6 +219,28 @@ export default function OVARiskSimulator({ onComplete }) {
       </div>
     );
   };
+
+  if (showWelcome) {
+    return (
+      <SectionErrorBoundary name="OVARiskSimulator">
+        <OVAIntro
+          icon="fa-brain"
+          badge={t("ova.risksim.badge")}
+          title={t("ova.risksim.title")}
+          description={t("ova.risksim.subtitle")}
+          audioText={t("ova.risksim.welcome_voice")}
+          onStart={() => setShowWelcome(false)}
+          startLabel={t("ova.risksim.start_btn")}
+          objectives={[
+            t("ova.risksim.learning_obj_1"),
+            t("ova.risksim.learning_obj_2"),
+            t("ova.risksim.learning_obj_3"),
+            t("ova.risksim.learning_obj_4"),
+          ]}
+        />
+      </SectionErrorBoundary>
+    );
+  }
 
   return (
     <SectionErrorBoundary name="OVARiskSimulator">
@@ -234,13 +258,15 @@ export default function OVARiskSimulator({ onComplete }) {
               <VoiceReader text={t("ova.risksim.welcome_voice")} />
             </div>
           </div>
-          <div className="flex border-b border-gray-100 dark:border-slate-700">
+          <div className="flex border-b border-gray-100 dark:border-slate-700" role="tablist">
             {[
               { id: "content", label: t("ova.risksim.tab_content") },
               { id: "game", label: t("ova.risksim.tab_game") },
             ].map((tab) => (
               <button
                 key={tab.id}
+                role="tab"
+                aria-selected={activeTab === tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 py-3 text-sm font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-inset transition-all ${activeTab === tab.id ? "text-corporate border-b-2 border-corporate bg-[#E0F7FA]/30" : "text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300"}`}
               >
@@ -353,3 +379,7 @@ export default function OVARiskSimulator({ onComplete }) {
     </SectionErrorBoundary>
   );
 }
+
+OVARiskSimulator.propTypes = {
+  onComplete: PropTypes.func,
+};

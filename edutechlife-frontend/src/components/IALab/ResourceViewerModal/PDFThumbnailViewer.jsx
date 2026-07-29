@@ -5,7 +5,6 @@ import { useTranslation } from '../../../i18n/I18nProvider';
 
 const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
   const { t } = useTranslation();
-  const openFullScreen = () => window.open(resource.url, '_blank');
   const [hasScrolledEnough, setHasScrolledEnough] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [loadError, setLoadError] = useState(false);
@@ -47,21 +46,13 @@ const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex justify-between items-center mb-2 px-1 gap-3">
-        <button
-          onClick={openFullScreen}
-          className="text-sm font-medium text-petroleum border border-slate-200 dark:border-slate-600 hover:bg-petroleum/5 hover:border-corporate/30 py-1.5 px-3 rounded-xl transition-all duration-200 flex items-center gap-2"
-        >
-          <Icon name="fa-external-link-alt" className="w-3.5 h-3.5" />
-          {t('ialab.viewer_modal.open_new_tab')}
-          <Icon name="fa-arrow-up-right-from-square" className="w-3 h-3" />
-        </button>
-        {!completedRef.current && !hasScrolledEnough && (
-          <span className="text-xs text-corporate bg-corporate/10 px-3 py-1 rounded-full font-medium flex-shrink-0 backdrop-blur-sm">
+      {!completedRef.current && !hasScrolledEnough && (
+        <div className="mb-2 px-1">
+          <span className="text-xs text-corporate bg-corporate/10 px-3 py-1 rounded-full font-medium backdrop-blur-sm">
             {t('ialab.viewer_modal.scroll_to_end')}
           </span>
-        )}
-      </div>
+        </div>
+      )}
       <div 
         ref={scrollRef}
         onScroll={handleScroll}
@@ -73,16 +64,10 @@ const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
             <Icon name="fa-file-pdf" className="text-petroleum/30 w-16 h-16 mb-4" />
             <p className="text-petroleum font-semibold mb-2">{t('ialab.viewer_modal.cannot_load')}</p>
             <p className="text-petroleum/60 text-sm mb-6">{t('ialab.viewer_modal.try_download')}</p>
-            <div className="flex gap-3">
-              <a href={resource.url} download className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-lg hover:from-corporate-deep hover:to-corporate-darker transition-colors flex items-center gap-2 font-medium">
-                <Icon name="fa-download" className="w-4 h-4" />
-                {t('ialab.viewer_modal.download')}
-              </a>
-              <button onClick={() => window.open(resource.url, '_blank')} className="px-6 py-3 border-2 border-petroleum/20 text-petroleum rounded-lg hover:bg-petroleum/5 transition-colors flex items-center gap-2 font-medium">
-                <Icon name="fa-external-link-alt" className="w-4 h-4" />
-                {t('ialab.viewer_modal.open_new_tab')}
-              </button>
-            </div>
+            <a href={resource.url} download className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-lg hover:from-corporate-deep hover:to-corporate-darker transition-colors flex items-center gap-2 font-medium">
+              <Icon name="fa-download" className="w-4 h-4" />
+              {t('ialab.viewer_modal.download')}
+            </a>
           </div>
         ) : (
           <iframe

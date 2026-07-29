@@ -1,0 +1,3 @@
+# Clerk sends webhooks without Supabase JWT — skip JWT verification
+[auth]
+verify_jwt = false
