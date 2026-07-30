@@ -230,6 +230,68 @@ router.post('/register', async (req, res) => {
 });
 
 /**
+ * POST /api/auth/login
+ * Log in a user with email + password (Supabase Auth)
+ *
+ * Body: { email: string (required), password: string (required) }
+ * Returns: { success, token, email, user }
+ */
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        error: 'missing_fields',
+        message: 'Correo y contraseña son requeridos.',
+      });
+    }
+
+    // Authenticate against Supabase Auth
+    const { data: signInData, error: signInError } =
+      await supabase.auth.signInWithPassword({ email, password });
+
+    if (signInError || !signInData?.session) {
+      const msg = (signInError?.message || '').toLowerCase();
+      // Distinguish unconfirmed email from wrong credentials
+      if (msg.includes('confirm')) {
+        return res.status(403).json({
+          error: 'email_not_confirmed',
+          message: 'Debes confirmar tu correo antes de iniciar sesión.',
+        });
+      }
+      return res.status(401).json({
+        error: 'invalid_credentials',
+        message: 'Correo o contraseña incorrectos.',
+      });
+    }
+
+    // Fetch profile row (non-blocking if missing)
+    const { data: profile } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single();
+
+    req.log.info('User logged in', { email });
+
+    res.json({
+      success: true,
+      token: signInData.session.access_token,
+      email,
+      user: profile || null,
+    });
+  } catch (err) {
+    console.error('Login error:', err);
+    req.log.error('Unexpected error in auth login', { error: err.message });
+    res.status(500).json({
+      error: 'internal_error',
+      message: 'Error interno del servidor.',
+    });
+  }
+});
+
+/**
  * GET /api/auth/user/:clerk_id
  * Get user data from Supabase by Clerk ID
  */
@@ -460,15 +522,13 @@ router.get('/callback', async (req, res) => {
       ]);
     }
 
-    // Generate JWT token - create a temporary password and sign in
+    // Generate JWT token - set a temp password on the auth user so we can
+    // obtain a session token. Applies to BOTH new and existing users
+    // (new OAuth users are created without a password, so this is required).
     const tempPassword = crypto.randomBytes(16).toString('hex');
-
-    // Update or create user with temp password
-    if (existingUser) {
-      await supabase.auth.admin.updateUserById(userId, {
-        password: tempPassword,
-      });
-    }
+    await supabase.auth.admin.updateUserById(userId, {
+      password: tempPassword,
+    });
 
     // Sign in with email/password to get JWT
     const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
