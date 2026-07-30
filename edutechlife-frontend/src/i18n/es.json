@@ -4391,5 +4391,6 @@
   "login.signup_link": "Regístrate aquí",
   "login.error.invalid_credentials": "Correo o contraseña inválidos",
   "login.error.email_not_confirmed": "Debes confirmar tu correo antes de iniciar sesión.",
+  "login.error.oauth_account": "Esta cuenta se creó con {provider}. Inicia sesión con el botón de {provider} que está arriba.",
   "login.error.connection": "Error de conexión"
 }

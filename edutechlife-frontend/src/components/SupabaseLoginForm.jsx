@@ -42,6 +42,12 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
       const data = await response.json();
 
       if (!response.ok) {
+        if (data.error === "oauth_account") {
+          const provider = data.provider === "facebook" ? "Facebook" : "Google";
+          setError(t("login.error.oauth_account", { provider }));
+          setLoading(false);
+          return;
+        }
         const key =
           data.error === "email_not_confirmed"
             ? "login.error.email_not_confirmed"

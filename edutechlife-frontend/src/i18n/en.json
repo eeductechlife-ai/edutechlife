@@ -4388,6 +4388,7 @@
   "login.signup_link": "Sign up here",
   "login.error.invalid_credentials": "Invalid email or password",
   "login.error.email_not_confirmed": "You must confirm your email before signing in.",
+  "login.error.oauth_account": "This account was created with {provider}. Please sign in using the {provider} button above.",
   "login.error.connection": "Connection error",
   "ialab.progress_label": "Progress",
   "ialab.xp_earned": "+{amount} XP",

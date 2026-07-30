@@ -260,6 +260,26 @@ router.post('/login', async (req, res) => {
           message: 'Debes confirmar tu correo antes de iniciar sesión.',
         });
       }
+
+      // If the account was created through OAuth it has no password set,
+      // so password sign-in can never succeed. Tell the user which button to use.
+      try {
+        const { data: list } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
+        const authUser = list?.users?.find(
+          (u) => (u.email || '').toLowerCase() === email.toLowerCase()
+        );
+        const oauthProvider = authUser?.user_metadata?.provider;
+        if (authUser && oauthProvider) {
+          return res.status(409).json({
+            error: 'oauth_account',
+            provider: oauthProvider,
+            message: `Esta cuenta se creó con ${oauthProvider}. Inicia sesión con ese botón, o restablece tu contraseña.`,
+          });
+        }
+      } catch (e) {
+        /* non-blocking: fall through to generic error */
+      }
+
       return res.status(401).json({
         error: 'invalid_credentials',
         message: 'Correo o contraseña incorrectos.',
@@ -284,6 +304,47 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     console.error('Login error:', err);
     req.log.error('Unexpected error in auth login', { error: err.message });
+    res.status(500).json({
+      error: 'internal_error',
+      message: 'Error interno del servidor.',
+    });
+  }
+});
+
+/**
+ * POST /api/auth/reset-password
+ * Send a password reset email so the user can set/recover their password.
+ * Useful for accounts created through OAuth, which have no password.
+ *
+ * Body: { email: string (required) }
+ */
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        error: 'missing_fields',
+        message: 'El correo es requerido.',
+      });
+    }
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5174';
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${frontendUrl}/auth/reset-password`,
+    });
+
+    if (error) {
+      console.error('Reset password error:', error);
+    }
+
+    // Always return success: never reveal whether an email is registered.
+    res.json({
+      success: true,
+      message: 'Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.',
+    });
+  } catch (err) {
+    console.error('Reset password error:', err);
     res.status(500).json({
       error: 'internal_error',
       message: 'Error interno del servidor.',
@@ -522,18 +583,22 @@ router.get('/callback', async (req, res) => {
       ]);
     }
 
-    // Generate JWT token - set a temp password on the auth user so we can
-    // obtain a session token. Applies to BOTH new and existing users
-    // (new OAuth users are created without a password, so this is required).
-    const tempPassword = crypto.randomBytes(16).toString('hex');
-    await supabase.auth.admin.updateUserById(userId, {
-      password: tempPassword,
+    // Obtain a session WITHOUT touching the user's password.
+    // (The previous approach overwrote the password with a random one on every
+    // OAuth login, which locked users out of email+password sign-in.)
+    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+      type: 'magiclink',
+      email: oauthEmail,
     });
 
-    // Sign in with email/password to get JWT
-    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-      email: oauthEmail,
-      password: tempPassword,
+    if (linkError || !linkData?.properties?.hashed_token) {
+      console.error('Generate link error:', linkError);
+      return res.redirect(`${frontendUrl}/login?error=signin_failed`);
+    }
+
+    const { data: signInData, error: signInError } = await supabase.auth.verifyOtp({
+      token_hash: linkData.properties.hashed_token,
+      type: 'email',
     });
 
     if (signInError || !signInData?.session) {
