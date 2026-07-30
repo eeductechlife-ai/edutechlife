@@ -38,6 +38,13 @@ export default defineConfig({
           '**/pdf-vendor*',
         ],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        // Evita que chunks viejos (hash desactualizado) crasheen la app tras un deploy
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        // No sirvas index.html cuando se pide un asset JS/CSS que no existe:
+        // así el fallo de import se detecta y no genera error de MIME "text/html"
+        navigateFallbackDenylist: [/^\/assets\//, /\.[a-z0-9]+\.(js|css)$/i],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
