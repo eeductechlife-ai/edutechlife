@@ -277,7 +277,8 @@ router.get('/oauth/:provider', (req, res) => {
       });
     }
 
-    const state = crypto.randomBytes(32).toString('hex');
+    // Encode provider in state to identify it in callback
+    const state = `${provider}:${crypto.randomBytes(24).toString('hex')}`;
     const scope = provider === 'google'
       ? 'openid email profile'
       : 'email public_profile';
@@ -319,57 +320,70 @@ router.get('/oauth/:provider', (req, res) => {
  * - error: Error from provider
  */
 router.get('/callback', async (req, res) => {
+  const frontendUrl = process.env.FRONTEND_URL || 'https://edutechlife.co';
   try {
-    const { code, state, error, provider } = req.query;
+    const { code, state, error } = req.query;
 
     if (error) {
-      return res.redirect(`/login?error=oauth_${error}`);
+      return res.redirect(`${frontendUrl}/login?error=oauth_${error}`);
     }
 
-    if (!code || !state || !provider) {
-      return res.redirect('/login?error=invalid_oauth_response');
+    if (!code || !state) {
+      return res.redirect(`${frontendUrl}/login?error=invalid_oauth_response`);
+    }
+
+    // Extract provider from state (format: "provider:randomHex")
+    const provider = state.split(':')[0];
+    if (!provider || !OAUTH_PROVIDERS[provider]) {
+      return res.redirect(`${frontendUrl}/login?error=invalid_oauth_state`);
     }
 
     const clientId = process.env[`OAUTH_${provider.toUpperCase()}_CLIENT_ID`];
     const clientSecret = process.env[`OAUTH_${provider.toUpperCase()}_CLIENT_SECRET`];
 
     if (!clientId || !clientSecret) {
-      return res.redirect('/login?error=oauth_not_configured');
+      return res.redirect(`${frontendUrl}/login?error=oauth_not_configured`);
     }
 
     const callbackUrl = `${process.env.BACKEND_URL || 'http://localhost:3001'}/api/auth/callback`;
 
     // Exchange authorization code for access token
+    // Google/Facebook require form-urlencoded, not JSON
     const tokenUrl = OAUTH_PROVIDERS[provider].tokenUrl;
+    const tokenParams = new URLSearchParams({
+      code,
+      client_id: clientId,
+      client_secret: clientSecret,
+      redirect_uri: callbackUrl,
+      grant_type: 'authorization_code',
+    });
     const tokenResponse = await fetch(tokenUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        code,
-        client_id: clientId,
-        client_secret: clientSecret,
-        redirect_uri: callbackUrl,
-        grant_type: 'authorization_code',
-      }),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: tokenParams.toString(),
     });
 
     if (!tokenResponse.ok) {
-      console.error('Token exchange failed:', await tokenResponse.text());
-      return res.redirect('/login?error=token_exchange_failed');
+      const errText = await tokenResponse.text();
+      console.error('Token exchange failed:', errText);
+      return res.redirect(`${frontendUrl}/login?error=token_exchange_failed`);
     }
 
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
 
     // Fetch user info from OAuth provider
-    const userUrl = OAUTH_PROVIDERS[provider].userUrl;
+    // Facebook needs specific fields param; Google returns them by default
+    const userUrl = provider === 'facebook'
+      ? `${OAUTH_PROVIDERS[provider].userUrl}?fields=id,name,email&access_token=${accessToken}`
+      : OAUTH_PROVIDERS[provider].userUrl;
     const userResponse = await fetch(userUrl, {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: provider === 'google' ? { Authorization: `Bearer ${accessToken}` } : {},
     });
 
     if (!userResponse.ok) {
       console.error('User fetch failed:', await userResponse.text());
-      return res.redirect('/login?error=user_fetch_failed');
+      return res.redirect(`${frontendUrl}/login?error=user_fetch_failed`);
     }
 
     const userData = await userResponse.json();
@@ -415,7 +429,7 @@ router.get('/callback', async (req, res) => {
 
       if (authError) {
         console.error('Auth creation error:', authError);
-        return res.redirect('/login?error=user_creation_failed');
+        return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
       }
 
       userId = authData.user.id;
@@ -455,7 +469,7 @@ router.get('/callback', async (req, res) => {
 
     if (signInError || !signInData?.session) {
       console.error('Sign in error:', signInError);
-      return res.redirect('/login?error=signin_failed');
+      return res.redirect(`${frontendUrl}/login?error=signin_failed`);
     }
 
     const sessionToken = signInData.session.access_token;
@@ -467,12 +481,12 @@ router.get('/callback', async (req, res) => {
     });
 
     // Redirect to frontend with token
-    const redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:5174'}/auth/callback?token=${encodeURIComponent(sessionToken)}&email=${encodeURIComponent(oauthEmail)}`;
+    const redirectUrl = `${frontendUrl}/auth/callback?token=${encodeURIComponent(sessionToken)}&email=${encodeURIComponent(oauthEmail)}`;
     res.redirect(redirectUrl);
   } catch (err) {
     console.error('OAuth callback error:', err);
     req.log.error('OAuth callback error', { error: err.message });
-    res.redirect('/login?error=oauth_failed');
+    res.redirect(`${frontendUrl}/login?error=oauth_failed`);
   }
 });
 
