@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
@@ -10,6 +11,7 @@ const StudyCalendarSection = lazy(() => import('./StudyCalendarSection'));
 
 const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenProfile, onOpenHistory, onOpenHelp }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const {
     activeMod, setActiveMod, courseProgress, modules,
     isModuleLocked, calculateModuleScore
@@ -18,7 +20,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
   const {
     user, sidebarDropdowns, toggleSidebarDropdown,
     setShowCertificateModal,
-    courseCompleted, signOut
+    courseCompleted
   } = useIALabUIContext();
 
   const streak = useIALabStore(s => s.streak);
@@ -48,9 +50,9 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
 
   const isInfographicCompleted = useInfographicCompletion();
 
-  const handleLogout = async () => {
+  const handleCloseSection = () => {
     closeMobileMenu();
-    await signOut();
+    navigate("/");
   };
 
   return (
@@ -241,15 +243,15 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
         </button>
       </div>
 
-      {/* CERRAR SESION */}
+      {/* CERRAR SECCION */}
       <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
       <div className="px-3 py-3">
-        <button onClick={handleLogout}
-          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/40 min-h-[44px]">
-          <div className="w-7 h-7 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
-            <Icon name="fa-sign-out-alt" className="text-xs text-red-500" />
+        <button onClick={handleCloseSection}
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-petroleum dark:text-petroleum hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
+          <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
+            <Icon name="fa-sign-out-alt" className="text-xs text-petroleum" />
           </div>
-          {t('mobile_menu.logout')}
+          {t('mobile_menu.close_section')}
         </button>
       </div>
 

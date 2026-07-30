@@ -7,6 +7,7 @@ import React, {
   Suspense,
 } from "react";
 import { useUser, useAuth } from "@clerk/react";
+import { useNavigate } from "react-router-dom";
 import { useClerkAuth, getClerkUserInfo } from "../utils/clerk-utils";
 import { Icon } from "../utils/iconMapping.jsx";
 import ErrorBoundary from "./forum/ErrorBoundary";
@@ -23,10 +24,11 @@ const ChangeAvatarModal = lazy(() => import("./modals/ChangeAvatarModal"));
 const ActivityHistory = lazy(() => import("./ActivityHistory"));
 const StudyPlannerModal = lazy(() => import("./IALab/StudyPlannerModal"));
 
-const MENU_ITEMS_COUNT = 6;
+const MENU_ITEMS_COUNT = 7;
 
 const UserDropdownMenuSimplified = ({ onNavigate }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const {
     user: clerkUser,
     isSignedIn: isClerkSignedIn,
@@ -168,23 +170,10 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
     }
   }, [isOpen, isClosing, closeWithAnimation]);
 
-  const handleLogout = useCallback(async () => {
-    try {
-      if (clerkSignOutOfficial) {
-        await clerkSignOutOfficial();
-      } else if (clerkSignOut) {
-        await clerkSignOut();
-      } else {
-        console.error("No hay método de logout disponible");
-      }
-      setIsOpen(false);
-      if (onNavigate) {
-        onNavigate("landing");
-      }
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
-  }, [clerkSignOutOfficial, clerkSignOut, onNavigate]);
+  const handleCloseSection = useCallback(() => {
+    closeWithAnimation();
+    navigate("/");
+  }, [navigate, closeWithAnimation]);
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isCertificatesOpen, setIsCertificatesOpen] = useState(false);
@@ -414,16 +403,16 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
                 ref={setMenuItemRef(5)}
                 role="menuitem"
                 tabIndex={focusedIndex === 5 ? 0 : -1}
-                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-rose-400 rounded-lg shadow-sm hover:shadow hover:border-l-rose-500 hover:bg-rose-50/50 transition-all duration-200 cursor-pointer text-left"
-                onClick={handleLogout}
+                className="group flex items-center gap-2.5 w-full px-3 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-petroleum rounded-lg shadow-sm hover:shadow hover:border-l-corporate hover:bg-slate-50 transition-all duration-200 cursor-pointer text-left"
+                onClick={handleCloseSection}
                 style={staggerStyle(5)}
               >
                 <Icon
                   name="fa-sign-out-alt"
-                  className="text-sm text-rose-500 flex-shrink-0"
+                  className="text-sm text-petroleum flex-shrink-0"
                 />
-                <span className="text-xs font-semibold text-rose-600 group-hover:text-rose-700 transition-colors duration-200">
-                  {t("sidebar.logout")}
+                <span className="text-xs font-semibold text-slate-800 group-hover:text-petroleum transition-colors duration-200">
+                  {t("mobile_menu.close_section")}
                 </span>
               </button>
             </div>

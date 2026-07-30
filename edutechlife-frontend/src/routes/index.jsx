@@ -17,6 +17,7 @@ import { useTranslation } from "../i18n/I18nProvider";
 // Lazy load para componentes pesados
 const LandingPage = lazy(() => import("../components/pages/LandingPage"));
 const WelcomeScreen = lazy(() => import("../components/WelcomeScreen"));
+const OAuthCallbackHandler = lazy(() => import("../components/OAuthCallbackHandler"));
 const IALabSignUpPage = lazy(() => import("../components/IALabSignUpPage"));
 const SmartBoardSignUpPage = lazy(
   () => import("../components/SmartBoardSignUpPage"),
@@ -397,6 +398,15 @@ const AppRoutes = () => {
           element={
             <Suspense fallback={<PageLoader message={t("common.loading")} />}>
               <WelcomeScreen />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="auth/callback"
+          element={
+            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+              <OAuthCallbackHandler />
             </Suspense>
           }
         />

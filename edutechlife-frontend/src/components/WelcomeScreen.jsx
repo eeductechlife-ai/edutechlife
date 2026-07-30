@@ -1,12 +1,12 @@
-import { SignIn, SignUp } from '@clerk/react';
-import { esES, enUS } from '@clerk/localizations';
 import { motion } from 'framer-motion';
 import FloatingParticles from './FloatingParticles';
-import { Brain, CheckCircle } from 'lucide-react';
+import { Brain, CheckCircle, ArrowLeft } from 'lucide-react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from '../i18n/I18nProvider';
 import SEO from './SEO';
+import SupabaseSignUpForm from './SupabaseSignUpForm';
+import SupabaseLoginForm from './SupabaseLoginForm';
 
 const WelcomeScreen = ({ onNavigate }) => {
   const { t, locale } = useTranslation();
@@ -17,48 +17,16 @@ const WelcomeScreen = ({ onNavigate }) => {
   const urlReturnTo = searchParams.get('returnTo');
   const storageReturnTo = sessionStorage.getItem('clerk_return_to');
   const returnTo = urlReturnTo || (storageReturnTo ? `/${storageReturnTo}` : '/ialab');
-  const clerkLocale = locale === 'en' ? enUS : esES;
-  
   useEffect(() => {
     const action = searchParams.get('action');
     if (action === 'signup') {
       setIsSignUpMode(true);
     }
   }, [searchParams]);
-  
+
   if (storageReturnTo) {
     sessionStorage.removeItem('clerk_return_to');
   }
-  
-  const clerkAppearance = {
-    variables: {
-      colorPrimary: '#004B63',
-      colorPrimaryHover: '#0A3550',
-      colorText: '#00374A',
-      colorTextSecondary: '#4DA8C4',
-      colorBackground: '#FFFFFF',
-      colorInputBackground: '#F8FAFC',
-      colorInputText: '#00374A',
-      colorInputPlaceholder: '#64748B',
-      colorDanger: '#DC2626',
-      colorSuccess: '#059669',
-      colorButtonText: '#FFFFFF',
-      colorButtonPrimary: '#004B63',
-      colorButtonPrimaryHover: '#0A3550',
-      borderRadius: '0.75rem',
-      fontFamily: "'Montserrat', sans-serif",
-    },
-    elements: {
-      formButtonPrimary: '!bg-[#004B63] hover:!bg-[#0A3550] font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg',
-      card: 'shadow-none border-none',
-      headerTitle: 'text-2xl font-bold text-[#004B63] text-center',
-      headerSubtitle: 'text-[#4DA8C4] text-center',
-      socialButtonsBlockButton: 'border-gray-200 hover:bg-gray-50 transition-colors',
-      formFieldLabel: 'text-[#00374A] font-medium',
-      formFieldInput: 'border-gray-200 focus:border-[#004B63] focus:ring-[#004B63]/20 rounded-lg',
-      footerActionLink: 'text-[#004B63] hover:text-[#4DA8C4] font-semibold',
-    }
-  };
   
   return (
     <>
@@ -153,26 +121,24 @@ const WelcomeScreen = ({ onNavigate }) => {
               </p>
             </div>
 
-            {/* Clerk Form */}
-            <div className="w-full min-h-[480px] flex items-center justify-center">
+            {/* Auth Form */}
+            <div className="w-full">
               {isSignUpMode ? (
-                <SignUp
-                  routing="virtual"
-                  fallbackRedirectUrl={returnTo}
-                  signInUrl="/login"
-                  signUpUrl="/sign-up/ialab"
-                  appearance={clerkAppearance}
-                  localization={clerkLocale}
-                  afterSignUpUrl={returnTo}
-                />
+                <div className="space-y-4">
+                  <button
+                    onClick={() => setIsSignUpMode(false)}
+                    className="inline-flex items-center gap-2 text-[#004B63] hover:text-[#0A3550] font-medium mb-4"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    {t('welcome.back_to_signin')}
+                  </button>
+                  <SupabaseSignUpForm
+                    onBack={() => setIsSignUpMode(false)}
+                    returnTo={returnTo}
+                  />
+                </div>
               ) : (
-                <SignIn
-                  routing="virtual"
-                  fallbackRedirectUrl={returnTo}
-                  signUpUrl="/sign-up/ialab"
-                  appearance={clerkAppearance}
-                  localization={clerkLocale}
-                />
+                <SupabaseLoginForm returnTo={returnTo} />
               )}
             </div>
 
