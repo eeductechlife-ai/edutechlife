@@ -159,8 +159,17 @@ router.post('/register', async (req, res) => {
 
     if (authError) {
       console.error('Auth creation error:', authError);
+      // Handle duplicate email specifically
+      const msg = (authError.message || '').toLowerCase();
+      if (msg.includes('already') || msg.includes('registered') || msg.includes('exists')) {
+        return res.status(409).json({
+          error: 'email_already_registered',
+          message: 'Este correo ya está registrado. Por favor, inicia sesión.',
+        });
+      }
       return res.status(400).json({
-        error: authError.message || 'Failed to create user',
+        error: 'signup_failed',
+        message: authError.message || 'Failed to create user',
       });
     }
 
