@@ -1,15 +1,33 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Lock } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { CATEGORY_MAP, CATEGORIES, PREMIUM_TABS } from "../kidsDashboardConfig";
 import { glow } from "../smartboardTheme";
 
+// Hide the bar when the on-screen keyboard is up so it never covers the input.
+// Detected via visualViewport: keyboard shrinks the viewport by ≥25%.
+function useKeyboardVisible() {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const vv = typeof window !== "undefined" ? window.visualViewport : null;
+    if (!vv) return;
+    const check = () => setVisible(window.innerHeight - vv.height > 150);
+    vv.addEventListener("resize", check);
+    check();
+    return () => vv.removeEventListener("resize", check);
+  }, []);
+  return visible;
+}
+
 const MobileBottomBar = memo(
   ({ activeTab, onTabChange, darkMode, subscriptionTier }) => {
     const { t } = useTranslation();
     const isPremium = subscriptionTier === "premium";
     const activeCategory = CATEGORY_MAP[activeTab] || "home";
+    const keyboardVisible = useKeyboardVisible();
+
+    if (keyboardVisible) return null;
 
     const getFirstTab = (catId) => {
       const cat = CATEGORIES.find((c) => c.id === catId);
