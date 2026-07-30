@@ -13,6 +13,10 @@ vi.mock('react-router-dom', () => ({
   Route: () => null,
   useParams: () => ({ moduleId: '1' }),
   useNavigate: () => vi.fn(),
+  useLocation: () => ({ pathname: '/ialab/1', search: '', hash: '', state: null }),
+  useSearchParams: () => [new URLSearchParams(), vi.fn()],
+  Link: ({ children, to, ...rest }) => <a href={typeof to === 'string' ? to : '#'} {...rest}>{children}</a>,
+  NavLink: ({ children, to, ...rest }) => <a href={typeof to === 'string' ? to : '#'} {...rest}>{children}</a>,
 }));
 
 vi.mock('@clerk/react', () => ({

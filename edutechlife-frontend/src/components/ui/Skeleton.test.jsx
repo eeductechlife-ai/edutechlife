@@ -7,8 +7,15 @@ describe("Skeleton", () => {
     const { container } = render(<Skeleton />);
     const el = container.firstChild;
     expect(el).toBeTruthy();
-    expect(el.className).toContain("animate-pulse");
+    // Default is shimmer=true → skeleton-shimmer class; without shimmer it
+    // falls back to animate-pulse (tested below).
+    expect(el.className).toContain("skeleton-shimmer");
     expect(el.className).toContain("rounded-lg");
+  });
+
+  it("falls back to animate-pulse when shimmer is disabled", () => {
+    const { container } = render(<Skeleton shimmer={false} />);
+    expect(container.firstChild.className).toContain("animate-pulse");
   });
 
   it("applies custom width and height", () => {

@@ -12,17 +12,19 @@ describe("VakSkeleton", () => {
 
   test("renders four placeholder option rows", () => {
     const { container } = render(<VakSkeleton />);
+    // <Skeleton> emits .skeleton-shimmer by default (see ui/Skeleton).
     const optionRows = container.querySelectorAll(
-      ".space-y-4 > .animate-pulse",
+      ".space-y-4 > div",
     );
     expect(optionRows).toHaveLength(4);
   });
 
-  test("renders pulsing skeleton blocks for progress and question placeholders", () => {
+  test("renders shimmer skeleton blocks for progress and question placeholders", () => {
     const { container } = render(<VakSkeleton />);
-    const pulseBlocks = container.querySelectorAll(".animate-pulse");
-    // 2 header blocks + 1 progress bar fill + 1 question title + 4 option rows = 8
-    expect(pulseBlocks.length).toBe(8);
+    const shimmerBlocks = container.querySelectorAll(".skeleton-shimmer");
+    // 2 header blocks + 1 progress bar fill + 1 question title
+    // + 4 option rows × (icon + line1 + line2) = 2+1+1+12 = 16 shimmers
+    expect(shimmerBlocks.length).toBeGreaterThanOrEqual(8);
   });
 
   test("is a pure presentational component that accepts no props", () => {

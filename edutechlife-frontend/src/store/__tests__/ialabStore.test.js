@@ -101,11 +101,12 @@ describe('ialabStore — gamification slice', () => {
     expect(useIALabStore.getState().xp).toBe(initialXp + 50);
   });
 
-  test('addXp with negative amount decreases xp', () => {
+  test('addXp ignores negative amounts (guards against buggy callers)', () => {
     const store = useIALabStore.getState();
     store.addXp(100);
     store.addXp(-30);
-    expect(useIALabStore.getState().xp).toBe(70);
+    // Students never lose XP due to a bug — negative deltas are dropped.
+    expect(useIALabStore.getState().xp).toBe(100);
   });
 
   test('awardBadge adds to badges array', () => {
