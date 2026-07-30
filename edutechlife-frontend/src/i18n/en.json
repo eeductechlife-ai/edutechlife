@@ -3516,6 +3516,7 @@
   "ialab.quiz.good_work_msg": "You demonstrated solid understanding of the module content.",
   "ialab.quiz.back_to_module": "Back to module",
   "ialab.quiz.retry": "Retry exam",
+  "ialab.quiz.min_score": "{score}% minimum",
   "ialab.quiz.options_group": "Options for question {question}",
   "ialab.quiz.sync_error_title": "Sync error",
   "ialab.quiz.sync_error_msg": "Error syncing exam result. Will retry later.",
@@ -4367,6 +4368,7 @@
   "signup.error.password_min_length": "Password must be at least 8 characters",
   "signup.error.phone_invalid": "Invalid phone number format",
   "signup.error.registration_failed": "Registration failed. Please try again.",
+  "signup.error.email_already_registered": "This email is already registered. Please use another email or sign in.",
   "signup.button.register": "Register",
   "signup.button.registering": "Registering...",
   "signup.info.password_min_length": "At least 8 characters",
@@ -4385,5 +4387,10 @@
   "login.no_account": "Don't have an account?",
   "login.signup_link": "Sign up here",
   "login.error.invalid_credentials": "Invalid email or password",
-  "login.error.connection": "Connection error"
+  "login.error.connection": "Connection error",
+  "ialab.progress_label": "Progress",
+  "ialab.xp_earned": "+{amount} XP",
+  "ialab.xp_excellent_work": "Excellent work!",
+  "ialab.objectives_learn": "You will learn to:",
+  "ialab.objectives_verified": "You verified:"
 }
