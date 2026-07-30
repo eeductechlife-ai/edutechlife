@@ -191,6 +191,20 @@ export default defineConfig({
         assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     },
+    // The landing page (/) doesn't render charts, Supabase-driven data,
+    // Stripe or PDF tooling — those live behind lazy-loaded routes.
+    // Skip the eager <link rel="modulepreload"> for those vendor chunks so
+    // the initial payload stays small; they'll load on-demand when the
+    // router lazy() reaches a route that actually imports them.
+    modulePreload: {
+      resolveDependencies: (_filename, deps) =>
+        deps.filter(
+          (d) =>
+            !d.includes('charts-vendor') &&
+            !d.includes('supabase-vendor') &&
+            !d.includes('stripe-vendor'),
+        ),
+    },
     chunkSizeWarningLimit: 250,
     sourcemap: false,
     reportCompressedSize: true,
