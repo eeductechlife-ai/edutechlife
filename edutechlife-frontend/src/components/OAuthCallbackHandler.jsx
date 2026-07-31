@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 
 const OAuthCallbackHandler = () => {
   const navigate = useNavigate();
@@ -35,10 +36,13 @@ const OAuthCallbackHandler = () => {
         // Save authentication token
         localStorage.setItem("auth_token", token);
         localStorage.setItem("user_email", email);
-        console.log("OAuth token saved, redirecting to /ialab");
 
-        // Redirect to IALab
-        navigate("/ialab");
+        // Progress is stored per account. Claim the namespace for this user and
+        // reload rather than client-side navigating, so the stores rehydrate
+        // from this account's data instead of keeping the previous user's
+        // in-memory state (which showed everyone the same progress).
+        claimStorageForCurrentUser();
+        window.location.replace("/ialab");
       } catch (err) {
         console.error("Callback processing error:", err);
         navigate("/login?error=callback_failed");

@@ -16,6 +16,7 @@ import {
 import { useTranslation } from "../i18n/I18nProvider";
 import FloatingParticles from "./FloatingParticles";
 import { sanitize } from "../utils/sanitize";
+import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 import SEO from "./SEO";
 
 const SupabaseSignUpForm = ({ onBack, returnTo }) => {
@@ -196,8 +197,12 @@ const SupabaseSignUpForm = ({ onBack, returnTo }) => {
       setTimeout(() => {
         if (result.access_token) {
           localStorage.setItem("auth_token", result.access_token);
+          localStorage.setItem("user_email", formData.email.toLowerCase());
         }
-        navigate(defaultReturnTo);
+        // A new account must start with its own empty progress, never inherit
+        // whatever the previous user left cached in this browser.
+        claimStorageForCurrentUser();
+        window.location.replace(defaultReturnTo);
       }, 2000);
     } catch (err) {
       console.error("Sign-up error:", err);

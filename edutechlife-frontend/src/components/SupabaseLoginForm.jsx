@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
 import FloatingParticles from "./FloatingParticles";
+import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 
 const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
   const { t } = useTranslation();
@@ -90,8 +91,12 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
       localStorage.setItem("auth_token", data.token);
       localStorage.setItem("user_email", data.email);
 
-      // Redirect
-      navigate(returnTo);
+      // Progress is stored per account. Claim the namespace for this user and
+      // reload rather than client-side navigating, so the stores rehydrate from
+      // this account's data instead of keeping the previous user's in-memory
+      // state (which showed every student the same progress).
+      claimStorageForCurrentUser();
+      window.location.replace(returnTo);
     } catch (err) {
       setError(t("login.error.connection") || "Connection error");
       console.error("Login error:", err);

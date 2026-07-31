@@ -21,7 +21,9 @@
  * @see ROADMAP_FUNCIONALIDAD_PEDAGOGICA.md — Sprint 2
  */
 
-const STORAGE_KEY = 'ialab_adaptive_v1';
+import { scopedKey } from "@/utils/userScopedStorage";
+
+const STORAGE_KEY = "ialab_adaptive_v1";
 
 // Intervalos Leitner en días (índice = box - 1)
 const LEITNER_INTERVALS_DAYS = [1, 3, 7, 14, 30];
@@ -29,7 +31,10 @@ const LEITNER_INTERVALS_DAYS = [1, 3, 7, 14, 30];
 // Cargar datos persistidos con fallback safe
 const loadPersisted = () => {
   try {
-    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
+    const raw =
+      typeof localStorage !== "undefined"
+        ? localStorage.getItem(scopedKey(STORAGE_KEY))
+        : null;
     if (!raw) return {};
     return JSON.parse(raw);
   } catch {
@@ -40,8 +45,8 @@ const loadPersisted = () => {
 // Persistir con fallback silencioso
 const persist = (data) => {
   try {
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem(scopedKey(STORAGE_KEY), JSON.stringify(data));
     }
   } catch {
     // Silent fail — no bloqueamos UX si storage falla
@@ -57,7 +62,7 @@ export const createAdaptiveSlice = (set, get) => ({
   viewHistory: initial.viewHistory || [],
   reviewSchedule: initial.reviewSchedule || [],
   errorPatterns: initial.errorPatterns || [],
-  learningPace: initial.learningPace || 'normal',
+  learningPace: initial.learningPace || "normal",
   lastRecommendation: initial.lastRecommendation || null,
 
   // ═══════════════════════════════════════════════════════════
@@ -76,9 +81,9 @@ export const createAdaptiveSlice = (set, get) => ({
       const entry = {
         itemId,
         timestamp: Date.now(),
-        type: meta.type || 'ova',
-        score: typeof meta.score === 'number' ? meta.score : null,
-        timeSpent: typeof meta.timeSpent === 'number' ? meta.timeSpent : null,
+        type: meta.type || "ova",
+        score: typeof meta.score === "number" ? meta.score : null,
+        timeSpent: typeof meta.timeSpent === "number" ? meta.timeSpent : null,
       };
 
       // Mantener últimas 200 entradas para no llenar storage
@@ -131,16 +136,14 @@ export const createAdaptiveSlice = (set, get) => ({
    * @param {string} itemId
    * @param {'correct'|'incorrect'} outcome
    */
-  completeReview: (itemId, outcome = 'correct') => {
+  completeReview: (itemId, outcome = "correct") => {
     const { reviewSchedule, scheduleReview } = get();
     const item = reviewSchedule.find((r) => r.itemId === itemId);
     if (!item) return;
 
     // Correcto: promociona (Box 1 → 2 → 3 → ...)
     // Incorrecto: baja a Box 1 (reset)
-    const newBox = outcome === 'correct'
-      ? Math.min(item.box + 1, 5)
-      : 1;
+    const newBox = outcome === "correct" ? Math.min(item.box + 1, 5) : 1;
 
     scheduleReview(itemId, newBox);
   },
@@ -150,11 +153,13 @@ export const createAdaptiveSlice = (set, get) => ({
    * @param {string} conceptId - ej: 'transformer-attention', 'prompt-role-play'
    * @param {string} misunderstanding - Descripción corta
    */
-  recordError: (conceptId, misunderstanding = '') => {
+  recordError: (conceptId, misunderstanding = "") => {
     if (!conceptId) return;
 
     set((state) => {
-      const existing = state.errorPatterns.find((e) => e.conceptId === conceptId);
+      const existing = state.errorPatterns.find(
+        (e) => e.conceptId === conceptId,
+      );
       let errorPatterns;
 
       if (existing) {
@@ -166,7 +171,7 @@ export const createAdaptiveSlice = (set, get) => ({
                 lastError: Date.now(),
                 misunderstanding: misunderstanding || e.misunderstanding,
               }
-            : e
+            : e,
         );
       } else {
         errorPatterns = [
@@ -202,7 +207,7 @@ export const createAdaptiveSlice = (set, get) => ({
    * @param {'slow'|'normal'|'fast'} pace
    */
   setLearningPace: (pace) => {
-    if (!['slow', 'normal', 'fast'].includes(pace)) return;
+    if (!["slow", "normal", "fast"].includes(pace)) return;
 
     set((state) => {
       persist({

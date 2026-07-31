@@ -15,6 +15,7 @@
  */
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { createUserScopedStorage } from "../utils/userScopedStorage";
 import { LS_KEYS, LAST_MODULE_ID } from "../constants/ialab";
 import {
   ls,
@@ -524,7 +525,9 @@ export const useIALabStore = create(
     }),
     {
       name: "ialab-store",
-      storage: createJSONStorage(() => localStorage),
+      // Scoped per signed-in account: a shared key made every student on the
+      // same browser read and write one another's progress.
+      storage: createJSONStorage(() => createUserScopedStorage()),
       partialize: (state) => ({
         xp: state.xp,
         streak: state.streak,
