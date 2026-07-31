@@ -13,6 +13,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
 
   const handleOAuthLogin = (provider) => {
     const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -24,10 +25,38 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
     window.location.href = `${apiUrl}${endpoint}?redirect_uri=${encodeURIComponent(redirectUri)}&provider=${provider}`;
   };
 
+  const handleForgotPassword = async () => {
+    if (!email.trim()) {
+      setError(t("login.error.email_required_for_reset"));
+      return;
+    }
+    setLoading(true);
+    setError("");
+    setInfo("");
+    try {
+      await fetch(
+        `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/auth/reset-password`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        },
+      );
+      // Always show the same message: never reveal whether the email exists.
+      setInfo(t("login.reset_email_sent"));
+    } catch (err) {
+      console.error("Reset request error:", err);
+      setError(t("login.error.connection"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setInfo("");
 
     try {
       const response = await fetch(
@@ -75,6 +104,12 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
       {error && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           {error}
+        </div>
+      )}
+
+      {info && (
+        <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 text-sm">
+          {info}
         </div>
       )}
 
@@ -171,6 +206,17 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
               )}
             </button>
           </div>
+        </div>
+
+        <div className="text-right">
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            disabled={loading}
+            className="text-xs text-[#004B63] hover:text-[#0A3550] hover:underline disabled:opacity-50"
+          >
+            {t("login.forgot_password")}
+          </button>
         </div>
 
         <button

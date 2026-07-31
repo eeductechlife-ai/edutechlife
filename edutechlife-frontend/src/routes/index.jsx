@@ -17,7 +17,10 @@ import { useTranslation } from "../i18n/I18nProvider";
 // Lazy load para componentes pesados
 const LandingPage = lazy(() => import("../components/pages/LandingPage"));
 const WelcomeScreen = lazy(() => import("../components/WelcomeScreen"));
-const OAuthCallbackHandler = lazy(() => import("../components/OAuthCallbackHandler"));
+const OAuthCallbackHandler = lazy(
+  () => import("../components/OAuthCallbackHandler"),
+);
+const ResetPasswordPage = lazy(() => import("../components/ResetPasswordPage"));
 const IALabSignUpPage = lazy(() => import("../components/IALabSignUpPage"));
 const SmartBoardSignUpPage = lazy(
   () => import("../components/SmartBoardSignUpPage"),
@@ -66,7 +69,9 @@ const SmartBoardConsentGate = lazy(
   () => import("../components/kids-dashboard/SmartBoardConsentGate"),
 );
 const IALabDashboard = lazy(() => import("../components/IALab/IALabDashboard"));
-const PublicProfilePage = lazy(() => import("../components/userProfilePublic/PublicProfilePage"));
+const PublicProfilePage = lazy(
+  () => import("../components/userProfilePublic/PublicProfilePage"),
+);
 import SectionErrorBoundary from "../components/IALab/SectionErrorBoundary";
 import IALabSkeleton from "../components/skeletons/IALabSkeleton";
 import SmartBoardSkeleton from "../components/skeletons/SmartBoardSkeleton";
@@ -407,6 +412,15 @@ const AppRoutes = () => {
           element={
             <Suspense fallback={<PageLoader message={t("common.loading")} />}>
               <OAuthCallbackHandler />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="auth/reset-password"
+          element={
+            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+              <ResetPasswordPage />
             </Suspense>
           }
         />

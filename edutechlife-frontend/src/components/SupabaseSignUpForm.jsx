@@ -243,7 +243,10 @@ const SupabaseSignUpForm = ({ onBack, returnTo }) => {
             {!success ? (
               <div className="flex flex-col lg:flex-row min-h-screen lg:min-h-auto">
                 {/* Left Side - Brand & Benefits */}
-                <div className="lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] p-8 lg:p-12 text-white flex flex-col justify-between relative overflow-hidden">
+                {/* pt is oversized on purpose: the "back to login" button is
+                    absolutely positioned at top-6/left-6 and would otherwise
+                    sit on top of the logo. */}
+                <div className="lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-8 pt-24 pb-8 lg:px-12 lg:pt-28 lg:pb-12 text-white flex flex-col justify-between relative overflow-hidden">
                   <div className="absolute inset-0 opacity-10">
                     <div
                       style={{

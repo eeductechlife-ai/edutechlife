@@ -210,21 +210,26 @@
     border-radius: 2px;
   }
 
-  /* === BUTTONS BASE === */
+  /* === BUTTONS BASE ===
+     Typography/cursor apply to every button, but the decorative chrome
+     (border, background, color) is limited to `.btn`. Applying a border to
+     every button put a 1px box around icon-only and text-link buttons
+     (e.g. the show-password eye, "Registrate aqui"), which looked broken. */
   button,
   [role="button"],
   .btn {
     font-family: var(--font-body);
     font-weight: 500;
-    color: var(--color-corporate);
-    background: transparent;
-    border: 1px solid var(--color-slate-200);
     cursor: pointer;
     transition: all 0.2s ease;
   }
 
-  button:hover,
-  [role="button"]:hover,
+  .btn {
+    color: var(--color-corporate);
+    background: transparent;
+    border: 1px solid var(--color-slate-200);
+  }
+
   .btn:hover {
     color: var(--color-petroleum);
     border-color: var(--color-corporate);
