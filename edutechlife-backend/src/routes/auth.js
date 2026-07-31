@@ -530,27 +530,31 @@ router.get('/callback', async (req, res) => {
       ? oauthName.split(' ')
       : [oauthName, ''];
 
-    // Check if user exists in Supabase
-    const { data: existingUser } = await supabase
-      .from('users')
-      .select('*')
-      .eq('email', oauthEmail)
-      .single();
+    // Supabase Auth is the source of truth for whether the account exists.
+    // (Looking only at the `users` table breaks sign-in for anyone who exists
+    // in Auth but has no profile row: createUser then fails with `email_exists`.)
+    const normalizedEmail = String(oauthEmail || '').toLowerCase();
+    if (!normalizedEmail) {
+      console.error('OAuth provider returned no email', { provider });
+      return res.redirect(`${frontendUrl}/login?error=no_email_from_provider`);
+    }
+
+    let authUser = null;
+    try {
+      const { data: list } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
+      authUser = list?.users?.find(
+        (u) => (u.email || '').toLowerCase() === normalizedEmail
+      ) || null;
+    } catch (e) {
+      console.error('listUsers failed:', e.message);
+    }
 
     let userId;
-    if (existingUser) {
-      userId = existingUser.id;
-      // Update existing user
-      await supabase
-        .from('users')
-        .update({
-          last_login: new Date().toISOString(),
-        })
-        .eq('id', userId);
+    if (authUser) {
+      userId = authUser.id;
     } else {
-      // Create new user in Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-        email: oauthEmail,
+        email: normalizedEmail,
         user_metadata: {
           provider,
           first_name: firstName,
@@ -565,22 +569,40 @@ router.get('/callback', async (req, res) => {
       }
 
       userId = authData.user.id;
+    }
 
-      // Create user record in users table
-      await supabase.from('users').insert([
-        {
-          id: userId,
-          clerk_id: userId,
-          email: oauthEmail,
-          first_name: firstName || null,
-          last_name: lastName || null,
-          username: oauthEmail.split('@')[0],
-          user_type: 'adult',
-          platform: 'ialab',
-          age_range: '18+',
-          registration_source: `oauth_${provider}`,
-        },
-      ]);
+    // Ensure a profile row exists for this account (idempotent, never blocking).
+    try {
+      const { data: profileRow } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', normalizedEmail)
+        .maybeSingle();
+
+      if (profileRow) {
+        await supabase
+          .from('users')
+          .update({ last_login: new Date().toISOString() })
+          .eq('id', profileRow.id);
+      } else {
+        await supabase.from('users').insert([
+          {
+            id: userId,
+            clerk_id: userId,
+            email: normalizedEmail,
+            first_name: firstName || null,
+            last_name: lastName || null,
+            username: normalizedEmail.split('@')[0],
+            user_type: 'adult',
+            platform: 'ialab',
+            age_range: '18+',
+            registration_source: `oauth_${provider}`,
+          },
+        ]);
+      }
+    } catch (e) {
+      // A missing profile row must never block sign-in.
+      console.error('Profile row sync failed (non-blocking):', e.message);
     }
 
     // Obtain a session WITHOUT touching the user's password.
@@ -588,7 +610,7 @@ router.get('/callback', async (req, res) => {
     // OAuth login, which locked users out of email+password sign-in.)
     const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
       type: 'magiclink',
-      email: oauthEmail,
+      email: normalizedEmail,
     });
 
     if (linkError || !linkData?.properties?.hashed_token) {
@@ -610,12 +632,12 @@ router.get('/callback', async (req, res) => {
 
     req.log.info('OAuth login successful', {
       userId,
-      email: oauthEmail,
+      email: normalizedEmail,
       provider,
     });
 
     // Redirect to frontend with token
-    const redirectUrl = `${frontendUrl}/auth/callback?token=${encodeURIComponent(sessionToken)}&email=${encodeURIComponent(oauthEmail)}`;
+    const redirectUrl = `${frontendUrl}/auth/callback?token=${encodeURIComponent(sessionToken)}&email=${encodeURIComponent(normalizedEmail)}`;
     res.redirect(redirectUrl);
   } catch (err) {
     console.error('OAuth callback error:', err);
