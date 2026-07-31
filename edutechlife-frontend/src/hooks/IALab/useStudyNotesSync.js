@@ -1,15 +1,15 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { useSession, useAuth } from '@clerk/react';
-import { createClerkSupabaseClient } from '../../lib/supabase';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useSupabase } from "../useSupabase";
 
-const NOTES_KEY = 'ialab_notes';
-const DAY_NOTES_KEY = 'ialab_day_notes';
-const RESOURCE_NOTES_KEY = 'ialab_resource_notes';
+const NOTES_KEY = "ialab_notes";
+const DAY_NOTES_KEY = "ialab_day_notes";
+const RESOURCE_NOTES_KEY = "ialab_resource_notes";
 
-const STUDY_NOTES_EXISTS_KEY = 'ialab_study_notes_table_exists';
+const STUDY_NOTES_EXISTS_KEY = "ialab_study_notes_table_exists";
 let _studyNotesTableExists;
 try {
-  _studyNotesTableExists = localStorage.getItem(STUDY_NOTES_EXISTS_KEY) !== 'false';
+  _studyNotesTableExists =
+    localStorage.getItem(STUDY_NOTES_EXISTS_KEY) !== "false";
 } catch {
   _studyNotesTableExists = true;
 }
@@ -17,98 +17,79 @@ try {
 function isTableNotFound(e) {
   if (!e) return false;
   if (e.status === 404) return true;
-  if (e.code === 'PGRST116' || e.code === 'PGRST205') return true;
+  if (e.code === "PGRST116" || e.code === "PGRST205") return true;
   if (e.error?.status === 404) return true;
-  if (e.error?.code === 'PGRST116' || e.error?.code === 'PGRST205') return true;
-  if (e.message?.includes?.('PGRST116')) return true;
-  if (e.message?.includes?.('relation') && e.message?.includes?.('does not exist')) return true;
+  if (e.error?.code === "PGRST116" || e.error?.code === "PGRST205") return true;
+  if (e.message?.includes?.("PGRST116")) return true;
+  if (
+    e.message?.includes?.("relation") &&
+    e.message?.includes?.("does not exist")
+  )
+    return true;
   return false;
 }
 
 export const useStudyNotesSync = () => {
-  const { session, isLoaded: sessionLoaded } = useSession();
-  const { getToken } = useAuth();
-  const [supabase, setSupabase] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // El cliente y el userId vienen de la sesion de Supabase. Antes se pedia un
+  // token a Clerk, que ya no autentica, asi que userId era null y los apuntes
+  // del estudiante nunca se guardaban.
+  const { supabase, userId, isLoading } = useSupabase();
   const [lastSync, setLastSync] = useState(null);
   const debounceRef = useRef(null);
 
-  useEffect(() => {
-    const init = async () => {
-      if (!sessionLoaded) return;
-      setIsLoading(true);
+  const upsertNote = useCallback(
+    async (noteType, key, content) => {
+      if (!supabase || !userId || !_studyNotesTableExists) return;
       try {
-        if (session) {
-          const token = await getToken({ template: 'supabase' });
-          if (token) {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            setUserId(payload.sub);
-            setSupabase(createClerkSupabaseClient(token));
-          } else {
-            setSupabase(createClerkSupabaseClient());
-          }
-        } else {
-          setSupabase(null);
-          setUserId(null);
+        const { error } = await supabase.from("study_notes").upsert(
+          {
+            user_id: userId,
+            note_type: noteType,
+            key,
+            content,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: "user_id,note_type,key" },
+        );
+        if (error) throw error;
+      } catch (e) {
+        if (isTableNotFound(e)) {
+          _studyNotesTableExists = false;
+          localStorage.setItem(STUDY_NOTES_EXISTS_KEY, "false");
+          return;
         }
-      } catch {
-        setSupabase(createClerkSupabaseClient());
-      } finally {
-        setIsLoading(false);
+        console.warn("[NotesSync] Error syncing note to Supabase:", e);
       }
-    };
-    init();
-  }, [session, sessionLoaded, getToken]);
-
-  const upsertNote = useCallback(async (noteType, key, content) => {
-    if (!supabase || !userId || !_studyNotesTableExists) return;
-    try {
-      const { error } = await supabase
-        .from('study_notes')
-        .upsert({
-          user_id: userId,
-          note_type: noteType,
-          key,
-          content,
-          updated_at: new Date().toISOString(),
-        }, { onConflict: 'user_id,note_type,key' });
-      if (error) throw error;
-    } catch (e) {
-      if (isTableNotFound(e)) {
-        _studyNotesTableExists = false;
-        localStorage.setItem(STUDY_NOTES_EXISTS_KEY, 'false');
-        return;
-      }
-      console.warn('[NotesSync] Error syncing note to Supabase:', e);
-    }
-  }, [supabase, userId]);
+    },
+    [supabase, userId],
+  );
 
   const loadNotesFromSupabase = useCallback(async () => {
     if (!supabase || !userId || !_studyNotesTableExists) return null;
     try {
       const { data, error } = await supabase
-        .from('study_notes')
-        .select('note_type, key, content')
-        .eq('user_id', userId);
+        .from("study_notes")
+        .select("note_type, key, content")
+        .eq("user_id", userId);
       if (error) throw error;
       if (!data || data.length === 0) return null;
       const moduleNotes = {};
       const dayNotes = {};
       const resourceNotes = {};
-      data.forEach(row => {
-        if (row.note_type === 'module') moduleNotes[row.key] = row.content;
-        else if (row.note_type === 'day') dayNotes[row.key] = row.content;
-        else if (row.note_type === 'resource') resourceNotes[row.key] = row.content;
+      data.forEach((row) => {
+        if (row.note_type === "module") moduleNotes[row.key] = row.content;
+        else if (row.note_type === "day") dayNotes[row.key] = row.content;
+        else if (row.note_type === "resource")
+          resourceNotes[row.key] = row.content;
       });
       return { moduleNotes, dayNotes, resourceNotes };
     } catch (e) {
       if (isTableNotFound(e)) {
         _studyNotesTableExists = false;
-        localStorage.setItem(STUDY_NOTES_EXISTS_KEY, 'false');
+        localStorage.setItem(STUDY_NOTES_EXISTS_KEY, "false");
         return null;
       }
-      console.warn('[NotesSync] Error loading notes from Supabase:', e);
+      console.warn("[NotesSync] Error loading notes from Supabase:", e);
       return null;
     }
   }, [supabase, userId]);
@@ -117,20 +98,36 @@ export const useStudyNotesSync = () => {
     const remote = await loadNotesFromSupabase();
     if (!remote) return;
     try {
-      const currentNotes = JSON.parse(localStorage.getItem(NOTES_KEY) || '{}');
+      const currentNotes = JSON.parse(localStorage.getItem(NOTES_KEY) || "{}");
       const mergedNotes = { ...currentNotes, ...remote.moduleNotes };
       localStorage.setItem(NOTES_KEY, JSON.stringify(mergedNotes));
-    } catch (e) { /* ignore */ }
+    } catch (e) {
+      /* ignore */
+    }
     try {
-      const currentDayNotes = JSON.parse(localStorage.getItem(DAY_NOTES_KEY) || '{}');
+      const currentDayNotes = JSON.parse(
+        localStorage.getItem(DAY_NOTES_KEY) || "{}",
+      );
       const mergedDayNotes = { ...currentDayNotes, ...remote.dayNotes };
       localStorage.setItem(DAY_NOTES_KEY, JSON.stringify(mergedDayNotes));
-    } catch (e) { /* ignore */ }
+    } catch (e) {
+      /* ignore */
+    }
     try {
-      const currentResourceNotes = JSON.parse(localStorage.getItem(RESOURCE_NOTES_KEY) || '{}');
-      const mergedResourceNotes = { ...currentResourceNotes, ...remote.resourceNotes };
-      localStorage.setItem(RESOURCE_NOTES_KEY, JSON.stringify(mergedResourceNotes));
-    } catch (e) { /* ignore */ }
+      const currentResourceNotes = JSON.parse(
+        localStorage.getItem(RESOURCE_NOTES_KEY) || "{}",
+      );
+      const mergedResourceNotes = {
+        ...currentResourceNotes,
+        ...remote.resourceNotes,
+      };
+      localStorage.setItem(
+        RESOURCE_NOTES_KEY,
+        JSON.stringify(mergedResourceNotes),
+      );
+    } catch (e) {
+      /* ignore */
+    }
   }, [loadNotesFromSupabase]);
 
   useEffect(() => {
@@ -145,45 +142,60 @@ export const useStudyNotesSync = () => {
     };
   }, []);
 
-  const syncModuleNote = useCallback((modId, content) => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(async () => {
-      await upsertNote('module', String(modId), content || '');
+  const syncModuleNote = useCallback(
+    (modId, content) => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(async () => {
+        await upsertNote("module", String(modId), content || "");
+        setLastSync(new Date());
+      }, 2000);
+    },
+    [upsertNote],
+  );
+
+  const syncDayNote = useCallback(
+    (dateKey, content) => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(async () => {
+        await upsertNote("day", dateKey, content || "");
+        setLastSync(new Date());
+      }, 2000);
+    },
+    [upsertNote],
+  );
+
+  const syncModuleNotes = useCallback(
+    async (notes) => {
+      const entries = Object.entries(notes).filter(([, v]) => v?.trim());
+      for (const [modId, content] of entries) {
+        await upsertNote("module", modId, content);
+      }
       setLastSync(new Date());
-    }, 2000);
-  }, [upsertNote]);
+    },
+    [upsertNote],
+  );
 
-  const syncDayNote = useCallback((dateKey, content) => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(async () => {
-      await upsertNote('day', dateKey, content || '');
+  const syncDayNotes = useCallback(
+    async (dayNotes) => {
+      const entries = Object.entries(dayNotes).filter(([, v]) => v?.trim());
+      for (const [dateKey, content] of entries) {
+        await upsertNote("day", dateKey, content);
+      }
       setLastSync(new Date());
-    }, 2000);
-  }, [upsertNote]);
+    },
+    [upsertNote],
+  );
 
-  const syncModuleNotes = useCallback(async (notes) => {
-    const entries = Object.entries(notes).filter(([, v]) => v?.trim());
-    for (const [modId, content] of entries) {
-      await upsertNote('module', modId, content);
-    }
-    setLastSync(new Date());
-  }, [upsertNote]);
-
-  const syncDayNotes = useCallback(async (dayNotes) => {
-    const entries = Object.entries(dayNotes).filter(([, v]) => v?.trim());
-    for (const [dateKey, content] of entries) {
-      await upsertNote('day', dateKey, content);
-    }
-    setLastSync(new Date());
-  }, [upsertNote]);
-
-  const syncResourceNote = useCallback((resourceId, content) => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(async () => {
-      await upsertNote('resource', String(resourceId), content || '');
-      setLastSync(new Date());
-    }, 2000);
-  }, [upsertNote]);
+  const syncResourceNote = useCallback(
+    (resourceId, content) => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(async () => {
+        await upsertNote("resource", String(resourceId), content || "");
+        setLastSync(new Date());
+      }, 2000);
+    },
+    [upsertNote],
+  );
 
   return {
     syncModuleNote,

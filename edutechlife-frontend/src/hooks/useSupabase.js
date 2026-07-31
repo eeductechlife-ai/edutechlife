@@ -1,85 +1,56 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { useSession, useAuth } from '@clerk/react';
-import { createClerkSupabaseClient } from '../lib/supabase';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { createClerkSupabaseClient } from "../lib/supabase";
+import { useAuthIdentity } from "./useAuthIdentity";
 
+/**
+ * Supabase client bound to the signed-in student.
+ *
+ * Previously this derived the session from Clerk (`useSession`). Auth now runs
+ * on Supabase, so Clerk reported no session, `userId` stayed null and every
+ * consumer that gated on it — progress sync above all — silently did nothing.
+ * The token now comes from the Supabase session, which is what RLS checks.
+ *
+ * The return shape is unchanged so existing consumers keep working.
+ */
 export const useSupabase = () => {
-  const { session, isLoaded } = useSession();
-  const { getToken } = useAuth();
+  const { userId, token, isSignedIn, isLoaded } = useAuthIdentity();
   const [supabaseClient, setSupabaseClient] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isUsingJWT, setIsUsingJWT] = useState(false);
-  const [userId, setUserId] = useState(null);
 
-  const clientCreatedRef = useRef(false);
+  // The client is rebuilt whenever the token changes, so a fresh login does not
+  // keep querying with the previous student's credentials.
+  const currentTokenRef = useRef(null);
 
-  const updateSupabaseClient = useCallback(async () => {
+  const updateSupabaseClient = useCallback(() => {
     try {
       setIsLoading(true);
       setError(null);
 
-      let client;
-      let usingJWT = false;
-      let currentUserId = null;
-      
-      if (session) {
-        const token = await getToken({ template: 'supabase' });
-        
-        if (token) {
-          const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-          currentUserId = tokenPayload.sub;
-          setUserId(currentUserId);
-          
-          // Crear cliente con JWT de Clerk para autenticación real
-          // IMPORTANTE: En Clerk Dashboard → JWT Templates, el template 'supabase'
-          // debe usar algoritmo RS256 (no HS256) para compatibilidad con Supabase JWKS
-          try {
-            client = createClerkSupabaseClient(token);
-            usingJWT = true;
-          } catch (jwtErr) {
-            console.warn('⚠️ Fallback a anon key (JWT no disponible):', jwtErr.message);
-            client = createClerkSupabaseClient();
-            usingJWT = false;
-          }
-        } else {
-          client = createClerkSupabaseClient();
-          usingJWT = false;
-        }
-      } else {
-        client = createClerkSupabaseClient();
-        usingJWT = false;
-      }
-      
-      setIsUsingJWT(usingJWT);
-      
-      if (!clientCreatedRef.current) {
-        setSupabaseClient(client);
-        clientCreatedRef.current = true;
-      }
+      // Passing the access token makes PostgREST run as this user, so the
+      // row-level-security policies on user_progress apply: a student reads and
+      // writes only their own rows.
+      const client = createClerkSupabaseClient(token || null);
+
+      setSupabaseClient(client);
+      setIsUsingJWT(!!token);
+      currentTokenRef.current = token || null;
     } catch (err) {
-      console.error('❌ Error creando cliente Supabase:', err);
+      console.error("Error creando cliente Supabase:", err);
       setError(err.message);
-      const fallbackClient = createClerkSupabaseClient();
-      setSupabaseClient(fallbackClient);
+      setSupabaseClient(createClerkSupabaseClient());
       setIsUsingJWT(false);
     } finally {
       setIsLoading(false);
     }
-  }, [session, getToken]);
+  }, [token]);
 
   useEffect(() => {
-    if (isLoaded) {
-      updateSupabaseClient();
-    }
-  }, [isLoaded, updateSupabaseClient]);
-
-  useEffect(() => {
-    if (!session) {
-      clientCreatedRef.current = false;
-      setIsUsingJWT(false);
-      setUserId(null);
-    }
-  }, [session]);
+    if (!isLoaded) return;
+    if (supabaseClient && currentTokenRef.current === (token || null)) return;
+    updateSupabaseClient();
+  }, [isLoaded, token, supabaseClient, updateSupabaseClient]);
 
   return {
     supabase: supabaseClient,
@@ -87,8 +58,11 @@ export const useSupabase = () => {
     error,
     isUsingJWT,
     userId,
-    hasClerkSession: !!session,
-    session,
+    // Kept for backwards compatibility with call sites that still read it;
+    // it now reports the Supabase session, not a Clerk one.
+    hasClerkSession: isSignedIn,
+    isSignedIn,
+    session: isSignedIn ? { userId, token } : null,
     refreshClient: updateSupabaseClient,
   };
 };

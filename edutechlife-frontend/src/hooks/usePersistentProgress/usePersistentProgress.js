@@ -1,18 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useUser, useAuth as useClerkAuth } from "@clerk/react";
 import { useSupabase } from "../useSupabase";
-import {
-  setupConnectionListener,
-} from "../../services/progressSync";
+import { setupConnectionListener } from "../../services/progressSync";
 import {
   MODULE_CONFIG,
   MODULE_THRESHOLD,
   TOTAL_RESOURCES,
 } from "./courseModuleConfig";
 import { STORAGE_KEYS } from "./storageKeys";
-import {
-  calculateModuleProgressInternal,
-} from "./courseProgressUtils";
+import { calculateModuleProgressInternal } from "./courseProgressUtils";
 import useLocalProgress from "./useLocalProgress";
 import useSyncProgress from "./useSyncProgress";
 import { INITIAL_STATE } from "./constants";
@@ -24,27 +19,43 @@ import {
 import { syncActivity, loadRemoteProgress } from "./supabaseSync";
 
 export const usePersistentProgress = () => {
-  const { user: clerkUser } = useUser();
-  const { isSignedIn } = useClerkAuth();
   const {
     supabase,
     isLoading: supabaseLoading,
     isUsingJWT,
-    userId: supabaseUserId,
+    userId,
+    isSignedIn,
   } = useSupabase();
 
-  const userId = supabaseUserId || clerkUser?.id;
+  // Gated on the Supabase session. This used to require a Clerk session, which
+  // no longer exists, so it was never true and no progress ever reached Supabase.
   const isUserReady = isSignedIn && userId;
 
-  const [completedVideos, setCompletedVideos] = useState(INITIAL_STATE.completedVideos);
-  const [completedModules, setCompletedModules] = useState(INITIAL_STATE.completedModules);
-  const [completedExams, setCompletedExams] = useState(INITIAL_STATE.completedExams);
-  const [completedInfographics, setCompletedInfographics] = useState(INITIAL_STATE.completedInfographics);
-  const [completedActivities, setCompletedActivities] = useState(INITIAL_STATE.completedActivities);
-  const [challengeScores, setChallengeScores] = useState(INITIAL_STATE.challengeScores);
-  const [completedCommunity, setCompletedCommunity] = useState(INITIAL_STATE.completedCommunity);
+  const [completedVideos, setCompletedVideos] = useState(
+    INITIAL_STATE.completedVideos,
+  );
+  const [completedModules, setCompletedModules] = useState(
+    INITIAL_STATE.completedModules,
+  );
+  const [completedExams, setCompletedExams] = useState(
+    INITIAL_STATE.completedExams,
+  );
+  const [completedInfographics, setCompletedInfographics] = useState(
+    INITIAL_STATE.completedInfographics,
+  );
+  const [completedActivities, setCompletedActivities] = useState(
+    INITIAL_STATE.completedActivities,
+  );
+  const [challengeScores, setChallengeScores] = useState(
+    INITIAL_STATE.challengeScores,
+  );
+  const [completedCommunity, setCompletedCommunity] = useState(
+    INITIAL_STATE.completedCommunity,
+  );
   const [gamification, setGamification] = useState(INITIAL_STATE.gamification);
-  const [courseProgress, setCourseProgress] = useState(INITIAL_STATE.courseProgress);
+  const [courseProgress, setCourseProgress] = useState(
+    INITIAL_STATE.courseProgress,
+  );
   const [isLoading, setIsLoading] = useState(INITIAL_STATE.isLoading);
   const [syncStatus, setSyncStatus] = useState(INITIAL_STATE.syncStatus);
 
@@ -424,7 +435,10 @@ export const usePersistentProgress = () => {
     const remoteData = await loadRemoteProgress(supabase, userId);
 
     if (remoteData) {
-      const mergedData = mergeLocalWithRemote(loadFromLocalStorage(), remoteData);
+      const mergedData = mergeLocalWithRemote(
+        loadFromLocalStorage(),
+        remoteData,
+      );
       applyProgressData(setters, mergedData);
       const progress = computeGlobalProgress(mergedData);
       setCourseProgress(progress);

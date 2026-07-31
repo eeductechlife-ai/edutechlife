@@ -6,7 +6,7 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { useUser } from "@clerk/react";
+import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { useProgressContext } from "../ProgressContext";
 import { useNotification } from "../NotificationContext";
 import { useActivityTracker } from "../../hooks/useActivityTracker";
@@ -33,13 +33,10 @@ export const useIALabProgressContext = () => {
 
 export function IALabProgressProvider({ children }) {
   const { t, locale } = useTranslation();
-  const { user: clerkUser } = useUser();
-  const isDevUser =
-    clerkUser?.username === "johnbeltran22" ||
-    clerkUser?.id === "johnbeltran22";
-  const clerkRole = isDevUser
-    ? "admin"
-    : clerkUser?.publicMetadata?.role || "student";
+  // Role comes from the `users` table. It used to come from Clerk metadata,
+  // which returns nothing now, so every account fell back to "student" and the
+  // admin account lost its rights inside IALab.
+  const { role: userRole } = useStudentProfile();
 
   const activeMod = useIALabStore((s) => s.activeMod);
   const setActiveMod = useIALabStore((s) => s.setActiveMod);
@@ -117,7 +114,7 @@ export function IALabProgressProvider({ children }) {
       syncStatus: progressSyncStatus,
       isUsingJWT: progressIsUsingJWT,
       userId: progressUserId,
-      userRole: clerkRole,
+      userRole,
       isLoading: progressLoading,
     });
   }, [
@@ -131,7 +128,7 @@ export function IALabProgressProvider({ children }) {
     progressSyncStatus,
     progressIsUsingJWT,
     progressUserId,
-    clerkRole,
+    userRole,
     progressLoading,
   ]);
 

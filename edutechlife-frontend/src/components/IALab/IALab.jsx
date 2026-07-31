@@ -13,7 +13,6 @@ import {
   memo,
 } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { useClerk } from "@clerk/react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   IALabProvider,
@@ -84,6 +83,7 @@ const IALabValerioPanel = lazy(() => import("./IALabValerioPanel"));
 import MobileHeader from "./shared/MobileHeader";
 import MobileInfoBar from "./shared/MobileInfoBar";
 import ToastNotification from "./shared/ToastNotification";
+import XPToast from "./XPToast";
 
 const createTABS = (t) => [
   { id: null, label: t("ialab.tab_all") },
@@ -147,7 +147,6 @@ const IALabContent = memo(function () {
     }
   }, [activeMod]);
   const isScrollingRef = useRef(false);
-  const { openUserProfile } = useClerk();
   const {
     containerRef,
     pullDistance,
@@ -201,7 +200,10 @@ const IALabContent = memo(function () {
 
   const handleOpenProfile = () => {
     closeMobileMenu();
-    openUserProfile();
+    // Antes abria el modal de perfil de Clerk, que sin sesion de Clerk no
+    // abria nada. Lleva al perfil propio de la plataforma.
+    const id = useIALabStore.getState().userId;
+    navigate(id ? `/profile/${id}` : "/profile");
   };
 
   const handleOpenHistory = () => {
@@ -357,7 +359,7 @@ const IALabContent = memo(function () {
           ref={setMainRef}
           id="main-content"
           tabIndex={-1}
-          className="flex-1 outline-none overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 safe-area-bottom md:px-8 md:pt-0 lg:px-10 lg:pt-0 lg:pb-8 xl:px-12 2xl:px-16"
+          className="flex-1 outline-none overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 safe-area-bottom md:px-5 md:pt-0 lg:px-8 lg:pt-0 lg:pb-8 xl:px-12 2xl:px-16"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -417,10 +419,10 @@ const IALabContent = memo(function () {
                   <Suspense fallback={<RouteSkeleton />}>
                     <SectionErrorBoundary name="DailyPlan">
                       <div data-tour="tour-ruta">
-                      <DailyPlan
-                        onAction={handleAction}
-                        isLoading={isLoadingProgress}
-                      />
+                        <DailyPlan
+                          onAction={handleAction}
+                          isLoading={isLoadingProgress}
+                        />
                       </div>
                     </SectionErrorBoundary>
                   </Suspense>
@@ -620,7 +622,9 @@ const IALabContent = memo(function () {
         t={t}
       />
 
-      <Suspense fallback={<div className="h-20 bg-white/50 rounded-xl animate-pulse" />}>
+      <Suspense
+        fallback={<div className="h-20 bg-white/50 rounded-xl animate-pulse" />}
+      >
         {showValerioPanel && (
           <IALabValerioPanel
             isOpen={showValerioPanel}
@@ -633,11 +637,15 @@ const IALabContent = memo(function () {
       <OfflineBanner />
 
       {/* Tour interactivo contextual */}
-      <Suspense fallback={<div className="h-20 bg-white/50 rounded-xl animate-pulse" />}>
+      <Suspense
+        fallback={<div className="h-20 bg-white/50 rounded-xl animate-pulse" />}
+      >
         <IALabTour hasStartedCourse={hasStartedCourse} />
       </Suspense>
 
       <ToastNotification toast={toast} onDismiss={() => setToast(null)} />
+
+      <XPToast />
 
       <Suspense fallback={null}>
         <AchievementToast

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useUser, useClerk, useAuth as useClerkAuth } from "@clerk/react";
+import { useAuthIdentity } from "../../../hooks/useAuthIdentity";
+import { useStudentProfile } from "../../../hooks/useStudentProfile";
 import { useProgressContext } from "../../ProgressContext";
 import { useNotification } from "../../NotificationContext";
 import { useActivityTracker } from "../../../hooks/useActivityTracker";
@@ -12,11 +13,15 @@ import { getAnalyzingMsgs } from "./ialabAnalyzingMsgs";
 
 export function useIALabUI(onBack) {
   const onBackRef = useRef(onBack);
-  useEffect(() => { onBackRef.current = onBack; }, [onBack]);
+  useEffect(() => {
+    onBackRef.current = onBack;
+  }, [onBack]);
   const { t } = useTranslation();
-  const { user: clerkUser } = useUser();
-  const { signOut: clerkSignOut } = useClerk();
-  const { isLoaded: authLoaded } = useClerkAuth();
+  // Identidad y perfil desde Supabase. Antes venian de Clerk, que ya no
+  // autentica a nadie, por lo que `user` era siempre null y todo lo que
+  // dependia de `user.id` (gamificacion, notificaciones) no se ejecutaba.
+  const { userId, email: authEmail, isLoaded: authLoaded } = useAuthIdentity();
+  const { profile, role: userRole } = useStudentProfile();
 
   const activeTab = useIALabStore((s) => s.activeTab);
   const setActiveTab = useIALabStore((s) => s.setActiveTab);
@@ -87,28 +92,38 @@ export function useIALabUI(onBack) {
   const badges = useIALabStore((s) => s.badges);
   const lessonProgress = useIALabStore((s) => s.lessonProgress);
 
-  const clerkRole = clerkUser?.publicMetadata?.role || "student";
-  const user = useMemo(
-    () =>
-      clerkUser
-        ? {
-            id: clerkUser.id,
-            full_name: clerkUser.fullName || t("profile.user_fallback"),
-            email: clerkUser.emailAddresses?.[0]?.emailAddress || "",
-            fullName: clerkUser.fullName,
-            firstName: clerkUser.firstName,
-            lastName: clerkUser.lastName,
-            imageUrl: clerkUser.imageUrl,
-            createdAt: clerkUser.createdAt,
-            role: clerkRole,
-          }
-        : null,
-    [clerkUser, clerkRole],
-  );
+  const user = useMemo(() => {
+    if (!userId) return null;
+    const fullName =
+      [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") ||
+      profile?.username ||
+      t("profile.user_fallback");
+    return {
+      id: userId,
+      full_name: fullName,
+      email: profile?.email || authEmail || "",
+      fullName,
+      firstName: profile?.first_name || "",
+      lastName: profile?.last_name || "",
+      username: profile?.username || "",
+      imageUrl: profile?.avatar_url || "",
+      createdAt: profile?.created_at || null,
+      role: userRole,
+    };
+  }, [userId, authEmail, profile, userRole, t]);
 
   const signOut = async () => {
-    await clerkSignOut();
+    // Clerk's signOut was a no-op here (no Clerk session existed), so sessions
+    // were never actually closed. Clearing the Supabase session is what signs
+    // the student out.
+    try {
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("user_email");
+    } catch {
+      /* ignore */
+    }
     clearProgressFromStorage();
+    window.location.replace("/login");
   };
 
   const { syncGamification: syncGamificationToSupabase } = useProgressContext();
