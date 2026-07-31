@@ -15,7 +15,7 @@ const NotFoundPage = () => {
       <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC]">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-[#004B63] mb-4">404</h1>
-          <p className="text-lg text-[#4DA8C4] mb-6">
+          <p className="text-lg text-[#00708F] mb-6">
             {t("seo.notfound.title")}
           </p>
           <button

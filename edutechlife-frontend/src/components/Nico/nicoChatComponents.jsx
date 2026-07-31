@@ -6,13 +6,14 @@ export function ChatButton({ onClick }) {
   return (
     <button
       onClick={onClick}
+      aria-label="Abrir chat con Nico, asistente virtual"
       className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-gentle-pulse safe-area-bottom flex items-center justify-center"
       style={{
         backgroundColor: COLORS.PETROLEUM,
         background: `linear-gradient(135deg, ${COLORS.PETROLEUM} 0%, ${COLORS.CORPORATE} 100%)`,
       }}
     >
-      <Bot className="w-8 h-8 text-white" />
+      <Bot className="w-8 h-8 text-white" aria-hidden="true" />
       <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-green-500 animate-ping" />
     </button>
   );
@@ -63,6 +64,7 @@ export function ChatHeader({
             border: audioEnabled ? `2px solid ${COLORS.CORPORATE}` : "none",
           }}
           title={audioEnabled ? "Desactivar audio" : "Activar audio"}
+          aria-label={audioEnabled ? "Desactivar audio" : "Activar audio"}
         >
           {audioEnabled ? (
             <Volume2 className="w-4 h-4 text-white" />
@@ -76,6 +78,7 @@ export function ChatHeader({
           className="p-2 rounded-lg hover:opacity-80 transition"
           style={{ backgroundColor: COLORS.CORPORATE }}
           title="Nueva Conversación"
+          aria-label="Nueva conversación"
         >
           <RotateCcw className="w-4 h-4 text-white" />
         </button>
@@ -85,6 +88,7 @@ export function ChatHeader({
           className="p-2 rounded-lg hover:opacity-80 transition"
           style={{ backgroundColor: COLORS.PETROLEUM }}
           title="Cerrar"
+          aria-label="Cerrar chat"
         >
           <X className="w-4 h-4 text-white" />
         </button>
