@@ -23,7 +23,8 @@ const QuickActions = memo(({ onAction, darkMode }) => {
       {actions.map((action) => (
         <motion.button
           key={action.value}
-          onClick={() => onAction(action.value)}
+          data-value={action.value}
+          onClick={(e) => onAction(e.currentTarget.dataset.value)}
           className={`px-3 py-2 border rounded-full text-xs font-medium transition-all flex items-center gap-1.5 shadow-sm ${
             darkMode
               ? "bg-[#1E293B] border-[#334155] text-[#94A3B8] hover:bg-[#334155]"

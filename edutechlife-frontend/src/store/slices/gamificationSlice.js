@@ -10,9 +10,9 @@
  * Side effects: persistencia automática vía Zustand persist middleware,
  *   window.dispatchEvent('ialab:badgesAwarded')
  */
-import { LS_KEYS } from '@/constants/ialab';
-import { ls } from '@/utils/ialab';
-import { BADGE_INFO } from '@/data/ialab';
+import { LS_KEYS } from "@/constants/ialab";
+import { ls } from "@/utils/ialab";
+import { BADGE_INFO } from "@/data/ialab";
 
 export const createGamificationSlice = (set, get) => ({
   xp: ls.get(LS_KEYS.XP, 0),
@@ -22,7 +22,9 @@ export const createGamificationSlice = (set, get) => ({
     const stored = ls.get(LS_KEYS.START_DATE);
     if (stored) return stored;
     const now = new Date().toISOString();
-    try { localStorage.setItem(LS_KEYS.START_DATE, JSON.stringify(now)); } catch {}
+    try {
+      localStorage.setItem(LS_KEYS.START_DATE, JSON.stringify(now));
+    } catch {}
     return now;
   })(),
   badges: ls.get(LS_KEYS.BADGES, []),
@@ -31,15 +33,22 @@ export const createGamificationSlice = (set, get) => ({
   forumCommentCount: ls.get(LS_KEYS.FORUM_COMMENT_COUNT, 0),
 
   addXp: (amount) => {
-    const safe = typeof amount === 'number' && !Number.isNaN(amount) ? amount : 0;
+    const safe =
+      typeof amount === "number" && !Number.isNaN(amount) ? amount : 0;
+    if (safe <= 0) return;
     set((state) => ({ xp: state.xp + safe }));
+    window.dispatchEvent(
+      new CustomEvent("ialab:xpEarned", { detail: { amount: safe } }),
+    );
   },
 
   recordActivity: () => {
     const { lastActivityDate, streak } = get();
     const now = new Date();
     const todayDateStr = now.toDateString();
-    const lastDateStr = lastActivityDate ? new Date(lastActivityDate).toDateString() : null;
+    const lastDateStr = lastActivityDate
+      ? new Date(lastActivityDate).toDateString()
+      : null;
     if (lastDateStr === todayDateStr) {
       set({ lastActivityDate: now.toISOString() });
       return true;
@@ -80,29 +89,46 @@ export const createGamificationSlice = (set, get) => ({
 
   checkAndAwardBadges: () => {
     const state = get();
-    const totalLessonsCompleted = Object.values(state.lessonProgress)
-      .reduce((sum, mod) => sum + Object.values(mod).filter(s => s === 'completed').length, 0);
+    const totalLessonsCompleted = Object.values(state.lessonProgress).reduce(
+      (sum, mod) =>
+        sum + Object.values(mod).filter((s) => s === "completed").length,
+      0,
+    );
     const totalModulesCompleted = state.completedModules.length;
     const newBadges = [];
 
-    if (totalLessonsCompleted >= 1 && !state.badges.includes('first_lesson')) newBadges.push('first_lesson');
-    if (totalLessonsCompleted >= 5 && !state.badges.includes('five_lessons')) newBadges.push('five_lessons');
-    if (totalLessonsCompleted >= 15 && !state.badges.includes('all_lessons')) newBadges.push('all_lessons');
-    if (state.streak >= 3 && !state.badges.includes('streak_3')) newBadges.push('streak_3');
-    if (state.streak >= 7 && !state.badges.includes('streak_7')) newBadges.push('streak_7');
-    if (totalModulesCompleted >= 1 && !state.badges.includes('first_module')) newBadges.push('first_module');
-    if (totalModulesCompleted >= 3 && !state.badges.includes('three_modules')) newBadges.push('three_modules');
-    if (totalModulesCompleted >= 5 && !state.badges.includes('all_modules')) newBadges.push('all_modules');
+    if (totalLessonsCompleted >= 1 && !state.badges.includes("first_lesson"))
+      newBadges.push("first_lesson");
+    if (totalLessonsCompleted >= 5 && !state.badges.includes("five_lessons"))
+      newBadges.push("five_lessons");
+    if (totalLessonsCompleted >= 15 && !state.badges.includes("all_lessons"))
+      newBadges.push("all_lessons");
+    if (state.streak >= 3 && !state.badges.includes("streak_3"))
+      newBadges.push("streak_3");
+    if (state.streak >= 7 && !state.badges.includes("streak_7"))
+      newBadges.push("streak_7");
+    if (totalModulesCompleted >= 1 && !state.badges.includes("first_module"))
+      newBadges.push("first_module");
+    if (totalModulesCompleted >= 3 && !state.badges.includes("three_modules"))
+      newBadges.push("three_modules");
+    if (totalModulesCompleted >= 5 && !state.badges.includes("all_modules"))
+      newBadges.push("all_modules");
 
     if (newBadges.length > 0) {
       const now = new Date().toISOString();
       const newDates = {};
-      newBadges.forEach(id => { newDates[id] = now; });
+      newBadges.forEach((id) => {
+        newDates[id] = now;
+      });
       set({
         badges: [...state.badges, ...newBadges],
         badgesDates: { ...state.badgesDates, ...newDates },
       });
-      window.dispatchEvent(new CustomEvent('ialab:badgesAwarded', { detail: { badges: newBadges } }));
+      window.dispatchEvent(
+        new CustomEvent("ialab:badgesAwarded", {
+          detail: { badges: newBadges },
+        }),
+      );
     }
   },
 
@@ -124,10 +150,14 @@ export const createGamificationSlice = (set, get) => ({
 
   getUserBadges: () => {
     const state = get();
-    return state.badges.map(id => {
-      const info = BADGE_INFO[id];
-      return info ? { id, ...info, dateEarned: state.badgesDates[id] || null } : null;
-    }).filter(Boolean);
+    return state.badges
+      .map((id) => {
+        const info = BADGE_INFO[id];
+        return info
+          ? { id, ...info, dateEarned: state.badgesDates[id] || null }
+          : null;
+      })
+      .filter(Boolean);
   },
 
   getBadgesSummary: () => {
@@ -135,10 +165,16 @@ export const createGamificationSlice = (set, get) => ({
     return {
       total: Object.keys(BADGE_INFO).length,
       earned: state.badges.length,
-      recent: state.badges.slice(-3).reverse().map(id => {
-        const info = BADGE_INFO[id];
-        return info ? { id, ...info, dateEarned: state.badgesDates[id] || null } : null;
-      }).filter(Boolean),
+      recent: state.badges
+        .slice(-3)
+        .reverse()
+        .map((id) => {
+          const info = BADGE_INFO[id];
+          return info
+            ? { id, ...info, dateEarned: state.badgesDates[id] || null }
+            : null;
+        })
+        .filter(Boolean),
     };
   },
 });

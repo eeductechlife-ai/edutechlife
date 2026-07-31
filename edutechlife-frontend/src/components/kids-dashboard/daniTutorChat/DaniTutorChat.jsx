@@ -1,4 +1,4 @@
-import { memo, useRef, useEffect, useMemo } from "react";
+import { memo, useRef, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import {
@@ -44,11 +44,16 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
   const inputRef = useRef(null);
   const maxChars = 500;
 
-  const kidErrorMessages = useMemo(() => ({
-    generic: "¡Ups! Dani se quedó pensando. ¿Puedes intentar de nuevo?",
-    timeout: "Dani está pensando muy profundo... Espera un poco y vuelve a intentar.",
-    network: "¡Oh! Parece que el internet se fue de paseo. Revisa tu conexión y vuelve a intentar.",
-  }), []);
+  const kidErrorMessages = useMemo(
+    () => ({
+      generic: "¡Ups! Dani se quedó pensando. ¿Puedes intentar de nuevo?",
+      timeout:
+        "Dani está pensando muy profundo... Espera un poco y vuelve a intentar.",
+      network:
+        "¡Oh! Parece que el internet se fue de paseo. Revisa tu conexión y vuelve a intentar.",
+    }),
+    [],
+  );
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
@@ -56,6 +61,47 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
+  const handleBackdropKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Escape") onClose();
+    },
+    [onClose],
+  );
+
+  const handleContentClick = useCallback((e) => e.stopPropagation(), []);
+
+  const handleCloseCrisis = useCallback(
+    () => setShowCrisisResources(false),
+    [],
+  );
+  const handleCloseEmotional = useCallback(
+    () => setShowEmotionalBanner(false),
+    [],
+  );
+  const handleCloseDocument = useCallback(() => setDocumentForDani(null), []);
+
+  const handleInputChange = useCallback((e) => {
+    if (e.target.value.length <= maxChars) {
+      setInputText(e.target.value);
+    }
+  }, []);
+
+  const handleInputKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleSendMessage(inputText);
+      }
+    },
+    [handleSendMessage, inputText],
+  );
+
+  const handleClearInput = useCallback(() => setInputText(""), []);
+  const handleSend = useCallback(
+    () => handleSendMessage(inputText),
+    [handleSendMessage, inputText],
+  );
 
   const {
     focusTrapRef,
@@ -88,7 +134,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     isListening,
     handleMicClick,
     crisisAlertLevel,
-  } = useDaniChat({ isOpen, onClose, activeTab });
+  } = useDaniChat({ isOpen, activeTab });
 
   if (!isOpen) return null;
 
@@ -105,9 +151,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
         aria-modal="true"
         aria-label={t("dani.chat_title")}
         onClick={onClose}
-        onKeyDown={(e) => {
-          if (e.key === "Escape") onClose();
-        }}
+        onKeyDown={handleBackdropKeyDown}
       >
         <motion.div
           initial={{ opacity: 0, y: 100, scale: 0.9 }}
@@ -119,7 +163,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
               ? "bg-[#0F172A] border-[#334155]"
               : "bg-[#F8FAFC] border-[#E2E8F0]"
           }`}
-          onClick={(e) => e.stopPropagation()}
+          onClick={handleContentClick}
         >
           <DaniChatHeader
             isSpeaking={isSpeaking}
@@ -160,7 +204,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                   </p>
                 </div>
                 <button
-                  onClick={() => setShowCrisisResources(false)}
+                  onClick={handleCloseCrisis}
                   className="text-red-400 hover:text-red-600 text-sm"
                   aria-label={t("dani.close")}
                 >
@@ -187,7 +231,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                   {t("dani.emotional_banner")}
                 </p>
                 <button
-                  onClick={() => setShowEmotionalBanner(false)}
+                  onClick={handleCloseEmotional}
                   className="text-[#64748B] hover:text-[#004B63] text-xs"
                   aria-label={t("dani.close")}
                 >
@@ -250,7 +294,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                   </p>
                 </div>
                 <button
-                  onClick={() => setDocumentForDani(null)}
+                  onClick={handleCloseDocument}
                   className="text-[#64748B] hover:text-[#004B63] text-xs"
                   aria-label={t("dani.document_close")}
                 >
@@ -290,17 +334,8 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                     ref={inputRef}
                     type="text"
                     value={inputText}
-                    onChange={(e) => {
-                      if (e.target.value.length <= maxChars) {
-                        setInputText(e.target.value);
-                      }
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage(inputText);
-                      }
-                    }}
+                    onChange={handleInputChange}
+                    onKeyDown={handleInputKeyDown}
                     placeholder={
                       activeTab === "examenes"
                         ? t("dani.placeholder_exam") ||
@@ -322,7 +357,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                       initial={{ opacity: 0, scale: 0.5 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.5 }}
-                      onClick={() => setInputText("")}
+                      onClick={handleClearInput}
                       className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center ${
                         darkMode
                           ? "text-[#64748B] hover:text-white"
@@ -353,7 +388,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                   <Mic size={20} strokeWidth={2} />
                 </motion.button>
                 <motion.button
-                  onClick={() => handleSendMessage(inputText)}
+                  onClick={handleSend}
                   disabled={!inputText.trim() || isTyping}
                   aria-label={t("dani.send")}
                   className="w-12 h-12 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl flex items-center justify-center disabled:opacity-40 shadow-lg flex-shrink-0"

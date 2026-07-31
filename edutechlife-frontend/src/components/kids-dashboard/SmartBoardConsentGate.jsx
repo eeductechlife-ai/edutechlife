@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useUser } from "@clerk/react";
+import { useAuthIdentity } from "../../hooks/useAuthIdentity";
+import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import SmartBoardHabeasDataModal from "./SmartBoardHabeasDataModal";
 
@@ -16,7 +17,9 @@ import SmartBoardHabeasDataModal from "./SmartBoardHabeasDataModal";
 const SmartBoardConsentGate = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, isLoaded } = useUser();
+  // Identidad y perfil desde Supabase (Clerk ya no autentica).
+  const { token, isLoaded } = useAuthIdentity();
+  const { profile } = useStudentProfile();
   const { setSubscriptionTier } = useSmartBoardKids();
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,10 +42,9 @@ const SmartBoardConsentGate = () => {
 
     try {
       // Calculate student age from Clerk publicMetadata
-      const birthYear = user?.publicMetadata?.birthYear;
-      const studentAge = birthYear
-        ? new Date().getFullYear() - Number(birthYear)
-        : user?.publicMetadata?.age || 13;
+      // La edad venia de Clerk publicMetadata; ahora del rango guardado en el
+      // perfil de Supabase (age_range), con 13 como valor por defecto.
+      const studentAge = parseInt(profile?.age_range, 10) || 13;
 
       // If minor, send parental consent to backend
       if (data.parentEmail) {
@@ -52,7 +54,7 @@ const SmartBoardConsentGate = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${await user.getIdToken()}`,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
               parentEmail: data.parentEmail,
@@ -100,13 +102,9 @@ const SmartBoardConsentGate = () => {
 
   return (
     <>
-      {showModal && user && (
+      {showModal && profile && (
         <SmartBoardHabeasDataModal
-          studentAge={
-            user?.publicMetadata?.birthYear
-              ? new Date().getFullYear() - Number(user.publicMetadata.birthYear)
-              : user?.publicMetadata?.age || 13
-          }
+          studentAge={parseInt(profile?.age_range, 10) || 13}
           onClose={handleCloseModal}
           onAccept={handleAcceptConsent}
         />

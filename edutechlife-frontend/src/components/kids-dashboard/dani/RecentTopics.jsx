@@ -11,7 +11,8 @@ const RecentTopics = memo(({ topics, onTopicClick, darkMode }) => {
       {topics.slice(-5).map((t) => (
         <motion.button
           key={t.topic}
-          onClick={() => onTopicClick(t.topic)}
+          data-topic={t.topic}
+          onClick={(e) => onTopicClick(e.currentTarget.dataset.topic)}
           className={`px-2.5 py-1 text-xs rounded-full border transition-all ${
             darkMode
               ? "bg-[#1E293B] border-[#334155] text-[#94A3B8] hover:bg-[#334155]"

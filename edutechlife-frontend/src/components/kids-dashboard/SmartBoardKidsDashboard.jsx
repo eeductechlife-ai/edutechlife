@@ -1,24 +1,21 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useClerk } from "@clerk/react";
+import { signOutUser } from "../../hooks/useAuthIdentity";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
-import { useA11y } from "../../hooks/useA11y";
 import "../../styles/a11y.css";
 import ParticlesBackground from "./ParticlesBackground";
 import DaniTutorChat from "./daniTutorChat";
 import PremiumSidebar from "./components/PremiumSidebar";
 import MobileBottomBar from "./components/MobileBottomBar";
 import CinematicContent from "./components/CinematicContent";
-import { Bot, Flame, Gem, Wifi, WifiOff, CloudSync } from "lucide-react";
-import { CATEGORIES, TOP_BAR_LABELS } from "./kidsDashboardConfig";
-import { SB_GRADIENTS, glow } from "./smartboardTheme";
+import { WifiOff, CloudSync } from "lucide-react";
 import SmartBoardLoadingSkeleton from "./SmartBoardLoadingSkeleton";
+import TopBar from "./components/TopBar";
 
 const SmartBoardKidsDashboard = () => {
   const { t } = useTranslation();
-  const { reducedMotion, highContrast, getAnimationDuration } = useA11y();
   const [activeTab, setActiveTab] = useState("inicio");
   useEffect(() => {
     try {
@@ -48,12 +45,14 @@ const SmartBoardKidsDashboard = () => {
   const prefersReducedMotion = useReducedMotion();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { signOut } = useClerk();
 
   const handleLogout = useCallback(() => {
-    signOut();
+    signOutUser("/");
     navigate("/");
   }, [signOut, navigate]);
+
+  const handleDaniOpen = useCallback(() => setIsDaniOpen(true), []);
+  const handleDaniClose = useCallback(() => setIsDaniOpen(false), []);
 
   // Proactive Dani reminder after inactivity
   useEffect(() => {
@@ -185,7 +184,8 @@ const SmartBoardKidsDashboard = () => {
 
       {/* Gradient Orbs */}
       <motion.div
-        className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#66CCCC]/20 rounded-full blur-[150px] pointer-events-none z-0"
+        className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#66CCCC]/20 rounded-full blur-[150px] pointer-events-none z-0 will-change-transform will-change-opacity"
+        style={{ willChange: "transform, opacity" }}
         animate={
           prefersReducedMotion
             ? {}
@@ -197,7 +197,8 @@ const SmartBoardKidsDashboard = () => {
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#4DA8C4]/20 rounded-full blur-[150px] pointer-events-none z-0"
+        className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#4DA8C4]/20 rounded-full blur-[150px] pointer-events-none z-0 will-change-transform will-change-opacity"
+        style={{ willChange: "transform, opacity" }}
         animate={
           prefersReducedMotion
             ? {}
@@ -226,156 +227,13 @@ const SmartBoardKidsDashboard = () => {
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Top Bar - Glassmorphism */}
-          <motion.header
-            initial={{ y: -50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className={`backdrop-blur-xl border-b p-4 flex items-center justify-between z-20 transition-colors duration-500 ${
-              darkMode
-                ? "bg-[#1E293B]/80 border-[#334155]/50"
-                : "bg-white/80 border-[#E2E8F0]/50"
-            }`}
-          >
-            {(() => {
-              const activeCat = CATEGORIES.find((c) =>
-                c.tabs.includes(activeTab),
-              );
-              const ActiveIcon = activeCat?.Icon || Bot;
-              return (
-                <div className="flex items-center gap-3">
-                  <motion.span
-                    key={activeCat?.id}
-                    initial={{ scale: 0.6, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: "spring", damping: 14 }}
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0"
-                    style={{
-                      background: activeCat?.gradient || SB_GRADIENTS.brand,
-                      boxShadow: `${glow(activeCat?.glowColor || "#00B4D8", 0.4)}, inset 0 1px 0 rgba(255,255,255,0.35)`,
-                    }}
-                  >
-                    <ActiveIcon
-                      className="w-[21px] h-[21px]"
-                      strokeWidth={2.3}
-                    />
-                  </motion.span>
-                  <div className="leading-none">
-                    <span
-                      className={`block text-[10px] font-black uppercase tracking-[0.14em] mb-0.5 ${darkMode ? "text-[#5C7386]" : "text-[#93A6B2]"}`}
-                    >
-                      {activeCat?.label}
-                    </span>
-                    <h1
-                      className={`text-xl font-black tracking-tight transition-colors duration-500 ${darkMode ? "text-white" : "text-[#00303F]"}`}
-                    >
-                      {TOP_BAR_LABELS[activeTab] || activeTab}
-                    </h1>
-                  </div>
-                </div>
-              );
-            })()}
-
-            <div className="flex items-center gap-3">
-              {/* Dani Quick Access */}
-              <motion.button
-                id="openDaniChat"
-                type="button"
-                onClick={() => setIsDaniOpen(true)}
-                whileHover={{ scale: 1.05, y: -1 }}
-                whileTap={{ scale: 0.92 }}
-                aria-label={t("smartboard.talk_dani")}
-                className="relative flex items-center gap-2 px-5 py-2.5 text-white rounded-full text-sm font-bold transition-all cursor-pointer select-none"
-                style={{
-                  background: SB_GRADIENTS.brand,
-                  boxShadow: glow("#0096C7", 0.45),
-                }}
-              >
-                <motion.span
-                  className="flex items-center justify-center"
-                  animate={{ rotate: [0, -10, 10, -10, 0] }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    repeatDelay: 3,
-                  }}
-                >
-                  <Bot className="w-[18px] h-[18px]" strokeWidth={2.4} />
-                </motion.span>
-                <span className="hidden md:block">
-                  {t("smartboard.talk_dani")}
-                </span>
-                <motion.span
-                  className="absolute inset-0 rounded-full border-2 border-white/40"
-                  initial={{ opacity: 0, scale: 1 }}
-                  whileTap={{ opacity: 1, scale: 1.15 }}
-                  transition={{ duration: 0.2 }}
-                />
-              </motion.button>
-
-              {/* Streak Display */}
-              <motion.div
-                className="hidden sm:flex px-2.5 py-1.5 rounded-2xl items-center gap-2 transition-colors duration-500"
-                style={{
-                  background: darkMode
-                    ? "linear-gradient(135deg, rgba(251,133,0,0.18), rgba(255,209,102,0.12))"
-                    : "linear-gradient(135deg, rgba(251,133,0,0.12), rgba(255,209,102,0.10))",
-                }}
-                whileHover={{ scale: 1.03, y: -1 }}
-                title={t("smartboard.streak_title")}
-              >
-                <span
-                  className="w-7 h-7 rounded-lg flex items-center justify-center text-white"
-                  style={{
-                    background: "linear-gradient(135deg, #FB8500, #F3722C)",
-                  }}
-                >
-                  <Flame className="w-4 h-4" strokeWidth={2.4} />
-                </span>
-                <span className="leading-none">
-                  <span className="block text-sm font-black text-[#FB8500] tabular-nums">
-                    {streak.current}
-                  </span>
-                  <span
-                    className={`block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
-                  >
-                    {t("smartboard.days")}
-                  </span>
-                </span>
-              </motion.div>
-
-              {/* Points Display */}
-              <motion.div
-                className="flex px-2.5 py-1.5 rounded-2xl items-center gap-2 transition-colors duration-500"
-                style={{
-                  background: darkMode
-                    ? "linear-gradient(135deg, rgba(0,150,199,0.20), rgba(72,202,228,0.12))"
-                    : "linear-gradient(135deg, rgba(0,150,199,0.12), rgba(72,202,228,0.10))",
-                }}
-                whileHover={{ scale: 1.03, y: -1 }}
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                <span
-                  className="w-7 h-7 rounded-lg flex items-center justify-center text-white"
-                  style={{ background: SB_GRADIENTS.brand }}
-                >
-                  <Gem className="w-4 h-4" strokeWidth={2.4} />
-                </span>
-                <span className="leading-none">
-                  <span
-                    className={`block text-sm font-black tabular-nums ${darkMode ? "text-white" : "text-[#00303F]"}`}
-                  >
-                    {totalPoints.toLocaleString()}
-                  </span>
-                  <span
-                    className={`block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
-                  >
-                    {t("smartboard.points_display")}
-                  </span>
-                </span>
-              </motion.div>
-            </div>
-          </motion.header>
+          <TopBar
+            activeTab={activeTab}
+            darkMode={darkMode}
+            streak={streak}
+            totalPoints={totalPoints}
+            onDaniOpen={handleDaniOpen}
+          />
 
           {/* Scrollable Content */}
           <CinematicContent
@@ -497,7 +355,7 @@ const SmartBoardKidsDashboard = () => {
         {isDaniOpen && (
           <DaniTutorChat
             isOpen={isDaniOpen}
-            onClose={() => setIsDaniOpen(false)}
+            onClose={handleDaniClose}
             activeTab={activeTab}
           />
         )}

@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 import AppRoutes from "./routes/index.jsx";
 import { StudentProvider } from "./context/StudentContext";
-import { useAuth as useClerkAuth } from "@clerk/react";
+import { useAuthIdentity } from "./hooks/useAuthIdentity";
 import { initSupabaseClient } from "./lib/supabase";
 import CustomCursor from "./components/CustomCursor";
 import AppErrorBoundary from "./components/common/ErrorBoundary";
@@ -15,15 +15,15 @@ const App = () => {
   const isIALabRoute = location.pathname.includes("/ialab");
   const isSmartBoardRoute = location.pathname.includes("/smartboard");
   const isVAKRoute = location.pathname.includes("/vak");
-  const { isLoaded: clerkLoaded, getToken } = useClerkAuth();
+  const { token: authToken } = useAuthIdentity();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!clerkLoaded) return;
-    getToken({ template: "supabase" }).then((token) => {
-      if (token) initSupabaseClient(token);
-    });
-  }, [clerkLoaded, getToken]);
+    // El cliente Supabase se eleva con el token de la sesion. Antes se pedia un
+    // JWT a Clerk, que no tenia sesion, asi que el cliente quedaba anonimo y las
+    // politicas RLS bloqueaban la lectura/escritura del progreso.
+    if (authToken) initSupabaseClient(authToken);
+  }, [authToken]);
 
   useEffect(() => {
     const prefetch = setTimeout(() => {

@@ -4,7 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import * as Sentry from "@sentry/react";
 import App from "./App.jsx";
-import ClerkProviderWrapper from "./providers/ClerkProviderWrapper";
 import { AuthProvider } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -32,19 +31,17 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <HelmetProvider>
       <BrowserRouter>
         <I18nProvider>
-          <ClerkProviderWrapper>
-            <AuthProvider>
-              <NotificationProvider>
-                <ThemeProvider>
-                  <AnalyticsProvider>
-                    <ErrorBoundary>
-                      <App />
-                    </ErrorBoundary>
-                  </AnalyticsProvider>
-                </ThemeProvider>
-              </NotificationProvider>
-            </AuthProvider>
-          </ClerkProviderWrapper>
+          <AuthProvider>
+            <NotificationProvider>
+              <ThemeProvider>
+                <AnalyticsProvider>
+                  <ErrorBoundary>
+                    <App />
+                  </ErrorBoundary>
+                </AnalyticsProvider>
+              </ThemeProvider>
+            </NotificationProvider>
+          </AuthProvider>
         </I18nProvider>
       </BrowserRouter>
     </HelmetProvider>

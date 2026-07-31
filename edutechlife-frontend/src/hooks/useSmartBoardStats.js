@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useUser } from "@clerk/react";
+import { useAuthIdentity } from "./useAuthIdentity";
 
 const PREFIX = "edutechlife";
 const DEFAULT_USER_ID = "student";
@@ -213,8 +213,9 @@ const loadFromStorage = (uid) => {
 };
 
 export const useSmartBoardStats = (userId) => {
-  const { user } = useUser();
-  const uid = userId || user?.id || DEFAULT_USER_ID;
+  // Si no llega por parametro, se toma de la sesion de Supabase.
+  const { userId: sessionUserId } = useAuthIdentity();
+  const uid = userId || sessionUserId || DEFAULT_USER_ID;
   const [stats, setStats] = useState(() => loadFromStorage(uid));
   const [isLive, setIsLive] = useState(false);
   const mountedRef = useRef(true);

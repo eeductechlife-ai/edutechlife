@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { useAuth } from "@clerk/react";
+import { signOutUser } from "../../hooks/useAuthIdentity";
 import { useNavigate } from "react-router-dom";
 import { PageLoader } from "../LoadingScreen";
 import { useTranslation } from "../../i18n/I18nProvider";
@@ -7,12 +7,11 @@ import { useTranslation } from "../../i18n/I18nProvider";
 const SmartBoardDashboard = lazy(() => import("../smartBoardDashboard"));
 
 const SmartBoardPage = () => {
-  const { signOut } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const handleLogout = async () => {
-    await signOut();
+    signOutUser("/");
     navigate("/");
   };
 

@@ -5,6 +5,7 @@ import { Icon } from "../../../utils/iconMapping.jsx";
 import { speakTextConversational, stopSpeech } from "../../../utils/speech";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { cn } from "../../forum/forumDesignSystem";
+import LessonObjectives from "../LessonObjectives";
 
 const OVAIntro = ({
   icon = "fa-brain",
@@ -93,27 +94,7 @@ const OVAIntro = ({
             transition={{ delay: 0.45, duration: 0.4 }}
             className="max-w-lg mx-auto mb-8 text-left"
           >
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-corporate/10 text-corporate font-semibold text-[10px] uppercase tracking-wider mb-3 border border-corporate/20">
-              <span>Objetivos de aprendizaje</span>
-            </div>
-            <div className="space-y-2">
-              {objectives.map((obj, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + i * 0.08, duration: 0.3 }}
-                  className="flex items-start gap-2.5 p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-900/20 border border-emerald-500/20"
-                >
-                  <div className="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
-                    {i + 1}
-                  </div>
-                  <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300 leading-relaxed">
-                    {obj}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
+            <LessonObjectives objectives={objectives} variant="start" />
           </motion.div>
         )}
 
@@ -147,7 +128,11 @@ const OVAIntro = ({
                   setAudioPlaying(true);
                 }
               }}
-              aria-label={audioPlaying ? t("ialab.voice_reader.stop") : t("ialab.voice_reader.listen")}
+              aria-label={
+                audioPlaying
+                  ? t("ialab.voice_reader.stop")
+                  : t("ialab.voice_reader.listen")
+              }
               className={cn(
                 "px-6 py-3 rounded-2xl font-semibold text-xs sm:text-sm transition-all border-2",
                 audioPlaying

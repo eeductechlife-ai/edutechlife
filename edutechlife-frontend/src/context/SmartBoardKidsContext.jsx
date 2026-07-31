@@ -7,7 +7,6 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { useUser } from "@clerk/react";
 import {
   DEFAULT_NEWS,
   DEFAULT_MISSIONS,
@@ -33,8 +32,6 @@ export const useSmartBoardKids = () => {
 };
 
 export const SmartBoardKidsProvider = ({ children }) => {
-  const { user: clerkUser } = useUser();
-
   const [daniChatHistory, setDaniChatHistory] = useState([]);
   const [daniMood, setDaniMood] = useState("happy");
   const [studentMoodHistory, setStudentMoodHistory] = useState([]);

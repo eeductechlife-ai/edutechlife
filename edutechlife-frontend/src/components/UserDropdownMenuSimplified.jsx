@@ -9,7 +9,7 @@ import React, {
 import { useAuthIdentity, signOutUser } from "./../hooks/useAuthIdentity";
 import { useStudentProfile } from "./../hooks/useStudentProfile";
 import { useNavigate } from "react-router-dom";
-import { useClerkAuth, getClerkUserInfo } from "../utils/clerk-utils";
+import { getUserInfo } from "../utils/userInfo";
 import { Icon } from "../utils/iconMapping.jsx";
 import ErrorBoundary from "./forum/ErrorBoundary";
 import UserProfileSection from "./userDropdownMenuSimplified/UserProfileSection";
@@ -30,13 +30,7 @@ const MENU_ITEMS_COUNT = 7;
 const UserDropdownMenuSimplified = ({ onNavigate }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const {
-    user: clerkUser,
-    isSignedIn: isClerkSignedIn,
-    signOut: clerkSignOut,
-    openUserProfile,
-  } = useClerkAuth();
-  const { userId, isSignedIn } = useAuthIdentity();
+  const { userId, email: authEmail, isSignedIn } = useAuthIdentity();
   const { profile } = useStudentProfile();
   const user = profile ? { ...profile, id: userId } : null;
 
@@ -49,14 +43,9 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   const [profileName, setProfileName] = useState(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  const activeUser = clerkUser || clerkUserOfficial;
-  const userInfo = getClerkUserInfo(activeUser);
+  const userInfo = getUserInfo(profile, authEmail);
   const displayName =
-    profileName ||
-    activeUser?.fullName ||
-    activeUser?.firstName ||
-    userInfo?.displayName ||
-    t("mobile_menu.user_fallback");
+    profileName || userInfo.displayName || t("mobile_menu.user_fallback");
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");

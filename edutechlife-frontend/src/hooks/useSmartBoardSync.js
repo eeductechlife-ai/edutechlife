@@ -1,62 +1,18 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { useSession, useAuth } from '@clerk/react';
-import { createClerkSupabaseClient } from '../lib/supabase';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useSupabase } from "./useSupabase";
 import {
   loadFromSupabase,
   saveToSupabase,
   mergeWithLocal,
   setupConnectionListener,
-} from '../services/smartboardSync';
+} from "../services/smartboardSync";
 
 export const useSmartBoardSync = () => {
-  const { session, isLoaded: sessionLoaded } = useSession();
-  const { getToken } = useAuth();
-  const [supabase, setSupabase] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // Cliente y userId desde la sesion de Supabase (antes token de Clerk).
+  const { supabase, userId, isLoading } = useSupabase();
   const [error, setError] = useState(null);
   const lastSavedRef = useRef(null);
   const saveTimeoutRef = useRef(null);
-
-  useEffect(() => {
-    const initClient = async () => {
-      if (!sessionLoaded) return;
-
-      setIsLoading(true);
-      try {
-        if (session) {
-          const token = await getToken({ template: 'supabase' });
-          if (token) {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            const uid = payload.sub;
-            setUserId(uid);
-
-            try {
-              const client = createClerkSupabaseClient(token);
-              setSupabase(client);
-            } catch {
-              const client = createClerkSupabaseClient();
-              setSupabase(client);
-            }
-          } else {
-            const client = createClerkSupabaseClient();
-            setSupabase(client);
-          }
-        } else {
-          setSupabase(null);
-          setUserId(null);
-        }
-      } catch (err) {
-        setError(err.message);
-        const client = createClerkSupabaseClient();
-        setSupabase(client);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initClient();
-  }, [session, sessionLoaded, getToken]);
 
   const loadData = useCallback(async () => {
     if (!supabase || !userId) return null;
@@ -85,13 +41,17 @@ export const useSmartBoardSync = () => {
         }, 500);
       });
     },
-    [supabase, userId]
+    [supabase, userId],
   );
 
   useEffect(() => {
     if (!supabase || !userId) return;
 
-    const cleanup = setupConnectionListener(supabase, userId, () => lastSavedRef.current);
+    const cleanup = setupConnectionListener(
+      supabase,
+      userId,
+      () => lastSavedRef.current,
+    );
     return cleanup;
   }, [supabase, userId]);
 

@@ -10,7 +10,7 @@ import { Button } from "../ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useTranslation } from "../../i18n/I18nProvider";
-import { getClerkUserInfo } from "../../utils/clerk-utils";
+import { getUserInfo } from "../../utils/userInfo";
 import UserProfileSmartCard from "../userProfileSmartCard";
 import ErrorBoundary from "../forum/ErrorBoundary";
 import UserCoursesDashboard from "../IALab/UserCoursesDashboard";
@@ -45,7 +45,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
     }
   }, [isLoaded]);
 
-  const userInfo = getClerkUserInfo(user);
+  const userInfo = getUserInfo(profile);
 
   const handleLogout = async () => {
     try {

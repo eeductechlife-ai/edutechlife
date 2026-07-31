@@ -1,4 +1,5 @@
-import { SignIn, SignUp } from "@clerk/react";
+import SupabaseLoginForm from "./SupabaseLoginForm";
+import SupabaseSignUpForm from "./SupabaseSignUpForm";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -15,42 +16,6 @@ import {
 import { useTranslation } from "../i18n/I18nProvider";
 import { sanitize } from "../utils/sanitize";
 import SEO from "./SEO";
-
-const clerkAppearance = {
-  variables: {
-    colorPrimary: "#4DA8C4",
-    colorPrimaryHover: "#66CCCC",
-    colorText: "#00374A",
-    colorBackground: "#FFFFFF",
-    colorInputBackground: "#F8FAFC",
-    colorInputText: "#00374A",
-    colorInputPlaceholder: "#64748B",
-    colorDanger: "#DC2626",
-    colorSuccess: "#059669",
-    borderRadius: "0.75rem",
-    fontSize: { base: "14px", sm: "15px", md: "16px" },
-    fontFamily: "'Montserrat', sans-serif",
-    fontSmoothing: "antialiased",
-    fontWeight: { normal: "400", medium: "500", bold: "600" },
-    spacingUnit: { base: "0.2rem", sm: "0.25rem", md: "0.3rem" },
-    animation: { slow: "400ms", default: "250ms", fast: "150ms" },
-    shadow: {
-      sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-      md: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-      lg: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
-    },
-  },
-  elements: {
-    formButtonPrimary: {
-      backgroundColor: "#4DA8C4",
-      "&:hover": { backgroundColor: "#66CCCC" },
-    },
-    card: {
-      backgroundColor: "transparent",
-      boxShadow: "none",
-    },
-  },
-};
 
 const SmartBoardSignUpPage = () => {
   const { t } = useTranslation();
@@ -186,7 +151,7 @@ const SmartBoardSignUpPage = () => {
               </div>
             </div>
 
-            {/* Right Side - Clerk SignIn / SignUp */}
+            {/* Right Side - formularios propios (antes UI de Clerk) */}
             <div className="lg:w-3/5 p-8 lg:p-12 flex flex-col justify-center items-center">
               {/* Mode Tabs */}
               <div className="flex bg-slate-100 rounded-xl p-1 mb-6 w-full max-w-sm">
@@ -239,14 +204,7 @@ const SmartBoardSignUpPage = () => {
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.25 }}
                     >
-                      <SignIn
-                        routing="virtual"
-                        signUpUrl="/sign-up/smartboard"
-                        signInUrl="/sign-up/smartboard"
-                        afterSignInUrl="/smartboard"
-                        fallbackRedirectUrl={returnTo}
-                        appearance={clerkAppearance}
-                      />
+                      <SupabaseLoginForm returnTo={returnTo || "/smartboard"} />
                     </motion.div>
                   ) : (
                     <motion.div
@@ -256,19 +214,9 @@ const SmartBoardSignUpPage = () => {
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.25 }}
                     >
-                      <SignUp
-                        routing="virtual"
-                        signInUrl="/sign-up/smartboard"
-                        signUpUrl="/sign-up/smartboard"
-                        afterSignUpUrl="/smartboard/consent"
-                        fallbackRedirectUrl={returnTo}
-                        appearance={clerkAppearance}
-                        metadata={{
-                          user_type: "student",
-                          platform: "smartboard",
-                          age_range: "8-16",
-                          registration_source: "smartboard_signup",
-                        }}
+                      <SupabaseSignUpForm
+                        returnTo={returnTo || "/smartboard/consent"}
+                        onBack={() => setMode("signin")}
                       />
                     </motion.div>
                   )}
