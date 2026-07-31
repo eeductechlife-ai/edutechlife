@@ -18,6 +18,97 @@ const OAUTH_PROVIDERS = {
 };
 
 /**
+ * Ensure the account has a row in the `users` profile table.
+ *
+ * Supabase Auth is the source of truth for identity; this table only holds the
+ * profile. Historically an insert failure here left accounts with no profile
+ * row, which then broke OAuth sign-in, so this is idempotent, self-healing and
+ * never throws: a missing profile must not stop anyone from signing in.
+ *
+ * @returns {Promise<object|null>} the profile row, or null if it could not be created
+ */
+async function ensureProfileRow(userId, email, extra = {}) {
+  const normalizedEmail = String(email || '').toLowerCase();
+  if (!normalizedEmail) return null;
+
+  try {
+    const { data: existing } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', normalizedEmail)
+      .maybeSingle();
+
+    if (existing) return existing;
+
+    // Usernames are unique; fall back to a suffixed one rather than failing.
+    const base = (extra.username || normalizedEmail.split('@')[0])
+      .toLowerCase()
+      .replace(/[^a-z0-9._-]/g, '')
+      .slice(0, 40) || 'user';
+
+    let username = base;
+    const { data: taken } = await supabase
+      .from('users')
+      .select('id')
+      .eq('username', base)
+      .maybeSingle();
+    if (taken) username = `${base}${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const { data: inserted, error } = await supabase
+      .from('users')
+      .insert([
+        {
+          id: userId,
+          clerk_id: userId,
+          email: normalizedEmail,
+          first_name: extra.first_name || null,
+          last_name: extra.last_name || null,
+          username,
+          phone_number: extra.phone_number || null,
+          user_type: extra.user_type || 'adult',
+          platform: extra.platform || 'ialab',
+          age_range: extra.age_range || '18+',
+          registration_source: extra.registration_source || 'ialab_signup',
+        },
+      ])
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      console.error('ensureProfileRow insert failed:', error.message);
+      return null;
+    }
+    return inserted;
+  } catch (err) {
+    console.error('ensureProfileRow unexpected error:', err.message);
+    return null;
+  }
+}
+
+/**
+ * Resolve a login identifier (email OR username) to the account email.
+ * Supabase authenticates by email only, so a username has to be translated
+ * into its email before we can sign in.
+ */
+async function resolveEmailFromIdentifier(identifier) {
+  const value = String(identifier || '').trim();
+  if (!value) return null;
+  if (value.includes('@')) return value.toLowerCase();
+
+  try {
+    const { data } = await supabase
+      .from('users')
+      .select('email')
+      .ilike('username', value)
+      .maybeSingle();
+    return data?.email ? data.email.toLowerCase() : null;
+  } catch (err) {
+    console.error('resolveEmailFromIdentifier failed:', err.message);
+    return null;
+  }
+}
+
+/**
  * POST /api/auth/sync-user
  * Sync a newly registered Clerk user to Supabase
  *
@@ -175,35 +266,34 @@ router.post('/register', async (req, res) => {
 
     const userId = authData.user.id;
 
-    // Create user record in users table
-    const { data: userData, error: dbError } = await supabase
-      .from('users')
-      .insert([
-        {
-          id: userId, // Use Supabase Auth user ID
-          clerk_id: userId, // Backward compatibility
-          email,
-          first_name: first_name || null,
-          last_name: last_name || null,
-          username: username || null,
-          phone_number: phone_number || null,
-          user_type: user_type || 'adult',
-          platform: platform || 'ialab',
-          age_range: age_range || '18+',
-          registration_source: registration_source || 'ialab_signup',
-        },
-      ])
-      .select();
+    // Persist the profile row in Supabase.
+    const profile = await ensureProfileRow(userId, email, {
+      first_name,
+      last_name,
+      username,
+      phone_number,
+      user_type,
+      platform,
+      age_range,
+      registration_source,
+    });
 
-    if (dbError) {
-      console.error('User record creation error:', dbError);
-      // Continue anyway - auth user was created
+    // Sign the new user straight in so registration lands them in IALab
+    // instead of bouncing them back to the login screen.
+    let accessToken = authData.session?.access_token || null;
+    if (!accessToken) {
+      const { data: signInData } = await supabase.auth.signInWithPassword({
+        email: String(email).toLowerCase(),
+        password,
+      });
+      accessToken = signInData?.session?.access_token || null;
     }
 
     req.log.info('User registered', {
       userId,
       email,
       platform,
+      profileCreated: !!profile,
     });
 
     res.status(201).json({
@@ -214,9 +304,9 @@ router.post('/register', async (req, res) => {
         email,
         first_name,
         last_name,
-        username,
+        username: profile?.username || username,
       },
-      access_token: authData.session?.access_token || null,
+      access_token: accessToken,
     });
   } catch (err) {
     console.error('Register error:', err);
@@ -238,12 +328,24 @@ router.post('/register', async (req, res) => {
  */
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    // `email` may carry either an email address or a username.
+    const { email: identifier, password } = req.body;
 
-    if (!email || !password) {
+    if (!identifier || !password) {
       return res.status(400).json({
         error: 'missing_fields',
-        message: 'Correo y contraseña son requeridos.',
+        message: 'Correo o usuario y contraseña son requeridos.',
+      });
+    }
+
+    const email = await resolveEmailFromIdentifier(identifier);
+
+    if (!email) {
+      // Unknown username. Same generic answer as a wrong password so we do not
+      // leak which accounts exist.
+      return res.status(401).json({
+        error: 'invalid_credentials',
+        message: 'Correo o contraseña incorrectos.',
       });
     }
 
@@ -266,7 +368,7 @@ router.post('/login', async (req, res) => {
       try {
         const { data: list } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
         const authUser = list?.users?.find(
-          (u) => (u.email || '').toLowerCase() === email.toLowerCase()
+          (u) => (u.email || '').toLowerCase() === email
         );
         const oauthProvider = authUser?.user_metadata?.provider;
         if (authUser && oauthProvider) {
@@ -286,12 +388,12 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // Fetch profile row (non-blocking if missing)
-    const { data: profile } = await supabase
-      .from('users')
-      .select('*')
-      .eq('email', email)
-      .single();
+    // Self-heal: older accounts may have no profile row.
+    const profile = await ensureProfileRow(signInData.user.id, email, {
+      first_name: signInData.user.user_metadata?.first_name,
+      last_name: signInData.user.user_metadata?.last_name,
+      registration_source: 'backfill_login',
+    });
 
     req.log.info('User logged in', { email });
 
@@ -320,22 +422,24 @@ router.post('/login', async (req, res) => {
  */
 router.post('/reset-password', async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email: identifier } = req.body;
 
-    if (!email) {
+    if (!identifier) {
       return res.status(400).json({
         error: 'missing_fields',
-        message: 'El correo es requerido.',
+        message: 'El correo o usuario es requerido.',
       });
     }
 
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5174';
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${frontendUrl}/auth/reset-password`,
-    });
+    // Accepts an email or a username, same as /login.
+    const email = await resolveEmailFromIdentifier(identifier);
 
-    if (error) {
-      console.error('Reset password error:', error);
+    if (email) {
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5174';
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${frontendUrl}/auth/reset-password`,
+      });
+      if (error) console.error('Reset password error:', error);
     }
 
     // Always return success: never reveal whether an email is registered.
@@ -572,38 +676,11 @@ router.get('/callback', async (req, res) => {
     }
 
     // Ensure a profile row exists for this account (idempotent, never blocking).
-    try {
-      const { data: profileRow } = await supabase
-        .from('users')
-        .select('id')
-        .eq('email', normalizedEmail)
-        .maybeSingle();
-
-      if (profileRow) {
-        await supabase
-          .from('users')
-          .update({ last_login: new Date().toISOString() })
-          .eq('id', profileRow.id);
-      } else {
-        await supabase.from('users').insert([
-          {
-            id: userId,
-            clerk_id: userId,
-            email: normalizedEmail,
-            first_name: firstName || null,
-            last_name: lastName || null,
-            username: normalizedEmail.split('@')[0],
-            user_type: 'adult',
-            platform: 'ialab',
-            age_range: '18+',
-            registration_source: `oauth_${provider}`,
-          },
-        ]);
-      }
-    } catch (e) {
-      // A missing profile row must never block sign-in.
-      console.error('Profile row sync failed (non-blocking):', e.message);
-    }
+    await ensureProfileRow(userId, normalizedEmail, {
+      first_name: firstName,
+      last_name: lastName,
+      registration_source: `oauth_${provider}`,
+    });
 
     // Obtain a session WITHOUT touching the user's password.
     // (The previous approach overwrote the password with a random one on every

@@ -165,15 +165,17 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
       <form onSubmit={handleLogin} className="space-y-3">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            {t("login.email") || "Correo electrónico"}
+            {t("login.email_or_username")}
           </label>
           <div className="relative">
             <Mail className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+            {/* type="text", not "email": the field also accepts a username. */}
             <input
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="usuario@ejemplo.com"
+              placeholder={t("login.email_or_username_placeholder")}
+              autoComplete="username"
               className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004B63] focus:border-transparent"
               required
             />

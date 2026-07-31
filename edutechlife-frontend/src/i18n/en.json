@@ -516,7 +516,6 @@
   "ialab.module_actions.status_passed": "Passed",
   "ialab.module_actions.status_failed": "Failed",
   "ialab.module_actions.status_pending": "Pending",
-
   "ialab.practice.title": "Practice",
   "ialab.practice.subtitle": "Reinforce your learning with these interactive tools",
   "ialab.practice.tool_prompts": "Prompt Creation Tools",
@@ -533,7 +532,6 @@
   "ialab.practice.tool_podcast_desc": "Generate narrative podcast-style summaries from documents",
   "ialab.practice.tool_ethics": "AI Ethics Lab",
   "ialab.practice.tool_ethics_desc": "Explore the 3 pillars of responsible AI: bias, privacy, and regulation",
-
   "ialab.gemini_research.intro_title": "Gemini Research Lab",
   "ialab.gemini_research.intro_desc": "Simulate the data detective workflow: select a research type and discover how Gemini analyzes, verifies, and generates evidence-based reports.",
   "ialab.gemini_research.intro_point_1": "Multimodal Analysis",
@@ -570,7 +568,6 @@
   "ialab.gemini_research.report_sources": "Verified sources",
   "ialab.gemini_research.report_sources_unit": "sources",
   "ialab.gemini_research.try_again": "New investigation",
-
   "ialab.module_info.objective_title": "Module Objective",
   "ialab.module_info.learning_title": "What you will learn",
   "ialab.module_info.composition": "Score composition: Community {communityPct} · Challenge {challengePct} · Exam {examPct} · Resources {resourcesPct}",
@@ -1114,9 +1111,9 @@
   "ova.introprompt.challenge_after": "You are a science tutor specialized in secondary education (Role). I have a 14-year-old student studying the solar system for the first time (Context). Design a visual study guide with the 8 planets: name, size, distance from sun, and temperature (Action). Present it in a comparative table with icons (Structure). Use clear, accessible language for a teenager. No complex jargon (Tone).",
   "ova.introprompt.challenge_reveal": "See transformation",
   "ova.introprompt.challenge_voice": "This is the final challenge. Watch how a 4-word prompt transforms into a structured prompt that produces amazing results.",
-  "ova.introprompt.learning_obj_1": "Understand what a prompt is and why its quality matters",
-  "ova.introprompt.learning_obj_2": "Identify the anatomy of an effective prompt",
-  "ova.introprompt.learning_obj_3": "Master the types of prompts and engineering strategies",
+  "ova.introprompt.learning_obj_1": "Understand what a prompt is and its importance in AI communication",
+  "ova.introprompt.learning_obj_2": "Identify prompt anatomy: role, context, task, format",
+  "ova.introprompt.learning_obj_3": "Apply prompt engineering techniques for better results",
   "ova.introprompt.learning_obj_4": "Apply the CREATE method to design professional prompts",
   "ova.introprompt.challenge_complete": "Now you know how to communicate with AI effectively!",
   "ova.introprompt.challenge_instructions": "“Welcome to Challenge 1. Your mission is to transform a vague prompt into a professional one using the CREATE method. On your left you will see an unstructured prompt: think about what’s missing. Then press ‘See transformation’ to discover how it becomes an expert prompt with Role, Context, Action, Structure, Tone, and Examples. Pay attention to each element to master the art of communicating with AI.”",
@@ -2840,9 +2837,7 @@
   "ialab.ethics_explorer.filter_accountability_yes": "Solid information that would complement an informed decision well.",
   "ialab.ethics_explorer.filter_accountability_partial": "Has useful information but you need to verify before deciding.",
   "ialab.ethics_explorer.filter_accountability_no": "Would not trust this for an important decision without validation.",
-
   "ialab.ethics_explorer.voice_instruction": "Now we will apply 5 ethical filters to the response. For each one, choose Yes, Partial, or No based on your judgment. Be honest in your evaluation.",
-
   "ialab.ethics_explorer.voice_result": "The ethical score of this response is {score} out of 100. Category: {label}. Review each filter for specific recommendations.",
   "ialab.study_planner.title": "Study Plan",
   "ialab.study_planner.close_aria": "Close",
@@ -4054,10 +4049,6 @@
   "ova.gemini.learning_obj_2": "Apply deep research techniques for academic investigation",
   "ova.gemini.learning_obj_3": "Leverage Gemini integration with Google Workspace tools",
   "ova.gemini.learning_obj_4": "Evaluate real-time multimodal processing applications",
-  "ova.introprompt.learning_obj_1": "Understand what a prompt is and its importance in AI communication",
-  "ova.introprompt.learning_obj_2": "Identify prompt anatomy: role, context, task, format",
-  "ova.introprompt.learning_obj_3": "Apply prompt engineering techniques for better results",
-
   "ova.promptlab.badge": "Prompt Laboratory",
   "ova.promptlab.welcome_title": "Practice prompts with a real model",
   "ova.promptlab.welcome_desc": "Master the anatomy and techniques of prompting with live exercises. Write, run, iterate.",
@@ -4122,7 +4113,6 @@
   "ova.promptlab.tech_role": "Role-play",
   "ova.promptlab.tech_role_desc": "You assign a specific role to the model. Changes tone and depth.",
   "ova.promptlab.tech_role_example": "\"Act as a senior code reviewer. Find vulnerabilities...\"",
-
   "ova.ethicscases.badge": "Practical Cases",
   "ova.ethicscases.welcome_title": "Ethics in practice",
   "ova.ethicscases.welcome_desc": "An analysis framework + 3 real AI cases in the world. Make decisions and discover how an ethical guardian thinks.",
@@ -4199,7 +4189,6 @@
   "ova.ethicscases.menu_title": "Map",
   "ova.ethicscases.menu_welcome": "Welcome",
   "ova.ethicscases.footer": "EdutechLife · Practical Ethics Cases",
-
   "ova.automation.badge": "Automation Flows",
   "ova.automation.welcome_title": "Automation in the real world",
   "ova.automation.welcome_desc": "How companies, educators and entrepreneurs use ChatGPT tools in chains to solve real problems. From workshop to factory.",
@@ -4273,7 +4262,6 @@
   "ova.automation.menu_title": "Map",
   "ova.automation.menu_welcome": "Welcome",
   "ova.automation.footer": "EdutechLife · Real Automation Flows",
-
   "ova.docmastery.badge": "Document Mastery",
   "ova.docmastery.welcome_title": "From document to podcast",
   "ova.docmastery.welcome_desc": "Connect synthesis with audio: how to turn mountains of documents into podcasts people listen to. The complete flow of an alchemist.",
@@ -4389,7 +4377,7 @@
   "login.error.invalid_credentials": "Invalid email or password",
   "login.error.email_not_confirmed": "You must confirm your email before signing in.",
   "login.error.oauth_account": "This account was created with {provider}. Please sign in using the {provider} button above.",
-  "login.error.email_required_for_reset": "Enter your email above, then click the link again.",
+  "login.error.email_required_for_reset": "Enter your email or username above, then click the link again.",
   "login.forgot_password": "Forgot your password?",
   "login.reset_email_sent": "If that email is registered, we sent a link to create a new password. Check your inbox and spam folder.",
   "reset.title": "Create your new password",
@@ -4410,5 +4398,7 @@
   "ialab.xp_earned": "+{amount} XP",
   "ialab.xp_excellent_work": "Excellent work!",
   "ialab.objectives_learn": "You will learn to:",
-  "ialab.objectives_verified": "You verified:"
+  "ialab.objectives_verified": "You verified:",
+  "login.email_or_username": "Email or username",
+  "login.email_or_username_placeholder": "you@example.com or your username"
 }

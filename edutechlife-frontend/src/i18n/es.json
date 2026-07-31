@@ -516,7 +516,6 @@
   "ialab.module_actions.status_passed": "Aprobado",
   "ialab.module_actions.status_failed": "Reprobado",
   "ialab.module_actions.status_pending": "Pendiente",
-
   "ialab.practice.title": "Practicar",
   "ialab.practice.subtitle": "Refuerza tu aprendizaje con estas herramientas interactivas",
   "ialab.practice.tool_prompts": "Herramientas para Crear Prompts",
@@ -533,7 +532,6 @@
   "ialab.practice.tool_podcast_desc": "Genera resúmenes narrativos estilo podcast desde documentos",
   "ialab.practice.tool_ethics": "Laboratorio de Ética IA",
   "ialab.practice.tool_ethics_desc": "Explora los 3 pilares de la IA responsable: sesgos, privacidad y regulación",
-
   "ialab.gemini_research.intro_title": "Laboratorio de Investigación Gemini",
   "ialab.gemini_research.intro_desc": "Simula el flujo de trabajo de un detective de datos: selecciona un tipo de investigación y descubre cómo Gemini analiza, verifica y genera报告es con evidencia.",
   "ialab.gemini_research.intro_point_1": "Análisis Multimodal",
@@ -570,7 +568,6 @@
   "ialab.gemini_research.report_sources": "Fuentes verificadas",
   "ialab.gemini_research.report_sources_unit": "fuentes",
   "ialab.gemini_research.try_again": "Nueva investigación",
-
   "ialab.module_info.objective_title": "Objetivo del Módulo",
   "ialab.module_info.learning_title": "Lo que aprenderás",
   "ialab.module_info.composition": "Composición de la nota: Comunidad {communityPct} · Desafío {challengePct} · Examen {examPct} · Recursos {resourcesPct}",
@@ -1114,9 +1111,9 @@
   "ova.introprompt.challenge_after": "Eres un tutor de ciencias especializado en educación secundaria (Rol). Tengo un estudiante de 14 años que estudia el sistema solar por primera vez (Contexto). Diseña una guía de estudio visual con los 8 planetas: nombre, tamaño, distancia al sol y temperatura (Acción). Preséntalo en una tabla comparativa con íconos (Estructura). Usa lenguaje claro y accesible para un adolescente. Sin tecnicismos complejos (Tono).",
   "ova.introprompt.challenge_reveal": "Ver transformación",
   "ova.introprompt.challenge_voice": "Este es el reto final. Observa cómo un prompt de solo 4 palabras se convierte en un prompt estructurado que produce resultados increíbles.",
-  "ova.introprompt.learning_obj_1": "Comprender qué es un prompt y por qué su calidad es importante",
-  "ova.introprompt.learning_obj_2": "Identificar la anatomía de un prompt efectivo",
-  "ova.introprompt.learning_obj_3": "Dominar los tipos de prompts y estrategias de ingeniería",
+  "ova.introprompt.learning_obj_1": "Entender qué es un prompt y su importancia en la comunicación con IA",
+  "ova.introprompt.learning_obj_2": "Identificar la anatomía del prompt: rol, contexto, tarea, formato",
+  "ova.introprompt.learning_obj_3": "Aplicar técnicas de ingeniería de prompts para mejores resultados",
   "ova.introprompt.learning_obj_4": "Aplicar el método CREATE para diseñar prompts profesionales",
   "ova.introprompt.challenge_complete": "¡Ahora sabes cómo comunicarte con la IA de forma efectiva!",
   "ova.introprompt.challenge_instructions": "“Bienvenido al Desafío 1. Tu misión es transformar un prompt vago en uno profesional usando el método CREATE. A tu izquierda verás un prompt sin estructura: piensa qué le falta. Luego presiona ‘Ver transformación’ para descubrir cómo se convierte en un prompt experto con Rol, Contexto, Acción, Estructura, Tono y Ejemplos. Presta atención a cada elemento para dominar el arte de comunicarte con la IA.”",
@@ -2840,9 +2837,7 @@
   "ialab.ethics_explorer.filter_accountability_yes": "Es información sólida que complementaría bien una decisión informada.",
   "ialab.ethics_explorer.filter_accountability_partial": "Tiene información útil pero necesitas verificarla antes de decidir.",
   "ialab.ethics_explorer.filter_accountability_no": "No confiarías en esto para tomar una decisión importante sin validar.",
-
   "ialab.ethics_explorer.voice_instruction": "Ahora vamos a aplicar 5 filtros éticos a la respuesta. Para cada uno, elige entre Sí, Parcialmente o No según tu criterio. Sé honesto en tu evaluación.",
-
   "ialab.ethics_explorer.voice_result": "El score ético de esta respuesta es {score} sobre 100. Categoría: {label}. Revisa cada filtro para ver las recomendaciones específicas.",
   "ialab.study_planner.title": "Plan de Estudio",
   "ialab.study_planner.close_aria": "Cerrar",
@@ -4052,10 +4047,6 @@
   "ova.gemini.learning_obj_2": "Aplicar técnicas de investigación profunda para investigación académica",
   "ova.gemini.learning_obj_3": "Aprovechar la integración de Gemini con Google Workspace",
   "ova.gemini.learning_obj_4": "Evaluar aplicaciones de procesamiento multimodal en tiempo real",
-  "ova.introprompt.learning_obj_1": "Entender qué es un prompt y su importancia en la comunicación con IA",
-  "ova.introprompt.learning_obj_2": "Identificar la anatomía del prompt: rol, contexto, tarea, formato",
-  "ova.introprompt.learning_obj_3": "Aplicar técnicas de ingeniería de prompts para mejores resultados",
-
   "ova.promptlab.badge": "Laboratorio de Prompts",
   "ova.promptlab.welcome_title": "Practica prompts con un modelo real",
   "ova.promptlab.welcome_desc": "Domina la anatomía y las técnicas de prompting con ejercicios en vivo. Escribe, ejecuta, itera.",
@@ -4120,7 +4111,6 @@
   "ova.promptlab.tech_role": "Role-play",
   "ova.promptlab.tech_role_desc": "Asignas un rol específico al modelo. Cambia tono y profundidad.",
   "ova.promptlab.tech_role_example": "\"Actúa como un revisor senior de código. Encuentra vulnerabilidades...\"",
-
   "ova.ethicscases.badge": "Casos Prácticos",
   "ova.ethicscases.welcome_title": "Ética en la práctica",
   "ova.ethicscases.welcome_desc": "Un framework de análisis + 3 casos reales de IA en el mundo. Toma decisiones y descubre cómo un guardián ético piensa.",
@@ -4197,7 +4187,6 @@
   "ova.ethicscases.menu_title": "Mapa",
   "ova.ethicscases.menu_welcome": "Bienvenida",
   "ova.ethicscases.footer": "EdutechLife · Casos Prácticos de Ética",
-
   "ova.automation.badge": "Flujos de Automatización",
   "ova.automation.welcome_title": "Automatización en el mundo real",
   "ova.automation.welcome_desc": "Cómo empresas, educadores y emprendedores usan las herramientas de ChatGPT en cadena para resolver problemas reales. Del taller a la fábrica.",
@@ -4271,7 +4260,6 @@
   "ova.automation.menu_title": "Mapa",
   "ova.automation.menu_welcome": "Bienvenida",
   "ova.automation.footer": "EdutechLife · Flujos de Automatización Real",
-
   "ova.docmastery.badge": "Dominio del Documento",
   "ova.docmastery.welcome_title": "Del documento al podcast",
   "ova.docmastery.welcome_desc": "Conecta síntesis con audio: cómo convertir montañas de documentos en podcasts que la gente escucha. El flujo completo de un alquimista.",
@@ -4392,7 +4380,7 @@
   "login.error.invalid_credentials": "Correo o contraseña inválidos",
   "login.error.email_not_confirmed": "Debes confirmar tu correo antes de iniciar sesión.",
   "login.error.oauth_account": "Esta cuenta se creó con {provider}. Inicia sesión con el botón de {provider} que está arriba.",
-  "login.error.email_required_for_reset": "Escribe tu correo arriba y vuelve a pulsar el enlace.",
+  "login.error.email_required_for_reset": "Escribe tu correo o usuario arriba y vuelve a pulsar el enlace.",
   "login.forgot_password": "¿Olvidaste tu contraseña?",
   "login.reset_email_sent": "Si el correo está registrado, te enviamos un enlace para crear una nueva contraseña. Revisa tu bandeja de entrada y la carpeta de spam.",
   "reset.title": "Crea tu nueva contraseña",
@@ -4408,5 +4396,7 @@
   "reset.error.link_invalid": "Este enlace no es válido o ya expiró. Solicita uno nuevo desde la pantalla de inicio de sesión.",
   "reset.error.passwords_mismatch": "Las contraseñas no coinciden.",
   "reset.error.failed": "No se pudo actualizar la contraseña. Intenta de nuevo.",
-  "login.error.connection": "Error de conexión"
+  "login.error.connection": "Error de conexión",
+  "login.email_or_username": "Correo electrónico o usuario",
+  "login.email_or_username_placeholder": "usuario@ejemplo.com o tu usuario"
 }
