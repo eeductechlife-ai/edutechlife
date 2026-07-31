@@ -1,15 +1,22 @@
-import React, { useState, useRef } from 'react';
-import { useUser } from '@clerk/react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card-simple';
-import { Icon } from '../../utils/iconMapping.jsx';
-import { useTranslation } from '../../i18n/I18nProvider';
+import React, { useState, useRef } from "react";
+import { ls } from "../../utils/ialab";
+import { LS_KEYS } from "../../constants/ialab";
+import { useStudentProfile } from "../../hooks/useStudentProfile";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card-simple";
+import { Icon } from "../../utils/iconMapping.jsx";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const ChangeAvatarModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
-  const { user } = useUser();
+  // El avatar se guarda por usuario en el navegador. Antes usaba la API de
+  // imagenes de Clerk, que sin sesion de Clerk fallaba siempre.
+  const { displayName } = useStudentProfile();
+  const [avatarUrl, setAvatarUrl] = useState(() =>
+    ls.get(LS_KEYS.AVATAR, null),
+  );
   const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
 
@@ -19,60 +26,67 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      setError(t('modals.avatar.error_only_images'));
+    if (!file.type.startsWith("image/")) {
+      setError(t("modals.avatar.error_only_images"));
       return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      setError(t('modals.avatar.error_max_size'));
+      setError(t("modals.avatar.error_max_size"));
       return;
     }
 
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
     setUploading(true);
 
     try {
-      await user.setProfileImage({ file });
-      setSuccess(t('modals.avatar.success_updated'));
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => resolve(ev.target.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      ls.set(LS_KEYS.AVATAR, dataUrl);
+      setAvatarUrl(dataUrl);
+      setSuccess(t("modals.avatar.success_updated"));
       setTimeout(() => {
-        setSuccess('');
+        setSuccess("");
         onClose();
       }, 1500);
     } catch (err) {
-      console.error('Error uploading avatar:', err);
-      setError(t('modals.avatar.error_update'));
+      console.error("Error uploading avatar:", err);
+      setError(t("modals.avatar.error_update"));
     } finally {
       setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      if (cameraInputRef.current) cameraInputRef.current.value = '';
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      if (cameraInputRef.current) cameraInputRef.current.value = "";
     }
   };
 
   const handleDeleteAvatar = async () => {
-    if (!confirm(t('modals.avatar.confirm_delete'))) return;
+    if (!confirm(t("modals.avatar.confirm_delete"))) return;
 
     setUploading(true);
-    setError('');
+    setError("");
 
     try {
-      await user.deleteProfileImage();
-      setSuccess(t('modals.avatar.success_deleted'));
+      ls.remove(LS_KEYS.AVATAR);
+      setAvatarUrl(null);
+      setSuccess(t("modals.avatar.success_deleted"));
       setTimeout(() => {
-        setSuccess('');
+        setSuccess("");
         onClose();
       }, 1500);
     } catch (err) {
-      console.error('Error deleting avatar:', err);
-      setError(t('modals.avatar.error_delete'));
+      console.error("Error deleting avatar:", err);
+      setError(t("modals.avatar.error_delete"));
     } finally {
       setUploading(false);
     }
   };
 
-  const avatarUrl = user?.imageUrl || '';
-  const initials = user?.firstName?.[0]?.toUpperCase() || user?.fullName?.[0]?.toUpperCase() || 'U';
+  const initials = displayName?.[0]?.toUpperCase() || "U";
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
@@ -81,7 +95,7 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-50 p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800 rounded-full transition-all duration-200"
-          aria-label={t('modals.avatar.close')}
+          aria-label={t("modals.avatar.close")}
         >
           <Icon name="fa-times" className="text-lg" />
         </button>
@@ -91,7 +105,9 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center">
               <Icon name="fa-camera" className="text-[#004B63]" />
             </div>
-            <CardTitle className="text-slate-800 font-bold text-sm">{t('modals.avatar.title')}</CardTitle>
+            <CardTitle className="text-slate-800 font-bold text-sm">
+              {t("modals.avatar.title")}
+            </CardTitle>
           </div>
         </CardHeader>
 
@@ -107,11 +123,16 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
                 />
               ) : (
                 <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#004B63] to-[#00BCD4] flex items-center justify-center border-4 border-slate-200/60 shadow-md">
-                  <span className="text-white font-bold text-3xl">{initials}</span>
+                  <span className="text-white font-bold text-3xl">
+                    {initials}
+                  </span>
                 </div>
               )}
               <div className="absolute inset-0 rounded-full bg-black/0 group-hover:bg-black/20 transition-all duration-200 flex items-center justify-center">
-                <Icon name="fa-camera" className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl" />
+                <Icon
+                  name="fa-camera"
+                  className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-xl"
+                />
               </div>
             </div>
           </div>
@@ -119,13 +140,19 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
           {/* Mensajes */}
           {error && (
             <div className="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-start gap-2">
-              <Icon name="fa-exclamation-circle" className="text-rose-500 text-sm mt-0.5 flex-shrink-0" />
+              <Icon
+                name="fa-exclamation-circle"
+                className="text-rose-500 text-sm mt-0.5 flex-shrink-0"
+              />
               <p className="text-xs text-rose-700">{error}</p>
             </div>
           )}
           {success && (
             <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-start gap-2">
-              <Icon name="fa-check-circle" className="text-emerald-500 text-sm mt-0.5 flex-shrink-0" />
+              <Icon
+                name="fa-check-circle"
+                className="text-emerald-500 text-sm mt-0.5 flex-shrink-0"
+              />
               <p className="text-xs text-emerald-700">{success}</p>
             </div>
           )}
@@ -139,11 +166,18 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
               className="w-full flex items-center gap-3 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#004B63] rounded-lg shadow-sm hover:shadow hover:border-l-[#00BCD4] hover:bg-slate-50 transition-all duration-300 text-left disabled:opacity-50"
             >
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center flex-shrink-0">
-                <Icon name="fa-folder-open" className="text-[#004B63] text-xs" />
+                <Icon
+                  name="fa-folder-open"
+                  className="text-[#004B63] text-xs"
+                />
               </div>
               <div className="flex-1">
-                <span className="text-xs font-semibold text-slate-800">{t('modals.avatar.upload_device')}</span>
-                <p className="text-[10px] text-slate-500">{t('modals.avatar.upload_device_desc')}</p>
+                <span className="text-xs font-semibold text-slate-800">
+                  {t("modals.avatar.upload_device")}
+                </span>
+                <p className="text-[10px] text-slate-500">
+                  {t("modals.avatar.upload_device_desc")}
+                </p>
               </div>
             </button>
 
@@ -157,8 +191,12 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
                 <Icon name="fa-camera" className="text-[#004B63] text-xs" />
               </div>
               <div className="flex-1">
-                <span className="text-xs font-semibold text-slate-800">{t('modals.avatar.take_photo')}</span>
-                <p className="text-[10px] text-slate-500">{t('modals.avatar.take_photo_desc')}</p>
+                <span className="text-xs font-semibold text-slate-800">
+                  {t("modals.avatar.take_photo")}
+                </span>
+                <p className="text-[10px] text-slate-500">
+                  {t("modals.avatar.take_photo_desc")}
+                </p>
               </div>
             </button>
 
@@ -172,7 +210,9 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-rose-400/10 to-rose-500/10 flex items-center justify-center flex-shrink-0">
                   <Icon name="fa-trash" className="text-rose-500 text-xs" />
                 </div>
-                <span className="text-xs font-semibold text-rose-600">{t('modals.avatar.delete_current')}</span>
+                <span className="text-xs font-semibold text-rose-600">
+                  {t("modals.avatar.delete_current")}
+                </span>
               </button>
             )}
           </div>
@@ -181,8 +221,13 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
           {uploading && (
             <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-xl flex items-center justify-center">
               <div className="flex flex-col items-center gap-2">
-                <Icon name="fa-spinner" className="text-2xl text-[#00BCD4] animate-spin" />
-                <p className="text-xs text-slate-500">{t('modals.avatar.uploading')}</p>
+                <Icon
+                  name="fa-spinner"
+                  className="text-2xl text-[#00BCD4] animate-spin"
+                />
+                <p className="text-xs text-slate-500">
+                  {t("modals.avatar.uploading")}
+                </p>
               </div>
             </div>
           )}

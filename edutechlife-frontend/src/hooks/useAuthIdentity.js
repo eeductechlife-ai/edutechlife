@@ -66,6 +66,25 @@ export const readAuthIdentity = () => {
   }
 };
 
+/**
+ * Close the session and send the user back to the login screen.
+ *
+ * Sign-out used to call Clerk's `signOut()`, which did nothing because there
+ * was no Clerk session — students stayed signed in. Clearing the Supabase
+ * token is what actually ends the session.
+ *
+ * @param {string} [redirectTo="/login"] where to land after signing out
+ */
+export const signOutUser = (redirectTo = "/login") => {
+  try {
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user_email");
+  } catch {
+    /* ignore */
+  }
+  window.location.replace(redirectTo);
+};
+
 export const useAuthIdentity = () => {
   const [identity, setIdentity] = useState(() => readAuthIdentity());
 

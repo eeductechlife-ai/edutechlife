@@ -4400,5 +4400,6 @@
   "ialab.objectives_learn": "You will learn to:",
   "ialab.objectives_verified": "You verified:",
   "login.email_or_username": "Email or username",
-  "login.email_or_username_placeholder": "you@example.com or your username"
+  "login.email_or_username_placeholder": "you@example.com or your username",
+  "profile.password_email_sent": "We sent a link to your email to change your password."
 }

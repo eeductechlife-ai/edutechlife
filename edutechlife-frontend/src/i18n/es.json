@@ -4398,5 +4398,6 @@
   "reset.error.failed": "No se pudo actualizar la contraseña. Intenta de nuevo.",
   "login.error.connection": "Error de conexión",
   "login.email_or_username": "Correo electrónico o usuario",
-  "login.email_or_username_placeholder": "usuario@ejemplo.com o tu usuario"
+  "login.email_or_username_placeholder": "usuario@ejemplo.com o tu usuario",
+  "profile.password_email_sent": "Te enviamos un enlace a tu correo para cambiar la contraseña."
 }

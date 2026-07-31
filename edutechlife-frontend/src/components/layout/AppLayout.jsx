@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, lazy, Suspense } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { useAuth, useUser } from "@clerk/react";
+import { useAuthIdentity } from "../../hooks/useAuthIdentity";
+import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { PageLoader } from "../LoadingScreen";
 import ContactModal from "../ContactModal";
 import LeadCaptureModal from "../LeadCaptureModal";
@@ -18,8 +19,8 @@ const GlobalCanvas = lazy(() => import("../GlobalCanvas"));
 const AppLayout = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isSignedIn } = useAuth();
-  const { user: clerkUser } = useUser();
+  const { isSignedIn } = useAuthIdentity();
+  const { profile: clerkUser } = useStudentProfile();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [drawerClosing, setDrawerClosing] = useState(false);

@@ -1,16 +1,24 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
-import { useUser } from '@clerk/react';
-import { supabase } from '../lib/supabase';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
+import { useAuthIdentity } from "../hooks/useAuthIdentity";
+import { supabase } from "../lib/supabase";
 
 const NotificationContext = createContext(null);
 
 export const NotificationProvider = ({ children }) => {
-  const { user } = useUser();
+  // Identidad desde la sesion de Supabase (Clerk ya no autentica).
+  const { userId } = useAuthIdentity();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchNotifications = useCallback(async () => {
-    if (!user?.id) {
+    if (!userId) {
       setNotifications([]);
       setLoading(false);
       return;
@@ -18,16 +26,27 @@ export const NotificationProvider = ({ children }) => {
 
     try {
       const { data, error } = await supabase
-        .from('notifications')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
+        .from("notifications")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) {
-        if (error.code === '42P01' || error.code === '22P02' || error.code === '42501' || error.message?.includes('uuid') || error.message?.includes('UUID')) {
-          console.warn('[NOTIFICATIONS] Supabase fetch error, loading from localStorage:', error.code);
-          const local = JSON.parse(localStorage.getItem('ialab_notifications') || '[]');
+        if (
+          error.code === "42P01" ||
+          error.code === "22P02" ||
+          error.code === "42501" ||
+          error.message?.includes("uuid") ||
+          error.message?.includes("UUID")
+        ) {
+          console.warn(
+            "[NOTIFICATIONS] Supabase fetch error, loading from localStorage:",
+            error.code,
+          );
+          const local = JSON.parse(
+            localStorage.getItem("ialab_notifications") || "[]",
+          );
           setNotifications(local);
           return;
         }
@@ -35,16 +54,16 @@ export const NotificationProvider = ({ children }) => {
       }
       setNotifications(data || []);
     } catch (err) {
-      const msg = err?.message || err?.toString() || 'Unknown error';
-      console.error('[NOTIFICATIONS] Error fetching:', msg);
+      const msg = err?.message || err?.toString() || "Unknown error";
+      console.error("[NOTIFICATIONS] Error fetching:", msg);
       setNotifications([]);
     } finally {
       setLoading(false);
     }
-  }, [user?.id]);
+  }, [userId]);
 
   useEffect(() => {
-    if (!user?.id) return;
+    if (!userId) return;
 
     fetchNotifications();
 
@@ -58,38 +77,50 @@ export const NotificationProvider = ({ children }) => {
 
     const setupChannel = () => {
       channel = supabase
-        .channel('notification-changes')
+        .channel("notification-changes")
         .on(
-          'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` },
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "notifications",
+            filter: `user_id=eq.${userId}`,
+          },
           (payload) => {
             setNotifications((prev) => [payload.new, ...prev]);
-          }
+          },
         )
         .on(
-          'postgres_changes',
-          { event: 'UPDATE', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` },
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "notifications",
+            filter: `user_id=eq.${userId}`,
+          },
           (payload) => {
             setNotifications((prev) =>
-              prev.map((n) => (n.id === payload.new.id ? payload.new : n))
+              prev.map((n) => (n.id === payload.new.id ? payload.new : n)),
             );
-          }
+          },
         )
         .subscribe((status) => {
           if (!mounted) return;
-          if (status === 'CHANNEL_ERROR') {
-            console.warn('[NOTIFICATIONS] Realtime subscription error');
+          if (status === "CHANNEL_ERROR") {
+            console.warn("[NOTIFICATIONS] Realtime subscription error");
             cleanup();
             if (retryCount < MAX_RETRIES) {
               retryCount++;
               const delay = Math.min(1000 * Math.pow(2, retryCount), 30000);
               retryTimer = setTimeout(setupChannel, delay);
             } else {
-              console.warn('[NOTIFICATIONS] Max retries reached, falling back to polling');
+              console.warn(
+                "[NOTIFICATIONS] Max retries reached, falling back to polling",
+              );
               pollingTimer = setInterval(fetchNotifications, 30000);
             }
           }
-          if (status === 'SUBSCRIBED') {
+          if (status === "SUBSCRIBED") {
             retryCount = 0;
           }
         });
@@ -111,8 +142,12 @@ export const NotificationProvider = ({ children }) => {
     heartbeatTimer = setInterval(async () => {
       if (!mounted) return;
       if (!channel) return;
-      const { error } = await supabase.from('notifications').select('id', { count: 'exact', head: true }).limit(0).eq('user_id', user.id);
-      if (error && error.code === '42P01') return;
+      const { error } = await supabase
+        .from("notifications")
+        .select("id", { count: "exact", head: true })
+        .limit(0)
+        .eq("user_id", userId);
+      if (error && error.code === "42P01") return;
       if (error && !mounted) return;
       if (error) {
         cleanup();
@@ -132,128 +167,164 @@ export const NotificationProvider = ({ children }) => {
         heartbeatTimer = null;
       }
     };
-  }, [user?.id, fetchNotifications]);
+  }, [userId, fetchNotifications]);
 
   const markAsRead = async (id) => {
     try {
-      if (id.startsWith('local_')) {
+      if (id.startsWith("local_")) {
         setNotifications((prev) =>
           prev.map((n) =>
-            n.id === id ? { ...n, is_read: true, read_at: new Date().toISOString() } : n
-          )
+            n.id === id
+              ? { ...n, is_read: true, read_at: new Date().toISOString() }
+              : n,
+          ),
         );
-        const local = JSON.parse(localStorage.getItem('ialab_notifications') || '[]');
-        const updated = local.map(n =>
-          n.id === id ? { ...n, is_read: true, read_at: new Date().toISOString() } : n
+        const local = JSON.parse(
+          localStorage.getItem("ialab_notifications") || "[]",
         );
-        localStorage.setItem('ialab_notifications', JSON.stringify(updated));
+        const updated = local.map((n) =>
+          n.id === id
+            ? { ...n, is_read: true, read_at: new Date().toISOString() }
+            : n,
+        );
+        localStorage.setItem("ialab_notifications", JSON.stringify(updated));
         return;
       }
 
       const { error } = await supabase
-        .from('notifications')
+        .from("notifications")
         .update({ is_read: true, read_at: new Date().toISOString() })
-        .eq('id', id)
-        .eq('user_id', user.id);
+        .eq("id", id)
+        .eq("user_id", userId);
 
       if (error) {
-        if (error.code !== '42P01') throw error;
+        if (error.code !== "42P01") throw error;
         return;
       }
 
       setNotifications((prev) =>
         prev.map((n) =>
-          n.id === id ? { ...n, is_read: true, read_at: new Date().toISOString() } : n
-        )
+          n.id === id
+            ? { ...n, is_read: true, read_at: new Date().toISOString() }
+            : n,
+        ),
       );
     } catch (err) {
-      const msg = err?.message || err?.toString() || 'Unknown error';
-      console.error('[NOTIFICATIONS] Error marking as read:', msg);
+      const msg = err?.message || err?.toString() || "Unknown error";
+      console.error("[NOTIFICATIONS] Error marking as read:", msg);
     }
   };
 
   const markAllAsRead = async () => {
     try {
-      const local = JSON.parse(localStorage.getItem('ialab_notifications') || '[]');
-      const updatedLocal = local.map(n => ({ ...n, is_read: true, read_at: new Date().toISOString() }));
-      localStorage.setItem('ialab_notifications', JSON.stringify(updatedLocal));
+      const local = JSON.parse(
+        localStorage.getItem("ialab_notifications") || "[]",
+      );
+      const updatedLocal = local.map((n) => ({
+        ...n,
+        is_read: true,
+        read_at: new Date().toISOString(),
+      }));
+      localStorage.setItem("ialab_notifications", JSON.stringify(updatedLocal));
 
-      const supabaseIds = notifications.filter(n => !n.id.startsWith('local_')).map(n => n.id);
-      
+      const supabaseIds = notifications
+        .filter((n) => !n.id.startsWith("local_"))
+        .map((n) => n.id);
+
       setNotifications((prev) =>
-        prev.map((n) => ({ ...n, is_read: true, read_at: new Date().toISOString() }))
+        prev.map((n) => ({
+          ...n,
+          is_read: true,
+          read_at: new Date().toISOString(),
+        })),
       );
 
       if (supabaseIds.length > 0) {
         const { error } = await supabase
-          .from('notifications')
+          .from("notifications")
           .update({ is_read: true, read_at: new Date().toISOString() })
-          .in('id', supabaseIds);
+          .in("id", supabaseIds);
 
-        if (error && error.code !== '42P01') {
-          console.error('[NOTIFICATIONS] Error updating Supabase:', error.message);
+        if (error && error.code !== "42P01") {
+          console.error(
+            "[NOTIFICATIONS] Error updating Supabase:",
+            error.message,
+          );
         }
       }
     } catch (err) {
-      const msg = err?.message || err?.toString() || 'Unknown error';
-      console.error('[NOTIFICATIONS] Error marking all as read:', msg);
+      const msg = err?.message || err?.toString() || "Unknown error";
+      console.error("[NOTIFICATIONS] Error marking all as read:", msg);
     }
   };
 
   const dismissNotification = async (id) => {
     try {
-      if (id.startsWith('local_')) {
+      if (id.startsWith("local_")) {
         setNotifications((prev) => prev.filter((n) => n.id !== id));
-        const local = JSON.parse(localStorage.getItem('ialab_notifications') || '[]');
-        localStorage.setItem('ialab_notifications', JSON.stringify(local.filter(n => n.id !== id)));
+        const local = JSON.parse(
+          localStorage.getItem("ialab_notifications") || "[]",
+        );
+        localStorage.setItem(
+          "ialab_notifications",
+          JSON.stringify(local.filter((n) => n.id !== id)),
+        );
         return;
       }
 
       const { error } = await supabase
-        .from('notifications')
+        .from("notifications")
         .delete()
-        .eq('id', id)
-        .eq('user_id', user.id);
+        .eq("id", id)
+        .eq("user_id", userId);
 
       if (error) {
-        if (error.code !== '42P01') throw error;
+        if (error.code !== "42P01") throw error;
         return;
       }
 
       setNotifications((prev) => prev.filter((n) => n.id !== id));
     } catch (err) {
-      const msg = err?.message || err?.toString() || 'Unknown error';
-      console.error('[NOTIFICATIONS] Error dismissing:', msg);
+      const msg = err?.message || err?.toString() || "Unknown error";
+      console.error("[NOTIFICATIONS] Error dismissing:", msg);
     }
   };
 
   const clearAllNotifications = async () => {
     try {
-      localStorage.removeItem('ialab_notifications');
+      localStorage.removeItem("ialab_notifications");
       setNotifications([]);
 
       const { error } = await supabase
-        .from('notifications')
+        .from("notifications")
         .delete()
-        .eq('user_id', user.id);
+        .eq("user_id", userId);
 
-      if (error && error.code !== '42P01') {
-        console.error('[NOTIFICATIONS] Error clearing Supabase:', error.message);
+      if (error && error.code !== "42P01") {
+        console.error(
+          "[NOTIFICATIONS] Error clearing Supabase:",
+          error.message,
+        );
       }
     } catch (err) {
-      const msg = err?.message || err?.toString() || 'Unknown error';
-      console.error('[NOTIFICATIONS] Error clearing:', msg);
+      const msg = err?.message || err?.toString() || "Unknown error";
+      console.error("[NOTIFICATIONS] Error clearing:", msg);
     }
   };
 
-  const createNotification = async ({ type, title, message, metadata = {} }) => {
-    if (!user?.id) return;
+  const createNotification = async ({
+    type,
+    title,
+    message,
+    metadata = {},
+  }) => {
+    if (!userId) return;
 
     try {
       const { data, error } = await supabase
-        .from('notifications')
+        .from("notifications")
         .insert({
-          user_id: user.id,
+          user_id: userId,
           type,
           title,
           message,
@@ -263,27 +334,46 @@ export const NotificationProvider = ({ children }) => {
         .single();
 
       if (error) {
-        if (error.code === '42P01' || error.code === '22P02' || error.code === '23503' || error.code === '42501' || error.message?.includes('uuid') || error.message?.includes('UUID')) {
-          console.warn('[NOTIFICATIONS] Supabase error, using localStorage fallback:', error.code, error.message);
+        if (
+          error.code === "42P01" ||
+          error.code === "22P02" ||
+          error.code === "23503" ||
+          error.code === "42501" ||
+          error.message?.includes("uuid") ||
+          error.message?.includes("UUID")
+        ) {
+          console.warn(
+            "[NOTIFICATIONS] Supabase error, using localStorage fallback:",
+            error.code,
+            error.message,
+          );
           const localNotif = {
             id: `local_${Date.now()}`,
-            user_id: user.id,
-            type, title, message, metadata,
+            user_id: userId,
+            type,
+            title,
+            message,
+            metadata,
             is_read: false,
             created_at: new Date().toISOString(),
           };
-          const local = JSON.parse(localStorage.getItem('ialab_notifications') || '[]');
+          const local = JSON.parse(
+            localStorage.getItem("ialab_notifications") || "[]",
+          );
           local.unshift(localNotif);
-          localStorage.setItem('ialab_notifications', JSON.stringify(local.slice(0, 50)));
-          setNotifications(prev => [localNotif, ...prev]);
+          localStorage.setItem(
+            "ialab_notifications",
+            JSON.stringify(local.slice(0, 50)),
+          );
+          setNotifications((prev) => [localNotif, ...prev]);
           return localNotif;
         }
         throw error;
       }
       return data;
     } catch (err) {
-      const msg = err?.message || err?.toString() || 'Unknown error';
-      console.error('[NOTIFICATIONS] Error creating:', msg);
+      const msg = err?.message || err?.toString() || "Unknown error";
+      console.error("[NOTIFICATIONS] Error creating:", msg);
       return null;
     }
   };
@@ -291,45 +381,61 @@ export const NotificationProvider = ({ children }) => {
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   const [preferences, setPrefs] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('ialab_notif_prefs') || '{"push":true,"reminders":true,"forum":true}'); }
-    catch { return { push: true, reminders: true, forum: true }; }
+    try {
+      return JSON.parse(
+        localStorage.getItem("ialab_notif_prefs") ||
+          '{"push":true,"reminders":true,"forum":true}',
+      );
+    } catch {
+      return { push: true, reminders: true, forum: true };
+    }
   });
 
-  const updatePreferences = useCallback((p) => { setPrefs(p); localStorage.setItem('ialab_notif_prefs', JSON.stringify(p)); }, []);
+  const updatePreferences = useCallback((p) => {
+    setPrefs(p);
+    localStorage.setItem("ialab_notif_prefs", JSON.stringify(p));
+  }, []);
 
   const studyReminderRef = useRef(null);
 
   useEffect(() => {
-    if (!user?.id) return;
+    if (!userId) return;
     const checkReminder = () => {
       if (!preferences.reminders) return;
-      const lastActivity = localStorage.getItem('ialab_last_activity_date');
+      const lastActivity = localStorage.getItem("ialab_last_activity_date");
       if (!lastActivity) return;
-      const daysSince = Math.floor((Date.now() - new Date(lastActivity).getTime()) / 86400000);
+      const daysSince = Math.floor(
+        (Date.now() - new Date(lastActivity).getTime()) / 86400000,
+      );
       if (daysSince < 2) return;
-      const lastReminder = localStorage.getItem('ialab_last_study_reminder');
+      const lastReminder = localStorage.getItem("ialab_last_study_reminder");
       if (lastReminder === new Date().toDateString()) return;
       if (daysSince >= 7) {
         createNotification({
-          type: 'lesson_reminder',
-          title: '📚 ¡Una semana sin estudiar!',
-          message: 'Han pasado 7+ días. Vuelve hoy para no perder tu progreso.',
-          metadata: { moduleId: 1 }
+          type: "lesson_reminder",
+          title: "📚 ¡Una semana sin estudiar!",
+          message: "Han pasado 7+ días. Vuelve hoy para no perder tu progreso.",
+          metadata: { moduleId: 1 },
         });
       } else if (daysSince >= 2) {
         createNotification({
-          type: 'lesson_reminder',
-          title: '📚 Te esperamos en IALab',
+          type: "lesson_reminder",
+          title: "📚 Te esperamos en IALab",
           message: `${daysSince} días sin actividad. Una lección rápida mantiene tu racha.`,
-          metadata: { moduleId: 1 }
+          metadata: { moduleId: 1 },
         });
       }
-      localStorage.setItem('ialab_last_study_reminder', new Date().toDateString());
+      localStorage.setItem(
+        "ialab_last_study_reminder",
+        new Date().toDateString(),
+      );
     };
     studyReminderRef.current = setInterval(checkReminder, 6 * 3600000);
     checkReminder();
-    return () => { if (studyReminderRef.current) clearInterval(studyReminderRef.current); };
-  }, [user?.id, createNotification, preferences.reminders]);
+    return () => {
+      if (studyReminderRef.current) clearInterval(studyReminderRef.current);
+    };
+  }, [userId, createNotification, preferences.reminders]);
 
   return (
     <NotificationContext.Provider
@@ -355,7 +461,9 @@ export const NotificationProvider = ({ children }) => {
 export const useNotification = () => {
   const context = useContext(NotificationContext);
   if (!context) {
-    throw new Error('useNotification must be used within a NotificationProvider');
+    throw new Error(
+      "useNotification must be used within a NotificationProvider",
+    );
   }
   return context;
 };

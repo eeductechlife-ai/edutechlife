@@ -6,7 +6,8 @@ import React, {
   lazy,
   Suspense,
 } from "react";
-import { useUser, useAuth } from "@clerk/react";
+import { useAuthIdentity, signOutUser } from "./../hooks/useAuthIdentity";
+import { useStudentProfile } from "./../hooks/useStudentProfile";
 import { useNavigate } from "react-router-dom";
 import { useClerkAuth, getClerkUserInfo } from "../utils/clerk-utils";
 import { Icon } from "../utils/iconMapping.jsx";
@@ -35,8 +36,9 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
     signOut: clerkSignOut,
     openUserProfile,
   } = useClerkAuth();
-  const { user: clerkUserOfficial } = useUser();
-  const { signOut: clerkSignOutOfficial } = useAuth();
+  const { userId, isSignedIn } = useAuthIdentity();
+  const { profile } = useStudentProfile();
+  const user = profile ? { ...profile, id: userId } : null;
 
   const [isOpen, setIsOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);

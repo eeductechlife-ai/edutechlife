@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
-import { useUser, useAuth } from '@clerk/react';
-import { initAnalytics, identify, reset } from '../lib/analytics';
+import { useEffect } from "react";
+import { useAuthIdentity } from "../hooks/useAuthIdentity";
+import { useStudentProfile } from "../hooks/useStudentProfile";
+import { initAnalytics, identify, reset } from "../lib/analytics";
 
 export function AnalyticsProvider({ children }) {
-  const { user, isLoaded } = useUser();
-  const { isSignedIn } = useAuth();
+  const { userId, email: authEmail, isSignedIn, isLoaded } = useAuthIdentity();
+  const { displayName } = useStudentProfile();
 
   useEffect(() => {
     initAnalytics();
@@ -14,9 +15,9 @@ export function AnalyticsProvider({ children }) {
     if (!isLoaded) return;
 
     if (isSignedIn && user) {
-      identify(user.id, {
-        email: user.primaryEmailAddress?.emailAddress,
-        name: user.fullName,
+      identify(userId, {
+        email: authEmail,
+        name: displayName,
       });
     } else {
       reset();

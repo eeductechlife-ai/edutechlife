@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth, useUser } from "@clerk/react";
+import { useAuthIdentity } from "../../hooks/useAuthIdentity";
+import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useTranslation } from "../../i18n/I18nProvider";
 import LocaleSwitcher from "../LocaleSwitcher";
@@ -53,8 +54,8 @@ const loginOptions = [
 const HeaderFluidIsland = ({ onOpenMobileMenu }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isSignedIn } = useAuth();
-  const { user: clerkUser } = useUser();
+  const { isSignedIn } = useAuthIdentity();
+  const { profile: clerkUser } = useStudentProfile();
   const location = useLocation();
 
   const prefersReducedMotion = useReducedMotion();
@@ -216,24 +217,37 @@ const HeaderFluidIsland = ({ onOpenMobileMenu }) => {
             aria-label={t("nav.menu_aria")}
           >
             <div className="relative w-5 h-5">
-              <span className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full" style={{ top: "50%", marginTop: "-1px", transform: "translateY(-5px)" }} />
-              <span className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full" style={{ top: "50%", marginTop: "-1px" }} />
-              <span className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full" style={{ top: "50%", marginTop: "-1px", transform: "translateY(5px)" }} />
+              <span
+                className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full"
+                style={{
+                  top: "50%",
+                  marginTop: "-1px",
+                  transform: "translateY(-5px)",
+                }}
+              />
+              <span
+                className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full"
+                style={{ top: "50%", marginTop: "-1px" }}
+              />
+              <span
+                className="absolute left-0 w-full h-[2px] bg-petroleum rounded-full"
+                style={{
+                  top: "50%",
+                  marginTop: "-1px",
+                  transform: "translateY(5px)",
+                }}
+              />
             </div>
           </button>
         </div>
       </div>
-
-
     </>
   );
 
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
-        <motion.header
-          className="pointer-events-auto relative w-full md:w-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-white/10 shadow-lg shadow-black/5 rounded-none md:rounded-full"
-        >
+        <motion.header className="pointer-events-auto relative w-full md:w-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-white/10 shadow-lg shadow-black/5 rounded-none md:rounded-full">
           {headerContent}
         </motion.header>
       </div>

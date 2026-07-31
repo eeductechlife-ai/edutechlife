@@ -1,6 +1,6 @@
 // fix vercel casing cache
 import { lazy, Suspense } from "react";
-import { useAuth } from "@clerk/react";
+import { signOutUser } from "../../hooks/useAuthIdentity";
 import { useNavigate } from "react-router-dom";
 import { PageLoader } from "../LoadingScreen";
 import { useTranslation } from "../../i18n/I18nProvider";
@@ -14,11 +14,10 @@ const AdminDashboard = lazy(() => import("../adminDashboard"));
  */
 const AdminPage = () => {
   const { t } = useTranslation();
-  const { signOut } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await signOut();
+    signOutUser("/");
     navigate("/");
   };
 

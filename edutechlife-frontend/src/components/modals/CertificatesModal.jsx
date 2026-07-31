@@ -1,6 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
-import { useUser } from "@clerk/react";
+import { useAuthIdentity } from "../../hooks/useAuthIdentity";
+import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { supabase } from "../../lib/supabase";
 import { useProgressContext } from "../../context/ProgressContext";
 import {
@@ -18,7 +19,9 @@ const COURSE_NAME = "Introducción a la I.A Generativa";
 
 const CertificatesModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
-  const { user } = useUser();
+  // Identidad desde la sesion de Supabase (Clerk ya no autentica).
+  const { userId } = useAuthIdentity();
+  const { displayName } = useStudentProfile();
   const {
     courseProgress,
     completedModules,
@@ -40,7 +43,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!isOpen || !user?.id) return;
+    if (!isOpen || !userId) return;
 
     const fetchCertificate = async () => {
       setLoading(true);
@@ -49,7 +52,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
         const certRes = await supabase
           .from("certificates")
           .select("*")
-          .eq("user_id", user.id)
+          .eq("user_id", userId)
           .maybeSingle();
 
         if (certRes.error && certRes.error.code !== "PGRST116") {
@@ -64,7 +67,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
     };
 
     fetchCertificate();
-  }, [isOpen, user?.id]);
+  }, [isOpen, userId]);
 
   useEffect(() => {
     if (storedCertificate) {
@@ -94,7 +97,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
       try {
         const studentName =
           nameInput.trim() ||
-          user.fullName ||
+          displayName ||
           t("modals.certificates.student_fallback");
         const result = await generateCertificate(studentName);
         if (result && !result.error) {
@@ -186,7 +189,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
                 if (error) setError(null);
               }}
               placeholder={
-                user?.fullName || t("modals.certificates.name_placeholder")
+                displayName || t("modals.certificates.name_placeholder")
               }
               className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#004B63]/30 focus:border-[#004B63] transition-all"
             />

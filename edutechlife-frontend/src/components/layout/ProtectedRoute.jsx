@@ -1,4 +1,4 @@
-import { useAuth } from "@clerk/react";
+import { useAuthIdentity } from "../../hooks/useAuthIdentity";
 import { Navigate } from "react-router-dom";
 import { PageLoader } from "../LoadingScreen";
 import { useTranslation } from "../../i18n/I18nProvider";
@@ -12,7 +12,9 @@ import { useTranslation } from "../../i18n/I18nProvider";
  */
 const ProtectedRoute = ({ children }) => {
   const { t } = useTranslation();
-  const { isLoaded, isSignedIn } = useAuth();
+  // Sesion de Supabase. Con Clerk esto era siempre false y habria
+  // redirigido a /login a cualquier usuario autenticado.
+  const { isLoaded, isSignedIn } = useAuthIdentity();
 
   if (!isLoaded) {
     return <PageLoader message={t("page_loader.auth")} />;

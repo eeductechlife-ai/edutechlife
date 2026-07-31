@@ -1,36 +1,38 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { useUser } from '@clerk/react';
-import { useNotification } from '../context/NotificationContext';
-import { useProgressContext } from '../context/ProgressContext';
-import { useTranslation } from '../i18n/I18nProvider';
+import { useEffect, useRef, useCallback } from "react";
+import { useAuthIdentity } from "./useAuthIdentity";
+import { useNotification } from "../context/NotificationContext";
+import { useProgressContext } from "../context/ProgressContext";
+import { useTranslation } from "../i18n/I18nProvider";
 
 const MODULE_NAMES = {
-  1: 'Ingenieria de Prompts',
-  2: 'Potencia ChatGPT',
-  3: 'Rastreo Profundo',
-  4: 'Inmersion NotebookLM',
-  5: 'Proyecto Disruptivo',
+  1: "Ingenieria de Prompts",
+  2: "Potencia ChatGPT",
+  3: "Rastreo Profundo",
+  4: "Inmersion NotebookLM",
+  5: "Proyecto Disruptivo",
 };
 
 const REMINDER_DAYS = 2;
-const STORAGE_KEY = 'ialab_last_reminder_check';
-const LAST_NOTIFIED_ABSENCE = 'ialab_last_notified_absence';
-const NOTIFIED_EXAMS_KEY = 'ialab_notified_exams';
+const STORAGE_KEY = "ialab_last_reminder_check";
+const LAST_NOTIFIED_ABSENCE = "ialab_last_notified_absence";
+const NOTIFIED_EXAMS_KEY = "ialab_notified_exams";
 
 export const useCourseReminders = () => {
   const { t } = useTranslation();
-  const { user } = useUser();
+  // Identidad desde la sesion de Supabase (Clerk ya no autentica).
+  const { userId } = useAuthIdentity();
   const { createNotification } = useNotification();
-  const { completedModules, completedExams, courseProgress } = useProgressContext();
+  const { completedModules, completedExams, courseProgress } =
+    useProgressContext();
   const hasCheckedRef = useRef(false);
 
   const getNextModule = useCallback((completedMods) => {
-    return [1, 2, 3, 4, 5].find(m => !completedMods.includes(m));
+    return [1, 2, 3, 4, 5].find((m) => !completedMods.includes(m));
   }, []);
 
   const getLastViewedTopic = useCallback(() => {
     try {
-      const raw = localStorage.getItem('ialab_last_viewed_topic');
+      const raw = localStorage.getItem("ialab_last_viewed_topic");
       if (!raw) return null;
       return JSON.parse(raw);
     } catch {
@@ -39,11 +41,11 @@ export const useCourseReminders = () => {
   }, []);
 
   const checkInactivity = useCallback(async () => {
-    if (!user?.id) return;
+    if (!userId) return;
 
     const now = new Date();
     const lastCheck = localStorage.getItem(STORAGE_KEY);
-    
+
     if (lastCheck) {
       const hoursSinceCheck = (now - new Date(lastCheck)) / (1000 * 60 * 60);
       if (hoursSinceCheck < 24) return;
@@ -51,9 +53,9 @@ export const useCourseReminders = () => {
 
     if (completedModules.length >= 5) return;
 
-    const lastActivity = localStorage.getItem('ialab_last_activity_date');
+    const lastActivity = localStorage.getItem("ialab_last_activity_date");
     if (!lastActivity) {
-      localStorage.setItem('ialab_last_activity_date', now.toISOString());
+      localStorage.setItem("ialab_last_activity_date", now.toISOString());
       return;
     }
 
@@ -61,35 +63,54 @@ export const useCourseReminders = () => {
     if (daysSince < REMINDER_DAYS) return;
 
     const daysFloor = Math.floor(daysSince);
-    const lastNotifiedDays = parseInt(localStorage.getItem(LAST_NOTIFIED_ABSENCE) || '0');
+    const lastNotifiedDays = parseInt(
+      localStorage.getItem(LAST_NOTIFIED_ABSENCE) || "0",
+    );
 
     if (daysFloor <= lastNotifiedDays) return;
 
     const nextModule = getNextModule(completedModules);
     if (!nextModule) return;
 
-    const moduleName = MODULE_NAMES[nextModule] || t('progress.module_fallback', { id: nextModule });
+    const moduleName =
+      MODULE_NAMES[nextModule] ||
+      t("progress.module_fallback", { id: nextModule });
     const lastTopic = getLastViewedTopic();
 
     let title, message;
 
     const topicContext = lastTopic
-      ? t('reminder.topic_context', { title: lastTopic.resourceTitle, moduleName: lastTopic.moduleName })
-      : '';
+      ? t("reminder.topic_context", {
+          title: lastTopic.resourceTitle,
+          moduleName: lastTopic.moduleName,
+        })
+      : "";
 
     if (daysFloor >= 7) {
-      title = t('reminder.inactivity_7_title');
-      message = t('reminder.inactivity_7_msg', { days: daysFloor, topicContext, moduleName });
+      title = t("reminder.inactivity_7_title");
+      message = t("reminder.inactivity_7_msg", {
+        days: daysFloor,
+        topicContext,
+        moduleName,
+      });
     } else if (daysFloor >= 4) {
-      title = t('reminder.inactivity_4_title');
-      message = t('reminder.inactivity_4_msg', { days: daysFloor, topicContext, moduleName });
+      title = t("reminder.inactivity_4_title");
+      message = t("reminder.inactivity_4_msg", {
+        days: daysFloor,
+        topicContext,
+        moduleName,
+      });
     } else {
-      title = t('reminder.inactivity_2_title');
-      message = t('reminder.inactivity_2_msg', { days: daysFloor, topicContext, moduleName });
+      title = t("reminder.inactivity_2_title");
+      message = t("reminder.inactivity_2_msg", {
+        days: daysFloor,
+        topicContext,
+        moduleName,
+      });
     }
 
     await createNotification({
-      type: 'lesson_reminder',
+      type: "lesson_reminder",
       title,
       message,
       metadata: { moduleId: nextModule, daysInactive: daysFloor },
@@ -97,10 +118,16 @@ export const useCourseReminders = () => {
 
     localStorage.setItem(LAST_NOTIFIED_ABSENCE, daysFloor.toString());
     localStorage.setItem(STORAGE_KEY, now.toISOString());
-  }, [user?.id, completedModules, createNotification, getNextModule, getLastViewedTopic]);
+  }, [
+    userId,
+    completedModules,
+    createNotification,
+    getNextModule,
+    getLastViewedTopic,
+  ]);
 
   const checkPendingExams = useCallback(async () => {
-    if (!user?.id) return;
+    if (!userId) return;
 
     const now = new Date();
     const lastCheck = localStorage.getItem(STORAGE_KEY);
@@ -109,7 +136,7 @@ export const useCourseReminders = () => {
       if (hoursSinceCheck < 24) return;
     }
 
-    const notifiedExamsStr = localStorage.getItem(NOTIFIED_EXAMS_KEY) || '[]';
+    const notifiedExamsStr = localStorage.getItem(NOTIFIED_EXAMS_KEY) || "[]";
     let notifiedExams;
     try {
       notifiedExams = JSON.parse(notifiedExamsStr);
@@ -117,21 +144,23 @@ export const useCourseReminders = () => {
       notifiedExams = [];
     }
 
-    const incompleteExams = [1, 2, 3, 4, 5].filter(m => {
+    const incompleteExams = [1, 2, 3, 4, 5].filter((m) => {
       const examScore = completedExams[m];
-      const isApproved = typeof examScore === 'number' ? examScore >= 80 : !!examScore;
+      const isApproved =
+        typeof examScore === "number" ? examScore >= 80 : !!examScore;
       return !isApproved && m <= completedModules.length + 1;
     });
 
     for (const modId of incompleteExams) {
       if (notifiedExams.includes(modId)) continue;
 
-      const moduleName = MODULE_NAMES[modId] || t('progress.module_fallback', { id: modId });
+      const moduleName =
+        MODULE_NAMES[modId] || t("progress.module_fallback", { id: modId });
 
       await createNotification({
-        type: 'exam_reminder',
-        title: t('reminder.pending_challenge_title'),
-        message: t('reminder.pending_challenge_msg', { moduleName }),
+        type: "exam_reminder",
+        title: t("reminder.pending_challenge_title"),
+        message: t("reminder.pending_challenge_msg", { moduleName }),
         metadata: { moduleId: modId },
       });
 
@@ -141,25 +170,25 @@ export const useCourseReminders = () => {
     if (notifiedExams.length > 0) {
       localStorage.setItem(NOTIFIED_EXAMS_KEY, JSON.stringify(notifiedExams));
     }
-  }, [user?.id, completedModules, completedExams, createNotification]);
+  }, [userId, completedModules, completedExams, createNotification]);
 
   useEffect(() => {
-    if (!user?.id || hasCheckedRef.current) return;
+    if (!userId || hasCheckedRef.current) return;
     hasCheckedRef.current = true;
 
     checkInactivity();
     checkPendingExams();
-  }, [user?.id, checkInactivity, checkPendingExams]);
+  }, [userId, checkInactivity, checkPendingExams]);
 
   useEffect(() => {
-    if (!user?.id || !hasCheckedRef.current) return;
+    if (!userId || !hasCheckedRef.current) return;
 
     const timer = setTimeout(() => {
       checkInactivity();
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [courseProgress, completedModules, user?.id, checkInactivity]);
+  }, [courseProgress, completedModules, userId, checkInactivity]);
 
   return { checkInactivity, checkPendingExams };
 };
