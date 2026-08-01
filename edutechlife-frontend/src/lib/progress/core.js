@@ -31,7 +31,7 @@ const ensureProgressRow = async (db, userId, moduleId) => {
       const { data: newRow, error: insertError } = await db
         .from(TABLE_NAME)
         .insert(defaultData)
-        .select()
+        .select("*")
         .maybeSingle();
 
       if (insertError) throw insertError;
@@ -143,7 +143,7 @@ export const coreFactory = (db) => ({
           onConflict: "user_id,module_id,activity_type,resource_id",
           ignoreDuplicates: false,
         })
-        .select()
+        .select("*")
         .maybeSingle();
 
       if (error) throw error;
@@ -188,7 +188,7 @@ export const coreFactory = (db) => ({
         })
         .eq("user_id", actualUserId)
         .eq("module_id", numericModuleId)
-        .select()
+        .select("*")
         .maybeSingle();
 
       if (error) throw error;
@@ -296,7 +296,7 @@ export const coreFactory = (db) => ({
         })
         .eq("user_id", actualUserId)
         .eq("module_id", numericModuleId)
-        .select()
+        .select("*")
         .single();
 
       if (error) throw error;
