@@ -28,6 +28,7 @@ import {
   setSupabaseClient,
   createProgressService,
 } from "../../../lib/progress";
+import { checkAndFixRLS } from "../../../lib/rls-fixer";
 import { PROGRESS_STATUS } from "./progressCalculations";
 import { loadFromCache } from "./supabaseQueries";
 import {
@@ -155,13 +156,24 @@ export const useIALabProgress = () => {
 
         if (cancelledRef.current) return;
 
+        // Restaurar no es progresar: `silent` evita volver a premiar con XP,
+        // marcar la racha del día y reenviar a Supabase lo ya leído. Sin él,
+        // cada recarga inflaba el XP y falseaba la constancia.
+        const restore = { silent: true };
+
         for (let modId = 1; modId <= 5; modId++) {
           if (cancelledRef.current) return;
           const breakdown = moduleBreakdowns[modId];
           if (breakdown) {
             if (breakdown.exam.passed) {
               if (cancelledRef.current) return;
-              updateModuleActivity(modId, "exam", true, breakdown.exam.score);
+              updateModuleActivity(
+                modId,
+                "exam",
+                true,
+                breakdown.exam.score,
+                restore,
+              );
             }
             if (breakdown.challenge.score > 0) {
               if (cancelledRef.current) return;
@@ -170,15 +182,28 @@ export const useIALabProgress = () => {
                 "challenge",
                 true,
                 breakdown.challenge.score,
+                restore,
               );
             }
             if (breakdown.resources.earned > 0) {
               if (cancelledRef.current) return;
-              updateModuleActivity(modId, "resourcesCompleted", true);
+              updateModuleActivity(
+                modId,
+                "resourcesCompleted",
+                true,
+                undefined,
+                restore,
+              );
             }
             if (breakdown.community.commented) {
               if (cancelledRef.current) return;
-              updateModuleActivity(modId, "community", true);
+              updateModuleActivity(
+                modId,
+                "community",
+                true,
+                undefined,
+                restore,
+              );
             }
           }
         }
@@ -383,28 +408,53 @@ export const useIALabProgress = () => {
 
   const trackResourceViewed = useCallback(
     async (moduleId, resourceId, resourceType) => {
-      return trackResourceViewedFn(moduleId, resourceId, resourceType, user, progressService, updateModuleActivity);
+      return trackResourceViewedFn(
+        moduleId,
+        resourceId,
+        resourceType,
+        user,
+        progressService,
+        updateModuleActivity,
+      );
     },
     [user, updateModuleActivity, progressService],
   );
 
   const trackExamResult = useCallback(
     async (moduleId, score, passed) => {
-      return trackExamResultFn(moduleId, score, passed, user, progressService, updateModuleActivity);
+      return trackExamResultFn(
+        moduleId,
+        score,
+        passed,
+        user,
+        progressService,
+        updateModuleActivity,
+      );
     },
     [user, updateModuleActivity, progressService],
   );
 
   const trackChallengeResult = useCallback(
     async (moduleId, score) => {
-      return trackChallengeResultFn(moduleId, score, user, progressService, updateModuleActivity);
+      return trackChallengeResultFn(
+        moduleId,
+        score,
+        user,
+        progressService,
+        updateModuleActivity,
+      );
     },
     [user, updateModuleActivity, progressService],
   );
 
   const trackCommunityComment = useCallback(
     async (moduleId) => {
-      return trackCommunityCommentFn(moduleId, user, progressService, updateModuleActivity);
+      return trackCommunityCommentFn(
+        moduleId,
+        user,
+        progressService,
+        updateModuleActivity,
+      );
     },
     [user, updateModuleActivity, progressService],
   );
@@ -417,6 +467,13 @@ export const useIALabProgress = () => {
   );
 
   // ==================== EFFECTS ====================
+
+  // Diagnóstico: verificar RLS en user_progress al cargarse
+  useEffect(() => {
+    if (supabaseClient && user?.id) {
+      checkAndFixRLS(supabaseClient, user.id);
+    }
+  }, [supabaseClient, user?.id]);
 
   useEffect(() => {
     if (!isLoaded) {
@@ -442,7 +499,12 @@ export const useIALabProgress = () => {
 
   useEffect(() => {
     return () => {
-      persistProgressToCache(courseProgress, completedModules, visitedModules, user?.id);
+      persistProgressToCache(
+        courseProgress,
+        completedModules,
+        visitedModules,
+        user?.id,
+      );
     };
   }, [courseProgress, completedModules, visitedModules, user?.id]);
 
