@@ -6,6 +6,9 @@ import {
   calcGlobalProgress,
 } from "../ialab";
 import { WEIGHTS } from "@/constants/ialab";
+// `ls` namespaces every key per account, so raw localStorage assertions have to
+// go through the same scoping — otherwise they read a key that is never written.
+import { scopedKey } from "@/utils/userScopedStorage";
 
 beforeEach(() => {
   localStorage.clear();
@@ -39,15 +42,15 @@ describe("ls", () => {
     ls.set("a", 1);
     ls.set("b", 2);
     await new Promise(process.nextTick);
-    expect(JSON.parse(localStorage.getItem("a"))).toBe(1);
-    expect(JSON.parse(localStorage.getItem("b"))).toBe(2);
+    expect(JSON.parse(localStorage.getItem(scopedKey("a")))).toBe(1);
+    expect(JSON.parse(localStorage.getItem(scopedKey("b")))).toBe(2);
   });
 
   test("remove deletes key from localStorage", async () => {
     ls.set("key", "val");
     await new Promise(process.nextTick);
     ls.remove("key");
-    expect(localStorage.getItem("key")).toBe(null);
+    expect(localStorage.getItem(scopedKey("key"))).toBe(null);
   });
 
   test("remove clears pending value before flush", () => {
@@ -57,7 +60,7 @@ describe("ls", () => {
   });
 
   test("get returns fallback on JSON parse error", () => {
-    localStorage.setItem("bad", "not-json{");
+    localStorage.setItem(scopedKey("bad"), "not-json{");
     expect(ls.get("bad", "fallback")).toBe("fallback");
   });
 

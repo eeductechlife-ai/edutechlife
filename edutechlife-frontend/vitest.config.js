@@ -8,6 +8,14 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test-setup.ts'],
+    // src/lib/supabase.js throws at import time when these are absent, which
+    // takes down any suite that transitively imports a Supabase-backed
+    // component. CI has no .env, so tests get their own dummy credentials —
+    // they only need to satisfy the guard, nothing here talks to the network.
+    env: {
+      VITE_SUPABASE_URL: 'https://test.supabase.co',
+      VITE_SUPABASE_ANON_KEY: 'test-anon-key',
+    },
     include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
     css: true,
     pool: 'threads',

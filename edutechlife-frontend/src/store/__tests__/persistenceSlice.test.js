@@ -1,4 +1,7 @@
 import { useIALabStore } from "../ialabStore";
+// Attempt counters and their 12h cooldown are stored per account, so clearing
+// the bare key leaves the previous test's cooldown in place.
+import { scopedRemove } from "@/utils/userScopedStorage";
 
 beforeEach(() => {
   useIALabStore.setState({
@@ -26,10 +29,10 @@ beforeEach(() => {
     forumPostCount: 0,
     forumCommentCount: 0,
   });
-  localStorage.removeItem("challenge_attempts_remaining_m1");
-  localStorage.removeItem("challenge_next_attempt_m1");
-  localStorage.removeItem("exam_attempts_remaining_m1");
-  localStorage.removeItem("exam_next_attempt_m1");
+  scopedRemove("challenge_attempts_remaining_m1");
+  scopedRemove("challenge_next_attempt_m1");
+  scopedRemove("exam_attempts_remaining_m1");
+  scopedRemove("exam_next_attempt_m1");
 });
 
 describe("persistenceSlice — syncFromPersistence", () => {
