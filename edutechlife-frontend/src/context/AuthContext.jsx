@@ -4,6 +4,7 @@ import {
   useEffect,
   useCallback,
   useContext,
+  useMemo,
 } from "react";
 import { useAuthIdentity, signOutUser } from "../hooks/useAuthIdentity";
 import { useStudentProfile } from "../hooks/useStudentProfile";
@@ -29,19 +30,29 @@ export const AuthProvider = ({ children }) => {
   const { profile: studentProfile, displayName } = useStudentProfile();
 
   // Se conserva la forma del objeto para no romper a los consumidores.
-  const clerkUser = userId
-    ? {
-        id: userId,
-        fullName: displayName,
-        firstName: studentProfile?.first_name || "",
-        lastName: studentProfile?.last_name || "",
-        emailAddresses: [
-          { emailAddress: studentProfile?.email || authEmail || "" },
-        ],
-        imageUrl: "",
-        createdAt: studentProfile?.created_at || null,
-      }
-    : null;
+  //
+  // Memoizado a proposito: sin useMemo este objeto se recreaba en cada render,
+  // lo que invalidaba fetchProfile y volvia a disparar el efecto de sincronizacion,
+  // cuyos setUser/setProfile provocaban otro render. El resultado era un bucle
+  // infinito ("Maximum update depth exceeded") que solo aparecia con la sesion
+  // iniciada, porque con userId null clerkUser es null y no cambia de identidad.
+  const clerkUser = useMemo(
+    () =>
+      userId
+        ? {
+            id: userId,
+            fullName: displayName,
+            firstName: studentProfile?.first_name || "",
+            lastName: studentProfile?.last_name || "",
+            emailAddresses: [
+              { emailAddress: studentProfile?.email || authEmail || "" },
+            ],
+            imageUrl: "",
+            createdAt: studentProfile?.created_at || null,
+          }
+        : null,
+    [userId, displayName, studentProfile, authEmail],
+  );
   const { supabase, isLoading: supabaseLoading } = useSupabase();
 
   const [user, setUser] = useState(null);
