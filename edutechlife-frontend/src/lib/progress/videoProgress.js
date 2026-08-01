@@ -29,7 +29,7 @@ export const videoProgressFactory = (db) => ({
             ignoreDuplicates: false,
           },
         )
-        .select()
+        .select("*")
         .single();
 
       if (error) throw error;
@@ -86,7 +86,7 @@ export const videoProgressFactory = (db) => ({
             ignoreDuplicates: false,
           },
         )
-        .select()
+        .select("*")
         .single();
 
       if (error) throw error;

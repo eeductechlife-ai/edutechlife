@@ -32,7 +32,7 @@ export const examProgressFactory = (db) => ({
             submitted_at: new Date().toISOString(),
           },
         ])
-        .select()
+        .select("*")
         .single();
 
       if (error) throw error;

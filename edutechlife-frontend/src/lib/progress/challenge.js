@@ -38,7 +38,7 @@ export const challengeFactory = (db) => ({
             ignoreDuplicates: false,
           },
         )
-        .select()
+        .select("*")
         .maybeSingle();
 
       if (error) throw error;
@@ -79,7 +79,7 @@ export const challengeFactory = (db) => ({
             ignoreDuplicates: false,
           },
         )
-        .select()
+        .select("*")
         .maybeSingle();
 
       if (error) throw error;

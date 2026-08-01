@@ -1,3 +1,7 @@
+// Fuente única con el cliente: antes esta copia fijaba 8 recursos por módulo
+// igual que `constants/ialab.js`, y ambas estaban desalineadas del catálogo.
+import { MODULE_RESOURCE_COUNTS } from "../../constants/ialab.js";
+
 export const TABLE_NAME = "user_progress";
 
 export const PROGRESS_STATUS = {
@@ -26,8 +30,6 @@ export const SCORING = {
   TOTAL_POSSIBLE: 100,
 };
 
-const resourceCounts = { 1: 8, 2: 8, 3: 8, 4: 8, 5: 8 };
-
 export const countModuleResources = (moduleId) => {
-  return resourceCounts[moduleId] || 8;
+  return MODULE_RESOURCE_COUNTS[moduleId] || MODULE_RESOURCE_COUNTS[1];
 };

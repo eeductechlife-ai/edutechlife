@@ -43,7 +43,7 @@ export const resourcesFactory = (db) => ({
             ignoreDuplicates: false,
           },
         )
-        .select()
+        .select("*")
         .maybeSingle();
 
       if (error) throw error;
