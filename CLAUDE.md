@@ -147,8 +147,17 @@ Any string works as a custom agent type.
 ### Completed
 - **Phase 4B Refactoring**: Centralized MCP configs (20→1), tsconfigs (10→`.tsconfig/`), settings (`.claude/settings.json` → `settings/`), analytics images → `assets/`
 - **Docs Reorganization**: Auth docs → `docs/auth/`, Reports → `docs/reports/`, Guides → `docs/guides/`, SQL → `sql/`
-- **Deploy Pipeline**: Created `.github/workflows/deploy.yml` — real CD pipeline with 4 jobs:
-  - `migrate-db` (Supabase CLI) → `deploy-frontend` (Vercel) + `deploy-backend` (Render hook) → `smoke-test`
+- **Deploy Pipeline**: `.github/workflows/deploy.yml` — 4 jobs:
+  - `migrate-db` (Supabase CLI) → `deploy-backend` (Render hook); `deploy-frontend` (Vercel) corre en paralelo → `smoke-test`
+  - **Estado real**: el workflow nunca completó una corrida exitosa (12/12 fallidas en `migrate-db`).
+    Las migraciones 003–010 nunca se aplicaron: la base remota se construyó a mano con los scripts
+    sueltos de `sql/` y `edutechlife-frontend/*.sql`, y quedó desalineada con `supabase/migrations/`.
+    Producción la despliega la integración Git de Vercel, no este workflow.
+  - `migrate-db` **sigue fallando**: las migraciones se reescribieron para tolerar el esquema real,
+    pero esa reescritura vive sin fusionar en la rama `claude/gracious-mccarthy-9d023b` (commit `bea7ad0`)
+    porque nunca se ha ejecutado contra una base de datos. Verificar en staging antes de fusionar:
+    al entrar a `main`, el siguiente push corre `supabase db push` sobre producción.
+  - No asumir que el CD funciona hasta verlo en verde.
 - **SEO Prerendering**: Fixed SEO for SPA — implemented prerendering + meta tags dinámicos:
   - `src/components/SEO.jsx` — componente SEO con react-helmet-async
   - `HelmetProvider` en `main.jsx`

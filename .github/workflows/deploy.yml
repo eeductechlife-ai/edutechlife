@@ -30,9 +30,12 @@ jobs:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
 
+  # Sin `needs: migrate-db` a proposito. El frontend es estatico y no depende
+  # del resultado de la migracion: si una migracion se rompe, un arreglo de UI
+  # tiene que poder salir igual. El backend si queda detras de migrate-db
+  # porque habla con la base directamente.
   deploy-frontend:
     name: Deploy Frontend (Vercel)
-    needs: migrate-db
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
@@ -77,6 +80,9 @@ jobs:
   smoke-test:
     name: Smoke Test
     needs: [deploy-frontend, deploy-backend]
+    # Corre aunque deploy-backend se haya saltado por un fallo en migrate-db:
+    # en ese caso se verifica solo lo que si se desplego.
+    if: ${{ always() && needs.deploy-frontend.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -89,6 +95,7 @@ jobs:
             && echo "Frontend OK"
 
       - name: Check backend
+        if: ${{ needs.deploy-backend.result == 'success' }}
         run: |
           curl -sf --max-time 10 "${{ secrets.SMOKE_TEST_BACKEND_URL }}" \
             && echo "Backend OK"
