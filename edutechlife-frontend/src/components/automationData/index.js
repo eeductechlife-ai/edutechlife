@@ -5,6 +5,30 @@ export * from "./config.js";
 export * from "./processes.js";
 export * from "./cases.js";
 
+// `export *` reexporta, pero no crea bindings locales: getData() referenciaba
+// nombres inexistentes y lanzaba ReferenceError al llamarla.
+import { METRICS_ES, METRICS_EN } from "./metrics.js";
+import { STANDARDS_ES, STANDARDS_EN } from "./standards.js";
+import { QUESTIONS_ES, QUESTIONS_EN } from "./questions.js";
+import {
+  LEVELS_ES,
+  LEVELS_EN,
+  PROCESOS_OPTIONS_ES,
+  PROCESOS_OPTIONS_EN,
+  INDUSTRIAS_ES,
+  INDUSTRIAS_EN,
+  ARQUITECTURAS_PREDEFINIDAS,
+  ARQUITECTURAS_PREDEFINIDAS_EN,
+  SECTOR_OPTIONS_ES,
+  SECTOR_OPTIONS_EN,
+  PROCESO_ICONS_MAP,
+} from "./config.js";
+import {
+  PROCESS_TO_SOLUTIONS_ES,
+  PROCESS_TO_SOLUTIONS_EN,
+} from "./processes.js";
+import { CASES_ES, CASES_EN } from "./cases.js";
+
 const getData = (locale) =>
   locale === "en"
     ? {

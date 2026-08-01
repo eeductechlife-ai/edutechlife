@@ -49,7 +49,7 @@ const SmartBoardKidsDashboard = () => {
   const handleLogout = useCallback(() => {
     signOutUser("/");
     navigate("/");
-  }, [signOut, navigate]);
+  }, [navigate]);
 
   const handleDaniOpen = useCallback(() => setIsDaniOpen(true), []);
   const handleDaniClose = useCallback(() => setIsDaniOpen(false), []);

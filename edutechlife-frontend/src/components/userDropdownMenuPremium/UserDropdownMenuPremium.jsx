@@ -77,11 +77,9 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
   const handleStudyPlanner = () => setShowStudyPlanner(true);
 
   const handleChangePassword = () => {
-    if (openUserProfile) {
-      window.location.href = "/user-profile?section=security";
-    } else {
-      setIsChangePasswordOpen(true);
-    }
+    // Antes intentaba abrir el perfil de Clerk; ahora el cambio de contraseña
+    // se hace en el modal propio.
+    setIsChangePasswordOpen(true);
   };
 
   if (!isSignedIn) {
@@ -490,10 +488,10 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
 
                   <Button
                     onClick={() => {
+                      // openUserProfile era el modal de Clerk; abrimos la
+                      // tarjeta de perfil propia.
                       setIsProfileOpen(false);
-                      if (openUserProfile) {
-                        openUserProfile();
-                      }
+                      setShowProfile(true);
                     }}
                     className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-semibold py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
                   >

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useAuthIdentity } from "./useAuthIdentity";
-import { createClerkSupabaseClient } from "../lib/supabase";
+import { createSupabaseClient } from "../lib/supabase";
 import { useIALabStore } from "../store/ialabStore";
 
 const SESSION_LOG_KEY = "ialab_session_log";
@@ -8,7 +8,7 @@ const MIN_SESSION_SECONDS = 30;
 
 export const useSessionTracker = () => {
   // Identidad desde la sesion de Supabase (Clerk ya no autentica).
-  const { userId } = useAuthIdentity();
+  const { userId, token } = useAuthIdentity();
   const sessionStartRef = useRef(null);
 
   useEffect(() => {
@@ -34,10 +34,9 @@ export const useSessionTracker = () => {
       };
 
       try {
-        const token = session
-          ? await session.getToken({ template: "supabase" })
-          : null;
-        const client = createClerkSupabaseClient(token);
+        // El token salia de session.getToken() de Clerk; ahora es el access
+        // token de Supabase que ya expone useAuthIdentity.
+        const client = createSupabaseClient(token);
         const { error } = await client
           .from("activity_log")
           .insert(activity)
@@ -69,7 +68,7 @@ export const useSessionTracker = () => {
       window.removeEventListener("beforeunload", endSession);
       document.removeEventListener("visibilitychange", endSession);
     };
-  }, [userId, session]);
+  }, [userId, token]);
 };
 
 export const getSessionStats = (sessions) => {

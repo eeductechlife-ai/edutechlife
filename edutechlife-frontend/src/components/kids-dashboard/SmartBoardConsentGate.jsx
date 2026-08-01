@@ -18,7 +18,7 @@ const SmartBoardConsentGate = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   // Identidad y perfil desde Supabase (Clerk ya no autentica).
-  const { token, isLoaded } = useAuthIdentity();
+  const { token, isLoaded, isSignedIn } = useAuthIdentity();
   const { profile } = useStudentProfile();
   const { setSubscriptionTier } = useSmartBoardKids();
   const [showModal, setShowModal] = useState(false);
@@ -26,16 +26,16 @@ const SmartBoardConsentGate = () => {
 
   useEffect(() => {
     // If user not authenticated or failed signup, redirect back
-    if (isLoaded && !user) {
+    if (isLoaded && !isSignedIn) {
       navigate("/sign-up/smartboard");
       return;
     }
 
     // Show modal when loaded
-    if (isLoaded && user) {
+    if (isLoaded && isSignedIn) {
       setShowModal(true);
     }
-  }, [isLoaded, user, navigate]);
+  }, [isLoaded, isSignedIn, navigate]);
 
   const handleAcceptConsent = async (data) => {
     setIsLoading(true);

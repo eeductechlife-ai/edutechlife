@@ -14,7 +14,7 @@ export function AnalyticsProvider({ children }) {
   useEffect(() => {
     if (!isLoaded) return;
 
-    if (isSignedIn && user) {
+    if (isSignedIn && userId) {
       identify(userId, {
         email: authEmail,
         name: displayName,
@@ -22,7 +22,7 @@ export function AnalyticsProvider({ children }) {
     } else {
       reset();
     }
-  }, [isLoaded, isSignedIn, user]);
+  }, [isLoaded, isSignedIn, userId, authEmail, displayName]);
 
   return children;
 }

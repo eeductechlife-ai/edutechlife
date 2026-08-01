@@ -68,7 +68,9 @@ export const useSmartBoardSync = () => {
     saveData,
     mergeWithLocal,
     userId,
-    isLoading: isLoading || !sessionLoaded,
+    // sessionLoaded era el flag asincrono de Clerk; useSupabase ya resuelve la
+    // sesion y expone isLoading.
+    isLoading,
     error,
     isConnected: !!supabase && !!userId,
   };

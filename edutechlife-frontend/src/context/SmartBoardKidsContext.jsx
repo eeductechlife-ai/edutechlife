@@ -367,19 +367,10 @@ export const SmartBoardKidsProvider = ({ children }) => {
     planCompletedActivities,
   ]);
 
-  // Sync Stripe tier from Clerk publicMetadata to subscriptionTier
-  useEffect(() => {
-    if (!clerkUser?.publicMetadata?.plan) return;
-
-    const clerkPlan = clerkUser.publicMetadata.plan;
-    // Map Stripe plans (free, pro, enterprise) to SmartBoard tiers (basic, premium)
-    const mappedTier = clerkPlan === "free" ? "basic" : "premium";
-
-    if (mappedTier !== subscriptionTier) {
-      setSubscriptionTier(mappedTier);
-      setLocalStorage("subscription_tier", mappedTier);
-    }
-  }, [clerkUser?.publicMetadata?.plan]);
+  // El tier de Stripe se leia de Clerk publicMetadata. Clerk ya no autentica y
+  // ese objeto no existe, asi que el efecto solo lanzaba ReferenceError. El
+  // tier vive en subscriptionTier (localStorage/perfil) hasta que se conecte
+  // la fuente de Stripe sobre Supabase.
 
   // Compute upcoming deadlines from calendar events
   const computedUpcomingDeadlines = useMemo(() => {

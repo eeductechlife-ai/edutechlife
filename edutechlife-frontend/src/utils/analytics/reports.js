@@ -174,16 +174,17 @@ export function generateCSVReport(type = "summary") {
       });
       break;
 
-    default:
-      {
-        const summary = this.getSummaryMetrics();
-        csv = "Métrica,Valor\n";
-      }
+    default: {
+      // `summary` estaba declarado dentro de un bloque y se usaba fuera de el,
+      // asi que el caso por defecto siempre lanzaba ReferenceError.
+      const summary = this.getSummaryMetrics();
+      csv = "Métrica,Valor\n";
       Object.entries(summary).forEach(([key, value]) => {
         if (typeof value !== "object") {
           csv += `${key},${value}\n`;
         }
       });
+    }
   }
 
   return csv;

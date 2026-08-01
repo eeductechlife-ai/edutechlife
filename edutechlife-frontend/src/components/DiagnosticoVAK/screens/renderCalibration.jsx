@@ -10,6 +10,7 @@ export default function renderCalibration({
   studentAge,
   setStudentAge,
   ageError,
+  setAgeError,
   studentMood,
   habeasDataAccepted,
   setHabeasDataAccepted,

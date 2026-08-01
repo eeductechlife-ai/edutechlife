@@ -1,5 +1,6 @@
 import { supabase } from "../supabase";
 import { TABLES, VALIDATION } from "./config";
+import { readAuthIdentity } from "../../hooks/useAuthIdentity";
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
@@ -142,10 +143,11 @@ export const addComment = async (postId, content) => {
       );
     }
 
+    // El userId venia de Clerk y aqui quedo sin definir. Se lee de la sesion
+    // de Supabase, que es la que autentica ahora.
+    const { userId } = readAuthIdentity();
     if (!userId) {
-      throw new Error(
-        "Se requiere userId para crear comentarios (use Clerk authentication)",
-      );
+      throw new Error("Se requiere una sesion iniciada para comentar");
     }
 
     const { data: post } = await supabase

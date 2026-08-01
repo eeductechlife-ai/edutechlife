@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import SEO from "../../SEO";
-import { createClerkSupabaseClient } from "../../../lib/supabase";
+import { createSupabaseClient } from "../../../lib/supabase";
 import { LivePresenceBar, ActivityLog } from "./components/ParentControls";
 import {
   StatCard,
@@ -45,7 +45,8 @@ const LEVELS = [
 const SmartBoardParentDashboard = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { userId, getToken, isLoaded } = useAuth();
+  // Identidad desde Supabase: useAuth() era de Clerk y ya ni siquiera se importaba.
+  const { userId, token: authToken, isLoaded } = useAuthIdentity();
 
   const [data, setData] = useState({
     points: 0,
@@ -109,18 +110,17 @@ const SmartBoardParentDashboard = () => {
 
     const interval = setInterval(update, 5000);
     return () => clearInterval(interval);
-  }, [userId, isLoaded, navigate, getToken]);
+  }, [userId, isLoaded, navigate]);
 
   useEffect(() => {
-    if (!isLoaded || !userId || !getToken) return;
+    if (!isLoaded || !userId || !authToken) return;
 
     let channel;
     let supabaseClient;
 
     const setupRealtime = async () => {
       try {
-        const token = await getToken();
-        supabaseClient = createClerkSupabaseClient(token);
+        supabaseClient = createSupabaseClient(authToken);
 
         channel = supabaseClient
           .channel("parent-activity-live")
@@ -155,7 +155,7 @@ const SmartBoardParentDashboard = () => {
         supabaseClient.removeChannel(channel);
       }
     };
-  }, [isLoaded, userId, getToken]);
+  }, [isLoaded, userId, authToken]);
 
   const level =
     LEVELS.find((l) => data.points >= l.min) || LEVELS[LEVELS.length - 1];
