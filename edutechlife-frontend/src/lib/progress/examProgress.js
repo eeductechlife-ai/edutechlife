@@ -98,7 +98,7 @@ export const examProgressFactory = (db) => ({
             ignoreDuplicates: false,
           },
         )
-        .select()
+        .select("*")
         .maybeSingle();
 
       if (error) throw error;

@@ -43,7 +43,7 @@ export async function saveGradeToSupabase({
           ignoreDuplicates: false,
         },
       )
-      .select()
+      .select("*")
       .maybeSingle();
 
     if (error) throw error;

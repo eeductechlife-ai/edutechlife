@@ -97,7 +97,7 @@ export function useEvaluationDraft({
               onConflict: "user_id,module_id,activity_type,resource_id",
             },
           )
-          .select();
+          .select("*");
       } catch (err) {
         console.warn("Error auto-guardando borrador:", err);
       }
