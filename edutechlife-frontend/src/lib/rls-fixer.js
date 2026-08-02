@@ -28,7 +28,7 @@ async function checkAndFixRLS(supabaseClient, userId) {
     const { data, error } = await supabaseClient
       .from("user_progress")
       .insert([testData])
-      .select();
+      .select("*");
 
     if (error) {
       console.error("[RLS FIX] Error writing test record:", error);

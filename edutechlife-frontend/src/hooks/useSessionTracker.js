@@ -40,7 +40,7 @@ export const useSessionTracker = () => {
         const { error } = await client
           .from("activity_log")
           .insert(activity)
-          .select()
+          .select("*")
           .single();
         if (error) throw error;
       } catch {

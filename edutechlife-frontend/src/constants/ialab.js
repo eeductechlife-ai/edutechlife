@@ -1,3 +1,8 @@
+import { CONTENT_ES } from "../components/IALab/constants/moduleContent/contentEs.js";
+import { CONTENT_EN } from "../components/IALab/constants/moduleContent/contentEn.js";
+import { RESOURCES_ES } from "../components/IALab/constants/moduleResources/resourcesEs.js";
+import { RESOURCES_EN } from "../components/IALab/constants/moduleResources/resourcesEn.js";
+
 /** LocalStorage key constants */
 export const LS_KEYS = {
   VIEWED_RESOURCES: "ialab_viewed_resources",
@@ -90,50 +95,70 @@ export const INITIAL_MODULE_PROGRESS = {
 
 export const LAST_MODULE_ID = 5;
 
-/** @type {Record<number, number>} */
-export const MODULE_RESOURCE_COUNTS = { 1: 8, 2: 8, 3: 8, 4: 8, 5: 8 };
-
-/** @type {Record<string, number>} */
-export const RESOURCE_MODULE_MAP = {
-  "intro-video-1": 1,
-  "intro-ova-1": 1,
-  "prompt-video-1": 1,
-  "prompt-guide-1": 1,
-  "prompt-ova-html-1": 1,
-  "chatgpt-video-1": 1,
-  "chatgpt-guide-modulo2": 1,
-  "chatgpt-ova-ecosystem": 1,
-  "workflow-pdf-modulo2": 1,
-  "workflow-ova-herramientas": 1,
-  "gpts-guide-1": 1,
-  "gpts-ova-1": 1,
-  "gemini-video-1": 2,
-  "gemini-guide-1": 2,
-  "gemini-ova-1": 2,
-  "workspace-video-1": 2,
-  "workspace-template-1": 2,
-  "workspace-ova-1": 2,
-  "gemini-cases-video-1": 2,
-  "gemini-cases-guide-1": 2,
-  "gemini-cases-ova-1": 2,
-  "notebooklm-video-1": 3,
-  "notebooklm-guide-1": 3,
-  "notebooklm-ova-1": 3,
-  "notebook-summary-video-1": 3,
-  "notebook-summary-template-1": 3,
-  "notebook-summary-ova-1": 3,
-  "notebook-audio-video-1": 3,
-  "notebook-audio-guide-1": 3,
-  "notebook-audio-ova-1": 3,
-  "bias-video-1": 4,
-  "bias-guide-1": 4,
-  "bias-ova-1": 4,
-  "privacy-video-1": 4,
-  "privacy-guide-1": 4,
-  "privacy-ova-1": 4,
-  "ethics-video-1": 4,
-  "ethics-ova-1": 4,
+/**
+ * Recorre el catálogo de un idioma y devuelve, por módulo, los ids de sus
+ * recursos. El catálogo está indexado por título de tema, así que la relación
+ * tema → módulo se toma de `overviewData.topics`.
+ *
+ * @param {Record<number, any>} content
+ * @param {Record<string, any>} resources
+ * @returns {Record<number, string[]>}
+ */
+const collectResourceIdsByModule = (content, resources) => {
+  /** @type {Record<number, string[]>} */
+  const byModule = {};
+  for (let moduleId = 1; moduleId <= LAST_MODULE_ID; moduleId++) {
+    const topics = content?.[moduleId]?.overviewData?.topics || [];
+    byModule[moduleId] = topics.flatMap((topic) =>
+      (resources?.[topic.title]?.resources || []).map(
+        (resource) => resource.id,
+      ),
+    );
+  }
+  return byModule;
 };
+
+const RESOURCE_IDS_ES = collectResourceIdsByModule(CONTENT_ES, RESOURCES_ES);
+const RESOURCE_IDS_EN = collectResourceIdsByModule(CONTENT_EN, RESOURCES_EN);
+
+/**
+ * Cuántos recursos tiene realmente cada módulo. Se deriva del catálogo en vez
+ * de fijarse a mano: estaba puesto en 8 para los cinco módulos cuando los
+ * reales son 6/7/7/9/9, así que los módulos 1-3 nunca alcanzaban
+ * `resourcesCompleted` y el curso quedaba imposible de completar.
+ *
+ * Se toma el español como inventario canónico. Un módulo con más recursos en
+ * inglés simplemente se completa antes para ese idioma; nunca bloquea.
+ *
+ * @type {Record<number, number>}
+ */
+export const MODULE_RESOURCE_COUNTS = Object.fromEntries(
+  Object.entries(RESOURCE_IDS_ES).map(([moduleId, ids]) => [
+    Number(moduleId),
+    ids.length,
+  ]),
+);
+
+/**
+ * A qué módulo pertenece cada recurso. Se deriva de ambos idiomas para que
+ * ningún recurso quede sin mapear; la tabla escrita a mano tenía 31 de 38
+ * entradas corridas un módulo (los recursos de ChatGPT apuntaban al módulo 1,
+ * los de Gemini al 2...) y el módulo 5 no aparecía.
+ *
+ * @type {Record<string, number>}
+ */
+export const RESOURCE_MODULE_MAP = (() => {
+  /** @type {Record<string, number>} */
+  const map = {};
+  for (const idsByModule of [RESOURCE_IDS_EN, RESOURCE_IDS_ES]) {
+    for (const [moduleId, ids] of Object.entries(idsByModule)) {
+      ids.forEach((id) => {
+        map[id] = Number(moduleId);
+      });
+    }
+  }
+  return map;
+})();
 
 /** @type {Record<string, number>} */
 export const XP_MAP = {

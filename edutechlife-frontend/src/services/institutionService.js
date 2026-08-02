@@ -65,7 +65,7 @@ export async function createInstitution(
         contact_email: contactEmail || null,
         plan,
       })
-      .select()
+      .select("*")
       .single();
     if (error) return { ok: false, error: error.message };
     return { ok: true, data };

@@ -233,7 +233,7 @@ export const AuthProvider = ({ children }) => {
           .from("profiles")
           .update(updates)
           .eq("id", user.id)
-          .select()
+          .select("*")
           .single();
 
         if (updateError) throw updateError;

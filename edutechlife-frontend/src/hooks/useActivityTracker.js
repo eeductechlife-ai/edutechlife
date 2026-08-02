@@ -129,7 +129,7 @@ export const useActivityTracker = () => {
         const { data, error } = await supabase
           .from("activity_log")
           .insert(activity)
-          .select()
+          .select("*")
           .single();
 
         if (error) {

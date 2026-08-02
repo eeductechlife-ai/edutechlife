@@ -145,10 +145,15 @@ export function IALabProgressProvider({ children }) {
   }, []);
 
   const updateModuleActivity = useCallback(
-    async (moduleId, activity, value, score) => {
+    async (moduleId, activity, value, score, options = {}) => {
       const result = useIALabStore
         .getState()
-        .updateModuleActivity(moduleId, activity, value, score);
+        .updateModuleActivity(moduleId, activity, value, score, options);
+
+      // En modo silencioso el origen del dato es la propia base: reenviarlo
+      // sería devolverle a Supabase lo que acaba de leer en cada carga, y
+      // notificar de nuevo módulos completados hace sesiones.
+      if (options.silent) return result;
 
       switch (activity) {
         case "exam":

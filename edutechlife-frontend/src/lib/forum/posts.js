@@ -308,7 +308,7 @@ export const createPost = async (content, tags = []) => {
         upvotes: 0,
         is_verified: false,
       })
-      .select()
+      .select("*")
       .single();
 
     if (error) throw error;
@@ -371,7 +371,7 @@ export const updatePost = async (postId, updates, userId) => {
       .from(TABLES.POSTS)
       .update(updates)
       .eq("id", postId)
-      .select()
+      .select("*")
       .single();
 
     if (error) throw error;

@@ -17,12 +17,32 @@
  *   XP_MAP (constants), calcModuleScore, calcGlobalProgress, memoize,
  *   clearMemoCache, ls (utils)
  */
-import { LS_KEYS, WEIGHTS, INITIAL_MODULE_PROGRESS, MODULE_RESOURCE_COUNTS, XP_MAP } from '@/constants/ialab';
-import { calcModuleScore, calcGlobalProgress, memoize, clearMemoCache, ls } from '@/utils/ialab';
+import {
+  LS_KEYS,
+  WEIGHTS,
+  INITIAL_MODULE_PROGRESS,
+  MODULE_RESOURCE_COUNTS,
+  XP_MAP,
+} from "@/constants/ialab";
+import {
+  calcModuleScore,
+  calcGlobalProgress,
+  memoize,
+  clearMemoCache,
+  ls,
+} from "@/utils/ialab";
 
 const _tryUnlockNextModule = (moduleId, updated, newProgress) => {
-  if (moduleId < 5 && updated.resourcesCompleted && (updated.examScore || 0) >= 80 && (updated.challengeScore || 0) >= 80) {
-    newProgress[moduleId + 1] = { ...newProgress[moduleId + 1], isUnlocked: true };
+  if (
+    moduleId < 5 &&
+    updated.resourcesCompleted &&
+    (updated.examScore || 0) >= 80 &&
+    (updated.challengeScore || 0) >= 80
+  ) {
+    newProgress[moduleId + 1] = {
+      ...newProgress[moduleId + 1],
+      isUnlocked: true,
+    };
   }
 };
 
@@ -39,10 +59,15 @@ export const createProgressSlice = (set, get) => ({
   syncStatus: null,
   isUsingJWT: false,
   userId: null,
-  userRole: 'student',
+  userRole: "student",
   courseCompleted: false,
 
-  setCompletedModules: (v) => set(typeof v === 'function' ? { completedModules: v(get().completedModules) } : { completedModules: v }),
+  setCompletedModules: (v) =>
+    set(
+      typeof v === "function"
+        ? { completedModules: v(get().completedModules) }
+        : { completedModules: v },
+    ),
   setCourseProgress: (v) => set({ courseProgress: v }),
   setIsLoadingProgress: (v) => set({ isLoadingProgress: v }),
   setUserRole: (v) => set({ userRole: v }),
@@ -54,7 +79,9 @@ export const createProgressSlice = (set, get) => ({
 
   getMemoizedModuleScore: (moduleId) => {
     const state = get();
-    return memoize(`modScore_${moduleId}`, () => state.calculateModuleScore(moduleId));
+    return memoize(`modScore_${moduleId}`, () =>
+      state.calculateModuleScore(moduleId),
+    );
   },
 
   calculateModulePoints: (moduleId) => {
@@ -74,55 +101,65 @@ export const createProgressSlice = (set, get) => ({
 
   getMemoizedGlobalProgress: () => {
     const state = get();
-    return memoize('globalProgress', () => state.calculateGlobalProgress());
+    return memoize("globalProgress", () => state.calculateGlobalProgress());
   },
 
   isModuleFullyApproved: (moduleId) => {
     const mod = get().moduleProgress[moduleId];
     if (!mod) return false;
-    return mod.exam === true
-        && mod.challenge === true
-        && mod.resourcesCompleted === true
-        && mod.currentScore >= 80;
+    return (
+      mod.exam === true &&
+      mod.challenge === true &&
+      mod.resourcesCompleted === true &&
+      mod.currentScore >= 80
+    );
   },
 
   isCourseCompleted: () => {
-    return [1, 2, 3, 4, 5].every(id => {
+    return [1, 2, 3, 4, 5].every((id) => {
       const mod = get().moduleProgress[id];
-      return mod?.exam === true
-          && mod?.challenge === true
-          && mod?.resourcesCompleted === true
-          && mod?.currentScore >= 80;
+      return (
+        mod?.exam === true &&
+        mod?.challenge === true &&
+        mod?.resourcesCompleted === true &&
+        mod?.currentScore >= 80
+      );
     });
   },
 
-  updateModuleActivity: (moduleId, activity, value, score) => {
+  /**
+   * @param {{ silent?: boolean }} [options] `silent` aplica el progreso sin
+   *   premiarlo. Lo usa la rehidratación desde Supabase, que replica cada
+   *   actividad ya guardada en cada carga de página: sin esto volvía a sumar
+   *   el XP (hasta 1725 por F5) y marcaba la racha del día sin estudiar nada.
+   */
+  updateModuleActivity: (moduleId, activity, value, score, options = {}) => {
     const state = get();
     const prevMod = state.moduleProgress[moduleId];
     let newScore = 0;
     let justCompleted = false;
 
     const updated = { ...prevMod };
-    if (activity === 'exam' && typeof score === 'number') {
+    if (activity === "exam" && typeof score === "number") {
       updated.examScore = score;
       updated.exam = score >= 80;
       updated.examEarned = (score / 100) * WEIGHTS.exam;
-    } else if (activity === 'exam') {
+    } else if (activity === "exam") {
       updated.exam = !!value;
       updated.examEarned = value ? WEIGHTS.exam : 0;
     }
-    if (activity === 'challenge' && typeof score === 'number') {
+    if (activity === "challenge" && typeof score === "number") {
       updated.challengeScore = score;
       updated.challenge = score >= 80;
       updated.challengeEarned = (score / 100) * WEIGHTS.challenge;
-    } else if (activity === 'challenge') {
+    } else if (activity === "challenge") {
       updated.challenge = !!value;
       updated.challengeEarned = value ? WEIGHTS.challenge : 0;
     }
-    if (activity === 'resourcesCompleted') {
+    if (activity === "resourcesCompleted") {
       updated.resourcesCompleted = !!value;
     }
-    if (activity === 'community') {
+    if (activity === "community") {
       updated.community = !!value;
     }
 
@@ -137,25 +174,34 @@ export const createProgressSlice = (set, get) => ({
       const newProgress = { ...s.moduleProgress, [moduleId]: updated };
       _tryUnlockNextModule(moduleId, updated, newProgress);
       const newCompletedExams = { ...s.completedExams };
-      if (activity === 'exam' && typeof score === 'number') {
+      if (activity === "exam" && typeof score === "number") {
         newCompletedExams[moduleId] = score;
       }
       const newCompletedModules = [...s.completedModules];
       if (justCompleted && !newCompletedModules.includes(moduleId)) {
         newCompletedModules.push(moduleId);
       }
-      return { moduleProgress: newProgress, completedExams: newCompletedExams, completedModules: newCompletedModules, courseProgress: calcGlobalProgress(newProgress) };
+      return {
+        moduleProgress: newProgress,
+        completedExams: newCompletedExams,
+        completedModules: newCompletedModules,
+        courseProgress: calcGlobalProgress(newProgress),
+      };
     });
 
-    if (XP_MAP[activity]) {
-      get().addXp(XP_MAP[activity]);
+    if (!options.silent) {
+      if (XP_MAP[activity]) {
+        get().addXp(XP_MAP[activity]);
+      }
+      if (activity !== "community") {
+        get().recordActivity();
+      }
     }
-    if (activity !== 'community') {
-      get().recordActivity();
-    }
+    // Los logros sí se recalculan siempre: `awardBadge`/`checkAndAwardBadges`
+    // ignoran los ya obtenidos, y así se recuperan tras restaurar el progreso.
     get().checkAndAwardBadges();
 
-    if (activity === 'exam' && typeof score === 'number') {
+    if (activity === "exam" && typeof score === "number") {
       const current = ls.get(LS_KEYS.COMPLETED_EXAMS, {});
       current[moduleId] = score;
       ls.set(LS_KEYS.COMPLETED_EXAMS, current);
@@ -174,12 +220,22 @@ export const createProgressSlice = (set, get) => ({
       const newViewed = [...viewedResources, resourceId];
       const totalResources = MODULE_RESOURCE_COUNTS[moduleId] || 8;
       const resourcesCompleted = newViewed.length >= totalResources;
-      const resourcesPct = Math.round((newViewed.length / totalResources) * 100);
-      const updated = { ...mod, viewedResources: newViewed, resourcesCompleted, resourcesPct };
+      const resourcesPct = Math.round(
+        (newViewed.length / totalResources) * 100,
+      );
+      const updated = {
+        ...mod,
+        viewedResources: newViewed,
+        resourcesCompleted,
+        resourcesPct,
+      };
       updated.currentScore = calcModuleScore(updated);
       const newProgress = { ...state.moduleProgress, [moduleId]: updated };
       _tryUnlockNextModule(moduleId, updated, newProgress);
-      return { moduleProgress: newProgress, courseProgress: calcGlobalProgress(newProgress) };
+      return {
+        moduleProgress: newProgress,
+        courseProgress: calcGlobalProgress(newProgress),
+      };
     });
   },
 
@@ -191,18 +247,22 @@ export const createProgressSlice = (set, get) => ({
     updated.currentScore = calcModuleScore(updated);
     const newProgress = { ...state.moduleProgress, [moduleId]: updated };
     _tryUnlockNextModule(moduleId, updated, newProgress);
-    set({ moduleProgress: newProgress, courseProgress: calcGlobalProgress(newProgress), forumCommentCount: (state.forumCommentCount || 0) + 1 });
+    set({
+      moduleProgress: newProgress,
+      courseProgress: calcGlobalProgress(newProgress),
+      forumCommentCount: (state.forumCommentCount || 0) + 1,
+    });
     get().addXp(15);
   },
 
   isModuleLocked: (moduleId) => {
-    if (get().userRole === 'admin') return false;
+    if (get().userRole === "admin") return false;
     if (moduleId === 1) return false;
     return !get().moduleProgress[moduleId]?.isUnlocked;
   },
 
   isEvaluationLocked: (moduleId) => {
-    if (get().userRole === 'admin') return false;
+    if (get().userRole === "admin") return false;
     if (moduleId === 1) return false;
     return !get().completedModules.includes(moduleId - 1);
   },
@@ -216,7 +276,12 @@ export const createProgressSlice = (set, get) => ({
         score: mp?.currentScore || 0,
         exam: !!mp?.exam,
         challenge: !!mp?.challenge,
-        resources: mp?.resourcesCompleted ? 5 : Math.min(mp?.resourcesViewed || 0, 5),
+        // El campo es `viewedResources` (array); `resourcesViewed` no existe,
+        // así que esto devolvía 0 recursos siempre que el módulo no estuviera
+        // completo. El total lo da MODULE_RESOURCE_COUNTS, no un 5 fijo.
+        resources: mp?.resourcesCompleted
+          ? MODULE_RESOURCE_COUNTS[id]
+          : mp?.viewedResources?.length || 0,
         community: !!mp?.community,
       };
     }

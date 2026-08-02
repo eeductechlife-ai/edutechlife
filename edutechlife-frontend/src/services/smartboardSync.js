@@ -82,7 +82,7 @@ export const saveToSupabase = async (supabase, userId, kidsData) => {
     const { data, error } = await supabase
       .from(TABLE_NAME)
       .upsert(payload, { onConflict: "user_id" })
-      .select()
+      .select("*")
       .maybeSingle();
 
     if (error) {

@@ -187,8 +187,11 @@ export const useIALabStore = create(
         });
 
         const challengeDone = modProg?.challenge;
-        const modScore = state.calculateModuleScore(moduleId);
-        const scoreReady = modScore >= 80;
+        // El requisito era "nota del módulo ≥80", pero el propio desafío aporta
+        // 30 de esos 100 puntos: sin hacerlo el techo es 70, así que nunca se
+        // desbloqueaba. Se pide el trabajo previo real del módulo — recursos
+        // vistos y examen aprobado — que es lo que ese ≥80 pretendía exigir.
+        const challengeReady = !!modProg?.resourcesCompleted && !!modProg?.exam;
         activities.push({
           type: "challenge",
           id: `challenge-${moduleId}`,
@@ -197,14 +200,14 @@ export const useIALabStore = create(
           xp: "+200 XP",
           status: challengeDone
             ? "completed"
-            : scoreReady
+            : challengeReady
               ? "available"
               : "locked",
           description: challengeDone
             ? "Completado"
-            : scoreReady
+            : challengeReady
               ? "Disponible ahora"
-              : "Requiere nota ≥80 en el módulo",
+              : "Completa los recursos y aprueba el examen primero",
         });
 
         const communityDone = modProg?.community;

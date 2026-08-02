@@ -330,7 +330,7 @@ export const NotificationProvider = ({ children }) => {
           message,
           metadata,
         })
-        .select()
+        .select("*")
         .single();
 
       if (error) {

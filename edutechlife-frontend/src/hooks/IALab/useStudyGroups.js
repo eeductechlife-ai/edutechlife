@@ -64,7 +64,7 @@ export function useStudyGroups(moduleId) {
             module_id: moduleId,
             created_by: user.id,
           })
-          .select()
+          .select("*")
           .single();
 
         if (err) throw err;

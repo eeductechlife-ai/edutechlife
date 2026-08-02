@@ -229,7 +229,7 @@ export function useIALabUI(onBack) {
         const { data, error } = await supabase
           .from("certificates")
           .insert(certData)
-          .select()
+          .select("*")
           .single();
 
         if (error)

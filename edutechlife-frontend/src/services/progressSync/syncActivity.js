@@ -116,7 +116,7 @@ export const syncProgressToSupabase = async (
       .upsert(uniqueRecords, {
         onConflict: "user_id,module_id,activity_type,resource_id",
       })
-      .select();
+      .select("*");
 
     if (error) {
       console.error(
@@ -179,7 +179,7 @@ export const syncGamificationToSupabase = async (
         },
         { onConflict: "user_id,module_id,activity_type,resource_id" },
       )
-      .select();
+      .select("*");
 
     if (error) {
       console.error("❌ Error sync gamification:", error.message);
@@ -246,7 +246,7 @@ export const syncActivityToSupabase = async (
         },
         { onConflict: "user_id,module_id,activity_type,resource_id" },
       )
-      .select();
+      .select("*");
 
     if (error) {
       console.error("❌ Error sync actividad:", error.message);
