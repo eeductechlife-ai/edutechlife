@@ -30,7 +30,11 @@ const isAdminAccount = (profile) => {
 
 export const useStudentProfile = () => {
   const { userId, email, isSignedIn } = useAuthIdentity();
-  const [fetched, setFetched] = useState({ email: null, profile: null });
+  const [fetched, setFetched] = useState({
+    email: null,
+    profile: null,
+    userRole: null,
+  });
 
   useEffect(() => {
     if (!isSignedIn || !email) return undefined;
@@ -38,16 +42,29 @@ export const useStudentProfile = () => {
     let cancelled = false;
     (async () => {
       try {
+        // Obtener perfil del usuario desde tabla `users`
         const { data } = await supabase
           .from("users")
           .select("*")
           .eq("email", email)
           .maybeSingle();
-        if (!cancelled) setFetched({ email, profile: data || null });
+
+        // Obtener rol desde tabla `user_roles` si existe
+        let userRole = null;
+        if (userId) {
+          const { data: roleData } = await supabase
+            .from("user_roles")
+            .select("role")
+            .eq("user_id", userId)
+            .maybeSingle();
+          userRole = roleData?.role || null;
+        }
+
+        if (!cancelled) setFetched({ email, profile: data || null, userRole });
       } catch (err) {
         // A missing profile must not block access to the course.
         console.error("useStudentProfile:", err.message);
-        if (!cancelled) setFetched({ email, profile: null });
+        if (!cancelled) setFetched({ email, profile: null, userRole: null });
       }
     })();
 
@@ -63,10 +80,14 @@ export const useStudentProfile = () => {
   const isLoading = isSignedIn ? fetched.email !== email : false;
 
   // `user_type` describes the audience (adult/kid), not permissions, so it is
-  // not a role. Admins are recognised by account, mirroring what the Clerk
-  // version did (it hardcoded the username "johnbeltran22"). An explicit
-  // `role` column on `users` takes precedence if it is ever added.
-  const role = profile?.role || (isAdminAccount(profile) ? "admin" : "student");
+  // not a role. Admins are recognised by:
+  // 1. Explicit role in `user_roles` table (highest priority)
+  // 2. Role column in `users` table
+  // 3. Known admin account (username or email)
+  const role =
+    fetched.userRole ||
+    profile?.role ||
+    (isAdminAccount(profile) ? "admin" : "student");
 
   return {
     profile,
