@@ -201,3 +201,50 @@ npx @claude-flow/cli@latest doctor --fix
 ```
 
 **Agent tool** handles execution (agents, files, code, git). **MCP tools** handle coordination (swarm, memory, hooks). **CLI** is the same via Bash.
+
+## GStack — Workflow & Browser Automation
+
+### Web Browsing
+- **ALWAYS use `/browse` skill from gstack for all web browsing**
+- **NEVER use `mcp__claude-in-chrome__*` tools**
+- `/browse` is optimized for navigation, verification, and data extraction
+- Simpler, faster, and handles cache/auth correctly
+
+### Available GStack Skills
+
+| Skill | Purpose |
+|-------|---------|
+| `/browse` | Navigate websites, verify deployments, extract data |
+| `/plan-ceo-review` | CEO-level strategic planning |
+| `/plan-eng-review` | Engineering review & technical assessment |
+| `/review` | Code and feature review |
+| `/ship` | Deploy and release automation |
+| `/qa` | Quality assurance testing |
+| `/setup-browser-cookies` | Configure browser authentication |
+| `/retro` | Retrospectives and team feedback |
+
+### Installation
+
+GStack is installed at `~/.claude/skills/gstack`. If missing, run:
+
+```bash
+git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
+cd ~/.claude/skills/gstack
+./setup
+```
+
+### Usage Examples
+
+```bash
+# Browse a website
+/browse https://edutechlife.co/ialab
+
+# Review code changes
+/review
+
+# Plan deployment
+/ship
+
+# QA test a feature
+/qa
+```
