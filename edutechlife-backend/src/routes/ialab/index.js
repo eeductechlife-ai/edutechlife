@@ -3,6 +3,7 @@ const supabase = require('../../db/supabase');
 const { modulesData, modulesList } = require('../../data/modules');
 const { saveProgress, getProgress } = require('../../controllers/ialab/progressController');
 const { createTemplate, getTemplates, updateTemplate, deleteTemplate } = require('../../controllers/ialab/templatesController');
+const { examSubmissionLimiter, challengeSubmissionLimiter } = require('../../middleware/rateLimiter');
 
 const router = Router();
 
@@ -15,7 +16,7 @@ router.use('/prompts', require('./prompts'));
 router.use('/evaluate-prompt', require('./evaluate'));
 router.use('/resources', require('./resources'));
 
-router.post('/progress', saveProgress);
+router.post('/progress', examSubmissionLimiter, saveProgress);
 router.get('/progress/:userId', getProgress);
 
 router.get('/modules', (req, res) => {

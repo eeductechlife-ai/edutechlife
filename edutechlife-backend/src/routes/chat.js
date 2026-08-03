@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { chat, chatStream, validateMessages } = require('../services/deepseek');
+const { chatMessageLimiter } = require('../middleware/rateLimiter');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -64,7 +65,7 @@ function checkApiKey(req, res) {
  *       500:
  *         description: Error del servidor
  */
-router.post('/', async (req, res) => {
+router.post('/', chatMessageLimiter, async (req, res) => {
   const { messages, prompt, systemPrompt, isJson, temperature, maxTokens, model } = req.body;
 
   let msgs = messages;

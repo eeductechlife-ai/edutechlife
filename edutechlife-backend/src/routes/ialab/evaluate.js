@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { challengeSubmissionLimiter } = require('../../middleware/rateLimiter');
 
 const router = Router();
 
@@ -56,7 +57,7 @@ const router = Router();
  *       500:
  *         description: Error del servidor
  */
-router.post('/', (req, res) => {
+router.post('/', challengeSubmissionLimiter, (req, res) => {
   try {
     const { prompt } = req.body;
     if (!prompt) return res.status(400).json({ error: 'Prompt is required for evaluation' });
