@@ -1,4 +1,5 @@
 const rateLimit = require('express-rate-limit');
+const { ipKeyGenerator } = require('express-rate-limit');
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -34,7 +35,7 @@ const chatMessageLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Demasiados mensajes. Intenta de nuevo en 1 minuto.', retryAfter: 60 },
-  keyGenerator: (req, res) => req.user?.id || req.ip,
+  keyGenerator: (req) => req.user?.id || ipKeyGenerator(req),
   skip: (req) => process.env.NODE_ENV !== 'production'
 });
 
@@ -44,7 +45,7 @@ const examSubmissionLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Demasiados envíos. Intenta de nuevo después.', retryAfter: 30 },
-  keyGenerator: (req, res) => `${req.user?.id}-${req.params.examId || 'unknown'}`,
+  keyGenerator: (req) => `${req.user?.id || ipKeyGenerator(req)}-${req.params.examId || 'unknown'}`,
   skip: (req) => process.env.NODE_ENV !== 'production'
 });
 
@@ -54,7 +55,7 @@ const challengeSubmissionLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Demasiados envíos de desafío. Intenta de nuevo.', retryAfter: 60 },
-  keyGenerator: (req, res) => `${req.user?.id}-${req.params.challengeId || 'unknown'}`,
+  keyGenerator: (req) => `${req.user?.id || ipKeyGenerator(req)}-${req.params.challengeId || 'unknown'}`,
   skip: (req) => process.env.NODE_ENV !== 'production'
 });
 
