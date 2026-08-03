@@ -12,7 +12,7 @@ const OAUTH_PROVIDERS = {
   },
   facebook: {
     authUrl: 'https://www.facebook.com/v18.0/dialog/oauth',
-    tokenUrl: 'https://graph.instagram.com/v18.0/oauth/access_token',
+    tokenUrl: 'https://graph.facebook.com/v18.0/oauth/access_token',
     userUrl: 'https://graph.facebook.com/v18.0/me',
   },
 };
