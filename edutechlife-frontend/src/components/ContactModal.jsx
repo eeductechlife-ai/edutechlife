@@ -181,7 +181,7 @@ const ContactModal = ({ isOpen, onClose }) => {
                         className="text-sm font-medium"
                         style={{ color: "#004B63" }}
                       >
-                        +52 (55) 1234-5678
+                        +57 323 836 5517
                       </p>
                     </div>
                   </div>
@@ -205,7 +205,7 @@ const ContactModal = ({ isOpen, onClose }) => {
                         className="text-sm font-medium"
                         style={{ color: "#004B63" }}
                       >
-                        Av. Principal 123, Centro
+                        Calle 13 # 4-32, Manizales
                       </p>
                     </div>
                   </div>
@@ -315,7 +315,7 @@ const ContactModal = ({ isOpen, onClose }) => {
                       <Icon name="fa-youtube" className="text-sm" />
                     </a>
                     <a
-                      href="https://wa.me/573001234567"
+                      href="https://wa.me/573238365517"
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="WhatsApp"

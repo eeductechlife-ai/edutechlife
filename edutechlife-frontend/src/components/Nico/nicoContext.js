@@ -244,7 +244,7 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     lowerMessage.includes("teléfono") ||
     lowerMessage.includes("escribir")
   ) {
-    return "Puedes escribirnos al WhatsApp: +57 300 123 4567 o al email: info@edutechlife.com";
+    return "Puedes escribirnos al WhatsApp: +57 323 836 5517 o al email: info@edutechlife.com";
   }
 
   // Inscripción

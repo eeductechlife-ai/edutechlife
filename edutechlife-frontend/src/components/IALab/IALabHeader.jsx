@@ -12,7 +12,6 @@ import { useBrowserNotifications } from "../../hooks/useBrowserNotifications";
 import useForumNotifications from "../../hooks/IALab/forum/useForumNotifications";
 import GlobalSearchBar from "./GlobalSearchBar";
 import { getBadgeInfo } from "../../data/ialab";
-import XPStreakDisplay from "./XPStreakDisplay";
 
 const IALabHeader = () => {
   const { t, locale } = useTranslation();
@@ -88,8 +87,6 @@ const IALabHeader = () => {
       </div>
 
       <div className="flex items-center gap-2 lg:gap-3">
-        <XPStreakDisplay />
-
         <LocaleSwitcher />
         {/* Campana de notificaciones */}
         <div className="relative">

@@ -172,7 +172,10 @@ const StreakBadge = ({ streak, xp, isAtRisk, level, onClick }) => {
           </div>
           {xp > 0 && (
             <div className="text-right shrink-0">
-              <p className="text-[10px] font-medium text-slate-400 dark:text-slate-500">{t('streak.level')} {level}</p>
+              <p className="flex items-center justify-end gap-1 text-[10px] font-medium text-slate-400 dark:text-slate-500">
+                <Icon name="fa-bolt" className="text-[10px] text-petroleum" aria-hidden="true" />
+                {t('streak.level')} {level}
+              </p>
               <p className="text-xs font-bold text-corporate">{xp} {t('streak.xp')}</p>
             </div>
           )}

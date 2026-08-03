@@ -15,7 +15,7 @@ export const contacto = [
     ],
     category: "contacto",
     response:
-      "Puedes contactarnos por WhatsApp al +57 300 123 4567, por email a info@edutechlife.com, o visitar nuestra web edutechlife.com. También puedes dejar tus datos y te contactamos.",
+      "Puedes contactarnos por WhatsApp al +57 323 836 5517, por email a info@edutechlife.com, o visitar nuestra web edutechlife.com. También puedes dejar tus datos y te contactamos.",
   },
   {
     id: "ubicacion",
@@ -30,6 +30,6 @@ export const contacto = [
     ],
     category: "contacto",
     response:
-      "Nuestras instalaciones están en Bogotá y otras ciudades. Contamos con aulas equipadas con tecnología de punta, laboratorio STEM, y espacios cómodos para aprendizaje. Si prefieres desde casa, ofrecemos clases online.",
+      "Nuestras instalaciones están en Calle 13 # 4-32, Manizales. Contamos con aulas equipadas con tecnología de punta, laboratorio STEM, y espacios cómodos para aprendizaje. Si prefieres desde casa, ofrecemos clases online.",
   },
 ];

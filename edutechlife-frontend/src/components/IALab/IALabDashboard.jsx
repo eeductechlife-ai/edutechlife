@@ -1,7 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, lazy, Suspense } from "react";
 import { useIALabStore } from "../../store/ialabStore";
 import DashboardCompleted from "./dashboard/DashboardCompleted";
 import DashboardInProgress from "./dashboard/DashboardInProgress";
+
+const WelcomeTour = lazy(() => import("./WelcomeTour"));
 
 const MODULES = [1, 2, 3, 4, 5];
 
@@ -52,6 +54,9 @@ export default function IALabDashboard() {
 
   return (
     <>
+      <Suspense fallback={null}>
+        <WelcomeTour />
+      </Suspense>
       <DueForReview />
       {courseCompleted || stats.completed === 5 ? (
         <DashboardCompleted />

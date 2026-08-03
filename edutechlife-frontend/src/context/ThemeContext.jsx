@@ -7,6 +7,7 @@ const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [forceLightMode, setForceLightMode] = useState(false);
 
   useEffect(() => {
     const storedTheme = safeStorage.getItem(THEME_KEY);
@@ -15,8 +16,9 @@ export function ThemeProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDarkMode);
-  }, [isDarkMode]);
+    const shouldApplyDark = isDarkMode && !forceLightMode;
+    document.documentElement.classList.toggle('dark', shouldApplyDark);
+  }, [isDarkMode, forceLightMode]);
 
   const toggleDarkMode = useCallback(() => {
     setIsDarkMode(prev => {
@@ -27,7 +29,7 @@ export function ThemeProvider({ children }) {
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+    <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode, forceLightMode, setForceLightMode }}>
       {children}
     </ThemeContext.Provider>
   );
@@ -37,4 +39,13 @@ export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) throw new Error('useTheme must be used within a ThemeProvider');
   return context;
+}
+
+export function useLightModeOnly() {
+  const { setForceLightMode } = useTheme();
+
+  useEffect(() => {
+    setForceLightMode(true);
+    return () => setForceLightMode(false);
+  }, [setForceLightMode]);
 }

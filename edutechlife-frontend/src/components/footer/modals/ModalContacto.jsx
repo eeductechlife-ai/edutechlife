@@ -154,7 +154,7 @@ export default function ModalContacto({ onClose }) {
                     { icon: 'fa-instagram', label: 'Instagram', bg: '#4DA8C4', hover: '#66CCCC', href: 'https://www.instagram.com/edu_techlife/' },
                     { icon: 'fa-linkedin-in', label: 'LinkedIn', bg: '#0A66C2', hover: '#0842A0', href: 'https://www.linkedin.com/company/edutechlife' },
                     { icon: 'fa-youtube', label: 'YouTube', bg: '#FF0000', hover: '#CC0000', href: 'https://www.youtube.com/@edutechlife' },
-                    { icon: 'fa-whatsapp', label: 'WhatsApp', bg: '#66CCCC', hover: '#4DA8C4', href: 'https://wa.me/573001234567' },
+                    { icon: 'fa-whatsapp', label: 'WhatsApp', bg: '#66CCCC', hover: '#4DA8C4', href: 'https://wa.me/573238365517' },
                   ].map((s, i) => (
                     <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} className="w-9 h-9 rounded-full flex items-center justify-center transition-colors text-white"
                       style={{ backgroundColor: s.bg }}

@@ -37,7 +37,7 @@ export function getAppointmentConfirmationTemplate() {
       prep3P: t(locale, 'Busca un lugar tranquilo para la llamada', 'Find a quiet place for the call'),
       addCalendar: t(locale, 'Agregar a mi calendario', 'Add to my calendar'),
       reschedule: t(locale, 'Si necesitas reagendar o cancelar, por favor contáctanos con al menos 24 horas de anticipación.', 'If you need to reschedule or cancel, please contact us at least 24 hours in advance.'),
-      footerInfo: t(locale, 'EdutechLife · Bogotá, Colombia · info@edutechlife.com · +57 XXX XXX XXXX', 'EdutechLife · Bogotá, Colombia · info@edutechlife.com · +57 XXX XXX XXXX'),
+      footerInfo: t(locale, 'EdutechLife · Manizales, Colombia · info@edutechlife.com · +57 323 836 5517', 'EdutechLife · Manizales, Colombia · info@edutechlife.com · +57 323 836 5517'),
       footerAuto: t(locale, 'Este es un email automático, por favor no respondas a este mensaje.', 'This is an automated email, please do not reply to this message.'),
       call: t(locale, 'llamada', 'call'),
     };
@@ -230,7 +230,7 @@ export function getAppointmentReminder1hTemplate() {
       videoLinkTitle: t(locale, 'Enlace de videollamada:', 'Video call link:'),
       joinCall: t(locale, 'Unirse a la videollamada', 'Join video call'),
       incomingCall: t(locale, 'Llamada entrante:', 'Incoming call:'),
-      callDetail: t(locale, 'Recibirás una llamada del número +57 XXX XXX XXXX', 'You will receive a call from +57 XXX XXX XXXX'),
+      callDetail: t(locale, 'Recibirás una llamada del número +57 323 836 5517', 'You will receive a call from +57 323 836 5517'),
       keepPhone: t(locale, 'Por favor mantén tu teléfono disponible y con señal.', 'Please keep your phone available and with signal.'),
       troubleConnect: t(locale, 'Si tienes problemas para conectarte, contáctanos inmediatamente por WhatsApp.', 'If you have trouble connecting, contact us immediately via WhatsApp.'),
       footerExcited: t(locale, '¡Estamos emocionados de conocerte! El equipo EdutechLife', 'We are excited to meet you! The EdutechLife team'),
@@ -330,7 +330,7 @@ export function getLeadWelcomeTemplate() {
       step3: t(locale, 'Recibirás un plan personalizado basado en tus necesidades', 'You will receive a personalized plan based on your needs'),
       accessAccount: t(locale, 'Acceder a mi cuenta', 'Access my account'),
       contactTitle: t(locale, 'Contacto inmediato:', 'Immediate contact:'),
-      footerInfo: t(locale, 'EdutechLife · Centro de Innovación Educativa · Bogotá, Colombia', 'EdutechLife · Educational Innovation Center · Bogotá, Colombia'),
+      footerInfo: t(locale, 'EdutechLife · Centro de Innovación Educativa · Manizales, Colombia', 'EdutechLife · Educational Innovation Center · Manizales, Colombia'),
       footerAuto: t(locale, 'Este es un email automático de bienvenida.', 'This is an automated welcome email.'),
     };
 
@@ -398,7 +398,7 @@ export function getLeadWelcomeTemplate() {
           <p><a href="https://edutechlife.com/mi-cuenta" class="button">👤 ${T.accessAccount}</a></p>
           
           <p><strong>📞 ${T.contactTitle}</strong><br>
-          WhatsApp: +57 XXX XXX XXXX<br>
+          WhatsApp: +57 323 836 5517<br>
           Email: info@edutechlife.com<br>
           Sitio web: www.edutechlife.com</p>
           

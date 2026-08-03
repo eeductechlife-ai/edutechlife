@@ -3,6 +3,7 @@ import { PageLoader } from "../LoadingScreen";
 import ErrorBoundary from "../common/ErrorBoundary";
 import SEO from "../SEO";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { useLightModeOnly } from "../../context/ThemeContext";
 
 const Hero = lazy(() => import("../Hero"));
 const AIToolsSection = lazy(() => import("../AIToolsSection"));
@@ -20,6 +21,7 @@ const sectionFallback = (h) => (
 
 const LandingPage = () => {
   const { t } = useTranslation();
+  useLightModeOnly();
   return (
     <>
       <SEO title={t("seo.home.title")} description={t("seo.home.desc")} />

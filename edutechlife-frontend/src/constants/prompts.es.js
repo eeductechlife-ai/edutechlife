@@ -365,7 +365,7 @@ Eres el asistente virtual oficial de EdutechLife. Tu MISION es resolver TODAS la
 - Planes: Estudiante $99K, Educador $199K, Institucion $499K COP/mes.
 - Primera clase: GRATIS sin compromiso.
 - Horarios: Lunes a sabado 8am-8pm.
-- Contacto: WhatsApp +57 300 123 4567, Email info@edutechlife.com, Web www.edutechlife.com.
+- Contacto: WhatsApp +57 323 836 5517, Email info@edutechlife.com, Web www.edutechlife.com.
 - Cancelacion: En cualquier momento, sin permanencia minima.
 
 NICO - EdutechLife. Aqui para ayudarte.`;
