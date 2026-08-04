@@ -7,6 +7,7 @@ import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/a11y.css";
 import ParticlesBackground from "./ParticlesBackground";
 import DaniTutorChat from "./daniTutorChat";
+import DaniFAB from "./DaniFAB";
 import PremiumSidebar from "./components/PremiumSidebar";
 import MobileBottomBar from "./components/MobileBottomBar";
 import CinematicContent from "./components/CinematicContent";
@@ -240,7 +241,6 @@ const SmartBoardKidsDashboard = () => {
             darkMode={darkMode}
             streak={streak}
             totalPoints={totalPoints}
-            onDaniOpen={handleDaniOpen}
             authToken={authToken}
             studentName={studentName}
           />
@@ -307,8 +307,16 @@ const SmartBoardKidsDashboard = () => {
         subscriptionTier={subscriptionTier}
       />
 
+      {/* DaniFAB - Floating Action Button */}
+      <DaniFAB
+        isDaniOpen={isDaniOpen}
+        onDaniOpen={handleDaniOpen}
+        darkMode={darkMode}
+        unreadCount={0}
+      />
+
       {/* Data Rights - Floating Action (GDPR-K / COPPA) */}
-      <div className="fixed bottom-20 md:bottom-6 right-6 z-40 flex flex-col gap-2">
+      <div className="fixed bottom-20 md:bottom-6 right-6 z-30 flex flex-col gap-2">
         <motion.button
           onClick={async () => {
             if (

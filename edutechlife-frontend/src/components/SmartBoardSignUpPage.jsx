@@ -193,7 +193,7 @@ const SmartBoardSignUpPage = () => {
                 </p>
               </div>
 
-              {/* Clerk Component */}
+              {/* Form Container */}
               <div className="w-full min-h-[480px] sm:min-h-[520px] py-4 sm:py-6">
                 <AnimatePresence mode="wait">
                   {mode === "signin" ? (
@@ -214,10 +214,15 @@ const SmartBoardSignUpPage = () => {
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.25 }}
                     >
-                      <SupabaseSignUpForm
-                        returnTo={returnTo || "/smartboard/consent"}
-                        onBack={() => setMode("signin")}
-                      />
+                      <div
+                        style={{ minHeight: "480px" }}
+                        className="flex items-center justify-center"
+                      >
+                        <SupabaseSignUpForm
+                          returnTo={returnTo || "/smartboard/consent"}
+                          onBack={() => setMode("signin")}
+                        />
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>

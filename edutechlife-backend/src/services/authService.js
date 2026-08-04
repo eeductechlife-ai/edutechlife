@@ -42,7 +42,8 @@ async function signUp({ email, password, username, firstName, lastName, userType
     }
 
     // 2. Create user profile (use userId as clerk_id for native auth)
-    const { data: profileData, error: profileError } = await supabase
+    // Use admin client to bypass RLS
+    const { data: profileData, error: profileError } = await supabase.admin
       .from('users')
       .insert([
         {
@@ -132,8 +133,8 @@ async function signIn({ email, password }) {
 
     if (profileError) {
       console.error('Profile fetch failed:', profileError);
-      // Auth succeeded but profile missing — create minimal one
-      await supabase.from('users').insert([
+      // Auth succeeded but profile missing — create minimal one (use admin to bypass RLS)
+      await supabase.admin.from('users').insert([
         {
           id: authData.user.id,
           email,

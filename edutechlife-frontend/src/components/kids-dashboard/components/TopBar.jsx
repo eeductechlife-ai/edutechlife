@@ -1,21 +1,13 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { Bot, Flame, Gem } from "lucide-react";
+import { Flame, Gem } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { CATEGORIES, TOP_BAR_LABELS } from "../kidsDashboardConfig";
 import { SB_GRADIENTS, glow } from "../smartboardTheme";
 import UserMenu from "../UserMenu";
 
 const TopBar = memo(
-  ({
-    activeTab,
-    darkMode,
-    streak,
-    totalPoints,
-    onDaniOpen,
-    authToken,
-    studentName,
-  }) => {
+  ({ activeTab, darkMode, streak, totalPoints, authToken, studentName }) => {
     const { t } = useTranslation();
     const activeCat = CATEGORIES.find((c) => c.tabs.includes(activeTab));
     const ActiveIcon = activeCat?.Icon || Bot;
@@ -59,35 +51,6 @@ const TopBar = memo(
         </div>
 
         <div className="flex items-center gap-3">
-          <motion.button
-            id="openDaniChat"
-            type="button"
-            onClick={onDaniOpen}
-            whileHover={{ scale: 1.05, y: -1 }}
-            whileTap={{ scale: 0.92 }}
-            aria-label={t("smartboard.talk_dani")}
-            className="relative flex items-center gap-2 px-5 py-2.5 text-white rounded-full text-sm font-bold transition-all cursor-pointer select-none"
-            style={{
-              background: SB_GRADIENTS.brand,
-              boxShadow: glow("#0096C7", 0.45),
-            }}
-          >
-            <motion.span
-              className="flex items-center justify-center"
-              animate={{ rotate: [0, -10, 10, -10, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
-            >
-              <Bot className="w-[18px] h-[18px]" strokeWidth={2.4} />
-            </motion.span>
-            <span className="hidden md:block">{t("smartboard.talk_dani")}</span>
-            <motion.span
-              className="absolute inset-0 rounded-full border-2 border-white/40"
-              initial={{ opacity: 0, scale: 1 }}
-              whileTap={{ opacity: 1, scale: 1.15 }}
-              transition={{ duration: 0.2 }}
-            />
-          </motion.button>
-
           <motion.div
             className="hidden sm:flex px-2.5 py-1.5 rounded-2xl items-center gap-2 transition-colors duration-500"
             style={{

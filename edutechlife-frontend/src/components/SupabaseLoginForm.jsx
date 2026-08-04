@@ -241,7 +241,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
       <div className="text-center text-sm text-gray-600">
         {t("login.no_account") || "¿No tienes cuenta?"}{" "}
         <button
-          onClick={() => navigate("/sign-up/ialab")}
+          onClick={() => navigate("/sign-up/smartboard")}
           className="text-[#004B63] hover:text-[#0A3550] font-semibold"
         >
           {t("login.signup_link") || "Regístrate aquí"}

@@ -1,0 +1,43 @@
+/* Dani FAB Z-Index Management */
+
+/* Fixed elements positioning */
+.dani-fab {
+  position: fixed;
+  z-index: 40;
+  bottom: 1.5rem; /* 6 in Tailwind */
+  right: 1.5rem;
+}
+
+/* Mobile adjustment */
+@media (max-width: 640px) {
+  .dani-fab {
+    bottom: 1rem; /* 4 in Tailwind */
+    right: 1rem;
+    width: 3.5rem; /* 56px */
+    height: 3.5rem;
+  }
+}
+
+/* Tablet */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .dani-fab {
+    bottom: 2rem; /* 8 in Tailwind */
+    right: 2rem;
+  }
+}
+
+/* Modal backdrop - must be higher than FAB when open */
+.dani-modal-backdrop {
+  z-index: 50;
+}
+
+/* Connectivity bar - stays on top */
+.connectivity-indicator {
+  z-index: 60;
+}
+
+/* Ensure accessibility */
+.dani-fab:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
