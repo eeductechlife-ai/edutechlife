@@ -47,7 +47,8 @@ export const useSmartBoardPersistence = (setters) => {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
-    if (!userId || dataLoaded || syncLoading) return;
+    // Load immediately with local data even if userId not yet resolved
+    if (dataLoaded) return;
 
     const loadAllData = async () => {
       try {
@@ -163,9 +164,19 @@ export const useSmartBoardPersistence = (setters) => {
         let merged = localData;
         let remoteData = null;
         if (navigator.onLine) {
-          remoteData = await loadData();
-          if (remoteData) {
-            merged = mergeWithLocal(localData, remoteData);
+          try {
+            // Timeout after 3 seconds - use local data if Supabase is slow/unavailable
+            remoteData = await Promise.race([
+              loadData(),
+              new Promise((_, reject) =>
+                setTimeout(() => reject(new Error("Timeout")), 3000),
+              ),
+            ]);
+            if (remoteData) {
+              merged = mergeWithLocal(localData, remoteData);
+            }
+          } catch (e) {
+            // Supabase unavailable or timeout - continue with local data
           }
         }
 
@@ -221,14 +232,14 @@ export const useSmartBoardPersistence = (setters) => {
           saveData(merged);
         }
       } catch (error) {
-        console.error("Error cargando datos SmartBoard:", error);
+        console.error("Error loading SmartBoard data:", error);
       } finally {
         setDataLoaded(true);
       }
     };
 
     loadAllData();
-  }, [userId, syncLoading]);
+  }, [syncLoading]); // Remove userId from deps so effect runs even when userId is null
 
   return {
     dataLoaded,
