@@ -55,6 +55,40 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     [],
   );
 
+  // Hook must be called first to get handleSendMessage
+  const {
+    focusTrapRef,
+    isSpeaking,
+    isTyping,
+    conversationCount,
+    toggleVoice,
+    voiceEnabled,
+    voiceBlocked,
+    streak,
+    socraticMode,
+    setSocraticMode,
+    showCrisisResources,
+    setShowCrisisResources,
+    showEmotionalBanner,
+    setShowEmotionalBanner,
+    studentMoodHistory,
+    darkMode,
+    documentForDani,
+    setDocumentForDani,
+    daniChatHistory,
+    streamingMessage,
+    messagesEndRef,
+    handleQuickAction,
+    academicTopics,
+    handleTopicClick,
+    inputText,
+    setInputText,
+    handleSendMessage,
+    isListening,
+    handleMicClick,
+    crisisAlertLevel,
+  } = useDaniChat({ isOpen, activeTab });
+
   useEffect(() => {
     if (isOpen && inputRef.current) {
       const timer = setTimeout(() => inputRef.current.focus(), 300);
@@ -102,39 +136,6 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     () => handleSendMessage(inputText),
     [handleSendMessage, inputText],
   );
-
-  const {
-    focusTrapRef,
-    isSpeaking,
-    isTyping,
-    conversationCount,
-    toggleVoice,
-    voiceEnabled,
-    voiceBlocked,
-    streak,
-    socraticMode,
-    setSocraticMode,
-    showCrisisResources,
-    setShowCrisisResources,
-    showEmotionalBanner,
-    setShowEmotionalBanner,
-    studentMoodHistory,
-    darkMode,
-    documentForDani,
-    setDocumentForDani,
-    daniChatHistory,
-    streamingMessage,
-    messagesEndRef,
-    handleQuickAction,
-    academicTopics,
-    handleTopicClick,
-    inputText,
-    setInputText,
-    handleSendMessage,
-    isListening,
-    handleMicClick,
-    crisisAlertLevel,
-  } = useDaniChat({ isOpen, activeTab });
 
   if (!isOpen) return null;
 
