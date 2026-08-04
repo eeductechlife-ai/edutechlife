@@ -150,37 +150,38 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
   return (
     <>
       <AnimatePresence mode="wait">
-        <motion.div
-          key="dani-chat-backdrop"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
-          style={{ overscrollBehavior: "contain" }}
-          ref={focusTrapRef}
-          role="dialog"
-          aria-modal="true"
-          aria-label={t("dani.chat_title")}
-          onKeyDown={handleBackdropKeyDown}
-        >
-          {/* Transparent click-catcher to close on outside click (no gray overlay) */}
-          <div
-            className="absolute inset-0 pointer-events-auto"
-            onClick={onClose}
-            aria-hidden="true"
-          />
-          <motion.div
-            initial={{ opacity: 0, y: 100, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 100, scale: 0.9 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className={`relative z-10 pointer-events-auto w-[calc(100vw-2rem)] sm:w-auto sm:max-w-2xl md:max-w-2xl max-h-[90vh] rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col overflow-hidden border ${
-              darkMode
-                ? "bg-[#0F172A] border-[#334155]"
-                : "bg-[#F8FAFC] border-[#E2E8F0]"
-            }`}
-            onClick={handleContentClick}
-          >
+        {isOpen && (
+          <>
+            {/* Mobile backdrop */}
+            <motion.div
+              key="dani-mobile-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+              onClick={onClose}
+              aria-hidden="true"
+            />
+            {/* Sidebar panel - like Valerio in IALab */}
+            <motion.div
+              key="dani-panel"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className={`fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[520px] md:w-[600px] shadow-2xl flex flex-col overflow-hidden border-l ${
+                darkMode
+                  ? "bg-[#0F172A] border-l-[#334155]"
+                  : "bg-[#F8FAFC] border-l-[#E2E8F0]"
+              }`}
+              ref={focusTrapRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label={t("dani.chat_title")}
+              onKeyDown={handleBackdropKeyDown}
+              onClick={handleContentClick}
+            >
             <DaniChatHeader
               isSpeaking={isSpeaking}
               isTyping={isTyping}
@@ -460,8 +461,9 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                 </motion.div>
               )}
             </motion.div>
-          </motion.div>
-        </motion.div>
+            </motion.div>
+          </>
+        )}
       </AnimatePresence>
 
       {showCrisisResources && (

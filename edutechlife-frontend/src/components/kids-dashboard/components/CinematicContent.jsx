@@ -13,20 +13,12 @@ import MisionDelDia from "./MisionDelDia";
 import { SectionFallback } from "./SkeletonLoader";
 import { PREMIUM_FEATURES } from "../kidsDashboardConfig";
 
-const KidsCalendar = lazy(() => import("../KidsCalendar"));
 const PointsRewardsSystem = lazy(() => import("../PointsRewardsSystem"));
-const NewsTechFeed = lazy(() => import("../NewsTechFeed"));
-const ActivityUploader = lazy(() => import("../activityUploader"));
 const SmartBoardProgress = lazy(() => import("../smartBoardProgress"));
 const PersonalizedPlan = lazy(() => import("../PersonalizedPlan"));
 const ExamPrep = lazy(() => import("../examPrep"));
 const FlashcardSystem = lazy(() => import("../flashcardSystem"));
-const SmartBookReader = lazy(() => import("../smartBookReader"));
-const ProblemScanner = lazy(() => import("../ProblemScanner"));
-const CurriculumView = lazy(() => import("../CurriculumView"));
-const StudyPodcast = lazy(() => import("../StudyPodcast"));
 const OralExamSimulator = lazy(() => import("../OralExamSimulator"));
-const SmartBoardAnalytics = lazy(() => import("../SmartBoardAnalytics"));
 
 const sharedTransition = { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] };
 
@@ -81,18 +73,6 @@ function createTabRenderer(deps) {
               <PointsRewardsSystem />
             </LazyLoad>
           </InViewSection>
-          <InViewSection delay={0.2}>
-            <LazyLoad fallback={<SectionFallback tab="noticias" />}>
-              <PremiumGate
-                icon="📰"
-                title={PREMIUM_FEATURES.noticias.title}
-                description={PREMIUM_FEATURES.noticias.description}
-                isPremium={isPremium}
-              >
-                <NewsTechFeed />
-              </PremiumGate>
-            </LazyLoad>
-          </InViewSection>
         </>
       ),
       errorKey: "inicio",
@@ -110,24 +90,6 @@ function createTabRenderer(deps) {
       errorKey: "materias",
       errorMsg: t("smartboard.error_load_subjects"),
     },
-    actividades: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="actividades" />}>
-          <ActivityUploader />
-        </LazyLoad>
-      ),
-      errorKey: "actividades",
-      errorMsg: t("smartboard.error_load_activities"),
-    },
-    calendario: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="calendario" />}>
-          <KidsCalendar />
-        </LazyLoad>
-      ),
-      errorKey: "calendario",
-      errorMsg: t("smartboard.error_load_calendar"),
-    },
     puntos: {
       component: () => (
         <LazyLoad fallback={<SectionFallback tab="puntos" />}>
@@ -136,22 +98,6 @@ function createTabRenderer(deps) {
       ),
       errorKey: "puntos",
       errorMsg: t("smartboard.error_load_points"),
-    },
-    noticias: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="noticias" />}>
-          <PremiumGate
-            icon={PREMIUM_FEATURES.noticias.icon}
-            title={PREMIUM_FEATURES.noticias.title}
-            description={PREMIUM_FEATURES.noticias.description}
-            isPremium={isPremium}
-          >
-            <NewsTechFeed />
-          </PremiumGate>
-        </LazyLoad>
-      ),
-      errorKey: "noticias",
-      errorMsg: t("smartboard.error_load_news"),
     },
     vak: {
       component: () => (
@@ -206,31 +152,6 @@ function createTabRenderer(deps) {
       errorKey: "flashcards",
       errorMsg: "Error al cargar flashcards",
     },
-    libros: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="libros" />}>
-          <PremiumGate
-            icon={PREMIUM_FEATURES.libros.icon}
-            title={PREMIUM_FEATURES.libros.title}
-            description={PREMIUM_FEATURES.libros.description}
-            isPremium={isPremium}
-          >
-            <SmartBookReader />
-          </PremiumGate>
-        </LazyLoad>
-      ),
-      errorKey: "libros",
-      errorMsg: "Error al cargar libros",
-    },
-    escaner: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="escaner" />}>
-          <ProblemScanner />
-        </LazyLoad>
-      ),
-      errorKey: "escaner",
-      errorMsg: "Error al cargar escáner",
-    },
     progreso: {
       component: () => (
         <LazyLoad fallback={<SectionFallback tab="progreso" />}>
@@ -239,33 +160,6 @@ function createTabRenderer(deps) {
       ),
       errorKey: "progreso",
       errorMsg: "Error al cargar progreso",
-      className: "h-full",
-    },
-    podcast: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="podcast" />}>
-          <StudyPodcast />
-        </LazyLoad>
-      ),
-      errorKey: "podcast",
-      errorMsg: "Error al cargar podcast",
-      className: "h-full",
-    },
-    analitica: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="analitica" />}>
-          <PremiumGate
-            icon={PREMIUM_FEATURES.analitica.icon}
-            title={PREMIUM_FEATURES.analitica.title}
-            description={PREMIUM_FEATURES.analitica.description}
-            isPremium={isPremium}
-          >
-            <SmartBoardAnalytics />
-          </PremiumGate>
-        </LazyLoad>
-      ),
-      errorKey: "analitica",
-      errorMsg: "Error al cargar analytics",
       className: "h-full",
     },
   };
@@ -291,10 +185,6 @@ const CinematicContent = memo(
       [setVakResultAndRecommendations],
     );
 
-    if (activeTab === "padres") {
-      navigate("/smartboard/padres");
-      return null;
-    }
 
     const tabRenderer = useMemo(
       () =>
