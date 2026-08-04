@@ -1,0 +1,109 @@
+/* Dani Color System - Coherent with SmartBoard */
+
+:root {
+  /* Primary Colors */
+  --dani-primary: #0ea5e9; /* Bright blue - SmartBoard coherent */
+  --dani-secondary: #06b6d4; /* Turquoise - Dani personality */
+  --dani-accent: #f97316; /* Orange - Interactive elements */
+
+  /* Status Colors */
+  --dani-success: #10b981; /* Green - Confirmations */
+  --dani-warning: #f59e0b; /* Amber - Alerts */
+  --dani-error: #ef4444; /* Red - Errors */
+  --dani-info: #3b82f6; /* Blue - Information */
+
+  /* Background & Text */
+  --dani-bg-light: #f8fafc; /* Light background */
+  --dani-bg-dark: #0f172a; /* Dark theme background */
+  --dani-bg-muted: #e2e8f0; /* Muted background */
+
+  --dani-text-dark: #0f172a; /* Dark text */
+  --dani-text-light: #64748b; /* Light text */
+  --dani-text-lighter: #94a3b8; /* Lighter text */
+  --dani-text-white: #ffffff; /* White text */
+
+  /* Avatar Colors */
+  --dani-avatar-6-9: #06b6d4; /* Turquoise for young kids */
+  --dani-avatar-10-13: #0ea5e9; /* Blue for tweens */
+  --dani-avatar-14-16: #6366f1; /* Indigo for teens */
+
+  /* Spacing */
+  --dani-spacing-xs: 0.25rem;
+  --dani-spacing-sm: 0.5rem;
+  --dani-spacing-md: 1rem;
+  --dani-spacing-lg: 1.5rem;
+  --dani-spacing-xl: 2rem;
+  --dani-spacing-2xl: 3rem;
+
+  /* Typography */
+  --dani-font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --dani-font-size-xs: 0.75rem;
+  --dani-font-size-sm: 0.875rem;
+  --dani-font-size-base: 1rem;
+  --dani-font-size-lg: 1.125rem;
+  --dani-font-size-xl: 1.25rem;
+  --dani-font-size-2xl: 1.5rem;
+  --dani-font-size-3xl: 1.875rem;
+
+  /* Border Radius */
+  --dani-radius-sm: 0.375rem;
+  --dani-radius-md: 0.5rem;
+  --dani-radius-lg: 0.75rem;
+  --dani-radius-xl: 1rem;
+  --dani-radius-2xl: 1.5rem;
+
+  /* Shadows */
+  --dani-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --dani-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --dani-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --dani-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /* Transitions */
+  --dani-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --dani-transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --dani-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark Mode Adjustments */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --dani-bg-light: #1e293b;
+    --dani-bg-muted: #334155;
+    --dani-text-dark: #f1f5f9;
+    --dani-text-light: #cbd5e1;
+  }
+}
+
+/* Adaptive Typography for Age Groups */
+.dani-age-6-9 {
+  --dani-font-size-base: 1.125rem; /* 18px */
+  --dani-font-size-lg: 1.375rem; /* 22px */
+  --dani-button-height: 3.5rem; /* 56px */
+}
+
+.dani-age-10-13 {
+  --dani-font-size-base: 1rem; /* 16px */
+  --dani-font-size-lg: 1.125rem; /* 18px */
+  --dani-button-height: 3rem; /* 48px */
+}
+
+.dani-age-14-16 {
+  --dani-font-size-base: 0.875rem; /* 14px */
+  --dani-font-size-lg: 1rem; /* 16px */
+  --dani-button-height: 2.75rem; /* 44px */
+}
+
+/* Color Palette Variants */
+.dani-light-theme {
+  --dani-bg-main: var(--dani-bg-light);
+  --dani-text-main: var(--dani-text-dark);
+  --dani-border-color: #e2e8f0;
+}
+
+.dani-dark-theme {
+  --dani-bg-main: var(--dani-bg-dark);
+  --dani-text-main: var(--dani-text-white);
+  --dani-border-color: #334155;
+}

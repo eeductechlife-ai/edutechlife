@@ -1,0 +1,288 @@
+/* Quick Actions Improved Styles */
+@import "./dani-colors.css";
+
+.quick-actions-improved {
+  width: 100%;
+  padding: var(--dani-spacing-md);
+  border-top: 1px solid var(--dani-border-color, #e2e8f0);
+}
+
+.quick-actions-improved.dark-mode {
+  --dani-border-color: #334155;
+  background-color: rgba(15, 23, 42, 0.5);
+}
+
+.quick-actions-improved.light-mode {
+  background-color: rgba(248, 250, 252, 0.5);
+}
+
+/* Header */
+.quick-actions-header {
+  display: flex;
+  align-items: center;
+  gap: var(--dani-spacing-sm);
+  margin-bottom: var(--dani-spacing-md);
+  padding: 0 var(--dani-spacing-sm);
+}
+
+.quick-actions-label {
+  font-size: var(--dani-font-size-sm);
+  font-weight: 600;
+  color: var(--dani-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.quick-actions-accent {
+  font-size: 1.25rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Grid Layout - Responsive */
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--dani-spacing-md);
+}
+
+/* For age group 6-9: 2 columns, larger cards */
+.dani-age-6-9 .quick-actions-grid {
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--dani-spacing-lg);
+}
+
+/* For age group 10-13: 3 columns */
+.dani-age-10-13 .quick-actions-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--dani-spacing-md);
+}
+
+/* For age group 14-16: 3 columns, compact */
+.dani-age-14-16 .quick-actions-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--dani-spacing-md);
+}
+
+/* Card Styling */
+.quick-action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--dani-spacing-sm);
+  padding: var(--dani-spacing-md);
+  border: none;
+  border-radius: var(--dani-radius-lg);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  min-height: 120px;
+  transition: all var(--dani-transition-base);
+  box-shadow: var(--dani-shadow-md);
+  color: white;
+  font-weight: 600;
+  font-family: var(--dani-font-family);
+
+  /* Pseudo-element for overlay effect */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0;
+    transition: opacity var(--dani-transition-base);
+  }
+
+  &:hover {
+    box-shadow: var(--dani-shadow-lg);
+    transform: translateY(-4px);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Icon */
+.quick-action-icon {
+  font-size: 2rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.dani-age-6-9 .quick-action-icon {
+  font-size: 2.5rem;
+}
+
+.dani-age-14-16 .quick-action-icon {
+  font-size: 1.75rem;
+}
+
+/* Content */
+.quick-action-content {
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+/* Title */
+.quick-action-title {
+  margin: 0;
+  font-size: var(--dani-font-size-base);
+  font-weight: 700;
+  line-height: 1.2;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.dani-age-6-9 .quick-action-title {
+  font-size: var(--dani-font-size-lg);
+}
+
+.dani-age-14-16 .quick-action-title {
+  font-size: 0.875rem;
+}
+
+/* Subtitle */
+.quick-action-subtitle {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.1;
+}
+
+.dani-age-6-9 .quick-action-subtitle {
+  font-size: 0.875rem;
+}
+
+.dani-age-14-16 .quick-action-subtitle {
+  font-size: 0.7rem;
+}
+
+/* Arrow indicator */
+.quick-action-arrow {
+  position: absolute;
+  right: var(--dani-spacing-sm);
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  font-size: 1.25rem;
+  transition: all var(--dani-transition-base);
+}
+
+.quick-action-card:hover .quick-action-arrow {
+  opacity: 1;
+  transform: translateY(-50%) translateX(2px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .quick-actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--dani-spacing-sm);
+  }
+
+  .quick-action-card {
+    min-height: 100px;
+    padding: var(--dani-spacing-sm);
+  }
+
+  .quick-action-icon {
+    font-size: 1.75rem;
+  }
+
+  .quick-action-title {
+    font-size: 0.875rem;
+  }
+
+  .quick-action-subtitle {
+    display: none;
+  }
+
+  .dani-age-6-9 .quick-action-card {
+    min-height: 120px;
+  }
+
+  .dani-age-6-9 .quick-action-title {
+    font-size: 1rem;
+  }
+
+  .dani-age-6-9 .quick-action-subtitle {
+    display: block;
+  }
+}
+
+/* Accessibility */
+.quick-action-card:focus {
+  outline: 2px solid var(--dani-accent);
+  outline-offset: 2px;
+}
+
+.quick-action-card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+
+  &:hover {
+    transform: none;
+    box-shadow: var(--dani-shadow-sm);
+  }
+}
+
+/* Animation for entrance */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.quick-action-card {
+  animation: slideInUp var(--dani-transition-base) ease-out forwards;
+}
+
+/* Stagger animation */
+.quick-action-card:nth-child(1) {
+  animation-delay: 0ms;
+}
+.quick-action-card:nth-child(2) {
+  animation-delay: 50ms;
+}
+.quick-action-card:nth-child(3) {
+  animation-delay: 100ms;
+}
+.quick-action-card:nth-child(4) {
+  animation-delay: 150ms;
+}
+.quick-action-card:nth-child(5) {
+  animation-delay: 200ms;
+}
+.quick-action-card:nth-child(6) {
+  animation-delay: 250ms;
+}
