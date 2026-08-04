@@ -297,6 +297,142 @@ describe('Smartboard DELETE /delete-user-data', () => {
   });
 });
 
+describe('Smartboard GET /student-profile', () => {
+  it('returns student profile with all fields', async () => {
+    mockSupabase.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({
+        data: { age: 12, vak_style: 'visual', school: 'Colegio Mayor', grade: '6B' },
+        error: null,
+      }),
+    });
+
+    const res = await request(app)
+      .get('/api/smartboard/student-profile')
+      .set('x-test-user-id', 'kid-123');
+
+    expect(res.status).toBe(200);
+    expect(res.body.age).toBe(12);
+    expect(res.body.vakStyle).toBe('visual');
+    expect(res.body.school).toBe('Colegio Mayor');
+    expect(res.body.grade).toBe('6B');
+  });
+
+  it('returns 404 when profile not found', async () => {
+    mockSupabase.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: null, error: { code: 'PGRST116' } }),
+    });
+
+    const res = await request(app)
+      .get('/api/smartboard/student-profile')
+      .set('x-test-user-id', 'missing-user');
+
+    expect(res.status).toBe(404);
+  });
+
+  it('handles null fields gracefully', async () => {
+    mockSupabase.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({
+        data: { age: null, vak_style: null, school: null, grade: null },
+        error: null,
+      }),
+    });
+
+    const res = await request(app)
+      .get('/api/smartboard/student-profile')
+      .set('x-test-user-id', 'kid-123');
+
+    expect(res.status).toBe(200);
+    expect(res.body.age).toBeNull();
+    expect(res.body.vakStyle).toBeNull();
+  });
+});
+
+describe('Smartboard PUT /student-profile', () => {
+  it('updates all fields successfully', async () => {
+    mockSupabase.from.mockReturnValue({
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({
+        data: { age: 13, vak_style: 'auditivo', school: 'Liceo', grade: '7A' },
+        error: null,
+      }),
+    });
+
+    const res = await request(app)
+      .put('/api/smartboard/student-profile')
+      .set('x-test-user-id', 'kid-123')
+      .send({ age: 13, vakStyle: 'auditivo', school: 'Liceo', grade: '7A' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.message).toContain('actualizado');
+    expect(res.body.profile.age).toBe(13);
+    expect(res.body.profile.vakStyle).toBe('auditivo');
+  });
+
+  it('updates single field only', async () => {
+    mockSupabase.from.mockReturnValue({
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({
+        data: { age: 14, vak_style: null, school: null, grade: null },
+        error: null,
+      }),
+    });
+
+    const res = await request(app)
+      .put('/api/smartboard/student-profile')
+      .set('x-test-user-id', 'kid-123')
+      .send({ age: 14 });
+
+    expect(res.status).toBe(200);
+    expect(res.body.profile.age).toBe(14);
+  });
+
+  it('returns 400 when age invalid', async () => {
+    const res = await request(app)
+      .put('/api/smartboard/student-profile')
+      .set('x-test-user-id', 'kid-123')
+      .send({ age: 99 });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('age');
+  });
+
+  it('returns 400 when no fields to update', async () => {
+    const res = await request(app)
+      .put('/api/smartboard/student-profile')
+      .set('x-test-user-id', 'kid-123')
+      .send({});
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('No hay campos');
+  });
+
+  it('returns 404 when student not found', async () => {
+    mockSupabase.from.mockReturnValue({
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: null, error: { code: 'PGRST116' } }),
+    });
+
+    const res = await request(app)
+      .put('/api/smartboard/student-profile')
+      .set('x-test-user-id', 'missing-user')
+      .send({ age: 12 });
+
+    expect(res.status).toBe(404);
+  });
+});
+
 describe('Smartboard POST /chat validation', () => {
   it('returns 400 when messages missing', async () => {
     const res = await request(app)

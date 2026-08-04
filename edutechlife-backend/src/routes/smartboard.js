@@ -671,4 +671,151 @@ router.delete('/delete-user-data', requireAuth, async (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /api/smartboard/student-profile:
+ *   get:
+ *     summary: Obtener perfil del estudiante (edad, VAK, colegio, grado)
+ *     description: >
+ *       Lee el perfil del estudiante autenticado desde la tabla students.
+ *       Devuelve: age, VAK style, school, grade. La identidad viene del token.
+ *     tags: [SmartBoard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Perfil del estudiante
+ *       404:
+ *         description: Perfil no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
+router.get('/student-profile', requireAuth, async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const { data, error } = await supabase
+      .from('students')
+      .select('age, vak_style, school, grade')
+      .eq('auth_id', userId)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ error: 'Perfil de estudiante no encontrado' });
+      }
+      throw error;
+    }
+
+    if (!data) {
+      return res.status(404).json({ error: 'Perfil de estudiante no encontrado' });
+    }
+
+    res.json({
+      age: data.age || null,
+      vakStyle: data.vak_style || null,
+      school: data.school || null,
+      grade: data.grade || null,
+    });
+  } catch (e) {
+    console.error('Error fetching student profile:', e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/smartboard/student-profile:
+ *   put:
+ *     summary: Actualizar perfil del estudiante (edad, VAK, colegio, grado)
+ *     description: >
+ *       Actualiza los datos del estudiante autenticado en la tabla students.
+ *       Campos: age, vakStyle, school, grade. La identidad viene del token.
+ *     tags: [SmartBoard]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               age:
+ *                 type: integer
+ *               vakStyle:
+ *                 type: string
+ *               school:
+ *                 type: string
+ *               grade:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Perfil actualizado
+ *       400:
+ *         description: Datos inválidos
+ *       500:
+ *         description: Error del servidor
+ */
+router.put('/student-profile', requireAuth, async (req, res) => {
+  const userId = req.userId;
+  const { age, vakStyle, school, grade } = req.body || {};
+
+  // Validación básica
+  if (age !== undefined && (typeof age !== 'number' || age < 5 || age > 25)) {
+    return res.status(400).json({ error: 'age debe ser un número entre 5 y 25' });
+  }
+
+  if (vakStyle && typeof vakStyle !== 'string') {
+    return res.status(400).json({ error: 'vakStyle debe ser un string' });
+  }
+
+  if (school && typeof school !== 'string') {
+    return res.status(400).json({ error: 'school debe ser un string' });
+  }
+
+  if (grade && typeof grade !== 'string') {
+    return res.status(400).json({ error: 'grade debe ser un string' });
+  }
+
+  try {
+    const updateData = {};
+    if (age !== undefined) updateData.age = age;
+    if (vakStyle !== undefined) updateData.vak_style = vakStyle;
+    if (school !== undefined) updateData.school = school;
+    if (grade !== undefined) updateData.grade = grade;
+
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({ error: 'No hay campos para actualizar' });
+    }
+
+    const { data, error } = await supabase
+      .from('students')
+      .update(updateData)
+      .eq('auth_id', userId)
+      .select('age, vak_style, school, grade')
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ error: 'Perfil de estudiante no encontrado' });
+      }
+      throw error;
+    }
+
+    res.json({
+      message: 'Perfil actualizado correctamente',
+      profile: {
+        age: data.age || null,
+        vakStyle: data.vak_style || null,
+        school: data.school || null,
+        grade: data.grade || null,
+      },
+    });
+  } catch (e) {
+    console.error('Error updating student profile:', e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 module.exports = router;

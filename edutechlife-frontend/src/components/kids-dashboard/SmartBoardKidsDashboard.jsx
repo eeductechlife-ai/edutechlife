@@ -54,6 +54,14 @@ const SmartBoardKidsDashboard = () => {
   const handleDaniOpen = useCallback(() => setIsDaniOpen(true), []);
   const handleDaniClose = useCallback(() => setIsDaniOpen(false), []);
 
+  // Obtener auth token y nombre del estudiante para UserMenu
+  const authToken =
+    typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+  const studentName =
+    typeof window !== "undefined"
+      ? localStorage.getItem("student_name") || "Estudiante"
+      : "Estudiante";
+
   // Proactive Dani reminder after inactivity
   useEffect(() => {
     if (isDaniOpen) {
@@ -233,6 +241,8 @@ const SmartBoardKidsDashboard = () => {
             streak={streak}
             totalPoints={totalPoints}
             onDaniOpen={handleDaniOpen}
+            authToken={authToken}
+            studentName={studentName}
           />
 
           {/* Scrollable Content */}

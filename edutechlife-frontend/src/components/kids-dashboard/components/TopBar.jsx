@@ -4,9 +4,18 @@ import { Bot, Flame, Gem } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { CATEGORIES, TOP_BAR_LABELS } from "../kidsDashboardConfig";
 import { SB_GRADIENTS, glow } from "../smartboardTheme";
+import UserMenu from "../UserMenu";
 
 const TopBar = memo(
-  ({ activeTab, darkMode, streak, totalPoints, onDaniOpen }) => {
+  ({
+    activeTab,
+    darkMode,
+    streak,
+    totalPoints,
+    onDaniOpen,
+    authToken,
+    studentName,
+  }) => {
     const { t } = useTranslation();
     const activeCat = CATEGORIES.find((c) => c.tabs.includes(activeTab));
     const ActiveIcon = activeCat?.Icon || Bot;
@@ -139,6 +148,10 @@ const TopBar = memo(
               </span>
             </span>
           </motion.div>
+
+          {authToken && (
+            <UserMenu authToken={authToken} studentName={studentName} />
+          )}
         </div>
       </motion.header>
     );
