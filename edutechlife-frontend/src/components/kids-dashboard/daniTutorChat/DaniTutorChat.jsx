@@ -19,6 +19,7 @@ import RecentTopics from "../dani/RecentTopics";
 import DaniChatHeader from "./components/DaniChatHeader";
 import DaniChatMessages from "./components/DaniChatMessages";
 import CrisisResourcesModal from "../CrisisResourcesModal";
+import ChatInputImproved from "./components/ChatInputImproved";
 import useDaniChat from "./useDaniChat";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 
@@ -145,7 +146,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/50 z-50 flex items-end justify-end p-4 md:p-8"
+        className="fixed inset-0 bg-gradient-to-l from-black/30 via-black/10 to-transparent z-50 flex items-end justify-end p-4 md:p-8 backdrop-blur-sm"
         style={{ overscrollBehavior: "contain" }}
         ref={focusTrapRef}
         role="dialog"
@@ -321,102 +322,25 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
             darkMode={darkMode}
           />
 
-          <div
-            className={`p-4 border-t ${
-              darkMode
-                ? "bg-[#0F172A] border-[#334155]"
-                : "bg-white border-[#E2E8F0]"
-            }`}
-          >
-            <div className="flex flex-col gap-1.5">
-              <div className="flex gap-2 items-end">
-                <div className="flex-1 relative">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={inputText}
-                    onChange={handleInputChange}
-                    onKeyDown={handleInputKeyDown}
-                    placeholder={
-                      activeTab === "examenes"
-                        ? t("dani.placeholder_exam") ||
-                          "Pregúntame sobre el examen..."
-                        : activeTab === "materias"
-                          ? t("dani.placeholder_subject") ||
-                            "¿Qué materia quieres estudiar?"
-                          : t("dani.placeholder")
-                    }
-                    maxLength={maxChars}
-                    className={`w-full px-4 py-3 pr-10 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/50 placeholder-[#64748B] transition-all ${
-                      darkMode
-                        ? "bg-[#1E293B] border border-[#334155] text-[#E2F0FF]"
-                        : "bg-[#F8FAFC] border border-[#E2E8F0] text-[#004B63]"
-                    }`}
-                  />
-                  {inputText.length > 0 && (
-                    <motion.button
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.5 }}
-                      onClick={handleClearInput}
-                      className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center ${
-                        darkMode
-                          ? "text-[#64748B] hover:text-white"
-                          : "text-[#94A3B8] hover:text-[#004B63]"
-                      }`}
-                      aria-label={t("dani.clear_input") || "Limpiar"}
-                    >
-                      <X size={14} strokeWidth={2.5} />
-                    </motion.button>
-                  )}
-                </div>
-                <motion.button
-                  onClick={handleMicClick}
-                  disabled={isTyping}
-                  aria-label={
-                    isListening ? t("dani.mic_stop") : t("dani.mic_start")
-                  }
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all ${
-                    isListening
-                      ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
-                      : darkMode
-                        ? "bg-[#1E293B] border border-[#334155] text-[#64748B] hover:bg-[#334155]"
-                        : "bg-[#F8FAFC] border border-[#E2E8F0] text-[#64748B] hover:bg-[#E2E8F0]"
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Mic size={20} strokeWidth={2} />
-                </motion.button>
-                <motion.button
-                  onClick={handleSend}
-                  disabled={!inputText.trim() || isTyping}
-                  aria-label={t("dani.send")}
-                  className="w-12 h-12 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl flex items-center justify-center disabled:opacity-40 shadow-lg flex-shrink-0"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Send size={20} strokeWidth={2} />
-                </motion.button>
-              </div>
-              <div className="flex items-center justify-between px-1">
-                {inputText.length > 0 && (
-                  <span
-                    className={`text-[10px] font-medium transition-colors ${
-                      inputText.length > maxChars * 0.9
-                        ? "text-red-500"
-                        : inputText.length > maxChars * 0.75
-                          ? "text-amber-500"
-                          : "text-[#64748B]"
-                    }`}
-                  >
-                    {inputText.length}/{maxChars}
-                  </span>
-                )}
-                <span />
-              </div>
-            </div>
-          </div>
+          <ChatInputImproved
+            inputText={inputText}
+            onInputChange={handleInputChange}
+            onSendMessage={handleSendMessage}
+            onMicClick={handleMicClick}
+            isListening={isListening}
+            isTyping={isTyping}
+            darkMode={darkMode}
+            studentAge={studentAge}
+            placeholder={
+              activeTab === "examenes"
+                ? t("dani.placeholder_exam") || "Pregúntame sobre el examen..."
+                : activeTab === "materias"
+                  ? t("dani.placeholder_subject") ||
+                    "¿Qué materia quieres estudiar?"
+                  : t("dani.placeholder") || "Pregúntale a Dani..."
+            }
+            maxChars={maxChars}
+          />
         </motion.div>
       </motion.div>
 
