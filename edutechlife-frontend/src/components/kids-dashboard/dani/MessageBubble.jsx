@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import DaniAvatar from "./DaniAvatar";
+import DaniAvatar from "../daniTutorChat/components/DaniAvatar";
 import { getRelativeTime } from "./chatUtils";
 
 // ==========================================

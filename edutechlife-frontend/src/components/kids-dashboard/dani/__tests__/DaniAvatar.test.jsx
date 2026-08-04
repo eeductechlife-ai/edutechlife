@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { describe, test, expect } from "vitest";
-import DaniAvatar from "../DaniAvatar";
+import DaniAvatar from "../../daniTutorChat/components/DaniAvatar";
 import { tutorAvatars } from "../../../../data/tutorAvatars";
 
 describe("DaniAvatar", () => {

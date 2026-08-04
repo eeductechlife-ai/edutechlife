@@ -8,6 +8,7 @@ import "../../styles/a11y.css";
 import ParticlesBackground from "./ParticlesBackground";
 import DaniTutorChat from "./daniTutorChat";
 import DaniFAB from "./DaniFAB";
+import OnboardingGuide from "./OnboardingGuide";
 import PremiumSidebar from "./components/PremiumSidebar";
 import MobileBottomBar from "./components/MobileBottomBar";
 import CinematicContent from "./components/CinematicContent";
@@ -314,6 +315,9 @@ const SmartBoardKidsDashboard = () => {
         darkMode={darkMode}
         unreadCount={0}
       />
+
+      {/* Onboarding Guide - First Time User Experience */}
+      <OnboardingGuide />
 
       {/* Data Rights - Floating Action (GDPR-K / COPPA) */}
       <div className="fixed bottom-20 md:bottom-6 right-6 z-30 flex flex-col gap-2">
