@@ -18,6 +18,21 @@ import {
   setLocalStorage,
 } from "./useSmartBoardPersistence";
 import { useSmartBoardActions } from "./useSmartBoardActions";
+import {
+  useStudentData,
+  usePointsHistory,
+  useAddPoints as useAddPointsMutation,
+  useVAKResult,
+  useSetVAKResult,
+  useSessionCreate as useSessionCreateMutation,
+  useAcademicContext,
+  useAchievements,
+  useLearningStreaks,
+  useSmartboardSettings,
+  useUpdateSettings,
+  useTotalPoints,
+  useSessionsData,
+} from "../hooks/useSmartBoardSupabase";
 
 export const SmartBoardKidsContext = createContext();
 
@@ -32,6 +47,7 @@ export const useSmartBoardKids = () => {
 };
 
 export const SmartBoardKidsProvider = ({ children }) => {
+  // Local state (for backward compatibility and instant UI updates)
   const [daniChatHistory, setDaniChatHistory] = useState([]);
   const [daniMood, setDaniMood] = useState("happy");
   const [studentMoodHistory, setStudentMoodHistory] = useState([]);
@@ -98,6 +114,22 @@ export const SmartBoardKidsProvider = ({ children }) => {
 
   const syncTimeoutRef = useRef(null);
 
+  // Supabase/React Query hooks
+  const studentDataQuery = useStudentData();
+  const pointsHistoryQuery = usePointsHistory();
+  const vakResultQuery = useVAKResult();
+  const sessionsDataQuery = useSessionsData();
+  const achievementsQuery = useAchievements();
+  const learningStreaksQuery = useLearningStreaks();
+  const settingsQuery = useSmartboardSettings();
+  const addPointsMutation = useAddPointsMutation();
+  const setVAKMutation = useSetVAKResult();
+  const sessionCreateMutation = useSessionCreateMutation();
+
+  // Calculated total points from Supabase
+  const supabaseTotalPoints = useTotalPoints();
+
+  // Legacy persistence layer (kept for backward compatibility)
   const { dataLoaded, saveData, userId, isConnected, syncLoading } =
     useSmartBoardPersistence({
       setDaniChatHistory,
@@ -182,6 +214,47 @@ export const SmartBoardKidsProvider = ({ children }) => {
     addAnalyzedActivity,
     markNewsAsRead,
   } = actions;
+
+  // Sync Supabase data to local state
+  useEffect(() => {
+    if (pointsHistoryQuery.data) {
+      setPointsHistory(pointsHistoryQuery.data);
+      const total = pointsHistoryQuery.data.reduce(
+        (sum, entry) => sum + entry.points,
+        0,
+      );
+      setTotalPoints(total);
+    }
+  }, [pointsHistoryQuery.data]);
+
+  useEffect(() => {
+    if (vakResultQuery.data) {
+      setVakResult(vakResultQuery.data);
+    }
+  }, [vakResultQuery.data]);
+
+  useEffect(() => {
+    if (sessionsDataQuery.data) {
+      setSessions(sessionsDataQuery.data);
+    }
+  }, [sessionsDataQuery.data]);
+
+  useEffect(() => {
+    if (learningStreaksQuery.data) {
+      setStreak({
+        current: learningStreaksQuery.data.current_streak || 0,
+        longest: learningStreaksQuery.data.best_streak || 0,
+        lastActive: learningStreaksQuery.data.last_activity_date,
+      });
+    }
+  }, [learningStreaksQuery.data]);
+
+  useEffect(() => {
+    if (studentDataQuery.data) {
+      setStudentAge(studentDataQuery.data.age);
+      setSubscriptionTier(studentDataQuery.data.subscription_tier || "basic");
+    }
+  }, [studentDataQuery.data]);
 
   // Earn points for active minutes
   useEffect(() => {
@@ -367,11 +440,6 @@ export const SmartBoardKidsProvider = ({ children }) => {
     planCompletedActivities,
   ]);
 
-  // El tier de Stripe se leia de Clerk publicMetadata. Clerk ya no autentica y
-  // ese objeto no existe, asi que el efecto solo lanzaba ReferenceError. El
-  // tier vive en subscriptionTier (localStorage/perfil) hasta que se conecte
-  // la fuente de Stripe sobre Supabase.
-
   // Compute upcoming deadlines from calendar events
   const computedUpcomingDeadlines = useMemo(() => {
     const now = new Date();
@@ -384,6 +452,52 @@ export const SmartBoardKidsProvider = ({ children }) => {
   useEffect(() => {
     setUpcomingDeadlines(computedUpcomingDeadlines);
   }, [computedUpcomingDeadlines]);
+
+  // Wrapper functions that use React Query mutations
+  const addPointsWithSupabase = useCallback(
+    (amount, reason) => {
+      // Add to local state immediately
+      addPoints(amount, reason);
+      // Also sync to Supabase
+      if (userId) {
+        addPointsMutation.mutate({
+          points: amount,
+          reason,
+          category: "bonus",
+        });
+      }
+    },
+    [addPoints, userId, addPointsMutation],
+  );
+
+  const setVakResultWithSupabase = useCallback(
+    (result, recommendations) => {
+      // Add to local state immediately
+      setVakResultAndRecommendations(result, recommendations);
+      // Also sync to Supabase
+      if (result?.visual !== undefined) {
+        setVAKMutation.mutate({
+          visual_score: result.visual || 0,
+          auditory_score: result.auditory || 0,
+          kinesthetic_score: result.kinesthetic || 0,
+          responses: result.responses || {},
+        });
+      }
+    },
+    [setVakResultAndRecommendations, setVAKMutation],
+  );
+
+  const createSessionWithSupabase = useCallback(
+    (subject, type = "lesson") => {
+      if (userId) {
+        sessionCreateMutation.mutate({
+          subject,
+          type,
+        });
+      }
+    },
+    [userId, sessionCreateMutation],
+  );
 
   const value = {
     // Loading & connectivity
@@ -413,13 +527,13 @@ export const SmartBoardKidsProvider = ({ children }) => {
     // VAK
     vakResult,
     vakRecommendations,
-    setVakResultAndRecommendations,
+    setVakResultAndRecommendations: setVakResultWithSupabase,
 
     // Points
     totalPoints,
     pointsHistory,
     unlockedRewards,
-    addPoints,
+    addPoints: addPointsWithSupabase,
     unlockReward,
 
     // Rewards effects
@@ -477,6 +591,17 @@ export const SmartBoardKidsProvider = ({ children }) => {
     setSmartBookHistory,
     planCompletedActivities,
     setPlanCompletedActivities,
+
+    // Supabase/React Query hooks (for advanced usage)
+    supabaseQueries: {
+      studentData: studentDataQuery,
+      pointsHistory: pointsHistoryQuery,
+      vakResult: vakResultQuery,
+      sessions: sessionsDataQuery,
+      achievements: achievementsQuery,
+      learningStreaks: learningStreaksQuery,
+      settings: settingsQuery,
+    },
   };
 
   return (

@@ -74,6 +74,12 @@ export function useNicoSendMessage({
   saveLead,
   scheduleAppointment,
 
+  // Academic context and conversation memory
+  systemPromptContext = "",
+  conversationHistoryContext = "",
+  saveConversation,
+  nicoContext,
+
   voice: {
     isSpeakingRef,
     sentenceQueueRef,
@@ -185,7 +191,9 @@ export function useNicoSendMessage({
       const noMulletilla = removeGreetingMulletilla(quickResponse);
       const cleanResponse = removeEmojis(noMulletilla);
 
-      const assistantMessageObj = createAssistantMessage(cleanResponse, { isQuickResponse: true });
+      const assistantMessageObj = createAssistantMessage(cleanResponse, {
+        isQuickResponse: true,
+      });
 
       setMessages((prev) => {
         const newMessages = [...prev, assistantMessageObj];
@@ -205,7 +213,11 @@ export function useNicoSendMessage({
         );
       }
 
-      advanceMessagePhase(userMessageCount, setUserMessageCount, setConversationPhase);
+      advanceMessagePhase(
+        userMessageCount,
+        setUserMessageCount,
+        setConversationPhase,
+      );
 
       setIsLoading(false);
       return;
@@ -250,7 +262,9 @@ export function useNicoSendMessage({
       const localMatch = matchIntent(userMessage);
       if (localMatch) {
         const cleanResponse = removeEmojis(localMatch.response);
-        const assistantMessageObj = createAssistantMessage(cleanResponse, { isLocalResponse: true });
+        const assistantMessageObj = createAssistantMessage(cleanResponse, {
+          isLocalResponse: true,
+        });
         setMessages((prev) => {
           const newMessages = [...prev, assistantMessageObj];
           return optimizeLongConversation(newMessages, 25);
@@ -304,6 +318,23 @@ export function useNicoSendMessage({
         });
         processMessage("assistant", cached.response);
 
+        // Save cached conversation to Supabase
+        if (saveConversation) {
+          try {
+            await saveConversation({
+              user_message: userMessage,
+              ai_response: cached.response,
+              subject: nicoContext?.primarySubject || null,
+              learning_style_applied: nicoContext?.learningStyle || null,
+            });
+          } catch (err) {
+            console.warn(
+              "[NicoModern] Failed to save cached conversation:",
+              err,
+            );
+          }
+        }
+
         if (audioEnabled) {
           speakTextConversational(
             cleanResponse,
@@ -319,9 +350,21 @@ export function useNicoSendMessage({
         const contextInfo = userNameFromState
           ? `El usuario se llama ${userNameFromState}.`
           : "";
-        const enhancedSystemPrompt = memoryContext
-          ? `${PROMPT_NICO_SOPORTE}\nContexto: ${memoryContext.substring(0, 500)} ${contextInfo}`
-          : `${PROMPT_NICO_SOPORTE} ${contextInfo}`;
+
+        // Build enhanced system prompt with academic context
+        let enhancedSystemPrompt = systemPromptContext || PROMPT_NICO_SOPORTE;
+
+        if (conversationHistoryContext) {
+          enhancedSystemPrompt += `\n\n${conversationHistoryContext}`;
+        }
+
+        if (memoryContext) {
+          enhancedSystemPrompt += `\n\nContexto de memoria: ${memoryContext.substring(0, 500)}`;
+        }
+
+        if (contextInfo) {
+          enhancedSystemPrompt += `\n\n${contextInfo}`;
+        }
 
         const placeholderObj = createStreamingPlaceholder();
         setMessages((prev) => [...prev, placeholderObj]);
@@ -375,6 +418,20 @@ export function useNicoSendMessage({
           timestamp: Date.now(),
         });
         processMessage("assistant", fullResponse);
+
+        // Save conversation to Supabase for memory
+        if (saveConversation) {
+          try {
+            await saveConversation({
+              user_message: userMessage,
+              ai_response: fullResponse,
+              subject: nicoContext?.primarySubject || null,
+              learning_style_applied: nicoContext?.learningStyle || null,
+            });
+          } catch (err) {
+            console.warn("[NicoModern] Failed to save conversation:", err);
+          }
+        }
 
         finishStreamAudio(audioEnabled);
       }
