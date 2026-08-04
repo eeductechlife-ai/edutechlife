@@ -155,7 +155,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-end justify-end p-4 md:p-8 pointer-events-none"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 pointer-events-none"
           style={{ overscrollBehavior: "contain" }}
           ref={focusTrapRef}
           role="dialog"
@@ -174,7 +174,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 100, scale: 0.9 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className={`relative z-10 pointer-events-auto w-full max-w-md h-[600px] rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col overflow-hidden border ${
+            className={`relative z-10 pointer-events-auto w-full max-w-md max-h-[90vh] rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col overflow-hidden border ${
               darkMode
                 ? "bg-[#0F172A] border-[#334155]"
                 : "bg-[#F8FAFC] border-[#E2E8F0]"
