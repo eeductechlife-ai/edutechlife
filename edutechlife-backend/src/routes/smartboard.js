@@ -3,7 +3,8 @@ const supabase = require('../db/supabase');
 const { chat, chatStream, validateMessages } = require('../services/deepseek');
 const { requireAuth } = require('../middleware/auth');
 const { detectCrisis } = require('../services/crisisDetection');
-const { sendCrisisAlert, logCrisisIncident } = require('../services/emailService');
+const { sendCrisisAlert, logCrisisIncident, sendEmail } = require('../services/emailService');
+const { buildWeeklySummary, renderWeeklyEmail } = require('../services/weeklyReport');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -433,6 +434,241 @@ router.post('/parental-consent', requireAuth, async (req, res) => {
     console.error('Error processing parental consent:', e);
     res.status(500).json({ error: e.message });
   }
+});
+
+/**
+ * @swagger
+ * /api/smartboard/weekly-report:
+ *   post:
+ *     summary: Genera y envía por email el reporte semanal del hijo al padre
+ *     description: >
+ *       Lee los datos del estudiante autenticado desde Supabase, arma un resumen
+ *       semanal (puntos, días activos, racha, materias) y lo envía al email del
+ *       padre registrado en el consentimiento parental. La identidad viene del token.
+ *     tags: [SmartBoard]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               studentName:
+ *                 type: string
+ *               preview:
+ *                 type: boolean
+ *                 description: Si es true, devuelve el resumen sin enviar email
+ *     responses:
+ *       200:
+ *         description: Reporte enviado (o preview generado)
+ *       404:
+ *         description: Sin datos o sin email de padre registrado
+ *       500:
+ *         description: Error del servidor
+ */
+router.post('/weekly-report', requireAuth, async (req, res) => {
+  const userId = req.userId;
+  const { studentName, preview = false } = req.body || {};
+
+  try {
+    // 1. Datos del niño desde el blob ya sincronizado en Supabase
+    const { data: row, error: dataError } = await supabase
+      .from('smartboard_kids_data')
+      .select('data')
+      .eq('user_id', userId)
+      .single();
+
+    if (dataError) {
+      if (dataError.code === 'PGRST116') {
+        return res.status(404).json({ error: 'No hay datos para este usuario todavía' });
+      }
+      throw dataError;
+    }
+
+    const summary = buildWeeklySummary(row?.data || {});
+
+    // Modo preview: útil para el frontend sin disparar correo
+    if (preview) {
+      return res.status(200).json({ summary });
+    }
+
+    // 2. Email del padre desde el consentimiento parental
+    const { data: consent, error: consentError } = await supabase
+      .from('parent_consents')
+      .select('parent_email')
+      .eq('student_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (consentError || !consent?.parent_email) {
+      return res.status(404).json({
+        error: 'No hay email de padre registrado. Completa el consentimiento parental primero.',
+        summary,
+      });
+    }
+
+    // 3. Render + envío (sendEmail cae a log en dev si no hay Resend)
+    const email = renderWeeklyEmail(summary, {
+      studentName,
+      dashboardUrl: 'https://edutechlife.co/smartboard',
+    });
+
+    const sent = await sendEmail(
+      consent.parent_email,
+      email.subject,
+      email.html,
+      email.text,
+    );
+
+    if (!sent.success) {
+      return res.status(500).json({ error: 'No se pudo enviar el reporte', detail: sent.error });
+    }
+
+    return res.status(200).json({
+      message: 'Reporte semanal enviado al padre',
+      to: consent.parent_email,
+      mode: sent.mode,
+      summary,
+    });
+  } catch (e) {
+    console.error('Error generando reporte semanal:', e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/smartboard/wellbeing-status:
+ *   get:
+ *     summary: Estado agregado de bienestar del hijo para el padre (no expone contenido sensible)
+ *     description: >
+ *       Devuelve una señal de confianza para el padre: si el acompañamiento de
+ *       bienestar está activo y si hubo alertas recientes. NUNCA devuelve el
+ *       contenido detectado, solo el conteo agregado. Identidad desde el token.
+ *     tags: [SmartBoard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Estado de bienestar
+ *       500:
+ *         description: Error del servidor
+ */
+router.get('/wellbeing-status', requireAuth, async (req, res) => {
+  const userId = req.userId;
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  try {
+    const { data, error } = await supabase
+      .from('crisis_alerts')
+      .select('crisis_level, created_at')
+      .eq('student_id', userId)
+      .gte('created_at', weekAgo);
+
+    // La tabla puede no existir en algún entorno: el acompañamiento sigue "activo".
+    if (error && error.code !== '42P01') {
+      throw error;
+    }
+
+    const alerts = Array.isArray(data) ? data : [];
+    const recentAlerts = alerts.length;
+    const highAlerts = alerts.filter((a) => a.crisis_level === 'high').length;
+    const lastAlertAt = alerts
+      .map((a) => a.created_at)
+      .sort()
+      .pop() || null;
+
+    return res.status(200).json({
+      // El acompañamiento de bienestar por IA siempre está activo.
+      monitoring: true,
+      recentAlerts,   // conteo agregado, sin contenido
+      highAlerts,
+      lastAlertAt,
+      // Mensaje listo para mostrar al padre
+      status: highAlerts > 0 ? 'attention' : 'calm',
+    });
+  } catch (e) {
+    console.error('Error obteniendo estado de bienestar:', e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/smartboard/delete-user-data:
+ *   delete:
+ *     summary: Eliminar todos los datos personales del usuario autenticado (GDPR-K / COPPA / Habeas Data)
+ *     description: >
+ *       Ejerce el derecho de supresión. Borra de forma permanente todos los datos del
+ *       estudiante autenticado en Supabase. La identidad se toma del token, no del body,
+ *       para impedir que un usuario borre datos de otro.
+ *     tags: [SmartBoard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Datos eliminados correctamente
+ *       401:
+ *         description: No autorizado
+ *       500:
+ *         description: Error del servidor
+ */
+router.delete('/delete-user-data', requireAuth, async (req, res) => {
+  // La identidad SIEMPRE viene del token verificado, nunca del body (evita IDOR).
+  const userId = req.userId;
+
+  // Tablas keyed por auth id. Borrar la fila de `students` cascadea las 10 tablas
+  // normalizadas (sessions, points_history, vak_results, etc.). Las tablas auxiliares
+  // se borran explícitamente porque no cuelgan de students(id).
+  const deletions = [
+    { table: 'smartboard_kids_data', column: 'user_id' },
+    { table: 'parent_consents', column: 'student_id' },
+    { table: 'crisis_alerts', column: 'student_id' },
+    { table: 'activity_log', column: 'user_id' },
+    { table: 'students', column: 'auth_id' }, // cascada a tablas hijas
+  ];
+
+  const results = {};
+  let hadFatalError = false;
+
+  for (const { table, column } of deletions) {
+    try {
+      const { error } = await supabase.from(table).delete().eq(column, userId);
+
+      if (error) {
+        // 42P01 = la tabla no existe en este entorno: es tolerable, se omite.
+        if (error.code === '42P01') {
+          results[table] = 'skipped (table not present)';
+          continue;
+        }
+        results[table] = `error: ${error.message}`;
+        hadFatalError = true;
+        console.error(`[delete-user-data] Error borrando ${table}:`, error.message);
+      } else {
+        results[table] = 'deleted';
+      }
+    } catch (e) {
+      results[table] = `error: ${e.message}`;
+      hadFatalError = true;
+      console.error(`[delete-user-data] Excepción borrando ${table}:`, e.message);
+    }
+  }
+
+  if (hadFatalError) {
+    return res.status(500).json({
+      error: 'No se pudieron eliminar todos los datos. Intenta de nuevo o contacta soporte.',
+      results,
+    });
+  }
+
+  console.log(`[delete-user-data] Datos eliminados para usuario ${userId}`);
+  return res.status(200).json({
+    message: 'Todos tus datos han sido eliminados permanentemente.',
+    results,
+  });
 });
 
 module.exports = router;

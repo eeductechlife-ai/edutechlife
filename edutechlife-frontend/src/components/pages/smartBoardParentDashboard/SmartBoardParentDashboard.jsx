@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuthIdentity } from "../../../hooks/useAuthIdentity";
+import { useParentDashboardRealtime } from "../../../hooks/useParentDashboardRealtime";
 import {
   ArrowLeft,
   Brain,
@@ -22,6 +23,8 @@ import {
   SubjectProgress,
 } from "./components/ParentStats";
 import ParentChildrenList from "./components/ParentChildrenList";
+import WeeklyReportCard from "./components/WeeklyReportCard";
+import WellbeingCard from "./components/WellbeingCard";
 
 const STORAGE_PREFIX = "edutechlife";
 
@@ -61,6 +64,10 @@ const SmartBoardParentDashboard = () => {
   });
   const [liveActivities, setLiveActivities] = useState([]);
   const [newActivityPulse, setNewActivityPulse] = useState(false);
+
+  // Realtime subscriptions for live data
+  const { studentStatus, liveSessions, livePoints, isConnected } =
+    useParentDashboardRealtime(userId, authToken);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -157,6 +164,35 @@ const SmartBoardParentDashboard = () => {
     };
   }, [isLoaded, userId, authToken]);
 
+  // Update live sessions and points from realtime subscriptions
+  useEffect(() => {
+    if (liveSessions.length > 0 || livePoints.length > 0) {
+      setData((prev) => {
+        const updatedData = { ...prev };
+
+        // Update sessions with live data
+        if (liveSessions.length > 0) {
+          updatedData.sessions = liveSessions;
+        }
+
+        // Update points history with live data
+        if (livePoints.length > 0) {
+          const newPoints = livePoints.reduce(
+            (sum, entry) => sum + entry.points,
+            0,
+          );
+          updatedData.points = (prev.points || 0) + newPoints;
+          updatedData.history = [...livePoints, ...(prev.history || [])].slice(
+            0,
+            100,
+          );
+        }
+
+        return updatedData;
+      });
+    }
+  }, [liveSessions, livePoints]);
+
   const level =
     LEVELS.find((l) => data.points >= l.min) || LEVELS[LEVELS.length - 1];
   const completedMissions = data.missions.filter((m) => m.completed).length;
@@ -215,12 +251,23 @@ const SmartBoardParentDashboard = () => {
             <p className="text-[#64748B] mt-1">{t("smartboard.parent_desc")}</p>
           </motion.div>
 
+          {/* Bienestar como pilar de confianza (Track D) */}
+          <WellbeingCard authToken={authToken} />
+
+          {/* Reporte semanal por correo (Track A) */}
+          <WeeklyReportCard
+            authToken={authToken}
+            studentName={data.vakResult?.studentName}
+          />
+
           {/* Live Presence */}
           <div className="mb-6">
             <LivePresenceBar
               streak={data.streak}
               sessions={data.sessions}
               totalActiveMinutes={data.minutes}
+              studentStatus={studentStatus}
+              liveSessions={liveSessions}
             />
           </div>
 

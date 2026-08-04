@@ -27,6 +27,21 @@ const PLANS = [
     ],
   },
   {
+    id: 'smartboard_premium',
+    name: 'SmartBoard Premium',
+    price: 19900,
+    currency: 'usd',
+    priceId: process.env.STRIPE_SMARTBOARD_PRICE_ID || 'price_smartboard',
+    description: 'Para que tu hijo aprenda a su manera, y tú lo veas avanzar',
+    features: [
+      'Reporte semanal de progreso a tu correo',
+      'Tutor Dani ilimitado con IA',
+      'Todas las materias y actividades',
+      'Diagnóstico VAK y aprendizaje personalizado',
+      'Acompañamiento de bienestar emocional',
+    ],
+  },
+  {
     id: 'enterprise',
     name: 'Enterprise',
     price: 0,

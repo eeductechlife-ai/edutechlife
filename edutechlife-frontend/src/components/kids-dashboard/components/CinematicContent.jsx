@@ -9,6 +9,7 @@ import { VAKDiagnosticEnhanced } from "../VAKDiagnosticEnhanced";
 import PremiumGate from "../PremiumGate";
 import MissionsView from "./MissionsView";
 import SubjectsView from "./SubjectsView";
+import MisionDelDia from "./MisionDelDia";
 import { SectionFallback } from "./SkeletonLoader";
 import { PREMIUM_FEATURES } from "../kidsDashboardConfig";
 
@@ -66,12 +67,14 @@ function createTabRenderer(deps) {
     vakResult,
     t,
     navigate,
+    onTabChange,
   } = deps;
 
   return {
     inicio: {
       component: () => (
         <>
+          <MisionDelDia onTabChange={onTabChange} />
           <HeroSection />
           <InViewSection>
             <LazyLoad fallback={<SectionFallback tab="inicio" />}>
@@ -304,6 +307,7 @@ const CinematicContent = memo(
           vakResult,
           t,
           navigate,
+          onTabChange,
         }),
       [
         isPremium,
@@ -314,6 +318,7 @@ const CinematicContent = memo(
         vakResult,
         t,
         navigate,
+        onTabChange,
       ],
     );
 

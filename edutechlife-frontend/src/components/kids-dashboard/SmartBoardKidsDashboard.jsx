@@ -300,31 +300,49 @@ const SmartBoardKidsDashboard = () => {
       {/* Data Rights - Floating Action (GDPR-K / COPPA) */}
       <div className="fixed bottom-20 md:bottom-6 right-6 z-40 flex flex-col gap-2">
         <motion.button
-          onClick={() => {
+          onClick={async () => {
             if (
-              window.confirm(
+              !window.confirm(
                 "¿Estás seguro de que quieres eliminar todos tus datos? Esta acción no se puede deshacer.",
               )
             ) {
-              const userId = localStorage.getItem("edutechlife_user_id");
-              if (userId) {
-                fetch(
-                  `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/smartboard/delete-user-data`,
-                  {
-                    method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ userId }),
+              return;
+            }
+
+            // La identidad la determina el servidor a partir del token, no el body.
+            const token = localStorage.getItem("auth_token");
+            if (!token) {
+              alert(
+                "Debes iniciar sesión para eliminar tus datos. Vuelve a entrar e inténtalo de nuevo.",
+              );
+              return;
+            }
+
+            try {
+              const res = await fetch(
+                `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/smartboard/delete-user-data`,
+                {
+                  method: "DELETE",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
                   },
-                )
-                  .then(() => {
-                    localStorage.clear();
-                    window.location.href = "/";
-                  })
-                  .catch(() => {
-                    localStorage.clear();
-                    window.location.href = "/";
-                  });
+                },
+              );
+
+              // Solo limpiamos el dispositivo si el servidor confirmó el borrado.
+              if (res.ok) {
+                localStorage.clear();
+                window.location.href = "/";
+              } else {
+                alert(
+                  "No pudimos eliminar tus datos en el servidor. Intenta de nuevo o contacta soporte.",
+                );
               }
+            } catch {
+              alert(
+                "No pudimos conectar con el servidor. Revisa tu conexión e intenta de nuevo.",
+              );
             }
           }}
           whileHover={{ scale: 1.05 }}

@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Crown, Lock } from "lucide-react";
+import { Crown, Lock, Loader2 } from "lucide-react";
 import { SB_GRADIENTS, glow } from "./smartboardTheme";
+import { createCheckoutSession } from "../../services/stripeClient";
 
 const PremiumGate = ({
   children,
@@ -9,8 +11,29 @@ const PremiumGate = ({
   title,
   description,
   isPremium = false,
+  planId = "smartboard_premium",
 }) => {
   const navigate = useNavigate();
+  const [upgrading, setUpgrading] = useState(false);
+
+  // Inicia el checkout de Stripe. Si algo falla (sin sesión, sin Stripe
+  // configurado, error de red), cae con gracia a la página informativa.
+  const handleUpgrade = async () => {
+    if (upgrading) return;
+    setUpgrading(true);
+    try {
+      const session = await createCheckoutSession(planId);
+      if (session?.url) {
+        window.location.href = session.url;
+        return;
+      }
+      navigate("/conoce-smartboard");
+    } catch {
+      navigate("/conoce-smartboard");
+    } finally {
+      setUpgrading(false);
+    }
+  };
 
   // If user is premium, show full content
   if (isPremium) {
@@ -55,15 +78,25 @@ const PremiumGate = ({
           <motion.button
             whileHover={{ scale: 1.03, y: -1 }}
             whileTap={{ scale: 0.97 }}
-            onClick={() => navigate("/conoce-smartboard")}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[#00303F] font-black text-sm transition-all"
+            onClick={handleUpgrade}
+            disabled={upgrading}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[#00303F] font-black text-sm transition-all disabled:opacity-70"
             style={{
               background: SB_GRADIENTS.gold,
               boxShadow: `${glow("#FB8500", 0.5)}, inset 0 1px 0 rgba(255,255,255,0.5)`,
             }}
           >
-            <Crown className="w-[18px] h-[18px]" strokeWidth={2.4} />
-            <span>Actualizar a Premium — $50.000/mes</span>
+            {upgrading ? (
+              <Loader2
+                className="w-[18px] h-[18px] animate-spin"
+                strokeWidth={2.4}
+              />
+            ) : (
+              <Crown className="w-[18px] h-[18px]" strokeWidth={2.4} />
+            )}
+            <span>
+              {upgrading ? "Abriendo pago..." : "Desbloquear para mi hijo"}
+            </span>
           </motion.button>
           <button
             onClick={() => navigate("/smartboard")}
