@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "../lib/supabase";
 
 // Native Supabase Auth hook (replaces Clerk)
 export const useSupabaseAuth = () => {
@@ -12,6 +11,7 @@ export const useSupabaseAuth = () => {
   useEffect(() => {
     const initAuth = async () => {
       try {
+        const { supabase } = await import("../lib/supabase");
         const {
           data: { session },
         } = await supabase.auth.getSession();
@@ -49,28 +49,38 @@ export const useSupabaseAuth = () => {
     initAuth();
 
     // Listen for auth state changes
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session?.user) {
-          setUser(session.user);
-          localStorage.setItem("auth_token", session.access_token);
-          localStorage.setItem("refresh_token", session.refresh_token);
+    const setupListener = async () => {
+      const { supabase } = await import("../lib/supabase");
+      const { data: listener } = supabase.auth.onAuthStateChange(
+        async (event, session) => {
+          if (session?.user) {
+            setUser(session.user);
+            localStorage.setItem("auth_token", session.access_token);
+            localStorage.setItem("refresh_token", session.refresh_token);
 
-          const { data: profileData } = await supabase
-            .from("users")
-            .select("*")
-            .eq("id", session.user.id)
-            .single();
+            const { data: profileData } = await supabase
+              .from("users")
+              .select("*")
+              .eq("id", session.user.id)
+              .single();
 
-          setProfile(profileData);
-        } else {
-          setUser(null);
-          setProfile(null);
-          localStorage.removeItem("auth_token");
-          localStorage.removeItem("refresh_token");
-        }
-      },
-    );
+            setProfile(profileData);
+          } else {
+            setUser(null);
+            setProfile(null);
+            localStorage.removeItem("auth_token");
+            localStorage.removeItem("refresh_token");
+          }
+        },
+      );
+
+      return listener;
+    };
+
+    let listener;
+    setupListener().then((l) => {
+      listener = l;
+    });
 
     return () => {
       listener?.unsubscribe();
@@ -146,6 +156,7 @@ export const useSupabaseAuth = () => {
       );
 
       // Trigger auth state update
+      const { supabase } = await import("../lib/supabase");
       await supabase.auth.setSession({
         access_token: data.token,
         refresh_token: data.refreshToken,

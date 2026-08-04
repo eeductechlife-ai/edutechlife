@@ -29,7 +29,7 @@ async function signUp({ email, password, username, firstName, lastName, userType
       throw new Error('Failed to create auth user');
     }
 
-    // 2. Create user profile
+    // 2. Create user profile (use userId as clerk_id for native auth)
     const { data: profileData, error: profileError } = await supabase
       .from('users')
       .insert([
@@ -40,6 +40,7 @@ async function signUp({ email, password, username, firstName, lastName, userType
           first_name: firstName,
           last_name: lastName,
           user_type: userType,
+          clerk_id: userId,
         },
       ])
       .select()
