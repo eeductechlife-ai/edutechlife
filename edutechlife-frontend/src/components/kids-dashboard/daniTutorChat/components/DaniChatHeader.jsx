@@ -10,7 +10,7 @@ import {
   X,
   Flag,
 } from "lucide-react";
-import DaniAvatar from "../../dani/DaniAvatar";
+import DaniAvatar from "../components/DaniAvatar";
 
 const DaniChatHeader = memo(
   ({
