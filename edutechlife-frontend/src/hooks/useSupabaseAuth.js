@@ -155,12 +155,32 @@ export const useSupabaseAuth = () => {
         data.user.username || data.user.email.split("@")[0],
       );
 
-      // Trigger auth state update
-      const { supabase } = await import("../lib/supabase");
-      await supabase.auth.setSession({
-        access_token: data.token,
-        refresh_token: data.refreshToken,
+      // Set local state immediately (no need to wait for supabase session)
+      setUser({
+        id: data.user.id,
+        email: data.user.email,
+        user_metadata: {
+          username: data.user.username,
+          first_name: data.user.firstName,
+          last_name: data.user.lastName,
+        },
       });
+      setProfile(data.user);
+
+      // Trigger supabase session update in background (non-blocking)
+      import("../lib/supabase")
+        .then(({ supabase }) =>
+          supabase.auth.setSession({
+            access_token: data.token,
+            refresh_token: data.refreshToken,
+          }),
+        )
+        .catch((err) =>
+          console.warn(
+            "Supabase session sync failed (non-blocking):",
+            err.message,
+          ),
+        );
 
       return data;
     } catch (e) {

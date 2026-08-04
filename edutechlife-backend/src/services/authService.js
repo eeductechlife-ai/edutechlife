@@ -14,13 +14,25 @@ async function signUp({ email, password, username, firstName, lastName, userType
   }
 
   try {
-    // 1. Create auth user via Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.signUp({
+    // 1. Create auth user via Supabase Admin API (bypasses email rate limit)
+    // email_confirm: true auto-confirms so user can login immediately
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
       email,
       password,
+      email_confirm: true,
+      user_metadata: {
+        username: username || email.split('@')[0],
+        first_name: firstName,
+        last_name: lastName,
+      },
     });
 
     if (authError) {
+      // Detect existing account and produce a friendlier message
+      const msg = (authError.message || '').toLowerCase();
+      if (msg.includes('already') || msg.includes('exists') || msg.includes('registered')) {
+        throw new Error('Este correo ya está registrado. Inicia sesión.');
+      }
       throw new Error(`Auth signup failed: ${authError.message}`);
     }
 
@@ -48,9 +60,21 @@ async function signUp({ email, password, username, firstName, lastName, userType
 
     if (profileError) {
       console.error('Profile creation failed:', profileError);
-      // Auth user created but profile failed — may need manual cleanup
+      // If profile already exists (rare), still consider signup a success
+      if (profileError.message.includes('duplicate')) {
+        return {
+          user: { id: userId, email, username, firstName, lastName, userType },
+          message: 'Cuenta creada exitosamente.',
+        };
+      }
       throw new Error(`Profile creation failed: ${profileError.message}`);
     }
+
+    // 3. Sign in the new user to return a session token immediately
+    const { data: signInData } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
     return {
       user: {
@@ -61,7 +85,9 @@ async function signUp({ email, password, username, firstName, lastName, userType
         lastName,
         userType,
       },
-      message: 'Sign up successful. Please check your email to confirm.',
+      token: signInData?.session?.access_token || null,
+      refreshToken: signInData?.session?.refresh_token || null,
+      message: 'Cuenta creada exitosamente. Ya puedes iniciar sesión.',
     };
   } catch (e) {
     console.error('signUp error:', e.message);
