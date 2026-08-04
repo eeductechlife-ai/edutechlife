@@ -90,9 +90,17 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
   } = useDaniChat({ isOpen, activeTab });
 
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      const timer = setTimeout(() => inputRef.current.focus(), 300);
-      return () => clearTimeout(timer);
+    if (isOpen && inputRef?.current) {
+      try {
+        const timer = setTimeout(() => {
+          if (inputRef?.current) {
+            inputRef.current.focus();
+          }
+        }, 300);
+        return () => clearTimeout(timer);
+      } catch (error) {
+        console.warn("Error focusing input:", error);
+      }
     }
   }, [isOpen]);
 
