@@ -68,6 +68,7 @@ const SmartBoardStatsPage = lazy(
 const SmartBoardConsentGate = lazy(
   () => import("../components/kids-dashboard/SmartBoardConsentGate"),
 );
+const SmartBoardLogin = lazy(() => import("../pages/SmartBoardLogin"));
 const IALabDashboard = lazy(() => import("../components/IALab/IALabDashboard"));
 const PublicProfilePage = lazy(
   () => import("../components/userProfilePublic/PublicProfilePage"),
@@ -297,6 +298,15 @@ const AppRoutes = () => {
                 <SmartBoardConsentGate />
               </Suspense>
             </SectionErrorBoundary>
+          }
+        />
+
+        <Route
+          path="smartboard/login"
+          element={
+            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+              <SmartBoardLogin />
+            </Suspense>
           }
         />
 

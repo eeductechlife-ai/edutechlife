@@ -11,9 +11,9 @@ const OAUTH_PROVIDERS = {
     userUrl: 'https://www.googleapis.com/oauth2/v2/userinfo',
   },
   facebook: {
-    authUrl: 'https://www.facebook.com/v18.0/dialog/oauth',
-    tokenUrl: 'https://graph.facebook.com/v18.0/oauth/access_token',
-    userUrl: 'https://graph.facebook.com/v18.0/me',
+    authUrl: 'https://www.facebook.com/v21.0/dialog/oauth',
+    tokenUrl: 'https://graph.facebook.com/v21.0/oauth/access_token',
+    userUrl: 'https://graph.facebook.com/v21.0/me',
   },
 };
 
@@ -850,6 +850,150 @@ router.get('/oauth-demo/:provider', async (req, res) => {
   } catch (err) {
     console.error('Demo OAuth error:', err);
     res.status(500).json({ error: 'Demo OAuth failed', message: err.message });
+  }
+});
+
+// ============================================================
+// Native Supabase Auth (No Clerk) — Email + Password Auth
+// ============================================================
+
+const authService = require('../services/authService');
+
+/**
+ * @swagger
+ * /api/auth/signup:
+ *   post:
+ *     summary: Crear nuevo usuario con email + contraseña
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Usuario creado exitosamente
+ *       400:
+ *         description: Validación fallida
+ */
+router.post('/signup', async (req, res) => {
+  const { email, password, username, firstName, lastName } = req.body || {};
+
+  try {
+    const result = await authService.signUp({
+      email,
+      password,
+      username,
+      firstName,
+      lastName,
+      userType: 'student',
+    });
+
+    res.status(201).json(result);
+  } catch (e) {
+    console.error('Signup error:', e.message);
+    const statusCode = e.message.includes('Email') ? 400 : 400;
+    res.status(statusCode).json({ error: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Iniciar sesión con email + contraseña
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Sesión iniciada, retorna token
+ *       401:
+ *         description: Credenciales inválidas
+ */
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body || {};
+
+  try {
+    const result = await authService.signIn({ email, password });
+
+    res.json(result);
+  } catch (e) {
+    console.error('Login error:', e.message);
+    const statusCode = e.message.includes('Invalid') ? 401 : 400;
+    res.status(statusCode).json({ error: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Cerrar sesión
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Sesión cerrada
+ */
+router.post('/logout', (req, res) => {
+  // Client clears tokens from localStorage; backend is best-effort
+  // (Supabase sessions are managed client-side)
+  res.json({ message: 'Logged out successfully' });
+});
+
+/**
+ * @swagger
+ * /api/auth/refresh:
+ *   post:
+ *     summary: Refrescar token de acceso
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Nuevo token generado
+ *       401:
+ *         description: Refresh token inválido
+ */
+router.post('/refresh', async (req, res) => {
+  const { refreshToken } = req.body || {};
+
+  try {
+    const result = await authService.refreshSession(refreshToken);
+    res.json(result);
+  } catch (e) {
+    console.error('Refresh error:', e.message);
+    res.status(401).json({ error: 'Invalid refresh token' });
   }
 });
 
