@@ -171,42 +171,71 @@ export default defineConfig({
       external: ['@solana/web3.js'],
       output: {
         manualChunks(id) {
+          // React core — smallest possible critical chunk
           if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/scheduler/')) {
             return 'react-vendor';
           }
-          if (id.includes('node_modules/framer-motion/') || id.includes('node_modules/lucide-react/') || id.includes('node_modules/canvas-confetti/')) {
-            return 'animation-vendor';
-          }
-          if (id.includes('node_modules/recharts/')) {
-            return 'charts-vendor';
-          }
-          if (id.includes('node_modules/@supabase/supabase-js/')) {
-            return 'supabase-vendor';
-          }
+          // Routing
           if (id.includes('node_modules/react-router-dom/') || id.includes('node_modules/react-router/')) {
             return 'router-vendor';
           }
+          // State management — keep away from main bundle
+          if (id.includes('node_modules/zustand/') || id.includes('node_modules/@tanstack/')) {
+            return 'state-vendor';
+          }
+          // Radix UI components — heavy, not needed on landing
+          if (id.includes('node_modules/@radix-ui/')) {
+            return 'radix-vendor';
+          }
+          // Animations + icons — deferred
+          if (id.includes('node_modules/framer-motion/') || id.includes('node_modules/lucide-react/') || id.includes('node_modules/canvas-confetti/')) {
+            return 'animation-vendor';
+          }
+          // Charts — large, only used in admin/stats pages
+          if (id.includes('node_modules/recharts/') || id.includes('node_modules/victory-')) {
+            return 'charts-vendor';
+          }
+          // Supabase client
+          if (id.includes('node_modules/@supabase/')) {
+            return 'supabase-vendor';
+          }
+          // Stripe
           if (id.includes('node_modules/@stripe/')) {
             return 'stripe-vendor';
           }
+          // Analytics & monitoring — never on critical path
+          if (id.includes('node_modules/posthog-js/') || id.includes('node_modules/@sentry/') || id.includes('node_modules/@sentry-internal/')) {
+            return 'analytics-vendor';
+          }
+          // Markdown & sanitization — only in content-heavy pages
+          if (id.includes('node_modules/marked/') || id.includes('node_modules/dompurify/')) {
+            return 'markdown-vendor';
+          }
+          // PDF tools are dynamic imports — let Rollup keep them as separate
+          // named chunks so each downloads only when the user triggers PDF export.
         },
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     },
-    // The landing page (/) doesn't render charts, Supabase-driven data,
-    // Stripe or PDF tooling — those live behind lazy-loaded routes.
+    // The landing page (/) doesn't render charts, state, analytics, PDF tools,
+    // Radix UI, Supabase or Stripe — those live behind protected/lazy routes.
     // Skip the eager <link rel="modulepreload"> for those vendor chunks so
-    // the initial payload stays small; they'll load on-demand when the
-    // router lazy() reaches a route that actually imports them.
+    // the initial payload stays small; they load on-demand when the router
+    // lazy() reaches a route that actually imports them.
     modulePreload: {
       resolveDependencies: (_filename, deps) =>
         deps.filter(
           (d) =>
             !d.includes('charts-vendor') &&
             !d.includes('supabase-vendor') &&
-            !d.includes('stripe-vendor'),
+            !d.includes('stripe-vendor') &&
+            !d.includes('state-vendor') &&
+            !d.includes('radix-vendor') &&
+            !d.includes('analytics-vendor') &&
+            !d.includes('markdown-vendor') &&
+            !d.includes('pdf-tools'),
         ),
     },
     chunkSizeWarningLimit: 250,
@@ -219,12 +248,15 @@ export default defineConfig({
     include: [
       'react',
       'react-dom',
+      'react-router-dom',
+      'zustand',
+      '@tanstack/react-query',
       'framer-motion',
       'lucide-react',
       'canvas-confetti',
       'prop-types',
     ],
-    exclude: ['lottie-web', '@solana/web3.js', 'tesseract.js']
+    exclude: ['lottie-web', '@solana/web3.js', 'tesseract.js', 'mammoth', 'xlsx']
   },
 
   resolve: {

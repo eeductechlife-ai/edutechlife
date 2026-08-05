@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, Loader2, Eye, EyeOff, Users } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { createSupabaseClient } from "../lib/supabase";
+import { decodeJwtPayload } from "../hooks/useAuthIdentity";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL ||
@@ -63,10 +65,30 @@ const SmartBoardLogin = () => {
       localStorage.setItem("refresh_token", data.refreshToken);
       localStorage.setItem("user_role", "parent");
       localStorage.setItem("student_email", data.user.studentEmail);
+      localStorage.setItem("student_id", data.user.studentId || "");
       localStorage.setItem(
         "parent_name",
         `${data.user.firstName} ${data.user.lastName}`.trim(),
       );
+
+      // Registrar vínculo padre→hijo en Supabase para que el RLS funcione
+      // (migration 023: parent_student_links). Falla silenciosamente si aún
+      // no se ha aplicado el SQL — el dashboard cae a localStorage.
+      try {
+        const payload = decodeJwtPayload(data.token);
+        const parentUserId = payload?.sub;
+        const studentUserId = data.user.studentId;
+        if (parentUserId && studentUserId && parentUserId !== studentUserId) {
+          const sb = createSupabaseClient(data.token);
+          await sb.from("parent_student_links").upsert(
+            { parent_user_id: parentUserId, student_user_id: studentUserId, is_active: true },
+            { onConflict: "parent_user_id,student_user_id" },
+          );
+        }
+      } catch {
+        // La tabla aún no existe o RLS lo bloquea — no interrumpir el login
+      }
+
       navigate("/smartboard");
     } catch (err) {
       setError(err.message);

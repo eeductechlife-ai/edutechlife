@@ -19,9 +19,6 @@ const PersonalizedPlan = lazy(() => import("../PersonalizedPlan"));
 const ExamPrep = lazy(() => import("../examPrep"));
 const FlashcardSystem = lazy(() => import("../flashcardSystem"));
 const OralExamSimulator = lazy(() => import("../OralExamSimulator"));
-const SmartBoardParentDashboard = lazy(
-  () => import("../../pages/smartBoardParentDashboard"),
-);
 
 const sharedTransition = { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] };
 
@@ -163,16 +160,6 @@ function createTabRenderer(deps) {
       ),
       errorKey: "progreso",
       errorMsg: "Error al cargar progreso",
-      className: "h-full",
-    },
-    padres: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="padres" />}>
-          <SmartBoardParentDashboard />
-        </LazyLoad>
-      ),
-      errorKey: "padres",
-      errorMsg: "Error al cargar panel de padres",
       className: "h-full",
     },
   };

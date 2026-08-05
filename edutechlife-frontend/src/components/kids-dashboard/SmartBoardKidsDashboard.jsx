@@ -49,8 +49,7 @@ const SmartBoardKidsDashboard = () => {
   const [searchParams] = useSearchParams();
 
   const handleLogout = useCallback(() => {
-    signOutUser("/");
-    navigate("/");
+    signOutUser("/", navigate);
   }, [navigate]);
 
   const handleDaniOpen = useCallback(() => setIsDaniOpen(true), []);
@@ -355,7 +354,8 @@ const SmartBoardKidsDashboard = () => {
               // Solo limpiamos el dispositivo si el servidor confirmó el borrado.
               if (res.ok) {
                 localStorage.clear();
-                window.location.href = "/";
+                window.dispatchEvent(new CustomEvent("auth:signout"));
+                navigate("/", { replace: true });
               } else {
                 alert(
                   "No pudimos eliminar tus datos en el servidor. Intenta de nuevo o contacta soporte.",

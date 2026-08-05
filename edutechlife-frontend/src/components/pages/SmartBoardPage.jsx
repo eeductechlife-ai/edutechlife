@@ -11,8 +11,7 @@ const SmartBoardPage = () => {
   const { t } = useTranslation();
 
   const handleLogout = async () => {
-    signOutUser("/");
-    navigate("/");
+    signOutUser("/", navigate);
   };
 
   return (

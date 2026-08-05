@@ -191,7 +191,7 @@ function AIToolsSection() {
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="none"
                 onError={() => setIsVideoError(true)}
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
                   showVideo ? 'opacity-100 z-20' : 'opacity-0 z-0'
@@ -381,7 +381,7 @@ function AIToolsSection() {
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="none"
                 onError={() => setIsVideoErrorSmartboard(true)}
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
                   showVideoSmartboard ? 'opacity-100 z-20' : 'opacity-0 z-0'

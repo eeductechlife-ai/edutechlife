@@ -17,8 +17,7 @@ const AdminPage = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    signOutUser("/");
-    navigate("/");
+    signOutUser("/", navigate);
   };
 
   const handleBack = () => {

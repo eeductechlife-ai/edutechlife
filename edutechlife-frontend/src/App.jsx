@@ -27,6 +27,8 @@ const App = () => {
 
   useEffect(() => {
     const prefetch = setTimeout(() => {
+      // LandingPage first — most likely destination after IALab/SmartBoard exit.
+      import("./components/pages/LandingPage.jsx");
       import("./components/pages/IALabProLandingPage.jsx");
       import("./components/pages/SmartBoardLandingPage.jsx");
       import("./components/pages/SmartBoardInfoPage.jsx");
