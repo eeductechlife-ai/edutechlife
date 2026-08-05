@@ -1,10 +1,22 @@
-import { memo } from "react";
-import { motion } from "framer-motion";
+import { memo, useState, useCallback, lazy, Suspense } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import GenerateFlashcards from "../GenerateFlashcards";
 import { useFlashcardDeck } from "./useFlashcardDeck";
 import QuizCard from "./components/QuizCard";
 import FlashcardResults from "./components/FlashcardResults";
 import FlashcardImporter from "./components/FlashcardImporter";
+import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import {
+  generateFlashcards,
+  detectThemeFromTopic,
+} from "../../../services/flashcardAI";
+import { generateStudySummary } from "../../../services/documentSummaryAI";
+
+const LEARNING_PATH = [
+  { tab: "flashcards", label: "Flashcards", icon: "🎴" },
+  { tab: "oral", label: "Habla con Dani", icon: "🗣️" },
+  { tab: "examenes", label: "Examen", icon: "📝" },
+];
 
 const DeckCard = memo(({ deck, onStudy, onEdit, onDelete, index }) => {
   const themeColor = deck.metadata?.theme?.color || "#4DA8C4";
@@ -106,7 +118,232 @@ const GRADE_LABELS = {
   "10-12": "15-16+",
 };
 
-const FlashcardSystem = memo(() => {
+// Scanner tab — scan PDF/image → extract text → generate cards + summary
+const ScannerTab = memo(({ onGenerated }) => {
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [topic, setTopic] = useState("");
+  const [grade, setGrade] = useState("7-9");
+  const [processing, setProcessing] = useState(false);
+  const [stage, setStage] = useState("");
+  const [summary, setSummary] = useState(null);
+  const [error, setError] = useState("");
+  const fileRef = useCallback((node) => {
+    if (node) node._ref = node;
+  }, []);
+
+  const handleFile = useCallback(async (f) => {
+    if (!f) return;
+    setFile(f);
+    setError("");
+    setSummary(null);
+    if (f.type.startsWith("image/")) {
+      setPreview(URL.createObjectURL(f));
+    } else {
+      setPreview(null);
+    }
+  }, []);
+
+  const processAndGenerate = useCallback(async () => {
+    if (!file && !topic.trim()) return;
+    setProcessing(true);
+    setError("");
+    setSummary(null);
+
+    try {
+      let text = topic.trim();
+      if (file) {
+        setStage("📄 Leyendo documento…");
+        const { extractDocumentText } =
+          await import("../../../utils/documentParser");
+        text = await extractDocumentText(file);
+      }
+
+      setStage("🧠 Generando resumen…");
+      const sum = await generateStudySummary(text, {
+        subject: "general",
+        ageKey:
+          grade.split("-")[0] === "1"
+            ? "6-8"
+            : grade.split("-")[0] <= "6"
+              ? "9-11"
+              : grade.split("-")[0] <= "9"
+                ? "12-14"
+                : "15-17",
+      });
+      setSummary(sum);
+
+      setStage("🎴 Creando flashcards…");
+      const useTopic = sum?.title || file?.name || topic.slice(0, 50);
+      const cards = await generateFlashcards(useTopic, grade);
+      const theme = detectThemeFromTopic(useTopic);
+      onGenerated(useTopic, cards, { grade, theme, summary: sum });
+      setStage("");
+    } catch (e) {
+      setError("No pude procesar el documento. Intenta de nuevo.");
+    } finally {
+      setProcessing(false);
+      setStage("");
+    }
+  }, [file, topic, grade, onGenerated]);
+
+  const GRADES = [
+    { v: "1-3", l: "1-3 (6-8 años)" },
+    { v: "4-6", l: "4-6 (9-11 años)" },
+    { v: "7-9", l: "7-9 (12-14 años)" },
+    { v: "10-12", l: "10-12 (15-16+)" },
+  ];
+
+  return (
+    <div className="p-5 rounded-2xl bg-gradient-to-br from-[#EF476F]/5 to-[#FF6B9D]/5 border border-[#EF476F]/20 space-y-4">
+      <div className="flex items-center gap-2">
+        <span className="text-xl">📷</span>
+        <div>
+          <h4 className="font-bold text-[#004B63]">Escanear o pegar tema</h4>
+          <p className="text-xs text-[#64748B]">
+            Sube imagen, PDF o escribe el tema → Dani genera tarjetas + resumen
+          </p>
+        </div>
+      </div>
+
+      {/* File drop */}
+      <label className="block">
+        <input
+          type="file"
+          accept="image/*,application/pdf,.txt,.docx"
+          className="hidden"
+          onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+        />
+        {preview ? (
+          <div className="relative">
+            <img
+              src={preview}
+              alt="doc"
+              className="w-full max-h-36 object-contain rounded-xl border border-[#E2E8F0]"
+            />
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setFile(null);
+                setPreview(null);
+              }}
+              className="absolute top-1 right-1 w-6 h-6 bg-white rounded-full shadow text-red-400 text-xs flex items-center justify-center"
+            >
+              ✕
+            </button>
+          </div>
+        ) : file ? (
+          <div className="flex items-center gap-2 p-3 rounded-xl bg-white border border-[#E2E8F0] cursor-pointer">
+            <span className="text-2xl">📄</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-[#004B63] truncate">
+                {file.name}
+              </p>
+              <p className="text-xs text-[#64748B]">
+                {(file.size / 1024).toFixed(0)} KB
+              </p>
+            </div>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setFile(null);
+              }}
+              className="text-red-400 text-xs px-2"
+            >
+              ✕
+            </button>
+          </div>
+        ) : (
+          <div className="border-2 border-dashed border-[#EF476F]/30 rounded-xl p-6 text-center cursor-pointer hover:border-[#EF476F]/60 transition-colors">
+            <span className="text-3xl block mb-1">📎</span>
+            <p className="text-sm font-semibold text-[#004B63]">
+              Subir imagen o PDF
+            </p>
+            <p className="text-xs text-[#64748B]">JPG, PNG, PDF, TXT</p>
+          </div>
+        )}
+      </label>
+
+      {/* Or text */}
+      <div className="flex items-center gap-2 text-xs text-[#64748B]">
+        <div className="flex-1 h-px bg-[#E2E8F0]" />
+        <span>o escribe el tema</span>
+        <div className="flex-1 h-px bg-[#E2E8F0]" />
+      </div>
+
+      <textarea
+        value={topic}
+        onChange={(e) => setTopic(e.target.value)}
+        placeholder="Pega aquí el texto del tema o escribe de qué trata (ej: La Revolución Francesa, Fracciones, Fotosíntesis…)"
+        rows={3}
+        className="w-full p-3 rounded-xl border border-[#E2E8F0] text-[#004B63] text-sm resize-none focus:outline-none focus:border-[#EF476F]/60"
+      />
+
+      {/* Grade selector */}
+      <div className="flex gap-2 flex-wrap">
+        {GRADES.map((g) => (
+          <button
+            key={g.v}
+            onClick={() => setGrade(g.v)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              grade === g.v
+                ? "bg-[#EF476F] text-white shadow-md"
+                : "bg-white border border-[#E2E8F0] text-[#64748B]"
+            }`}
+          >
+            {g.l}
+          </button>
+        ))}
+      </div>
+
+      {stage && (
+        <div className="flex items-center gap-2 text-sm text-[#EF476F]">
+          <motion.span
+            className="inline-block w-4 h-4 border-2 border-[#EF476F] border-t-transparent rounded-full"
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+          />
+          {stage}
+        </div>
+      )}
+
+      {error && <p className="text-sm text-red-500">{error}</p>}
+
+      {/* Summary preview */}
+      {summary?.keyPoints?.length > 0 && (
+        <div className="p-3 rounded-xl bg-white border border-[#4DA8C4]/30 space-y-2">
+          <p className="text-xs font-bold text-[#004B63]">
+            📋 Resumen generado
+          </p>
+          <ul className="space-y-1">
+            {summary.keyPoints.slice(0, 4).map((p, i) => (
+              <li key={i} className="text-xs text-[#374151] flex gap-1.5">
+                <span className="text-[#4DA8C4]">•</span>
+                {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <motion.button
+        onClick={processAndGenerate}
+        disabled={processing || (!file && !topic.trim())}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="w-full py-3 rounded-xl font-bold text-white text-sm shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
+        style={{ background: "linear-gradient(135deg, #EF476F, #FF6B9D)" }}
+      >
+        {processing ? "Procesando…" : "🎴 Generar tarjetas + resumen"}
+      </motion.button>
+    </div>
+  );
+});
+ScannerTab.displayName = "ScannerTab";
+
+const FlashcardSystem = memo(({ onTabChange }) => {
+  const { activeStudyDeck, setActiveStudyDeck } = useSmartBoardKids();
+  const [createTab, setCreateTab] = useState("text"); // "text" | "scan"
   const {
     decks,
     mode,
@@ -199,9 +436,7 @@ const FlashcardSystem = memo(() => {
             themeColor={deck.metadata?.theme?.color}
             themeIcon={deck.metadata?.theme?.icon}
             gradeLabel={
-              deck.metadata?.grade
-                ? GRADE_LABELS[deck.metadata.grade]
-                : ""
+              deck.metadata?.grade ? GRADE_LABELS[deck.metadata.grade] : ""
             }
           />
         </motion.div>
@@ -331,6 +566,20 @@ const FlashcardSystem = memo(() => {
     );
   }
 
+  const activateDeck = useCallback(
+    (deckId) => {
+      const d = decks.find((x) => x.id === deckId);
+      if (!d) return;
+      setActiveStudyDeck({
+        deckId: d.id,
+        title: d.title,
+        cards: d.cards,
+        topic: d.title,
+      });
+    },
+    [decks, setActiveStudyDeck],
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -358,26 +607,95 @@ const FlashcardSystem = memo(() => {
         )}
       </div>
 
-      <GenerateFlashcards onGenerated={handleGenerateFlashcards} />
+      {/* Active deck + learning path */}
+      {activeStudyDeck && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="p-4 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#0077B6] text-white"
+        >
+          <p className="text-xs font-semibold text-white/70 mb-1">
+            🎯 Mazo activo
+          </p>
+          <p className="font-black text-base mb-3">{activeStudyDeck.title}</p>
+          <div className="flex items-center gap-1">
+            {LEARNING_PATH.map((step, i) => (
+              <div key={step.tab} className="flex items-center gap-1 flex-1">
+                <button
+                  onClick={() => onTabChange?.(step.tab)}
+                  className="flex-1 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 transition-colors text-center text-xs font-semibold"
+                >
+                  {step.icon} {step.label}
+                </button>
+                {i < LEARNING_PATH.length - 1 && (
+                  <span className="text-white/50 text-xs">→</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Create tab switcher */}
+      <div className="flex gap-2 p-1 bg-[#F1F5F9] rounded-xl">
+        {[
+          { id: "text", label: "✏️ Escribir tema" },
+          { id: "scan", label: "📷 Escanear / PDF" },
+        ].map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setCreateTab(t.id)}
+            className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${
+              createTab === t.id
+                ? "bg-white text-[#004B63] shadow-sm"
+                : "text-[#64748B]"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {createTab === "text" ? (
+        <GenerateFlashcards onGenerated={handleGenerateFlashcards} />
+      ) : (
+        <ScannerTab onGenerated={handleGenerateFlashcards} />
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {decks.map((d, i) => (
-          <DeckCard
-            key={d.id}
-            deck={d}
-            index={i}
-            onStudy={startStudy}
-            onEdit={(id) => {
-              setCurrentDeckId(id);
-              const d2 = decks.find((x) => x.id === id);
-              if (d2) {
-                setDeckTitle(d2.title);
-                setDeckDescription(d2.description || "");
-              }
-              setMode("editor");
-            }}
-            onDelete={deleteDeck}
-          />
+          <div key={d.id} className="space-y-2">
+            <DeckCard
+              deck={d}
+              index={i}
+              onStudy={startStudy}
+              onEdit={(id) => {
+                setCurrentDeckId(id);
+                const d2 = decks.find((x) => x.id === id);
+                if (d2) {
+                  setDeckTitle(d2.title);
+                  setDeckDescription(d2.description || "");
+                }
+                setMode("editor");
+              }}
+              onDelete={deleteDeck}
+            />
+            {/* Activate for learning path */}
+            <motion.button
+              onClick={() => activateDeck(d.id)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`w-full py-2 rounded-xl text-xs font-bold transition-all border ${
+                activeStudyDeck?.deckId === d.id
+                  ? "bg-[#004B63] text-white border-[#004B63]"
+                  : "bg-white text-[#4DA8C4] border-[#4DA8C4]/40 hover:border-[#4DA8C4]"
+              }`}
+            >
+              {activeStudyDeck?.deckId === d.id
+                ? "✅ Mazo activo — practica con Dani y el Examen"
+                : "🎯 Activar para Habla con Dani y Examen"}
+            </motion.button>
+          </div>
         ))}
       </div>
 
@@ -390,7 +708,7 @@ const FlashcardSystem = memo(() => {
           <span className="text-6xl mb-4 block">📚</span>
           <p className="text-[#64748B]">Aún no tienes mazos de estudio</p>
           <p className="text-sm text-[#64748B] mt-2">
-            ¡Crea tu primer mazo para empezar a estudiar!
+            ¡Crea tu primer mazo arriba para empezar!
           </p>
         </motion.div>
       )}

@@ -19,6 +19,7 @@ const PersonalizedPlan = lazy(() => import("../PersonalizedPlan"));
 const ExamPrep = lazy(() => import("../examPrep"));
 const FlashcardSystem = lazy(() => import("../flashcardSystem"));
 const OralExamSimulator = lazy(() => import("../OralExamSimulator"));
+const GradeScanner = lazy(() => import("../GradeScanner"));
 
 const sharedTransition = { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] };
 
@@ -120,20 +121,30 @@ function createTabRenderer(deps) {
       errorMsg: "Error al cargar currículo",
       className: "h-full",
     },
+    calificaciones: {
+      component: () => (
+        <LazyLoad fallback={<SectionFallback tab="calificaciones" />}>
+          <GradeScanner onTabChange={onTabChange} />
+        </LazyLoad>
+      ),
+      errorKey: "calificaciones",
+      errorMsg: "Error al cargar calificaciones",
+      className: "space-y-4",
+    },
     oral: {
       component: () => (
         <LazyLoad fallback={<SectionFallback tab="oral" />}>
-          <OralExamSimulator />
+          <OralExamSimulator onTabChange={onTabChange} />
         </LazyLoad>
       ),
       errorKey: "oral",
-      errorMsg: "Error al cargar examen oral",
+      errorMsg: "Error al cargar Habla con Dani",
       className: "h-full",
     },
     examenes: {
       component: () => (
         <LazyLoad fallback={<SectionFallback tab="examenes" />}>
-          <ExamPrep />
+          <ExamPrep onTabChange={onTabChange} />
         </LazyLoad>
       ),
       errorKey: "examenes",
@@ -142,7 +153,7 @@ function createTabRenderer(deps) {
     flashcards: {
       component: () => (
         <LazyLoad fallback={<SectionFallback tab="flashcards" />}>
-          <FlashcardSystem />
+          <FlashcardSystem onTabChange={onTabChange} />
         </LazyLoad>
       ),
       errorKey: "flashcards",

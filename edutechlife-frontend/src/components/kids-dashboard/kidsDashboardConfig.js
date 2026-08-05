@@ -8,6 +8,7 @@ export const CATEGORY_MAP = {
   examenes: "practice",
   vak: "progress",
   progreso: "progress",
+  calificaciones: "progress",
   misiones: "explore",
 };
 
@@ -46,7 +47,7 @@ export const CATEGORIES = [
     color: "#FB8500",
     gradient: "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
     glowColor: "#FFB703",
-    tabs: ["vak", "progreso"],
+    tabs: ["calificaciones", "vak", "progreso"],
   },
   {
     id: "explore",
@@ -63,9 +64,10 @@ export const CATEGORY_TAB_LABELS = {
   materias: "Materias",
   examenes: "Exámenes",
   flashcards: "Flashcards",
-  oral: "Oral",
+  oral: "Habla con Dani",
   vak: "VAK",
   progreso: "Progreso",
+  calificaciones: "Calificaciones",
   misiones: "Misiones",
   inicio: "Inicio",
 };
@@ -77,9 +79,10 @@ export const TOP_BAR_LABELS = {
   materias: "Materias",
   examenes: "Exámenes",
   flashcards: "Flashcards",
-  oral: "Prueba Oral",
+  oral: "Habla con Dani",
   vak: "Diagnóstico VAK",
   progreso: "Mi Progreso",
+  calificaciones: "Mis Calificaciones",
   misiones: "Misiones Diarias",
 };
 

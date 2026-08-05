@@ -111,6 +111,9 @@ export const SmartBoardKidsProvider = ({ children }) => {
   const [examMaterials, setExamMaterials] = useState({});
   const [smartBookHistory, setSmartBookHistory] = useState([]);
   const [planCompletedActivities, setPlanCompletedActivities] = useState([]);
+  // Active study loop: deck selected in Flashcards → used by Habla con Dani + Examen
+  const [activeStudyDeck, setActiveStudyDeck] = useState(null); // { deckId, title, cards, topic }
+  const [studentGrades, setStudentGrades] = useState([]);
 
   const syncTimeoutRef = useRef(null);
 
@@ -591,6 +594,12 @@ export const SmartBoardKidsProvider = ({ children }) => {
     setSmartBookHistory,
     planCompletedActivities,
     setPlanCompletedActivities,
+
+    // Learning loop
+    activeStudyDeck,
+    setActiveStudyDeck,
+    studentGrades,
+    setStudentGrades,
 
     // Supabase/React Query hooks (for advanced usage)
     supabaseQueries: {
