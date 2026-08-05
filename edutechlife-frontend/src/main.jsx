@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as Sentry from "@sentry/react";
 import App from "./App.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
@@ -29,18 +28,27 @@ const queryClient = new QueryClient({
   },
 });
 
-if (import.meta.env.VITE_SENTRY_DSN) {
-  Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    integrations: [Sentry.browserTracingIntegration()],
-    tracesSampleRate: Number(import.meta.env.VITE_SENTRY_TRACES_RATE) || 0,
-    replaysSessionSampleRate: 0,
-    replaysOnErrorSampleRate: 0,
-    environment: import.meta.env.MODE,
-  });
-}
-
 registerSW();
+
+// Sentry se inicializa después del primer render para no bloquear el LCP
+if (import.meta.env.VITE_SENTRY_DSN) {
+  const initSentry = () =>
+    import("@sentry/react").then(({ init, browserTracingIntegration }) => {
+      init({
+        dsn: import.meta.env.VITE_SENTRY_DSN,
+        integrations: [browserTracingIntegration()],
+        tracesSampleRate: Number(import.meta.env.VITE_SENTRY_TRACES_RATE) || 0,
+        replaysSessionSampleRate: 0,
+        replaysOnErrorSampleRate: 0,
+        environment: import.meta.env.MODE,
+      });
+    });
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(initSentry, { timeout: 3000 });
+  } else {
+    setTimeout(initSentry, 2000);
+  }
+}
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

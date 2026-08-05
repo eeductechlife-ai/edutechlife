@@ -1,20 +1,20 @@
-import { useState, useRef, useEffect, lazy, Suspense } from "react";
+import { useState, lazy, Suspense } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAuthIdentity } from "../../hooks/useAuthIdentity";
 import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { PageLoader } from "../LoadingScreen";
-import ContactModal from "../ContactModal";
-import LeadCaptureModal from "../LeadCaptureModal";
-import AdminLoginModal from "../AdminLoginModal";
 import { ProgressProvider } from "../../context/ProgressContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import ScrollToTop from "./ScrollToTop";
-import MobileDrawer from "./MobileDrawer";
 import HeaderFluidIsland from "./HeaderFluidIsland";
 import FloatingParticles from "../FloatingParticles";
 
-// Lazy load components
+// Heavy components — load on first use, not on initial render
 const GlobalCanvas = lazy(() => import("../GlobalCanvas"));
+const ContactModal = lazy(() => import("../ContactModal"));
+const LeadCaptureModal = lazy(() => import("../LeadCaptureModal"));
+const AdminLoginModal = lazy(() => import("../AdminLoginModal"));
+const MobileDrawer = lazy(() => import("./MobileDrawer"));
 
 const AppLayout = () => {
   const { t } = useTranslation();
@@ -87,17 +87,19 @@ const AppLayout = () => {
         <HeaderFluidIsland onOpenMobileMenu={() => setMobileMenuOpen(true)} />
 
         {(mobileMenuOpen || drawerClosing) && (
-          <MobileDrawer
-            drawerClosing={drawerClosing}
-            onClose={closeDrawer}
-            isSignedIn={isSignedIn}
-            clerkUser={clerkUser}
-            navigate={navigate}
-            navigateToSection={navigateToSection}
-            openContactModal={openContactModal}
-            setShowLeadCaptureModal={setShowLeadCaptureModal}
-            t={t}
-          />
+          <Suspense fallback={null}>
+            <MobileDrawer
+              drawerClosing={drawerClosing}
+              onClose={closeDrawer}
+              isSignedIn={isSignedIn}
+              clerkUser={clerkUser}
+              navigate={navigate}
+              navigateToSection={navigateToSection}
+              openContactModal={openContactModal}
+              setShowLeadCaptureModal={setShowLeadCaptureModal}
+              t={t}
+            />
+          </Suspense>
         )}
 
         {/* Main Content Area */}
@@ -108,19 +110,28 @@ const AppLayout = () => {
           </Suspense>
         </main>
 
-        {/* Modales Globales */}
-        <ContactModal
-          isOpen={showContactModal}
-          onClose={() => setShowContactModal(false)}
-        />
-        <LeadCaptureModal
-          isOpen={showLeadCaptureModal}
-          onClose={() => setShowLeadCaptureModal(false)}
-        />
-        <AdminLoginModal
-          isOpen={adminLoginModalOpen}
-          onClose={() => setAdminLoginModalOpen(false)}
-        />
+        {/* Modales Globales — lazy: no cargan hasta que el usuario los abre */}
+        {showContactModal && (
+          <Suspense fallback={null}>
+            <ContactModal isOpen onClose={() => setShowContactModal(false)} />
+          </Suspense>
+        )}
+        {showLeadCaptureModal && (
+          <Suspense fallback={null}>
+            <LeadCaptureModal
+              isOpen
+              onClose={() => setShowLeadCaptureModal(false)}
+            />
+          </Suspense>
+        )}
+        {adminLoginModalOpen && (
+          <Suspense fallback={null}>
+            <AdminLoginModal
+              isOpen
+              onClose={() => setAdminLoginModalOpen(false)}
+            />
+          </Suspense>
+        )}
       </div>
     </ProgressProvider>
   );
