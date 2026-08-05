@@ -1,50 +1,63 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import SidebarNavigation from '@/components/SidebarNavigation';
-import useStudentProgress from './useStudentProgress';
-import { generateReportData, downloadReport } from './reportGenerator';
-import HomeView from './components/HomeView';
-import MissionsView from './components/MissionsView';
-import SubjectsView from './components/SubjectsView';
-import IALabView from './components/IALabView';
-import ProgressView from './components/ProgressView';
-import ReportModal from './components/ReportModal';
+import React, { useState, useMemo, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import SidebarNavigation from "@/components/SidebarNavigation";
+import useStudentProgress from "./useStudentProgress";
+import { generateReportData, downloadReport } from "./reportGenerator";
+import HomeView from "./components/HomeView";
+import MissionsView from "./components/MissionsView";
+import SubjectsView from "./components/SubjectsView";
+import IALabView from "./components/IALabView";
+import ProgressView from "./components/ProgressView";
+import ReportModal from "./components/ReportModal";
 
 const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
-  const [activeTab, setActiveTab] = useState('inicio');
+  const [activeTab, setActiveTab] = useState("inicio");
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportData, setReportData] = useState(null);
 
   const {
-    userXP, setUserXP, userLevel, streakDays,
-    missions, subjects, studentData, sessionStartRef,
+    userXP,
+    setUserXP,
+    userLevel,
+    streakDays,
+    missions,
+    subjects,
+    studentData,
+    sessionStartRef,
     trackInteraction,
-    handleMissionStart, handleMissionComplete
+    handleMissionStart,
+    handleMissionComplete,
   } = useStudentProgress();
 
-  const handleSubjectClick = useCallback((subject) => {
-    if (!subject.locked) {
-      trackInteraction('topicsExplored', [...(studentData.topicsExplored || []), subject.name]);
-      setActiveTab('materias');
-    }
-  }, [trackInteraction, studentData.topicsExplored]);
+  const handleSubjectClick = useCallback(
+    (subject) => {
+      if (!subject.locked) {
+        trackInteraction("topicsExplored", [
+          ...(studentData.topicsExplored || []),
+          subject.name,
+        ]);
+        setActiveTab("materias");
+      }
+    },
+    [trackInteraction, studentData.topicsExplored],
+  );
 
   const generateStudentReport = useCallback(() => {
     const data = generateReportData({
-      studentName: 'Estudiante',
+      studentName: "Estudiante",
       studentData,
       userXP,
       userLevel,
       streakDays,
       subjects,
-      sessionStartRef
+      sessionStartRef,
     });
     setReportData(data);
     setShowReportModal(true);
   }, [studentData, userXP, userLevel, streakDays, subjects, sessionStartRef]);
 
   const downloadStudentReport = useCallback(() => {
-    downloadReport({ reportData, studentName: 'Estudiante', subjects });
+    downloadReport({ reportData, studentName: "Estudiante", subjects });
   }, [reportData, subjects]);
 
   const renderActiveView = useMemo(() => {
@@ -76,9 +89,7 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
           onNavigate={setActiveTab}
         />
       ),
-      'lab-ia': (
-        <IALabView onNavigate={onNavigate} />
-      ),
+      "lab-ia": <IALabView onNavigate={onNavigate} />,
       progreso: (
         <ProgressView
           userXP={userXP}
@@ -93,9 +104,18 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
 
     return views[activeTab] || views.inicio;
   }, [
-    activeTab, missions, subjects, userLevel, userXP, streakDays, studentData,
-    handleMissionStart, handleMissionComplete, handleSubjectClick,
-    generateStudentReport, onNavigate
+    activeTab,
+    missions,
+    subjects,
+    userLevel,
+    userXP,
+    streakDays,
+    studentData,
+    handleMissionStart,
+    handleMissionComplete,
+    handleSubjectClick,
+    generateStudentReport,
+    onNavigate,
   ]);
 
   return (
@@ -109,6 +129,7 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
             activeTab={activeTab}
             onTabChange={setActiveTab}
             onNavigate={onNavigate}
+            onRouteNavigate={onNavigate}
             onLogout={onLogout}
           />
         </div>
@@ -122,7 +143,10 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  transition={{
+                    duration: 0.25,
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                  }}
                 >
                   {renderActiveView}
                 </motion.div>
@@ -130,7 +154,6 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
             </div>
           </div>
         </div>
-
       </div>
 
       <ReportModal

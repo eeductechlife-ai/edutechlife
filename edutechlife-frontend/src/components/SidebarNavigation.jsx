@@ -89,7 +89,7 @@ const TabButton = memo(({ tab, isActive, onClick }) => {
 TabButton.displayName = "TabButton";
 
 const SidebarNavigation = memo(
-  ({ activeTab, onTabChange, onNavigate, onLogout }) => {
+  ({ activeTab, onTabChange, onNavigate, onRouteNavigate, onLogout }) => {
     const { t } = useTranslation();
     const [hoveredTab, setHoveredTab] = useState(null);
 
@@ -271,7 +271,7 @@ const SidebarNavigation = memo(
           </div>
 
           <motion.button
-            onClick={() => onNavigate?.("/smartboard/padres")}
+            onClick={() => onRouteNavigate?.("/smartboard/padres")}
             className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#4DA8C4]/10 border border-[#4DA8C4]/30 rounded-xl hover:bg-[#4DA8C4]/20 transition-all duration-300"
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.99 }}
