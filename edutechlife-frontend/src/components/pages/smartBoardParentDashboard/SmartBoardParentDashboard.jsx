@@ -228,7 +228,7 @@ const SmartBoardParentDashboard = () => {
         title={t("seo.smartboard_parents.title")}
         description={t("seo.smartboard_parents.desc")}
       />
-      <div className="min-h-screen bg-[#F8FAFC] border-t-4 border-[#004B63]">
+      <div className="min-h-screen bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] border-t-4 border-[#004B63]">
         <div className="max-w-6xl mx-auto p-4 md:p-8">
           {/* Header */}
           <motion.div

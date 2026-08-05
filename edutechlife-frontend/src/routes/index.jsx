@@ -313,11 +313,13 @@ const AppRoutes = () => {
         <Route
           path="smartboard/padres"
           element={
-            <SectionErrorBoundary name="SmartBoardParentDashboard">
-              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-                <SmartBoardParentDashboard />
-              </Suspense>
-            </SectionErrorBoundary>
+            <RoleProtectedRoute requiredRole="smartboard">
+              <SectionErrorBoundary name="SmartBoardParentDashboard">
+                <Suspense fallback={<SmartBoardSkeleton />}>
+                  <SmartBoardParentDashboard />
+                </Suspense>
+              </SectionErrorBoundary>
+            </RoleProtectedRoute>
           }
         />
 
