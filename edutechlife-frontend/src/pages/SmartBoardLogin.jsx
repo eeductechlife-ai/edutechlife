@@ -4,7 +4,9 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User, Loader2, Eye, EyeOff, Users } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com";
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://edutechlife-backend.onrender.com";
 
 const SmartBoardLogin = () => {
   const navigate = useNavigate();
@@ -61,7 +63,10 @@ const SmartBoardLogin = () => {
       localStorage.setItem("refresh_token", data.refreshToken);
       localStorage.setItem("user_role", "parent");
       localStorage.setItem("student_email", data.user.studentEmail);
-      localStorage.setItem("parent_name", `${data.user.firstName} ${data.user.lastName}`.trim());
+      localStorage.setItem(
+        "parent_name",
+        `${data.user.firstName} ${data.user.lastName}`.trim(),
+      );
       navigate("/smartboard");
     } catch (err) {
       setError(err.message);
@@ -87,7 +92,11 @@ const SmartBoardLogin = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error al crear cuenta");
       setSuccess(data.message || "Cuenta creada. Ahora puedes iniciar sesión.");
-      setParentForm({ studentEmail: parentForm.studentEmail, parentPassword: "", parentName: "" });
+      setParentForm({
+        studentEmail: parentForm.studentEmail,
+        parentPassword: "",
+        parentName: "",
+      });
       setTimeout(() => setMode("parent"), 2000);
     } catch (err) {
       setError(err.message);
@@ -115,7 +124,13 @@ const SmartBoardLogin = () => {
           lastName: formData.lastName,
         });
         setSuccess("Cuenta creada. Revisa tu email para confirmar.");
-        setFormData({ email: "", password: "", username: "", firstName: "", lastName: "" });
+        setFormData({
+          email: "",
+          password: "",
+          username: "",
+          firstName: "",
+          lastName: "",
+        });
         setTimeout(() => setMode("login"), 2000);
       }
     } catch (e) {
@@ -159,7 +174,11 @@ const SmartBoardLogin = () => {
           {/* Tabs — Estudiante / Padre */}
           <div className="flex gap-2 mb-5">
             <button
-              onClick={() => { setMode("login"); setError(""); setSuccess(""); }}
+              onClick={() => {
+                setMode("login");
+                setError("");
+                setSuccess("");
+              }}
               className={`flex-1 py-2 px-3 rounded-lg font-semibold text-sm transition-all ${
                 mode === "login" || mode === "signup"
                   ? "bg-[#0077B6] text-white shadow"
@@ -169,10 +188,14 @@ const SmartBoardLogin = () => {
               Soy Estudiante
             </button>
             <button
-              onClick={() => { setMode("parent"); setError(""); setSuccess(""); }}
+              onClick={() => {
+                setMode("parent");
+                setError("");
+                setSuccess("");
+              }}
               className={`flex-1 py-2 px-3 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-1.5 ${
                 mode === "parent" || mode === "parent-register"
-                  ? "bg-purple-600 text-white shadow"
+                  ? "bg-[#004B63] text-white shadow"
                   : "bg-gray-100 text-gray-600 hover:text-gray-900"
               }`}
             >
@@ -185,17 +208,27 @@ const SmartBoardLogin = () => {
           {(mode === "login" || mode === "signup") && (
             <div className="flex gap-2 mb-5 bg-gray-100 p-1 rounded-lg">
               <button
-                onClick={() => { setMode("login"); setError(""); }}
+                onClick={() => {
+                  setMode("login");
+                  setError("");
+                }}
                 className={`flex-1 py-1.5 px-3 rounded text-xs font-semibold transition-all ${
-                  mode === "login" ? "bg-white text-[#0077B6] shadow-sm" : "text-gray-500"
+                  mode === "login"
+                    ? "bg-white text-[#0077B6] shadow-sm"
+                    : "text-gray-500"
                 }`}
               >
                 Iniciar Sesión
               </button>
               <button
-                onClick={() => { setMode("signup"); setError(""); }}
+                onClick={() => {
+                  setMode("signup");
+                  setError("");
+                }}
                 className={`flex-1 py-1.5 px-3 rounded text-xs font-semibold transition-all ${
-                  mode === "signup" ? "bg-white text-[#0077B6] shadow-sm" : "text-gray-500"
+                  mode === "signup"
+                    ? "bg-white text-[#0077B6] shadow-sm"
+                    : "text-gray-500"
                 }`}
               >
                 Crear Cuenta
@@ -205,19 +238,29 @@ const SmartBoardLogin = () => {
 
           {/* Parent sub-tabs */}
           {(mode === "parent" || mode === "parent-register") && (
-            <div className="flex gap-2 mb-5 bg-purple-50 p-1 rounded-lg">
+            <div className="flex gap-2 mb-5 bg-[#E8F7FB] p-1 rounded-lg">
               <button
-                onClick={() => { setMode("parent"); setError(""); }}
+                onClick={() => {
+                  setMode("parent");
+                  setError("");
+                }}
                 className={`flex-1 py-1.5 px-3 rounded text-xs font-semibold transition-all ${
-                  mode === "parent" ? "bg-white text-purple-700 shadow-sm" : "text-purple-500"
+                  mode === "parent"
+                    ? "bg-white text-[#004B63] shadow-sm"
+                    : "text-[#4DA8C4]"
                 }`}
               >
                 Iniciar Sesión
               </button>
               <button
-                onClick={() => { setMode("parent-register"); setError(""); }}
+                onClick={() => {
+                  setMode("parent-register");
+                  setError("");
+                }}
                 className={`flex-1 py-1.5 px-3 rounded text-xs font-semibold transition-all ${
-                  mode === "parent-register" ? "bg-white text-purple-700 shadow-sm" : "text-purple-500"
+                  mode === "parent-register"
+                    ? "bg-white text-[#004B63] shadow-sm"
+                    : "text-[#4DA8C4]"
                 }`}
               >
                 Registrarse
@@ -269,7 +312,9 @@ const SmartBoardLogin = () => {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">Nombre</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Nombre
+                      </label>
                       <input
                         type="text"
                         name="firstName"
@@ -280,7 +325,9 @@ const SmartBoardLogin = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">Apellido</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Apellido
+                      </label>
                       <input
                         type="text"
                         name="lastName"
@@ -295,7 +342,9 @@ const SmartBoardLogin = () => {
               )}
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Correo Electrónico</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Correo Electrónico
+                </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                   <input
@@ -311,7 +360,9 @@ const SmartBoardLogin = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Contraseña</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Contraseña
+                </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                   <input
@@ -328,11 +379,17 @@ const SmartBoardLogin = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
                   </button>
                 </div>
                 {mode === "signup" && (
-                  <p className="text-xs text-gray-500 mt-1">Mínimo 6 caracteres</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Mínimo 6 caracteres
+                  </p>
                 )}
               </div>
 
@@ -352,7 +409,7 @@ const SmartBoardLogin = () => {
           {/* ── PARENT LOGIN FORM ── */}
           {mode === "parent" && (
             <form onSubmit={handleParentLogin} className="space-y-4">
-              <div className="bg-purple-50 rounded-xl p-3 text-xs text-purple-700 mb-2">
+              <div className="bg-[#E8F7FB] rounded-xl p-3 text-xs text-[#004B63] mb-2">
                 Ingresa el correo de tu hijo/a y tu contraseña de padre/madre.
               </div>
               <div>
@@ -367,7 +424,7 @@ const SmartBoardLogin = () => {
                     value={parentForm.studentEmail}
                     onChange={handleParentChange}
                     placeholder="correo-de-tu-hijo@email.com"
-                    className="w-full pl-10 pr-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-[#4DA8C4]/30 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
                     required
                   />
                 </div>
@@ -384,7 +441,7 @@ const SmartBoardLogin = () => {
                     value={parentForm.parentPassword}
                     onChange={handleParentChange}
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-10 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                    className="w-full pl-10 pr-10 py-2 border border-[#4DA8C4]/30 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
                     required
                   />
                   <button
@@ -392,7 +449,11 @@ const SmartBoardLogin = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -401,7 +462,7 @@ const SmartBoardLogin = () => {
                 disabled={parentLoading}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full py-2.5 bg-gradient-to-r from-purple-600 to-purple-400 text-white font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {parentLoading && <Loader2 className="w-4 h-4 animate-spin" />}
                 Entrar como Padre/Madre
@@ -410,8 +471,11 @@ const SmartBoardLogin = () => {
                 ¿Aún no tienes cuenta de padre?{" "}
                 <button
                   type="button"
-                  onClick={() => { setMode("parent-register"); setError(""); }}
-                  className="text-purple-600 font-semibold hover:underline"
+                  onClick={() => {
+                    setMode("parent-register");
+                    setError("");
+                  }}
+                  className="text-[#004B63] font-semibold hover:underline"
                 >
                   Regístrate aquí
                 </button>
@@ -422,8 +486,9 @@ const SmartBoardLogin = () => {
           {/* ── PARENT REGISTER FORM ── */}
           {mode === "parent-register" && (
             <form onSubmit={handleParentRegister} className="space-y-4">
-              <div className="bg-purple-50 rounded-xl p-3 text-xs text-purple-700 mb-2">
-                Crea tu acceso de padre/madre usando el correo de tu hijo/a. Elige una contraseña diferente a la del estudiante.
+              <div className="bg-[#E8F7FB] rounded-xl p-3 text-xs text-[#004B63] mb-2">
+                Crea tu acceso de padre/madre usando el correo de tu hijo/a.
+                Elige una contraseña diferente a la del estudiante.
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -437,7 +502,7 @@ const SmartBoardLogin = () => {
                     value={parentForm.parentName}
                     onChange={handleParentChange}
                     placeholder="ej: María García"
-                    className="w-full pl-10 pr-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-[#4DA8C4]/30 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
                   />
                 </div>
               </div>
@@ -453,7 +518,7 @@ const SmartBoardLogin = () => {
                     value={parentForm.studentEmail}
                     onChange={handleParentChange}
                     placeholder="correo-de-tu-hijo@email.com"
-                    className="w-full pl-10 pr-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-[#4DA8C4]/30 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
                     required
                   />
                 </div>
@@ -470,7 +535,7 @@ const SmartBoardLogin = () => {
                     value={parentForm.parentPassword}
                     onChange={handleParentChange}
                     placeholder="Diferente a la del estudiante"
-                    className="w-full pl-10 pr-10 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                    className="w-full pl-10 pr-10 py-2 border border-[#4DA8C4]/30 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
                     required
                   />
                   <button
@@ -478,17 +543,23 @@ const SmartBoardLogin = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
                   </button>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Mínimo 6 caracteres</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Mínimo 6 caracteres
+                </p>
               </div>
               <motion.button
                 type="submit"
                 disabled={parentLoading}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full py-2.5 bg-gradient-to-r from-purple-600 to-purple-400 text-white font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {parentLoading && <Loader2 className="w-4 h-4 animate-spin" />}
                 Crear mi Cuenta de Padre/Madre

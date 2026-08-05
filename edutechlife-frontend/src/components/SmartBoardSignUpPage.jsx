@@ -261,7 +261,7 @@ const SmartBoardSignUpPage = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="lg:w-2/5 bg-gradient-to-br from-[#7B2FF7] to-[#9D4EDD] p-8 lg:p-12 text-white flex flex-col justify-between"
+                  className="lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] p-8 lg:p-12 text-white flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center gap-3 mb-8">
@@ -357,7 +357,7 @@ const SmartBoardSignUpPage = () => {
                   onClick={() => switchUserType("parent")}
                   className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-sm font-bold transition-all duration-200 ${
                     isParentMode
-                      ? "bg-purple-600 text-white shadow-md"
+                      ? "bg-[#004B63] text-white shadow-md"
                       : "text-gray-500 hover:text-gray-700"
                   }`}
                 >
@@ -476,7 +476,7 @@ const SmartBoardSignUpPage = () => {
                     className="w-full flex flex-col items-center"
                   >
                     {/* Parent sub-tabs */}
-                    <div className="flex bg-purple-50 rounded-xl p-1 mb-5 w-full max-w-sm gap-1">
+                    <div className="flex bg-[#E8F7FB] rounded-xl p-1 mb-5 w-full max-w-sm gap-1">
                       <button
                         onClick={() => {
                           setParentMode("login");
@@ -484,8 +484,8 @@ const SmartBoardSignUpPage = () => {
                         }}
                         className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all ${
                           parentMode === "login"
-                            ? "bg-white text-purple-700 shadow-sm"
-                            : "text-purple-400 hover:text-purple-600"
+                            ? "bg-white text-[#004B63] shadow-sm"
+                            : "text-[#4DA8C4] hover:text-[#004B63]"
                         }`}
                       >
                         <LogIn className="w-4 h-4" />
@@ -498,8 +498,8 @@ const SmartBoardSignUpPage = () => {
                         }}
                         className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all ${
                           parentMode === "register"
-                            ? "bg-white text-purple-700 shadow-sm"
-                            : "text-purple-400 hover:text-purple-600"
+                            ? "bg-white text-[#004B63] shadow-sm"
+                            : "text-[#4DA8C4] hover:text-[#004B63]"
                         }`}
                       >
                         <UserPlus className="w-4 h-4" />
@@ -508,12 +508,12 @@ const SmartBoardSignUpPage = () => {
                     </div>
 
                     <div className="mb-4 text-center w-full">
-                      <h3 className="text-xl font-bold text-purple-700 mb-1">
+                      <h3 className="text-xl font-bold text-[#004B63] mb-1">
                         {parentMode === "login"
                           ? "Acceso para Padres y Madres"
                           : "Crear cuenta de Padre/Madre"}
                       </h3>
-                      <p className="text-purple-400 text-sm">
+                      <p className="text-[#4DA8C4] text-sm">
                         {parentMode === "login"
                           ? "Usa el correo de tu hijo/a con tu propia contraseña"
                           : "Tu cuenta se vincula al correo del estudiante"}
@@ -552,7 +552,7 @@ const SmartBoardSignUpPage = () => {
                           transition={{ duration: 0.2 }}
                           className="w-full max-w-sm space-y-4"
                         >
-                          <div className="bg-purple-50 rounded-xl p-3 text-xs text-purple-600">
+                          <div className="bg-[#E8F7FB] rounded-xl p-3 text-xs text-[#4DA8C4]">
                             Ingresa el correo de tu hijo/a y tu contraseña
                             personal de padre/madre.
                           </div>
@@ -568,7 +568,7 @@ const SmartBoardSignUpPage = () => {
                                 value={parentForm.studentEmail}
                                 onChange={handleParentChange}
                                 placeholder="correo-de-tu-hijo@email.com"
-                                className="w-full pl-10 pr-4 py-2.5 border border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent text-sm"
+                                className="w-full pl-10 pr-4 py-2.5 border border-[#4DA8C4]/30 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent text-sm"
                                 required
                               />
                             </div>
@@ -585,7 +585,7 @@ const SmartBoardSignUpPage = () => {
                                 value={parentForm.parentPassword}
                                 onChange={handleParentChange}
                                 placeholder="••••••••"
-                                className="w-full pl-10 pr-10 py-2.5 border border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent text-sm"
+                                className="w-full pl-10 pr-10 py-2.5 border border-[#4DA8C4]/30 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent text-sm"
                                 required
                               />
                               <button
@@ -606,7 +606,7 @@ const SmartBoardSignUpPage = () => {
                             disabled={parentLoading}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-full py-3 bg-gradient-to-r from-purple-700 to-purple-500 text-white font-bold rounded-xl shadow hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                            className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold rounded-xl shadow hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                           >
                             {parentLoading && (
                               <Loader2 className="w-4 h-4 animate-spin" />
@@ -627,7 +627,7 @@ const SmartBoardSignUpPage = () => {
                           transition={{ duration: 0.2 }}
                           className="w-full max-w-sm space-y-4"
                         >
-                          <div className="bg-purple-50 rounded-xl p-3 text-xs text-purple-600">
+                          <div className="bg-[#E8F7FB] rounded-xl p-3 text-xs text-[#4DA8C4]">
                             Crea tu acceso usando el correo de tu hijo/a. Elige
                             una contraseña diferente a la del estudiante.
                           </div>
@@ -643,7 +643,7 @@ const SmartBoardSignUpPage = () => {
                                 value={parentForm.parentName}
                                 onChange={handleParentChange}
                                 placeholder="ej: María García"
-                                className="w-full pl-10 pr-4 py-2.5 border border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent text-sm"
+                                className="w-full pl-10 pr-4 py-2.5 border border-[#4DA8C4]/30 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent text-sm"
                               />
                             </div>
                           </div>
@@ -659,7 +659,7 @@ const SmartBoardSignUpPage = () => {
                                 value={parentForm.studentEmail}
                                 onChange={handleParentChange}
                                 placeholder="correo-de-tu-hijo@email.com"
-                                className="w-full pl-10 pr-4 py-2.5 border border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent text-sm"
+                                className="w-full pl-10 pr-4 py-2.5 border border-[#4DA8C4]/30 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent text-sm"
                                 required
                               />
                             </div>
@@ -676,7 +676,7 @@ const SmartBoardSignUpPage = () => {
                                 value={parentForm.parentPassword}
                                 onChange={handleParentChange}
                                 placeholder="Diferente a la del estudiante"
-                                className="w-full pl-10 pr-10 py-2.5 border border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-transparent text-sm"
+                                className="w-full pl-10 pr-10 py-2.5 border border-[#4DA8C4]/30 rounded-xl focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent text-sm"
                                 required
                               />
                               <button
@@ -700,7 +700,7 @@ const SmartBoardSignUpPage = () => {
                             disabled={parentLoading}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-full py-3 bg-gradient-to-r from-purple-700 to-purple-500 text-white font-bold rounded-xl shadow hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                            className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold rounded-xl shadow hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                           >
                             {parentLoading && (
                               <Loader2 className="w-4 h-4 animate-spin" />
