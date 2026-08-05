@@ -4,7 +4,6 @@ import {
   GraduationCap,
   Flame,
   Gem,
-  Users,
   LogOut,
   Lock,
   Star,
@@ -276,25 +275,10 @@ const PremiumSidebar = memo(
           })}
         </nav>
 
-        {/* Parents + Logout */}
+        {/* Logout */}
         <div
           className={`p-3 border-t space-y-1 ${darkMode ? "border-[#2A3A54]/60" : "border-[#E2E8F0]/70"}`}
         >
-          <motion.button
-            onClick={() => onNavigate?.("/smartboard/padres")}
-            whileHover={{ x: 3 }}
-            whileTap={{ scale: 0.98 }}
-            className={`w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-2xl text-sm font-semibold transition-all ${
-              darkMode
-                ? "text-[#94A3B8] hover:bg-[#1E293B]/70"
-                : "text-[#475569] hover:bg-[#F1F5F9]"
-            }`}
-          >
-            <span className="w-8 h-8 rounded-xl flex items-center justify-center bg-gradient-to-br from-[#9D4EDD]/15 to-[#C77DFF]/15 text-[#9D4EDD]">
-              <Users className="w-[18px] h-[18px]" strokeWidth={2.3} />
-            </span>
-            <span>{t("smartboard.tab_parents")}</span>
-          </motion.button>
           <motion.button
             onClick={onLogout}
             whileTap={{ scale: 0.98 }}

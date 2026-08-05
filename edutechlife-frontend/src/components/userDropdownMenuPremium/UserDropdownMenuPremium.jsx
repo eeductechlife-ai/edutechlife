@@ -1,4 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuthIdentity, signOutUser } from "../../hooks/useAuthIdentity";
 import { useStudentProfile } from "../../hooks/useStudentProfile";
 import {
@@ -23,6 +24,7 @@ const StudyPlannerModal = lazy(() => import("../IALab/StudyPlannerModal"));
 
 const UserDropdownMenuPremium = ({ onNavigate }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -49,10 +51,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
 
   const handleLogout = async () => {
     try {
-      signOutUser("/");
-      if (onNavigate) {
-        onNavigate("landing");
-      }
+      signOutUser("/", navigate);
     } catch (error) {
       console.error(t("modals.settings.logout_error"), error);
     }
@@ -88,9 +87,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
         variant="ghost"
         className="relative h-10 w-10 rounded-full p-0"
         aria-label={t("modals.settings.unauthenticated_aria")}
-        onClick={() => {
-          window.location.href = "/login";
-        }}
+        onClick={() => navigate("/login")}
       >
         <Avatar className="h-10 w-10 border-2 border-white">
           <AvatarFallback className="bg-slate-100 text-slate-400">
@@ -119,7 +116,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
         variant="ghost"
         className="relative h-10 w-10 rounded-full p-0 hover:bg-cyan-50"
         aria-label={t("modals.settings.sign_in_aria")}
-        onClick={() => (window.location.href = "/login")}
+        onClick={() => navigate("/login")}
       >
         <Avatar className="h-10 w-10 border-2 border-white">
           <AvatarFallback className="bg-gradient-to-br from-slate-400 to-slate-600 text-white">

@@ -133,12 +133,12 @@ export default {
         },
       },
         fontFamily: {
-         sans: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
+         sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
          display: ['Montserrat', 'system-ui', '-apple-system', 'sans-serif'],
-         body: ['Inter', 'Geist', 'system-ui', '-apple-system', 'sans-serif'],
-         mono: ['JetBrains Mono', 'SF Mono', 'Monaco', 'monospace'],
-         inter: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-         geist: ['Geist', 'system-ui', '-apple-system', 'sans-serif'],
+         body: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+         mono: ['JetBrains Mono', 'SF Mono', 'Monaco', 'Consolas', 'monospace'],
+         inter: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+         geist: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
        },
       backgroundColor: {
         petroleum: 'var(--color-petroleum)',

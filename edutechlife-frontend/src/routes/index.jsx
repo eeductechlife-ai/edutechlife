@@ -68,6 +68,7 @@ const SmartBoardStatsPage = lazy(
 const SmartBoardConsentGate = lazy(
   () => import("../components/kids-dashboard/SmartBoardConsentGate"),
 );
+const SmartBoardLogin = lazy(() => import("../pages/SmartBoardLogin"));
 const IALabDashboard = lazy(() => import("../components/IALab/IALabDashboard"));
 const PublicProfilePage = lazy(
   () => import("../components/userProfilePublic/PublicProfilePage"),
@@ -301,13 +302,24 @@ const AppRoutes = () => {
         />
 
         <Route
+          path="smartboard/login"
+          element={
+            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+              <SmartBoardLogin />
+            </Suspense>
+          }
+        />
+
+        <Route
           path="smartboard/padres"
           element={
-            <SectionErrorBoundary name="SmartBoardParentDashboard">
-              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-                <SmartBoardParentDashboard />
-              </Suspense>
-            </SectionErrorBoundary>
+            <RoleProtectedRoute requiredRole="smartboard">
+              <SectionErrorBoundary name="SmartBoardParentDashboard">
+                <Suspense fallback={<SmartBoardSkeleton />}>
+                  <SmartBoardParentDashboard />
+                </Suspense>
+              </SectionErrorBoundary>
+            </RoleProtectedRoute>
           }
         />
 

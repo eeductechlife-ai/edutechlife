@@ -60,7 +60,7 @@ const HeroSection = memo(() => {
       initial={{ opacity: 0, y: -40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="relative overflow-hidden rounded-[2rem] p-8 md:p-12"
+      className="relative overflow-hidden rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-12"
       style={{
         background: SB_GRADIENTS.hero,
         boxShadow: `${glow(SB_COLORS.primary, 0.4)}, 0 24px 60px -20px rgba(0,48,63,0.55)`,

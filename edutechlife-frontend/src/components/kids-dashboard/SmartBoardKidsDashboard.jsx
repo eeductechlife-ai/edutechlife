@@ -7,6 +7,8 @@ import { useTranslation } from "../../i18n/I18nProvider";
 import "../../styles/a11y.css";
 import ParticlesBackground from "./ParticlesBackground";
 import DaniTutorChat from "./daniTutorChat";
+import DaniFAB from "./DaniFAB";
+import OnboardingGuide from "./OnboardingGuide";
 import PremiumSidebar from "./components/PremiumSidebar";
 import MobileBottomBar from "./components/MobileBottomBar";
 import CinematicContent from "./components/CinematicContent";
@@ -47,12 +49,19 @@ const SmartBoardKidsDashboard = () => {
   const [searchParams] = useSearchParams();
 
   const handleLogout = useCallback(() => {
-    signOutUser("/");
-    navigate("/");
+    signOutUser("/", navigate);
   }, [navigate]);
 
   const handleDaniOpen = useCallback(() => setIsDaniOpen(true), []);
   const handleDaniClose = useCallback(() => setIsDaniOpen(false), []);
+
+  // Obtener auth token y nombre del estudiante para UserMenu
+  const authToken =
+    typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+  const studentName =
+    typeof window !== "undefined"
+      ? localStorage.getItem("student_name") || "Estudiante"
+      : "Estudiante";
 
   // Proactive Dani reminder after inactivity
   useEffect(() => {
@@ -232,7 +241,8 @@ const SmartBoardKidsDashboard = () => {
             darkMode={darkMode}
             streak={streak}
             totalPoints={totalPoints}
-            onDaniOpen={handleDaniOpen}
+            authToken={authToken}
+            studentName={studentName}
           />
 
           {/* Scrollable Content */}
@@ -297,8 +307,19 @@ const SmartBoardKidsDashboard = () => {
         subscriptionTier={subscriptionTier}
       />
 
+      {/* DaniFAB - Floating Action Button */}
+      <DaniFAB
+        isDaniOpen={isDaniOpen}
+        onDaniOpen={handleDaniOpen}
+        darkMode={darkMode}
+        unreadCount={0}
+      />
+
+      {/* Onboarding Guide - First Time User Experience */}
+      <OnboardingGuide />
+
       {/* Data Rights - Floating Action (GDPR-K / COPPA) */}
-      <div className="fixed bottom-20 md:bottom-6 right-6 z-40 flex flex-col gap-2">
+      <div className="fixed bottom-20 md:bottom-6 right-6 z-30 flex flex-col gap-2">
         <motion.button
           onClick={async () => {
             if (
@@ -333,7 +354,8 @@ const SmartBoardKidsDashboard = () => {
               // Solo limpiamos el dispositivo si el servidor confirmó el borrado.
               if (res.ok) {
                 localStorage.clear();
-                window.location.href = "/";
+                window.dispatchEvent(new CustomEvent("auth:signout"));
+                navigate("/", { replace: true });
               } else {
                 alert(
                   "No pudimos eliminar tus datos en el servidor. Intenta de nuevo o contacta soporte.",

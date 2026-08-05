@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 // ==========================================
 const ParticlesBackground = memo(
   ({
-    count = 30,
+    count = 10,
     colors = ["#4DA8C4", "#66CCCC", "#FFD166", "#FF6B9D", "#B2D8E5"],
   }) => {
     const prefersReducedMotion = useReducedMotion();

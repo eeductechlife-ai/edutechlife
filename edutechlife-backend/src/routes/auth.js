@@ -11,9 +11,9 @@ const OAUTH_PROVIDERS = {
     userUrl: 'https://www.googleapis.com/oauth2/v2/userinfo',
   },
   facebook: {
-    authUrl: 'https://www.facebook.com/v18.0/dialog/oauth',
-    tokenUrl: 'https://graph.facebook.com/v18.0/oauth/access_token',
-    userUrl: 'https://graph.facebook.com/v18.0/me',
+    authUrl: 'https://www.facebook.com/v21.0/dialog/oauth',
+    tokenUrl: 'https://graph.facebook.com/v21.0/oauth/access_token',
+    userUrl: 'https://graph.facebook.com/v21.0/me',
   },
 };
 
@@ -200,218 +200,7 @@ router.post('/sync-user', async (req, res) => {
   }
 });
 
-/**
- * POST /api/auth/register
- * Register a new user directly (Supabase Auth + users table)
- *
- * Body:
- * {
- *   email: string (required)
- *   password: string (required)
- *   first_name: string
- *   last_name: string
- *   username: string
- *   phone_number: string
- *   user_type: string
- *   platform: string
- *   age_range: string
- *   registration_source: string
- * }
- */
-router.post('/register', async (req, res) => {
-  try {
-    const {
-      email,
-      password,
-      first_name,
-      last_name,
-      username,
-      phone_number,
-      user_type,
-      platform,
-      age_range,
-      registration_source,
-    } = req.body;
 
-    // Validate required fields
-    if (!email || !password) {
-      return res.status(400).json({
-        error: 'Missing required fields: email and password',
-      });
-    }
-
-    // Create user in Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.admin
-      .createUser({
-        email,
-        password,
-        email_confirm: true, // Auto-confirm email
-      });
-
-    if (authError) {
-      console.error('Auth creation error:', authError);
-      // Handle duplicate email specifically
-      const msg = (authError.message || '').toLowerCase();
-      if (msg.includes('already') || msg.includes('registered') || msg.includes('exists')) {
-        return res.status(409).json({
-          error: 'email_already_registered',
-          message: 'Este correo ya está registrado. Por favor, inicia sesión.',
-        });
-      }
-      return res.status(400).json({
-        error: 'signup_failed',
-        message: authError.message || 'Failed to create user',
-      });
-    }
-
-    const userId = authData.user.id;
-
-    // Persist the profile row in Supabase.
-    const profile = await ensureProfileRow(userId, email, {
-      first_name,
-      last_name,
-      username,
-      phone_number,
-      user_type,
-      platform,
-      age_range,
-      registration_source,
-    });
-
-    // Sign the new user straight in so registration lands them in IALab
-    // instead of bouncing them back to the login screen.
-    let accessToken = authData.session?.access_token || null;
-    if (!accessToken) {
-      const { data: signInData } = await supabase.auth.signInWithPassword({
-        email: String(email).toLowerCase(),
-        password,
-      });
-      accessToken = signInData?.session?.access_token || null;
-    }
-
-    req.log.info('User registered', {
-      userId,
-      email,
-      platform,
-      profileCreated: !!profile,
-    });
-
-    res.status(201).json({
-      success: true,
-      message: 'User registered successfully',
-      user: {
-        id: userId,
-        email,
-        first_name,
-        last_name,
-        username: profile?.username || username,
-      },
-      access_token: accessToken,
-    });
-  } catch (err) {
-    console.error('Register error:', err);
-    req.log.error('Unexpected error in auth register', { error: err.message });
-
-    res.status(500).json({
-      error: 'Internal server error',
-      message: err.message,
-    });
-  }
-});
-
-/**
- * POST /api/auth/login
- * Log in a user with email + password (Supabase Auth)
- *
- * Body: { email: string (required), password: string (required) }
- * Returns: { success, token, email, user }
- */
-router.post('/login', async (req, res) => {
-  try {
-    // `email` may carry either an email address or a username.
-    const { email: identifier, password } = req.body;
-
-    if (!identifier || !password) {
-      return res.status(400).json({
-        error: 'missing_fields',
-        message: 'Correo o usuario y contraseña son requeridos.',
-      });
-    }
-
-    const email = await resolveEmailFromIdentifier(identifier);
-
-    if (!email) {
-      // Unknown username. Same generic answer as a wrong password so we do not
-      // leak which accounts exist.
-      return res.status(401).json({
-        error: 'invalid_credentials',
-        message: 'Correo o contraseña incorrectos.',
-      });
-    }
-
-    // Authenticate against Supabase Auth
-    const { data: signInData, error: signInError } =
-      await supabase.auth.signInWithPassword({ email, password });
-
-    if (signInError || !signInData?.session) {
-      const msg = (signInError?.message || '').toLowerCase();
-      // Distinguish unconfirmed email from wrong credentials
-      if (msg.includes('confirm')) {
-        return res.status(403).json({
-          error: 'email_not_confirmed',
-          message: 'Debes confirmar tu correo antes de iniciar sesión.',
-        });
-      }
-
-      // If the account was created through OAuth it has no password set,
-      // so password sign-in can never succeed. Tell the user which button to use.
-      try {
-        const { data: list } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
-        const authUser = list?.users?.find(
-          (u) => (u.email || '').toLowerCase() === email
-        );
-        const oauthProvider = authUser?.user_metadata?.provider;
-        if (authUser && oauthProvider) {
-          return res.status(409).json({
-            error: 'oauth_account',
-            provider: oauthProvider,
-            message: `Esta cuenta se creó con ${oauthProvider}. Inicia sesión con ese botón, o restablece tu contraseña.`,
-          });
-        }
-      } catch (e) {
-        /* non-blocking: fall through to generic error */
-      }
-
-      return res.status(401).json({
-        error: 'invalid_credentials',
-        message: 'Correo o contraseña incorrectos.',
-      });
-    }
-
-    // Self-heal: older accounts may have no profile row.
-    const profile = await ensureProfileRow(signInData.user.id, email, {
-      first_name: signInData.user.user_metadata?.first_name,
-      last_name: signInData.user.user_metadata?.last_name,
-      registration_source: 'backfill_login',
-    });
-
-    req.log.info('User logged in', { email });
-
-    res.json({
-      success: true,
-      token: signInData.session.access_token,
-      email,
-      user: profile || null,
-    });
-  } catch (err) {
-    console.error('Login error:', err);
-    req.log.error('Unexpected error in auth login', { error: err.message });
-    res.status(500).json({
-      error: 'internal_error',
-      message: 'Error interno del servidor.',
-    });
-  }
-});
 
 /**
  * POST /api/auth/reset-password
@@ -850,6 +639,182 @@ router.get('/oauth-demo/:provider', async (req, res) => {
   } catch (err) {
     console.error('Demo OAuth error:', err);
     res.status(500).json({ error: 'Demo OAuth failed', message: err.message });
+  }
+});
+
+// ============================================================
+// Native Supabase Auth (No Clerk) — Email + Password Auth
+// ============================================================
+
+const authService = require('../services/authService');
+
+/**
+ * POST /api/auth/parent-register
+ * Crea una cuenta de padre vinculada al email del estudiante.
+ * El padre usa el mismo email pero diferente contraseña.
+ */
+router.post('/parent-register', async (req, res) => {
+  const { studentEmail, parentPassword, parentName } = req.body || {};
+  try {
+    const result = await authService.signUpParent({ studentEmail, parentPassword, parentName });
+    res.status(201).json(result);
+  } catch (e) {
+    console.error('Parent register error:', e.message);
+    res.status(400).json({ error: e.message });
+  }
+});
+
+/**
+ * POST /api/auth/parent-login
+ * Inicia sesión como padre usando el email del estudiante + contraseña del padre.
+ */
+router.post('/parent-login', async (req, res) => {
+  const { studentEmail, parentPassword } = req.body || {};
+  try {
+    const result = await authService.signInParent({ studentEmail, parentPassword });
+    res.json(result);
+  } catch (e) {
+    console.error('Parent login error:', e.message);
+    const status = e.message.includes('Contraseña incorrecta') ? 401 : 400;
+    res.status(status).json({ error: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/auth/signup:
+ *   post:
+ *     summary: Crear nuevo usuario con email + contraseña
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Usuario creado exitosamente
+ *       400:
+ *         description: Validación fallida
+ */
+router.post('/signup', async (req, res) => {
+  const { email, password, username, firstName, lastName } = req.body || {};
+
+  try {
+    const result = await authService.signUp({
+      email,
+      password,
+      username,
+      firstName,
+      lastName,
+      userType: 'student',
+    });
+
+    res.status(201).json(result);
+  } catch (e) {
+    console.error('Signup error:', e.message);
+    const statusCode = e.message.includes('Email') ? 400 : 400;
+    res.status(statusCode).json({ error: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Iniciar sesión con email + contraseña
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Sesión iniciada, retorna token
+ *       401:
+ *         description: Credenciales inválidas
+ */
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body || {};
+
+  try {
+    const result = await authService.signIn({ email, password });
+
+    res.json(result);
+  } catch (e) {
+    console.error('Login error:', e.message);
+    const statusCode = e.message.includes('Invalid') ? 401 : 400;
+    res.status(statusCode).json({ error: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Cerrar sesión
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Sesión cerrada
+ */
+router.post('/logout', (req, res) => {
+  // Client clears tokens from localStorage; backend is best-effort
+  // (Supabase sessions are managed client-side)
+  res.json({ message: 'Logged out successfully' });
+});
+
+/**
+ * @swagger
+ * /api/auth/refresh:
+ *   post:
+ *     summary: Refrescar token de acceso
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Nuevo token generado
+ *       401:
+ *         description: Refresh token inválido
+ */
+router.post('/refresh', async (req, res) => {
+  const { refreshToken } = req.body || {};
+
+  try {
+    const result = await authService.refreshSession(refreshToken);
+    res.json(result);
+  } catch (e) {
+    console.error('Refresh error:', e.message);
+    res.status(401).json({ error: 'Invalid refresh token' });
   }
 });
 

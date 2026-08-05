@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import { Icon } from "../utils/iconMapping.jsx";
 import { useTranslation } from "../i18n/I18nProvider";
 import { getFooterContent } from "../data/footer/footerContent";
-import ModalVAK from "./footer/modals/ModalVAK";
-import ModalCertificaciones from "./footer/modals/ModalCertificaciones";
-import ModalBlog from "./footer/modals/ModalBlog";
-import ModalDocumentacion from "./footer/modals/ModalDocumentacion";
-import ModalPrivacidad from "./footer/modals/ModalPrivacidad";
-import ModalTerminos from "./footer/modals/ModalTerminos";
-import ModalContacto from "./footer/modals/ModalContacto";
+
+const ModalVAK = lazy(() => import("./footer/modals/ModalVAK"));
+const ModalCertificaciones = lazy(() => import("./footer/modals/ModalCertificaciones"));
+const ModalBlog = lazy(() => import("./footer/modals/ModalBlog"));
+const ModalDocumentacion = lazy(() => import("./footer/modals/ModalDocumentacion"));
+const ModalPrivacidad = lazy(() => import("./footer/modals/ModalPrivacidad"));
+const ModalTerminos = lazy(() => import("./footer/modals/ModalTerminos"));
+const ModalContacto = lazy(() => import("./footer/modals/ModalContacto"));
 
 const socialLinks = [
   {
@@ -340,25 +341,27 @@ export default function Footer() {
         </div>
       </footer>
 
-      {activeModal === "vak" && (
-        <ModalVAK onClose={closeModal} content={content} />
-      )}
-      {activeModal === "certificaciones" && (
-        <ModalCertificaciones onClose={closeModal} content={content} />
-      )}
-      {activeModal === "blog" && (
-        <ModalBlog onClose={closeModal} content={content} />
-      )}
-      {activeModal === "documentacion" && (
-        <ModalDocumentacion onClose={closeModal} content={content} />
-      )}
-      {activeModal === "privacidad" && (
-        <ModalPrivacidad onClose={closeModal} content={content} />
-      )}
-      {activeModal === "terminos" && (
-        <ModalTerminos onClose={closeModal} content={content} />
-      )}
-      {activeModal === "contacto" && <ModalContacto onClose={closeModal} />}
+      <Suspense fallback={null}>
+        {activeModal === "vak" && (
+          <ModalVAK onClose={closeModal} content={content} />
+        )}
+        {activeModal === "certificaciones" && (
+          <ModalCertificaciones onClose={closeModal} content={content} />
+        )}
+        {activeModal === "blog" && (
+          <ModalBlog onClose={closeModal} content={content} />
+        )}
+        {activeModal === "documentacion" && (
+          <ModalDocumentacion onClose={closeModal} content={content} />
+        )}
+        {activeModal === "privacidad" && (
+          <ModalPrivacidad onClose={closeModal} content={content} />
+        )}
+        {activeModal === "terminos" && (
+          <ModalTerminos onClose={closeModal} content={content} />
+        )}
+        {activeModal === "contacto" && <ModalContacto onClose={closeModal} />}
+      </Suspense>
     </>
   );
 }

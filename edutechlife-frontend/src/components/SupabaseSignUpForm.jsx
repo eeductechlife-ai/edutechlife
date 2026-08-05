@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Brain,
@@ -18,6 +18,15 @@ import FloatingParticles from "./FloatingParticles";
 import { sanitize } from "../utils/sanitize";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 import SEO from "./SEO";
+
+// Error boundary fallback
+function SignUpFormFallback() {
+  return (
+    <div className="w-full p-4 text-center">
+      <p className="text-gray-600">Loading form...</p>
+    </div>
+  );
+}
 
 const SupabaseSignUpForm = ({ onBack, returnTo }) => {
   const { t } = useTranslation();

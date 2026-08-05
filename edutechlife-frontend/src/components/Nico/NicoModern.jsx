@@ -4,6 +4,11 @@ import useLeadManagement from "../../hooks/useLeadManagement";
 import useLeadCaptureLogic from "../../hooks/useLeadCaptureLogic";
 import useAppointmentScheduling from "../../hooks/useAppointmentScheduling";
 import {
+  useNicoContext,
+  buildNicoSystemPrompt,
+} from "../../hooks/useNicoContext";
+import { useNicoConversationMemory } from "../../hooks/useNicoConversationMemory";
+import {
   warmupTts,
   prefetchTts,
   stopSpeech,
@@ -56,6 +61,14 @@ const NicoModern = ({
   const inputRef = useRef(null);
   const handleSendMessageRef = useRef(null);
 
+  // Load academic context and conversation memory
+  const { context: nicoContext, isLoading: contextLoading } = useNicoContext();
+  const {
+    saveConversation,
+    buildConversationContext,
+    isSaving: savingConversation,
+  } = useNicoConversationMemory();
+
   const {
     memory = {},
     processMessage = () => {},
@@ -102,6 +115,9 @@ const NicoModern = ({
 
   const [showAppointmentSuccess, setShowAppointmentSuccess] = useState(false);
   const [greetingSent, setGreetingSent] = useState(false);
+  const [systemPromptContext, setSystemPromptContext] = useState("");
+  const [conversationHistoryContext, setConversationHistoryContext] =
+    useState("");
 
   const voice = useNicoVoice({
     audioEnabled,
@@ -165,6 +181,12 @@ const NicoModern = ({
     saveLead,
     scheduleAppointment,
 
+    // Academic context and conversation memory
+    systemPromptContext,
+    conversationHistoryContext,
+    saveConversation,
+    nicoContext,
+
     voice: {
       isSpeakingRef: voice.isSpeakingRef,
       sentenceQueueRef: voice.sentenceQueueRef,
@@ -212,6 +234,30 @@ const NicoModern = ({
     }
   }, []);
 
+  // Initialize academic context in system prompt
+  useEffect(() => {
+    if (nicoContext) {
+      const systemPrompt = buildNicoSystemPrompt(nicoContext);
+      setSystemPromptContext(systemPrompt);
+    }
+  }, [nicoContext]);
+
+  // Load conversation history context
+  useEffect(() => {
+    const loadConversationContext = async () => {
+      try {
+        const context = await buildConversationContext(5);
+        setConversationHistoryContext(context);
+      } catch (err) {
+        console.warn("[NicoModern] Failed to load conversation context:", err);
+      }
+    };
+
+    if (isOpen && messages.length > 0) {
+      loadConversationContext();
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     const initializeServices = async () => {
       try {
@@ -241,7 +287,7 @@ const NicoModern = ({
       voice.sentenceQueueRef.current = [];
       stopSpeech();
     };
-  }, []);
+  }, [buildConversationContext]);
 
   useEffect(() => {
     const handleGlobalKeyDown = (e) => {

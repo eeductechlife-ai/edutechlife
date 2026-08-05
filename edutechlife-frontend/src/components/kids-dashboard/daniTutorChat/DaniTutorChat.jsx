@@ -14,7 +14,7 @@ import {
   Send,
   Mic,
 } from "lucide-react";
-import QuickActions from "../dani/QuickActions";
+import QuickActions from "./components/QuickActionsImproved";
 import RecentTopics from "../dani/RecentTopics";
 import DaniChatHeader from "./components/DaniChatHeader";
 import DaniChatMessages from "./components/DaniChatMessages";
@@ -55,10 +55,52 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     [],
   );
 
+  // Hook must be called first to get handleSendMessage
+  const {
+    focusTrapRef,
+    isSpeaking,
+    isTyping,
+    conversationCount,
+    toggleVoice,
+    voiceEnabled,
+    voiceBlocked,
+    streak,
+    socraticMode,
+    setSocraticMode,
+    showCrisisResources,
+    setShowCrisisResources,
+    showEmotionalBanner,
+    setShowEmotionalBanner,
+    studentMoodHistory,
+    darkMode,
+    documentForDani,
+    setDocumentForDani,
+    daniChatHistory,
+    streamingMessage,
+    messagesEndRef,
+    handleQuickAction,
+    academicTopics,
+    handleTopicClick,
+    inputText,
+    setInputText,
+    handleSendMessage,
+    isListening,
+    handleMicClick,
+    crisisAlertLevel,
+  } = useDaniChat({ isOpen, activeTab });
+
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      const timer = setTimeout(() => inputRef.current.focus(), 300);
-      return () => clearTimeout(timer);
+    if (isOpen && inputRef?.current) {
+      try {
+        const timer = setTimeout(() => {
+          if (inputRef?.current) {
+            inputRef.current.focus();
+          }
+        }, 300);
+        return () => clearTimeout(timer);
+      } catch (error) {
+        console.warn("Error focusing input:", error);
+      }
     }
   }, [isOpen]);
 
@@ -103,328 +145,335 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     [handleSendMessage, inputText],
   );
 
-  const {
-    focusTrapRef,
-    isSpeaking,
-    isTyping,
-    conversationCount,
-    toggleVoice,
-    voiceEnabled,
-    voiceBlocked,
-    streak,
-    socraticMode,
-    setSocraticMode,
-    showCrisisResources,
-    setShowCrisisResources,
-    showEmotionalBanner,
-    setShowEmotionalBanner,
-    studentMoodHistory,
-    darkMode,
-    documentForDani,
-    setDocumentForDani,
-    daniChatHistory,
-    streamingMessage,
-    messagesEndRef,
-    handleQuickAction,
-    academicTopics,
-    handleTopicClick,
-    inputText,
-    setInputText,
-    handleSendMessage,
-    isListening,
-    handleMicClick,
-    crisisAlertLevel,
-  } = useDaniChat({ isOpen, activeTab });
-
   if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/50 z-50 flex items-end justify-end p-4 md:p-8"
-        style={{ overscrollBehavior: "contain" }}
-        ref={focusTrapRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label={t("dani.chat_title")}
-        onClick={onClose}
-        onKeyDown={handleBackdropKeyDown}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 100, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 100, scale: 0.9 }}
-          transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className={`w-full max-w-md h-[600px] rounded-t-2xl md:rounded-2xl shadow-2xl flex flex-col overflow-hidden border ${
-            darkMode
-              ? "bg-[#0F172A] border-[#334155]"
-              : "bg-[#F8FAFC] border-[#E2E8F0]"
-          }`}
-          onClick={handleContentClick}
-        >
-          <DaniChatHeader
-            isSpeaking={isSpeaking}
-            isTyping={isTyping}
-            conversationCount={conversationCount}
-            toggleVoice={toggleVoice}
-            voiceEnabled={voiceEnabled}
-            voiceBlocked={voiceBlocked}
-            streak={streak}
-            socraticMode={socraticMode}
-            setSocraticMode={setSocraticMode}
-            onClose={onClose}
-          />
-
-          {showCrisisResources && (
+    <>
+      <AnimatePresence mode="wait">
+        {isOpen && (
+          <>
+            {/* Mobile backdrop */}
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mx-4 mt-2 px-4 py-3 bg-red-50 border border-red-300 rounded-xl"
-            >
-              <div className="flex items-start gap-3">
-                <AlertCircle
-                  className="text-red-500 mt-0.5"
-                  size={22}
-                  aria-hidden="true"
-                />
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-red-800 mb-1">
-                    {t("dani.crisis_title")}
-                  </p>
-                  <p className="text-xs text-red-700 leading-relaxed">
-                    <strong>{t("dani.crisis_line1")}</strong>
-                    {" | "}
-                    <strong>{t("dani.crisis_line2")}</strong>
-                    {" | "}
-                    <strong>{t("dani.crisis_line3")}</strong>
-                  </p>
-                </div>
-                <button
-                  onClick={handleCloseCrisis}
-                  className="text-red-400 hover:text-red-600 text-sm"
-                  aria-label={t("dani.close")}
-                >
-                  ✕
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {showEmotionalBanner && (
+              key="dani-mobile-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+              onClick={onClose}
+              aria-hidden="true"
+            />
+            {/* Sidebar panel - like Valerio in IALab */}
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mx-4 mt-2 px-3 py-2 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 rounded-xl"
-            >
-              <div className="flex items-center gap-2">
-                <Heart
-                  className="text-[#004B63]"
-                  size={20}
-                  aria-hidden="true"
-                />
-                <p className="text-xs text-[#004B63] flex-1">
-                  {t("dani.emotional_banner")}
-                </p>
-                <button
-                  onClick={handleCloseEmotional}
-                  className="text-[#64748B] hover:text-[#004B63] text-xs"
-                  aria-label={t("dani.close")}
-                >
-                  ✕
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {studentMoodHistory.length > 0 && (
-            <div
-              className={`flex gap-1 px-4 py-1.5 border-b ${
+              key="dani-panel"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className={`fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[520px] md:w-[600px] shadow-2xl flex flex-col overflow-hidden border-l ${
                 darkMode
-                  ? "border-[#334155] bg-[#0F172A]"
-                  : "border-[#E2E8F0] bg-white/50"
+                  ? "bg-[#0F172A] border-l-[#334155]"
+                  : "bg-[#F8FAFC] border-l-[#E2E8F0]"
               }`}
+              ref={focusTrapRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label={t("dani.chat_title")}
+              onKeyDown={handleBackdropKeyDown}
+              onClick={handleContentClick}
             >
-              <span className="text-[10px] text-[#64748B] mr-1">
-                {t("dani.mood_label")}
-              </span>
-              {studentMoodHistory.slice(-5).map((m, i) => {
-                const MoodIcon = MOOD_ICONS[m.mood] || MessageSquare;
-                return (
-                  <span
-                    key={i}
-                    className={MOOD_COLORS[m.mood] || "text-[#64748B]"}
-                  >
-                    <MoodIcon size={14} aria-hidden="true" />
-                  </span>
-                );
-              })}
-            </div>
-          )}
+              <DaniChatHeader
+                isSpeaking={isSpeaking}
+                isTyping={isTyping}
+                conversationCount={conversationCount}
+                toggleVoice={toggleVoice}
+                voiceEnabled={voiceEnabled}
+                voiceBlocked={voiceBlocked}
+                streak={streak}
+                socraticMode={socraticMode}
+                setSocraticMode={setSocraticMode}
+                onClose={onClose}
+              />
 
-          {documentForDani && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mx-4 mt-2 px-3 py-2 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 rounded-xl"
-            >
-              <div className="flex items-center gap-2">
-                <FileText
-                  className="text-[#004B63]"
-                  size={18}
-                  aria-hidden="true"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold text-[#004B63] truncate">
-                    {t("dani.document_analyzing")}{" "}
-                    {documentForDani.title || t("dani.document_summary")}
-                  </p>
-                  <p className="text-[10px] text-[#64748B]">
-                    {documentForDani.score != null
-                      ? `${t("dani.document_score")} ${documentForDani.score}/100`
-                      : t("dani.document_summary")}
-                    {documentForDani.subject
-                      ? ` • ${documentForDani.subject}`
-                      : ""}
-                  </p>
-                </div>
-                <button
-                  onClick={handleCloseDocument}
-                  className="text-[#64748B] hover:text-[#004B63] text-xs"
-                  aria-label={t("dani.document_close")}
+              {showCrisisResources && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mx-4 mt-2 px-4 py-3 bg-red-50 border border-red-300 rounded-xl"
                 >
-                  ✕
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          <DaniChatMessages
-            daniChatHistory={daniChatHistory}
-            streamingMessage={streamingMessage}
-            isTyping={isTyping}
-            darkMode={darkMode}
-            messagesEndRef={messagesEndRef}
-          />
-
-          <QuickActions onAction={handleQuickAction} darkMode={darkMode} />
-
-          <RecentTopics
-            topics={academicTopics.filter((t) => t.count > 0)}
-            onTopicClick={handleTopicClick}
-            darkMode={darkMode}
-          />
-
-          <div
-            className={`p-4 border-t ${
-              darkMode
-                ? "bg-[#0F172A] border-[#334155]"
-                : "bg-white border-[#E2E8F0]"
-            }`}
-          >
-            <div className="flex flex-col gap-1.5">
-              <div className="flex gap-2 items-end">
-                <div className="flex-1 relative">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={inputText}
-                    onChange={handleInputChange}
-                    onKeyDown={handleInputKeyDown}
-                    placeholder={
-                      activeTab === "examenes"
-                        ? t("dani.placeholder_exam") ||
-                          "Pregúntame sobre el examen..."
-                        : activeTab === "materias"
-                          ? t("dani.placeholder_subject") ||
-                            "¿Qué materia quieres estudiar?"
-                          : t("dani.placeholder")
-                    }
-                    maxLength={maxChars}
-                    className={`w-full px-4 py-3 pr-10 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]/50 placeholder-[#64748B] transition-all ${
-                      darkMode
-                        ? "bg-[#1E293B] border border-[#334155] text-[#E2F0FF]"
-                        : "bg-[#F8FAFC] border border-[#E2E8F0] text-[#004B63]"
-                    }`}
-                  />
-                  {inputText.length > 0 && (
-                    <motion.button
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.5 }}
-                      onClick={handleClearInput}
-                      className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center ${
-                        darkMode
-                          ? "text-[#64748B] hover:text-white"
-                          : "text-[#94A3B8] hover:text-[#004B63]"
-                      }`}
-                      aria-label={t("dani.clear_input") || "Limpiar"}
+                  <div className="flex items-start gap-3">
+                    <AlertCircle
+                      className="text-red-500 mt-0.5"
+                      size={22}
+                      aria-hidden="true"
+                    />
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-red-800 mb-1">
+                        {t("dani.crisis_title")}
+                      </p>
+                      <p className="text-xs text-red-700 leading-relaxed">
+                        <strong>{t("dani.crisis_line1")}</strong>
+                        {" | "}
+                        <strong>{t("dani.crisis_line2")}</strong>
+                        {" | "}
+                        <strong>{t("dani.crisis_line3")}</strong>
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleCloseCrisis}
+                      className="text-red-400 hover:text-red-600 text-sm"
+                      aria-label={t("dani.close")}
                     >
-                      <X size={14} strokeWidth={2.5} />
-                    </motion.button>
-                  )}
-                </div>
-                <motion.button
-                  onClick={handleMicClick}
-                  disabled={isTyping}
-                  aria-label={
-                    isListening ? t("dani.mic_stop") : t("dani.mic_start")
-                  }
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all ${
-                    isListening
-                      ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
-                      : darkMode
-                        ? "bg-[#1E293B] border border-[#334155] text-[#64748B] hover:bg-[#334155]"
-                        : "bg-[#F8FAFC] border border-[#E2E8F0] text-[#64748B] hover:bg-[#E2E8F0]"
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Mic size={20} strokeWidth={2} />
-                </motion.button>
-                <motion.button
-                  onClick={handleSend}
-                  disabled={!inputText.trim() || isTyping}
-                  aria-label={t("dani.send")}
-                  className="w-12 h-12 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl flex items-center justify-center disabled:opacity-40 shadow-lg flex-shrink-0"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Send size={20} strokeWidth={2} />
-                </motion.button>
-              </div>
-              <div className="flex items-center justify-between px-1">
-                {inputText.length > 0 && (
-                  <span
-                    className={`text-[10px] font-medium transition-colors ${
-                      inputText.length > maxChars * 0.9
-                        ? "text-red-500"
-                        : inputText.length > maxChars * 0.75
-                          ? "text-amber-500"
-                          : "text-[#64748B]"
-                    }`}
-                  >
-                    {inputText.length}/{maxChars}
-                  </span>
-                )}
-                <span />
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
+                      ✕
+                    </button>
+                  </div>
+                </motion.div>
+              )}
 
-      <CrisisResourcesModal
-        isOpen={showCrisisResources}
-        onClose={() => setShowCrisisResources(false)}
-        crisisLevel={crisisAlertLevel}
-      />
-    </AnimatePresence>
+              {showEmotionalBanner && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mx-4 mt-2 px-3 py-2 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 rounded-xl"
+                >
+                  <div className="flex items-center gap-2">
+                    <Heart
+                      className="text-[#004B63]"
+                      size={20}
+                      aria-hidden="true"
+                    />
+                    <p className="text-xs text-[#004B63] flex-1">
+                      {t("dani.emotional_banner")}
+                    </p>
+                    <button
+                      onClick={handleCloseEmotional}
+                      className="text-[#64748B] hover:text-[#004B63] text-xs"
+                      aria-label={t("dani.close")}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {studentMoodHistory.length > 0 && (
+                <div
+                  className={`flex gap-1 px-4 py-1.5 border-b ${
+                    darkMode
+                      ? "border-[#334155] bg-[#0F172A]"
+                      : "border-[#E2E8F0] bg-white/50"
+                  }`}
+                >
+                  <span className="text-[10px] text-[#64748B] mr-1">
+                    {t("dani.mood_label")}
+                  </span>
+                  {studentMoodHistory.slice(-5).map((m, i) => {
+                    const MoodIcon = MOOD_ICONS[m.mood] || MessageSquare;
+                    return (
+                      <span
+                        key={i}
+                        className={MOOD_COLORS[m.mood] || "text-[#64748B]"}
+                      >
+                        <MoodIcon size={14} aria-hidden="true" />
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+
+              {documentForDani && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mx-4 mt-2 px-3 py-2 bg-gradient-to-r from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 rounded-xl"
+                >
+                  <div className="flex items-center gap-2">
+                    <FileText
+                      className="text-[#004B63]"
+                      size={18}
+                      aria-hidden="true"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-[#004B63] truncate">
+                        {t("dani.document_analyzing")}{" "}
+                        {documentForDani.title || t("dani.document_summary")}
+                      </p>
+                      <p className="text-[10px] text-[#64748B]">
+                        {documentForDani.score != null
+                          ? `${t("dani.document_score")} ${documentForDani.score}/100`
+                          : t("dani.document_summary")}
+                        {documentForDani.subject
+                          ? ` • ${documentForDani.subject}`
+                          : ""}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleCloseDocument}
+                      className="text-[#64748B] hover:text-[#004B63] text-xs"
+                      aria-label={t("dani.document_close")}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              <DaniChatMessages
+                daniChatHistory={daniChatHistory}
+                streamingMessage={streamingMessage}
+                isTyping={isTyping}
+                darkMode={darkMode}
+                messagesEndRef={messagesEndRef}
+              />
+
+              <QuickActions onAction={handleQuickAction} darkMode={darkMode} />
+
+              <RecentTopics
+                topics={academicTopics.filter((t) => t.count > 0)}
+                onTopicClick={handleTopicClick}
+                darkMode={darkMode}
+              />
+
+              {/* Improved Chat Input */}
+              <motion.div
+                className={`flex flex-col gap-3 px-4 pb-4 ${
+                  darkMode ? "bg-[#0F172A]" : "bg-[#F8FAFC]"
+                }`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                {/* Input field with improved styling */}
+                <div className="flex gap-2 items-end">
+                  <div className="flex-1 relative">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={inputText}
+                      onChange={handleInputChange}
+                      onKeyDown={handleInputKeyDown}
+                      placeholder={
+                        activeTab === "examenes"
+                          ? t("dani.placeholder_exam") ||
+                            "Pregúntame sobre el examen..."
+                          : activeTab === "materias"
+                            ? t("dani.placeholder_subject") ||
+                              "¿Qué materia quieres estudiar?"
+                            : t("dani.placeholder") || "Pregúntale a Dani..."
+                      }
+                      maxLength={maxChars}
+                      className={`w-full px-4 py-3 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 transition-all ${
+                        darkMode
+                          ? "bg-[#1E293B] border border-[#334155] text-[#E2F0FF] placeholder-[#64748B] focus:ring-[#06B6D4]/50 focus:border-[#06B6D4]"
+                          : "bg-white border border-[#E2E8F0] text-[#004B63] placeholder-[#94A3B8] focus:ring-[#0EA5E9]/50 focus:border-[#0EA5E9]"
+                      }`}
+                    />
+                    {/* Clear button */}
+                    {inputText.length > 0 && (
+                      <motion.button
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        onClick={handleClearInput}
+                        className={`absolute right-3 top-1/2 -translate-y-1/2 ${
+                          darkMode ? "text-[#64748B]" : "text-[#94A3B8]"
+                        }`}
+                        type="button"
+                      >
+                        <X size={16} />
+                      </motion.button>
+                    )}
+                  </div>
+
+                  {/* Microphone Button */}
+                  <motion.button
+                    onClick={handleMicClick}
+                    disabled={isTyping}
+                    className={`w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 transition-all font-medium ${
+                      isListening
+                        ? "bg-red-500 text-white shadow-lg"
+                        : darkMode
+                          ? "bg-[#1E293B] border border-[#334155] text-[#64748B] hover:bg-[#334155]"
+                          : "bg-white border border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]"
+                    }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    type="button"
+                  >
+                    <Mic size={18} strokeWidth={2} />
+                  </motion.button>
+
+                  {/* Send Button */}
+                  <motion.button
+                    onClick={handleSend}
+                    disabled={!inputText.trim() || isTyping}
+                    className="w-11 h-11 bg-gradient-to-br from-[#06B6D4] to-[#0EA5E9] text-white rounded-lg flex items-center justify-center disabled:opacity-40 shadow-md flex-shrink-0 font-medium transition-all"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    type="button"
+                  >
+                    <Send size={18} strokeWidth={2} />
+                  </motion.button>
+                </div>
+
+                {/* Character count */}
+                {inputText.length > 0 && (
+                  <div className="flex justify-end px-1">
+                    <span
+                      className={`text-xs font-medium ${
+                        inputText.length > maxChars * 0.9
+                          ? "text-red-500"
+                          : inputText.length > maxChars * 0.75
+                            ? "text-amber-500"
+                            : darkMode
+                              ? "text-[#64748B]"
+                              : "text-[#94A3B8]"
+                      }`}
+                    >
+                      {inputText.length}/{maxChars}
+                    </span>
+                  </div>
+                )}
+
+                {/* Status indicator */}
+                {isTyping && (
+                  <motion.div
+                    className={`flex items-center gap-2 px-2 py-2 text-xs font-medium rounded-lg ${
+                      darkMode
+                        ? "bg-[#1E293B] text-[#64748B]"
+                        : "bg-[#F0F9FF] text-[#0369A1]"
+                    }`}
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    <span className="inline-block w-2 h-2 bg-current rounded-full animate-bounce" />
+                    <span
+                      className="inline-block w-2 h-2 bg-current rounded-full animate-bounce"
+                      style={{ animationDelay: "0.2s" }}
+                    />
+                    <span
+                      className="inline-block w-2 h-2 bg-current rounded-full animate-bounce"
+                      style={{ animationDelay: "0.4s" }}
+                    />
+                    <span className="ml-1">Dani está escribiendo...</span>
+                  </motion.div>
+                )}
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {showCrisisResources && (
+        <CrisisResourcesModal
+          isOpen={showCrisisResources}
+          onClose={() => setShowCrisisResources(false)}
+          crisisLevel={crisisAlertLevel}
+        />
+      )}
+    </>
   );
 });
 

@@ -14,7 +14,7 @@ import { useState, useEffect, useCallback } from "react";
  */
 
 /** Decode a JWT payload without verifying it (the server verifies on every call). */
-const decodeJwtPayload = (token) => {
+export const decodeJwtPayload = (token) => {
   try {
     const payload = token.split(".")[1];
     if (!payload) return null;
@@ -67,22 +67,32 @@ export const readAuthIdentity = () => {
 };
 
 /**
- * Close the session and send the user back to the login screen.
+ * Close the session without a full page reload.
  *
- * Sign-out used to call Clerk's `signOut()`, which did nothing because there
- * was no Clerk session — students stayed signed in. Clearing the Supabase
- * token is what actually ends the session.
+ * Clears the Supabase tokens, fires a custom event so useAuthIdentity
+ * refreshes in the same tab, then navigates via React Router when a
+ * navigate function is provided — avoiding the hard reload that used to
+ * trigger the LoadingScreen on every logout.
  *
  * @param {string} [redirectTo="/login"] where to land after signing out
+ * @param {Function|null} [navigate] React Router navigate fn from useNavigate()
  */
-export const signOutUser = (redirectTo = "/login") => {
+export const signOutUser = (redirectTo = "/login", navigate = null) => {
   try {
     localStorage.removeItem("auth_token");
     localStorage.removeItem("user_email");
   } catch {
     /* ignore */
   }
-  window.location.replace(redirectTo);
+  // Notify same-tab listeners (storage event only fires in other tabs).
+  window.dispatchEvent(new CustomEvent("auth:signout"));
+
+  if (navigate) {
+    navigate(redirectTo, { replace: true });
+  } else {
+    // Fallback for call sites that cannot pass navigate yet.
+    window.location.replace(redirectTo);
+  }
 };
 
 export const useAuthIdentity = () => {
@@ -101,8 +111,14 @@ export const useAuthIdentity = () => {
         refresh();
       }
     };
+    // Same-tab sign-out dispatched by signOutUser.
+    const onSignout = () => refresh();
     window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    window.addEventListener("auth:signout", onSignout);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener("auth:signout", onSignout);
+    };
   }, [refresh]);
 
   // The session is read synchronously from storage, so it is already resolved

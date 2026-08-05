@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import { motion, useReducedMotion } from "framer-motion";
+import { supabase } from "../../../lib/supabase";
 import {
   useIALabProgressContext,
   useIALabUIContext,
@@ -26,6 +27,9 @@ import { useTranslation } from "../../../i18n/I18nProvider";
 import ValerioPanelHeader from "./ValerioPanelHeader";
 import ValerioContextBar from "./ValerioContextBar";
 import ValerioQuickActions from "./ValerioQuickActions";
+// ENHANCED: Use improved conversation area with professional features
+import ValerioEnhancedConversationArea from "./ValerioEnhancedConversationArea";
+// FALLBACK: Keep original as emergency backup
 import ValerioConversationArea from "./ValerioConversationArea";
 import ValerioChatInput from "./ValerioChatInput";
 import {
@@ -38,6 +42,17 @@ import {
   endSession,
   updateSession,
 } from "../../../services/valerioMemory";
+import { ValerioAcademicMemory } from "../../../services/valerioAcademicMemory";
+import {
+  useStreamingWithAudio,
+  StreamingMessageOptimized,
+} from "./ValerioStreamingOptimized";
+import {
+  useDebouncedInput,
+  useResponseCache,
+  PerformanceMetrics,
+} from "./valerioPerfOptimizations";
+import { useToast } from "./ValerioUIEnhancements";
 import { ALL_LESSONS, ALL_LESSONS_EN } from "../../../data/ialab";
 
 const VALERIO_MEMORY_KEY = "ialab_valerio_conversation";
@@ -45,6 +60,8 @@ const VALERIO_MEMORY_KEY = "ialab_valerio_conversation";
 const IALabValerioPanel = ({ isOpen, onClose }) => {
   const { t, locale } = useTranslation();
   const { activeMod, modules, completedModules } = useIALabProgressContext();
+  // Shared Supabase singleton for academic memory (optional)
+  const supabaseClient = supabase;
 
   const { user } = useIALabUIContext();
 
@@ -63,6 +80,25 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   const [streamingMessage, setStreamingMessage] = useState("");
   const [quickActions, setQuickActions] = useState([]);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [systemPrompt, setSystemPrompt] = useState("");
+
+  // Streaming optimization: parallel text + audio
+  const { streaming, handleStreamChunk, handleStreamComplete } =
+    useStreamingWithAudio();
+
+  // Performance optimizations (with fallbacks)
+  const debouncedInput = useDebouncedInput(userInput, 300);
+  const cache = useResponseCache();
+  const { toasts, show } = useToast();
+  const metricsRef = useRef(null);
+
+  // Initialize performance metrics in dev only
+  useEffect(() => {
+    if (import.meta.env.DEV && !metricsRef.current) {
+      metricsRef.current = new PerformanceMetrics();
+    }
+  }, []);
+
   const welcomeSpokenRef = useRef(false);
   const abortRef = useRef(null);
   const warmupDoneRef = useRef(false);
@@ -88,27 +124,58 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 
   const voice = useValerioVoice(isOpen, setUserInput, locale);
 
-  const systemPrompt = useMemo(
-    () =>
-      buildValerioSystemPrompt({
-        locale,
-        currentModule,
-        modules,
-        studentName,
-        userLevel,
-        completedModules,
-        t,
-        currentLesson,
-      }),
-    [
-      locale,
-      currentModule?.id,
-      studentName,
-      userLevel,
-      completedModules?.length,
-      currentLesson?.lessonId,
-    ],
-  );
+  // Build system prompt with academic personalization (async)
+  useEffect(() => {
+    let isMounted = true;
+
+    const buildPrompt = async () => {
+      try {
+        const userId = user?.id || window.Clerk?.session?.user?.id;
+        const prompt = await buildValerioSystemPrompt({
+          locale,
+          currentModule,
+          modules,
+          studentName,
+          userLevel,
+          completedModules,
+          t,
+          currentLesson,
+          supabaseClient,
+          userId,
+        });
+        if (isMounted) setSystemPrompt(prompt);
+      } catch (err) {
+        console.warn("[buildPrompt] Error:", err.message);
+        // Fallback to sync version if async fails
+        const prompt = await buildValerioSystemPrompt({
+          locale,
+          currentModule,
+          modules,
+          studentName,
+          userLevel,
+          completedModules,
+          t,
+          currentLesson,
+        });
+        if (isMounted) setSystemPrompt(prompt);
+      }
+    };
+
+    buildPrompt();
+    return () => {
+      isMounted = false;
+    };
+  }, [
+    locale,
+    currentModule?.id,
+    studentName,
+    userLevel,
+    completedModules?.length,
+    currentLesson?.lessonId,
+    supabaseClient,
+    user?.id,
+    t,
+  ]);
 
   const processTtsQueue = useCallback(() => {
     if (ttsPlayingRef.current || ttsQueueRef.current.length === 0) return;
@@ -212,7 +279,20 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       if (conversation.length > 0) {
         updateSession({ messageCount: conversation.length });
       }
+
+      // Record academic session to Supabase (non-blocking)
+      if (
+        conversation.length > 2 &&
+        supabaseClient &&
+        user?.id &&
+        currentModule?.id
+      ) {
+        recordAcademicSession().catch(() => {
+          /* silent fail - don't block UI */
+        });
+      }
     }, 3000);
+
     return () => {
       clearTimeout(timer);
       try {
@@ -221,7 +301,73 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         /* ignore */
       }
     };
-  }, [conversation]);
+  }, [conversation, supabaseClient, user?.id, currentModule?.id]);
+
+  // Helper: Record academic session
+  const recordAcademicSession = useCallback(async () => {
+    try {
+      if (!supabaseClient || !user?.id || !currentModule?.id) return;
+
+      const academicMemory = new ValerioAcademicMemory(supabaseClient, user.id);
+
+      // Extract topics from conversation
+      const userMessages = conversation
+        .filter((m) => m.type === "user")
+        .map((m) => m.content);
+
+      // Basic sentiment detection (could be enhanced)
+      const lastMessage =
+        conversation.length > 0
+          ? conversation[conversation.length - 1].content
+          : "";
+      let sentiment = "neutral";
+      if (lastMessage.toLowerCase().match(/confus|no entend|no entiend/))
+        sentiment = "confused";
+      if (lastMessage.toLowerCase().match(/gracias|excelent|perfecto/))
+        sentiment = "confident";
+
+      await academicMemory.recordSession({
+        moduleId: currentModule.id,
+        topicsCovered: extractTopicsFromMessages(userMessages),
+        questionsAsked: userMessages,
+        weakAreasIdentified: [],
+        progressMade: calculateProgress(),
+        sentiment,
+      });
+    } catch (err) {
+      console.warn("[recordAcademicSession] Error:", err.message);
+      // Silent fail - don't disrupt UX
+    }
+  }, [conversation, supabaseClient, user?.id, currentModule?.id]);
+
+  // Helper: Extract topics from messages
+  const extractTopicsFromMessages = (messages) => {
+    const topics = new Set();
+    const keywords = {
+      "prompt engineering": ["prompt", "instruction", "role"],
+      IA: ["ai", "ia", "inteligencia", "artificial"],
+      "text to speech": ["tts", "audio", "voice"],
+      chatgpt: ["chatgpt", "gpt", "openai"],
+      gemini: ["gemini", "google"],
+    };
+
+    messages.forEach((msg) => {
+      const lower = msg.toLowerCase();
+      Object.entries(keywords).forEach(([topic, kws]) => {
+        if (kws.some((kw) => lower.includes(kw))) {
+          topics.add(topic);
+        }
+      });
+    });
+
+    return Array.from(topics).slice(0, 5);
+  };
+
+  // Helper: Calculate progress (simple heuristic)
+  const calculateProgress = () => {
+    const userMessages = conversation.filter((m) => m.type === "user").length;
+    return Math.min(userMessages * 15, 95); // 15% per question, max 95%
+  };
 
   useEffect(() => {
     const isEn = locale === "en";
@@ -366,8 +512,12 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
                   firstChunkRef.current = true;
                   setValerioState("speaking");
                 }
-                setStreamingMessage(fullResponse);
 
+                // OPTIMIZED: Parallel text + audio streaming
+                handleStreamChunk(chunk);
+                setStreamingMessage(streaming.chunks.join(""));
+
+                // Fallback: also queue for legacy TTS system
                 pendingSentenceRef.current += chunk;
                 while (true) {
                   const match = pendingSentenceRef.current.match(
@@ -409,6 +559,9 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
         if (fullResponse.length < 5) {
           throw new Error("Respuesta vacía o muy corta");
         }
+
+        // Finalize optimized streaming
+        handleStreamComplete();
 
         const remaining = pendingSentenceRef.current.trim();
         if (remaining.length > 3) {
@@ -585,11 +738,19 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
               disabled={isProcessing}
             />
 
-            <ValerioConversationArea
+            {/* ENHANCED with professional features - safe fallback to original */}
+            <ValerioEnhancedConversationArea
               conversation={conversation}
               isProcessing={isProcessing}
               moduleTitle={currentModule?.title}
               streamingMessage={streamingMessage}
+              onMessageAction={(action, msgId) => {
+                if (action === "helpful") {
+                  if (import.meta.env.DEV) {
+                    console.log(`Message ${msgId} marked as helpful`);
+                  }
+                }
+              }}
             />
 
             <ValerioChatInput

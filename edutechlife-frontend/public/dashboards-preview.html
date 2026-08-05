@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBoard Dashboards - Parent & Educator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .tab-button {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-container {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .dashboard-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-content {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            min-height: 80vh;
+        }
+
+        .dashboard-preview {
+            width: 100%;
+            height: 80vh;
+            border: none;
+            display: block;
+        }
+
+        .info {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .info h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .info ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 SmartBoard Kids Dashboards</h1>
+            <p>Parent & Educator Monitoring Platforms</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('parent')">
+                👨‍👩‍👧 Parent Dashboard
+            </button>
+            <button class="tab-button" onclick="switchTab('educator')">
+                👨‍🏫 Educator Dashboard
+            </button>
+        </div>
+
+        <!-- Parent Dashboard Info -->
+        <div id="parent-info" class="info">
+            <h3>Parent Dashboard Features:</h3>
+            <ul>
+                <li>📊 Real-time statistics (streak, points, lessons, grades)</li>
+                <li>📝 Recent activity timeline</li>
+                <li>💡 Personalized recommendations</li>
+                <li>📈 Weekly summary & progress tracking</li>
+                <li>🎯 Performance insights</li>
+            </ul>
+        </div>
+
+        <!-- Educator Dashboard Info -->
+        <div id="educator-info" class="info" style="display: none;">
+            <h3>Educator Dashboard Features:</h3>
+            <ul>
+                <li>👥 Class overview (28 students, 25 active)</li>
+                <li>📊 Grid view of student progress</li>
+                <li>🏆 Top performers ranking</li>
+                <li>⚠️ Identify students needing attention</li>
+                <li>📚 Educational resources</li>
+            </ul>
+        </div>
+
+        <!-- Parent Dashboard -->
+        <div id="parent-dashboard" class="dashboard-container active">
+            <div class="dashboard-content">
+                <iframe src="http://localhost:5174/smartboard" class="dashboard-preview"></iframe>
+            </div>
+        </div>
+
+        <!-- Educator Dashboard -->
+        <div id="educator-dashboard" class="dashboard-container">
+            <div class="dashboard-content">
+                <div style="padding: 40px; text-align: center; color: #999;">
+                    <p>Educator Dashboard Preview (Component Ready)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            // Update buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update dashboards
+            document.querySelectorAll('.dashboard-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            document.getElementById(tab + '-dashboard').classList.add('active');
+
+            // Update info
+            document.querySelectorAll('.info').forEach(info => {
+                info.style.display = 'none';
+            });
+            document.getElementById(tab + '-info').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

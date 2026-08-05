@@ -1,23 +1,20 @@
-import React, { useState, memo, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Home, 
-  Target, 
-  BookOpen, 
-  Cpu, 
+import React, { useState, memo, useCallback, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Home,
+  Target,
+  BookOpen,
+  Cpu,
   BarChart3,
   ChevronRight,
   Award,
   Clock,
-  LogOut
-} from 'lucide-react';
-import { useTranslation } from '../i18n/I18nProvider';
+  LogOut,
+  Users,
+} from "lucide-react";
+import { useTranslation } from "../i18n/I18nProvider";
 
-const TabButton = memo(({ 
-  tab, 
-  isActive, 
-  onClick 
-}) => {
+const TabButton = memo(({ tab, isActive, onClick }) => {
   const Icon = tab.icon;
 
   return (
@@ -27,9 +24,10 @@ const TabButton = memo(({
       className={`
         w-full flex items-center justify-between p-4 rounded-xl
         transition-all duration-300 ease-out
-        ${isActive
-          ? `${tab.bgActive} border-2 border-[#4DA8C4]/30 shadow-md`
-          : 'hover:bg-[#F1F5F9] border-2 border-transparent'
+        ${
+          isActive
+            ? `${tab.bgActive} border-2 border-[#4DA8C4]/30 shadow-md`
+            : "hover:bg-[#F1F5F9] border-2 border-transparent"
         }
       `}
       whileHover={{ x: 4 }}
@@ -37,34 +35,37 @@ const TabButton = memo(({
       transition={{ duration: 0.2 }}
     >
       <div className="flex items-center gap-3">
-        <motion.div 
+        <motion.div
           className="relative"
           animate={{ scale: isActive ? 1.1 : 1 }}
-          transition={{ type: 'spring', stiffness: 500 }}
+          transition={{ type: "spring", stiffness: 500 }}
         >
           <Icon className={`w-5 h-5 ${tab.color}`} />
         </motion.div>
-        <span className={`
+        <span
+          className={`
           font-medium font-open-sans
-          ${isActive ? 'text-[#004B63] font-semibold' : 'text-[#64748B]'}
-        `}>
+          ${isActive ? "text-[#004B63] font-semibold" : "text-[#64748B]"}
+        `}
+        >
           {tab.label}
         </span>
       </div>
-      
+
       <div className="flex items-center gap-2">
         {tab.badge && (
-          <motion.span 
+          <motion.span
             className={`
               px-2 py-1 rounded-full text-xs font-semibold
-              ${tab.id === 'lab-ia'
-                ? 'bg-[#FF6B9D]/20 text-[#FF6B9D]'
-                : 'bg-[#4DA8C4]/20 text-[#4DA8C4]'
+              ${
+                tab.id === "lab-ia"
+                  ? "bg-[#FF6B9D]/20 text-[#FF6B9D]"
+                  : "bg-[#4DA8C4]/20 text-[#4DA8C4]"
               }
             `}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 500 }}
+            transition={{ type: "spring", stiffness: 500 }}
           >
             {tab.badge}
           </motion.span>
@@ -85,159 +86,219 @@ const TabButton = memo(({
   );
 });
 
-TabButton.displayName = 'TabButton';
+TabButton.displayName = "TabButton";
 
-const SidebarNavigation = memo(({ 
-  activeTab, 
-  onTabChange, 
-  onNavigate, 
-  onLogout 
-}) => {
-  const { t } = useTranslation();
-  const [hoveredTab, setHoveredTab] = useState(null);
+const SidebarNavigation = memo(
+  ({ activeTab, onTabChange, onNavigate, onRouteNavigate, onLogout }) => {
+    const { t } = useTranslation();
+    const [hoveredTab, setHoveredTab] = useState(null);
 
-  const tabsConfig = [
-    { id: 'inicio', label: t('sidebar.home'), icon: Home, color: 'text-[#4DA8C4]', bgActive: 'bg-[#4DA8C4]/20', badge: null },
-    { id: 'misiones', label: t('sidebar.missions'), icon: Target, color: 'text-[#66CCCC]', bgActive: 'bg-[#66CCCC]/20', badge: '3' },
-    { id: 'materias', label: t('sidebar.subjects'), icon: BookOpen, color: 'text-[#004B63]', bgActive: 'bg-[#004B63]/10', badge: '12' },
-    { id: 'lab-ia', label: t('sidebar.lab_ia'), icon: Cpu, color: 'text-[#FF6B9D]', bgActive: 'bg-[#FF6B9D]/20', badge: t('sidebar.new') },
-    { id: 'progreso', label: t('sidebar.progress'), icon: BarChart3, color: 'text-[#FFD166]', bgActive: 'bg-[#FFD166]/20', badge: null },
-  ];
+    const tabsConfig = [
+      {
+        id: "inicio",
+        label: t("sidebar.home"),
+        icon: Home,
+        color: "text-[#4DA8C4]",
+        bgActive: "bg-[#4DA8C4]/20",
+        badge: null,
+      },
+      {
+        id: "misiones",
+        label: t("sidebar.missions"),
+        icon: Target,
+        color: "text-[#66CCCC]",
+        bgActive: "bg-[#66CCCC]/20",
+        badge: "3",
+      },
+      {
+        id: "materias",
+        label: t("sidebar.subjects"),
+        icon: BookOpen,
+        color: "text-[#004B63]",
+        bgActive: "bg-[#004B63]/10",
+        badge: "12",
+      },
+      {
+        id: "lab-ia",
+        label: t("sidebar.lab_ia"),
+        icon: Cpu,
+        color: "text-[#FF6B9D]",
+        bgActive: "bg-[#FF6B9D]/20",
+        badge: t("sidebar.new"),
+      },
+      {
+        id: "progreso",
+        label: t("sidebar.progress"),
+        icon: BarChart3,
+        color: "text-[#FFD166]",
+        bgActive: "bg-[#FFD166]/20",
+        badge: null,
+      },
+    ];
 
-  const stats = useMemo(() => ({
-    xp: 1250,
-    level: 8,
-    streak: 14,
-    missionsCompleted: 23
-  }), []);
+    const stats = useMemo(
+      () => ({
+        xp: 1250,
+        level: 8,
+        streak: 14,
+        missionsCompleted: 23,
+      }),
+      [],
+    );
 
-  const handleTabClick = useCallback((tabId) => {
-    onTabChange?.(tabId);
-  }, [onTabChange]);
+    const handleTabClick = useCallback(
+      (tabId) => {
+        onTabChange?.(tabId);
+      },
+      [onTabChange],
+    );
 
-  return (
-    <motion.div 
-      className="h-full flex flex-col bg-white border-r border-[#E2E8F0] shadow-lg"
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <div className="flex-1 p-4 pt-6">
-        <nav className="space-y-2">
-          {tabsConfig.map((tab) => (
-            <TabButton
-              key={tab.id}
-              tab={tab}
-              isActive={activeTab === tab.id}
-              onClick={handleTabClick}
-            />
-          ))}
-        </nav>
+    return (
+      <motion.div
+        className="h-full flex flex-col bg-white border-r border-[#E2E8F0] shadow-lg"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <div className="flex-1 p-4 pt-6">
+          <nav className="space-y-2">
+            {tabsConfig.map((tab) => (
+              <TabButton
+                key={tab.id}
+                tab={tab}
+                isActive={activeTab === tab.id}
+                onClick={handleTabClick}
+              />
+            ))}
+          </nav>
 
-        <motion.div 
-          className="mt-8 space-y-3"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
-        >
-          <motion.div 
-            className="flex items-center justify-between p-3 bg-[#FFD166]/10 rounded-xl"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
+          <motion.div
+            className="mt-8 space-y-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.4 }}
           >
-            <div className="flex items-center gap-2">
-              <Award className="w-4 h-4 text-[#FFD166]" />
-              <span className="text-xs text-[#64748B] font-open-sans">{t('sidebar.level_label', { level: stats.level })}</span>
-            </div>
-            <span className="text-lg font-bold text-[#004B63] font-montserrat">
-              {stats.xp.toLocaleString()} {t('streak.xp')}
-            </span>
-          </motion.div>
-          
-          <motion.div 
-            className="flex items-center justify-between p-3 bg-[#FF6B9D]/10 rounded-xl"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#FF6B9D]" />
-              <span className="text-xs text-[#64748B] font-open-sans">{t('streak.racha', { tier: '' })}</span>
-            </div>
-            <span className="text-lg font-bold text-[#004B63] font-montserrat flex items-center gap-1">
-              {stats.streak} 🔥
-            </span>
-          </motion.div>
-          
-          <motion.div 
-            className="flex items-center justify-between p-3 bg-[#4DA8C4]/10 rounded-xl"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="flex items-center gap-2">
-              <Target className="w-4 h-4 text-[#4DA8C4]" />
-              <span className="text-xs text-[#64748B] font-open-sans">{t('sidebar.missions')}</span>
-            </div>
-            <span className="text-lg font-bold text-[#004B63] font-montserrat">
-              {stats.missionsCompleted}
-            </span>
-          </motion.div>
-        </motion.div>
-      </div>
+            <motion.div
+              className="flex items-center justify-between p-3 bg-[#FFD166]/10 rounded-xl"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="flex items-center gap-2">
+                <Award className="w-4 h-4 text-[#FFD166]" />
+                <span className="text-xs text-[#64748B] font-open-sans">
+                  {t("sidebar.level_label", { level: stats.level })}
+                </span>
+              </div>
+              <span className="text-lg font-bold text-[#004B63] font-montserrat">
+                {stats.xp.toLocaleString()} {t("streak.xp")}
+              </span>
+            </motion.div>
 
-      <div className="p-4 border-t border-[#E2E8F0]">
-        <motion.div 
-          className="flex items-center gap-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="relative">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] flex items-center justify-center">
-              <span className="text-white text-sm">👤</span>
-            </div>
-            <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#66CCCC] border-2 border-white"></div>
-          </div>
-          <div className="flex-1">
-            <h4 className="text-sm font-semibold text-[#004B63] font-open-sans">
-              {t('sidebar.student_premium')}
-            </h4>
-            <p className="text-xs text-[#64748B] font-open-sans">
-              {t('sidebar.plan_elite')}
-            </p>
-          </div>
-        </motion.div>
-        
-        <div className="mt-3">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-[#64748B] font-open-sans">{t('sidebar.daily_progress')}</span>
-            <span className="text-xs font-semibold text-[#66CCCC] font-open-sans">78%</span>
-          </div>
-          <div className="h-2 rounded-full bg-[#E2E8F0] overflow-hidden">
-            <motion.div 
-              className="h-full rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]"
-              initial={{ width: 0 }}
-              animate={{ width: '78%' }}
-              transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
-            />
-          </div>
+            <motion.div
+              className="flex items-center justify-between p-3 bg-[#FF6B9D]/10 rounded-xl"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-[#FF6B9D]" />
+                <span className="text-xs text-[#64748B] font-open-sans">
+                  {t("streak.racha", { tier: "" })}
+                </span>
+              </div>
+              <span className="text-lg font-bold text-[#004B63] font-montserrat flex items-center gap-1">
+                {stats.streak} 🔥
+              </span>
+            </motion.div>
+
+            <motion.div
+              className="flex items-center justify-between p-3 bg-[#4DA8C4]/10 rounded-xl"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="flex items-center gap-2">
+                <Target className="w-4 h-4 text-[#4DA8C4]" />
+                <span className="text-xs text-[#64748B] font-open-sans">
+                  {t("sidebar.missions")}
+                </span>
+              </div>
+              <span className="text-lg font-bold text-[#004B63] font-montserrat">
+                {stats.missionsCompleted}
+              </span>
+            </motion.div>
+          </motion.div>
         </div>
 
-        <motion.button
-          onClick={onLogout}
-          className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#FF6B9D]/10 border border-[#FF6B9D]/20 rounded-xl hover:bg-[#FF6B9D]/20 transition-all duration-300 group"
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.99 }}
-        >
-          <LogOut className="w-4 h-4 text-[#FF6B9D]" />
-          <span className="text-sm font-semibold text-[#FF6B9D] font-open-sans">
-            {t('sidebar.logout')}
-          </span>
-        </motion.button>
-      </div>
-    </motion.div>
-  );
-});
+        <div className="p-4 border-t border-[#E2E8F0]">
+          <motion.div
+            className="flex items-center gap-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <div className="relative">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] flex items-center justify-center">
+                <span className="text-white text-sm">👤</span>
+              </div>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#66CCCC] border-2 border-white"></div>
+            </div>
+            <div className="flex-1">
+              <h4 className="text-sm font-semibold text-[#004B63] font-open-sans">
+                {t("sidebar.student_premium")}
+              </h4>
+              <p className="text-xs text-[#64748B] font-open-sans">
+                {t("sidebar.plan_elite")}
+              </p>
+            </div>
+          </motion.div>
 
-SidebarNavigation.displayName = 'SidebarNavigation';
+          <div className="mt-3">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs text-[#64748B] font-open-sans">
+                {t("sidebar.daily_progress")}
+              </span>
+              <span className="text-xs font-semibold text-[#66CCCC] font-open-sans">
+                78%
+              </span>
+            </div>
+            <div className="h-2 rounded-full bg-[#E2E8F0] overflow-hidden">
+              <motion.div
+                className="h-full rounded-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]"
+                initial={{ width: 0 }}
+                animate={{ width: "78%" }}
+                transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+              />
+            </div>
+          </div>
+
+          <motion.button
+            onClick={() => onRouteNavigate?.("/smartboard/padres")}
+            className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#4DA8C4]/10 border border-[#4DA8C4]/30 rounded-xl hover:bg-[#4DA8C4]/20 transition-all duration-300"
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+          >
+            <Users className="w-4 h-4 text-[#4DA8C4]" />
+            <span className="text-sm font-semibold text-[#4DA8C4] font-open-sans">
+              {t("sidebar.parent_dashboard") || "Panel de Padres"}
+            </span>
+          </motion.button>
+
+          <motion.button
+            onClick={onLogout}
+            className="mt-2 w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#FF6B9D]/10 border border-[#FF6B9D]/20 rounded-xl hover:bg-[#FF6B9D]/20 transition-all duration-300 group"
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+          >
+            <LogOut className="w-4 h-4 text-[#FF6B9D]" />
+            <span className="text-sm font-semibold text-[#FF6B9D] font-open-sans">
+              {t("sidebar.logout")}
+            </span>
+          </motion.button>
+        </div>
+      </motion.div>
+    );
+  },
+);
+
+SidebarNavigation.displayName = "SidebarNavigation";
 
 export default SidebarNavigation;

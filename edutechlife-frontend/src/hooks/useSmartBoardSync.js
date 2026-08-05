@@ -11,6 +11,9 @@ export const useSmartBoardSync = () => {
   // Cliente y userId desde la sesion de Supabase (antes token de Clerk).
   const { supabase, userId, isLoading } = useSupabase();
   const [error, setError] = useState(null);
+  const [isOnline, setIsOnline] = useState(
+    typeof navigator !== "undefined" ? navigator.onLine : true,
+  );
   const lastSavedRef = useRef(null);
   const saveTimeoutRef = useRef(null);
 
@@ -45,6 +48,19 @@ export const useSmartBoardSync = () => {
   );
 
   useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!supabase || !userId) return;
 
     const cleanup = setupConnectionListener(
@@ -72,7 +88,7 @@ export const useSmartBoardSync = () => {
     // sesion y expone isLoading.
     isLoading,
     error,
-    isConnected: !!supabase && !!userId,
+    isConnected: isOnline && !!supabase,
   };
 };
 

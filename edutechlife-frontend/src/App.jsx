@@ -27,6 +27,8 @@ const App = () => {
 
   useEffect(() => {
     const prefetch = setTimeout(() => {
+      // LandingPage first — most likely destination after IALab/SmartBoard exit.
+      import("./components/pages/LandingPage.jsx");
       import("./components/pages/IALabProLandingPage.jsx");
       import("./components/pages/SmartBoardLandingPage.jsx");
       import("./components/pages/SmartBoardInfoPage.jsx");
@@ -46,7 +48,7 @@ const App = () => {
             <Suspense fallback={null}>
               <LoadingScreen
                 onComplete={() => setIsLoading(false)}
-                minDuration={800}
+                minDuration={600}
               />
             </Suspense>
           )}
