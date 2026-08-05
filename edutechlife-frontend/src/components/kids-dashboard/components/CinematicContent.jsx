@@ -115,11 +115,7 @@ function createTabRenderer(deps) {
       className: "space-y-6",
     },
     curriculo: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="curriculo" />}>
-          <CurriculumView />
-        </LazyLoad>
-      ),
+      component: () => <SectionFallback tab="curriculo" />,
       errorKey: "curriculo",
       errorMsg: "Error al cargar currículo",
       className: "h-full",
@@ -184,7 +180,6 @@ const CinematicContent = memo(
       },
       [setVakResultAndRecommendations],
     );
-
 
     const tabRenderer = useMemo(
       () =>
