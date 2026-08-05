@@ -215,9 +215,133 @@ async function signOut(userId) {
   }
 }
 
+/**
+ * Build the internal parent email alias for a given student email.
+ * Parent: juan@gmail.com → juan+padre@gmail.com
+ */
+function buildParentEmail(studentEmail) {
+  const [local, domain] = String(studentEmail || '').toLowerCase().split('@');
+  if (!local || !domain) throw new Error('Email inválido');
+  return `${local}+padre@${domain}`;
+}
+
+/**
+ * Register a parent account linked to an existing student email.
+ * The parent uses the same email as the student but a different password.
+ * Internally we store the parent as `local+padre@domain`.
+ */
+async function signUpParent({ studentEmail, parentPassword, parentName }) {
+  if (!studentEmail || !parentPassword) {
+    throw new Error('El correo del estudiante y la contraseña son requeridos');
+  }
+  if (parentPassword.length < 6) {
+    throw new Error('La contraseña debe tener al menos 6 caracteres');
+  }
+
+  const normalizedStudentEmail = String(studentEmail).toLowerCase().trim();
+  const parentAuthEmail = buildParentEmail(normalizedStudentEmail);
+  const [firstName, ...rest] = (parentName || 'Padre/Madre').split(' ');
+  const lastName = rest.join(' ') || '';
+
+  // Find the student's ID
+  const { data: studentProfile } = await supabase
+    .from('users')
+    .select('id')
+    .eq('email', normalizedStudentEmail)
+    .maybeSingle();
+
+  const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    email: parentAuthEmail,
+    password: parentPassword,
+    email_confirm: true,
+    user_metadata: {
+      role: 'parent',
+      student_email: normalizedStudentEmail,
+      student_id: studentProfile?.id || null,
+      first_name: firstName,
+      last_name: lastName,
+    },
+  });
+
+  if (authError) {
+    const msg = (authError.message || '').toLowerCase();
+    if (msg.includes('already') || msg.includes('exists')) {
+      throw new Error('Ya existe una cuenta de padre para este correo. Inicia sesión.');
+    }
+    throw new Error(`Error al crear cuenta: ${authError.message}`);
+  }
+
+  const userId = authData.user?.id;
+  if (!userId) throw new Error('Error al crear cuenta');
+
+  await supabase
+    .from('users')
+    .insert([{
+      id: userId,
+      email: parentAuthEmail,
+      first_name: firstName,
+      last_name: lastName,
+      username: `padre_${normalizedStudentEmail.split('@')[0]}`,
+      user_type: 'parent',
+      clerk_id: userId,
+      platform: 'smartboard',
+    }])
+    .select()
+    .maybeSingle();
+
+  return { message: 'Cuenta de padre creada exitosamente. Ya puedes iniciar sesión.' };
+}
+
+/**
+ * Sign in a parent using the student's email + parent password.
+ * Returns a token with role=parent and the student's email for data lookup.
+ */
+async function signInParent({ studentEmail, parentPassword }) {
+  if (!studentEmail || !parentPassword) {
+    throw new Error('El correo del estudiante y la contraseña son requeridos');
+  }
+
+  const normalizedStudentEmail = String(studentEmail).toLowerCase().trim();
+  const parentAuthEmail = buildParentEmail(normalizedStudentEmail);
+
+  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+    email: parentAuthEmail,
+    password: parentPassword,
+  });
+
+  if (authError) {
+    if (authError.status === 400) {
+      throw new Error('Contraseña incorrecta o cuenta de padre no registrada para este correo');
+    }
+    throw new Error(`Error al iniciar sesión: ${authError.message}`);
+  }
+
+  const session = authData.session;
+  if (!session) throw new Error('No se pudo crear la sesión');
+
+  const meta = authData.user?.user_metadata || {};
+
+  return {
+    token: session.access_token,
+    refreshToken: session.refresh_token,
+    user: {
+      id: authData.user.id,
+      email: normalizedStudentEmail,
+      role: 'parent',
+      studentEmail: meta.student_email || normalizedStudentEmail,
+      studentId: meta.student_id || null,
+      firstName: meta.first_name || 'Padre',
+      lastName: meta.last_name || '',
+      userType: 'parent',
+    },
+  };
+}
+
 module.exports = {
   signUp,
   signIn,
+  signUpParent,
+  signInParent,
   refreshSession,
   signOut,
 };

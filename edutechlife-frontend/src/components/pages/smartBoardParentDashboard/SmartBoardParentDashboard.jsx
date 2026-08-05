@@ -45,11 +45,45 @@ const LEVELS = [
   { min: 0, name: "Principiante", emoji: "🌱", color: "#66CCCC" },
 ];
 
+const ParentLoginGate = ({ onLogin }) => {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center p-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-[#E2E8F0] p-8 text-center"
+      >
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] flex items-center justify-center">
+          <span className="text-3xl">👨‍👩‍👧</span>
+        </div>
+        <h2 className="text-2xl font-black text-[#004B63] mb-2">
+          Panel de Padres
+        </h2>
+        <p className="text-[#64748B] text-sm mb-6">
+          Para acceder al seguimiento de tu hijo, inicia sesión con tu cuenta.
+        </p>
+        <motion.button
+          onClick={onLogin}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full py-3 px-6 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
+        >
+          Iniciar Sesión
+        </motion.button>
+      </motion.div>
+    </div>
+  );
+};
+
 const SmartBoardParentDashboard = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  // Identidad desde Supabase: useAuth() era de Clerk y ya ni siquiera se importaba.
   const { userId, token: authToken, isLoaded } = useAuthIdentity();
+
+  // Detect parent role (set by parent login flow)
+  const isParent = localStorage.getItem("user_role") === "parent";
+  const parentStudentEmail = localStorage.getItem("student_email") || null;
+  const parentName = localStorage.getItem("parent_name") || "Padre/Madre";
 
   const [data, setData] = useState({
     points: 0,
@@ -70,11 +104,7 @@ const SmartBoardParentDashboard = () => {
     useParentDashboardRealtime(userId, authToken);
 
   useEffect(() => {
-    if (!isLoaded) return;
-    if (!userId) {
-      navigate("/login");
-      return;
-    }
+    if (!isLoaded || !userId) return;
 
     const suffix = `_${userId}`;
 
@@ -193,6 +223,17 @@ const SmartBoardParentDashboard = () => {
     }
   }, [liveSessions, livePoints]);
 
+  // Parent is authenticated via their own token OR via parent role flag
+  const isAuthenticated = (isLoaded && !!userId) || isParent;
+
+  if (!isAuthenticated) {
+    return (
+      <ParentLoginGate
+        onLogin={() => navigate("/smartboard/login")}
+      />
+    );
+  }
+
   const level =
     LEVELS.find((l) => data.points >= l.min) || LEVELS[LEVELS.length - 1];
   const completedMissions = data.missions.filter((m) => m.completed).length;
@@ -248,7 +289,19 @@ const SmartBoardParentDashboard = () => {
             <h1 className="text-3xl font-black text-[#004B63]">
               {t("smartboard.parent_panel")}
             </h1>
-            <p className="text-[#64748B] mt-1">{t("smartboard.parent_desc")}</p>
+            {isParent && parentName && (
+              <p className="text-[#4DA8C4] font-semibold mt-0.5 text-sm">
+                Bienvenido/a, {parentName}
+              </p>
+            )}
+            {isParent && parentStudentEmail && (
+              <p className="text-[#64748B] text-xs mt-0.5">
+                Seguimiento de: <span className="font-semibold">{parentStudentEmail}</span>
+              </p>
+            )}
+            {!isParent && (
+              <p className="text-[#64748B] mt-1">{t("smartboard.parent_desc")}</p>
+            )}
           </motion.div>
 
           {/* Bienestar como pilar de confianza (Track D) */}

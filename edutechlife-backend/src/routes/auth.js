@@ -649,6 +649,38 @@ router.get('/oauth-demo/:provider', async (req, res) => {
 const authService = require('../services/authService');
 
 /**
+ * POST /api/auth/parent-register
+ * Crea una cuenta de padre vinculada al email del estudiante.
+ * El padre usa el mismo email pero diferente contraseña.
+ */
+router.post('/parent-register', async (req, res) => {
+  const { studentEmail, parentPassword, parentName } = req.body || {};
+  try {
+    const result = await authService.signUpParent({ studentEmail, parentPassword, parentName });
+    res.status(201).json(result);
+  } catch (e) {
+    console.error('Parent register error:', e.message);
+    res.status(400).json({ error: e.message });
+  }
+});
+
+/**
+ * POST /api/auth/parent-login
+ * Inicia sesión como padre usando el email del estudiante + contraseña del padre.
+ */
+router.post('/parent-login', async (req, res) => {
+  const { studentEmail, parentPassword } = req.body || {};
+  try {
+    const result = await authService.signInParent({ studentEmail, parentPassword });
+    res.json(result);
+  } catch (e) {
+    console.error('Parent login error:', e.message);
+    const status = e.message.includes('Contraseña incorrecta') ? 401 : 400;
+    res.status(status).json({ error: e.message });
+  }
+});
+
+/**
  * @swagger
  * /api/auth/signup:
  *   post:

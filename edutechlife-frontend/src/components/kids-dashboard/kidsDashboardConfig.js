@@ -68,6 +68,7 @@ export const CATEGORY_TAB_LABELS = {
   progreso: "Progreso",
   misiones: "Misiones",
   inicio: "Inicio",
+  padres: "Panel de Padres",
 };
 
 export const PREMIUM_TABS = [];
@@ -81,6 +82,7 @@ export const TOP_BAR_LABELS = {
   vak: "Diagnóstico VAK",
   progreso: "Mi Progreso",
   misiones: "Misiones Diarias",
+  padres: "Panel de Padres",
 };
 
 export const PREMIUM_FEATURES = {

@@ -281,7 +281,7 @@ const PremiumSidebar = memo(
           className={`p-3 border-t space-y-1 ${darkMode ? "border-[#2A3A54]/60" : "border-[#E2E8F0]/70"}`}
         >
           <motion.button
-            onClick={() => onNavigate?.("/smartboard/padres")}
+            onClick={() => onTabChange?.("padres")}
             whileHover={{ x: 3 }}
             whileTap={{ scale: 0.98 }}
             className={`w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-2xl text-sm font-semibold transition-all ${

@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { Flame, Gem } from "lucide-react";
+import { Flame, Gem, Home } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { CATEGORIES, TOP_BAR_LABELS } from "../kidsDashboardConfig";
 import { SB_GRADIENTS, glow } from "../smartboardTheme";
@@ -10,7 +10,7 @@ const TopBar = memo(
   ({ activeTab, darkMode, streak, totalPoints, authToken, studentName }) => {
     const { t } = useTranslation();
     const activeCat = CATEGORIES.find((c) => c.tabs.includes(activeTab));
-    const ActiveIcon = activeCat?.Icon || Bot;
+    const ActiveIcon = activeCat?.Icon || Home;
 
     return (
       <motion.header
