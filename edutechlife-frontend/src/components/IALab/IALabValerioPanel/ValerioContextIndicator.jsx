@@ -20,8 +20,8 @@ const ValerioContextIndicator = ({ currentModule }) => {
     : null;
 
   const tooltipText = currentLesson
-    ? `${locale === "en" ? "Helping with" : "Ayudando con"}: ${currentModule?.title} › ${currentLesson.title}`
-    : `${locale === "en" ? "Ready to help with" : "Listo para ayudar con"} ${currentModule?.title || ""}`;
+    ? `${["en", "pt"].includes(locale) ? "Helping with" : "Ayudando con"}: ${currentModule?.title} › ${currentLesson.title}`
+    : `${["en", "pt"].includes(locale) ? "Ready to help with" : "Listo para ayudar con"} ${currentModule?.title || ""}`;
 
   useEffect(() => {
     const handleClickOutside = (e) => {

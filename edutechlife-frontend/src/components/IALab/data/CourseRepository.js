@@ -1,4 +1,12 @@
-import { modules, modules_en, ALL_LESSONS, ALL_LESSONS_EN, MODULE_QUESTIONS } from '../../../data/ialab';
+import {
+  modules,
+  modules_en,
+  modules_pt,
+  ALL_LESSONS,
+  ALL_LESSONS_EN,
+  MODULE_QUESTIONS,
+} from "../../../data/ialab";
+import { resolveLocalized } from "../../../utils/localeUtils";
 
 export class CourseRepository {
   constructor(adapter) {
@@ -40,27 +48,32 @@ export class CourseRepository {
 
 class LocalCourseAdapter {
   getCourses() {
-    return [{ id: 1, title: 'IA Lab', slug: 'ialab', localeKey: 'course.ia_lab' }];
+    return [
+      { id: 1, title: "IA Lab", slug: "ialab", localeKey: "course.ia_lab" },
+    ];
   }
 
   getModules(courseId, locale) {
-    const list = locale === 'en' ? modules_en : modules;
-    return list.map(m => ({ ...m, courseId }));
+    const list = resolveLocalized(
+      { es: modules, en: modules_en, pt: modules_pt },
+      locale,
+    );
+    return list.map((m) => ({ ...m, courseId }));
   }
 
   getModule(courseId, moduleId, locale) {
     const list = this.getModules(courseId, locale);
-    return list.find(m => m.id === moduleId) || null;
+    return list.find((m) => m.id === moduleId) || null;
   }
 
   getLessons(courseId, moduleId, locale) {
-    const all = locale === 'en' ? ALL_LESSONS_EN : ALL_LESSONS;
-    return (all[moduleId] || []).map(l => ({ ...l, moduleId, courseId }));
+    const all = locale === "en" ? ALL_LESSONS_EN : ALL_LESSONS;
+    return (all[moduleId] || []).map((l) => ({ ...l, moduleId, courseId }));
   }
 
   getLesson(courseId, moduleId, lessonId, locale) {
     const lessons = this.getLessons(courseId, moduleId, locale);
-    return lessons.find(l => l.id === lessonId) || null;
+    return lessons.find((l) => l.id === lessonId) || null;
   }
 
   getQuestions(courseId, moduleId) {
@@ -79,8 +92,12 @@ class LocalCourseAdapter {
   saveProgress({ userId, lessonId, status, score }) {
     try {
       const key = `course_progress_${userId}`;
-      const data = JSON.parse(localStorage.getItem(key) || '{}');
-      data[lessonId] = { status, score, completed_at: new Date().toISOString() };
+      const data = JSON.parse(localStorage.getItem(key) || "{}");
+      data[lessonId] = {
+        status,
+        score,
+        completed_at: new Date().toISOString(),
+      };
       localStorage.setItem(key, JSON.stringify(data));
       return data;
     } catch {
@@ -89,8 +106,8 @@ class LocalCourseAdapter {
   }
 }
 
-export function createCourseRepository(type = 'local') {
-  if (type === 'local') {
+export function createCourseRepository(type = "local") {
+  if (type === "local") {
     return new CourseRepository(new LocalCourseAdapter());
   }
   throw new Error(`Unknown repository type: ${type}`);

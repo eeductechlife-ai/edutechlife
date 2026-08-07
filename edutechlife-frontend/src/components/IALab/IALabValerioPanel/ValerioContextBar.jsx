@@ -53,7 +53,7 @@ const ValerioContextBar = ({ currentModule }) => {
         </div>
         {totalLessons > 0 && (
           <span className="text-slate-400 flex-shrink-0 ml-3">
-            {locale === "en" ? "Lesson" : "Lección"}{" "}
+            {["en", "pt"].includes(locale) ? "Lesson" : "Lección"}{" "}
             {currentLessonId || completedCount + 1} / {totalLessons}
           </span>
         )}

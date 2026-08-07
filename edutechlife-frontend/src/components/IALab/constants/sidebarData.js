@@ -122,9 +122,11 @@ export const COURSE_DATA = {
 };
 
 const getData = (locale = "es") =>
-  locale === "en"
-    ? { section: SECTION_DATA_EN, module: MODULE_DATA_EN }
-    : { section: SECTION_DATA_ES, module: MODULE_DATA_ES };
+  locale === "pt"
+    ? { section: SECTION_DATA_PT, module: MODULE_DATA_PT }
+    : locale === "en"
+      ? { section: SECTION_DATA_EN, module: MODULE_DATA_EN }
+      : { section: SECTION_DATA_ES, module: MODULE_DATA_ES };
 
 export const getSectionData = (locale) => getData(locale).section;
 export const getModuleData = (locale) => getData(locale).module;

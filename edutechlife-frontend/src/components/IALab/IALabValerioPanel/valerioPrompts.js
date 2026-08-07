@@ -101,7 +101,7 @@ export const buildValerioSystemPrompt = async ({
   supabaseClient = null,
   userId = null,
 }) => {
-  const isEn = locale === "en";
+  const isEn = locale === "en" || locale === "pt";
   const store = useIALabStore.getState();
   const currentModuleId = currentModule?.id || 1;
   const currentModuleData = COURSE_KNOWLEDGE.find(
@@ -173,7 +173,10 @@ ${isEn ? "The student is currently viewing this lesson. Use this context to prov
 ${academicProfile.instruction}`;
       }
     } catch (err) {
-      console.warn("[valerioPrompts] Failed to load academic memory:", err.message);
+      console.warn(
+        "[valerioPrompts] Failed to load academic memory:",
+        err.message,
+      );
       // Fall back to session-only context if academic memory fails
     }
   }
@@ -221,7 +224,7 @@ export const buildContextualWelcome = ({
   userLevel,
   activeMod,
 }) => {
-  const isEn = locale === "en";
+  const isEn = locale === "en" || locale === "pt";
   const store = useIALabStore.getState();
   const name = studentName || (isEn ? "Student" : "Estudiante");
   const moduleTitle =

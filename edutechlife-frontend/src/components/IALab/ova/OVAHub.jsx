@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react'
-import PropTypes from 'prop-types'
-import { motion } from 'framer-motion'
-import { Icon } from '../../../utils/iconMapping.jsx'
-import { useTranslation } from '../../../i18n/I18nProvider'
-import { OVA_CATALOG, MODULE_NAMES } from './ovaData'
+import { useState, useMemo } from "react";
+import PropTypes from "prop-types";
+import { motion } from "framer-motion";
+import { Icon } from "../../../utils/iconMapping.jsx";
+import { useTranslation } from "../../../i18n/I18nProvider";
+import { OVA_CATALOG, MODULE_NAMES } from "./ovaData";
+import { resolveLocalized } from "../../../utils/localeUtils";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -11,7 +12,7 @@ const containerVariants = {
     opacity: 1,
     transition: { staggerChildren: 0.06 },
   },
-}
+};
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20, scale: 0.96 },
@@ -19,17 +20,17 @@ const itemVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.35, ease: 'easeOut' },
+    transition: { duration: 0.35, ease: "easeOut" },
   },
-}
+};
 
 OVACard.propTypes = {
   ova: PropTypes.object.isRequired,
   moduleColor: PropTypes.string.isRequired,
-}
+};
 
 function OVACard({ ova, moduleColor }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   return (
     <motion.div
       variants={itemVariants}
@@ -56,33 +57,34 @@ function OVACard({ ova, moduleColor }) {
             <span>{ova.duration}</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs font-bold text-corporate opacity-0 group-hover:opacity-100 transition-opacity">
-            <span>{t('ialab.ova_thumbnail.explore') || 'Explorar'}</span>
+            <span>{t("ialab.ova_thumbnail.explore") || "Explorar"}</span>
             <Icon name="fa-arrow-right" className="w-3 h-3" />
           </div>
         </div>
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-petroleum/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
     </motion.div>
-  )
+  );
 }
 
 const MODULE_COLORS = {
-  1: '#004B63',
-  2: '#4361EE',
-  3: '#10B981',
-  4: '#F59E0B',
-  5: '#EF4444',
-}
+  1: "#004B63",
+  2: "#4361EE",
+  3: "#10B981",
+  4: "#F59E0B",
+  5: "#EF4444",
+};
 
 ModuleSection.propTypes = {
   moduleNum: PropTypes.number,
   ovas: PropTypes.array,
   color: PropTypes.string.isRequired,
-}
+};
 
 function ModuleSection({ moduleNum, ovas, color }) {
-  const { locale } = useTranslation()
-  const name = MODULE_NAMES[moduleNum]?.[locale] || MODULE_NAMES[moduleNum]?.es || `Módulo ${moduleNum}`
+  const { locale } = useTranslation();
+  const name =
+    resolveLocalized(MODULE_NAMES[moduleNum], locale) || `Módulo ${moduleNum}`;
   return (
     <div className="mb-10 last:mb-0">
       <div className="flex items-center gap-3 mb-5">
@@ -94,7 +96,7 @@ function ModuleSection({ moduleNum, ovas, color }) {
           {name}
         </h3>
         <span className="text-xs font-bold text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded-full ml-auto">
-          {ovas.length} {ovas.length === 1 ? 'OVA' : 'OVAs'}
+          {ovas.length} {ovas.length === 1 ? "OVA" : "OVAs"}
         </span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -103,45 +105,45 @@ function ModuleSection({ moduleNum, ovas, color }) {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-OVAHub.propTypes = {}
+OVAHub.propTypes = {};
 
 export default function OVAHub() {
-  const { t } = useTranslation()
-  const [search, setSearch] = useState('')
+  const { t } = useTranslation();
+  const [search, setSearch] = useState("");
 
   const grouped = useMemo(() => {
     const filtered = search.trim()
       ? OVA_CATALOG.filter(
           (ova) =>
             ova.title.toLowerCase().includes(search.toLowerCase()) ||
-            ova.description.toLowerCase().includes(search.toLowerCase())
+            ova.description.toLowerCase().includes(search.toLowerCase()),
         )
-      : OVA_CATALOG
+      : OVA_CATALOG;
 
-    const map = {}
+    const map = {};
     for (const ova of filtered) {
-      if (!map[ova.module]) map[ova.module] = []
-      map[ova.module].push(ova)
+      if (!map[ova.module]) map[ova.module] = [];
+      map[ova.module].push(ova);
     }
-    return Object.entries(map).sort(([a], [b]) => Number(a) - Number(b))
-  }, [search])
+    return Object.entries(map).sort(([a], [b]) => Number(a) - Number(b));
+  }, [search]);
 
-  const totalOVAs = OVA_CATALOG.length
-  const totalModules = 5
+  const totalOVAs = OVA_CATALOG.length;
+  const totalModules = 5;
   const totalDuration = OVA_CATALOG.reduce((acc, ova) => {
-    const min = parseInt(ova.duration, 10)
-    return acc + (isNaN(min) ? 15 : min)
-  }, 0)
+    const min = parseInt(ova.duration, 10);
+    return acc + (isNaN(min) ? 15 : min);
+  }, 0);
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8">
       <motion.div
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
         className="mb-8"
       >
         <div className="flex items-center gap-3 mb-2">
@@ -149,31 +151,46 @@ export default function OVAHub() {
             <Icon name="fa-brain" className="w-5 h-5 text-white" />
           </div>
           <h2 className="text-2xl font-black text-petroleum dark:text-white tracking-tight">
-            {t('ialab.ova_hub.title') || 'Centro de OVAs'}
+            {t("ialab.ova_hub.title") || "Centro de OVAs"}
           </h2>
         </div>
         <p className="text-sm text-slate-500 dark:text-slate-400 ml-[52px]">
-          {t('ialab.ova_hub.subtitle') || `${totalOVAs} experiencias interactivas en ${totalModules} módulos · ~${totalDuration} min total`}
+          {t("ialab.ova_hub.subtitle") ||
+            `${totalOVAs} experiencias interactivas en ${totalModules} módulos · ~${totalDuration} min total`}
         </p>
       </motion.div>
 
       <div className="relative mb-8">
-        <Icon name="fa-search" className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" aria-hidden="true" />
+        <Icon
+          name="fa-search"
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+          aria-hidden="true"
+        />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder={t('ialab.ova_hub.search_placeholder') || 'Buscar OVA por nombre o descripción...'}
-          aria-label={t('ialab.ova_hub.search_placeholder') || 'Buscar OVA por nombre o descripción...'}
+          placeholder={
+            t("ialab.ova_hub.search_placeholder") ||
+            "Buscar OVA por nombre o descripción..."
+          }
+          aria-label={
+            t("ialab.ova_hub.search_placeholder") ||
+            "Buscar OVA por nombre o descripción..."
+          }
           className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-corporate/30 focus:border-corporate transition-all"
         />
         {search && (
           <button
-            onClick={() => setSearch('')}
-            aria-label={t('ialab.ova_hub.clear_search') || 'Limpiar búsqueda'}
+            onClick={() => setSearch("")}
+            aria-label={t("ialab.ova_hub.clear_search") || "Limpiar búsqueda"}
             className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
           >
-            <Icon name="fa-xmark" className="w-4 h-4 text-slate-400" aria-hidden="true" />
+            <Icon
+              name="fa-xmark"
+              className="w-4 h-4 text-slate-400"
+              aria-hidden="true"
+            />
           </button>
         )}
       </div>
@@ -188,13 +205,14 @@ export default function OVAHub() {
             <Icon name="fa-search" className="w-6 h-6 text-slate-400" />
           </div>
           <p className="text-base font-bold text-slate-500 dark:text-slate-400">
-            {t('ialab.ova_hub.no_results') || 'Ninguna OVA coincide con tu búsqueda'}
+            {t("ialab.ova_hub.no_results") ||
+              "Ninguna OVA coincide con tu búsqueda"}
           </p>
           <button
-            onClick={() => setSearch('')}
+            onClick={() => setSearch("")}
             className="mt-3 text-sm font-bold text-corporate hover:underline"
           >
-            {t('ialab.ova_hub.clear_search') || 'Limpiar búsqueda'}
+            {t("ialab.ova_hub.clear_search") || "Limpiar búsqueda"}
           </button>
         </motion.div>
       ) : (
@@ -208,11 +226,11 @@ export default function OVAHub() {
               key={moduleNum}
               moduleNum={Number(moduleNum)}
               ovas={ovas}
-              color={MODULE_COLORS[moduleNum] || '#004B63'}
+              color={MODULE_COLORS[moduleNum] || "#004B63"}
             />
           ))}
         </motion.div>
       )}
     </div>
-  )
+  );
 }

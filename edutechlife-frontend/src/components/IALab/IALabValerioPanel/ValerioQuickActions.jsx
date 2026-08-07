@@ -16,7 +16,7 @@ const ValerioQuickActions = ({ quickActions, onAction, disabled }) => {
         </h3>
         {hasLessonContext && (
           <span className="text-[10px] text-corporate font-medium px-2 py-0.5 rounded-full bg-corporate/5">
-            {locale === "en" ? "In-lesson" : "En lección"}
+            {["en", "pt"].includes(locale) ? "In-lesson" : "En lección"}
           </span>
         )}
       </div>
