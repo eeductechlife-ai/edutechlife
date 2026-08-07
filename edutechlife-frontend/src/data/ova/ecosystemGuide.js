@@ -1,17 +1,9 @@
 import * as esData from "./ecosystemGuide.es.js";
 import * as enData from "./ecosystemGuide.en.js";
+import * as ptData from "./ecosystemGuide.pt.js";
+import { resolveLocalized } from "../../utils/localeUtils";
 
-const getLocale = () => {
-  try {
-    return typeof window !== "undefined" && typeof localStorage !== "undefined"
-      ? localStorage.getItem("edutechlife_locale") || "es"
-      : "es";
-  } catch {
-    return "es";
-  }
-};
-
-const data = getLocale() === "en" ? enData : esData;
+const data = resolveLocalized({ es: esData, en: enData, pt: ptData }) || esData;
 
 export const { infographicData, learningObjectives, pricingSection } = data;
 

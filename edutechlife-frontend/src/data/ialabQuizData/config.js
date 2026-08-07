@@ -11,6 +11,11 @@ export const SECURITY_WARNING_MESSAGES = [
   "Segunda advertencia: El sistema detectó que abriste otra ventana",
   "Última advertencia: Si vuelves a cambiar de ventana, el examen se cerrará automáticamente",
 ];
+export const SECURITY_WARNING_MESSAGES_PT = [
+  "Aviso: Não mude de janela durante a prova",
+  "Segundo aviso: o sistema detectou que você abriu outra janela",
+  "Último aviso: se você mudar de janela novamente, a prova será encerrada automaticamente",
+];
 export const SECURITY_VIOLATION_PENALTY = 1;
 export const SCREENSHOT_OVERLAY_DURATION = 5000;
 export const SECURITY_MESSAGE_DURATION = 3000;
