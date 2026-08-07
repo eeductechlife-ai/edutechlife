@@ -3,7 +3,7 @@ import { createSupabaseClient } from "../lib/supabase";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
 export interface StudentOnlineStatus {
-  student_id: string;
+  auth_id: string;
   is_online: boolean;
   last_activity: string;
 }
@@ -29,6 +29,7 @@ export interface LivePointsEntry {
 
 export const useParentDashboardRealtime = (
   parentId: string,
+  studentAuthId: string,
   authToken: string | null,
 ) => {
   const [studentStatus, setStudentStatus] = useState<StudentOnlineStatus[]>([]);
@@ -40,7 +41,7 @@ export const useParentDashboardRealtime = (
   const supabaseRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!parentId || !authToken) {
+    if (!parentId || !studentAuthId || !authToken) {
       setIsConnected(false);
       return;
     }
@@ -49,11 +50,18 @@ export const useParentDashboardRealtime = (
 
     const setupRealtimeSubscriptions = async () => {
       try {
-        // Initialize Supabase client with auth token
         const supabase = createSupabaseClient(authToken);
         supabaseRef.current = supabase;
 
-        // Subscribe to student online status changes
+        // Resolve the student's DB id from the auth id (students.id != auth.uid)
+        let studentDbId: string | null = null;
+        const { data: studentRow } = await supabase
+          .from("students")
+          .select("id")
+          .eq("auth_id", studentAuthId)
+          .maybeSingle();
+        if (studentRow?.id) studentDbId = String(studentRow.id);
+
         const statusChannel = supabase
           .channel(`parent-student-status-${parentId}`)
           .on(
@@ -62,19 +70,19 @@ export const useParentDashboardRealtime = (
               event: "*",
               schema: "public",
               table: "students",
-              filter: `last_activity=gt.${new Date(Date.now() - 5 * 60 * 1000).toISOString()}`,
+              filter: `auth_id=eq.${studentAuthId}`,
             },
             (payload: any) => {
               if (isMounted) {
                 const student = payload.new || payload.old;
                 setStudentStatus((prev) => {
                   const filtered = prev.filter(
-                    (s) => s.student_id !== student.id,
+                    (s) => s.auth_id !== student.auth_id,
                   );
                   return [
                     ...filtered,
                     {
-                      student_id: student.id,
+                      auth_id: student.auth_id,
                       is_online:
                         new Date(student.last_activity).getTime() >
                         Date.now() - 5 * 60 * 1000,
@@ -86,14 +94,11 @@ export const useParentDashboardRealtime = (
             },
           )
           .subscribe((status) => {
-            if (isMounted && status === "SUBSCRIBED") {
-              setIsConnected(true);
-            }
+            if (isMounted && status === "SUBSCRIBED") setIsConnected(true);
           });
 
         channelsRef.current.push(statusChannel);
 
-        // Subscribe to live sessions
         const sessionsChannel = supabase
           .channel(`parent-live-sessions-${parentId}`)
           .on(
@@ -102,26 +107,23 @@ export const useParentDashboardRealtime = (
               event: "INSERT",
               schema: "public",
               table: "sessions",
-              filter: `end_time=is.null`,
+              filter: studentDbId ? `student_id=eq.${studentDbId}` : undefined,
             },
             (payload: any) => {
               if (isMounted) {
                 const session = payload.new;
-                setLiveSessions((prev) => {
-                  const filtered = prev.filter((s) => s.id !== session.id);
-                  return [
-                    ...filtered,
-                    {
-                      id: session.id,
-                      student_id: session.student_id,
-                      subject: session.subject,
-                      start_time: session.start_time,
-                      completion_percentage: session.completion_percentage,
-                      points_earned: session.points_earned,
-                      type: session.type,
-                    },
-                  ];
-                });
+                setLiveSessions((prev) => [
+                  ...prev.filter((s) => s.id !== session.id),
+                  {
+                    id: session.id,
+                    student_id: session.student_id,
+                    subject: session.subject,
+                    start_time: session.start_time,
+                    completion_percentage: session.completion_percentage,
+                    points_earned: session.points_earned,
+                    type: session.type,
+                  },
+                ]);
               }
             },
           )
@@ -131,13 +133,13 @@ export const useParentDashboardRealtime = (
               event: "UPDATE",
               schema: "public",
               table: "sessions",
+              filter: studentDbId ? `student_id=eq.${studentDbId}` : undefined,
             },
             (payload: any) => {
               if (isMounted) {
                 const session = payload.new;
                 setLiveSessions((prev) => {
                   const filtered = prev.filter((s) => s.id !== session.id);
-                  // Only keep active sessions (end_time is null)
                   if (!session.end_time) {
                     return [
                       ...filtered,
@@ -161,7 +163,6 @@ export const useParentDashboardRealtime = (
 
         channelsRef.current.push(sessionsChannel);
 
-        // Subscribe to live points
         const pointsChannel = supabase
           .channel(`parent-live-points-${parentId}`)
           .on(
@@ -170,12 +171,13 @@ export const useParentDashboardRealtime = (
               event: "INSERT",
               schema: "public",
               table: "points_history",
+              filter: studentDbId ? `student_id=eq.${studentDbId}` : undefined,
             },
             (payload: any) => {
               if (isMounted) {
                 const entry = payload.new;
-                setLivePoints((prev) => {
-                  const updated = [
+                setLivePoints((prev) =>
+                  [
                     {
                       id: entry.id,
                       student_id: entry.student_id,
@@ -185,10 +187,8 @@ export const useParentDashboardRealtime = (
                       timestamp: entry.timestamp,
                     },
                     ...prev,
-                  ];
-                  // Keep only last 50 entries for performance
-                  return updated.slice(0, 50);
-                });
+                  ].slice(0, 50),
+                );
               }
             },
           )
@@ -205,20 +205,12 @@ export const useParentDashboardRealtime = (
 
     return () => {
       isMounted = false;
-      // Cleanup subscriptions
       channelsRef.current.forEach((channel) => {
-        if (supabaseRef.current) {
-          supabaseRef.current.removeChannel(channel);
-        }
+        if (supabaseRef.current) supabaseRef.current.removeChannel(channel);
       });
       channelsRef.current = [];
     };
-  }, [parentId, authToken]);
+  }, [parentId, studentAuthId, authToken]);
 
-  return {
-    studentStatus,
-    liveSessions,
-    livePoints,
-    isConnected,
-  };
+  return { studentStatus, liveSessions, livePoints, isConnected };
 };
