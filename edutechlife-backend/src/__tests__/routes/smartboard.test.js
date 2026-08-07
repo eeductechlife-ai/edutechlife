@@ -458,3 +458,100 @@ describe('Smartboard POST /chat validation', () => {
     expect(res.status).toBe(400);
   });
 });
+
+describe('Smartboard POST /parental-consent', () => {
+  it('rejects invalid studentAge type', async () => {
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent')
+      .set('x-test-user-id', 'kid-1')
+      .send({ parentEmail: 'papa@x.co', studentAge: 'once' });
+    expect(res.status).toBe(400);
+  });
+
+  it('rejects out-of-range studentAge', async () => {
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent')
+      .set('x-test-user-id', 'kid-1')
+      .send({ parentEmail: 'papa@x.co', studentAge: 99 });
+    expect(res.status).toBe(400);
+  });
+
+  it('rejects invalid email', async () => {
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent')
+      .set('x-test-user-id', 'kid-1')
+      .send({ parentEmail: 'not-an-email', studentAge: 12 });
+    expect(res.status).toBe(400);
+  });
+
+  it('registers a pending consent and returns it without exposing the token', async () => {
+    const inserted = {
+      id: 'c1',
+      parent_email: 'papa@x.co',
+      student_age: 12,
+      verification_status: 'pending',
+      verification_token: 'super-secret-token-1234567890',
+    };
+    const chain = {
+      insert: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+    };
+    chain.insert.mockReturnValue(chain);
+    chain.select.mockResolvedValue({ data: [inserted], error: null });
+    mockSupabase.from.mockReturnValue(chain);
+
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent')
+      .set('x-test-user-id', 'kid-1')
+      .send({ parentEmail: 'papa@x.co', studentAge: 12 });
+
+    expect(res.status).toBe(201);
+    expect(res.body.data.verification_status).toBe('pending');
+    expect(JSON.stringify(res.body)).not.toContain('super-secret-token');
+  });
+});
+
+describe('Smartboard POST /parental-consent/verify', () => {
+  it('marks consent as verified when token matches', async () => {
+    const chain = {
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({
+        data: { verification_status: 'verified' },
+        error: null,
+      }),
+    };
+    mockSupabase.from.mockReturnValue(chain);
+
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent/verify')
+      .send({ token: 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.verification_status).toBe('verified');
+  });
+
+  it('returns 404 when token is not found', async () => {
+    const chain = {
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+    };
+    mockSupabase.from.mockReturnValue(chain);
+
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent/verify')
+      .send({ token: 'a1b2c3d4e5f6a1b2c3d4e5f6-no-such-token' });
+
+    expect(res.status).toBe(404);
+  });
+
+  it('returns 400 when token is missing or too short', async () => {
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent/verify')
+      .send({ token: 'short' });
+    expect(res.status).toBe(400);
+  });
+});

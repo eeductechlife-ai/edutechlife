@@ -102,8 +102,7 @@ async function sendCrisisAlert(parentEmail, studentName, studentAge, detectedCon
 /**
  * Logs crisis incident to database
  */
-async function logCrisisIncident(supabase, studentId, studentAge, detectedContent, crisisLevel, parentEmail) {
-  try {
+async function logCrisisIncident(supabase, studentId, studentAge, detectedContent, crisisLevel, parentEmail) {  try {
     const { data, error } = await supabase
       .from('crisis_alerts')
       .insert([
@@ -130,8 +129,30 @@ async function logCrisisIncident(supabase, studentId, studentAge, detectedConten
   }
 }
 
+/**
+ * Envía el email de verificación de consentimiento parental (COPPA / Ley 1581).
+ * El enlace contiene un token de un solo uso que marca el consentimiento como
+ * verificado y habilita el registro de la cuenta de padre.
+ */
+async function sendConsentVerificationEmail({ parentEmail, studentAge, token }) {
+  const verifyUrl = `https://edutechlife.co/api/smartboard/parental-consent/verify?token=${token}`;
+  const html = `
+    <p>Recibimos una solicitud de consentimiento para un estudiante de SmartBoard (edad: ${studentAge}).</p>
+    <p>Para activar la cuenta, verifica tu consentimiento:</p>
+    <p><a href="${verifyUrl}">Verificar consentimiento</a></p>
+    <p>Este enlace es de un solo uso. Si no reconoces esta solicitud, ignora este correo.</p>
+  `;
+  return sendEmail(
+    parentEmail,
+    'Verifica el consentimiento parental de SmartBoard',
+    html,
+    `Verifica tu consentimiento en: ${verifyUrl}`
+  );
+}
+
 module.exports = {
   sendEmail,
   sendCrisisAlert,
-  logCrisisIncident
+  logCrisisIncident,
+  sendConsentVerificationEmail
 };

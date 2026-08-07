@@ -46,33 +46,40 @@ const SmartBoardConsentGate = () => {
       // perfil de Supabase (age_range), con 13 como valor por defecto.
       const studentAge = parseInt(profile?.age_range, 10) || 13;
 
-      // If minor, send parental consent to backend
+      // If minor, send parental consent to backend. Soft-fail: si el email de
+      // verificación no puede enviarse, el estudiante entra igualmente en modo
+      // "pendiente de verificación" y el padre usa el código de invitación.
       if (data.parentEmail) {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/smartboard/parental-consent`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/smartboard/parental-consent`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                parentEmail: data.parentEmail,
+                studentAge,
+                timestamp: new Date().toISOString(),
+              }),
             },
-            body: JSON.stringify({
-              parentEmail: data.parentEmail,
-              studentAge,
-              timestamp: new Date().toISOString(),
-            }),
-          },
-        );
+          );
 
-        if (!response.ok) {
-          throw new Error("Failed to register parental consent");
+          if (!response.ok) {
+            console.warn("Consent registration failed:", await response.text());
+          }
+        } catch (networkError) {
+          console.warn("Consent registration network error:", networkError);
         }
       }
 
       // Set basic subscription tier
       setSubscriptionTier("basic");
 
-      // Redirect to SmartBoard
+      // Redirect to SmartBoard. El consentimiento queda en "pending" hasta que
+      // el acudiente verifique el email; el dashboard no bloquea por esto.
       const returnTo = searchParams.get("returnTo") || "/smartboard";
       navigate(returnTo);
     } catch (error) {

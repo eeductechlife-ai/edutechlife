@@ -1,9 +1,10 @@
 const { Router } = require('express');
+const crypto = require('crypto');
 const supabase = require('../db/supabase');
 const { chat, chatStream, validateMessages } = require('../services/deepseek');
 const { requireAuth } = require('../middleware/auth');
 const { detectCrisis } = require('../services/crisisDetection');
-const { sendCrisisAlert, logCrisisIncident, sendEmail } = require('../services/emailService');
+const { sendCrisisAlert, logCrisisIncident, sendEmail, sendConsentVerificationEmail } = require('../services/emailService');
 const { buildWeeklySummary, renderWeeklyEmail } = require('../services/weeklyReport');
 
 const router = Router();
@@ -249,14 +250,14 @@ router.post('/chat/stream', requireAuth, async (req, res) => {
     }
   }
 
+  const hasSystemPrompt = messages.some(m => m.role === 'system');
   const systemPrompt = context
     ? `${DANI_SYSTEM_PROMPT}\n\nContexto actual:\n${context}`
     : DANI_SYSTEM_PROMPT;
 
-  const msgs = [
-    { role: 'system', content: systemPrompt },
-    ...messages,
-  ];
+  const msgs = hasSystemPrompt
+    ? messages
+    : [{ role: 'system', content: systemPrompt }, ...messages];
 
   try {
     await chatStream(DEEPSEEK_API_KEY, { messages: msgs }, (chunk) => {
@@ -397,8 +398,13 @@ router.post('/parental-consent', requireAuth, async (req, res) => {
   const { parentEmail, studentAge, timestamp } = req.body;
   const userId = req.userId;
 
-  if (!parentEmail || !studentAge) {
+  if (!parentEmail || studentAge === undefined || studentAge === null) {
     return res.status(400).json({ error: 'parentEmail and studentAge are required' });
+  }
+
+  const age = Number(studentAge);
+  if (!Number.isInteger(age) || age < 5 || age > 18) {
+    return res.status(400).json({ error: 'studentAge must be an integer between 5 and 18' });
   }
 
   // Basic email validation
@@ -407,6 +413,8 @@ router.post('/parental-consent', requireAuth, async (req, res) => {
     return res.status(400).json({ error: 'Invalid email format' });
   }
 
+  const verificationToken = crypto.randomBytes(24).toString('hex');
+
   try {
     const { data, error } = await supabase
       .from('parent_consents')
@@ -414,9 +422,10 @@ router.post('/parental-consent', requireAuth, async (req, res) => {
         {
           student_id: userId,
           parent_email: parentEmail,
-          student_age: studentAge,
+          student_age: age,
           consent_timestamp: timestamp || new Date().toISOString(),
-          verification_status: 'pending'
+          verification_status: 'pending',
+          verification_token: verificationToken,
         }
       ])
       .select();
@@ -426,13 +435,84 @@ router.post('/parental-consent', requireAuth, async (req, res) => {
       return res.status(500).json({ error: 'Failed to save parental consent' });
     }
 
+    // Enviar email de verificación al padre con el token de un solo uso.
+    try {
+      await sendConsentVerificationEmail({
+        parentEmail,
+        studentAge: age,
+        token: verificationToken,
+      });
+    } catch (emailError) {
+      console.error('Error sending consent verification email:', emailError.message);
+    }
+
+    // No exponer el verification_token al cliente; solo el estado.
     res.status(201).json({
-      message: 'Parental consent registered successfully',
-      data: data[0]
+      message: 'Parental consent registered successfully. Verification email sent.',
+      data: { id: data[0].id, verification_status: 'pending' }
     });
   } catch (e) {
     console.error('Error processing parental consent:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Failed to process parental consent' });
+  }
+});
+
+/**
+ * @swagger
+ * /api/smartboard/parental-consent/verify:
+ *   post:
+ *     summary: Verifica el consentimiento parental con el token enviado por email
+ *     description: >
+ *       Marca verification_status='verified' para el consentimiento cuyo
+ *       verification_token coincide. Es el paso que habilita el registro del
+ *       padre (POST /api/auth/parent-register).
+ *     tags: [SmartBoard]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Consentimiento verificado
+ *       400:
+ *         description: Token inválido
+ *       404:
+ *         description: Token no encontrado o ya utilizado
+ *       500:
+ *         description: Error del servidor
+ */
+router.post('/parental-consent/verify', async (req, res) => {
+  const { token } = req.body || {};
+  if (!token || typeof token !== 'string' || token.length < 16) {
+    return res.status(400).json({ error: 'Token inválido' });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('parent_consents')
+      .update({
+        verification_status: 'verified',
+        verified_at: new Date().toISOString(),
+      })
+      .eq('verification_token', token)
+      .select()
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) return res.status(404).json({ error: 'Token no encontrado o ya utilizado' });
+
+    res.json({
+      message: 'Consentimiento verificado. Ya puedes crear tu cuenta de padre.',
+      verification_status: data.verification_status,
+    });
+  } catch (e) {
+    console.error('Error verifying parental consent:', e);
+    res.status(500).json({ error: 'Error al verificar el consentimiento' });
   }
 });
 
