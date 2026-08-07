@@ -101,9 +101,8 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
       isCorrect = openAnswer.trim().length > 10;
     }
 
-    if (isCorrect && q.type === "multiple") {
-      addPoints(10, `Acertó pregunta oral de ${subject.label}`);
-    }
+    // Los puntos se otorgan una sola vez al finalizar el examen
+    // (correctCount * 10), no por cada respuesta — evita el doble pago.
 
     const newAnswers = [
       ...answers,

@@ -6,8 +6,8 @@ export const useSmartBoardActions = (stateAndSetters) => {
   ref.current = stateAndSetters;
 
   const addPoints = useCallback((points, reason) => {
-    const safePoints = Math.max(0, parseInt(points, 10) || 0);
-    if (safePoints === 0 && points !== 0) return;
+    const safePoints = parseInt(points, 10);
+    if (Number.isNaN(safePoints)) return;
     const { setTotalPoints, setPointsHistory } = ref.current;
     setTotalPoints((prev) => prev + safePoints);
     setPointsHistory((prev) => [
