@@ -47,8 +47,11 @@ export const useSmartBoardPersistence = (setters) => {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
-    // Load immediately with local data even if userId not yet resolved
+    // Do NOT mark data as loaded until userId is resolved: if we return early
+    // with local-only data while the Supabase client is still null, the remote
+    // blob would never be merged on this visit (race condition).
     if (dataLoaded) return;
+    if (!userId) return;
 
     const loadAllData = async () => {
       try {
@@ -239,7 +242,7 @@ export const useSmartBoardPersistence = (setters) => {
     };
 
     loadAllData();
-  }, [syncLoading]); // Remove userId from deps so effect runs even when userId is null
+  }, [syncLoading, userId]);
 
   return {
     dataLoaded,
