@@ -36,24 +36,48 @@ const LazyNicoModern = () => {
   useEffect(() => {
     if (showNico) return; // Already loaded
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShowNico(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" } // Load 200px before entering viewport
-    );
+    // Wait for footer to exist before setting up observer (avoid observing body during route transition)
+    let attempts = 0;
+    const maxAttempts = 50; // Max 2.5 seconds
 
-    // Observe the footer element (or body bottom if footer not found)
-    const target = document.querySelector("footer") || document.body;
-    if (target) {
-      observer.observe(target);
+    const setupObserver = () => {
+      const footer = document.querySelector("footer");
+
+      // If footer not found and we haven't exceeded max attempts, retry
+      if (!footer && attempts < maxAttempts) {
+        attempts++;
+        setTimeout(setupObserver, 50);
+        return;
+      }
+
+      // Use footer if found, otherwise skip observer (don't observe body during transitions)
+      if (!footer) {
+        // Footer never appeared — probably on a route that has no footer
+        // Don't set up observer at all
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setShowNico(true);
+            observer.disconnect();
+          }
+        },
+        { rootMargin: "200px" } // Load 200px before entering viewport
+      );
+
+      observer.observe(footer);
       observerRef.current = observer;
-    }
+    };
 
-    return () => observer.disconnect();
+    setupObserver();
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
   }, [showNico]);
 
   if (!showNico) return null;
@@ -84,9 +108,10 @@ const App = () => {
     // Prefetch only when browser is idle (more efficient than setTimeout)
     if ("requestIdleCallback" in window) {
       const id = requestIdleCallback(() => {
-        // Only prefetch top 2 routes to reduce initial load impact
+        // Prefetch key components: Hero for faster landing page, IALab dashboard for app
         Promise.allSettled([
           import("./components/pages/LandingPage.jsx"),
+          import("./components/Hero.jsx"),
           import("./components/IALab/IALabDashboard.jsx"),
         ]).catch(() => {
           // Prefetch failures are non-critical; silently continue
@@ -97,6 +122,7 @@ const App = () => {
       // Fallback for browsers without requestIdleCallback
       const timer = setTimeout(() => {
         import("./components/pages/LandingPage.jsx").catch(() => {});
+        import("./components/Hero.jsx").catch(() => {});
         import("./components/IALab/IALabDashboard.jsx").catch(() => {});
       }, 3000);
       return () => clearTimeout(timer);

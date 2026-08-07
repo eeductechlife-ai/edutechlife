@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { PageLoader } from "../LoadingScreen";
 import ErrorBoundary from "../common/ErrorBoundary";
 import SEO from "../SEO";
@@ -21,7 +21,18 @@ const sectionFallback = (h) => (
 
 const LandingPage = () => {
   const { t } = useTranslation();
-  useLightModeOnly();
+
+  // Defer light mode setup to avoid blocking initial render
+  useEffect(() => {
+    if ("requestIdleCallback" in window) {
+      const id = requestIdleCallback(() => {
+        useLightModeOnly();
+      });
+      return () => cancelIdleCallback(id);
+    } else {
+      useLightModeOnly();
+    }
+  }, []);
   return (
     <>
       <SEO title={t("seo.home.title")} description={t("seo.home.desc")} />
