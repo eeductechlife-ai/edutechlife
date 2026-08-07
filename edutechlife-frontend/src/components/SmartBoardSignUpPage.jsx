@@ -82,6 +82,7 @@ const SmartBoardSignUpPage = () => {
       localStorage.setItem("refresh_token", data.refreshToken);
       localStorage.setItem("user_role", "parent");
       localStorage.setItem("student_email", data.user.studentEmail);
+      localStorage.setItem("student_id", data.user.studentId || "");
       localStorage.setItem(
         "parent_name",
         `${data.user.firstName} ${data.user.lastName}`.trim(),

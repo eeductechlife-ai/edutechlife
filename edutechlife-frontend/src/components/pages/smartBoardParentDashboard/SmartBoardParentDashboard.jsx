@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useAuthIdentity } from "../../../hooks/useAuthIdentity";
+import { useAuthIdentity, signOutUser } from "../../../hooks/useAuthIdentity";
 import { useParentDashboardRealtime } from "../../../hooks/useParentDashboardRealtime";
 import { useParentStudentData } from "../../../hooks/useParentStudentData";
 import {
@@ -308,7 +308,9 @@ const SmartBoardParentDashboard = () => {
       "student_id",
       "parent_name",
     ].forEach((k) => localStorage.removeItem(k));
-    navigate("/smartboard/login");
+    // signOutUser dispara el evento auth:signout (sincroniza otras pestañas)
+    // y navega al login.
+    signOutUser("/smartboard/login", navigate);
   };
 
   const level =
