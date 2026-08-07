@@ -654,9 +654,9 @@ const authService = require('../services/authService');
  * El padre usa el mismo email pero diferente contraseña.
  */
 router.post('/parent-register', async (req, res) => {
-  const { studentEmail, parentPassword, parentName } = req.body || {};
+  const { studentEmail, parentPassword, parentName, invitationToken } = req.body || {};
   try {
-    const result = await authService.signUpParent({ studentEmail, parentPassword, parentName });
+    const result = await authService.signUpParent({ studentEmail, parentPassword, parentName, invitationToken });
     res.status(201).json(result);
   } catch (e) {
     console.error('Parent register error:', e.message);

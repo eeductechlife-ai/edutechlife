@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, Loader2, Eye, EyeOff, Users } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { createSupabaseClient } from "../lib/supabase";
-import { decodeJwtPayload } from "../hooks/useAuthIdentity";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL ||
@@ -31,6 +29,7 @@ const SmartBoardLogin = () => {
     studentEmail: "",
     parentPassword: "",
     parentName: "",
+    invitationToken: "",
   });
 
   const handleChange = (e) => {
@@ -71,23 +70,8 @@ const SmartBoardLogin = () => {
         `${data.user.firstName} ${data.user.lastName}`.trim(),
       );
 
-      // Registrar vínculo padre→hijo en Supabase para que el RLS funcione
-      // (migration 023: parent_student_links). Falla silenciosamente si aún
-      // no se ha aplicado el SQL — el dashboard cae a localStorage.
-      try {
-        const payload = decodeJwtPayload(data.token);
-        const parentUserId = payload?.sub;
-        const studentUserId = data.user.studentId;
-        if (parentUserId && studentUserId && parentUserId !== studentUserId) {
-          const sb = createSupabaseClient(data.token);
-          await sb.from("parent_student_links").upsert(
-            { parent_user_id: parentUserId, student_user_id: studentUserId, is_active: true },
-            { onConflict: "parent_user_id,student_user_id" },
-          );
-        }
-      } catch {
-        // La tabla aún no existe o RLS lo bloquea — no interrumpir el login
-      }
+      // El vínculo padre→hijo lo crea el backend al registrar (service_role),
+      // nunca desde el cliente. Ver services/authService.signUpParent.
 
       navigate("/smartboard");
     } catch (err) {
@@ -109,6 +93,7 @@ const SmartBoardLogin = () => {
           studentEmail: parentForm.studentEmail,
           parentPassword: parentForm.parentPassword,
           parentName: parentForm.parentName,
+          invitationToken: parentForm.invitationToken,
         }),
       });
       const data = await res.json();
@@ -118,6 +103,7 @@ const SmartBoardLogin = () => {
         studentEmail: parentForm.studentEmail,
         parentPassword: "",
         parentName: "",
+        invitationToken: "",
       });
       setTimeout(() => setMode("parent"), 2000);
     } catch (err) {
@@ -317,7 +303,24 @@ const SmartBoardLogin = () => {
                 <>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">
-                      Nombre de usuario
+                      Código de invitación
+                    </label>
+                    <div className="relative">
+                      <Users className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        name="invitationToken"
+                        value={parentForm.invitationToken}
+                        onChange={handleParentChange}
+                        placeholder="Código enviado al email del acudiente"
+                        className="w-full pl-10 pr-4 py-2 border border-[#4DA8C4]/30 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">
+                      Correo del estudiante (tu hijo/a)
                     </label>
                     <div className="relative">
                       <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -510,7 +513,9 @@ const SmartBoardLogin = () => {
             <form onSubmit={handleParentRegister} className="space-y-4">
               <div className="bg-[#E8F7FB] rounded-xl p-3 text-xs text-[#004B63] mb-2">
                 Crea tu acceso de padre/madre usando el correo de tu hijo/a.
-                Elige una contraseña diferente a la del estudiante.
+                Elige una contraseña diferente a la del estudiante. Necesitas el
+                código de invitación que genera el estudiante desde su cuenta
+                (se envía por email al verificar el consentimiento parental).
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">

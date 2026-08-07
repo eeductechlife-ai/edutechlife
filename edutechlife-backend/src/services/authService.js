@@ -230,12 +230,15 @@ function buildParentEmail(studentEmail) {
  * The parent uses the same email as the student but a different password.
  * Internally we store the parent as `local+padre@domain`.
  */
-async function signUpParent({ studentEmail, parentPassword, parentName }) {
+async function signUpParent({ studentEmail, parentPassword, parentName, invitationToken }) {
   if (!studentEmail || !parentPassword) {
     throw new Error('El correo del estudiante y la contraseña son requeridos');
   }
   if (parentPassword.length < 6) {
     throw new Error('La contraseña debe tener al menos 6 caracteres');
+  }
+  if (!invitationToken) {
+    throw new Error('Se requiere el código de invitación que genera el estudiante desde su cuenta');
   }
 
   const normalizedStudentEmail = String(studentEmail).toLowerCase().trim();
@@ -249,6 +252,23 @@ async function signUpParent({ studentEmail, parentPassword, parentName }) {
     .select('id')
     .eq('email', normalizedStudentEmail)
     .maybeSingle();
+  if (!studentProfile?.id) {
+    throw new Error('No existe una cuenta de estudiante con ese correo');
+  }
+
+  // Validate the invitation token against a VERIFIED parental consent.
+  // The consent is created by the student's flow (POST /parental-consent) and
+  // verified by email (POST /parental-consent/verify) before any parent
+  // account can be created.
+  const { data: consent } = await supabase
+    .from('parent_consents')
+    .select('verification_status')
+    .eq('student_id', studentProfile.id)
+    .eq('verification_token', invitationToken)
+    .maybeSingle();
+  if (!consent || consent.verification_status !== 'verified') {
+    throw new Error('El código de invitación no es válido o el consentimiento no está verificado');
+  }
 
   const { data: authData, error: authError } = await supabase.auth.admin.createUser({
     email: parentAuthEmail,
@@ -257,7 +277,7 @@ async function signUpParent({ studentEmail, parentPassword, parentName }) {
     user_metadata: {
       role: 'parent',
       student_email: normalizedStudentEmail,
-      student_id: studentProfile?.id || null,
+      student_id: studentProfile.id,
       first_name: firstName,
       last_name: lastName,
     },
@@ -288,6 +308,18 @@ async function signUpParent({ studentEmail, parentPassword, parentName }) {
     }])
     .select()
     .maybeSingle();
+
+  // Link parent → student from the backend (service_role), never from the client.
+  await supabase
+    .from('parent_student_links')
+    .upsert(
+      {
+        parent_user_id: userId,
+        student_user_id: studentProfile.id,
+        is_active: true,
+      },
+      { onConflict: 'parent_user_id,student_user_id' },
+    );
 
   return { message: 'Cuenta de padre creada exitosamente. Ya puedes iniciar sesión.' };
 }
