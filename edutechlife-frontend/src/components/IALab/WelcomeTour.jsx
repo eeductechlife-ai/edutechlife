@@ -108,50 +108,46 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
       return;
     }
 
-    // Defer storage operations to avoid blocking render
+    // Completely new students (no activity) → No tour, go straight to dashboard
+    const hasProgress = hasExistingProgress({
+      moduleProgress,
+      totalXp,
+      completedLessons,
+    });
+    if (!hasProgress) {
+      // New student: no tour needed
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(() => incrementVisitCount());
+      } else {
+        incrementVisitCount();
+      }
+      return;
+    }
+
+    // Students with existing progress + returning student → Show interactive tour
+    if (isReturningStudent()) {
+      // Already seen tour before: don't show again
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(() => incrementVisitCount());
+      } else {
+        incrementVisitCount();
+      }
+      return;
+    }
+
+    // Student with progress but haven't seen tour → Show welcome tour
+    // (helps orient experienced students to new features)
     if ("requestIdleCallback" in window) {
       const id = requestIdleCallback(() => {
-        if (isReturningStudent()) {
-          incrementVisitCount();
-          return;
-        }
-
-        const hasProgress = hasExistingProgress({
-          moduleProgress,
-          totalXp,
-          completedLessons,
-        });
-        if (hasProgress) {
-          safeStorage.setItem(TOUR_KEY, new Date().toISOString());
-          incrementVisitCount();
-          return;
-        }
-
         incrementVisitCount();
         const timer = setTimeout(() => setIsOpen(true), 300);
         return () => clearTimeout(timer);
       });
       return () => cancelIdleCallback(id);
     } else {
-      // Fallback for browsers without requestIdleCallback
-      if (isReturningStudent()) {
-        incrementVisitCount();
-        return;
-      }
-
-      const hasProgress = hasExistingProgress({
-        moduleProgress,
-        totalXp,
-        completedLessons,
-      });
-      if (hasProgress) {
-        safeStorage.setItem(TOUR_KEY, new Date().toISOString());
-        incrementVisitCount();
-        return;
-      }
-
+      // Fallback: show after 300ms
       incrementVisitCount();
-      const timer = setTimeout(() => setIsOpen(true), 1200);
+      const timer = setTimeout(() => setIsOpen(true), 300);
       return () => clearTimeout(timer);
     }
   }, [forceShow, moduleProgress, totalXp, completedLessons]);
