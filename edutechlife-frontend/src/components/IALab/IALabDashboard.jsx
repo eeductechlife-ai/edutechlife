@@ -1,9 +1,27 @@
 import { useMemo, lazy, Suspense } from "react";
 import { useIALabStore } from "../../store/ialabStore";
-import DashboardCompleted from "./dashboard/DashboardCompleted";
-import DashboardInProgress from "./dashboard/DashboardInProgress";
 
 const WelcomeTour = lazy(() => import("./WelcomeTour"));
+const DashboardCompleted = lazy(() => import("./dashboard/DashboardCompleted"));
+const DashboardInProgress = lazy(
+  () => import("./dashboard/DashboardInProgress"),
+);
+
+// Placeholder spinner for dashboard loading
+function DashboardFallback() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-pulse space-y-4">
+        <div className="h-8 w-48 bg-gray-200 rounded"></div>
+        <div className="space-y-3">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="h-12 w-96 bg-gray-100 rounded"></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const MODULES = [1, 2, 3, 4, 5];
 
@@ -57,12 +75,14 @@ export default function IALabDashboard() {
       <Suspense fallback={null}>
         <WelcomeTour />
       </Suspense>
-      <DueForReview />
-      {courseCompleted || stats.completed === 5 ? (
-        <DashboardCompleted />
-      ) : (
-        <DashboardInProgress />
-      )}
+      <Suspense fallback={<DashboardFallback />}>
+        <DueForReview />
+        {courseCompleted || stats.completed === 5 ? (
+          <DashboardCompleted />
+        ) : (
+          <DashboardInProgress />
+        )}
+      </Suspense>
     </>
   );
 }

@@ -1,7 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
-import { X, ChevronRight, ChevronLeft, Sparkles, Trophy, Zap, MessageCircle, BookOpen } from "lucide-react";
+import {
+  X,
+  ChevronRight,
+  ChevronLeft,
+  Sparkles,
+  Trophy,
+  Zap,
+  MessageCircle,
+  BookOpen,
+} from "lucide-react";
 import { safeStorage } from "../../utils/storage";
 import { useIALabStore } from "../../store/ialabStore";
+import LearningPaceSelector from "./LearningPaceSelector";
 
 const TOUR_KEY = "ialab-welcome-tour-completed";
 const VISIT_COUNT_KEY = "ialab-visit-count";
@@ -30,7 +40,7 @@ const STEPS = [
   },
   {
     icon: MessageCircle,
-    title: "Valerio, tu coach IA",
+    title: "MAX, tu coach IA",
     description:
       "Un tutor personal disponible 24/7. Pregúntale cualquier duda sobre los módulos, prompts, herramientas o ética.",
     highlight: "Disponible en todos los módulos",
@@ -73,10 +83,15 @@ function hasExistingProgress(store) {
   if (!store) return false;
   const moduleProgress = store.moduleProgress || {};
   const hasAnyModuleActivity = Object.values(moduleProgress).some(
-    (mod) => mod?.exam || mod?.challenge || mod?.resourcesCompleted || (mod?.currentScore || 0) > 0,
+    (mod) =>
+      mod?.exam ||
+      mod?.challenge ||
+      mod?.resourcesCompleted ||
+      (mod?.currentScore || 0) > 0,
   );
   const hasXp = (store.totalXp || 0) > 0;
-  const hasCompletedLessons = Array.isArray(store.completedLessons) && store.completedLessons.length > 0;
+  const hasCompletedLessons =
+    Array.isArray(store.completedLessons) && store.completedLessons.length > 0;
   return hasAnyModuleActivity || hasXp || hasCompletedLessons;
 }
 
@@ -93,21 +108,52 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
       return;
     }
 
-    if (isReturningStudent()) {
-      incrementVisitCount();
-      return;
-    }
+    // Defer storage operations to avoid blocking render
+    if ("requestIdleCallback" in window) {
+      const id = requestIdleCallback(() => {
+        if (isReturningStudent()) {
+          incrementVisitCount();
+          return;
+        }
 
-    const hasProgress = hasExistingProgress({ moduleProgress, totalXp, completedLessons });
-    if (hasProgress) {
-      safeStorage.setItem(TOUR_KEY, new Date().toISOString());
-      incrementVisitCount();
-      return;
-    }
+        const hasProgress = hasExistingProgress({
+          moduleProgress,
+          totalXp,
+          completedLessons,
+        });
+        if (hasProgress) {
+          safeStorage.setItem(TOUR_KEY, new Date().toISOString());
+          incrementVisitCount();
+          return;
+        }
 
-    incrementVisitCount();
-    const timer = setTimeout(() => setIsOpen(true), 1200);
-    return () => clearTimeout(timer);
+        incrementVisitCount();
+        const timer = setTimeout(() => setIsOpen(true), 300);
+        return () => clearTimeout(timer);
+      });
+      return () => cancelIdleCallback(id);
+    } else {
+      // Fallback for browsers without requestIdleCallback
+      if (isReturningStudent()) {
+        incrementVisitCount();
+        return;
+      }
+
+      const hasProgress = hasExistingProgress({
+        moduleProgress,
+        totalXp,
+        completedLessons,
+      });
+      if (hasProgress) {
+        safeStorage.setItem(TOUR_KEY, new Date().toISOString());
+        incrementVisitCount();
+        return;
+      }
+
+      incrementVisitCount();
+      const timer = setTimeout(() => setIsOpen(true), 1200);
+      return () => clearTimeout(timer);
+    }
   }, [forceShow, moduleProgress, totalXp, completedLessons]);
 
   const handleClose = useCallback(() => {
@@ -163,8 +209,10 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
       <div
         className="relative rounded-3xl max-w-md w-full overflow-hidden"
         style={{
-          background: "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(240,249,252,0.98) 100%)",
-          boxShadow: "0 25px 60px -12px rgba(0, 75, 99, 0.45), 0 0 0 1px rgba(0, 188, 212, 0.1)",
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(240,249,252,0.98) 100%)",
+          boxShadow:
+            "0 25px 60px -12px rgba(0, 75, 99, 0.45), 0 0 0 1px rgba(0, 188, 212, 0.1)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -190,8 +238,14 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
           }}
         >
           <div className="absolute inset-0 opacity-25 pointer-events-none">
-            <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full blur-2xl" style={{ background: "rgba(255,255,255,0.4)" }} />
-            <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full blur-2xl" style={{ background: "rgba(102, 204, 204, 0.5)" }} />
+            <div
+              className="absolute -top-8 -right-8 w-32 h-32 rounded-full blur-2xl"
+              style={{ background: "rgba(255,255,255,0.4)" }}
+            />
+            <div
+              className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full blur-2xl"
+              style={{ background: "rgba(102, 204, 204, 0.5)" }}
+            />
           </div>
           <div
             className="w-20 h-20 rounded-3xl flex items-center justify-center transform transition-transform hover:scale-105"
@@ -200,7 +254,11 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
               boxShadow: "0 10px 30px rgba(0, 75, 99, 0.35)",
             }}
           >
-            <Icon className="w-10 h-10" style={{ color: "var(--ialab-petroleum, #004B63)" }} aria-hidden="true" />
+            <Icon
+              className="w-10 h-10"
+              style={{ color: "var(--ialab-petroleum, #004B63)" }}
+              aria-hidden="true"
+            />
           </div>
         </div>
 
@@ -208,7 +266,10 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
           <h2
             id="tour-title"
             className="text-xl sm:text-2xl font-bold mb-2 text-center"
-            style={{ color: "var(--ialab-petroleum, #004B63)", fontFamily: "'Montserrat', sans-serif" }}
+            style={{
+              color: "var(--ialab-petroleum, #004B63)",
+              fontFamily: "'Montserrat', sans-serif",
+            }}
           >
             {currentStep.title}
           </h2>
@@ -219,19 +280,33 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
           >
             {currentStep.description}
           </p>
-          <div
-            className="rounded-xl px-4 py-3 mb-6 text-center"
-            style={{
-              background: "linear-gradient(90deg, rgba(0, 188, 212, 0.08) 0%, rgba(102, 204, 204, 0.12) 100%)",
-              border: "1px solid rgba(0, 188, 212, 0.2)",
-            }}
-          >
-            <p className="text-xs font-semibold" style={{ color: "var(--ialab-teal, #2596be)" }}>
-              {currentStep.highlight}
-            </p>
-          </div>
+          {isLast ? (
+            <div className="mb-6">
+              <LearningPaceSelector showLabel={false} />
+            </div>
+          ) : (
+            <div
+              className="rounded-xl px-4 py-3 mb-6 text-center"
+              style={{
+                background:
+                  "linear-gradient(90deg, rgba(0, 188, 212, 0.08) 0%, rgba(102, 204, 204, 0.12) 100%)",
+                border: "1px solid rgba(0, 188, 212, 0.2)",
+              }}
+            >
+              <p
+                className="text-xs font-semibold"
+                style={{ color: "var(--ialab-teal, #2596be)" }}
+              >
+                {currentStep.highlight}
+              </p>
+            </div>
+          )}
 
-          <div className="flex items-center justify-center gap-1.5 mb-6" role="tablist" aria-label="Progreso del tour">
+          <div
+            className="flex items-center justify-center gap-1.5 mb-6"
+            role="tablist"
+            aria-label="Progreso del tour"
+          >
             {STEPS.map((_, i) => (
               <button
                 key={i}
@@ -248,8 +323,8 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
                     i === step
                       ? "var(--ialab-cyan, #00BCD4)"
                       : i < step
-                      ? "rgba(0, 188, 212, 0.4)"
-                      : "rgba(148, 163, 184, 0.3)",
+                        ? "rgba(0, 188, 212, 0.4)"
+                        : "rgba(148, 163, 184, 0.3)",
                 }}
               />
             ))}
@@ -278,7 +353,9 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
               }}
             >
               {isLast ? "¡Empezar!" : "Siguiente"}
-              {!isLast && <ChevronRight className="w-4 h-4" aria-hidden="true" />}
+              {!isLast && (
+                <ChevronRight className="w-4 h-4" aria-hidden="true" />
+              )}
               {isLast && <Sparkles className="w-4 h-4" aria-hidden="true" />}
             </button>
           </div>

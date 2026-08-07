@@ -262,6 +262,9 @@ describe('Smartboard DELETE /delete-user-data', () => {
     expect(mockSupabase.from).toHaveBeenCalledWith('students');
     expect(mockSupabase.from).toHaveBeenCalledWith('smartboard_kids_data');
     expect(mockSupabase.from).toHaveBeenCalledWith('parent_consents');
+    // Erasure completo: perfil users, vínculos padre→hijo y activity_log legacy
+    expect(mockSupabase.from).toHaveBeenCalledWith('users');
+    expect(mockSupabase.from).toHaveBeenCalledWith('parent_student_links');
     // Always scoped to the authenticated user id from the token
     expect(deleteEq).toHaveBeenCalledWith('auth_id', 'kid-123');
   });

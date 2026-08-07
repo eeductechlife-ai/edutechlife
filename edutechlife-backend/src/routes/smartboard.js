@@ -709,6 +709,9 @@ router.delete('/delete-user-data', requireAuth, async (req, res) => {
     { table: 'crisis_alerts', column: 'student_id' },
     { table: 'activity_log', column: 'user_id' },
     { table: 'students', column: 'auth_id' }, // cascada a tablas hijas
+    { table: 'users', column: 'id' },
+    { table: 'parent_student_links', column: 'student_user_id' },
+    { table: 'parent_student_links', column: 'parent_user_id' },
   ];
 
   const results = {};
