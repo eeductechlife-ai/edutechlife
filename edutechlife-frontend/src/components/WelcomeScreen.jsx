@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import FloatingParticles from './FloatingParticles';
 import { Brain, CheckCircle, ArrowLeft } from 'lucide-react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -32,8 +31,6 @@ const WelcomeScreen = ({ onNavigate }) => {
     <>
       <SEO title={t('seo.login.title')} description={t('seo.login.desc')} />
       <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 md:p-6 relative overflow-hidden">
-      <FloatingParticles />
-      
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
           backgroundImage: `radial-gradient(circle at 25px 25px, white 2%, transparent 0%)`,

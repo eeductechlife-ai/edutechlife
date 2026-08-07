@@ -141,7 +141,7 @@ const App = () => {
             <Suspense fallback={null}>
               <LoadingScreen
                 onComplete={() => setIsLoading(false)}
-                minDuration={100}
+                minDuration={0}
               />
             </Suspense>
           )}

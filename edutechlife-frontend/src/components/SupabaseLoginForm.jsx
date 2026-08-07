@@ -91,12 +91,14 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
       localStorage.setItem("auth_token", data.token);
       localStorage.setItem("user_email", data.email);
 
-      // Progress is stored per account. Claim the namespace for this user and
-      // reload rather than client-side navigating, so the stores rehydrate from
-      // this account's data instead of keeping the previous user's in-memory
-      // state (which showed every student the same progress).
+      // Claim storage for current user (creates isolated namespace)
+      // Token is now in localStorage; useAuthIdentity will read it on next render
       claimStorageForCurrentUser();
-      window.location.replace(returnTo);
+
+      // Use client-side navigation instead of hard reload
+      // Preserves browser cache, avoids re-parsing bundles, faster than window.location.replace()
+      // Store subscriptions will rehydrate automatically via Zustand persist middleware
+      navigate(returnTo, { replace: true });
     } catch (err) {
       setError(t("login.error.connection") || "Connection error");
       console.error("Login error:", err);
