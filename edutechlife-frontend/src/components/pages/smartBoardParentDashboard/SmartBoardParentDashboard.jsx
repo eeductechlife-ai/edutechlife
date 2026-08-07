@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuthIdentity } from "../../../hooks/useAuthIdentity";
@@ -35,6 +35,7 @@ import {
 import WeeklyReportCard from "./components/WeeklyReportCard";
 import WellbeingCard from "./components/WellbeingCard";
 import ParentResources from "./components/ParentResources";
+import { mergeRealtimePoints } from "./mergeRealtime";
 
 const LEVELS = [
   { min: 5000, name: "Maestro", emoji: "🏆" },
@@ -229,6 +230,7 @@ const SmartBoardParentDashboard = () => {
     authToken,
   );
   const [data, setData] = useState(supabaseData);
+  const liveAppliedRef = useRef(false);
 
   const { studentStatus, liveSessions, livePoints, isConnected } =
     useParentDashboardRealtime(userId, studentId || userId, authToken);
@@ -244,9 +246,10 @@ const SmartBoardParentDashboard = () => {
     if (isLoaded && !userId && !isParent) navigate("/smartboard/login");
   }, [isLoaded, userId, isParent, navigate]);
 
-  // Keep local state in sync with the hook (Supabase or localStorage fallback)
+  // Keep local state in sync with the hook (Supabase or localStorage fallback).
+  // Do NOT clobber realtime-merged data once live events have been applied.
   useEffect(() => {
-    setData(supabaseData);
+    if (!liveAppliedRef.current) setData(supabaseData);
   }, [supabaseData]);
 
   useEffect(() => {
@@ -284,16 +287,16 @@ const SmartBoardParentDashboard = () => {
 
   useEffect(() => {
     if (!liveSessions.length && !livePoints.length) return;
-    setData((prev) => ({
-      ...prev,
-      sessions: liveSessions.length ? liveSessions : prev.sessions,
-      points: livePoints.length
-        ? prev.points + livePoints.reduce((s, e) => s + e.points, 0)
-        : prev.points,
-      history: livePoints.length
-        ? [...livePoints, ...prev.history].slice(0, 100)
-        : prev.history,
-    }));
+    liveAppliedRef.current = true;
+    setData((prev) => {
+      const merged = mergeRealtimePoints(prev, livePoints);
+      return {
+        ...prev,
+        sessions: liveSessions.length ? liveSessions : prev.sessions,
+        points: merged.points,
+        history: merged.history,
+      };
+    });
   }, [liveSessions, livePoints]);
 
   const handleLogout = () => {
