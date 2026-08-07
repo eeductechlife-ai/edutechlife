@@ -52,8 +52,24 @@ const SmartBoardKidsDashboard = () => {
     signOutUser("/", navigate);
   }, [navigate]);
 
-  const handleDaniOpen = useCallback(() => setIsDaniOpen(true), []);
-  const handleDaniClose = useCallback(() => setIsDaniOpen(false), []);
+  const handleDaniOpen = useCallback(() => {
+    setIsDaniOpen(true);
+    document.body.style.overflow = "hidden";
+  }, []);
+  const handleDaniClose = useCallback(() => {
+    setIsDaniOpen(false);
+    document.body.style.overflow = "";
+  }, []);
+
+  // Restore body scroll if component unmounts while Dani is open
+  useEffect(() => () => { document.body.style.overflow = ""; }, []);
+
+  // Allow child components to open Dani panel via custom event
+  useEffect(() => {
+    const handler = () => handleDaniOpen();
+    window.addEventListener("smartboard:open-dani", handler);
+    return () => window.removeEventListener("smartboard:open-dani", handler);
+  }, [handleDaniOpen]);
 
   // Obtener auth token y nombre del estudiante para UserMenu
   const authToken =

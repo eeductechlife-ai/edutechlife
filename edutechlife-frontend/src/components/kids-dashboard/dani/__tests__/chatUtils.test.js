@@ -1,9 +1,10 @@
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import {
   inferMoodFromText,
   getRelativeTime,
   extractTopic,
   SUBJECT_KEYWORDS,
+  scrollMessagesToBottom,
 } from "../chatUtils";
 
 describe("inferMoodFromText", () => {
@@ -99,5 +100,38 @@ describe("extractTopic", () => {
       const found = extractTopic(subject.keywords[0]);
       expect(found?.topic).toBe(subject.topic);
     });
+  });
+});
+
+describe("scrollMessagesToBottom", () => {
+  test("scrolls the container to its scrollHeight with smooth behavior", () => {
+    const scrollTo = vi.fn();
+    scrollMessagesToBottom({ scrollHeight: 500, scrollTo });
+    expect(scrollTo).toHaveBeenCalledWith({
+      top: 500,
+      behavior: "smooth",
+    });
+  });
+
+  test("does nothing when container is null", () => {
+    expect(() => scrollMessagesToBottom(null)).not.toThrow();
+  });
+
+  test("does nothing when container is undefined", () => {
+    expect(() => scrollMessagesToBottom(undefined)).not.toThrow();
+  });
+
+  test("does nothing when container has no scrollTo method", () => {
+    expect(() =>
+      scrollMessagesToBottom({ scrollHeight: 100 }),
+    ).not.toThrow();
+  });
+
+  test("never calls scrollIntoView on the container", () => {
+    const scrollIntoView = vi.fn();
+    const scrollTo = vi.fn();
+    scrollMessagesToBottom({ scrollHeight: 200, scrollTo, scrollIntoView });
+    expect(scrollIntoView).not.toHaveBeenCalled();
+    expect(scrollTo).toHaveBeenCalledTimes(1);
   });
 });

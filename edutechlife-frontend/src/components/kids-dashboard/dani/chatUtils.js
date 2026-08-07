@@ -1,6 +1,11 @@
 // ==========================================
 // Utility: Mood detection from text
 // ==========================================
+export function scrollMessagesToBottom(container) {
+  if (!container || typeof container.scrollTo !== "function") return;
+  container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+}
+
 export function inferMoodFromText(text) {
   const t = text.toLowerCase();
   if (

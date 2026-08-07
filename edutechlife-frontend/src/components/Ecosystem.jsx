@@ -10,7 +10,7 @@ const Ecosystem = memo(() => {
   const pilares = [
     {
       id: 'neuroentorno', icon: 'fa-brain', title: 'NeuroEntornos Escolares', subtitle: 'Pilar 1',
-      desc: 'Diagnóstico VAK, IA Lab con Valerio, SmartBoard y herramientas neuropedagógicas.',
+      desc: 'Diagnóstico VAK, IA Lab con MAX, SmartBoard y herramientas neuropedagógicas.',
       stats: [{ num: '6,000+', label: 'Estudiantes' }, { num: '98%', label: 'Efectividad' }],
     },
     {

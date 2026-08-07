@@ -2,7 +2,7 @@
  * PromptSandbox — Laboratorio interactivo de Prompt Engineering
  *
  * ADITIVO: Componente autocontenido. Usa `callDeepseek` existente.
- * No modifica lógica de Valerio ni otros chats. Ideal para OVA hands-on.
+ * No modifica lógica de MAX ni otros chats. Ideal para OVA hands-on.
  *
  * Features:
  *   - Editor de prompt con system prompt + user prompt

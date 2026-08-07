@@ -386,12 +386,6 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
             />
             {t("ialab.study_planner.auto_save")}
           </p>
-          {isConnected && (
-            <span className="text-[9px] text-emerald-500 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-              {t("ialab.study_planner.cloud")}
-            </span>
-          )}
         </div>
       </div>
     </div>

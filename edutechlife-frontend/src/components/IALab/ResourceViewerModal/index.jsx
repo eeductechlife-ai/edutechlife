@@ -38,8 +38,6 @@ const ResourceViewerModal = ({
   onNextResource,
   currentIndex = 0,
   totalResources = 0,
-  onOpenImmersiveView = null,
-  onOpenOVA = null,
   youtubeDuration = null,
   durationLoading = false,
 }) => {
@@ -60,6 +58,9 @@ const ResourceViewerModal = ({
   const prefersReducedMotion = useReducedMotion();
   const { noteText, showNotes, setShowNotes, noteSaved, handleNoteChange } =
     useResourceNotes(resource);
+
+  const setShowValerioDrawer = useIALabStore((s) => s.setShowValerioDrawer);
+  const setValerioInitialMessage = useIALabStore((s) => s.setValerioInitialMessage);
 
   const RESOURCE_ICONS = {
     video: "fa-video",
@@ -550,6 +551,19 @@ const ResourceViewerModal = ({
                           {t("ialab.viewer_modal.notes")}
                         </span>
                       </button>
+                      <button
+                        onClick={() => {
+                          setValerioInitialMessage(t("ialab.ask_max_context") + (resource?.title || ''));
+                          setShowValerioDrawer(true);
+                          handleClose();
+                        }}
+                        className="px-3 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px] border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 text-petroleum/70 hover:bg-petroleum/5 hover:text-petroleum"
+                        aria-label={t("ialab.ask_max_btn")}
+                        title={t("ialab.ask_max_btn")}
+                      >
+                        <Icon name="fa-robot" className="w-3 h-3 sm:w-4 sm:h-4" />
+                        <span className="hidden sm:inline">{t("ialab.ask_max_btn")}</span>
+                      </button>
                     </div>
                     {totalResources > 1 && (
                       <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
@@ -665,8 +679,6 @@ ResourceViewerModal.propTypes = {
   onNextResource: PropTypes.func,
   currentIndex: PropTypes.number,
   totalResources: PropTypes.number,
-  onOpenImmersiveView: PropTypes.func,
-  onOpenOVA: PropTypes.func,
   youtubeDuration: PropTypes.string,
   durationLoading: PropTypes.bool,
 };

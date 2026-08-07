@@ -587,8 +587,6 @@ const TopicResourcesModal = ({
             onNextResource={handleNextResource}
             currentIndex={activeResourceIndex}
             totalResources={resources.length}
-            onOpenImmersiveView={handleOpenImmersivePdf}
-            onOpenOVA={handleOpenOVA}
             youtubeDuration={youtubeDuration}
             durationLoading={durationLoading}
           />

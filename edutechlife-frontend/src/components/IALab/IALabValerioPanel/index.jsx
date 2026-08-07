@@ -44,20 +44,34 @@ import {
 } from "../../../services/valerioMemory";
 import { ValerioAcademicMemory } from "../../../services/valerioAcademicMemory";
 import {
-  useStreamingWithAudio,
-  StreamingMessageOptimized,
-} from "./ValerioStreamingOptimized";
-import {
   useDebouncedInput,
   useResponseCache,
   PerformanceMetrics,
 } from "./valerioPerfOptimizations";
 import { useToast } from "./ValerioUIEnhancements";
+import { createSpeechQueue } from "./valerioSpeechQueue";
 import { ALL_LESSONS, ALL_LESSONS_EN } from "../../../data/ialab";
 
 const VALERIO_MEMORY_KEY = "ialab_valerio_conversation";
 
-const IALabValerioPanel = ({ isOpen, onClose }) => {
+// Divide un texto en frases completas para hablarlas de una en una
+const splitIntoSentences = (text) => {
+  const sentences = [];
+  let pending = text;
+  while (true) {
+    const match = pending.match(/[.!?…](?:\s|$|[\n\r])/);
+    if (!match) break;
+    const endIdx = match.index + 1;
+    const sentence = pending.slice(0, endIdx).trim();
+    pending = pending.slice(endIdx + match[0].length);
+    if (sentence.length >= 5) sentences.push(sentence);
+  }
+  const rest = pending.trim();
+  if (rest.length > 3) sentences.push(rest);
+  return sentences;
+};
+
+const IALabValerioPanel = ({ isOpen, onClose, initialMessage = '' }) => {
   const { t, locale } = useTranslation();
   const { activeMod, modules, completedModules } = useIALabProgressContext();
   // Shared Supabase singleton for academic memory (optional)
@@ -82,10 +96,6 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [systemPrompt, setSystemPrompt] = useState("");
 
-  // Streaming optimization: parallel text + audio
-  const { streaming, handleStreamChunk, handleStreamComplete } =
-    useStreamingWithAudio();
-
   // Performance optimizations (with fallbacks)
   const debouncedInput = useDebouncedInput(userInput, 300);
   const cache = useResponseCache();
@@ -104,10 +114,10 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   const warmupDoneRef = useRef(false);
   const warmupRef = useRef(null);
   const firstChunkRef = useRef(false);
-  const ttsQueueRef = useRef([]);
-  const ttsPlayingRef = useRef(false);
   const pendingSentenceRef = useRef("");
-  const fallbackTypingRef = useRef(null);
+  const streamDoneRef = useRef(false);
+  const conversationFinalizedRef = useRef(false);
+  const fullResponseRef = useRef("");
 
   const studentName = user?.firstName || user?.full_name || "";
   const currentModule = modules.find((m) => m.id === activeMod);
@@ -177,18 +187,48 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     t,
   ]);
 
-  const processTtsQueue = useCallback(() => {
-    if (ttsPlayingRef.current || ttsQueueRef.current.length === 0) return;
-    ttsPlayingRef.current = true;
-    const text = ttsQueueRef.current.shift();
-    speakTextConversational(cleanTextForTTS(text), "valerio", {}, () => {
-      ttsPlayingRef.current = false;
-      if (ttsQueueRef.current.length === 0) {
-        setValerioState("idle");
-      }
-      processTtsQueue();
-    });
+  const finalizeMessage = useCallback((fullText) => {
+    if (conversationFinalizedRef.current) return;
+    conversationFinalizedRef.current = true;
+    const valerioMessage = {
+      id: `valerio_${Date.now()}`,
+      type: "valerio",
+      content: fullText,
+      timestamp: new Date().toISOString(),
+    };
+    setConversation((prev) => [...prev, valerioMessage]);
+    setMessage(fullText);
+    setStreamingMessage("");
+    setValerioState("idle");
   }, []);
+
+  // Cola de voz "voz primero, texto después": el texto se revela cuando cada
+  // frase empieza a sonar; la cola avanza solo al terminar el audio, y la
+  // siguiente frase se precarga en paralelo para no dejar huecos.
+  const ttsQueueRef = useRef(
+    createSpeechQueue({
+      speak: (text, onEnd, onStart) =>
+        speakTextConversational(
+          cleanTextForTTS(text),
+          "valerio",
+          {},
+          onEnd,
+          undefined,
+          onStart,
+        ),
+      prefetch: (nextText) => prefetchTts(cleanTextForTTS(nextText), "valerio"),
+      reveal: (sentence) =>
+        setStreamingMessage((prev) => (prev ? prev + " " : "") + sentence),
+      onSpeak: () => setValerioState("speaking"),
+      onIdle: () => setValerioState("idle"),
+      onFinalize: () => {
+        if (streamDoneRef.current && fullResponseRef.current) {
+          finalizeMessage(fullResponseRef.current);
+        }
+      },
+      isStreamDone: () => streamDoneRef.current,
+    }),
+  );
 
   useEffect(() => {
     let warmupTimeoutId;
@@ -235,8 +275,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     } else {
       warmupDoneRef.current = false;
       welcomeSpokenRef.current = false;
-      ttsQueueRef.current = [];
-      ttsPlayingRef.current = false;
+      ttsQueueRef.current.reset();
       pendingSentenceRef.current = "";
       endSession(conversationRef.current);
       stopSpeech();
@@ -245,14 +284,18 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
     return () => {
       clearTimeout(warmupTimeoutId);
       warmupRef.current?.abort();
-      ttsQueueRef.current = [];
-      ttsPlayingRef.current = false;
+      ttsQueueRef.current.reset();
       pendingSentenceRef.current = "";
-      if (fallbackTypingRef.current) clearTimeout(fallbackTypingRef.current);
+      // Si la respuesta ya se generó pero el audio no terminó, fijarla en la
+      // conversación para no perderla al cerrar el panel
+      if (streamDoneRef.current && fullResponseRef.current) {
+        finalizeMessage(fullResponseRef.current);
+      }
+      streamDoneRef.current = false;
       endSession(conversationRef.current);
       stopSpeech();
     };
-  }, [isOpen]);
+  }, [isOpen, finalizeMessage]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -419,6 +462,12 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   }, [currentModule, userLevel, locale, currentLesson?.lessonId]);
 
   useEffect(() => {
+    if (isOpen && initialMessage) {
+      setUserInput(initialMessage);
+    }
+  }, [isOpen, initialMessage]);
+
+  useEffect(() => {
     if (isOpen && !welcomeSpokenRef.current) {
       welcomeSpokenRef.current = true;
       setValerioState("speaking");
@@ -464,9 +513,11 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       setIsProcessing(true);
       setValerioState("thinking");
       setStreamingMessage("");
-      ttsQueueRef.current = [];
-      ttsPlayingRef.current = false;
+      ttsQueueRef.current.reset();
       pendingSentenceRef.current = "";
+      streamDoneRef.current = false;
+      conversationFinalizedRef.current = false;
+      fullResponseRef.current = "";
       stopSpeech();
 
       const userMessage = {
@@ -495,6 +546,9 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       try {
         firstChunkRef.current = false;
         pendingSentenceRef.current = "";
+        streamDoneRef.current = false;
+        conversationFinalizedRef.current = false;
+        fullResponseRef.current = "";
         let fullResponse = "";
 
         let retries = 0;
@@ -508,16 +562,14 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
               false,
               (chunk) => {
                 fullResponse += chunk;
+                fullResponseRef.current = fullResponse;
                 if (!firstChunkRef.current && chunk.trim()) {
                   firstChunkRef.current = true;
-                  setValerioState("speaking");
                 }
 
-                // OPTIMIZED: Parallel text + audio streaming
-                handleStreamChunk(chunk);
-                setStreamingMessage(streaming.chunks.join(""));
-
-                // Fallback: also queue for legacy TTS system
+                // El texto NO se adelanta a la voz: solo se acumulan frases
+                // completas para que MAX las hable primero y el texto se
+                // revele en la burbuja cuando cada frase empieza a sonar.
                 pendingSentenceRef.current += chunk;
                 while (true) {
                   const match = pendingSentenceRef.current.match(
@@ -533,7 +585,6 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
                   );
                   if (sentence.length >= 5) {
                     ttsQueueRef.current.push(sentence);
-                    processTtsQueue();
                   }
                 }
               },
@@ -560,25 +611,23 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
           throw new Error("Respuesta vacía o muy corta");
         }
 
-        // Finalize optimized streaming
-        handleStreamComplete();
+        // El LLM terminó: la respuesta se fija en la conversación cuando la
+        // cola de voz se vacía (o al revelarse todo por el watchdog), para que
+        // el texto siga copiándose sincronizado con el audio hasta el final.
+        streamDoneRef.current = true;
+        fullResponseRef.current = fullResponse;
 
         const remaining = pendingSentenceRef.current.trim();
         if (remaining.length > 3) {
           ttsQueueRef.current.push(remaining);
-          processTtsQueue();
         }
 
-        const valerioMessage = {
-          id: `valerio_${Date.now()}`,
-          type: "valerio",
-          content: fullResponse,
-          timestamp: new Date().toISOString(),
-        };
-
-        setConversation((prev) => [...prev, valerioMessage]);
-        setMessage(fullResponse);
-        setStreamingMessage("");
+        if (
+          ttsQueueRef.current.pending() === 0 &&
+          !ttsQueueRef.current.isPlaying()
+        ) {
+          finalizeMessage(fullResponse);
+        }
       } catch (error) {
         clearTimeout(timeoutId);
         if (error.name === "AbortError") {
@@ -594,39 +643,18 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
           userLevel,
         });
 
-        const valerioMessage = {
-          id: `valerio_${Date.now()}`,
-          type: "valerio",
-          content: fallbackResponse,
-          timestamp: new Date().toISOString(),
-        };
-
-        setConversation((prev) => [...prev, valerioMessage]);
-
-        let charIndex = 0;
-        const typingSpeed = 15;
-        setStreamingMessage("");
-        setValerioState("speaking");
-        if (fallbackTypingRef.current) clearTimeout(fallbackTypingRef.current);
-
-        const typeNextChar = () => {
-          if (charIndex < fallbackResponse.length) {
-            setStreamingMessage(fallbackResponse.slice(0, charIndex + 1));
-            charIndex++;
-            fallbackTypingRef.current = setTimeout(typeNextChar, typingSpeed);
-          } else {
-            fallbackTypingRef.current = null;
-            setStreamingMessage("");
-            setMessage(fallbackResponse);
-            speakTextConversational(
-              cleanTextForTTS(fallbackResponse),
-              "valerio",
-              {},
-              () => setValerioState("idle"),
-            );
-          }
-        };
-        typeNextChar();
+        // Voz primero: la respuesta de respaldo se habla frase por frase y
+        // el texto se revela cuando cada frase empieza a sonar (misma cola).
+        streamDoneRef.current = true;
+        fullResponseRef.current = fallbackResponse;
+        const sentences = splitIntoSentences(fallbackResponse);
+        if (sentences.length === 0) {
+          finalizeMessage(fallbackResponse);
+        } else {
+          setStreamingMessage("");
+          setValerioState("thinking");
+          ttsQueueRef.current.push(sentences);
+        }
       } finally {
         setIsProcessing(false);
         abortRef.current = null;
@@ -641,6 +669,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
       completedModules,
       t,
       systemPrompt,
+      finalizeMessage,
     ],
   );
 
@@ -667,6 +696,10 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
   };
 
   const confirmClearConversation = () => {
+    conversationFinalizedRef.current = false;
+    streamDoneRef.current = false;
+    fullResponseRef.current = "";
+    ttsQueueRef.current.reset();
     setConversation([]);
     setMessage("");
     setStreamingMessage("");
@@ -780,6 +813,7 @@ const IALabValerioPanel = ({ isOpen, onClose }) => {
 IALabValerioPanel.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
+  initialMessage: PropTypes.string,
 };
 
 export default IALabValerioPanel;

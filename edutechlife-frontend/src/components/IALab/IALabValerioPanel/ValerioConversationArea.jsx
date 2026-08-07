@@ -85,7 +85,7 @@ const StreamingMessage = ({ content }) => {
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-xs font-medium opacity-80 mb-2">
-              Valerio
+              MAX
             </div>
             <div className="prose prose-sm max-w-none text-petroleum-darker">
               {content.split('\n').map((line, i) => (

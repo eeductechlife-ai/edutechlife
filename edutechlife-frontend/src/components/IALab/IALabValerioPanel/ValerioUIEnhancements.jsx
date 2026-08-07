@@ -1,5 +1,5 @@
 /**
- * Valerio UI Enhancements
+ * MAX UI Enhancements
  * Componentes profesionales para mejor UX:
  * - Toast notifications
  * - Loading skeletons
@@ -138,9 +138,9 @@ export const CopyButton = ({ text, label = "Copiar" }) => {
 
 /**
  * Typing Indicator
- * Muestra cuando Valerio está escribiendo
+ * Muestra cuando MAX está escribiendo
  */
-export const TypingIndicator = ({ label = "Valerio escribiendo" }) => (
+export const TypingIndicator = ({ label = "MAX escribiendo" }) => (
   <div className="flex items-center gap-1 text-xs text-slate-500">
     <span>{label}</span>
     <span className="flex gap-1">
@@ -214,7 +214,7 @@ export const exportConversation = (conversation, format = "txt") => {
   if (format === "txt") {
     content = `CONVERSACIÓN CON VALERIO\nFecha: ${timestamp}\n\n`;
     conversation.forEach((msg) => {
-      const sender = msg.type === "user" ? "Tú" : "Valerio";
+      const sender = msg.type === "user" ? "Tú" : "MAX";
       content += `[${sender}]\n${msg.content}\n\n`;
     });
   } else if (format === "json") {
@@ -224,7 +224,7 @@ export const exportConversation = (conversation, format = "txt") => {
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Conversación con Valerio</title>
+  <title>Conversación con MAX</title>
   <style>
     body { font-family: sans-serif; max-width: 800px; margin: 20px; }
     .message { margin: 10px 0; padding: 10px; border-radius: 8px; }
@@ -234,13 +234,13 @@ export const exportConversation = (conversation, format = "txt") => {
   </style>
 </head>
 <body>
-  <h1>Conversación con Valerio</h1>
+  <h1>Conversación con MAX</h1>
   <p class="timestamp">${timestamp}</p>
   ${conversation
     .map(
       (msg) => `
   <div class="message ${msg.type}">
-    <strong>${msg.type === "user" ? "Tú" : "Valerio"}:</strong><br>
+    <strong>${msg.type === "user" ? "Tú" : "MAX"}:</strong><br>
     ${msg.content.replace(/\n/g, "<br>")}
   </div>
   `,

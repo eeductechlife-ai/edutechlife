@@ -133,7 +133,7 @@ export const MODULE_3_EN = [
     topic: "Guided Learning",
     difficulty: "easy",
     feedback:
-      "AI is your personal 24/7 tutor. Use it to learn actively, not to avoid effort. Review the guided lab by Valerio.",
+      "AI is your personal 24/7 tutor. Use it to learn actively, not to avoid effort. Review the guided lab by MAX.",
   },
   {
     id: "m3q7",

@@ -2,7 +2,7 @@ import { API_BASE_URL } from "../config/api";
 import { withRetry, deduplicate } from "../utils/asyncHelpers";
 const API_URL = `${API_BASE_URL}/api/chat`;
 
-const VALERIO_SYSTEM_PROMPT = `Eres Valerio, el tutor experto de Edutechlife. Evalúa el prompt del alumno. Debes responder estrictamente en formato JSON con estas llaves: "score" (0-100), "feedback" (3 consejos breves), "improvedPrompt" (el prompt optimizado) y "level" (Novato, Pro, Maestro). Responde únicamente con JSON válido, sin texto adicional.`;
+const VALERIO_SYSTEM_PROMPT = `Eres MAX, el tutor experto de Edutechlife. Evalúa el prompt del alumno. Debes responder estrictamente en formato JSON con estas llaves: "score" (0-100), "feedback" (3 consejos breves), "improvedPrompt" (el prompt optimizado) y "level" (Novato, Pro, Maestro). Responde únicamente con JSON válido, sin texto adicional.`;
 
 const MODULE_CONTEXT = {
   1: {
@@ -188,7 +188,7 @@ const generateDemoResponse = (studentPrompt, moduleId) => {
         "Considera usar ejemplos Few-shot para tareas complejas",
         "Incluye restricciones claras para delimitar el alcance",
       ],
-      improvedPrompt: `${studentPrompt}\n\n[Optimizado por Valerio]`,
+      improvedPrompt: `${studentPrompt}\n\n[Optimizado por MAX]`,
       level,
       moduleId,
       evaluatedAt: new Date().toISOString(),

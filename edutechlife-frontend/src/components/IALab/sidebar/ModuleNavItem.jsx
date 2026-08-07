@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../utils/iconMapping';
+import { useTranslation } from '../../../i18n/I18nProvider';
 
 const ModuleNavItem = ({
   mod,
@@ -15,7 +17,10 @@ const ModuleNavItem = ({
   className = '',
   children,
 }) => {
+  const { t } = useTranslation();
+  const [showUnlockTip, setShowUnlockTip] = useState(false);
   const completed = !isLocked && score >= 80;
+  const prevModId = mod.id > 1 ? mod.id - 1 : null;
 
   if (variant === 'compact') {
     return (
@@ -47,36 +52,50 @@ const ModuleNavItem = ({
   }
 
   return (
-    <motion.button
-      variants={motionVariants}
-      onClick={() => !isLocked && onClick?.(mod.id)}
-      className={`w-full group flex items-center gap-2 min-h-[44px] p-2.5 rounded-xl transition-all duration-300 ${isActive
-        ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md shadow-petroleum/15 dark:shadow-petroleum/30'
-        : 'hover:bg-petroleum/10 dark:hover:bg-petroleum/20 text-slate-700 dark:text-slate-300'
-      } ${isLocked ? 'opacity-60 cursor-not-allowed' : ''} focus:outline-none focus:ring-2 focus:ring-petroleum/30 dark:focus:ring-petroleum/50 focus:ring-offset-1 ${className}`}
-      disabled={isLocked}
-      aria-current={isActive ? 'page' : undefined}
-      aria-label={`${mod.title}${isLocked ? ' (bloqueado)' : ''}`}
-    >
-      <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${isActive
-        ? 'bg-white/20'
-        : 'bg-petroleum/8 dark:bg-petroleum/20 group-hover:bg-petroleum/15'
-      }`}>
-        <span className={`${isActive ? 'text-white' : 'text-petroleum dark:text-[#4DA8C4]'} text-sm font-bold`}>{mod.id}</span>
-      </div>
-      <div className="flex-1 min-w-0 text-left">
-        <p className={`font-semibold text-sm truncate transition-colors ${isActive ? 'text-white' : 'group-hover:text-petroleum dark:group-hover:text-[#4DA8C4]'}`}>{mod.title}</p>
-        {score > 0 && (
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-            <div className={`h-full rounded-full transition-all duration-500 ${isActive ? 'bg-white/60' : 'bg-corporate'}`}
-                 style={{ width: `${score}%` }} />
-          </div>
-        )}
-      </div>
-      {isLocked && <Icon name="fa-lock" className="text-xs text-petroleum/40 dark:text-slate-500" aria-hidden="true" />}
-      {!isLocked && completed && <Icon name="fa-check" className="text-xs text-emerald-500" aria-hidden="true" />}
-      {children}
-    </motion.button>
+    <div className="relative">
+      <motion.button
+        variants={motionVariants}
+        onClick={() => {
+          if (isLocked) { setShowUnlockTip((v) => !v); return; }
+          onClick?.(mod.id);
+        }}
+        className={`w-full group flex items-center gap-2 min-h-[44px] p-2.5 rounded-xl transition-all duration-300 ${isActive
+          ? 'bg-gradient-to-r from-petroleum to-corporate text-white shadow-md shadow-petroleum/15 dark:shadow-petroleum/30'
+          : 'hover:bg-petroleum/10 dark:hover:bg-petroleum/20 text-slate-700 dark:text-slate-300'
+        } ${isLocked ? 'cursor-pointer' : ''} focus:outline-none focus:ring-2 focus:ring-petroleum/30 dark:focus:ring-petroleum/50 focus:ring-offset-1 ${className}`}
+        aria-current={isActive ? 'page' : undefined}
+        aria-label={`${mod.title}${isLocked ? ' (bloqueado)' : ''}`}
+        aria-expanded={isLocked ? showUnlockTip : undefined}
+      >
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${isActive
+          ? 'bg-white/20'
+          : isLocked
+            ? 'bg-slate-100 dark:bg-slate-700/50'
+            : 'bg-petroleum/8 dark:bg-petroleum/20 group-hover:bg-petroleum/15'
+        }`}>
+          {isLocked
+            ? <Icon name="fa-lock" className="text-xs text-slate-400 dark:text-slate-500" aria-hidden="true" />
+            : <span className={`${isActive ? 'text-white' : 'text-petroleum dark:text-[#4DA8C4]'} text-sm font-bold`}>{mod.id}</span>
+          }
+        </div>
+        <div className="flex-1 min-w-0 text-left">
+          <p className={`font-semibold text-sm truncate transition-colors ${isActive ? 'text-white' : isLocked ? 'text-slate-400 dark:text-slate-500' : 'group-hover:text-petroleum dark:group-hover:text-[#4DA8C4]'}`}>{mod.title}</p>
+          {!isLocked && score > 0 && (
+            <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+              <div className={`h-full rounded-full transition-all duration-500 ${isActive ? 'bg-white/60' : 'bg-corporate'}`}
+                   style={{ width: `${score}%` }} />
+            </div>
+          )}
+          {isLocked && prevModId && (
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 leading-tight mt-0.5">
+              {t("ialab.unlock_requirement", { prev: prevModId })}
+            </p>
+          )}
+        </div>
+        {!isLocked && completed && <Icon name="fa-check" className="text-xs text-emerald-500" aria-hidden="true" />}
+        {children}
+      </motion.button>
+    </div>
   );
 };
 

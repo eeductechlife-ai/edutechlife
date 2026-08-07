@@ -11,6 +11,10 @@ export const createSynthesizerSlice = (set, get) => ({
   setAvatarState: (v) => set({ avatarState: v }),
   showValerioDrawer: false,
   setShowValerioDrawer: (v) => set({ showValerioDrawer: v }),
+  valerioInitialMessage: '',
+  setValerioInitialMessage: (v) => set({ valerioInitialMessage: v }),
+  showStudyPlannerModal: false,
+  setShowStudyPlannerModal: (v) => set({ showStudyPlannerModal: v }),
 
   isSynthesizerOpen: false,
   setIsSynthesizerOpen: (v) => set({ isSynthesizerOpen: v }),

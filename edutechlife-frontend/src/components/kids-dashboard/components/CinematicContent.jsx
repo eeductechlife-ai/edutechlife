@@ -68,7 +68,7 @@ function createTabRenderer(deps) {
       component: () => (
         <>
           <MisionDelDia onTabChange={onTabChange} />
-          <HeroSection />
+          <HeroSection onTabChange={onTabChange} />
           <InViewSection>
             <LazyLoad fallback={<SectionFallback tab="inicio" />}>
               <PointsRewardsSystem />

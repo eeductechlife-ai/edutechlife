@@ -326,6 +326,7 @@ export const faToLucideMap = {
   'fa-sliders': Sliders,
   'fa-coins': Coins,
    'fa-calendar': Calendar,
+   'fa-calendar-days': Calendar,
    'fa-piggy-bank': PiggyBank,
     'fa-sitemap': Network,
     'fa-copy': Copy,
@@ -376,6 +377,7 @@ export const faToLucideMap = {
   'fa-exclamation-triangle': TriangleAlert,
   // Phase 1: Critical missing mappings
   'fa-layer-group': Layers,
+  'fa-cards-blank': Layers,
   'fa-bars': Menu,
   'fa-video-camera': Video,
   'fa-clipboard': Clipboard,
@@ -388,6 +390,7 @@ export const faToLucideMap = {
    'fa-hand-pointer': MousePointerClick,
    'fa-list': List,
    'fa-tachometer-alt': Gauge,
+   'fa-gauge-high': Gauge,
    'fa-user-plus': UserPlus,
    'fa-quote-left': Quote,
    'fa-face-smile': Smile,

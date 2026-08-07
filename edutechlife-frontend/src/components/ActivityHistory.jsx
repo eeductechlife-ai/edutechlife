@@ -4,6 +4,8 @@ import React, {
   useEffect,
   useMemo,
   useCallback,
+  lazy,
+  Suspense,
 } from "react";
 import { motion } from "framer-motion";
 import { useActivityTracker } from "../hooks/useActivityTracker";
@@ -19,6 +21,10 @@ import { supabase } from "../lib/supabase";
 
 import SectionHeader from "../components/ui/SectionHeader";
 import ModuleProgressCard from "../components/IALab/ModuleProgressCard";
+import ReviewScheduler from "../components/IALab/ReviewScheduler";
+const StudyCalendarSection = lazy(() =>
+  import("../components/IALab/StudyCalendarSection"),
+);
 
 import {
   MODULE_NAMES,
@@ -480,6 +486,16 @@ const ActivityHistory = ({ isOpen, onClose }) => {
               lastActivityTime={lastActivityTime}
               effectiveAllMinutes={effectiveAllMinutes}
             />
+          )}
+
+          {activeTab === "review" && (
+            <div className="p-3 sm:p-5 space-y-2.5">
+              <SectionHeader title={t("activity.tab.review")} />
+              <ReviewScheduler maxUpcoming={5} />
+              <Suspense fallback={null}>
+                <StudyCalendarSection />
+              </Suspense>
+            </div>
           )}
 
           {activeTab === "recommendations" && (

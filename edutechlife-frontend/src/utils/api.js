@@ -40,6 +40,65 @@ async function fetchWithRetry(url, options, retries = 2) {
   }
 }
 
+/**
+ * Parseo tolerante de JSON generado por IA. DeepSeek a veces devuelve
+ * JSON con comas finales, texto sobrante o truncado. Este parser intenta
+ * reparar y extraer la estructura válida en lugar de fallar.
+ */
+function stripCodeFences(text) {
+  return (text || "").replace(/```json|```/g, "").trim();
+}
+
+function extractBalancedJson(text) {
+  const start = text.search(/[\[{]/);
+  if (start === -1) return null;
+  let depth = 0;
+  let inString = false;
+  let escape = false;
+  for (let i = start; i < text.length; i++) {
+    const ch = text[i];
+    if (inString) {
+      if (escape) escape = false;
+      else if (ch === "\\") escape = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') inString = true;
+    else if (ch === "[" || ch === "{") depth++;
+    else if (ch === "]" || ch === "}") {
+      depth--;
+      if (depth === 0) return text.slice(start, i + 1);
+    }
+  }
+  return text.slice(start);
+}
+
+export function parseJsonResult(raw) {
+  const cleaned = stripCodeFences(raw);
+  if (!cleaned) return null;
+
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    // continua con reparaciones
+  }
+
+  const extracted = extractBalancedJson(cleaned);
+  const candidates = extracted
+    ? [extracted, extracted.replace(/,\s*([\]}])/g, "$1")]
+    : [];
+
+  for (const candidate of candidates) {
+    try {
+      return JSON.parse(candidate);
+    } catch {
+      // intenta el siguiente candidato
+    }
+  }
+
+  return null;
+}
+
 export async function callDeepseek(
   messagesOrPrompt,
   systemPromptOrOpts = null,
@@ -110,7 +169,11 @@ export async function callDeepseek(
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      throw new Error(`API responded with status ${response.status}`);
+      const body = await response.json().catch(() => null);
+      const detail = body?.error?.message || body?.error || response.statusText;
+      throw new Error(
+        `API responded with status ${response.status}${detail ? `: ${detail}` : ""}`,
+      );
     }
 
     const data = await response.json();
@@ -119,9 +182,13 @@ export async function callDeepseek(
       throw new Error(data.error.message || "API returned an error");
     }
 
-    const result = payload.isJson
-      ? JSON.parse(data.result.replace(/```json|```/g, "").trim())
-      : data.result;
+    const result = payload.isJson ? parseJsonResult(data.result) : data.result;
+
+    if (payload.isJson && result === null) {
+      const err = new Error("La respuesta de la IA no fue un JSON válido.");
+      err.raw = data.result || "";
+      throw err;
+    }
 
     // Simplificar respuesta si es muy larga (only legacy format)
     if (

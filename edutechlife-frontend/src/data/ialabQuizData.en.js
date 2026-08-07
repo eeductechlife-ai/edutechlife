@@ -332,7 +332,7 @@ export const MODULE_EXAMS_EN = {
         { id: 'm3q6_d', label: 'Avoid using it because it confuses more than it helps' }
       ],
       correctAnswer: 'm3q6_b', topic: 'Guided Learning', difficulty: 'easy',
-      feedback: 'AI is your personal 24/7 tutor. Use it to learn actively, not to avoid effort. Review the guided lab by Valerio.'
+      feedback: 'AI is your personal 24/7 tutor. Use it to learn actively, not to avoid effort. Review the guided lab by MAX.'
     },
     {
       id: 'm3q7', question: 'You need to research the top 5 AI trends in 2025. Which workflow with Gemini would give you the most complete and verifiable result?',

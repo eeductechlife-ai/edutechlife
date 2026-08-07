@@ -162,7 +162,7 @@ const IALabForumOptimized = ({
             whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
             transition={{ duration: 0.2 }}
             className={cn(
-                "relative z-10 bg-white rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100",
+                "relative z-10 bg-white dark:bg-slate-800 rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 dark:border-slate-700",
                 "flex flex-col",
                 compact ? "max-h-[50dvh] h-fit min-h-[200px]" : "h-fit",
                 className
@@ -177,7 +177,7 @@ const IALabForumOptimized = ({
 
 
             {/* Header */}
-            <div className="flex items-center justify-between p-4 md:p-6 border-b border-slate-100">
+            <div className="flex items-center justify-between p-4 md:p-6 border-b border-slate-100 dark:border-slate-700">
                 <div className="flex items-center gap-4">
                     <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-petroleum to-petroleum-dark flex items-center justify-center flex-shrink-0">
                         <Icon name="fa-comments" className="text-white text-sm" />
@@ -287,7 +287,7 @@ const IALabForumOptimized = ({
                                 <div
                                     key={post.id}
                                     className={cn(
-                                        "bg-white border border-slate-100 rounded-xl p-4",
+                                        "bg-white dark:bg-slate-700/60 border border-slate-100 dark:border-slate-600 rounded-xl p-4",
                                         "message-bubble",
                                         "ialab-animate-in fade-in-up",
                                         index === 0 ? "animation-delay-100" :
@@ -311,7 +311,7 @@ const IALabForumOptimized = ({
 
                                             <div>
                                                 <div className="flex items-center gap-2">
-                                                    <span className="text-xs font-bold text-slate-800">
+                                                    <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
                                                         {post.profiles?.full_name || t('ialab.forum.optimized.user_fallback')}
                                                     </span>
                                                     {post.tags?.includes('Mentor') && (
@@ -349,10 +349,10 @@ const IALabForumOptimized = ({
                                     </div>
 
                                     <div className="mb-3">
-                                        <h4 className="text-sm font-semibold text-slate-800 mb-1">
+                                        <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-1">
                                             {post.title}
                                         </h4>
-                                        <p className="text-sm text-slate-600 leading-snug">
+                                        <p className="text-sm text-slate-600 dark:text-slate-300 leading-snug">
                                             {post.content}
                                         </p>
                                     </div>

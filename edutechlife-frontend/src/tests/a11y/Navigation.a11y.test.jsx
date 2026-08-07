@@ -127,14 +127,20 @@ describe('Navigation a11y', () => {
 
   test('MobileHeader has no violations', async () => {
     const MobileHeader = (await import('../../components/IALab/shared/MobileHeader')).default;
+    const NotificationProvider = (await import('../../context/NotificationContext')).NotificationProvider;
+    const { MemoryRouter } = await import('react-router-dom');
     const { container } = render(
-      <MobileHeader
-        onOpenMobileMenu={() => {}}
-        setIsSearchOpen={() => {}}
-        searchQuery=""
-        setSearchQuery={() => {}}
-        isSearchOpen={false}
-      />
+      <MemoryRouter>
+        <NotificationProvider>
+          <MobileHeader
+            onOpenMobileMenu={() => {}}
+            setIsSearchOpen={() => {}}
+            searchQuery=""
+            setSearchQuery={() => {}}
+            isSearchOpen={false}
+          />
+        </NotificationProvider>
+      </MemoryRouter>
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();

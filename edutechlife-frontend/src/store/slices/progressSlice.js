@@ -255,10 +255,9 @@ export const createProgressSlice = (set, get) => ({
     get().addXp(15);
   },
 
-  isModuleLocked: (moduleId) => {
-    if (get().userRole === "admin") return false;
-    if (moduleId === 1) return false;
-    return !get().moduleProgress[moduleId]?.isUnlocked;
+  isModuleLocked: (_moduleId) => {
+    // Pre-commercial phase: all modules accessible to all users
+    return false;
   },
 
   isEvaluationLocked: (moduleId) => {

@@ -114,7 +114,7 @@ export const helpArticleContents = {
           "Edutechlife offers multiple AI models optimized for different educational purposes. Selecting the right model can significantly improve your results.",
         modelos: [
           {
-            nombre: "Valerio",
+            nombre: "MAX",
             descripcion:
               "Pedagogical assistant specialized in educational methodologies",
             caso: "Lesson plan creation",
@@ -160,9 +160,9 @@ export const helpArticleContents = {
         unidad: "%",
       },
       {
-        titulo: "Integration with Valerio",
+        titulo: "Integration with MAX",
         contenido:
-          "Valerio is Edutechlife's intelligent avatar that combines coaching techniques with AI. Compatible with IA Lab, Valerio provides contextualized responses based on best pedagogical practices.",
+          "MAX is Edutechlife's intelligent avatar that combines coaching techniques with AI. Compatible with IA Lab, MAX provides contextualized responses based on best pedagogical practices.",
       },
     ],
   },

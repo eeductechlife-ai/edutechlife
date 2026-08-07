@@ -114,7 +114,7 @@ export const helpArticleContents = {
           "Edutechlife ofrece múltiples modelos de IA optimizados para diferentes propósitos educativos. La selección del modelo correcto puede mejorar significativamente tus resultados.",
         modelos: [
           {
-            nombre: "Valerio",
+            nombre: "MAX",
             descripcion:
               "Asistente pedagógico especializado en metodologías educativas",
             caso: "Creación de planes de clase",
@@ -160,9 +160,9 @@ export const helpArticleContents = {
         unidad: "%",
       },
       {
-        titulo: "Integración con Valerio",
+        titulo: "Integración con MAX",
         contenido:
-          "Valerio es el avatar inteligente de Edutechlife que combina técnicas de coaching con IA. Compatible con IA Lab, Valerio proporciona respuestas contextualizadas basadas en las mejores prácticas pedagógicas.",
+          "MAX es el avatar inteligente de Edutechlife que combina técnicas de coaching con IA. Compatible con IA Lab, MAX proporciona respuestas contextualizadas basadas en las mejores prácticas pedagógicas.",
       },
     ],
   },

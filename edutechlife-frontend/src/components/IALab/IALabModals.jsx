@@ -21,6 +21,7 @@ const SettingsSupportModal = lazy(
   () => import("../modals/SettingsSupportModal"),
 );
 const PracticeToolModal = lazy(() => import("./PracticeToolModal"));
+const StudyPlannerModal = lazy(() => import("./StudyPlannerModal"));
 
 function FocusTrapModal({ isOpen, children, className }) {
   const trapRef = useFocusTrap(isOpen);
@@ -57,6 +58,8 @@ const ModalsSection = ({ handleGlobalAction, activeMod, completedExams }) => {
   const practiceToolOpen = useIALabStore((s) => s.practiceToolOpen);
   const activePracticeTool = useIALabStore((s) => s.activePracticeTool);
   const closePracticeTool = useIALabStore((s) => s.closePracticeTool);
+  const showStudyPlannerModal = useIALabStore((s) => s.showStudyPlannerModal);
+  const setShowStudyPlannerModal = useIALabStore((s) => s.setShowStudyPlannerModal);
 
   const modalItems = [
     {
@@ -171,12 +174,14 @@ const ModalsSection = ({ handleGlobalAction, activeMod, completedExams }) => {
         <AnimatePresence>
           {showHistoryModal && (
             <SectionErrorBoundary>
-              <ActivityHistory
-                isOpen={showHistoryModal}
-                onClose={() =>
-                  useIALabStore.getState().setShowHistoryModal(false)
-                }
-              />
+              <Suspense fallback={<LoadingFallback />}>
+                <ActivityHistory
+                  isOpen={showHistoryModal}
+                  onClose={() =>
+                    useIALabStore.getState().setShowHistoryModal(false)
+                  }
+                />
+              </Suspense>
             </SectionErrorBoundary>
           )}
         </AnimatePresence>
@@ -232,6 +237,12 @@ const ModalsSection = ({ handleGlobalAction, activeMod, completedExams }) => {
           isOpen={practiceToolOpen}
           toolType={activePracticeTool}
           onClose={closePracticeTool}
+        />
+      </Suspense>
+      <Suspense fallback={<LoadingFallback />}>
+        <StudyPlannerModal
+          isOpen={showStudyPlannerModal}
+          onClose={() => setShowStudyPlannerModal(false)}
         />
       </Suspense>
     </>

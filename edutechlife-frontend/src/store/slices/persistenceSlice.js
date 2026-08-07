@@ -216,6 +216,7 @@ export const createPersistenceSlice = (set, get) => ({
       bookmarked.filter((b) => b !== id),
     );
   },
+  _bookmarkVersion: 0,
   toggleBookmark: (id) => {
     const bookmarked = get().getBookmarkedResources();
     if (bookmarked.includes(id)) {
@@ -223,6 +224,7 @@ export const createPersistenceSlice = (set, get) => ({
     } else {
       get().addBookmarkedResource(id);
     }
+    set({ _bookmarkVersion: Date.now() });
   },
 
   getValerioWelcomed: () => ls.get(LS_KEYS.VALERIO_WELCOMED, false),

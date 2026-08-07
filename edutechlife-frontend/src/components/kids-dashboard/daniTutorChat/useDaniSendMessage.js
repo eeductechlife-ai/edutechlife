@@ -149,10 +149,13 @@ export default function useDaniSendMessage({
           }
         }
 
-        const history = daniChatHistory.slice(-15).map((msg) => ({
-          role: msg.role,
-          content: msg.text,
-        }));
+        const history = daniChatHistory
+          .slice(-15)
+          .filter((msg) => msg.text && typeof msg.text === "string")
+          .map((msg) => ({
+            role: msg.role,
+            content: msg.text,
+          }));
         messages.push(...history);
         messages.push({ role: "user", content: userMessage.text });
 
@@ -282,6 +285,7 @@ export default function useDaniSendMessage({
     [
       addDaniMessage,
       buildDaniContext,
+      buildMemoryInjection,
       daniChatHistory,
       recordMoodInference,
       trackAcademicTopic,

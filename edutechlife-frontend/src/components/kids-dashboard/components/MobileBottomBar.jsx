@@ -13,7 +13,7 @@ function useKeyboardVisible() {
     const vv = typeof window !== "undefined" ? window.visualViewport : null;
     if (!vv) return;
     const check = () => setVisible(window.innerHeight - vv.height > 150);
-    vv.addEventListener("resize", check);
+    vv.addEventListener("resize", check, { passive: true });
     check();
     return () => vv.removeEventListener("resize", check);
   }, []);

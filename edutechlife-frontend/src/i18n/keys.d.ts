@@ -100,6 +100,7 @@ export type TranslationKeys = {
   "activity.tab.activities": string;
   "activity.tab.modules": string;
   "activity.tab.recommendations": string;
+  "activity.tab.review": string;
   "activity.tab.stats": string;
   "activity.time.days": string;
   "activity.time.hours": string;
@@ -2036,6 +2037,9 @@ export type TranslationKeys = {
   "ialab.tab_objectives": string;
   "ialab.tab_tools": string;
   "ialab.title": string;
+  "ialab.flashcard_review_btn": string;
+  "ialab.flashcard_review_xp": string;
+  "ialab.practice.flashcards_hint": string;
   "ialab.tool_tutor.ethics_subtitle": string;
   "ialab.tool_tutor.ethics_title": string;
   "ialab.tool_tutor.flashcard_subtitle": string;
@@ -3301,6 +3305,7 @@ export type TranslationKeys = {
   "seo.vak_simple.desc": string;
   "seo.vak_simple.title": string;
   "sidebar.badges": string;
+  "sidebar.toggle_collapse_tip": string;
   "sidebar.badges_count": string;
   "sidebar.badges_view_all": string;
   "sidebar.certificate": string;
@@ -3964,6 +3969,7 @@ const translationKeySet: Record<string, true> = {
   "activity.tab.activities": true,
   "activity.tab.modules": true,
   "activity.tab.recommendations": true,
+  "activity.tab.review": true,
   "activity.tab.stats": true,
   "activity.time.days": true,
   "activity.time.hours": true,
@@ -5896,6 +5902,9 @@ const translationKeySet: Record<string, true> = {
   "ialab.tab_objectives": true,
   "ialab.tab_tools": true,
   "ialab.title": true,
+  "ialab.flashcard_review_btn": true,
+  "ialab.flashcard_review_xp": true,
+  "ialab.practice.flashcards_hint": true,
   "ialab.tool_tutor.ethics_subtitle": true,
   "ialab.tool_tutor.ethics_title": true,
   "ialab.tool_tutor.flashcard_subtitle": true,
@@ -7159,6 +7168,7 @@ const translationKeySet: Record<string, true> = {
   "seo.vak_simple.desc": true,
   "seo.vak_simple.title": true,
   "sidebar.badges": true,
+  "sidebar.toggle_collapse_tip": true,
   "sidebar.badges_count": true,
   "sidebar.badges_view_all": true,
   "sidebar.certificate": true,

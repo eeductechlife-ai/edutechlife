@@ -182,13 +182,13 @@ Por ejemplo, en lugar de decir "Traduce estos al inglés", escribirías: "Hola -
       question: 'How does the VAK methodology apply to AI learning?',
       answer: `The VAK (Visual-Auditory-Kinesthetic) methodology recognizes that people learn differently: some prefer images (visual), others prefer explanations (auditory), and others learn by doing (kinesthetic). In our IALab course, we apply this through diverse resources: videos and infographics for visual learners, podcast-style Audio Overviews for auditory learners, and hands-on labs and OVAs for kinesthetic learners.
 
-When you study with Valerio, feel free to ask for explanations in your preferred style — whether that's a diagram description, a step-by-step walkthrough, or a practical example.`
+When you study with MAX, feel free to ask for explanations in your preferred style — whether that's a diagram description, a step-by-step walkthrough, or a practical example.`
     },
     es: {
       question: '¿Cómo aplica la metodología VAK al aprendizaje de IA?',
       answer: `La metodología VAK (Visual-Auditivo-Kinestésico) reconoce que las personas aprenden diferente: unos prefieren imágenes (visual), otros explicaciones (auditivo), y otros aprenden haciendo (kinestésico). En nuestro curso IALab, aplicamos esto con recursos diversos: videos e infografías para visuales, Audio Overviews tipo podcast para auditivos, y laboratorios prácticos y OVAs para kinestésicos.
 
-Cuando estudies con Valerio, siéntete libre de pedir explicaciones en tu estilo preferido — ya sea una descripción visual, una explicación paso a paso, o un ejemplo práctico.`
+Cuando estudies con MAX, siéntete libre de pedir explicaciones en tu estilo preferido — ya sea una descripción visual, una explicación paso a paso, o un ejemplo práctico.`
     }
   },
   {
@@ -198,13 +198,13 @@ Cuando estudies con Valerio, siéntete libre de pedir explicaciones en tu estilo
       question: 'What types of resources are available in IALab?',
       answer: `IALab offers a rich variety of learning resources for each module: instructional videos with practical demonstrations, downloadable PDFs with detailed guides, interactive OVAs (Virtual Learning Objects) for hands-on practice, infographics and images for quick reference, and document templates you can use in real projects.
 
-Each module has resources tailored to its topic, and you can always find them within the module page. Valerio can point you to the most relevant resource based on your specific question.`
+Each module has resources tailored to its topic, and you can always find them within the module page. MAX can point you to the most relevant resource based on your specific question.`
     },
     es: {
       question: '¿Qué tipos de recursos hay disponibles en IALab?',
       answer: `IALab ofrece una gran variedad de recursos de aprendizaje para cada módulo: videos instructivos con demostraciones prácticas, PDFs descargables con guías detalladas, OVAs (Objetos Virtuales de Aprendizaje) interactivos para práctica hands-on, infografías e imágenes para referencia rápida, y plantillas de documentos que puedes usar en proyectos reales.
 
-Cada módulo tiene recursos adaptados a su tema, y siempre puedes encontrarlos dentro de la página del módulo. Valerio puede señalarte el recurso más relevante según tu pregunta específica.`
+Cada módulo tiene recursos adaptados a su tema, y siempre puedes encontrarlos dentro de la página del módulo. MAX puede señalarte el recurso más relevante según tu pregunta específica.`
     }
   },
   {
@@ -214,13 +214,13 @@ Cada módulo tiene recursos adaptados a su tema, y siempre puedes encontrarlos d
       question: 'How do I complete the IALab course?',
       answer: `To complete the IALab course, you need to go through all 5 modules: Prompt Engineering, Potencia ChatGPT, Gemini Deep Research, NotebookLM, and Applied AI Ethics. For each module, you must watch the videos, study the resources, complete the quiz with at least 80%, and pass the final challenge.
 
-Your progress is tracked across all modules, and Valerio is here to help you with any topic you find challenging. Keep up your streak, practice consistently, and you'll earn your certificate.`
+Your progress is tracked across all modules, and MAX is here to help you with any topic you find challenging. Keep up your streak, practice consistently, and you'll earn your certificate.`
     },
     es: {
       question: '¿Cómo completo el curso IALab?',
       answer: `Para completar el curso IALab, debes recorrer los 5 módulos: Ingeniería de Prompts, Potencia ChatGPT, Gemini Deep Research, NotebookLM y Ética Aplicada a IA. En cada módulo, debes ver los videos, estudiar los recursos, completar el quiz con al menos 80% y pasar el desafío final.
 
-Tu progreso se registra en todos los módulos, y Valerio está aquí para ayudarte con cualquier tema que se te complique. Mantén tu racha, practica consistentemente y obtendrás tu certificado.`
+Tu progreso se registra en todos los módulos, y MAX está aquí para ayudarte con cualquier tema que se te complique. Mantén tu racha, practica consistentemente y obtendrás tu certificado.`
     }
   },
   {

@@ -139,7 +139,7 @@ Un ejercicio práctico: la próxima vez que uses IA, pásala por nuestro checkli
 
 const FALLBACK_DEFAULT = {
   en: {
-    noMatch: `Thanks for your question. I'm Valerio, your AI coach, and I'm here to help you learn.
+    noMatch: `Thanks for your question. I'm MAX, your AI coach, and I'm here to help you learn.
 
 Since I'm currently thinking about how to best address your question, let me share some general guidance that applies across all IALab modules:
 
@@ -150,7 +150,7 @@ Since I'm currently thinking about how to best address your question, let me sha
 Could you tell me which module or topic you're working on? That way I can give you a more targeted answer.`
   },
   es: {
-    noMatch: `Gracias por tu pregunta. Soy Valerio, tu coach de IA, y estoy aquí para ayudarte a aprender.
+    noMatch: `Gracias por tu pregunta. Soy MAX, tu coach de IA, y estoy aquí para ayudarte a aprender.
 
 Mientras pienso en la mejor forma de abordar tu pregunta, déjame compartirte una guía general que aplica a todos los módulos de IALab:
 

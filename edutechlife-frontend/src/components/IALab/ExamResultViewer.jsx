@@ -13,6 +13,15 @@ import {
 const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
   const { t } = useTranslation();
   const passed = score >= PASSING_SCORE;
+  const setShowValerioDrawer = useIALabStore((s) => s.setShowValerioDrawer);
+  const setValerioInitialMessage = useIALabStore((s) => s.setValerioInitialMessage);
+
+  const handleAskMax = () => {
+    const key = passed ? "ialab.ask_max_exam_passed" : "ialab.ask_max_exam_failed";
+    setValerioInitialMessage(t(key, { mod: moduleId, score }));
+    setShowValerioDrawer(true);
+    onClose?.();
+  };
 
   let storedAttempt = null;
   try {
@@ -180,10 +189,18 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
             </div>
           )}
 
+          {/* Valerio CTA */}
+          <button
+            onClick={handleAskMax}
+            className="w-full py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-lg transition-all duration-200 font-bold text-sm flex items-center justify-center gap-2 mb-2"
+          >
+            <Icon name="fa-robot" className="w-4 h-4" aria-hidden="true" />
+            {t("ialab.ask_max_exam_btn")}
+          </button>
           {/* Close button */}
           <button
             onClick={onClose}
-            className="w-full py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-lg transition-all duration-200 font-bold text-sm"
+            className="w-full py-2.5 border border-petroleum/30 text-petroleum rounded-xl hover:bg-petroleum/5 transition-all duration-200 font-bold text-sm"
           >
             {t("ialab.exam_result.back_to_module")}
           </button>

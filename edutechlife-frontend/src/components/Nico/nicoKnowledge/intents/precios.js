@@ -91,7 +91,7 @@ export const precios = [
     ],
     category: "precios",
     response:
-      "Tenemos tres planes: Estudiante desde $99.000/mes con diagnóstico VAK incluido, plan de estudio personalizado y contenido STEAM. Educador desde $199.000/mes con SmartBoard, Valerio ilimitado y certificaciones IBM. Institución desde $499.000/mes con usuarios ilimitados y API personalizada.",
+      "Tenemos tres planes: Estudiante desde $99.000/mes con diagnóstico VAK incluido, plan de estudio personalizado y contenido STEAM. Educador desde $199.000/mes con SmartBoard, MAX ilimitado y certificaciones IBM. Institución desde $499.000/mes con usuarios ilimitados y API personalizada.",
   },
   {
     id: "descuentos",

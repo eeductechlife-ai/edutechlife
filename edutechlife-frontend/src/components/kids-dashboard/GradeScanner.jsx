@@ -80,7 +80,7 @@ GradeRow.displayName = "GradeRow";
 const uid = () => Math.random().toString(36).slice(2, 8);
 
 export default memo(function GradeScanner({ onTabChange }) {
-  const { studentGrades, setStudentGrades, vakResult, addPoints } =
+  const { studentGrades, setStudentGrades, vakResult, addPoints, setDocumentForDani } =
     useSmartBoardKids();
   const [grades, setGrades] = useState(
     studentGrades.length
@@ -545,18 +545,41 @@ Analiza y responde SOLO con JSON:
               </div>
             )}
 
-            {/* CTA to flashcards */}
-            <motion.button
-              onClick={() => onTabChange?.("flashcards")}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full py-3 rounded-2xl font-bold text-white text-sm shadow-md"
-              style={{
-                background: "linear-gradient(135deg, #EF476F 0%, #FF6B9D 100%)",
-              }}
-            >
-              🎴 Ir a Flashcards para empezar a estudiar →
-            </motion.button>
+            {/* CTAs */}
+            <div className="grid grid-cols-1 gap-3">
+              <motion.button
+                onClick={() => {
+                  setDocumentForDani?.({
+                    title: "Mi plan de estudio personalizado",
+                    subject: "múltiples materias",
+                    summary: `${plan.overall || ""} ${plan.motivation || ""}`.trim(),
+                    strengths: plan.strengths || [],
+                    improvements: (plan.weaknesses || []).map(w => `${w.subject}: ${w.why || ""}`),
+                    score: Math.round((grades.reduce((s, g) => s + g.score, 0) / Math.max(grades.length, 1)) * 20),
+                    difficulty: "personalizado",
+                    tutoringQuestions: (plan.weaknesses || []).slice(0, 4).map(w => `¿Cómo te está yendo en ${w.subject}? ¿Qué te parece más difícil?`),
+                  });
+                  window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+                }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full py-3 rounded-2xl font-bold text-white text-sm shadow-md"
+                style={{ background: "linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%)" }}
+              >
+                🗣️ Habla con Dani sobre tu plan →
+              </motion.button>
+              <motion.button
+                onClick={() => onTabChange?.("flashcards")}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full py-3 rounded-2xl font-bold text-white text-sm shadow-md"
+                style={{
+                  background: "linear-gradient(135deg, #EF476F 0%, #FF6B9D 100%)",
+                }}
+              >
+                🎴 Ir a Flashcards para empezar a estudiar →
+              </motion.button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

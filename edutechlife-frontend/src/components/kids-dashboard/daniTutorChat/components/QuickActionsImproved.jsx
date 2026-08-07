@@ -49,7 +49,7 @@ const QUICK_ACTIONS = [
 ];
 
 const QuickActionsImproved = memo(
-  ({ onAction, studentAge = 10, darkMode = false }) => {
+  ({ onAction, studentAge = 10, darkMode = false, hasHistory = false }) => {
     const handleAction = useCallback(
       (actionId, title) => {
         onAction(actionId);
@@ -103,7 +103,7 @@ const QuickActionsImproved = memo(
 
     return (
       <motion.div
-        className={`quick-actions-improved ${darkMode ? "dark-mode" : "light-mode"}`}
+        className={`quick-actions-improved ${darkMode ? "dark-mode" : "light-mode"}${hasHistory ? " compact" : ""}`}
         variants={containerVariants}
         initial="hidden"
         animate="visible"

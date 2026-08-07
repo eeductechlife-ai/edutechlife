@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { useTranslation } from '../../i18n/I18nProvider';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useSM2Flashcard } from '../../hooks/IALab/useSM2Flashcard';
+import { useIALabStore } from '../../store/ialabStore';
 
 const MODULE_FLASHCARDS_ES = {
   1: [
@@ -130,6 +131,14 @@ export function FlashcardArena({ moduleId }) {
   const [direction, setDirection] = useState(0);
   const [ratedCount, setRatedCount] = useState(0);
   const [allReviewed, setAllReviewed] = useState(false);
+  const xpAwardedRef = useRef(false);
+
+  useEffect(() => {
+    if (allReviewed && !xpAwardedRef.current) {
+      xpAwardedRef.current = true;
+      useIALabStore.getState().addXp(30);
+    }
+  }, [allReviewed]);
 
   const currentCard = sortedCards[currentIndex];
 
@@ -157,6 +166,7 @@ export function FlashcardArena({ moduleId }) {
     setDirection(0);
     setAllReviewed(false);
     setRatedCount(0);
+    xpAwardedRef.current = false;
   }, [resetModule]);
 
   if (allReviewed) {

@@ -8,8 +8,19 @@ export default function useDaniWelcome({
   t,
   missions,
   subjects,
+  documentForDani,
 }) {
   const buildRichWelcome = useCallback(() => {
+    // If Dani has document/topic context, generate a focused verification opener
+    if (documentForDani?.title) {
+      const firstQ = documentForDani.tutoringQuestions?.[0];
+      const isGradePlan = documentForDani.subject === "múltiples materias";
+      if (isGradePlan) {
+        const weakArea = documentForDani.improvements?.[0]?.split(":")[0] || "";
+        return `¡Hola! 📊 Revisé tu plan de estudio personalizado. ${documentForDani.summary ? documentForDani.summary + " " : ""}${weakArea ? `Vamos a enfocarnos en ${weakArea}. ` : ""}${firstQ || "Cuéntame, ¿cómo te sientes con tus materias esta semana?"}`;
+      }
+      return `¡Hola! 📖 Acabo de leer el tema "${documentForDani.title}" ${documentForDani.difficulty ? `(nivel ${documentForDani.difficulty})` : ""}. Vamos a verificar juntos que lo entendiste bien. ${firstQ || "¿Puedes explicarme con tus propias palabras de qué trata?"}`;
+    }
     const now = new Date();
     const hour = now.getHours();
     const greeting =
@@ -89,7 +100,7 @@ export default function useDaniWelcome({
     }
 
     return parts.join(" ");
-  }, [streak, vakResult, calendarEvents, activeTab, t, missions, subjects]);
+  }, [streak, vakResult, calendarEvents, activeTab, t, missions, subjects, documentForDani]);
 
   return buildRichWelcome;
 }

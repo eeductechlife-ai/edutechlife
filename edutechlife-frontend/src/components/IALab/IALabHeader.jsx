@@ -53,7 +53,7 @@ const IALabHeader = () => {
 
   return (
     <header className="h-16 flex items-center justify-between px-4 md:px-5 lg:px-6 bg-white border-b border-slate-200 w-full shadow-sm">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 group rounded-xl text-left">
         <div className="w-9 h-9 bg-gradient-to-br from-petroleum via-petroleum-dark to-corporate rounded-xl flex items-center justify-center shadow-sm shadow-petroleum/15">
           <Icon
             name="fa-flask-vial"
@@ -62,9 +62,12 @@ const IALabHeader = () => {
           />
         </div>
         {courseCompleted ? (
-          <button
-            onClick={() => setShowCertificateModal(true)}
-            className="text-lg font-bold text-petroleum tracking-tight truncate hover:text-corporate transition-colors duration-200 flex items-center gap-2 group"
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowCertificateModal(true);
+            }}
+            className="text-lg font-bold text-petroleum tracking-tight truncate hover:text-corporate transition-colors duration-200 flex items-center gap-2 cursor-pointer"
             title={t("ialab.certificate_title")}
           >
             <span>{t("ialab.course_title")}</span>
@@ -73,7 +76,7 @@ const IALabHeader = () => {
               className="text-[#FFD166] text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               aria-hidden="true"
             />
-          </button>
+          </span>
         ) : (
           <h2 className="text-lg font-bold text-petroleum tracking-tight truncate">
             {t("ialab.course_title")}

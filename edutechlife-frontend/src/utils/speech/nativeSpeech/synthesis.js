@@ -23,6 +23,7 @@ const speakTextConversational = async (
   overrides = {},
   onEndCallback,
   onPermissionError,
+  onStartCallback,
 ) => {
   const gen = ++ttsGeneration;
   currentTtsGeneration = gen;
@@ -232,6 +233,9 @@ const speakTextConversational = async (
             handleEnd();
             resolve(true);
           };
+          utterance.onstart = () => {
+            if (onStartCallback) onStartCallback();
+          };
           utterance.onerror = (event) => {
             console.error("❌ Error voz nativa:", event.error);
             cleanup();
@@ -281,6 +285,9 @@ const speakTextConversational = async (
     currentAudio = new Audio(`data:audio/mp3;base64,${cachedAudio}`);
     currentAudio.volume = 1.0;
     currentAudio.onended = handleEnd;
+    currentAudio.onplay = () => {
+      if (onStartCallback) onStartCallback();
+    };
     currentAudio.onerror = (e) => {
       console.error("Error reproduciendo audio cacheado:", e);
       cleanup();
@@ -389,6 +396,9 @@ const speakTextConversational = async (
           );
           currentAudio.volume = 1.0;
           currentAudio.onended = handleEnd;
+          currentAudio.onplay = () => {
+            if (onStartCallback) onStartCallback();
+          };
           currentAudio.onerror = (e) => {
             console.error("Error reproduciendo audio:", e);
             cleanup();

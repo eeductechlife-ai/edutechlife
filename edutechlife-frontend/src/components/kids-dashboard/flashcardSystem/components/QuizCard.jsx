@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 
-const QuizCard = memo(
-  ({
+const QuizCard = memo((props) => {
+  const {
     card,
     flipped,
     onFlip,
@@ -12,7 +12,19 @@ const QuizCard = memo(
     themeColor,
     themeIcon,
     gradeLabel,
-  }) => (
+  } = props;
+
+  if (!card) {
+    return (
+      <div className="flex items-center justify-center w-full" style={{ minHeight: "480px" }}>
+        <p className="text-sm text-[#64748B]">
+          Esta tarjeta no está disponible.
+        </p>
+      </div>
+    );
+  }
+
+  return (
     <div className="flex flex-col items-center gap-8 w-full">
       <p className="text-sm text-[#64748B]">
         {idx + 1} / {total}
@@ -163,8 +175,8 @@ const QuizCard = memo(
         </motion.div>
       </div>
     </div>
-  ),
-);
+  );
+});
 QuizCard.displayName = "QuizCard";
 
 export default QuizCard;

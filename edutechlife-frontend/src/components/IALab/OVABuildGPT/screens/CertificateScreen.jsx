@@ -31,7 +31,7 @@ export default function CertificateScreen({ xp, onReset, onMarkComplete }) {
       <p className="text-lg text-gray-600 dark:text-slate-300 mb-10">{t('ova.buildgpt.cert_desc')}</p>
       <div className="flex flex-col sm:flex-row justify-center gap-4">
         <Button onClick={onReset} variant="outline" icon={Settings}>{t('ova.buildgpt.cert_reset')}</Button>
-        <Button onClick={() => alert('¡Sigue aprendiendo con Edutechlife y Valerio!')} icon={GraduationCap}>{t('ova.buildgpt.cert_explore')}</Button>
+        <Button onClick={() => alert('¡Sigue aprendiendo con Edutechlife y MAX!')} icon={GraduationCap}>{t('ova.buildgpt.cert_explore')}</Button>
       </div>
     </div>
   );

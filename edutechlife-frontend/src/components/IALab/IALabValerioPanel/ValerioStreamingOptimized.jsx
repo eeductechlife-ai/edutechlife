@@ -123,7 +123,7 @@ export const StreamingMessageOptimized = ({
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-xs font-medium opacity-80 mb-2 flex items-center gap-2">
-              Valerio
+              MAX
               {isAudioPlaying && (
                 <span className="inline-flex gap-0.5">
                   <span className="w-1.5 h-1.5 bg-petroleum rounded-full animate-pulse"></span>

@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useIALabStore } from '../../../store/ialabStore';
 import { getBadgeInfo } from '../../../data/ialab';
 import { useTranslation } from '../../../i18n/I18nProvider';
 import { Icon } from '../../../utils/iconMapping.jsx';
+import { getSessionStats } from '../../../hooks/useSessionTracker';
 import XPCard from './XPCard';
 import StreakCalendar from './StreakCalendar';
 import ActivityFeed from './ActivityFeed';
@@ -16,6 +17,9 @@ function AnalyticsDashboard() {
   const moduleProgress = useIALabStore(s => s.moduleProgress);
   const badges = useIALabStore(s => s.badges);
   const badgesDates = useIALabStore(s => s.badgesDates);
+
+  const [sessionStats, setSessionStats] = useState(() => getSessionStats());
+  useEffect(() => { setSessionStats(getSessionStats()); }, []);
 
   const badgeInfo = useMemo(() => getBadgeInfo(locale), [locale]);
 
@@ -87,9 +91,9 @@ function AnalyticsDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <XPCard />
         <StreakCalendar />
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-100">
+        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-corporate/10 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-corporate/10 dark:bg-corporate/20 flex items-center justify-center">
               <Icon name="fa-chart-line" className="w-4 h-4 text-corporate" />
             </div>
             <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">XP Semanal</p>
@@ -118,13 +122,34 @@ function AnalyticsDashboard() {
         </div>
       </div>
 
+      {/* Session time stats */}
+      <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-8 h-8 rounded-lg bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center">
+            <Icon name="fa-clock" className="w-4 h-4 text-sky-500" />
+          </div>
+          <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tiempo de Estudio</p>
+        </div>
+        <div className="flex gap-6">
+          <div>
+            <p className="text-xl font-bold text-slate-800 dark:text-slate-100 tabular-nums">{Math.round(sessionStats.todayMinutes)}<span className="text-[11px] font-normal text-slate-400 ml-1">min hoy</span></p>
+          </div>
+          <div>
+            <p className="text-xl font-bold text-slate-800 dark:text-slate-100 tabular-nums">{sessionStats.allMinutes < 60 ? Math.round(sessionStats.allMinutes) + ' min' : (sessionStats.allMinutes / 60).toFixed(1) + ' h'}<span className="text-[11px] font-normal text-slate-400 ml-1">total</span></p>
+          </div>
+          <div>
+            <p className="text-xl font-bold text-slate-800 dark:text-slate-100 tabular-nums">{sessionStats.daysActive}<span className="text-[11px] font-normal text-slate-400 ml-1">días activos</span></p>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-100">
+        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
               <Icon name="fa-trophy" className="w-4 h-4 text-purple-500" />
             </div>
-            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Puntaje por Módulo</p>
+            <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Puntaje por Módulo</p>
           </div>
           <div className="space-y-2.5">
             {moduleScores.map(m => (
@@ -144,12 +169,12 @@ function AnalyticsDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-100">
+        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
               <Icon name="fa-award" className="w-4 h-4 text-amber-500" />
             </div>
-            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Insignias</p>
+            <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Insignias</p>
           </div>
           <div className="grid grid-cols-3 gap-2">
             {badgeItems.map(b => (

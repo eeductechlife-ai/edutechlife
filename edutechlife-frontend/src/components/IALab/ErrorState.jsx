@@ -32,7 +32,7 @@ const ERROR_PRESETS = {
   generic: {
     icon: AlertCircle,
     title: "Algo no salió como esperábamos",
-    message: "Puedes intentarlo de nuevo o contactar a Valerio si el problema persiste.",
+    message: "Puedes intentarlo de nuevo o contactar a MAX si el problema persiste.",
     actionLabel: "Reintentar",
     tone: "red",
   },

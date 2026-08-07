@@ -34,13 +34,24 @@ const CONTENT_EN = {
         {
           title: "The Artisan's Chisel: What is a Prompt?",
           icon: "fa-comments",
-          resources: 3,
+          resources: 4,
           duration: "20 min",
         },
       ],
     },
     lessons: [],
-    accordionContent: {},
+    accordionContent: {
+      1: {
+        objective: "🎯 The Artisan's Foundations",
+        objectiveDesc:
+          "Understand what generative AI is and how it creates new content. This is where your digital craft begins.",
+      },
+      2: {
+        objective: "🎯 The Artisan's Chisel",
+        objectiveDesc:
+          "A well-crafted prompt is your most powerful tool: learn to write instructions AI understands the first time.",
+      },
+    },
   },
 
   2: {
@@ -70,6 +81,12 @@ const CONTENT_EN = {
           icon: "fa-layer-group",
           resources: 2,
           duration: "20 min",
+        },
+        {
+          title: "The Architect's Flow: Real-World Automation",
+          icon: "fa-robot",
+          resources: 1,
+          duration: "22 min",
         },
         {
           title: "The Building's Facade: GPTs and Function Calling",
@@ -121,7 +138,7 @@ const CONTENT_EN = {
       1: {
         objective: "🎯 The Architect's Foundations",
         objectiveDesc:
-          "Master the fundamentals of ChatGPT like an architect masters construction principles: from models to professional prompt engineering techniques.",
+          "Master ChatGPT's fundamentals: models, limits, and professional prompt engineering techniques.",
         achievements: [
           {
             icon: "fa-check",
@@ -158,9 +175,9 @@ const CONTENT_EN = {
         },
       },
       2: {
-        objective: "🏗️ The Architect's Scaffolding: The Tool Ecosystem",
+        objective: "🏗️ The Architect's Scaffolding",
         objectiveDesc:
-          "Master all of ChatGPT's integrated tools like an architect masters their workshop: Web Search, Code Interpreter, DALL-E 3, Canvas, and Projects. Learn to combine them in professional construction workflows.",
+          "Master ChatGPT's tool ecosystem: Web Search, Code, DALL-E 3, Canvas, and Projects.",
         achievements: [
           {
             icon: "fa-check",
@@ -197,9 +214,9 @@ const CONTENT_EN = {
         },
       },
       3: {
-        objective: "⚡ The Building's Facade: Function Calling",
+        objective: "⚡ The Architect's Flow",
         objectiveDesc:
-          "Integrate your ChatGPT constructions with the outside world through APIs so they can query data, execute actions, and automate complete workflows.",
+          "Connect your ChatGPT builds to the outside world via APIs: data, actions, and full automation.",
         achievements: [
           {
             icon: "fa-check",
@@ -231,6 +248,11 @@ const CONTENT_EN = {
           strong:
             "✅ Function Calling: ChatGPT detects the intent, calls the weather API, receives JSON data, and generates: The current weather in Bogotá is 18°C with 65% humidity. We recommend bringing an umbrella due to 80% rain probability this afternoon. An elegant facade connecting to live real-world data.",
         },
+      },
+      4: {
+        objective: "⚡ The Building's Facade",
+        objectiveDesc:
+          "Create custom GPTs and connect them to the real world with Function Calling: automate your daily work.",
       },
     },
   },
@@ -311,9 +333,9 @@ const CONTENT_EN = {
     ],
     accordionContent: {
       1: {
-        objective: "🎯 Main Objective: Activate Your Multimodal Magnifying Glass",
+        objective: "🎯 Activate Your Multimodal Magnifying Glass",
         objectiveDesc:
-          "Meet your new secret weapon: discover what makes Gemini unique, how it processes multiple types of evidence, and why it outperforms other models in multimodal investigation.",
+          "Gemini processes text, images, audio, and video as one language. Your new secret research weapon.",
         achievements: [
           {
             icon: "fa-check",
@@ -347,9 +369,9 @@ const CONTENT_EN = {
         },
       },
       2: {
-        objective: "🔬 Multimodal Reasoning: The Digital Detective's Superpower",
+        objective: "🔬 Multimodal Reasoning",
         objectiveDesc:
-          "Unlock the ability to process multiple types of evidence simultaneously: text, images, audio, and code. Like having 4 detectives working in parallel within a single mind.",
+          "Process several evidence types at once: text, images, audio, and code. Four detectives in one mind.",
         achievements: [
           {
             icon: "fa-check",
@@ -386,9 +408,9 @@ const CONTENT_EN = {
         },
       },
       3: {
-        objective: "🔍 Deep Research: The Forensic Investigator's Arsenal",
+        objective: "🔍 Deep Research",
         objectiveDesc:
-          "When simple cases turn complex, you need Deep Research. Learn to harness Gemini's power for exhaustive investigations with verifiable sources, automatic fact-checking, and technical reports any expert would respect.",
+          "For complex cases: deep investigations with verifiable sources and automatic fact-checking.",
         achievements: [
           { icon: "fa-check", text: "Execute deep investigations that cross-reference dozens of sources automatically" },
           {
@@ -455,6 +477,12 @@ const CONTENT_EN = {
           resources: 3,
           duration: "20 min",
         },
+        {
+          title: "The Master Alchemist: Complete Document-to-Podcast Flow",
+          icon: "fa-headphones",
+          resources: 1,
+          duration: "24 min",
+        },
       ],
     },
     lessons: [
@@ -499,7 +527,7 @@ const CONTENT_EN = {
       1: {
         objective: "🎯 The First Spell",
         objectiveDesc:
-          "Discover the hidden power of NotebookLM: how an assistant that only talks about what it knows is revolutionizing personal knowledge management.",
+          "NotebookLM only talks about what it knows: your sources. AI that revolutionizes knowledge management.",
         achievements: [
           {
             icon: "fa-check",
@@ -572,9 +600,9 @@ const CONTENT_EN = {
         },
       },
       3: {
-        objective: "🎙️ Audio Overviews: Your Documents on the Radio",
+        objective: "🎙️ Audio Overviews",
         objectiveDesc:
-          "Transform complex documents into fascinating audio conversations generated by AI with two virtual hosts that sound like a real show.",
+          "Turn your documents into AI-generated audio conversations, like a show made just for you.",
         achievements: [
           {
             icon: "fa-check",
@@ -606,6 +634,11 @@ const CONTENT_EN = {
           strong:
             "✅ Focused audio: 15-minute podcast where two hosts discuss key findings from 5 papers on neuroplasticity, with practical examples, analogies, and even an 'aha!' moment that makes it unforgettable",
         },
+      },
+      4: {
+        objective: "🧪 The Master Alchemist",
+        objectiveDesc:
+          "Master the full workflow: from your documents to a podcast ready to share.",
       },
     },
   },
@@ -641,7 +674,7 @@ const CONTENT_EN = {
         {
           title: "The Guardian's Legacy: Navigating the Law",
           icon: "fa-shield-alt",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
         },
       ],
@@ -688,7 +721,7 @@ const CONTENT_EN = {
       1: {
         objective: "🛡️ The Guardian's Ethical Oath",
         objectiveDesc:
-          "Develop a bulletproof ethical framework for generative AI that protects users, organizations, and society from the invisible risks of technology.",
+          "Build a bulletproof ethical framework for generative AI: protect users, organizations, and society.",
         achievements: [
           {
             icon: "fa-check",
@@ -722,9 +755,9 @@ const CONTENT_EN = {
         },
       },
       2: {
-        objective: "🔍 The Bias Hunter: Find the Invisible Enemy",
+        objective: "🔍 The Bias Hunter",
         objectiveDesc:
-          "Train your guardian eye to detect, understand, and eliminate the biases that AI systems inherit from their training data — before they cause harm.",
+          "Detect and eliminate the biases AI inherits from its data before they cause harm.",
         achievements: [
           {
             icon: "fa-check",
@@ -755,9 +788,9 @@ const CONTENT_EN = {
         },
       },
       3: {
-        objective: "📜 The Guardian's Code: Laws That Protect Millions",
+        objective: "📜 The Guardian's Code",
         objectiveDesc:
-          "Learn the regulations governing AI worldwide and design governance protocols that shield your organization from legal and reputational risks.",
+          "Learn the laws governing AI and design protocols that shield your organization.",
         achievements: [
           { icon: "fa-check", text: "Master the European Union AI Act like a compliance expert" },
           {

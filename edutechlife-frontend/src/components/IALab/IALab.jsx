@@ -80,6 +80,7 @@ import ValerioFloatingButton from "./ValerioFloatingButton";
 import { useSessionTracker } from "../../hooks/useSessionTracker";
 import { useAchievementNotifications } from "../../hooks/useAchievementNotifications";
 const IALabValerioPanel = lazy(() => import("./IALabValerioPanel"));
+const BookmarksTab = lazy(() => import("./BookmarksTab"));
 import MobileHeader from "./shared/MobileHeader";
 import MobileInfoBar from "./shared/MobileInfoBar";
 import ToastNotification from "./shared/ToastNotification";
@@ -91,11 +92,17 @@ const createTABS = (t) => [
   { id: "contenido", label: t("ialab.tab_content") },
   { id: "actividades", label: t("ialab.tab_activities") },
   { id: "practica", label: t("ialab.tab_practice") },
+  { id: "guardados", label: t("ialab.tab_bookmarks"), icon: "fa-bookmark" },
 ];
 
 const IALabContent = memo(function () {
   const { t, locale } = useTranslation();
   const TABS = useMemo(() => createTABS(t), [t]);
+  const _bookmarkVersion = useIALabStore((s) => s._bookmarkVersion);
+  const bookmarkBadge = useMemo(
+    () => useIALabStore.getState().getBookmarkedResources().length,
+    [_bookmarkVersion],
+  );
   const { user } = useIALabUIContext();
   const { toasts: achievementToasts, removeToast: removeAchievementToast } =
     useAchievementNotifications(useIALabStore);
@@ -111,6 +118,16 @@ const IALabContent = memo(function () {
   } = useIALabProgressContext();
   const { isDarkMode, toggleDarkMode } = useTheme();
   const [showValerioPanel, setShowValerioPanel] = useState(false);
+  const showValerioDrawer = useIALabStore((s) => s.showValerioDrawer);
+  const setShowValerioDrawer = useIALabStore((s) => s.setShowValerioDrawer);
+  const valerioInitialMessage = useIALabStore((s) => s.valerioInitialMessage);
+  const setValerioInitialMessage = useIALabStore((s) => s.setValerioInitialMessage);
+  useEffect(() => {
+    if (showValerioDrawer) {
+      setShowValerioPanel(true);
+      setShowValerioDrawer(false);
+    }
+  }, [showValerioDrawer, setShowValerioDrawer]);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [mobileMenuClosing, setMobileMenuClosing] = useState(false);
   const closeMobileMenu = () => {
@@ -255,7 +272,7 @@ const IALabContent = memo(function () {
     return () => window.removeEventListener("ialab:switchTab", handleSwitchTab);
   }, []);
 
-  // Auto-cerrar Valerio cuando se abre un modal inmersivo (video/OVA)
+  // Auto-cerrar MAX cuando se abre un modal inmersivo (video/OVA)
   const immersiveModalOpen = useIALabStore((s) => s.immersiveModalOpen);
   useEffect(() => {
     if (immersiveModalOpen) setShowValerioPanel(false);
@@ -272,6 +289,7 @@ const IALabContent = memo(function () {
         )?.title
       : null;
 
+
   // Handler para acciones globales
   const handleAction = useCallback((action, data) => {
     if (action === "OPEN_VALERIO") {
@@ -280,6 +298,14 @@ const IALabContent = memo(function () {
     }
     if (action === "CLOSE_VALERIO") {
       setShowValerioPanel(false);
+      return;
+    }
+    if (action === "OPEN_SEARCH") {
+      setIsSearchOpen(true);
+      return;
+    }
+    if (action === "OPEN_PRACTICE") {
+      useIALabStore.getState().setPracticeTool('tutoring');
       return;
     }
     const s = useIALabStore.getState();
@@ -400,6 +426,31 @@ const IALabContent = memo(function () {
                 courseProgress={courseProgress}
               />
 
+              {/* Banner: Continuar donde lo dejaste */}
+              {!isLoadingProgress && currentLessonTitle && viewSection === null && (
+                <motion.div
+                  key={`continue-banner-${activeMod}`}
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-petroleum/10 to-corporate/8 border border-petroleum/20 rounded-xl"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0 shadow-sm">
+                    <span className="text-white text-sm">▶</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] font-bold text-petroleum uppercase tracking-wide">{t("ialab.continue_banner_lesson")}</p>
+                    <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{currentLessonTitle}</p>
+                  </div>
+                  <button
+                    onClick={() => setViewSection("contenido")}
+                    className="flex-shrink-0 px-3 py-1.5 bg-petroleum text-white text-xs font-bold rounded-lg hover:bg-petroleum-dark transition-colors shadow-sm"
+                  >
+                    {t("ialab.continue_banner_cta")}
+                  </button>
+                </motion.div>
+              )}
+
               {isLoadingProgress ? (
                 <motion.div
                   key={`skeleton-ruta-${activeMod}`}
@@ -440,6 +491,7 @@ const IALabContent = memo(function () {
                   TABS={TABS}
                   viewSection={viewSection}
                   setViewSection={setViewSection}
+                  badges={{ guardados: bookmarkBadge }}
                 />
               </div>
 
@@ -591,6 +643,21 @@ const IALabContent = memo(function () {
                 </div>
               </AnimatedSection>
 
+              {/* 7. MIS GUARDADOS */}
+              <AnimatedSection
+                show={viewSection === "guardados"}
+                loading={false}
+                skeleton={<ModuleActionsSkeleton />}
+              >
+                <div id="panel-guardados" role="tabpanel" aria-labelledby="tab-guardados">
+                  <Suspense fallback={<ModuleActionsSkeleton />}>
+                    <SectionErrorBoundary name="BookmarksTab">
+                      <BookmarksTab />
+                    </SectionErrorBoundary>
+                  </Suspense>
+                </div>
+              </AnimatedSection>
+
               {/* 6. FORO DEL MÓDULO */}
               {(viewSection === null || viewSection === "actividades") &&
                 isForumOpen && (
@@ -628,7 +695,8 @@ const IALabContent = memo(function () {
         {showValerioPanel && (
           <IALabValerioPanel
             isOpen={showValerioPanel}
-            onClose={() => setShowValerioPanel(false)}
+            onClose={() => { setShowValerioPanel(false); setValerioInitialMessage(''); }}
+            initialMessage={valerioInitialMessage}
           />
         )}
       </Suspense>

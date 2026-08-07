@@ -51,6 +51,8 @@ vi.mock('../../../store/ialabStore', () => {
     lastVisitedLesson: null,
     lessonProgress: {},
     toggleBookmark: vi.fn(),
+    _bookmarkVersion: 0,
+    getBookmarkedResources: () => [],
     immersiveModalOpen: false,
     userRole: 'student',
     moduleProgress: {},

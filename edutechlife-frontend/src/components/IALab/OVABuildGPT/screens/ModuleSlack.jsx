@@ -22,7 +22,7 @@ export default function ModuleSlack({ onNext, addXp }) {
     addXp(100);
     setTimeout(() => {
       setMessages(prev => [...prev, {
-        sender: 'Valerio GPT',
+        sender: 'MAX GPT',
         text: '¡Claro! Aquí tienes el resumen:\n1. Se aprobó el uso de herramientas IA.\n2. Exámenes la próxima semana.\n3. Capacitación docente el viernes.',
         isBot: true
       }]);

@@ -180,7 +180,11 @@ const ScannerTab = memo(({ onGenerated }) => {
       onGenerated(useTopic, cards, { grade, theme, summary: sum });
       setStage("");
     } catch (e) {
-      setError("No pude procesar el documento. Intenta de nuevo.");
+      const msg =
+        e?.message && e.message !== "AbortError"
+          ? e.message
+          : "No pude procesar el documento. Intenta de nuevo.";
+      setError(msg);
     } finally {
       setProcessing(false);
       setStage("");
@@ -310,19 +314,24 @@ const ScannerTab = memo(({ onGenerated }) => {
       {error && <p className="text-sm text-red-500">{error}</p>}
 
       {/* Summary preview */}
-      {summary?.keyPoints?.length > 0 && (
+      {(summary?.overview || summary?.learningPoints?.length > 0) && (
         <div className="p-3 rounded-xl bg-white border border-[#4DA8C4]/30 space-y-2">
           <p className="text-xs font-bold text-[#004B63]">
-            📋 Resumen generado
+            📋 {summary.title || "Resumen generado"}
           </p>
-          <ul className="space-y-1">
-            {summary.keyPoints.slice(0, 4).map((p, i) => (
-              <li key={i} className="text-xs text-[#374151] flex gap-1.5">
-                <span className="text-[#4DA8C4]">•</span>
-                {p}
-              </li>
-            ))}
-          </ul>
+          {summary.overview && (
+            <p className="text-xs text-[#374151]">{summary.overview}</p>
+          )}
+          {summary.learningPoints?.length > 0 && (
+            <ul className="space-y-1">
+              {summary.learningPoints.slice(0, 4).map((p, i) => (
+                <li key={i} className="text-xs text-[#374151] flex gap-1.5">
+                  <span className="text-[#4DA8C4]">•</span>
+                  {p}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
@@ -342,8 +351,9 @@ const ScannerTab = memo(({ onGenerated }) => {
 ScannerTab.displayName = "ScannerTab";
 
 const FlashcardSystem = memo(({ onTabChange }) => {
-  const { activeStudyDeck, setActiveStudyDeck } = useSmartBoardKids();
+  const { activeStudyDeck, setActiveStudyDeck, setDocumentForDani } = useSmartBoardKids();
   const [createTab, setCreateTab] = useState("text"); // "text" | "scan"
+  const [lastScanSummary, setLastScanSummary] = useState(null);
   const {
     decks,
     mode,
@@ -383,6 +393,28 @@ const FlashcardSystem = memo(({ onTabChange }) => {
     handleResult,
     startMultiplayer,
   } = useFlashcardDeck();
+
+  const handleScanGenerated = useCallback(
+    (title, cards, metadata) => {
+      if (metadata?.summary) setLastScanSummary(metadata.summary);
+      handleGenerateFlashcards(title, cards, metadata);
+    },
+    [handleGenerateFlashcards],
+  );
+
+  const activateDeck = useCallback(
+    (deckId) => {
+      const d = decks.find((x) => x.id === deckId);
+      if (!d) return;
+      setActiveStudyDeck({
+        deckId: d.id,
+        title: d.title,
+        cards: d.cards,
+        topic: d.title,
+      });
+    },
+    [decks, setActiveStudyDeck],
+  );
 
   if (mode === "quiz" && deck) {
     if (done) {
@@ -566,20 +598,6 @@ const FlashcardSystem = memo(({ onTabChange }) => {
     );
   }
 
-  const activateDeck = useCallback(
-    (deckId) => {
-      const d = decks.find((x) => x.id === deckId);
-      if (!d) return;
-      setActiveStudyDeck({
-        deckId: d.id,
-        title: d.title,
-        cards: d.cards,
-        topic: d.title,
-      });
-    },
-    [decks, setActiveStudyDeck],
-  );
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -656,10 +674,58 @@ const FlashcardSystem = memo(({ onTabChange }) => {
         ))}
       </div>
 
+      {/* Dani scan-context banner */}
+      {lastScanSummary && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-4 rounded-2xl bg-gradient-to-br from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 flex items-start gap-3"
+        >
+          <span className="text-2xl flex-shrink-0">🤖</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold text-[#004B63] truncate">
+              Dani leyó "{lastScanSummary.title}"
+            </p>
+            <p className="text-xs text-[#64748B] mt-0.5">
+              ¿Quieres que Dani te haga preguntas para verificar que entendiste?
+            </p>
+          </div>
+          <div className="flex flex-col gap-1.5 flex-shrink-0">
+            <motion.button
+              onClick={() => {
+                setDocumentForDani?.({
+                  title: lastScanSummary.title,
+                  subject: "general",
+                  summary: lastScanSummary.overview || "",
+                  strengths: lastScanSummary.learningPoints || [],
+                  improvements: (lastScanSummary.keyConcepts || []).slice(0, 3).map(kc => kc.term),
+                  score: 75,
+                  difficulty: lastScanSummary.difficulty || "intermedio",
+                  tutoringQuestions: (lastScanSummary.keyConcepts || []).slice(0, 4).map(kc => `¿Qué entiendes por "${kc.term}"?`),
+                });
+                window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+                setLastScanSummary(null);
+              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-3 py-1.5 bg-[#4DA8C4] text-white rounded-xl text-xs font-bold shadow-sm"
+            >
+              🗣️ Sí, habla con Dani
+            </motion.button>
+            <button
+              onClick={() => setLastScanSummary(null)}
+              className="text-[10px] text-[#64748B] text-center hover:text-[#004B63]"
+            >
+              Descartar
+            </button>
+          </div>
+        </motion.div>
+      )}
+
       {createTab === "text" ? (
         <GenerateFlashcards onGenerated={handleGenerateFlashcards} />
       ) : (
-        <ScannerTab onGenerated={handleGenerateFlashcards} />
+        <ScannerTab onGenerated={handleScanGenerated} />
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

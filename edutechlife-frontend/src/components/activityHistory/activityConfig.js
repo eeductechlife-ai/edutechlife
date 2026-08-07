@@ -109,6 +109,7 @@ export const TABS = [
   { key: "modules", icon: "fa-cubes", labelKey: "activity.tab.modules" },
   { key: "activities", icon: "fa-list", labelKey: "activity.tab.activities" },
   { key: "stats", icon: "fa-chart-bar", labelKey: "activity.tab.stats" },
+  { key: "review", icon: "fa-calendar-days", labelKey: "activity.tab.review" },
   {
     key: "recommendations",
     icon: "fa-lightbulb",

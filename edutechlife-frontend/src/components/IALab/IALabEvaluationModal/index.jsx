@@ -71,7 +71,7 @@ const STEP_DESC_KEYS = {
 /**
  * IALabEvaluationModal — Modal multi-paso para evaluación de desafíos.
  * Guía al usuario a través de los pasos específicos de cada módulo
- * (Valerio, ChatGPT, Gemini, NotebookLM, Ética) y gestiona el envío.
+ * (MAX, ChatGPT, Gemini, NotebookLM, Ética) y gestiona el envío.
  *
  * @param {Object}   props
  * @param {boolean}  props.isOpen     - Controla la visibilidad del modal

@@ -21,5 +21,15 @@ REGLAS IMPORTANTES:
 - Las palabras relacionadas deben estar en el mismo tema
 - La definición debe ser clara pero no demasiado técnica para la edad
 
-Responde ÚNICAMENTE con un array JSON válido con EXACTAMENTE 10 objetos.`;
+Responde ÚNICAMENTE con un objeto JSON válido con esta estructura EXACTA (el array debe contener EXACTAMENTE 10 tarjetas):
+{
+  "flashcards": [
+    {
+      "keyword": "palabra clave",
+      "definition": "explicación clara",
+      "example": "ejemplo práctico",
+      "relatedTerms": ["término 1", "término 2", "término 3"]
+    }
+  ]
+}`;
 };

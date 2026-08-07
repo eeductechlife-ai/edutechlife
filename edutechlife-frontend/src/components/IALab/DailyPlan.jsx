@@ -40,7 +40,11 @@ const DailyPlan = ({ onAction, isLoading }) => {
   const setVisitedModules = useIALabStore(s => s.setVisitedModules);
   const addXp = useIALabStore(s => s.addXp);
   const courseProgress = useIALabStore(s => s.courseProgress);
+  const streak = useIALabStore(s => s.streak);
+  const isStreakAtRisk = useIALabStore(s => s.isStreakAtRisk);
   const personalizedRecs = usePersonalizedRecommendations();
+
+  const atRisk = streak > 0 && isStreakAtRisk();
 
   const [completed, setCompleted] = useState(loadCompletion);
   const [isOpen, setIsOpen] = useState(false);
@@ -95,15 +99,29 @@ const DailyPlan = ({ onAction, isLoading }) => {
         aria-expanded={isOpen}
       >
         <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300" />
-        <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center flex-shrink-0">
-          <Icon name="fa-lightbulb" className="w-4 h-4 text-white" />
+        {/* Borde amber pulsante cuando hay riesgo */}
+        {atRisk && (
+          <div className="absolute inset-0 rounded-2xl ring-2 ring-amber-400/70 animate-pulse pointer-events-none" />
+        )}
+        <div className="relative w-9 h-9 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center flex-shrink-0">
+          <Icon name={atRisk ? 'fa-fire' : 'fa-lightbulb'} className="w-4 h-4 text-white" />
+          {atRisk && (
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 border-2 border-petroleum animate-ping" />
+          )}
         </div>
-        <span className="text-sm font-bold text-white flex-1 text-left drop-shadow-sm">
-          {t('ialab.daily_plan.title')}
-        </span>
-        <span className="flex items-center gap-2">
+        <div className="flex-1 text-left min-w-0">
+          <span className="text-sm font-bold text-white drop-shadow-sm block leading-tight">
+            {t('ialab.daily_plan.title')}
+          </span>
+          {atRisk && (
+            <span className="text-[10px] font-semibold text-amber-300 leading-tight block">
+              {t('ialab.streak_risk_title') || 'Racha en riesgo · actúa hoy'}
+            </span>
+          )}
+        </div>
+        <span className="flex items-center gap-2 flex-shrink-0">
           {pendingCount > 0 && (
-            <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-semibold">
+            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${atRisk ? 'bg-amber-400/30 text-amber-200' : 'bg-white/20 text-white'}`}>
               {pendingCount}
             </span>
           )}

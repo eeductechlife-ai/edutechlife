@@ -23,6 +23,26 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
     ? new Date(issuedAt).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })
     : new Date().toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
 
+  const loadLogoDataUrl = () =>
+    new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        try {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+          resolve(canvas.toDataURL("image/png"));
+        } catch (err) {
+          reject(err);
+        }
+      };
+      img.onerror = () => reject(new Error("logo load failed"));
+      img.src = "/images/logo-edutechlife.webp";
+    });
+
   const handleDownloadPDF = async () => {
     setIsDownloading(true);
     try {
@@ -75,6 +95,21 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
       doc.setFontSize(120);
       doc.setTextColor(0, 75, 99, 0.03);
       doc.text('E', W / 2, H / 2 + 20, { align: 'center' });
+
+      // Edutechlife logo (wordmark 2972x392, sobre blanco)
+      try {
+        const logoDataUrl = await Promise.race([
+          loadLogoDataUrl(),
+          new Promise((res) => setTimeout(() => res(null), 2000)),
+        ]);
+        if (logoDataUrl) {
+          const LOGO_W = 104;
+          const LOGO_H = (392 / 2972) * LOGO_W;
+          doc.addImage(logoDataUrl, "PNG", (W - LOGO_W) / 2, 26, LOGO_W, LOGO_H);
+        }
+      } catch (err) {
+        if (import.meta.env.DEV) console.error('Logo no disponible en PDF:', err);
+      }
 
       // CERTIFICADO title
       doc.setFont('helvetica', 'bold');
@@ -267,11 +302,15 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
         <div className="relative z-10 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate px-6 py-3.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L14.5 9H22L16 13.5L18.5 21L12 16.5L5.5 21L8 13.5L2 9H9.5L12 2Z" fill="white" />
-                </svg>
-              </div>
+              <img
+                src="/images/logo-edutechlife.webp"
+                alt="Edutechlife"
+                className="h-7 w-auto object-contain"
+                style={{ filter: "brightness(0) invert(1)", opacity: 0.95 }}
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
+              />
               <span className="text-white font-bold text-sm tracking-[0.15em]">EDUTECHLIFE</span>
             </div>
             <span className="text-white/60 text-[10px] hidden sm:block">www.edutechlife.com</span>

@@ -45,6 +45,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   // Estado para el acordeón de temas
   const [expandedTopic, setExpandedTopic] = useState(0);
   const [viewedIds, setViewedIds] = useState([]);
+  const confettiFiredRef = useRef(false);
 
   const [filterType, setFilterType] = useState("all");
   const [justCompletedId, setJustCompletedId] = useState(null);
@@ -250,6 +251,34 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     return unsub;
   }, []);
 
+  useEffect(() => {
+    confettiFiredRef.current = false;
+  }, [activeMod]);
+
+  useEffect(() => {
+    if (!moduleData?.topics?.length || !viewedIds.length) return;
+    const allIds = moduleData.topics.flatMap((topic) => {
+      const tr = getResourcesForTopic(topic.title, locale);
+      return tr?.resources?.map((r) => r.id) || [];
+    });
+    if (!allIds.length || confettiFiredRef.current) return;
+    if (allIds.every((id) => viewedIds.includes(id))) {
+      confettiFiredRef.current = true;
+      useIALabStore.getState().markLessonComplete(
+        activeMod,
+        Math.min(moduleData.topics.length, 3),
+      );
+      import('canvas-confetti').then(({ default: confetti }) => {
+        confetti({
+          particleCount: 130,
+          spread: 72,
+          origin: { y: 0.65 },
+          colors: ['#004B63', '#00BCD4', '#F59E0B', '#10B981', '#8B5CF6'],
+        });
+      }).catch(() => {});
+    }
+  }, [viewedIds, moduleData, locale]);
+
   // Los recursos ya vistos SIEMPRE se pueden reabrir haciendo clic en ellos.
   // Auto-avance: al completar un tema, abrir el siguiente para mantener el flujo
   useEffect(() => {
@@ -260,6 +289,10 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     const ids = tr?.resources?.map((r) => r.id) || [];
     const allDone = ids.length > 0 && ids.every((id) => viewedIds.includes(id));
     if (allDone) {
+      useIALabStore.getState().markLessonComplete(
+        activeMod,
+        expandedTopic + 1,
+      );
       const timer = setTimeout(() => {
         setExpandedTopic((prev) => (prev !== null ? prev + 1 : null));
       }, 1500);

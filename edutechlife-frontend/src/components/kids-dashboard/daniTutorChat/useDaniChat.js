@@ -12,6 +12,7 @@ import {
 } from "./daniChatVoice";
 import useDaniWelcome from "./useDaniWelcome";
 import useDaniSendMessage from "./useDaniSendMessage";
+import { scrollMessagesToBottom } from "../dani/chatUtils";
 
 export default function useDaniChat({ isOpen, activeTab }) {
   const { t } = useTranslation();
@@ -76,6 +77,7 @@ export default function useDaniChat({ isOpen, activeTab }) {
     t,
     missions,
     subjects,
+    documentForDani,
   });
 
   const { handleSendMessage, handleQuickAction, handleTopicClick } =
@@ -139,7 +141,9 @@ export default function useDaniChat({ isOpen, activeTab }) {
   }, [isSpeaking, setVoiceEnabled, setVoiceBlocked]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const endEl = messagesEndRef.current;
+    if (!endEl) return;
+    scrollMessagesToBottom(endEl.parentElement);
   }, [daniChatHistory]);
 
   useEffect(() => {
@@ -147,6 +151,25 @@ export default function useDaniChat({ isOpen, activeTab }) {
       hasSentWelcome.current = false;
     }
   }, [isOpen]);
+
+  // When Dani opens with a document context and there's already chat history,
+  // inject a context-acknowledgment message so Dani starts the verification.
+  const lastDocTitleRef = useRef(null);
+  useEffect(() => {
+    if (!isOpen || !documentForDani?.title) return;
+    if (documentForDani.title === lastDocTitleRef.current) return;
+    if (daniChatHistory.length === 0) return; // handled by welcome message instead
+    lastDocTitleRef.current = documentForDani.title;
+    const firstQ = documentForDani.tutoringQuestions?.[0];
+    const isGradePlan = documentForDani.subject === "múltiples materias";
+    const msg = isGradePlan
+      ? `📊 Cambié de contexto: ahora tengo tu plan de estudio cargado. ${firstQ || "¿Quieres que repasemos las materias donde más puedes mejorar?"}`
+      : `📖 Leí el resumen de "${documentForDani.title}". ¡Perfecto para verificar! ${firstQ || "¿Puedes explicarme con tus propias palabras de qué trata?"}`;
+    const timer = setTimeout(() => {
+      addDaniMessage({ role: "assistant", text: msg });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [isOpen, documentForDani, addDaniMessage]);
 
   useEffect(() => {
     if (!isOpen || speechPrimed.current) return;

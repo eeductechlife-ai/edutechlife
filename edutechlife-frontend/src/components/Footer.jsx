@@ -35,7 +35,7 @@ const socialLinks = [
 ];
 
 const toolLinks = [
-  { label: "IA Lab con Valerio", view: "ialab", key: "footer.ialab" },
+  { label: "IA Lab con MAX", view: "ialab", key: "footer.ialab" },
   { label: "SmartBoard", view: "neuroentorno", key: "footer.smartboard" },
   { label: "Diagnóstico VAK", view: "vak", key: "footer.vak" },
   { label: "ROI Calculator", view: "consultoria", key: "footer.roi" },

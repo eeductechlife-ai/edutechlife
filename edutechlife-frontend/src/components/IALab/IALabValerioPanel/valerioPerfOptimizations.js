@@ -1,9 +1,9 @@
 /**
- * Valerio Performance Optimizations
+ * MAX Performance Optimizations
  * Memoization, caching, debouncing para máximo rendimiento
  */
 
-import { useMemo, useCallback, useRef } from "react";
+import React, { useMemo, useCallback, useRef } from "react";
 
 /**
  * Hook para cachear el systemPrompt y evitar recalculos innecesarios

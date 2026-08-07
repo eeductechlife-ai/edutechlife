@@ -14,10 +14,22 @@ const useIALabKeyboardShortcuts = (onAction) => {
       }
 
       switch (e.key.toLowerCase()) {
+        case 'k':
+          if (e.metaKey || e.ctrlKey) {
+            e.preventDefault();
+            onAction?.('OPEN_SEARCH');
+          }
+          break;
         case 'e':
           if (!e.metaKey && !e.ctrlKey) {
             e.preventDefault();
             onAction?.('OPEN_EVALUATION');
+          }
+          break;
+        case 'p':
+          if (!e.metaKey && !e.ctrlKey) {
+            e.preventDefault();
+            onAction?.('OPEN_PRACTICE');
           }
           break;
         case 'r':
