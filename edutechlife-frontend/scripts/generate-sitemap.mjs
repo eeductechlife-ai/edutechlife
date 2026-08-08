@@ -44,8 +44,9 @@ ${altTags}
 const urls = ROUTES.map(r => {
   const altEs = r.loc === '/' ? { href: '/', hreflang: 'es' } : { href: r.loc, hreflang: 'es' }
   const altEn = { href: `/en${r.loc}`, hreflang: 'en' }
+  const altPt = { href: `/pt${r.loc}`, hreflang: 'pt' }
   const altXDefault = r.loc === '/' ? { href: '/', hreflang: 'x-default' } : { href: r.loc, hreflang: 'x-default' }
-  return urlElement(r.loc, r.priority, r.changefreq, [altEs, altEn, altXDefault])
+  return urlElement(r.loc, r.priority, r.changefreq, [altEs, altEn, altPt, altXDefault])
 }).join('\n')
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
