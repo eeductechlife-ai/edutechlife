@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, Loader2, Eye, EyeOff, Users } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "../i18n/I18nProvider";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE_URL ||
@@ -11,6 +12,7 @@ const API_BASE =
 const SmartBoardLogin = () => {
   const navigate = useNavigate();
   const { signIn, signUp, loading } = useAuth();
+  const { t } = useTranslation();
   const [mode, setMode] = useState("login"); // login | signup | parent | parent-register
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -58,7 +60,7 @@ const SmartBoardLogin = () => {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Error al iniciar sesión");
+      if (!res.ok) throw new Error(data.error || t("login.error.login_failed"));
 
       localStorage.setItem("auth_token", data.token);
       localStorage.setItem("refresh_token", data.refreshToken);
@@ -97,8 +99,9 @@ const SmartBoardLogin = () => {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Error al crear cuenta");
-      setSuccess(data.message || "Cuenta creada. Ahora puedes iniciar sesión.");
+      if (!res.ok)
+        throw new Error(data.error || t("login.error.register_failed"));
+      setSuccess(data.message || t("login.success.account_created"));
       setParentForm({
         studentEmail: parentForm.studentEmail,
         parentPassword: "",
@@ -131,7 +134,7 @@ const SmartBoardLogin = () => {
           firstName: formData.firstName,
           lastName: formData.lastName,
         });
-        setSuccess("Cuenta creada. Revisa tu email para confirmar.");
+        setSuccess(t("login.success.email_confirmation"));
         setFormData({
           email: "",
           password: "",
@@ -172,9 +175,7 @@ const SmartBoardLogin = () => {
         {/* Header */}
         <div className="bg-gradient-to-r from-[#0077B6] to-[#00B4D8] p-8 text-white text-center">
           <h1 className="text-3xl font-black mb-2">SmartBoard</h1>
-          <p className="text-sm text-white/90">
-            Plataforma de aprendizaje personalizado
-          </p>
+          <p className="text-sm text-white/90">{t("login.subtitle")}</p>
         </div>
 
         {/* Form */}
@@ -193,7 +194,7 @@ const SmartBoardLogin = () => {
                   : "bg-gray-100 text-gray-600 hover:text-gray-900"
               }`}
             >
-              Soy Estudiante
+              {t("login.tab.student")}
             </button>
             <button
               onClick={() => {
@@ -208,7 +209,7 @@ const SmartBoardLogin = () => {
               }`}
             >
               <Users className="w-4 h-4" />
-              Soy Padre/Madre
+              {t("login.tab.parent")}
             </button>
           </div>
 
@@ -226,7 +227,7 @@ const SmartBoardLogin = () => {
                     : "text-gray-500"
                 }`}
               >
-                Iniciar Sesión
+                {t("login.button.signin")}
               </button>
               <button
                 onClick={() => {
@@ -239,7 +240,7 @@ const SmartBoardLogin = () => {
                     : "text-gray-500"
                 }`}
               >
-                Crear Cuenta
+                {t("login.tab.create_account")}
               </button>
             </div>
           )}
@@ -258,7 +259,7 @@ const SmartBoardLogin = () => {
                     : "text-[#4DA8C4]"
                 }`}
               >
-                Iniciar Sesión
+                {t("login.button.signin")}
               </button>
               <button
                 onClick={() => {
@@ -271,7 +272,7 @@ const SmartBoardLogin = () => {
                     : "text-[#4DA8C4]"
                 }`}
               >
-                Registrarse
+                {t("login.tab.register")}
               </button>
             </div>
           )}
@@ -303,7 +304,7 @@ const SmartBoardLogin = () => {
                 <>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">
-                      Código de invitación
+                      {t("login.label.invitation_code")}
                     </label>
                     <div className="relative">
                       <Users className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -312,7 +313,7 @@ const SmartBoardLogin = () => {
                         name="invitationToken"
                         value={parentForm.invitationToken}
                         onChange={handleParentChange}
-                        placeholder="Código enviado al email del acudiente"
+                        placeholder={t("login.placeholder.invitation_code")}
                         className="w-full pl-10 pr-4 py-2 border border-[#4DA8C4]/30 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
                         required
                       />
@@ -320,7 +321,7 @@ const SmartBoardLogin = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">
-                      Correo del estudiante (tu hijo/a)
+                      {t("login.label.student_email")}
                     </label>
                     <div className="relative">
                       <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -329,7 +330,7 @@ const SmartBoardLogin = () => {
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
-                        placeholder="ej: juanperez"
+                        placeholder={t("login.placeholder.username")}
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0077B6] focus:border-transparent"
                         required
                       />
@@ -338,27 +339,27 @@ const SmartBoardLogin = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1">
-                        Nombre
+                        {t("login.label.first_name")}
                       </label>
                       <input
                         type="text"
                         name="firstName"
                         value={formData.firstName}
                         onChange={handleChange}
-                        placeholder="Juan"
+                        placeholder={t("login.placeholder.first_name")}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0077B6] focus:border-transparent"
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1">
-                        Apellido
+                        {t("login.label.last_name")}
                       </label>
                       <input
                         type="text"
                         name="lastName"
                         value={formData.lastName}
                         onChange={handleChange}
-                        placeholder="Pérez"
+                        placeholder={t("login.placeholder.last_name")}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0077B6] focus:border-transparent"
                       />
                     </div>
@@ -368,7 +369,7 @@ const SmartBoardLogin = () => {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Correo Electrónico
+                  {t("login.label.email")}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -386,7 +387,7 @@ const SmartBoardLogin = () => {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Contraseña
+                  {t("login.password")}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -413,7 +414,7 @@ const SmartBoardLogin = () => {
                 </div>
                 {mode === "signup" && (
                   <p className="text-xs text-gray-500 mt-1">
-                    Mínimo 6 caracteres
+                    {t("login.password_min_length")}
                   </p>
                 )}
               </div>
@@ -426,7 +427,9 @@ const SmartBoardLogin = () => {
                 className="w-full py-2.5 bg-gradient-to-r from-[#0077B6] to-[#00B4D8] text-white font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-                {mode === "login" ? "Entrar a SmartBoard" : "Crear mi Cuenta"}
+                {mode === "login"
+                  ? t("login.enter_smartboard")
+                  : t("login.create_my_account")}
               </motion.button>
             </form>
           )}
@@ -435,11 +438,11 @@ const SmartBoardLogin = () => {
           {mode === "parent" && (
             <form onSubmit={handleParentLogin} className="space-y-4">
               <div className="bg-[#E8F7FB] rounded-xl p-3 text-xs text-[#004B63] mb-2">
-                Ingresa el correo de tu hijo/a y tu contraseña de padre/madre.
+                {t("login.parent_hint")}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Correo del estudiante (tu hijo/a)
+                  {t("login.label.student_email")}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -456,7 +459,7 @@ const SmartBoardLogin = () => {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Tu contraseña de padre/madre
+                  {t("login.label.parent_password")}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -490,10 +493,10 @@ const SmartBoardLogin = () => {
                 className="w-full py-2.5 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {parentLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-                Entrar como Padre/Madre
+                {t("login.enter_as_parent")}
               </motion.button>
               <p className="text-center text-xs text-gray-500">
-                ¿Aún no tienes cuenta de padre?{" "}
+                {t("login.parent_no_account")}{" "}
                 <button
                   type="button"
                   onClick={() => {
@@ -502,7 +505,7 @@ const SmartBoardLogin = () => {
                   }}
                   className="text-[#004B63] font-semibold hover:underline"
                 >
-                  Regístrate aquí
+                  {t("login.signup_link")}
                 </button>
               </p>
             </form>
@@ -512,14 +515,11 @@ const SmartBoardLogin = () => {
           {mode === "parent-register" && (
             <form onSubmit={handleParentRegister} className="space-y-4">
               <div className="bg-[#E8F7FB] rounded-xl p-3 text-xs text-[#004B63] mb-2">
-                Crea tu acceso de padre/madre usando el correo de tu hijo/a.
-                Elige una contraseña diferente a la del estudiante. Necesitas el
-                código de invitación que genera el estudiante desde su cuenta
-                (se envía por email al verificar el consentimiento parental).
+                {t("login.parent_register_hint")}
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Tu nombre completo
+                  {t("login.label.parent_full_name")}
                 </label>
                 <div className="relative">
                   <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -528,14 +528,14 @@ const SmartBoardLogin = () => {
                     name="parentName"
                     value={parentForm.parentName}
                     onChange={handleParentChange}
-                    placeholder="ej: María García"
+                    placeholder={t("login.placeholder.parent_full_name")}
                     className="w-full pl-10 pr-4 py-2 border border-[#4DA8C4]/30 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
                   />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Correo del estudiante (tu hijo/a)
+                  {t("login.label.student_email")}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -552,7 +552,7 @@ const SmartBoardLogin = () => {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Tu contraseña de padre/madre
+                  {t("login.label.parent_password")}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -561,7 +561,7 @@ const SmartBoardLogin = () => {
                     name="parentPassword"
                     value={parentForm.parentPassword}
                     onChange={handleParentChange}
-                    placeholder="Diferente a la del estudiante"
+                    placeholder={t("login.placeholder.parent_password")}
                     className="w-full pl-10 pr-10 py-2 border border-[#4DA8C4]/30 rounded-lg focus:ring-2 focus:ring-[#4DA8C4] focus:border-transparent"
                     required
                   />
@@ -578,7 +578,7 @@ const SmartBoardLogin = () => {
                   </button>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  Mínimo 6 caracteres
+                  {t("login.password_min_length")}
                 </p>
               </div>
               <motion.button
@@ -589,7 +589,7 @@ const SmartBoardLogin = () => {
                 className="w-full py-2.5 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {parentLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-                Crear mi Cuenta de Padre/Madre
+                {t("login.create_parent_account")}
               </motion.button>
             </form>
           )}
@@ -598,8 +598,8 @@ const SmartBoardLogin = () => {
           {(mode === "login" || mode === "signup") && (
             <p className="text-center text-xs text-gray-500 mt-6">
               {mode === "login"
-                ? "¿No tienes cuenta? Crea una arriba"
-                : "¿Ya tienes cuenta? Inicia sesión arriba"}
+                ? t("login.no_account_footer")
+                : t("login.has_account_footer")}
             </p>
           )}
         </div>

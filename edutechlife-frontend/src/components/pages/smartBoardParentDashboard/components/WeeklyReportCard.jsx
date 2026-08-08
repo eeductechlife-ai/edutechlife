@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { Mail, Check, Loader2 } from "lucide-react";
+import { useTranslation } from "../../../../i18n/I18nProvider";
 
 /**
  * WeeklyReportCard
@@ -10,13 +11,14 @@ import { Mail, Check, Loader2 } from "lucide-react";
  * Fails soft — never blocks the rest of the dashboard.
  */
 const WeeklyReportCard = ({ authToken, studentName }) => {
+  const { t } = useTranslation();
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const [message, setMessage] = useState("");
 
   const sendReport = async () => {
     if (!authToken) {
       setStatus("error");
-      setMessage("Inicia sesión para recibir el reporte.");
+      setMessage(t("parent_dashboard.report_login_required"));
       return;
     }
     setStatus("sending");
@@ -41,22 +43,19 @@ const WeeklyReportCard = ({ authToken, studentName }) => {
         setStatus("sent");
         setMessage(
           data.to
-            ? `Reporte enviado a ${data.to}`
-            : "Reporte enviado a tu correo.",
+            ? t("parent_dashboard.report_sent_to", { email: data.to })
+            : t("parent_dashboard.report_sent"),
         );
       } else if (res.status === 404) {
         setStatus("error");
-        setMessage(
-          data.error ||
-            "Aún no hay email de padre registrado o datos suficientes.",
-        );
+        setMessage(data.error || t("parent_dashboard.report_no_data"));
       } else {
         setStatus("error");
-        setMessage("No pudimos enviar el reporte. Intenta más tarde.");
+        setMessage(t("parent_dashboard.report_failed"));
       }
     } catch {
       setStatus("error");
-      setMessage("Sin conexión con el servidor. Intenta más tarde.");
+      setMessage(t("parent_dashboard.report_offline"));
     }
   };
 
@@ -70,12 +69,12 @@ const WeeklyReportCard = ({ authToken, studentName }) => {
         <div className="max-w-md">
           <h3 className="font-bold text-base flex items-center gap-2">
             <Mail className="w-4 h-4" />
-            Reporte semanal por correo
+            {t("parent_dashboard.report_weekly_title")}
           </h3>
           <p className="text-sm text-white/85 mt-1">
-            Recibe cada semana el progreso de {studentName || "tu hijo"}:
-            puntos, días activos, racha y materias. Así lo acompañas sin tener
-            que estar encima.
+            {t("parent_dashboard.report_weekly_desc", {
+              name: studentName || t("parent_dashboard.report_child"),
+            })}
           </p>
         </div>
 
@@ -87,10 +86,10 @@ const WeeklyReportCard = ({ authToken, studentName }) => {
           {status === "sending" && <Loader2 className="w-4 h-4 animate-spin" />}
           {status === "sent" && <Check className="w-4 h-4" />}
           {status === "sending"
-            ? "Enviando..."
+            ? t("parent_dashboard.report_sending")
             : status === "sent"
-              ? "Enviado"
-              : "Enviar a mi correo"}
+              ? t("parent_dashboard.report_sent_short")
+              : t("parent_dashboard.report_send")}
         </button>
       </div>
 

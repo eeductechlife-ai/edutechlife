@@ -25,6 +25,7 @@ import {
   Database,
 } from "lucide-react";
 import SEO from "../../SEO";
+import { useTranslation } from "../../../i18n/I18nProvider";
 import { createSupabaseClient } from "../../../lib/supabase";
 import { LivePresenceBar, ActivityLog } from "./components/ParentControls";
 import {
@@ -38,32 +39,48 @@ import ParentResources from "./components/ParentResources";
 import { mergeRealtimePoints } from "./mergeRealtime";
 
 const LEVELS = [
-  { min: 5000, name: "Maestro", emoji: "🏆" },
-  { min: 2500, name: "Experto", emoji: "⭐" },
-  { min: 1000, name: "Avanzado", emoji: "📚" },
-  { min: 500, name: "Intermedio", emoji: "🌟" },
-  { min: 0, name: "Principiante", emoji: "🌱" },
+  { min: 5000, nameKey: "parent_dashboard.level_maestro", emoji: "🏆" },
+  { min: 2500, nameKey: "parent_dashboard.level_experto", emoji: "⭐" },
+  { min: 1000, nameKey: "parent_dashboard.level_avanzado", emoji: "📚" },
+  { min: 500, nameKey: "parent_dashboard.level_intermedio", emoji: "🌟" },
+  { min: 0, nameKey: "parent_dashboard.level_principiante", emoji: "🌱" },
 ];
 
 const FEATURES = [
-  { icon: "🤖", text: "Tutor IA Dani — disponible 24/7" },
-  { icon: "🧠", text: "Diagnóstico VAK — cómo aprende tu hijo/a" },
-  { icon: "🎯", text: "Misiones gamificadas diarias" },
-  { icon: "🛡️", text: "Monitoreo de bienestar emocional con IA" },
-  { icon: "📊", text: "Dashboard exclusivo para padres" },
-  { icon: "📧", text: "Reportes semanales por correo" },
+  { icon: "🤖", textKey: "parent_dashboard.feature_1" },
+  { icon: "🧠", textKey: "parent_dashboard.feature_2" },
+  { icon: "🎯", textKey: "parent_dashboard.feature_3" },
+  { icon: "🛡️", textKey: "parent_dashboard.feature_4" },
+  { icon: "📊", textKey: "parent_dashboard.feature_5" },
+  { icon: "📧", textKey: "parent_dashboard.feature_6" },
 ];
 
 const NAV = [
-  { id: "resumen", label: "Resumen", Icon: LayoutDashboard },
-  { id: "actividad", label: "Actividad", Icon: Activity },
-  { id: "progreso", label: "Progreso", Icon: TrendingUp },
-  { id: "bienestar", label: "Bienestar", Icon: Heart },
-  { id: "recursos", label: "Recursos", Icon: BookMarked },
-  { id: "plan", label: "Mi Plan", Icon: Star },
+  {
+    id: "resumen",
+    labelKey: "parent_dashboard.nav_resumen",
+    Icon: LayoutDashboard,
+  },
+  {
+    id: "actividad",
+    labelKey: "parent_dashboard.nav_actividad",
+    Icon: Activity,
+  },
+  {
+    id: "progreso",
+    labelKey: "parent_dashboard.nav_progreso",
+    Icon: TrendingUp,
+  },
+  { id: "bienestar", labelKey: "parent_dashboard.nav_bienestar", Icon: Heart },
+  {
+    id: "recursos",
+    labelKey: "parent_dashboard.nav_recursos",
+    Icon: BookMarked,
+  },
+  { id: "plan", labelKey: "parent_dashboard.nav_plan", Icon: Star },
 ];
 
-const getWellness = (streak, completionRate, minutes) => {
+const getWellness = (streak, completionRate, minutes, t) => {
   let s = 0;
   if (streak >= 5) s += 3;
   else if (streak >= 2) s += 2;
@@ -75,38 +92,38 @@ const getWellness = (streak, completionRate, minutes) => {
   else if (minutes >= 30) s += 1;
   if (s >= 6)
     return {
-      label: "Excelente",
+      label: t("parent_dashboard.wellness_excelente"),
       color: "#16A34A",
       bg: "#F0FDF4",
       border: "#BBF7D0",
       emoji: "😊",
-      tip: "¡Tu hijo/a está muy motivado/a! Felicítale por su constancia.",
+      tip: t("parent_dashboard.wellness_excelente_tip"),
     };
   if (s >= 3)
     return {
-      label: "Bien",
+      label: t("parent_dashboard.wellness_bien"),
       color: "#D97706",
       bg: "#FFFBEB",
       border: "#FDE68A",
       emoji: "🙂",
-      tip: "Va bien. Pregúntale cómo le va en sus materias favoritas.",
+      tip: t("parent_dashboard.wellness_bien_tip"),
     };
   if (s >= 1)
     return {
-      label: "Regular",
+      label: t("parent_dashboard.wellness_regular"),
       color: "#EA580C",
       bg: "#FFF7ED",
       border: "#FED7AA",
       emoji: "😐",
-      tip: "Podría necesitar un empujón. Anímale a completar una misión hoy.",
+      tip: t("parent_dashboard.wellness_regular_tip"),
     };
   return {
-    label: "Sin actividad reciente",
+    label: t("parent_dashboard.wellness_sin_actividad"),
     color: "#64748B",
     bg: "#F8FAFC",
     border: "#E2E8F0",
     emoji: "💤",
-    tip: "No hay actividad reciente. Recuérdale que Dani le espera en SmartBoard.",
+    tip: t("parent_dashboard.wellness_sin_actividad_tip"),
   };
 };
 
@@ -119,101 +136,107 @@ const Sidebar = ({
   mobileOpen,
   onCloseMobile,
   studentOnline,
-}) => (
-  <motion.aside
-    initial={false}
-    className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#004B63] flex flex-col transform transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:flex`}
-  >
-    <div className="p-5 border-b border-white/10">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-white font-black text-lg leading-tight">
-            SmartBoard
-          </h1>
-          <span className="text-[#4DA8C4] text-xs font-semibold tracking-wide">
-            Panel de Padres
-          </span>
+}) => {
+  const { t } = useTranslation();
+  return (
+    <motion.aside
+      initial={false}
+      className={`fixed inset-y-0 left-0 z-40 w-64 bg-[#004B63] flex flex-col transform transition-transform duration-300 ${mobileOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:static md:flex`}
+    >
+      <div className="p-5 border-b border-white/10">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-white font-black text-lg leading-tight">
+              SmartBoard
+            </h1>
+            <span className="text-[#4DA8C4] text-xs font-semibold tracking-wide">
+              {t("parent_dashboard.panel_title")}
+            </span>
+          </div>
+          <button
+            onClick={onCloseMobile}
+            className="md:hidden text-white/60 hover:text-white"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
-        <button
-          onClick={onCloseMobile}
-          className="md:hidden text-white/60 hover:text-white"
-        >
-          <X className="w-5 h-5" />
-        </button>
       </div>
-    </div>
 
-    <div className="p-4 border-b border-white/10">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-[#4DA8C4]/30 flex items-center justify-center text-white font-black text-base flex-shrink-0">
-          {parentName.charAt(0).toUpperCase()}
-        </div>
-        <div className="min-w-0">
-          <p className="text-white font-semibold text-sm truncate">
-            {parentName}
-          </p>
-          <p className="text-[#4DA8C4] text-xs">Padre / Madre</p>
-        </div>
-      </div>
-      {studentEmail && (
-        <div className="mt-3 bg-white/8 rounded-lg px-3 py-2">
-          <p className="text-white/40 text-[10px] uppercase tracking-wider mb-0.5">
-            Monitoreando
-          </p>
-          <div className="flex items-center gap-1.5">
-            <div
-              className={`w-2 h-2 rounded-full flex-shrink-0 ${studentOnline ? "bg-emerald-400 animate-pulse" : "bg-white/25"}`}
-            />
-            <p
-              className="text-xs font-medium truncate"
-              style={{
-                color: studentOnline ? "#34d399" : "rgba(255,255,255,0.6)",
-              }}
-            >
-              {studentOnline
-                ? "Estudiando ahora ✨"
-                : studentEmail.split("@")[0]}
+      <div className="p-4 border-b border-white/10">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-[#4DA8C4]/30 flex items-center justify-center text-white font-black text-base flex-shrink-0">
+            {parentName.charAt(0).toUpperCase()}
+          </div>
+          <div className="min-w-0">
+            <p className="text-white font-semibold text-sm truncate">
+              {parentName}
+            </p>
+            <p className="text-[#4DA8C4] text-xs">
+              {t("parent_dashboard.parent_role")}
             </p>
           </div>
         </div>
-      )}
-    </div>
+        {studentEmail && (
+          <div className="mt-3 bg-white/8 rounded-lg px-3 py-2">
+            <p className="text-white/40 text-[10px] uppercase tracking-wider mb-0.5">
+              {t("parent_dashboard.monitoring")}
+            </p>
+            <div className="flex items-center gap-1.5">
+              <div
+                className={`w-2 h-2 rounded-full flex-shrink-0 ${studentOnline ? "bg-emerald-400 animate-pulse" : "bg-white/25"}`}
+              />
+              <p
+                className="text-xs font-medium truncate"
+                style={{
+                  color: studentOnline ? "#34d399" : "rgba(255,255,255,0.6)",
+                }}
+              >
+                {studentOnline
+                  ? t("parent_dashboard.studying_now")
+                  : studentEmail.split("@")[0]}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
 
-    <nav className="flex-1 p-3 space-y-0.5">
-      {NAV.map(({ id, label, Icon }) => (
+      <nav className="flex-1 p-3 space-y-0.5">
+        {NAV.map(({ id, labelKey, Icon }) => (
+          <button
+            key={id}
+            onClick={() => {
+              onSection(id);
+              onCloseMobile();
+            }}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${activeSection === id ? "bg-white/15 text-white" : "text-white/55 hover:bg-white/8 hover:text-white"}`}
+          >
+            <Icon className="w-4 h-4 flex-shrink-0" />
+            {t(labelKey)}
+            {activeSection === id && (
+              <motion.div
+                layoutId="nav-dot"
+                className="ml-auto w-1.5 h-1.5 rounded-full bg-[#4DA8C4]"
+              />
+            )}
+          </button>
+        ))}
+      </nav>
+
+      <div className="p-4 border-t border-white/10">
         <button
-          key={id}
-          onClick={() => {
-            onSection(id);
-            onCloseMobile();
-          }}
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${activeSection === id ? "bg-white/15 text-white" : "text-white/55 hover:bg-white/8 hover:text-white"}`}
+          onClick={onLogout}
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 text-sm transition-all"
         >
-          <Icon className="w-4 h-4 flex-shrink-0" />
-          {label}
-          {activeSection === id && (
-            <motion.div
-              layoutId="nav-dot"
-              className="ml-auto w-1.5 h-1.5 rounded-full bg-[#4DA8C4]"
-            />
-          )}
+          <LogOut className="w-4 h-4" /> {t("parent_dashboard.logout")}
         </button>
-      ))}
-    </nav>
-
-    <div className="p-4 border-t border-white/10">
-      <button
-        onClick={onLogout}
-        className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-white/50 hover:text-white hover:bg-white/10 text-sm transition-all"
-      >
-        <LogOut className="w-4 h-4" /> Cerrar Sesión
-      </button>
-    </div>
-  </motion.aside>
-);
+      </div>
+    </motion.aside>
+  );
+};
 
 const SmartBoardParentDashboard = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { userId, token: authToken, isLoaded } = useAuthIdentity();
   const [activeSection, setActiveSection] = useState("resumen");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -223,7 +246,9 @@ const SmartBoardParentDashboard = () => {
   const isParent = localStorage.getItem("user_role") === "parent";
   const studentEmail = localStorage.getItem("student_email") || "";
   const studentId = localStorage.getItem("student_id") || "";
-  const parentName = localStorage.getItem("parent_name") || "Padre/Madre";
+  const parentName =
+    localStorage.getItem("parent_name") ||
+    t("parent_dashboard.parent_fallback");
 
   const { data: supabaseData, source: dataSource } = useParentStudentData(
     studentId || userId,
@@ -329,16 +354,20 @@ const SmartBoardParentDashboard = () => {
     data.streak?.current || 0,
     completionRate,
     data.minutes,
+    t,
   );
-  const studentFirst = studentEmail ? studentEmail.split("@")[0] : "tu hijo/a";
+  const studentFirst = studentEmail
+    ? studentEmail.split("@")[0]
+    : t("parent_dashboard.your_child");
+  const activeNav = NAV.find((n) => n.id === activeSection);
 
   if (!isParent && isLoaded && !userId) return null;
 
   return (
     <>
       <SEO
-        title="Panel de Padres · SmartBoard"
-        description="Monitorea el progreso y bienestar de tu hijo en SmartBoard EdutechLife"
+        title={t("parent_dashboard.seo_title")}
+        description={t("parent_dashboard.seo_desc")}
       />
       <div className="flex h-screen bg-[#F1F5F9] overflow-hidden">
         {mobileOpen && (
@@ -369,16 +398,21 @@ const SmartBoardParentDashboard = () => {
             </button>
             <div className="flex-1 min-w-0">
               <h2 className="font-bold text-[#004B63] text-sm">
-                {NAV.find((n) => n.id === activeSection)?.label}
+                {activeNav ? t(activeNav.labelKey) : ""}
               </h2>
               <p className="text-[#94A3B8] text-xs">
-                Hola, {parentName.split(" ")[0]} · Monitoreando a {studentFirst}
+                {t("parent_dashboard.header_greeting", {
+                  name: parentName.split(" ")[0],
+                  student: studentFirst,
+                })}
               </p>
             </div>
             {studentOnline && (
               <div className="hidden sm:flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                {studentFirst} está estudiando
+                {t("parent_dashboard.student_studying", {
+                  name: studentFirst,
+                })}
               </div>
             )}
             <div
@@ -391,18 +425,18 @@ const SmartBoardParentDashboard = () => {
               }`}
               title={
                 dataSource === "backend"
-                  ? "Datos en vivo desde el servidor"
+                  ? t("parent_dashboard.source_backend")
                   : dataSource === "supabase"
-                    ? "Datos en tiempo real desde la nube"
-                    : "Datos locales de este dispositivo"
+                    ? t("parent_dashboard.source_supabase")
+                    : t("parent_dashboard.source_local")
               }
             >
               <Database className="w-3 h-3" />
               {dataSource === "backend"
-                ? "En vivo"
+                ? t("parent_dashboard.live")
                 : dataSource === "supabase"
-                  ? "Nube"
-                  : "Local"}
+                  ? t("parent_dashboard.cloud")
+                  : t("parent_dashboard.local")}
             </div>
             <div
               className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full ${isConnected ? "bg-emerald-50 text-emerald-600" : "bg-gray-100 text-gray-500"}`}
@@ -412,7 +446,9 @@ const SmartBoardParentDashboard = () => {
               ) : (
                 <WifiOff className="w-3 h-3" />
               )}
-              {isConnected ? "En vivo" : "Offline"}
+              {isConnected
+                ? t("parent_dashboard.live")
+                : t("parent_dashboard.offline")}
             </div>
           </header>
 
@@ -443,7 +479,9 @@ const SmartBoardParentDashboard = () => {
                           className="font-bold text-sm"
                           style={{ color: wellness.color }}
                         >
-                          {studentFirst} está:{" "}
+                          {t("parent_dashboard.student_status", {
+                            name: studentFirst,
+                          })}{" "}
                           <span className="capitalize">{wellness.label}</span>
                         </p>
                         <p
@@ -457,7 +495,9 @@ const SmartBoardParentDashboard = () => {
                         <p className="text-2xl font-black text-[#004B63]">
                           {data.streak?.current || 0} 🔥
                         </p>
-                        <p className="text-xs text-[#94A3B8]">días seguidos</p>
+                        <p className="text-xs text-[#94A3B8]">
+                          {t("parent_dashboard.streak_days_consecutive")}
+                        </p>
                       </div>
                     </div>
 
@@ -465,31 +505,37 @@ const SmartBoardParentDashboard = () => {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                       <StatCard
                         icon={<Trophy className="w-4 h-4" />}
-                        label="Puntos ganados"
+                        label={t("parent_dashboard.points_earned")}
                         value={data.points.toLocaleString()}
                         color="#FFD166"
-                        subtitle={`${level.emoji} ${level.name}`}
+                        subtitle={`${level.emoji} ${t(level.nameKey)}`}
                       />
                       <StatCard
                         icon={<Clock className="w-4 h-4" />}
-                        label="Horas de estudio"
+                        label={t("parent_dashboard.study_hours")}
                         value={`${studyHours}h`}
                         color="#4DA8C4"
-                        subtitle={`${data.minutes} min totales`}
+                        subtitle={t("parent_dashboard.minutes_total_label", {
+                          minutes: data.minutes,
+                        })}
                       />
                       <StatCard
                         icon={<Award className="w-4 h-4" />}
-                        label="Misiones"
+                        label={t("parent_dashboard.missions")}
                         value={`${completed}/${total}`}
                         color="#66CCCC"
-                        subtitle={`${Math.round(completionRate * 100)}% completadas`}
+                        subtitle={t("parent_dashboard.missions_completed_pct", {
+                          pct: Math.round(completionRate * 100),
+                        })}
                       />
                       <StatCard
                         icon={<TrendingUp className="w-4 h-4" />}
-                        label="Progreso promedio"
+                        label={t("parent_dashboard.avg_progress")}
                         value={`${avgProgress}%`}
                         color="#B2D8E5"
-                        subtitle={`${data.subjects.length} materias`}
+                        subtitle={t("parent_dashboard.subjects_count", {
+                          count: data.subjects.length,
+                        })}
                       />
                     </div>
 
@@ -526,11 +572,13 @@ const SmartBoardParentDashboard = () => {
                         <div className="flex items-center gap-2 mb-1">
                           <Brain className="w-5 h-5 text-[#4DA8C4]" />
                           <h3 className="font-bold text-[#004B63]">
-                            Cómo aprende {studentFirst}
+                            {t("parent_dashboard.how_learns", {
+                              name: studentFirst,
+                            })}
                           </h3>
                         </div>
                         <p className="text-xs text-[#94A3B8] mb-4">
-                          Diagnóstico VAK — estilo predominante:{" "}
+                          {t("parent_dashboard.vak_predominant")}{" "}
                           <strong className="text-[#4DA8C4]">
                             {data.vakResult.predominantStyle}
                           </strong>
@@ -589,22 +637,24 @@ const SmartBoardParentDashboard = () => {
                       }}
                     >
                       <h3 className="font-bold text-[#004B63] mb-4 flex items-center gap-2">
-                        <span className="text-xl">{wellness.emoji}</span> Pulso
-                        emocional de {studentFirst}
+                        <span className="text-xl">{wellness.emoji}</span>{" "}
+                        {t("parent_dashboard.emotional_pulse", {
+                          name: studentFirst,
+                        })}
                       </h3>
                       <div className="grid grid-cols-3 gap-3 mb-4">
                         {[
                           {
                             value: `${data.streak?.current || 0}🔥`,
-                            label: "Racha actual",
+                            label: t("parent_dashboard.current_streak"),
                           },
                           {
                             value: `${Math.round(completionRate * 100)}%`,
-                            label: "Misiones hechas",
+                            label: t("parent_dashboard.missions_done"),
                           },
                           {
                             value: `${studyHours}h`,
-                            label: "Tiempo estudiado",
+                            label: t("parent_dashboard.time_studied"),
                           },
                         ].map((s, i) => (
                           <div
@@ -622,7 +672,9 @@ const SmartBoardParentDashboard = () => {
                       </div>
                       <div className="bg-white/70 rounded-lg p-3">
                         <p className="text-xs font-semibold text-[#004B63] mb-1">
-                          💡 Tip para ti, {parentName.split(" ")[0]}
+                          {t("parent_dashboard.tip_for_you", {
+                            name: parentName.split(" ")[0],
+                          })}
                         </p>
                         <p
                           className="text-sm"
@@ -636,31 +688,52 @@ const SmartBoardParentDashboard = () => {
                     {/* Hábitos de estudio */}
                     <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
                       <h3 className="font-bold text-[#004B63] mb-4">
-                        Hábitos de estudio
+                        {t("parent_dashboard.study_habits")}
                       </h3>
                       <div className="space-y-3">
                         {[
                           {
                             icon: "📅",
-                            title: "Racha más larga",
-                            desc: `${data.streak?.longest || 0} días consecutivos de estudio`,
+                            title: t("parent_dashboard.longest_streak"),
+                            desc: t("parent_dashboard.longest_streak_desc", {
+                              days: data.streak?.longest || 0,
+                            }),
                           },
                           {
                             icon: "⏱️",
-                            title: "Tiempo total invertido",
-                            desc: `${data.minutes} min (${studyHours}h) de aprendizaje activo`,
+                            title: t("parent_dashboard.total_time_invested"),
+                            desc: t("parent_dashboard.total_time_desc", {
+                              minutes: data.minutes,
+                              hours: studyHours,
+                            }),
                           },
                           {
                             icon: "📚",
-                            title: "Materias con avance",
-                            desc: `${data.subjects.filter((s) => s.progress > 0).length} de ${data.subjects.length} materias`,
+                            title: t("parent_dashboard.subjects_with_progress"),
+                            desc: t("parent_dashboard.subjects_of", {
+                              count: data.subjects.filter((s) => s.progress > 0)
+                                .length,
+                              total: data.subjects.length,
+                            }),
                           },
                           ...(data.vakResult
                             ? [
                                 {
                                   icon: "🧠",
-                                  title: `${studentFirst} aprende mejor de forma`,
-                                  desc: `${data.vakResult.predominantStyle === "visual" ? "visual — comparte videos y diagramas" : data.vakResult.predominantStyle === "auditivo" ? "auditiva — prueba podcasts y explicaciones orales" : "kinestésica — apoya con ejercicios y proyectos prácticos"}`,
+                                  title: t("parent_dashboard.learns_best", {
+                                    name: studentFirst,
+                                  }),
+                                  desc:
+                                    data.vakResult.predominantStyle === "visual"
+                                      ? t("parent_dashboard.vak_visual_style")
+                                      : data.vakResult.predominantStyle ===
+                                          "auditivo"
+                                        ? t(
+                                            "parent_dashboard.vak_auditivo_style",
+                                          )
+                                        : t(
+                                            "parent_dashboard.vak_kinestesico_style",
+                                          ),
                                 },
                               ]
                             : []),
@@ -694,33 +767,35 @@ const SmartBoardParentDashboard = () => {
                     {/* ROI hero — lo que el padre pagó y recibió */}
                     <div className="bg-gradient-to-br from-[#004B63] to-[#0077B6] rounded-xl p-6 text-white">
                       <h3 className="font-black text-xl mb-0.5">
-                        Lo que ha logrado {studentFirst}
+                        {t("parent_dashboard.achieved_title", {
+                          name: studentFirst,
+                        })}
                       </h3>
                       <p className="text-white/60 text-sm mb-5">
-                        con SmartBoard · tu inversión en acción
+                        {t("parent_dashboard.achieved_subtitle")}
                       </p>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         {[
                           {
                             emoji: "⭐",
                             value: data.points.toLocaleString(),
-                            label: "Puntos ganados",
+                            label: t("parent_dashboard.points_earned"),
                           },
                           {
                             emoji: "⏱️",
                             value: `${studyHours}h`,
-                            label: "Horas de estudio",
+                            label: t("parent_dashboard.study_hours"),
                           },
                           {
                             emoji: "✅",
                             value: completed,
-                            label: "Misiones completadas",
+                            label: t("parent_dashboard.missions_completed"),
                           },
                           {
                             emoji: "📚",
                             value: data.subjects.filter((s) => s.progress > 0)
                               .length,
-                            label: "Materias avanzadas",
+                            label: t("parent_dashboard.advanced_subjects"),
                           },
                         ].map((stat, i) => (
                           <div
@@ -740,8 +815,8 @@ const SmartBoardParentDashboard = () => {
                     {/* Features list */}
                     <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
                       <h3 className="font-bold text-[#004B63] mb-4 flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-[#4DA8C4]" /> Tu
-                        suscripción SmartBoard incluye
+                        <Sparkles className="w-4 h-4 text-[#4DA8C4]" />{" "}
+                        {t("parent_dashboard.subscription_includes")}
                       </h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         {FEATURES.map((f, i) => (
@@ -751,7 +826,7 @@ const SmartBoardParentDashboard = () => {
                           >
                             <span className="text-xl">{f.icon}</span>
                             <span className="text-sm text-[#334155] flex-1">
-                              {f.text}
+                              {t(f.textKey)}
                             </span>
                             <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                           </div>
