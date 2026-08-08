@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Icon } from "../../../utils/iconMapping.jsx";
 import { useReadingPreferences } from "../../../hooks/IALab/useReadingPreferences";
-import { useTranslation } from "../../../i18n/I18nProvider";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const FONT_SIZES = [14, 16, 18, 20, 24];
 

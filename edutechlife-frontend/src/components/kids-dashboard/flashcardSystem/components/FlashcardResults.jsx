@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { useTranslation } from "../../../i18n/I18nProvider";
+import { useTranslation } from "../../../../i18n/I18nProvider";
 
 const FlashcardResults = memo(
   ({ rate, correct, incorrect, onRestart, onBack }) => {

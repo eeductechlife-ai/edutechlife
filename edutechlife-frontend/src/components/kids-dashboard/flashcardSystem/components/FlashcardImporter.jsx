@@ -1,6 +1,6 @@
 import { useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTranslation } from "../../../i18n/I18nProvider";
+import { useTranslation } from "../../../../i18n/I18nProvider";
 
 const FlashcardImporter = memo(({ decks, saveDecks, onStartMultiplayer }) => {
   const { t } = useTranslation();
