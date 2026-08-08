@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import { motion, useReducedMotion } from 'framer-motion';
-import { Icon } from '../../utils/iconMapping';
-import { useTranslation } from '../../i18n/I18nProvider';
+import PropTypes from "prop-types";
+import { motion, useReducedMotion } from "framer-motion";
+import { Icon } from "../../utils/iconMapping";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const sparkPositions = [
   { x: -10, y: -6, size: 2, delay: 0 },
@@ -21,17 +21,17 @@ const Sparkle = ({ x, y, size, delay, color }) => (
       x: [0, x * 0.5, x],
       y: [0, y * 0.5, y],
     }}
-    transition={{ delay, duration: 0.9, ease: 'easeOut' }}
+    transition={{ delay, duration: 0.9, ease: "easeOut" }}
     className="absolute pointer-events-none"
-    style={{ top: '50%', left: '50%' }}
+    style={{ top: "50%", left: "50%" }}
   >
     <div
       className="rounded-full"
       style={{
         width: size,
         height: size,
-        backgroundColor: color || '#FBBF24',
-        boxShadow: `0 0 ${size * 2}px ${color || '#FBBF24'}`,
+        backgroundColor: color || "#FBBF24",
+        boxShadow: `0 0 ${size * 2}px ${color || "#FBBF24"}`,
       }}
     />
   </motion.div>
@@ -45,14 +45,21 @@ const cardVariants = {
     scale: 1,
     transition: {
       delay: 0,
-      type: 'spring',
+      type: "spring",
       stiffness: 300,
       damping: 24,
     },
   }),
 };
 
-const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 0 }) => {
+const BadgeCard = ({
+  badge,
+  earned,
+  dateEarned,
+  onClick,
+  isNewlyEarned,
+  index = 0,
+}) => {
   const prefersReducedMotion = useReducedMotion();
   const { t, locale } = useTranslation();
 
@@ -63,7 +70,7 @@ const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 
       scale: 1,
       transition: {
         delay: i * 0.05,
-        type: 'spring',
+        type: "spring",
         stiffness: 300,
         damping: 24,
       },
@@ -81,10 +88,13 @@ const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 
       onClick={onClick}
       className={`relative flex flex-col items-center p-4 rounded-xl border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 ${
         earned
-          ? 'bg-white/80 backdrop-blur-sm dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:shadow-corporate/5'
-          : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200/60 dark:border-slate-700/50 opacity-60 grayscale'
+          ? "bg-white/80 backdrop-blur-sm dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:shadow-corporate/5"
+          : "bg-slate-50 dark:bg-slate-800/50 border-slate-200/60 dark:border-slate-700/50 opacity-60 grayscale"
       }`}
-      aria-label={t(earned ? 'badge.earned_aria' : 'badge.locked_aria', { label: badge.label, desc: badge.desc })}
+      aria-label={t(earned ? "badge.earned_aria" : "badge.locked_aria", {
+        label: badge.label,
+        desc: badge.desc,
+      })}
     >
       {earned && (
         <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
@@ -96,29 +106,37 @@ const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 
               className="absolute inset-0 bg-gradient-to-br from-yellow-300/10 to-transparent"
             />
           )}
-          {!prefersReducedMotion && isNewlyEarned && sparkPositions.map((sp, i) => (
-            <Sparkle key={i} {...sp} color={badge.color} />
-          ))}
+          {!prefersReducedMotion &&
+            isNewlyEarned &&
+            sparkPositions.map((sp, i) => (
+              <Sparkle key={i} {...sp} color={badge.color} />
+            ))}
         </div>
       )}
       <div
         className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-2 relative"
         style={{
-          backgroundColor: earned ? `${badge.color}20` : 'transparent',
-          color: earned ? badge.color : '#64748b',
+          backgroundColor: earned ? `${badge.color}20` : "transparent",
+          color: earned ? badge.color : "#64748b",
         }}
       >
         <motion.div
-          animate={earned && !prefersReducedMotion ? {
-            rotate: [0, -8, 8, -4, 4, 0],
-            scale: [1, 1.15, 1.08, 1],
-          } : {}}
-          transition={{ delay: 0.2, duration: 0.7, ease: 'easeOut' }}
+          animate={
+            earned && !prefersReducedMotion
+              ? {
+                  rotate: [0, -8, 8, -4, 4, 0],
+                  scale: [1, 1.15, 1.08, 1],
+                }
+              : {}
+          }
+          transition={{ delay: 0.2, duration: 0.7, ease: "easeOut" }}
         >
           <Icon name={badge.icon} />
         </motion.div>
       </div>
-      <span className={`text-xs font-semibold text-center leading-tight ${earned ? 'text-slate-700 dark:text-slate-200' : 'text-slate-500 dark:text-slate-400'}`}>
+      <span
+        className={`text-xs font-semibold text-center leading-tight ${earned ? "text-slate-700 dark:text-slate-200" : "text-slate-500 dark:text-slate-400"}`}
+      >
         {badge.label}
       </span>
       <span className="text-[10px] text-slate-400 dark:text-slate-500 text-center mt-1 leading-tight">
@@ -131,7 +149,10 @@ const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 
           transition={{ delay: 0.5, duration: 0.3 }}
           className="text-[9px] text-emerald-600 dark:text-emerald-400 mt-1.5 font-medium"
         >
-          {new Date(dateEarned).toLocaleDateString(locale === 'en' ? 'en-US' : 'es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+          {new Date(dateEarned).toLocaleDateString(
+            { en: "en-US", pt: "pt-BR", es: "es-ES" }[locale] || "es-ES",
+            { day: "numeric", month: "short", year: "numeric" },
+          )}
         </motion.span>
       )}
       {!earned && (
@@ -141,14 +162,16 @@ const BadgeCard = ({ badge, earned, dateEarned, onClick, isNewlyEarned, index = 
           className="absolute inset-0 rounded-xl bg-slate-200/60 dark:bg-slate-900/40 flex items-center justify-center"
         >
           <div className="w-8 h-8 rounded-full bg-white/80 dark:bg-slate-700/80 flex items-center justify-center shadow-sm">
-            <Icon name="fa-lock" className="text-slate-400 dark:text-slate-500 text-xs" />
+            <Icon
+              name="fa-lock"
+              className="text-slate-400 dark:text-slate-500 text-xs"
+            />
           </div>
         </motion.div>
       )}
     </motion.button>
   );
 };
-
 
 Sparkle.propTypes = {
   x: PropTypes.number,

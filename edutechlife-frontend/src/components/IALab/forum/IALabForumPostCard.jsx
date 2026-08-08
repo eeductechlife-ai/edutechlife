@@ -12,7 +12,7 @@ const IALabForumPostCard = ({
 }) => {
   const likeProps = getLikeButtonProps(post.id);
   const formattedDate = new Date(post.created_at).toLocaleDateString(
-    locale === "en" ? "en-US" : "es-ES",
+    { en: "en-US", pt: "pt-BR", es: "es-ES" }[locale] || "es-ES",
     {
       day: "numeric",
       month: "short",

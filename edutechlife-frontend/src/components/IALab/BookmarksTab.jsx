@@ -3,7 +3,11 @@ import { motion } from "framer-motion";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useIALabStore } from "../../store/ialabStore";
 import { useTranslation } from "../../i18n/I18nProvider";
-import { RESOURCES_ES, RESOURCES_EN } from "./constants/moduleResources";
+import {
+  RESOURCES_ES,
+  RESOURCES_EN,
+  RESOURCES_PT,
+} from "./constants/moduleResources";
 import ResourceViewerModal from "./ResourceViewerModal";
 
 const TYPE_ICONS = {
@@ -22,7 +26,9 @@ const TYPE_ICONS = {
 };
 
 function buildFlatResourceMap(locale) {
-  const source = locale === "en" ? RESOURCES_EN : RESOURCES_ES;
+  const source =
+    { en: RESOURCES_EN, pt: RESOURCES_PT, es: RESOURCES_ES }[locale] ||
+    RESOURCES_ES;
   const result = [];
   for (const [topicTitle, topicData] of Object.entries(source)) {
     const resources = topicData?.resources || [];
@@ -40,10 +46,13 @@ const BookmarksTab = () => {
 
   const [bookmarkedIds, setBookmarkedIds] = useState(() => getFromStore());
 
-  const toggleBookmark = useCallback((id) => {
-    storeToggle(id);
-    setBookmarkedIds(getFromStore());
-  }, [storeToggle, getFromStore]);
+  const toggleBookmark = useCallback(
+    (id) => {
+      storeToggle(id);
+      setBookmarkedIds(getFromStore());
+    },
+    [storeToggle, getFromStore],
+  );
 
   const [viewerOpen, setViewerOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState(null);
@@ -70,10 +79,17 @@ const BookmarksTab = () => {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm p-10 flex flex-col items-center justify-center text-center gap-3">
         <div className="w-14 h-14 rounded-2xl bg-petroleum/8 dark:bg-petroleum/15 flex items-center justify-center">
-          <Icon name="fa-bookmark" className="text-2xl text-petroleum/40 dark:text-petroleum/50" />
+          <Icon
+            name="fa-bookmark"
+            className="text-2xl text-petroleum/40 dark:text-petroleum/50"
+          />
         </div>
-        <h4 className="text-sm font-bold text-slate-700 dark:text-slate-200">{t("ialab.bookmarks_empty_title")}</h4>
-        <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs">{t("ialab.bookmarks_empty_desc")}</p>
+        <h4 className="text-sm font-bold text-slate-700 dark:text-slate-200">
+          {t("ialab.bookmarks_empty_title")}
+        </h4>
+        <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs">
+          {t("ialab.bookmarks_empty_desc")}
+        </p>
       </div>
     );
   }
@@ -92,7 +108,9 @@ const BookmarksTab = () => {
             className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm overflow-hidden"
           >
             <div className="px-5 py-3 bg-petroleum/4 dark:bg-petroleum/10 border-b border-slate-200/60 dark:border-slate-700/40">
-              <p className="text-xs font-bold text-petroleum dark:text-[#4DA8C4] uppercase tracking-wide truncate">{topicTitle}</p>
+              <p className="text-xs font-bold text-petroleum dark:text-[#4DA8C4] uppercase tracking-wide truncate">
+                {topicTitle}
+              </p>
             </div>
             <div className="divide-y divide-slate-100 dark:divide-slate-700/40">
               {resources.map((resource, i) => (
@@ -114,7 +132,9 @@ const BookmarksTab = () => {
                       {resource.title}
                     </p>
                     {resource.duration && (
-                      <p className="text-xs text-slate-400 dark:text-slate-500">{resource.duration}</p>
+                      <p className="text-xs text-slate-400 dark:text-slate-500">
+                        {resource.duration}
+                      </p>
                     )}
                   </div>
                   <div className="flex items-center gap-1.5 flex-shrink-0">

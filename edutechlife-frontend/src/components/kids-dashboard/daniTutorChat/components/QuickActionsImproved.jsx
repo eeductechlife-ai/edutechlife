@@ -1,5 +1,6 @@
 import { memo, useCallback } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "../../../../i18n/I18nProvider";
 import "../styles/dani-colors.css";
 import "../styles/quick-actions-improved.css";
 
@@ -7,51 +8,52 @@ const QUICK_ACTIONS = [
   {
     id: "homework",
     icon: "📚",
-    title: "Ayuda con Tarea",
-    subtitle: "Explícame este concepto",
+    titleKey: "dani.qa_homework_title",
+    subtitleKey: "dani.qa_homework_subtitle",
     color: "blue",
   },
   {
     id: "motivation",
     icon: "💬",
-    title: "Motivación Diaria",
-    subtitle: "Dame un impulso positivo",
+    titleKey: "dani.qa_motivation_title",
+    subtitleKey: "dani.qa_motivation_subtitle",
     color: "green",
   },
   {
     id: "vak",
     icon: "🧠",
-    title: "Mi Estilo VAK",
-    subtitle: "Descubre cómo aprendes mejor",
+    titleKey: "dani.qa_vak_title",
+    subtitleKey: "dani.qa_vak_subtitle",
     color: "purple",
   },
   {
     id: "today",
     icon: "📝",
-    title: "Qué Debo Hacer",
-    subtitle: "Mi agenda de hoy",
+    titleKey: "dani.qa_today_title",
+    subtitleKey: "dani.qa_today_subtitle",
     color: "orange",
   },
   {
     id: "explain",
     icon: "💡",
-    title: "Explícame un Tema",
-    subtitle: "Necesito que me enseñes",
+    titleKey: "dani.qa_explain_title",
+    subtitleKey: "dani.qa_explain_subtitle",
     color: "yellow",
   },
   {
     id: "emotional",
     icon: "❤️",
-    title: "Apoyo Emocional",
-    subtitle: "Necesito hablar",
+    titleKey: "dani.qa_emotional_title",
+    subtitleKey: "dani.qa_emotional_subtitle",
     color: "red",
   },
 ];
 
 const QuickActionsImproved = memo(
   ({ onAction, studentAge = 10, darkMode = false, hasHistory = false }) => {
+    const { t } = useTranslation();
     const handleAction = useCallback(
-      (actionId, title) => {
+      (actionId) => {
         onAction(actionId);
       },
       [onAction],
@@ -109,7 +111,7 @@ const QuickActionsImproved = memo(
         animate="visible"
       >
         <div className="quick-actions-header">
-          <span className="quick-actions-label">Acciones Rápidas</span>
+          <span className="quick-actions-label">{t("dani.qa_label")}</span>
           <motion.div
             className="quick-actions-accent"
             animate={{ opacity: [0.5, 1, 0.5] }}
@@ -124,7 +126,7 @@ const QuickActionsImproved = memo(
             <motion.button
               key={action.id}
               variants={itemVariants}
-              onClick={() => handleAction(action.id, action.title)}
+              onClick={() => handleAction(action.id)}
               className="quick-action-card"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
@@ -134,8 +136,8 @@ const QuickActionsImproved = memo(
             >
               <div className="quick-action-icon">{action.icon}</div>
               <div className="quick-action-content">
-                <h3 className="quick-action-title">{action.title}</h3>
-                <p className="quick-action-subtitle">{action.subtitle}</p>
+                <h3 className="quick-action-title">{t(action.titleKey)}</h3>
+                <p className="quick-action-subtitle">{t(action.subtitleKey)}</p>
               </div>
               <div className="quick-action-arrow">→</div>
             </motion.button>

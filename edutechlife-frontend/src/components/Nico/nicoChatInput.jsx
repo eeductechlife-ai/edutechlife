@@ -1,6 +1,7 @@
 import React from "react";
 import { Mic, MicOff, Volume2, VolumeX, Send, X } from "lucide-react";
 import { COLORS } from "./nicoColors";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 export function ChatInput({
   message,
@@ -19,6 +20,7 @@ export function ChatInput({
   inputRef,
   messages,
 }) {
+  const { t } = useTranslation();
   return (
     <div
       className="p-4 border-t"
@@ -70,8 +72,7 @@ export function ChatInput({
         >
           <div className="flex items-center">
             <span className="text-sm font-medium" style={{ color: "#C62828" }}>
-              Audio bloqueado. Presiona el botón de volumen y concede
-              permisos.
+              {t("nico.audio_blocked")}
             </span>
           </div>
         </div>
@@ -87,7 +88,7 @@ export function ChatInput({
             backgroundColor: isListening ? "#FF4757" : COLORS.PETROLEUM,
             boxShadow: isListening ? `0 0 20px ${COLORS.MINT}80` : "none",
           }}
-          title={isListening ? "Detener grabación" : "Hablar con Nico"}
+          title={t(isListening ? "nico.stop_recording" : "nico.talk_to_nico")}
         >
           <div className="relative">
             {isListening ? (
@@ -112,7 +113,7 @@ export function ChatInput({
             opacity: (messages || []).length === 0 ? 0.5 : 1,
             boxShadow: isSpeaking ? `0 0 20px ${COLORS.MINT}80` : "none",
           }}
-          title={isSpeaking ? "Detener voz" : "Escuchar respuesta de Nico"}
+          title={t(isSpeaking ? "nico.stop_voice" : "nico.listen_response")}
         >
           <div className="relative">
             {isSpeaking ? (
@@ -130,7 +131,7 @@ export function ChatInput({
           onClick={onClearChat}
           className="p-3 rounded-xl transition-all duration-300 hover:scale-105"
           style={{ backgroundColor: COLORS.PETROLEUM }}
-          title="Limpiar conversación"
+          title={t("nico.clear_conversation")}
         >
           <X className="w-6 h-6 text-white" />
         </button>
@@ -139,7 +140,7 @@ export function ChatInput({
           onClick={onClearCache}
           className="p-3 rounded-xl transition-all duration-300 hover:scale-105"
           style={{ backgroundColor: COLORS.CORPORATE }}
-          title="Limpiar caché de respuestas"
+          title={t("nico.clear_cache")}
         >
           <div className="relative">
             <span className="text-white font-bold text-sm">{"⚡"}</span>
@@ -153,7 +154,7 @@ export function ChatInput({
           value={message}
           onChange={onChange}
           onKeyDown={onKeyDown}
-          placeholder="Escribe tu mensaje aquí..."
+          placeholder={t("nico.input_placeholder")}
           className="flex-1 p-3 rounded-xl resize-none focus:outline-none focus:ring-2 text-sm md:text-base"
           style={{
             backgroundColor: COLORS.SOFT_BLUE,
@@ -181,8 +182,7 @@ export function ChatInput({
 
       <div className="mt-3 text-center">
         <p className="text-xs" style={{ color: COLORS.MINT }}>
-          Presiona Enter para enviar {"•"} Shift+Enter para nueva
-          línea
+          {t("nico.input_hint")}
         </p>
       </div>
     </div>

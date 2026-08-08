@@ -50,9 +50,19 @@ import {
 } from "./valerioPerfOptimizations";
 import { useToast } from "./ValerioUIEnhancements";
 import { createSpeechQueue } from "./valerioSpeechQueue";
-import { ALL_LESSONS, ALL_LESSONS_EN } from "../../../data/ialab";
+import {
+  ALL_LESSONS,
+  ALL_LESSONS_EN,
+  ALL_LESSONS_PT,
+} from "../../../data/ialab";
 
 const VALERIO_MEMORY_KEY = "ialab_valerio_conversation";
+
+const LESSONS_BY_LOCALE = {
+  en: ALL_LESSONS_EN,
+  pt: ALL_LESSONS_PT,
+  es: ALL_LESSONS,
+};
 
 // Divide un texto en frases completas para hablarlas de una en una
 const splitIntoSentences = (text) => {
@@ -71,7 +81,7 @@ const splitIntoSentences = (text) => {
   return sentences;
 };
 
-const IALabValerioPanel = ({ isOpen, onClose, initialMessage = '' }) => {
+const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
   const { t, locale } = useTranslation();
   const { activeMod, modules, completedModules } = useIALabProgressContext();
   // Shared Supabase singleton for academic memory (optional)
@@ -413,9 +423,8 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = '' }) => {
   };
 
   useEffect(() => {
-    const isEn = locale === "en";
     const lessons = currentModule
-      ? (isEn ? ALL_LESSONS_EN : ALL_LESSONS)?.[currentModule.id] || []
+      ? (LESSONS_BY_LOCALE[locale] || ALL_LESSONS)?.[currentModule.id] || []
       : [];
     const currentLessonData = currentLesson?.lessonId
       ? lessons.find((l) => l.id === currentLesson.lessonId)
@@ -429,33 +438,49 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = '' }) => {
         id: "explain_topic",
         label: t("ialab.valerio.quick_explain_topic"),
         icon: "fa-book",
-        prompt: isEn
-          ? `Explain the main topic of ${topicRef} clearly and concisely.`
-          : `Explica el tema principal de ${topicRef} de manera clara y concisa.`,
+        prompt:
+          {
+            en: `Explain the main topic of ${topicRef} clearly and concisely.`,
+            pt: `Explique o tópico principal de ${topicRef} de forma clara e concisa.`,
+            es: `Explica el tema principal de ${topicRef} de manera clara y concisa.`,
+          }[locale] ||
+          `Explica el tema principal de ${topicRef} de manera clara y concisa.`,
       },
       {
         id: "give_example",
         label: t("ialab.valerio.quick_give_example"),
         icon: "fa-lightbulb",
-        prompt: isEn
-          ? `Provide a practical example related to "${currentModule?.challenge || "prompt engineering"}".`
-          : `Proporciona un ejemplo práctico relacionado con "${currentModule?.challenge || "ingeniería de prompts"}".`,
+        prompt:
+          {
+            en: `Provide a practical example related to "${currentModule?.challenge || "prompt engineering"}".`,
+            pt: `Forneça um exemplo prático relacionado a "${currentModule?.challenge || "engenharia de prompts"}".`,
+            es: `Proporciona un ejemplo práctico relacionado con "${currentModule?.challenge || "ingeniería de prompts"}".`,
+          }[locale] ||
+          `Proporciona un ejemplo práctico relacionado con "${currentModule?.challenge || "ingeniería de prompts"}".`,
       },
       {
         id: "help_challenge",
         label: t("ialab.valerio.quick_help_challenge"),
         icon: "fa-puzzle-piece",
-        prompt: isEn
-          ? `How can I effectively approach the "${currentModule?.challenge}" challenge?`
-          : `¿Cómo puedo abordar el desafío "${currentModule?.challenge}" de manera efectiva?`,
+        prompt:
+          {
+            en: `How can I effectively approach the "${currentModule?.challenge}" challenge?`,
+            pt: `Como posso abordar o desafio "${currentModule?.challenge}" de forma eficaz?`,
+            es: `¿Cómo puedo abordar el desafío "${currentModule?.challenge}" de manera efectiva?`,
+          }[locale] ||
+          `¿Cómo puedo abordar el desafío "${currentModule?.challenge}" de manera efectiva?`,
       },
       {
         id: "study_tips",
         label: t("ialab.valerio.quick_study_tips"),
         icon: "fa-graduation-cap",
-        prompt: isEn
-          ? `Give me study tips for the "${currentModule?.title}" module (level ${userLevel < 3 ? "beginner" : userLevel < 6 ? "intermediate" : "advanced"}). I am currently on the lesson "${lessonTitle || currentModule?.title}".`
-          : `Dame consejos de estudio para el módulo "${currentModule?.title}" (nivel ${userLevel < 3 ? "principiante" : userLevel < 6 ? "intermedio" : "avanzado"}). Estoy en la lección "${lessonTitle || currentModule?.title}".`,
+        prompt:
+          {
+            en: `Give me study tips for the "${currentModule?.title}" module (level ${userLevel < 3 ? "beginner" : userLevel < 6 ? "intermediate" : "advanced"}). I am currently on the lesson "${lessonTitle || currentModule?.title}".`,
+            pt: `Dê-me dicas de estudo para o módulo "${currentModule?.title}" (nível ${userLevel < 3 ? "iniciante" : userLevel < 6 ? "intermediário" : "avançado"}). Estou na lição "${lessonTitle || currentModule?.title}".`,
+            es: `Dame consejos de estudio para el módulo "${currentModule?.title}" (nivel ${userLevel < 3 ? "principiante" : userLevel < 6 ? "intermedio" : "avanzado"}). Estoy en la lección "${lessonTitle || currentModule?.title}".`,
+          }[locale] ||
+          `Dame consejos de estudio para el módulo "${currentModule?.title}" (nivel ${userLevel < 3 ? "principiante" : userLevel < 6 ? "intermedio" : "avanzado"}). Estoy en la lección "${lessonTitle || currentModule?.title}".`,
       },
     ];
     setQuickActions(actions);

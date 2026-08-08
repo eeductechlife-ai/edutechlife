@@ -1,17 +1,29 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "../../../i18n/I18nProvider";
+
+const TOPIC_KEYS = {
+  Matemáticas: "dani.topic_math",
+  Lenguaje: "dani.topic_language",
+  Ciencias: "dani.topic_science",
+  Historia: "dani.topic_history",
+  Inglés: "dani.topic_english",
+  Arte: "dani.topic_art",
+  Tecnología: "dani.topic_technology",
+};
 
 // ==========================================
 // Suggested Topics Chip
 // ==========================================
 const RecentTopics = memo(({ topics, onTopicClick, darkMode }) => {
+  const { t } = useTranslation();
   if (!topics || topics.length === 0) return null;
   return (
     <div className="px-4 pb-2 flex gap-1.5 flex-wrap">
-      {topics.slice(-5).map((t) => (
+      {topics.slice(-5).map((topic) => (
         <motion.button
-          key={t.topic}
-          data-topic={t.topic}
+          key={topic.topic}
+          data-topic={topic.topic}
           onClick={(e) => onTopicClick(e.currentTarget.dataset.topic)}
           className={`px-2.5 py-1 text-xs rounded-full border transition-all ${
             darkMode
@@ -21,7 +33,7 @@ const RecentTopics = memo(({ topics, onTopicClick, darkMode }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {t.icon || "📌"} {t.topic}
+          {topic.icon || "📌"} {t(TOPIC_KEYS[topic.topic] || topic.topic)}
         </motion.button>
       ))}
     </div>

@@ -5,7 +5,8 @@ const MAX_NO_SPEECH_RETRIES = 3;
 
 export function useValerioVoice(isOpen, onTranscript, locale = "es") {
   const { t } = useTranslation();
-  const recognitionLang = locale === "en" ? "en-US" : "es-CO";
+  const recognitionLang =
+    { en: "en-US", pt: "pt-BR", es: "es-CO" }[locale] || "es-CO";
   const [isListening, setIsListening] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(true);
   const [speechError, setSpeechError] = useState("");

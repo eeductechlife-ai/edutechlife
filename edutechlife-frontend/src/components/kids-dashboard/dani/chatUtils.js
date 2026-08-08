@@ -47,16 +47,22 @@ export function inferMoodFromText(text) {
   return null;
 }
 
-export function getRelativeTime(timestamp) {
+const TIME_LOCALE_MAP = { en: "en-US", pt: "pt-BR", es: "es-ES" };
+
+export function getRelativeTime(timestamp, locale = "es", t = null) {
   const now = new Date();
   const msgTime = new Date(timestamp);
   const diffMs = now - msgTime;
   const diffMin = Math.floor(diffMs / 60000);
-  if (diffMin < 1) return "ahora";
-  if (diffMin < 60) return `hace ${diffMin} min`;
+  if (diffMin < 1) return t ? t("dani.time_now") : "ahora";
+  if (diffMin < 60)
+    return t ? t("dani.time_min", { min: diffMin }) : `hace ${diffMin} min`;
   const diffHours = Math.floor(diffMin / 60);
-  if (diffHours < 24) return `hace ${diffHours}h`;
-  return msgTime.toLocaleTimeString("es-ES", {
+  if (diffHours < 24)
+    return t
+      ? t("dani.time_hours", { hours: diffHours })
+      : `hace ${diffHours}h`;
+  return msgTime.toLocaleTimeString(TIME_LOCALE_MAP[locale] || "es-ES", {
     hour: "2-digit",
     minute: "2-digit",
   });

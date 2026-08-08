@@ -225,7 +225,9 @@ const VideoViewer = ({
             const tracks =
               playerRef.current?.getOption("captions", "tracklist") || [];
             const es = tracks.find(
-              (t) => t.languageCode === (locale === "en" ? "en" : "es"),
+              (t) =>
+                t.languageCode ===
+                ({ en: "en", pt: "pt", es: "es" }[locale] || "es"),
             );
             if (es) playerRef.current?.setOption("captions", "track", es);
             else if (tracks.length > 0)

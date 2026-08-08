@@ -3,8 +3,10 @@ import { Bot, User, CheckCircle, Calendar } from "lucide-react";
 import { COLORS } from "./nicoColors";
 import { LeadCaptureForm, AppointmentScheduler } from "./nicoConfig";
 import { getQuestionSuggestions } from "./nicoContext";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 function ChatOptionButtons({ options, onScheduleOption, onAskQuestion }) {
+  const { t } = useTranslation();
   return (
     <div className="mt-3 pt-3 border-t border-gray-200">
       <div className="flex flex-col space-y-2">
@@ -37,8 +39,8 @@ function ChatOptionButtons({ options, onScheduleOption, onAskQuestion }) {
               ) {
                 const question =
                   option.action === "test_vak"
-                    ? "¿Cómo funciona el test VAK y cómo puedo hacerlo?"
-                    : "¿Cómo puedo conocer a los tutores disponibles?";
+                    ? t("nico.question_vak_test")
+                    : t("nico.question_meet_tutors");
                 onAskQuestion(question);
               }
             }}
@@ -58,6 +60,7 @@ function ChatOptionButtons({ options, onScheduleOption, onAskQuestion }) {
 }
 
 function MessageBubble({ msg, onScheduleOption, onAskQuestion }) {
+  const { t } = useTranslation();
   return (
     <div
       className={`max-w-[85%] md:max-w-[80%] rounded-2xl p-3 md:p-4 ${
@@ -91,7 +94,7 @@ function MessageBubble({ msg, onScheduleOption, onAskQuestion }) {
               />
             )}
             <span className="text-xs font-semibold">
-              {msg.role === "user" ? "Tú" : "Nico"}
+              {msg.role === "user" ? t("nico.you_label") : "Nico"}
             </span>
           </div>
           <div className="flex items-center space-x-1">
@@ -122,6 +125,7 @@ function MessageBubble({ msg, onScheduleOption, onAskQuestion }) {
 }
 
 function TypingIndicator() {
+  const { t } = useTranslation();
   return (
     <div className="flex justify-start">
       <div
@@ -149,7 +153,7 @@ function TypingIndicator() {
               }}
             />
           </div>
-          <span style={{ color: COLORS.NAVY }}>Nico está pensando...</span>
+          <span style={{ color: COLORS.NAVY }}>{t("nico.typing")}</span>
         </div>
       </div>
     </div>
@@ -177,6 +181,7 @@ export function ChatMessages({
   onAskQuestion,
   messagesEndRef,
 }) {
+  const { t } = useTranslation();
   return (
     <div
       className="flex-1 overflow-y-auto p-4"
@@ -200,14 +205,13 @@ export function ChatMessages({
             Nico
           </h3>
           <p className="text-sm mb-6" style={{ color: COLORS.MINT }}>
-            Asistente de EdutechLife
+            {t("nico.empty_subtitle")}
           </p>
           <p className="text-sm mb-6" style={{ color: COLORS.CORPORATE }}>
-            Puedo ayudarte con información sobre nuestros servicios
-            educativos: VAK, STEM, tutorías y bienestar.
+            {t("nico.empty_description")}
           </p>
           <p className="text-xs italic mb-4" style={{ color: COLORS.MINT }}>
-            Escribe tu pregunta en el campo de abajo
+            {t("nico.empty_hint")}
           </p>
         </div>
       ) : (
@@ -231,7 +235,7 @@ export function ChatMessages({
             !showScheduler && (
               <div className="mt-4 mb-2">
                 <p className="text-xs font-medium mb-2 text-gray-500">
-                  {"¿Te interesa saber sobre...?"}
+                  {t("nico.suggestions_label")}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {getQuestionSuggestions(messages, userContext).map(
@@ -255,7 +259,7 @@ export function ChatMessages({
                   onClick={() => onToggleSuggestions(false)}
                   className="text-xs mt-2 text-gray-400 hover:text-gray-600"
                 >
-                  Ocultar sugerencias
+                  {t("nico.hide_suggestions")}
                 </button>
               </div>
             )}
@@ -268,7 +272,7 @@ export function ChatMessages({
                 onClick={() => onToggleSuggestions(true)}
                 className="text-xs mt-2 text-gray-400 hover:text-gray-600 flex items-center"
               >
-                <span>{"💡"} Mostrar sugerencias de preguntas</span>
+                <span>{t("nico.show_suggestions")}</span>
               </button>
             )}
 
@@ -277,7 +281,7 @@ export function ChatMessages({
               <Suspense
                 fallback={
                   <div className="p-4 text-center text-gray-500">
-                    Cargando formulario...
+                    {t("nico.loading_form")}
                   </div>
                 }
               >
@@ -307,10 +311,10 @@ export function ChatMessages({
                 />
                 <div>
                   <p className="font-medium" style={{ color: COLORS.NAVY }}>
-                    {"✅"} Información guardada exitosamente
+                    {t("nico.lead_saved_title")}
                   </p>
                   <p className="text-sm" style={{ color: COLORS.PETROLEUM }}>
-                    Un asesor se contactará contigo pronto
+                    {t("nico.lead_saved_desc")}
                   </p>
                 </div>
               </div>
@@ -322,7 +326,7 @@ export function ChatMessages({
               <Suspense
                 fallback={
                   <div className="p-4 text-center text-gray-500">
-                    Cargando calendario...
+                    {t("nico.loading_calendar")}
                   </div>
                 }
               >
@@ -351,10 +355,10 @@ export function ChatMessages({
                 />
                 <div>
                   <p className="font-medium" style={{ color: COLORS.NAVY }}>
-                    {"📅"} Cita agendada exitosamente
+                    {t("nico.appointment_saved_title")}
                   </p>
                   <p className="text-sm" style={{ color: COLORS.PETROLEUM }}>
-                    Recibirás confirmación y recordatorio
+                    {t("nico.appointment_saved_desc")}
                   </p>
                 </div>
               </div>
