@@ -154,6 +154,37 @@ export type TranslationKeys = {
   "aliados.marquee_aria": string;
   "aliados.title_before": string;
   "aliados.title_highlight": string;
+  "analytics.activity_distribution": string;
+  "analytics.empty_desc": string;
+  "analytics.empty_hint_missions": string;
+  "analytics.empty_hint_progress": string;
+  "analytics.empty_hint_study": string;
+  "analytics.empty_title": string;
+  "analytics.metric_heatmap": string;
+  "analytics.metric_prediction": string;
+  "analytics.metric_speed": string;
+  "analytics.metric_speed_desc": string;
+  "analytics.metric_streak": string;
+  "analytics.metric_time": string;
+  "analytics.module_scores": string;
+  "analytics.no_data": string;
+  "analytics.session": string;
+  "analytics.study_time": string;
+  "analytics.subject_english": string;
+  "analytics.subject_language": string;
+  "analytics.subject_math": string;
+  "analytics.subject_science": string;
+  "analytics.subject_social": string;
+  "analytics.subtitle": string;
+  "analytics.title": string;
+  "analytics.week_fri": string;
+  "analytics.week_mon": string;
+  "analytics.week_sat": string;
+  "analytics.week_sun": string;
+  "analytics.week_thu": string;
+  "analytics.week_tue": string;
+  "analytics.week_wed": string;
+  "analytics.weekly_xp": string;
   "automation.architect.back_dashboard": string;
   "automation.architect.badge": string;
   "automation.architect.btn_atras": string;
@@ -328,6 +359,8 @@ export type TranslationKeys = {
   "badge.locked": string;
   "badge.locked_aria": string;
   "badge.obtained": string;
+  "calendar.activity_desc_placeholder": string;
+  "calendar.activity_title_placeholder": string;
   "certificate.awarded_to": string;
   "certificate.cert_number_pdf": string;
   "certificate.completed_course": string;
@@ -523,6 +556,7 @@ export type TranslationKeys = {
   "course_completion.view_cert": string;
   "course_completion.yes": string;
   "dani.chart_title": string;
+  "dani.chat_placeholder": string;
   "dani.chat_title": string;
   "dani.close": string;
   "dani.conversation_count": string;
@@ -661,12 +695,19 @@ export type TranslationKeys = {
   "flashcard.completed_desc": string;
   "flashcard.mastered_title": string;
   "flashcard.next_btn": string;
+  "flashcard.no_cards": string;
   "flashcard.prev_btn": string;
   "flashcard.progress": string;
   "flashcard.question_aria": string;
+  "flashcard.rating_again": string;
+  "flashcard.rating_easy": string;
+  "flashcard.rating_good": string;
+  "flashcard.rating_hard": string;
+  "flashcard.rating_hint": string;
   "flashcard.remaining": string;
   "flashcard.repeat_all": string;
   "flashcard.restart_btn": string;
+  "flashcards.placeholder": string;
   "footer.automation": string;
   "footer.blog": string;
   "footer.certifications": string;
@@ -741,12 +782,46 @@ export type TranslationKeys = {
   "hero.subtitle_highlight": string;
   "hero.title_line1": string;
   "hero.title_line2": string;
+  "ialab.achievement_toast.close_aria": string;
+  "ialab.activity_feed.challenge_completed": string;
+  "ialab.activity_feed.empty": string;
+  "ialab.activity_feed.exam_passed": string;
+  "ialab.activity_feed.exam_passed_score": string;
+  "ialab.activity_feed.forum_participation": string;
+  "ialab.activity_feed.resources_completed": string;
+  "ialab.activity_feed.title": string;
+  "ialab.adaptive.day_ago": string;
+  "ialab.adaptive.days_ago": string;
+  "ialab.adaptive.failed_attempts": string;
+  "ialab.adaptive.month_ago": string;
+  "ialab.adaptive.months_ago": string;
+  "ialab.adaptive.review_label": string;
+  "ialab.adaptive.scheduled_review": string;
+  "ialab.adaptive.stale_label": string;
+  "ialab.adaptive.struggle_label": string;
+  "ialab.adaptive.subtitle": string;
+  "ialab.adaptive.title": string;
+  "ialab.adaptive.today": string;
+  "ialab.adaptive.viewed": string;
+  "ialab.analytics_subtitle": string;
+  "ialab.analytics_title": string;
+  "ialab.ask_max_btn": string;
+  "ialab.ask_max_context": string;
+  "ialab.ask_max_exam_btn": string;
+  "ialab.ask_max_exam_failed": string;
+  "ialab.ask_max_exam_passed": string;
   "ialab.badge_gallery.count": string;
   "ialab.badge_gallery.title": string;
   "ialab.benefits.subtitle": string;
   "ialab.benefits.title": string;
   "ialab.bookmark.remove": string;
   "ialab.bookmark.save": string;
+  "ialab.bookmarked": string;
+  "ialab.bookmarked_aria": string;
+  "ialab.bookmarks_empty_desc": string;
+  "ialab.bookmarks_empty_title": string;
+  "ialab.bookmarks_module": string;
+  "ialab.bookmarks_open": string;
   "ialab.breadcrumb.aria_label": string;
   "ialab.breadcrumb_home": string;
   "ialab.breadcrumb_module": string;
@@ -1124,6 +1199,9 @@ export type TranslationKeys = {
   "ialab.challenge_result.title": string;
   "ialab.completed": string;
   "ialab.completed_pct": string;
+  "ialab.continue_banner_cta": string;
+  "ialab.continue_banner_lesson": string;
+  "ialab.continue_banner_title": string;
   "ialab.continue_lesson": string;
   "ialab.course_card.btn_enroll": string;
   "ialab.course_card.btn_explore": string;
@@ -1168,6 +1246,22 @@ export type TranslationKeys = {
   "ialab.error_boundary.reload": string;
   "ialab.error_boundary.retry": string;
   "ialab.error_boundary.title": string;
+  "ialab.error_state.auth_action": string;
+  "ialab.error_state.auth_message": string;
+  "ialab.error_state.auth_title": string;
+  "ialab.error_state.generic_action": string;
+  "ialab.error_state.generic_message": string;
+  "ialab.error_state.generic_title": string;
+  "ialab.error_state.network_action": string;
+  "ialab.error_state.network_message": string;
+  "ialab.error_state.network_title": string;
+  "ialab.error_state.not_found_action": string;
+  "ialab.error_state.not_found_message": string;
+  "ialab.error_state.not_found_title": string;
+  "ialab.error_state.server_action": string;
+  "ialab.error_state.server_message": string;
+  "ialab.error_state.server_title": string;
+  "ialab.error_state.technical_details": string;
   "ialab.ethics_explorer.analyze_another": string;
   "ialab.ethics_explorer.apply_filter": string;
   "ialab.ethics_explorer.badge": string;
@@ -1226,9 +1320,12 @@ export type TranslationKeys = {
   "ialab.ethics_explorer.subtitle": string;
   "ialab.ethics_explorer.title": string;
   "ialab.ethics_explorer.view_report": string;
+  "ialab.ethics_explorer.voice_instruction": string;
+  "ialab.ethics_explorer.voice_result": string;
   "ialab.ethics_explorer.welcome_desc": string;
   "ialab.ethics_explorer.yes": string;
   "ialab.evaluation.modal.ai_designing": string;
+  "ialab.evaluation.modal.dialog_label": string;
   "ialab.evaluation.modal.evaluating": string;
   "ialab.evaluation.modal.exit": string;
   "ialab.evaluation.modal.form_error_evaluation": string;
@@ -1422,6 +1519,34 @@ export type TranslationKeys = {
   "ialab.exam_result.title_passed": string;
   "ialab.exam_result.total": string;
   "ialab.filter_all": string;
+  "ialab.flashcard_review_btn": string;
+  "ialab.flashcard_review_xp": string;
+  "ialab.flashcard_topic_btn": string;
+  "ialab.flashcards.practice_badge": string;
+  "ialab.flashcards.practice_completed_desc": string;
+  "ialab.flashcards.practice_completed_title": string;
+  "ialab.flashcards.practice_correct": string;
+  "ialab.flashcards.practice_easy": string;
+  "ialab.flashcards.practice_feedback_correct": string;
+  "ialab.flashcards.practice_feedback_incorrect": string;
+  "ialab.flashcards.practice_hard": string;
+  "ialab.flashcards.practice_incorrect": string;
+  "ialab.flashcards.practice_medium": string;
+  "ialab.flashcards.practice_next": string;
+  "ialab.flashcards.practice_no_questions": string;
+  "ialab.flashcards.practice_stats_by_difficulty": string;
+  "ialab.flashcards.practice_try_again": string;
+  "ialab.flashcards.practice_view_results": string;
+  "ialab.flashcards.practice_xp_earned": string;
+  "ialab.flashcards.tab_practice": string;
+  "ialab.flashcards.tab_practice_icon": string;
+  "ialab.flashcards.tab_study": string;
+  "ialab.flashcards.tab_study_icon": string;
+  "ialab.flashcards_quick_desc": string;
+  "ialab.flashcards_quick_title": string;
+  "ialab.forum.best_answer.remove": string;
+  "ialab.forum.best_answer.solution": string;
+  "ialab.forum.best_answer.user_fallback": string;
   "ialab.forum.comment.day_ago": string;
   "ialab.forum.comment.edited": string;
   "ialab.forum.comment.hour_ago": string;
@@ -1475,18 +1600,22 @@ export type TranslationKeys = {
   "ialab.forum.optimized.empty_desc": string;
   "ialab.forum.optimized.empty_title": string;
   "ialab.forum.optimized.input_placeholder": string;
+  "ialab.forum.optimized.like_aria": string;
   "ialab.forum.optimized.live_badge": string;
   "ialab.forum.optimized.loading": string;
   "ialab.forum.optimized.login_link": string;
   "ialab.forum.optimized.login_prompt": string;
   "ialab.forum.optimized.mentor_badge": string;
+  "ialab.forum.optimized.post_aria": string;
   "ialab.forum.optimized.retry": string;
   "ialab.forum.optimized.send": string;
   "ialab.forum.optimized.sending": string;
   "ialab.forum.optimized.show_more": string;
   "ialab.forum.optimized.stats_line": string;
   "ialab.forum.optimized.title": string;
+  "ialab.forum.optimized.unlike_aria": string;
   "ialab.forum.optimized.user_fallback": string;
+  "ialab.forum.post_card.author_name": string;
   "ialab.forum.post_card.category_announcement": string;
   "ialab.forum.post_card.category_discussion": string;
   "ialab.forum.post_card.category_feedback": string;
@@ -1496,8 +1625,12 @@ export type TranslationKeys = {
   "ialab.forum.post_card.day_ago": string;
   "ialab.forum.post_card.edited_label": string;
   "ialab.forum.post_card.hour_ago": string;
+  "ialab.forum.post_card.last_responder_name": string;
   "ialab.forum.post_card.min_ago": string;
   "ialab.forum.post_card.now": string;
+  "ialab.forum.post_card.tag_help": string;
+  "ialab.forum.post_card.tag_module5": string;
+  "ialab.forum.post_card.tag_rtf": string;
   "ialab.forum.post_card.user_fallback": string;
   "ialab.forum.post_list.count": string;
   "ialab.forum.post_list.empty_all_desc": string;
@@ -1565,6 +1698,42 @@ export type TranslationKeys = {
   "ialab.forum.section.title_fallback": string;
   "ialab.forum.section.validation_empty": string;
   "ialab.forum.section.views_label": string;
+  "ialab.gemini_research.find_deep_1": string;
+  "ialab.gemini_research.find_deep_2": string;
+  "ialab.gemini_research.find_deep_3": string;
+  "ialab.gemini_research.find_deep_4": string;
+  "ialab.gemini_research.find_fact_1": string;
+  "ialab.gemini_research.find_fact_2": string;
+  "ialab.gemini_research.find_fact_3": string;
+  "ialab.gemini_research.find_fact_4": string;
+  "ialab.gemini_research.find_image_1": string;
+  "ialab.gemini_research.find_image_2": string;
+  "ialab.gemini_research.find_image_3": string;
+  "ialab.gemini_research.find_image_4": string;
+  "ialab.gemini_research.grounding_badge": string;
+  "ialab.gemini_research.intro_desc": string;
+  "ialab.gemini_research.intro_point_1": string;
+  "ialab.gemini_research.intro_point_2": string;
+  "ialab.gemini_research.intro_point_3": string;
+  "ialab.gemini_research.intro_title": string;
+  "ialab.gemini_research.report_badge": string;
+  "ialab.gemini_research.report_confidence": string;
+  "ialab.gemini_research.report_sources": string;
+  "ialab.gemini_research.report_sources_unit": string;
+  "ialab.gemini_research.results_subtitle": string;
+  "ialab.gemini_research.sample_deep_title": string;
+  "ialab.gemini_research.sample_factcheck_title": string;
+  "ialab.gemini_research.sample_image_title": string;
+  "ialab.gemini_research.select_desc": string;
+  "ialab.gemini_research.select_title": string;
+  "ialab.gemini_research.start_btn": string;
+  "ialab.gemini_research.try_again": string;
+  "ialab.gemini_research.type_deep_desc": string;
+  "ialab.gemini_research.type_deep_title": string;
+  "ialab.gemini_research.type_factcheck_desc": string;
+  "ialab.gemini_research.type_factcheck_title": string;
+  "ialab.gemini_research.type_image_desc": string;
+  "ialab.gemini_research.type_image_title": string;
   "ialab.global_search.close_aria": string;
   "ialab.global_search.empty_hint": string;
   "ialab.global_search.empty_title": string;
@@ -1573,10 +1742,22 @@ export type TranslationKeys = {
   "ialab.global_search.placeholder": string;
   "ialab.global_search.placeholder_short": string;
   "ialab.global_search.results_count": string;
+  "ialab.global_search.results_label": string;
   "ialab.global_search.search_aria": string;
   "ialab.global_search.topic_label": string;
   "ialab.header_unavailable": string;
   "ialab.info_unavailable": string;
+  "ialab.integration_exercise.badge": string;
+  "ialab.integration_exercise.completed_title": string;
+  "ialab.integration_exercise.correct": string;
+  "ialab.integration_exercise.incorrect": string;
+  "ialab.integration_exercise.next": string;
+  "ialab.integration_exercise.question_label": string;
+  "ialab.integration_exercise.retry": string;
+  "ialab.integration_exercise.score": string;
+  "ialab.integration_exercise.see_results": string;
+  "ialab.integration_exercise.start": string;
+  "ialab.integration_exercise.title": string;
   "ialab.interaction_advisor.alternatives": string;
   "ialab.interaction_advisor.analyze_data": string;
   "ialab.interaction_advisor.automate": string;
@@ -1622,6 +1803,28 @@ export type TranslationKeys = {
   "ialab.landing.why_subtitle": string;
   "ialab.landing.why_title": string;
   "ialab.leaderboard_modal.close_aria": string;
+  "ialab.learning_pace.aria": string;
+  "ialab.learning_pace.fast_desc": string;
+  "ialab.learning_pace.fast_name": string;
+  "ialab.learning_pace.fast_weekly": string;
+  "ialab.learning_pace.normal_desc": string;
+  "ialab.learning_pace.normal_name": string;
+  "ialab.learning_pace.normal_weekly": string;
+  "ialab.learning_pace.slow_desc": string;
+  "ialab.learning_pace.slow_name": string;
+  "ialab.learning_pace.slow_weekly": string;
+  "ialab.learning_pace.subtitle": string;
+  "ialab.learning_pace.title": string;
+  "ialab.level_badge.level0_desc": string;
+  "ialab.level_badge.level0_name": string;
+  "ialab.level_badge.level1_desc": string;
+  "ialab.level_badge.level1_name": string;
+  "ialab.level_badge.level2_desc": string;
+  "ialab.level_badge.level2_name": string;
+  "ialab.level_badge.level3_desc": string;
+  "ialab.level_badge.level3_name": string;
+  "ialab.level_badge.level4_desc": string;
+  "ialab.level_badge.level4_name": string;
   "ialab.menu_aria": string;
   "ialab.module.lessons": string;
   "ialab.module.module_label": string;
@@ -1649,11 +1852,6 @@ export type TranslationKeys = {
   "ialab.module_info.objective_highlight": string;
   "ialab.module_info.objective_suffix": string;
   "ialab.module_info.objective_title": string;
-  "ialab.module_overview.module1_description": string;
-  "ialab.module_overview.module1_mission": string;
-  "ialab.module_overview.module1_title": string;
-  "ialab.module_overview.topic_1_title": string;
-  "ialab.module_overview.topic_2_title": string;
   "ialab.module_progress": string;
   "ialab.module_progress_bar.challenge": string;
   "ialab.module_progress_bar.challenge_pending": string;
@@ -1671,9 +1869,18 @@ export type TranslationKeys = {
   "ialab.module_roadmap.subtitle": string;
   "ialab.module_roadmap.title": string;
   "ialab.nav_menu_aria": string;
+  "ialab.notif_mobile_aria": string;
   "ialab.notifications_aria": string;
+  "ialab.objectives_learn": string;
+  "ialab.objectives_verified": string;
   "ialab.offline_banner.message": string;
+  "ialab.ova.badge": string;
   "ialab.ova.start": string;
+  "ialab.ova_hub.clear_search": string;
+  "ialab.ova_hub.no_results": string;
+  "ialab.ova_hub.search_placeholder": string;
+  "ialab.ova_hub.subtitle": string;
+  "ialab.ova_hub.title": string;
   "ialab.ova_thumbnail.aria_open": string;
   "ialab.ova_thumbnail.certification": string;
   "ialab.ova_thumbnail.click_to_explore": string;
@@ -1707,6 +1914,24 @@ export type TranslationKeys = {
   "ialab.pdf_thumbnail.title": string;
   "ialab.pdf_thumbnail.title_attr": string;
   "ialab.pdf_thumbnail.zoom_instruction": string;
+  "ialab.practice.flashcards_hint": string;
+  "ialab.practice.subtitle": string;
+  "ialab.practice.title": string;
+  "ialab.practice.tool_ethics": string;
+  "ialab.practice.tool_ethics_desc": string;
+  "ialab.practice.tool_flashcards": string;
+  "ialab.practice.tool_flashcards_desc": string;
+  "ialab.practice.tool_gemini_research": string;
+  "ialab.practice.tool_gemini_research_desc": string;
+  "ialab.practice.tool_interaction": string;
+  "ialab.practice.tool_interaction_desc": string;
+  "ialab.practice.tool_podcast": string;
+  "ialab.practice.tool_podcast_desc": string;
+  "ialab.practice.tool_prompts": string;
+  "ialab.practice.tool_prompts_desc": string;
+  "ialab.practice.tool_tutoring": string;
+  "ialab.practice.tool_tutoring_desc": string;
+  "ialab.progress_label": string;
   "ialab.prompt_feedback.applied_technique": string;
   "ialab.prompt_feedback.identified_problems": string;
   "ialab.prompt_feedback.improvements": string;
@@ -1718,6 +1943,42 @@ export type TranslationKeys = {
   "ialab.prompt_feedback.score": string;
   "ialab.prompt_feedback.suggestion": string;
   "ialab.prompt_feedback.tips": string;
+  "ialab.prompt_sandbox.char_tokens": string;
+  "ialab.prompt_sandbox.clear_all": string;
+  "ialab.prompt_sandbox.copy": string;
+  "ialab.prompt_sandbox.empty_response": string;
+  "ialab.prompt_sandbox.error_generate": string;
+  "ialab.prompt_sandbox.generated_chars": string;
+  "ialab.prompt_sandbox.generating": string;
+  "ialab.prompt_sandbox.history": string;
+  "ialab.prompt_sandbox.history_aria": string;
+  "ialab.prompt_sandbox.history_title": string;
+  "ialab.prompt_sandbox.placeholder_system": string;
+  "ialab.prompt_sandbox.placeholder_user": string;
+  "ialab.prompt_sandbox.response_label": string;
+  "ialab.prompt_sandbox.run": string;
+  "ialab.prompt_sandbox.sample_cot_label": string;
+  "ialab.prompt_sandbox.sample_cot_system": string;
+  "ialab.prompt_sandbox.sample_cot_user": string;
+  "ialab.prompt_sandbox.sample_explain_label": string;
+  "ialab.prompt_sandbox.sample_explain_system": string;
+  "ialab.prompt_sandbox.sample_explain_user": string;
+  "ialab.prompt_sandbox.sample_format_label": string;
+  "ialab.prompt_sandbox.sample_format_system": string;
+  "ialab.prompt_sandbox.sample_format_user": string;
+  "ialab.prompt_sandbox.samples_label": string;
+  "ialab.prompt_sandbox.subtitle": string;
+  "ialab.prompt_sandbox.suggestion_cot": string;
+  "ialab.prompt_sandbox.suggestion_format": string;
+  "ialab.prompt_sandbox.suggestion_long": string;
+  "ialab.prompt_sandbox.suggestion_roleplay": string;
+  "ialab.prompt_sandbox.suggestion_short": string;
+  "ialab.prompt_sandbox.suggestion_system": string;
+  "ialab.prompt_sandbox.suggestions": string;
+  "ialab.prompt_sandbox.system_hint": string;
+  "ialab.prompt_sandbox.thinking": string;
+  "ialab.prompt_sandbox.title": string;
+  "ialab.prompt_sandbox.user_hint": string;
   "ialab.que_es_prompt.anatomy_contexto": string;
   "ialab.que_es_prompt.anatomy_ejemplos": string;
   "ialab.que_es_prompt.anatomy_formato": string;
@@ -1820,6 +2081,7 @@ export type TranslationKeys = {
   "ialab.quiz.mark_review": string;
   "ialab.quiz.marked": string;
   "ialab.quiz.max_violations": string;
+  "ialab.quiz.min_score": string;
   "ialab.quiz.next": string;
   "ialab.quiz.options_group": string;
   "ialab.quiz.passed": string;
@@ -1892,12 +2154,28 @@ export type TranslationKeys = {
   "ialab.resource_viewer.type_unsupported": string;
   "ialab.resource_viewer.viewer_error": string;
   "ialab.resources_label": string;
+  "ialab.review_scheduler.box_learned": string;
+  "ialab.review_scheduler.box_mastered": string;
+  "ialab.review_scheduler.box_new": string;
+  "ialab.review_scheduler.box_recent": string;
+  "ialab.review_scheduler.box_retained": string;
+  "ialab.review_scheduler.days_until": string;
+  "ialab.review_scheduler.due_today": string;
+  "ialab.review_scheduler.empty": string;
+  "ialab.review_scheduler.overdue_review": string;
+  "ialab.review_scheduler.title": string;
+  "ialab.review_scheduler.today": string;
+  "ialab.review_scheduler.tomorrow": string;
+  "ialab.review_scheduler.upcoming": string;
+  "ialab.review_scheduler.weeks_plural": string;
+  "ialab.review_scheduler.weeks_singular": string;
   "ialab.route_unavailable": string;
   "ialab.screenshot_protection.aria_label": string;
   "ialab.screenshot_protection.description": string;
   "ialab.screenshot_protection.title": string;
   "ialab.screenshot_protection.waiting": string;
   "ialab.search_aria": string;
+  "ialab.search_hint": string;
   "ialab.security_warning.level_1_hint": string;
   "ialab.security_warning.level_1_title": string;
   "ialab.security_warning.level_2_hint": string;
@@ -1909,6 +2187,10 @@ export type TranslationKeys = {
   "ialab.security_warning.understood": string;
   "ialab.see_less": string;
   "ialab.see_more": string;
+  "ialab.sidebar_flashcards": string;
+  "ialab.sidebar_leaderboard": string;
+  "ialab.sidebar_practice": string;
+  "ialab.sidebar_study_plan": string;
   "ialab.signup_back_to_login": string;
   "ialab.signup_feature_1": string;
   "ialab.signup_feature_2": string;
@@ -1928,10 +2210,20 @@ export type TranslationKeys = {
   "ialab.status.locked": string;
   "ialab.status.start_here": string;
   "ialab.status.viewed": string;
+  "ialab.streak_calendar.active": string;
+  "ialab.streak_calendar.day_aria": string;
+  "ialab.streak_calendar.days": string;
+  "ialab.streak_calendar.inactive": string;
+  "ialab.streak_calendar.title": string;
+  "ialab.streak_calendar.today": string;
+  "ialab.streak_risk_cta": string;
+  "ialab.streak_risk_desc": string;
+  "ialab.streak_risk_dismiss": string;
+  "ialab.streak_risk_title": string;
   "ialab.study_calendar.deadlines": string;
   "ialab.study_calendar.no_deadlines": string;
-  "ialab.study_calendar.pending_exam": string;
   "ialab.study_calendar.pending_challenge": string;
+  "ialab.study_calendar.pending_exam": string;
   "ialab.study_planner.active_days": string;
   "ialab.study_planner.auto_save": string;
   "ialab.study_planner.close_aria": string;
@@ -2033,13 +2325,13 @@ export type TranslationKeys = {
   "ialab.synthesizer_input.ready_status": string;
   "ialab.tab_activities": string;
   "ialab.tab_all": string;
+  "ialab.tab_bookmarks": string;
   "ialab.tab_content": string;
   "ialab.tab_objectives": string;
+  "ialab.tab_practice": string;
+  "ialab.tab_progress": string;
   "ialab.tab_tools": string;
   "ialab.title": string;
-  "ialab.flashcard_review_btn": string;
-  "ialab.flashcard_review_xp": string;
-  "ialab.practice.flashcards_hint": string;
   "ialab.tool_tutor.ethics_subtitle": string;
   "ialab.tool_tutor.ethics_title": string;
   "ialab.tool_tutor.flashcard_subtitle": string;
@@ -2064,8 +2356,8 @@ export type TranslationKeys = {
   "ialab.topic_resources.select_resource": string;
   "ialab.tour.aria_label": string;
   "ialab.tour.next": string;
-  "ialab.tour.restart_title": string;
   "ialab.tour.restart_aria": string;
+  "ialab.tour.restart_title": string;
   "ialab.tour.skip": string;
   "ialab.tour.start": string;
   "ialab.tour.step_0_desc": string;
@@ -2089,12 +2381,36 @@ export type TranslationKeys = {
   "ialab.tour.step_9_desc": string;
   "ialab.tour.step_9_title": string;
   "ialab.tour.step_label": string;
+  "ialab.tour.welcome_back": string;
+  "ialab.tour.welcome_close_aria": string;
+  "ialab.tour.welcome_next": string;
+  "ialab.tour.welcome_progress_aria": string;
+  "ialab.tour.welcome_skip": string;
+  "ialab.tour.welcome_start": string;
+  "ialab.tour.welcome_step1_desc": string;
+  "ialab.tour.welcome_step1_highlight": string;
+  "ialab.tour.welcome_step1_title": string;
+  "ialab.tour.welcome_step2_desc": string;
+  "ialab.tour.welcome_step2_highlight": string;
+  "ialab.tour.welcome_step2_title": string;
+  "ialab.tour.welcome_step3_desc": string;
+  "ialab.tour.welcome_step3_highlight": string;
+  "ialab.tour.welcome_step3_title": string;
+  "ialab.tour.welcome_step4_desc": string;
+  "ialab.tour.welcome_step4_highlight": string;
+  "ialab.tour.welcome_step4_title": string;
+  "ialab.tour.welcome_step5_desc": string;
+  "ialab.tour.welcome_step5_highlight": string;
+  "ialab.tour.welcome_step5_title": string;
+  "ialab.tour.welcome_step_aria": string;
   "ialab.tutorias_virtuales.countdown": string;
   "ialab.tutorias_virtuales.description": string;
   "ialab.tutorias_virtuales.join": string;
   "ialab.tutorias_virtuales.live": string;
   "ialab.tutorias_virtuales.title": string;
   "ialab.tutorias_virtuales.unavailable": string;
+  "ialab.unlock_first_module": string;
+  "ialab.unlock_requirement": string;
   "ialab.user_fallback": string;
   "ialab.valerio.clear_button": string;
   "ialab.valerio.clear_confirm": string;
@@ -2104,8 +2420,14 @@ export type TranslationKeys = {
   "ialab.valerio.clear_confirm_yes_aria": string;
   "ialab.valerio.close_aria": string;
   "ialab.valerio.conversation_aria": string;
+  "ialab.valerio.copy.copied": string;
+  "ialab.valerio.copy.label": string;
+  "ialab.valerio.copy.title": string;
   "ialab.valerio.empty_description": string;
   "ialab.valerio.empty_title": string;
+  "ialab.valerio.export.header": string;
+  "ialab.valerio.export.html_title": string;
+  "ialab.valerio.export.you": string;
   "ialab.valerio.greeting_anon": string;
   "ialab.valerio.greeting_name": string;
   "ialab.valerio.input_hint": string;
@@ -2116,6 +2438,9 @@ export type TranslationKeys = {
   "ialab.valerio.level_intermediate": string;
   "ialab.valerio.level_label": string;
   "ialab.valerio.loading": string;
+  "ialab.valerio.message_actions.download": string;
+  "ialab.valerio.message_actions.more": string;
+  "ialab.valerio.message_actions.useful": string;
   "ialab.valerio.message_valerio": string;
   "ialab.valerio.message_you": string;
   "ialab.valerio.module_label": string;
@@ -2139,9 +2464,18 @@ export type TranslationKeys = {
   "ialab.valerio.status_thinking": string;
   "ialab.valerio.system_instructions": string;
   "ialab.valerio.title": string;
+  "ialab.valerio.typing.label": string;
+  "ialab.valerio.voice.error": string;
+  "ialab.valerio.voice.https_required": string;
+  "ialab.valerio.voice.no_speech": string;
+  "ialab.valerio.voice.not_supported": string;
+  "ialab.valerio.voice.permission_denied": string;
+  "ialab.valerio.voice.start_error": string;
   "ialab.valerio.voice_start_aria": string;
   "ialab.valerio.voice_stop_aria": string;
   "ialab.valerio_aria": string;
+  "ialab.valerio_nudge": string;
+  "ialab.valerio_nudge_sub": string;
   "ialab.valerio_talk": string;
   "ialab.valerio_tooltip": string;
   "ialab.viewer_modal.cannot_load": string;
@@ -2199,6 +2533,8 @@ export type TranslationKeys = {
   "ialab.voice_reader.listen": string;
   "ialab.voice_reader.stop": string;
   "ialab.voice_reader.title": string;
+  "ialab.xp_earned": string;
+  "ialab.xp_excellent_work": string;
   "kid.news.empty_category": string;
   "kid.news.featured_badge": string;
   "kid.news.filter_all": string;
@@ -2282,6 +2618,21 @@ export type TranslationKeys = {
   "loading.status_done": string;
   "loading.status_start": string;
   "loading.status_vak": string;
+  "login.button.signin": string;
+  "login.button.signing_in": string;
+  "login.email": string;
+  "login.email_or_username": string;
+  "login.email_or_username_placeholder": string;
+  "login.error.connection": string;
+  "login.error.email_not_confirmed": string;
+  "login.error.email_required_for_reset": string;
+  "login.error.invalid_credentials": string;
+  "login.error.oauth_account": string;
+  "login.forgot_password": string;
+  "login.no_account": string;
+  "login.password": string;
+  "login.reset_email_sent": string;
+  "login.signup_link": string;
   "metodo.cta_text": string;
   "metodo.form_email_label": string;
   "metodo.form_email_placeholder": string;
@@ -2318,6 +2669,7 @@ export type TranslationKeys = {
   "mobile_menu.badges_earned": string;
   "mobile_menu.certificates": string;
   "mobile_menu.change_password": string;
+  "mobile_menu.close_section": string;
   "mobile_menu.completed": string;
   "mobile_menu.help": string;
   "mobile_menu.level": string;
@@ -2521,8 +2873,82 @@ export type TranslationKeys = {
   "notification.type_lesson_reminder": string;
   "notification.type_module_complete": string;
   "notification.unread_count": string;
+  "ova.automation.analyze_workflow": string;
+  "ova.automation.analyzed": string;
+  "ova.automation.badge": string;
+  "ova.automation.case_business_insight": string;
+  "ova.automation.case_business_scenario": string;
+  "ova.automation.case_business_step1": string;
+  "ova.automation.case_business_step2": string;
+  "ova.automation.case_business_step3": string;
+  "ova.automation.case_business_title": string;
+  "ova.automation.case_education_insight": string;
+  "ova.automation.case_education_scenario": string;
+  "ova.automation.case_education_step1": string;
+  "ova.automation.case_education_step2": string;
+  "ova.automation.case_education_step3": string;
+  "ova.automation.case_education_title": string;
+  "ova.automation.case_marketing_insight": string;
+  "ova.automation.case_marketing_scenario": string;
+  "ova.automation.case_marketing_step1": string;
+  "ova.automation.case_marketing_step2": string;
+  "ova.automation.case_marketing_step3": string;
+  "ova.automation.case_marketing_title": string;
+  "ova.automation.conclusion_desc": string;
+  "ova.automation.conclusion_hint": string;
+  "ova.automation.conclusion_title": string;
+  "ova.automation.design_prompt": string;
+  "ova.automation.design_title": string;
+  "ova.automation.footer": string;
+  "ova.automation.framework_intro": string;
+  "ova.automation.learning_obj_1": string;
+  "ova.automation.learning_obj_2": string;
+  "ova.automation.learning_obj_3": string;
+  "ova.automation.learning_obj_4": string;
+  "ova.automation.menu_title": string;
+  "ova.automation.menu_welcome": string;
+  "ova.automation.nav_finish": string;
+  "ova.automation.nav_next": string;
+  "ova.automation.nav_prev": string;
+  "ova.automation.save_flow": string;
+  "ova.automation.screen_m1": string;
+  "ova.automation.screen_m2": string;
+  "ova.automation.screen_m3": string;
+  "ova.automation.screen_m4": string;
+  "ova.automation.screen_m5": string;
+  "ova.automation.screen_m6": string;
+  "ova.automation.section_label": string;
+  "ova.automation.select_tools": string;
+  "ova.automation.stage_input": string;
+  "ova.automation.stage_input_desc": string;
+  "ova.automation.stage_input_example": string;
+  "ova.automation.stage_orchestration": string;
+  "ova.automation.stage_orchestration_desc": string;
+  "ova.automation.stage_orchestration_example": string;
+  "ova.automation.stage_output": string;
+  "ova.automation.stage_output_desc": string;
+  "ova.automation.stage_output_example": string;
+  "ova.automation.start": string;
+  "ova.automation.the_workflow": string;
+  "ova.automation.tool_canvas": string;
+  "ova.automation.tool_dalle": string;
+  "ova.automation.tool_gpt": string;
+  "ova.automation.tool_sheets": string;
+  "ova.automation.tool_web": string;
+  "ova.automation.voice_m1": string;
+  "ova.automation.voice_m2": string;
+  "ova.automation.voice_m3": string;
+  "ova.automation.voice_m4": string;
+  "ova.automation.voice_m5": string;
+  "ova.automation.voice_m6": string;
+  "ova.automation.welcome_audio": string;
+  "ova.automation.welcome_desc": string;
+  "ova.automation.welcome_title": string;
+  "ova.automation.workflow_understood": string;
+  "ova.automation.your_flow": string;
   "ova.biaslab.attention_label": string;
   "ova.biaslab.back_to_start": string;
+  "ova.biaslab.badge": string;
   "ova.biaslab.case_study": string;
   "ova.biaslab.default_voice_text": string;
   "ova.biaslab.footer": string;
@@ -2531,6 +2957,10 @@ export type TranslationKeys = {
   "ova.biaslab.game_desc": string;
   "ova.biaslab.game_title": string;
   "ova.biaslab.intro_img_alt": string;
+  "ova.biaslab.learning_obj_1": string;
+  "ova.biaslab.learning_obj_2": string;
+  "ova.biaslab.learning_obj_3": string;
+  "ova.biaslab.learning_obj_4": string;
   "ova.biaslab.nav_cap1": string;
   "ova.biaslab.nav_cap2": string;
   "ova.biaslab.nav_cap3": string;
@@ -2539,6 +2969,10 @@ export type TranslationKeys = {
   "ova.biaslab.nav_intro": string;
   "ova.biaslab.responsible_practices": string;
   "ova.biaslab.sidebar_subtitle": string;
+  "ova.biaslab.start_btn": string;
+  "ova.biaslab.welcome_desc": string;
+  "ova.biaslab.welcome_title": string;
+  "ova.biaslab.welcome_voice": string;
   "ova.buildgpt.activity_badge": string;
   "ova.buildgpt.activity_desc": string;
   "ova.buildgpt.activity_done_desc": string;
@@ -2599,6 +3033,10 @@ export type TranslationKeys = {
   "ova.buildgpt.intro_text": string;
   "ova.buildgpt.intro_title": string;
   "ova.buildgpt.lab_title": string;
+  "ova.buildgpt.learning_obj_1": string;
+  "ova.buildgpt.learning_obj_2": string;
+  "ova.buildgpt.learning_obj_3": string;
+  "ova.buildgpt.learning_obj_4": string;
   "ova.buildgpt.quiz_bad": string;
   "ova.buildgpt.quiz_cert_btn": string;
   "ova.buildgpt.quiz_good": string;
@@ -2640,6 +3078,10 @@ export type TranslationKeys = {
   "ova.chatgpttools.feedback_incorrect": string;
   "ova.chatgpttools.footer": string;
   "ova.chatgpttools.lab_badge": string;
+  "ova.chatgpttools.learning_obj_1": string;
+  "ova.chatgpttools.learning_obj_2": string;
+  "ova.chatgpttools.learning_obj_3": string;
+  "ova.chatgpttools.learning_obj_4": string;
   "ova.chatgpttools.mark_complete": string;
   "ova.chatgpttools.modal_ecosystem": string;
   "ova.chatgpttools.modal_limits": string;
@@ -2665,6 +3107,79 @@ export type TranslationKeys = {
   "ova.chatgpttools.welcome_subtitle": string;
   "ova.chatgpttools.welcome_title": string;
   "ova.chatgpttools.welcome_voice": string;
+  "ova.docmastery.analyze_workflow": string;
+  "ova.docmastery.analyzed": string;
+  "ova.docmastery.badge": string;
+  "ova.docmastery.case_educator_insight": string;
+  "ova.docmastery.case_educator_scenario": string;
+  "ova.docmastery.case_educator_step1": string;
+  "ova.docmastery.case_educator_step2": string;
+  "ova.docmastery.case_educator_step3": string;
+  "ova.docmastery.case_educator_title": string;
+  "ova.docmastery.case_enterprise_insight": string;
+  "ova.docmastery.case_enterprise_scenario": string;
+  "ova.docmastery.case_enterprise_step1": string;
+  "ova.docmastery.case_enterprise_step2": string;
+  "ova.docmastery.case_enterprise_step3": string;
+  "ova.docmastery.case_enterprise_title": string;
+  "ova.docmastery.case_researcher_insight": string;
+  "ova.docmastery.case_researcher_scenario": string;
+  "ova.docmastery.case_researcher_step1": string;
+  "ova.docmastery.case_researcher_step2": string;
+  "ova.docmastery.case_researcher_step3": string;
+  "ova.docmastery.case_researcher_title": string;
+  "ova.docmastery.conclusion_desc": string;
+  "ova.docmastery.conclusion_hint": string;
+  "ova.docmastery.conclusion_title": string;
+  "ova.docmastery.design_prompt": string;
+  "ova.docmastery.design_title": string;
+  "ova.docmastery.elem_notebook": string;
+  "ova.docmastery.elem_pdf": string;
+  "ova.docmastery.elem_video": string;
+  "ova.docmastery.elem_website": string;
+  "ova.docmastery.flow_understood": string;
+  "ova.docmastery.footer": string;
+  "ova.docmastery.framework_intro": string;
+  "ova.docmastery.learning_obj_1": string;
+  "ova.docmastery.learning_obj_2": string;
+  "ova.docmastery.learning_obj_3": string;
+  "ova.docmastery.learning_obj_4": string;
+  "ova.docmastery.menu_title": string;
+  "ova.docmastery.menu_welcome": string;
+  "ova.docmastery.nav_finish": string;
+  "ova.docmastery.nav_next": string;
+  "ova.docmastery.nav_prev": string;
+  "ova.docmastery.output_podcast": string;
+  "ova.docmastery.save_flow": string;
+  "ova.docmastery.screen_m1": string;
+  "ova.docmastery.screen_m2": string;
+  "ova.docmastery.screen_m3": string;
+  "ova.docmastery.screen_m4": string;
+  "ova.docmastery.screen_m5": string;
+  "ova.docmastery.screen_m6": string;
+  "ova.docmastery.section_label": string;
+  "ova.docmastery.select_sources": string;
+  "ova.docmastery.stage_podcast": string;
+  "ova.docmastery.stage_podcast_desc": string;
+  "ova.docmastery.stage_podcast_example": string;
+  "ova.docmastery.stage_sources": string;
+  "ova.docmastery.stage_sources_desc": string;
+  "ova.docmastery.stage_sources_example": string;
+  "ova.docmastery.stage_synthesis": string;
+  "ova.docmastery.stage_synthesis_desc": string;
+  "ova.docmastery.stage_synthesis_example": string;
+  "ova.docmastery.start": string;
+  "ova.docmastery.the_flow": string;
+  "ova.docmastery.voice_m1": string;
+  "ova.docmastery.voice_m2": string;
+  "ova.docmastery.voice_m3": string;
+  "ova.docmastery.voice_m4": string;
+  "ova.docmastery.voice_m5": string;
+  "ova.docmastery.voice_m6": string;
+  "ova.docmastery.welcome_audio": string;
+  "ova.docmastery.welcome_desc": string;
+  "ova.docmastery.welcome_title": string;
+  "ova.docmastery.your_flow": string;
   "ova.ecosystem.challenge_after_label": string;
   "ova.ecosystem.challenge_before_label": string;
   "ova.ecosystem.challenge_desc": string;
@@ -2692,6 +3207,7 @@ export type TranslationKeys = {
   "ova.ecosystem.formula_format": string;
   "ova.ecosystem.formula_role": string;
   "ova.ecosystem.formula_task": string;
+  "ova.ecosystem.guide_title": string;
   "ova.ecosystem.header_module": string;
   "ova.ecosystem.lab_badge": string;
   "ova.ecosystem.mark_complete": string;
@@ -2700,6 +3216,15 @@ export type TranslationKeys = {
   "ova.ecosystem.matchup_descs": string;
   "ova.ecosystem.matchup_hint": string;
   "ova.ecosystem.matchup_tools": string;
+  "ova.ecosystem.menu_aria": string;
+  "ova.ecosystem.menu_title_m1": string;
+  "ova.ecosystem.menu_title_m2": string;
+  "ova.ecosystem.menu_title_m3": string;
+  "ova.ecosystem.menu_title_m4": string;
+  "ova.ecosystem.menu_title_m5": string;
+  "ova.ecosystem.menu_title_m6": string;
+  "ova.ecosystem.menu_title_m7": string;
+  "ova.ecosystem.menu_title_m8": string;
   "ova.ecosystem.quiz_desc": string;
   "ova.ecosystem.quiz_next": string;
   "ova.ecosystem.quiz_no_data": string;
@@ -2776,6 +3301,86 @@ export type TranslationKeys = {
   "ova.ethical_dilemmas.see_results_btn": string;
   "ova.ethical_dilemmas.sidebar_subtitle": string;
   "ova.ethical_dilemmas.start_btn": string;
+  "ova.ethicscases.analysis": string;
+  "ova.ethicscases.badge": string;
+  "ova.ethicscases.case_copyright_feedback_a": string;
+  "ova.ethicscases.case_copyright_feedback_b": string;
+  "ova.ethicscases.case_copyright_feedback_c": string;
+  "ova.ethicscases.case_copyright_opt_a": string;
+  "ova.ethicscases.case_copyright_opt_b": string;
+  "ova.ethicscases.case_copyright_opt_c": string;
+  "ova.ethicscases.case_copyright_scenario": string;
+  "ova.ethicscases.case_copyright_title": string;
+  "ova.ethicscases.case_health_feedback_a": string;
+  "ova.ethicscases.case_health_feedback_b": string;
+  "ova.ethicscases.case_health_feedback_c": string;
+  "ova.ethicscases.case_health_opt_a": string;
+  "ova.ethicscases.case_health_opt_b": string;
+  "ova.ethicscases.case_health_opt_c": string;
+  "ova.ethicscases.case_health_scenario": string;
+  "ova.ethicscases.case_health_title": string;
+  "ova.ethicscases.case_hiring_feedback_a": string;
+  "ova.ethicscases.case_hiring_feedback_b": string;
+  "ova.ethicscases.case_hiring_feedback_c": string;
+  "ova.ethicscases.case_hiring_opt_a": string;
+  "ova.ethicscases.case_hiring_opt_b": string;
+  "ova.ethicscases.case_hiring_opt_c": string;
+  "ova.ethicscases.case_hiring_scenario": string;
+  "ova.ethicscases.case_hiring_title": string;
+  "ova.ethicscases.conclusion_desc": string;
+  "ova.ethicscases.conclusion_hint": string;
+  "ova.ethicscases.conclusion_title": string;
+  "ova.ethicscases.decision_label": string;
+  "ova.ethicscases.decision_placeholder": string;
+  "ova.ethicscases.decision_prompt": string;
+  "ova.ethicscases.decision_saved": string;
+  "ova.ethicscases.decision_submit": string;
+  "ova.ethicscases.decision_success": string;
+  "ova.ethicscases.decision_title": string;
+  "ova.ethicscases.footer": string;
+  "ova.ethicscases.framework_intro": string;
+  "ova.ethicscases.learning_obj_1": string;
+  "ova.ethicscases.learning_obj_2": string;
+  "ova.ethicscases.learning_obj_3": string;
+  "ova.ethicscases.learning_obj_4": string;
+  "ova.ethicscases.menu_title": string;
+  "ova.ethicscases.menu_welcome": string;
+  "ova.ethicscases.min_chars": string;
+  "ova.ethicscases.nav_finish": string;
+  "ova.ethicscases.nav_next": string;
+  "ova.ethicscases.nav_prev": string;
+  "ova.ethicscases.q_accountability": string;
+  "ova.ethicscases.q_accountability_desc": string;
+  "ova.ethicscases.q_benefit": string;
+  "ova.ethicscases.q_benefit_desc": string;
+  "ova.ethicscases.q_consent": string;
+  "ova.ethicscases.q_consent_desc": string;
+  "ova.ethicscases.q_fairness": string;
+  "ova.ethicscases.q_fairness_desc": string;
+  "ova.ethicscases.q_harm": string;
+  "ova.ethicscases.q_harm_desc": string;
+  "ova.ethicscases.screen_m1": string;
+  "ova.ethicscases.screen_m2": string;
+  "ova.ethicscases.screen_m3": string;
+  "ova.ethicscases.screen_m4": string;
+  "ova.ethicscases.screen_m5": string;
+  "ova.ethicscases.screen_m6": string;
+  "ova.ethicscases.section_label": string;
+  "ova.ethicscases.start": string;
+  "ova.ethicscases.voice_m1": string;
+  "ova.ethicscases.voice_m2": string;
+  "ova.ethicscases.voice_m3": string;
+  "ova.ethicscases.voice_m4": string;
+  "ova.ethicscases.voice_m5": string;
+  "ova.ethicscases.voice_m6": string;
+  "ova.ethicscases.welcome_audio": string;
+  "ova.ethicscases.welcome_desc": string;
+  "ova.ethicscases.welcome_title": string;
+  "ova.ethicscases.what_would_you_do": string;
+  "ova.gemini.learning_obj_1": string;
+  "ova.gemini.learning_obj_2": string;
+  "ova.gemini.learning_obj_3": string;
+  "ova.gemini.learning_obj_4": string;
   "ova.introprompt.anatomy_contexto": string;
   "ova.introprompt.anatomy_contexto_desc": string;
   "ova.introprompt.anatomy_element": string;
@@ -2795,6 +3400,9 @@ export type TranslationKeys = {
   "ova.introprompt.cert_title": string;
   "ova.introprompt.challenge_after": string;
   "ova.introprompt.challenge_after_title": string;
+  "ova.introprompt.challenge_badge_apply": string;
+  "ova.introprompt.challenge_badge_challenge": string;
+  "ova.introprompt.challenge_badge_practice": string;
   "ova.introprompt.challenge_before": string;
   "ova.introprompt.challenge_before_title": string;
   "ova.introprompt.challenge_complete": string;
@@ -2883,6 +3491,10 @@ export type TranslationKeys = {
   "ova.introprompt.importance_title": string;
   "ova.introprompt.importance_voice": string;
   "ova.introprompt.lab_title": string;
+  "ova.introprompt.learning_obj_1": string;
+  "ova.introprompt.learning_obj_2": string;
+  "ova.introprompt.learning_obj_3": string;
+  "ova.introprompt.learning_obj_4": string;
   "ova.introprompt.map": string;
   "ova.introprompt.master": string;
   "ova.introprompt.menu_welcome": string;
@@ -3041,6 +3653,10 @@ export type TranslationKeys = {
   "ova.podcaststudio.focus_label": string;
   "ova.podcaststudio.format_label": string;
   "ova.podcaststudio.go_checklist": string;
+  "ova.podcaststudio.learning_obj_1": string;
+  "ova.podcaststudio.learning_obj_2": string;
+  "ova.podcaststudio.learning_obj_3": string;
+  "ova.podcaststudio.learning_obj_4": string;
   "ova.podcaststudio.plan_desc": string;
   "ova.podcaststudio.plan_summary": string;
   "ova.podcaststudio.plan_title": string;
@@ -3085,6 +3701,70 @@ export type TranslationKeys = {
   "ova.practical.start_btn": string;
   "ova.practical.title": string;
   "ova.practical.welcome_text": string;
+  "ova.promptlab.anatomy_example_label": string;
+  "ova.promptlab.anatomy_intro": string;
+  "ova.promptlab.badge": string;
+  "ova.promptlab.challenge_goal": string;
+  "ova.promptlab.challenge_mark": string;
+  "ova.promptlab.challenge_success": string;
+  "ova.promptlab.challenge_title": string;
+  "ova.promptlab.challenge_zone": string;
+  "ova.promptlab.conclusion_desc": string;
+  "ova.promptlab.conclusion_hint": string;
+  "ova.promptlab.conclusion_title": string;
+  "ova.promptlab.footer": string;
+  "ova.promptlab.lab_title": string;
+  "ova.promptlab.learning_obj_1": string;
+  "ova.promptlab.learning_obj_2": string;
+  "ova.promptlab.learning_obj_3": string;
+  "ova.promptlab.learning_obj_4": string;
+  "ova.promptlab.menu_title": string;
+  "ova.promptlab.menu_welcome": string;
+  "ova.promptlab.nav_finish": string;
+  "ova.promptlab.nav_next": string;
+  "ova.promptlab.nav_prev": string;
+  "ova.promptlab.part_ctx": string;
+  "ova.promptlab.part_ctx_desc": string;
+  "ova.promptlab.part_ctx_example": string;
+  "ova.promptlab.part_fmt": string;
+  "ova.promptlab.part_fmt_desc": string;
+  "ova.promptlab.part_fmt_example": string;
+  "ova.promptlab.part_rol": string;
+  "ova.promptlab.part_rol_desc": string;
+  "ova.promptlab.part_rol_example": string;
+  "ova.promptlab.part_tarea": string;
+  "ova.promptlab.part_tarea_desc": string;
+  "ova.promptlab.part_tarea_example": string;
+  "ova.promptlab.screen_m1": string;
+  "ova.promptlab.screen_m2": string;
+  "ova.promptlab.screen_m3": string;
+  "ova.promptlab.screen_m4": string;
+  "ova.promptlab.screen_m5": string;
+  "ova.promptlab.section_label": string;
+  "ova.promptlab.start": string;
+  "ova.promptlab.tech_cot": string;
+  "ova.promptlab.tech_cot_desc": string;
+  "ova.promptlab.tech_cot_example": string;
+  "ova.promptlab.tech_example_label": string;
+  "ova.promptlab.tech_fewshot": string;
+  "ova.promptlab.tech_fewshot_desc": string;
+  "ova.promptlab.tech_fewshot_example": string;
+  "ova.promptlab.tech_hint": string;
+  "ova.promptlab.tech_intro": string;
+  "ova.promptlab.tech_role": string;
+  "ova.promptlab.tech_role_desc": string;
+  "ova.promptlab.tech_role_example": string;
+  "ova.promptlab.tech_zeroshot": string;
+  "ova.promptlab.tech_zeroshot_desc": string;
+  "ova.promptlab.tech_zeroshot_example": string;
+  "ova.promptlab.voice_m1": string;
+  "ova.promptlab.voice_m2": string;
+  "ova.promptlab.voice_m3": string;
+  "ova.promptlab.voice_m4": string;
+  "ova.promptlab.voice_m5": string;
+  "ova.promptlab.welcome_audio": string;
+  "ova.promptlab.welcome_desc": string;
+  "ova.promptlab.welcome_title": string;
   "ova.quiz.all_correct_hint": string;
   "ova.quiz.answer_prompt": string;
   "ova.quiz.check_answers": string;
@@ -3094,6 +3774,7 @@ export type TranslationKeys = {
   "ova.quiz.put_to_test": string;
   "ova.quiz.result_label": string;
   "ova.risksim.back_stars": string;
+  "ova.risksim.badge": string;
   "ova.risksim.click_hint": string;
   "ova.risksim.completion_desc": string;
   "ova.risksim.completion_title": string;
@@ -3109,11 +3790,16 @@ export type TranslationKeys = {
   "ova.risksim.icon_justice": string;
   "ova.risksim.icon_privacy": string;
   "ova.risksim.icon_transparency": string;
+  "ova.risksim.learning_obj_1": string;
+  "ova.risksim.learning_obj_2": string;
+  "ova.risksim.learning_obj_3": string;
+  "ova.risksim.learning_obj_4": string;
   "ova.risksim.mark_complete": string;
   "ova.risksim.modal_button": string;
   "ova.risksim.module_label": string;
   "ova.risksim.section_bias": string;
   "ova.risksim.section_mitigations": string;
+  "ova.risksim.start_btn": string;
   "ova.risksim.subtitle": string;
   "ova.risksim.tab_content": string;
   "ova.risksim.tab_game": string;
@@ -3121,6 +3807,10 @@ export type TranslationKeys = {
   "ova.risksim.welcome_voice": string;
   "ova.tour.description": string;
   "ova.tour.interactive_badge": string;
+  "ova.tour.learning_obj_1": string;
+  "ova.tour.learning_obj_2": string;
+  "ova.tour.learning_obj_3": string;
+  "ova.tour.learning_obj_4": string;
   "ova.tour.start_btn": string;
   "ova.tour.title": string;
   "ova.tour.valerio_quiz_text": string;
@@ -3210,6 +3900,7 @@ export type TranslationKeys = {
   "profile.name_label": string;
   "profile.name_placeholder": string;
   "profile.no_email": string;
+  "profile.password_email_sent": string;
   "profile.personal_info": string;
   "profile.phone_error_digits": string;
   "profile.phone_error_format": string;
@@ -3255,6 +3946,19 @@ export type TranslationKeys = {
   "reminder.pending_challenge_msg": string;
   "reminder.pending_challenge_title": string;
   "reminder.topic_context": string;
+  "reset.back_to_login": string;
+  "reset.confirm_password": string;
+  "reset.error.failed": string;
+  "reset.error.link_invalid": string;
+  "reset.error.passwords_mismatch": string;
+  "reset.new_password": string;
+  "reset.saving": string;
+  "reset.submit": string;
+  "reset.subtitle": string;
+  "reset.success_message": string;
+  "reset.success_title": string;
+  "reset.title": string;
+  "reset.toggle_password": string;
   "route.accept_challenge": string;
   "route.continue": string;
   "route.continue_learning": string;
@@ -3270,6 +3974,20 @@ export type TranslationKeys = {
   "route.start": string;
   "route.take_exam": string;
   "route.view_certificate": string;
+  "scanner.age_12_14": string;
+  "scanner.age_15_17": string;
+  "scanner.age_6_8": string;
+  "scanner.age_9_11": string;
+  "scanner.error_analysis": string;
+  "scanner.stage_processing": string;
+  "scanner.stage_reading": string;
+  "scanner.subject_art": string;
+  "scanner.subject_english": string;
+  "scanner.subject_history": string;
+  "scanner.subject_language": string;
+  "scanner.subject_math": string;
+  "scanner.subject_science": string;
+  "scanner.summary_title": string;
   "seo.automation.desc": string;
   "seo.automation.title": string;
   "seo.consultoria.desc": string;
@@ -3305,7 +4023,6 @@ export type TranslationKeys = {
   "seo.vak_simple.desc": string;
   "seo.vak_simple.title": string;
   "sidebar.badges": string;
-  "sidebar.toggle_collapse_tip": string;
   "sidebar.badges_count": string;
   "sidebar.badges_view_all": string;
   "sidebar.certificate": string;
@@ -3314,6 +4031,7 @@ export type TranslationKeys = {
   "sidebar.collapse_btn": string;
   "sidebar.completed": string;
   "sidebar.completed_pct": string;
+  "sidebar.continue_where": string;
   "sidebar.daily_progress": string;
   "sidebar.days": string;
   "sidebar.expand": string;
@@ -3332,6 +4050,7 @@ export type TranslationKeys = {
   "sidebar.modules": string;
   "sidebar.new": string;
   "sidebar.panel_aria": string;
+  "sidebar.parent_dashboard": string;
   "sidebar.pending": string;
   "sidebar.plan_elite": string;
   "sidebar.points": string;
@@ -3351,10 +4070,48 @@ export type TranslationKeys = {
   "sidebar.resources": string;
   "sidebar.resources_tooltip": string;
   "sidebar.streak_days": string;
+  "sidebar.streak_details": string;
   "sidebar.streak_risk": string;
   "sidebar.streak_study_today": string;
   "sidebar.student_premium": string;
   "sidebar.subjects": string;
+  "sidebar.toggle_collapse_tip": string;
+  "sidebar.zone_avance": string;
+  "sidebar.zone_modules": string;
+  "sidebar.zone_tools": string;
+  "signup.button.register": string;
+  "signup.button.registering": string;
+  "signup.error.email_already_registered": string;
+  "signup.error.email_required": string;
+  "signup.error.first_name_required": string;
+  "signup.error.invalid_email": string;
+  "signup.error.last_name_required": string;
+  "signup.error.password_min_length": string;
+  "signup.error.password_required": string;
+  "signup.error.phone_invalid": string;
+  "signup.error.registration_failed": string;
+  "signup.error.username_required": string;
+  "signup.field.email": string;
+  "signup.field.first_name": string;
+  "signup.field.last_name": string;
+  "signup.field.password": string;
+  "signup.field.phone": string;
+  "signup.field.username": string;
+  "signup.info.password_min_length": string;
+  "signup.password_fair": string;
+  "signup.password_good": string;
+  "signup.password_strong": string;
+  "signup.password_very_strong": string;
+  "signup.password_weak": string;
+  "signup.placeholder.email": string;
+  "signup.placeholder.first_name": string;
+  "signup.placeholder.last_name": string;
+  "signup.placeholder.password": string;
+  "signup.placeholder.phone": string;
+  "signup.placeholder.username": string;
+  "signup.step_1_info": string;
+  "signup.step_2_security": string;
+  "signup.success.registration_complete": string;
   "smartboard.achievements": string;
   "smartboard.active": string;
   "smartboard.active_connection": string;
@@ -3383,6 +4140,7 @@ export type TranslationKeys = {
   "smartboard.clear": string;
   "smartboard.click_select": string;
   "smartboard.close": string;
+  "smartboard.close_reminder": string;
   "smartboard.close_report": string;
   "smartboard.complete_btn": string;
   "smartboard.completed": string;
@@ -3392,6 +4150,8 @@ export type TranslationKeys = {
   "smartboard.connected_ialab": string;
   "smartboard.copy": string;
   "smartboard.current_streak": string;
+  "smartboard.dani_fab_aria": string;
+  "smartboard.dani_reminder_open": string;
   "smartboard.date": string;
   "smartboard.days": string;
   "smartboard.diagnostico_vak": string;
@@ -3411,6 +4171,8 @@ export type TranslationKeys = {
   "smartboard.error_load_subjects": string;
   "smartboard.error_load_vak": string;
   "smartboard.general": string;
+  "smartboard.habeas_parent_email_invalid": string;
+  "smartboard.habeas_parent_email_required": string;
   "smartboard.ialab_desc": string;
   "smartboard.ialab_pro_desc": string;
   "smartboard.ialab_pro_title": string;
@@ -3664,11 +4426,21 @@ export type TranslationKeys = {
   "streak.tier_encendida": string;
   "streak.tier_imparable": string;
   "streak.xp": string;
-  "time_avg": string;
-  "time_days_active": string;
-  "time_title": string;
-  "time_today": string;
-  "time_week": string;
+  "streak.you": string;
+  "study_groups.create": string;
+  "study_groups.create_first": string;
+  "study_groups.form_desc_placeholder": string;
+  "study_groups.form_name_placeholder": string;
+  "study_groups.join": string;
+  "study_groups.leave": string;
+  "study_groups.no_groups": string;
+  "study_groups.subtitle": string;
+  "study_groups.title": string;
+  time_avg: string;
+  time_days_active: string;
+  time_title: string;
+  time_today: string;
+  time_week: string;
   "vak.ui.accept_and_continue": string;
   "vak.ui.accept_data_policy": string;
   "vak.ui.accessibility_label": string;
@@ -3846,6 +4618,7 @@ export type TranslationKeys = {
   "video.unavailable_title": string;
   "video.unmute": string;
   "welcome.back_btn": string;
+  "welcome.back_to_signin": string;
   "welcome.badge": string;
   "welcome.benefit_cert": string;
   "welcome.benefit_personalized": string;
@@ -4023,6 +4796,37 @@ const translationKeySet: Record<string, true> = {
   "aliados.marquee_aria": true,
   "aliados.title_before": true,
   "aliados.title_highlight": true,
+  "analytics.activity_distribution": true,
+  "analytics.empty_desc": true,
+  "analytics.empty_hint_missions": true,
+  "analytics.empty_hint_progress": true,
+  "analytics.empty_hint_study": true,
+  "analytics.empty_title": true,
+  "analytics.metric_heatmap": true,
+  "analytics.metric_prediction": true,
+  "analytics.metric_speed": true,
+  "analytics.metric_speed_desc": true,
+  "analytics.metric_streak": true,
+  "analytics.metric_time": true,
+  "analytics.module_scores": true,
+  "analytics.no_data": true,
+  "analytics.session": true,
+  "analytics.study_time": true,
+  "analytics.subject_english": true,
+  "analytics.subject_language": true,
+  "analytics.subject_math": true,
+  "analytics.subject_science": true,
+  "analytics.subject_social": true,
+  "analytics.subtitle": true,
+  "analytics.title": true,
+  "analytics.week_fri": true,
+  "analytics.week_mon": true,
+  "analytics.week_sat": true,
+  "analytics.week_sun": true,
+  "analytics.week_thu": true,
+  "analytics.week_tue": true,
+  "analytics.week_wed": true,
+  "analytics.weekly_xp": true,
   "automation.architect.back_dashboard": true,
   "automation.architect.badge": true,
   "automation.architect.btn_atras": true,
@@ -4197,6 +5001,8 @@ const translationKeySet: Record<string, true> = {
   "badge.locked": true,
   "badge.locked_aria": true,
   "badge.obtained": true,
+  "calendar.activity_desc_placeholder": true,
+  "calendar.activity_title_placeholder": true,
   "certificate.awarded_to": true,
   "certificate.cert_number_pdf": true,
   "certificate.completed_course": true,
@@ -4392,6 +5198,7 @@ const translationKeySet: Record<string, true> = {
   "course_completion.view_cert": true,
   "course_completion.yes": true,
   "dani.chart_title": true,
+  "dani.chat_placeholder": true,
   "dani.chat_title": true,
   "dani.close": true,
   "dani.conversation_count": true,
@@ -4530,12 +5337,19 @@ const translationKeySet: Record<string, true> = {
   "flashcard.completed_desc": true,
   "flashcard.mastered_title": true,
   "flashcard.next_btn": true,
+  "flashcard.no_cards": true,
   "flashcard.prev_btn": true,
   "flashcard.progress": true,
   "flashcard.question_aria": true,
+  "flashcard.rating_again": true,
+  "flashcard.rating_easy": true,
+  "flashcard.rating_good": true,
+  "flashcard.rating_hard": true,
+  "flashcard.rating_hint": true,
   "flashcard.remaining": true,
   "flashcard.repeat_all": true,
   "flashcard.restart_btn": true,
+  "flashcards.placeholder": true,
   "footer.automation": true,
   "footer.blog": true,
   "footer.certifications": true,
@@ -4610,12 +5424,46 @@ const translationKeySet: Record<string, true> = {
   "hero.subtitle_highlight": true,
   "hero.title_line1": true,
   "hero.title_line2": true,
+  "ialab.achievement_toast.close_aria": true,
+  "ialab.activity_feed.challenge_completed": true,
+  "ialab.activity_feed.empty": true,
+  "ialab.activity_feed.exam_passed": true,
+  "ialab.activity_feed.exam_passed_score": true,
+  "ialab.activity_feed.forum_participation": true,
+  "ialab.activity_feed.resources_completed": true,
+  "ialab.activity_feed.title": true,
+  "ialab.adaptive.day_ago": true,
+  "ialab.adaptive.days_ago": true,
+  "ialab.adaptive.failed_attempts": true,
+  "ialab.adaptive.month_ago": true,
+  "ialab.adaptive.months_ago": true,
+  "ialab.adaptive.review_label": true,
+  "ialab.adaptive.scheduled_review": true,
+  "ialab.adaptive.stale_label": true,
+  "ialab.adaptive.struggle_label": true,
+  "ialab.adaptive.subtitle": true,
+  "ialab.adaptive.title": true,
+  "ialab.adaptive.today": true,
+  "ialab.adaptive.viewed": true,
+  "ialab.analytics_subtitle": true,
+  "ialab.analytics_title": true,
+  "ialab.ask_max_btn": true,
+  "ialab.ask_max_context": true,
+  "ialab.ask_max_exam_btn": true,
+  "ialab.ask_max_exam_failed": true,
+  "ialab.ask_max_exam_passed": true,
   "ialab.badge_gallery.count": true,
   "ialab.badge_gallery.title": true,
   "ialab.benefits.subtitle": true,
   "ialab.benefits.title": true,
   "ialab.bookmark.remove": true,
   "ialab.bookmark.save": true,
+  "ialab.bookmarked": true,
+  "ialab.bookmarked_aria": true,
+  "ialab.bookmarks_empty_desc": true,
+  "ialab.bookmarks_empty_title": true,
+  "ialab.bookmarks_module": true,
+  "ialab.bookmarks_open": true,
   "ialab.breadcrumb.aria_label": true,
   "ialab.breadcrumb_home": true,
   "ialab.breadcrumb_module": true,
@@ -4993,6 +5841,9 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge_result.title": true,
   "ialab.completed": true,
   "ialab.completed_pct": true,
+  "ialab.continue_banner_cta": true,
+  "ialab.continue_banner_lesson": true,
+  "ialab.continue_banner_title": true,
   "ialab.continue_lesson": true,
   "ialab.course_card.btn_enroll": true,
   "ialab.course_card.btn_explore": true,
@@ -5037,6 +5888,22 @@ const translationKeySet: Record<string, true> = {
   "ialab.error_boundary.reload": true,
   "ialab.error_boundary.retry": true,
   "ialab.error_boundary.title": true,
+  "ialab.error_state.auth_action": true,
+  "ialab.error_state.auth_message": true,
+  "ialab.error_state.auth_title": true,
+  "ialab.error_state.generic_action": true,
+  "ialab.error_state.generic_message": true,
+  "ialab.error_state.generic_title": true,
+  "ialab.error_state.network_action": true,
+  "ialab.error_state.network_message": true,
+  "ialab.error_state.network_title": true,
+  "ialab.error_state.not_found_action": true,
+  "ialab.error_state.not_found_message": true,
+  "ialab.error_state.not_found_title": true,
+  "ialab.error_state.server_action": true,
+  "ialab.error_state.server_message": true,
+  "ialab.error_state.server_title": true,
+  "ialab.error_state.technical_details": true,
   "ialab.ethics_explorer.analyze_another": true,
   "ialab.ethics_explorer.apply_filter": true,
   "ialab.ethics_explorer.badge": true,
@@ -5095,9 +5962,12 @@ const translationKeySet: Record<string, true> = {
   "ialab.ethics_explorer.subtitle": true,
   "ialab.ethics_explorer.title": true,
   "ialab.ethics_explorer.view_report": true,
+  "ialab.ethics_explorer.voice_instruction": true,
+  "ialab.ethics_explorer.voice_result": true,
   "ialab.ethics_explorer.welcome_desc": true,
   "ialab.ethics_explorer.yes": true,
   "ialab.evaluation.modal.ai_designing": true,
+  "ialab.evaluation.modal.dialog_label": true,
   "ialab.evaluation.modal.evaluating": true,
   "ialab.evaluation.modal.exit": true,
   "ialab.evaluation.modal.form_error_evaluation": true,
@@ -5291,6 +6161,34 @@ const translationKeySet: Record<string, true> = {
   "ialab.exam_result.title_passed": true,
   "ialab.exam_result.total": true,
   "ialab.filter_all": true,
+  "ialab.flashcard_review_btn": true,
+  "ialab.flashcard_review_xp": true,
+  "ialab.flashcard_topic_btn": true,
+  "ialab.flashcards.practice_badge": true,
+  "ialab.flashcards.practice_completed_desc": true,
+  "ialab.flashcards.practice_completed_title": true,
+  "ialab.flashcards.practice_correct": true,
+  "ialab.flashcards.practice_easy": true,
+  "ialab.flashcards.practice_feedback_correct": true,
+  "ialab.flashcards.practice_feedback_incorrect": true,
+  "ialab.flashcards.practice_hard": true,
+  "ialab.flashcards.practice_incorrect": true,
+  "ialab.flashcards.practice_medium": true,
+  "ialab.flashcards.practice_next": true,
+  "ialab.flashcards.practice_no_questions": true,
+  "ialab.flashcards.practice_stats_by_difficulty": true,
+  "ialab.flashcards.practice_try_again": true,
+  "ialab.flashcards.practice_view_results": true,
+  "ialab.flashcards.practice_xp_earned": true,
+  "ialab.flashcards.tab_practice": true,
+  "ialab.flashcards.tab_practice_icon": true,
+  "ialab.flashcards.tab_study": true,
+  "ialab.flashcards.tab_study_icon": true,
+  "ialab.flashcards_quick_desc": true,
+  "ialab.flashcards_quick_title": true,
+  "ialab.forum.best_answer.remove": true,
+  "ialab.forum.best_answer.solution": true,
+  "ialab.forum.best_answer.user_fallback": true,
   "ialab.forum.comment.day_ago": true,
   "ialab.forum.comment.edited": true,
   "ialab.forum.comment.hour_ago": true,
@@ -5344,18 +6242,22 @@ const translationKeySet: Record<string, true> = {
   "ialab.forum.optimized.empty_desc": true,
   "ialab.forum.optimized.empty_title": true,
   "ialab.forum.optimized.input_placeholder": true,
+  "ialab.forum.optimized.like_aria": true,
   "ialab.forum.optimized.live_badge": true,
   "ialab.forum.optimized.loading": true,
   "ialab.forum.optimized.login_link": true,
   "ialab.forum.optimized.login_prompt": true,
   "ialab.forum.optimized.mentor_badge": true,
+  "ialab.forum.optimized.post_aria": true,
   "ialab.forum.optimized.retry": true,
   "ialab.forum.optimized.send": true,
   "ialab.forum.optimized.sending": true,
   "ialab.forum.optimized.show_more": true,
   "ialab.forum.optimized.stats_line": true,
   "ialab.forum.optimized.title": true,
+  "ialab.forum.optimized.unlike_aria": true,
   "ialab.forum.optimized.user_fallback": true,
+  "ialab.forum.post_card.author_name": true,
   "ialab.forum.post_card.category_announcement": true,
   "ialab.forum.post_card.category_discussion": true,
   "ialab.forum.post_card.category_feedback": true,
@@ -5365,8 +6267,12 @@ const translationKeySet: Record<string, true> = {
   "ialab.forum.post_card.day_ago": true,
   "ialab.forum.post_card.edited_label": true,
   "ialab.forum.post_card.hour_ago": true,
+  "ialab.forum.post_card.last_responder_name": true,
   "ialab.forum.post_card.min_ago": true,
   "ialab.forum.post_card.now": true,
+  "ialab.forum.post_card.tag_help": true,
+  "ialab.forum.post_card.tag_module5": true,
+  "ialab.forum.post_card.tag_rtf": true,
   "ialab.forum.post_card.user_fallback": true,
   "ialab.forum.post_list.count": true,
   "ialab.forum.post_list.empty_all_desc": true,
@@ -5434,6 +6340,42 @@ const translationKeySet: Record<string, true> = {
   "ialab.forum.section.title_fallback": true,
   "ialab.forum.section.validation_empty": true,
   "ialab.forum.section.views_label": true,
+  "ialab.gemini_research.find_deep_1": true,
+  "ialab.gemini_research.find_deep_2": true,
+  "ialab.gemini_research.find_deep_3": true,
+  "ialab.gemini_research.find_deep_4": true,
+  "ialab.gemini_research.find_fact_1": true,
+  "ialab.gemini_research.find_fact_2": true,
+  "ialab.gemini_research.find_fact_3": true,
+  "ialab.gemini_research.find_fact_4": true,
+  "ialab.gemini_research.find_image_1": true,
+  "ialab.gemini_research.find_image_2": true,
+  "ialab.gemini_research.find_image_3": true,
+  "ialab.gemini_research.find_image_4": true,
+  "ialab.gemini_research.grounding_badge": true,
+  "ialab.gemini_research.intro_desc": true,
+  "ialab.gemini_research.intro_point_1": true,
+  "ialab.gemini_research.intro_point_2": true,
+  "ialab.gemini_research.intro_point_3": true,
+  "ialab.gemini_research.intro_title": true,
+  "ialab.gemini_research.report_badge": true,
+  "ialab.gemini_research.report_confidence": true,
+  "ialab.gemini_research.report_sources": true,
+  "ialab.gemini_research.report_sources_unit": true,
+  "ialab.gemini_research.results_subtitle": true,
+  "ialab.gemini_research.sample_deep_title": true,
+  "ialab.gemini_research.sample_factcheck_title": true,
+  "ialab.gemini_research.sample_image_title": true,
+  "ialab.gemini_research.select_desc": true,
+  "ialab.gemini_research.select_title": true,
+  "ialab.gemini_research.start_btn": true,
+  "ialab.gemini_research.try_again": true,
+  "ialab.gemini_research.type_deep_desc": true,
+  "ialab.gemini_research.type_deep_title": true,
+  "ialab.gemini_research.type_factcheck_desc": true,
+  "ialab.gemini_research.type_factcheck_title": true,
+  "ialab.gemini_research.type_image_desc": true,
+  "ialab.gemini_research.type_image_title": true,
   "ialab.global_search.close_aria": true,
   "ialab.global_search.empty_hint": true,
   "ialab.global_search.empty_title": true,
@@ -5442,10 +6384,22 @@ const translationKeySet: Record<string, true> = {
   "ialab.global_search.placeholder": true,
   "ialab.global_search.placeholder_short": true,
   "ialab.global_search.results_count": true,
+  "ialab.global_search.results_label": true,
   "ialab.global_search.search_aria": true,
   "ialab.global_search.topic_label": true,
   "ialab.header_unavailable": true,
   "ialab.info_unavailable": true,
+  "ialab.integration_exercise.badge": true,
+  "ialab.integration_exercise.completed_title": true,
+  "ialab.integration_exercise.correct": true,
+  "ialab.integration_exercise.incorrect": true,
+  "ialab.integration_exercise.next": true,
+  "ialab.integration_exercise.question_label": true,
+  "ialab.integration_exercise.retry": true,
+  "ialab.integration_exercise.score": true,
+  "ialab.integration_exercise.see_results": true,
+  "ialab.integration_exercise.start": true,
+  "ialab.integration_exercise.title": true,
   "ialab.interaction_advisor.alternatives": true,
   "ialab.interaction_advisor.analyze_data": true,
   "ialab.interaction_advisor.automate": true,
@@ -5491,6 +6445,28 @@ const translationKeySet: Record<string, true> = {
   "ialab.landing.why_subtitle": true,
   "ialab.landing.why_title": true,
   "ialab.leaderboard_modal.close_aria": true,
+  "ialab.learning_pace.aria": true,
+  "ialab.learning_pace.fast_desc": true,
+  "ialab.learning_pace.fast_name": true,
+  "ialab.learning_pace.fast_weekly": true,
+  "ialab.learning_pace.normal_desc": true,
+  "ialab.learning_pace.normal_name": true,
+  "ialab.learning_pace.normal_weekly": true,
+  "ialab.learning_pace.slow_desc": true,
+  "ialab.learning_pace.slow_name": true,
+  "ialab.learning_pace.slow_weekly": true,
+  "ialab.learning_pace.subtitle": true,
+  "ialab.learning_pace.title": true,
+  "ialab.level_badge.level0_desc": true,
+  "ialab.level_badge.level0_name": true,
+  "ialab.level_badge.level1_desc": true,
+  "ialab.level_badge.level1_name": true,
+  "ialab.level_badge.level2_desc": true,
+  "ialab.level_badge.level2_name": true,
+  "ialab.level_badge.level3_desc": true,
+  "ialab.level_badge.level3_name": true,
+  "ialab.level_badge.level4_desc": true,
+  "ialab.level_badge.level4_name": true,
   "ialab.menu_aria": true,
   "ialab.module.lessons": true,
   "ialab.module.module_label": true,
@@ -5518,11 +6494,6 @@ const translationKeySet: Record<string, true> = {
   "ialab.module_info.objective_highlight": true,
   "ialab.module_info.objective_suffix": true,
   "ialab.module_info.objective_title": true,
-  "ialab.module_overview.module1_description": true,
-  "ialab.module_overview.module1_mission": true,
-  "ialab.module_overview.module1_title": true,
-  "ialab.module_overview.topic_1_title": true,
-  "ialab.module_overview.topic_2_title": true,
   "ialab.module_progress": true,
   "ialab.module_progress_bar.challenge": true,
   "ialab.module_progress_bar.challenge_pending": true,
@@ -5540,9 +6511,18 @@ const translationKeySet: Record<string, true> = {
   "ialab.module_roadmap.subtitle": true,
   "ialab.module_roadmap.title": true,
   "ialab.nav_menu_aria": true,
+  "ialab.notif_mobile_aria": true,
   "ialab.notifications_aria": true,
+  "ialab.objectives_learn": true,
+  "ialab.objectives_verified": true,
   "ialab.offline_banner.message": true,
+  "ialab.ova.badge": true,
   "ialab.ova.start": true,
+  "ialab.ova_hub.clear_search": true,
+  "ialab.ova_hub.no_results": true,
+  "ialab.ova_hub.search_placeholder": true,
+  "ialab.ova_hub.subtitle": true,
+  "ialab.ova_hub.title": true,
   "ialab.ova_thumbnail.aria_open": true,
   "ialab.ova_thumbnail.certification": true,
   "ialab.ova_thumbnail.click_to_explore": true,
@@ -5576,6 +6556,24 @@ const translationKeySet: Record<string, true> = {
   "ialab.pdf_thumbnail.title": true,
   "ialab.pdf_thumbnail.title_attr": true,
   "ialab.pdf_thumbnail.zoom_instruction": true,
+  "ialab.practice.flashcards_hint": true,
+  "ialab.practice.subtitle": true,
+  "ialab.practice.title": true,
+  "ialab.practice.tool_ethics": true,
+  "ialab.practice.tool_ethics_desc": true,
+  "ialab.practice.tool_flashcards": true,
+  "ialab.practice.tool_flashcards_desc": true,
+  "ialab.practice.tool_gemini_research": true,
+  "ialab.practice.tool_gemini_research_desc": true,
+  "ialab.practice.tool_interaction": true,
+  "ialab.practice.tool_interaction_desc": true,
+  "ialab.practice.tool_podcast": true,
+  "ialab.practice.tool_podcast_desc": true,
+  "ialab.practice.tool_prompts": true,
+  "ialab.practice.tool_prompts_desc": true,
+  "ialab.practice.tool_tutoring": true,
+  "ialab.practice.tool_tutoring_desc": true,
+  "ialab.progress_label": true,
   "ialab.prompt_feedback.applied_technique": true,
   "ialab.prompt_feedback.identified_problems": true,
   "ialab.prompt_feedback.improvements": true,
@@ -5587,6 +6585,42 @@ const translationKeySet: Record<string, true> = {
   "ialab.prompt_feedback.score": true,
   "ialab.prompt_feedback.suggestion": true,
   "ialab.prompt_feedback.tips": true,
+  "ialab.prompt_sandbox.char_tokens": true,
+  "ialab.prompt_sandbox.clear_all": true,
+  "ialab.prompt_sandbox.copy": true,
+  "ialab.prompt_sandbox.empty_response": true,
+  "ialab.prompt_sandbox.error_generate": true,
+  "ialab.prompt_sandbox.generated_chars": true,
+  "ialab.prompt_sandbox.generating": true,
+  "ialab.prompt_sandbox.history": true,
+  "ialab.prompt_sandbox.history_aria": true,
+  "ialab.prompt_sandbox.history_title": true,
+  "ialab.prompt_sandbox.placeholder_system": true,
+  "ialab.prompt_sandbox.placeholder_user": true,
+  "ialab.prompt_sandbox.response_label": true,
+  "ialab.prompt_sandbox.run": true,
+  "ialab.prompt_sandbox.sample_cot_label": true,
+  "ialab.prompt_sandbox.sample_cot_system": true,
+  "ialab.prompt_sandbox.sample_cot_user": true,
+  "ialab.prompt_sandbox.sample_explain_label": true,
+  "ialab.prompt_sandbox.sample_explain_system": true,
+  "ialab.prompt_sandbox.sample_explain_user": true,
+  "ialab.prompt_sandbox.sample_format_label": true,
+  "ialab.prompt_sandbox.sample_format_system": true,
+  "ialab.prompt_sandbox.sample_format_user": true,
+  "ialab.prompt_sandbox.samples_label": true,
+  "ialab.prompt_sandbox.subtitle": true,
+  "ialab.prompt_sandbox.suggestion_cot": true,
+  "ialab.prompt_sandbox.suggestion_format": true,
+  "ialab.prompt_sandbox.suggestion_long": true,
+  "ialab.prompt_sandbox.suggestion_roleplay": true,
+  "ialab.prompt_sandbox.suggestion_short": true,
+  "ialab.prompt_sandbox.suggestion_system": true,
+  "ialab.prompt_sandbox.suggestions": true,
+  "ialab.prompt_sandbox.system_hint": true,
+  "ialab.prompt_sandbox.thinking": true,
+  "ialab.prompt_sandbox.title": true,
+  "ialab.prompt_sandbox.user_hint": true,
   "ialab.que_es_prompt.anatomy_contexto": true,
   "ialab.que_es_prompt.anatomy_ejemplos": true,
   "ialab.que_es_prompt.anatomy_formato": true,
@@ -5689,6 +6723,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.quiz.mark_review": true,
   "ialab.quiz.marked": true,
   "ialab.quiz.max_violations": true,
+  "ialab.quiz.min_score": true,
   "ialab.quiz.next": true,
   "ialab.quiz.options_group": true,
   "ialab.quiz.passed": true,
@@ -5761,12 +6796,28 @@ const translationKeySet: Record<string, true> = {
   "ialab.resource_viewer.type_unsupported": true,
   "ialab.resource_viewer.viewer_error": true,
   "ialab.resources_label": true,
+  "ialab.review_scheduler.box_learned": true,
+  "ialab.review_scheduler.box_mastered": true,
+  "ialab.review_scheduler.box_new": true,
+  "ialab.review_scheduler.box_recent": true,
+  "ialab.review_scheduler.box_retained": true,
+  "ialab.review_scheduler.days_until": true,
+  "ialab.review_scheduler.due_today": true,
+  "ialab.review_scheduler.empty": true,
+  "ialab.review_scheduler.overdue_review": true,
+  "ialab.review_scheduler.title": true,
+  "ialab.review_scheduler.today": true,
+  "ialab.review_scheduler.tomorrow": true,
+  "ialab.review_scheduler.upcoming": true,
+  "ialab.review_scheduler.weeks_plural": true,
+  "ialab.review_scheduler.weeks_singular": true,
   "ialab.route_unavailable": true,
   "ialab.screenshot_protection.aria_label": true,
   "ialab.screenshot_protection.description": true,
   "ialab.screenshot_protection.title": true,
   "ialab.screenshot_protection.waiting": true,
   "ialab.search_aria": true,
+  "ialab.search_hint": true,
   "ialab.security_warning.level_1_hint": true,
   "ialab.security_warning.level_1_title": true,
   "ialab.security_warning.level_2_hint": true,
@@ -5778,6 +6829,10 @@ const translationKeySet: Record<string, true> = {
   "ialab.security_warning.understood": true,
   "ialab.see_less": true,
   "ialab.see_more": true,
+  "ialab.sidebar_flashcards": true,
+  "ialab.sidebar_leaderboard": true,
+  "ialab.sidebar_practice": true,
+  "ialab.sidebar_study_plan": true,
   "ialab.signup_back_to_login": true,
   "ialab.signup_feature_1": true,
   "ialab.signup_feature_2": true,
@@ -5797,6 +6852,20 @@ const translationKeySet: Record<string, true> = {
   "ialab.status.locked": true,
   "ialab.status.start_here": true,
   "ialab.status.viewed": true,
+  "ialab.streak_calendar.active": true,
+  "ialab.streak_calendar.day_aria": true,
+  "ialab.streak_calendar.days": true,
+  "ialab.streak_calendar.inactive": true,
+  "ialab.streak_calendar.title": true,
+  "ialab.streak_calendar.today": true,
+  "ialab.streak_risk_cta": true,
+  "ialab.streak_risk_desc": true,
+  "ialab.streak_risk_dismiss": true,
+  "ialab.streak_risk_title": true,
+  "ialab.study_calendar.deadlines": true,
+  "ialab.study_calendar.no_deadlines": true,
+  "ialab.study_calendar.pending_challenge": true,
+  "ialab.study_calendar.pending_exam": true,
   "ialab.study_planner.active_days": true,
   "ialab.study_planner.auto_save": true,
   "ialab.study_planner.close_aria": true,
@@ -5898,13 +6967,13 @@ const translationKeySet: Record<string, true> = {
   "ialab.synthesizer_input.ready_status": true,
   "ialab.tab_activities": true,
   "ialab.tab_all": true,
+  "ialab.tab_bookmarks": true,
   "ialab.tab_content": true,
   "ialab.tab_objectives": true,
+  "ialab.tab_practice": true,
+  "ialab.tab_progress": true,
   "ialab.tab_tools": true,
   "ialab.title": true,
-  "ialab.flashcard_review_btn": true,
-  "ialab.flashcard_review_xp": true,
-  "ialab.practice.flashcards_hint": true,
   "ialab.tool_tutor.ethics_subtitle": true,
   "ialab.tool_tutor.ethics_title": true,
   "ialab.tool_tutor.flashcard_subtitle": true,
@@ -5929,6 +6998,8 @@ const translationKeySet: Record<string, true> = {
   "ialab.topic_resources.select_resource": true,
   "ialab.tour.aria_label": true,
   "ialab.tour.next": true,
+  "ialab.tour.restart_aria": true,
+  "ialab.tour.restart_title": true,
   "ialab.tour.skip": true,
   "ialab.tour.start": true,
   "ialab.tour.step_0_desc": true,
@@ -5952,12 +7023,36 @@ const translationKeySet: Record<string, true> = {
   "ialab.tour.step_9_desc": true,
   "ialab.tour.step_9_title": true,
   "ialab.tour.step_label": true,
+  "ialab.tour.welcome_back": true,
+  "ialab.tour.welcome_close_aria": true,
+  "ialab.tour.welcome_next": true,
+  "ialab.tour.welcome_progress_aria": true,
+  "ialab.tour.welcome_skip": true,
+  "ialab.tour.welcome_start": true,
+  "ialab.tour.welcome_step1_desc": true,
+  "ialab.tour.welcome_step1_highlight": true,
+  "ialab.tour.welcome_step1_title": true,
+  "ialab.tour.welcome_step2_desc": true,
+  "ialab.tour.welcome_step2_highlight": true,
+  "ialab.tour.welcome_step2_title": true,
+  "ialab.tour.welcome_step3_desc": true,
+  "ialab.tour.welcome_step3_highlight": true,
+  "ialab.tour.welcome_step3_title": true,
+  "ialab.tour.welcome_step4_desc": true,
+  "ialab.tour.welcome_step4_highlight": true,
+  "ialab.tour.welcome_step4_title": true,
+  "ialab.tour.welcome_step5_desc": true,
+  "ialab.tour.welcome_step5_highlight": true,
+  "ialab.tour.welcome_step5_title": true,
+  "ialab.tour.welcome_step_aria": true,
   "ialab.tutorias_virtuales.countdown": true,
   "ialab.tutorias_virtuales.description": true,
   "ialab.tutorias_virtuales.join": true,
   "ialab.tutorias_virtuales.live": true,
   "ialab.tutorias_virtuales.title": true,
   "ialab.tutorias_virtuales.unavailable": true,
+  "ialab.unlock_first_module": true,
+  "ialab.unlock_requirement": true,
   "ialab.user_fallback": true,
   "ialab.valerio.clear_button": true,
   "ialab.valerio.clear_confirm": true,
@@ -5967,8 +7062,14 @@ const translationKeySet: Record<string, true> = {
   "ialab.valerio.clear_confirm_yes_aria": true,
   "ialab.valerio.close_aria": true,
   "ialab.valerio.conversation_aria": true,
+  "ialab.valerio.copy.copied": true,
+  "ialab.valerio.copy.label": true,
+  "ialab.valerio.copy.title": true,
   "ialab.valerio.empty_description": true,
   "ialab.valerio.empty_title": true,
+  "ialab.valerio.export.header": true,
+  "ialab.valerio.export.html_title": true,
+  "ialab.valerio.export.you": true,
   "ialab.valerio.greeting_anon": true,
   "ialab.valerio.greeting_name": true,
   "ialab.valerio.input_hint": true,
@@ -5979,6 +7080,9 @@ const translationKeySet: Record<string, true> = {
   "ialab.valerio.level_intermediate": true,
   "ialab.valerio.level_label": true,
   "ialab.valerio.loading": true,
+  "ialab.valerio.message_actions.download": true,
+  "ialab.valerio.message_actions.more": true,
+  "ialab.valerio.message_actions.useful": true,
   "ialab.valerio.message_valerio": true,
   "ialab.valerio.message_you": true,
   "ialab.valerio.module_label": true,
@@ -6002,9 +7106,18 @@ const translationKeySet: Record<string, true> = {
   "ialab.valerio.status_thinking": true,
   "ialab.valerio.system_instructions": true,
   "ialab.valerio.title": true,
+  "ialab.valerio.typing.label": true,
+  "ialab.valerio.voice.error": true,
+  "ialab.valerio.voice.https_required": true,
+  "ialab.valerio.voice.no_speech": true,
+  "ialab.valerio.voice.not_supported": true,
+  "ialab.valerio.voice.permission_denied": true,
+  "ialab.valerio.voice.start_error": true,
   "ialab.valerio.voice_start_aria": true,
   "ialab.valerio.voice_stop_aria": true,
   "ialab.valerio_aria": true,
+  "ialab.valerio_nudge": true,
+  "ialab.valerio_nudge_sub": true,
   "ialab.valerio_talk": true,
   "ialab.valerio_tooltip": true,
   "ialab.viewer_modal.cannot_load": true,
@@ -6062,6 +7175,8 @@ const translationKeySet: Record<string, true> = {
   "ialab.voice_reader.listen": true,
   "ialab.voice_reader.stop": true,
   "ialab.voice_reader.title": true,
+  "ialab.xp_earned": true,
+  "ialab.xp_excellent_work": true,
   "kid.news.empty_category": true,
   "kid.news.featured_badge": true,
   "kid.news.filter_all": true,
@@ -6145,6 +7260,21 @@ const translationKeySet: Record<string, true> = {
   "loading.status_done": true,
   "loading.status_start": true,
   "loading.status_vak": true,
+  "login.button.signin": true,
+  "login.button.signing_in": true,
+  "login.email": true,
+  "login.email_or_username": true,
+  "login.email_or_username_placeholder": true,
+  "login.error.connection": true,
+  "login.error.email_not_confirmed": true,
+  "login.error.email_required_for_reset": true,
+  "login.error.invalid_credentials": true,
+  "login.error.oauth_account": true,
+  "login.forgot_password": true,
+  "login.no_account": true,
+  "login.password": true,
+  "login.reset_email_sent": true,
+  "login.signup_link": true,
   "metodo.cta_text": true,
   "metodo.form_email_label": true,
   "metodo.form_email_placeholder": true,
@@ -6181,6 +7311,7 @@ const translationKeySet: Record<string, true> = {
   "mobile_menu.badges_earned": true,
   "mobile_menu.certificates": true,
   "mobile_menu.change_password": true,
+  "mobile_menu.close_section": true,
   "mobile_menu.completed": true,
   "mobile_menu.help": true,
   "mobile_menu.level": true,
@@ -6384,8 +7515,82 @@ const translationKeySet: Record<string, true> = {
   "notification.type_lesson_reminder": true,
   "notification.type_module_complete": true,
   "notification.unread_count": true,
+  "ova.automation.analyze_workflow": true,
+  "ova.automation.analyzed": true,
+  "ova.automation.badge": true,
+  "ova.automation.case_business_insight": true,
+  "ova.automation.case_business_scenario": true,
+  "ova.automation.case_business_step1": true,
+  "ova.automation.case_business_step2": true,
+  "ova.automation.case_business_step3": true,
+  "ova.automation.case_business_title": true,
+  "ova.automation.case_education_insight": true,
+  "ova.automation.case_education_scenario": true,
+  "ova.automation.case_education_step1": true,
+  "ova.automation.case_education_step2": true,
+  "ova.automation.case_education_step3": true,
+  "ova.automation.case_education_title": true,
+  "ova.automation.case_marketing_insight": true,
+  "ova.automation.case_marketing_scenario": true,
+  "ova.automation.case_marketing_step1": true,
+  "ova.automation.case_marketing_step2": true,
+  "ova.automation.case_marketing_step3": true,
+  "ova.automation.case_marketing_title": true,
+  "ova.automation.conclusion_desc": true,
+  "ova.automation.conclusion_hint": true,
+  "ova.automation.conclusion_title": true,
+  "ova.automation.design_prompt": true,
+  "ova.automation.design_title": true,
+  "ova.automation.footer": true,
+  "ova.automation.framework_intro": true,
+  "ova.automation.learning_obj_1": true,
+  "ova.automation.learning_obj_2": true,
+  "ova.automation.learning_obj_3": true,
+  "ova.automation.learning_obj_4": true,
+  "ova.automation.menu_title": true,
+  "ova.automation.menu_welcome": true,
+  "ova.automation.nav_finish": true,
+  "ova.automation.nav_next": true,
+  "ova.automation.nav_prev": true,
+  "ova.automation.save_flow": true,
+  "ova.automation.screen_m1": true,
+  "ova.automation.screen_m2": true,
+  "ova.automation.screen_m3": true,
+  "ova.automation.screen_m4": true,
+  "ova.automation.screen_m5": true,
+  "ova.automation.screen_m6": true,
+  "ova.automation.section_label": true,
+  "ova.automation.select_tools": true,
+  "ova.automation.stage_input": true,
+  "ova.automation.stage_input_desc": true,
+  "ova.automation.stage_input_example": true,
+  "ova.automation.stage_orchestration": true,
+  "ova.automation.stage_orchestration_desc": true,
+  "ova.automation.stage_orchestration_example": true,
+  "ova.automation.stage_output": true,
+  "ova.automation.stage_output_desc": true,
+  "ova.automation.stage_output_example": true,
+  "ova.automation.start": true,
+  "ova.automation.the_workflow": true,
+  "ova.automation.tool_canvas": true,
+  "ova.automation.tool_dalle": true,
+  "ova.automation.tool_gpt": true,
+  "ova.automation.tool_sheets": true,
+  "ova.automation.tool_web": true,
+  "ova.automation.voice_m1": true,
+  "ova.automation.voice_m2": true,
+  "ova.automation.voice_m3": true,
+  "ova.automation.voice_m4": true,
+  "ova.automation.voice_m5": true,
+  "ova.automation.voice_m6": true,
+  "ova.automation.welcome_audio": true,
+  "ova.automation.welcome_desc": true,
+  "ova.automation.welcome_title": true,
+  "ova.automation.workflow_understood": true,
+  "ova.automation.your_flow": true,
   "ova.biaslab.attention_label": true,
   "ova.biaslab.back_to_start": true,
+  "ova.biaslab.badge": true,
   "ova.biaslab.case_study": true,
   "ova.biaslab.default_voice_text": true,
   "ova.biaslab.footer": true,
@@ -6394,6 +7599,10 @@ const translationKeySet: Record<string, true> = {
   "ova.biaslab.game_desc": true,
   "ova.biaslab.game_title": true,
   "ova.biaslab.intro_img_alt": true,
+  "ova.biaslab.learning_obj_1": true,
+  "ova.biaslab.learning_obj_2": true,
+  "ova.biaslab.learning_obj_3": true,
+  "ova.biaslab.learning_obj_4": true,
   "ova.biaslab.nav_cap1": true,
   "ova.biaslab.nav_cap2": true,
   "ova.biaslab.nav_cap3": true,
@@ -6402,6 +7611,10 @@ const translationKeySet: Record<string, true> = {
   "ova.biaslab.nav_intro": true,
   "ova.biaslab.responsible_practices": true,
   "ova.biaslab.sidebar_subtitle": true,
+  "ova.biaslab.start_btn": true,
+  "ova.biaslab.welcome_desc": true,
+  "ova.biaslab.welcome_title": true,
+  "ova.biaslab.welcome_voice": true,
   "ova.buildgpt.activity_badge": true,
   "ova.buildgpt.activity_desc": true,
   "ova.buildgpt.activity_done_desc": true,
@@ -6462,6 +7675,10 @@ const translationKeySet: Record<string, true> = {
   "ova.buildgpt.intro_text": true,
   "ova.buildgpt.intro_title": true,
   "ova.buildgpt.lab_title": true,
+  "ova.buildgpt.learning_obj_1": true,
+  "ova.buildgpt.learning_obj_2": true,
+  "ova.buildgpt.learning_obj_3": true,
+  "ova.buildgpt.learning_obj_4": true,
   "ova.buildgpt.quiz_bad": true,
   "ova.buildgpt.quiz_cert_btn": true,
   "ova.buildgpt.quiz_good": true,
@@ -6503,6 +7720,10 @@ const translationKeySet: Record<string, true> = {
   "ova.chatgpttools.feedback_incorrect": true,
   "ova.chatgpttools.footer": true,
   "ova.chatgpttools.lab_badge": true,
+  "ova.chatgpttools.learning_obj_1": true,
+  "ova.chatgpttools.learning_obj_2": true,
+  "ova.chatgpttools.learning_obj_3": true,
+  "ova.chatgpttools.learning_obj_4": true,
   "ova.chatgpttools.mark_complete": true,
   "ova.chatgpttools.modal_ecosystem": true,
   "ova.chatgpttools.modal_limits": true,
@@ -6528,6 +7749,79 @@ const translationKeySet: Record<string, true> = {
   "ova.chatgpttools.welcome_subtitle": true,
   "ova.chatgpttools.welcome_title": true,
   "ova.chatgpttools.welcome_voice": true,
+  "ova.docmastery.analyze_workflow": true,
+  "ova.docmastery.analyzed": true,
+  "ova.docmastery.badge": true,
+  "ova.docmastery.case_educator_insight": true,
+  "ova.docmastery.case_educator_scenario": true,
+  "ova.docmastery.case_educator_step1": true,
+  "ova.docmastery.case_educator_step2": true,
+  "ova.docmastery.case_educator_step3": true,
+  "ova.docmastery.case_educator_title": true,
+  "ova.docmastery.case_enterprise_insight": true,
+  "ova.docmastery.case_enterprise_scenario": true,
+  "ova.docmastery.case_enterprise_step1": true,
+  "ova.docmastery.case_enterprise_step2": true,
+  "ova.docmastery.case_enterprise_step3": true,
+  "ova.docmastery.case_enterprise_title": true,
+  "ova.docmastery.case_researcher_insight": true,
+  "ova.docmastery.case_researcher_scenario": true,
+  "ova.docmastery.case_researcher_step1": true,
+  "ova.docmastery.case_researcher_step2": true,
+  "ova.docmastery.case_researcher_step3": true,
+  "ova.docmastery.case_researcher_title": true,
+  "ova.docmastery.conclusion_desc": true,
+  "ova.docmastery.conclusion_hint": true,
+  "ova.docmastery.conclusion_title": true,
+  "ova.docmastery.design_prompt": true,
+  "ova.docmastery.design_title": true,
+  "ova.docmastery.elem_notebook": true,
+  "ova.docmastery.elem_pdf": true,
+  "ova.docmastery.elem_video": true,
+  "ova.docmastery.elem_website": true,
+  "ova.docmastery.flow_understood": true,
+  "ova.docmastery.footer": true,
+  "ova.docmastery.framework_intro": true,
+  "ova.docmastery.learning_obj_1": true,
+  "ova.docmastery.learning_obj_2": true,
+  "ova.docmastery.learning_obj_3": true,
+  "ova.docmastery.learning_obj_4": true,
+  "ova.docmastery.menu_title": true,
+  "ova.docmastery.menu_welcome": true,
+  "ova.docmastery.nav_finish": true,
+  "ova.docmastery.nav_next": true,
+  "ova.docmastery.nav_prev": true,
+  "ova.docmastery.output_podcast": true,
+  "ova.docmastery.save_flow": true,
+  "ova.docmastery.screen_m1": true,
+  "ova.docmastery.screen_m2": true,
+  "ova.docmastery.screen_m3": true,
+  "ova.docmastery.screen_m4": true,
+  "ova.docmastery.screen_m5": true,
+  "ova.docmastery.screen_m6": true,
+  "ova.docmastery.section_label": true,
+  "ova.docmastery.select_sources": true,
+  "ova.docmastery.stage_podcast": true,
+  "ova.docmastery.stage_podcast_desc": true,
+  "ova.docmastery.stage_podcast_example": true,
+  "ova.docmastery.stage_sources": true,
+  "ova.docmastery.stage_sources_desc": true,
+  "ova.docmastery.stage_sources_example": true,
+  "ova.docmastery.stage_synthesis": true,
+  "ova.docmastery.stage_synthesis_desc": true,
+  "ova.docmastery.stage_synthesis_example": true,
+  "ova.docmastery.start": true,
+  "ova.docmastery.the_flow": true,
+  "ova.docmastery.voice_m1": true,
+  "ova.docmastery.voice_m2": true,
+  "ova.docmastery.voice_m3": true,
+  "ova.docmastery.voice_m4": true,
+  "ova.docmastery.voice_m5": true,
+  "ova.docmastery.voice_m6": true,
+  "ova.docmastery.welcome_audio": true,
+  "ova.docmastery.welcome_desc": true,
+  "ova.docmastery.welcome_title": true,
+  "ova.docmastery.your_flow": true,
   "ova.ecosystem.challenge_after_label": true,
   "ova.ecosystem.challenge_before_label": true,
   "ova.ecosystem.challenge_desc": true,
@@ -6555,6 +7849,7 @@ const translationKeySet: Record<string, true> = {
   "ova.ecosystem.formula_format": true,
   "ova.ecosystem.formula_role": true,
   "ova.ecosystem.formula_task": true,
+  "ova.ecosystem.guide_title": true,
   "ova.ecosystem.header_module": true,
   "ova.ecosystem.lab_badge": true,
   "ova.ecosystem.mark_complete": true,
@@ -6563,6 +7858,15 @@ const translationKeySet: Record<string, true> = {
   "ova.ecosystem.matchup_descs": true,
   "ova.ecosystem.matchup_hint": true,
   "ova.ecosystem.matchup_tools": true,
+  "ova.ecosystem.menu_aria": true,
+  "ova.ecosystem.menu_title_m1": true,
+  "ova.ecosystem.menu_title_m2": true,
+  "ova.ecosystem.menu_title_m3": true,
+  "ova.ecosystem.menu_title_m4": true,
+  "ova.ecosystem.menu_title_m5": true,
+  "ova.ecosystem.menu_title_m6": true,
+  "ova.ecosystem.menu_title_m7": true,
+  "ova.ecosystem.menu_title_m8": true,
   "ova.ecosystem.quiz_desc": true,
   "ova.ecosystem.quiz_next": true,
   "ova.ecosystem.quiz_no_data": true,
@@ -6639,6 +7943,86 @@ const translationKeySet: Record<string, true> = {
   "ova.ethical_dilemmas.see_results_btn": true,
   "ova.ethical_dilemmas.sidebar_subtitle": true,
   "ova.ethical_dilemmas.start_btn": true,
+  "ova.ethicscases.analysis": true,
+  "ova.ethicscases.badge": true,
+  "ova.ethicscases.case_copyright_feedback_a": true,
+  "ova.ethicscases.case_copyright_feedback_b": true,
+  "ova.ethicscases.case_copyright_feedback_c": true,
+  "ova.ethicscases.case_copyright_opt_a": true,
+  "ova.ethicscases.case_copyright_opt_b": true,
+  "ova.ethicscases.case_copyright_opt_c": true,
+  "ova.ethicscases.case_copyright_scenario": true,
+  "ova.ethicscases.case_copyright_title": true,
+  "ova.ethicscases.case_health_feedback_a": true,
+  "ova.ethicscases.case_health_feedback_b": true,
+  "ova.ethicscases.case_health_feedback_c": true,
+  "ova.ethicscases.case_health_opt_a": true,
+  "ova.ethicscases.case_health_opt_b": true,
+  "ova.ethicscases.case_health_opt_c": true,
+  "ova.ethicscases.case_health_scenario": true,
+  "ova.ethicscases.case_health_title": true,
+  "ova.ethicscases.case_hiring_feedback_a": true,
+  "ova.ethicscases.case_hiring_feedback_b": true,
+  "ova.ethicscases.case_hiring_feedback_c": true,
+  "ova.ethicscases.case_hiring_opt_a": true,
+  "ova.ethicscases.case_hiring_opt_b": true,
+  "ova.ethicscases.case_hiring_opt_c": true,
+  "ova.ethicscases.case_hiring_scenario": true,
+  "ova.ethicscases.case_hiring_title": true,
+  "ova.ethicscases.conclusion_desc": true,
+  "ova.ethicscases.conclusion_hint": true,
+  "ova.ethicscases.conclusion_title": true,
+  "ova.ethicscases.decision_label": true,
+  "ova.ethicscases.decision_placeholder": true,
+  "ova.ethicscases.decision_prompt": true,
+  "ova.ethicscases.decision_saved": true,
+  "ova.ethicscases.decision_submit": true,
+  "ova.ethicscases.decision_success": true,
+  "ova.ethicscases.decision_title": true,
+  "ova.ethicscases.footer": true,
+  "ova.ethicscases.framework_intro": true,
+  "ova.ethicscases.learning_obj_1": true,
+  "ova.ethicscases.learning_obj_2": true,
+  "ova.ethicscases.learning_obj_3": true,
+  "ova.ethicscases.learning_obj_4": true,
+  "ova.ethicscases.menu_title": true,
+  "ova.ethicscases.menu_welcome": true,
+  "ova.ethicscases.min_chars": true,
+  "ova.ethicscases.nav_finish": true,
+  "ova.ethicscases.nav_next": true,
+  "ova.ethicscases.nav_prev": true,
+  "ova.ethicscases.q_accountability": true,
+  "ova.ethicscases.q_accountability_desc": true,
+  "ova.ethicscases.q_benefit": true,
+  "ova.ethicscases.q_benefit_desc": true,
+  "ova.ethicscases.q_consent": true,
+  "ova.ethicscases.q_consent_desc": true,
+  "ova.ethicscases.q_fairness": true,
+  "ova.ethicscases.q_fairness_desc": true,
+  "ova.ethicscases.q_harm": true,
+  "ova.ethicscases.q_harm_desc": true,
+  "ova.ethicscases.screen_m1": true,
+  "ova.ethicscases.screen_m2": true,
+  "ova.ethicscases.screen_m3": true,
+  "ova.ethicscases.screen_m4": true,
+  "ova.ethicscases.screen_m5": true,
+  "ova.ethicscases.screen_m6": true,
+  "ova.ethicscases.section_label": true,
+  "ova.ethicscases.start": true,
+  "ova.ethicscases.voice_m1": true,
+  "ova.ethicscases.voice_m2": true,
+  "ova.ethicscases.voice_m3": true,
+  "ova.ethicscases.voice_m4": true,
+  "ova.ethicscases.voice_m5": true,
+  "ova.ethicscases.voice_m6": true,
+  "ova.ethicscases.welcome_audio": true,
+  "ova.ethicscases.welcome_desc": true,
+  "ova.ethicscases.welcome_title": true,
+  "ova.ethicscases.what_would_you_do": true,
+  "ova.gemini.learning_obj_1": true,
+  "ova.gemini.learning_obj_2": true,
+  "ova.gemini.learning_obj_3": true,
+  "ova.gemini.learning_obj_4": true,
   "ova.introprompt.anatomy_contexto": true,
   "ova.introprompt.anatomy_contexto_desc": true,
   "ova.introprompt.anatomy_element": true,
@@ -6658,6 +8042,9 @@ const translationKeySet: Record<string, true> = {
   "ova.introprompt.cert_title": true,
   "ova.introprompt.challenge_after": true,
   "ova.introprompt.challenge_after_title": true,
+  "ova.introprompt.challenge_badge_apply": true,
+  "ova.introprompt.challenge_badge_challenge": true,
+  "ova.introprompt.challenge_badge_practice": true,
   "ova.introprompt.challenge_before": true,
   "ova.introprompt.challenge_before_title": true,
   "ova.introprompt.challenge_complete": true,
@@ -6746,6 +8133,10 @@ const translationKeySet: Record<string, true> = {
   "ova.introprompt.importance_title": true,
   "ova.introprompt.importance_voice": true,
   "ova.introprompt.lab_title": true,
+  "ova.introprompt.learning_obj_1": true,
+  "ova.introprompt.learning_obj_2": true,
+  "ova.introprompt.learning_obj_3": true,
+  "ova.introprompt.learning_obj_4": true,
   "ova.introprompt.map": true,
   "ova.introprompt.master": true,
   "ova.introprompt.menu_welcome": true,
@@ -6904,6 +8295,10 @@ const translationKeySet: Record<string, true> = {
   "ova.podcaststudio.focus_label": true,
   "ova.podcaststudio.format_label": true,
   "ova.podcaststudio.go_checklist": true,
+  "ova.podcaststudio.learning_obj_1": true,
+  "ova.podcaststudio.learning_obj_2": true,
+  "ova.podcaststudio.learning_obj_3": true,
+  "ova.podcaststudio.learning_obj_4": true,
   "ova.podcaststudio.plan_desc": true,
   "ova.podcaststudio.plan_summary": true,
   "ova.podcaststudio.plan_title": true,
@@ -6948,6 +8343,70 @@ const translationKeySet: Record<string, true> = {
   "ova.practical.start_btn": true,
   "ova.practical.title": true,
   "ova.practical.welcome_text": true,
+  "ova.promptlab.anatomy_example_label": true,
+  "ova.promptlab.anatomy_intro": true,
+  "ova.promptlab.badge": true,
+  "ova.promptlab.challenge_goal": true,
+  "ova.promptlab.challenge_mark": true,
+  "ova.promptlab.challenge_success": true,
+  "ova.promptlab.challenge_title": true,
+  "ova.promptlab.challenge_zone": true,
+  "ova.promptlab.conclusion_desc": true,
+  "ova.promptlab.conclusion_hint": true,
+  "ova.promptlab.conclusion_title": true,
+  "ova.promptlab.footer": true,
+  "ova.promptlab.lab_title": true,
+  "ova.promptlab.learning_obj_1": true,
+  "ova.promptlab.learning_obj_2": true,
+  "ova.promptlab.learning_obj_3": true,
+  "ova.promptlab.learning_obj_4": true,
+  "ova.promptlab.menu_title": true,
+  "ova.promptlab.menu_welcome": true,
+  "ova.promptlab.nav_finish": true,
+  "ova.promptlab.nav_next": true,
+  "ova.promptlab.nav_prev": true,
+  "ova.promptlab.part_ctx": true,
+  "ova.promptlab.part_ctx_desc": true,
+  "ova.promptlab.part_ctx_example": true,
+  "ova.promptlab.part_fmt": true,
+  "ova.promptlab.part_fmt_desc": true,
+  "ova.promptlab.part_fmt_example": true,
+  "ova.promptlab.part_rol": true,
+  "ova.promptlab.part_rol_desc": true,
+  "ova.promptlab.part_rol_example": true,
+  "ova.promptlab.part_tarea": true,
+  "ova.promptlab.part_tarea_desc": true,
+  "ova.promptlab.part_tarea_example": true,
+  "ova.promptlab.screen_m1": true,
+  "ova.promptlab.screen_m2": true,
+  "ova.promptlab.screen_m3": true,
+  "ova.promptlab.screen_m4": true,
+  "ova.promptlab.screen_m5": true,
+  "ova.promptlab.section_label": true,
+  "ova.promptlab.start": true,
+  "ova.promptlab.tech_cot": true,
+  "ova.promptlab.tech_cot_desc": true,
+  "ova.promptlab.tech_cot_example": true,
+  "ova.promptlab.tech_example_label": true,
+  "ova.promptlab.tech_fewshot": true,
+  "ova.promptlab.tech_fewshot_desc": true,
+  "ova.promptlab.tech_fewshot_example": true,
+  "ova.promptlab.tech_hint": true,
+  "ova.promptlab.tech_intro": true,
+  "ova.promptlab.tech_role": true,
+  "ova.promptlab.tech_role_desc": true,
+  "ova.promptlab.tech_role_example": true,
+  "ova.promptlab.tech_zeroshot": true,
+  "ova.promptlab.tech_zeroshot_desc": true,
+  "ova.promptlab.tech_zeroshot_example": true,
+  "ova.promptlab.voice_m1": true,
+  "ova.promptlab.voice_m2": true,
+  "ova.promptlab.voice_m3": true,
+  "ova.promptlab.voice_m4": true,
+  "ova.promptlab.voice_m5": true,
+  "ova.promptlab.welcome_audio": true,
+  "ova.promptlab.welcome_desc": true,
+  "ova.promptlab.welcome_title": true,
   "ova.quiz.all_correct_hint": true,
   "ova.quiz.answer_prompt": true,
   "ova.quiz.check_answers": true,
@@ -6957,6 +8416,7 @@ const translationKeySet: Record<string, true> = {
   "ova.quiz.put_to_test": true,
   "ova.quiz.result_label": true,
   "ova.risksim.back_stars": true,
+  "ova.risksim.badge": true,
   "ova.risksim.click_hint": true,
   "ova.risksim.completion_desc": true,
   "ova.risksim.completion_title": true,
@@ -6972,11 +8432,16 @@ const translationKeySet: Record<string, true> = {
   "ova.risksim.icon_justice": true,
   "ova.risksim.icon_privacy": true,
   "ova.risksim.icon_transparency": true,
+  "ova.risksim.learning_obj_1": true,
+  "ova.risksim.learning_obj_2": true,
+  "ova.risksim.learning_obj_3": true,
+  "ova.risksim.learning_obj_4": true,
   "ova.risksim.mark_complete": true,
   "ova.risksim.modal_button": true,
   "ova.risksim.module_label": true,
   "ova.risksim.section_bias": true,
   "ova.risksim.section_mitigations": true,
+  "ova.risksim.start_btn": true,
   "ova.risksim.subtitle": true,
   "ova.risksim.tab_content": true,
   "ova.risksim.tab_game": true,
@@ -6984,6 +8449,10 @@ const translationKeySet: Record<string, true> = {
   "ova.risksim.welcome_voice": true,
   "ova.tour.description": true,
   "ova.tour.interactive_badge": true,
+  "ova.tour.learning_obj_1": true,
+  "ova.tour.learning_obj_2": true,
+  "ova.tour.learning_obj_3": true,
+  "ova.tour.learning_obj_4": true,
   "ova.tour.start_btn": true,
   "ova.tour.title": true,
   "ova.tour.valerio_quiz_text": true,
@@ -7073,6 +8542,7 @@ const translationKeySet: Record<string, true> = {
   "profile.name_label": true,
   "profile.name_placeholder": true,
   "profile.no_email": true,
+  "profile.password_email_sent": true,
   "profile.personal_info": true,
   "profile.phone_error_digits": true,
   "profile.phone_error_format": true,
@@ -7118,6 +8588,19 @@ const translationKeySet: Record<string, true> = {
   "reminder.pending_challenge_msg": true,
   "reminder.pending_challenge_title": true,
   "reminder.topic_context": true,
+  "reset.back_to_login": true,
+  "reset.confirm_password": true,
+  "reset.error.failed": true,
+  "reset.error.link_invalid": true,
+  "reset.error.passwords_mismatch": true,
+  "reset.new_password": true,
+  "reset.saving": true,
+  "reset.submit": true,
+  "reset.subtitle": true,
+  "reset.success_message": true,
+  "reset.success_title": true,
+  "reset.title": true,
+  "reset.toggle_password": true,
   "route.accept_challenge": true,
   "route.continue": true,
   "route.continue_learning": true,
@@ -7133,6 +8616,20 @@ const translationKeySet: Record<string, true> = {
   "route.start": true,
   "route.take_exam": true,
   "route.view_certificate": true,
+  "scanner.age_12_14": true,
+  "scanner.age_15_17": true,
+  "scanner.age_6_8": true,
+  "scanner.age_9_11": true,
+  "scanner.error_analysis": true,
+  "scanner.stage_processing": true,
+  "scanner.stage_reading": true,
+  "scanner.subject_art": true,
+  "scanner.subject_english": true,
+  "scanner.subject_history": true,
+  "scanner.subject_language": true,
+  "scanner.subject_math": true,
+  "scanner.subject_science": true,
+  "scanner.summary_title": true,
   "seo.automation.desc": true,
   "seo.automation.title": true,
   "seo.consultoria.desc": true,
@@ -7168,7 +8665,6 @@ const translationKeySet: Record<string, true> = {
   "seo.vak_simple.desc": true,
   "seo.vak_simple.title": true,
   "sidebar.badges": true,
-  "sidebar.toggle_collapse_tip": true,
   "sidebar.badges_count": true,
   "sidebar.badges_view_all": true,
   "sidebar.certificate": true,
@@ -7177,6 +8673,7 @@ const translationKeySet: Record<string, true> = {
   "sidebar.collapse_btn": true,
   "sidebar.completed": true,
   "sidebar.completed_pct": true,
+  "sidebar.continue_where": true,
   "sidebar.daily_progress": true,
   "sidebar.days": true,
   "sidebar.expand": true,
@@ -7195,6 +8692,7 @@ const translationKeySet: Record<string, true> = {
   "sidebar.modules": true,
   "sidebar.new": true,
   "sidebar.panel_aria": true,
+  "sidebar.parent_dashboard": true,
   "sidebar.pending": true,
   "sidebar.plan_elite": true,
   "sidebar.points": true,
@@ -7214,10 +8712,48 @@ const translationKeySet: Record<string, true> = {
   "sidebar.resources": true,
   "sidebar.resources_tooltip": true,
   "sidebar.streak_days": true,
+  "sidebar.streak_details": true,
   "sidebar.streak_risk": true,
   "sidebar.streak_study_today": true,
   "sidebar.student_premium": true,
   "sidebar.subjects": true,
+  "sidebar.toggle_collapse_tip": true,
+  "sidebar.zone_avance": true,
+  "sidebar.zone_modules": true,
+  "sidebar.zone_tools": true,
+  "signup.button.register": true,
+  "signup.button.registering": true,
+  "signup.error.email_already_registered": true,
+  "signup.error.email_required": true,
+  "signup.error.first_name_required": true,
+  "signup.error.invalid_email": true,
+  "signup.error.last_name_required": true,
+  "signup.error.password_min_length": true,
+  "signup.error.password_required": true,
+  "signup.error.phone_invalid": true,
+  "signup.error.registration_failed": true,
+  "signup.error.username_required": true,
+  "signup.field.email": true,
+  "signup.field.first_name": true,
+  "signup.field.last_name": true,
+  "signup.field.password": true,
+  "signup.field.phone": true,
+  "signup.field.username": true,
+  "signup.info.password_min_length": true,
+  "signup.password_fair": true,
+  "signup.password_good": true,
+  "signup.password_strong": true,
+  "signup.password_very_strong": true,
+  "signup.password_weak": true,
+  "signup.placeholder.email": true,
+  "signup.placeholder.first_name": true,
+  "signup.placeholder.last_name": true,
+  "signup.placeholder.password": true,
+  "signup.placeholder.phone": true,
+  "signup.placeholder.username": true,
+  "signup.step_1_info": true,
+  "signup.step_2_security": true,
+  "signup.success.registration_complete": true,
   "smartboard.achievements": true,
   "smartboard.active": true,
   "smartboard.active_connection": true,
@@ -7246,6 +8782,7 @@ const translationKeySet: Record<string, true> = {
   "smartboard.clear": true,
   "smartboard.click_select": true,
   "smartboard.close": true,
+  "smartboard.close_reminder": true,
   "smartboard.close_report": true,
   "smartboard.complete_btn": true,
   "smartboard.completed": true,
@@ -7255,6 +8792,8 @@ const translationKeySet: Record<string, true> = {
   "smartboard.connected_ialab": true,
   "smartboard.copy": true,
   "smartboard.current_streak": true,
+  "smartboard.dani_fab_aria": true,
+  "smartboard.dani_reminder_open": true,
   "smartboard.date": true,
   "smartboard.days": true,
   "smartboard.diagnostico_vak": true,
@@ -7274,6 +8813,8 @@ const translationKeySet: Record<string, true> = {
   "smartboard.error_load_subjects": true,
   "smartboard.error_load_vak": true,
   "smartboard.general": true,
+  "smartboard.habeas_parent_email_invalid": true,
+  "smartboard.habeas_parent_email_required": true,
   "smartboard.ialab_desc": true,
   "smartboard.ialab_pro_desc": true,
   "smartboard.ialab_pro_title": true,
@@ -7527,11 +9068,21 @@ const translationKeySet: Record<string, true> = {
   "streak.tier_encendida": true,
   "streak.tier_imparable": true,
   "streak.xp": true,
-  "time_avg": true,
-  "time_days_active": true,
-  "time_title": true,
-  "time_today": true,
-  "time_week": true,
+  "streak.you": true,
+  "study_groups.create": true,
+  "study_groups.create_first": true,
+  "study_groups.form_desc_placeholder": true,
+  "study_groups.form_name_placeholder": true,
+  "study_groups.join": true,
+  "study_groups.leave": true,
+  "study_groups.no_groups": true,
+  "study_groups.subtitle": true,
+  "study_groups.title": true,
+  time_avg: true,
+  time_days_active: true,
+  time_title: true,
+  time_today: true,
+  time_week: true,
   "vak.ui.accept_and_continue": true,
   "vak.ui.accept_data_policy": true,
   "vak.ui.accessibility_label": true,
@@ -7709,6 +9260,7 @@ const translationKeySet: Record<string, true> = {
   "video.unavailable_title": true,
   "video.unmute": true,
   "welcome.back_btn": true,
+  "welcome.back_to_signin": true,
   "welcome.badge": true,
   "welcome.benefit_cert": true,
   "welcome.benefit_personalized": true,
