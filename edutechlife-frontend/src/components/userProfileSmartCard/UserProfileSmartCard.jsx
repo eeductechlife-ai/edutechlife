@@ -1,6 +1,7 @@
 import { Icon } from "../../utils/iconMapping.jsx";
 import { Card, CardContent } from "../ui/card-simple";
 import { resolveAvatarUrl } from "./resolveAvatar";
+import { shouldDisableSave } from "./profileSaveLogic";
 import { useProfileData } from "./useProfileData";
 import ProfileInfoSection from "./components/ProfileInfoSection";
 import ProfileProgressSection from "./components/ProfileProgressSection";
@@ -128,7 +129,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
             <div className="mb-5">
               <button
                 onClick={handleSaveAll}
-                disabled={isSaving || (phoneError && tempValue.length > 0)}
+                disabled={shouldDisableSave({ isSaving })}
                 className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow-md hover:opacity-90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSaving ? (

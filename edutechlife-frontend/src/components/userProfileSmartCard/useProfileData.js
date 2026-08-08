@@ -3,6 +3,7 @@ import { useAuthIdentity } from "../../hooks/useAuthIdentity";
 import { supabase } from "../../lib/supabase";
 import { useProgressContext } from "../../context/ProgressContext";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { normalizePhone } from "./profileSaveLogic";
 
 export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
   const { t, locale } = useTranslation();
@@ -153,14 +154,27 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
         const name =
           [p.first_name, p.last_name].filter(Boolean).join(" ") || clerkName;
         // phone_number puede no existir en la tabla users (esquema variable);
-        // consultarlo por separado y tolerar su ausencia.
+        // consultarlo por separado y tolerar su ausencia. Respaldo: profiles.phone.
         try {
-          const { data: phoneRow } = await supabase
+          const { data: phoneRow, error: phoneErr } = await supabase
             .from("users")
             .select("phone_number")
             .eq("id", userId)
             .maybeSingle();
           phone = phoneRow?.phone_number || "";
+          if (
+            (phoneErr || !phone) &&
+            /column.*does not exist|PGRST204|42703/i.test(
+              phoneErr?.message || "",
+            )
+          ) {
+            const { data: profRow } = await supabase
+              .from("profiles")
+              .select("phone")
+              .eq("id", userId)
+              .maybeSingle();
+            phone = profRow?.phone || "";
+          }
         } catch {
           phone = "";
         }
@@ -254,7 +268,7 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
 
   const handleTempChange = (field, value) => {
     if (field === "phone") {
-      const digits = value.replace(/\D/g, "");
+      const digits = normalizePhone(value);
       setTempValue(digits);
       setPhoneError(validatePhone(digits));
       setPendingChanges((prev) => ({ ...prev, phone: digits }));
@@ -295,18 +309,36 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
 
       // 2. Guardar el TELÉFONO por separado y de forma tolerante: la columna
       //    phone_number puede no existir en el esquema real de users, en cuyo
-      //    caso se omite sin romper el guardado del nombre.
+      //    caso se intenta en profiles.phone (poblada por el trigger de auth).
       if (pendingChanges.phone !== profileData.phone) {
+        const phone = normalizePhone(pendingChanges.phone);
         try {
-          await supabase
+          const { error } = await supabase
             .from("users")
             .update({
-              phone_number: pendingChanges.phone,
+              phone_number: phone,
               updated_at: new Date().toISOString(),
             })
             .eq("id", userId);
+          if (
+            error &&
+            !/column.*does not exist|PGRST204|42703/i.test(error.message || "")
+          ) {
+            throw new Error(error.message);
+          }
         } catch (phoneErr) {
-          console.warn("phone_number column unavailable:", phoneErr.message);
+          // Columna phone_number ausente en users → intentar en profiles.phone
+          try {
+            await supabase
+              .from("profiles")
+              .update({ phone, updated_at: new Date().toISOString() })
+              .eq("id", userId);
+          } catch (profilesErr) {
+            console.warn(
+              "phone_number/profile.phone unavailable:",
+              profilesErr.message,
+            );
+          }
         }
       }
 
