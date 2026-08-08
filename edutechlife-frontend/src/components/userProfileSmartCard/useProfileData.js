@@ -108,7 +108,7 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
   const formatDate = (date) => {
     if (!date) return t("profile.na");
     return new Date(date).toLocaleDateString(
-      locale === "en" ? "en-US" : "es-CO",
+      { en: "en-US", pt: "pt-BR", es: "es-CO" }[locale] || "es-CO",
       { day: "numeric", month: "short", year: "numeric" },
     );
   };
