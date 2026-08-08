@@ -2632,7 +2632,7 @@
   "ialab.reactive_prompt.open_tools": "Abrir Ferramentas para a Criação de Prompts",
   "ialab.reactive_prompt.input_placeholder": "Descreva brevemente sua ideia para um prompt...",
   "ialab.reactive_prompt.chars": "{count} / 500 caracteres",
-  "ialab.reactive_prompt.min_chars": "Mínimo 3 caracteres",
+  "ialab.reactive_prompt.min_chars": "Mínimo de 3 caracteres",
   "ialab.reactive_prompt.generating": "Analisando e Melhorando...",
   "ialab.reactive_prompt.generate": "Gerar Prompt Profissional",
   "ialab.reactive_prompt.live_analysis": "Análise ao Vivo",
