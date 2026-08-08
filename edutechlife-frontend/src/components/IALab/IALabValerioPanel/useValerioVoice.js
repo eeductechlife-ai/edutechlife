@@ -1,43 +1,51 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect } from "react";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 const MAX_NO_SPEECH_RETRIES = 3;
 
-export function useValerioVoice(isOpen, onTranscript, locale = 'es') {
-  const recognitionLang = locale === 'en' ? 'en-US' : 'es-CO';
+export function useValerioVoice(isOpen, onTranscript, locale = "es") {
+  const { t } = useTranslation();
+  const recognitionLang = locale === "en" ? "en-US" : "es-CO";
   const [isListening, setIsListening] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(true);
-  const [speechError, setSpeechError] = useState('');
+  const [speechError, setSpeechError] = useState("");
   const userCancelRef = useRef(false);
   const recognitionRef = useRef(null);
-  const accumulatedRef = useRef('');
+  const accumulatedRef = useRef("");
   const noSpeechRetryRef = useRef(0);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const hasAPI = !!window.SpeechRecognition || !!window.webkitSpeechRecognition;
+    if (typeof window === "undefined") return;
+    const hasAPI =
+      !!window.SpeechRecognition || !!window.webkitSpeechRecognition;
     setSpeechSupported(hasAPI);
     if (!hasAPI) {
-      setSpeechError('Tu navegador no soporta reconocimiento de voz');
+      setSpeechError(t("ialab.valerio.voice.not_supported"));
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (!isOpen && recognitionRef.current) {
-      try { recognitionRef.current.abort(); } catch (e) {}
-      try { recognitionRef.current.stop(); } catch (e) {}
+      try {
+        recognitionRef.current.abort();
+      } catch (e) {}
+      try {
+        recognitionRef.current.stop();
+      } catch (e) {}
       recognitionRef.current = null;
       setIsListening(false);
     }
   }, [isOpen]);
 
   const startRecognition = useCallback(() => {
-    setSpeechError('');
+    setSpeechError("");
     userCancelRef.current = false;
     noSpeechRetryRef.current = 0;
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      setSpeechError('Tu navegador no soporta reconocimiento de voz');
+      setSpeechError(t("ialab.valerio.voice.not_supported"));
       setSpeechSupported(false);
       return;
     }
@@ -51,15 +59,15 @@ export function useValerioVoice(isOpen, onTranscript, locale = 'es') {
 
       recognition.onstart = () => {
         setIsListening(true);
-        setSpeechError('');
+        setSpeechError("");
       };
 
       recognition.onresult = (event) => {
-        let newText = '';
+        let newText = "";
         for (let i = event.resultIndex; i < event.results.length; i++) {
           newText += event.results[i][0].transcript;
         }
-        onTranscript((accumulatedRef.current + ' ' + newText).trim());
+        onTranscript((accumulatedRef.current + " " + newText).trim());
       };
 
       recognition.onend = () => {
@@ -68,17 +76,20 @@ export function useValerioVoice(isOpen, onTranscript, locale = 'es') {
       };
 
       recognition.onerror = (event) => {
-        if (event.error === 'not-allowed') {
-          const isHTTP = window.location.protocol !== 'https:';
+        if (event.error === "not-allowed") {
+          const isHTTP = window.location.protocol !== "https:";
           if (isHTTP) {
-            setSpeechError('Se requiere una conexión segura (HTTPS) para usar el micrófono. Activa SSL en edutechlife.co');
+            setSpeechError(t("ialab.valerio.voice.https_required"));
           } else {
-            setSpeechError('Permiso de micrófono denegado. Permite el acceso en la configuración del navegador.');
+            setSpeechError(t("ialab.valerio.voice.permission_denied"));
           }
           setIsListening(false);
           recognitionRef.current = null;
-        } else if (event.error === 'no-speech') {
-          if (!userCancelRef.current && noSpeechRetryRef.current < MAX_NO_SPEECH_RETRIES) {
+        } else if (event.error === "no-speech") {
+          if (
+            !userCancelRef.current &&
+            noSpeechRetryRef.current < MAX_NO_SPEECH_RETRIES
+          ) {
             noSpeechRetryRef.current += 1;
             setTimeout(() => {
               if (!userCancelRef.current) {
@@ -101,14 +112,14 @@ export function useValerioVoice(isOpen, onTranscript, locale = 'es') {
               }
             }, 100);
           } else {
-            setSpeechError('No se detectó audio. Verifica tu micrófono e intenta de nuevo.');
+            setSpeechError(t("ialab.valerio.voice.no_speech"));
             setIsListening(false);
             recognitionRef.current = null;
             noSpeechRetryRef.current = 0;
           }
-        } else if (event.error === 'aborted') {
+        } else if (event.error === "aborted") {
         } else {
-          setSpeechError('Error: ' + event.error);
+          setSpeechError(t("ialab.valerio.voice.error", { code: event.error }));
           setIsListening(false);
           recognitionRef.current = null;
         }
@@ -117,27 +128,33 @@ export function useValerioVoice(isOpen, onTranscript, locale = 'es') {
       recognition.start();
       recognitionRef.current = recognition;
     } catch (e) {
-      setSpeechError('Error al iniciar reconocimiento: ' + e.message);
+      setSpeechError(
+        t("ialab.valerio.voice.start_error", { message: e.message }),
+      );
       setIsListening(false);
     }
-  }, [onTranscript]);
+  }, [onTranscript, t]);
 
   const stopRecognition = useCallback(() => {
     userCancelRef.current = true;
     if (recognitionRef.current) {
-      try { recognitionRef.current.abort(); } catch (e) {}
-      try { recognitionRef.current.stop(); } catch (e) {}
+      try {
+        recognitionRef.current.abort();
+      } catch (e) {}
+      try {
+        recognitionRef.current.stop();
+      } catch (e) {}
       recognitionRef.current = null;
     }
     setIsListening(false);
-    setSpeechError('');
+    setSpeechError("");
   }, []);
 
   const toggleVoice = useCallback(() => {
     if (isListening) {
       stopRecognition();
     } else {
-      accumulatedRef.current = '';
+      accumulatedRef.current = "";
       startRecognition();
     }
   }, [isListening, startRecognition, stopRecognition]);

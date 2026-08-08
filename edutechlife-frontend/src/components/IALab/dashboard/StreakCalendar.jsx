@@ -1,10 +1,12 @@
-import { useMemo } from 'react';
-import { useIALabStore } from '../../../store/ialabStore';
-import { Icon } from '../../../utils/iconMapping.jsx';
+import { useMemo } from "react";
+import { useIALabStore } from "../../../store/ialabStore";
+import { Icon } from "../../../utils/iconMapping.jsx";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 function StreakCalendar() {
-  const lastActivityDate = useIALabStore(s => s.lastActivityDate);
-  const streak = useIALabStore(s => s.streak);
+  const { t } = useTranslation();
+  const lastActivityDate = useIALabStore((s) => s.lastActivityDate);
+  const streak = useIALabStore((s) => s.streak);
 
   const days = useMemo(() => {
     const result = [];
@@ -16,15 +18,18 @@ function StreakCalendar() {
     for (let i = 27; i >= 0; i--) {
       const date = new Date(now);
       date.setDate(now.getDate() - i);
-      let status = 'inactive';
+      let status = "inactive";
       if (last) {
         const diff = Math.round((last - date) / 86400000);
         if (diff >= 0 && diff < streak) {
-          status = 'active';
+          status = "active";
         }
       }
       if (date.toDateString() === now.toDateString()) {
-        status = last && last.toDateString() === now.toDateString() ? 'today' : 'inactive';
+        status =
+          last && last.toDateString() === now.toDateString()
+            ? "today"
+            : "inactive";
       }
       result.push({ date, status });
     }
@@ -32,13 +37,18 @@ function StreakCalendar() {
   }, [lastActivityDate, streak]);
 
   const dotClass = (status) => {
-    const base = 'w-3 h-3 rounded-full ';
-    if (status === 'active') return base + 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.4)]';
-    if (status === 'today') return base + 'bg-corporate ring-2 ring-corporate/30 shadow-[0_0_6px_rgba(0,188,212,0.4)]';
-    return base + 'bg-slate-200';
+    const base = "w-3 h-3 rounded-full ";
+    if (status === "active")
+      return base + "bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.4)]";
+    if (status === "today")
+      return (
+        base +
+        "bg-corporate ring-2 ring-corporate/30 shadow-[0_0_6px_rgba(0,188,212,0.4)]"
+      );
+    return base + "bg-slate-200";
   };
 
-  const dayLabels = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+  const dayLabels = ["D", "L", "M", "M", "J", "V", "S"];
 
   return (
     <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-100">
@@ -47,13 +57,22 @@ function StreakCalendar() {
           <Icon name="fa-fire" className="w-4 h-4 text-orange-500" />
         </div>
         <div>
-          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Racha</p>
-          <p className="text-lg font-bold text-petroleum">{streak || 0} días</p>
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+            {t("ialab.streak_calendar.title")}
+          </p>
+          <p className="text-lg font-bold text-petroleum">
+            {t("ialab.streak_calendar.days", { count: streak || 0 })}
+          </p>
         </div>
       </div>
       <div className="grid grid-cols-7 gap-1 mb-1">
         {dayLabels.map((d, i) => (
-          <span key={i} className="text-[8px] text-slate-400 text-center font-medium">{d}</span>
+          <span
+            key={i}
+            className="text-[8px] text-slate-400 text-center font-medium"
+          >
+            {d}
+          </span>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-1.5">
@@ -61,7 +80,16 @@ function StreakCalendar() {
           <div
             key={i}
             className={dotClass(d.status)}
-            aria-label={`${d.date.toLocaleDateString('es-ES')} - ${d.status === 'active' ? 'Activo' : d.status === 'today' ? 'Hoy' : 'Inactivo'}`}
+            aria-label={t("ialab.streak_calendar.day_aria", {
+              date: d.date.toLocaleDateString("es-ES"),
+              status: t(
+                d.status === "active"
+                  ? "ialab.streak_calendar.active"
+                  : d.status === "today"
+                    ? "ialab.streak_calendar.today"
+                    : "ialab.streak_calendar.inactive",
+              ),
+            })}
           />
         ))}
       </div>

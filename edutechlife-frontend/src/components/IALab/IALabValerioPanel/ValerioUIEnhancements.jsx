@@ -10,6 +10,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Icon } from "../../../utils/iconMapping.jsx";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 /**
  * Toast Notification Component
@@ -107,7 +108,8 @@ export const ConversationSkeleton = () => (
  * Copy to Clipboard Button
  * Botón elegante para copiar respuestas
  */
-export const CopyButton = ({ text, label = "Copiar" }) => {
+export const CopyButton = ({ text, label }) => {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -128,10 +130,12 @@ export const CopyButton = ({ text, label = "Copiar" }) => {
           ? "bg-green-500 text-white"
           : "bg-slate-200 text-slate-600 hover:bg-slate-300"
       }`}
-      title="Copiar al portapapeles"
+      title={t("ialab.valerio.copy.title")}
     >
       <Icon name={copied ? "fa-check" : "fa-copy"} className="text-xs mr-1" />
-      {copied ? "¡Copiado!" : label}
+      {copied
+        ? t("ialab.valerio.copy.copied")
+        : (label ?? t("ialab.valerio.copy.label"))}
     </button>
   );
 };
@@ -140,28 +144,32 @@ export const CopyButton = ({ text, label = "Copiar" }) => {
  * Typing Indicator
  * Muestra cuando MAX está escribiendo
  */
-export const TypingIndicator = ({ label = "MAX escribiendo" }) => (
-  <div className="flex items-center gap-1 text-xs text-slate-500">
-    <span>{label}</span>
-    <span className="flex gap-1">
-      <span className="w-1 h-1 bg-slate-400 rounded-full animate-bounce" />
-      <span
-        className="w-1 h-1 bg-slate-400 rounded-full animate-bounce"
-        style={{ animationDelay: "0.2s" }}
-      />
-      <span
-        className="w-1 h-1 bg-slate-400 rounded-full animate-bounce"
-        style={{ animationDelay: "0.4s" }}
-      />
-    </span>
-  </div>
-);
+export const TypingIndicator = ({ label }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="flex items-center gap-1 text-xs text-slate-500">
+      <span>{label ?? t("ialab.valerio.typing.label")}</span>
+      <span className="flex gap-1">
+        <span className="w-1 h-1 bg-slate-400 rounded-full animate-bounce" />
+        <span
+          className="w-1 h-1 bg-slate-400 rounded-full animate-bounce"
+          style={{ animationDelay: "0.2s" }}
+        />
+        <span
+          className="w-1 h-1 bg-slate-400 rounded-full animate-bounce"
+          style={{ animationDelay: "0.4s" }}
+        />
+      </span>
+    </div>
+  );
+};
 
 /**
  * Message Actions Bar
  * Acciones por mensaje (copiar, reaccionar, etc)
  */
 export const MessageActionsBar = ({ messageContent, onReact, onExport }) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -170,7 +178,7 @@ export const MessageActionsBar = ({ messageContent, onReact, onExport }) => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="text-xs px-2 py-1 bg-slate-200 text-slate-600 rounded hover:bg-slate-300 transition-colors"
-        title="Más opciones"
+        title={t("ialab.valerio.message_actions.more")}
       >
         <Icon name="fa-ellipsis" className="text-xs" />
       </button>
@@ -185,7 +193,7 @@ export const MessageActionsBar = ({ messageContent, onReact, onExport }) => {
             className="block w-full text-left px-2 py-1 hover:bg-slate-100"
           >
             <Icon name="fa-thumbs-up" className="text-xs mr-1" />
-            Útil
+            {t("ialab.valerio.message_actions.useful")}
           </button>
           <button
             onClick={() => {
@@ -195,7 +203,7 @@ export const MessageActionsBar = ({ messageContent, onReact, onExport }) => {
             className="block w-full text-left px-2 py-1 hover:bg-slate-100"
           >
             <Icon name="fa-download" className="text-xs mr-1" />
-            Descargar
+            {t("ialab.valerio.message_actions.download")}
           </button>
         </div>
       )}
@@ -207,14 +215,19 @@ export const MessageActionsBar = ({ messageContent, onReact, onExport }) => {
  * Export Conversation Helper
  * Exporta conversaciones a varios formatos
  */
-export const exportConversation = (conversation, format = "txt") => {
+export const exportConversation = (
+  conversation,
+  format = "txt",
+  t = (key, params) => key,
+) => {
   let content = "";
   const timestamp = new Date().toLocaleString("es-CO");
 
   if (format === "txt") {
-    content = `CONVERSACIÓN CON VALERIO\nFecha: ${timestamp}\n\n`;
+    content = `${t("ialab.valerio.export.header", { timestamp })}\n\n`;
     conversation.forEach((msg) => {
-      const sender = msg.type === "user" ? "Tú" : "MAX";
+      const sender =
+        msg.type === "user" ? t("ialab.valerio.export.you") : "MAX";
       content += `[${sender}]\n${msg.content}\n\n`;
     });
   } else if (format === "json") {
@@ -224,7 +237,7 @@ export const exportConversation = (conversation, format = "txt") => {
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Conversación con MAX</title>
+  <title>${t("ialab.valerio.export.html_title")}</title>
   <style>
     body { font-family: sans-serif; max-width: 800px; margin: 20px; }
     .message { margin: 10px 0; padding: 10px; border-radius: 8px; }
@@ -234,13 +247,13 @@ export const exportConversation = (conversation, format = "txt") => {
   </style>
 </head>
 <body>
-  <h1>Conversación con MAX</h1>
+  <h1>${t("ialab.valerio.export.html_title")}</h1>
   <p class="timestamp">${timestamp}</p>
   ${conversation
     .map(
       (msg) => `
   <div class="message ${msg.type}">
-    <strong>${msg.type === "user" ? "Tú" : "MAX"}:</strong><br>
+    <strong>${msg.type === "user" ? t("ialab.valerio.export.you") : "MAX"}:</strong><br>
     ${msg.content.replace(/\n/g, "<br>")}
   </div>
   `,

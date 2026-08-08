@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { safeStorage } from "../../utils/storage";
 import { useIALabStore } from "../../store/ialabStore";
+import { useTranslation } from "../../i18n/I18nProvider";
 import LearningPaceSelector from "./LearningPaceSelector";
 
 const TOUR_KEY = "ialab-welcome-tour-completed";
@@ -19,38 +20,33 @@ const VISIT_COUNT_KEY = "ialab-visit-count";
 const STEPS = [
   {
     icon: Sparkles,
-    title: "¡Bienvenido a IA Lab Academic!",
-    description:
-      "Tu ruta hacia el dominio de la IA comienza aquí. En 5 módulos progresivos aprenderás desde prompts básicos hasta ética avanzada.",
-    highlight: "5 Módulos · 28-40 horas · Certificado profesional",
+    title: "ialab.tour.welcome_step1_title",
+    description: "ialab.tour.welcome_step1_desc",
+    highlight: "ialab.tour.welcome_step1_highlight",
   },
   {
     icon: BookOpen,
-    title: "Tu ruta de aprendizaje",
-    description:
-      "Cada módulo tiene contenido, actividades, un desafío y un examen. Debes obtener 80% para desbloquear el siguiente módulo.",
-    highlight: "Artesano → Arquitecto → Detective → Alquimista → Guardián",
+    title: "ialab.tour.welcome_step2_title",
+    description: "ialab.tour.welcome_step2_desc",
+    highlight: "ialab.tour.welcome_step2_highlight",
   },
   {
     icon: Trophy,
-    title: "Gamificación que motiva",
-    description:
-      "Gana XP por cada actividad, mantén rachas diarias y desbloquea badges. Tu progreso es tuyo y se guarda automáticamente.",
-    highlight: "XP · Rachas · Badges · Certificado final",
+    title: "ialab.tour.welcome_step3_title",
+    description: "ialab.tour.welcome_step3_desc",
+    highlight: "ialab.tour.welcome_step3_highlight",
   },
   {
     icon: MessageCircle,
-    title: "MAX, tu coach IA",
-    description:
-      "Un tutor personal disponible 24/7. Pregúntale cualquier duda sobre los módulos, prompts, herramientas o ética.",
-    highlight: "Disponible en todos los módulos",
+    title: "ialab.tour.welcome_step4_title",
+    description: "ialab.tour.welcome_step4_desc",
+    highlight: "ialab.tour.welcome_step4_highlight",
   },
   {
     icon: Zap,
-    title: "¡Estás listo para empezar!",
-    description:
-      "Comienza con el Módulo 1 (Artesano Digital) y avanza a tu ritmo. Recuerda: cada pequeño paso te acerca a ser un Guardián Digital.",
-    highlight: "Tu primer módulo te espera",
+    title: "ialab.tour.welcome_step5_title",
+    description: "ialab.tour.welcome_step5_desc",
+    highlight: "ialab.tour.welcome_step5_highlight",
   },
 ];
 
@@ -96,6 +92,7 @@ function hasExistingProgress(store) {
 }
 
 export default function WelcomeTour({ forceShow = false, onComplete }) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState(0);
   const moduleProgress = useIALabStore((s) => s.moduleProgress);
@@ -221,7 +218,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
             color: "var(--ialab-petroleum, #004B63)",
             boxShadow: "0 2px 8px rgba(0, 75, 99, 0.15)",
           }}
-          aria-label="Cerrar tour de bienvenida"
+          aria-label={t("ialab.tour.welcome_close_aria")}
         >
           <X className="w-4 h-4" />
         </button>
@@ -267,14 +264,14 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
               fontFamily: "'Montserrat', sans-serif",
             }}
           >
-            {currentStep.title}
+            {t(currentStep.title)}
           </h2>
           <p
             id="tour-description"
             className="text-sm leading-relaxed mb-4 text-center"
             style={{ color: "#334155" }}
           >
-            {currentStep.description}
+            {t(currentStep.description)}
           </p>
           {isLast ? (
             <div className="mb-6">
@@ -293,7 +290,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
                 className="text-xs font-semibold"
                 style={{ color: "var(--ialab-teal, #2596be)" }}
               >
-                {currentStep.highlight}
+                {t(currentStep.highlight)}
               </p>
             </div>
           )}
@@ -301,7 +298,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
           <div
             className="flex items-center justify-center gap-1.5 mb-6"
             role="tablist"
-            aria-label="Progreso del tour"
+            aria-label={t("ialab.tour.welcome_progress_aria")}
           >
             {STEPS.map((_, i) => (
               <button
@@ -309,7 +306,10 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
                 type="button"
                 role="tab"
                 aria-selected={i === step}
-                aria-label={`Paso ${i + 1} de ${STEPS.length}`}
+                aria-label={t("ialab.tour.welcome_step_aria", {
+                  step: i + 1,
+                  total: STEPS.length,
+                })}
                 onClick={() => setStep(i)}
                 className="rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                 style={{
@@ -335,7 +335,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
               style={{ color: "var(--ialab-petroleum, #004B63)" }}
             >
               <ChevronLeft className="w-4 h-4" aria-hidden="true" />
-              Atrás
+              {t("ialab.tour.welcome_back")}
             </button>
 
             <button
@@ -348,7 +348,9 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
                 boxShadow: "0 6px 18px rgba(0, 75, 99, 0.35)",
               }}
             >
-              {isLast ? "¡Empezar!" : "Siguiente"}
+              {isLast
+                ? t("ialab.tour.welcome_start")
+                : t("ialab.tour.welcome_next")}
               {!isLast && (
                 <ChevronRight className="w-4 h-4" aria-hidden="true" />
               )}
@@ -363,7 +365,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
               className="w-full mt-3 text-xs transition-colors focus-visible:outline-none focus-visible:underline"
               style={{ color: "#64748B" }}
             >
-              Saltar tour
+              {t("ialab.tour.welcome_skip")}
             </button>
           )}
         </div>

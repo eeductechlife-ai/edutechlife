@@ -1,39 +1,47 @@
-import { AlertCircle, RefreshCw, WifiOff, ServerCrash, Lock, HelpCircle } from "lucide-react";
+import {
+  AlertCircle,
+  RefreshCw,
+  WifiOff,
+  ServerCrash,
+  Lock,
+  HelpCircle,
+} from "lucide-react";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const ERROR_PRESETS = {
   network: {
     icon: WifiOff,
-    title: "Sin conexión a internet",
-    message: "Revisa tu conexión y vuelve a intentarlo. Tu progreso está guardado localmente.",
-    actionLabel: "Reintentar",
+    title: "ialab.error_state.network_title",
+    message: "ialab.error_state.network_message",
+    actionLabel: "ialab.error_state.network_action",
     tone: "amber",
   },
   server: {
     icon: ServerCrash,
-    title: "Nuestro servidor está descansando",
-    message: "Estamos trabajando en resolverlo. Intenta de nuevo en unos segundos.",
-    actionLabel: "Reintentar",
+    title: "ialab.error_state.server_title",
+    message: "ialab.error_state.server_message",
+    actionLabel: "ialab.error_state.server_action",
     tone: "red",
   },
   auth: {
     icon: Lock,
-    title: "Tu sesión expiró",
-    message: "Por seguridad, cerramos tu sesión. Inicia sesión de nuevo para continuar donde lo dejaste.",
-    actionLabel: "Iniciar sesión",
+    title: "ialab.error_state.auth_title",
+    message: "ialab.error_state.auth_message",
+    actionLabel: "ialab.error_state.auth_action",
     tone: "blue",
   },
   notFound: {
     icon: HelpCircle,
-    title: "No encontramos lo que buscas",
-    message: "Este contenido no existe o fue movido. Vuelve al panel principal.",
-    actionLabel: "Ir al panel",
+    title: "ialab.error_state.not_found_title",
+    message: "ialab.error_state.not_found_message",
+    actionLabel: "ialab.error_state.not_found_action",
     tone: "slate",
   },
   generic: {
     icon: AlertCircle,
-    title: "Algo no salió como esperábamos",
-    message: "Puedes intentarlo de nuevo o contactar a MAX si el problema persiste.",
-    actionLabel: "Reintentar",
+    title: "ialab.error_state.generic_title",
+    message: "ialab.error_state.generic_message",
+    actionLabel: "ialab.error_state.generic_action",
     tone: "red",
   },
 };
@@ -72,10 +80,26 @@ const TONE_CLASSES = {
 export function detectErrorType(error) {
   if (!error) return "generic";
   const message = String(error?.message || error).toLowerCase();
-  if (message.includes("network") || message.includes("fetch") || message.includes("offline")) return "network";
-  if (message.includes("401") || message.includes("unauthorized") || message.includes("jwt")) return "auth";
-  if (message.includes("404") || message.includes("not found")) return "notFound";
-  if (message.includes("500") || message.includes("503") || message.includes("server")) return "server";
+  if (
+    message.includes("network") ||
+    message.includes("fetch") ||
+    message.includes("offline")
+  )
+    return "network";
+  if (
+    message.includes("401") ||
+    message.includes("unauthorized") ||
+    message.includes("jwt")
+  )
+    return "auth";
+  if (message.includes("404") || message.includes("not found"))
+    return "notFound";
+  if (
+    message.includes("500") ||
+    message.includes("503") ||
+    message.includes("server")
+  )
+    return "server";
   return "generic";
 }
 
@@ -91,14 +115,15 @@ export default function ErrorState({
   compact = false,
   className = "",
 }) {
+  const { t } = useTranslation();
   const detectedType = type || detectErrorType(error);
   const preset = ERROR_PRESETS[detectedType] || ERROR_PRESETS.generic;
   const tone = TONE_CLASSES[preset.tone];
   const Icon = preset.icon;
 
-  const finalTitle = title || preset.title;
-  const finalMessage = message || preset.message;
-  const finalAction = actionLabel || preset.actionLabel;
+  const finalTitle = title || t(preset.title);
+  const finalMessage = message || t(preset.message);
+  const finalAction = actionLabel || t(preset.actionLabel);
 
   const paddingClass = compact ? "p-4" : "p-6 sm:p-8";
   const iconSizeClass = compact ? "w-10 h-10" : "w-14 h-14";
@@ -110,15 +135,25 @@ export default function ErrorState({
       aria-live="polite"
       className={`rounded-2xl border ${tone.bg} ${tone.border} ${paddingClass} flex flex-col items-center text-center ${className}`}
     >
-      <div className={`${iconSizeClass} ${tone.iconBg} rounded-2xl flex items-center justify-center mb-3`}>
+      <div
+        className={`${iconSizeClass} ${tone.iconBg} rounded-2xl flex items-center justify-center mb-3`}
+      >
         <Icon className={`w-6 h-6 ${tone.iconText}`} aria-hidden="true" />
       </div>
-      <h3 className={`font-bold text-slate-900 dark:text-slate-100 mb-1.5 ${titleClass}`}>{finalTitle}</h3>
-      <p className="text-sm text-slate-600 dark:text-slate-300 max-w-md mb-4 leading-relaxed">{finalMessage}</p>
+      <h3
+        className={`font-bold text-slate-900 dark:text-slate-100 mb-1.5 ${titleClass}`}
+      >
+        {finalTitle}
+      </h3>
+      <p className="text-sm text-slate-600 dark:text-slate-300 max-w-md mb-4 leading-relaxed">
+        {finalMessage}
+      </p>
 
       {import.meta.env.DEV && error?.message && (
         <details className="text-xs text-slate-400 mb-3 max-w-md">
-          <summary className="cursor-pointer">Detalles técnicos</summary>
+          <summary className="cursor-pointer">
+            {t("ialab.error_state.technical_details")}
+          </summary>
           <pre className="mt-2 text-left overflow-auto bg-slate-100 dark:bg-slate-800 p-2 rounded text-[10px]">
             {error.message}
           </pre>
