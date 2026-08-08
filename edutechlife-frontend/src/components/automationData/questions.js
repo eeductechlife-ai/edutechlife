@@ -114,6 +114,122 @@ export const QUESTIONS_ES = [
   },
 ];
 
+export const QUESTIONS_PT = [
+  {
+    id: 1,
+    category: "Processos",
+    text: "Como seus processos operacionais são gerenciados atualmente?",
+    options: [
+      { value: 1, label: "Totalmente manuais (papel, planilhas)" },
+      { value: 2, label: "Semi-automatizados com ferramentas básicas" },
+      { value: 3, label: "Automatizados com software especializado" },
+      { value: 4, label: "Automatizados com IA e análise avançada" },
+    ],
+  },
+  {
+    id: 2,
+    category: "Processos",
+    text: "Com que frequência os processos são otimizados?",
+    options: [
+      { value: 1, label: "Nunca / Não há um processo definido" },
+      { value: 2, label: "Anualmente" },
+      { value: 3, label: "Trimestralmente" },
+      { value: 4, label: "Continuamente com métricas em tempo real" },
+    ],
+  },
+  {
+    id: 3,
+    category: "Dados",
+    text: "Como os dados da sua empresa são armazenados e gerenciados?",
+    options: [
+      { value: 1, label: "Arquivos locais sem estrutura" },
+      { value: 2, label: "Sistemas básicos com bancos de dados simples" },
+      { value: 3, label: "Data warehouse ou data lake" },
+      { value: 4, label: "Plataforma integrada com análise em tempo real" },
+    ],
+  },
+  {
+    id: 4,
+    category: "Dados",
+    text: "Qual é o nível de qualidade dos seus dados?",
+    options: [
+      { value: 1, label: "Dados inconsistentes com duplicatas frequentes" },
+      { value: 2, label: "Dados parcialmente limpos" },
+      { value: 3, label: "Dados limpos com processos de validação" },
+      { value: 4, label: "Dados governados com qualidade automatizada" },
+    ],
+  },
+  {
+    id: 5,
+    category: "Tecnologia",
+    text: "Qual stack tecnológico sua empresa utiliza?",
+    options: [
+      { value: 1, label: "Ferramentas básicas de escritório" },
+      { value: 2, label: "Software de gestão (ERP/CRM básico)" },
+      { value: 3, label: "Plataformas cloud com APIs" },
+      { value: 4, label: "Arquitetura cloud-native com IA integrada" },
+    ],
+  },
+  {
+    id: 6,
+    category: "Tecnologia",
+    text: "Sua empresa utiliza APIs ou integrações entre sistemas?",
+    options: [
+      { value: 1, label: "Não, os sistemas estão isolados" },
+      { value: 2, label: "Integrações pontuais manuais" },
+      { value: 3, label: "APIs padrão entre sistemas principais" },
+      {
+        value: 4,
+        label: "Arquitetura orientada a serviços (SOA/microserviços)",
+      },
+    ],
+  },
+  {
+    id: 7,
+    category: "Equipe",
+    text: "Qual é o nível de habilidades digitais da sua equipe?",
+    options: [
+      { value: 1, label: "Básico: uso de ferramentas de escritório" },
+      { value: 2, label: "Intermediário: uso de software especializado" },
+      { value: 3, label: "Avançado: equipe com perfil técnico/data literate" },
+      { value: 4, label: "Especialistas: equipe dedicada à inovação digital" },
+    ],
+  },
+  {
+    id: 8,
+    category: "Equipe",
+    text: "Existe uma cultura de inovação e adoção tecnológica?",
+    options: [
+      { value: 1, label: "Resistente à mudança tecnológica" },
+      { value: 2, label: "Aberta, mas sem processos definidos" },
+      { value: 3, label: "Programas de capacitação contínua" },
+      { value: 4, label: "Cultura data-driven com inovação constante" },
+    ],
+  },
+  {
+    id: 9,
+    category: "Orçamento",
+    text: "Quanto orçamento você destina a tecnologia e inovação?",
+    options: [
+      { value: 1, label: "Menos de 2% da receita" },
+      { value: 2, label: "Entre 2% e 5% da receita" },
+      { value: 3, label: "Entre 5% e 10% da receita" },
+      { value: 4, label: "Mais de 10% da receita" },
+    ],
+  },
+  {
+    id: 10,
+    category: "Orçamento",
+    text: "Você já implementou soluções de IA na sua empresa?",
+    options: [
+      { value: 1, label: "Não, nunca" },
+      { value: 2, label: "Projetos piloto sem escala" },
+      { value: 3, label: "IA implementada em áreas específicas" },
+      { value: 4, label: "IA integrada aos processos centrais do negócio" },
+    ],
+  },
+];
+
 export const QUESTIONS_EN = [
   {
     id: 1,

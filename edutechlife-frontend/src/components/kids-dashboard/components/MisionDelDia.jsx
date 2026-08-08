@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { ChevronRight, Sparkles } from "lucide-react";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 /**
  * MisionDelDia
@@ -15,32 +16,32 @@ import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 const VAK_PRACTICE = {
   visual: {
     icon: "🃏",
-    title: "Repasa con flashcards",
-    subtitle: "Aprendes mejor viendo",
+    titleKey: "kid.mision.vak_visual_title",
+    subtitleKey: "kid.mision.vak_visual_subtitle",
     tab: "flashcards",
   },
   auditivo: {
     icon: "🎧",
-    title: "Escucha un podcast de estudio",
-    subtitle: "Aprendes mejor escuchando",
+    titleKey: "kid.mision.vak_audio_title",
+    subtitleKey: "kid.mision.vak_audio_subtitle",
     tab: "podcast",
   },
   auditory: {
     icon: "🎧",
-    title: "Escucha un podcast de estudio",
-    subtitle: "Aprendes mejor escuchando",
+    titleKey: "kid.mision.vak_audio_title",
+    subtitleKey: "kid.mision.vak_audio_subtitle",
     tab: "podcast",
   },
   kinestesico: {
     icon: "📷",
-    title: "Escanea un problema y resuélvelo",
-    subtitle: "Aprendes mejor haciendo",
+    titleKey: "kid.mision.vak_kine_title",
+    subtitleKey: "kid.mision.vak_kine_subtitle",
     tab: "escaner",
   },
   kinesthetic: {
     icon: "📷",
-    title: "Escanea un problema y resuélvelo",
-    subtitle: "Aprendes mejor haciendo",
+    titleKey: "kid.mision.vak_kine_title",
+    subtitleKey: "kid.mision.vak_kine_subtitle",
     tab: "escaner",
   },
 };
@@ -62,7 +63,7 @@ const getPredominantStyle = (vakResult) => {
   return raw ? String(raw).toLowerCase() : null;
 };
 
-const buildTasks = ({ vakResult, missions, subjects }) => {
+const buildTasks = ({ vakResult, missions, subjects, t }) => {
   const tasks = [];
 
   // 1. If no VAK yet, that is always the first task — it powers everything else.
@@ -70,8 +71,8 @@ const buildTasks = ({ vakResult, missions, subjects }) => {
     tasks.push({
       key: "vak",
       icon: "🧠",
-      title: "Descubre cómo aprendes",
-      subtitle: "Haz tu diagnóstico VAK (2 min)",
+      title: t("kid.mision.vak_title"),
+      subtitle: t("kid.mision.vak_subtitle"),
       tab: "vak",
       xp: 100,
     });
@@ -85,7 +86,7 @@ const buildTasks = ({ vakResult, missions, subjects }) => {
       key: `mission-${m.id}`,
       icon: m.icon || "🎯",
       title: m.title,
-      subtitle: m.description || "Completa tu misión",
+      subtitle: m.description || t("kid.mision.complete_mission"),
       tab: "misiones",
       xp: m.xp || 50,
     });
@@ -95,7 +96,14 @@ const buildTasks = ({ vakResult, missions, subjects }) => {
   const style = getPredominantStyle(vakResult);
   if (style && VAK_PRACTICE[style]) {
     const p = VAK_PRACTICE[style];
-    tasks.push({ key: `vak-practice`, ...p, xp: 40 });
+    tasks.push({
+      key: `vak-practice`,
+      icon: p.icon,
+      title: t(p.titleKey),
+      subtitle: t(p.subtitleKey),
+      tab: p.tab,
+      xp: 40,
+    });
   }
 
   // 4. Subject that needs the most love (lowest progress).
@@ -107,8 +115,11 @@ const buildTasks = ({ vakResult, missions, subjects }) => {
     tasks.push({
       key: `subject-${s.id}`,
       icon: s.icon || "📚",
-      title: `Avanza en ${s.name}`,
-      subtitle: s.progress > 0 ? `Vas ${s.progress}%` : "¡Empieza hoy!",
+      title: t("kid.mision.subject_progress", { name: s.name }),
+      subtitle:
+        s.progress > 0
+          ? t("kid.mision.subject_percent", { progress: s.progress })
+          : t("kid.mision.subject_start"),
       tab: "materias",
       xp: 30,
     });
@@ -120,10 +131,11 @@ const buildTasks = ({ vakResult, missions, subjects }) => {
 
 const MisionDelDia = ({ onTabChange }) => {
   const { vakResult, missions, subjects, streak } = useSmartBoardKids();
+  const { t } = useTranslation();
 
   const tasks = useMemo(
-    () => buildTasks({ vakResult, missions, subjects }),
-    [vakResult, missions, subjects],
+    () => buildTasks({ vakResult, missions, subjects, t }),
+    [vakResult, missions, subjects, t],
   );
 
   if (tasks.length === 0) return null;
@@ -137,23 +149,26 @@ const MisionDelDia = ({ onTabChange }) => {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       className="mb-6 rounded-2xl p-5 bg-gradient-to-br from-[#0077B6] via-[#00B4D8] to-[#48CAE4] text-white shadow-lg"
-      aria-label="Misión del día"
+      aria-label={t("kid.mision.aria_label")}
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5" />
-          <h2 className="font-black text-lg">Tu misión de hoy</h2>
+          <h2 className="font-black text-lg">{t("kid.mision.title")}</h2>
         </div>
         <div className="text-right">
-          <div className="text-xs text-white/80">Ganas hasta</div>
+          <div className="text-xs text-white/80">
+            {t("kid.mision.earn_up_to")}
+          </div>
           <div className="font-black text-lg">+{totalXp} XP</div>
         </div>
       </div>
 
       {streakNum > 0 && (
         <p className="text-xs text-white/85 mb-3">
-          🔥 Llevas {streakNum} {streakNum === 1 ? "día" : "días"} seguidos. ¡No
-          rompas la racha!
+          {streakNum === 1
+            ? t("kid.mision.streak_one", { days: streakNum })
+            : t("kid.mision.streak_many", { days: streakNum })}
         </p>
       )}
 

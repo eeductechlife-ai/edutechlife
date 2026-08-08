@@ -2,25 +2,69 @@ import { useState, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { callDeepseek } from "../../utils/api";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useTranslation } from "../../i18n/I18nProvider";
 
-const SUBJECTS = [
-  { id: "matematicas", label: "Matemáticas", icon: "🔢", color: "#4DA8C4" },
-  { id: "lenguaje", label: "Lenguaje", icon: "📖", color: "#FF6B9D" },
-  { id: "ciencias", label: "Ciencias Naturales", icon: "🔬", color: "#66CCCC" },
-  { id: "sociales", label: "Ciencias Sociales", icon: "🌍", color: "#FFD166" },
-  { id: "ingles", label: "Inglés", icon: "🇬🇧", color: "#A855F7" },
+const getSubjects = (t) => [
+  {
+    id: "matematicas",
+    label: t("oral.subject_matematicas"),
+    icon: "🔢",
+    color: "#4DA8C4",
+  },
+  {
+    id: "lenguaje",
+    label: t("oral.subject_lenguaje"),
+    icon: "📖",
+    color: "#FF6B9D",
+  },
+  {
+    id: "ciencias",
+    label: t("oral.subject_ciencias"),
+    icon: "🔬",
+    color: "#66CCCC",
+  },
+  {
+    id: "sociales",
+    label: t("oral.subject_sociales"),
+    icon: "🌍",
+    color: "#FFD166",
+  },
+  {
+    id: "ingles",
+    label: t("oral.subject_ingles"),
+    icon: "🇬🇧",
+    color: "#A855F7",
+  },
 ];
 
-const DIFFICULTIES = [
-  { id: "facil", label: "Fácil", color: "#22C55E", icon: "🌱" },
-  { id: "medio", label: "Medio", color: "#EAB308", icon: "🔥" },
-  { id: "dificil", label: "Difícil", color: "#EF4444", icon: "💀" },
+const getDifficulties = (t) => [
+  {
+    id: "facil",
+    label: t("oral.difficulty_facil"),
+    color: "#22C55E",
+    icon: "🌱",
+  },
+  {
+    id: "medio",
+    label: t("oral.difficulty_medio"),
+    color: "#EAB308",
+    icon: "🔥",
+  },
+  {
+    id: "dificil",
+    label: t("oral.difficulty_dificil"),
+    color: "#EF4444",
+    icon: "💀",
+  },
 ];
 
 const dc = (dm, l, d) => (dm ? d : l);
 
 const OralExamSimulator = memo(({ onTabChange }) => {
   const { darkMode: dm, addPoints, activeStudyDeck } = useSmartBoardKids();
+  const { t } = useTranslation();
+  const SUBJECTS = getSubjects(t);
+  const DIFFICULTIES = getDifficulties(t);
   const [phase, setPhase] = useState("setup");
   const [subject, setSubject] = useState(null);
   const [difficulty, setDifficulty] = useState(null);
@@ -124,7 +168,10 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
         const correctCount = newAnswers.filter((a) => a.correct).length;
         const grade = Math.round((correctCount / questions.length) * 100);
         const earnedPoints = correctCount * 10;
-        addPoints(earnedPoints, `Completó examen oral de ${subject.label}`);
+        addPoints(
+          earnedPoints,
+          t("oral.points_desc", { subject: subject.label }),
+        );
         setResults({
           correctCount,
           total: questions.length,
@@ -143,6 +190,7 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
     answers,
     addPoints,
     subject,
+    t,
   ]);
 
   return (
@@ -159,14 +207,14 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
           <h3
             className={`text-lg font-bold ${dc(dm, "text-[#004B63]", "text-[#E2F0FF]")}`}
           >
-            Habla con Dani
+            {t("oral.title")}
           </h3>
           <p
             className={`text-xs ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
           >
             {hasDeck
-              ? `Repasando: "${activeStudyDeck.title}"`
-              : "Conversa con Dani y demuestra lo que sabes"}
+              ? t("oral.reviewing_deck", { title: activeStudyDeck.title })
+              : t("oral.subtitle_no_deck")}
           </p>
         </div>
       </motion.div>
@@ -180,10 +228,10 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-white/70">🎴 Mazo activo</p>
+              <p className="text-xs text-white/70">{t("oral.active_deck")}</p>
               <p className="font-bold">{activeStudyDeck.title}</p>
               <p className="text-xs text-white/70">
-                {activeStudyDeck.cards.length} tarjetas
+                {t("oral.cards_count", { count: activeStudyDeck.cards.length })}
               </p>
             </div>
             <motion.button
@@ -193,7 +241,7 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
               whileTap={{ scale: 0.95 }}
               className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl font-bold text-sm disabled:opacity-50 whitespace-nowrap"
             >
-              {loading ? "⏳ Cargando…" : "🗣️ Empezar repaso"}
+              {loading ? t("oral.loading") : t("oral.start_review")}
             </motion.button>
           </div>
         </motion.div>
@@ -209,20 +257,19 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
             className="space-y-6"
           >
             <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-700">
-              💡 <strong>Tip:</strong> Para repasar tu mazo de flashcards,
-              actívalo primero en la sección Flashcards.
+              💡 <strong>{t("oral.tip_label")}</strong> {t("oral.tip_desc")}
               <button
                 onClick={() => onTabChange?.("flashcards")}
                 className="ml-1 font-bold underline"
               >
-                Ir a Flashcards →
+                {t("oral.go_flashcards")}
               </button>
             </div>
             <div>
               <p
                 className={`text-sm font-semibold mb-3 ${dc(dm, "text-[#004B63]", "text-white")}`}
               >
-                O elige una materia para repasar
+                {t("oral.pick_subject")}
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {SUBJECTS.map((s) => (
@@ -260,7 +307,7 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
                 <p
                   className={`text-sm font-semibold mb-3 ${dc(dm, "text-[#004B63]", "text-white")}`}
                 >
-                  Selecciona la dificultad
+                  {t("oral.select_difficulty")}
                 </p>
                 <div className="flex gap-3">
                   {DIFFICULTIES.map((d) => (
@@ -312,11 +359,12 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
                         ease: "linear",
                       }}
                     />{" "}
-                    Generando preguntas...
+                    {t("oral.generating_questions")}
                   </>
                 ) : (
                   <>
-                    <span className="text-xl">🗣️</span> Hablar con Dani
+                    <span className="text-xl">🗣️</span>{" "}
+                    {t("oral.talk_with_dani")}
                   </>
                 )}
               </motion.button>
@@ -364,8 +412,8 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
                     className={`text-xs font-semibold mb-1 ${dc(dm, "text-[#4DA8C4]", "text-[#004B63]")}`}
                   >
                     {questions[currentQ].type === "multiple"
-                      ? "Selección múltiple"
-                      : "Pregunta abierta"}
+                      ? t("oral.multiple_choice")
+                      : t("oral.open_question")}
                   </p>
                   <p
                     className={`text-base font-semibold ${dc(dm, "text-white", "text-[#1E293B]")}`}
@@ -434,7 +482,7 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
                   value={openAnswer}
                   onChange={(e) => setOpenAnswer(e.target.value)}
                   disabled={!!feedback}
-                  placeholder="Escribe tu respuesta aquí..."
+                  placeholder={t("oral.answer_placeholder")}
                   rows={4}
                   className={`w-full p-3 rounded-xl border text-sm resize-none ${
                     feedback
@@ -456,7 +504,9 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
                     className={`mt-4 p-4 rounded-xl ${feedback.correct ? "bg-green-50 border border-green-200" : "bg-amber-50 border border-amber-200"}`}
                   >
                     <p className="text-sm font-bold mb-1">
-                      {feedback.correct ? "✅ ¡Correcto!" : "❌ Incorrecto"}
+                      {feedback.correct
+                        ? t("oral.correct")
+                        : t("oral.incorrect")}
                     </p>
                     <p className="text-xs text-[#64748B]">
                       {feedback.explanation}
@@ -478,8 +528,8 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
                   className="mt-4 w-full py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-bold text-sm disabled:opacity-50"
                 >
                   {currentQ < questions.length - 1
-                    ? "Responder y continuar →"
-                    : "Finalizar examen"}
+                    ? t("oral.answer_continue")
+                    : t("oral.finish_exam")}
                 </motion.button>
               )}
             </motion.div>
@@ -521,7 +571,10 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
               <p
                 className={`text-sm ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
               >
-                {results.correctCount} de {results.total} correctas
+                {t("oral.correct_count", {
+                  correct: results.correctCount,
+                  total: results.total,
+                })}
               </p>
               <motion.div
                 initial={{ width: 0 }}
@@ -542,7 +595,7 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
                 transition={{ delay: 0.8 }}
                 className={`mt-4 text-sm font-bold ${dc(dm, "text-[#4DA8C4]", "text-[#004B63]")}`}
               >
-                +{results.earnedPoints} XP ganados
+                {t("oral.xp_earned", { points: results.earnedPoints })}
               </motion.p>
             </motion.div>
 
@@ -557,7 +610,7 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
                   onClick={() => onTabChange?.("examenes")}
                   className="w-full py-3 bg-gradient-to-r from-[#004B63] to-[#0077B6] text-white rounded-xl font-bold text-sm"
                 >
-                  📝 ¡Listo! Hacer el Examen final →
+                  {t("oral.ready_final_exam")}
                 </motion.button>
               )}
               <motion.button
@@ -575,7 +628,7 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
                 }}
                 className="w-full py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-bold text-sm"
               >
-                🔄 Repasar de nuevo
+                {t("oral.review_again")}
               </motion.button>
             </div>
           </motion.div>

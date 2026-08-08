@@ -1,8 +1,10 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { daysLeft, badgeCls, badgeEmj, sbj } from "../examUtils";
+import { useTranslation } from "../../../../i18n/I18nProvider";
 
 const ExamCard = memo(({ e: exam, i, onView, onDelete }) => {
+  const { t } = useTranslation();
   const d = daysLeft(exam.date);
   return (
     <motion.div
@@ -19,12 +21,17 @@ const ExamCard = memo(({ e: exam, i, onView, onDelete }) => {
               {exam.name}
             </h4>
             <p className="text-xs text-[#64748B]">
-              {sbj(exam.subject)?.l || exam.subject}
+              {sbj(exam.subject)
+                ? t(`kid.exam.subject_${exam.subject}`)
+                : exam.subject}
             </p>
           </div>
         </div>
         <motion.button
-          onClick={(e) => { e.stopPropagation(); onDelete(exam.id); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(exam.id);
+          }}
           whileHover={{ scale: 1.1 }}
           className="text-[#94A3B8] hover:text-red-400 text-lg leading-none"
         >
@@ -35,7 +42,13 @@ const ExamCard = memo(({ e: exam, i, onView, onDelete }) => {
         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold ${badgeCls(d)}`}
       >
         <span>{badgeEmj(d)}</span>
-        <span>{d === 0 ? "¡Hoy!" : d === 1 ? "1 día" : `${d} días`}</span>
+        <span>
+          {d === 0
+            ? t("kid.exam.today")
+            : d === 1
+              ? t("kid.exam.one_day")
+              : t("kid.exam.days_left", { count: d })}
+        </span>
       </div>
       {d < 14 && (
         <motion.div
@@ -55,7 +68,7 @@ const ExamCard = memo(({ e: exam, i, onView, onDelete }) => {
         whileHover={{ scale: 1.02 }}
         className="mt-3 w-full text-xs text-[#4DA8C4] font-semibold py-1.5 rounded-lg hover:bg-[#4DA8C4]/5 transition-colors"
       >
-        Ver detalle →
+        {t("kid.exam.view_detail")}
       </motion.button>
     </motion.div>
   );

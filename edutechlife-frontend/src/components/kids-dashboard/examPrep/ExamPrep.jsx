@@ -5,92 +5,97 @@ import useExamPrep from "./useExamPrep";
 import ExamList from "./components/ExamList";
 import ExamDetail from "./components/ExamDetail";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useTranslation } from "../../../i18n/I18nProvider";
 import { callDeepseek } from "../../../utils/api";
 
-const ExamForm = memo(({ n, sN, s, sS, d, sD, g, sG, onAdd }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -20 }}
-    className="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-sm space-y-5"
-  >
-    <div>
-      <label className="text-sm font-semibold text-[#004B63] mb-1.5 block">
-        Nombre del examen
-      </label>
-      <input
-        type="text"
-        value={n}
-        onChange={(e) => sN(e.target.value)}
-        placeholder="Ej: Examen final de álgebra"
-        className={inpCls}
-      />
-    </div>
-    <div>
-      <label className="text-sm font-semibold text-[#004B63] mb-2 block">
-        Materia
-      </label>
-      <div className="grid grid-cols-3 gap-2">
-        {subjects.map((sb) => (
-          <motion.button
-            key={sb.v}
-            onClick={() => sS(sb.v)}
-            className={`p-2.5 rounded-xl border-2 transition-all text-sm ${sb.v === s ? "border-[#4DA8C4] bg-[#4DA8C4]/10 text-[#004B63] font-semibold" : "border-[#E2E8F0] text-[#64748B] hover:border-[#4DA8C4]/30"}`}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <span className="mr-1">{sb.i}</span>
-            {sb.l}
-          </motion.button>
-        ))}
-      </div>
-    </div>
-    <div className="grid grid-cols-2 gap-4">
+const ExamForm = memo(({ n, sN, s, sS, d, sD, g, sG, onAdd }) => {
+  const { t } = useTranslation();
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-sm space-y-5"
+    >
       <div>
         <label className="text-sm font-semibold text-[#004B63] mb-1.5 block">
-          Fecha del examen
+          {t("kid.exam.name_label")}
         </label>
         <input
-          type="date"
-          value={d}
-          onChange={(e) => sD(e.target.value)}
-          min={new Date().toISOString().split("T")[0]}
+          type="text"
+          value={n}
+          onChange={(e) => sN(e.target.value)}
+          placeholder={t("kid.exam.name_placeholder")}
           className={inpCls}
         />
       </div>
       <div>
-        <label className="text-sm font-semibold text-[#004B63] mb-1.5 block">
-          Nota deseada (0-100)
+        <label className="text-sm font-semibold text-[#004B63] mb-2 block">
+          {t("kid.exam.subject_label")}
         </label>
-        <div className="flex items-center gap-3">
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={g}
-            onChange={(e) => sG(Number(e.target.value))}
-            className="flex-1 accent-[#4DA8C4]"
-          />
-          <span className="text-lg font-black text-[#4DA8C4] min-w-[3ch] text-center">
-            {g}
-          </span>
+        <div className="grid grid-cols-3 gap-2">
+          {subjects.map((sb) => (
+            <motion.button
+              key={sb.v}
+              onClick={() => sS(sb.v)}
+              className={`p-2.5 rounded-xl border-2 transition-all text-sm ${sb.v === s ? "border-[#4DA8C4] bg-[#4DA8C4]/10 text-[#004B63] font-semibold" : "border-[#E2E8F0] text-[#64748B] hover:border-[#4DA8C4]/30"}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="mr-1">{sb.i}</span>
+              {t(`kid.exam.subject_${sb.v}`)}
+            </motion.button>
+          ))}
         </div>
       </div>
-    </div>
-    <motion.button
-      onClick={onAdd}
-      disabled={!n.trim() || !d}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className={`${gdCls} w-full py-3 disabled:opacity-50 disabled:cursor-not-allowed`}
-    >
-      ➕ Agregar Examen
-    </motion.button>
-  </motion.div>
-));
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="text-sm font-semibold text-[#004B63] mb-1.5 block">
+            {t("kid.exam.date_label")}
+          </label>
+          <input
+            type="date"
+            value={d}
+            onChange={(e) => sD(e.target.value)}
+            min={new Date().toISOString().split("T")[0]}
+            className={inpCls}
+          />
+        </div>
+        <div>
+          <label className="text-sm font-semibold text-[#004B63] mb-1.5 block">
+            {t("kid.exam.desired_grade_label")}
+          </label>
+          <div className="flex items-center gap-3">
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={g}
+              onChange={(e) => sG(Number(e.target.value))}
+              className="flex-1 accent-[#4DA8C4]"
+            />
+            <span className="text-lg font-black text-[#4DA8C4] min-w-[3ch] text-center">
+              {g}
+            </span>
+          </div>
+        </div>
+      </div>
+      <motion.button
+        onClick={onAdd}
+        disabled={!n.trim() || !d}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className={`${gdCls} w-full py-3 disabled:opacity-50 disabled:cursor-not-allowed`}
+      >
+        {t("kid.exam.add_exam")}
+      </motion.button>
+    </motion.div>
+  );
+});
 
 // Flashcard-based quick quiz from active deck
 const DeckQuiz = memo(({ deck, onFinish, onTabChange }) => {
+  const { t } = useTranslation();
   const { addPoints } = useSmartBoardKids();
   const [questions, setQuestions] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -106,6 +111,7 @@ const DeckQuiz = memo(({ deck, onFinish, onTabChange }) => {
       .slice(0, 12)
       .map((c) => `• ${c.front}: ${c.back}`)
       .join("\n");
+    // Prompt interno de IA (DeepSeek) — se mantiene en español a propósito.
     const prompt = `Genera un examen de 5 preguntas de opción múltiple (4 opciones A-D) basado en estas tarjetas de estudio:
 ${cardContext}
 
@@ -137,7 +143,10 @@ Responde SOLO con JSON:
     setTimeout(() => {
       if (qIdx + 1 >= questions.length) {
         const finalScore = score + (correct ? 1 : 0);
-        addPoints(finalScore * 15, `Examen de ${deck.title}`);
+        addPoints(
+          finalScore * 15,
+          t("kid.exam.deck_exam_points", { title: deck.title }),
+        );
         setDone(true);
       } else {
         setQIdx((i) => i + 1);
@@ -145,7 +154,7 @@ Responde SOLO con JSON:
         setFeedback(null);
       }
     }, 1800);
-  }, [qIdx, questions, selected, score, deck, addPoints]);
+  }, [qIdx, questions, selected, score, deck, addPoints, t]);
 
   if (!questions) {
     return (
@@ -153,9 +162,11 @@ Responde SOLO con JSON:
         <div className="flex items-center gap-3">
           <span className="text-2xl">🎴</span>
           <div>
-            <p className="font-bold text-[#004B63]">Examen: {deck.title}</p>
+            <p className="font-bold text-[#004B63]">
+              {t("kid.exam.deck_exam_title", { title: deck.title })}
+            </p>
             <p className="text-xs text-[#64748B]">
-              {deck.cards.length} tarjetas → 5 preguntas generadas por IA
+              {t("kid.exam.deck_quiz_desc", { count: deck.cards.length })}
             </p>
           </div>
         </div>
@@ -167,7 +178,9 @@ Responde SOLO con JSON:
           className="w-full py-3 rounded-xl font-bold text-white text-sm shadow-md disabled:opacity-50"
           style={{ background: "linear-gradient(135deg, #004B63, #0077B6)" }}
         >
-          {loading ? "⏳ Generando examen…" : "📝 Generar examen del mazo"}
+          {loading
+            ? t("kid.exam.generating")
+            : t("kid.exam.generate_deck_exam")}
         </motion.button>
       </div>
     );
@@ -193,21 +206,21 @@ Responde SOLO con JSON:
           {pct}%
         </p>
         <p className="text-sm text-[#64748B]">
-          {score} de {questions.length} correctas
+          {t("kid.exam.score_correct", { score, total: questions.length })}
         </p>
         <div className="flex gap-2">
           <button
             onClick={onFinish}
             className="flex-1 py-2 rounded-xl border border-[#E2E8F0] text-sm text-[#64748B] font-semibold"
           >
-            ← Volver
+            {t("kid.exam.back")}
           </button>
           {pct < 80 && (
             <button
               onClick={() => onTabChange?.("flashcards")}
               className="flex-1 py-2 rounded-xl bg-[#4DA8C4] text-white text-sm font-semibold"
             >
-              🎴 Repasar flashcards
+              {t("kid.exam.review_flashcards")}
             </button>
           )}
         </div>
@@ -281,7 +294,9 @@ Responde SOLO con JSON:
               className={`p-3 rounded-xl text-sm ${feedback.correct ? "bg-green-50 border border-green-200 text-green-700" : "bg-amber-50 border border-amber-200 text-amber-700"}`}
             >
               <strong>
-                {feedback.correct ? "✅ ¡Correcto!" : "❌ Incorrecto"}
+                {feedback.correct
+                  ? t("kid.exam.correct")
+                  : t("kid.exam.incorrect")}
               </strong>{" "}
               — {feedback.explanation}
             </motion.div>
@@ -296,7 +311,7 @@ Responde SOLO con JSON:
             className="w-full py-2.5 rounded-xl font-bold text-white text-sm disabled:opacity-40"
             style={{ background: "linear-gradient(135deg, #4DA8C4, #66CCCC)" }}
           >
-            Responder →
+            {t("kid.exam.answer")}
           </motion.button>
         )}
       </div>
@@ -306,6 +321,7 @@ Responde SOLO con JSON:
 DeckQuiz.displayName = "DeckQuiz";
 
 const ExamPrep = memo(({ onTabChange }) => {
+  const { t } = useTranslation();
   const { activeStudyDeck } = useSmartBoardKids();
   const [showDeckQuiz, setShowDeckQuiz] = useState(false);
   const {
@@ -340,10 +356,12 @@ const ExamPrep = memo(({ onTabChange }) => {
           animate={{ opacity: 1, y: 0 }}
           className="p-4 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#0077B6] text-white"
         >
-          <p className="text-xs text-white/70 mb-1">🎴 Mazo activo</p>
+          <p className="text-xs text-white/70 mb-1">
+            {t("kid.flashcards.active_deck")}
+          </p>
           <p className="font-bold">{activeStudyDeck.title}</p>
           <p className="text-xs text-white/70 mb-3">
-            {activeStudyDeck.cards.length} tarjetas listas para el examen
+            {t("kid.exam.cards_ready", { count: activeStudyDeck.cards.length })}
           </p>
           <motion.button
             onClick={() => setShowDeckQuiz(true)}
@@ -351,7 +369,7 @@ const ExamPrep = memo(({ onTabChange }) => {
             whileTap={{ scale: 0.98 }}
             className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-xl font-bold text-sm transition-colors"
           >
-            📝 Hacer examen de este mazo →
+            {t("kid.exam.take_deck_exam")}
           </motion.button>
         </motion.div>
       )}
@@ -369,7 +387,9 @@ const ExamPrep = memo(({ onTabChange }) => {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center justify-between"
           >
-            <h3 className="text-lg font-bold text-[#004B63]">📝 Exámenes</h3>
+            <h3 className="text-lg font-bold text-[#004B63]">
+              {t("kid.exam.title")}
+            </h3>
             {mode === "form" ? (
               <motion.button
                 onClick={() => setMode("list")}
@@ -377,7 +397,7 @@ const ExamPrep = memo(({ onTabChange }) => {
                 whileTap={{ scale: 0.98 }}
                 className="px-3 py-1.5 text-sm rounded-xl border border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]"
               >
-                Cancelar
+                {t("kid.exam.cancel")}
               </motion.button>
             ) : (
               <motion.button
@@ -392,7 +412,7 @@ const ExamPrep = memo(({ onTabChange }) => {
                 whileTap={{ scale: 0.98 }}
                 className="px-4 py-1.5 text-sm rounded-xl bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white font-semibold shadow-md"
               >
-                + Nuevo
+                {t("kid.exam.new")}
               </motion.button>
             )}
           </motion.div>

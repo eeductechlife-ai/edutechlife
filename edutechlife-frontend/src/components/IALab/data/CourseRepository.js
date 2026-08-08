@@ -4,6 +4,7 @@ import {
   modules_pt,
   ALL_LESSONS,
   ALL_LESSONS_EN,
+  ALL_LESSONS_PT,
   MODULE_QUESTIONS,
 } from "../../../data/ialab";
 import { resolveLocalized } from "../../../utils/localeUtils";
@@ -67,7 +68,10 @@ class LocalCourseAdapter {
   }
 
   getLessons(courseId, moduleId, locale) {
-    const all = locale === "en" ? ALL_LESSONS_EN : ALL_LESSONS;
+    const all = resolveLocalized(
+      { es: ALL_LESSONS, en: ALL_LESSONS_EN, pt: ALL_LESSONS_PT },
+      locale,
+    );
     return (all[moduleId] || []).map((l) => ({ ...l, moduleId, courseId }));
   }
 

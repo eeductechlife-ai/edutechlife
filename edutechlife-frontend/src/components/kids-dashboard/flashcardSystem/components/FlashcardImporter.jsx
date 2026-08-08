@@ -1,7 +1,9 @@
 import { useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 const FlashcardImporter = memo(({ decks, saveDecks, onStartMultiplayer }) => {
+  const { t } = useTranslation();
   const [showImport, setShowImport] = useState(false);
   const [importCode, setImportCode] = useState("");
   const [shareMessage, setShareMessage] = useState("");
@@ -13,21 +15,17 @@ const FlashcardImporter = memo(({ decks, saveDecks, onStartMultiplayer }) => {
       Math.random().toString(36).substring(2, 8).toUpperCase();
     if (!deck.shareCode) {
       const updated = { ...deck, shareCode: code };
-      saveDecks((prev) =>
-        prev.map((d) => (d.id === deck.id ? updated : d)),
-      );
+      saveDecks((prev) => prev.map((d) => (d.id === deck.id ? updated : d)));
     }
     navigator.clipboard.writeText(code);
-    setShareMessage("¡Código copiado!");
+    setShareMessage(t("kid.flashcards.code_copied"));
     setTimeout(() => setShareMessage(""), 2000);
   };
 
   const handleImport = () => {
     const allDecks = [
       ...decks,
-      ...JSON.parse(
-        localStorage.getItem("edutechlife_shared_decks") || "[]",
-      ),
+      ...JSON.parse(localStorage.getItem("edutechlife_shared_decks") || "[]"),
     ];
     const found = allDecks.find((d) => d.shareCode === importCode);
     if (found) {
@@ -55,7 +53,7 @@ const FlashcardImporter = memo(({ decks, saveDecks, onStartMultiplayer }) => {
           onClick={handleShare}
           className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white text-sm font-bold"
         >
-          📤 Compartir mazo
+          {t("kid.flashcards.share_deck")}
         </motion.button>
         <motion.button
           whileHover={{ scale: 1.02 }}
@@ -63,7 +61,7 @@ const FlashcardImporter = memo(({ decks, saveDecks, onStartMultiplayer }) => {
           onClick={() => setShowImport(true)}
           className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#FFD166] to-[#FFB300] text-white text-sm font-bold"
         >
-          📥 Importar mazo
+          {t("kid.flashcards.import_deck")}
         </motion.button>
       </div>
       {shareMessage && (
@@ -81,7 +79,7 @@ const FlashcardImporter = memo(({ decks, saveDecks, onStartMultiplayer }) => {
         onClick={onStartMultiplayer}
         className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#FF6B9D] to-[#A855F7] text-white text-sm font-bold flex items-center justify-center gap-2"
       >
-        👥 Modo 2 Jugadores
+        {t("kid.flashcards.two_player_mode")}
       </motion.button>
 
       <AnimatePresence>
@@ -100,7 +98,7 @@ const FlashcardImporter = memo(({ decks, saveDecks, onStartMultiplayer }) => {
               onClick={(e) => e.stopPropagation()}
             >
               <h3 className="text-lg font-bold text-[#004B63] mb-4">
-                Importar mazo
+                {t("kid.flashcards.import_deck")}
               </h3>
               <input
                 value={importCode}
@@ -115,7 +113,7 @@ const FlashcardImporter = memo(({ decks, saveDecks, onStartMultiplayer }) => {
                   onClick={() => setShowImport(false)}
                   className="flex-1 py-2.5 rounded-xl border border-[#E2E8F0] text-sm font-bold text-[#64748B]"
                 >
-                  Cancelar
+                  {t("kid.flashcards.cancel")}
                 </motion.button>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
@@ -123,7 +121,7 @@ const FlashcardImporter = memo(({ decks, saveDecks, onStartMultiplayer }) => {
                   disabled={importCode.length < 4}
                   className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white text-sm font-bold disabled:opacity-50"
                 >
-                  Importar
+                  {t("kid.flashcards.import_btn")}
                 </motion.button>
               </div>
             </motion.div>

@@ -80,6 +80,88 @@ export const CASES_ES = [
   },
 ];
 
+export const CASES_PT = [
+  {
+    id: 1,
+    empresa: "TechCorp Solutions",
+    sector: "Tecnologia / SaaS",
+    resultado: "+340% eficiência",
+    metricas: [
+      { label: "Economia operacional", value: "$180K/ano" },
+      { label: "ROI", value: "4.2x" },
+      { label: "Implementação", value: "3 meses" },
+    ],
+    problema:
+      "A empresa gerenciava 15.000+ tickets de suporte por mês manualmente, com tempos de resposta acima de 48 horas e uma equipe de 12 agentes no limite.",
+    solucion:
+      "Implementamos um sistema multi-agente com chatbot de IA para o nível 1, roteamento inteligente com NLP e automação de respostas para problemas recorrentes. Integrado com Zendesk e o CRM existente.",
+    resultados:
+      "Redução de 78% nos tickets de nível 1, tempo de resposta caiu para <5 minutos, a equipe humana foca em casos complexos. Economia anual de $180.000.",
+    icono: "M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z",
+    color: "#4DA8C4",
+  },
+  {
+    id: 2,
+    empresa: "Clínica Santa Maria",
+    sector: "Saúde",
+    resultado: "-70% carga administrativa",
+    metricas: [
+      { label: "Economia operacional", value: "$240K/ano" },
+      { label: "ROI", value: "5.8x" },
+      { label: "Implementação", value: "4 meses" },
+    ],
+    problema:
+      "40% do tempo do corpo clínico era perdido em tarefas administrativas: agendamento, faturamento, prontuários e autorizações.",
+    solucion:
+      "Implantamos um ecossistema de automação com NLP para transcrição médica, chatbot para agendamento, OCR para prontuários e faturamento automático com IA.",
+    resultados:
+      "Os médicos recuperaram 15h/semana para atendimento de pacientes. Redução de 70% nas tarefas administrativas. Precisão de 95% na codificação de diagnósticos.",
+    icono:
+      "M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342",
+    color: "#66CCCC",
+  },
+  {
+    id: 3,
+    empresa: "LogiCo Express",
+    sector: "Logística",
+    resultado: "+180% capacidade",
+    metricas: [
+      { label: "Economia operacional", value: "$320K/ano" },
+      { label: "ROI", value: "6.3x" },
+      { label: "Implementação", value: "5 meses" },
+    ],
+    problema:
+      "Gestão manual de rotas para 200+ entregas diárias, com atrasos de 25% e custos elevados de combustível por rotas ineficientes.",
+    solucion:
+      "IA para otimização de rotas em tempo real, automação de tracking e notificações, dashboard preditivo de demanda e sistema de gestão de frota com ML.",
+    resultados:
+      "Redução de 35% nos custos de combustível, 99,8% de entregas no prazo, capacidade de envios dobrada sem contratar mais pessoal. Economia anual de $320.000.",
+    icono:
+      "M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12",
+    color: "#004B63",
+  },
+  {
+    id: 4,
+    empresa: "FinTech Pay",
+    sector: "Fintech",
+    resultado: "+250% conversão",
+    metricas: [
+      { label: "Economia operacional", value: "$150K/ano" },
+      { label: "ROI", value: "3.9x" },
+      { label: "Implementação", value: "2 meses" },
+    ],
+    problema:
+      "Alto volume de consultas de clientes (8.000/mês) com equipe limitada. Processo de onboarding manual que levava em média 3 dias.",
+    solucion:
+      "Chatbot financeiro com IA para atendimento ao cliente, automação do processo KYC com OCR e verificação de identidade, e scoring de crédito com ML preditivo.",
+    resultados:
+      "Onboarding reduzido de 3 dias para 15 minutos. 85% das consultas resolvidas pelo chatbot. Aumento de 250% na taxa de conversão de leads. NPS subiu de 62 para 91.",
+    icono:
+      "M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+    color: "#10B981",
+  },
+];
+
 export const CASES_EN = [
   {
     id: 1,

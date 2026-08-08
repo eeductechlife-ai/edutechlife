@@ -201,6 +201,209 @@ export const PROCESS_TO_SOLUTIONS_ES = {
   ],
 };
 
+export const PROCESS_TO_SOLUTIONS_PT = {
+  "Atendimento ao cliente": [
+    {
+      name: "Chatbot IA 24/7",
+      desc: "Atendimento automatizado com respostas inteligentes e escalonamento para humano.",
+      tools: "Zendesk + GPT / Intercom + IA",
+      impacto: "Alto",
+    },
+    {
+      name: "Sistema de Tickets Inteligente",
+      desc: "Classificação e roteamento automático de solicitações por IA.",
+      tools: "Jira Service Management + ML",
+      impacto: "Alto",
+    },
+    {
+      name: "Voicebot",
+      desc: "Assistente telefônico com reconhecimento de voz e NLP.",
+      tools: "Twilio + Speech Recognition",
+      impacto: "Médio",
+    },
+  ],
+  "Faturamento e cobranças": [
+    {
+      name: "Faturamento Automático",
+      desc: "Geração e envio automatizado de faturas com vencimento programado.",
+      tools: "Stripe + QuickBooks / FreshBooks API",
+      impacto: "Alto",
+    },
+    {
+      name: "Cobrança Inteligente",
+      desc: "Sistema preditivo de cobrança com lembretes automatizados.",
+      tools: "Chargebee + IA preditiva",
+      impacto: "Alto",
+    },
+    {
+      name: "Conciliação Automática",
+      desc: "Matching automático de pagamentos vs faturas usando ML.",
+      tools: "Xero + ML reconciliation",
+      impacto: "Médio",
+    },
+  ],
+  "Gestão de estoque": [
+    {
+      name: "Estoque Preditivo",
+      desc: "Previsão de demanda e reposição automática com IA.",
+      tools: "TradeGecko + ML forecasting",
+      impacto: "Alto",
+    },
+    {
+      name: "Escaneamento Automatizado",
+      desc: "Reconhecimento de produtos por imagem para entrada/saída.",
+      tools: "Computer Vision + RFID",
+      impacto: "Médio",
+    },
+    {
+      name: "Alertas de Estoque",
+      desc: "Notificações automáticas quando o estoque fica abaixo do limite mínimo.",
+      tools: "Zapier + ERP + Slack",
+      impacto: "Médio",
+    },
+  ],
+  "Processos contábeis": [
+    {
+      name: "Contabilidade Automatizada",
+      desc: "Categorização automática de despesas e receitas com IA.",
+      tools: "QuickBooks + ML categorization",
+      impacto: "Alto",
+    },
+    {
+      name: "Relatórios Financeiros",
+      desc: "Geração automática de demonstrações financeiras e dashboards.",
+      tools: "PowerBI + Tableau + APIs",
+      impacto: "Alto",
+    },
+    {
+      name: "Auditoria com IA",
+      desc: "Detecção de anomalias e padrões suspeitos em transações.",
+      tools: "AuditBoard + ML anomaly detection",
+      impacto: "Médio",
+    },
+  ],
+  "Recursos humanos": [
+    {
+      name: "Recrutamento IA",
+      desc: "Triagem automática de currículos e match com o perfil da vaga.",
+      tools: "LinkedIn Recruiter + IA screening",
+      impacto: "Alto",
+    },
+    {
+      name: "Onboarding Automatizado",
+      desc: "Fluxo de integração com documentos, treinamento e acessos.",
+      tools: "BambooHR + Zapier + LMS",
+      impacto: "Alto",
+    },
+    {
+      name: "Avaliação de Desempenho",
+      desc: "Análise automática de métricas e feedback 360° com IA.",
+      tools: "Lattice + ML analytics",
+      impacto: "Médio",
+    },
+  ],
+  "Marketing e vendas": [
+    {
+      name: "CRM Preditivo",
+      desc: "Scoring de leads e previsão de fechamento com IA.",
+      tools: "Salesforce + Einstein AI",
+      impacto: "Alto",
+    },
+    {
+      name: "E-mail Marketing IA",
+      desc: "Segmentação automática e personalização de campanhas.",
+      tools: "HubSpot + Mailchimp + ML",
+      impacto: "Alto",
+    },
+    {
+      name: "Análise de Vendas",
+      desc: "Dashboard preditivo de vendas e recomendações.",
+      tools: "Tableau + PowerBI + ML",
+      impacto: "Médio",
+    },
+  ],
+  "Logística e entregas": [
+    {
+      name: "Rotas Inteligentes",
+      desc: "Otimização de rotas de entrega com IA em tempo real.",
+      tools: "Route4Me + Google Maps API",
+      impacto: "Alto",
+    },
+    {
+      name: "Tracking Automatizado",
+      desc: "Notificações de rastreamento e status de entregas.",
+      tools: "ShipStation + Twilio + IA",
+      impacto: "Alto",
+    },
+    {
+      name: "Gestão de Frota",
+      desc: "Monitoramento preditivo de manutenção e desempenho.",
+      tools: "Samsara + Fleet Complete",
+      impacto: "Médio",
+    },
+  ],
+  "Análise de dados": [
+    {
+      name: "Dashboard Automatizado",
+      desc: "Relatórios em tempo real com atualização automática.",
+      tools: "PowerBI + Tableau + Looker",
+      impacto: "Alto",
+    },
+    {
+      name: "Detecção de Tendências",
+      desc: "Identificação automática de padrões e anomalias.",
+      tools: "Python ML + AWS QuickSight",
+      impacto: "Alto",
+    },
+    {
+      name: "Data Pipeline Automatizado",
+      desc: "ETL automático com transformação e limpeza de dados.",
+      tools: "Airflow + dbt + Snowflake",
+      impacto: "Médio",
+    },
+  ],
+  "Comunicação interna": [
+    {
+      name: "Slackbot / Teams Bot",
+      desc: "Bot interno para consultas, relatórios e notificações.",
+      tools: "Slack API + GPT + Power Automate",
+      impacto: "Médio",
+    },
+    {
+      name: "Newsletter Automática",
+      desc: "Geração e envio de comunicações internas com IA.",
+      tools: "Mailchimp + GPT + Canva API",
+      impacto: "Baixo",
+    },
+    {
+      name: "Pesquisas Inteligentes",
+      desc: "Criação e análise automática de pesquisas de clima.",
+      tools: "Typeform + SurveyMonkey + ML",
+      impacto: "Baixo",
+    },
+  ],
+  "Documentação e relatórios": [
+    {
+      name: "Geração de Relatórios IA",
+      desc: "Redação automática de relatórios executivos com dados ao vivo.",
+      tools: "GPT + Notion + Airtable",
+      impacto: "Alto",
+    },
+    {
+      name: "OCR Inteligente",
+      desc: "Digitalização e classificação automática de documentos.",
+      tools: "Google Vision + AWS Textract",
+      impacto: "Alto",
+    },
+    {
+      name: "Gestão Documental",
+      desc: "Arquivamento, busca e recuperação inteligente de documentos.",
+      tools: "DocuSign + Box + IA indexing",
+      impacto: "Médio",
+    },
+  ],
+};
+
 export const PROCESS_TO_SOLUTIONS_EN = {
   "Customer Service": [
     {

@@ -71,6 +71,79 @@ export const LEVELS_ES = [
   },
 ];
 
+export const LEVELS_PT = [
+  {
+    min: 10,
+    max: 17,
+    name: "Emergente",
+    color: "#EF4444",
+    description:
+      "Sua empresa está nas etapas iniciais da transformação digital. Há um grande potencial de melhoria por meio da automação básica.",
+    actions: [
+      "Automatizar processos manuais repetitivos",
+      "Implementar um CRM/ERP básico",
+      "Digitalizar documentos e processos",
+    ],
+    standards: "ISO/IEC 42001 Seção 6.2 — Planejamento do SGA",
+  },
+  {
+    min: 18,
+    max: 24,
+    name: "Básico",
+    color: "#F59E0B",
+    description:
+      "Você tem bases digitais, mas falta integração e automação de processos multi-etapa.",
+    actions: [
+      "Integrar sistemas por meio de APIs",
+      "Implementar chatbots para atendimento ao cliente",
+      "Automatizar relatórios e documentação",
+    ],
+    standards: "ISO/IEC 23053 — Framework para sistemas de IA",
+  },
+  {
+    min: 25,
+    max: 31,
+    name: "Intermediário",
+    color: "#4DA8C4",
+    description:
+      "Boa base tecnológica. O próximo nível é implementar IA preditiva e automação inteligente.",
+    actions: [
+      "Implementar IA preditiva para tomada de decisões",
+      "Automatizar fluxos multi-etapa com IA",
+      "Dashboard analítico em tempo real",
+    ],
+    standards: "NIST AI RMF — Mapear, Medir, Gerenciar",
+  },
+  {
+    min: 32,
+    max: 37,
+    name: "Avançado",
+    color: "#66CCCC",
+    description:
+      "Sua empresa está preparada para automação cognitiva e agentes de IA autônomos.",
+    actions: [
+      "Implantar multi-agentes de IA autônomos",
+      "Automação end-to-end de processos centrais",
+      "Análise prescritiva com ML",
+    ],
+    standards: "ISO/IEC 42001 Seção 8 — Avaliação do SGA",
+  },
+  {
+    min: 38,
+    max: 40,
+    name: "Otimizado",
+    color: "#004B63",
+    description:
+      "Você é líder em transformação digital. O foco agora é inovação contínua e escalar a IA para toda a organização.",
+    actions: [
+      "Escalar IA para toda a organização",
+      "Inovação contínua com IA generativa",
+      "Criar centro de excelência em IA",
+    ],
+    standards: "ISO/IEC 42001 + EU AI Act Compliance",
+  },
+];
+
 export const LEVELS_EN = [
   {
     min: 10,
@@ -157,6 +230,19 @@ export const PROCESOS_OPTIONS_ES = [
   "Documentación y reportes",
 ];
 
+export const PROCESOS_OPTIONS_PT = [
+  "Atendimento ao cliente",
+  "Faturamento e cobranças",
+  "Gestão de estoque",
+  "Processos contábeis",
+  "Recursos humanos",
+  "Marketing e vendas",
+  "Logística e entregas",
+  "Análise de dados",
+  "Comunicação interna",
+  "Documentação e relatórios",
+];
+
 export const PROCESOS_OPTIONS_EN = [
   "Customer Service",
   "Billing & Collections",
@@ -179,6 +265,17 @@ export const INDUSTRIAS_ES = [
   { id: "manufactura", label: "Manufactura / Industria" },
   { id: "servicios", label: "Servicios Profesionales" },
   { id: "turismo", label: "Hotelería / Turismo" },
+];
+
+export const INDUSTRIAS_PT = [
+  { id: "educacion", label: "Educação" },
+  { id: "retail", label: "Varejo / Comércio" },
+  { id: "logistica", label: "Logística / Transporte" },
+  { id: "salud", label: "Saúde / Clínicas" },
+  { id: "fintech", label: "Fintech / Bancário" },
+  { id: "manufactura", label: "Manufatura / Indústria" },
+  { id: "servicios", label: "Serviços Profissionais" },
+  { id: "turismo", label: "Hotelaria / Turismo" },
 ];
 
 export const INDUSTRIAS_EN = [
@@ -252,6 +349,69 @@ export const ARQUITECTURAS_PREDEFINIDAS = [
   },
 ];
 
+export const ARQUITECTURAS_PREDEFINIDAS_PT = [
+  {
+    id: "basica",
+    nombre: "Arquitetura Básica",
+    descripcion:
+      "Automação de processos-chave com chatbots, relatórios automáticos e notificações inteligentes.",
+    tiempo: "1-3 meses",
+    costo: "$5-10M",
+    complejidad: "Baixa",
+    icono: "fa-robot",
+    color: "#4DA8C4",
+    componentes: [
+      { nombre: "Chatbot IA", desc: "Atendimento ao cliente automatizado" },
+      { nombre: "Dashboard", desc: "Relatórios em tempo real" },
+      { nombre: "Notificações", desc: "Alertas automáticos por e-mail/SMS" },
+      { nombre: "CRM", desc: "Gestão de clientes automatizada" },
+    ],
+  },
+  {
+    id: "intermedia",
+    nombre: "Arquitetura Intermediária",
+    descripcion:
+      "Automação multi-processo com integração de sistemas via APIs e análise preditiva.",
+    tiempo: "3-6 meses",
+    costo: "$15-25M",
+    complejidad: "Média",
+    icono: "fa-brain",
+    color: "#66CCCC",
+    componentes: [
+      {
+        nombre: "Multi-Agente IA",
+        desc: "Agentes de IA especializados por processo",
+      },
+      { nombre: "API Gateway", desc: "Integração de sistemas via APIs" },
+      { nombre: "ML Preditivo", desc: "Modelos preditivos por processo" },
+      { nombre: "Orquestrador", desc: "Orquestração de fluxos multi-etapa" },
+    ],
+  },
+  {
+    id: "avanzada",
+    nombre: "Arquitetura Avançada",
+    descripcion:
+      "Automação cognitiva com agentes autônomos, análise prescritiva e autoaprendizagem.",
+    tiempo: "6-12 meses",
+    costo: "$30-50M",
+    complejidad: "Alta",
+    icono: "fa-network-wired",
+    color: "#004B63",
+    componentes: [
+      {
+        nombre: "Agentes Autônomos",
+        desc: "Agentes de IA com tomada de decisão autônoma",
+      },
+      { nombre: "AutoML", desc: "Modelos de autoaprendizagem contínua" },
+      { nombre: "Gêmeo Digital", desc: "Simulação digital de processos" },
+      {
+        nombre: "Governança de IA",
+        desc: "Framework de governança e compliance",
+      },
+    ],
+  },
+];
+
 export const ARQUITECTURAS_PREDEFINIDAS_EN = [
   {
     id: "basica",
@@ -319,6 +479,18 @@ export const SECTOR_OPTIONS_ES = [
   { value: "servicios", label: "Servicios Profesionales" },
   { value: "turismo", label: "Hotelería / Turismo" },
   { value: "educacion", label: "Educación" },
+];
+
+export const SECTOR_OPTIONS_PT = [
+  { value: "", label: "Selecionar..." },
+  { value: "retail", label: "Varejo / Comércio" },
+  { value: "logistica", label: "Logística / Transporte" },
+  { value: "salud", label: "Saúde / Clínicas" },
+  { value: "fintech", label: "Fintech / Bancário" },
+  { value: "manufactura", label: "Manufatura / Indústria" },
+  { value: "servicios", label: "Serviços Profissionais" },
+  { value: "turismo", label: "Hotelaria / Turismo" },
+  { value: "educacion", label: "Educação" },
 ];
 
 export const SECTOR_OPTIONS_EN = [

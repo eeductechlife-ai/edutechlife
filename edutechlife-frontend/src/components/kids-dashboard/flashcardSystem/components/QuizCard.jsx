@@ -1,7 +1,9 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 const QuizCard = memo((props) => {
+  const { t } = useTranslation();
   const {
     card,
     flipped,
@@ -16,9 +18,12 @@ const QuizCard = memo((props) => {
 
   if (!card) {
     return (
-      <div className="flex items-center justify-center w-full" style={{ minHeight: "480px" }}>
+      <div
+        className="flex items-center justify-center w-full"
+        style={{ minHeight: "480px" }}
+      >
         <p className="text-sm text-[#64748B]">
-          Esta tarjeta no está disponible.
+          {t("kid.flashcards.card_unavailable")}
         </p>
       </div>
     );
@@ -61,7 +66,7 @@ const QuizCard = memo((props) => {
                 className="text-xs font-semibold mb-3 block tracking-wider"
                 style={{ color: themeColor || "#4DA8C4" }}
               >
-                PALABRA CLAVE
+                {t("kid.flashcards.keyword_label")}
               </span>
               <p className="text-3xl font-bold text-[#004B63] text-center mb-6">
                 {card.front}
@@ -69,7 +74,7 @@ const QuizCard = memo((props) => {
               <span className="text-6xl">{card.icon || themeIcon || "📚"}</span>
             </div>
             <p className="text-xs text-[#64748B] text-center">
-              Toca para ver la respuesta
+              {t("kid.flashcards.tap_to_reveal")}
             </p>
           </div>
 
@@ -88,7 +93,7 @@ const QuizCard = memo((props) => {
                   className="text-sm font-bold block mb-2"
                   style={{ color: themeColor || "#66CCCC" }}
                 >
-                  📖 DEFINICIÓN
+                  {t("kid.flashcards.definition_label")}
                 </span>
                 <p className="text-base font-semibold text-[#004B63] leading-relaxed">
                   {card.back}
@@ -104,7 +109,7 @@ const QuizCard = memo((props) => {
                     className="text-sm font-bold block mb-2"
                     style={{ color: themeColor || "#66CCCC" }}
                   >
-                    💡 EJEMPLO
+                    {t("kid.flashcards.example_label")}
                   </span>
                   <p className="text-base text-[#404B5C] leading-relaxed">
                     {card.example}
@@ -121,7 +126,7 @@ const QuizCard = memo((props) => {
                     className="text-sm font-bold block mb-2"
                     style={{ color: themeColor || "#66CCCC" }}
                   >
-                    🔗 TÉRMINOS RELACIONADOS
+                    {t("kid.flashcards.related_terms_label")}
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {card.relatedTerms.map((term, i) => (
@@ -153,7 +158,7 @@ const QuizCard = memo((props) => {
                 whileTap={{ scale: 0.96 }}
                 className="flex-1 py-3.5 bg-white border-2 border-red-400 text-red-500 rounded-xl font-bold text-base hover:bg-red-50 shadow-sm transition-all"
               >
-                ❌ No Entendí
+                {t("kid.flashcards.not_understood")}
               </motion.button>
               <motion.button
                 onClick={(e) => {
@@ -168,7 +173,7 @@ const QuizCard = memo((props) => {
                     "linear-gradient(135deg, #2ECC71 0%, #27AE60 100%)",
                 }}
               >
-                ✅ Entendí
+                {t("kid.flashcards.understood")}
               </motion.button>
             </div>
           </div>

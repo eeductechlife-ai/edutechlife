@@ -1,5 +1,6 @@
 import { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "../../../../i18n/I18nProvider";
 
 const COLORS = [
   "#4DA8C4",
@@ -76,66 +77,71 @@ export const SectionBlock = memo(({ section, i, dark }) => {
 });
 SectionBlock.displayName = "Sec";
 
-export const BookDisplay = memo(({ book, dark }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className={`rounded-2xl border overflow-hidden backdrop-blur-xl ${dark ? "bg-[#0F172A]/90 border-[#334155]" : "bg-white/90 border-[#E2E8F0] shadow-sm"}`}
-  >
-    <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-5 text-white">
-      <h3 className="font-bold text-lg mb-1">{book.title}</h3>
-      <p className="text-white/70 text-xs">
-        {new Date(book.createdAt).toLocaleDateString("es-ES", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </p>
-    </div>
-    <div className="p-4 space-y-4">
-      <div>
-        <h4
-          className={`text-xs font-bold uppercase tracking-wider mb-2 ${dark ? "text-[#94A3B8]" : "text-[#64748B]"}`}
-        >
-          Resumen
-        </h4>
-        <p
-          className={`text-sm leading-relaxed ${dark ? "text-[#CBD5E1]" : "text-[#475569]"}`}
-        >
-          {book.summary}
+export const BookDisplay = memo(({ book, dark }) => {
+  const { t, locale } = useTranslation();
+  const dateLocale =
+    { en: "en-US", pt: "pt-BR", es: "es-CO" }[locale] || "es-CO";
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`rounded-2xl border overflow-hidden backdrop-blur-xl ${dark ? "bg-[#0F172A]/90 border-[#334155]" : "bg-white/90 border-[#E2E8F0] shadow-sm"}`}
+    >
+      <div className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] p-5 text-white">
+        <h3 className="font-bold text-lg mb-1">{book.title}</h3>
+        <p className="text-white/70 text-xs">
+          {new Date(book.createdAt).toLocaleDateString(dateLocale, {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </p>
       </div>
-      {book.keyConcepts?.length > 0 && (
+      <div className="p-4 space-y-4">
         <div>
           <h4
             className={`text-xs font-bold uppercase tracking-wider mb-2 ${dark ? "text-[#94A3B8]" : "text-[#64748B]"}`}
           >
-            Conceptos Clave
+            {t("kid.smartbook.summary")}
           </h4>
-          <div className="flex flex-wrap gap-2">
-            {book.keyConcepts.map((c, i) => (
-              <ConceptChip key={i} label={c} i={i} />
-            ))}
-          </div>
-        </div>
-      )}
-      {book.sections?.length > 0 && (
-        <div>
-          <h4
-            className={`text-xs font-bold uppercase tracking-wider mb-2 ${dark ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+          <p
+            className={`text-sm leading-relaxed ${dark ? "text-[#CBD5E1]" : "text-[#475569]"}`}
           >
-            Secciones
-          </h4>
-          <div className="space-y-2">
-            {book.sections.map((s, i) => (
-              <SectionBlock key={i} section={s} i={i} dark={dark} />
-            ))}
-          </div>
+            {book.summary}
+          </p>
         </div>
-      )}
-    </div>
-  </motion.div>
-));
+        {book.keyConcepts?.length > 0 && (
+          <div>
+            <h4
+              className={`text-xs font-bold uppercase tracking-wider mb-2 ${dark ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+            >
+              {t("kid.smartbook.key_concepts")}
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {book.keyConcepts.map((c, i) => (
+                <ConceptChip key={i} label={c} i={i} />
+              ))}
+            </div>
+          </div>
+        )}
+        {book.sections?.length > 0 && (
+          <div>
+            <h4
+              className={`text-xs font-bold uppercase tracking-wider mb-2 ${dark ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+            >
+              {t("kid.smartbook.sections")}
+            </h4>
+            <div className="space-y-2">
+              {book.sections.map((s, i) => (
+                <SectionBlock key={i} section={s} i={i} dark={dark} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+});
 BookDisplay.displayName = "BD";

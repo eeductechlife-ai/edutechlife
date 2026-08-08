@@ -1,8 +1,10 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { CATEGORIES } from "../../data/newsData";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const CategoryTabs = memo(function CategoryTabs({ active, onChange, counts }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-wrap gap-2">
       {CATEGORIES.map((cat) => (
@@ -26,7 +28,7 @@ const CategoryTabs = memo(function CategoryTabs({ active, onChange, counts }) {
               active === cat.id ? "text-white" : "text-[#64748B]"
             }`}
           >
-            {cat.label}
+            {t(`kid.news.category_${cat.id}`)}
             {counts?.[cat.id] !== undefined && (
               <span
                 className={`ml-1.5 text-xs ${active === cat.id ? "text-white/70" : "text-[#94A3B8]"}`}

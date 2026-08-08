@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangle, Phone, MessageSquare, Heart, X } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 /**
  * Crisis Resources Modal
@@ -8,77 +9,78 @@ import { useState } from "react";
  * Triggered when suicidal ideation is detected
  */
 const CrisisResourcesModal = ({ isOpen, onClose, crisisLevel }) => {
+  const { t } = useTranslation();
   const [expandedTab, setExpandedTab] = useState("immediate");
 
   const resources = {
     immediate: {
-      title: "🆘 AYUDA INMEDIATA",
+      title: t("kid.crisis.section_immediate"),
       color: "from-red-600 to-red-700",
       items: [
         {
-          label: "Emergencias (Colombia)",
+          label: t("kid.crisis.immediate.emergencies"),
           value: "123",
-          description: "Llamada de emergencia",
-          action: "tel:123"
+          description: t("kid.crisis.immediate.emergencies_desc"),
+          action: "tel:123",
         },
         {
-          label: "Línea PAS",
+          label: t("kid.crisis.immediate.pas_line"),
           value: "+57 (2) 5149100",
-          description: "Crisis 24/7",
-          action: "tel:+5725149100"
+          description: t("kid.crisis.immediate.pas_line_desc"),
+          action: "tel:+5725149100",
         },
         {
-          label: "Teléfono Amigo",
-          value: "Disponible en tu país",
-          description: "Apoyo emocional",
-          action: null
-        }
-      ]
+          label: t("kid.crisis.immediate.friend_phone"),
+          value: t("kid.crisis.immediate.friend_phone_value"),
+          description: t("kid.crisis.immediate.friend_phone_desc"),
+          action: null,
+        },
+      ],
     },
     emotional: {
-      title: "❤️ APOYO EMOCIONAL",
+      title: t("kid.crisis.section_emotional"),
       color: "from-pink-600 to-pink-700",
       items: [
         {
-          label: "Habla con tus padres",
-          description: "Los adultos de confianza pueden ayudarte",
-          icon: Heart
+          label: t("kid.crisis.emotional.talk_parents"),
+          description: t("kid.crisis.emotional.talk_parents_desc"),
+          icon: Heart,
         },
         {
-          label: "Busca un consejero escolar",
-          description: "Tu escuela tiene profesionales",
-          icon: Heart
+          label: t("kid.crisis.emotional.school_counselor"),
+          description: t("kid.crisis.emotional.school_counselor_desc"),
+          icon: Heart,
         },
         {
-          label: "Crisis Text Line",
+          label: t("kid.crisis.emotional.crisis_text_line"),
           value: "Text HOME to 741741",
-          description: "Chat anónimo (USA/Canada)",
-          icon: MessageSquare
-        }
-      ]
+          description: t("kid.crisis.emotional.crisis_text_line_desc"),
+          icon: MessageSquare,
+        },
+      ],
     },
     reasons: {
-      title: "✨ RAZONES PARA VIVIR",
+      title: t("kid.crisis.section_reasons"),
       color: "from-blue-600 to-blue-700",
       items: [
         {
-          title: "Tu vida importa",
-          description: "Eres valioso/a tal como eres"
+          title: t("kid.crisis.reasons.life_matters"),
+          description: t("kid.crisis.reasons.life_matters_desc"),
         },
         {
-          title: "Las emociones cambian",
-          description: "Lo que sientes hoy puede ser diferente mañana"
+          title: t("kid.crisis.reasons.emotions_change"),
+          description: t("kid.crisis.reasons.emotions_change_desc"),
         },
         {
-          title: "Hay gente que te ama",
-          description: "Tu familia, amigos y educadores se preocupan"
+          title: t("kid.crisis.reasons.people_love_you"),
+          description: t("kid.crisis.reasons.people_love_you_desc"),
         },
         {
-          title: "El futuro tiene sorpresas",
-          description: "Muchas personas han pasado por esto y encontraron felicidad"
-        }
-      ]
-    }
+          title: t("kid.crisis.reasons.future_surprises"),
+          description: t("kid.crisis.reasons.future_surprises_desc"),
+        },
+      ],
+    },
   };
 
   return (
@@ -105,16 +107,16 @@ const CrisisResourcesModal = ({ isOpen, onClose, crisisLevel }) => {
                     id="crisis-title"
                     className="text-2xl font-bold text-[#004B63]"
                   >
-                    Estamos aquí para ti
+                    {t("kid.crisis.we_are_here")}
                   </h2>
                   <p className="text-[#004B63]/60 text-sm">
-                    Recursos de apoyo inmediato
+                    {t("kid.crisis.support_subtitle")}
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                aria-label="Cerrar"
+                aria-label={t("kid.crisis.close_aria")}
                 className="text-[#004B63]/40 hover:text-[#004B63] transition"
               >
                 <X className="w-6 h-6" />
@@ -124,10 +126,9 @@ const CrisisResourcesModal = ({ isOpen, onClose, crisisLevel }) => {
             {/* Alert Message */}
             <div className="bg-red-50 border-l-4 border-red-600 p-4 rounded mb-6">
               <p className="text-red-900 text-sm">
-                <strong>Detectamos que podrías estar pasando por un momento difícil.</strong>
-                {" "}
-                Queremos ayudarte. Si tienes pensamientos de autolesión,
-                <strong> contacta a alguien de confianza o llama a emergencias</strong>.
+                <strong>{t("kid.crisis.alert_1")}</strong>{" "}
+                {t("kid.crisis.alert_2")}
+                <strong> {t("kid.crisis.alert_3")}</strong>.
               </p>
             </div>
 
@@ -145,11 +146,10 @@ const CrisisResourcesModal = ({ isOpen, onClose, crisisLevel }) => {
                 >
                   {tab === "immediate" && "🆘"}
                   {tab === "emotional" && "❤️"}
-                  {tab === "reasons" && "✨"}
-                  {" "}
-                  {tab === "immediate" && "Inmediato"}
-                  {tab === "emotional" && "Apoyo"}
-                  {tab === "reasons" && "Razones"}
+                  {tab === "reasons" && "✨"}{" "}
+                  {tab === "immediate" && t("kid.crisis.tab_immediate")}
+                  {tab === "emotional" && t("kid.crisis.tab_emotional")}
+                  {tab === "reasons" && t("kid.crisis.tab_reasons")}
                 </button>
               ))}
             </div>
@@ -187,7 +187,7 @@ const CrisisResourcesModal = ({ isOpen, onClose, crisisLevel }) => {
                             className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-2 whitespace-nowrap"
                           >
                             <Phone className="w-4 h-4" />
-                            Llamar
+                            {t("kid.crisis.call")}
                           </a>
                         )}
                       </div>
@@ -249,14 +249,13 @@ const CrisisResourcesModal = ({ isOpen, onClose, crisisLevel }) => {
             {/* Footer */}
             <div className="mt-6 pt-6 border-t border-slate-200 text-center">
               <p className="text-[#004B63]/60 text-sm mb-4">
-                Tu bienestar emocional es importante. Habla con un adulto de confianza
-                o contacta a un profesional de salud mental.
+                {t("kid.crisis.footer")}
               </p>
               <button
                 onClick={onClose}
                 className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white font-bold hover:shadow-lg transition"
               >
-                Entendido, Gracias
+                {t("kid.crisis.understood_thanks")}
               </button>
             </div>
           </motion.div>
