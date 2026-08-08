@@ -12,6 +12,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { getUserInfo } from "../../utils/userInfo";
+import { useAvatarUrl } from "../userProfileSmartCard/resolveAvatar";
 import UserProfileSmartCard from "../userProfileSmartCard";
 import ErrorBoundary from "../forum/ErrorBoundary";
 import UserCoursesDashboard from "../IALab/UserCoursesDashboard";
@@ -48,6 +49,10 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
   }, [isLoaded]);
 
   const userInfo = getUserInfo(profile);
+  // La foto subida por ChangeAvatarModal se guarda en localStorage; usarla
+  // como fuente primaria (fallback: avatar_url de la BD). Reactiva ante el
+  // evento avatar-updated.
+  const avatarUrl = useAvatarUrl(profile);
 
   const handleLogout = async () => {
     try {
@@ -149,11 +154,8 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
             aria-label={t("modals.settings.user_menu_aria")}
           >
             <Avatar className="h-10 w-10 border-2 border-white shadow-md">
-              {userInfo.avatarUrl ? (
-                <AvatarImage
-                  src={userInfo.avatarUrl}
-                  alt={userInfo.displayName}
-                />
+              {avatarUrl ? (
+                <AvatarImage src={avatarUrl} alt={userInfo.displayName} />
               ) : (
                 <AvatarFallback className="bg-gradient-to-br from-[#004B63] to-[#00BCD4] text-white font-semibold">
                   {userInfo.initials}
@@ -168,7 +170,12 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
           align="end"
           sideOffset={8}
         >
-          <UserMenuHeader userInfo={userInfo} t={t} isSignedIn={isSignedIn} />
+          <UserMenuHeader
+            userInfo={userInfo}
+            avatarUrl={avatarUrl}
+            t={t}
+            isSignedIn={isSignedIn}
+          />
 
           <UserMenuItems
             t={t}
@@ -426,11 +433,8 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
 
             <div className="flex items-center gap-4 bg-gradient-to-b from-slate-50 to-white p-6 rounded-2xl border border-slate-100">
               <Avatar className="h-16 w-16 border-2 border-white shadow-md">
-                {userInfo.avatarUrl ? (
-                  <AvatarImage
-                    src={userInfo.avatarUrl}
-                    alt={userInfo.displayName}
-                  />
+                {avatarUrl ? (
+                  <AvatarImage src={avatarUrl} alt={userInfo.displayName} />
                 ) : (
                   <AvatarFallback className="bg-gradient-to-br from-[#004B63] to-[#00BCD4] text-white text-xl font-semibold">
                     {userInfo.initials}

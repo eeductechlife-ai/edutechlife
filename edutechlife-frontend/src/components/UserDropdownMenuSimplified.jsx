@@ -10,6 +10,7 @@ import { useAuthIdentity, signOutUser } from "./../hooks/useAuthIdentity";
 import { useStudentProfile } from "./../hooks/useStudentProfile";
 import { useNavigate } from "react-router-dom";
 import { getUserInfo } from "../utils/userInfo";
+import { useAvatarUrl } from "./userProfileSmartCard/resolveAvatar";
 import { Icon } from "../utils/iconMapping.jsx";
 import ErrorBoundary from "./forum/ErrorBoundary";
 import UserProfileSection from "./userDropdownMenuSimplified/UserProfileSection";
@@ -44,6 +45,10 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   const userInfo = getUserInfo(profile, authEmail);
+  // La foto subida por ChangeAvatarModal se guarda en localStorage; usarla
+  // como fuente primaria (fallback: avatar_url de la BD). Reactiva ante el
+  // evento avatar-updated.
+  const avatarUrl = useAvatarUrl(profile);
   const displayName =
     profileName || userInfo.displayName || t("mobile_menu.user_fallback");
 
@@ -243,9 +248,9 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
             aria-label={t("modals.settings.change_photo_aria")}
             title={t("modals.settings.change_photo_aria")}
           >
-            {userInfo.avatarUrl ? (
+            {avatarUrl ? (
               <img
-                src={userInfo.avatarUrl}
+                src={avatarUrl}
                 alt={displayName}
                 loading="lazy"
                 className="w-full h-full object-cover"
@@ -305,6 +310,7 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
           >
             <UserProfileSection
               userInfo={userInfo}
+              avatarUrl={avatarUrl}
               displayName={displayName}
               getUserInitials={getUserInitials}
               handleAvatarClick={handleAvatarClick}

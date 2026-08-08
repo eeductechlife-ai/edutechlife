@@ -1,7 +1,6 @@
 import { Icon } from "../../utils/iconMapping.jsx";
 import { Card, CardContent } from "../ui/card-simple";
-import { ls } from "../../utils/ialab";
-import { LS_KEYS } from "../../constants/ialab";
+import { resolveAvatarUrl } from "./resolveAvatar";
 import { useProfileData } from "./useProfileData";
 import ProfileInfoSection from "./components/ProfileInfoSection";
 import ProfileProgressSection from "./components/ProfileProgressSection";
@@ -35,8 +34,9 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
     handleOpenChangePassword,
   } = useProfileData({ isOpen, onClose, onOpenChangeAvatar });
 
-  // Avatar guardado por usuario (antes venia de Clerk).
-  const avatarUrl = ls.get(LS_KEYS.AVATAR, null);
+  // Avatar guardado por usuario (antes venia de Clerk). Prioriza la foto local
+  // de ChangeAvatarModal y cae a avatar_url de la BD.
+  const avatarUrl = resolveAvatarUrl(profileData);
 
   if (!isOpen) return null;
 

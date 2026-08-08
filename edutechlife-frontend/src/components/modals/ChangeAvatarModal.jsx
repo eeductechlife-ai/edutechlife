@@ -49,6 +49,7 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
       });
       ls.set(LS_KEYS.AVATAR, dataUrl);
       setAvatarUrl(dataUrl);
+      window.dispatchEvent(new CustomEvent("avatar-updated"));
       setSuccess(t("modals.avatar.success_updated"));
       setTimeout(() => {
         setSuccess("");
@@ -73,6 +74,7 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
     try {
       ls.remove(LS_KEYS.AVATAR);
       setAvatarUrl(null);
+      window.dispatchEvent(new CustomEvent("avatar-updated"));
       setSuccess(t("modals.avatar.success_deleted"));
       setTimeout(() => {
         setSuccess("");

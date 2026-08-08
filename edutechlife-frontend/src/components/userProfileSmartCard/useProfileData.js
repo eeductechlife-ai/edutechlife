@@ -134,7 +134,7 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
       const [profileRes, certRes] = await Promise.all([
         supabase
           .from("users")
-          .select("id, first_name, last_name, email, phone_number, created_at")
+          .select("id, first_name, last_name, email, created_at")
           .eq("id", userId)
           .maybeSingle(),
         supabase
@@ -146,12 +146,24 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
 
       let learningHours = 0;
       let createdAt = clerkCreatedAt;
+      let phone = "";
 
       if (profileRes.data) {
         const p = profileRes.data;
         const name =
           [p.first_name, p.last_name].filter(Boolean).join(" ") || clerkName;
-        const phone = p.phone_number || "";
+        // phone_number puede no existir en la tabla users (esquema variable);
+        // consultarlo por separado y tolerar su ausencia.
+        try {
+          const { data: phoneRow } = await supabase
+            .from("users")
+            .select("phone_number")
+            .eq("id", userId)
+            .maybeSingle();
+          phone = phoneRow?.phone_number || "";
+        } catch {
+          phone = "";
+        }
         setProfileData((prev) => ({
           ...prev,
           full_name: name,
@@ -264,26 +276,39 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
     setSaveMessage(null);
 
     try {
-      const updates = {};
+      // 1. Guardar el NOMBRE (columnas first_name/last_name, siempre presentes
+      //    en la tabla users). Es el cambio principal y no debe depender de
+      //    columnas opcionales.
       if (pendingChanges.full_name !== profileData.full_name) {
         const parts = pendingChanges.full_name.trim().split(" ");
-        updates.first_name = parts[0] || "";
-        updates.last_name = parts.slice(1).join(" ");
+        const updates = {
+          first_name: parts[0] || "",
+          last_name: parts.slice(1).join(" "),
+          updated_at: new Date().toISOString(),
+        };
+        const { error } = await supabase
+          .from("users")
+          .update(updates)
+          .eq("id", userId);
+        if (error) throw new Error(error.message);
       }
-      if (pendingChanges.phone !== profileData.phone)
-        updates.phone_number = pendingChanges.phone;
 
-      if (Object.keys(updates).length === 0) {
-        setIsSaving(false);
-        return;
+      // 2. Guardar el TELÉFONO por separado y de forma tolerante: la columna
+      //    phone_number puede no existir en el esquema real de users, en cuyo
+      //    caso se omite sin romper el guardado del nombre.
+      if (pendingChanges.phone !== profileData.phone) {
+        try {
+          await supabase
+            .from("users")
+            .update({
+              phone_number: pendingChanges.phone,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", userId);
+        } catch (phoneErr) {
+          console.warn("phone_number column unavailable:", phoneErr.message);
+        }
       }
-
-      const { error } = await supabase
-        .from("users")
-        .update({ ...updates, updated_at: new Date().toISOString() })
-        .eq("id", userId);
-
-      if (error) throw new Error(error.message);
 
       setProfileData((prev) => ({
         ...prev,

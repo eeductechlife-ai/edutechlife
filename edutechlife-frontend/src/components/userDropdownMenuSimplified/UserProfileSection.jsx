@@ -2,6 +2,7 @@ import React from "react";
 
 const UserProfileSection = ({
   userInfo,
+  avatarUrl,
   displayName,
   getUserInitials,
   handleAvatarClick,
@@ -16,9 +17,9 @@ const UserProfileSection = ({
           aria-label={t("modals.settings.change_photo_aria")}
           title={t("modals.settings.change_photo_aria")}
         >
-          {userInfo.avatarUrl ? (
+          {avatarUrl ? (
             <img
-              src={userInfo.avatarUrl}
+              src={avatarUrl}
               alt={displayName}
               loading="lazy"
               className="w-full h-full object-cover"
