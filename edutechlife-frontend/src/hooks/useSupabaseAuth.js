@@ -34,6 +34,29 @@ export const useSupabaseAuth = () => {
 
           setProfile(profileData);
         } else {
+          // The SmartBoard login/sign-up flows persist the backend-issued tokens
+          // in localStorage without a supabase-js session. Restore that session
+          // here (which also re-enables auto-refresh), instead of wiping the
+          // tokens and leaving the dashboard stuck on its loading skeleton.
+          const storedToken = localStorage.getItem("auth_token");
+          const storedRefresh = localStorage.getItem("refresh_token");
+          if (storedToken) {
+            const { data: restored, error: restoreError } =
+              await supabase.auth.setSession({
+                access_token: storedToken,
+                refresh_token: storedRefresh || undefined,
+              });
+            if (restored?.user && !restoreError) {
+              setUser(restored.user);
+              const { data: profileData } = await supabase
+                .from("users")
+                .select("*")
+                .eq("id", restored.user.id)
+                .single();
+              setProfile(profileData);
+              return;
+            }
+          }
           setUser(null);
           setProfile(null);
           localStorage.removeItem("auth_token");
@@ -89,7 +112,14 @@ export const useSupabaseAuth = () => {
 
   // Sign up
   const signUp = useCallback(
-    async ({ email, password, username, firstName, lastName }) => {
+    async ({
+      email,
+      password,
+      username,
+      firstName,
+      lastName,
+      accountType = "ialab",
+    }) => {
       setLoading(true);
       setError(null);
 
@@ -105,6 +135,7 @@ export const useSupabaseAuth = () => {
               username,
               firstName,
               lastName,
+              accountType,
             }),
           },
         );

@@ -37,13 +37,14 @@ describe('Stripe service', () => {
   let stripeService;
   let mockSessionsCreate;
   let mockConstructEvent;
-  let mockUpdateUser;
   let mockStripeFactory;
+  // Captura los updates a Supabase por tabla: { table, fields, matchColumn, matchValue }
+  let supabaseUpdates;
 
   beforeAll(() => {
     mockSessionsCreate = vi.fn();
     mockConstructEvent = vi.fn();
-    mockUpdateUser = vi.fn();
+    supabaseUpdates = [];
 
     mockStripeFactory = vi.fn(() => ({
       checkout: { sessions: { create: mockSessionsCreate } },
@@ -59,16 +60,22 @@ describe('Stripe service', () => {
       exports: mockStripeFactory,
     };
 
-    const clerkPath = require.resolve('@clerk/backend');
-    delete require.cache[clerkPath];
-    require.cache[clerkPath] = {
-      id: clerkPath,
-      filename: clerkPath,
+    // Mock del cliente Supabase del backend: registra cada .update().eq()
+    const supabasePath = require.resolve('../../db/supabase');
+    delete require.cache[supabasePath];
+    require.cache[supabasePath] = {
+      id: supabasePath,
+      filename: supabasePath,
       loaded: true,
       exports: {
-        createClerkClient: vi.fn(() => ({
-          users: { updateUser: mockUpdateUser },
-        })),
+        from: (table) => ({
+          update: (fields) => ({
+            eq: (matchColumn, matchValue) => {
+              supabaseUpdates.push({ table, fields, matchColumn, matchValue });
+              return Promise.resolve({ error: null });
+            },
+          }),
+        }),
       },
     };
 
@@ -80,6 +87,7 @@ describe('Stripe service', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    supabaseUpdates.length = 0;
   });
 
   afterAll(() => {
@@ -158,7 +166,7 @@ describe('Stripe service', () => {
   });
 
   describe('handleWebhookEvent', () => {
-    it('handles checkout.session.completed', async () => {
+    it('persists IALab (pro) plan to the users table on checkout completed', async () => {
       const event = {
         type: 'checkout.session.completed',
         data: {
@@ -171,14 +179,36 @@ describe('Stripe service', () => {
 
       const result = await stripeService.handleWebhookEvent(event);
 
-      expect(mockUpdateUser).toHaveBeenCalledWith('u1', {
-        publicMetadata: {
-          plan: 'pro',
-          subscriptionId: 'sub_123',
-          subscriptionStatus: 'active',
-        },
+      expect(supabaseUpdates).toHaveLength(1);
+      expect(supabaseUpdates[0]).toEqual({
+        table: 'users',
+        fields: { plan: 'pro', subscription_id: 'sub_123', subscription_status: 'active' },
+        matchColumn: 'id',
+        matchValue: 'u1',
       });
       expect(result).toEqual({ userId: 'u1', planId: 'pro', subscriptionId: 'sub_123', status: 'active' });
+    });
+
+    it('persists SmartBoard plan to the students table (independent from users)', async () => {
+      const event = {
+        type: 'checkout.session.completed',
+        data: {
+          object: {
+            metadata: { userId: 'kid1', planId: 'smartboard_premium' },
+            subscription: 'sub_kid',
+          },
+        },
+      };
+
+      await stripeService.handleWebhookEvent(event);
+
+      expect(supabaseUpdates).toHaveLength(1);
+      expect(supabaseUpdates[0]).toEqual({
+        table: 'students',
+        fields: { subscription_tier: 'premium' },
+        matchColumn: 'auth_id',
+        matchValue: 'kid1',
+      });
     });
 
     it('handles checkout.session.completed with missing metadata', async () => {
@@ -189,7 +219,7 @@ describe('Stripe service', () => {
 
       const result = await stripeService.handleWebhookEvent(event);
 
-      expect(mockUpdateUser).not.toHaveBeenCalled();
+      expect(supabaseUpdates).toHaveLength(0);
       expect(result).toBeUndefined();
     });
 
@@ -207,17 +237,17 @@ describe('Stripe service', () => {
 
       const result = await stripeService.handleWebhookEvent(event);
 
-      expect(mockUpdateUser).toHaveBeenCalledWith('u1', {
-        publicMetadata: {
-          plan: 'pro',
-          subscriptionStatus: 'active',
-        },
+      expect(supabaseUpdates[0]).toEqual({
+        table: 'users',
+        fields: { plan: 'pro', subscription_id: 'sub_123', subscription_status: 'active' },
+        matchColumn: 'id',
+        matchValue: 'u1',
       });
       expect(result.userId).toBe('u1');
       expect(result.status).toBe('active');
     });
 
-    it('handles customer.subscription.deleted', async () => {
+    it('downgrades to free on subscription deleted', async () => {
       const event = {
         type: 'customer.subscription.deleted',
         data: {
@@ -231,11 +261,11 @@ describe('Stripe service', () => {
 
       const result = await stripeService.handleWebhookEvent(event);
 
-      expect(mockUpdateUser).toHaveBeenCalledWith('u1', {
-        publicMetadata: {
-          plan: 'free',
-          subscriptionStatus: 'canceled',
-        },
+      expect(supabaseUpdates[0]).toEqual({
+        table: 'users',
+        fields: { plan: 'free', subscription_id: 'sub_123', subscription_status: 'canceled' },
+        matchColumn: 'id',
+        matchValue: 'u1',
       });
       expect(result.status).toBe('canceled');
     });
@@ -248,7 +278,7 @@ describe('Stripe service', () => {
 
       const result = await stripeService.handleWebhookEvent(event);
 
-      expect(mockUpdateUser).not.toHaveBeenCalled();
+      expect(supabaseUpdates).toHaveLength(0);
       expect(result.userId).toBeUndefined();
     });
 

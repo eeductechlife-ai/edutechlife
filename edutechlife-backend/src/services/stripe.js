@@ -1,18 +1,50 @@
 const { getPlanById } = require('../data/plans');
+const supabase = require('../db/supabase');
 
 function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) return null;
   return require('stripe')(process.env.STRIPE_SECRET_KEY);
 }
 
-async function updateClerkUserMetadata(userId, metadata) {
-  if (!process.env.CLERK_SECRET_KEY) return;
+// Planes de SmartBoard (menores 6–16): su estado vive en `students`, no en
+// `users`. Mantiene los datos de IALab (adultos) y SmartBoard (niños) separados.
+const SMARTBOARD_PLAN_IDS = new Set(['smartboard_premium']);
+
+/**
+ * Persiste el estado de suscripción en Supabase, en la tabla correcta según el
+ * público del plan. Es el destino canónico tras migrar auth de Clerk a Supabase
+ * (de aquí lee el frontend el plan/tier del usuario).
+ *
+ * - Planes IALab (adultos)   → `users` (columnas plan/subscription_*), key: id
+ * - Planes SmartBoard (niños) → `students` (subscription_tier), key: auth_id
+ *
+ * Nunca lanza: un fallo aquí no debe impedir devolver 200 a Stripe (evitar
+ * reintentos innecesarios del webhook). `userId` es el UUID de auth.users.
+ */
+async function updateSupabaseUserSubscription(userId, { planId, subscriptionId, status }) {
+  if (!userId) return;
+  const active = status === 'active';
   try {
-    const { createClerkClient } = require('@clerk/backend');
-    const client = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
-    await client.users.updateUser(userId, { publicMetadata: metadata });
+    if (SMARTBOARD_PLAN_IDS.has(planId)) {
+      const { error } = await supabase
+        .from('students')
+        .update({ subscription_tier: active ? 'premium' : 'free' })
+        .eq('auth_id', userId);
+      if (error) console.error('Supabase students subscription update failed:', error.message);
+      return;
+    }
+
+    const { error } = await supabase
+      .from('users')
+      .update({
+        plan: active ? planId : 'free',
+        subscription_id: subscriptionId,
+        subscription_status: status,
+      })
+      .eq('id', userId);
+    if (error) console.error('Supabase users subscription update failed:', error.message);
   } catch (err) {
-    console.error('Error updating Clerk user metadata:', err.message);
+    console.error('Supabase subscription update threw:', err.message);
   }
 }
 
@@ -77,10 +109,10 @@ async function handleWebhookEvent(event) {
         return;
       }
 
-      await updateClerkUserMetadata(userId, {
-        plan: planId,
+      await updateSupabaseUserSubscription(userId, {
+        planId,
         subscriptionId,
-        subscriptionStatus: 'active',
+        status: 'active',
       });
 
       return { userId, planId, subscriptionId, status: 'active' };
@@ -94,9 +126,10 @@ async function handleWebhookEvent(event) {
       const status = subscription.status;
 
       if (userId) {
-        await updateClerkUserMetadata(userId, {
-          plan: status === 'active' ? planId : 'free',
-          subscriptionStatus: status,
+        await updateSupabaseUserSubscription(userId, {
+          planId,
+          subscriptionId: subscription.id,
+          status,
         });
       }
 

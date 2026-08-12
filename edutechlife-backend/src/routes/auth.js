@@ -1,6 +1,8 @@
 const express = require('express');
 const crypto = require('crypto');
 const supabase = require('../db/supabase');
+const { createSessionClient } = require('../db/sessionClient');
+const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -248,8 +250,10 @@ router.post('/reset-password', async (req, res) => {
 /**
  * GET /api/auth/user/:clerk_id
  * Get user data from Supabase by Clerk ID
+ *
+ * Autenticado y con ownership: solo se puede leer el propio registro.
  */
-router.get('/user/:clerk_id', async (req, res) => {
+router.get('/user/:clerk_id', requireAuth, async (req, res) => {
   try {
     const { clerk_id } = req.params;
 
@@ -264,6 +268,16 @@ router.get('/user/:clerk_id', async (req, res) => {
         return res.status(404).json({ error: 'User not found' });
       }
       throw error;
+    }
+
+    // Ownership: la identidad hoy es el Supabase uid del JWT; el registro
+    // legacy se vincula por email. Nadie debe leer perfiles ajenos.
+    const normalized = (s) => String(s || '').toLowerCase();
+    if (
+      (!req.userEmail || normalized(data.email) !== normalized(req.userEmail)) &&
+      data.clerk_id !== req.userId
+    ) {
+      return res.status(403).json({ error: 'Forbidden' });
     }
 
     res.json(data);
@@ -621,8 +635,9 @@ router.get('/oauth-demo/:provider', async (req, res) => {
       password: tempPassword,
     });
 
-    // Sign in to get JWT
-    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+    // Sign in to get JWT — throwaway client so the shared service client never
+    // holds a user session (signInWithPassword pins one, breaking data queries)
+    const { data: signInData, error: signInError } = await createSessionClient().auth.signInWithPassword({
       email: demoEmail,
       password: tempPassword,
     });
@@ -710,7 +725,11 @@ router.post('/parent-login', async (req, res) => {
  *         description: Validación fallida
  */
 router.post('/signup', async (req, res) => {
-  const { email, password, username, firstName, lastName } = req.body || {};
+  const { email, password, username, firstName, lastName, accountType } = req.body || {};
+
+  // Solo se aceptan los dos productos; cualquier otro valor cae en 'ialab'
+  // (comportamiento histórico) para no romper clientes existentes.
+  const safeAccountType = accountType === 'smartboard' ? 'smartboard' : 'ialab';
 
   try {
     const result = await authService.signUp({
@@ -720,6 +739,7 @@ router.post('/signup', async (req, res) => {
       firstName,
       lastName,
       userType: 'student',
+      accountType: safeAccountType,
     });
 
     res.status(201).json(result);

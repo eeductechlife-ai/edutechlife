@@ -133,6 +133,7 @@ const SmartBoardLogin = () => {
           username: formData.username,
           firstName: formData.firstName,
           lastName: formData.lastName,
+          accountType: "smartboard",
         });
         setSuccess(t("login.success.email_confirmation"));
         setFormData({

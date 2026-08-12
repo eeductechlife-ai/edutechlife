@@ -1,10 +1,11 @@
 const supabase = require('../db/supabase');
+const { createSessionClient } = require('../db/sessionClient');
 
 /**
  * Sign up a new user with email + password
  * Creates auth.users entry + users profile
  */
-async function signUp({ email, password, username, firstName, lastName, userType = 'student' }) {
+async function signUp({ email, password, username, firstName, lastName, userType = 'student', accountType = 'ialab' }) {
   if (!email || !password) {
     throw new Error('Email and password required');
   }
@@ -53,6 +54,7 @@ async function signUp({ email, password, username, firstName, lastName, userType
           first_name: firstName,
           last_name: lastName,
           user_type: userType,
+          account_type: accountType,
           clerk_id: userId,
         },
       ])
@@ -72,7 +74,9 @@ async function signUp({ email, password, username, firstName, lastName, userType
     }
 
     // 3. Sign in the new user to return a session token immediately
-    const { data: signInData } = await supabase.auth.signInWithPassword({
+    // Use a throwaway client: signInWithPassword saves a session on the client,
+    // which would poison the shared service client (role=authenticated + RLS).
+    const { data: signInData } = await createSessionClient().auth.signInWithPassword({
       email,
       password,
     });
@@ -106,8 +110,9 @@ async function signIn({ email, password }) {
   }
 
   try {
-    // Sign in via Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+    // Sign in via Supabase Auth (throwaway client — never pin a session on the
+    // shared service client)
+    const { data: authData, error: authError } = await createSessionClient().auth.signInWithPassword({
       email,
       password,
     });
@@ -336,7 +341,7 @@ async function signInParent({ studentEmail, parentPassword }) {
   const normalizedStudentEmail = String(studentEmail).toLowerCase().trim();
   const parentAuthEmail = buildParentEmail(normalizedStudentEmail);
 
-  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+  const { data: authData, error: authError } = await createSessionClient().auth.signInWithPassword({
     email: parentAuthEmail,
     password: parentPassword,
   });
