@@ -95,7 +95,7 @@ const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
         ></div>
       </div>
 
-      <div className="relative w-full max-w-md">
+      <div className="relative w-full max-w-md max-h-[calc(100vh-2rem)] max-h-[calc(100dvh-2rem)] overflow-y-auto">
         <div
           className="absolute -inset-1 rounded-3xl opacity-50"
           style={{
@@ -113,7 +113,7 @@ const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
         >
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 rounded-lg flex items-center justify-center text-[#B2D8E5] hover:text-white hover:bg-[#004B63]/50 transition-all"
+            className="absolute top-4 right-4 w-11 h-11 rounded-lg flex items-center justify-center text-[#B2D8E5] hover:text-white hover:bg-[#004B63]/50 transition-all"
           >
             <X className="w-5 h-5" />
           </button>
@@ -189,7 +189,7 @@ const AdminLoginModal = ({ isOpen, onClose, onLogin }) => {
                     showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
                   }
                   aria-pressed={showPassword}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#B2D8E5]/50 hover:text-[#B2D8E5] transition-colors"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-[#B2D8E5]/50 hover:text-[#B2D8E5] transition-colors"
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />

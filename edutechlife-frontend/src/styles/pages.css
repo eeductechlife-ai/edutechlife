@@ -403,6 +403,7 @@
 /* Pillar Tabs */
 .pillar-tabs {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 0.75rem;
   padding: 1.5rem 5%;
@@ -1216,6 +1217,12 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin-bottom: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .caso-metrics {
+    grid-template-columns: 1fr;
+  }
 }
 
 .metric-item {
@@ -2587,6 +2594,14 @@
   border-radius: 1rem;
 }
 
+@media (max-width: 480px) {
+  .modal-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+}
+
 .modal-stat {
   text-align: center;
 }
@@ -3793,7 +3808,6 @@
     opacity: 0.5;
   }
 }
-
 
 /* =========================
    AUTOMATION ARCHITECT

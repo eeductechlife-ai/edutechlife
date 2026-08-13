@@ -99,11 +99,11 @@ const PointsDisplay = memo(({ totalPoints, totalActiveMinutes }) => {
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="bg-white/70 backdrop-blur-xl border border-[#E2E8F0]/50 rounded-2xl p-6 text-[#004B63] shadow-xl"
+      className="bg-white/70 backdrop-blur-xl border-2 border-[#FFD166]/60 rounded-2xl p-6 text-[#004B63] shadow-xl"
     >
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-white/80 text-sm">
+          <p className="text-[#64748B] text-sm">
             {t("kid.points_rewards.your_points")}
           </p>
           <motion.p
@@ -115,11 +115,12 @@ const PointsDisplay = memo(({ totalPoints, totalActiveMinutes }) => {
           </motion.p>
         </div>
         <div className="text-right">
-          <p className="text-white/80 text-sm">
+          <p className="text-[#64748B] text-sm">
             {t("kid.points_rewards.level")}
           </p>
-          <p className="text-2xl font-bold" style={{ color: level.color }}>
-            {level.emoji} {t(level.levelKey)}
+          <p className="text-2xl font-bold text-[#00303F]">
+            <span style={{ color: level.color }}>{level.emoji}</span>{" "}
+            {t(level.levelKey)}
           </p>
         </div>
       </div>
@@ -134,7 +135,7 @@ const PointsDisplay = memo(({ totalPoints, totalActiveMinutes }) => {
           transition={{ duration: 1 }}
         />
       </div>
-      <p className="text-xs text-white/60 mt-2">
+      <p className="text-xs text-[#64748B] mt-2">
         {t("kid.points_rewards.minutes_to_next_level", {
           minutes: safeMinutes,
           current: totalPoints % 500,
@@ -272,28 +273,35 @@ const PointsRewardsSystem = memo(() => {
       />
 
       {/* Tabs */}
-      <div className="flex gap-2">
+      <div className="flex gap-1.5 bg-white/70 backdrop-blur-xl border border-[#E2E8F0]/50 rounded-full p-1.5 shadow-sm">
         {["puntos", "tienda", "historial"].map((tab) => (
-          <motion.button
+          <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+            className={`relative flex-1 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
               activeTab === tab
-                ? "bg-[#4DA8C4] text-white shadow-md"
-                : "bg-white text-[#64748B] hover:bg-[#F8FAFC] border border-[#E2E8F0]"
+                ? "text-white"
+                : "text-[#64748B] hover:text-[#004B63]"
             }`}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
           >
-            {tab === "puntos" && "💎 "}
-            {tab === "tienda" && "🛒 "}
-            {tab === "historial" && "📜 "}
-            {tab === "puntos"
-              ? t("kid.points_rewards.tab_points")
-              : tab === "tienda"
-                ? t("kid.points_rewards.tab_store")
-                : t("kid.points_rewards.tab_history")}
-          </motion.button>
+            {activeTab === tab && (
+              <motion.span
+                layoutId="pointsTabPill"
+                className="absolute inset-0 rounded-full bg-[#4DA8C4] shadow-md"
+                transition={{ type: "spring", damping: 28, stiffness: 350 }}
+              />
+            )}
+            <span className="relative z-10">
+              {tab === "puntos" && "💎 "}
+              {tab === "tienda" && "🛒 "}
+              {tab === "historial" && "📜 "}
+              {tab === "puntos"
+                ? t("kid.points_rewards.tab_points")
+                : tab === "tienda"
+                  ? t("kid.points_rewards.tab_store")
+                  : t("kid.points_rewards.tab_history")}
+            </span>
+          </button>
         ))}
       </div>
 

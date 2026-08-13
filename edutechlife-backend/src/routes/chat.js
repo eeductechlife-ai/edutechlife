@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { chat, chatStream, validateMessages } = require('../services/deepseek');
 const { chatMessageLimiter } = require('../middleware/rateLimiter');
+const { optionalAuth } = require('../middleware/auth');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -65,7 +66,7 @@ function checkApiKey(req, res) {
  *       500:
  *         description: Error del servidor
  */
-router.post('/', chatMessageLimiter, async (req, res) => {
+router.post('/', chatMessageLimiter, optionalAuth, async (req, res) => {
   const { messages, prompt, systemPrompt, isJson, temperature, maxTokens, model } = req.body;
 
   let msgs = messages;
@@ -87,7 +88,9 @@ router.post('/', chatMessageLimiter, async (req, res) => {
     const text = data.choices?.[0]?.message?.content;
     if (!text) return res.status(500).json({ error: 'No response from API' });
 
-    console.log(`[DeepSeek] Response time: ${Date.now() - new Date().getTime()}ms`);
+    if (req.userId) {
+      console.log(`[DeepSeek] call attributed to user ${req.userId} (${Date.now() - new Date().getTime()}ms)`);
+    }
     res.json({ result: text });
   } catch (e) {
     console.error('Error calling DeepSeek API:', e);
@@ -144,7 +147,7 @@ router.post('/', chatMessageLimiter, async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.post('/stream', async (req, res) => {
+router.post('/stream', optionalAuth, async (req, res) => {
   const { messages, prompt, systemPrompt, isJson, temperature, maxTokens, model } = req.body;
 
   let msgs = messages;

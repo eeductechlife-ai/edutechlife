@@ -7,6 +7,22 @@ const API_BASE_URL =
 
 const TIMEOUT_MS = 60000; // 60 segundos timeout (Deepseek tarda en empezar)
 
+/**
+ * JWT de Supabase guardado por useSupabaseAuth (clave auth_token en
+ * localStorage). Se adjunta como Bearer para que el backend pueda
+ * atribuir la llamada al usuario; el chat público sigue funcionando
+ * sin sesión.
+ */
+function getAuthToken() {
+  try {
+    return typeof window !== "undefined"
+      ? localStorage.getItem("auth_token")
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 async function fetchWithTimeout(url, options, timeout = TIMEOUT_MS) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
@@ -50,7 +66,7 @@ function stripCodeFences(text) {
 }
 
 function extractBalancedJson(text) {
-  const start = text.search(/[\[{]/);
+  const start = text.search(/[[{]/);
   if (start === -1) return null;
   let depth = 0;
   let inString = false;
@@ -159,6 +175,9 @@ export async function callDeepseek(
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        ...(getAuthToken()
+          ? { Authorization: `Bearer ${getAuthToken()}` }
+          : {}),
       },
       body: JSON.stringify(payload),
       mode: "cors",
@@ -245,6 +264,7 @@ export async function callDeepseekStream(
       chunkCb,
       opts.isJson ?? legacyIsJson,
       opts.signal,
+      getAuthToken() ? { Authorization: `Bearer ${getAuthToken()}` } : {},
     );
   } else {
     // Legacy format: callDeepseekStream(prompt, systemPrompt, isJson, onChunk)
@@ -259,7 +279,14 @@ export async function callDeepseekStream(
       temperature: 0.75,
       maxTokens: 1200,
     };
-    return streamFetch(url, payload, onChunk, legacyIsJson);
+    return streamFetch(
+      url,
+      payload,
+      onChunk,
+      legacyIsJson,
+      undefined,
+      getAuthToken() ? { Authorization: `Bearer ${getAuthToken()}` } : {},
+    );
   }
 }
 

@@ -179,7 +179,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
           <div className="flex items-center gap-1">
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              className="p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
               aria-label={t("ialab.study_planner.close_aria")}
             >
               <Icon

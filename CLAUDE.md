@@ -165,6 +165,14 @@ Any string works as a custom agent type.
   - `scripts/prerender.mjs` — prerender con puppeteer-core (Chrome local)
   - 11/16 rutas prerenderizadas con contenido real
   - `npm run build:full` para build + prerender
+- **Responsive Web Design (F0–F5)**: auditoría completa con 4 subagentes (~40 hallazgos) + implementación:
+  - F0: `base.css` overflow-x guard + text-size-adjust; Footer legal row wrap; Hero CTAs `px-6 sm:px-12`; `h-dvh` fallbacks (MobileDrawer, SmartBoard, loading skeleton)
+  - F1: modales con scroll (`max-h-[90dvh] overflow-y-auto`): ExamResultViewer, LeadCapture, AdminLogin, UserMenu dropdown, UserDropdownMenuPremium; touch targets semáforo CF (`after:-inset-3`); headers de PDF/Resources con truncate + labels `hidden sm:inline`; Sidebar 400px→responsive
+  - F2: barra Valeria — bottom-padding en `DiagnosticoVAK.jsx:87` + botones `top-[calc(env(safe-area-inset-top,0px)+76px)]` (safe-area-aware), slider oculto solo en <520px; `.pillar-tabs` flex-wrap; OVANavTabs wrap; skeleton `max-w-full`
+  - F3: grids responsive (`grid-cols-1 sm:grid-cols-2`) en AutomationLeadCapture/ROICalculator, VAKInfoPanel; `infoGrid` documentStyles → `repeat(auto-fit, minmax(120px,1fr))`; `.caso-metrics`/`.modal-stats` media queries; AnalyticsDashboard flex-wrap; ModuleTopicAccordion `pl-4 md:pl-8`
+  - F4: X buttons ≥44px (ContactModal, ModalContacto, HabeasDataModal, StudyPlanner, IALabForumCreatePost); `LandingPage.jsx` fallback dinámico `h-${h}` → mapa literal; LocaleSwitcher py-2.5
+  - F5: `GlobalCanvas` sin blur/animación en táctil (`matchMedia('(pointer: coarse)')`); FloatingParticles ya tenía cap 25 móvil
+  - Verificación: ESLint 0 errores, a11y 36/36, `vite build` OK (2m36s)
 
 ### Secrets (set)
 - `SUPABASE_PROJECT_ID`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID_FRONTEND`, `RENDER_DEPLOY_HOOK`, `SMOKE_TEST_FRONTEND_URL`, `SMOKE_TEST_BACKEND_URL`

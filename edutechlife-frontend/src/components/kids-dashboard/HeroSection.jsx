@@ -4,7 +4,6 @@ import {
   Sun,
   CloudSun,
   Moon,
-  Gem,
   Eye,
   Ear,
   Zap,
@@ -67,8 +66,7 @@ const QUICK_ACTIONS = [
 const LEARNING_PATH = ["calificaciones", "flashcards", "oral", "examenes"];
 
 const HeroSection = memo(({ onTabChange }) => {
-  const { totalPoints, vakResult, activeStudyDeck, studentGrades } =
-    useSmartBoardKids();
+  const { vakResult, activeStudyDeck, studentGrades } = useSmartBoardKids();
   const { t } = useTranslation();
   const reduce = useReducedMotion();
 
@@ -99,8 +97,8 @@ const HeroSection = memo(({ onTabChange }) => {
   const floatAnim = reduce
     ? {}
     : {
-        y: [0, -14, 0],
-        transition: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+        y: [0, -10, 0],
+        transition: { duration: 4, repeat: Infinity, ease: "easeOut" },
       };
 
   // Determine learning path progress
@@ -122,7 +120,7 @@ const HeroSection = memo(({ onTabChange }) => {
       className="relative overflow-hidden rounded-[1.5rem] md:rounded-[2rem]"
       style={{
         background: SB_GRADIENTS.hero,
-        boxShadow: `${glow(SB_COLORS.primary, 0.4)}, 0 24px 60px -20px rgba(0,48,63,0.55)`,
+        boxShadow: `${glow(SB_COLORS.primary, 0.28)}, 0 24px 60px -20px rgba(0,48,63,0.55)`,
       }}
     >
       {/* Soft floating orbs */}
@@ -133,7 +131,9 @@ const HeroSection = memo(({ onTabChange }) => {
           background:
             "radial-gradient(circle, rgba(255,209,102,0.35), transparent 70%)",
         }}
-        animate={reduce ? {} : { scale: [1, 1.2, 1], opacity: [0.6, 0.9, 0.6] }}
+        animate={
+          reduce ? {} : { scale: [1, 1.12, 1], opacity: [0.6, 0.7, 0.6] }
+        }
         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
@@ -144,7 +144,7 @@ const HeroSection = memo(({ onTabChange }) => {
             "radial-gradient(circle, rgba(72,202,228,0.4), transparent 70%)",
         }}
         animate={
-          reduce ? {} : { scale: [1, 1.25, 1], opacity: [0.5, 0.8, 0.5] }
+          reduce ? {} : { scale: [1, 1.15, 1], opacity: [0.5, 0.65, 0.5] }
         }
         transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -152,7 +152,7 @@ const HeroSection = memo(({ onTabChange }) => {
       {/* Dotted grid overlay */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 opacity-[0.12] pointer-events-none"
+        className="absolute inset-0 opacity-[0.07] pointer-events-none"
         style={{
           backgroundImage:
             "radial-gradient(circle at center, #FFFFFF 1.2px, transparent 1.2px)",
@@ -162,7 +162,7 @@ const HeroSection = memo(({ onTabChange }) => {
 
       {/* Floating sparkles */}
       {!reduce &&
-        ["✨", "⭐", "🌟"].map((s, i) => (
+        ["✨"].map((s, i) => (
           <motion.span
             key={i}
             aria-hidden="true"
@@ -224,17 +224,17 @@ const HeroSection = memo(({ onTabChange }) => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white/90 text-xs md:text-sm font-semibold mb-3"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white/90 text-xs md:text-sm font-semibold mb-2"
             >
               <greeting.Icon className="w-4 h-4" strokeWidth={2.4} />
               {greeting.text}
             </motion.span>
 
-            <motion.h2
+            <motion.h1
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 }}
-              className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-3 leading-[1.1] tracking-tight"
+              className="text-2xl md:text-4xl lg:text-5xl font-black text-white mb-3 leading-[1.1] tracking-tight"
             >
               {t("kid.hero.title_before")}{" "}
               <span
@@ -244,13 +244,13 @@ const HeroSection = memo(({ onTabChange }) => {
                 Dani
               </span>
               {t("kid.hero.title_after")}
-            </motion.h2>
+            </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.7 }}
-              className="flex items-center justify-center md:justify-start gap-2.5 text-white/90 text-base md:text-lg font-medium mb-4"
+              className="flex items-center justify-center md:justify-start gap-2.5 text-white/90 text-sm md:text-lg font-medium mb-3"
             >
               <span className="w-8 h-8 rounded-xl flex items-center justify-center bg-white/18 text-white flex-shrink-0">
                 <vak.Icon className="w-5 h-5" strokeWidth={2.4} />
@@ -265,26 +265,6 @@ const HeroSection = memo(({ onTabChange }) => {
               transition={{ delay: 0.8 }}
               className="flex flex-wrap gap-3 justify-center md:justify-start"
             >
-              <div
-                className="flex items-center gap-2.5 pl-2 pr-4 py-2 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25"
-                style={{ boxShadow: glow(SB_COLORS.gold, 0.35) }}
-              >
-                <span
-                  className="w-9 h-9 rounded-xl flex items-center justify-center"
-                  style={{ background: SB_GRADIENTS.gold, color: "#5A3A00" }}
-                >
-                  <Gem className="w-5 h-5" strokeWidth={2.4} />
-                </span>
-                <span className="leading-tight text-left">
-                  <span className="block text-white font-black text-lg tabular-nums">
-                    {totalPoints.toLocaleString()}
-                  </span>
-                  <span className="block text-white/70 text-[10px] font-bold uppercase tracking-wider -mt-0.5">
-                    {t("kid.hero.points")}
-                  </span>
-                </span>
-              </div>
-
               {vakResult && (
                 <div
                   className="flex items-center gap-2.5 pl-2 pr-4 py-2 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25"
@@ -322,14 +302,14 @@ const HeroSection = memo(({ onTabChange }) => {
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => onTabChange?.("oral")}
-              className="group px-6 py-4 rounded-2xl font-bold text-[#00303F] flex items-center gap-3 transition-shadow"
+              className="group px-5 py-3 rounded-2xl font-bold text-[#00303F] flex items-center gap-3 transition-shadow"
               style={{
                 background: SB_GRADIENTS.gold,
                 boxShadow: glow(SB_COLORS.amber, 0.5),
               }}
             >
               <motion.span
-                className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: "rgba(1,26,36,0.12)" }}
                 animate={reduce ? {} : { rotate: [0, -12, 12, -12, 0] }}
                 transition={{
@@ -379,7 +359,7 @@ const HeroSection = memo(({ onTabChange }) => {
                   <div key={tab} className="flex items-center gap-1">
                     <button
                       onClick={() => onTabChange?.(tab)}
-                      className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-all"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold transition-all"
                       style={{
                         background: isCurrent
                           ? action?.color
@@ -404,7 +384,7 @@ const HeroSection = memo(({ onTabChange }) => {
             </div>
             <button
               onClick={() => onTabChange?.("flashcards")}
-              className="text-white/80 hover:text-white text-xs font-semibold flex items-center gap-1 transition-colors"
+              className="text-white text-xs font-semibold flex items-center gap-1 px-3 py-2 rounded-full bg-white/15 hover:bg-white/25 border border-white/20 transition-all active:scale-95"
             >
               {t("kid.hero.continue")} <ChevronRight className="w-3.5 h-3.5" />
             </button>
@@ -427,14 +407,14 @@ const HeroSection = memo(({ onTabChange }) => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.1 + i * 0.07 }}
-              className="flex items-center gap-3 px-3 py-3 rounded-2xl text-left backdrop-blur-md border transition-all"
+              className="flex items-center gap-3 px-3.5 py-3.5 min-h-[88px] rounded-2xl text-left backdrop-blur-md border transition-all hover:shadow-lg"
               style={{
                 background: "rgba(255,255,255,0.08)",
-                borderColor: "rgba(255,255,255,0.18)",
+                borderColor: "rgba(255,255,255,0.30)",
               }}
             >
               <span
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
+                className="w-11 h-11 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
                 style={{
                   background: action.bg,
                   border: `1.5px solid ${action.border}`,
@@ -446,7 +426,7 @@ const HeroSection = memo(({ onTabChange }) => {
                 <span className="block text-white font-bold text-sm truncate">
                   {t(action.labelKey)}
                 </span>
-                <span className="block text-white/55 text-[10px] mt-0.5 truncate">
+                <span className="block text-white/70 text-[10px] mt-0.5 truncate">
                   {t(action.hintKey)}
                 </span>
               </span>

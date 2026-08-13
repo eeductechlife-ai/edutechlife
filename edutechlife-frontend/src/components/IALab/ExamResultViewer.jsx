@@ -14,10 +14,14 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
   const { t } = useTranslation();
   const passed = score >= PASSING_SCORE;
   const setShowValerioDrawer = useIALabStore((s) => s.setShowValerioDrawer);
-  const setValerioInitialMessage = useIALabStore((s) => s.setValerioInitialMessage);
+  const setValerioInitialMessage = useIALabStore(
+    (s) => s.setValerioInitialMessage,
+  );
 
   const handleAskMax = () => {
-    const key = passed ? "ialab.ask_max_exam_passed" : "ialab.ask_max_exam_failed";
+    const key = passed
+      ? "ialab.ask_max_exam_passed"
+      : "ialab.ask_max_exam_failed";
     setValerioInitialMessage(t(key, { mod: moduleId, score }));
     setShowValerioDrawer(true);
     onClose?.();
@@ -69,7 +73,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 max-h-[90dvh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-8">

@@ -61,7 +61,7 @@ export function ReadingModeOverlay({ children }) {
       }}
     >
       <div
-        className="sticky top-0 z-10 flex items-center justify-between px-3 py-2 border-b"
+        className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3 py-2 border-b"
         style={{
           borderColor: styles.accent + "20",
           backgroundColor: styles.bg,
@@ -84,7 +84,7 @@ export function ReadingModeOverlay({ children }) {
         </button>
 
         {toolbarOpen && (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0 overflow-x-auto max-w-full">
             <div className="flex items-center gap-1">
               {FONT_SIZES.map((size) => (
                 <button

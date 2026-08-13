@@ -719,6 +719,15 @@
   text-align: right;
 }
 
+@media (max-width: 520px) {
+  .valeria-controls-bar .valeria-speaking-indicator {
+    display: none;
+  }
+  .valeria-controls-bar .valeria-volume-slider {
+    width: 64px;
+  }
+}
+
 /* ==================== CONTENEDOR DE PREGUNTA PREMIUM ==================== */
 
 .vak-question-container-premium {

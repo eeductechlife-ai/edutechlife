@@ -78,7 +78,7 @@ const ModuleTopicAccordion = ({
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                   {topicAccordion && (
-                    <div className="pl-14 md:pl-8 lg:pl-14 pr-4 pb-3">
+                    <div className="pl-4 md:pl-8 lg:pl-14 pr-4 pb-3">
                       <div className="rounded-2xl border border-petroleum/10 bg-petroleum/[0.03] dark:bg-slate-800/60 p-4 space-y-3">
                         <div>
                           <h4 className="text-sm font-bold text-petroleum dark:text-[#4DA8C4]">
@@ -108,7 +108,7 @@ const ModuleTopicAccordion = ({
                     };
                     return (
                       <div
-                        className="flex gap-1.5 pl-14 md:pl-8 lg:pl-14 pr-4 pb-2 flex-wrap"
+                        className="flex gap-1.5 pl-4 md:pl-8 lg:pl-14 pr-4 pb-2 flex-wrap"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <button
@@ -131,7 +131,7 @@ const ModuleTopicAccordion = ({
                     );
                   })()}
                   <motion.div
-                    className="pl-14 md:pl-8 lg:pl-14 pr-4 pb-2 space-y-1.5"
+                    className="pl-4 md:pl-8 lg:pl-14 pr-4 pb-2 space-y-1.5"
                     variants={{
                       hidden: { opacity: 0 },
                       visible: {
@@ -167,10 +167,9 @@ const ModuleTopicAccordion = ({
                             t={t}
                             onClick={(e) => {
                               e.stopPropagation();
-                              useIALabStore.getState().setLastVisitedLesson(
-                                activeMod,
-                                index + 1,
-                              );
+                              useIALabStore
+                                .getState()
+                                .setLastVisitedLesson(activeMod, index + 1);
                               useIALabStore
                                 .getState()
                                 .markLessonInProgress(activeMod, index + 1);
@@ -191,7 +190,7 @@ const ModuleTopicAccordion = ({
                   </motion.div>
 
                   {totalResources > 0 && (
-                    <div className="pl-14 md:pl-8 lg:pl-14 pr-4 pb-3 space-y-3">
+                    <div className="pl-4 md:pl-8 lg:pl-14 pr-4 pb-3 space-y-3">
                       <div className="flex items-center gap-3">
                         <div className="flex-1" role="none">
                           <ModuleProgressBar

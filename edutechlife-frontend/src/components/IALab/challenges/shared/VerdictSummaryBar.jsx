@@ -1,13 +1,17 @@
-import PropTypes from 'prop-types';
-import { motion } from 'framer-motion';
-import { Icon } from '../../../../utils/iconMapping.jsx';
+import PropTypes from "prop-types";
+import { motion } from "framer-motion";
+import { Icon } from "../../../../utils/iconMapping.jsx";
 
 const VerdictSummaryBar = ({ claims, t }) => {
   const total = claims.length;
   if (!total) return null;
-  const verified = claims.filter(c => c.verdict === 'verified').length;
-  const questionable = claims.filter(c => c.verdict === 'questionable').length;
-  const unverifiable = claims.filter(c => c.verdict === 'unverifiable').length;
+  const verified = claims.filter((c) => c.verdict === "verified").length;
+  const questionable = claims.filter(
+    (c) => c.verdict === "questionable",
+  ).length;
+  const unverifiable = claims.filter(
+    (c) => c.verdict === "unverifiable",
+  ).length;
   const unclassified = total - verified - questionable - unverifiable;
   const classified = total - unclassified;
 
@@ -20,10 +24,10 @@ const VerdictSummaryBar = ({ claims, t }) => {
     >
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-          {t('ialab.challenge.m3.verdict_summary_title')}
+          {t("ialab.challenge.m3.verdict_summary_title")}
         </h4>
         <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
-          {classified}/{total} {t('ialab.challenge.m3.verdict_progress_label')}
+          {classified}/{total} {t("ialab.challenge.m3.verdict_progress_label")}
         </span>
       </div>
 
@@ -32,9 +36,9 @@ const VerdictSummaryBar = ({ claims, t }) => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             className="h-full bg-emerald-500"
-            title={`Verified: ${verified}`}
+            title={`${t("ialab.challenge.m3.step3_verified")}: ${verified}`}
             style={{ width: `${(verified / total) * 100}%` }}
           />
         )}
@@ -42,9 +46,9 @@ const VerdictSummaryBar = ({ claims, t }) => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
             className="h-full bg-amber-500"
-            title={`Questionable: ${questionable}`}
+            title={`${t("ialab.challenge.m3.step3_questionable")}: ${questionable}`}
             style={{ width: `${(questionable / total) * 100}%` }}
           />
         )}
@@ -52,9 +56,9 @@ const VerdictSummaryBar = ({ claims, t }) => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
             className="h-full bg-slate-400 dark:bg-slate-500"
-            title={`Unverifiable: ${unverifiable}`}
+            title={`${t("ialab.challenge.m3.step3_unverifiable")}: ${unverifiable}`}
             style={{ width: `${(unverifiable / total) * 100}%` }}
           />
         )}
@@ -64,19 +68,19 @@ const VerdictSummaryBar = ({ claims, t }) => {
         <div className="flex items-center gap-1.5 text-xs">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
           <span className="text-slate-600 dark:text-slate-400">
-            {t('ialab.challenge.m3.step3_verified')} ({verified})
+            {t("ialab.challenge.m3.step3_verified")} ({verified})
           </span>
         </div>
         <div className="flex items-center gap-1.5 text-xs">
           <div className="w-2.5 h-2.5 rounded-full bg-amber-500" />
           <span className="text-slate-600 dark:text-slate-400">
-            {t('ialab.challenge.m3.step3_questionable')} ({questionable})
+            {t("ialab.challenge.m3.step3_questionable")} ({questionable})
           </span>
         </div>
         <div className="flex items-center gap-1.5 text-xs">
           <div className="w-2.5 h-2.5 rounded-full bg-slate-400 dark:bg-slate-500" />
           <span className="text-slate-600 dark:text-slate-400">
-            {t('ialab.challenge.m3.step3_unverifiable')} ({unverifiable})
+            {t("ialab.challenge.m3.step3_unverifiable")} ({unverifiable})
           </span>
         </div>
       </div>
@@ -89,18 +93,21 @@ const VerdictSummaryBar = ({ claims, t }) => {
           className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700 flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400"
         >
           <Icon name="fa-check-circle" />
-          <span className="font-medium">{t('ialab.challenge.m3.verdict_all_classified')}</span>
+          <span className="font-medium">
+            {t("ialab.challenge.m3.verdict_all_classified")}
+          </span>
         </motion.div>
       )}
     </motion.div>
   );
 };
 
-
 VerdictSummaryBar.propTypes = {
-  claims: PropTypes.arrayOf(PropTypes.shape({
-    verdict: PropTypes.string,
-  })).isRequired,
+  claims: PropTypes.arrayOf(
+    PropTypes.shape({
+      verdict: PropTypes.string,
+    }),
+  ).isRequired,
   t: PropTypes.func.isRequired,
 };
 

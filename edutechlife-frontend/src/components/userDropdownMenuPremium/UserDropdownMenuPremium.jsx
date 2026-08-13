@@ -166,7 +166,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
-          className="w-80 border border-slate-100 shadow-2xl shadow-slate-200/50 rounded-2xl bg-white"
+          className="w-80 max-w-[calc(100vw-1rem)] max-h-[80vh] overflow-y-auto border border-slate-100 shadow-2xl shadow-slate-200/50 rounded-2xl bg-white"
           align="end"
           sideOffset={8}
         >
@@ -196,7 +196,7 @@ const UserDropdownMenuPremium = ({ onNavigate }) => {
         open={isChangePasswordOpen}
         onOpenChange={setIsChangePasswordOpen}
       >
-        <DialogContent className="sm:max-w-md bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/60 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] shadow-indigo-900/5 relative overflow-hidden">
+        <DialogContent className="sm:max-w-md max-h-[85dvh] overflow-y-auto bg-white/95 backdrop-blur-xl rounded-3xl border border-slate-200/60 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] shadow-indigo-900/5 relative">
           <button
             onClick={() => setIsChangePasswordOpen(false)}
             className="absolute top-4 right-4 text-slate-400 hover:text-slate-800 hover:bg-slate-100 p-2 rounded-full transition-colors duration-200 z-50"

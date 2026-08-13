@@ -42,7 +42,15 @@ const OAuthCallbackHandler = () => {
         // from this account's data instead of keeping the previous user's
         // in-memory state (which showed everyone the same progress).
         claimStorageForCurrentUser();
-        window.location.replace("/ialab");
+        const returnTo =
+          sessionStorage.getItem("auth_return_to") === "/smartboard" ||
+          (sessionStorage.getItem("auth_return_to") || "").startsWith(
+            "/smartboard",
+          )
+            ? sessionStorage.getItem("auth_return_to")
+            : "/ialab";
+        sessionStorage.removeItem("auth_return_to");
+        window.location.replace(returnTo);
       } catch (err) {
         console.error("Callback processing error:", err);
         navigate("/login?error=callback_failed");

@@ -460,6 +460,14 @@ export const usePersistentProgress = () => {
 
       try {
         const localData = loadFromLocalStorage();
+
+        // Render-first: si hay progreso local, pintarlo de inmediato en vez de
+        // esperar el roundtrip remoto. El sync remoto refina el estado después.
+        if (localData) {
+          applyProgressData(setters, localData);
+          setCourseProgress(computeGlobalProgress(localData));
+        }
+
         const remoteData = await loadRemoteProgress(supabase, userId);
         const mergedData = mergeLocalWithRemote(localData, remoteData);
 

@@ -231,7 +231,7 @@ export const noteText = {
 
 export const infoGrid = {
   display: "grid",
-  gridTemplateColumns: "1fr 1fr",
+  gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
   gap: "14px",
   marginBottom: "20px",
 };
@@ -534,7 +534,7 @@ export const analysisFooter = {
 
 export const twoColGrid = {
   display: "grid",
-  gridTemplateColumns: "1fr 1fr",
+  gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
   gap: "14px",
   marginBottom: "20px",
 };

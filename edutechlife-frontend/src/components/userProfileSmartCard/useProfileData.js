@@ -4,6 +4,7 @@ import { supabase } from "../../lib/supabase";
 import { useProgressContext } from "../../context/ProgressContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { normalizePhone } from "./profileSaveLogic";
+import { API_BASE_URL } from "../../config/api";
 
 export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
   const { t, locale } = useTranslation();
@@ -371,14 +372,11 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
     // Antes abria el perfil de Clerk y, si fallaba, mandaba al usuario a
     // accounts.clerk.com. Ahora usa el flujo propio de recuperacion.
     try {
-      await fetch(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/auth/reset-password`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: displayEmail }),
-        },
-      );
+      await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: displayEmail }),
+      });
       setSaveMessage({
         type: "success",
         text: t("profile.password_email_sent"),

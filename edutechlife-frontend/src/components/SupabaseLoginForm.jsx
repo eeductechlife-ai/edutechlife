@@ -4,6 +4,7 @@ import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
 import FloatingParticles from "./FloatingParticles";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
+import { API_BASE_URL } from "../config/api";
 
 const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
   const { t } = useTranslation();
@@ -17,12 +18,13 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
   const [info, setInfo] = useState("");
 
   const handleOAuthLogin = (provider) => {
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3001";
+    const apiUrl = API_BASE_URL;
     const redirectUri = `${window.location.origin}/auth/callback`;
     const isDevelopment = apiUrl.includes("localhost");
     const endpoint = isDevelopment
       ? `/api/auth/oauth-demo/${provider}`
       : `/api/auth/oauth/${provider}`;
+    sessionStorage.setItem("auth_return_to", returnTo);
     window.location.href = `${apiUrl}${endpoint}?redirect_uri=${encodeURIComponent(redirectUri)}&provider=${provider}`;
   };
 
@@ -35,14 +37,11 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
     setError("");
     setInfo("");
     try {
-      await fetch(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/auth/reset-password`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        },
-      );
+      await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
       // Always show the same message: never reveal whether the email exists.
       setInfo(t("login.reset_email_sent"));
     } catch (err) {
@@ -60,14 +59,11 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
     setInfo("");
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        },
-      );
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
       const data = await response.json();
 

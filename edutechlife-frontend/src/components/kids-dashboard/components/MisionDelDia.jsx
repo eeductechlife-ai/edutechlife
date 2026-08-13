@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
-import { ChevronRight, Sparkles } from "lucide-react";
+import { ChevronRight, Target } from "lucide-react";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../../i18n/I18nProvider";
 
@@ -148,24 +148,25 @@ const MisionDelDia = ({ onTabChange }) => {
     <motion.section
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-6 rounded-2xl p-5 bg-gradient-to-br from-[#0077B6] via-[#00B4D8] to-[#48CAE4] text-white shadow-lg"
+      transition={{ delay: 0.15 }}
+      className="rounded-2xl p-5 bg-white/70 backdrop-blur-xl border border-[#E2E8F0]/50 text-[#00303F] shadow-xl"
       aria-label={t("kid.mision.aria_label")}
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5" />
-          <h2 className="font-black text-lg">{t("kid.mision.title")}</h2>
-        </div>
-        <div className="text-right">
-          <div className="text-xs text-white/80">
+      <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+        <h3 className="inline-flex items-center gap-1.5 bg-gradient-to-r from-[#FFE29A] via-[#FFD166] to-[#FB8500] text-[#4A2C00] px-3 py-1 rounded-full font-black text-xs tracking-wide">
+          <Target className="w-4 h-4" strokeWidth={2.6} />
+          {t("kid.mision.title")}
+        </h3>
+        <div className="text-right rounded-xl bg-[#FFD166]/15 border border-[#FFD166]/40 px-3 py-1.5">
+          <div className="text-xs text-[#64748B] font-semibold">
             {t("kid.mision.earn_up_to")}
           </div>
-          <div className="font-black text-lg">+{totalXp} XP</div>
+          <div className="font-black text-lg text-[#FB8500]">+{totalXp} XP</div>
         </div>
       </div>
 
       {streakNum > 0 && (
-        <p className="text-xs text-white/85 mb-3">
+        <p className="text-xs text-[#B45309] font-semibold mb-3">
           {streakNum === 1
             ? t("kid.mision.streak_one", { days: streakNum })
             : t("kid.mision.streak_many", { days: streakNum })}
@@ -177,23 +178,26 @@ const MisionDelDia = ({ onTabChange }) => {
           <li key={task.key}>
             <button
               onClick={() => onTabChange?.(task.tab)}
-              className="w-full flex items-center gap-3 bg-white/15 hover:bg-white/25 rounded-xl px-4 py-3 text-left transition-colors"
+              className="w-full flex items-center gap-3 bg-[#F8FAFC] hover:bg-[#EAF6FA] rounded-xl px-4 py-3 text-left border border-[#E2E8F0]/60 transition-all active:scale-[0.98]"
             >
-              <span className="text-2xl shrink-0" aria-hidden="true">
+              <span
+                className="w-11 h-11 rounded-xl bg-white border border-[#E2E8F0]/70 flex items-center justify-center text-2xl shrink-0"
+                aria-hidden="true"
+              >
                 {task.icon}
               </span>
               <span className="flex-1 min-w-0">
-                <span className="block font-bold text-sm truncate">
+                <span className="block text-[#00303F] font-bold text-sm truncate">
                   {task.title}
                 </span>
-                <span className="block text-xs text-white/80 truncate">
+                <span className="block text-[#64748B] text-xs truncate">
                   {task.subtitle}
                 </span>
               </span>
-              <span className="text-xs font-bold bg-white/20 rounded-full px-2 py-0.5 shrink-0">
+              <span className="text-xs font-bold text-[#FB8500] bg-[#FFD166]/15 border border-[#FFD166]/40 rounded-full px-2 py-0.5 shrink-0">
                 +{task.xp}
               </span>
-              <ChevronRight className="w-4 h-4 shrink-0" />
+              <ChevronRight className="w-4 h-4 text-[#4DA8C4] shrink-0" />
             </button>
           </li>
         ))}

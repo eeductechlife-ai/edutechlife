@@ -1,29 +1,30 @@
 import PropTypes from "prop-types";
 import { Icon } from "../../../../utils/iconMapping.jsx";
+import { useTranslation } from "../../../../i18n/I18nProvider";
 
 const CASE_META = {
   marketing: {
     icon: "fa-chart-line",
-    label: { es: "Agencia de Marketing", en: "Marketing Agency" },
+    labelKey: "ialab.challenge.m2.case_label_marketing",
     color: "from-violet-500 to-purple-600",
   },
   support: {
     icon: "fa-headset",
-    label: { es: "Soporte al Cliente", en: "Customer Support" },
+    labelKey: "ialab.challenge.m2.case_label_support",
     color: "from-emerald-500 to-teal-600",
   },
   dev: {
     icon: "fa-code",
-    label: { es: "Desarrollo de Software", en: "Software Development" },
+    labelKey: "ialab.challenge.m2.case_label_dev",
     color: "from-sky-500 to-cyan-600",
   },
 };
 
-const CaseContextBanner = ({ selectedCase, stepNumber, locale = "es" }) => {
+const CaseContextBanner = ({ selectedCase, stepNumber }) => {
+  const { t } = useTranslation();
   if (!selectedCase) return null;
   const meta = CASE_META[selectedCase];
   if (!meta) return null;
-  const label = meta.label[locale] || meta.label.en || meta.label.es;
   return (
     <div className="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-petroleum/5 to-corporate/5 rounded-xl border border-corporate/20 mb-6">
       <div
@@ -33,16 +34,14 @@ const CaseContextBanner = ({ selectedCase, stepNumber, locale = "es" }) => {
       </div>
       <div className="flex-1">
         <p className="text-xs font-medium text-corporate uppercase tracking-wider">
-          {["en", "pt"].includes(locale) ? "Building for" : "Construyendo para"}
+          {t("ialab.challenge.m2.building_for")}
         </p>
         <p className="text-sm font-bold text-slate-800 dark:text-slate-100">
-          {label}
+          {t(meta.labelKey)}
         </p>
       </div>
       <div className="text-xs text-slate-400">
-        {["en", "pt"].includes(locale)
-          ? `Step ${stepNumber}`
-          : `Paso ${stepNumber}`}
+        {t("ialab.challenge.m2.case_step_label", { step: stepNumber })}
       </div>
     </div>
   );
@@ -51,7 +50,6 @@ const CaseContextBanner = ({ selectedCase, stepNumber, locale = "es" }) => {
 CaseContextBanner.propTypes = {
   selectedCase: PropTypes.string,
   stepNumber: PropTypes.number,
-  locale: PropTypes.string,
 };
 
 export default CaseContextBanner;

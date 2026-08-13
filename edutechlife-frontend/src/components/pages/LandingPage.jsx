@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense } from "react";
 import { PageLoader } from "../LoadingScreen";
 import ErrorBoundary from "../common/ErrorBoundary";
 import SEO from "../SEO";
@@ -13,26 +13,20 @@ const Metodo = lazy(() => import("../Metodo"));
 const Aliados = lazy(() => import("../Aliados"));
 const Footer = lazy(() => import("../Footer"));
 
-const sectionFallback = (h) => (
-  <div
-    className={`h-${h} bg-gradient-to-b from-slate-50 to-white animate-pulse rounded-2xl mx-4 my-8`}
-  />
-);
+const sectionFallback = (h) => {
+  const heights = { 32: "h-32", 40: "h-40", 48: "h-48" };
+  return (
+    <div
+      className={`${heights[h] || "h-40"} bg-gradient-to-b from-slate-50 to-white animate-pulse rounded-2xl mx-4 my-8`}
+    />
+  );
+};
 
 const LandingPage = () => {
   const { t } = useTranslation();
 
-  // Defer light mode setup to avoid blocking initial render
-  useEffect(() => {
-    if ("requestIdleCallback" in window) {
-      const id = requestIdleCallback(() => {
-        useLightModeOnly();
-      });
-      return () => cancelIdleCallback(id);
-    } else {
-      useLightModeOnly();
-    }
-  }, []);
+  // Forces light mode via effect post-paint; does not block initial render
+  useLightModeOnly();
   return (
     <>
       <SEO title={t("seo.home.title")} description={t("seo.home.desc")} />

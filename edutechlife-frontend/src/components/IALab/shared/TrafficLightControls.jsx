@@ -25,7 +25,7 @@ export function TrafficLightControls({
       {showFullscreen && (
         <button
           onClick={onToggleFullscreen}
-          className="w-[7px] h-[7px] rounded-full bg-[#22C55E] hover:brightness-110 transition-all flex items-center justify-center focus-visible:outline-none"
+          className="relative w-[7px] h-[7px] rounded-full bg-[#22C55E] hover:brightness-110 transition-all flex items-center justify-center focus-visible:outline-none after:content-[''] after:absolute after:-inset-3"
           aria-label={isFullscreen ? resolvedExitLabel : resolvedEnterLabel}
           title={isFullscreen ? resolvedExitLabel : resolvedEnterLabel}
         >
@@ -37,7 +37,7 @@ export function TrafficLightControls({
       )}
       <button
         onClick={onClose}
-        className="w-[7px] h-[7px] rounded-full bg-[#EF4444] hover:brightness-110 transition-all flex items-center justify-center focus-visible:outline-none"
+        className="relative w-[7px] h-[7px] rounded-full bg-[#EF4444] hover:brightness-110 transition-all flex items-center justify-center focus-visible:outline-none after:content-[''] after:absolute after:-inset-3"
         aria-label={resolvedCloseLabel}
         title={resolvedCloseLabel}
       >

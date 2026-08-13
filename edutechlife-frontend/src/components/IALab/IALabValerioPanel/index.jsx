@@ -255,7 +255,14 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
         warmupTimeoutId = setTimeout(() => controller.abort(), 12000);
         fetch(`${baseUrl}/api/chat/stream`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(localStorage.getItem("auth_token")
+              ? {
+                  Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+                }
+              : {}),
+          },
           body: JSON.stringify({
             messages: [{ role: "user", content: "ping" }],
             temperature: 0.5,
