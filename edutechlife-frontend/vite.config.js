@@ -171,6 +171,14 @@ export default defineConfig({
       external: ['@solana/web3.js'],
       output: {
         manualChunks(id) {
+          // Datos IALab (lecciones). Los importan tanto el store (eager) como
+          // rutas lazy; sin un chunk fijo, Rollup puede partirlos de forma
+          // inconsistente y el binding de exports (p. ej. ALL_LESSONS) queda
+          // sin inicializar en producción → "Export 'ALL_LESSONS' is not
+          // defined in module" y pantalla en blanco. Un chunk estable lo evita.
+          if (id.includes('/data/ialab.js')) {
+            return 'ialab-data';
+          }
           // React core — smallest possible critical chunk
           if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/scheduler/')) {
             return 'react-vendor';
