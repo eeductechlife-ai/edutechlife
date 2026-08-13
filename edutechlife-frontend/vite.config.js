@@ -170,73 +170,12 @@ export default defineConfig({
     rollupOptions: {
       external: ['@solana/web3.js'],
       output: {
-        manualChunks(id) {
-          // Módulos "leaf" de config/constants/datos compartidos por código
-          // eager (el store IALab) y lazy (rutas). Sin chunks fijos, Rollup los
-          // parte de forma inconsistente entre entornos: sus bindings de export
-          // (ALL_LESSONS, API_BASE_URL, …) quedan sin inicializar en producción
-          // → "Export 'X' is not defined in module" → pantalla en blanco. El
-          // build local funcionaba por otro ordenamiento, ocultando el bug.
-          // Chunks estables dedicados garantizan que carguen antes que sus
-          // consumidores. (No hay ciclos: madge reporta solo 1, ajeno.)
-          if (id.includes('/src/data/ialab.js')) {
-            return 'ialab-data';
-          }
-          if (id.includes('/src/config/')) {
-            return 'app-config';
-          }
-          if (id.includes('/src/constants/')) {
-            return 'app-constants';
-          }
-          if (
-            id.includes('/src/utils/ialab.js') ||
-            id.includes('/src/utils/userScopedStorage.js')
-          ) {
-            return 'app-utils-core';
-          }
-          // React core — smallest possible critical chunk
-          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/scheduler/')) {
-            return 'react-vendor';
-          }
-          // Routing
-          if (id.includes('node_modules/react-router-dom/') || id.includes('node_modules/react-router/')) {
-            return 'router-vendor';
-          }
-          // State management — keep away from main bundle
-          if (id.includes('node_modules/zustand/') || id.includes('node_modules/@tanstack/')) {
-            return 'state-vendor';
-          }
-          // Radix UI components — heavy, not needed on landing
-          if (id.includes('node_modules/@radix-ui/')) {
-            return 'radix-vendor';
-          }
-          // Animations + icons — deferred
-          if (id.includes('node_modules/framer-motion/') || id.includes('node_modules/lucide-react/') || id.includes('node_modules/canvas-confetti/')) {
-            return 'animation-vendor';
-          }
-          // Charts — large, only used in admin/stats pages
-          if (id.includes('node_modules/recharts/') || id.includes('node_modules/victory-')) {
-            return 'charts-vendor';
-          }
-          // Supabase client
-          if (id.includes('node_modules/@supabase/')) {
-            return 'supabase-vendor';
-          }
-          // Stripe
-          if (id.includes('node_modules/@stripe/')) {
-            return 'stripe-vendor';
-          }
-          // Analytics & monitoring — never on critical path
-          if (id.includes('node_modules/posthog-js/') || id.includes('node_modules/@sentry/') || id.includes('node_modules/@sentry-internal/')) {
-            return 'analytics-vendor';
-          }
-          // Markdown & sanitization — only in content-heavy pages
-          if (id.includes('node_modules/marked/') || id.includes('node_modules/dompurify/')) {
-            return 'markdown-vendor';
-          }
-          // PDF tools are dynamic imports — let Rollup keep them as separate
-          // named chunks so each downloads only when the user triggers PDF export.
-        },
+        // Sin `manualChunks` custom a propósito: la partición manual de vendors
+        // interactuaba mal con el entorno de build de Vercel y producía chunks
+        // con bindings de export rotos ("Export 'X' is not defined in module":
+        // ALL_LESSONS, API_BASE_URL, AppErrorBoundary…) → pantalla en blanco,
+        // pese a que el build local funcionaba. Se deja el chunking por defecto
+        // de Vite/Rollup, que es determinista y robusto contra ese bug.
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]'
