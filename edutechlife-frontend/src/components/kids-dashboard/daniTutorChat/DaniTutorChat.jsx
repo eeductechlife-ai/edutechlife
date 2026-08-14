@@ -1,4 +1,5 @@
 import { memo, useRef, useEffect, useMemo, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import {
@@ -90,13 +91,15 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
   } = useDaniChat({ isOpen, activeTab });
 
   useEffect(() => {
-    if (isOpen && inputRef?.current) {
+    // Auto-focus only on desktop — on mobile the keyboard would shift the viewport
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+    if (isOpen && isDesktop && inputRef?.current) {
       try {
         const timer = setTimeout(() => {
           if (inputRef?.current) {
-            inputRef.current.focus();
+            inputRef.current.focus({ preventScroll: true });
           }
-        }, 300);
+        }, 400);
         return () => clearTimeout(timer);
       } catch (error) {
         console.warn("Error focusing input:", error);
@@ -147,7 +150,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <>
       <AnimatePresence mode="wait">
         {isOpen && (
@@ -163,14 +166,14 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
               onClick={onClose}
               aria-hidden="true"
             />
-            {/* Sidebar panel - like Valerio in IALab */}
+            {/* Sidebar panel - like MAX in IALab */}
             <motion.div
               key="dani-panel"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className={`fixed right-0 top-0 bottom-0 z-50 w-full sm:w-[520px] md:w-[600px] shadow-2xl flex flex-col overflow-hidden border-l ${
+              className={`fixed right-0 top-0 z-50 w-full sm:w-[520px] md:w-[600px] h-[100dvh] shadow-2xl flex flex-col overflow-hidden border-l ${
                 darkMode
                   ? "bg-[#0F172A] border-l-[#334155]"
                   : "bg-[#F8FAFC] border-l-[#E2E8F0]"
@@ -329,7 +332,14 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                 messagesEndRef={messagesEndRef}
               />
 
-              <QuickActions onAction={handleQuickAction} darkMode={darkMode} />
+              {/* Bottom controls — flex-shrink-0 ensures they always get space */}
+              <div className="flex-shrink-0">
+              <QuickActions
+                onAction={handleQuickAction}
+                darkMode={darkMode}
+                studentAge={studentAge}
+                hasHistory={daniChatHistory.length > 0}
+              />
 
               <RecentTopics
                 topics={academicTopics.filter((t) => t.count > 0)}
@@ -461,6 +471,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                   </motion.div>
                 )}
               </motion.div>
+              </div>{/* end flex-shrink-0 bottom controls */}
             </motion.div>
           </>
         )}
@@ -473,7 +484,8 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
           crisisLevel={crisisAlertLevel}
         />
       )}
-    </>
+    </>,
+    document.body
   );
 });
 

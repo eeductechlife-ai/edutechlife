@@ -1,8 +1,11 @@
 import { API_BASE_URL } from "../config/api";
 import { withRetry, deduplicate } from "../utils/asyncHelpers";
+// Estático (no dinámico): evita el mix estático+dinámico de lib/supabase que
+// rompe el chunking en el build de Vercel ("Export not defined").
+import { supabase } from "../lib/supabase";
 const API_URL = `${API_BASE_URL}/api/chat`;
 
-const VALERIO_SYSTEM_PROMPT = `Eres Valerio, el tutor experto de Edutechlife. Evalúa el prompt del alumno. Debes responder estrictamente en formato JSON con estas llaves: "score" (0-100), "feedback" (3 consejos breves), "improvedPrompt" (el prompt optimizado) y "level" (Novato, Pro, Maestro). Responde únicamente con JSON válido, sin texto adicional.`;
+const VALERIO_SYSTEM_PROMPT = `Eres MAX, el tutor experto de Edutechlife. Evalúa el prompt del alumno. Debes responder estrictamente en formato JSON con estas llaves: "score" (0-100), "feedback" (3 consejos breves), "improvedPrompt" (el prompt optimizado) y "level" (Novato, Pro, Maestro). Responde únicamente con JSON válido, sin texto adicional.`;
 
 const MODULE_CONTEXT = {
   1: {
@@ -188,7 +191,7 @@ const generateDemoResponse = (studentPrompt, moduleId) => {
         "Considera usar ejemplos Few-shot para tareas complejas",
         "Incluye restricciones claras para delimitar el alcance",
       ],
-      improvedPrompt: `${studentPrompt}\n\n[Optimizado por Valerio]`,
+      improvedPrompt: `${studentPrompt}\n\n[Optimizado por MAX]`,
       level,
       moduleId,
       evaluatedAt: new Date().toISOString(),
@@ -237,8 +240,6 @@ export const evaluateWithDeepseek = deduplicate(evaluateWithRetry, {
 });
 
 export const getEvaluationHistory = async (moduleId) => {
-  const { supabase } = await import("../lib/supabase");
-
   try {
     // SOLUCIÓN TEMPORAL: Desactivar consultas que causan error 406
 

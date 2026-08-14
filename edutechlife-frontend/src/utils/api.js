@@ -1,11 +1,23 @@
 import { PROMPT_ANALIZAR_DOCUMENTO } from "../constants/prompts";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  import.meta.env.VITE_API_URL ||
-  "https://edutechlife-backend.onrender.com";
+import { API_BASE_URL } from "../config/api";
 
 const TIMEOUT_MS = 60000; // 60 segundos timeout (Deepseek tarda en empezar)
+
+/**
+ * JWT de Supabase guardado por useSupabaseAuth (clave auth_token en
+ * localStorage). Se adjunta como Bearer para que el backend pueda
+ * atribuir la llamada al usuario; el chat público sigue funcionando
+ * sin sesión.
+ */
+function getAuthToken() {
+  try {
+    return typeof window !== "undefined"
+      ? sessionStorage.getItem("auth_token")
+      : null;
+  } catch {
+    return null;
+  }
+}
 
 async function fetchWithTimeout(url, options, timeout = TIMEOUT_MS) {
   const controller = new AbortController();
@@ -38,6 +50,65 @@ async function fetchWithRetry(url, options, retries = 2) {
       await new Promise((r) => setTimeout(r, delays[i]));
     }
   }
+}
+
+/**
+ * Parseo tolerante de JSON generado por IA. DeepSeek a veces devuelve
+ * JSON con comas finales, texto sobrante o truncado. Este parser intenta
+ * reparar y extraer la estructura válida en lugar de fallar.
+ */
+function stripCodeFences(text) {
+  return (text || "").replace(/```json|```/g, "").trim();
+}
+
+function extractBalancedJson(text) {
+  const start = text.search(/[[{]/);
+  if (start === -1) return null;
+  let depth = 0;
+  let inString = false;
+  let escape = false;
+  for (let i = start; i < text.length; i++) {
+    const ch = text[i];
+    if (inString) {
+      if (escape) escape = false;
+      else if (ch === "\\") escape = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') inString = true;
+    else if (ch === "[" || ch === "{") depth++;
+    else if (ch === "]" || ch === "}") {
+      depth--;
+      if (depth === 0) return text.slice(start, i + 1);
+    }
+  }
+  return text.slice(start);
+}
+
+export function parseJsonResult(raw) {
+  const cleaned = stripCodeFences(raw);
+  if (!cleaned) return null;
+
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    // continua con reparaciones
+  }
+
+  const extracted = extractBalancedJson(cleaned);
+  const candidates = extracted
+    ? [extracted, extracted.replace(/,\s*([\]}])/g, "$1")]
+    : [];
+
+  for (const candidate of candidates) {
+    try {
+      return JSON.parse(candidate);
+    } catch {
+      // intenta el siguiente candidato
+    }
+  }
+
+  return null;
 }
 
 export async function callDeepseek(
@@ -100,6 +171,9 @@ export async function callDeepseek(
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        ...(getAuthToken()
+          ? { Authorization: `Bearer ${getAuthToken()}` }
+          : {}),
       },
       body: JSON.stringify(payload),
       mode: "cors",
@@ -110,7 +184,11 @@ export async function callDeepseek(
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      throw new Error(`API responded with status ${response.status}`);
+      const body = await response.json().catch(() => null);
+      const detail = body?.error?.message || body?.error || response.statusText;
+      throw new Error(
+        `API responded with status ${response.status}${detail ? `: ${detail}` : ""}`,
+      );
     }
 
     const data = await response.json();
@@ -119,9 +197,13 @@ export async function callDeepseek(
       throw new Error(data.error.message || "API returned an error");
     }
 
-    const result = payload.isJson
-      ? JSON.parse(data.result.replace(/```json|```/g, "").trim())
-      : data.result;
+    const result = payload.isJson ? parseJsonResult(data.result) : data.result;
+
+    if (payload.isJson && result === null) {
+      const err = new Error("La respuesta de la IA no fue un JSON válido.");
+      err.raw = data.result || "";
+      throw err;
+    }
 
     // Simplificar respuesta si es muy larga (only legacy format)
     if (
@@ -178,6 +260,7 @@ export async function callDeepseekStream(
       chunkCb,
       opts.isJson ?? legacyIsJson,
       opts.signal,
+      getAuthToken() ? { Authorization: `Bearer ${getAuthToken()}` } : {},
     );
   } else {
     // Legacy format: callDeepseekStream(prompt, systemPrompt, isJson, onChunk)
@@ -192,7 +275,14 @@ export async function callDeepseekStream(
       temperature: 0.75,
       maxTokens: 1200,
     };
-    return streamFetch(url, payload, onChunk, legacyIsJson);
+    return streamFetch(
+      url,
+      payload,
+      onChunk,
+      legacyIsJson,
+      undefined,
+      getAuthToken() ? { Authorization: `Bearer ${getAuthToken()}` } : {},
+    );
   }
 }
 
@@ -330,9 +420,12 @@ export async function callDaniChatStream(messages, opts = {}, onChunk) {
   let token = opts.token;
 
   if (!token) {
-    // Try to get from Clerk if not provided
-    if (typeof window !== "undefined" && window.__CLERK_AUTH_TOKEN) {
-      token = window.__CLERK_AUTH_TOKEN;
+    try {
+      if (typeof window !== "undefined") {
+        token = sessionStorage.getItem("auth_token");
+      }
+    } catch {
+      token = null;
     }
   }
 

@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
+import { API_BASE_URL } from "../../../../config/api";
 import { ShieldCheck, HeartPulse } from "lucide-react";
+import { useTranslation } from "../../../../i18n/I18nProvider";
 
 /**
  * WellbeingCard
@@ -11,6 +13,7 @@ import { ShieldCheck, HeartPulse } from "lucide-react";
  * shows the reassurance that monitoring is active.
  */
 const WellbeingCard = ({ authToken }) => {
+  const { t } = useTranslation();
   const [status, setStatus] = useState({
     loaded: false,
     calm: true,
@@ -24,7 +27,7 @@ const WellbeingCard = ({ authToken }) => {
     (async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/smartboard/wellbeing-status`,
+          `${API_BASE_URL}/api/smartboard/wellbeing-status`,
           { headers: { Authorization: `Bearer ${authToken}` } },
         );
         if (!res.ok) return;
@@ -75,25 +78,27 @@ const WellbeingCard = ({ authToken }) => {
             style={{ color: calm ? "#166534" : "#92400E" }}
           >
             {calm
-              ? "Bienestar de tu hijo: todo tranquilo"
-              : "Estuvimos pendientes de tu hijo"}
+              ? t("parent_dashboard.wellbeing_calm_title")
+              : t("parent_dashboard.wellbeing_attention_title")}
           </h3>
           <p
             className="text-sm mt-1"
             style={{ color: calm ? "#15803D" : "#B45309" }}
           >
-            La IA de SmartBoard acompaña a tu hijo mientras aprende y cuida su
-            bienestar emocional. Si detecta que necesita apoyo, te avisamos de
-            inmediato por correo.
+            {t("parent_dashboard.wellbeing_calm_desc")}
             {!calm && status.lastAlertAt
-              ? ` Última señal: ${new Date(status.lastAlertAt).toLocaleDateString("es-CO")}.`
+              ? ` ${t("parent_dashboard.wellbeing_last_alert", {
+                  date: new Date(status.lastAlertAt).toLocaleDateString(
+                    "es-CO",
+                  ),
+                })}`
               : ""}
           </p>
           <p
             className="text-xs mt-2"
             style={{ color: calm ? "#16A34A" : "#D97706" }}
           >
-            🛡️ Acompañamiento de bienestar activo · exclusivo de EdutechLife
+            {t("parent_dashboard.wellbeing_badge")}
           </p>
         </div>
       </div>

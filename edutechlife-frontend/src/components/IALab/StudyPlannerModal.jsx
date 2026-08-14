@@ -179,7 +179,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
           <div className="flex items-center gap-1">
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              className="p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
               aria-label={t("ialab.study_planner.close_aria")}
             >
               <Icon
@@ -386,12 +386,6 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
             />
             {t("ialab.study_planner.auto_save")}
           </p>
-          {isConnected && (
-            <span className="text-[9px] text-emerald-500 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-              {t("ialab.study_planner.cloud")}
-            </span>
-          )}
         </div>
       </div>
     </div>

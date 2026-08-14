@@ -3,6 +3,7 @@ const request = require('supertest');
 
 const authPath = require.resolve('../../middleware/auth');
 const supabasePath = require.resolve('../../db/supabase');
+const consentPath = require.resolve('../../middleware/parentalConsent');
 
 delete require.cache[authPath];
 require.cache[authPath] = {
@@ -17,6 +18,16 @@ require.cache[authPath] = {
   },
 };
 
+delete require.cache[consentPath];
+require.cache[consentPath] = {
+  id: consentPath,
+  filename: consentPath,
+  loaded: true,
+  exports: {
+    requireVerifiedParentalConsent: (_req, _res, next) => next(),
+  },
+};
+
 const mockSupabase = { from: vi.fn() };
 delete require.cache[supabasePath];
 require.cache[supabasePath] = {
@@ -28,7 +39,7 @@ require.cache[supabasePath] = {
 
 function createApp() {
   const app = express();
-  app.use(express.json({ limit: '1mb' }));
+  app.use(express.json({ limit: '8mb' }));
   const smartboardRoutes = require('../../routes/smartboard');
   app.use('/api/smartboard', smartboardRoutes);
   return app;
@@ -262,6 +273,9 @@ describe('Smartboard DELETE /delete-user-data', () => {
     expect(mockSupabase.from).toHaveBeenCalledWith('students');
     expect(mockSupabase.from).toHaveBeenCalledWith('smartboard_kids_data');
     expect(mockSupabase.from).toHaveBeenCalledWith('parent_consents');
+    // Erasure completo: perfil users, vínculos padre→hijo y activity_log legacy
+    expect(mockSupabase.from).toHaveBeenCalledWith('users');
+    expect(mockSupabase.from).toHaveBeenCalledWith('parent_student_links');
     // Always scoped to the authenticated user id from the token
     expect(deleteEq).toHaveBeenCalledWith('auth_id', 'kid-123');
   });
@@ -303,7 +317,7 @@ describe('Smartboard GET /student-profile', () => {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({
-        data: { age: 12, vak_style: 'visual', school: 'Colegio Mayor', grade: '6B' },
+        data: { name: 'Juan', age: 12, vak_style: 'visual', school: 'Colegio Mayor', grade: '6B', avatar_url: 'https://cdn/x.png' },
         error: null,
       }),
     });
@@ -313,24 +327,35 @@ describe('Smartboard GET /student-profile', () => {
       .set('x-test-user-id', 'kid-123');
 
     expect(res.status).toBe(200);
+    expect(res.body.name).toBe('Juan');
     expect(res.body.age).toBe(12);
     expect(res.body.vakStyle).toBe('visual');
     expect(res.body.school).toBe('Colegio Mayor');
     expect(res.body.grade).toBe('6B');
+    expect(res.body.avatarUrl).toBe('https://cdn/x.png');
   });
 
-  it('returns 404 when profile not found', async () => {
-    mockSupabase.from.mockReturnValue({
+  it('auto-creates student profile when row missing (upsert)', async () => {
+    const chain = {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
-      single: vi.fn().mockResolvedValue({ data: null, error: { code: 'PGRST116' } }),
-    });
+      single: vi.fn()
+        .mockResolvedValueOnce({ data: null, error: { code: 'PGRST116' } })
+        .mockResolvedValueOnce({
+          data: { name: 'test-user-id', age: null, vak_style: null, school: null, grade: null, avatar_url: null },
+          error: null,
+        }),
+      upsert: vi.fn().mockReturnThis(),
+    };
+    mockSupabase.from.mockReturnValue(chain);
 
     const res = await request(app)
       .get('/api/smartboard/student-profile')
       .set('x-test-user-id', 'missing-user');
 
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(200);
+    expect(res.body.name).toBe('test-user-id');
+    expect(chain.upsert).toHaveBeenCalled();
   });
 
   it('handles null fields gracefully', async () => {
@@ -338,7 +363,7 @@ describe('Smartboard GET /student-profile', () => {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({
-        data: { age: null, vak_style: null, school: null, grade: null },
+        data: { name: null, age: null, vak_style: null, school: null, grade: null, avatar_url: null },
         error: null,
       }),
     });
@@ -360,7 +385,7 @@ describe('Smartboard PUT /student-profile', () => {
       eq: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({
-        data: { age: 13, vak_style: 'auditivo', school: 'Liceo', grade: '7A' },
+        data: { name: 'Juan Pérez', age: 13, vak_style: 'auditivo', school: 'Liceo', grade: '7A', avatar_url: null },
         error: null,
       }),
     });
@@ -368,11 +393,12 @@ describe('Smartboard PUT /student-profile', () => {
     const res = await request(app)
       .put('/api/smartboard/student-profile')
       .set('x-test-user-id', 'kid-123')
-      .send({ age: 13, vakStyle: 'auditivo', school: 'Liceo', grade: '7A' });
+      .send({ name: 'Juan Pérez', age: 13, vakStyle: 'auditivo', school: 'Liceo', grade: '7A' });
 
     expect(res.status).toBe(200);
     expect(res.body.message).toContain('actualizado');
     expect(res.body.profile.age).toBe(13);
+    expect(res.body.profile.name).toBe('Juan Pérez');
     expect(res.body.profile.vakStyle).toBe('auditivo');
   });
 
@@ -382,7 +408,7 @@ describe('Smartboard PUT /student-profile', () => {
       eq: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({
-        data: { age: 14, vak_style: null, school: null, grade: null },
+        data: { name: null, age: 14, vak_style: null, school: null, grade: null, avatar_url: null },
         error: null,
       }),
     });
@@ -396,6 +422,27 @@ describe('Smartboard PUT /student-profile', () => {
     expect(res.body.profile.age).toBe(14);
   });
 
+  it('updates avatar_url when null (remove avatar)', async () => {
+    const chain = {
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({
+        data: { name: null, age: null, vak_style: null, school: null, grade: null, avatar_url: null },
+        error: null,
+      }),
+    };
+    mockSupabase.from.mockReturnValue(chain);
+
+    const res = await request(app)
+      .put('/api/smartboard/student-profile')
+      .set('x-test-user-id', 'kid-123')
+      .send({ avatarUrl: null });
+
+    expect(res.status).toBe(200);
+    expect(chain.update).toHaveBeenCalledWith({ avatar_url: null });
+  });
+
   it('returns 400 when age invalid', async () => {
     const res = await request(app)
       .put('/api/smartboard/student-profile')
@@ -404,6 +451,26 @@ describe('Smartboard PUT /student-profile', () => {
 
     expect(res.status).toBe(400);
     expect(res.body.error).toContain('age');
+  });
+
+  it('returns 400 when vakStyle invalid', async () => {
+    const res = await request(app)
+      .put('/api/smartboard/student-profile')
+      .set('x-test-user-id', 'kid-123')
+      .send({ vakStyle: 'genio' });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('vakStyle');
+  });
+
+  it('returns 400 when name too long', async () => {
+    const res = await request(app)
+      .put('/api/smartboard/student-profile')
+      .set('x-test-user-id', 'kid-123')
+      .send({ name: 'x'.repeat(100) });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('name');
   });
 
   it('returns 400 when no fields to update', async () => {
@@ -416,20 +483,106 @@ describe('Smartboard PUT /student-profile', () => {
     expect(res.body.error).toContain('No hay campos');
   });
 
-  it('returns 404 when student not found', async () => {
-    mockSupabase.from.mockReturnValue({
+  it('creates profile via upsert when student not found', async () => {
+    const chain = {
       update: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis(),
-      single: vi.fn().mockResolvedValue({ data: null, error: { code: 'PGRST116' } }),
-    });
+      upsert: vi.fn().mockReturnThis(),
+      single: vi.fn()
+        .mockResolvedValueOnce({ data: null, error: { code: 'PGRST116' } })
+        .mockResolvedValueOnce({
+          data: { name: 'Juan', age: 12, vak_style: null, school: null, grade: null, avatar_url: null },
+          error: null,
+        }),
+    };
+    mockSupabase.from.mockReturnValue(chain);
 
     const res = await request(app)
       .put('/api/smartboard/student-profile')
       .set('x-test-user-id', 'missing-user')
       .send({ age: 12 });
 
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(200);
+    expect(chain.upsert).toHaveBeenCalled();
+    expect(res.body.profile.age).toBe(12);
+  });
+});
+
+describe('Smartboard POST /student-profile/avatar', () => {
+  function mockStorageOk() {
+    mockSupabase.storage = {
+      from: vi.fn().mockReturnValue({
+        upload: vi.fn().mockResolvedValue({ error: null }),
+        getPublicUrl: vi.fn().mockReturnValue({ data: { publicUrl: 'https://cdn/student-avatars/kid-123.png' } }),
+      }),
+    };
+    mockSupabase.from.mockReturnValue({
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+    });
+  }
+
+  const tinyPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+
+  it('uploads a valid avatar and updates avatar_url', async () => {
+    mockStorageOk();
+
+    const res = await request(app)
+      .post('/api/smartboard/student-profile/avatar')
+      .set('x-test-user-id', 'kid-123')
+      .send({ dataUrl: tinyPng });
+
+    expect(res.status).toBe(200);
+    expect(res.body.avatarUrl).toBe('https://cdn/student-avatars/kid-123.png');
+  });
+
+  it('returns 400 when dataUrl missing', async () => {
+    const res = await request(app)
+      .post('/api/smartboard/student-profile/avatar')
+      .set('x-test-user-id', 'kid-123')
+      .send({});
+
+    expect(res.status).toBe(400);
+  });
+
+  it('returns 400 when not an image', async () => {
+    const res = await request(app)
+      .post('/api/smartboard/student-profile/avatar')
+      .set('x-test-user-id', 'kid-123')
+      .send({ dataUrl: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==' });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('Formato');
+  });
+
+  it('returns 400 for avatars over 2MB', async () => {
+    const big = `data:image/png;base64,${'A'.repeat(3.5 * 1024 * 1024)}`;
+
+    const res = await request(app)
+      .post('/api/smartboard/student-profile/avatar')
+      .set('x-test-user-id', 'kid-123')
+      .send({ dataUrl: big });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('2MB');
+  });
+
+  it('returns 500 without leaking internal error details when storage upload fails', async () => {
+    mockSupabase.storage = {
+      from: vi.fn().mockReturnValue({
+        upload: vi.fn().mockResolvedValue({ error: { message: 'bucket not found' } }),
+      }),
+    };
+
+    const res = await request(app)
+      .post('/api/smartboard/student-profile/avatar')
+      .set('x-test-user-id', 'kid-123')
+      .send({ dataUrl: tinyPng });
+
+    expect(res.status).toBe(500);
+    expect(res.body.error).not.toContain('bucket not found');
   });
 });
 
@@ -456,5 +609,243 @@ describe('Smartboard POST /chat validation', () => {
       .set('Authorization', 'Bearer test-token')
       .send({ messages: [{ role: 'user' }] });
     expect(res.status).toBe(400);
+  });
+});
+
+describe('Smartboard POST /parental-consent', () => {
+  it('rejects invalid studentAge type', async () => {
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent')
+      .set('x-test-user-id', 'kid-1')
+      .send({ parentEmail: 'papa@x.co', studentAge: 'once' });
+    expect(res.status).toBe(400);
+  });
+
+  it('rejects out-of-range studentAge', async () => {
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent')
+      .set('x-test-user-id', 'kid-1')
+      .send({ parentEmail: 'papa@x.co', studentAge: 99 });
+    expect(res.status).toBe(400);
+  });
+
+  it('rejects invalid email', async () => {
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent')
+      .set('x-test-user-id', 'kid-1')
+      .send({ parentEmail: 'not-an-email', studentAge: 12 });
+    expect(res.status).toBe(400);
+  });
+
+  it('registers a pending consent and returns it without exposing the token', async () => {
+    const inserted = {
+      id: 'c1',
+      parent_email: 'papa@x.co',
+      student_age: 12,
+      verification_status: 'pending',
+      verification_token: 'super-secret-token-1234567890',
+    };
+    const chain = {
+      insert: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+    };
+    chain.insert.mockReturnValue(chain);
+    chain.select.mockResolvedValue({ data: [inserted], error: null });
+    mockSupabase.from.mockReturnValue(chain);
+
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent')
+      .set('x-test-user-id', 'kid-1')
+      .send({ parentEmail: 'papa@x.co', studentAge: 12 });
+
+    expect(res.status).toBe(201);
+    expect(res.body.data.verification_status).toBe('pending');
+    expect(JSON.stringify(res.body)).not.toContain('super-secret-token');
+  });
+});
+
+describe('Smartboard POST /parental-consent/verify', () => {
+  it('marks consent as verified when token matches', async () => {
+    const chain = {
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({
+        data: { verification_status: 'verified' },
+        error: null,
+      }),
+    };
+    mockSupabase.from.mockReturnValue(chain);
+
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent/verify')
+      .send({ token: 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.verification_status).toBe('verified');
+  });
+
+  it('returns 404 when token is not found', async () => {
+    const chain = {
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+    };
+    mockSupabase.from.mockReturnValue(chain);
+
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent/verify')
+      .send({ token: 'a1b2c3d4e5f6a1b2c3d4e5f6-no-such-token' });
+
+    expect(res.status).toBe(404);
+  });
+
+  it('returns 400 when token is missing or too short', async () => {
+    const res = await request(app)
+      .post('/api/smartboard/parental-consent/verify')
+      .send({ token: 'short' });
+    expect(res.status).toBe(400);
+  });
+});
+
+describe('Smartboard GET /parental-consent/status', () => {
+  it('returns none when no consent exists', async () => {
+    mockSupabase.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      order: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+    });
+
+    const res = await request(app)
+      .get('/api/smartboard/parental-consent/status')
+      .set('x-test-user-id', 'kid-1');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({
+      verification_status: 'none',
+      student_age: null,
+      pending_email: null,
+    });
+  });
+
+  it('returns pending with the parent email for a waiting consent', async () => {
+    mockSupabase.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      order: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({
+        data: {
+          verification_status: 'pending',
+          student_age: 12,
+          parent_email: 'papa@x.co',
+        },
+        error: null,
+      }),
+    });
+
+    const res = await request(app)
+      .get('/api/smartboard/parental-consent/status')
+      .set('x-test-user-id', 'kid-1');
+
+    expect(res.status).toBe(200);
+    expect(res.body.verification_status).toBe('pending');
+    expect(res.body.pending_email).toBe('papa@x.co');
+    expect(res.body.student_age).toBe(12);
+  });
+
+  it('returns verified without exposing the email', async () => {
+    mockSupabase.from.mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      order: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({
+        data: {
+          verification_status: 'verified',
+          student_age: 12,
+          parent_email: 'papa@x.co',
+        },
+        error: null,
+      }),
+    });
+
+    const res = await request(app)
+      .get('/api/smartboard/parental-consent/status')
+      .set('x-test-user-id', 'kid-1');
+
+    expect(res.status).toBe(200);
+    expect(res.body.verification_status).toBe('verified');
+    expect(res.body.pending_email).toBeNull();
+  });
+});
+
+describe('Smartboard GET /parental-consent/verify', () => {
+  it('returns 400 when token is missing or too short', async () => {
+    const res = await request(app)
+      .get('/api/smartboard/parental-consent/verify?token=short');
+    expect(res.status).toBe(400);
+  });
+
+  it('returns HTML confirmation and marks consent verified', async () => {
+    const chain = {
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValueOnce({ data: null, error: null })
+        .mockResolvedValueOnce({
+          data: { verification_status: 'verified', verified_at: '2026-01-01' },
+          error: null,
+        }),
+      update: vi.fn().mockReturnThis(),
+    };
+    mockSupabase.from.mockReturnValue(chain);
+
+    const res = await request(app)
+      .get('/api/smartboard/parental-consent/verify?token=a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6');
+
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toContain('text/html');
+    expect(res.text).toContain('Consentimiento verificado');
+    expect(chain.update).toHaveBeenCalled();
+  });
+
+  it('reports already-verified consent without re-using the token', async () => {
+    const chain = {
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({
+        data: { verification_status: 'verified', verified_at: '2026-01-01' },
+        error: null,
+      }),
+      update: vi.fn().mockReturnThis(),
+    };
+    mockSupabase.from.mockReturnValue(chain);
+
+    const res = await request(app)
+      .get('/api/smartboard/parental-consent/verify?token=a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6');
+
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('ya verificado');
+    expect(chain.update).not.toHaveBeenCalled();
+  });
+
+  it('returns 404 HTML when the token is unknown', async () => {
+    const chain = {
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValueOnce({ data: null, error: null })
+        .mockResolvedValueOnce({ data: null, error: null }),
+      update: vi.fn().mockReturnThis(),
+    };
+    mockSupabase.from.mockReturnValue(chain);
+
+    const res = await request(app)
+      .get('/api/smartboard/parental-consent/verify?token=a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6');
+
+    expect(res.status).toBe(404);
+    expect(res.text).toContain('Enlace no válido');
   });
 });

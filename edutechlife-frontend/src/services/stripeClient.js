@@ -1,4 +1,5 @@
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3001";
+import { API_BASE_URL } from "../config/api";
+const API_BASE = API_BASE_URL;
 
 export async function getPlans() {
   const res = await fetch(`${API_BASE}/api/stripe/plans`);
@@ -31,10 +32,10 @@ export async function createCheckoutSession(planId) {
 async function getAuthToken() {
   if (typeof window === "undefined") return null;
 
-  // La app autentica con Supabase: el token vive en localStorage (auth_token).
+  // La app autentica con Supabase: el token vive en sessionStorage (auth_token).
   // Clerk quedó como fallback por compatibilidad con sesiones antiguas.
   try {
-    const supabaseToken = localStorage.getItem("auth_token");
+    const supabaseToken = sessionStorage.getItem("auth_token");
     if (supabaseToken) return supabaseToken;
   } catch {
     /* localStorage no disponible */

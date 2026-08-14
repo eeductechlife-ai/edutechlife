@@ -5,6 +5,11 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import path from 'path'
 
 export default defineConfig({
+  // Con minify:'esbuild', drop_console se hace aquí (equivalente al terserOptions
+  // que se retiró para evitar el bug de mangle entre chunks).
+  esbuild: {
+    drop: ['console', 'debugger'],
+  },
   test: {
     environment: 'jsdom',
     globals: true,
@@ -157,63 +162,17 @@ export default defineConfig({
   },
   build: {
     target: 'es2020',
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-      format: {
-        comments: false,
-      },
-    },
+    // esbuild (no terser): terser manglaba nombres de nivel superior de forma
+    // inconsistente entre chunks compartidos → "Export 'X' is not defined in
+    // module" solo en el build de Vercel (con drift de versión de terser,
+    // "^5.49.0"). esbuild viene con Vite (sin drift), es determinista y no
+    // rompe los bindings de export entre chunks. drop_console vía esbuild.
+    minify: 'esbuild',
     rollupOptions: {
       external: ['@solana/web3.js'],
       output: {
-        manualChunks(id) {
-          // React core — smallest possible critical chunk
-          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/scheduler/')) {
-            return 'react-vendor';
-          }
-          // Routing
-          if (id.includes('node_modules/react-router-dom/') || id.includes('node_modules/react-router/')) {
-            return 'router-vendor';
-          }
-          // State management — keep away from main bundle
-          if (id.includes('node_modules/zustand/') || id.includes('node_modules/@tanstack/')) {
-            return 'state-vendor';
-          }
-          // Radix UI components — heavy, not needed on landing
-          if (id.includes('node_modules/@radix-ui/')) {
-            return 'radix-vendor';
-          }
-          // Animations + icons — deferred
-          if (id.includes('node_modules/framer-motion/') || id.includes('node_modules/lucide-react/') || id.includes('node_modules/canvas-confetti/')) {
-            return 'animation-vendor';
-          }
-          // Charts — large, only used in admin/stats pages
-          if (id.includes('node_modules/recharts/') || id.includes('node_modules/victory-')) {
-            return 'charts-vendor';
-          }
-          // Supabase client
-          if (id.includes('node_modules/@supabase/')) {
-            return 'supabase-vendor';
-          }
-          // Stripe
-          if (id.includes('node_modules/@stripe/')) {
-            return 'stripe-vendor';
-          }
-          // Analytics & monitoring — never on critical path
-          if (id.includes('node_modules/posthog-js/') || id.includes('node_modules/@sentry/') || id.includes('node_modules/@sentry-internal/')) {
-            return 'analytics-vendor';
-          }
-          // Markdown & sanitization — only in content-heavy pages
-          if (id.includes('node_modules/marked/') || id.includes('node_modules/dompurify/')) {
-            return 'markdown-vendor';
-          }
-          // PDF tools are dynamic imports — let Rollup keep them as separate
-          // named chunks so each downloads only when the user triggers PDF export.
-        },
+        // Chunking por defecto de Vite. El "Export not defined" venía del
+        // minificador terser (ver build.minify), no del chunking.
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]'

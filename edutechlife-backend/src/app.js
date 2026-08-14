@@ -70,6 +70,7 @@ const isAllowed = (origin) => {
 const app = express();
 
 app.set('etag', 'strong');
+app.set('trust proxy', 1);
 app.use(compression());
 app.use(cors({
   origin: (origin, callback) => callback(null, isAllowed(origin)),
@@ -100,13 +101,13 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), webhookHandler);
 
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '8mb' }));
 app.use(sanitizeMiddleware);
 
 app.use('/api', apiLimiter);
 app.use('/api/chat', deepseekLimiter);
 app.use('/api/ialab/prompts', deepseekLimiter);
-app.use('/api/voice-token', authLimiter);
+app.use('/api/voice-token', requireAuth, authLimiter);
 app.use('/api/smartboard/data', requireAuth);
 app.use('/api/smartboard/progress', requireAuth);
 app.use('/api/smartboard/chat', requireAuth, deepseekLimiter);
@@ -117,7 +118,7 @@ app.use('/api/health', healthRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/ialab', ialabRoutes);
 app.use('/api/voice-token', voiceRoutes);
-app.use('/api/tts', ttsRoutes);
+app.use('/api/tts', requireAuth, ttsRoutes);
 app.use('/api/smartboard', smartboardRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/auth', authRoutes);

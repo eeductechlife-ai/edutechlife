@@ -35,12 +35,15 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
             nota_ej1: lessons.nota_ej1 || 0,
             nota_ej2: lessons.nota_ej2 || 0,
             nota_ej3: lessons.nota_ej3 || 0,
+            nota_ej4: lessons.nota_ej4 || 0,
             feedback_ej1:
               lessons.feedback_ej1 || t("ialab.challenge_result.no_feedback"),
             feedback_ej2:
               lessons.feedback_ej2 || t("ialab.challenge_result.no_feedback"),
             feedback_ej3:
               lessons.feedback_ej3 || t("ialab.challenge_result.no_feedback"),
+            feedback_ej4:
+              lessons.feedback_ej4 || t("ialab.challenge_result.no_feedback"),
           });
         } else {
           setEvaluation({
@@ -48,22 +51,26 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
             nota_ej1: 0,
             nota_ej2: 0,
             nota_ej3: 0,
+            nota_ej4: 0,
             feedback_ej1: t("ialab.challenge_result.no_feedback_stored"),
             feedback_ej2: t("ialab.challenge_result.no_feedback_stored"),
             feedback_ej3: t("ialab.challenge_result.no_feedback_stored"),
+            feedback_ej4: t("ialab.challenge_result.no_feedback_stored"),
           });
         }
       } catch (err) {
         if (import.meta.env.DEV)
           console.error("[CHALLENGE_RESULT] Error loading:", err);
         setEvaluation({
-          notaGlobal: 80,
+          notaGlobal: 0,
           nota_ej1: 0,
           nota_ej2: 0,
           nota_ej3: 0,
+          nota_ej4: 0,
           feedback_ej1: t("ialab.challenge_result.error_feedback"),
           feedback_ej2: t("ialab.challenge_result.error_feedback"),
           feedback_ej3: t("ialab.challenge_result.error_feedback"),
+          feedback_ej4: t("ialab.challenge_result.error_feedback"),
         });
       } finally {
         setLoading(false);

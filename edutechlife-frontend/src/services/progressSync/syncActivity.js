@@ -290,11 +290,15 @@ export const loadProgressFromSupabase = async (supabase, userId) => {
     return { success: false, error: "offline", offline: true, data: null };
   }
 
+  const PROGRESS_COLUMNS =
+    "activity_type, resource_id, score, module_id, is_completed, total_resources, resources_viewed, gamification_data, user_id";
+
   try {
     const { data, error } = await supabase
       .from(PROGRESS_TABLE)
-      .select("*")
-      .eq("user_id", userId);
+      .select(PROGRESS_COLUMNS)
+      .eq("user_id", userId)
+      .limit(200);
 
     if (error) {
       if (
@@ -308,7 +312,8 @@ export const loadProgressFromSupabase = async (supabase, userId) => {
 
         const { data: allData, error: allError } = await supabase
           .from(PROGRESS_TABLE)
-          .select("*");
+          .select(PROGRESS_COLUMNS)
+          .limit(200);
 
         if (allError) {
           console.error(

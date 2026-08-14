@@ -38,7 +38,7 @@ vi.mock('@clerk/react', () => ({
 }));
 
 vi.mock('../../../lib/supabase', () => ({
-  createClerkSupabaseClient: (...args) => mockSupabase.client,
+  createSupabaseClient: (...args) => mockSupabase.client,
 }));
 
 let localStorageStore = {};

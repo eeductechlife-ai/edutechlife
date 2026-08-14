@@ -67,8 +67,8 @@ function createTabRenderer(deps) {
     inicio: {
       component: () => (
         <>
+          <HeroSection onTabChange={onTabChange} />
           <MisionDelDia onTabChange={onTabChange} />
-          <HeroSection />
           <InViewSection>
             <LazyLoad fallback={<SectionFallback tab="inicio" />}>
               <PointsRewardsSystem />
@@ -76,6 +76,7 @@ function createTabRenderer(deps) {
           </InViewSection>
         </>
       ),
+      className: "space-y-6 md:space-y-8",
       errorKey: "inicio",
       errorMsg: t("smartboard.error_load_home"),
     },
@@ -222,7 +223,7 @@ const CinematicContent = memo(
     if (!tab) return null;
 
     return (
-      <div className="flex-1 overflow-y-auto relative p-4 md:p-6">
+      <div className="flex-1 overflow-y-auto relative p-4 md:p-6 pb-24 md:pb-8">
         <AnimatePresence mode="wait">
           <DashboardErrorBoundary
             key={activeTab}

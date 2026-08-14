@@ -1,5 +1,7 @@
 import { RESOURCES_ES } from "./resourcesEs";
 import { RESOURCES_EN } from "./resourcesEn";
+import { RESOURCES_PT } from "./resourcesPt";
+import { resolveLocalized } from "../../../../utils/localeUtils";
 import {
   RESOURCE_TYPE_CONFIG,
   getResourceColor,
@@ -17,6 +19,7 @@ import {
 export {
   RESOURCES_ES,
   RESOURCES_EN,
+  RESOURCES_PT,
   RESOURCE_TYPE_CONFIG,
   getResourceColor,
   getResourceIcon,

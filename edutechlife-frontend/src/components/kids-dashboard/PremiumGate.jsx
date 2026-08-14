@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Crown, Lock, Loader2 } from "lucide-react";
 import { SB_GRADIENTS, glow } from "./smartboardTheme";
 import { createCheckoutSession } from "../../services/stripeClient";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const PremiumGate = ({
   children,
@@ -14,6 +15,7 @@ const PremiumGate = ({
   planId = "smartboard_premium",
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [upgrading, setUpgrading] = useState(false);
 
   // Inicia el checkout de Stripe. Si algo falla (sin sesión, sin Stripe
@@ -95,14 +97,14 @@ const PremiumGate = ({
               <Crown className="w-[18px] h-[18px]" strokeWidth={2.4} />
             )}
             <span>
-              {upgrading ? "Abriendo pago..." : "Desbloquear para mi hijo"}
+              {upgrading ? t("kid.premium.opening") : t("kid.premium.unlock")}
             </span>
           </motion.button>
           <button
             onClick={() => navigate("/smartboard")}
             className="block mx-auto mt-4 text-xs font-semibold text-[#94A3B8] hover:text-[#64748B] transition-colors cursor-pointer"
           >
-            Seguir explorando
+            {t("kid.premium.keep_exploring")}
           </button>
         </motion.div>
       </div>

@@ -4,7 +4,7 @@ import COURSE_KNOWLEDGE from "../constants/courseKnowledge";
 import { injectSessionContext } from "../../../services/valerioMemory";
 import { ValerioAcademicMemory } from "../../../services/valerioAcademicMemory";
 
-const PROMPT_VALERIO_DOCENTE_ES = `Eres Valerio, el coach de IA de Edutechlife.
+const PROMPT_VALERIO_DOCENTE_ES = `Eres MAX, el coach de IA de Edutechlife.
 
 IDENTIDAD:
 - Coach experto en IA con 10+ años de experiencia
@@ -39,7 +39,7 @@ IMPORTANTE:
 - No des respuestas largas aunque parezca incompleta — el estudiante puede preguntar más
 - Sé el asistente que los estudiantes necesitan, no el que les da todo masticado`;
 
-const PROMPT_VALERIO_DOCENTE_EN = `You are Valerio, the AI coach from Edutechlife.
+const PROMPT_VALERIO_DOCENTE_EN = `You are MAX, the AI coach from Edutechlife.
 
 IDENTITY:
 - Expert AI coach with 10+ years of experience
@@ -101,7 +101,7 @@ export const buildValerioSystemPrompt = async ({
   supabaseClient = null,
   userId = null,
 }) => {
-  const isEn = locale === "en";
+  const isEn = locale === "en" || locale === "pt";
   const store = useIALabStore.getState();
   const currentModuleId = currentModule?.id || 1;
   const currentModuleData = COURSE_KNOWLEDGE.find(
@@ -173,7 +173,10 @@ ${isEn ? "The student is currently viewing this lesson. Use this context to prov
 ${academicProfile.instruction}`;
       }
     } catch (err) {
-      console.warn("[valerioPrompts] Failed to load academic memory:", err.message);
+      console.warn(
+        "[valerioPrompts] Failed to load academic memory:",
+        err.message,
+      );
       // Fall back to session-only context if academic memory fails
     }
   }
@@ -221,7 +224,7 @@ export const buildContextualWelcome = ({
   userLevel,
   activeMod,
 }) => {
-  const isEn = locale === "en";
+  const isEn = locale === "en" || locale === "pt";
   const store = useIALabStore.getState();
   const name = studentName || (isEn ? "Student" : "Estudiante");
   const moduleTitle =
@@ -268,7 +271,7 @@ export const buildContextualWelcome = ({
     if (overallPct >= 80) {
       return `You're almost there, ${name}! ${overallPct}% complete — just the final stretch left. Keep pushing, and let me know if you need help with anything!`;
     }
-    return `Hello${studentName ? ", " + studentName : ""}! I'm Valerio, your coach. I see you're in "${moduleTitle}" — great topic! You're at ${levelLabel} level, and we'll explore it together. Ask me anything: explain a topic, give you an example, or help you with the challenge. Where would you like to start?`;
+    return `Hello${studentName ? ", " + studentName : ""}! I'm MAX, your coach. I see you're in "${moduleTitle}" — great topic! You're at ${levelLabel} level, and we'll explore it together. Ask me anything: explain a topic, give you an example, or help you with the challenge. Where would you like to start?`;
   }
 
   if (daysSinceLast !== null && daysSinceLast >= 3) {

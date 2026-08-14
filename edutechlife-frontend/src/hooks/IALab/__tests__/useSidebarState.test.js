@@ -13,6 +13,7 @@ const setWindowWidth = (width) => {
 
 beforeEach(() => {
   useIALabStore.getState().removeSidebarState();
+  useIALabStore.getState().setSidebarCollapsed(false);
 });
 
 describe('useSidebarState', () => {

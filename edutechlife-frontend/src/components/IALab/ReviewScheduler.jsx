@@ -9,43 +9,76 @@
  *
  * @see adaptiveSlice.js
  */
-import PropTypes from 'prop-types';
-import { motion } from 'framer-motion';
-import { useIALabStore } from '../../store/ialabStore';
-import { Icon } from '../../utils/iconMapping.jsx';
+import PropTypes from "prop-types";
+import { motion } from "framer-motion";
+import { useIALabStore } from "../../store/ialabStore";
+import { Icon } from "../../utils/iconMapping.jsx";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const BOX_LABELS = {
-  1: { name: 'Nuevo', color: 'bg-rose-500', short: 'N' },
-  2: { name: 'Reciente', color: 'bg-amber-500', short: 'R' },
-  3: { name: 'Aprendido', color: 'bg-yellow-500', short: 'A' },
-  4: { name: 'Retenido', color: 'bg-emerald-500', short: 'D' },
-  5: { name: 'Dominado', color: 'bg-teal-500', short: 'M' },
+  1: {
+    name: "ialab.review_scheduler.box_new",
+    color: "bg-rose-500",
+    short: "N",
+  },
+  2: {
+    name: "ialab.review_scheduler.box_recent",
+    color: "bg-amber-500",
+    short: "R",
+  },
+  3: {
+    name: "ialab.review_scheduler.box_learned",
+    color: "bg-yellow-500",
+    short: "A",
+  },
+  4: {
+    name: "ialab.review_scheduler.box_retained",
+    color: "bg-emerald-500",
+    short: "D",
+  },
+  5: {
+    name: "ialab.review_scheduler.box_mastered",
+    color: "bg-teal-500",
+    short: "M",
+  },
 };
 
-const formatDaysUntil = (ts) => {
+const formatDaysUntil = (ts, t) => {
   const diff = ts - Date.now();
   const days = Math.ceil(diff / (24 * 60 * 60 * 1000));
-  if (days <= 0) return 'Hoy';
-  if (days === 1) return 'Mañana';
-  if (days < 7) return `${days} días`;
+  if (days <= 0) return t("ialab.review_scheduler.today");
+  if (days === 1) return t("ialab.review_scheduler.tomorrow");
+  if (days < 7) return t("ialab.review_scheduler.days_until", { days });
   const weeks = Math.floor(days / 7);
-  return `${weeks} ${weeks === 1 ? 'semana' : 'semanas'}`;
+  return weeks === 1
+    ? t("ialab.review_scheduler.weeks_singular", { weeks })
+    : t("ialab.review_scheduler.weeks_plural", { weeks });
 };
 
-const ReviewScheduler = ({ compact = false, maxUpcoming = 3, onReviewClick }) => {
+const ReviewScheduler = ({
+  compact = false,
+  maxUpcoming = 3,
+  onReviewClick,
+}) => {
+  const { t } = useTranslation();
   const getDueReviews = useIALabStore((s) => s.getDueReviews);
   const getUpcomingReviews = useIALabStore((s) => s.getUpcomingReviews);
   const reviewScheduleLen = useIALabStore((s) => s.reviewSchedule?.length || 0);
 
   const due = getDueReviews ? getDueReviews() : [];
-  const upcoming = getUpcomingReviews ? getUpcomingReviews(14).slice(0, maxUpcoming) : [];
+  const upcoming = getUpcomingReviews
+    ? getUpcomingReviews(14).slice(0, maxUpcoming)
+    : [];
 
   if (reviewScheduleLen === 0) {
     return (
       <div className="w-full p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-dashed border-gray-300 dark:border-gray-700 text-center">
-        <Icon name="fa-calendar-check" className="text-2xl text-gray-400 mb-2" />
+        <Icon
+          name="fa-calendar-check"
+          className="text-2xl text-gray-400 mb-2"
+        />
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          Tus repasos aparecerán aquí conforme avances
+          {t("ialab.review_scheduler.empty")}
         </p>
       </div>
     );
@@ -58,12 +91,12 @@ const ReviewScheduler = ({ compact = false, maxUpcoming = 3, onReviewClick }) =>
         <div className="flex items-center gap-2">
           <Icon name="fa-calendar-days" className="text-corporate text-sm" />
           <h4 className="text-sm font-bold text-petroleum dark:text-white">
-            Repasos programados
+            {t("ialab.review_scheduler.title")}
           </h4>
         </div>
         {due.length > 0 && (
           <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold">
-            {due.length} hoy
+            {t("ialab.review_scheduler.due_today", { count: due.length })}
           </span>
         )}
       </div>
@@ -85,7 +118,7 @@ const ReviewScheduler = ({ compact = false, maxUpcoming = 3, onReviewClick }) =>
               >
                 <div
                   className={`w-7 h-7 rounded-full ${box.color} flex items-center justify-center text-white font-bold text-[10px] shrink-0`}
-                  title={box.name}
+                  title={t(box.name)}
                 >
                   {box.short}
                 </div>
@@ -94,7 +127,7 @@ const ReviewScheduler = ({ compact = false, maxUpcoming = 3, onReviewClick }) =>
                     {item.itemId}
                   </div>
                   <div className="text-[10px] text-rose-600 dark:text-rose-400 font-medium">
-                    Vencido — repasa hoy
+                    {t("ialab.review_scheduler.overdue_review")}
                   </div>
                 </div>
                 <Icon name="fa-play" className="text-rose-500 text-[10px]" />
@@ -108,7 +141,7 @@ const ReviewScheduler = ({ compact = false, maxUpcoming = 3, onReviewClick }) =>
       {upcoming.length > 0 && !compact && (
         <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
           <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
-            Próximos
+            {t("ialab.review_scheduler.upcoming")}
           </p>
           <div className="space-y-1.5">
             {upcoming.map((item, i) => {
@@ -123,13 +156,13 @@ const ReviewScheduler = ({ compact = false, maxUpcoming = 3, onReviewClick }) =>
                 >
                   <div
                     className={`w-2 h-2 rounded-full ${box.color} shrink-0`}
-                    title={box.name}
+                    title={t(box.name)}
                   />
                   <span className="flex-1 text-[11px] text-gray-700 dark:text-gray-300 truncate">
                     {item.itemId}
                   </span>
                   <span className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 shrink-0">
-                    {formatDaysUntil(item.dueAt)}
+                    {formatDaysUntil(item.dueAt, t)}
                   </span>
                 </motion.div>
               );

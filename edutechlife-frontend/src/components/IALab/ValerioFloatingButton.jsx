@@ -11,6 +11,19 @@ const ValerioFloatingButton = ({ onClick, t }) => {
   const tooltipTimer = useRef(null);
   const greetingSpokenRef = useRef(false);
 
+  const [showNudge, setShowNudge] = useState(() => {
+    try { return !localStorage.getItem('ialab_valerio_seen'); } catch { return false; }
+  });
+
+  useEffect(() => {
+    if (!showNudge) return;
+    const id = setTimeout(() => {
+      setShowNudge(false);
+      try { localStorage.setItem('ialab_valerio_seen', '1'); } catch {}
+    }, 15000);
+    return () => clearTimeout(id);
+  }, [showNudge]);
+
   useEffect(() => {
     const timer = setTimeout(() => setMounted(true), 500);
     return () => clearTimeout(timer);
@@ -38,6 +51,10 @@ const ValerioFloatingButton = ({ onClick, t }) => {
   const handleClick = () => {
     if (tooltipTimer.current) clearTimeout(tooltipTimer.current);
     setShowTooltip(false);
+    if (showNudge) {
+      setShowNudge(false);
+      try { localStorage.setItem('ialab_valerio_seen', '1'); } catch {}
+    }
     if (onClick) onClick();
   };
 
@@ -52,6 +69,30 @@ const ValerioFloatingButton = ({ onClick, t }) => {
             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
             className="relative flex items-center justify-center"
           >
+            <AnimatePresence>
+              {showNudge && !showTooltip && (
+                <motion.div
+                  initial={{ opacity: 0, x: 16, scale: 0.9 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  exit={{ opacity: 0, x: 16, scale: 0.9 }}
+                  transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                  className="absolute right-full mr-4 top-1/2 -translate-y-1/2 hidden sm:block pointer-events-none"
+                >
+                  <div className="bg-white dark:bg-slate-900 shadow-2xl rounded-2xl px-4 py-3 border border-slate-100 dark:border-slate-700 whitespace-nowrap">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-400 to-corporate flex items-center justify-center flex-shrink-0">
+                        <Icon name="fa-comment-dots" className="text-white text-xs" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-petroleum dark:text-[#4DA8C4]">{t('ialab.valerio_nudge')}</p>
+                        <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{t('ialab.valerio_nudge_sub')}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute right-[-5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-white dark:bg-slate-900 border-r border-b border-slate-100 dark:border-slate-700 rotate-45" />
+                </motion.div>
+              )}
+            </AnimatePresence>
             <AnimatePresence>
               {showTooltip && (
                 <motion.div

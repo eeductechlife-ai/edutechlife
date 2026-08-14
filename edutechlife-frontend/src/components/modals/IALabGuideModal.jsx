@@ -14,8 +14,7 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (!isOpen) return;
     setLoading(true);
-    const file =
-      locale === "en" ? "/docs/guia-ialab.md" : "/docs/guia-ialab.md";
+    const file = "/docs/guia-ialab.md";
     fetch(file)
       .then((r) => {
         if (!r.ok) {

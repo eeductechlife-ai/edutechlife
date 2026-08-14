@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useIALabStore } from '../../../store/ialabStore';
@@ -9,6 +9,8 @@ import DashboardTopBar from './DashboardTopBar';
 import DashboardTabs from './DashboardTabs';
 import DashboardModuleList from './DashboardModuleList';
 import DashboardActivityView from './DashboardActivityView';
+
+const CertificatesModal = lazy(() => import('../../modals/CertificatesModal'));
 
 const MODULES = [1, 2, 3, 4, 5];
 
@@ -22,6 +24,7 @@ export default function DashboardCompleted() {
   const courseCompleted = useIALabStore(s => s.courseCompleted);
 
   const [activeTab, setActiveTab] = useState('modules');
+  const [showCert, setShowCert] = useState(false);
 
   const stats = useMemo(() => {
     const completed = MODULES.filter(id => {
@@ -51,7 +54,7 @@ export default function DashboardCompleted() {
         <p className="text-sm text-petroleum/70 mt-1">{t('dashboard.explore_courses')}</p>
         <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.95 }}
           transition={{ type: 'spring', stiffness: 500, damping: 14 }}
-          onClick={() => navigate('/ialab/certificate')}
+          onClick={() => setShowCert(true)}
           className="mt-4 inline-flex items-center gap-2 bg-white text-petroleum font-semibold px-5 py-2.5 rounded-xl border border-petroleum/20 shadow-sm">
           <Icon name="fa-certificate" className="w-4 h-4" />
           {t('route.view_certificate')}
@@ -91,6 +94,12 @@ export default function DashboardCompleted() {
       ) : (
         <DashboardActivityView />
       )}
+
+      <Suspense fallback={null}>
+        {showCert && (
+          <CertificatesModal isOpen={showCert} onClose={() => setShowCert(false)} />
+        )}
+      </Suspense>
     </div>
   );
 }

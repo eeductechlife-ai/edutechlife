@@ -1,16 +1,12 @@
+import { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { Icon } from "../../../utils/iconMapping";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import LocaleSwitcher from "../../LocaleSwitcher";
+import NotificationPanel from "../../NotificationPanel";
+import { useNotification } from "../../../context/NotificationContext";
+import useForumNotifications from "../../../hooks/IALab/forum/useForumNotifications";
 
-/**
- * @param {Object} props
- * @param {() => void} props.onOpenMobileMenu
- * @param {(v: boolean) => void} props.setIsSearchOpen
- * @param {string} props.searchQuery
- * @param {(v: string) => void} props.setSearchQuery
- * @param {boolean} props.isSearchOpen
- */
 const MobileHeader = ({
   onOpenMobileMenu,
   setIsSearchOpen,
@@ -19,6 +15,12 @@ const MobileHeader = ({
   isSearchOpen,
 }) => {
   const { t } = useTranslation();
+  const { unreadCount } = useNotification();
+  const { unreadCount: forumUnreadCount } = useForumNotifications();
+  const totalUnread = unreadCount + forumUnreadCount;
+  const [notifOpen, setNotifOpen] = useState(false);
+  const notifTriggerRef = useRef(null);
+
   return (
     <div
       role="banner"
@@ -30,6 +32,32 @@ const MobileHeader = ({
       </h1>
       <div className="flex items-center gap-1.5">
         <LocaleSwitcher />
+
+        {/* Campana de notificaciones en móvil */}
+        <div className="relative">
+          <button
+            ref={notifTriggerRef}
+            onClick={() => setNotifOpen((v) => !v)}
+            className="relative h-11 w-11 rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/50"
+            aria-label={t("ialab.notif_mobile_aria")}
+            aria-haspopup="dialog"
+            aria-expanded={notifOpen}
+          >
+            <Icon name="fa-bell" className={`w-4 h-4 ${totalUnread > 0 ? "text-petroleum dark:text-corporate" : ""}`} aria-hidden="true" />
+            {totalUnread > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[16px] h-4 text-[10px] font-bold text-white bg-gradient-to-r from-petroleum to-corporate rounded-full border-2 border-white dark:border-slate-800 px-0.5 shadow-sm">
+                {totalUnread > 99 ? "99+" : totalUnread}
+              </span>
+            )}
+          </button>
+          <NotificationPanel
+            isOpen={notifOpen}
+            onClose={() => setNotifOpen(false)}
+            triggerRef={notifTriggerRef}
+            forumUnreadCount={forumUnreadCount}
+          />
+        </div>
+
         <button
           onClick={() => setIsSearchOpen(true)}
           className="h-11 w-11 rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/50"

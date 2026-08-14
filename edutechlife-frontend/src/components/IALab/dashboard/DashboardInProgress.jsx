@@ -1,4 +1,13 @@
-import { useMemo, useState, useEffect, useRef, useCallback, memo } from "react";
+import {
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  memo,
+  lazy,
+  Suspense,
+} from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useIALabStore } from "../../../store/ialabStore";
@@ -9,7 +18,8 @@ import DashboardBgPattern from "./DashboardBgPattern";
 import DashboardTopBar from "./DashboardTopBar";
 import DashboardTabs from "./DashboardTabs";
 import DashboardModuleList from "./DashboardModuleList";
-import DashboardActivityView from "./DashboardActivityView";
+
+const DashboardActivityView = lazy(() => import("./DashboardActivityView"));
 
 const MODULES = [1, 2, 3, 4, 5];
 const IDLE_TIMEOUT = 10000;
@@ -385,7 +395,13 @@ function DashboardInProgress() {
           id="tabpanel-activity"
           aria-labelledby="tab-activity"
         >
-          <DashboardActivityView />
+          <Suspense
+            fallback={
+              <div className="h-32 bg-gray-100 rounded animate-pulse" />
+            }
+          >
+            <DashboardActivityView />
+          </Suspense>
         </div>
       )}
     </div>

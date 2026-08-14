@@ -1,8 +1,10 @@
 import { memo, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 const VideoEmbed = memo(({ videoData, darkMode }) => {
   const [loaded, setLoaded] = useState(false);
+  const { t } = useTranslation();
   if (!videoData?.url) return null;
 
   const getId = (url) => {
@@ -26,7 +28,7 @@ const VideoEmbed = memo(({ videoData, darkMode }) => {
         <div className="relative" style={{ paddingBottom: "56.25%" }}>
           <iframe
             src={`https://www.youtube.com/embed/${videoId}`}
-            title={videoData.title || "Video"}
+            title={videoData.title || t("dani.video_title")}
             className="absolute inset-0 w-full h-full rounded-xl"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -41,9 +43,11 @@ const VideoEmbed = memo(({ videoData, darkMode }) => {
           </div>
           <div className="min-w-0">
             <p className="text-sm font-semibold truncate">
-              {videoData.title || "Ver video"}
+              {videoData.title || t("dani.video_watch")}
             </p>
-            <p className="text-xs text-[#64748B]">YouTube · Toca para cargar</p>
+            <p className="text-xs text-[#64748B]">
+              {t("dani.video_click_to_load")}
+            </p>
           </div>
         </div>
       )}

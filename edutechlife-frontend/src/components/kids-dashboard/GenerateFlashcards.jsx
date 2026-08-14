@@ -5,8 +5,34 @@ import {
   generateFlashcards,
   detectThemeFromTopic,
 } from "../../services/flashcardAI";
+import { useTranslation } from "../../i18n/I18nProvider";
+
+const getGrades = (t) => [
+  {
+    value: "1-3",
+    label: t("kid.flashcards.grade_label_1_3"),
+    color: "from-pink-400 to-rose-400",
+  },
+  {
+    value: "4-6",
+    label: t("kid.flashcards.grade_label_4_6"),
+    color: "from-blue-400 to-cyan-400",
+  },
+  {
+    value: "7-9",
+    label: t("kid.flashcards.grade_label_7_9"),
+    color: "from-purple-400 to-indigo-400",
+  },
+  {
+    value: "10-12",
+    label: t("kid.flashcards.grade_label_10_12"),
+    color: "from-emerald-400 to-teal-400",
+  },
+];
 
 export default function GenerateFlashcards({ onGenerated }) {
+  const { t } = useTranslation();
+  const grades = getGrades(t);
   const [topic, setTopic] = useState("");
   const [grade, setGrade] = useState("4-6");
   const [generating, setGenerating] = useState(false);
@@ -28,42 +54,19 @@ export default function GenerateFlashcards({ onGenerated }) {
     }
   };
 
-  const grades = [
-    {
-      value: "1-3",
-      label: "1-3 (6-8 años)",
-      color: "from-pink-400 to-rose-400",
-    },
-    {
-      value: "4-6",
-      label: "4-6 (9-11 años)",
-      color: "from-blue-400 to-cyan-400",
-    },
-    {
-      value: "7-9",
-      label: "7-9 (12-14 años)",
-      color: "from-purple-400 to-indigo-400",
-    },
-    {
-      value: "10-12",
-      label: "10-12 (15-16+)",
-      color: "from-emerald-400 to-teal-400",
-    },
-  ];
-
   return (
     <div className="p-5 rounded-2xl bg-gradient-to-br from-[#004B63]/5 to-[#4DA8C4]/5 border border-[#4DA8C4]/20 shadow-sm">
       <div className="flex items-center gap-2 mb-4">
         <Icon name="fa-brain" className="w-5 h-5 text-[#4DA8C4]" />
         <h4 className="font-bold text-[#004B63]">
-          Generar Mazo Inteligente con IA
+          {t("kid.flashcards.generate_title")}
         </h4>
       </div>
 
       <div className="space-y-3">
         <div>
           <label className="block text-xs font-semibold text-[#004B63] mb-2">
-            Selecciona el grado del estudiante:
+            {t("kid.flashcards.select_grade")}
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {grades.map((g) => (
@@ -89,7 +92,7 @@ export default function GenerateFlashcards({ onGenerated }) {
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleGenerate()}
-            placeholder="Ej: Fotosíntesis, Verbos en inglés, Tabla periódica..."
+            placeholder={t("kid.flashcards.topic_placeholder")}
             disabled={generating}
             className="flex-1 px-4 py-2.5 rounded-xl border border-[#E2E8F0] text-[#004B63] placeholder:text-[#94A3B8] text-sm focus:outline-none focus:border-[#4DA8C4] focus:ring-2 focus:ring-[#4DA8C4]/20 bg-white disabled:opacity-50"
           />
@@ -103,10 +106,12 @@ export default function GenerateFlashcards({ onGenerated }) {
             {generating ? (
               <span className="flex items-center gap-2">
                 <Icon name="fa-spinner" className="w-4 h-4 animate-spin" />
-                Generando...
+                {t("kid.flashcards.generating")}
               </span>
             ) : (
-              <span className="flex items-center gap-2">✨ Generar Mazo</span>
+              <span className="flex items-center gap-2">
+                {t("kid.flashcards.generate_btn")}
+              </span>
             )}
           </motion.button>
         </div>
@@ -133,8 +138,9 @@ export default function GenerateFlashcards({ onGenerated }) {
               ))}
             </div>
             <p className="text-xs text-[#64748B] mt-2 text-center">
-              Generando 10 flashcards adaptadas para{" "}
-              {grades.find((g) => g.value === grade)?.label}...
+              {t("kid.flashcards.generating_for", {
+                grade: grades.find((g) => g.value === grade)?.label,
+              })}
             </p>
           </motion.div>
         )}
@@ -158,7 +164,7 @@ export default function GenerateFlashcards({ onGenerated }) {
               whileTap={{ scale: 0.98 }}
               className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-semibold"
             >
-              Reintentar
+              {t("kid.flashcards.retry")}
             </motion.button>
           </motion.div>
         )}

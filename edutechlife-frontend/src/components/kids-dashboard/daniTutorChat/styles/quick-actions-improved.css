@@ -197,6 +197,70 @@
   transform: translateY(-50%) translateX(2px);
 }
 
+/* Compact mode — shown during active conversation */
+.quick-actions-improved.compact {
+  padding: var(--dani-spacing-sm) var(--dani-spacing-md);
+}
+
+.quick-actions-improved.compact .quick-actions-header {
+  display: none;
+}
+
+.quick-actions-improved.compact .quick-actions-grid {
+  display: flex;
+  flex-direction: row;
+  gap: var(--dani-spacing-sm);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
+}
+
+.quick-actions-improved.compact .quick-actions-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.quick-actions-improved.compact .quick-action-card {
+  flex: 0 0 auto;
+  flex-direction: row;
+  min-height: 36px;
+  padding: 6px 12px;
+  gap: 6px;
+  border-radius: 20px;
+  box-shadow: none;
+  animation: none;
+  transform: none !important;
+}
+
+.quick-actions-improved.compact .quick-action-card:hover {
+  transform: none !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.quick-actions-improved.compact .quick-action-icon {
+  font-size: 1rem;
+  filter: none;
+}
+
+.quick-actions-improved.compact .quick-action-content {
+  flex: 0 0 auto;
+  text-align: left;
+  gap: 0;
+}
+
+.quick-actions-improved.compact .quick-action-title {
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.quick-actions-improved.compact .quick-action-subtitle {
+  display: none;
+}
+
+.quick-actions-improved.compact .quick-action-arrow {
+  display: none;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 640px) {
   .quick-actions-grid {

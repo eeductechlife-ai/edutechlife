@@ -134,7 +134,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "Valerio es tu coach virtual basado en IA, entrenado con metodologías socráticas y pedagógicas. Puede responder preguntas sobre aprendizaje, analizar documentos, crear planes de estudio y guiarte en tu proceso educativo.",
+      "MAX es tu coach virtual basado en IA, entrenado con metodologías socráticas y pedagógicas. Puede responder preguntas sobre aprendizaje, analizar documentos, crear planes de estudio y guiarte en tu proceso educativo.",
   },
   {
     id: "vak_resultado",

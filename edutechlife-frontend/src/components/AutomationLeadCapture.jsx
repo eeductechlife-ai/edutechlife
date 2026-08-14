@@ -1,11 +1,17 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useTranslation } from '../i18n/I18nProvider';
-import { getSectorOptions } from './AutomationData';
-import { track } from '../lib/analytics';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { useTranslation } from "../i18n/I18nProvider";
+import { getSectorOptions } from "./AutomationData";
+import { track } from "../lib/analytics";
 
 const AutomationLeadCapture = () => {
-  const [form, setForm] = useState({ nombre: '', email: '', telefono: '', empresa: '', sector: '' });
+  const [form, setForm] = useState({
+    nombre: "",
+    email: "",
+    telefono: "",
+    empresa: "",
+    sector: "",
+  });
   const [sent, setSent] = useState(false);
   const { t, locale } = useTranslation();
   const sectorOptions = getSectorOptions(locale);
@@ -14,7 +20,7 @@ const AutomationLeadCapture = () => {
     e.preventDefault();
     if (!form.nombre || !form.email) return;
     setSent(true);
-    track('lead_captured', { source: 'automation_page', ...form });
+    track("lead_captured", { source: "automation_page", sector: form.sector });
   };
 
   if (sent) {
@@ -25,13 +31,25 @@ const AutomationLeadCapture = () => {
         className="max-w-2xl mx-auto bg-gradient-to-br from-petroleum to-petroleum-dark rounded-3xl p-10 md:p-14 text-center text-white shadow-premium-lg"
       >
         <div className="w-20 h-20 rounded-full bg-white/15 flex items-center justify-center mx-auto mb-6">
-          <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          <svg
+            className="w-10 h-10"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+            />
           </svg>
         </div>
-        <h3 className="text-2xl font-black mb-3">{t('automation.lead.success_title')}</h3>
+        <h3 className="text-2xl font-black mb-3">
+          {t("automation.lead.success_title")}
+        </h3>
         <p className="text-white/80 max-w-md mx-auto">
-          {t('automation.lead.success_desc')}
+          {t("automation.lead.success_desc")}
         </p>
       </motion.div>
     );
@@ -45,24 +63,37 @@ const AutomationLeadCapture = () => {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-[11px] font-semibold mb-5">
                 <span className="w-1.5 h-1.5 rounded-full bg-mint animate-pulse" />
-                {t('automation.lead.badge')}
+                {t("automation.lead.badge")}
               </div>
               <h3 className="text-2xl font-black mb-3 text-primary-light">
-                {t('automation.lead.title')}
+                {t("automation.lead.title")}
               </h3>
               <p className="text-white/70 text-sm leading-relaxed mb-6">
-                {t('automation.lead.desc')}
+                {t("automation.lead.desc")}
               </p>
               <ul className="space-y-3">
                 {[
-                  t('automation.lead.feature_1'),
-                  t('automation.lead.feature_2'),
-                  t('automation.lead.feature_3'),
-                  t('automation.lead.feature_4'),
+                  t("automation.lead.feature_1"),
+                  t("automation.lead.feature_2"),
+                  t("automation.lead.feature_3"),
+                  t("automation.lead.feature_4"),
                 ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-white/80">
-                    <svg className="w-5 h-5 text-mint flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <li
+                    key={i}
+                    className="flex items-center gap-3 text-sm text-white/80"
+                  >
+                    <svg
+                      className="w-5 h-5 text-mint flex-shrink-0"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     {item}
                   </li>
@@ -73,90 +104,122 @@ const AutomationLeadCapture = () => {
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-2">
                   {[1, 2, 3].map((a) => (
-                    <div key={a} className="w-8 h-8 rounded-full bg-white/20 border-2 border-petroleum flex items-center justify-center text-[10px] font-bold">
-                      {['JD', 'MA', 'CR'][a - 1]}
+                    <div
+                      key={a}
+                      className="w-8 h-8 rounded-full bg-white/20 border-2 border-petroleum flex items-center justify-center text-[10px] font-bold"
+                    >
+                      {["JD", "MA", "CR"][a - 1]}
                     </div>
                   ))}
                 </div>
                 <div className="text-xs text-white/60">
-                  <span className="font-semibold text-white">{t('automation.lead.companies_prefix')}</span> {t('automation.lead.companies')}
+                  <span className="font-semibold text-white">
+                    {t("automation.lead.companies_prefix")}
+                  </span>{" "}
+                  {t("automation.lead.companies")}
                 </div>
               </div>
             </div>
           </div>
 
           <div className="md:col-span-3 bg-white/70 backdrop-blur-xl p-8 md:p-10">
-            <h4 className="text-lg font-bold text-petroleum mb-6">{t('automation.lead.form_title')}</h4>
+            <h4 className="text-lg font-bold text-petroleum mb-6">
+              {t("automation.lead.form_title")}
+            </h4>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('automation.lead.label_nombre')}</label>
+                  <label className="block text-xs font-semibold text-slate-500 mb-1.5">
+                    {t("automation.lead.label_nombre")}
+                  </label>
                   <input
                     type="text"
                     value={form.nombre}
-                    onChange={(e) => setForm(f => ({ ...f, nombre: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, nombre: e.target.value }))
+                    }
                     required
                     className="w-full px-4 py-2.5 border border-white/40 rounded-xl text-sm text-petroleum placeholder:text-slate-300 focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary-light/20 transition-all bg-white/70 backdrop-blur-xl"
-                    placeholder={t('automation.lead.placeholder_nombre')}
+                    placeholder={t("automation.lead.placeholder_nombre")}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('automation.lead.label_email')}</label>
+                  <label className="block text-xs font-semibold text-slate-500 mb-1.5">
+                    {t("automation.lead.label_email")}
+                  </label>
                   <input
                     type="email"
                     value={form.email}
-                    onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, email: e.target.value }))
+                    }
                     required
                     className="w-full px-4 py-2.5 border border-white/40 rounded-xl text-sm text-petroleum placeholder:text-slate-300 focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary-light/20 transition-all bg-white/70 backdrop-blur-xl"
-                    placeholder={t('automation.lead.placeholder_email')}
+                    placeholder={t("automation.lead.placeholder_email")}
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('automation.lead.label_telefono')}</label>
+                  <label className="block text-xs font-semibold text-slate-500 mb-1.5">
+                    {t("automation.lead.label_telefono")}
+                  </label>
                   <input
                     type="tel"
                     value={form.telefono}
-                    onChange={(e) => setForm(f => ({ ...f, telefono: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, telefono: e.target.value }))
+                    }
                     className="w-full px-4 py-2.5 border border-white/40 rounded-xl text-sm text-petroleum placeholder:text-slate-300 focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary-light/20 transition-all bg-white/70 backdrop-blur-xl"
-                    placeholder={t('automation.lead.placeholder_telefono')}
+                    placeholder={t("automation.lead.placeholder_telefono")}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('automation.lead.label_empresa')}</label>
+                  <label className="block text-xs font-semibold text-slate-500 mb-1.5">
+                    {t("automation.lead.label_empresa")}
+                  </label>
                   <input
                     type="text"
                     value={form.empresa}
-                    onChange={(e) => setForm(f => ({ ...f, empresa: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, empresa: e.target.value }))
+                    }
                     className="w-full px-4 py-2.5 border border-white/40 rounded-xl text-sm text-petroleum placeholder:text-slate-300 focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary-light/20 transition-all bg-white/70 backdrop-blur-xl"
-                    placeholder={t('automation.lead.placeholder_empresa')}
+                    placeholder={t("automation.lead.placeholder_empresa")}
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1.5">{t('automation.lead.label_sector')}</label>
+                <label className="block text-xs font-semibold text-slate-500 mb-1.5">
+                  {t("automation.lead.label_sector")}
+                </label>
                 <select
                   value={form.sector}
-                  onChange={(e) => setForm(f => ({ ...f, sector: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, sector: e.target.value }))
+                  }
                   className="w-full px-4 py-2.5 border border-white/40 rounded-xl text-sm text-petroleum focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary-light/20 transition-all bg-white/70 backdrop-blur-xl"
                 >
-                  {sectorOptions.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  {sectorOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
                   ))}
                 </select>
               </div>
               <p className="text-[11px] text-slate-400">
-                {t('automation.lead.privacy_prefix')}{' '}
-                <a href="#" className="text-primary-light hover:underline">{t('automation.lead.privacy_link')}</a>.
-                {t('automation.lead.privacy_hint')}
+                {t("automation.lead.privacy_prefix")}{" "}
+                <a href="#" className="text-primary-light hover:underline">
+                  {t("automation.lead.privacy_link")}
+                </a>
+                .{t("automation.lead.privacy_hint")}
               </p>
               <button
                 type="submit"
                 disabled={!form.nombre || !form.email}
                 className="w-full py-3 bg-gradient-to-r from-petroleum to-primary-light text-white rounded-xl font-bold text-sm hover:shadow-premium transition-all disabled:opacity-30 disabled:cursor-not-allowed relative overflow-hidden"
               >
-                {t('automation.lead.btn_submit')}
+                {t("automation.lead.btn_submit")}
               </button>
             </form>
           </div>

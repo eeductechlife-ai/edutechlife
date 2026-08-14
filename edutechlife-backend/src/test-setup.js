@@ -1,6 +1,5 @@
 process.env.SUPABASE_URL = 'https://test.supabase.co';
 process.env.SUPABASE_SERVICE_KEY = 'test-service-key';
-process.env.CLERK_SECRET_KEY = 'test-clerk-secret';
 if (!process.env.DEEPSEEK_API_KEY) {
   process.env.DEEPSEEK_API_KEY = 'test-deepseek-key';
 }

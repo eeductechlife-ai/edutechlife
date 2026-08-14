@@ -2,17 +2,24 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import DaniAvatar from "../daniTutorChat/components/DaniAvatar";
 import { getRelativeTime } from "./chatUtils";
+import { useTranslation } from "../../../i18n/I18nProvider";
+
+const LOCALE_MAP = { en: "en-US", pt: "pt-BR", es: "es-ES" };
 
 // ==========================================
 // Message Bubble Component
 // ==========================================
 const MessageBubble = memo(({ message, isDani, darkMode }) => {
-  const time = new Date(message.timestamp).toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const { t, locale } = useTranslation();
+  const time = new Date(message.timestamp).toLocaleTimeString(
+    LOCALE_MAP[locale] || "es-ES",
+    {
+      hour: "2-digit",
+      minute: "2-digit",
+    },
+  );
 
-  const relativeTime = getRelativeTime(message.timestamp);
+  const relativeTime = getRelativeTime(message.timestamp, locale, t);
 
   return (
     <motion.div

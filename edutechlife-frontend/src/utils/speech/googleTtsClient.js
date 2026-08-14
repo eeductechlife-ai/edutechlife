@@ -1,8 +1,6 @@
 import { VOICE_PROFILES } from "./voiceProfiles.js";
 import { audioCache } from "./audioCache.js";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || "";
+import { API_BASE_URL } from "../../config/api";
 
 let __backendReachable = null;
 
@@ -20,24 +18,33 @@ const __testBackend = async (apiBase) => {
   return __backendReachable;
 };
 
+const getAuthToken = () => {
+  try {
+    return typeof window !== "undefined"
+      ? sessionStorage.getItem("auth_token")
+      : null;
+  } catch {
+    return null;
+  }
+};
+
 const prefetchTts = async (text, profile = "valeria", overrides = {}) => {
   if (!text || text.length < 3) return;
   try {
     const cached = audioCache.get(profile, text);
     if (cached) return;
-    const apiBase =
-      import.meta.env.VITE_API_BASE_URL ||
-      import.meta.env.VITE_API_URL ||
-      (typeof window !== "undefined" && window.location.hostname === "localhost"
-        ? "http://localhost:3001"
-        : "https://edutechlife-backend.onrender.com");
+    const apiBase = API_BASE_URL;
     const voice = {
       ...(VOICE_PROFILES[profile] || VOICE_PROFILES.valeria),
       ...overrides,
     };
+    const token = getAuthToken();
     const response = await fetch(`${apiBase}/api/tts`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       signal: AbortSignal.timeout(15000),
       body: JSON.stringify({
         input: { text },
@@ -56,8 +63,7 @@ const prefetchTts = async (text, profile = "valeria", overrides = {}) => {
 };
 
 const warmupTts = () => {
-  const apiBase =
-    import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || "";
+  const apiBase = API_BASE_URL;
   if (apiBase) __testBackend(apiBase);
   if (typeof window !== "undefined" && window.speechSynthesis) {
     window.speechSynthesis.getVoices();

@@ -31,7 +31,7 @@ const ValeriaControls = ({
 
   return (
     <div className="valeria-controls-bar">
-      <div className="max-w-6xl mx-auto px-4 flex items-center justify-between py-3">
+      <div className="max-w-6xl mx-auto px-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3">
         <div className="valeria-logo">
           <div className="valeria-avatar-container">
             <div className={`valeria-avatar ${isSpeaking ? "speaking" : ""}`}>

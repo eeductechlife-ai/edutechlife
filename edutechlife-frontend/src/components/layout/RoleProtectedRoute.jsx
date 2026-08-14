@@ -2,23 +2,84 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { PageLoader } from "../LoadingScreen";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { useStudentProfile } from "../../hooks/useStudentProfile";
+import { supabase } from "../../lib/supabase";
 
 /**
  * Componente RoleProtectedRoute - Patrón simplificado con Supabase Auth
  *
- * Verifica si el usuario tiene un token de autenticación en localStorage.
- * Si no, redirige a /login?returnTo=currentPath
+ * 1. Valida que exista una sesión Supabase real (token vigente). Si no,
+ *    redirige a /login?returnTo=currentPath.
+ * 2. Separa productos por `account_type` (IALab 16+ vs SmartBoard 6–16):
+ *    una cuenta de un producto no debe entrar al dashboard del otro.
+ *
+ * El gate de producto es FAIL-OPEN por diseño — nunca bloquea a un usuario
+ * legítimo:
+ *   - Perfil aún cargando → deja pasar.
+ *   - Cuentas sin `account_type` (usuarios previos a la migración 028, o BD
+ *     sin migrar) → dejan pasar.
+ *   - Padres (user_role='parent') y admins → dejan pasar.
+ *   - Solo redirige cuando el `account_type` es conocido y es el OPUESTO al
+ *     producto de la ruta, con redirección suave (Navigate), nunca un error.
  */
+
+// Producto esperado por cada requiredRole y a dónde enviar si no coincide.
+const PRODUCT_ROUTES = {
+  ialab: { expected: "ialab", redirectTo: "/smartboard" },
+  smartboard: { expected: "smartboard", redirectTo: "/ialab" },
+};
+
 const RoleProtectedRoute = ({ children, requiredRole }) => {
   const { t } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Perfil (incluye account_type). Ya está cacheado y usado en otras partes,
+  // así que no añade peticiones nuevas.
+  const { profile, isAdmin, isLoading } = useStudentProfile();
+
   useEffect(() => {
-    // Check for auth token in localStorage
-    const token = localStorage.getItem("auth_token");
-    setIsAuthenticated(!!token);
-    setIsLoaded(true);
+    // Valida que el token de localStorage corresponda a una sesión Supabase
+    // vigente. Evita el gate fail-open que dejaba pasar tokens inexistentes,
+    // inválidos o expirados solo por existir la clave.
+    const validateSession = async () => {
+      try {
+        const token = sessionStorage.getItem("auth_token");
+        if (!token) {
+          setIsAuthenticated(false);
+          setIsLoaded(true);
+          return;
+        }
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session?.user && session.access_token) {
+          // El token de localStorage debe coincidir con la sesión vigente.
+          setIsAuthenticated(session.access_token === token);
+        } else {
+          const refreshToken = localStorage.getItem("refresh_token");
+          const { data: restored, error: restoreError } =
+            await supabase.auth.setSession({
+              access_token: token,
+              refresh_token: refreshToken || undefined,
+            });
+          if (restored?.user && !restoreError && restored.session) {
+            sessionStorage.setItem("auth_token", restored.session.access_token);
+            localStorage.setItem("refresh_token", restored.session.refresh_token);
+            setIsAuthenticated(true);
+          } else {
+            setIsAuthenticated(false);
+          }
+        }
+      } catch {
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoaded(true);
+      }
+    };
+
+    validateSession();
   }, []);
 
   if (!isLoaded) {
@@ -36,12 +97,26 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
     );
   }
 
-  // Salvoconducto IA Lab - cualquier usuario autenticado puede acceder
-  if (requiredRole === "ialab") {
-    return children;
+  // --- Gate de producto por account_type (fail-open) -----------------------
+  const config = PRODUCT_ROUTES[requiredRole];
+  const accountType = profile?.account_type;
+  const isParent =
+    typeof localStorage !== "undefined" &&
+    localStorage.getItem("user_role") === "parent";
+
+  // Solo redirige con evidencia positiva de cruce de producto. Cualquier
+  // ambigüedad (cargando, sin tipo, padre, admin) deja pasar.
+  if (
+    config &&
+    !isLoading &&
+    !isAdmin &&
+    !isParent &&
+    accountType &&
+    accountType !== config.expected
+  ) {
+    return <Navigate to={config.redirectTo} replace />;
   }
 
-  // Para otros roles, permitir acceso (en el futuro se puede agregar verificación de rol)
   return children;
 };
 

@@ -1,12 +1,14 @@
 import React from "react";
 import { Bot, Volume2, VolumeX, RotateCcw, X } from "lucide-react";
 import { COLORS } from "./nicoColors";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 export function ChatButton({ onClick }) {
+  const { t } = useTranslation();
   return (
     <button
       onClick={onClick}
-      aria-label="Abrir chat con Nico, asistente virtual"
+      aria-label={t("nico.open_chat_aria")}
       className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-gentle-pulse safe-area-bottom flex items-center justify-center"
       style={{
         backgroundColor: COLORS.PETROLEUM,
@@ -25,6 +27,8 @@ export function ChatHeader({
   onNewConversation,
   onClose,
 }) {
+  const { t } = useTranslation();
+  const audioLabel = t(audioEnabled ? "nico.audio_off" : "nico.audio_on");
   return (
     <div
       className="p-4 flex items-center justify-between"
@@ -46,7 +50,7 @@ export function ChatHeader({
         <div>
           <h3 className="font-bold text-white">Nico</h3>
           <p className="text-xs" style={{ color: COLORS.SOFT_BLUE }}>
-            EdutechLife AI Support
+            {t("nico.support_subtitle")}
           </p>
         </div>
       </div>
@@ -63,8 +67,8 @@ export function ChatHeader({
             backgroundColor: audioEnabled ? COLORS.MINT : COLORS.PETROLEUM,
             border: audioEnabled ? `2px solid ${COLORS.CORPORATE}` : "none",
           }}
-          title={audioEnabled ? "Desactivar audio" : "Activar audio"}
-          aria-label={audioEnabled ? "Desactivar audio" : "Activar audio"}
+          title={audioLabel}
+          aria-label={audioLabel}
         >
           {audioEnabled ? (
             <Volume2 className="w-4 h-4 text-white" />
@@ -77,8 +81,8 @@ export function ChatHeader({
           onClick={onNewConversation}
           className="p-2 rounded-lg hover:opacity-80 transition"
           style={{ backgroundColor: COLORS.CORPORATE }}
-          title="Nueva Conversación"
-          aria-label="Nueva conversación"
+          title={t("nico.new_conversation")}
+          aria-label={t("nico.new_conversation_aria")}
         >
           <RotateCcw className="w-4 h-4 text-white" />
         </button>
@@ -87,8 +91,8 @@ export function ChatHeader({
           onClick={onClose}
           className="p-2 rounded-lg hover:opacity-80 transition"
           style={{ backgroundColor: COLORS.PETROLEUM }}
-          title="Cerrar"
-          aria-label="Cerrar chat"
+          title={t("nico.close")}
+          aria-label={t("nico.close_chat_aria")}
         >
           <X className="w-4 h-4 text-white" />
         </button>

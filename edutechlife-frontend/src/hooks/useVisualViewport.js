@@ -11,8 +11,8 @@ export function useVisualViewport(ref, key) {
       el.style.height = `${vv.height}px`;
     };
 
-    window.visualViewport.addEventListener("resize", handler);
-    window.visualViewport.addEventListener("scroll", handler);
+    window.visualViewport.addEventListener("resize", handler, { passive: true });
+    window.visualViewport.addEventListener("scroll", handler, { passive: true });
     handler();
 
     return () => {

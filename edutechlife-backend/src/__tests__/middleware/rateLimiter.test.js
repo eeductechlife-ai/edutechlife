@@ -31,12 +31,34 @@ describe('rate limiters', () => {
   });
 
   it('deepseekLimiter sets rate limit headers', async () => {
-    const app = express();
-    app.use('/api', deepseekLimiter);
-    app.get('/api/test', (req, res) => res.json({ ok: true }));
+    vi.stubEnv('NODE_ENV', 'production');
+    try {
+      const app = express();
+      app.use('/api', deepseekLimiter);
+      app.get('/api/test', (req, res) => res.json({ ok: true }));
 
-    const res = await request(app).get('/api/test');
-    expect(res.status).toBe(200);
-    expect(res.headers['ratelimit-limit']).toBeDefined();
+      const res = await request(app).get('/api/test');
+      expect(res.status).toBe(200);
+      expect(res.headers['ratelimit-limit']).toBeDefined();
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
+  it('deepseekLimiter rejects requests over the limit in production', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    try {
+      const app = express();
+      app.use('/api', deepseekLimiter);
+      app.get('/api/test', (req, res) => res.json({ ok: true }));
+
+      let lastStatus = 200;
+      for (let i = 0; i < 25; i++) {
+        lastStatus = (await request(app).get('/api/test')).status;
+      }
+      expect(lastStatus).toBe(429);
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 });

@@ -8,7 +8,7 @@ const MODULE_CONFIG = {
       () => `Genera un JSON con 3 ejercicios de nivel medio para evaluación de prompts:
 1. ejercicio1: Un párrafo con un escenario detallado donde el usuario debe identificar (Rol, Contexto, Tarea). Ejemplo: "Eres un experto en marketing digital trabajando para una startup de e-commerce que quiere aumentar sus ventas en un 30% en el próximo trimestre. Tu tarea es crear una campaña de email marketing segmentada para clientes recurrentes."
 2. ejercicio2: Un prompt mal redactado que el usuario debe optimizar. Ejemplo: "haz algo para mejorar las ventas con email"
-3. ejercicio3: Un caso de uso complejo donde el usuario debe crear un prompt desde cero. Ejemplo: "Crea un prompt para generar un plan de contenido de 30 días para una marca de ropa sostenible que quiere posicionarse en TikTok"
+3. ejercicio3: Un caso de uso complejo donde el usuario debe crear un prompt desde cero, indicando EXPLÍCITAMENTE el FORMATO de salida esperado (estructura, longitud, tono). Ejemplo: "Crea un prompt para generar un plan de contenido de 30 días para una marca de ropa sostenible que quiere posicionarse en TikTok"
 
 Formato JSON exacto: { "ejercicio1": "texto", "ejercicio2": "texto", "ejercicio3": "texto" }`,
     evaluateSystemPrompt:
@@ -31,7 +31,8 @@ CRITERIOS DE CALIFICACIÓN - EJERCICIO 3 (Crear prompt desde cero):
 - Si escribió ALGO relacionado al desafío: 50%
 - Si incluyó al menos rol + tarea: 70%
 - Si incluyó rol + contexto + tarea + detalle: 80%
-- Si es completo, coherente y bien estructurado: 90-100%
+- Si incluyó además el FORMATO de salida esperado (estructura, longitud, tono): 90%
+- Si es completo, coherente y bien estructurado: 95-100%
 
 NOTA GLOBAL = (nota_ej1 + nota_ej2 + nota_ej3) / 3, redondeada a 1 decimal.
 
@@ -190,7 +191,7 @@ Recuerda: El estudiante está aprendiendo. Valora el intento. Devuelve SOLO JSON
       "Eres un experto en ChatGPT, GPTs personalizados y Function Calling. Genera 3 ejercicios de nivel medio para evaluación sobre automatización con GPTs. Devuelve SOLO JSON.",
     generateUserPrompt:
       () => `Genera un JSON con 3 ejercicios sobre ChatGPT y GPTs personalizados:
-1. casoUso: Un párrafo describiendo un escenario profesional donde se necesita automatizar una tarea con un GPT personalizado. Incluye: tipo de industria, tarea a automatizar, requisitos técnicos. Ejemplo: "Una agencia de marketing digital quiere automatizar la generación de informes semanales de redes sociales. Necesitan un GPT que analice datos de Instagram, Facebook y TikTok, y genere un PDF con métricas clave y recomendaciones."
+1. casoUso: Un párrafo describiendo un escenario profesional donde se necesita automatizar una tarea con un GPT personalizado. Incluye: tipo de industria, tarea a automatizar, requisitos técnicos y un componente de ANÁLISIS PREDICTIVO (p. ej. prever demanda, churn o tendencia). Ejemplo: "Una agencia de marketing digital quiere automatizar la generación de informes semanales de redes sociales. Necesitan un GPT que analice datos de Instagram, Facebook y TikTok, genere un PDF con métricas clave y PREDIGA qué tipo de contenido tendrá mejor rendimiento la próxima semana según las tendencias históricas."
 2. gptConfig: Descripción de lo que debería hacer un GPT, con instrucciones incompletas. El estudiante debe completar/mejorar las instrucciones.
 3. functionCallSpec: Un caso de uso donde se necesita Function Calling para integrar con una API externa. Describir qué debe hacer la función. Ejemplo: "Un GPT de atención al cliente necesita consultar una API de CRM para obtener datos del cliente y registrar tickets de soporte."
 
@@ -201,7 +202,8 @@ Formato JSON exacto: { "casoUso": "texto", "gptConfig": "texto", "functionCallSp
 CRITERIOS - EJERCICIO 1 (Analizar caso de uso):
 - Si seleccionó un caso y justificó: 60%
 - Si la justificación menciona criterios relevantes (automatizable, impacto, viabilidad): 80%
-- Si la justificación es detallada y considera múltiples factores: 90-100%
+- Si la justificación considera además el componente de ANÁLISIS PREDICTIVO (datos históricos, tendencia, proyección): 85-90%
+- Si la justificación es detallada y considera múltiples factores: 95-100%
 
 CRITERIOS - EJERCICIO 2 (Diseñar configuración GPT):
 - Si completó instrucciones básicas: 50%
@@ -295,14 +297,14 @@ Devuelve SOLO JSON válido.`,
     generateUserPrompt:
       () => `Genera un JSON con 4 ejercicios sobre Gemini Deep Research:
 1. temaInvestigacion: Un tema de actualidad con contexto (3 oraciones). El estudiante debe formular una pregunta de investigación. Ejemplo: "La energía de fusión nuclear ha alcanzado hitos importantes en 2024. Varios países están invirtiendo en reactores experimentales. El debate sobre su viabilidad comercial continúa."
-2. fuentes: Array con 4 objetos. Cada uno: { "titulo": "string", "tipo": "articulo"|"tweet"|"grafico"|"paper", "contenido": "string", "esRelevante": true|false }. El estudiante debe identificar cuáles son relevantes.
-3. afirmaciones: Array con 4 objetos. Cada uno: { "texto": "string", "veracidad": "verdadero"|"falso"|"no_verificable" }. El estudiante debe clasificar cada una.
+2. fuentes: Array con 4 objetos. Cada uno: { "titulo": "string", "tipo": "articulo"|"tweet"|"grafico"|"paper", "contenido": "string", "esRelevante": true|false, "modalidad": "texto"|"imagen"|"video"|"audio" }. El estudiante debe identificar cuáles son relevantes y justificar la MODALIDAD de la fuente (qué tipo de entrada es y para qué conviene).
+3. afirmaciones: Array con 4 objetos. Cada uno: { "texto": "string", "veracidad": "verdadero"|"falso"|"no_verificable" }. El estudiante debe clasificar cada una y citar la fuente que respalda su veredicto (GROUNDING).
 4. informeTemplate: Un esquema de informe profesional con secciones a completar.
 
 Formato JSON exacto:
 {
   "temaInvestigacion": "texto",
-  "fuentes": [{ "titulo": "string", "tipo": "string", "contenido": "string", "esRelevante": true|false }],
+  "fuentes": [{ "titulo": "string", "tipo": "string", "contenido": "string", "esRelevante": true|false, "modalidad": "string" }],
   "afirmaciones": [{ "texto": "string", "veracidad": "string" }],
   "informeTemplate": { "secciones": ["string"] }
 }`,
@@ -317,12 +319,14 @@ CRITERIOS - EJERCICIO 1 (Pregunta de investigación):
 CRITERIOS - EJERCICIO 2 (Análisis de fuentes):
 - Seleccionó fuentes relevantes: 50%
 - Extrajo datos clave correctamente: 70%
-- Análisis profundo y crítico: 80-100%
+- Justifica la MODALIDAD de la fuente (texto, imagen, video, audio) y su valor para la pregunta: 80%
+- Análisis profundo y crítico con conexión de modalidades: 90-100%
 
 CRITERIOS - EJERCICIO 3 (Verificación):
 - Clasificó afirmaciones correctamente: 50%
 - Razonamiento sólido en cada clasificación: 70%
-- Justificación detallada y precisa: 80-100%
+- CITA la fuente específica que respalda cada veredicto (grounding): 80%
+- Justificación detallada, precisa y con cita a fuente: 90-100%
 
 CRITERIOS - EJERCICIO 4 (Informe):
 - Completó las secciones básicas: 50%
@@ -502,7 +506,7 @@ Devuelve SOLO JSON válido.`,
       "Eres un experto en NotebookLM, curación de fuentes y síntesis de documentos. Genera 3 ejercicios sobre organización y análisis de información con IA. Devuelve SOLO JSON.",
     generateUserPrompt: () => `Genera un JSON con 3 ejercicios sobre NotebookLM:
 1. conceptos: Array con 5 objetos. Cada uno: { "titulo": "string", "contenido": "string", "tema": "string" }. El estudiante debe seleccionar hasta 4 y extraer el insight principal de cada uno.
-2. preguntasSintesis: 2 preguntas que el estudiante debe responder integrando múltiples fuentes. Ejemplo: "¿En qué coinciden y en qué se contradicen los conceptos seleccionados?"
+2. preguntasSintesis: 2 preguntas que el estudiante debe responder integrando múltiples fuentes. Una de ellas debe exigir VERIFICAR UNA CITA contra las fuentes (el estudiante debe decir si una afirmación dada proviene realmente de un concepto y cuál). Ejemplo: "¿En qué coinciden y en qué se contradicen los conceptos seleccionados? ¿La afirmación 'el ejercicio físico promueve la neurogénesis' proviene realmente de alguno de los conceptos? ¿De cuál?"
 3. guionTemplate: Un esquema de guión de podcast con secciones: introduccion, desarrollo (3 puntos), conclusion.
 
 Formato JSON exacto:
@@ -522,7 +526,8 @@ CRITERIOS - EJERCICIO 1 (Análisis de conceptos):
 CRITERIOS - EJERCICIO 2 (Síntesis):
 - Respondió las preguntas: 50%
 - Integra múltiples conceptos en la respuesta: 70%
-- Síntesis profunda con conexiones originales: 80-100%
+- VERIFICA la cita propuesta contra los conceptos e indica la fuente de origen: 80%
+- Síntesis profunda con conexiones originales y verificación precisa: 90-100%
 
 CRITERIOS - EJERCICIO 3 (Guión de audio):
 - Completó secciones: 50%
@@ -697,7 +702,7 @@ Devuelve SOLO JSON válido.`,
     generateUserPrompt:
       () => `Genera un JSON con 3 ejercicios sobre ética en IA:
 1. casoEtico: Descripción detallada de un caso real de sesgo algorítmico (3-4 oraciones). Incluye el contexto, los datos usados, y el resultado problemático. Ejemplo: "Un sistema de contratación basado en IA entrenado con datos históricos de una empresa tecnológica mostraba preferencia por candidatos hombres. El sistema penalizaba CVs que incluían palabras como 'voluntariado' o 'licencia maternal'."
-2. tiposSesgo: Array con 4 tipos de sesgo (nombres y descripciones). El estudiante debe identificar cuáles están presentes en el caso.
+2. tiposSesgo: Array con 4 tipos de sesgo (nombres y descripciones). El estudiante debe identificar cuáles están presentes en el caso y CLASIFICAR el riesgo del caso según el AI Act de la UE (riesgo inaceptable, alto, limitado o mínimo).
 3. protocoloPlantilla: Un esquema con secciones: principios rectores, medidas de prevención, medidas de mitigación, plan de monitoreo.
 
 Formato JSON exacto:
@@ -717,7 +722,8 @@ CRITERIOS - EJERCICIO 1 (Identificar sesgos):
 CRITERIOS - EJERCICIO 2 (Análisis de impacto):
 - Describió el impacto: 50%
 - Identificó causas raíz técnicas y humanas: 70%
-- Análisis sistémico y profundo: 80-100%
+- CLASIFICA el caso según el AI Act (riesgo inaceptable/alto/limitado/mínimo) y justifica la clasificación: 80%
+- Análisis sistémico y profundo con referencia regulatoria precisa: 90-100%
 
 CRITERIOS - EJERCICIO 3 (Protocolo ético):
 - Propuso principios y medidas básicas: 50%

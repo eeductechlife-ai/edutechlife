@@ -137,7 +137,7 @@ export const MODULE_3 = [
     topic: "Aprendizaje Guiado",
     difficulty: "fácil",
     feedback:
-      "La IA es tu tutor personal 24/7. Úsala para aprender activamente, no para evitar el esfuerzo. Repasa el laboratorio guiado por Valerio.",
+      "La IA es tu tutor personal 24/7. Úsala para aprender activamente, no para evitar el esfuerzo. Repasa el laboratorio guiado por MAX.",
   },
   {
     id: "m3q7",

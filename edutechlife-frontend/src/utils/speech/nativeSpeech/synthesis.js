@@ -23,6 +23,7 @@ const speakTextConversational = async (
   overrides = {},
   onEndCallback,
   onPermissionError,
+  onStartCallback,
 ) => {
   const gen = ++ttsGeneration;
   currentTtsGeneration = gen;
@@ -40,13 +41,7 @@ const speakTextConversational = async (
     safetyTimeout = null;
   }
 
-  const isDev =
-    import.meta.env.DEV ||
-    (typeof window !== "undefined" && window.location.hostname === "localhost");
-  const apiBase =
-    import.meta.env.VITE_API_BASE_URL ||
-    import.meta.env.VITE_API_URL ||
-    (isDev ? "http://localhost:3001" : "https://edutechlife-api.vercel.app");
+  const apiBase = API_BASE_URL;
   const voice = VOICE_PROFILES[profile] || VOICE_PROFILES.valeria;
 
   const cleanup = () => {
@@ -232,6 +227,9 @@ const speakTextConversational = async (
             handleEnd();
             resolve(true);
           };
+          utterance.onstart = () => {
+            if (onStartCallback) onStartCallback();
+          };
           utterance.onerror = (event) => {
             console.error("❌ Error voz nativa:", event.error);
             cleanup();
@@ -281,6 +279,9 @@ const speakTextConversational = async (
     currentAudio = new Audio(`data:audio/mp3;base64,${cachedAudio}`);
     currentAudio.volume = 1.0;
     currentAudio.onended = handleEnd;
+    currentAudio.onplay = () => {
+      if (onStartCallback) onStartCallback();
+    };
     currentAudio.onerror = (e) => {
       console.error("Error reproduciendo audio cacheado:", e);
       cleanup();
@@ -329,9 +330,19 @@ const speakTextConversational = async (
 
     for (const voiceOption of [voice, ...voiceFallbacks]) {
       try {
+        let token = null;
+        try {
+          token =
+            typeof window !== "undefined"
+              ? sessionStorage.getItem("auth_token")
+              : null;
+        } catch {}
         const response = await fetch(`${currentApi}/api/tts`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
           signal: (() => {
             const c = new AbortController();
             setTimeout(() => c.abort(), 20000);
@@ -389,6 +400,9 @@ const speakTextConversational = async (
           );
           currentAudio.volume = 1.0;
           currentAudio.onended = handleEnd;
+          currentAudio.onplay = () => {
+            if (onStartCallback) onStartCallback();
+          };
           currentAudio.onerror = (e) => {
             console.error("Error reproduciendo audio:", e);
             cleanup();

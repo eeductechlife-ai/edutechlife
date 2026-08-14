@@ -72,7 +72,7 @@ describe("ValerioPanelHeader", () => {
     render(<ValerioPanelHeader {...defaultProps} valerioState="speaking" />);
     const avatar = screen.getByTestId("valerio-avatar");
     expect(avatar).toBeInTheDocument();
-    expect(avatar).toHaveAttribute("alt", "Valerio");
+    expect(avatar).toHaveAttribute("alt", "MAX");
     expect(
       screen.getByText(/ialab\.valerio\.status_speaking/),
     ).toBeInTheDocument();

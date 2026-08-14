@@ -5,7 +5,6 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
 import { useIALabStore } from '../../store/ialabStore';
 import { useTranslation } from '../../i18n/I18nProvider';
-import useInfographicCompletion from '../../hooks/IALab/useInfographicCompletion';
 import ModuleNavItem from './sidebar/ModuleNavItem';
 const StudyCalendarSection = lazy(() => import('./StudyCalendarSection'));
 
@@ -18,7 +17,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
   } = useIALabProgressContext();
 
   const {
-    user, sidebarDropdowns, toggleSidebarDropdown,
+    user,
     setShowCertificateModal,
     courseCompleted
   } = useIALabUIContext();
@@ -47,8 +46,6 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-  const isInfographicCompleted = useInfographicCompletion();
 
   const handleCloseSection = () => {
     closeMobileMenu();
@@ -154,48 +151,6 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             );
           })}
         </div>
-      </div>
-
-      <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
-
-      {/* RECURSOS ADICIONALES */}
-      <div className="px-3 py-3">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-corporate flex items-center gap-1.5">
-            <Icon name="fa-cubes" className="text-corporate text-xs" /> {t('mobile_menu.resources')}
-          </h3>
-          <button onClick={() => toggleSidebarDropdown('recursos')}
-            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30"
-            aria-label={sidebarDropdowns.recursos ? t('mobile_menu.resources_collapse') : t('mobile_menu.resources_expand')}>
-            <Icon name={sidebarDropdowns.recursos ? 'fa-chevron-up' : 'fa-chevron-down'} className="text-xs" />
-          </button>
-        </div>
-        {sidebarDropdowns.recursos && (
-          <div className="space-y-0.5">
-            {[
-              { id: 'i' + activeMod, label: t('mobile_menu.resource_cheatsheet'), icon: 'fa-file-alt', meta: t('mobile_menu.resource_cheatsheet_meta') },
-              { id: 'i' + activeMod + '_2', label: t('mobile_menu.resource_examples'), icon: 'fa-code', meta: t('mobile_menu.resource_examples_meta') },
-              { id: 'i' + activeMod + '_3', label: t('mobile_menu.resource_templates'), icon: 'fa-clipboard', meta: t('mobile_menu.resource_templates_meta') },
-              { id: 'i' + activeMod + '_4', label: t('mobile_menu.resource_cases'), icon: 'fa-chart-line', meta: t('mobile_menu.resource_cases_meta') },
-            ].map((r) => {
-              const completed = isInfographicCompleted(r.id);
-              return (
-                <button key={r.id} onClick={() => window.dispatchEvent(new CustomEvent('ialab:openTopic'))}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 min-h-[44px] min-w-[44px]">
-                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                    completed ? 'bg-emerald-50 text-emerald-500' : 'bg-petroleum/8 dark:bg-petroleum/20 text-petroleum dark:text-petroleum'
-                  }`}>
-                    <Icon name={completed ? 'fa-check-circle' : r.icon} className="text-xs" />
-                  </div>
-                  <div className="flex-1 min-w-0 text-left">
-                    <p className="text-sm truncate">{r.label}</p>
-                    <p className="text-[10px] text-slate-600">{completed ? t('mobile_menu.completed') : r.meta}</p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        )}
       </div>
 
       {/* INSIGNIAS */}

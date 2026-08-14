@@ -1,7 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
-import { X, ChevronRight, ChevronLeft, Sparkles, Trophy, Zap, MessageCircle, BookOpen } from "lucide-react";
+import {
+  X,
+  ChevronRight,
+  ChevronLeft,
+  Sparkles,
+  Trophy,
+  Zap,
+  MessageCircle,
+  BookOpen,
+} from "lucide-react";
 import { safeStorage } from "../../utils/storage";
 import { useIALabStore } from "../../store/ialabStore";
+import { useTranslation } from "../../i18n/I18nProvider";
+import LearningPaceSelector from "./LearningPaceSelector";
 
 const TOUR_KEY = "ialab-welcome-tour-completed";
 const VISIT_COUNT_KEY = "ialab-visit-count";
@@ -9,38 +20,33 @@ const VISIT_COUNT_KEY = "ialab-visit-count";
 const STEPS = [
   {
     icon: Sparkles,
-    title: "¡Bienvenido a IA Lab Academic!",
-    description:
-      "Tu ruta hacia el dominio de la IA comienza aquí. En 5 módulos progresivos aprenderás desde prompts básicos hasta ética avanzada.",
-    highlight: "5 Módulos · 28-40 horas · Certificado profesional",
+    title: "ialab.tour.welcome_step1_title",
+    description: "ialab.tour.welcome_step1_desc",
+    highlight: "ialab.tour.welcome_step1_highlight",
   },
   {
     icon: BookOpen,
-    title: "Tu ruta de aprendizaje",
-    description:
-      "Cada módulo tiene contenido, actividades, un desafío y un examen. Debes obtener 80% para desbloquear el siguiente módulo.",
-    highlight: "Artesano → Arquitecto → Detective → Alquimista → Guardián",
+    title: "ialab.tour.welcome_step2_title",
+    description: "ialab.tour.welcome_step2_desc",
+    highlight: "ialab.tour.welcome_step2_highlight",
   },
   {
     icon: Trophy,
-    title: "Gamificación que motiva",
-    description:
-      "Gana XP por cada actividad, mantén rachas diarias y desbloquea badges. Tu progreso es tuyo y se guarda automáticamente.",
-    highlight: "XP · Rachas · Badges · Certificado final",
+    title: "ialab.tour.welcome_step3_title",
+    description: "ialab.tour.welcome_step3_desc",
+    highlight: "ialab.tour.welcome_step3_highlight",
   },
   {
     icon: MessageCircle,
-    title: "Valerio, tu coach IA",
-    description:
-      "Un tutor personal disponible 24/7. Pregúntale cualquier duda sobre los módulos, prompts, herramientas o ética.",
-    highlight: "Disponible en todos los módulos",
+    title: "ialab.tour.welcome_step4_title",
+    description: "ialab.tour.welcome_step4_desc",
+    highlight: "ialab.tour.welcome_step4_highlight",
   },
   {
     icon: Zap,
-    title: "¡Estás listo para empezar!",
-    description:
-      "Comienza con el Módulo 1 (Artesano Digital) y avanza a tu ritmo. Recuerda: cada pequeño paso te acerca a ser un Guardián Digital.",
-    highlight: "Tu primer módulo te espera",
+    title: "ialab.tour.welcome_step5_title",
+    description: "ialab.tour.welcome_step5_desc",
+    highlight: "ialab.tour.welcome_step5_highlight",
   },
 ];
 
@@ -73,14 +79,20 @@ function hasExistingProgress(store) {
   if (!store) return false;
   const moduleProgress = store.moduleProgress || {};
   const hasAnyModuleActivity = Object.values(moduleProgress).some(
-    (mod) => mod?.exam || mod?.challenge || mod?.resourcesCompleted || (mod?.currentScore || 0) > 0,
+    (mod) =>
+      mod?.exam ||
+      mod?.challenge ||
+      mod?.resourcesCompleted ||
+      (mod?.currentScore || 0) > 0,
   );
   const hasXp = (store.totalXp || 0) > 0;
-  const hasCompletedLessons = Array.isArray(store.completedLessons) && store.completedLessons.length > 0;
+  const hasCompletedLessons =
+    Array.isArray(store.completedLessons) && store.completedLessons.length > 0;
   return hasAnyModuleActivity || hasXp || hasCompletedLessons;
 }
 
 export default function WelcomeTour({ forceShow = false, onComplete }) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState(0);
   const moduleProgress = useIALabStore((s) => s.moduleProgress);
@@ -93,21 +105,48 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
       return;
     }
 
+    // Completely new students (no activity) → No tour, go straight to dashboard
+    const hasProgress = hasExistingProgress({
+      moduleProgress,
+      totalXp,
+      completedLessons,
+    });
+    if (!hasProgress) {
+      // New student: no tour needed
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(() => incrementVisitCount());
+      } else {
+        incrementVisitCount();
+      }
+      return;
+    }
+
+    // Students with existing progress + returning student → Show interactive tour
     if (isReturningStudent()) {
-      incrementVisitCount();
+      // Already seen tour before: don't show again
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(() => incrementVisitCount());
+      } else {
+        incrementVisitCount();
+      }
       return;
     }
 
-    const hasProgress = hasExistingProgress({ moduleProgress, totalXp, completedLessons });
-    if (hasProgress) {
-      safeStorage.setItem(TOUR_KEY, new Date().toISOString());
+    // Student with progress but haven't seen tour → Show welcome tour
+    // (helps orient experienced students to new features)
+    if ("requestIdleCallback" in window) {
+      const id = requestIdleCallback(() => {
+        incrementVisitCount();
+        const timer = setTimeout(() => setIsOpen(true), 300);
+        return () => clearTimeout(timer);
+      });
+      return () => cancelIdleCallback(id);
+    } else {
+      // Fallback: show after 300ms
       incrementVisitCount();
-      return;
+      const timer = setTimeout(() => setIsOpen(true), 300);
+      return () => clearTimeout(timer);
     }
-
-    incrementVisitCount();
-    const timer = setTimeout(() => setIsOpen(true), 1200);
-    return () => clearTimeout(timer);
   }, [forceShow, moduleProgress, totalXp, completedLessons]);
 
   const handleClose = useCallback(() => {
@@ -163,8 +202,10 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
       <div
         className="relative rounded-3xl max-w-md w-full overflow-hidden"
         style={{
-          background: "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(240,249,252,0.98) 100%)",
-          boxShadow: "0 25px 60px -12px rgba(0, 75, 99, 0.45), 0 0 0 1px rgba(0, 188, 212, 0.1)",
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(240,249,252,0.98) 100%)",
+          boxShadow:
+            "0 25px 60px -12px rgba(0, 75, 99, 0.45), 0 0 0 1px rgba(0, 188, 212, 0.1)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -177,7 +218,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
             color: "var(--ialab-petroleum, #004B63)",
             boxShadow: "0 2px 8px rgba(0, 75, 99, 0.15)",
           }}
-          aria-label="Cerrar tour de bienvenida"
+          aria-label={t("ialab.tour.welcome_close_aria")}
         >
           <X className="w-4 h-4" />
         </button>
@@ -190,8 +231,14 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
           }}
         >
           <div className="absolute inset-0 opacity-25 pointer-events-none">
-            <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full blur-2xl" style={{ background: "rgba(255,255,255,0.4)" }} />
-            <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full blur-2xl" style={{ background: "rgba(102, 204, 204, 0.5)" }} />
+            <div
+              className="absolute -top-8 -right-8 w-32 h-32 rounded-full blur-2xl"
+              style={{ background: "rgba(255,255,255,0.4)" }}
+            />
+            <div
+              className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full blur-2xl"
+              style={{ background: "rgba(102, 204, 204, 0.5)" }}
+            />
           </div>
           <div
             className="w-20 h-20 rounded-3xl flex items-center justify-center transform transition-transform hover:scale-105"
@@ -200,7 +247,11 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
               boxShadow: "0 10px 30px rgba(0, 75, 99, 0.35)",
             }}
           >
-            <Icon className="w-10 h-10" style={{ color: "var(--ialab-petroleum, #004B63)" }} aria-hidden="true" />
+            <Icon
+              className="w-10 h-10"
+              style={{ color: "var(--ialab-petroleum, #004B63)" }}
+              aria-hidden="true"
+            />
           </div>
         </div>
 
@@ -208,37 +259,57 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
           <h2
             id="tour-title"
             className="text-xl sm:text-2xl font-bold mb-2 text-center"
-            style={{ color: "var(--ialab-petroleum, #004B63)", fontFamily: "'Montserrat', sans-serif" }}
+            style={{
+              color: "var(--ialab-petroleum, #004B63)",
+              fontFamily: "'Montserrat', sans-serif",
+            }}
           >
-            {currentStep.title}
+            {t(currentStep.title)}
           </h2>
           <p
             id="tour-description"
             className="text-sm leading-relaxed mb-4 text-center"
             style={{ color: "#334155" }}
           >
-            {currentStep.description}
+            {t(currentStep.description)}
           </p>
-          <div
-            className="rounded-xl px-4 py-3 mb-6 text-center"
-            style={{
-              background: "linear-gradient(90deg, rgba(0, 188, 212, 0.08) 0%, rgba(102, 204, 204, 0.12) 100%)",
-              border: "1px solid rgba(0, 188, 212, 0.2)",
-            }}
-          >
-            <p className="text-xs font-semibold" style={{ color: "var(--ialab-teal, #2596be)" }}>
-              {currentStep.highlight}
-            </p>
-          </div>
+          {isLast ? (
+            <div className="mb-6">
+              <LearningPaceSelector showLabel={false} />
+            </div>
+          ) : (
+            <div
+              className="rounded-xl px-4 py-3 mb-6 text-center"
+              style={{
+                background:
+                  "linear-gradient(90deg, rgba(0, 188, 212, 0.08) 0%, rgba(102, 204, 204, 0.12) 100%)",
+                border: "1px solid rgba(0, 188, 212, 0.2)",
+              }}
+            >
+              <p
+                className="text-xs font-semibold"
+                style={{ color: "var(--ialab-teal, #2596be)" }}
+              >
+                {t(currentStep.highlight)}
+              </p>
+            </div>
+          )}
 
-          <div className="flex items-center justify-center gap-1.5 mb-6" role="tablist" aria-label="Progreso del tour">
+          <div
+            className="flex items-center justify-center gap-1.5 mb-6"
+            role="tablist"
+            aria-label={t("ialab.tour.welcome_progress_aria")}
+          >
             {STEPS.map((_, i) => (
               <button
                 key={i}
                 type="button"
                 role="tab"
                 aria-selected={i === step}
-                aria-label={`Paso ${i + 1} de ${STEPS.length}`}
+                aria-label={t("ialab.tour.welcome_step_aria", {
+                  step: i + 1,
+                  total: STEPS.length,
+                })}
                 onClick={() => setStep(i)}
                 className="rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                 style={{
@@ -248,8 +319,8 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
                     i === step
                       ? "var(--ialab-cyan, #00BCD4)"
                       : i < step
-                      ? "rgba(0, 188, 212, 0.4)"
-                      : "rgba(148, 163, 184, 0.3)",
+                        ? "rgba(0, 188, 212, 0.4)"
+                        : "rgba(148, 163, 184, 0.3)",
                 }}
               />
             ))}
@@ -264,7 +335,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
               style={{ color: "var(--ialab-petroleum, #004B63)" }}
             >
               <ChevronLeft className="w-4 h-4" aria-hidden="true" />
-              Atrás
+              {t("ialab.tour.welcome_back")}
             </button>
 
             <button
@@ -277,8 +348,12 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
                 boxShadow: "0 6px 18px rgba(0, 75, 99, 0.35)",
               }}
             >
-              {isLast ? "¡Empezar!" : "Siguiente"}
-              {!isLast && <ChevronRight className="w-4 h-4" aria-hidden="true" />}
+              {isLast
+                ? t("ialab.tour.welcome_start")
+                : t("ialab.tour.welcome_next")}
+              {!isLast && (
+                <ChevronRight className="w-4 h-4" aria-hidden="true" />
+              )}
               {isLast && <Sparkles className="w-4 h-4" aria-hidden="true" />}
             </button>
           </div>
@@ -290,7 +365,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
               className="w-full mt-3 text-xs transition-colors focus-visible:outline-none focus-visible:underline"
               style={{ color: "#64748B" }}
             >
-              Saltar tour
+              {t("ialab.tour.welcome_skip")}
             </button>
           )}
         </div>

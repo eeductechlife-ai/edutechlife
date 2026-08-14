@@ -1,6 +1,7 @@
 import { memo, useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import { Send, Mic, X } from "lucide-react";
+import { useTranslation } from "../../../../i18n/I18nProvider";
 import "../styles/dani-colors.css";
 import "../styles/chat-input-improved.css";
 
@@ -14,10 +15,11 @@ const ChatInputImproved = memo(
     isTyping = false,
     darkMode = false,
     studentAge = 10,
-    placeholder = "Pregúntale a Dani...",
+    placeholder,
     maxChars = 500,
   }) => {
     const [isFocused, setIsFocused] = useState(false);
+    const { t } = useTranslation();
 
     const handleClearInput = useCallback(() => {
       onInputChange({ target: { value: "" } });
@@ -53,11 +55,11 @@ const ChatInputImproved = memo(
               onKeyDown={handleKeyDown}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              placeholder={placeholder}
+              placeholder={placeholder ?? t("dani.placeholder")}
               maxLength={maxChars}
               disabled={isTyping}
               className="chat-input-field"
-              aria-label="Input para preguntar a Dani"
+              aria-label={t("dani.input_aria")}
             />
 
             {/* Clear Button */}
@@ -68,7 +70,7 @@ const ChatInputImproved = memo(
                 exit={{ opacity: 0, scale: 0.5 }}
                 onClick={handleClearInput}
                 className="input-clear-button"
-                aria-label="Limpiar entrada"
+                aria-label={t("dani.clear_aria")}
                 type="button"
               >
                 <X size={16} />
@@ -112,7 +114,9 @@ const ChatInputImproved = memo(
               className={`action-button mic-button ${isListening ? "listening" : ""}`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              aria-label={isListening ? "Detener escucha" : "Activar micrófono"}
+              aria-label={
+                isListening ? t("dani.mic_stop_aria") : t("dani.mic_start_aria")
+              }
               type="button"
             >
               <Mic size={20} strokeWidth={2} />
@@ -138,7 +142,7 @@ const ChatInputImproved = memo(
               className="action-button send-button"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              aria-label="Enviar mensaje"
+              aria-label={t("dani.send_aria")}
               type="button"
             >
               <Send size={20} strokeWidth={2} />
@@ -154,7 +158,7 @@ const ChatInputImproved = memo(
             animate={{ opacity: 0.6 }}
             transition={{ delay: 0.3 }}
           >
-            💡 Escribe o usa el micrófono para hablar con Dani
+            💡 {t("dani.helper_text")}
           </motion.p>
         )}
 
@@ -168,7 +172,7 @@ const ChatInputImproved = memo(
             <span className="dot" />
             <span className="dot" style={{ animationDelay: "0.2s" }} />
             <span className="dot" style={{ animationDelay: "0.4s" }} />
-            <span className="status-text">Dani está escribiendo...</span>
+            <span className="status-text">{t("dani.typing_status")}</span>
           </motion.div>
         )}
       </motion.div>

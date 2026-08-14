@@ -1,12 +1,9 @@
 import * as esData from "./chatGPTTools.es.js";
 import * as enData from "./chatGPTTools.en.js";
+import * as ptData from "./chatGPTTools.pt.js";
+import { resolveLocalized } from "../../utils/localeUtils";
 
-const locale =
-  typeof window !== "undefined" && typeof localStorage !== "undefined"
-    ? localStorage.getItem("edutechlife_locale") || "es"
-    : "es";
-
-const data = locale === "en" ? enData : esData;
+const data = resolveLocalized({ es: esData, en: enData, pt: ptData }) || esData;
 
 export const { tools, quizScenarios, learningObjectives } = data;
 

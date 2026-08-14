@@ -1,75 +1,111 @@
-import { createContext, useContext, useMemo } from 'react';
-import { useSmartBoardKids } from '../../context/SmartBoardKidsContext';
+import { createContext, useContext, useMemo } from "react";
+import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const VAK_STYLES = {
   visual: {
-    icon: '👁️',
-    colors: { primary: '#4DA8C4', secondary: '#66CCCC', accent: '#004B63' },
+    icon: "👁️",
+    colors: { primary: "#4DA8C4", secondary: "#66CCCC", accent: "#004B63" },
     tips: [
-      'Usa mapas mentales y diagramas',
-      'Colorea tus apuntes con resaltadores',
-      'Dibuja esquemas de los conceptos'
+      "kid.vak.tip_visual_1",
+      "kid.vak.tip_visual_2",
+      "kid.vak.tip_visual_3",
     ],
-    recommendation: 'Aprendes mejor viendo. Usa videos, infografías y colores.'
+    recommendation: "kid.vak.rec_visual",
   },
   auditivo: {
-    icon: '👂',
-    colors: { primary: '#66CCCC', secondary: '#88DDDD', accent: '#004B63' },
+    icon: "👂",
+    colors: { primary: "#66CCCC", secondary: "#88DDDD", accent: "#004B63" },
     tips: [
-      'Graba tus apuntes y escúchalos',
-      'Explica los temas en voz alta',
-      'Usa canciones y rimas para memorizar'
+      "kid.vak.tip_auditory_1",
+      "kid.vak.tip_auditory_2",
+      "kid.vak.tip_auditory_3",
     ],
-    recommendation: 'Aprendes mejor escuchando. Usa podcasts, audios y explicaciones orales.'
+    recommendation: "kid.vak.rec_auditory",
   },
   kinestesico: {
-    icon: '🏃',
-    colors: { primary: '#FFD166', secondary: '#FF8E53', accent: '#004B63' },
+    icon: "🏃",
+    colors: { primary: "#FFD166", secondary: "#FF8E53", accent: "#004B63" },
     tips: [
-      'Construye modelos y maquetas',
-      'Actúa situaciones de aprendizaje',
-      'Toma descansos activos entre estudio'
+      "kid.vak.tip_kinesthetic_1",
+      "kid.vak.tip_kinesthetic_2",
+      "kid.vak.tip_kinesthetic_3",
     ],
-    recommendation: 'Aprendes haciendo. Usa experimentos, juegos y actividades prácticas.'
-  }
+    recommendation: "kid.vak.rec_kinesthetic",
+  },
 };
 
-const DEFAULT = { primary: '#4DA8C4', secondary: '#66CCCC', accent: '#004B63' };
+const DEFAULT = { primary: "#4DA8C4", secondary: "#66CCCC", accent: "#004B63" };
 
 const VAKThemeContext = createContext({
-  vakStyle: null, vakColors: DEFAULT, vakIcon: '🧠', vakTips: [], learningRecommendation: '', vakResult: null,
+  vakStyle: null,
+  vakColors: DEFAULT,
+  vakIcon: "🧠",
+  vakTips: [],
+  learningRecommendation: "",
+  vakResult: null,
 });
 
 const VAKThemeProvider = ({ children }) => {
   const { vakResult } = useSmartBoardKids();
+  const { t } = useTranslation();
 
   const value = useMemo(() => {
-    if (!vakResult?.predominantStyle) return { vakStyle: null, vakColors: DEFAULT, vakIcon: '🧠', vakTips: [], learningRecommendation: '', vakResult: null };
+    if (!vakResult?.predominantStyle)
+      return {
+        vakStyle: null,
+        vakColors: DEFAULT,
+        vakIcon: "🧠",
+        vakTips: [],
+        learningRecommendation: "",
+        vakResult: null,
+      };
 
     const style = VAK_STYLES[vakResult.predominantStyle] || VAK_STYLES.visual;
-    return { vakStyle: vakResult.predominantStyle, vakColors: style.colors, vakIcon: style.icon, vakTips: style.tips, learningRecommendation: style.recommendation, vakResult };
-  }, [vakResult]);
+    return {
+      vakStyle: vakResult.predominantStyle,
+      vakColors: style.colors,
+      vakIcon: style.icon,
+      vakTips: style.tips.map((k) => t(k)),
+      learningRecommendation: t(style.recommendation),
+      vakResult,
+    };
+  }, [vakResult, t]);
 
-  return <VAKThemeContext.Provider value={value}>{children}</VAKThemeContext.Provider>;
+  return (
+    <VAKThemeContext.Provider value={value}>
+      {children}
+    </VAKThemeContext.Provider>
+  );
 };
 
 const useVAKTheme = () => {
   const context = useContext(VAKThemeContext);
   if (!context) {
-    throw new Error('useVAKTheme must be used within a VAKThemeProvider');
+    throw new Error("useVAKTheme must be used within a VAKThemeProvider");
   }
   return context;
 };
 
-const SIZES = { sm: 'text-xs px-2 py-0.5', md: 'text-sm px-3 py-1', lg: 'text-base px-4 py-1.5' };
+const SIZES = {
+  sm: "text-xs px-2 py-0.5",
+  md: "text-sm px-3 py-1",
+  lg: "text-base px-4 py-1.5",
+};
 
-const VAKBadge = ({ size = 'md', showIcon = true, className = '' }) => {
+const VAKBadge = ({ size = "md", showIcon = true, className = "" }) => {
   const { vakStyle, vakIcon, vakColors, vakResult } = useVAKTheme();
   if (!vakStyle || !vakResult) return null;
 
   return (
-    <span className={`inline-flex items-center gap-1.5 font-medium rounded-full ${SIZES[size]} ${className}`}
-      style={{ backgroundColor: `${vakColors.primary}20`, color: vakColors.primary, border: `1px solid ${vakColors.primary}40` }}>
+    <span
+      className={`inline-flex items-center gap-1.5 font-medium rounded-full ${SIZES[size]} ${className}`}
+      style={{
+        backgroundColor: `${vakColors.primary}20`,
+        color: vakColors.primary,
+        border: `1px solid ${vakColors.primary}40`,
+      }}
+    >
       {showIcon && <span>{vakIcon}</span>}
       {vakStyle.charAt(0).toUpperCase() + vakStyle.slice(1)}
     </span>

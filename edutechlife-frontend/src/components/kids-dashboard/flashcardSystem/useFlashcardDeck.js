@@ -171,16 +171,19 @@ export function useFlashcardDeck() {
   );
 
   const startMultiplayer = useCallback(() => {
-    if (decks.length > 0) {
-      setMultiplayerMode(true);
-      setCurrentDeckId(decks[0].id);
-      setMode("quiz");
-      setScore1(0);
-      setScore2(0);
-      setMpCurrentPlayer(1);
-      setQIdx(0);
-      setPlayerAnswer("");
-    }
+    const first = decks.find((d) => (d.cards?.length || 0) > 0);
+    if (!first) return;
+    setMultiplayerMode(true);
+    setCurrentDeckId(first.id);
+    setMode("quiz");
+    setScore1(0);
+    setScore2(0);
+    setMpCurrentPlayer(1);
+    setQIdx(0);
+    setPlayerAnswer("");
+    setCardIdx(0);
+    setFlipped(false);
+    setDone(false);
   }, [decks]);
 
   return {

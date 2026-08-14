@@ -52,8 +52,8 @@ const IALabForumOptimizedInput = ({
                             disabled={isSubmitting || !user}
                             className={cn(
                                 "w-full px-4 py-3 pr-12",
-                                "bg-white border border-slate-200 rounded-xl",
-                                "text-sm text-slate-700 placeholder:text-slate-600/70",
+                                "bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl",
+                                "text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-600/70 dark:placeholder:text-slate-400",
                                 "focus:outline-none focus:ring-2 focus:ring-corporate/20 focus:border-corporate/30",
                                 "disabled:opacity-50 disabled:cursor-not-allowed",
                                 "transition-all duration-200",

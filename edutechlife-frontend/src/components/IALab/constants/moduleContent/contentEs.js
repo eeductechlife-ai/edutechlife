@@ -44,13 +44,24 @@ const CONTENT_ES = {
         {
           title: "El Cincel del Artesano: ¿Qué es un Prompt?",
           icon: "fa-comments",
-          resources: 3,
+          resources: 4,
           duration: "20 min",
         },
       ],
     },
     lessons: [],
-    accordionContent: {},
+    accordionContent: {
+      1: {
+        objective: "🎯 Los Fundamentos del Artesano",
+        objectiveDesc:
+          "Entiende qué es la IA generativa y cómo crea contenido nuevo. Aquí comienza tu oficio digital.",
+      },
+      2: {
+        objective: "🎯 El Cincel del Artesano",
+        objectiveDesc:
+          "Un prompt bien forjado es tu herramienta más poderosa: aprende a escribir instrucciones que la IA entienda a la primera.",
+      },
+    },
   },
 
   // ============================================================================
@@ -83,6 +94,12 @@ const CONTENT_ES = {
           icon: "fa-layer-group",
           resources: 2,
           duration: "20 min",
+        },
+        {
+          title: "El Flujo del Arquitecto: Automatización en el Mundo Real",
+          icon: "fa-robot",
+          resources: 1,
+          duration: "22 min",
         },
         {
           title: "La Fachada del Edificio: GPTs y Function Calling",
@@ -134,7 +151,7 @@ const CONTENT_ES = {
       1: {
         objective: "🎯 Los Cimientos del Arquitecto",
         objectiveDesc:
-          "Domina los fundamentos de ChatGPT como un arquitecto domina los principios de la construcción: desde los modelos hasta las técnicas profesionales de prompt engineering.",
+          "Domina los fundamentos de ChatGPT: modelos, límites y técnicas profesionales de prompt engineering.",
         achievements: [
           {
             icon: "fa-check",
@@ -172,9 +189,9 @@ const CONTENT_ES = {
       },
       2: {
         objective:
-          "🏗️ El Andamio del Arquitecto: El Ecosistema de Herramientas",
+          "🏗️ El Andamio del Arquitecto",
         objectiveDesc:
-          "Domina todas las herramientas integradas de ChatGPT como un arquitecto domina su taller: Búsqueda Web, Intérprete de Código, DALL-E 3, Canvas y Proyectos. Aprende a combinarlas en flujos de obra profesionales.",
+          "Domina el ecosistema de herramientas de ChatGPT: Búsqueda Web, Código, DALL-E 3, Canvas y Proyectos.",
         achievements: [
           {
             icon: "fa-check",
@@ -211,9 +228,9 @@ const CONTENT_ES = {
         },
       },
       3: {
-        objective: "⚡ La Fachada del Edificio: Function Calling",
+        objective: "⚡ El Flujo del Arquitecto",
         objectiveDesc:
-          "Integra tus construcciones de ChatGPT con el mundo exterior a través de APIs para que puedan consultar datos, ejecutar acciones y automatizar flujos de trabajo completos.",
+          "Conecta tus construcciones con el mundo exterior vía APIs: datos, acciones y automatización total.",
         achievements: [
           {
             icon: "fa-check",
@@ -245,6 +262,11 @@ const CONTENT_ES = {
           strong:
             "✅ Function Calling: ChatGPT detecta la intención, llama a la API del clima, recibe datos JSON y genera: El clima actual en Bogotá es 18°C con 65% de humedad. Te recomendamos llevar paraguas por probabilidad de lluvia del 80% esta tarde. Una fachada elegante que conecta con datos vivos del mundo real.",
         },
+      },
+      4: {
+        objective: "⚡ La Fachada del Edificio",
+        objectiveDesc:
+          "Crea GPTs a tu medida y conéctalos al mundo real con Function Calling: automatiza tu trabajo diario.",
       },
     },
   },
@@ -328,9 +350,9 @@ const CONTENT_ES = {
     ],
     accordionContent: {
       1: {
-        objective: "🎯 Objetivo Principal: Activar tu Lupa Multimodal",
+        objective: "🎯 Activa tu Lupa Multimodal",
         objectiveDesc:
-          "Conoce a tu nueva arma secreta: descubre qué hace a Gemini único, cómo procesa múltiples tipos de evidencia y por qué supera a otros modelos en investigación multimodal.",
+          "Gemini procesa texto, imágenes, audio y video como un solo lenguaje. Tu nueva arma secreta de investigación.",
         achievements: [
           {
             icon: "fa-check",
@@ -364,9 +386,9 @@ const CONTENT_ES = {
         },
       },
       2: {
-        objective: "🔬 Razonamiento Multimodal: El Superpoder del Detective Digital",
+        objective: "🔬 Razonamiento Multimodal",
         objectiveDesc:
-          "Desbloquea la capacidad de procesar múltiples tipos de evidencia a la vez: texto, imágenes, audio y código. Como tener 4 detectives trabajando en paralelo dentro de una sola mente.",
+          "Procesa varios tipos de evidencia a la vez: texto, imágenes, audio y código. Cuatro detectives en una sola mente.",
         achievements: [
           {
             icon: "fa-check",
@@ -403,9 +425,9 @@ const CONTENT_ES = {
         },
       },
       3: {
-        objective: "🔍 Deep Research: El Arsenal del Investigador Forense",
+        objective: "🔍 Deep Research",
         objectiveDesc:
-          "Cuando los casos simples se vuelven complejos, necesitas Deep Research. Aprende a usar la potencia de Gemini para investigaciones exhaustivas con fuentes verificables, fact-checking automático y generación de informes que cualquier experto respetaría.",
+          "Para casos complejos: investigaciones profundas con fuentes verificables y fact-checking automático.",
         achievements: [
           {
             icon: "fa-check",
@@ -481,6 +503,12 @@ const CONTENT_ES = {
           resources: 3,
           duration: "20 min",
         },
+        {
+          title: "El Maestro Alquimista: Flujo Completo Documento-Podcast",
+          icon: "fa-headphones",
+          resources: 1,
+          duration: "24 min",
+        },
       ],
     },
     lessons: [
@@ -525,7 +553,7 @@ const CONTENT_ES = {
       1: {
         objective: "🎯 El Hechizo Inicial",
         objectiveDesc:
-          "Descubre el poder oculto de NotebookLM: cómo un asistente que solo habla de lo que sabe está revolucionando la gestión del conocimiento personal.",
+          "NotebookLM solo habla de lo que sabe: tus fuentes. La IA que revoluciona la gestión del conocimiento.",
         achievements: [
           {
             icon: "fa-check",
@@ -592,9 +620,9 @@ const CONTENT_ES = {
         },
       },
       3: {
-        objective: "🎙️ Audio Overviews: Tus Documentos en la Radio",
+        objective: "🎙️ Audio Overviews",
         objectiveDesc:
-          "Transforma documentos complejos en conversaciones de audio fascinantes generadas por IA con dos presentadores virtuales que suenan a programa de verdad.",
+          "Convierte tus documentos en conversaciones de audio generadas por IA, como un programa hecho a tu medida.",
         achievements: [
           {
             icon: "fa-check",
@@ -629,6 +657,11 @@ const CONTENT_ES = {
           strong:
             "✅ Audio enfocado: Podcast de 15 minutos donde dos presentadores discuten los hallazgos clave de 5 papers sobre neuroplasticidad, con ejemplos prácticos, analogías y hasta un momento '¡ahá!' que lo hace inolvidable",
         },
+      },
+      4: {
+        objective: "🧪 El Maestro Alquimista",
+        objectiveDesc:
+          "Domina el flujo completo: de tus documentos a un podcast listo para compartir.",
       },
     },
   },
@@ -667,7 +700,7 @@ const CONTENT_ES = {
         {
           title: "El Legado del Guardián: Navegando la Ley",
           icon: "fa-shield-alt",
-          resources: 2,
+          resources: 3,
           duration: "20 min",
         },
       ],
@@ -714,7 +747,7 @@ const CONTENT_ES = {
       1: {
         objective: "🛡️ El Juramento del Guardián Ético",
         objectiveDesc:
-          "Desarrollar un marco ético blindado para el uso de IA generativa que proteja a usuarios, organizaciones y la sociedad de los riesgos invisibles de la tecnología.",
+          "Construye un marco ético blindado para la IA generativa: protege a usuarios, organizaciones y sociedad.",
         achievements: [
           {
             icon: "fa-check",
@@ -751,9 +784,9 @@ const CONTENT_ES = {
         },
       },
       2: {
-        objective: "🔍 El Cazador de Sesgos: Encuentra al Enemigo Invisible",
+        objective: "🔍 El Cazador de Sesgos",
         objectiveDesc:
-          "Entrena tu ojo de guardián para detectar, entender y eliminar los sesgos que los sistemas de IA heredan de sus datos de entrenamiento — antes de que hagan daño.",
+          "Detecta y elimina los sesgos que la IA hereda de sus datos antes de que causen daño.",
         achievements: [
           {
             icon: "fa-check",
@@ -790,9 +823,9 @@ const CONTENT_ES = {
         },
       },
       3: {
-        objective: "📜 El Código del Guardián: Leyes que Protegen a Millones",
+        objective: "📜 El Código del Guardián",
         objectiveDesc:
-          "Conoce las regulaciones que gobiernan la IA en el mundo y aprende a diseñar protocolos de gobernanza que blinden a tu organización contra riesgos legales y reputacionales.",
+          "Conoce las leyes que gobiernan la IA y diseña protocolos que blinden a tu organización.",
         achievements: [
           { icon: "fa-check", text: "Dominar el AI Act de la Unión Europea como un experto en cumplimiento" },
           {

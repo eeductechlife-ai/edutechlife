@@ -1,5 +1,6 @@
 import { memo, useState } from "react";
 import { motion } from "framer-motion";
+import { API_BASE_URL } from "../../../../config/api";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 import {
   Volume2,
@@ -33,7 +34,7 @@ const DaniChatHeader = memo(
         "🚨 Un estudiante ha reportado un mensaje inapropiado en el chat con Dani.";
       try {
         fetch(
-          `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/smartboard/report`,
+          `${API_BASE_URL}/api/smartboard/report`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

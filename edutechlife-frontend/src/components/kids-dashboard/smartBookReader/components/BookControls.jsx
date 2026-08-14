@@ -1,5 +1,6 @@
 import { memo, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "../../../../i18n/I18nProvider";
 
 const COLORS = [
   "#4DA8C4",
@@ -11,6 +12,7 @@ const COLORS = [
 ];
 
 export const UploadZone = memo(({ onUpload, busy }) => {
+  const { t } = useTranslation();
   const [drag, setDrag] = useState(false);
   const ref = useRef(null);
   const d = (e, val) => {
@@ -46,7 +48,7 @@ export const UploadZone = memo(({ onUpload, busy }) => {
         <span className="text-lg">📄</span>
       </div>
       <p className="text-sm font-semibold text-[#004B63] mb-0.5">
-        Sube un archivo
+        {t("kid.smartbook.upload_file")}
       </p>
       <p className="text-xs text-[#64748B]">PDF o TXT</p>
     </motion.div>
@@ -55,7 +57,12 @@ export const UploadZone = memo(({ onUpload, busy }) => {
 UploadZone.displayName = "UZ";
 
 export const StepBar = memo(({ step }) => {
-  const steps = ["📖 Extrayendo", "🤖 Analizando", "📚 Organizando"];
+  const { t } = useTranslation();
+  const steps = [
+    t("kid.smartbook.stepbar_extracting"),
+    t("kid.smartbook.stepbar_analyzing"),
+    t("kid.smartbook.stepbar_organizing"),
+  ];
   return (
     <div className="flex items-center justify-center gap-2 mb-4">
       {steps.map((s, i) => (
@@ -85,42 +92,49 @@ export const StepBar = memo(({ step }) => {
 });
 StepBar.displayName = "SB";
 
-export const HistoryItem = memo(({ book, i, dark, onSelect }) => (
-  <motion.button
-    initial={{ opacity: 0, x: -10 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ delay: i * 0.04 }}
-    onClick={() => onSelect(book)}
-    whileHover={{ scale: 1.01 }}
-    whileTap={{ scale: 0.99 }}
-    className={`w-full text-left p-3 rounded-xl border transition-all hover:shadow-md ${
-      dark
-        ? "bg-[#1E293B] border-[#334155] hover:border-[#4DA8C4]/30"
-        : "bg-white border-[#E2E8F0] hover:border-[#4DA8C4]/30"
-    }`}
-  >
-    <h5
-      className={`text-sm font-bold truncate ${dark ? "text-white" : "text-[#004B63]"}`}
+export const HistoryItem = memo(({ book, i, dark, onSelect }) => {
+  const { locale } = useTranslation();
+  const dateLocale =
+    { en: "en-US", pt: "pt-BR", es: "es-CO" }[locale] || "es-CO";
+  return (
+    <motion.button
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: i * 0.04 }}
+      onClick={() => onSelect(book)}
+      whileHover={{ scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
+      className={`w-full text-left p-3 rounded-xl border transition-all hover:shadow-md ${
+        dark
+          ? "bg-[#1E293B] border-[#334155] hover:border-[#4DA8C4]/30"
+          : "bg-white border-[#E2E8F0] hover:border-[#4DA8C4]/30"
+      }`}
     >
-      {book.title}
-    </h5>
-    <p className={`text-xs mt-1 ${dark ? "text-[#64748B]" : "text-[#94A3B8]"}`}>
-      {new Date(book.createdAt).toLocaleDateString("es-ES")}
-    </p>
-    <div className="flex flex-wrap gap-1 mt-2">
-      {book.keyConcepts?.slice(0, 3).map((c, j) => (
-        <span
-          key={j}
-          className="text-[10px] px-1.5 py-0.5 rounded"
-          style={{
-            backgroundColor: `${COLORS[j % COLORS.length]}15`,
-            color: COLORS[j % COLORS.length],
-          }}
-        >
-          {c}
-        </span>
-      ))}
-    </div>
-  </motion.button>
-));
+      <h5
+        className={`text-sm font-bold truncate ${dark ? "text-white" : "text-[#004B63]"}`}
+      >
+        {book.title}
+      </h5>
+      <p
+        className={`text-xs mt-1 ${dark ? "text-[#64748B]" : "text-[#94A3B8]"}`}
+      >
+        {new Date(book.createdAt).toLocaleDateString(dateLocale)}
+      </p>
+      <div className="flex flex-wrap gap-1 mt-2">
+        {book.keyConcepts?.slice(0, 3).map((c, j) => (
+          <span
+            key={j}
+            className="text-[10px] px-1.5 py-0.5 rounded"
+            style={{
+              backgroundColor: `${COLORS[j % COLORS.length]}15`,
+              color: COLORS[j % COLORS.length],
+            }}
+          >
+            {c}
+          </span>
+        ))}
+      </div>
+    </motion.button>
+  );
+});
 HistoryItem.displayName = "HI";

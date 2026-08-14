@@ -66,7 +66,7 @@ const ValerioMessageBubble = ({ msg, onAction }) => {
               ))}
             </div>
 
-            {/* ENHANCED: Copy button + Actions for Valerio messages */}
+            {/* ENHANCED: Copy button + Actions for MAX messages */}
             {!isUser && (
               <div className="mt-2 flex items-center gap-2">
                 <CopyButton text={msg.content} label="Copiar" />
@@ -101,16 +101,10 @@ const ThinkingIndicator = () => (
         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center text-white text-xs font-bold">
           V
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
-          <div
-            className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"
-            style={{ animationDelay: "0.2s" }}
-          ></div>
-          <div
-            className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"
-            style={{ animationDelay: "0.4s" }}
-          ></div>
+        <div className="flex items-center">
+          <span className="text-sm font-semibold text-petroleum tracking-[0.2em] animate-pulse select-none">
+            ......
+          </span>
         </div>
       </div>
     </div>
@@ -118,6 +112,7 @@ const ThinkingIndicator = () => (
 );
 
 const StreamingMessage = ({ content }) => {
+  const isEmpty = !content || content.trim() === "";
   return (
     <div className="flex justify-start mb-4">
       <div className="max-w-[80%] rounded-2xl p-4 break-words overflow-wrap-anywhere bg-white border border-slate-200 shadow-sm">
@@ -128,16 +123,22 @@ const StreamingMessage = ({ content }) => {
             </div>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-medium opacity-80 mb-2">Valerio</div>
+            <div className="text-xs font-medium opacity-80 mb-2">MAX</div>
             <div className="prose prose-sm max-w-none text-petroleum-darker">
-              {content.split("\n").map((line, i) => (
-                <p key={i} className="mb-2 last:mb-0">
-                  {line}
-                  {i === content.split("\n").length - 1 && (
-                    <span className="inline-block w-1.5 h-4 bg-corporate ml-0.5 animate-pulse align-text-bottom" />
-                  )}
+              {isEmpty ? (
+                <p className="text-petroleum tracking-[0.2em] animate-pulse select-none">
+                  ......
                 </p>
-              ))}
+              ) : (
+                content.split("\n").map((line, i) => (
+                  <p key={i} className="mb-2 last:mb-0">
+                    {line}
+                    {i === content.split("\n").length - 1 && (
+                      <span className="inline-block w-1.5 h-4 bg-corporate ml-0.5 animate-pulse align-text-bottom" />
+                    )}
+                  </p>
+                ))
+              )}
             </div>
           </div>
         </div>

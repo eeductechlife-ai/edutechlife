@@ -21,12 +21,14 @@ import { useNicoSendMessage } from "./useNicoSendMessage";
 import { ChatButton, ChatHeader } from "./nicoChatComponents";
 import { ChatMessages } from "./nicoChatMessages";
 import { ChatInput } from "./nicoChatInput";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const NicoModern = ({
   studentName: initialName = "amigo",
   onNavigate,
   onInteraction,
 }) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [message, setMessage] = useState("");
@@ -205,8 +207,7 @@ const NicoModern = ({
     if (isOpen && !greetingSent && (!messages || messages.length === 0)) {
       setGreetingSent(true);
 
-      const greeting =
-        "Hola soy Nico, asistente de EdutechLife. \u00bfEn que puedo ayudarte?";
+      const greeting = t("nico.greeting");
 
       const greetingMessageObj = {
         role: "assistant",
@@ -226,7 +227,7 @@ const NicoModern = ({
         );
       }
     }
-  }, [isOpen, greetingSent, messages, audioEnabled]);
+  }, [isOpen, greetingSent, messages, audioEnabled, t]);
 
   useEffect(() => {
     if (messages.length === 0 && memory?.conversationHistory?.length > 0) {
@@ -262,18 +263,9 @@ const NicoModern = ({
     const initializeServices = async () => {
       try {
         warmupTts();
-        prefetchTts(
-          "Hola, soy Nico, asistente de EdutechLife. En que puedo ayudarte?",
-          "nico_premium",
-        );
-        prefetchTts(
-          "De nada. Hay algo mas en que pueda ayudarte?",
-          "nico_premium",
-        );
-        prefetchTts(
-          "La primera clase es gratuita. Te gustaria agendarla?",
-          "nico_premium",
-        );
+        prefetchTts(t("nico.greeting_tts"), "nico_premium");
+        prefetchTts(t("nico.farewell_tts"), "nico_premium");
+        prefetchTts(t("nico.free_class_tts"), "nico_premium");
       } catch (error) {
         console.error("Error inicializando servicios:", error);
       }
@@ -287,7 +279,7 @@ const NicoModern = ({
       voice.sentenceQueueRef.current = [];
       stopSpeech();
     };
-  }, [buildConversationContext]);
+  }, [buildConversationContext, t]);
 
   useEffect(() => {
     const handleGlobalKeyDown = (e) => {
@@ -397,8 +389,7 @@ const NicoModern = ({
       setTimeout(() => inputRef.current.focus(), 100);
 
       if (messages.length === 0) {
-        const welcomeMessage =
-          "Hola soy Nico, asistente de EdutechLife. \u00bfEn que puedo ayudarte?";
+        const welcomeMessage = t("nico.greeting");
         const welcomeMessageObj = {
           role: "assistant",
           content: welcomeMessage,
@@ -422,7 +413,7 @@ const NicoModern = ({
       } else if (audioEnabled) {
         const userName = memory?.userName || initialName;
         const nameGreeting = userName !== "amigo" ? ` ${userName}` : "";
-        const reconnectMessage = `Hola soy Nico, asistente de EdutechLife. \u00bfEn que puedo ayudarte?${nameGreeting}`;
+        const reconnectMessage = `${t("nico.greeting")}${nameGreeting}`;
         speakTextConversational(
           reconnectMessage,
           "nico_premium",
@@ -447,8 +438,7 @@ const NicoModern = ({
     responseCache.clear();
     const cacheClearedMessage = {
       role: "assistant",
-      content:
-        "Cach\u00e9 limpiado. Las pr\u00f3ximas respuestas se generar\u00e1n desde cero.",
+      content: t("nico.cache_cleared"),
       timestamp: new Date().toISOString(),
     };
     setMessages((prev) => [...prev, cacheClearedMessage]);
@@ -468,7 +458,7 @@ const NicoModern = ({
     setAudioPermissionError(null);
 
     if (newAudioEnabled) {
-      const confirmation = "Audio activado. Puedes hablar conmigo.";
+      const confirmation = t("nico.audio_enabled");
       speakTextConversational(
         confirmation,
         "nico_premium",

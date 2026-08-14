@@ -136,7 +136,7 @@ router.get('/', async (req, res) => {
     res.json({ success: true, resources: filteredResources, total: filteredResources.length, modules: Object.keys(resourcesData) });
   } catch (error) {
     console.error('Error retrieving IALab resources:', error);
-    res.status(500).json({ error: 'Failed to retrieve resources', details: error.message });
+    res.status(500).json({ error: 'Failed to retrieve resources', details: 'Error interno' });
   }
 });
 

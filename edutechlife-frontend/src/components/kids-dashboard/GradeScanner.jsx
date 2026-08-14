@@ -2,16 +2,21 @@ import { useState, useCallback, useRef, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { callDeepseek } from "../../utils/api";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useTranslation } from "../../i18n/I18nProvider";
 
-const SUBJECTS = [
-  { v: "matematicas", l: "Matemáticas", i: "🔢" },
-  { v: "lenguaje", l: "Lenguaje", i: "📖" },
-  { v: "ciencias", l: "Ciencias", i: "🔬" },
-  { v: "sociales", l: "Sociales", i: "🌍" },
-  { v: "ingles", l: "Inglés", i: "🇬🇧" },
-  { v: "arte", l: "Arte", i: "🎨" },
-  { v: "educacion_fisica", l: "Ed. Física", i: "⚽" },
-  { v: "tecnologia", l: "Tecnología", i: "💻" },
+const getSubjects = (t) => [
+  { v: "matematicas", l: t("kid.grades.subject_matematicas"), i: "🔢" },
+  { v: "lenguaje", l: t("kid.grades.subject_lenguaje"), i: "📖" },
+  { v: "ciencias", l: t("kid.grades.subject_ciencias"), i: "🔬" },
+  { v: "sociales", l: t("kid.grades.subject_sociales"), i: "🌍" },
+  { v: "ingles", l: t("kid.grades.subject_ingles"), i: "🇬🇧" },
+  { v: "arte", l: t("kid.grades.subject_arte"), i: "🎨" },
+  {
+    v: "educacion_fisica",
+    l: t("kid.grades.subject_educacion_fisica"),
+    i: "⚽",
+  },
+  { v: "tecnologia", l: t("kid.grades.subject_tecnologia"), i: "💻" },
 ];
 
 const gradeColor = (n) => {
@@ -27,7 +32,7 @@ const gradeEmoji = (n) => {
   return "🔴";
 };
 
-const GradeRow = memo(({ grade, onUpdate, onRemove }) => (
+const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => (
   <motion.div
     initial={{ opacity: 0, x: -10 }}
     animate={{ opacity: 1, x: 0 }}
@@ -35,14 +40,14 @@ const GradeRow = memo(({ grade, onUpdate, onRemove }) => (
     className="flex items-center gap-2 p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-sm"
   >
     <span className="text-lg w-8 text-center">
-      {SUBJECTS.find((s) => s.v === grade.subject)?.i || "📚"}
+      {subjects.find((s) => s.v === grade.subject)?.i || "📚"}
     </span>
     <select
       value={grade.subject}
       onChange={(e) => onUpdate(grade.id, "subject", e.target.value)}
       className="flex-1 text-sm text-[#004B63] font-semibold bg-transparent border-none outline-none"
     >
-      {SUBJECTS.map((s) => (
+      {subjects.map((s) => (
         <option key={s.v} value={s.v}>
           {s.l}
         </option>
@@ -80,8 +85,15 @@ GradeRow.displayName = "GradeRow";
 const uid = () => Math.random().toString(36).slice(2, 8);
 
 export default memo(function GradeScanner({ onTabChange }) {
-  const { studentGrades, setStudentGrades, vakResult, addPoints } =
-    useSmartBoardKids();
+  const {
+    studentGrades,
+    setStudentGrades,
+    vakResult,
+    addPoints,
+    setDocumentForDani,
+  } = useSmartBoardKids();
+  const { t } = useTranslation();
+  const SUBJECTS = getSubjects(t);
   const [grades, setGrades] = useState(
     studentGrades.length
       ? studentGrades
@@ -117,18 +129,19 @@ export default memo(function GradeScanner({ onTabChange }) {
     [],
   );
 
-  const handleImageFile = useCallback(async (f) => {
-    if (!f) return;
-    setImgFile(f);
-    setImgPreview(URL.createObjectURL(f));
-    setExtracting(true);
-    setError("");
-    try {
-      const { extractDocumentText } =
-        await import("../../utils/documentParser");
-      const text = await extractDocumentText(f);
-      // Parse grades from OCR text
-      const prompt = `Tienes este texto extraído de un boletín de calificaciones colombiano: "${text.slice(0, 2000)}"
+  const handleImageFile = useCallback(
+    async (f) => {
+      if (!f) return;
+      setImgFile(f);
+      setImgPreview(URL.createObjectURL(f));
+      setExtracting(true);
+      setError("");
+      try {
+        const { extractDocumentText } =
+          await import("../../utils/documentParser");
+        const text = await extractDocumentText(f);
+        // Parse grades from OCR text
+        const prompt = `Tienes este texto extraído de un boletín de calificaciones colombiano: "${text.slice(0, 2000)}"
 
 Extrae las calificaciones. Responde SOLO con JSON:
 {
@@ -139,28 +152,26 @@ Extrae las calificaciones. Responde SOLO con JSON:
 }
 Usa solo estos subjects: matematicas, lenguaje, ciencias, sociales, ingles, arte, educacion_fisica, tecnologia.
 Escala de notas: 0-5. Si no encuentras notas claras, devuelve array vacío.`;
-      const res = await callDeepseek(prompt, {
-        temperature: 0.2,
-        maxTokens: 400,
-        isJson: true,
-      });
-      const parsed = typeof res === "string" ? JSON.parse(res) : res;
-      if (parsed.grades?.length) {
-        setGrades(parsed.grades.map((g) => ({ id: uid(), ...g })));
-        setScanMode("manual");
-      } else {
-        setError(
-          "No se encontraron notas en la imagen. Ingrésalas manualmente.",
-        );
+        const res = await callDeepseek(prompt, {
+          temperature: 0.2,
+          maxTokens: 400,
+          isJson: true,
+        });
+        const parsed = typeof res === "string" ? JSON.parse(res) : res;
+        if (parsed.grades?.length) {
+          setGrades(parsed.grades.map((g) => ({ id: uid(), ...g })));
+          setScanMode("manual");
+        } else {
+          setError(t("kid.grades.error_no_grades"));
+        }
+      } catch {
+        setError(t("kid.grades.error_read"));
+      } finally {
+        setExtracting(false);
       }
-    } catch {
-      setError(
-        "No pude leer las notas. Ingresa tus calificaciones manualmente.",
-      );
-    } finally {
-      setExtracting(false);
-    }
-  }, []);
+    },
+    [t],
+  );
 
   const analyze = useCallback(async () => {
     if (grades.length === 0) return;
@@ -225,11 +236,11 @@ Analiza y responde SOLO con JSON:
       setStudentGrades(grades);
       addPoints?.(50);
     } catch (e) {
-      setError("Dani no pudo analizar las notas. Intenta de nuevo.");
+      setError(t("kid.grades.error_analyze"));
     } finally {
       setScanning(false);
     }
-  }, [grades, vakResult, setStudentGrades, addPoints]);
+  }, [grades, vakResult, setStudentGrades, addPoints, SUBJECTS, t]);
 
   const avg = grades.length
     ? (grades.reduce((s, g) => s + g.score, 0) / grades.length).toFixed(1)
@@ -244,19 +255,17 @@ Analiza y responde SOLO con JSON:
         </div>
         <div>
           <h3 className="text-lg font-black text-[#004B63]">
-            Mis Calificaciones
+            {t("kid.grades.title")}
           </h3>
-          <p className="text-xs text-[#64748B]">
-            Ingresa tus notas y Dani crea tu plan de estudio personalizado
-          </p>
+          <p className="text-xs text-[#64748B]">{t("kid.grades.subtitle")}</p>
         </div>
       </div>
 
       {/* Mode toggle */}
       <div className="flex gap-2 p-1 bg-[#F1F5F9] rounded-xl">
         {[
-          { id: "manual", label: "✏️ Manual" },
-          { id: "image", label: "📷 Foto / PDF" },
+          { id: "manual", label: t("kid.grades.tab_manual") },
+          { id: "image", label: t("kid.grades.tab_image") },
         ].map((m) => (
           <button
             key={m.id}
@@ -315,10 +324,10 @@ Analiza y responde SOLO con JSON:
               >
                 <span className="text-4xl block">📷</span>
                 <p className="text-sm font-semibold text-[#004B63]">
-                  Toca para subir tu boletín
+                  {t("kid.grades.upload_boletin")}
                 </p>
                 <p className="text-xs text-[#64748B]">
-                  Imagen o PDF del boletín de notas
+                  {t("kid.grades.boletin_hint")}
                 </p>
               </button>
             )}
@@ -333,7 +342,7 @@ Analiza y responde SOLO con JSON:
                     ease: "linear",
                   }}
                 />
-                Extrayendo notas del documento…
+                {t("kid.grades.extracting")}
               </div>
             )}
             {error && (
@@ -349,7 +358,7 @@ Analiza y responde SOLO con JSON:
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <p className="text-sm font-bold text-[#004B63]">
-            📋 Mis notas{" "}
+            📋 {t("kid.grades.my_notes")}{" "}
             {grades.length > 0 && (
               <span
                 className="ml-2 px-2 py-0.5 rounded-full text-xs font-black"
@@ -358,7 +367,7 @@ Analiza y responde SOLO con JSON:
                   color: gradeColor(Number(avg)),
                 }}
               >
-                Promedio {avg}
+                {t("kid.grades.average", { avg })}
               </span>
             )}
           </p>
@@ -366,7 +375,7 @@ Analiza y responde SOLO con JSON:
             onClick={addRow}
             className="text-xs text-[#4DA8C4] font-semibold hover:underline"
           >
-            + Agregar materia
+            {t("kid.grades.add_subject")}
           </button>
         </div>
         <AnimatePresence>
@@ -374,6 +383,7 @@ Analiza y responde SOLO con JSON:
             <GradeRow
               key={g.id}
               grade={g}
+              subjects={SUBJECTS}
               onUpdate={updateGrade}
               onRemove={removeGrade}
             />
@@ -399,10 +409,10 @@ Analiza y responde SOLO con JSON:
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
             />
-            Dani está analizando…
+            {t("kid.grades.analyzing")}
           </span>
         ) : (
-          "🤖 Dani, analiza mis notas y crea mi plan"
+          t("kid.grades.analyze_btn")
         )}
       </motion.button>
 
@@ -422,7 +432,7 @@ Analiza y responde SOLO con JSON:
             <div className="p-4 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#0077B6] text-white space-y-2">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">🤖</span>
-                <span className="font-bold">Dani dice:</span>
+                <span className="font-bold">{t("kid.grades.dani_says")}</span>
               </div>
               <p className="text-sm leading-relaxed">{plan.overall}</p>
             </div>
@@ -431,7 +441,7 @@ Analiza y responde SOLO con JSON:
             {plan.strengths?.length > 0 && (
               <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
                 <p className="font-bold text-emerald-700 mb-2">
-                  💪 Tus fortalezas
+                  {t("kid.grades.strengths")}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {plan.strengths.map((s, i) => (
@@ -449,7 +459,9 @@ Analiza y responde SOLO con JSON:
             {/* Weaknesses with VAK + STEAM */}
             {plan.weaknesses?.length > 0 && (
               <div className="space-y-3">
-                <p className="font-bold text-[#004B63]">🎯 A mejorar</p>
+                <p className="font-bold text-[#004B63]">
+                  {t("kid.grades.to_improve")}
+                </p>
                 {plan.weaknesses.map((w, i) => (
                   <div
                     key={i}
@@ -501,7 +513,7 @@ Analiza y responde SOLO con JSON:
             {plan.studyPlan?.length > 0 && (
               <div className="space-y-3">
                 <p className="font-bold text-[#004B63]">
-                  📅 Plan de estudio personalizado
+                  {t("kid.grades.study_plan")}
                 </p>
                 {plan.studyPlan.map((week, i) => (
                   <div
@@ -513,7 +525,10 @@ Analiza y responde SOLO con JSON:
                         {week.week}
                       </span>
                       <span className="font-bold text-[#004B63] text-sm">
-                        Semana {week.week}: {week.focus}
+                        {t("kid.grades.week", {
+                          week: week.week,
+                          focus: week.focus,
+                        })}
                       </span>
                     </div>
                     <ul className="space-y-1 mb-2">
@@ -545,18 +560,57 @@ Analiza y responde SOLO con JSON:
               </div>
             )}
 
-            {/* CTA to flashcards */}
-            <motion.button
-              onClick={() => onTabChange?.("flashcards")}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full py-3 rounded-2xl font-bold text-white text-sm shadow-md"
-              style={{
-                background: "linear-gradient(135deg, #EF476F 0%, #FF6B9D 100%)",
-              }}
-            >
-              🎴 Ir a Flashcards para empezar a estudiar →
-            </motion.button>
+            {/* CTAs */}
+            <div className="grid grid-cols-1 gap-3">
+              <motion.button
+                onClick={() => {
+                  setDocumentForDani?.({
+                    title: t("kid.grades.doc_title"),
+                    subject: t("kid.grades.doc_subject"),
+                    summary:
+                      `${plan.overall || ""} ${plan.motivation || ""}`.trim(),
+                    strengths: plan.strengths || [],
+                    improvements: (plan.weaknesses || []).map(
+                      (w) => `${w.subject}: ${w.why || ""}`,
+                    ),
+                    score: Math.round(
+                      (grades.reduce((s, g) => s + g.score, 0) /
+                        Math.max(grades.length, 1)) *
+                        20,
+                    ),
+                    difficulty: "personalizado",
+                    tutoringQuestions: (plan.weaknesses || [])
+                      .slice(0, 4)
+                      .map(
+                        (w) =>
+                          `¿Cómo te está yendo en ${w.subject}? ¿Qué te parece más difícil?`,
+                      ),
+                  });
+                  window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+                }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full py-3 rounded-2xl font-bold text-white text-sm shadow-md"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%)",
+                }}
+              >
+                {t("kid.grades.talk_about_plan")}
+              </motion.button>
+              <motion.button
+                onClick={() => onTabChange?.("flashcards")}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full py-3 rounded-2xl font-bold text-white text-sm shadow-md"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #EF476F 0%, #FF6B9D 100%)",
+                }}
+              >
+                {t("kid.grades.go_flashcards")}
+              </motion.button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

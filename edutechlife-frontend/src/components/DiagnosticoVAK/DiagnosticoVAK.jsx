@@ -84,7 +84,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
   return (
     <div
-      className={`min-h-screen bg-[#F8FAFC] py-6 md:py-10 px-3 md:px-4 relative overflow-hidden font-sans antialiased ${highContrast ? "high-contrast-mode" : ""}`}
+      className={`min-h-screen bg-[#F8FAFC] pt-[calc(env(safe-area-inset-top,0px)+88px)] pb-6 md:pb-10 px-3 md:px-4 relative overflow-hidden font-sans antialiased ${highContrast ? "high-contrast-mode" : ""}`}
       style={
         highContrast
           ? {
@@ -111,7 +111,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-lg border border-green-400"
+            className="fixed top-[calc(env(safe-area-inset-top,0px)+76px)] right-4 z-50 flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-lg border border-green-400"
           >
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-sm font-medium text-green-700">
@@ -123,7 +123,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
 
       <button
         onClick={toggleHighContrast}
-        className="fixed top-4 left-4 z-50 p-3 bg-white rounded-full shadow-lg border-2 border-[var(--color-gray-200)] hover:border-[var(--color-corporate)] transition-all"
+        className="fixed top-[calc(env(safe-area-inset-top,0px)+76px)] left-4 z-50 p-3 bg-white rounded-full shadow-lg border-2 border-[var(--color-gray-200)] hover:border-[var(--color-corporate)] transition-all"
         title={t("vak.ui.accessibility_title")}
         aria-label={t("vak.ui.accessibility_label")}
       >

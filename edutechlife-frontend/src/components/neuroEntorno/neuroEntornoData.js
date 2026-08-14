@@ -68,7 +68,7 @@ export const testimoniosVAK = [
     {
         nombre: 'Juan Sebastián Martínez',
         rol: 'Estudiante Universidad Nacional',
-        texto: 'Como estudiante universitario, el coaching con Valerio me ayudó a organizar mi tiempo y descubrir que soy un aprendiz multimodal. Las estrategias personalizadas marcaron la diferencia.',
+        texto: 'Como estudiante universitario, el coaching con MAX me ayudó a organizar mi tiempo y descubrir que soy un aprendiz multimodal. Las estrategias personalizadas marcaron la diferencia.',
         img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100',
         perfil: 'Multimodal',
         resultado: 'Graduación honrosa'

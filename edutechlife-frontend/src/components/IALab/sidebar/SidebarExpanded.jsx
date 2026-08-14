@@ -1,20 +1,19 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useIALabProgressContext, useIALabUIContext } from '../../../context/IALabContext';
 import { useIALabStore } from '../../../store/ialabStore';
 import { useTranslation } from '../../../i18n/I18nProvider';
-import useInfographicCompletion from '../../../hooks/IALab/useInfographicCompletion';
-import SidebarProgressCircle from './SidebarProgressCircle';
+import { Icon } from '../../../utils/iconMapping.jsx';
 import SidebarModuleList from './SidebarModuleList';
-import SidebarResources from './SidebarResources';
-import StreakBadge from '../StreakBadge';
+import SidebarProgressCircle from './SidebarProgressCircle';
+import ZoneHeading from './ZoneHeading';
 import CourseCompletionSection from '../CourseCompletionSection';
 
-const SidebarExpanded = () => {
+const SidebarExpanded = ({ onOpenStreak }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const goToModule = (id) => navigate(`/ialab/${id}`);
   const shouldReduceMotion = useReducedMotion();
   const fadeTransition = shouldReduceMotion ? { duration: 0 } : { duration: 0.15 };
   const moduleListVariants = shouldReduceMotion ? {} : {
@@ -31,17 +30,33 @@ const SidebarExpanded = () => {
   } = useIALabProgressContext();
 
   const {
-    sidebarDropdowns, toggleSidebarDropdown,
     courseCompleted, setShowCertificateModal,
     storedCertificate, certificateGenerating,
-    setShowStreakModal,
   } = useIALabUIContext();
 
   const streak = useIALabStore(s => s.streak);
   const getLevel = useIALabStore(s => s.getLevel);
   const getTotalPoints = useIALabStore(s => s.getTotalPoints);
   const isStreakAtRisk = useIALabStore(s => s.isStreakAtRisk);
-  const isInfographicCompleted = useInfographicCompletion();
+  const toggleSidebar = useIALabStore(s => s.toggleSidebarCollapsed);
+  const setShowLeaderboard = useIALabStore(s => s.setShowLeaderboard);
+  const setShowStudyPlannerModal = useIALabStore(s => s.setShowStudyPlannerModal);
+  const setShowHistoryModal = useIALabStore(s => s.setShowHistoryModal);
+
+  const level = getLevel();
+  const xp = getTotalPoints();
+  const atRisk = isStreakAtRisk();
+
+  const nextStepLabel = useMemo(() => {
+    if (!activeMod || !modules) return null;
+    const mod = modules.find(m => m.id === activeMod);
+    return mod?.title || null;
+  }, [activeMod, modules]);
+
+  // Mi Progreso abre el mismo modal que el usermenu (ActivityHistory)
+  const goToProgress = () => setShowHistoryModal(true);
+  const goToModule = (id) => navigate(`/ialab/${id}`);
+  const continueModule = () => navigate(`/ialab/${activeMod || 1}`);
 
   return (
     <motion.div
@@ -50,18 +65,32 @@ const SidebarExpanded = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={fadeTransition}
-      className="px-4 py-4 space-y-4"
+      className="px-3 py-4 space-y-3"
     >
-      <SidebarProgressCircle courseProgress={courseProgress} t={t} />
+      {/* ── ZONA 1: TU AVANCE ── */}
+      <ZoneHeading icon="fa-gauge-high" label={t('sidebar.zone_avance') || 'Tu Avance'} />
 
-      <StreakBadge
+      <SidebarProgressCircle
+        courseProgress={courseProgress}
+        t={t}
+        levelName={level?.name}
         streak={streak}
-        xp={getTotalPoints()}
-        isAtRisk={isStreakAtRisk()}
-        level={getLevel()}
-        onClick={() => setShowStreakModal(true)}
+        xp={xp}
+        atRisk={atRisk}
+        onCircleClick={toggleSidebar}
+        onStreakClick={onOpenStreak}
       />
 
+      {/* Mi Progreso — acción primaria, justo bajo el círculo de avance */}
+      <button
+        onClick={goToProgress}
+        className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-petroleum/10 dark:bg-petroleum/20 border border-petroleum/15 dark:border-petroleum/30 hover:bg-petroleum/15 dark:hover:bg-petroleum/30 text-petroleum dark:text-[#4DA8C4] transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+      >
+        <Icon name="fa-chart-line" className="text-corporate text-sm flex-shrink-0" />
+        <span>{t('ialab.tab_progress') || 'Mi Progreso'}</span>
+      </button>
+
+      {/* ── ZONA 2: MÓDULOS ── */}
       <SidebarModuleList
         modules={modules}
         activeMod={activeMod}
@@ -73,17 +102,49 @@ const SidebarExpanded = () => {
         t={t}
       />
 
-      <SidebarResources
-        activeMod={activeMod}
-        sidebarDropdowns={sidebarDropdowns}
-        toggleSidebarDropdown={toggleSidebarDropdown}
-        isInfographicCompleted={isInfographicCompleted}
-        fadeTransition={fadeTransition}
-        t={t}
-      />
+      {nextStepLabel && (
+        <button
+          onClick={continueModule}
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-petroleum/[0.06] to-corporate/[0.06] dark:from-petroleum/15 dark:to-corporate/10 border border-petroleum/10 dark:border-petroleum/20 hover:from-petroleum/10 hover:to-corporate/10 dark:hover:from-petroleum/20 dark:hover:to-corporate/15 transition-all duration-200 group text-left focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+        >
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0 shadow-sm">
+            <Icon name="fa-play" className="text-white text-[9px]" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold uppercase tracking-wide leading-none mb-0.5">
+              {t('sidebar.continue_where') || 'Continúa aquí'}
+            </p>
+            <p className="text-[13px] font-bold font-display text-petroleum dark:text-[#4DA8C4] truncate">{nextStepLabel}</p>
+          </div>
+          <Icon name="fa-chevron-right" className="text-slate-400 text-[9px] group-hover:translate-x-0.5 transition-transform duration-150 flex-shrink-0" />
+        </button>
+      )}
+
+      {/* ── ZONA 3: HERRAMIENTAS ── */}
+      <ZoneHeading icon="fa-sliders" label={t('sidebar.zone_tools') || 'Herramientas'} />
+
+      <div className="space-y-1.5 px-0.5">
+        <div className="grid grid-cols-2 gap-1.5">
+          <button
+            onClick={() => setShowStudyPlannerModal(true)}
+            className="flex flex-col items-center gap-1 px-2 py-2.5 rounded-xl bg-petroleum/8 dark:bg-petroleum/15 hover:bg-petroleum/15 dark:hover:bg-petroleum/25 text-petroleum dark:text-[#4DA8C4] transition-all duration-200 text-[11px] font-bold leading-tight focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+          >
+            <Icon name="fa-calendar" className="text-corporate text-sm" />
+            <span className="text-center">{t('ialab.sidebar_study_plan') || 'Plan'}</span>
+          </button>
+
+          <button
+            onClick={() => setShowLeaderboard(true)}
+            className="flex flex-col items-center gap-1 px-2 py-2.5 rounded-xl bg-petroleum/8 dark:bg-petroleum/15 hover:bg-petroleum/15 dark:hover:bg-petroleum/25 text-petroleum dark:text-[#4DA8C4] transition-all duration-200 text-[11px] font-bold leading-tight focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+          >
+            <Icon name="fa-trophy" className="text-amber-500 text-sm" />
+            <span className="text-center">{t('ialab.sidebar_leaderboard') || 'Ranking'}</span>
+          </button>
+        </div>
+      </div>
 
       {storedCertificate && (
-        <div className="px-1 w-full mt-4">
+        <div className="px-0.5 pt-1">
           <CourseCompletionSection
             hasCertificate={!!storedCertificate}
             courseCompleted={courseCompleted}
@@ -96,6 +157,10 @@ const SidebarExpanded = () => {
       )}
     </motion.div>
   );
+};
+
+SidebarExpanded.propTypes = {
+  onOpenStreak: PropTypes.func,
 };
 
 export default React.memo(SidebarExpanded);

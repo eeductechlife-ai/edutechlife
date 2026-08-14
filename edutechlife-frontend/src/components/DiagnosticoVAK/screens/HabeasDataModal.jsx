@@ -39,7 +39,7 @@ const HabeasDataModal = ({ onClose, onAccept }) => {
           <button
             onClick={onClose}
             aria-label="Cerrar"
-            className="text-[#004B63]/40 hover:text-[#004B63] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#4DA8C4] rounded-md"
+            className="p-2 text-[#004B63]/40 hover:text-[#004B63] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#4DA8C4] rounded-md"
           >
             <svg
               width="24"

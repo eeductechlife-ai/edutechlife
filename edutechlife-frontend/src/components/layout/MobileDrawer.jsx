@@ -23,7 +23,7 @@ const MobileDrawer = ({
         role="dialog"
         aria-modal="true"
         aria-label={t("ialab.nav_menu_aria")}
-        className={`fixed top-0 right-0 z-[1002] h-dvh w-[85vw] max-w-sm bg-white shadow-2xl md:hidden flex flex-col ${drawerClosing ? "animate-slide-out" : "animate-slide-in"}`}
+        className={`fixed top-0 right-0 z-[1002] h-screen h-dvh w-[85vw] max-w-sm bg-white shadow-2xl md:hidden flex flex-col ${drawerClosing ? "animate-slide-out" : "animate-slide-in"}`}
         style={{ willChange: "transform" }}
       >
         <div className="p-4 border-b border-[#4DA8C4]/20 flex items-center justify-between flex-shrink-0">

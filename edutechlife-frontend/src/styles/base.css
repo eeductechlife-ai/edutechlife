@@ -535,6 +535,12 @@
 
 html,
 body {
+  /* Red de seguridad responsive: evita scroll horizontal causado por
+     contenido que desborda el viewport (modales, tabs, filas sin wrap).
+     Los elementos que necesitan scroll horizontal propio usan
+     overflow-x-auto en sus contenedores. */
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
   cursor: default;
 }
 

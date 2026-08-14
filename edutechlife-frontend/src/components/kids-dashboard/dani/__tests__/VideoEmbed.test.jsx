@@ -1,8 +1,27 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
-import { describe, test, expect } from "vitest";
+import { describe, test, expect, vi } from "vitest";
 import VideoEmbed from "../VideoEmbed";
+
+vi.mock("../../../../i18n/I18nProvider", async () => {
+  const es = (await import("../../../../i18n/es.json")).default;
+  return {
+    useTranslation: () => ({
+      t: (key, params) => {
+        let result = es[key] ?? key;
+        if (params) {
+          Object.entries(params).forEach(([k, v]) => {
+            result = result.replace(`{${k}}`, String(v));
+          });
+        }
+        return result;
+      },
+      locale: "es",
+      setLocale: () => {},
+    }),
+  };
+});
 
 describe("VideoEmbed", () => {
   test("renders nothing when videoData has no url", () => {

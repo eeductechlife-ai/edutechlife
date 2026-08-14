@@ -1,10 +1,11 @@
 const supabase = require('../db/supabase');
+const { createSessionClient } = require('../db/sessionClient');
 
 /**
  * Sign up a new user with email + password
  * Creates auth.users entry + users profile
  */
-async function signUp({ email, password, username, firstName, lastName, userType = 'student' }) {
+async function signUp({ email, password, username, firstName, lastName, userType = 'student', accountType = 'ialab' }) {
   if (!email || !password) {
     throw new Error('Email and password required');
   }
@@ -42,8 +43,8 @@ async function signUp({ email, password, username, firstName, lastName, userType
     }
 
     // 2. Create user profile (use userId as clerk_id for native auth)
-    // Use admin client to bypass RLS
-    const { data: profileData, error: profileError } = await supabase.admin
+    // Service-role client bypasses RLS
+    const { data: profileData, error: profileError } = await supabase
       .from('users')
       .insert([
         {
@@ -53,6 +54,7 @@ async function signUp({ email, password, username, firstName, lastName, userType
           first_name: firstName,
           last_name: lastName,
           user_type: userType,
+          account_type: accountType,
           clerk_id: userId,
         },
       ])
@@ -72,7 +74,9 @@ async function signUp({ email, password, username, firstName, lastName, userType
     }
 
     // 3. Sign in the new user to return a session token immediately
-    const { data: signInData } = await supabase.auth.signInWithPassword({
+    // Use a throwaway client: signInWithPassword saves a session on the client,
+    // which would poison the shared service client (role=authenticated + RLS).
+    const { data: signInData } = await createSessionClient().auth.signInWithPassword({
       email,
       password,
     });
@@ -106,8 +110,9 @@ async function signIn({ email, password }) {
   }
 
   try {
-    // Sign in via Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+    // Sign in via Supabase Auth (throwaway client — never pin a session on the
+    // shared service client)
+    const { data: authData, error: authError } = await createSessionClient().auth.signInWithPassword({
       email,
       password,
     });
@@ -133,8 +138,8 @@ async function signIn({ email, password }) {
 
     if (profileError) {
       console.error('Profile fetch failed:', profileError);
-      // Auth succeeded but profile missing — create minimal one (use admin to bypass RLS)
-      await supabase.admin.from('users').insert([
+      // Auth succeeded but profile missing — create minimal one (service-role client bypasses RLS)
+      await supabase.from('users').insert([
         {
           id: authData.user.id,
           email,
@@ -171,7 +176,11 @@ async function refreshSession(refreshToken) {
   }
 
   try {
-    const { data: authData, error: authError } = await supabase.auth.refreshSession({
+    // Use a throwaway client — refreshSession pins the user session on the
+    // client it runs on; pinning it on the shared service client would make
+    // every subsequent data query send the user JWT (role=authenticated, RLS
+    // applies), breaking profile lookups with PGRST116.
+    const { data: authData, error: authError } = await createSessionClient().auth.refreshSession({
       refresh_token: refreshToken,
     });
 
@@ -230,12 +239,15 @@ function buildParentEmail(studentEmail) {
  * The parent uses the same email as the student but a different password.
  * Internally we store the parent as `local+padre@domain`.
  */
-async function signUpParent({ studentEmail, parentPassword, parentName }) {
+async function signUpParent({ studentEmail, parentPassword, parentName, invitationToken }) {
   if (!studentEmail || !parentPassword) {
     throw new Error('El correo del estudiante y la contraseña son requeridos');
   }
   if (parentPassword.length < 6) {
     throw new Error('La contraseña debe tener al menos 6 caracteres');
+  }
+  if (!invitationToken) {
+    throw new Error('Se requiere el código de invitación que genera el estudiante desde su cuenta');
   }
 
   const normalizedStudentEmail = String(studentEmail).toLowerCase().trim();
@@ -249,6 +261,23 @@ async function signUpParent({ studentEmail, parentPassword, parentName }) {
     .select('id')
     .eq('email', normalizedStudentEmail)
     .maybeSingle();
+  if (!studentProfile?.id) {
+    throw new Error('No existe una cuenta de estudiante con ese correo');
+  }
+
+  // Validate the invitation token against a VERIFIED parental consent.
+  // The consent is created by the student's flow (POST /parental-consent) and
+  // verified by email (POST /parental-consent/verify) before any parent
+  // account can be created.
+  const { data: consent } = await supabase
+    .from('parent_consents')
+    .select('verification_status')
+    .eq('student_id', studentProfile.id)
+    .eq('verification_token', invitationToken)
+    .maybeSingle();
+  if (!consent || consent.verification_status !== 'verified') {
+    throw new Error('El código de invitación no es válido o el consentimiento no está verificado');
+  }
 
   const { data: authData, error: authError } = await supabase.auth.admin.createUser({
     email: parentAuthEmail,
@@ -257,7 +286,7 @@ async function signUpParent({ studentEmail, parentPassword, parentName }) {
     user_metadata: {
       role: 'parent',
       student_email: normalizedStudentEmail,
-      student_id: studentProfile?.id || null,
+      student_id: studentProfile.id,
       first_name: firstName,
       last_name: lastName,
     },
@@ -289,6 +318,18 @@ async function signUpParent({ studentEmail, parentPassword, parentName }) {
     .select()
     .maybeSingle();
 
+  // Link parent → student from the backend (service_role), never from the client.
+  await supabase
+    .from('parent_student_links')
+    .upsert(
+      {
+        parent_user_id: userId,
+        student_user_id: studentProfile.id,
+        is_active: true,
+      },
+      { onConflict: 'parent_user_id,student_user_id' },
+    );
+
   return { message: 'Cuenta de padre creada exitosamente. Ya puedes iniciar sesión.' };
 }
 
@@ -304,7 +345,7 @@ async function signInParent({ studentEmail, parentPassword }) {
   const normalizedStudentEmail = String(studentEmail).toLowerCase().trim();
   const parentAuthEmail = buildParentEmail(normalizedStudentEmail);
 
-  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+  const { data: authData, error: authError } = await createSessionClient().auth.signInWithPassword({
     email: parentAuthEmail,
     password: parentPassword,
   });

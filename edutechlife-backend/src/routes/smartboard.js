@@ -1,9 +1,11 @@
 const { Router } = require('express');
+const crypto = require('crypto');
 const supabase = require('../db/supabase');
 const { chat, chatStream, validateMessages } = require('../services/deepseek');
 const { requireAuth } = require('../middleware/auth');
+const { requireVerifiedParentalConsent } = require('../middleware/parentalConsent');
 const { detectCrisis } = require('../services/crisisDetection');
-const { sendCrisisAlert, logCrisisIncident, sendEmail } = require('../services/emailService');
+const { sendCrisisAlert, logCrisisIncident, sendEmail, sendConsentVerificationEmail } = require('../services/emailService');
 const { buildWeeklySummary, renderWeeklyEmail } = require('../services/weeklyReport');
 
 const router = Router();
@@ -48,7 +50,7 @@ Reglas importantes:
  *       500:
  *         description: Error del servidor
  */
-router.get('/data/:userId', requireAuth, async (req, res) => {
+router.get('/data/:userId', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   const { userId } = req.params;
 
   if (req.userId !== userId) {
@@ -76,7 +78,7 @@ router.get('/data/:userId', requireAuth, async (req, res) => {
     res.json(data.data);
   } catch (e) {
     console.error('Error fetching smartboard data:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -122,7 +124,18 @@ router.get('/data/:userId', requireAuth, async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.post('/chat', requireAuth, async (req, res) => {
+/**
+ * El system prompt de Dani lo fija exclusivamente el servidor. Los mensajes
+ * del cliente que intenten enviar role:'system' se reescriben a 'user' para
+ * que no puedan pisar ni eliminar la personalidad del tutor.
+ */
+function sanitizeClientMessages(messages) {
+  return (messages || []).map((m) =>
+    m.role === 'system' ? { role: 'user', content: m.content } : m,
+  );
+}
+
+router.post('/chat', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   const { messages, context } = req.body;
 
   const validationError = validateMessages(messages);
@@ -138,7 +151,7 @@ router.post('/chat', requireAuth, async (req, res) => {
 
   const msgs = [
     { role: 'system', content: systemPrompt },
-    ...messages,
+    ...sanitizeClientMessages(messages),
   ];
 
   try {
@@ -151,7 +164,7 @@ router.post('/chat', requireAuth, async (req, res) => {
     res.json({ result: text });
   } catch (e) {
     console.error('Error calling Dani AI:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -182,7 +195,7 @@ router.post('/chat', requireAuth, async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.post('/chat/stream', requireAuth, async (req, res) => {
+router.post('/chat/stream', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   const { messages, context, language = 'es' } = req.body;
   const userId = req.userId;
 
@@ -255,7 +268,7 @@ router.post('/chat/stream', requireAuth, async (req, res) => {
 
   const msgs = [
     { role: 'system', content: systemPrompt },
-    ...messages,
+    ...sanitizeClientMessages(messages),
   ];
 
   try {
@@ -274,7 +287,7 @@ router.post('/chat/stream', requireAuth, async (req, res) => {
   } catch (e) {
     if (streamClosed) return;
     console.error('Error calling Dani AI (stream):', e);
-    res.write(`data: ${JSON.stringify({ error: e.message })}\n\n`);
+    res.write(`data: ${JSON.stringify({ error: 'Error generando respuesta' })}\n\n`);
     res.end();
   }
 });
@@ -322,7 +335,7 @@ router.post('/chat/stream', requireAuth, async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.get('/progress/:userId', requireAuth, async (req, res) => {
+router.get('/progress/:userId', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   const { userId } = req.params;
 
   if (req.userId !== userId) {
@@ -359,7 +372,7 @@ router.get('/progress/:userId', requireAuth, async (req, res) => {
     });
   } catch (e) {
     console.error('Error fetching smartboard progress:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -397,8 +410,13 @@ router.post('/parental-consent', requireAuth, async (req, res) => {
   const { parentEmail, studentAge, timestamp } = req.body;
   const userId = req.userId;
 
-  if (!parentEmail || !studentAge) {
+  if (!parentEmail || studentAge === undefined || studentAge === null) {
     return res.status(400).json({ error: 'parentEmail and studentAge are required' });
+  }
+
+  const age = Number(studentAge);
+  if (!Number.isInteger(age) || age < 5 || age >= 18) {
+    return res.status(400).json({ error: 'studentAge must be an integer and, por ser un consentimiento de menor de edad, ser menor de 18' });
   }
 
   // Basic email validation
@@ -407,6 +425,8 @@ router.post('/parental-consent', requireAuth, async (req, res) => {
     return res.status(400).json({ error: 'Invalid email format' });
   }
 
+  const verificationToken = crypto.randomBytes(24).toString('hex');
+
   try {
     const { data, error } = await supabase
       .from('parent_consents')
@@ -414,9 +434,10 @@ router.post('/parental-consent', requireAuth, async (req, res) => {
         {
           student_id: userId,
           parent_email: parentEmail,
-          student_age: studentAge,
+          student_age: age,
           consent_timestamp: timestamp || new Date().toISOString(),
-          verification_status: 'pending'
+          verification_status: 'pending',
+          verification_token: verificationToken,
         }
       ])
       .select();
@@ -426,13 +447,199 @@ router.post('/parental-consent', requireAuth, async (req, res) => {
       return res.status(500).json({ error: 'Failed to save parental consent' });
     }
 
+    // Enviar email de verificación al padre con el token de un solo uso.
+    try {
+      await sendConsentVerificationEmail({
+        parentEmail,
+        studentAge: age,
+        token: verificationToken,
+      });
+    } catch (emailError) {
+      console.error('Error sending consent verification email:', emailError.message);
+    }
+
+    // No exponer el verification_token al cliente; solo el estado.
     res.status(201).json({
-      message: 'Parental consent registered successfully',
-      data: data[0]
+      message: 'Parental consent registered successfully. Verification email sent.',
+      data: { id: data[0].id, verification_status: 'pending' }
     });
   } catch (e) {
     console.error('Error processing parental consent:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Failed to process parental consent' });
+  }
+});
+
+/**
+ * @swagger
+ * /api/smartboard/parental-consent/verify:
+ *   post:
+ *     summary: Verifica el consentimiento parental con el token enviado por email
+ *     description: >
+ *       Marca verification_status='verified' para el consentimiento cuyo
+ *       verification_token coincide. Es el paso que habilita el registro del
+ *       padre (POST /api/auth/parent-register).
+ *     tags: [SmartBoard]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Consentimiento verificado
+ *       400:
+ *         description: Token inválido
+ *       404:
+ *         description: Token no encontrado o ya utilizado
+ *       500:
+ *         description: Error del servidor
+ */
+router.post('/parental-consent/verify', async (req, res) => {
+  const { token } = req.body || {};
+  if (!token || typeof token !== 'string' || token.length < 16) {
+    return res.status(400).json({ error: 'Token inválido' });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('parent_consents')
+      .update({
+        verification_status: 'verified',
+        verified_at: new Date().toISOString(),
+      })
+      .eq('verification_token', token)
+      .select()
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) return res.status(404).json({ error: 'Token no encontrado o ya utilizado' });
+
+    res.json({
+      message: 'Consentimiento verificado. Ya puedes crear tu cuenta de padre.',
+      verification_status: data.verification_status,
+    });
+  } catch (e) {
+    console.error('Error verifying parental consent:', e);
+    res.status(500).json({ error: 'Error al verificar el consentimiento' });
+  }
+});
+
+/**
+ * GET /api/smartboard/parental-consent/status
+ * Estado del consentimiento parental del menor autenticado.
+ * Usado por la puerta de entrada de la SmartBoard para bloquear el
+ * acceso mientras el consentimiento no esté verificado.
+ */
+router.get('/parental-consent/status', requireAuth, async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('parent_consents')
+      .select('verification_status, student_age, parent_email')
+      .eq('student_id', req.userId)
+      .order('consent_timestamp', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!data) {
+      return res.json({
+        verification_status: 'none',
+        student_age: null,
+        pending_email: null,
+      });
+    }
+
+    res.json({
+      verification_status: data.verification_status,
+      student_age: data.student_age,
+      pending_email: data.verification_status === 'pending'
+        ? (data.parent_email || null)
+        : null,
+    });
+  } catch (e) {
+    console.error('Error reading parental consent status:', e);
+    res.status(500).json({ error: 'Error al consultar el consentimiento' });
+  }
+});
+
+/**
+ * GET /api/smartboard/parental-consent/verify?token=...
+ * Verificación del consentimiento desde el enlace del email (clicable).
+ * El token se consume una sola vez: cuando ya consta como verificado se
+ * muestra el estado actual en lugar de fallar.
+ */
+router.get('/parental-consent/verify', async (req, res) => {
+  const { token } = req.query || {};
+  if (!token || typeof token !== 'string' || token.length < 16) {
+    return res.status(400).json({ error: 'Token inválido' });
+  }
+
+  const page = (title, body) =>
+    `<!doctype html><html lang="es"><head><meta charset="utf-8">` +
+    `<meta name="viewport" content="width=device-width, initial-scale=1">` +
+    `<title>${title}</title></head>` +
+    `<body style="margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f1f5f9;color:#0f172a;display:flex;min-height:100vh;align-items:center;justify-content:center">` +
+    `<div style="max-width:520px;margin:24px;padding:40px;background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(2,44,66,.08);text-align:center">` +
+    `<div style="width:56px;height:56px;border-radius:50%;background:#e6f4f8;color:#004B63;font-size:28px;line-height:56px;margin:0 auto 16px">✓</div>` +
+    `<h1 style="font-size:20px;margin:0 0 8px">${title}</h1>` +
+    `<p style="color:#475569;margin:0 0 24px;line-height:1.5">${body}</p>` +
+    `<a href="https://edutechlife.co" style="display:inline-block;background:#004B63;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600">Ir a Edutechlife</a>` +
+    `</div></body></html>`;
+
+  try {
+    const { data: existing, error: fetchError } = await supabase
+      .from('parent_consents')
+      .select('verification_status, verified_at')
+      .eq('verification_token', token)
+      .maybeSingle();
+
+    if (fetchError) throw fetchError;
+
+    if (existing && existing.verification_status === 'verified') {
+      return res.status(200)
+        .set('Content-Type', 'text/html; charset=utf-8')
+        .send(page(
+          'Consentimiento ya verificado',
+          'El consentimiento parental ya había sido confirmado anteriormente. No es necesario hacer nada más.'
+        ));
+    }
+
+    const { data, error } = await supabase
+      .from('parent_consents')
+      .update({
+        verification_status: 'verified',
+        verified_at: new Date().toISOString(),
+      })
+      .eq('verification_token', token)
+      .eq('verification_status', 'pending')
+      .select()
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!data) {
+      return res.status(404)
+        .set('Content-Type', 'text/html; charset=utf-8')
+        .send(page(
+          'Enlace no válido',
+          'Este enlace de verificación no existe o ya fue utilizado. Solicita uno nuevo desde la SmartBoard.'
+        ));
+    }
+
+    res.status(200)
+      .set('Content-Type', 'text/html; charset=utf-8')
+      .send(page(
+        'Consentimiento verificado',
+        'Gracias. El acceso de tu hijo/a a la SmartBoard ha quedado habilitado.'
+      ));
+  } catch (e) {
+    console.error('Error verifying parental consent (GET):', e);
+    res.status(500).json({ error: 'Error al verificar el consentimiento' });
   }
 });
 
@@ -468,7 +675,7 @@ router.post('/parental-consent', requireAuth, async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.post('/weekly-report', requireAuth, async (req, res) => {
+router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   const userId = req.userId;
   const { studentName, preview = false } = req.body || {};
 
@@ -535,7 +742,7 @@ router.post('/weekly-report', requireAuth, async (req, res) => {
     });
   } catch (e) {
     console.error('Error generando reporte semanal:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -557,7 +764,7 @@ router.post('/weekly-report', requireAuth, async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.get('/wellbeing-status', requireAuth, async (req, res) => {
+router.get('/wellbeing-status', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   const userId = req.userId;
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
@@ -592,7 +799,7 @@ router.get('/wellbeing-status', requireAuth, async (req, res) => {
     });
   } catch (e) {
     console.error('Error obteniendo estado de bienestar:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -616,7 +823,7 @@ router.get('/wellbeing-status', requireAuth, async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
-router.delete('/delete-user-data', requireAuth, async (req, res) => {
+router.delete('/delete-user-data', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   // La identidad SIEMPRE viene del token verificado, nunca del body (evita IDOR).
   const userId = req.userId;
 
@@ -629,6 +836,9 @@ router.delete('/delete-user-data', requireAuth, async (req, res) => {
     { table: 'crisis_alerts', column: 'student_id' },
     { table: 'activity_log', column: 'user_id' },
     { table: 'students', column: 'auth_id' }, // cascada a tablas hijas
+    { table: 'users', column: 'id' },
+    { table: 'parent_student_links', column: 'student_user_id' },
+    { table: 'parent_student_links', column: 'parent_user_id' },
   ];
 
   const results = {};
@@ -690,38 +900,69 @@ router.delete('/delete-user-data', requireAuth, async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
+const STUDENT_PROFILE_FIELDS = 'id, name, age, vak_style, school, grade, avatar_url, email';
+
 router.get('/student-profile', requireAuth, async (req, res) => {
   const userId = req.userId;
 
   try {
     const { data, error } = await supabase
       .from('students')
-      .select('age, vak_style, school, grade')
+      .select(STUDENT_PROFILE_FIELDS)
       .eq('auth_id', userId)
       .single();
 
     if (error) {
       if (error.code === 'PGRST116') {
-        return res.status(404).json({ error: 'Perfil de estudiante no encontrado' });
+        return createStudentProfile(res, userId, req.userEmail);
       }
       throw error;
     }
 
     if (!data) {
-      return res.status(404).json({ error: 'Perfil de estudiante no encontrado' });
+      return createStudentProfile(res, userId, req.userEmail);
     }
 
-    res.json({
-      age: data.age || null,
-      vakStyle: data.vak_style || null,
-      school: data.school || null,
-      grade: data.grade || null,
-    });
+    res.json(serializeStudentProfile(data));
   } catch (e) {
     console.error('Error fetching student profile:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
+
+function serializeStudentProfile(data) {
+  return {
+    name: data.name || null,
+    age: data.age || null,
+    vakStyle: data.vak_style || null,
+    school: data.school || null,
+    grade: data.grade || null,
+    avatarUrl: data.avatar_url || null,
+  };
+}
+
+async function createStudentProfile(res, userId, email) {
+  const safeName = email ? email.split('@')[0] : 'Estudiante';
+  const { data, error } = await supabase
+    .from('students')
+    .upsert(
+      {
+        auth_id: userId,
+        name: safeName,
+        email: email || null,
+      },
+      { onConflict: 'auth_id' },
+    )
+    .select(STUDENT_PROFILE_FIELDS)
+    .single();
+
+  if (error) {
+    console.error('Error creating student profile:', error);
+    return res.status(500).json({ error: error.message });
+  }
+
+  return res.json(serializeStudentProfile(data));
+}
 
 /**
  * @swagger
@@ -759,15 +1000,26 @@ router.get('/student-profile', requireAuth, async (req, res) => {
  */
 router.put('/student-profile', requireAuth, async (req, res) => {
   const userId = req.userId;
-  const { age, vakStyle, school, grade } = req.body || {};
+  const { name, age, vakStyle, school, grade, avatarUrl } = req.body || {};
 
   // Validación básica
   if (age !== undefined && (typeof age !== 'number' || age < 5 || age > 25)) {
     return res.status(400).json({ error: 'age debe ser un número entre 5 y 25' });
   }
 
-  if (vakStyle && typeof vakStyle !== 'string') {
-    return res.status(400).json({ error: 'vakStyle debe ser un string' });
+  if (name !== undefined && (typeof name !== 'string' || !name.trim() || name.trim().length > 80)) {
+    return res.status(400).json({ error: 'name debe ser un string de 1 a 80 caracteres' });
+  }
+
+  if (avatarUrl !== undefined && avatarUrl !== null && typeof avatarUrl !== 'string') {
+    return res.status(400).json({ error: 'avatarUrl debe ser un string o null' });
+  }
+
+  if (vakStyle !== undefined) {
+    const VAK_STYLES = ['visual', 'auditivo', 'kinestesico', 'auditory', 'kinesthetic'];
+    if (typeof vakStyle !== 'string' || !VAK_STYLES.includes(vakStyle)) {
+      return res.status(400).json({ error: 'vakStyle debe ser visual, auditivo o kinestésico' });
+    }
   }
 
   if (school && typeof school !== 'string') {
@@ -780,41 +1032,141 @@ router.put('/student-profile', requireAuth, async (req, res) => {
 
   try {
     const updateData = {};
+    if (name !== undefined) updateData.name = name.trim();
     if (age !== undefined) updateData.age = age;
     if (vakStyle !== undefined) updateData.vak_style = vakStyle;
     if (school !== undefined) updateData.school = school;
     if (grade !== undefined) updateData.grade = grade;
+    if (avatarUrl !== undefined) updateData.avatar_url = avatarUrl;
 
     if (Object.keys(updateData).length === 0) {
       return res.status(400).json({ error: 'No hay campos para actualizar' });
     }
 
-    const { data, error } = await supabase
+    let result = await supabase
       .from('students')
       .update(updateData)
       .eq('auth_id', userId)
-      .select('age, vak_style, school, grade')
+      .select(STUDENT_PROFILE_FIELDS)
       .single();
 
-    if (error) {
-      if (error.code === 'PGRST116') {
-        return res.status(404).json({ error: 'Perfil de estudiante no encontrado' });
-      }
-      throw error;
+    if (result.error && result.error.code === 'PGRST116') {
+      result = await supabase
+        .from('students')
+        .upsert(
+          {
+            auth_id: userId,
+            name: updateData.name || (req.userEmail ? req.userEmail.split('@')[0] : 'Estudiante'),
+            email: req.userEmail || null,
+            ...updateData,
+          },
+          { onConflict: 'auth_id' },
+        )
+        .select(STUDENT_PROFILE_FIELDS)
+        .single();
+    }
+
+    if (result.error) {
+      throw result.error;
     }
 
     res.json({
       message: 'Perfil actualizado correctamente',
-      profile: {
-        age: data.age || null,
-        vakStyle: data.vak_style || null,
-        school: data.school || null,
-        grade: data.grade || null,
-      },
+      profile: serializeStudentProfile(result.data),
     });
   } catch (e) {
     console.error('Error updating student profile:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+/**
+ * @swagger
+ * /api/smartboard/student-profile/avatar:
+ *   post:
+ *     summary: Subir foto de perfil del estudiante a Supabase Storage
+ *     description: >
+ *       Recibe la imagen como data URL base64 (PNG/JPEG/WebP, máx. 2MB),
+ *       la guarda en el bucket 'avatars' y actualiza students.avatar_url.
+ *     tags: [SmartBoard]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               dataUrl:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Foto subida y avatar_url actualizado
+ *       400:
+ *         description: dataUrl inválido o demasiado grande
+ *       500:
+ *         description: Error del servidor
+ */
+router.post('/student-profile/avatar', requireAuth, async (req, res) => {
+  const userId = req.userId;
+  const { dataUrl } = req.body || {};
+
+  if (typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/')) {
+    return res.status(400).json({ error: 'dataUrl debe ser una imagen base64 (data:image/...)' });
+  }
+
+  const headerMatch = dataUrl.match(/^data:(image\/(png|jpeg|webp));base64,/);
+  if (!headerMatch) {
+    return res.status(400).json({ error: 'Formato de imagen no soportado (usa PNG, JPEG o WebP)' });
+  }
+
+  const base64Data = dataUrl.split(',')[1] || '';
+  const imageBuffer = Buffer.from(base64Data, 'base64');
+
+  if (imageBuffer.length === 0) {
+    return res.status(400).json({ error: 'La imagen está vacía' });
+  }
+
+  if (imageBuffer.length > 2 * 1024 * 1024) {
+    return res.status(400).json({ error: 'La imagen supera el máximo de 2MB' });
+  }
+
+  const extensions = { png: 'png', jpeg: 'jpg', webp: 'webp' };
+  const ext = extensions[headerMatch[2]];
+
+  try {
+    const fileName = `student-avatars/${userId}-${Date.now()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(fileName, imageBuffer, {
+        contentType: headerMatch[1],
+        cacheControl: '3600',
+        upsert: true,
+      });
+
+    if (uploadError) {
+      throw new Error(`Supabase upload failed: ${uploadError.message}`);
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(fileName);
+
+    const { error: updateError } = await supabase
+      .from('students')
+      .update({ avatar_url: publicUrlData.publicUrl })
+      .eq('auth_id', userId);
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    res.json({ avatarUrl: publicUrlData.publicUrl });
+  } catch (e) {
+    console.error('Error uploading student avatar:', e);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 

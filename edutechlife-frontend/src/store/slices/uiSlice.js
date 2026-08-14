@@ -10,6 +10,14 @@ export const createUiSlice = (set, get) => ({
   isQuizValid: false,
   setIsQuizValid: (v) => set({ isQuizValid: v }),
 
+  // Estado compartido del sidebar: el toggle vive en el header (icono+título
+  // del curso), por eso se mueve aquí en vez de estado local del hook.
+  sidebarCollapsed:
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false,
+  setSidebarCollapsed: (v) => set({ sidebarCollapsed: !!v }),
+  toggleSidebarCollapsed: () =>
+    set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
+
   showBadgeGallery: false,
   setShowBadgeGallery: (v) => set({ showBadgeGallery: v }),
 

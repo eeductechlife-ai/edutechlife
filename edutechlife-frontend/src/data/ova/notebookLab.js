@@ -1,12 +1,9 @@
 import * as esData from "./notebookLab.es.js";
 import * as enData from "./notebookLab.en.js";
+import * as ptData from "./notebookLab.pt.js";
+import { resolveLocalized } from "../../utils/localeUtils";
 
-const locale =
-  typeof window !== "undefined" && typeof localStorage !== "undefined"
-    ? localStorage.getItem("edutechlife_locale") || "es"
-    : "es";
-
-const data = locale === "en" ? enData : esData;
+const data = resolveLocalized({ es: esData, en: enData, pt: ptData }) || esData;
 
 export const { contentScreens, questionsData, learningObjectives } = data;
 

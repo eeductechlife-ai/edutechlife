@@ -15,9 +15,10 @@ import {
 } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
 import FloatingParticles from "./FloatingParticles";
-import { sanitize } from "../utils/sanitize";
+import { sanitize, safeReturnTo } from "../utils/sanitize";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 import SEO from "./SEO";
+import { API_BASE_URL } from "../config/api";
 
 // Error boundary fallback
 function SignUpFormFallback() {
@@ -32,7 +33,7 @@ const SupabaseSignUpForm = ({ onBack, returnTo }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const defaultReturnTo = returnTo || "/ialab";
+  const defaultReturnTo = safeReturnTo(returnTo);
   const [currentStep, setCurrentStep] = useState(0);
 
   const [formData, setFormData] = useState({
@@ -146,12 +147,13 @@ const SupabaseSignUpForm = ({ onBack, returnTo }) => {
   };
 
   const handleOAuthSignUp = (provider) => {
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3001";
+    const apiUrl = API_BASE_URL;
     const redirectUri = `${window.location.origin}/auth/callback`;
-    const isDevelopment = apiUrl.includes("localhost");
-    const endpoint = isDevelopment
+    const useDemoOAuth = import.meta.env.VITE_USE_OAUTH_DEMO === "true";
+    const endpoint = useDemoOAuth
       ? `/api/auth/oauth-demo/${provider}`
       : `/api/auth/oauth/${provider}`;
+    sessionStorage.setItem("auth_return_to", returnTo);
     window.location.href = `${apiUrl}${endpoint}?redirect_uri=${encodeURIComponent(redirectUri)}&provider=${provider}`;
   };
 
@@ -164,25 +166,17 @@ const SupabaseSignUpForm = ({ onBack, returnTo }) => {
     setError("");
 
     try {
-      const registerResponse = await fetch(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/auth/register`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            username: formData.username,
-            phone_number: formData.phone || null,
-            user_type: "adult",
-            platform: "ialab",
-            age_range: "18+",
-            registration_source: "ialab_signup",
-          }),
-        },
-      );
+      const registerResponse = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          username: formData.username,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+        }),
+      });
 
       if (!registerResponse.ok) {
         const errorData = await registerResponse.json();
@@ -204,8 +198,9 @@ const SupabaseSignUpForm = ({ onBack, returnTo }) => {
       setSuccess(true);
 
       setTimeout(() => {
-        if (result.access_token) {
-          localStorage.setItem("auth_token", result.access_token);
+        if (result.token) {
+          sessionStorage.setItem("auth_token", result.token);
+          localStorage.setItem("refresh_token", result.refreshToken);
           localStorage.setItem("user_email", formData.email.toLowerCase());
         }
         // A new account must start with its own empty progress, never inherit

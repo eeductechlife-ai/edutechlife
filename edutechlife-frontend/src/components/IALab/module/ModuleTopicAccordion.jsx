@@ -9,6 +9,7 @@ import {
   getResourceTypesForTopic,
   countResourcesByType,
 } from "../constants/moduleResources";
+import { getModuleAccordionContent } from "../constants/moduleContent";
 import TopicHeader from "./TopicHeader";
 import ResourceItem from "./ResourceItem";
 import ModuleProgressBar from "./ModuleProgressBar";
@@ -52,6 +53,8 @@ const ModuleTopicAccordion = ({
         ).length;
 
         const topicDuration = calculateTopicDuration(tema.title);
+        const accordionContent = getModuleAccordionContent(activeMod, locale);
+        const topicAccordion = accordionContent[index + 1];
         return (
           <Fragment key={index}>
             <TopicHeader
@@ -74,6 +77,23 @@ const ModuleTopicAccordion = ({
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
+                  {topicAccordion && (
+                    <div className="pl-4 md:pl-8 lg:pl-14 pr-4 pb-3">
+                      <div className="rounded-2xl border border-petroleum/10 bg-petroleum/[0.03] dark:bg-slate-800/60 p-4 space-y-3">
+                        <div>
+                          <h4 className="text-sm font-bold text-petroleum dark:text-[#4DA8C4]">
+                            {topicAccordion.objective}
+                          </h4>
+                          {topicAccordion.objectiveDesc && (
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                              {topicAccordion.objectiveDesc}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {(() => {
                     const types = getResourceTypesForTopic(tema.title, locale);
                     const counts = countResourcesByType(tema.title, locale);
@@ -88,7 +108,7 @@ const ModuleTopicAccordion = ({
                     };
                     return (
                       <div
-                        className="flex gap-1.5 pl-14 md:pl-8 lg:pl-14 pr-4 pb-2 flex-wrap"
+                        className="flex gap-1.5 pl-4 md:pl-8 lg:pl-14 pr-4 pb-2 flex-wrap"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <button
@@ -111,7 +131,7 @@ const ModuleTopicAccordion = ({
                     );
                   })()}
                   <motion.div
-                    className="pl-14 md:pl-8 lg:pl-14 pr-4 pb-2 space-y-1.5"
+                    className="pl-4 md:pl-8 lg:pl-14 pr-4 pb-2 space-y-1.5"
                     variants={{
                       hidden: { opacity: 0 },
                       visible: {
@@ -147,10 +167,12 @@ const ModuleTopicAccordion = ({
                             t={t}
                             onClick={(e) => {
                               e.stopPropagation();
-                              useIALabStore.getState().setLastVisitedLesson(
-                                activeMod,
-                                index + 1,
-                              );
+                              useIALabStore
+                                .getState()
+                                .setLastVisitedLesson(activeMod, index + 1);
+                              useIALabStore
+                                .getState()
+                                .markLessonInProgress(activeMod, index + 1);
                               const allResources =
                                 topicResources?.resources || [];
                               const idx = allResources.findIndex(
@@ -168,7 +190,7 @@ const ModuleTopicAccordion = ({
                   </motion.div>
 
                   {totalResources > 0 && (
-                    <div className="pl-14 md:pl-8 lg:pl-14 pr-4 pb-3 space-y-3">
+                    <div className="pl-4 md:pl-8 lg:pl-14 pr-4 pb-3 space-y-3">
                       <div className="flex items-center gap-3">
                         <div className="flex-1" role="none">
                           <ModuleProgressBar
@@ -260,6 +282,33 @@ const ModuleTopicAccordion = ({
                           </motion.button>
                         );
                       })()}
+
+                      {index === moduleData.topics.length - 1 && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            useIALabStore
+                              .getState()
+                              .setPracticeTool("flashcards");
+                          }}
+                          className="w-full py-2.5 rounded-xl border border-petroleum/25 dark:border-petroleum/40 bg-petroleum/5 dark:bg-petroleum/10 text-petroleum dark:text-[#4DA8C4] text-xs font-bold flex items-center justify-center gap-2 hover:bg-petroleum/10 dark:hover:bg-petroleum/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+                        >
+                          <Icon
+                            name="fa-cards-blank"
+                            className="w-3.5 h-3.5"
+                            aria-hidden="true"
+                          />
+                          {t("ialab.flashcard_review_btn")}
+                          <span className="inline-flex items-center gap-0.5 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-corporate/15 dark:bg-corporate/25 text-corporate-dark dark:text-corporate">
+                            <Icon
+                              name="fa-star"
+                              className="w-2.5 h-2.5"
+                              aria-hidden="true"
+                            />
+                            {t("ialab.flashcard_review_xp")}
+                          </span>
+                        </button>
+                      )}
                     </div>
                   )}
                 </motion.div>

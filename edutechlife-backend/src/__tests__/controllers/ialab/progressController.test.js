@@ -115,4 +115,30 @@ describe('progressController with Supabase', () => {
     await saveProgress(req, res);
     expect(res.status).toHaveBeenCalledWith(500);
   });
+
+  it('getIdorFix: req.userId prevalece sobre userId del body (anti-IDOR)', async () => {
+    const chain = installMockSupabase();
+    chain.maybeSingle = vi.fn().mockResolvedValue({ data: null, error: null });
+    const inserted = [];
+    chain.insert = vi.fn((row) => { inserted.push(row); return chain; });
+    const { saveProgress } = require(CONTROLLER_PATH);
+    const req = mockReq({ userId: 'attacker-uuid', moduleId: 2, completed: true, score: 5 });
+    req.userId = 'victim-uuid';
+    const res = mockRes();
+    await saveProgress(req, res);
+    expect(inserted[0].user_id).toBe('victim-uuid');
+  });
+
+  it('getIdorFix: getProgress usa req.userId del token', async () => {
+    const chain = installMockSupabase();
+    const eqArgs = [];
+    chain.eq = vi.fn((a, b) => { eqArgs.push([a, b]); return chain; });
+    const { getProgress } = require(CONTROLLER_PATH);
+    const req = mockReq({}, { userId: 'attacker-uuid' });
+    req.userId = 'victim-uuid';
+    const res = mockRes();
+    await getProgress(req, res);
+    expect(eqArgs).toContainEqual(['user_id', 'victim-uuid']);
+    expect(eqArgs).not.toContainEqual(['user_id', 'attacker-uuid']);
+  });
 });

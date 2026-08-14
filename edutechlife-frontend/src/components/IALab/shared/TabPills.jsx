@@ -6,7 +6,7 @@ import { memo, useCallback } from "react";
  * @param {string} props.viewSection
  * @param {(id: string) => void} props.setViewSection
  */
-export function TabPills({ TABS, viewSection, setViewSection }) {
+export function TabPills({ TABS, viewSection, setViewSection, badges = {} }) {
   const handleKeyDown = useCallback(
     (e, tabIndex) => {
       const tabs = TABS.filter((t) => t.id !== undefined);
@@ -50,6 +50,15 @@ export function TabPills({ TABS, viewSection, setViewSection }) {
           }`}
         >
           {tab.label}
+          {badges[tab.id] > 0 && (
+            <span className={`ml-1 min-w-[18px] h-[18px] px-1 text-[10px] font-bold rounded-full flex items-center justify-center ${
+              viewSection === tab.id
+                ? 'bg-white/25 text-white'
+                : 'bg-amber-400/20 text-amber-600 dark:text-amber-400'
+            }`}>
+              {badges[tab.id]}
+            </span>
+          )}
         </button>
       ))}
     </>

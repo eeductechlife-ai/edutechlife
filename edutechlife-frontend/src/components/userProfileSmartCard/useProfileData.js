@@ -3,6 +3,8 @@ import { useAuthIdentity } from "../../hooks/useAuthIdentity";
 import { supabase } from "../../lib/supabase";
 import { useProgressContext } from "../../context/ProgressContext";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { normalizePhone } from "./profileSaveLogic";
+import { API_BASE_URL } from "../../config/api";
 
 export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
   const { t, locale } = useTranslation();
@@ -108,7 +110,7 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
   const formatDate = (date) => {
     if (!date) return t("profile.na");
     return new Date(date).toLocaleDateString(
-      locale === "en" ? "en-US" : "es-CO",
+      { en: "en-US", pt: "pt-BR", es: "es-CO" }[locale] || "es-CO",
       { day: "numeric", month: "short", year: "numeric" },
     );
   };
@@ -134,7 +136,7 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
       const [profileRes, certRes] = await Promise.all([
         supabase
           .from("users")
-          .select("id, first_name, last_name, email, phone_number, created_at")
+          .select("id, first_name, last_name, email, created_at")
           .eq("id", userId)
           .maybeSingle(),
         supabase
@@ -146,12 +148,37 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
 
       let learningHours = 0;
       let createdAt = clerkCreatedAt;
+      let phone = "";
 
       if (profileRes.data) {
         const p = profileRes.data;
         const name =
           [p.first_name, p.last_name].filter(Boolean).join(" ") || clerkName;
-        const phone = p.phone_number || "";
+        // phone_number puede no existir en la tabla users (esquema variable);
+        // consultarlo por separado y tolerar su ausencia. Respaldo: profiles.phone.
+        try {
+          const { data: phoneRow, error: phoneErr } = await supabase
+            .from("users")
+            .select("phone_number")
+            .eq("id", userId)
+            .maybeSingle();
+          phone = phoneRow?.phone_number || "";
+          if (
+            (phoneErr || !phone) &&
+            /column.*does not exist|PGRST204|42703/i.test(
+              phoneErr?.message || "",
+            )
+          ) {
+            const { data: profRow } = await supabase
+              .from("profiles")
+              .select("phone")
+              .eq("id", userId)
+              .maybeSingle();
+            phone = profRow?.phone || "";
+          }
+        } catch {
+          phone = "";
+        }
         setProfileData((prev) => ({
           ...prev,
           full_name: name,
@@ -242,7 +269,7 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
 
   const handleTempChange = (field, value) => {
     if (field === "phone") {
-      const digits = value.replace(/\D/g, "");
+      const digits = normalizePhone(value);
       setTempValue(digits);
       setPhoneError(validatePhone(digits));
       setPendingChanges((prev) => ({ ...prev, phone: digits }));
@@ -264,26 +291,57 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
     setSaveMessage(null);
 
     try {
-      const updates = {};
+      // 1. Guardar el NOMBRE (columnas first_name/last_name, siempre presentes
+      //    en la tabla users). Es el cambio principal y no debe depender de
+      //    columnas opcionales.
       if (pendingChanges.full_name !== profileData.full_name) {
         const parts = pendingChanges.full_name.trim().split(" ");
-        updates.first_name = parts[0] || "";
-        updates.last_name = parts.slice(1).join(" ");
+        const updates = {
+          first_name: parts[0] || "",
+          last_name: parts.slice(1).join(" "),
+          updated_at: new Date().toISOString(),
+        };
+        const { error } = await supabase
+          .from("users")
+          .update(updates)
+          .eq("id", userId);
+        if (error) throw new Error(error.message);
       }
-      if (pendingChanges.phone !== profileData.phone)
-        updates.phone_number = pendingChanges.phone;
 
-      if (Object.keys(updates).length === 0) {
-        setIsSaving(false);
-        return;
+      // 2. Guardar el TELÉFONO por separado y de forma tolerante: la columna
+      //    phone_number puede no existir en el esquema real de users, en cuyo
+      //    caso se intenta en profiles.phone (poblada por el trigger de auth).
+      if (pendingChanges.phone !== profileData.phone) {
+        const phone = normalizePhone(pendingChanges.phone);
+        try {
+          const { error } = await supabase
+            .from("users")
+            .update({
+              phone_number: phone,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", userId);
+          if (
+            error &&
+            !/column.*does not exist|PGRST204|42703/i.test(error.message || "")
+          ) {
+            throw new Error(error.message);
+          }
+        } catch (phoneErr) {
+          // Columna phone_number ausente en users → intentar en profiles.phone
+          try {
+            await supabase
+              .from("profiles")
+              .update({ phone, updated_at: new Date().toISOString() })
+              .eq("id", userId);
+          } catch (profilesErr) {
+            console.warn(
+              "phone_number/profile.phone unavailable:",
+              profilesErr.message,
+            );
+          }
+        }
       }
-
-      const { error } = await supabase
-        .from("users")
-        .update({ ...updates, updated_at: new Date().toISOString() })
-        .eq("id", userId);
-
-      if (error) throw new Error(error.message);
 
       setProfileData((prev) => ({
         ...prev,
@@ -314,14 +372,11 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
     // Antes abria el perfil de Clerk y, si fallaba, mandaba al usuario a
     // accounts.clerk.com. Ahora usa el flujo propio de recuperacion.
     try {
-      await fetch(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/auth/reset-password`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: displayEmail }),
-        },
-      );
+      await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: displayEmail }),
+      });
       setSaveMessage({
         type: "success",
         text: t("profile.password_email_sent"),
@@ -337,7 +392,7 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
   const handleLogout = async () => {
     if (window.confirm(t("profile.confirm_logout"))) {
       try {
-        localStorage.removeItem("auth_token");
+        sessionStorage.removeItem("auth_token");
         localStorage.removeItem("user_email");
       } catch (err) {
         console.error("Error signing out:", err);

@@ -43,11 +43,16 @@ vi.mock('jspdf', () => ({
     text: vi.fn(),
     line: vi.fn(),
     getTextWidth: vi.fn(() => 50),
+    addImage: vi.fn(),
     save: vi.fn(),
   })),
 }));
 
 describe('CertificatePreview', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   test('renders student name', () => {
     render(<CertificatePreview studentName="María López" />);
     expect(screen.getByText('María López')).toBeInTheDocument();
@@ -82,7 +87,25 @@ describe('CertificatePreview', () => {
     expect(screen.getByText(/ialab\.certificate_preview\.issued_to/i)).toBeInTheDocument();
   });
 
+  test('renders edutechlife logo in header', () => {
+    render(<CertificatePreview studentName="María López" />);
+    const logo = screen.getByAltText('Edutechlife');
+    expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute('src', '/images/logo-edutechlife.webp');
+  });
+
   test('shows generating state on download click', async () => {
+    vi.stubGlobal('Image', class {
+      constructor() {
+        this.crossOrigin = null;
+        this.src = '';
+        setTimeout(() => {
+          this.naturalWidth = 2972;
+          this.naturalHeight = 392;
+          this.onload?.();
+        }, 0);
+      }
+    });
     render(<CertificatePreview studentName="Test User" />);
     fireEvent.click(screen.getByText(/ialab\.certificate_preview\.download/i));
     expect(screen.getByText(/ialab\.certificate_preview\.generating/i)).toBeInTheDocument();

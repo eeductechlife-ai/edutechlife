@@ -28,6 +28,45 @@ const isAdminAccount = (profile) => {
   return ADMIN_USERNAMES.includes(username) || ADMIN_EMAILS.includes(email);
 };
 
+// Caché de promesas en vuelo: AppLayout y IALabProgressProvider montan este
+// hook a la vez, y ambos disparaban las mismas 2 queries (users + user_roles).
+// Se comparte la promesa entre instancias y se limpia al resolver, así el
+// siguiente login vuelve a fetchear datos frescos.
+const profileFetchCache = new Map();
+
+const fetchStudentProfile = async (email, userId) => {
+  const cacheKey = `${email}|${userId || ""}`;
+  const inFlight = profileFetchCache.get(cacheKey);
+  if (inFlight) return inFlight;
+
+  const promise = (async () => {
+    try {
+      const { data } = await supabase
+        .from("users")
+        .select("*")
+        .eq("email", email)
+        .maybeSingle();
+
+      let userRole = null;
+      if (userId) {
+        const { data: roleData } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", userId)
+          .maybeSingle();
+        userRole = roleData?.role || null;
+      }
+
+      return { profile: data || null, userRole };
+    } finally {
+      profileFetchCache.delete(cacheKey);
+    }
+  })();
+
+  profileFetchCache.set(cacheKey, promise);
+  return promise;
+};
+
 export const useStudentProfile = () => {
   const { userId, email, isSignedIn } = useAuthIdentity();
   const [fetched, setFetched] = useState({
@@ -42,25 +81,8 @@ export const useStudentProfile = () => {
     let cancelled = false;
     (async () => {
       try {
-        // Obtener perfil del usuario desde tabla `users`
-        const { data } = await supabase
-          .from("users")
-          .select("*")
-          .eq("email", email)
-          .maybeSingle();
-
-        // Obtener rol desde tabla `user_roles` si existe
-        let userRole = null;
-        if (userId) {
-          const { data: roleData } = await supabase
-            .from("user_roles")
-            .select("role")
-            .eq("user_id", userId)
-            .maybeSingle();
-          userRole = roleData?.role || null;
-        }
-
-        if (!cancelled) setFetched({ email, profile: data || null, userRole });
+        const result = await fetchStudentProfile(email, userId);
+        if (!cancelled) setFetched({ email, ...result });
       } catch (err) {
         // A missing profile must not block access to the course.
         console.error("useStudentProfile:", err.message);

@@ -1,8 +1,15 @@
-import React, { useState, useEffect, useCallback, createContext, useContext } from 'react'
-import PropTypes from 'prop-types';
-import { motion } from 'framer-motion';
-import { Icon } from '../../../utils/iconMapping.jsx';
-import { useAuth } from '../../../context/AuthContext';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  createContext,
+  useContext,
+} from "react";
+import PropTypes from "prop-types";
+import { motion } from "framer-motion";
+import { Icon } from "../../../utils/iconMapping.jsx";
+import { useAuth } from "../../../context/AuthContext";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 const getBestKey = (postId) => `forum_best_answer_${postId}`;
 
@@ -11,6 +18,7 @@ export const useBestAnswer = () => useContext(BestAnswerContext);
 
 const IALabForumBestAnswer = ({ postId, postAuthorId, comments, children }) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [bestAnswerId, setBestAnswerId] = useState(null);
 
   useEffect(() => {
@@ -20,22 +28,35 @@ const IALabForumBestAnswer = ({ postId, postAuthorId, comments, children }) => {
     } catch {}
   }, [postId]);
 
-  const markAsBest = useCallback((commentId) => {
-    try { localStorage.setItem(getBestKey(postId), commentId); } catch {}
-    setBestAnswerId(commentId);
-  }, [postId]);
+  const markAsBest = useCallback(
+    (commentId) => {
+      try {
+        localStorage.setItem(getBestKey(postId), commentId);
+      } catch {}
+      setBestAnswerId(commentId);
+    },
+    [postId],
+  );
 
   const unmarkBest = useCallback(() => {
-    try { localStorage.removeItem(getBestKey(postId)); } catch {}
+    try {
+      localStorage.removeItem(getBestKey(postId));
+    } catch {}
     setBestAnswerId(null);
   }, [postId]);
 
   const bestComment = bestAnswerId
-    ? comments?.find(c => c.id === bestAnswerId || c.id?.toString() === bestAnswerId?.toString())
+    ? comments?.find(
+        (c) =>
+          c.id === bestAnswerId ||
+          c.id?.toString() === bestAnswerId?.toString(),
+      )
     : null;
 
   return (
-    <BestAnswerContext.Provider value={{ bestAnswerId, markAsBest, unmarkBest, postAuthorId }}>
+    <BestAnswerContext.Provider
+      value={{ bestAnswerId, markAsBest, unmarkBest, postAuthorId }}
+    >
       {bestComment && (
         <motion.div
           initial={{ opacity: 0, y: -8 }}
@@ -45,7 +66,7 @@ const IALabForumBestAnswer = ({ postId, postAuthorId, comments, children }) => {
           <div className="flex items-center gap-1.5 mb-2">
             <Icon name="fa-check" className="text-emerald-500 text-xs" />
             <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
-              Solución
+              {t("ialab.forum.best_answer.solution")}
             </span>
             {user?.id === postAuthorId && (
               <button
@@ -53,21 +74,29 @@ const IALabForumBestAnswer = ({ postId, postAuthorId, comments, children }) => {
                 className="ml-auto text-[10px] text-slate-500 hover:text-red-500 transition-colors px-2 py-0.5 rounded"
               >
                 <Icon name="fa-x" className="mr-0.5 text-[8px]" />
-                Quitar
+                {t("ialab.forum.best_answer.remove")}
               </button>
             )}
           </div>
           <div className="flex items-start gap-2">
             <div className="w-6 h-6 rounded-full bg-emerald-400 flex items-center justify-center flex-shrink-0">
               <span className="text-[8px] font-bold text-white">
-                {(bestComment.profiles?.full_name || '?').split(' ').map(p => p[0]).join('').toUpperCase().substring(0, 2)}
+                {(bestComment.profiles?.full_name || "?")
+                  .split(" ")
+                  .map((p) => p[0])
+                  .join("")
+                  .toUpperCase()
+                  .substring(0, 2)}
               </span>
             </div>
             <div className="flex-1 min-w-0">
               <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">
-                {bestComment.profiles?.full_name || 'Usuario'}
+                {bestComment.profiles?.full_name ||
+                  t("ialab.forum.best_answer.user_fallback")}
               </span>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-0.5">{bestComment.content}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mt-0.5">
+                {bestComment.content}
+              </p>
             </div>
           </div>
         </motion.div>

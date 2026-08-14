@@ -98,6 +98,9 @@ describe('templatesController with Supabase', () => {
     installMockSupabase();
     const { updateTemplate } = require(CONTROLLER_PATH);
     const req = mockReq({ templateName: 'Updated' }, { templateId: 'tpl_1' });
+    req.userId = 'u1';
+    const chain = require.cache[SUPABASE_PATH].exports.from();
+    chain.single = vi.fn().mockResolvedValue({ data: { id: 'tpl_1', name: 'Updated' }, error: null });
     const res = mockRes();
     await updateTemplate(req, res);
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }));
@@ -117,6 +120,9 @@ describe('templatesController with Supabase', () => {
     installMockSupabase();
     const { deleteTemplate } = require(CONTROLLER_PATH);
     const req = mockReq({}, { templateId: 'tpl_1' });
+    req.userId = 'u1';
+    const chain = require.cache[SUPABASE_PATH].exports.from();
+    chain.single = vi.fn().mockResolvedValue({ data: { id: 'tpl_1' }, error: null });
     const res = mockRes();
     await deleteTemplate(req, res);
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }));
@@ -130,5 +136,43 @@ describe('templatesController with Supabase', () => {
     await deleteTemplate(req, res);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ error: expect.stringContaining('Template ID') }));
+  });
+
+  it('getIdorFix: createTemplate usa req.userId del token, no el del body', async () => {
+    const chain = installMockSupabase();
+    const inserted = [];
+    chain.insert = vi.fn((row) => { inserted.push(row); return chain; });
+    const { createTemplate } = require(CONTROLLER_PATH);
+    const req = mockReq({ userId: 'attacker-uuid', templateName: 'T', templateData: { blocks: [] } });
+    req.userId = 'victim-uuid';
+    const res = mockRes();
+    await createTemplate(req, res);
+    expect(inserted[0].user_id).toBe('victim-uuid');
+  });
+
+  it('getIdorFix: updateTemplate filtra por user_id del token', async () => {
+    const chain = installMockSupabase();
+    const eqArgs = [];
+    chain.eq = vi.fn((a, b) => { eqArgs.push([a, b]); return chain; });
+    chain.single = vi.fn().mockResolvedValue({ data: { id: 'tpl_1' }, error: null });
+    const { updateTemplate } = require(CONTROLLER_PATH);
+    const req = mockReq({ templateName: 'Updated' }, { templateId: 'tpl_1' });
+    req.userId = 'victim-uuid';
+    const res = mockRes();
+    await updateTemplate(req, res);
+    expect(eqArgs).toContainEqual(['user_id', 'victim-uuid']);
+  });
+
+  it('getIdorFix: deleteTemplate filtra por user_id del token', async () => {
+    const chain = installMockSupabase();
+    const eqArgs = [];
+    chain.eq = vi.fn((a, b) => { eqArgs.push([a, b]); return chain; });
+    chain.single = vi.fn().mockResolvedValue({ data: { id: 'tpl_1' }, error: null });
+    const { deleteTemplate } = require(CONTROLLER_PATH);
+    const req = mockReq({}, { templateId: 'tpl_1' });
+    req.userId = 'victim-uuid';
+    const res = mockRes();
+    await deleteTemplate(req, res);
+    expect(eqArgs).toContainEqual(['user_id', 'victim-uuid']);
   });
 });

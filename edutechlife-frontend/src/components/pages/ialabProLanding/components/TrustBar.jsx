@@ -1,11 +1,18 @@
-import { useState, useRef, useEffect } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { Icon } from '../../../../utils/iconMapping';
+import { useState, useRef, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
+import { Icon } from "../../../../utils/iconMapping";
 
-const AnimatedCounter = ({ from = 0, to, suffix = '', prefix = '', duration = 2, formatter }) => {
+const AnimatedCounter = ({
+  from = 0,
+  to,
+  suffix = "",
+  prefix = "",
+  duration = 2,
+  formatter,
+}) => {
   const [value, setValue] = useState(from);
   const cRef = useRef(null);
-  const inView = useInView(cRef, { once: true, margin: '-100px' });
+  const inView = useInView(cRef, { once: true, margin: "-100px" });
 
   useEffect(() => {
     if (!inView) return;
@@ -23,7 +30,13 @@ const AnimatedCounter = ({ from = 0, to, suffix = '', prefix = '', duration = 2,
   }, [inView, from, to, duration]);
 
   const display = formatter ? formatter(value) : Math.round(value);
-  return <span ref={cRef}>{prefix}{display}{suffix}</span>;
+  return (
+    <span ref={cRef}>
+      {prefix}
+      {display}
+      {suffix}
+    </span>
+  );
 };
 
 const TrustBar = ({ t, locale }) => (
@@ -36,25 +49,52 @@ const TrustBar = ({ t, locale }) => (
     <div className="flex flex-wrap justify-center items-center gap-5 md:gap-6 text-white text-sm md:text-base">
       <div className="flex items-center gap-2 md:gap-3">
         <div className="flex -space-x-1.5">
-          {[1,2,3,4].map((i) => (
-            <div key={i} className="w-7 h-7 rounded-full bg-[#00334A] border-2 border-[#00334A]/50 flex items-center justify-center text-[9px] font-bold text-white">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="w-7 h-7 rounded-full bg-[#00334A] border-2 border-[#00334A]/50 flex items-center justify-center text-[9px] font-bold text-white"
+            >
               {String.fromCharCode(64 + i)}
             </div>
           ))}
         </div>
-        <span><strong className="text-white"><AnimatedCounter from={0} to={4200} suffix="+" formatter={(v) => Math.floor(v).toLocaleString(locale === 'en' ? 'en-US' : 'es-ES')} /></strong> <span className="text-white font-semibold">{t('ialab.landing.students_label')}</span></span>
+        <span>
+          <strong className="text-white">
+            <AnimatedCounter
+              from={0}
+              to={4200}
+              suffix="+"
+              formatter={(v) =>
+                Math.floor(v).toLocaleString(
+                  { en: "en-US", pt: "pt-BR", es: "es-ES" }[locale] || "es-ES",
+                )
+              }
+            />
+          </strong>{" "}
+          <span className="text-white font-semibold">
+            {t("ialab.landing.students_label")}
+          </span>
+        </span>
       </div>
       <div className="h-7 w-px bg-white/10" />
       <div className="flex items-center gap-1 text-amber-400">
-        {[1,2,3,4,5].map((s) => (
+        {[1, 2, 3, 4, 5].map((s) => (
           <Icon key={s} name="fa-star" className="w-4 h-4" />
         ))}
-        <span className="text-white ml-1.5"><strong className="text-white"><AnimatedCounter from={0} to={4.8} formatter={(v) => v.toFixed(1)} /></strong></span>
+        <span className="text-white ml-1.5">
+          <strong className="text-white">
+            <AnimatedCounter
+              from={0}
+              to={4.8}
+              formatter={(v) => v.toFixed(1)}
+            />
+          </strong>
+        </span>
       </div>
       <div className="h-7 w-px bg-white/10" />
       <div className="flex items-center gap-1.5 text-emerald-400">
         <Icon name="fa-shield-check" className="w-4 h-4" />
-        <span className="text-white">{t('ialab.landing.certified_label')}</span>
+        <span className="text-white">{t("ialab.landing.certified_label")}</span>
       </div>
     </div>
   </motion.div>

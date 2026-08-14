@@ -117,7 +117,7 @@ export function useIALabUI(onBack) {
     // were never actually closed. Clearing the Supabase session is what signs
     // the student out.
     try {
-      localStorage.removeItem("auth_token");
+      sessionStorage.removeItem("auth_token");
       localStorage.removeItem("user_email");
     } catch {
       /* ignore */

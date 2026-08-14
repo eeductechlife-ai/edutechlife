@@ -18,8 +18,8 @@ const ValerioPanelHeader = ({
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
           <img
-            src={tutorAvatars.Valerio || DEFAULT_AVATAR}
-            alt="Valerio"
+            src={tutorAvatars.MAX || DEFAULT_AVATAR}
+            alt="MAX"
             data-testid="valerio-avatar"
             className="w-16 h-16 rounded-full object-cover ring-2 ring-white/30"
           />

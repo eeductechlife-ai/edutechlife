@@ -1,6 +1,8 @@
 const express = require('express');
 const crypto = require('crypto');
 const supabase = require('../db/supabase');
+const { createSessionClient } = require('../db/sessionClient');
+const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -126,7 +128,7 @@ async function resolveEmailFromIdentifier(identifier) {
  *   registration_source: string
  * }
  */
-router.post('/sync-user', async (req, res) => {
+router.post('/sync-user', requireAuth, async (req, res) => {
   try {
     const {
       clerk_id,
@@ -141,10 +143,24 @@ router.post('/sync-user', async (req, res) => {
       registration_source,
     } = req.body;
 
-    // Validate required fields
-    if (!clerk_id || !email) {
+    // El identity proviene del token validado (requireAuth). Rechazamos
+    // cualquier intento de auto-omitir el auth indicando un clerk_id/email
+    // que no corresponda a la sesión.
+    if (!email && !req.userEmail) {
       return res.status(400).json({
         error: 'Missing required fields: clerk_id and email',
+      });
+    }
+
+    const effectiveEmail = String(email || req.userEmail).toLowerCase();
+    if (req.userEmail && effectiveEmail !== String(req.userEmail).toLowerCase()) {
+      return res.status(403).json({
+        error: 'Email does not match the authenticated session',
+      });
+    }
+    if (clerk_id && req.userId && clerk_id !== req.userId) {
+      return res.status(403).json({
+        error: 'clerk_id does not match the authenticated session',
       });
     }
 
@@ -154,8 +170,8 @@ router.post('/sync-user', async (req, res) => {
       .insert(
         [
           {
-            clerk_id,
-            email,
+            clerk_id: clerk_id || req.userId,
+            email: effectiveEmail,
             first_name: first_name || null,
             last_name: last_name || null,
             username: username || null,
@@ -174,7 +190,6 @@ router.post('/sync-user', async (req, res) => {
       console.error('Supabase insert error:', error);
       return res.status(500).json({
         error: 'Failed to sync user to Supabase',
-        details: error.message,
       });
     }
 
@@ -195,7 +210,6 @@ router.post('/sync-user', async (req, res) => {
 
     res.status(500).json({
       error: 'Internal server error',
-      message: err.message,
     });
   }
 });
@@ -248,8 +262,10 @@ router.post('/reset-password', async (req, res) => {
 /**
  * GET /api/auth/user/:clerk_id
  * Get user data from Supabase by Clerk ID
+ *
+ * Autenticado y con ownership: solo se puede leer el propio registro.
  */
-router.get('/user/:clerk_id', async (req, res) => {
+router.get('/user/:clerk_id', requireAuth, async (req, res) => {
   try {
     const { clerk_id } = req.params;
 
@@ -266,12 +282,21 @@ router.get('/user/:clerk_id', async (req, res) => {
       throw error;
     }
 
+    // Ownership: la identidad hoy es el Supabase uid del JWT; el registro
+    // legacy se vincula por email. Nadie debe leer perfiles ajenos.
+    const normalized = (s) => String(s || '').toLowerCase();
+    if (
+      (!req.userEmail || normalized(data.email) !== normalized(req.userEmail)) &&
+      data.clerk_id !== req.userId
+    ) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     res.json(data);
   } catch (err) {
     console.error('Get user error:', err);
     res.status(500).json({
       error: 'Failed to fetch user',
-      message: err.message,
     });
   }
 });
@@ -329,7 +354,6 @@ router.get('/oauth/:provider', (req, res) => {
     req.log.error('OAuth initiate error', { provider: req.params.provider, error: err.message });
     res.status(500).json({
       error: 'OAuth initialization failed',
-      message: err.message,
     });
   }
 });
@@ -434,12 +458,12 @@ router.get('/callback', async (req, res) => {
 
     let authUser = null;
     try {
-      const { data: list } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
-      authUser = list?.users?.find(
-        (u) => (u.email || '').toLowerCase() === normalizedEmail
-      ) || null;
+      // getUserByEmail es O(1) y sin límite de paginación; listUsers con
+      // perPage 1000 se rompe al superar pocos miles de cuentas.
+      const { data: byEmail } = await supabase.auth.admin.getUserByEmail(normalizedEmail);
+      authUser = byEmail?.user || null;
     } catch (e) {
-      console.error('listUsers failed:', e.message);
+      console.error('getUserByEmail failed:', e.message);
     }
 
     let userId;
@@ -562,10 +586,9 @@ router.get('/oauth-demo/:provider', async (req, res) => {
       if (authError) {
         // If user already exists in Auth but not in users table, just get the user
         if (authError.code === 'email_exists') {
-          // Get the user from auth by email - we'll need to fetch it differently
-          // For now, create a record in users table if it doesn't exist
-          const { data: authUsers, error: listError } = await supabase.auth.admin.listUsers();
-          const authUser = authUsers?.users?.find(u => u.email === demoEmail);
+          const { data: byEmail, error: lookupError } = await supabase.auth.admin.getUserByEmail(demoEmail);
+          const authUser = byEmail?.user || null;
+          if (lookupError) console.error('getUserByEmail failed:', lookupError.message);
 
           if (authUser) {
             userId = authUser.id;
@@ -621,8 +644,9 @@ router.get('/oauth-demo/:provider', async (req, res) => {
       password: tempPassword,
     });
 
-    // Sign in to get JWT
-    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+    // Sign in to get JWT — throwaway client so the shared service client never
+    // holds a user session (signInWithPassword pins one, breaking data queries)
+    const { data: signInData, error: signInError } = await createSessionClient().auth.signInWithPassword({
       email: demoEmail,
       password: tempPassword,
     });
@@ -638,7 +662,7 @@ router.get('/oauth-demo/:provider', async (req, res) => {
     res.redirect(redirectUrl);
   } catch (err) {
     console.error('Demo OAuth error:', err);
-    res.status(500).json({ error: 'Demo OAuth failed', message: err.message });
+    res.status(500).json({ error: 'Demo OAuth failed' });
   }
 });
 
@@ -654,9 +678,9 @@ const authService = require('../services/authService');
  * El padre usa el mismo email pero diferente contraseña.
  */
 router.post('/parent-register', async (req, res) => {
-  const { studentEmail, parentPassword, parentName } = req.body || {};
+  const { studentEmail, parentPassword, parentName, invitationToken } = req.body || {};
   try {
-    const result = await authService.signUpParent({ studentEmail, parentPassword, parentName });
+    const result = await authService.signUpParent({ studentEmail, parentPassword, parentName, invitationToken });
     res.status(201).json(result);
   } catch (e) {
     console.error('Parent register error:', e.message);
@@ -710,7 +734,11 @@ router.post('/parent-login', async (req, res) => {
  *         description: Validación fallida
  */
 router.post('/signup', async (req, res) => {
-  const { email, password, username, firstName, lastName } = req.body || {};
+  const { email, password, username, firstName, lastName, accountType } = req.body || {};
+
+  // Solo se aceptan los dos productos; cualquier otro valor cae en 'ialab'
+  // (comportamiento histórico) para no romper clientes existentes.
+  const safeAccountType = accountType === 'smartboard' ? 'smartboard' : 'ialab';
 
   try {
     const result = await authService.signUp({
@@ -720,6 +748,7 @@ router.post('/signup', async (req, res) => {
       firstName,
       lastName,
       userType: 'student',
+      accountType: safeAccountType,
     });
 
     res.status(201).json(result);

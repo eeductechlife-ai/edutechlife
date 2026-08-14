@@ -15,12 +15,12 @@ export function useSidebarState(
   const getSidebarState = useIALabStore((s) => s.getSidebarState);
   const setSidebarState = useIALabStore((s) => s.setSidebarState);
   const removeSidebarState = useIALabStore((s) => s.removeSidebarState);
+  const isCollapsed = useIALabStore((s) => s.sidebarCollapsed);
+  const setSidebarCollapsed = useIALabStore((s) => s.setSidebarCollapsed);
+  const toggleSidebar = useIALabStore((s) => s.toggleSidebarCollapsed);
   const persistedState = getSidebarState(null);
   const [collapsedSections, setCollapsedSections] = useState(
     persistedState || initialState,
-  );
-  const [isCollapsed, setIsCollapsed] = useState(
-    () => window.innerWidth < TABLET_BREAKPOINT,
   );
   const [isMobile, setIsMobile] = useState(false);
   const initialRef = useRef(initialState);
@@ -33,17 +33,17 @@ export function useSidebarState(
         const w = window.innerWidth;
         const mobile = w < MOBILE_BREAKPOINT;
         setIsMobile(mobile);
-        if (w < TABLET_BREAKPOINT) setIsCollapsed(true);
+        if (w < TABLET_BREAKPOINT) setSidebarCollapsed(true);
       }, 100);
     };
 
     checkViewport();
-    window.addEventListener("resize", checkViewport);
+    window.addEventListener("resize", checkViewport, { passive: true });
     return () => {
       window.removeEventListener("resize", checkViewport);
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, []);
+  }, [setSidebarCollapsed]);
 
   const persist = useCallback(
     (state) => {
@@ -96,10 +96,6 @@ export function useSidebarState(
     setCollapsedSections(initialRef.current);
     removeSidebarState();
   }, [removeSidebarState]);
-
-  const toggleSidebar = useCallback(() => {
-    setIsCollapsed((prev) => !prev);
-  }, []);
 
   const getSectionData = useCallback((sectionId) => {
     return SECTION_DATA[sectionId] || null;

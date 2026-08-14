@@ -1,36 +1,36 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useNotification } from '../context/NotificationContext';
-import { useTranslation } from '../i18n/I18nProvider';
-import { Icon } from '../utils/iconMapping.jsx';
-import useBrowserNotifications from '../hooks/useBrowserNotifications';
+import React, { useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useNotification } from "../context/NotificationContext";
+import { useTranslation } from "../i18n/I18nProvider";
+import { Icon } from "../utils/iconMapping.jsx";
+import useBrowserNotifications from "../hooks/useBrowserNotifications";
 
 const NOTIFICATION_CONFIG = {
-  lesson_reminder: { icon: 'fa-book', color: '#004B63' },
-  exam_reminder: { icon: 'fa-file-alt', color: '#00BCD4' },
-  module_complete: { icon: 'fa-check-circle', color: '#004B63' },
-  certificate_earned: { icon: 'fa-award', color: '#004B63' },
-  course_update: { icon: 'fa-info-circle', color: '#00BCD4' },
-  general: { icon: 'fa-bell', color: '#00BCD4' },
+  lesson_reminder: { icon: "fa-book", color: "#004B63" },
+  exam_reminder: { icon: "fa-file-alt", color: "#00BCD4" },
+  module_complete: { icon: "fa-check-circle", color: "#004B63" },
+  certificate_earned: { icon: "fa-award", color: "#004B63" },
+  course_update: { icon: "fa-info-circle", color: "#00BCD4" },
+  general: { icon: "fa-bell", color: "#00BCD4" },
 };
 
 const TYPE_LABEL_KEYS = {
-  lesson_reminder: 'notification.type_lesson_reminder',
-  exam_reminder: 'notification.type_exam_reminder',
-  module_complete: 'notification.type_module_complete',
-  certificate_earned: 'notification.type_certificate_earned',
-  course_update: 'notification.type_course_update',
-  general: 'notification.type_general',
+  lesson_reminder: "notification.type_lesson_reminder",
+  exam_reminder: "notification.type_exam_reminder",
+  module_complete: "notification.type_module_complete",
+  certificate_earned: "notification.type_certificate_earned",
+  course_update: "notification.type_course_update",
+  general: "notification.type_general",
 };
 
 const getIconColorClass = (color) => {
-  return color === '#004B63' ? 'text-[#004B63]' : 'text-[#00BCD4]';
+  return color === "#004B63" ? "text-[#004B63]" : "text-[#00BCD4]";
 };
 
 const getBadgeBgClass = (color) => {
-  return color === '#004B63'
-    ? 'from-[#004B63]/10 to-[#00BCD4]/10'
-    : 'from-[#00BCD4]/10 to-[#00BCD4]/20';
+  return color === "#004B63"
+    ? "from-[#004B63]/10 to-[#00BCD4]/10"
+    : "from-[#00BCD4]/10 to-[#00BCD4]/20";
 };
 
 const formatTimeAgo = (date, t, locale) => {
@@ -41,26 +41,44 @@ const formatTimeAgo = (date, t, locale) => {
   const diffHrs = Math.floor(diffMin / 60);
   const diffDays = Math.floor(diffHrs / 24);
 
-  if (diffMin < 1) return t('notification.time_just_now');
-  if (diffMin < 60) return t('notification.time_ago_min', { count: diffMin });
-  if (diffHrs < 24) return t('notification.time_ago_h', { count: diffHrs });
-  if (diffDays < 7) return t('notification.time_ago_d', { count: diffDays });
-  return then.toLocaleDateString(locale === 'en' ? 'en-US' : 'es-CO', { day: 'numeric', month: 'short' });
+  if (diffMin < 1) return t("notification.time_just_now");
+  if (diffMin < 60) return t("notification.time_ago_min", { count: diffMin });
+  if (diffHrs < 24) return t("notification.time_ago_h", { count: diffHrs });
+  if (diffDays < 7) return t("notification.time_ago_d", { count: diffDays });
+  return then.toLocaleDateString(
+    { en: "en-US", pt: "pt-BR", es: "es-CO" }[locale] || "es-CO",
+    { day: "numeric", month: "short" },
+  );
 };
 
 const ROUTE_MAP = {
   lesson_reminder: (m) => `/ialab/${m?.moduleId || 1}`,
   exam_reminder: (m) => `/ialab/${m?.moduleId || 1}`,
   module_complete: (m) => `/ialab/${m?.moduleId || 1}`,
-  certificate_earned: () => '#certificate',
-  course_update: () => '/ialab',
-  general: (m) => m?.moduleId ? `/ialab/${m.moduleId}` : '/ialab',
+  certificate_earned: () => "#certificate",
+  course_update: () => "/ialab",
+  general: (m) => (m?.moduleId ? `/ialab/${m.moduleId}` : "/ialab"),
 };
 
-const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }) => {
+const NotificationPanel = ({
+  isOpen,
+  onClose,
+  triggerRef,
+  forumUnreadCount = 0,
+}) => {
   const navigate = useNavigate();
   const { t, locale } = useTranslation();
-  const { notifications, unreadCount, loading, markAsRead, markAllAsRead, dismissNotification, clearAllNotifications, preferences, updatePreferences } = useNotification();
+  const {
+    notifications,
+    unreadCount,
+    loading,
+    markAsRead,
+    markAllAsRead,
+    dismissNotification,
+    clearAllNotifications,
+    preferences,
+    updatePreferences,
+  } = useNotification();
   const { subscribeToPush, syncPushSubscription } = useBrowserNotifications();
   const panelRef = useRef(null);
   const [confirmClear, setConfirmClear] = useState(false);
@@ -72,15 +90,16 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
       if (!panelRef.current) return;
 
       const isInsidePanel = panelRef.current.contains(e.target);
-      const isTriggerClick = triggerRef?.current && triggerRef.current.contains(e.target);
+      const isTriggerClick =
+        triggerRef?.current && triggerRef.current.contains(e.target);
 
       if (!isInsidePanel && !isTriggerClick) {
         onClose();
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [isOpen, onClose, triggerRef]);
 
   const handleClearAll = () => {
@@ -107,14 +126,20 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
         <div className="bg-gradient-to-r from-[#004B63] to-[#00BCD4] px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Icon name="fa-bell" className="text-white text-sm" />
-            <h3 className="text-white font-bold text-sm">{t('notification.panel_title')}</h3>
+            <h3 className="text-white font-bold text-sm">
+              {t("notification.panel_title")}
+            </h3>
             {unreadCount > 0 && (
               <span className="bg-white/20 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                {t('notification.unread_count', { count: unreadCount })}
+                {t("notification.unread_count", { count: unreadCount })}
               </span>
             )}
           </div>
-          <button onClick={onClose} className="text-white/70 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10" aria-label={t('notification.close_aria')}>
+          <button
+            onClick={onClose}
+            className="text-white/70 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10"
+            aria-label={t("notification.close_aria")}
+          >
             <Icon name="fa-xmark" className="text-sm" />
           </button>
         </div>
@@ -127,19 +152,21 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
               className="flex items-center gap-1.5 text-[10px] font-semibold text-[#004B63] hover:text-[#00BCD4] transition-colors px-2 py-1 rounded-md hover:bg-[#004B63]/5"
             >
               <Icon name="fa-check-double" className="text-[10px]" />
-              {t('notification.mark_all_read')}
+              {t("notification.mark_all_read")}
             </button>
             {notificationCount > 0 && (
               <button
                 onClick={handleClearAll}
                 className={`flex items-center gap-1.5 text-[10px] font-semibold transition-colors px-2 py-1 rounded-md ${
                   confirmClear
-                    ? 'text-white bg-rose-500 hover:bg-rose-600'
-                    : 'text-rose-500 hover:text-rose-600 hover:bg-rose-50'
+                    ? "text-white bg-rose-500 hover:bg-rose-600"
+                    : "text-rose-500 hover:text-rose-600 hover:bg-rose-50"
                 }`}
               >
                 <Icon name="fa-trash-can" className="text-[10px]" />
-                {confirmClear ? t('notification.confirm_clear') : t('notification.clear_all')}
+                {confirmClear
+                  ? t("notification.confirm_clear")
+                  : t("notification.clear_all")}
               </button>
             )}
           </div>
@@ -148,25 +175,29 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
         {/* Push toggle */}
         <div className="px-3 py-2 border-b border-slate-200/60 bg-slate-50/50">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Notif. push</span>
+            <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
+              Notif. push
+            </span>
             <button
               onClick={async (e) => {
                 e.stopPropagation();
-                if (preferences.push && Notification.permission === 'granted') {
+                if (preferences.push && Notification.permission === "granted") {
                   updatePreferences({ ...preferences, push: false });
                 } else {
                   const perm = await Notification.requestPermission();
-                  if (perm === 'granted') {
+                  if (perm === "granted") {
                     const sub = await subscribeToPush();
                     if (sub) await syncPushSubscription(sub);
                     updatePreferences({ ...preferences, push: true });
                   }
                 }
               }}
-              className={`relative w-9 h-5 rounded-full transition-colors ${preferences.push && Notification.permission === 'granted' ? 'bg-corporate' : 'bg-slate-300'}`}
+              className={`relative w-9 h-5 rounded-full transition-colors ${preferences.push && Notification.permission === "granted" ? "bg-corporate" : "bg-slate-300"}`}
               aria-label="Toggle push notifications"
             >
-              <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${preferences.push && Notification.permission === 'granted' ? 'translate-x-4' : ''}`} />
+              <span
+                className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${preferences.push && Notification.permission === "granted" ? "translate-x-4" : ""}`}
+              />
             </button>
           </div>
         </div>
@@ -176,48 +207,62 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12 px-4">
               <div className="w-8 h-8 rounded-full border-2 border-[#004B63] border-t-transparent animate-spin mb-3" />
-              <p className="text-xs text-slate-500">{t('notification.loading')}</p>
+              <p className="text-xs text-slate-500">
+                {t("notification.loading")}
+              </p>
             </div>
           ) : notificationCount === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#004B63]/10 to-[#00BCD4]/10 flex items-center justify-center mb-3">
                 <Icon name="fa-bell" className="text-[#004B63] text-lg" />
               </div>
-              <p className="text-sm font-semibold text-slate-600">{t('notification.empty_title')}</p>
+              <p className="text-sm font-semibold text-slate-600">
+                {t("notification.empty_title")}
+              </p>
               <p className="text-xs text-slate-400 text-center mt-1">
-                {t('notification.empty_desc')}
+                {t("notification.empty_desc")}
               </p>
             </div>
           ) : (
             <div className="divide-y divide-slate-100">
               {notifications.map((notif) => {
-                const config = NOTIFICATION_CONFIG[notif.type] || NOTIFICATION_CONFIG.general;
+                const config =
+                  NOTIFICATION_CONFIG[notif.type] ||
+                  NOTIFICATION_CONFIG.general;
                 return (
-                    <div
+                  <div
                     key={notif.id}
                     onClick={() => {
                       if (!notif.is_read) markAsRead(notif.id);
-                      if (!notif.id?.startsWith('local_')) {
+                      if (!notif.id?.startsWith("local_")) {
                         const metadata = notif.metadata || {};
-                        const routeFn = ROUTE_MAP[notif.type] || ROUTE_MAP.general;
+                        const routeFn =
+                          ROUTE_MAP[notif.type] || ROUTE_MAP.general;
                         const route = routeFn(metadata);
-                        if (route && !route.startsWith('#')) {
+                        if (route && !route.startsWith("#")) {
                           navigate(route);
                           onClose();
                         }
                       }
                     }}
-                    className={`relative group px-4 py-3 transition-colors hover:bg-slate-50/50 cursor-pointer ${!notif.is_read ? 'bg-[#004B63]/[0.02]' : ''}`}
+                    className={`relative group px-4 py-3 transition-colors hover:bg-slate-50/50 cursor-pointer ${!notif.is_read ? "bg-[#004B63]/[0.02]" : ""}`}
                   >
                     <div className="flex gap-3">
-                      <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${getBadgeBgClass(config.color)} flex items-center justify-center flex-shrink-0 mt-0.5`}>
-                        <Icon name={config.icon} className={`text-sm ${getIconColorClass(config.color)}`} />
+                      <div
+                        className={`w-8 h-8 rounded-lg bg-gradient-to-br ${getBadgeBgClass(config.color)} flex items-center justify-center flex-shrink-0 mt-0.5`}
+                      >
+                        <Icon
+                          name={config.icon}
+                          className={`text-sm ${getIconColorClass(config.color)}`}
+                        />
                       </div>
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1 min-w-0">
-                            <p className={`text-xs leading-tight ${!notif.is_read ? 'font-bold text-slate-800' : 'font-medium text-slate-700'}`}>
+                            <p
+                              className={`text-xs leading-tight ${!notif.is_read ? "font-bold text-slate-800" : "font-medium text-slate-700"}`}
+                            >
                               {notif.title}
                             </p>
                             <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
@@ -225,15 +270,20 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
                             </p>
                           </div>
                           <button
-                            onClick={(e) => { e.stopPropagation(); dismissNotification(notif.id); }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              dismissNotification(notif.id);
+                            }}
                             className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-rose-500 transition-all flex-shrink-0 rounded-md hover:bg-rose-50"
-                            aria-label={t('notification.delete_aria')}
+                            aria-label={t("notification.delete_aria")}
                           >
                             <Icon name="fa-xmark" className="text-xs" />
                           </button>
                         </div>
                         <div className="flex items-center gap-2 mt-1.5">
-                          <span className="text-[10px] text-slate-400">{formatTimeAgo(notif.created_at, t, locale)}</span>
+                          <span className="text-[10px] text-slate-400">
+                            {formatTimeAgo(notif.created_at, t, locale)}
+                          </span>
                           {!notif.is_read && (
                             <span className="w-1.5 h-1.5 rounded-full bg-[#00BCD4]" />
                           )}
@@ -250,15 +300,20 @@ const NotificationPanel = ({ isOpen, onClose, triggerRef, forumUnreadCount = 0 }
           {forumUnreadCount > 0 && (
             <button
               onClick={() => {
-                window.dispatchEvent(new CustomEvent('ialab:switchTab', { detail: 'comunidad' }));
+                window.dispatchEvent(
+                  new CustomEvent("ialab:switchTab", { detail: "comunidad" }),
+                );
               }}
               className="w-full flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-petroleum/[0.03] to-corporate/[0.03] border-t border-slate-200/60 text-xs font-medium text-petroleum hover:from-petroleum/[0.06] hover:to-corporate/[0.06] transition-colors"
             >
               <Icon name="fa-comments" className="text-corporate text-xs" />
               <span>
-                {t('notification.forum_count', { count: forumUnreadCount })}
+                {t("notification.forum_count", { count: forumUnreadCount })}
               </span>
-              <Icon name="fa-arrow-right" className="text-corporate text-[10px] ml-auto" />
+              <Icon
+                name="fa-arrow-right"
+                className="text-corporate text-[10px] ml-auto"
+              />
             </button>
           )}
         </div>

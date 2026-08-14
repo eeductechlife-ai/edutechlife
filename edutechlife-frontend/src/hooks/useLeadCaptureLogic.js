@@ -185,8 +185,11 @@ const useLeadCaptureLogic = (options = {}) => {
   const handleLeadSaved = useCallback((leadData) => {
     interestScoreRef.current = 0;
     hideForm();
-    track('lead_captured', { source: 'nico_chat', ...leadData });
-    
+    track('lead_captured', {
+      source: 'nico_chat',
+      interest: leadData.interesPrincipal,
+    });
+
     return leadData;
   }, [hideForm]);
 

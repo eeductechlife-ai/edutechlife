@@ -8,12 +8,9 @@ const SectionFallback = ({ tab }) => {
   if (tab === "inicio") {
     return (
       <div className="space-y-6 p-4">
-        <SkeletonBar className="h-48 w-full" />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <SkeletonBar className="h-32" />
-          <SkeletonBar className="h-32" />
-        </div>
-        <SkeletonBar className="h-24 w-3/4" />
+        <SkeletonBar className="h-72 md:h-80 w-full" />
+        <SkeletonBar className="h-52 w-full" />
+        <SkeletonBar className="h-40 w-full" />
       </div>
     );
   }

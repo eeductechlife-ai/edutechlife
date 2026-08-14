@@ -34,7 +34,7 @@ const OAuthCallbackHandler = () => {
         }
 
         // Save authentication token
-        localStorage.setItem("auth_token", token);
+        sessionStorage.setItem("auth_token", token);
         localStorage.setItem("user_email", email);
 
         // Progress is stored per account. Claim the namespace for this user and
@@ -42,7 +42,15 @@ const OAuthCallbackHandler = () => {
         // from this account's data instead of keeping the previous user's
         // in-memory state (which showed everyone the same progress).
         claimStorageForCurrentUser();
-        window.location.replace("/ialab");
+        const returnTo =
+          sessionStorage.getItem("auth_return_to") === "/smartboard" ||
+          (sessionStorage.getItem("auth_return_to") || "").startsWith(
+            "/smartboard",
+          )
+            ? sessionStorage.getItem("auth_return_to")
+            : "/ialab";
+        sessionStorage.removeItem("auth_return_to");
+        window.location.replace(returnTo);
       } catch (err) {
         console.error("Callback processing error:", err);
         navigate("/login?error=callback_failed");

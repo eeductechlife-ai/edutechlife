@@ -13,34 +13,37 @@ const loadData = (key) => {
   }
 };
 
-const getLastActiveText = (lastActive) => {
+const getLastActiveText = (lastActive, t) => {
   if (!lastActive) return "—";
   const diff = Math.floor(
     (Date.now() - new Date(lastActive).getTime()) / 60000,
   );
-  if (diff < 1) return "Ahora";
-  if (diff < 60) return `Hace ${diff} min`;
+  if (diff < 1) return t("parent_dashboard.now");
+  if (diff < 60) return t("parent_dashboard.minutes_ago", { minutes: diff });
   const hours = Math.floor(diff / 60);
-  return `Hace ${hours}h ${diff % 60}min`;
+  return t("parent_dashboard.hours_ago", {
+    hours,
+    minutes: diff % 60,
+  });
 };
 
 const TAB_LABELS = {
-  inicio: "Inicio",
-  materias: "Materias",
-  curriculo: "Currículo",
-  libros: "Libros",
-  podcast: "Podcast",
-  examenes: "Exámenes",
-  flashcards: "Flashcards",
-  oral: "Oral",
-  escaner: "Escáner",
-  vak: "Diagnóstico VAK",
-  progreso: "Progreso",
-  analitica: "Analítica",
-  calendario: "Calendario",
-  misiones: "Misiones",
-  actividades: "Actividades",
-  noticias: "Noticias",
+  inicio: "parent_dashboard.tab_inicio",
+  materias: "parent_dashboard.tab_materias",
+  curriculo: "parent_dashboard.tab_curriculo",
+  libros: "parent_dashboard.tab_libros",
+  podcast: "parent_dashboard.tab_podcast",
+  examenes: "parent_dashboard.tab_examenes",
+  flashcards: "parent_dashboard.tab_flashcards",
+  oral: "parent_dashboard.tab_oral",
+  escaner: "parent_dashboard.tab_escaner",
+  vak: "parent_dashboard.tab_vak",
+  progreso: "parent_dashboard.tab_progreso",
+  analitica: "parent_dashboard.tab_analitica",
+  calendario: "parent_dashboard.tab_calendario",
+  misiones: "parent_dashboard.tab_misiones",
+  actividades: "parent_dashboard.tab_actividades",
+  noticias: "parent_dashboard.tab_noticias",
 };
 
 const TAB_ICONS = {
@@ -69,6 +72,7 @@ export const LivePresenceBar = ({
   studentStatus = [],
   liveSessions = [],
 }) => {
+  const { t } = useTranslation();
   const currentTab = loadData(`${STORAGE_PREFIX}_current_tab`);
   const lastActivity = loadData(`${STORAGE_PREFIX}_last_activity`);
 
@@ -130,14 +134,20 @@ export const LivePresenceBar = ({
             </motion.span>
             <div>
               <span className="text-sm font-bold text-[#004B63]">
-                {isOnline ? "Conectado ahora" : "Desconectado"}
+                {isOnline
+                  ? t("parent_dashboard.connected_now")
+                  : t("parent_dashboard.disconnected")}
               </span>
               <p className="text-xs text-[#94A3B8]">
                 {isOnline
-                  ? `Última actividad: ${getLastActiveText(lastActivity)}`
+                  ? t("parent_dashboard.last_activity_label", {
+                      time: getLastActiveText(lastActivity, t),
+                    })
                   : lastActivity
-                    ? `Última conexión: ${new Date(lastActivity).toLocaleString("es-ES")}`
-                    : "Sin actividad registrada"}
+                    ? t("parent_dashboard.last_connection_label", {
+                        date: new Date(lastActivity).toLocaleString("es-ES"),
+                      })
+                    : t("parent_dashboard.no_activity")}
               </p>
             </div>
           </div>
@@ -146,7 +156,11 @@ export const LivePresenceBar = ({
               <div className="flex items-center gap-2 mt-2 bg-green-50 rounded-lg px-3 py-1.5 inline-flex border border-green-200">
                 <span className="text-base">📚</span>
                 <span className="text-xs font-medium text-green-700">
-                  Estudiando {liveSessions[0]?.subject || "una materia"}
+                  {t("parent_dashboard.studying_subject", {
+                    subject:
+                      liveSessions[0]?.subject ||
+                      t("parent_dashboard.a_subject"),
+                  })}
                 </span>
                 <motion.span
                   animate={{ scale: [1, 1.2, 1] }}
@@ -162,7 +176,9 @@ export const LivePresenceBar = ({
                   {TAB_ICONS[currentTab] || "💻"}
                 </span>
                 <span className="text-xs font-medium text-[#64748B]">
-                  {TAB_LABELS[currentTab] || currentTab}
+                  {TAB_LABELS[currentTab]
+                    ? t(TAB_LABELS[currentTab])
+                    : currentTab}
                 </span>
               </div>
             ) : null)}
@@ -175,7 +191,7 @@ export const LivePresenceBar = ({
               {todaySessions.length}
             </p>
             <p className="text-[9px] text-[#94A3B8] uppercase tracking-wider">
-              Sesiones hoy
+              {t("parent_dashboard.sessions_today")}
             </p>
           </div>
           <div className="text-center min-w-[60px]">
@@ -183,7 +199,7 @@ export const LivePresenceBar = ({
               {todayMinutes > 0 ? `${todayMinutes}min` : "—"}
             </p>
             <p className="text-[9px] text-[#94A3B8] uppercase tracking-wider">
-              Tiempo activo
+              {t("parent_dashboard.active_time")}
             </p>
           </div>
           <div className="text-center min-w-[60px]">
@@ -191,7 +207,7 @@ export const LivePresenceBar = ({
               {streak?.current || 0} 🔥
             </p>
             <p className="text-[9px] text-[#94A3B8] uppercase tracking-wider">
-              Racha
+              {t("parent_dashboard.streak_label")}
             </p>
           </div>
         </div>
@@ -255,19 +271,23 @@ export const ActivityLog = ({
     alerts.push({
       type: "streak",
       emoji: "🔥",
-      text: `${streak.current} días seguidos!`,
+      text: t("parent_dashboard.alert_streak_days", {
+        days: streak.current,
+      }),
     });
   if (todayPoints > 0)
     alerts.push({
       type: "points",
       emoji: "💎",
-      text: `Hoy: +${todayPoints} puntos`,
+      text: t("parent_dashboard.alert_points_today", {
+        points: todayPoints,
+      }),
     });
   if (subjects?.filter((s) => s.progress === 0).length > 2)
     alerts.push({
       type: "explore",
       emoji: "🧭",
-      text: "Materias sin explorar",
+      text: t("parent_dashboard.alert_unexplored"),
     });
 
   return (
@@ -281,7 +301,9 @@ export const ActivityLog = ({
               transition={{ duration: 0.5 }}
               className="w-2 h-2 rounded-full bg-green-500"
             />
-            <span className="text-xs font-bold text-green-700">En vivo</span>
+            <span className="text-xs font-bold text-green-700">
+              {t("parent_dashboard.live")}
+            </span>
           </div>
           <div className="space-y-1.5">
             {liveActivities.map((a, i) => (
@@ -290,7 +312,9 @@ export const ActivityLog = ({
                 className="flex items-center justify-between text-xs"
               >
                 <span className="text-green-800 truncate">
-                  {a.title || a.activity_type || "Actividad"}
+                  {a.title ||
+                    a.activity_type ||
+                    t("parent_dashboard.activity_fallback")}
                 </span>
                 <span className="text-green-600">
                   {new Date(a.created_at || a.completed_at).toLocaleTimeString(
@@ -312,7 +336,7 @@ export const ActivityLog = ({
         <div className="space-y-2 max-h-64 overflow-y-auto">
           {recent.length === 0 && (
             <p className="text-xs text-[#94A3B8] text-center py-4">
-              Sin actividad registrada
+              {t("parent_dashboard.no_activity")}
             </p>
           )}
           {recent.map((entry, i) => (

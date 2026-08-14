@@ -130,8 +130,9 @@ textarea:focus {
   outline: 3px solid rgba(77, 168, 196, 0.1);
 }
 
-/* Live regions for announcements */
-[aria-live] {
+/* Live regions for announcements — solo ocultar las que usan .sr-only,
+   NO los pills de estado que usan aria-live visible (puntos, sync, etc.) */
+.sr-only[aria-live] {
   position: absolute;
   width: 1px;
   height: 1px;

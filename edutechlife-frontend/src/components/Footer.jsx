@@ -4,9 +4,13 @@ import { useTranslation } from "../i18n/I18nProvider";
 import { getFooterContent } from "../data/footer/footerContent";
 
 const ModalVAK = lazy(() => import("./footer/modals/ModalVAK"));
-const ModalCertificaciones = lazy(() => import("./footer/modals/ModalCertificaciones"));
+const ModalCertificaciones = lazy(
+  () => import("./footer/modals/ModalCertificaciones"),
+);
 const ModalBlog = lazy(() => import("./footer/modals/ModalBlog"));
-const ModalDocumentacion = lazy(() => import("./footer/modals/ModalDocumentacion"));
+const ModalDocumentacion = lazy(
+  () => import("./footer/modals/ModalDocumentacion"),
+);
 const ModalPrivacidad = lazy(() => import("./footer/modals/ModalPrivacidad"));
 const ModalTerminos = lazy(() => import("./footer/modals/ModalTerminos"));
 const ModalContacto = lazy(() => import("./footer/modals/ModalContacto"));
@@ -35,7 +39,7 @@ const socialLinks = [
 ];
 
 const toolLinks = [
-  { label: "IA Lab con Valerio", view: "ialab", key: "footer.ialab" },
+  { label: "IA Lab con MAX", view: "ialab", key: "footer.ialab" },
   { label: "SmartBoard", view: "neuroentorno", key: "footer.smartboard" },
   { label: "Diagnóstico VAK", view: "vak", key: "footer.vak" },
   { label: "ROI Calculator", view: "consultoria", key: "footer.roi" },
@@ -118,7 +122,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:pt-6 lg:pb-3">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 lg:mb-2">
             <div className="lg:col-span-1">
-              <div className="mb-3 lg:mb-3">
+              <div className="mb-4">
                 <img
                   src="/images/logo-edutechlife.webp"
                   alt="Edutechlife"
@@ -163,12 +167,12 @@ export default function Footer() {
               <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-4">
                 {t("footer.tools")}
               </h4>
-              <ul className="space-y-2.5 lg:space-y-0">
+              <ul className="space-y-2.5">
                 {toolLinks.map((item, index) => (
                   <li key={index}>
                     <button
                       onClick={() => navigateTo(item.view)}
-                      className="flex items-center gap-2 group w-full text-left text-sm transition-all duration-200 lg:hover:text-brand-primary lg:hover:translate-x-0.5 lg:py-0.5"
+                      className="flex items-center gap-2 group w-full text-left text-sm transition-all duration-200 lg:hover:text-brand-primary lg:hover:translate-x-0.5"
                       style={{
                         color: "rgba(255, 255, 255, 0.9)",
                         background: "transparent",
@@ -195,12 +199,12 @@ export default function Footer() {
               <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-4">
                 {t("footer.resources")}
               </h4>
-              <ul className="space-y-2.5 lg:space-y-0">
+              <ul className="space-y-2.5">
                 {resourceLinks.map((item, index) => (
                   <li key={index}>
                     <button
                       onClick={() => handleResourceClick(item)}
-                      className="flex items-center gap-2 group w-full text-left text-sm transition-all duration-200 lg:hover:text-brand-primary lg:hover:translate-x-0.5 lg:py-0.5"
+                      className="flex items-center gap-2 group w-full text-left text-sm transition-all duration-200 lg:hover:text-brand-primary lg:hover:translate-x-0.5"
                       style={{
                         color: "rgba(255, 255, 255, 0.9)",
                         background: "transparent",
@@ -224,7 +228,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <h4 className="text-base font-bold mb-3 lg:mb-2 text-white">
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-4">
                 {t("footer.newsletter")}
               </h4>
               <p
@@ -255,7 +259,7 @@ export default function Footer() {
               ) : (
                 <form
                   onSubmit={handleSubscribe}
-                  className="flex items-center gap-2"
+                  className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2"
                 >
                   <div className="relative flex-1">
                     <input
@@ -272,13 +276,13 @@ export default function Footer() {
                     />
                     {emailError && (
                       <p className="text-xs mt-1" style={{ color: "#FF6B9D" }}>
-                        {t("footer.email_placeholder")}
+                        {t("footer.email_error")}
                       </p>
                     )}
                   </div>
                   <button
                     type="submit"
-                    className="w-full lg:w-auto lg:px-4 lg:shrink-0 h-11 rounded-brand-md font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-brand-primary/50 hover:-translate-y-0.5"
+                    className="w-full sm:w-auto sm:px-4 sm:shrink-0 h-11 rounded-brand-md font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-brand-primary/50 hover:-translate-y-0.5"
                     style={{
                       background:
                         "linear-gradient(to right, #004B63, var(--brand-primary))",
@@ -311,7 +315,7 @@ export default function Footer() {
                 {t("footer.copyright")}
               </p>
             </div>
-            <div className="flex items-center gap-1.5 lg:gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-1.5 lg:gap-2">
               {legalLinks.map((item, index) => (
                 <React.Fragment key={index}>
                   {index > 0 && (

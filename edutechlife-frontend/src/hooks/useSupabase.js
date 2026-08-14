@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { createClerkSupabaseClient } from "../lib/supabase";
+import { createSupabaseClient } from "../lib/supabase";
 import { useAuthIdentity } from "./useAuthIdentity";
 
 /**
@@ -31,7 +31,7 @@ export const useSupabase = () => {
       // Passing the access token makes PostgREST run as this user, so the
       // row-level-security policies on user_progress apply: a student reads and
       // writes only their own rows.
-      const client = createClerkSupabaseClient(token || null);
+      const client = createSupabaseClient(token || null);
 
       setSupabaseClient(client);
       setIsUsingJWT(!!token);
@@ -39,7 +39,7 @@ export const useSupabase = () => {
     } catch (err) {
       console.error("Error creando cliente Supabase:", err);
       setError(err.message);
-      setSupabaseClient(createClerkSupabaseClient());
+      setSupabaseClient(createSupabaseClient());
       setIsUsingJWT(false);
     } finally {
       setIsLoading(false);

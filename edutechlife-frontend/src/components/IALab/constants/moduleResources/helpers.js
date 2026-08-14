@@ -1,8 +1,12 @@
 import { RESOURCES_ES } from "./resourcesEs";
 import { RESOURCES_EN } from "./resourcesEn";
+import { RESOURCES_PT } from "./resourcesPt";
+import { resolveLocalized } from "../../../../utils/localeUtils";
+
+const RESOURCES_MAP = { es: RESOURCES_ES, en: RESOURCES_EN, pt: RESOURCES_PT };
 
 const getResources = (locale = "es") => {
-  return locale === "en" ? RESOURCES_EN : RESOURCES_ES;
+  return resolveLocalized(RESOURCES_MAP, locale) || RESOURCES_ES;
 };
 
 export const getResourcesForTopic = (topicTitle, locale = "es") => {

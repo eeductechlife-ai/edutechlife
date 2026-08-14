@@ -12,7 +12,7 @@ const PulsingBlock = ({ className }) => (
 const SmartBoardLoadingSkeleton = ({ darkMode }) => {
   const base = darkMode ? "text-[#1E293B]" : "text-[#E2E8F0]";
   return (
-    <div className={`relative z-10 flex h-screen ${base}`}>
+    <div className={`relative z-10 flex h-screen min-h-dvh ${base}`}>
       {/* Sidebar skeleton */}
       <div className="hidden md:flex w-56 flex-col h-full p-4 gap-4">
         <PulsingBlock className="w-32 h-6" />

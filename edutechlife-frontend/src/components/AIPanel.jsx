@@ -125,7 +125,7 @@ const AIPanel = ({ title, icon = 'fa-brain-circuit', placeholder, systemPrompt, 
                     evaluatedAt: new Date().toISOString()
                 });
 
-                // Hacer que Valerio hable el feedback
+                // Hacer que MAX hable el feedback
                 if (result.data.feedback && window.valerioSpeak) {
                     setTimeout(() => {
                         const rawText = result.data.feedback.join('. ');

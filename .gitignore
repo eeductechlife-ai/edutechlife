@@ -12,6 +12,10 @@ node_modules/
 # Build outputs
 dist/
 build/
+dist.zip
+
+# Repo-scan / analysis artifacts (no deben rastrearse)
+repomix-output.xml
 
 # IDE
 .idea/

@@ -10,6 +10,6 @@
 
 export {
   supabase,
-  createClerkSupabaseClient,
+  createSupabaseClient,
   initSupabaseClient,
 } from "../../lib/supabase.js";

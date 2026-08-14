@@ -7,7 +7,16 @@ import { SB_GRADIENTS, glow } from "../smartboardTheme";
 import UserMenu from "../UserMenu";
 
 const TopBar = memo(
-  ({ activeTab, darkMode, streak, totalPoints, authToken, studentName }) => {
+  ({
+    activeTab,
+    darkMode,
+    streak,
+    totalPoints,
+    authToken,
+    studentName,
+    onTabChange,
+    onLogout,
+  }) => {
     const { t } = useTranslation();
     const activeCat = CATEGORIES.find((c) => c.tabs.includes(activeTab));
     const ActiveIcon = activeCat?.Icon || Home;
@@ -22,38 +31,40 @@ const TopBar = memo(
             : "bg-white/80 border-[#E2E8F0]/50"
         }`}
       >
-        <div className="flex items-center gap-3 min-w-0">
-          <motion.span
-            key={activeCat?.id}
-            initial={{ scale: 0.6, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: "spring", damping: 14 }}
-            className="w-11 h-11 md:w-10 md:h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0"
-            style={{
-              background: activeCat?.gradient || SB_GRADIENTS.brand,
-              boxShadow: `${glow(activeCat?.glowColor || "#00B4D8", 0.4)}, inset 0 1px 0 rgba(255,255,255,0.35)`,
-            }}
-          >
-            <ActiveIcon
-              className="w-6 md:w-[21px] h-6 md:h-[21px]"
-              strokeWidth={2.3}
-            />
-          </motion.span>
-          <div className="leading-tight truncate">
-            <span
-              className={`block text-[11px] md:text-[10px] font-black uppercase tracking-[0.14em] mb-1 ${darkMode ? "text-[#5C7386]" : "text-[#93A6B2]"}`}
+        {activeTab !== "inicio" && (
+          <div className="flex items-center gap-3 min-w-0">
+            <motion.span
+              key={activeCat?.id}
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", damping: 14 }}
+              className="w-11 h-11 md:w-10 md:h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0"
+              style={{
+                background: activeCat?.gradient || SB_GRADIENTS.brand,
+                boxShadow: `${glow(activeCat?.glowColor || "#00B4D8", 0.4)}, inset 0 1px 0 rgba(255,255,255,0.35)`,
+              }}
             >
-              {activeCat?.label}
-            </span>
-            <h1
-              className={`text-lg md:text-xl font-black tracking-tight transition-colors duration-500 truncate ${darkMode ? "text-white" : "text-[#00303F]"}`}
-            >
-              {TOP_BAR_LABELS[activeTab] || activeTab}
-            </h1>
+              <ActiveIcon
+                className="w-6 md:w-[21px] h-6 md:h-[21px]"
+                strokeWidth={2.3}
+              />
+            </motion.span>
+            <div className="leading-tight truncate">
+              <span
+                className={`block text-[11px] md:text-[10px] font-black uppercase tracking-[0.14em] mb-1 ${darkMode ? "text-[#5C7386]" : "text-[#93A6B2]"}`}
+              >
+                {activeCat?.label}
+              </span>
+              <h1
+                className={`text-lg md:text-xl font-black tracking-tight transition-colors duration-500 truncate ${darkMode ? "text-white" : "text-[#00303F]"}`}
+              >
+                {TOP_BAR_LABELS[activeTab] || activeTab}
+              </h1>
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="flex items-center gap-2 md:gap-3">
+        <div className="flex items-center gap-2 md:gap-3 ml-auto">
           <motion.div
             className="hidden sm:flex px-3 md:px-2.5 py-2 md:py-1.5 rounded-2xl items-center gap-2 transition-colors duration-500"
             style={{
@@ -116,7 +127,13 @@ const TopBar = memo(
           </motion.div>
 
           {authToken && (
-            <UserMenu authToken={authToken} studentName={studentName} />
+            <UserMenu
+              authToken={authToken}
+              studentName={studentName}
+              darkMode={darkMode}
+              onTabChange={onTabChange}
+              onLogout={onLogout}
+            />
           )}
         </div>
       </motion.header>
