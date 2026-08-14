@@ -87,7 +87,11 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
 
       // Save token
       sessionStorage.setItem("auth_token", data.token);
-      localStorage.setItem("user_email", data.email);
+      localStorage.setItem("refresh_token", data.refreshToken);
+      localStorage.setItem(
+        "user_email",
+        (data.user?.email || data.email || "").toLowerCase(),
+      );
 
       // Claim storage for current user (creates isolated namespace)
       // Token is now in localStorage; useAuthIdentity will read it on next render

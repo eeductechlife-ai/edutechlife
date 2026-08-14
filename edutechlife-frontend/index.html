@@ -27,7 +27,8 @@
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     <!-- Logo de la pantalla de carga — preload para que aparezca sin flash -->
     <link rel="preload" as="image" href="/images/logo-edutechlife.webp" fetchpriority="high" />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- CSP estricto bloquea event handlers inline: antes un link media=print+onload quedaba en media="print" y las fuentes nunca cargaban en producción -->
     <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" /></noscript>
     <!-- CSP configurado via HTTP headers en Vercel (vercel.json) para produccion -->
     <title>Edutechlife | Liderando la Educación del Futuro con Pedagogía e Inteligencia Artificial</title>
