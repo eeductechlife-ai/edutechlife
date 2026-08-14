@@ -8,10 +8,12 @@ import { useTranslation } from "../../i18n/I18nProvider";
 import ScrollToTop from "./ScrollToTop";
 import HeaderFluidIsland from "./HeaderFluidIsland";
 import FloatingParticles from "../FloatingParticles";
+// Estático: ContactModal ya lo importa estáticamente HeaderFluidIsland. El
+// lazy() aquí creaba un mix estático+dinámico que rompe el chunking en Vercel.
+import ContactModal from "../ContactModal";
 
 // Heavy components — load on first use, not on initial render
 const GlobalCanvas = lazy(() => import("../GlobalCanvas"));
-const ContactModal = lazy(() => import("../ContactModal"));
 const LeadCaptureModal = lazy(() => import("../LeadCaptureModal"));
 const AdminLoginModal = lazy(() => import("../AdminLoginModal"));
 const MobileDrawer = lazy(() => import("./MobileDrawer"));

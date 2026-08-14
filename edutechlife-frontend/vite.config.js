@@ -170,12 +170,8 @@ export default defineConfig({
     rollupOptions: {
       external: ['@solana/web3.js'],
       output: {
-        // Sin `manualChunks` custom a propósito: la partición manual de vendors
-        // interactuaba mal con el entorno de build de Vercel y producía chunks
-        // con bindings de export rotos ("Export 'X' is not defined in module":
-        // ALL_LESSONS, API_BASE_URL, AppErrorBoundary…) → pantalla en blanco,
-        // pese a que el build local funcionaba. Se deja el chunking por defecto
-        // de Vite/Rollup, que es determinista y robusto contra ese bug.
+        // Chunking por defecto de Vite (sin manualChunks custom).
+        // Ver nota sobre el bug de Vercel más abajo / en el historial.
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]'

@@ -5,8 +5,11 @@ import { StudentProvider } from "./context/StudentContext";
 import { useAuthIdentity } from "./hooks/useAuthIdentity";
 import { initSupabaseClient } from "./lib/supabase";
 import AppErrorBoundary from "./components/common/ErrorBoundary";
+// Import estático: LoadingScreen ya se importa estáticamente en ~15 módulos.
+// El lazy() aquí creaba un mix estático+dinámico que rompe el chunking del
+// build de Vercel ("Export not defined" → pantalla en blanco).
+import LoadingScreen from "./components/LoadingScreen";
 
-const LoadingScreen = lazy(() => import("./components/LoadingScreen"));
 const NicoModern = lazy(() => import("./components/Nico/NicoModern"));
 const CustomCursor = lazy(() => import("./components/CustomCursor"));
 
@@ -64,7 +67,7 @@ const LazyNicoModern = () => {
             observer.disconnect();
           }
         },
-        { rootMargin: "200px" } // Load 200px before entering viewport
+        { rootMargin: "200px" }, // Load 200px before entering viewport
       );
 
       observer.observe(footer);

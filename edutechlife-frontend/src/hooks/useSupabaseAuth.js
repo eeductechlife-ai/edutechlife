@@ -1,4 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
+// Import estático (no dinámico): lib/supabase ya se importa estáticamente en
+// ~28 módulos. Mezclar import estático + dinámico del mismo módulo crea chunks
+// compartidos frágiles que Rollup enlaza mal en el build de Vercel
+// ("Export 'X' is not defined" → pantalla en blanco).
+import { supabase } from "../lib/supabase";
 
 // Native Supabase Auth hook (replaces Clerk)
 export const useSupabaseAuth = () => {
@@ -11,7 +16,6 @@ export const useSupabaseAuth = () => {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const { supabase } = await import("../lib/supabase");
         const {
           data: { session },
         } = await supabase.auth.getSession();
@@ -73,7 +77,6 @@ export const useSupabaseAuth = () => {
 
     // Listen for auth state changes
     const setupListener = async () => {
-      const { supabase } = await import("../lib/supabase");
       const { data: listener } = supabase.auth.onAuthStateChange(
         async (event, session) => {
           if (session?.user) {
@@ -199,19 +202,17 @@ export const useSupabaseAuth = () => {
       setProfile(data.user);
 
       // Trigger supabase session update in background (non-blocking)
-      import("../lib/supabase")
-        .then(({ supabase }) =>
-          supabase.auth.setSession({
-            access_token: data.token,
-            refresh_token: data.refreshToken,
-          }),
-        )
-        .catch((err) =>
-          console.warn(
-            "Supabase session sync failed (non-blocking):",
-            err.message,
-          ),
-        );
+      Promise.resolve(
+        supabase.auth.setSession({
+          access_token: data.token,
+          refresh_token: data.refreshToken,
+        }),
+      ).catch((err) =>
+        console.warn(
+          "Supabase session sync failed (non-blocking):",
+          err.message,
+        ),
+      );
 
       return data;
     } catch (e) {

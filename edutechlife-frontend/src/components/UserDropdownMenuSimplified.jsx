@@ -16,8 +16,10 @@ import ErrorBoundary from "./forum/ErrorBoundary";
 import UserProfileSection from "./userDropdownMenuSimplified/UserProfileSection";
 import UserSettingsSection from "./userDropdownMenuSimplified/UserSettingsSection";
 import { useTranslation } from "../i18n/I18nProvider";
-
-const UserProfileSmartCard = lazy(() => import("./userProfileSmartCard"));
+// Estático: userProfileSmartCard ya lo importa estáticamente
+// UserDropdownMenuPremium. El lazy() creaba un mix estático+dinámico que rompe
+// el chunking en Vercel ("Export not defined").
+import UserProfileSmartCard from "./userProfileSmartCard";
 const SettingsSupportModal = lazy(
   () => import("./modals/SettingsSupportModal"),
 );
