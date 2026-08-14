@@ -101,7 +101,7 @@ router.post('/', challengeSubmissionLimiter, (req, res) => {
     });
   } catch (error) {
     console.error('Error evaluating prompt:', error);
-    res.status(500).json({ error: 'Failed to evaluate prompt', details: error.message });
+    res.status(500).json({ error: 'Failed to evaluate prompt', details: 'Error interno' });
   }
 });
 

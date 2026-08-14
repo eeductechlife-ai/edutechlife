@@ -110,7 +110,7 @@ router.post('/', async (req, res) => {
   } catch (e) {
     console.error('Error in IALab prompts endpoint:', e);
     res.status(500).json({
-      error: e.message,
+      error: 'Error interno del servidor',
       fallback: {
         masterPrompt: 'Genera un prompt profesional para: ' + prompt + '. Sé específico con el contexto y formato de respuesta.',
         feedback: 'Error en la generación. Revisa tu prompt e intenta de nuevo.',

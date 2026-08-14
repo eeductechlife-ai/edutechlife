@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
+import { API_BASE_URL } from "../../../../config/api";
 import { Mail, Check, Loader2 } from "lucide-react";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 
@@ -26,7 +27,7 @@ const WeeklyReportCard = ({ authToken, studentName }) => {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/smartboard/weekly-report`,
+        `${API_BASE_URL}/api/smartboard/weekly-report`,
         {
           method: "POST",
           headers: {

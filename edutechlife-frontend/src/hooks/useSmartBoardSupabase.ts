@@ -146,7 +146,6 @@ export const useStudentData = (): UseQueryResult<StudentData> => {
 // Hook: Fetch points history with real-time subscription
 export const usePointsHistory = (): UseQueryResult<PointsHistoryEntry[]> => {
   const { user } = useAuth();
-  const queryClient = useQueryClient();
 
   return useQuery({
     queryKey: smartBoardQueryKeys.pointsHistory(user?.id || ""),

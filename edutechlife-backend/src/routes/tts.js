@@ -76,7 +76,7 @@ router.post('/', async (req, res) => {
     res.json(data);
   } catch (error) {
     console.error('[TTS] Proxy error:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 

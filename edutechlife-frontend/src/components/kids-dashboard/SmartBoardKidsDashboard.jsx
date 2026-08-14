@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { API_BASE_URL } from "../../config/api";
 import { signOutUser } from "../../hooks/useAuthIdentity";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
@@ -79,7 +80,7 @@ const SmartBoardKidsDashboard = () => {
 
   // Obtener auth token y nombre del estudiante para UserMenu
   const authToken =
-    typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+    typeof window !== "undefined" ? sessionStorage.getItem("auth_token") : null;
   const studentName =
     typeof window !== "undefined"
       ? localStorage.getItem("student_name") || "Estudiante"
@@ -356,7 +357,7 @@ const SmartBoardKidsDashboard = () => {
               }
 
               // La identidad la determina el servidor a partir del token, no el body.
-              const token = localStorage.getItem("auth_token");
+              const token = sessionStorage.getItem("auth_token");
               if (!token) {
                 alert(
                   "Debes iniciar sesión para eliminar tus datos. Vuelve a entrar e inténtalo de nuevo.",
@@ -366,7 +367,7 @@ const SmartBoardKidsDashboard = () => {
 
               try {
                 const res = await fetch(
-                  `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/smartboard/delete-user-data`,
+                  `${API_BASE_URL}/api/smartboard/delete-user-data`,
                   {
                     method: "DELETE",
                     headers: {

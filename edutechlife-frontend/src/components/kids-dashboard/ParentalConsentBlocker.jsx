@@ -3,11 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthIdentity, signOutUser } from "../../hooks/useAuthIdentity";
 import SmartBoardHabeasDataModal from "./SmartBoardHabeasDataModal";
 import SmartBoardLoadingSkeleton from "./SmartBoardLoadingSkeleton";
-
-const API_BASE =
-  import.meta.env.VITE_API_BASE_URL ||
-  import.meta.env.VITE_API_URL ||
-  "https://edutechlife-backend.onrender.com";
+import { API_BASE_URL as API_BASE } from "../../config/api";
 
 const MINOR_MAX_AGE = 18;
 

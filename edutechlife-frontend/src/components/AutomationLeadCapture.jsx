@@ -20,7 +20,7 @@ const AutomationLeadCapture = () => {
     e.preventDefault();
     if (!form.nombre || !form.email) return;
     setSent(true);
-    track("lead_captured", { source: "automation_page", ...form });
+    track("lead_captured", { source: "automation_page", sector: form.sector });
   };
 
   if (sent) {

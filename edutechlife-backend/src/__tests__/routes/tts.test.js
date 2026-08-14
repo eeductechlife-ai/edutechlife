@@ -3,12 +3,11 @@ const request = require('supertest');
 const app = require('../../app');
 
 describe('POST /api/tts', () => {
-  it('returns 500 when TTS API key is not configured', async () => {
+  it('returns 401 without valid token (endpoint protegido)', async () => {
     const res = await request(app)
       .post('/api/tts')
       .send({ input: { text: 'Hello' }, voice: { languageCode: 'es-ES' } });
-    expect(res.status).toBe(500);
-    expect(res.body.error).toContain('API key not configured');
+    expect(res.status).toBe(401);
   });
 });
 

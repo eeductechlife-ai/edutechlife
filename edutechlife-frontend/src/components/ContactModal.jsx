@@ -44,7 +44,7 @@ const ContactModal = ({ isOpen, onClose }) => {
     localStorage.setItem("edutechlife_leads", JSON.stringify(existing));
 
     setSubmitted(true);
-    track("lead_captured", { source: "contact_modal", ...leadData });
+    track("lead_captured", { source: "contact_modal", interes: leadData.interes, tema: leadData.tema });
   };
 
   const handleClose = () => {

@@ -3,12 +3,13 @@ import { Navigate } from "react-router-dom";
 import { PageLoader } from "../LoadingScreen";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { useStudentProfile } from "../../hooks/useStudentProfile";
+import { supabase } from "../../lib/supabase";
 
 /**
  * Componente RoleProtectedRoute - Patrón simplificado con Supabase Auth
  *
- * 1. Verifica que exista un token de autenticación en localStorage.
- *    Si no, redirige a /login?returnTo=currentPath.
+ * 1. Valida que exista una sesión Supabase real (token vigente). Si no,
+ *    redirige a /login?returnTo=currentPath.
  * 2. Separa productos por `account_type` (IALab 16+ vs SmartBoard 6–16):
  *    una cuenta de un producto no debe entrar al dashboard del otro.
  *
@@ -38,10 +39,47 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
   const { profile, isAdmin, isLoading } = useStudentProfile();
 
   useEffect(() => {
-    // Check for auth token in localStorage
-    const token = localStorage.getItem("auth_token");
-    setIsAuthenticated(!!token);
-    setIsLoaded(true);
+    // Valida que el token de localStorage corresponda a una sesión Supabase
+    // vigente. Evita el gate fail-open que dejaba pasar tokens inexistentes,
+    // inválidos o expirados solo por existir la clave.
+    const validateSession = async () => {
+      try {
+        const token = sessionStorage.getItem("auth_token");
+        if (!token) {
+          setIsAuthenticated(false);
+          setIsLoaded(true);
+          return;
+        }
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session?.user && session.access_token) {
+          // El token de localStorage debe coincidir con la sesión vigente.
+          setIsAuthenticated(session.access_token === token);
+        } else {
+          const refreshToken = localStorage.getItem("refresh_token");
+          const { data: restored, error: restoreError } =
+            await supabase.auth.setSession({
+              access_token: token,
+              refresh_token: refreshToken || undefined,
+            });
+          if (restored?.user && !restoreError && restored.session) {
+            sessionStorage.setItem("auth_token", restored.session.access_token);
+            localStorage.setItem("refresh_token", restored.session.refresh_token);
+            setIsAuthenticated(true);
+          } else {
+            setIsAuthenticated(false);
+          }
+        }
+      } catch {
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoaded(true);
+      }
+    };
+
+    validateSession();
   }, []);
 
   if (!isLoaded) {

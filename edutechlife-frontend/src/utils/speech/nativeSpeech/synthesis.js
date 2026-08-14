@@ -41,13 +41,7 @@ const speakTextConversational = async (
     safetyTimeout = null;
   }
 
-  const isDev =
-    import.meta.env.DEV ||
-    (typeof window !== "undefined" && window.location.hostname === "localhost");
-  const apiBase =
-    import.meta.env.VITE_API_BASE_URL ||
-    import.meta.env.VITE_API_URL ||
-    (isDev ? "http://localhost:3001" : "https://edutechlife-api.vercel.app");
+  const apiBase = API_BASE_URL;
   const voice = VOICE_PROFILES[profile] || VOICE_PROFILES.valeria;
 
   const cleanup = () => {
@@ -336,9 +330,19 @@ const speakTextConversational = async (
 
     for (const voiceOption of [voice, ...voiceFallbacks]) {
       try {
+        let token = null;
+        try {
+          token =
+            typeof window !== "undefined"
+              ? sessionStorage.getItem("auth_token")
+              : null;
+        } catch {}
         const response = await fetch(`${currentApi}/api/tts`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
           signal: (() => {
             const c = new AbortController();
             setTimeout(() => c.abort(), 20000);

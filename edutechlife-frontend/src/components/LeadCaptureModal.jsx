@@ -42,7 +42,6 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
 
     track("lead_captured", {
       source: "lead_capture_modal",
-      ...formData,
       interest: context?.interest,
       topic: context?.topic,
     });

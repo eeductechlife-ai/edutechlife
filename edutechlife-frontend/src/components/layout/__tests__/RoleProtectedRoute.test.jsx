@@ -14,6 +14,38 @@ vi.mock("../../../hooks/useStudentProfile", () => ({
   useStudentProfile: vi.fn(),
 }));
 
+// getSession devuelve sesión solo si el token de localStorage es "vigente".
+// setSession falla cuando el token es inválido ("expired-token").
+vi.mock("../../../lib/supabase", () => ({
+  supabase: {
+    auth: {
+      getSession: vi.fn(async () => {
+        const token = sessionStorage.getItem("auth_token");
+        return {
+          data: {
+            session:
+              token && token !== "expired-token"
+                ? { user: { id: "u1" }, access_token: token }
+                : null,
+          },
+        };
+      }),
+      setSession: vi.fn(async ({ access_token }) => {
+        if (access_token === "expired-token") {
+          return { data: { user: null, session: null }, error: { message: "expired" } };
+        }
+        return {
+          data: {
+            user: { id: "u1" },
+            session: { access_token, refresh_token: "rt" },
+          },
+          error: null,
+        };
+      }),
+    },
+  },
+}));
+
 const { useStudentProfile } = await import("../../../hooks/useStudentProfile");
 const RoleProtectedRoute = (await import("../RoleProtectedRoute")).default;
 
@@ -45,75 +77,84 @@ const profile = (overrides = {}) => ({
 
 describe("RoleProtectedRoute product gate", () => {
   beforeEach(() => {
-    localStorage.clear();
+    sessionStorage.clear(); localStorage.clear();
     useStudentProfile.mockReturnValue(profile());
   });
 
-  it("redirects to login when no auth token", () => {
+  it("redirects to login when no auth token", async () => {
     useStudentProfile.mockReturnValue(profile());
     renderAt("ialab");
-    expect(screen.getByText("login-page")).toBeInTheDocument();
+    expect(await screen.findByText("login-page")).toBeInTheDocument();
   });
 
-  it("allows access when account_type matches the route", () => {
-    localStorage.setItem("auth_token", "t");
+  it("allows access when account_type matches the route", async () => {
+    sessionStorage.setItem("auth_token", "t");
     useStudentProfile.mockReturnValue(
       profile({ profile: { account_type: "ialab" } }),
     );
     renderAt("ialab");
-    expect(screen.getByText("protected-content")).toBeInTheDocument();
+    expect(await screen.findByText("protected-content")).toBeInTheDocument();
   });
 
-  it("redirects a smartboard account away from an ialab route", () => {
-    localStorage.setItem("auth_token", "t");
+  it("redirects a smartboard account away from an ialab route", async () => {
+    sessionStorage.setItem("auth_token", "t");
     useStudentProfile.mockReturnValue(
       profile({ profile: { account_type: "smartboard" } }),
     );
     renderAt("ialab");
-    expect(screen.getByText("smartboard-home")).toBeInTheDocument();
+    expect(await screen.findByText("smartboard-home")).toBeInTheDocument();
   });
 
-  it("redirects an ialab account away from a smartboard route", () => {
-    localStorage.setItem("auth_token", "t");
+  it("redirects an ialab account away from a smartboard route", async () => {
+    sessionStorage.setItem("auth_token", "t");
     useStudentProfile.mockReturnValue(
       profile({ profile: { account_type: "ialab" } }),
     );
     renderAt("smartboard");
-    expect(screen.getByText("ialab-home")).toBeInTheDocument();
+    expect(await screen.findByText("ialab-home")).toBeInTheDocument();
   });
 
-  it("FAIL-OPEN: allows when account_type is missing (unmigrated user)", () => {
-    localStorage.setItem("auth_token", "t");
+  it("FAIL-OPEN: allows when account_type is missing (unmigrated user)", async () => {
+    sessionStorage.setItem("auth_token", "t");
     useStudentProfile.mockReturnValue(profile({ profile: {} }));
     renderAt("ialab");
-    expect(screen.getByText("protected-content")).toBeInTheDocument();
+    expect(await screen.findByText("protected-content")).toBeInTheDocument();
   });
 
-  it("FAIL-OPEN: allows while the profile is still loading", () => {
-    localStorage.setItem("auth_token", "t");
+  it("FAIL-OPEN: allows while the profile is still loading", async () => {
+    sessionStorage.setItem("auth_token", "t");
     useStudentProfile.mockReturnValue(
       profile({ profile: { account_type: "smartboard" }, isLoading: true }),
     );
     renderAt("ialab");
-    expect(screen.getByText("protected-content")).toBeInTheDocument();
+    expect(await screen.findByText("protected-content")).toBeInTheDocument();
   });
 
-  it("FAIL-OPEN: allows parents regardless of account_type", () => {
-    localStorage.setItem("auth_token", "t");
+  it("FAIL-OPEN: allows parents regardless of account_type", async () => {
+    sessionStorage.setItem("auth_token", "t");
     localStorage.setItem("user_role", "parent");
     useStudentProfile.mockReturnValue(
       profile({ profile: { account_type: "ialab" } }),
     );
     renderAt("smartboard");
-    expect(screen.getByText("protected-content")).toBeInTheDocument();
+    expect(await screen.findByText("protected-content")).toBeInTheDocument();
   });
 
-  it("FAIL-OPEN: allows admins regardless of account_type", () => {
-    localStorage.setItem("auth_token", "t");
+  it("FAIL-OPEN: allows admins regardless of account_type", async () => {
+    sessionStorage.setItem("auth_token", "t");
     useStudentProfile.mockReturnValue(
       profile({ profile: { account_type: "smartboard" }, isAdmin: true }),
     );
     renderAt("ialab");
-    expect(screen.getByText("protected-content")).toBeInTheDocument();
+    expect(await screen.findByText("protected-content")).toBeInTheDocument();
+  });
+
+  it("FAIL-CLOSED: redirects to login when the token is invalid/expired", async () => {
+    sessionStorage.setItem("auth_token", "expired-token");
+    useStudentProfile.mockReturnValue(
+      profile({ profile: { account_type: "ialab" } }),
+    );
+    renderAt("ialab");
+    expect(await screen.findByText("login-page")).toBeInTheDocument();
   });
 });

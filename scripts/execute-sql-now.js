@@ -2,9 +2,15 @@ const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
-// Configuración desde .env.local
-const supabaseUrl = 'https://srirrwpgswlnuqfgtule.supabase.co';
-const serviceRoleKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyaXJyd3Bnc3dsbnVxZmd0dWxlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTM1MTkyNywiZXhwIjoyMDkwOTI3OTI3fQ.LsjO_sbMBedOs1s2ulfps8bX2VHCHWJKmZOmx1RAmK4';
+// Configuración desde .env.local / entorno
+const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://srirrwpgswlnuqfgtule.supabase.co';
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
+
+if (!serviceRoleKey) {
+  console.error('❌ Falta SUPABASE_SERVICE_ROLE_KEY en las variables de entorno.');
+  console.error('   Ejemplo: SUPABASE_SERVICE_ROLE_KEY=eyJ... node scripts/execute-sql-now.js');
+  process.exit(1);
+}
 
 const supabase = createClient(supabaseUrl, serviceRoleKey);
 

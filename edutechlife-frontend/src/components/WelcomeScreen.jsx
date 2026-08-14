@@ -6,6 +6,7 @@ import { useTranslation } from "../i18n/I18nProvider";
 import SEO from "./SEO";
 import SupabaseSignUpForm from "./SupabaseSignUpForm";
 import SupabaseLoginForm from "./SupabaseLoginForm";
+import { safeReturnTo } from "../utils/sanitize";
 
 const WelcomeScreen = ({ onNavigate }) => {
   const { t, locale } = useTranslation();
@@ -15,8 +16,10 @@ const WelcomeScreen = ({ onNavigate }) => {
 
   const urlReturnTo = searchParams.get("returnTo");
   const storageReturnTo = sessionStorage.getItem("clerk_return_to");
-  const returnTo =
-    urlReturnTo || (storageReturnTo ? `/${storageReturnTo}` : "/ialab");
+  const returnTo = safeReturnTo(
+    urlReturnTo || (storageReturnTo ? `/${storageReturnTo}` : null),
+    "/ialab",
+  );
   useEffect(() => {
     const action = searchParams.get("action");
     if (action === "signup") {

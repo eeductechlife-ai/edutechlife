@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 import { useAuthIdentity } from "../hooks/useAuthIdentity";
-import { useStudentProfile } from "../hooks/useStudentProfile";
 import { initAnalytics, identify, reset } from "../lib/analytics";
 
 export function AnalyticsProvider({ children }) {
-  const { userId, email: authEmail, isSignedIn, isLoaded } = useAuthIdentity();
-  const { displayName } = useStudentProfile();
+  const { userId, isSignedIn, isLoaded } = useAuthIdentity();
 
   useEffect(() => {
     initAnalytics();
@@ -15,14 +13,11 @@ export function AnalyticsProvider({ children }) {
     if (!isLoaded) return;
 
     if (isSignedIn && userId) {
-      identify(userId, {
-        email: authEmail,
-        name: displayName,
-      });
+      identify(userId);
     } else {
       reset();
     }
-  }, [isLoaded, isSignedIn, userId, authEmail, displayName]);
+  }, [isLoaded, isSignedIn, userId]);
 
   return children;
 }

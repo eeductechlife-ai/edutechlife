@@ -3,11 +3,13 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
 import FloatingParticles from "./FloatingParticles";
+import { safeReturnTo } from "../utils/sanitize";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 import { API_BASE_URL } from "../config/api";
 
 const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
   const { t } = useTranslation();
+  returnTo = safeReturnTo(returnTo);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [email, setEmail] = useState("");
@@ -20,8 +22,8 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
   const handleOAuthLogin = (provider) => {
     const apiUrl = API_BASE_URL;
     const redirectUri = `${window.location.origin}/auth/callback`;
-    const isDevelopment = apiUrl.includes("localhost");
-    const endpoint = isDevelopment
+    const useDemoOAuth = import.meta.env.VITE_USE_OAUTH_DEMO === "true";
+    const endpoint = useDemoOAuth
       ? `/api/auth/oauth-demo/${provider}`
       : `/api/auth/oauth/${provider}`;
     sessionStorage.setItem("auth_return_to", returnTo);
@@ -84,7 +86,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
       }
 
       // Save token
-      localStorage.setItem("auth_token", data.token);
+      sessionStorage.setItem("auth_token", data.token);
       localStorage.setItem("user_email", data.email);
 
       // Claim storage for current user (creates isolated namespace)

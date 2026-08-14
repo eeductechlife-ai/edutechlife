@@ -2,11 +2,10 @@ const express = require('express');
 const request = require('supertest');
 const app = require('../../app');
 
-describe('GET /api/voice/token', () => {
-  it('returns 500 when Google credentials are not configured', async () => {
+describe('GET /api/voice-token/token', () => {
+  it('returns 401 without valid token (endpoint protegido)', async () => {
     const res = await request(app).get('/api/voice-token/token');
-    expect(res.status).toBe(500);
-    expect(res.body.error).toContain('Google credentials');
+    expect(res.status).toBe(401);
   });
 });
 

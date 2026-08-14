@@ -4,10 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User, Loader2, Eye, EyeOff, Users } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "../i18n/I18nProvider";
-
-const API_BASE =
-  import.meta.env.VITE_API_BASE_URL ||
-  "https://edutechlife-backend.onrender.com";
+import { API_BASE_URL as API_BASE } from "../config/api";
 
 const SmartBoardLogin = () => {
   const navigate = useNavigate();
@@ -62,7 +59,7 @@ const SmartBoardLogin = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || t("login.error.login_failed"));
 
-      localStorage.setItem("auth_token", data.token);
+      sessionStorage.setItem("auth_token", data.token);
       localStorage.setItem("refresh_token", data.refreshToken);
       localStorage.setItem("user_role", "parent");
       localStorage.setItem("student_email", data.user.studentEmail);

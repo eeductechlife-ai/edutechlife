@@ -6,8 +6,13 @@ function isSupabaseReady() {
   return !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY);
 }
 
+function resolveUserId(req) {
+  return req.userId || req.body?.userId || req.params?.userId;
+}
+
 async function saveProgress(req, res) {
-  const { userId, moduleId, completed, score, timestamp } = req.body;
+  const { moduleId, completed, score, timestamp } = req.body;
+  const userId = resolveUserId(req);
 
   if (!userId || typeof userId !== 'string') {
     return res.status(400).json({ error: 'userId is required and must be a string' });
@@ -115,12 +120,12 @@ async function saveProgress(req, res) {
     res.json({ success: true, progress: userProgress, message: 'Progress saved successfully' });
   } catch (e) {
     console.error('Error saving IALab progress:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 }
 
 async function getProgress(req, res) {
-  const { userId } = req.params;
+  const userId = resolveUserId(req);
   if (!userId) return res.status(400).json({ error: 'userId is required' });
 
   try {
@@ -168,7 +173,7 @@ async function getProgress(req, res) {
     res.json(userProgress);
   } catch (e) {
     console.error('Error retrieving IALab progress:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 }
 

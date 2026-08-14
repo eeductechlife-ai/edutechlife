@@ -34,7 +34,7 @@ const OAuthCallbackHandler = () => {
         }
 
         // Save authentication token
-        localStorage.setItem("auth_token", token);
+        sessionStorage.setItem("auth_token", token);
         localStorage.setItem("user_email", email);
 
         // Progress is stored per account. Claim the namespace for this user and

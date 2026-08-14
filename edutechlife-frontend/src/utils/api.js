@@ -1,9 +1,5 @@
 import { PROMPT_ANALIZAR_DOCUMENTO } from "../constants/prompts";
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  import.meta.env.VITE_API_URL ||
-  "https://edutechlife-backend.onrender.com";
+import { API_BASE_URL } from "../config/api";
 
 const TIMEOUT_MS = 60000; // 60 segundos timeout (Deepseek tarda en empezar)
 
@@ -16,7 +12,7 @@ const TIMEOUT_MS = 60000; // 60 segundos timeout (Deepseek tarda en empezar)
 function getAuthToken() {
   try {
     return typeof window !== "undefined"
-      ? localStorage.getItem("auth_token")
+      ? sessionStorage.getItem("auth_token")
       : null;
   } catch {
     return null;
@@ -424,9 +420,12 @@ export async function callDaniChatStream(messages, opts = {}, onChunk) {
   let token = opts.token;
 
   if (!token) {
-    // Try to get from Clerk if not provided
-    if (typeof window !== "undefined" && window.__CLERK_AUTH_TOKEN) {
-      token = window.__CLERK_AUTH_TOKEN;
+    try {
+      if (typeof window !== "undefined") {
+        token = sessionStorage.getItem("auth_token");
+      }
+    } catch {
+      token = null;
     }
   }
 

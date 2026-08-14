@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 // compartidos frágiles que Rollup enlaza mal en el build de Vercel
 // ("Export 'X' is not defined" → pantalla en blanco).
 import { supabase } from "../lib/supabase";
+import { API_BASE_URL } from "../config/api";
 
 // Native Supabase Auth hook (replaces Clerk)
 export const useSupabaseAuth = () => {
@@ -22,7 +23,7 @@ export const useSupabaseAuth = () => {
 
         if (session?.user) {
           setUser(session.user);
-          localStorage.setItem("auth_token", session.access_token);
+          sessionStorage.setItem("auth_token", session.access_token);
           localStorage.setItem("refresh_token", session.refresh_token);
           localStorage.setItem(
             "student_name",
@@ -42,7 +43,7 @@ export const useSupabaseAuth = () => {
           // in localStorage without a supabase-js session. Restore that session
           // here (which also re-enables auto-refresh), instead of wiping the
           // tokens and leaving the dashboard stuck on its loading skeleton.
-          const storedToken = localStorage.getItem("auth_token");
+          const storedToken = sessionStorage.getItem("auth_token");
           const storedRefresh = localStorage.getItem("refresh_token");
           if (storedToken) {
             const { data: restored, error: restoreError } =
@@ -63,7 +64,7 @@ export const useSupabaseAuth = () => {
           }
           setUser(null);
           setProfile(null);
-          localStorage.removeItem("auth_token");
+          sessionStorage.removeItem("auth_token");
           localStorage.removeItem("refresh_token");
         }
       } catch (e) {
@@ -81,7 +82,7 @@ export const useSupabaseAuth = () => {
         async (event, session) => {
           if (session?.user) {
             setUser(session.user);
-            localStorage.setItem("auth_token", session.access_token);
+            sessionStorage.setItem("auth_token", session.access_token);
             localStorage.setItem("refresh_token", session.refresh_token);
 
             const { data: profileData } = await supabase
@@ -94,7 +95,7 @@ export const useSupabaseAuth = () => {
           } else {
             setUser(null);
             setProfile(null);
-            localStorage.removeItem("auth_token");
+            sessionStorage.removeItem("auth_token");
             localStorage.removeItem("refresh_token");
           }
         },
@@ -128,7 +129,7 @@ export const useSupabaseAuth = () => {
 
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/auth/signup`,
+          `${API_BASE_URL}/api/auth/signup`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -167,7 +168,7 @@ export const useSupabaseAuth = () => {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/auth/login`,
+        `${API_BASE_URL}/api/auth/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -182,7 +183,7 @@ export const useSupabaseAuth = () => {
       }
 
       // Store tokens
-      localStorage.setItem("auth_token", data.token);
+      sessionStorage.setItem("auth_token", data.token);
       localStorage.setItem("refresh_token", data.refreshToken);
       localStorage.setItem(
         "student_name",
@@ -230,7 +231,7 @@ export const useSupabaseAuth = () => {
 
     try {
       await supabase.auth.signOut();
-      localStorage.removeItem("auth_token");
+      sessionStorage.removeItem("auth_token");
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("student_name");
       setUser(null);

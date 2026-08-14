@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
+import { API_BASE_URL } from "../../../../config/api";
 import { ShieldCheck, HeartPulse } from "lucide-react";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 
@@ -26,7 +27,7 @@ const WellbeingCard = ({ authToken }) => {
     (async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/smartboard/wellbeing-status`,
+          `${API_BASE_URL}/api/smartboard/wellbeing-status`,
           { headers: { Authorization: `Bearer ${authToken}` } },
         );
         if (!res.ok) return;

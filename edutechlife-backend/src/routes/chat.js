@@ -94,7 +94,7 @@ router.post('/', chatMessageLimiter, optionalAuth, async (req, res) => {
     res.json({ result: text });
   } catch (e) {
     console.error('Error calling DeepSeek API:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -185,10 +185,10 @@ router.post('/stream', optionalAuth, async (req, res) => {
     if (streamClosed) return;
     console.error('Error in streaming:', e);
     if (res.headersSent) {
-      res.write(`data: ${JSON.stringify({ error: e.message })}\n\n`);
+      res.write(`data: ${JSON.stringify({ error: 'Error generando respuesta' })}\n\n`);
       res.end();
     } else {
-      res.status(500).json({ error: e.message });
+      res.status(500).json({ error: 'Error interno del servidor' });
     }
   }
 });

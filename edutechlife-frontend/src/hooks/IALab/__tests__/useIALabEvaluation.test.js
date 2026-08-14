@@ -21,7 +21,7 @@ const mockSupabase = {
 };
 
 vi.mock('../../../lib/supabase', () => ({
-  createClerkSupabaseClient: vi.fn(() => mockSupabase),
+  createSupabaseClient: vi.fn(() => mockSupabase),
 }));
 
 const API_OK = (result) => ({

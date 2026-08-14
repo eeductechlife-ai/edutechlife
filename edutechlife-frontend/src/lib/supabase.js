@@ -149,9 +149,6 @@ export const createSupabaseClient = (accessToken = null) => {
   return client;
 };
 
-/** @deprecated Nombre heredado de la época de Clerk. Usar createSupabaseClient. */
-export const createClerkSupabaseClient = createSupabaseClient;
-
 // Inicializar cliente anónimo por defecto
 _currentClient = createSupabaseClient();
 

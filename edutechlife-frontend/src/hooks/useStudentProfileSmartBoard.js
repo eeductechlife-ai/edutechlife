@@ -1,8 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-
-const API_BASE =
-  import.meta.env.VITE_API_BASE_URL ||
-  "https://edutechlife-backend.onrender.com";
+import { API_BASE_URL as API_BASE } from "../config/api";
 
 // Hook específico para SmartBoard student profile (name, age, VAK, school, grade, avatar)
 export const useStudentProfileSmartBoard = (authToken) => {

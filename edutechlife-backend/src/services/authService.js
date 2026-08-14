@@ -43,8 +43,8 @@ async function signUp({ email, password, username, firstName, lastName, userType
     }
 
     // 2. Create user profile (use userId as clerk_id for native auth)
-    // Use admin client to bypass RLS
-    const { data: profileData, error: profileError } = await supabase.admin
+    // Service-role client bypasses RLS
+    const { data: profileData, error: profileError } = await supabase
       .from('users')
       .insert([
         {
@@ -138,8 +138,8 @@ async function signIn({ email, password }) {
 
     if (profileError) {
       console.error('Profile fetch failed:', profileError);
-      // Auth succeeded but profile missing — create minimal one (use admin to bypass RLS)
-      await supabase.admin.from('users').insert([
+      // Auth succeeded but profile missing — create minimal one (service-role client bypasses RLS)
+      await supabase.from('users').insert([
         {
           id: authData.user.id,
           email,
@@ -176,7 +176,11 @@ async function refreshSession(refreshToken) {
   }
 
   try {
-    const { data: authData, error: authError } = await supabase.auth.refreshSession({
+    // Use a throwaway client — refreshSession pins the user session on the
+    // client it runs on; pinning it on the shared service client would make
+    // every subsequent data query send the user JWT (role=authenticated, RLS
+    // applies), breaking profile lookups with PGRST116.
+    const { data: authData, error: authError } = await createSessionClient().auth.refreshSession({
       refresh_token: refreshToken,
     });
 

@@ -35,7 +35,7 @@ export const decodeJwtPayload = (token) => {
 /** Read the current identity straight from storage. Safe to call anywhere. */
 export const readAuthIdentity = () => {
   try {
-    const token = localStorage.getItem("auth_token");
+    const token = sessionStorage.getItem("auth_token");
     if (!token)
       return { userId: null, email: null, token: null, isSignedIn: false };
 
@@ -79,7 +79,7 @@ export const readAuthIdentity = () => {
  */
 export const signOutUser = (redirectTo = "/login", navigate = null) => {
   try {
-    localStorage.removeItem("auth_token");
+    sessionStorage.removeItem("auth_token");
     localStorage.removeItem("user_email");
   } catch {
     /* ignore */

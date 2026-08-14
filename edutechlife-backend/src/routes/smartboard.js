@@ -78,7 +78,7 @@ router.get('/data/:userId', requireAuth, requireVerifiedParentalConsent, async (
     res.json(data.data);
   } catch (e) {
     console.error('Error fetching smartboard data:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -124,6 +124,17 @@ router.get('/data/:userId', requireAuth, requireVerifiedParentalConsent, async (
  *       500:
  *         description: Error del servidor
  */
+/**
+ * El system prompt de Dani lo fija exclusivamente el servidor. Los mensajes
+ * del cliente que intenten enviar role:'system' se reescriben a 'user' para
+ * que no puedan pisar ni eliminar la personalidad del tutor.
+ */
+function sanitizeClientMessages(messages) {
+  return (messages || []).map((m) =>
+    m.role === 'system' ? { role: 'user', content: m.content } : m,
+  );
+}
+
 router.post('/chat', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   const { messages, context } = req.body;
 
@@ -140,7 +151,7 @@ router.post('/chat', requireAuth, requireVerifiedParentalConsent, async (req, re
 
   const msgs = [
     { role: 'system', content: systemPrompt },
-    ...messages,
+    ...sanitizeClientMessages(messages),
   ];
 
   try {
@@ -153,7 +164,7 @@ router.post('/chat', requireAuth, requireVerifiedParentalConsent, async (req, re
     res.json({ result: text });
   } catch (e) {
     console.error('Error calling Dani AI:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -251,14 +262,14 @@ router.post('/chat/stream', requireAuth, requireVerifiedParentalConsent, async (
     }
   }
 
-  const hasSystemPrompt = messages.some(m => m.role === 'system');
   const systemPrompt = context
     ? `${DANI_SYSTEM_PROMPT}\n\nContexto actual:\n${context}`
     : DANI_SYSTEM_PROMPT;
 
-  const msgs = hasSystemPrompt
-    ? messages
-    : [{ role: 'system', content: systemPrompt }, ...messages];
+  const msgs = [
+    { role: 'system', content: systemPrompt },
+    ...sanitizeClientMessages(messages),
+  ];
 
   try {
     await chatStream(DEEPSEEK_API_KEY, { messages: msgs }, (chunk) => {
@@ -276,7 +287,7 @@ router.post('/chat/stream', requireAuth, requireVerifiedParentalConsent, async (
   } catch (e) {
     if (streamClosed) return;
     console.error('Error calling Dani AI (stream):', e);
-    res.write(`data: ${JSON.stringify({ error: e.message })}\n\n`);
+    res.write(`data: ${JSON.stringify({ error: 'Error generando respuesta' })}\n\n`);
     res.end();
   }
 });
@@ -361,7 +372,7 @@ router.get('/progress/:userId', requireAuth, requireVerifiedParentalConsent, asy
     });
   } catch (e) {
     console.error('Error fetching smartboard progress:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -404,8 +415,8 @@ router.post('/parental-consent', requireAuth, async (req, res) => {
   }
 
   const age = Number(studentAge);
-  if (!Number.isInteger(age) || age < 5 || age > 18) {
-    return res.status(400).json({ error: 'studentAge must be an integer between 5 and 18' });
+  if (!Number.isInteger(age) || age < 5 || age >= 18) {
+    return res.status(400).json({ error: 'studentAge must be an integer and, por ser un consentimiento de menor de edad, ser menor de 18' });
   }
 
   // Basic email validation
@@ -731,7 +742,7 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
     });
   } catch (e) {
     console.error('Error generando reporte semanal:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -788,7 +799,7 @@ router.get('/wellbeing-status', requireAuth, requireVerifiedParentalConsent, asy
     });
   } catch (e) {
     console.error('Error obteniendo estado de bienestar:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -915,7 +926,7 @@ router.get('/student-profile', requireAuth, async (req, res) => {
     res.json(serializeStudentProfile(data));
   } catch (e) {
     console.error('Error fetching student profile:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -1065,7 +1076,7 @@ router.put('/student-profile', requireAuth, async (req, res) => {
     });
   } catch (e) {
     console.error('Error updating student profile:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
@@ -1155,7 +1166,7 @@ router.post('/student-profile/avatar', requireAuth, async (req, res) => {
     res.json({ avatarUrl: publicUrlData.publicUrl });
   } catch (e) {
     console.error('Error uploading student avatar:', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 

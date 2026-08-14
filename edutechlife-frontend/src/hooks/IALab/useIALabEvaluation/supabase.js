@@ -1,4 +1,4 @@
-import { createClerkSupabaseClient } from "../../../lib/supabase";
+import { createSupabaseClient } from "../../../lib/supabase";
 
 export async function getAuthDb() {
   if (typeof window !== "undefined" && window.Clerk?.session) {
@@ -6,10 +6,10 @@ export async function getAuthDb() {
       const token = await window.Clerk.session.getToken({
         template: "supabase",
       });
-      if (token) return createClerkSupabaseClient(token);
+      if (token) return createSupabaseClient(token);
     } catch (e) {}
   }
-  return createClerkSupabaseClient();
+  return createSupabaseClient();
 }
 
 export async function saveGradeToSupabase({

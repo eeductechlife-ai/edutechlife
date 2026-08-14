@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
 import FloatingParticles from "./FloatingParticles";
-import { sanitize } from "../utils/sanitize";
+import { sanitize, safeReturnTo } from "../utils/sanitize";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 import SEO from "./SEO";
 import { API_BASE_URL } from "../config/api";
@@ -33,7 +33,7 @@ const SupabaseSignUpForm = ({ onBack, returnTo }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const defaultReturnTo = returnTo || "/ialab";
+  const defaultReturnTo = safeReturnTo(returnTo);
   const [currentStep, setCurrentStep] = useState(0);
 
   const [formData, setFormData] = useState({
@@ -149,8 +149,8 @@ const SupabaseSignUpForm = ({ onBack, returnTo }) => {
   const handleOAuthSignUp = (provider) => {
     const apiUrl = API_BASE_URL;
     const redirectUri = `${window.location.origin}/auth/callback`;
-    const isDevelopment = apiUrl.includes("localhost");
-    const endpoint = isDevelopment
+    const useDemoOAuth = import.meta.env.VITE_USE_OAUTH_DEMO === "true";
+    const endpoint = useDemoOAuth
       ? `/api/auth/oauth-demo/${provider}`
       : `/api/auth/oauth/${provider}`;
     sessionStorage.setItem("auth_return_to", returnTo);
@@ -199,7 +199,7 @@ const SupabaseSignUpForm = ({ onBack, returnTo }) => {
 
       setTimeout(() => {
         if (result.token) {
-          localStorage.setItem("auth_token", result.token);
+          sessionStorage.setItem("auth_token", result.token);
           localStorage.setItem("refresh_token", result.refreshToken);
           localStorage.setItem("user_email", formData.email.toLowerCase());
         }

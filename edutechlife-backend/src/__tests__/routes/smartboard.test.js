@@ -569,7 +569,7 @@ describe('Smartboard POST /student-profile/avatar', () => {
     expect(res.body.error).toContain('2MB');
   });
 
-  it('returns 500 when storage upload fails', async () => {
+  it('returns 500 without leaking internal error details when storage upload fails', async () => {
     mockSupabase.storage = {
       from: vi.fn().mockReturnValue({
         upload: vi.fn().mockResolvedValue({ error: { message: 'bucket not found' } }),
@@ -582,7 +582,7 @@ describe('Smartboard POST /student-profile/avatar', () => {
       .send({ dataUrl: tinyPng });
 
     expect(res.status).toBe(500);
-    expect(res.body.error).toContain('bucket not found');
+    expect(res.body.error).not.toContain('bucket not found');
   });
 });
 

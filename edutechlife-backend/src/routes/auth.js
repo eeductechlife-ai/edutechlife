@@ -128,7 +128,7 @@ async function resolveEmailFromIdentifier(identifier) {
  *   registration_source: string
  * }
  */
-router.post('/sync-user', async (req, res) => {
+router.post('/sync-user', requireAuth, async (req, res) => {
   try {
     const {
       clerk_id,
@@ -143,10 +143,24 @@ router.post('/sync-user', async (req, res) => {
       registration_source,
     } = req.body;
 
-    // Validate required fields
-    if (!clerk_id || !email) {
+    // El identity proviene del token validado (requireAuth). Rechazamos
+    // cualquier intento de auto-omitir el auth indicando un clerk_id/email
+    // que no corresponda a la sesión.
+    if (!email && !req.userEmail) {
       return res.status(400).json({
         error: 'Missing required fields: clerk_id and email',
+      });
+    }
+
+    const effectiveEmail = String(email || req.userEmail).toLowerCase();
+    if (req.userEmail && effectiveEmail !== String(req.userEmail).toLowerCase()) {
+      return res.status(403).json({
+        error: 'Email does not match the authenticated session',
+      });
+    }
+    if (clerk_id && req.userId && clerk_id !== req.userId) {
+      return res.status(403).json({
+        error: 'clerk_id does not match the authenticated session',
       });
     }
 
@@ -156,8 +170,8 @@ router.post('/sync-user', async (req, res) => {
       .insert(
         [
           {
-            clerk_id,
-            email,
+            clerk_id: clerk_id || req.userId,
+            email: effectiveEmail,
             first_name: first_name || null,
             last_name: last_name || null,
             username: username || null,
@@ -176,7 +190,6 @@ router.post('/sync-user', async (req, res) => {
       console.error('Supabase insert error:', error);
       return res.status(500).json({
         error: 'Failed to sync user to Supabase',
-        details: error.message,
       });
     }
 
@@ -197,7 +210,6 @@ router.post('/sync-user', async (req, res) => {
 
     res.status(500).json({
       error: 'Internal server error',
-      message: err.message,
     });
   }
 });
@@ -285,7 +297,6 @@ router.get('/user/:clerk_id', requireAuth, async (req, res) => {
     console.error('Get user error:', err);
     res.status(500).json({
       error: 'Failed to fetch user',
-      message: err.message,
     });
   }
 });
@@ -343,7 +354,6 @@ router.get('/oauth/:provider', (req, res) => {
     req.log.error('OAuth initiate error', { provider: req.params.provider, error: err.message });
     res.status(500).json({
       error: 'OAuth initialization failed',
-      message: err.message,
     });
   }
 });
@@ -448,12 +458,12 @@ router.get('/callback', async (req, res) => {
 
     let authUser = null;
     try {
-      const { data: list } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
-      authUser = list?.users?.find(
-        (u) => (u.email || '').toLowerCase() === normalizedEmail
-      ) || null;
+      // getUserByEmail es O(1) y sin límite de paginación; listUsers con
+      // perPage 1000 se rompe al superar pocos miles de cuentas.
+      const { data: byEmail } = await supabase.auth.admin.getUserByEmail(normalizedEmail);
+      authUser = byEmail?.user || null;
     } catch (e) {
-      console.error('listUsers failed:', e.message);
+      console.error('getUserByEmail failed:', e.message);
     }
 
     let userId;
@@ -576,10 +586,9 @@ router.get('/oauth-demo/:provider', async (req, res) => {
       if (authError) {
         // If user already exists in Auth but not in users table, just get the user
         if (authError.code === 'email_exists') {
-          // Get the user from auth by email - we'll need to fetch it differently
-          // For now, create a record in users table if it doesn't exist
-          const { data: authUsers, error: listError } = await supabase.auth.admin.listUsers();
-          const authUser = authUsers?.users?.find(u => u.email === demoEmail);
+          const { data: byEmail, error: lookupError } = await supabase.auth.admin.getUserByEmail(demoEmail);
+          const authUser = byEmail?.user || null;
+          if (lookupError) console.error('getUserByEmail failed:', lookupError.message);
 
           if (authUser) {
             userId = authUser.id;
@@ -653,7 +662,7 @@ router.get('/oauth-demo/:provider', async (req, res) => {
     res.redirect(redirectUrl);
   } catch (err) {
     console.error('Demo OAuth error:', err);
-    res.status(500).json({ error: 'Demo OAuth failed', message: err.message });
+    res.status(500).json({ error: 'Demo OAuth failed' });
   }
 });
 

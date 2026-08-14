@@ -4,6 +4,7 @@ import { useAuthIdentity } from "../../hooks/useAuthIdentity";
 import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import SmartBoardHabeasDataModal from "./SmartBoardHabeasDataModal";
+import { API_BASE_URL } from "../../config/api";
 
 /**
  * SmartBoardConsentGate: Intermediate page after signup
@@ -52,7 +53,7 @@ const SmartBoardConsentGate = () => {
       if (data.parentEmail) {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_API_BASE_URL || "https://edutechlife-backend.onrender.com"}/api/smartboard/parental-consent`,
+            `${API_BASE_URL}/api/smartboard/parental-consent`,
             {
               method: "POST",
               headers: {

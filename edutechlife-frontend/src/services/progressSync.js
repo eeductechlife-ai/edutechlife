@@ -1,6 +1,6 @@
 export {
   supabase,
-  createClerkSupabaseClient,
+  createSupabaseClient,
   initSupabaseClient,
   queueSyncOperation,
   processSyncQueue,

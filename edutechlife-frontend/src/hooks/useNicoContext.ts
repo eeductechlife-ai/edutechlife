@@ -116,7 +116,7 @@ export const useNicoContext = (): {
         student.vak_result_json?.primary_style || "multi-modal";
 
       // Fetch learning streak
-      const { data: streakData, error: streakError } = await supabase
+      const { data: streakData } = await supabase
         .from("learning_streaks")
         .select("current_streak")
         .eq("student_id", student.id)

@@ -392,7 +392,7 @@ export function useProfileData({ isOpen, onClose, onOpenChangeAvatar }) {
   const handleLogout = async () => {
     if (window.confirm(t("profile.confirm_logout"))) {
       try {
-        localStorage.removeItem("auth_token");
+        sessionStorage.removeItem("auth_token");
         localStorage.removeItem("user_email");
       } catch (err) {
         console.error("Error signing out:", err);

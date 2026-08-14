@@ -8,6 +8,7 @@ import React, {
 import PropTypes from "prop-types";
 import { motion, useReducedMotion } from "framer-motion";
 import { supabase } from "../../../lib/supabase";
+import { API_BASE_URL } from "../../../config/api";
 import {
   useIALabProgressContext,
   useIALabUIContext,
@@ -246,10 +247,7 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
       startSession(activeMod);
       if (!warmupDoneRef.current) {
         warmupDoneRef.current = true;
-        const baseUrl =
-          import.meta.env.VITE_API_BASE_URL ||
-          import.meta.env.VITE_API_URL ||
-          "https://edutechlife-backend.onrender.com";
+        const baseUrl = API_BASE_URL;
         const controller = new AbortController();
         warmupRef.current = controller;
         warmupTimeoutId = setTimeout(() => controller.abort(), 12000);
@@ -257,9 +255,9 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            ...(localStorage.getItem("auth_token")
+            ...(sessionStorage.getItem("auth_token")
               ? {
-                  Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+                  Authorization: `Bearer ${sessionStorage.getItem("auth_token")}`,
                 }
               : {}),
           },
@@ -274,7 +272,14 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
           .catch(() => {});
         fetch(`${baseUrl}/api/tts`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(sessionStorage.getItem("auth_token")
+              ? {
+                  Authorization: `Bearer ${sessionStorage.getItem("auth_token")}`,
+                }
+              : {}),
+          },
           body: JSON.stringify({
             input: { text: "Hola" },
             voice: { languageCode: "es-US", name: "es-US-Neural2-C" },
@@ -316,10 +321,7 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
 
   useEffect(() => {
     if (!isOpen) return;
-    const baseUrl =
-      import.meta.env.VITE_API_BASE_URL ||
-      import.meta.env.VITE_API_URL ||
-      "https://edutechlife-backend.onrender.com";
+    const baseUrl = API_BASE_URL;
     const interval = setInterval(() => {
       fetch(`${baseUrl}/api/health`, {
         method: "GET",

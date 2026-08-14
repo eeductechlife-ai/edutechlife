@@ -4,9 +4,14 @@ function isSupabaseReady() {
   return !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY);
 }
 
+function resolveUserId(req) {
+  return req.userId || req.body?.userId || req.params?.userId;
+}
+
 async function createTemplate(req, res) {
   try {
-    const { userId, templateName, templateData, category, difficulty } = req.body;
+    const { templateName, templateData, category, difficulty } = req.body;
+    const userId = resolveUserId(req);
     if (!userId || !templateName || !templateData) {
       return res.status(400).json({ error: 'Missing required fields: userId, templateName, templateData' });
     }
@@ -38,13 +43,13 @@ async function createTemplate(req, res) {
     res.status(201).json({ success: true, message: 'Template saved successfully', template: savedTemplate });
   } catch (error) {
     console.error('Error saving IALab template:', error);
-    res.status(500).json({ error: 'Failed to save template', details: error.message });
+    res.status(500).json({ error: 'Failed to save template', details: 'Error interno' });
   }
 }
 
 async function getTemplates(req, res) {
   try {
-    const { userId } = req.params;
+    const userId = resolveUserId(req);
     const { category, difficulty } = req.query;
     if (!userId) return res.status(400).json({ error: 'User ID is required' });
 
@@ -92,13 +97,14 @@ async function getTemplates(req, res) {
     res.json({ success: true, templates: filteredTemplates, total: filteredTemplates.length });
   } catch (error) {
     console.error('Error retrieving IALab templates:', error);
-    res.status(500).json({ error: 'Failed to retrieve templates', details: error.message });
+    res.status(500).json({ error: 'Failed to retrieve templates', details: 'Error interno' });
   }
 }
 
 async function updateTemplate(req, res) {
   try {
     const { templateId } = req.params;
+    const userId = resolveUserId(req);
     const { templateName, templateData, category, difficulty } = req.body;
     if (!templateId) return res.status(400).json({ error: 'Template ID is required' });
 
@@ -110,9 +116,10 @@ async function updateTemplate(req, res) {
       if (difficulty) updateData.difficulty = difficulty;
 
       const { data, error } = await supabase.from('prompt_templates')
-        .update(updateData).eq('id', templateId).select('*').single();
+        .update(updateData).eq('id', templateId).eq('user_id', userId).select('*').single();
 
       if (error) throw error;
+      if (!data) return res.status(404).json({ error: 'Template not found or not owned by user' });
       return res.json({ success: true, message: 'Template updated successfully', template: data });
     }
 
@@ -127,18 +134,21 @@ async function updateTemplate(req, res) {
     });
   } catch (error) {
     console.error('Error updating IALab template:', error);
-    res.status(500).json({ error: 'Failed to update template', details: error.message });
+    res.status(500).json({ error: 'Failed to update template', details: 'Error interno' });
   }
 }
 
 async function deleteTemplate(req, res) {
   try {
     const { templateId } = req.params;
+    const userId = resolveUserId(req);
     if (!templateId) return res.status(400).json({ error: 'Template ID is required' });
 
     if (isSupabaseReady()) {
-      const { error } = await supabase.from('prompt_templates').delete().eq('id', templateId);
+      const { data, error } = await supabase.from('prompt_templates')
+        .delete().eq('id', templateId).eq('user_id', userId).select('*').single();
       if (error) throw error;
+      if (!data) return res.status(404).json({ error: 'Template not found or not owned by user' });
       return res.json({ success: true, message: 'Template deleted successfully' });
     }
 
@@ -146,7 +156,7 @@ async function deleteTemplate(req, res) {
     res.json({ success: true, message: 'Template deleted successfully' });
   } catch (error) {
     console.error('Error deleting IALab template:', error);
-    res.status(500).json({ error: 'Failed to delete template', details: error.message });
+    res.status(500).json({ error: 'Failed to delete template', details: 'Error interno' });
   }
 }
 
