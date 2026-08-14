@@ -37,7 +37,7 @@ export default defineConfig({
         globIgnores: [
           '**/pdf-vendor*',
         ],
-        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        maximumFileSizeToCacheInBytes: 9 * 1024 * 1024,
         // Evita que chunks viejos (hash desactualizado) crasheen la app tras un deploy
         cleanupOutdatedCaches: true,
         clientsClaim: true,
@@ -170,12 +170,32 @@ export default defineConfig({
     rollupOptions: {
       external: ['@solana/web3.js'],
       output: {
-        // Chunking por defecto de Vite (sin manualChunks custom). El
-        // "Export 'X' is not defined in module" que dejaba la app en blanco venía
-        // del CACHÉ DE BUILD stale de Vercel (node_modules cacheado inconsistente),
-        // no del chunking: el build local (fresco) siempre fue correcto. Se
-        // resuelve limpiando el build cache en Vercel. Los imports mixtos
-        // estático+dinámico igual se corrigieron (mejora real e independiente).
+        // El build de Vercel (Linux) enlaza mal los chunks COMPARTIDOS con exports
+        // rotos ("Export 'X' is not defined" → pantalla en blanco), incluso con las
+        // mismas versiones de Vite/Rollup que en local (donde nunca falla). Es un
+        // problema de codegen entre chunks específico de ese entorno.
+        //
+        // Única solución fiable: colapsar toda la app + vendores livianos en UN
+        // chunk 'app'. Sin imports estáticos entre chunks, el error es imposible.
+        // Las libs PESADAS puramente lazy (PDF, OCR, xlsx, charts, docx, lottie)
+        // sí se separan en chunks bajo demanda vía import() dinámico (no sufren el
+        // bug de link estático). Trade-off: bundle base grande (~1.8MB gzip);
+        // prioridad = app funcional en producción. TODO: splitting granular.
+        manualChunks: (id) => {
+          if (
+            id.includes('node_modules/pdfjs-dist') ||
+            id.includes('node_modules/html2pdf') ||
+            id.includes('node_modules/jspdf') ||
+            id.includes('node_modules/tesseract.js') ||
+            id.includes('node_modules/xlsx') ||
+            id.includes('node_modules/recharts') ||
+            id.includes('node_modules/mammoth') ||
+            id.includes('node_modules/lottie-web')
+          ) {
+            return undefined;
+          }
+          return 'app';
+        },
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]'
