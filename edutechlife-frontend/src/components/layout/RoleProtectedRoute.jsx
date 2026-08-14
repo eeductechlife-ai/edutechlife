@@ -66,8 +66,24 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
             });
           if (restored?.user && !restoreError && restored.session) {
             sessionStorage.setItem("auth_token", restored.session.access_token);
-            localStorage.setItem("refresh_token", restored.session.refresh_token);
+            localStorage.setItem(
+              "refresh_token",
+              restored.session.refresh_token,
+            );
             setIsAuthenticated(true);
+          } else if (!restoreError && !restored?.session) {
+            // La restauración no devolvió error pero tampoco sesión: recargar
+            // una vez recupera la página (el getSession() del arranque suele
+            // encontrar la sesión ya persistida). Evita el loop: solo un retry.
+            const alreadyRetried = sessionStorage.getItem(
+              "auth_restore_retried",
+            );
+            if (!alreadyRetried && refreshToken) {
+              sessionStorage.setItem("auth_restore_retried", "1");
+              window.location.replace(window.location.pathname);
+              return;
+            }
+            setIsAuthenticated(false);
           } else {
             setIsAuthenticated(false);
           }

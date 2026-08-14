@@ -23,6 +23,11 @@ const supabaseUrl =
 const supabaseAnonKey =
   import.meta.env.VITE_SUPABASE_ANON_KEY || "placeholder-anon-key";
 
+// Nombre de la clave de storage que supabase-js usa para persistir la sesión.
+// Se exporta para que los flujos de login puedan pre-sembrar la sesión antes
+// de navegar (RoleProtectedRoute lee esta clave en su getSession()).
+export const supabaseStorageKey = `sb-${supabaseUrl.split("//")[1].split(".")[0]}-auth-token`;
+
 // Cache de clientes Supabase por token para evitar múltiples instancias
 const supabaseClientsCache = new Map();
 

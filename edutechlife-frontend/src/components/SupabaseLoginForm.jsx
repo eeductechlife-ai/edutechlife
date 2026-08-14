@@ -6,6 +6,56 @@ import FloatingParticles from "./FloatingParticles";
 import { safeReturnTo } from "../utils/sanitize";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 import { API_BASE_URL } from "../config/api";
+import { supabase, supabaseStorageKey } from "../lib/supabase";
+import { decodeJwtPayload } from "../hooks/useAuthIdentity";
+
+// Pre-sembra la sesión del cliente supabase-js ANTES de navegar al dashboard.
+// El role gate (RoleProtectedRoute) restaura la sesión con supabase.auth.
+// setSession() — y en algunos navegadores esa cadena (setSession → notify de
+// onAuthStateChange) se queda sin resolver, dejando la página en
+// "Verificando permisos..." para siempre. Escribir la sesión aquí hace que el
+// getSession() del gate la encuentre ya lista al montar (misma forma que un
+// hard reload con sesión persistida, que funciona). Con timeout de seguridad:
+// si setSession tarda o falla, se escribe la clave de storage manualmente.
+const seedClientSession = async (token, refreshToken) => {
+  try {
+    await Promise.race([
+      supabase.auth.setSession({
+        access_token: token,
+        refresh_token: refreshToken,
+      }),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("setSession timeout")), 1500),
+      ),
+    ]);
+    return;
+  } catch (err) {
+    console.warn(
+      "setSession pre-seed no completó, escribiendo sesión manualmente:",
+      err.message,
+    );
+  }
+  try {
+    const payload = decodeJwtPayload(token);
+    const now = Math.floor(Date.now() / 1000);
+    const session = {
+      access_token: token,
+      refresh_token: refreshToken,
+      token_type: "bearer",
+      expires_in: Math.max(0, (payload?.exp || now + 3600) - now),
+      expires_at: payload?.exp || now + 3600,
+      user: {
+        id: payload?.sub || null,
+        email: payload?.email || null,
+        aud: "authenticated",
+        role: "authenticated",
+      },
+    };
+    localStorage.setItem(supabaseStorageKey, JSON.stringify(session));
+  } catch (e) {
+    console.warn("No se pudo pre-sembrar la sesión:", e.message);
+  }
+};
 
 const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
   const { t } = useTranslation();
@@ -96,6 +146,11 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
       // Claim storage for current user (creates isolated namespace)
       // Token is now in localStorage; useAuthIdentity will read it on next render
       claimStorageForCurrentUser();
+
+      // Pre-seed the supabase-js session so the role gate passes on mount.
+      // Non-blocking: navigation proceeds regardless (setSession itself can
+      // hang on some browsers, hence the timeout + manual-write fallback).
+      seedClientSession(data.token, data.refreshToken);
 
       // Use client-side navigation instead of hard reload
       // Preserves browser cache, avoids re-parsing bundles, faster than window.location.replace()
