@@ -1,13 +1,27 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    "VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be defined in environment",
+// No lanzar al cargar el módulo: si faltan las env vars (p. ej. un deploy de
+// preview de Vercel sin las variables configuradas para ese entorno), lanzar
+// aquí crashea TODA la app a pantalla en blanco, porque supabase se importa de
+// forma estática y eager. En su lugar se avisa y se usan placeholders: las
+// páginas públicas (landing) renderizan, y las llamadas reales a Supabase
+// fallan de forma controlada (atrapadas por los error boundaries) hasta que
+// las variables estén configuradas.
+if (
+  !import.meta.env.VITE_SUPABASE_URL ||
+  !import.meta.env.VITE_SUPABASE_ANON_KEY
+) {
+  console.error(
+    "[supabase] Faltan VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY en el entorno. " +
+      "Configúralas en Vercel (Production, Preview y Development). " +
+      "La app carga, pero las funciones que usan Supabase no operarán.",
   );
 }
+
+const supabaseUrl =
+  import.meta.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co";
+const supabaseAnonKey =
+  import.meta.env.VITE_SUPABASE_ANON_KEY || "placeholder-anon-key";
 
 // Cache de clientes Supabase por token para evitar múltiples instancias
 const supabaseClientsCache = new Map();
