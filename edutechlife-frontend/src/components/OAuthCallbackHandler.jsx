@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
+import { seedClientSession, decodeJwtPayload } from "../hooks/useAuthIdentity";
+import { supabaseStorageKey } from "../lib/supabase";
 
 const OAuthCallbackHandler = () => {
   const navigate = useNavigate();
@@ -14,10 +16,15 @@ const OAuthCallbackHandler = () => {
         console.log("OAuth Callback - All params:", allParams);
 
         const token = searchParams.get("token");
+        const refreshToken = searchParams.get("refreshToken");
         const email = searchParams.get("email");
         const error = searchParams.get("error");
 
         console.log("OAuth Callback - Token:", token ? "present" : "missing");
+        console.log(
+          "OAuth Callback - RefreshToken:",
+          refreshToken ? "present" : "missing",
+        );
         console.log("OAuth Callback - Email:", email);
         console.log("OAuth Callback - Error:", error);
 
@@ -33,9 +40,20 @@ const OAuthCallbackHandler = () => {
           return;
         }
 
-        // Save authentication token
+        if (!refreshToken) {
+          console.warn("Missing refreshToken from OAuth callback");
+        }
+
+        // Save authentication tokens
         sessionStorage.setItem("auth_token", token);
         localStorage.setItem("user_email", email);
+        if (refreshToken) {
+          localStorage.setItem("refresh_token", refreshToken);
+        }
+
+        // Pre-seed the Supabase session so the role gate's getSession() finds it
+        // when /ialab mounts. This is critical for OAuth flow to work correctly.
+        await seedClientSession(token, refreshToken || "");
 
         // Progress is stored per account. Claim the namespace for this user and
         // reload rather than client-side navigating, so the stores rehydrate

@@ -519,6 +519,7 @@ router.get('/callback', async (req, res) => {
     }
 
     const sessionToken = signInData.session.access_token;
+    const refreshToken = signInData.session.refresh_token;
 
     req.log.info('OAuth login successful', {
       userId,
@@ -526,8 +527,8 @@ router.get('/callback', async (req, res) => {
       provider,
     });
 
-    // Redirect to frontend with token
-    const redirectUrl = `${frontendUrl}/auth/callback?token=${encodeURIComponent(sessionToken)}&email=${encodeURIComponent(normalizedEmail)}`;
+    // Redirect to frontend with token and refresh token for session pre-seeding
+    const redirectUrl = `${frontendUrl}/auth/callback?token=${encodeURIComponent(sessionToken)}&refreshToken=${encodeURIComponent(refreshToken)}&email=${encodeURIComponent(normalizedEmail)}`;
     res.redirect(redirectUrl);
   } catch (err) {
     console.error('OAuth callback error:', err);
@@ -658,7 +659,7 @@ router.get('/oauth-demo/:provider', async (req, res) => {
 
     req.log.info('Demo OAuth login', { userId, email: demoEmail, provider });
 
-    const redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:5174'}/auth/callback?token=${encodeURIComponent(signInData.session.access_token)}&email=${encodeURIComponent(demoEmail)}`;
+    const redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:5174'}/auth/callback?token=${encodeURIComponent(signInData.session.access_token)}&refreshToken=${encodeURIComponent(signInData.session.refresh_token)}&email=${encodeURIComponent(demoEmail)}`;
     res.redirect(redirectUrl);
   } catch (err) {
     console.error('Demo OAuth error:', err);
