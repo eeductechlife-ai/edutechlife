@@ -58,35 +58,21 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
           // El token de localStorage debe coincidir con la sesión vigente.
           setIsAuthenticated(session.access_token === token);
         } else {
-          const refreshToken = localStorage.getItem("refresh_token");
-          const { data: restored, error: restoreError } =
-            await supabase.auth.setSession({
-              access_token: token,
-              refresh_token: refreshToken || undefined,
-            });
-          if (restored?.user && !restoreError && restored.session) {
-            sessionStorage.setItem("auth_token", restored.session.access_token);
-            localStorage.setItem(
-              "refresh_token",
-              restored.session.refresh_token,
-            );
-            setIsAuthenticated(true);
-          } else if (!restoreError && !restored?.session) {
-            // La restauración no devolvió error pero tampoco sesión: recargar
-            // una vez recupera la página (el getSession() del arranque suele
-            // encontrar la sesión ya persistida). Evita el loop: solo un retry.
-            const alreadyRetried = sessionStorage.getItem(
-              "auth_restore_retried",
-            );
-            if (!alreadyRetried && refreshToken) {
-              sessionStorage.setItem("auth_restore_retried", "1");
-              window.location.replace(window.location.pathname);
-              return;
-            }
-            setIsAuthenticated(false);
-          } else {
-            setIsAuthenticated(false);
+          // Sin sesión en storage pese a tener tokens: recargar una vez. La
+          // carga fresca re-inicializa gotrue y encuentra la sesión que el
+          // login pre-sembró (sb-...-auth-token). NO se usa
+          // supabase.auth.setSession() aquí: en algunos navegadores la cadena
+          // setSession → notify de onAuthStateChange no resuelve y retiene el
+          // lock interno de gotrue para siempre, dejando el getSession() de
+          // este gate encolado sin timeout (página eterna en
+          // "Verificando permisos..."). El reload único evita el bucle.
+          const alreadyRetried = sessionStorage.getItem("auth_restore_retried");
+          if (!alreadyRetried) {
+            sessionStorage.setItem("auth_restore_retried", "1");
+            window.location.replace(window.location.pathname);
+            return;
           }
+          setIsAuthenticated(false);
         }
       } catch {
         setIsAuthenticated(false);

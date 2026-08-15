@@ -6,35 +6,20 @@ import FloatingParticles from "./FloatingParticles";
 import { safeReturnTo } from "../utils/sanitize";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 import { API_BASE_URL } from "../config/api";
-import { supabase, supabaseStorageKey } from "../lib/supabase";
+import { supabaseStorageKey } from "../lib/supabase";
 import { decodeJwtPayload } from "../hooks/useAuthIdentity";
 
 // Pre-sembra la sesión del cliente supabase-js ANTES de navegar al dashboard.
-// El role gate (RoleProtectedRoute) restaura la sesión con supabase.auth.
-// setSession() — y en algunos navegadores esa cadena (setSession → notify de
-// onAuthStateChange) se queda sin resolver, dejando la página en
-// "Verificando permisos..." para siempre. Escribir la sesión aquí hace que el
-// getSession() del gate la encuentre ya lista al montar (misma forma que un
-// hard reload con sesión persistida, que funciona). Con timeout de seguridad:
-// si setSession tarda o falla, se escribe la clave de storage manualmente.
+// El role gate (RoleProtectedRoute) lee esta clave con supabase.auth.
+// getSession(). NO se usa supabase.auth.setSession() aquí: en ciertos
+// navegadores esa cadena (setSession → notify de onAuthStateChange → el
+// listener global de AuthProvider) queda sin resolver, reteniendo el lock
+// interno de gotrue para siempre — y entonces el getSession() del gate se
+// encola detrás del lock sin timeout y la página queda en "Verificando
+// permisos..." eternamente. Escribiendo la sesión manualmente el gate la
+// encuentra lista al montar y no necesita el SDK (mismo formato que persiste
+// supabase-js, verificado funcionando con hard reload).
 const seedClientSession = async (token, refreshToken) => {
-  try {
-    await Promise.race([
-      supabase.auth.setSession({
-        access_token: token,
-        refresh_token: refreshToken,
-      }),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("setSession timeout")), 1500),
-      ),
-    ]);
-    return;
-  } catch (err) {
-    console.warn(
-      "setSession pre-seed no completó, escribiendo sesión manualmente:",
-      err.message,
-    );
-  }
   try {
     const payload = decodeJwtPayload(token);
     const now = Math.floor(Date.now() / 1000);
