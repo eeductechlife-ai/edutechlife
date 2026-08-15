@@ -18,6 +18,16 @@ import {
 } from "./localCache";
 import { syncActivity, loadRemoteProgress } from "./supabaseSync";
 
+const REMOTE_PROGRESS_TIMEOUT_MS = 6000;
+
+const withRemoteTimeout = (promise) =>
+  Promise.race([
+    promise,
+    new Promise((resolve) =>
+      setTimeout(() => resolve(null), REMOTE_PROGRESS_TIMEOUT_MS),
+    ),
+  ]);
+
 export const usePersistentProgress = () => {
   const {
     supabase,
@@ -432,7 +442,9 @@ export const usePersistentProgress = () => {
     if (!userId || !supabase) return;
 
     setIsLoading(true);
-    const remoteData = await loadRemoteProgress(supabase, userId);
+    const remoteData = await withRemoteTimeout(
+      loadRemoteProgress(supabase, userId),
+    );
 
     if (remoteData) {
       const mergedData = mergeLocalWithRemote(
@@ -468,7 +480,9 @@ export const usePersistentProgress = () => {
           setCourseProgress(computeGlobalProgress(localData));
         }
 
-        const remoteData = await loadRemoteProgress(supabase, userId);
+        const remoteData = await withRemoteTimeout(
+          loadRemoteProgress(supabase, userId),
+        );
         const mergedData = mergeLocalWithRemote(localData, remoteData);
 
         applyProgressData(setters, mergedData);

@@ -54,6 +54,8 @@ import {
  * - Manejar estados de loading/error
  */
 
+const PROGRESS_FETCH_TIMEOUT_MS = 6000;
+
 export const useIALabProgress = () => {
   const {
     activeMod,
@@ -123,7 +125,14 @@ export const useIALabProgress = () => {
 
       if (cancelledRef.current) return;
 
-      const fullProgress = await progressService.getFullUserProgress(user.id);
+      // Timeout defensivo: si el fetch remoto se cuelga (red lenta, idle), la
+      // UI queda en skeleton >=10s. Con race de 6s el contenido siempre pinta.
+      const fullProgress = await Promise.race([
+        progressService.getFullUserProgress(user.id),
+        new Promise((resolve) =>
+          setTimeout(() => resolve(null), PROGRESS_FETCH_TIMEOUT_MS),
+        ),
+      ]);
 
       if (cancelledRef.current) return;
 
