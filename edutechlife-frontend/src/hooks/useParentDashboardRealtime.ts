@@ -53,15 +53,30 @@ export const useParentDashboardRealtime = (
         const supabase = createSupabaseClient(authToken);
         supabaseRef.current = supabase;
 
-        // Resolve the student's DB id from the auth id (students.id != auth.uid)
+        // SECURITY: Resolve the student's DB id from the auth id (students.id != auth.uid)
+        // Must succeed — no filters mean data leakage to all students.
         let studentDbId: string | null = null;
-        const { data: studentRow } = await supabase
+        const { data: studentRow, error: studentError } = await supabase
           .from("students")
           .select("id")
           .eq("auth_id", studentAuthId)
           .maybeSingle();
-        if (studentRow?.id) studentDbId = String(studentRow.id);
 
+        if (studentError || !studentRow?.id) {
+          console.error(
+            "[ParentDashboardRealtime] SECURITY: Could not resolve student DB id. Blocking realtime.",
+            studentError,
+          );
+          setIsConnected(false);
+          return;
+        }
+
+        studentDbId = String(studentRow.id);
+        console.log(
+          `[ParentDashboardRealtime] Resolved student DB id: ${studentDbId}`,
+        );
+
+        // Canal 1: Monitor del estudiante (auth_id filter)
         const statusChannel = supabase
           .channel(`parent-student-status-${parentId}`)
           .on(
@@ -70,7 +85,7 @@ export const useParentDashboardRealtime = (
               event: "*",
               schema: "public",
               table: "students",
-              filter: `auth_id=eq.${studentAuthId}`,
+              filter: `auth_id=eq.${studentAuthId}`, // SECURITY: Filter by auth_id
             },
             (payload: any) => {
               if (isMounted) {
@@ -99,6 +114,7 @@ export const useParentDashboardRealtime = (
 
         channelsRef.current.push(statusChannel);
 
+        // Canal 2: Sesiones en tiempo real (student_id filter - OBLIGATORIO)
         const sessionsChannel = supabase
           .channel(`parent-live-sessions-${parentId}`)
           .on(
@@ -107,7 +123,7 @@ export const useParentDashboardRealtime = (
               event: "INSERT",
               schema: "public",
               table: "sessions",
-              filter: studentDbId ? `student_id=eq.${studentDbId}` : undefined,
+              filter: `student_id=eq.${studentDbId}`, // SECURITY: Always filter by student_id
             },
             (payload: any) => {
               if (isMounted) {
@@ -133,7 +149,7 @@ export const useParentDashboardRealtime = (
               event: "UPDATE",
               schema: "public",
               table: "sessions",
-              filter: studentDbId ? `student_id=eq.${studentDbId}` : undefined,
+              filter: `student_id=eq.${studentDbId}`, // SECURITY: Always filter by student_id
             },
             (payload: any) => {
               if (isMounted) {
@@ -163,6 +179,7 @@ export const useParentDashboardRealtime = (
 
         channelsRef.current.push(sessionsChannel);
 
+        // Canal 3: Historial de puntos en tiempo real (student_id filter - OBLIGATORIO)
         const pointsChannel = supabase
           .channel(`parent-live-points-${parentId}`)
           .on(
@@ -171,7 +188,7 @@ export const useParentDashboardRealtime = (
               event: "INSERT",
               schema: "public",
               table: "points_history",
-              filter: studentDbId ? `student_id=eq.${studentDbId}` : undefined,
+              filter: `student_id=eq.${studentDbId}`, // SECURITY: Always filter by student_id
             },
             (payload: any) => {
               if (isMounted) {
@@ -196,7 +213,10 @@ export const useParentDashboardRealtime = (
 
         channelsRef.current.push(pointsChannel);
       } catch (err) {
-        console.warn("[ParentDashboardRealtime] Setup error:", err);
+        console.error(
+          "[ParentDashboardRealtime] Setup error — blocking realtime:",
+          err,
+        );
         setIsConnected(false);
       }
     };

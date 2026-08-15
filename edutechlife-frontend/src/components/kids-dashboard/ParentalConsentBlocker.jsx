@@ -32,7 +32,9 @@ const ParentalConsentBlocker = ({ children }) => {
   const [resendState, setResendState] = useState(null); // null | sending | sent | error
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(null); // Countdown 24h en segundos
   const pollRef = useRef(null);
+  const countdownRef = useRef(null);
 
   const fetchStatus = useCallback(async () => {
     if (!token) return null;
@@ -52,11 +54,18 @@ const ParentalConsentBlocker = ({ children }) => {
 
   const checkGate = useCallback(async () => {
     const status = await fetchStatus();
+
+    // SECURITY: Bloqueo estricto si backend no responde o error.
+    // No hacer fail-open — el consentimiento es OBLIGATORIO para menores.
     if (!status) {
-      setState({ status: "open", age: null, pendingEmail: null });
+      console.warn(
+        "[ParentalConsentBlocker] Backend error - blocking access until verified",
+      );
+      setState({ status: "required", age: null, pendingEmail: null });
       return;
     }
 
+    // ÚNICA puerta de entrada: verification_status === 'verified'
     if (status.verification_status === "verified") {
       setState({ status: "open", age: status.student_age, pendingEmail: null });
       return;
@@ -78,6 +87,10 @@ const ParentalConsentBlocker = ({ children }) => {
     }
 
     if (age !== null && Number(age) < MINOR_MAX_AGE) {
+      // Menor de edad: requiere consentimiento verificado
+      console.log(
+        `[ParentalConsentBlocker] Student age ${age} - consentimiento status: ${status.verification_status}`,
+      );
       setState({
         status:
           status.verification_status === "pending" ? "pending" : "required",
@@ -94,24 +107,70 @@ const ParentalConsentBlocker = ({ children }) => {
     if (!isLoaded || !isSignedIn || !token) return undefined;
     checkGate();
 
-    // Mientras esté pendiente, refresca cada 30s por si el padre ya verificó.
+    // Mientras esté pendiente, refresca cada 10s por si el padre ya verificó.
+    // UX mejorada: validación más rápida sin saturar el backend.
     if (pollRef.current) clearInterval(pollRef.current);
     pollRef.current = setInterval(() => {
       fetchStatus().then((status) => {
         if (status?.verification_status === "verified") {
+          console.log(
+            "[ParentalConsentBlocker] Padre verificó - abriendo acceso",
+          );
           setState({ status: "open", age: null, pendingEmail: null });
         }
       });
-    }, 30000);
+    }, 10000);
 
     return () => {
       if (pollRef.current) clearInterval(pollRef.current);
     };
   }, [isLoaded, isSignedIn, token, checkGate, fetchStatus]);
 
+  // Countdown 24h cuando el status es "pending"
+  useEffect(() => {
+    if (state.status !== "pending") {
+      if (countdownRef.current) clearInterval(countdownRef.current);
+      setTimeRemaining(null);
+      return;
+    }
+
+    // Iniciar countdown en 24h = 86400 segundos
+    setTimeRemaining(86400);
+
+    if (countdownRef.current) clearInterval(countdownRef.current);
+    countdownRef.current = setInterval(() => {
+      setTimeRemaining((prev) => {
+        if (prev === null) return null;
+        if (prev <= 1) {
+          console.warn(
+            "[ParentalConsentBlocker] Token de consentimiento expirado",
+          );
+          // Opcionalmente: forzar re-request
+          return null;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      if (countdownRef.current) clearInterval(countdownRef.current);
+    };
+  }, [state.status]);
+
   const handleLogout = useCallback(() => {
     signOutUser("/", navigate);
   }, [navigate]);
+
+  const formatTimeRemaining = (seconds) => {
+    if (!seconds) return null;
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    if (hours > 0) {
+      return `${hours}h ${minutes}m ${secs}s`;
+    }
+    return `${minutes}m ${secs}s`;
+  };
 
   const handleResend = async () => {
     if (!token || !state.pendingEmail || state.age === null) return;
@@ -198,6 +257,13 @@ const ParentalConsentBlocker = ({ children }) => {
               <strong className="break-all">{state.pendingEmail}</strong>.
               Cuando tu acudiente confirme el enlace, podrás entrar. Esto
               protege tus datos según la ley (COPPA / Ley 1581).
+              <br />
+              <span className="text-xs text-slate-500 mt-2 block">
+                Enlace válido por:{" "}
+                <strong>
+                  {formatTimeRemaining(timeRemaining) || "Expirado"}
+                </strong>
+              </span>
             </>
           ) : (
             <>
@@ -216,23 +282,30 @@ const ParentalConsentBlocker = ({ children }) => {
               className="min-h-[44px] w-full rounded-xl bg-[#004B63] text-white font-semibold py-3 px-4 hover:bg-[#00394D] transition-colors disabled:opacity-60"
             >
               {resendState === "sending"
-                ? "Enviando..."
+                ? "Reenviando..."
                 : resendState === "sent"
-                  ? "Correo reenviado ✓"
-                  : "Reenviar correo de confirmación"}
+                  ? "✓ Correo reenviado"
+                  : "Reenviar correo a mi acudiente"}
             </button>
             <button
               onClick={() => {
+                console.log(
+                  "[ParentalConsentBlocker] Verificando consentimiento nuevamente...",
+                );
                 checkGate();
                 setResendState(null);
               }}
-              className="min-h-[44px] w-full rounded-xl bg-[#E6F4F8] text-[#004B63] font-semibold py-3 px-4 hover:bg-[#d3eaf1] transition-colors"
+              disabled={resendState === "sending"}
+              className="min-h-[44px] w-full rounded-xl bg-[#E6F4F8] text-[#004B63] font-semibold py-3 px-4 hover:bg-[#d3eaf1] transition-colors disabled:opacity-60"
             >
-              Ya confirmó mi acudiente
+              {resendState === "sending"
+                ? "Verificando..."
+                : "✓ Mi acudiente ya confirmó"}
             </button>
             {resendState === "error" && (
               <p className="text-xs text-red-500">
-                No pudimos reenviar el correo. Intenta de nuevo.
+                No pudimos procesar tu solicitud. Intenta de nuevo en unos
+                momentos.
               </p>
             )}
           </div>
