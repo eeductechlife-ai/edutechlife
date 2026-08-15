@@ -23,6 +23,26 @@ class SectionErrorBoundary extends Component {
       error,
       errorInfo,
     );
+    if (typeof window !== "undefined") {
+      try {
+        window.__bberr = {
+          name: this.props.name || "unknown",
+          message: String(error && error.message ? error.message : error).slice(
+            0,
+            400,
+          ),
+          stack: String(error && error.stack ? error.stack : "").slice(0, 800),
+          componentStack: String(
+            errorInfo && errorInfo.componentStack
+              ? errorInfo.componentStack
+              : "",
+          ).slice(0, 1200),
+          at: Date.now(),
+        };
+      } catch (e) {
+        /* noop */
+      }
+    }
   }
 
   handleRetry = () => {
