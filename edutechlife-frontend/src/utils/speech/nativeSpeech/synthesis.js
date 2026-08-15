@@ -93,9 +93,7 @@ const speakTextConversational = async (
           debugLog(
             `🎤 VOCES NATIVAS: ${voicesList.length} total, ${spanishVoices.length} español`,
           );
-          spanishVoices.forEach((v) =>
-            debugLog(`   → ${v.name} (${v.lang})`),
-          );
+          spanishVoices.forEach((v) => debugLog(`   → ${v.name} (${v.lang})`));
 
           const utterance = new SpeechSynthesisUtterance(text);
           utterance.lang = "es-MX";
@@ -322,6 +320,20 @@ const speakTextConversational = async (
 
   const voiceFallbacks = VOICE_FALLBACKS[profile] || [];
 
+  let authToken = null;
+  try {
+    authToken =
+      typeof window !== "undefined"
+        ? sessionStorage.getItem("auth_token")
+        : null;
+  } catch {}
+
+  if (!authToken) {
+    debugLog("🎤 TTS remoto requiere sesión; usando voz nativa...");
+    await useNativeSpeech();
+    return;
+  }
+
   for (const currentApi of backends) {
     if (gotAudio) break;
     debugLog(
@@ -330,18 +342,11 @@ const speakTextConversational = async (
 
     for (const voiceOption of [voice, ...voiceFallbacks]) {
       try {
-        let token = null;
-        try {
-          token =
-            typeof window !== "undefined"
-              ? sessionStorage.getItem("auth_token")
-              : null;
-        } catch {}
         const response = await fetch(`${currentApi}/api/tts`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
           },
           signal: (() => {
             const c = new AbortController();
