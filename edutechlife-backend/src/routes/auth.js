@@ -481,11 +481,28 @@ router.get('/callback', async (req, res) => {
       });
 
       if (authError) {
-        console.error('Auth creation error:', authError);
-        return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
+        // User already exists — try to get them again
+        if (authError.message?.includes('email_exists')) {
+          console.warn('User already exists, retrieving ID:', normalizedEmail);
+          try {
+            const { data: retry } = await supabase.auth.admin.getUserByEmail(normalizedEmail);
+            if (retry?.user?.id) {
+              userId = retry.user.id;
+            } else {
+              console.error('Could not retrieve existing user:', normalizedEmail);
+              return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
+            }
+          } catch (retryErr) {
+            console.error('Retry getUserByEmail failed:', retryErr.message);
+            return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
+          }
+        } else {
+          console.error('Auth creation error:', authError);
+          return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
+        }
+      } else {
+        userId = authData.user.id;
       }
-
-      userId = authData.user.id;
     }
 
     // Ensure a profile row exists for this account (idempotent, never blocking).
