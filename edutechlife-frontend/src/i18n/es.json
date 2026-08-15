@@ -2586,6 +2586,8 @@
   "ialab.dashboard.filter_all": "Todos",
   "ialab.dashboard.filter_in_progress": "En Progreso",
   "ialab.dashboard.filter_completed": "Completados",
+  "ialab.dashboard.stats_label": "Estadísticas de progreso",
+  "ialab.dashboard.no_courses": "No hay cursos en esta categoría",
   "ialab.module.lessons": "{done}/{total} lecciones",
   "ialab.module.progress_title": "Progreso del Módulo",
   "ialab.module.module_label": "Módulo {number}",
