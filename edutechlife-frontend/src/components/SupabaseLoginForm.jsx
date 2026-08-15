@@ -147,10 +147,12 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
       // Token is now in localStorage; useAuthIdentity will read it on next render
       claimStorageForCurrentUser();
 
-      // Pre-seed the supabase-js session so the role gate passes on mount.
-      // Non-blocking: navigation proceeds regardless (setSession itself can
-      // hang on some browsers, hence the timeout + manual-write fallback).
-      seedClientSession(data.token, data.refreshToken);
+      // Pre-seed the supabase-js session so the role gate's getSession() finds
+      // it already persisted when /ialab mounts. AWAITED: navigating before the
+      // seed completes reintroduces the gate hang (mount → getSession() null →
+      // setSession() → notify chain that never settles). The internal 1.5s
+      // timeout + manual-write fallback bound the wait.
+      await seedClientSession(data.token, data.refreshToken);
 
       // Use client-side navigation instead of hard reload
       // Preserves browser cache, avoids re-parsing bundles, faster than window.location.replace()
