@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
-import { seedClientSession, decodeJwtPayload } from "../hooks/useAuthIdentity";
+import { decodeJwtPayload } from "../hooks/useAuthIdentity";
+import { seedClientSession } from "./SupabaseLoginForm";
 import { supabaseStorageKey } from "../lib/supabase";
 
 const OAuthCallbackHandler = () => {

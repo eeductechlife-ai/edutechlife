@@ -19,7 +19,7 @@ import { decodeJwtPayload } from "../hooks/useAuthIdentity";
 // permisos..." eternamente. Escribiendo la sesión manualmente el gate la
 // encuentra lista al montar y no necesita el SDK (mismo formato que persiste
 // supabase-js, verificado funcionando con hard reload).
-const seedClientSession = async (token, refreshToken) => {
+export const seedClientSession = async (token, refreshToken) => {
   try {
     const payload = decodeJwtPayload(token);
     const now = Math.floor(Date.now() / 1000);
