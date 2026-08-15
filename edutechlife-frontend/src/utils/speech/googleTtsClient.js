@@ -30,6 +30,8 @@ const getAuthToken = () => {
 
 const prefetchTts = async (text, profile = "valeria", overrides = {}) => {
   if (!text || text.length < 3) return;
+  const token = getAuthToken();
+  if (!token) return;
   try {
     const cached = audioCache.get(profile, text);
     if (cached) return;
@@ -38,7 +40,6 @@ const prefetchTts = async (text, profile = "valeria", overrides = {}) => {
       ...(VOICE_PROFILES[profile] || VOICE_PROFILES.valeria),
       ...overrides,
     };
-    const token = getAuthToken();
     const response = await fetch(`${apiBase}/api/tts`, {
       method: "POST",
       headers: {
