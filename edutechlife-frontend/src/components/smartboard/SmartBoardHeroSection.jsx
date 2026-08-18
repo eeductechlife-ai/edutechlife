@@ -164,8 +164,8 @@ export default function SmartBoardHeroSection({
         <FloatingParticles count={35} className="z-0" />
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-10 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-8 lg:py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8 items-center">
           <div className="lg:col-span-3">
             <motion.div
               {...(!prefersReducedMotion ? springUp(0) : {})}
@@ -214,87 +214,6 @@ export default function SmartBoardHeroSection({
             </motion.div>
 
             <motion.div
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-              animate={
-                prefersReducedMotion
-                  ? false
-                  : inView
-                    ? { opacity: 1, y: 0 }
-                    : {}
-              }
-              transition={
-                prefersReducedMotion
-                  ? undefined
-                  : {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 18,
-                      delay: 0.3,
-                    }
-              }
-              className="mb-6"
-            >
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-2.5 text-center lg:text-left">
-                {t("smartboard.landing_concern_label")}
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {PAIN_POINTS.map((tag, i) => (
-                  <motion.div
-                    key={i}
-                    initial={
-                      prefersReducedMotion ? false : { opacity: 0, x: -20 }
-                    }
-                    animate={
-                      prefersReducedMotion
-                        ? false
-                        : inView
-                          ? { opacity: 1, x: 0 }
-                          : {}
-                    }
-                    transition={
-                      prefersReducedMotion
-                        ? undefined
-                        : {
-                            type: "spring",
-                            stiffness: 120,
-                            damping: 14,
-                            delay: 0.35 + i * 0.08,
-                          }
-                    }
-                    className="group relative flex items-center gap-3 px-4 py-3 rounded-xl bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm hover:shadow-[0_12px_24px_rgba(0,75,99,0.1)] hover:-translate-y-1 transition-all duration-300 cursor-default overflow-hidden"
-                  >
-                    <div
-                      className="absolute left-0 top-0 bottom-0 w-[3px] opacity-60"
-                      style={{ backgroundColor: PAIN_COLORS[i].accent }}
-                    />
-                    <div
-                      className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ backgroundColor: PAIN_COLORS[i].bg }}
-                    >
-                      <Icon
-                        name={tag.icon}
-                        className="text-sm"
-                        style={{ color: PAIN_COLORS[i].accent }}
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <p
-                        className="text-xs font-bold leading-tight mb-0.5"
-                        style={{ color: PAIN_COLORS[i].accent }}
-                      >
-                        {tag.text}
-                      </p>
-                      <p className="text-[10px] text-slate-400 leading-tight">
-                        {PAIN_SOLUTIONS[i]}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div
               initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }}
               animate={
                 prefersReducedMotion
@@ -334,10 +253,10 @@ export default function SmartBoardHeroSection({
             </motion.div>
           </div>
 
-          <div className="lg:col-span-2 hidden lg:flex flex-col items-center justify-center gap-6">
+          <div className="lg:col-span-2 hidden lg:flex flex-col items-center justify-center gap-4">
             <SmartBoardTilt3D
               intensity={8}
-              className="relative w-[320px] h-[320px] xl:w-[360px] xl:h-[360px] shrink-0"
+              className="relative w-[240px] h-[240px] lg:w-[280px] lg:h-[280px] shrink-0"
             >
               <motion.div
                 initial={
@@ -638,7 +557,7 @@ export default function SmartBoardHeroSection({
                       delay: 0.5,
                     }
               }
-              className="flex items-center justify-center gap-3"
+              className="hidden lg:flex items-center justify-center gap-3"
             >
               {STATS.map((stat, i) => (
                 <SmartBoardTilt3D key={i} intensity={12}>
