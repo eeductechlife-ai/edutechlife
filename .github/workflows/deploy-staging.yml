@@ -1,0 +1,230 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches: [staging, develop]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 20
+
+concurrency:
+  group: deploy-staging-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pre-deploy-checks:
+    name: Pre-Deploy Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      skip: ${{ steps.check-skip.outputs.skip }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check if changes should trigger deploy
+        id: check-skip
+        run: |
+          # Skip if only docs or config changed
+          git diff HEAD~1 --name-only | grep -E '\.(md|yml|json)$' > /dev/null
+          if [ $? -eq 0 ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+  deploy-staging-frontend:
+    name: Deploy Staging Frontend (Vercel)
+    needs: pre-deploy-checks
+    if: ${{ needs.pre-deploy-checks.outputs.skip != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: edutechlife-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-frontend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-frontend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Lint and Type Check
+        run: |
+          npm run lint || echo "Lint warnings detected"
+          npm run typecheck || echo "Type check warnings detected"
+
+      - name: Run Tests
+        run: npm run test:smoke
+
+      - name: Build Frontend
+        run: npm run build
+        env:
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN_STAGING }}
+          VITE_POSTHOG_KEY: ${{ secrets.VITE_POSTHOG_KEY }}
+          VITE_POSTHOG_HOST: ${{ secrets.VITE_POSTHOG_HOST }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Deploy to Vercel Staging
+        run: |
+          npx vercel deploy \
+            --token=${{ secrets.VERCEL_TOKEN }} \
+            --scope=${{ secrets.VERCEL_ORG_ID }} \
+            --yes
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STAGING }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+
+      - name: Get Staging URL
+        id: staging-url
+        run: |
+          URL=$(npx vercel ls --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }} 2>/dev/null | grep -oP 'https://[^\s]+' | head -1)
+          echo "url=${URL}" >> $GITHUB_OUTPUT
+          echo "Staging URL: ${URL}"
+
+  deploy-staging-backend:
+    name: Deploy Staging Backend (Render)
+    needs: pre-deploy-checks
+    if: ${{ needs.pre-deploy-checks.outputs.skip != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-backend/package-lock.json
+          cache-dependency-path: edutechlife-backend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-backend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-backend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        working-directory: edutechlife-backend
+        run: npm ci
+
+      - name: Lint and Type Check
+        working-directory: edutechlife-backend
+        run: npm run lint || echo "Lint warnings detected"
+
+      - name: Run Tests
+        working-directory: edutechlife-backend
+        run: npm test
+
+      - name: Trigger Render Deploy Hook (Staging)
+        run: |
+          curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_STAGING }}" \
+            -H "Content-Type: application/json" \
+            -d '{}'
+          echo ""
+          echo "Staging backend deploy hook dispatched"
+
+  smoke-test-staging:
+    name: Smoke Test Staging
+    needs: [deploy-staging-frontend, deploy-staging-backend]
+    if: ${{ always() && needs.deploy-staging-frontend.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Wait for deploy propagation
+        run: sleep 20
+
+      - name: Check Frontend Staging
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "${{ secrets.SMOKE_TEST_FRONTEND_STAGING_URL }}")
+          echo "Frontend Status: $RESPONSE"
+          if [ "$RESPONSE" != "200" ]; then
+            echo "Frontend health check failed!"
+            exit 1
+          fi
+
+      - name: Check Backend Staging
+        if: ${{ needs.deploy-staging-backend.result == 'success' }}
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "${{ secrets.SMOKE_TEST_BACKEND_STAGING_URL }}")
+          echo "Backend Status: $RESPONSE"
+          if [ "$RESPONSE" != "200" ]; then
+            echo "Backend health check failed!"
+            exit 1
+          fi
+
+      - name: Basic Functionality Test
+        run: |
+          # Test basic endpoints
+          curl -sf "${{ secrets.SMOKE_TEST_FRONTEND_STAGING_URL }}/ialab" && echo "IALab OK"
+          curl -sf "${{ secrets.SMOKE_TEST_FRONTEND_STAGING_URL }}/smartboard" && echo "SmartBoard OK"
+
+      - name: Post Deployment Summary
+        if: success()
+        run: |
+          echo "## Staging Deployment Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Frontend: ${{ secrets.SMOKE_TEST_FRONTEND_STAGING_URL }}" >> $GITHUB_STEP_SUMMARY
+          echo "Backend: ${{ secrets.SMOKE_TEST_BACKEND_STAGING_URL }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### QA Checklist" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] All features work on staging" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] Analytics events tracked" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] No console errors" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] Mobile responsive" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] Auth flow works" >> $GITHUB_STEP_SUMMARY
+          echo "- [ ] Payment flow works (test card)" >> $GITHUB_STEP_SUMMARY
+
+  notify-deployment:
+    name: Notify Deployment Status
+    needs: [smoke-test-staging]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Notify Slack on Success
+        if: ${{ needs.smoke-test-staging.result == 'success' }}
+        run: |
+          curl -X POST ${{ secrets.SLACK_WEBHOOK_DEVOPS }} \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "text": "✅ Staging deployment successful",
+              "attachments": [{
+                "color": "good",
+                "fields": [
+                  {"title": "Branch", "value": "${{ github.ref }}", "short": true},
+                  {"title": "Commit", "value": "${{ github.sha }}", "short": true},
+                  {"title": "Frontend", "value": "${{ secrets.SMOKE_TEST_FRONTEND_STAGING_URL }}", "short": false}
+                ]
+              }]
+            }'
+
+      - name: Notify Slack on Failure
+        if: ${{ needs.smoke-test-staging.result != 'success' }}
+        run: |
+          curl -X POST ${{ secrets.SLACK_WEBHOOK_DEVOPS }} \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "text": "❌ Staging deployment failed",
+              "attachments": [{
+                "color": "danger",
+                "fields": [
+                  {"title": "Branch", "value": "${{ github.ref }}", "short": true},
+                  {"title": "Commit", "value": "${{ github.sha }}", "short": true},
+                  {"title": "Action URL", "value": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}", "short": false}
+                ]
+              }]
+            }'

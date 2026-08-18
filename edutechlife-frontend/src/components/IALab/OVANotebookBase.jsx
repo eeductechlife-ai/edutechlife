@@ -76,7 +76,7 @@ export default function OVANotebookBase({
           particleCount: 150,
           spread: 70,
           origin: { y: 0.6 },
-          colors: ["#00BCD4", "#004B63", "#EAEAEA"],
+          colors: ["#1e40af", "#fbbf24", "#f3f4f6"],
         });
       });
     }
@@ -146,7 +146,7 @@ export default function OVANotebookBase({
 
   if (screen === "intro") {
     return (
-      <div className="w-full h-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center rounded-2xl min-h-[400px]">
+      <div className="w-full h-full bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center rounded-2xl min-h-[400px]">
         <OVAIntro
           icon="fa-brain"
           badge={tk("learning_badge")}
@@ -178,8 +178,8 @@ export default function OVANotebookBase({
     return (
       <div className="w-full relative min-h-[400px]">
         <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[length:50px_50px]" />
-        <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(0,188,212,0.15)_0%,rgba(255,255,255,0)_70%)]" />
-        <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(0,75,99,0.08)_0%,rgba(255,255,255,0)_70%)]" />
+        <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(30,64,175,0.1)_0%,rgba(255,255,255,0)_70%)]" />
+        <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(30,64,175,0.08)_0%,rgba(255,255,255,0)_70%)]" />
         <div className="w-full flex items-center justify-center py-12 px-4 relative z-10">
           <div className="w-full max-w-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-corporate/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-8 md:p-16 rounded-3xl animate-[fadeIn_0.6s_ease-out_forwards] text-center border-t-4 border-t-petroleum">
             <div className="mb-6 flex justify-center">
@@ -225,8 +225,8 @@ export default function OVANotebookBase({
     return (
       <div className="w-full relative min-h-[400px]">
         <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[length:50px_50px]" />
-        <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(0,188,212,0.15)_0%,rgba(255,255,255,0)_70%)]" />
-        <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(0,75,99,0.08)_0%,rgba(255,255,255,0)_70%)]" />
+        <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(30,64,175,0.1)_0%,rgba(255,255,255,0)_70%)]" />
+        <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(30,64,175,0.08)_0%,rgba(255,255,255,0)_70%)]" />
         <div className="w-full py-6 px-4 relative z-10">
           <div
             className="w-full max-w-5xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]"
@@ -264,9 +264,9 @@ export default function OVANotebookBase({
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover opacity-90"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-petroleum via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900 via-transparent to-transparent opacity-80" />
                   <div className="absolute bottom-4 left-4 right-4">
-                    <div className="flex items-center gap-2 text-white text-sm font-semibold bg-corporate/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20">
+                    <div className="flex items-center gap-2 text-white text-sm font-semibold bg-blue-700/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20">
                       <Network size={16} /> {tk("learning_badge")}
                     </div>
                   </div>
@@ -276,7 +276,7 @@ export default function OVANotebookBase({
                 className={`w-full lg:w-3/5 ${contentPanelMaxHeight} overflow-y-auto`}
               >
                 <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-corporate/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-6 md:p-10 rounded-3xl flex flex-col border-t-4 border-t-corporate">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-50 dark:bg-cyan-900/30 text-corporate dark:text-teal-200 font-semibold text-[9px] uppercase tracking-[0.15em] border border-corporate/20 w-fit mb-4">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold text-[9px] uppercase tracking-[0.15em] border border-blue-700/20 w-fit mb-4">
                     <Brain size={12} />
                     <span>{screen_data.subtitle}</span>
                   </div>

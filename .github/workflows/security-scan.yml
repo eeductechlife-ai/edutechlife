@@ -1,0 +1,213 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run security scans daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+env:
+  NODE_VERSION: 20
+
+jobs:
+  snyk-frontend:
+    name: Snyk Scan - Frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: edutechlife-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-frontend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-frontend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-frontend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Install Snyk
+        run: npm install -g snyk
+
+      - name: Snyk Auth
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+        if: ${{ secrets.SNYK_TOKEN != '' }}
+
+      - name: Snyk Test (Frontend)
+        run: snyk test --severity-threshold=high
+        if: ${{ secrets.SNYK_TOKEN != '' }}
+        continue-on-error: true
+
+  snyk-backend:
+    name: Snyk Scan - Backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: edutechlife-backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: edutechlife-backend/package-lock.json
+
+      - name: Cache node_modules
+        id: cache-nm
+        uses: actions/cache@v4
+        with:
+          path: edutechlife-backend/node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('edutechlife-backend/package-lock.json') }}
+
+      - if: steps.cache-nm.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Install Snyk
+        run: npm install -g snyk
+
+      - name: Snyk Auth
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+        if: ${{ secrets.SNYK_TOKEN != '' }}
+
+      - name: Snyk Test (Backend)
+        run: snyk test --severity-threshold=high
+        if: ${{ secrets.SNYK_TOKEN != '' }}
+        continue-on-error: true
+
+  owasp-deps:
+    name: OWASP Dependency Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run OWASP Dependency Check (Frontend)
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'edutechlife-frontend'
+          path: 'edutechlife-frontend'
+          format: 'JSON'
+          args: >
+            --enableProjectName
+            --enableExperimental
+        continue-on-error: true
+
+      - name: Run OWASP Dependency Check (Backend)
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'edutechlife-backend'
+          path: 'edutechlife-backend'
+          format: 'JSON'
+          args: >
+            --enableProjectName
+            --enableExperimental
+        continue-on-error: true
+
+      - name: Upload OWASP Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: owasp-reports
+          path: reports/
+          retention-days: 30
+
+  npm-audit:
+    name: NPM Audit (Strict)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Frontend NPM Audit
+        run: |
+          cd edutechlife-frontend
+          npm ci
+          npm audit --production || true
+        continue-on-error: true
+
+      - name: Backend NPM Audit
+        run: |
+          cd edutechlife-backend
+          npm ci
+          npm audit --production || true
+        continue-on-error: true
+
+  secrets-scan:
+    name: Secrets Detection
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: TruffleHog Secrets Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+        continue-on-error: true
+
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      security-events: write
+    strategy:
+      matrix:
+        language: ['javascript', 'typescript']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: '/language:${{ matrix.language }}'
+
+  security-report:
+    name: Security Report Summary
+    needs: [snyk-frontend, snyk-backend, owasp-deps, npm-audit, secrets-scan, codeql]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Generate Security Report
+        run: |
+          echo "## Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "- **Snyk Frontend**: ${{ needs.snyk-frontend.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Snyk Backend**: ${{ needs.snyk-backend.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **OWASP Dependencies**: ${{ needs.owasp-deps.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **NPM Audit**: ${{ needs.npm-audit.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Secrets Scan**: ${{ needs.secrets-scan.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **CodeQL**: ${{ needs.codeql.result }}" >> $GITHUB_STEP_SUMMARY

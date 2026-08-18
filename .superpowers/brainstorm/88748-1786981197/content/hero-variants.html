@@ -1,0 +1,88 @@
+<h2>Hero compacto — ¿qué tan reducido?</h2>
+<p class="subtitle">Todo lo que está dentro del rectángulo punteado rojo es lo que se ve al cargar la página (primer pantallazo). El menú queda justo debajo del hero y se pega arriba al hacer scroll.</p>
+
+<style>
+  .wk { display: flex; flex-direction: column; gap: 5px; font-size: 11px; background: #fff; border-radius: 10px; padding: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.08); position: relative; min-height: 175px; }
+  .wk .fold { position: absolute; left: 0; right: 0; top: 148px; border-top: 2px dashed #ff6b6b; }
+  .wk .fold::after { content: "primer pantallazo"; position: absolute; right: 2px; top: -11px; background: #ff6b6b; color: #fff; font-size: 8px; border-radius: 3px; padding: 1px 4px; }
+  .wk .badge { align-self: center; background: #FFF3D6; border: 1px solid #F5D78E; color: #8a6d1f; border-radius: 20px; font-size: 9px; padding: 2px 8px; flex-shrink: 0; }
+  .wk .title { align-self: center; background: #004B63; border-radius: 4px; height: 13px; width: 72%; flex-shrink: 0; }
+  .wk .title.short { width: 45%; }
+  .wk .sub { align-self: center; background: #cfe3ee; border-radius: 3px; height: 7px; width: 80%; flex-shrink: 0; }
+  .wk .sub.w60 { width: 60%; }
+  .wk .cta { display: flex; gap: 5px; justify-content: center; flex-shrink: 0; }
+  .wk .btn { background: #004B63; border-radius: 14px; height: 16px; width: 60px; flex-shrink: 0; }
+  .wk .btn.ghost { background: #fff; border: 1px solid #004B63; }
+  .wk .stats { display: flex; gap: 5px; justify-content: center; flex-shrink: 0; }
+  .wk .stat { background: #f2f6f8; border: 1px solid #dde9ef; border-radius: 6px; height: 16px; width: 55px; flex-shrink: 0; }
+  .wk .bar { height: 16px; border-radius: 4px; display: flex; align-items: center; gap: 4px; padding: 0 6px; flex-shrink: 0; }
+  .wk .bar.light { background: #e8f4fb; color: #0d3f52; border: 1px solid #bfe0ef; font-weight: 600; }
+  .wk .pills { display: flex; gap: 3px; flex: 1; }
+  .wk .pill { background: #cfe3ee; border-radius: 9px; height: 8px; flex: 1 0 10%; }
+  .wk .pill.on { background: #FFC857; }
+  .wk .counter { background: #004B63; color: #fff; border-radius: 9px; font-size: 9px; padding: 1px 5px; flex-shrink: 0; }
+  .wk .sec { background: #f2f6f8; border-radius: 6px; height: 20px; flex-shrink: 0; }
+  .wk .sec.w70 { width: 70%; }
+  .cards .card { min-width: 225px; }
+  .note { font-size: 10px; color: #6b7f8c; margin-top: 6px; }
+</style>
+
+<div class="cards">
+  <div class="card" data-choice="b1" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f4f7f9">
+      <div class="wk">
+        <div class="badge">SmartBoard</div>
+        <div class="title short"></div>
+        <div class="cta"><div class="btn"></div><div class="btn ghost"></div></div>
+        <div class="bar light"><div class="pills"><span class="pill on"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span></div><span class="counter">1/8</span></div>
+        <div class="fold"></div>
+        <div class="sec"></div>
+        <div class="sec w70"></div>
+      </div>
+      <p class="note">Stats y subtítulo salen del primer pantallazo.</p>
+    </div>
+    <div class="card-body">
+      <h3>B1. Esqueleto</h3>
+      <p>Badge + título + CTA. Mínimo posible, el menú respira.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b2" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f4f7f9">
+      <div class="wk">
+        <div class="badge">SmartBoard</div>
+        <div class="title"></div>
+        <div class="sub"></div>
+        <div class="cta"><div class="btn"></div><div class="btn ghost"></div></div>
+        <div class="stats"><div class="stat"></div><div class="stat"></div><div class="stat"></div></div>
+        <div class="bar light"><div class="pills"><span class="pill on"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span></div><span class="counter">1/8</span></div>
+        <div class="fold"></div>
+        <div class="sec"></div>
+      </div>
+      <p class="note">Todo entra, pero apretado — riesgo de desborde en pantallas cortas.</p>
+    </div>
+    <div class="card-body">
+      <h3>B2. Compacto completo</h3>
+      <p>Todo el hero (badge, título, subtítulo, CTAs, stats) pero con espaciados reducidos.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b3" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f4f7f9">
+      <div class="wk">
+        <div class="badge">SmartBoard</div>
+        <div class="title"></div>
+        <div class="cta"><div class="btn"></div><div class="btn ghost"></div></div>
+        <div class="bar light"><div class="pills"><span class="pill on"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span><span class="pill"></span></div><span class="counter">1/8</span></div>
+        <div class="fold"></div>
+        <div class="sec" style="width:100%"></div>
+        <div class="stats"><div class="stat"></div><div class="stat"></div><div class="stat"></div></div>
+      </div>
+      <p class="note">Los stats pasan a una fila justo debajo del menú — la info no se pierde.</p>
+    </div>
+    <div class="card-body">
+      <h3>B3. Stats debajo del menú</h3>
+      <p>Hero con badge + título + CTA; las estadísticas bajan a la primera fila de contenido.</p>
+    </div>
+  </div>
+</div>

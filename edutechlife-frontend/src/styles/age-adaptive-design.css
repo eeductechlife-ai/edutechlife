@@ -1,0 +1,355 @@
+/**
+ * AGE-ADAPTIVE DESIGN SYSTEM — Phase 3
+ * ============================================================
+ * CSS variables and design tokens for age-group-specific styling
+ * Applied via data-age-group attribute on SmartBoardKidsDashboard
+ *
+ * Age Groups:
+ * - elementary: 5-8 years (Grades K-2)
+ * - middle: 9-11 years (Grades 3-5)
+ * - secondary: 12+ years (Grades 6+)
+ *
+ * Features:
+ * - Font sizes scale by age group
+ * - Color intensity adapts to age-appropriateness
+ * - Animation complexity varies by cognitive load
+ * - Touch targets optimized per age (elementary = larger)
+ * - Dark mode support via .dark class
+ */
+
+/* ==================== BASE: MIDDLE SCHOOL (9-11) ==================== */
+/* Default values used when no data-age-group set */
+:root {
+  /* ---- TYPOGRAPHY ---- */
+  --age-font-size-xs: 0.75rem; /* 12px - captions, labels */
+  --age-font-size-sm: 0.875rem; /* 14px - body text */
+  --age-font-size-base: 1rem; /* 16px - regular text */
+  --age-font-size-lg: 1.125rem; /* 18px - subheadings */
+  --age-font-size-xl: 1.25rem; /* 20px - card titles */
+  --age-font-size-2xl: 1.5rem; /* 24px - section headers */
+  --age-font-size-3xl: 1.875rem; /* 30px - page headers */
+  --age-font-weight-body: 400; /* Regular */
+  --age-font-weight-bold: 700; /* Bold */
+  --age-line-height: 1.5; /* Comfortable reading */
+
+  /* ---- COLORS & CONTRAST ---- */
+  --age-primary-color: #4da8c4; /* Teal */
+  --age-accent-color: #66cccc; /* Mint */
+  --age-text-color: #004b63; /* Navy */
+  --age-text-light: #64748b; /* Gray */
+  --age-background-light: #f8fafc; /* Off-white */
+  --age-background-card: #ffffff; /* White */
+  --age-highlight-color: #ffd166; /* Warm yellow */
+
+  /* ---- SPACING & LAYOUT ---- */
+  --age-spacing-sm: 0.5rem; /* 8px - tight spacing */
+  --age-spacing-md: 1rem; /* 16px - regular spacing */
+  --age-spacing-lg: 1.5rem; /* 24px - loose spacing */
+  --age-spacing-xl: 2rem; /* 32px - very loose */
+
+  /* ---- INTERACTIVE ELEMENTS ---- */
+  --age-touch-target-min: 44px; /* Minimum touch target (WCAG) */
+  --age-border-radius: 1rem; /* 16px - moderate rounded corners */
+  --age-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --age-shadow-md: 0 4px 12px rgba(0, 75, 99, 0.12);
+
+  /* ---- ANIMATIONS ---- */
+  --age-animation-duration: 300ms; /* Medium speed */
+  --age-animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --age-motion-reduce: false; /* Enable animations by default */
+
+  /* ---- ICON SIZE ---- */
+  --age-icon-sm: 1.25rem; /* 20px - inline icons */
+  --age-icon-md: 2rem; /* 32px - card icons */
+  --age-icon-lg: 3rem; /* 48px - feature icons */
+
+  /* ---- CARD STYLING ---- */
+  --age-card-padding: 1rem;
+  --age-card-gap: 0.75rem;
+  --age-grid-columns: 3; /* Desktop grid layout */
+}
+
+/* ==================== DARK MODE (IALab OVERRIDE) ==================== */
+.dark {
+  --age-text-color: #e2e8f0; /* Light text */
+  --age-text-light: #94a3b8; /* Light gray */
+  --age-background-light: #0f172a; /* Dark background */
+  --age-background-card: #1e293b; /* Darker card */
+  --age-primary-color: #66cccc; /* Brighter teal */
+  --age-accent-color: #8edede; /* Brighter mint */
+}
+
+/* ==================== ELEMENTARY SCHOOL (5-8) ==================== */
+/* Larger, simpler, more colorful for younger kids */
+[data-age-group="elementary"] {
+  /* ---- TYPOGRAPHY (BIGGER) ---- */
+  --age-font-size-xs: 0.875rem; /* 14px → 14px (larger) */
+  --age-font-size-sm: 1rem; /* 14px → 16px */
+  --age-font-size-base: 1.125rem; /* 16px → 18px */
+  --age-font-size-lg: 1.25rem; /* 18px → 20px */
+  --age-font-size-xl: 1.5rem; /* 20px → 24px */
+  --age-font-size-2xl: 1.875rem; /* 24px → 30px */
+  --age-font-size-3xl: 2.25rem; /* 30px → 36px */
+  --age-font-weight-body: 500; /* Slightly bold by default */
+  --age-font-weight-bold: 800; /* Extra bold */
+  --age-line-height: 1.75; /* More spacious reading */
+
+  /* ---- COLORS (MORE VIBRANT) ---- */
+  --age-primary-color: #ff6b9d; /* Bright pink */
+  --age-accent-color: #ffb74d; /* Warm orange */
+  --age-text-color: #004b63; /* Keep navy text */
+  --age-text-light: #5f6b7a; /* Slightly darker gray */
+  --age-highlight-color: #66cccc; /* Mint highlight */
+  --age-background-light: #fffbf8; /* Cream/warm white */
+  --age-background-card: #fffef5; /* Warm card bg */
+
+  /* ---- SPACING (BIGGER) ---- */
+  --age-spacing-sm: 0.75rem; /* 12px (from 8px) */
+  --age-spacing-md: 1.25rem; /* 20px (from 16px) */
+  --age-spacing-lg: 2rem; /* 32px (from 24px) */
+  --age-spacing-xl: 2.5rem; /* 40px (from 32px) */
+
+  /* ---- INTERACTIVE ELEMENTS ---- */
+  --age-touch-target-min: 48px; /* LARGER for small hands */
+  --age-border-radius: 1.5rem; /* 24px - rounded & friendly */
+  --age-shadow-md: 0 6px 16px rgba(255, 107, 157, 0.18);
+
+  /* ---- ANIMATIONS (FASTER, MORE FUN) ---- */
+  --age-animation-duration: 400ms; /* Slightly slower for clarity */
+  --age-icon-sm: 1.5rem; /* 24px */
+  --age-icon-md: 2.5rem; /* 40px */
+  --age-icon-lg: 3.5rem; /* 56px */
+
+  /* ---- CARD STYLING ---- */
+  --age-card-padding: 1.25rem;
+  --age-card-gap: 1rem;
+  --age-grid-columns: 2; /* 2-column grid on desktop */
+}
+
+.dark[data-age-group="elementary"] {
+  --age-background-light: #1a0f1e; /* Dark warm */
+  --age-background-card: #2d1b35; /* Dark purple-ish */
+  --age-text-color: #fff5f8; /* Warm light text */
+  --age-text-light: #d4b5c4; /* Warm gray */
+  --age-primary-color: #ff8fad; /* Lighter pink */
+  --age-accent-color: #ffd666; /* Lighter orange */
+}
+
+/* ==================== SECONDARY SCHOOL (12+) ==================== */
+/* Smaller, more sophisticated, neutral for older kids */
+[data-age-group="secondary"] {
+  /* ---- TYPOGRAPHY (SMALLER, MORE COMPACT) ---- */
+  --age-font-size-xs: 0.7rem; /* 11px (from 12px) */
+  --age-font-size-sm: 0.8rem; /* 13px (from 14px) */
+  --age-font-size-base: 0.95rem; /* 15px (from 16px) */
+  --age-font-size-lg: 1.05rem; /* 17px (from 18px) */
+  --age-font-size-xl: 1.2rem; /* 19px (from 20px) */
+  --age-font-size-2xl: 1.4rem; /* 22px (from 24px) */
+  --age-font-size-3xl: 1.75rem; /* 28px (from 30px) */
+  --age-font-weight-body: 400; /* Regular */
+  --age-font-weight-bold: 600; /* Medium-bold (not as heavy) */
+  --age-line-height: 1.4; /* Tighter reading */
+
+  /* ---- COLORS (MORE NEUTRAL, SOPHISTICATED) ---- */
+  --age-primary-color: #0097a7; /* Deep teal */
+  --age-accent-color: #4da8c4; /* Muted teal */
+  --age-text-color: #1e293b; /* Dark gray-blue */
+  --age-text-light: #64748b; /* Medium gray */
+  --age-highlight-color: #ffa500; /* Orange accent */
+  --age-background-light: #f5f7fa; /* Cool white */
+  --age-background-card: #ffffff; /* Pure white */
+
+  /* ---- SPACING (COMPACT) ---- */
+  --age-spacing-sm: 0.5rem; /* 8px (tighter) */
+  --age-spacing-md: 0.875rem; /* 14px (compact) */
+  --age-spacing-lg: 1.25rem; /* 20px */
+  --age-spacing-xl: 1.75rem; /* 28px */
+
+  /* ---- INTERACTIVE ELEMENTS ---- */
+  --age-touch-target-min: 40px; /* Can be smaller for mature hands */
+  --age-border-radius: 0.75rem; /* 12px - more angular/modern */
+  --age-shadow-md: 0 2px 8px rgba(0, 75, 99, 0.08);
+
+  /* ---- ANIMATIONS (SUBTLE, PROFESSIONAL) ---- */
+  --age-animation-duration: 250ms; /* Fast & snappy */
+  --age-icon-sm: 1rem; /* 16px */
+  --age-icon-md: 1.75rem; /* 28px */
+  --age-icon-lg: 2.5rem; /* 40px */
+
+  /* ---- CARD STYLING ---- */
+  --age-card-padding: 0.875rem;
+  --age-card-gap: 0.625rem;
+  --age-grid-columns: 4; /* 4-column for dense info */
+}
+
+.dark[data-age-group="secondary"] {
+  --age-background-light: #0d1117; /* Very dark */
+  --age-background-card: #161b22; /* Darker card */
+  --age-text-color: #c9d1d9; /* Light gray */
+  --age-text-light: #8b949e; /* Medium gray */
+  --age-primary-color: #58a6ff; /* Blue */
+  --age-accent-color: #79c0ff; /* Light blue */
+}
+
+/* ==================== TABLET ADJUSTMENTS ==================== */
+@media (max-width: 1024px) {
+  :root {
+    --age-grid-columns: 2;
+  }
+
+  [data-age-group="elementary"] {
+    --age-grid-columns: 2;
+  }
+
+  [data-age-group="secondary"] {
+    --age-grid-columns: 3;
+  }
+}
+
+/* ==================== MOBILE ADJUSTMENTS ==================== */
+@media (max-width: 640px) {
+  :root {
+    --age-grid-columns: 1;
+    --age-spacing-lg: 1rem;
+    --age-spacing-xl: 1.5rem;
+  }
+
+  [data-age-group="elementary"] {
+    --age-grid-columns: 1;
+    --age-font-size-3xl: 1.75rem; /* Reduce page header size */
+    --age-spacing-lg: 1.5rem;
+  }
+
+  [data-age-group="secondary"] {
+    --age-grid-columns: 2;
+    --age-font-size-3xl: 1.5rem;
+  }
+}
+
+/* ==================== MOTION PREFERENCES ==================== */
+@media (prefers-reduced-motion: reduce) {
+  :root,
+  [data-age-group] {
+    --age-animation-duration: 0.01ms !important;
+    --age-motion-reduce: true;
+  }
+}
+
+/* ==================== FOCUS STATES (ACCESSIBILITY) ==================== */
+[data-age-group] button:focus-visible,
+[data-age-group] a:focus-visible,
+[data-age-group] input:focus-visible {
+  outline: 3px solid var(--age-primary-color);
+  outline-offset: 2px;
+}
+
+[data-age-group="elementary"] button:focus-visible,
+[data-age-group="elementary"] a:focus-visible,
+[data-age-group="elementary"] input:focus-visible {
+  outline-width: 4px;
+  outline-offset: 3px;
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+
+/* Age-adaptive text sizing */
+.age-text-xs {
+  font-size: var(--age-font-size-xs);
+}
+.age-text-sm {
+  font-size: var(--age-font-size-sm);
+}
+.age-text-base {
+  font-size: var(--age-font-size-base);
+}
+.age-text-lg {
+  font-size: var(--age-font-size-lg);
+}
+.age-text-xl {
+  font-size: var(--age-font-size-xl);
+}
+.age-text-2xl {
+  font-size: var(--age-font-size-2xl);
+}
+.age-text-3xl {
+  font-size: var(--age-font-size-3xl);
+}
+
+/* Age-adaptive colors */
+.age-text-primary {
+  color: var(--age-text-color);
+}
+.age-text-secondary {
+  color: var(--age-text-light);
+}
+.age-text-highlight {
+  color: var(--age-highlight-color);
+}
+.age-bg-light {
+  background-color: var(--age-background-light);
+}
+.age-bg-card {
+  background-color: var(--age-background-card);
+}
+
+/* Age-adaptive spacing */
+.age-gap-sm {
+  gap: var(--age-spacing-sm);
+}
+.age-gap-md {
+  gap: var(--age-spacing-md);
+}
+.age-gap-lg {
+  gap: var(--age-spacing-lg);
+}
+.age-gap-xl {
+  gap: var(--age-spacing-xl);
+}
+
+.age-p-sm {
+  padding: var(--age-spacing-sm);
+}
+.age-p-md {
+  padding: var(--age-spacing-md);
+}
+.age-p-lg {
+  padding: var(--age-spacing-lg);
+}
+.age-p-xl {
+  padding: var(--age-spacing-xl);
+}
+
+.age-m-sm {
+  margin: var(--age-spacing-sm);
+}
+.age-m-md {
+  margin: var(--age-spacing-md);
+}
+.age-m-lg {
+  margin: var(--age-spacing-lg);
+}
+.age-m-xl {
+  margin: var(--age-spacing-xl);
+}
+
+/* Age-adaptive touch targets */
+.age-touch-safe {
+  min-width: var(--age-touch-target-min);
+  min-height: var(--age-touch-target-min);
+}
+
+/* Age-adaptive border radius */
+.age-rounded {
+  border-radius: var(--age-border-radius);
+}
+
+/* Age-adaptive shadows */
+.age-shadow {
+  box-shadow: var(--age-shadow-md);
+}
+
+/* Age-adaptive animations */
+.age-transition {
+  transition-duration: var(--age-animation-duration);
+  transition-timing-function: var(--age-animation-easing);
+}

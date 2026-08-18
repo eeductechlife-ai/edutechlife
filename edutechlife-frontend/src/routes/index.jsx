@@ -13,6 +13,7 @@ import ProtectedRoute from "../components/layout/ProtectedRoute";
 import RoleProtectedRoute from "../components/layout/RoleProtectedRoute";
 import { PageLoader, SkeletonLoader } from "../components/LoadingScreen";
 import { useTranslation } from "../i18n/I18nProvider";
+import SmartBoardLoginRedirect from "../components/SmartBoardLoginRedirect";
 
 // Lazy load para componentes pesados
 const LandingPage = lazy(() => import("../components/pages/LandingPage"));
@@ -303,11 +304,7 @@ const AppRoutes = () => {
 
         <Route
           path="smartboard/login"
-          element={
-            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-              <SmartBoardLogin />
-            </Suspense>
-          }
+          element={<SmartBoardLoginRedirect />}
         />
 
         <Route

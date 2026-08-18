@@ -145,8 +145,8 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
           style={{ minHeight: "400px" }}
         >
           <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#E5E7EB_1px,transparent_1px),linear-gradient(to_bottom,#E5E7EB_1px,transparent_1px)] bg-[length:50px_50px]" />
-          <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(0,188,212,0.15)_0%,rgba(255,255,255,0)_70%)]" />
-          <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(10,53,80,0.08)_0%,rgba(255,255,255,0)_70%)]" />
+          <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(30,64,175,0.1)_0%,rgba(255,255,255,0)_70%)]" />
+          <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(30,64,175,0.08)_0%,rgba(255,255,255,0)_70%)]" />
             <header className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-sm px-6 py-4 flex flex-wrap items-center justify-between gap-4 z-20 border-b border-gray-100 dark:border-slate-700">
               <EdutechLogo />
               <div className="flex-1 w-full md:w-auto mx-0 md:mx-8 order-last md:order-none">
@@ -163,7 +163,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                   className="h-2 bg-gray-200 dark:bg-slate-600 rounded-full overflow-hidden"
                 >
                   <motion.div
-                    className="h-full bg-gradient-to-r from-corporate to-petroleum"
+                    className="h-full bg-gradient-to-r from-blue-700 to-amber-500"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     style={{ width: `${currentTotalProgress}%` }}
@@ -171,7 +171,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                 </div>
               </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full font-bold">
+              <div className="flex items-center gap-2 bg-amber-100 text-amber-700 px-4 py-2 rounded-full font-bold">
                 <Star className="w-5 h-5 fill-current" /> {score}{" "}
                 {t("ova.podcastguide.score_label")}
               </div>
@@ -192,7 +192,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                         setCurrentSlide(0);
                         setActivityState(null);
                       }}
-                      className={`w-full text-left flex items-center gap-3 p-3 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2 transition-colors cursor-pointer ${currentModuleIndex === idx ? "bg-corporate text-white shadow-md" : idx < currentModuleIndex ? "bg-green-50 dark:bg-green-900/20 text-green-700" : "text-gray-500 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-corporate"}`}
+                      className={`w-full text-left flex items-center gap-3 p-3 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2 transition-colors cursor-pointer ${currentModuleIndex === idx ? "bg-blue-700 text-white shadow-md" : idx < currentModuleIndex ? "bg-green-50 dark:bg-green-900/20 text-green-700" : "text-gray-500 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-700"}`}
                     >
                       {idx < currentModuleIndex ? (
                         <CheckCircle className="w-5 h-5" />
@@ -215,13 +215,13 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                   transition={{ duration: 0.3 }}
                   className="max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 p-6 md:p-10 min-h-[60vh] flex flex-col"
                 >
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-50 text-petroleum font-semibold text-[9px] uppercase tracking-[0.15em] border border-corporate/20 w-fit mb-6">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-semibold text-[9px] uppercase tracking-[0.15em] border border-blue-700/20 w-fit mb-6">
                     {t("ova.podcastguide.module_badge", {
                       current: currentModuleIndex + 1,
                       total: MODULE_DATA.length,
                     })}
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-petroleum dark:text-slate-100 mb-6 font-montserrat">
+                  <h2 className="text-2xl md:text-3xl font-bold text-blue-900 dark:text-slate-100 mb-6 font-montserrat">
                     {slide.title}
                   </h2>
                   <div className="flex-1">
@@ -234,11 +234,11 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                       <div className="overflow-x-auto mt-4">
                         <table className="w-full text-left border-collapse">
                           <thead>
-                            <tr className="bg-gray-50 dark:bg-slate-700/30 text-petroleum dark:text-slate-100">
+                            <tr className="bg-gray-50 dark:bg-slate-700/30 text-blue-900 dark:text-slate-100">
                               <th className="p-4 border-b-2">
                                 {t("ova.podcastguide.comparison_feature")}
                               </th>
-                              <th className="p-4 border-b-2 text-corporate">
+                              <th className="p-4 border-b-2 text-blue-700">
                                 {t("ova.podcastguide.comparison_nb")}
                               </th>
                               <th className="p-4 border-b-2">
@@ -272,13 +272,13 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                         {slide.items.map((item, i) => (
                           <div
                             key={i}
-                            className="p-6 border-2 border-gray-100 dark:border-slate-700 rounded-xl hover:border-corporate transition-all bg-white dark:bg-slate-800 hover:shadow-lg flex items-start gap-4"
+                            className="p-6 border-2 border-gray-100 dark:border-slate-700 rounded-xl hover:border-blue-700 transition-all bg-white dark:bg-slate-800 hover:shadow-lg flex items-start gap-4"
                           >
                             <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
                               {item.icon}
                             </div>
                             <div>
-                              <h4 className="font-bold text-petroleum dark:text-slate-100 text-lg mb-1">
+                              <h4 className="font-bold text-blue-900 dark:text-slate-100 text-lg mb-1">
                                 {item.title}
                               </h4>
                               <p className="text-gray-500 dark:text-slate-400 text-sm">
@@ -299,7 +299,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                             key={i}
                             className="flex items-center gap-4 bg-gray-50 dark:bg-slate-700/30 p-4 rounded-xl border border-gray-100 dark:border-slate-700"
                           >
-                            <div className="w-10 h-10 bg-corporate text-white rounded-full flex items-center justify-center font-bold text-lg shrink-0">
+                            <div className="w-10 h-10 bg-blue-700 text-white rounded-full flex items-center justify-center font-bold text-lg shrink-0">
                               {i + 1}
                             </div>
                             <p className="text-gray-700 dark:text-slate-200 font-medium">
@@ -311,7 +311,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                     )}
                     {slide.type === "activity" && (
                       <div className="bg-blue-50/50 dark:bg-blue-900/20 p-6 rounded-xl border border-blue-100 dark:border-blue-800 mt-4">
-                        <p className="text-lg text-petroleum dark:text-slate-100 font-medium mb-6">
+                        <p className="text-lg text-blue-900 dark:text-slate-100 font-medium mb-6">
                           {slide.text}
                         </p>
                         <div className="space-y-3">
@@ -326,7 +326,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                         } else setActivityState("incorrect");
                       }}
                       aria-pressed={activityState === "correct" && opt.correct ? true : activityState === "incorrect" && !opt.correct ? true : false}
-                      className={`w-full p-4 text-left rounded-lg border-2 ${FOCUS_RING} font-medium flex items-center justify-between ${activityState === "correct" && opt.correct ? "border-green-500 bg-green-50 dark:bg-green-900/20" : ""} ${activityState === "incorrect" && !opt.correct ? "border-red-500 bg-red-50 dark:bg-red-900/20" : ""} ${!activityState ? "border-gray-200 dark:border-slate-600 hover:border-corporate hover:bg-white dark:hover:bg-slate-800 bg-white dark:bg-slate-800" : ""}`}
+                      className={`w-full p-4 text-left rounded-lg border-2 ${FOCUS_RING} font-medium flex items-center justify-between ${activityState === "correct" && opt.correct ? "border-green-500 bg-green-50 dark:bg-green-900/20" : ""} ${activityState === "incorrect" && !opt.correct ? "border-red-500 bg-red-50 dark:bg-red-900/20" : ""} ${!activityState ? "border-gray-200 dark:border-slate-600 hover:border-blue-700 hover:bg-white dark:hover:bg-slate-800 bg-white dark:bg-slate-800" : ""}`}
                             >
                               <span>{opt.text}</span>
                               {activityState === "correct" && opt.correct && (
@@ -381,7 +381,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                         <div
                           key={i}
                           aria-hidden="true"
-                          className={`w-2.5 h-2.5 rounded-full transition-colors ${i === currentSlide ? "bg-corporate" : "bg-gray-200 dark:bg-slate-600"}`}
+                          className={`w-2.5 h-2.5 rounded-full transition-colors ${i === currentSlide ? "bg-blue-700" : "bg-gray-200 dark:bg-slate-600"}`}
                         />
                       ))}
                     </div>
@@ -391,7 +391,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                           setActivityState(null);
                           setCurrentSlide((s) => s + 1);
                         }}
-                        className={`flex items-center gap-2 px-6 py-3 bg-petroleum hover:bg-petroleum-dark text-white rounded-xl font-bold shadow-md ${FOCUS_RING}`}
+                        className={`flex items-center gap-2 px-6 py-3 bg-blue-900 hover:bg-blue-800 text-white rounded-xl font-bold shadow-md ${FOCUS_RING}`}
                       >
                         {t("ova.podcastguide.next_btn")}{" "}
                         <ChevronRight className="w-5 h-5" />
@@ -406,7 +406,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                             setActivityState(null);
                           } else setCurrentScreen("challenge");
                         }}
-                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold shadow-md ${FOCUS_RING} ${activityState === "correct" ? "bg-corporate hover:bg-corporate-dark text-white animate-pulse" : "bg-gray-200 dark:bg-slate-600 text-gray-400 dark:text-slate-400 cursor-not-allowed"}`}
+                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold shadow-md ${FOCUS_RING} ${activityState === "correct" ? "bg-blue-700 hover:bg-blue-800 text-white animate-pulse" : "bg-gray-200 dark:bg-slate-600 text-gray-400 dark:text-slate-400 cursor-not-allowed"}`}
                       >
                         {currentModuleIndex < MODULE_DATA.length - 1
                           ? t("ova.podcastguide.next_module")
@@ -431,7 +431,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
       <SectionErrorBoundary name="OVAPodcastGuide-challenge">
         <div
           className="w-full relative min-h-[500px]"
-          style={{ background: "#004B63" }}
+          style={{ background: "#1e40af" }}
         >
           <div className="w-full min-h-screen p-4 md:p-8 flex items-center justify-center">
             <motion.div
@@ -441,7 +441,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
             >
               <div className="text-center mb-8">
                 <Award className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
-                <h2 className="text-3xl font-bold text-petroleum dark:text-slate-100 font-montserrat">
+                <h2 className="text-3xl font-bold text-blue-900 dark:text-slate-100 font-montserrat">
                   {t("ova.podcastguide.challenge_title")}
                 </h2>
                 <p className="text-gray-500 dark:text-slate-400 mt-2">
@@ -467,7 +467,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                         setScore((s) => s + 50);
                       } else setActivityState("incorrect");
                     }}
-                    className={`w-full p-5 text-left rounded-xl border-2 ${FOCUS_RING} font-medium flex items-center justify-between ${activityState === "correct" && opt.correct ? "border-green-500 bg-green-50 dark:bg-green-900/20" : ""} ${activityState === "incorrect" && !opt.correct ? "border-red-500 bg-red-50 dark:bg-red-900/20" : ""} ${!activityState ? "border-gray-200 dark:border-slate-600 hover:border-corporate hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-slate-800" : ""} ${activityState !== null && opt.correct && activityState === "incorrect" ? "border-green-500 bg-green-50 dark:bg-green-900/20" : ""}`}
+                    className={`w-full p-5 text-left rounded-xl border-2 ${FOCUS_RING} font-medium flex items-center justify-between ${activityState === "correct" && opt.correct ? "border-green-500 bg-green-50 dark:bg-green-900/20" : ""} ${activityState === "incorrect" && !opt.correct ? "border-red-500 bg-red-50 dark:bg-red-900/20" : ""} ${!activityState ? "border-gray-200 dark:border-slate-600 hover:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-white dark:bg-slate-800" : ""} ${activityState !== null && opt.correct && activityState === "incorrect" ? "border-green-500 bg-green-50 dark:bg-green-900/20" : ""}`}
                   >
                     <span>{opt.text}</span>
                     {activityState !== null && opt.correct && (
@@ -483,9 +483,9 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mb-8 p-4 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-corporate rounded-r-xl"
+                  className="mb-8 p-4 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-700 rounded-r-xl"
                 >
-                  <p className="text-petroleum dark:text-slate-100 font-bold mb-1">
+                  <p className="text-blue-900 dark:text-slate-100 font-bold mb-1">
                     {t("ova.podcastguide.challenge_analysis")}
                   </p>
                   <p className="text-gray-700 dark:text-slate-200">
@@ -502,7 +502,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                       setActivityState(null);
                     } else setCurrentScreen("certificate");
                   }}
-                  className={`px-8 py-4 rounded-xl font-bold ${FOCUS_RING} shadow-lg text-lg flex items-center gap-2 ${activityState ? "bg-gradient-to-r from-corporate to-petroleum text-white" : "bg-gray-200 dark:bg-slate-600 text-gray-400 dark:text-slate-400 cursor-not-allowed"}`}
+                  className={`px-8 py-4 rounded-xl font-bold ${FOCUS_RING} shadow-lg text-lg flex items-center gap-2 ${activityState ? "bg-gradient-to-r from-blue-700 to-amber-500 text-white" : "bg-gray-200 dark:bg-slate-600 text-gray-400 dark:text-slate-400 cursor-not-allowed"}`}
                 >
                   {currentSlide < FINAL_CHALLENGE.length - 1
                     ? t("ova.podcastguide.challenge_next")
@@ -523,7 +523,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
       <SectionErrorBoundary name="OVAPodcastGuide-certificate">
         <div
           className="w-full relative min-h-[500px]"
-          style={{ background: "linear-gradient(135deg, #004B63, #0D1B2A)" }}
+          style={{ background: "linear-gradient(135deg, #1e40af, #3b82f6)" }}
         >
           <div className="w-full min-h-screen p-4 md:p-8 flex items-center justify-center">
             <motion.div
@@ -532,11 +532,11 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
               transition={{ type: "spring" }}
               className="max-w-2xl w-full bg-white dark:bg-slate-800 rounded-3xl shadow-2xl p-10 text-center relative overflow-hidden"
             >
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-corporate to-petroleum"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-700 to-amber-500"></div>
               <div className="w-24 h-24 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl border-4 border-white dark:border-slate-700">
                 <CheckCircle className="w-12 h-12 text-white" />
               </div>
-              <h2 className="text-4xl font-bold text-petroleum dark:text-slate-100 mb-2 font-montserrat">
+              <h2 className="text-4xl font-bold text-blue-900 dark:text-slate-100 mb-2 font-montserrat">
                 {t("ova.podcastguide.cert_title")}
               </h2>
               <p className="text-xl text-gray-500 dark:text-slate-400 mb-8">
@@ -546,7 +546,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                 <p className="text-gray-500 dark:text-slate-400 font-bold uppercase tracking-widest text-sm mb-2">
                   {t("ova.podcastguide.cert_score_label")}
                 </p>
-                <p className="text-6xl font-black text-corporate mb-4">
+                <p className="text-6xl font-black text-blue-700 mb-4">
                   {score}
                 </p>
                 <p className="text-gray-600 dark:text-slate-300">
@@ -560,7 +560,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                   setCurrentSlide(0);
                   setScore(0);
                 }}
-                className={`mt-4 bg-gradient-to-r from-corporate to-petroleum text-white px-8 py-4 rounded-xl font-bold shadow-lg ${FOCUS_RING} hover:shadow-xl`}
+                className={`mt-4 bg-gradient-to-r from-blue-700 to-amber-500 text-white px-8 py-4 rounded-xl font-bold shadow-lg ${FOCUS_RING} hover:shadow-xl`}
               >
                 {t("ova.podcastguide.cert_reset")}
               </button>

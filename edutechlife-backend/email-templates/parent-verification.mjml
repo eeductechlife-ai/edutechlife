@@ -1,0 +1,142 @@
+<mjml>
+  <mj-head>
+    <mj-title>Verifica el acceso de tu hijo a SmartBoard</mj-title>
+    <mj-preview>Completa la verificación de consentimiento parental en un clic</mj-preview>
+    <mj-style>
+      .button-text { font-family: sans-serif; color: #ffffff; }
+      .footer-text { font-size: 12px; color: #999999; }
+      .highlight { background-color: #f1f5f9; padding: 16px; border-radius: 8px; }
+    </mj-style>
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700" />
+  </mj-head>
+  <mj-body background-color="#ffffff">
+    <!-- Header with logo -->
+    <mj-section background-color="#004B63" padding="24px">
+      <mj-column>
+        <mj-image width="140px" src="https://edutechlife.co/logo.svg" alt="EdutechLife" />
+      </mj-column>
+    </mj-section>
+
+    <!-- Main content -->
+    <mj-section padding="40px 20px">
+      <mj-column>
+        <!-- Greeting -->
+        <mj-text font-size="24px" font-weight="700" color="#004B63" align="center" padding="0 0 16px 0">
+          Verifica el acceso de tu hijo a SmartBoard
+        </mj-text>
+
+        <!-- Intro paragraph -->
+        <mj-text font-size="16px" line-height="1.6" color="#475569" padding="0 0 24px 0">
+          Recibimos una solicitud para activar SmartBoard (nuestra plataforma de aprendizaje gamificado) para un estudiante de <strong>{{studentAge}} años</strong>.
+        </mj-text>
+
+        <!-- What is SmartBoard section -->
+        <mj-text font-size="14px" font-weight="600" color="#004B63" padding="0 0 12px 0">
+          ¿Qué es SmartBoard?
+        </mj-text>
+
+        <mj-text font-size="14px" line-height="1.6" color="#475569" padding="0 0 24px 0">
+          SmartBoard es una plataforma interactiva que ayuda a estudiantes entre 8 y 16 años a aprender a través del juego. Con misiones, puntos y retroalimentación en tiempo real de Dani, nuestro tutor virtual de IA, los estudiantes desarrollan pensamiento crítico y habilidades de resolución de problemas.
+        </mj-text>
+
+        <!-- Verification CTA -->
+        <mj-text font-size="14px" font-weight="600" color="#004B63" padding="0 0 16px 0">
+          Paso 1: Verifica tu identidad
+        </mj-text>
+
+        <mj-text font-size="14px" line-height="1.6" color="#475569" padding="0 0 32px 0">
+          Haz clic en el botón de abajo para confirmar que eres el tutor responsable de este estudiante. Este enlace es de <strong>un solo uso</strong> y expira en 24 horas.
+        </mj-text>
+
+        <!-- Verification button -->
+        <mj-button
+          background-color="#004B63"
+          href="{{verifyUrl}}"
+          font-size="16px"
+          font-weight="600"
+          padding="16px 40px"
+          border-radius="8px"
+          width="100%"
+          align="center"
+        >
+          Verificar consentimiento
+        </mj-button>
+
+        <!-- Divider -->
+        <mj-divider border-color="#e2e8f0" padding="32px 0" />
+
+        <!-- Step 2 -->
+        <mj-text font-size="14px" font-weight="600" color="#004B63" padding="0 0 16px 0">
+          Paso 2: Crea tu cuenta de padre
+        </mj-text>
+
+        <mj-text font-size="14px" line-height="1.6" color="#475569" padding="0 0 24px 0">
+          Después de verificar, podrás crear una cuenta de padre para monitorear el progreso, recibir reportes semanales y estar alerta ante señales de bienestar.
+        </mj-text>
+
+        <!-- Safety notice section -->
+        <mj-section background-color="#f1f5f9" padding="20px">
+          <mj-column>
+            <mj-text font-size="13px" font-weight="600" color="#004B63" padding="0 0 8px 0">
+              Seguridad y privacidad
+            </mj-text>
+            <mj-text font-size="13px" line-height="1.5" color="#475569">
+              • Este enlace es personal y debe mantenerse confidencial.<br />
+              • Nunca compartamos tu contraseña por correo electrónico.<br />
+              • Los datos de tu hijo están protegidos por RLS (Seguridad en Filas) en nuestra base de datos.<br />
+              • Cumplimos con COPPA (EE.UU. &lt;13), Ley 1581 (Colombia &lt;18) y GDPR-K (Europa).
+            </mj-text>
+          </mj-column>
+        </mj-section>
+
+        <!-- Spacing -->
+        <mj-text padding="24px 0 0 0" />
+
+        <!-- Link as fallback -->
+        <mj-text font-size="12px" color="#64748b" align="center" padding="0 0 24px 0">
+          Si el botón no funciona, copia y pega este enlace en tu navegador:
+        </mj-text>
+
+        <mj-text font-size="11px" color="#94a3b8" align="center" padding="0 0 32px 0" font-family="monospace">
+          {{verifyUrl}}
+        </mj-text>
+
+        <!-- Divider -->
+        <mj-divider border-color="#e2e8f0" padding="16px 0 32px 0" />
+
+        <!-- Support section -->
+        <mj-text font-size="13px" color="#475569" padding="0 0 16px 0">
+          ¿Necesitas ayuda? Estamos aquí para ti.
+        </mj-text>
+
+        <mj-text font-size="12px" line-height="1.6" color="#64748b">
+          📧 Email: <a href="mailto:soporte@edutechlife.co" style="color:#004B63;text-decoration:none;">soporte@edutechlife.co</a><br />
+          🌐 Centro de ayuda: <a href="https://edutechlife.co/help" style="color:#004B63;text-decoration:none;">edutechlife.co/help</a><br />
+          📞 Disponible en horario de oficina (hora de Bogotá, Col)
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#f8fafc" padding="32px 20px">
+      <mj-column>
+        <mj-text font-size="12px" color="#64748b" align="center" padding="0 0 12px 0">
+          EdutechLife — Plataformas educativas con IA
+        </mj-text>
+
+        <mj-text font-size="11px" color="#94a3b8" align="center" padding="0 0 16px 0">
+          Si no reconoces esta solicitud, simplemente ignora este correo. No se realizará ninguna acción.
+        </mj-text>
+
+        <mj-divider border-color="#e2e8f0" padding="16px 0" />
+
+        <!-- Legal links -->
+        <mj-text font-size="11px" color="#94a3b8" align="center">
+          <a href="https://edutechlife.co/privacy" style="color:#94a3b8;text-decoration:none;margin:0 8px;">Privacidad</a> •
+          <a href="https://edutechlife.co/terms" style="color:#94a3b8;text-decoration:none;margin:0 8px;">Términos</a> •
+          <a href="https://edutechlife.co/habeas-data" style="color:#94a3b8;text-decoration:none;margin:0 8px;">Derechos HABEAS DATA</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

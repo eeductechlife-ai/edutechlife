@@ -1,5 +1,5 @@
-export const SPRING_STIFFNESS = 300;
-export const SPRING_DAMPING = 25;
+export const SPRING_STIFFNESS = 380;
+export const SPRING_DAMPING = 28;
 export const SLIDE_DISTANCE = 320;
 export const MOBILE_MENU_WIDTH = 288;
 
@@ -18,3 +18,5 @@ export const CONFETTI_SPREAD = 80;
 export const TOTAL_MODULES = 5;
 export const MIN_MODULE_ID = 1;
 export const MAX_MODULE_ID = 5;
+
+export const NOTEBOOKLM_CONFETTI_COLORS = ['#1e40af', '#fbbf24', '#f3f4f6'];

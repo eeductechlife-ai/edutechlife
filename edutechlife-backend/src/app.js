@@ -57,7 +57,7 @@ const ALLOWED_ORIGINS = [
 ];
 
 // Precompile regex for performance (avoid recompilation per request)
-const LOCALHOST_REGEX = /^https?:\/\/(localhost|127\.0\.0\.1):(3000|3001|5173|5174|5175|5176|5177)$/;
+const LOCALHOST_REGEX = /^https?:\/\/(localhost|127\.0\.0\.1):(3000|3001|5173|5174|5175|5176|5177|5178|5179|5180)$/;
 
 const isAllowed = (origin) => {
   if (!origin) return true;
