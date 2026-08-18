@@ -204,10 +204,10 @@ export default function SmartBoardHeroSection({
                 </div>
                 <div className="text-left">
                   <p className="text-xs sm:text-sm font-bold text-petroleum">
-                    Trusted by 2,500+ families
+                    {t("smartboard.landing_trust_badge")}
                   </p>
                   <p className="text-xs text-slate-500">
-                    Learning together, growing faster
+                    {t("smartboard.landing_trust_subtitle")}
                   </p>
                 </div>
               </motion.div>
@@ -248,7 +248,7 @@ export default function SmartBoardHeroSection({
                 />
               </MagneticButton>
               <p className="text-xs text-slate-500 text-center">
-                7 days free • No credit card required • Cancel anytime
+                {t("smartboard.landing_trial_terms")}
               </p>
             </motion.div>
           </div>
