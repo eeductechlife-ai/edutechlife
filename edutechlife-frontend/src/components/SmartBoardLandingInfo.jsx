@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useInView, AnimatePresence, motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "../i18n/I18nProvider";
+import { useABExperiment, trackConversion } from "../hooks/useABExperiment";
 import {
   getVakStyles,
   getPricingPlans,
@@ -130,10 +131,16 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
     if (currentStep > 0) goToStep(currentStep - 1);
   }, [currentStep, goToStep]);
 
+  const { variant, experimentId } = useABExperiment();
+
   const handleCta = useCallback(() => {
+    trackConversion("cta_click", {
+      section: stepLabels[currentStep],
+      experiment_variant: variant,
+    });
     if (onNavigate) onNavigate("/sign-up/smartboard");
     else navigate("/sign-up/smartboard");
-  }, [onNavigate, navigate]);
+  }, [onNavigate, navigate, variant, currentStep, stepLabels]);
 
   const statStart = heroInView;
   const countStudents = useAnimatedCounter(2500, 1800, statStart);
