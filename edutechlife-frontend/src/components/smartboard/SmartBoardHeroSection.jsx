@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { motion, useReducedMotion } from "framer-motion";
 import FloatingParticles from "../FloatingParticles";
 import MagneticButton from "../MagneticButton";
@@ -141,7 +141,11 @@ export default function SmartBoardHeroSection({
   ];
 
   return (
-    <section role="region" aria-label="SmartBoard Hero" className="relative w-full py-16 lg:py-20 flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-white via-[#F0F9FF] to-white">
+    <section
+      role="region"
+      aria-label="SmartBoard Hero"
+      className="relative w-full py-12 lg:py-14 flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-white via-[#F0F9FF] to-white"
+    >
       {onBack && (
         <button
           onClick={() => onBack()}
@@ -160,7 +164,7 @@ export default function SmartBoardHeroSection({
         <FloatingParticles count={35} className="z-0" />
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
           <div className="lg:col-span-3">
             <motion.div
@@ -179,21 +183,55 @@ export default function SmartBoardHeroSection({
 
               <motion.p
                 {...(!prefersReducedMotion ? springUp(0.12) : {})}
-                className="text-sm sm:text-base text-slate-500 leading-relaxed max-w-2xl mb-6"
+                className="text-sm sm:text-base text-slate-500 leading-relaxed max-w-2xl mb-8"
               >
                 {t("smartboard.landing_hero_desc")}
               </motion.p>
+
+              <motion.div
+                {...(!prefersReducedMotion ? springUp(0.18) : {})}
+                className="flex flex-col sm:flex-row items-center lg:items-start gap-3 mb-8"
+              >
+                <div className="flex -space-x-2">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="w-9 h-9 rounded-full bg-gradient-to-br from-petroleum to-primary-light flex items-center justify-center text-white text-xs font-bold border-2 border-white shadow-sm"
+                    >
+                      {i}
+                    </div>
+                  ))}
+                </div>
+                <div className="text-left">
+                  <p className="text-xs sm:text-sm font-bold text-petroleum">
+                    Trusted by 2,500+ families
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    Learning together, growing faster
+                  </p>
+                </div>
+              </motion.div>
             </motion.div>
 
             <motion.div
               initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-              animate={prefersReducedMotion ? false : (inView ? { opacity: 1, y: 0 } : {})}
-              transition={prefersReducedMotion ? undefined : {
-                type: "spring",
-                stiffness: 100,
-                damping: 18,
-                delay: 0.3,
-              }}
+              animate={
+                prefersReducedMotion
+                  ? false
+                  : inView
+                    ? { opacity: 1, y: 0 }
+                    : {}
+              }
+              transition={
+                prefersReducedMotion
+                  ? undefined
+                  : {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 18,
+                      delay: 0.3,
+                    }
+              }
               className="mb-6"
             >
               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-2.5 text-center lg:text-left">
@@ -203,14 +241,26 @@ export default function SmartBoardHeroSection({
                 {PAIN_POINTS.map((tag, i) => (
                   <motion.div
                     key={i}
-                    initial={prefersReducedMotion ? false : { opacity: 0, x: -20 }}
-                    animate={prefersReducedMotion ? false : (inView ? { opacity: 1, x: 0 } : {})}
-                    transition={prefersReducedMotion ? undefined : {
-                      type: "spring",
-                      stiffness: 120,
-                      damping: 14,
-                      delay: 0.35 + i * 0.08,
-                    }}
+                    initial={
+                      prefersReducedMotion ? false : { opacity: 0, x: -20 }
+                    }
+                    animate={
+                      prefersReducedMotion
+                        ? false
+                        : inView
+                          ? { opacity: 1, x: 0 }
+                          : {}
+                    }
+                    transition={
+                      prefersReducedMotion
+                        ? undefined
+                        : {
+                            type: "spring",
+                            stiffness: 120,
+                            damping: 14,
+                            delay: 0.35 + i * 0.08,
+                          }
+                    }
                     className="group relative flex items-center gap-3 px-4 py-3 rounded-xl bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm hover:shadow-[0_12px_24px_rgba(0,75,99,0.1)] hover:-translate-y-1 transition-all duration-300 cursor-default overflow-hidden"
                   >
                     <div
@@ -246,28 +296,41 @@ export default function SmartBoardHeroSection({
 
             <motion.div
               initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }}
-              animate={prefersReducedMotion ? false : (inView ? { opacity: 1, y: 0 } : {})}
-              transition={prefersReducedMotion ? undefined : {
-                type: "spring",
-                stiffness: 80,
-                damping: 14,
-                delay: 0.5,
-              }}
-              className="flex justify-center items-center"
+              animate={
+                prefersReducedMotion
+                  ? false
+                  : inView
+                    ? { opacity: 1, y: 0 }
+                    : {}
+              }
+              transition={
+                prefersReducedMotion
+                  ? undefined
+                  : {
+                      type: "spring",
+                      stiffness: 80,
+                      damping: 14,
+                      delay: 0.5,
+                    }
+              }
+              className="flex flex-col items-center gap-3"
             >
               <MagneticButton
                 onClick={handleCta}
-                className="group relative overflow-hidden flex items-center justify-center gap-2.5 w-full sm:w-auto px-8 sm:px-10 py-3.5 rounded-full text-sm sm:text-base font-bold bg-gradient-to-r from-petroleum to-primary-light text-white shadow-lg hover:shadow-[0_15px_40px_rgba(77,168,196,0.3)] hover:-translate-y-1 transition-all duration-300"
+                className="group relative overflow-hidden flex items-center justify-center gap-2.5 w-full sm:w-auto px-10 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-gradient-to-r from-petroleum to-primary-light text-white shadow-xl hover:shadow-[0_20px_50px_rgba(77,168,196,0.35)] hover:-translate-y-1.5 transition-all duration-300"
               >
-                <span className="absolute inset-0 w-[200%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-sweep skew-x-[-20deg]" />
+                <span className="absolute inset-0 w-[200%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover:animate-sweep skew-x-[-20deg]" />
                 <span className="text-white relative z-10 font-semibold">
                   {t("smartboard.landing_cta_try")}
                 </span>
                 <Icon
                   name="fa-arrow-right"
-                  className="text-white/90 relative z-10 group-hover:translate-x-1 transition-transform"
+                  className="text-white/90 relative z-10 group-hover:translate-x-1.5 transition-transform"
                 />
               </MagneticButton>
+              <p className="text-xs text-slate-500 text-center">
+                7 days free • No credit card required • Cancel anytime
+              </p>
             </motion.div>
           </div>
 
@@ -277,9 +340,21 @@ export default function SmartBoardHeroSection({
               className="relative w-[320px] h-[320px] xl:w-[360px] xl:h-[360px] shrink-0"
             >
               <motion.div
-                initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.8 }}
-                animate={prefersReducedMotion ? false : (inView ? { opacity: 1, scale: 1 } : {})}
-                transition={prefersReducedMotion ? undefined : { duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                initial={
+                  prefersReducedMotion ? false : { opacity: 0, scale: 0.8 }
+                }
+                animate={
+                  prefersReducedMotion
+                    ? false
+                    : inView
+                      ? { opacity: 1, scale: 1 }
+                      : {}
+                }
+                transition={
+                  prefersReducedMotion
+                    ? undefined
+                    : { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+                }
                 style={{ transform: "translateZ(-40px)" }}
                 className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-light/20 via-corporate/10 to-mint/15 blur-[80px]"
               />
@@ -318,24 +393,34 @@ export default function SmartBoardHeroSection({
                         strokeWidth="0.5"
                         strokeDasharray={`${4 + i * 2} ${6 + i * 2}`}
                         initial={{ rotate: 0, opacity: 0.15 }}
-                        animate={prefersReducedMotion ? { rotate: 0, opacity: 0.15 } : { rotate: 360, opacity: [0.08, 0.18, 0.08] }}
+                        animate={
+                          prefersReducedMotion
+                            ? { rotate: 0, opacity: 0.15 }
+                            : { rotate: 360, opacity: [0.08, 0.18, 0.08] }
+                        }
                         style={{
-                          willChange: prefersReducedMotion ? "auto" : "transform",
+                          willChange: prefersReducedMotion
+                            ? "auto"
+                            : "transform",
                           transformOrigin: "150px 150px",
                         }}
-                        transition={prefersReducedMotion ? undefined : {
-                          rotate: {
-                            duration: 25 + i * 12,
-                            repeat: Infinity,
-                            ease: "linear",
-                          },
-                          opacity: {
-                            duration: 4 + i,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: i * 1.5,
-                          },
-                        }}
+                        transition={
+                          prefersReducedMotion
+                            ? undefined
+                            : {
+                                rotate: {
+                                  duration: 25 + i * 12,
+                                  repeat: Infinity,
+                                  ease: "linear",
+                                },
+                                opacity: {
+                                  duration: 4 + i,
+                                  repeat: Infinity,
+                                  ease: "easeInOut",
+                                  delay: i * 1.5,
+                                },
+                              }
+                        }
                       />
                     </g>
                   ))}
@@ -343,14 +428,26 @@ export default function SmartBoardHeroSection({
               </div>
 
               <motion.div
-                initial={prefersReducedMotion ? false : { scale: 0, rotate: -30 }}
-                animate={prefersReducedMotion ? false : (inView ? { scale: 1, rotate: 0 } : {})}
-                transition={prefersReducedMotion ? undefined : {
-                  type: "spring",
-                  stiffness: 70,
-                  damping: 10,
-                  delay: 0.3,
-                }}
+                initial={
+                  prefersReducedMotion ? false : { scale: 0, rotate: -30 }
+                }
+                animate={
+                  prefersReducedMotion
+                    ? false
+                    : inView
+                      ? { scale: 1, rotate: 0 }
+                      : {}
+                }
+                transition={
+                  prefersReducedMotion
+                    ? undefined
+                    : {
+                        type: "spring",
+                        stiffness: 70,
+                        damping: 10,
+                        delay: 0.3,
+                      }
+                }
                 style={{
                   transform: "translateZ(30px)",
                   transformStyle: "preserve-3d",
@@ -359,12 +456,18 @@ export default function SmartBoardHeroSection({
               >
                 <div className="absolute inset-2 rounded-full bg-white/[0.06] ring-2 ring-white/20" />
                 <motion.div
-                  animate={prefersReducedMotion ? false : { scale: [1, 1.05, 1] }}
-                  transition={prefersReducedMotion ? undefined : {
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
+                  animate={
+                    prefersReducedMotion ? false : { scale: [1, 1.05, 1] }
+                  }
+                  transition={
+                    prefersReducedMotion
+                      ? undefined
+                      : {
+                          duration: 4,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }
+                  }
                   style={{
                     willChange: prefersReducedMotion ? "auto" : "transform",
                     transformStyle: "preserve-3d",
@@ -374,11 +477,11 @@ export default function SmartBoardHeroSection({
                     style={{ transform: "translateZ(10px)" }}
                     className="flex flex-col items-center gap-1"
                   >
-                      <Icon
-                        name="fa-brain"
-                        className="text-[10rem] xl:text-[14rem] text-white/95"
-                        aria-hidden="true"
-                      />
+                    <Icon
+                      name="fa-brain"
+                      className="text-[10rem] xl:text-[14rem] text-white/95"
+                      aria-hidden="true"
+                    />
                     <span className="text-[9px] font-bold text-white/70 uppercase tracking-[0.2em]">
                       {t("smartboard.landing_hero_brain_label")}
                     </span>
@@ -389,13 +492,21 @@ export default function SmartBoardHeroSection({
                   <motion.div
                     key={i}
                     className={`absolute rounded-full ${dot.color} ${dot.className}`}
-                    animate={prefersReducedMotion ? false : { opacity: [0.1, 0.5, 0.1] }}
-                    transition={prefersReducedMotion ? undefined : {
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: dot.delay,
-                    }}
+                    animate={
+                      prefersReducedMotion
+                        ? false
+                        : { opacity: [0.1, 0.5, 0.1] }
+                    }
+                    transition={
+                      prefersReducedMotion
+                        ? undefined
+                        : {
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: dot.delay,
+                          }
+                    }
                   />
                 ))}
               </motion.div>
@@ -409,78 +520,124 @@ export default function SmartBoardHeroSection({
               <motion.div
                 className="absolute -top-3 right-2 z-20"
                 initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
-                animate={prefersReducedMotion ? false : (inView ? { opacity: 1, y: 0 } : {})}
-                transition={prefersReducedMotion ? undefined : {
-                  type: "spring",
-                  stiffness: 100,
-                  damping: 14,
-                  delay: 1.1,
-                }}
+                animate={
+                  prefersReducedMotion
+                    ? false
+                    : inView
+                      ? { opacity: 1, y: 0 }
+                      : {}
+                }
+                transition={
+                  prefersReducedMotion
+                    ? undefined
+                    : {
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 14,
+                        delay: 1.1,
+                      }
+                }
               >
                 <motion.div
-                  animate={prefersReducedMotion ? false : {
-                    rotate: [0, 15, 0, -15, 0],
-                    scale: [1, 1.2, 1, 1.2, 1],
-                  }}
-                  transition={prefersReducedMotion ? undefined : {
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
+                  animate={
+                    prefersReducedMotion
+                      ? false
+                      : {
+                          rotate: [0, 15, 0, -15, 0],
+                          scale: [1, 1.2, 1, 1.2, 1],
+                        }
+                  }
+                  transition={
+                    prefersReducedMotion
+                      ? undefined
+                      : {
+                          duration: 5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }
+                  }
                   style={{
                     willChange: prefersReducedMotion ? "auto" : "transform",
                     transformStyle: "preserve-3d",
                   }}
                 >
-                      <Icon
-                        name="fa-star"
-                        className="text-xl text-corporate drop-shadow-lg"
-                        aria-hidden="true"
-                      />
+                  <Icon
+                    name="fa-star"
+                    className="text-xl text-corporate drop-shadow-lg"
+                    aria-hidden="true"
+                  />
                 </motion.div>
               </motion.div>
 
               <motion.div
                 className="absolute -bottom-3 left-6 z-20"
                 initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
-                animate={prefersReducedMotion ? false : (inView ? { opacity: 1, y: 0 } : {})}
-                transition={prefersReducedMotion ? undefined : {
-                  type: "spring",
-                  stiffness: 100,
-                  damping: 14,
-                  delay: 1.3,
-                }}
+                animate={
+                  prefersReducedMotion
+                    ? false
+                    : inView
+                      ? { opacity: 1, y: 0 }
+                      : {}
+                }
+                transition={
+                  prefersReducedMotion
+                    ? undefined
+                    : {
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 14,
+                        delay: 1.3,
+                      }
+                }
               >
                 <motion.div
-                  animate={prefersReducedMotion ? false : { rotate: [0, -15, 0, 15, 0], y: [0, -5, 0, -5, 0] }}
-                  transition={prefersReducedMotion ? undefined : {
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
+                  animate={
+                    prefersReducedMotion
+                      ? false
+                      : { rotate: [0, -15, 0, 15, 0], y: [0, -5, 0, -5, 0] }
+                  }
+                  transition={
+                    prefersReducedMotion
+                      ? undefined
+                      : {
+                          duration: 6,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }
+                  }
                   style={{
                     willChange: prefersReducedMotion ? "auto" : "transform",
                     transformStyle: "preserve-3d",
                   }}
                 >
-                      <Icon
-                        name="fa-rocket-launch"
-                        className="text-xl text-mint drop-shadow-lg"
-                        aria-hidden="true"
-                      />
+                  <Icon
+                    name="fa-rocket-launch"
+                    className="text-xl text-mint drop-shadow-lg"
+                    aria-hidden="true"
+                  />
                 </motion.div>
               </motion.div>
             </SmartBoardTilt3D>
 
             <motion.div
               initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-              animate={prefersReducedMotion ? false : (inView ? { opacity: 1, y: 0 } : {})}
-              transition={prefersReducedMotion ? undefined : {
-                type: "spring",
-                stiffness: 90,
-                damping: 16,
-                delay: 0.5,
-              }}
+              animate={
+                prefersReducedMotion
+                  ? false
+                  : inView
+                    ? { opacity: 1, y: 0 }
+                    : {}
+              }
+              transition={
+                prefersReducedMotion
+                  ? undefined
+                  : {
+                      type: "spring",
+                      stiffness: 90,
+                      damping: 16,
+                      delay: 0.5,
+                    }
+              }
               className="flex items-center justify-center gap-3"
             >
               {STATS.map((stat, i) => (

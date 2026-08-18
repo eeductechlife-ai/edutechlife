@@ -219,7 +219,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         />
       </motion.div>
 
-      <div className="relative min-h-0">
+      <div className="relative min-h-0 pt-0">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentStep}
