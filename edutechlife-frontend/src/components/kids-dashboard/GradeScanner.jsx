@@ -188,29 +188,65 @@ export default memo(function GradeScanner({ onTabChange }) {
         const { extractDocumentText } =
           await import("../../utils/documentParser");
         const text = await extractDocumentText(f);
-        // Parse grades from OCR text
-        const prompt = `Tienes este texto extraído de un boletín de calificaciones colombiano: "${text.slice(0, 2000)}"
 
-Extrae las calificaciones. Responde SOLO con JSON:
-{
-  "grades": [
-    { "subject": "matematicas", "score": 4.2 },
-    { "subject": "lenguaje", "score": 3.8 }
-  ]
-}
-Usa solo estos subjects: matematicas, lenguaje, ciencias, sociales, ingles, arte, educacion_fisica, tecnologia.
-Escala de notas: 0-5. Si no encuentras notas claras, devuelve array vacío.`;
+        // Prompt optimizado para boletines colombianos con OCR imperfecto
+        const prompt = `Texto OCR de un boletín de calificaciones colombiano (puede estar mal formateado por el OCR):
+"${text.slice(0, 2500)}"
+
+TAREA: Extrae TODAS las calificaciones. Los boletines colombianos usan escala 1.0-5.0 (aprobado ≥ 3.0).
+- Busca cualquier número entre 1.0 y 5.0 que parezca una nota
+- Intenta asociar cada nota a su materia
+- Si no puedes identificar la materia exactamente, usa el nombre más cercano de: matematicas, lenguaje, ciencias, sociales, ingles, arte, educacion_fisica, tecnologia
+- INCLUYE notas aunque no estés 100% seguro — es mejor incluir que omitir
+- Convierte comas a puntos: 4,2 → 4.2
+
+Responde SOLO JSON:
+{"grades": [{"subject": "matematicas", "score": 4.2}, {"subject": "lenguaje", "score": 3.8}]}
+
+Si no hay absolutamente ningún número entre 1.0 y 5.0, responde: {"grades": []}`;
+
         const res = await callDeepseek(prompt, {
-          temperature: 0.2,
-          maxTokens: 400,
+          temperature: 0.1,
+          maxTokens: 500,
           isJson: true,
         });
         const parsed = typeof res === "string" ? JSON.parse(res) : res;
+
         if (parsed.grades?.length) {
           setGrades(parsed.grades.map((g) => ({ id: uid(), ...g })));
           setScanMode("manual");
         } else {
-          setError(t("kid.grades.error_no_grades"));
+          // Fallback: regex para encontrar números con formato de nota colombiana
+          const SUBJECTS_FALLBACK = [
+            "matematicas",
+            "lenguaje",
+            "ciencias",
+            "sociales",
+            "ingles",
+            "arte",
+            "educacion_fisica",
+            "tecnologia",
+          ];
+          const numMatches = text.match(/[1-4][.,]\d|[0-5][.,][0-9]/g) || [];
+          const validScores = numMatches
+            .map((n) => parseFloat(n.replace(",", ".")))
+            .filter((n) => n >= 1.0 && n <= 5.0);
+
+          if (validScores.length > 0) {
+            setGrades(
+              validScores.slice(0, 8).map((score, i) => ({
+                id: uid(),
+                subject: SUBJECTS_FALLBACK[i] || "matematicas",
+                score,
+              })),
+            );
+            setScanMode("manual");
+            setError(
+              "⚠️ Extracción parcial — verifica y ajusta las materias y notas.",
+            );
+          } else {
+            setError(t("kid.grades.error_no_grades"));
+          }
         }
       } catch {
         setError(t("kid.grades.error_read"));
@@ -488,7 +524,15 @@ Analiza y responde SOLO con JSON:
       </motion.button>
 
       {error && scanMode !== "image" && (
-        <p className="text-sm text-red-500 text-center">{error}</p>
+        <p
+          className={`text-sm text-center rounded-xl p-3 ${
+            error.startsWith("⚠️")
+              ? "text-orange-600 bg-orange-50"
+              : "text-red-500"
+          }`}
+        >
+          {error}
+        </p>
       )}
 
       {/* History — past analyses */}

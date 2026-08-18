@@ -30,12 +30,17 @@ export async function parseDOCX(file) {
 
 export async function parseImage(file) {
   const Tesseract = await import("tesseract.js");
-  const {
-    data: { text },
-  } = await Tesseract.recognize(file, "spa", {
-    logger: () => {},
-  });
-  return text.trim();
+  try {
+    // Try Spanish + English — Colombian docs often mix both
+    const result = await Tesseract.recognize(file, "spa+eng", {
+      logger: () => {},
+    });
+    return result.data.text.trim();
+  } catch {
+    // Fallback to Spanish only
+    const result = await Tesseract.recognize(file, "spa", { logger: () => {} });
+    return result.data.text.trim();
+  }
 }
 
 export async function extractDocumentText(file) {
