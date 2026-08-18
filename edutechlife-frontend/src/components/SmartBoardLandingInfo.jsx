@@ -26,22 +26,19 @@ import SmartBoardFinalSection from "./smartboard/SmartBoardFinalSection";
 
 const stepVariants = {
   enter: (dir) => ({
-    x: dir > 0 ? 400 : -400,
+    x: dir > 0 ? 300 : -300,
     opacity: 0,
-    scale: 0.93,
-    filter: "blur(4px)",
+    scale: 0.96,
   }),
   center: {
     x: 0,
     opacity: 1,
     scale: 1,
-    filter: "blur(0px)",
   },
   exit: (dir) => ({
-    x: dir > 0 ? -300 : 300,
+    x: dir > 0 ? -200 : 200,
     opacity: 0,
-    scale: 0.96,
-    filter: "blur(2px)",
+    scale: 0.97,
   }),
 };
 

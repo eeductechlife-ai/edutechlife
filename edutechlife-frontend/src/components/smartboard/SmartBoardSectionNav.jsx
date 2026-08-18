@@ -22,7 +22,7 @@ export default function SmartBoardSectionNav({
               className={`relative px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-bold transition-all duration-300 whitespace-nowrap border-b-2 ${
                 idx === currentStep
                   ? "bg-petroleum text-white shadow-premium-lg scale-105 ring-2 ring-petroleum/20 border-b-petroleum"
-                  : "bg-petroleum/5 border-petroleum/10 text-petroleum/80 border-b-transparent hover:bg-petroleum hover:text-white hover:border-b-petroleum"
+                  : "bg-petroleum/5 border-petroleum/10 text-petroleum/80 border-b-transparent hover:bg-petroleum hover:text-white hover:border-b-petroleum hover:shadow-md hover:scale-105 active:scale-95"
               }`}
             >
               {label}

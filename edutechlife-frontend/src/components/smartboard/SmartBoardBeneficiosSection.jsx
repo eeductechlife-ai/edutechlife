@@ -1,5 +1,11 @@
-import PropTypes from 'prop-types';
-import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
+import PropTypes from "prop-types";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { fadeInUp, containerVariants, childVariant } from "./SmartBoardShared";
 
@@ -14,22 +20,34 @@ const TiltCard = ({ children, className = "" }) => {
 
   return (
     <motion.div
-      onMouseMove={prefersReducedMotion ? undefined : (e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        x.set((e.clientX - rect.left) / rect.width - 0.5);
-        y.set((e.clientY - rect.top) / rect.height - 0.5);
-      }}
-      onMouseLeave={prefersReducedMotion ? undefined : () => {
-        x.set(0);
-        y.set(0);
-      }}
-      style={prefersReducedMotion ? {} : {
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-        perspective: 800,
-        willChange: "transform",
-      }}
+      onMouseMove={
+        prefersReducedMotion
+          ? undefined
+          : (e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              x.set((e.clientX - rect.left) / rect.width - 0.5);
+              y.set((e.clientY - rect.top) / rect.height - 0.5);
+            }
+      }
+      onMouseLeave={
+        prefersReducedMotion
+          ? undefined
+          : () => {
+              x.set(0);
+              y.set(0);
+            }
+      }
+      style={
+        prefersReducedMotion
+          ? {}
+          : {
+              rotateX,
+              rotateY,
+              transformStyle: "preserve-3d",
+              perspective: 800,
+              willChange: "transform",
+            }
+      }
       className={className}
     >
       {children}
@@ -102,7 +120,7 @@ export default function SmartBoardBeneficiosSection({ t, beneficios }) {
         >
           {beneficios.map((item, i) => (
             <motion.div key={item.title} variants={childVariant}>
-              <TiltCard className="group relative bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm hover:shadow-[0_15px_35px_rgba(0,75,99,0.12)] hover:-translate-y-1 transition-all duration-300 p-6 h-fit">
+              <TiltCard className="group relative bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm hover:shadow-[0_20px_40px_rgba(0,75,99,0.15)] hover:-translate-y-2 transition-all duration-300 p-6 h-fit hover:border-petroleum/30">
                 <div
                   className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${BENEFIT_GRADIENTS[i % BENEFIT_GRADIENTS.length].bg} flex items-center justify-center mb-3 group-hover:scale-125 transition-transform duration-300`}
                 >
