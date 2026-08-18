@@ -41,8 +41,6 @@ const ToolIcon = ({ icon, iconColor, className }) => {
   );
 };
 
-
-
 ToolIcon.propTypes = {
   icon: PropTypes.string,
   iconColor: PropTypes.string,

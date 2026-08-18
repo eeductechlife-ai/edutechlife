@@ -103,9 +103,7 @@ const SmartBoardConsentGate = () => {
           <h1 className="text-3xl font-black text-[#004B63] mb-2">
             ¡Hola {profile?.username || "Estudiante"}!
           </h1>
-          <p className="text-gray-600 text-lg">
-            Bienvenido a SmartBoard
-          </p>
+          <p className="text-gray-600 text-lg">Bienvenido a SmartBoard</p>
         </div>
 
         {/* Benefits */}

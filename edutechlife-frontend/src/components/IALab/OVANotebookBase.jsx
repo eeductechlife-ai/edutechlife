@@ -240,19 +240,19 @@ export default function OVANotebookBase({
                 </span>
               </div>
             </div>
+            <div
+              role="progressbar"
+              aria-valuenow={currentStep}
+              aria-valuemin={0}
+              aria-valuemax={totalSteps}
+              aria-label={tk("progress_label")}
+              className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner"
+            >
               <div
-                role="progressbar"
-                aria-valuenow={currentStep}
-                aria-valuemin={0}
-                aria-valuemax={totalSteps}
-                aria-label={tk("progress_label")}
-                className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner"
-              >
-                <div
-                  className="bg-gradient-to-r from-corporate to-petroleum h-full rounded-full transition-all duration-500 ease-out"
-                  style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-                />
-              </div>
+                className="bg-gradient-to-r from-corporate to-petroleum h-full rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+              />
+            </div>
             <div className="flex flex-col lg:flex-row gap-8">
               <div className="w-full lg:w-2/5 flex flex-col gap-6">
                 <div
@@ -368,7 +368,11 @@ export default function OVANotebookBase({
               >
                 <ArrowLeft size={20} />
               </button>
-              <div className="flex gap-2" role="group" aria-label={tk("progress_label")}>
+              <div
+                className="flex gap-2"
+                role="group"
+                aria-label={tk("progress_label")}
+              >
                 {contentScreens.map((_, i) => (
                   <div
                     key={i}
@@ -385,7 +389,10 @@ export default function OVANotebookBase({
                 <ArrowRight size={18} />
               </button>
             </div>
-            <footer className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-600 text-center" aria-label={tk("footer")}>
+            <footer
+              className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-600 text-center"
+              aria-label={tk("footer")}
+            >
               <p className="text-slate-600 dark:text-slate-300 text-xs">
                 {tk("footer")}
               </p>
@@ -398,181 +405,184 @@ export default function OVANotebookBase({
   }
 
   const currentQ = questionsData[currentQIndex];
-    return (
-      <SectionErrorBoundary name="OVANotebookBase">
+  return (
+    <SectionErrorBoundary name="OVANotebookBase">
       <div className="w-full relative min-h-[400px]">
         <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[length:50px_50px]" />
         <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(0,188,212,0.15)_0%,rgba(255,255,255,0)_70%)]" />
         <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(0,75,99,0.08)_0%,rgba(255,255,255,0)_70%)]" />
-      <div className="w-full py-6 px-4 relative z-10" key={currentQ.id}>
-        <div className="w-full max-w-6xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-            <EdutechLogo size="small" />
-            <div className="flex items-center gap-3">
-              <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-50 dark:bg-cyan-900/30 text-corporate dark:text-teal-200 font-semibold text-[10px] uppercase tracking-[0.15em] border border-corporate/20">
-                <Brain size={14} />
-                <span>{tk("lab_title")}</span>
-              </div>
-              <span className="text-petroleum dark:text-slate-100 font-semibold bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-gray-200 dark:border-slate-600 shadow-sm text-sm">
-                {tk("node_label", {
-                  current: currentQIndex + 1,
-                  total: questionsData.length,
-                })}
-              </span>
-              <span className="text-white font-semibold bg-corporate px-4 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,188,212,0.4)] text-sm">
-                {tk("score_label")} {score}
-              </span>
-            </div>
-          </div>
-          <div
-            role="progressbar"
-            aria-valuenow={1 + contentScreens.length + currentQIndex}
-            aria-valuemin={0}
-            aria-valuemax={totalSteps}
-            aria-label={tk("progress_label")}
-            className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner"
-          >
-            <div
-              className="bg-gradient-to-r from-corporate to-petroleum h-full rounded-full transition-all duration-500 ease-out"
-              style={{
-                width: `${((1 + contentScreens.length + currentQIndex) / totalSteps) * 100}%`,
-              }}
-            />
-          </div>
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="w-full lg:w-2/5 flex flex-col gap-6">
-              <div
-                className={`relative rounded-2xl overflow-hidden shadow-xl border border-gray-200 dark:border-slate-600 group h-64 ${imageLayoutClass} bg-white dark:bg-slate-800`}
-              >
-                <img
-                  src={currentQ.image}
-                  alt={tk("image_alt")}
-                  loading="lazy"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-petroleum via-transparent to-transparent opacity-80" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <div className="flex items-center gap-2 text-white text-sm font-semibold bg-corporate/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20">
-                    <Network size={16} /> {tk("scenario_badge")}
-                  </div>
+        <div className="w-full py-6 px-4 relative z-10" key={currentQ.id}>
+          <div className="w-full max-w-6xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+              <EdutechLogo size="small" />
+              <div className="flex items-center gap-3">
+                <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-50 dark:bg-cyan-900/30 text-corporate dark:text-teal-200 font-semibold text-[10px] uppercase tracking-[0.15em] border border-corporate/20">
+                  <Brain size={14} />
+                  <span>{tk("lab_title")}</span>
                 </div>
-              </div>
-              {isAnswered && (
-                <div
-                  className={`p-6 rounded-2xl border animate-[fadeIn_0.6s_ease-out_forwards] shadow-sm ${selectedOption === currentQ.correct ? "bg-emerald-50 dark:bg-emerald-900/30 border-emerald-500/40" : "bg-red-50 dark:bg-red-900/30 border-red-400/40"}`}
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    {selectedOption === currentQ.correct ? (
-                      <span className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300 font-bold text-lg">
-                        <CheckCircle size={24} /> {tk("correct_label")}
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-2 text-red-700 dark:text-red-300 font-bold text-lg">
-                        <XCircle size={24} /> {tk("incorrect_label")}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-petroleum dark:text-slate-100 text-sm leading-relaxed font-medium opacity-90">
-                    {currentQ.explanation}
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className="w-full lg:w-3/5">
-              <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-corporate/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-6 md:p-10 rounded-3xl h-full flex flex-col border-t-4 border-t-corporate">
-                <h2 className="text-xl md:text-2xl font-semibold text-petroleum dark:text-slate-100 mb-8 leading-relaxed font-montserrat">
-                  {currentQ.question}
-                </h2>
-                <div className="space-y-4 flex-grow">
-                  {currentQ.options.map((option, index) => {
-                    let btnClass =
-                      "bg-white/95 dark:bg-slate-800/95 border border-gray-200 dark:border-slate-600 shadow-[0_4px_20px_rgba(0,0,0,0.03)] transition-all duration-300 enabled:hover:border-corporate enabled:hover:shadow-[0_8px_25px_rgba(0,188,212,0.15)] enabled:hover:-translate-y-0.5 w-full text-left p-4 md:p-5 rounded-2xl flex items-start gap-4 ";
-                    let iconClass =
-                      "flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-sm md:text-base transition-colors ";
-                    let textClass =
-                      "text-base md:text-lg font-medium transition-colors ";
-                    if (!isAnswered) {
-                      btnClass += "cursor-pointer";
-                      iconClass +=
-                        "bg-gray-200 dark:bg-slate-600 text-petroleum dark:text-slate-100";
-                      textClass += "text-petroleum/80 dark:text-slate-100/80";
-                    } else if (index === currentQ.correct) {
-                      btnClass +=
-                        "bg-emerald-50 dark:bg-emerald-900/30 !border-emerald-500 shadow-[0_0_20px_rgba(34,197,94,0.15)]";
-                      iconClass += "bg-emerald-500 text-white";
-                      textClass += "text-emerald-700 dark:text-emerald-300";
-                    } else if (index === selectedOption) {
-                      btnClass +=
-                        "bg-red-50 dark:bg-red-900/30 !border-red-400";
-                      iconClass += "bg-red-500 text-white";
-                      textClass += "text-red-700 dark:text-red-300";
-                    } else {
-                      btnClass +=
-                        "opacity-50 cursor-not-allowed bg-white dark:bg-slate-800";
-                      iconClass +=
-                        "bg-gray-200 dark:bg-slate-600 text-petroleum/50 dark:text-slate-100/50";
-                      textClass += "text-petroleum/50 dark:text-slate-100/50";
-                    }
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => handleOptionClick(index)}
-                        disabled={isAnswered}
-                        className={btnClass}
-                      >
-                        <div className={iconClass}>
-                          {["A", "B", "C", "D"][index]}
-                        </div>
-                        <span className={textClass}>{option}</span>
-                      </button>
-                    );
+                <span className="text-petroleum dark:text-slate-100 font-semibold bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-gray-200 dark:border-slate-600 shadow-sm text-sm">
+                  {tk("node_label", {
+                    current: currentQIndex + 1,
+                    total: questionsData.length,
                   })}
-                </div>
-                {!isAnswered && (
-                  <div className="mt-6 flex flex-col items-start gap-3 animate-[fadeIn_0.6s_ease-out_forwards]">
-                          <button
-                              onClick={() => setShowHint(!showHint)}
-                              aria-expanded={showHint}
-                              className="flex items-center gap-2 px-4 py-2 bg-gray-200/40 dark:bg-slate-700/40 hover:bg-gray-200 dark:hover:bg-slate-700 border border-corporate/30 rounded-xl text-petroleum dark:text-slate-100 font-semibold text-sm transition-all duration-300"
-                            >
-                              <Lightbulb size={16} />
-                              {showHint ? tk("hide_hint") : tk("show_hint")}
-                            </button>
-                    {showHint && (
-                      <div className="w-full p-4 bg-emerald-50 dark:bg-emerald-900/30 border border-corporate/50 rounded-xl text-petroleum dark:text-slate-100 text-sm md:text-base font-medium animate-[fadeIn_0.6s_ease-out_forwards] shadow-inner">
-                        <span className="text-corporate font-bold mr-2">
-                          {tk("hint_prefix")}
-                        </span>{" "}
-                        {currentQ.hint}
-                      </div>
-                    )}
+                </span>
+                <span className="text-white font-semibold bg-corporate px-4 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,188,212,0.4)] text-sm">
+                  {tk("score_label")} {score}
+                </span>
+              </div>
+            </div>
+            <div
+              role="progressbar"
+              aria-valuenow={1 + contentScreens.length + currentQIndex}
+              aria-valuemin={0}
+              aria-valuemax={totalSteps}
+              aria-label={tk("progress_label")}
+              className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner"
+            >
+              <div
+                className="bg-gradient-to-r from-corporate to-petroleum h-full rounded-full transition-all duration-500 ease-out"
+                style={{
+                  width: `${((1 + contentScreens.length + currentQIndex) / totalSteps) * 100}%`,
+                }}
+              />
+            </div>
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="w-full lg:w-2/5 flex flex-col gap-6">
+                <div
+                  className={`relative rounded-2xl overflow-hidden shadow-xl border border-gray-200 dark:border-slate-600 group h-64 ${imageLayoutClass} bg-white dark:bg-slate-800`}
+                >
+                  <img
+                    src={currentQ.image}
+                    alt={tk("image_alt")}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-petroleum via-transparent to-transparent opacity-80" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <div className="flex items-center gap-2 text-white text-sm font-semibold bg-corporate/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20">
+                      <Network size={16} /> {tk("scenario_badge")}
+                    </div>
                   </div>
-                )}
+                </div>
                 {isAnswered && (
-                  <div className="mt-8 flex justify-end animate-[fadeIn_0.6s_ease-out_forwards]">
-                    <button
-                      onClick={nextQuestion}
-                      className="px-8 py-3.5 bg-petroleum hover:bg-corporate text-white font-semibold rounded-xl transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-[0_8px_20px_rgba(0,188,212,0.4)] hover:-translate-y-1"
-                    >
-                      {currentQIndex === questionsData.length - 1
-                        ? tk("process_results")
-                        : tk("next_node")}{" "}
-                      <ArrowRight size={18} />
-                    </button>
+                  <div
+                    className={`p-6 rounded-2xl border animate-[fadeIn_0.6s_ease-out_forwards] shadow-sm ${selectedOption === currentQ.correct ? "bg-emerald-50 dark:bg-emerald-900/30 border-emerald-500/40" : "bg-red-50 dark:bg-red-900/30 border-red-400/40"}`}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      {selectedOption === currentQ.correct ? (
+                        <span className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300 font-bold text-lg">
+                          <CheckCircle size={24} /> {tk("correct_label")}
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2 text-red-700 dark:text-red-300 font-bold text-lg">
+                          <XCircle size={24} /> {tk("incorrect_label")}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-petroleum dark:text-slate-100 text-sm leading-relaxed font-medium opacity-90">
+                      {currentQ.explanation}
+                    </p>
                   </div>
                 )}
               </div>
+              <div className="w-full lg:w-3/5">
+                <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-corporate/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-6 md:p-10 rounded-3xl h-full flex flex-col border-t-4 border-t-corporate">
+                  <h2 className="text-xl md:text-2xl font-semibold text-petroleum dark:text-slate-100 mb-8 leading-relaxed font-montserrat">
+                    {currentQ.question}
+                  </h2>
+                  <div className="space-y-4 flex-grow">
+                    {currentQ.options.map((option, index) => {
+                      let btnClass =
+                        "bg-white/95 dark:bg-slate-800/95 border border-gray-200 dark:border-slate-600 shadow-[0_4px_20px_rgba(0,0,0,0.03)] transition-all duration-300 enabled:hover:border-corporate enabled:hover:shadow-[0_8px_25px_rgba(0,188,212,0.15)] enabled:hover:-translate-y-0.5 w-full text-left p-4 md:p-5 rounded-2xl flex items-start gap-4 ";
+                      let iconClass =
+                        "flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-sm md:text-base transition-colors ";
+                      let textClass =
+                        "text-base md:text-lg font-medium transition-colors ";
+                      if (!isAnswered) {
+                        btnClass += "cursor-pointer";
+                        iconClass +=
+                          "bg-gray-200 dark:bg-slate-600 text-petroleum dark:text-slate-100";
+                        textClass += "text-petroleum/80 dark:text-slate-100/80";
+                      } else if (index === currentQ.correct) {
+                        btnClass +=
+                          "bg-emerald-50 dark:bg-emerald-900/30 !border-emerald-500 shadow-[0_0_20px_rgba(34,197,94,0.15)]";
+                        iconClass += "bg-emerald-500 text-white";
+                        textClass += "text-emerald-700 dark:text-emerald-300";
+                      } else if (index === selectedOption) {
+                        btnClass +=
+                          "bg-red-50 dark:bg-red-900/30 !border-red-400";
+                        iconClass += "bg-red-500 text-white";
+                        textClass += "text-red-700 dark:text-red-300";
+                      } else {
+                        btnClass +=
+                          "opacity-50 cursor-not-allowed bg-white dark:bg-slate-800";
+                        iconClass +=
+                          "bg-gray-200 dark:bg-slate-600 text-petroleum/50 dark:text-slate-100/50";
+                        textClass += "text-petroleum/50 dark:text-slate-100/50";
+                      }
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => handleOptionClick(index)}
+                          disabled={isAnswered}
+                          className={btnClass}
+                        >
+                          <div className={iconClass}>
+                            {["A", "B", "C", "D"][index]}
+                          </div>
+                          <span className={textClass}>{option}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {!isAnswered && (
+                    <div className="mt-6 flex flex-col items-start gap-3 animate-[fadeIn_0.6s_ease-out_forwards]">
+                      <button
+                        onClick={() => setShowHint(!showHint)}
+                        aria-expanded={showHint}
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-200/40 dark:bg-slate-700/40 hover:bg-gray-200 dark:hover:bg-slate-700 border border-corporate/30 rounded-xl text-petroleum dark:text-slate-100 font-semibold text-sm transition-all duration-300"
+                      >
+                        <Lightbulb size={16} />
+                        {showHint ? tk("hide_hint") : tk("show_hint")}
+                      </button>
+                      {showHint && (
+                        <div className="w-full p-4 bg-emerald-50 dark:bg-emerald-900/30 border border-corporate/50 rounded-xl text-petroleum dark:text-slate-100 text-sm md:text-base font-medium animate-[fadeIn_0.6s_ease-out_forwards] shadow-inner">
+                          <span className="text-corporate font-bold mr-2">
+                            {tk("hint_prefix")}
+                          </span>{" "}
+                          {currentQ.hint}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {isAnswered && (
+                    <div className="mt-8 flex justify-end animate-[fadeIn_0.6s_ease-out_forwards]">
+                      <button
+                        onClick={nextQuestion}
+                        className="px-8 py-3.5 bg-petroleum hover:bg-corporate text-white font-semibold rounded-xl transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-[0_8px_20px_rgba(0,188,212,0.4)] hover:-translate-y-1"
+                      >
+                        {currentQIndex === questionsData.length - 1
+                          ? tk("process_results")
+                          : tk("next_node")}{" "}
+                        <ArrowRight size={18} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
+            <footer
+              className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-600 text-center"
+              aria-label={tk("footer")}
+            >
+              <p className="text-slate-600 dark:text-slate-300 text-xs">
+                {tk("footer")}
+              </p>
+            </footer>
           </div>
-          <footer className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-600 text-center" aria-label={tk("footer")}>
-            <p className="text-slate-600 dark:text-slate-300 text-xs">
-              {tk("footer")}
-            </p>
-          </footer>
         </div>
+        <OVAValerioBar text={getValerioText()} />
       </div>
-      <OVAValerioBar text={getValerioText()} />
-    </div>
     </SectionErrorBoundary>
   );
 }

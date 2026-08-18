@@ -19,4 +19,4 @@ export const TOTAL_MODULES = 5;
 export const MIN_MODULE_ID = 1;
 export const MAX_MODULE_ID = 5;
 
-export const NOTEBOOKLM_CONFETTI_COLORS = ['#1e40af', '#fbbf24', '#f3f4f6'];
+export const NOTEBOOKLM_CONFETTI_COLORS = ["#1e40af", "#fbbf24", "#f3f4f6"];

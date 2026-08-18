@@ -20,9 +20,12 @@ const ParentalConsentBlocker = ({ children }) => {
   const fetchStatus = useCallback(async () => {
     if (!token) return null;
     try {
-      const res = await fetch(`${API_BASE}/api/smartboard/parental-consent/status`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(
+        `${API_BASE}/api/smartboard/parental-consent/status`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       if (!res.ok) return null;
       return await res.json();
     } catch {
@@ -66,7 +69,9 @@ const ParentalConsentBlocker = ({ children }) => {
     setIsStarting(true);
     try {
       const { supabase } = await import("../../lib/supabase");
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (user) {
         supabase
           .channel(`parent-updates-${user.id}`)
@@ -109,8 +114,8 @@ const ParentalConsentBlocker = ({ children }) => {
         </h1>
 
         <p className="text-sm text-slate-600 leading-relaxed mb-8">
-          Tus padres verán tu progreso en tiempo real mientras trabajas.
-          ¡Haz clic para comenzar!
+          Tus padres verán tu progreso en tiempo real mientras trabajas. ¡Haz
+          clic para comenzar!
         </p>
 
         <button

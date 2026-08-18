@@ -147,29 +147,29 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
           <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#E5E7EB_1px,transparent_1px),linear-gradient(to_bottom,#E5E7EB_1px,transparent_1px)] bg-[length:50px_50px]" />
           <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(30,64,175,0.1)_0%,rgba(255,255,255,0)_70%)]" />
           <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(30,64,175,0.08)_0%,rgba(255,255,255,0)_70%)]" />
-            <header className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-sm px-6 py-4 flex flex-wrap items-center justify-between gap-4 z-20 border-b border-gray-100 dark:border-slate-700">
-              <EdutechLogo />
-              <div className="flex-1 w-full md:w-auto mx-0 md:mx-8 order-last md:order-none">
-                <div className="flex justify-between text-xs text-gray-500 dark:text-slate-400 font-bold mb-1">
-                  <span>{t("ova.podcastguide.progress_label")}</span>
-                  <span>{Math.round(currentTotalProgress)}%</span>
-                </div>
-                <div
-                  role="progressbar"
-                  aria-valuenow={Math.round(currentTotalProgress)}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-label={t("ova.podcastguide.progress_label")}
-                  className="h-2 bg-gray-200 dark:bg-slate-600 rounded-full overflow-hidden"
-                >
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-blue-700 to-amber-500"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    style={{ width: `${currentTotalProgress}%` }}
-                  />
-                </div>
+          <header className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-sm px-6 py-4 flex flex-wrap items-center justify-between gap-4 z-20 border-b border-gray-100 dark:border-slate-700">
+            <EdutechLogo />
+            <div className="flex-1 w-full md:w-auto mx-0 md:mx-8 order-last md:order-none">
+              <div className="flex justify-between text-xs text-gray-500 dark:text-slate-400 font-bold mb-1">
+                <span>{t("ova.podcastguide.progress_label")}</span>
+                <span>{Math.round(currentTotalProgress)}%</span>
               </div>
+              <div
+                role="progressbar"
+                aria-valuenow={Math.round(currentTotalProgress)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={t("ova.podcastguide.progress_label")}
+                className="h-2 bg-gray-200 dark:bg-slate-600 rounded-full overflow-hidden"
+              >
+                <motion.div
+                  className="h-full bg-gradient-to-r from-blue-700 to-amber-500"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  style={{ width: `${currentTotalProgress}%` }}
+                />
+              </div>
+            </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 bg-amber-100 text-amber-700 px-4 py-2 rounded-full font-bold">
                 <Star className="w-5 h-5 fill-current" /> {score}{" "}
@@ -316,17 +316,24 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                         </p>
                         <div className="space-y-3">
                           {slide.options.map((opt, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        if (opt.correct) {
-                          setActivityState("correct");
-                          if (activityState !== "correct")
-                            setScore((s) => s + 20);
-                        } else setActivityState("incorrect");
-                      }}
-                      aria-pressed={activityState === "correct" && opt.correct ? true : activityState === "incorrect" && !opt.correct ? true : false}
-                      className={`w-full p-4 text-left rounded-lg border-2 ${FOCUS_RING} font-medium flex items-center justify-between ${activityState === "correct" && opt.correct ? "border-green-500 bg-green-50 dark:bg-green-900/20" : ""} ${activityState === "incorrect" && !opt.correct ? "border-red-500 bg-red-50 dark:bg-red-900/20" : ""} ${!activityState ? "border-gray-200 dark:border-slate-600 hover:border-blue-700 hover:bg-white dark:hover:bg-slate-800 bg-white dark:bg-slate-800" : ""}`}
+                            <button
+                              key={i}
+                              onClick={() => {
+                                if (opt.correct) {
+                                  setActivityState("correct");
+                                  if (activityState !== "correct")
+                                    setScore((s) => s + 20);
+                                } else setActivityState("incorrect");
+                              }}
+                              aria-pressed={
+                                activityState === "correct" && opt.correct
+                                  ? true
+                                  : activityState === "incorrect" &&
+                                      !opt.correct
+                                    ? true
+                                    : false
+                              }
+                              className={`w-full p-4 text-left rounded-lg border-2 ${FOCUS_RING} font-medium flex items-center justify-between ${activityState === "correct" && opt.correct ? "border-green-500 bg-green-50 dark:bg-green-900/20" : ""} ${activityState === "incorrect" && !opt.correct ? "border-red-500 bg-red-50 dark:bg-red-900/20" : ""} ${!activityState ? "border-gray-200 dark:border-slate-600 hover:border-blue-700 hover:bg-white dark:hover:bg-slate-800 bg-white dark:bg-slate-800" : ""}`}
                             >
                               <span>{opt.text}</span>
                               {activityState === "correct" && opt.correct && (
@@ -376,7 +383,11 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                       <ChevronLeft className="w-5 h-5" />{" "}
                       {t("ova.podcastguide.prev_btn")}
                     </button>
-                    <div className="flex gap-2" role="group" aria-label={t("ova.podcastguide.progress_label")}>
+                    <div
+                      className="flex gap-2"
+                      role="group"
+                      aria-label={t("ova.podcastguide.progress_label")}
+                    >
                       {module.content.map((_, i) => (
                         <div
                           key={i}
