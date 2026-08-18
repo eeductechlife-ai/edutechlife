@@ -357,67 +357,67 @@ const TESTIMONIALS_PT = [
 
 const BENEFICIOS_HIJO_ES = [
   {
-    icon: "fa-brain",
-    title: "Plan personalizado",
-    desc: "Creamos una ruta de aprendizaje única basada en su estilo VAK. Cada actividad está diseñada para cómo él o ella aprende mejor.",
+    icon: "fa-chart-line",
+    title: "Mejora de calificaciones",
+    desc: "Promedio: +2 puntos en 3 meses. Tu hijo alcanza sus objetivos académicos con un plan diseñado solo para él.",
   },
   {
-    icon: "fa-laptop-code",
-    title: "Habilidades tecnológicas",
-    desc: "Desarrolla competencias digitales reales mientras estudia: pensamiento computacional, IA generativa y creatividad digital.",
+    icon: "fa-heart",
+    title: "Recupera su confianza",
+    desc: "Coaches humanos + IA que lo animan en cada paso. De 'no puedo' a 'lo logré' en semanas.",
   },
   {
-    icon: "fa-star",
-    title: "Puntos y recompensas",
-    desc: "Cada actividad completada le da puntos que puede canjear por premios reales. La motivación se convierte en un juego.",
+    icon: "fa-lightbulb",
+    title: "Aprende a su ritmo VAK",
+    desc: "Sin presión. Si es visual, auditivo o kinestésico, cada clase se adapta a cómo SU CEREBRO aprende mejor.",
+  },
+  {
+    icon: "fa-shield-check",
+    title: "Reportes semanales para ti",
+    desc: "Sabes exactamente cómo va tu hijo: progreso, fortalezas, áreas de mejora. Transparencia total.",
   },
   {
     icon: "fa-robot",
-    title: "Coach virtual Dani",
-    desc: "Un tutor con IA disponible 24/7 que lo guía, responde sus preguntas y lo anima en cada paso.",
+    title: "Disponible 24/7",
+    desc: "Tutor Dani (IA) + Coach humano. Estudia cuando quiera: mañana, noche o fin de semana. Apoyo constante.",
   },
   {
-    icon: "fa-user-graduate",
-    title: "Coach humano experto",
-    desc: "Un profesional real que supervisa su progreso y ajusta su plan según su evolución académica y emocional.",
-  },
-  {
-    icon: "fa-book-open",
-    title: "Recursos premium",
-    desc: "Acceso ilimitado a guías, videos, ejercicios interactivos y materiales seleccionados por expertos en educación.",
+    icon: "fa-sparkles",
+    title: "Preparado para el futuro",
+    desc: "Desarrolla pensamiento crítico, creatividad y habilidades digitales. No solo memoriza, entiende.",
   },
 ];
 
 const BENEFICIOS_HIJO_EN = [
   {
-    icon: "fa-brain",
-    title: "Personalized plan",
-    desc: "We create a unique learning path based on their VAK style. Every activity is designed for how they learn best.",
+    icon: "fa-chart-line",
+    title: "Grade improvement",
+    desc: "Average: +2 points in 3 months. Your child reaches academic goals with a plan designed just for them.",
   },
   {
-    icon: "fa-laptop-code",
-    title: "Tech skills",
-    desc: "Develop real digital competencies while studying: computational thinking, generative AI, and digital creativity.",
+    icon: "fa-heart",
+    title: "Regains confidence",
+    desc: "Human coaches + AI that encourages every step. From 'I can't' to 'I did it' in weeks.",
   },
   {
-    icon: "fa-star",
-    title: "Points & rewards",
-    desc: "Every completed activity earns points they can redeem for real prizes. Motivation becomes a game.",
+    icon: "fa-lightbulb",
+    title: "Learns at their VAK pace",
+    desc: "No pressure. Visual, auditory, or kinesthetic—every class adapts to how THEIR BRAIN learns best.",
+  },
+  {
+    icon: "fa-shield-check",
+    title: "Weekly reports for you",
+    desc: "Know exactly how your child is doing: progress, strengths, improvement areas. Total transparency.",
   },
   {
     icon: "fa-robot",
-    title: "Virtual coach Dani",
-    desc: "An AI tutor available 24/7 that guides them, answers questions, and encourages them every step of the way.",
+    title: "Available 24/7",
+    desc: "Tutor Dani (AI) + Human coach. Study whenever: mornings, evenings, weekends. Constant support.",
   },
   {
-    icon: "fa-user-graduate",
-    title: "Expert human coach",
-    desc: "A real professional who supervises progress and adjusts their plan according to academic and emotional development.",
-  },
-  {
-    icon: "fa-book-open",
-    title: "Premium resources",
-    desc: "Unlimited access to guides, videos, interactive exercises, and materials selected by education experts.",
+    icon: "fa-sparkles",
+    title: "Ready for the future",
+    desc: "Develops critical thinking, creativity, and digital skills. Not just memorizing—truly understanding.",
   },
 ];
 

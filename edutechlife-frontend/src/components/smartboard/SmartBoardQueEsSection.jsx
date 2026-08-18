@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { sanitize } from "../../utils/sanitize";
@@ -48,19 +48,40 @@ export default function SmartBoardQueEsSection({ t }) {
                 __html: sanitize(t("smartboard.landing_what_desc2")),
               }}
             />
-            <div className="flex flex-wrap gap-2 pt-1">
+            <div className="flex flex-wrap gap-3 pt-3">
               {[
-                t("smartboard.landing_tag_adaptive_ai"),
-                t("smartboard.landing_tag_real_coaches"),
-                t("smartboard.landing_tag_scientific_vak"),
-                t("smartboard.landing_tag_live_reports"),
-              ].map((tag) => (
-                <span
-                  key={tag}
-                  className="badge-clay px-4 py-2 rounded-full bg-petroleum/5 text-petroleum text-sm font-semibold border border-petroleum/10"
+                {
+                  icon: "fa-chart-line",
+                  label: "94% mejora académica",
+                  desc: "Comprobado en 2,500+ estudiantes",
+                },
+                {
+                  icon: "fa-user-tie",
+                  label: "Coaches humanos",
+                  desc: "Certificados y expertos",
+                },
+                {
+                  icon: "fa-brain",
+                  label: "Plan VAK",
+                  desc: "Adaptado al estilo de tu hijo",
+                },
+              ].map((benefit) => (
+                <motion.div
+                  key={benefit.label}
+                  whileHover={{ y: -2 }}
+                  className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-gradient-to-br from-petroleum/5 to-primary-light/5 border border-petroleum/10 hover:border-petroleum/30 transition-all duration-300"
                 >
-                  {tag}
-                </span>
+                  <Icon
+                    name={benefit.icon}
+                    className="text-petroleum text-base shrink-0"
+                  />
+                  <div>
+                    <p className="text-xs font-bold text-petroleum">
+                      {benefit.label}
+                    </p>
+                    <p className="text-[10px] text-slate-500">{benefit.desc}</p>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </motion.div>
