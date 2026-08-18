@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInView, AnimatePresence, motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { useTranslation } from "../i18n/I18nProvider";
 import {
   getVakStyles,
@@ -182,8 +183,34 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
   const totalSteps = sections.length;
   const progress = ((currentStep + 1) / totalSteps) * 100;
 
+  const seoTitles = [
+    t("smartboard.landing_step_que_es"),
+    t("smartboard.landing_step_vak"),
+    t("smartboard.landing_step_beneficios"),
+    t("smartboard.landing_step_tranquilidad"),
+    t("smartboard.landing_step_como_funciona"),
+    t("smartboard.landing_step_planes"),
+    t("smartboard.landing_step_testimonios"),
+    t("smartboard.landing_step_faq"),
+  ];
+
+  const seoDescriptions = [
+    "Descubre cómo SmartBoard combina IA, diagnóstico VAK y coaches humanos para crear una experiencia única de aprendizaje.",
+    "Aprende cómo tu hijo aprende mejor: Visual, Auditivo o Kinestésico. Planes personalizados según su estilo.",
+    "Mejora académica del 94%, confianza recuperada, y reportes semanales para padres. Beneficios reales comprobados.",
+    "Tranquilidad garantizada: coaches humanos certificados + soporte 24/7. Tu hijo está en buenas manos.",
+    "Sistema adaptativo que ajusta el ritmo de aprendizaje. Paso a paso, sin presión, con éxito garantizado.",
+    "2 planes simples: Starter y Premium. Elige el que mejor se adapte a tus necesidades y presupuesto.",
+    "Historias reales de padres: mejoras de calificaciones, confianza y amor por aprender. Testimonios verificados.",
+    "Respuestas a tus preguntas: prueba gratuita de 7 días, cancela cuando quieras, no se requiere tarjeta.",
+  ];
+
   return (
     <div className="w-full bg-white overflow-hidden">
+      <Helmet>
+        <title>{seoTitles[currentStep]} | SmartBoard - Edutechlife</title>
+        <meta name="description" content={seoDescriptions[currentStep]} />
+      </Helmet>
       <div ref={heroRef}>
         <SmartBoardHeroSection
           t={t}
