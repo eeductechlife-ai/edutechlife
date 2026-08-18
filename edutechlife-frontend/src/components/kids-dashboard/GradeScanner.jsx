@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, memo } from "react";
+import { useState, useCallback, useRef, useEffect, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { callDeepseek } from "../../utils/api";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
@@ -91,6 +91,7 @@ export default memo(function GradeScanner({ onTabChange }) {
     vakResult,
     addPoints,
     setDocumentForDani,
+    userId,
   } = useSmartBoardKids();
   const { t } = useTranslation();
   const SUBJECTS = getSubjects(t);
@@ -110,7 +111,54 @@ export default memo(function GradeScanner({ onTabChange }) {
   const [imgFile, setImgFile] = useState(null);
   const [imgPreview, setImgPreview] = useState(null);
   const [extracting, setExtracting] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
   const fileRef = useRef(null);
+  const isPdf =
+    imgFile?.type === "application/pdf" ||
+    imgFile?.name?.toLowerCase().endsWith(".pdf");
+
+  const loadHistory = useCallback(async () => {
+    const token = sessionStorage.getItem("auth_token");
+    if (!token || !userId) return;
+    try {
+      const { createSupabaseClient } = await import("../../lib/supabase");
+      const sb = createSupabaseClient(token);
+      const { data } = await sb
+        .from("grade_analyses")
+        .select("id, grades, avg_score, plan, created_at")
+        .order("created_at", { ascending: false })
+        .limit(5);
+      if (data?.length) setHistory(data);
+    } catch {}
+  }, [userId]);
+
+  useEffect(() => {
+    loadHistory();
+  }, [loadHistory]);
+
+  const saveAnalysis = useCallback(
+    async (planData, gradeData) => {
+      const token = sessionStorage.getItem("auth_token");
+      if (!token || !userId) return;
+      try {
+        const { createSupabaseClient } = await import("../../lib/supabase");
+        const sb = createSupabaseClient(token);
+        const avg = gradeData.length
+          ? gradeData.reduce((s, g) => s + g.score, 0) / gradeData.length
+          : 0;
+        await sb.from("grade_analyses").insert({
+          student_user_id: userId,
+          grades: gradeData,
+          plan: planData,
+          avg_score: parseFloat(avg.toFixed(1)),
+          vak_style: vakResult?.dominant || null,
+        });
+        await loadHistory();
+      } catch {}
+    },
+    [userId, vakResult, loadHistory],
+  );
 
   const addRow = () =>
     setGrades((prev) => [
@@ -235,12 +283,21 @@ Analiza y responde SOLO con JSON:
       setPlan(parsed);
       setStudentGrades(grades);
       addPoints?.(50);
+      saveAnalysis(parsed, grades);
     } catch (e) {
       setError(t("kid.grades.error_analyze"));
     } finally {
       setScanning(false);
     }
-  }, [grades, vakResult, setStudentGrades, addPoints, SUBJECTS, t]);
+  }, [
+    grades,
+    vakResult,
+    setStudentGrades,
+    addPoints,
+    SUBJECTS,
+    t,
+    saveAnalysis,
+  ]);
 
   const avg = grades.length
     ? (grades.reduce((s, g) => s + g.score, 0) / grades.length).toFixed(1)
@@ -302,11 +359,25 @@ Analiza y responde SOLO con JSON:
             />
             {imgPreview ? (
               <div className="relative">
-                <img
-                  src={imgPreview}
-                  alt="boletín"
-                  className="w-full max-h-48 object-contain rounded-xl border border-[#E2E8F0]"
-                />
+                {isPdf ? (
+                  <div className="w-full py-5 px-4 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] flex items-center gap-3">
+                    <span className="text-3xl">📄</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-[#004B63] text-sm truncate">
+                        {imgFile.name}
+                      </p>
+                      <p className="text-xs text-[#64748B]">
+                        {(imgFile.size / 1024).toFixed(0)} KB · PDF
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <img
+                    src={imgPreview}
+                    alt="boletín"
+                    className="w-full max-h-48 object-contain rounded-xl border border-[#E2E8F0]"
+                  />
+                )}
                 <button
                   onClick={() => {
                     setImgFile(null);
@@ -416,8 +487,52 @@ Analiza y responde SOLO con JSON:
         )}
       </motion.button>
 
-      {error && !scanMode === "image" && (
+      {error && scanMode !== "image" && (
         <p className="text-sm text-red-500 text-center">{error}</p>
+      )}
+
+      {/* History — past analyses */}
+      {history.length > 0 && !plan && (
+        <div className="border border-[#E2E8F0] rounded-2xl overflow-hidden">
+          <button
+            onClick={() => setShowHistory((v) => !v)}
+            className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-[#004B63] hover:bg-[#F8FAFC] transition-colors"
+          >
+            <span>📚 Historial de análisis ({history.length})</span>
+            <span className="text-[#64748B]">{showHistory ? "▲" : "▼"}</span>
+          </button>
+          {showHistory && (
+            <div className="divide-y divide-[#F1F5F9]">
+              {history.map((h) => (
+                <div key={h.id} className="px-4 py-3 bg-white">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs text-[#64748B]">
+                      {new Date(h.created_at).toLocaleDateString("es-CO", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
+                    <span
+                      className="text-xs font-bold px-2 py-0.5 rounded-full"
+                      style={{
+                        backgroundColor: gradeColor(Number(h.avg_score)) + "20",
+                        color: gradeColor(Number(h.avg_score)),
+                      }}
+                    >
+                      {gradeEmoji(Number(h.avg_score))} {h.avg_score}/5
+                    </span>
+                  </div>
+                  {h.plan?.overall && (
+                    <p className="text-xs text-[#374151] line-clamp-2">
+                      {h.plan.overall}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       )}
 
       {/* Plan result */}
