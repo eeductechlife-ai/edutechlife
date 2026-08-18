@@ -7,12 +7,42 @@
  */
 
 const ACHIEVEMENTS = {
-  FIRST_LESSON: { id: 'first_lesson', name: 'Primer Paso', icon: '🎓', points: 10 },
-  FIVE_DAY_STREAK: { id: 'five_day_streak', name: 'En Racha', icon: '🔥', points: 50 },
-  HUNDRED_POINTS: { id: 'hundred_points', name: 'Centenario', icon: '💯', points: 25 },
-  MASTER_SUBJECT: { id: 'master_subject', name: 'Experto', icon: '👑', points: 100 },
-  PERFECT_QUIZ: { id: 'perfect_quiz', name: 'Perfección', icon: '✨', points: 30 },
-  SOCIAL_BUTTERFLY: { id: 'social_butterfly', name: 'Mariposa Social', icon: '🦋', points: 40 },
+  FIRST_LESSON: {
+    id: "first_lesson",
+    name: "Primer Paso",
+    icon: "🎓",
+    points: 10,
+  },
+  FIVE_DAY_STREAK: {
+    id: "five_day_streak",
+    name: "En Racha",
+    icon: "🔥",
+    points: 50,
+  },
+  HUNDRED_POINTS: {
+    id: "hundred_points",
+    name: "Centenario",
+    icon: "💯",
+    points: 25,
+  },
+  MASTER_SUBJECT: {
+    id: "master_subject",
+    name: "Experto",
+    icon: "👑",
+    points: 100,
+  },
+  PERFECT_QUIZ: {
+    id: "perfect_quiz",
+    name: "Perfección",
+    icon: "✨",
+    points: 30,
+  },
+  SOCIAL_BUTTERFLY: {
+    id: "social_butterfly",
+    name: "Mariposa Social",
+    icon: "🦋",
+    points: 40,
+  },
 };
 
 const UNLOCK_CONDITIONS = {
@@ -67,7 +97,10 @@ export const calculateNewUnlocks = (userData, unlockedIds = []) => {
 
   Object.keys(ACHIEVEMENTS).forEach((key) => {
     const achievementId = ACHIEVEMENTS[key].id;
-    if (!unlockedSet.has(achievementId) && shouldUnlock(achievementId, userData)) {
+    if (
+      !unlockedSet.has(achievementId) &&
+      shouldUnlock(achievementId, userData)
+    ) {
       newUnlocks.push(ACHIEVEMENTS[key]);
     }
   });
@@ -121,7 +154,10 @@ export const getAvailableAchievements = () => {
  * @returns {number}
  */
 export const calculateAchievementPoints = (unlockedAchievements = []) => {
-  return (unlockedAchievements || []).reduce((sum, a) => sum + (a.points ?? 0), 0);
+  return (unlockedAchievements || []).reduce(
+    (sum, a) => sum + (a.points ?? 0),
+    0,
+  );
 };
 
 export default {

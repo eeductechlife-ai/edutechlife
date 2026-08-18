@@ -13,33 +13,52 @@
  * @param {string} sortBy - Campo para ordenar: 'points', 'streak', 'avgScore'
  * @returns {object} - { rank, total, percentile, score }
  */
-export const calculateRank = (studentData, allStudentsData = [], sortBy = 'points') => {
+export const calculateRank = (
+  studentData,
+  allStudentsData = [],
+  sortBy = "points",
+) => {
   if (!Array.isArray(allStudentsData)) {
     return { rank: null, total: 0, percentile: 0, score: 0 };
   }
 
   if (!studentData) {
-    return { rank: null, total: allStudentsData.length, percentile: 0, score: 0 };
+    return {
+      rank: null,
+      total: allStudentsData.length,
+      percentile: 0,
+      score: 0,
+    };
   }
 
   const scores = allStudentsData
     .map((s) => {
       switch (sortBy) {
-        case 'streak':
+        case "streak":
           return s?.streak?.current ?? 0;
-        case 'avgScore':
+        case "avgScore":
           return calculateAverageScore(s);
-        case 'points':
+        case "points":
         default:
           return s?.totalPoints ?? 0;
       }
     })
     .sort((a, b) => b - a);
 
-  const studentScore = studentData[sortBy === 'streak' ? 'streak' : sortBy === 'avgScore' ? 'avgScore' : 'totalPoints'];
-  const actualScore = sortBy === 'streak' ? studentScore?.current ?? 0 : studentScore ?? 0;
+  const studentScore =
+    studentData[
+      sortBy === "streak"
+        ? "streak"
+        : sortBy === "avgScore"
+          ? "avgScore"
+          : "totalPoints"
+    ];
+  const actualScore =
+    sortBy === "streak" ? (studentScore?.current ?? 0) : (studentScore ?? 0);
   const rank = scores.findIndex((s) => s === actualScore) + 1;
-  const percentile = Math.round(((scores.length - rank + 1) / scores.length) * 100);
+  const percentile = Math.round(
+    ((scores.length - rank + 1) / scores.length) * 100,
+  );
 
   return {
     rank: rank > 0 ? rank : null,
@@ -69,7 +88,11 @@ export const calculateAverageScore = (studentData = {}) => {
  * @param {number} limit - Máximo de estudiantes a retornar
  * @returns {array}
  */
-export const generateLeaderboard = (allStudentsData = [], sortBy = 'points', limit = 50) => {
+export const generateLeaderboard = (
+  allStudentsData = [],
+  sortBy = "points",
+  limit = 50,
+) => {
   if (!Array.isArray(allStudentsData) || allStudentsData.length === 0) {
     return [];
   }
@@ -77,26 +100,35 @@ export const generateLeaderboard = (allStudentsData = [], sortBy = 'points', lim
   let sortedStudents = [...allStudentsData];
 
   switch (sortBy) {
-    case 'streak':
-      sortedStudents.sort((a, b) => (b?.streak?.current ?? 0) - (a?.streak?.current ?? 0));
+    case "streak":
+      sortedStudents.sort(
+        (a, b) => (b?.streak?.current ?? 0) - (a?.streak?.current ?? 0),
+      );
       break;
-    case 'avgScore':
-      sortedStudents.sort((a, b) => calculateAverageScore(b) - calculateAverageScore(a));
+    case "avgScore":
+      sortedStudents.sort(
+        (a, b) => calculateAverageScore(b) - calculateAverageScore(a),
+      );
       break;
-    case 'points':
+    case "points":
     default:
-      sortedStudents.sort((a, b) => (b?.totalPoints ?? 0) - (a?.totalPoints ?? 0));
+      sortedStudents.sort(
+        (a, b) => (b?.totalPoints ?? 0) - (a?.totalPoints ?? 0),
+      );
   }
 
-  return sortedStudents
-    .slice(0, Math.max(1, limit))
-    .map((student, index) => ({
-      rank: index + 1,
-      name: student?.name || 'Anónimo',
-      score: sortBy === 'streak' ? student?.streak?.current ?? 0 : sortBy === 'avgScore' ? calculateAverageScore(student) : student?.totalPoints ?? 0,
-      userId: student?.id,
-      avatarUrl: student?.avatarUrl || null,
-    }));
+  return sortedStudents.slice(0, Math.max(1, limit)).map((student, index) => ({
+    rank: index + 1,
+    name: student?.name || "Anónimo",
+    score:
+      sortBy === "streak"
+        ? (student?.streak?.current ?? 0)
+        : sortBy === "avgScore"
+          ? calculateAverageScore(student)
+          : (student?.totalPoints ?? 0),
+    userId: student?.id,
+    avatarUrl: student?.avatarUrl || null,
+  }));
 };
 
 /**
@@ -110,25 +142,31 @@ export const detectAnomalies = (studentData, previousData = {}) => {
 
   if (!studentData) return { isAnomalous: false, flags };
 
-  const pointsDelta = (studentData?.totalPoints ?? 0) - (previousData?.totalPoints ?? 0);
-  const pointsPerMinute = pointsDelta / Math.max(1, studentData?.totalActiveMinutes ?? 1);
+  const pointsDelta =
+    (studentData?.totalPoints ?? 0) - (previousData?.totalPoints ?? 0);
+  const pointsPerMinute =
+    pointsDelta / Math.max(1, studentData?.totalActiveMinutes ?? 1);
 
   // Más de 10 puntos por minuto = sospechoso
   if (pointsPerMinute > 10) {
-    flags.push('suspicious_point_velocity');
+    flags.push("suspicious_point_velocity");
   }
 
   // Racha imposible: no se puede ganar 100+ días en 1 día
-  const streakDelta = (studentData?.streak?.current ?? 0) - (previousData?.streak?.current ?? 0);
+  const streakDelta =
+    (studentData?.streak?.current ?? 0) - (previousData?.streak?.current ?? 0);
   if (streakDelta > 7) {
-    flags.push('impossible_streak_jump');
+    flags.push("impossible_streak_jump");
   }
 
   // Todos los quizzes con puntuación perfecta en minutos
   const quizzes = studentData?.analyzedActivities ?? [];
   const perfectQuizzes = quizzes.filter((q) => q?.score === 100).length;
-  if (perfectQuizzes / Math.max(1, quizzes.length) > 0.8 && quizzes.length > 5) {
-    flags.push('all_perfect_scores');
+  if (
+    perfectQuizzes / Math.max(1, quizzes.length) > 0.8 &&
+    quizzes.length > 5
+  ) {
+    flags.push("all_perfect_scores");
   }
 
   // Cambios bruscos de VAK
@@ -137,13 +175,13 @@ export const detectAnomalies = (studentData, previousData = {}) => {
     studentData?.vakResult &&
     previousData.vakResult !== studentData.vakResult
   ) {
-    flags.push('vak_changed');
+    flags.push("vak_changed");
   }
 
   return {
     isAnomalous: flags.length > 0,
     flags,
-    riskLevel: flags.length >= 2 ? 'high' : flags.length > 0 ? 'medium' : 'low',
+    riskLevel: flags.length >= 2 ? "high" : flags.length > 0 ? "medium" : "low",
   };
 };
 
@@ -153,7 +191,7 @@ export const detectAnomalies = (studentData, previousData = {}) => {
  * @returns {boolean}
  */
 export const isValidScore = (score) => {
-  return typeof score === 'number' && score >= 0 && score <= 100;
+  return typeof score === "number" && score >= 0 && score <= 100;
 };
 
 /**

@@ -14,7 +14,6 @@ const ParentalConsentBlocker = ({ children }) => {
   const { token, isLoaded, isSignedIn } = useAuthIdentity();
   const navigate = useNavigate();
   const [status, setStatus] = useState("loading");
-  const [isStarting, setIsStarting] = useState(false);
   const pollRef = useRef(null);
 
   const fetchStatus = useCallback(async () => {
@@ -65,31 +64,33 @@ const ParentalConsentBlocker = ({ children }) => {
     signOutUser("/", navigate);
   }, [navigate]);
 
-  const handleStartWork = async () => {
-    setIsStarting(true);
-    try {
-      const { supabase } = await import("../../lib/supabase");
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        supabase
-          .channel(`parent-updates-${user.id}`)
-          .send({
-            type: "broadcast",
-            event: "student_session",
-            payload: {
-              type: "session_started",
-              student_id: user.id,
-              start_time: new Date().toISOString(),
-            },
+  const handleStartWork = () => {
+    setStatus("open");
+    // Notificar a padres en background — sin bloquear al estudiante
+    import("../../lib/supabase")
+      .then(({ supabase }) => {
+        supabase.auth
+          .getSession()
+          .then(({ data: { session } }) => {
+            const userId = session?.user?.id;
+            if (userId) {
+              supabase
+                .channel(`parent-updates-${userId}`)
+                .send({
+                  type: "broadcast",
+                  event: "student_session",
+                  payload: {
+                    type: "session_started",
+                    student_id: userId,
+                    start_time: new Date().toISOString(),
+                  },
+                })
+                .catch(() => {});
+            }
           })
           .catch(() => {});
-      }
-    } catch {
-      // Fail silently — no bloquear al estudiante
-    }
-    setStatus("open");
+      })
+      .catch(() => {});
   };
 
   if (status === "loading") {
@@ -120,17 +121,9 @@ const ParentalConsentBlocker = ({ children }) => {
 
         <button
           onClick={handleStartWork}
-          disabled={isStarting}
-          className="min-h-[52px] w-full rounded-2xl bg-gradient-to-r from-[#0077B6] to-[#00B4D8] text-white font-bold text-lg py-3 px-4 hover:shadow-lg transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+          className="min-h-[52px] w-full rounded-2xl bg-gradient-to-r from-[#0077B6] to-[#00B4D8] text-white font-bold text-lg py-3 px-4 hover:shadow-lg transition-all flex items-center justify-center gap-2"
         >
-          {isStarting ? (
-            <>
-              <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-              Iniciando...
-            </>
-          ) : (
-            <>▶ Comenzar a trabajar</>
-          )}
+          ▶ Comenzar a trabajar
         </button>
 
         <button

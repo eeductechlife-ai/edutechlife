@@ -302,10 +302,7 @@ const AppRoutes = () => {
           }
         />
 
-        <Route
-          path="smartboard/login"
-          element={<SmartBoardLoginRedirect />}
-        />
+        <Route path="smartboard/login" element={<SmartBoardLoginRedirect />} />
 
         <Route
           path="smartboard/padres"

@@ -13,7 +13,7 @@
  */
 export const predictChurnRisk = (studentData = {}) => {
   if (!studentData || Object.keys(studentData).length === 0) {
-    return { riskLevel: 'unknown', score: 0, reasons: [] };
+    return { riskLevel: "unknown", score: 0, reasons: [] };
   }
 
   let riskScore = 0;
@@ -31,21 +31,21 @@ export const predictChurnRisk = (studentData = {}) => {
   const totalPoints = studentData?.totalPoints ?? 0;
   if (totalPoints < 50 && daysInactive > 3) {
     riskScore += 25;
-    reasons.push('Baja puntuación acumulada');
+    reasons.push("Baja puntuación acumulada");
   }
 
   // Factor: Racha rota (streak = 0)
   const currentStreak = studentData?.streak?.current ?? 0;
   if (currentStreak === 0 && daysInactive > 2) {
     riskScore += 20;
-    reasons.push('Racha perdida');
+    reasons.push("Racha perdida");
   }
 
   // Factor: Sin misiones completadas
   const missionsCount = studentData?.missions?.length ?? 0;
   if (missionsCount === 0 && daysInactive > 1) {
     riskScore += 15;
-    reasons.push('Ninguna misión completada');
+    reasons.push("Ninguna misión completada");
   }
 
   // Factor: Actividad muy baja (< 30 minutos acumulados)
@@ -56,7 +56,7 @@ export const predictChurnRisk = (studentData = {}) => {
   }
 
   return {
-    riskLevel: riskScore > 70 ? 'high' : riskScore > 40 ? 'medium' : 'low',
+    riskLevel: riskScore > 70 ? "high" : riskScore > 40 ? "medium" : "low",
     score: Math.min(100, riskScore),
     reasons,
   };
@@ -68,7 +68,10 @@ export const predictChurnRisk = (studentData = {}) => {
  * @param {array} unlockedAchievementIds
  * @returns {object|null} - { achievementId, progress, daysUntilUnlock }
  */
-export const predictNextUnlock = (studentData = {}, unlockedAchievementIds = []) => {
+export const predictNextUnlock = (
+  studentData = {},
+  unlockedAchievementIds = [],
+) => {
   if (!studentData) return null;
 
   const predictions = [];
@@ -76,12 +79,13 @@ export const predictNextUnlock = (studentData = {}, unlockedAchievementIds = [])
   const currentStreak = studentData?.streak?.current ?? 0;
 
   // Predicción: Hundred Points
-  if (!unlockedAchievementIds.includes('hundred_points')) {
+  if (!unlockedAchievementIds.includes("hundred_points")) {
     const pointsNeeded = Math.max(0, 100 - currentPoints);
     const pointsPerDay = calculateDailyPoints(studentData);
-    const daysNeeded = pointsPerDay > 0 ? Math.ceil(pointsNeeded / pointsPerDay) : 999;
+    const daysNeeded =
+      pointsPerDay > 0 ? Math.ceil(pointsNeeded / pointsPerDay) : 999;
     predictions.push({
-      achievementId: 'hundred_points',
+      achievementId: "hundred_points",
       progress: Math.round((currentPoints / 100) * 100),
       daysUntilUnlock: daysNeeded,
       estimatedDate: new Date(Date.now() + daysNeeded * 24 * 60 * 60 * 1000),
@@ -89,10 +93,10 @@ export const predictNextUnlock = (studentData = {}, unlockedAchievementIds = [])
   }
 
   // Predicción: Five Day Streak
-  if (!unlockedAchievementIds.includes('five_day_streak')) {
+  if (!unlockedAchievementIds.includes("five_day_streak")) {
     const streakNeeded = Math.max(0, 5 - currentStreak);
     predictions.push({
-      achievementId: 'five_day_streak',
+      achievementId: "five_day_streak",
       progress: Math.round((currentStreak / 5) * 100),
       daysUntilUnlock: streakNeeded,
       estimatedDate: new Date(Date.now() + streakNeeded * 24 * 60 * 60 * 1000),
@@ -103,7 +107,7 @@ export const predictNextUnlock = (studentData = {}, unlockedAchievementIds = [])
   if (predictions.length === 0) return null;
 
   return predictions.reduce((closest, current) =>
-    current.daysUntilUnlock < closest.daysUntilUnlock ? current : closest
+    current.daysUntilUnlock < closest.daysUntilUnlock ? current : closest,
   );
 };
 
@@ -123,7 +127,10 @@ export const calculateDailyPoints = (studentData = {}) => {
   const lastDate = new Date(lastEntry?.date);
 
   const daysDiff = Math.max(1, (lastDate - firstDate) / (1000 * 60 * 60 * 24));
-  const pointsDiff = Math.max(0, (lastEntry?.cumulative ?? 0) - (firstEntry?.cumulative ?? 0));
+  const pointsDiff = Math.max(
+    0,
+    (lastEntry?.cumulative ?? 0) - (firstEntry?.cumulative ?? 0),
+  );
 
   return Math.round(pointsDiff / daysDiff);
 };
@@ -140,17 +147,19 @@ export const generateParentAlert = (studentData = {}, previousAlerts = []) => {
   const churnRisk = predictChurnRisk(studentData);
 
   // Alerta: Alto riesgo de abandono
-  if (churnRisk.riskLevel === 'high') {
-    const lastAlert = previousAlerts.find((a) => a.type === 'high_churn_risk');
-    const shouldAlert = !lastAlert || (Date.now() - new Date(lastAlert.createdAt)) > 24 * 60 * 60 * 1000;
+  if (churnRisk.riskLevel === "high") {
+    const lastAlert = previousAlerts.find((a) => a.type === "high_churn_risk");
+    const shouldAlert =
+      !lastAlert ||
+      Date.now() - new Date(lastAlert.createdAt) > 24 * 60 * 60 * 1000;
 
     if (shouldAlert) {
       return {
-        type: 'high_churn_risk',
-        severity: 'high',
+        type: "high_churn_risk",
+        severity: "high",
         message: `Tu hijo ha estado inactivo. Ayúdalo a retomar la práctica.`,
         actionRequired: true,
-        suggestedAction: 'Send encouragement message',
+        suggestedAction: "Send encouragement message",
         createdAt: new Date().toISOString(),
       };
     }
@@ -159,16 +168,18 @@ export const generateParentAlert = (studentData = {}, previousAlerts = []) => {
   // Alerta: Puntuación consistentemente baja
   const avgScore = calculateRecentAverageScore(studentData);
   if (avgScore < 50 && studentData?.missions?.length > 0) {
-    const lastAlert = previousAlerts.find((a) => a.type === 'low_scores');
-    const shouldAlert = !lastAlert || (Date.now() - new Date(lastAlert.createdAt)) > 3 * 24 * 60 * 60 * 1000;
+    const lastAlert = previousAlerts.find((a) => a.type === "low_scores");
+    const shouldAlert =
+      !lastAlert ||
+      Date.now() - new Date(lastAlert.createdAt) > 3 * 24 * 60 * 60 * 1000;
 
     if (shouldAlert) {
       return {
-        type: 'low_scores',
-        severity: 'medium',
+        type: "low_scores",
+        severity: "medium",
         message: `Las puntuaciones de tu hijo están bajas. Considera ofrecerle ayuda adicional.`,
         actionRequired: false,
-        suggestedAction: 'Review learning topics',
+        suggestedAction: "Review learning topics",
         createdAt: new Date().toISOString(),
       };
     }
@@ -176,20 +187,24 @@ export const generateParentAlert = (studentData = {}, previousAlerts = []) => {
 
   // Alerta: Progreso excepcional (motivación)
   if (
-    churnRisk.riskLevel === 'low' &&
+    churnRisk.riskLevel === "low" &&
     (studentData?.streak?.current ?? 0) >= 7 &&
     (studentData?.totalPoints ?? 0) >= 200
   ) {
-    const lastAlert = previousAlerts.find((a) => a.type === 'outstanding_progress');
-    const shouldAlert = !lastAlert || (Date.now() - new Date(lastAlert.createdAt)) > 7 * 24 * 60 * 60 * 1000;
+    const lastAlert = previousAlerts.find(
+      (a) => a.type === "outstanding_progress",
+    );
+    const shouldAlert =
+      !lastAlert ||
+      Date.now() - new Date(lastAlert.createdAt) > 7 * 24 * 60 * 60 * 1000;
 
     if (shouldAlert) {
       return {
-        type: 'outstanding_progress',
-        severity: 'low',
+        type: "outstanding_progress",
+        severity: "low",
         message: `¡Tu hijo va muy bien! Mantén el impulso.`,
         actionRequired: false,
-        suggestedAction: 'Celebrate achievement',
+        suggestedAction: "Celebrate achievement",
         createdAt: new Date().toISOString(),
       };
     }

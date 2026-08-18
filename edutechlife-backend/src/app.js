@@ -57,7 +57,7 @@ const ALLOWED_ORIGINS = [
 ];
 
 // Precompile regex for performance (avoid recompilation per request)
-const LOCALHOST_REGEX = /^https?:\/\/(localhost|127\.0\.0\.1):(3000|3001|5173|5174|5175|5176|5177|5178|5179|5180)$/;
+const LOCALHOST_REGEX = /^https?:\/\/(localhost|127\.0\.0\.1):(3000|3001|517[0-9]|518[0-9]|519[0-9])$/;
 
 const isAllowed = (origin) => {
   if (!origin) return true;
@@ -82,6 +82,7 @@ app.use(cors({
 app.use(helmet({
   contentSecurityPolicy: { directives: CSP_DIRECTIVES },
   crossOriginEmbedderPolicy: false,
+  hsts: process.env.NODE_ENV === 'production' ? { maxAge: 31536000, includeSubDomains: true } : false,
 }));
 
 app.use((req, res, next) => {
