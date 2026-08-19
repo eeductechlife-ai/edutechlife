@@ -3,10 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { callDeepseek } from "../../utils/api";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
-import {
-  getSubjectEmoji,
-  createSubject,
-} from "../../config/subjectMappings";
+import { getSubjectEmoji, createSubject } from "../../config/subjectMappings";
 
 // Default subjects with translations
 const DEFAULT_SUBJECTS = [
@@ -216,28 +213,34 @@ export default memo(function GradeScanner({ onTabChange }) {
           const { parsePDF } = await import("../../utils/documentParser");
           const text = await parsePDF(f);
           if (text) {
-            const prompt = `Texto de un boletín escolar (escala 1.0-5.0 o porcentaje):
-"${text.slice(0, 3000)}"
+            const prompt = `Eres un extractor de datos de boletines escolares.
+Tu tarea: Extraer TODAS las asignaturas con sus calificaciones.
 
-Extrae TODAS las calificaciones/notas de TODAS las asignaturas/áreas.
+BOLETÍN (escala 1.0-5.0 o porcentaje):
+"${text.slice(0, 3500)}"
 
-Responde SOLO JSON (sin markdown):
+INSTRUCCIONES CRÍTICAS:
+1. CADA FILA/LÍNEA del boletín tiene una asignatura y una nota
+2. Busca PARES de (NOMBRE_MATERIA, NOTA) en ORDEN de aparición
+3. El nombre EXACTO debe estar ANTES o AL LADO de su nota
+4. NO repitas nombres - cada materia debe tener su nota correcta
+5. Si encuentras una nota (4.2, 3.8, 85%, etc), busca su materia INMEDIATAMENTE antes
+6. Convierte porcentajes a escala 1-5: 90%=4.5, 85%=4.25, 80%=4.0, 75%=3.75, etc.
+
+FORMATO JSON (responde SOLO esto, sin markdown):
 {
   "grades": [
-    {"subject": "Nombre exacto de la asignatura", "score": 4.2},
-    {"subject": "Otra asignatura", "score": 3.8}
+    {"subject": "NOMBRE EXACTO MATERIA 1", "score": 4.2},
+    {"subject": "NOMBRE EXACTO MATERIA 2", "score": 3.8},
+    {"subject": "NOMBRE EXACTO MATERIA 3", "score": 4.5}
   ]
 }
 
-Instrucciones:
-- Extrae TODAS las asignaturas (no hay límite)
-- Usa el nombre EXACTO de cada materia como aparece en el boletín
-- Si es porcentaje, convierte a escala 1-5 (ej: 85% = 4.25)
-- Incluye TODAS las áreas: académicas, artísticas, deportivas, religiosas, etc.
-- Si no hay notas claras: {"grades": []}`;
+Si encuentras 16 asignaturas, devuelve 16 pares diferentes.
+Si no encuentras notas: {"grades": []}`;
             const res = await callDeepseek(
               [{ role: "user", content: prompt }],
-              { temperature: 0.1, maxTokens: 1000, isJson: true },
+              { temperature: 0.05, maxTokens: 1200, isJson: true },
             );
             const parsed = typeof res === "string" ? JSON.parse(res) : res;
             extractedGrades = parsed?.grades || [];
@@ -272,28 +275,34 @@ Instrucciones:
           const { text } = await resp.json();
 
           if (text && text.trim().length > 10) {
-            const prompt = `Texto OCR de un boletín escolar (escala 1.0-5.0 o porcentaje):
-"${text.slice(0, 3000)}"
+            const prompt = `Eres un extractor de datos de boletines escolares.
+Tu tarea: Extraer TODAS las asignaturas con sus calificaciones.
 
-Extrae TODAS las calificaciones/notas de TODAS las asignaturas/áreas.
+BOLETÍN OCR (escala 1.0-5.0 o porcentaje):
+"${text.slice(0, 3500)}"
 
-Responde SOLO JSON (sin markdown):
+INSTRUCCIONES CRÍTICAS:
+1. CADA FILA/LÍNEA del boletín tiene una asignatura y una nota
+2. Busca PARES de (NOMBRE_MATERIA, NOTA) en ORDEN de aparición
+3. El nombre EXACTO debe estar ANTES o AL LADO de su nota
+4. NO repitas nombres - cada materia debe tener su nota correcta
+5. Si encuentras una nota (4.2, 3.8, 85%, etc), busca su materia INMEDIATAMENTE antes
+6. Convierte porcentajes a escala 1-5: 90%=4.5, 85%=4.25, 80%=4.0, 75%=3.75, etc.
+
+FORMATO JSON (responde SOLO esto, sin markdown):
 {
   "grades": [
-    {"subject": "Nombre exacto de la asignatura", "score": 4.2},
-    {"subject": "Otra asignatura", "score": 3.8}
+    {"subject": "NOMBRE EXACTO MATERIA 1", "score": 4.2},
+    {"subject": "NOMBRE EXACTO MATERIA 2", "score": 3.8},
+    {"subject": "NOMBRE EXACTO MATERIA 3", "score": 4.5}
   ]
 }
 
-Instrucciones:
-- Extrae TODAS las asignaturas (no hay límite)
-- Usa el nombre EXACTO de cada materia como aparece en el boletín
-- Si es porcentaje, convierte a escala 1-5 (ej: 85% = 4.25)
-- Incluye TODAS las áreas: académicas, artísticas, deportivas, religiosas, etc.
-- Si no hay notas claras: {"grades": []}`;
+Si encuentras 16 asignaturas, devuelve 16 pares diferentes.
+Si no encuentras notas: {"grades": []}`;
             const res = await callDeepseek(
               [{ role: "user", content: prompt }],
-              { temperature: 0.1, maxTokens: 1000, isJson: true },
+              { temperature: 0.05, maxTokens: 1200, isJson: true },
             );
             const parsed = typeof res === "string" ? JSON.parse(res) : res;
             extractedGrades = parsed?.grades || [];
@@ -306,7 +315,7 @@ Instrucciones:
             ...new Set(
               extractedGrades
                 .map((g) => g.subject)
-                .filter((s) => s && typeof s === "string")
+                .filter((s) => s && typeof s === "string"),
             ),
           ].sort();
 
