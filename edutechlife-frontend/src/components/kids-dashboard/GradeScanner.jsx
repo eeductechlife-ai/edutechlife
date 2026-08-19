@@ -131,6 +131,9 @@ export default memo(function GradeScanner({ onTabChange }) {
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
   const fileRef = useRef(null);
+  const initializedFromHistory = useRef(false);
+  // true only when component mounted with no grades in context (fresh load)
+  const startedWithDefaults = useRef(!studentGrades.length);
   const isPdf =
     imgFile?.type === "application/pdf" ||
     imgFile?.name?.toLowerCase().endsWith(".pdf");
@@ -146,7 +149,28 @@ export default memo(function GradeScanner({ onTabChange }) {
         .select("id, grades, avg_score, plan, created_at")
         .order("created_at", { ascending: false })
         .limit(5);
-      if (data?.length) setHistory(data);
+      if (data?.length) {
+        setHistory(data);
+        // Auto-load latest grades on first mount only when started with defaults
+        const latest = data[0];
+        if (
+          !initializedFromHistory.current &&
+          startedWithDefaults.current &&
+          latest.grades?.length > 0
+        ) {
+          initializedFromHistory.current = true;
+          const latestGrades = latest.grades.map((g) => ({
+            id: uid(),
+            subject: g.subject,
+            score: g.score,
+          }));
+          setGrades(latestGrades);
+          const subjectNames = [
+            ...new Set(latestGrades.map((g) => g.subject).filter(Boolean)),
+          ];
+          if (subjectNames.length > 0) setExtractedSubjectNames(subjectNames);
+        }
+      }
     } catch {}
   }, [userId]);
 
