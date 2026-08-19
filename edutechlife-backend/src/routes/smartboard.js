@@ -544,9 +544,11 @@ router.get('/parental-consent/status', requireAuth, async (req, res) => {
       .limit(1)
       .maybeSingle();
 
-    if (error) throw error;
+    // La tabla parent_consents puede no existir (PGRST205 / 42P01 en despliegues
+    // sin la migración): se trata como "sin consentimiento aún", no como error.
+    if (error && error.code !== 'PGRST205' && error.code !== '42P01') throw error;
 
-    if (!data) {
+    if (!data || error) {
       return res.json({
         verification_status: 'none',
         student_age: null,

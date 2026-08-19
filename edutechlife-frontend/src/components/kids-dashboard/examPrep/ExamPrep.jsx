@@ -122,7 +122,7 @@ Responde SOLO con JSON:
   ]
 }`;
     try {
-      const res = await callDeepseek(prompt, {
+      const res = await callDeepseek([{ role: "user", content: prompt }], {
         temperature: 0.6,
         maxTokens: 1200,
         isJson: true,

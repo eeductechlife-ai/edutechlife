@@ -115,7 +115,7 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
   ]
 }`;
       }
-      const res = await callDeepseek(prompt, {
+      const res = await callDeepseek([{ role: "user", content: prompt }], {
         temperature: 0.7,
         maxTokens: 1500,
         isJson: true,

@@ -59,7 +59,7 @@ const StudyPodcast = memo(() => {
 Texto:
 ${input.substring(0, 3000)}`;
 
-        const result = await callDeepseek(prompt, {
+        const result = await callDeepseek([{ role: "user", content: prompt }], {
           temperature: 0.7,
           maxTokens: 1000,
           isJson: true,
