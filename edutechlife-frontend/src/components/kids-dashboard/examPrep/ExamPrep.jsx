@@ -354,14 +354,24 @@ const ExamPrep = memo(({ onTabChange }) => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#0077B6] text-white"
+          className="p-4 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#0077B6] text-white space-y-3"
         >
-          <p className="text-xs text-white/70 mb-1">
-            {t("kid.flashcards.active_deck")}
-          </p>
-          <p className="font-bold">{activeStudyDeck.title}</p>
-          <p className="text-xs text-white/70 mb-3">
-            {t("kid.exam.cards_ready", { count: activeStudyDeck.cards.length })}
+          <div>
+            <p className="text-xs text-white/70 mb-1">
+              {t("kid.flashcards.active_deck")}
+            </p>
+            <p className="font-bold">{activeStudyDeck.title}</p>
+            <p className="text-xs text-white/70">
+              {t("kid.exam.cards_ready", { count: activeStudyDeck.cards.length })}
+            </p>
+          </div>
+          {/* Sincronización: navegación a Dani sobre el mismo tema */}
+          <button
+            onClick={() => onTabChange?.("oral")}
+            className="w-full py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white font-semibold text-sm transition-all"
+          >
+            🗣️ Hablar con Dani sobre esto
+          </button>
           </p>
           <motion.button
             onClick={() => setShowDeckQuiz(true)}
