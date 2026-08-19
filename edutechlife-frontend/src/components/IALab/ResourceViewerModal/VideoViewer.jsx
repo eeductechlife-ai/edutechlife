@@ -58,6 +58,10 @@ const VideoViewer = ({
     };
     window.addEventListener("message", suppressPostMsgError, true);
 
+    return () => {
+      window.removeEventListener("message", suppressPostMsgError, true);
+    };
+
     const init = () => {
       if (playerRef.current)
         try {

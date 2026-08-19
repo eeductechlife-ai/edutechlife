@@ -3,21 +3,37 @@ import { motion, AnimatePresence } from "framer-motion";
 import { callDeepseek } from "../../utils/api";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
+import {
+  getSubjectEmoji,
+  createSubject,
+} from "../../config/subjectMappings";
 
-const getSubjects = (t) => [
-  { v: "matematicas", l: t("kid.grades.subject_matematicas"), i: "🔢" },
-  { v: "lenguaje", l: t("kid.grades.subject_lenguaje"), i: "📖" },
-  { v: "ciencias", l: t("kid.grades.subject_ciencias"), i: "🔬" },
-  { v: "sociales", l: t("kid.grades.subject_sociales"), i: "🌍" },
-  { v: "ingles", l: t("kid.grades.subject_ingles"), i: "🇬🇧" },
-  { v: "arte", l: t("kid.grades.subject_arte"), i: "🎨" },
-  {
-    v: "educacion_fisica",
-    l: t("kid.grades.subject_educacion_fisica"),
-    i: "⚽",
-  },
-  { v: "tecnologia", l: t("kid.grades.subject_tecnologia"), i: "💻" },
+// Default subjects with translations
+const DEFAULT_SUBJECTS = [
+  "matematicas",
+  "lenguaje",
+  "ciencias",
+  "sociales",
+  "ingles",
+  "arte",
+  "educacion_fisica",
+  "tecnologia",
 ];
+
+// Get subjects: dynamically from extractedSubjects or defaults
+const getSubjects = (t, extractedSubjects = null) => {
+  // If we have extracted subjects from OCR/PDF, use them
+  if (extractedSubjects && Array.isArray(extractedSubjects)) {
+    return extractedSubjects.map((name) => createSubject(name));
+  }
+
+  // Otherwise, use default subjects with translations
+  return DEFAULT_SUBJECTS.map((key) => ({
+    v: key,
+    l: t(`kid.grades.subject_${key}`),
+    i: getSubjectEmoji(t(`kid.grades.subject_${key}`)),
+  }));
+};
 
 const gradeColor = (n) => {
   if (n >= 4.5) return "#22C55E";
@@ -95,7 +111,10 @@ export default memo(function GradeScanner({ onTabChange }) {
     userId,
   } = useSmartBoardKids();
   const { t } = useTranslation();
-  const SUBJECTS = getSubjects(t);
+  // Support dynamic subjects extracted from documents
+  const [extractedSubjectNames, setExtractedSubjectNames] = useState(null);
+  const SUBJECTS = getSubjects(t, extractedSubjectNames);
+
   const [grades, setGrades] = useState(
     studentGrades.length
       ? studentGrades
@@ -197,14 +216,28 @@ export default memo(function GradeScanner({ onTabChange }) {
           const { parsePDF } = await import("../../utils/documentParser");
           const text = await parsePDF(f);
           if (text) {
-            const prompt = `Texto de un boletín colombiano (escala 1.0-5.0):
-"${text.slice(0, 2500)}"
-Extrae TODAS las calificaciones. Usa solo estos nombres: matematicas, lenguaje, ciencias, sociales, ingles, arte, educacion_fisica, tecnologia.
-Responde SOLO JSON: {"grades": [{"subject": "matematicas", "score": 4.2}]}
-Si no hay notas: {"grades": []}`;
+            const prompt = `Texto de un boletín escolar (escala 1.0-5.0 o porcentaje):
+"${text.slice(0, 3000)}"
+
+Extrae TODAS las calificaciones/notas de TODAS las asignaturas/áreas.
+
+Responde SOLO JSON (sin markdown):
+{
+  "grades": [
+    {"subject": "Nombre exacto de la asignatura", "score": 4.2},
+    {"subject": "Otra asignatura", "score": 3.8}
+  ]
+}
+
+Instrucciones:
+- Extrae TODAS las asignaturas (no hay límite)
+- Usa el nombre EXACTO de cada materia como aparece en el boletín
+- Si es porcentaje, convierte a escala 1-5 (ej: 85% = 4.25)
+- Incluye TODAS las áreas: académicas, artísticas, deportivas, religiosas, etc.
+- Si no hay notas claras: {"grades": []}`;
             const res = await callDeepseek(
               [{ role: "user", content: prompt }],
-              { temperature: 0.1, maxTokens: 500, isJson: true },
+              { temperature: 0.1, maxTokens: 1000, isJson: true },
             );
             const parsed = typeof res === "string" ? JSON.parse(res) : res;
             extractedGrades = parsed?.grades || [];
@@ -239,14 +272,28 @@ Si no hay notas: {"grades": []}`;
           const { text } = await resp.json();
 
           if (text && text.trim().length > 10) {
-            const prompt = `Texto OCR de un boletín colombiano (escala 1.0-5.0):
-"${text.slice(0, 2500)}"
-Extrae TODAS las calificaciones. Usa solo estos nombres: matematicas, lenguaje, ciencias, sociales, ingles, arte, educacion_fisica, tecnologia.
-Responde SOLO JSON: {"grades": [{"subject": "matematicas", "score": 4.2}]}
-Si no hay notas claras: {"grades": []}`;
+            const prompt = `Texto OCR de un boletín escolar (escala 1.0-5.0 o porcentaje):
+"${text.slice(0, 3000)}"
+
+Extrae TODAS las calificaciones/notas de TODAS las asignaturas/áreas.
+
+Responde SOLO JSON (sin markdown):
+{
+  "grades": [
+    {"subject": "Nombre exacto de la asignatura", "score": 4.2},
+    {"subject": "Otra asignatura", "score": 3.8}
+  ]
+}
+
+Instrucciones:
+- Extrae TODAS las asignaturas (no hay límite)
+- Usa el nombre EXACTO de cada materia como aparece en el boletín
+- Si es porcentaje, convierte a escala 1-5 (ej: 85% = 4.25)
+- Incluye TODAS las áreas: académicas, artísticas, deportivas, religiosas, etc.
+- Si no hay notas claras: {"grades": []}`;
             const res = await callDeepseek(
               [{ role: "user", content: prompt }],
-              { temperature: 0.1, maxTokens: 500, isJson: true },
+              { temperature: 0.1, maxTokens: 1000, isJson: true },
             );
             const parsed = typeof res === "string" ? JSON.parse(res) : res;
             extractedGrades = parsed?.grades || [];
@@ -254,7 +301,20 @@ Si no hay notas claras: {"grades": []}`;
         }
 
         if (extractedGrades.length > 0) {
+          // Extract unique subject names for dynamic subject list
+          const subjectNames = [
+            ...new Set(
+              extractedGrades
+                .map((g) => g.subject)
+                .filter((s) => s && typeof s === "string")
+            ),
+          ].sort();
+
           setGrades(extractedGrades.map((g) => ({ id: uid(), ...g })));
+          // Update extracted subjects to populate SUBJECTS dynamically
+          if (subjectNames.length > 0) {
+            setExtractedSubjectNames(subjectNames);
+          }
           setScanMode("manual");
           setError("");
         } else {
