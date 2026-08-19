@@ -683,7 +683,7 @@ Analiza y responde SOLO con JSON:
                             }}
                           >
                             <span className="text-sm">
-                              {subject?.i || "📚"}
+                              {subject?.i || getSubjectEmoji(g.subject || "")}
                             </span>
                             <span>{g.score}</span>
                           </div>

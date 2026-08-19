@@ -34,7 +34,7 @@ const SUBJECT_EMOJI_MAP = {
 
   inglés: "🇬🇧",
   ingles: "🇬🇧",
-  "english": "🇬🇧",
+  english: "🇬🇧",
 
   arte: "🎨",
   "educación artística": "🎨",
@@ -106,13 +106,17 @@ export function getSubjectEmoji(subjectName) {
 
   // Fallback based on keywords
   if (normalized.includes("matemat")) return "🔢";
-  if (normalized.includes("lengua") || normalized.includes("lenguaje")) return "📖";
+  if (normalized.includes("lengua") || normalized.includes("lenguaje"))
+    return "📖";
   if (normalized.includes("ciencia")) return "🔬";
   if (normalized.includes("social")) return "🌍";
-  if (normalized.includes("inglés") || normalized.includes("ingles")) return "🇬🇧";
+  if (normalized.includes("inglés") || normalized.includes("ingles"))
+    return "🇬🇧";
   if (normalized.includes("arte")) return "🎨";
-  if (normalized.includes("física") || normalized.includes("fisica")) return "⚛️";
-  if (normalized.includes("educación") || normalized.includes("educacion")) return "🎓";
+  if (normalized.includes("física") || normalized.includes("fisica"))
+    return "⚛️";
+  if (normalized.includes("educación") || normalized.includes("educacion"))
+    return "🎓";
   if (normalized.includes("tecnolog")) return "💻";
   if (normalized.includes("filosofi")) return "🤔";
 
@@ -125,10 +129,10 @@ export function getSubjectEmoji(subjectName) {
  */
 export function createSubject(name, score = null) {
   return {
-    v: name.toLowerCase().replace(/\s+/g, "_"), // value (normalized)
-    l: name, // label (display name)
-    i: getSubjectEmoji(name), // icon/emoji
-    ...(score !== null && { score }), // optional score
+    v: name, // keep raw name so grade.subject matches select value directly
+    l: name,
+    i: getSubjectEmoji(name),
+    ...(score !== null && { score }),
   };
 }
 
