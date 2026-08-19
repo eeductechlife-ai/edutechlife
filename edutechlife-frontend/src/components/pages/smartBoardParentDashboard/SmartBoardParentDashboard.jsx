@@ -36,6 +36,7 @@ import {
 import WeeklyReportCard from "./components/WeeklyReportCard";
 import WellbeingCard from "./components/WellbeingCard";
 import ParentResources from "./components/ParentResources";
+import GradeReportCard from "./components/GradeReportCard";
 import { mergeRealtimePoints } from "./mergeRealtime";
 
 const LEVELS = [
@@ -838,6 +839,17 @@ const SmartBoardParentDashboard = () => {
                       authToken={authToken}
                       studentName={data.vakResult?.studentName}
                     />
+
+                    {/* Informe de notas y plan académico de Dani */}
+                    <div>
+                      <h3 className="font-bold text-[#004B63] mb-3 flex items-center gap-2">
+                        <span>📊</span> Informe académico — Análisis de notas
+                      </h3>
+                      <GradeReportCard
+                        authToken={authToken}
+                        studentId={studentId || userId}
+                      />
+                    </div>
                   </div>
                 )}
               </motion.div>

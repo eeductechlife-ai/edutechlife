@@ -363,56 +363,80 @@ Si no encuentras notas: {"grades": []}`;
     setError("");
     setPlan(null);
 
-    const gradeList = grades
-      .map((g) => {
-        const s = SUBJECTS.find((x) => x.v === g.subject);
-        return `${s?.l || g.subject}: ${g.score}/5`;
-      })
-      .join(", ");
+    const getLabel = (g) =>
+      SUBJECTS.find((x) => x.v === g.subject)?.l || g.subject;
+    const avgScore = (
+      grades.reduce((s, g) => s + g.score, 0) / grades.length
+    ).toFixed(1);
+    const failing = grades.filter((g) => g.score < 3.0);
+    const toImprove = grades.filter((g) => g.score >= 3.0 && g.score < 4.0);
+    const strong = grades.filter((g) => g.score >= 4.0);
+    const weakCount = Math.min(failing.length + toImprove.length, 5);
+    const planWeeks = Math.min(Math.max(weakCount, 2), 4);
 
-    const vakStyle = vakResult
-      ? `Estilo de aprendizaje VAK del estudiante: ${vakResult.dominant || "visual"}.`
-      : "";
+    const fmt = (arr) =>
+      arr
+        .sort((a, b) => a.score - b.score)
+        .map((g) => `${getLabel(g)} (${g.score}/5)`)
+        .join(", ") || "ninguna";
 
-    const prompt = `Eres Dani, tutora IA educativa de EdutechLife para Colombia. ${vakStyle}
+    const vakStyle = vakResult?.dominant || "visual";
 
-El estudiante tiene estas calificaciones: ${gradeList}
+    const prompt = `Eres Dani, tutora IA de EdutechLife para Colombia.
+Estilo de aprendizaje VAK: ${vakStyle}.
 
-Analiza y responde SOLO con JSON:
+CALIFICACIONES (escala 1.0–5.0, aprobatorio ≥ 3.0):
+- Promedio: ${avgScore}/5 | Total: ${grades.length} asignaturas
+- FUERTES (≥ 4.0): ${fmt(strong)}
+- A MEJORAR (3.0–3.9): ${fmt(toImprove)}
+- REPROBADAS (< 3.0): ${fmt(failing)}
+
+Genera un JSON con DOS secciones: una para el ESTUDIANTE (corta y motivadora) y otra para los PADRES (completa y detallada).
+
+Responde SOLO con JSON válido (sin markdown):
 {
-  "overall": "frase motivadora corta sobre el desempeño general",
-  "strengths": ["materia fuerte 1 con emoji", "materia fuerte 2"],
+  "overall": "Mensaje CORTO para el estudiante: máx 2 frases, tutéalo, menciona su promedio de forma positiva, sé directo y motivador",
+  "motivation": "Frase final poderosa y corta de Dani al estudiante (1 frase, tutéalo)",
+  "strengths": ["emoji Materia (nota)", "emoji Materia (nota)"],
+  "topActions": ["La acción MÁS urgente para la materia más baja", "Segunda acción clave", "Tercera acción"],
   "weaknesses": [
     {
-      "subject": "nombre materia",
-      "score": 3.0,
-      "why": "por qué puede estar fallando (1 frase)",
-      "vakTip": "consejo específico según estilo VAK",
-      "steamLink": "cómo conectar con STEAM (1 frase)",
-      "actions": ["acción concreta 1", "acción concreta 2", "acción concreta 3"]
+      "subject": "nombre exacto",
+      "score": 2.8,
+      "emoji": "emoji materia",
+      "why": "razón en 1 frase sencilla (para el estudiante)",
+      "vakTip": "consejo práctico estilo ${vakStyle} (1 frase)",
+      "steamLink": "conexión con el mundo real (1 frase)",
+      "actions": ["acción 1", "acción 2", "acción 3"]
     }
   ],
   "studyPlan": [
     {
       "week": 1,
       "focus": "materia prioritaria",
-      "activities": ["actividad 1", "actividad 2"],
+      "activities": ["actividad 1", "actividad 2", "actividad 3"],
       "daniTip": "consejo de Dani para esa semana"
-    },
-    {
-      "week": 2,
-      "focus": "materia 2",
-      "activities": ["actividad 1", "actividad 2"],
-      "daniTip": "consejo semana 2"
     }
   ],
-  "motivation": "mensaje motivador final de Dani al estudiante"
-}`;
+  "parentReport": {
+    "summary": "Párrafo formal (3-4 frases) para los padres: rendimiento general, fortalezas y áreas críticas. Menciona el promedio ${avgScore}/5 y si hay materias reprobadas.",
+    "concerns": ["Preocupación académica concreta 1 si aplica", "Preocupación 2"],
+    "recommendations": ["Recomendación a los padres 1 (apoyo en casa)", "Recomendación 2 (hábitos de estudio)", "Recomendación 3"],
+    "followUp": "Sugerencia específica de seguimiento para los padres (cuándo revisar, cómo apoyar)"
+  }
+}
+
+REGLAS:
+- overall + motivation: MUY CORTOS, energéticos, para niños 6-16 años
+- weaknesses: máx ${weakCount}, de menor a mayor nota
+- studyPlan: ${planWeeks} semanas
+- parentReport: formal, completo, sin emojis, en tercera persona o dirigido a los padres
+- topActions: las 3 acciones más importantes de las materias más bajas`;
 
     try {
       const res = await callDeepseek([{ role: "user", content: prompt }], {
         temperature: 0.7,
-        maxTokens: 1800,
+        maxTokens: 2500,
         isJson: true,
       });
       const parsed = typeof res === "string" ? JSON.parse(res) : res;
@@ -721,16 +745,30 @@ Analiza y responde SOLO con JSON:
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
           >
-            {/* Overall + motivation */}
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#0077B6] text-white space-y-2">
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">🤖</span>
-                <span className="font-bold">{t("kid.grades.dani_says")}</span>
+            {/* ── SECCIÓN ESTUDIANTE ── */}
+            {/* Dani card: corta y motivadora */}
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#0077B6] text-white space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">🤖</span>
+                  <span className="font-bold">{t("kid.grades.dani_says")}</span>
+                </div>
+                <button
+                  onClick={() => setPlan(null)}
+                  className="text-white/60 hover:text-white text-xs underline"
+                >
+                  Nuevo análisis
+                </button>
               </div>
               <p className="text-sm leading-relaxed">{plan.overall}</p>
+              {plan.motivation && (
+                <p className="text-sm font-bold text-[#FFD166]">
+                  💫 {plan.motivation}
+                </p>
+              )}
             </div>
 
-            {/* Strengths */}
+            {/* Fortalezas */}
             {plan.strengths?.length > 0 && (
               <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
                 <p className="font-bold text-emerald-700 mb-2">
@@ -749,109 +787,147 @@ Analiza y responde SOLO con JSON:
               </div>
             )}
 
-            {/* Weaknesses with VAK + STEAM */}
-            {plan.weaknesses?.length > 0 && (
-              <div className="space-y-3">
-                <p className="font-bold text-[#004B63]">
-                  {t("kid.grades.to_improve")}
+            {/* Acciones urgentes (vista estudiante — compacta) */}
+            {plan.topActions?.length > 0 && (
+              <div className="p-4 rounded-2xl bg-orange-50 border border-orange-200">
+                <p className="font-bold text-orange-700 mb-2">
+                  ⚡ Lo que debes hacer YA
                 </p>
-                {plan.weaknesses.map((w, i) => (
-                  <div
-                    key={i}
-                    className="p-4 rounded-2xl bg-white border-2 border-orange-200 shadow-sm space-y-3"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-black text-[#004B63]">
-                        {w.subject}
+                <div className="space-y-1.5">
+                  {plan.topActions.map((a, i) => (
+                    <div
+                      key={i}
+                      className="flex items-start gap-2 text-sm text-orange-800"
+                    >
+                      <span className="font-black text-orange-500 mt-0.5">
+                        {i + 1}.
                       </span>
-                      <span
-                        className="px-2 py-1 rounded-full text-xs font-bold text-white"
-                        style={{ backgroundColor: gradeColor(w.score) }}
+                      {a}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ── INFORME COMPLETO (Plan de estudio detallado) ── */}
+            <details className="group">
+              <summary className="cursor-pointer flex items-center justify-between p-4 rounded-2xl bg-[#F1F5F9] border border-[#E2E8F0] font-bold text-[#004B63] text-sm select-none">
+                <span>📋 Ver plan de estudio completo</span>
+                <span className="text-[#64748B] group-open:rotate-180 transition-transform">
+                  ▼
+                </span>
+              </summary>
+              <div className="mt-2 space-y-3">
+                {/* Materias a mejorar con detalle */}
+                {plan.weaknesses?.length > 0 && (
+                  <div className="space-y-3">
+                    <p className="font-bold text-[#004B63] px-1">
+                      {t("kid.grades.to_improve")}
+                    </p>
+                    {plan.weaknesses.map((w, i) => (
+                      <div
+                        key={i}
+                        className="p-4 rounded-2xl bg-white border-2 border-orange-200 shadow-sm space-y-3"
                       >
-                        {w.score}/5
-                      </span>
-                    </div>
-                    <p className="text-xs text-[#64748B]">{w.why}</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="p-2 rounded-xl bg-purple-50 border border-purple-100">
-                        <p className="text-xs font-bold text-purple-600 mb-1">
-                          👁️ VAK
-                        </p>
-                        <p className="text-xs text-purple-700">{w.vakTip}</p>
-                      </div>
-                      <div className="p-2 rounded-xl bg-cyan-50 border border-cyan-100">
-                        <p className="text-xs font-bold text-cyan-600 mb-1">
-                          🔬 STEAM
-                        </p>
-                        <p className="text-xs text-cyan-700">{w.steamLink}</p>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      {w.actions?.map((a, j) => (
-                        <div
-                          key={j}
-                          className="flex items-start gap-2 text-xs text-[#374151]"
-                        >
-                          <span className="text-orange-400 mt-0.5">→</span>
-                          {a}
+                        <div className="flex items-center justify-between">
+                          <span className="font-black text-[#004B63] flex items-center gap-1.5">
+                            <span>{w.emoji || getSubjectEmoji(w.subject)}</span>
+                            {w.subject}
+                          </span>
+                          <span
+                            className="px-2 py-1 rounded-full text-xs font-bold text-white"
+                            style={{ backgroundColor: gradeColor(w.score) }}
+                          >
+                            {w.score}/5
+                          </span>
                         </div>
-                      ))}
-                    </div>
+                        <p className="text-sm text-[#374151]">{w.why}</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <div className="p-2 rounded-xl bg-purple-50 border border-purple-100">
+                            <p className="text-xs font-bold text-purple-600 mb-1">
+                              👁️ VAK
+                            </p>
+                            <p className="text-xs text-purple-700">
+                              {w.vakTip}
+                            </p>
+                          </div>
+                          <div className="p-2 rounded-xl bg-cyan-50 border border-cyan-100">
+                            <p className="text-xs font-bold text-cyan-600 mb-1">
+                              🔬 STEAM
+                            </p>
+                            <p className="text-xs text-cyan-700">
+                              {w.steamLink}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="space-y-1">
+                          {w.actions?.map((a, j) => (
+                            <div
+                              key={j}
+                              className="flex items-start gap-2 text-xs text-[#374151]"
+                            >
+                              <span className="text-orange-400 mt-0.5">→</span>
+                              {a}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
+                )}
 
-            {/* Study plan weeks */}
-            {plan.studyPlan?.length > 0 && (
-              <div className="space-y-3">
-                <p className="font-bold text-[#004B63]">
-                  {t("kid.grades.study_plan")}
-                </p>
-                {plan.studyPlan.map((week, i) => (
-                  <div
-                    key={i}
-                    className="p-4 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm"
-                  >
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="w-7 h-7 rounded-full bg-[#4DA8C4] text-white text-xs font-black flex items-center justify-center">
-                        {week.week}
-                      </span>
-                      <span className="font-bold text-[#004B63] text-sm">
-                        {t("kid.grades.week", {
-                          week: week.week,
-                          focus: week.focus,
-                        })}
-                      </span>
-                    </div>
-                    <ul className="space-y-1 mb-2">
-                      {week.activities?.map((a, j) => (
-                        <li
-                          key={j}
-                          className="text-xs text-[#374151] flex items-start gap-1.5"
-                        >
-                          <span className="text-[#4DA8C4]">•</span>
-                          {a}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="flex items-center gap-1.5 text-xs text-[#4DA8C4] bg-[#4DA8C4]/10 rounded-lg p-2">
-                      <span>🤖</span>
-                      <span>{week.daniTip}</span>
-                    </div>
+                {/* Plan semana a semana */}
+                {plan.studyPlan?.length > 0 && (
+                  <div className="space-y-3">
+                    <p className="font-bold text-[#004B63] px-1">
+                      {t("kid.grades.study_plan")}
+                    </p>
+                    {plan.studyPlan.map((week, i) => (
+                      <div
+                        key={i}
+                        className="p-4 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm"
+                      >
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="w-7 h-7 rounded-full bg-[#4DA8C4] text-white text-xs font-black flex items-center justify-center">
+                            {week.week}
+                          </span>
+                          <span className="font-bold text-[#004B63] text-sm">
+                            {t("kid.grades.week", {
+                              week: week.week,
+                              focus: week.focus,
+                            })}
+                          </span>
+                        </div>
+                        <ul className="space-y-1 mb-2">
+                          {week.activities?.map((a, j) => (
+                            <li
+                              key={j}
+                              className="text-xs text-[#374151] flex items-start gap-1.5"
+                            >
+                              <span className="text-[#4DA8C4]">•</span>
+                              {a}
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="flex items-center gap-1.5 text-xs text-[#4DA8C4] bg-[#4DA8C4]/10 rounded-lg p-2">
+                          <span>🤖</span>
+                          <span>{week.daniTip}</span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
-            )}
+            </details>
 
-            {/* Motivation */}
-            {plan.motivation && (
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-[#EF476F]/10 to-[#FF6B9D]/10 border border-[#EF476F]/20 text-center">
-                <p className="text-sm text-[#004B63] font-semibold leading-relaxed">
-                  💫 {plan.motivation}
-                </p>
-              </div>
-            )}
+            {/* Aviso: el informe completo para padres está disponible en el dashboard de padres */}
+            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#F1F5F9] border border-[#E2E8F0] text-xs text-[#64748B]">
+              <span>👨‍👩‍👧</span>
+              <span>
+                El informe completo para tus padres está disponible en su panel
+                de seguimiento.
+              </span>
+            </div>
 
             {/* CTAs */}
             <div className="grid grid-cols-1 gap-3">
