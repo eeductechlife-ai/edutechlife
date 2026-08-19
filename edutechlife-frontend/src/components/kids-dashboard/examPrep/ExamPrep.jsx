@@ -362,7 +362,9 @@ const ExamPrep = memo(({ onTabChange }) => {
             </p>
             <p className="font-bold">{activeStudyDeck.title}</p>
             <p className="text-xs text-white/70">
-              {t("kid.exam.cards_ready", { count: activeStudyDeck.cards.length })}
+              {t("kid.exam.cards_ready", {
+                count: activeStudyDeck.cards.length,
+              })}
             </p>
           </div>
           {/* Sincronización: navegación a Dani sobre el mismo tema */}
@@ -372,7 +374,6 @@ const ExamPrep = memo(({ onTabChange }) => {
           >
             🗣️ Hablar con Dani sobre esto
           </button>
-          </p>
           <motion.button
             onClick={() => setShowDeckQuiz(true)}
             whileHover={{ scale: 1.02 }}
