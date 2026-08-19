@@ -29,7 +29,7 @@ function SignUpFormFallback() {
   );
 }
 
-const SupabaseSignUpForm = ({ onBack, returnTo }) => {
+const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -175,6 +175,7 @@ const SupabaseSignUpForm = ({ onBack, returnTo }) => {
           username: formData.username,
           firstName: formData.firstName,
           lastName: formData.lastName,
+          accountType,
         }),
       });
 

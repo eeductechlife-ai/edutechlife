@@ -46,10 +46,15 @@ export const useSmartBoardPersistence = (setters) => {
   } = useSmartBoardSync();
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  // Safety net: if userId never resolves (expired/missing token), unblock the UI
+  // after 8 seconds so the skeleton doesn't stay forever. The normal path
+  // (userId present) sets dataLoaded=true in the finally block below.
   useEffect(() => {
-    // Do NOT mark data as loaded until userId is resolved: if we return early
-    // with local-only data while the Supabase client is still null, the remote
-    // blob would never be merged on this visit (race condition).
+    const timer = setTimeout(() => setDataLoaded(true), 8000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
     if (dataLoaded) return;
     if (!userId) return;
 

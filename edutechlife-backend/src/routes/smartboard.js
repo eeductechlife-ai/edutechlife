@@ -1038,36 +1038,51 @@ router.put('/student-profile', requireAuth, async (req, res) => {
     const updateData = {};
     if (name !== undefined) updateData.name = name.trim();
     if (age !== undefined) updateData.age = age;
-    if (vakStyle !== undefined) updateData.vak_style = vakStyle;
     if (school !== undefined) updateData.school = school;
     if (grade !== undefined) updateData.grade = grade;
     if (avatarUrl !== undefined) updateData.avatar_url = avatarUrl;
+    // vak_style column added by migration 040; include only if the value is provided
+    if (vakStyle !== undefined) updateData.vak_style = vakStyle;
 
     if (Object.keys(updateData).length === 0) {
       return res.status(400).json({ error: 'No hay campos para actualizar' });
     }
 
-    let result = await supabase
-      .from('students')
-      .update(updateData)
-      .eq('auth_id', userId)
-      .select(STUDENT_PROFILE_FIELDS)
-      .single();
-
-    if (result.error && result.error.code === 'PGRST116') {
-      result = await supabase
+    const doUpdate = async (fields) => {
+      let result = await supabase
         .from('students')
-        .upsert(
-          {
-            auth_id: userId,
-            name: updateData.name || (req.userEmail ? req.userEmail.split('@')[0] : 'Estudiante'),
-            email: req.userEmail || null,
-            ...updateData,
-          },
-          { onConflict: 'auth_id' },
-        )
+        .update(fields)
+        .eq('auth_id', userId)
         .select(STUDENT_PROFILE_FIELDS)
         .single();
+
+      // Row not found → upsert (first save for this user)
+      if (result.error && result.error.code === 'PGRST116') {
+        result = await supabase
+          .from('students')
+          .upsert(
+            {
+              auth_id: userId,
+              name: fields.name || (req.userEmail ? req.userEmail.split('@')[0] : 'Estudiante'),
+              email: req.userEmail || null,
+              ...fields,
+            },
+            { onConflict: 'auth_id' },
+          )
+          .select(STUDENT_PROFILE_FIELDS)
+          .single();
+      }
+      return result;
+    };
+
+    let result = await doUpdate(updateData);
+
+    // If vak_style column doesn't exist yet (migration 040 pending), retry without it
+    if (result.error && result.error.message && result.error.message.includes('vak_style')) {
+      const { vak_style, ...fieldsWithoutVak } = updateData; // eslint-disable-line no-unused-vars
+      if (Object.keys(fieldsWithoutVak).length > 0) {
+        result = await doUpdate(fieldsWithoutVak);
+      }
     }
 
     if (result.error) {

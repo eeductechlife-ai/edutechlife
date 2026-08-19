@@ -1,15 +1,41 @@
 import { useState, useEffect, useCallback } from "react";
 import { API_BASE_URL as API_BASE } from "../config/api";
 
-// Hook específico para SmartBoard student profile (name, age, VAK, school, grade, avatar)
+const getToken = (authToken) =>
+  (typeof window !== "undefined" && sessionStorage.getItem("auth_token")) ||
+  authToken ||
+  null;
+
+/** Build a minimal profile from localStorage when the API is unavailable. */
+const getLocalFallbackProfile = () => {
+  try {
+    const name = localStorage.getItem("student_name") || "";
+    const age = localStorage.getItem("student_age");
+    const grade = localStorage.getItem("student_grade") || "";
+    if (!name && !grade) return null;
+    return {
+      name,
+      age: age ? Number(age) : null,
+      grade,
+      vakStyle: null,
+      school: null,
+      avatarUrl: null,
+    };
+  } catch {
+    return null;
+  }
+};
+
 export const useStudentProfileSmartBoard = (authToken) => {
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState(() => getLocalFallbackProfile());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchProfile = useCallback(async () => {
-    if (!authToken) {
-      setProfile(null);
+    const token = getToken(authToken);
+    if (!token) {
+      // No token — use local fallback, don't show error
+      setProfile(getLocalFallbackProfile());
       return;
     }
 
@@ -18,7 +44,7 @@ export const useStudentProfileSmartBoard = (authToken) => {
 
     try {
       const res = await fetch(`${API_BASE}/api/smartboard/student-profile`, {
-        headers: { Authorization: `Bearer ${authToken}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) {
@@ -27,19 +53,31 @@ export const useStudentProfileSmartBoard = (authToken) => {
 
       const data = await res.json();
       setProfile(data);
+      // Keep localStorage in sync so other components (e.g. OralExamSimulator) can read without prop drilling
+      if (data?.name) localStorage.setItem("student_name", data.name);
+      if (data?.age != null)
+        localStorage.setItem("student_age", String(data.age));
+      if (data?.grade) localStorage.setItem("student_grade", data.grade);
     } catch (e) {
-      setError(e.message);
-      setProfile(null);
+      // API failed (expired token, network error) — show local data silently
+      const fallback = getLocalFallbackProfile();
+      setProfile(fallback);
+      // Only propagate error if there's truly nothing to show
+      if (!fallback) setError(e.message);
     } finally {
       setLoading(false);
     }
   }, [authToken]);
 
+  // Returns { ok: true } on success or { ok: false, message: string } on failure
   const updateProfile = useCallback(
     async (updates) => {
-      if (!authToken) {
-        setError("No autenticado");
-        return false;
+      const token = getToken(authToken);
+
+      if (!token) {
+        const msg = "Sesión no encontrada. Por favor, recarga la página.";
+        setError(msg);
+        return { ok: false, message: msg };
       }
 
       setLoading(true);
@@ -50,7 +88,7 @@ export const useStudentProfileSmartBoard = (authToken) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(updates),
         });
@@ -63,13 +101,16 @@ export const useStudentProfileSmartBoard = (authToken) => {
         const data = await res.json();
         setProfile(data.profile);
 
-        if (data.profile?.name) {
+        if (data.profile?.name)
           localStorage.setItem("student_name", data.profile.name);
-        }
-        return true;
+        if (data.profile?.age != null)
+          localStorage.setItem("student_age", String(data.profile.age));
+        if (data.profile?.grade)
+          localStorage.setItem("student_grade", data.profile.grade);
+        return { ok: true };
       } catch (e) {
         setError(e.message);
-        return false;
+        return { ok: false, message: e.message };
       } finally {
         setLoading(false);
       }
@@ -79,8 +120,9 @@ export const useStudentProfileSmartBoard = (authToken) => {
 
   const uploadAvatar = useCallback(
     async (dataUrl) => {
-      if (!authToken) {
-        setError("No autenticado");
+      const token = getToken(authToken);
+      if (!token) {
+        setError("Sesión no encontrada. Por favor, recarga la página.");
         return false;
       }
 
@@ -94,7 +136,7 @@ export const useStudentProfileSmartBoard = (authToken) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${authToken}`,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({ dataUrl }),
           },
@@ -119,8 +161,9 @@ export const useStudentProfileSmartBoard = (authToken) => {
   );
 
   const removeAvatar = useCallback(async () => {
-    if (!authToken) {
-      setError("No autenticado");
+    const token = getToken(authToken);
+    if (!token) {
+      setError("Sesión no encontrada. Por favor, recarga la página.");
       return false;
     }
     setLoading(true);
@@ -131,7 +174,7 @@ export const useStudentProfileSmartBoard = (authToken) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ avatarUrl: null }),
       });

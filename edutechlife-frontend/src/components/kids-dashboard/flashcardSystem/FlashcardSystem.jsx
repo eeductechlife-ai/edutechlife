@@ -437,6 +437,35 @@ const FlashcardSystem = memo(({ onTabChange }) => {
 
   if (mode === "quiz" && deck) {
     if (done) {
+      const handleTalkToDani = () => {
+        if (deck) {
+          // Set activeStudyDeck so OralExamSimulator picks up the deck automatically
+          setActiveStudyDeck?.({
+            deckId: deck.id,
+            title: deck.title,
+            cards: deck.cards,
+            topic: deck.title,
+          });
+          // Also set documentForDani for Dani's awareness of the session results
+          setDocumentForDani?.({
+            title: deck.title,
+            subject: deck.title,
+            summary: `El estudiante acaba de estudiar el mazo "${deck.title}" con ${correct + incorrect} tarjetas y obtuvo ${rate}% de aciertos.`,
+            tutoringQuestions:
+              deck.cards
+                ?.slice(0, 3)
+                .map((c) => c.front || c.question || c.term)
+                .filter(Boolean) || [],
+            improvements:
+              rate < 80
+                ? [`${deck.title}: reforzar conceptos con menos del 80%`]
+                : [],
+          });
+        }
+        // Navigate to the oral (Habla con Dani) tab — next step in the learning path
+        onTabChange?.("oral");
+      };
+
       return (
         <FlashcardResults
           rate={rate}
@@ -444,6 +473,7 @@ const FlashcardSystem = memo(({ onTabChange }) => {
           incorrect={incorrect}
           onRestart={() => startStudy(currentDeckId)}
           onBack={() => setMode("decks")}
+          onTalkToDani={handleTalkToDani}
         />
       );
     }

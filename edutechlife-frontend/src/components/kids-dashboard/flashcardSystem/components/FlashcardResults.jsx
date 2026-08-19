@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 
 const FlashcardResults = memo(
-  ({ rate, correct, incorrect, onRestart, onBack }) => {
+  ({ rate, correct, incorrect, onRestart, onBack, onTalkToDani }) => {
     const { t } = useTranslation();
     return (
       <motion.div
@@ -36,7 +36,7 @@ const FlashcardResults = memo(
               </p>
             </div>
           </div>
-          <div className="flex gap-3 mt-6 justify-center">
+          <div className="flex flex-wrap gap-3 mt-6 justify-center">
             <motion.button
               onClick={onRestart}
               whileHover={{ scale: 1.02 }}
@@ -53,6 +53,16 @@ const FlashcardResults = memo(
             >
               {t("kid.flashcards.back")}
             </motion.button>
+            {onTalkToDani && (
+              <motion.button
+                onClick={onTalkToDani}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-4 py-2 bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] text-white rounded-xl font-bold text-sm shadow-md flex items-center gap-1.5"
+              >
+                🤖 Hablar con Dani
+              </motion.button>
+            )}
           </div>
         </motion.div>
       </motion.div>

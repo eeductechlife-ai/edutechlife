@@ -63,7 +63,37 @@ const getDifficulties = (t) => [
 const dc = (dm, l, d) => (dm ? d : l);
 
 const OralExamSimulator = memo(({ onTabChange }) => {
-  const { darkMode: dm, addPoints, activeStudyDeck } = useSmartBoardKids();
+  const {
+    darkMode: dm,
+    addPoints,
+    activeStudyDeck,
+    studentAge,
+  } = useSmartBoardKids();
+  // Student identity — read from localStorage (synced by useStudentProfileSmartBoard on load/save)
+  const studentName = (() => {
+    try {
+      return localStorage.getItem("student_name") || "";
+    } catch {
+      return "";
+    }
+  })();
+  const studentGrade = (() => {
+    try {
+      return localStorage.getItem("student_grade") || "";
+    } catch {
+      return "";
+    }
+  })();
+  const studentAgeVal =
+    studentAge ||
+    (() => {
+      try {
+        const v = localStorage.getItem("student_age");
+        return v ? Number(v) : null;
+      } catch {
+        return null;
+      }
+    })();
   const { t } = useTranslation();
   const SUBJECTS = getSubjects(t);
   const DIFFICULTIES = getDifficulties(t);
@@ -175,7 +205,18 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
       const deckLine = hasDeck
         ? `\nTarjetas de estudio del alumno:\n${deckContext}`
         : "";
-      const system = `Eres Dani, tutora de IA amigable y entusiasta de EdutechLife para niños 6-16 años (Colombia).
+
+      // Build student identity line — only include fields that are known
+      const identityParts = [];
+      if (studentName)
+        identityParts.push(`Se llama ${studentName.split(" ")[0]}`);
+      if (studentAgeVal) identityParts.push(`tiene ${studentAgeVal} años`);
+      if (studentGrade) identityParts.push(`está en grado ${studentGrade}`);
+      const studentLine = identityParts.length
+        ? `\nDATO DEL ESTUDIANTE: ${identityParts.join(", ")}. YA SABES SU NOMBRE — NO lo pidas de nuevo.`
+        : "";
+
+      const system = `Eres Dani, tutora de IA amigable y entusiasta de EdutechLife para niños 6-16 años (Colombia).${studentLine}
 
 TU OBJETIVO: Explicar "${topic}" (nivel ${level}) de forma conversacional, sin examinar.
 
@@ -187,18 +228,20 @@ PRINCIPIOS CLAVE:
 5. MOTIVAR LA CURIOSIDAD: "Buena pregunta, déjame contarte más..." > simplemente responder.
 6. MENSAJES NATURALES: 2-4 frases, como una conversación real. Evita listas numeradas.
 7. SIN PRESIÓN: No califiques, no digas "incorrecto". Di "Mmm, pensemos juntas...".
+8. USAR EL NOMBRE: Usa el nombre del estudiante ocasionalmente para hacer la conversación más personal y cercana.
 
 EVITAR:
-- Emojis en la voz (serán removidos, no los leas mentalmente)
+- Preguntar el nombre (ya lo sabes)
+- Emojis en la voz (serán removidos)
 - Preguntas de opción múltiple (son examen)
 - Tecnicismos sin explicar
 - Respuestas largas que cansen
 - Comparaciones con otros estudiantes
 
 FOMENTAR:
-- Conexión personal ("¿Cómo te llamas?" si no lo sabes)
 - Crecimiento sin miedo ("Hoy aprendes esto; mañana entenderás más")
 - Pensamiento crítico y creatividad
+- Mencionar el nombre del estudiante para personalizar
 
 Escribe solo en español, de forma conversacional.${deckLine}`;
       return [
@@ -209,7 +252,16 @@ Escribe solo en español, de forma conversacional.${deckLine}`;
         })),
       ];
     },
-    [hasDeck, activeStudyDeck, subject, difficulty, deckContext],
+    [
+      hasDeck,
+      activeStudyDeck,
+      subject,
+      difficulty,
+      deckContext,
+      studentName,
+      studentGrade,
+      studentAgeVal,
+    ],
   );
 
   // Inicia la conversación: Dani abre explicando el tema.
@@ -218,12 +270,12 @@ Escribe solo en español, de forma conversacional.${deckLine}`;
     setPhase("conversar");
     setChatMessages([]);
     try {
+      const greeting = studentName
+        ? `Hola Dani, soy ${studentName.split(" ")[0]}. Explícame este tema para empezar.`
+        : "Hola Dani, explícame este tema para empezar.";
       const seed = [
         ...buildChatMessages([]),
-        {
-          role: "user",
-          content: "Hola Dani, explícame este tema para empezar.",
-        },
+        { role: "user", content: greeting },
       ];
       const res = await callDeepseek(seed, {
         temperature: 0.7,

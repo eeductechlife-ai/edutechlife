@@ -443,6 +443,7 @@ const SmartBoardSignUpPage = () => {
                               <SupabaseSignUpForm
                                 returnTo={returnTo || "/smartboard/consent"}
                                 onBack={() => setMode("signin")}
+                                accountType="smartboard"
                               />
                             </div>
                           </motion.div>
