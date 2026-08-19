@@ -10,7 +10,7 @@ const VAK_STYLES_ES = [
       "Mapas mentales",
       "Videos educativos",
       "Esquemas de color",
-      "Flashcards con imágenes",
+      "EduCard con imágenes",
     ],
   },
   {
@@ -51,12 +51,7 @@ const VAK_STYLES_EN = [
     color: "#4DA8C4",
     description:
       "Learns best by seeing: images, videos, mind maps, and diagrams. Their brain processes information through the visual channel with high retention.",
-    traits: [
-      "Mind maps",
-      "Educational videos",
-      "Color schemes",
-      "Image flashcards",
-    ],
+    traits: ["Mind maps", "Educational videos", "Color schemes", "Image cards"],
   },
   {
     key: "auditivo",
@@ -100,7 +95,7 @@ const VAK_STYLES_PT = [
       "Mapas mentais",
       "Vídeos educativos",
       "Esquemas coloridos",
-      "Flashcards com imagens",
+      "EduCard com imagens",
     ],
   },
   {
@@ -145,7 +140,7 @@ const PRICING_PLANS_ES = [
       "Diagnóstico VAK completo",
       "Tutor IA Dani — chat ilimitado",
       "Preparación de exámenes",
-      "Sistema de flashcards",
+      "EduCard — tarjetas de estudio con IA",
       "Escáner de problemas con IA",
       "Plan de estudio personalizado",
       "Sistema de puntos y recompensas",
@@ -186,7 +181,7 @@ const PRICING_PLANS_EN = [
       "Complete VAK diagnosis",
       "AI Tutor Dani — unlimited chat",
       "Exam preparation",
-      "Flashcard system",
+      "EduCard — AI-powered study cards",
       "AI problem scanner",
       "Personalized study plan",
       "Points and rewards system",
@@ -227,7 +222,7 @@ const PRICING_PLANS_PT = [
       "Diagnóstico VAK completo",
       "Tutor IA Dani — chat ilimitado",
       "Preparação para provas",
-      "Sistema de flashcards",
+      "EduCard — tarjetas com IA",
       "Scanner de problemas com IA",
       "Plano de estudos personalizado",
       "Sistema de pontos e recompensas",
