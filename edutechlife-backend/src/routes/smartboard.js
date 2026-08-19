@@ -776,7 +776,9 @@ router.get('/wellbeing-status', requireAuth, requireVerifiedParentalConsent, asy
       .gte('created_at', weekAgo);
 
     // La tabla puede no existir en algún entorno: el acompañamiento sigue "activo".
-    if (error && error.code !== '42P01') {
+    // 42P01 = undefined_table (Postgres crudo); PGRST205 = tabla ausente del
+    // schema cache (lo que devuelve PostgREST/Supabase en la práctica).
+    if (error && error.code !== '42P01' && error.code !== 'PGRST205') {
       throw error;
     }
 

@@ -60,8 +60,16 @@ async function requireVerifiedParentalConsent(req, res, next) {
 
     next();
   } catch (e) {
-    console.error('Error verifying parental consent:', e.message);
-    return res.status(500).json({ error: 'No se pudo verificar el consentimiento parental' });
+    // Fail-open: si no se puede determinar el estado de consentimiento —tabla
+    // ausente (PGRST205 en despliegues sin la migración) o cualquier error de
+    // infraestructura— NO bloqueamos al usuario. Coincide con la filosofía
+    // documentada arriba ("adulto por defecto") y con el flujo del frontend,
+    // que entra directo al dashboard. La puerta de entrada UX cubre el consent.
+    console.warn(
+      'Consentimiento parental no verificable, permitiendo acceso (fail-open):',
+      e.message,
+    );
+    return next();
   }
 }
 
