@@ -566,7 +566,7 @@ Analiza y responde SOLO con JSON:
 
       {/* History — past analyses */}
       {history.length > 0 && !plan && (
-        <div className="border border-[#E2E8F0] rounded-2xl overflow-hidden">
+        <div className="border border-[#E2E8F0] rounded-2xl overflow-visible">
           <button
             onClick={() => setShowHistory((v) => !v)}
             className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-[#004B63] hover:bg-[#F8FAFC] transition-colors"
@@ -599,20 +599,23 @@ Analiza y responde SOLO con JSON:
 
                   {/* Individual grades from analysis */}
                   {h.grades && h.grades.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 pt-1">
+                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1 pt-1">
                       {h.grades.map((g, idx) => {
                         const subject = SUBJECTS.find((s) => s.v === g.subject);
                         return (
                           <div
                             key={idx}
-                            className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold"
+                            className="flex flex-col items-center gap-0.5 px-1.5 py-1 rounded-lg text-xs font-semibold text-center"
+                            title={`${subject?.l || g.subject}: ${g.score}/5`}
                             style={{
                               backgroundColor: gradeColor(g.score) + "15",
                               color: gradeColor(g.score),
                               border: `1px solid ${gradeColor(g.score)}30`,
                             }}
                           >
-                            <span>{subject?.i || "📚"}</span>
+                            <span className="text-sm">
+                              {subject?.i || "📚"}
+                            </span>
                             <span>{g.score}</span>
                           </div>
                         );
