@@ -2,6 +2,7 @@ import { useState, useCallback, memo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { callDeepseek } from "../../utils/api";
 import { speakTextConversational, stopSpeech } from "../../utils/speech";
+import { stripEmoji } from "./daniTutorChat/DaniVoiceController";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 
@@ -140,6 +141,7 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
   }, [subject, difficulty, hasDeck, deckContext, activeStudyDeck]);
 
   // Reproduce automáticamente la voz de Dani cuando hay un nuevo mensaje de ella.
+  // Nota: stripEmoji evita que Dani lea emojis (p.ej. "cara sonriente") para niños 6-16 años.
   useEffect(() => {
     const latestMsg = chatMessages[chatMessages.length - 1];
     if (
@@ -149,8 +151,10 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
     ) {
       lastSpokenIdx.current = chatMessages.length - 1;
       setIsSpeaking(true);
+      // Remover emojis antes de reproducir (mantienen la experiencia limpia y enfocada)
+      const textToSpeak = stripEmoji(latestMsg.text);
       speakTextConversational(
-        latestMsg.text,
+        textToSpeak,
         "dani",
         () => setIsSpeaking(false), // onEnd
         () => setIsSpeaking(false), // onError
