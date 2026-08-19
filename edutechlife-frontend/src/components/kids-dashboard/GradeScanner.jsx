@@ -232,39 +232,44 @@ export default memo(function GradeScanner({ onTabChange }) {
       try {
         let extractedGrades = [];
 
-        if (isPdfFile) {
-          // PDFs: extract text locally (no CDN needed) then parse with AI
-          const { parsePDF } = await import("../../utils/documentParser");
-          const text = await parsePDF(f);
-          if (text) {
-            const prompt = `Eres un extractor de datos de boletines escolares.
-Tu tarea: Extraer TODAS las asignaturas con sus calificaciones.
+        const GRADE_PROMPT = (
+          text,
+        ) => `Eres un extractor de notas de boletines escolares colombianos.
 
-BOLETÍN (escala 1.0-5.0 o porcentaje):
-"${text.slice(0, 3500)}"
+BOLETÍN:
+"${text.slice(0, 4500)}"
 
-INSTRUCCIONES CRÍTICAS:
-1. CADA FILA/LÍNEA del boletín tiene una asignatura y una nota
-2. Busca PARES de (NOMBRE_MATERIA, NOTA) en ORDEN de aparición
-3. El nombre EXACTO debe estar ANTES o AL LADO de su nota
-4. NO repitas nombres - cada materia debe tener su nota correcta
-5. Si encuentras una nota (4.2, 3.8, 85%, etc), busca su materia INMEDIATAMENTE antes
-6. Convierte porcentajes a escala 1-5: 90%=4.5, 85%=4.25, 80%=4.0, 75%=3.75, etc.
+TAREA: Extraer la NOTA FINAL de cada asignatura. Solo UNA nota por asignatura.
 
-FORMATO JSON (responde SOLO esto, sin markdown):
+PRIORIDAD para elegir qué nota extraer por cada asignatura:
+1. Columna "DEFINITIVA", "NOTA FINAL", "FINAL", "DEF" o "PROMEDIO FINAL" → usa esa
+2. Si no hay definitiva → usa el período más alto disponible (P4 > P3 > P2 > P1)
+3. Si solo hay una nota → usa esa
+
+REGLAS CRÍTICAS:
+- UNA entrada por asignatura (sin duplicados)
+- El nombre de la asignatura exactamente como aparece en el boletín
+- NO uses el mismo nombre para dos materias diferentes
+- Convierte porcentajes: 100%=5.0, 90%=4.5, 85%=4.25, 80%=4.0, 75%=3.75, 70%=3.5, 60%=3.0
+
+RESPONDE SOLO con este JSON (sin markdown, sin texto adicional):
 {
   "grades": [
     {"subject": "NOMBRE EXACTO MATERIA 1", "score": 4.2},
-    {"subject": "NOMBRE EXACTO MATERIA 2", "score": 3.8},
-    {"subject": "NOMBRE EXACTO MATERIA 3", "score": 4.5}
+    {"subject": "NOMBRE EXACTO MATERIA 2", "score": 3.8}
   ]
 }
 
-Si encuentras 16 asignaturas, devuelve 16 pares diferentes.
 Si no encuentras notas: {"grades": []}`;
+
+        if (isPdfFile) {
+          // PDFs: extract text locally then parse with AI
+          const { parsePDF } = await import("../../utils/documentParser");
+          const text = await parsePDF(f);
+          if (text) {
             const res = await callDeepseek(
-              [{ role: "user", content: prompt }],
-              { temperature: 0.05, maxTokens: 1200, isJson: true },
+              [{ role: "user", content: GRADE_PROMPT(text) }],
+              { temperature: 0.05, maxTokens: 1500, isJson: true },
             );
             const parsed = typeof res === "string" ? JSON.parse(res) : res;
             extractedGrades = parsed?.grades || [];
@@ -299,34 +304,9 @@ Si no encuentras notas: {"grades": []}`;
           const { text } = await resp.json();
 
           if (text && text.trim().length > 10) {
-            const prompt = `Eres un extractor de datos de boletines escolares.
-Tu tarea: Extraer TODAS las asignaturas con sus calificaciones.
-
-BOLETÍN OCR (escala 1.0-5.0 o porcentaje):
-"${text.slice(0, 3500)}"
-
-INSTRUCCIONES CRÍTICAS:
-1. CADA FILA/LÍNEA del boletín tiene una asignatura y una nota
-2. Busca PARES de (NOMBRE_MATERIA, NOTA) en ORDEN de aparición
-3. El nombre EXACTO debe estar ANTES o AL LADO de su nota
-4. NO repitas nombres - cada materia debe tener su nota correcta
-5. Si encuentras una nota (4.2, 3.8, 85%, etc), busca su materia INMEDIATAMENTE antes
-6. Convierte porcentajes a escala 1-5: 90%=4.5, 85%=4.25, 80%=4.0, 75%=3.75, etc.
-
-FORMATO JSON (responde SOLO esto, sin markdown):
-{
-  "grades": [
-    {"subject": "NOMBRE EXACTO MATERIA 1", "score": 4.2},
-    {"subject": "NOMBRE EXACTO MATERIA 2", "score": 3.8},
-    {"subject": "NOMBRE EXACTO MATERIA 3", "score": 4.5}
-  ]
-}
-
-Si encuentras 16 asignaturas, devuelve 16 pares diferentes.
-Si no encuentras notas: {"grades": []}`;
             const res = await callDeepseek(
-              [{ role: "user", content: prompt }],
-              { temperature: 0.05, maxTokens: 1200, isJson: true },
+              [{ role: "user", content: GRADE_PROMPT(text) }],
+              { temperature: 0.05, maxTokens: 1500, isJson: true },
             );
             const parsed = typeof res === "string" ? JSON.parse(res) : res;
             extractedGrades = parsed?.grades || [];
@@ -334,14 +314,19 @@ Si no encuentras notas: {"grades": []}`;
         }
 
         if (extractedGrades.length > 0) {
+          // Deduplicate: keep last occurrence per subject (final grade wins over period grades)
+          const seen = new Map();
+          extractedGrades.forEach((g) => {
+            if (g.subject && typeof g.subject === "string") {
+              seen.set(g.subject.toUpperCase().trim(), g);
+            }
+          });
+          extractedGrades = [...seen.values()];
+
           // Extract unique subject names for dynamic subject list
-          const subjectNames = [
-            ...new Set(
-              extractedGrades
-                .map((g) => g.subject)
-                .filter((s) => s && typeof s === "string"),
-            ),
-          ].sort();
+          const subjectNames = extractedGrades
+            .map((g) => g.subject)
+            .filter((s) => s && typeof s === "string");
 
           setGrades(extractedGrades.map((g) => ({ id: uid(), ...g })));
           // Update extracted subjects to populate SUBJECTS dynamically
