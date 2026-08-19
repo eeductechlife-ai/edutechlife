@@ -1,6 +1,7 @@
-import { useState, useCallback, memo } from "react";
+import { useState, useCallback, memo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { callDeepseek } from "../../utils/api";
+import { speakTextConversational, stopSpeech } from "../../utils/speech";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 
@@ -81,6 +82,8 @@ const OralExamSimulator = memo(({ onTabChange }) => {
   const [chatMessages, setChatMessages] = useState([]); // {role:'dani'|'user', text}
   const [chatInput, setChatInput] = useState("");
   const [chatLoading, setChatLoading] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const lastSpokenIdx = useRef(-1); // Track which message was last spoken to avoid re-speaking
 
   // When there's an active flashcard deck, use it as context
   const hasDeck = !!activeStudyDeck?.cards?.length;
@@ -135,6 +138,30 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
     }
     setLoading(false);
   }, [subject, difficulty, hasDeck, deckContext, activeStudyDeck]);
+
+  // Reproduce automáticamente la voz de Dani cuando hay un nuevo mensaje de ella.
+  useEffect(() => {
+    const latestMsg = chatMessages[chatMessages.length - 1];
+    if (
+      latestMsg &&
+      latestMsg.role === "dani" &&
+      lastSpokenIdx.current < chatMessages.length - 1
+    ) {
+      lastSpokenIdx.current = chatMessages.length - 1;
+      setIsSpeaking(true);
+      speakTextConversational(
+        latestMsg.text,
+        "dani",
+        () => setIsSpeaking(false), // onEnd
+        () => setIsSpeaking(false), // onError
+      );
+    }
+  }, [chatMessages]);
+
+  // Cleanup: detener TTS si el componente se desmonta.
+  useEffect(() => {
+    return () => stopSpeech();
+  }, []);
 
   // Construye el historial para DeepSeek: system (personaje Dani) + turnos.
   const buildChatMessages = useCallback(
@@ -491,8 +518,18 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
                     }`}
                   >
                     {m.role === "dani" && (
-                      <span className="mr-1 font-bold text-[#FF6B9D]">
+                      <span className="mr-1 font-bold text-[#FF6B9D] flex items-center gap-1">
                         🗣️ Dani
+                        {isSpeaking &&
+                          chatMessages[chatMessages.length - 1] === m && (
+                            <motion.span
+                              className="text-xs"
+                              animate={{ opacity: [0.5, 1, 0.5] }}
+                              transition={{ duration: 1.5, repeat: Infinity }}
+                            >
+                              🔊
+                            </motion.span>
+                          )}
                       </span>
                     )}
                     {m.text}
@@ -553,6 +590,9 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
             <div className="flex flex-col sm:flex-row gap-2 pt-1">
               <button
                 onClick={() => {
+                  stopSpeech();
+                  setIsSpeaking(false);
+                  lastSpokenIdx.current = -1;
                   setPhase("setup");
                   setChatMessages([]);
                   setSubject(null);
