@@ -577,8 +577,8 @@ Analiza y responde SOLO con JSON:
           {showHistory && (
             <div className="divide-y divide-[#F1F5F9]">
               {history.map((h) => (
-                <div key={h.id} className="px-4 py-3 bg-white">
-                  <div className="flex items-center justify-between mb-1">
+                <div key={h.id} className="px-4 py-3 bg-white space-y-2">
+                  <div className="flex items-center justify-between">
                     <span className="text-xs text-[#64748B]">
                       {new Date(h.created_at).toLocaleDateString("es-CO", {
                         day: "numeric",
@@ -596,8 +596,32 @@ Analiza y responde SOLO con JSON:
                       {gradeEmoji(Number(h.avg_score))} {h.avg_score}/5
                     </span>
                   </div>
+
+                  {/* Individual grades from analysis */}
+                  {h.grades && h.grades.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {h.grades.map((g, idx) => {
+                        const subject = SUBJECTS.find((s) => s.v === g.subject);
+                        return (
+                          <div
+                            key={idx}
+                            className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold"
+                            style={{
+                              backgroundColor: gradeColor(g.score) + "15",
+                              color: gradeColor(g.score),
+                              border: `1px solid ${gradeColor(g.score)}30`,
+                            }}
+                          >
+                            <span>{subject?.i || "📚"}</span>
+                            <span>{g.score}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
                   {h.plan?.overall && (
-                    <p className="text-xs text-[#374151] line-clamp-2">
+                    <p className="text-xs text-[#374151] line-clamp-2 pt-1">
                       {h.plan.overall}
                     </p>
                   )}
