@@ -14,12 +14,20 @@ async function fetchWithRetry(url, options, retries = 3) {
       const response = await fetch(url, finalOptions);
       clearTimeout(timeoutId);
       if (response.ok) return await response.json();
-      if (response.status < 500) throw lastError = new Error(`HTTP ${response.status}`);
-      throw lastError = new Error(`HTTP ${response.status}`);
+      let body;
+      try { body = await response.json(); } catch {}
+      const err = new Error(body?.error?.message || `HTTP ${response.status}`);
+      err.status = response.status;
+      err.body = body;
+      // Client errors (4xx) should not be retried
+      if (response.status >= 400 && response.status < 500) throw err;
+      lastError = err;
+      throw err;
     } catch (e) {
       clearTimeout(timeoutId);
       lastError = e;
       if (e.name === 'AbortError') throw new Error('DeepSeek request timed out');
+      if (e.status >= 400 && e.status < 500) throw e;
       if (i === retries - 1) throw e;
       await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
     }

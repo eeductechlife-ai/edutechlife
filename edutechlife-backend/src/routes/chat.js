@@ -94,7 +94,10 @@ router.post('/', chatMessageLimiter, optionalAuth, async (req, res) => {
     res.json({ result: text });
   } catch (e) {
     console.error('Error calling DeepSeek API:', e);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    const status = e.status;
+    if (status === 402) return res.status(402).json({ error: 'API sin saldo disponible. Recarga tu cuenta DeepSeek.' });
+    if (status === 401) return res.status(401).json({ error: 'API key inválida o expirada.' });
+    res.status(500).json({ error: e.message || 'Error interno del servidor' });
   }
 });
 

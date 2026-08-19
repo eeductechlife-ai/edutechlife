@@ -60,6 +60,7 @@ const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => (
         max="5"
         step="0.1"
         value={grade.score}
+        onFocus={(e) => e.target.select()}
         onChange={(e) =>
           onUpdate(grade.id, "score", parseFloat(e.target.value) || 0)
         }
@@ -184,72 +185,93 @@ export default memo(function GradeScanner({ onTabChange }) {
       setImgPreview(URL.createObjectURL(f));
       setExtracting(true);
       setError("");
+
+      const isPdfFile =
+        f.type === "application/pdf" || f.name?.toLowerCase().endsWith(".pdf");
+
       try {
-        const { extractDocumentText } =
-          await import("../../utils/documentParser");
-        const text = await extractDocumentText(f);
+        let extractedGrades = [];
 
-        // Prompt optimizado para boletines colombianos con OCR imperfecto
-        const prompt = `Texto OCR de un boletín de calificaciones colombiano (puede estar mal formateado por el OCR):
+        if (isPdfFile) {
+          // PDFs: extract text locally (no CDN needed) then parse with AI
+          const { parsePDF } = await import("../../utils/documentParser");
+          const text = await parsePDF(f);
+          if (text) {
+            const prompt = `Texto de un boletín colombiano (escala 1.0-5.0):
 "${text.slice(0, 2500)}"
-
-TAREA: Extrae TODAS las calificaciones. Los boletines colombianos usan escala 1.0-5.0 (aprobado ≥ 3.0).
-- Busca cualquier número entre 1.0 y 5.0 que parezca una nota
-- Intenta asociar cada nota a su materia
-- Si no puedes identificar la materia exactamente, usa el nombre más cercano de: matematicas, lenguaje, ciencias, sociales, ingles, arte, educacion_fisica, tecnologia
-- INCLUYE notas aunque no estés 100% seguro — es mejor incluir que omitir
-- Convierte comas a puntos: 4,2 → 4.2
-
-Responde SOLO JSON:
-{"grades": [{"subject": "matematicas", "score": 4.2}, {"subject": "lenguaje", "score": 3.8}]}
-
-Si no hay absolutamente ningún número entre 1.0 y 5.0, responde: {"grades": []}`;
-
-        const res = await callDeepseek(prompt, {
-          temperature: 0.1,
-          maxTokens: 500,
-          isJson: true,
-        });
-        const parsed = typeof res === "string" ? JSON.parse(res) : res;
-
-        if (parsed.grades?.length) {
-          setGrades(parsed.grades.map((g) => ({ id: uid(), ...g })));
-          setScanMode("manual");
+Extrae TODAS las calificaciones. Usa solo estos nombres: matematicas, lenguaje, ciencias, sociales, ingles, arte, educacion_fisica, tecnologia.
+Responde SOLO JSON: {"grades": [{"subject": "matematicas", "score": 4.2}]}
+Si no hay notas: {"grades": []}`;
+            const res = await callDeepseek(
+              [{ role: "user", content: prompt }],
+              { temperature: 0.1, maxTokens: 500, isJson: true },
+            );
+            const parsed = typeof res === "string" ? JSON.parse(res) : res;
+            extractedGrades = parsed?.grades || [];
+          }
         } else {
-          // Fallback: regex para encontrar números con formato de nota colombiana
-          const SUBJECTS_FALLBACK = [
-            "matematicas",
-            "lenguaje",
-            "ciencias",
-            "sociales",
-            "ingles",
-            "arte",
-            "educacion_fisica",
-            "tecnologia",
-          ];
-          const numMatches = text.match(/[1-4][.,]\d|[0-5][.,][0-9]/g) || [];
-          const validScores = numMatches
-            .map((n) => parseFloat(n.replace(",", ".")))
-            .filter((n) => n >= 1.0 && n <= 5.0);
+          // Images: OCR via backend Google Vision API, then structure with DeepSeek
+          const base64 = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(f);
+          });
+          const { API_BASE_URL } = await import("../../config/api");
+          const token = sessionStorage.getItem("auth_token");
+          const resp = await fetch(
+            `${API_BASE_URL}/api/smartboard/scan-image`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              },
+              body: JSON.stringify({ imageBase64: base64 }),
+            },
+          );
+          if (!resp.ok) {
+            const errBody = await resp.json().catch(() => null);
+            const err = new Error(errBody?.error || `HTTP ${resp.status}`);
+            err.status = resp.status;
+            throw err;
+          }
+          const { text } = await resp.json();
 
-          if (validScores.length > 0) {
-            setGrades(
-              validScores.slice(0, 8).map((score, i) => ({
-                id: uid(),
-                subject: SUBJECTS_FALLBACK[i] || "matematicas",
-                score,
-              })),
+          if (text && text.trim().length > 10) {
+            const prompt = `Texto OCR de un boletín colombiano (escala 1.0-5.0):
+"${text.slice(0, 2500)}"
+Extrae TODAS las calificaciones. Usa solo estos nombres: matematicas, lenguaje, ciencias, sociales, ingles, arte, educacion_fisica, tecnologia.
+Responde SOLO JSON: {"grades": [{"subject": "matematicas", "score": 4.2}]}
+Si no hay notas claras: {"grades": []}`;
+            const res = await callDeepseek(
+              [{ role: "user", content: prompt }],
+              { temperature: 0.1, maxTokens: 500, isJson: true },
             );
-            setScanMode("manual");
-            setError(
-              "⚠️ Extracción parcial — verifica y ajusta las materias y notas.",
-            );
-          } else {
-            setError(t("kid.grades.error_no_grades"));
+            const parsed = typeof res === "string" ? JSON.parse(res) : res;
+            extractedGrades = parsed?.grades || [];
           }
         }
-      } catch {
-        setError(t("kid.grades.error_read"));
+
+        if (extractedGrades.length > 0) {
+          setGrades(extractedGrades.map((g) => ({ id: uid(), ...g })));
+          setScanMode("manual");
+          setError("");
+        } else {
+          setScanMode("manual");
+          setError(t("kid.grades.error_no_grades"));
+        }
+      } catch (e) {
+        // Keep image visible so user can see their boletín as reference
+        if (e.status === 402) {
+          setError(
+            "⚠️ Sin saldo de IA. Mira tu boletín arriba e ingresa tus notas abajo manualmente.",
+          );
+        } else {
+          setError(
+            "📸 Imagen cargada. Mirá tu boletín arriba e ingresá tus notas abajo — Dani las analizará.",
+          );
+        }
       } finally {
         setExtracting(false);
       }
@@ -310,7 +332,7 @@ Analiza y responde SOLO con JSON:
 }`;
 
     try {
-      const res = await callDeepseek(prompt, {
+      const res = await callDeepseek([{ role: "user", content: prompt }], {
         temperature: 0.7,
         maxTokens: 1800,
         isJson: true,
@@ -321,7 +343,14 @@ Analiza y responde SOLO con JSON:
       addPoints?.(50);
       saveAnalysis(parsed, grades);
     } catch (e) {
-      setError(t("kid.grades.error_analyze"));
+      const msg = e.message || "";
+      if (msg.includes("402") || msg.toLowerCase().includes("saldo")) {
+        setError(
+          "⚠️ El servicio de IA no tiene saldo. Por favor recarga tu cuenta DeepSeek.",
+        );
+      } else {
+        setError(t("kid.grades.error_analyze"));
+      }
     } finally {
       setScanning(false);
     }
@@ -638,7 +667,7 @@ Analiza y responde SOLO con JSON:
                       </span>
                     </div>
                     <p className="text-xs text-[#64748B]">{w.why}</p>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <div className="p-2 rounded-xl bg-purple-50 border border-purple-100">
                         <p className="text-xs font-bold text-purple-600 mb-1">
                           👁️ VAK

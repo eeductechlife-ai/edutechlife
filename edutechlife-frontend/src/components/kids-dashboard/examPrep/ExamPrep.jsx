@@ -33,12 +33,12 @@ const ExamForm = memo(({ n, sN, s, sS, d, sD, g, sG, onAdd }) => {
         <label className="text-sm font-semibold text-[#004B63] mb-2 block">
           {t("kid.exam.subject_label")}
         </label>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {subjects.map((sb) => (
             <motion.button
               key={sb.v}
               onClick={() => sS(sb.v)}
-              className={`p-2.5 rounded-xl border-2 transition-all text-sm ${sb.v === s ? "border-[#4DA8C4] bg-[#4DA8C4]/10 text-[#004B63] font-semibold" : "border-[#E2E8F0] text-[#64748B] hover:border-[#4DA8C4]/30"}`}
+              className={`p-2.5 rounded-xl border-2 transition-all text-xs sm:text-sm ${sb.v === s ? "border-[#4DA8C4] bg-[#4DA8C4]/10 text-[#004B63] font-semibold" : "border-[#E2E8F0] text-[#64748B] hover:border-[#4DA8C4]/30"}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -48,7 +48,7 @@ const ExamForm = memo(({ n, sN, s, sS, d, sD, g, sG, onAdd }) => {
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="text-sm font-semibold text-[#004B63] mb-1.5 block">
             {t("kid.exam.date_label")}

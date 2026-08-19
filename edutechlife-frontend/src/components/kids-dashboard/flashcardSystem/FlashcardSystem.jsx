@@ -686,7 +686,7 @@ const FlashcardSystem = memo(({ onTabChange }) => {
           <button
             key={tb.id}
             onClick={() => setCreateTab(tb.id)}
-            className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${
+            className={`flex-1 py-3 sm:py-2 rounded-lg text-sm font-semibold transition-all ${
               createTab === tb.id
                 ? "bg-white text-[#004B63] shadow-sm"
                 : "text-[#64748B]"
@@ -702,7 +702,7 @@ const FlashcardSystem = memo(({ onTabChange }) => {
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-2xl bg-gradient-to-br from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 flex items-start gap-3"
+          className="p-4 rounded-2xl bg-gradient-to-br from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 flex flex-col sm:flex-row sm:items-start gap-3"
         >
           <span className="text-2xl flex-shrink-0">🤖</span>
           <div className="flex-1 min-w-0">
@@ -713,7 +713,7 @@ const FlashcardSystem = memo(({ onTabChange }) => {
               {t("kid.flashcards.dani_ask")}
             </p>
           </div>
-          <div className="flex flex-col gap-1.5 flex-shrink-0">
+          <div className="flex flex-col gap-1.5 flex-shrink-0 w-full sm:w-auto">
             <motion.button
               onClick={() => {
                 setDocumentForDani?.({

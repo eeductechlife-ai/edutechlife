@@ -192,10 +192,12 @@ const VAKDiagnosticEnhanced = ({ vakResult: propVakResult, onComplete }) => {
           {vakResult.predominantStyle.toUpperCase()}
         </p>
 
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           {Object.entries(vakResult.scores).map(([key, value]) => (
             <div key={key} className="p-4 bg-[#F8FAFC] rounded-xl">
-              <p className="text-3xl font-black text-[#4DA8C4]">{value}%</p>
+              <p className="text-2xl sm:text-3xl font-black text-[#4DA8C4]">
+                {value}%
+              </p>
               <p className="text-xs text-[#64748B] mt-1">
                 {key === "visual"
                   ? t("kid.vak.style_visual")
