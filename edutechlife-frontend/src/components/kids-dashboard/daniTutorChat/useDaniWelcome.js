@@ -11,27 +11,32 @@ export default function useDaniWelcome({
   documentForDani,
 }) {
   const buildRichWelcome = useCallback(() => {
+    // Nombre real del estudiante desde localStorage
+    const rawName =
+      typeof window !== "undefined"
+        ? localStorage.getItem("student_name") || ""
+        : "";
+    const firstName = rawName.split(" ")[0] || "";
+    const nameTag = firstName ? `, ${firstName}` : "";
+
     // If Dani has document/topic context, generate a focused verification opener
     if (documentForDani?.title) {
       const firstQ = documentForDani.tutoringQuestions?.[0];
       const isGradePlan = documentForDani.subject === "múltiples materias";
       if (isGradePlan) {
         const weakArea = documentForDani.improvements?.[0]?.split(":")[0] || "";
-        return `¡Hola! 📊 Revisé tu plan de estudio personalizado. ${documentForDani.summary ? documentForDani.summary + " " : ""}${weakArea ? `Vamos a enfocarnos en ${weakArea}. ` : ""}${firstQ || "Cuéntame, ¿cómo te sientes con tus materias esta semana?"}`;
+        return `¡Hola${nameTag}! 📊 Revisé tu plan de estudio. ${documentForDani.summary ? documentForDani.summary + " " : ""}${weakArea ? `Vamos a enfocarnos en ${weakArea}. ` : ""}${firstQ || "¿En qué puedo ayudarte hoy?"}`;
       }
-      return `¡Hola! 📖 Acabo de leer el tema "${documentForDani.title}" ${documentForDani.difficulty ? `(nivel ${documentForDani.difficulty})` : ""}. Vamos a verificar juntos que lo entendiste bien. ${firstQ || "¿Puedes explicarme con tus propias palabras de qué trata?"}`;
+      return `¡Hola${nameTag}! 📖 Acabo de leer "${documentForDani.title}" ${documentForDani.difficulty ? `(nivel ${documentForDani.difficulty})` : ""}. ¿Puedes explicarme con tus palabras de qué trata?`;
     }
+
     const now = new Date();
     const hour = now.getHours();
-    const greeting =
-      hour < 12
-        ? t("dani.welcome_morning")
-        : hour < 18
-          ? t("dani.welcome_afternoon")
-          : t("dani.welcome_evening");
+    const timeOfDay =
+      hour < 12 ? "Buenos días" : hour < 18 ? "Buenas tardes" : "Buenas noches";
 
     const parts = [];
-    parts.push(greeting);
+    parts.push(`¡${timeOfDay}${nameTag}! ¿En qué puedo ayudarte hoy?`);
 
     if (streak.current >= 2) {
       parts.push(t("dani.welcome_streak", { days: streak.current }));
@@ -100,7 +105,16 @@ export default function useDaniWelcome({
     }
 
     return parts.join(" ");
-  }, [streak, vakResult, calendarEvents, activeTab, t, missions, subjects, documentForDani]);
+  }, [
+    streak,
+    vakResult,
+    calendarEvents,
+    activeTab,
+    t,
+    missions,
+    subjects,
+    documentForDani,
+  ]);
 
   return buildRichWelcome;
 }
