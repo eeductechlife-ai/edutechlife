@@ -20,16 +20,18 @@ const EdutechLogo = ({ size = "large" }) => {
   return (
     <div className="flex items-center justify-center gap-3 select-none">
       <div
-        className={`relative flex items-center justify-center rounded-xl bg-gradient-to-br from-corporate to-petroleum shadow-lg shadow-corporate/20 ${isLarge ? "w-12 h-12 md:w-14 md:h-14" : "w-10 h-10"}`}
+        className={`relative flex items-center justify-center rounded-xl bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-emphasis)] shadow-lg shadow-[var(--theme-primary)]/20 ${isLarge ? "w-12 h-12 md:w-14 md:h-14" : "w-10 h-10"}`}
       >
         <Brain className={`text-white ${isLarge ? "w-7 h-7" : "w-5 h-5"}`} />
-        <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-petroleum rounded-full border-2 border-white shadow-[0_0_8px_rgba(0,75,99,0.5)] animate-pulse" />
+        <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[var(--theme-emphasis)] rounded-full border-2 border-white shadow-[0_0_8px_rgba(0,75,99,0.5)] animate-pulse" />
       </div>
       <h1
         className={`font-bold tracking-tight ${isLarge ? "text-4xl md:text-5xl" : "text-2xl md:text-3xl"}`}
       >
-        <span className="text-corporate">Edu</span>
-        <span className="text-petroleum dark:text-slate-100">techlife</span>
+        <span className="text-[var(--theme-primary)]">Edu</span>
+        <span className="text-[var(--theme-emphasis)] dark:text-slate-100">
+          techlife
+        </span>
       </h1>
     </div>
   );
@@ -146,7 +148,12 @@ export default function OVANotebookBase({
 
   if (screen === "intro") {
     return (
-      <div className="w-full h-full bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center rounded-2xl min-h-[400px]">
+      <div
+        className="w-full h-full flex items-center justify-center rounded-2xl min-h-[400px]"
+        style={{
+          background: `linear-gradient(to bottom right, var(--theme-bg), var(--theme-surface))`,
+        }}
+      >
         <OVAIntro
           icon="fa-brain"
           badge={tk("learning_badge")}
@@ -181,7 +188,7 @@ export default function OVANotebookBase({
         <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(30,64,175,0.1)_0%,rgba(255,255,255,0)_70%)]" />
         <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(30,64,175,0.08)_0%,rgba(255,255,255,0)_70%)]" />
         <div className="w-full flex items-center justify-center py-12 px-4 relative z-10">
-          <div className="w-full max-w-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-corporate/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-8 md:p-16 rounded-3xl animate-[fadeIn_0.6s_ease-out_forwards] text-center border-t-4 border-t-petroleum">
+          <div className="w-full max-w-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-[var(--theme-primary)]/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-8 md:p-16 rounded-3xl animate-[fadeIn_0.6s_ease-out_forwards] text-center border-t-4 border-t-[var(--theme-emphasis)]">
             <div className="mb-6 flex justify-center">
               <EdutechLogo size="small" />
             </div>
@@ -189,24 +196,24 @@ export default function OVANotebookBase({
               <Award size={14} />
               <span>{tk("completed_label")}</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-2 text-petroleum dark:text-slate-100 font-montserrat">
+            <h2 className="text-3xl md:text-4xl font-bold mb-2 text-[var(--theme-emphasis)] dark:text-slate-100 font-montserrat">
               {tk("results_title")}
             </h2>
-            <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-corporate to-petroleum my-8 drop-shadow-sm">
+            <div className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] my-8 drop-shadow-sm">
               {score}
               <span className="text-4xl text-gray-400 dark:text-slate-400">
                 /7
               </span>
             </div>
-            <h3 className="text-2xl font-semibold text-corporate mb-4">
+            <h3 className="text-2xl font-semibold text-[var(--theme-primary)] mb-4">
               {message}
             </h3>
-            <p className="text-petroleum/80 dark:text-slate-100/80 mb-6 text-lg">
+            <p className="text-[var(--theme-emphasis)]/80 dark:text-slate-100/80 mb-6 text-lg">
               {submessage}
             </p>
             <button
               onClick={startGame}
-              className="px-8 py-3 rounded-xl bg-white dark:bg-slate-800 text-petroleum dark:text-slate-100 border-2 border-gray-200 dark:border-slate-600 hover:border-corporate hover:text-corporate dark:hover:text-corporate transition-all font-semibold flex items-center justify-center gap-2 mx-auto shadow-sm"
+              className="px-8 py-3 rounded-xl bg-white dark:bg-slate-800 text-[var(--theme-emphasis)] dark:text-slate-100 border-2 border-gray-200 dark:border-slate-600 hover:border-[var(--theme-primary)] hover:text-[var(--theme-primary)] dark:hover:text-[var(--theme-primary)] transition-all font-semibold flex items-center justify-center gap-2 mx-auto shadow-sm"
             >
               <Play size={18} />
               {tk("restart")}
@@ -235,7 +242,7 @@ export default function OVANotebookBase({
             <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
               <EdutechLogo size="small" />
               <div className="flex items-center gap-3">
-                <span className="text-petroleum dark:text-slate-100 font-semibold bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-gray-200 dark:border-slate-600 shadow-sm text-sm">
+                <span className="text-[var(--theme-emphasis)] dark:text-slate-100 font-semibold bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-gray-200 dark:border-slate-600 shadow-sm text-sm">
                   {contentIdx + 1} / {contentScreens.length}
                 </span>
               </div>
@@ -249,7 +256,7 @@ export default function OVANotebookBase({
               className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner"
             >
               <div
-                className="bg-gradient-to-r from-corporate to-petroleum h-full rounded-full transition-all duration-500 ease-out"
+                className="bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] h-full rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${(currentStep / totalSteps) * 100}%` }}
               />
             </div>
@@ -275,20 +282,20 @@ export default function OVANotebookBase({
               <div
                 className={`w-full lg:w-3/5 ${contentPanelMaxHeight} overflow-y-auto`}
               >
-                <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-corporate/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-6 md:p-10 rounded-3xl flex flex-col border-t-4 border-t-corporate">
+                <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-[var(--theme-primary)]/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-6 md:p-10 rounded-3xl flex flex-col border-t-4 border-t-[var(--theme-primary)]">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold text-[9px] uppercase tracking-[0.15em] border border-blue-700/20 w-fit mb-4">
                     <Brain size={12} />
                     <span>{screen_data.subtitle}</span>
                   </div>
-                  <h2 className="text-xl md:text-2xl font-bold text-petroleum dark:text-slate-100 mb-4 font-montserrat">
+                  <h2 className="text-xl md:text-2xl font-bold text-[var(--theme-emphasis)] dark:text-slate-100 mb-4 font-montserrat">
                     {screen_data.title}
                   </h2>
-                  <p className="text-petroleum/80 dark:text-slate-100/80 text-sm leading-relaxed mb-6">
+                  <p className="text-[var(--theme-emphasis)]/80 dark:text-slate-100/80 text-sm leading-relaxed mb-6">
                     {screen_data.valerioText}
                   </p>
 
                   <div className="mb-5">
-                    <h3 className="text-xs font-bold text-petroleum dark:text-slate-100 uppercase tracking-wider mb-3">
+                    <h3 className="text-xs font-bold text-[var(--theme-emphasis)] dark:text-slate-100 uppercase tracking-wider mb-3">
                       {tk("objectives_title")}
                     </h3>
                     <div className="space-y-2">
@@ -310,7 +317,7 @@ export default function OVANotebookBase({
                   </div>
 
                   <div className="mb-5">
-                    <h3 className="text-xs font-bold text-petroleum dark:text-slate-100 uppercase tracking-wider mb-3">
+                    <h3 className="text-xs font-bold text-[var(--theme-emphasis)] dark:text-slate-100 uppercase tracking-wider mb-3">
                       {tk("warnings_title")}
                     </h3>
                     <div className="space-y-2">
@@ -332,7 +339,7 @@ export default function OVANotebookBase({
                   </div>
 
                   <div>
-                    <h3 className="text-xs font-bold text-petroleum dark:text-slate-100 uppercase tracking-wider mb-3">
+                    <h3 className="text-xs font-bold text-[var(--theme-emphasis)] dark:text-slate-100 uppercase tracking-wider mb-3">
                       {tk("example_title")}
                     </h3>
                     <div className="space-y-2">
@@ -364,7 +371,7 @@ export default function OVANotebookBase({
                 onClick={prevContent}
                 disabled={isFirst}
                 aria-label={t("ova.nav.prev_aria")}
-                className="p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-petroleum dark:text-slate-100 rounded-xl disabled:opacity-30 hover:border-corporate transition-all disabled:cursor-not-allowed"
+                className="p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-[var(--theme-emphasis)] dark:text-slate-100 rounded-xl disabled:opacity-30 hover:border-[var(--theme-primary)] transition-all disabled:cursor-not-allowed"
               >
                 <ArrowLeft size={20} />
               </button>
@@ -377,13 +384,13 @@ export default function OVANotebookBase({
                   <div
                     key={i}
                     aria-hidden="true"
-                    className={`h-1.5 rounded-full transition-all duration-700 ${i === contentIdx ? "w-8 bg-petroleum dark:bg-slate-100" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
+                    className={`h-1.5 rounded-full transition-all duration-700 ${i === contentIdx ? "w-8 bg-[var(--theme-emphasis)] dark:bg-slate-100" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
                   />
                 ))}
               </div>
               <button
                 onClick={nextContent}
-                className="px-6 py-3 bg-gradient-to-r from-corporate to-petroleum text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg active:scale-95 transition-all flex items-center gap-2"
+                className="px-6 py-3 bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg active:scale-95 transition-all flex items-center gap-2"
               >
                 {isLast ? tk("start_quiz") : tk("next")}{" "}
                 <ArrowRight size={18} />
@@ -416,17 +423,17 @@ export default function OVANotebookBase({
             <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
               <EdutechLogo size="small" />
               <div className="flex items-center gap-3">
-                <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-50 dark:bg-cyan-900/30 text-corporate dark:text-teal-200 font-semibold text-[10px] uppercase tracking-[0.15em] border border-corporate/20">
+                <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-50 dark:bg-cyan-900/30 text-[var(--theme-primary)] dark:text-teal-200 font-semibold text-[10px] uppercase tracking-[0.15em] border border-[var(--theme-primary)]/20">
                   <Brain size={14} />
                   <span>{tk("lab_title")}</span>
                 </div>
-                <span className="text-petroleum dark:text-slate-100 font-semibold bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-gray-200 dark:border-slate-600 shadow-sm text-sm">
+                <span className="text-[var(--theme-emphasis)] dark:text-slate-100 font-semibold bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-gray-200 dark:border-slate-600 shadow-sm text-sm">
                   {tk("node_label", {
                     current: currentQIndex + 1,
                     total: questionsData.length,
                   })}
                 </span>
-                <span className="text-white font-semibold bg-corporate px-4 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,188,212,0.4)] text-sm">
+                <span className="text-white font-semibold bg-[var(--theme-primary)] px-4 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,188,212,0.4)] text-sm">
                   {tk("score_label")} {score}
                 </span>
               </div>
@@ -440,7 +447,7 @@ export default function OVANotebookBase({
               className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5 mb-8 overflow-hidden shadow-inner"
             >
               <div
-                className="bg-gradient-to-r from-corporate to-petroleum h-full rounded-full transition-all duration-500 ease-out"
+                className="bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] h-full rounded-full transition-all duration-500 ease-out"
                 style={{
                   width: `${((1 + contentScreens.length + currentQIndex) / totalSteps) * 100}%`,
                 }}
@@ -457,9 +464,9 @@ export default function OVANotebookBase({
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-petroleum via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--theme-emphasis)] via-transparent to-transparent opacity-80" />
                   <div className="absolute bottom-4 left-4 right-4">
-                    <div className="flex items-center gap-2 text-white text-sm font-semibold bg-corporate/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20">
+                    <div className="flex items-center gap-2 text-white text-sm font-semibold bg-[var(--theme-primary)]/90 w-fit px-4 py-1.5 rounded-lg backdrop-blur-md shadow-lg border border-white/20">
                       <Network size={16} /> {tk("scenario_badge")}
                     </div>
                   </div>
@@ -479,21 +486,21 @@ export default function OVANotebookBase({
                         </span>
                       )}
                     </div>
-                    <p className="text-petroleum dark:text-slate-100 text-sm leading-relaxed font-medium opacity-90">
+                    <p className="text-[var(--theme-emphasis)] dark:text-slate-100 text-sm leading-relaxed font-medium opacity-90">
                       {currentQ.explanation}
                     </p>
                   </div>
                 )}
               </div>
               <div className="w-full lg:w-3/5">
-                <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-corporate/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-6 md:p-10 rounded-3xl h-full flex flex-col border-t-4 border-t-corporate">
-                  <h2 className="text-xl md:text-2xl font-semibold text-petroleum dark:text-slate-100 mb-8 leading-relaxed font-montserrat">
+                <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-[var(--theme-primary)]/15 shadow-[0_8px_32px_rgba(31,38,135,0.1)] p-6 md:p-10 rounded-3xl h-full flex flex-col border-t-4 border-t-[var(--theme-primary)]">
+                  <h2 className="text-xl md:text-2xl font-semibold text-[var(--theme-emphasis)] dark:text-slate-100 mb-8 leading-relaxed font-montserrat">
                     {currentQ.question}
                   </h2>
                   <div className="space-y-4 flex-grow">
                     {currentQ.options.map((option, index) => {
                       let btnClass =
-                        "bg-white/95 dark:bg-slate-800/95 border border-gray-200 dark:border-slate-600 shadow-[0_4px_20px_rgba(0,0,0,0.03)] transition-all duration-300 enabled:hover:border-corporate enabled:hover:shadow-[0_8px_25px_rgba(0,188,212,0.15)] enabled:hover:-translate-y-0.5 w-full text-left p-4 md:p-5 rounded-2xl flex items-start gap-4 ";
+                        "bg-white/95 dark:bg-slate-800/95 border border-gray-200 dark:border-slate-600 shadow-[0_4px_20px_rgba(0,0,0,0.03)] transition-all duration-300 enabled:hover:border-[var(--theme-primary)] enabled:hover:shadow-[0_8px_25px_rgba(0,188,212,0.15)] enabled:hover:-translate-y-0.5 w-full text-left p-4 md:p-5 rounded-2xl flex items-start gap-4 ";
                       let iconClass =
                         "flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-sm md:text-base transition-colors ";
                       let textClass =
@@ -501,8 +508,9 @@ export default function OVANotebookBase({
                       if (!isAnswered) {
                         btnClass += "cursor-pointer";
                         iconClass +=
-                          "bg-gray-200 dark:bg-slate-600 text-petroleum dark:text-slate-100";
-                        textClass += "text-petroleum/80 dark:text-slate-100/80";
+                          "bg-gray-200 dark:bg-slate-600 text-[var(--theme-emphasis)] dark:text-slate-100";
+                        textClass +=
+                          "text-[var(--theme-emphasis)]/80 dark:text-slate-100/80";
                       } else if (index === currentQ.correct) {
                         btnClass +=
                           "bg-emerald-50 dark:bg-emerald-900/30 !border-emerald-500 shadow-[0_0_20px_rgba(34,197,94,0.15)]";
@@ -517,8 +525,9 @@ export default function OVANotebookBase({
                         btnClass +=
                           "opacity-50 cursor-not-allowed bg-white dark:bg-slate-800";
                         iconClass +=
-                          "bg-gray-200 dark:bg-slate-600 text-petroleum/50 dark:text-slate-100/50";
-                        textClass += "text-petroleum/50 dark:text-slate-100/50";
+                          "bg-gray-200 dark:bg-slate-600 text-[var(--theme-emphasis)]/50 dark:text-slate-100/50";
+                        textClass +=
+                          "text-[var(--theme-emphasis)]/50 dark:text-slate-100/50";
                       }
                       return (
                         <button
@@ -540,14 +549,14 @@ export default function OVANotebookBase({
                       <button
                         onClick={() => setShowHint(!showHint)}
                         aria-expanded={showHint}
-                        className="flex items-center gap-2 px-4 py-2 bg-gray-200/40 dark:bg-slate-700/40 hover:bg-gray-200 dark:hover:bg-slate-700 border border-corporate/30 rounded-xl text-petroleum dark:text-slate-100 font-semibold text-sm transition-all duration-300"
+                        className="flex items-center gap-2 px-4 py-2 bg-gray-200/40 dark:bg-slate-700/40 hover:bg-gray-200 dark:hover:bg-slate-700 border border-[var(--theme-primary)]/30 rounded-xl text-[var(--theme-emphasis)] dark:text-slate-100 font-semibold text-sm transition-all duration-300"
                       >
                         <Lightbulb size={16} />
                         {showHint ? tk("hide_hint") : tk("show_hint")}
                       </button>
                       {showHint && (
-                        <div className="w-full p-4 bg-emerald-50 dark:bg-emerald-900/30 border border-corporate/50 rounded-xl text-petroleum dark:text-slate-100 text-sm md:text-base font-medium animate-[fadeIn_0.6s_ease-out_forwards] shadow-inner">
-                          <span className="text-corporate font-bold mr-2">
+                        <div className="w-full p-4 bg-emerald-50 dark:bg-emerald-900/30 border border-[var(--theme-primary)]/50 rounded-xl text-[var(--theme-emphasis)] dark:text-slate-100 text-sm md:text-base font-medium animate-[fadeIn_0.6s_ease-out_forwards] shadow-inner">
+                          <span className="text-[var(--theme-primary)] font-bold mr-2">
                             {tk("hint_prefix")}
                           </span>{" "}
                           {currentQ.hint}
@@ -559,7 +568,7 @@ export default function OVANotebookBase({
                     <div className="mt-8 flex justify-end animate-[fadeIn_0.6s_ease-out_forwards]">
                       <button
                         onClick={nextQuestion}
-                        className="px-8 py-3.5 bg-petroleum hover:bg-corporate text-white font-semibold rounded-xl transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-[0_8px_20px_rgba(0,188,212,0.4)] hover:-translate-y-1"
+                        className="px-8 py-3.5 bg-[var(--theme-emphasis)] hover:bg-[var(--theme-primary)] text-white font-semibold rounded-xl transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-[0_8px_20px_rgba(0,188,212,0.4)] hover:-translate-y-1"
                       >
                         {currentQIndex === questionsData.length - 1
                           ? tk("process_results")

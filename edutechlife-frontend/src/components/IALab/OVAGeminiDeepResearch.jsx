@@ -107,7 +107,7 @@ const StepIndicator = ({ current, total }) => (
     {Array.from({ length: total }, (_, i) => (
       <div
         key={i}
-        className={`h-2 rounded-full transition-all duration-300 ${i === current ? "w-8 bg-petroleum" : i < current ? "w-2 bg-corporate" : "w-2 bg-slate-200 dark:bg-slate-700"}`}
+        className={`h-2 rounded-full transition-all duration-300 ${i === current ? "w-8 bg-[var(--theme-emphasis)]" : i < current ? "w-2 bg-[var(--theme-primary)]" : "w-2 bg-[var(--theme-border)]"}`}
       />
     ))}
   </div>
@@ -144,10 +144,10 @@ const OVAGeminiDeepResearch = () => {
             transition={{ type: "spring", stiffness: 350, damping: 25 }}
             className="text-center py-6"
           >
-            <div className="w-20 h-20 rounded-2xl bg-indigo-500 flex items-center justify-center mx-auto mb-5 shadow-md">
+            <div className="w-20 h-20 rounded-2xl bg-[var(--theme-emphasis)] flex items-center justify-center mx-auto mb-5 shadow-md">
               <Icon name="fa-search" className="text-white text-3xl" />
             </div>
-            <h3 className="text-xl font-bold text-indigo-500 mb-2">
+            <h3 className="text-xl font-bold text-[var(--theme-emphasis)] mb-2">
               {t("ialab.gemini_research.intro_title")}
             </h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-6 leading-relaxed">
@@ -174,7 +174,7 @@ const OVAGeminiDeepResearch = () => {
                 >
                   <Icon
                     name={p.icon}
-                    className="text-corporate w-4 h-4 flex-shrink-0"
+                    className="text-[var(--theme-primary)] w-4 h-4 flex-shrink-0"
                   />
                   <span className="text-xs text-slate-600 dark:text-slate-300">
                     {t(p.key)}
@@ -187,7 +187,7 @@ const OVAGeminiDeepResearch = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="px-8 py-3 bg-indigo-500 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
+              className="px-8 py-3 bg-[var(--theme-emphasis)] text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
             >
               {t("ialab.gemini_research.start_btn")}
             </motion.button>
@@ -202,7 +202,7 @@ const OVAGeminiDeepResearch = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ type: "spring", stiffness: 350, damping: 25 }}
           >
-            <h3 className="text-lg font-bold text-indigo-500 text-center mb-2">
+            <h3 className="text-lg font-bold text-[var(--theme-emphasis)] text-center mb-2">
               {t("ialab.gemini_research.select_title")}
             </h3>
             <p className="text-sm text-slate-500 text-center mb-6">
@@ -218,8 +218,8 @@ const OVAGeminiDeepResearch = () => {
                   onClick={() => handleSelectType(rt.id)}
                   className={`relative overflow-hidden rounded-2xl border-2 p-5 text-left transition-all duration-200 ${
                     selectedType === rt.id
-                      ? "border-indigo-500 shadow-md"
-                      : "border-slate-200 dark:border-slate-700 hover:border-indigo-300 hover:shadow-sm"
+                      ? "border-[var(--theme-emphasis)] shadow-md"
+                      : "theme-border hover:border-[color-mix(in_srgb,var(--theme-emphasis)_60%,transparent)] hover:shadow-sm"
                   }`}
                 >
                   <div className={`absolute inset-0 ${rt.gradient}`} />
@@ -260,7 +260,7 @@ const OVAGeminiDeepResearch = () => {
                 />
               </div>
               <div>
-                <h3 className="text-base font-bold text-indigo-500">
+                <h3 className="text-base font-bold text-[var(--theme-emphasis)]">
                   {t(ANALYSIS_SAMPLES[selectedType].titleKey)}
                 </h3>
                 <p className="text-xs text-slate-500">
@@ -269,10 +269,16 @@ const OVAGeminiDeepResearch = () => {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 mb-5 border border-slate-200 dark:border-slate-700">
+            <div
+              className="rounded-2xl p-5 mb-5 theme-border"
+              style={{ background: "var(--theme-surface)" }}
+            >
               <div className="flex items-center gap-2 mb-4">
-                <Icon name="fa-shield" className="text-indigo-500 w-4 h-4" />
-                <span className="text-xs font-bold text-indigo-500 uppercase tracking-wider">
+                <Icon
+                  name="fa-shield"
+                  className="text-[var(--theme-emphasis)] w-4 h-4"
+                />
+                <span className="text-xs font-bold text-[var(--theme-emphasis)] uppercase tracking-wider">
                   {t("ialab.gemini_research.grounding_badge")}
                 </span>
               </div>
@@ -283,7 +289,8 @@ const OVAGeminiDeepResearch = () => {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.15 }}
-                    className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700"
+                    className="flex items-start gap-3 p-3 rounded-xl theme-border"
+                    style={{ background: "var(--theme-surface)" }}
                   >
                     <Icon
                       name={f.icon}
@@ -297,13 +304,16 @@ const OVAGeminiDeepResearch = () => {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 mb-6">
+            <div
+              className="rounded-2xl p-5 theme-border mb-6"
+              style={{ background: "var(--theme-surface)" }}
+            >
               <div className="flex items-center gap-2 mb-3">
                 <Icon
                   name="fa-file-lines"
-                  className="text-indigo-500 w-4 h-4"
+                  className="text-[var(--theme-emphasis)] w-4 h-4"
                 />
-                <span className="text-xs font-bold text-indigo-500 uppercase tracking-wider">
+                <span className="text-xs font-bold text-[var(--theme-emphasis)] uppercase tracking-wider">
                   {t("ialab.gemini_research.report_badge")}
                 </span>
               </div>
@@ -314,7 +324,7 @@ const OVAGeminiDeepResearch = () => {
                 <div className="flex items-center gap-2">
                   <div className="w-24 h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                     <div
-                      className={`h-full rounded-full ${selectedType === "image" ? "w-[85%] bg-purple-600" : selectedType === "factcheck" ? "w-[72%] bg-teal-500" : "w-[91%] bg-indigo-500"}`}
+                      className={`h-full rounded-full ${selectedType === "image" ? "w-[85%] bg-purple-600" : selectedType === "factcheck" ? "w-[72%] bg-teal-500" : "w-[91%] bg-[var(--theme-emphasis)]"}`}
                     />
                   </div>
                   <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
@@ -330,7 +340,7 @@ const OVAGeminiDeepResearch = () => {
                 <span className="text-sm text-slate-600 dark:text-slate-300">
                   {t("ialab.gemini_research.report_sources")}
                 </span>
-                <span className="text-xs font-bold text-indigo-500">
+                <span className="text-xs font-bold text-[var(--theme-emphasis)]">
                   {selectedType === "image"
                     ? "4"
                     : selectedType === "factcheck"
@@ -347,7 +357,7 @@ const OVAGeminiDeepResearch = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                className="px-6 py-2.5 bg-indigo-500 text-white font-semibold rounded-xl text-sm shadow-sm hover:shadow-md transition-all duration-200"
+                className="px-6 py-2.5 bg-[var(--theme-emphasis)] text-white font-semibold rounded-xl text-sm shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Icon name="fa-rotate" className="mr-2" />
                 {t("ialab.gemini_research.try_again")}
