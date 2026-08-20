@@ -51,7 +51,7 @@ const OVAIntro = ({
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="max-w-2xl w-full text-center"
       >
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-50 dark:bg-cyan-900/20 text-corporate font-semibold text-xs uppercase tracking-wider border border-cyan-200 dark:border-cyan-700 mb-6">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-50 dark:bg-cyan-900/20 text-[var(--theme-primary)] font-semibold text-xs uppercase tracking-wider border border-cyan-200 dark:border-cyan-700 mb-6">
           <Icon name={icon} className="text-sm" />
           <span>{badge || t("ialab.ova.badge")}</span>
         </div>
@@ -62,7 +62,7 @@ const OVAIntro = ({
           transition={{ delay: 0.2, duration: 0.5 }}
           className="flex justify-center mb-6"
         >
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-corporate to-petroleum flex items-center justify-center shadow-lg shadow-corporate/20">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-emphasis)] flex items-center justify-center shadow-lg shadow-[var(--theme-primary)]/20">
             <Icon name={icon} className="text-white text-2xl sm:text-3xl" />
           </div>
         </motion.div>
@@ -71,7 +71,7 @@ const OVAIntro = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.4 }}
-          className="text-2xl sm:text-3xl md:text-4xl font-bold text-petroleum dark:text-white mb-4 font-montserrat leading-tight"
+          className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--theme-emphasis)] dark:text-white mb-4 font-montserrat leading-tight"
         >
           {title}
         </motion.h1>
@@ -107,7 +107,7 @@ const OVAIntro = ({
           <button
             onClick={handleStart}
             aria-label={startLabel || t("ialab.ova.start")}
-            className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-corporate to-petroleum text-white font-bold text-sm shadow-lg shadow-corporate/25 hover:shadow-xl hover:shadow-corporate/30 hover:-translate-y-0.5 transition-all"
+            className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] text-white font-bold text-sm shadow-lg shadow-[var(--theme-primary)]/25 hover:shadow-xl hover:shadow-[var(--theme-primary)]/30 hover:-translate-y-0.5 transition-all"
           >
             <span className="flex items-center gap-2">
               <Icon name="fa-play" className="text-sm" />
@@ -137,7 +137,7 @@ const OVAIntro = ({
                 "px-6 py-3 rounded-2xl font-semibold text-xs sm:text-sm transition-all border-2",
                 audioPlaying
                   ? "bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700 text-red-600 dark:text-red-400"
-                  : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-corporate",
+                  : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-[var(--theme-primary)]",
               )}
             >
               <span className="flex items-center gap-2">

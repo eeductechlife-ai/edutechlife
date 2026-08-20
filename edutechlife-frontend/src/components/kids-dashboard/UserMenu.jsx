@@ -147,16 +147,16 @@ const UserMenu = ({
     )
       payload.grade = formData.grade;
 
-    const success = await updateProfile(payload);
+    const result = await updateProfile(payload);
     setSaving(false);
-    if (success) {
+    if (result?.ok) {
       setSaveMessage(t("kid.user.saved"));
       setTimeout(() => {
         setIsEditingModal(false);
         setSaveMessage("");
       }, 1500);
     } else {
-      setSaveError(t("kid.user.save_error"));
+      setSaveError(result?.message || t("kid.user.save_error"));
     }
   };
 

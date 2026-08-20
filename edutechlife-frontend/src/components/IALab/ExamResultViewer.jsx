@@ -164,7 +164,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
                 <>
                   <button
                     onClick={handleRetry}
-                    className="w-full py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-lg transition-all duration-200 font-bold text-sm mb-2 flex items-center justify-center gap-2"
+                    className="w-full py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-lg transition-all duration-200 font-bold text-sm mb-2 flex items-center justify-center gap-2"
                   >
                     <Icon name="fa-rocket" />
                     {t("ialab.exam_result.retry")}
@@ -196,7 +196,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
           {/* Valerio CTA */}
           <button
             onClick={handleAskMax}
-            className="w-full py-2.5 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-lg transition-all duration-200 font-bold text-sm flex items-center justify-center gap-2 mb-2"
+            className="w-full py-2.5 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-lg transition-all duration-200 font-bold text-sm flex items-center justify-center gap-2 mb-2"
           >
             <Icon name="fa-robot" className="w-4 h-4" aria-hidden="true" />
             {t("ialab.ask_max_exam_btn")}
@@ -204,7 +204,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
           {/* Close button */}
           <button
             onClick={onClose}
-            className="w-full py-2.5 border border-petroleum/30 text-petroleum rounded-xl hover:bg-petroleum/5 transition-all duration-200 font-bold text-sm"
+            className="w-full py-2.5 border border-[var(--theme-emphasis)]/30 text-[var(--theme-emphasis)] rounded-xl hover:bg-[var(--theme-emphasis)]/5 transition-all duration-200 font-bold text-sm"
           >
             {t("ialab.exam_result.back_to_module")}
           </button>

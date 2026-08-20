@@ -33,7 +33,7 @@ const IALabForumOptimizedInput = ({
                     {user && (
                         <div className={cn(
                             "w-8 h-8 rounded-full flex-shrink-0",
-                            "bg-gradient-to-tr from-petroleum to-petroleum-dark",
+                            "bg-gradient-to-tr from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark",
                             "flex items-center justify-center",
                             "shadow-sm"
                         )}>
@@ -54,7 +54,7 @@ const IALabForumOptimizedInput = ({
                                 "w-full px-4 py-3 pr-12",
                                 "bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl",
                                 "text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-600/70 dark:placeholder:text-slate-400",
-                                "focus:outline-none focus:ring-2 focus:ring-corporate/20 focus:border-corporate/30",
+                                "focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)]/20 focus:border-[var(--theme-primary)]/30",
                                 "disabled:opacity-50 disabled:cursor-not-allowed",
                                 "transition-all duration-200",
                                 "shadow-sm focus:shadow-md"
@@ -82,7 +82,7 @@ const IALabForumOptimizedInput = ({
                         disabled={!newMessage.trim() || isSubmitting || !user}
                         className={cn(
                             "px-4 py-3 rounded-xl",
-                            "bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate",
+                            "bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]",
                             "text-white text-sm font-medium",
                             "hover:shadow-[0_0_15px_rgba(0,188,212,0.3)]",
                             "disabled:opacity-50 disabled:cursor-not-allowed",
@@ -110,7 +110,7 @@ const IALabForumOptimizedInput = ({
                 {!user && (
                     <div className="mt-2 text-center">
                         <p className="text-xs text-slate-500">
-                            <a href="/auth" className="text-petroleum hover:text-petroleum-dark font-medium">
+                            <a href="/auth" className="text-[var(--theme-emphasis)] hover:text-[var(--theme-emphasis)]-dark font-medium">
                                 {t('ialab.forum.optimized.login_link')}
                             </a>{t('ialab.forum.optimized.login_prompt')}
                         </p>

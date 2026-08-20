@@ -78,10 +78,10 @@ const BookmarksTab = () => {
   if (!bookmarkedIds.length) {
     return (
       <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm p-10 flex flex-col items-center justify-center text-center gap-3">
-        <div className="w-14 h-14 rounded-2xl bg-petroleum/8 dark:bg-petroleum/15 flex items-center justify-center">
+        <div className="w-14 h-14 rounded-2xl bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 flex items-center justify-center">
           <Icon
             name="fa-bookmark"
-            className="text-2xl text-petroleum/40 dark:text-petroleum/50"
+            className="text-2xl text-[var(--theme-emphasis)]/40 dark:text-[var(--theme-emphasis)]/50"
           />
         </div>
         <h4 className="text-sm font-bold text-slate-700 dark:text-slate-200">
@@ -107,8 +107,8 @@ const BookmarksTab = () => {
             key={topicTitle}
             className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm overflow-hidden"
           >
-            <div className="px-5 py-3 bg-petroleum/4 dark:bg-petroleum/10 border-b border-slate-200/60 dark:border-slate-700/40">
-              <p className="text-xs font-bold text-petroleum dark:text-[#4DA8C4] uppercase tracking-wide truncate">
+            <div className="px-5 py-3 bg-[var(--theme-emphasis)]/4 dark:bg-[var(--theme-emphasis)]/10 border-b border-slate-200/60 dark:border-slate-700/40">
+              <p className="text-xs font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] uppercase tracking-wide truncate">
                 {topicTitle}
               </p>
             </div>
@@ -121,14 +121,14 @@ const BookmarksTab = () => {
                   transition={{ delay: i * 0.04, duration: 0.2 }}
                   className="flex items-center gap-3 px-5 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors group"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
                     <Icon
                       name={TYPE_ICONS[resource.type] || "fa-file"}
-                      className="text-sm text-petroleum dark:text-[#4DA8C4]"
+                      className="text-sm text-[var(--theme-emphasis)] dark:text-[#4DA8C4]"
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate group-hover:text-petroleum dark:group-hover:text-[#4DA8C4] transition-colors">
+                    <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate group-hover:text-[var(--theme-emphasis)] dark:group-hover:text-[#4DA8C4] transition-colors">
                       {resource.title}
                     </p>
                     {resource.duration && (
@@ -148,7 +148,7 @@ const BookmarksTab = () => {
                     </button>
                     <button
                       onClick={() => openResource(resource, resources)}
-                      className="px-3 py-1.5 bg-petroleum text-white text-xs font-bold rounded-lg hover:bg-petroleum-dark transition-colors shadow-sm"
+                      className="px-3 py-1.5 bg-[var(--theme-emphasis)] text-white text-xs font-bold rounded-lg hover:bg-[var(--theme-emphasis)]-dark transition-colors shadow-sm"
                     >
                       {t("ialab.bookmarks_open")}
                     </button>

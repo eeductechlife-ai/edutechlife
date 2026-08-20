@@ -8,7 +8,7 @@ const QuizTimer = forwardRef(function QuizTimer({ timeElapsed, suggestedTime, cu
   const timeWarning = timeElapsed > suggestedTime * 0.8;
 
   return (
-    <div ref={ref} className="bg-gradient-to-r from-petroleum to-corporate px-6 py-4 flex items-center justify-between z-50">
+    <div ref={ref} className="bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] px-6 py-4 flex items-center justify-between z-50">
       <button
         onClick={onClose}
         className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 px-2 sm:px-3 py-2 rounded-lg transition-colors"
@@ -39,7 +39,7 @@ const QuizTimer = forwardRef(function QuizTimer({ timeElapsed, suggestedTime, cu
             type="checkbox"
             checked={practiceMode}
             onChange={onTogglePractice}
-            className="w-3.5 h-3.5 rounded border-white/30 bg-white/10 text-petroleum focus:ring-petroleum focus:ring-offset-0"
+            className="w-3.5 h-3.5 rounded border-white/30 bg-white/10 text-[var(--theme-emphasis)] focus:ring-[var(--theme-emphasis)] focus:ring-offset-0"
           />
           <span className="hidden sm:inline text-[11px] font-medium text-white/80">{t('ialab.quiz.practice')}</span>
         </label>
@@ -50,7 +50,7 @@ const QuizTimer = forwardRef(function QuizTimer({ timeElapsed, suggestedTime, cu
           </span>
           <div className="w-16 sm:w-32 h-2 bg-white/20 rounded-full overflow-hidden">
             <div
-              className="h-full bg-petroleum transition-all duration-500"
+              className="h-full bg-[var(--theme-emphasis)] transition-all duration-500"
               style={{ width: `${((currentQuestion + 1) / totalQuestions) * 100}%` }}
             ></div>
           </div>

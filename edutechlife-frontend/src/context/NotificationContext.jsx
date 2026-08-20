@@ -76,54 +76,61 @@ export const NotificationProvider = ({ children }) => {
     let mounted = true;
 
     const setupChannel = () => {
-      channel = supabase
-        .channel("notification-changes")
-        .on(
-          "postgres_changes",
-          {
-            event: "INSERT",
-            schema: "public",
-            table: "notifications",
-            filter: `user_id=eq.${userId}`,
-          },
-          (payload) => {
-            setNotifications((prev) => [payload.new, ...prev]);
-          },
-        )
-        .on(
-          "postgres_changes",
-          {
-            event: "UPDATE",
-            schema: "public",
-            table: "notifications",
-            filter: `user_id=eq.${userId}`,
-          },
-          (payload) => {
-            setNotifications((prev) =>
-              prev.map((n) => (n.id === payload.new.id ? payload.new : n)),
-            );
-          },
-        )
-        .subscribe((status) => {
-          if (!mounted) return;
-          if (status === "CHANNEL_ERROR") {
-            console.warn("[NOTIFICATIONS] Realtime subscription error");
-            cleanup();
-            if (retryCount < MAX_RETRIES) {
-              retryCount++;
-              const delay = Math.min(1000 * Math.pow(2, retryCount), 30000);
-              retryTimer = setTimeout(setupChannel, delay);
-            } else {
-              console.warn(
-                "[NOTIFICATIONS] Max retries reached, falling back to polling",
+      try {
+        channel = supabase
+          .channel("notification-changes")
+          .on(
+            "postgres_changes",
+            {
+              event: "INSERT",
+              schema: "public",
+              table: "notifications",
+              filter: `user_id=eq.${userId}`,
+            },
+            (payload) => {
+              setNotifications((prev) => [payload.new, ...prev]);
+            },
+          )
+          .on(
+            "postgres_changes",
+            {
+              event: "UPDATE",
+              schema: "public",
+              table: "notifications",
+              filter: `user_id=eq.${userId}`,
+            },
+            (payload) => {
+              setNotifications((prev) =>
+                prev.map((n) => (n.id === payload.new.id ? payload.new : n)),
               );
-              pollingTimer = setInterval(fetchNotifications, 30000);
+            },
+          )
+          .subscribe((status) => {
+            if (!mounted) return;
+            if (status === "CHANNEL_ERROR") {
+              console.warn("[NOTIFICATIONS] Realtime subscription error");
+              cleanup();
+              if (retryCount < MAX_RETRIES) {
+                retryCount++;
+                const delay = Math.min(1000 * Math.pow(2, retryCount), 30000);
+                retryTimer = setTimeout(setupChannel, delay);
+              } else {
+                console.warn(
+                  "[NOTIFICATIONS] Max retries reached, falling back to polling",
+                );
+                pollingTimer = setInterval(fetchNotifications, 30000);
+              }
             }
-          }
-          if (status === "SUBSCRIBED") {
-            retryCount = 0;
-          }
-        });
+            if (status === "SUBSCRIBED") {
+              retryCount = 0;
+            }
+          });
+      } catch (err) {
+        console.warn("[NOTIFICATIONS] Realtime setup failed, using polling:", err?.message);
+        if (mounted) {
+          pollingTimer = setInterval(fetchNotifications, 30000);
+        }
+      }
     };
 
     const cleanup = () => {

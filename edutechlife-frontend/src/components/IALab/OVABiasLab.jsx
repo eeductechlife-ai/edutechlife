@@ -43,12 +43,12 @@ const BrainIcon = ({ className = "" }) => (
 const EdutechLogo = () => (
   <div className="flex items-center gap-2 select-none">
     <div className="relative w-9 h-9 flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-tr from-petroleum-dark to-corporate rounded-xl rotate-3 shadow-md"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] rounded-xl rotate-3 shadow-md"></div>
       <Brain className="w-5 h-5 text-white relative z-10" />
     </div>
     <div className="text-xl tracking-tighter flex items-center lowercase font-bold">
-      <span className="text-petroleum-dark">edu</span>
-      <span className="text-corporate">techlife</span>
+      <span className="text-[var(--theme-emphasis)]-dark">edu</span>
+      <span className="text-[var(--theme-primary)]">techlife</span>
     </div>
   </div>
 );
@@ -139,7 +139,7 @@ export default function OVABiasLab({ onComplete }) {
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
                 aria-current={activeSection === item.id ? "true" : undefined}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl ${FOCUS_RING} min-w-max md:min-w-0 ${activeSection === item.id ? "bg-gradient-to-r from-corporate to-petroleum-dark text-white font-semibold shadow-lg" : "text-slate-500 dark:text-slate-400 hover:bg-corporate/10 hover:text-petroleum"}`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl ${FOCUS_RING} min-w-max md:min-w-0 ${activeSection === item.id ? "bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)]-dark text-white font-semibold shadow-lg" : "text-slate-500 dark:text-slate-400 hover:bg-[var(--theme-primary)]/10 hover:text-[var(--theme-emphasis)]"}`}
               >
                 {item.icon}
                 <span className="text-sm md:text-base">
@@ -164,10 +164,10 @@ export default function OVABiasLab({ onComplete }) {
           className="flex-1 p-4 md:p-10 overflow-y-auto relative"
           style={{ maxHeight: "100vh" }}
         >
-          <div className="max-w-5xl mx-auto bg-white/85 dark:bg-slate-800/85 backdrop-blur-[20px] border border-corporate/15 shadow-[0_10px_40px_rgba(10,53,80,0.08)] rounded-3xl p-6 md:p-10 min-h-[80vh] flex flex-col relative z-10 border-t-4 border-t-corporate">
+          <div className="max-w-5xl mx-auto bg-white/85 dark:bg-slate-800/85 backdrop-blur-[20px] border border-[var(--theme-primary)]/15 shadow-[0_10px_40px_rgba(10,53,80,0.08)] rounded-3xl p-6 md:p-10 min-h-[80vh] flex flex-col relative z-10 border-t-4 border-t-[var(--theme-primary)]">
             {activeSection === "intro" && (
               <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
-                <h2 className="text-3xl md:text-4xl font-black text-petroleum-dark dark:text-slate-100 mb-6 font-montserrat">
+                <h2 className="text-3xl md:text-4xl font-black text-[var(--theme-emphasis)]-dark dark:text-slate-100 mb-6 font-montserrat">
                   {contentData.intro.title}
                 </h2>
                 <div className="w-full h-64 md:h-80 rounded-2xl mb-8 overflow-hidden shadow-xl border border-[#EAEAEA]">
@@ -181,7 +181,7 @@ export default function OVABiasLab({ onComplete }) {
                 <p className="text-lg text-slate-700 dark:text-slate-200 leading-relaxed">
                   {contentData.intro.text}
                 </p>
-                <div className="mt-6 p-6 bg-corporate/10 border-l-8 border-corporate rounded-r-2xl italic text-petroleum-dark dark:text-slate-100 font-medium">
+                <div className="mt-6 p-6 bg-[var(--theme-primary)]/10 border-l-8 border-[var(--theme-primary)] rounded-r-2xl italic text-[var(--theme-emphasis)]-dark dark:text-slate-100 font-medium">
                   "{contentData.intro.extended}"
                 </div>
               </div>
@@ -189,7 +189,7 @@ export default function OVABiasLab({ onComplete }) {
 
             {activeSection === "cap2" && (
               <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
-                <h2 className="text-3xl font-bold text-petroleum-dark dark:text-slate-100 mb-6 font-montserrat">
+                <h2 className="text-3xl font-bold text-[var(--theme-emphasis)]-dark dark:text-slate-100 mb-6 font-montserrat">
                   {contentData.cap2.title}
                 </h2>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
@@ -218,9 +218,9 @@ export default function OVABiasLab({ onComplete }) {
                       </ul>
                     </div>
                   </div>
-                  <div className="bg-gradient-to-br from-petroleum-dark to-[#0D1B2A] rounded-2xl p-6 text-white shadow-xl flex flex-col justify-center border-b-8 border-corporate">
+                  <div className="bg-gradient-to-br from-[var(--theme-emphasis)]-dark to-[#0D1B2A] rounded-2xl p-6 text-white shadow-xl flex flex-col justify-center border-b-8 border-[var(--theme-primary)]">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="p-3 bg-corporate rounded-xl">
+                      <div className="p-3 bg-[var(--theme-primary)] rounded-xl">
                         <Zap size={24} />
                       </div>
                       <h3 className="text-xl font-bold">
@@ -231,7 +231,7 @@ export default function OVABiasLab({ onComplete }) {
                       {contentData.cap2.toolDesc}
                     </p>
                     <div className="bg-white/10 rounded-xl p-4 border border-white/20">
-                      <p className="text-xs uppercase tracking-widest text-corporate font-bold mb-2">
+                      <p className="text-xs uppercase tracking-widest text-[var(--theme-primary)] font-bold mb-2">
                         {t("ova.biaslab.case_study")}
                       </p>
                       <p className="text-sm italic">
@@ -248,7 +248,7 @@ export default function OVABiasLab({ onComplete }) {
               activeSection === "cap3" ||
               activeSection === "cap4") && (
               <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
-                <h2 className="text-3xl font-bold text-petroleum-dark dark:text-slate-100 mb-6 font-montserrat">
+                <h2 className="text-3xl font-bold text-[var(--theme-emphasis)]-dark dark:text-slate-100 mb-6 font-montserrat">
                   {contentData[activeSection].title}
                 </h2>
                 <p className="text-base text-slate-600 dark:text-slate-300 mb-8">
@@ -262,10 +262,10 @@ export default function OVABiasLab({ onComplete }) {
                   ).map((item, idx) => (
                     <div
                       key={idx}
-                      className="p-6 bg-slate-50 dark:bg-slate-700/30 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-corporate transition-all group"
+                      className="p-6 bg-slate-50 dark:bg-slate-700/30 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-[var(--theme-primary)] transition-all group"
                     >
-                      <h4 className="font-bold text-petroleum-dark dark:text-slate-100 mb-2 flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-corporate group-hover:scale-150 transition-transform"></div>
+                      <h4 className="font-bold text-[var(--theme-emphasis)]-dark dark:text-slate-100 mb-2 flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[var(--theme-primary)] group-hover:scale-150 transition-transform"></div>
                         {item.name}
                       </h4>
                       <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
@@ -292,7 +292,7 @@ export default function OVABiasLab({ onComplete }) {
                 {matchedPairs.length < gameData.length ? (
                   <>
                     <div className="mb-8">
-                      <h2 className="text-3xl font-black text-petroleum-dark dark:text-slate-100 mb-2 font-montserrat">
+                      <h2 className="text-3xl font-black text-[var(--theme-emphasis)]-dark dark:text-slate-100 mb-2 font-montserrat">
                         {t("ova.biaslab.game_title")}
                       </h2>
                       <p className="text-slate-500 dark:text-slate-400">
@@ -307,7 +307,7 @@ export default function OVABiasLab({ onComplete }) {
                             disabled={matchedPairs.includes(item.id)}
                             onClick={() => setSelectedCase(item)}
                             aria-pressed={selectedCase?.id === item.id}
-                            className={`w-full p-4 text-left text-sm rounded-2xl border-2 ${FOCUS_RING} ${matchedPairs.includes(item.id) ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 text-emerald-700 dark:text-emerald-300 opacity-50" : selectedCase?.id === item.id ? "border-corporate bg-[#E0F7FA] shadow-md scale-105" : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate"} ${isError && selectedCase?.id === item.id ? "animate-[shake_0.4s_ease-in-out] border-rose-400 bg-rose-50 dark:bg-rose-900/20" : ""}`}
+                            className={`w-full p-4 text-left text-sm rounded-2xl border-2 ${FOCUS_RING} ${matchedPairs.includes(item.id) ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 text-emerald-700 dark:text-emerald-300 opacity-50" : selectedCase?.id === item.id ? "border-[var(--theme-primary)] bg-[#E0F7FA] shadow-md scale-105" : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-[var(--theme-primary)]"} ${isError && selectedCase?.id === item.id ? "animate-[shake_0.4s_ease-in-out] border-rose-400 bg-rose-50 dark:bg-rose-900/20" : ""}`}
                           >
                             {item.case}
                           </button>
@@ -321,7 +321,7 @@ export default function OVABiasLab({ onComplete }) {
                             onClick={() => setSelectedConcept(item)}
                             aria-pressed={selectedConcept?.id === item.id}
                             aria-label={item.concept}
-                            className={`w-full p-4 text-center font-bold rounded-2xl border-2 ${FOCUS_RING} ${matchedPairs.includes(item.id) ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 text-emerald-700 dark:text-emerald-300 opacity-50" : selectedConcept?.id === item.id ? "border-corporate bg-[#E0F7FA] shadow-md scale-105" : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate"} ${isError && selectedConcept?.id === item.id ? "animate-[shake_0.4s_ease-in-out] border-rose-400 bg-rose-50 dark:bg-rose-900/20" : ""}`}
+                            className={`w-full p-4 text-center font-bold rounded-2xl border-2 ${FOCUS_RING} ${matchedPairs.includes(item.id) ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 text-emerald-700 dark:text-emerald-300 opacity-50" : selectedConcept?.id === item.id ? "border-[var(--theme-primary)] bg-[#E0F7FA] shadow-md scale-105" : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-[var(--theme-primary)]"} ${isError && selectedConcept?.id === item.id ? "animate-[shake_0.4s_ease-in-out] border-rose-400 bg-rose-50 dark:bg-rose-900/20" : ""}`}
                           >
                             {item.concept}
                           </button>
@@ -343,7 +343,7 @@ export default function OVABiasLab({ onComplete }) {
                         setActiveSection("intro");
                         setMatchedPairs([]);
                       }}
-                      className={`mt-6 px-6 py-3 bg-gradient-to-r from-corporate to-petroleum-dark text-white rounded-xl font-bold shadow-md hover:shadow-lg ${FOCUS_RING}`}
+                      className={`mt-6 px-6 py-3 bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)]-dark text-white rounded-xl font-bold shadow-md hover:shadow-lg ${FOCUS_RING}`}
                     >
                       {t("ova.biaslab.back_to_start")}
                     </button>

@@ -117,7 +117,7 @@ export const StreamingMessageOptimized = ({
       <div className="max-w-[80%] rounded-2xl p-4 break-words overflow-wrap-anywhere bg-white border border-slate-200 shadow-sm">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center text-white text-xs font-bold">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center text-white text-xs font-bold">
               V
             </div>
           </div>
@@ -126,26 +126,26 @@ export const StreamingMessageOptimized = ({
               MAX
               {isAudioPlaying && (
                 <span className="inline-flex gap-0.5">
-                  <span className="w-1.5 h-1.5 bg-petroleum rounded-full animate-pulse"></span>
+                  <span className="w-1.5 h-1.5 bg-[var(--theme-emphasis)] rounded-full animate-pulse"></span>
                   <span
-                    className="w-1.5 h-1.5 bg-petroleum rounded-full animate-pulse"
+                    className="w-1.5 h-1.5 bg-[var(--theme-emphasis)] rounded-full animate-pulse"
                     style={{ animationDelay: "0.2s" }}
                   ></span>
                   <span
-                    className="w-1.5 h-1.5 bg-petroleum rounded-full animate-pulse"
+                    className="w-1.5 h-1.5 bg-[var(--theme-emphasis)] rounded-full animate-pulse"
                     style={{ animationDelay: "0.4s" }}
                   ></span>
                 </span>
               )}
             </div>
-            <div className="prose prose-sm max-w-none text-petroleum-darker">
+            <div className="prose prose-sm max-w-none text-[var(--theme-emphasis)]-darker">
               {fullText.split("\n").map((line, i) => (
                 <p key={i} className="mb-2 last:mb-0">
                   {line}
                   {i === fullText.split("\n").length - 1 &&
                     isStreaming &&
                     showCursor && (
-                      <span className="inline-block w-1.5 h-4 bg-corporate ml-0.5 animate-pulse align-text-bottom" />
+                      <span className="inline-block w-1.5 h-4 bg-[var(--theme-primary)] ml-0.5 animate-pulse align-text-bottom" />
                     )}
                 </p>
               ))}

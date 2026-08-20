@@ -51,8 +51,8 @@ const ResourceSelector = ({
       <div className="px-4 py-3 border-b border-slate-200/60 bg-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
-              <Icon name="fa-layer-group" className="text-petroleum w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 flex items-center justify-center">
+              <Icon name="fa-layer-group" className="text-[var(--theme-emphasis)] w-4 h-4" />
             </div>
             <h3 className="font-semibold text-slate-800 text-sm">{t('ialab.resource_selector.resources_title')}</h3>
           </div>
@@ -70,7 +70,7 @@ const ResourceSelector = ({
           <div className="px-3 py-2 border-b border-slate-200/60 bg-white flex flex-wrap gap-1.5">
             <button onClick={() => setTypeFilter(null)} className={cn(
               "px-2 py-1 rounded-md text-xs font-medium transition-colors",
-              typeFilter === null ? "bg-petroleum text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              typeFilter === null ? "bg-[var(--theme-emphasis)] text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             )}>{t('ialab.tab_all')}</button>
             {types.map(type => {
               const cfg = RESOURCE_TYPE_CONFIG[type] || { label: type, color: "#64748B", bg: "bg-slate-50" };
@@ -102,10 +102,10 @@ const ResourceSelector = ({
               className={cn(
                 "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-300 text-left",
                 isActive
-                  ? "bg-white border border-slate-200/60 border-l-4 border-l-petroleum shadow-sm"
+                  ? "bg-white border border-slate-200/60 border-l-4 border-l-[var(--theme-emphasis)] shadow-sm"
                   : isCompleted
                     ? "bg-emerald-50/40 border border-emerald-200/60 border-l-4 border-l-emerald-400 shadow-sm"
-                    : "bg-white border border-slate-200/60 shadow-sm hover:shadow hover:border-l-corporate hover:bg-slate-50"
+                    : "bg-white border border-slate-200/60 shadow-sm hover:shadow hover:border-l-[var(--theme-primary)] hover:bg-slate-50"
               )}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
@@ -126,7 +126,7 @@ const ResourceSelector = ({
               <div className="flex-1 min-w-0">
                 <div className={cn(
                   "text-sm font-semibold truncate transition-colors duration-300 flex items-center gap-2",
-                  isActive ? "text-petroleum" : isCompleted ? "text-emerald-700" : "text-slate-800"
+                  isActive ? "text-[var(--theme-emphasis)]" : isCompleted ? "text-emerald-700" : "text-slate-800"
                 )}>
                   {resource.title}
                   {isCompleted && (
@@ -148,7 +148,7 @@ const ResourceSelector = ({
 
               {isActive && (
                 <div className="flex-shrink-0">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
                     <Icon name="fa-check" className="text-white w-3 h-3" />
                   </div>
                 </div>
@@ -162,9 +162,9 @@ const ResourceSelector = ({
       <div className="px-4 py-2 border-t border-slate-200/60 bg-white">
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'bg-emerald-500' : 'bg-corporate animate-pulse'}`}></div>
+            <div className={`w-2 h-2 rounded-full ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'bg-emerald-500' : 'bg-[var(--theme-primary)] animate-pulse'}`}></div>
             <span className="text-slate-600">{completedIds.includes(resources[activeResourceIndex]?.id) ? t('ialab.resource_selector.status_completed') : t('ialab.resource_selector.status_active')}</span>
-            <span className={`font-medium truncate max-w-[200px] ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'text-emerald-600' : 'text-petroleum'}`}>
+            <span className={`font-medium truncate max-w-[200px] ${completedIds.includes(resources[activeResourceIndex]?.id) ? 'text-emerald-600' : 'text-[var(--theme-emphasis)]'}`}>
               {resources[activeResourceIndex]?.title || t('ialab.resource_selector.none')}
             </span>
           </div>

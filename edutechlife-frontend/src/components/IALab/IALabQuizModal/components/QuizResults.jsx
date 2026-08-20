@@ -282,7 +282,7 @@ export function QuizResults({
         <div className="flex flex-col gap-3">
           <button
             onClick={onClose}
-            className="w-full py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 font-medium"
+            className="w-full py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 font-medium"
           >
             {t("ialab.quiz.back_to_module")}
           </button>

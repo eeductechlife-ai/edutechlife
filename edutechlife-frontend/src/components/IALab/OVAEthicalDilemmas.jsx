@@ -116,12 +116,12 @@ export default function OVAEthicalDilemmas({ onComplete }) {
         <div className="p-6 text-center border-b border-cyan-50 dark:border-gray-700">
           <div className="flex items-center gap-2 justify-center select-none">
             <div className="relative w-9 h-9 flex items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-tr from-corporate to-petroleum rounded-xl rotate-3 shadow-md"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-[var(--theme-primary)] to-[var(--theme-emphasis)] rounded-xl rotate-3 shadow-md"></div>
               <Brain className="w-5 h-5 text-white relative z-10" />
             </div>
             <div className="text-xl tracking-tighter flex items-center lowercase font-bold">
-              <span className="text-corporate">edu</span>
-              <span className="text-petroleum">techlife</span>
+              <span className="text-[var(--theme-primary)]">edu</span>
+              <span className="text-[var(--theme-emphasis)]">techlife</span>
             </div>
           </div>
           <p className="text-[10px] uppercase mt-2 text-slate-600 dark:text-slate-300 font-bold tracking-[0.2em]">
@@ -141,7 +141,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                 setSelectedAnswer(null);
                 setShowFeedback(false);
               }}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all min-w-max md:min-w-0 ${activeSection === item.id ? "bg-gradient-to-r from-corporate to-petroleum text-white font-semibold shadow-lg" : "text-slate-500 dark:text-slate-400 hover:bg-cyan-50 hover:text-petroleum"}`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all min-w-max md:min-w-0 ${activeSection === item.id ? "bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] text-white font-semibold shadow-lg" : "text-slate-500 dark:text-slate-400 hover:bg-cyan-50 hover:text-[var(--theme-emphasis)]"}`}
             >
               {item.icon}
               <span className="text-sm md:text-base">
@@ -156,10 +156,10 @@ export default function OVAEthicalDilemmas({ onComplete }) {
         className="flex-1 p-4 md:p-10 overflow-y-auto relative"
         style={{ maxHeight: "100vh" }}
       >
-        <div className="max-w-5xl mx-auto bg-white/85 dark:bg-slate-800/85 backdrop-blur-[20px] border border-corporate/15 shadow-xl rounded-3xl p-6 md:p-10 min-h-[80vh] flex flex-col relative z-10 border-t-4 border-t-corporate">
+        <div className="max-w-5xl mx-auto bg-white/85 dark:bg-slate-800/85 backdrop-blur-[20px] border border-[var(--theme-primary)]/15 shadow-xl rounded-3xl p-6 md:p-10 min-h-[80vh] flex flex-col relative z-10 border-t-4 border-t-[var(--theme-primary)]">
           {activeSection === "intro" && (
             <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
-              <h2 className="text-3xl md:text-4xl font-black text-petroleum dark:text-slate-100 mb-6 font-montserrat">
+              <h2 className="text-3xl md:text-4xl font-black text-[var(--theme-emphasis)] dark:text-slate-100 mb-6 font-montserrat">
                 {t(
                   "ova.ethical_dilemmas.intro_title",
                   "Dilemas Éticos en Inteligencia Artificial",
@@ -179,7 +179,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                   "La inteligencia artificial plantea dilemas éticos que no tienen respuestas fáciles. En este laboratorio, enfrentarás situaciones reales donde deberás elegir el camino más ético.",
                 )}
               </p>
-              <div className="mt-6 p-6 bg-cyan-50 dark:bg-cyan-900/20 border-l-8 border-corporate rounded-r-2xl italic text-petroleum dark:text-slate-100 font-medium">
+              <div className="mt-6 p-6 bg-cyan-50 dark:bg-cyan-900/20 border-l-8 border-[var(--theme-primary)] rounded-r-2xl italic text-[var(--theme-emphasis)] dark:text-slate-100 font-medium">
                 &ldquo;
                 {t(
                   "ova.ethical_dilemmas.intro_quote",
@@ -190,7 +190,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
               <div className="mt-8 flex gap-4">
                 <button
                   onClick={() => setActiveSection("dilemmas")}
-                  className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-corporate to-petroleum text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center gap-2"
+                  className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center gap-2"
                 >
                   <Scale size={18} />
                   {t("ova.ethical_dilemmas.start_btn", "Comenzar Dilemas")}
@@ -202,7 +202,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
           {activeSection === "dilemmas" && (
             <div className="animate-[fadeIn_0.6s_ease-out_forwards] flex flex-col h-full">
                   <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-black text-petroleum dark:text-slate-100 font-montserrat">
+                <h2 className="text-2xl font-black text-[var(--theme-emphasis)] dark:text-slate-100 font-montserrat">
                   {t("ova.ethical_dilemmas.dilemmas_title", "Dilemas Éticos")}
                 </h2>
                 <div className="flex items-center gap-3">
@@ -214,7 +214,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                       <div
                         key={i}
                         aria-hidden="true"
-                        className={`w-2.5 h-2.5 rounded-full transition-all ${answers[i]?.correct ? "bg-emerald-400" : answers[i] ? "bg-rose-400" : i === currentDilemma ? "bg-corporate scale-125" : "bg-slate-200 dark:bg-slate-600"}`}
+                        className={`w-2.5 h-2.5 rounded-full transition-all ${answers[i]?.correct ? "bg-emerald-400" : answers[i] ? "bg-rose-400" : i === currentDilemma ? "bg-[var(--theme-primary)] scale-125" : "bg-slate-200 dark:bg-slate-600"}`}
                       />
                     ))}
                   </div>
@@ -252,8 +252,8 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                               : showResult && !isCorrect
                                 ? "bg-rose-50 dark:bg-rose-900/20 border-rose-300 text-rose-900 dark:text-rose-100"
                                 : isSelected
-                                  ? "border-corporate bg-cyan-50 dark:bg-slate-700 shadow-md"
-                                  : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate hover:bg-cyan-50/50"
+                                  ? "border-[var(--theme-primary)] bg-cyan-50 dark:bg-slate-700 shadow-md"
+                                  : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-[var(--theme-primary)] hover:bg-cyan-50/50"
                           }
                         `}
                       >
@@ -267,7 +267,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                                   ? "bg-slate-200 dark:bg-slate-600 text-slate-500"
                                   : showResult && isSelected
                                     ? "bg-rose-500 text-white"
-                                    : "bg-corporate/20 text-petroleum dark:text-slate-300"
+                                    : "bg-[var(--theme-primary)]/20 text-[var(--theme-emphasis)] dark:text-slate-300"
                             }`}
                           >
                             {showResult && isCorrect ? (
@@ -328,7 +328,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                 {showFeedback && currentDilemma < totalDilemmas - 1 && (
                   <button
                     onClick={nextDilemma}
-                    className="mt-6 px-8 py-3 rounded-xl bg-gradient-to-r from-corporate to-petroleum text-white font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+                    className="mt-6 px-8 py-3 rounded-xl bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] text-white font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all"
                   >
                     {t("ova.ethical_dilemmas.next_btn", "Siguiente Dilema")}
                   </button>
@@ -349,7 +349,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                 {currentDilemma > 0 && !showFeedback && (
                   <button
                     onClick={prevDilemma}
-                    className="mt-4 text-sm text-slate-500 dark:text-slate-400 hover:text-petroleum transition-colors"
+                    className="mt-4 text-sm text-slate-500 dark:text-slate-400 hover:text-[var(--theme-emphasis)] transition-colors"
                   >
                     &larr; {t("ova.ethical_dilemmas.prev_btn", "Anterior")}
                   </button>
@@ -360,7 +360,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
 
           {activeSection === "principles" && (
             <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
-              <h2 className="text-3xl font-black text-petroleum dark:text-slate-100 mb-6 font-montserrat">
+              <h2 className="text-3xl font-black text-[var(--theme-emphasis)] dark:text-slate-100 mb-6 font-montserrat">
                 {t(
                   "ova.ethical_dilemmas.principles_title",
                   "Principios de IA Ética",
@@ -415,14 +415,14 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                   return (
                     <div
                       key={item.id}
-                      className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-corporate/15 shadow-md rounded-xl overflow-hidden"
+                      className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-[var(--theme-primary)]/15 shadow-md rounded-xl overflow-hidden"
                     >
                       <button
                         onClick={() =>
                           setOpenAccordion(isOpen ? null : item.id)
                         }
                         aria-expanded={isOpen}
-                        className="w-full text-left p-4 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 flex justify-between items-center font-bold text-petroleum dark:text-slate-100 text-base"
+                        className="w-full text-left p-4 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 flex justify-between items-center font-bold text-[var(--theme-emphasis)] dark:text-slate-100 text-base"
                       >
                         <span>
                           <span className="mr-2">{item.icon}</span> {item.title}
@@ -461,7 +461,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                     setShowFeedback(false);
                     setAnswers({});
                   }}
-                  className="mt-4 px-6 py-3 bg-gradient-to-r from-corporate to-petroleum text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all"
+                  className="mt-4 px-6 py-3 bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all"
                 >
                   {t("ova.ethical_dilemmas.back_to_start", "Volver al Inicio")}
                 </button>

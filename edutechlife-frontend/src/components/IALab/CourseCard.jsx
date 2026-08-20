@@ -40,7 +40,7 @@ const CourseCard = ({ course, isSignedIn }) => {
     <ErrorBoundary>
     <motion.div
       variants={fadeInUp}
-      className="group relative bg-white border border-petroleum/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-fit"
+      className="group relative bg-white border border-[var(--theme-emphasis)]/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-fit"
       whileHover={shouldReduceMotion ? {} : { y: -6, scale: 1.015 }}
       whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
@@ -109,7 +109,7 @@ const CourseCard = ({ course, isSignedIn }) => {
       <div className="p-4 flex-1 flex flex-col">
         <div className="flex flex-wrap gap-1.5 mb-3">
           {course.features.map((f, i) => (
-            <span key={i} className="px-2 py-0.5 bg-petroleum/5 text-petroleum text-[10px] md:text-xs font-semibold rounded-md border border-petroleum/10">
+            <span key={i} className="px-2 py-0.5 bg-[var(--theme-emphasis)]/5 text-[var(--theme-emphasis)] text-[10px] md:text-xs font-semibold rounded-md border border-[var(--theme-emphasis)]/10">
               {f}
             </span>
           ))}
@@ -119,7 +119,7 @@ const CourseCard = ({ course, isSignedIn }) => {
           {course.description}
         </p>
 
-        <div className="flex items-center gap-3 mb-3 text-xs text-petroleum">
+        <div className="flex items-center gap-3 mb-3 text-xs text-[var(--theme-emphasis)]">
           <span className="flex items-center gap-1">
             <Icon name="fa-book-open" className="w-3 h-3 text-primary-light" />
             {t('ialab.course_card.modules', { count: course.modules })}
@@ -130,7 +130,7 @@ const CourseCard = ({ course, isSignedIn }) => {
               {t('ialab.course_card.certificate')}
             </span>
           )}
-          <span className="ml-auto px-2 py-0.5 bg-primary-light/10 rounded text-[10px] md:text-xs font-bold text-petroleum uppercase tracking-wider">
+          <span className="ml-auto px-2 py-0.5 bg-primary-light/10 rounded text-[10px] md:text-xs font-bold text-[var(--theme-emphasis)] uppercase tracking-wider">
             {course.level}
           </span>
         </div>
@@ -148,11 +148,11 @@ const CourseCard = ({ course, isSignedIn }) => {
                   animated={false}
                 />
               </span>
-              <span className="font-semibold text-petroleum">{course.progress}%</span>
+              <span className="font-semibold text-[var(--theme-emphasis)]">{course.progress}%</span>
             </div>
-            <div className="h-1.5 bg-petroleum/10 rounded-full overflow-hidden">
+            <div className="h-1.5 bg-[var(--theme-emphasis)]/10 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full"
+                className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full"
                 initial={{ width: 0 }}
                 whileInView={{ width: `${course.progress}%` }}
                 viewport={{ once: true }}

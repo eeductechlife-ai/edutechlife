@@ -48,7 +48,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
         if (moduleData.objectiveHighlight) {
             return (
                 <>
-                    {moduleData.objective}<span className="font-semibold text-petroleum">{moduleData.objectiveHighlight}</span>{moduleData.objectiveSuffix}
+                    {moduleData.objective}<span className="font-semibold theme-text-emphasis">{moduleData.objectiveHighlight}</span>{moduleData.objectiveSuffix}
                 </>
             );
         }
@@ -56,32 +56,33 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
     };
 
     return (
-        <motion.div 
+        <motion.div
             aria-live="polite" aria-label={`Información del módulo ${activeMod}`}
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.2 }}
             className={cn(
-                "relative z-10 bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden dark:bg-slate-800 dark:border-slate-700/60 hover:border-petroleum/20 dark:hover:border-petroleum/30",
+                "relative z-10 rounded-2xl border theme-border shadow-sm overflow-hidden hover:theme-border-emphasis-20",
                 className
             )}
+            style={{ background: 'var(--theme-surface)' }}
             {...rest}
         >
             {/* Elementos decorativos de fondo */}
-            <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-petroleum/6 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
-            <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-gradient-to-tr from-petroleum/4 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-[var(--theme-primary)]/6 to-[var(--theme-emphasis)]/4 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-gradient-to-tr from-[var(--theme-primary)]/4 to-[var(--theme-emphasis)]/4 rounded-full blur-2xl pointer-events-none"></div>
 
             {/* Elemento decorativo de borde superior */}
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 theme-bg-emphasis rounded-t-2xl" />
 
             {/* Contenido principal */}
             <div className="p-5 md:p-8">
                 {/* Header con objetivo */}
                 <div className="flex items-start gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-petroleum to-petroleum-dark shadow-md shadow-petroleum/15 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-emphasis)] shadow-md shadow-[var(--theme-emphasis)]/15 flex items-center justify-center flex-shrink-0">
                         <Icon name="fa-bullseye" className="text-base text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
-<h4 className="text-xs font-bold text-petroleum uppercase tracking-wider font-montserrat">
+<h4 className="text-xs font-bold theme-text-emphasis uppercase tracking-wider font-montserrat">
                               {t('ialab.module_info.objective_title')}
                           </h4>
                           <p className="text-sm text-slate-600 leading-relaxed mt-1 dark:text-slate-300">
@@ -91,7 +92,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                 </div>
 
                 {/* Divider sutil */}
-                <div className="h-px bg-gradient-to-r from-transparent via-petroleum/10 to-transparent mb-4"></div>
+                <div className="h-px bg-gradient-to-r from-transparent via-[var(--theme-primary)]/10 to-transparent mb-4"></div>
 
                 {/* Lo que aprenderás */}
                 <div>
@@ -109,7 +110,7 @@ const ModuleInfoSection = ({ className = '', ...rest }) => {
                                 <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm transition-all duration-300 ${
                                   isModuleCompleted
                                     ? 'bg-emerald-500'
-                                    : 'bg-gradient-to-br from-petroleum to-corporate'
+                                    : 'theme-bg-emphasis'
                                 }`}>
                                     <Icon
                                         name={isModuleCompleted ? 'fa-check' : point.icon}

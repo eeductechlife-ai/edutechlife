@@ -86,7 +86,7 @@ const GeminiStep2 = ({
         className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
             <Icon name="fa-file-text" className="text-white text-lg" />
           </div>
           <div>
@@ -154,7 +154,7 @@ const GeminiStep2 = ({
               transition={{ duration: 0.3 }}
               className={`rounded-xl border-2 transition-all duration-200 ${
                 source.isRelevant
-                  ? "border-corporate/40 dark:border-corporate-dark/40 bg-corporate/[0.03] dark:bg-corporate-dark/5 shadow-md shadow-corporate/5 dark:shadow-corporate-dark/10"
+                  ? "border-[var(--theme-primary)]/40 dark:border-[var(--theme-primary)]-dark/40 bg-[var(--theme-primary)]/[0.03] dark:bg-[var(--theme-primary)]-dark/5 shadow-md shadow-[var(--theme-primary)]/5 dark:shadow-[var(--theme-primary)]-dark/10"
                   : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600"
               }`}
             >
@@ -196,9 +196,9 @@ const GeminiStep2 = ({
                         <div
                           className={`w-11 h-6 rounded-full peer transition-colors ${
                             source.isRelevant
-                              ? "bg-corporate dark:bg-corporate-dark"
+                              ? "bg-[var(--theme-primary)] dark:bg-[var(--theme-primary)]-dark"
                               : "bg-slate-300 dark:bg-slate-600"
-                          } peer-focus:ring-2 peer-focus:ring-corporate/30 dark:peer-focus:ring-corporate-dark/30`}
+                          } peer-focus:ring-2 peer-focus:ring-[var(--theme-primary)]/30 dark:peer-focus:ring-[var(--theme-primary)]-dark/30`}
                         >
                           <div
                             className={`w-5 h-5 bg-white rounded-full shadow-sm transition-transform mt-0.5 ${

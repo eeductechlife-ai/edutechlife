@@ -22,8 +22,8 @@ const ValerioChallengeIntro = ({ moduleId, onStart, t, locale: localeProp }) => 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] px-6 py-12">
       <div className="relative mb-8">
-        <div className="w-28 h-28 rounded-full bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-lg shadow-corporate/20">
+        <div className="w-28 h-28 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 flex items-center justify-center">
+          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-lg shadow-[var(--theme-primary)]/20">
             <Icon name="fa-robot" className="text-white text-4xl" />
           </div>
         </div>
@@ -35,7 +35,7 @@ const ValerioChallengeIntro = ({ moduleId, onStart, t, locale: localeProp }) => 
       <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-3 text-center">
         {t('ialab.challenge.valerio_intro_title')}
       </h2>
-      <p className="text-sm font-medium text-corporate mb-6 text-center">
+      <p className="text-sm font-medium text-[var(--theme-primary)] mb-6 text-center">
         {t('ialab.challenge.valerio_intro_subtitle')}
       </p>
 
@@ -59,21 +59,21 @@ const ValerioChallengeIntro = ({ moduleId, onStart, t, locale: localeProp }) => 
       </div>
 
       <div className="grid grid-cols-3 gap-4 max-w-lg w-full mb-8">
-        <div className="bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl p-4 text-center border border-petroleum/10">
-          <Icon name="fa-brain" className="text-corporate text-xl mb-2 mx-auto" />
-          <p className="text-[10px] font-semibold text-petroleum dark:text-slate-300 uppercase tracking-wider">
+        <div className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-xl p-4 text-center border border-[var(--theme-emphasis)]/10">
+          <Icon name="fa-brain" className="text-[var(--theme-primary)] text-xl mb-2 mx-auto" />
+          <p className="text-[10px] font-semibold text-[var(--theme-emphasis)] dark:text-slate-300 uppercase tracking-wider">
             {t('ialab.challenge.valerio_label_apply')}
           </p>
         </div>
-        <div className="bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl p-4 text-center border border-petroleum/10">
+        <div className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-xl p-4 text-center border border-[var(--theme-emphasis)]/10">
           <Icon name="fa-star" className="text-amber-500 text-xl mb-2 mx-auto" />
-          <p className="text-[10px] font-semibold text-petroleum dark:text-slate-300 uppercase tracking-wider">
+          <p className="text-[10px] font-semibold text-[var(--theme-emphasis)] dark:text-slate-300 uppercase tracking-wider">
             {t('ialab.challenge.valerio_label_practice')}
           </p>
         </div>
-        <div className="bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl p-4 text-center border border-petroleum/10">
+        <div className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-xl p-4 text-center border border-[var(--theme-emphasis)]/10">
           <Icon name="fa-trophy" className="text-amber-500 text-xl mb-2 mx-auto" />
-          <p className="text-[10px] font-semibold text-petroleum dark:text-slate-300 uppercase tracking-wider">
+          <p className="text-[10px] font-semibold text-[var(--theme-emphasis)] dark:text-slate-300 uppercase tracking-wider">
             {t('ialab.challenge.valerio_label_challenge')}
           </p>
         </div>
@@ -81,7 +81,7 @@ const ValerioChallengeIntro = ({ moduleId, onStart, t, locale: localeProp }) => 
 
       <button
         onClick={onStart}
-        className="px-10 py-4 bg-gradient-to-r from-petroleum to-corporate text-white font-bold text-lg rounded-xl hover:shadow-lg hover:shadow-corporate/25 transition-all duration-300 active:scale-[0.98] flex items-center gap-3"
+        className="px-10 py-4 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white font-bold text-lg rounded-xl hover:shadow-lg hover:shadow-[var(--theme-primary)]/25 transition-all duration-300 active:scale-[0.98] flex items-center gap-3"
       >
         <Icon name="fa-play-circle" className="text-xl" />
         {t('ialab.challenge.valerio_start')}

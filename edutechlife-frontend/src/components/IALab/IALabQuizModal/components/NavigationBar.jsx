@@ -25,7 +25,7 @@ export function NavigationBar({ currentQuestion, totalQuestions, hasAnsweredCurr
         <button
           onClick={onNext}
           disabled={!hasAnsweredCurrent}
-          className="px-5 py-2.5 min-h-[44px] bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="px-5 py-2.5 min-h-[44px] bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           <span className="text-sm font-medium">{t('ialab.quiz.next')}</span>
           <Icon name="fa-arrow-right" className="text-sm hidden sm:inline" aria-hidden="true" />

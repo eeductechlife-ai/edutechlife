@@ -14,7 +14,7 @@ const ValerioPanelHeader = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div className="sticky top-0 bg-gradient-to-r from-petroleum to-corporate text-white p-6 rounded-t-2xl">
+    <div className="sticky top-0 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white p-6 rounded-t-2xl">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
           <img

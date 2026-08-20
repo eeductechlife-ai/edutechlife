@@ -15,7 +15,7 @@ const ValerioQuickActions = ({ quickActions, onAction, disabled }) => {
           {t("ialab.valerio.quick_actions_title")}
         </h3>
         {hasLessonContext && (
-          <span className="text-[10px] text-corporate font-medium px-2 py-0.5 rounded-full bg-corporate/5">
+          <span className="text-[10px] text-[var(--theme-primary)] font-medium px-2 py-0.5 rounded-full bg-[var(--theme-primary)]/5">
             {["en", "pt"].includes(locale) ? "In-lesson" : "En lección"}
           </span>
         )}
@@ -26,9 +26,9 @@ const ValerioQuickActions = ({ quickActions, onAction, disabled }) => {
             key={action.id}
             onClick={() => onAction(action)}
             disabled={disabled}
-            className="flex items-center gap-2 p-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-sm text-slate-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate"
+            className="flex items-center gap-2 p-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-sm text-slate-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)]"
           >
-            <Icon name={action.icon} className="text-corporate" />
+            <Icon name={action.icon} className="text-[var(--theme-primary)]" />
             <span className="text-left">{action.label}</span>
           </button>
         ))}

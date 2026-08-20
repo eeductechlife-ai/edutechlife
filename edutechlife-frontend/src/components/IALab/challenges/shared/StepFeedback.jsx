@@ -29,7 +29,7 @@ const StepFeedback = ({ completed, total, hints = [], t }) => {
             <div className="flex items-center gap-2">
               <div className="flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-corporate rounded-full transition-all duration-500"
+                  className="h-full bg-[var(--theme-primary)] rounded-full transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>

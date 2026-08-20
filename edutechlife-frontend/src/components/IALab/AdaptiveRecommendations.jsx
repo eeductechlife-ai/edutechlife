@@ -125,11 +125,11 @@ const AdaptiveRecommendations = ({
   return (
     <div className={`w-full ${className}`}>
       <div className="flex items-center gap-2 mb-3">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-corporate to-petroleum flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-emphasis)] flex items-center justify-center">
           <Icon name="fa-wand-magic-sparkles" className="text-white text-sm" />
         </div>
         <div>
-          <h3 className="text-sm font-bold text-petroleum dark:text-white">
+          <h3 className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-white">
             {t("ialab.adaptive.title")}
           </h3>
           <p className="text-[10px] text-gray-500 dark:text-gray-400">
@@ -164,7 +164,7 @@ const AdaptiveRecommendations = ({
                   >
                     {t(config.label)}
                   </div>
-                  <div className="text-xs font-semibold text-petroleum dark:text-white truncate">
+                  <div className="text-xs font-semibold text-[var(--theme-emphasis)] dark:text-white truncate">
                     {rec.itemId}
                   </div>
                   <div className="text-[10px] text-gray-500 dark:text-gray-400 truncate">

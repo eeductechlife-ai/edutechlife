@@ -94,7 +94,7 @@ const SynthesizerInput = memo(({
             FORUM_EFFECTS.TRANSITION_ALL,
             FORUM_EFFECTS.HOVER_SCALE,
             "flex items-center justify-center gap-2",
-            "focus:outline-none focus:ring-2 focus:ring-corporate focus:ring-offset-2",
+            "focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)] focus:ring-offset-2",
             "disabled:opacity-70 disabled:cursor-not-allowed",
             loading && "opacity-70 cursor-not-allowed"
           )}

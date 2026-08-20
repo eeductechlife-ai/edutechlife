@@ -30,7 +30,7 @@ const IALabForumRichEditor = ({ placeholder, onSubmit, buttonLabel, compact, onC
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder || t('ialab.forum.rich_editor.default_placeholder')}
-          className={`w-full px-3 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-corporate/20 focus:border-corporate/30 transition-all resize-none ${
+          className={`w-full px-3 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)]/20 focus:border-[var(--theme-primary)]/30 transition-all resize-none ${
             compact ? 'min-h-[60px]' : 'min-h-[80px]'
           }`}
           maxLength={2000}
@@ -57,7 +57,7 @@ const IALabForumRichEditor = ({ placeholder, onSubmit, buttonLabel, compact, onC
           <button
             type="submit"
             disabled={!content.trim() || isSubmitting}
-            className={`px-4 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-petroleum to-corporate text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-sm ${
+            className={`px-4 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-sm ${
               compact ? 'text-[11px]' : 'text-xs'
             }`}
           >

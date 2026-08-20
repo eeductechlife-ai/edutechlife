@@ -409,7 +409,7 @@ const RATING_ACTIONS = [
   {
     rating: 3,
     labelKey: "flashcard.rating_easy",
-    className: "border-petroleum/30 text-petroleum hover:bg-petroleum/5",
+    className: "border-[var(--theme-emphasis)]/30 text-[var(--theme-emphasis)] hover:bg-[var(--theme-emphasis)]/5",
     icon: "fa-rocket",
   },
 ];
@@ -483,22 +483,22 @@ export function FlashcardArena({ moduleId }) {
   if (allReviewed) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-        <div className="w-16 h-16 rounded-2xl bg-petroleum/10 flex items-center justify-center mb-4">
+        <div className="w-16 h-16 rounded-2xl bg-[var(--theme-emphasis)]/10 flex items-center justify-center mb-4">
           <Icon
             name="fa-check"
-            className="text-petroleum text-3xl"
+            className="text-[var(--theme-emphasis)] text-3xl"
             aria-hidden="true"
           />
         </div>
-        <h3 className="text-lg font-bold text-petroleum">
+        <h3 className="text-lg font-bold text-[var(--theme-emphasis)]">
           {t("flashcard.mastered_title")}
         </h3>
-        <p className="text-sm text-petroleum/70 mt-1 mb-4">
+        <p className="text-sm text-[var(--theme-emphasis)]/70 mt-1 mb-4">
           {t("flashcard.completed_desc", { count: allCards.length })}
         </p>
         <button
           onClick={resetCards}
-          className="px-4 py-2 rounded-xl bg-petroleum/10 text-petroleum text-sm font-semibold hover:bg-petroleum/20 transition-colors"
+          className="px-4 py-2 rounded-xl bg-[var(--theme-emphasis)]/10 text-[var(--theme-emphasis)] text-sm font-semibold hover:bg-[var(--theme-emphasis)]/20 transition-colors"
         >
           <Icon name="fa-rotate" className="mr-2" aria-hidden="true" />
           {t("flashcard.repeat_all")}
@@ -510,7 +510,7 @@ export function FlashcardArena({ moduleId }) {
   if (!currentCard) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-        <p className="text-sm text-petroleum/70">{t("flashcard.no_cards")}</p>
+        <p className="text-sm text-[var(--theme-emphasis)]/70">{t("flashcard.no_cards")}</p>
       </div>
     );
   }
@@ -518,14 +518,14 @@ export function FlashcardArena({ moduleId }) {
   return (
     <div className="max-w-lg mx-auto">
       <div
-        className="flex items-center justify-between text-sm text-petroleum/70 mb-4"
+        className="flex items-center justify-between text-sm text-[var(--theme-emphasis)]/70 mb-4"
         role="status"
         aria-live="polite"
       >
         <span className="flex items-center gap-1.5">
           <Icon
             name="fa-layer-group"
-            className="text-corporate"
+            className="text-[var(--theme-primary)]"
             aria-hidden="true"
           />
           {t("flashcard.progress", {
@@ -534,7 +534,7 @@ export function FlashcardArena({ moduleId }) {
           })}
         </span>
         <span className="flex items-center gap-1.5">
-          <Icon name="fa-clock" className="text-petroleum" aria-hidden="true" />
+          <Icon name="fa-clock" className="text-[var(--theme-emphasis)]" aria-hidden="true" />
           {t("flashcard.remaining", {
             count: sortedCards.length - currentIndex - 1,
           })}
@@ -580,13 +580,13 @@ export function FlashcardArena({ moduleId }) {
                 transition: "transform 400ms ease-in-out",
               }}
             >
-              <div className="absolute inset-0 bg-white border-2 border-petroleum/15 rounded-2xl shadow-sm p-6 flex items-center justify-center ialab-backface-hidden">
-                <p className="text-lg font-medium text-petroleum text-center leading-relaxed">
+              <div className="absolute inset-0 bg-white border-2 border-[var(--theme-emphasis)]/15 rounded-2xl shadow-sm p-6 flex items-center justify-center ialab-backface-hidden">
+                <p className="text-lg font-medium text-[var(--theme-emphasis)] text-center leading-relaxed">
                   {currentCard.front}
                 </p>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-br from-petroleum/10 to-corporate/10 border-2 border-corporate/40 rounded-2xl shadow-sm p-6 flex items-center justify-center ialab-backface-hidden ialab-rotate-y-180">
-                <p className="text-base text-petroleum text-center leading-relaxed">
+              <div className="absolute inset-0 bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 border-2 border-[var(--theme-primary)]/40 rounded-2xl shadow-sm p-6 flex items-center justify-center ialab-backface-hidden ialab-rotate-y-180">
+                <p className="text-base text-[var(--theme-emphasis)] text-center leading-relaxed">
                   {currentCard.back}
                 </p>
               </div>
@@ -610,20 +610,20 @@ export function FlashcardArena({ moduleId }) {
               </button>
             ))}
           </div>
-          <p className="text-[10px] text-petroleum/40">
+          <p className="text-[10px] text-[var(--theme-emphasis)]/40">
             {t("flashcard.rating_hint")}
           </p>
         </div>
       )}
 
-      <p className="text-center text-xs text-petroleum/50 mt-4">
+      <p className="text-center text-xs text-[var(--theme-emphasis)]/50 mt-4">
         {t("flashcard.click_hint")}
       </p>
 
       <div className="flex justify-center mt-4">
         <button
           onClick={resetCards}
-          className="text-xs text-petroleum/50 hover:text-petroleum transition-colors flex items-center gap-1"
+          className="text-xs text-[var(--theme-emphasis)]/50 hover:text-[var(--theme-emphasis)] transition-colors flex items-center gap-1"
         >
           <Icon name="fa-rotate" aria-hidden="true" />
           {t("flashcard.restart_btn")}

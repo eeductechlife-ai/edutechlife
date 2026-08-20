@@ -100,14 +100,14 @@ const PracticeToolModal = ({ isOpen, toolType, onClose }) => {
         >
           <div className="sticky top-0 z-10 flex items-center justify-between p-4 md:p-6 border-b border-slate-100 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-corporate to-petroleum flex items-center justify-center shadow-sm flex-shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-emphasis)] flex items-center justify-center shadow-sm flex-shrink-0">
                 <Icon
                   name={config?.icon || "fa-wand-sparkles"}
                   className="text-white text-base"
                   aria-hidden="true"
                 />
               </div>
-              <h3 className="text-lg font-bold text-petroleum dark:text-slate-100">
+              <h3 className="text-lg font-bold text-[var(--theme-emphasis)] dark:text-slate-100">
                 {toolType === "flashcards"
                   ? t("ialab.practice.tool_flashcards")
                   : toolType === "tutoring"
@@ -117,7 +117,7 @@ const PracticeToolModal = ({ isOpen, toolType, onClose }) => {
             </div>
             <button
               onClick={onClose}
-              className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-petroleum hover:border-petroleum/30 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+              className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-[var(--theme-emphasis)] hover:border-[var(--theme-emphasis)]/30 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
               aria-label="Cerrar"
             >
               <Icon name="fa-xmark" className="w-4 h-4" />

@@ -121,7 +121,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
             {/* Instrucciones */}
             <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
                         <Icon name="fa-search" className="text-white text-lg" />
                     </div>
                     <div>
@@ -131,7 +131,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         </p>
                         <div className="mt-3 p-4 bg-blue-50 border border-blue-100 rounded-xl">
                             <p className="text-xs text-slate-600 leading-relaxed">
-                                <strong className="text-petroleum">{t('ialab.evaluation.step1.how_to_title')}</strong> {t('ialab.evaluation.step1.how_to_desc')}
+                                <strong className="text-[var(--theme-emphasis)]">{t('ialab.evaluation.step1.how_to_title')}</strong> {t('ialab.evaluation.step1.how_to_desc')}
                             </p>
                         </div>
                     </div>
@@ -141,7 +141,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
             {/* Escenario generado por DeepSeek */}
             <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                    <Icon name="fa-scroll" className="text-corporate" />
+                    <Icon name="fa-scroll" className="text-[var(--theme-primary)]" />
                     <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.scenario')}</h4>
                 </div>
                 <div className="bg-slate-50/50 rounded-xl p-5 border border-slate-200">
@@ -155,13 +155,13 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Rol */}
                 <div 
-                    className="bg-white rounded-xl p-5 border-2 border-corporate/20 min-h-[200px]"
+                    className="bg-white rounded-xl p-5 border-2 border-[var(--theme-primary)]/20 min-h-[200px]"
                     onDrop={(e) => handleDrop(e, 'rol')}
                     onDragOver={handleDragOver}
                 >
                     <div className="flex items-center gap-2 mb-4">
-                        <div className="w-8 h-8 rounded-lg bg-corporate/10 flex items-center justify-center">
-                            <Icon name="fa-user-tie" className="text-corporate" />
+                        <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary)]/10 flex items-center justify-center">
+                            <Icon name="fa-user-tie" className="text-[var(--theme-primary)]" />
                         </div>
                         <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.role')}</h4>
                     </div>
@@ -170,9 +170,9 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                     </p>
                     
                     {selectedElements.rol ? (
-                        <div className="bg-corporate/5 border border-corporate/20 rounded-lg p-3 mb-3">
+                        <div className="bg-[var(--theme-primary)]/5 border border-[var(--theme-primary)]/20 rounded-lg p-3 mb-3">
                             <div className="flex items-start justify-between">
-                                <p className="text-corporate text-sm">{selectedElements.rol}</p>
+                                <p className="text-[var(--theme-primary)] text-sm">{selectedElements.rol}</p>
                                 <button
                                     onClick={() => handleElementSelect('rol', '')}
                                     className="text-slate-500 hover:text-slate-900"
@@ -191,13 +191,13 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
 
                 {/* Contexto */}
                 <div 
-                    className="bg-white rounded-xl p-5 border-2 border-petroleum/20 min-h-[200px]"
+                    className="bg-white rounded-xl p-5 border-2 border-[var(--theme-emphasis)]/20 min-h-[200px]"
                     onDrop={(e) => handleDrop(e, 'contexto')}
                     onDragOver={handleDragOver}
                 >
                     <div className="flex items-center gap-2 mb-4">
-                        <div className="w-8 h-8 rounded-lg bg-petroleum/10 flex items-center justify-center">
-                            <Icon name="fa-building" className="text-petroleum" />
+                        <div className="w-8 h-8 rounded-lg bg-[var(--theme-emphasis)]/10 flex items-center justify-center">
+                            <Icon name="fa-building" className="text-[var(--theme-emphasis)]" />
                         </div>
                         <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.context')}</h4>
                     </div>
@@ -206,9 +206,9 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                     </p>
                     
                     {selectedElements.contexto ? (
-                        <div className="bg-petroleum/5 border border-petroleum/20 rounded-lg p-3 mb-3">
+                        <div className="bg-[var(--theme-emphasis)]/5 border border-[var(--theme-emphasis)]/20 rounded-lg p-3 mb-3">
                             <div className="flex items-start justify-between">
-                                <p className="text-petroleum text-sm">{selectedElements.contexto}</p>
+                                <p className="text-[var(--theme-emphasis)] text-sm">{selectedElements.contexto}</p>
                                 <button
                                     onClick={() => handleElementSelect('contexto', '')}
                                     className="text-slate-500 hover:text-slate-900"
@@ -280,8 +280,8 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                                     onDragStart={(e) => handleDragStart(e, type, element)}
                                     className={`p-3 rounded-lg cursor-move transition-all duration-200 ${
                                         selectedElements[type] === element
-                                            ? type === 'rol' ? 'bg-corporate/10 border border-corporate' :
-                                              type === 'contexto' ? 'bg-petroleum/10 border border-petroleum' :
+                                            ? type === 'rol' ? 'bg-[var(--theme-primary)]/10 border border-[var(--theme-primary)]' :
+                                              type === 'contexto' ? 'bg-[var(--theme-emphasis)]/10 border border-[var(--theme-emphasis)]' :
                                               'bg-emerald-500/10 border border-emerald-500'
                                             : 'bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300'
                                     }`}
@@ -292,8 +292,8 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                                             name={type === 'rol' ? 'fa-user-tie' : 
                                                   type === 'contexto' ? 'fa-building' : 'fa-tasks'} 
                                             className={`mt-1 ${
-                                                type === 'rol' ? 'text-corporate' :
-                                                type === 'contexto' ? 'text-petroleum' :
+                                                type === 'rol' ? 'text-[var(--theme-primary)]' :
+                                                type === 'contexto' ? 'text-[var(--theme-emphasis)]' :
                                                 'text-emerald-500'
                                             }`}
                                         />
@@ -318,7 +318,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-corporate rounded-full"></div>
+                            <div className="w-2 h-2 bg-[var(--theme-primary)] rounded-full"></div>
                             <span className="text-sm font-medium text-slate-700">{t('ialab.evaluation.step1.role')}</span>
                         </div>
                         <p className="text-slate-500 text-sm">
@@ -327,7 +327,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                     </div>
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-petroleum rounded-full"></div>
+                            <div className="w-2 h-2 bg-[var(--theme-emphasis)] rounded-full"></div>
                             <span className="text-sm font-medium text-slate-700">{t('ialab.evaluation.step1.context')}</span>
                         </div>
                         <p className="text-slate-500 text-sm">

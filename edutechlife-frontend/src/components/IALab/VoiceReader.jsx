@@ -21,7 +21,7 @@ const VoiceReader = ({ text }) => {
   return (
     <button
       onClick={speak}
-      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-[#E0F7FA] text-petroleum hover:bg-[#B2EBF2]'}`}
+      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-[#E0F7FA] text-[var(--theme-emphasis)] hover:bg-[#B2EBF2]'}`}
       title={t('ialab.voice_reader.title')}
     >
       {isPlaying ? <Square size={16} /> : <Volume2 size={16} />}

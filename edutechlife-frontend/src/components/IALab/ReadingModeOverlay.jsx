@@ -90,7 +90,7 @@ export function ReadingModeOverlay({ children }) {
                 <button
                   key={size}
                   onClick={() => setFontSize(size)}
-                  className={`w-7 h-7 rounded text-xs font-semibold transition-colors ${fontSize === size ? "bg-petroleum text-white" : ""}`}
+                  className={`w-7 h-7 rounded text-xs font-semibold transition-colors ${fontSize === size ? "bg-[var(--theme-emphasis)] text-white" : ""}`}
                   style={
                     fontSize === size
                       ? {}
@@ -139,7 +139,7 @@ export function ReadingModeOverlay({ children }) {
                 <button
                   key={fontOpt.id}
                   onClick={() => setFontFamily(fontOpt.id)}
-                  className={`px-2 h-7 rounded text-xs font-semibold transition-colors ${fontFamily === fontOpt.id ? "bg-petroleum text-white" : ""}`}
+                  className={`px-2 h-7 rounded text-xs font-semibold transition-colors ${fontFamily === fontOpt.id ? "bg-[var(--theme-emphasis)] text-white" : ""}`}
                   style={
                     fontFamily === fontOpt.id
                       ? {}

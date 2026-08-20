@@ -105,9 +105,9 @@ const ChatGPTStep1 = ({ exercise, response, onResponseChange }) => {
     <div className="space-y-6">
       <ProgressStepper currentStep={1} t={t} />
 
-      <div className="bg-gradient-to-r from-petroleum/5 to-corporate/5 rounded-2xl p-6 border border-corporate/20">
+      <div className="bg-gradient-to-r from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-2xl p-6 border border-[var(--theme-primary)]/20">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center shadow-lg shadow-corporate/20 flex-shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-lg shadow-[var(--theme-primary)]/20 flex-shrink-0">
             <Icon name="fa-search" className="text-white text-xl" />
           </div>
           <div className="min-w-0 flex-1">
@@ -119,10 +119,10 @@ const ChatGPTStep1 = ({ exercise, response, onResponseChange }) => {
 
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <Icon name="fa-briefcase" className="text-corporate" />
+          <Icon name="fa-briefcase" className="text-[var(--theme-primary)]" />
           <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{t('ialab.challenge.m2.step1_scenario')}</h3>
         </div>
-        <div className="bg-gradient-to-r from-petroleum/5 to-corporate/5 rounded-xl p-5 border border-corporate/20">
+        <div className="bg-gradient-to-r from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-xl p-5 border border-[var(--theme-primary)]/20">
           <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{casoUso}</p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -137,7 +137,7 @@ const ChatGPTStep1 = ({ exercise, response, onResponseChange }) => {
 
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <Icon name="fa-layer-group" className="text-petroleum" />
+          <Icon name="fa-layer-group" className="text-[var(--theme-emphasis)]" />
           <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{t('ialab.challenge.m2.step1_select_case')}</h3>
         </div>
         <motion.div
@@ -154,7 +154,7 @@ const ChatGPTStep1 = ({ exercise, response, onResponseChange }) => {
                   onClick={() => handleCaseSelect(c.id)}
                   className={`relative rounded-xl border-2 p-5 text-left w-full transition-all duration-300 h-full ${
                     isSelected
-                      ? `${c.selectedBg} ${c.selectedBorder} shadow-lg shadow-corporate/10`
+                      ? `${c.selectedBg} ${c.selectedBorder} shadow-lg shadow-[var(--theme-primary)]/10`
                       : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 hover:shadow-md'
                   }`}
                 >
@@ -189,8 +189,8 @@ const ChatGPTStep1 = ({ exercise, response, onResponseChange }) => {
 
           <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl p-6 space-y-4 mt-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-petroleum/10 dark:bg-petroleum/20 flex items-center justify-center">
-                <Icon name="fa-pencil" className="text-petroleum" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center">
+                <Icon name="fa-pencil" className="text-[var(--theme-emphasis)]" />
               </div>
               <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{t('ialab.challenge.m2.step1_task_question')}</h3>
             </div>

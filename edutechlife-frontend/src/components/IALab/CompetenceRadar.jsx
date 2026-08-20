@@ -76,7 +76,7 @@ const CompetenceRadar = ({ scores, size = 220 }) => {
     <svg
       width="100%"
       viewBox={`0 0 ${size} ${size}`}
-      className="max-w-[220px] mx-auto text-petroleum dark:text-corporate"
+      className="max-w-[220px] mx-auto text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]"
       role="img"
       aria-label={t("ialab.evaluation.results.radar_label")}
     >

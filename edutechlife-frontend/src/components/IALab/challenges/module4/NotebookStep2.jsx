@@ -90,7 +90,7 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
         className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
             <Icon name="fa-compress" className="text-white text-lg" />
           </div>
           <div>
@@ -132,7 +132,7 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
           {selectedDocs.map((d) => (
             <span
               key={d.index}
-              className="inline-flex items-center gap-1 px-2 py-0.5 bg-corporate/10 dark:bg-corporate-dark/20 text-corporate dark:text-corporate-dark text-xs rounded-full"
+              className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]-dark/20 text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark text-xs rounded-full"
             >
               <Icon name="fa-bookmark" className="w-3 h-3" />
               <span className="max-w-[120px] truncate">{d.title}</span>
@@ -150,8 +150,8 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
             className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5"
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-corporate/10 dark:bg-corporate-dark/20 flex items-center justify-center">
-                <Icon name="fa-table" className="text-corporate dark:text-corporate-dark w-4 h-4" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]-dark/20 flex items-center justify-center">
+                <Icon name="fa-table" className="text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark w-4 h-4" />
               </div>
               <h4 className="text-base font-semibold text-slate-800 dark:text-slate-100">{t('ialab.challenge.m4.step2.table_title')}</h4>
             </div>
@@ -171,7 +171,7 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
                   {TABLE_ROWS.map((row) => (
                     <tr key={row.key}>
                       <td className="p-2 align-top">
-                        <span className="inline-block px-2 py-1 bg-corporate/10 dark:bg-corporate-dark/20 text-corporate dark:text-corporate-dark text-xs font-medium rounded-lg">
+                        <span className="inline-block px-2 py-1 bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]-dark/20 text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark text-xs font-medium rounded-lg">
                           {t(row.labelKey)}
                         </span>
                       </td>
@@ -197,11 +197,11 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
             initial={shouldReduceMotion ? false : { opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.2 }}
-            className="bg-gradient-to-br from-petroleum/5 to-corporate/5 dark:from-petroleum-dark/10 dark:to-corporate-dark/5 rounded-xl border border-corporate/20 dark:border-corporate-dark/20 p-5"
+            className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 dark:from-[var(--theme-emphasis)]-dark/10 dark:to-[var(--theme-primary)]-dark/5 rounded-xl border border-[var(--theme-primary)]/20 dark:border-[var(--theme-primary)]-dark/20 p-5"
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-corporate/10 dark:bg-corporate-dark/20 flex items-center justify-center">
-                <Icon name="fa-pen-fancy" className="text-corporate dark:text-corporate-dark w-4 h-4" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]-dark/20 flex items-center justify-center">
+                <Icon name="fa-pen-fancy" className="text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark w-4 h-4" />
               </div>
               <div>
                 <h4 className="text-base font-semibold text-slate-800 dark:text-slate-100">{t('ialab.challenge.m4.step2.synthesis_title')}</h4>

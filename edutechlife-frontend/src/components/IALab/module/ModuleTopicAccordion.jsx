@@ -79,9 +79,9 @@ const ModuleTopicAccordion = ({
                 >
                   {topicAccordion && (
                     <div className="pl-4 md:pl-8 lg:pl-14 pr-4 pb-3">
-                      <div className="rounded-2xl border border-petroleum/10 bg-petroleum/[0.03] dark:bg-slate-800/60 p-4 space-y-3">
+                      <div className="rounded-2xl border border-[var(--theme-emphasis)]/10 bg-[var(--theme-emphasis)]/[0.03] dark:bg-slate-800/60 p-4 space-y-3">
                         <div>
-                          <h4 className="text-sm font-bold text-petroleum dark:text-[#4DA8C4]">
+                          <h4 className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
                             {topicAccordion.objective}
                           </h4>
                           {topicAccordion.objectiveDesc && (
@@ -113,7 +113,7 @@ const ModuleTopicAccordion = ({
                       >
                         <button
                           onClick={() => setFilterType("all")}
-                          className={`text-xs font-semibold px-4 py-2 min-h-[36px] rounded-full transition-all duration-200 ${filterType === "all" ? "bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm hover:shadow-md" : "bg-slate-100/80 text-slate-500 hover:bg-slate-200/80 hover:text-slate-700 dark:bg-slate-700/80 dark:text-slate-300 dark:hover:bg-slate-600/80"}`}
+                          className={`text-xs font-semibold px-4 py-2 min-h-[36px] rounded-full transition-all duration-200 ${filterType === "all" ? "bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white shadow-sm hover:shadow-md" : "bg-slate-100/80 text-slate-500 hover:bg-slate-200/80 hover:text-slate-700 dark:bg-slate-700/80 dark:text-slate-300 dark:hover:bg-slate-600/80"}`}
                         >
                           {t("ialab.filter_all")}{" "}
                           {topicResources?.resources?.length || 0}
@@ -122,7 +122,7 @@ const ModuleTopicAccordion = ({
                           <button
                             key={type}
                             onClick={() => setFilterType(type)}
-                            className={`text-xs font-semibold px-4 py-2 min-h-[36px] rounded-full transition-all duration-200 ${filterType === type ? "bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm hover:shadow-md" : "bg-slate-100/80 text-slate-500 hover:bg-slate-200/80 hover:text-slate-700 dark:bg-slate-700/80 dark:text-slate-300 dark:hover:bg-slate-600/80"}`}
+                            className={`text-xs font-semibold px-4 py-2 min-h-[36px] rounded-full transition-all duration-200 ${filterType === type ? "bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white shadow-sm hover:shadow-md" : "bg-slate-100/80 text-slate-500 hover:bg-slate-200/80 hover:text-slate-700 dark:bg-slate-700/80 dark:text-slate-300 dark:hover:bg-slate-600/80"}`}
                           >
                             {typeLabels[type] || type} {counts[type] || 0}
                           </button>
@@ -250,7 +250,7 @@ const ModuleTopicAccordion = ({
                                   .setActiveMod(activeMod + 1);
                                 setExpandedTopic(0);
                               }}
-                              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-petroleum to-corporate text-white text-sm font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-200"
+                              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white text-sm font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-200"
                             >
                               {t("ialab.continue_lesson")}
                               <Icon
@@ -271,7 +271,7 @@ const ModuleTopicAccordion = ({
                               prefersReducedMotion ? {} : { scale: 0.97 }
                             }
                             onClick={() => setExpandedTopic(index + 1)}
-                            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-petroleum to-corporate text-white text-sm font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-200"
+                            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white text-sm font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-200"
                           >
                             {t("ialab.continue_lesson")}
                             <Icon
@@ -291,7 +291,7 @@ const ModuleTopicAccordion = ({
                               .getState()
                               .setPracticeTool("flashcards");
                           }}
-                          className="w-full py-2.5 rounded-xl border border-petroleum/25 dark:border-petroleum/40 bg-petroleum/5 dark:bg-petroleum/10 text-petroleum dark:text-[#4DA8C4] text-xs font-bold flex items-center justify-center gap-2 hover:bg-petroleum/10 dark:hover:bg-petroleum/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+                          className="w-full py-2.5 rounded-xl border border-[var(--theme-emphasis)]/25 dark:border-[var(--theme-emphasis)]/40 bg-[var(--theme-emphasis)]/5 dark:bg-[var(--theme-emphasis)]/10 text-[var(--theme-emphasis)] dark:text-[#4DA8C4] text-xs font-bold flex items-center justify-center gap-2 hover:bg-[var(--theme-emphasis)]/10 dark:hover:bg-[var(--theme-emphasis)]/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
                         >
                           <Icon
                             name="fa-cards-blank"
@@ -299,7 +299,7 @@ const ModuleTopicAccordion = ({
                             aria-hidden="true"
                           />
                           {t("ialab.flashcard_review_btn")}
-                          <span className="inline-flex items-center gap-0.5 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-corporate/15 dark:bg-corporate/25 text-corporate-dark dark:text-corporate">
+                          <span className="inline-flex items-center gap-0.5 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-[var(--theme-primary)]/15 dark:bg-[var(--theme-primary)]/25 text-[var(--theme-primary)]-dark dark:text-[var(--theme-primary)]">
                             <Icon
                               name="fa-star"
                               className="w-2.5 h-2.5"

@@ -44,7 +44,7 @@ const IALabForumUserHoverCard = ({ userId, children }) => {
           >
             <div className="p-4">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-petroleum to-corporate flex items-center justify-center shadow-sm">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm">
                   <span className="text-xs font-bold text-white">
                     {(profile.full_name || '?').split(' ').map(p => p[0]).join('').toUpperCase().substring(0, 2)}
                   </span>
@@ -60,7 +60,7 @@ const IALabForumUserHoverCard = ({ userId, children }) => {
               <div className="grid grid-cols-2 gap-2">
                 {stats.map((s, i) => (
                   <div key={i} className="flex items-center gap-1.5 text-[10px] text-slate-600 dark:text-slate-400">
-                    <Icon name={s.icon} className="text-petroleum text-[8px]" />
+                    <Icon name={s.icon} className="text-[var(--theme-emphasis)] text-[8px]" />
                     <span>{s.value} {s.label}</span>
                   </div>
                 ))}

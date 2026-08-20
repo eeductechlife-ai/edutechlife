@@ -297,7 +297,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
         >
           <a
             href="#eval-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[110] focus:px-4 focus:py-2 focus:bg-white focus:text-petroleum focus:rounded-lg focus:text-sm focus:font-bold focus:shadow-lg"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[110] focus:px-4 focus:py-2 focus:bg-white focus:text-[var(--theme-emphasis)] focus:rounded-lg focus:text-sm focus:font-bold focus:shadow-lg"
           >
             {t('ialab.skip_link')}
           </a>
@@ -306,10 +306,10 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
 
           {showWatermark && (
             <div className="fixed inset-0 pointer-events-none z-[101] opacity-[0.03] select-none" style={{
-              background: `repeating-linear-gradient(45deg, var(--color-petroleum), var(--color-petroleum) 2px, transparent 2px, transparent 60px)`,
+              background: `repeating-linear-gradient(45deg, var(--color-[var(--theme-emphasis)]), var(--color-[var(--theme-emphasis)]) 2px, transparent 2px, transparent 60px)`,
             }}>
               <div className="absolute inset-0 flex items-center justify-center overflow-hidden max-w-full">
-                <span className="text-petroleum text-8xl md:text-9xl font-bold -rotate-12 select-none whitespace-nowrap">
+                <span className="text-[var(--theme-emphasis)] text-8xl md:text-9xl font-bold -rotate-12 select-none whitespace-nowrap">
                   EDUTECHLIFE
                 </span>
               </div>

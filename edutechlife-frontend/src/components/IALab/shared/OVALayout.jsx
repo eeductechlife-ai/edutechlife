@@ -27,7 +27,7 @@ const OVALayout = ({
       {title && (
         <div className="flex-shrink-0 px-4 sm:px-6 pt-4 sm:pt-6 pb-3 border-b border-gray-100 dark:border-gray-700">
           <div className="flex items-center gap-3 mb-1">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-corporate to-petroleum flex items-center justify-center">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-emphasis)] flex items-center justify-center">
               <Icon name={icon} className="text-white text-sm sm:text-base" />
             </div>
             <h2 className="text-base sm:text-lg font-bold text-gray-800 dark:text-white font-montserrat">

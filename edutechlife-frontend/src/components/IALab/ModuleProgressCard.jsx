@@ -47,12 +47,12 @@ const ModuleProgressCard = memo(
           className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 transition-all duration-300 ${
             isPassed
               ? "bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 shadow-sm shadow-emerald-500/10"
-              : "bg-gradient-to-br from-petroleum/10 to-corporate/10"
+              : "bg-gradient-to-br from-[var(--theme-primary)]/10 to-[var(--theme-emphasis)]/10"
           }`}
         >
           <Icon
             name={icon}
-            className={`text-sm transition-colors duration-300 ${isPassed ? "text-emerald-600" : "text-petroleum group-hover:text-corporate"}`}
+            className={`text-sm transition-colors duration-300 ${isPassed ? "text-emerald-600" : "theme-text-emphasis group-hover:theme-text-primary"}`}
           />
         </div>
         <div className="flex-1 min-w-0">
@@ -112,7 +112,7 @@ const ModuleProgressCard = memo(
             )}
             {completedModules.includes(moduleId) &&
               (examScore > 0 || challengeScore > 0) && (
-                <span className="inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border bg-petroleum/5 text-petroleum border-petroleum/10">
+                <span className="inline-flex items-center gap-[3px] text-[9px] font-bold px-1.5 py-0.5 rounded-md border bg-[var(--theme-primary)]/5 theme-text-emphasis theme-border-emphasis-20">
                   <Icon name="fa-comments" className="text-[7px]" />{" "}
                   {t("ialab.module_progress_card.forum_label")}
                 </span>

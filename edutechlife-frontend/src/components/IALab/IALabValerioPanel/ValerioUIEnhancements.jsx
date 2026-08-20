@@ -98,7 +98,7 @@ export const ConversationSkeleton = () => (
   <div className="space-y-4">
     <MessageSkeleton />
     <div className="flex justify-end mb-4 animate-pulse">
-      <div className="max-w-[80%] rounded-2xl p-4 bg-petroleum/20 w-[180px] h-[40px]" />
+      <div className="max-w-[80%] rounded-2xl p-4 bg-[var(--theme-emphasis)]/20 w-[180px] h-[40px]" />
     </div>
     <MessageSkeleton />
   </div>

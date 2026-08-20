@@ -105,11 +105,11 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
             <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
               <div className="flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-amber-400" />
-                <h2 className="text-lg font-bold text-petroleum dark:text-corporate">{t('leaderboard.title')}</h2>
+                <h2 className="text-lg font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]">{t('leaderboard.title')}</h2>
               </div>
               <button
                 onClick={onClose}
-                className="min-w-[44px] min-h-[44px] w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+                className="min-w-[44px] min-h-[44px] w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
                 aria-label={t('ialab.leaderboard_modal.close_aria')}
               >
                 <X className="w-4 h-4 text-slate-500" />
@@ -119,7 +119,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
             <div className="overflow-y-auto" style={{ maxHeight: 'calc(80vh - 73px)' }}>
               {loading ? (
                 <div className="flex items-center justify-center py-16">
-                  <Loader2 className="w-6 h-6 text-petroleum animate-spin" />
+                  <Loader2 className="w-6 h-6 text-[var(--theme-emphasis)] animate-spin" />
                 </div>
               ) : entries.length === 0 ? (
                 <div className="flex flex-col items-center py-16 text-slate-400">
@@ -137,7 +137,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
                         key={entry.userId}
                         className={`flex items-center gap-3 p-3 rounded-xl transition-colors ${
                           isMe
-                            ? 'bg-petroleum/5 dark:bg-petroleum/10 ring-1 ring-petroleum/20'
+                            ? 'bg-[var(--theme-emphasis)]/5 dark:bg-[var(--theme-emphasis)]/10 ring-1 ring-[var(--theme-emphasis)]/20'
                             : 'hover:bg-slate-50 dark:hover:bg-slate-700/50'
                         }`}
                       >
@@ -151,7 +151,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
                           )}
                         </div>
 
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0 text-white text-xs font-bold overflow-hidden">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 text-white text-xs font-bold overflow-hidden">
                           {entry.avatar ? (
                             <img src={entry.avatar} alt={entry.name} className="w-full h-full object-cover" />
                           ) : (
@@ -162,7 +162,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">
                             {entry.name}
-                            {isMe && <span className="text-[10px] text-petroleum font-medium ml-1.5">{t('leaderboard.you_label')}</span>}
+                            {isMe && <span className="text-[10px] text-[var(--theme-emphasis)] font-medium ml-1.5">{t('leaderboard.you_label')}</span>}
                           </p>
                           <div className="flex items-center gap-2 text-xs text-slate-400">
                             <span>{t('leaderboard.streak', { days: entry.streak })}</span>
@@ -172,7 +172,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
                         </div>
 
                         <div className="text-right flex-shrink-0">
-                          <p className="text-sm font-bold text-petroleum dark:text-corporate">{entry.xp.toLocaleString()}</p>
+                          <p className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]">{entry.xp.toLocaleString()}</p>
                           <p className="text-[10px] text-slate-400">{t('streak.xp')}</p>
                         </div>
                       </div>
@@ -183,11 +183,11 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
 
               {!myEntry && !loading && (
                 <div className="sticky bottom-0 p-4 border-t border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-petroleum/5 dark:bg-petroleum/10 ring-1 ring-petroleum/20">
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-[var(--theme-emphasis)]/5 dark:bg-[var(--theme-emphasis)]/10 ring-1 ring-[var(--theme-emphasis)]/20">
                     <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center flex-shrink-0">
                       <span className="text-sm font-bold text-slate-400">—</span>
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0 text-white text-xs font-bold">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 text-white text-xs font-bold">
                       Y
                     </div>
                     <div className="flex-1 min-w-0">
@@ -195,7 +195,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
                       <p className="text-xs text-slate-400">{t('streak.position_line', { xp: myXp.toLocaleString(), days: myStreak })}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-petroleum dark:text-corporate">{myXp.toLocaleString()}</p>
+                      <p className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]">{myXp.toLocaleString()}</p>
                       <p className="text-[10px] text-slate-400">{t('streak.xp')}</p>
                     </div>
                   </div>

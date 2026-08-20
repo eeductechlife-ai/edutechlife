@@ -19,8 +19,8 @@ const loadCompletion = () => {
 };
 
 const URGENCY_STYLE = {
-  high: { border: 'border-petroleum/30', hover: 'hover:border-petroleum', icon: 'bg-petroleum/10 text-petroleum', badge: 'bg-petroleum/10 text-petroleum' },
-  medium: { border: 'border-corporate/30', hover: 'hover:border-corporate', icon: 'bg-corporate/10 text-corporate', badge: 'bg-corporate/10 text-corporate' },
+  high: { border: 'theme-border-emphasis-20', hover: 'hover:theme-border-emphasis', icon: 'theme-bg-emphasis-10 theme-text-emphasis', badge: 'theme-bg-emphasis-10 theme-text-emphasis' },
+  medium: { border: 'theme-border-primary-30', hover: 'hover:theme-border-primary', icon: 'theme-bg-primary-10 theme-text-primary', badge: 'theme-bg-primary-10 theme-text-primary' },
   low: { border: 'border-slate-200', hover: 'hover:border-slate-400', icon: 'bg-slate-100 text-slate-500', badge: 'bg-slate-100 text-slate-500' },
 };
 
@@ -95,7 +95,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
     <div data-testid="daily-plan" className="flex flex-col gap-2">
       <button
         onClick={toggleOpen}
-        className="relative w-full overflow-hidden bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate text-white font-bold py-3 px-5 rounded-2xl hover:shadow-lg transition-all duration-300 flex items-center gap-3 group"
+        className="relative w-full overflow-hidden theme-bg-emphasis text-white font-bold py-3 px-5 rounded-2xl hover:shadow-lg transition-all duration-300 flex items-center gap-3 group"
         aria-expanded={isOpen}
       >
         <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300" />
@@ -106,7 +106,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
         <div className="relative w-9 h-9 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center flex-shrink-0">
           <Icon name={atRisk ? 'fa-fire' : 'fa-lightbulb'} className="w-4 h-4 text-white" />
           {atRisk && (
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 border-2 border-petroleum animate-ping" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 border-2 theme-border-emphasis animate-ping" />
           )}
         </div>
         <div className="flex-1 text-left min-w-0">
@@ -156,7 +156,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
                   <div className="flex items-center gap-1.5">
                     <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-500"
+                        className="h-full theme-bg-emphasis rounded-full transition-all duration-500"
                         style={{ width: `${Math.min(courseProgress || 0, 100)}%` }}
                       />
                     </div>
@@ -174,9 +174,9 @@ const DailyPlan = ({ onAction, isLoading }) => {
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.06, duration: 0.2 }}
-                        className="group relative bg-white rounded-2xl border border-slate-200/60 hover:border-petroleum/30 hover:shadow-md transition-all duration-200 overflow-hidden"
+                        className="group relative bg-white rounded-2xl border border-slate-200/60 hover:theme-border-emphasis/30 hover:shadow-md transition-all duration-200 overflow-hidden"
                       >
-                        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-petroleum to-corporate" />
+                        <div className="absolute top-0 left-0 w-1 h-full theme-bg-emphasis" />
                         <div className="p-4 pl-5">
                           <div className="flex items-start gap-3">
                             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center flex-shrink-0 shadow-sm">
@@ -187,7 +187,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
                                 <h4 className="text-sm font-bold text-slate-800">{t(item.titleKey)}</h4>
                                 <button
                                   onClick={() => completeChallenge(item.id, item.xpReward)}
-                                  className="flex-shrink-0 text-[11px] font-semibold text-white bg-gradient-to-r from-petroleum to-corporate px-3 py-1.5 rounded-lg hover:shadow-md active:scale-95 transition-all"
+                                  className="flex-shrink-0 text-[11px] font-semibold text-white theme-bg-emphasis px-3 py-1.5 rounded-lg hover:shadow-md active:scale-95 transition-all"
                                 >
                                   <Icon name="fa-check" className="text-[9px] mr-1" />{t('ialab.daily_plan.complete')}
                                 </button>
@@ -220,7 +220,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
                       transition={{ delay: i * 0.06, duration: 0.2 }}
                       className="group relative bg-white rounded-2xl border border-slate-200/60 hover:shadow-md transition-all duration-200 overflow-hidden"
                     >
-                      <div className={`absolute top-0 left-0 w-1 h-full bg-gradient-to-b ${urgency === 'high' ? 'from-petroleum to-corporate' : urgency === 'medium' ? 'from-corporate to-corporate/60' : 'from-slate-300 to-slate-200'}`} />
+                      <div className={`absolute top-0 left-0 w-1 h-full bg-gradient-to-b ${urgency === 'high' ? 'from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]' : urgency === 'medium' ? 'from-[var(--theme-primary)] to-[color-mix(in_srgb,var(--theme-primary)_60%,transparent)]' : 'from-slate-300 to-slate-200'}`} />
                       <div className="p-4 pl-5">
                         <div className="flex items-start gap-3">
                           <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm ${style.icon}`}>
@@ -232,7 +232,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
                               {item.action && (
                                 <button
                                   onClick={() => handleAction(item.rec || item)}
-                                  className="flex-shrink-0 text-[11px] font-semibold text-white bg-gradient-to-r from-petroleum to-corporate px-3 py-1.5 rounded-lg hover:shadow-md active:scale-95 transition-all whitespace-nowrap"
+                                  className="flex-shrink-0 text-[11px] font-semibold text-white theme-bg-emphasis px-3 py-1.5 rounded-lg hover:shadow-md active:scale-95 transition-all whitespace-nowrap"
                                 >
                                   {item.action.label} <Icon name="fa-arrow-right" className="text-[9px] ml-1" />
                                 </button>

@@ -67,14 +67,14 @@ export default function ExpandedQuiz({ questions }) {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-          className="w-16 h-16 bg-gradient-to-br from-corporate to-petroleum rounded-full flex items-center justify-center mx-auto shadow-lg"
+          className="w-16 h-16 bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-emphasis)] rounded-full flex items-center justify-center mx-auto shadow-lg"
         >
           <Users className="w-8 h-8 text-white" />
         </motion.div>
-        <h4 className="font-[900] text-petroleum text-xl tracking-tighter lowercase">
+        <h4 className="font-[900] text-[var(--theme-emphasis)] text-xl tracking-tighter lowercase">
           {t(`ova.ecosystem.quiz_result_${result}_title`)}
         </h4>
-        <div className="p-4 bg-gradient-to-br from-corporate/5 to-white rounded-xl border border-corporate/20">
+        <div className="p-4 bg-gradient-to-br from-[var(--theme-primary)]/5 to-white rounded-xl border border-[var(--theme-primary)]/20">
           <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
             {t(`ova.ecosystem.quiz_result_${result}`)}
           </p>
@@ -83,7 +83,7 @@ export default function ExpandedQuiz({ questions }) {
           onClick={restart}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-slate-100 dark:bg-slate-700 text-petroleum font-black rounded-xl text-xs uppercase tracking-wider hover:bg-slate-200 dark:hover:bg-slate-600 transition-all"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-slate-100 dark:bg-slate-700 text-[var(--theme-emphasis)] font-black rounded-xl text-xs uppercase tracking-wider hover:bg-slate-200 dark:hover:bg-slate-600 transition-all"
         >
           <RefreshCw className="w-4 h-4" />
           {t('ova.ecosystem.quiz_restart')}
@@ -97,8 +97,8 @@ export default function ExpandedQuiz({ questions }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <HelpCircle className="w-4 h-4 text-corporate" />
-        <span className="text-[10px] font-black text-petroleum uppercase tracking-wider">{t('ova.ecosystem.quiz_desc')}</span>
+        <HelpCircle className="w-4 h-4 text-[var(--theme-primary)]" />
+        <span className="text-[10px] font-black text-[var(--theme-emphasis)] uppercase tracking-wider">{t('ova.ecosystem.quiz_desc')}</span>
         <span className="ml-auto text-[10px] font-black text-slate-400">{step + 1}/{questions.length}</span>
       </div>
 
@@ -114,7 +114,7 @@ export default function ExpandedQuiz({ questions }) {
           <div
             key={i}
             className={`h-1.5 rounded-full transition-all ${
-              i === step ? 'w-8 bg-petroleum' : i < step ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'
+              i === step ? 'w-8 bg-[var(--theme-emphasis)]' : i < step ? 'w-2 bg-[var(--theme-primary)]' : 'w-2 bg-slate-200 dark:bg-slate-600'
             }`}
           />
         ))}
@@ -128,7 +128,7 @@ export default function ExpandedQuiz({ questions }) {
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.25 }}
         >
-          <h4 className="font-[900] text-petroleum text-base leading-tight mb-3">{q.question}</h4>
+          <h4 className="font-[900] text-[var(--theme-emphasis)] text-base leading-tight mb-3">{q.question}</h4>
           <div className="space-y-2">
             {q.options.map((opt, i) => {
               const isSelected = selectedAnswer === opt;
@@ -148,8 +148,8 @@ export default function ExpandedQuiz({ questions }) {
                       : isCorrect
                         ? 'bg-green-50 border-green-300 dark:bg-green-900/20 dark:border-green-700'
                         : isSelected
-                          ? 'bg-blue-50 border-corporate'
-                          : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate'
+                          ? 'bg-blue-50 border-[var(--theme-primary)]'
+                          : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-[var(--theme-primary)]'
                   }`}
                 >
                   {showFeedback && (
@@ -185,7 +185,7 @@ export default function ExpandedQuiz({ questions }) {
             onClick={handleNext}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full py-3 bg-gradient-to-r from-petroleum to-corporate text-white font-black rounded-xl text-xs uppercase tracking-wider shadow-lg"
+            className="w-full py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white font-black rounded-xl text-xs uppercase tracking-wider shadow-lg"
           >
             {step < questions.length - 1 ? t('ova.ecosystem.quiz_next') : t('ova.ecosystem.quiz_see_results')}
           </motion.button>

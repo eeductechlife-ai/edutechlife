@@ -11,21 +11,22 @@ const PracticeCard = ({ icon, label, description, onClick }) => {
       onClick={onClick}
       whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
       whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-      className="relative w-full flex items-center gap-4 p-5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-800 text-left cursor-pointer group hover:shadow-md hover:border-corporate/30 dark:hover:border-corporate/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+      className="relative w-full flex items-center gap-4 p-5 rounded-xl border theme-border text-left cursor-pointer group hover:shadow-md hover:theme-border-primary-30 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)]/40"
+      style={{ background: 'var(--theme-surface)' }}
     >
-      <div className="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-corporate/0 via-corporate/60 to-petroleum/0 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-      <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm bg-gradient-to-br from-corporate to-petroleum group-hover:shadow-md group-hover:scale-105 transition-all duration-200">
+      <div className="absolute top-0 left-6 right-6 h-0.5 bg-gradient-to-r from-transparent via-[color-mix(in_srgb,var(--theme-primary)_60%,transparent)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+      <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm bg-gradient-to-br theme-bg-emphasis group-hover:shadow-md group-hover:scale-105 transition-all duration-200">
         <Icon name={icon} className="text-white text-xl" />
       </div>
       <div className="flex-1 min-w-0">
-        <span className="font-bold text-sm text-slate-800 dark:text-slate-100 group-hover:text-petroleum block truncate">
+        <span className="font-bold text-sm text-slate-800 dark:text-slate-100 group-hover:theme-text-emphasis block truncate">
           {label}
         </span>
         <span className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
           {description}
         </span>
       </div>
-      <div className="flex-shrink-0 w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 group-hover:text-corporate group-hover:border-corporate/30 transition-all duration-200">
+      <div className="flex-shrink-0 w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 group-hover:theme-text-primary group-hover:theme-border-primary/30 transition-all duration-200">
         <Icon name="fa-arrow-right" className="w-3.5 h-3.5" />
       </div>
     </motion.button>
@@ -84,17 +85,17 @@ const ModulePractice = ({ onAction, activeMod }) => {
   };
 
   return (
-    <div className="relative bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm p-5 md:p-8 mt-5">
-      <div className="absolute -top-6 -left-6 w-32 h-32 bg-gradient-to-br from-corporate/6 to-petroleum/4 rounded-full blur-2xl pointer-events-none"></div>
-      <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-tr from-corporate/4 to-petroleum/4 rounded-full blur-2xl pointer-events-none"></div>
-      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-corporate via-petroleum to-petroleum-dark rounded-t-2xl" />
+    <div className="relative rounded-2xl border theme-border shadow-sm p-5 md:p-8 mt-5" style={{ background: 'var(--theme-surface)' }}>
+      <div className="absolute -top-6 -left-6 w-32 h-32 bg-gradient-to-br from-[var(--theme-primary)]/6 to-[var(--theme-emphasis)]/4 rounded-full blur-2xl pointer-events-none"></div>
+      <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-tr from-[var(--theme-primary)]/4 to-[var(--theme-emphasis)]/4 rounded-full blur-2xl pointer-events-none"></div>
+      <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-emphasis)] rounded-t-2xl" />
 
       <div className="flex items-center gap-3 mb-5">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-corporate to-petroleum flex items-center justify-center shadow-md shadow-corporate/15 flex-shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br theme-bg-emphasis flex items-center justify-center shadow-md shadow-[var(--theme-emphasis)]/15 flex-shrink-0">
           <Icon name="fa-flask" className="text-white text-base" />
         </div>
         <div>
-          <h4 className="text-sm font-bold text-petroleum uppercase tracking-wider font-display dark:text-petroleum">
+          <h4 className="text-sm font-bold theme-text-emphasis uppercase tracking-wider font-display dark:theme-text-emphasis">
             {t("ialab.practice.title")}
           </h4>
           <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
@@ -115,10 +116,10 @@ const ModulePractice = ({ onAction, activeMod }) => {
         ))}
       </div>
 
-      <div className="mt-4 flex items-start gap-3 rounded-xl border border-petroleum/10 bg-petroleum/[0.03] dark:bg-slate-700/40 dark:border-slate-600/60 p-4">
+      <div className="mt-4 flex items-start gap-3 rounded-xl border theme-border-emphasis-20 theme-bg-emphasis-10 dark:bg-slate-700/40 dark:border-slate-600/60 p-4">
         <Icon
           name="fa-lightbulb"
-          className="w-5 h-5 text-corporate mt-0.5 flex-shrink-0"
+          className="w-5 h-5 theme-text-primary mt-0.5 flex-shrink-0"
           aria-hidden="true"
         />
         <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed">

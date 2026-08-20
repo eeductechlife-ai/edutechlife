@@ -33,18 +33,18 @@ const ValerioContextBar = ({ currentModule }) => {
         onClick={(e) => {
           if (!currentLesson) e.preventDefault();
         }}
-        className="flex items-center justify-between text-xs text-slate-500 hover:text-corporate transition-colors group"
+        className="flex items-center justify-between text-xs text-slate-500 hover:text-[var(--theme-primary)] transition-colors group"
       >
         <div className="flex items-center gap-2 min-w-0">
-          <div className="w-5 h-5 rounded-md bg-corporate/10 flex items-center justify-center flex-shrink-0 group-hover:bg-corporate/20 transition-colors">
-            <Icon name="fa-book-open" className="w-3 h-3 text-corporate" />
+          <div className="w-5 h-5 rounded-md bg-[var(--theme-primary)]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--theme-primary)]/20 transition-colors">
+            <Icon name="fa-book-open" className="w-3 h-3 text-[var(--theme-primary)]" />
           </div>
           <span className="truncate font-medium">
             {currentLesson ? (
               <span className="flex items-center gap-1.5">
                 <span className="text-slate-600">{currentModule.title}</span>
                 <span className="text-slate-300 text-[10px]">›</span>
-                <span className="text-corporate">{currentLesson.title}</span>
+                <span className="text-[var(--theme-primary)]">{currentLesson.title}</span>
               </span>
             ) : (
               currentModule.title

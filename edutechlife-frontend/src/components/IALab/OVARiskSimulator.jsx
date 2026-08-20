@@ -12,12 +12,12 @@ import { OVAIntro } from "./shared";
 const EdutechLogo = () => (
   <div className="flex items-center gap-2 select-none">
     <div className="relative w-9 h-9 flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-tr from-petroleum-dark to-corporate rounded-xl rotate-3 shadow-md"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] rounded-xl rotate-3 shadow-md"></div>
       <Brain className="w-5 h-5 text-white relative z-10" />
     </div>
     <div className="text-xl tracking-tighter flex items-center lowercase font-bold">
-      <span className="text-petroleum-dark">edu</span>
-      <span className="text-corporate">techlife</span>
+      <span className="text-[var(--theme-emphasis)]-dark">edu</span>
+      <span className="text-[var(--theme-primary)]">techlife</span>
     </div>
   </div>
 );
@@ -67,7 +67,7 @@ export default function OVARiskSimulator({ onComplete }) {
             <button
               onClick={() => setOpenAccordion(isOpen ? null : id)}
               aria-expanded={isOpen}
-              className={`w-full text-left p-4 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 flex justify-between items-center font-bold text-petroleum-dark dark:text-slate-100 text-base ${FOCUS_RING}`}
+              className={`w-full text-left p-4 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 flex justify-between items-center font-bold text-[var(--theme-emphasis)]-dark dark:text-slate-100 text-base ${FOCUS_RING}`}
             >
               <span>
                 <span className="mr-2">{data.icon}</span> {data.title}
@@ -114,7 +114,7 @@ export default function OVARiskSimulator({ onComplete }) {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center mb-4 border-b pb-2">
-            <h3 className="text-lg font-bold text-petroleum-dark dark:text-slate-100">
+            <h3 className="text-lg font-bold text-[var(--theme-emphasis)]-dark dark:text-slate-100">
               {openModal.title}
             </h3>
             <button
@@ -130,7 +130,7 @@ export default function OVARiskSimulator({ onComplete }) {
           </p>
           <button
             onClick={() => setOpenModal(null)}
-            className={`w-full bg-gradient-to-r from-corporate to-petroleum-dark text-white font-bold py-3 px-4 rounded-xl ${FOCUS_RING} transition hover:shadow-lg`}
+            className={`w-full bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)]-dark text-white font-bold py-3 px-4 rounded-xl ${FOCUS_RING} transition hover:shadow-lg`}
           >
             {t("ova.risksim.modal_button")}
           </button>
@@ -153,7 +153,7 @@ export default function OVARiskSimulator({ onComplete }) {
                 key={i}
                 onClick={() => setStarIndex(i)}
                 aria-pressed={solvedStars.includes(i)}
-                className={`text-5xl focus:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2 rounded-xl transition-all duration-300 hover:scale-110 ${solvedStars.includes(i) ? "text-yellow-400 opacity-70 pointer-events-none" : "text-gray-400 hover:text-yellow-400"}`}
+                className={`text-5xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)] focus-visible:ring-offset-2 rounded-xl transition-all duration-300 hover:scale-110 ${solvedStars.includes(i) ? "text-yellow-400 opacity-70 pointer-events-none" : "text-gray-400 hover:text-yellow-400"}`}
                 disabled={solvedStars.includes(i)}
               >
                 <Star
@@ -192,7 +192,7 @@ export default function OVARiskSimulator({ onComplete }) {
               key={i}
               onClick={() => handleAnswer(i)}
               disabled={showFeedback}
-              className={`w-full p-4 text-left rounded-xl border-2 ${FOCUS_RING} font-medium ${showFeedback ? (i === data.correct ? "border-emerald-500 bg-emerald-50 text-emerald-800" : i === selectedAnswer ? "border-red-500 bg-red-50 text-red-800" : "border-gray-200 opacity-50") : "border-gray-200 bg-white dark:bg-slate-800 hover:border-corporate hover:bg-[#E0F7FA] dark:hover:bg-slate-700"}`}
+              className={`w-full p-4 text-left rounded-xl border-2 ${FOCUS_RING} font-medium ${showFeedback ? (i === data.correct ? "border-emerald-500 bg-emerald-50 text-emerald-800" : i === selectedAnswer ? "border-red-500 bg-red-50 text-red-800" : "border-gray-200 opacity-50") : "border-gray-200 bg-white dark:bg-slate-800 hover:border-[var(--theme-primary)] hover:bg-[#E0F7FA] dark:hover:bg-slate-700"}`}
             >
               {String.fromCharCode(65 + i)} {opt}
             </button>
@@ -211,7 +211,7 @@ export default function OVARiskSimulator({ onComplete }) {
         {showFeedback && (
           <button
             onClick={resetGame}
-            className={`mt-6 px-6 py-3 bg-gradient-to-r from-corporate to-petroleum-dark text-white rounded-xl font-bold shadow-md hover:shadow-lg ${FOCUS_RING}`}
+            className={`mt-6 px-6 py-3 bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)]-dark text-white rounded-xl font-bold shadow-md hover:shadow-lg ${FOCUS_RING}`}
           >
             {t("ova.risksim.back_stars")}
           </button>
@@ -268,7 +268,7 @@ export default function OVARiskSimulator({ onComplete }) {
                 role="tab"
                 aria-selected={activeTab === tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 py-3 text-sm font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-inset transition-all ${activeTab === tab.id ? "text-corporate border-b-2 border-corporate bg-[#E0F7FA]/30" : "text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300"}`}
+                className={`flex-1 py-3 text-sm font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)] focus-visible:ring-inset transition-all ${activeTab === tab.id ? "text-[var(--theme-primary)] border-b-2 border-[var(--theme-primary)] bg-[#E0F7FA]/30" : "text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300"}`}
               >
                 {tab.label}
               </button>
@@ -280,9 +280,9 @@ export default function OVARiskSimulator({ onComplete }) {
           {activeTab === "content" && (
             <div className="space-y-10 animate-[fadeIn_0.6s_ease-out_forwards]">
               <section
-                className={`${GLASS_CARD} rounded-2xl p-8 text-center border-t-4 border-corporate`}
+                className={`${GLASS_CARD} rounded-2xl p-8 text-center border-t-4 border-[var(--theme-primary)]`}
               >
-                <h1 className="text-3xl md:text-4xl font-black text-petroleum-dark dark:text-slate-100 mb-4">
+                <h1 className="text-3xl md:text-4xl font-black text-[var(--theme-emphasis)]-dark dark:text-slate-100 mb-4">
                   {t("ova.risksim.title")}
                 </h1>
                 <p className="text-lg text-gray-600 dark:text-slate-300 mb-6">
@@ -290,17 +290,17 @@ export default function OVARiskSimulator({ onComplete }) {
                 </p>
                 <div className="flex justify-center gap-6 text-2xl">
                   <Scale
-                    className="text-corporate"
+                    className="text-[var(--theme-primary)]"
                     size={24}
                     title={t("ova.risksim.icon_justice")}
                   />
                   <Shield
-                    className="text-corporate"
+                    className="text-[var(--theme-primary)]"
                     size={24}
                     title={t("ova.risksim.icon_privacy")}
                   />
                   <Search
-                    className="text-corporate"
+                    className="text-[var(--theme-primary)]"
                     size={24}
                     title={t("ova.risksim.icon_transparency")}
                   />
@@ -308,15 +308,15 @@ export default function OVARiskSimulator({ onComplete }) {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-petroleum-dark dark:text-slate-100 mb-6 flex items-center gap-2">
-                  <Brain size={24} className="text-corporate" />{" "}
+                <h2 className="text-2xl font-bold text-[var(--theme-emphasis)]-dark dark:text-slate-100 mb-6 flex items-center gap-2">
+                  <Brain size={24} className="text-[var(--theme-primary)]" />{" "}
                   {t("ova.risksim.section_bias")}
                 </h2>
                 {renderAccordion()}
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-petroleum-dark dark:text-slate-100 mb-6 flex items-center gap-2">
+                <h2 className="text-2xl font-bold text-[var(--theme-emphasis)]-dark dark:text-slate-100 mb-6 flex items-center gap-2">
                   {t("ova.risksim.section_mitigations")}
                 </h2>
                 <p className="mb-4 text-gray-600 dark:text-slate-300 text-sm">
@@ -327,7 +327,7 @@ export default function OVARiskSimulator({ onComplete }) {
                     <button
                       key={i}
                       onClick={() => setOpenModal(m)}
-                      className={`${GLASS_CARD} p-6 rounded-xl flex flex-col items-center hover:bg-corporate hover:text-white ${FOCUS_RING} group`}
+                      className={`${GLASS_CARD} p-6 rounded-xl flex flex-col items-center hover:bg-[var(--theme-primary)] hover:text-white ${FOCUS_RING} group`}
                     >
                       <span className="text-4xl mb-3 group-hover:scale-110 transition-transform">
                         {m.icon}
@@ -341,9 +341,9 @@ export default function OVARiskSimulator({ onComplete }) {
               </section>
 
               <section
-                className={`${GLASS_CARD} p-8 rounded-2xl border-l-8 border-corporate`}
+                className={`${GLASS_CARD} p-8 rounded-2xl border-l-8 border-[var(--theme-primary)]`}
               >
-                <h2 className="text-2xl font-bold text-petroleum-dark dark:text-slate-100 mb-4">
+                <h2 className="text-2xl font-bold text-[var(--theme-emphasis)]-dark dark:text-slate-100 mb-4">
                   {t("ova.risksim.decalogue_title")}
                 </h2>
                 <ul className="space-y-3 text-gray-700 dark:text-slate-300">
@@ -354,7 +354,7 @@ export default function OVARiskSimulator({ onComplete }) {
                     t("ova.risksim.decalogue_4"),
                   ].map((item, i) => (
                     <li key={i} className="flex gap-3">
-                      <span className="text-corporate font-bold">{i + 1}.</span>
+                      <span className="text-[var(--theme-primary)] font-bold">{i + 1}.</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -364,7 +364,7 @@ export default function OVARiskSimulator({ onComplete }) {
           )}
 
           {activeTab === "game" && (
-            <section className="bg-gradient-to-br from-petroleum-dark to-[#0D1B2A] p-8 rounded-2xl shadow-2xl animate-[fadeIn_0.6s_ease-out_forwards]">
+            <section className="bg-gradient-to-br from-[var(--theme-emphasis)]-dark to-[#0D1B2A] p-8 rounded-2xl shadow-2xl animate-[fadeIn_0.6s_ease-out_forwards]">
               {renderStarGame()}
             </section>
           )}

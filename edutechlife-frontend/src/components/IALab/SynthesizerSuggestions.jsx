@@ -18,17 +18,17 @@ const SynthesizerSuggestions = memo(({ suggestions, loading, onSuggestionClick, 
               "text-left p-4 rounded-xl border border-slate-200/60",
               "bg-white",
               "hover:bg-slate-50",
-              "hover:border-corporate/40 hover:shadow-sm",
+              "hover:border-[var(--theme-primary)]/40 hover:shadow-sm",
               FORUM_EFFECTS.TRANSITION_ALL,
-              "focus:outline-none focus:ring-2 focus:ring-corporate/50"
+              "focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)]/50"
             )}
             disabled={loading}
           >
             <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-corporate/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <Icon name="fa-lightbulb" className="text-corporate text-xs" />
+              <div className="w-6 h-6 rounded-full bg-[var(--theme-primary)]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Icon name="fa-lightbulb" className="text-[var(--theme-primary)] text-xs" />
               </div>
-              <p className={cn(FORUM_TYPOGRAPHY.BODY.SM, "text-petroleum-darker leading-relaxed")}>
+              <p className={cn(FORUM_TYPOGRAPHY.BODY.SM, "text-[var(--theme-emphasis)]-darker leading-relaxed")}>
                 {suggestion}
               </p>
             </div>

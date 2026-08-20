@@ -38,8 +38,8 @@ const DetectAndFix = () => {
     <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-3">
       <p className="text-sm text-slate-500 dark:text-slate-300 font-bold">{t('ova.introprompt.detect_desc')}</p>
       <div className="flex items-center gap-2 mb-2">
-        <Bug className="w-4 h-4 text-corporate" />
-        <span className="text-[10px] font-black text-petroleum uppercase tracking-wider">{t('ova.introprompt.detect_round')} {round + 1} {t('ova.introprompt.detect_of')} 3</span>
+        <Bug className="w-4 h-4 text-[var(--theme-primary)]" />
+        <span className="text-[10px] font-black text-[var(--theme-emphasis)] uppercase tracking-wider">{t('ova.introprompt.detect_round')} {round + 1} {t('ova.introprompt.detect_of')} 3</span>
       </div>
       <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-200 dark:border-amber-700 rounded-xl">
         <p className="text-xs font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wider mb-2">{t('ova.introprompt.detect_prompt_label')}</p>
@@ -53,7 +53,7 @@ const DetectAndFix = () => {
           const isWrong = isSelected && !correct;
           return (
             <button key={i} onClick={() => handleSelect(i)} aria-pressed={isSelected}
-              className={`w-full p-3 rounded-xl border-2 text-left text-xs font-medium transition-all flex items-center justify-between gap-2 ${isCorrectOpt ? 'bg-green-50 border-green-500 text-green-700' : isWrong ? 'bg-red-50 border-red-500 text-red-700' : isSelected ? 'border-corporate bg-blue-50' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-slate-200'}`}>
+              className={`w-full p-3 rounded-xl border-2 text-left text-xs font-medium transition-all flex items-center justify-between gap-2 ${isCorrectOpt ? 'bg-green-50 border-green-500 text-green-700' : isWrong ? 'bg-red-50 border-red-500 text-red-700' : isSelected ? 'border-[var(--theme-primary)] bg-blue-50' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-slate-200'}`}>
               <span>{opt}</span>
               {isCorrectOpt && <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />}
               {isWrong && <XCircle className="w-4 h-4 text-red-500 shrink-0" />}
@@ -69,7 +69,7 @@ const DetectAndFix = () => {
           </div>
           <p className="text-xs text-slate-700 dark:text-slate-200 font-medium leading-relaxed">{fixes[round]}</p>
           {round < 2 && (
-            <button onClick={nextRound} className="mt-3 px-4 py-2 bg-petroleum text-white rounded-xl text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
+            <button onClick={nextRound} className="mt-3 px-4 py-2 bg-[var(--theme-emphasis)] text-white rounded-xl text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
               {t('ova.introprompt.next')} <ChevronRight className="w-3 h-3" />
             </button>
           )}

@@ -11,7 +11,7 @@ const ExampleToggle = ({ example }) => {
     <div className="mt-2">
       <button
         onClick={() => setShow(!show)}
-        className="flex items-center gap-2 text-xs text-corporate hover:text-petroleum transition-colors"
+        className="flex items-center gap-2 text-xs text-[var(--theme-primary)] hover:text-[var(--theme-emphasis)] transition-colors"
         aria-expanded={show}
       >
         <Icon name={show ? 'fa-eye-slash' : 'fa-eye'} className="text-xs" />

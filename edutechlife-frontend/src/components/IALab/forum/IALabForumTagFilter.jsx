@@ -13,17 +13,14 @@ const IALabForumTagFilter = ({ activeFilter, setActiveFilter, t }) => {
     <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
       {FILTERS.map(({ key, icon, tKey }) => {
         const isActive = activeFilter === key;
-        const isCorporate = key === 'unanswered';
-        const color = isCorporate ? 'corporate' : 'petroleum';
-
         return (
           <button
             key={key}
             onClick={() => setActiveFilter(key)}
             className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
               isActive
-                ? `bg-${color} text-white shadow-sm`
-                : `bg-white text-${color} border border-slate-200 hover:bg-slate-50`
+                ? `theme-bg-emphasis text-white shadow-sm`
+                : `bg-white theme-text-emphasis border border-slate-200 hover:bg-slate-50`
             }`}
           >
             <Icon name={icon} className="mr-2" />

@@ -356,26 +356,31 @@ export const useActivityTracker = () => {
     if (!userId || realtimeInitRef.current) return;
     realtimeInitRef.current = true;
 
-    realtimeChannel = supabase
-      .channel(`activity-${userId}-${Date.now()}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "activity_log",
-          filter: `user_id=eq.${userId}`,
-        },
-        (payload) => {
-          setActivities((prev) => [payload.new, ...prev]);
-          if (updateResourceStatusRef.current)
-            updateResourceStatusRef.current(
-              payload.new.resource_id,
-              payload.new,
-            );
-        },
-      )
-      .subscribe();
+    try {
+      realtimeChannel = supabase
+        .channel(`activity-${userId}-${Date.now()}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "activity_log",
+            filter: `user_id=eq.${userId}`,
+          },
+          (payload) => {
+            setActivities((prev) => [payload.new, ...prev]);
+            if (updateResourceStatusRef.current)
+              updateResourceStatusRef.current(
+                payload.new.resource_id,
+                payload.new,
+              );
+          },
+        )
+        .subscribe();
+    } catch (err) {
+      console.warn("[ACTIVITY] Realtime setup failed:", err?.message);
+      realtimeInitRef.current = false;
+    }
 
     return () => {
       if (realtimeChannel) {

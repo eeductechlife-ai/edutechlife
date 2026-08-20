@@ -23,10 +23,10 @@ export const ProgressBar = ({
   return (
     <div className="flex flex-col gap-2">
       <div
-        className={`w-full ${sizeClasses[size]} bg-slate-200 rounded-full overflow-hidden`}
+        className={`w-full ${sizeClasses[size]} bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden`}
       >
         <motion.div
-          className="h-full bg-gradient-to-r from-petroleum via-corporate to-petroleum rounded-full"
+          className="h-full theme-bg-primary rounded-full"
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -34,10 +34,10 @@ export const ProgressBar = ({
       </div>
       {showLabel && (
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-petroleum">
+          <span className="text-xs font-semibold theme-text-primary">
             {t("ialab.progress_label")}
           </span>
-          <span className="text-xs font-bold text-slate-600">
+          <span className="text-xs font-bold theme-text-muted">
             {completed}/{total} ({percentage}%)
           </span>
         </div>

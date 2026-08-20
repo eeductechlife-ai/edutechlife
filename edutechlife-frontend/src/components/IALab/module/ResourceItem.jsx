@@ -58,11 +58,11 @@ const ResourceItem = ({
           ? "bg-emerald-50/40 border-emerald-200/40 cursor-pointer"
           : resourceLocked
             ? "bg-slate-50/50 border-slate-200/40 cursor-not-allowed opacity-60 dark:bg-slate-800/40 dark:border-slate-700/30"
-            : "bg-white dark:bg-slate-800 border-slate-200/60 dark:border-slate-700/50 hover:border-corporate/40 hover:shadow-lg hover:shadow-corporate/5 cursor-pointer"
+            : "bg-white dark:bg-slate-800 border-slate-200/60 dark:border-slate-700/50 hover:border-[var(--theme-primary)]/40 hover:shadow-lg hover:shadow-[var(--theme-primary)]/5 cursor-pointer"
       } ${justCompletedId === resource.id ? "ialab-animate-shimmer-pulse" : ""}`}
     >
       {!isResourceCompleted && !resourceLocked && (
-        <div className="absolute inset-0 bg-gradient-to-r from-corporate/[0.03] to-transparent opacity-0 group-hover/res:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--theme-primary)]/[0.03] to-transparent opacity-0 group-hover/res:opacity-100 transition-opacity duration-500 pointer-events-none" />
       )}
       <div className="relative flex items-center gap-3 p-3">
         <div
@@ -71,7 +71,7 @@ const ResourceItem = ({
               ? "bg-slate-100 dark:bg-slate-700"
               : isResourceCompleted
                 ? "bg-emerald-100 dark:bg-emerald-900/30"
-                : "bg-gradient-to-br from-petroleum/10 to-corporate/10 group-hover/res:from-petroleum/15 group-hover/res:to-corporate/15 dark:from-petroleum/20 dark:to-corporate/20"
+                : "bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 group-hover/res:from-[var(--theme-emphasis)]/15 group-hover/res:to-[var(--theme-primary)]/15 dark:from-[var(--theme-emphasis)]/20 dark:to-[var(--theme-primary)]/20"
           }`}
         >
           <Icon
@@ -81,7 +81,7 @@ const ResourceItem = ({
                 ? "text-slate-300 dark:text-slate-500"
                 : isResourceCompleted
                   ? "text-emerald-600 dark:text-emerald-400"
-                  : "text-petroleum"
+                  : "text-[var(--theme-emphasis)]"
             }`}
             aria-hidden="true"
           />
@@ -93,7 +93,7 @@ const ResourceItem = ({
                 ? "text-emerald-700 dark:text-emerald-400"
                 : resourceLocked
                   ? "text-slate-400"
-                  : "text-slate-700 group-hover/res:text-petroleum dark:text-slate-200 dark:group-hover/res:text-petroleum"
+                  : "text-slate-700 group-hover/res:text-[var(--theme-emphasis)] dark:text-slate-200 dark:group-hover/res:text-[var(--theme-emphasis)]"
             }`}
           >
             {resource.title}
@@ -112,7 +112,7 @@ const ResourceItem = ({
               ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
               : resourceLocked
                 ? "bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500"
-                : "bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm"
+                : "bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white shadow-sm"
           }`}
         >
           {isResourceCompleted
@@ -131,7 +131,7 @@ const ResourceItem = ({
           }}
           role="button"
           tabIndex={0}
-          className="flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 cursor-pointer"
+          className="flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 cursor-pointer"
           aria-label={
             bookmarkedIds.includes(resource.id)
               ? t("ialab.bookmark.remove")

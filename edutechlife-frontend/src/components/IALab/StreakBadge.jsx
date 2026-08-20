@@ -8,8 +8,8 @@ import { useTranslation } from '../../i18n/I18nProvider';
 
 const STREAK_GRADIENTS = {
   low: 'from-slate-300 to-slate-400',
-  mid: 'from-petroleum to-corporate',
-  high: 'from-corporate to-cyan-400',
+  mid: 'from-[var(--theme-emphasis)] to-[var(--theme-primary)]',
+  high: 'from-[var(--theme-primary)] to-cyan-400',
 };
 
 const sparkleVariants = {
@@ -28,7 +28,7 @@ const Sparkle = ({ index }) => (
     variants={sparkleVariants}
     initial="initial"
     animate="animate"
-    className="absolute w-1.5 h-1.5 rounded-full bg-corporate"
+    className="absolute w-1.5 h-1.5 rounded-full bg-[var(--theme-primary)]"
     style={{
       top: `${15 + Math.sin(index * 1.2) * 8}px`,
       left: `${15 + Math.cos(index * 1.2) * 8}px`,
@@ -57,7 +57,7 @@ const StreakCircle = ({ filled, label, isToday, index, prefersReducedMotion }) =
       transition={prefersReducedMotion ? {} : { repeat: filled && isToday ? Infinity : 0, duration: 2, ease: 'easeInOut' }}
       className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
         filled
-          ? 'bg-gradient-to-br from-petroleum to-corporate shadow-md shadow-corporate/30'
+          ? 'bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] shadow-md shadow-[var(--theme-primary)]/30'
           : 'bg-slate-100 dark:bg-slate-700/60 border border-slate-200 dark:border-slate-600'
       }`}
     >
@@ -125,7 +125,7 @@ const StreakBadge = ({ streak, xp, isAtRisk, level, onClick }) => {
         }}
         className={`relative rounded-xl p-3 transition-all duration-300 cursor-pointer
           group-hover:-translate-y-0.5
-          group-focus-visible:ring-2 group-focus-visible:ring-petroleum/40 group-focus-visible:ring-offset-2
+          group-focus-visible:ring-2 group-focus-visible:ring-[var(--theme-emphasis)]/40 group-focus-visible:ring-offset-2
           bg-transparent`}
       >
         {!prefersReducedMotion && isAtRisk && streak > 0 && (
@@ -159,9 +159,9 @@ const StreakBadge = ({ streak, xp, isAtRisk, level, onClick }) => {
             </div>
             <p className={`text-[10px] font-medium leading-tight ${
               streak >= 7
-                ? 'text-corporate dark:text-corporate'
+                ? 'text-[var(--theme-primary)] dark:text-[var(--theme-primary)]'
                 : streak >= 3
-                  ? 'text-petroleum dark:text-corporate-dark'
+                  ? 'text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]-dark'
                   : 'text-slate-400 dark:text-slate-500'
             }`}>
               {t('streak.racha', { tier: t(tierKey) })}
@@ -173,10 +173,10 @@ const StreakBadge = ({ streak, xp, isAtRisk, level, onClick }) => {
           {xp > 0 && (
             <div className="text-right shrink-0">
               <p className="flex items-center justify-end gap-1 text-[10px] font-medium text-slate-400 dark:text-slate-500">
-                <Icon name="fa-bolt" className="text-[10px] text-petroleum" aria-hidden="true" />
+                <Icon name="fa-bolt" className="text-[10px] text-[var(--theme-emphasis)]" aria-hidden="true" />
                 {t('streak.level')} {level}
               </p>
-              <p className="text-xs font-bold text-corporate">{xp} {t('streak.xp')}</p>
+              <p className="text-xs font-bold text-[var(--theme-primary)]">{xp} {t('streak.xp')}</p>
             </div>
           )}
         </div>

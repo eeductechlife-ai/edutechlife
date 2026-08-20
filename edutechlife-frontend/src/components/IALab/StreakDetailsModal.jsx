@@ -12,9 +12,9 @@ import { getWeekDays } from "./useWeekDays";
 import { useTranslation } from "../../i18n/I18nProvider";
 
 const FIRE_GRADIENTS = {
-  low: "from-corporate to-cyan-400",
-  mid: "from-petroleum to-corporate",
-  high: "from-petroleum to-cyan-400",
+  low: "from-[var(--theme-primary)] to-cyan-400",
+  mid: "from-[var(--theme-emphasis)] to-[var(--theme-primary)]",
+  high: "from-[var(--theme-emphasis)] to-cyan-400",
 };
 
 const POSITION_ICONS = {
@@ -25,8 +25,8 @@ const POSITION_ICONS = {
 
 const SECTION_HEADER = "flex items-center gap-2 mb-3";
 const SECTION_ICON_WRAPPER =
-  "w-6 h-6 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm flex-shrink-0";
-const SECTION_TITLE = "text-sm font-bold text-petroleum";
+  "w-6 h-6 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm flex-shrink-0";
+const SECTION_TITLE = "text-sm font-bold text-[var(--theme-emphasis)]";
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 16 },
@@ -84,7 +84,7 @@ const StreakCircle = ({
       }
       className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
         filled
-          ? "bg-gradient-to-br from-petroleum to-corporate shadow-md shadow-petroleum/30"
+          ? "bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] shadow-md shadow-[var(--theme-emphasis)]/30"
           : "bg-slate-100 border border-slate-200"
       }`}
     >
@@ -251,16 +251,16 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
           >
             <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white/95 backdrop-blur-sm">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm">
                   <Icon name="fa-chart-line" className="text-white text-sm" />
                 </div>
-                <h2 className="text-lg font-bold text-petroleum">
+                <h2 className="text-lg font-bold text-[var(--theme-emphasis)]">
                   {t("modal.progress_title")}
                 </h2>
               </div>
               <button
                 onClick={onClose}
-                className="min-w-[44px] min-h-[44px] w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+                className="min-w-[44px] min-h-[44px] w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
                 aria-label={t("common.close")}
               >
                 <X className="w-4 h-4 text-slate-500" />
@@ -277,18 +277,18 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                 variants={sectionVariants}
                 initial={prefersReducedMotion ? {} : "hidden"}
                 animate="visible"
-                className="bg-gradient-to-br from-petroleum/[0.04] to-corporate/[0.02] rounded-xl border border-petroleum/10 p-4"
+                className="bg-gradient-to-br from-[var(--theme-emphasis)]/[0.04] to-[var(--theme-primary)]/[0.02] rounded-xl border border-[var(--theme-emphasis)]/10 p-4"
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm">
                       <Icon name="fa-bolt" className="text-white text-xs" />
                     </div>
-                    <span className="text-sm font-bold text-petroleum">
+                    <span className="text-sm font-bold text-[var(--theme-emphasis)]">
                       {t("streak.level")} {level}
                     </span>
                   </div>
-                  <span className="text-xs font-semibold text-corporate">
+                  <span className="text-xs font-semibold text-[var(--theme-primary)]">
                     {xp.toLocaleString()} {t("streak.xp")}
                   </span>
                 </div>
@@ -297,7 +297,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-                    className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full"
+                    className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full"
                     style={{ width: `${levelProgress}%` }}
                   />
                 </div>
@@ -315,7 +315,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                     isAtRisk && streak > 0
                       ? "border-amber-200/60 bg-gradient-to-br from-amber-50/40 to-white"
                       : streak >= 3
-                        ? "border-corporate/20 bg-gradient-to-br from-corporate/[0.04] to-white"
+                        ? "border-[var(--theme-primary)]/20 bg-gradient-to-br from-[var(--theme-primary)]/[0.04] to-white"
                         : "border-slate-200/60 bg-white"
                   }`}
                 >
@@ -340,7 +340,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                         duration: 3,
                         ease: "easeInOut",
                       }}
-                      className="absolute inset-0 bg-gradient-to-r from-corporate/[0.04] to-transparent pointer-events-none"
+                      className="absolute inset-0 bg-gradient-to-r from-[var(--theme-primary)]/[0.04] to-transparent pointer-events-none"
                     />
                   )}
                   <div className="flex items-center gap-3 mb-3">
@@ -376,7 +376,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                           }}
                           initial="initial"
                           animate="animate"
-                          className="absolute w-1.5 h-1.5 rounded-full bg-corporate"
+                          className="absolute w-1.5 h-1.5 rounded-full bg-[var(--theme-primary)]"
                           style={{ top: "14px", left: "20px" }}
                         />
                       )}
@@ -393,9 +393,9 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                       <p
                         className={`text-xs font-medium leading-tight ${
                           streak >= 7
-                            ? "text-corporate"
+                            ? "text-[var(--theme-primary)]"
                             : streak >= 3
-                              ? "text-petroleum"
+                              ? "text-[var(--theme-emphasis)]"
                               : "text-slate-400"
                         }`}
                       >
@@ -493,7 +493,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                 <div className="bg-white rounded-xl border border-slate-200/60 overflow-hidden">
                   {loadingLb ? (
                     <div className="flex items-center justify-center py-8">
-                      <Loader2 className="w-5 h-5 text-petroleum animate-spin" />
+                      <Loader2 className="w-5 h-5 text-[var(--theme-emphasis)] animate-spin" />
                     </div>
                   ) : entries.length === 0 ? (
                     <div className="flex flex-col items-center py-8 text-slate-400">
@@ -518,7 +518,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                             key={entry.userId}
                             className={`flex items-center gap-3 px-4 py-2.5 transition-colors ${
                               isMe
-                                ? "bg-petroleum/[0.03] ring-1 ring-inset ring-petroleum/10"
+                                ? "bg-[var(--theme-emphasis)]/[0.03] ring-1 ring-inset ring-[var(--theme-emphasis)]/10"
                                 : "hover:bg-slate-50"
                             }`}
                           >
@@ -538,7 +538,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                                 </span>
                               )}
                             </div>
-                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0 text-white text-[10px] font-bold overflow-hidden">
+                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 text-white text-[10px] font-bold overflow-hidden">
                               {entry.avatar ? (
                                 <img
                                   src={entry.avatar}
@@ -553,7 +553,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                               <p className="text-sm font-semibold text-slate-700 truncate">
                                 {entry.name}
                                 {isMe && (
-                                  <span className="text-[10px] text-petroleum font-medium ml-1">
+                                  <span className="text-[10px] text-[var(--theme-emphasis)] font-medium ml-1">
                                     ({t("streak.you")})
                                   </span>
                                 )}
@@ -573,7 +573,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                               </div>
                             </div>
                             <div className="text-right flex-shrink-0">
-                              <p className="text-sm font-bold text-petroleum">
+                              <p className="text-sm font-bold text-[var(--theme-emphasis)]">
                                 {entry.xp.toLocaleString()}
                               </p>
                               <p className="text-[10px] text-slate-400">
@@ -588,14 +588,14 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
 
                   {/* Tu posicion si no está en top 10 */}
                   {!myEntry && !loadingLb && entries.length > 0 && (
-                    <div className="border-t border-slate-100 p-3 bg-petroleum/[0.02]">
+                    <div className="border-t border-slate-100 p-3 bg-[var(--theme-emphasis)]/[0.02]">
                       <div className="flex items-center gap-3">
                         <div className="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
                           <span className="text-xs font-bold text-slate-400">
                             —
                           </span>
                         </div>
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0 text-white text-[10px] font-bold">
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 text-white text-[10px] font-bold">
                           <Icon
                             name="fa-user"
                             className="text-white text-[10px]"
@@ -613,7 +613,7 @@ const StreakDetailsModal = ({ isOpen, onClose }) => {
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm font-bold text-petroleum">
+                          <p className="text-sm font-bold text-[var(--theme-emphasis)]">
                             {myXp.toLocaleString()}
                           </p>
                           <p className="text-[10px] text-slate-400">XP</p>

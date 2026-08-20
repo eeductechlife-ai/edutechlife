@@ -19,6 +19,12 @@ import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import DaniAvatar3D from "./DaniAvatar3D";
 import { SB_GRADIENTS, SB_COLORS, glow } from "./smartboardTheme";
+import useTimetable from "../../hooks/useTimetable";
+import {
+  DAY_LABELS,
+  subjectEmoji,
+  formatHHMM,
+} from "./schedule/timetableUtils";
 
 const QUICK_ACTIONS = [
   {
@@ -69,6 +75,18 @@ const HeroSection = memo(({ onTabChange }) => {
   const { vakResult, activeStudyDeck, studentGrades } = useSmartBoardKids();
   const { t } = useTranslation();
   const reduce = useReducedMotion();
+  const { currentClass, nextClass, timetable } = useTimetable();
+  const activeClass = currentClass || nextClass;
+  const isNow = !!currentClass;
+
+  const firstName = (() => {
+    try {
+      const raw = typeof window !== "undefined" ? localStorage.getItem("student_name") || "" : "";
+      return raw.split(" ")[0] || "";
+    } catch {
+      return "";
+    }
+  })();
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -236,14 +254,28 @@ const HeroSection = memo(({ onTabChange }) => {
               transition={{ delay: 0.6 }}
               className="text-2xl md:text-4xl lg:text-5xl font-black text-white mb-3 leading-[1.1] tracking-tight"
             >
-              {t("kid.hero.title_before")}{" "}
-              <span
-                className="bg-clip-text text-transparent"
-                style={{ backgroundImage: SB_GRADIENTS.gold }}
-              >
-                Dani
-              </span>
-              {t("kid.hero.title_after")}
+              {firstName ? (
+                <>
+                  <span
+                    className="bg-clip-text text-transparent"
+                    style={{ backgroundImage: SB_GRADIENTS.gold }}
+                  >
+                    {firstName}
+                  </span>
+                  , ¿en qué puedo ayudarte?
+                </>
+              ) : (
+                <>
+                  {t("kid.hero.title_before")}{" "}
+                  <span
+                    className="bg-clip-text text-transparent"
+                    style={{ backgroundImage: SB_GRADIENTS.gold }}
+                  >
+                    Dani
+                  </span>
+                  {t("kid.hero.title_after")}
+                </>
+              )}
             </motion.h1>
 
             <motion.p
@@ -287,6 +319,38 @@ const HeroSection = memo(({ onTabChange }) => {
                     </span>
                   </span>
                 </div>
+              )}
+              {timetable && activeClass && (
+                <button
+                  type="button"
+                  onClick={() => onTabChange?.("horario")}
+                  className="flex items-center gap-2.5 pl-2 pr-4 py-2 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 hover:bg-white/25 transition-colors text-left"
+                  style={{ boxShadow: glow(SB_COLORS.cyan, 0.35) }}
+                  aria-label="Ir a mi horario"
+                >
+                  <span
+                    className="w-9 h-9 rounded-xl flex items-center justify-center text-xl"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #06D6A0, #118AB2)",
+                    }}
+                    aria-hidden
+                  >
+                    {subjectEmoji(
+                      activeClass.subject_label || activeClass.subject,
+                    )}
+                  </span>
+                  <span className="leading-tight">
+                    <span className="block text-white font-black text-base truncate max-w-[9rem]">
+                      {activeClass.subject_label || activeClass.subject}
+                    </span>
+                    <span className="block text-white/80 text-[10px] font-bold uppercase tracking-wider -mt-0.5">
+                      {isNow
+                        ? `Ahora · hasta ${formatHHMM(activeClass.end_time)}`
+                        : `Sigue · ${DAY_LABELS.es[activeClass.day_of_week]} ${formatHHMM(activeClass.start_time)}`}
+                    </span>
+                  </span>
+                </button>
               )}
             </motion.div>
           </div>

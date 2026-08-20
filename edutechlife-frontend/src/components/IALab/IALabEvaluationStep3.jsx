@@ -147,7 +147,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
             {/* Instrucciones */}
             <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
                         <Icon name="fa-plus-circle" className="text-white text-lg" />
                     </div>
                     <div>
@@ -162,12 +162,12 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
             {/* Caso de uso */}
             <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                    <Icon name="fa-briefcase" className="text-corporate" />
+                    <Icon name="fa-briefcase" className="text-[var(--theme-primary)]" />
                     <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step3.use_case')}</h4>
                 </div>
                 <div className="bg-slate-50/50 rounded-xl p-5 border border-slate-200">
                     <div className="flex items-start gap-3">
-                        <Icon name="fa-star" className="text-corporate mt-1" />
+                        <Icon name="fa-star" className="text-[var(--theme-primary)] mt-1" />
                         <p className="text-slate-700 leading-relaxed">
                             {exercise}
                         </p>
@@ -182,7 +182,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                         onClick={() => setActiveTab('editor')}
                         className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${
                             activeTab === 'editor'
-                                ? 'bg-white text-petroleum border-b-2 border-corporate'
+                                ? 'bg-white text-[var(--theme-emphasis)] border-b-2 border-[var(--theme-primary)]'
                                 : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                         }`}
                     >
@@ -193,7 +193,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                         onClick={() => setActiveTab('constructor')}
                         className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${
                             activeTab === 'constructor'
-                                ? 'bg-white text-petroleum border-b-2 border-corporate'
+                                ? 'bg-white text-[var(--theme-emphasis)] border-b-2 border-[var(--theme-primary)]'
                                 : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                         }`}
                     >
@@ -218,11 +218,11 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                             <button
                                 onClick={generateWithAI}
                                 disabled={isGenerating}
-                                className="px-4 py-2 bg-corporate/10 text-corporate rounded-lg hover:bg-corporate/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                className="px-4 py-2 bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] rounded-lg hover:bg-[var(--theme-primary)]/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                             >
                                 {isGenerating ? (
                                     <>
-                                        <div className="w-4 h-4 border-2 border-corporate border-t-transparent rounded-full animate-spin"></div>
+                                        <div className="w-4 h-4 border-2 border-[var(--theme-primary)] border-t-transparent rounded-full animate-spin"></div>
                                         {t('ialab.evaluation.step3.generating')}
                                     </>
                                 ) : (
@@ -243,7 +243,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                             placeholder={`## ${t('ialab.evaluation.step3.section_role')}\n${t('ialab.evaluation.step3.placeholder_role')}\n\n## ${t('ialab.evaluation.step3.section_context')}\n${t('ialab.evaluation.step3.placeholder_context')}\n\n## ${t('ialab.evaluation.step3.section_objective')}\n${t('ialab.evaluation.step3.placeholder_objective')}\n\n## ${t('ialab.evaluation.step3.section_audience')}\n${t('ialab.evaluation.step3.placeholder_audience')}\n\n## ${t('ialab.evaluation.step3.section_requirements')}\n${t('ialab.evaluation.step3.placeholder_requirement_1')}\n${t('ialab.evaluation.step3.placeholder_requirement_2')}\n\n## ${t('ialab.evaluation.step3.section_format')}\n${t('ialab.evaluation.step3.placeholder_format')}`}
                             aria-required="true"
                             aria-describedby="evaluation-step3-chars"
-                            className="w-full h-80 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none font-mono text-sm leading-relaxed"
+                            className="w-full h-80 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-[var(--theme-primary)] focus:ring-2 focus:ring-[var(--theme-primary)]/20 resize-none font-mono text-sm leading-relaxed"
                             spellCheck="false"
                             autoFocus
                         />
@@ -261,7 +261,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <Icon name="fa-cubes" className="text-petroleum" />
+                            <Icon name="fa-cubes" className="text-[var(--theme-emphasis)]" />
                             <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step3.constructor_title')}</h4>
                         </div>
                         <button
@@ -277,7 +277,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                         {Object.entries(promptComponents).map(([type, components]) => (
                             <div key={type} className="bg-white rounded-xl p-4 border border-slate-200">
                                 <div className="flex items-center gap-2 mb-3">
-                                    <div className="w-8 h-8 rounded-lg bg-petroleum/10 flex items-center justify-center">
+                                    <div className="w-8 h-8 rounded-lg bg-[var(--theme-emphasis)]/10 flex items-center justify-center">
                                         <Icon 
                                             name={
                                                 type === 'role' ? 'fa-user-tie' :
@@ -287,7 +287,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                                                 type === 'requirements' ? 'fa-list-check' :
                                                 'fa-file-alt'
                                             } 
-                                            className="text-petroleum" 
+                                            className="text-[var(--theme-emphasis)]" 
                                         />
                                     </div>
                                     <h5 className="font-semibold text-slate-800">{t(`ialab.evaluation.step3.section_${type}`)}</h5>
@@ -298,12 +298,12 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                                         <button
                                             key={index}
                                             onClick={() => addComponent(type, component)}
-                                            className="w-full text-left p-3 bg-slate-50 hover:bg-white rounded-lg border border-slate-200 hover:border-petroleum/30 transition-colors group"
+                                            className="w-full text-left p-3 bg-slate-50 hover:bg-white rounded-lg border border-slate-200 hover:border-[var(--theme-emphasis)]/30 transition-colors group"
                                         >
                                             <div className="flex items-start gap-2">
                                                 <Icon 
                                                     name="fa-plus" 
-                                                    className="text-slate-500 group-hover:text-petroleum mt-1 flex-shrink-0" 
+                                                    className="text-slate-500 group-hover:text-[var(--theme-emphasis)] mt-1 flex-shrink-0" 
                                                 />
                                                 <span className="text-sm text-slate-600 group-hover:text-slate-900">
                                                     {component}
@@ -350,32 +350,32 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-3">
                         <h5 className="font-medium text-slate-700 flex items-center gap-2">
-                            <div className="w-2 h-2 bg-corporate rounded-full"></div>
+                            <div className="w-2 h-2 bg-[var(--theme-primary)] rounded-full"></div>
                             {t('ialab.evaluation.step3.guide_structure')}
                         </h5>
                         <ol className="space-y-2 text-sm text-slate-500">
                             <li className="flex items-start gap-2">
-                                <span className="text-corporate font-bold">1.</span>
+                                <span className="text-[var(--theme-primary)] font-bold">1.</span>
                                 <span>{t('ialab.evaluation.step3.guide_role')}</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="text-corporate font-bold">2.</span>
+                                <span className="text-[var(--theme-primary)] font-bold">2.</span>
                                 <span>{t('ialab.evaluation.step3.guide_context')}</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="text-corporate font-bold">3.</span>
+                                <span className="text-[var(--theme-primary)] font-bold">3.</span>
                                 <span>{t('ialab.evaluation.step3.guide_objective')}</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="text-corporate font-bold">4.</span>
+                                <span className="text-[var(--theme-primary)] font-bold">4.</span>
                                 <span>{t('ialab.evaluation.step3.guide_audience')}</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="text-corporate font-bold">5.</span>
+                                <span className="text-[var(--theme-primary)] font-bold">5.</span>
                                 <span>{t('ialab.evaluation.step3.guide_requirements')}</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="text-corporate font-bold">6.</span>
+                                <span className="text-[var(--theme-primary)] font-bold">6.</span>
                                 <span>{t('ialab.evaluation.step3.guide_format')}</span>
                             </li>
                         </ol>

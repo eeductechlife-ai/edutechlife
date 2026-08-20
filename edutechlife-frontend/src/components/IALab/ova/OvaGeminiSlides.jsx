@@ -15,7 +15,7 @@ export default function OvaGeminiSlides({ currentSlide, slideContent, slideDescs
   return (
     <div key={`slide-${currentSlide}`}>
       <div className="flex items-center gap-3 mb-4 sm:mb-6">
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-cyan-400/20 to-petroleum/20 dark:from-cyan-400/10 dark:to-petroleum/10 flex items-center justify-center">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-cyan-400/20 to-[var(--theme-emphasis)]/20 dark:from-cyan-400/10 dark:to-[var(--theme-emphasis)]/10 flex items-center justify-center">
           <Icon name={SLIDE_ICONS[currentSlide]} className="text-cyan-600 dark:text-cyan-400 text-lg sm:text-xl" />
         </div>
         <div>

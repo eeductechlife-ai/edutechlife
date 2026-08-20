@@ -4,9 +4,9 @@ import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
 
 const EXERCISE_CONFIG = [
-  { key: 'ej1', titleKey: 'ialab.evaluation.results.exercise_1', icon: 'fa-search', color: 'text-corporate', bgColor: 'bg-corporate/10' },
+  { key: 'ej1', titleKey: 'ialab.evaluation.results.exercise_1', icon: 'fa-search', color: 'text-[var(--theme-primary)]', bgColor: 'bg-[var(--theme-primary)]/10' },
   { key: 'ej2', titleKey: 'ialab.evaluation.results.exercise_2', icon: 'fa-magic', color: 'text-emerald-500', bgColor: 'bg-emerald-500/10' },
-  { key: 'ej3', titleKey: 'ialab.evaluation.results.exercise_3', icon: 'fa-plus-circle', color: 'text-petroleum', bgColor: 'bg-petroleum/10' },
+  { key: 'ej3', titleKey: 'ialab.evaluation.results.exercise_3', icon: 'fa-plus-circle', color: 'text-[var(--theme-emphasis)]', bgColor: 'bg-[var(--theme-emphasis)]/10' },
   { key: 'ej4', titleKey: 'ialab.evaluation.results.exercise_4', icon: 'fa-file-alt', color: 'text-amber-500', bgColor: 'bg-amber-500/10' },
 ];
 

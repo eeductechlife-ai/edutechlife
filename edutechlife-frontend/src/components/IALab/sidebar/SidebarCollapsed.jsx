@@ -12,7 +12,7 @@ const formatPoints = (pts) => {
 
 const MiniDivider = () => (
   <div className="relative w-full flex items-center justify-center py-0.5">
-    <div className="w-8 h-px bg-gradient-to-r from-transparent via-petroleum/20 dark:via-petroleum/40 to-transparent" />
+    <div className="w-8 h-px bg-gradient-to-r from-transparent via-[var(--theme-emphasis)]/20 dark:via-[var(--theme-emphasis)]/40 to-transparent" />
   </div>
 );
 
@@ -42,10 +42,10 @@ const SidebarCollapsed = ({
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
     transition={fadeTransition}
-    className="relative flex flex-col items-center px-2 py-4 gap-2 ring-1 ring-inset ring-petroleum/10 dark:ring-petroleum/20"
+    className="relative flex flex-col items-center px-2 py-4 gap-2 ring-1 ring-inset ring-[var(--theme-emphasis)]/10 dark:ring-[var(--theme-emphasis)]/20"
   >
-    <div className="absolute top-0 left-3 right-3 h-[1px] bg-gradient-to-r from-petroleum/30 via-corporate/30 to-transparent rounded-full pointer-events-none" />
-    <div className="absolute -bottom-20 -left-8 w-28 h-28 bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="absolute top-0 left-3 right-3 h-[1px] bg-gradient-to-r from-[var(--theme-emphasis)]/30 via-[var(--theme-primary)]/30 to-transparent rounded-full pointer-events-none" />
+    <div className="absolute -bottom-20 -left-8 w-28 h-28 bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-full blur-3xl pointer-events-none" />
 
     {/* ── ZONA 1: TU AVANCE (clic → expandir sidebar) ── */}
     <TooltipIcon
@@ -56,7 +56,7 @@ const SidebarCollapsed = ({
       <button
         type="button"
         onClick={onToggleSidebar}
-        className="w-full h-[60px] flex items-center justify-center flex-shrink-0 relative group cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-petroleum/30 rounded-full"
+        className="w-full h-[60px] flex items-center justify-center flex-shrink-0 relative group cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 rounded-full"
         role="progressbar"
         aria-valuenow={Math.round(courseProgress)}
         aria-valuemin="0"
@@ -101,7 +101,7 @@ const SidebarCollapsed = ({
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-display text-xs font-extrabold text-petroleum dark:text-[#4DA8C4]">
+            <span className="font-display text-xs font-extrabold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
               {Math.round(courseProgress)}%
             </span>
           </div>
@@ -113,7 +113,7 @@ const SidebarCollapsed = ({
     <TooltipIcon label={t("ialab.tab_progress")}>
       <button
         onClick={goToProgress}
-        className="w-8 h-8 rounded-xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm hover:scale-110 active:scale-95 transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+        className="w-8 h-8 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm hover:scale-110 active:scale-95 transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
         aria-label={t("ialab.tab_progress")}
       >
         <Icon
@@ -131,14 +131,14 @@ const SidebarCollapsed = ({
         premium
       >
         <div className="flex flex-col items-center gap-0">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm">
             <Icon
               name="fa-graduation-cap"
               className="text-white text-xs"
               aria-hidden="true"
             />
           </div>
-          <span className="text-[11px] font-bold text-petroleum dark:text-[#4DA8C4] mt-0.5 leading-tight">
+          <span className="text-[11px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] mt-0.5 leading-tight">
             {t("sidebar.level", { level: getLevel() })}
           </span>
         </div>
@@ -183,14 +183,14 @@ const SidebarCollapsed = ({
         premium
       >
         <div className="flex flex-col items-center gap-0">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm">
             <Icon
               name="fa-award"
               className="text-white text-xs"
               aria-hidden="true"
             />
           </div>
-          <span className="text-[11px] font-bold text-petroleum dark:text-[#4DA8C4] mt-0.5 leading-tight">
+          <span className="text-[11px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] mt-0.5 leading-tight">
             {formatPoints(getTotalPoints())}
           </span>
         </div>
@@ -201,7 +201,7 @@ const SidebarCollapsed = ({
 
     {/* ── ZONA 2: MÓDULOS ── */}
     <TooltipIcon decorative label={t("sidebar.modules")}>
-      <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm flex-shrink-0">
+      <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm flex-shrink-0">
         <Icon
           name="fa-layer-group"
           className="text-white text-[11px]"
@@ -222,19 +222,19 @@ const SidebarCollapsed = ({
               premium
               label={
                 <div>
-                  <p className="text-xs font-bold text-petroleum dark:text-corporate">
+                  <p className="text-xs font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]">
                     {t("sidebar.module_tooltip", {
                       id: mod.id,
                       title: mod.title,
                     })}
                   </p>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-[10px] text-corporate font-semibold">
+                    <span className="text-[10px] text-[var(--theme-primary)] font-semibold">
                       {modScore}%
                     </span>
                     <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full"
+                        className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full"
                         style={{ width: `${modScore}%` }}
                       />
                     </div>
@@ -263,7 +263,7 @@ const SidebarCollapsed = ({
       <div className="flex flex-col items-center gap-0">
         <button
           onClick={() => setShowStudyPlannerModal(true)}
-          className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-sm hover:scale-110 active:scale-95 transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+          className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm hover:scale-110 active:scale-95 transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
           aria-label={t("ialab.sidebar_study_plan")}
         >
           <Icon
@@ -272,7 +272,7 @@ const SidebarCollapsed = ({
             aria-hidden="true"
           />
         </button>
-        <span className="text-[10px] font-bold text-petroleum dark:text-[#4DA8C4] mt-0.5 leading-tight">
+        <span className="text-[10px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] mt-0.5 leading-tight">
           {t("ialab.sidebar_plan_short")}
         </span>
       </div>
@@ -318,7 +318,7 @@ const SidebarCollapsed = ({
         </TooltipIcon>
       </>
     )}
-    <div className="absolute bottom-0 left-3 right-3 h-[1px] bg-gradient-to-r from-transparent via-corporate/25 to-petroleum/30 rounded-full pointer-events-none" />
+    <div className="absolute bottom-0 left-3 right-3 h-[1px] bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-[var(--theme-emphasis)]/30 rounded-full pointer-events-none" />
   </motion.div>
 );
 

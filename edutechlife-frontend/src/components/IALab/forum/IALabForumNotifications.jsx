@@ -99,15 +99,15 @@ const IALabForumNotifications = () => {
       <button
         ref={triggerRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-petroleum/30 transition-all"
+        className="relative flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-[var(--theme-emphasis)]/30 transition-all"
         aria-label={t("ialab.forum.notifications.aria")}
       >
         <Icon
           name="fa-bell"
-          className={`text-sm transition-colors ${unreadCount > 0 ? "text-petroleum" : "text-slate-600"}`}
+          className={`text-sm transition-colors ${unreadCount > 0 ? "text-[var(--theme-emphasis)]" : "text-slate-600"}`}
         />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[16px] h-[16px] text-[8px] font-bold text-white bg-gradient-to-r from-petroleum to-corporate rounded-full border-2 border-white dark:border-slate-800 px-1">
+          <span className="absolute -top-1 -right-1 flex items-center justify-center min-w-[16px] h-[16px] text-[8px] font-bold text-white bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full border-2 border-white dark:border-slate-800 px-1">
             {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}
@@ -124,13 +124,13 @@ const IALabForumNotifications = () => {
             className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden z-50"
           >
             <div className="flex items-center justify-between p-3 border-b border-slate-100 dark:border-slate-700">
-              <h4 className="text-sm font-bold text-petroleum">
+              <h4 className="text-sm font-bold text-[var(--theme-emphasis)]">
                 {t("ialab.forum.notifications.title")}
               </h4>
               {unreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}
-                  className="text-[10px] text-corporate hover:text-petroleum font-medium transition-colors"
+                  className="text-[10px] text-[var(--theme-primary)] hover:text-[var(--theme-emphasis)] font-medium transition-colors"
                 >
                   {t("ialab.forum.notifications.mark_all_read")}
                 </button>
@@ -159,7 +159,7 @@ const IALabForumNotifications = () => {
                         onClick={() => markAsRead(notif.id)}
                         className={`w-full flex items-start gap-3 p-3 text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/50 ${
                           !notif.is_read
-                            ? "bg-petroleum/[0.02] dark:bg-petroleum/[0.04]"
+                            ? "bg-[var(--theme-emphasis)]/[0.02] dark:bg-[var(--theme-emphasis)]/[0.04]"
                             : ""
                         }`}
                       >
@@ -183,7 +183,7 @@ const IALabForumNotifications = () => {
                           </span>
                         </div>
                         {!notif.is_read && (
-                          <div className="w-2 h-2 rounded-full bg-corporate flex-shrink-0 mt-1" />
+                          <div className="w-2 h-2 rounded-full bg-[var(--theme-primary)] flex-shrink-0 mt-1" />
                         )}
                       </button>
                     );

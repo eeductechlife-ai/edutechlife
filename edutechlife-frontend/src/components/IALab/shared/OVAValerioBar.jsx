@@ -59,7 +59,7 @@ const OVAValerioBar = ({ text, autoPlay = false }) => {
         <div className={cn(
           'flex items-center gap-3 px-4 py-2.5 rounded-2xl shadow-2xl border transition-all',
           'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700',
-          isPlaying ? 'shadow-corporate/20' : 'shadow-black/10'
+          isPlaying ? 'shadow-[var(--theme-primary)]/20' : 'shadow-black/10'
         )}>
           <button
             onClick={togglePlay}
@@ -68,7 +68,7 @@ const OVAValerioBar = ({ text, autoPlay = false }) => {
               'min-w-[44px] min-h-[44px] flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all',
               isPlaying
                 ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100'
-                : 'bg-cyan-50 dark:bg-cyan-900/20 text-corporate hover:bg-cyan-100'
+                : 'bg-cyan-50 dark:bg-cyan-900/20 text-[var(--theme-primary)] hover:bg-cyan-100'
             )}
           >
             <Icon
@@ -94,7 +94,7 @@ const OVAValerioBar = ({ text, autoPlay = false }) => {
                     delay: i * 0.08,
                     ease: 'easeInOut'
                   }}
-                  className="w-0.5 bg-corporate rounded-full origin-bottom"
+                  className="w-0.5 bg-[var(--theme-primary)] rounded-full origin-bottom"
                 />
               ))}
             </div>

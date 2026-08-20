@@ -12,7 +12,7 @@ const AnimatedProgressBar = ({ value, className = '' }) => {
       aria-valuemax={100}
     >
       <motion.div
-        className="h-full w-full bg-gradient-to-r from-petroleum to-corporate rounded-full"
+        className="h-full w-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full"
         style={{ transformOrigin: 'left' }}
         initial={{ scaleX: 0 }}
         animate={{ scaleX: pct / 100 }}

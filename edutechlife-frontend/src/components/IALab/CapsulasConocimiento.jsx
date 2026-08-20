@@ -26,7 +26,7 @@ export default function CapsulasConocimiento() {
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 transition-all duration-200 ${
               activeTab === tab.id
-                ? 'border-petroleum text-petroleum'
+                ? 'border-[var(--theme-emphasis)] theme-text-emphasis'
                 : 'border-transparent text-slate-400 hover:text-slate-600 hover:border-slate-300'
             }`}
             role="tab"

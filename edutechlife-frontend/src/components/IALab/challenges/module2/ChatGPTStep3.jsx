@@ -82,9 +82,9 @@ const ChatGPTStep3 = ({ exercise, response, onResponseChange, selectedCase }) =>
     <div className="space-y-6">
       <ProgressStepper currentStep={3} t={t} />
 
-      <div className="bg-gradient-to-r from-petroleum/5 to-corporate/5 rounded-2xl p-6 border border-corporate/20">
+      <div className="bg-gradient-to-r from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-2xl p-6 border border-[var(--theme-primary)]/20">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center shadow-lg shadow-corporate/20 flex-shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-lg shadow-[var(--theme-primary)]/20 flex-shrink-0">
             <Icon name="fa-plug" className="text-white text-xl" />
           </div>
           <div className="min-w-0 flex-1">
@@ -106,8 +106,8 @@ const ChatGPTStep3 = ({ exercise, response, onResponseChange, selectedCase }) =>
 
       <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl p-6 space-y-4">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-petroleum/10 dark:bg-petroleum/20 flex items-center justify-center">
-            <Icon name="fa-cog" className="text-petroleum" />
+          <div className="w-8 h-8 rounded-lg bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center">
+            <Icon name="fa-cog" className="text-[var(--theme-emphasis)]" />
           </div>
           <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100">{t('ialab.challenge.m2.step3_function_name')}</h3>
         </div>
@@ -116,15 +116,15 @@ const ChatGPTStep3 = ({ exercise, response, onResponseChange, selectedCase }) =>
           value={functionName}
           onChange={(e) => { setFunctionName(e.target.value); emitChange({ functionName: e.target.value }); }}
           placeholder={t('ialab.challenge.m2.step3_function_name_placeholder')}
-          className="w-full px-4 py-3 bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 rounded-xl text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 text-sm font-mono"
+          className="w-full px-4 py-3 bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 rounded-xl text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-[var(--theme-primary)] focus:ring-2 focus:ring-[var(--theme-primary)]/20 text-sm font-mono"
         />
         <ExampleToggle t={t} example={getExample()} />
       </div>
 
       <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl p-6 space-y-4">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-corporate/10 dark:bg-corporate/20 flex items-center justify-center">
-            <Icon name="fa-database" className="text-corporate" />
+          <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]/20 flex items-center justify-center">
+            <Icon name="fa-database" className="text-[var(--theme-primary)]" />
           </div>
           <div>
             <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100">{t('ialab.challenge.m2.step3_data_needed')}</h3>
@@ -144,11 +144,11 @@ const ChatGPTStep3 = ({ exercise, response, onResponseChange, selectedCase }) =>
                 }}
                 className={`flex items-center gap-2 px-3 py-2 rounded-xl border-2 text-sm transition-all duration-200 ${
                   isSelected
-                    ? 'bg-corporate/10 border-corporate text-corporate dark:bg-mint/10 dark:border-mint dark:text-mint'
+                    ? 'bg-[var(--theme-primary)]/10 border-[var(--theme-primary)] text-[var(--theme-primary)] dark:bg-mint/10 dark:border-mint dark:text-mint'
                     : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-500'
                 }`}
               >
-                <Icon name={field.icon} className={`text-sm ${isSelected ? 'text-corporate dark:text-mint' : 'text-slate-400'}`} />
+                <Icon name={field.icon} className={`text-sm ${isSelected ? 'text-[var(--theme-primary)] dark:text-mint' : 'text-slate-400'}`} />
                 <span className="font-medium">{t(field.labelKey)}</span>
                 {isSelected && <Icon name="fa-check" className="text-xs" />}
               </button>

@@ -755,7 +755,7 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
     return (
       <div className="fixed right-0 top-0 bottom-0 z-[90] flex flex-col">
         <div className="relative w-[85vw] max-w-[380px] h-full bg-white shadow-2xl flex flex-col items-center justify-center p-8 z-10">
-          <div className="w-12 h-12 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin mb-4" />
+          <div className="w-12 h-12 border-2 border-[var(--theme-emphasis)]/30 border-t-[var(--theme-emphasis)] rounded-full animate-spin mb-4" />
           <p className="text-slate-500 text-sm font-medium">
             {t("ialab.valerio.loading")}
           </p>

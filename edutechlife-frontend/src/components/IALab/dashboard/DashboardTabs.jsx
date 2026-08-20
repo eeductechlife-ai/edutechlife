@@ -13,7 +13,7 @@ export default function DashboardTabs({ activeTab, setActiveTab }) {
         role="tab" aria-selected={activeTab === 'modules'} aria-controls="tabpanel-modules"
         className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all flex-1 max-md:justify-center ${
           activeTab === 'modules'
-            ? 'bg-white text-petroleum shadow-sm' : 'text-petroleum/50 hover:text-petroleum/70'}`}>
+            ? 'bg-white text-[var(--theme-emphasis)] shadow-sm' : 'text-[var(--theme-emphasis)]/50 hover:text-[var(--theme-emphasis)]/70'}`}>
         <Icon name="fa-layer-group" className="w-3.5 h-3.5" />
         {t('dashboard.your_progress')}
       </motion.button>
@@ -23,7 +23,7 @@ export default function DashboardTabs({ activeTab, setActiveTab }) {
         role="tab" aria-selected={activeTab === 'activity'} aria-controls="tabpanel-activity"
         className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all flex-1 max-md:justify-center ${
           activeTab === 'activity'
-            ? 'bg-white text-petroleum shadow-sm' : 'text-petroleum/50 hover:text-petroleum/70'}`}>
+            ? 'bg-white text-[var(--theme-emphasis)] shadow-sm' : 'text-[var(--theme-emphasis)]/50 hover:text-[var(--theme-emphasis)]/70'}`}>
         <Icon name="fa-chart-line" className="w-3.5 h-3.5" />
         {t('dashboard.activity_trends')}
       </motion.button>

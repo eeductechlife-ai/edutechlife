@@ -30,7 +30,7 @@ const LessonObjectives = ({
     <motion.div
       className={`border rounded-lg p-3.5 md:p-4 ${
         isStart
-          ? "bg-gradient-to-r from-petroleum/5 to-corporate/5 dark:from-petroleum/10 dark:to-corporate/10 border-petroleum/20"
+          ? "bg-gradient-to-r from-[var(--theme-primary)]/5 to-[var(--theme-emphasis)]/5 dark:from-[var(--theme-primary)]/10 dark:to-[var(--theme-emphasis)]/10 border-[var(--theme-emphasis)]/20"
           : "bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-700"
       }`}
       variants={containerVariants}
@@ -40,12 +40,12 @@ const LessonObjectives = ({
       <div className="flex items-start gap-2.5">
         <Icon
           name={isStart ? "fa-bullseye" : "fa-circle-check"}
-          className={`text-base flex-shrink-0 mt-0.5 ${isStart ? "text-petroleum" : "text-green-600"}`}
+          className={`text-base flex-shrink-0 mt-0.5 ${isStart ? "theme-text-emphasis" : "text-green-600"}`}
           aria-hidden="true"
         />
         <div className="flex-1 min-w-0">
           <h3
-            className={`text-sm font-bold mb-2 ${isStart ? "text-petroleum" : "text-green-700 dark:text-green-400"}`}
+            className={`text-sm font-bold mb-2 ${isStart ? "theme-text-emphasis" : "text-green-700 dark:text-green-400"}`}
           >
             {isStart
               ? t("ialab.objectives_learn")

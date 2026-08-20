@@ -126,12 +126,12 @@ const UserCoursesDashboard = () => {
             variants={statVariants}
             initial="hidden"
             animate="visible"
-            className="bg-gradient-to-br from-petroleum/[0.06] to-corporate/[0.04] rounded-xl p-3 border border-petroleum/20"
+            className="bg-gradient-to-br from-[var(--theme-emphasis)]/[0.06] to-[var(--theme-primary)]/[0.04] rounded-xl p-3 border border-[var(--theme-emphasis)]/20"
           >
             <p className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">
               {stat.label}
             </p>
-            <p className="text-lg font-bold text-petroleum mt-0.5">
+            <p className="text-lg font-bold text-[var(--theme-emphasis)] mt-0.5">
               {stat.value}
             </p>
           </motion.div>
@@ -151,7 +151,7 @@ const UserCoursesDashboard = () => {
             onClick={() => setActiveFilter(tab.id)}
             className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
               activeFilter === tab.id
-                ? "bg-white text-petroleum shadow-sm"
+                ? "bg-white text-[var(--theme-emphasis)] shadow-sm"
                 : "text-slate-500 hover:text-slate-700"
             }`}
           >
@@ -221,7 +221,7 @@ const UserCoursesDashboard = () => {
           className="border-t border-slate-100 pt-6"
         >
           <h3 className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-            <Icon name="fa-award" className="text-corporate" />
+            <Icon name="fa-award" className="text-[var(--theme-primary)]" />
             {t("ialab.dashboard.certificates_title")}
           </h3>
           <div className="bg-gradient-to-br from-emerald-50 to-white rounded-xl p-4 border border-emerald-200 flex items-center gap-3">

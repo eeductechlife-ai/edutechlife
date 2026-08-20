@@ -43,14 +43,14 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
     <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-white dark:bg-slate-800">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-petroleum to-corporate shadow-sm flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] shadow-sm flex items-center justify-center shrink-0">
             <Icon name="fa-file-pdf" className="text-white w-5 h-5" />
           </div>
           <div className="min-w-0">
-            <h4 className="font-semibold text-petroleum truncate">
+            <h4 className="font-semibold text-[var(--theme-emphasis)] truncate">
               {resource.title}
             </h4>
-            <div className="flex items-center gap-3 text-sm text-petroleum/70">
+            <div className="flex items-center gap-3 text-sm text-[var(--theme-emphasis)]/70">
               <span>{resource.format}</span>
               {resource.size && <span>• {resource.size}</span>}
               {resource.pages && (
@@ -63,7 +63,7 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
         </div>
         <div className="flex items-center gap-3 shrink-0">
           {!completedRef.current && !hasScrolledEnough && (
-            <span className="text-xs text-corporate bg-corporate/10 px-3 py-1 rounded-full font-medium">
+            <span className="text-xs text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-3 py-1 rounded-full font-medium">
               {t("ialab.viewer_modal.scroll_to_end")}
             </span>
           )}
@@ -74,7 +74,7 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
             <a
               href={resource.url}
               download
-              className="px-4 py-2 bg-gradient-to-r from-petroleum to-corporate text-white rounded-lg hover:from-corporate-deep hover:to-corporate-darker transition-colors duration-200 flex items-center gap-2 font-medium"
+              className="px-4 py-2 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-lg hover:from-[var(--theme-primary)]-deep hover:to-[var(--theme-primary)]-darker transition-colors duration-200 flex items-center gap-2 font-medium"
             >
               <Icon name="fa-download" className="w-4 h-4" />
               {t("ialab.viewer_modal.download")}
@@ -87,18 +87,18 @@ const DocumentViewer = ({ resource, onAutoComplete }) => {
           <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
             <Icon
               name="fa-file-pdf"
-              className="text-petroleum/30 w-16 h-16 mb-4"
+              className="text-[var(--theme-emphasis)]/30 w-16 h-16 mb-4"
             />
-            <p className="text-petroleum font-semibold mb-2">
+            <p className="text-[var(--theme-emphasis)] font-semibold mb-2">
               {t("ialab.viewer_modal.cannot_load")}
             </p>
-            <p className="text-petroleum/60 text-sm mb-6">
+            <p className="text-[var(--theme-emphasis)]/60 text-sm mb-6">
               {t("ialab.viewer_modal.try_download")}
             </p>
             <a
               href={resource.url}
               download
-              className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-lg hover:from-corporate-deep hover:to-corporate-darker transition-colors flex items-center gap-2 font-medium"
+              className="px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-lg hover:from-[var(--theme-primary)]-deep hover:to-[var(--theme-primary)]-darker transition-colors flex items-center gap-2 font-medium"
             >
               <Icon name="fa-download" className="w-4 h-4" />
               {t("ialab.viewer_modal.download")}

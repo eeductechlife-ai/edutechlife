@@ -20,27 +20,27 @@ const FinalChallenge = () => {
   return (
     <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-5">
       <div className="flex flex-col items-center text-center mb-2">
-        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-lg mb-4 mt-2">
+        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-lg mb-4 mt-2">
           <BrainCircuit className="w-10 h-10 text-white" />
         </div>
-        <h3 className="text-2xl font-black text-petroleum uppercase tracking-tighter mb-3">Desafío 1</h3>
-        <div className="bg-gradient-to-br from-petroleum/[0.04] to-corporate/[0.04] rounded-2xl p-5 border border-petroleum/10 max-w-lg w-full mb-3">
+        <h3 className="text-2xl font-black text-[var(--theme-emphasis)] uppercase tracking-tighter mb-3">Desafío 1</h3>
+        <div className="bg-gradient-to-br from-[var(--theme-emphasis)]/[0.04] to-[var(--theme-primary)]/[0.04] rounded-2xl p-5 border border-[var(--theme-emphasis)]/10 max-w-lg w-full mb-3">
           <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic">
             {t('ova.introprompt.challenge_instructions')}
           </p>
         </div>
         <div className="grid grid-cols-3 gap-3 max-w-xs w-full mt-4">
-          <div className="bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl p-3 text-center border border-petroleum/10">
-            <BrainCircuit className="w-4 h-4 text-corporate mx-auto mb-1" />
-            <p className="text-[9px] font-semibold text-petroleum uppercase tracking-wider">{t('ova.introprompt.challenge_badge_apply') || 'Aplicar'}</p>
+          <div className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-xl p-3 text-center border border-[var(--theme-emphasis)]/10">
+            <BrainCircuit className="w-4 h-4 text-[var(--theme-primary)] mx-auto mb-1" />
+            <p className="text-[9px] font-semibold text-[var(--theme-emphasis)] uppercase tracking-wider">{t('ova.introprompt.challenge_badge_apply') || 'Aplicar'}</p>
           </div>
-          <div className="bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl p-3 text-center border border-petroleum/10">
+          <div className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-xl p-3 text-center border border-[var(--theme-emphasis)]/10">
             <Star className="w-4 h-4 text-amber-500 mx-auto mb-1 fill-amber-500" />
-            <p className="text-[9px] font-semibold text-petroleum uppercase tracking-wider">{t('ova.introprompt.challenge_badge_practice') || 'Practicar'}</p>
+            <p className="text-[9px] font-semibold text-[var(--theme-emphasis)] uppercase tracking-wider">{t('ova.introprompt.challenge_badge_practice') || 'Practicar'}</p>
           </div>
-          <div className="bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-xl p-3 text-center border border-petroleum/10">
+          <div className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-xl p-3 text-center border border-[var(--theme-emphasis)]/10">
             <Award className="w-4 h-4 text-amber-500 mx-auto mb-1" />
-            <p className="text-[9px] font-semibold text-petroleum uppercase tracking-wider">{t('ova.introprompt.challenge_badge_challenge') || 'Desafiar'}</p>
+            <p className="text-[9px] font-semibold text-[var(--theme-emphasis)] uppercase tracking-wider">{t('ova.introprompt.challenge_badge_challenge') || 'Desafiar'}</p>
           </div>
         </div>
       </div>
@@ -68,13 +68,13 @@ const FinalChallenge = () => {
         {!revealed && (
           <button onClick={() => setRevealed(true)}
             aria-expanded={revealed}
-            className="w-full py-4 bg-gradient-to-r from-petroleum to-corporate text-white font-black rounded-xl flex items-center justify-center gap-2 text-sm uppercase tracking-wider shadow-lg mt-3">
+            className="w-full py-4 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white font-black rounded-xl flex items-center justify-center gap-2 text-sm uppercase tracking-wider shadow-lg mt-3">
             <ArrowLeftRight className="w-5 h-5" /> {t('ova.introprompt.challenge_reveal')}
           </button>
         )}
         {revealed && (
-          <div role="alert" className="p-4 bg-petroleum text-white rounded-xl text-center mt-3">
-            <Rocket className="w-8 h-8 mx-auto mb-2 text-corporate" aria-hidden="true" />
+          <div role="alert" className="p-4 bg-[var(--theme-emphasis)] text-white rounded-xl text-center mt-3">
+            <Rocket className="w-8 h-8 mx-auto mb-2 text-[var(--theme-primary)]" aria-hidden="true" />
             <p className="font-bold text-sm text-white leading-relaxed">{t('ova.introprompt.challenge_complete')}</p>
           </div>
         )}

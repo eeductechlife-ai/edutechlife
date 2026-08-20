@@ -54,13 +54,13 @@ const CATEGORY_STYLES = {
 };
 
 const getAvatarGradient = (name) => {
-  if (!name) return "from-petroleum to-petroleum-dark";
+  if (!name) return "from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark";
   const colors = [
-    "from-petroleum to-petroleum-dark",
-    "from-petroleum-dark to-corporate",
-    "from-petroleum to-corporate",
-    "from-petroleum-dark to-corporate",
-    "from-petroleum to-petroleum-dark",
+    "from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark",
+    "from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]",
+    "from-[var(--theme-emphasis)] to-[var(--theme-primary)]",
+    "from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]",
+    "from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark",
   ];
   const hash = name
     .split("")
@@ -154,10 +154,10 @@ const IALabForumPostCard = ({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: Math.min(index * 0.04, 0.3) }}
-      className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-700/60 hover:border-petroleum/20 dark:hover:border-petroleum/40 hover:shadow-md transition-all duration-200 cursor-pointer group relative"
+      className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-700/60 hover:border-[var(--theme-emphasis)]/20 dark:hover:border-[var(--theme-emphasis)]/40 hover:shadow-md transition-all duration-200 cursor-pointer group relative"
       onClick={onSelect}
     >
-      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-petroleum/0 via-petroleum/20 to-corporate/0 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-xl" />
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[var(--theme-emphasis)]/0 via-[var(--theme-emphasis)]/20 to-[var(--theme-primary)]/0 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-xl" />
 
       <div className="p-4">
         <div className="flex items-start gap-3">
@@ -198,7 +198,7 @@ const IALabForumPostCard = ({
               </IALabForumUserHoverCard>
               {profile.title &&
                 !["Estudiante", "Student"].includes(profile.title) && (
-                  <span className="px-1.5 py-0.5 bg-petroleum/5 text-petroleum text-[9px] font-medium rounded-full flex-shrink-0">
+                  <span className="px-1.5 py-0.5 bg-[var(--theme-emphasis)]/5 text-[var(--theme-emphasis)] text-[9px] font-medium rounded-full flex-shrink-0">
                     {profile.title}
                   </span>
                 )}
@@ -229,7 +229,7 @@ const IALabForumPostCard = ({
               )}
             </div>
 
-            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1 leading-snug group-hover:text-petroleum transition-colors">
+            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-1 leading-snug group-hover:text-[var(--theme-emphasis)] transition-colors">
               {post.title}
             </h4>
             <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 leading-snug">
@@ -253,7 +253,7 @@ const IALabForumPostCard = ({
               } disabled:opacity-50`}
             >
               {voteState?.isLoading ? (
-                <div className="w-3.5 h-3.5 border-2 border-petroleum/20 border-t-petroleum rounded-full animate-spin" />
+                <div className="w-3.5 h-3.5 border-2 border-[var(--theme-emphasis)]/20 border-t-[var(--theme-emphasis)] rounded-full animate-spin" />
               ) : (
                 <Icon name={voteState?.userVoted ? "fa-heart" : "fa-heart"} />
               )}
@@ -281,7 +281,7 @@ const IALabForumPostCard = ({
             <button
               onClick={handleShare}
               aria-label="Compartir"
-              className="min-w-[44px] min-h-[44px] text-xs text-slate-600 hover:text-petroleum transition-colors relative"
+              className="min-w-[44px] min-h-[44px] text-xs text-slate-600 hover:text-[var(--theme-emphasis)] transition-colors relative"
             >
               <Icon name={shareFeedback ? "fa-check" : "fa-share"} />
               {shareFeedback && (

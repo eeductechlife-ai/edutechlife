@@ -32,10 +32,10 @@ const IALabForumSearchBar = ({ onSearch }) => {
     <div className={`relative mb-3 transition-all duration-200 ${isFocused ? 'scale-[1.01]' : ''}`}>
       <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border bg-white dark:bg-slate-800 transition-all duration-200 ${
         isFocused
-          ? 'border-petroleum/40 dark:border-petroleum/60 shadow-sm shadow-petroleum/5'
+          ? 'border-[var(--theme-emphasis)]/40 dark:border-[var(--theme-emphasis)]/60 shadow-sm shadow-[var(--theme-emphasis)]/5'
           : 'border-slate-200 dark:border-slate-700'
       }`}>
-        <Icon name="fa-search" className={`text-sm transition-colors ${isFocused ? 'text-petroleum' : 'text-slate-600'}`} />
+        <Icon name="fa-search" className={`text-sm transition-colors ${isFocused ? 'text-[var(--theme-emphasis)]' : 'text-slate-600'}`} />
         <input
           ref={inputRef}
           type="search" inputMode="search"

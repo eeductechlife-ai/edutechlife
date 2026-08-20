@@ -107,8 +107,8 @@ export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
 
   return (
     <div className="max-w-3xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards] pb-12">
-      <h2 className="text-3xl font-bold text-petroleum mb-6 flex items-center gap-3">
-        <CheckCircle className="text-corporate" size={32} />{" "}
+      <h2 className="text-3xl font-bold text-[var(--theme-emphasis)] mb-6 flex items-center gap-3">
+        <CheckCircle className="text-[var(--theme-primary)]" size={32} />{" "}
         {t("ova.buildgpt.quiz_title")}
       </h2>
       {!showResult ? (
@@ -130,7 +130,7 @@ export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
                 "w-full text-left p-4 rounded-xl border transition-all duration-300 ";
               if (selected === null) {
                 btnClass +=
-                  "border-gray-200 dark:border-slate-600 hover:border-corporate hover:bg-cyan-50";
+                  "border-gray-200 dark:border-slate-600 hover:border-[var(--theme-primary)] hover:bg-cyan-50";
               } else {
                 if (i === questions[currentQ].answer) {
                   btnClass +=
@@ -168,10 +168,10 @@ export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
         </Card>
       ) : (
         <Card className="text-center animate-[scaleIn_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]" aria-live="polite">
-          <div className="w-24 h-24 mx-auto bg-gradient-to-tr from-corporate to-petroleum rounded-full flex items-center justify-center text-white text-4xl mb-6 shadow-lg shadow-cyan-200">
+          <div className="w-24 h-24 mx-auto bg-gradient-to-tr from-[var(--theme-primary)] to-[var(--theme-emphasis)] rounded-full flex items-center justify-center text-white text-4xl mb-6 shadow-lg shadow-cyan-200">
             <Award size={48} />
           </div>
-          <h3 className="text-3xl font-bold text-petroleum mb-2">
+          <h3 className="text-3xl font-bold text-[var(--theme-emphasis)] mb-2">
             {t("ova.buildgpt.quiz_result_title")}
           </h3>
           <p className="text-xl text-gray-600 dark:text-slate-300 mb-6">

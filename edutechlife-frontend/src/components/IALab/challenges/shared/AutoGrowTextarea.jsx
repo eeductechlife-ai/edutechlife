@@ -21,7 +21,7 @@ const AutoGrowTextarea = forwardRef(({ value, onChange, placeholder, className =
       placeholder={placeholder}
       aria-required={ariaRequired}
       aria-describedby={ariaDescribedby}
-      className={`w-full bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none text-sm leading-relaxed min-h-[120px] max-h-[320px] ${className}`}
+      className={`w-full bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[var(--theme-primary)] focus:ring-2 focus:ring-[var(--theme-primary)]/20 resize-none text-sm leading-relaxed min-h-[120px] max-h-[320px] ${className}`}
       {...props}
     />
   );

@@ -38,7 +38,7 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
               {seg.onClick ? (
                 <button
                   onClick={seg.onClick}
-                  className="font-medium text-slate-500 hover:text-petroleum dark:text-slate-400 dark:hover:text-corporate transition-colors cursor-pointer truncate max-w-[120px] sm:max-w-[200px] inline-block align-bottom py-1"
+                  className="font-medium theme-text-muted hover:theme-text-primary transition-colors cursor-pointer truncate max-w-[120px] sm:max-w-[200px] inline-block align-bottom py-1"
                 >
                   {seg.icon && <Icon name={seg.icon} className="text-[9px] mr-1 inline" />}
                   {seg.label}
@@ -46,7 +46,7 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
               ) : seg.href ? (
                 <a
                   href={seg.href}
-                  className="font-medium text-slate-500 hover:text-petroleum dark:text-slate-400 dark:hover:text-corporate transition-colors truncate max-w-[120px] sm:max-w-[200px] inline-block align-bottom py-1"
+                  className="font-medium theme-text-muted hover:theme-text-primary transition-colors truncate max-w-[120px] sm:max-w-[200px] inline-block align-bottom py-1"
                 >
                   {seg.icon && <Icon name={seg.icon} className="text-[9px] mr-1 inline" />}
                   {seg.label}
@@ -63,7 +63,7 @@ const Breadcrumbs = memo(function Breadcrumbs({ segments, className = '', separa
           <li className="text-slate-300 dark:text-slate-600" aria-hidden="true">{separator}</li>
         )}
         <li aria-current="page">
-          <span className="font-semibold text-petroleum dark:text-corporate truncate max-w-[120px] sm:max-w-[200px] inline-block align-bottom">
+          <span className="font-semibold theme-text-primary truncate max-w-[120px] sm:max-w-[200px] inline-block align-bottom">
             {lastSegment.icon && <Icon name={lastSegment.icon} className="text-[9px] mr-1 inline" />}
             {lastSegment.label}
           </span>

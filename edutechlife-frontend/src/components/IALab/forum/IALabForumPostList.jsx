@@ -72,8 +72,8 @@ const IALabForumPostList = ({ onSelectPost, onAction }) => {
         </div>
       ) : posts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 px-4">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-petroleum/10 to-corporate/10 border border-petroleum/10 flex items-center justify-center mb-4">
-            <Icon name="fa-comment-dots" className="text-petroleum text-2xl" />
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 border border-[var(--theme-emphasis)]/10 flex items-center justify-center mb-4">
+            <Icon name="fa-comment-dots" className="text-[var(--theme-emphasis)] text-2xl" />
           </div>
           <h4 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-1">
             {category !== 'all'
@@ -103,7 +103,7 @@ const IALabForumPostList = ({ onSelectPost, onAction }) => {
                   onClick={() => setSortBy(opt.id)}
                   className={`px-3 py-2 rounded-lg text-[10px] font-medium transition-all ${
                     sortBy === opt.id
-                      ? 'bg-petroleum text-white dark:bg-petroleum dark:text-white'
+                      ? 'bg-[var(--theme-emphasis)] text-white dark:bg-[var(--theme-emphasis)] dark:text-white'
                       : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700'
                   }`}
                 >
@@ -141,7 +141,7 @@ const IALabForumPostList = ({ onSelectPost, onAction }) => {
 
           {hasMore && (
             <div ref={loaderRef} className="flex justify-center py-4">
-              <div className="w-6 h-6 border-2 border-petroleum/20 border-t-petroleum rounded-full animate-spin" />
+              <div className="w-6 h-6 border-2 border-[var(--theme-emphasis)]/20 border-t-[var(--theme-emphasis)] rounded-full animate-spin" />
             </div>
           )}
         </>

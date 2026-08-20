@@ -20,7 +20,7 @@ function XPCard() {
         </div>
         <div>
           <p className="text-xs text-slate-500">Nivel {level}</p>
-          <p className="text-xl font-bold text-petroleum">{xp?.toLocaleString() || 0} XP</p>
+          <p className="text-xl font-bold text-[var(--theme-emphasis)]">{xp?.toLocaleString() || 0} XP</p>
         </div>
       </div>
       <div className="relative h-2 bg-slate-100 rounded-full overflow-hidden">

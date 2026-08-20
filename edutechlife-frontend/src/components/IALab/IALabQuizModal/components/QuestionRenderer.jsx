@@ -20,7 +20,7 @@ export function QuestionRenderer({ question, questionIndex, totalQuestions, sele
     <div className="p-6">
       <div className="mb-6">
         <div className="flex items-start gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center shadow-lg shadow-petroleum/20 mt-0.5 flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-lg shadow-[var(--theme-emphasis)]/20 mt-0.5 flex-shrink-0">
             <span className="text-white font-bold text-sm">{questionIndex + 1}</span>
           </div>
           <div className="min-w-0 flex-1">
@@ -63,17 +63,17 @@ export function QuestionRenderer({ question, questionIndex, totalQuestions, sele
               onClick={() => onSelectAnswer(option.id)}
               className={`w-full text-left min-h-[44px] p-3.5 rounded-xl border-2 transition-all duration-300 flex items-start gap-3 ${
                 isSelected
-                  ? 'border-corporate bg-corporate/5 shadow-[0_0_15px_rgba(0,188,212,0.15)] dark:border-mint dark:bg-mint/10 dark:shadow-mint/20'
+                  ? 'border-[var(--theme-primary)] bg-[var(--theme-primary)]/5 shadow-[0_0_15px_rgba(0,188,212,0.15)] dark:border-mint dark:bg-mint/10 dark:shadow-mint/20'
                   : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 dark:hover:border-slate-500'
               }`}
             >
               <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all duration-300 ${
-                isSelected ? 'border-corporate bg-corporate' : 'border-slate-300'
+                isSelected ? 'border-[var(--theme-primary)] bg-[var(--theme-primary)]' : 'border-slate-300'
               }`}>
                 {isSelected && <div className="w-2 h-2 rounded-full bg-white"></div>}
               </div>
               <label htmlFor={optionId} className={`text-sm md:text-base leading-relaxed cursor-pointer ${
-                isSelected ? 'text-petroleum font-medium' : 'text-slate-700 dark:text-slate-200'
+                isSelected ? 'text-[var(--theme-emphasis)] font-medium' : 'text-slate-700 dark:text-slate-200'
               }`}>
                 {option.label}
               </label>

@@ -89,8 +89,8 @@ const ReviewScheduler = ({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Icon name="fa-calendar-days" className="text-corporate text-sm" />
-          <h4 className="text-sm font-bold text-petroleum dark:text-white">
+          <Icon name="fa-calendar-days" className="text-[var(--theme-primary)] text-sm" />
+          <h4 className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-white">
             {t("ialab.review_scheduler.title")}
           </h4>
         </div>
@@ -123,7 +123,7 @@ const ReviewScheduler = ({
                   {box.short}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs font-semibold text-petroleum dark:text-white truncate">
+                  <div className="text-xs font-semibold text-[var(--theme-emphasis)] dark:text-white truncate">
                     {item.itemId}
                   </div>
                   <div className="text-[10px] text-rose-600 dark:text-rose-400 font-medium">

@@ -42,12 +42,12 @@ import { stopSpeech } from '../../utils/speech';
 const Logo = () => (
   <div className="flex items-center gap-2 select-none group cursor-pointer">
     <div className="relative w-9 h-9 flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-tr from-petroleum to-corporate rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-[var(--theme-text)] to-[var(--theme-primary)] rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
       <BrainCircuit className="w-5 h-5 text-white relative z-10" />
     </div>
     <div className="text-xl tracking-tighter flex items-center lowercase">
-      <span className="font-[900] text-petroleum">edutech</span>
-      <span className="font-[400] text-corporate">life</span>
+      <span className="font-[900] theme-text">edutech</span>
+      <span className="font-[400] theme-text-primary">life</span>
     </div>
   </div>
 );
@@ -96,7 +96,7 @@ const AutomationFramework = () => {
             aria-expanded={expanded === s.k}
             className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
               expanded === s.k
-                ? 'border-corporate bg-blue-50 dark:bg-slate-700 shadow-md'
+                ? 'border-[var(--theme-primary)] bg-blue-50 dark:bg-slate-700 shadow-md'
                 : 'bg-white dark:bg-slate-800 border-slate-50 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600'
             }`}
           >
@@ -105,7 +105,7 @@ const AutomationFramework = () => {
                 {idx + 1}
               </div>
               <div className="flex-1 min-w-0">
-                <h5 className="font-[900] text-petroleum dark:text-white text-sm leading-tight">{s.label}</h5>
+                <h5 className="font-[900] theme-text dark:text-white text-sm leading-tight">{s.label}</h5>
                 {expanded === s.k && (
                   <div className="mt-2 space-y-1.5">
                     <p className="text-xs text-slate-600 dark:text-slate-300 font-medium">{s.desc}</p>
@@ -150,7 +150,7 @@ const CaseView = ({ caseKey, icon, gradient, onComplete }) => {
         <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-2">
           {[1, 2, 3].map((step) => (
             <div key={step} className="flex items-center gap-2">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-petroleum text-white text-[10px] font-black flex items-center justify-center">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--theme-emphasis)] text-white text-[10px] font-black flex items-center justify-center">
                 {step}
               </span>
               <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
@@ -168,7 +168,7 @@ const CaseView = ({ caseKey, icon, gradient, onComplete }) => {
           onComplete();
         }}
         disabled={analyzed}
-        className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-petroleum to-corporate text-white text-xs font-black uppercase tracking-wider shadow-md disabled:opacity-50 transition-all"
+        className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[var(--theme-text)] to-[var(--theme-primary)] text-white text-xs font-black uppercase tracking-wider shadow-md disabled:opacity-50 transition-all"
       >
         {analyzed ? t('ova.automation.analyzed') : t('ova.automation.analyze_workflow')}
       </button>
@@ -250,7 +250,7 @@ const DesignYourFlow = ({ onCompleted }) => {
               aria-pressed={tools.includes(opt.k)}
               className={`p-2.5 rounded-lg border-2 transition-all text-xs font-bold text-center ${
                 tools.includes(opt.k)
-                  ? 'border-corporate bg-blue-50 dark:bg-slate-700 text-petroleum dark:text-white'
+                  ? 'border-[var(--theme-primary)] bg-blue-50 dark:bg-slate-700 theme-text dark:text-white'
                   : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-600'
               }`}
             >
@@ -270,7 +270,7 @@ const DesignYourFlow = ({ onCompleted }) => {
             <div className="flex items-center gap-1.5 flex-wrap">
               {tools.map((t, i) => (
                 <React.Fragment key={t}>
-                  <span className="px-2.5 py-1 rounded-full bg-petroleum text-white text-xs font-black">
+                  <span className="px-2.5 py-1 rounded-full bg-[var(--theme-emphasis)] text-white text-xs font-black">
                     {toolOptions.find((x) => x.k === t)?.label}
                   </span>
                   {i < tools.length - 1 && <ArrowRight className="w-3 h-3 text-slate-400" />}
@@ -301,7 +301,7 @@ const Conclusion = () => {
       <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-5 shadow-xl border-4 border-white dark:border-slate-700">
         <Zap className="w-10 h-10 text-white" />
       </div>
-      <h2 className="text-3xl font-black text-petroleum dark:text-white mb-2 uppercase tracking-tighter">
+      <h2 className="text-3xl font-black theme-text dark:text-white mb-2 uppercase tracking-tighter">
         {t('ova.automation.conclusion_title')}
       </h2>
       <p className="text-base text-slate-600 dark:text-slate-300 font-bold mb-4 leading-relaxed">
@@ -463,9 +463,9 @@ function OVAAutomationFlows({ onComplete, onClose }) {
         <Logo />
         <div className="flex items-center gap-4">
           {screen !== 'welcome' && (
-            <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-corporate/20">
-              <Star className="text-corporate fill-current" size={14} />
-              <span className="font-bold text-petroleum text-xs">
+            <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-[var(--theme-primary)]/20">
+              <Star className="theme-text-primary fill-current" size={14} />
+              <span className="font-bold theme-text text-xs">
                 {nav.filter((id) => completed.includes(id)).length}/{nav.length - 1}
               </span>
             </div>
@@ -475,7 +475,7 @@ function OVAAutomationFlows({ onComplete, onClose }) {
             aria-label={t('ova.automation.menu_title')}
             className="min-w-[44px] min-h-[44px] p-2.5 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-all border border-slate-100 dark:border-slate-700"
           >
-            <Menu className="w-5 h-5 text-petroleum" />
+            <Menu className="w-5 h-5 theme-text" />
           </button>
         </div>
       </header>
@@ -484,10 +484,10 @@ function OVAAutomationFlows({ onComplete, onClose }) {
         <div className="w-full bg-white dark:bg-slate-800 rounded-2xl shadow-md p-4 md:p-6 relative overflow-hidden border border-slate-50 dark:border-slate-700">
           {screen.startsWith('m') && (
             <div className="mb-4 border-b border-slate-50 dark:border-slate-700 pb-3">
-              <div className="flex items-center gap-1.5 text-corporate font-[900] text-[10px] tracking-[0.3em] uppercase">
+              <div className="flex items-center gap-1.5 theme-text-primary font-[900] text-[10px] tracking-[0.3em] uppercase">
                 <Sparkles className="w-3 h-3" /> {t('ova.automation.section_label')}
               </div>
-              <h1 className="text-lg md:text-xl font-[900] text-petroleum dark:text-white tracking-tighter leading-tight">
+              <h1 className="text-lg md:text-xl font-[900] theme-text dark:text-white tracking-tighter leading-tight">
                 {t(`ova.automation.screen_${screen}`)}
               </h1>
             </div>
@@ -505,7 +505,7 @@ function OVAAutomationFlows({ onComplete, onClose }) {
                 stopSpeech();
               }}
               aria-label={t('ova.automation.nav_prev')}
-              className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700"
+              className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:theme-text dark:hover:theme-text-primary rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700"
               disabled={curIdx <= 1}
             >
               <ChevronLeft className="w-5 h-5" />
@@ -516,7 +516,7 @@ function OVAAutomationFlows({ onComplete, onClose }) {
                   key={i}
                   aria-hidden="true"
                   className={`h-1.5 rounded-full transition-all duration-700 ${
-                    i + 1 === curIdx ? 'w-8 bg-petroleum' : completed.includes(nav[i + 1]) ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'
+                    i + 1 === curIdx ? 'w-8 bg-[var(--theme-emphasis)]' : completed.includes(nav[i + 1]) ? 'w-2 bg-[var(--theme-primary)]' : 'w-2 bg-slate-200 dark:bg-slate-600'
                   }`}
                 />
               ))}
@@ -524,7 +524,7 @@ function OVAAutomationFlows({ onComplete, onClose }) {
             <button
               onClick={isLastScreen ? () => { onClose?.(); } : nextScreen}
               className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${
-                isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-petroleum to-corporate text-white'
+                isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-[var(--theme-text)] to-[var(--theme-primary)] text-white'
               }`}
             >
               {isLastScreen ? t('ova.automation.nav_finish') : t('ova.automation.nav_next')} <ArrowRightCircle className="w-4 h-4" />
@@ -554,8 +554,8 @@ function OVAAutomationFlows({ onComplete, onClose }) {
           >
             <div className="flex items-center justify-between border-b-2 border-slate-50 dark:border-slate-700 pb-4">
               <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.3em] uppercase">{t('ova.automation.menu_title')}</h3>
-              <div className="flex items-center gap-1.5 text-[10px] font-black text-petroleum">
-                <Star className="w-3 h-3 text-corporate fill-current" />
+              <div className="flex items-center gap-1.5 text-[10px] font-black theme-text">
+                <Star className="w-3 h-3 theme-text-primary fill-current" />
                 {completed.filter((id) => id.startsWith('m')).length}/{nav.filter((id) => id.startsWith('m')).length}
               </div>
             </div>
@@ -568,26 +568,26 @@ function OVAAutomationFlows({ onComplete, onClose }) {
                     key={id}
                     onClick={() => goToScreen(id)}
                     className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${
-                      isCurrent ? 'bg-petroleum text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
+                      isCurrent ? 'bg-[var(--theme-emphasis)] text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${
-                          isCompleted ? 'bg-corporate text-white' : isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'
+                          isCompleted ? 'bg-[var(--theme-primary)] text-white' : isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'
                         }`}
                       >
                         {idx}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className={`uppercase tracking-wider ${isCurrent ? 'text-white' : isCompleted ? 'text-petroleum dark:text-corporate' : 'text-slate-500 dark:text-slate-400'}`}>
+                        <div className={`uppercase tracking-wider ${isCurrent ? 'text-white' : isCompleted ? 'theme-text dark:theme-text-primary' : 'text-slate-500 dark:text-slate-400'}`}>
                           {id === 'welcome' ? t('ova.automation.menu_welcome') : t(`ova.automation.screen_${id}`)}
                         </div>
                         <div className="mt-1.5 w-full h-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                          <div className={`h-full rounded-full transition-all duration-700 ${isCompleted ? 'w-full bg-corporate' : isCurrent ? 'w-1/3 bg-petroleum' : 'w-0'}`} />
+                          <div className={`h-full rounded-full transition-all duration-700 ${isCompleted ? 'w-full bg-[var(--theme-primary)]' : isCurrent ? 'w-1/3 bg-[var(--theme-emphasis)]' : 'w-0'}`} />
                         </div>
                       </div>
-                      {isCompleted && <CheckCircle2 className="w-4 h-4 text-corporate shrink-0" />}
+                      {isCompleted && <CheckCircle2 className="w-4 h-4 theme-text-primary shrink-0" />}
                     </div>
                   </button>
                 );

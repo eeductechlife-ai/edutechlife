@@ -70,12 +70,12 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
   const EdutechLogo = () => (
     <div className="flex items-center gap-2 select-none">
       <div className="relative w-9 h-9 flex items-center justify-center">
-        <div className="absolute inset-0 bg-gradient-to-tr from-corporate to-petroleum rounded-xl rotate-3 shadow-md"></div>
+        <div className="absolute inset-0 bg-gradient-to-tr from-[var(--theme-primary)] to-[var(--theme-emphasis)] rounded-xl rotate-3 shadow-md"></div>
         <Brain className="w-5 h-5 text-white relative z-10" />
       </div>
       <div className="text-xl tracking-tighter flex items-center lowercase font-bold">
-        <span className="text-petroleum">edu</span>
-        <span className="text-corporate">techlife</span>
+        <span className="text-[var(--theme-emphasis)]">edu</span>
+        <span className="text-[var(--theme-primary)]">techlife</span>
       </div>
     </div>
   );

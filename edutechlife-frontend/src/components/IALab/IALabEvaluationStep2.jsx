@@ -155,7 +155,7 @@ Eres un [especificar rol experto]
             {/* Instrucciones */}
             <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
                 <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
                         <Icon name="fa-magic" className="text-white text-lg" />
                     </div>
                     <div>
@@ -216,7 +216,7 @@ Eres un [especificar rol experto]
                         placeholder={t('ialab.evaluation.step2.placeholder')}
                         aria-required="true"
                         aria-describedby="evaluation-step2-chars"
-                        className="w-full h-64 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-corporate/20 resize-none font-mono text-sm leading-relaxed"
+                        className="w-full h-64 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-[var(--theme-primary)] focus:ring-2 focus:ring-[var(--theme-primary)]/20 resize-none font-mono text-sm leading-relaxed"
                         spellCheck="false"
                         autoFocus
                     />
@@ -236,7 +236,7 @@ Eres un [especificar rol experto]
             {showSuggestions && (
                 <div className="space-y-6">
                     <div className="flex items-center gap-2">
-                        <Icon name="fa-lightbulb" className="text-corporate" />
+                        <Icon name="fa-lightbulb" className="text-[var(--theme-primary)]" />
                         <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step2.suggestions_title')}</h4>
                     </div>
                     
@@ -245,11 +245,11 @@ Eres un [especificar rol experto]
                             <button
                                 key={index}
                                 onClick={() => handleImprovementClick(suggestion)}
-                                className="bg-white hover:bg-slate-50 border border-slate-200 rounded-xl p-4 text-left transition-all duration-200 hover:border-corporate/30 group"
+                                className="bg-white hover:bg-slate-50 border border-slate-200 rounded-xl p-4 text-left transition-all duration-200 hover:border-[var(--theme-primary)]/30 group"
                             >
                                 <div className="flex items-start gap-3 mb-3">
-                                    <div className="w-10 h-10 rounded-lg bg-corporate/10 flex items-center justify-center flex-shrink-0 group-hover:bg-corporate/20">
-                                        <span className="text-corporate font-bold">{index + 1}</span>
+                                    <div className="w-10 h-10 rounded-lg bg-[var(--theme-primary)]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--theme-primary)]/20">
+                                        <span className="text-[var(--theme-primary)] font-bold">{index + 1}</span>
                                     </div>
                                     <div>
                                         <h5 className="font-semibold text-slate-800 mb-1">{suggestion.title}</h5>
@@ -266,7 +266,7 @@ Eres un [especificar rol experto]
                     {/* Plantillas de prompts */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
-                            <Icon name="fa-copy" className="text-petroleum" />
+                            <Icon name="fa-copy" className="text-[var(--theme-emphasis)]" />
                             <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step2.templates_title')}</h4>
                         </div>
                         
@@ -275,11 +275,11 @@ Eres un [especificar rol experto]
                                 <button
                                     key={index}
                                     onClick={() => applyTemplate(template.template)}
-                                    className="bg-white hover:bg-slate-50 border border-slate-200 rounded-xl p-4 text-left transition-all duration-200 hover:border-petroleum/30 group"
+                                    className="bg-white hover:bg-slate-50 border border-slate-200 rounded-xl p-4 text-left transition-all duration-200 hover:border-[var(--theme-emphasis)]/30 group"
                                 >
                                     <div className="flex items-center gap-3 mb-3">
-                                        <div className="w-10 h-10 rounded-lg bg-petroleum/10 flex items-center justify-center group-hover:bg-petroleum/20">
-                                            <Icon name="fa-file-alt" className="text-petroleum" />
+                                        <div className="w-10 h-10 rounded-lg bg-[var(--theme-emphasis)]/10 flex items-center justify-center group-hover:bg-[var(--theme-emphasis)]/20">
+                                            <Icon name="fa-file-alt" className="text-[var(--theme-emphasis)]" />
                                         </div>
                                         <h5 className="font-semibold text-slate-800">{template.name}</h5>
                                     </div>

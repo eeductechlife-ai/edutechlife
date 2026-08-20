@@ -20,6 +20,7 @@ const ExamPrep = lazy(() => import("../examPrep"));
 const FlashcardSystem = lazy(() => import("../flashcardSystem"));
 const OralExamSimulator = lazy(() => import("../OralExamSimulator"));
 const GradeScanner = lazy(() => import("../GradeScanner"));
+const WeeklyScheduleView = lazy(() => import("../schedule"));
 
 const sharedTransition = { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] };
 
@@ -91,6 +92,16 @@ function createTabRenderer(deps) {
       component: () => <SubjectsView subjects={subjects} />,
       errorKey: "materias",
       errorMsg: t("smartboard.error_load_subjects"),
+    },
+    horario: {
+      component: () => (
+        <LazyLoad fallback={<SectionFallback tab="horario" />}>
+          <WeeklyScheduleView />
+        </LazyLoad>
+      ),
+      errorKey: "horario",
+      errorMsg: "Error al cargar el horario",
+      className: "space-y-4",
     },
     puntos: {
       component: () => (
@@ -183,6 +194,7 @@ const CinematicContent = memo(
       setVakResultAndRecommendations,
       missions,
       subjects,
+      subjectsWithGrades,
       completeMission,
     } = useSmartBoardKids();
 
@@ -200,7 +212,7 @@ const CinematicContent = memo(
           handleVakComplete,
           missions,
           completeMission,
-          subjects,
+          subjects: subjectsWithGrades || subjects,
           vakResult,
           t,
           navigate,
@@ -211,6 +223,7 @@ const CinematicContent = memo(
         handleVakComplete,
         missions,
         completeMission,
+        subjectsWithGrades,
         subjects,
         vakResult,
         t,

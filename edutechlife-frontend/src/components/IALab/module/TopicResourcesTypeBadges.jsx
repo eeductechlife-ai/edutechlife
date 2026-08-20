@@ -13,7 +13,7 @@ const TopicResourcesTypeBadges = ({ resources }) => {
   const sortedTypes = Object.entries(typeCounts).sort((a, b) => b[1] - a[1]);
 
   return (
-    <div className="px-6 py-3 border-b border-petroleum/25 flex flex-wrap items-center gap-2">
+    <div className="px-6 py-3 border-b border-[var(--theme-emphasis)]/25 flex flex-wrap items-center gap-2">
       {sortedTypes.map(([type, count]) => {
         const cfg = RESOURCE_TYPE_CONFIG[type] || {
           label: type,

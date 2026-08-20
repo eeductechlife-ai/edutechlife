@@ -14,8 +14,8 @@ const actionIcons = {
   },
   resources: {
     icon: "fa-video",
-    bg: "bg-corporate/10",
-    color: "text-corporate",
+    bg: "bg-[var(--theme-primary)]/10",
+    color: "text-[var(--theme-primary)]",
   },
 };
 

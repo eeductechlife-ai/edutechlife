@@ -12,6 +12,7 @@ import {
   DEFAULT_MISSIONS,
   DEFAULT_SUBJECTS,
 } from "./smartBoardData";
+import { getSubjectEmoji } from "../config/subjectMappings";
 import {
   useSmartBoardPersistence,
   getLocalStorage,
@@ -200,6 +201,68 @@ export const SmartBoardKidsProvider = ({ children }) => {
     vakResult,
     userId,
   });
+
+  // Derive subject progress from scanned student grades (nota/5 × 100).
+  // When grades exist, shows ALL scanned subjects (not just the 6 defaults).
+  const subjectsWithGrades = useMemo(() => {
+    if (!studentGrades?.length) return subjects;
+
+    const norm = (s) =>
+      (s || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "")
+        .replace(/[^a-z0-9]/g, "");
+
+    // Keywords to match each default subject against boletín subject names
+    const KEYWORDS = {
+      matematicas: ["matemat", "geometr", "algebra"],
+      lenguaje: ["lengua", "lenguaj", "castellan", "lecto", "escritura"],
+      ciencias: ["ciencia", "natur", "quimic", "biolog", "fisic"],
+      historia: ["social", "histor", "civism", "ciudadan", "geograf"],
+      ingles: ["ingles", "english"],
+      arte: ["arte", "artist", "music"],
+    };
+
+    // Color palette for extra subjects not in the defaults
+    const EXTRA_COLORS = [
+      "#7C3AED", "#DB2777", "#0891B2", "#059669", "#D97706",
+      "#DC2626", "#2563EB", "#65A30D", "#9333EA", "#C2410C",
+    ];
+
+    // Step 1: update the 6 default subjects with matching grade data
+    const matchedGradeKeys = new Set();
+    const updatedDefaults = subjects.map((subject) => {
+      const keys = KEYWORDS[subject.id] || [norm(subject.name).slice(0, 5)];
+      const match = studentGrades.find((g) => {
+        const gn = norm(g.subject);
+        return keys.some((k) => gn.includes(k));
+      });
+      if (!match) return subject;
+      matchedGradeKeys.add(norm(match.subject));
+      const progress = Math.min(100, Math.round((match.score / 5) * 100));
+      return { ...subject, progress, gradeScore: match.score };
+    });
+
+    // Step 2: add extra subjects from the boletín that didn't match any default
+    let colorIdx = 0;
+    const extras = studentGrades
+      .filter((g) => !matchedGradeKeys.has(norm(g.subject)))
+      .map((g) => {
+        const color = EXTRA_COLORS[colorIdx++ % EXTRA_COLORS.length];
+        const progress = Math.min(100, Math.round((g.score / 5) * 100));
+        return {
+          id: norm(g.subject) || `extra_${colorIdx}`,
+          name: g.subject,
+          icon: getSubjectEmoji(g.subject),
+          color,
+          progress,
+          gradeScore: g.score,
+        };
+      });
+
+    return [...updatedDefaults, ...extras];
+  }, [subjects, studentGrades]);
 
   const {
     addPoints,
@@ -581,6 +644,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     // Missions & Subjects
     missions,
     subjects,
+    subjectsWithGrades,
     completeMission,
 
     // Persisted data from other SmartBoard tools

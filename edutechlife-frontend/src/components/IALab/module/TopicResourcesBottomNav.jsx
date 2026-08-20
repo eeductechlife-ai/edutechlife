@@ -33,25 +33,25 @@ const TopicResourcesBottomNav = ({
   const resourceType = currentResource?.type;
 
   return (
-    <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-petroleum/25 bg-white flex items-center justify-between gap-3">
+    <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-[var(--theme-emphasis)]/25 bg-white flex items-center justify-between gap-3">
       <div className="flex items-center gap-3 min-w-0">
         <div
           className={cn(
             "w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0",
-            "bg-gradient-to-br from-petroleum/10 to-corporate/10 text-petroleum text-sm sm:text-lg",
+            "bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 text-[var(--theme-emphasis)] text-sm sm:text-lg",
           )}
         >
           <Icon
             name={getResourceIcon(resourceType)}
-            className="text-petroleum w-4 h-4 sm:w-5 sm:h-5"
+            className="text-[var(--theme-emphasis)] w-4 h-4 sm:w-5 sm:h-5"
           />
         </div>
         <div className="min-w-0">
-          <h4 className="font-semibold text-petroleum text-xs sm:text-sm truncate">
+          <h4 className="font-semibold text-[var(--theme-emphasis)] text-xs sm:text-sm truncate">
             {currentResource?.title ||
               t("ialab.topic_resources.select_resource")}
           </h4>
-          <div className="flex items-center gap-1 sm:gap-2 text-xs text-petroleum/60">
+          <div className="flex items-center gap-1 sm:gap-2 text-xs text-[var(--theme-emphasis)]/60">
             {resourceType === "video" && (
               <span>
                 {durationLoading
@@ -74,16 +74,16 @@ const TopicResourcesBottomNav = ({
           }}
           disabled={activeResourceIndex <= 0}
           className={cn(
-            "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
+            "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-[var(--theme-emphasis)]/25 border-l-4 border-l-[var(--theme-emphasis)] transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
             activeResourceIndex <= 0
-              ? "text-petroleum/50 cursor-not-allowed opacity-40"
-              : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow",
+              ? "text-[var(--theme-emphasis)]/50 cursor-not-allowed opacity-40"
+              : "text-[var(--theme-emphasis)] hover:bg-[var(--theme-emphasis)]/5 hover:border-l-[var(--theme-primary)] hover:shadow",
           )}
           aria-label={t("ialab.viewer_modal.previous_aria")}
         >
           <Icon name="fa-chevron-left" className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
-        <div className="px-3 py-1 bg-gradient-to-br from-petroleum/10 to-corporate/10 text-petroleum rounded-full text-sm font-medium">
+        <div className="px-3 py-1 bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 text-[var(--theme-emphasis)] rounded-full text-sm font-medium">
           {activeResourceIndex + 1} / {totalResources}
         </div>
         <button
@@ -95,10 +95,10 @@ const TopicResourcesBottomNav = ({
           }}
           disabled={activeResourceIndex >= totalResources - 1}
           className={cn(
-            "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-petroleum/25 border-l-4 border-l-petroleum transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
+            "w-9 h-9 sm:w-11 sm:h-11 rounded-xl border border-[var(--theme-emphasis)]/25 border-l-4 border-l-[var(--theme-emphasis)] transition-all duration-200 flex items-center justify-center bg-white shadow-sm",
             activeResourceIndex >= totalResources - 1
-              ? "text-petroleum/50 cursor-not-allowed opacity-40"
-              : "text-petroleum hover:bg-petroleum/5 hover:border-l-corporate hover:shadow",
+              ? "text-[var(--theme-emphasis)]/50 cursor-not-allowed opacity-40"
+              : "text-[var(--theme-emphasis)] hover:bg-[var(--theme-emphasis)]/5 hover:border-l-[var(--theme-primary)] hover:shadow",
           )}
           aria-label={t("ialab.viewer_modal.next_aria")}
         >

@@ -127,14 +127,14 @@ const IALabForumOptimized = ({
     };
 
     const getAvatarGradient = (name) => {
-        if (!name) return 'from-petroleum to-petroleum-dark';
+        if (!name) return 'from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark';
 
         const colors = [
-            'from-petroleum to-petroleum-dark',
-            'from-petroleum-dark to-corporate',
-            'from-petroleum to-corporate',
-            'from-petroleum-dark to-corporate',
-            'from-petroleum to-petroleum-dark'
+            'from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark',
+            'from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]',
+            'from-[var(--theme-emphasis)] to-[var(--theme-primary)]',
+            'from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]',
+            'from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark'
         ];
 
         const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
@@ -170,16 +170,16 @@ const IALabForumOptimized = ({
             {...rest}
         >
             {/* Elementos decorativos */}
-            <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-petroleum/6 to-corporate/4 rounded-full blur-2xl pointer-events-none"></div>
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-petroleum/4 to-corporate/2 rounded-full blur-2xl pointer-events-none"></div>
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
+            <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-[var(--theme-emphasis)]/6 to-[var(--theme-primary)]/4 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[var(--theme-emphasis)]/4 to-[var(--theme-primary)]/2 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] rounded-t-2xl" />
 
 
 
             {/* Header */}
             <div className="flex items-center justify-between p-4 md:p-6 border-b border-slate-100 dark:border-slate-700">
                 <div className="flex items-center gap-4">
-                    <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-petroleum to-petroleum-dark flex items-center justify-center flex-shrink-0">
+                    <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark flex items-center justify-center flex-shrink-0">
                         <Icon name="fa-comments" className="text-white text-sm" />
                         {showLiveIndicator && (
                             <div className="absolute -top-1 -right-1 w-3 h-3">
@@ -190,7 +190,7 @@ const IALabForumOptimized = ({
                     </div>
                     <div>
                         <div className="flex items-center gap-2">
-                            <h3 className="text-lg font-bold text-petroleum">
+                            <h3 className="text-lg font-bold text-[var(--theme-emphasis)]">
                                 {t('ialab.forum.optimized.title')}
                             </h3>
                             {showLiveIndicator && (
@@ -245,7 +245,7 @@ const IALabForumOptimized = ({
                 {isLoading ? (
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center">
-                            <div className="w-8 h-8 border-2 border-petroleum/20 border-t-[#004B63] rounded-full animate-spin mx-auto mb-3" />
+                            <div className="w-8 h-8 border-2 border-[var(--theme-emphasis)]/20 border-t-[#004B63] rounded-full animate-spin mx-auto mb-3" />
                             <p className="text-sm text-slate-500">{t('ialab.forum.optimized.loading')}</p>
                         </div>
                     </div>
@@ -256,7 +256,7 @@ const IALabForumOptimized = ({
                             <p className="text-sm text-slate-600 mb-2">{error}</p>
                             <button
                                 onClick={() => loadForumPosts(initialLimit)}
-                                className="text-xs text-petroleum hover:text-petroleum-dark font-medium"
+                                className="text-xs text-[var(--theme-emphasis)] hover:text-[var(--theme-emphasis)]-dark font-medium"
                             >
                                 {t('ialab.forum.optimized.retry')}
                             </button>
@@ -265,8 +265,8 @@ const IALabForumOptimized = ({
                 ) : visiblePosts.length === 0 ? (
                     <div className="flex items-center justify-center h-full">
                         <div className="text-center p-4">
-                            <div className="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-petroleum/10 to-corporate/10 border border-petroleum/10 flex items-center justify-center mb-4">
-                                <Icon name="fa-comment-dots" className="text-petroleum text-xl" />
+                            <div className="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 border border-[var(--theme-emphasis)]/10 flex items-center justify-center mb-4">
+                                <Icon name="fa-comment-dots" className="text-[var(--theme-emphasis)] text-xl" />
                             </div>
                             <h4 className="text-sm font-bold text-slate-800 mb-1">
                                 {t('ialab.forum.optimized.empty_title')}
@@ -315,7 +315,7 @@ const IALabForumOptimized = ({
                                                         {post.profiles?.full_name || t('ialab.forum.optimized.user_fallback')}
                                                     </span>
                                                     {post.tags?.includes('Mentor') && (
-                                                        <span className="px-1.5 py-0.5 bg-petroleum/5 text-petroleum text-[10px] font-medium rounded-full">
+                                                        <span className="px-1.5 py-0.5 bg-[var(--theme-emphasis)]/5 text-[var(--theme-emphasis)] text-[10px] font-medium rounded-full">
                                                             {t('ialab.forum.optimized.mentor_badge')}
                                                         </span>
                                                     )}
@@ -340,7 +340,7 @@ const IALabForumOptimized = ({
                                             )}
                                         >
                                             {isLoadingLike ? (
-                                                <div className="w-3 h-3 border border-petroleum/20 border-t-[#004B63] rounded-full animate-spin" />
+                                                <div className="w-3 h-3 border border-[var(--theme-emphasis)]/20 border-t-[#004B63] rounded-full animate-spin" />
                                             ) : (
                                                 <Icon name={isLiked ? "fa-heart" : "fa-heart"} className={isLiked ? "fill-current" : ""} />
                                             )}
@@ -362,7 +362,7 @@ const IALabForumOptimized = ({
                                             {post.tags?.slice(0, 2).map((tag, tagIndex) => (
                                                 <span
                                                     key={tagIndex}
-                                                    className="px-2 py-0.5 bg-petroleum/5 text-petroleum text-[10px] font-medium rounded-full"
+                                                    className="px-2 py-0.5 bg-[var(--theme-emphasis)]/5 text-[var(--theme-emphasis)] text-[10px] font-medium rounded-full"
                                                 >
                                                     {tag}
                                                 </span>
@@ -389,7 +389,7 @@ const IALabForumOptimized = ({
                             <div className="text-center pt-2">
                                 <button
                                     onClick={handleLoadMore}
-                                    className="text-xs text-petroleum hover:text-petroleum-dark font-medium"
+                                    className="text-xs text-[var(--theme-emphasis)] hover:text-[var(--theme-emphasis)]-dark font-medium"
                                 >
                                     {t('ialab.forum.optimized.show_more', { count: forumPosts.length - initialLimit })}
                                 </button>

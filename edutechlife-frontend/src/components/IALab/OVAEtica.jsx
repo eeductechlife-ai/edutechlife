@@ -38,15 +38,15 @@ import CertificateScreen from "./ova-etica/CertificateScreen";
 const Logo = () => (
   <div className="flex items-center gap-2 select-none group cursor-pointer">
     <div className="relative w-9 h-9 flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-tr from-petroleum to-corporate rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
       <BrainCircuit className="w-5 h-5 text-white relative z-10" />
     </div>
     <div
       className="text-xl tracking-tighter flex items-center lowercase"
       style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
     >
-      <span className="font-[900] text-petroleum">edutech</span>
-      <span className="font-[400] text-corporate">life</span>
+      <span className="font-[900] text-[var(--theme-emphasis)]">edutech</span>
+      <span className="font-[400] text-[var(--theme-primary)]">life</span>
     </div>
   </div>
 );
@@ -93,7 +93,7 @@ const ModuleHistory = ({ texts }) => {
     <div className="animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
       <div className="relative flex flex-col md:flex-row gap-6 md:gap-0">
         <div className="hidden md:flex flex-col items-center gap-2 pt-2 relative">
-          <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-gradient-to-b from-petroleum via-corporate to-petroleum -translate-x-1/2 rounded-full" />
+          <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-gradient-to-b from-[var(--theme-emphasis)] via-[var(--theme-primary)] to-[var(--theme-emphasis)] -translate-x-1/2 rounded-full" />
           {sections.map((s, i) => (
             <button
               key={i}
@@ -101,7 +101,7 @@ const ModuleHistory = ({ texts }) => {
               className="relative flex items-center gap-4 w-full group cursor-pointer z-10"
             >
               <div
-                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-500 ${active === i ? "bg-petroleum border-corporate shadow-lg shadow-corporate/30 scale-125" : "bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 group-hover:border-corporate"}`}
+                className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-500 ${active === i ? "bg-[var(--theme-emphasis)] border-[var(--theme-primary)] shadow-lg shadow-[var(--theme-primary)]/30 scale-125" : "bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 group-hover:border-[var(--theme-primary)]"}`}
               >
                 {active === i && (
                   <div className="w-2 h-2 bg-white rounded-full animate-ping absolute" />
@@ -111,7 +111,7 @@ const ModuleHistory = ({ texts }) => {
                 />
               </div>
               <span
-                className={`text-[10px] font-black uppercase tracking-widest transition-all shrink-0 ${active === i ? "text-petroleum" : "text-slate-400 dark:text-slate-500 group-hover:text-petroleum"}`}
+                className={`text-[10px] font-black uppercase tracking-widest transition-all shrink-0 ${active === i ? "text-[var(--theme-emphasis)]" : "text-slate-400 dark:text-slate-500 group-hover:text-[var(--theme-emphasis)]"}`}
               >
                 {s.era}
               </span>
@@ -128,14 +128,14 @@ const ModuleHistory = ({ texts }) => {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="p-5 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl shadow-md relative overflow-hidden min-h-[160px]"
             >
-              <div className="absolute -right-4 -bottom-4 opacity-5 text-corporate scale-150">
+              <div className="absolute -right-4 -bottom-4 opacity-5 text-[var(--theme-primary)] scale-150">
                 {sections[active].icon}
               </div>
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-gradient-to-br from-petroleum to-corporate text-white rounded-lg shadow-md">
+                <div className="p-2 bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-lg shadow-md">
                   {sections[active].icon}
                 </div>
-                <h4 className="text-petroleum font-[900] text-lg leading-none uppercase tracking-tighter">
+                <h4 className="text-[var(--theme-emphasis)] font-[900] text-lg leading-none uppercase tracking-tighter">
                   {sections[active].t}
                 </h4>
               </div>
@@ -146,7 +146,7 @@ const ModuleHistory = ({ texts }) => {
                 {sections.map((_, i) => (
                   <div
                     key={i}
-                    className={`h-1 rounded-full transition-all duration-300 ${i === active ? "w-8 bg-petroleum" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
+                    className={`h-1 rounded-full transition-all duration-300 ${i === active ? "w-8 bg-[var(--theme-emphasis)]" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
                   />
                 ))}
               </div>
@@ -157,7 +157,7 @@ const ModuleHistory = ({ texts }) => {
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${active === i ? "bg-petroleum text-white shadow-md" : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400"}`}
+                className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${active === i ? "bg-[var(--theme-emphasis)] text-white shadow-md" : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400"}`}
               >
                 {s.era}
               </button>
@@ -176,7 +176,7 @@ ModuleHistory.propTypes = {
 const PromptConcept = ({ texts }) => (
   <div className="space-y-4 animate-[fadeIn_1.1s_cubic-bezier(0.16,1,0.3,1)_forwards]">
     <div className="p-5 bg-[#F0F9FF] rounded-[2rem] border-2 border-white dark:border-slate-700 shadow-md relative overflow-hidden">
-      <h4 className="text-petroleum font-[900] text-xl mb-3 tracking-tighter leading-none lowercase">
+      <h4 className="text-[var(--theme-emphasis)] font-[900] text-xl mb-3 tracking-tighter leading-none lowercase">
         {texts.prompt_title}
       </h4>
       <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-bold text-sm max-w-2xl">
@@ -184,7 +184,7 @@ const PromptConcept = ({ texts }) => (
       </p>
     </div>
     <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-4 rounded-[1.5rem] flex items-center gap-3 shadow-sm">
-      <div className="p-3 bg-corporate/10 rounded-xl text-corporate shadow-inner">
+      <div className="p-3 bg-[var(--theme-primary)]/10 rounded-xl text-[var(--theme-primary)] shadow-inner">
         <Lightbulb size={24} />
       </div>
       <p className="text-xs text-slate-500 dark:text-slate-300 font-bold italic leading-relaxed">
@@ -201,11 +201,11 @@ PromptConcept.propTypes = {
 const ModuleAnatomy = ({ texts }) => {
   const [sel, setSel] = useState(null);
   const elements = [
-    { k: texts.anatomy_rol, d: texts.anatomy_rol_desc, c: "bg-petroleum" },
+    { k: texts.anatomy_rol, d: texts.anatomy_rol_desc, c: "bg-[var(--theme-emphasis)]" },
     {
       k: texts.anatomy_contexto,
       d: texts.anatomy_contexto_desc,
-      c: "bg-corporate",
+      c: "bg-[var(--theme-primary)]",
     },
     {
       k: texts.anatomia_tarea,
@@ -235,23 +235,23 @@ const ModuleAnatomy = ({ texts }) => {
           <button
             key={el.k}
             onClick={() => setSel(el)}
-            className={`p-4 rounded-[1.8rem] border-2 transition-all flex flex-col items-center gap-2 group ${sel?.k === el.k ? "border-corporate bg-blue-50 shadow-md" : "bg-white dark:bg-slate-800 border-slate-50 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600"}`}
+            className={`p-4 rounded-[1.8rem] border-2 transition-all flex flex-col items-center gap-2 group ${sel?.k === el.k ? "border-[var(--theme-primary)] bg-blue-50 shadow-md" : "bg-white dark:bg-slate-800 border-slate-50 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600"}`}
           >
             <div
               className={`w-10 h-10 ${el.c} text-white rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}
             >
               <span className="text-lg font-black">{el.k[0]}</span>
             </div>
-            <span className="text-xs font-black text-petroleum uppercase tracking-tighter leading-none">
+            <span className="text-xs font-black text-[var(--theme-emphasis)] uppercase tracking-tighter leading-none">
               {el.k}
             </span>
           </button>
         ))}
       </div>
-      <div className="bg-petroleum text-white p-5 rounded-[1.8rem] shadow-lg relative min-h-[180px] flex flex-col justify-center border-b-2 border-corporate">
+      <div className="bg-[var(--theme-emphasis)] text-white p-5 rounded-[1.8rem] shadow-lg relative min-h-[180px] flex flex-col justify-center border-b-2 border-[var(--theme-primary)]">
         {sel ? (
           <div className="animate-[slideInRight_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
-            <h5 className="text-corporate font-[900] text-xs uppercase tracking-[0.3em] mb-3">
+            <h5 className="text-[var(--theme-primary)] font-[900] text-xs uppercase tracking-[0.3em] mb-3">
               {texts.anatomy_element_label} {sel.k}
             </h5>
             <p className="text-base text-white leading-relaxed font-medium">
@@ -313,11 +313,11 @@ const TechniquesSection = ({ texts }) => (
         key={i}
         className="flex items-start gap-4 p-5 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-[2.2rem] shadow-sm hover:shadow-lg transition-all group"
       >
-        <div className="p-3 bg-slate-50 dark:bg-slate-700 text-petroleum rounded-[1rem] shadow-inner group-hover:bg-petroleum group-hover:text-white transition-all">
+        <div className="p-3 bg-slate-50 dark:bg-slate-700 text-[var(--theme-emphasis)] rounded-[1rem] shadow-inner group-hover:bg-[var(--theme-emphasis)] group-hover:text-white transition-all">
           {s.i}
         </div>
         <div>
-          <h5 className="font-[900] text-petroleum text-xs uppercase mb-1 tracking-tighter leading-none">
+          <h5 className="font-[900] text-[var(--theme-emphasis)] text-xs uppercase mb-1 tracking-tighter leading-none">
             {s.t}
           </h5>
           <p className="text-xs text-slate-500 dark:text-slate-300 font-medium leading-relaxed">
@@ -350,7 +350,7 @@ const ErrorSection = ({ texts }) => (
         <div className="w-8 h-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
           {e.i}
         </div>
-        <h5 className="font-[900] text-petroleum text-xs uppercase tracking-widest leading-none mb-1">
+        <h5 className="font-[900] text-[var(--theme-emphasis)] text-xs uppercase tracking-widest leading-none mb-1">
           {e.t}
         </h5>
         <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed font-medium">
@@ -467,12 +467,12 @@ export default function OVAEtica({ onComplete }) {
               <button
                 key={id}
                 onClick={() => setScreen(id)}
-                className="group bg-white dark:bg-slate-800 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-700 shadow-lg hover:border-corporate transition-all flex flex-col items-center text-center gap-4 relative overflow-hidden"
+                className="group bg-white dark:bg-slate-800 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-700 shadow-lg hover:border-[var(--theme-primary)] transition-all flex flex-col items-center text-center gap-4 relative overflow-hidden"
               >
-                <div className="bg-[#F0F9FF] dark:bg-blue-900/30 text-petroleum p-4 rounded-[1.5rem] shadow-sm group-hover:scale-110 transition-transform">
+                <div className="bg-[#F0F9FF] dark:bg-blue-900/30 text-[var(--theme-emphasis)] p-4 rounded-[1.5rem] shadow-sm group-hover:scale-110 transition-transform">
                   <BookOpen className="w-6 h-6" />
                 </div>
-                <span className="font-[900] text-petroleum text-xs uppercase tracking-[0.1em] leading-tight">
+                <span className="font-[900] text-[var(--theme-emphasis)] text-xs uppercase tracking-[0.1em] leading-tight">
                   {screensData[id].title}
                 </span>
                 {completed.includes(id) && (
@@ -624,15 +624,15 @@ export default function OVAEtica({ onComplete }) {
               className="w-24 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden border border-slate-50 dark:border-slate-700 shadow-inner"
             >
               <div
-                className="h-full bg-gradient-to-r from-petroleum to-corporate transition-all duration-1000 ease-out shadow-lg"
+                className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] transition-all duration-1000 ease-out shadow-lg"
                 style={{ width: `${(xp / totalXp) * 100}%` }}
               ></div>
             </div>
           </div>
           {screen !== "welcome" && screen !== "certificate" && (
-            <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-corporate/20">
-              <Star className="text-corporate fill-current" size={14} />
-              <span className="font-bold text-petroleum text-xs">{xp} XP</span>
+            <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-[var(--theme-primary)]/20">
+              <Star className="text-[var(--theme-primary)] fill-current" size={14} />
+              <span className="font-bold text-[var(--theme-emphasis)] text-xs">{xp} XP</span>
             </div>
           )}
           <button
@@ -640,7 +640,7 @@ export default function OVAEtica({ onComplete }) {
             aria-label="Menú de navegación"
             className="p-2 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-all shadow-sm border border-slate-100 dark:border-slate-700"
           >
-            <Menu className="w-5 h-5 text-petroleum" />
+            <Menu className="w-5 h-5 text-[var(--theme-emphasis)]" />
           </button>
         </div>
       </header>
@@ -650,10 +650,10 @@ export default function OVAEtica({ onComplete }) {
           {screen.startsWith("m") && (
             <div className="mb-4 flex flex-col md:flex-row justify-between items-start md:items-end gap-2 border-b border-slate-50 dark:border-slate-700 pb-4">
               <div className="space-y-1">
-                <div className="flex items-center gap-1.5 text-corporate font-[900] text-[10px] tracking-[0.3em] uppercase">
+                <div className="flex items-center gap-1.5 text-[var(--theme-primary)] font-[900] text-[10px] tracking-[0.3em] uppercase">
                   <Sparkles className="w-3 h-3" /> {texts.edutechlife_master}
                 </div>
-                <h1 className="text-xl md:text-2xl font-[900] text-petroleum tracking-tighter leading-tight">
+                <h1 className="text-xl md:text-2xl font-[900] text-[var(--theme-emphasis)] tracking-tighter leading-tight">
                   {screensData[screen].title}
                 </h1>
               </div>
@@ -677,8 +677,8 @@ export default function OVAEtica({ onComplete }) {
               </motion.div>
             </AnimatePresence>
           </div>
-          <div className="absolute -top-40 -right-40 w-[300px] h-[300px] bg-corporate rounded-full blur-[100px] opacity-[0.04] pointer-events-none"></div>
-          <div className="absolute -bottom-40 -left-40 w-[300px] h-[300px] bg-petroleum rounded-full blur-[100px] opacity-[0.04] pointer-events-none"></div>
+          <div className="absolute -top-40 -right-40 w-[300px] h-[300px] bg-[var(--theme-primary)] rounded-full blur-[100px] opacity-[0.04] pointer-events-none"></div>
+          <div className="absolute -bottom-40 -left-40 w-[300px] h-[300px] bg-[var(--theme-emphasis)] rounded-full blur-[100px] opacity-[0.04] pointer-events-none"></div>
         </div>
       </main>
 
@@ -691,7 +691,7 @@ export default function OVAEtica({ onComplete }) {
                 stopSpeech();
               }}
               aria-label={t("ova.nav.prev_aria")}
-              className="p-3 bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all shadow-inner border border-slate-50 dark:border-slate-700"
+              className="p-3 bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-[var(--theme-emphasis)] dark:hover:text-[var(--theme-primary)] rounded-xl disabled:opacity-10 transition-all shadow-inner border border-slate-50 dark:border-slate-700"
               disabled={curIdx === 0}
             >
               <ChevronLeft className="w-5 h-5" />
@@ -701,7 +701,7 @@ export default function OVAEtica({ onComplete }) {
                 <div
                   key={i}
                   aria-hidden="true"
-                  className={`h-1.5 rounded-full transition-all duration-700 ${i === curIdx ? "w-10 bg-petroleum" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
+                  className={`h-1.5 rounded-full transition-all duration-700 ${i === curIdx ? "w-10 bg-[var(--theme-emphasis)]" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
                 ></div>
               ))}
             </div>
@@ -717,7 +717,7 @@ export default function OVAEtica({ onComplete }) {
                   stopSpeech();
                 }
               }}
-              className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em]"
+              className="px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em]"
             >
               {texts.btn_next} <ArrowRightCircle className="w-4 h-4" />
             </button>
@@ -729,7 +729,7 @@ export default function OVAEtica({ onComplete }) {
         <div className="border-t border-slate-100 dark:border-slate-700 py-3 text-center text-slate-500 dark:text-slate-300 text-xs">
           <p>
             {texts.footer}{" "}
-            <strong className="text-corporate">{texts.footer_coach}</strong> —{" "}
+            <strong className="text-[var(--theme-primary)]">{texts.footer_coach}</strong> —{" "}
             {texts.footer_tagline}
           </p>
         </div>
@@ -748,8 +748,8 @@ export default function OVAEtica({ onComplete }) {
               <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.3em] uppercase">
                 {texts.sidebar_title}
               </h3>
-              <div className="flex items-center gap-1.5 text-[10px] font-black text-petroleum">
-                <Star className="w-3 h-3 text-corporate fill-current" />
+              <div className="flex items-center gap-1.5 text-[10px] font-black text-[var(--theme-emphasis)]">
+                <Star className="w-3 h-3 text-[var(--theme-primary)] fill-current" />
                 {completed.filter((id) => id.startsWith("m")).length}/6
               </div>
             </div>
@@ -767,12 +767,12 @@ export default function OVAEtica({ onComplete }) {
                       setScreen(id);
                       setIsMenuOpen(false);
                     }}
-                    className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? "bg-petroleum text-white shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
+                    className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? "bg-[var(--theme-emphasis)] text-white shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
                   >
                     <div className="flex items-center gap-3">
                       {id.startsWith("m") ? (
                         <div
-                          className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${isCompleted ? "bg-corporate text-white" : isCurrent ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-700 text-slate-400"}`}
+                          className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${isCompleted ? "bg-[var(--theme-primary)] text-white" : isCurrent ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-700 text-slate-400"}`}
                         >
                           {stepNum}
                         </div>
@@ -791,7 +791,7 @@ export default function OVAEtica({ onComplete }) {
                       )}
                       <div className="flex-1 min-w-0">
                         <div
-                          className={`uppercase tracking-wider ${isCurrent ? "text-white" : isCompleted ? "text-petroleum dark:text-corporate" : "text-slate-500 dark:text-slate-400"}`}
+                          className={`uppercase tracking-wider ${isCurrent ? "text-white" : isCompleted ? "text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]" : "text-slate-500 dark:text-slate-400"}`}
                         >
                           {id === "welcome"
                             ? texts.sidebar_welcome
@@ -804,13 +804,13 @@ export default function OVAEtica({ onComplete }) {
                         {id.startsWith("m") && (
                           <div className="mt-1.5 w-full h-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                             <div
-                              className={`h-full rounded-full transition-all duration-700 ${isCompleted ? "w-full bg-corporate" : isCurrent ? "w-1/3 bg-petroleum" : "w-0"}`}
+                              className={`h-full rounded-full transition-all duration-700 ${isCompleted ? "w-full bg-[var(--theme-primary)]" : isCurrent ? "w-1/3 bg-[var(--theme-emphasis)]" : "w-0"}`}
                             />
                           </div>
                         )}
                       </div>
                       {isCompleted && (
-                        <CheckCircle2 className="w-4 h-4 text-corporate shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-[var(--theme-primary)] shrink-0" />
                       )}
                     </div>
                   </button>

@@ -5,7 +5,7 @@ export function EvaluationHeader({ step, totalSteps, securityWarning, onClose, l
   const { t } = useTranslation();
 
   return (
-    <div className="bg-gradient-to-r from-petroleum to-corporate border-b border-white/10 px-6 py-4 flex items-center justify-between z-50">
+    <div className="bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] border-b border-white/10 px-6 py-4 flex items-center justify-between z-50">
       <button
         onClick={onClose}
         className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-colors"
@@ -23,7 +23,7 @@ export function EvaluationHeader({ step, totalSteps, securityWarning, onClose, l
             </div>
             <div className="w-32 h-2 bg-white/20 rounded-full overflow-hidden">
               <div
-                className="h-full bg-petroleum transition-all duration-500"
+                className="h-full bg-[var(--theme-emphasis)] transition-all duration-500"
                 style={{ width: `${(step / totalSteps) * 100}%` }}
               ></div>
             </div>

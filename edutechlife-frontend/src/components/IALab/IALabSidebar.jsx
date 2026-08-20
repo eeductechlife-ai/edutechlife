@@ -55,11 +55,12 @@ const IALabSidebar = () => {
       role="navigation"
       aria-label={t('sidebar.panel_aria')}
       style={{ width: isCollapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH }}
-      className="relative flex-shrink-0 border-r border-petroleum/15 dark:border-petroleum/25 bg-white/90 dark:bg-slate-800/90 backdrop-blur-lg shadow-[0_0_15px_rgba(0,75,99,0.06)] transition-[width] duration-300"
+      className="relative flex-shrink-0 border-r theme-border-primary-20 backdrop-blur-lg shadow-sm transition-[width] duration-300"
+      style={{ background: 'color-mix(in srgb, var(--theme-surface-2) 95%, transparent)' }}
     >
       <div className="h-full overflow-y-auto overflow-x-hidden relative">
-        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-petroleum/30 via-corporate/30 to-transparent pointer-events-none z-10" />
-        <div className="absolute -bottom-20 -left-10 w-32 h-32 bg-gradient-to-br from-petroleum/5 to-corporate/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-[1px] theme-bg-primary-20 pointer-events-none z-10" />
+        <div className="absolute -bottom-20 -left-10 w-32 h-32 theme-bg-primary-5 rounded-full blur-3xl pointer-events-none" />
 
         <AnimatePresence mode="wait">
           {isCollapsed ? (

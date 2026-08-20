@@ -293,7 +293,7 @@ const IALabTour = ({ hasStartedCourse }) => {
         style={tooltipPos ? { top: tooltipPos.top, left: tooltipPos.left } : {}}
       >
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-bold text-corporate uppercase tracking-wider">
+          <span className="text-[10px] font-bold text-[var(--theme-primary)] uppercase tracking-wider">
             {t('ialab.tour.step_label', { step: step + 1, total: STEPS.length })}
           </span>
           <button
@@ -303,11 +303,11 @@ const IALabTour = ({ hasStartedCourse }) => {
             {t('ialab.tour.skip')}
           </button>
         </div>
-        <h4 className="text-sm font-bold text-petroleum mb-1">{current.title}</h4>
+        <h4 className="text-sm font-bold text-[var(--theme-emphasis)] mb-1">{current.title}</h4>
         <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3">{current.description}</p>
         <button
           onClick={handleNext}
-          className="w-full py-2 rounded-lg bg-gradient-to-r from-petroleum to-corporate text-white text-xs font-bold hover:shadow-md transition-all duration-200 flex items-center justify-center gap-1.5"
+          className="w-full py-2 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white text-xs font-bold hover:shadow-md transition-all duration-200 flex items-center justify-center gap-1.5"
         >
           {isLast ? t('ialab.tour.start') : t('ialab.tour.next')}
           {!isLast && <Icon name="fa-arrow-right" className="text-[10px]" />}

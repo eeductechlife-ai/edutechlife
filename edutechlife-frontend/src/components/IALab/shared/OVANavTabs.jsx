@@ -32,7 +32,7 @@ const OVANavTabs = ({
           <button
             onClick={onPrev}
             aria-label={prevLabel || t("ova.nav.prev")}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-corporate transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-[var(--theme-primary)] transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <Icon name="fa-chevron-left" className="text-xs" />
             {prevLabel || t("ova.nav.prev")}
@@ -52,7 +52,7 @@ const OVANavTabs = ({
                 className={cn(
                   "relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl transition-all",
                   tab.id === activeTab || idx === currentIndex
-                    ? "bg-gradient-to-br from-corporate to-petroleum text-white shadow-md shadow-corporate/20"
+                    ? "bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-emphasis)] text-white shadow-md shadow-[var(--theme-primary)]/20"
                     : "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600",
                 )}
                 title={tab.title || tab.label || ""}
@@ -70,7 +70,7 @@ const OVANavTabs = ({
           <button
             onClick={onNext}
             aria-label={nextLabel || t("ova.nav.next")}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-corporate transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-[var(--theme-primary)] transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             {nextLabel || t("ova.nav.next")}
             <Icon name="fa-chevron-right" className="text-xs" />

@@ -7,7 +7,7 @@ const ImmersivePdfModal = ({ isOpen, resource, onClose, t }) => {
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
       <div className="relative w-full h-full max-w-6xl bg-white rounded-3xl overflow-hidden flex flex-col shadow-[0_25px_50px_-12px_rgba(0,75,99,0.25)]">
-        <div className="flex flex-wrap items-center justify-between gap-3 p-4 sm:p-6 border-b border-white/10 bg-gradient-to-r from-petroleum to-corporate backdrop-blur-sm">
+        <div className="flex flex-wrap items-center justify-between gap-3 p-4 sm:p-6 border-b border-white/10 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] backdrop-blur-sm">
           <div className="flex items-center gap-4 min-w-0">
             <div className="bg-white/10 p-3 rounded-xl shrink-0">
               <Icon name="fa-file-pdf" className="text-[#06B6D4] text-xl" />

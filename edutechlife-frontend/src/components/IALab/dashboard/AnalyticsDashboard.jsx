@@ -88,8 +88,8 @@ function AnalyticsDashboard() {
       className="space-y-4"
     >
       <div className="flex items-center gap-2">
-        <Icon name="fa-chart-line" className="w-4 h-4 text-petroleum" />
-        <h2 className="text-sm font-bold text-petroleum uppercase tracking-wider">
+        <Icon name="fa-chart-line" className="w-4 h-4 text-[var(--theme-emphasis)]" />
+        <h2 className="text-sm font-bold text-[var(--theme-emphasis)] uppercase tracking-wider">
           Analíticas
         </h2>
       </div>
@@ -99,8 +99,8 @@ function AnalyticsDashboard() {
         <StreakCalendar />
         <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-corporate/10 dark:bg-corporate/20 flex items-center justify-center">
-              <Icon name="fa-chart-line" className="w-4 h-4 text-corporate" />
+            <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]/20 flex items-center justify-center">
+              <Icon name="fa-chart-line" className="w-4 h-4 text-[var(--theme-primary)]" />
             </div>
             <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
               XP Semanal
@@ -115,7 +115,7 @@ function AnalyticsDashboard() {
                   className="flex-1 flex flex-col items-center gap-1 group relative"
                 >
                   <div
-                    className="w-full rounded-md bg-corporate/5 relative overflow-hidden"
+                    className="w-full rounded-md bg-[var(--theme-primary)]/5 relative overflow-hidden"
                     style={{ height: 80 }}
                   >
                     <motion.div
@@ -126,7 +126,7 @@ function AnalyticsDashboard() {
                         delay: i * 0.08,
                         ease: "easeOut",
                       }}
-                      className="absolute bottom-0 w-full bg-gradient-to-t from-corporate to-corporate/60 rounded-t-md"
+                      className="absolute bottom-0 w-full bg-gradient-to-t from-[var(--theme-primary)] to-[var(--theme-primary)]/60 rounded-t-md"
                     />
                   </div>
                   <span className="text-[9px] text-slate-400">{d.day}</span>

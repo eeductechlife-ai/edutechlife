@@ -32,7 +32,7 @@ const ValerioChatInput = ({
             placeholder={t("ialab.valerio.input_placeholder", {
               module: moduleTitle,
             })}
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-corporate focus:border-transparent text-petroleum-darker placeholder-slate-500 resize-none min-h-[60px] max-h-[120px]"
+            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)] focus:border-transparent text-[var(--theme-emphasis)]-darker placeholder-slate-500 resize-none min-h-[60px] max-h-[120px]"
             disabled={isProcessing}
             rows={2}
             inputMode="text"
@@ -76,10 +76,10 @@ const ValerioChatInput = ({
           <button
             onClick={onVoiceToggle}
             disabled={isProcessing}
-            className={`w-10 h-10 rounded-xl transition-all duration-200 flex items-center justify-center flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate ${
+            className={`w-10 h-10 rounded-xl transition-all duration-200 flex items-center justify-center flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)] ${
               isListening
                 ? "bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)] animate-pulse"
-                : "bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-petroleum"
+                : "bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-[var(--theme-emphasis)]"
             }`}
             aria-label={
               isListening
@@ -102,7 +102,7 @@ const ValerioChatInput = ({
         <button
           onClick={onSend}
           disabled={isProcessing || !userInput.trim()}
-          className="w-12 h-12 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_15px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2"
+          className="w-12 h-12 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-[0_0_15px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)] focus-visible:ring-offset-2"
           aria-label={t("ialab.valerio.send_aria")}
         >
           {isProcessing ? (

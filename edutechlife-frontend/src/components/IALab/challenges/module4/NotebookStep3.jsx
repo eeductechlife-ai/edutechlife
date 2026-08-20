@@ -118,7 +118,7 @@ const NotebookStep3 = ({ exercise, response, onResponseChange, topic = '' }) => 
         className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
             <Icon name="fa-microphone" className="text-white text-lg" />
           </div>
           <div>
@@ -148,8 +148,8 @@ const NotebookStep3 = ({ exercise, response, onResponseChange, topic = '' }) => 
       </motion.div>
 
       <div className="flex items-center gap-2 mb-2">
-        <div className="w-8 h-8 rounded-lg bg-corporate/10 dark:bg-corporate-dark/20 flex items-center justify-center">
-          <Icon name="fa-pen" className="text-corporate dark:text-corporate-dark w-4 h-4" />
+        <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]-dark/20 flex items-center justify-center">
+          <Icon name="fa-pen" className="text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark w-4 h-4" />
         </div>
         <h4 className="text-base font-semibold text-slate-800 dark:text-slate-100">{t('ialab.challenge.m4.step3.script_label')}</h4>
       </div>
@@ -171,8 +171,8 @@ const NotebookStep3 = ({ exercise, response, onResponseChange, topic = '' }) => 
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded bg-corporate/10 dark:bg-corporate-dark/20 flex items-center justify-center">
-                    <span className="text-corporate dark:text-corporate-dark font-bold text-xs">{idx + 1}</span>
+                  <div className="w-7 h-7 rounded bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]-dark/20 flex items-center justify-center">
+                    <span className="text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark font-bold text-xs">{idx + 1}</span>
                   </div>
                   <h4 className="font-semibold text-slate-800 dark:text-slate-100">{t(field.titleKey)}</h4>
                   {fieldOk && <Icon name="fa-check-circle" className="text-emerald-500 text-sm" />}
@@ -265,7 +265,7 @@ const NotebookStep3 = ({ exercise, response, onResponseChange, topic = '' }) => 
           className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-5"
         >
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
               <Icon name="fa-eye" className="text-white text-sm" />
             </div>
             <h4 className="text-base font-semibold text-slate-800 dark:text-slate-100">{t('ialab.challenge.m4.step3.preview_title')}</h4>
@@ -273,7 +273,7 @@ const NotebookStep3 = ({ exercise, response, onResponseChange, topic = '' }) => 
 
           <div className="bg-white dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-600 p-4 space-y-3 mb-4">
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 bg-gradient-to-r from-petroleum to-corporate text-white text-[10px] font-bold rounded uppercase">
+              <span className="px-2 py-0.5 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white text-[10px] font-bold rounded uppercase">
                 {t('ialab.challenge.m4.step3.hook_title')}
               </span>
               <span className="text-sm text-slate-600 dark:text-slate-300">{data.hook}</span>
@@ -300,7 +300,7 @@ const NotebookStep3 = ({ exercise, response, onResponseChange, topic = '' }) => 
 
           <div className="flex justify-center">
             <div
-              className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl cursor-default opacity-80"
+              className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl cursor-default opacity-80"
             >
               <Icon name="fa-play-circle" className="text-xl" />
               <span className="text-sm font-semibold">{t('ialab.challenge.m4.step3.preview_play')}</span>

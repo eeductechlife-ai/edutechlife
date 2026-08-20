@@ -31,13 +31,13 @@ export default function ModuleSlack({ onNext, addXp }) {
 
   return (
     <div className="max-w-4xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
-      <h2 className="text-3xl font-bold text-petroleum mb-2">{t('ova.buildgpt.slack_title')}</h2>
+      <h2 className="text-3xl font-bold text-[var(--theme-emphasis)] mb-2">{t('ova.buildgpt.slack_title')}</h2>
       <p className="text-gray-600 dark:text-slate-300 mb-6">{t('ova.buildgpt.slack_desc')}</p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="col-span-1 flex flex-col justify-between">
           <div>
-            <MessageSquare className="text-corporate w-12 h-12 mb-4" />
-            <h3 className="text-xl font-bold text-petroleum mb-3">{t('ova.buildgpt.slack_what_title')}</h3>
+            <MessageSquare className="text-[var(--theme-primary)] w-12 h-12 mb-4" />
+            <h3 className="text-xl font-bold text-[var(--theme-emphasis)] mb-3">{t('ova.buildgpt.slack_what_title')}</h3>
             <ul className="space-y-3">
               {[t('ova.buildgpt.slack_item1'), t('ova.buildgpt.slack_item2'), t('ova.buildgpt.slack_item3')].map((item, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-gray-700 dark:text-slate-300">
@@ -55,7 +55,7 @@ export default function ModuleSlack({ onNext, addXp }) {
           <div className="space-y-4 mb-6 min-h-[200px]">
             {messages.map((msg, i) => (
               <div key={i} className={`flex gap-3 animate-[fadeIn_0.6s_ease-out_forwards] ${msg.isBot ? 'bg-white dark:bg-slate-700 p-3 rounded-lg border border-cyan-100 dark:border-cyan-900/30 shadow-sm' : ''}`}>
-                <div className={`w-8 h-8 rounded-md flex items-center justify-center text-white font-bold flex-shrink-0 ${msg.isBot ? 'bg-corporate' : 'bg-purple-600'}`}>
+                <div className={`w-8 h-8 rounded-md flex items-center justify-center text-white font-bold flex-shrink-0 ${msg.isBot ? 'bg-[var(--theme-primary)]' : 'bg-purple-600'}`}>
                   {msg.isBot ? <Bot size={18}/> : 'A'}
                 </div>
                 <div>

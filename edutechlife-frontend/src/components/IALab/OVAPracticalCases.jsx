@@ -100,12 +100,12 @@ const OVAPracticalCases = ({ onComplete }) => {
         <div className="p-6 text-center border-b border-cyan-50 dark:border-gray-700">
           <div className="flex items-center gap-2 justify-center select-none">
             <div className="relative w-9 h-9 flex items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-tr from-corporate to-petroleum rounded-xl rotate-3 shadow-md"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-[var(--theme-primary)] to-[var(--theme-emphasis)] rounded-xl rotate-3 shadow-md"></div>
               <Brain className="w-5 h-5 text-white relative z-10" />
             </div>
             <div className="text-xl tracking-tighter flex items-center lowercase font-bold">
-              <span className="text-corporate">edu</span>
-              <span className="text-petroleum">techlife</span>
+              <span className="text-[var(--theme-primary)]">edu</span>
+              <span className="text-[var(--theme-emphasis)]">techlife</span>
             </div>
           </div>
           <p className="text-[10px] uppercase mt-2 text-slate-600 dark:text-slate-300 font-bold tracking-[0.2em]">
@@ -114,10 +114,10 @@ const OVAPracticalCases = ({ onComplete }) => {
         </div>
 
         <div className="p-4 space-y-2">
-          <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-petroleum uppercase tracking-wider">
+          <div className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-[var(--theme-emphasis)] uppercase tracking-wider">
             <Target size={14} />
             <span>{t("ova.practical.progress")}</span>
-            <span className="ml-auto text-corporate">
+            <span className="ml-auto text-[var(--theme-primary)]">
               {correctCount}/{totalChallenges}
             </span>
           </div>
@@ -133,12 +133,12 @@ const OVAPracticalCases = ({ onComplete }) => {
               }}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm ${
                 i === currentChallenge
-                  ? "bg-gradient-to-r from-corporate to-petroleum text-white font-semibold shadow-lg"
+                  ? "bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] text-white font-semibold shadow-lg"
                   : answers[i]
                     ? answers[i].correct
                       ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300"
                       : "bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300"
-                    : "text-slate-500 dark:text-slate-400 hover:bg-cyan-50 hover:text-petroleum"
+                    : "text-slate-500 dark:text-slate-400 hover:bg-cyan-50 hover:text-[var(--theme-emphasis)]"
               }`}
             >
               <span
@@ -188,17 +188,17 @@ const OVAPracticalCases = ({ onComplete }) => {
         className="flex-1 p-4 md:p-10 overflow-y-auto relative"
         style={{ maxHeight: "100vh" }}
       >
-        <div className="max-w-5xl mx-auto bg-white/85 dark:bg-slate-800/85 backdrop-blur-[20px] border border-corporate/15 shadow-xl rounded-3xl p-6 md:p-10 min-h-[80vh] flex flex-col relative z-10 border-t-4 border-t-corporate">
+        <div className="max-w-5xl mx-auto bg-white/85 dark:bg-slate-800/85 backdrop-blur-[20px] border border-[var(--theme-primary)]/15 shadow-xl rounded-3xl p-6 md:p-10 min-h-[80vh] flex flex-col relative z-10 border-t-4 border-t-[var(--theme-primary)]">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-corporate to-petroleum flex items-center justify-center shadow-md">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-emphasis)] flex items-center justify-center shadow-md">
                 <Briefcase className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-black text-petroleum dark:text-slate-100 font-montserrat">
+                <h2 className="text-xl font-black text-[var(--theme-emphasis)] dark:text-slate-100 font-montserrat">
                   {c.title}
                 </h2>
-                <span className="text-xs text-corporate font-semibold">
+                <span className="text-xs text-[var(--theme-primary)] font-semibold">
                   {t("ova.practical.challenge")} {currentChallenge + 1} /{" "}
                   {totalChallenges}
                 </span>
@@ -215,7 +215,7 @@ const OVAPracticalCases = ({ onComplete }) => {
                       : answers[i]
                         ? "bg-rose-400"
                         : i === currentChallenge
-                          ? "bg-corporate scale-125"
+                          ? "bg-[var(--theme-primary)] scale-125"
                           : "bg-slate-200 dark:bg-slate-600"
                   }`}
                 />
@@ -226,8 +226,8 @@ const OVAPracticalCases = ({ onComplete }) => {
           <div className="flex-1 bg-slate-50 dark:bg-slate-700/30 rounded-2xl p-6 md:p-8 border border-slate-100 dark:border-slate-700">
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-4">
-                <Building2 className="text-corporate" size={18} />
-                <span className="text-xs uppercase tracking-widest text-corporate font-bold">
+                <Building2 className="text-[var(--theme-primary)]" size={18} />
+                <span className="text-xs uppercase tracking-widest text-[var(--theme-primary)] font-bold">
                   {t("ova.practical.context_label")}
                 </span>
               </div>
@@ -244,8 +244,8 @@ const OVAPracticalCases = ({ onComplete }) => {
 
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-4">
-                <Target className="text-corporate" size={18} />
-                <span className="text-xs uppercase tracking-widest text-corporate font-bold">
+                <Target className="text-[var(--theme-primary)]" size={18} />
+                <span className="text-xs uppercase tracking-widest text-[var(--theme-primary)] font-bold">
                   {t("ova.practical.scenario_label")}
                 </span>
               </div>
@@ -275,8 +275,8 @@ const OVAPracticalCases = ({ onComplete }) => {
                           : showResult && !isOptCorrect
                             ? "bg-rose-50 dark:bg-rose-900/20 border-rose-300 text-rose-900 dark:text-rose-100"
                             : isSelected
-                              ? "border-corporate bg-cyan-50 dark:bg-slate-700 shadow-md"
-                              : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate hover:bg-cyan-50/50"
+                              ? "border-[var(--theme-primary)] bg-cyan-50 dark:bg-slate-700 shadow-md"
+                              : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-[var(--theme-primary)] hover:bg-cyan-50/50"
                       }
                     `}
                   >
@@ -290,7 +290,7 @@ const OVAPracticalCases = ({ onComplete }) => {
                               ? "bg-slate-200 dark:bg-slate-600 text-slate-500"
                               : showResult && isSelected
                                 ? "bg-rose-500 text-white"
-                                : "bg-corporate/20 text-petroleum dark:text-slate-300"
+                                : "bg-[var(--theme-primary)]/20 text-[var(--theme-emphasis)] dark:text-slate-300"
                         }`}
                       >
                         {showResult && isOptCorrect ? (
@@ -372,7 +372,7 @@ const OVAPracticalCases = ({ onComplete }) => {
               {currentChallenge > 0 && !showFeedback && (
                 <button
                   onClick={prevChallenge}
-                  className="flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400 hover:text-petroleum transition-colors"
+                  className="flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400 hover:text-[var(--theme-emphasis)] transition-colors"
                 >
                   <ArrowLeft size={14} />
                   {t("ova.practical.previous")}
@@ -382,7 +382,7 @@ const OVAPracticalCases = ({ onComplete }) => {
                 {showFeedback && currentChallenge < totalChallenges - 1 && (
                   <button
                     onClick={nextChallenge}
-                    className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-corporate to-petroleum text-white font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm"
+                    className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] text-white font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm"
                   >
                     {t("ova.practical.next_challenge")}
                     <ArrowRight size={16} />

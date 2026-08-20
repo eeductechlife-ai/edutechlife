@@ -68,12 +68,12 @@ const MAX_XP = 145;
 const Logo = () => (
   <div className="flex items-center gap-2 select-none group cursor-pointer">
     <div className="relative w-9 h-9 flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-tr from-petroleum to-corporate rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-[var(--theme-text)] to-[var(--theme-primary)] rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
       <BrainCircuit className="w-5 h-5 text-white relative z-10" />
     </div>
     <div className="text-xl tracking-tighter flex items-center lowercase">
-      <span className="font-[900] text-petroleum">edutech</span>
-      <span className="font-[400] text-corporate">life</span>
+      <span className="font-[900] theme-text">edutech</span>
+      <span className="font-[400] theme-text-primary">life</span>
     </div>
   </div>
 );
@@ -93,24 +93,24 @@ const DetailCard = ({ detail }) => {
   const DetailIcon = detailIconMap[detail.icon] || null;
   return (
     <div
-      className={`bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl border transition-all shadow-sm ${isExpanded ? "border-corporate/40 shadow-md" : "border-slate-100 dark:border-slate-700 hover:border-corporate/30 hover:shadow-md"}`}
+      className={`bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl border transition-all shadow-sm ${isExpanded ? "border-[var(--theme-primary)]/40 shadow-md" : "border-slate-100 dark:border-slate-700 hover:border-[var(--theme-primary)]/30 hover:shadow-md"}`}
     >
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full flex items-center gap-4 p-4 text-left"
       >
         <div
-          className={`shrink-0 transition-colors ${isExpanded ? "text-corporate" : "text-slate-400"}`}
+          className={`shrink-0 transition-colors ${isExpanded ? "theme-text-primary" : "text-slate-400"}`}
         >
           {DetailIcon ? <DetailIcon size={20} /> : <ChevronDown size={20} />}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <h5 className="font-[900] text-petroleum text-xs uppercase">
+            <h5 className="font-[900] theme-text text-xs uppercase">
               {detail.title}
             </h5>
             {detail.date && (
-              <span className="text-[10px] font-black text-corporate bg-corporate/10 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-black theme-text-primary theme-bg-primary-10 px-2 py-0.5 rounded-md">
                 {detail.date}
               </span>
             )}
@@ -121,7 +121,7 @@ const DetailCard = ({ detail }) => {
         </div>
         <ChevronDown
           size={18}
-          className={`text-slate-300 dark:text-slate-500 shrink-0 transition-transform duration-300 ${isExpanded ? "rotate-180 text-corporate" : ""}`}
+          className={`text-slate-300 dark:text-slate-500 shrink-0 transition-transform duration-300 ${isExpanded ? "rotate-180 theme-text-primary" : ""}`}
         />
       </button>
       {detail.extendedText && (
@@ -153,11 +153,11 @@ const SectionScreen = ({ section }) => {
   return (
     <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4">
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 bg-gradient-to-br from-petroleum to-corporate text-white rounded-xl flex items-center justify-center shadow-md">
+        <div className="w-12 h-12 bg-gradient-to-br from-[var(--theme-text)] to-[var(--theme-primary)] text-white rounded-xl flex items-center justify-center shadow-md">
           {SectionIcon && <SectionIcon size={22} />}
         </div>
         <div>
-          <h4 className="font-[900] text-petroleum text-lg tracking-tighter lowercase">
+          <h4 className="font-[900] theme-text text-lg tracking-tighter lowercase">
             {section.title}
           </h4>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
@@ -178,11 +178,11 @@ const StrategiesScreen = () => {
   const { t } = useTranslation();
   const [active, setActive] = useState(null);
   const strategies = [
-    { k: "gpts", icon: <Bot className="w-5 h-5" />, color: "bg-petroleum" },
+    { k: "gpts", icon: <Bot className="w-5 h-5" />, color: "bg-[var(--theme-emphasis)]" },
     {
       k: "voice",
       icon: <Volume2 className="w-5 h-5" />,
-      color: "bg-corporate",
+      color: "bg-[var(--theme-primary)]",
     },
     { k: "dalle", icon: <Image className="w-5 h-5" />, color: "bg-[#4361EE]" },
     {
@@ -202,22 +202,22 @@ const StrategiesScreen = () => {
           <button
             key={s.k}
             onClick={() => setActive(active === s.k ? null : s.k)}
-            className={`p-4 rounded-xl border-2 transition-all text-left ${active === s.k ? "border-corporate bg-blue-50 shadow-md" : "bg-white dark:bg-slate-800 border-slate-50 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600"}`}
+            className={`p-4 rounded-xl border-2 transition-all text-left ${active === s.k ? "border-[var(--theme-primary)] bg-blue-50 shadow-md" : "bg-white dark:bg-slate-800 border-slate-50 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600"}`}
           >
             <div
               className={`w-10 h-10 ${s.color} text-white rounded-lg flex items-center justify-center mb-2 shadow-sm`}
             >
               {s.icon}
             </div>
-            <h5 className="font-[900] text-petroleum text-xs uppercase tracking-wider">
+            <h5 className="font-[900] theme-text text-xs uppercase tracking-wider">
               {t(`ova.ecosystem.strategies_${s.k}_title`)}
             </h5>
           </button>
         ))}
       </div>
       {active ? (
-        <div className="p-4 bg-petroleum text-white rounded-xl">
-          <h5 className="text-corporate font-[900] text-xs uppercase tracking-[0.2em] mb-2">
+        <div className="p-4 bg-[var(--theme-emphasis)] text-white rounded-xl">
+          <h5 className="theme-text-primary font-[900] text-xs uppercase tracking-[0.2em] mb-2">
             {t(`ova.ecosystem.strategies_${active}_title`)}
           </h5>
           <p className="text-sm text-white leading-relaxed font-medium">
@@ -241,8 +241,8 @@ const ChallengeScreen = () => {
   const [scenario, setScenario] = useState(null);
   const [revealed, setRevealed] = useState(false);
   const scenarios = [
-    { k: "student", icon: <Star className="w-5 h-5" />, color: "bg-petroleum" },
-    { k: "teacher", icon: <Zap className="w-5 h-5" />, color: "bg-corporate" },
+    { k: "student", icon: <Star className="w-5 h-5" />, color: "bg-[var(--theme-emphasis)]" },
+    { k: "teacher", icon: <Zap className="w-5 h-5" />, color: "bg-[var(--theme-primary)]" },
     {
       k: "pro",
       icon: <Briefcase className="w-5 h-5" />,
@@ -264,14 +264,14 @@ const ChallengeScreen = () => {
                 setScenario(s.k);
                 setRevealed(false);
               }}
-              className="p-4 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 hover:border-corporate rounded-xl text-center transition-all"
+              className="p-4 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 hover:border-[var(--theme-primary)] rounded-xl text-center transition-all"
             >
               <div
                 className={`w-10 h-10 ${s.color} text-white rounded-lg flex items-center justify-center mx-auto mb-2`}
               >
                 {s.icon}
               </div>
-              <h5 className="font-[900] text-petroleum text-xs uppercase">
+              <h5 className="font-[900] theme-text text-xs uppercase">
                 {t(`ova.ecosystem.challenge_option_${s.k}`)}
               </h5>
             </button>
@@ -288,7 +288,7 @@ const ChallengeScreen = () => {
           setScenario(null);
           setRevealed(false);
         }}
-        className="text-[10px] font-black text-corporate uppercase tracking-wider hover:underline"
+        className="text-[10px] font-black theme-text-primary uppercase tracking-wider hover:underline"
       >
         &larr; {t("ova.ecosystem.challenge_desc")}
       </button>
@@ -315,7 +315,7 @@ const ChallengeScreen = () => {
       {!revealed && (
         <button
           onClick={() => setRevealed(true)}
-          className="w-full py-3 bg-gradient-to-r from-petroleum to-corporate text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-lg"
+          className="w-full py-3 bg-gradient-to-r from-[var(--theme-text)] to-[var(--theme-primary)] text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-lg"
         >
           {t("ova.ecosystem.challenge_reveal")}{" "}
           <ArrowRightCircle className="w-4 h-4" />
@@ -329,10 +329,10 @@ const ConclusionScreen = () => {
   const { t } = useTranslation();
   return (
     <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4 text-center">
-      <div className="w-16 h-16 bg-gradient-to-br from-petroleum to-corporate rounded-[2rem] flex items-center justify-center mx-auto shadow-lg">
+      <div className="w-16 h-16 bg-gradient-to-br from-[var(--theme-text)] to-[var(--theme-primary)] rounded-[2rem] flex items-center justify-center mx-auto shadow-lg">
         <Rocket className="w-8 h-8 text-white" />
       </div>
-      <h4 className="font-[900] text-petroleum text-2xl tracking-tighter lowercase">
+      <h4 className="font-[900] theme-text text-2xl tracking-tighter lowercase">
         {t("ova.ecosystem.conclusion_title")}
       </h4>
       <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-bold text-sm max-w-lg mx-auto">
@@ -538,7 +538,7 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
             aria-label={t("ova.ecosystem.menu_aria")}
             className="min-w-[44px] min-h-[44px] p-2.5 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-all border border-slate-100 dark:border-slate-700"
           >
-            <Menu className="w-5 h-5 text-petroleum" />
+            <Menu className="w-5 h-5 theme-text" />
           </button>
         </div>
       </header>
@@ -547,10 +547,10 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
         <div className="w-full bg-white dark:bg-slate-800 rounded-2xl shadow-md p-4 md:p-6 relative overflow-hidden border border-slate-50 dark:border-slate-700">
           {screen.startsWith("m") && (
             <div className="mb-4 border-b border-slate-50 dark:border-slate-700 pb-3">
-              <div className="flex items-center gap-1.5 text-corporate font-[900] text-[10px] tracking-[0.3em] uppercase">
+              <div className="flex items-center gap-1.5 theme-text-primary font-[900] text-[10px] tracking-[0.3em] uppercase">
                 <Sparkles className="w-3 h-3" /> {t("ova.introprompt.master")}
               </div>
-              <h1 className="text-lg md:text-xl font-[900] text-petroleum tracking-tighter leading-tight">
+              <h1 className="text-lg md:text-xl font-[900] theme-text tracking-tighter leading-tight">
                 {resolvedScreensData[screen]?.title}
               </h1>
             </div>
@@ -581,7 +581,7 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
                   stopSpeech();
                 }}
                 aria-label={t("ova.nav.prev_aria")}
-                className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700"
+                className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:theme-text dark:hover:theme-text-primary rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700"
                 disabled={curIdx <= 1}
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -590,13 +590,13 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
                 {nav.slice(1).map((_, i) => (
                   <div
                     key={i}
-                    className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === curIdx ? "w-8 bg-petroleum" : completed.includes(nav[i + 1]) ? "w-2 bg-corporate" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
+                    className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === curIdx ? "w-8 bg-[var(--theme-emphasis)]" : completed.includes(nav[i + 1]) ? "w-2 bg-[var(--theme-primary)]" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
                   />
                 ))}
               </div>
               <button
                 onClick={isLastScreen ? () => onClose?.() : nextScreen}
-                className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${isLastScreen ? "bg-emerald-500 text-white hover:bg-emerald-600" : "bg-gradient-to-r from-petroleum to-corporate text-white"}`}
+                className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${isLastScreen ? "bg-emerald-500 text-white hover:bg-emerald-600" : "bg-gradient-to-r from-[var(--theme-text)] to-[var(--theme-primary)] text-white"}`}
               >
                 {isLastScreen
                   ? t("ova.introprompt.finish_btn")
@@ -624,8 +624,8 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
               <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.3em] uppercase">
                 {t("ova.introprompt.map")}
               </h3>
-              <div className="flex items-center gap-1.5 text-[10px] font-black text-petroleum">
-                <Star className="w-3 h-3 text-corporate fill-current" />
+              <div className="flex items-center gap-1.5 text-[10px] font-black theme-text">
+                <Star className="w-3 h-3 theme-text-primary fill-current" />
                 {completed.filter((id) => id.startsWith("m")).length}/
                 {nav.filter((id) => id.startsWith("m")).length}
               </div>
@@ -639,17 +639,17 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
                   <button
                     key={id}
                     onClick={() => goToScreen(id)}
-                    className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? "bg-petroleum text-white shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
+                    className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? "bg-[var(--theme-emphasis)] text-white shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
                   >
                     <div className="flex items-center gap-3">
                       <div
-                        className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${isCompleted ? "bg-corporate text-white" : isCurrent ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-700 text-slate-400"}`}
+                        className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${isCompleted ? "bg-[var(--theme-primary)] text-white" : isCurrent ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-700 text-slate-400"}`}
                       >
                         {stepNum}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div
-                          className={`uppercase tracking-wider ${isCurrent ? "text-white" : isCompleted ? "text-petroleum dark:text-corporate" : "text-slate-500 dark:text-slate-400"}`}
+                          className={`uppercase tracking-wider ${isCurrent ? "text-white" : isCompleted ? "theme-text dark:theme-text-primary" : "text-slate-500 dark:text-slate-400"}`}
                         >
                           {id === "welcome"
                             ? t("ova.introprompt.menu_welcome")
@@ -657,12 +657,12 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
                         </div>
                         <div className="mt-1.5 w-full h-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                           <div
-                            className={`h-full rounded-full transition-all duration-700 ${isCompleted ? "w-full bg-corporate" : isCurrent ? "w-1/3 bg-petroleum" : "w-0"}`}
+                            className={`h-full rounded-full transition-all duration-700 ${isCompleted ? "w-full bg-[var(--theme-primary)]" : isCurrent ? "w-1/3 bg-[var(--theme-emphasis)]" : "w-0"}`}
                           />
                         </div>
                       </div>
                       {isCompleted && (
-                        <CheckCircle2 className="w-4 h-4 text-corporate shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 theme-text-primary shrink-0" />
                       )}
                     </div>
                   </button>

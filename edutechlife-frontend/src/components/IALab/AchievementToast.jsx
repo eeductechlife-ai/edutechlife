@@ -5,7 +5,7 @@ import { useTranslation } from "../../i18n/I18nProvider";
 
 const TYPE_STYLES = {
   badge: { gradient: "from-amber-400 to-amber-500", icon: "fa-trophy" },
-  level_up: { gradient: "from-corporate to-cyan-400", icon: "fa-arrow-up" },
+  level_up: { gradient: "from-[var(--theme-primary)] to-cyan-400", icon: "fa-arrow-up" },
   streak: { gradient: "from-rose-400 to-rose-500", icon: "fa-fire" },
 };
 

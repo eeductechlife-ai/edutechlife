@@ -136,17 +136,34 @@ async function signIn({ email, password }) {
       .eq('id', authData.user.id)
       .single();
 
+    let userProfile = profileData;
     if (profileError) {
-      console.error('Profile fetch failed:', profileError);
+      console.warn('Profile fetch failed:', profileError.message);
       // Auth succeeded but profile missing — create minimal one (service-role client bypasses RLS)
-      await supabase.from('users').insert([
-        {
-          id: authData.user.id,
-          email,
+      const { data: createdProfile, error: insertError } = await supabase
+        .from('users')
+        .insert([
+          {
+            id: authData.user.id,
+            email,
+            username: email.split('@')[0],
+            user_type: 'student',
+            account_type: 'ialab',
+          },
+        ])
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error('Profile creation failed:', insertError.message);
+        // Continue anyway with minimal data
+        userProfile = {
           username: email.split('@')[0],
           user_type: 'student',
-        },
-      ]);
+        };
+      } else {
+        userProfile = createdProfile;
+      }
     }
 
     return {
@@ -155,10 +172,10 @@ async function signIn({ email, password }) {
       user: {
         id: authData.user.id,
         email: authData.user.email,
-        username: profileData?.username || email.split('@')[0],
-        firstName: profileData?.first_name,
-        lastName: profileData?.last_name,
-        userType: profileData?.user_type || 'student',
+        username: userProfile?.username || email.split('@')[0],
+        firstName: userProfile?.first_name,
+        lastName: userProfile?.last_name,
+        userType: userProfile?.user_type || 'student',
       },
     };
   } catch (e) {

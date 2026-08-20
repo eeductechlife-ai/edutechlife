@@ -80,11 +80,11 @@ const ValerioFloatingButton = ({ onClick, t }) => {
                 >
                   <div className="bg-white dark:bg-slate-900 shadow-2xl rounded-2xl px-4 py-3 border border-slate-100 dark:border-slate-700 whitespace-nowrap">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-400 to-corporate flex items-center justify-center flex-shrink-0">
+                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-400 to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0">
                         <Icon name="fa-comment-dots" className="text-white text-xs" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-petroleum dark:text-[#4DA8C4]">{t('ialab.valerio_nudge')}</p>
+                        <p className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">{t('ialab.valerio_nudge')}</p>
                         <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{t('ialab.valerio_nudge_sub')}</p>
                       </div>
                     </div>
@@ -104,7 +104,7 @@ const ValerioFloatingButton = ({ onClick, t }) => {
                 >
                   <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-premium-lg border border-white/30 dark:border-slate-700/50 p-4 max-w-[220px]">
                     <div className="flex items-start gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-corporate flex items-center justify-center flex-shrink-0 shadow-lg shadow-corporate/20">
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 shadow-lg shadow-[var(--theme-primary)]/20">
                         <Icon name="fa-comment-dots" className="text-white text-base" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -138,7 +138,7 @@ const ValerioFloatingButton = ({ onClick, t }) => {
               onMouseLeave={handleLeave}
               aria-label={t('ialab.valerio_aria')}
               data-tour="tour-valerio"
-              className="relative w-16 h-16 lg:w-20 lg:h-20 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 cursor-pointer"
+              className="relative w-16 h-16 lg:w-20 lg:h-20 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 cursor-pointer"
               whileHover={{ scale: 1.12 }}
               whileTap={{ scale: 0.95 }}
               animate={{ y: [0, -3, 0] }}

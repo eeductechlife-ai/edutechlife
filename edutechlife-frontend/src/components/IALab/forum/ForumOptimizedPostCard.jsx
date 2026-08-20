@@ -75,7 +75,7 @@ const ForumOptimizedPostCard = ({
                   t("ialab.forum.optimized.user_fallback")}
               </span>
               {post.tags?.includes("Mentor") && (
-                <span className="px-1.5 py-0.5 bg-petroleum/5 text-petroleum text-[10px] font-medium rounded-full">
+                <span className="px-1.5 py-0.5 bg-[var(--theme-emphasis)]/5 text-[var(--theme-emphasis)] text-[10px] font-medium rounded-full">
                   {t("ialab.forum.optimized.mentor_badge")}
                 </span>
               )}
@@ -105,7 +105,7 @@ const ForumOptimizedPostCard = ({
           )}
         >
           {isLoadingLike ? (
-            <div className="w-3 h-3 border border-petroleum/20 border-t-[#004B63] rounded-full animate-spin" />
+            <div className="w-3 h-3 border border-[var(--theme-emphasis)]/20 border-t-[#004B63] rounded-full animate-spin" />
           ) : (
             <Icon name="fa-heart" className={isLiked ? "fill-current" : ""} />
           )}
@@ -125,7 +125,7 @@ const ForumOptimizedPostCard = ({
           {post.tags?.slice(0, 2).map((tag, tagIndex) => (
             <span
               key={tagIndex}
-              className="px-2 py-0.5 bg-petroleum/5 text-petroleum text-[10px] font-medium rounded-full"
+              className="px-2 py-0.5 bg-[var(--theme-emphasis)]/5 text-[var(--theme-emphasis)] text-[10px] font-medium rounded-full"
             >
               {tag}
             </span>

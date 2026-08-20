@@ -347,12 +347,12 @@ const VideoViewer = ({
           <div className="group/progress relative mb-2 cursor-default">
             <div className="h-2 bg-white/20 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-100"
+                className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full transition-all duration-100"
                 style={{ width: `${progress}%` }}
               />
             </div>
             <div
-              className="absolute -top-2 left-0 w-4 h-4 bg-corporate rounded-full shadow-lg ring-2 ring-white/30"
+              className="absolute -top-2 left-0 w-4 h-4 bg-[var(--theme-primary)] rounded-full shadow-lg ring-2 ring-white/30"
               style={{ left: `calc(${progress}% - 6px)` }}
             />
           </div>
@@ -360,7 +360,7 @@ const VideoViewer = ({
           <div className="flex items-center gap-1 sm:gap-3">
             <button
               onClick={togglePlay}
-              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center text-white hover:text-corporate transition-colors"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center text-white hover:text-[var(--theme-primary)] transition-colors"
               aria-label={
                 playing
                   ? t("ialab.viewer_modal.pause")
@@ -406,7 +406,7 @@ const VideoViewer = ({
                   max={100}
                   value={muted ? 0 : volume}
                   onChange={(e) => changeVolume(Number(e.target.value))}
-                  className="w-16 h-1 accent-corporate cursor-pointer"
+                  className="w-16 h-1 accent-[var(--theme-primary)] cursor-pointer"
                   aria-label={t("ialab.viewer_modal.volume")}
                 />
               </div>
@@ -441,7 +441,7 @@ const VideoViewer = ({
                     <button
                       key={s}
                       onClick={() => changeRate(s)}
-                      className={`block w-full text-left px-3 py-1.5 text-xs rounded-lg transition-colors ${rate === s ? "bg-corporate/20 text-corporate font-bold" : "text-white/70 hover:bg-white/10"}`}
+                      className={`block w-full text-left px-3 py-1.5 text-xs rounded-lg transition-colors ${rate === s ? "bg-[var(--theme-primary)]/20 text-[var(--theme-primary)] font-bold" : "text-white/70 hover:bg-white/10"}`}
                     >
                       {s}x
                     </button>
@@ -458,7 +458,7 @@ const VideoViewer = ({
             >
               <Icon
                 name="fa-closed-captioning"
-                className={`text-[10px] ${ccActive ? "text-corporate" : "text-white/70 hover:text-white"}`}
+                className={`text-[10px] ${ccActive ? "text-[var(--theme-primary)]" : "text-white/70 hover:text-white"}`}
               />
             </button>
 
@@ -474,7 +474,7 @@ const VideoViewer = ({
       </div>
 
       {!hasEnded && (
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-corporate/10 border border-corporate/20 rounded-lg text-xs font-medium text-corporate shadow-sm z-10 backdrop-blur-sm">
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-[var(--theme-primary)]/10 border border-[var(--theme-primary)]/20 rounded-lg text-xs font-medium text-[var(--theme-primary)] shadow-sm z-10 backdrop-blur-sm">
           {t("ialab.viewer_modal.warning_no_skip")}
         </div>
       )}

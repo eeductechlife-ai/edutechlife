@@ -10,21 +10,21 @@ import AdaptiveRecommendations from './AdaptiveRecommendations';
 const URGENCY_CONFIG = {
   high: {
     labelKey: 'ialab.recommendations.urgency_high', icon: 'fa-flag',
-    textColor: 'text-petroleum', bgColor: 'bg-petroleum/10', iconColor: 'text-petroleum',
-    gradientFrom: 'from-petroleum/5', gradientTo: 'to-petroleum/[0.02]',
-    borderClass: 'border-petroleum/20', hoverBorder: 'hover:border-petroleum/40',
-    btnBg: 'bg-petroleum/10', btnBorder: 'border-petroleum/20', btnText: 'text-petroleum',
-    btnHover: 'hover:bg-petroleum/20',
-    lineGradient: 'from-petroleum/30 to-transparent',
+    textColor: 'text-[var(--theme-emphasis)]', bgColor: 'bg-[var(--theme-emphasis)]/10', iconColor: 'text-[var(--theme-emphasis)]',
+    gradientFrom: 'from-[var(--theme-emphasis)]/5', gradientTo: 'to-[var(--theme-emphasis)]/[0.02]',
+    borderClass: 'border-[var(--theme-emphasis)]/20', hoverBorder: 'hover:border-[var(--theme-emphasis)]/40',
+    btnBg: 'bg-[var(--theme-emphasis)]/10', btnBorder: 'border-[var(--theme-emphasis)]/20', btnText: 'text-[var(--theme-emphasis)]',
+    btnHover: 'hover:bg-[var(--theme-emphasis)]/20',
+    lineGradient: 'from-[var(--theme-emphasis)]/30 to-transparent',
   },
   medium: {
     labelKey: 'ialab.recommendations.urgency_medium', icon: 'fa-list',
-    textColor: 'text-corporate', bgColor: 'bg-corporate/10', iconColor: 'text-corporate',
-    gradientFrom: 'from-corporate/5', gradientTo: 'to-corporate/[0.02]',
-    borderClass: 'border-corporate/20', hoverBorder: 'hover:border-corporate/40',
-    btnBg: 'bg-corporate/10', btnBorder: 'border-corporate/20', btnText: 'text-corporate',
-    btnHover: 'hover:bg-corporate/20',
-    lineGradient: 'from-corporate/30 to-transparent',
+    textColor: 'text-[var(--theme-primary)]', bgColor: 'bg-[var(--theme-primary)]/10', iconColor: 'text-[var(--theme-primary)]',
+    gradientFrom: 'from-[var(--theme-primary)]/5', gradientTo: 'to-[var(--theme-primary)]/[0.02]',
+    borderClass: 'border-[var(--theme-primary)]/20', hoverBorder: 'hover:border-[var(--theme-primary)]/40',
+    btnBg: 'bg-[var(--theme-primary)]/10', btnBorder: 'border-[var(--theme-primary)]/20', btnText: 'text-[var(--theme-primary)]',
+    btnHover: 'hover:bg-[var(--theme-primary)]/20',
+    lineGradient: 'from-[var(--theme-primary)]/30 to-transparent',
   },
   low: {
     labelKey: 'ialab.recommendations.urgency_low', icon: 'fa-lightbulb',
@@ -110,9 +110,9 @@ const RecommendationsPanel = ({ onAction, isLoading }) => {
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
-          <Icon name="fa-lightbulb" className="w-3.5 h-3.5 text-corporate group-hover:text-corporate/80 transition-colors" />
+          <Icon name="fa-lightbulb" className="w-3.5 h-3.5 text-[var(--theme-primary)] group-hover:text-[var(--theme-primary)]/80 transition-colors" />
         </motion.div>
-        <h4 className="text-xs font-bold text-petroleum uppercase tracking-wider group-hover:text-corporate transition-colors">
+        <h4 className="text-xs font-bold text-[var(--theme-emphasis)] uppercase tracking-wider group-hover:text-[var(--theme-primary)] transition-colors">
           {t('ialab.recommendations.title')}
         </h4>
         <span className="text-[10px] text-slate-400 ml-auto">

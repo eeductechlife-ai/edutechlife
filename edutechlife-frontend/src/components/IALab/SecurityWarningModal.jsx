@@ -54,7 +54,7 @@ const SecurityWarningModal = ({ isOpen, message, level = 1, onClose }) => {
             onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-md mx-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-2xl overflow-hidden"
           >
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] rounded-t-2xl" />
 
             <div className="p-6">
               <div className="flex flex-col items-center text-center">
@@ -116,7 +116,7 @@ const SecurityWarningModal = ({ isOpen, message, level = 1, onClose }) => {
                     className={`w-full py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 ${
                       isDanger
                         ? 'bg-gradient-to-r from-red-500 to-red-400 text-white hover:shadow-[0_0_20px_rgba(239,68,68,0.3)]'
-                        : 'bg-gradient-to-r from-petroleum to-corporate text-white hover:shadow-[0_0_20px_rgba(0,188,212,0.3)]'
+                        : 'bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white hover:shadow-[0_0_20px_rgba(0,188,212,0.3)]'
                     }`}
                   >
                     <Icon name="fa-check" className="text-sm" />

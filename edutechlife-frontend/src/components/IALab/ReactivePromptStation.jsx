@@ -89,14 +89,14 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
     };
 
     const getMetricColor = (score) => {
-        if (score >= 70) return 'text-petroleum';
-        if (score >= 40) return 'text-corporate';
+        if (score >= 70) return 'text-[var(--theme-emphasis)]';
+        if (score >= 40) return 'text-[var(--theme-primary)]';
         return 'text-slate-600';
     };
 
     const getMetricBarColor = (score) => {
-        if (score >= 70) return 'bg-petroleum';
-        if (score >= 40) return 'bg-corporate';
+        if (score >= 70) return 'bg-[var(--theme-emphasis)]';
+        if (score >= 40) return 'bg-[var(--theme-primary)]';
         return 'bg-slate-300';
     };
 
@@ -129,14 +129,14 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
             )}
             {...rest}
         >
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-2xl" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] rounded-t-2xl" />
 
             <div
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center justify-between cursor-pointer group"
             >
                 <div className="flex-1">
-                    <h2 className="text-lg md:text-xl font-bold text-petroleum group-hover:text-corporate transition-colors duration-300">
+                    <h2 className="text-lg md:text-xl font-bold text-[var(--theme-emphasis)] group-hover:text-[var(--theme-primary)] transition-colors duration-300">
                         {t('ialab.reactive_prompt.title')}
                     </h2>
                     <p className="text-slate-600 text-sm md:text-base leading-relaxed mt-1">
@@ -144,7 +144,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                     </p>
                     {!isOpen && (
                         <div className="mt-4">
-                            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-petroleum to-corporate rounded-xl shadow-sm hover:from-petroleum-dark hover:to-corporate-dark hover:shadow group-hover:scale-105 transition-all duration-300 cursor-pointer">
+                            <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-xl shadow-sm hover:from-[var(--theme-emphasis)]-dark hover:to-[var(--theme-primary)]-dark hover:shadow group-hover:scale-105 transition-all duration-300 cursor-pointer">
                                 <Icon name="fa-hand-pointer" className="w-4 h-4 text-white" />
                                 <span className="text-sm font-bold text-white tracking-wide">{t('ialab.reactive_prompt.open_tools')}</span>
                                 <Icon name="fa-chevron-right" className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform duration-300" />
@@ -153,11 +153,11 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                     )}
                 </div>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${
-                    isOpen ? 'bg-petroleum/10 rotate-180' : 'bg-corporate/15 group-hover:scale-110'
+                    isOpen ? 'bg-[var(--theme-emphasis)]/10 rotate-180' : 'bg-[var(--theme-primary)]/15 group-hover:scale-110'
                 }`}>
                     <Icon
                         name={isOpen ? "fa-chevron-up" : "fa-chevron-down"}
-                        className={`w-3.5 h-3.5 transition-all duration-300 ${isOpen ? 'text-petroleum' : 'text-corporate group-hover:text-petroleum'}`}
+                        className={`w-3.5 h-3.5 transition-all duration-300 ${isOpen ? 'text-[var(--theme-emphasis)]' : 'text-[var(--theme-primary)] group-hover:text-[var(--theme-emphasis)]'}`}
                     />
                 </div>
             </div>
@@ -168,7 +168,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                 <div className="flex-1 flex flex-col">
                     <div className="flex-1">
                         <div className="relative">
-                            <div className="absolute top-3 left-3 text-petroleum/30 pointer-events-none z-10">
+                            <div className="absolute top-3 left-3 text-[var(--theme-emphasis)]/30 pointer-events-none z-10">
                                 <Icon name="fa-pen" className="w-4 h-4" />
                             </div>
                             <textarea
@@ -182,7 +182,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                     "pl-10 pr-4 py-3",
                                     "text-slate-700 placeholder:text-slate-600/50 text-sm",
                                     "resize-none",
-                                    "focus:outline-none focus:ring-2 focus:ring-petroleum/20 focus:border-petroleum/30 focus:bg-white",
+                                    "focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/20 focus:border-[var(--theme-emphasis)]/30 focus:bg-white",
                                     "transition-all duration-300",
                                     "shadow-sm"
                                 )}
@@ -213,13 +213,13 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                             transition={{ type: "spring", stiffness: 400, damping: 17 }}
                             className={cn(
                                 "w-full px-6 py-3 rounded-xl",
-                                "bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate",
+                                "bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]",
                                 "text-white font-semibold",
-                                "hover:bg-white hover:text-petroleum",
-                                "shadow-md shadow-petroleum/20 hover:shadow-lg hover:shadow-petroleum/30",
+                                "hover:bg-white hover:text-[var(--theme-emphasis)]",
+                                "shadow-md shadow-[var(--theme-emphasis)]/20 hover:shadow-lg hover:shadow-[var(--theme-emphasis)]/30",
                                 "transition-all duration-300",
                                 "flex items-center justify-center gap-2",
-                                "focus:outline-none focus:ring-2 focus:ring-corporate/30 focus:ring-offset-2",
+                                "focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)]/30 focus:ring-offset-2",
                                 "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-transparent disabled:hover:text-white"
                             )}
                             aria-label={loading ? t('ialab.reactive_prompt.generating') : t('ialab.reactive_prompt.generate')}
@@ -231,8 +231,8 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 </>
                             ) : (
                                 <>
-                                    <Icon name="fa-wand-magic-sparkles" className="text-sm text-white hover:text-petroleum" />
-                                    <span className="text-sm text-white hover:text-petroleum">{t('ialab.reactive_prompt.generate')}</span>
+                                    <Icon name="fa-wand-magic-sparkles" className="text-sm text-white hover:text-[var(--theme-emphasis)]" />
+                                    <span className="text-sm text-white hover:text-[var(--theme-emphasis)]">{t('ialab.reactive_prompt.generate')}</span>
                                 </>
                             )}
                         </motion.button>
@@ -268,7 +268,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 return (
                                     <div 
                                         key={metric.name}
-                                        className="flex items-center justify-between p-3 rounded-lg bg-petroleum/5 border border-petroleum/10 hover:bg-petroleum/8 transition-all duration-300"
+                                        className="flex items-center justify-between p-3 rounded-lg bg-[var(--theme-emphasis)]/5 border border-[var(--theme-emphasis)]/10 hover:bg-[var(--theme-emphasis)]/8 transition-all duration-300"
                                     >
                                         <div className="flex items-center gap-2">
                                             <Icon 
@@ -296,7 +296,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                             })}
                         </div>
 
-                        <div className="mt-4 pt-3 border-t border-petroleum/10">
+                        <div className="mt-4 pt-3 border-t border-[var(--theme-emphasis)]/10">
                             {!input.trim() ? (
                                 <p className="text-xs text-slate-600 text-center">
                                     {t('ialab.reactive_prompt.write_to_analyze')}
@@ -311,8 +311,8 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                         <span className={cn(
                                             "text-xs font-semibold px-2.5 py-1 rounded-md",
                                             quickAnalysis.level === 'Excelente' ? "bg-emerald-50 text-emerald-700" :
-                                            quickAnalysis.level === 'Bueno' ? "bg-petroleum/10 text-petroleum" :
-                                            quickAnalysis.level === 'Aceptable' ? "bg-corporate/10 text-corporate" :
+                                            quickAnalysis.level === 'Bueno' ? "bg-[var(--theme-emphasis)]/10 text-[var(--theme-emphasis)]" :
+                                            quickAnalysis.level === 'Aceptable' ? "bg-[var(--theme-primary)]/10 text-[var(--theme-primary)]" :
                                             "bg-slate-100 text-slate-500"
                                         )}>
                                             {quickAnalysis.level}
@@ -338,28 +338,28 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
             </div>
 
             {genData && genData.optimizedPrompt && (
-                <div className="space-y-4 pt-4 border-t border-petroleum/10">
+                <div className="space-y-4 pt-4 border-t border-[var(--theme-emphasis)]/10">
                     <div
                         onClick={() => setIsResultOpen(!isResultOpen)}
-                        className="flex items-center justify-between px-4 py-3 rounded-xl bg-petroleum/5 hover:bg-petroleum/10 border border-corporate/20 cursor-pointer transition-colors duration-200"
+                        className="flex items-center justify-between px-4 py-3 rounded-xl bg-[var(--theme-emphasis)]/5 hover:bg-[var(--theme-emphasis)]/10 border border-[var(--theme-primary)]/20 cursor-pointer transition-colors duration-200"
                     >
                         <div className="flex items-center gap-2">
-                            <Icon name="fa-terminal" className="text-petroleum w-4 h-4" />
-                            <span className="text-xs font-bold tracking-[0.12em] uppercase text-petroleum">
+                            <Icon name="fa-terminal" className="text-[var(--theme-emphasis)] w-4 h-4" />
+                            <span className="text-xs font-bold tracking-[0.12em] uppercase text-[var(--theme-emphasis)]">
                                 {t('ialab.reactive_prompt.result')}
                             </span>
                             <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
-                                isResultOpen ? 'bg-petroleum/10' : 'bg-corporate/15'
+                                isResultOpen ? 'bg-[var(--theme-emphasis)]/10' : 'bg-[var(--theme-primary)]/15'
                             }`}>
                                 <Icon
                                     name={isResultOpen ? "fa-chevron-up" : "fa-chevron-down"}
-                                    className={`w-3 h-3 ${isResultOpen ? 'text-petroleum' : 'text-corporate'}`}
+                                    className={`w-3 h-3 ${isResultOpen ? 'text-[var(--theme-emphasis)]' : 'text-[var(--theme-primary)]'}`}
                                 />
                             </div>
                         </div>
                         <button
                             onClick={(e) => { e.stopPropagation(); handleCopy(); }}
-                            className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-petroleum text-xs font-semibold rounded-lg transition-all duration-200"
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-[var(--theme-emphasis)] text-xs font-semibold rounded-lg transition-all duration-200"
                         >
                             <Icon name={copied ? "fa-check" : "fa-copy"} className="w-3 h-3" />
                             <span>{copied ? t('ialab.reactive_prompt.copied') : t('ialab.reactive_prompt.copy')}</span>
@@ -370,10 +370,10 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                         <>
                             <div className="relative bg-white rounded-xl p-5 md:p-6 border border-slate-200/60 shadow-sm">
                                 <div className="flex items-center gap-2 mb-4">
-                                    <div className="w-6 h-6 rounded-md bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center">
+                                    <div className="w-6 h-6 rounded-md bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
                                         <Icon name="fa-terminal" className="text-white w-3.5 h-3.5" />
                                     </div>
-                                    <span className="text-xs font-bold tracking-[0.12em] uppercase text-petroleum">
+                                    <span className="text-xs font-bold tracking-[0.12em] uppercase text-[var(--theme-emphasis)]">
                                         {t('ialab.reactive_prompt.generated_prompt')}
                                     </span>
                                 </div>
@@ -384,30 +384,30 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
                                 </div>
                             </div>
 
-                            <div className="bg-petroleum/5 border-l-4 border-petroleum rounded-r-xl p-4 md:p-5">
+                            <div className="bg-[var(--theme-emphasis)]/5 border-l-4 border-[var(--theme-emphasis)] rounded-r-xl p-4 md:p-5">
                                 <div className="flex items-center gap-2 mb-3">
-                                    <div className="w-7 h-7 rounded-md bg-petroleum/10 flex items-center justify-center flex-shrink-0">
-                                        <Icon name="fa-lightbulb" className="text-petroleum w-3.5 h-3.5" />
+                                    <div className="w-7 h-7 rounded-md bg-[var(--theme-emphasis)]/10 flex items-center justify-center flex-shrink-0">
+                                        <Icon name="fa-lightbulb" className="text-[var(--theme-emphasis)] w-3.5 h-3.5" />
                                     </div>
-                                    <span className="font-semibold text-petroleum text-sm">{t('ialab.reactive_prompt.educational_feedback')}</span>
+                                    <span className="font-semibold text-[var(--theme-emphasis)] text-sm">{t('ialab.reactive_prompt.educational_feedback')}</span>
                                 </div>
                                 <p className="text-slate-600 text-sm md:text-base leading-relaxed">
                                     {genData.feedback?.educationalInsights || genData.feedback?.summary || ''}
                                 </p>
                                 {improvements.length > 0 && (
                                     <>
-                                        <div className="my-3 border-t border-petroleum/10" />
+                                        <div className="my-3 border-t border-[var(--theme-emphasis)]/10" />
                                         <div className="flex items-center gap-2 mb-2">
-                                            <div className="w-5 h-5 rounded-md bg-petroleum/10 flex items-center justify-center flex-shrink-0">
-                                                <Icon name="fa-list-check" className="text-petroleum w-2.5 h-2.5" />
+                                            <div className="w-5 h-5 rounded-md bg-[var(--theme-emphasis)]/10 flex items-center justify-center flex-shrink-0">
+                                                <Icon name="fa-list-check" className="text-[var(--theme-emphasis)] w-2.5 h-2.5" />
                                             </div>
-                                            <span className="text-xs font-semibold text-petroleum uppercase tracking-wider">{t('ialab.reactive_prompt.improvements')}</span>
+                                            <span className="text-xs font-semibold text-[var(--theme-emphasis)] uppercase tracking-wider">{t('ialab.reactive_prompt.improvements')}</span>
                                         </div>
                                         <ul className="space-y-2">
                                             {improvements.map((imp, i) => (
                                                 <li key={i} className="flex items-start gap-2.5 text-sm text-slate-600">
-                                                    <div className="w-5 h-5 rounded-full bg-petroleum/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                        <Icon name="fa-check" className="text-petroleum w-2.5 h-2.5" />
+                                                    <div className="w-5 h-5 rounded-full bg-[var(--theme-emphasis)]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                        <Icon name="fa-check" className="text-[var(--theme-emphasis)] w-2.5 h-2.5" />
                                                     </div>
                                                     <span className="leading-snug">{imp}</span>
                                                 </li>

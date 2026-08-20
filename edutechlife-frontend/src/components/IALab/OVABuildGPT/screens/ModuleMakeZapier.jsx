@@ -17,13 +17,13 @@ export default function ModuleMakeZapier({ onNext, addXp }) {
 
   return (
     <div className="max-w-4xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
-      <h2 className="text-3xl font-bold text-petroleum mb-2">{t('ova.buildgpt.api_title')}</h2>
+      <h2 className="text-3xl font-bold text-[var(--theme-emphasis)] mb-2">{t('ova.buildgpt.api_title')}</h2>
       <p className="text-gray-600 dark:text-slate-300 mb-6">{t('ova.buildgpt.api_desc')}</p>
       <div className="flex gap-4 mb-6" role="tablist">
-        <button onClick={() => setTab('make')} role="tab" aria-selected={tab === 'make'} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'make' ? 'bg-petroleum text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-petroleum'}`}>
+        <button onClick={() => setTab('make')} role="tab" aria-selected={tab === 'make'} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'make' ? 'bg-[var(--theme-emphasis)] text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-[var(--theme-emphasis)]'}`}>
           <Workflow className="inline mr-2" size={20}/> {t('ova.buildgpt.api_rest')}
         </button>
-        <button onClick={() => setTab('zapier')} role="tab" aria-selected={tab === 'zapier'} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'zapier' ? 'bg-corporate text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-corporate'}`}>
+        <button onClick={() => setTab('zapier')} role="tab" aria-selected={tab === 'zapier'} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'zapier' ? 'bg-[var(--theme-primary)] text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-[var(--theme-primary)]'}`}>
           <Zap className="inline mr-2" size={20}/> {t('ova.buildgpt.api_webhooks')}
         </button>
       </div>
@@ -32,7 +32,7 @@ export default function ModuleMakeZapier({ onNext, addXp }) {
           <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h3 className="text-2xl font-bold text-petroleum mb-2">{t('ova.buildgpt.api_connect_title')}</h3>
+                <h3 className="text-2xl font-bold text-[var(--theme-emphasis)] mb-2">{t('ova.buildgpt.api_connect_title')}</h3>
                 <p className="text-gray-600 dark:text-slate-300">{t('ova.buildgpt.api_connect_desc')}</p>
               </div>
             </div>
@@ -43,7 +43,7 @@ export default function ModuleMakeZapier({ onNext, addXp }) {
               </div>
               <div className="w-12 h-1 bg-slate-300 dark:bg-slate-600"></div>
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 bg-corporate rounded-full flex items-center justify-center text-white shadow-lg z-10"><Bot/></div>
+                <div className="w-16 h-16 bg-[var(--theme-primary)] rounded-full flex items-center justify-center text-white shadow-lg z-10"><Bot/></div>
                 <span className="text-xs font-bold mt-2 text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_process')}</span>
               </div>
               <div className="w-12 h-1 bg-slate-300 dark:bg-slate-600"></div>
@@ -53,7 +53,7 @@ export default function ModuleMakeZapier({ onNext, addXp }) {
               </div>
               <div className="w-12 h-1 bg-slate-300 dark:bg-slate-600"></div>
               <div className="flex flex-col items-center">
-                <div className="w-14 h-14 bg-petroleum rounded-full flex items-center justify-center text-white shadow-lg z-10"><CheckCircle/></div>
+                <div className="w-14 h-14 bg-[var(--theme-emphasis)] rounded-full flex items-center justify-center text-white shadow-lg z-10"><CheckCircle/></div>
                 <span className="text-xs font-bold mt-2 text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_response')}</span>
               </div>
             </div>
@@ -62,7 +62,7 @@ export default function ModuleMakeZapier({ onNext, addXp }) {
           <div className="animate-[fadeIn_0.6s_ease-out_forwards]">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h3 className="text-2xl font-bold text-corporate mb-2">{t('ova.buildgpt.api_webhook_title')}</h3>
+                <h3 className="text-2xl font-bold text-[var(--theme-primary)] mb-2">{t('ova.buildgpt.api_webhook_title')}</h3>
                 <p className="text-gray-600 dark:text-slate-300">{t('ova.buildgpt.api_webhook_desc')}</p>
               </div>
             </div>
@@ -71,8 +71,8 @@ export default function ModuleMakeZapier({ onNext, addXp }) {
                 <thead className="bg-slate-50 dark:bg-slate-700/30 text-slate-600 dark:text-slate-300">
                   <tr>
                     <th className="p-4 border-b">{t('ova.buildgpt.api_feature')}</th>
-                    <th className="p-4 border-b font-bold text-petroleum">{t('ova.buildgpt.api_rest')}</th>
-                    <th className="p-4 border-b font-bold text-corporate">{t('ova.buildgpt.api_webhooks')}</th>
+                    <th className="p-4 border-b font-bold text-[var(--theme-emphasis)]">{t('ova.buildgpt.api_rest')}</th>
+                    <th className="p-4 border-b font-bold text-[var(--theme-primary)]">{t('ova.buildgpt.api_webhooks')}</th>
                   </tr>
                 </thead>
                 <tbody>

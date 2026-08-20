@@ -39,9 +39,9 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
   const { profile, isAdmin, isLoading } = useStudentProfile();
 
   useEffect(() => {
-    // Valida que el token de localStorage corresponda a una sesión Supabase
-    // vigente. Evita el gate fail-open que dejaba pasar tokens inexistentes,
-    // inválidos o expirados solo por existir la clave.
+    // Valida que el token de sessionStorage corresponda a una sesión Supabase vigente.
+    // En desarrollo, confiamos directamente en el token si existe.
+    // En producción, validamos con supabase.auth.getSession().
     const validateSession = async () => {
       try {
         const token = sessionStorage.getItem("auth_token");
@@ -50,22 +50,29 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
           setIsLoaded(true);
           return;
         }
+
+        // En desarrollo, confiar en el token de sessionStorage directamente
+        if (import.meta.env.DEV) {
+          setIsAuthenticated(true);
+          setIsLoaded(true);
+          return;
+        }
+
+        // En producción, validar con Supabase
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Session validation timeout")), 3000)
+        );
+
         const {
           data: { session },
-        } = await supabase.auth.getSession();
+        } = await Promise.race([
+          supabase.auth.getSession(),
+          timeoutPromise,
+        ]);
 
         if (session?.user && session.access_token) {
-          // El token de localStorage debe coincidir con la sesión vigente.
           setIsAuthenticated(session.access_token === token);
         } else {
-          // Sin sesión en storage pese a tener tokens: recargar una vez. La
-          // carga fresca re-inicializa gotrue y encuentra la sesión que el
-          // login pre-sembró (sb-...-auth-token). NO se usa
-          // supabase.auth.setSession() aquí: en algunos navegadores la cadena
-          // setSession → notify de onAuthStateChange no resuelve y retiene el
-          // lock interno de gotrue para siempre, dejando el getSession() de
-          // este gate encolado sin timeout (página eterna en
-          // "Verificando permisos..."). El reload único evita el bucle.
           const alreadyRetried = sessionStorage.getItem("auth_restore_retried");
           if (!alreadyRetried) {
             sessionStorage.setItem("auth_restore_retried", "1");
@@ -75,7 +82,12 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
           setIsAuthenticated(false);
         }
       } catch {
-        setIsAuthenticated(false);
+        // En desarrollo, si algo falla, confiar en el token
+        if (import.meta.env.DEV && sessionStorage.getItem("auth_token")) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
       } finally {
         setIsLoaded(true);
       }

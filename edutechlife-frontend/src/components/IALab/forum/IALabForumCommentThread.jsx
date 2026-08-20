@@ -7,7 +7,7 @@ const IALabForumCommentThread = ({ comments, onReply, depth = 0 }) => {
   if (!comments?.length) return null;
 
   return (
-    <div className={`space-y-2 ${depth > 0 ? 'ml-6 pl-3 border-l-2 border-petroleum/10 dark:border-petroleum/20' : ''}`}>
+    <div className={`space-y-2 ${depth > 0 ? 'ml-6 pl-3 border-l-2 border-[var(--theme-emphasis)]/10 dark:border-[var(--theme-emphasis)]/20' : ''}`}>
       {comments.map((comment) => (
         <IALabForumComment
           key={comment.id}

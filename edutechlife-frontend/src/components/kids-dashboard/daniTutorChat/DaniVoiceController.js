@@ -36,7 +36,10 @@ const EMOJI_HARDCODED = /[😊🔥🧠🎉💙📚💭🌟📅💬🎯🤔📖�
 
 export function stripEmoji(text) {
   try {
-    return text.replace(/\p{Emoji}/gu, '').trim();
+    // \p{Extended_Pictographic} matches true pictographic emoji only.
+    // \p{Emoji} also matches 0-9, # and * (Unicode keycap bases), which
+    // would silently strip digits from spoken text like "4.5/5".
+    return text.replace(/\p{Extended_Pictographic}/gu, '').trim();
   } catch {
     return text.replace(EMOJI_HARDCODED, '').trim();
   }

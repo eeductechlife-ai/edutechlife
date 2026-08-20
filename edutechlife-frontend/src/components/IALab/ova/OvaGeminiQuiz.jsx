@@ -102,7 +102,7 @@ export default function OvaGeminiQuiz({
                         <span className={cn(
                           "w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold border-2 flex-shrink-0",
                           isSelected && !showResults
-                            ? 'bg-corporate border-corporate text-white'
+                            ? 'bg-[var(--theme-primary)] border-[var(--theme-primary)] text-white'
                             : 'bg-transparent border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400'
                         )}>
                           {opt.id.toUpperCase()}
@@ -142,7 +142,7 @@ export default function OvaGeminiQuiz({
           className={cn(
             'w-full mt-4 sm:mt-6 py-2.5 sm:py-3.5 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-base transition-all',
             answeredCount >= totalQuestions
-              ? 'bg-gradient-to-r from-cyan-500 to-petroleum text-white shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/30 hover:-translate-y-0.5 cursor-pointer'
+              ? 'bg-gradient-to-r from-cyan-500 to-[var(--theme-emphasis)] text-white shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/30 hover:-translate-y-0.5 cursor-pointer'
               : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
           )}
         >

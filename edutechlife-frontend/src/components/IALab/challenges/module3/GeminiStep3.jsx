@@ -94,7 +94,7 @@ const GeminiStep3 = ({
         className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
             <Icon name="fa-shield" className="text-white text-lg" />
           </div>
           <div>
@@ -167,7 +167,7 @@ const GeminiStep3 = ({
             >
               <div className="p-5">
                 <div className="flex items-start gap-3 mb-4">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs font-bold">
                       {i + 1}
                     </span>

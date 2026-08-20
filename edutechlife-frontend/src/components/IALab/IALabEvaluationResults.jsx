@@ -95,7 +95,7 @@ const IALabEvaluationResults = ({
         </p>
         <button
           onClick={onClose}
-          className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300"
+          className="px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300"
         >
           <Icon name="fa-arrow-left" className="mr-2" />
           {t("ialab.evaluation.results.back_to_start")}
@@ -152,7 +152,7 @@ const IALabEvaluationResults = ({
         <div className="mb-8">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
                 <Icon name="fa-trophy" className="text-white text-2xl" />
               </div>
               <div>
@@ -168,7 +168,7 @@ const IALabEvaluationResults = ({
             </div>
 
             <div
-              className={`px-4 py-2 rounded-lg flex items-center gap-2 border ${gradeSaved ? "bg-emerald-50 border-emerald-200" : "bg-petroleum/5 border-petroleum/10"}`}
+              className={`px-4 py-2 rounded-lg flex items-center gap-2 border ${gradeSaved ? "bg-emerald-50 border-emerald-200" : "bg-[var(--theme-emphasis)]/5 border-[var(--theme-emphasis)]/10"}`}
             >
               {gradeSaved ? (
                 <>
@@ -179,8 +179,8 @@ const IALabEvaluationResults = ({
                 </>
               ) : (
                 <>
-                  <div className="w-4 h-4 border-2 border-petroleum border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-sm text-petroleum font-medium">
+                  <div className="w-4 h-4 border-2 border-[var(--theme-emphasis)] border-t-transparent rounded-full animate-spin"></div>
+                  <span className="text-sm text-[var(--theme-emphasis)] font-medium">
                     {t("ialab.evaluation.results.registering_grade")}
                   </span>
                 </>
@@ -188,11 +188,11 @@ const IALabEvaluationResults = ({
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-petroleum/10 to-corporate/10 rounded-xl p-5 border border-corporate/20 dark:from-petroleum/20 dark:to-corporate/20 dark:border-corporate/40">
+          <div className="bg-gradient-to-r from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 rounded-xl p-5 border border-[var(--theme-primary)]/20 dark:from-[var(--theme-emphasis)]/20 dark:to-[var(--theme-primary)]/20 dark:border-[var(--theme-primary)]/40">
             <div className="flex items-center gap-3">
-              <Icon name="fa-chart-line" className="text-petroleum text-xl" />
+              <Icon name="fa-chart-line" className="text-[var(--theme-emphasis)] text-xl" />
               <div>
-                <h3 className="text-lg font-bold text-petroleum mb-1">
+                <h3 className="text-lg font-bold text-[var(--theme-emphasis)] mb-1">
                   {t("ialab.evaluation.results.score_weight_info", {
                     module: activeMod,
                   })}
@@ -236,7 +236,7 @@ const IALabEvaluationResults = ({
           <div
             className={`flex items-center gap-3 ${isApproved ? "bg-emerald-50/60" : "bg-slate-50"} border border-slate-200 dark:bg-slate-800/50 dark:border-slate-700 rounded-xl p-4`}
           >
-            <Icon name="fa-chart-pie" className="text-corporate text-xl" />
+            <Icon name="fa-chart-pie" className="text-[var(--theme-primary)] text-xl" />
             <div>
               <p className="text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 font-bold">
                 {t("ialab.evaluation.results.competencies_label")}
@@ -265,8 +265,8 @@ const IALabEvaluationResults = ({
                     onClick={() => setActiveTab(tab)}
                     className={`px-4 py-3 text-sm font-medium rounded-t-lg transition-colors ${
                       activeTab === tab
-                        ? "bg-white text-petroleum border-b-2 border-corporate dark:bg-slate-800 dark:text-petroleum"
-                        : "text-slate-600 hover:text-petroleum hover:bg-slate-50 dark:text-slate-400 dark:hover:text-petroleum dark:hover:bg-slate-800"
+                        ? "bg-white text-[var(--theme-emphasis)] border-b-2 border-[var(--theme-primary)] dark:bg-slate-800 dark:text-[var(--theme-emphasis)]"
+                        : "text-slate-600 hover:text-[var(--theme-emphasis)] hover:bg-slate-50 dark:text-slate-400 dark:hover:text-[var(--theme-emphasis)] dark:hover:bg-slate-800"
                     }`}
                   >
                     <Icon
@@ -372,11 +372,11 @@ const IALabEvaluationResults = ({
                     <Icon
                       name={isApproved ? "fa-trophy" : "fa-certificate"}
                       className={
-                        isApproved ? "text-emerald-500" : "text-petroleum"
+                        isApproved ? "text-emerald-500" : "text-[var(--theme-emphasis)]"
                       }
                     />
                     <h4
-                      className={`font-semibold ${isApproved ? "text-emerald-700" : "text-petroleum"}`}
+                      className={`font-semibold ${isApproved ? "text-emerald-700" : "text-[var(--theme-emphasis)]"}`}
                     >
                       {isApproved
                         ? t("ialab.evaluation.results.challenge_passed")
@@ -403,13 +403,13 @@ const IALabEvaluationResults = ({
 
                 {isApproved && isPremium && (
                   <div className="pt-4 border-t border-slate-100">
-                    <div className="rounded-xl p-4 border border-corporate/30 bg-corporate/5 dark:bg-corporate/10">
+                    <div className="rounded-xl p-4 border border-[var(--theme-primary)]/30 bg-[var(--theme-primary)]/5 dark:bg-[var(--theme-primary)]/10">
                       <div className="flex items-center gap-2 mb-1">
                         <Icon
                           name="fa-award"
-                          className="text-corporate text-sm"
+                          className="text-[var(--theme-primary)] text-sm"
                         />
-                        <h4 className="text-sm font-semibold text-petroleum dark:text-white">
+                        <h4 className="text-sm font-semibold text-[var(--theme-emphasis)] dark:text-white">
                           {t(
                             "ialab.evaluation.results.certificate_final_kicker",
                           )}
@@ -464,7 +464,7 @@ const IALabEvaluationResults = ({
                 {!isApproved && remainingAttempts > 0 && (
                   <button
                     onClick={handleRetry}
-                    className="w-full mt-3 py-3.5 rounded-xl bg-gradient-to-r from-petroleum to-corporate text-white font-bold text-sm hover:shadow-lg hover:shadow-petroleum/20 transition-all duration-300 flex items-center justify-center gap-2"
+                    className="w-full mt-3 py-3.5 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white font-bold text-sm hover:shadow-lg hover:shadow-[var(--theme-emphasis)]/20 transition-all duration-300 flex items-center justify-center gap-2"
                   >
                     <Icon name="fa-rocket" className="text-base" />
                     {t("ialab.evaluation.results.retry_challenge")}

@@ -209,13 +209,13 @@ const ResourceViewerModal = ({
   const renderViewer = () => {
     if (!resource) {
       return (
-        <div className="w-full h-full flex items-center justify-center bg-petroleum/5 rounded-2xl">
+        <div className="w-full h-full flex items-center justify-center bg-[var(--theme-emphasis)]/5 rounded-2xl">
           <div className="text-center">
             <Icon
               name="fa-file-circle-question"
-              className="text-petroleum/50 text-4xl mb-4"
+              className="text-[var(--theme-emphasis)]/50 text-4xl mb-4"
             />
-            <p className="text-petroleum/80 font-medium">
+            <p className="text-[var(--theme-emphasis)]/80 font-medium">
               {t("ialab.resource_viewer.no_resource")}
             </p>
           </div>
@@ -280,10 +280,10 @@ const ResourceViewerModal = ({
           return (
             <Suspense
               fallback={
-                <div className="w-full h-full flex items-center justify-center bg-petroleum/5">
+                <div className="w-full h-full flex items-center justify-center bg-[var(--theme-emphasis)]/5">
                   <div className="text-center">
-                    <div className="animate-spin w-10 h-10 border-4 border-petroleum border-t-transparent rounded-full mx-auto mb-4"></div>
-                    <p className="text-petroleum/80 font-bold">
+                    <div className="animate-spin w-10 h-10 border-4 border-[var(--theme-emphasis)] border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <p className="text-[var(--theme-emphasis)]/80 font-bold">
                       {t("ialab.resource_viewer.loading_interactive")}
                     </p>
                   </div>
@@ -306,13 +306,13 @@ const ResourceViewerModal = ({
 
         default:
           return (
-            <div className="w-full h-full flex items-center justify-center bg-corporate/5 rounded-2xl">
+            <div className="w-full h-full flex items-center justify-center bg-[var(--theme-primary)]/5 rounded-2xl">
               <div className="text-center">
                 <Icon
                   name="fa-triangle-exclamation"
-                  className="text-corporate text-4xl mb-4"
+                  className="text-[var(--theme-primary)] text-4xl mb-4"
                 />
-                <p className="text-corporate/80 font-medium">
+                <p className="text-[var(--theme-primary)]/80 font-medium">
                   {t("ialab.resource_viewer.type_unsupported", {
                     type: resource.type,
                   })}
@@ -387,7 +387,7 @@ const ResourceViewerModal = ({
                 "h-full relative overflow-hidden",
                 isFullscreen
                   ? "w-full"
-                  : "w-full max-w-6xl max-sm:max-w-full mx-0 sm:mx-2 p-0 sm:p-[1.5px] sm:rounded-[2rem] sm:bg-gradient-to-b from-petroleum/20 via-petroleum/10 to-corporate/5 shadow-[0_20px_25px_-5px_rgba(0,75,99,0.18),0_8px_10px_-6px_rgba(0,75,99,0.12)]",
+                  : "w-full max-w-6xl max-sm:max-w-full mx-0 sm:mx-2 p-0 sm:p-[1.5px] sm:rounded-[2rem] sm:bg-gradient-to-b from-[var(--theme-emphasis)]/20 via-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/5 shadow-[0_20px_25px_-5px_rgba(0,75,99,0.18),0_8px_10px_-6px_rgba(0,75,99,0.12)]",
               )}
               style={{
                 height: isFullscreen ? "100dvh" : "calc(100dvh - 2rem)",
@@ -396,8 +396,8 @@ const ResourceViewerModal = ({
             >
               {!isFullscreen && (
                 <>
-                  <div className="absolute -top-10 -right-10 w-48 h-48 bg-gradient-to-br from-petroleum/8 to-corporate/5 rounded-full blur-3xl pointer-events-none" />
-                  <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-gradient-to-tr from-petroleum/6 to-corporate/5 rounded-full blur-3xl pointer-events-none" />
+                  <div className="absolute -top-10 -right-10 w-48 h-48 bg-gradient-to-br from-[var(--theme-emphasis)]/8 to-[var(--theme-primary)]/5 rounded-full blur-3xl pointer-events-none" />
+                  <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-gradient-to-tr from-[var(--theme-emphasis)]/6 to-[var(--theme-primary)]/5 rounded-full blur-3xl pointer-events-none" />
                 </>
               )}
               <motion.div
@@ -420,13 +420,13 @@ const ResourceViewerModal = ({
               >
                 <div
                   className={cn(
-                    "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-petroleum to-corporate z-10",
+                    "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] z-10",
                     isFullscreen ? "" : "sm:rounded-t-[calc(2rem-1.5px)]",
                   )}
                 />
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-800">
                   <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-petroleum to-corporate shadow-sm flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] shadow-sm flex items-center justify-center flex-shrink-0">
                       <Icon
                         name={RESOURCE_ICONS[resource.type] || "fa-file"}
                         className="text-white w-5 h-5 sm:w-6 sm:h-6"
@@ -450,7 +450,7 @@ const ResourceViewerModal = ({
                         size="text-xs"
                         className="mb-1 text-slate-400 dark:text-slate-500"
                       />
-                      <h2 className="text-lg sm:text-xl font-bold text-petroleum dark:text-white tracking-tight truncate">
+                      <h2 className="text-lg sm:text-xl font-bold text-[var(--theme-emphasis)] dark:text-white tracking-tight truncate">
                         {resource.title}
                       </h2>
                       <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1">
@@ -483,7 +483,7 @@ const ResourceViewerModal = ({
                   <div className="flex-shrink-0 mt-3 sm:mt-0 ml-0 sm:ml-2 flex items-center gap-2">
                     <button
                       onClick={() => setIsFullscreen((prev) => !prev)}
-                      className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-petroleum hover:border-petroleum/30 hover:bg-petroleum/5 transition-all duration-200 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+                      className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-[var(--theme-emphasis)] hover:border-[var(--theme-emphasis)]/30 hover:bg-[var(--theme-emphasis)]/5 transition-all duration-200 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
                       aria-label={
                         isFullscreen
                           ? t("ialab.viewer_modal.fullscreen_exit")
@@ -497,7 +497,7 @@ const ResourceViewerModal = ({
                     </button>
                     <button
                       onClick={handleClose}
-                      className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-petroleum hover:border-petroleum/30 hover:bg-petroleum/5 transition-all duration-200 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+                      className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-[var(--theme-emphasis)] hover:border-[var(--theme-emphasis)]/30 hover:bg-[var(--theme-emphasis)]/5 transition-all duration-200 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
                       aria-label={t("ialab.viewer_modal.close_aria")}
                     >
                       <Icon name="fa-times" className="w-4 h-4" />
@@ -509,7 +509,7 @@ const ResourceViewerModal = ({
                   {showNotes && (
                     <div className="border-t border-slate-200/60 dark:border-slate-700/60 px-4 sm:px-6 py-4 bg-white dark:bg-slate-800">
                       <div className="flex items-center justify-between mb-3">
-                        <h4 className="text-sm font-semibold text-petroleum dark:text-petroleum-light flex items-center gap-2">
+                        <h4 className="text-sm font-semibold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]-light flex items-center gap-2">
                           <Icon name="fa-note-sticky" className="w-4 h-4" />
                           {t("ialab.viewer_modal.notes_title")}
                         </h4>
@@ -525,7 +525,7 @@ const ResourceViewerModal = ({
                         value={noteText}
                         onChange={handleNoteChange}
                         placeholder={t("ialab.viewer_modal.notes_placeholder")}
-                        className="w-full min-h-[100px] p-3 border border-slate-200 dark:border-slate-600 rounded-xl resize-y text-sm bg-white dark:bg-slate-900 text-petroleum dark:text-slate-200 focus:outline-none focus:border-corporate focus:ring-2 focus:ring-petroleum/20 focus:ring-offset-1 transition-all duration-200"
+                        className="w-full min-h-[100px] p-3 border border-slate-200 dark:border-slate-600 rounded-xl resize-y text-sm bg-white dark:bg-slate-900 text-[var(--theme-emphasis)] dark:text-slate-200 focus:outline-none focus:border-[var(--theme-primary)] focus:ring-2 focus:ring-[var(--theme-emphasis)]/20 focus:ring-offset-1 transition-all duration-200"
                         aria-label={t("ialab.viewer_modal.notes_aria")}
                       />
                     </div>
@@ -538,8 +538,8 @@ const ResourceViewerModal = ({
                         onClick={() => setShowNotes((s) => !s)}
                         className={`px-3 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px] border ${
                           showNotes
-                            ? "bg-gradient-to-r from-petroleum to-corporate text-white shadow-sm border-transparent"
-                            : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 text-petroleum/70 hover:bg-petroleum/5 hover:text-petroleum transition-all duration-200"
+                            ? "bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white shadow-sm border-transparent"
+                            : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 text-[var(--theme-emphasis)]/70 hover:bg-[var(--theme-emphasis)]/5 hover:text-[var(--theme-emphasis)] transition-all duration-200"
                         }`}
                         aria-label={t("ialab.viewer_modal.notes_toggle_aria")}
                       >
@@ -557,7 +557,7 @@ const ResourceViewerModal = ({
                           setShowValerioDrawer(true);
                           handleClose();
                         }}
-                        className="px-3 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px] border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 text-petroleum/70 hover:bg-petroleum/5 hover:text-petroleum"
+                        className="px-3 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px] border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 text-[var(--theme-emphasis)]/70 hover:bg-[var(--theme-emphasis)]/5 hover:text-[var(--theme-emphasis)]"
                         aria-label={t("ialab.ask_max_btn")}
                         title={t("ialab.ask_max_btn")}
                       >
@@ -574,7 +574,7 @@ const ResourceViewerModal = ({
                             "px-4 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px]",
                             currentIndex <= 0
                               ? "text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-40"
-                              : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-petroleum/70 hover:bg-petroleum/5 hover:border-corporate/30 hover:shadow-sm transition-all duration-200",
+                              : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-[var(--theme-emphasis)]/70 hover:bg-[var(--theme-emphasis)]/5 hover:border-[var(--theme-primary)]/30 hover:shadow-sm transition-all duration-200",
                           )}
                           aria-label={t("ialab.viewer_modal.previous_aria")}
                         >
@@ -586,7 +586,7 @@ const ResourceViewerModal = ({
                             {t("ialab.viewer_modal.previous")}
                           </span>
                         </button>
-                        <div className="px-4 py-2 sm:px-5 sm:py-2.5 bg-gradient-to-br from-petroleum/10 to-corporate/10 rounded-full text-petroleum font-bold text-sm sm:text-base shadow-sm">
+                        <div className="px-4 py-2 sm:px-5 sm:py-2.5 bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 rounded-full text-[var(--theme-emphasis)] font-bold text-sm sm:text-base shadow-sm">
                           {currentIndex + 1} / {totalResources}
                         </div>
                         <button
@@ -596,7 +596,7 @@ const ResourceViewerModal = ({
                             "px-4 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px]",
                             currentIndex >= totalResources - 1
                               ? "text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-40"
-                              : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-petroleum/70 hover:bg-petroleum/5 hover:border-corporate/30 hover:shadow-sm transition-all duration-200",
+                              : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-[var(--theme-emphasis)]/70 hover:bg-[var(--theme-emphasis)]/5 hover:border-[var(--theme-primary)]/30 hover:shadow-sm transition-all duration-200",
                           )}
                           aria-label={t("ialab.viewer_modal.next_aria")}
                         >
@@ -621,7 +621,7 @@ const ResourceViewerModal = ({
                     ) : resource.type === "video" ||
                       resource.type === "pdf" ||
                       resource.type === "pdf-thumbnail" ? (
-                      <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-xl bg-gradient-to-r from-corporate/5 to-corporate/10 border border-corporate/20 dark:border-corporate/30 text-corporate font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center backdrop-blur-sm shadow-sm">
+                      <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-xl bg-gradient-to-r from-[var(--theme-primary)]/5 to-[var(--theme-primary)]/10 border border-[var(--theme-primary)]/20 dark:border-[var(--theme-primary)]/30 text-[var(--theme-primary)] font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center backdrop-blur-sm shadow-sm">
                         <Icon
                           name="fa-hourglass-half"
                           className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
@@ -635,7 +635,7 @@ const ResourceViewerModal = ({
                     ) : resource.type === "ova" ||
                       resource.type === "ova_interactive" ||
                       resource.type === "ova-thumbnail" ? (
-                      <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-xl bg-gradient-to-r from-corporate/5 to-corporate/10 border border-corporate/20 dark:border-corporate/30 text-corporate font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center backdrop-blur-sm shadow-sm">
+                      <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-xl bg-gradient-to-r from-[var(--theme-primary)]/5 to-[var(--theme-primary)]/10 border border-[var(--theme-primary)]/20 dark:border-[var(--theme-primary)]/30 text-[var(--theme-primary)] font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center backdrop-blur-sm shadow-sm">
                         <Icon
                           name="fa-hourglass-half"
                           className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
@@ -648,7 +648,7 @@ const ResourceViewerModal = ({
                       <button
                         onClick={handleMarkAsViewed}
                         aria-label={t("ialab.viewer_modal.mark_viewed")}
-                        className="px-4 py-3 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base min-h-[44px] w-full sm:w-auto justify-center border-none bg-gradient-to-r from-petroleum to-corporate hover:from-corporate-deep hover:to-corporate-darker text-white shadow-md hover:shadow-lg"
+                        className="px-4 py-3 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base min-h-[44px] w-full sm:w-auto justify-center border-none bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] hover:from-[var(--theme-primary)]-deep hover:to-[var(--theme-primary)]-darker text-white shadow-md hover:shadow-lg"
                       >
                         <Icon
                           name="fa-check"

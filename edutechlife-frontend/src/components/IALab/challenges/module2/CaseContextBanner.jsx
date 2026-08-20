@@ -26,14 +26,14 @@ const CaseContextBanner = ({ selectedCase, stepNumber }) => {
   const meta = CASE_META[selectedCase];
   if (!meta) return null;
   return (
-    <div className="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-petroleum/5 to-corporate/5 rounded-xl border border-corporate/20 mb-6">
+    <div className="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-xl border border-[var(--theme-primary)]/20 mb-6">
       <div
         className={`w-8 h-8 rounded-lg bg-gradient-to-r ${meta.color} flex items-center justify-center flex-shrink-0`}
       >
         <Icon name={meta.icon} className="text-white text-sm" />
       </div>
       <div className="flex-1">
-        <p className="text-xs font-medium text-corporate uppercase tracking-wider">
+        <p className="text-xs font-medium text-[var(--theme-primary)] uppercase tracking-wider">
           {t("ialab.challenge.m2.building_for")}
         </p>
         <p className="text-sm font-bold text-slate-800 dark:text-slate-100">

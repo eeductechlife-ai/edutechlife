@@ -22,8 +22,8 @@ const IALabForumFilterBar = ({ category, onCategoryChange }) => {
           onClick={() => onCategoryChange?.(cat.id)}
           className={`flex items-center gap-1.5 px-3 min-h-[44px] py-0 rounded-xl text-[11px] font-semibold transition-all duration-200 whitespace-nowrap sm:whitespace-nowrap whitespace-normal sm:px-3 px-2 border ${
             category === cat.id
-              ? 'bg-gradient-to-r from-petroleum to-corporate text-white border-petroleum/30 shadow-sm'
-              : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200/60 dark:border-slate-700/60 hover:border-petroleum/30 hover:text-petroleum'
+              ? 'bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white border-[var(--theme-emphasis)]/30 shadow-sm'
+              : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200/60 dark:border-slate-700/60 hover:border-[var(--theme-emphasis)]/30 hover:text-[var(--theme-emphasis)]'
           }`}
         >
           <Icon name={cat.icon} className="text-[10px]" />

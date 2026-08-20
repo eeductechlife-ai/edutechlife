@@ -30,7 +30,7 @@ const OVAViewer = ({ resource, onClose, onComplete }) => {
   return (
     <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-auto">
       <div className="flex-1 relative">
-        <Suspense fallback={<div className="w-full h-64 flex items-center justify-center text-petroleum/60">Cargando OVA...</div>}>
+        <Suspense fallback={<div className="w-full h-64 flex items-center justify-center text-[var(--theme-emphasis)]/60">Cargando OVA...</div>}>
           <SectionErrorBoundary name="QueEsPrompt">
             <QueEsPrompt_OVA_Original onClose={onClose} />
           </SectionErrorBoundary>

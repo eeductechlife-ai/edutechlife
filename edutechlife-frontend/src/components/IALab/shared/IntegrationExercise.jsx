@@ -74,7 +74,7 @@ const IntegrationExercise = ({
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 mx-auto mb-6">
             <Star className="text-white text-2xl sm:text-3xl" />
           </div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-petroleum dark:text-white mb-4 font-montserrat leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--theme-emphasis)] dark:text-white mb-4 font-montserrat leading-tight">
             {title || t("ialab.integration_exercise.title")}
           </h1>
           {description && (
@@ -111,7 +111,7 @@ const IntegrationExercise = ({
               {score}
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-petroleum dark:text-white mb-2">
+          <h2 className="text-2xl font-bold text-[var(--theme-emphasis)] dark:text-white mb-2">
             {t("ialab.integration_exercise.completed_title")}
           </h2>
           <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600 my-4">
@@ -162,7 +162,7 @@ const IntegrationExercise = ({
             </div>
           </div>
 
-          <h3 className="text-lg md:text-xl font-bold text-petroleum dark:text-white mb-6 leading-tight">
+          <h3 className="text-lg md:text-xl font-bold text-[var(--theme-emphasis)] dark:text-white mb-6 leading-tight">
             {q.question}
           </h3>
 

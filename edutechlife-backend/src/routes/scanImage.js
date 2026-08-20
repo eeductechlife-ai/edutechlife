@@ -4,7 +4,7 @@ const { optionalAuth } = require('../middleware/auth');
 const router = Router();
 
 const GOOGLE_VISION_URL = 'https://vision.googleapis.com/v1/images:annotate';
-const GOOGLE_API_KEY = process.env.GOOGLE_TTS_API_KEY;
+const GOOGLE_API_KEY = process.env.GOOGLE_VISION_API_KEY || process.env.GOOGLE_TTS_API_KEY;
 
 // POST /api/smartboard/scan-image
 // Body: { imageBase64: "data:image/jpeg;base64,..." }

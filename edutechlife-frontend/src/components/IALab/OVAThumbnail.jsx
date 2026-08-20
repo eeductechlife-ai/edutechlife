@@ -75,20 +75,20 @@ const OVAThumbnail = ({
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
         onClick={handleClick}
-        className="group relative w-full bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 border-l-4 border-l-petroleum shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
+        className="group relative w-full bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 border-l-4 border-l-[var(--theme-emphasis)] shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
         aria-label={t('ialab.ova_thumbnail.aria_open', { title: title || t('ialab.ova_thumbnail.title') })}
         title={t('ialab.ova_thumbnail.title_click')}
       >
         {/* Indicador de interactividad */}
         <div className="absolute top-3 right-3 z-10">
-          <div className="flex items-center gap-1 bg-gradient-to-br from-petroleum/10 to-corporate/10 px-2 py-1 rounded-full">
-            <Icon name="fa-play" className="w-3 h-3 text-petroleum" />
-            <span className="text-xs font-bold text-petroleum">{t('ialab.ova_thumbnail.interactive_label')}</span>
+          <div className="flex items-center gap-1 bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 px-2 py-1 rounded-full">
+            <Icon name="fa-play" className="w-3 h-3 text-[var(--theme-emphasis)]" />
+            <span className="text-xs font-bold text-[var(--theme-emphasis)]">{t('ialab.ova_thumbnail.interactive_label')}</span>
           </div>
         </div>
 
         {/* Imagen de previsualización premium */}
-          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-petroleum/10 to-corporate/10 border-b border-slate-200/60 dark:border-slate-700/60">
+          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 border-b border-slate-200/60 dark:border-slate-700/60">
           {/* Patrón de fondo */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-white dark:bg-white/20"></div>
@@ -100,21 +100,21 @@ const OVAThumbnail = ({
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative">
               {/* Cerebro principal */}
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-petroleum to-corporate shadow-2xl flex items-center justify-center">
+              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] shadow-2xl flex items-center justify-center">
                 <Icon name="fa-brain" className="text-white text-5xl" />
               </div>
               
               {/* Circuitos alrededor */}
-              <div className="absolute -top-4 -left-4 w-12 h-12 rounded-xl bg-gradient-to-br from-petroleum/80 to-petroleum-dark shadow-lg flex items-center justify-center">
+              <div className="absolute -top-4 -left-4 w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)]/80 to-[var(--theme-emphasis)]-dark shadow-lg flex items-center justify-center">
                 <Icon name="fa-puzzle-piece" className="text-white text-lg" />
               </div>
-              <div className="absolute -top-4 -right-4 w-12 h-12 rounded-xl bg-gradient-to-br from-corporate/80 to-petroleum shadow-lg flex items-center justify-center">
+              <div className="absolute -top-4 -right-4 w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--theme-primary)]/80 to-[var(--theme-emphasis)] shadow-lg flex items-center justify-center">
                 <Icon name="fa-gamepad" className="text-white text-lg" />
               </div>
-              <div className="absolute -bottom-4 -left-4 w-12 h-12 rounded-xl bg-gradient-to-br from-petroleum-dark to-corporate/80 shadow-lg flex items-center justify-center">
+              <div className="absolute -bottom-4 -left-4 w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]/80 shadow-lg flex items-center justify-center">
                 <Icon name="fa-chart-network" className="text-white text-lg" />
               </div>
-              <div className="absolute -bottom-4 -right-4 w-12 h-12 rounded-xl bg-gradient-to-br from-corporate to-petroleum shadow-lg flex items-center justify-center">
+              <div className="absolute -bottom-4 -right-4 w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-emphasis)] shadow-lg flex items-center justify-center">
                 <Icon name="fa-lightbulb" className="text-white text-lg" />
               </div>
               
@@ -127,15 +127,15 @@ const OVAThumbnail = ({
               </svg>
               
               {/* Puntos animados */}
-              <div className="absolute top-1/2 left-1/4 w-2 h-2 rounded-full bg-corporate animate-ping"></div>
-              <div className="absolute top-1/4 left-1/2 w-2 h-2 rounded-full bg-petroleum animate-ping" style={{animationDelay: '0.2s'}}></div>
-              <div className="absolute top-1/2 right-1/4 w-2 h-2 rounded-full bg-petroleum-dark animate-ping" style={{animationDelay: '0.4s'}}></div>
-              <div className="absolute bottom-1/4 left-1/2 w-2 h-2 rounded-full bg-corporate animate-ping" style={{animationDelay: '0.6s'}}></div>
+              <div className="absolute top-1/2 left-1/4 w-2 h-2 rounded-full bg-[var(--theme-primary)] animate-ping"></div>
+              <div className="absolute top-1/4 left-1/2 w-2 h-2 rounded-full bg-[var(--theme-emphasis)] animate-ping" style={{animationDelay: '0.2s'}}></div>
+              <div className="absolute top-1/2 right-1/4 w-2 h-2 rounded-full bg-[var(--theme-emphasis)]-dark animate-ping" style={{animationDelay: '0.4s'}}></div>
+              <div className="absolute bottom-1/4 left-1/2 w-2 h-2 rounded-full bg-[var(--theme-primary)] animate-ping" style={{animationDelay: '0.6s'}}></div>
             </div>
           </div>
 
           {/* Badge interactivo */}
-          <div className="absolute top-3 left-3 bg-gradient-to-r from-petroleum to-corporate text-white px-3 py-1 rounded-full shadow-md flex items-center gap-2">
+          <div className="absolute top-3 left-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white px-3 py-1 rounded-full shadow-md flex items-center gap-2">
             <Icon name="fa-play" className="w-3 h-3" />
             <span className="text-xs font-bold">{t('ialab.ova_thumbnail.click_to_explore_badge')}</span>
           </div>
@@ -156,8 +156,8 @@ const OVAThumbnail = ({
             {/* Metadatos del OVA */}
              <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-3 pt-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
-                  <Icon name="fa-clock" className="text-petroleum w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 flex items-center justify-center">
+                  <Icon name="fa-clock" className="text-[var(--theme-emphasis)] w-4 h-4" />
                 </div>
                 <div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.ova_thumbnail.duration')}</div>
@@ -166,8 +166,8 @@ const OVAThumbnail = ({
               </div>
 
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
-                  <Icon name="fa-signal" className="text-petroleum w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 flex items-center justify-center">
+                  <Icon name="fa-signal" className="text-[var(--theme-emphasis)] w-4 h-4" />
                 </div>
                 <div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.ova_thumbnail.difficulty_label')}</div>
@@ -176,8 +176,8 @@ const OVAThumbnail = ({
               </div>
 
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
-                  <Icon name="fa-mouse-pointer" className="text-petroleum w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 flex items-center justify-center">
+                  <Icon name="fa-mouse-pointer" className="text-[var(--theme-emphasis)] w-4 h-4" />
                 </div>
                 <div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.ova_thumbnail.interactivities')}</div>
@@ -186,8 +186,8 @@ const OVAThumbnail = ({
               </div>
 
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center">
-                  <Icon name="fa-graduation-cap" className="text-petroleum w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 flex items-center justify-center">
+                  <Icon name="fa-graduation-cap" className="text-[var(--theme-emphasis)] w-4 h-4" />
                 </div>
                 <div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.ova_thumbnail.certification')}</div>
@@ -201,30 +201,30 @@ const OVAThumbnail = ({
           <div className="mt-4 pt-4 border-t border-slate-200/60 dark:border-slate-700/60">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Icon name="fa-hand-pointer" className="w-4 h-4 text-petroleum" />
+                <Icon name="fa-hand-pointer" className="w-4 h-4 text-[var(--theme-emphasis)]" />
                 <span className="text-sm text-slate-600 dark:text-slate-300 font-medium">
                   {t('ialab.ova_thumbnail.click_to_explore')}
                 </span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-xs text-petroleum font-bold">{t('ialab.ova_thumbnail.explore')}</span>
-                <Icon name="fa-arrow-right" className="w-4 h-4 text-petroleum" />
+                <span className="text-xs text-[var(--theme-emphasis)] font-bold">{t('ialab.ova_thumbnail.explore')}</span>
+                <Icon name="fa-arrow-right" className="w-4 h-4 text-[var(--theme-emphasis)]" />
               </div>
           </div>
         </div>
         </div>
 
         {/* Efecto hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-petroleum/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--theme-emphasis)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
         
         {/* Borde animado en hover */}
-        <div className="absolute inset-0 border-2 border-transparent group-hover:border-corporate rounded-2xl transition-colors duration-300 pointer-events-none"></div>
+        <div className="absolute inset-0 border-2 border-transparent group-hover:border-[var(--theme-primary)] rounded-2xl transition-colors duration-300 pointer-events-none"></div>
       </motion.div>
 
       {/* OVA A PANTALLA COMPLETA */}
       <AnimatePresence>
         {isOVAOpen && (
-          <Suspense fallback={<div className="w-full h-64 flex items-center justify-center text-petroleum/60">Cargando OVA...</div>}>
+          <Suspense fallback={<div className="w-full h-64 flex items-center justify-center text-[var(--theme-emphasis)]/60">Cargando OVA...</div>}>
             <SectionErrorBoundary name="QueEsPrompt">
               <QueEsPrompt_OVA_Original onClose={handleCloseOVA} />
             </SectionErrorBoundary>

@@ -60,7 +60,7 @@ const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp, topic = '
         className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
             <Icon name="fa-search" className="text-white text-lg" />
           </div>
           <div>
@@ -75,7 +75,7 @@ const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp, topic = '
           initial={shouldReduceMotion ? false : { opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.05 }}
-          className="bg-gradient-to-br from-petroleum/5 to-corporate/5 dark:from-petroleum-dark/10 dark:to-corporate-dark/5 rounded-xl p-5 border border-petroleum/10 dark:border-petroleum-dark/20"
+          className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 dark:from-[var(--theme-emphasis)]-dark/10 dark:to-[var(--theme-primary)]-dark/5 rounded-xl p-5 border border-[var(--theme-emphasis)]/10 dark:border-[var(--theme-emphasis)]-dark/20"
         >
           <div className="flex items-center gap-2 mb-2">
             <Icon name="fa-lightbulb" className="text-amber-500" />
@@ -125,8 +125,8 @@ const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp, topic = '
                 onClick={() => update({ topic: topic.id })}
                 className={`relative rounded-xl p-4 text-left transition-all duration-200 ${
                   selected
-                    ? 'bg-gradient-to-br from-petroleum to-corporate text-white shadow-lg shadow-corporate/20'
-                    : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-corporate/40 dark:hover:border-corporate-dark/40 hover:shadow-md text-slate-700 dark:text-slate-200'
+                    ? 'bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white shadow-lg shadow-[var(--theme-primary)]/20'
+                    : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-[var(--theme-primary)]/40 dark:hover:border-[var(--theme-primary)]-dark/40 hover:shadow-md text-slate-700 dark:text-slate-200'
                 }`}
                 aria-pressed={selected}
                 aria-label={`${topic.label}${selected ? ' (selected)' : ''}`}
@@ -137,9 +137,9 @@ const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp, topic = '
                   </div>
                 )}
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${
-                  selected ? 'bg-white/20' : 'bg-corporate/10 dark:bg-corporate-dark/20'
+                  selected ? 'bg-white/20' : 'bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]-dark/20'
                 }`}>
-                  <Icon name={topic.icon} className={selected ? 'text-white' : 'text-corporate dark:text-corporate-dark'} />
+                  <Icon name={topic.icon} className={selected ? 'text-white' : 'text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark'} />
                 </div>
                 <p className={`text-sm font-medium ${selected ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}>{topic.label}</p>
               </button>
@@ -158,7 +158,7 @@ const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp, topic = '
             {translate('ialab.challenge.m3.step1_main_question')}
           </label>
           <span className={`text-xs font-medium ${
-            form.mainQuestion.length > 0 ? 'text-corporate dark:text-corporate-dark' : 'text-slate-400 dark:text-slate-500'
+            form.mainQuestion.length > 0 ? 'text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark' : 'text-slate-400 dark:text-slate-500'
           }`}>
             {form.mainQuestion.length}/500
           </span>
@@ -186,7 +186,7 @@ const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp, topic = '
         <div className="space-y-2">
           {form.subQuestions.map((sq, i) => (
             <div key={i} className="flex items-center gap-3">
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0">
+              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-xs font-bold">{i + 1}</span>
               </div>
               <input
@@ -194,7 +194,7 @@ const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp, topic = '
                 value={sq}
                 onChange={(e) => handleSubChange(i, e.target.value)}
                 placeholder={translate('ialab.challenge.m3.step1_sub_placeholder', { n: i + 1 })}
-                className="flex-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-corporate dark:focus:border-corporate-dark focus:ring-2 focus:ring-corporate/20 dark:focus:ring-corporate-dark/30"
+                className="flex-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[var(--theme-primary)] dark:focus:border-[var(--theme-primary)]-dark focus:ring-2 focus:ring-[var(--theme-primary)]/20 dark:focus:ring-[var(--theme-primary)]-dark/30"
               />
             </div>
           ))}

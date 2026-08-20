@@ -44,12 +44,12 @@ import { stopSpeech } from '../../utils/speech';
 const Logo = () => (
   <div className="flex items-center gap-2 select-none group cursor-pointer">
     <div className="relative w-9 h-9 flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-tr from-petroleum to-corporate rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
       <BrainCircuit className="w-5 h-5 text-white relative z-10" />
     </div>
     <div className="text-xl tracking-tighter flex items-center lowercase">
-      <span className="font-[900] text-petroleum">edutech</span>
-      <span className="font-[400] text-corporate">life</span>
+      <span className="font-[900] text-[var(--theme-emphasis)]">edutech</span>
+      <span className="font-[400] text-[var(--theme-primary)]">life</span>
     </div>
   </div>
 );
@@ -76,7 +76,7 @@ const EthicalFramework = () => {
     {
       k: 'fairness',
       icon: <Scale className="w-5 h-5" />,
-      color: 'bg-corporate',
+      color: 'bg-[var(--theme-primary)]',
       label: t('ova.ethicscases.q_fairness'),
       desc: t('ova.ethicscases.q_fairness_desc'),
     },
@@ -109,14 +109,14 @@ const EthicalFramework = () => {
             aria-expanded={expanded === q.k}
             className={`w-full p-3 rounded-xl border-2 transition-all text-left ${
               expanded === q.k
-                ? 'border-corporate bg-blue-50 dark:bg-slate-700 shadow-md'
+                ? 'border-[var(--theme-primary)] bg-blue-50 dark:bg-slate-700 shadow-md'
                 : 'bg-white dark:bg-slate-800 border-slate-50 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600'
             }`}
           >
             <div className="flex items-start gap-3">
               <div className={`p-2 ${q.color} text-white rounded-lg shrink-0`}>{q.icon}</div>
               <div className="flex-1 min-w-0">
-                <h5 className="font-[900] text-petroleum dark:text-white text-sm leading-tight">{q.label}</h5>
+                <h5 className="font-[900] text-[var(--theme-emphasis)] dark:text-white text-sm leading-tight">{q.label}</h5>
                 {expanded === q.k && (
                   <p className="text-xs text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed font-medium">{q.desc}</p>
                 )}
@@ -171,13 +171,13 @@ const CaseView = ({ caseKey, icon, color, onDecide }) => {
               aria-pressed={choice === opt.k}
               className={`w-full text-left p-3 rounded-xl border-2 transition-all text-sm font-medium ${
                 choice === opt.k
-                  ? 'border-corporate bg-blue-50 dark:bg-slate-700 text-petroleum dark:text-white shadow-md'
+                  ? 'border-[var(--theme-primary)] bg-blue-50 dark:bg-slate-700 text-[var(--theme-emphasis)] dark:text-white shadow-md'
                   : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600'
               }`}
             >
               <div className="flex items-start gap-2">
                 <span className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${
-                  choice === opt.k ? 'bg-corporate text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                  choice === opt.k ? 'bg-[var(--theme-primary)] text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
                 }`}>{opt.k.toUpperCase()}</span>
                 <span>{opt.text}</span>
               </div>
@@ -187,10 +187,10 @@ const CaseView = ({ caseKey, icon, color, onDecide }) => {
       </div>
 
       {choice && (
-        <div className="p-4 rounded-xl bg-petroleum text-white">
+        <div className="p-4 rounded-xl bg-[var(--theme-emphasis)] text-white">
           <div className="flex items-center gap-2 mb-1.5">
-            <Sparkles className="w-4 h-4 text-corporate" />
-            <span className="text-corporate font-black uppercase text-[10px] tracking-[0.2em]">
+            <Sparkles className="w-4 h-4 text-[var(--theme-primary)]" />
+            <span className="text-[var(--theme-primary)] font-black uppercase text-[10px] tracking-[0.2em]">
               {t('ova.ethicscases.analysis')}
             </span>
           </div>
@@ -254,7 +254,7 @@ const YourDecision = ({ onCompleted }) => {
           disabled={submitted}
           rows={6}
           placeholder={t('ova.ethicscases.decision_placeholder')}
-          className="w-full px-3 py-2.5 text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-corporate focus:border-transparent resize-y text-petroleum dark:text-white disabled:opacity-70"
+          className="w-full px-3 py-2.5 text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-[var(--theme-primary)] focus:border-transparent resize-y text-[var(--theme-emphasis)] dark:text-white disabled:opacity-70"
         />
         <div className="flex items-center justify-between mt-1.5">
           <span className="text-[10px] text-slate-400">
@@ -299,7 +299,7 @@ const Conclusion = () => {
       <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-5 shadow-xl border-4 border-white dark:border-slate-700">
         <Gavel className="w-10 h-10 text-white" />
       </div>
-      <h2 className="text-3xl font-black text-petroleum dark:text-white mb-2 uppercase tracking-tighter">
+      <h2 className="text-3xl font-black text-[var(--theme-emphasis)] dark:text-white mb-2 uppercase tracking-tighter">
         {t('ova.ethicscases.conclusion_title')}
       </h2>
       <p className="text-base text-slate-600 dark:text-slate-300 font-bold mb-4 leading-relaxed">
@@ -461,9 +461,9 @@ function OVAEthicsCases({ onComplete, onClose }) {
         <Logo />
         <div className="flex items-center gap-4">
           {screen !== 'welcome' && (
-            <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-corporate/20">
-              <Star className="text-corporate fill-current" size={14} />
-              <span className="font-bold text-petroleum text-xs">
+            <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-[var(--theme-primary)]/20">
+              <Star className="text-[var(--theme-primary)] fill-current" size={14} />
+              <span className="font-bold text-[var(--theme-emphasis)] text-xs">
                 {nav.filter((id) => completed.includes(id)).length}/{nav.length - 1}
               </span>
             </div>
@@ -473,7 +473,7 @@ function OVAEthicsCases({ onComplete, onClose }) {
             aria-label={t('ova.ethicscases.menu_title')}
             className="min-w-[44px] min-h-[44px] p-2.5 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-all border border-slate-100 dark:border-slate-700"
           >
-            <Menu className="w-5 h-5 text-petroleum" />
+            <Menu className="w-5 h-5 text-[var(--theme-emphasis)]" />
           </button>
         </div>
       </header>
@@ -482,10 +482,10 @@ function OVAEthicsCases({ onComplete, onClose }) {
         <div className="w-full bg-white dark:bg-slate-800 rounded-2xl shadow-md p-4 md:p-6 relative overflow-hidden border border-slate-50 dark:border-slate-700">
           {screen.startsWith('m') && (
             <div className="mb-4 border-b border-slate-50 dark:border-slate-700 pb-3">
-              <div className="flex items-center gap-1.5 text-corporate font-[900] text-[10px] tracking-[0.3em] uppercase">
+              <div className="flex items-center gap-1.5 text-[var(--theme-primary)] font-[900] text-[10px] tracking-[0.3em] uppercase">
                 <Sparkles className="w-3 h-3" /> {t('ova.ethicscases.section_label')}
               </div>
-              <h1 className="text-lg md:text-xl font-[900] text-petroleum dark:text-white tracking-tighter leading-tight">
+              <h1 className="text-lg md:text-xl font-[900] text-[var(--theme-emphasis)] dark:text-white tracking-tighter leading-tight">
                 {t(`ova.ethicscases.screen_${screen}`)}
               </h1>
             </div>
@@ -503,7 +503,7 @@ function OVAEthicsCases({ onComplete, onClose }) {
                 stopSpeech();
               }}
               aria-label={t('ova.ethicscases.nav_prev')}
-              className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700"
+              className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-[var(--theme-emphasis)] dark:hover:text-[var(--theme-primary)] rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700"
               disabled={curIdx <= 1}
             >
               <ChevronLeft className="w-5 h-5" />
@@ -514,7 +514,7 @@ function OVAEthicsCases({ onComplete, onClose }) {
                   key={i}
                   aria-hidden="true"
                   className={`h-1.5 rounded-full transition-all duration-700 ${
-                    i + 1 === curIdx ? 'w-8 bg-petroleum' : completed.includes(nav[i + 1]) ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'
+                    i + 1 === curIdx ? 'w-8 bg-[var(--theme-emphasis)]' : completed.includes(nav[i + 1]) ? 'w-2 bg-[var(--theme-primary)]' : 'w-2 bg-slate-200 dark:bg-slate-600'
                   }`}
                 />
               ))}
@@ -522,7 +522,7 @@ function OVAEthicsCases({ onComplete, onClose }) {
             <button
               onClick={isLastScreen ? () => { onClose?.(); } : nextScreen}
               className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${
-                isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-petroleum to-corporate text-white'
+                isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white'
               }`}
             >
               {isLastScreen ? t('ova.ethicscases.nav_finish') : t('ova.ethicscases.nav_next')} <ArrowRightCircle className="w-4 h-4" />
@@ -552,8 +552,8 @@ function OVAEthicsCases({ onComplete, onClose }) {
           >
             <div className="flex items-center justify-between border-b-2 border-slate-50 dark:border-slate-700 pb-4">
               <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.3em] uppercase">{t('ova.ethicscases.menu_title')}</h3>
-              <div className="flex items-center gap-1.5 text-[10px] font-black text-petroleum">
-                <Star className="w-3 h-3 text-corporate fill-current" />
+              <div className="flex items-center gap-1.5 text-[10px] font-black text-[var(--theme-emphasis)]">
+                <Star className="w-3 h-3 text-[var(--theme-primary)] fill-current" />
                 {completed.filter((id) => id.startsWith('m')).length}/{nav.filter((id) => id.startsWith('m')).length}
               </div>
             </div>
@@ -567,26 +567,26 @@ function OVAEthicsCases({ onComplete, onClose }) {
                     key={id}
                     onClick={() => goToScreen(id)}
                     className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${
-                      isCurrent ? 'bg-petroleum text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
+                      isCurrent ? 'bg-[var(--theme-emphasis)] text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${
-                          isCompleted ? 'bg-corporate text-white' : isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'
+                          isCompleted ? 'bg-[var(--theme-primary)] text-white' : isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'
                         }`}
                       >
                         {stepNum}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className={`uppercase tracking-wider ${isCurrent ? 'text-white' : isCompleted ? 'text-petroleum dark:text-corporate' : 'text-slate-500 dark:text-slate-400'}`}>
+                        <div className={`uppercase tracking-wider ${isCurrent ? 'text-white' : isCompleted ? 'text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]' : 'text-slate-500 dark:text-slate-400'}`}>
                           {id === 'welcome' ? t('ova.ethicscases.menu_welcome') : t(`ova.ethicscases.screen_${id}`)}
                         </div>
                         <div className="mt-1.5 w-full h-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                          <div className={`h-full rounded-full transition-all duration-700 ${isCompleted ? 'w-full bg-corporate' : isCurrent ? 'w-1/3 bg-petroleum' : 'w-0'}`} />
+                          <div className={`h-full rounded-full transition-all duration-700 ${isCompleted ? 'w-full bg-[var(--theme-primary)]' : isCurrent ? 'w-1/3 bg-[var(--theme-emphasis)]' : 'w-0'}`} />
                         </div>
                       </div>
-                      {isCompleted && <CheckCircle2 className="w-4 h-4 text-corporate shrink-0" />}
+                      {isCompleted && <CheckCircle2 className="w-4 h-4 text-[var(--theme-primary)] shrink-0" />}
                     </div>
                   </button>
                 );

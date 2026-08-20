@@ -226,7 +226,7 @@ const GlobalSearchBar = forwardRef(function GlobalSearchBar(
                 setIsOpen(true);
               }}
               placeholder={t("ialab.global_search.placeholder")}
-              className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-petroleum/40 focus:border-petroleum/50"
+              className="w-full h-11 pl-10 pr-4 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/40 focus:border-[var(--theme-emphasis)]/50"
               autoFocus
               aria-label={t("ialab.search_aria")}
             />
@@ -253,25 +253,25 @@ const GlobalSearchBar = forwardRef(function GlobalSearchBar(
                 handleSelect(hit);
                 onClose();
               }}
-              className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-colors text-left border-b border-slate-100 dark:border-slate-800 last:border-0"
+              className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-colors text-left border-b border-slate-100 dark:border-slate-800 last:border-0"
             >
-              <div className="w-8 h-8 rounded-xl bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
                 {hit.type === "module" ? (
                   <Icon
                     name="fa-layer-group"
-                    className="text-sm text-petroleum"
+                    className="text-sm text-[var(--theme-emphasis)]"
                     aria-hidden="true"
                   />
                 ) : hit.type === "topic" ? (
                   <Icon
                     name="fa-folder"
-                    className="text-sm text-petroleum"
+                    className="text-sm text-[var(--theme-emphasis)]"
                     aria-hidden="true"
                   />
                 ) : (
                   <Icon
                     name="fa-file"
-                    className="text-sm text-petroleum"
+                    className="text-sm text-[var(--theme-emphasis)]"
                     aria-hidden="true"
                   />
                 )}
@@ -361,7 +361,7 @@ const GlobalSearchBar = forwardRef(function GlobalSearchBar(
             onFocus={() => setIsOpen(true)}
             onKeyDown={handleKeyDown}
             placeholder={t("ialab.global_search.placeholder_short")}
-            className="min-w-[180px] h-9 pl-8 pr-8 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-petroleum/40 focus:border-petroleum/50 transition-all duration-200"
+            className="min-w-[180px] h-9 pl-8 pr-8 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/40 focus:border-[var(--theme-emphasis)]/50 transition-all duration-200"
             aria-label={t("ialab.global_search.search_aria")}
             aria-autocomplete="list"
             aria-controls="search-listbox"
@@ -397,27 +397,27 @@ const GlobalSearchBar = forwardRef(function GlobalSearchBar(
                 }}
                 className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors text-left ${
                   i === activeIndex
-                    ? "bg-petroleum/10 dark:bg-petroleum/20"
-                    : "hover:bg-petroleum/5 dark:hover:bg-petroleum/10"
+                    ? "bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/20"
+                    : "hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10"
                 }`}
               >
-                <div className="w-6 h-6 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
+                <div className="w-6 h-6 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
                   {hit.type === "module" ? (
                     <Icon
                       name="fa-layer-group"
-                      className="text-[10px] text-petroleum"
+                      className="text-[10px] text-[var(--theme-emphasis)]"
                       aria-hidden="true"
                     />
                   ) : hit.type === "topic" ? (
                     <Icon
                       name="fa-folder"
-                      className="text-[10px] text-petroleum"
+                      className="text-[10px] text-[var(--theme-emphasis)]"
                       aria-hidden="true"
                     />
                   ) : (
                     <Icon
                       name="fa-file"
-                      className="text-[10px] text-petroleum"
+                      className="text-[10px] text-[var(--theme-emphasis)]"
                       aria-hidden="true"
                     />
                   )}

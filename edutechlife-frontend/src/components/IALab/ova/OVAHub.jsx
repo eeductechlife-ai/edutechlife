@@ -39,8 +39,8 @@ function OVACard({ ova, moduleColor }) {
     >
       <div className="p-5">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-petroleum/10 to-corporate/10 flex items-center justify-center shrink-0">
-            <Icon name={ova.icon} className="w-6 h-6 text-petroleum" />
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 flex items-center justify-center shrink-0">
+            <Icon name={ova.icon} className="w-6 h-6 text-[var(--theme-emphasis)]" />
           </div>
           <div className="flex-1 min-w-0">
             <h4 className="font-bold text-slate-800 dark:text-slate-100 text-base leading-tight mb-1">
@@ -56,13 +56,13 @@ function OVACard({ ova, moduleColor }) {
             <Icon name="fa-clock" className="w-3.5 h-3.5" />
             <span>{ova.duration}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-xs font-bold text-corporate opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--theme-primary)] opacity-0 group-hover:opacity-100 transition-opacity">
             <span>{t("ialab.ova_thumbnail.explore") || "Explorar"}</span>
             <Icon name="fa-arrow-right" className="w-3 h-3" />
           </div>
         </div>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-petroleum/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--theme-emphasis)]/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
     </motion.div>
   );
 }
@@ -92,7 +92,7 @@ function ModuleSection({ moduleNum, ovas, color }) {
           className="w-1 h-8 rounded-full"
           style={{ backgroundColor: color }}
         />
-        <h3 className="text-lg font-black text-petroleum dark:text-white tracking-tight">
+        <h3 className="text-lg font-black text-[var(--theme-emphasis)] dark:text-white tracking-tight">
           {name}
         </h3>
         <span className="text-xs font-bold text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded-full ml-auto">
@@ -147,10 +147,10 @@ export default function OVAHub() {
         className="mb-8"
       >
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-md">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-md">
             <Icon name="fa-brain" className="w-5 h-5 text-white" />
           </div>
-          <h2 className="text-2xl font-black text-petroleum dark:text-white tracking-tight">
+          <h2 className="text-2xl font-black text-[var(--theme-emphasis)] dark:text-white tracking-tight">
             {t("ialab.ova_hub.title") || "Centro de OVAs"}
           </h2>
         </div>
@@ -178,7 +178,7 @@ export default function OVAHub() {
             t("ialab.ova_hub.search_placeholder") ||
             "Buscar OVA por nombre o descripción..."
           }
-          className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-corporate/30 focus:border-corporate transition-all"
+          className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)]/30 focus:border-[var(--theme-primary)] transition-all"
         />
         {search && (
           <button
@@ -210,7 +210,7 @@ export default function OVAHub() {
           </p>
           <button
             onClick={() => setSearch("")}
-            className="mt-3 text-sm font-bold text-corporate hover:underline"
+            className="mt-3 text-sm font-bold text-[var(--theme-primary)] hover:underline"
           >
             {t("ialab.ova_hub.clear_search") || "Limpiar búsqueda"}
           </button>

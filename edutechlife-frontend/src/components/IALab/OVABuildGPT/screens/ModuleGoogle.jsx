@@ -23,7 +23,7 @@ export default function ModuleGoogle({ onNext, addXp }) {
 
   return (
     <div className="max-w-4xl mx-auto animate-[fadeIn_0.6s_ease-out_forwards]">
-      <h2 className="text-3xl font-bold text-petroleum mb-2">{t('ova.buildgpt.google_title')}</h2>
+      <h2 className="text-3xl font-bold text-[var(--theme-emphasis)] mb-2">{t('ova.buildgpt.google_title')}</h2>
       <p className="text-gray-600 dark:text-slate-300 mb-6">{t('ova.buildgpt.google_desc')}</p>
       <Card className="mb-6">
         <div className="flex justify-between items-center mb-4">

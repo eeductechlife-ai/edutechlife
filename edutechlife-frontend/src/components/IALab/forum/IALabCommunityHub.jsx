@@ -38,8 +38,8 @@ const IALabCommunityHub = ({ onAction }) => {
       transition={{ duration: 0.25 }}
       className="relative"
     >
-      <div className="absolute -top-6 -right-6 w-48 h-48 bg-gradient-to-br from-petroleum/5 to-corporate/3 rounded-full blur-2xl pointer-events-none" />
-      <div className="absolute -bottom-6 -left-6 w-36 h-36 bg-gradient-to-tr from-petroleum/3 to-corporate/2 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute -top-6 -right-6 w-48 h-48 bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/3 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute -bottom-6 -left-6 w-36 h-36 bg-gradient-to-tr from-[var(--theme-emphasis)]/3 to-[var(--theme-primary)]/2 rounded-full blur-2xl pointer-events-none" />
 
       <div className="relative overflow-hidden">
         {selectedPost ? (
@@ -54,11 +54,11 @@ const IALabCommunityHub = ({ onAction }) => {
           <>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-petroleum to-petroleum-dark flex items-center justify-center shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark flex items-center justify-center shadow-sm">
                   <Icon name="fa-comments" className="text-white text-sm" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-petroleum">{t('ialab.forum.hub.title')}</h3>
+                  <h3 className="text-lg font-bold text-[var(--theme-emphasis)]">{t('ialab.forum.hub.title')}</h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">{t('ialab.forum.hub.subtitle')}</p>
                 </div>
               </div>
@@ -69,7 +69,7 @@ const IALabCommunityHub = ({ onAction }) => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => setShowCreatePost(true)}
-                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-petroleum to-corporate text-white text-sm font-medium hover:shadow-lg hover:shadow-petroleum/20 transition-all duration-200 flex items-center gap-2"
+                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white text-sm font-medium hover:shadow-lg hover:shadow-[var(--theme-emphasis)]/20 transition-all duration-200 flex items-center gap-2"
                   >
                     <Icon name="fa-plus" className="text-xs" />
                     <span className="hidden sm:inline">{t('ialab.forum.hub.new_post')}</span>

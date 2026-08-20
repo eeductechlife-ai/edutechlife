@@ -24,7 +24,7 @@ export const TouchableIcon = memo(({ icon, label, onClick, size = 'md', classNam
         min-w-[44px] min-h-[44px] flex items-center justify-center
         active:scale-95 transition-transform duration-100 ease-out
         before:content-[''] before:absolute before:-inset-2 before:rounded-xl before:z-[-1]
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/50
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/50
         ${className}`}
       {...props}
     >

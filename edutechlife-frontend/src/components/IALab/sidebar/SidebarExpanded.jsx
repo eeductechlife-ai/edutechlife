@@ -84,9 +84,9 @@ const SidebarExpanded = ({ onOpenStreak }) => {
       {/* Mi Progreso — acción primaria, justo bajo el círculo de avance */}
       <button
         onClick={goToProgress}
-        className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-petroleum/10 dark:bg-petroleum/20 border border-petroleum/15 dark:border-petroleum/30 hover:bg-petroleum/15 dark:hover:bg-petroleum/30 text-petroleum dark:text-[#4DA8C4] transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+        className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/20 border border-[var(--theme-emphasis)]/15 dark:border-[var(--theme-emphasis)]/30 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/30 text-[var(--theme-emphasis)] dark:text-[#4DA8C4] transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
       >
-        <Icon name="fa-chart-line" className="text-corporate text-sm flex-shrink-0" />
+        <Icon name="fa-chart-line" className="text-[var(--theme-primary)] text-sm flex-shrink-0" />
         <span>{t('ialab.tab_progress') || 'Mi Progreso'}</span>
       </button>
 
@@ -105,16 +105,16 @@ const SidebarExpanded = ({ onOpenStreak }) => {
       {nextStepLabel && (
         <button
           onClick={continueModule}
-          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-petroleum/[0.06] to-corporate/[0.06] dark:from-petroleum/15 dark:to-corporate/10 border border-petroleum/10 dark:border-petroleum/20 hover:from-petroleum/10 hover:to-corporate/10 dark:hover:from-petroleum/20 dark:hover:to-corporate/15 transition-all duration-200 group text-left focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)]/[0.06] to-[var(--theme-primary)]/[0.06] dark:from-[var(--theme-emphasis)]/15 dark:to-[var(--theme-primary)]/10 border border-[var(--theme-emphasis)]/10 dark:border-[var(--theme-emphasis)]/20 hover:from-[var(--theme-emphasis)]/10 hover:to-[var(--theme-primary)]/10 dark:hover:from-[var(--theme-emphasis)]/20 dark:hover:to-[var(--theme-primary)]/15 transition-all duration-200 group text-left focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
         >
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0 shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 shadow-sm">
             <Icon name="fa-play" className="text-white text-[9px]" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold uppercase tracking-wide leading-none mb-0.5">
               {t('sidebar.continue_where') || 'Continúa aquí'}
             </p>
-            <p className="text-[13px] font-bold font-display text-petroleum dark:text-[#4DA8C4] truncate">{nextStepLabel}</p>
+            <p className="text-[13px] font-bold font-display text-[var(--theme-emphasis)] dark:text-[#4DA8C4] truncate">{nextStepLabel}</p>
           </div>
           <Icon name="fa-chevron-right" className="text-slate-400 text-[9px] group-hover:translate-x-0.5 transition-transform duration-150 flex-shrink-0" />
         </button>
@@ -127,15 +127,15 @@ const SidebarExpanded = ({ onOpenStreak }) => {
         <div className="grid grid-cols-2 gap-1.5">
           <button
             onClick={() => setShowStudyPlannerModal(true)}
-            className="flex flex-col items-center gap-1 px-2 py-2.5 rounded-xl bg-petroleum/8 dark:bg-petroleum/15 hover:bg-petroleum/15 dark:hover:bg-petroleum/25 text-petroleum dark:text-[#4DA8C4] transition-all duration-200 text-[11px] font-bold leading-tight focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+            className="flex flex-col items-center gap-1 px-2 py-2.5 rounded-xl bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[#4DA8C4] transition-all duration-200 text-[11px] font-bold leading-tight focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
           >
-            <Icon name="fa-calendar" className="text-corporate text-sm" />
+            <Icon name="fa-calendar" className="text-[var(--theme-primary)] text-sm" />
             <span className="text-center">{t('ialab.sidebar_study_plan') || 'Plan'}</span>
           </button>
 
           <button
             onClick={() => setShowLeaderboard(true)}
-            className="flex flex-col items-center gap-1 px-2 py-2.5 rounded-xl bg-petroleum/8 dark:bg-petroleum/15 hover:bg-petroleum/15 dark:hover:bg-petroleum/25 text-petroleum dark:text-[#4DA8C4] transition-all duration-200 text-[11px] font-bold leading-tight focus:outline-none focus:ring-2 focus:ring-petroleum/30"
+            className="flex flex-col items-center gap-1 px-2 py-2.5 rounded-xl bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[#4DA8C4] transition-all duration-200 text-[11px] font-bold leading-tight focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
           >
             <Icon name="fa-trophy" className="text-amber-500 text-sm" />
             <span className="text-center">{t('ialab.sidebar_leaderboard') || 'Ranking'}</span>

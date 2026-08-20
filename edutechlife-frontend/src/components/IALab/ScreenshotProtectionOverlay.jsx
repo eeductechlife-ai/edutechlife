@@ -46,7 +46,7 @@ const ScreenshotProtectionOverlay = ({ isOpen }) => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 }}
-              className="w-20 h-20 rounded-2xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center shadow-lg shadow-corporate/30 mb-6"
+              className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-lg shadow-[var(--theme-primary)]/30 mb-6"
             >
               <Icon name="fa-shield-halved" className="text-white text-3xl" />
             </motion.div>
@@ -75,7 +75,7 @@ const ScreenshotProtectionOverlay = ({ isOpen }) => {
               transition={{ delay: 0.5 }}
               className="mt-8 flex items-center gap-2 text-white/40 text-xs"
             >
-              <div className="w-2 h-2 rounded-full bg-corporate animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-[var(--theme-primary)] animate-pulse" />
               <span>{t('ialab.screenshot_protection.waiting')}</span>
             </motion.div>
           </div>

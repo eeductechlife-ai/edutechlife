@@ -82,19 +82,19 @@ export default function OVABuildGPT({ onComplete }) {
   const ScreenComponent = screens[currentScreen];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-white dark:from-slate-900 dark:to-slate-800 font-sans selection:bg-corporate selection:text-white">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-white dark:from-slate-900 dark:to-slate-800 font-sans selection:bg-[var(--theme-primary)] selection:text-white">
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 transform scale-75 origin-left sm:scale-100 transition-transform">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-corporate to-petroleum flex items-center justify-center shadow-sm text-white">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-emphasis)] flex items-center justify-center shadow-sm text-white">
               <GraduationCap size={22} strokeWidth={2.5} />
             </div>
             <span
               className="text-2xl font-bold tracking-tight"
               style={{ letterSpacing: "-0.02em" }}
             >
-              <span className="text-corporate">Edu</span>
-              <span className="text-petroleum">techlife</span>
+              <span className="text-[var(--theme-primary)]">Edu</span>
+              <span className="text-[var(--theme-emphasis)]">techlife</span>
             </span>
           </div>
           {currentScreen < screens.length - 1 && (
@@ -105,9 +105,9 @@ export default function OVABuildGPT({ onComplete }) {
                   total: screens.length,
                 })}
               </div>
-              <div className="flex items-center gap-2 bg-cyan-50 dark:bg-slate-700/30 px-4 py-1.5 rounded-full border border-corporate/20">
+              <div className="flex items-center gap-2 bg-cyan-50 dark:bg-slate-700/30 px-4 py-1.5 rounded-full border border-[var(--theme-primary)]/20">
                 <Star className="text-yellow-500 fill-current" size={16} />
-                <span className="font-bold text-petroleum">{xp} XP</span>
+                <span className="font-bold text-[var(--theme-emphasis)]">{xp} XP</span>
               </div>
             </div>
           )}
@@ -121,7 +121,7 @@ export default function OVABuildGPT({ onComplete }) {
           className="h-1.5 w-full bg-slate-100 dark:bg-slate-700/50"
         >
           <div
-            className="h-full bg-gradient-to-r from-corporate to-petroleum transition-all duration-1000 ease-out"
+            className="h-full bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] transition-all duration-1000 ease-out"
             style={{ width: `${(xp / totalXp) * 100}%` }}
           />
         </div>

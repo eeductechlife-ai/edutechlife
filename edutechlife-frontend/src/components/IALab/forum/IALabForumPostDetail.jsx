@@ -38,7 +38,7 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
       <div className="p-4 border-b border-slate-100 dark:border-slate-700">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-petroleum transition-colors mb-3"
+          className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-[var(--theme-emphasis)] transition-colors mb-3"
         >
           <Icon name="fa-arrow-left" className="text-[10px]" />
           {t('ialab.forum.detail.back')}
@@ -46,7 +46,7 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
 
         <div className="flex items-center gap-2 mb-2">
           {post.tags?.slice(0, 3).map((tag, i) => (
-            <span key={i} className="px-2 py-0.5 bg-petroleum/5 text-petroleum text-[10px] font-medium rounded-full">
+            <span key={i} className="px-2 py-0.5 bg-[var(--theme-emphasis)]/5 text-[var(--theme-emphasis)] text-[10px] font-medium rounded-full">
               {tag}
             </span>
           ))}
@@ -76,13 +76,13 @@ const IALabForumPostDetail = ({ post, onBack, onAction }) => {
 
       <div className="p-4">
         <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-2">
-          <Icon name="fa-comments" className="text-corporate text-xs" />
+          <Icon name="fa-comments" className="text-[var(--theme-primary)] text-xs" />
           {t('ialab.forum.detail.comments_title', { count: post.comment_count || 0 })}
         </h4>
 
         {isLoading ? (
           <div className="flex justify-center py-6">
-            <div className="w-6 h-6 border-2 border-petroleum/20 border-t-petroleum rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-[var(--theme-emphasis)]/20 border-t-[var(--theme-emphasis)] rounded-full animate-spin" />
           </div>
         ) : (
           <IALabForumBestAnswer

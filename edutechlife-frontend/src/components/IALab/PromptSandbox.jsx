@@ -238,7 +238,7 @@ const PromptSandbox = ({
             <Icon name="fa-flask" className="text-white text-sm" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-petroleum dark:text-white">
+            <h3 className="text-base font-bold text-[var(--theme-emphasis)] dark:text-white">
               {translateText(title)}
             </h3>
             <p className="text-[11px] text-gray-500 dark:text-gray-400">
@@ -250,7 +250,7 @@ const PromptSandbox = ({
         <button
           type="button"
           onClick={() => setShowHistory((v) => !v)}
-          className="px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:text-corporate rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-1.5"
+          className="px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:text-[var(--theme-primary)] rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-1.5"
           aria-label={t("ialab.prompt_sandbox.history_aria")}
         >
           <Icon name="fa-clock-rotate-left" className="text-xs" />
@@ -289,7 +289,7 @@ const PromptSandbox = ({
               htmlFor="prompt-sandbox-system"
               className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1.5 flex items-center gap-1.5"
             >
-              <Icon name="fa-user-tie" className="text-corporate text-xs" />
+              <Icon name="fa-user-tie" className="text-[var(--theme-primary)] text-xs" />
               System prompt{" "}
               <span className="text-gray-400 font-normal">
                 {t("ialab.prompt_sandbox.system_hint")}
@@ -301,7 +301,7 @@ const PromptSandbox = ({
               onChange={(e) => setSystemPrompt(e.target.value)}
               placeholder={t("ialab.prompt_sandbox.placeholder_system")}
               rows={3}
-              className="w-full px-3 py-2 text-xs font-mono bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-corporate focus:border-transparent resize-y text-petroleum dark:text-white"
+              className="w-full px-3 py-2 text-xs font-mono bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[var(--theme-primary)] focus:border-transparent resize-y text-[var(--theme-emphasis)] dark:text-white"
             />
           </div>
 
@@ -310,7 +310,7 @@ const PromptSandbox = ({
               htmlFor="prompt-sandbox-user"
               className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1.5 flex items-center gap-1.5"
             >
-              <Icon name="fa-message" className="text-corporate text-xs" />
+              <Icon name="fa-message" className="text-[var(--theme-primary)] text-xs" />
               User prompt{" "}
               <span className="text-gray-400 font-normal">
                 {t("ialab.prompt_sandbox.user_hint")}
@@ -322,7 +322,7 @@ const PromptSandbox = ({
               onChange={(e) => setUserPrompt(e.target.value)}
               placeholder={t("ialab.prompt_sandbox.placeholder_user")}
               rows={6}
-              className="w-full px-3 py-2 text-xs font-mono bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-corporate focus:border-transparent resize-y text-petroleum dark:text-white"
+              className="w-full px-3 py-2 text-xs font-mono bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[var(--theme-primary)] focus:border-transparent resize-y text-[var(--theme-emphasis)] dark:text-white"
             />
             <div className="flex items-center justify-between mt-1.5">
               <span className="text-[10px] text-gray-400">
@@ -398,10 +398,10 @@ const PromptSandbox = ({
         {/* Response */}
         <div>
           <label className="block text-[11px] font-bold text-gray-700 dark:text-gray-300 mb-1.5 flex items-center gap-1.5">
-            <Icon name="fa-sparkles" className="text-corporate text-xs" />
+            <Icon name="fa-sparkles" className="text-[var(--theme-primary)] text-xs" />
             {t("ialab.prompt_sandbox.response_label")}
           </label>
-          <div className="min-h-[280px] p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-xs text-petroleum dark:text-gray-200 whitespace-pre-wrap font-mono leading-relaxed">
+          <div className="min-h-[280px] p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-xs text-[var(--theme-emphasis)] dark:text-gray-200 whitespace-pre-wrap font-mono leading-relaxed">
             <AnimatePresence mode="wait">
               {error ? (
                 <motion.div
@@ -457,7 +457,7 @@ const PromptSandbox = ({
               <button
                 type="button"
                 onClick={() => navigator.clipboard?.writeText(response)}
-                className="hover:text-corporate transition-colors flex items-center gap-1"
+                className="hover:text-[var(--theme-primary)] transition-colors flex items-center gap-1"
               >
                 <Icon name="fa-copy" className="text-[10px]" />
                 {t("ialab.prompt_sandbox.copy")}
@@ -498,7 +498,7 @@ const PromptSandbox = ({
                         minute: "2-digit",
                       })}
                     </div>
-                    <div className="text-[11px] text-petroleum dark:text-white truncate">
+                    <div className="text-[11px] text-[var(--theme-emphasis)] dark:text-white truncate">
                       {h.user}
                     </div>
                   </button>

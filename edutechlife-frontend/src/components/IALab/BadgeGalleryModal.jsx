@@ -51,14 +51,14 @@ const BadgeGalleryModal = ({ isOpen, onClose }) => {
           >
             <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm">
               <div>
-                <h2 className="text-lg font-bold text-petroleum dark:text-corporate">{t('ialab.badge_gallery.title')}</h2>
+                <h2 className="text-lg font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]">{t('ialab.badge_gallery.title')}</h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   {t('ialab.badge_gallery.count', { earned: earned.length, total: Object.keys(BADGE_INFO).length })}
                 </p>
               </div>
               <button
                 onClick={onClose}
-                className="min-w-[44px] min-h-[44px] w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40"
+                className="min-w-[44px] min-h-[44px] w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
                 aria-label={t('common.close')}
               >
                 <X className="w-4 h-4 text-slate-500" />

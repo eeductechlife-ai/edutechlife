@@ -129,7 +129,7 @@ const EthicsStep2 = ({ exercise, response, onResponseChange, topic = '', exercis
         className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
             <Icon name="fa-chart-line" className="text-white text-lg" />
           </div>
           <div>
@@ -173,7 +173,7 @@ const EthicsStep2 = ({ exercise, response, onResponseChange, topic = '', exercis
         className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4"
       >
         <div className="flex items-start gap-3">
-          <Icon name="fa-scroll" className="text-petroleum dark:text-corporate-dark mt-1 flex-shrink-0" />
+          <Icon name="fa-scroll" className="text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]-dark mt-1 flex-shrink-0" />
           <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
             {casoEtico?.substring(0, 300)}{casoEtico?.length > 300 ? '...' : ''}
           </p>

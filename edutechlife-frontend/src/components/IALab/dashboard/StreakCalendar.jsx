@@ -43,7 +43,7 @@ function StreakCalendar() {
     if (status === "today")
       return (
         base +
-        "bg-corporate ring-2 ring-corporate/30 shadow-[0_0_6px_rgba(0,188,212,0.4)]"
+        "bg-[var(--theme-primary)] ring-2 ring-[var(--theme-primary)]/30 shadow-[0_0_6px_rgba(0,188,212,0.4)]"
       );
     return base + "bg-slate-200";
   };
@@ -60,7 +60,7 @@ function StreakCalendar() {
           <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
             {t("ialab.streak_calendar.title")}
           </p>
-          <p className="text-lg font-bold text-petroleum">
+          <p className="text-lg font-bold text-[var(--theme-emphasis)]">
             {t("ialab.streak_calendar.days", { count: streak || 0 })}
           </p>
         </div>

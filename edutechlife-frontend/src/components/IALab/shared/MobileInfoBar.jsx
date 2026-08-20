@@ -17,10 +17,10 @@ const MobileInfoBar = ({ user, activeMod, courseProgress }) => {
   const progress = Math.round(courseProgress || 0);
 
   return (
-    <div className="lg:hidden flex flex-col gap-2 px-3 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-petroleum/8 dark:border-petroleum/20 shadow-sm">
+    <div className="lg:hidden flex flex-col gap-2 px-3 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-[var(--theme-emphasis)]/8 dark:border-[var(--theme-emphasis)]/20 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 min-w-0 flex-1">
-          <div className="w-8 h-8 flex-shrink-0 rounded-full bg-gradient-to-br from-petroleum to-petroleum-dark flex items-center justify-center text-white text-xs font-bold">
+          <div className="w-8 h-8 flex-shrink-0 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark flex items-center justify-center text-white text-xs font-bold">
             {user?.full_name
               ? user.full_name
                   .split(" ")
@@ -65,7 +65,7 @@ const MobileInfoBar = ({ user, activeMod, courseProgress }) => {
           )}
 
           {/* Progress badge */}
-          <div className="px-2.5 py-1 bg-petroleum/8 dark:bg-petroleum/20 border border-petroleum/15 text-petroleum dark:text-petroleum rounded-lg font-semibold text-[11px]">
+          <div className="px-2.5 py-1 bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 border border-[var(--theme-emphasis)]/15 text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)] rounded-lg font-semibold text-[11px]">
             {progress}%
           </div>
         </div>
@@ -74,7 +74,7 @@ const MobileInfoBar = ({ user, activeMod, courseProgress }) => {
       {/* Progress bar visual */}
       <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-petroleum via-corporate to-petroleum rounded-full transition-all duration-700 ease-out"
+          className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-primary)] to-[var(--theme-emphasis)] rounded-full transition-all duration-700 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>

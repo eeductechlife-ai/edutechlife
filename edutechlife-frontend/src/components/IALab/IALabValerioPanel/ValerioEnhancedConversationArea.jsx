@@ -31,14 +31,14 @@ const ValerioMessageBubble = ({ msg, onAction }) => {
       <div
         className={`max-w-[80%] rounded-2xl p-4 break-words overflow-wrap-anywhere ${
           isUser
-            ? "bg-gradient-to-r from-petroleum to-corporate text-white"
+            ? "bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white"
             : "bg-white border border-slate-200 shadow-sm"
         }`}
       >
         <div className="flex items-start gap-3">
           {!isUser && (
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center text-white text-xs font-bold">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center text-white text-xs font-bold">
                 V
               </div>
             </div>
@@ -56,7 +56,7 @@ const ValerioMessageBubble = ({ msg, onAction }) => {
 
             <div
               className={`prose prose-sm max-w-none ${
-                isUser ? "text-white" : "text-petroleum-darker"
+                isUser ? "text-white" : "text-[var(--theme-emphasis)]-darker"
               }`}
             >
               {msg.content.split("\n").map((line, i) => (
@@ -98,11 +98,11 @@ const ThinkingIndicator = () => (
   <div className="flex justify-start">
     <div className="bg-white border border-slate-200 rounded-2xl p-4 max-w-[80%]">
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center text-white text-xs font-bold">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center text-white text-xs font-bold">
           V
         </div>
         <div className="flex items-center">
-          <span className="text-sm font-semibold text-petroleum tracking-[0.2em] animate-pulse select-none">
+          <span className="text-sm font-semibold text-[var(--theme-emphasis)] tracking-[0.2em] animate-pulse select-none">
             ......
           </span>
         </div>
@@ -118,15 +118,15 @@ const StreamingMessage = ({ content }) => {
       <div className="max-w-[80%] rounded-2xl p-4 break-words overflow-wrap-anywhere bg-white border border-slate-200 shadow-sm">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center text-white text-xs font-bold">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center text-white text-xs font-bold">
               V
             </div>
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-xs font-medium opacity-80 mb-2">MAX</div>
-            <div className="prose prose-sm max-w-none text-petroleum-darker">
+            <div className="prose prose-sm max-w-none text-[var(--theme-emphasis)]-darker">
               {isEmpty ? (
-                <p className="text-petroleum tracking-[0.2em] animate-pulse select-none">
+                <p className="text-[var(--theme-emphasis)] tracking-[0.2em] animate-pulse select-none">
                   ......
                 </p>
               ) : (
@@ -134,7 +134,7 @@ const StreamingMessage = ({ content }) => {
                   <p key={i} className="mb-2 last:mb-0">
                     {line}
                     {i === content.split("\n").length - 1 && (
-                      <span className="inline-block w-1.5 h-4 bg-corporate ml-0.5 animate-pulse align-text-bottom" />
+                      <span className="inline-block w-1.5 h-4 bg-[var(--theme-primary)] ml-0.5 animate-pulse align-text-bottom" />
                     )}
                   </p>
                 ))
@@ -152,10 +152,10 @@ const EmptyState = ({ moduleTitle }) => {
   return (
     <div className="h-full flex items-center justify-center text-center p-8">
       <div>
-        <div className="w-16 h-16 bg-gradient-to-r from-petroleum/10 to-corporate/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <Icon name="fa-comments" className="text-corporate text-2xl" />
+        <div className="w-16 h-16 bg-gradient-to-r from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <Icon name="fa-comments" className="text-[var(--theme-primary)] text-2xl" />
         </div>
-        <h3 className="text-lg font-bold text-petroleum-darker mb-2">
+        <h3 className="text-lg font-bold text-[var(--theme-emphasis)]-darker mb-2">
           {t("ialab.valerio.empty_title", { module: moduleTitle })}
         </h3>
         <p className="text-slate-600">{t("ialab.valerio.empty_description")}</p>

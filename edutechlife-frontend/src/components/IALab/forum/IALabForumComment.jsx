@@ -9,11 +9,11 @@ import { useBestAnswer } from './IALabForumBestAnswer';
 import { useTranslation } from '../../../i18n/I18nProvider';
 
 const getAvatarGradient = (name) => {
-  if (!name) return 'from-petroleum to-petroleum-dark';
+  if (!name) return 'from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark';
   const colors = [
-    'from-petroleum to-petroleum-dark',
-    'from-petroleum-dark to-corporate',
-    'from-petroleum to-corporate',
+    'from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark',
+    'from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]',
+    'from-[var(--theme-emphasis)] to-[var(--theme-primary)]',
   ];
   const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   return colors[hash % colors.length];
@@ -62,7 +62,7 @@ const IALabForumComment = ({ comment, onReply, depth, children }) => {
     <motion.div
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`bg-white dark:bg-slate-800 rounded-xl p-3 border hover:border-petroleum/10 transition-colors ${isBest ? 'border-emerald-300 dark:border-emerald-600 ring-1 ring-emerald-200 dark:ring-emerald-700/50' : 'border-slate-100 dark:border-slate-700/50'}`}
+      className={`bg-white dark:bg-slate-800 rounded-xl p-3 border hover:border-[var(--theme-emphasis)]/10 transition-colors ${isBest ? 'border-emerald-300 dark:border-emerald-600 ring-1 ring-emerald-200 dark:ring-emerald-700/50' : 'border-slate-100 dark:border-slate-700/50'}`}
     >
       <div className="flex items-start gap-2.5">
         <div className={`w-7 h-7 rounded-full bg-gradient-to-tr ${getAvatarGradient(profile.full_name)} flex items-center justify-center flex-shrink-0 shadow-sm`}>
@@ -97,7 +97,7 @@ const IALabForumComment = ({ comment, onReply, depth, children }) => {
           <div className="flex items-center gap-2 mt-1.5">
             <button
               onClick={() => setShowReplyEditor(!showReplyEditor)}
-              className="min-w-[44px] min-h-[44px] flex items-center gap-1 text-[10px] text-slate-600 hover:text-petroleum transition-colors"
+              className="min-w-[44px] min-h-[44px] flex items-center gap-1 text-[10px] text-slate-600 hover:text-[var(--theme-emphasis)] transition-colors"
             >
               <Icon name="fa-reply" className="text-[9px]" />
               {t('ialab.forum.comment.reply_btn')}

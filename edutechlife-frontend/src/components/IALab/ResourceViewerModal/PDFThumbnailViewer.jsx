@@ -48,7 +48,7 @@ const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
     <div className="w-full h-full flex flex-col">
       {!completedRef.current && !hasScrolledEnough && (
         <div className="mb-2 px-1">
-          <span className="text-xs text-corporate bg-corporate/10 px-3 py-1 rounded-full font-medium backdrop-blur-sm">
+          <span className="text-xs text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-3 py-1 rounded-full font-medium backdrop-blur-sm">
             {t('ialab.viewer_modal.scroll_to_end')}
           </span>
         </div>
@@ -61,10 +61,10 @@ const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
       >
         {loadError ? (
           <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-            <Icon name="fa-file-pdf" className="text-petroleum/30 w-16 h-16 mb-4" />
-            <p className="text-petroleum font-semibold mb-2">{t('ialab.viewer_modal.cannot_load')}</p>
-            <p className="text-petroleum/60 text-sm mb-6">{t('ialab.viewer_modal.try_download')}</p>
-            <a href={resource.url} download className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-lg hover:from-corporate-deep hover:to-corporate-darker transition-colors flex items-center gap-2 font-medium">
+            <Icon name="fa-file-pdf" className="text-[var(--theme-emphasis)]/30 w-16 h-16 mb-4" />
+            <p className="text-[var(--theme-emphasis)] font-semibold mb-2">{t('ialab.viewer_modal.cannot_load')}</p>
+            <p className="text-[var(--theme-emphasis)]/60 text-sm mb-6">{t('ialab.viewer_modal.try_download')}</p>
+            <a href={resource.url} download className="px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-lg hover:from-[var(--theme-primary)]-deep hover:to-[var(--theme-primary)]-darker transition-colors flex items-center gap-2 font-medium">
               <Icon name="fa-download" className="w-4 h-4" />
               {t('ialab.viewer_modal.download')}
             </a>

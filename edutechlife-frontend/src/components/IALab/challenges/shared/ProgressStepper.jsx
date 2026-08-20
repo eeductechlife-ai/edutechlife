@@ -26,7 +26,7 @@ const ProgressStepper = ({ currentStep, completedSteps = {}, t, steps }) => {
                   isCompleted
                     ? 'bg-emerald-50 border-emerald-400 text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-600 dark:text-emerald-400'
                     : isActive
-                    ? 'bg-corporate/5 border-corporate text-corporate dark:bg-corporate/10 dark:border-mint dark:text-mint'
+                    ? 'bg-[var(--theme-primary)]/5 border-[var(--theme-primary)] text-[var(--theme-primary)] dark:bg-[var(--theme-primary)]/10 dark:border-mint dark:text-mint'
                     : 'bg-white border-slate-200 text-slate-400 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-500'
                 }`}
               >
@@ -34,7 +34,7 @@ const ProgressStepper = ({ currentStep, completedSteps = {}, t, steps }) => {
                   isCompleted
                     ? 'bg-emerald-500 text-white'
                     : isActive
-                    ? 'bg-corporate text-white'
+                    ? 'bg-[var(--theme-primary)] text-white'
                     : 'bg-slate-100 text-slate-400 dark:bg-slate-700 dark:text-slate-500'
                 }`}>
                   {isCompleted ? (

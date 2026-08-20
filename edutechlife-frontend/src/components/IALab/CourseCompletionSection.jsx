@@ -46,7 +46,7 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
       transition={{ duration: 0.4, ease: 'easeOut' }}
       className="px-1 w-full"
     >
-      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-petroleum via-petroleum-dark to-corporate p-5 shadow-lg">
+      <div className="relative overflow-hidden rounded-xl theme-bg-emphasis p-5 shadow-lg">
         {/* Decoración */}
         <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -translate-y-6 translate-x-6" />
         <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/5 rounded-full translate-y-4 -translate-x-4" />
@@ -62,7 +62,7 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-              className="h-full bg-gradient-to-r from-[#FFD166] to-corporate rounded-full"
+              className="h-full bg-gradient-to-r from-[#FFD166] to-[var(--theme-emphasis)] rounded-full"
               style={{ width: `${Math.min(courseProgress, 100)}%` }}
             />
           </div>
@@ -128,7 +128,7 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
             whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
             whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
             onClick={onViewCertificate}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] bg-white rounded-xl text-petroleum font-bold text-xs shadow-md hover:shadow-lg transition-all duration-300"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] bg-white rounded-xl theme-text-emphasis font-bold text-xs shadow-md hover:shadow-lg transition-all duration-300"
           >
             <Icon name="fa-award" className="text-sm" />
             {t('course_completion.view_cert')}

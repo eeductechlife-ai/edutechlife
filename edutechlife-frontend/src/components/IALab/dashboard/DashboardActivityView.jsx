@@ -52,7 +52,7 @@ function DashboardActivityView() {
             whileInView={noMotion ? undefined : 'visible'}
             viewport={vp} custom={i} variants={cardVariants}
             className="bg-white rounded-xl py-3.5 px-2 text-center shadow-sm border border-slate-100">
-            <p className="text-lg font-bold text-petroleum">{s.value}</p>
+            <p className="text-lg font-bold text-[var(--theme-emphasis)]">{s.value}</p>
             <p className="text-[10px] text-slate-500 uppercase tracking-wider">{s.label}</p>
           </motion.div>
         ))}
@@ -69,8 +69,8 @@ function DashboardActivityView() {
             return (
               <div key={day} className="flex-1 flex flex-col items-center gap-1">
                 <span className="text-[9px] text-slate-400 font-medium">{count}</span>
-                <div className="w-full rounded-md bg-corporate/5 relative overflow-hidden" style={{ height: 48 }}>
-                  <div className="absolute bottom-0 w-full bg-corporate rounded-md transition-all duration-500"
+                <div className="w-full rounded-md bg-[var(--theme-primary)]/5 relative overflow-hidden" style={{ height: 48 }}>
+                  <div className="absolute bottom-0 w-full bg-[var(--theme-primary)] rounded-md transition-all duration-500"
                     style={{ height: `${(count / max) * 100}%` }} />
                 </div>
                 <span className="text-[9px] text-slate-400">{day}</span>
@@ -89,10 +89,10 @@ function DashboardActivityView() {
             <div key={m.id} className="flex items-center gap-3">
               <span className="text-xs font-bold text-slate-500 min-w-[24px] w-8">M{m.id}</span>
               <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                <div className="h-full rounded-full bg-corporate transition-all duration-500"
+                <div className="h-full rounded-full bg-[var(--theme-primary)] transition-all duration-500"
                   style={{ width: `${Math.max(0, m.score)}%` }} />
               </div>
-              <span className="text-xs font-bold text-petroleum min-w-[32px] w-10 text-right">{m.score || 0}%</span>
+              <span className="text-xs font-bold text-[var(--theme-emphasis)] min-w-[32px] w-10 text-right">{m.score || 0}%</span>
             </div>
           ))}
         </div>

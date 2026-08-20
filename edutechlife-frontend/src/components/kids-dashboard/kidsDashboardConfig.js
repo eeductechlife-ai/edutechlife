@@ -3,6 +3,7 @@ import { Home, BookOpen, PencilRuler, BarChart3, Gamepad2 } from "lucide-react";
 export const CATEGORY_MAP = {
   inicio: "home",
   materias: "learn",
+  horario: "learn",
   flashcards: "practice",
   oral: "practice",
   examenes: "practice",
@@ -29,7 +30,7 @@ export const CATEGORIES = [
     color: "#06D6A0",
     gradient: "linear-gradient(135deg, #06D6A0 0%, #1B9AAA 60%, #118AB2 100%)",
     glowColor: "#06D6A0",
-    tabs: ["materias"],
+    tabs: ["materias", "horario"],
   },
   {
     id: "practice",
@@ -62,8 +63,9 @@ export const CATEGORIES = [
 
 export const CATEGORY_TAB_LABELS = {
   materias: "Materias",
+  horario: "Horario",
   examenes: "Exámenes",
-  flashcards: "Flashcards",
+  flashcards: "Educards",
   oral: "Habla con Dani",
   vak: "VAK",
   progreso: "Progreso",
@@ -77,8 +79,9 @@ export const PREMIUM_TABS = [];
 export const TOP_BAR_LABELS = {
   inicio: "Inicio",
   materias: "Materias",
+  horario: "Mi Horario",
   examenes: "Exámenes",
-  flashcards: "Flashcards",
+  flashcards: "Educards",
   oral: "Habla con Dani",
   vak: "Diagnóstico VAK",
   progreso: "Mi Progreso",

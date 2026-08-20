@@ -138,7 +138,7 @@ const NotebookStep1 = ({
         className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
             <Icon name="fa-bookmark" className="text-white text-lg" />
           </div>
           <div>
@@ -234,7 +234,7 @@ const NotebookStep1 = ({
               transition={{ duration: 0.3 }}
               className={`bg-white dark:bg-slate-800 rounded-xl border-2 transition-all duration-200 ${
                 selected
-                  ? "border-corporate dark:border-corporate-dark shadow-md shadow-corporate/10 dark:shadow-corporate-dark/10"
+                  ? "border-[var(--theme-primary)] dark:border-[var(--theme-primary)]-dark shadow-md shadow-[var(--theme-primary)]/10 dark:shadow-[var(--theme-primary)]-dark/10"
                   : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
               }`}
             >
@@ -254,7 +254,7 @@ const NotebookStep1 = ({
                     <div
                       className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
                         selected
-                          ? "bg-corporate dark:bg-corporate-dark border-corporate dark:border-corporate-dark"
+                          ? "bg-[var(--theme-primary)] dark:bg-[var(--theme-primary)]-dark border-[var(--theme-primary)] dark:border-[var(--theme-primary)]-dark"
                           : "border-slate-300 dark:border-slate-600"
                       } ${!selected && maxReached ? "opacity-30 cursor-not-allowed" : ""}`}
                     >
@@ -280,7 +280,7 @@ const NotebookStep1 = ({
                     </p>
                     <button
                       onClick={() => toggleContent(index)}
-                      className="text-xs font-medium text-corporate dark:text-corporate-dark hover:underline mt-1"
+                      className="text-xs font-medium text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark hover:underline mt-1"
                     >
                       {expandedContent[index]
                         ? t("ialab.challenge.m4.step1.hide_content")
@@ -308,7 +308,7 @@ const NotebookStep1 = ({
                                   parseInt(e.target.value),
                                 )
                               }
-                              className="w-full bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:border-corporate"
+                              className="w-full bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:border-[var(--theme-primary)]"
                             >
                               {[1, 2, 3, 4].map((r) => (
                                 <option key={r} value={r}>
@@ -330,7 +330,7 @@ const NotebookStep1 = ({
                                   e.target.value,
                                 )
                               }
-                              className="w-full bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:border-corporate"
+                              className="w-full bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:border-[var(--theme-primary)]"
                             >
                               <option value="">---</option>
                               {CATEGORIES.map((cat) => (
@@ -414,13 +414,13 @@ const NotebookStep1 = ({
             return (
               <span
                 key={d.index}
-                className="inline-flex items-center gap-1 px-2.5 py-1 bg-corporate/10 dark:bg-corporate-dark/20 text-corporate dark:text-corporate-dark text-xs rounded-full font-medium"
+                className="inline-flex items-center gap-1 px-2.5 py-1 bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]-dark/20 text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark text-xs rounded-full font-medium"
               >
                 <Icon name="fa-bookmark" className="w-3 h-3" />
                 <span className="max-w-[120px] truncate">{doc.titulo}</span>
                 <button
                   onClick={() => removeDoc(d.index)}
-                  className="ml-0.5 w-4 h-4 rounded-full hover:bg-corporate/20 dark:hover:bg-corporate-dark/30 flex items-center justify-center transition-colors"
+                  className="ml-0.5 w-4 h-4 rounded-full hover:bg-[var(--theme-primary)]/20 dark:hover:bg-[var(--theme-primary)]-dark/30 flex items-center justify-center transition-colors"
                   aria-label={`Remove ${doc.titulo}`}
                 >
                   <Icon name="fa-times" className="w-2.5 h-2.5" />

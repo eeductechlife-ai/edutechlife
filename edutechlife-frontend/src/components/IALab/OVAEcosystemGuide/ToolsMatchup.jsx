@@ -42,7 +42,7 @@ export default function ToolsMatchup({ items }) {
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-2">
-          <h6 className="text-[10px] font-black text-petroleum uppercase tracking-wider text-center">{t('ova.ecosystem.matchup_tools')}</h6>
+          <h6 className="text-[10px] font-black text-[var(--theme-emphasis)] uppercase tracking-wider text-center">{t('ova.ecosystem.matchup_tools')}</h6>
           {items.map((item, i) => {
             const Icon = toolIconMap[item.icon] || null;
             const matched = matches[item.title];
@@ -53,21 +53,21 @@ export default function ToolsMatchup({ items }) {
                 whileHover={!matched ? { scale: 1.02 } : {}}
                 whileTap={!matched ? { scale: 0.98 } : {}}
                 aria-pressed={selected === i}
-                className={`w-full p-3 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${matched ? 'bg-green-50 border-green-300 dark:bg-green-900/20 dark:border-green-700' : selected === i ? 'bg-blue-50 border-corporate' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate/50'}`}
+                className={`w-full p-3 rounded-xl border-2 text-left transition-all flex items-center gap-2 ${matched ? 'bg-green-50 border-green-300 dark:bg-green-900/20 dark:border-green-700' : selected === i ? 'bg-blue-50 border-[var(--theme-primary)]' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-[var(--theme-primary)]/50'}`}
               >
                 {matched ? (
                   <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
                 ) : Icon ? (
-                  <Icon className="w-4 h-4 text-petroleum shrink-0" />
+                  <Icon className="w-4 h-4 text-[var(--theme-emphasis)] shrink-0" />
                 ) : null}
-                <span className="text-xs font-bold text-petroleum">{item.title}</span>
+                <span className="text-xs font-bold text-[var(--theme-emphasis)]">{item.title}</span>
               </motion.button>
             );
           })}
         </div>
 
         <div className="space-y-2">
-          <h6 className="text-[10px] font-black text-petroleum uppercase tracking-wider text-center">{t('ova.ecosystem.matchup_descs')}</h6>
+          <h6 className="text-[10px] font-black text-[var(--theme-emphasis)] uppercase tracking-wider text-center">{t('ova.ecosystem.matchup_descs')}</h6>
           {shuffledDescs.map((item) => {
             const matched = matches[item.title];
             const isWrong = wrong === item.sortKey;
@@ -80,7 +80,7 @@ export default function ToolsMatchup({ items }) {
                 whileTap={!matched ? { scale: 0.98 } : {}}
                 animate={isWrong ? { x: [0, -4, 4, -4, 4, 0] } : {}}
                 transition={isWrong ? { duration: 0.4 } : {}}
-                className={`w-full p-3 rounded-xl border-2 text-left transition-all ${matched ? 'bg-green-50 border-green-300 dark:bg-green-900/20 dark:border-green-700 opacity-50' : isWrong ? 'bg-red-50 border-red-300 dark:bg-red-900/20' : selected !== null ? 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-corporate/50 cursor-pointer' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-slate-700 cursor-default'}`}
+                className={`w-full p-3 rounded-xl border-2 text-left transition-all ${matched ? 'bg-green-50 border-green-300 dark:bg-green-900/20 dark:border-green-700 opacity-50' : isWrong ? 'bg-red-50 border-red-300 dark:bg-red-900/20' : selected !== null ? 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-[var(--theme-primary)]/50 cursor-pointer' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-slate-700 cursor-default'}`}
               >
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{item.text}</p>
               </motion.button>

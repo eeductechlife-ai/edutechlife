@@ -20,9 +20,9 @@ export default function EvolutionTimeline({ items }) {
             transition={{ delay: i * 0.12, type: 'spring', stiffness: 200, damping: 25 }}
             className="relative pl-8"
           >
-            <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-petroleum to-corporate rounded-full" />
+            <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full" />
             <motion.div
-              className={`absolute left-[-5px] top-2 w-3 h-3 rounded-full border-2 border-white z-10 ${isOpen ? 'bg-corporate' : 'bg-petroleum'}`}
+              className={`absolute left-[-5px] top-2 w-3 h-3 rounded-full border-2 border-white z-10 ${isOpen ? 'bg-[var(--theme-primary)]' : 'bg-[var(--theme-emphasis)]'}`}
               animate={{ scale: isOpen ? 1.4 : 1 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             />
@@ -31,13 +31,13 @@ export default function EvolutionTimeline({ items }) {
               aria-expanded={isOpen}
               className="w-full text-left"
             >
-              <div className={`bg-white dark:bg-slate-800 rounded-xl border-2 transition-all p-4 ${isOpen ? 'border-corporate shadow-md' : 'border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600'}`}>
+              <div className={`bg-white dark:bg-slate-800 rounded-xl border-2 transition-all p-4 ${isOpen ? 'border-[var(--theme-primary)] shadow-md' : 'border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600'}`}>
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h5 className="font-[900] text-petroleum text-xs uppercase">{item.title}</h5>
+                      <h5 className="font-[900] text-[var(--theme-emphasis)] text-xs uppercase">{item.title}</h5>
                       {item.date && (
-                        <span className="text-[10px] font-black text-corporate bg-corporate/10 px-2 py-0.5 rounded-md">{item.date}</span>
+                        <span className="text-[10px] font-black text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-2 py-0.5 rounded-md">{item.date}</span>
                       )}
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5 leading-relaxed">{item.text}</p>

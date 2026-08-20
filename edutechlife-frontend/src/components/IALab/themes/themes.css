@@ -1,0 +1,424 @@
+/* ==========================================================================
+   IALab Immersive Themes — Design Tokens
+   ==========================================================================
+
+   FILOSOFÍA DE DISEÑO (leer antes de tocar):
+
+   Los tokens replican la SENSACIÓN de las herramientas reales, no solo
+   sus colores. ChatGPT no es "verde por todos lados" — es 95% neutro
+   con verde SOLO como acento (logo, botón send). Gemini es blanco con
+   gradiente ocasional. NotebookLM usa amber solo en el panel Studio.
+
+   TOKENS SEMÁNTICOS (usar según la jerarquía del elemento):
+
+   - --theme-primary    →  Acentos SUTILES (logo, iconos, links, botón send,
+                            check activos). En ChatGPT: verde #10a37f.
+                            No usar en fondos grandes.
+
+   - --theme-emphasis   →  Elementos PROMINENTES (banners, tabs activos,
+                            pills seleccionados, headers oscuros).
+                            En ChatGPT: casi-negro #2f2f2f. Es lo que
+                            hace que la app se sienta ChatGPT.
+
+   - --theme-surface    →  Fondo dominante (cards, containers).
+                            Neutro y muy claro.
+
+   - --theme-surface-2  →  Fondo secundario (sidebar, hover states, chip bg)
+
+   - --theme-text       →  Texto principal (casi-negro)
+   - --theme-text-muted →  Texto secundario (gris)
+   - --theme-border     →  Bordes sutiles (gris muy claro)
+
+   El tema se aplica a través de [data-theme="..."] en el container IALab.
+   Los OVAs y modales heredan porque el ThemeProvider replica el atributo
+   en document.body (los portales viven allí).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Tema DEFAULT — Edutechlife (Módulos 1, 5, catch-all)
+   Identidad original preservada. Ningún rojo en la UI base — el rojo
+   se reserva para estados de error del sistema (fallar actividad, etc).
+   -------------------------------------------------------------------------- */
+[data-theme="default"] {
+  --theme-icon-stroke: 2;                   /* Lucide default */
+  --theme-primary: #259eb5;
+  --theme-primary-hover: #1e8194;
+  --theme-emphasis: #004b63;
+  --theme-emphasis-hover: #0a3550;
+  --theme-on-emphasis: #ffffff;
+  --theme-bg: #f8fafc;
+  --theme-surface: #ffffff;
+  --theme-surface-2: #f1f5f9;
+  --theme-text: #0f172a;
+  --theme-text-muted: #64748b;
+  --theme-border: #e2e8f0;
+  --theme-accent: #f59e0b;
+  --theme-radius: 12px;
+  --theme-radius-lg: 16px;
+  --theme-radius-pill: 9999px;
+  --theme-font: "Inter", system-ui, -apple-system, sans-serif;
+  --theme-font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --theme-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --theme-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --theme-shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.12);
+}
+
+[data-theme="default"].dark,
+.dark [data-theme="default"] {
+  --theme-bg: #0f172a;
+  --theme-surface: #1e293b;
+  --theme-surface-2: #334155;
+  --theme-text: #f8fafc;
+  --theme-text-muted: #94a3b8;
+  --theme-border: #334155;
+  --theme-emphasis: #f8fafc;
+  --theme-on-emphasis: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   Tema CHATGPT — Módulo 2 (Arquitecto Digital)
+   ChatGPT REAL: 95% neutro blanco/gris, verde solo como acento del logo
+   y del botón send. Los elementos prominentes son casi-negro (#2f2f2f).
+   -------------------------------------------------------------------------- */
+[data-theme="chatgpt"] {
+  --theme-icon-stroke: 1.5;         /* Líneas finas estilo ChatGPT */
+  --theme-primary: #10a37f;         /* Verde — SOLO acentos (logo, iconos, send) */
+  --theme-primary-hover: #0d8b6c;
+  --theme-emphasis: #2f2f2f;        /* Casi-negro — banners, tabs activos, pills */
+  --theme-emphasis-hover: #171717;
+  --theme-on-emphasis: #ffffff;
+  --theme-bg: #f7f7f8;              /* ChatGPT background (gris muy sutil) */
+  --theme-surface: #ffffff;         /* Cards blancas */
+  --theme-surface-2: #ececec;       /* Sidebar ChatGPT gris visible */
+  --theme-text: #0d0d0d;
+  --theme-text-muted: #6e6e80;
+  --theme-border: #d9d9e3;          /* Bordes ChatGPT */
+  --theme-accent: #ab68ff;          /* Purple GPT-4 (badges) */
+  --theme-radius: 12px;
+  --theme-radius-lg: 16px;
+  --theme-radius-pill: 9999px;
+  --theme-font: "Söhne", "Inter", system-ui, -apple-system, sans-serif;
+  --theme-font-mono: "Söhne Mono", "JetBrains Mono", "Fira Code", monospace;
+  --theme-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --theme-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --theme-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  /* Banner: el casi-negro propio de ChatGPT */
+  --theme-header-bg: linear-gradient(135deg, #343541 0%, #2f2f2f 100%);
+  --theme-tool-label: "ChatGPT";
+  --theme-tool-badge-bg: rgba(255,255,255,0.12);
+  --theme-tool-badge-color: #10a37f;
+  --theme-tool-badge-border: rgba(16,163,127,0.4);
+}
+
+[data-theme="chatgpt"].dark,
+.dark [data-theme="chatgpt"] {
+  --theme-bg: #212121;
+  --theme-surface: #171717;
+  --theme-surface-2: #2f2f2f;
+  --theme-text: #ececec;
+  --theme-text-muted: #b4b4b4;
+  --theme-border: #2f2f2f;
+  --theme-emphasis: #ececec;
+  --theme-on-emphasis: #0d0d0d;
+}
+
+/* --------------------------------------------------------------------------
+   Tema GEMINI — Módulo 3 (Detective Multimodal)
+   Gemini REAL: blanco/neutro con acento azul-morado-coral (gradiente Google).
+   Chips redondeados 24px estilo Material 3. Botones activos oscuros o azul.
+   -------------------------------------------------------------------------- */
+[data-theme="gemini"] {
+  --theme-icon-stroke: 1.75;                 /* Material Design outline */
+  --theme-primary: #1a73e8;                  /* Google Blue — acentos */
+  --theme-primary-hover: #155cb8;
+  --theme-primary-gradient: linear-gradient(135deg, #4285f4 0%, #9b72cb 50%, #d96570 100%);
+  --theme-emphasis: #1a73e8;                 /* Prominente = Google Blue */
+  --theme-emphasis-hover: #155cb8;
+  --theme-on-emphasis: #ffffff;
+  --theme-bg: #f8f9ff;                       /* Fondo con tinte azul-blanco Gemini */
+  --theme-surface: #ffffff;
+  --theme-surface-2: #e8f0fe;               /* Google Blue chip bg (más visible) */
+  --theme-text: #1f1f1f;
+  --theme-text-muted: #5f6368;
+  --theme-border: #c5d4f6;                  /* Borde azul sutil Gemini */
+  --theme-accent: #d96570;
+  --theme-radius: 24px;                      /* Material 3 fully rounded */
+  --theme-radius-lg: 28px;
+  --theme-radius-pill: 9999px;
+  --theme-font: "Google Sans", "Product Sans", "Roboto", "Inter", sans-serif;
+  --theme-font-mono: "Roboto Mono", "JetBrains Mono", monospace;
+  --theme-shadow-sm: 0 1px 2px rgba(60, 64, 67, 0.08);
+  --theme-shadow-md: 0 2px 6px rgba(60, 64, 67, 0.15);
+  --theme-shadow-lg: 0 8px 24px rgba(60, 64, 67, 0.18);
+  /* Banner: gradiente multicolor firma de Gemini */
+  --theme-header-bg: linear-gradient(135deg, #4285f4 0%, #9b72cb 50%, #d96570 100%);
+  --theme-tool-label: "Gemini";
+  --theme-tool-badge-bg: rgba(255,255,255,0.2);
+  --theme-tool-badge-color: #ffffff;
+  --theme-tool-badge-border: rgba(255,255,255,0.4);
+}
+
+[data-theme="gemini"].dark,
+.dark [data-theme="gemini"] {
+  --theme-bg: #1f1f1f;
+  --theme-surface: #2d2f31;
+  --theme-surface-2: #3a3d40;
+  --theme-text: #e3e3e3;
+  --theme-text-muted: #9aa0a6;
+  --theme-border: #3c4043;
+  --theme-emphasis: #e3e3e3;
+  --theme-on-emphasis: #1f1f1f;
+}
+
+/* --------------------------------------------------------------------------
+   Tema NOTEBOOKLM — Módulo 4 (Alquimista de Documentos)
+   NotebookLM REAL: fondos blancos, sidebar oscura, azul deep como firma,
+   amber en el panel Studio (Audio Overview). Layout 3-columnas.
+   -------------------------------------------------------------------------- */
+[data-theme="notebooklm"] {
+  --theme-icon-stroke: 1.75;        /* Material Design outline */
+  --theme-primary: #1e40af;         /* Deep Blue signature */
+  --theme-primary-hover: #1e3a8a;
+  --theme-emphasis: #1e40af;        /* Prominente = mismo blue oscuro */
+  --theme-emphasis-hover: #1e3a8a;
+  --theme-on-emphasis: #ffffff;
+  --theme-bg: #eef2fb;              /* NotebookLM fondo azul-lavanda suave */
+  --theme-surface: #ffffff;
+  --theme-surface-2: #dbe4f8;       /* Sidebar NotebookLM azul más notable */
+  --theme-text: #202124;
+  --theme-text-muted: #5f6368;
+  --theme-border: #b8c8ef;          /* Borde azul NotebookLM */
+  --theme-accent: #f59e0b;          /* Amber Studio/Podcast */
+  --theme-radius: 16px;
+  --theme-radius-lg: 20px;
+  --theme-radius-pill: 9999px;
+  --theme-font: "Google Sans Text", "Roboto", "Inter", sans-serif;
+  --theme-font-mono: "Roboto Mono", "JetBrains Mono", monospace;
+  --theme-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --theme-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
+  --theme-shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.15);
+  /* Banner: azul profundo NotebookLM con acento amber */
+  --theme-header-bg: linear-gradient(135deg, #1e3a8a 0%, #1e40af 60%, #1d4ed8 100%);
+  --theme-tool-label: "NotebookLM";
+  --theme-tool-badge-bg: rgba(245,158,11,0.15);
+  --theme-tool-badge-color: #fbbf24;
+  --theme-tool-badge-border: rgba(245,158,11,0.4);
+}
+
+[data-theme="notebooklm"].dark,
+.dark [data-theme="notebooklm"] {
+  --theme-bg: #1e1f22;
+  --theme-surface: #2b2d31;
+  --theme-surface-2: #35373c;
+  --theme-text: #e3e3e3;
+  --theme-text-muted: #9aa0a6;
+  --theme-border: #3c4043;
+}
+
+/* --------------------------------------------------------------------------
+   Tokens semánticos de ESTADO (compartidos entre todos los temas)
+   REGLA DE USO:
+   - danger  → SOLO para errores del sistema: perder actividad, validación
+               fallida, "sin conexión", quiz reprobado, toasts de error.
+               NUNCA para UI decorativa o énfasis general.
+   - success → Confirmaciones (actividad completada, toast de éxito)
+   - warning → Advertencias suaves (recordatorios, límites)
+   - info    → Mensajes neutros informativos
+   -------------------------------------------------------------------------- */
+[data-theme] {
+  --theme-danger: #dc2626;
+  --theme-danger-bg: #fef2f2;
+  --theme-danger-border: #fecaca;
+  --theme-success: #059669;
+  --theme-success-bg: #ecfdf5;
+  --theme-warning: #d97706;
+  --theme-warning-bg: #fffbeb;
+  --theme-info: #0284c7;
+  --theme-info-bg: #f0f9ff;
+}
+
+.dark [data-theme],
+[data-theme].dark {
+  --theme-danger-bg: rgba(220, 38, 38, 0.1);
+  --theme-danger-border: rgba(220, 38, 38, 0.3);
+  --theme-success-bg: rgba(5, 150, 105, 0.1);
+  --theme-warning-bg: rgba(217, 119, 6, 0.1);
+  --theme-info-bg: rgba(2, 132, 199, 0.1);
+}
+
+.theme-text-danger  { color: var(--theme-danger); }
+.theme-bg-danger    { background-color: var(--theme-danger); color: #fff; }
+.theme-bg-danger-soft { background-color: var(--theme-danger-bg); color: var(--theme-danger); }
+.theme-border-danger { border-color: var(--theme-danger-border); }
+
+.theme-text-success { color: var(--theme-success); }
+.theme-bg-success   { background-color: var(--theme-success); color: #fff; }
+.theme-bg-success-soft { background-color: var(--theme-success-bg); color: var(--theme-success); }
+
+.theme-text-warning { color: var(--theme-warning); }
+.theme-bg-warning-soft { background-color: var(--theme-warning-bg); color: var(--theme-warning); }
+
+.theme-text-info { color: var(--theme-info); }
+.theme-bg-info-soft { background-color: var(--theme-info-bg); color: var(--theme-info); }
+
+/* --------------------------------------------------------------------------
+   Font-family auto-inheritance
+   El container IALab tiene [data-theme] → hereda font-family.
+   Las clases Tailwind "font-montserrat"/"font-display" usan font-face
+   sin !important, así que la regla de tema gana cuando es más específica.
+   -------------------------------------------------------------------------- */
+[data-theme] {
+  font-family: var(--theme-font);
+}
+
+/* Override tipografía en encabezados y texto display dentro del tema.
+   ChatGPT → Inter más delgado.
+   Gemini/NotebookLM → Google Sans (Product Sans fallback). */
+[data-theme="chatgpt"] h1,
+[data-theme="chatgpt"] h2,
+[data-theme="chatgpt"] h3,
+[data-theme="chatgpt"] h4,
+[data-theme="chatgpt"] .font-montserrat,
+[data-theme="chatgpt"] .font-display {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+[data-theme="gemini"] h1,
+[data-theme="gemini"] h2,
+[data-theme="gemini"] h3,
+[data-theme="gemini"] h4,
+[data-theme="gemini"] .font-montserrat,
+[data-theme="gemini"] .font-display {
+  font-family: "Google Sans", "Product Sans", "Roboto", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+[data-theme="notebooklm"] h1,
+[data-theme="notebooklm"] h2,
+[data-theme="notebooklm"] h3,
+[data-theme="notebooklm"] h4,
+[data-theme="notebooklm"] .font-montserrat,
+[data-theme="notebooklm"] .font-display {
+  font-family: "Google Sans Text", "Roboto", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Border-radius por tema (Material 3 para Gemini: muy redondeado)
+   Solo se aplica a elementos de control (botones, pills, badges).
+   No se toca la estructura de layout (cards, modales).
+   -------------------------------------------------------------------------- */
+[data-theme="gemini"] button:not([class*="rounded-full"]):not([class*="rounded-none"]) {
+  border-radius: 20px;
+}
+[data-theme="gemini"] .rounded-lg  { border-radius: 12px; }
+[data-theme="gemini"] .rounded-xl  { border-radius: 20px; }
+[data-theme="gemini"] .rounded-2xl { border-radius: 24px; }
+
+/* ChatGPT: bordes más sutiles */
+[data-theme="chatgpt"] button:not([class*="rounded-full"]):not([class*="rounded-none"]) {
+  border-radius: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   Icon stroke-width por tema
+   Lucide añade stroke-width como ATRIBUTO INLINE del SVG → CSS normal
+   pierde frente al atributo. Usamos !important para que el tema prevalezca.
+   - ChatGPT: 1.5  → líneas finas, sensación minimalista premium
+   - Gemini/NotebookLM: 1.75 → Material Design Outlined
+   - Default: 2 → Lucide estándar
+   -------------------------------------------------------------------------- */
+[data-theme="chatgpt"]   svg:not(.no-theme-stroke) { stroke-width: 1.5  !important; }
+[data-theme="gemini"]    svg:not(.no-theme-stroke) { stroke-width: 1.75 !important; }
+[data-theme="notebooklm"] svg:not(.no-theme-stroke) { stroke-width: 1.75 !important; }
+
+/* --------------------------------------------------------------------------
+   Icon color semantic per theme
+   Clase .theme-icon → el icono toma el color del acento del tema.
+   Útil en barras de acciones, menús, nav items.
+   -------------------------------------------------------------------------- */
+.theme-icon { color: var(--theme-primary); }
+
+[data-theme="chatgpt"]    .theme-icon-muted { color: #8e8ea0; }
+[data-theme="gemini"]     .theme-icon-muted { color: #5f6368; }
+[data-theme="notebooklm"] .theme-icon-muted { color: #5f6368; }
+[data-theme="default"]    .theme-icon-muted { color: var(--theme-text-muted); }
+
+/* --------------------------------------------------------------------------
+   Gemini: borde de énfasis con gradiente (chips activos, inputs en foco)
+   -------------------------------------------------------------------------- */
+[data-theme="gemini"] *:focus-visible {
+  outline: 2px solid #4285f4;
+  outline-offset: 2px;
+}
+[data-theme="gemini"] input:focus,
+[data-theme="gemini"] textarea:focus {
+  border-color: #1a73e8 !important;
+  box-shadow: 0 0 0 2px rgba(26,115,232,0.2) !important;
+}
+
+/* --------------------------------------------------------------------------
+   NotebookLM: amber focus para elementos Studio/audio
+   -------------------------------------------------------------------------- */
+[data-theme="notebooklm"] *:focus-visible {
+  outline: 2px solid #1e40af;
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   UTILIDADES SEMÁNTICAS
+   ==========================================================================
+   Prefijo `.theme-` — para consumir tokens sin escribir var() en cada clase.
+   Diseñado para usar Tailwind + estas utilidades juntos.
+   ========================================================================== */
+
+/* Backgrounds */
+.theme-bg              { background-color: var(--theme-bg); }
+.theme-surface         { background-color: var(--theme-surface); }
+.theme-surface-2       { background-color: var(--theme-surface-2); }
+
+/* Primary — solo para acentos sutiles */
+.theme-bg-primary      { background-color: var(--theme-primary); }
+.theme-bg-primary-5    { background-color: color-mix(in srgb, var(--theme-primary) 5%,  transparent); }
+.theme-bg-primary-10   { background-color: color-mix(in srgb, var(--theme-primary) 10%, transparent); }
+.theme-bg-primary-15   { background-color: color-mix(in srgb, var(--theme-primary) 15%, transparent); }
+.theme-bg-primary-20   { background-color: color-mix(in srgb, var(--theme-primary) 20%, transparent); }
+
+/* Emphasis — para elementos prominentes (banners, active pills, headers oscuros) */
+.theme-bg-emphasis     { background-color: var(--theme-emphasis); color: var(--theme-on-emphasis); }
+.theme-bg-emphasis-10  { background-color: color-mix(in srgb, var(--theme-emphasis) 10%, transparent); }
+.theme-bg-emphasis-hover:hover { background-color: var(--theme-emphasis-hover); }
+.theme-text-on-emphasis { color: var(--theme-on-emphasis); }
+
+/* Text */
+.theme-text            { color: var(--theme-text); }
+.theme-text-muted      { color: var(--theme-text-muted); }
+.theme-text-primary    { color: var(--theme-primary); }
+.theme-text-emphasis   { color: var(--theme-emphasis); }
+.theme-text-accent     { color: var(--theme-accent); }
+
+/* Borders */
+.theme-border          { border-color: var(--theme-border); }
+.theme-border-primary  { border-color: var(--theme-primary); }
+.theme-border-primary-20 { border-color: color-mix(in srgb, var(--theme-primary) 20%, transparent); }
+.theme-border-primary-30 { border-color: color-mix(in srgb, var(--theme-primary) 30%, transparent); }
+.theme-border-emphasis { border-color: var(--theme-emphasis); }
+.theme-border-emphasis-20 { border-color: color-mix(in srgb, var(--theme-emphasis) 20%, transparent); }
+
+/* Shadows */
+.theme-shadow-primary-15 { box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--theme-primary) 15%, transparent); }
+.theme-shadow-emphasis   { box-shadow: 0 4px 16px 0 color-mix(in srgb, var(--theme-emphasis) 20%, transparent); }
+
+/* Hover variants */
+.hover\:theme-bg-primary-5:hover       { background-color: color-mix(in srgb, var(--theme-primary) 5%,  transparent); }
+.hover\:theme-bg-primary-10:hover      { background-color: color-mix(in srgb, var(--theme-primary) 10%, transparent); }
+.hover\:theme-bg-emphasis:hover        { background-color: var(--theme-emphasis); color: var(--theme-on-emphasis); }
+.hover\:theme-bg-surface-2:hover       { background-color: var(--theme-surface-2); }
+.hover\:theme-border-primary-20:hover  { border-color: color-mix(in srgb, var(--theme-primary) 20%, transparent); }
+.hover\:theme-border-emphasis:hover    { border-color: var(--theme-emphasis); }
+.hover\:theme-text-primary:hover       { color: var(--theme-primary); }
+.hover\:theme-text-emphasis:hover      { color: var(--theme-emphasis); }

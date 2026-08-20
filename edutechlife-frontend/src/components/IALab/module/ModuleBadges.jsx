@@ -4,7 +4,7 @@ const ModuleBadges = ({ duration, doneCount, totalLessons, t }) => {
   if (!totalLessons) return null;
   return (
     <div className="flex items-center justify-end gap-2">
-      <span className="px-3 py-1.5 bg-gradient-to-br from-petroleum/10 to-corporate/5 text-petroleum text-[10px] font-bold rounded-lg border border-petroleum/10 shadow-sm">
+      <span className="px-3 py-1.5 bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/5 text-[var(--theme-emphasis)] text-[10px] font-bold rounded-lg border border-[var(--theme-emphasis)]/10 shadow-sm">
         {duration}
       </span>
       <span

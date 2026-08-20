@@ -7,8 +7,8 @@ export function LoadingState({ loadingType }) {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-8">
-      <div className="w-20 h-20 rounded-full bg-gradient-to-r from-petroleum/20 to-corporate/20 flex items-center justify-center mb-6">
-        <div className="w-10 h-10 border-3 border-corporate border-t-transparent rounded-full animate-spin"></div>
+      <div className="w-20 h-20 rounded-full bg-gradient-to-r from-[var(--theme-emphasis)]/20 to-[var(--theme-primary)]/20 flex items-center justify-center mb-6">
+        <div className="w-10 h-10 border-3 border-[var(--theme-primary)] border-t-transparent rounded-full animate-spin"></div>
       </div>
       <h3 className="text-xl font-bold text-slate-700 mb-2">
         {loadingType === 'loading' ? t('ialab.evaluation.modal.ai_designing') : t('ialab.evaluation.modal.evaluating')}
@@ -32,7 +32,7 @@ export function ErrorState({ error, onRetry }) {
       <p className="text-slate-500 text-center max-w-md mb-6">{error}</p>
       <button
         onClick={onRetry}
-        className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300"
+        className="px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300"
       >
         <Icon name="fa-redo" className="mr-2" aria-hidden="true" />
         {t('ialab.evaluation.modal.retry')}
@@ -112,7 +112,7 @@ export function StepContent({
 
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
             <Icon name="fa-clipboard-check" className="text-white text-xl" aria-hidden="true" />
           </div>
           <div className="flex-1">
@@ -182,7 +182,7 @@ export function StepContent({
             <button
               onClick={handleNextStep}
               disabled={!responses[responseKey] || loading}
-              className="px-6 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t('ialab.evaluation.modal.next')}
               <Icon name="fa-arrow-right" className="ml-2" aria-hidden="true" />

@@ -143,6 +143,11 @@ export const createSupabaseClient = (accessToken = null) => {
     db: {
       schema: "public",
     },
+    realtime: {
+      params: {
+        eventsPerSecond: 10,
+      },
+    },
   });
 
   // Cachear cliente para reutilización

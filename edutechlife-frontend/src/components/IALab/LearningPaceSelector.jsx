@@ -105,7 +105,7 @@ const LearningPaceSelector = ({
     <div className={`w-full ${className}`}>
       {showLabel && (
         <div className="mb-3">
-          <h3 className="text-sm font-bold text-petroleum dark:text-white">
+          <h3 className="text-sm font-bold theme-text-emphasis dark:text-white">
             {t("ialab.learning_pace.title")}
           </h3>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -152,7 +152,7 @@ const LearningPaceSelector = ({
               </div>
 
               <div
-                className={`text-sm font-bold mb-1 ${isActive ? pace.textColor : "text-petroleum dark:text-white"}`}
+                className={`text-sm font-bold mb-1 ${isActive ? pace.textColor : "theme-text-emphasis dark:text-white"}`}
               >
                 {t(pace.name)}
               </div>

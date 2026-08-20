@@ -31,21 +31,21 @@ const GenerationHistory = memo(({ history, clearHistory, loadFromHistory, t }) =
               className={cn(
                 "w-full text-left p-4 rounded-xl",
                 "bg-white border border-slate-100",
-                "hover:bg-corporate/5 hover:border-corporate/30",
+                "hover:bg-[var(--theme-primary)]/5 hover:border-[var(--theme-primary)]/30",
                 FORUM_EFFECTS.TRANSITION_ALL,
-                "focus:outline-none focus:ring-2 focus:ring-corporate/50"
+                "focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)]/50"
               )}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
-                  <p className={cn(FORUM_TYPOGRAPHY.BODY.SM, "text-petroleum-darker truncate")}>
+                  <p className={cn(FORUM_TYPOGRAPHY.BODY.SM, "text-[var(--theme-emphasis)]-darker truncate")}>
                     {item.originalPrompt}
                   </p>
                   <div className="flex items-center gap-2 mt-2">
                     <span className="text-xs text-slate-500">
                       {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
-                    <span className="text-xs px-2 py-0.5 bg-petroleum/10 text-petroleum rounded-full">
+                    <span className="text-xs px-2 py-0.5 bg-[var(--theme-emphasis)]/10 text-[var(--theme-emphasis)] rounded-full">
                       {item.techniqueApplied.name}
                     </span>
                     <span className={cn(

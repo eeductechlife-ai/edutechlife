@@ -109,7 +109,7 @@ const GeminiStep4 = ({ exercise, response, onResponseChange, t: tProp, topic = '
         className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
             <Icon name="fa-file-alt" className="text-white text-lg" />
           </div>
           <div>
@@ -147,7 +147,7 @@ const GeminiStep4 = ({ exercise, response, onResponseChange, t: tProp, topic = '
         {defaultSections.map((section) => {
           const key = typeof section === 'string' ? section : (section.titulo || section);
           const iconName = SECTION_ICONS[key] || 'fa-file';
-          const gradient = SECTION_COLORS[key] || 'from-petroleum to-corporate';
+          const gradient = SECTION_COLORS[key] || 'from-[var(--theme-emphasis)] to-[var(--theme-primary)]';
           const isExpanded = expanded[key];
           const content = sections[key] || '';
 
@@ -207,7 +207,7 @@ const GeminiStep4 = ({ exercise, response, onResponseChange, t: tProp, topic = '
                           {translate('ialab.challenge.m3.step4_placeholder', { section: key })}
                         </label>
                         <span className={`text-xs font-medium ${
-                          content.length > 0 ? 'text-corporate dark:text-corporate-dark' : 'text-slate-400 dark:text-slate-500'
+                          content.length > 0 ? 'text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark' : 'text-slate-400 dark:text-slate-500'
                         }`}>
                           {content.length} {translate('ialab.challenge.m3.step4_char_label')}
                         </span>
@@ -232,7 +232,7 @@ const GeminiStep4 = ({ exercise, response, onResponseChange, t: tProp, topic = '
         initial={shouldReduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.2 }}
-        className="bg-gradient-to-br from-petroleum/5 to-corporate/5 dark:from-petroleum-dark/10 dark:to-corporate-dark/5 rounded-xl p-5 border border-petroleum/10 dark:border-petroleum-dark/20"
+        className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 dark:from-[var(--theme-emphasis)]-dark/10 dark:to-[var(--theme-primary)]-dark/5 rounded-xl p-5 border border-[var(--theme-emphasis)]/10 dark:border-[var(--theme-emphasis)]-dark/20"
       >
         <div className="flex items-center gap-2 mb-2">
           <Icon name="fa-lightbulb" className="text-amber-500" />

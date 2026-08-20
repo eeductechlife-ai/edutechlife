@@ -17,7 +17,7 @@ const ModuleBookmarkFilter = ({
     <>
       <button
         onClick={() => setShowBookmarked((prev) => !prev)}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-900/10 border border-amber-200/60 dark:border-amber-700/30 hover:bg-amber-100/50 dark:hover:bg-amber-900/20 transition-all duration-200 text-left w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 group/bm"
+        className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-900/10 border border-amber-200/60 dark:border-amber-700/30 hover:bg-amber-100/50 dark:hover:bg-amber-900/20 transition-all duration-200 text-left w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 group/bm"
         aria-expanded={showBookmarked}
         aria-label={t("ialab.bookmarked_aria", {
           count: bookmarkedResources.length,

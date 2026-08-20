@@ -124,14 +124,14 @@ export default function QuizPractice({ moduleId }) {
           <ScoreCircle pct={pct} />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <span className={`text-2xl font-bold ${passed ? 'text-emerald-600' : 'text-petroleum'}`}>
+              <span className={`text-2xl font-bold ${passed ? 'text-emerald-600' : 'text-[var(--theme-emphasis)]'}`}>
                 {pct}%
               </span>
             </div>
           </div>
         </div>
 
-        <h3 className="text-lg font-bold text-petroleum mb-1">
+        <h3 className="text-lg font-bold text-[var(--theme-emphasis)] mb-1">
           {t('ialab.flashcards.practice_completed_title')}
         </h3>
         <p className="text-sm text-slate-500 mb-5">
@@ -177,7 +177,7 @@ export default function QuizPractice({ moduleId }) {
         <div className="flex gap-3 justify-center flex-wrap">
           <button
             onClick={handleRestart}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-petroleum/10 text-petroleum text-sm font-semibold hover:bg-petroleum/20 transition-all active:scale-[0.97]"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--theme-emphasis)]/10 text-[var(--theme-emphasis)] text-sm font-semibold hover:bg-[var(--theme-emphasis)]/20 transition-all active:scale-[0.97]"
           >
             <Icon name="fa-rotate" aria-hidden="true" />
             {t('ialab.flashcards.practice_try_again')}
@@ -188,15 +188,15 @@ export default function QuizPractice({ moduleId }) {
   }
 
   return (
-    <div className="relative p-[1.5px] bg-gradient-to-br from-petroleum/20 via-corporate/10 to-petroleum/5 rounded-[1.75rem]">
+    <div className="relative p-[1.5px] bg-gradient-to-br from-[var(--theme-emphasis)]/20 via-[var(--theme-primary)]/10 to-[var(--theme-emphasis)]/5 rounded-[1.75rem]">
       <div className="relative bg-white dark:bg-slate-800 rounded-[calc(1.75rem-1.5px)] shadow-[inset_0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-[calc(1.75rem-1.5px)]" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] rounded-t-[calc(1.75rem-1.5px)]" />
 
         <div className="p-5 sm:p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2.5">
-              <div className="px-2.5 py-1 rounded-full bg-gradient-to-r from-petroleum/10 to-corporate/10">
-                <span className="text-[10px] font-semibold text-petroleum uppercase tracking-wide">
+              <div className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10">
+                <span className="text-[10px] font-semibold text-[var(--theme-emphasis)] uppercase tracking-wide">
                   {t('ialab.flashcards.practice_badge')}
                 </span>
               </div>
@@ -212,7 +212,7 @@ export default function QuizPractice({ moduleId }) {
 
           <div className="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 mb-6 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-500 ease-out"
+              className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full transition-all duration-500 ease-out"
               style={{ width: `${((currentQ + 1) / questions.length) * 100}%` }}
             />
           </div>
@@ -225,13 +225,13 @@ export default function QuizPractice({ moduleId }) {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.2 }}
             >
-              <p className="text-base font-bold text-petroleum dark:text-white mb-5 leading-relaxed">
+              <p className="text-base font-bold text-[var(--theme-emphasis)] dark:text-white mb-5 leading-relaxed">
                 {currentQuestion?.question}
               </p>
 
               <div className="space-y-2.5">
                 {currentQuestion?.options.map((opt) => {
-                  let borderClass = 'border-slate-200/60 dark:border-slate-600 hover:border-petroleum/30 dark:hover:border-petroleum/50 hover:bg-petroleum/5 dark:hover:bg-petroleum/10';
+                  let borderClass = 'border-slate-200/60 dark:border-slate-600 hover:border-[var(--theme-emphasis)]/30 dark:hover:border-[var(--theme-emphasis)]/50 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10';
                   let bgClass = 'bg-white dark:bg-slate-800';
                   let textClass = 'text-slate-700 dark:text-slate-200';
                   let iconWrapper = null;
@@ -318,7 +318,7 @@ export default function QuizPractice({ moduleId }) {
               </div>
               <button
                 onClick={handleNext}
-                className="group w-full py-3 rounded-xl bg-gradient-to-r from-petroleum to-corporate text-white text-sm font-semibold shadow-md shadow-petroleum/20 hover:shadow-lg hover:shadow-petroleum/30 transition-all duration-200 active:scale-[0.99] inline-flex items-center justify-center gap-2"
+                className="group w-full py-3 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white text-sm font-semibold shadow-md shadow-[var(--theme-emphasis)]/20 hover:shadow-lg hover:shadow-[var(--theme-emphasis)]/30 transition-all duration-200 active:scale-[0.99] inline-flex items-center justify-center gap-2"
               >
                 <span>{currentQ >= questions.length - 1 ? t('ialab.flashcards.practice_view_results') : t('ialab.flashcards.practice_next')}</span>
                 <div className="w-6 h-6 rounded-lg bg-white/15 flex items-center justify-center group-hover:translate-x-0.5 transition-transform duration-200">

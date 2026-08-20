@@ -335,20 +335,20 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
 
   return (
     <Fragment>
-      <div className="p-[1.5px] rounded-[2rem] bg-gradient-to-b from-petroleum/20 via-petroleum/10 to-corporate/5 relative overflow-hidden">
-        <div className="absolute -top-6 -right-6 w-40 h-40 bg-gradient-to-br from-petroleum/10 to-corporate/6 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-6 -left-6 w-40 h-40 bg-gradient-to-tr from-petroleum/8 to-corporate/6 rounded-full blur-3xl pointer-events-none" />
+      <div className="p-[1.5px] rounded-[2rem] theme-bg-primary-20 relative overflow-hidden">
+        <div className="absolute -top-6 -right-6 w-40 h-40 theme-bg-primary-10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-6 -left-6 w-40 h-40 theme-bg-primary-10 rounded-full blur-3xl pointer-events-none" />
         <motion.div
           whileHover={prefersReducedMotion ? {} : { scale: 1.01 }}
           transition={{ duration: 0.2 }}
-          className="relative z-10 bg-white rounded-[calc(2rem-1.5px)] shadow-sm p-4 md:p-6 overflow-hidden dark:bg-slate-800"
+          className="relative z-10 bg-[var(--theme-surface)] rounded-[calc(2rem-1.5px)] shadow-sm p-4 md:p-6 overflow-hidden"
         >
 
         {/* Contenido principal */}
         <div className="flex flex-col gap-3">
           {/* Badges superior derecha */}
           <div className="flex items-center justify-end gap-2">
-            <span className="px-3 py-1.5 bg-gradient-to-br from-petroleum/10 to-corporate/5 text-petroleum text-[10px] font-bold rounded-lg border border-petroleum/10 shadow-sm">
+            <span className="px-3 py-1.5 theme-bg-primary-10 theme-text-primary text-[10px] font-bold rounded-lg border theme-border-primary-20 shadow-sm">
               {moduleData.badge.duration}
             </span>
             {(() => {
@@ -385,17 +385,17 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                       <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                         <Icon
                           name="fa-chart-line"
-                          className="text-[10px] text-petroleum"
+                          className="text-[10px] theme-text-primary"
                         />
                         {t("ialab.module.progress_title")}
                       </span>
-                      <span className="text-[10px] font-bold text-petroleum">
+                      <span className="text-[10px] font-bold theme-text-primary">
                         {viewed}/{total} &middot; {pct}%
                       </span>
                     </div>
                     <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-500 ease-out"
+                        className="h-full theme-bg-primary rounded-full transition-all duration-500 ease-out"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -443,17 +443,17 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
             </div>
         </div>
 
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate rounded-t-[calc(2rem-1.5px)]" />
+        <div className="absolute top-0 left-0 right-0 h-1.5 theme-bg-primary rounded-t-[calc(2rem-1.5px)]" />
       </motion.div>
-      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-petroleum/5 via-transparent to-corporate/5 rounded-t-[2rem] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-corporate/5 via-transparent to-petroleum/5 rounded-b-[2rem] pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-[1.5px] theme-bg-primary-10 rounded-t-[2rem] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-[1.5px] theme-bg-primary-10 rounded-b-[2rem] pointer-events-none" />
     </div>
 
       {/* Modal de Recursos */}
       <Suspense
         fallback={
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-            <div className="w-8 h-8 border-2 border-petroleum/30 border-t-petroleum rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 theme-border-primary-30 border-t-[var(--theme-primary)] rounded-full animate-spin" />
           </div>
         }
       >

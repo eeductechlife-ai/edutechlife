@@ -249,7 +249,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
         <button
           onClick={handleDownloadPDF}
           disabled={isDownloading}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-petroleum rounded-lg shadow-sm hover:shadow hover:border-l-corporate hover:bg-slate-50 transition-all duration-300 text-xs font-semibold text-slate-800 disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[var(--theme-emphasis)] rounded-lg shadow-sm hover:shadow hover:border-l-[var(--theme-primary)] hover:bg-slate-50 transition-all duration-300 text-xs font-semibold text-slate-800 disabled:opacity-50"
         >
           {isDownloading ? (
             <>
@@ -293,13 +293,13 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
 
         {/* Watermark */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
-          <span className="font-black text-[200px] md:text-[250px] opacity-[0.03] text-petroleum">
+          <span className="font-black text-[200px] md:text-[250px] opacity-[0.03] text-[var(--theme-emphasis)]">
             E
           </span>
         </div>
 
         {/* Header gradient */}
-        <div className="relative z-10 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate px-6 py-3.5">
+        <div className="relative z-10 bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] px-6 py-3.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <img
@@ -324,7 +324,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-3xl md:text-4xl font-black tracking-[0.2em] text-petroleum"
+            className="text-3xl md:text-4xl font-black tracking-[0.2em] text-[var(--theme-emphasis)]"
           >
             {t('ialab.certificate_preview.certificate_title_react')}
           </motion.h2>
@@ -334,7 +334,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="w-24 h-0.5 mx-auto my-3 bg-gradient-to-r from-transparent via-corporate to-transparent"
+            className="w-24 h-0.5 mx-auto my-3 bg-gradient-to-r from-transparent via-[var(--theme-primary)] to-transparent"
           />
 
           {/* Course name */}
@@ -357,7 +357,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            className="text-2xl md:text-3xl font-bold mb-3 px-4 text-petroleum"
+            className="text-2xl md:text-3xl font-bold mb-3 px-4 text-[var(--theme-emphasis)]"
           >
             {displayName}
           </motion.h3>
@@ -367,7 +367,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="w-48 h-0.5 mx-auto mb-6 bg-gradient-to-r from-transparent via-petroleum/30 to-transparent"
+            className="w-48 h-0.5 mx-auto mb-6 bg-gradient-to-r from-transparent via-[var(--theme-emphasis)]/30 to-transparent"
           />
 
           {/* Description */}
@@ -394,7 +394,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
               <p className="text-[10px] uppercase tracking-wider mb-1 text-slate-400">
                 {t('ialab.certificate_preview.issue_date')}
               </p>
-              <p className="text-sm font-bold text-petroleum">
+              <p className="text-sm font-bold text-[var(--theme-emphasis)]">
                 {displayDate}
               </p>
             </div>
@@ -403,7 +403,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
               <p className="text-[10px] uppercase tracking-wider mb-1 text-slate-400">
                 {t('ialab.certificate_preview.cert_number')}
               </p>
-              <p className="text-sm font-bold font-mono text-petroleum">
+              <p className="text-sm font-bold font-mono text-[var(--theme-emphasis)]">
                 {displayCertNumber}
               </p>
             </div>
@@ -420,10 +420,10 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
               >
                 {/* Inner circle */}
                 <div className="w-14 h-14 rounded-full border-2 border-white/50 flex flex-col items-center justify-center">
-                  <span className="text-[8px] font-bold leading-tight text-petroleum">
+                  <span className="text-[8px] font-bold leading-tight text-[var(--theme-emphasis)]">
                     {t('ialab.certificate_preview.verified')}
                   </span>
-                  <span className="text-[7px] font-semibold leading-tight" style={{ color: 'var(--color-petroleum-dark)' }}>
+                  <span className="text-[7px] font-semibold leading-tight" style={{ color: 'var(--color-[var(--theme-emphasis)]-dark)' }}>
                     EDUTECHLIFE
                   </span>
                 </div>
@@ -440,7 +440,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
         </div>
 
         {/* Bottom bar */}
-        <div className="relative z-10 bg-gradient-to-r from-petroleum via-petroleum-dark to-corporate px-6 py-2.5 text-center">
+        <div className="relative z-10 bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] px-6 py-2.5 text-center">
           <p className="text-[10px] text-white/70 tracking-wide">
             www.edutechlife.com  •  {t('ialab.certificate_preview.verified')}
           </p>
@@ -458,7 +458,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
           whileTap={{ scale: 0.98 }}
           onClick={handleDownloadPDF}
           disabled={isDownloading}
-          className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-petroleum to-corporate text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50"
         >
           {isDownloading ? (
             <>

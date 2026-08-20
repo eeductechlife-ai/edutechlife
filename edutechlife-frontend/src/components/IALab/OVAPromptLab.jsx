@@ -43,12 +43,12 @@ import { stopSpeech } from '../../utils/speech';
 const Logo = () => (
   <div className="flex items-center gap-2 select-none group cursor-pointer">
     <div className="relative w-9 h-9 flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-tr from-petroleum to-corporate rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-xl rotate-3 shadow-md group-hover:rotate-0 transition-transform"></div>
       <BrainCircuit className="w-5 h-5 text-white relative z-10" />
     </div>
     <div className="text-xl tracking-tighter flex items-center lowercase">
-      <span className="font-[900] text-petroleum">edutech</span>
-      <span className="font-[400] text-corporate">life</span>
+      <span className="font-[900] text-[var(--theme-emphasis)]">edutech</span>
+      <span className="font-[400] text-[var(--theme-primary)]">life</span>
     </div>
   </div>
 );
@@ -62,7 +62,7 @@ const PromptAnatomy = () => {
       k: 'rol',
       label: t('ova.promptlab.part_rol'),
       icon: <User className="w-5 h-5" />,
-      color: 'bg-petroleum',
+      color: 'bg-[var(--theme-emphasis)]',
       desc: t('ova.promptlab.part_rol_desc'),
       example: t('ova.promptlab.part_rol_example'),
     },
@@ -70,7 +70,7 @@ const PromptAnatomy = () => {
       k: 'ctx',
       label: t('ova.promptlab.part_ctx'),
       icon: <Layers className="w-5 h-5" />,
-      color: 'bg-corporate',
+      color: 'bg-[var(--theme-primary)]',
       desc: t('ova.promptlab.part_ctx_desc'),
       example: t('ova.promptlab.part_ctx_example'),
     },
@@ -103,7 +103,7 @@ const PromptAnatomy = () => {
             key={p.k}
             onClick={() => setSelected(selected?.k === p.k ? null : p)}
             className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider text-white shadow-sm transition-all ${p.color} ${
-              selected?.k === p.k ? 'ring-2 ring-offset-2 ring-offset-white dark:ring-offset-slate-800 ring-corporate scale-110' : 'opacity-80 hover:opacity-100'
+              selected?.k === p.k ? 'ring-2 ring-offset-2 ring-offset-white dark:ring-offset-slate-800 ring-[var(--theme-primary)] scale-110' : 'opacity-80 hover:opacity-100'
             }`}
           >
             {p.label}
@@ -117,14 +117,14 @@ const PromptAnatomy = () => {
             onClick={() => setSelected(selected?.k === p.k ? null : p)}
             className={`p-4 rounded-xl border-2 transition-all text-left ${
               selected?.k === p.k
-                ? 'border-corporate bg-blue-50 dark:bg-slate-700 shadow-md'
+                ? 'border-[var(--theme-primary)] bg-blue-50 dark:bg-slate-700 shadow-md'
                 : 'bg-white dark:bg-slate-800 border-slate-50 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600'
             }`}
           >
             <div className="flex items-center gap-3">
               <div className={`p-2 ${p.color} text-white rounded-lg`}>{p.icon}</div>
               <div>
-                <h5 className="font-[900] text-petroleum text-xs uppercase leading-none mb-1">{p.label}</h5>
+                <h5 className="font-[900] text-[var(--theme-emphasis)] text-xs uppercase leading-none mb-1">{p.label}</h5>
                 <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed">{p.desc}</p>
               </div>
             </div>
@@ -132,8 +132,8 @@ const PromptAnatomy = () => {
         ))}
       </div>
       {selected && (
-        <div className="p-4 bg-petroleum text-white rounded-xl">
-          <span className="text-corporate font-black uppercase text-xs mb-1 block">{t('ova.promptlab.anatomy_example_label')}: {selected.label}</span>
+        <div className="p-4 bg-[var(--theme-emphasis)] text-white rounded-xl">
+          <span className="text-[var(--theme-primary)] font-black uppercase text-xs mb-1 block">{t('ova.promptlab.anatomy_example_label')}: {selected.label}</span>
           <p className="text-sm text-white italic">{selected.example}</p>
         </div>
       )}
@@ -149,14 +149,14 @@ const PromptTechniques = () => {
     {
       k: 'zeroshot',
       label: t('ova.promptlab.tech_zeroshot'),
-      color: 'bg-petroleum',
+      color: 'bg-[var(--theme-emphasis)]',
       desc: t('ova.promptlab.tech_zeroshot_desc'),
       example: t('ova.promptlab.tech_zeroshot_example'),
     },
     {
       k: 'fewshot',
       label: t('ova.promptlab.tech_fewshot'),
-      color: 'bg-corporate',
+      color: 'bg-[var(--theme-primary)]',
       desc: t('ova.promptlab.tech_fewshot_desc'),
       example: t('ova.promptlab.tech_fewshot_example'),
     },
@@ -188,7 +188,7 @@ const PromptTechniques = () => {
             onClick={() => setActive(active === tech.k ? null : tech.k)}
             className={`p-4 rounded-xl border-2 transition-all text-left ${
               active === tech.k
-                ? 'border-corporate bg-blue-50 dark:bg-slate-700 shadow-md'
+                ? 'border-[var(--theme-primary)] bg-blue-50 dark:bg-slate-700 shadow-md'
                 : 'bg-white dark:bg-slate-800 border-slate-50 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600'
             }`}
           >
@@ -200,8 +200,8 @@ const PromptTechniques = () => {
         ))}
       </div>
       {active && (
-        <div className="p-4 bg-petroleum text-white rounded-xl">
-          <span className="text-corporate font-black uppercase text-xs mb-1 block">{t('ova.promptlab.tech_example_label')}</span>
+        <div className="p-4 bg-[var(--theme-emphasis)] text-white rounded-xl">
+          <span className="text-[var(--theme-primary)] font-black uppercase text-xs mb-1 block">{t('ova.promptlab.tech_example_label')}</span>
           <p className="text-sm text-white font-mono italic">{techniques.find((tech) => tech.k === active)?.example}</p>
         </div>
       )}
@@ -266,7 +266,7 @@ const ChallengeScreen = ({ onSuccess }) => {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md">
             <Trophy className="w-5 h-5 text-white" />
           </div>
-          <h4 className="text-petroleum dark:text-white font-[900] text-lg tracking-tight lowercase">{t('ova.promptlab.challenge_title')}</h4>
+          <h4 className="text-[var(--theme-emphasis)] dark:text-white font-[900] text-lg tracking-tight lowercase">{t('ova.promptlab.challenge_title')}</h4>
         </div>
         <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium">{t('ova.promptlab.challenge_goal')}</p>
       </div>
@@ -312,7 +312,7 @@ const Conclusion = () => {
       <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-5 shadow-xl border-4 border-white dark:border-slate-700">
         <CheckCircle2 className="w-10 h-10 text-white" />
       </div>
-      <h2 className="text-3xl font-black text-petroleum dark:text-white mb-2 uppercase tracking-tighter">
+      <h2 className="text-3xl font-black text-[var(--theme-emphasis)] dark:text-white mb-2 uppercase tracking-tighter">
         {t('ova.promptlab.conclusion_title')}
       </h2>
       <p className="text-base text-slate-600 dark:text-slate-300 font-bold mb-4 leading-relaxed">
@@ -449,9 +449,9 @@ function OVAPromptLab({ onComplete, onClose }) {
         <Logo />
         <div className="flex items-center gap-4">
           {screen !== 'welcome' && (
-            <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-corporate/20">
-              <Star className="text-corporate fill-current" size={14} />
-              <span className="font-bold text-petroleum text-xs">
+            <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-[var(--theme-primary)]/20">
+              <Star className="text-[var(--theme-primary)] fill-current" size={14} />
+              <span className="font-bold text-[var(--theme-emphasis)] text-xs">
                 {nav.filter((id) => completed.includes(id)).length}/{nav.length - 1}
               </span>
             </div>
@@ -461,7 +461,7 @@ function OVAPromptLab({ onComplete, onClose }) {
             aria-label="Menú de navegación"
             className="min-w-[44px] min-h-[44px] p-2.5 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-all border border-slate-100 dark:border-slate-700"
           >
-            <Menu className="w-5 h-5 text-petroleum" />
+            <Menu className="w-5 h-5 text-[var(--theme-emphasis)]" />
           </button>
         </div>
       </header>
@@ -470,10 +470,10 @@ function OVAPromptLab({ onComplete, onClose }) {
         <div className="w-full bg-white dark:bg-slate-800 rounded-2xl shadow-md p-4 md:p-6 relative overflow-hidden border border-slate-50 dark:border-slate-700">
           {screen.startsWith('m') && (
             <div className="mb-4 border-b border-slate-50 dark:border-slate-700 pb-3">
-              <div className="flex items-center gap-1.5 text-corporate font-[900] text-[10px] tracking-[0.3em] uppercase">
+              <div className="flex items-center gap-1.5 text-[var(--theme-primary)] font-[900] text-[10px] tracking-[0.3em] uppercase">
                 <Sparkles className="w-3 h-3" /> {t('ova.promptlab.section_label')}
               </div>
-              <h1 className="text-lg md:text-xl font-[900] text-petroleum dark:text-white tracking-tighter leading-tight">
+              <h1 className="text-lg md:text-xl font-[900] text-[var(--theme-emphasis)] dark:text-white tracking-tighter leading-tight">
                 {t(`ova.promptlab.screen_${screen}`)}
               </h1>
             </div>
@@ -491,7 +491,7 @@ function OVAPromptLab({ onComplete, onClose }) {
                 stopSpeech();
               }}
               aria-label={t('ova.promptlab.nav_prev')}
-              className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-petroleum dark:hover:text-corporate rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700"
+              className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-[var(--theme-emphasis)] dark:hover:text-[var(--theme-primary)] rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700"
               disabled={curIdx <= 1}
             >
               <ChevronLeft className="w-5 h-5" />
@@ -502,7 +502,7 @@ function OVAPromptLab({ onComplete, onClose }) {
                   key={i}
                   aria-hidden="true"
                   className={`h-1.5 rounded-full transition-all duration-700 ${
-                    i + 1 === curIdx ? 'w-8 bg-petroleum' : completed.includes(nav[i + 1]) ? 'w-2 bg-corporate' : 'w-2 bg-slate-200 dark:bg-slate-600'
+                    i + 1 === curIdx ? 'w-8 bg-[var(--theme-emphasis)]' : completed.includes(nav[i + 1]) ? 'w-2 bg-[var(--theme-primary)]' : 'w-2 bg-slate-200 dark:bg-slate-600'
                   }`}
                 />
               ))}
@@ -516,7 +516,7 @@ function OVAPromptLab({ onComplete, onClose }) {
                   : nextScreen
               }
               className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${
-                isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-petroleum to-corporate text-white'
+                isLastScreen ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white'
               }`}
             >
               {isLastScreen ? t('ova.promptlab.nav_finish') : t('ova.promptlab.nav_next')} <ArrowRightCircle className="w-4 h-4" />
@@ -546,8 +546,8 @@ function OVAPromptLab({ onComplete, onClose }) {
           >
             <div className="flex items-center justify-between border-b-2 border-slate-50 dark:border-slate-700 pb-4">
               <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.3em] uppercase">{t('ova.promptlab.menu_title')}</h3>
-              <div className="flex items-center gap-1.5 text-[10px] font-black text-petroleum">
-                <Star className="w-3 h-3 text-corporate fill-current" />
+              <div className="flex items-center gap-1.5 text-[10px] font-black text-[var(--theme-emphasis)]">
+                <Star className="w-3 h-3 text-[var(--theme-primary)] fill-current" />
                 {completed.filter((id) => id.startsWith('m')).length}/{nav.filter((id) => id.startsWith('m')).length}
               </div>
             </div>
@@ -561,26 +561,26 @@ function OVAPromptLab({ onComplete, onClose }) {
                     key={id}
                     onClick={() => goToScreen(id)}
                     className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${
-                      isCurrent ? 'bg-petroleum text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
+                      isCurrent ? 'bg-[var(--theme-emphasis)] text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${
-                          isCompleted ? 'bg-corporate text-white' : isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'
+                          isCompleted ? 'bg-[var(--theme-primary)] text-white' : isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'
                         }`}
                       >
                         {stepNum}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className={`uppercase tracking-wider ${isCurrent ? 'text-white' : isCompleted ? 'text-petroleum dark:text-corporate' : 'text-slate-500 dark:text-slate-400'}`}>
+                        <div className={`uppercase tracking-wider ${isCurrent ? 'text-white' : isCompleted ? 'text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]' : 'text-slate-500 dark:text-slate-400'}`}>
                           {id === 'welcome' ? t('ova.promptlab.menu_welcome') : t(`ova.promptlab.screen_${id}`)}
                         </div>
                         <div className="mt-1.5 w-full h-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                          <div className={`h-full rounded-full transition-all duration-700 ${isCompleted ? 'w-full bg-corporate' : isCurrent ? 'w-1/3 bg-petroleum' : 'w-0'}`} />
+                          <div className={`h-full rounded-full transition-all duration-700 ${isCompleted ? 'w-full bg-[var(--theme-primary)]' : isCurrent ? 'w-1/3 bg-[var(--theme-emphasis)]' : 'w-0'}`} />
                         </div>
                       </div>
-                      {isCompleted && <CheckCircle2 className="w-4 h-4 text-corporate shrink-0" />}
+                      {isCompleted && <CheckCircle2 className="w-4 h-4 text-[var(--theme-primary)] shrink-0" />}
                     </div>
                   </button>
                 );

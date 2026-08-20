@@ -57,7 +57,7 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       {/* Perfil compacto */}
       <div className="px-3 py-3 border-b border-slate-100 dark:border-slate-700">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-petroleum to-petroleum-dark flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
             {user?.full_name ? user.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
           </div>
           <div className="flex-1 min-w-0">
@@ -70,54 +70,54 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
           </div>
         </div>
         <div className="mt-2 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-700"
+          <div className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full transition-all duration-700"
                style={{ width: `${Math.min(courseProgress, 100)}%` }} />
         </div>
       </div>
 
       {/* UNDERMENU - Acciones de usuario */}
       <div className="px-3 py-3">
-        <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-corporate mb-2 flex items-center gap-1.5">
-          <Icon name="fa-user" className="text-corporate text-xs" />
+        <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-[var(--theme-primary)] mb-2 flex items-center gap-1.5">
+          <Icon name="fa-user" className="text-[var(--theme-primary)] text-xs" />
           {t('mobile_menu.undermenu')}
         </h3>
         <div className="space-y-0.5">
           <button onClick={onOpenProfile}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
-            <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-user" className="text-xs text-petroleum dark:text-petroleum" />
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+            <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
+              <Icon name="fa-user" className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]" />
             </div>
             {t('mobile_menu.my_profile')}
           </button>
 
           <button onClick={onOpenHistory}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
-            <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-chart-line" className="text-xs text-petroleum dark:text-petroleum" />
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+            <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
+              <Icon name="fa-chart-line" className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]" />
             </div>
             {t('mobile_menu.my_history')}
           </button>
 
           <button onClick={() => setShowStudyPlanner(true)}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
-            <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-calendar" className="text-xs text-petroleum dark:text-petroleum" />
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+            <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
+              <Icon name="fa-calendar" className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]" />
             </div>
             {t('mobile_menu.study_plan')}
           </button>
 
           <button onClick={() => { closeMobileMenu(); setShowCertificateModal(true); }}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
-            <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-certificate" className="text-xs text-petroleum dark:text-petroleum" />
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+            <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
+              <Icon name="fa-certificate" className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]" />
             </div>
             {t('mobile_menu.certificates')}
           </button>
 
           <button onClick={onOpenHelp}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
-            <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-question-circle" className="text-xs text-petroleum dark:text-petroleum" />
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+            <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
+              <Icon name="fa-question-circle" className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]" />
             </div>
             {t('mobile_menu.help')}
           </button>
@@ -129,8 +129,8 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
 
       {/* MODULOS DEL CURSO */}
       <div className="px-3 py-3">
-        <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-corporate mb-2 flex items-center gap-1.5">
-          <Icon name="fa-layer-group" className="text-corporate text-xs" />
+        <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-[var(--theme-primary)] mb-2 flex items-center gap-1.5">
+          <Icon name="fa-layer-group" className="text-[var(--theme-primary)] text-xs" />
           {t('mobile_menu.modules')}
         </h3>
         <div className="space-y-0.5">
@@ -161,21 +161,21 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
           <>
             <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
             <div className="px-3 py-3 space-y-2">
-              <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-corporate flex items-center gap-1.5">
-                <Icon name="fa-award" className="text-corporate text-xs" /> {t('mobile_menu.badges')}
+              <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-[var(--theme-primary)] flex items-center gap-1.5">
+                <Icon name="fa-award" className="text-[var(--theme-primary)] text-xs" /> {t('mobile_menu.badges')}
               </h3>
               <div className="flex items-center justify-between px-1">
                 <span className="text-xs text-slate-500">{t('mobile_menu.badges_earned', { earned: badgesSummary.earned, total: badgesSummary.total })}</span>
-                <span className="text-xs font-semibold text-corporate">{Math.round((badgesSummary.earned / badgesSummary.total) * 100)}%</span>
+                <span className="text-xs font-semibold text-[var(--theme-primary)]">{Math.round((badgesSummary.earned / badgesSummary.total) * 100)}%</span>
               </div>
               <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-700"
+                <div className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full transition-all duration-700"
                      style={{ width: `${(badgesSummary.earned / badgesSummary.total) * 100}%` }} />
               </div>
               {courseCompleted && (
                 <button onClick={() => { setShowCertificateModal(true); closeMobileMenu(); }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-petroleum dark:text-petroleum bg-petroleum/5 hover:bg-petroleum/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 min-h-[44px]">
-                  <Icon name="fa-certificate" className="text-corporate text-sm" /> {t('mobile_menu.view_certificate')}
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)] bg-[var(--theme-emphasis)]/5 hover:bg-[var(--theme-emphasis)]/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/30 min-h-[44px]">
+                  <Icon name="fa-certificate" className="text-[var(--theme-primary)] text-sm" /> {t('mobile_menu.view_certificate')}
                 </button>
               )}
             </div>
@@ -187,12 +187,12 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
       <div className="px-3 py-3">
         <button onClick={toggleDarkMode}
-          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/30 min-h-[44px]">
+          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/30 min-h-[44px]">
           <span className="flex items-center gap-2.5">
             <Icon name={isDarkMode ? 'fa-sun' : 'fa-moon'} className={`text-sm ${isDarkMode ? 'text-amber-400' : 'text-slate-500'}`} />
             {t('mobile_menu.theme_mode', { mode: isDarkMode ? t('mobile_menu.theme_light') : t('mobile_menu.theme_dark') })}
           </span>
-          <div className={`w-9 h-5 rounded-full transition-colors duration-200 ${isDarkMode ? 'bg-petroleum' : 'bg-slate-300'} relative`}>
+          <div className={`w-9 h-5 rounded-full transition-colors duration-200 ${isDarkMode ? 'bg-[var(--theme-emphasis)]' : 'bg-slate-300'} relative`}>
             <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${isDarkMode ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
           </div>
         </button>
@@ -202,9 +202,9 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
       <div className="px-3 py-3">
         <button onClick={handleCloseSection}
-          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-petroleum dark:text-petroleum hover:bg-petroleum/5 dark:hover:bg-petroleum/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 min-h-[44px]">
-          <div className="w-7 h-7 rounded-lg bg-petroleum/8 dark:bg-petroleum/20 flex items-center justify-center flex-shrink-0">
-            <Icon name="fa-sign-out-alt" className="text-xs text-petroleum" />
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)] hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+          <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
+            <Icon name="fa-sign-out-alt" className="text-xs text-[var(--theme-emphasis)]" />
           </div>
           {t('mobile_menu.close_section')}
         </button>
@@ -220,8 +220,8 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
           >
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-700">
               <div className="flex items-center gap-2">
-                <Icon name="fa-calendar" className="text-petroleum text-sm" />
-                <h2 className="text-sm font-bold text-petroleum">{t('ialab.study_planner.title')}</h2>
+                <Icon name="fa-calendar" className="text-[var(--theme-emphasis)] text-sm" />
+                <h2 className="text-sm font-bold text-[var(--theme-emphasis)]">{t('ialab.study_planner.title')}</h2>
               </div>
               <button onClick={() => setShowStudyPlanner(false)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label={t('ialab.study_planner.close_aria')}>
                 <Icon name="fa-times" className="text-slate-600 dark:text-slate-400 text-sm" />

@@ -29,13 +29,13 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
     <div className="w-full h-full flex flex-col bg-white dark:bg-slate-800 rounded-2xl overflow-auto">
       <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-800 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-petroleum to-corporate shadow-sm flex items-center justify-center">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] shadow-sm flex items-center justify-center">
             <Icon name="fa-image" className="text-white w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-semibold text-petroleum">{resource.title}</h4>
+            <h4 className="font-semibold text-[var(--theme-emphasis)]">{resource.title}</h4>
             {resource.interactive && (
-              <span className="text-sm text-petroleum font-medium">{t('ialab.viewer_modal.interactive_label')}</span>
+              <span className="text-sm text-[var(--theme-emphasis)] font-medium">{t('ialab.viewer_modal.interactive_label')}</span>
             )}
           </div>
         </div>
@@ -45,7 +45,7 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
           <a
             href={resource.url}
             download
-            className="px-4 py-2 bg-gradient-to-r from-petroleum to-corporate text-white rounded-lg hover:from-corporate-deep hover:to-corporate-darker transition-colors duration-200 flex items-center gap-2 font-medium"
+            className="px-4 py-2 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-lg hover:from-[var(--theme-primary)]-deep hover:to-[var(--theme-primary)]-darker transition-colors duration-200 flex items-center gap-2 font-medium"
           >
             <Icon name="fa-download" className="w-4 h-4" />
             {t('ialab.viewer_modal.download')}
@@ -57,7 +57,7 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
       <div className="flex-1 relative bg-transparent">
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-petroleum/20 border-t-petroleum rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-[var(--theme-emphasis)]/20 border-t-[var(--theme-emphasis)] rounded-full animate-spin"></div>
           </div>
         )}
 
@@ -75,8 +75,8 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
       </div>
 
       {resource.description && (
-        <div className="p-4 bg-petroleum/5">
-          <p className="text-sm text-petroleum/80">{resource.description}</p>
+        <div className="p-4 bg-[var(--theme-emphasis)]/5">
+          <p className="text-sm text-[var(--theme-emphasis)]/80">{resource.description}</p>
         </div>
       )}
     </div>

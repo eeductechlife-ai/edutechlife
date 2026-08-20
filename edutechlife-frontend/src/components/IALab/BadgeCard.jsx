@@ -86,9 +86,9 @@ const BadgeCard = ({
       whileHover={prefersReducedMotion ? {} : { scale: 1.03, y: -2 }}
       whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
       onClick={onClick}
-      className={`relative flex flex-col items-center p-4 rounded-xl border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-petroleum/40 ${
+      className={`relative flex flex-col items-center p-4 rounded-xl border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 ${
         earned
-          ? "bg-white/80 backdrop-blur-sm dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:shadow-corporate/5"
+          ? "bg-white/80 backdrop-blur-sm dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:shadow-[var(--theme-primary)]/5"
           : "bg-slate-50 dark:bg-slate-800/50 border-slate-200/60 dark:border-slate-700/50 opacity-60 grayscale"
       }`}
       aria-label={t(earned ? "badge.earned_aria" : "badge.locked_aria", {

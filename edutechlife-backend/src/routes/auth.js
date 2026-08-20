@@ -458,12 +458,15 @@ router.get('/callback', async (req, res) => {
 
     let authUser = null;
     try {
-      // getUserByEmail es O(1) y sin límite de paginación; listUsers con
-      // perPage 1000 se rompe al superar pocos miles de cuentas.
-      const { data: byEmail } = await supabase.auth.admin.getUserByEmail(normalizedEmail);
-      authUser = byEmail?.user || null;
+      // Use listUsers with pagination to find user by email
+      const { data: users, error: listError } = await supabase.auth.admin.listUsers({
+        perPage: 1000,
+      });
+      if (!listError && users?.users) {
+        authUser = users.users.find(u => u.email?.toLowerCase() === normalizedEmail);
+      }
     } catch (e) {
-      console.error('getUserByEmail failed:', e.message);
+      console.error('listUsers failed:', e.message);
     }
 
     let userId;
@@ -485,15 +488,18 @@ router.get('/callback', async (req, res) => {
         if (authError.message?.includes('email_exists')) {
           console.warn('User already exists, retrieving ID:', normalizedEmail);
           try {
-            const { data: retry } = await supabase.auth.admin.getUserByEmail(normalizedEmail);
-            if (retry?.user?.id) {
-              userId = retry.user.id;
+            const { data: users, error: listError } = await supabase.auth.admin.listUsers({
+              perPage: 1000,
+            });
+            const existingUser = users?.users?.find(u => u.email?.toLowerCase() === normalizedEmail);
+            if (existingUser?.id) {
+              userId = existingUser.id;
             } else {
               console.error('Could not retrieve existing user:', normalizedEmail);
               return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
             }
           } catch (retryErr) {
-            console.error('Retry getUserByEmail failed:', retryErr.message);
+            console.error('Retry listUsers failed:', retryErr.message);
             return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
           }
         } else {
@@ -604,9 +610,9 @@ router.get('/oauth-demo/:provider', async (req, res) => {
       if (authError) {
         // If user already exists in Auth but not in users table, just get the user
         if (authError.code === 'email_exists') {
-          const { data: byEmail, error: lookupError } = await supabase.auth.admin.getUserByEmail(demoEmail);
-          const authUser = byEmail?.user || null;
-          if (lookupError) console.error('getUserByEmail failed:', lookupError.message);
+          const { data: users, error: lookupError } = await supabase.auth.admin.listUsers({ perPage: 1000 });
+          const authUser = users?.users?.find(u => u.email?.toLowerCase() === demoEmail.toLowerCase()) || null;
+          if (lookupError) console.error('listUsers failed:', lookupError.message);
 
           if (authUser) {
             userId = authUser.id;
@@ -654,19 +660,21 @@ router.get('/oauth-demo/:provider', async (req, res) => {
       }
     }
 
-    // Generate JWT using temporary password
-    const tempPassword = crypto.randomBytes(16).toString('hex');
-
-    // Update user with temp password
-    await supabase.auth.admin.updateUserById(userId, {
-      password: tempPassword,
+    // Generate magic link for session (same approach as OAuth callback)
+    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+      type: 'magiclink',
+      email: demoEmail,
     });
 
-    // Sign in to get JWT — throwaway client so the shared service client never
-    // holds a user session (signInWithPassword pins one, breaking data queries)
-    const { data: signInData, error: signInError } = await createSessionClient().auth.signInWithPassword({
-      email: demoEmail,
-      password: tempPassword,
+    if (linkError || !linkData?.properties?.hashed_token) {
+      console.error('Demo generate link error:', linkError);
+      return res.status(400).json({ error: 'Failed to create session' });
+    }
+
+    // Verify OTP to get session
+    const { data: signInData, error: signInError } = await supabase.auth.verifyOtp({
+      token_hash: linkData.properties.hashed_token,
+      type: 'email',
     });
 
     if (signInError || !signInData?.session) {

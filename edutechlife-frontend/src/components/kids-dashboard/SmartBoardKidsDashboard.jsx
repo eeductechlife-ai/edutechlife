@@ -5,6 +5,7 @@ import { API_BASE_URL } from "../../config/api";
 import { signOutUser } from "../../hooks/useAuthIdentity";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
+import useExamReminders from "../../hooks/useExamReminders";
 import "../../styles/a11y.css";
 import ParticlesBackground from "./ParticlesBackground";
 import DaniTutorChat from "./daniTutorChat";
@@ -21,6 +22,9 @@ import TopBar from "./components/TopBar";
 const SmartBoardKidsDashboard = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("inicio");
+  // Background: watches upcoming exams and posts in-app reminders at
+  // T-24h / T-3h / T-30min. Silent when there is no timetable/exams.
+  useExamReminders();
   useEffect(() => {
     try {
       localStorage.setItem("edutechlife_current_tab", activeTab);
@@ -344,77 +348,6 @@ const SmartBoardKidsDashboard = () => {
         {/* Onboarding Guide - First Time User Experience */}
         <OnboardingGuide />
 
-        {/* Data Rights - Floating Action (GDPR-K / COPPA) */}
-        <div className="fixed bottom-20 md:bottom-6 right-6 z-30 flex flex-col gap-2">
-          <motion.button
-            onClick={async () => {
-              if (
-                !window.confirm(
-                  "¿Estás seguro de que quieres eliminar todos tus datos? Esta acción no se puede deshacer.",
-                )
-              ) {
-                return;
-              }
-
-              // La identidad la determina el servidor a partir del token, no el body.
-              const token = sessionStorage.getItem("auth_token");
-              if (!token) {
-                alert(
-                  "Debes iniciar sesión para eliminar tus datos. Vuelve a entrar e inténtalo de nuevo.",
-                );
-                return;
-              }
-
-              try {
-                const res = await fetch(
-                  `${API_BASE_URL}/api/smartboard/delete-user-data`,
-                  {
-                    method: "DELETE",
-                    headers: {
-                      "Content-Type": "application/json",
-                      Authorization: `Bearer ${token}`,
-                    },
-                  },
-                );
-
-                // Solo limpiamos el dispositivo si el servidor confirmó el borrado.
-                if (res.ok) {
-                  localStorage.clear();
-                  window.dispatchEvent(new CustomEvent("auth:signout"));
-                  navigate("/", { replace: true });
-                } else {
-                  alert(
-                    "No pudimos eliminar tus datos en el servidor. Intenta de nuevo o contacta soporte.",
-                  );
-                }
-              } catch {
-                alert(
-                  "No pudimos conectar con el servidor. Revisa tu conexión e intenta de nuevo.",
-                );
-              }
-            }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label="Eliminar mis datos personales"
-            className="min-w-[44px] min-h-[44px] px-3 py-2 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/40 hover:text-red-200 text-[10px] font-semibold backdrop-blur-sm border border-red-500/30 transition-all flex items-center gap-1.5"
-            title="Eliminar mis datos (GDPR / COPPA)"
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              aria-hidden="true"
-            >
-              <polyline points="3 6 5 6 21 6" />
-              <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" />
-              <path d="M10 3h4a1 1 0 011 1v2H9V4a1 1 0 011-1z" />
-            </svg>
-            Eliminar mis datos
-          </motion.button>
-        </div>
 
         {/* Dani Chat Modal - Full Premium Experience */}
         <AnimatePresence>

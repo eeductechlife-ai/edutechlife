@@ -25,6 +25,9 @@ import { usePullToRefresh } from "../../hooks/IALab/usePullToRefresh";
 import { useSwipeNavigation } from "../../hooks/IALab/useSwipeNavigation";
 import { useCelebrationEffects } from "../../hooks/IALab/useCelebrationEffects";
 import "./IALab.css";
+import "./themes/themes.css";
+import ThemeProvider from "./themes/ThemeProvider";
+import { mapModuleToTheme } from "./themes/themeMap";
 import MobileMenuOverlay from "./shared/MobileMenuOverlay";
 import TabPills from "./shared/TabPills";
 import AnimatedSection from "./shared/AnimatedSection";
@@ -334,13 +337,16 @@ const IALabContent = memo(function () {
   });
 
   return (
-    <div
-      data-testid="ialab-container"
-      className={`flex flex-col h-dvh bg-bg-light touch-manipulation${isDarkMode ? " dark" : ""}`}
-      onTouchStart={swipeStart}
-      onTouchMove={swipeMove}
-      onTouchEnd={swipeEnd}
-    >
+    <ThemeProvider moduleId={activeMod}>
+      <div
+        data-testid="ialab-container"
+        data-theme={mapModuleToTheme(activeMod)}
+        className={`flex flex-col h-dvh touch-manipulation${isDarkMode ? " dark" : ""}`}
+        style={{ background: 'var(--theme-bg)', fontFamily: 'var(--theme-font)' }}
+        onTouchStart={swipeStart}
+        onTouchMove={swipeMove}
+        onTouchEnd={swipeEnd}
+      >
       <MobileHeader
         onOpenMobileMenu={() => setShowMobileMenu(true)}
         setIsSearchOpen={setIsSearchOpen}
@@ -399,7 +405,7 @@ const IALabContent = memo(function () {
               }}
             >
               <div
-                className={`w-6 h-6 rounded-full border-2 border-petroleum ${isRefreshing ? "animate-spin border-t-transparent" : ""}`}
+                className={`w-6 h-6 rounded-full border-2 border-[var(--theme-emphasis)] ${isRefreshing ? "animate-spin border-t-transparent" : ""}`}
                 style={{ transform: `rotate(${pullDistance * 3}deg)` }}
               />
             </div>
@@ -433,18 +439,18 @@ const IALabContent = memo(function () {
                   initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-petroleum/10 to-corporate/8 border border-petroleum/20 rounded-xl"
+                  className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/8 border border-[var(--theme-emphasis)]/20 rounded-xl"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-petroleum to-corporate flex items-center justify-center flex-shrink-0 shadow-sm">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 shadow-sm">
                     <span className="text-white text-sm">▶</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] font-bold text-petroleum uppercase tracking-wide">{t("ialab.continue_banner_lesson")}</p>
+                    <p className="text-[11px] font-bold text-[var(--theme-emphasis)] uppercase tracking-wide">{t("ialab.continue_banner_lesson")}</p>
                     <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{currentLessonTitle}</p>
                   </div>
                   <button
                     onClick={() => setViewSection("contenido")}
-                    className="flex-shrink-0 px-3 py-1.5 bg-petroleum text-white text-xs font-bold rounded-lg hover:bg-petroleum-dark transition-colors shadow-sm"
+                    className="flex-shrink-0 px-3 py-1.5 bg-[var(--theme-emphasis)] text-white text-xs font-bold rounded-lg hover:bg-[var(--theme-emphasis)]-dark transition-colors shadow-sm"
                   >
                     {t("ialab.continue_banner_cta")}
                   </button>
@@ -721,7 +727,8 @@ const IALabContent = memo(function () {
           removeToast={removeAchievementToast}
         />
       </Suspense>
-    </div>
+      </div>
+    </ThemeProvider>
   );
 });
 

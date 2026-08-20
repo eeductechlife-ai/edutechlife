@@ -28,7 +28,7 @@ const ACTIVITY_COLORS = {
   challenge: "bg-amber-500",
   video: "bg-sky-500",
   infographic: "bg-emerald-500",
-  session: "bg-petroleum",
+  session: "bg-[var(--theme-emphasis)]",
   community: "bg-rose-400",
   default: "bg-slate-400",
 };
@@ -254,8 +254,8 @@ const StudyCalendarSection = () => {
     >
       <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-700">
         <div className="flex items-center gap-2">
-          <Icon name="fa-calendar" className="text-petroleum text-sm" />
-          <h2 className="text-sm font-bold text-petroleum">
+          <Icon name="fa-calendar" className="theme-text-emphasis text-sm" />
+          <h2 className="text-sm font-bold theme-text-emphasis">
             {t("ialab.study_planner.title")}
           </h2>
         </div>
@@ -280,7 +280,7 @@ const StudyCalendarSection = () => {
               >
                 ‹
               </button>
-              <span className="text-xs font-bold text-petroleum dark:text-petroleum w-28 text-center">
+              <span className="text-xs font-bold theme-text-emphasis w-28 text-center">
                 {calendar.label}
               </span>
               <button
@@ -323,12 +323,12 @@ const StudyCalendarSection = () => {
                     d === null
                       ? "cursor-default"
                       : isSelected
-                        ? "ring-2 ring-petroleum bg-petroleum/15 font-bold text-petroleum"
+                        ? "ring-2 ring-[var(--theme-emphasis)] bg-[var(--theme-emphasis)]/15 font-bold theme-text-emphasis"
                         : d === calendar.todayDate
-                          ? "bg-gradient-to-r from-petroleum to-corporate text-white font-bold shadow-sm"
+                          ? "theme-bg-emphasis text-white font-bold shadow-sm"
                           : isPastDay
-                            ? "bg-petroleum/5 dark:bg-petroleum/10 text-slate-500 dark:text-slate-400 hover:bg-petroleum/10"
-                            : "text-slate-600 dark:text-slate-400 hover:bg-petroleum/5"
+                            ? "bg-[var(--theme-primary)]/5 dark:bg-[var(--theme-primary)]/10 text-slate-500 dark:text-slate-400 hover:bg-[var(--theme-primary)]/10"
+                            : "text-slate-600 dark:text-slate-400 hover:bg-[var(--theme-primary)]/5"
                   }`}
                 >
                   <span>{d || ""}</span>
@@ -343,7 +343,7 @@ const StudyCalendarSection = () => {
                     </div>
                   )}
                   {hasNote && (
-                    <span className="absolute -bottom-0.5 right-0.5 w-1 h-1 rounded-full bg-petroleum" />
+                    <span className="absolute -bottom-0.5 right-0.5 w-1 h-1 rounded-full bg-[var(--theme-emphasis)]" />
                   )}
                 </div>
               );
@@ -365,7 +365,7 @@ const StudyCalendarSection = () => {
                 {ACTIVITY_LABELS.video}
               </span>
               <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-petroleum" />{" "}
+                <span className="w-2 h-2 rounded-full bg-[var(--theme-emphasis)]" />{" "}
                 {ACTIVITY_LABELS.session}
               </span>
             </div>
@@ -392,9 +392,9 @@ const StudyCalendarSection = () => {
           </div>
         )}
 
-        <div className="p-3 rounded-xl bg-gradient-to-br from-petroleum/5 to-corporate/5 border border-petroleum/10">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-[var(--theme-primary)]/5 to-[var(--theme-emphasis)]/5 border border-[var(--theme-emphasis)]/10">
           <div className="flex items-center justify-between mb-1.5">
-            <h4 className="text-[10px] font-bold text-petroleum flex items-center gap-1">
+            <h4 className="text-[10px] font-bold theme-text-emphasis flex items-center gap-1">
               <Icon name="fa-chart-simple" className="text-[9px]" />
               {t("ialab.study_planner.weekly_summary")}
             </h4>
@@ -405,7 +405,7 @@ const StudyCalendarSection = () => {
             </span>
           </div>
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs font-bold text-petroleum">
+            <span className="text-xs font-bold theme-text-emphasis">
               {weeklyStats.weekly} XP
             </span>
             <span className="text-[9px] text-slate-500">
@@ -416,7 +416,7 @@ const StudyCalendarSection = () => {
           </div>
           <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-petroleum to-corporate rounded-full transition-all duration-500"
+              className="h-full bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-emphasis)] rounded-full transition-all duration-500"
               style={{ width: `${weeklyStats.weeklyPct}%` }}
             />
           </div>
@@ -436,7 +436,7 @@ const StudyCalendarSection = () => {
               className="p-3 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/30"
             >
               <div className="flex items-center justify-between mb-1.5">
-                <h4 className="text-[10px] font-bold text-petroleum flex items-center gap-1">
+                <h4 className="text-[10px] font-bold theme-text-emphasis flex items-center gap-1">
                   <Icon name="fa-pen" className="text-[9px]" />
                   {t("ialab.study_planner.day_note_label", {
                     date: selectedDay
@@ -462,15 +462,15 @@ const StudyCalendarSection = () => {
                 value={dayText}
                 onChange={(e) => handleDayNoteChange(e.target.value)}
                 placeholder={t("ialab.study_planner.note_placeholder")}
-                className="w-full h-16 p-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 resize-none focus:outline-none focus:ring-2 focus:ring-petroleum/40 focus:border-petroleum/50 transition-all duration-200"
+                className="w-full h-16 p-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 resize-none focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/40 focus:border-[var(--theme-emphasis)]/50 transition-all duration-200"
                 aria-label={t("ialab.study_planner.note_aria")}
               />
             </motion.div>
           )}
         </AnimatePresence>
 
-        <div className="p-3 rounded-xl bg-gradient-to-br from-petroleum/5 to-corporate/5 border border-petroleum/10">
-          <h4 className="text-[10px] font-bold text-petroleum mb-1.5 flex items-center gap-1">
+        <div className="p-3 rounded-xl bg-gradient-to-br from-[var(--theme-primary)]/5 to-[var(--theme-emphasis)]/5 border border-[var(--theme-emphasis)]/10">
+          <h4 className="text-[10px] font-bold theme-text-emphasis mb-1.5 flex items-center gap-1">
             <Icon name="fa-lightbulb" className="text-[9px]" />
             {t("ialab.study_planner.daily_tip")}
           </h4>

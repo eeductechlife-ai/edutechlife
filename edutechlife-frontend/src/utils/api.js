@@ -86,25 +86,85 @@ function extractBalancedJson(text) {
 }
 
 export function parseJsonResult(raw) {
-  const cleaned = stripCodeFences(raw);
+  if (!raw || typeof raw !== "string") return null;
+
+  const cleaned = stripCodeFences(raw).trim();
   if (!cleaned) return null;
 
+  // Attempt 1: Direct parse
   try {
     return JSON.parse(cleaned);
   } catch {
-    // continua con reparaciones
+    // continue with repairs
   }
 
+  // Attempt 2: Extract balanced JSON and remove trailing commas
   const extracted = extractBalancedJson(cleaned);
-  const candidates = extracted
-    ? [extracted, extracted.replace(/,\s*([\]}])/g, "$1")]
-    : [];
+  if (extracted) {
+    const candidates = [
+      extracted,
+      extracted.replace(/,\s*([\]}])/g, "$1"),
+      extracted.replace(/,(\s*[}\]])/g, "$1"),
+    ];
 
-  for (const candidate of candidates) {
+    for (const candidate of candidates) {
+      try {
+        return JSON.parse(candidate);
+      } catch {
+        // try next candidate
+      }
+    }
+  }
+
+  // Attempt 3: Aggressive cleanup — remove any non-JSON prefix/suffix
+  const start = cleaned.search(/[{[]/);
+  if (start > 0) {
+    const substr = cleaned.substring(start);
     try {
-      return JSON.parse(candidate);
+      return JSON.parse(substr);
     } catch {
-      // intenta el siguiente candidato
+      // continue
+    }
+  }
+
+  // Attempt 4: Try to find last closing brace/bracket
+  for (let i = cleaned.length - 1; i >= 0; i--) {
+    if (cleaned[i] === "}" || cleaned[i] === "]") {
+      const substr = cleaned.substring(start >= 0 ? start : 0, i + 1);
+      try {
+        return JSON.parse(substr);
+      } catch {
+        // continue
+      }
+    }
+  }
+
+  // Attempt 5: Repair truncated JSON by closing open brackets/braces
+  const jsonStart = cleaned.search(/[{[]/);
+  if (jsonStart !== -1) {
+    const fragment = cleaned.substring(jsonStart);
+    const stack = [];
+    let repaired = "";
+    let inStr = false;
+    let esc = false;
+    for (const ch of fragment) {
+      repaired += ch;
+      if (esc) { esc = false; continue; }
+      if (ch === "\\" && inStr) { esc = true; continue; }
+      if (ch === '"') { inStr = !inStr; continue; }
+      if (inStr) continue;
+      if (ch === "{") stack.push("}");
+      else if (ch === "[") stack.push("]");
+      else if ((ch === "}" || ch === "]") && stack.length) stack.pop();
+    }
+    // Strip trailing comma before closing
+    repaired = repaired.replace(/,\s*$/, "");
+    // Close all open structures
+    while (stack.length) repaired += stack.pop();
+    try {
+      return JSON.parse(repaired);
+    } catch {
+      // give up
     }
   }
 
@@ -200,6 +260,7 @@ export async function callDeepseek(
     const result = payload.isJson ? parseJsonResult(data.result) : data.result;
 
     if (payload.isJson && result === null) {
+      console.warn("[callDeepseek] JSON parse failed. Raw response:", (data.result || "").substring(0, 500));
       const err = new Error("La respuesta de la IA no fue un JSON válido.");
       err.raw = data.result || "";
       throw err;

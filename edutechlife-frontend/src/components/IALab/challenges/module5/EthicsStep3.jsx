@@ -138,7 +138,7 @@ const EthicsStep3 = ({ exercise, response, onResponseChange, topic = '', exercis
         className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
             <Icon name="fa-shield-alt" className="text-white text-lg" />
           </div>
           <div>
@@ -185,7 +185,7 @@ const EthicsStep3 = ({ exercise, response, onResponseChange, topic = '', exercis
           className="overflow-hidden"
         >
           <details className="group">
-            <summary className="cursor-pointer text-xs font-medium text-corporate dark:text-corporate-dark hover:underline px-4 py-2.5 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/10 border border-indigo-200 dark:border-indigo-800 rounded-xl list-none flex items-center gap-1">
+            <summary className="cursor-pointer text-xs font-medium text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark hover:underline px-4 py-2.5 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/10 border border-indigo-200 dark:border-indigo-800 rounded-xl list-none flex items-center gap-1">
               <Icon name="fa-eye" className="w-3 h-3" />
               {t('ialab.challenge.m5.step3.view_template')}
             </summary>
@@ -397,8 +397,8 @@ const EthicsStep3 = ({ exercise, response, onResponseChange, topic = '', exercis
                         onClick={() => updateAction(bias.index, 'timeline', tl.id)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
                           action.timeline === tl.id
-                            ? 'bg-petroleum text-white border-petroleum'
-                            : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-600 hover:border-petroleum/40'
+                            ? 'bg-[var(--theme-emphasis)] text-white border-[var(--theme-emphasis)]'
+                            : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-600 hover:border-[var(--theme-emphasis)]/40'
                         }`}
                       >
                         {t(tl.labelKey)}
@@ -433,7 +433,7 @@ const EthicsStep3 = ({ exercise, response, onResponseChange, topic = '', exercis
                         const bias = biases.find((b) => b.index === a.biasIndex);
                         return (
                           <li key={a.biasIndex} className="text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/50 p-2 rounded-lg">
-                            <span className="font-medium text-petroleum dark:text-corporate-dark">
+                            <span className="font-medium text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]-dark">
                               {bias?.label}:
                             </span>{' '}
                             {a.measure?.substring(0, 60)}

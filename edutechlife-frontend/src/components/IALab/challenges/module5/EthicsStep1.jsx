@@ -96,7 +96,7 @@ const EthicsStep1 = ({ exercise, response, onResponseChange, topic = '', exercis
         className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-petroleum to-corporate flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
             <Icon name="fa-search" className="text-white text-lg" />
           </div>
           <div>
@@ -163,7 +163,7 @@ const EthicsStep1 = ({ exercise, response, onResponseChange, topic = '', exercis
         <motion.div className="space-y-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Icon name="fa-list-check" className="text-petroleum dark:text-corporate-dark" />
+              <Icon name="fa-list-check" className="text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]-dark" />
               <h4 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
                 {t('ialab.challenge.m5.step1.bias_title')}
               </h4>
@@ -184,14 +184,14 @@ const EthicsStep1 = ({ exercise, response, onResponseChange, topic = '', exercis
                   aria-pressed={isSelected}
                   className={`w-full flex items-center gap-3 p-4 rounded-xl border transition-all duration-200 text-left ${
                     isSelected
-                      ? 'bg-petroleum/5 dark:bg-corporate-dark/10 border-petroleum/30 dark:border-corporate-dark/30'
-                      : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 hover:border-petroleum/20 hover:bg-slate-50 dark:hover:bg-slate-600'
+                      ? 'bg-[var(--theme-emphasis)]/5 dark:bg-[var(--theme-primary)]-dark/10 border-[var(--theme-emphasis)]/30 dark:border-[var(--theme-primary)]-dark/30'
+                      : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 hover:border-[var(--theme-emphasis)]/20 hover:bg-slate-50 dark:hover:bg-slate-600'
                   }`}
                 >
                   <div
                     className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors flex-shrink-0 ${
                       isSelected
-                        ? 'bg-petroleum dark:bg-corporate-dark border-petroleum dark:border-corporate-dark'
+                        ? 'bg-[var(--theme-emphasis)] dark:bg-[var(--theme-primary)]-dark border-[var(--theme-emphasis)] dark:border-[var(--theme-primary)]-dark'
                         : 'border-slate-300 dark:border-slate-500'
                     }`}
                   >
@@ -201,7 +201,7 @@ const EthicsStep1 = ({ exercise, response, onResponseChange, topic = '', exercis
                     <span
                       className={`text-sm font-medium ${
                         isSelected
-                          ? 'text-petroleum dark:text-corporate-dark'
+                          ? 'text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]-dark'
                           : 'text-slate-600 dark:text-slate-300'
                       }`}
                     >
@@ -256,7 +256,7 @@ const EthicsStep1 = ({ exercise, response, onResponseChange, topic = '', exercis
                               onClick={() => updateBiasField(index, 'pipeline', stage.id)}
                               className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs transition-all ${
                                 biasEntry.pipeline === stage.id
-                                  ? 'bg-petroleum/5 dark:bg-corporate-dark/10 border-petroleum/30 dark:border-corporate-dark/30 text-petroleum dark:text-corporate-dark'
+                                  ? 'bg-[var(--theme-emphasis)]/5 dark:bg-[var(--theme-primary)]-dark/10 border-[var(--theme-emphasis)]/30 dark:border-[var(--theme-primary)]-dark/30 text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]-dark'
                                   : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400'
                               }`}
                             >
@@ -342,7 +342,7 @@ const EthicsStep1 = ({ exercise, response, onResponseChange, topic = '', exercis
                 return (
                   <span
                     key={b.index}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 bg-petroleum/10 dark:bg-corporate-dark/20 text-petroleum dark:text-corporate-dark text-xs rounded-full"
+                    className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-primary)]-dark/20 text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]-dark text-xs rounded-full"
                   >
                     {getNombre(sesgo)}
                     {b.severity && (
@@ -356,7 +356,7 @@ const EthicsStep1 = ({ exercise, response, onResponseChange, topic = '', exercis
                     )}
                     <button
                       onClick={() => toggleBias(b.index)}
-                      className="ml-0.5 w-3.5 h-3.5 rounded-full hover:bg-petroleum/20 dark:hover:bg-corporate-dark/30 flex items-center justify-center"
+                      className="ml-0.5 w-3.5 h-3.5 rounded-full hover:bg-[var(--theme-emphasis)]/20 dark:hover:bg-[var(--theme-primary)]-dark/30 flex items-center justify-center"
                     >
                       <Icon name="fa-times" className="w-2 h-2" />
                     </button>

@@ -89,7 +89,7 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
         className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 backdrop-blur-sm"
       >
         <div className="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center">
-          <div className="w-10 h-10 border-2 border-petroleum border-t-transparent rounded-full animate-spin mb-4" />
+          <div className="w-10 h-10 border-2 border-[var(--theme-emphasis)] border-t-transparent rounded-full animate-spin mb-4" />
           <p className="text-sm text-slate-500">
             {t("ialab.challenge_result.loading")}
           </p>
