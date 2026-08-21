@@ -86,10 +86,25 @@ export const useTimetable = () => {
       );
       if (resp.ok) {
         const json = await resp.json();
-        return json.studentId || null;
+        if (json.studentId) return json.studentId;
       }
     } catch (_) {
-      // network error — return null, show empty state
+      // network error — fall through to direct upsert
+    }
+
+    // 3. Last resort: upsert directly from frontend (INSERT policy allows this).
+    try {
+      const { data } = await supabase
+        .from("students")
+        .upsert(
+          { auth_id: userId, name: "Estudiante", age: 13 },
+          { onConflict: "auth_id" },
+        )
+        .select("id")
+        .single();
+      if (data?.id) return data.id;
+    } catch (_) {
+      // RLS or network error
     }
     return null;
   }, [isSignedIn, userId]);

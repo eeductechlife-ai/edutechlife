@@ -256,9 +256,10 @@ const WeeklyScheduleView = () => {
           msg.includes("profile") ||
           msg.includes("Profile")
         ) {
-          setSaveError(
-            "Tu perfil de estudiante aún no está listo. Cierra sesión, vuelve a entrar e intenta de nuevo.",
-          );
+          // Reset to view so the empty state (not a red error) shows
+          setPendingSlots(null);
+          setPendingMeta({});
+          setMode("view");
         } else {
           setSaveError(msg || "No se pudo guardar el horario.");
         }
