@@ -268,20 +268,47 @@ const WeeklyScheduleView = () => {
 
   if (error) {
     // Show a friendlier message for common errors
-    if (error.includes("student") || error.includes("profile")) {
+    const errorStr = String(error).toLowerCase();
+    if (
+      errorStr.includes("student") ||
+      errorStr.includes("profile") ||
+      errorStr.includes("no rows")
+    ) {
       return (
-        <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8 text-center space-y-4">
-          <div className="text-4xl" aria-hidden>
-            📅
-          </div>
-          <div className="text-[#64748B]">
-            <p className="font-semibold text-[#004B63] mb-2">
-              Aún no tienes horario
+        <div className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-2xl bg-gradient-to-br from-[#004B63] via-[#4DA8C4] to-[#66CCCC] text-white p-6 sm:p-8 shadow-lg text-center"
+          >
+            <div className="text-5xl mb-3">📅</div>
+            <h3 className="text-2xl font-black mb-1">Agrega tu horario</h3>
+            <p className="text-sm opacity-90 mb-5 max-w-md mx-auto">
+              Escanea el horario del colegio y SmartBoard te recordará tus
+              clases y exámenes. También podrás hablar con Dani sobre la materia
+              del momento.
             </p>
-            <p className="text-sm">
-              Haz clic en "Añadir horario" para comenzar
-            </p>
-          </div>
+            <div className="flex flex-wrap gap-2 justify-center">
+              <button
+                type="button"
+                onClick={() => setMode("scan")}
+                className="px-5 py-3 rounded-xl bg-white text-[#004B63] font-bold shadow hover:shadow-md"
+              >
+                📸 Escanear horario
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPendingSlots([]);
+                  setPendingMeta({});
+                  setMode("edit");
+                }}
+                className="px-5 py-3 rounded-xl bg-white/15 text-white font-semibold border border-white/40 hover:bg-white/25"
+              >
+                ✏️ Ingresar manualmente
+              </button>
+            </div>
+          </motion.div>
         </div>
       );
     }
