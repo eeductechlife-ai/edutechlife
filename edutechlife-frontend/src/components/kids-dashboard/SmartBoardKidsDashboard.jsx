@@ -126,19 +126,13 @@ const SmartBoardKidsDashboard = () => {
         "vak",
         "misiones",
         "materias",
-        "actividades",
-        "calendario",
-        "noticias",
         "progreso",
-        "curriculo",
         "oral",
         "examenes",
         "flashcards",
-        "libros",
-        "escaner",
-        "analitica",
-        "padres",
-        "podcast",
+        "horario",
+        "puntos",
+        "calificaciones",
       ].includes(tab)
     ) {
       setActiveTab(tab);

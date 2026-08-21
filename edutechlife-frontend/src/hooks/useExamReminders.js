@@ -43,6 +43,7 @@ export const useExamReminders = () => {
   const { upcomingExams, reload } = useTimetable();
   const { createNotification } = useNotification();
   const timerRef = useRef(null);
+  const checkRef = useRef(null);
   const inFlightRef = useRef(new Set());
 
   const persistFired = useCallback(async (examId, prevFired, windowKey) => {
@@ -108,16 +109,26 @@ export const useExamReminders = () => {
     }
   }, [upcomingExams, createNotification, persistFired]);
 
+  // Store the latest check function in a ref so the interval can always
+  // call the most up-to-date version without recreating itself.
+  useEffect(() => {
+    checkRef.current = check;
+  }, [check]);
+
   useEffect(() => {
     // First check happens shortly after mount so a freshly-opened app
     // catches an imminent exam. Then every 5 minutes.
-    const boot = setTimeout(check, 4000);
-    timerRef.current = setInterval(check, 5 * 60 * 1000);
+    const boot = setTimeout(() => checkRef.current?.(), 4000);
+
+    // Create interval once on first mount; it persists and calls checkRef.current
+    if (!timerRef.current) {
+      timerRef.current = setInterval(() => checkRef.current?.(), 5 * 60 * 1000);
+    }
+
     return () => {
       clearTimeout(boot);
-      clearInterval(timerRef.current);
     };
-  }, [check]);
+  }, []);
 
   // Expose reload so the caller (dashboard) can force-refresh after adding exams.
   return { refresh: reload };

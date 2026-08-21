@@ -127,12 +127,7 @@ function createTabRenderer(deps) {
       errorMsg: t("smartboard.error_load_vak"),
       className: "space-y-6",
     },
-    curriculo: {
-      component: () => <SectionFallback tab="curriculo" />,
-      errorKey: "curriculo",
-      errorMsg: "Error al cargar currículo",
-      className: "h-full",
-    },
+    // curriculo: TODO — placeholder implementation pending (was just showing SectionFallback)
     calificaciones: {
       component: () => (
         <LazyLoad fallback={<SectionFallback tab="calificaciones" />}>
