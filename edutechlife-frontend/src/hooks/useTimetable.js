@@ -54,13 +54,26 @@ export const useTimetable = () => {
 
   const resolveStudentId = useCallback(async () => {
     if (!isSignedIn || !userId) return null;
-    const { data, error: e } = await supabase
-      .from("students")
-      .select("id")
-      .eq("auth_id", userId)
-      .maybeSingle();
-    if (e) throw e;
-    return data?.id || null;
+    // Race against a 8 s timeout so the loading state never hangs forever
+    // (Supabase free-tier can stall when waking from sleep or under poor network).
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("timeout")), 8000),
+    );
+    try {
+      const { data, error: e } = await Promise.race([
+        supabase
+          .from("students")
+          .select("id")
+          .eq("auth_id", userId)
+          .maybeSingle(),
+        timeout,
+      ]);
+      if (e) throw e;
+      return data?.id || null;
+    } catch (err) {
+      if (err.message === "timeout") return null;
+      throw err;
+    }
   }, [isSignedIn, userId]);
 
   const load = useCallback(async () => {
@@ -76,19 +89,26 @@ export const useTimetable = () => {
         return;
       }
 
-      const [{ data: tt }, { data: ex }] = await Promise.all([
-        supabase
-          .from("student_timetable")
-          .select("*")
-          .eq("student_id", sid)
-          .eq("is_active", true)
-          .maybeSingle(),
-        supabase
-          .from("student_exams")
-          .select("*")
-          .eq("student_id", sid)
-          .eq("completed", false)
-          .order("exam_date", { ascending: true }),
+      const timeoutP = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("timeout")), 8000),
+      );
+
+      const [{ data: tt }, { data: ex }] = await Promise.race([
+        Promise.all([
+          supabase
+            .from("student_timetable")
+            .select("*")
+            .eq("student_id", sid)
+            .eq("is_active", true)
+            .maybeSingle(),
+          supabase
+            .from("student_exams")
+            .select("*")
+            .eq("student_id", sid)
+            .eq("completed", false)
+            .order("exam_date", { ascending: true }),
+        ]),
+        timeoutP,
       ]);
 
       setTimetable(tt || null);
@@ -104,7 +124,14 @@ export const useTimetable = () => {
         setSlots([]);
       }
     } catch (e) {
-      setError(e?.message || "Error loading timetable");
+      if (e?.message === "timeout") {
+        // Timeout: no mostramos error — dejamos el estado vacío (sin horario).
+        setTimetable(null);
+        setSlots([]);
+        setExams([]);
+      } else {
+        setError(e?.message || "Error loading timetable");
+      }
     } finally {
       setLoading(false);
     }
@@ -218,9 +245,7 @@ export const useTimetable = () => {
         .single();
       if (e) throw e;
       setExams((prev) =>
-        [...prev, data].sort((a, b) =>
-          a.exam_date.localeCompare(b.exam_date),
-        ),
+        [...prev, data].sort((a, b) => a.exam_date.localeCompare(b.exam_date)),
       );
       return data;
     },
