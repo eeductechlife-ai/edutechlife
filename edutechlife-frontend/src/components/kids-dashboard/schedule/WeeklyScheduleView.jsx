@@ -267,13 +267,17 @@ const WeeklyScheduleView = () => {
   }
 
   if (error) {
-    // Show a friendlier message for common errors
-    const errorStr = String(error).toLowerCase();
-    if (
+    // Show a friendlier message for any error (assume it's missing schedule)
+    // since we only show this when useTimetable can't load data
+    const errorStr = String(error || "").toLowerCase();
+    const isScheduleError =
       errorStr.includes("student") ||
       errorStr.includes("profile") ||
-      errorStr.includes("no rows")
-    ) {
+      errorStr.includes("no rows") ||
+      errorStr.includes("404") ||
+      error; // If there's any error, show friendly message
+
+    if (isScheduleError) {
       return (
         <div className="space-y-4">
           <motion.div
