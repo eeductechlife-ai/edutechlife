@@ -250,7 +250,18 @@ const WeeklyScheduleView = () => {
         setPendingMeta({});
         setMode("view");
       } catch (e) {
-        setSaveError(e?.message || "No se pudo guardar el horario.");
+        const msg = e?.message || "";
+        if (
+          msg.includes("student") ||
+          msg.includes("profile") ||
+          msg.includes("Profile")
+        ) {
+          setSaveError(
+            "Tu perfil de estudiante aún no está listo. Cierra sesión, vuelve a entrar e intenta de nuevo.",
+          );
+        } else {
+          setSaveError(msg || "No se pudo guardar el horario.");
+        }
       } finally {
         setSaving(false);
       }

@@ -170,7 +170,12 @@ export const useTimetable = () => {
    */
   const saveTimetable = useCallback(
     async (payload) => {
-      const sid = studentId || (await resolveStudentId());
+      let sid = studentId || (await resolveStudentId());
+      if (!sid) {
+        // Last resort: retry once with a short delay to allow profile creation
+        await new Promise((r) => setTimeout(r, 1500));
+        sid = await resolveStudentId();
+      }
       if (!sid) throw new Error("No student profile");
 
       if (timetable?.id) {
