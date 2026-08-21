@@ -9,7 +9,7 @@ import SubjectsView from "./components/SubjectsView";
 import IALabView from "./components/IALabView";
 import ProgressView from "./components/ProgressView";
 import ReportModal from "./components/ReportModal";
-import { WeeklyScheduleView } from "@/components/kids-dashboard/schedule/WeeklyScheduleView";
+import WeeklyScheduleView from "@/components/kids-dashboard/schedule/WeeklyScheduleView";
 
 const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
   const [activeTab, setActiveTab] = useState("inicio");

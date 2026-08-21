@@ -1,14 +1,17 @@
-import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
-import { useIALabStore } from '../../store/ialabStore';
-import { useSidebarState } from '../../hooks/IALab/useSidebarState';
-import { useTranslation } from '../../i18n/I18nProvider';
-import useInfographicCompletion from '../../hooks/IALab/useInfographicCompletion';
-import StreakDetailsModal from './StreakDetailsModal';
-import SidebarCollapsed from './sidebar/SidebarCollapsed';
-import SidebarExpanded from './sidebar/SidebarExpanded';
+import React, { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import {
+  useIALabProgressContext,
+  useIALabUIContext,
+} from "../../context/IALabContext";
+import { useIALabStore } from "../../store/ialabStore";
+import { useSidebarState } from "../../hooks/IALab/useSidebarState";
+import { useTranslation } from "../../i18n/I18nProvider";
+import useInfographicCompletion from "../../hooks/IALab/useInfographicCompletion";
+import StreakDetailsModal from "./StreakDetailsModal";
+import SidebarCollapsed from "./sidebar/SidebarCollapsed";
+import SidebarExpanded from "./sidebar/SidebarExpanded";
 
 const COLLAPSED_WIDTH = 72;
 const EXPANDED_WIDTH = 256;
@@ -24,26 +27,38 @@ const IALabSidebar = () => {
   const navigate = useNavigate();
   const goToModule = (id) => navigate(`/ialab/${id}`);
   const {
-    activeMod, courseProgress, modules,
-    isModuleLocked, calculateModuleScore, completedModules,
+    activeMod,
+    courseProgress,
+    modules,
+    isModuleLocked,
+    calculateModuleScore,
+    completedModules,
   } = useIALabProgressContext();
 
   const {
-    sidebarDropdowns, toggleSidebarDropdown,
-    courseCompleted, setShowCertificateModal,
-    storedCertificate, certificateGenerating,
+    sidebarDropdowns,
+    toggleSidebarDropdown,
+    courseCompleted,
+    setShowCertificateModal,
+    storedCertificate,
+    certificateGenerating,
   } = useIALabUIContext();
 
-  const streak = useIALabStore(s => s.streak);
-  const getLevel = useIALabStore(s => s.getLevel);
-  const getTotalPoints = useIALabStore(s => s.getTotalPoints);
-  const isStreakAtRisk = useIALabStore(s => s.isStreakAtRisk);
-  const setShowLeaderboard = useIALabStore(s => s.setShowLeaderboard);
-  const setShowStudyPlannerModal = useIALabStore(s => s.setShowStudyPlannerModal);
-  const setShowHistoryModal = useIALabStore(s => s.setShowHistoryModal);
+  const streak = useIALabStore((s) => s.streak);
+  const getLevel = useIALabStore((s) => s.getLevel);
+  const getTotalPoints = useIALabStore((s) => s.getTotalPoints);
+  const isStreakAtRisk = useIALabStore((s) => s.isStreakAtRisk);
+  const setShowLeaderboard = useIALabStore((s) => s.setShowLeaderboard);
+  const setShowStudyPlannerModal = useIALabStore(
+    (s) => s.setShowStudyPlannerModal,
+  );
+  const setShowHistoryModal = useIALabStore((s) => s.setShowHistoryModal);
   const { isCollapsed, toggleSidebar } = useSidebarState();
   // Mi Progreso abre el mismo modal que el usermenu (ActivityHistory)
-  const goToProgress = useCallback(() => setShowHistoryModal(true), [setShowHistoryModal]);
+  const goToProgress = useCallback(
+    () => setShowHistoryModal(true),
+    [setShowHistoryModal],
+  );
   const [showStreakModal, setShowStreakModal] = useState(false);
 
   const isInfographicCompleted = useInfographicCompletion();
@@ -53,10 +68,13 @@ const IALabSidebar = () => {
       id="ialab-sidebar-panel"
       data-testid="ialab-sidebar"
       role="navigation"
-      aria-label={t('sidebar.panel_aria')}
-      style={{ width: isCollapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH }}
+      aria-label={t("sidebar.panel_aria")}
+      style={{
+        width: isCollapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH,
+        background:
+          "color-mix(in srgb, var(--theme-surface-2) 95%, transparent)",
+      }}
       className="relative flex-shrink-0 border-r theme-border-primary-20 backdrop-blur-lg shadow-sm transition-[width] duration-300"
-      style={{ background: 'color-mix(in srgb, var(--theme-surface-2) 95%, transparent)' }}
     >
       <div className="h-full overflow-y-auto overflow-x-hidden relative">
         <div className="absolute top-0 left-0 right-0 h-[1px] theme-bg-primary-20 pointer-events-none z-10" />
