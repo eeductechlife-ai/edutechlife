@@ -1189,4 +1189,62 @@ router.post('/student-profile/avatar', requireAuth, async (req, res) => {
   }
 });
 
+/**
+ * GET /api/smartboard/student-profile
+ * Returns the student's profile row, creating it if it doesn't exist yet.
+ * Used by useTimetable as a fallback when the direct Supabase query returns null
+ * (accounts created before the signup route started auto-creating this row).
+ */
+router.get('/student-profile', requireAuth, async (req, res) => {
+  const userId = req.userId;
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+  try {
+    const { data: existing } = await supabase
+      .from('students')
+      .select('id, name, age')
+      .eq('auth_id', userId)
+      .maybeSingle();
+
+    if (existing) return res.json({ studentId: existing.id });
+
+    // No row — create one using the users profile data.
+    const { data: profile } = await supabase
+      .from('users')
+      .select('first_name, last_name, username, email')
+      .eq('id', userId)
+      .maybeSingle();
+
+    const studentName =
+      [profile?.first_name, profile?.last_name].filter(Boolean).join(' ').trim() ||
+      profile?.username ||
+      (profile?.email ? profile.email.split('@')[0] : 'Estudiante');
+
+    const { data: created, error: createErr } = await supabase
+      .from('students')
+      .insert([{ auth_id: userId, name: studentName, age: 12, email: profile?.email }])
+      .select('id')
+      .single();
+
+    if (createErr) {
+      if (createErr.message?.includes('duplicate') || createErr.code === '23505') {
+        // Race: another request created it first
+        const { data: retry } = await supabase
+          .from('students')
+          .select('id')
+          .eq('auth_id', userId)
+          .maybeSingle();
+        return res.json({ studentId: retry?.id || null });
+      }
+      console.error('student-profile create error:', createErr.message);
+      return res.status(500).json({ error: createErr.message });
+    }
+
+    res.json({ studentId: created.id });
+  } catch (e) {
+    console.error('student-profile error:', e.message);
+    res.status(500).json({ error: 'Error interno' });
+  }
+});
+
 module.exports = router;

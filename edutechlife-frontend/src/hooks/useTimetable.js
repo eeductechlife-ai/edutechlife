@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useAuthIdentity } from "./useAuthIdentity";
+import { API_BASE_URL } from "../config/api";
 
 // ISO day: Mon=1 … Sun=7 (matches migration 042 CHECK).
 const isoDay = (date) => {
@@ -54,10 +55,10 @@ export const useTimetable = () => {
 
   const resolveStudentId = useCallback(async () => {
     if (!isSignedIn || !userId) return null;
-    // Race against a 8 s timeout so the loading state never hangs forever
-    // (Supabase free-tier can stall when waking from sleep or under poor network).
-    const timeout = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("timeout")), 8000),
+
+    // 1. Try the direct Supabase query with a 5 s timeout.
+    const timeout5s = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("timeout")), 5000),
     );
     try {
       const { data, error: e } = await Promise.race([
@@ -66,14 +67,31 @@ export const useTimetable = () => {
           .select("id")
           .eq("auth_id", userId)
           .maybeSingle(),
-        timeout,
+        timeout5s,
       ]);
-      if (e) throw e;
-      return data?.id || null;
-    } catch (err) {
-      if (err.message === "timeout") return null;
-      throw err;
+      if (!e && data?.id) return data.id;
+    } catch (_) {
+      // timeout or RLS block — fall through to backend
     }
+
+    // 2. Backend fallback: creates the students row if missing (service role).
+    try {
+      const token = sessionStorage.getItem("auth_token");
+      const resp = await fetch(
+        `${API_BASE_URL}/api/smartboard/student-profile`,
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          signal: AbortSignal.timeout(8000),
+        },
+      );
+      if (resp.ok) {
+        const json = await resp.json();
+        return json.studentId || null;
+      }
+    } catch (_) {
+      // network error — return null, show empty state
+    }
+    return null;
   }, [isSignedIn, userId]);
 
   const load = useCallback(async () => {
