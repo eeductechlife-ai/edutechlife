@@ -936,6 +936,7 @@ router.get('/student-profile', requireAuth, async (req, res) => {
 
 function serializeStudentProfile(data) {
   return {
+    studentId: data.id || null,
     name: data.name || null,
     age: data.age || null,
     vakStyle: data.vak_style || null,
