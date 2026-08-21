@@ -81,7 +81,10 @@ const HeroSection = memo(({ onTabChange }) => {
 
   const firstName = (() => {
     try {
-      const raw = typeof window !== "undefined" ? localStorage.getItem("student_name") || "" : "";
+      const raw =
+        typeof window !== "undefined"
+          ? localStorage.getItem("student_name") || ""
+          : "";
       return raw.split(" ")[0] || "";
     } catch {
       return "";
@@ -295,7 +298,7 @@ const HeroSection = memo(({ onTabChange }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="flex flex-wrap gap-3 justify-center md:justify-start"
+              className="w-full flex flex-col sm:flex-row sm:flex-wrap gap-3 justify-center md:justify-start"
             >
               {vakResult && (
                 <div
@@ -324,15 +327,15 @@ const HeroSection = memo(({ onTabChange }) => {
                 <button
                   type="button"
                   onClick={() => onTabChange?.("horario")}
-                  className="flex items-center gap-2.5 pl-2 pr-4 py-2 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 hover:bg-white/25 transition-colors text-left"
+                  className="flex items-center gap-2 sm:gap-2.5 pl-2 pr-3 sm:pr-4 py-1.5 sm:py-2 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 hover:bg-white/25 transition-colors text-left flex-shrink-0"
                   style={{ boxShadow: glow(SB_COLORS.cyan, 0.35) }}
                   aria-label="Ir a mi horario"
+                  title="Ver mi horario"
                 >
                   <span
-                    className="w-9 h-9 rounded-xl flex items-center justify-center text-xl"
+                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-lg sm:text-xl flex-shrink-0"
                     style={{
-                      background:
-                        "linear-gradient(135deg, #06D6A0, #118AB2)",
+                      background: "linear-gradient(135deg, #06D6A0, #118AB2)",
                     }}
                     aria-hidden
                   >
@@ -340,11 +343,11 @@ const HeroSection = memo(({ onTabChange }) => {
                       activeClass.subject_label || activeClass.subject,
                     )}
                   </span>
-                  <span className="leading-tight">
-                    <span className="block text-white font-black text-base truncate max-w-[9rem]">
+                  <span className="leading-tight min-w-0">
+                    <span className="block text-white font-black text-sm sm:text-base truncate max-w-[7rem] sm:max-w-[9rem]">
                       {activeClass.subject_label || activeClass.subject}
                     </span>
-                    <span className="block text-white/80 text-[10px] font-bold uppercase tracking-wider -mt-0.5">
+                    <span className="block text-white/80 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider -mt-0.5">
                       {isNow
                         ? `Ahora · hasta ${formatHHMM(activeClass.end_time)}`
                         : `Sigue · ${DAY_LABELS.es[activeClass.day_of_week]} ${formatHHMM(activeClass.start_time)}`}
