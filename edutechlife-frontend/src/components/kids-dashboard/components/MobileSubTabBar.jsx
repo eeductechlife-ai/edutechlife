@@ -10,13 +10,6 @@ const MobileSubTabBar = memo(({ activeTab, onTabChange, darkMode }) => {
   const activeCategory = CATEGORY_MAP[activeTab] || "home";
   const activeCat = CATEGORIES.find((c) => c.id === activeCategory);
 
-  console.log("MobileSubTabBar:", {
-    activeTab,
-    activeCategory,
-    activeCat: activeCat?.id,
-    tabs: activeCat?.tabs?.length,
-  });
-
   // Only show sub-tabs if there are multiple tabs in the category
   if (!activeCat || activeCat.tabs.length <= 1 || activeCat.id === "home") {
     return null;
