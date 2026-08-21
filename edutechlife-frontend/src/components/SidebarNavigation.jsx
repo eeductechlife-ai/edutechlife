@@ -103,6 +103,14 @@ const SidebarNavigation = memo(
         badge: null,
       },
       {
+        id: "horario",
+        label: t("sidebar.schedule") || "Horario",
+        icon: Clock,
+        color: "text-[#06D6A0]",
+        bgActive: "bg-[#06D6A0]/20",
+        badge: null,
+      },
+      {
         id: "misiones",
         label: t("sidebar.missions"),
         icon: Target,

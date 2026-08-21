@@ -9,6 +9,7 @@ import SubjectsView from "./components/SubjectsView";
 import IALabView from "./components/IALabView";
 import ProgressView from "./components/ProgressView";
 import ReportModal from "./components/ReportModal";
+import { WeeklyScheduleView } from "@/components/kids-dashboard/schedule/WeeklyScheduleView";
 
 const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
   const [activeTab, setActiveTab] = useState("inicio");
@@ -74,6 +75,12 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
           onGenerateReport={generateStudentReport}
         />
       ),
+      horario: (
+        <div className="w-full">
+          <h2 className="text-2xl font-bold text-[#004B63] mb-6">Mi Horario</h2>
+          <WeeklyScheduleView />
+        </div>
+      ),
       misiones: (
         <MissionsView
           missions={missions}
@@ -123,8 +130,8 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#66CCCC]/20 rounded-full blur-[150px] pointer-events-none z-0"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#4DA8C4]/20 rounded-full blur-[150px] pointer-events-none z-0"></div>
 
-      <div className="flex h-screen relative z-10">
-        <div className="w-80 flex-shrink-0">
+      <div className="flex h-screen relative z-10 flex-col md:flex-row">
+        <div className="w-full md:w-80 md:flex-shrink-0 md:border-r md:border-[#E2E8F0] md:shadow-lg bg-white border-b md:border-b-0 md:h-screen overflow-y-auto md:overflow-y-auto">
           <SidebarNavigation
             activeTab={activeTab}
             onTabChange={setActiveTab}
@@ -134,9 +141,9 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
           />
         </div>
 
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex-1 overflow-auto p-8">
-            <div className="max-w-7xl mx-auto">
+        <div className="flex-1 flex flex-col overflow-hidden w-full">
+          <div className="flex-1 overflow-auto p-4 md:p-8">
+            <div className="max-w-7xl mx-auto w-full">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
