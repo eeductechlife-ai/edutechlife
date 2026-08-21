@@ -542,18 +542,28 @@ export const SmartBoardKidsProvider = ({ children }) => {
   // Wrapper functions that use React Query mutations
   const addPointsWithSupabase = useCallback(
     (amount, reason) => {
-      // Add to local state immediately
+      // Store previous total for potential rollback
+      const previousTotal = totalPoints;
+      // Add to local state immediately (optimistic)
       addPoints(amount, reason);
       // Also sync to Supabase
       if (userId) {
-        addPointsMutation.mutate({
-          points: amount,
-          reason,
-          category: "bonus",
-        });
+        addPointsMutation.mutate(
+          {
+            points: amount,
+            reason,
+            category: "bonus",
+          },
+          {
+            onError: () => {
+              // Rollback on mutation error
+              setTotalPoints(previousTotal);
+            },
+          },
+        );
       }
     },
-    [addPoints, userId, addPointsMutation],
+    [addPoints, userId, addPointsMutation, totalPoints],
   );
 
   const setVakResultWithSupabase = useCallback(
