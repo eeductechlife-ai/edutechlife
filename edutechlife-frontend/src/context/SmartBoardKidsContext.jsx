@@ -169,7 +169,6 @@ export const SmartBoardKidsProvider = ({ children }) => {
       setSubscriptionTier,
       setVakResult,
       setFlashcardDecks,
-      setExams,
       setExamMaterials,
       setSmartBookHistory,
       setPlanCompletedActivities,
@@ -680,8 +679,6 @@ export const SmartBoardKidsProvider = ({ children }) => {
     // Persisted data from other SmartBoard tools
     flashcardDecks,
     setFlashcardDecks,
-    exams,
-    setExams,
     examMaterials,
     setExamMaterials,
     smartBookHistory,
