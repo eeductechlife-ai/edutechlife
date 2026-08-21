@@ -812,7 +812,12 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body || {};
 
   try {
-    const result = await authService.signIn({ email, password });
+    // Accepts email OR username — resolve username to email first.
+    const resolvedEmail = await resolveEmailFromIdentifier(email);
+    if (!resolvedEmail) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+    const result = await authService.signIn({ email: resolvedEmail, password });
 
     res.json(result);
   } catch (e) {
