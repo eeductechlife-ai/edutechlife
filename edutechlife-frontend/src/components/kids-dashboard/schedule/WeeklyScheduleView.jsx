@@ -157,9 +157,7 @@ const UpcomingExams = ({ exams, onRemove }) => {
         <span className="text-lg" aria-hidden>
           📋
         </span>
-        <h4 className="text-sm font-bold text-[#004B63]">
-          Próximos exámenes
-        </h4>
+        <h4 className="text-sm font-bold text-[#004B63]">Próximos exámenes</h4>
       </header>
       <ul className="space-y-2">
         {exams.map((x) => (
@@ -269,6 +267,24 @@ const WeeklyScheduleView = () => {
   }
 
   if (error) {
+    // Show a friendlier message for common errors
+    if (error.includes("student") || error.includes("profile")) {
+      return (
+        <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8 text-center space-y-4">
+          <div className="text-4xl" aria-hidden>
+            📅
+          </div>
+          <div className="text-[#64748B]">
+            <p className="font-semibold text-[#004B63] mb-2">
+              Aún no tienes horario
+            </p>
+            <p className="text-sm">
+              Haz clic en "Añadir horario" para comenzar
+            </p>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
         {error}
@@ -278,12 +294,13 @@ const WeeklyScheduleView = () => {
 
   // Editor takes priority (either fresh scan or edit existing).
   if (mode === "edit") {
-    const initial = pendingSlots
-      ? pendingSlots
-      : slots.map((s) => ({ ...s }));
+    const initial = pendingSlots ? pendingSlots : slots.map((s) => ({ ...s }));
     const meta = pendingSlots
       ? pendingMeta
-      : { school_name: timetable?.school_name, term_label: timetable?.term_label };
+      : {
+          school_name: timetable?.school_name,
+          term_label: timetable?.term_label,
+        };
     return (
       <Suspense fallback={<LoadingBlock />}>
         {saveError && (
@@ -329,9 +346,9 @@ const WeeklyScheduleView = () => {
           <div className="text-5xl mb-3">📅</div>
           <h3 className="text-2xl font-black mb-1">Agrega tu horario</h3>
           <p className="text-sm opacity-90 mb-5 max-w-md mx-auto">
-            Escanea el horario del colegio y SmartBoard te recordará tus
-            clases y exámenes. También podrás hablar con Dani sobre la materia
-            del momento.
+            Escanea el horario del colegio y SmartBoard te recordará tus clases
+            y exámenes. También podrás hablar con Dani sobre la materia del
+            momento.
           </p>
           <div className="flex flex-wrap gap-2 justify-center">
             <button

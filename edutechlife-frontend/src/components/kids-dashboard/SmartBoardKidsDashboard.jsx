@@ -13,6 +13,7 @@ import DaniFAB from "./DaniFAB";
 import OnboardingGuide from "./OnboardingGuide";
 import PremiumSidebar from "./components/PremiumSidebar";
 import MobileBottomBar from "./components/MobileBottomBar";
+import MobileSubTabBar from "./components/MobileSubTabBar";
 import CinematicContent from "./components/CinematicContent";
 import { WifiOff, CloudSync } from "lucide-react";
 import SmartBoardLoadingSkeleton from "./SmartBoardLoadingSkeleton";
@@ -275,6 +276,13 @@ const SmartBoardKidsDashboard = () => {
               onLogout={handleLogout}
             />
 
+            {/* Mobile Sub-Tab Bar */}
+            <MobileSubTabBar
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              darkMode={darkMode}
+            />
+
             {/* Scrollable Content */}
             <CinematicContent
               activeTab={activeTab}
@@ -347,7 +355,6 @@ const SmartBoardKidsDashboard = () => {
 
         {/* Onboarding Guide - First Time User Experience */}
         <OnboardingGuide />
-
 
         {/* Dani Chat Modal - Full Premium Experience */}
         <AnimatePresence>

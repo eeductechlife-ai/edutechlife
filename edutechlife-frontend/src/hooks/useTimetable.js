@@ -101,10 +101,15 @@ export const useTimetable = () => {
       const sid = await resolveStudentId();
       setStudentId(sid);
       if (!sid) {
-        setTimetable(null);
-        setSlots([]);
-        setExams([]);
-        return;
+        // Try once more (sometimes the backend takes a moment to create the profile)
+        const sid2 = await resolveStudentId();
+        if (!sid2) {
+          setTimetable(null);
+          setSlots([]);
+          setExams([]);
+          return;
+        }
+        setStudentId(sid2);
       }
 
       const timeoutP = new Promise((_, reject) =>
