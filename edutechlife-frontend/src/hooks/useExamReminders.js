@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { supabase } from "../lib/supabase";
 import { useNotification } from "../context/NotificationContext";
-import useTimetable from "./useTimetable";
+import { useSmartBoardKids } from "../context/SmartBoardKidsContext";
 
 // Reminder windows (minutes before exam). Order matters: farthest first.
 const REMINDER_WINDOWS = [
@@ -38,9 +38,11 @@ const emojiFor = (win) =>
  * never notify twice, even across sessions or devices.
  *
  * Silences during sleep hours (22:00–07:00) to avoid pinging a child at night.
+ *
+ * Note: Requires SmartBoardKidsProvider to be present in the component tree.
  */
 export const useExamReminders = () => {
-  const { upcomingExams, reload } = useTimetable();
+  const { upcomingExams, reloadTimetable } = useSmartBoardKids();
   const { createNotification } = useNotification();
   const timerRef = useRef(null);
   const checkRef = useRef(null);
@@ -130,8 +132,8 @@ export const useExamReminders = () => {
     };
   }, []);
 
-  // Expose reload so the caller (dashboard) can force-refresh after adding exams.
-  return { refresh: reload };
+  // Expose reloadTimetable so the caller (dashboard) can force-refresh after adding exams.
+  return { refresh: reloadTimetable };
 };
 
 export default useExamReminders;

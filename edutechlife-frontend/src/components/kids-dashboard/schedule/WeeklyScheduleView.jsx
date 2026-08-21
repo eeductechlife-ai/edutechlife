@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import useTimetable from "../../../hooks/useTimetable";
+import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 import {
   DAY_KEYS,
   DAY_LABELS,
@@ -207,15 +207,19 @@ const WeeklyScheduleView = () => {
   const {
     timetable,
     slots,
-    loading,
-    error,
+    timetableLoading,
+    timetableError,
     saveTimetable,
     saveSlots,
     currentClass,
     nextClass,
     upcomingExams,
     removeExam,
-  } = useTimetable();
+  } = useSmartBoardKids();
+
+  // Map the context loading/error names to the original names used in the component
+  const loading = timetableLoading;
+  const error = timetableError;
 
   const [mode, setMode] = useState("view"); // view | scan | edit
   const [pendingSlots, setPendingSlots] = useState(null);

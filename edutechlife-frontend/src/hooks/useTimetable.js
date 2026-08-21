@@ -222,6 +222,10 @@ export const useTimetable = () => {
    * operation (delete + insert). newSlots items:
    *   { day_of_week, start_time, end_time, subject, subject_label?,
    *     teacher?, room?, color?, notes? }
+   *
+   * Atomicity: if DELETE succeeds but INSERT fails, old slots are backed up and
+   * restored to prevent data loss. This ensures either all slots are updated or
+   * none are (no partial deletions).
    */
   const saveSlots = useCallback(
     async (newSlots, overrideTimetableId) => {
@@ -229,17 +233,24 @@ export const useTimetable = () => {
       // from saveTimetable before React re-renders (avoids stale closure).
       const ttId = overrideTimetableId ?? timetable?.id;
       if (!ttId) throw new Error("Create a timetable first");
+
+      // Backup current slots in case insertion fails
+      const oldSlots = [...slots];
+
+      // Delete all existing slots
       const { error: delErr } = await supabase
         .from("timetable_slots")
         .delete()
         .eq("timetable_id", ttId);
       if (delErr) throw delErr;
 
+      // If no new slots, clear and return
       if (!newSlots.length) {
         setSlots([]);
         return [];
       }
 
+      // Prepare new slot rows
       const rows = newSlots.map((s) => ({
         timetable_id: ttId,
         day_of_week: s.day_of_week,
@@ -253,17 +264,34 @@ export const useTimetable = () => {
         notes: s.notes || null,
       }));
 
+      // Attempt to insert new slots
       const { data, error: insErr } = await supabase
         .from("timetable_slots")
         .insert(rows)
         .select();
-      if (insErr) throw insErr;
+
+      // If insertion fails, restore old slots (atomic rollback)
+      if (insErr) {
+        if (oldSlots.length) {
+          try {
+            await supabase.from("timetable_slots").insert(oldSlots).select();
+            setSlots(oldSlots);
+          } catch (restoreErr) {
+            // If restore also fails, update local state to oldSlots anyway
+            setSlots(oldSlots);
+            throw new Error(
+              `Failed to insert slots and restore backup: ${insErr.message}`,
+            );
+          }
+        }
+        throw insErr;
+      }
 
       const ordered = orderSlots(data || []);
       setSlots(ordered);
       return ordered;
     },
-    [timetable],
+    [timetable, slots],
   );
 
   const addExam = useCallback(

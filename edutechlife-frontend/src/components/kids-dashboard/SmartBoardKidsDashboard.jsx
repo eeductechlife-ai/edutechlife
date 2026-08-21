@@ -299,34 +299,44 @@ const SmartBoardKidsDashboard = () => {
                 setIsDaniOpen(true);
               }}
               aria-label={t("smartboard.dani_reminder_open")}
-              className="fixed bottom-24 md:bottom-6 left-6 z-50 flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl shadow-xl cursor-pointer"
+              className="fixed bottom-24 md:bottom-6 left-6 z-50 flex items-center justify-between gap-3 px-4 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl shadow-xl cursor-pointer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <motion.span
-                className="text-xl"
-                animate={{ rotate: [0, -10, 10, -10, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
-                aria-hidden="true"
-              >
-                🤖
-              </motion.span>
-              <div className="text-left">
-                <p className="text-xs font-bold">¿Necesitas ayuda?</p>
-                <p className="text-[10px] text-white/80">
-                  Dani está aquí para ti
-                </p>
+              <div className="flex items-center gap-3">
+                <motion.span
+                  className="text-xl flex-shrink-0"
+                  animate={{ rotate: [0, -10, 10, -10, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+                  aria-hidden="true"
+                >
+                  🤖
+                </motion.span>
+                <div className="text-left">
+                  <p className="text-xs font-bold">¿Necesitas ayuda?</p>
+                  <p className="text-[10px] text-white/80">
+                    Dani está aquí para ti
+                  </p>
+                </div>
               </div>
-              <motion.button
+              <motion.span
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowDaniReminder(false);
                 }}
+                role="button"
+                tabIndex="0"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.stopPropagation();
+                    setShowDaniReminder(false);
+                  }
+                }}
                 aria-label={t("smartboard.close_reminder")}
-                className="text-white/50 hover:text-white text-sm ml-2"
+                className="text-white/50 hover:text-white text-sm ml-2 flex-shrink-0 cursor-pointer hover:bg-white/20 rounded px-1.5 py-0.5 transition-colors"
               >
                 ✕
-              </motion.button>
+              </motion.span>
             </motion.button>
           )}
         </AnimatePresence>

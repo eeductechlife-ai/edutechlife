@@ -34,6 +34,7 @@ import {
   useTotalPoints,
   useSessionsData,
 } from "../hooks/useSmartBoardSupabase";
+import useTimetable from "../hooks/useTimetable";
 import { useSubjectProgressPersistence } from "../hooks/useSubjectProgressPersistence";
 
 export const SmartBoardKidsContext = createContext();
@@ -135,6 +136,9 @@ export const SmartBoardKidsProvider = ({ children }) => {
 
   // Calculated total points from Supabase
   const supabaseTotalPoints = useTotalPoints();
+
+  // Timetable (single instance for all consumers)
+  const timetableData = useTimetable();
 
   // Legacy persistence layer (kept for backward compatibility)
   const { dataLoaded, saveData, userId, isConnected, syncLoading } =
@@ -680,6 +684,22 @@ export const SmartBoardKidsProvider = ({ children }) => {
     setActiveStudyDeck,
     studentGrades,
     setStudentGrades,
+
+    // Timetable (weekly schedule + exams)
+    timetable: timetableData.timetable,
+    slots: timetableData.slots,
+    exams: timetableData.exams,
+    timetableLoading: timetableData.loading,
+    timetableError: timetableData.error,
+    saveTimetable: timetableData.saveTimetable,
+    saveSlots: timetableData.saveSlots,
+    addExam: timetableData.addExam,
+    removeExam: timetableData.removeExam,
+    currentClass: timetableData.currentClass,
+    nextClass: timetableData.nextClass,
+    todayClasses: timetableData.todayClasses,
+    upcomingExams: timetableData.upcomingExams,
+    reloadTimetable: timetableData.reload,
 
     // Supabase/React Query hooks (for advanced usage)
     supabaseQueries: {

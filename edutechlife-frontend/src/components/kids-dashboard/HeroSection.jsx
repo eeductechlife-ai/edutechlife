@@ -19,7 +19,6 @@ import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import DaniAvatar3D from "./DaniAvatar3D";
 import { SB_GRADIENTS, SB_COLORS, glow } from "./smartboardTheme";
-import useTimetable from "../../hooks/useTimetable";
 import {
   DAY_LABELS,
   subjectEmoji,
@@ -72,10 +71,9 @@ const QUICK_ACTIONS = [
 const LEARNING_PATH = ["calificaciones", "flashcards", "oral", "examenes"];
 
 const HeroSection = memo(({ onTabChange }) => {
-  const { vakResult, activeStudyDeck, studentGrades } = useSmartBoardKids();
+  const { vakResult, activeStudyDeck, studentGrades, timetable, currentClass, nextClass } = useSmartBoardKids();
   const { t } = useTranslation();
   const reduce = useReducedMotion();
-  const { currentClass, nextClass, timetable } = useTimetable();
   const activeClass = currentClass || nextClass;
   const isNow = !!currentClass;
 

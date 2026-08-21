@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useTranslation } from "../../../i18n/I18nProvider";
+import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 import { callDaniChatStream } from "../../../utils/api";
 import {
   PROMPT_DANI_EXPERTO,
@@ -48,6 +49,13 @@ export default function useDaniSendMessage({
   studentAge,
 }) {
   const { t } = useTranslation();
+  const {
+    currentClass,
+    nextClass,
+    todayClasses,
+    upcomingExams,
+    slots
+  } = useSmartBoardKids();
   const isKid = studentAge && studentAge <= 11;
 
   const kidErrorMessages = {
@@ -104,6 +112,42 @@ export default function useDaniSendMessage({
         }
 
         let contextInfo = buildDaniContext();
+
+        // Add academic schedule context
+        let scheduleContext = "";
+        if (slots && slots.length > 0) {
+          scheduleContext = "\n\n## HORARIO ESCOLAR DEL ESTUDIANTE\n";
+
+          // Format today's classes
+          if (todayClasses && todayClasses.length > 0) {
+            scheduleContext += "Clases de hoy:\n";
+            todayClasses.forEach((cls) => {
+              scheduleContext += `- ${cls.subject_label || cls.subject} (${cls.start_time} - ${cls.end_time})${cls.teacher ? ` con ${cls.teacher}` : ""}\n`;
+            });
+          } else {
+            scheduleContext += "Sin clases programadas para hoy.\n";
+          }
+
+          // Current class
+          if (currentClass) {
+            scheduleContext += `\nClase actual: ${currentClass.subject_label || currentClass.subject} (${currentClass.start_time} - ${currentClass.end_time})\n`;
+          }
+
+          // Next class
+          if (nextClass) {
+            scheduleContext += `Próxima clase: ${nextClass.subject_label || nextClass.subject} (${nextClass.start_time})\n`;
+          }
+
+          // Upcoming exams
+          if (upcomingExams && upcomingExams.length > 0) {
+            scheduleContext += "\nExámenes próximos:\n";
+            upcomingExams.slice(0, 5).forEach((exam) => {
+              scheduleContext += `- ${exam.subject} (${exam.exam_date})${exam.topic ? ` - ${exam.topic}` : ""}\n`;
+            });
+          }
+
+          contextInfo += scheduleContext;
+        }
 
         if (hasDocumentContext) {
           contextInfo += `\n\n## ANÁLISIS DE DOCUMENTO DEL ESTUDIANTE\n`;
@@ -309,6 +353,11 @@ export default function useDaniSendMessage({
       setStreamingMessage,
       daniMemory,
       updateDaniMemory,
+      currentClass,
+      nextClass,
+      todayClasses,
+      upcomingExams,
+      slots,
     ],
   );
 
