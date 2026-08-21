@@ -74,7 +74,7 @@ export const CATEGORY_TAB_LABELS = {
   inicio: "Inicio",
 };
 
-export const PREMIUM_TABS = [];
+export const PREMIUM_TABS = ["oral", "misiones"];
 
 export const TOP_BAR_LABELS = {
   inicio: "Inicio",

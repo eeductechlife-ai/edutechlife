@@ -85,7 +85,7 @@ const TopBar = memo(
             </span>
             <span className="leading-tight">
               <span className="block text-base md:text-sm font-black text-[#FB8500] tabular-nums">
-                {streak.current}
+                {streak?.current ?? 0}
               </span>
               <span
                 className={`block text-[10px] md:text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
@@ -116,7 +116,7 @@ const TopBar = memo(
               <span
                 className={`block text-base md:text-sm font-black tabular-nums ${darkMode ? "text-white" : "text-[#00303F]"}`}
               >
-                {totalPoints.toLocaleString()}
+                {(totalPoints ?? 0).toLocaleString()}
               </span>
               <span
                 className={`block text-[10px] md:text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}

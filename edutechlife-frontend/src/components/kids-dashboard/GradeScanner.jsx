@@ -5,6 +5,7 @@ import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { getSubjectEmoji, createSubject } from "../../config/subjectMappings";
 import { useStudentGradesPersistence } from "../../hooks/useStudentGradesPersistence";
+import { createSupabaseClient } from "../../lib/supabase";
 
 // Default subjects with translations
 const DEFAULT_SUBJECTS = [
@@ -146,7 +147,6 @@ export default memo(function GradeScanner({ onTabChange }) {
     const token = sessionStorage.getItem("auth_token");
     if (!token || !userId) return;
     try {
-      const { createSupabaseClient } = await import("../../lib/supabase");
       const sb = createSupabaseClient(token);
       const { data } = await sb
         .from("grade_analyses")
@@ -190,12 +190,20 @@ export default memo(function GradeScanner({ onTabChange }) {
     }
   }, [grades, saveGrades, setStudentGrades]);
 
+  // Cleanup blob URLs on unmount or when preview changes
+  useEffect(() => {
+    return () => {
+      if (imgPreview) {
+        URL.revokeObjectURL(imgPreview);
+      }
+    };
+  }, [imgPreview]);
+
   const saveAnalysis = useCallback(
     async (planData, gradeData) => {
       const token = sessionStorage.getItem("auth_token");
       if (!token || !userId) return;
       try {
-        const { createSupabaseClient } = await import("../../lib/supabase");
         const sb = createSupabaseClient(token);
         const avg = gradeData.length
           ? gradeData.reduce((s, g) => s + g.score, 0) / gradeData.length

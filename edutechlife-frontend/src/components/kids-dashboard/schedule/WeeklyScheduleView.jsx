@@ -177,11 +177,14 @@ const UpcomingExams = ({ exams, onRemove }) => {
                 {x.exam_name || x.subject}
               </div>
               <div className="text-xs text-[#64748B]">
-                {new Date(x.exam_date).toLocaleDateString("es-ES", {
-                  weekday: "short",
-                  day: "2-digit",
-                  month: "short",
-                })}
+                {new Date(x.exam_date + "T00:00:00").toLocaleDateString(
+                  "es-ES",
+                  {
+                    weekday: "short",
+                    day: "2-digit",
+                    month: "short",
+                  },
+                )}
                 {x.topic ? ` · ${x.topic}` : ""}
               </div>
             </div>
