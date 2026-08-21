@@ -708,7 +708,7 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
       .from('parent_consents')
       .select('parent_email')
       .eq('student_id', userId)
-      .order('created_at', { ascending: false })
+      .order('consent_timestamp', { ascending: false })
       .limit(1)
       .single();
 
@@ -771,10 +771,32 @@ router.get('/wellbeing-status', requireAuth, requireVerifiedParentalConsent, asy
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
   try {
+    // Get student IDs linked to this parent
+    const { data: links, error: linksError } = await supabase
+      .from('parent_student_links')
+      .select('student_user_id')
+      .eq('parent_user_id', userId);
+
+    if (linksError && linksError.code !== '42P01' && linksError.code !== 'PGRST205') {
+      throw linksError;
+    }
+
+    const studentIds = (Array.isArray(links) ? links : []).map(l => l.student_user_id);
+    if (!studentIds || studentIds.length === 0) {
+      return res.status(200).json({
+        monitoring: true,
+        recentAlerts: 0,
+        highAlerts: 0,
+        lastAlertAt: null,
+        status: 'calm',
+      });
+    }
+
+    // Query crisis alerts for all linked students
     const { data, error } = await supabase
       .from('crisis_alerts')
       .select('crisis_level, created_at')
-      .eq('student_id', userId)
+      .in('student_id', studentIds)
       .gte('created_at', weekAgo);
 
     // La tabla puede no existir en algún entorno: el acompañamiento sigue "activo".
@@ -1374,64 +1396,6 @@ router.post('/student-grades', requireAuth, async (req, res) => {
     res.json({ success: true, grades });
   } catch (e) {
     console.error('student-grades post error:', e.message);
-    res.status(500).json({ error: 'Error interno' });
-  }
-});
-
-/**
- * GET /api/smartboard/student-profile
- * Returns the student's profile row, creating it if it doesn't exist yet.
- * Used by useTimetable as a fallback when the direct Supabase query returns null
- * (accounts created before the signup route started auto-creating this row).
- */
-router.get('/student-profile', requireAuth, async (req, res) => {
-  const userId = req.userId;
-  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
-
-  try {
-    const { data: existing } = await supabase
-      .from('students')
-      .select('id, name, age')
-      .eq('auth_id', userId)
-      .maybeSingle();
-
-    if (existing) return res.json({ studentId: existing.id });
-
-    // No row — create one using the users profile data.
-    const { data: profile } = await supabase
-      .from('users')
-      .select('first_name, last_name, username, email')
-      .eq('id', userId)
-      .maybeSingle();
-
-    const studentName =
-      [profile?.first_name, profile?.last_name].filter(Boolean).join(' ').trim() ||
-      profile?.username ||
-      (profile?.email ? profile.email.split('@')[0] : 'Estudiante');
-
-    const { data: created, error: createErr } = await supabase
-      .from('students')
-      .insert([{ auth_id: userId, name: studentName, age: 12, email: profile?.email }])
-      .select('id')
-      .single();
-
-    if (createErr) {
-      if (createErr.message?.includes('duplicate') || createErr.code === '23505') {
-        // Race: another request created it first
-        const { data: retry } = await supabase
-          .from('students')
-          .select('id')
-          .eq('auth_id', userId)
-          .maybeSingle();
-        return res.json({ studentId: retry?.id || null });
-      }
-      console.error('student-profile create error:', createErr.message);
-      return res.status(500).json({ error: createErr.message });
-    }
-
-    res.json({ studentId: created.id });
-  } catch (e) {
-    console.error('student-profile error:', e.message);
     res.status(500).json({ error: 'Error interno' });
   }
 });
