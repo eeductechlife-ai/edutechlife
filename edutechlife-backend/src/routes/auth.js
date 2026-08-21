@@ -777,6 +777,23 @@ router.post('/signup', async (req, res) => {
       accountType: safeAccountType,
     });
 
+    // SmartBoard students need a row in `students` so that timetable,
+    // sessions, and other SmartBoard features can reference it via students.auth_id.
+    if (safeAccountType === 'smartboard' && result.user?.id) {
+      const studentName =
+        [firstName, lastName].filter(Boolean).join(' ').trim() ||
+        username ||
+        String(email).split('@')[0];
+      const { error: studentErr } = await supabase
+        .from('students')
+        .insert([{ auth_id: result.user.id, name: studentName, age: 12, email }])
+        .select()
+        .maybeSingle();
+      if (studentErr && !studentErr.message?.includes('duplicate')) {
+        console.error('Auto-create student profile failed:', studentErr.message);
+      }
+    }
+
     res.status(201).json(result);
   } catch (e) {
     console.error('Signup error:', e.message);
@@ -818,6 +835,39 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
     const result = await authService.signIn({ email: resolvedEmail, password });
+
+    // Best-effort: ensure SmartBoard students have a row in `students` so the
+    // timetable and other SmartBoard features work. Handles accounts created
+    // before the signup route started auto-creating this row.
+    if (result.user?.id) {
+      (async () => {
+        try {
+          const { data: profile } = await supabase
+            .from('users')
+            .select('first_name, last_name, username, account_type')
+            .eq('id', result.user.id)
+            .maybeSingle();
+          if (profile?.account_type === 'smartboard') {
+            const { data: existing } = await supabase
+              .from('students')
+              .select('id')
+              .eq('auth_id', result.user.id)
+              .maybeSingle();
+            if (!existing) {
+              const studentName =
+                [profile.first_name, profile.last_name].filter(Boolean).join(' ').trim() ||
+                profile.username ||
+                resolvedEmail.split('@')[0];
+              await supabase
+                .from('students')
+                .insert([{ auth_id: result.user.id, name: studentName, age: 12, email: resolvedEmail }]);
+            }
+          }
+        } catch (e) {
+          console.error('ensure-student-profile on login failed:', e.message);
+        }
+      })();
+    }
 
     res.json(result);
   } catch (e) {
