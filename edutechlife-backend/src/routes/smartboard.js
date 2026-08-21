@@ -1190,6 +1190,96 @@ router.post('/student-profile/avatar', requireAuth, async (req, res) => {
 });
 
 /**
+ * GET/POST /api/smartboard/student-progress
+ * Load or save subject progress (subjectTime, sessions) to students.progress_json.
+ * Fallback for SmartBoard progress tracking when localStorage is lost.
+ */
+router.get('/student-progress', requireAuth, async (req, res) => {
+  const userId = req.userId;
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+  try {
+    const { data: student } = await supabase
+      .from('students')
+      .select('id, progress_json')
+      .eq('auth_id', userId)
+      .maybeSingle();
+
+    if (!student) {
+      // Create student profile if missing
+      const { data: profile } = await supabase
+        .from('users')
+        .select('first_name, last_name, username, email')
+        .eq('id', userId)
+        .maybeSingle();
+
+      const studentName =
+        [profile?.first_name, profile?.last_name].filter(Boolean).join(' ').trim() ||
+        profile?.username ||
+        (profile?.email ? profile.email.split('@')[0] : 'Estudiante');
+
+      const { data: created } = await supabase
+        .from('students')
+        .insert([{ auth_id: userId, name: studentName, age: 12, email: profile?.email }])
+        .select('id, progress_json')
+        .single();
+
+      return res.json({ subjectTime: {}, sessions: [] });
+    }
+
+    const progress = student.progress_json || {};
+    res.json({ subjectTime: progress.subjectTime || {}, sessions: progress.sessions || [] });
+  } catch (e) {
+    console.error('student-progress get error:', e.message);
+    res.status(500).json({ error: 'Error interno' });
+  }
+});
+
+router.post('/student-progress', requireAuth, async (req, res) => {
+  const userId = req.userId;
+  if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+  const { subjectTime, sessions } = req.body || {};
+
+  try {
+    // Ensure student exists
+    const { data: existing } = await supabase
+      .from('students')
+      .select('id')
+      .eq('auth_id', userId)
+      .maybeSingle();
+
+    const studentId = existing?.id || (
+      await supabase
+        .from('students')
+        .insert([{ auth_id: userId, name: 'Estudiante', age: 12 }])
+        .select('id')
+        .single()
+    ).data?.id;
+
+    if (!studentId) {
+      return res.status(500).json({ error: 'Could not create student profile' });
+    }
+
+    // Update progress_json
+    const { error: updateErr } = await supabase
+      .from('students')
+      .update({ progress_json: { subjectTime, sessions } })
+      .eq('id', studentId);
+
+    if (updateErr) {
+      console.error('student-progress update error:', updateErr.message);
+      return res.status(500).json({ error: updateErr.message });
+    }
+
+    res.json({ success: true });
+  } catch (e) {
+    console.error('student-progress post error:', e.message);
+    res.status(500).json({ error: 'Error interno' });
+  }
+});
+
+/**
  * GET/POST /api/smartboard/student-grades
  * Load or save student grades (calificaciones) to students.grades_json (JSONB).
  * Fallback for GradeScanner when localStorage is lost or across devices.

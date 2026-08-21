@@ -34,6 +34,7 @@ import {
   useTotalPoints,
   useSessionsData,
 } from "../hooks/useSmartBoardSupabase";
+import { useSubjectProgressPersistence } from "../hooks/useSubjectProgressPersistence";
 
 export const SmartBoardKidsContext = createContext();
 
@@ -64,7 +65,10 @@ export const SmartBoardKidsProvider = ({ children }) => {
   const sessionStartRef = useRef(new Date());
   const [totalActiveMinutes, setTotalActiveMinutes] = useState(0);
 
-  const [sessions, setSessions] = useState([]);
+  // Persistent progress: subject time + sessions
+  const { subjectTime, sessions, setSubjectTime, setSessions, saveProgress } =
+    useSubjectProgressPersistence();
+
   const [streak, setStreak] = useState({
     current: 0,
     longest: 0,
@@ -83,7 +87,6 @@ export const SmartBoardKidsProvider = ({ children }) => {
     interactionCount: 0,
     lastSessionSummary: null,
   });
-  const [subjectTime, setSubjectTime] = useState({});
   const currentSessionRef = useRef(null);
 
   const [calendarEvents, setCalendarEvents] = useState([]);
@@ -226,8 +229,16 @@ export const SmartBoardKidsProvider = ({ children }) => {
 
     // Color palette for extra subjects not in the defaults
     const EXTRA_COLORS = [
-      "#7C3AED", "#DB2777", "#0891B2", "#059669", "#D97706",
-      "#DC2626", "#2563EB", "#65A30D", "#9333EA", "#C2410C",
+      "#7C3AED",
+      "#DB2777",
+      "#0891B2",
+      "#059669",
+      "#D97706",
+      "#DC2626",
+      "#2563EB",
+      "#65A30D",
+      "#9333EA",
+      "#C2410C",
     ];
 
     // Step 1: update the 6 default subjects with matching grade data
@@ -429,6 +440,11 @@ export const SmartBoardKidsProvider = ({ children }) => {
     setLocalStorage(`activities_${userId}`, uploadedActivities);
     setLocalStorage(`analyzed_${userId}`, analyzedActivities);
     setLocalStorage(`dark_mode_${userId}`, darkMode);
+
+    // Sync subject progress to backend (fire-and-forget)
+    if (subjectTime || sessions?.length) {
+      saveProgress(subjectTime, sessions);
+    }
     setLocalStorage(`avatar_animado_${userId}`, avatarAnimado);
     setLocalStorage(`fondo_galaxia_${userId}`, fondoGalaxia);
     setLocalStorage("subscription_tier", subscriptionTier);

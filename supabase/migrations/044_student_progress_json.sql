@@ -1,0 +1,16 @@
+-- ============================================================================
+-- Migration 044 — Student Progress JSON (Avance de Materias)
+--
+-- Adds progress_json column to students table to persist subject time and session data.
+-- Fallback for SmartBoard progress tracking across sessions and devices.
+-- ============================================================================
+
+BEGIN;
+
+-- Add progress_json column if it doesn't exist
+ALTER TABLE students ADD COLUMN IF NOT EXISTS progress_json JSONB DEFAULT '{}'::JSONB;
+
+-- Index for progress lookups
+CREATE INDEX IF NOT EXISTS idx_students_progress_json ON students USING GIN (progress_json);
+
+COMMIT;
