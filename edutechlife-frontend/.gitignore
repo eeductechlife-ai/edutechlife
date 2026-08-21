@@ -16,6 +16,9 @@
 bundle-stats.html
 repomix-output.xml
 
+# Chrome descargado por @puppeteer/browsers (build de Vercel / verificación local)
+chrome/
+
 # Security credentials
 *.key
 *.pem

@@ -15,21 +15,13 @@ const WelcomeScreen = ({ onNavigate }) => {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
 
   const urlReturnTo = searchParams.get("returnTo");
-  const storageReturnTo = sessionStorage.getItem("clerk_return_to");
-  const returnTo = safeReturnTo(
-    urlReturnTo || (storageReturnTo ? `/${storageReturnTo}` : null),
-    "/ialab",
-  );
+  const returnTo = safeReturnTo(urlReturnTo, "/ialab");
   useEffect(() => {
     const action = searchParams.get("action");
     if (action === "signup") {
       setIsSignUpMode(true);
     }
   }, [searchParams]);
-
-  if (storageReturnTo) {
-    sessionStorage.removeItem("clerk_return_to");
-  }
 
   return (
     <>

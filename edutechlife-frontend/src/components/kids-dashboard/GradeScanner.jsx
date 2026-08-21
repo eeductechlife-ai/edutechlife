@@ -4,6 +4,7 @@ import { callDeepseek } from "../../utils/api";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { getSubjectEmoji, createSubject } from "../../config/subjectMappings";
+import { useStudentGradesPersistence } from "../../hooks/useStudentGradesPersistence";
 
 // Default subjects with translations
 const DEFAULT_SUBJECTS = [
@@ -108,19 +109,22 @@ export default memo(function GradeScanner({ onTabChange }) {
     userId,
   } = useSmartBoardKids();
   const { t } = useTranslation();
+  const { grades: persistedGrades, saveGrades } = useStudentGradesPersistence();
+
   // Support dynamic subjects extracted from documents
   const [extractedSubjectNames, setExtractedSubjectNames] = useState(null);
   const SUBJECTS = getSubjects(t, extractedSubjectNames);
 
-  const [grades, setGrades] = useState(
-    studentGrades.length
-      ? studentGrades
-      : SUBJECTS.slice(0, 5).map((s) => ({
-          id: uid(),
-          subject: s.v,
-          score: 3.5,
-        })),
-  );
+  // Use persisted grades from hook, fall back to context, then defaults
+  const [grades, setGrades] = useState(() => {
+    if (persistedGrades?.length) return persistedGrades;
+    if (studentGrades?.length) return studentGrades;
+    return SUBJECTS.slice(0, 5).map((s) => ({
+      id: uid(),
+      subject: s.v,
+      score: 3.5,
+    }));
+  });
   const [scanning, setScanning] = useState(false);
   const [plan, setPlan] = useState(null);
   const [error, setError] = useState("");
@@ -177,6 +181,14 @@ export default memo(function GradeScanner({ onTabChange }) {
   useEffect(() => {
     loadHistory();
   }, [loadHistory]);
+
+  // Auto-save grades to localStorage + backend every time they change
+  useEffect(() => {
+    if (grades?.length) {
+      saveGrades(grades);
+      setStudentGrades(grades);
+    }
+  }, [grades, saveGrades, setStudentGrades]);
 
   const saveAnalysis = useCallback(
     async (planData, gradeData) => {

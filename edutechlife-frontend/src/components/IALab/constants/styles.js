@@ -1,3 +1,7 @@
+/* Paletas de herramienta derivadas de la fuente única de verdad
+   (themes/toolConfig.js) para no duplicar valores. */
+import { TOOL_CHROME_CONFIG } from "../themes/toolConfig";
+
 export const FOCUS_RING =
   "focus:outline-none focus-visible:ring-2 focus-visible:ring-corporate focus-visible:ring-offset-2 transition-all";
 
@@ -32,14 +36,17 @@ export const STICKY_HEADER =
 export const TOUCH_TARGET_MIN =
   "min-w-[44px] min-h-[44px] flex items-center justify-center";
 
-export const CHATGPT_COLORS = {
-  primary: "#10a37f",
-  background: "#0d0d0d",
-  surface: "#f7f7f8",
-  text: "#ffffff",
-  accent: "#10a37f",
-  border: "#d1d5db",
-};
+export const CHATGPT_COLORS = (() => {
+  const cfg = TOOL_CHROME_CONFIG.chatgpt;
+  return {
+    primary: cfg.sendBg,
+    background: cfg.railBg,
+    surface: cfg.subtle,
+    text: "#ffffff",
+    accent: cfg.sendBg,
+    border: cfg.composerBorder,
+  };
+})();
 
 export const CHATGPT_BUTTON_STYLES = {
   primary: "bg-[#10a37f] text-white hover:bg-[#0d0d0d] shadow-[#10a37f]/30",
@@ -56,22 +63,28 @@ export const CHATGPT_CARD_STYLES = {
   modal: "bg-white dark:bg-slate-800 rounded-[2rem] shadow-2xl",
 };
 
-export const GEMINI_COLORS = {
-  primary: "#4f46e5",
-  background: "#ffffff",
-  bgLight: "#f9fafb",
-  researchTypes: {
-    image: "#7c3aed",
-    factcheck: "#14b8a6",
-    deep: "#4f46e5",
-  },
-};
+export const GEMINI_COLORS = (() => {
+  const cfg = TOOL_CHROME_CONFIG.gemini;
+  return {
+    primary: cfg.primary,
+    background: "#ffffff",
+    bgLight: cfg.subtle,
+    researchTypes: {
+      image: "#4285f4",
+      factcheck: "#d96570",
+      deep: "#1a73e8",
+    },
+  };
+})();
 
-export const NOTEBOOKLM_COLORS = {
-  primary: "#1e40af",
-  secondary: "#fbbf24",
-  lightGray: "#f3f4f6",
-  background: "#f8f9fa",
-  darkBackground: "#121212",
-  confetti: ["#1e40af", "#fbbf24", "#f3f4f6"],
-};
+export const NOTEBOOKLM_COLORS = (() => {
+  const cfg = TOOL_CHROME_CONFIG.notebooklm;
+  return {
+    primary: cfg.primary,
+    secondary: cfg.amberSoft,
+    lightGray: "#f3f4f6",
+    background: cfg.subtle,
+    darkBackground: "#121212",
+    confetti: ["#1e40af", "#fbbf24", "#f3f4f6"],
+  };
+})();

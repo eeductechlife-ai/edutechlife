@@ -23,11 +23,13 @@ import { getAllLessons } from "../../data/ialab";
 import { useIALabStore } from "../../store/ialabStore";
 import { usePullToRefresh } from "../../hooks/IALab/usePullToRefresh";
 import { useSwipeNavigation } from "../../hooks/IALab/useSwipeNavigation";
+import { useToolChrome } from "../../hooks/IALab/useToolChrome";
 import { useCelebrationEffects } from "../../hooks/IALab/useCelebrationEffects";
 import "./IALab.css";
 import "./themes/themes.css";
 import ThemeProvider from "./themes/ThemeProvider";
 import { mapModuleToTheme } from "./themes/themeMap";
+import ToolWorkspace from "./workspace/ToolWorkspace";
 import MobileMenuOverlay from "./shared/MobileMenuOverlay";
 import TabPills from "./shared/TabPills";
 import AnimatedSection from "./shared/AnimatedSection";
@@ -124,7 +126,9 @@ const IALabContent = memo(function () {
   const showValerioDrawer = useIALabStore((s) => s.showValerioDrawer);
   const setShowValerioDrawer = useIALabStore((s) => s.setShowValerioDrawer);
   const valerioInitialMessage = useIALabStore((s) => s.valerioInitialMessage);
-  const setValerioInitialMessage = useIALabStore((s) => s.setValerioInitialMessage);
+  const setValerioInitialMessage = useIALabStore(
+    (s) => s.setValerioInitialMessage,
+  );
   useEffect(() => {
     if (showValerioDrawer) {
       setShowValerioPanel(true);
@@ -292,7 +296,6 @@ const IALabContent = memo(function () {
         )?.title
       : null;
 
-
   // Handler para acciones globales
   const handleAction = useCallback((action, data) => {
     if (action === "OPEN_VALERIO") {
@@ -308,7 +311,7 @@ const IALabContent = memo(function () {
       return;
     }
     if (action === "OPEN_PRACTICE") {
-      useIALabStore.getState().setPracticeTool('tutoring');
+      useIALabStore.getState().setPracticeTool("tutoring");
       return;
     }
     const s = useIALabStore.getState();
@@ -336,397 +339,447 @@ const IALabContent = memo(function () {
     isScrollingRef,
   });
 
+  const toolChrome = useToolChrome(mapModuleToTheme(activeMod));
+  /* Chrome inmersivo por ahora SOLO en Módulo 2 (ChatGPT) — piloto.
+     Fase D del plan extiende el workspace a Gemini (3) y NotebookLM (4). */
+  const chromeActive =
+    toolChrome.enabled && mapModuleToTheme(activeMod) === "chatgpt";
+
+  /* 2–6. Secciones del módulo: paneles informativo, temas, actividades,
+     práctica, guardados y foro. Se envuelven en ToolWorkspace cuando el
+     chrome inmersivo está activo; si no, se montan sin wrapper. */
+  const moduleSections = (
+    <>
+      {/* 2. SECCIÓN INFORMATIVA DEL MÓDULO */}
+      <AnimatedSection
+        show={viewSection === null || viewSection === "objetivos"}
+        loading={isLoadingProgress || isModuleTransitioning}
+        skeleton={<ModuleInfoSkeleton />}
+      >
+        <div
+          id="panel-objetivos"
+          role="tabpanel"
+          aria-labelledby="tab-objetivos"
+          data-tour="tour-objetivos"
+        >
+          <SectionErrorBoundary
+            name="ModuleInfoSection"
+            title={t("ialab.info_unavailable")}
+          >
+            <ModuleInfoSection />
+          </SectionErrorBoundary>
+        </div>
+      </AnimatedSection>
+
+      {/* 3. TEMAS DEL MÓDULO - ACORDEÓN */}
+      <AnimatedSection
+        show={viewSection === null || viewSection === "contenido"}
+        loading={isLoadingProgress || isModuleTransitioning}
+        skeleton={<ModuleOverviewSkeleton />}
+      >
+        <div
+          id="panel-contenido"
+          role="tabpanel"
+          aria-labelledby="tab-contenido"
+          data-tour="tour-temas"
+        >
+          <Suspense fallback={<ModuleOverviewSkeleton />}>
+            <SectionErrorBoundary name="ModuleOverviewCard">
+              <ModuleOverviewCard
+                onAction={handleAction}
+                onToggleForum={setIsForumOpen}
+              />
+            </SectionErrorBoundary>
+          </Suspense>
+        </div>
+      </AnimatedSection>
+
+      {/* 4. ACTIVIDADES DEL MÓDULO */}
+      <AnimatedSection
+        show={viewSection === null || viewSection === "actividades"}
+        loading={isLoadingProgress || isModuleTransitioning}
+        skeleton={<ModuleActionsSkeleton />}
+      >
+        <div
+          id="panel-actividades"
+          role="tabpanel"
+          aria-labelledby="tab-actividades"
+          data-tour="tour-actividades"
+        >
+          <Suspense fallback={<ModuleActionsSkeleton />}>
+            <SectionErrorBoundary name="ModuleActions">
+              <ModuleActions
+                onAction={handleAction}
+                activeMod={activeMod}
+                challengeScores={challengeScores}
+                completedExams={completedExams}
+                moduleProgress={moduleProgress}
+                isForumOpen={isForumOpen}
+                onToggleForum={() => setIsForumOpen((prev) => !prev)}
+              />
+            </SectionErrorBoundary>
+          </Suspense>
+        </div>
+      </AnimatedSection>
+
+      {/* 5. PRÁCTICA DEL MÓDULO */}
+      <AnimatedSection
+        show={viewSection === null || viewSection === "practica"}
+        loading={isLoadingProgress || isModuleTransitioning}
+        skeleton={<ModuleActionsSkeleton />}
+      >
+        <div
+          id="panel-practica"
+          role="tabpanel"
+          aria-labelledby="tab-practica"
+          data-tour="tour-herramientas"
+        >
+          <Suspense fallback={null}>
+            <SectionErrorBoundary name="ModulePractice">
+              <ModulePractice onAction={handleAction} activeMod={activeMod} />
+            </SectionErrorBoundary>
+          </Suspense>
+        </div>
+      </AnimatedSection>
+
+      {/* 7. MIS GUARDADOS */}
+      <AnimatedSection
+        show={viewSection === "guardados"}
+        loading={false}
+        skeleton={<ModuleActionsSkeleton />}
+      >
+        <div
+          id="panel-guardados"
+          role="tabpanel"
+          aria-labelledby="tab-guardados"
+        >
+          <Suspense fallback={<ModuleActionsSkeleton />}>
+            <SectionErrorBoundary name="BookmarksTab">
+              <BookmarksTab />
+            </SectionErrorBoundary>
+          </Suspense>
+        </div>
+      </AnimatedSection>
+
+      {/* 6. FORO DEL MÓDULO */}
+      {(viewSection === null || viewSection === "actividades") &&
+        isForumOpen && (
+          <div id="forum-section">
+            <SectionErrorBoundary name="Forum">
+              <Suspense
+                fallback={
+                  <div className="h-20 bg-white/50 rounded-xl animate-pulse" />
+                }
+              >
+                <IALabForumOptimized compact={false} initialLimit={3} />
+              </Suspense>
+            </SectionErrorBoundary>
+          </div>
+        )}
+    </>
+  );
+
   return (
     <ThemeProvider moduleId={activeMod}>
       <div
         data-testid="ialab-container"
         data-theme={mapModuleToTheme(activeMod)}
+        data-chrome={chromeActive ? "on" : "off"}
         className={`flex flex-col h-dvh touch-manipulation${isDarkMode ? " dark" : ""}`}
-        style={{ background: 'var(--theme-bg)', fontFamily: 'var(--theme-font)' }}
+        style={{
+          background: "var(--theme-bg)",
+          fontFamily: "var(--theme-font)",
+        }}
         onTouchStart={swipeStart}
         onTouchMove={swipeMove}
         onTouchEnd={swipeEnd}
       >
-      <MobileHeader
-        onOpenMobileMenu={() => setShowMobileMenu(true)}
-        setIsSearchOpen={setIsSearchOpen}
-        isSearchOpen={isSearchOpen}
-      />
-
-      {isSearchOpen && (
-        <GlobalSearchBar mobile onClose={() => setIsSearchOpen(false)} />
-      )}
-
-      <header role="banner" className="hidden md:block">
-        <IALabHeader onAction={handleAction} />
-      </header>
-
-      {/* Layout principal - Flexbox estricto para evitar overlap */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar - oculto en móviles, visible desde md (tablet) */}
-        <div className="hidden md:flex" data-tour="tour-sidebar">
-          <IALabSidebar />
-        </div>
-
-        <MobileMenuOverlay
-          showMobileMenu={showMobileMenu}
-          mobileMenuClosing={mobileMenuClosing}
-          closeMobileMenu={closeMobileMenu}
-          MOBILE_MENU_WIDTH={MOBILE_MENU_WIDTH}
-          SPRING_DAMPING={SPRING_DAMPING}
-          SPRING_STIFFNESS={SPRING_STIFFNESS}
-          toggleDarkMode={toggleDarkMode}
-          isDarkMode={isDarkMode}
-          handleOpenProfile={handleOpenProfile}
-          handleOpenHistory={handleOpenHistory}
-          handleOpenHelp={handleOpenHelp}
+        <MobileHeader
+          onOpenMobileMenu={() => setShowMobileMenu(true)}
+          setIsSearchOpen={setIsSearchOpen}
+          isSearchOpen={isSearchOpen}
         />
 
-        <SkipLink />
+        {isSearchOpen && (
+          <GlobalSearchBar mobile onClose={() => setIsSearchOpen(false)} />
+        )}
 
-        {/* Área de Contenido Principal - scroll propio */}
-        <main
-          data-testid="ialab-main-content"
-          role="main"
-          ref={setMainRef}
-          id="main-content"
-          tabIndex={-1}
-          className="flex-1 outline-none overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 safe-area-bottom md:px-5 md:pt-0 lg:px-8 lg:pt-0 lg:pb-8 xl:px-12 2xl:px-16"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          {pullDistance > 0 && (
-            <div
-              className="flex items-center justify-center transition-all duration-100"
-              style={{
-                height: Math.min(pullDistance, 60),
-                opacity: Math.min(pullDistance / 60, 1),
-              }}
-            >
+        <header role="banner" className="hidden md:block">
+          <IALabHeader onAction={handleAction} />
+        </header>
+
+        {/* Layout principal - Flexbox estricto para evitar overlap */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Sidebar - oculto en móviles, visible desde md (tablet) */}
+          <div className="hidden md:flex" data-tour="tour-sidebar">
+            <IALabSidebar />
+          </div>
+
+          <MobileMenuOverlay
+            showMobileMenu={showMobileMenu}
+            mobileMenuClosing={mobileMenuClosing}
+            closeMobileMenu={closeMobileMenu}
+            MOBILE_MENU_WIDTH={MOBILE_MENU_WIDTH}
+            SPRING_DAMPING={SPRING_DAMPING}
+            SPRING_STIFFNESS={SPRING_STIFFNESS}
+            toggleDarkMode={toggleDarkMode}
+            isDarkMode={isDarkMode}
+            handleOpenProfile={handleOpenProfile}
+            handleOpenHistory={handleOpenHistory}
+            handleOpenHelp={handleOpenHelp}
+          />
+
+          <SkipLink />
+
+          {/* Área de Contenido Principal - scroll propio */}
+          <main
+            data-testid="ialab-main-content"
+            role="main"
+            ref={setMainRef}
+            id="main-content"
+            tabIndex={-1}
+            className="flex-1 outline-none overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 safe-area-bottom md:px-5 md:pt-0 lg:px-8 lg:pt-0 lg:pb-8 xl:px-12 2xl:px-16"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            {pullDistance > 0 && (
               <div
-                className={`w-6 h-6 rounded-full border-2 border-[var(--theme-emphasis)] ${isRefreshing ? "animate-spin border-t-transparent" : ""}`}
-                style={{ transform: `rotate(${pullDistance * 3}deg)` }}
-              />
-            </div>
-          )}
-          <AnimatePresence mode="wait" custom={directionRef.current}>
-            <motion.div
-              key={`content-${activeMod}`}
-              custom={directionRef.current}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{
-                x: { type: "spring", stiffness: SPRING_STIFFNESS, damping: 30 },
-                opacity: { duration: shouldReduceMotion ? 0 : 0.2 },
-              }}
-              aria-live="polite"
-              aria-atomic="true"
-              className="flex flex-col gap-5 w-full max-w-7xl pb-8"
-            >
-              <MobileInfoBar
-                user={user}
-                activeMod={activeMod}
-                courseProgress={courseProgress}
-              />
-
-              {/* Banner: Continuar donde lo dejaste */}
-              {!isLoadingProgress && currentLessonTitle && viewSection === null && (
-                <motion.div
-                  key={`continue-banner-${activeMod}`}
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/8 border border-[var(--theme-emphasis)]/20 rounded-xl"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 shadow-sm">
-                    <span className="text-white text-sm">▶</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[11px] font-bold text-[var(--theme-emphasis)] uppercase tracking-wide">{t("ialab.continue_banner_lesson")}</p>
-                    <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">{currentLessonTitle}</p>
-                  </div>
-                  <button
-                    onClick={() => setViewSection("contenido")}
-                    className="flex-shrink-0 px-3 py-1.5 bg-[var(--theme-emphasis)] text-white text-xs font-bold rounded-lg hover:bg-[var(--theme-emphasis)]-dark transition-colors shadow-sm"
-                  >
-                    {t("ialab.continue_banner_cta")}
-                  </button>
-                </motion.div>
-              )}
-
-              {isLoadingProgress ? (
-                <motion.div
-                  key={`skeleton-ruta-${activeMod}`}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  <RouteSkeleton />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key={`content-ruta-${activeMod}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.25 }}
-                  className="space-y-4"
-                >
-                  <Suspense fallback={<RouteSkeleton />}>
-                    <SectionErrorBoundary name="DailyPlan">
-                      <div data-tour="tour-ruta">
-                        <DailyPlan
-                          onAction={handleAction}
-                          isLoading={isLoadingProgress}
-                        />
-                      </div>
-                    </SectionErrorBoundary>
-                  </Suspense>
-                </motion.div>
-              )}
-
-              {/* TAB PILLS - Navegación entre secciones */}
-              <div
-                data-tour="tour-tabs"
-                data-testid="ialab-tabs"
-                role="tablist"
-                className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin-ialab"
-              >
-                <TabPills
-                  TABS={TABS}
-                  viewSection={viewSection}
-                  setViewSection={setViewSection}
-                  badges={{ guardados: bookmarkBadge }}
-                />
-              </div>
-
-              <div className="flex flex-col gap-5">
-                <Breadcrumbs
-                  segments={[
-                    {
-                      label: t("ialab.breadcrumb_home"),
-                      icon: "fa-house",
-                      onClick: resetViewSection,
-                    },
-                    {
-                      label:
-                        modules?.find((m) => m.id === activeMod)?.title ||
-                        t("ialab.breadcrumb_module", { id: activeMod }),
-                      onClick: resetViewSection,
-                    },
-                    ...(viewSection
-                      ? [
-                          {
-                            label:
-                              TABS.find((t) => t.id === viewSection)?.label ||
-                              viewSection,
-                          },
-                        ]
-                      : []),
-                    ...(viewSection === null && currentLessonTitle
-                      ? [{ label: currentLessonTitle }]
-                      : []),
-                  ]}
-                  size="text-[10px] md:text-xs"
-                />
-
-                {/* 1. TÍTULO PRINCIPAL */}
-                <AnimatedSection
-                  show={viewSection === null}
-                  loading={isLoadingProgress || isModuleTransitioning}
-                  skeleton={
-                    <div className="flex items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                      <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
-                      <div className="space-y-2 flex-1">
-                        <div className="h-5 w-56 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
-                        <div className="h-3 w-32 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
-                      </div>
-                    </div>
-                  }
-                >
-                  <SectionErrorBoundary
-                    name="IALabModuleHeader"
-                    title={t("ialab.header_unavailable")}
-                  >
-                    <IALabModuleHeader onAction={handleAction} />
-                  </SectionErrorBoundary>
-                </AnimatedSection>
-
-                {/* 2. SECCIÓN INFORMATIVA DEL MÓDULO */}
-                <AnimatedSection
-                  show={viewSection === null || viewSection === "objetivos"}
-                  loading={isLoadingProgress || isModuleTransitioning}
-                  skeleton={<ModuleInfoSkeleton />}
-                >
-                  <div
-                    id="panel-objetivos"
-                    role="tabpanel"
-                    aria-labelledby="tab-objetivos"
-                    data-tour="tour-objetivos"
-                  >
-                    <SectionErrorBoundary
-                      name="ModuleInfoSection"
-                      title={t("ialab.info_unavailable")}
-                    >
-                      <ModuleInfoSection />
-                    </SectionErrorBoundary>
-                  </div>
-                </AnimatedSection>
-
-                {/* 3. TEMAS DEL MÓDULO - ACORDEÓN */}
-                <AnimatedSection
-                  show={viewSection === null || viewSection === "contenido"}
-                  loading={isLoadingProgress || isModuleTransitioning}
-                  skeleton={<ModuleOverviewSkeleton />}
-                >
-                  <div
-                    id="panel-contenido"
-                    role="tabpanel"
-                    aria-labelledby="tab-contenido"
-                    data-tour="tour-temas"
-                  >
-                    <Suspense fallback={<ModuleOverviewSkeleton />}>
-                      <SectionErrorBoundary name="ModuleOverviewCard">
-                        <ModuleOverviewCard
-                          onAction={handleAction}
-                          onToggleForum={setIsForumOpen}
-                        />
-                      </SectionErrorBoundary>
-                    </Suspense>
-                  </div>
-                </AnimatedSection>
-
-                {/* 4. ACTIVIDADES DEL MÓDULO */}
-                <AnimatedSection
-                  show={viewSection === null || viewSection === "actividades"}
-                  loading={isLoadingProgress || isModuleTransitioning}
-                  skeleton={<ModuleActionsSkeleton />}
-                >
-                  <div
-                    id="panel-actividades"
-                    role="tabpanel"
-                    aria-labelledby="tab-actividades"
-                    data-tour="tour-actividades"
-                  >
-                    <Suspense fallback={<ModuleActionsSkeleton />}>
-                      <SectionErrorBoundary name="ModuleActions">
-                        <ModuleActions
-                          onAction={handleAction}
-                          activeMod={activeMod}
-                          challengeScores={challengeScores}
-                          completedExams={completedExams}
-                          moduleProgress={moduleProgress}
-                          isForumOpen={isForumOpen}
-                          onToggleForum={() => setIsForumOpen((prev) => !prev)}
-                        />
-                      </SectionErrorBoundary>
-                    </Suspense>
-                  </div>
-                </AnimatedSection>
-              </div>
-
-              {/* 5. PRÁCTICA DEL MÓDULO */}
-              <AnimatedSection
-                show={viewSection === null || viewSection === "practica"}
-                loading={isLoadingProgress || isModuleTransitioning}
-                skeleton={<ModuleActionsSkeleton />}
+                className="flex items-center justify-center transition-all duration-100"
+                style={{
+                  height: Math.min(pullDistance, 60),
+                  opacity: Math.min(pullDistance / 60, 1),
+                }}
               >
                 <div
-                  id="panel-practica"
-                  role="tabpanel"
-                  aria-labelledby="tab-practica"
-                  data-tour="tour-herramientas"
-                >
-                  <Suspense fallback={null}>
-                    <SectionErrorBoundary name="ModulePractice">
-                      <ModulePractice
-                        onAction={handleAction}
-                        activeMod={activeMod}
-                      />
-                    </SectionErrorBoundary>
-                  </Suspense>
-                </div>
-              </AnimatedSection>
-
-              {/* 7. MIS GUARDADOS */}
-              <AnimatedSection
-                show={viewSection === "guardados"}
-                loading={false}
-                skeleton={<ModuleActionsSkeleton />}
+                  className={`w-6 h-6 rounded-full border-2 border-[var(--theme-emphasis)] ${isRefreshing ? "animate-spin border-t-transparent" : ""}`}
+                  style={{ transform: `rotate(${pullDistance * 3}deg)` }}
+                />
+              </div>
+            )}
+            <AnimatePresence mode="wait" custom={directionRef.current}>
+              <motion.div
+                key={`content-${activeMod}`}
+                custom={directionRef.current}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: {
+                    type: "spring",
+                    stiffness: SPRING_STIFFNESS,
+                    damping: 30,
+                  },
+                  opacity: { duration: shouldReduceMotion ? 0 : 0.2 },
+                }}
+                aria-live="polite"
+                aria-atomic="true"
+                className="flex flex-col gap-5 w-full max-w-7xl pb-8"
               >
-                <div id="panel-guardados" role="tabpanel" aria-labelledby="tab-guardados">
-                  <Suspense fallback={<ModuleActionsSkeleton />}>
-                    <SectionErrorBoundary name="BookmarksTab">
-                      <BookmarksTab />
-                    </SectionErrorBoundary>
-                  </Suspense>
-                </div>
-              </AnimatedSection>
+                <MobileInfoBar
+                  user={user}
+                  activeMod={activeMod}
+                  courseProgress={courseProgress}
+                />
 
-              {/* 6. FORO DEL MÓDULO */}
-              {(viewSection === null || viewSection === "actividades") &&
-                isForumOpen && (
-                  <div id="forum-section">
-                    <SectionErrorBoundary name="Forum">
-                      <Suspense
-                        fallback={
-                          <div className="h-20 bg-white/50 rounded-xl animate-pulse" />
-                        }
+                {/* Banner: Continuar donde lo dejaste */}
+                {!isLoadingProgress &&
+                  currentLessonTitle &&
+                  viewSection === null && (
+                    <motion.div
+                      key={`continue-banner-${activeMod}`}
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/8 border border-[var(--theme-emphasis)]/20 rounded-xl"
+                    >
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <span className="text-white text-sm">▶</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-bold text-[var(--theme-emphasis)] uppercase tracking-wide">
+                          {t("ialab.continue_banner_lesson")}
+                        </p>
+                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">
+                          {currentLessonTitle}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setViewSection("contenido")}
+                        className="flex-shrink-0 px-3 py-1.5 bg-[var(--theme-emphasis)] text-white text-xs font-bold rounded-lg hover:bg-[var(--theme-emphasis)]-dark transition-colors shadow-sm"
                       >
-                        <IALabForumOptimized compact={false} initialLimit={3} />
-                      </Suspense>
-                    </SectionErrorBoundary>
-                  </div>
+                        {t("ialab.continue_banner_cta")}
+                      </button>
+                    </motion.div>
+                  )}
+
+                {isLoadingProgress ? (
+                  <motion.div
+                    key={`skeleton-ruta-${activeMod}`}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <RouteSkeleton />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key={`content-ruta-${activeMod}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.25 }}
+                    className="space-y-4"
+                  >
+                    <Suspense fallback={<RouteSkeleton />}>
+                      <SectionErrorBoundary name="DailyPlan">
+                        <div data-tour="tour-ruta">
+                          <DailyPlan
+                            onAction={handleAction}
+                            isLoading={isLoadingProgress}
+                          />
+                        </div>
+                      </SectionErrorBoundary>
+                    </Suspense>
+                  </motion.div>
                 )}
-            </motion.div>
-          </AnimatePresence>
-        </main>
-      </div>
 
-      <IALabModals
-        handleGlobalAction={handleAction}
-        activeMod={activeMod}
-        completedExams={completedExams}
-      />
+                {/* TAB PILLS - Navegación entre secciones */}
+                <div
+                  data-tour="tour-tabs"
+                  data-testid="ialab-tabs"
+                  role="tablist"
+                  className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin-ialab"
+                >
+                  <TabPills
+                    TABS={TABS}
+                    viewSection={viewSection}
+                    setViewSection={setViewSection}
+                    badges={{ guardados: bookmarkBadge }}
+                  />
+                </div>
 
-      <ValerioFloatingButton
-        onClick={() => handleAction("OPEN_VALERIO")}
-        t={t}
-      />
+                <div className="flex flex-col gap-5">
+                  <Breadcrumbs
+                    segments={[
+                      {
+                        label: t("ialab.breadcrumb_home"),
+                        icon: "fa-house",
+                        onClick: resetViewSection,
+                      },
+                      {
+                        label:
+                          modules?.find((m) => m.id === activeMod)?.title ||
+                          t("ialab.breadcrumb_module", { id: activeMod }),
+                        onClick: resetViewSection,
+                      },
+                      ...(viewSection
+                        ? [
+                            {
+                              label:
+                                TABS.find((t) => t.id === viewSection)?.label ||
+                                viewSection,
+                            },
+                          ]
+                        : []),
+                      ...(viewSection === null && currentLessonTitle
+                        ? [{ label: currentLessonTitle }]
+                        : []),
+                    ]}
+                    size="text-[10px] md:text-xs"
+                  />
 
-      <Suspense
-        fallback={<div className="h-20 bg-white/50 rounded-xl animate-pulse" />}
-      >
-        {showValerioPanel && (
-          <IALabValerioPanel
-            isOpen={showValerioPanel}
-            onClose={() => { setShowValerioPanel(false); setValerioInitialMessage(''); }}
-            initialMessage={valerioInitialMessage}
-          />
-        )}
-      </Suspense>
+                  {/* 1. TÍTULO PRINCIPAL */}
+                  <AnimatedSection
+                    show={viewSection === null}
+                    loading={isLoadingProgress || isModuleTransitioning}
+                    skeleton={
+                      <div className="flex items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                        <div className="space-y-2 flex-1">
+                          <div className="h-5 w-56 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
+                          <div className="h-3 w-32 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
+                        </div>
+                      </div>
+                    }
+                  >
+                    <SectionErrorBoundary
+                      name="IALabModuleHeader"
+                      title={t("ialab.header_unavailable")}
+                    >
+                      <IALabModuleHeader onAction={handleAction} />
+                    </SectionErrorBoundary>
+                  </AnimatedSection>
+                </div>
 
-      {/* Banner de conectividad */}
-      <OfflineBanner />
+                {/* 2–6. Secciones del módulo (envueltas en el workspace inmersivo cuando aplica) */}
+                {chromeActive ? (
+                  <ToolWorkspace
+                    theme="chatgpt"
+                    activeMod={activeMod}
+                    viewSection={viewSection}
+                    onNewChat={resetViewSection}
+                    onSelectTopic={() => setViewSection("contenido")}
+                  >
+                    {moduleSections}
+                  </ToolWorkspace>
+                ) : (
+                  moduleSections
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </main>
+        </div>
 
-      {/* Tour interactivo contextual */}
-      <Suspense
-        fallback={<div className="h-20 bg-white/50 rounded-xl animate-pulse" />}
-      >
-        <IALabTour hasStartedCourse={hasStartedCourse} />
-      </Suspense>
-
-      <ToastNotification toast={toast} onDismiss={() => setToast(null)} />
-
-      <XPToast />
-
-      <Suspense fallback={null}>
-        <AchievementToast
-          toasts={achievementToasts}
-          removeToast={removeAchievementToast}
+        <IALabModals
+          handleGlobalAction={handleAction}
+          activeMod={activeMod}
+          completedExams={completedExams}
         />
-      </Suspense>
+
+        <ValerioFloatingButton
+          onClick={() => handleAction("OPEN_VALERIO")}
+          t={t}
+        />
+
+        <Suspense
+          fallback={
+            <div className="h-20 bg-white/50 rounded-xl animate-pulse" />
+          }
+        >
+          {showValerioPanel && (
+            <IALabValerioPanel
+              isOpen={showValerioPanel}
+              onClose={() => {
+                setShowValerioPanel(false);
+                setValerioInitialMessage("");
+              }}
+              initialMessage={valerioInitialMessage}
+            />
+          )}
+        </Suspense>
+
+        {/* Banner de conectividad */}
+        <OfflineBanner />
+
+        {/* Tour interactivo contextual */}
+        <Suspense
+          fallback={
+            <div className="h-20 bg-white/50 rounded-xl animate-pulse" />
+          }
+        >
+          <IALabTour hasStartedCourse={hasStartedCourse} />
+        </Suspense>
+
+        <ToastNotification toast={toast} onDismiss={() => setToast(null)} />
+
+        <XPToast />
+
+        <Suspense fallback={null}>
+          <AchievementToast
+            toasts={achievementToasts}
+            removeToast={removeAchievementToast}
+          />
+        </Suspense>
       </div>
     </ThemeProvider>
   );

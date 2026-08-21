@@ -130,7 +130,7 @@ export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
                 "w-full text-left p-4 rounded-xl border transition-all duration-300 ";
               if (selected === null) {
                 btnClass +=
-                  "border-gray-200 dark:border-slate-600 hover:border-[var(--theme-primary)] hover:bg-cyan-50";
+                  "border-gray-200 dark:border-slate-600 hover:border-[var(--theme-primary)] hover:bg-[var(--theme-primary)]/10";
               } else {
                 if (i === questions[currentQ].answer) {
                   btnClass +=
@@ -167,8 +167,11 @@ export default function QuizScreen({ onNext, addXp, onMarkComplete }) {
           </div>
         </Card>
       ) : (
-        <Card className="text-center animate-[scaleIn_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]" aria-live="polite">
-          <div className="w-24 h-24 mx-auto bg-gradient-to-tr from-[var(--theme-primary)] to-[var(--theme-emphasis)] rounded-full flex items-center justify-center text-white text-4xl mb-6 shadow-lg shadow-cyan-200">
+        <Card
+          className="text-center animate-[scaleIn_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]"
+          aria-live="polite"
+        >
+          <div className="w-24 h-24 mx-auto bg-gradient-to-tr from-[var(--theme-primary)] to-[var(--theme-emphasis)] rounded-full flex items-center justify-center text-white text-4xl mb-6 shadow-lg shadow-[var(--theme-primary)]/20">
             <Award size={48} />
           </div>
           <h3 className="text-3xl font-bold text-[var(--theme-emphasis)] mb-2">

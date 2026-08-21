@@ -17,11 +17,68 @@
   --chatgpt-scrollbar-hover: rgba(16, 163, 127, 0.6);
 
   /* Gemini theme colors */
-  --gemini-primary: #4f46e5;
+  --gemini-primary: #1a73e8;
   --gemini-background: #ffffff;
   --gemini-bg-light: #f9fafb;
-  --gemini-scrollbar-color: rgba(79, 70, 229, 0.3);
-  --gemini-scrollbar-hover: rgba(79, 70, 229, 0.6);
+  --gemini-scrollbar-color: rgba(26, 115, 232, 0.3);
+  --gemini-scrollbar-hover: rgba(26, 115, 232, 0.6);
+}
+
+/* Scrollbars y selección de texto POR TEMA (scoped a [data-theme],
+   para que cada herramienta tenga su propio color de marca) */
+[data-theme="chatgpt"] {
+  --ova-scrollbar-color: rgba(16, 163, 127, 0.3);
+  --ova-scrollbar-hover: rgba(16, 163, 127, 0.6);
+}
+[data-theme="gemini"] {
+  --ova-scrollbar-color: rgba(26, 115, 232, 0.3);
+  --ova-scrollbar-hover: rgba(26, 115, 232, 0.6);
+}
+[data-theme="notebooklm"] {
+  --ova-scrollbar-color: rgba(30, 64, 175, 0.3);
+  --ova-scrollbar-hover: rgba(30, 64, 175, 0.6);
+}
+[data-theme="default"] {
+  --ova-scrollbar-color: rgba(0, 75, 99, 0.3);
+  --ova-scrollbar-hover: rgba(0, 75, 99, 0.6);
+}
+
+[data-theme="chatgpt"] ::selection {
+  background: rgba(16, 163, 127, 0.3);
+}
+[data-theme="gemini"] ::selection {
+  background: rgba(26, 115, 232, 0.25);
+}
+[data-theme="notebooklm"] ::selection {
+  background: rgba(30, 64, 175, 0.25);
+}
+[data-theme="default"] ::selection {
+  background: rgba(0, 75, 99, 0.2);
+}
+
+[data-theme="chatgpt"] .scrollbar-thin::-webkit-scrollbar-thumb,
+[data-theme="chatgpt"] .scrollbar-thin-ialab::-webkit-scrollbar-thumb {
+  background-color: rgba(16, 163, 127, 0.3);
+}
+[data-theme="chatgpt"] .scrollbar-thin::-webkit-scrollbar-thumb:hover,
+[data-theme="chatgpt"] .scrollbar-thin-ialab::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(16, 163, 127, 0.5);
+}
+[data-theme="gemini"] .scrollbar-thin::-webkit-scrollbar-thumb,
+[data-theme="gemini"] .scrollbar-thin-ialab::-webkit-scrollbar-thumb {
+  background-color: rgba(26, 115, 232, 0.35);
+}
+[data-theme="gemini"] .scrollbar-thin::-webkit-scrollbar-thumb:hover,
+[data-theme="gemini"] .scrollbar-thin-ialab::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(26, 115, 232, 0.55);
+}
+[data-theme="notebooklm"] .scrollbar-thin::-webkit-scrollbar-thumb,
+[data-theme="notebooklm"] .scrollbar-thin-ialab::-webkit-scrollbar-thumb {
+  background-color: rgba(30, 64, 175, 0.35);
+}
+[data-theme="notebooklm"] .scrollbar-thin::-webkit-scrollbar-thumb:hover,
+[data-theme="notebooklm"] .scrollbar-thin-ialab::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(30, 64, 175, 0.55);
 }
 
 .dark {
@@ -35,14 +92,28 @@
   --chatgpt-scrollbar-hover: rgba(16, 163, 127, 0.8);
 
   /* Gemini theme colors - dark mode */
-  --gemini-scrollbar-color: rgba(79, 70, 229, 0.5);
-  --gemini-scrollbar-hover: rgba(79, 70, 229, 0.8);
+  --gemini-scrollbar-color: rgba(26, 115, 232, 0.5);
+  --gemini-scrollbar-hover: rgba(26, 115, 232, 0.8);
 }
 
-/* OVA global scrollbar (ChatGPT theme) */
-::selection {
-  background: rgba(16, 163, 127, 0.3);
+.dark [data-theme="gemini"],
+[data-theme="gemini"].dark {
+  --ova-scrollbar-color: rgba(26, 115, 232, 0.5);
+  --ova-scrollbar-hover: rgba(26, 115, 232, 0.8);
 }
+.dark [data-theme="notebooklm"],
+[data-theme="notebooklm"].dark {
+  --ova-scrollbar-color: rgba(59, 91, 219, 0.5);
+  --ova-scrollbar-hover: rgba(59, 91, 219, 0.8);
+}
+.dark [data-theme="default"],
+[data-theme="default"].dark {
+  --ova-scrollbar-color: rgba(0, 75, 99, 0.5);
+  --ova-scrollbar-hover: rgba(0, 75, 99, 0.8);
+}
+
+/* OVA global scrollbar (ChatGPT theme) — la selección y scrollbars ahora
+   se definen POR TEMA arriba (scoped a [data-theme]) */
 
 ::-webkit-scrollbar {
   width: 8px;

@@ -244,6 +244,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
+              autoComplete="current-password"
               className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004B63] focus:border-transparent"
               required
             />

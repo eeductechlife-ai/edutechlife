@@ -59,7 +59,7 @@ export default function OVABuildGPT({ onComplete }) {
 
   if (screen === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[var(--theme-primary)]/5 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <OVAIntro
           icon="fa-robot"
           badge={t("ova.buildgpt.badge")}
@@ -82,7 +82,7 @@ export default function OVABuildGPT({ onComplete }) {
   const ScreenComponent = screens[currentScreen];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-white dark:from-slate-900 dark:to-slate-800 font-sans selection:bg-[var(--theme-primary)] selection:text-white">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--theme-primary)]/5 to-white dark:from-slate-900 dark:to-slate-800 font-sans selection:bg-[var(--theme-primary)] selection:text-white">
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 transform scale-75 origin-left sm:scale-100 transition-transform">
@@ -105,9 +105,11 @@ export default function OVABuildGPT({ onComplete }) {
                   total: screens.length,
                 })}
               </div>
-              <div className="flex items-center gap-2 bg-cyan-50 dark:bg-slate-700/30 px-4 py-1.5 rounded-full border border-[var(--theme-primary)]/20">
+              <div className="flex items-center gap-2 bg-[var(--theme-primary)]/10 dark:bg-slate-700/30 px-4 py-1.5 rounded-full border border-[var(--theme-primary)]/20">
                 <Star className="text-yellow-500 fill-current" size={16} />
-                <span className="font-bold text-[var(--theme-emphasis)]">{xp} XP</span>
+                <span className="font-bold text-[var(--theme-emphasis)]">
+                  {xp} XP
+                </span>
               </div>
             </div>
           )}
@@ -117,7 +119,10 @@ export default function OVABuildGPT({ onComplete }) {
           aria-valuenow={xp}
           aria-valuemin={0}
           aria-valuemax={totalXp}
-          aria-label={t("ova.buildgpt.step", { current: currentScreen + 1, total: screens.length })}
+          aria-label={t("ova.buildgpt.step", {
+            current: currentScreen + 1,
+            total: screens.length,
+          })}
           className="h-1.5 w-full bg-slate-100 dark:bg-slate-700/50"
         >
           <div

@@ -4,6 +4,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import puppeteer from 'puppeteer-core'
 import os from 'os'
+import { computeExecutablePath, detectBrowserPlatform } from '@puppeteer/browsers'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const distDir = path.resolve(__dirname, '../dist')
@@ -32,6 +33,75 @@ const chromePaths = [
        'C:\\Program Files (x86)\\Google Chrome\\Application\\chrome.exe']
     : []),
 ]
+
+// Directorios donde puede vivir un Chrome descargado por @puppeteer/browsers:
+// 1) PUPPETEER_CACHE_DIR, 2) el --path del build de Vercel (chrome/),
+// 3) la caché por defecto de puppeteer (~/.cache/puppeteer).
+const chromeSearchRoots = () => [
+  process.env.PUPPETEER_CACHE_DIR,
+  path.join(__dirname, '..', 'chrome'),
+  path.join(os.homedir(), '.cache', 'puppeteer'),
+].filter(Boolean)
+
+// Último recurso: escanear el layout de la caché por si computeExecutablePath
+// no reconoce la plataforma/versión exacta del binario instalado.
+function findChromeInDir(dir, depth = 0) {
+  // 8 niveles: cubre bundle .app de macOS (Contents/MacOS) y layouts Linux.
+  if (depth > 8 || !fs.existsSync(dir)) return undefined
+  let entries
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true })
+  } catch {
+    return undefined
+  }
+  for (const entry of entries) {
+    const full = path.join(dir, entry.name)
+    if (
+      entry.isFile() &&
+      (entry.name === 'chrome' || entry.name === 'headless_shell' ||
+        entry.name === 'Google Chrome for Testing')
+    ) {
+      return full
+    }
+    if (entry.isDirectory()) {
+      const found = findChromeInDir(full, depth + 1)
+      if (found) return found
+    }
+  }
+  return undefined
+}
+
+function chromeFromPuppeteerCache() {
+  for (const root of chromeSearchRoots()) {
+    try {
+      const executable = computeExecutablePath({
+        browser: 'chrome',
+        channel: 'stable',
+        platform: detectBrowserPlatform(),
+        cacheDir: root,
+      })
+      // computeExecutablePath devuelve "b64://..." cuando el cacheDir tiene
+      // caracteres especiales; en ese caso usar el scan como fallback.
+      if (executable && !executable.startsWith('b64://') && fs.existsSync(executable)) {
+        return executable
+      }
+    } catch {
+      /* probar siguiente raíz */
+    }
+    const found = findChromeInDir(root)
+    if (found) return found
+  }
+  return undefined
+}
+
+// Orden de resolución: 1) CHROME_PATH explícita, 2) instalaciones del sistema,
+// 3) Chrome descargado por @puppeteer/browsers (p. ej. build de Vercel).
+function resolveChrome() {
+  if (process.env.CHROME_PATH && fs.existsSync(process.env.CHROME_PATH)) {
+    return process.env.CHROME_PATH
+  }
+  return chromePaths.find(p => fs.existsSync(p)) || chromeFromPuppeteerCache()
+}
 
 function createServer() {
   return http.createServer((req, res) => {
@@ -81,7 +151,7 @@ async function renderRoute(page, route) {
 }
 
 async function main() {
-  const executablePath = chromePaths.find(p => fs.existsSync(p))
+  const executablePath = resolveChrome()
   if (!executablePath) {
     console.log('[prerender] No Chrome/Chromium found. Skipping prerendering.')
     console.log('[prerender] To install Chrome: https://www.google.com/chrome/')

@@ -4,6 +4,9 @@ import { useIALabProgressContext } from "../../context/IALabContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { useIALabTheme } from "./themes/ThemeProvider";
 import LevelBadge from "./LevelBadge";
+import { TOOL_CHROME_CONFIG } from "./themes/toolConfig";
+import { useToolChrome } from "../../hooks/IALab/useToolChrome";
+import { Icon } from "../../utils/iconMapping.jsx";
 
 const progressToLevel = (progress = 0) => {
   if (progress <= 0) return 0;
@@ -120,44 +123,38 @@ const NotebookLMLogo = () => (
   </svg>
 );
 
-/* ─── Configuración visual por herramienta ───────────────────────────────── */
-const TOOL_CONFIG = {
-  chatgpt: {
-    headerBg: "linear-gradient(135deg, #343541 0%, #2f2f2f 100%)",
-    badgeBg: "rgba(16,163,127,0.15)",
-    badgeColor: "#10a37f",
-    badgeBorder: "rgba(16,163,127,0.4)",
-    badgeLabel: "ChatGPT",
-    Logo: ChatGPTLogo,
-    progressBarColor: "#10a37f",
-  },
-  gemini: {
-    headerBg: "linear-gradient(135deg, #4285f4 0%, #9b72cb 55%, #d96570 100%)",
-    badgeBg: "rgba(255,255,255,0.18)",
-    badgeColor: "#ffffff",
-    badgeBorder: "rgba(255,255,255,0.4)",
-    badgeLabel: "Gemini",
-    Logo: GeminiLogo,
-    progressBarColor: "#ffffff",
-  },
-  notebooklm: {
-    headerBg: "linear-gradient(135deg, #1e3a8a 0%, #1e40af 60%, #1d4ed8 100%)",
-    badgeBg: "rgba(245,158,11,0.18)",
-    badgeColor: "#fbbf24",
-    badgeBorder: "rgba(245,158,11,0.45)",
-    badgeLabel: "NotebookLM",
-    Logo: NotebookLMLogo,
-    progressBarColor: "#fbbf24",
-  },
-  default: {
-    headerBg: null,
-    badgeBg: null,
-    badgeColor: null,
-    badgeBorder: null,
-    badgeLabel: null,
-    Logo: null,
-    progressBarColor: "#ffffff",
-  },
+/* ─── Configuración visual por herramienta ─────────────────────────────────
+   Fuente única de verdad: themes/toolConfig.js (TOOL_CHROME_CONFIG).
+   Solo las logos SVG viven aquí; los colores/gradientes se centralizan. */
+export const TOOL_LOGOS = {
+  chatgpt: ChatGPTLogo,
+  gemini: GeminiLogo,
+  notebooklm: NotebookLMLogo,
+};
+
+const TOOL_CONFIG = Object.fromEntries(
+  Object.entries(TOOL_CHROME_CONFIG).map(([id, cfg]) => [
+    id,
+    {
+      headerBg: cfg.headerBg,
+      badgeBg: cfg.badgeBg,
+      badgeColor: cfg.badgeColor,
+      badgeBorder: cfg.badgeBorder,
+      badgeLabel: cfg.label,
+      Logo: TOOL_LOGOS[id] || null,
+      progressBarColor: cfg.progressBarColor,
+    },
+  ]),
+);
+
+TOOL_CONFIG.default = {
+  headerBg: null,
+  badgeBg: null,
+  badgeColor: null,
+  badgeBorder: null,
+  badgeLabel: null,
+  Logo: null,
+  progressBarColor: "#ffffff",
 };
 
 /* ─── Componente ─────────────────────────────────────────────────────────── */
@@ -170,6 +167,7 @@ const IALabModuleHeader = () => {
   const level = progressToLevel(curr?.progress ?? courseProgress);
   const tool = TOOL_CONFIG[theme] || TOOL_CONFIG.default;
   const { Logo } = tool;
+  const chrome = useToolChrome(theme);
 
   return (
     <motion.div
@@ -204,6 +202,36 @@ const IALabModuleHeader = () => {
               {curr?.title}
             </h1>
           </div>
+
+          {/* Toggle Vista herramienta / Vista clásica (solo M2–M4) */}
+          {chrome.supported && (
+            <button
+              type="button"
+              onClick={chrome.toggle}
+              title={
+                chrome.enabled
+                  ? t("ialab.workspace.toggle_off")
+                  : t("ialab.workspace.toggle_on")
+              }
+              aria-label={
+                chrome.enabled
+                  ? t("ialab.workspace.toggle_off")
+                  : t("ialab.workspace.toggle_on")
+              }
+              aria-pressed={chrome.enabled}
+              className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-2 rounded-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white border border-white/20 backdrop-blur-sm transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+            >
+              <Icon
+                name={chrome.enabled ? "fa-eye" : "fa-eye-slash"}
+                className="text-sm"
+              />
+              <span className="hidden md:inline text-[11px] font-bold tracking-wide">
+                {chrome.enabled
+                  ? t("ialab.workspace.toggle_view_tool")
+                  : t("ialab.workspace.toggle_view_classic")}
+              </span>
+            </button>
+          )}
 
           {/* Badge de herramienta con logo SVG auténtico */}
           {tool.badgeLabel && Logo && (

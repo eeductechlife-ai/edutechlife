@@ -36,7 +36,7 @@ const ToolIcon = ({ icon, iconColor, className }) => {
   if (!Icon) return null;
   return (
     <Icon
-      className={`${className || "w-10 h-10"} ${iconColor || "text-blue-500"}`}
+      className={`${className || "w-10 h-10"} ${iconColor || "text-[var(--theme-primary)]"}`}
     />
   );
 };

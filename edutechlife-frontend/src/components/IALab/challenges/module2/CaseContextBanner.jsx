@@ -6,7 +6,7 @@ const CASE_META = {
   marketing: {
     icon: "fa-chart-line",
     labelKey: "ialab.challenge.m2.case_label_marketing",
-    color: "from-violet-500 to-purple-600",
+    color: "from-[#10a37f] to-[#128468]",
   },
   support: {
     icon: "fa-headset",
@@ -16,7 +16,7 @@ const CASE_META = {
   dev: {
     icon: "fa-code",
     labelKey: "ialab.challenge.m2.case_label_dev",
-    color: "from-sky-500 to-cyan-600",
+    color: "from-slate-600 to-slate-800",
   },
 };
 
