@@ -12,6 +12,7 @@ import SubjectsView from "./SubjectsView";
 import MisionDelDia from "./MisionDelDia";
 import { SectionFallback } from "./SkeletonLoader";
 import { PREMIUM_FEATURES } from "../kidsDashboardConfig";
+import RutaAprendizaje from "../RutaAprendizaje";
 
 const PointsRewardsSystem = lazy(() => import("../PointsRewardsSystem"));
 const SmartBoardProgress = lazy(() => import("../smartBoardProgress"));
@@ -68,6 +69,7 @@ function createTabRenderer(deps) {
     inicio: {
       component: () => (
         <>
+          <RutaAprendizaje onTabChange={onTabChange} />
           <HeroSection onTabChange={onTabChange} />
           <MisionDelDia onTabChange={onTabChange} />
           <InViewSection>

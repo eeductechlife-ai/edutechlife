@@ -11,6 +11,7 @@ import ParticlesBackground from "./ParticlesBackground";
 import DaniTutorChat from "./daniTutorChat";
 import DaniFAB from "./DaniFAB";
 import OnboardingGuide from "./OnboardingGuide";
+import OnboardingWizard from "./onboarding/OnboardingWizard";
 import PremiumSidebar from "./components/PremiumSidebar";
 import MobileBottomBar from "./components/MobileBottomBar";
 import MobileSubTabBar from "./components/MobileSubTabBar";
@@ -22,7 +23,31 @@ import TopBar from "./components/TopBar";
 
 const SmartBoardKidsDashboard = () => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState("inicio");
+  const [activeTab, setActiveTab] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlTab = params.get("tab");
+    const TAB_WHITELIST = [
+      "inicio",
+      "materias",
+      "horario",
+      "flashcards",
+      "oral",
+      "examenes",
+      "vak",
+      "progreso",
+      "calificaciones",
+      "misiones",
+      "noticias",
+      "plan",
+      "puntos",
+    ];
+    if (urlTab && TAB_WHITELIST.includes(urlTab)) return urlTab;
+    try {
+      const saved = localStorage.getItem("edutechlife_current_tab");
+      if (saved && TAB_WHITELIST.includes(saved)) return saved;
+    } catch {}
+    return "inicio";
+  });
   // Background: watches upcoming exams and posts in-app reminders at
   // T-24h / T-3h / T-30min. Silent when there is no timetable/exams.
   useExamReminders();
@@ -362,8 +387,11 @@ const SmartBoardKidsDashboard = () => {
           unreadCount={0}
         />
 
-        {/* Onboarding Guide - First Time User Experience */}
-        <OnboardingGuide />
+        {/* Onboarding Guide - First Time Welcome Screen */}
+        <OnboardingGuide onTabChange={setActiveTab} />
+
+        {/* Onboarding Wizard - Step-by-step setup after welcome */}
+        <OnboardingWizard onTabChange={setActiveTab} />
 
         {/* Dani Chat Modal - Full Premium Experience */}
         <AnimatePresence>
