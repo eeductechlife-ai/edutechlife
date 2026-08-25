@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 import { getTips } from "./examUtils";
-import useTimetable from "../../../hooks/useTimetable";
 
 // Mon=1 … Sun=7 (matches migration 042).
 const isoDayFromDate = (yyyyMmDd) => {
@@ -12,19 +11,29 @@ const isoDayFromDate = (yyyyMmDd) => {
   return js === 0 ? 7 : js;
 };
 
+// Normalize Supabase snake_case rows to the camelCase shape expected by
+// ExamCard / ExamDetail. Handles both legacy local objects and DB rows.
+const normalizeExam = (e) => ({
+  id: e.id,
+  name: e.name ?? e.exam_name ?? "",
+  subject: e.subject ?? "",
+  date: e.date ?? e.exam_date ?? "",
+  desiredGrade: e.desiredGrade ?? e.desired_grade ?? 0,
+  studyProgress: e.studyProgress ?? e.study_progress ?? 0,
+  createdAt: e.createdAt ?? e.created_at ?? "",
+});
+
 export default function useExamPrep() {
   const {
     vakResult,
     setDocumentForDani,
     exams,
-    setExams,
+    addExam: contextAddExam,
+    removeExam: contextRemoveExam,
+    slots,
     examMaterials,
     setExamMaterials,
   } = useSmartBoardKids();
-
-  // Timetable integration: enables subject autocomplete + DB persistence.
-  // Errors here must never break the local exam flow (DB may be missing).
-  const { slots, addExam: persistExamToDb } = useTimetable();
 
   const [mode, setMode] = useState("list");
   const [detailId, setDetailId] = useState(null);
@@ -66,37 +75,24 @@ export default function useExamPrep() {
 
   const addExam = useCallback(() => {
     if (!name.trim() || !date) return;
-    const localExam = {
-      id: Date.now(),
-      name: name.trim(),
+    contextAddExam({
+      exam_name: name.trim(),
       subject,
-      date,
-      desiredGrade: Math.min(100, Math.max(0, grade)),
-      studyProgress: 0,
-      createdAt: new Date().toISOString(),
-    };
-    setExams((prev) => [...prev, localExam]);
-    // Fire-and-forget DB persist. Never blocks the UI, never breaks it.
-    persistExamToDb({
-      subject,
-      exam_name: localExam.name,
       exam_date: date,
-      desired_grade: localExam.desiredGrade,
+      desired_grade: Math.min(100, Math.max(0, grade)),
       source: "manual",
-    }).catch((e) =>
-      console.warn("[exam] DB persist failed (kept locally):", e?.message),
-    );
+    }).catch((e) => console.warn("[exam] DB persist failed:", e?.message));
     setName("");
     setDate("");
     setGrade(70);
     subjectManuallyPickedRef.current = false;
     setSuggestedSubject(null);
     setMode("list");
-  }, [name, subject, date, grade, setExams, persistExamToDb]);
+  }, [name, subject, date, grade, contextAddExam]);
 
   const deleteExam = useCallback(
     (id) => {
-      setExams((prev) => prev.filter((e) => e.id !== id));
+      contextRemoveExam(id);
       setExamMaterials((prev) => {
         const next = { ...prev };
         delete next[id];
@@ -107,7 +103,7 @@ export default function useExamPrep() {
         setDetailId(null);
       }
     },
-    [detailId, setExams, setExamMaterials],
+    [detailId, contextRemoveExam, setExamMaterials],
   );
 
   const handleUploadMaterial = useCallback(
@@ -123,18 +119,27 @@ export default function useExamPrep() {
     [setExamMaterials],
   );
 
-  const sorted = [...exams].sort((a, b) => new Date(a.date) - new Date(b.date));
-  const detailExam = exams.find((e) => e.id === detailId);
+  const normalizedExams = exams.map(normalizeExam);
+  const sorted = [...normalizedExams].sort(
+    (a, b) => new Date(a.date) - new Date(b.date),
+  );
+  const detailExam = normalizedExams.find((e) => e.id === detailId);
   const tips = detailExam ? getTips(vakResult) : [];
   const detailMaterials = detailId ? examMaterials[detailId] || [] : [];
 
   return {
-    mode, setMode,
-    detailId, setDetailId,
-    name, setName,
-    subject, setSubject: chooseSubject,
-    date, setDate,
-    grade, setGrade,
+    mode,
+    setMode,
+    detailId,
+    setDetailId,
+    name,
+    setName,
+    subject,
+    setSubject: chooseSubject,
+    date,
+    setDate,
+    grade,
+    setGrade,
     addExam,
     deleteExam,
     handleUploadMaterial,

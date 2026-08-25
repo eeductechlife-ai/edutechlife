@@ -4,6 +4,43 @@ import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 const id = () =>
   Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
+// SM2 spaced-repetition algorithm (quality: 0=fail, 1=pass)
+function sm2Update(card, quality) {
+  const q = quality === 1 ? 4 : 1;
+  const { interval = 1, repetitions = 0, ef = 2.5 } = card.sm2 || {};
+  const newEf = Math.max(1.3, ef + 0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
+  let newInterval, newReps;
+  if (q < 3) {
+    newInterval = 1;
+    newReps = 0;
+  } else {
+    newReps = repetitions + 1;
+    newInterval =
+      newReps === 1 ? 1 : newReps === 2 ? 6 : Math.round(interval * newEf);
+  }
+  const nextReview = new Date();
+  nextReview.setDate(nextReview.getDate() + newInterval);
+  return {
+    interval: newInterval,
+    repetitions: newReps,
+    ef: newEf,
+    nextReview: nextReview.toISOString(),
+  };
+}
+
+function ensureSm2(card) {
+  if (card.sm2) return card;
+  return {
+    ...card,
+    sm2: {
+      interval: 1,
+      repetitions: 0,
+      ef: 2.5,
+      nextReview: new Date().toISOString(),
+    },
+  };
+}
+
 export function useFlashcardDeck() {
   const { flashcardDecks: decks, setFlashcardDecks: setDecks } =
     useSmartBoardKids();
@@ -24,11 +61,32 @@ export function useFlashcardDeck() {
   const [mpCurrentPlayer, setMpCurrentPlayer] = useState(1);
   const [qIdx, setQIdx] = useState(0);
   const [playerAnswer, setPlayerAnswer] = useState("");
+  // null = full deck; array = only the due subset
+  const [studyQueue, setStudyQueue] = useState(null);
 
   const deck = useMemo(
     () => decks.find((d) => d.id === currentDeckId) || null,
     [decks, currentDeckId],
   );
+
+  // Cards being studied in the current session
+  const activeCards = useMemo(
+    () => studyQueue ?? deck?.cards ?? [],
+    [studyQueue, deck],
+  );
+
+  // Per-deck count of cards due today (never reviewed counts as due)
+  const dueToday = useMemo(() => {
+    const now = new Date();
+    const map = {};
+    decks.forEach((d) => {
+      map[d.id] = d.cards.filter((c) => {
+        if (!c.sm2?.nextReview) return true;
+        return new Date(c.sm2.nextReview) <= now;
+      }).length;
+    });
+    return map;
+  }, [decks]);
 
   const saveDecks = useCallback((fn) => setDecks((prev) => fn(prev)), []);
 
@@ -99,18 +157,25 @@ export function useFlashcardDeck() {
   }, [frontText, backText, currentDeckId, saveDecks]);
 
   const deleteDeck = useCallback(
-    (id) => {
-      saveDecks((prev) => prev.filter((d) => d.id !== id));
-      if (currentDeckId === id) setCurrentDeckId(null);
+    (deckId) => {
+      saveDecks((prev) => prev.filter((d) => d.id !== deckId));
+      if (currentDeckId === deckId) setCurrentDeckId(null);
     },
     [currentDeckId, saveDecks],
   );
 
   const startStudy = useCallback(
-    (id) => {
-      const d = decks.find((x) => x.id === id);
+    (deckId) => {
+      const d = decks.find((x) => x.id === deckId);
       if (!d || d.cards.length === 0) return;
-      setCurrentDeckId(id);
+      // Initialize sm2 on any cards that have never been reviewed
+      saveDecks((prev) =>
+        prev.map((x) =>
+          x.id === deckId ? { ...x, cards: x.cards.map(ensureSm2) } : x,
+        ),
+      );
+      setCurrentDeckId(deckId);
+      setStudyQueue(null);
       setCardIdx(0);
       setFlipped(false);
       setCorrect(0);
@@ -118,7 +183,34 @@ export function useFlashcardDeck() {
       setDone(false);
       setMode("quiz");
     },
-    [decks],
+    [decks, saveDecks],
+  );
+
+  // Study only cards that are due today
+  const startStudyDue = useCallback(
+    (deckId) => {
+      const d = decks.find((x) => x.id === deckId);
+      if (!d || d.cards.length === 0) return;
+      const now = new Date();
+      const initialized = d.cards.map(ensureSm2);
+      const dueCards = initialized.filter(
+        (c) => !c.sm2?.nextReview || new Date(c.sm2.nextReview) <= now,
+      );
+      if (dueCards.length === 0) return;
+      // Persist sm2 initialization
+      saveDecks((prev) =>
+        prev.map((x) => (x.id === deckId ? { ...x, cards: initialized } : x)),
+      );
+      setCurrentDeckId(deckId);
+      setStudyQueue(dueCards);
+      setCardIdx(0);
+      setFlipped(false);
+      setCorrect(0);
+      setIncorrect(0);
+      setDone(false);
+      setMode("quiz");
+    },
+    [decks, saveDecks],
   );
 
   const handleResult = useCallback(
@@ -131,30 +223,55 @@ export function useFlashcardDeck() {
       }
       if (known) setCorrect((prev) => prev + 1);
       else setIncorrect((prev) => prev + 1);
+
       const d = decks.find((x) => x.id === currentDeckId);
       if (!d) return;
-      if (cardIdx + 1 >= d.cards.length) {
-        setDone(true);
-        saveDecks((prev) =>
-          prev.map((x) =>
-            x.id === currentDeckId
-              ? {
-                  ...x,
-                  stats: {
-                    totalStudied:
-                      (x.stats?.totalStudied || 0) + d.cards.length,
-                    correct:
-                      (x.stats?.correct || 0) + (known ? 1 : 0),
-                    incorrect:
-                      (x.stats?.incorrect || 0) + (known ? 0 : 1),
-                    streak: known
-                      ? (x.stats?.streak || 0) + 1
-                      : 0,
-                  },
-                }
-              : x,
-          ),
+
+      const queue = studyQueue ?? d.cards;
+      const currentCard = queue[cardIdx];
+      const updatedSm2 = currentCard
+        ? sm2Update(currentCard, known ? 1 : 0)
+        : null;
+
+      const totalInSession = queue.length;
+      const isLast = cardIdx + 1 >= totalInSession;
+
+      // Persist sm2 update (and stats when done) in one saveDecks call
+      saveDecks((prev) =>
+        prev.map((x) => {
+          if (x.id !== currentDeckId) return x;
+          const updatedCards = updatedSm2
+            ? x.cards.map((c) =>
+                c.id === currentCard.id ? { ...c, sm2: updatedSm2 } : c,
+              )
+            : x.cards;
+          if (!isLast) return { ...x, cards: updatedCards };
+          return {
+            ...x,
+            cards: updatedCards,
+            stats: {
+              totalStudied: (x.stats?.totalStudied || 0) + totalInSession,
+              correct: (x.stats?.correct || 0) + (known ? 1 : 0),
+              incorrect: (x.stats?.incorrect || 0) + (known ? 0 : 1),
+              streak: known ? (x.stats?.streak || 0) + 1 : 0,
+            },
+          };
+        }),
+      );
+
+      // Also update the in-memory studyQueue so activeCards reflects new sm2
+      if (studyQueue && updatedSm2) {
+        setStudyQueue((prev) =>
+          prev
+            ? prev.map((c) =>
+                c.id === currentCard.id ? { ...c, sm2: updatedSm2 } : c,
+              )
+            : prev,
         );
+      }
+
+      if (isLast) {
+        setDone(true);
       } else {
         setCardIdx((prev) => prev + 1);
         setFlipped(false);
@@ -167,6 +284,7 @@ export function useFlashcardDeck() {
       saveDecks,
       multiplayerMode,
       mpCurrentPlayer,
+      studyQueue,
     ],
   );
 
@@ -175,6 +293,7 @@ export function useFlashcardDeck() {
     if (!first) return;
     setMultiplayerMode(true);
     setCurrentDeckId(first.id);
+    setStudyQueue(null);
     setMode("quiz");
     setScore1(0);
     setScore2(0);
@@ -223,6 +342,8 @@ export function useFlashcardDeck() {
     playerAnswer,
     setPlayerAnswer,
     deck,
+    activeCards,
+    dueToday,
     rate,
     saveDecks,
     createDeck,
@@ -230,6 +351,7 @@ export function useFlashcardDeck() {
     addCard,
     deleteDeck,
     startStudy,
+    startStudyDue,
     handleResult,
     startMultiplayer,
   };

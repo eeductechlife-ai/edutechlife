@@ -94,11 +94,12 @@ function WeekCard({ week, weekIdx, onToggle, darkMode }) {
 }
 
 function ImprovementPlan() {
-  const { vakResult, studentGrades, darkMode } = useSmartBoardKids();
+  const { vakResult, studentGrades, darkMode, gradeLevel, countryCode } =
+    useSmartBoardKids();
   const { plan, isGenerating, error, generatePlan, markActivityDone, hasPlan } =
     useImprovementPlan();
 
-  const canGenerate = vakResult && studentGrades && studentGrades.length > 0;
+  const canGenerate = !!vakResult;
 
   const totalActivities = hasPlan
     ? plan.weeks.reduce((s, w) => s + w.activities.length, 0)
@@ -146,7 +147,7 @@ function ImprovementPlan() {
           >
             {canGenerate
               ? "Genera tu plan personalizado basado en tu estilo VAK y tus calificaciones"
-              : "Primero completa tu diagnóstico VAK y agrega tus calificaciones para generar tu plan"}
+              : "Primero completa tu diagnóstico VAK para generar tu plan"}
           </p>
         </div>
         {error && <p className="text-sm text-red-500 max-w-xs">{error}</p>}
@@ -175,11 +176,18 @@ function ImprovementPlan() {
             : "bg-gradient-to-r from-[#0096C7]/10 to-[#06D6A0]/10"
         }`}
       >
-        <h2
-          className={`font-bold text-lg mb-1 ${darkMode ? "text-white" : "text-gray-800"}`}
-        >
-          📋 Mi Plan de Mejora
-        </h2>
+        <div className="flex items-center gap-2 flex-wrap mb-1">
+          <h2
+            className={`font-bold text-lg ${darkMode ? "text-white" : "text-gray-800"}`}
+          >
+            📋 Mi Plan de Mejora
+          </h2>
+          {gradeLevel && (
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#0096C7]/20 text-[#0096C7]">
+              MEN Colombia · Grado {gradeLevel}
+            </span>
+          )}
+        </div>
         <p
           className={`text-sm mb-3 ${darkMode ? "text-gray-300" : "text-gray-600"}`}
         >

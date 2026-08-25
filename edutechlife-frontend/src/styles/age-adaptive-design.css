@@ -353,3 +353,61 @@
   transition-duration: var(--age-animation-duration);
   transition-timing-function: var(--age-animation-easing);
 }
+
+/* ==================== CONCRETE SMARTBOARD OVERRIDES ==================== */
+/* Applied via [data-age-group] on SmartBoardKidsDashboard root element.
+   These give real visual differentiation between the 3 tiers.           */
+
+/* ── EARLY (6–8 años): más grande, más táctil, más alegre ── */
+[data-age-group="early"] button,
+[data-age-group="early"] a[role="button"] {
+  min-height: 48px;
+}
+
+/* Navigation bottom bar: bigger tap targets for little fingers */
+[data-age-group="early"] nav button {
+  min-height: 52px;
+  font-size: 0.8rem;
+}
+
+/* Cards get more padding and rounded corners */
+[data-age-group="early"] .rounded-2xl,
+[data-age-group="early"] .rounded-xl {
+  border-radius: 1.25rem;
+}
+
+/* Body text: inherit larger base font */
+[data-age-group="early"] {
+  font-size: 1.05rem;
+}
+
+/* ── SENIOR (13–16 años): más compacto, más denso ── */
+[data-age-group="senior"] {
+  font-size: 0.92rem;
+}
+
+/* Tighter gaps in grids for more information density */
+[data-age-group="senior"] .gap-4 {
+  gap: 0.75rem;
+}
+[data-age-group="senior"] .gap-6 {
+  gap: 1rem;
+}
+
+/* Slightly smaller nav text for teens */
+[data-age-group="senior"] nav button {
+  font-size: 0.7rem;
+}
+
+/* Cards: less padding for denser layout */
+[data-age-group="senior"] .p-6 {
+  padding: 1rem;
+}
+[data-age-group="senior"] .p-5 {
+  padding: 0.875rem;
+}
+
+/* ── SHARED: smooth transitions when age-group changes ── */
+[data-age-group] {
+  transition: font-size 300ms ease;
+}

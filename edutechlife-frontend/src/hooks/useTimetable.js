@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../lib/supabase"; // used in resolveStudentId fallbacks only
 import { useAuthIdentity } from "./useAuthIdentity";
 import { API_BASE_URL } from "../config/api";
 
@@ -109,6 +109,31 @@ export const useTimetable = () => {
     return null;
   }, [isSignedIn, userId]);
 
+  // Helper: direct fetch to Supabase REST API (avoids supabase-js client hang in dev).
+  const sbFetch = useCallback(async (path, opts = {}) => {
+    const token = sessionStorage.getItem("auth_token");
+    const base = import.meta.env.VITE_SUPABASE_URL;
+    const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    const resp = await fetch(`${base}/rest/v1/${path}`, {
+      ...opts,
+      headers: {
+        "Content-Type": "application/json",
+        apikey: key,
+        Authorization: `Bearer ${token}`,
+        ...(opts.headers || {}),
+      },
+      signal: opts.signal ?? AbortSignal.timeout(10000),
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.message || `HTTP ${resp.status}`);
+    }
+    if (resp.status === 204 || resp.headers.get("content-length") === "0") {
+      return null;
+    }
+    return resp.json();
+  }, []);
+
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -116,7 +141,6 @@ export const useTimetable = () => {
       const sid = await resolveStudentId();
       setStudentId(sid);
       if (!sid) {
-        // Try once more (sometimes the backend takes a moment to create the profile)
         const sid2 = await resolveStudentId();
         if (!sid2) {
           setTimetable(null);
@@ -127,53 +151,33 @@ export const useTimetable = () => {
         setStudentId(sid2);
       }
 
-      const timeoutP = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("timeout")), 8000),
-      );
-
-      const [{ data: tt }, { data: ex }] = await Promise.race([
-        Promise.all([
-          supabase
-            .from("student_timetable")
-            .select("*")
-            .eq("student_id", sid)
-            .eq("is_active", true)
-            .maybeSingle(),
-          supabase
-            .from("student_exams")
-            .select("*")
-            .eq("student_id", sid)
-            .eq("completed", false)
-            .order("exam_date", { ascending: true }),
-        ]),
-        timeoutP,
+      const [ttRows, exRows] = await Promise.all([
+        sbFetch(
+          `student_timetable?student_id=eq.${sid}&is_active=eq.true&select=*&limit=1`,
+        ),
+        sbFetch(
+          `student_exams?student_id=eq.${sid}&completed=eq.false&select=*&order=exam_date.asc`,
+        ),
       ]);
 
-      setTimetable(tt || null);
-      setExams(ex || []);
+      const tt = Array.isArray(ttRows) ? (ttRows[0] ?? null) : null;
+      setTimetable(tt);
+      setExams(Array.isArray(exRows) ? exRows : []);
 
       if (tt?.id) {
-        const { data: sl } = await supabase
-          .from("timetable_slots")
-          .select("*")
-          .eq("timetable_id", tt.id);
-        setSlots(orderSlots(sl || []));
+        const slRows = await sbFetch(
+          `timetable_slots?timetable_id=eq.${tt.id}&select=*`,
+        );
+        setSlots(orderSlots(Array.isArray(slRows) ? slRows : []));
       } else {
         setSlots([]);
       }
     } catch (e) {
-      if (e?.message === "timeout") {
-        // Timeout: no mostramos error — dejamos el estado vacío (sin horario).
-        setTimetable(null);
-        setSlots([]);
-        setExams([]);
-      } else {
-        setError(e?.message || "Error loading timetable");
-      }
+      setError(e?.message || "Error loading timetable");
     } finally {
       setLoading(false);
     }
-  }, [resolveStudentId]);
+  }, [resolveStudentId, sbFetch]);
 
   useEffect(() => {
     load();
@@ -187,34 +191,32 @@ export const useTimetable = () => {
     async (payload) => {
       let sid = studentId || (await resolveStudentId());
       if (!sid) {
-        // Last resort: retry once with a short delay to allow profile creation
         await new Promise((r) => setTimeout(r, 1500));
         sid = await resolveStudentId();
       }
       if (!sid) throw new Error("No student profile");
 
       if (timetable?.id) {
-        const { data, error: e } = await supabase
-          .from("student_timetable")
-          .update(payload)
-          .eq("id", timetable.id)
-          .select()
-          .single();
-        if (e) throw e;
+        const rows = await sbFetch(`student_timetable?id=eq.${timetable.id}`, {
+          method: "PATCH",
+          headers: { Prefer: "return=representation" },
+          body: JSON.stringify(payload),
+        });
+        const data = Array.isArray(rows) ? rows[0] : rows;
         setTimetable(data);
         return data;
       }
 
-      const { data, error: e } = await supabase
-        .from("student_timetable")
-        .insert({ student_id: sid, is_active: true, ...payload })
-        .select()
-        .single();
-      if (e) throw e;
+      const rows = await sbFetch("student_timetable", {
+        method: "POST",
+        headers: { Prefer: "return=representation" },
+        body: JSON.stringify({ student_id: sid, is_active: true, ...payload }),
+      });
+      const data = Array.isArray(rows) ? rows[0] : rows;
       setTimetable(data);
       return data;
     },
-    [studentId, timetable, resolveStudentId],
+    [studentId, timetable, resolveStudentId, sbFetch],
   );
 
   /**
@@ -238,11 +240,9 @@ export const useTimetable = () => {
       const oldSlots = [...slots];
 
       // Delete all existing slots
-      const { error: delErr } = await supabase
-        .from("timetable_slots")
-        .delete()
-        .eq("timetable_id", ttId);
-      if (delErr) throw delErr;
+      await sbFetch(`timetable_slots?timetable_id=eq.${ttId}`, {
+        method: "DELETE",
+      });
 
       // If no new slots, clear and return
       if (!newSlots.length) {
@@ -264,57 +264,73 @@ export const useTimetable = () => {
         notes: s.notes || null,
       }));
 
-      // Attempt to insert new slots
-      const { data, error: insErr } = await supabase
-        .from("timetable_slots")
-        .insert(rows)
-        .select();
-
-      // If insertion fails, restore old slots (atomic rollback)
-      if (insErr) {
+      // Attempt to insert new slots; on error restore old slots
+      let data;
+      try {
+        data = await sbFetch("timetable_slots", {
+          method: "POST",
+          headers: { Prefer: "return=representation" },
+          body: JSON.stringify(rows),
+        });
+      } catch (insErr) {
         if (oldSlots.length) {
-          try {
-            await supabase.from("timetable_slots").insert(oldSlots).select();
-            setSlots(oldSlots);
-          } catch (restoreErr) {
-            // If restore also fails, update local state to oldSlots anyway
-            setSlots(oldSlots);
-            throw new Error(
-              `Failed to insert slots and restore backup: ${insErr.message}`,
-            );
-          }
+          await sbFetch("timetable_slots", {
+            method: "POST",
+            headers: { Prefer: "return=representation" },
+            body: JSON.stringify(oldSlots),
+          }).catch(() => {});
+          setSlots(oldSlots);
         }
         throw insErr;
       }
 
-      const ordered = orderSlots(data || []);
+      const ordered = orderSlots(Array.isArray(data) ? data : []);
       setSlots(ordered);
       return ordered;
     },
-    [timetable, slots],
+    [timetable, slots, sbFetch],
   );
 
   const addExam = useCallback(
     async (exam) => {
       const sid = studentId || (await resolveStudentId());
       if (!sid) throw new Error("No student profile");
-      const { data, error: e } = await supabase
-        .from("student_exams")
-        .insert({
-          student_id: sid,
-          slot_id: exam.slot_id || null,
-          subject: exam.subject,
-          exam_name: exam.exam_name || null,
-          exam_date: exam.exam_date,
-          exam_time: exam.exam_time || null,
-          topic: exam.topic || null,
-          desired_grade: exam.desired_grade ?? null,
-          source: exam.source || "manual",
-          file_url: exam.file_url || null,
-        })
-        .select()
-        .single();
-      if (e) throw e;
+
+      const row = {
+        student_id: sid,
+        slot_id: exam.slot_id || null,
+        subject: exam.subject,
+        exam_name: exam.exam_name || null,
+        exam_date: exam.exam_date,
+        exam_time: exam.exam_time || null,
+        topic: exam.topic || null,
+        desired_grade: exam.desired_grade ?? null,
+        source: exam.source || "manual",
+        file_url: exam.file_url || null,
+      };
+
+      // Use direct fetch — the supabase-js client hangs on inserts in dev
+      // due to an internal auth initialization race; raw fetch is reliable.
+      const token = sessionStorage.getItem("auth_token");
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const resp = await fetch(`${supabaseUrl}/rest/v1/student_exams`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: anonKey,
+          Authorization: `Bearer ${token}`,
+          Prefer: "return=representation",
+        },
+        body: JSON.stringify(row),
+        signal: AbortSignal.timeout(10000),
+      });
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error(err.message || `HTTP ${resp.status}`);
+      }
+      const rows = await resp.json();
+      const data = Array.isArray(rows) ? rows[0] : rows;
       setExams((prev) =>
         [...prev, data].sort((a, b) => a.exam_date.localeCompare(b.exam_date)),
       );
@@ -323,14 +339,13 @@ export const useTimetable = () => {
     [studentId, resolveStudentId],
   );
 
-  const removeExam = useCallback(async (id) => {
-    const { error: e } = await supabase
-      .from("student_exams")
-      .delete()
-      .eq("id", id);
-    if (e) throw e;
-    setExams((prev) => prev.filter((x) => x.id !== id));
-  }, []);
+  const removeExam = useCallback(
+    async (id) => {
+      await sbFetch(`student_exams?id=eq.${id}`, { method: "DELETE" });
+      setExams((prev) => prev.filter((x) => x.id !== id));
+    },
+    [sbFetch],
+  );
 
   // ── Derived state ─────────────────────────────────────────────────────
   const derived = useMemo(() => {

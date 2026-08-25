@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -75,7 +75,8 @@ const UserMenu = ({
   onLogout,
 }) => {
   const { t } = useTranslation();
-  const { toggleDarkMode } = useSmartBoardKids();
+  const { toggleDarkMode, gradeLevel, setGradeLevel, setSchoolName } =
+    useSmartBoardKids();
   const [isOpen, setIsOpen] = useState(false);
   const [isEditingModal, setIsEditingModal] = useState(false);
   const { profile, loading, error, updateProfile, uploadAvatar, removeAvatar } =
@@ -87,6 +88,20 @@ const UserMenu = ({
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const avatarInputRef = useRef(null);
+
+  // Auto-sync grade and school from profile → SmartBoard context when profile loads
+  useEffect(() => {
+    if (!profile) return;
+    if (profile.grade && !gradeLevel) {
+      const parsed = parseInt(profile.grade, 10);
+      if (!Number.isNaN(parsed) && parsed >= 1 && parsed <= 11) {
+        setGradeLevel(parsed);
+      }
+    }
+    if (profile.school && setSchoolName) {
+      setSchoolName(profile.school);
+    }
+  }, [profile, gradeLevel, setGradeLevel, setSchoolName]);
 
   const displayName = profile?.name || studentName || t("kid.user.student");
   const vakKey = getVakKey(profile?.vakStyle);
@@ -152,6 +167,13 @@ const UserMenu = ({
     const result = await updateProfile(payload);
     setSaving(false);
     if (result?.ok) {
+      // Sync grade/school to SmartBoard context immediately on save
+      if (payload.grade) {
+        const parsed = parseInt(payload.grade, 10);
+        if (!Number.isNaN(parsed) && parsed >= 1 && parsed <= 11)
+          setGradeLevel(parsed);
+      }
+      if (payload.school && setSchoolName) setSchoolName(payload.school);
       setSaveMessage(t("kid.user.saved"));
       setTimeout(() => {
         setIsEditingModal(false);

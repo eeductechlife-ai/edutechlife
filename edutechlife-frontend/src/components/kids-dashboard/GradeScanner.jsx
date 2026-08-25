@@ -46,56 +46,116 @@ const gradeEmoji = (n) => {
   if (n >= 3.0) return "⚠️";
   return "🔴";
 };
+// Returns average of entered periods (supports 4-period format and legacy single score)
+const getAvgScore = (g) => {
+  const vals = [g.p1, g.p2, g.p3, g.p4].filter(
+    (v) => v != null && !isNaN(Number(v)),
+  );
+  if (vals.length) return vals.reduce((a, b) => a + Number(b), 0) / vals.length;
+  return Number(g.score) || 0;
+};
 
-const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => (
-  <motion.div
-    initial={{ opacity: 0, x: -10 }}
-    animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: 10 }}
-    className="flex items-center gap-2 p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-sm"
-  >
-    <span className="text-lg w-8 text-center">
-      {subjects.find((s) => s.v === grade.subject)?.i || "📚"}
+const PeriodInput = ({ label, value, onChange }) => (
+  <div className="flex flex-col items-center gap-0.5">
+    <span className="text-[10px] font-bold text-[#94A3B8] uppercase">
+      {label}
     </span>
-    <select
-      value={grade.subject}
-      onChange={(e) => onUpdate(grade.id, "subject", e.target.value)}
-      className="flex-1 text-sm text-[#004B63] font-semibold bg-transparent border-none outline-none"
-    >
-      {subjects.map((s) => (
-        <option key={s.v} value={s.v}>
-          {s.l}
-        </option>
-      ))}
-    </select>
-    <div className="flex items-center gap-1">
-      <input
-        type="number"
-        min="0"
-        max="5"
-        step="0.1"
-        value={grade.score}
-        onFocus={(e) => e.target.select()}
-        onChange={(e) =>
-          onUpdate(grade.id, "score", parseFloat(e.target.value) || 0)
+    <input
+      type="text"
+      inputMode="decimal"
+      placeholder="—"
+      value={value != null ? value : ""}
+      onFocus={(e) => e.target.select()}
+      onChange={(e) => {
+        const raw = e.target.value.replace(",", ".");
+        if (raw === "" || raw === "-") {
+          onChange(null);
+          return;
         }
-        className="w-16 text-center text-lg font-black border-2 rounded-lg outline-none p-1"
-        style={{
-          color: gradeColor(grade.score),
-          borderColor: gradeColor(grade.score) + "40",
-        }}
-      />
-      <span className="text-sm text-[#64748B]">/5</span>
-    </div>
-    <span className="text-lg">{gradeEmoji(grade.score)}</span>
-    <button
-      onClick={() => onRemove(grade.id)}
-      className="text-red-300 hover:text-red-500 transition-colors text-sm px-1"
+        const n = parseFloat(raw);
+        if (!isNaN(n) && n >= 0 && n <= 5) onChange(n);
+      }}
+      className="w-14 text-center text-sm font-bold border-2 rounded-lg outline-none p-1"
+      style={{
+        color: value != null ? gradeColor(Number(value)) : "#94A3B8",
+        borderColor:
+          value != null ? gradeColor(Number(value)) + "40" : "#E2E8F0",
+      }}
+    />
+  </div>
+);
+
+const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
+  const avg = getAvgScore(grade);
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 10 }}
+      className="p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-sm space-y-2"
     >
-      ✕
-    </button>
-  </motion.div>
-));
+      <div className="flex items-center gap-2">
+        <span className="text-lg w-8 text-center flex-shrink-0">
+          {subjects.find((s) => s.v === grade.subject)?.i || "📚"}
+        </span>
+        <select
+          value={grade.subject}
+          onChange={(e) => onUpdate(grade.id, "subject", e.target.value)}
+          className="flex-1 text-sm text-[#004B63] font-semibold bg-transparent border-none outline-none min-w-0"
+        >
+          {subjects.map((s) => (
+            <option key={s.v} value={s.v}>
+              {s.l}
+            </option>
+          ))}
+        </select>
+        {avg > 0 && (
+          <span
+            className="text-xs font-black px-2 py-0.5 rounded-full flex-shrink-0"
+            style={{
+              backgroundColor: gradeColor(avg) + "20",
+              color: gradeColor(avg),
+            }}
+          >
+            {gradeEmoji(avg)} {avg.toFixed(1)}
+          </span>
+        )}
+        <button
+          onClick={() => onRemove(grade.id)}
+          className="text-red-300 hover:text-red-500 transition-colors text-sm px-1 flex-shrink-0"
+          aria-label="Eliminar materia"
+        >
+          ✕
+        </button>
+      </div>
+      <div className="flex gap-2 pl-10">
+        {["p1", "p2", "p3", "p4"].map((p, i) => (
+          <PeriodInput
+            key={p}
+            label={`P${i + 1}`}
+            value={grade[p]}
+            onChange={(val) => onUpdate(grade.id, p, val)}
+          />
+        ))}
+        <div className="flex-1" />
+        <div className="flex flex-col items-center gap-0.5 justify-end">
+          <span className="text-[10px] font-bold text-[#94A3B8] uppercase">
+            Prom
+          </span>
+          <span
+            className="w-14 text-center text-sm font-black border-2 rounded-lg p-1"
+            style={{
+              color: avg > 0 ? gradeColor(avg) : "#94A3B8",
+              borderColor: avg > 0 ? gradeColor(avg) + "40" : "#E2E8F0",
+            }}
+          >
+            {avg > 0 ? avg.toFixed(1) : "—"}
+          </span>
+        </div>
+      </div>
+    </motion.div>
+  );
+});
 GradeRow.displayName = "GradeRow";
 
 const uid = () => Math.random().toString(36).slice(2, 8);
@@ -112,21 +172,30 @@ export default memo(function GradeScanner({ onTabChange }) {
   const { t } = useTranslation();
   const { grades: persistedGrades, saveGrades } = useStudentGradesPersistence();
 
-  // Support dynamic subjects extracted from documents
-  const [extractedSubjectNames, setExtractedSubjectNames] = useState(null);
+  // Support dynamic subjects extracted from documents.
+  // Initialize from existing grades so OCR subject names survive navigation.
+  const [extractedSubjectNames, setExtractedSubjectNames] = useState(() => {
+    const initGrades = persistedGrades?.length
+      ? persistedGrades
+      : studentGrades?.length
+        ? studentGrades
+        : null;
+    if (!initGrades) return null;
+    const names = initGrades.map((g) => g.subject).filter(Boolean);
+    const hasNonDefault = names.some((n) => !DEFAULT_SUBJECTS.includes(n));
+    return hasNonDefault ? [...new Set(names)] : null;
+  });
   const SUBJECTS = getSubjects(t, extractedSubjectNames);
 
-  // Use persisted grades from hook, fall back to context, then defaults
+  // Use persisted grades from hook, fall back to context, then empty list (no defaults on first load)
   const [grades, setGrades] = useState(() => {
     if (persistedGrades?.length) return persistedGrades;
     if (studentGrades?.length) return studentGrades;
-    return SUBJECTS.slice(0, 5).map((s) => ({
-      id: uid(),
-      subject: s.v,
-      score: 3.5,
-    }));
+    return []; // start empty — auto-load from Supabase history via loadHistory
   });
   const [scanning, setScanning] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
   const [plan, setPlan] = useState(null);
   const [error, setError] = useState("");
   const [scanMode, setScanMode] = useState("manual"); // "manual" | "image"
@@ -137,7 +206,8 @@ export default memo(function GradeScanner({ onTabChange }) {
   const [showHistory, setShowHistory] = useState(false);
   const fileRef = useRef(null);
   const initializedFromHistory = useRef(false);
-  // true only when component mounted with no grades in context (fresh load)
+  // Guard: prevents auto-save from overwriting persisted data with blank defaults
+  const hasUserModified = useRef(false);
   const startedWithDefaults = useRef(!studentGrades.length);
   const isPdf =
     imgFile?.type === "application/pdf" ||
@@ -163,10 +233,22 @@ export default memo(function GradeScanner({ onTabChange }) {
           latest.grades?.length > 0
         ) {
           initializedFromHistory.current = true;
+          // Normalize: support both legacy { subject, score } and new { subject, p1..p4 }
           const latestGrades = latest.grades.map((g) => ({
             id: uid(),
             subject: g.subject,
-            score: g.score,
+            p1:
+              g.p1 != null
+                ? Number(g.p1)
+                : g.p2 == null &&
+                    g.p3 == null &&
+                    g.p4 == null &&
+                    g.score != null
+                  ? Number(g.score)
+                  : null,
+            p2: g.p2 != null ? Number(g.p2) : null,
+            p3: g.p3 != null ? Number(g.p3) : null,
+            p4: g.p4 != null ? Number(g.p4) : null,
           }));
           setGrades(latestGrades);
           const subjectNames = [
@@ -182,13 +264,10 @@ export default memo(function GradeScanner({ onTabChange }) {
     loadHistory();
   }, [loadHistory]);
 
-  // Auto-save grades to localStorage + backend every time they change
+  // Keep context in sync (lightweight — no localStorage write here to avoid overwriting persisted data)
   useEffect(() => {
-    if (grades?.length) {
-      saveGrades(grades);
-      setStudentGrades(grades);
-    }
-  }, [grades, saveGrades, setStudentGrades]);
+    if (grades?.length) setStudentGrades(grades);
+  }, [grades, setStudentGrades]);
 
   // Cleanup blob URLs on unmount or when preview changes
   useEffect(() => {
@@ -221,22 +300,58 @@ export default memo(function GradeScanner({ onTabChange }) {
     [userId, vakResult, loadHistory],
   );
 
-  const addRow = () =>
+  const addRow = () => {
+    hasUserModified.current = true;
     setGrades((prev) => [
       ...prev,
-      { id: uid(), subject: "matematicas", score: 3.5 },
+      {
+        id: uid(),
+        subject: "matematicas",
+        p1: null,
+        p2: null,
+        p3: null,
+        p4: null,
+      },
     ]);
+  };
 
   const updateGrade = useCallback((id, field, val) => {
+    hasUserModified.current = true;
     setGrades((prev) =>
       prev.map((g) => (g.id === id ? { ...g, [field]: val } : g)),
     );
   }, []);
 
-  const removeGrade = useCallback(
-    (id) => setGrades((prev) => prev.filter((g) => g.id !== id)),
-    [],
-  );
+  const removeGrade = useCallback((id) => {
+    hasUserModified.current = true;
+    setGrades((prev) => prev.filter((g) => g.id !== id));
+  }, []);
+
+  // Explicit save: localStorage + Supabase (grade_analyses row with plan=null)
+  const handleSave = useCallback(async () => {
+    if (!grades.length) return;
+    setSaving(true);
+    setSaveSuccess(false);
+    try {
+      const gradeData = grades.map((g) => ({
+        subject: g.subject,
+        p1: g.p1 ?? null,
+        p2: g.p2 ?? null,
+        p3: g.p3 ?? null,
+        p4: g.p4 ?? null,
+        score: getAvgScore(g),
+      }));
+      saveGrades(gradeData);
+      setStudentGrades(grades);
+      await saveAnalysis(null, gradeData);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch {
+      // saveAnalysis already swallows errors; localStorage always saved
+    } finally {
+      setSaving(false);
+    }
+  }, [grades, saveGrades, setStudentGrades, saveAnalysis]);
 
   const handleImageFile = useCallback(
     async (f) => {
@@ -259,24 +374,22 @@ export default memo(function GradeScanner({ onTabChange }) {
 BOLETÍN:
 "${text.slice(0, 4500)}"
 
-TAREA: Extraer la NOTA FINAL de cada asignatura. Solo UNA nota por asignatura.
+TAREA: Extraer las notas de CADA PERÍODO (P1, P2, P3, P4) por asignatura, exactamente como aparecen.
 
-PRIORIDAD para elegir qué nota extraer por cada asignatura:
-1. Columna "DEFINITIVA", "NOTA FINAL", "FINAL", "DEF" o "PROMEDIO FINAL" → usa esa
-2. Si no hay definitiva → usa el período más alto disponible (P4 > P3 > P2 > P1)
-3. Si solo hay una nota → usa esa
-
-REGLAS CRÍTICAS:
-- UNA entrada por asignatura (sin duplicados)
+REGLAS:
+- Extrae UNA entrada por asignatura (sin duplicados)
+- Si el boletín tiene columnas P1/P2/P3/P4 (o Período 1, Período 2, etc.), extrae cada una por separado
+- Si una columna de período no existe o está vacía → usa null para ese período
+- Si solo hay una nota sin indicar período, ponla en p1
 - El nombre de la asignatura exactamente como aparece en el boletín
-- NO uses el mismo nombre para dos materias diferentes
 - Convierte porcentajes: 100%=5.0, 90%=4.5, 85%=4.25, 80%=4.0, 75%=3.75, 70%=3.5, 60%=3.0
+- NO incluyas una columna "DEFINITIVA" o "PROMEDIO FINAL" — eso lo calculamos nosotros
 
 RESPONDE SOLO con este JSON (sin markdown, sin texto adicional):
 {
   "grades": [
-    {"subject": "NOMBRE EXACTO MATERIA 1", "score": 4.2},
-    {"subject": "NOMBRE EXACTO MATERIA 2", "score": 3.8}
+    {"subject": "NOMBRE EXACTO MATERIA", "p1": 4.2, "p2": 3.8, "p3": null, "p4": null},
+    {"subject": "NOMBRE EXACTO MATERIA 2", "p1": 3.5, "p2": 4.0, "p3": null, "p4": null}
   ]
 }
 
@@ -348,7 +461,25 @@ Si no encuentras notas: {"grades": []}`;
             .map((g) => g.subject)
             .filter((s) => s && typeof s === "string");
 
-          setGrades(extractedGrades.map((g) => ({ id: uid(), ...g })));
+          hasUserModified.current = true;
+          // Use per-period values extracted by AI; fall back: if only legacy `score`, put in p1
+          setGrades(
+            extractedGrades.map((g) => ({
+              id: uid(),
+              subject: g.subject,
+              p1:
+                g.p1 != null
+                  ? Number(g.p1)
+                  : g.p2 == null && g.p3 == null && g.p4 == null
+                    ? g.score != null
+                      ? Number(g.score)
+                      : null
+                    : null,
+              p2: g.p2 != null ? Number(g.p2) : null,
+              p3: g.p3 != null ? Number(g.p3) : null,
+              p4: g.p4 != null ? Number(g.p4) : null,
+            })),
+          );
           // Update extracted subjects to populate SUBJECTS dynamically
           if (subjectNames.length > 0) {
             setExtractedSubjectNames(subjectNames);
@@ -386,18 +517,20 @@ Si no encuentras notas: {"grades": []}`;
     const getLabel = (g) =>
       SUBJECTS.find((x) => x.v === g.subject)?.l || g.subject;
     const avgScore = (
-      grades.reduce((s, g) => s + g.score, 0) / grades.length
+      grades.reduce((s, g) => s + getAvgScore(g), 0) / grades.length
     ).toFixed(1);
-    const failing = grades.filter((g) => g.score < 3.0);
-    const toImprove = grades.filter((g) => g.score >= 3.0 && g.score < 4.0);
-    const strong = grades.filter((g) => g.score >= 4.0);
+    const failing = grades.filter((g) => getAvgScore(g) < 3.0);
+    const toImprove = grades.filter(
+      (g) => getAvgScore(g) >= 3.0 && getAvgScore(g) < 4.0,
+    );
+    const strong = grades.filter((g) => getAvgScore(g) >= 4.0);
     const weakCount = Math.min(failing.length + toImprove.length, 5);
     const planWeeks = Math.min(Math.max(weakCount, 2), 4);
 
     const fmt = (arr) =>
       arr
-        .sort((a, b) => a.score - b.score)
-        .map((g) => `${getLabel(g)} (${g.score}/5)`)
+        .sort((a, b) => getAvgScore(a) - getAvgScore(b))
+        .map((g) => `${getLabel(g)} (${getAvgScore(g).toFixed(1)}/5)`)
         .join(", ") || "ninguna";
 
     const vakStyle = vakResult?.dominant || "visual";
@@ -463,7 +596,16 @@ REGLAS:
       setPlan(parsed);
       setStudentGrades(grades);
       addPoints?.(50);
-      saveAnalysis(parsed, grades);
+      const gradeData = grades.map((g) => ({
+        subject: g.subject,
+        p1: g.p1 ?? null,
+        p2: g.p2 ?? null,
+        p3: g.p3 ?? null,
+        p4: g.p4 ?? null,
+        score: getAvgScore(g),
+      }));
+      saveGrades(gradeData);
+      saveAnalysis(parsed, gradeData);
     } catch (e) {
       const msg = e.message || "";
       if (msg.includes("402") || msg.toLowerCase().includes("saldo")) {
@@ -484,10 +626,13 @@ REGLAS:
     SUBJECTS,
     t,
     saveAnalysis,
+    saveGrades,
   ]);
 
   const avg = grades.length
-    ? (grades.reduce((s, g) => s + g.score, 0) / grades.length).toFixed(1)
+    ? (grades.reduce((s, g) => s + getAvgScore(g), 0) / grades.length).toFixed(
+        1,
+      )
     : 0;
 
   return (
@@ -612,12 +757,25 @@ REGLAS:
         )}
       </AnimatePresence>
 
+      {/* Period legend */}
+      <div className="flex items-center gap-3 px-1 text-xs text-[#94A3B8]">
+        <span className="font-semibold text-[#64748B]">Períodos:</span>
+        {["P1", "P2", "P3", "P4"].map((p) => (
+          <span key={p} className="font-mono font-bold">
+            {p}
+          </span>
+        ))}
+        <span className="ml-auto font-semibold">
+          Prom = promedio períodos ingresados
+        </span>
+      </div>
+
       {/* Manual grade entry */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <p className="text-sm font-bold text-[#004B63]">
             📋 {t("kid.grades.my_notes")}{" "}
-            {grades.length > 0 && (
+            {grades.length > 0 && Number(avg) > 0 && (
               <span
                 className="ml-2 px-2 py-0.5 rounded-full text-xs font-black"
                 style={{
@@ -636,6 +794,20 @@ REGLAS:
             {t("kid.grades.add_subject")}
           </button>
         </div>
+        {grades.length === 0 && (
+          <div className="py-8 text-center space-y-2">
+            <span className="text-4xl block">📚</span>
+            <p className="text-sm text-[#64748B]">
+              Agrega tus materias y escribe la nota de cada período
+            </p>
+            <button
+              onClick={addRow}
+              className="mt-2 px-4 py-2 rounded-xl bg-[#4DA8C4] text-white text-sm font-bold shadow-sm hover:bg-[#3d97b3] transition-colors"
+            >
+              + Agregar primera materia
+            </button>
+          </div>
+        )}
         <AnimatePresence>
           {grades.map((g) => (
             <GradeRow
@@ -648,6 +820,45 @@ REGLAS:
           ))}
         </AnimatePresence>
       </div>
+
+      {/* Guardar button */}
+      <motion.button
+        onClick={handleSave}
+        disabled={saving || grades.length === 0}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="w-full py-3 rounded-2xl font-black text-white shadow-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{
+          background: "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)",
+        }}
+      >
+        {saving ? (
+          <span className="flex items-center justify-center gap-2">
+            <motion.span
+              className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+            />
+            Guardando...
+          </span>
+        ) : (
+          "💾 Guardar calificaciones"
+        )}
+      </motion.button>
+
+      {/* Save success banner */}
+      <AnimatePresence>
+        {saveSuccess && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-xl text-sm text-green-700 font-semibold"
+          >
+            <span>✅</span> Calificaciones guardadas correctamente
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Analyze button */}
       <motion.button

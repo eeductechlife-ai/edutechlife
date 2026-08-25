@@ -25,6 +25,7 @@ const WeeklyScheduleView = lazy(() => import("../schedule"));
 const ImprovementPlan = lazy(
   () => import("../improvementPlan/ImprovementPlan"),
 );
+const TechNewsFeed = lazy(() => import("../news/TechNewsFeed"));
 
 const sharedTransition = { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] };
 
@@ -174,7 +175,7 @@ function createTabRenderer(deps) {
     progreso: {
       component: () => (
         <LazyLoad fallback={<SectionFallback tab="progreso" />}>
-          <SmartBoardProgress />
+          <SmartBoardProgress onTabChange={onTabChange} />
         </LazyLoad>
       ),
       errorKey: "progreso",
@@ -189,6 +190,16 @@ function createTabRenderer(deps) {
       ),
       errorKey: "plan",
       errorMsg: "Error al cargar el plan de mejora",
+      className: "space-y-4",
+    },
+    noticias: {
+      component: () => (
+        <LazyLoad fallback={<SectionFallback tab="noticias" />}>
+          <TechNewsFeed />
+        </LazyLoad>
+      ),
+      errorKey: "noticias",
+      errorMsg: "Error al cargar noticias",
       className: "space-y-4",
     },
   };

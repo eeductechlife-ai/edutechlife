@@ -1,0 +1,708 @@
+{
+  "country": "CO",
+  "ministry": "MEN",
+  "name": "Estándares Básicos de Competencias — Ministerio de Educación Nacional de Colombia",
+  "scale": "1.0-5.0",
+  "passing": 3.0,
+  "gradeMap": {
+    "1": { "label": "Primero", "level": "Básica Primaria", "menRange": "1-3" },
+    "2": { "label": "Segundo", "level": "Básica Primaria", "menRange": "1-3" },
+    "3": { "label": "Tercero", "level": "Básica Primaria", "menRange": "1-3" },
+    "4": { "label": "Cuarto", "level": "Básica Primaria", "menRange": "4-5" },
+    "5": { "label": "Quinto", "level": "Básica Primaria", "menRange": "4-5" },
+    "6": { "label": "Sexto", "level": "Básica Secundaria", "menRange": "6-7" },
+    "7": { "label": "Séptimo", "level": "Básica Secundaria", "menRange": "6-7" },
+    "8": { "label": "Octavo", "level": "Básica Secundaria", "menRange": "8-9" },
+    "9": { "label": "Noveno", "level": "Básica Secundaria", "menRange": "8-9" },
+    "10": { "label": "Décimo", "level": "Media Vocacional", "menRange": "10-11" },
+    "11": { "label": "Undécimo", "level": "Media Vocacional", "menRange": "10-11" }
+  },
+  "subjects": {
+    "matematicas": {
+      "label": "Matemáticas",
+      "emoji": "🔢",
+      "pensamientos": ["numérico", "espacial", "métrico", "aleatorio", "variacional"],
+      "standards": {
+        "1-3": {
+          "objetivo": "Construir el pensamiento numérico básico, operar con números naturales y reconocer figuras geométricas y medidas simples.",
+          "temas": [
+            "Números naturales hasta 999: lectura, escritura, orden",
+            "Suma y resta de números naturales con reagrupación",
+            "Multiplicación y división básica (tablas del 1 al 9)",
+            "Fracciones simples: mitad, tercera, cuarta parte",
+            "Figuras geométricas: círculo, triángulo, cuadrado, rectángulo",
+            "Medidas de longitud (cm, m), masa (g, kg) y tiempo (horas, días, meses)",
+            "Patrones y secuencias numéricas",
+            "Resolución de problemas sencillos de la vida cotidiana"
+          ],
+          "competencias": [
+            "Interpreta y usa los números naturales en contextos cotidianos",
+            "Realiza operaciones básicas con naturalidad y precisión",
+            "Describe y clasifica figuras geométricas del entorno",
+            "Usa unidades de medida no estándar y estándar"
+          ],
+          "evaluacion": "Pruebas Saber 3° — énfasis en razonamiento y solución de problemas"
+        },
+        "4-5": {
+          "objetivo": "Ampliar el dominio numérico a decimales y fracciones, profundizar en geometría plana y estadística básica.",
+          "temas": [
+            "Números naturales hasta millones: descomposición y valor posicional",
+            "Fracciones homogéneas y heterogéneas: comparación y operaciones",
+            "Números decimales: décimas, centésimas y milésimas",
+            "Múltiplos y divisores; números primos y compuestos",
+            "Potencias y raíces cuadradas exactas",
+            "Perímetro y área de figuras planas (cuadrado, rectángulo, triángulo)",
+            "Sistema métrico decimal completo",
+            "Introducción a estadística: tablas, gráficas de barras y pictogramas",
+            "Probabilidad simple: posible, imposible, seguro",
+            "Razones y proporciones directas"
+          ],
+          "competencias": [
+            "Opera con fracciones y decimales en contextos reales",
+            "Calcula perímetros y áreas de figuras básicas",
+            "Lee e interpreta información estadística sencilla",
+            "Reconoce y usa proporcionalidad directa"
+          ],
+          "evaluacion": "Pruebas Saber 5° — razonamiento, comunicación y resolución de problemas"
+        },
+        "6-7": {
+          "objetivo": "Introducir el pensamiento algebraico, ampliar geometría a 3D, operar con números enteros y racionales.",
+          "temas": [
+            "Números enteros: representación, orden y operaciones",
+            "Números racionales (fracciones y decimales): operaciones y representación en la recta",
+            "Potenciación y radicación con exponentes enteros",
+            "Expresiones algebraicas: variables, monomios y polinomios",
+            "Ecuaciones de primer grado con una incógnita",
+            "Proporcionalidad directa e inversa; regla de tres simple",
+            "Porcentajes y descuentos en contextos comerciales",
+            "Geometría: figuras tridimensionales (prismas, pirámides, cilindros, conos, esferas)",
+            "Perímetro, área y volumen de sólidos básicos",
+            "Estadística: media, mediana, moda; histogramas y polígonos de frecuencia",
+            "Probabilidad experimental y teórica"
+          ],
+          "competencias": [
+            "Opera con números enteros y racionales correctamente",
+            "Plantea y resuelve ecuaciones lineales sencillas",
+            "Calcula áreas y volúmenes de figuras tridimensionales",
+            "Interpreta datos estadísticos y calcula medidas de tendencia central"
+          ],
+          "evaluacion": "Pruebas Saber 7° (desde 2023) — énfasis en pensamiento algebraico y modelación"
+        },
+        "8-9": {
+          "objetivo": "Consolidar álgebra, introducir funciones, trigonometría básica y estadística inferencial.",
+          "temas": [
+            "Sistemas de ecuaciones lineales con dos incógnitas (métodos gráfico, sustitución, igualación)",
+            "Factorización de expresiones algebraicas (factor común, diferencia de cuadrados, trinomio)",
+            "Funciones: concepto, dominio, rango; función lineal y afín",
+            "Gráficas cartesianas y pendiente de una recta",
+            "Teorema de Pitágoras y sus aplicaciones",
+            "Razones trigonométricas básicas (seno, coseno, tangente) en triángulo rectángulo",
+            "Números irracionales y el conjunto de los Reales",
+            "Estadística: frecuencia relativa, acumulada; curva de Gauss introductoria",
+            "Probabilidad condicional básica",
+            "Números complejos: introducción",
+            "Semejanza y congruencia de triángulos"
+          ],
+          "competencias": [
+            "Resuelve sistemas de ecuaciones lineales",
+            "Factoriza expresiones algebraicas",
+            "Interpreta y grafica funciones lineales",
+            "Aplica trigonometría básica a problemas geométricos"
+          ],
+          "evaluacion": "Pruebas Saber 9° — pensamiento variacional, métrico y estadístico"
+        },
+        "10-11": {
+          "objetivo": "Profundizar en cálculo preuniversitario, trigonometría circular, estadística avanzada y matemática financiera.",
+          "temas": [
+            "Funciones cuadráticas, exponenciales y logarítmicas",
+            "Trigonometría: círculo unitario, identidades, gráficas de seno y coseno",
+            "Sucesiones y series aritméticas y geométricas",
+            "Progresiones y límites introductorios",
+            "Derivada: concepto, reglas básicas y aplicaciones a máximos y mínimos",
+            "Integral: concepto y cálculo de áreas bajo la curva (nivel básico)",
+            "Estadística inferencial: muestreo, distribuciones de probabilidad (binomial, normal)",
+            "Matemática financiera: interés simple, compuesto, anualidades",
+            "Combinatoria: permutaciones y combinaciones",
+            "Números complejos: operaciones y representación polar",
+            "Geometría analítica: cónicas (circunferencia, elipse, parábola, hipérbola)"
+          ],
+          "competencias": [
+            "Analiza y grafica funciones trascendentes",
+            "Aplica derivadas a problemas de optimización",
+            "Interpreta distribuciones de probabilidad",
+            "Resuelve problemas de matemática financiera"
+          ],
+          "evaluacion": "Pruebas Saber 11° (ICFES) — componente matemático obligatorio"
+        }
+      }
+    },
+    "lenguaje": {
+      "label": "Lengua Castellana",
+      "emoji": "📖",
+      "ejes": ["comprensión lectora", "producción textual", "literatura", "medios de comunicación"],
+      "standards": {
+        "1-3": {
+          "objetivo": "Desarrollar el código lecto-escritor, la comprensión de textos sencillos y la comunicación oral básica.",
+          "temas": [
+            "Conciencia fonológica: sonidos, sílabas, palabras",
+            "Lectura de textos cortos: cuentos, fábulas, poemas",
+            "Comprensión lectora: idea principal, personajes, secuencia",
+            "Escritura: oraciones completas, párrafos cortos",
+            "Ortografía básica: uso de mayúsculas, punto, coma",
+            "Vocabulario: sinónimos, antónimos, familia de palabras",
+            "Expresión oral: descripciones, narraciones y diálogos simples",
+            "Tipos de texto: narrativo, descriptivo, instructivo"
+          ],
+          "competencias": [
+            "Lee con fluidez y comprende textos apropiados para su edad",
+            "Escribe oraciones y párrafos con coherencia",
+            "Participa en conversaciones y exposiciones orales"
+          ],
+          "evaluacion": "Pruebas Saber 3° — lectura y escritura"
+        },
+        "4-5": {
+          "objetivo": "Ampliar la comprensión de textos más complejos, producir textos organizados y analizar elementos literarios.",
+          "temas": [
+            "Lectura comprensiva: textos informativos, expositivos y literarios",
+            "Estructura textual: inicio, desarrollo, desenlace; introducción, desarrollo, conclusión",
+            "Producción textual: carta, noticia, cuento, reseña",
+            "Gramática: sustantivo, verbo, adjetivo, adverbio; concordancia",
+            "Ortografía: tilde, uso de b/v, h, ll/y, r/rr",
+            "Literatura colombiana e hispanoamericana para niños",
+            "Medios de comunicación: periódico, radio, televisión",
+            "Discurso oral: exposición con argumentos sencillos"
+          ],
+          "competencias": [
+            "Comprende e interpreta textos de distintos tipos",
+            "Produce textos con estructura clara y ortografía correcta",
+            "Identifica elementos literarios básicos"
+          ],
+          "evaluacion": "Pruebas Saber 5° — comprensión lectora y producción"
+        },
+        "6-7": {
+          "objetivo": "Desarrollar la lectura crítica, la producción de textos argumentativos y el análisis literario.",
+          "temas": [
+            "Tipos de texto: argumentativo, expositivo, narrativo, descriptivo, instructivo",
+            "Comprensión lectora multinivel: literal, inferencial, crítico",
+            "Análisis literario: género narrativo (cuento, novela), lírico (poema, canción), dramático (obra de teatro)",
+            "Literatura clásica y colombiana: García Márquez, Tomás González, Óscar Collazos",
+            "Producción textual: ensayo corto, artículo de opinión, reseña",
+            "Gramática: oraciones simples y compuestas; proposiciones coordinadas y subordinadas",
+            "Ortografía: acentuación diacrítica, uso de signos de puntuación",
+            "Semiótica básica: análisis de imágenes y publicidad"
+          ],
+          "competencias": [
+            "Lee críticamente textos de distintos géneros",
+            "Produce textos argumentativos con coherencia y cohesión",
+            "Identifica y analiza elementos de la narrativa colombiana e hispanoamericana"
+          ],
+          "evaluacion": "Pruebas Saber 7° — lectura crítica"
+        },
+        "8-9": {
+          "objetivo": "Fortalecer la argumentación, el análisis de textos complejos y la producción de textos académicos.",
+          "temas": [
+            "Texto argumentativo: tesis, argumentos, contraargumentos, conclusión",
+            "Ensayo literario y académico",
+            "Literatura universal: Homero, Shakespeare, Cervantes, Kafka",
+            "Literatura latinoamericana: Boom literario (García Márquez, Vargas Llosa, Cortázar)",
+            "Análisis del discurso: ideología, intención comunicativa",
+            "Semántica: polisemia, homonimia, campo semántico",
+            "Sintaxis: análisis de oraciones complejas",
+            "Medios y medios digitales: análisis crítico de fuentes"
+          ],
+          "competencias": [
+            "Construye argumentos sólidos y los sustenta con evidencia",
+            "Analiza obras literarias en su contexto histórico-cultural",
+            "Evalúa críticamente textos de medios digitales"
+          ],
+          "evaluacion": "Pruebas Saber 9° — lectura crítica"
+        },
+        "10-11": {
+          "objetivo": "Dominar la producción académica, el análisis literario avanzado y la comunicación en contextos formales.",
+          "temas": [
+            "Monografía, informe académico y ensayo argumentativo de alto nivel",
+            "Literatura contemporánea colombiana y latinoamericana",
+            "Teoría literaria básica: estructuralismo, narratología",
+            "Lectura crítica ICFES: textos continuos y discontinuos (gráficas, tablas, mapas)",
+            "Retórica y argumentación: falacias lógicas, refutación",
+            "Semiótica: sistemas de signos, multimodalidad",
+            "Comunicación en medios digitales: netiqueta, argumentación en redes",
+            "Preparación Saber 11: práctica de lectura crítica componente comunicativo"
+          ],
+          "competencias": [
+            "Produce textos académicos con rigor argumentativo",
+            "Analiza literatura en perspectiva comparada",
+            "Lee con criterio textos multimodales y digitales"
+          ],
+          "evaluacion": "Pruebas Saber 11° (ICFES) — lectura crítica (componente más pesado: 40 preguntas)"
+        }
+      }
+    },
+    "ciencias_naturales": {
+      "label": "Ciencias Naturales",
+      "emoji": "🔬",
+      "ejes": ["entorno vivo", "entorno físico", "ciencia, tecnología y sociedad"],
+      "standards": {
+        "1-3": {
+          "objetivo": "Explorar el entorno natural cercano, identificar seres vivos y sus características, y comprender fenómenos físicos básicos.",
+          "temas": [
+            "Seres vivos: características, clasificación (animales, plantas, hongos)",
+            "Ciclo de vida de plantas y animales",
+            "El cuerpo humano: partes externas e internas, órganos de los sentidos",
+            "Alimentación saludable y hábitos de higiene",
+            "Propiedades de la materia: estado sólido, líquido y gaseoso",
+            "Fenómenos naturales: lluvia, viento, sol; el ciclo del agua",
+            "El Sistema Solar: sol, luna, planetas",
+            "Ecosistemas locales: selva, sabana, páramo de Colombia"
+          ],
+          "competencias": [
+            "Observa, describe y clasifica seres vivos del entorno",
+            "Comprende ciclos naturales básicos",
+            "Identifica propiedades de la materia"
+          ],
+          "evaluacion": "Pruebas Saber 3° — ciencias naturales"
+        },
+        "4-5": {
+          "objetivo": "Profundizar en ecosistemas, sistemas del cuerpo humano, propiedades de la materia y energía.",
+          "temas": [
+            "Célula: partes y funciones básicas (animal y vegetal)",
+            "Fotosíntesis y respiración celular (nivel básico)",
+            "Sistemas del cuerpo humano: digestivo, respiratorio, circulatorio, nervioso",
+            "Cadenas alimentarias y redes tróficas",
+            "Ecosistemas de Colombia: biodiversidad, flora y fauna",
+            "Mezclas: homogéneas y heterogéneas; métodos de separación",
+            "Energía: formas (luz, calor, sonido, movimiento) y transformaciones",
+            "Fuerza y movimiento: gravedad, fricción, palancas",
+            "Cambio climático y cuidado del medio ambiente"
+          ],
+          "competencias": [
+            "Describe la célula como unidad básica de la vida",
+            "Explica los sistemas del cuerpo humano y sus funciones",
+            "Identifica tipos de energía y sus transformaciones"
+          ],
+          "evaluacion": "Pruebas Saber 5° — ciencias naturales"
+        },
+        "6-7": {
+          "objetivo": "Introducir biología celular, química básica, física de movimiento y ecología de ecosistemas.",
+          "temas": [
+            "Célula procariota y eucariota; organelas y sus funciones",
+            "Mitosis y meiosis (nivel conceptual)",
+            "Genética básica: ADN, cromosomas, herencia de caracteres (Mendel)",
+            "Evolución: selección natural, teoría de Darwin",
+            "Reino animal: vertebrados e invertebrados; clasificación taxonómica",
+            "Reino vegetal: briofitas, pteridofitas, gimnospermas, angiospermas",
+            "Átomo: estructura (protones, neutrones, electrones); tabla periódica básica",
+            "Enlace químico: iónico y covalente (nivel introductorio)",
+            "Mezclas y sustancias puras; reacciones químicas simples",
+            "Movimiento: velocidad, aceleración, fuerza (Leyes de Newton)",
+            "Ecosistemas: flujo de energía, ciclos biogeoquímicos (carbono, nitrógeno, agua)"
+          ],
+          "competencias": [
+            "Explica la estructura y función celular",
+            "Comprende los principios básicos de la herencia genética",
+            "Describe las Leyes de Newton y sus aplicaciones",
+            "Analiza el flujo de energía en ecosistemas"
+          ],
+          "evaluacion": "Pruebas Saber 7° — ciencias naturales"
+        },
+        "8-9": {
+          "objetivo": "Profundizar en química, física y biología molecular, con énfasis en aplicaciones tecnológicas y ambientales.",
+          "temas": [
+            "Química orgánica: hidrocarburos, grupos funcionales, biomoléculas (carbohidratos, lípidos, proteínas)",
+            "Reacciones químicas: ácido-base, oxidación-reducción; estequiometría básica",
+            "Física: trabajo, potencia y energía; energía cinética y potencial",
+            "Termodinámica básica: temperatura, calor, transferencia de energía",
+            "Ondas: propiedades, sonido y luz; espectro electromagnético",
+            "Electricidad y magnetismo: circuitos eléctricos básicos, campo magnético",
+            "Biología molecular: ADN, ARN, síntesis de proteínas (replicación, transcripción, traducción)",
+            "Biotecnología: organismos modificados genéticamente, bioética",
+            "Ecología: impacto ambiental, contaminación, sostenibilidad"
+          ],
+          "competencias": [
+            "Realiza estequiometría básica y balanceo de ecuaciones",
+            "Aplica conceptos de energía a situaciones reales",
+            "Comprende el flujo de información genética",
+            "Evalúa impactos ambientales desde la perspectiva científica"
+          ],
+          "evaluacion": "Pruebas Saber 9° — ciencias naturales"
+        },
+        "10-11": {
+          "objetivo": "Dominar química analítica, física de ondas y electromagnetismo, biología molecular avanzada y preparación ICFES.",
+          "temas": [
+            "Química: estequiometría avanzada, termodinámica química, equilibrio químico, cinética",
+            "Soluciones: concentración, pH, titulación ácido-base",
+            "Física: cinemática avanzada (MRU, MRUA, MCU), dinámica rotacional",
+            "Campo eléctrico y magnético; ley de Faraday; inducción electromagnética",
+            "Física moderna: relatividad especial (nivel conceptual), física cuántica básica",
+            "Biología: genética poblacional, ecología evolutiva, filogenia molecular",
+            "Fisiología avanzada: homeostasis, sistema endocrino, inmunológico",
+            "Preparación Saber 11: entorno vivo, entorno físico-químico, ciencia-tecnología-sociedad"
+          ],
+          "competencias": [
+            "Resuelve problemas de estequiometría y equilibrio químico",
+            "Analiza fenómenos de electromagnetismo",
+            "Relaciona evolución, genética y ecología",
+            "Aplica pensamiento científico a problemas socioambientales"
+          ],
+          "evaluacion": "Pruebas Saber 11° (ICFES) — componente ciencias naturales"
+        }
+      }
+    },
+    "ciencias_sociales": {
+      "label": "Ciencias Sociales",
+      "emoji": "🌎",
+      "ejes": ["historia", "geografía", "constitución política", "economía y política"],
+      "standards": {
+        "1-3": {
+          "objetivo": "Reconocer el entorno social inmediato, la familia, la escuela, el municipio y los símbolos patrios.",
+          "temas": [
+            "La familia: tipos, roles, derechos y deberes",
+            "La escuela: normas, convivencia, derechos del niño",
+            "El municipio y el barrio: servicios públicos, autoridades locales",
+            "Símbolos patrios colombianos: bandera, escudo, himno",
+            "Geografía básica: continentes, océanos, Colombia en el mapa",
+            "El tiempo histórico: antes, ahora, después; tradiciones familiares",
+            "Fiestas y tradiciones culturales de Colombia",
+            "Derechos del niño (Convención Internacional)"
+          ],
+          "competencias": [
+            "Reconoce su rol en la familia, escuela y comunidad",
+            "Identifica Colombia en el contexto geográfico mundial",
+            "Valora la diversidad cultural colombiana"
+          ],
+          "evaluacion": "Pruebas Saber 3° — ciencias sociales"
+        },
+        "4-5": {
+          "objetivo": "Estudiar la historia prehispánica y colonial de Colombia, la geografía nacional y las instituciones democráticas.",
+          "temas": [
+            "Culturas precolombinas de Colombia: Muisca, Tayrona, Quimbaya, Zenú",
+            "Conquista y Colonia española en Colombia y América",
+            "Historia de Colombia: Independencia, República, siglo XX",
+            "Geografía de Colombia: regiones naturales, ríos, cordilleras, climas",
+            "Organización política: ramas del poder público",
+            "Constitución de 1991: principios, derechos fundamentales",
+            "Economía básica: producción, comercio, empleo en Colombia",
+            "América Latina: países, capitales, diversidad cultural"
+          ],
+          "competencias": [
+            "Comprende el proceso histórico de Colombia desde la colonia",
+            "Describe las regiones geográficas de Colombia",
+            "Identifica los principios de la Constitución de 1991"
+          ],
+          "evaluacion": "Pruebas Saber 5° — ciencias sociales"
+        },
+        "6-7": {
+          "objetivo": "Estudiar geografía mundial, historia universal antigua y medieval, y la organización del Estado colombiano.",
+          "temas": [
+            "Geografía universal: mapas, coordenadas geográficas, husos horarios",
+            "Relieve mundial: montañas, ríos, océanos, placas tectónicas",
+            "Historia antigua: Mesopotamia, Egipto, Grecia, Roma",
+            "Edad Media: feudalismo, iglesia, Bizancio, Islam",
+            "Geografía de América: Norte, Centro y Sur; regiones climáticas",
+            "Colombia: división política y administrativa (departamentos, municipios)",
+            "Constitución colombiana: mecanismos de participación ciudadana",
+            "Economía colombiana: sectores primario, secundario, terciario",
+            "Conflicto armado colombiano: contexto histórico básico"
+          ],
+          "competencias": [
+            "Ubica eventos históricos en líneas de tiempo",
+            "Interpreta mapas y datos geográficos",
+            "Comprende la organización del Estado colombiano"
+          ],
+          "evaluacion": "Pruebas Saber 7° — ciencias sociales"
+        },
+        "8-9": {
+          "objetivo": "Estudiar historia moderna y contemporánea, globalización, derechos humanos y problemáticas sociales colombianas.",
+          "temas": [
+            "Renacimiento, Humanismo y Reforma Protestante",
+            "Revoluciones: Francesa, Industrial, Independencias americanas",
+            "Imperialismo y colonialismo siglo XIX",
+            "Siglo XX: Primera y Segunda Guerra Mundial, Guerra Fría",
+            "Derechos Humanos: Declaración Universal, mecanismos internacionales",
+            "Globalización: causas, efectos en Colombia y América Latina",
+            "Problemas sociales colombianos: desigualdad, desplazamiento, paz",
+            "Proceso de paz en Colombia: historia reciente",
+            "Economía: sistema capitalista, mercado, desigualdad global",
+            "Geografía política: bloques económicos (ONU, OEA, UNASUR, G-20)"
+          ],
+          "competencias": [
+            "Analiza causas y consecuencias de conflictos históricos",
+            "Comprende la globalización y sus efectos en Colombia",
+            "Evalúa el conflicto armado colombiano desde múltiples perspectivas"
+          ],
+          "evaluacion": "Pruebas Saber 9° — ciencias sociales"
+        },
+        "10-11": {
+          "objetivo": "Profundizar en economía política, filosofía del Estado, problemáticas globales y preparación ICFES.",
+          "temas": [
+            "Teorías económicas: capitalismo, socialismo, economías mixtas",
+            "Desarrollo económico y sostenibilidad: ODS",
+            "Filosofía política: Hobbes, Locke, Rousseau, Montesquieu",
+            "Democracia y sistemas de gobierno comparados",
+            "Colombia en el siglo XXI: conflicto, paz, Acuerdo de 2016",
+            "Relaciones internacionales: organismos multilaterales, derecho internacional",
+            "Ética y política: derechos de minorías, justicia transicional",
+            "Preparación Saber 11: competencias ciudadanas y pensamiento social"
+          ],
+          "competencias": [
+            "Analiza modelos económicos y sus impactos sociales",
+            "Evalúa el sistema político colombiano e internacional",
+            "Argumenta sobre problemáticas sociales con evidencia"
+          ],
+          "evaluacion": "Pruebas Saber 11° (ICFES) — sociales y ciudadanas"
+        }
+      }
+    },
+    "ingles": {
+      "label": "Inglés",
+      "emoji": "🗣️",
+      "marcoCEFR": "A1→B1 (primaria–grado 9) → B1→B2 (grados 10-11)",
+      "standards": {
+        "1-3": {
+          "objetivo": "Familiarizarse con el inglés: vocabulario básico, saludos, colores, números y frases cotidianas.",
+          "temas": [
+            "Greetings and farewells: Hello, Goodbye, Good morning",
+            "Numbers 1-20, colors, shapes",
+            "Classroom objects and school vocabulary",
+            "Family members: mother, father, brother, sister",
+            "Animals: pets, farm animals, wild animals",
+            "Body parts and simple commands",
+            "Simple present: I am, You are, He/She is",
+            "Songs, rhymes and TPR activities"
+          ],
+          "nivel": "Pre-A1",
+          "competencias": [
+            "Reconoce y usa vocabulario básico en inglés",
+            "Responde a instrucciones simples en inglés",
+            "Identifica palabras en contextos visuales"
+          ],
+          "evaluacion": "No hay Saber para inglés en primaria; seguimiento interno"
+        },
+        "4-5": {
+          "objetivo": "Desarrollar comprensión y producción oral/escrita básica; marco CEFR A1.",
+          "temas": [
+            "Verb to be: affirmative, negative, interrogative",
+            "Present simple: daily routines, habits",
+            "There is / There are",
+            "Possessive adjectives and pronouns",
+            "Vocabulary: food, clothes, places in town",
+            "Simple directions: turn left, go straight, next to",
+            "Present continuous: actions happening now",
+            "Simple past: irregular verbs básicos (go-went, eat-ate)",
+            "Reading simple texts (stories, postcards)",
+            "Writing short sentences and descriptions"
+          ],
+          "nivel": "A1",
+          "competencias": [
+            "Se comunica en inglés con frases simples sobre temas cotidianos",
+            "Lee y comprende textos cortos en inglés",
+            "Escribe oraciones simples con estructura correcta"
+          ],
+          "evaluacion": "No hay Saber para inglés en primaria"
+        },
+        "6-7": {
+          "objetivo": "Alcanzar nivel A2: comunicarse en situaciones cotidianas y leer textos de complejidad media.",
+          "temas": [
+            "Simple past regular and irregular verbs",
+            "Past continuous: actions in progress in the past",
+            "Future: going to and will",
+            "Comparative and superlative adjectives",
+            "Modal verbs: can, could, should, must, may",
+            "Conditional type 0 and 1",
+            "Passive voice: present and past simple",
+            "Question tags",
+            "Vocabulary: travel, technology, environment",
+            "Reading: news articles, short stories, instructions",
+            "Writing: emails, descriptions, narrative paragraphs"
+          ],
+          "nivel": "A2",
+          "competencias": [
+            "Describe situaciones pasadas y futuras en inglés",
+            "Lee textos de mediana complejidad",
+            "Escribe párrafos coherentes sobre temas cotidianos"
+          ],
+          "evaluacion": "Pruebas Saber 7° — componente inglés"
+        },
+        "8-9": {
+          "objetivo": "Alcanzar nivel B1: expresar opiniones, argumentar sencillo y comprender textos complejos.",
+          "temas": [
+            "Present perfect: have/has + past participle",
+            "Present perfect continuous",
+            "Conditional types 2 and 3",
+            "Reported speech: statements and questions",
+            "Relative clauses: who, which, that, whose",
+            "Passive voice: all tenses",
+            "Gerunds and infinitives",
+            "Vocabulary: health, society, science, media",
+            "Reading: articles, essays, short stories (level B1)",
+            "Writing: formal letters, essays, reports",
+            "Speaking: debates, presentations"
+          ],
+          "nivel": "B1",
+          "competencias": [
+            "Expresa y defiende opiniones en inglés",
+            "Comprende textos auténticos de nivel B1",
+            "Escribe textos formales e informales"
+          ],
+          "evaluacion": "Pruebas Saber 9° — componente inglés"
+        },
+        "10-11": {
+          "objetivo": "Alcanzar nivel B1+ / B2: uso académico del inglés, lectura crítica y producción escrita avanzada.",
+          "temas": [
+            "Advanced grammar: inversion, cleft sentences, ellipsis",
+            "Academic vocabulary: technical, scientific, social texts",
+            "Reading strategies: skimming, scanning, inference",
+            "Writing: argumentative essays, research summaries",
+            "Listening: authentic audio (podcasts, news, lectures)",
+            "Speaking: formal presentations, IELTS-style discussions",
+            "Phrasal verbs and collocations avanzados",
+            "Preparación Saber 11: reading comprehension componente inglés"
+          ],
+          "nivel": "B1+/B2",
+          "competencias": [
+            "Comprende textos académicos auténticos",
+            "Produce escritura académica en inglés",
+            "Se comunica con fluidez sobre temas complejos"
+          ],
+          "evaluacion": "Pruebas Saber 11° (ICFES) — componente inglés"
+        }
+      }
+    },
+    "tecnologia": {
+      "label": "Tecnología e Informática",
+      "emoji": "💻",
+      "ejes": ["naturaleza de la tecnología", "apropiación", "solución de problemas", "tecnología y sociedad"],
+      "standards": {
+        "1-3": {
+          "objetivo": "Reconocer herramientas tecnológicas del entorno y usarlas de forma segura y responsable.",
+          "temas": [
+            "Herramientas y artefactos del hogar y la escuela",
+            "Computador: partes básicas (monitor, teclado, ratón, CPU)",
+            "Uso básico del teclado y ratón",
+            "Software educativo: juegos y aplicaciones de aprendizaje",
+            "Internet: qué es, para qué sirve, seguridad básica online",
+            "Dibujo digital con herramientas básicas",
+            "Cuidado y uso responsable de dispositivos"
+          ],
+          "competencias": [
+            "Identifica y usa herramientas tecnológicas básicas",
+            "Navega con supervisión en internet de forma segura",
+            "Crea productos digitales sencillos"
+          ]
+        },
+        "4-5": {
+          "objetivo": "Desarrollar habilidades en ofimática básica y pensamiento computacional inicial.",
+          "temas": [
+            "Procesador de texto: Word/Google Docs — formato, tablas, imágenes",
+            "Presentaciones: PowerPoint/Google Slides",
+            "Hoja de cálculo básica: Excel/Google Sheets — fórmulas simples",
+            "Pensamiento computacional: algoritmos, secuencias, bucles (Scratch básico)",
+            "Correo electrónico: creación y uso responsable",
+            "Búsqueda efectiva en internet: fuentes confiables",
+            "Ciudadanía digital: privacidad, ciberbullying, huella digital"
+          ],
+          "competencias": [
+            "Usa herramientas ofimáticas para crear documentos",
+            "Comprende algoritmos básicos y los representa",
+            "Navega internet de forma crítica y segura"
+          ]
+        },
+        "6-7": {
+          "objetivo": "Desarrollar pensamiento computacional, programación básica y manejo de información digital.",
+          "temas": [
+            "Programación: Scratch avanzado o Python básico (variables, condicionales, bucles)",
+            "Diseño y creación de proyectos digitales",
+            "Hoja de cálculo: funciones estadísticas, gráficas",
+            "Bases de datos: concepto, tablas, consultas simples",
+            "Redes: internet, HTTP, seguridad en redes Wi-Fi",
+            "Ética digital: propiedad intelectual, licencias Creative Commons",
+            "Hardware y software: sistema operativo, actualizaciones",
+            "Inteligencia Artificial: qué es, ejemplos cotidianos"
+          ],
+          "competencias": [
+            "Programa soluciones simples a problemas cotidianos",
+            "Gestiona información digital de forma ética",
+            "Comprende conceptos básicos de redes y seguridad"
+          ]
+        },
+        "8-9": {
+          "objetivo": "Desarrollar competencias en programación, diseño web y uso crítico de tecnología.",
+          "temas": [
+            "Python intermedio: funciones, listas, diccionarios, archivos",
+            "HTML y CSS básico: crear una página web",
+            "Diseño gráfico digital: principios de diseño, Canva avanzado",
+            "Robótica básica: Arduino o micro:bit (si disponible)",
+            "Bases de datos relacionales: SQL básico",
+            "Ciberseguridad: contraseñas, phishing, encriptación básica",
+            "Redes sociales: impacto psicológico y social",
+            "Inteligencia Artificial: machine learning conceptual, algoritmos de recomendación"
+          ],
+          "competencias": [
+            "Desarrolla programas con estructuras de datos básicas",
+            "Crea páginas web simples con HTML/CSS",
+            "Analiza el impacto social de las tecnologías"
+          ]
+        },
+        "10-11": {
+          "objetivo": "Desarrollar proyectos tecnológicos complejos, programación avanzada y comprensión crítica de la IA.",
+          "temas": [
+            "Python avanzado: POO, APIs, librerías (pandas, matplotlib)",
+            "Desarrollo web: JavaScript básico, frameworks introductorios",
+            "Inteligencia Artificial: redes neuronales, modelos de lenguaje, ética de la IA",
+            "Emprendimiento tecnológico: design thinking, MVP, pitch",
+            "Ciberseguridad avanzada: ethical hacking básico, protección de datos",
+            "Cloud computing: servicios en la nube (Google Cloud, AWS) básico",
+            "Big Data: concepto, análisis de datos, visualización",
+            "Proyecto final tecnológico integrador"
+          ],
+          "competencias": [
+            "Desarrolla proyectos de software funcionales",
+            "Comprende y cuestiona el rol de la IA en la sociedad",
+            "Crea emprendimientos tecnológicos con impacto social"
+          ]
+        }
+      }
+    },
+    "etica": {
+      "label": "Ética y Valores",
+      "emoji": "💛",
+      "standards": {
+        "1-3": { "temas": ["Respeto, honestidad, responsabilidad", "Convivencia en el aula", "Reglas del juego limpio", "Amistad y solidaridad"] },
+        "4-5": { "temas": ["Valores cívicos y ciudadanía", "Resolución pacífica de conflictos", "Equidad de género básica", "Cuidado del medio ambiente"] },
+        "6-7": { "temas": ["Proyecto de vida", "Identidad y autoestima", "Diversidad cultural y respeto", "Democracia participativa"] },
+        "8-9": { "temas": ["Filosofía moral: el bien, el deber, la justicia", "Derechos humanos y responsabilidad", "Sexualidad y afectividad responsable", "Dilemas éticos contemporáneos"] },
+        "10-11": { "temas": ["Ética profesional", "Bioética", "Filosofía política: liberalismo, comunitarismo", "Proyecto de vida y toma de decisiones"] }
+      }
+    },
+    "ciencias_sociales_economia": {
+      "label": "Economía y Negocios (Grados 10-11)",
+      "emoji": "📊",
+      "standards": {
+        "10-11": {
+          "objetivo": "Comprender el sistema económico colombiano y mundial; emprendimiento y educación financiera.",
+          "temas": [
+            "Microeconomía: oferta, demanda, mercado, precio de equilibrio",
+            "Macroeconomía: PIB, inflación, desempleo, política monetaria y fiscal",
+            "Sistema financiero colombiano: Banco de la República, bancos comerciales",
+            "Educación financiera: ahorro, inversión, crédito, seguros",
+            "Emprendimiento: plan de negocios, DOFA, fuentes de financiamiento",
+            "Comercio internacional: tratados TLC, importaciones, exportaciones Colombia",
+            "Desarrollo sostenible: economía verde, ODS"
+          ],
+          "competencias": [
+            "Analiza el funcionamiento del mercado y la economía",
+            "Planea proyectos de emprendimiento básicos",
+            "Toma decisiones financieras informadas"
+          ]
+        }
+      }
+    }
+  },
+  "saberTests": {
+    "3": { "label": "Saber 3°", "subjects": ["lenguaje", "matematicas", "ciencias_naturales", "ciencias_sociales"] },
+    "5": { "label": "Saber 5°", "subjects": ["lenguaje", "matematicas", "ciencias_naturales", "ciencias_sociales"] },
+    "7": { "label": "Saber 7°", "subjects": ["lenguaje", "matematicas", "ciencias_naturales", "ciencias_sociales", "ingles"] },
+    "9": { "label": "Saber 9°", "subjects": ["lenguaje", "matematicas", "ciencias_naturales", "ciencias_sociales", "ingles"] },
+    "11": { "label": "Saber 11° (ICFES)", "subjects": ["lectura_critica", "matematicas", "ciencias_naturales", "ciencias_sociales_ciudadanas", "ingles"] }
+  }
+}

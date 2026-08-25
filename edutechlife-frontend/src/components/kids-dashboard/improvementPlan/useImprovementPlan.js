@@ -1,6 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
 import { callDeepseek } from "../../../utils/api";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import {
+  getCurriculumPromptText,
+  getGradeLabel,
+} from "../../../data/curriculum/curriculumHelper";
 
 function storageKey(userId) {
   return `improvement_plan_${userId}`;
@@ -24,8 +28,14 @@ function savePlan(userId, plan) {
 }
 
 export function useImprovementPlan() {
-  const { vakResult, studentGrades, upcomingExams, userId } =
-    useSmartBoardKids();
+  const {
+    vakResult,
+    studentGrades,
+    upcomingExams,
+    userId,
+    gradeLevel,
+    countryCode,
+  } = useSmartBoardKids();
 
   const [plan, setPlan] = useState(() => loadPlan(userId));
   const [isGenerating, setIsGenerating] = useState(false);
@@ -59,12 +69,37 @@ export function useImprovementPlan() {
       })
       .join(", ");
 
-    const prompt = `Eres Dani, tutora IA de EdutechLife para Colombia. Eres experta en pedagogía.
+    // Detect weak subjects from grades (score < 3.5) to prioritize in curriculum
+    const weakKeys = (studentGrades || [])
+      .filter((g) => (g.score ?? g.grade ?? 5) < 3.5)
+      .map((g) =>
+        (g.label || g.subject || g.key || "")
+          .toLowerCase()
+          .replace(/\s+/g, "_")
+          .replace(/á/g, "a")
+          .replace(/é/g, "e")
+          .replace(/í/g, "i")
+          .replace(/ó/g, "o")
+          .replace(/ú/g, "u"),
+      );
+
+    const curriculumText = gradeLevel
+      ? getCurriculumPromptText(gradeLevel, countryCode || "CO", weakKeys)
+      : "";
+    const gradeLabel = gradeLevel
+      ? getGradeLabel(gradeLevel, countryCode || "CO")
+      : null;
+    const gradeInfo = gradeLabel
+      ? `Grado del estudiante: ${gradeLabel} (${countryCode || "CO"}).`
+      : "";
+
+    const prompt = `Eres Dani, tutora IA de EdutechLife para Colombia. Eres experta en pedagogía y currículo escolar.
+${gradeInfo}
 Estilo de aprendizaje VAK del estudiante: ${vakStyle}.
 Calificaciones (escala 1.0-5.0, aprobatorio ≥ 3.0): ${gradesText || "no disponibles"}.
 Próximos exámenes: ${examsText || "ninguno registrado"}.
-
-Genera un plan de mejora académica de 4 semanas personalizado.
+${curriculumText ? `\n${curriculumText}\n` : ""}
+Genera un plan de mejora académica de 4 semanas personalizado, alineado al currículo MEN Colombia para el grado del estudiante.
 
 Responde SOLO con JSON válido (sin markdown, sin explicaciones):
 {
@@ -119,7 +154,15 @@ REGLAS:
       clearTimeout(timeoutId);
       setIsGenerating(false);
     }
-  }, [isGenerating, vakResult, studentGrades, upcomingExams, userId]);
+  }, [
+    isGenerating,
+    vakResult,
+    studentGrades,
+    upcomingExams,
+    userId,
+    gradeLevel,
+    countryCode,
+  ]);
 
   const markActivityDone = useCallback(
     (weekIdx, actIdx) => {

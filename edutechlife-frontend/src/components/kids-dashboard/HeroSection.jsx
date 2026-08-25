@@ -71,7 +71,15 @@ const QUICK_ACTIONS = [
 const LEARNING_PATH = ["calificaciones", "flashcards", "oral", "examenes"];
 
 const HeroSection = memo(({ onTabChange }) => {
-  const { vakResult, activeStudyDeck, studentGrades, timetable, currentClass, nextClass } = useSmartBoardKids();
+  const {
+    vakResult,
+    activeStudyDeck,
+    studentGrades,
+    timetable,
+    currentClass,
+    nextClass,
+    ageGroup,
+  } = useSmartBoardKids();
   const { t } = useTranslation();
   const reduce = useReducedMotion();
   const activeClass = currentClass || nextClass;
@@ -283,12 +291,26 @@ const HeroSection = memo(({ onTabChange }) => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.7 }}
-              className="flex items-center justify-center md:justify-start gap-2.5 text-white/90 text-sm md:text-lg font-medium mb-3"
+              className="flex items-center justify-center md:justify-start gap-2.5 text-white/90 text-sm md:text-lg font-medium mb-2"
             >
               <span className="w-8 h-8 rounded-xl flex items-center justify-center bg-white/18 text-white flex-shrink-0">
                 <vak.Icon className="w-5 h-5" strokeWidth={2.4} />
               </span>
               {vak.label}
+            </motion.p>
+
+            {/* Age-adaptive subtitle */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.75 }}
+              className="text-white/70 text-xs md:text-sm font-medium mb-3 text-center md:text-left"
+            >
+              {ageGroup === "early"
+                ? "🌟 ¡Juntos aprendemos jugando! Elige tu actividad favorita"
+                : ageGroup === "senior"
+                  ? "Tu plataforma de aprendizaje inteligente · Maximiza tu rendimiento"
+                  : "Tu asistente de estudio inteligente · ¡Vamos a aprender!"}
             </motion.p>
 
             {/* Stat chip */}

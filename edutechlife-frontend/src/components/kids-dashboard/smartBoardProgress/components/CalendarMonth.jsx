@@ -38,9 +38,9 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
       <div className="grid grid-cols-7 gap-1.5">
         {t("smartboard.calendar_days")
           .split("")
-          .map((d) => (
+          .map((d, i) => (
             <span
-              key={d}
+              key={i}
               className="text-center text-[10px] font-semibold text-[#64748B] py-1"
             >
               {d}

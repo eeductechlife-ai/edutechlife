@@ -57,6 +57,9 @@ export const SmartBoardKidsProvider = ({ children }) => {
   const [academicTopics, setAcademicTopics] = useState([]);
   const [conversationCount, setConversationCount] = useState(0);
   const [studentAge, setStudentAge] = useState(null);
+  const [gradeLevel, setGradeLevel] = useState(null);
+  const [countryCode, setCountryCode] = useState("CO");
+  const [schoolName, setSchoolName] = useState("");
   const [vakResult, setVakResult] = useState(null);
   const [vakRecommendations, setVakRecommendations] = useState([]);
   const [totalPoints, setTotalPoints] = useState(0);
@@ -153,6 +156,9 @@ export const SmartBoardKidsProvider = ({ children }) => {
       setAcademicTopics,
       setConversationCount,
       setStudentAge,
+      setGradeLevel,
+      setCountryCode,
+      setSchoolName,
       setTotalPoints,
       setPointsHistory,
       setUnlockedRewards,
@@ -174,6 +180,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
       setSubscriptionTier,
       setVakResult,
       setFlashcardDecks,
+      setExams,
       setExamMaterials,
       setSmartBookHistory,
       setPlanCompletedActivities,
@@ -212,6 +219,16 @@ export const SmartBoardKidsProvider = ({ children }) => {
     vakResult,
     userId,
   });
+
+  // Compute average score from a grade entry (supports 4-period format or legacy single score)
+  const gradeAvg = useCallback((g) => {
+    const vals = [g.p1, g.p2, g.p3, g.p4].filter(
+      (v) => v != null && !isNaN(Number(v)),
+    );
+    if (vals.length)
+      return vals.reduce((a, b) => a + Number(b), 0) / vals.length;
+    return Number(g.score) || 0;
+  }, []);
 
   // Derive subject progress from scanned student grades (nota/5 × 100).
   // When grades exist, shows ALL scanned subjects (not just the 6 defaults).
@@ -259,8 +276,9 @@ export const SmartBoardKidsProvider = ({ children }) => {
       });
       if (!match) return subject;
       matchedGradeKeys.add(norm(match.subject));
-      const progress = Math.min(100, Math.round((match.score / 5) * 100));
-      return { ...subject, progress, gradeScore: match.score };
+      const gradeScore = gradeAvg(match);
+      const progress = Math.min(100, Math.round((gradeScore / 5) * 100));
+      return { ...subject, progress, gradeScore };
     });
 
     // Step 2: add extra subjects from the boletín that didn't match any default
@@ -269,14 +287,15 @@ export const SmartBoardKidsProvider = ({ children }) => {
       .filter((g) => !matchedGradeKeys.has(norm(g.subject)))
       .map((g) => {
         const color = EXTRA_COLORS[colorIdx++ % EXTRA_COLORS.length];
-        const progress = Math.min(100, Math.round((g.score / 5) * 100));
+        const gradeScore = gradeAvg(g);
+        const progress = Math.min(100, Math.round((gradeScore / 5) * 100));
         return {
           id: norm(g.subject) || `extra_${colorIdx}`,
           name: g.subject,
           icon: getSubjectEmoji(g.subject),
           color,
           progress,
-          gradeScore: g.score,
+          gradeScore,
         };
       });
 
@@ -339,6 +358,10 @@ export const SmartBoardKidsProvider = ({ children }) => {
     if (studentDataQuery.data) {
       setStudentAge(studentDataQuery.data.age);
       setSubscriptionTier(studentDataQuery.data.subscription_tier || "basic");
+      if (studentDataQuery.data.grade_level)
+        setGradeLevel(studentDataQuery.data.grade_level);
+      if (studentDataQuery.data.country_code)
+        setCountryCode(studentDataQuery.data.country_code);
     }
   }, [studentDataQuery.data]);
 
@@ -432,6 +455,9 @@ export const SmartBoardKidsProvider = ({ children }) => {
     setLocalStorage(`academic_topics_${userId}`, academicTopics);
     setLocalStorage(`conversation_count_${userId}`, conversationCount);
     setLocalStorage(`age_${userId}`, studentAge);
+    if (gradeLevel) setLocalStorage(`grade_${userId}`, gradeLevel);
+    if (countryCode) setLocalStorage(`country_${userId}`, countryCode);
+    if (schoolName) setLocalStorage(`school_${userId}`, schoolName);
     setLocalStorage(`vak_${userId}`, vakResult);
     setLocalStorage(`points_${userId}`, totalPoints);
     setLocalStorage(`points_history_${userId}`, pointsHistory);
@@ -686,6 +712,14 @@ export const SmartBoardKidsProvider = ({ children }) => {
     // Student
     studentAge,
     setStudentAge,
+    ageGroup:
+      studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior",
+    gradeLevel,
+    setGradeLevel,
+    countryCode,
+    setCountryCode,
+    schoolName,
+    setSchoolName,
 
     // VAK
     vakResult,
@@ -772,6 +806,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     setActiveStudyDeck,
     studentGrades,
     setStudentGrades,
+    gradeAvg,
 
     // Timetable (weekly schedule + exams)
     timetable: timetableData.timetable,

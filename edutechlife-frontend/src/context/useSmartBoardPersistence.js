@@ -66,6 +66,9 @@ export const useSmartBoardPersistence = (setters) => {
           setAcademicTopics,
           setConversationCount,
           setStudentAge,
+          setGradeLevel,
+          setCountryCode,
+          setSchoolName,
           setTotalPoints,
           setPointsHistory,
           setUnlockedRewards,
@@ -99,6 +102,9 @@ export const useSmartBoardPersistence = (setters) => {
           academicTopics: getLocalStorage(`academic_topics_${userId}`, []),
           conversationCount: getLocalStorage(`conversation_count_${userId}`, 0),
           studentAge: getLocalStorage(`age_${userId}`, null),
+          gradeLevel: getLocalStorage(`grade_${userId}`, null),
+          countryCode: getLocalStorage(`country_${userId}`, "CO"),
+          schoolName: getLocalStorage(`school_${userId}`, ""),
           totalPoints: getLocalStorage(`points_${userId}`, 0),
           pointsHistory: getLocalStorage(`points_history_${userId}`, []),
           unlockedRewards: getLocalStorage(`rewards_${userId}`, []),
@@ -193,6 +199,12 @@ export const useSmartBoardPersistence = (setters) => {
         setAcademicTopics(merged.academicTopics || []);
         setConversationCount(merged.conversationCount || 0);
         setStudentAge(merged.studentAge || null);
+        if (setGradeLevel && merged.gradeLevel)
+          setGradeLevel(merged.gradeLevel);
+        if (setCountryCode && merged.countryCode)
+          setCountryCode(merged.countryCode);
+        if (setSchoolName && merged.schoolName)
+          setSchoolName(merged.schoolName);
         setTotalPoints(merged.totalPoints || 0);
         setPointsHistory(merged.pointsHistory || []);
         setUnlockedRewards(merged.unlockedRewards || []);

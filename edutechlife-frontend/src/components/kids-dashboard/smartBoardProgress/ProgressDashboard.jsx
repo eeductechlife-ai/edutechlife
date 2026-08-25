@@ -7,6 +7,7 @@ import CalendarMonth from "./components/CalendarMonth";
 import PointsHistory from "./components/PointsHistory";
 import SessionLog from "./components/SessionLog";
 import RewardsGrid from "./components/RewardsGrid";
+import AcademicFeedback from "./AcademicFeedback";
 
 const PointsChart = ({ pointsHistory, darkMode }) => {
   const { t } = useTranslation();
@@ -117,7 +118,7 @@ const SummaryCard = memo(function SummaryCard({
   );
 });
 
-const SmartBoardProgress = () => {
+const SmartBoardProgress = ({ onTabChange }) => {
   const { t } = useTranslation();
   const {
     totalPoints,
@@ -140,6 +141,8 @@ const SmartBoardProgress = () => {
         animate="show"
         className="max-w-5xl mx-auto space-y-5"
       >
+        <AcademicFeedback onTabChange={onTabChange} />
+
         <div className="flex flex-wrap gap-4">
           <SummaryCard
             icon="🔥"

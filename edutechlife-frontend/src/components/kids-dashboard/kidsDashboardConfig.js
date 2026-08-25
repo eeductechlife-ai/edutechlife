@@ -12,6 +12,7 @@ export const CATEGORY_MAP = {
   calificaciones: "progress",
   plan: "progress",
   misiones: "explore",
+  noticias: "explore",
 };
 
 export const CATEGORIES = [
@@ -58,7 +59,7 @@ export const CATEGORIES = [
     color: "#9D4EDD",
     gradient: "linear-gradient(135deg, #7B2FF7 0%, #9D4EDD 55%, #C77DFF 100%)",
     glowColor: "#C77DFF",
-    tabs: ["misiones"],
+    tabs: ["misiones", "noticias"],
   },
 ];
 
@@ -74,6 +75,7 @@ export const CATEGORY_TAB_LABELS = {
   misiones: "Misiones",
   inicio: "Inicio",
   plan: "Mi Plan",
+  noticias: "Tech & IA",
 };
 
 export const PREMIUM_TABS = ["oral", "misiones"];
@@ -90,6 +92,7 @@ export const TOP_BAR_LABELS = {
   calificaciones: "Mis Calificaciones",
   misiones: "Misiones Diarias",
   plan: "Mi Plan de Mejora",
+  noticias: "Tech & IA",
 };
 
 export const PREMIUM_FEATURES = {

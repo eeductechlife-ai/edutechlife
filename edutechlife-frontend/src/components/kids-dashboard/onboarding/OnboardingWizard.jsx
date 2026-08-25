@@ -1,18 +1,20 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { GRADE_OPTIONS } from "../../../data/curriculum/curriculumHelper";
 
-const STEPS = [
+// Step 0 is inline (no tab navigation) — captures grade + school.
+// Steps 1-3 navigate to their respective tabs.
+const NAV_STEPS = [
   {
     tab: "vak",
     icon: "🧠",
     title: "Diagnóstico VAK",
     messages: {
-      early: "¡Primero descubramos cómo aprendes mejor! Solo 2 minutitos 🌟",
-      middle: "Primero hagamos tu diagnóstico de estilo de aprendizaje (2 min)",
-      senior:
-        "Identifica tu estilo de aprendizaje para optimizar tu estudio (2 min)",
+      early: "¡Descubramos cómo aprendes mejor! Solo 2 minutitos 🌟",
+      middle: "Hagamos tu diagnóstico de estilo de aprendizaje (2 min)",
+      senior: "Identifica tu estilo de aprendizaje para optimizar tu estudio",
     },
     cta: "Ir al diagnóstico",
     flag: "vakCompleted",
@@ -23,11 +25,10 @@ const STEPS = [
     title: "Tu Horario Escolar",
     messages: {
       early: "¡Ahora sube tu horario! Así Dani sabe cuándo ayudarte 📚",
-      middle: "Ahora sube tu horario escolar para que puedas organizarte mejor",
-      senior:
-        "Carga tu horario escolar para recibir recordatorios y planificar tu estudio",
+      middle: "Sube tu horario para organizarte mejor",
+      senior: "Carga tu horario para recibir recordatorios personalizados",
     },
-    cta: "Ir al horario",
+    cta: "Subir horario",
     flag: "hasUploadedSchedule",
   },
   {
@@ -36,14 +37,112 @@ const STEPS = [
     title: "Tus Calificaciones",
     messages: {
       early: "¿Cuáles son tus notas? ¡Así vemos en qué podemos ayudarte! ⭐",
-      middle: "Ingresa tus últimas calificaciones para analizar tu rendimiento",
-      senior:
-        "Registra tus calificaciones para obtener análisis y recomendaciones personalizadas",
+      middle: "Ingresa tus calificaciones para analizar tu rendimiento",
+      senior: "Registra tus calificaciones para recomendaciones personalizadas",
     },
-    cta: "Ir a calificaciones",
+    cta: "Ingresar notas",
     flag: "hasGrades",
   },
 ];
+
+// Inline step: school + grade capture (index = -1, shown before NAV_STEPS)
+function GradeStep({ ageGroup, onDone }) {
+  const { setGradeLevel, setCountryCode, setSchoolName } = useSmartBoardKids();
+  const [grade, setGrade] = useState(null);
+  const [school, setSchool] = useState("");
+
+  const LEVEL_BG = {
+    "Básica Primaria":
+      "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800",
+    "Básica Secundaria":
+      "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800",
+    "Media Vocacional":
+      "bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800",
+  };
+
+  const messages = {
+    early: "¡Cuéntame un poco sobre ti! 🎒",
+    middle: "Primero, cuéntame sobre tu colegio:",
+    senior: "Para personalizar tu plan, necesito saber tu grado:",
+  };
+
+  function handleConfirm() {
+    if (!grade) return;
+    setGradeLevel(grade);
+    setCountryCode("CO");
+    if (school.trim()) setSchoolName(school.trim());
+    onDone({ grade, school });
+  }
+
+  return (
+    <div className="px-6 py-4">
+      <div className="text-4xl text-center mb-3">🏫</div>
+      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 text-center">
+        {messages[ageGroup]}
+      </h3>
+
+      {/* School name — optional */}
+      <div className="mb-4">
+        <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">
+          Nombre de tu colegio (opcional)
+        </label>
+        <input
+          type="text"
+          value={school}
+          onChange={(e) => setSchool(e.target.value)}
+          placeholder="Ej: Colegio San José"
+          className="w-full text-sm px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:border-[#0096C7]"
+        />
+      </div>
+
+      {/* Grade grid */}
+      <div className="mb-5">
+        <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 block">
+          ¿En qué grado estás? *
+        </label>
+        <div className="grid grid-cols-4 gap-1.5">
+          {GRADE_OPTIONS.map((o) => {
+            const sel = grade === o.value;
+            return (
+              <button
+                key={o.value}
+                onClick={() => setGrade(o.value)}
+                className={`flex flex-col items-center py-2 px-1 rounded-xl border text-center transition-all ${
+                  sel
+                    ? "border-[#0096C7] bg-[#0096C7] text-white shadow-md scale-105"
+                    : `border-gray-200 dark:border-white/10 hover:border-[#0096C7]/50 ${LEVEL_BG[o.level] ?? ""}`
+                }`}
+              >
+                <span
+                  className={`font-bold text-sm ${sel ? "text-white" : "text-gray-800 dark:text-white"}`}
+                >
+                  {o.value}°
+                </span>
+                <span
+                  className={`text-[9px] leading-tight ${sel ? "text-white/80" : "text-gray-400 dark:text-gray-500"}`}
+                >
+                  {o.level.replace("Básica ", "").replace(" Vocacional", "")}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <button
+        onClick={handleConfirm}
+        disabled={!grade}
+        className={`w-full py-3 rounded-xl font-bold text-sm transition-all ${
+          grade
+            ? "bg-gradient-to-r from-[#0096C7] to-[#06D6A0] text-white hover:opacity-90 shadow-md"
+            : "bg-gray-100 dark:bg-white/10 text-gray-400 cursor-not-allowed"
+        }`}
+      >
+        {grade ? `¡Soy de ${grade}°! Continuar →` : "Selecciona tu grado"}
+      </button>
+    </div>
+  );
+}
 
 const OnboardingWizard = memo(({ onTabChange }) => {
   const {
@@ -56,7 +155,11 @@ const OnboardingWizard = memo(({ onTabChange }) => {
     hasUploadedSchedule,
     hasGrades,
     studentAge,
+    gradeLevel,
   } = useSmartBoardKids();
+
+  // gradeDone = either already captured (gradeLevel in context) or skipped
+  const [gradeDone, setGradeDone] = useState(!!gradeLevel);
 
   const show = hasSeenWelcome && !onboardingComplete && onboardingStep < 3;
 
@@ -65,47 +168,48 @@ const OnboardingWizard = memo(({ onTabChange }) => {
 
   const flags = { vakCompleted, hasUploadedSchedule, hasGrades };
 
-  // Current step = first incomplete step at or after onboardingStep
-  const currentIndex = (() => {
-    for (let i = onboardingStep; i < STEPS.length; i++) {
-      if (!flags[STEPS[i].flag]) return i;
+  // Phase: 0 = grade inline step, 1+ = NAV_STEPS
+  const isGradePhase = !gradeDone;
+
+  const navIndex = (() => {
+    for (let i = onboardingStep; i < NAV_STEPS.length; i++) {
+      if (!flags[NAV_STEPS[i].flag]) return i;
     }
-    return STEPS.length; // all done
+    return NAV_STEPS.length;
   })();
 
-  const isDone = currentIndex >= STEPS.length;
+  const isDone = gradeDone && navIndex >= NAV_STEPS.length;
 
   const handleGo = (tab) => {
     if (onTabChange) onTabChange(tab);
-    // Don't advance step here — the flag will update when user completes
   };
 
   const handleSkip = () => {
-    const next = currentIndex + 1;
-    if (next >= STEPS.length) {
+    const next = navIndex + 1;
+    if (next >= NAV_STEPS.length) {
       setOnboardingComplete(true);
     } else {
       setOnboardingStep(next);
     }
   };
 
-  const handleClose = () => {
-    setOnboardingComplete(true);
-  };
+  const handleClose = () => setOnboardingComplete(true);
 
-  // Auto-complete when all flags are true
   if (isDone && show) {
     setOnboardingComplete(true);
     return null;
   }
 
-  const step = STEPS[currentIndex] ?? null;
+  // Total steps count: grade step + nav steps
+  const totalSteps = 1 + NAV_STEPS.length;
+  const currentStepNum = isGradePhase ? 0 : 1 + navIndex;
+  const step = isGradePhase ? null : (NAV_STEPS[navIndex] ?? null);
 
   return (
     <AnimatePresence>
-      {show && step && (
+      {show && (isGradePhase || step) && (
         <motion.div
-          key={`wizard-step-${currentIndex}`}
+          key={`wizard-step-${currentStepNum}`}
           className="fixed inset-0 z-[75] flex items-center justify-center p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -134,13 +238,13 @@ const OnboardingWizard = memo(({ onTabChange }) => {
             {/* Progress bar */}
             <div className="px-6 pt-5 pb-2">
               <div className="flex items-center gap-1 mb-1">
-                {STEPS.map((_, i) => (
+                {Array.from({ length: totalSteps }).map((_, i) => (
                   <motion.div
                     key={i}
                     className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${
-                      i < currentIndex
+                      i < currentStepNum
                         ? "bg-[#06D6A0]"
-                        : i === currentIndex
+                        : i === currentStepNum
                           ? "bg-[#0096C7]"
                           : "bg-gray-200 dark:bg-white/10"
                     }`}
@@ -148,44 +252,55 @@ const OnboardingWizard = memo(({ onTabChange }) => {
                 ))}
               </div>
               <p className="text-[10px] text-gray-400 dark:text-gray-500 text-right">
-                Paso {currentIndex + 1} de {STEPS.length}
+                Paso {currentStepNum + 1} de {totalSteps}
               </p>
             </div>
 
-            {/* Content */}
-            <div className="px-6 py-4 text-center">
-              <motion.div
-                className="text-5xl mb-4"
-                key={step.icon}
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-              >
-                {step.icon}
-              </motion.div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
-                {step.title}
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                {step.messages[ageGroup]}
-              </p>
-            </div>
+            {/* Grade inline step */}
+            {isGradePhase && (
+              <GradeStep
+                ageGroup={ageGroup}
+                onDone={() => setGradeDone(true)}
+              />
+            )}
 
-            {/* Actions */}
-            <div className="px-6 pb-6 flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={() => handleGo(step.tab)}
-                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#0096C7] to-[#06D6A0] text-white font-bold text-sm hover:opacity-90 transition-opacity shadow-md"
-              >
-                {step.cta}
-              </button>
-              <button
-                onClick={handleSkip}
-                className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 dark:border-white/20 text-gray-500 dark:text-gray-400 text-sm hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
-              >
-                Omitir por ahora
-              </button>
-            </div>
+            {/* Navigation steps */}
+            {!isGradePhase && step && (
+              <>
+                <div className="px-6 py-4 text-center">
+                  <motion.div
+                    className="text-5xl mb-4"
+                    key={step.icon}
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                  >
+                    {step.icon}
+                  </motion.div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                    {step.messages[ageGroup]}
+                  </p>
+                </div>
+
+                <div className="px-6 pb-6 flex flex-col sm:flex-row gap-3">
+                  <button
+                    onClick={() => handleGo(step.tab)}
+                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#0096C7] to-[#06D6A0] text-white font-bold text-sm hover:opacity-90 transition-opacity shadow-md"
+                  >
+                    {step.cta}
+                  </button>
+                  <button
+                    onClick={handleSkip}
+                    className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 dark:border-white/20 text-gray-500 dark:text-gray-400 text-sm hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                  >
+                    Omitir por ahora
+                  </button>
+                </div>
+              </>
+            )}
           </motion.div>
         </motion.div>
       )}
@@ -194,5 +309,4 @@ const OnboardingWizard = memo(({ onTabChange }) => {
 });
 
 OnboardingWizard.displayName = "OnboardingWizard";
-
 export default OnboardingWizard;
