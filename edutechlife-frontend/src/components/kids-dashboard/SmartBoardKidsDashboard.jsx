@@ -159,6 +159,7 @@ const SmartBoardKidsDashboard = () => {
         "horario",
         "puntos",
         "calificaciones",
+        "plan",
       ].includes(tab)
     ) {
       setActiveTab(tab);

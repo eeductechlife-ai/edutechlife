@@ -22,6 +22,9 @@ const FlashcardSystem = lazy(() => import("../flashcardSystem"));
 const OralExamSimulator = lazy(() => import("../OralExamSimulator"));
 const GradeScanner = lazy(() => import("../GradeScanner"));
 const WeeklyScheduleView = lazy(() => import("../schedule"));
+const ImprovementPlan = lazy(
+  () => import("../improvementPlan/ImprovementPlan"),
+);
 
 const sharedTransition = { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] };
 
@@ -177,6 +180,16 @@ function createTabRenderer(deps) {
       errorKey: "progreso",
       errorMsg: "Error al cargar progreso",
       className: "h-full",
+    },
+    plan: {
+      component: () => (
+        <LazyLoad fallback={<SectionFallback tab="plan" />}>
+          <ImprovementPlan />
+        </LazyLoad>
+      ),
+      errorKey: "plan",
+      errorMsg: "Error al cargar el plan de mejora",
+      className: "space-y-4",
     },
   };
 }

@@ -189,6 +189,7 @@ export const useSmartBoardActions = (stateAndSetters) => {
       missions,
       subjects,
       studentAge,
+      studentGrades,
     } = ref.current;
     const now = new Date();
     const fecha = now.toLocaleDateString("es-ES", {
@@ -244,6 +245,46 @@ export const useSmartBoardActions = (stateAndSetters) => {
       context += `- Estados de ánimo inferidos recientes: ${lastMoods}\n`;
     if (recentTopics)
       context += `- Temas académicos consultados: ${recentTopics}\n`;
+
+    // Calificaciones del estudiante
+    const gradesSection =
+      studentGrades?.length > 0
+        ? `\n\n## CALIFICACIONES ACTUALES DEL ESTUDIANTE\n` +
+          studentGrades
+            .map(
+              (g) =>
+                `- ${g.subject || g.materia}: ${g.score ?? g.nota} (${
+                  (g.score ?? g.nota) >= 3.5 ? "Aprobado" : "Necesita mejorar"
+                })`,
+            )
+            .join("\n") +
+          `\nPromedio general: ${(
+            studentGrades.reduce(
+              (sum, g) => sum + (g.score ?? g.nota ?? 0),
+              0,
+            ) / studentGrades.length
+          ).toFixed(1)}`
+        : "\n\n## CALIFICACIONES\nEl estudiante aún no ha registrado calificaciones.";
+
+    // Plan de mejora activo
+    let planSection = "";
+    try {
+      const savedPlan = userId
+        ? localStorage.getItem(`improvement_plan_${userId}`)
+        : null;
+      const planData = savedPlan ? JSON.parse(savedPlan) : null;
+      if (planData?.weeks?.length > 0) {
+        planSection =
+          `\n\n## PLAN DE MEJORA ACTIVO\n` +
+          `Semana actual: ${planData.weeks[0]?.focus || "N/A"}\n` +
+          `Top acciones: ${(planData.topActions || []).slice(0, 3).join(", ")}\n` +
+          `Materias a reforzar: ${(planData.weakSubjects || []).join(", ")}`;
+      }
+    } catch (_) {
+      // localStorage parse failed — omit plan section silently
+    }
+
+    context += gradesSection + planSection;
 
     return context;
   }, []);

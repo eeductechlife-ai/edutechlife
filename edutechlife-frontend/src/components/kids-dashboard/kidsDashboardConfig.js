@@ -10,6 +10,7 @@ export const CATEGORY_MAP = {
   vak: "progress",
   progreso: "progress",
   calificaciones: "progress",
+  plan: "progress",
   misiones: "explore",
 };
 
@@ -48,7 +49,7 @@ export const CATEGORIES = [
     color: "#FB8500",
     gradient: "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
     glowColor: "#FFB703",
-    tabs: ["calificaciones", "vak", "progreso"],
+    tabs: ["calificaciones", "vak", "progreso", "plan"],
   },
   {
     id: "explore",
@@ -72,6 +73,7 @@ export const CATEGORY_TAB_LABELS = {
   calificaciones: "Calificaciones",
   misiones: "Misiones",
   inicio: "Inicio",
+  plan: "Mi Plan",
 };
 
 export const PREMIUM_TABS = ["oral", "misiones"];
@@ -87,6 +89,7 @@ export const TOP_BAR_LABELS = {
   progreso: "Mi Progreso",
   calificaciones: "Mis Calificaciones",
   misiones: "Misiones Diarias",
+  plan: "Mi Plan de Mejora",
 };
 
 export const PREMIUM_FEATURES = {
