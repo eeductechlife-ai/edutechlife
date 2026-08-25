@@ -1,5 +1,5 @@
-import { memo, useCallback } from "react";
-import { motion } from "framer-motion";
+import { memo, useCallback, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 import "../styles/dani-colors.css";
 import "../styles/quick-actions-improved.css";
@@ -52,21 +52,28 @@ const QUICK_ACTIONS = [
 const QuickActionsImproved = memo(
   ({ onAction, studentAge = 10, darkMode = false, hasHistory = false }) => {
     const { t } = useTranslation();
+
+    // Age-adaptive configuration
+    const ageGroup = useMemo(() => {
+      if (studentAge <= 8) return "pequeño"; // 6-8: Large colorful cards
+      if (studentAge <= 12) return "explorador"; // 9-12: Medium cards
+      return "avanzado"; // 13-16: Compact, like Max/Valerio
+    }, [studentAge]);
+
+    const visibleCount = useMemo(() => {
+      if (studentAge <= 8) return 4;
+      if (studentAge <= 12) return 6;
+      return 6;
+    }, [studentAge]);
+
+    const visibleActions = QUICK_ACTIONS.slice(0, visibleCount);
+
     const handleAction = useCallback(
       (actionId) => {
         onAction(actionId);
       },
       [onAction],
     );
-
-    // Determine number of actions based on age
-    const getVisibleActions = () => {
-      if (studentAge <= 9) return 4;
-      if (studentAge <= 13) return 6;
-      return 6;
-    };
-
-    const visibleActions = QUICK_ACTIONS.slice(0, getVisibleActions());
 
     const containerVariants = {
       hidden: { opacity: 0 },
@@ -84,10 +91,7 @@ const QuickActionsImproved = memo(
       visible: {
         opacity: 1,
         y: 0,
-        transition: {
-          duration: 0.3,
-          ease: "easeOut",
-        },
+        transition: { duration: 0.3, ease: "easeOut" },
       },
     };
 
@@ -105,10 +109,12 @@ const QuickActionsImproved = memo(
 
     return (
       <motion.div
-        className={`quick-actions-improved ${darkMode ? "dark-mode" : "light-mode"}${hasHistory ? " compact" : ""}`}
+        className={`quick-actions-improved ${darkMode ? "dark-mode" : "light-mode"} ${ageGroup}${hasHistory ? " compact" : ""}`}
         variants={containerVariants}
         initial="hidden"
         animate="visible"
+        role="region"
+        aria-label={t("dani.qa_label")}
       >
         <div className="quick-actions-header">
           <span className="quick-actions-label">{t("dani.qa_label")}</span>
@@ -116,33 +122,43 @@ const QuickActionsImproved = memo(
             className="quick-actions-accent"
             animate={{ opacity: [0.5, 1, 0.5] }}
             transition={{ duration: 3, repeat: Infinity }}
+            aria-hidden="true"
           >
             ✨
           </motion.div>
         </div>
 
-        <div className="quick-actions-grid">
-          {visibleActions.map((action) => (
-            <motion.button
-              key={action.id}
-              variants={itemVariants}
-              onClick={() => handleAction(action.id)}
-              className="quick-action-card"
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              style={{
-                background: getActionGradient(action.color),
-              }}
-            >
-              <div className="quick-action-icon">{action.icon}</div>
-              <div className="quick-action-content">
-                <h3 className="quick-action-title">{t(action.titleKey)}</h3>
-                <p className="quick-action-subtitle">{t(action.subtitleKey)}</p>
-              </div>
-              <div className="quick-action-arrow">→</div>
-            </motion.button>
-          ))}
-        </div>
+        <motion.div className="quick-actions-grid" layout>
+          <AnimatePresence>
+            {visibleActions.map((action) => (
+              <motion.button
+                key={action.id}
+                variants={itemVariants}
+                onClick={() => handleAction(action.id)}
+                className="quick-action-card"
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                style={{ background: getActionGradient(action.color) }}
+                aria-label={`${t(action.titleKey)}: ${t(action.subtitleKey)}`}
+              >
+                <div className="quick-action-icon" aria-hidden="true">
+                  {action.icon}
+                </div>
+                <div className="quick-action-content">
+                  <h3 className="quick-action-title">{t(action.titleKey)}</h3>
+                  {ageGroup !== "avanzado" && (
+                    <p className="quick-action-subtitle">
+                      {t(action.subtitleKey)}
+                    </p>
+                  )}
+                </div>
+                <div className="quick-action-arrow" aria-hidden="true">
+                  →
+                </div>
+              </motion.button>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </motion.div>
     );
   },

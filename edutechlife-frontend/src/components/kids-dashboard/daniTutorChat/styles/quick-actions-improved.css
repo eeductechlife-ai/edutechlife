@@ -1,9 +1,9 @@
-/* Quick Actions Improved Styles */
+/* Quick Actions Improved Styles — Age-Adaptive & Responsive */
 @import "./dani-colors.css";
 
 .quick-actions-improved {
   width: 100%;
-  padding: var(--dani-spacing-md);
+  padding: clamp(0.75rem, 2vw, 1.5rem);
   border-top: 1px solid var(--dani-border-color, #e2e8f0);
 }
 
@@ -21,12 +21,12 @@
   display: flex;
   align-items: center;
   gap: var(--dani-spacing-sm);
-  margin-bottom: var(--dani-spacing-md);
+  margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
   padding: 0 var(--dani-spacing-sm);
 }
 
 .quick-actions-label {
-  font-size: var(--dani-font-size-sm);
+  font-size: clamp(0.65rem, 1.5vw, 0.875rem);
   font-weight: 600;
   color: var(--dani-text-light);
   text-transform: uppercase;
@@ -34,7 +34,7 @@
 }
 
 .quick-actions-accent {
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
   animation: float 3s ease-in-out infinite;
 }
 
@@ -48,92 +48,92 @@
   }
 }
 
-/* Grid Layout - Responsive */
+/* Grid Layout — Age Adaptive */
 .quick-actions-grid {
   display: grid;
+  gap: clamp(0.5rem, 2vw, 1.5rem);
+}
+
+/* Pequeño (6-8): Large colorful cards, 2 cols */
+.quick-actions-improved.pequeño .quick-actions-grid {
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--dani-spacing-md);
 }
 
-/* For age group 6-9: 2 columns, larger cards */
-.dani-age-6-9 .quick-actions-grid {
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--dani-spacing-lg);
+/* Explorador (9-12): Medium cards, 2-3 cols responsive */
+.quick-actions-improved.explorador .quick-actions-grid {
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 }
 
-/* For age group 10-13: 3 columns */
-.dani-age-10-13 .quick-actions-grid {
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--dani-spacing-md);
+/* Avanzado (13-16): Compact like Max/Valerio, 2-3 cols */
+.quick-actions-improved.avanzado .quick-actions-grid {
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
-/* For age group 14-16: 3 columns, compact */
-.dani-age-14-16 .quick-actions-grid {
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--dani-spacing-md);
-}
-
-/* Card Styling */
+/* Card Styling — Age & Responsive Adaptive */
 .quick-action-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--dani-spacing-sm);
-  padding: var(--dani-spacing-md);
+  gap: clamp(0.5rem, 1.5vw, 1rem);
+  padding: clamp(0.75rem, 2vw, 1.25rem);
   border: none;
   border-radius: var(--dani-radius-lg);
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  min-height: 120px;
+  min-height: clamp(90px, 20vw, 140px);
   transition: all var(--dani-transition-base);
   box-shadow: var(--dani-shadow-md);
   color: white;
   font-weight: 600;
   font-family: var(--dani-font-family);
-
-  /* Pseudo-element for overlay effect */
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    opacity: 0;
-    transition: opacity var(--dani-transition-base);
-  }
-
-  &:hover {
-    box-shadow: var(--dani-shadow-lg);
-    transform: translateY(-4px);
-
-    &::before {
-      opacity: 1;
-    }
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
 }
 
-/* Icon */
+.quick-action-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--dani-transition-base);
+}
+
+.quick-action-card:hover {
+  box-shadow: var(--dani-shadow-lg);
+  transform: translateY(-4px);
+}
+
+.quick-action-card:hover::before {
+  opacity: 1;
+}
+
+.quick-action-card:active {
+  transform: scale(0.98);
+}
+
+.quick-action-card:focus {
+  outline: 2px solid var(--dani-accent);
+  outline-offset: 2px;
+}
+
+/* Icon — Age adaptive sizing */
 .quick-action-icon {
-  font-size: 2rem;
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
   line-height: 1;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-.dani-age-6-9 .quick-action-icon {
-  font-size: 2.5rem;
+.quick-actions-improved.pequeño .quick-action-icon {
+  font-size: clamp(2rem, 5vw, 2.75rem);
 }
 
-.dani-age-14-16 .quick-action-icon {
-  font-size: 1.75rem;
+.quick-actions-improved.avanzado .quick-action-icon {
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
 }
 
 /* Content */
@@ -143,42 +143,45 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2px;
+  gap: clamp(2px, 1vw, 6px);
+  width: 100%;
 }
 
-/* Title */
+/* Title — Age adaptive sizing */
 .quick-action-title {
   margin: 0;
-  font-size: var(--dani-font-size-base);
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
   font-weight: 700;
   line-height: 1.2;
   color: white;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  word-break: break-word;
 }
 
-.dani-age-6-9 .quick-action-title {
-  font-size: var(--dani-font-size-lg);
+.quick-actions-improved.pequeño .quick-action-title {
+  font-size: clamp(0.95rem, 3vw, 1.1rem);
 }
 
-.dani-age-14-16 .quick-action-title {
-  font-size: 0.875rem;
+.quick-actions-improved.avanzado .quick-action-title {
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
 }
 
-/* Subtitle */
+/* Subtitle — Hidden in avanzado, visible in other groups */
 .quick-action-subtitle {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: clamp(0.65rem, 1.5vw, 0.75rem);
   font-weight: 500;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.1;
+  word-break: break-word;
 }
 
-.dani-age-6-9 .quick-action-subtitle {
-  font-size: 0.875rem;
+.quick-actions-improved.pequeño .quick-action-subtitle {
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
 }
 
-.dani-age-14-16 .quick-action-subtitle {
-  font-size: 0.7rem;
+.quick-actions-improved.avanzado .quick-action-subtitle {
+  display: none;
 }
 
 /* Arrow indicator */
@@ -234,7 +237,7 @@
 
 .quick-actions-improved.compact .quick-action-card:hover {
   transform: none !important;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .quick-actions-improved.compact .quick-action-icon {
@@ -261,58 +264,104 @@
   display: none;
 }
 
-/* Mobile responsiveness */
-@media (max-width: 640px) {
-  .quick-actions-grid {
+/* Tablet (768px+): Better spacing */
+@media (min-width: 768px) {
+  .quick-actions-improved.pequeño .quick-actions-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--dani-spacing-sm);
+  }
+
+  .quick-actions-improved.explorador .quick-actions-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .quick-actions-improved.avanzado .quick-actions-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile (< 640px): Optimize for small screens */
+@media (max-width: 640px) {
+  .quick-actions-improved {
+    padding: clamp(0.5rem, 1.5vw, 0.875rem);
+  }
+
+  .quick-actions-grid {
+    gap: clamp(0.5rem, 1vw, 0.75rem);
+  }
+
+  /* 2 columns for all age groups on mobile */
+  .quick-actions-improved.pequeño .quick-actions-grid,
+  .quick-actions-improved.explorador .quick-actions-grid,
+  .quick-actions-improved.avanzado .quick-actions-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .quick-action-card {
-    min-height: 100px;
-    padding: var(--dani-spacing-sm);
+    min-height: clamp(80px, 25vw, 110px);
+    padding: clamp(0.5rem, 1.5vw, 0.75rem);
   }
 
   .quick-action-icon {
-    font-size: 1.75rem;
+    font-size: clamp(1.5rem, 4vw, 2rem);
   }
 
   .quick-action-title {
-    font-size: 0.875rem;
+    font-size: clamp(0.7rem, 2vw, 0.85rem);
   }
 
-  .quick-action-subtitle {
+  /* Show subtitles only for pequeño on mobile */
+  .quick-actions-improved.explorador .quick-action-subtitle,
+  .quick-actions-improved.avanzado .quick-action-subtitle {
     display: none;
   }
 
-  .dani-age-6-9 .quick-action-card {
-    min-height: 120px;
-  }
-
-  .dani-age-6-9 .quick-action-title {
-    font-size: 1rem;
-  }
-
-  .dani-age-6-9 .quick-action-subtitle {
+  .quick-actions-improved.pequeño .quick-action-subtitle {
     display: block;
+    font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+  }
+}
+
+/* Very small phones (< 375px) */
+@media (max-width: 375px) {
+  .quick-actions-grid {
+    gap: 0.5rem;
+  }
+
+  .quick-action-card {
+    min-height: 70px;
+    padding: 0.5rem;
+    gap: 0.25rem;
+  }
+
+  .quick-action-icon {
+    font-size: 1.25rem;
+  }
+
+  .quick-action-title {
+    font-size: 0.65rem;
+  }
+
+  .quick-action-subtitle {
+    font-size: 0.6rem;
+    display: none;
+  }
+
+  .quick-actions-improved.pequeño .quick-action-subtitle {
+    display: block;
+    font-size: 0.65rem;
   }
 }
 
 /* Accessibility */
-.quick-action-card:focus {
-  outline: 2px solid var(--dani-accent);
-  outline-offset: 2px;
-}
-
 .quick-action-card:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+}
 
-  &:hover {
-    transform: none;
-    box-shadow: var(--dani-shadow-sm);
-  }
+.quick-action-card:disabled:hover {
+  transform: none;
+  box-shadow: var(--dani-shadow-sm);
 }
 
 /* Animation for entrance */
