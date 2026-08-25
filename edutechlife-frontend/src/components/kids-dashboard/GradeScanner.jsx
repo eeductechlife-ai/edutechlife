@@ -5,7 +5,29 @@ import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { getSubjectEmoji, createSubject } from "../../config/subjectMappings";
 import { useStudentGradesPersistence } from "../../hooks/useStudentGradesPersistence";
-import { createSupabaseClient } from "../../lib/supabase";
+// supabase-js hangs in dev — use direct REST fetch instead
+const SUPA_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPA_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+async function sbFetch(path, opts = {}) {
+  const token = sessionStorage.getItem("auth_token");
+  const resp = await fetch(`${SUPA_URL}/rest/v1/${path}`, {
+    ...opts,
+    headers: {
+      "Content-Type": "application/json",
+      apikey: SUPA_KEY,
+      Authorization: `Bearer ${token}`,
+      ...(opts.headers || {}),
+    },
+    signal: opts.signal ?? AbortSignal.timeout(10000),
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.message || `HTTP ${resp.status}`);
+  }
+  if (resp.status === 204 || resp.headers.get("content-length") === "0")
+    return null;
+  return resp.json();
+}
 
 // Default subjects with translations
 const DEFAULT_SUBJECTS = [
@@ -213,19 +235,54 @@ export default memo(function GradeScanner({ onTabChange }) {
     imgFile?.type === "application/pdf" ||
     imgFile?.name?.toLowerCase().endsWith(".pdf");
 
+  const GRADES_LS_KEY = userId ? `edutechlife_grades_${userId}` : null;
+
+  // Persist grades to localStorage immediately (synchronous)
+  const persistLocalGrades = useCallback(
+    (gradeData) => {
+      if (GRADES_LS_KEY) {
+        localStorage.setItem(GRADES_LS_KEY, JSON.stringify(gradeData));
+      }
+    },
+    [GRADES_LS_KEY],
+  );
+
   const loadHistory = useCallback(async () => {
+    if (!userId) return;
+
+    // 1. localStorage — instant (no network)
+    if (GRADES_LS_KEY) {
+      try {
+        const stored = localStorage.getItem(GRADES_LS_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (
+            parsed?.length &&
+            !initializedFromHistory.current &&
+            startedWithDefaults.current
+          ) {
+            initializedFromHistory.current = true;
+            const restored = parsed.map((g) => ({ id: uid(), ...g }));
+            setGrades(restored);
+            const names = [
+              ...new Set(restored.map((g) => g.subject).filter(Boolean)),
+            ];
+            if (names.length) setExtractedSubjectNames(names);
+          }
+        }
+      } catch {}
+    }
+
+    // 2. Supabase cloud — fetch history for the history panel
     const token = sessionStorage.getItem("auth_token");
-    if (!token || !userId) return;
+    if (!token) return;
     try {
-      const sb = createSupabaseClient(token);
-      const { data } = await sb
-        .from("grade_analyses")
-        .select("id, grades, avg_score, plan, created_at")
-        .order("created_at", { ascending: false })
-        .limit(5);
-      if (data?.length) {
+      const data = await sbFetch(
+        `grade_analyses?student_user_id=eq.${userId}&select=id,grades,avg_score,plan,created_at&order=created_at.desc&limit=5`,
+      );
+      if (Array.isArray(data) && data.length) {
         setHistory(data);
-        // Auto-load latest grades on first mount only when started with defaults
+        // Auto-load from cloud only if localStorage had nothing
         const latest = data[0];
         if (
           !initializedFromHistory.current &&
@@ -233,7 +290,6 @@ export default memo(function GradeScanner({ onTabChange }) {
           latest.grades?.length > 0
         ) {
           initializedFromHistory.current = true;
-          // Normalize: support both legacy { subject, score } and new { subject, p1..p4 }
           const latestGrades = latest.grades.map((g) => ({
             id: uid(),
             subject: g.subject,
@@ -251,18 +307,42 @@ export default memo(function GradeScanner({ onTabChange }) {
             p4: g.p4 != null ? Number(g.p4) : null,
           }));
           setGrades(latestGrades);
-          const subjectNames = [
+          persistLocalGrades(
+            latestGrades.map((g) => ({
+              subject: g.subject,
+              p1: g.p1,
+              p2: g.p2,
+              p3: g.p3,
+              p4: g.p4,
+              score: getAvgScore(g),
+            })),
+          );
+          const names = [
             ...new Set(latestGrades.map((g) => g.subject).filter(Boolean)),
           ];
-          if (subjectNames.length > 0) setExtractedSubjectNames(subjectNames);
+          if (names.length) setExtractedSubjectNames(names);
         }
       }
     } catch {}
-  }, [userId]);
+  }, [userId, GRADES_LS_KEY, persistLocalGrades]);
 
   useEffect(() => {
     loadHistory();
   }, [loadHistory]);
+
+  // Sync persisted grades (from hook's async localStorage load) into local state on first load
+  useEffect(() => {
+    if (persistedGrades?.length && !hasUserModified.current && !grades.length) {
+      const restored = persistedGrades.map((g) =>
+        g.id ? g : { id: uid(), ...g },
+      );
+      setGrades(restored);
+      const names = [
+        ...new Set(restored.map((r) => r.subject).filter(Boolean)),
+      ];
+      if (names.length) setExtractedSubjectNames(names);
+    }
+  }, [persistedGrades]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Keep context in sync (lightweight — no localStorage write here to avoid overwriting persisted data)
   useEffect(() => {
@@ -280,19 +360,22 @@ export default memo(function GradeScanner({ onTabChange }) {
 
   const saveAnalysis = useCallback(
     async (planData, gradeData) => {
-      const token = sessionStorage.getItem("auth_token");
-      if (!token || !userId) return;
+      if (!userId) return;
+      const avg = gradeData.length
+        ? gradeData.reduce((s, g) => s + g.score, 0) / gradeData.length
+        : 0;
+      // Save to Supabase cloud (fire-and-forget — localStorage already saved)
       try {
-        const sb = createSupabaseClient(token);
-        const avg = gradeData.length
-          ? gradeData.reduce((s, g) => s + g.score, 0) / gradeData.length
-          : 0;
-        await sb.from("grade_analyses").insert({
-          student_user_id: userId,
-          grades: gradeData,
-          plan: planData,
-          avg_score: parseFloat(avg.toFixed(1)),
-          vak_style: vakResult?.dominant || null,
+        await sbFetch("grade_analyses", {
+          method: "POST",
+          headers: { Prefer: "return=minimal" },
+          body: JSON.stringify({
+            student_user_id: userId,
+            grades: gradeData,
+            plan: planData,
+            avg_score: parseFloat(avg.toFixed(1)),
+            vak_style: vakResult?.dominant || null,
+          }),
         });
         await loadHistory();
       } catch {}
@@ -341,17 +424,20 @@ export default memo(function GradeScanner({ onTabChange }) {
         p4: g.p4 ?? null,
         score: getAvgScore(g),
       }));
+      // 1. localStorage — immediate, synchronous
+      persistLocalGrades(gradeData);
       saveGrades(gradeData);
       setStudentGrades(grades);
+      // 2. Supabase cloud — async
       await saveAnalysis(null, gradeData);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch {
-      // saveAnalysis already swallows errors; localStorage always saved
+      // saveAnalysis swallows cloud errors; localStorage always saved above
     } finally {
       setSaving(false);
     }
-  }, [grades, saveGrades, setStudentGrades, saveAnalysis]);
+  }, [grades, saveGrades, setStudentGrades, saveAnalysis, persistLocalGrades]);
 
   const handleImageFile = useCallback(
     async (f) => {
@@ -604,6 +690,8 @@ REGLAS:
         p4: g.p4 ?? null,
         score: getAvgScore(g),
       }));
+      // localStorage first, then Supabase cloud
+      persistLocalGrades(gradeData);
       saveGrades(gradeData);
       saveAnalysis(parsed, gradeData);
     } catch (e) {
@@ -627,6 +715,7 @@ REGLAS:
     t,
     saveAnalysis,
     saveGrades,
+    persistLocalGrades,
   ]);
 
   const avg = grades.length
