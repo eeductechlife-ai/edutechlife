@@ -7,7 +7,7 @@ const RESEARCH_TYPES = [
   {
     id: "image",
     icon: "fa-image",
-    color: "bg-purple-600",
+    color: "bg-slate-500",
     gradient: "bg-white",
   },
   {
@@ -19,7 +19,7 @@ const RESEARCH_TYPES = [
   {
     id: "deep",
     icon: "fa-compass",
-    color: "bg-indigo-500",
+    color: "bg-[var(--theme-primary)]",
     gradient: "bg-white",
   },
 ];
@@ -324,7 +324,7 @@ const OVAGeminiDeepResearch = () => {
                 <div className="flex items-center gap-2">
                   <div className="w-24 h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                     <div
-                      className={`h-full rounded-full ${selectedType === "image" ? "w-[85%] bg-purple-600" : selectedType === "factcheck" ? "w-[72%] bg-teal-500" : "w-[91%] bg-[var(--theme-emphasis)]"}`}
+                      className={`h-full rounded-full ${selectedType === "image" ? "w-[85%] bg-slate-500" : selectedType === "factcheck" ? "w-[72%] bg-teal-500" : "w-[91%] bg-[var(--theme-emphasis)]"}`}
                     />
                   </div>
                   <span className="text-xs font-bold text-slate-700 dark:text-slate-200">

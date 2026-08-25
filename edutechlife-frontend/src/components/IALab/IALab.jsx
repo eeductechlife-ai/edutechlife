@@ -340,10 +340,10 @@ const IALabContent = memo(function () {
   });
 
   const toolChrome = useToolChrome(mapModuleToTheme(activeMod));
-  /* Chrome inmersivo por ahora SOLO en Módulo 2 (ChatGPT) — piloto.
-     Fase D del plan extiende el workspace a Gemini (3) y NotebookLM (4). */
+  /* Chrome inmersivo activo en módulos con herramienta soportada
+     (ChatGPT M2, Gemini M3, NotebookLM M4). M1/M5 caen en vista clásica. */
   const chromeActive =
-    toolChrome.enabled && mapModuleToTheme(activeMod) === "chatgpt";
+    toolChrome.enabled && mapModuleToTheme(activeMod) !== "default";
 
   /* 2–6. Secciones del módulo: paneles informativo, temas, actividades,
      práctica, guardados y foro. Se envuelven en ToolWorkspace cuando el
@@ -714,7 +714,7 @@ const IALabContent = memo(function () {
                 {/* 2–6. Secciones del módulo (envueltas en el workspace inmersivo cuando aplica) */}
                 {chromeActive ? (
                   <ToolWorkspace
-                    theme="chatgpt"
+                    theme={mapModuleToTheme(activeMod)}
                     activeMod={activeMod}
                     viewSection={viewSection}
                     onNewChat={resetViewSection}

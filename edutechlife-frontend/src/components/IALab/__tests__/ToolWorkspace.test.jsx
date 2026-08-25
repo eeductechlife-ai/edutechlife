@@ -5,7 +5,7 @@ vi.mock("../../../i18n/I18nProvider", () => ({
   useTranslation: () => ({ t: (k) => k, locale: "es", setLocale: vi.fn() }),
 }));
 
-vi.mock("../../IALabModuleHeader", () => ({
+vi.mock("../IALabModuleHeader", () => ({
   TOOL_LOGOS: {
     chatgpt: () => <svg data-testid="logo-chatgpt" aria-hidden="true" />,
     gemini: () => <svg data-testid="logo-gemini" aria-hidden="true" />,
@@ -100,4 +100,24 @@ describe("ToolWorkspace", () => {
     newChatBtn.click();
     expect(defaultProps.onNewChat).toHaveBeenCalled();
   });
+
+  test.each(["gemini", "notebooklm"])(
+    "tema %s: monta workspace con rail y composer",
+    (theme) => {
+      render(
+        <ToolWorkspace
+          {...defaultProps}
+          theme={theme}
+          activeMod={theme === "gemini" ? 3 : 4}
+        >
+          <p>sección</p>
+        </ToolWorkspace>,
+      );
+      expect(screen.getByTestId(`tool-workspace-${theme}`)).toBeInTheDocument();
+      expect(screen.getByTestId("tool-workspace-rail")).toBeInTheDocument();
+      expect(screen.getByTestId("tool-workspace-composer")).toBeInTheDocument();
+      expect(screen.getByTestId(`logo-${theme}`)).toBeInTheDocument();
+      expect(screen.getByText("sección")).toBeInTheDocument();
+    },
+  );
 });

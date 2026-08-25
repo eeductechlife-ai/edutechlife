@@ -19,7 +19,7 @@ const SOURCE_TYPE_COLORS = {
   article: "text-blue-500 bg-blue-50 border-blue-200",
   tweet: "text-sky-500 bg-sky-50 border-sky-200",
   grafico: "text-emerald-500 bg-emerald-50 border-emerald-200",
-  paper: "text-violet-500 bg-violet-50 border-violet-200",
+  paper: "text-slate-500 bg-slate-100 border-slate-200",
 };
 
 const itemVariants = {

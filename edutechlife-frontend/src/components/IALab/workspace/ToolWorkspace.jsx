@@ -14,8 +14,8 @@
  */
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { AnimatePresence, motion } from "framer-motion";
-import { toolChromeFor } from "../themes/toolConfig";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { toolChromeFor, TOOL_BRAND_ICONS } from "../themes/toolConfig";
 import { THEME_META } from "../themes/themeMap";
 import { TOOL_LOGOS } from "../IALabModuleHeader";
 import { useTranslation } from "../../../i18n/I18nProvider";
@@ -44,6 +44,7 @@ export default function ToolWorkspace({
   const meta = THEME_META[theme] || { label: "IA", tagline: "" };
   const Logo = TOOL_LOGOS[theme] || null;
   const [railOpen, setRailOpen] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   if (!cfg) return children;
 
@@ -142,14 +143,19 @@ export default function ToolWorkspace({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={shouldReduceMotion ? { duration: 0 } : undefined}
             className="fixed inset-0 z-40 bg-black/50 lg:hidden"
             onClick={() => setRailOpen(false)}
           >
             <motion.div
-              initial={{ x: "-100%" }}
+              initial={{ x: shouldReduceMotion ? 0 : "-100%" }}
               animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ type: "spring", stiffness: 380, damping: 34 }}
+              exit={{ x: shouldReduceMotion ? 0 : "-100%" }}
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0 }
+                  : { type: "spring", stiffness: 380, damping: 34 }
+              }
               className="h-full w-72 max-w-[85vw]"
               onClick={(e) => e.stopPropagation()}
               role="dialog"
@@ -178,7 +184,7 @@ export default function ToolWorkspace({
         <PromptCard
           title={meta.tagline}
           subtitle={t("ialab.workspace.simulated_note")}
-          icon="sparkles"
+          icon={TOOL_BRAND_ICONS.sparkles}
           onClick={undefined}
         />
         <div

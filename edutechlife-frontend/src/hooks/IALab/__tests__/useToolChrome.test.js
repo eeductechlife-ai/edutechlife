@@ -73,4 +73,22 @@ describe("useToolChrome", () => {
     const { result } = renderHook(() => useToolChrome("chatgpt"));
     expect(result.current.enabled).toBe(true);
   });
+
+  test("el toggle sincroniza entre instancias del hook", () => {
+    const header = renderHook(() => useToolChrome("chatgpt"));
+    const content = renderHook(() => useToolChrome("chatgpt"));
+    expect(header.result.current.enabled).toBe(true);
+    expect(content.result.current.enabled).toBe(true);
+
+    act(() => {
+      header.result.current.toggle();
+    });
+    expect(header.result.current.enabled).toBe(false);
+    expect(content.result.current.enabled).toBe(false);
+
+    act(() => {
+      header.result.current.toggle();
+    });
+    expect(content.result.current.enabled).toBe(true);
+  });
 });

@@ -1,6 +1,11 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const STORAGE_KEY = "ialab-tool-chrome";
+
+/* Evento propio: el evento nativo `storage` no se dispara en la misma
+   pestaña, así que las instancias del hook se notifican entre sí para
+   mantener el toggle sincronizado (header ↔ workspace). */
+const SYNC_EVENT = "ialab-tool-chrome-change";
 
 export const TOOL_CHROME_THEMES = ["chatgpt", "gemini", "notebooklm"];
 
@@ -38,19 +43,30 @@ export function useToolChrome(theme) {
     setState({ theme, enabled: isEnabledFor(readStored(), theme) });
   }
 
+  useEffect(() => {
+    const sync = () =>
+      setState({ theme, enabled: isEnabledFor(readStored(), theme) });
+    window.addEventListener(SYNC_EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(SYNC_EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, [theme]);
+
   const toggle = useCallback(() => {
-    setState((prev) => {
-      const next = !prev.enabled;
-      try {
-        localStorage.setItem(
-          STORAGE_KEY,
-          JSON.stringify({ ...readStored(), [theme]: next }),
-        );
-      } catch {
-        // almacenamiento no disponible: el toggle sigue funcionando en memoria
-      }
-      return { theme, enabled: next };
-    });
+    const stored = readStored();
+    const next = !isEnabledFor(stored, theme);
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ ...stored, [theme]: next }),
+      );
+    } catch {
+      // almacenamiento no disponible: el toggle sigue funcionando en memoria
+    }
+    setState({ theme, enabled: next });
+    window.dispatchEvent(new Event(SYNC_EVENT));
   }, [theme]);
 
   return {

@@ -423,7 +423,7 @@ export default function OVANotebookBase({
             <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
               <EdutechLogo size="small" />
               <div className="flex items-center gap-3">
-                <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-cyan-50 dark:bg-cyan-900/30 text-[var(--theme-primary)] dark:text-teal-200 font-semibold text-[10px] uppercase tracking-[0.15em] border border-[var(--theme-primary)]/20">
+                <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[var(--theme-primary)]/10 dark:bg-slate-700/30 text-[var(--theme-primary)] dark:text-teal-200 font-semibold text-[10px] uppercase tracking-[0.15em] border border-[var(--theme-primary)]/20">
                   <Brain size={14} />
                   <span>{tk("lab_title")}</span>
                 </div>
