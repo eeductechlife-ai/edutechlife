@@ -5,15 +5,15 @@
  * Applied via data-age-group attribute on SmartBoardKidsDashboard
  *
  * Age Groups:
- * - elementary: 5-8 years (Grades K-2)
- * - middle: 9-11 years (Grades 3-5)
- * - secondary: 12+ years (Grades 6+)
+ * - early: 6-8 years (Grades K-2)
+ * - middle: 9-12 years (Grades 3-6)
+ * - senior: 13-16 years (Grades 7+)
  *
  * Features:
  * - Font sizes scale by age group
  * - Color intensity adapts to age-appropriateness
  * - Animation complexity varies by cognitive load
- * - Touch targets optimized per age (elementary = larger)
+ * - Touch targets optimized per age (early = larger, ≥48px)
  * - Dark mode support via .dark class
  */
 
@@ -79,9 +79,9 @@
   --age-accent-color: #8edede; /* Brighter mint */
 }
 
-/* ==================== ELEMENTARY SCHOOL (5-8) ==================== */
+/* ==================== EARLY (6-8) ==================== */
 /* Larger, simpler, more colorful for younger kids */
-[data-age-group="elementary"] {
+[data-age-group="early"] {
   /* ---- TYPOGRAPHY (BIGGER) ---- */
   --age-font-size-xs: 0.875rem; /* 14px → 14px (larger) */
   --age-font-size-sm: 1rem; /* 14px → 16px */
@@ -126,7 +126,7 @@
   --age-grid-columns: 2; /* 2-column grid on desktop */
 }
 
-.dark[data-age-group="elementary"] {
+.dark[data-age-group="early"] {
   --age-background-light: #1a0f1e; /* Dark warm */
   --age-background-card: #2d1b35; /* Dark purple-ish */
   --age-text-color: #fff5f8; /* Warm light text */
@@ -135,9 +135,9 @@
   --age-accent-color: #ffd666; /* Lighter orange */
 }
 
-/* ==================== SECONDARY SCHOOL (12+) ==================== */
+/* ==================== SENIOR (13-16) ==================== */
 /* Smaller, more sophisticated, neutral for older kids */
-[data-age-group="secondary"] {
+[data-age-group="senior"] {
   /* ---- TYPOGRAPHY (SMALLER, MORE COMPACT) ---- */
   --age-font-size-xs: 0.7rem; /* 11px (from 12px) */
   --age-font-size-sm: 0.8rem; /* 13px (from 14px) */
@@ -182,7 +182,7 @@
   --age-grid-columns: 4; /* 4-column for dense info */
 }
 
-.dark[data-age-group="secondary"] {
+.dark[data-age-group="senior"] {
   --age-background-light: #0d1117; /* Very dark */
   --age-background-card: #161b22; /* Darker card */
   --age-text-color: #c9d1d9; /* Light gray */
@@ -197,11 +197,11 @@
     --age-grid-columns: 2;
   }
 
-  [data-age-group="elementary"] {
+  [data-age-group="early"] {
     --age-grid-columns: 2;
   }
 
-  [data-age-group="secondary"] {
+  [data-age-group="senior"] {
     --age-grid-columns: 3;
   }
 }
@@ -214,13 +214,13 @@
     --age-spacing-xl: 1.5rem;
   }
 
-  [data-age-group="elementary"] {
+  [data-age-group="early"] {
     --age-grid-columns: 1;
     --age-font-size-3xl: 1.75rem; /* Reduce page header size */
     --age-spacing-lg: 1.5rem;
   }
 
-  [data-age-group="secondary"] {
+  [data-age-group="senior"] {
     --age-grid-columns: 2;
     --age-font-size-3xl: 1.5rem;
   }
@@ -243,9 +243,9 @@
   outline-offset: 2px;
 }
 
-[data-age-group="elementary"] button:focus-visible,
-[data-age-group="elementary"] a:focus-visible,
-[data-age-group="elementary"] input:focus-visible {
+[data-age-group="early"] button:focus-visible,
+[data-age-group="early"] a:focus-visible,
+[data-age-group="early"] input:focus-visible {
   outline-width: 4px;
   outline-offset: 3px;
 }

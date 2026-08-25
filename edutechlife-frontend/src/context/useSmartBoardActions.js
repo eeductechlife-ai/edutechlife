@@ -46,6 +46,11 @@ export const useSmartBoardActions = (stateAndSetters) => {
     if (reward.id === 3) setFondoGalaxia(true);
   }, []);
 
+  const toggleDarkMode = useCallback(() => {
+    const { setDarkMode } = ref.current;
+    setDarkMode((prev) => !prev);
+  }, []);
+
   const addDaniMessage = useCallback((message) => {
     const { setDaniChatHistory, setConversationCount } = ref.current;
     setDaniChatHistory((prev) => [
@@ -283,6 +288,7 @@ export const useSmartBoardActions = (stateAndSetters) => {
     addPoints,
     completeMission,
     unlockReward,
+    toggleDarkMode,
     addDaniMessage,
     recordMoodInference,
     trackAcademicTopic,

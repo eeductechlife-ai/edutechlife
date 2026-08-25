@@ -2,6 +2,7 @@ import { memo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, X, CheckCircle } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 
 const ONBOARDING_STEPS = [
   {
@@ -99,6 +100,7 @@ const OnboardingOverlay = ({ step, isHighlighting }) => {
 
 const OnboardingGuide = memo(() => {
   const { t } = useTranslation();
+  const { onboardingComplete, setOnboardingComplete } = useSmartBoardKids();
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [hasCompleted, setHasCompleted] = useState(false);
@@ -106,16 +108,15 @@ const OnboardingGuide = memo(() => {
 
   const step = ONBOARDING_STEPS[currentStep];
 
-  // Check if onboarding already completed
+  // Check if onboarding already completed (via context)
   useEffect(() => {
-    const completed = localStorage.getItem("onboarding_completed");
-    if (completed) {
+    if (onboardingComplete) {
       setHasCompleted(true);
     } else {
       // Show onboarding after a small delay
       setTimeout(() => setIsVisible(true), 1000);
     }
-  }, []);
+  }, [onboardingComplete]);
 
   // Timer for auto-advance
   useEffect(() => {
@@ -153,7 +154,7 @@ const OnboardingGuide = memo(() => {
   };
 
   const handleComplete = () => {
-    localStorage.setItem("onboarding_completed", "true");
+    setOnboardingComplete(true);
     setIsVisible(false);
     setHasCompleted(true);
   };

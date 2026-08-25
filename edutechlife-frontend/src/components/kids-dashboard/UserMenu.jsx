@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useStudentProfileSmartBoard } from "../../hooks/useStudentProfileSmartBoard";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 
 const VAK_STYLES_MAP = {
   visual: {
@@ -74,6 +75,7 @@ const UserMenu = ({
   onLogout,
 }) => {
   const { t } = useTranslation();
+  const { toggleDarkMode } = useSmartBoardKids();
   const [isOpen, setIsOpen] = useState(false);
   const [isEditingModal, setIsEditingModal] = useState(false);
   const { profile, loading, error, updateProfile, uploadAvatar, removeAvatar } =
@@ -377,6 +379,18 @@ const UserMenu = ({
               {/* Actions */}
               {!loading && (
                 <div className="p-3 border-t border-gray-200 space-y-2">
+                  <button
+                    onClick={() => {
+                      toggleDarkMode();
+                      setIsOpen(false);
+                    }}
+                    className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-[#F0F9FF] transition-colors"
+                  >
+                    <span className="text-base leading-none">
+                      {darkMode ? "☀️" : "🌙"}
+                    </span>
+                    {darkMode ? "Modo claro" : "Modo oscuro"}
+                  </button>
                   <button
                     onClick={handleProgressClick}
                     className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-[#F0F9FF] transition-colors"

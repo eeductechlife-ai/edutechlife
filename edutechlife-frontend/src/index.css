@@ -6,3 +6,5 @@
 @import "./styles/core.css";
 @import "./styles/components-bundle.css";
 @import "./styles/effects.css";
+@import "./styles/age-adaptive-design.css";
+@import "./styles/age-based-design.css";

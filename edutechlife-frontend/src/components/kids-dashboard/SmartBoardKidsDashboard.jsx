@@ -50,7 +50,8 @@ const SmartBoardKidsDashboard = () => {
     isConnected,
     studentAge,
   } = useSmartBoardKids();
-  const isKid = studentAge && studentAge <= 11;
+  const ageGroup =
+    studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior";
   const prefersReducedMotion = useReducedMotion();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -153,7 +154,7 @@ const SmartBoardKidsDashboard = () => {
         className={`relative min-h-screen overflow-hidden transition-colors duration-500 ${
           darkMode ? "bg-[#0F172A] text-white" : "bg-[#F8FAFC]"
         } ${fondoGalaxia ? "bg-[#0F172A]" : ""}`}
-        data-age-mode={isKid ? "kid" : "teen"}
+        data-age-group={ageGroup}
         style={
           fondoGalaxia
             ? {
@@ -307,7 +308,11 @@ const SmartBoardKidsDashboard = () => {
                 <motion.span
                   className="text-xl flex-shrink-0"
                   animate={{ rotate: [0, -10, 10, -10, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    repeatDelay: 2,
+                  }}
                   aria-hidden="true"
                 >
                   🤖

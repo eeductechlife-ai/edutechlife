@@ -120,6 +120,11 @@ export const SmartBoardKidsProvider = ({ children }) => {
   const [activeStudyDeck, setActiveStudyDeck] = useState(null); // { deckId, title, cards, topic }
   const [studentGrades, setStudentGrades] = useState([]);
 
+  // Onboarding state (persisted per-user via localStorage pattern)
+  const [onboardingComplete, setOnboardingComplete] = useState(false);
+  const [hasSeenWelcome, setHasSeenWelcome] = useState(false);
+  const [onboardingStep, setOnboardingStep] = useState(0);
+
   const syncTimeoutRef = useRef(null);
 
   // Supabase/React Query hooks
@@ -282,6 +287,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     addPoints,
     completeMission,
     unlockReward,
+    toggleDarkMode,
     addDaniMessage,
     recordMoodInference,
     trackAcademicTopic,
@@ -525,6 +531,50 @@ export const SmartBoardKidsProvider = ({ children }) => {
     planCompletedActivities,
   ]);
 
+  // Derived onboarding progress values
+  const vakCompleted = useMemo(() => !!vakResult, [vakResult]);
+  const hasUploadedSchedule = useMemo(
+    () => (timetableData.slots?.length ?? 0) > 0,
+    [timetableData.slots],
+  );
+  const hasGrades = useMemo(
+    () => (studentGrades?.length ?? 0) > 0,
+    [studentGrades],
+  );
+  const nextRecommendedStep = useMemo(() => {
+    if (!vakCompleted) return "vak";
+    if (!hasUploadedSchedule) return "horario";
+    if (!hasGrades) return "calificaciones";
+    return null;
+  }, [vakCompleted, hasUploadedSchedule, hasGrades]);
+
+  // Load onboarding state from localStorage when userId is known
+  useEffect(() => {
+    if (!userId) return;
+    const completed = getLocalStorage(`onboarding_complete_${userId}`, false);
+    const welcomed = getLocalStorage(`onboarding_welcomed_${userId}`, false);
+    const step = getLocalStorage(`onboarding_step_${userId}`, 0);
+    setOnboardingComplete(completed);
+    setHasSeenWelcome(welcomed);
+    setOnboardingStep(step);
+  }, [userId]);
+
+  // Persist onboarding state changes
+  useEffect(() => {
+    if (!userId) return;
+    setLocalStorage(`onboarding_complete_${userId}`, onboardingComplete);
+  }, [userId, onboardingComplete]);
+
+  useEffect(() => {
+    if (!userId) return;
+    setLocalStorage(`onboarding_welcomed_${userId}`, hasSeenWelcome);
+  }, [userId, hasSeenWelcome]);
+
+  useEffect(() => {
+    if (!userId) return;
+    setLocalStorage(`onboarding_step_${userId}`, onboardingStep);
+  }, [userId, onboardingStep]);
+
   // Compute upcoming deadlines from calendar events
   const computedUpcomingDeadlines = useMemo(() => {
     const now = new Date();
@@ -567,15 +617,33 @@ export const SmartBoardKidsProvider = ({ children }) => {
 
   const setVakResultWithSupabase = useCallback(
     (result, recommendations) => {
+      // Normalize scores regardless of shape:
+      // VAKDiagnosticEnhanced emits { scores: { visual, auditivo, kinestesico }, predominantStyle }
+      // Legacy callers may emit { visual, auditory, kinesthetic, dominant }
+      const visualScore = result?.scores?.visual ?? result?.visual ?? 0;
+      const auditoryScore = result?.scores?.auditivo ?? result?.auditory ?? 0;
+      const kinestheticScore =
+        result?.scores?.kinestesico ?? result?.kinesthetic ?? 0;
+      const primaryStyle = result?.predominantStyle ?? result?.dominant ?? null;
+
+      // Enrich result with both alias keys so consumers (e.g. GradeScanner)
+      // can read either `predominantStyle` or `dominant`
+      const normalizedResult = {
+        ...result,
+        predominantStyle: primaryStyle,
+        dominant: primaryStyle,
+      };
+
       // Add to local state immediately
-      setVakResultAndRecommendations(result, recommendations);
-      // Also sync to Supabase
-      if (result?.visual !== undefined) {
+      setVakResultAndRecommendations(normalizedResult, recommendations);
+
+      // Sync to Supabase whenever we have at least one score
+      if (visualScore !== undefined) {
         setVAKMutation.mutate({
-          visual_score: result.visual || 0,
-          auditory_score: result.auditory || 0,
-          kinesthetic_score: result.kinesthetic || 0,
-          responses: result.responses || {},
+          visual_score: visualScore,
+          auditory_score: auditoryScore,
+          kinesthetic_score: kinestheticScore,
+          responses: result?.responses || {},
         });
       }
     },
@@ -634,6 +702,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     // Rewards effects
     darkMode,
     setDarkMode,
+    toggleDarkMode,
     avatarAnimado,
     fondoGalaxia,
     lastUnlockedReward,
@@ -685,6 +754,18 @@ export const SmartBoardKidsProvider = ({ children }) => {
     setSmartBookHistory,
     planCompletedActivities,
     setPlanCompletedActivities,
+
+    // Onboarding
+    onboardingComplete,
+    setOnboardingComplete,
+    hasSeenWelcome,
+    setHasSeenWelcome,
+    onboardingStep,
+    setOnboardingStep,
+    vakCompleted,
+    hasUploadedSchedule,
+    hasGrades,
+    nextRecommendedStep,
 
     // Learning loop
     activeStudyDeck,
