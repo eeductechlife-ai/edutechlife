@@ -50,7 +50,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: edutechlife-frontend/package-lock.json
 
-      - run: npm ci
+      - run: npm install --prefer-offline
 
       - run: npm run build
 
