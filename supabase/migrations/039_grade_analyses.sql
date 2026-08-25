@@ -1,10 +1,14 @@
--- ============================================================================
--- Migration 039 — grade_analyses
+-- Idempotent: only applies if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'grade_analyses') THEN
+    -- ============================================================================
+    -- Migration 039 — grade_analyses
 --
--- Stores AI-generated grade analysis results from the SmartBoard GradeScanner.
--- Each row is one analysis session: the grades input + AI plan output.
--- RLS: students can only read/write their own analyses.
--- ============================================================================
+    -- Stores AI-generated grade analysis results from the SmartBoard GradeScanner.
+    -- Each row is one analysis session: the grades input + AI plan output.
+    -- RLS: students can only read/write their own analyses.
+    -- ============================================================================
 
 BEGIN;
 
@@ -33,3 +37,6 @@ CREATE POLICY "Students delete own analyses" ON grade_analyses
   FOR DELETE USING (auth.uid()::TEXT = student_user_id);
 
 COMMIT;
+  END IF;
+END
+$$;

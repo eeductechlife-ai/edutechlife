@@ -1,20 +1,24 @@
--- ============================================================================
--- Migration 037 — Predictive Analytics & Parent Alerts
+-- Idempotent: only applies if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'student_risk_scores') THEN
+    -- ============================================================================
+    -- Migration 037 — Predictive Analytics & Parent Alerts
 --
--- Implements ML-ready prediction engine for at-risk students and learning gaps.
+    -- Implements ML-ready prediction engine for at-risk students and learning gaps.
 --
--- Features:
---   - student_risk_scores: Real-time risk assessment (engagement, performance)
---   - predictive_alerts: Parent notifications for interventions
---   - learning_gap_predictions: Subject-area recommendations
---   - alert_actions: Tracking which interventions were taken by parent
---   - RLS: Parents see only their linked students' predictions
---   - Scoring: Engagement, performance, streak, emotional indicators
--- ============================================================================
+    -- Features:
+    --   - student_risk_scores: Real-time risk assessment (engagement, performance)
+    --   - predictive_alerts: Parent notifications for interventions
+    --   - learning_gap_predictions: Subject-area recommendations
+    --   - alert_actions: Tracking which interventions were taken by parent
+    --   - RLS: Parents see only their linked students' predictions
+    --   - Scoring: Engagement, performance, streak, emotional indicators
+    -- ============================================================================
 
 BEGIN;
 
--- Risk scoring (Denormalized ML-ready features)
+    -- Risk scoring (Denormalized ML-ready features)
 CREATE TABLE IF NOT EXISTS student_risk_scores (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_user_id TEXT NOT NULL UNIQUE,
@@ -31,7 +35,7 @@ CREATE TABLE IF NOT EXISTS student_risk_scores (
   CONSTRAINT fk_risk_student FOREIGN KEY (student_user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 );
 
--- Predictive alerts (Triggers for parent intervention)
+    -- Predictive alerts (Triggers for parent intervention)
 CREATE TABLE IF NOT EXISTS predictive_alerts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   parent_user_id TEXT NOT NULL,
@@ -53,7 +57,7 @@ CREATE TABLE IF NOT EXISTS predictive_alerts (
     REFERENCES parent_student_links(parent_user_id, student_user_id) ON DELETE CASCADE
 );
 
--- Learning gap predictions (Subject-specific recommendations)
+    -- Learning gap predictions (Subject-specific recommendations)
 CREATE TABLE IF NOT EXISTS learning_gap_predictions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_user_id TEXT NOT NULL,
@@ -69,7 +73,7 @@ CREATE TABLE IF NOT EXISTS learning_gap_predictions (
   UNIQUE(student_user_id, subject_name, gap_type)
 );
 
--- Alert action history (Track interventions)
+    -- Alert action history (Track interventions)
 CREATE TABLE IF NOT EXISTS alert_actions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   alert_id UUID NOT NULL REFERENCES predictive_alerts(id) ON DELETE CASCADE,
@@ -80,7 +84,7 @@ CREATE TABLE IF NOT EXISTS alert_actions (
   metadata JSONB DEFAULT '{}'::JSONB
 );
 
--- Prediction model performance (For ML improvements)
+    -- Prediction model performance (For ML improvements)
 CREATE TABLE IF NOT EXISTS prediction_metrics (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   model_version VARCHAR(50) NOT NULL,
@@ -91,7 +95,7 @@ CREATE TABLE IF NOT EXISTS prediction_metrics (
   UNIQUE(model_version, metric_name, computed_date)
 );
 
--- Create indexes for query performance
+    -- Create indexes for query performance
 CREATE INDEX idx_risk_scores_level ON student_risk_scores(overall_risk_level);
 CREATE INDEX idx_risk_scores_churn ON student_risk_scores(predicted_churn_probability DESC);
 CREATE INDEX idx_predictive_alerts_parent ON predictive_alerts(parent_user_id);
@@ -105,14 +109,14 @@ CREATE INDEX idx_learning_gaps_confidence ON learning_gap_predictions(confidence
 CREATE INDEX idx_alert_actions_alert ON alert_actions(alert_id);
 CREATE INDEX idx_prediction_metrics_date ON prediction_metrics(computed_date DESC);
 
--- Enable RLS
+    -- Enable RLS
 ALTER TABLE student_risk_scores ENABLE ROW LEVEL SECURITY;
 ALTER TABLE predictive_alerts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE learning_gap_predictions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE alert_actions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE prediction_metrics ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies
+    -- RLS Policies
 CREATE POLICY "risk_scores_own" ON student_risk_scores
   FOR SELECT USING (student_user_id = auth.uid()::TEXT);
 
@@ -140,7 +144,7 @@ CREATE POLICY "alert_actions_readable" ON alert_actions
 
 CREATE POLICY "prediction_metrics_readable" ON prediction_metrics FOR SELECT USING (true);
 
--- Function to compute risk scores (Run nightly or on-demand)
+    -- Function to compute risk scores (Run nightly or on-demand)
 CREATE OR REPLACE FUNCTION compute_risk_scores()
 RETURNS TABLE(computed_count INTEGER) AS $$
 DECLARE
@@ -211,3 +215,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 COMMIT;
+  END IF;
+END
+$$;

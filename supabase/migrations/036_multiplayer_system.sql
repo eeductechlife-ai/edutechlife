@@ -1,20 +1,24 @@
--- ============================================================================
--- Migration 036 — Multiplayer & Leaderboard System
+-- Idempotent: only applies if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'leaderboards') THEN
+    -- ============================================================================
+    -- Migration 036 — Multiplayer & Leaderboard System
 --
--- Implements competitive features: leaderboards, competitions, and social ranking.
+    -- Implements competitive features: leaderboards, competitions, and social ranking.
 --
--- Features:
---   - leaderboards: Weekly/monthly/all-time rankings by points
---   - student_competition_stats: Per-student competitive metrics
---   - competition_events: Time-bound competitions (tournaments)
---   - leaderboard_snapshots: Historical leaderboard states for analysis
---   - RLS: Privacy-aware ranking visibility
---   - Fast denormalized rank calculation
--- ============================================================================
+    -- Features:
+    --   - leaderboards: Weekly/monthly/all-time rankings by points
+    --   - student_competition_stats: Per-student competitive metrics
+    --   - competition_events: Time-bound competitions (tournaments)
+    --   - leaderboard_snapshots: Historical leaderboard states for analysis
+    --   - RLS: Privacy-aware ranking visibility
+    --   - Fast denormalized rank calculation
+    -- ============================================================================
 
 BEGIN;
 
--- Leaderboard rankings (Denormalized for fast queries)
+    -- Leaderboard rankings (Denormalized for fast queries)
 CREATE TABLE IF NOT EXISTS leaderboards (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   period VARCHAR(20) NOT NULL, -- 'weekly', 'monthly', 'all_time'
@@ -31,7 +35,7 @@ CREATE TABLE IF NOT EXISTS leaderboards (
   UNIQUE(period, student_user_id)
 );
 
--- Historical leaderboard snapshots (For trend analysis)
+    -- Historical leaderboard snapshots (For trend analysis)
 CREATE TABLE IF NOT EXISTS leaderboard_snapshots (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   period VARCHAR(20) NOT NULL,
@@ -45,7 +49,7 @@ CREATE TABLE IF NOT EXISTS leaderboard_snapshots (
   CONSTRAINT fk_snapshot_student FOREIGN KEY (student_user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 );
 
--- Competition events (Tournaments, challenges, events)
+    -- Competition events (Tournaments, challenges, events)
 CREATE TABLE IF NOT EXISTS competition_events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
@@ -61,7 +65,7 @@ CREATE TABLE IF NOT EXISTS competition_events (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Student participation in competitions
+    -- Student participation in competitions
 CREATE TABLE IF NOT EXISTS competition_participants (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   competition_id UUID NOT NULL REFERENCES competition_events(id) ON DELETE CASCADE,
@@ -75,7 +79,7 @@ CREATE TABLE IF NOT EXISTS competition_participants (
   UNIQUE(competition_id, student_user_id)
 );
 
--- Per-student competitive stats (Denormalized for dashboards)
+    -- Per-student competitive stats (Denormalized for dashboards)
 CREATE TABLE IF NOT EXISTS student_competition_stats (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_user_id TEXT NOT NULL UNIQUE,
@@ -91,7 +95,7 @@ CREATE TABLE IF NOT EXISTS student_competition_stats (
   CONSTRAINT fk_stats_student FOREIGN KEY (student_user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 );
 
--- Create indexes for query performance
+    -- Create indexes for query performance
 CREATE INDEX idx_leaderboards_period_rank ON leaderboards(period, rank);
 CREATE INDEX idx_leaderboards_student ON leaderboards(student_user_id);
 CREATE INDEX idx_leaderboards_points ON leaderboards(total_points DESC);
@@ -102,14 +106,14 @@ CREATE INDEX idx_competition_participants_competition ON competition_participant
 CREATE INDEX idx_competition_stats_student ON student_competition_stats(student_user_id);
 CREATE INDEX idx_leaderboard_snapshots_date ON leaderboard_snapshots(snapshot_date DESC);
 
--- Enable RLS
+    -- Enable RLS
 ALTER TABLE leaderboards ENABLE ROW LEVEL SECURITY;
 ALTER TABLE leaderboard_snapshots ENABLE ROW LEVEL SECURITY;
 ALTER TABLE competition_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE competition_participants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE student_competition_stats ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies: Leaderboards are public (privacy is handled at app level)
+    -- RLS Policies: Leaderboards are public (privacy is handled at app level)
 CREATE POLICY "leaderboards_readable" ON leaderboards FOR SELECT USING (true);
 
 CREATE POLICY "leaderboard_snapshots_readable" ON leaderboard_snapshots FOR SELECT USING (true);
@@ -123,7 +127,7 @@ CREATE POLICY "competition_participants_own_or_public" ON competition_participan
 
 CREATE POLICY "student_competition_stats_readable" ON student_competition_stats FOR SELECT USING (true);
 
--- Function to compute leaderboard rankings (Called nightly or on-demand)
+    -- Function to compute leaderboard rankings (Called nightly or on-demand)
 CREATE OR REPLACE FUNCTION compute_leaderboards()
 RETURNS TABLE(computed_count INTEGER, error_message TEXT) AS $$
 DECLARE
@@ -196,7 +200,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Seed initial competition event (Demo tournament)
+    -- Seed initial competition event (Demo tournament)
 INSERT INTO competition_events (title, description, event_type, start_date, end_date, status, rules)
 VALUES (
   'Tournament Semanal',
@@ -210,3 +214,6 @@ VALUES (
 ON CONFLICT DO NOTHING;
 
 COMMIT;
+  END IF;
+END
+$$;

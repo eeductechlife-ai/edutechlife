@@ -1,20 +1,24 @@
--- ============================================================================
--- Migration 038 — Parent-Dani AI Chat System
+-- Idempotent: only applies if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'parent_dani_conversations') THEN
+    -- ============================================================================
+    -- Migration 038 — Parent-Dani AI Chat System
 --
--- Enables parents to chat with Dani (the AI tutor) about their child's progress.
+    -- Enables parents to chat with Dani (the AI tutor) about their child's progress.
 --
--- Features:
---   - parent_dani_conversations: Chat history with context
---   - conversation_messages: Individual messages (parent/dani)
---   - conversation_summaries: AI-generated insights from chats
---   - RLS: Parents see only their linked students' conversations
---   - Context-aware responses (student progress, achievements, risks)
---   - Message pagination & archival for long-term storage
--- ============================================================================
+    -- Features:
+    --   - parent_dani_conversations: Chat history with context
+    --   - conversation_messages: Individual messages (parent/dani)
+    --   - conversation_summaries: AI-generated insights from chats
+    --   - RLS: Parents see only their linked students' conversations
+    --   - Context-aware responses (student progress, achievements, risks)
+    --   - Message pagination & archival for long-term storage
+    -- ============================================================================
 
 BEGIN;
 
--- Parent-Dani conversations (Per-student chat sessions)
+    -- Parent-Dani conversations (Per-student chat sessions)
 CREATE TABLE IF NOT EXISTS parent_dani_conversations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   parent_user_id TEXT NOT NULL,
@@ -36,7 +40,7 @@ CREATE TABLE IF NOT EXISTS parent_dani_conversations (
     REFERENCES parent_student_links(parent_user_id, student_user_id) ON DELETE CASCADE
 );
 
--- Individual messages in conversations
+    -- Individual messages in conversations
 CREATE TABLE IF NOT EXISTS conversation_messages (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   conversation_id UUID NOT NULL REFERENCES parent_dani_conversations(id) ON DELETE CASCADE,
@@ -51,7 +55,7 @@ CREATE TABLE IF NOT EXISTS conversation_messages (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Conversation summaries (Extracted insights)
+    -- Conversation summaries (Extracted insights)
 CREATE TABLE IF NOT EXISTS conversation_summaries (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   conversation_id UUID NOT NULL UNIQUE REFERENCES parent_dani_conversations(id) ON DELETE CASCADE,
@@ -64,7 +68,7 @@ CREATE TABLE IF NOT EXISTS conversation_summaries (
   reviewed_at TIMESTAMPTZ
 );
 
--- Dani response templates (For consistency & fast responses)
+    -- Dani response templates (For consistency & fast responses)
 CREATE TABLE IF NOT EXISTS dani_response_templates (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   template_key VARCHAR(100) UNIQUE NOT NULL,
@@ -75,7 +79,7 @@ CREATE TABLE IF NOT EXISTS dani_response_templates (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Message attachments (For sharing resources, reports, etc.)
+    -- Message attachments (For sharing resources, reports, etc.)
 CREATE TABLE IF NOT EXISTS conversation_attachments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   message_id UUID NOT NULL REFERENCES conversation_messages(id) ON DELETE CASCADE,
@@ -86,7 +90,7 @@ CREATE TABLE IF NOT EXISTS conversation_attachments (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Create indexes for query performance
+    -- Create indexes for query performance
 CREATE INDEX idx_conversations_parent ON parent_dani_conversations(parent_user_id);
 CREATE INDEX idx_conversations_student ON parent_dani_conversations(student_user_id);
 CREATE INDEX idx_conversations_status ON parent_dani_conversations(status);
@@ -100,14 +104,14 @@ CREATE INDEX idx_summaries_conversation ON conversation_summaries(conversation_i
 CREATE INDEX idx_templates_key ON dani_response_templates(template_key);
 CREATE INDEX idx_attachments_message ON conversation_attachments(message_id);
 
--- Enable RLS
+    -- Enable RLS
 ALTER TABLE parent_dani_conversations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversation_messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversation_summaries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE dani_response_templates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversation_attachments ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies: Parents see only their conversations
+    -- RLS Policies: Parents see only their conversations
 CREATE POLICY "conversations_parent_only" ON parent_dani_conversations
   FOR SELECT USING (parent_user_id = auth.uid()::TEXT);
 
@@ -152,7 +156,7 @@ CREATE POLICY "attachments_message_owner" ON conversation_attachments
     )
   );
 
--- Seed response templates (Quick-start for Dani responses)
+    -- Seed response templates (Quick-start for Dani responses)
 INSERT INTO dani_response_templates (template_key, template_text, category, placeholders)
 VALUES
   ('achievement_unlock', 'Qué emocionante, {studentName}! Acaba de desbloquear el logro "{achievement}". Continúa así! 🎉', 'achievement', ARRAY['studentName', 'achievement']),
@@ -162,7 +166,7 @@ VALUES
   ('learning_style', 'Según la prueba VAK, {studentName} aprende mejor de manera {style}. Podríamos buscar recursos que se adapten a su estilo.', 'guidance', ARRAY['studentName', 'style'])
 ON CONFLICT (template_key) DO NOTHING;
 
--- Function to auto-archive old conversations (30+ days inactive)
+    -- Function to auto-archive old conversations (30+ days inactive)
 CREATE OR REPLACE FUNCTION archive_old_conversations()
 RETURNS TABLE(archived_count INTEGER) AS $$
 DECLARE
@@ -177,7 +181,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Function to generate conversation summaries
+    -- Function to generate conversation summaries
 CREATE OR REPLACE FUNCTION generate_conversation_summary(conv_id UUID)
 RETURNS UUID AS $$
 DECLARE
@@ -204,3 +208,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 COMMIT;
+  END IF;
+END
+$$;

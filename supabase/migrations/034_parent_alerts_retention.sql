@@ -1,20 +1,24 @@
--- ============================================================================
--- Migration 034 — GDPR Parent Alerts Retention & Archiving
+-- Idempotent: only applies if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'parent_alerts') THEN
+    -- ============================================================================
+    -- Migration 034 — GDPR Parent Alerts Retention & Archiving
 --
--- Implements automatic archiving of parent alerts older than 90 days
--- for GDPR compliance (data retention policies).
+    -- Implements automatic archiving of parent alerts older than 90 days
+    -- for GDPR compliance (data retention policies).
 --
--- Features:
---   - parent_alerts_archive table for soft-delete pattern
---   - archive_old_alerts() function runs daily via pg_cron
---   - Maintains audit trail while reducing active table size
---   - Supports data subject access requests (DSAR)
--- ============================================================================
+    -- Features:
+    --   - parent_alerts_archive table for soft-delete pattern
+    --   - archive_old_alerts() function runs daily via pg_cron
+    --   - Maintains audit trail while reducing active table size
+    --   - Supports data subject access requests (DSAR)
+    -- ============================================================================
 
 BEGIN;
 
--- Create parent_alerts_archive table (soft delete pattern)
--- Stores archived alerts for historical records without permanently deleting
+    -- Create parent_alerts_archive table (soft delete pattern)
+    -- Stores archived alerts for historical records without permanently deleting
 CREATE TABLE IF NOT EXISTS parent_alerts_archive (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   original_alert_id UUID NOT NULL UNIQUE,
@@ -33,21 +37,21 @@ CREATE TABLE IF NOT EXISTS parent_alerts_archive (
     REFERENCES parent_student_links(parent_user_id, student_user_id) ON DELETE CASCADE
 );
 
--- Create indexes for archive queries
+    -- Create indexes for archive queries
 CREATE INDEX IF NOT EXISTS idx_parent_alerts_archive_archived ON parent_alerts_archive(archived_at DESC);
 CREATE INDEX IF NOT EXISTS idx_parent_alerts_archive_parent ON parent_alerts_archive(parent_user_id);
 CREATE INDEX IF NOT EXISTS idx_parent_alerts_archive_student ON parent_alerts_archive(student_user_id);
 CREATE INDEX IF NOT EXISTS idx_parent_alerts_archive_created ON parent_alerts_archive(created_at DESC);
 
--- Add archived_at column to parent_alerts for tracking soft deletes
+    -- Add archived_at column to parent_alerts for tracking soft deletes
 ALTER TABLE parent_alerts ADD COLUMN IF NOT EXISTS archived_at TIMESTAMPTZ DEFAULT NULL;
 CREATE INDEX IF NOT EXISTS idx_parent_alerts_archived ON parent_alerts(archived_at)
   WHERE archived_at IS NULL;
 
--- Add archive_reason for audit trail
+    -- Add archive_reason for audit trail
 ALTER TABLE parent_alerts ADD COLUMN IF NOT EXISTS archive_reason VARCHAR(100) DEFAULT NULL;
 
--- Create function to archive old alerts (>90 days old)
+    -- Create function to archive old alerts (>90 days old)
 CREATE OR REPLACE FUNCTION archive_old_alerts()
 RETURNS TABLE(archived_count INTEGER) AS $$
 DECLARE
@@ -86,9 +90,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Enable pg_cron extension if available (requires pg_cron installed on Supabase)
--- This creates a daily scheduled job to run archive_old_alerts()
--- Note: In local development, this may require manual execution or a separate scheduler
+    -- Enable pg_cron extension if available (requires pg_cron installed on Supabase)
+    -- This creates a daily scheduled job to run archive_old_alerts()
+    -- Note: In local development, this may require manual execution or a separate scheduler
 DO $$
 BEGIN
   -- Try to create the cron job; if pg_cron is not available, this will be silently ignored
@@ -109,7 +113,7 @@ BEGIN
   END IF;
 END $$;
 
--- Function to restore an archived alert (for DSAR requests)
+    -- Function to restore an archived alert (for DSAR requests)
 CREATE OR REPLACE FUNCTION restore_archived_alert(alert_id UUID)
 RETURNS TABLE(restored_id UUID, restored_at TIMESTAMPTZ) AS $$
 DECLARE
@@ -133,7 +137,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- RLS Policies for archive table
+    -- RLS Policies for archive table
 ALTER TABLE parent_alerts_archive ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Parents read own archived alerts"
@@ -146,7 +150,7 @@ CREATE POLICY "Service role manage archived alerts"
   USING (true)
   WITH CHECK (true);
 
--- Audit log for archiving operations
+    -- Audit log for archiving operations
 CREATE TABLE IF NOT EXISTS archive_audit_log (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   operation VARCHAR(50) NOT NULL,
@@ -162,7 +166,7 @@ CREATE TABLE IF NOT EXISTS archive_audit_log (
 CREATE INDEX IF NOT EXISTS idx_archive_audit_log_performed ON archive_audit_log(performed_at DESC);
 CREATE INDEX IF NOT EXISTS idx_archive_audit_log_operation ON archive_audit_log(operation);
 
--- Function to log archiving operations
+    -- Function to log archiving operations
 CREATE OR REPLACE FUNCTION log_archive_operation(
   p_operation VARCHAR(50),
   p_table_name VARCHAR(100),
@@ -185,7 +189,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger to log archiving
+    -- Trigger to log archiving
 CREATE OR REPLACE FUNCTION trigger_log_alert_archived()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -209,3 +213,6 @@ FOR EACH ROW
 EXECUTE FUNCTION trigger_log_alert_archived();
 
 COMMIT;
+  END IF;
+END
+$$;

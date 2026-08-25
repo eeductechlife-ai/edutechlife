@@ -1,19 +1,23 @@
--- ============================================================================
--- Migration 035 — Achievements System for SmartBoard
+-- Idempotent: only applies if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'achievements') THEN
+    -- ============================================================================
+    -- Migration 035 — Achievements System for SmartBoard
 --
--- Implements gamified achievement badges with unlock conditions and analytics.
+    -- Implements gamified achievement badges with unlock conditions and analytics.
 --
--- Features:
---   - achievements: Badge definitions (visual assets, unlock criteria)
---   - student_achievements: Tracking when students unlock achievements
---   - achievement_categories: Organization (academic, social, streak-based)
---   - RLS: Students see only their own achievement data
---   - Indexes: Fast lookups by student, category, date
--- ============================================================================
+    -- Features:
+    --   - achievements: Badge definitions (visual assets, unlock criteria)
+    --   - student_achievements: Tracking when students unlock achievements
+    --   - achievement_categories: Organization (academic, social, streak-based)
+    --   - RLS: Students see only their own achievement data
+    --   - Indexes: Fast lookups by student, category, date
+    -- ============================================================================
 
 BEGIN;
 
--- Create achievement categories (Extensible for future types)
+    -- Create achievement categories (Extensible for future types)
 CREATE TABLE IF NOT EXISTS achievement_categories (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   slug VARCHAR(50) UNIQUE NOT NULL,
@@ -23,7 +27,7 @@ CREATE TABLE IF NOT EXISTS achievement_categories (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Predefined categories
+    -- Predefined categories
 INSERT INTO achievement_categories (slug, label, description, icon_url) VALUES
   ('academic', 'Académicos', 'Logros por rendimiento académico', 'https://api.iconify.design/mdi:book.svg'),
   ('social', 'Sociales', 'Logros por interacción con pares', 'https://api.iconify.design/mdi:users.svg'),
@@ -32,7 +36,7 @@ INSERT INTO achievement_categories (slug, label, description, icon_url) VALUES
   ('leadership', 'Liderazgo', 'Logros por ayudar a otros', 'https://api.iconify.design/mdi:crown.svg')
 ON CONFLICT (slug) DO NOTHING;
 
--- Achievement definitions (Badge catalog)
+    -- Achievement definitions (Badge catalog)
 CREATE TABLE IF NOT EXISTS achievements (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   slug VARCHAR(100) UNIQUE NOT NULL,
@@ -50,7 +54,7 @@ CREATE TABLE IF NOT EXISTS achievements (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Student achievement unlocks (Timestamped progress)
+    -- Student achievement unlocks (Timestamped progress)
 CREATE TABLE IF NOT EXISTS student_achievements (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_user_id TEXT NOT NULL,
@@ -65,7 +69,7 @@ CREATE TABLE IF NOT EXISTS student_achievements (
   CONSTRAINT fk_student_achievement FOREIGN KEY (student_user_id) REFERENCES auth.users(id) ON DELETE CASCADE
 );
 
--- Achievement analytics (For recommendations & milestones)
+    -- Achievement analytics (For recommendations & milestones)
 CREATE TABLE IF NOT EXISTS achievement_stats (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   achievement_id UUID NOT NULL REFERENCES achievements(id) ON DELETE CASCADE,
@@ -77,7 +81,7 @@ CREATE TABLE IF NOT EXISTS achievement_stats (
   UNIQUE(achievement_id)
 );
 
--- Create indexes for query performance
+    -- Create indexes for query performance
 CREATE INDEX idx_student_achievements_student ON student_achievements(student_user_id);
 CREATE INDEX idx_student_achievements_unlocked ON student_achievements(unlocked_at DESC);
 CREATE INDEX idx_student_achievements_achievement ON student_achievements(achievement_id);
@@ -85,13 +89,13 @@ CREATE INDEX idx_achievements_category ON achievements(category_id);
 CREATE INDEX idx_achievements_slug ON achievements(slug);
 CREATE INDEX idx_achievement_stats_rarity ON achievement_stats(rarity_score DESC);
 
--- Enable RLS
+    -- Enable RLS
 ALTER TABLE achievements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE student_achievements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE achievement_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE achievement_stats ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies: Students see all achievement definitions but only their own unlocks
+    -- RLS Policies: Students see all achievement definitions but only their own unlocks
 CREATE POLICY "achievements_all_readable" ON achievements FOR SELECT USING (true);
 
 CREATE POLICY "student_achievements_own" ON student_achievements
@@ -104,7 +108,7 @@ CREATE POLICY "achievement_categories_readable" ON achievement_categories FOR SE
 
 CREATE POLICY "achievement_stats_readable" ON achievement_stats FOR SELECT USING (true);
 
--- Seed initial achievements (10 starter badges)
+    -- Seed initial achievements (10 starter badges)
 INSERT INTO achievements (slug, title, description, category_id, badge_url, points_reward, rarity, unlock_condition, display_order)
 SELECT
   'first_login', 'Primer Paso', 'Accede a SmartBoard por primera vez', c.id, 'https://api.iconify.design/mdi:login.svg?color=66cccc', 10, 'common',
@@ -141,3 +145,6 @@ FROM achievement_categories c WHERE c.slug = 'exploration'
 ON CONFLICT (slug) DO NOTHING;
 
 COMMIT;
+  END IF;
+END
+$$;

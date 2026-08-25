@@ -1,24 +1,28 @@
--- ============================================================================
--- Migration 042 — Student Timetable (Horario Escolar) + Exam Persistence
+-- Idempotent: only applies if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'student_timetable') THEN
+    -- ============================================================================
+    -- Migration 042 — Student Timetable (Horario Escolar) + Exam Persistence
 --
--- Adds three tables to persist the school schedule and upcoming exams that
--- were previously in localStorage only:
---   - student_timetable: one row per active academic term per student
---   - timetable_slots:   recurring weekly slots (day + start/end + subject)
---   - student_exams:     one-off upcoming exams (optionally linked to a slot)
+    -- Adds three tables to persist the school schedule and upcoming exams that
+    -- were previously in localStorage only:
+    --   - student_timetable: one row per active academic term per student
+    --   - timetable_slots:   recurring weekly slots (day + start/end + subject)
+    --   - student_exams:     one-off upcoming exams (optionally linked to a slot)
 --
--- RLS: mirrors the pattern of migration 041 — RLS enabled, but the effective
--- auth check is performed in the application layer (requireAuth + .eq filter)
--- because the backend uses a static Supabase client and does not always run
--- as service_role. A permissive policy is added so authenticated JWT calls
--- succeed; the app is the source of authorization truth.
--- ============================================================================
+    -- RLS: mirrors the pattern of migration 041 — RLS enabled, but the effective
+    -- auth check is performed in the application layer (requireAuth + .eq filter)
+    -- because the backend uses a static Supabase client and does not always run
+    -- as service_role. A permissive policy is added so authenticated JWT calls
+    -- succeed; the app is the source of authorization truth.
+    -- ============================================================================
 
 BEGIN;
 
--- ---------------------------------------------------------------------------
--- 1. student_timetable  ── one row per active school term per student
--- ---------------------------------------------------------------------------
+    -- ---------------------------------------------------------------------------
+    -- 1. student_timetable  ── one row per active school term per student
+    -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS student_timetable (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
@@ -39,13 +43,13 @@ CREATE INDEX IF NOT EXISTS idx_student_timetable_student
 CREATE INDEX IF NOT EXISTS idx_student_timetable_active
   ON student_timetable(student_id, is_active);
 
--- Only one active timetable per student at a time.
+    -- Only one active timetable per student at a time.
 CREATE UNIQUE INDEX IF NOT EXISTS uq_student_timetable_active
   ON student_timetable(student_id) WHERE is_active = true;
 
--- ---------------------------------------------------------------------------
--- 2. timetable_slots  ── recurring weekly blocks (Mon=1 … Sun=7)
--- ---------------------------------------------------------------------------
+    -- ---------------------------------------------------------------------------
+    -- 2. timetable_slots  ── recurring weekly blocks (Mon=1 … Sun=7)
+    -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS timetable_slots (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   timetable_id UUID NOT NULL
@@ -69,9 +73,9 @@ CREATE INDEX IF NOT EXISTS idx_timetable_slots_timetable
 CREATE INDEX IF NOT EXISTS idx_timetable_slots_day
   ON timetable_slots(timetable_id, day_of_week, start_time);
 
--- ---------------------------------------------------------------------------
--- 3. student_exams  ── upcoming exams (replaces localStorage `exams` state)
--- ---------------------------------------------------------------------------
+    -- ---------------------------------------------------------------------------
+    -- 3. student_exams  ── upcoming exams (replaces localStorage `exams` state)
+    -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS student_exams (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
@@ -99,9 +103,9 @@ CREATE INDEX IF NOT EXISTS idx_student_exams_upcoming
 CREATE INDEX IF NOT EXISTS idx_student_exams_date
   ON student_exams(exam_date);
 
--- ---------------------------------------------------------------------------
--- 4. updated_at trigger (reused pattern)
--- ---------------------------------------------------------------------------
+    -- ---------------------------------------------------------------------------
+    -- 4. updated_at trigger (reused pattern)
+    -- ---------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -125,9 +129,9 @@ CREATE TRIGGER trg_student_exams_updated_at
   BEFORE UPDATE ON student_exams
   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
--- ---------------------------------------------------------------------------
--- 5. RLS — permissive; app layer enforces (see comment in 041)
--- ---------------------------------------------------------------------------
+    -- ---------------------------------------------------------------------------
+    -- 5. RLS — permissive; app layer enforces (see comment in 041)
+    -- ---------------------------------------------------------------------------
 ALTER TABLE student_timetable ENABLE ROW LEVEL SECURITY;
 ALTER TABLE timetable_slots ENABLE ROW LEVEL SECURITY;
 ALTER TABLE student_exams ENABLE ROW LEVEL SECURITY;
@@ -142,3 +146,6 @@ CREATE POLICY "Enable all for authenticated users" ON student_exams
   FOR ALL TO public USING (true) WITH CHECK (true);
 
 COMMIT;
+  END IF;
+END
+$$;
