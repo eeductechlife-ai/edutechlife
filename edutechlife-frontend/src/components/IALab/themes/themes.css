@@ -87,12 +87,12 @@
   --theme-emphasis: #2f2f2f; /* Casi-negro — banners, tabs activos, pills */
   --theme-emphasis-hover: #171717;
   --theme-on-emphasis: #ffffff;
-  --theme-bg: #f7f7f8; /* ChatGPT background (gris muy sutil) */
+  --theme-bg: #ffffff; /* Fondo blanco limpio — visual más luminoso */
   --theme-surface: #ffffff; /* Cards blancas */
-  --theme-surface-2: #ececec; /* Sidebar ChatGPT gris visible */
+  --theme-surface-2: #f5f5f5; /* Sidebar ChatGPT gris muy claro — sutil, no pesado */
   --theme-text: #0d0d0d;
   --theme-text-muted: #6e6e80;
-  --theme-border: #d9d9e3; /* Bordes ChatGPT */
+  --theme-border: #e5e5e5; /* Bordes ChatGPT más claros en fondo blanco */
   --theme-accent: #ab68ff; /* Purple GPT-4 (badges) */
   --theme-radius: 12px;
   --theme-radius-lg: 16px;
@@ -112,12 +112,12 @@
 
 [data-theme="chatgpt"].dark,
 .dark [data-theme="chatgpt"] {
-  --theme-bg: #212121;
-  --theme-surface: #171717;
-  --theme-surface-2: #2f2f2f;
+  --theme-bg: #171717;
+  --theme-surface: #1a1a1a;
+  --theme-surface-2: #2d2d2d;
   --theme-text: #ececec;
   --theme-text-muted: #b4b4b4;
-  --theme-border: #2f2f2f;
+  --theme-border: #383838;
   --theme-emphasis: #ececec;
   --theme-on-emphasis: #0d0d0d;
 }
