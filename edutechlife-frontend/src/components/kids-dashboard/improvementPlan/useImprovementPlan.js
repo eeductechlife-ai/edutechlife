@@ -11,6 +11,7 @@ function storageKey(userId) {
 }
 
 function loadPlan(userId) {
+  if (!userId) return null;
   try {
     const raw = localStorage.getItem(storageKey(userId));
     return raw ? JSON.parse(raw) : null;
@@ -20,6 +21,7 @@ function loadPlan(userId) {
 }
 
 function savePlan(userId, plan) {
+  if (!userId) return;
   try {
     localStorage.setItem(storageKey(userId), JSON.stringify(plan));
   } catch {
