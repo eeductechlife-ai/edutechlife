@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "buildCommand": "npx --no-install @puppeteer/browsers install chrome@stable --path \"$PWD/chrome\" && npm run build && node scripts/generate-sitemap.mjs",
+  "buildCommand": "npm run build:fast",
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/Doc/(.*)", "destination": "/Doc/$1" },
