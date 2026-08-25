@@ -1,6 +1,10 @@
 -- Idempotent: only applies if table exists
 DO $$
 BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'IF') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'parent_alerts') THEN
     -- ============================================================================
     -- Migration 033 — Parent Alerts Real-time Notification System
@@ -70,6 +74,9 @@ CREATE POLICY "Service role manage alerts"
   WITH CHECK (true);
 
 COMMIT;
+  END IF;
+END
+$$;
   END IF;
 END
 $$;

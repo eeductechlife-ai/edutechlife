@@ -2,6 +2,10 @@
 DO $$
 BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'students') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'students') THEN
     -- ============================================================================
     -- Migration 043 — Student Grades JSON (Calificaciones Persistentes)
 --
@@ -18,6 +22,9 @@ ALTER TABLE students ADD COLUMN IF NOT EXISTS grades_json JSONB DEFAULT '[]'::JS
 CREATE INDEX IF NOT EXISTS idx_students_grades_json ON students USING GIN (grades_json);
 
 COMMIT;
+  END IF;
+END
+$$;
   END IF;
 END
 $$;

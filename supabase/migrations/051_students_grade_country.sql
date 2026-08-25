@@ -2,6 +2,10 @@
 DO $$
 BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'public.students') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'public.students') THEN
     -- Migration 051: Add grade_level and country_code to students table
     -- Purpose: Enable curriculum-aligned study plan generation (MEN Colombia and other countries)
     -- Grados: 1-11 (Básica Primaria, Básica Secundaria, Media)
@@ -21,6 +25,9 @@ COMMENT ON COLUMN public.students.country_code IS 'ISO 3166-1 alpha-2 country co
     -- Index for analytics queries by grade/country
 CREATE INDEX IF NOT EXISTS idx_students_grade_country
   ON public.students (country_code, grade_level);
+  END IF;
+END
+$$;
   END IF;
 END
 $$;

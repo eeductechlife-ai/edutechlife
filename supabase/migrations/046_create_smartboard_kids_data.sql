@@ -1,6 +1,10 @@
 -- Idempotent: only applies if table exists
 DO $$
 BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'IF') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'smartboard_kids_data') THEN
     -- ============================================================================
     -- Migration 046 — Create smartboard_kids_data table
@@ -94,6 +98,9 @@ CREATE POLICY "Parents read child smartboard data"
   );
 
 COMMIT;
+  END IF;
+END
+$$;
   END IF;
 END
 $$;

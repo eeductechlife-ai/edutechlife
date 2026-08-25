@@ -1,5 +1,9 @@
--- Migration 050: Create improvement_plans table for SmartBoard student improvement tracking
--- Each student has one active improvement plan generated from VAK + grades + upcoming exams
+-- Idempotent: only applies if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'IF') THEN
+    -- Migration 050: Create improvement_plans table for SmartBoard student improvement tracking
+    -- Each student has one active improvement plan generated from VAK + grades + upcoming exams
 
 CREATE TABLE IF NOT EXISTS improvement_plans (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -16,20 +20,20 @@ CREATE TABLE IF NOT EXISTS improvement_plans (
   updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 
--- Index for fast lookup by student
+    -- Index for fast lookup by student
 CREATE INDEX IF NOT EXISTS improvement_plans_student_id_idx
   ON improvement_plans(student_id);
 
--- Only one active plan per student
+    -- Only one active plan per student
 CREATE UNIQUE INDEX IF NOT EXISTS improvement_plans_student_active_idx
   ON improvement_plans(student_id)
   WHERE is_active = TRUE;
 
--- Enable Row Level Security
+    -- Enable Row Level Security
 ALTER TABLE improvement_plans ENABLE ROW LEVEL SECURITY;
 
--- Policy: authenticated users can only access their own plans
--- (student_id → students.id → students.auth_id = auth.uid())
+    -- Policy: authenticated users can only access their own plans
+    -- (student_id → students.id → students.auth_id = auth.uid())
 CREATE POLICY "students_own_improvement_plans"
   ON improvement_plans
   FOR ALL
@@ -45,7 +49,7 @@ CREATE POLICY "students_own_improvement_plans"
     )
   );
 
--- Auto-update updated_at on row changes
+    -- Auto-update updated_at on row changes
 CREATE OR REPLACE FUNCTION update_improvement_plans_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -58,3 +62,6 @@ CREATE TRIGGER improvement_plans_updated_at
   BEFORE UPDATE ON improvement_plans
   FOR EACH ROW
   EXECUTE FUNCTION update_improvement_plans_updated_at();
+  END IF;
+END
+$$;

@@ -1,6 +1,10 @@
 -- Idempotent: only applies if table exists
 DO $$
 BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'IF') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'grade_analyses') THEN
     -- ============================================================================
     -- Migration 039 — grade_analyses
@@ -37,6 +41,9 @@ CREATE POLICY "Students delete own analyses" ON grade_analyses
   FOR DELETE USING (auth.uid()::TEXT = student_user_id);
 
 COMMIT;
+  END IF;
+END
+$$;
   END IF;
 END
 $$;

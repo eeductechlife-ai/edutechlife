@@ -1,6 +1,10 @@
 -- Idempotent: only applies if table exists
 DO $$
 BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'IF') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'leaderboards') THEN
     -- ============================================================================
     -- Migration 036 — Multiplayer & Leaderboard System
@@ -214,6 +218,9 @@ VALUES (
 ON CONFLICT DO NOTHING;
 
 COMMIT;
+  END IF;
+END
+$$;
   END IF;
 END
 $$;

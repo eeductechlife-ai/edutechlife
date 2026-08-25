@@ -2,6 +2,10 @@
 DO $$
 BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'students') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'students') THEN
     -- ============================================================================
     -- Migration 047 — Fix students.age CHECK constraint
 --
@@ -31,6 +35,9 @@ ADD CONSTRAINT "age >= 5 AND age <= 25" CHECK (age >= 5 AND age <= 25);
 SELECT 'students.age constraint updated: 6-16 → 5-25 ✓' AS migration_result;
 
 COMMIT;
+  END IF;
+END
+$$;
   END IF;
 END
 $$;

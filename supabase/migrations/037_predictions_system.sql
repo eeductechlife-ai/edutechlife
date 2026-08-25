@@ -1,6 +1,10 @@
 -- Idempotent: only applies if table exists
 DO $$
 BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'IF') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'student_risk_scores') THEN
     -- ============================================================================
     -- Migration 037 — Predictive Analytics & Parent Alerts
@@ -215,6 +219,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 COMMIT;
+  END IF;
+END
+$$;
   END IF;
 END
 $$;

@@ -1,6 +1,10 @@
 -- Idempotent: only applies if table exists
 DO $$
 BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'IF') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'student_timetable') THEN
     -- ============================================================================
     -- Migration 042 — Student Timetable (Horario Escolar) + Exam Persistence
@@ -146,6 +150,9 @@ CREATE POLICY "Enable all for authenticated users" ON student_exams
   FOR ALL TO public USING (true) WITH CHECK (true);
 
 COMMIT;
+  END IF;
+END
+$$;
   END IF;
 END
 $$;

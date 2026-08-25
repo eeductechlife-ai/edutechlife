@@ -1,6 +1,10 @@
 -- Idempotent: only applies if table exists
 DO $$
 BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'IF') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'achievements') THEN
     -- ============================================================================
     -- Migration 035 — Achievements System for SmartBoard
@@ -145,6 +149,9 @@ FROM achievement_categories c WHERE c.slug = 'exploration'
 ON CONFLICT (slug) DO NOTHING;
 
 COMMIT;
+  END IF;
+END
+$$;
   END IF;
 END
 $$;

@@ -1,6 +1,10 @@
 -- Idempotent: only applies if table exists
 DO $$
 BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'IF') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'parent_alerts') THEN
     -- ============================================================================
     -- Migration 034 — GDPR Parent Alerts Retention & Archiving
@@ -213,6 +217,9 @@ FOR EACH ROW
 EXECUTE FUNCTION trigger_log_alert_archived();
 
 COMMIT;
+  END IF;
+END
+$$;
   END IF;
 END
 $$;

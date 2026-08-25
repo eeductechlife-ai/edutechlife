@@ -1,6 +1,10 @@
 -- Idempotent: only applies if table exists
 DO $$
 BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'IF') THEN
+    -- Idempotent: only applies if table exists
+DO $$
+BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'parent_dani_conversations') THEN
     -- ============================================================================
     -- Migration 038 — Parent-Dani AI Chat System
@@ -208,6 +212,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 COMMIT;
+  END IF;
+END
+$$;
   END IF;
 END
 $$;
