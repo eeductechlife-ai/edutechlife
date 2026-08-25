@@ -182,10 +182,45 @@ GradeRow.displayName = "GradeRow";
 
 const uid = () => Math.random().toString(36).slice(2, 8);
 
+// Maps Spanish grade words → numbers 1-11
+const GRADE_NUMBER_WORDS = {
+  primero: 1,
+  segundo: 2,
+  tercero: 3,
+  cuarto: 4,
+  quinto: 5,
+  sexto: 6,
+  septimo: 7,
+  octavo: 8,
+  noveno: 9,
+  decimo: 10,
+  undecimo: 11,
+  once: 11,
+};
+function normalizeGradeStr(s) {
+  if (!s) return null;
+  const clean = String(s)
+    .toLowerCase()
+    .trim()
+    .replace(/[áàä]/g, "a")
+    .replace(/[éèë]/g, "e")
+    .replace(/[íìï]/g, "i")
+    .replace(/[óòö]/g, "o")
+    .replace(/[úùü]/g, "u")
+    .replace(/[°º\s]/g, "");
+  const num = parseInt(clean, 10);
+  if (!Number.isNaN(num) && num >= 1 && num <= 11) return num;
+  for (const [word, grade] of Object.entries(GRADE_NUMBER_WORDS)) {
+    if (clean.includes(word)) return grade;
+  }
+  return null;
+}
+
 export default memo(function GradeScanner({ onTabChange }) {
   const {
     studentGrades,
     setStudentGrades,
+    setGradeLevel,
     vakResult,
     addPoints,
     setDocumentForDani,
@@ -460,7 +495,7 @@ export default memo(function GradeScanner({ onTabChange }) {
 BOLETÍN:
 "${text.slice(0, 4500)}"
 
-TAREA: Extraer las notas de CADA PERÍODO (P1, P2, P3, P4) por asignatura, exactamente como aparecen.
+TAREA: Extraer las notas de CADA PERÍODO (P1, P2, P3, P4) por asignatura y el grado escolar del estudiante.
 
 REGLAS:
 - Extrae UNA entrada por asignatura (sin duplicados)
@@ -470,16 +505,20 @@ REGLAS:
 - El nombre de la asignatura exactamente como aparece en el boletín
 - Convierte porcentajes: 100%=5.0, 90%=4.5, 85%=4.25, 80%=4.0, 75%=3.75, 70%=3.5, 60%=3.0
 - NO incluyas una columna "DEFINITIVA" o "PROMEDIO FINAL" — eso lo calculamos nosotros
+- grade_level: busca el grado en el encabezado del boletín (p.ej. "SÉPTIMO", "7°", "Grado 7"). Si no aparece, usa null
 
 RESPONDE SOLO con este JSON (sin markdown, sin texto adicional):
 {
+  "grade_level": "SÉPTIMO",
   "grades": [
     {"subject": "NOMBRE EXACTO MATERIA", "p1": 4.2, "p2": 3.8, "p3": null, "p4": null},
     {"subject": "NOMBRE EXACTO MATERIA 2", "p1": 3.5, "p2": 4.0, "p3": null, "p4": null}
   ]
 }
 
-Si no encuentras notas: {"grades": []}`;
+Si no encuentras notas: {"grade_level": null, "grades": []}`;
+
+        let detectedGradeLevel = null;
 
         if (isPdfFile) {
           // PDFs: extract text locally then parse with AI
@@ -492,6 +531,7 @@ Si no encuentras notas: {"grades": []}`;
             );
             const parsed = typeof res === "string" ? JSON.parse(res) : res;
             extractedGrades = parsed?.grades || [];
+            detectedGradeLevel = parsed?.grade_level ?? null;
           }
         } else {
           // Images: OCR via backend Google Vision API, then structure with DeepSeek
@@ -529,7 +569,14 @@ Si no encuentras notas: {"grades": []}`;
             );
             const parsed = typeof res === "string" ? JSON.parse(res) : res;
             extractedGrades = parsed?.grades || [];
+            detectedGradeLevel = parsed?.grade_level ?? null;
           }
+        }
+
+        // Apply detected grade level to context
+        if (detectedGradeLevel) {
+          const gradeNum = normalizeGradeStr(detectedGradeLevel);
+          if (gradeNum) setGradeLevel?.(gradeNum);
         }
 
         if (extractedGrades.length > 0) {

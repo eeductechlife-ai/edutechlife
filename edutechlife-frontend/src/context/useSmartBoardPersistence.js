@@ -12,6 +12,40 @@ export const getLocalStorage = (key, fallback) => {
   }
 };
 
+// Normalize Spanish grade words → number 1-11
+const GRADE_WORDS = {
+  primero: 1,
+  segundo: 2,
+  tercero: 3,
+  cuarto: 4,
+  quinto: 5,
+  sexto: 6,
+  septimo: 7,
+  octavo: 8,
+  noveno: 9,
+  decimo: 10,
+  undecimo: 11,
+  once: 11,
+};
+function normalizeGradeStr(s) {
+  if (!s) return null;
+  const clean = String(s)
+    .toLowerCase()
+    .trim()
+    .replace(/[áàä]/g, "a")
+    .replace(/[éèë]/g, "e")
+    .replace(/[íìï]/g, "i")
+    .replace(/[óòö]/g, "o")
+    .replace(/[úùü]/g, "u")
+    .replace(/[°º\s]/g, "");
+  const num = parseInt(clean, 10);
+  if (!Number.isNaN(num) && num >= 1 && num <= 11) return num;
+  for (const [word, grade] of Object.entries(GRADE_WORDS)) {
+    if (clean.includes(word)) return grade;
+  }
+  return null;
+}
+
 const pendingWrites = {};
 let writeTimer = null;
 
@@ -102,7 +136,13 @@ export const useSmartBoardPersistence = (setters) => {
           academicTopics: getLocalStorage(`academic_topics_${userId}`, []),
           conversationCount: getLocalStorage(`conversation_count_${userId}`, 0),
           studentAge: getLocalStorage(`age_${userId}`, null),
-          gradeLevel: getLocalStorage(`grade_${userId}`, null),
+          gradeLevel: (() => {
+            // Prefer student_grade (set from Supabase profile — source of truth)
+            const sg = localStorage.getItem("student_grade");
+            const fromProfile = normalizeGradeStr(sg);
+            if (fromProfile) return fromProfile;
+            return getLocalStorage(`grade_${userId}`, null);
+          })(),
           countryCode: getLocalStorage(`country_${userId}`, "CO"),
           schoolName: getLocalStorage(`school_${userId}`, ""),
           totalPoints: getLocalStorage(`points_${userId}`, 0),
