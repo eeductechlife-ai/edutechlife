@@ -121,7 +121,20 @@ export const SmartBoardKidsProvider = ({ children }) => {
   const [planCompletedActivities, setPlanCompletedActivities] = useState([]);
   // Active study loop: deck selected in Flashcards → used by Habla con Dani + Examen
   const [activeStudyDeck, setActiveStudyDeck] = useState(null); // { deckId, title, cards, topic }
-  const [studentGrades, setStudentGrades] = useState([]);
+  const [studentGrades, setStudentGrades] = useState(() => {
+    // Eager-load from localStorage so subjectsWithGrades populates before GradeScanner mounts
+    // (userId not yet available — will be refreshed via useEffect below)
+    try {
+      const keys = Object.keys(localStorage).filter((k) =>
+        k.startsWith("edutechlife_grades_"),
+      );
+      if (keys.length === 1) {
+        const parsed = JSON.parse(localStorage.getItem(keys[0]));
+        return Array.isArray(parsed) ? parsed : [];
+      }
+    } catch {}
+    return [];
+  });
 
   // Onboarding state (persisted per-user via localStorage pattern)
   const [onboardingComplete, setOnboardingComplete] = useState(false);
@@ -406,6 +419,18 @@ export const SmartBoardKidsProvider = ({ children }) => {
       }
     };
   }, [userId, dataLoaded]);
+
+  // Sync grades from localStorage keyed by userId (refreshes the eager-loaded value)
+  useEffect(() => {
+    if (!userId) return;
+    try {
+      const stored = localStorage.getItem(`edutechlife_grades_${userId}`);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length) setStudentGrades(parsed);
+      }
+    } catch {}
+  }, [userId]);
 
   // Daily streak
   useEffect(() => {
