@@ -13,6 +13,7 @@ import MisionDelDia from "./MisionDelDia";
 import { SectionFallback } from "./SkeletonLoader";
 import { PREMIUM_FEATURES } from "../kidsDashboardConfig";
 import RutaAprendizaje from "../RutaAprendizaje";
+import { isFeatureEnabled } from "../../../hooks/useFeatureFlag";
 
 const PointsRewardsSystem = lazy(() => import("../PointsRewardsSystem"));
 const SmartBoardProgress = lazy(() => import("../smartBoardProgress"));
@@ -26,6 +27,8 @@ const ImprovementPlan = lazy(
   () => import("../improvementPlan/ImprovementPlan"),
 );
 const TechNewsFeed = lazy(() => import("../news/TechNewsFeed"));
+const FutureExplorer = lazy(() => import("../FutureExplorer"));
+const SmartProfile = lazy(() => import("../profile/SmartProfile"));
 
 const sharedTransition = { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] };
 
@@ -67,15 +70,26 @@ function createTabRenderer(deps) {
     t,
     navigate,
     onTabChange,
+    onDaniOpen,
+    studentAge,
   } = deps;
 
   return {
     inicio: {
+      // UX hierarchy (brief §40): greeting + progress + NextBestAction (Hero) lead,
+      // then the learning path, today's mission, exploration, and metrics last.
       component: () => (
         <>
+          <HeroSection onTabChange={onTabChange} onDaniOpen={deps.onDaniOpen} />
           <RutaAprendizaje onTabChange={onTabChange} />
-          <HeroSection onTabChange={onTabChange} />
           <MisionDelDia onTabChange={onTabChange} />
+          {studentAge >= 10 && isFeatureEnabled("future_explorer") && (
+            <InViewSection delay={0.1}>
+              <LazyLoad fallback={<SectionFallback tab="explorar" />}>
+                <FutureExplorer />
+              </LazyLoad>
+            </InViewSection>
+          )}
           <InViewSection>
             <LazyLoad fallback={<SectionFallback tab="inicio" />}>
               <PointsRewardsSystem />
@@ -86,6 +100,16 @@ function createTabRenderer(deps) {
       className: "space-y-6 md:space-y-8",
       errorKey: "inicio",
       errorMsg: t("smartboard.error_load_home"),
+    },
+    perfil: {
+      component: () => (
+        <LazyLoad fallback={<SectionFallback tab="perfil" />}>
+          <SmartProfile onTabChange={onTabChange} />
+        </LazyLoad>
+      ),
+      errorKey: "perfil",
+      errorMsg: "Error al cargar el perfil",
+      className: "space-y-4",
     },
     misiones: {
       component: () => (
@@ -206,7 +230,7 @@ function createTabRenderer(deps) {
 }
 
 const CinematicContent = memo(
-  ({ activeTab, onTabChange, darkMode, subscriptionTier }) => {
+  ({ activeTab, onTabChange, darkMode, subscriptionTier, onDaniOpen }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const isPremium = subscriptionTier === "premium";
@@ -217,6 +241,7 @@ const CinematicContent = memo(
       subjects,
       subjectsWithGrades,
       completeMission,
+      studentAge,
     } = useSmartBoardKids();
 
     const handleVakComplete = useCallback(
@@ -238,6 +263,8 @@ const CinematicContent = memo(
           t,
           navigate,
           onTabChange,
+          onDaniOpen,
+          studentAge,
         }),
       [
         isPremium,
@@ -250,6 +277,8 @@ const CinematicContent = memo(
         t,
         navigate,
         onTabChange,
+        onDaniOpen,
+        studentAge,
       ],
     );
 

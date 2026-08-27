@@ -148,8 +148,10 @@ const AppRoutes = () => {
     const params = new URLSearchParams(location.search);
     if (params.get("checkout") === "success") {
       track("checkout_completed", {});
+      track("subscription_started", {});
     } else if (params.get("checkout") === "cancelled") {
       track("checkout_cancelled", {});
+      track("subscription_cancelled", {});
     }
   }, [location.search]);
 

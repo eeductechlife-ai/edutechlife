@@ -1,17 +1,15 @@
-import { memo, useState, useCallback, lazy, Suspense } from "react";
+import { memo, useState, useCallback, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import GenerateFlashcards from "../GenerateFlashcards";
 import { useFlashcardDeck } from "./useFlashcardDeck";
 import QuizCard from "./components/QuizCard";
 import FlashcardResults from "./components/FlashcardResults";
 import FlashcardImporter from "./components/FlashcardImporter";
+import DeckCard from "./components/DeckCard";
+import ScannerTab from "./components/ScannerTab";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useCompetencyTracking } from "../../../hooks/useCompetencyTracking";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import {
-  generateFlashcards,
-  detectThemeFromTopic,
-} from "../../../services/flashcardAI";
-import { generateStudySummary } from "../../../services/documentSummaryAI";
 
 const LEARNING_PATH = (t) => [
   { tab: "flashcards", label: t("kid.flashcards.tab_flashcards"), icon: "🎴" },
@@ -19,381 +17,12 @@ const LEARNING_PATH = (t) => [
   { tab: "examenes", label: t("kid.flashcards.tab_exam"), icon: "📝" },
 ];
 
-const DeckCard = memo(
-  ({ deck, onStudy, onStudyDue, onEdit, onDelete, index, dueCount }) => {
-    const { t } = useTranslation();
-    const themeColor = deck.metadata?.theme?.color || "#4DA8C4";
-    const themeIcon = deck.metadata?.theme?.icon || "📚";
-    const gradeLabel = deck.metadata?.grade
-      ? {
-          "1-3": t("kid.flashcards.grade_1_3"),
-          "4-6": t("kid.flashcards.grade_4_6"),
-          "7-9": t("kid.flashcards.grade_7_9"),
-          "10-12": t("kid.flashcards.grade_10_12"),
-        }[deck.metadata.grade]
-      : "";
-
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.05 }}
-        className="p-5 rounded-2xl bg-white border-2 shadow-sm hover:shadow-md transition-all"
-        style={{ borderColor: themeColor }}
-      >
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-start gap-3 flex-1">
-            <span className="text-2xl">{themeIcon}</span>
-            <div className="min-w-0 flex-1">
-              <h4 className="font-bold text-[#004B63] truncate">
-                {deck.title}
-              </h4>
-              {deck.description && (
-                <p className="text-xs text-[#64748B] mt-1 truncate">
-                  {deck.description}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="flex items-center gap-1.5 shrink-0">
-            {dueCount > 0 && (
-              <span className="px-2 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-600 whitespace-nowrap">
-                🔔 {dueCount}
-              </span>
-            )}
-            <span
-              className="px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap"
-              style={{ backgroundColor: themeColor + "20", color: themeColor }}
-            >
-              {t("kid.flashcards.cards_count", { count: deck.cards.length })}
-            </span>
-          </div>
-        </div>
-
-        {gradeLabel && (
-          <div className="mb-3">
-            <span
-              className="inline-block px-2.5 py-1 rounded-lg text-xs font-semibold text-white"
-              style={{ backgroundColor: themeColor }}
-            >
-              👤 {gradeLabel}
-            </span>
-          </div>
-        )}
-
-        {deck.stats?.totalStudied > 0 && (
-          <div className="flex gap-3 mb-3 text-xs text-[#64748B]">
-            <span>
-              {t("kid.flashcards.studied_count", {
-                count: deck.stats.totalStudied,
-              })}
-            </span>
-            <span>
-              {t("kid.flashcards.correct_count", { count: deck.stats.correct })}
-            </span>
-            <span>
-              {t("kid.flashcards.streak_count", {
-                count: deck.stats.streak || 0,
-              })}
-            </span>
-          </div>
-        )}
-
-        <div className="flex gap-2">
-          {dueCount > 0 && dueCount < deck.cards.length && (
-            <motion.button
-              onClick={() => onStudyDue(deck.id)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex-1 py-2 bg-amber-50 border border-amber-300 text-amber-700 rounded-xl font-bold text-xs shadow-sm"
-            >
-              🔔 Hoy ({dueCount})
-            </motion.button>
-          )}
-          <motion.button
-            onClick={() => onStudy(deck.id)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex-1 py-2 text-white rounded-xl font-bold text-sm shadow-md"
-            style={{
-              backgroundImage: `linear-gradient(135deg, ${themeColor}, ${themeColor}80)`,
-            }}
-          >
-            {dueCount > 0 && dueCount < deck.cards.length
-              ? `Todas (${deck.cards.length})`
-              : t("kid.flashcards.study")}
-          </motion.button>
-          <motion.button
-            onClick={() => onEdit(deck.id)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="px-4 py-2 bg-white border border-[#E2E8F0] text-[#64748B] rounded-xl text-sm"
-          >
-            ✏️
-          </motion.button>
-          <motion.button
-            onClick={() => onDelete(deck.id)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="px-4 py-2 bg-white border border-red-200 text-red-400 rounded-xl text-sm"
-          >
-            🗑️
-          </motion.button>
-        </div>
-      </motion.div>
-    );
-  },
-);
-DeckCard.displayName = "DeckCard";
-
-const GRADE_LABELS = (t) => ({
-  "1-3": t("kid.flashcards.grade_1_3"),
-  "4-6": t("kid.flashcards.grade_4_6"),
-  "7-9": t("kid.flashcards.grade_7_9"),
-  "10-12": t("kid.flashcards.grade_10_12"),
-});
-
-// Scanner tab — scan PDF/image → extract text → generate cards + summary
-const ScannerTab = memo(({ onGenerated }) => {
-  const { t } = useTranslation();
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [topic, setTopic] = useState("");
-  const [grade, setGrade] = useState("7-9");
-  const [processing, setProcessing] = useState(false);
-  const [stage, setStage] = useState("");
-  const [summary, setSummary] = useState(null);
-  const [error, setError] = useState("");
-  const fileRef = useCallback((node) => {
-    if (node) node._ref = node;
-  }, []);
-
-  const handleFile = useCallback(async (f) => {
-    if (!f) return;
-    setFile(f);
-    setError("");
-    setSummary(null);
-    if (f.type.startsWith("image/")) {
-      setPreview(URL.createObjectURL(f));
-    } else {
-      setPreview(null);
-    }
-  }, []);
-
-  const processAndGenerate = useCallback(async () => {
-    if (!file && !topic.trim()) return;
-    setProcessing(true);
-    setError("");
-    setSummary(null);
-
-    try {
-      let text = topic.trim();
-      if (file) {
-        setStage(t("kid.flashcards.scan_stage_reading"));
-        const { extractDocumentText } =
-          await import("../../../utils/documentParser");
-        text = await extractDocumentText(file);
-      }
-
-      setStage(t("kid.flashcards.scan_stage_summary"));
-      const sum = await generateStudySummary(text, {
-        subject: "general",
-        ageKey:
-          grade.split("-")[0] === "1"
-            ? "6-8"
-            : grade.split("-")[0] <= "6"
-              ? "9-11"
-              : grade.split("-")[0] <= "9"
-                ? "12-14"
-                : "15-17",
-      });
-      setSummary(sum);
-
-      setStage(t("kid.flashcards.scan_stage_cards"));
-      const useTopic = sum?.title || file?.name || topic.slice(0, 50);
-      const cards = await generateFlashcards(useTopic, grade);
-      const theme = detectThemeFromTopic(useTopic);
-      onGenerated(useTopic, cards, { grade, theme, summary: sum });
-      setStage("");
-    } catch (e) {
-      const msg =
-        e?.message && e.message !== "AbortError"
-          ? e.message
-          : t("kid.flashcards.scan_error");
-      setError(msg);
-    } finally {
-      setProcessing(false);
-      setStage("");
-    }
-  }, [file, topic, grade, onGenerated, t]);
-
-  const GRADES = [
-    { v: "1-3", l: t("kid.flashcards.scan_grade_1_3") },
-    { v: "4-6", l: t("kid.flashcards.scan_grade_4_6") },
-    { v: "7-9", l: t("kid.flashcards.scan_grade_7_9") },
-    { v: "10-12", l: t("kid.flashcards.scan_grade_10_12") },
-  ];
-
-  return (
-    <div className="p-5 rounded-2xl bg-gradient-to-br from-[#EF476F]/5 to-[#FF6B9D]/5 border border-[#EF476F]/20 space-y-4">
-      <div className="flex items-center gap-2">
-        <span className="text-xl">📷</span>
-        <div>
-          <h4 className="font-bold text-[#004B63]">
-            {t("kid.flashcards.scan_title")}
-          </h4>
-          <p className="text-xs text-[#64748B]">
-            {t("kid.flashcards.scan_subtitle")}
-          </p>
-        </div>
-      </div>
-
-      {/* File drop */}
-      <label className="block">
-        <input
-          type="file"
-          accept="image/*,application/pdf,.txt,.docx"
-          className="hidden"
-          onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
-        />
-        {preview ? (
-          <div className="relative">
-            <img
-              src={preview}
-              alt="doc"
-              className="w-full max-h-36 object-contain rounded-xl border border-[#E2E8F0]"
-            />
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setFile(null);
-                setPreview(null);
-              }}
-              className="absolute top-1 right-1 w-6 h-6 bg-white rounded-full shadow text-red-400 text-xs flex items-center justify-center"
-            >
-              ✕
-            </button>
-          </div>
-        ) : file ? (
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-white border border-[#E2E8F0] cursor-pointer">
-            <span className="text-2xl">📄</span>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-[#004B63] truncate">
-                {file.name}
-              </p>
-              <p className="text-xs text-[#64748B]">
-                {(file.size / 1024).toFixed(0)} KB
-              </p>
-            </div>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setFile(null);
-              }}
-              className="text-red-400 text-xs px-2"
-            >
-              ✕
-            </button>
-          </div>
-        ) : (
-          <div className="border-2 border-dashed border-[#EF476F]/30 rounded-xl p-6 text-center cursor-pointer hover:border-[#EF476F]/60 transition-colors">
-            <span className="text-3xl block mb-1">📎</span>
-            <p className="text-sm font-semibold text-[#004B63]">
-              {t("kid.flashcards.scan_upload")}
-            </p>
-            <p className="text-xs text-[#64748B]">JPG, PNG, PDF, TXT</p>
-          </div>
-        )}
-      </label>
-
-      {/* Or text */}
-      <div className="flex items-center gap-2 text-xs text-[#64748B]">
-        <div className="flex-1 h-px bg-[#E2E8F0]" />
-        <span>{t("kid.flashcards.scan_or_text")}</span>
-        <div className="flex-1 h-px bg-[#E2E8F0]" />
-      </div>
-
-      <textarea
-        value={topic}
-        onChange={(e) => setTopic(e.target.value)}
-        placeholder={t("kid.flashcards.scan_topic_placeholder")}
-        rows={3}
-        className="w-full p-3 rounded-xl border border-[#E2E8F0] text-[#004B63] text-sm resize-none focus:outline-none focus:border-[#EF476F]/60"
-      />
-
-      {/* Grade selector */}
-      <div className="flex gap-2 flex-wrap">
-        {GRADES.map((g) => (
-          <button
-            key={g.v}
-            onClick={() => setGrade(g.v)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-              grade === g.v
-                ? "bg-[#EF476F] text-white shadow-md"
-                : "bg-white border border-[#E2E8F0] text-[#64748B]"
-            }`}
-          >
-            {g.l}
-          </button>
-        ))}
-      </div>
-
-      {stage && (
-        <div className="flex items-center gap-2 text-sm text-[#EF476F]">
-          <motion.span
-            className="inline-block w-4 h-4 border-2 border-[#EF476F] border-t-transparent rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
-          />
-          {stage}
-        </div>
-      )}
-
-      {error && <p className="text-sm text-red-500">{error}</p>}
-
-      {/* Summary preview */}
-      {(summary?.overview || summary?.learningPoints?.length > 0) && (
-        <div className="p-3 rounded-xl bg-white border border-[#4DA8C4]/30 space-y-2">
-          <p className="text-xs font-bold text-[#004B63]">
-            📋 {summary.title || t("kid.flashcards.scan_summary_generated")}
-          </p>
-          {summary.overview && (
-            <p className="text-xs text-[#374151]">{summary.overview}</p>
-          )}
-          {summary.learningPoints?.length > 0 && (
-            <ul className="space-y-1">
-              {summary.learningPoints.slice(0, 4).map((p, i) => (
-                <li key={i} className="text-xs text-[#374151] flex gap-1.5">
-                  <span className="text-[#4DA8C4]">•</span>
-                  {p}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
-
-      <motion.button
-        onClick={processAndGenerate}
-        disabled={processing || (!file && !topic.trim())}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="w-full py-3 rounded-xl font-bold text-white text-sm shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
-        style={{ background: "linear-gradient(135deg, #EF476F, #FF6B9D)" }}
-      >
-        {processing
-          ? t("kid.flashcards.scan_processing")
-          : t("kid.flashcards.scan_generate")}
-      </motion.button>
-    </div>
-  );
-});
-ScannerTab.displayName = "ScannerTab";
-
 const FlashcardSystem = memo(({ onTabChange }) => {
   const { t } = useTranslation();
   const { activeStudyDeck, setActiveStudyDeck, setDocumentForDani } =
     useSmartBoardKids();
+  const { trackActivity } = useCompetencyTracking();
+
   const [createTab, setCreateTab] = useState("text"); // "text" | "scan"
   const [lastScanSummary, setLastScanSummary] = useState(null);
   const {
@@ -437,6 +66,14 @@ const FlashcardSystem = memo(({ onTabChange }) => {
     handleResult,
     startMultiplayer,
   } = useFlashcardDeck();
+
+  // Track competency mastery when a quiz session completes
+  useEffect(() => {
+    if (done && deck?.metadata?.subject) {
+      trackActivity({ subject: deck.metadata.subject, score: rate / 100 });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done]);
 
   const handleScanGenerated = useCallback(
     (title, cards, metadata) => {

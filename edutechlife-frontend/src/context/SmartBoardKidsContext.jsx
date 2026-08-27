@@ -36,6 +36,7 @@ import {
 } from "../hooks/useSmartBoardSupabase";
 import useTimetable from "../hooks/useTimetable";
 import { useSubjectProgressPersistence } from "../hooks/useSubjectProgressPersistence";
+import { useDaniMemory } from "../hooks/useDaniMemory";
 
 export const SmartBoardKidsContext = createContext();
 
@@ -48,6 +49,10 @@ export const useSmartBoardKids = () => {
   }
   return context;
 };
+
+// Safe version — returns null when used outside the provider (e.g. AppLayout)
+export const useSmartBoardKidsSafe = () =>
+  useContext(SmartBoardKidsContext) ?? null;
 
 export const SmartBoardKidsProvider = ({ children }) => {
   // Local state (for backward compatibility and instant UI updates)
@@ -86,6 +91,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
       strengths: [],
       challenges: [],
       interests: [],
+      parentGoal: null,
     },
     pendingTopics: [],
     interactionCount: 0,
@@ -157,6 +163,10 @@ export const SmartBoardKidsProvider = ({ children }) => {
 
   // Calculated total points from Supabase
   const supabaseTotalPoints = useTotalPoints();
+
+  // Dani memory — persists to Supabase dani_memory table (Sprint 2)
+  const studentDbId = studentDataQuery.data?.id ?? null;
+  const { saveMemory: saveDaniMemoryToDB } = useDaniMemory(studentDbId);
 
   // Timetable (single instance for all consumers)
   const timetableData = useTimetable();
@@ -243,6 +253,21 @@ export const SmartBoardKidsProvider = ({ children }) => {
     return Number(g.score) || 0;
   }, []);
 
+  // Period-over-period trend from the last two entered periods (P1→P4).
+  // Returns { delta, dir: "up"|"down"|"flat" } or null when <2 periods exist.
+  const gradeTrend = useCallback((g) => {
+    const periods = [g.p1, g.p2, g.p3, g.p4]
+      .map((v) => (v == null || isNaN(Number(v)) ? null : Number(v)))
+      .filter((v) => v != null);
+    if (periods.length < 2) return null;
+    const delta = periods[periods.length - 1] - periods[periods.length - 2];
+    const rounded = Math.round(delta * 10) / 10;
+    return {
+      delta: rounded,
+      dir: rounded > 0.05 ? "up" : rounded < -0.05 ? "down" : "flat",
+    };
+  }, []);
+
   // Derive subject progress from scanned student grades (nota/5 × 100).
   // When grades exist, shows ALL scanned subjects (not just the 6 defaults).
   const subjectsWithGrades = useMemo(() => {
@@ -291,7 +316,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
       matchedGradeKeys.add(norm(match.subject));
       const gradeScore = gradeAvg(match);
       const progress = Math.min(100, Math.round((gradeScore / 5) * 100));
-      return { ...subject, progress, gradeScore };
+      return { ...subject, progress, gradeScore, trend: gradeTrend(match) };
     });
 
     // Step 2: add extra subjects from the boletín that didn't match any default
@@ -309,11 +334,12 @@ export const SmartBoardKidsProvider = ({ children }) => {
           color,
           progress,
           gradeScore,
+          trend: gradeTrend(g),
         };
       });
 
     return [...updatedDefaults, ...extras];
-  }, [subjects, studentGrades]);
+  }, [subjects, studentGrades, gradeAvg, gradeTrend]);
 
   const {
     addPoints,
@@ -323,7 +349,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     addDaniMessage,
     recordMoodInference,
     trackAcademicTopic,
-    updateDaniMemory,
+    updateDaniMemory: _updateDaniMemory,
     buildMemoryInjection,
     buildDaniContext,
     setVakResultAndRecommendations,
@@ -332,6 +358,21 @@ export const SmartBoardKidsProvider = ({ children }) => {
     addAnalyzedActivity,
     markNewsAsRead,
   } = actions;
+
+  // Wrap updateDaniMemory to also persist to Supabase (Sprint 2)
+  const updateDaniMemory = useCallback(
+    (parsed) => {
+      _updateDaniMemory(parsed);
+      // Save updated memory to DB after React state update settles
+      setTimeout(() => {
+        setDaniMemory((current) => {
+          saveDaniMemoryToDB(current);
+          return current;
+        });
+      }, 100);
+    },
+    [_updateDaniMemory, saveDaniMemoryToDB],
+  );
 
   // Sync Supabase data to local state
   useEffect(() => {
@@ -832,6 +873,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     studentGrades,
     setStudentGrades,
     gradeAvg,
+    gradeTrend,
 
     // Timetable (weekly schedule + exams)
     timetable: timetableData.timetable,

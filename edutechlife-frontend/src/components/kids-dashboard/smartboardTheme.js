@@ -85,3 +85,46 @@ export const SB_RADII = {
   xl: "2rem",
   pill: "999px",
 };
+
+// ── Semantic aliases (use these in components) ───────────────
+// Replaces hardcoded hex values scattered across the codebase.
+export const SB = {
+  colors: SB_COLORS,
+  gradients: SB_GRADIENTS,
+  shadows: SB_SHADOWS,
+  radii: SB_RADII,
+
+  // Category colors — single source of truth
+  categories: {
+    home: { primary: "#0096C7", gradient: SB_GRADIENTS.home, glow: "#00B4D8" },
+    learn: {
+      primary: "#06D6A0",
+      gradient: SB_GRADIENTS.learn,
+      glow: "#06D6A0",
+    },
+    practice: {
+      primary: "#EF476F",
+      gradient: SB_GRADIENTS.practice,
+      glow: "#EF476F",
+    },
+    progress: {
+      primary: "#FB8500",
+      gradient: SB_GRADIENTS.progress,
+      glow: "#FFB703",
+    },
+    explore: {
+      primary: "#9D4EDD",
+      gradient: SB_GRADIENTS.explore,
+      glow: "#C77DFF",
+    },
+  },
+
+  // Semantic UI tokens
+  ui: {
+    overlayDark: "rgba(0,0,0,0.55)",
+    overlayLight: "rgba(255,255,255,0.55)",
+    toastBg: "#1E293B",
+    toastText: "#F1F5F9",
+    focusRing: `0 0 0 3px ${SB_COLORS.primary}55`,
+  },
+};

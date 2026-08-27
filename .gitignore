@@ -78,3 +78,6 @@ override.tf
 override.tf.json
 terraform.rc
 .terraformrc
+
+# ruflo/claude-flow tooling state (not source)
+**/.claude-flow/

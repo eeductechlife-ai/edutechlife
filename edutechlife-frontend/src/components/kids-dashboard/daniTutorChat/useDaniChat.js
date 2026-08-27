@@ -43,7 +43,9 @@ export default function useDaniChat({ isOpen, activeTab }) {
     missions,
     subjects,
     studentAge,
+    supabaseQueries,
   } = useSmartBoardKids();
+  const studentDbId = supabaseQueries?.studentData?.data?.id ?? null;
 
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -109,6 +111,7 @@ export default function useDaniChat({ isOpen, activeTab }) {
       setCrisisAlertLevel,
       setStreamingMessage,
       studentAge,
+      studentDbId,
     });
 
   useEffect(() => {

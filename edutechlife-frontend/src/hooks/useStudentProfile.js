@@ -1,127 +1,209 @@
-import { useState, useEffect } from "react";
-import { supabase } from "../lib/supabase";
-import { useAuthIdentity } from "./useAuthIdentity";
+import { useMemo } from "react";
+import { useSmartBoardKidsSafe } from "../context/SmartBoardKidsContext";
 
 /**
- * Profile of the signed-in student, read from the `users` table.
+ * Unified SmartBoard 3.0 student profile.
  *
- * Replaces the Clerk profile (`clerkUser.publicMetadata.role`, `username`,
- * `firstName`…). With auth on Supabase, Clerk returns no user at all, so role
- * checks silently fell back to "student" — including the admin check, which
- * meant nobody had admin rights in IALab.
+ * Composes data already loaded in SmartBoardKidsContext — no extra DB calls.
+ * Safe to call outside SmartBoardKidsProvider (returns { profile: null, isReady: false }).
  *
- * @returns {{profile: object|null, role: string, isAdmin: boolean,
- *            displayName: string, isLoading: boolean}}
+ * @returns {{ profile: StudentProfile, isReady: boolean }}
  */
-/**
- * Accounts with admin rights inside IALab. The Clerk implementation hardcoded
- * the username "johnbeltran22"; this keeps that account as admin and adds its
- * email so the check survives a username change.
- */
-const ADMIN_USERNAMES = ["johnbeltran22"];
-const ADMIN_EMAILS = ["eeductechlife@gmail.com"];
+export function useStudentProfile() {
+  const ctx = useSmartBoardKidsSafe();
 
-const isAdminAccount = (profile) => {
-  if (!profile) return false;
-  const username = (profile.username || "").toLowerCase();
-  const email = (profile.email || "").toLowerCase();
-  return ADMIN_USERNAMES.includes(username) || ADMIN_EMAILS.includes(email);
-};
+  const profile = useMemo(() => {
+    if (!ctx) return null;
+    const {
+      studentAge,
+      gradeLevel,
+      countryCode,
+      schoolName,
+      vakResult,
+      totalPoints,
+      streak,
+      studentMoodHistory,
+      academicTopics,
+      subjects,
+      subjectsWithGrades,
+      studentGrades,
+      sessions,
+      totalActiveMinutes,
+      missions,
+      daniMemory,
+      conversationCount,
+      subscriptionTier,
+      dataLoaded,
+    } = ctx;
 
-// Caché de promesas en vuelo: AppLayout y IALabProgressProvider montan este
-// hook a la vez, y ambos disparaban las mismas 2 queries (users + user_roles).
-// Se comparte la promesa entre instancias y se limpia al resolver, así el
-// siguiente login vuelve a fetchear datos frescos.
-const profileFetchCache = new Map();
+    if (!dataLoaded) return null;
 
-const fetchStudentProfile = async (email, userId) => {
-  const cacheKey = `${email}|${userId || ""}`;
-  const inFlight = profileFetchCache.get(cacheKey);
-  if (inFlight) return inFlight;
-
-  const promise = (async () => {
-    try {
-      const { data } = await supabase
-        .from("users")
-        .select("*")
-        .eq("email", email)
-        .maybeSingle();
-
-      let userRole = null;
-      if (userId) {
-        const { data: roleData } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", userId)
-          .maybeSingle();
-        userRole = roleData?.role || null;
-      }
-
-      return { profile: data || null, userRole };
-    } finally {
-      profileFetchCache.delete(cacheKey);
-    }
-  })();
-
-  profileFetchCache.set(cacheKey, promise);
-  return promise;
-};
-
-export const useStudentProfile = () => {
-  const { userId, email, isSignedIn } = useAuthIdentity();
-  const [fetched, setFetched] = useState({
-    email: null,
-    profile: null,
-    userRole: null,
-  });
-
-  useEffect(() => {
-    if (!isSignedIn || !email) return undefined;
-
-    let cancelled = false;
-    (async () => {
-      try {
-        const result = await fetchStudentProfile(email, userId);
-        if (!cancelled) setFetched({ email, ...result });
-      } catch (err) {
-        // A missing profile must not block access to the course.
-        console.error("useStudentProfile:", err.message);
-        if (!cancelled) setFetched({ email, profile: null, userRole: null });
-      }
-    })();
-
-    return () => {
-      cancelled = true;
+    // ── Identity ──────────────────────────────────────────────
+    const identity = {
+      age: studentAge ?? null,
+      grade: gradeLevel ?? null,
+      school: schoolName || null,
+      country: countryCode || "CO",
     };
-  }, [isSignedIn, email, userId]);
 
-  // Derived, not stored: avoids a render pass where a previous account's
-  // profile is still showing after switching users.
-  const profile =
-    isSignedIn && fetched.email === email ? fetched.profile : null;
-  const isLoading = isSignedIn ? fetched.email !== email : false;
+    // ── Academic ──────────────────────────────────────────────
+    const gradesWithScore = (subjectsWithGrades || subjects || []).map((s) => ({
+      subject: s.subject || s.name,
+      label: s.label || s.name,
+      grade: s.grade ?? null,
+      progress: s.progress ?? 0,
+      color: s.color,
+    }));
 
-  // `user_type` describes the audience (adult/kid), not permissions, so it is
-  // not a role. Admins are recognised by:
-  // 1. Explicit role in `user_roles` table (highest priority)
-  // 2. Role column in `users` table
-  // 3. Known admin account (username or email)
-  const role =
-    fetched.userRole ||
-    profile?.role ||
-    (isAdminAccount(profile) ? "admin" : "student");
+    const subjectsWithScore = gradesWithScore.filter((s) => s.grade !== null);
+    const avgGrade = subjectsWithScore.length
+      ? subjectsWithScore.reduce((sum, s) => sum + Number(s.grade), 0) /
+        subjectsWithScore.length
+      : null;
+
+    const strengths = subjectsWithScore
+      .filter((s) => Number(s.grade) >= 4.0)
+      .map((s) => s.label || s.subject);
+
+    const weaknesses = subjectsWithScore
+      .filter((s) => Number(s.grade) < 3.5)
+      .map((s) => s.label || s.subject);
+
+    const academic = {
+      subjects: gradesWithScore,
+      averageGrade: avgGrade ? Math.round(avgGrade * 10) / 10 : null,
+      strengths,
+      weaknesses,
+      rawGrades: studentGrades || [],
+    };
+
+    // ── Preferences ──────────────────────────────────────────
+    const vakDominant = vakResult
+      ? Object.entries(vakResult).reduce((a, b) => (a[1] > b[1] ? a : b))[0]
+      : null;
+
+    const preferences = {
+      vak: vakResult || null,
+      vakDominant,
+      communicationStyle:
+        daniMemory?.studentProfile?.communicationStyle ?? null,
+      interests: daniMemory?.studentProfile?.interests ?? [],
+      formats: vakDominant
+        ? ({
+            visual: ["videos", "gráficas"],
+            auditory: ["podcasts", "explicaciones"],
+            kinesthetic: ["retos", "práctica"],
+          }[vakDominant] ?? [])
+        : [],
+    };
+
+    // ── Behavior ─────────────────────────────────────────────
+    const recentSessions = (sessions || []).slice(-14);
+    const activeDays = new Set(recentSessions.map((s) => s.date?.slice(0, 10)))
+      .size;
+    const avgDuration = recentSessions.length
+      ? Math.round(
+          recentSessions.reduce((sum, s) => sum + (s.duration ?? 0), 0) /
+            recentSessions.length,
+        )
+      : 0;
+
+    const lastSession = recentSessions.length
+      ? recentSessions[recentSessions.length - 1]
+      : null;
+
+    const completedMissions = (missions || []).filter(
+      (m) => m.completed,
+    ).length;
+    const totalMissions = (missions || []).length;
+
+    const behavior = {
+      activeDaysLast14: activeDays,
+      avgSessionMinutes: avgDuration,
+      totalActiveMinutes: totalActiveMinutes || 0,
+      lastSessionDate: lastSession?.date ?? null,
+      consistency:
+        totalMissions > 0
+          ? Math.round((completedMissions / totalMissions) * 100)
+          : 0,
+      conversationCount: conversationCount || 0,
+    };
+
+    // ── Goals ────────────────────────────────────────────────
+    const goals = {
+      academic: daniMemory?.studentProfile?.goals ?? [],
+      habits: [],
+      skills: [],
+    };
+
+    // ── Current state ────────────────────────────────────────
+    const level = getLevelFromPoints(totalPoints || 0);
+    const recentMoods = (studentMoodHistory || []).slice(-7).map((m) => m.mood);
+    const dominantMood = recentMoods.length
+      ? getMostFrequent(recentMoods)
+      : null;
+
+    const state = {
+      totalPoints: totalPoints || 0,
+      level,
+      streak: streak?.current || 0,
+      bestStreak: streak?.longest || 0,
+      recentTopics: (academicTopics || []).slice(-5),
+      dominantMood,
+      subscriptionTier: subscriptionTier || "basic",
+      risks: detectRisks({
+        activeDays,
+        streak: streak?.current || 0,
+        weaknesses,
+      }),
+    };
+
+    return { identity, academic, preferences, behavior, goals, state };
+  }, [ctx]);
 
   return {
     profile,
-    role,
-    isAdmin: role === "admin",
-    displayName:
-      [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") ||
-      profile?.username ||
-      email ||
-      "",
-    isLoading,
+    isReady: profile !== null,
   };
-};
+}
 
-export default useStudentProfile;
+// ── Helpers ──────────────────────────────────────────────────
+
+function getLevelFromPoints(points) {
+  if (points >= 5000)
+    return { name: "Maestro", tier: 5, next: null, nextAt: null };
+  if (points >= 2500)
+    return { name: "Experto", tier: 4, next: "Maestro", nextAt: 5000 };
+  if (points >= 1000)
+    return { name: "Avanzado", tier: 3, next: "Experto", nextAt: 2500 };
+  if (points >= 500)
+    return { name: "Intermedio", tier: 2, next: "Avanzado", nextAt: 1000 };
+  return { name: "Principiante", tier: 1, next: "Intermedio", nextAt: 500 };
+}
+
+function getMostFrequent(arr) {
+  const freq = {};
+  arr.forEach((v) => {
+    freq[v] = (freq[v] || 0) + 1;
+  });
+  return Object.entries(freq).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
+}
+
+function detectRisks({ activeDays, streak, weaknesses }) {
+  const risks = [];
+  if (activeDays < 3)
+    risks.push({
+      type: "low_activity",
+      severity: "medium",
+      label: "Poca actividad reciente",
+    });
+  if (streak === 0)
+    risks.push({ type: "streak_broken", severity: "low", label: "Racha rota" });
+  if (weaknesses.length >= 2)
+    risks.push({
+      type: "multiple_weak_subjects",
+      severity: "medium",
+      label: `Materias por reforzar: ${weaknesses.slice(0, 2).join(", ")}`,
+    });
+  return risks;
+}

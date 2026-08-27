@@ -1,10 +1,13 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "../../../../i18n/I18nProvider";
+import { NEXT_STEP_MODES } from "../../adaptiveNextStep";
+import { NextStepCard } from "../../ui";
 
 const FlashcardResults = memo(
   ({ rate, correct, incorrect, onRestart, onBack, onTalkToDani }) => {
     const { t } = useTranslation();
+    const [emotionalFeedback, setEmotionalFeedback] = useState(null);
     return (
       <motion.div
         initial={{ opacity: 0 }}
@@ -36,6 +39,48 @@ const FlashcardResults = memo(
               </p>
             </div>
           </div>
+          {/* Emotional feedback */}
+          <div className="mt-4 flex items-center justify-center gap-2">
+            {!emotionalFeedback ? (
+              <>
+                <p className="text-xs text-[#94A3B8]">¿Cómo te sentiste?</p>
+                {[
+                  { emoji: "😊", label: "Fácil", value: "easy" },
+                  { emoji: "😐", label: "Normal", value: "ok" },
+                  { emoji: "😣", label: "Difícil", value: "hard" },
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setEmotionalFeedback(opt.value)}
+                    className="text-xl px-2 py-1 rounded-lg hover:bg-[#F1F5F9] transition-colors"
+                    aria-label={opt.label}
+                  >
+                    {opt.emoji}
+                  </button>
+                ))}
+              </>
+            ) : null}
+          </div>
+
+          {/* Adaptive next step — recovery / practice / transfer (§54–57) */}
+          {emotionalFeedback && (
+            <NextStepCard
+              className="mt-4"
+              score={rate}
+              feedback={emotionalFeedback}
+              ctaOverrides={{
+                recovery: "Pídele un ejemplo más simple a Dani",
+                transfer: "Rétate con Dani a algo más difícil",
+                practice: "Repasar una vez más",
+              }}
+              onAction={(step) => {
+                const wantsDani =
+                  step.mode !== NEXT_STEP_MODES.PRACTICE && onTalkToDani;
+                (wantsDani ? onTalkToDani : onRestart)?.();
+              }}
+            />
+          )}
+
           <div className="flex flex-wrap gap-3 mt-6 justify-center">
             <motion.button
               onClick={onRestart}

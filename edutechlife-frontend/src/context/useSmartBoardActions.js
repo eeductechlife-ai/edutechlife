@@ -1,5 +1,7 @@
 import { useCallback, useRef } from "react";
 import { VAK_RECOMMENDATIONS } from "./smartBoardData";
+import { track } from "../lib/analytics";
+import { EVENTS } from "../lib/analyticsEvents";
 
 export const useSmartBoardActions = (stateAndSetters) => {
   const ref = useRef(stateAndSetters);
@@ -26,6 +28,11 @@ export const useSmartBoardActions = (stateAndSetters) => {
     const mission = missions.find((m) => m.id === missionId);
     if (mission && !mission.completed) {
       addPoints(mission.xp || 0, `Misión completada: ${mission.title || ""}`);
+      track(EVENTS.MISSION_COMPLETED, {
+        mission_id: missionId,
+        title: mission.title || "",
+        xp: mission.xp || 0,
+      });
     }
   }, []);
 
@@ -39,6 +46,7 @@ export const useSmartBoardActions = (stateAndSetters) => {
     } = ref.current;
     setUnlockedRewards((prev) => [...prev, reward.id]);
     addPoints(-reward.cost, `Canjeó recompensa: ${reward.name}`);
+    track(EVENTS.BADGE_UNLOCKED, { reward_id: reward.id, name: reward.name });
     setLastUnlockedReward(reward);
     setTimeout(() => setLastUnlockedReward(null), 4000);
     if (reward.id === 1) setDarkMode(true);
@@ -93,7 +101,17 @@ export const useSmartBoardActions = (stateAndSetters) => {
   }, []);
 
   const updateDaniMemory = useCallback((parsed) => {
-    if (!parsed || !parsed.topics) return;
+    if (
+      !parsed ||
+      (!parsed.topics &&
+        !parsed.interests &&
+        !parsed.challengeObserved &&
+        !parsed.strengthObserved &&
+        !parsed.communicationStyle &&
+        !parsed.studentMood &&
+        !parsed.parentGoal)
+    )
+      return;
     const { setDaniMemory } = ref.current;
     setDaniMemory((prev) => {
       const next = { ...prev, studentProfile: { ...prev.studentProfile } };
@@ -139,6 +157,12 @@ export const useSmartBoardActions = (stateAndSetters) => {
       if (parsed.studentMood) {
         next.studentProfile.lastKnownMood = parsed.studentMood;
       }
+      if (Array.isArray(parsed.interests) && parsed.interests.length) {
+        next.studentProfile.interests = parsed.interests;
+      }
+      if (parsed.parentGoal) {
+        next.studentProfile.parentGoal = parsed.parentGoal;
+      }
       return next;
     });
   }, []);
@@ -159,6 +183,10 @@ export const useSmartBoardActions = (stateAndSetters) => {
       parts.push(`Fortalezas: ${profile.strengths.slice(-3).join(", ")}.`);
     if (profile.lastKnownMood)
       parts.push(`Último estado de ánimo: ${profile.lastKnownMood}.`);
+    if (profile.parentGoal)
+      parts.push(
+        `Objetivo del padre/madre: ${profile.parentGoal}. Adapta tu ayuda a este objetivo cuando sea relevante.`,
+      );
 
     const pending = daniMemory.pendingTopics.filter((t) => {
       const daysSince =

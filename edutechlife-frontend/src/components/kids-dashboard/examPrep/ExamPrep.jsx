@@ -5,8 +5,9 @@ import useExamPrep from "./useExamPrep";
 import ExamList from "./components/ExamList";
 import ExamDetail from "./components/ExamDetail";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useCompetencyTracking } from "../../../hooks/useCompetencyTracking";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import { callDeepseek } from "../../../utils/api";
+import { callDeepseekSmartboard } from "../../../utils/api";
 
 const ExamForm = memo(({ n, sN, s, sS, d, sD, g, sG, onAdd }) => {
   const { t } = useTranslation();
@@ -97,6 +98,7 @@ const ExamForm = memo(({ n, sN, s, sS, d, sD, g, sG, onAdd }) => {
 const DeckQuiz = memo(({ deck, onFinish, onTabChange }) => {
   const { t } = useTranslation();
   const { addPoints } = useSmartBoardKids();
+  const { trackActivity } = useCompetencyTracking();
   const [questions, setQuestions] = useState(null);
   const [loading, setLoading] = useState(false);
   const [qIdx, setQIdx] = useState(0);
@@ -104,6 +106,7 @@ const DeckQuiz = memo(({ deck, onFinish, onTabChange }) => {
   const [feedback, setFeedback] = useState(null);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
+  const [emotionalFeedback, setEmotionalFeedback] = useState(null);
 
   const generateQuiz = useCallback(async () => {
     setLoading(true);
@@ -122,11 +125,14 @@ Responde SOLO con JSON:
   ]
 }`;
     try {
-      const res = await callDeepseek([{ role: "user", content: prompt }], {
-        temperature: 0.6,
-        maxTokens: 1200,
-        isJson: true,
-      });
+      const res = await callDeepseekSmartboard(
+        [{ role: "user", content: prompt }],
+        {
+          temperature: 0.6,
+          maxTokens: 1200,
+          isJson: true,
+        },
+      );
       const parsed = typeof res === "string" ? JSON.parse(res) : res;
       setQuestions(parsed.questions || []);
     } catch {
@@ -148,13 +154,19 @@ Responde SOLO con JSON:
           t("kid.exam.deck_exam_points", { title: deck.title }),
         );
         setDone(true);
+        if (deck?.subject) {
+          trackActivity({
+            subject: deck.subject,
+            score: finalScore / questions.length,
+          });
+        }
       } else {
         setQIdx((i) => i + 1);
         setSelected(null);
         setFeedback(null);
       }
     }, 1800);
-  }, [qIdx, questions, selected, score, deck, addPoints, t]);
+  }, [qIdx, questions, selected, score, deck, addPoints, t, trackActivity]);
 
   if (!questions) {
     return (
@@ -208,6 +220,34 @@ Responde SOLO con JSON:
         <p className="text-sm text-[#64748B]">
           {t("kid.exam.score_correct", { score, total: questions.length })}
         </p>
+
+        {/* Emotional feedback */}
+        {!emotionalFeedback ? (
+          <div className="flex items-center justify-center gap-2">
+            <p className="text-xs text-[#94A3B8]">¿Cómo te sentiste?</p>
+            {[
+              { emoji: "😊", label: "Fácil", value: "easy" },
+              { emoji: "😐", label: "Normal", value: "ok" },
+              { emoji: "😣", label: "Difícil", value: "hard" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setEmotionalFeedback(opt.value)}
+                className="px-2 py-1 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] hover:border-[#4DA8C4] transition-all text-sm"
+                aria-label={opt.label}
+              >
+                {opt.emoji}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs text-[#4DA8C4] font-semibold">
+            {emotionalFeedback === "hard"
+              ? "¡Dani te preparará más práctica!"
+              : "¡Excelente actitud!"}
+          </p>
+        )}
+
         <div className="flex gap-2">
           <button
             onClick={onFinish}

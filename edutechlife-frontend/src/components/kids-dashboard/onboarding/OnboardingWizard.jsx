@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 import { GRADE_OPTIONS } from "../../../data/curriculum/curriculumHelper";
+import { track } from "../../../lib/analytics";
+import { EVENTS } from "../../../lib/analyticsEvents";
 
 // Step 0 is inline (no tab navigation) — captures grade + school.
 // Steps 1-3 navigate to their respective tabs.
@@ -45,11 +47,41 @@ const NAV_STEPS = [
   },
 ];
 
-// Inline step: school + grade capture (index = -1, shown before NAV_STEPS)
+const PARENT_GOAL_OPTIONS = [
+  { id: "mejorar_notas", label: "Mejorar notas", emoji: "📈" },
+  { id: "mejorar_habitos", label: "Mejorar hábitos", emoji: "📅" },
+  { id: "recuperar_materia", label: "Recuperar materia", emoji: "🔄" },
+  { id: "preparar_examenes", label: "Preparar exámenes", emoji: "📝" },
+  { id: "aprender_ia", label: "Aprender con IA", emoji: "🤖" },
+  { id: "acompanar", label: "Acompañar de lejos", emoji: "🤝" },
+];
+
+const INTEREST_OPTIONS = [
+  { id: "matematicas", label: "Matemáticas", emoji: "🔢" },
+  { id: "ciencias", label: "Ciencias", emoji: "🔬" },
+  { id: "tecnologia", label: "Tecnología", emoji: "💻" },
+  { id: "arte", label: "Arte", emoji: "🎨" },
+  { id: "musica", label: "Música", emoji: "🎵" },
+  { id: "deporte", label: "Deporte", emoji: "⚽" },
+  { id: "lectura", label: "Lectura", emoji: "📚" },
+  { id: "historia", label: "Historia", emoji: "🌍" },
+];
+
+// Inline step: school + grade + city + interests (index = -1, shown before NAV_STEPS)
 function GradeStep({ ageGroup, onDone }) {
-  const { setGradeLevel, setCountryCode, setSchoolName } = useSmartBoardKids();
+  const { setGradeLevel, setCountryCode, setSchoolName, updateDaniMemory } =
+    useSmartBoardKids();
   const [grade, setGrade] = useState(null);
   const [school, setSchool] = useState("");
+  const [city, setCity] = useState("");
+  const [interests, setInterests] = useState([]);
+  const [parentGoal, setParentGoal] = useState(null);
+
+  function toggleInterest(id) {
+    setInterests((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+    );
+  }
 
   const LEVEL_BG = {
     "Básica Primaria":
@@ -71,7 +103,18 @@ function GradeStep({ ageGroup, onDone }) {
     setGradeLevel(grade);
     setCountryCode("CO");
     if (school.trim()) setSchoolName(school.trim());
-    onDone({ grade, school });
+    if (city.trim()) {
+      try {
+        localStorage.setItem("sb_student_city", city.trim());
+      } catch {
+        /* quota */
+      }
+    }
+    const memoryUpdate = {};
+    if (interests.length > 0) memoryUpdate.interests = interests;
+    if (parentGoal) memoryUpdate.parentGoal = parentGoal;
+    if (Object.keys(memoryUpdate).length > 0) updateDaniMemory?.(memoryUpdate);
+    onDone({ grade, school, city, interests, parentGoal });
   }
 
   return (
@@ -81,18 +124,88 @@ function GradeStep({ ageGroup, onDone }) {
         {messages[ageGroup]}
       </h3>
 
-      {/* School name — optional */}
-      <div className="mb-4">
-        <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">
-          Nombre de tu colegio (opcional)
+      {/* School + city row — optional */}
+      <div className="flex gap-2 mb-3">
+        <div className="flex-1">
+          <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">
+            Colegio (opcional)
+          </label>
+          <input
+            type="text"
+            value={school}
+            onChange={(e) => setSchool(e.target.value)}
+            placeholder="Ej: Colegio San José"
+            className="w-full text-sm px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:border-[#0096C7]"
+          />
+        </div>
+        <div className="flex-1">
+          <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block">
+            Ciudad (opcional)
+          </label>
+          <input
+            type="text"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            placeholder="Ej: Bogotá"
+            className="w-full text-sm px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:border-[#0096C7]"
+          />
+        </div>
+      </div>
+
+      {/* Parent goal chips — optional */}
+      <div className="mb-3">
+        <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 block">
+          ¿Qué quieres lograr? (opcional)
         </label>
-        <input
-          type="text"
-          value={school}
-          onChange={(e) => setSchool(e.target.value)}
-          placeholder="Ej: Colegio San José"
-          className="w-full text-sm px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:border-[#0096C7]"
-        />
+        <div className="flex flex-wrap gap-1.5">
+          {PARENT_GOAL_OPTIONS.map((opt) => {
+            const sel = parentGoal === opt.id;
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setParentGoal(sel ? null : opt.id)}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border transition-all ${
+                  sel
+                    ? "border-[#06D6A0] bg-[#06D6A0]/10 text-[#059669] dark:text-[#06D6A0]"
+                    : "border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-[#06D6A0]/50"
+                }`}
+                aria-pressed={sel}
+              >
+                <span>{opt.emoji}</span>
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Interests chips — optional */}
+      <div className="mb-4">
+        <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 block">
+          ¿Qué te gusta? (opcional)
+        </label>
+        <div className="flex flex-wrap gap-1.5">
+          {INTEREST_OPTIONS.map((opt) => {
+            const sel = interests.includes(opt.id);
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => toggleInterest(opt.id)}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border transition-all ${
+                  sel
+                    ? "border-[#0096C7] bg-[#0096C7]/10 text-[#0096C7] dark:text-[#48CAE4]"
+                    : "border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-[#0096C7]/50"
+                }`}
+                aria-pressed={sel}
+              >
+                <span>{opt.emoji}</span>
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Grade grid */}
@@ -196,6 +309,7 @@ const OnboardingWizard = memo(({ onTabChange }) => {
   const handleClose = () => setOnboardingComplete(true);
 
   if (isDone && show) {
+    track(EVENTS.PROFILE_COMPLETED, {});
     setOnboardingComplete(true);
     return null;
   }

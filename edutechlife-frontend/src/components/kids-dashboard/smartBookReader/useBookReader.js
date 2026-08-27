@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 import { extractDocumentText } from "../../../utils/documentParser";
-import { callDeepseek } from "../../../utils/api";
+import { callDeepseekSmartboard } from "../../../utils/api";
 
 export function useBookReader() {
   const {
@@ -45,7 +45,7 @@ export function useBookReader() {
         },
       ];
       setStep(2);
-      const r = await callDeepseek(messages, {
+      const r = await callDeepseekSmartboard(messages, {
         temperature: 0.3,
         maxTokens: 1500,
         isJson: true,
@@ -67,5 +67,18 @@ export function useBookReader() {
     }
   }, []);
 
-  return { darkMode, mode, text, setText, step, book, view, setView, error, process, history, reset };
+  return {
+    darkMode,
+    mode,
+    text,
+    setText,
+    step,
+    book,
+    view,
+    setView,
+    error,
+    process,
+    history,
+    reset,
+  };
 }

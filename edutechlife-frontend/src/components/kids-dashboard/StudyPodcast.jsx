@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { callDeepseek } from "../../utils/api";
+import { callDeepseekSmartboard } from "../../utils/api";
 import { speakTextConversational, stopSpeech } from "../../utils/speech";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
@@ -59,11 +59,14 @@ const StudyPodcast = memo(() => {
 Texto:
 ${input.substring(0, 3000)}`;
 
-        const result = await callDeepseek([{ role: "user", content: prompt }], {
-          temperature: 0.7,
-          maxTokens: 1000,
-          isJson: true,
-        });
+        const result = await callDeepseekSmartboard(
+          [{ role: "user", content: prompt }],
+          {
+            temperature: 0.7,
+            maxTokens: 1000,
+            isJson: true,
+          },
+        );
 
         const parsed = typeof result === "string" ? JSON.parse(result) : result;
         setScript({ ...parsed, source: input });

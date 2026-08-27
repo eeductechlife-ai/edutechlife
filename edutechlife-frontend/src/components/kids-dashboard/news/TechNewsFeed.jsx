@@ -118,7 +118,7 @@ const ArticleCard = memo(({ article, isRead, onRead, darkMode }) => {
 });
 ArticleCard.displayName = "ArticleCard";
 
-const ArticleModal = memo(({ article, onClose, darkMode }) => {
+const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
   if (!article) return null;
   const color = CATEGORY_COLORS[article.category] || "#4DA8C4";
 
@@ -197,6 +197,22 @@ const ArticleModal = memo(({ article, onClose, darkMode }) => {
           >
             {article.content}
           </div>
+
+          {/* Explora 2.0 (§35): content → challenge with Dani */}
+          {onChallenge && (
+            <button
+              onClick={() => {
+                onChallenge(article);
+                onClose();
+              }}
+              className="w-full mt-5 py-3 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2"
+              style={{
+                background: `linear-gradient(135deg, ${color}, #48CAE4)`,
+              }}
+            >
+              🤖 Rétame con Dani sobre esto →
+            </button>
+          )}
         </div>
       </motion.div>
     </motion.div>
@@ -205,7 +221,27 @@ const ArticleModal = memo(({ article, onClose, darkMode }) => {
 ArticleModal.displayName = "ArticleModal";
 
 const TechNewsFeed = () => {
-  const { darkMode } = useSmartBoardKids();
+  const { darkMode, setDocumentForDani } = useSmartBoardKids();
+
+  // Explora 2.0 (§35): turn a passive article into an active challenge with Dani.
+  const handleChallenge = useCallback(
+    (article) => {
+      if (!article) return;
+      setDocumentForDani?.({
+        title: article.title,
+        subject: article.category || "Tech & IA",
+        summary: article.summary || (article.content || "").slice(0, 320),
+        difficulty: "exploración",
+        tutoringQuestions: [
+          `Acabo de leer "${article.title}". ¿Me lo explicas con un ejemplo sencillo?`,
+          "¿Cómo podría esto cambiar mi vida diaria o mi futuro?",
+          "Si yo quisiera crear algo con esta idea, ¿por dónde empiezo?",
+        ],
+      });
+      window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+    },
+    [setDocumentForDani],
+  );
   const {
     articles,
     allArticles,
@@ -313,7 +349,7 @@ const TechNewsFeed = () => {
         </div>
       ) : (
         <div className="space-y-4">
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="sync">
             {articles.map((article) => (
               <ArticleCard
                 key={article.id}
@@ -337,6 +373,7 @@ const TechNewsFeed = () => {
             article={openArticle}
             darkMode={darkMode}
             onClose={() => setOpenArticle(null)}
+            onChallenge={handleChallenge}
           />
         )}
       </AnimatePresence>

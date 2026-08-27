@@ -1,10 +1,12 @@
-import { memo } from "react";
+import { memo, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Flame, Gem, Home } from "lucide-react";
+import { Flame, Gem, Home, Bell } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { CATEGORIES, TOP_BAR_LABELS } from "../kidsDashboardConfig";
 import { SB_GRADIENTS, glow } from "../smartboardTheme";
 import UserMenu from "../UserMenu";
+import SmartBoardNotificationPanel from "./SmartBoardNotificationPanel";
+import { useNotification } from "../../../context/NotificationContext";
 
 const TopBar = memo(
   ({
@@ -18,6 +20,9 @@ const TopBar = memo(
     onLogout,
   }) => {
     const { t } = useTranslation();
+    const { unreadCount } = useNotification();
+    const [notifOpen, setNotifOpen] = useState(false);
+    const bellRef = useRef(null);
     const activeCat = CATEGORIES.find((c) => c.tabs.includes(activeTab));
     const ActiveIcon = activeCat?.Icon || Home;
 
@@ -125,6 +130,39 @@ const TopBar = memo(
               </span>
             </span>
           </motion.div>
+
+          {/* Notification bell — surfaces SmartBoard domain notifications (§42) */}
+          <div className="relative">
+            <button
+              ref={bellRef}
+              onClick={() => setNotifOpen((v) => !v)}
+              aria-label={t("smartboard.notifications") || "Notificaciones"}
+              aria-haspopup="true"
+              aria-expanded={notifOpen}
+              className={`relative flex items-center justify-center w-11 h-11 md:w-10 md:h-10 rounded-2xl transition-colors ${
+                darkMode
+                  ? "bg-[#334155]/40 hover:bg-[#334155]/70 text-[#E2F0FF]"
+                  : "bg-[#EEF4F8] hover:bg-[#DCE8EF] text-[#00303F]"
+              }`}
+            >
+              <Bell
+                className="w-5 md:w-[19px] h-5 md:h-[19px]"
+                strokeWidth={2.3}
+              />
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] text-[10px] font-bold text-white bg-[#EF476F] rounded-full border-2 border-white px-1">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
+            </button>
+            <SmartBoardNotificationPanel
+              isOpen={notifOpen}
+              onClose={() => setNotifOpen(false)}
+              triggerRef={bellRef}
+              darkMode={darkMode}
+              onNavigateTab={onTabChange}
+            />
+          </div>
 
           {authToken && (
             <UserMenu

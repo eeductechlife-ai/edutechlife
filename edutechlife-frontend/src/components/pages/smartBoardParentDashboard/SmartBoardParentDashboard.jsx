@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuthIdentity, signOutUser } from "../../../hooks/useAuthIdentity";
 import { useParentDashboardRealtime } from "../../../hooks/useParentDashboardRealtime";
 import { useParentStudentData } from "../../../hooks/useParentStudentData";
+import { useParentInsights } from "../../../hooks/useParentInsights";
+import { useEarlyWarnings } from "../../../hooks/useEarlyWarnings";
 import {
   Trophy,
   Clock,
@@ -38,6 +40,8 @@ import WellbeingCard from "./components/WellbeingCard";
 import ParentResources from "./components/ParentResources";
 import GradeReportCard from "./components/GradeReportCard";
 import { mergeRealtimePoints } from "./mergeRealtime";
+import { track } from "../../../lib/analytics";
+import { EVENTS } from "../../../lib/analyticsEvents";
 
 const LEVELS = [
   { min: 5000, nameKey: "parent_dashboard.level_maestro", emoji: "🏆" },
@@ -261,6 +265,9 @@ const SmartBoardParentDashboard = () => {
   const { studentStatus, liveSessions, livePoints, isConnected } =
     useParentDashboardRealtime(userId, studentId || userId, authToken);
 
+  const { insights, learningGraph, fetchInsights } = useParentInsights();
+  const { warnings, fetchWarnings, resolveWarning } = useEarlyWarnings();
+
   // studentStatus is StudentOnlineStatus[] — check if child's entry is online
   const studentOnline = Array.isArray(studentStatus)
     ? studentStatus.some(
@@ -271,6 +278,18 @@ const SmartBoardParentDashboard = () => {
   useEffect(() => {
     if (isLoaded && !userId && !isParent) navigate("/smartboard/login");
   }, [isLoaded, userId, isParent, navigate]);
+
+  // parent_report_viewed — fires once when the parent dashboard mounts
+  useEffect(() => {
+    track(EVENTS.PARENT_REPORT_VIEWED, {});
+  }, []);
+
+  useEffect(() => {
+    if (studentId) {
+      fetchInsights(studentId);
+      fetchWarnings(studentId);
+    }
+  }, [studentId, fetchInsights, fetchWarnings]);
 
   // Keep local state in sync with the hook (Supabase or localStorage fallback).
   // Do NOT clobber realtime-merged data once live events have been applied.
@@ -539,6 +558,96 @@ const SmartBoardParentDashboard = () => {
                         })}
                       />
                     </div>
+
+                    {/* Early Warnings */}
+                    {warnings.filter(
+                      (w) => w.severity === "high" || w.severity === "medium",
+                    ).length > 0 && (
+                      <div className="space-y-2">
+                        <p className="text-xs font-bold text-[#64748B] uppercase tracking-widest">
+                          Alertas de Aprendizaje
+                        </p>
+                        {warnings
+                          .filter((w) => w.severity !== "low")
+                          .map((w) => (
+                            <div
+                              key={w.id}
+                              className={`rounded-xl border p-3 flex items-start gap-3 ${w.severity === "high" ? "bg-red-50 border-red-200" : "bg-amber-50 border-amber-200"}`}
+                            >
+                              <span className="text-lg flex-shrink-0">
+                                {w.severity === "high" ? "🔴" : "🟡"}
+                              </span>
+                              <div className="flex-1 min-w-0">
+                                <p
+                                  className={`text-sm font-bold ${w.severity === "high" ? "text-red-800" : "text-amber-800"}`}
+                                >
+                                  {w.type === "inactivity"
+                                    ? "Inactividad detectada"
+                                    : w.type === "performance_drop"
+                                      ? "Caída de rendimiento"
+                                      : w.type === "repeated_errors"
+                                        ? "Errores repetitivos"
+                                        : "Racha interrumpida"}
+                                </p>
+                                <p className="text-xs mt-0.5 text-gray-600">
+                                  {w.recommendation}
+                                </p>
+                              </div>
+                              <button
+                                onClick={() => resolveWarning(w.id)}
+                                className="text-xs text-gray-400 hover:text-gray-600 flex-shrink-0"
+                                aria-label="Marcar como resuelta"
+                              >
+                                ✓
+                              </button>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+
+                    {/* Parent Intelligence Insights */}
+                    {insights.length > 0 && (
+                      <div className="space-y-2">
+                        <p className="text-xs font-bold text-[#64748B] uppercase tracking-widest">
+                          Inteligencia Parental
+                        </p>
+                        {insights.map((ins, i) => {
+                          const bg =
+                            ins.severity === "success"
+                              ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                              : ins.severity === "warning"
+                                ? "bg-amber-50 border-amber-200 text-amber-800"
+                                : ins.severity === "alert"
+                                  ? "bg-red-50 border-red-200 text-red-800"
+                                  : "bg-blue-50 border-blue-200 text-blue-800";
+                          return (
+                            <div
+                              key={i}
+                              className={`rounded-xl border p-3 flex items-start gap-3 ${bg}`}
+                              role="status"
+                            >
+                              <span className="text-lg flex-shrink-0">
+                                {ins.type === "progress"
+                                  ? "🌟"
+                                  : ins.type === "risk"
+                                    ? "⚠️"
+                                    : ins.type === "habit"
+                                      ? "📅"
+                                      : ins.type === "emotional"
+                                        ? "💙"
+                                        : "🎯"}
+                              </span>
+                              <div className="min-w-0">
+                                <p className="text-sm font-bold">{ins.title}</p>
+                                <p className="text-xs mt-0.5 opacity-80">
+                                  {ins.body}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <PointsChart history={data.history} />

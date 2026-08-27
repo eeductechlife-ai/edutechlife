@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Sun,
@@ -11,11 +11,12 @@ import {
   Bot,
   BarChart2,
   Layers,
-  MessageCircle,
   ClipboardCheck,
   ChevronRight,
 } from "lucide-react";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useAdaptiveEngine } from "../../hooks/useAdaptiveEngine";
+import WhatDoIDoToday from "./WhatDoIDoToday";
 import { useTranslation } from "../../i18n/I18nProvider";
 import DaniAvatar3D from "./DaniAvatar3D";
 import { SB_GRADIENTS, SB_COLORS, glow } from "./smartboardTheme";
@@ -47,16 +48,6 @@ const QUICK_ACTIONS = [
     border: "rgba(6,182,212,0.25)",
   },
   {
-    tab: "oral",
-    icon: MessageCircle,
-    emoji: "🗣️",
-    labelKey: "kid.hero.action_oral_label",
-    hintKey: "kid.hero.action_oral_hint",
-    color: "#8B5CF6",
-    bg: "rgba(139,92,246,0.12)",
-    border: "rgba(139,92,246,0.25)",
-  },
-  {
     tab: "examenes",
     icon: ClipboardCheck,
     emoji: "📝",
@@ -68,9 +59,9 @@ const QUICK_ACTIONS = [
   },
 ];
 
-const LEARNING_PATH = ["calificaciones", "flashcards", "oral", "examenes"];
+const LEARNING_PATH = ["calificaciones", "flashcards", "examenes"];
 
-const HeroSection = memo(({ onTabChange }) => {
+const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
   const {
     vakResult,
     activeStudyDeck,
@@ -82,6 +73,17 @@ const HeroSection = memo(({ onTabChange }) => {
   } = useSmartBoardKids();
   const { t } = useTranslation();
   const reduce = useReducedMotion();
+  const {
+    nextAction,
+    fetchNextAction,
+    fetchDailyPlan,
+    loading: adaptiveLoading,
+    studentDbId,
+  } = useAdaptiveEngine();
+
+  useEffect(() => {
+    if (studentDbId) fetchNextAction();
+  }, [studentDbId, fetchNextAction]);
   const activeClass = currentClass || nextClass;
   const isNow = !!currentClass;
 
@@ -388,7 +390,7 @@ const HeroSection = memo(({ onTabChange }) => {
             <motion.button
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => onTabChange?.("oral")}
+              onClick={() => onDaniOpen?.()}
               className="group px-5 py-3 rounded-2xl font-bold text-[#00303F] flex items-center gap-3 transition-shadow"
               style={{
                 background: SB_GRADIENTS.gold,
@@ -477,6 +479,17 @@ const HeroSection = memo(({ onTabChange }) => {
             </button>
           </motion.div>
         )}
+
+        {/* ¿Qué Hago Hoy? — Adaptive next action */}
+        <WhatDoIDoToday
+          nextAction={nextAction}
+          loading={adaptiveLoading}
+          onTabChange={onTabChange}
+          onMinutesChange={(m) => {
+            setPlanMinutes(m);
+            fetchDailyPlan(null, m);
+          }}
+        />
 
         {/* Quick Actions grid */}
         <motion.div

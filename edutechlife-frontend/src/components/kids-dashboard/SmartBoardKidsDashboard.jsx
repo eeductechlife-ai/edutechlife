@@ -6,6 +6,7 @@ import { signOutUser } from "../../hooks/useAuthIdentity";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import useExamReminders from "../../hooks/useExamReminders";
+import { useSmartBoardNotifications } from "../../hooks/useSmartBoardNotifications";
 import "../../styles/a11y.css";
 import ParticlesBackground from "./ParticlesBackground";
 import DaniTutorChat from "./daniTutorChat";
@@ -28,6 +29,7 @@ const SmartBoardKidsDashboard = () => {
     const urlTab = params.get("tab");
     const TAB_WHITELIST = [
       "inicio",
+      "perfil",
       "materias",
       "horario",
       "flashcards",
@@ -51,6 +53,8 @@ const SmartBoardKidsDashboard = () => {
   // Background: watches upcoming exams and posts in-app reminders at
   // T-24h / T-3h / T-30min. Silent when there is no timetable/exams.
   useExamReminders();
+  // SmartBoard domain notifications: daily mission ready + reinforcement opportunity (§42)
+  useSmartBoardNotifications();
   useEffect(() => {
     try {
       localStorage.setItem("edutechlife_current_tab", activeTab);
@@ -87,20 +91,10 @@ const SmartBoardKidsDashboard = () => {
 
   const handleDaniOpen = useCallback(() => {
     setIsDaniOpen(true);
-    document.body.style.overflow = "hidden";
   }, []);
   const handleDaniClose = useCallback(() => {
     setIsDaniOpen(false);
-    document.body.style.overflow = "";
   }, []);
-
-  // Restore body scroll if component unmounts while Dani is open
-  useEffect(
-    () => () => {
-      document.body.style.overflow = "";
-    },
-    [],
-  );
 
   // Allow child components to open Dani panel via custom event
   useEffect(() => {
@@ -149,6 +143,7 @@ const SmartBoardKidsDashboard = () => {
       tab &&
       [
         "inicio",
+        "perfil",
         "vak",
         "misiones",
         "materias",
@@ -310,6 +305,7 @@ const SmartBoardKidsDashboard = () => {
               onTabChange={setActiveTab}
               darkMode={darkMode}
               subscriptionTier={subscriptionTier}
+              onDaniOpen={handleDaniOpen}
             />
           </div>
         </div>

@@ -8,6 +8,7 @@ import PointsHistory from "./components/PointsHistory";
 import SessionLog from "./components/SessionLog";
 import RewardsGrid from "./components/RewardsGrid";
 import AcademicFeedback from "./AcademicFeedback";
+import SkillPassport from "../SkillPassport";
 
 const PointsChart = ({ pointsHistory, darkMode }) => {
   const { t } = useTranslation();
@@ -142,6 +143,8 @@ const SmartBoardProgress = ({ onTabChange }) => {
         className="max-w-5xl mx-auto space-y-5"
       >
         <AcademicFeedback onTabChange={onTabChange} />
+
+        <SkillPassport />
 
         <div className="flex flex-wrap gap-4">
           <SummaryCard
