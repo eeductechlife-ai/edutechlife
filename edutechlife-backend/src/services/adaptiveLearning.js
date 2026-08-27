@@ -45,11 +45,27 @@ async function fetchStreak(studentId) {
 }
 
 async function fetchGrades(studentId) {
+  // Grades are not a table of their own — they live in `grade_analyses`
+  // as a JSONB array (`grades: [{subject, score}]`) keyed by the auth user
+  // id (`student_user_id`), not by `students.id`. Resolve the auth id first,
+  // then read the most recent analysis.
+  const { data: student } = await supabase
+    .from("students")
+    .select("auth_id")
+    .eq("id", studentId)
+    .maybeSingle();
+  if (!student?.auth_id) return [];
+
   const { data } = await supabase
-    .from("student_grades")
-    .select("subject, grade")
-    .eq("student_id", studentId);
-  return data || [];
+    .from("grade_analyses")
+    .select("grades, created_at")
+    .eq("student_user_id", student.auth_id)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const grades = Array.isArray(data?.grades) ? data.grades : [];
+  return grades.map((g) => ({ subject: g.subject, grade: g.score }));
 }
 
 // ── Competency helpers ────────────────────────────────────────────────────────
