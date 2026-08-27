@@ -135,6 +135,7 @@ const SmartBoardNotificationPanel = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          key="sb-notif-panel"
           ref={panelRef}
           initial={{ opacity: 0, y: -8, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
