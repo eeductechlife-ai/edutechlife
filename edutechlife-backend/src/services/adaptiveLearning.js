@@ -244,6 +244,92 @@ function generateRecommendations(state) {
   return recs.slice(0, 4);
 }
 
+// ── Content-backed recommendations (RecommendationEngine, §52) ────────────────
+
+/**
+ * Finds real content for a subject from learning_content, filtered by
+ * difficulty (and age when known), easiest first.
+ */
+async function fetchContentForSubject(subject, { difficultyMax = 3, difficultyMin = 1, age = null, limit = 1 } = {}) {
+  let q = supabase
+    .from("learning_content")
+    .select("id, title, type, subject, difficulty, duration_min, competency_id, learning_objective")
+    .eq("subject", subject)
+    .eq("is_active", true)
+    .gte("difficulty", difficultyMin)
+    .lte("difficulty", difficultyMax)
+    .order("difficulty", { ascending: true })
+    .limit(limit);
+  if (age) q = q.lte("age_min", age).gte("age_max", age);
+  const { data } = await q;
+  return data || [];
+}
+
+/**
+ * Persists recommendations to the `recommendations` table (motivo/prioridad/
+ * estado/resultado per §52). Returns the inserted rows.
+ */
+async function persistRecommendations(studentId, recs) {
+  if (!studentId || !recs.length) return [];
+  const rows = recs.map((r) => ({
+    student_id: studentId,
+    type: r.type || "content",
+    content_id: r.contentId || null,
+    competency_id: r.competencyId || null,
+    reason: r.reason,
+    priority: r.priority || 3,
+    status: "pending",
+    metadata: r.metadata || {},
+  }));
+  const { data } = await supabase
+    .from("recommendations")
+    .insert(rows)
+    .select("id, type, content_id, reason, priority, status");
+  return data || [];
+}
+
+/**
+ * Turns the student's state into concrete, explainable, PERSISTED content
+ * recommendations: reinforcement for weaknesses (easy content) and a transfer
+ * challenge for a strength (harder content). This is the RecommendationEngine
+ * the Adaptive Engine exposes.
+ */
+async function recommendContent(studentId, state) {
+  const age = state.age || null;
+  const out = [];
+
+  for (const subj of (state.weaknesses || []).slice(0, 2)) {
+    const [content] = await fetchContentForSubject(subj, { difficultyMax: 2, age });
+    if (content) {
+      out.push({
+        type: "reinforcement",
+        contentId: content.id,
+        competencyId: content.competency_id,
+        priority: 5,
+        reason: `Tu dominio en ${SUBJECT_MAP[subj] || subj} está bajo. "${content.title}" (${content.duration_min} min) te ayuda a reforzar: ${content.learning_objective}.`,
+        metadata: { subject: subj, difficulty: content.difficulty, source: "weakness" },
+      });
+    }
+  }
+
+  for (const subj of (state.strengths || []).slice(0, 1)) {
+    const [content] = await fetchContentForSubject(subj, { difficultyMin: 3, difficultyMax: 5, age });
+    if (content) {
+      out.push({
+        type: "challenge",
+        contentId: content.id,
+        competencyId: content.competency_id,
+        priority: 2,
+        reason: `¡Dominas ${SUBJECT_MAP[subj] || subj}! Súbete de nivel con "${content.title}".`,
+        metadata: { subject: subj, difficulty: content.difficulty, source: "strength" },
+      });
+    }
+  }
+
+  const persisted = await persistRecommendations(studentId, out);
+  return { recommendations: out, persisted };
+}
+
 /**
  * Returns the single best next action for the student with an explanation.
  */
@@ -429,6 +515,9 @@ module.exports = {
   detectWeaknesses,
   detectRisks,
   generateRecommendations,
+  recommendContent,
+  fetchContentForSubject,
+  persistRecommendations,
   getNextBestAction,
   generateDailyPlan,
   generateWeeklyPlan,

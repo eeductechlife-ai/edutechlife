@@ -1544,6 +1544,7 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
 const {
   getStudentState,
   generateRecommendations,
+  recommendContent,
   getNextBestAction,
   generateDailyPlan,
   generateWeeklyPlan,
@@ -1606,6 +1607,22 @@ router.post('/adaptive/weekly-plan', requireAuth, async (req, res) => {
   } catch (e) {
     console.error('[Adaptive weekly-plan]', e.message);
     res.status(500).json({ error: 'Error generating weekly plan' });
+  }
+});
+
+// POST /api/smartboard/adaptive/recommendations
+// Body: { studentId }  → generates content-backed recommendations, persists them,
+// and returns the current pending queue for the student.
+router.post('/adaptive/recommendations', requireAuth, async (req, res) => {
+  try {
+    const { studentId } = req.body;
+    if (!studentId) return res.status(400).json({ error: 'studentId required' });
+    const state = await getStudentState(studentId);
+    const { recommendations, persisted } = await recommendContent(studentId, state);
+    res.json({ recommendations, persisted });
+  } catch (e) {
+    console.error('[Adaptive recommendations]', e.message);
+    res.status(500).json({ error: 'Error generating recommendations' });
   }
 });
 
