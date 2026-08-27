@@ -59,7 +59,7 @@ DO $$ BEGIN
   ) THEN
     CREATE POLICY mastery_own_select ON student_competency_mastery
       FOR SELECT USING (
-        student_id IN (SELECT id FROM students WHERE user_id = auth.uid())
+        student_id IN (SELECT id FROM students WHERE auth_id = auth.uid())
       );
   END IF;
 END $$;
@@ -70,7 +70,7 @@ DO $$ BEGIN
   ) THEN
     CREATE POLICY mastery_own_upsert ON student_competency_mastery
       FOR ALL USING (
-        student_id IN (SELECT id FROM students WHERE user_id = auth.uid())
+        student_id IN (SELECT id FROM students WHERE auth_id = auth.uid())
       );
   END IF;
 END $$;
