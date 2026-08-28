@@ -1,6 +1,8 @@
 import SupabaseLoginForm from "./SupabaseLoginForm";
 import SupabaseSignUpForm from "./SupabaseSignUpForm";
 import { useState } from "react";
+import { track } from "../lib/analytics";
+import { EVENTS } from "../lib/analyticsEvents";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import FloatingParticles from "./FloatingParticles";
@@ -110,6 +112,7 @@ const SmartBoardSignUpPage = () => {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error al crear cuenta");
+      track(EVENTS.USER_REGISTERED, { role: "parent" });
       setParentSuccess(
         data.message || "Cuenta creada. Ya puedes iniciar sesión.",
       );

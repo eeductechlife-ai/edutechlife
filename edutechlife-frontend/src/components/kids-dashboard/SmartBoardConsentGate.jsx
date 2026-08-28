@@ -5,6 +5,8 @@ import { Play, Clock, TrendingUp } from "lucide-react";
 import { useAuthIdentity } from "../../hooks/useAuthIdentity";
 import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { supabase } from "../../lib/supabase";
+import { track } from "../../lib/analytics";
+import { EVENTS } from "../../lib/analyticsEvents";
 
 /**
  * SmartBoardSessionStart: Begin work session
@@ -64,6 +66,8 @@ const SmartBoardConsentGate = () => {
           payload: broadcastData,
         })
         .catch(() => console.warn("Realtime broadcast failed"));
+
+      track(EVENTS.SESSION_START, { student_id: userId });
 
       // Redirect to SmartBoard
       const returnTo = searchParams.get("returnTo") || "/smartboard";

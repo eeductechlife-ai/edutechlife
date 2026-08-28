@@ -6,14 +6,19 @@ import {
   PREMIUM_TABS,
   TOP_BAR_LABELS,
   PREMIUM_FEATURES,
+  FEATURE_FLAGS,
 } from "../kidsDashboardConfig";
 
 describe("kidsDashboardConfig", () => {
   it("defines exactly 5 primary categories", () => {
     expect(CATEGORIES).toHaveLength(5);
-    expect(CATEGORIES.map((c) => c.id).sort()).toEqual(
-      ["explore", "home", "learn", "practice", "progress"],
-    );
+    expect(CATEGORIES.map((c) => c.id).sort()).toEqual([
+      "explore",
+      "home",
+      "learn",
+      "practice",
+      "progress",
+    ]);
   });
 
   it("every category exposes an Icon component", () => {
@@ -62,5 +67,28 @@ describe("kidsDashboardConfig", () => {
         expect(feature.description).toBeTruthy();
       }
     }
+  });
+
+  describe("FEATURE_FLAGS", () => {
+    it("has expected shipped flags as true", () => {
+      expect(FEATURE_FLAGS.adaptive_engine).toBe(true);
+      expect(FEATURE_FLAGS.skill_passport).toBe(true);
+      expect(FEATURE_FLAGS.future_explorer).toBe(true);
+      expect(FEATURE_FLAGS.early_warning).toBe(true);
+    });
+
+    it("has expected dark flags as false", () => {
+      expect(FEATURE_FLAGS.parent_intelligence_v2).toBe(false);
+      expect(FEATURE_FLAGS.gamification_v2).toBe(false);
+      expect(FEATURE_FLAGS.dani_orchestrator_v2).toBe(false);
+      expect(FEATURE_FLAGS.smart_profile).toBe(false);
+      expect(FEATURE_FLAGS.learning_graph).toBe(false);
+    });
+
+    it("all values are boolean", () => {
+      Object.values(FEATURE_FLAGS).forEach((v) => {
+        expect(typeof v).toBe("boolean");
+      });
+    });
   });
 });

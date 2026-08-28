@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { callDeepseek } from "../../../utils/api";
+import { callDeepseekSmartboard } from "../../../utils/api";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 import {
   getCurriculumPromptText,
@@ -131,10 +131,9 @@ REGLAS:
     const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     try {
-      const res = await callDeepseek(
+      const res = await callDeepseekSmartboard(
         [{ role: "user", content: prompt }],
         { temperature: 0.7, maxTokens: 2000, isJson: true },
-        controller.signal,
       );
       const parsed = typeof res === "string" ? JSON.parse(res) : res;
       if (!parsed?.weeks?.length) throw new Error("Respuesta incompleta");

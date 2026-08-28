@@ -149,9 +149,18 @@ export function parseJsonResult(raw) {
     let esc = false;
     for (const ch of fragment) {
       repaired += ch;
-      if (esc) { esc = false; continue; }
-      if (ch === "\\" && inStr) { esc = true; continue; }
-      if (ch === '"') { inStr = !inStr; continue; }
+      if (esc) {
+        esc = false;
+        continue;
+      }
+      if (ch === "\\" && inStr) {
+        esc = true;
+        continue;
+      }
+      if (ch === '"') {
+        inStr = !inStr;
+        continue;
+      }
       if (inStr) continue;
       if (ch === "{") stack.push("}");
       else if (ch === "[") stack.push("]");
@@ -260,7 +269,10 @@ export async function callDeepseek(
     const result = payload.isJson ? parseJsonResult(data.result) : data.result;
 
     if (payload.isJson && result === null) {
-      console.warn("[callDeepseek] JSON parse failed. Raw response:", (data.result || "").substring(0, 500));
+      console.warn(
+        "[callDeepseek] JSON parse failed. Raw response:",
+        (data.result || "").substring(0, 500),
+      );
       const err = new Error("La respuesta de la IA no fue un JSON válido.");
       err.raw = data.result || "";
       throw err;
@@ -284,6 +296,76 @@ export async function callDeepseek(
       throw new Error("El servidor no respondió a tiempo. Intenta de nuevo.");
     }
     console.warn("⚠️ API connection error:", e.message);
+    throw e;
+  }
+}
+
+/**
+ * SmartBoard-specific AI call — routes through /api/smartboard/ai which enforces
+ * requireAuth + requireVerifiedParentalConsent. Use this instead of callDeepseek()
+ * for all AI calls made from within the SmartBoard kids dashboard.
+ */
+export async function callDeepseekSmartboard(messages, opts = {}) {
+  const url = `${API_BASE_URL}/api/smartboard/ai`;
+  const token = getAuthToken();
+  if (!token) throw new Error("No auth token — user must be logged in");
+
+  const payload = {
+    messages,
+    isJson: opts.isJson ?? false,
+    temperature: opts.temperature ?? 0.7,
+    maxTokens: opts.maxTokens ?? 2000,
+  };
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(
+    () => controller.abort(new DOMException("Timeout agotado", "TimeoutError")),
+    30000,
+  );
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+      mode: "cors",
+      credentials: "omit",
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const body = await response.json().catch(() => null);
+      const detail = body?.error || response.statusText;
+      throw new Error(
+        `API responded with status ${response.status}${detail ? `: ${detail}` : ""}`,
+      );
+    }
+
+    const data = await response.json();
+    if (data.error) throw new Error(data.error);
+
+    if (opts.isJson) {
+      const parsed = parseJsonResult(data.result);
+      if (parsed === null) {
+        const err = new Error("La respuesta de la IA no fue un JSON válido.");
+        err.raw = data.result || "";
+        throw err;
+      }
+      return parsed;
+    }
+
+    return data.result;
+  } catch (e) {
+    clearTimeout(timeoutId);
+    if (e.name === "AbortError" || e.name === "TimeoutError") {
+      throw new Error("El servidor no respondió a tiempo. Intenta de nuevo.");
+    }
     throw e;
   }
 }
@@ -503,4 +585,28 @@ export async function callDaniChatStream(messages, opts = {}, onChunk) {
   const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
 
   return streamFetch(url, payload, onChunk, false, opts.signal, authHeaders);
+}
+
+/**
+ * Dani 2.0 — orchestrated chat endpoint.
+ * Frontend sends minimal payload; backend builds full context from DB.
+ * @param {{ message, studentId, socraticMode?, documentContext?, history? }} payload
+ * @param {Object} opts - { token, signal }
+ * @param {Function} onChunk - callback for each streamed chunk
+ */
+export async function callDaniOrchestrator(payload, opts = {}, onChunk) {
+  const url = `${API_BASE_URL}/api/smartboard/dani/chat`;
+  let token = opts.token;
+  if (!token) {
+    try {
+      token = sessionStorage.getItem("auth_token");
+    } catch {
+      token = null;
+    }
+  }
+  if (!token)
+    throw new Error("No auth token available — user must be logged in");
+  return streamFetch(url, payload, onChunk, false, opts.signal, {
+    Authorization: `Bearer ${token}`,
+  });
 }

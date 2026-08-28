@@ -6,7 +6,7 @@ const { requireAuth } = require('../middleware/auth');
 const { requireVerifiedParentalConsent } = require('../middleware/parentalConsent');
 const { detectCrisis } = require('../services/crisisDetection');
 const { sendCrisisAlert, logCrisisIncident, sendEmail, sendConsentVerificationEmail } = require('../services/emailService');
-const { buildWeeklySummary, renderWeeklyEmail } = require('../services/weeklyReport');
+const { buildWeeklySummary, renderWeeklyEmail, aggregateMasterySummary } = require('../services/weeklyReport');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -698,9 +698,20 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
 
     const summary = buildWeeklySummary(row?.data || {});
 
+    // 1b. Mastery data from adaptive engine (optional — non-blocking)
+    let masterySummary = null;
+    try {
+      const masteryRows = await getStudentMastery(userId);
+      if (masteryRows.length > 0) {
+        masterySummary = aggregateMasterySummary(masteryRows);
+      }
+    } catch (masteryErr) {
+      console.warn('Weekly report: mastery data unavailable', masteryErr.message);
+    }
+
     // Modo preview: útil para el frontend sin disparar correo
     if (preview) {
-      return res.status(200).json({ summary });
+      return res.status(200).json({ summary, mastery: masterySummary });
     }
 
     // 2. Email del padre desde el consentimiento parental
@@ -723,6 +734,7 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
     const email = renderWeeklyEmail(summary, {
       studentName,
       dashboardUrl: 'https://edutechlife.co/smartboard',
+      mastery: masterySummary,
     });
 
     const sent = await sendEmail(
@@ -741,6 +753,7 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
       to: consent.parent_email,
       mode: sent.mode,
       summary,
+      mastery: masterySummary,
     });
   } catch (e) {
     console.error('Error generando reporte semanal:', e);
@@ -1397,6 +1410,406 @@ router.post('/student-grades', requireAuth, async (req, res) => {
   } catch (e) {
     console.error('student-grades post error:', e.message);
     res.status(500).json({ error: 'Error interno' });
+  }
+});
+
+/**
+ * POST /api/smartboard/ai
+ * General AI endpoint for SmartBoard components (OralExam, Podcast, ImprovementPlan, etc.)
+ * Requires auth + verified parental consent. Accepts full messages array like /api/chat.
+ */
+router.post('/ai', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+  const { messages, isJson, temperature, maxTokens } = req.body;
+
+  const validationError = validateMessages(messages);
+  if (validationError) return res.status(400).json({ error: validationError });
+
+  if (!DEEPSEEK_API_KEY) {
+    return res.status(500).json({ error: 'API key not configured on server' });
+  }
+
+  try {
+    const data = await chat(DEEPSEEK_API_KEY, {
+      messages,
+      isJson: isJson ?? false,
+      temperature: temperature ?? 0.7,
+      maxTokens: maxTokens ?? 2000,
+    });
+
+    if (data.error) return res.status(400).json({ error: data.error.message });
+
+    const text = data.choices?.[0]?.message?.content;
+    if (!text) return res.status(500).json({ error: 'No response from API' });
+
+    res.json({ result: text });
+  } catch (e) {
+    console.error('[SmartBoard AI] Error:', e.message);
+    const status = e.status;
+    if (status === 402) return res.status(402).json({ error: 'API sin saldo disponible.' });
+    if (status === 401) return res.status(401).json({ error: 'API key inválida o expirada.' });
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// ── Sprint 6: Dani 2.0 — Orchestrated Chat ───────────────────────────────────
+const { loadStudentContext, buildSystemPrompt: buildOrchestratorPrompt } = require('../services/daniOrchestrator');
+const { validateInput, detectEmotionalState, sanitizeOutput } = require('../services/aiSafetyGateway');
+
+/**
+ * POST /api/smartboard/dani/chat
+ * Orchestrated Dani endpoint. Frontend sends minimal payload; backend builds full context.
+ * Body: { message, studentId, socraticMode?, documentContext?, history? }
+ */
+router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+  const { message, studentId, socraticMode = false, documentContext = null, history = [] } = req.body;
+
+  // 1. Safety gateway — input validation
+  const { ok, reason, sanitized } = validateInput(message);
+  if (!ok) {
+    return res.status(400).json({ error: reason === 'empty_input' ? 'Mensaje vacío' : 'Contenido no permitido' });
+  }
+
+  if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
+  if (!DEEPSEEK_API_KEY) return res.status(500).json({ error: 'API key no configurada' });
+
+  // 2. Detect emotional state from user message (non-blocking metadata)
+  const emotional = detectEmotionalState(sanitized);
+
+  // 3. Load student context from DB (orchestrator)
+  let ctx;
+  try {
+    ctx = await loadStudentContext(studentId);
+  } catch (e) {
+    console.error('[DaniOrchestrator] Context load failed:', e.message);
+    ctx = { profile: null, mastery: [], memory: null, activePlan: null, todaySchedule: [] };
+  }
+
+  // 4. Build system prompt
+  const systemPrompt = buildOrchestratorPrompt(ctx, { socraticMode, documentContext });
+
+  // 5. Assemble messages array
+  const safeHistory = Array.isArray(history)
+    ? history.slice(-12).filter((m) => m.role && typeof m.content === 'string')
+    : [];
+
+  const msgs = [
+    { role: 'system', content: systemPrompt },
+    ...safeHistory,
+    { role: 'user', content: sanitized },
+  ];
+
+  // 6. Crisis detection (existing service)
+  const crisisDetection = detectCrisis(sanitized, 'es');
+
+  let streamClosed = false;
+  req.on('close', () => { streamClosed = true; res.end(); });
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  // 7. Stream emotional state metadata first
+  if (emotional.state !== 'neutral' || emotional.dependencyRisk) {
+    res.write(`data: ${JSON.stringify({ emotionalState: emotional.state, dependencyRisk: emotional.dependencyRisk })}\n\n`);
+  }
+
+  // 8. Crisis escalation (same as existing /chat/stream)
+  if (crisisDetection.level === 'high') {
+    try {
+      const { data: consentData } = await supabase
+        .from('parent_consents')
+        .select('parent_email, student_age')
+        .eq('student_id', req.userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+      if (consentData?.parent_email) {
+        await sendCrisisAlert(consentData.parent_email, 'Estudiante', consentData.student_age, sanitized, 'high');
+        await logCrisisIncident(supabase, req.userId, consentData.student_age, sanitized, 'high', consentData.parent_email);
+      }
+    } catch (e) {
+      console.error('[Dani2 Crisis]', e.message);
+    }
+  }
+
+  try {
+    await chatStream(DEEPSEEK_API_KEY, { messages: msgs, temperature: 0.7, maxTokens: 800 }, (chunk) => {
+      if (streamClosed) return;
+      res.write(`data: ${JSON.stringify({ chunk: sanitizeOutput(chunk) })}\n\n`);
+    });
+
+    if (streamClosed) return;
+    if (crisisDetection.level !== 'none') {
+      res.write(`data: ${JSON.stringify({ crisisAlert: crisisDetection.level })}\n\n`);
+    }
+    res.write('data: [DONE]\n\n');
+    res.end();
+  } catch (e) {
+    if (streamClosed) return;
+    console.error('[Dani2 Stream Error]', e.message);
+    const status = e.status;
+    if (status === 402) return res.status(402).json({ error: 'API sin saldo.' });
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+// ── Sprint 4: Adaptive Learning Engine ───────────────────────────────────────
+const {
+  getStudentState,
+  generateRecommendations,
+  recommendContent,
+  getNextBestAction,
+  generateDailyPlan,
+  generateWeeklyPlan,
+  saveLearningPlan,
+} = require('../services/adaptiveLearning');
+
+// GET /api/smartboard/adaptive/state?studentId=uuid
+router.get('/adaptive/state', requireAuth, async (req, res) => {
+  try {
+    const { studentId } = req.query;
+    if (!studentId) return res.status(400).json({ error: 'studentId required' });
+    const state = await getStudentState(studentId);
+    res.json({ state });
+  } catch (e) {
+    console.error('[Adaptive state]', e.message);
+    res.status(500).json({ error: 'Error getting student state' });
+  }
+});
+
+// GET /api/smartboard/adaptive/next-action?studentId=uuid
+router.get('/adaptive/next-action', requireAuth, async (req, res) => {
+  try {
+    const { studentId } = req.query;
+    if (!studentId) return res.status(400).json({ error: 'studentId required' });
+    const state = await getStudentState(studentId);
+    res.json({ action: getNextBestAction(state), recommendations: generateRecommendations(state) });
+  } catch (e) {
+    console.error('[Adaptive next-action]', e.message);
+    res.status(500).json({ error: 'Error getting next action' });
+  }
+});
+
+// POST /api/smartboard/adaptive/daily-plan
+// Body: { studentId, availableMinutes }
+router.post('/adaptive/daily-plan', requireAuth, async (req, res) => {
+  try {
+    const { studentId, availableMinutes } = req.body;
+    if (!studentId) return res.status(400).json({ error: 'studentId required' });
+    const mins = Math.min(Math.max(parseInt(availableMinutes, 10) || 20, 5), 60);
+    const state = await getStudentState(studentId);
+    const plan = generateDailyPlan(state, mins);
+    await saveLearningPlan(studentId, plan).catch(() => {});
+    res.json({ plan });
+  } catch (e) {
+    console.error('[Adaptive daily-plan]', e.message);
+    res.status(500).json({ error: 'Error generating daily plan' });
+  }
+});
+
+// POST /api/smartboard/adaptive/weekly-plan
+// Body: { studentId }
+router.post('/adaptive/weekly-plan', requireAuth, async (req, res) => {
+  try {
+    const { studentId } = req.body;
+    if (!studentId) return res.status(400).json({ error: 'studentId required' });
+    const state = await getStudentState(studentId);
+    const plan = generateWeeklyPlan(state);
+    await saveLearningPlan(studentId, plan).catch(() => {});
+    res.json({ plan });
+  } catch (e) {
+    console.error('[Adaptive weekly-plan]', e.message);
+    res.status(500).json({ error: 'Error generating weekly plan' });
+  }
+});
+
+// POST /api/smartboard/adaptive/recommendations
+// Body: { studentId }  → generates content-backed recommendations, persists them,
+// and returns the current pending queue for the student.
+router.post('/adaptive/recommendations', requireAuth, async (req, res) => {
+  try {
+    const { studentId } = req.body;
+    if (!studentId) return res.status(400).json({ error: 'studentId required' });
+    const state = await getStudentState(studentId);
+    const { recommendations, persisted } = await recommendContent(studentId, state);
+    res.json({ recommendations, persisted });
+  } catch (e) {
+    console.error('[Adaptive recommendations]', e.message);
+    res.status(500).json({ error: 'Error generating recommendations' });
+  }
+});
+
+// ── Learning Graph — Competency Mastery ──────────────────────────────────────
+const {
+  updateCompetencyMastery,
+  batchUpdateMastery,
+  getStudentMastery,
+  getCompetencyIdsForSubject,
+} = require('../services/competencyMastery');
+
+// GET /api/smartboard/adaptive/mastery?subject=matematicas
+router.get('/adaptive/mastery', requireAuth, async (req, res) => {
+  try {
+    const { studentId, subject } = req.query;
+    if (!studentId) return res.status(400).json({ error: 'studentId required' });
+    const records = await getStudentMastery(studentId, subject || undefined);
+    res.json({ mastery: records });
+  } catch (e) {
+    console.error('[Mastery GET]', e.message);
+    res.status(500).json({ error: 'Error retrieving mastery data' });
+  }
+});
+
+// POST /api/smartboard/adaptive/mastery
+// Body: { studentId, competencyId, score } OR { studentId, entries: [{competencyId, score}] }
+router.post('/adaptive/mastery', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+  try {
+    const { studentId, competencyId, score, entries } = req.body;
+    if (!studentId) return res.status(400).json({ error: 'studentId required' });
+
+    if (Array.isArray(entries)) {
+      if (entries.length === 0) return res.status(400).json({ error: 'entries array empty' });
+      if (entries.length > 20) return res.status(400).json({ error: 'max 20 entries per request' });
+      const results = await batchUpdateMastery(studentId, entries);
+      return res.json({ results });
+    }
+
+    if (!competencyId || score === undefined) {
+      return res.status(400).json({ error: 'competencyId and score required' });
+    }
+    if (typeof score !== 'number' || score < 0 || score > 1) {
+      return res.status(400).json({ error: 'score must be a number between 0 and 1' });
+    }
+
+    const result = await updateCompetencyMastery(studentId, competencyId, score);
+    res.json(result);
+  } catch (e) {
+    console.error('[Mastery POST]', e.message);
+    res.status(500).json({ error: 'Error updating mastery' });
+  }
+});
+
+// ── Sprint 7: Parent Intelligence ────────────────────────────────────────────
+const { generateParentInsights, buildLearningGraphSummary } = require('../services/parentInsights');
+
+/**
+ * GET /api/smartboard/parent/insights?studentId=uuid
+ * Returns 3-5 actionable insights for the parent from the Learning Graph.
+ */
+router.get('/parent/insights', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+  const { studentId } = req.query;
+  if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
+  try {
+    const insights = await generateParentInsights(studentId);
+    res.json({ insights });
+  } catch (e) {
+    console.error('[Parent Insights]', e.message);
+    res.status(500).json({ error: 'Error generando insights' });
+  }
+});
+
+/**
+ * GET /api/smartboard/parent/learning-graph?studentId=uuid
+ * Returns mastery-by-subject summary for parent dashboard.
+ */
+router.get('/parent/learning-graph', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+  const { studentId } = req.query;
+  if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
+  try {
+    const summary = await buildLearningGraphSummary(studentId);
+    res.json({ summary });
+  } catch (e) {
+    console.error('[Learning Graph Summary]', e.message);
+    res.status(500).json({ error: 'Error generando resumen' });
+  }
+});
+
+// ── Sprint 8: Early Warning System ───────────────────────────────────────────
+const { runAllDetectors, resolveWarning } = require('../services/earlyWarning');
+
+/**
+ * GET /api/smartboard/adaptive/warnings?studentId=uuid
+ * Runs all 4 detectors and returns active (unresolved) warnings.
+ */
+router.get('/adaptive/warnings', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+  const { studentId } = req.query;
+  if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
+  try {
+    const warnings = await runAllDetectors(studentId);
+    res.json({ warnings });
+  } catch (e) {
+    console.error('[EarlyWarning]', e.message);
+    res.status(500).json({ error: 'Error ejecutando detectores' });
+  }
+});
+
+/**
+ * POST /api/smartboard/adaptive/warnings/:id/resolve
+ * Mark a warning as resolved.
+ */
+router.post('/adaptive/warnings/:id/resolve', requireAuth, async (req, res) => {
+  try {
+    await resolveWarning(req.params.id);
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: 'Error resolviendo alerta' });
+  }
+});
+
+// ── Sprint 9: Gamification 2.0 ───────────────────────────────────────────────
+const { getStudentMissions, recordActivity } = require('../services/missionEngine');
+const { checkAndUnlockBadges, getStudentBadges } = require('../services/badgeEngine');
+
+// GET /api/smartboard/gamification/missions?studentId=uuid
+router.get('/gamification/missions', requireAuth, async (req, res) => {
+  const { studentId } = req.query;
+  if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
+  try {
+    const missions = await getStudentMissions(studentId);
+    res.json({ missions });
+  } catch (e) {
+    console.error('[MissionEngine]', e.message);
+    res.status(500).json({ error: 'Error obteniendo misiones' });
+  }
+});
+
+// POST /api/smartboard/gamification/activity
+// Body: { studentId, activityType, meta? }
+router.post('/gamification/activity', requireAuth, async (req, res) => {
+  const { studentId, activityType, meta = {} } = req.body;
+  if (!studentId || !activityType) return res.status(400).json({ error: 'studentId y activityType requeridos' });
+  try {
+    await recordActivity(studentId, activityType, meta);
+    const newBadges = await checkAndUnlockBadges(studentId);
+    res.json({ ok: true, newBadges });
+  } catch (e) {
+    console.error('[Gamification Activity]', e.message);
+    res.status(500).json({ error: 'Error registrando actividad' });
+  }
+});
+
+// GET /api/smartboard/gamification/badges?studentId=uuid
+router.get('/gamification/badges', requireAuth, async (req, res) => {
+  const { studentId } = req.query;
+  if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
+  try {
+    const badges = await getStudentBadges(studentId);
+    res.json({ badges });
+  } catch (e) {
+    console.error('[BadgeEngine]', e.message);
+    res.status(500).json({ error: 'Error obteniendo badges' });
+  }
+});
+
+// GET /api/smartboard/competencies?subject=matematicas&grade=7
+router.get('/competencies', requireAuth, async (req, res) => {
+  try {
+    const { subject, grade } = req.query;
+    if (!subject || !grade) return res.status(400).json({ error: 'subject and grade required' });
+    const ids = getCompetencyIdsForSubject(subject, parseInt(grade, 10));
+    res.json({ competencyIds: ids });
+  } catch (e) {
+    res.status(500).json({ error: 'Error getting competencies' });
   }
 });
 

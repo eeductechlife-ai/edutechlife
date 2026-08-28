@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { track } from "../../lib/analytics";
+import { EVENTS } from "../../lib/analyticsEvents";
 
 // ==========================================
 // VAK Diagnostic Enhanced - 20 Questions
@@ -138,6 +140,12 @@ const VAKDiagnosticEnhanced = ({ vakResult: propVakResult, onComplete }) => {
   const [answers, setAnswers] = useState([]);
   const [isCompleted, setIsCompleted] = useState(!!vakResult);
 
+  // Fire diagnostic_started once per fresh diagnostic (not when re-viewing a result)
+  useEffect(() => {
+    if (!vakResult) track(EVENTS.DIAGNOSTIC_STARTED, { type: "vak" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleAnswer = useCallback(
     (type) => {
       const newAnswers = [...answers, type];
@@ -170,6 +178,10 @@ const VAKDiagnosticEnhanced = ({ vakResult: propVakResult, onComplete }) => {
         };
 
         setIsCompleted(true);
+        track(EVENTS.DIAGNOSTIC_COMPLETED, {
+          type: "vak",
+          predominant_style: predominantStyle,
+        });
         onComplete(vakResultData);
       }
     },

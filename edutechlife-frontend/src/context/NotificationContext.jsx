@@ -17,9 +17,25 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Merge local_ notifications (localStorage fallback) with remote rows, newest first.
+  const mergeLocalNotifications = (remote) => {
+    let local = [];
+    try {
+      local = JSON.parse(
+        localStorage.getItem("ialab_notifications") || "[]",
+      ).filter((n) => n?.id?.startsWith("local_"));
+    } catch {
+      local = [];
+    }
+    if (!local.length) return remote;
+    return [...local, ...remote].sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at),
+    );
+  };
+
   const fetchNotifications = useCallback(async () => {
     if (!userId) {
-      setNotifications([]);
+      setNotifications(mergeLocalNotifications([]));
       setLoading(false);
       return;
     }
@@ -52,11 +68,13 @@ export const NotificationProvider = ({ children }) => {
         }
         throw error;
       }
-      setNotifications(data || []);
+      // Merge locally-stored notifications (created via the localStorage fallback,
+      // e.g. when Supabase is unreachable) so they aren't dropped by the remote fetch.
+      setNotifications(mergeLocalNotifications(data || []));
     } catch (err) {
       const msg = err?.message || err?.toString() || "Unknown error";
       console.error("[NOTIFICATIONS] Error fetching:", msg);
-      setNotifications([]);
+      setNotifications(mergeLocalNotifications([]));
     } finally {
       setLoading(false);
     }
@@ -126,7 +144,10 @@ export const NotificationProvider = ({ children }) => {
             }
           });
       } catch (err) {
-        console.warn("[NOTIFICATIONS] Realtime setup failed, using polling:", err?.message);
+        console.warn(
+          "[NOTIFICATIONS] Realtime setup failed, using polling:",
+          err?.message,
+        );
         if (mounted) {
           pollingTimer = setInterval(fetchNotifications, 30000);
         }
@@ -319,6 +340,34 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
+  // localStorage fallback used when Supabase errors, is unreachable, or times out.
+  const saveLocalNotification = ({ type, title, message, metadata }) => {
+    const localNotif = {
+      id: `local_${Date.now()}`,
+      user_id: userId,
+      type,
+      title,
+      message,
+      metadata,
+      is_read: false,
+      created_at: new Date().toISOString(),
+    };
+    try {
+      const local = JSON.parse(
+        localStorage.getItem("ialab_notifications") || "[]",
+      );
+      local.unshift(localNotif);
+      localStorage.setItem(
+        "ialab_notifications",
+        JSON.stringify(local.slice(0, 50)),
+      );
+    } catch {
+      /* quota — still surface in-memory below */
+    }
+    setNotifications((prev) => [localNotif, ...prev]);
+    return localNotif;
+  };
+
   const createNotification = async ({
     type,
     title,
@@ -327,19 +376,29 @@ export const NotificationProvider = ({ children }) => {
   }) => {
     if (!userId) return;
 
-    try {
-      const { data, error } = await supabase
-        .from("notifications")
-        .insert({
-          user_id: userId,
-          type,
-          title,
-          message,
-          metadata,
-        })
-        .select("*")
-        .single();
+    // Race the insert against a timeout so an unreachable/slow Supabase never
+    // hangs the caller forever — fall back to localStorage instead.
+    const TIMEOUT_MS = 5000;
+    const insert = supabase
+      .from("notifications")
+      .insert({ user_id: userId, type, title, message, metadata })
+      .select("*")
+      .single();
+    const timeout = new Promise((resolve) =>
+      setTimeout(() => resolve({ __timedOut: true }), TIMEOUT_MS),
+    );
 
+    try {
+      const result = await Promise.race([insert, timeout]);
+
+      if (result?.__timedOut) {
+        console.warn(
+          "[NOTIFICATIONS] Supabase insert timed out, using localStorage fallback",
+        );
+        return saveLocalNotification({ type, title, message, metadata });
+      }
+
+      const { data, error } = result;
       if (error) {
         if (
           error.code === "42P01" ||
@@ -354,26 +413,7 @@ export const NotificationProvider = ({ children }) => {
             error.code,
             error.message,
           );
-          const localNotif = {
-            id: `local_${Date.now()}`,
-            user_id: userId,
-            type,
-            title,
-            message,
-            metadata,
-            is_read: false,
-            created_at: new Date().toISOString(),
-          };
-          const local = JSON.parse(
-            localStorage.getItem("ialab_notifications") || "[]",
-          );
-          local.unshift(localNotif);
-          localStorage.setItem(
-            "ialab_notifications",
-            JSON.stringify(local.slice(0, 50)),
-          );
-          setNotifications((prev) => [localNotif, ...prev]);
-          return localNotif;
+          return saveLocalNotification({ type, title, message, metadata });
         }
         throw error;
       }
@@ -381,7 +421,8 @@ export const NotificationProvider = ({ children }) => {
     } catch (err) {
       const msg = err?.message || err?.toString() || "Unknown error";
       console.error("[NOTIFICATIONS] Error creating:", msg);
-      return null;
+      // Last resort: never lose the notification on an unexpected failure.
+      return saveLocalNotification({ type, title, message, metadata });
     }
   };
 
