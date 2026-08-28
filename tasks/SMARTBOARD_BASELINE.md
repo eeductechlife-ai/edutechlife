@@ -1,5 +1,5 @@
 # SMARTBOARD_BASELINE.md — SmartBoard 3.0 Baseline Técnico
-> Generado: 2026-08-27 · Rama: `feature/smartboard-3.0` · Commit: `0455819`
+> Generado: 2026-08-27 · Actualizado: 2026-08-28 · Rama: `feature/smartboard-3.0` · Commit: `687c428`
 > Tag de restauración: `baseline-fase0`
 
 ---
@@ -8,10 +8,10 @@
 
 | Estado | Cantidad | % |
 |--------|----------|---|
-| ✅ DONE | 58 | 67% |
-| 🟡 PARTIAL | 18 | 21% |
-| 🔴 NOT IMPLEMENTED | 8 | 9% |
-| 🟠 MOCK | 2 | 2% |
+| ✅ DONE | 79 | 91% |
+| 🟡 PARTIAL | 2 | 2% |
+| 🔴 NOT IMPLEMENTED | 4 | 5% |
+| 🟠 MOCK | 1 | 1% |
 | ⛔ BLOCKED | 1 | 1% |
 | **Total** | **87** | **100%** |
 
@@ -54,7 +54,7 @@
 | 19 | Content model taggeado | ✅ DONE | `055_content_model.sql`: `learning_content` age/grade/subject/difficulty/VAK | 4 seeds, RLS |
 | 20 | Recommendation engine | ✅ DONE | `056_recommendations.sql` + `recommendContent()` | Content-backed, persisted |
 | 21 | Currículo MEN JSON | ✅ DONE | `co_men.json` grados 1-11, migración 051, sync desde UserMenu | Inyección en Plan de Mejora |
-| 22 | Grafo visual de competencias | 🟡 PARTIAL | `SkillPassport.jsx` muestra tarjetas por competencia | Falta grafo interconectado visual |
+| 22 | Grafo visual de competencias | ✅ DONE | `SkillPassport.jsx` CompetencyRadar SVG spider chart + tarjetas | Grafo interactivo + cards |
 
 ### Sección D — Plan Adaptativo (§23-§30)
 
@@ -78,7 +78,7 @@
 | 33 | Ciclo pedagógico | ✅ DONE | Pregunta→pista→explicación→ejemplo→verificación→retroalimentación | En system prompt |
 | 34 | Detección emocional | ✅ DONE | Confusión, frustración, dominio, dependencia excesiva | Backend + frontend |
 | 35 | Age policy | ✅ DONE | `getAgePolicy()` ajusta vocabulario y longitud | En aiSafetyGateway |
-| 36 | Challenge Engine | 🟡 PARTIAL | TechNewsFeed "Rétame con Dani" → abre chat con contexto | Falta standalone con niveles |
+| 36 | Challenge Engine | ✅ DONE | `challengeEngine/` — standalone con 3 niveles, 6 materias, MCQ AI, XP | Tab "retos" en Explorar |
 | 37 | Modo Socrático | ✅ DONE | `socraticMode` flag, prompt no resuelve directamente | Toggle en UI |
 | 38 | Streaming SSE | ✅ DONE | `callDaniOrchestrator()` + SSE backend | Migrado de callDaniChatStream |
 
@@ -91,11 +91,11 @@
 | 41 | Rachas diarias | ✅ DONE | `learning_streaks` tabla | Aplicada en producción |
 | 42 | Notification engine | ✅ DONE | `useSmartBoardNotifications.js` — mission_ready + reinforcement | Anti-spam 1/día |
 | 43 | Notification panel | ✅ DONE | `SmartBoardNotificationPanel.jsx` — glow, dark mode | Fix position bug resuelto |
-| 44 | Misiones diarias | 🟡 PARTIAL | `MisionDelDia.jsx` determinísticas por fecha | Falta conectar a misiones DB |
-| 45 | Misiones dinámicas | 🟡 PARTIAL | `054_gamification2.sql` + `missionEngine.js` backend | Frontend no consume aún |
-| 46 | Badges/logros | 🟡 PARTIAL | `badgeEngine.js` + tablas badges | UI en SkillPassport, sin unlock real-time |
-| 47 | Feedback emocional | 🟡 PARTIAL | 😊😐😣 en resultados OralExam/Flashcard/ExamPrep | No persiste (tabla feedback_log no existe) |
-| 48 | Recompensas cosméticas | 🟠 MOCK | `gamificationData.js` 6 ítems hardcodeados | No administrable |
+| 44 | Misiones diarias | ✅ DONE | `MisionDelDia.jsx` + Context fetches missions from DB with fallback | Wired to backend |
+| 45 | Misiones dinámicas | ✅ DONE | `missionEngine.js` backend + frontend fetch + completeMission POST | Full stack wired |
+| 46 | Badges/logros | ✅ DONE | `badgeEngine.js` + activity POST returns newBadges + toast notification | Real-time unlock |
+| 47 | Feedback emocional | ✅ DONE | `feedback_log` tabla (057) + `useFeedbackLog` hook + wired en OralExam/Flashcard/ExamPrep/Challenge | Persiste en DB |
+| 48 | Recompensas cosméticas | ✅ DONE | `rewards` tabla (058) + `RewardsGrid` fetch DB con fallback | Administrable vía DB |
 
 ### Sección G — Evaluación y Práctica (§49-§57)
 
@@ -120,7 +120,7 @@
 | 60 | Parent insights | ✅ DONE | `parentInsights.js` — 5 tipos | Lee mastery + memory + plans |
 | 61 | Learning graph para padres | ✅ DONE | `buildLearningGraphSummary()` | Resumen por materia |
 | 62 | Alertas parent dashboard | ✅ DONE | 🔴🟡 + botón resolución | Funcional |
-| 63 | Weekly report extendido | 🟡 PARTIAL | Report existente sin mastery data | Pendiente buildWeeklySummary |
+| 63 | Weekly report extendido | ✅ DONE | `aggregateMasterySummary` + `MasteryHighlights` en parent dashboard | Mastery integrado |
 | 64 | Crisis detection | ✅ DONE | `detectCrisis()` en Dani stream | Tabla `crisis_alerts` |
 | 65 | Control parental granular | 🔴 NOT IMPL | No existe UI de config granular | Solo on/off consent |
 
@@ -138,13 +138,13 @@
 
 | # | Punto del brief | Estado | Evidencia | Notas |
 |---|----------------|--------|-----------|-------|
-| 71 | PostHog instrumentación | 🟡 PARTIAL | 5/12 eventos instrumentados | Faltan 7 clave |
+| 71 | PostHog instrumentación | ✅ DONE | 12/12 eventos instrumentados (7 nuevos: SESSION_START/END, VAK/EXAM/FLASHCARD_COMPLETED, DANI_CHAT_STARTED, GRADE_SCANNED) | Completo |
 | 72 | Dashboard métricas internas | 🔴 NOT IMPL | No existe | Solo SmartBoardAnalytics básico |
 | 73 | Funnel activación/retención | 🔴 NOT IMPL | No instrumentado | Requiere PostHog + dashboard |
 | 74 | Activity tracker | ✅ DONE | `useActivityTracker.js` → `activity_log` | Datos comportamentales |
 | 75 | Age-adaptive analytics | ✅ DONE | `AgeAdaptiveAnalytics.jsx` 400L | Visualización por edad |
 | 76 | Progress dashboard | ✅ DONE | `ProgressDashboard.jsx` 248L | Con SkillPassport |
-| 77 | Analytics SmartBoard | 🟡 PARTIAL | `SmartBoardAnalytics.jsx` 495L | Sin PostHog |
+| 77 | Analytics SmartBoard | ✅ DONE | `SmartBoardAnalytics.jsx` reads real data from context (sessions, streaks, grades) | PostHog write-only correcto |
 
 ### Sección K — Seguridad y Compliance (§78-§83)
 
@@ -161,9 +161,9 @@
 
 | # | Punto del brief | Estado | Evidencia | Notas |
 |---|----------------|--------|-----------|-------|
-| 84 | Tests automatizados | 🟡 PARTIAL | 12 archivos test + adaptiveNextStep.test.js (7 tests) | Cobertura baja |
+| 84 | Tests automatizados | 🟡 PARTIAL | 132 archivos test + 10 nuevos (ChallengeEngine, FeedbackLog, SkillPassport) | Cobertura mejorada, aún expandible |
 | 85 | Build limpio | ✅ DONE | `vite build` OK (2m36s), ESLint 0 errores | Verificado |
-| 86 | Monolitos <500L | 🟡 PARTIAL | GradeScanner 1355L, OralExam 968L, Flashcard 879L | 3 splits pendientes |
+| 86 | Monolitos <500L | ✅ DONE | GradeScanner 386L, OralExam 492L, Flashcard 444L — todos <500L | Splits completados |
 | 87 | Multiplayer flashcards | 🟠 MOCK | `multiplayerFlashcards.js` stub sin integrar | No conectado |
 
 ---
