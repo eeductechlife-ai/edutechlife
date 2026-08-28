@@ -1,9 +1,95 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useSkillPassport } from "../../hooks/useSkillPassport";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 
 const TREND_ICONS = { up: "📈", stable: "➡️", down: "📉" };
+
+function CompetencyRadar({ subjects }) {
+  const n = subjects.length;
+  if (n < 3) return null;
+  const cx = 150;
+  const cy = 150;
+  const r = 110;
+  const angleStep = (2 * Math.PI) / n;
+  const levels = [0.25, 0.5, 0.75, 1.0];
+
+  const points = subjects.map((s, i) => {
+    const angle = i * angleStep - Math.PI / 2;
+    const val = s.mastery;
+    return {
+      x: cx + r * val * Math.cos(angle),
+      y: cy + r * val * Math.sin(angle),
+      labelX: cx + (r + 22) * Math.cos(angle),
+      labelY: cy + (r + 22) * Math.sin(angle),
+      label: s.label,
+      emoji: s.level.emoji,
+      percent: s.masteryPercent,
+      color: s.level.color,
+    };
+  });
+
+  const polyPoints = points.map((p) => `${p.x},${p.y}`).join(" ");
+
+  return (
+    <div className="flex justify-center">
+      <svg
+        viewBox="0 0 300 300"
+        className="w-full max-w-[280px]"
+        role="img"
+        aria-label="Grafo de competencias"
+      >
+        {levels.map((lv) => (
+          <polygon
+            key={lv}
+            points={Array.from({ length: n })
+              .map((_, i) => {
+                const a = i * angleStep - Math.PI / 2;
+                return `${cx + r * lv * Math.cos(a)},${cy + r * lv * Math.sin(a)}`;
+              })
+              .join(" ")}
+            fill="none"
+            stroke="#E2E8F0"
+            strokeWidth="1"
+          />
+        ))}
+        {points.map((p, i) => (
+          <line
+            key={i}
+            x1={cx}
+            y1={cy}
+            x2={cx + r * Math.cos(i * angleStep - Math.PI / 2)}
+            y2={cy + r * Math.sin(i * angleStep - Math.PI / 2)}
+            stroke="#E2E8F0"
+            strokeWidth="0.5"
+          />
+        ))}
+        <polygon
+          points={polyPoints}
+          fill="rgba(77,168,196,0.2)"
+          stroke="#4DA8C4"
+          strokeWidth="2"
+        />
+        {points.map((p, i) => (
+          <g key={i}>
+            <circle cx={p.x} cy={p.y} r="4" fill={p.color} />
+            <text
+              x={p.labelX}
+              y={p.labelY}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fontSize="9"
+              fontWeight="bold"
+              fill="#64748B"
+            >
+              {p.emoji} {p.percent}%
+            </text>
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
+}
 
 /**
  * Skill Passport — shows the student's competency mastery by subject,
@@ -50,6 +136,20 @@ const SkillPassport = memo(() => {
 
   return (
     <div className="space-y-5">
+      {/* Visual competency graph */}
+      {passport.length >= 3 && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="p-4 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm"
+        >
+          <p className="text-xs font-bold text-[#004B63] mb-2 text-center">
+            🕸️ Mapa de Competencias
+          </p>
+          <CompetencyRadar subjects={passport} />
+        </motion.div>
+      )}
+
       {/* Subject mastery cards */}
       <div className="space-y-3">
         {passport.map((item, i) => (
