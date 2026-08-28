@@ -23,6 +23,8 @@ import { WifiOff, CloudSync } from "lucide-react";
 import SmartBoardLoadingSkeleton from "./SmartBoardLoadingSkeleton";
 import ParentalConsentBlocker from "./ParentalConsentBlocker";
 import TopBar from "./components/TopBar";
+import { useParentalControls } from "../../hooks/useParentalControls";
+import useFunnelTracking from "../../hooks/useFunnelTracking";
 
 const SmartBoardKidsDashboard = () => {
   const { t } = useTranslation();
@@ -58,6 +60,8 @@ const SmartBoardKidsDashboard = () => {
   useExamReminders();
   // SmartBoard domain notifications: daily mission ready + reinforcement opportunity (§42)
   useSmartBoardNotifications();
+  // Activation/retention funnel tracking
+  useFunnelTracking();
   useEffect(() => {
     try {
       localStorage.setItem("edutechlife_current_tab", activeTab);
@@ -86,6 +90,8 @@ const SmartBoardKidsDashboard = () => {
   const ageGroup =
     studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior";
   const prefersReducedMotion = useReducedMotion();
+  const { isFeatureEnabled, controls: parentalControls } =
+    useParentalControls();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -308,6 +314,7 @@ const SmartBoardKidsDashboard = () => {
             onNavigate={navigate}
             onLogout={handleLogout}
             subscriptionTier={subscriptionTier}
+            isFeatureEnabled={isFeatureEnabled}
           />
 
           {/* Main Content Area */}
@@ -328,6 +335,7 @@ const SmartBoardKidsDashboard = () => {
               activeTab={activeTab}
               onTabChange={setActiveTab}
               darkMode={darkMode}
+              isFeatureEnabled={isFeatureEnabled}
             />
 
             {/* Scrollable Content */}
@@ -405,15 +413,18 @@ const SmartBoardKidsDashboard = () => {
           onTabChange={setActiveTab}
           darkMode={darkMode}
           subscriptionTier={subscriptionTier}
+          isFeatureEnabled={isFeatureEnabled}
         />
 
         {/* DaniFAB - Floating Action Button */}
-        <DaniFAB
-          isDaniOpen={isDaniOpen}
-          onDaniOpen={handleDaniOpen}
-          darkMode={darkMode}
-          unreadCount={0}
-        />
+        {parentalControls.chatEnabled && (
+          <DaniFAB
+            isDaniOpen={isDaniOpen}
+            onDaniOpen={handleDaniOpen}
+            darkMode={darkMode}
+            unreadCount={0}
+          />
+        )}
 
         {/* Onboarding Guide - First Time Welcome Screen */}
         <OnboardingGuide onTabChange={setActiveTab} />
@@ -423,7 +434,7 @@ const SmartBoardKidsDashboard = () => {
 
         {/* Dani Chat Modal - Full Premium Experience */}
         <AnimatePresence>
-          {isDaniOpen && (
+          {isDaniOpen && parentalControls.chatEnabled && (
             <DaniTutorChat
               isOpen={isDaniOpen}
               onClose={handleDaniClose}

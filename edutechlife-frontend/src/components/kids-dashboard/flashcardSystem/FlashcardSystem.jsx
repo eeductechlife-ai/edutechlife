@@ -8,6 +8,7 @@ import FlashcardImporter from "./components/FlashcardImporter";
 import DeckCard from "./components/DeckCard";
 import DeckEditor from "./components/DeckEditor";
 import ScannerTab from "./components/ScannerTab";
+import MultiplayerMode from "./MultiplayerMode";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 import { useCompetencyTracking } from "../../../hooks/useCompetencyTracking";
 import { useTranslation } from "../../../i18n/I18nProvider";
@@ -28,6 +29,7 @@ const FlashcardSystem = memo(({ onTabChange }) => {
 
   const [createTab, setCreateTab] = useState("text"); // "text" | "scan"
   const [lastScanSummary, setLastScanSummary] = useState(null);
+  const [multiplayerActive, setMultiplayerActive] = useState(false);
   const {
     decks,
     mode,
@@ -108,6 +110,19 @@ const FlashcardSystem = memo(({ onTabChange }) => {
     },
     [decks, setActiveStudyDeck],
   );
+
+  // Multiplayer local mode — pick first deck with cards if none selected
+  if (multiplayerActive) {
+    const mpDeck = deck || decks.find((d) => d.cards?.length > 0);
+    return (
+      <MultiplayerMode
+        cards={mpDeck?.cards || []}
+        deckTitle={mpDeck?.title || ""}
+        darkMode={false}
+        onExit={() => setMultiplayerActive(false)}
+      />
+    );
+  }
 
   if (mode === "quiz" && deck) {
     if (done) {
@@ -252,19 +267,29 @@ const FlashcardSystem = memo(({ onTabChange }) => {
           {t("kid.flashcards.my_decks_title")}
         </h3>
         {decks.length > 0 && (
-          <motion.button
-            onClick={() => {
-              setDeckTitle("");
-              setDeckDescription("");
-              setCurrentDeckId(null);
-              setMode("editor");
-            }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="px-4 py-2 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-bold text-sm shadow-md"
-          >
-            {t("kid.flashcards.new_deck_btn")}
-          </motion.button>
+          <div className="flex gap-2">
+            <motion.button
+              onClick={() => setMultiplayerActive(true)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-4 py-2 bg-gradient-to-r from-[#FF6B9D] to-[#FFD166] text-white rounded-xl font-bold text-sm shadow-md"
+            >
+              🆚 Multijugador
+            </motion.button>
+            <motion.button
+              onClick={() => {
+                setDeckTitle("");
+                setDeckDescription("");
+                setCurrentDeckId(null);
+                setMode("editor");
+              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-4 py-2 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-bold text-sm shadow-md"
+            >
+              {t("kid.flashcards.new_deck_btn")}
+            </motion.button>
+          </div>
         )}
       </div>
 

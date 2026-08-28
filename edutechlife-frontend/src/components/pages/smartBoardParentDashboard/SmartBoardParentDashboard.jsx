@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuthIdentity, signOutUser } from "../../../hooks/useAuthIdentity";
@@ -25,6 +25,8 @@ import {
   CheckCircle,
   Sparkles,
   Database,
+  Shield,
+  ChevronDown,
 } from "lucide-react";
 import SEO from "../../SEO";
 import { useTranslation } from "../../../i18n/I18nProvider";
@@ -39,9 +41,14 @@ import WeeklyReportCard from "./components/WeeklyReportCard";
 import WellbeingCard from "./components/WellbeingCard";
 import ParentResources from "./components/ParentResources";
 import GradeReportCard from "./components/GradeReportCard";
+import ParentalControlsPanel from "./components/ParentalControlsPanel";
 import { mergeRealtimePoints } from "./mergeRealtime";
 import { track } from "../../../lib/analytics";
 import { EVENTS } from "../../../lib/analyticsEvents";
+
+const InternalMetricsDashboard = lazy(
+  () => import("../../kids-dashboard/InternalMetricsDashboard"),
+);
 
 const LEVELS = [
   { min: 5000, nameKey: "parent_dashboard.level_maestro", emoji: "🏆" },
@@ -83,6 +90,11 @@ const NAV = [
     Icon: BookMarked,
   },
   { id: "plan", labelKey: "parent_dashboard.nav_plan", Icon: Star },
+  {
+    id: "controles",
+    labelKey: "parent_dashboard.nav_controles",
+    Icon: Shield,
+  },
 ];
 
 const getWellness = (streak, completionRate, minutes, t) => {
@@ -247,6 +259,7 @@ const SmartBoardParentDashboard = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [liveActivities, setLiveActivities] = useState([]);
   const [newActivityPulse, setNewActivityPulse] = useState(false);
+  const [metricsOpen, setMetricsOpen] = useState(false);
 
   const isParent = localStorage.getItem("user_role") === "parent";
   const studentEmail = localStorage.getItem("student_email") || "";
@@ -959,7 +972,55 @@ const SmartBoardParentDashboard = () => {
                         studentId={studentId || userId}
                       />
                     </div>
+
+                    {/* Internal Metrics — collapsible admin panel */}
+                    <div className="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
+                      <button
+                        onClick={() => setMetricsOpen((v) => !v)}
+                        className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[#F8FAFC] transition-colors"
+                      >
+                        <span className="flex items-center gap-2 text-sm font-bold text-[#004B63]">
+                          <Activity className="w-4 h-4 text-[#4DA8C4]" />
+                          Internal Metrics
+                        </span>
+                        <ChevronDown
+                          className={`w-4 h-4 text-[#94A3B8] transition-transform duration-200 ${metricsOpen ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {metricsOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="px-5 pb-5">
+                              <Suspense
+                                fallback={
+                                  <div className="text-center py-8 text-sm text-[#94A3B8]">
+                                    Cargando...
+                                  </div>
+                                }
+                              >
+                                <InternalMetricsDashboard
+                                  authToken={authToken}
+                                />
+                              </Suspense>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </div>
+                )}
+
+                {activeSection === "controles" && (
+                  <ParentalControlsPanel
+                    authToken={authToken}
+                    studentId={studentId || userId}
+                  />
                 )}
               </motion.div>
             </AnimatePresence>

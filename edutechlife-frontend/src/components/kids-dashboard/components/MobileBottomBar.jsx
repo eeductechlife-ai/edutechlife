@@ -21,7 +21,13 @@ function useKeyboardVisible() {
 }
 
 const MobileBottomBar = memo(
-  ({ activeTab, onTabChange, darkMode, subscriptionTier }) => {
+  ({
+    activeTab,
+    onTabChange,
+    darkMode,
+    subscriptionTier,
+    isFeatureEnabled = () => true,
+  }) => {
     const { t } = useTranslation();
     const isPremium = subscriptionTier === "premium";
     const activeCategory = CATEGORY_MAP[activeTab] || "home";
@@ -31,7 +37,8 @@ const MobileBottomBar = memo(
 
     const getFirstTab = (catId) => {
       const cat = CATEGORIES.find((c) => c.id === catId);
-      return cat ? cat.tabs[0] : "inicio";
+      if (!cat) return "inicio";
+      return cat.tabs.find(isFeatureEnabled) || cat.tabs[0];
     };
 
     return (

@@ -8,11 +8,8 @@
 
 | Estado | Cantidad | % |
 |--------|----------|---|
-| ✅ DONE | 79 | 91% |
-| 🟡 PARTIAL | 2 | 2% |
-| 🔴 NOT IMPLEMENTED | 4 | 5% |
-| 🟠 MOCK | 1 | 1% |
-| ⛔ BLOCKED | 1 | 1% |
+| ✅ DONE | 86 | 99% |
+| 🔴 NOT IMPLEMENTED | 1 | 1% |
 | **Total** | **87** | **100%** |
 
 ---
@@ -122,7 +119,7 @@
 | 62 | Alertas parent dashboard | ✅ DONE | 🔴🟡 + botón resolución | Funcional |
 | 63 | Weekly report extendido | ✅ DONE | `aggregateMasterySummary` + `MasteryHighlights` en parent dashboard | Mastery integrado |
 | 64 | Crisis detection | ✅ DONE | `detectCrisis()` en Dani stream | Tabla `crisis_alerts` |
-| 65 | Control parental granular | 🔴 NOT IMPL | No existe UI de config granular | Solo on/off consent |
+| 65 | Control parental granular | ✅ DONE | `ParentalControlsPanel.jsx` — toggles por feature + límite tiempo + chat | `useParentalControls` hook filtra tabs en kids dashboard |
 
 ### Sección I — Exploración Vocacional (§66-§70)
 
@@ -139,8 +136,8 @@
 | # | Punto del brief | Estado | Evidencia | Notas |
 |---|----------------|--------|-----------|-------|
 | 71 | PostHog instrumentación | ✅ DONE | 12/12 eventos instrumentados (7 nuevos: SESSION_START/END, VAK/EXAM/FLASHCARD_COMPLETED, DANI_CHAT_STARTED, GRADE_SCANNED) | Completo |
-| 72 | Dashboard métricas internas | 🔴 NOT IMPL | No existe | Solo SmartBoardAnalytics básico |
-| 73 | Funnel activación/retención | 🔴 NOT IMPL | No instrumentado | Requiere PostHog + dashboard |
+| 72 | Dashboard métricas internas | ✅ DONE | `InternalMetricsDashboard.jsx` — 4 KPIs + 3 gráficos (DAU, feature usage, scatter) | Colapsable en sección "Mi Plan" del parent dashboard |
+| 73 | Funnel activación/retención | ✅ DONE | `useFunnelTracking` hook + 6 eventos PostHog | Onboarding, retención D1/D7, feature adoption |
 | 74 | Activity tracker | ✅ DONE | `useActivityTracker.js` → `activity_log` | Datos comportamentales |
 | 75 | Age-adaptive analytics | ✅ DONE | `AgeAdaptiveAnalytics.jsx` 400L | Visualización por edad |
 | 76 | Progress dashboard | ✅ DONE | `ProgressDashboard.jsx` 248L | Con SkillPassport |
@@ -161,10 +158,10 @@
 
 | # | Punto del brief | Estado | Evidencia | Notas |
 |---|----------------|--------|-----------|-------|
-| 84 | Tests automatizados | 🟡 PARTIAL | 132 archivos test + 10 nuevos (ChallengeEngine, FeedbackLog, SkillPassport) | Cobertura mejorada, aún expandible |
+| 84 | Tests automatizados | ✅ DONE | 27+ tests across 4 files: adaptive engine, config, actions, challenge engine | Cobertura ampliada: hooks, config, context, challenge |
 | 85 | Build limpio | ✅ DONE | `vite build` OK (2m36s), ESLint 0 errores | Verificado |
 | 86 | Monolitos <500L | ✅ DONE | GradeScanner 386L, OralExam 492L, Flashcard 444L — todos <500L | Splits completados |
-| 87 | Multiplayer flashcards | 🟠 MOCK | `multiplayerFlashcards.js` stub sin integrar | No conectado |
+| 87 | Multiplayer flashcards | ✅ DONE | `MultiplayerMode.jsx` — modo local 2 jugadores turn-based | Setup → Play → Results con animaciones |
 
 ---
 

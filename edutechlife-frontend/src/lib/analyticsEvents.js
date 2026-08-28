@@ -37,6 +37,12 @@ export const PRODUCT_EVENTS = {
   PARENT_REPORT_VIEWED: "parent_report_viewed",
   SUBSCRIPTION_STARTED: "subscription_started",
   SUBSCRIPTION_CANCELLED: "subscription_cancelled",
+  ONBOARDING_STARTED: "onboarding_started",
+  ONBOARDING_COMPLETED: "onboarding_completed",
+  FIRST_ACTIVITY_COMPLETED: "first_activity_completed",
+  RETENTION_DAY_1: "retention_day_1",
+  RETENTION_DAY_7: "retention_day_7",
+  FEATURE_ADOPTED: "feature_adopted",
 };
 
 export const EVENTS = { ...LEARNING_EVENTS, ...PRODUCT_EVENTS };

@@ -306,10 +306,14 @@ const OnboardingWizard = memo(({ onTabChange }) => {
     }
   };
 
-  const handleClose = () => setOnboardingComplete(true);
+  const handleClose = () => {
+    track(EVENTS.ONBOARDING_COMPLETED, { method: "skipped" });
+    setOnboardingComplete(true);
+  };
 
   if (isDone && show) {
     track(EVENTS.PROFILE_COMPLETED, {});
+    track(EVENTS.ONBOARDING_COMPLETED, {});
     setOnboardingComplete(true);
     return null;
   }

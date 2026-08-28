@@ -36,6 +36,7 @@ const PremiumSidebar = memo(
     onNavigate,
     onLogout,
     subscriptionTier,
+    isFeatureEnabled = () => true,
   }) => {
     const { t } = useTranslation();
     const isPremium = subscriptionTier === "premium";
@@ -307,7 +308,10 @@ const PremiumSidebar = memo(
                             style={{ borderColor: `${cat.color}55` }}
                           >
                             {cat.tabs
-                              .filter(() => cat.id !== "home")
+                              .filter(
+                                (tabId) =>
+                                  cat.id !== "home" && isFeatureEnabled(tabId),
+                              )
                               .map((tabId) => {
                                 const isActive = activeTab === tabId;
                                 const isPremiumTab =
