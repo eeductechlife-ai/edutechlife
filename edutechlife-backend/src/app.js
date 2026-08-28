@@ -19,6 +19,7 @@ const smartboardRoutes = require('./routes/smartboard');
 const scanImageRoutes = require('./routes/scanImage');
 const stripeRoutes = require('./routes/stripe');
 const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
 const { webhookHandler } = require('./routes/stripe');
 
 const CSP_DIRECTIVES = {
@@ -125,6 +126,7 @@ app.use('/api/smartboard', smartboardRoutes);
 app.use('/api/smartboard', scanImageRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
