@@ -5,6 +5,8 @@ import { useCompetencyTracking } from "../../../../hooks/useCompetencyTracking";
 import { useFeedbackLog } from "../../../../hooks/useFeedbackLog";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 import { callDeepseekSmartboard } from "../../../../utils/api";
+import { track } from "../../../../lib/analytics";
+import { EVENTS } from "../../../../lib/analyticsEvents";
 
 const DeckQuiz = memo(({ deck, onFinish, onTabChange }) => {
   const { t } = useTranslation();
@@ -77,6 +79,13 @@ Responde SOLO con JSON:
           t("kid.exam.deck_exam_points", { title: deck.title }),
         );
         setDone(true);
+        track(EVENTS.EXAM_COMPLETED, {
+          exam_type: "deck_quiz",
+          deck_title: deck?.title,
+          score: Math.round((finalScore / questions.length) * 100),
+          correct_count: finalScore,
+          total_questions: questions.length,
+        });
         if (deck?.subject) {
           trackActivity({
             subject: deck.subject,

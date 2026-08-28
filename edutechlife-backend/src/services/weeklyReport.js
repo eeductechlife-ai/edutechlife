@@ -6,6 +6,69 @@
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
+const SUBJECT_LABELS = {
+  matematicas: 'Matemáticas',
+  lenguaje: 'Lenguaje',
+  ciencias_naturales: 'Ciencias Naturales',
+  ciencias_sociales: 'Ciencias Sociales',
+  ingles: 'Inglés',
+  tecnologia: 'Tecnología',
+};
+
+/**
+ * Extract subject key from a competency_id like "co_matematicas_01".
+ * @param {string} id
+ * @returns {string|null}
+ */
+function subjectFromId(id) {
+  if (!id || typeof id !== 'string') return null;
+  const parts = id.split('_');
+  // Pattern: co_<subject>_<number> — subject may have underscores (ciencias_naturales)
+  return parts.length >= 3 ? parts.slice(1, -1).join('_') : null;
+}
+
+/**
+ * Aggregate raw mastery rows into a parent-friendly summary.
+ * Same aggregation logic as useSkillPassport.js on the frontend.
+ *
+ * @param {Array} rows - From student_competency_mastery table
+ * @returns {{ overall: number, bySubject: Array, strongest: Array, weakest: Array }}
+ */
+function aggregateMasterySummary(rows) {
+  if (!Array.isArray(rows) || rows.length === 0) return null;
+
+  const bySubject = {};
+  let totalScore = 0;
+  let totalCount = 0;
+
+  for (const row of rows) {
+    const subj = subjectFromId(row.competency_id);
+    if (!subj) continue;
+    const score = Number(row.mastery_level) || 0;
+    if (!bySubject[subj]) bySubject[subj] = { sum: 0, count: 0 };
+    bySubject[subj].sum += score;
+    bySubject[subj].count++;
+    totalScore += score;
+    totalCount++;
+  }
+
+  const subjects = Object.entries(bySubject)
+    .map(([key, { sum, count }]) => ({
+      subject: key,
+      label: SUBJECT_LABELS[key] || key,
+      mastery: Math.round((sum / count) * 100),
+    }))
+    .sort((a, b) => b.mastery - a.mastery);
+
+  const overall = totalCount > 0 ? Math.round((totalScore / totalCount) * 100) : 0;
+  const strongest = subjects.slice(0, 3);
+  const weakest = subjects.length > 3
+    ? subjects.slice(-3).reverse()
+    : [];
+
+  return { overall, bySubject: subjects, strongest, weakest };
+}
+
 /**
  * Build the weekly summary object from the kid data blob.
  * Defensive about shape: the blob is a free-form JSON that has evolved over time.
@@ -117,6 +180,25 @@ function renderWeeklyEmail(summary, opts = {}) {
           .join("")
       : `<li style="margin:4px 0;color:#64748B">Aún sin materias con progreso esta semana.</li>`;
 
+  // Mastery section (optional — only rendered when adaptive data exists)
+  const mastery = opts.mastery || null;
+  let masteryHtml = '';
+  if (mastery && mastery.bySubject && mastery.bySubject.length > 0) {
+    const strongHtml = (mastery.strongest || [])
+      .map((s) => `<li style="margin:4px 0"><strong>${escapeHtml(s.label)}</strong>: ${s.mastery}%</li>`)
+      .join('');
+    const weakHtml = (mastery.weakest || [])
+      .map((s) => `<li style="margin:4px 0"><strong>${escapeHtml(s.label)}</strong>: ${s.mastery}%</li>`)
+      .join('');
+
+    masteryHtml = `
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:16px;margin-bottom:16px">
+      <h2 style="margin:0 0 8px;font-size:15px;color:#004B63">🎯 Dominio de competencias: ${mastery.overall}%</h2>
+      ${strongHtml ? `<p style="margin:8px 0 4px;font-size:13px;font-weight:600;color:#166534">Fortalezas</p><ul style="margin:0;padding-left:18px;font-size:14px">${strongHtml}</ul>` : ''}
+      ${weakHtml ? `<p style="margin:8px 0 4px;font-size:13px;font-weight:600;color:#9A3412">Oportunidades de mejora</p><ul style="margin:0;padding-left:18px;font-size:14px">${weakHtml}</ul>` : ''}
+    </div>`;
+  }
+
   const html = `<!DOCTYPE html>
 <html lang="es">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -151,6 +233,8 @@ function renderWeeklyEmail(summary, opts = {}) {
       🧠 ${styleLine}
     </div>
 
+    ${masteryHtml}
+
     <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:16px;margin-bottom:16px;font-size:13px;color:#166534">
       🛡️ La IA de SmartBoard acompaña a ${escapeHtml(name)} y cuida su bienestar mientras aprende. Si detecta que necesita ayuda, te avisamos.
     </div>
@@ -166,6 +250,17 @@ function renderWeeklyEmail(summary, opts = {}) {
 </body>
 </html>`;
 
+  const masteryLines = [];
+  if (mastery && mastery.bySubject && mastery.bySubject.length > 0) {
+    masteryLines.push('', `Dominio de competencias: ${mastery.overall}%`);
+    if (mastery.strongest.length) {
+      masteryLines.push(`Fortalezas: ${mastery.strongest.map((s) => `${s.label} (${s.mastery}%)`).join(', ')}`);
+    }
+    if (mastery.weakest.length) {
+      masteryLines.push(`Oportunidades de mejora: ${mastery.weakest.map((s) => `${s.label} (${s.mastery}%)`).join(', ')}`);
+    }
+  }
+
   const text = [
     `Resumen semanal de ${name} en SmartBoard`,
     ``,
@@ -176,6 +271,7 @@ function renderWeeklyEmail(summary, opts = {}) {
     summary.topSubjects.length
       ? `Materias con más avance: ${summary.topSubjects.map((s) => `${s.name} (${s.progress}%)`).join(", ")}`
       : `Aún sin materias con progreso esta semana.`,
+    ...masteryLines,
     ``,
     `Ver progreso completo: ${dashboardUrl}`,
   ].join("\n");
@@ -191,4 +287,4 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-module.exports = { buildWeeklySummary, renderWeeklyEmail };
+module.exports = { buildWeeklySummary, renderWeeklyEmail, aggregateMasterySummary };

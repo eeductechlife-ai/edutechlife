@@ -7,6 +7,8 @@ import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import useExamReminders from "../../hooks/useExamReminders";
 import { useSmartBoardNotifications } from "../../hooks/useSmartBoardNotifications";
+import { track } from "../../lib/analytics";
+import { EVENTS } from "../../lib/analyticsEvents";
 import "../../styles/a11y.css";
 import ParticlesBackground from "./ParticlesBackground";
 import DaniTutorChat from "./daniTutorChat";
@@ -39,6 +41,7 @@ const SmartBoardKidsDashboard = () => {
       "progreso",
       "calificaciones",
       "misiones",
+      "retos",
       "noticias",
       "plan",
       "puntos",
@@ -72,6 +75,7 @@ const SmartBoardKidsDashboard = () => {
     darkMode,
     fondoGalaxia,
     lastUnlockedReward,
+    lastUnlockedBadge,
     streak,
     subscriptionTier,
     dataLoaded,
@@ -161,6 +165,15 @@ const SmartBoardKidsDashboard = () => {
     }
   }, [searchParams]);
 
+  // Track session end on page unload
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      track(EVENTS.SESSION_END, { last_tab: activeTab });
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [activeTab]);
+
   if (!dataLoaded) {
     return (
       <div className={`${darkMode ? "bg-[#0F172A]" : "bg-[#F8FAFC]"}`}>
@@ -225,6 +238,24 @@ const SmartBoardKidsDashboard = () => {
                 <p className="text-sm opacity-90">
                   {lastUnlockedReward.icon} {lastUnlockedReward.name}
                 </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Badge Unlock Notification */}
+        <AnimatePresence>
+          {lastUnlockedBadge && (
+            <motion.div
+              initial={{ y: -100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -100, opacity: 0 }}
+              className="fixed top-4 left-4 z-[100] bg-gradient-to-r from-[#9D4EDD] to-[#4DA8C4] text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4"
+            >
+              <span className="text-3xl">{lastUnlockedBadge.icon || "🏅"}</span>
+              <div>
+                <p className="font-bold">Nuevo badge desbloqueado</p>
+                <p className="text-sm opacity-90">{lastUnlockedBadge.name}</p>
               </div>
             </motion.div>
           )}

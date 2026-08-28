@@ -52,7 +52,16 @@ export const useSmartBoardActions = (stateAndSetters) => {
           missionId,
           xp: mission.xp || 0,
         }),
-      }).catch(() => {});
+      })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => {
+          if (data?.newBadges?.length) {
+            const { setLastUnlockedBadge } = ref.current;
+            setLastUnlockedBadge(data.newBadges[0]);
+            setTimeout(() => setLastUnlockedBadge(null), 5000);
+          }
+        })
+        .catch(() => {});
     }
   }, []);
 

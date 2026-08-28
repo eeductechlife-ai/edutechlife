@@ -119,6 +119,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
   const [avatarAnimado, setAvatarAnimado] = useState(false);
   const [fondoGalaxia, setFondoGalaxia] = useState(false);
   const [lastUnlockedReward, setLastUnlockedReward] = useState(null);
+  const [lastUnlockedBadge, setLastUnlockedBadge] = useState(null);
 
   const [flashcardDecks, setFlashcardDecks] = useState([]);
   const [exams, setExams] = useState([]);
@@ -834,6 +835,8 @@ export const SmartBoardKidsProvider = ({ children }) => {
     avatarAnimado,
     fondoGalaxia,
     lastUnlockedReward,
+    lastUnlockedBadge,
+    setLastUnlockedBadge,
 
     // Time
     totalActiveMinutes,

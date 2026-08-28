@@ -2,6 +2,8 @@ import { memo, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Bot } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { track } from "../../lib/analytics";
+import { EVENTS } from "../../lib/analyticsEvents";
 
 const DaniFAB = memo(
   ({ isDaniOpen, onDaniOpen, darkMode, unreadCount = 0 }) => {
@@ -9,6 +11,7 @@ const DaniFAB = memo(
 
     const handleClick = useCallback(() => {
       if (!isDaniOpen) {
+        track(EVENTS.DANI_CHAT_STARTED, { source: "fab" });
         onDaniOpen();
       }
     }, [isDaniOpen, onDaniOpen]);

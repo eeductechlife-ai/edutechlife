@@ -6,7 +6,7 @@ const { requireAuth } = require('../middleware/auth');
 const { requireVerifiedParentalConsent } = require('../middleware/parentalConsent');
 const { detectCrisis } = require('../services/crisisDetection');
 const { sendCrisisAlert, logCrisisIncident, sendEmail, sendConsentVerificationEmail } = require('../services/emailService');
-const { buildWeeklySummary, renderWeeklyEmail } = require('../services/weeklyReport');
+const { buildWeeklySummary, renderWeeklyEmail, aggregateMasterySummary } = require('../services/weeklyReport');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -698,9 +698,20 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
 
     const summary = buildWeeklySummary(row?.data || {});
 
+    // 1b. Mastery data from adaptive engine (optional — non-blocking)
+    let masterySummary = null;
+    try {
+      const masteryRows = await getStudentMastery(userId);
+      if (masteryRows.length > 0) {
+        masterySummary = aggregateMasterySummary(masteryRows);
+      }
+    } catch (masteryErr) {
+      console.warn('Weekly report: mastery data unavailable', masteryErr.message);
+    }
+
     // Modo preview: útil para el frontend sin disparar correo
     if (preview) {
-      return res.status(200).json({ summary });
+      return res.status(200).json({ summary, mastery: masterySummary });
     }
 
     // 2. Email del padre desde el consentimiento parental
@@ -723,6 +734,7 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
     const email = renderWeeklyEmail(summary, {
       studentName,
       dashboardUrl: 'https://edutechlife.co/smartboard',
+      mastery: masterySummary,
     });
 
     const sent = await sendEmail(
@@ -741,6 +753,7 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
       to: consent.parent_email,
       mode: sent.mode,
       summary,
+      mastery: masterySummary,
     });
   } catch (e) {
     console.error('Error generando reporte semanal:', e);

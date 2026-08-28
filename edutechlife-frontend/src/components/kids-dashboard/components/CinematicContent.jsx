@@ -27,6 +27,7 @@ const ImprovementPlan = lazy(
   () => import("../improvementPlan/ImprovementPlan"),
 );
 const TechNewsFeed = lazy(() => import("../news/TechNewsFeed"));
+const ChallengeEngine = lazy(() => import("../challengeEngine"));
 const FutureExplorer = lazy(() => import("../FutureExplorer"));
 const SmartProfile = lazy(() => import("../profile/SmartProfile"));
 
@@ -214,6 +215,16 @@ function createTabRenderer(deps) {
       ),
       errorKey: "plan",
       errorMsg: "Error al cargar el plan de mejora",
+      className: "space-y-4",
+    },
+    retos: {
+      component: () => (
+        <LazyLoad fallback={<SectionFallback tab="retos" />}>
+          <ChallengeEngine onTabChange={onTabChange} />
+        </LazyLoad>
+      ),
+      errorKey: "retos",
+      errorMsg: "Error al cargar retos",
       className: "space-y-4",
     },
     noticias: {

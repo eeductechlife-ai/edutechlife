@@ -20,6 +20,12 @@ export const LEARNING_EVENTS = {
   PLAN_GENERATED: "plan_generated",
   BADGE_UNLOCKED: "badge_unlocked",
   ALERT_GENERATED: "alert_generated",
+  SESSION_START: "session_start",
+  SESSION_END: "session_end",
+  VAK_COMPLETED: "vak_completed",
+  EXAM_COMPLETED: "exam_completed",
+  FLASHCARD_SESSION_COMPLETED: "flashcard_session_completed",
+  GRADE_SCANNED: "grade_scanned",
 };
 
 export const PRODUCT_EVENTS = {
@@ -27,6 +33,7 @@ export const PRODUCT_EVENTS = {
   PROFILE_COMPLETED: "profile_completed",
   DANI_OPENED: "dani_opened",
   DANI_MESSAGE_SENT: "dani_message_sent",
+  DANI_CHAT_STARTED: "dani_chat_started",
   PARENT_REPORT_VIEWED: "parent_report_viewed",
   SUBSCRIPTION_STARTED: "subscription_started",
   SUBSCRIPTION_CANCELLED: "subscription_cancelled",

@@ -9,8 +9,15 @@ import {
   getSubjects,
   getAvgScore,
   uid,
-  normalizeGradeStr,
 } from "./gradeUtils";
+import { track } from "../../lib/analytics";
+import { EVENTS } from "../../lib/analyticsEvents";
+import {
+  extractGradesFromFile,
+  normalizeExtractedGrades,
+  resolveGradeLevel,
+  buildAnalysisPrompt,
+} from "./gradeExtraction";
 
 export function useGradeScanner() {
   const {
@@ -250,30 +257,6 @@ export function useGradeScanner() {
     }
   }, [grades, saveGrades, setStudentGrades, saveAnalysis, persistLocalGrades]);
 
-  const GRADE_PROMPT = (
-    text,
-  ) => `Eres un extractor de notas de boletines escolares colombianos.
-
-BOLETÍN:
-"${text.slice(0, 4500)}"
-
-TAREA: Extraer las notas de CADA PERÍODO (P1, P2, P3, P4) por asignatura y el grado escolar del estudiante.
-
-REGLAS:
-- Extrae UNA entrada por asignatura (sin duplicados)
-- Si el boletín tiene columnas P1/P2/P3/P4 (o Período 1, Período 2, etc.), extrae cada una por separado
-- Si una columna de período no existe o está vacía → usa null para ese período
-- Si solo hay una nota sin indicar período, ponla en p1
-- El nombre de la asignatura exactamente como aparece en el boletín
-- Convierte porcentajes: 100%=5.0, 90%=4.5, 85%=4.25, 80%=4.0, 75%=3.75, 70%=3.5, 60%=3.0
-- NO incluyas una columna "DEFINITIVA" o "PROMEDIO FINAL"
-- grade_level: busca el grado en el encabezado del boletín. Si no aparece, usa null
-
-RESPONDE SOLO con este JSON (sin markdown, sin texto adicional):
-{"grade_level":"SÉPTIMO","grades":[{"subject":"NOMBRE EXACTO","p1":4.2,"p2":3.8,"p3":null,"p4":null}]}
-
-Si no encuentras notas: {"grade_level":null,"grades":[]}`;
-
   const handleImageFile = useCallback(
     async (f) => {
       if (!f) return;
@@ -284,90 +267,23 @@ Si no encuentras notas: {"grade_level":null,"grades":[]}`;
       const isPdfFile =
         f.type === "application/pdf" || f.name?.toLowerCase().endsWith(".pdf");
       try {
-        let extractedGrades = [];
-        let detectedGradeLevel = null;
-        if (isPdfFile) {
-          const { parsePDF } = await import("../../utils/documentParser");
-          const text = await parsePDF(f);
-          if (text) {
-            const res = await callDeepseekSmartboard(
-              [{ role: "user", content: GRADE_PROMPT(text) }],
-              { temperature: 0.05, maxTokens: 1500, isJson: true },
-            );
-            const parsed = typeof res === "string" ? JSON.parse(res) : res;
-            extractedGrades = parsed?.grades || [];
-            detectedGradeLevel = parsed?.grade_level ?? null;
-          }
-        } else {
-          const base64 = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(f);
-          });
-          const { API_BASE_URL } = await import("../../config/api");
-          const token = sessionStorage.getItem("auth_token");
-          const resp = await fetch(
-            `${API_BASE_URL}/api/smartboard/scan-image`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                ...(token ? { Authorization: `Bearer ${token}` } : {}),
-              },
-              body: JSON.stringify({ imageBase64: base64 }),
-            },
-          );
-          if (!resp.ok) {
-            const errBody = await resp.json().catch(() => null);
-            const err = new Error(errBody?.error || `HTTP ${resp.status}`);
-            err.status = resp.status;
-            throw err;
-          }
-          const { text } = await resp.json();
-          if (text && text.trim().length > 10) {
-            const res = await callDeepseekSmartboard(
-              [{ role: "user", content: GRADE_PROMPT(text) }],
-              { temperature: 0.05, maxTokens: 1500, isJson: true },
-            );
-            const parsed = typeof res === "string" ? JSON.parse(res) : res;
-            extractedGrades = parsed?.grades || [];
-            detectedGradeLevel = parsed?.grade_level ?? null;
-          }
-        }
-        if (detectedGradeLevel) {
-          const gradeNum = normalizeGradeStr(detectedGradeLevel);
-          if (gradeNum) setGradeLevel?.(gradeNum);
-        }
+        const { extractedGrades, detectedGradeLevel } =
+          await extractGradesFromFile(f);
+        const gradeNum = resolveGradeLevel(detectedGradeLevel);
+        if (gradeNum) setGradeLevel?.(gradeNum);
         if (extractedGrades.length > 0) {
-          const seen = new Map();
-          extractedGrades.forEach((g) => {
-            if (g.subject && typeof g.subject === "string")
-              seen.set(g.subject.toUpperCase().trim(), g);
-          });
-          extractedGrades = [...seen.values()];
+          const normalized = normalizeExtractedGrades(extractedGrades);
           const subjectNames = extractedGrades
             .map((g) => g.subject)
             .filter((s) => s && typeof s === "string");
           hasUserModified.current = true;
-          setGrades(
-            extractedGrades.map((g) => ({
-              id: uid(),
-              subject: g.subject,
-              p1:
-                g.p1 != null
-                  ? Number(g.p1)
-                  : g.p2 == null && g.p3 == null && g.p4 == null
-                    ? g.score != null
-                      ? Number(g.score)
-                      : null
-                    : null,
-              p2: g.p2 != null ? Number(g.p2) : null,
-              p3: g.p3 != null ? Number(g.p3) : null,
-              p4: g.p4 != null ? Number(g.p4) : null,
-            })),
-          );
+          setGrades(normalized);
           if (subjectNames.length > 0) setExtractedSubjectNames(subjectNames);
+          track(EVENTS.GRADE_SCANNED, {
+            source: isPdfFile ? "pdf" : "image",
+            subject_count: extractedGrades.length,
+            grade_level: detectedGradeLevel,
+          });
           setScanMode("manual");
           setError("");
         } else {
@@ -396,45 +312,12 @@ Si no encuentras notas: {"grade_level":null,"grades":[]}`;
     setScanning(true);
     setError("");
     setPlan(null);
-    const getLabel = (g) =>
-      SUBJECTS.find((x) => x.v === g.subject)?.l || g.subject;
-    const avgScore = (
-      grades.reduce((s, g) => s + getAvgScore(g), 0) / grades.length
-    ).toFixed(1);
-    const failing = grades.filter((g) => getAvgScore(g) < 3.0);
-    const toImprove = grades.filter(
-      (g) => getAvgScore(g) >= 3.0 && getAvgScore(g) < 4.0,
-    );
-    const strong = grades.filter((g) => getAvgScore(g) >= 4.0);
-    const weakCount = Math.min(failing.length + toImprove.length, 5);
-    const planWeeks = Math.min(Math.max(weakCount, 2), 4);
-    const fmt = (arr) =>
-      arr
-        .sort((a, b) => getAvgScore(a) - getAvgScore(b))
-        .map((g) => `${getLabel(g)} (${getAvgScore(g).toFixed(1)}/5)`)
-        .join(", ") || "ninguna";
     const vakStyle = vakResult?.dominant || "visual";
-    const prompt = `Eres Dani, tutora IA de EdutechLife para Colombia.
-Estilo de aprendizaje VAK: ${vakStyle}.
-
-CALIFICACIONES (escala 1.0–5.0, aprobatorio ≥ 3.0):
-- Promedio: ${avgScore}/5 | Total: ${grades.length} asignaturas
-- FUERTES (≥ 4.0): ${fmt(strong)}
-- A MEJORAR (3.0–3.9): ${fmt(toImprove)}
-- REPROBADAS (< 3.0): ${fmt(failing)}
-
-Responde SOLO con JSON válido (sin markdown):
-{"overall":"Mensaje CORTO al estudiante: máx 2 frases, tutéalo, motivador","motivation":"Frase final de Dani al estudiante (1 frase)","strengths":["emoji Materia (nota)"],"topActions":["Acción urgente 1","Acción 2","Acción 3"],"weaknesses":[{"subject":"nombre","score":2.8,"emoji":"emoji","why":"razón en 1 frase","vakTip":"consejo ${vakStyle} (1 frase)","steamLink":"conexión mundo real (1 frase)","actions":["acción 1","acción 2","acción 3"]}],"studyPlan":[{"week":1,"focus":"materia","activities":["actividad 1","actividad 2","actividad 3"],"daniTip":"consejo de Dani"}],"parentReport":{"summary":"Párrafo formal 3-4 frases para los padres. Promedio ${avgScore}/5.","concerns":["Preocupación 1"],"recommendations":["Recomendación 1","Recomendación 2","Recomendación 3"],"followUp":"Sugerencia de seguimiento"}}
-
-REGLAS: overall+motivation MUY CORTOS para niños 6-16; weaknesses máx ${weakCount}; studyPlan ${planWeeks} semanas; parentReport formal sin emojis.`;
+    const prompt = buildAnalysisPrompt({ grades, vakStyle, SUBJECTS });
     try {
       const res = await callDeepseekSmartboard(
         [{ role: "user", content: prompt }],
-        {
-          temperature: 0.7,
-          maxTokens: 2500,
-          isJson: true,
-        },
+        { temperature: 0.7, maxTokens: 2500, isJson: true },
       );
       const parsed = typeof res === "string" ? JSON.parse(res) : res;
       setPlan(parsed);

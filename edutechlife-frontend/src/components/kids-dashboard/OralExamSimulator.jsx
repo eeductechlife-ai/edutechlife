@@ -341,6 +341,13 @@ Escribe solo en español, de forma conversacional.${deckLine}`;
           subject: subject?.label,
           grade,
         });
+        track(EVENTS.EXAM_COMPLETED, {
+          exam_type: "oral",
+          subject: subject?.label,
+          score: grade,
+          correct_count: correctCount,
+          total_questions: questions.length,
+        });
         if (subject?.id)
           trackActivity({ subject: subject.id, score: grade / 100 });
       }, 2000);

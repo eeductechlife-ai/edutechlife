@@ -13,6 +13,7 @@ export const CATEGORY_MAP = {
   calificaciones: "progress",
   plan: "progress",
   misiones: "explore",
+  retos: "explore",
   noticias: "explore",
 };
 
@@ -60,7 +61,7 @@ export const CATEGORIES = [
     color: "#9D4EDD",
     gradient: "linear-gradient(135deg, #7B2FF7 0%, #9D4EDD 55%, #C77DFF 100%)",
     glowColor: "#C77DFF",
-    tabs: ["misiones", "noticias"],
+    tabs: ["misiones", "retos", "noticias"],
   },
 ];
 
@@ -74,6 +75,7 @@ export const CATEGORY_TAB_LABELS = {
   progreso: "Progreso",
   calificaciones: "Calificaciones",
   misiones: "Misiones",
+  retos: "Retos",
   inicio: "Inicio",
   perfil: "Mi Perfil",
   plan: "Mi Plan",
@@ -94,6 +96,7 @@ export const TOP_BAR_LABELS = {
   progreso: "Mi Progreso",
   calificaciones: "Mis Calificaciones",
   misiones: "Misiones Diarias",
+  retos: "Retos Inteligentes",
   plan: "Mi Plan de Mejora",
   noticias: "Tech & IA",
 };
