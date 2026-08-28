@@ -9,6 +9,7 @@ import { useTranslation } from "../../i18n/I18nProvider";
 import { getSubjects, getDifficulties, dc } from "./oralExamUtils";
 import { track } from "../../lib/analytics";
 import { EVENTS } from "../../lib/analyticsEvents";
+import { useFeedbackLog } from "../../hooks/useFeedbackLog";
 import OralExamSetup from "./OralExamSetup";
 import OralExamConversation from "./OralExamConversation";
 import OralExamQuestion from "./OralExamQuestion";
@@ -22,6 +23,7 @@ const OralExamSimulator = memo(({ onTabChange }) => {
     studentAge,
   } = useSmartBoardKids();
   const { trackActivity } = useCompetencyTracking();
+  const { logFeedback } = useFeedbackLog();
 
   const studentName = (() => {
     try {
@@ -70,6 +72,17 @@ const OralExamSimulator = memo(({ onTabChange }) => {
   const [chatLoading, setChatLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const lastSpokenIdx = useRef(-1);
+
+  useEffect(() => {
+    if (!emotionalFeedback || !results) return;
+    const emotionMap = { easy: "happy", ok: "neutral", hard: "frustrated" };
+    logFeedback({
+      activity: "oral_exam",
+      emotion: emotionMap[emotionalFeedback] || "neutral",
+      score: results.score,
+      context: { subject, difficulty },
+    });
+  }, [emotionalFeedback]);
 
   const hasDeck = !!activeStudyDeck?.cards?.length;
   const deckContext = hasDeck

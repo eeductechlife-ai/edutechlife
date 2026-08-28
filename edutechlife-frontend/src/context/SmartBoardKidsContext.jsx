@@ -408,6 +408,34 @@ export const SmartBoardKidsProvider = ({ children }) => {
     }
   }, [learningStreaksQuery.data]);
 
+  // Fetch missions from backend when student DB id is available
+  useEffect(() => {
+    if (!studentDbId) return;
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+    const token = (() => {
+      try {
+        return localStorage.getItem("sb_auth_token") || "";
+      } catch {
+        return "";
+      }
+    })();
+    fetch(
+      `${API_BASE_URL}/api/smartboard/gamification/missions?studentId=${studentDbId}`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      },
+    )
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((data) => {
+        if (Array.isArray(data.missions) && data.missions.length > 0) {
+          setMissions(data.missions);
+        }
+      })
+      .catch(() => {
+        /* keep DEFAULT_MISSIONS fallback */
+      });
+  }, [studentDbId]);
+
   useEffect(() => {
     if (studentDataQuery.data) {
       setStudentAge(studentDataQuery.data.age);

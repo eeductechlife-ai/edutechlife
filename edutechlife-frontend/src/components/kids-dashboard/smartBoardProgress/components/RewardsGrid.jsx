@@ -1,9 +1,24 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "../../../../i18n/I18nProvider";
-import { REWARDS, item } from "../gamificationData";
+import { supabase } from "../../../../lib/supabase";
+import { REWARDS as FALLBACK_REWARDS, item } from "../gamificationData";
 
 const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
   const { t } = useTranslation();
+  const [rewards, setRewards] = useState(FALLBACK_REWARDS);
+
+  useEffect(() => {
+    supabase
+      .from("rewards")
+      .select("id, name, icon, cost, description, category")
+      .eq("is_active", true)
+      .order("sort_order")
+      .then(({ data }) => {
+        if (data?.length) setRewards(data);
+      });
+  }, []);
+
   return (
     <motion.div
       variants={item}
@@ -19,7 +34,7 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
         🎁 Recompensas
       </h3>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {REWARDS.map((r) => {
+        {rewards.map((r) => {
           const unlocked = unlockedRewards.includes(r.id);
           const canAfford = totalPoints >= r.cost;
           return (

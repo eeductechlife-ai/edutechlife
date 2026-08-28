@@ -1,13 +1,26 @@
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 import { NEXT_STEP_MODES } from "../../adaptiveNextStep";
 import { NextStepCard } from "../../ui";
+import { useFeedbackLog } from "../../../../hooks/useFeedbackLog";
 
 const FlashcardResults = memo(
   ({ rate, correct, incorrect, onRestart, onBack, onTalkToDani }) => {
     const { t } = useTranslation();
+    const { logFeedback } = useFeedbackLog();
     const [emotionalFeedback, setEmotionalFeedback] = useState(null);
+
+    useEffect(() => {
+      if (!emotionalFeedback) return;
+      const emotionMap = { easy: "happy", ok: "neutral", hard: "frustrated" };
+      logFeedback({
+        activity: "flashcard",
+        emotion: emotionMap[emotionalFeedback] || "neutral",
+        score: rate,
+        context: { correct, incorrect },
+      });
+    }, [emotionalFeedback]);
     return (
       <motion.div
         initial={{ opacity: 0 }}

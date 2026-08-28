@@ -112,6 +112,29 @@ export function useAdaptiveEngine() {
     [studentDbId],
   );
 
+  const fetchRecommendations = useCallback(
+    async (studentId) => {
+      const sid = studentId ?? studentDbId;
+      if (!sid) return;
+      setLoading(true);
+      try {
+        const data = await apiFetch(
+          "/api/smartboard/adaptive/recommendations",
+          {
+            method: "POST",
+            body: JSON.stringify({ studentId: sid }),
+          },
+        );
+        setRecommendations(data.recommendations ?? []);
+      } catch {
+        // Non-blocking
+      } finally {
+        setLoading(false);
+      }
+    },
+    [studentDbId],
+  );
+
   return {
     nextAction,
     recommendations,
@@ -119,6 +142,7 @@ export function useAdaptiveEngine() {
     weeklyPlan,
     loading,
     fetchNextAction,
+    fetchRecommendations,
     fetchDailyPlan,
     fetchWeeklyPlan,
     studentDbId,

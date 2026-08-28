@@ -33,6 +33,26 @@ export const useSmartBoardActions = (stateAndSetters) => {
         title: mission.title || "",
         xp: mission.xp || 0,
       });
+      const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+      const token = (() => {
+        try {
+          return localStorage.getItem("sb_auth_token") || "";
+        } catch {
+          return "";
+        }
+      })();
+      fetch(`${API_BASE_URL}/api/smartboard/gamification/activity`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          type: "mission_complete",
+          missionId,
+          xp: mission.xp || 0,
+        }),
+      }).catch(() => {});
     }
   }, []);
 
