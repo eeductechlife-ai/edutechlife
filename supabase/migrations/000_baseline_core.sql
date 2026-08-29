@@ -87,9 +87,11 @@ CREATE POLICY "Users can view own notifications" ON notifications FOR SELECT
 DROP POLICY IF EXISTS "Users can insert own notifications" ON notifications;
 CREATE POLICY "Users can insert own notifications" ON notifications FOR INSERT
   TO authenticated WITH CHECK (true);
-DROP POLICY IF EXISTS "Users can update own notifications" ON notifications FOR UPDATE
+DROP POLICY IF EXISTS "Users can update own notifications" ON notifications;
+CREATE POLICY "Users can update own notifications" ON notifications FOR UPDATE
   USING (user_id = auth.uid()::text OR user_id = (current_setting('request.jwt.claims', true)::json->>'sub'));
-DROP POLICY IF EXISTS "Users can delete own notifications" ON notifications FOR DELETE
+DROP POLICY IF EXISTS "Users can delete own notifications" ON notifications;
+CREATE POLICY "Users can delete own notifications" ON notifications FOR DELETE
   USING (user_id = auth.uid()::text OR user_id = (current_setting('request.jwt.claims', true)::json->>'sub'));
 
 CREATE OR REPLACE FUNCTION update_updated_at_column()
