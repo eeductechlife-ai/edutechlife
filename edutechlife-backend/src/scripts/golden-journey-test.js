@@ -157,7 +157,7 @@ async function run() {
   step('journey: activity A', activity.status === 200, { status: activity.status });
 
   const masteryUpd = await api('/api/smartboard/adaptive/mastery', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, competencyId: 'co_matematicas_6-7_1', score: 0.5 }) }, tokenA);
-  step('journey: mastery update A (0.35→0.455)', masteryUpd.status === 200 && Math.abs((masteryUpd.body?.mastery || 0) - 0.455) < 0.01, { status: masteryUpd.status, body: masteryUpd.body });
+  step('journey: mastery update A (0.35→0.395)', masteryUpd.status === 200 && Math.abs((masteryUpd.body?.mastery || 0) - 0.395) < 0.01, { status: masteryUpd.status, body: masteryUpd.body });
 
   const dani = await api('/api/smartboard/dani/chat', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, message: 'Ayudame con ecuaciones' }) }, tokenA, 60000);
   step('journey: Dani A', dani.status === 200, { status: dani.status, snippet: dani.body?.slice ? String(dani.body).slice(0, 100) : dani.body });
@@ -192,14 +192,18 @@ async function run() {
   });
 
   // ── EVOLUTION (A: recovery→practice→mastery→transfer) ────────────────
+  // Reinicia la línea base de ecuaciones a 0.35 (la prueba de journey la modificó)
+  await supabase.from('student_competency_mastery').upsert(
+    { student_id: studentIds.A, competency_id: 'co_matematicas_6-7_1', mastery_level: 0.35, practice_count: 3, updated_at: new Date().toISOString() },
+    { onConflict: 'student_id,competency_id' });
   const evolution = [];
   let cur = 0.35;
-  for (const [label, score, expect] of [['recovery', 0.4, 0.365], ['practice', 0.6, 0.4355], ['mastery', 0.82, 0.551], ['transfer', 0.9, 0.656]]) {
+  for (const [label, score, expect] of [['recovery', 0.4, 0.365], ['practice', 0.6, 0.4355], ['mastery', 0.82, 0.55085], ['transfer', 0.9, 0.655595]]) {
     const r = await api('/api/smartboard/adaptive/mastery', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, competencyId: 'co_matematicas_6-7_1', score }) }, tokenA);
-    cur = 0.7 * cur + 0.3 * score;
-    evolution.push({ label, sent: score, expected: Math.round(cur * 1000) / 1000, got: r.body?.mastery });
+    cur = Math.round((0.7 * cur + 0.3 * score) * 1000) / 1000;
+    evolution.push({ label, sent: score, expected: expect, got: r.body?.mastery });
   }
-  const evoOk = evolution.every((e, i) => i === 0 || Math.abs(e.got - e.expected) < 0.02);
+  const evoOk = evolution.every((e) => Math.abs(e.got - e.expected) < 0.02);
   step('evolution: recovery→practice→mastery→transfer (media móvil)', evoOk, evolution);
 
   // ── PERSISTENCE (logout → login) ──────────────────────────────────────
