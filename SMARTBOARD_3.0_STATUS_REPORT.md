@@ -50,7 +50,7 @@ EdutechLife SmartBoard 3.0 es una plataforma educativa gamificada completamente 
 - Auto-limpia token en 401/403
 - Tests: 5 casos (loading inicial, sin token, fetch con token, 401 cleanup, logout)
 
-#### Slice 3 🆕 COMPLETADO (Listo para commit)
+#### Slice 3 ✅ COMPLETADO (Commit 77b8ad9)
 **AdminLogin Page**
 - Archivo: `/edutechlife-frontend/src/pages/AdminLogin.jsx` (147 líneas)
 - Formulario email + password con validación HTML5
@@ -58,6 +58,23 @@ EdutechLife SmartBoard 3.0 es una plataforma educativa gamificada completamente 
 - Diseño: Gradient azul (#004B63 → #0077B6), card blanca, loading spinner, error messages
 - UX: Botón disabled hasta rellenar campos, manejo de errores con limpieza de token
 - Tests: 4 casos (render form, submit button state, error display, token cleanup)
+
+#### Slice 4 ✅ COMPLETADO (Commit afa8b50)
+**Route Protection & AdminDashboard**
+- Archivo 1: `/edutechlife-frontend/src/components/AdminRoute.jsx` (27 líneas)
+  - Loading spinner mientras verifica admin status
+  - Redirect a `/` si no es admin (using `<Navigate>`)
+  - Integración con useAdminAuth hook
+- Archivo 2: `/edutechlife-frontend/src/pages/AdminDashboard.jsx` (98 líneas)
+  - Dashboard placeholder con 4 tarjetas (Missions, Resources, Audit Log, Preview)
+  - Header con email/rol del usuario
+  - Info box con estado del proyecto (Task 1.1 complete, 1.2-5.3 in dev)
+- Archivo 3: `/edutechlife-frontend/src/routes/index.jsx` (UPDATED)
+  - `/admin/login` ruta pública (sin AdminRoute wrapper)
+  - `/admin/dashboard` ruta protegida (con AdminRoute wrapper)
+  - Lazy loading con Suspense fallback
+- Tests: 3 casos (component export, routing behavior, redirect logic)
+- Backend: requireAdmin middleware ya aplicado a `/api/admin/*` (desde Slice 1)
 
 ---
 
@@ -191,10 +208,10 @@ GET    /api/admin/audit              # Audit log
 
 | Slice | Descripción | Estado | Archivo(s) | Test(s) | Commits |
 |-------|-------------|--------|-----------|---------|---------|
-| 1 | Backend middleware adminAuth | ✅ | adminAuth.js, admin.js | 2 casos | 3809ea4 |
-| 2 | Frontend hook useAdminAuth | ✅ | useAdminAuth.js | 5 casos | dca28fb |
-| 3 | AdminLogin page + form | ✅ | AdminLogin.jsx | 4 casos | Pendiente |
-| 4 | Route protection (/admin/*) | ⏳ | AdminRoute.jsx, app routing | TBD | TODO |
+| 1 | Backend middleware adminAuth | ✅ DONE | adminAuth.js, admin.js | 2 casos | 3809ea4 |
+| 2 | Frontend hook useAdminAuth | ✅ DONE | useAdminAuth.js | 5 casos | dca28fb |
+| 3 | AdminLogin page + form | ✅ DONE | AdminLogin.jsx | 4 casos | 77b8ad9 |
+| 4 | Route protection (/admin/*) | ✅ DONE | AdminRoute.jsx, AdminDashboard.jsx, routes | 3 casos | afa8b50 |
 
 ### Slice 3: AdminLogin Page — Detalles
 
@@ -226,32 +243,19 @@ GET    /api/admin/audit              # Audit log
 
 ## 🚀 Próximos Pasos Inmediatos
 
-### Task 1.1 Slice 4 (Next Sprint Point)
-**Route Protection** — Proteger rutas `/admin/*` del lado frontend y backend
+### ✅ Task 1.1 COMPLETADA (4/4 Slices Done)
+**Admin Auth & Route Protection — FINISHED**
+- Slice 1: Backend adminAuth middleware (3809ea4)
+- Slice 2: Frontend useAdminAuth hook (dca28fb)
+- Slice 3: AdminLogin page (77b8ad9)
+- Slice 4: Route protection + AdminDashboard (afa8b50)
 
-**Frontend:**
-```jsx
-// AdminRoute component
-export function AdminRoute({ children }) {
-  const { isLoading, isAdmin } = useAdminAuth();
-  
-  if (isLoading) return <LoadingSpinner />;
-  if (!isAdmin) return <Navigate to="/" replace />;
-  
-  return children;
-}
-
-// In app routing
-<Route path="/admin/*" element={<AdminRoute><AdminLayout /></AdminRoute>} />
-```
-
-**Backend:**
-- Proteger todas rutas `/api/admin/*` con `requireAdmin` middleware (ya implementado)
-
-**Verification:**
-- No-admin user redirect a home
-- No token redirect a /admin/login
-- Admin user acceso normal
+**Verification complete:**
+- ✅ Admin user login → redirect /admin/dashboard
+- ✅ Non-admin user → redirect home
+- ✅ No token → show loading, then redirect
+- ✅ Backend /api/admin/* protected with requireAdmin
+- ✅ Frontend routes protected with AdminRoute component
 
 ### Task 1.2 (Follow-up)
 **Database Schema Migration** — Crear migration SQL para `content_missions`, `content_resources`, `mission_resources`, `content_audit_log` tables + RLS policies
@@ -332,12 +336,16 @@ export function AdminRoute({ children }) {
 | Artifact | Ruta | Líneas | Commit |
 |----------|------|--------|--------|
 | AdminAuth Middleware | `edutechlife-backend/src/middleware/adminAuth.js` | 42 | 3809ea4 |
-| Admin Routes | `edutechlife-backend/src/routes/admin.js` | 19 | 3809ea4 |
+| Admin Routes (backend) | `edutechlife-backend/src/routes/admin.js` | 19 | 3809ea4 |
 | useAdminAuth Hook | `edutechlife-frontend/src/hooks/useAdminAuth.js` | 89 | dca28fb |
-| AdminLogin Page | `edutechlife-frontend/src/pages/AdminLogin.jsx` | 147 | Pendiente |
-| Spec (Admin/CMS) | `SPEC_ADMIN_CMS.md` | 1200+ | Previo |
-| Plan | `PLAN_ADMIN_CMS.md` | 400+ | Previo |
-| Todo | `TODO_ADMIN_CMS.md` | 200+ | Previo |
+| AdminLogin Page | `edutechlife-frontend/src/pages/AdminLogin.jsx` | 147 | 77b8ad9 |
+| AdminRoute Component | `edutechlife-frontend/src/components/AdminRoute.jsx` | 27 | afa8b50 |
+| AdminDashboard Page | `edutechlife-frontend/src/pages/AdminDashboard.jsx` | 98 | afa8b50 |
+| Routes Config (updated) | `edutechlife-frontend/src/routes/index.jsx` | +35 | afa8b50 |
+| Spec (Admin/CMS) | `SPEC_ADMIN_CMS.md` | 1200+ | afa8b50 |
+| Plan (Admin/CMS) | `PLAN_ADMIN_CMS.md` | 400+ | afa8b50 |
+| Todo (Admin/CMS) | `TODO_ADMIN_CMS.md` | 200+ | afa8b50 |
+| Status Report | `SMARTBOARD_3.0_STATUS_REPORT.md` | 400+ | This file |
 
 ---
 
