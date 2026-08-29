@@ -522,10 +522,27 @@ jobs:
         working-directory: edutechlife-backend
         run: node src/scripts/golden-journey-test.js
 
+      - name: Run Security Live tests (IDOR/RLS/authorization — FASE D)
+        env:
+          STAGING_SUPABASE_URL: https://${{ steps.resolve.outputs.ref }}.supabase.co
+          STAGING_SUPABASE_SERVICE_ROLE_KEY: ${{ steps.resolve.outputs.service }}
+          STAGING_ANON_KEY: ${{ steps.resolve.outputs.anon }}
+          BASE_URL: http://localhost:3001
+        working-directory: edutechlife-backend
+        run: node src/scripts/security-live-test.js
+
       - name: Upload journey evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: golden-journey-evidence
           path: /tmp/golden-journey-evidence.json
+          if-no-files-found: warn
+
+      - name: Upload security evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-live-evidence
+          path: /tmp/security-live-evidence.json
           if-no-files-found: warn

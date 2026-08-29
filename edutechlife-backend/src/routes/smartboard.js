@@ -4,6 +4,7 @@ const supabase = require('../db/supabase');
 const { chat, chatStream, validateMessages } = require('../services/deepseek');
 const { requireAuth } = require('../middleware/auth');
 const { requireVerifiedParentalConsent } = require('../middleware/parentalConsent');
+const { requireStudentAccess, assertStudentAccess } = require('../middleware/ownership');
 const { detectCrisis } = require('../services/crisisDetection');
 const { sendCrisisAlert, logCrisisIncident, sendEmail, sendConsentVerificationEmail } = require('../services/emailService');
 const { buildWeeklySummary, renderWeeklyEmail, aggregateMasterySummary } = require('../services/weeklyReport');
@@ -1479,7 +1480,7 @@ const { validateInput, detectEmotionalState, sanitizeOutput } = require('../serv
  * Orchestrated Dani endpoint. Frontend sends minimal payload; backend builds full context.
  * Body: { message, studentId, socraticMode?, documentContext?, history? }
  */
-router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+router.post('/dani/chat', requireAuth, requireStudentAccess, requireVerifiedParentalConsent, async (req, res) => {
   const { message, studentId, socraticMode = false, documentContext = null, history = [] } = req.body;
 
   // 1. Safety gateway — input validation
@@ -1584,7 +1585,7 @@ const {
 } = require('../services/adaptiveLearning');
 
 // GET /api/smartboard/adaptive/state?studentId=uuid
-router.get('/adaptive/state', requireAuth, async (req, res) => {
+router.get('/adaptive/state', requireAuth, requireStudentAccess, async (req, res) => {
   try {
     const { studentId } = req.query;
     if (!studentId) return res.status(400).json({ error: 'studentId required' });
@@ -1597,7 +1598,7 @@ router.get('/adaptive/state', requireAuth, async (req, res) => {
 });
 
 // GET /api/smartboard/adaptive/next-action?studentId=uuid
-router.get('/adaptive/next-action', requireAuth, async (req, res) => {
+router.get('/adaptive/next-action', requireAuth, requireStudentAccess, async (req, res) => {
   try {
     const { studentId } = req.query;
     if (!studentId) return res.status(400).json({ error: 'studentId required' });
@@ -1611,7 +1612,7 @@ router.get('/adaptive/next-action', requireAuth, async (req, res) => {
 
 // POST /api/smartboard/adaptive/daily-plan
 // Body: { studentId, availableMinutes }
-router.post('/adaptive/daily-plan', requireAuth, async (req, res) => {
+router.post('/adaptive/daily-plan', requireAuth, requireStudentAccess, async (req, res) => {
   try {
     const { studentId, availableMinutes } = req.body;
     if (!studentId) return res.status(400).json({ error: 'studentId required' });
@@ -1630,7 +1631,7 @@ router.post('/adaptive/daily-plan', requireAuth, async (req, res) => {
 
 // POST /api/smartboard/adaptive/weekly-plan
 // Body: { studentId }
-router.post('/adaptive/weekly-plan', requireAuth, async (req, res) => {
+router.post('/adaptive/weekly-plan', requireAuth, requireStudentAccess, async (req, res) => {
   try {
     const { studentId } = req.body;
     if (!studentId) return res.status(400).json({ error: 'studentId required' });
@@ -1649,7 +1650,7 @@ router.post('/adaptive/weekly-plan', requireAuth, async (req, res) => {
 // POST /api/smartboard/adaptive/recommendations
 // Body: { studentId }  → generates content-backed recommendations, persists them,
 // and returns the current pending queue for the student.
-router.post('/adaptive/recommendations', requireAuth, async (req, res) => {
+router.post('/adaptive/recommendations', requireAuth, requireStudentAccess, async (req, res) => {
   try {
     const { studentId } = req.body;
     if (!studentId) return res.status(400).json({ error: 'studentId required' });
@@ -1671,7 +1672,7 @@ const {
 } = require('../services/competencyMastery');
 
 // GET /api/smartboard/adaptive/mastery?subject=matematicas
-router.get('/adaptive/mastery', requireAuth, async (req, res) => {
+router.get('/adaptive/mastery', requireAuth, requireStudentAccess, async (req, res) => {
   try {
     const { studentId, subject } = req.query;
     if (!studentId) return res.status(400).json({ error: 'studentId required' });
@@ -1685,7 +1686,7 @@ router.get('/adaptive/mastery', requireAuth, async (req, res) => {
 
 // POST /api/smartboard/adaptive/mastery
 // Body: { studentId, competencyId, score } OR { studentId, entries: [{competencyId, score}] }
-router.post('/adaptive/mastery', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+router.post('/adaptive/mastery', requireAuth, requireStudentAccess, requireVerifiedParentalConsent, async (req, res) => {
   try {
     const { studentId, competencyId, score, entries } = req.body;
     if (!studentId) return res.status(400).json({ error: 'studentId required' });
@@ -1719,7 +1720,7 @@ const { generateParentInsights, buildLearningGraphSummary } = require('../servic
  * GET /api/smartboard/parent/insights?studentId=uuid
  * Returns 3-5 actionable insights for the parent from the Learning Graph.
  */
-router.get('/parent/insights', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+router.get('/parent/insights', requireAuth, requireStudentAccess, requireVerifiedParentalConsent, async (req, res) => {
   const { studentId } = req.query;
   if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
   try {
@@ -1735,7 +1736,7 @@ router.get('/parent/insights', requireAuth, requireVerifiedParentalConsent, asyn
  * GET /api/smartboard/parent/learning-graph?studentId=uuid
  * Returns mastery-by-subject summary for parent dashboard.
  */
-router.get('/parent/learning-graph', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+router.get('/parent/learning-graph', requireAuth, requireStudentAccess, requireVerifiedParentalConsent, async (req, res) => {
   const { studentId } = req.query;
   if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
   try {
@@ -1754,7 +1755,7 @@ const { runAllDetectors, resolveWarning } = require('../services/earlyWarning');
  * GET /api/smartboard/adaptive/warnings?studentId=uuid
  * Runs all 4 detectors and returns active (unresolved) warnings.
  */
-router.get('/adaptive/warnings', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
+router.get('/adaptive/warnings', requireAuth, requireStudentAccess, requireVerifiedParentalConsent, async (req, res) => {
   const { studentId } = req.query;
   if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
   try {
@@ -1772,6 +1773,22 @@ router.get('/adaptive/warnings', requireAuth, requireVerifiedParentalConsent, as
  */
 router.post('/adaptive/warnings/:id/resolve', requireAuth, async (req, res) => {
   try {
+    const { data: warning } = await supabase
+      .from('early_warnings')
+      .select('student_id')
+      .eq('id', req.params.id)
+      .maybeSingle();
+    if (!warning) return res.status(404).json({ error: 'Alerta no encontrada' });
+
+    const result = await assertStudentAccess(req, warning.student_id);
+    if (!result.ok) {
+      if (result.status === 404) return res.status(404).json({ error: 'Estudiante no encontrado' });
+      (req.log || console).warn('[access-denied]', {
+        requestId: req.id, userId: req.userId, resource: `warning:${req.params.id}`, reason: result.reason,
+      });
+      return res.status(403).json({ error: 'No autorizado para esta alerta' });
+    }
+
     await resolveWarning(req.params.id);
     res.json({ ok: true });
   } catch (e) {
@@ -1784,7 +1801,7 @@ const { getStudentMissions, recordActivity } = require('../services/missionEngin
 const { checkAndUnlockBadges, getStudentBadges } = require('../services/badgeEngine');
 
 // GET /api/smartboard/gamification/missions?studentId=uuid
-router.get('/gamification/missions', requireAuth, async (req, res) => {
+router.get('/gamification/missions', requireAuth, requireStudentAccess, async (req, res) => {
   const { studentId } = req.query;
   if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
   try {
@@ -1798,7 +1815,7 @@ router.get('/gamification/missions', requireAuth, async (req, res) => {
 
 // POST /api/smartboard/gamification/activity
 // Body: { studentId, activityType, meta? }
-router.post('/gamification/activity', requireAuth, async (req, res) => {
+router.post('/gamification/activity', requireAuth, requireStudentAccess, async (req, res) => {
   const { studentId, activityType, meta = {} } = req.body;
   if (!studentId || !activityType) return res.status(400).json({ error: 'studentId y activityType requeridos' });
   try {
@@ -1812,7 +1829,7 @@ router.post('/gamification/activity', requireAuth, async (req, res) => {
 });
 
 // GET /api/smartboard/gamification/badges?studentId=uuid
-router.get('/gamification/badges', requireAuth, async (req, res) => {
+router.get('/gamification/badges', requireAuth, requireStudentAccess, async (req, res) => {
   const { studentId } = req.query;
   if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
   try {

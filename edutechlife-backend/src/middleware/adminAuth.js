@@ -1,9 +1,13 @@
 /**
  * Admin Authentication Middleware
- * Verifies JWT token and checks for admin/content-creator role
+ * Verifies JWT token and checks for admin/content-creator role.
+ *
+ * El rol se lee de `app_metadata` (no de `user_metadata`, que es editable
+ * por el propio usuario vía auth.updateUser). El token se valida con
+ * supabase.auth.getUser(token), como el resto de middlewares.
  */
 
-const { createSessionClient } = require('../db/sessionClient');
+const supabase = require('../db/supabase');
 
 /**
  * Verify JWT token from Authorization header
@@ -17,16 +21,15 @@ async function requireAdmin(req, res, next) {
     }
 
     const token = authHeader.substring(7);
-    const client = createSessionClient(token);
 
     // Verify token is valid
-    const { data: { user }, error: authError } = await client.auth.getUser();
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
     if (authError || !user) {
       return res.status(401).json({ error: 'Invalid or expired token' });
     }
 
-    // Check admin role (from user_metadata or custom claims)
-    const userRole = user.user_metadata?.role || user.role;
+    // Admin/content_creator role SOLO desde app_metadata (confiable)
+    const userRole = user.app_metadata?.role || null;
     const isAdmin = userRole === 'admin' || userRole === 'content_creator';
 
     if (!isAdmin) {
