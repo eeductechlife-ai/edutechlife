@@ -250,11 +250,15 @@ async function run() {
     return count || 0;
   };
 
-  // datos adicionales que la API no escribe (points/sessions van directo del
-  // frontend en el flujo real) — se siembran vía service para probar
-  // persistencia DB tras logout/login
+  // Escribe vía API (misión + badge con actividad dani_chat) y vía service
+  // (points/sessions, que en el flujo real el frontend escribe directo).
+  await api('/api/smartboard/gamification/activity', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, activityType: 'dani_chat', meta: {} }) }, tokenA2);
   await supabase.from('points_history').insert({ student_id: studentIds.A, points: 10, reason: 'test_persistence', category: 'participation' });
   await supabase.from('sessions').insert({ student_id: studentIds.A, subject: 'math', type: 'quiz', duration_minutes: 10 });
+
+  // Logout → login (segunda pasada)
+  await api('/api/auth/logout', { method: 'POST' }, tokenA2);
+  const tokenA3 = await login(USERS.A);
 
   const pers = {};
   pers.plan = await dbCount('learning_plans', { student_id: studentIds.A, is_active: true });
@@ -262,8 +266,8 @@ async function run() {
   pers.points = await dbCount('points_history', { student_id: studentIds.A, reason: 'test_persistence' });
   pers.badge = await dbCount('student_badges', { student_id: studentIds.A });
   pers.session = await dbCount('sessions', { student_id: studentIds.A });
-  const persOk = pers.plan >= 1 && pers.mission >= 1 && pers.points >= 1 && pers.session >= 1;
-  step('persistence: plan/mission/points/badge/session en DB (fuente de verdad)', persOk, pers);
+  const persOk = tokenA3 && pers.plan >= 1 && pers.mission >= 1 && pers.points >= 1 && pers.badge >= 1 && pers.session >= 1;
+  step('persistence: plan/mission/points/badge/session en DB tras logout/login', persOk, pers);
   step('persistence: dani_memory (requiere DEEPSEEK_API_KEY)', false, { blocked: 'secret' }, true);
 
   // ── E4: EARLY WARNING SCENARIO ─────────────────────────────────────────
@@ -277,7 +281,7 @@ async function run() {
     { student_id: studentIds.A, competency_id: 'co_matematicas_6-7_1', mastery_level: 0.2, practice_count: 6, updated_at: new Date().toISOString() },
     { onConflict: 'student_id,competency_id' });
 
-  const warn = await api(`/api/smartboard/adaptive/warnings?studentId=${studentIds.A}`, {}, tokenA2);
+  const warn = await api(`/api/smartboard/adaptive/warnings?studentId=${studentIds.A}`, {}, tokenA3);
   const warnTypes = (warn.body?.warnings || []).map((w) => w.type);
   step('early warning: deterioro dispara warning (inactivity/repeated_errors)', warn.status === 200 && warnTypes.length > 0, { status: warn.status, warnings: warnTypes });
 
