@@ -5,18 +5,30 @@ import { createSupabaseClient } from "../../../../lib/supabase";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 
 const FEATURE_TOGGLES = [
-  { id: "flashcards", emoji: "🃏", labelKey: "Flashcards" },
-  { id: "oral", emoji: "🎤", labelKey: "Examen Oral" },
-  { id: "examenes", emoji: "📝", labelKey: "Exámenes de Práctica" },
-  { id: "retos", emoji: "🏆", labelKey: "Retos Inteligentes" },
-  { id: "podcast", emoji: "🎙️", labelKey: "Podcast Educativo" },
-  { id: "vak", emoji: "🧠", labelKey: "Diagnóstico VAK" },
-  { id: "calificaciones", emoji: "📊", labelKey: "Escáner de Notas" },
-  { id: "misiones", emoji: "🎯", labelKey: "Misiones Diarias" },
+  {
+    id: "flashcards",
+    emoji: "🃏",
+    i18nKey: "parent_dashboard.feature_flashcards",
+  },
+  { id: "oral", emoji: "🎤", i18nKey: "parent_dashboard.feature_oral" },
+  {
+    id: "examenes",
+    emoji: "📝",
+    i18nKey: "parent_dashboard.feature_practice_exams",
+  },
+  { id: "retos", emoji: "🏆", i18nKey: "parent_dashboard.feature_challenges" },
+  { id: "podcast", emoji: "🎙️", i18nKey: "parent_dashboard.feature_podcast" },
+  { id: "vak", emoji: "🧠", i18nKey: "parent_dashboard.feature_vak" },
+  {
+    id: "calificaciones",
+    emoji: "📊",
+    i18nKey: "parent_dashboard.feature_grades",
+  },
+  { id: "misiones", emoji: "🎯", i18nKey: "parent_dashboard.feature_missions" },
 ];
 
 const TIME_LIMITS = [
-  { value: 0, label: "Sin límite" },
+  { value: 0, labelKey: "parent_dashboard.controls_no_limit" },
   { value: 30, label: "30 min" },
   { value: 60, label: "1 hora" },
   { value: 90, label: "1.5 horas" },
@@ -140,10 +152,11 @@ const ParentalControlsPanel = ({ authToken, studentId }) => {
       <div className="bg-gradient-to-r from-[#004B63] to-[#0077B6] rounded-xl p-5 text-white flex items-center gap-4">
         <Shield className="w-8 h-8 flex-shrink-0" />
         <div>
-          <h3 className="font-black text-lg">Control Parental</h3>
+          <h3 className="font-black text-lg">
+            {t("parent_dashboard.controls_title")}
+          </h3>
           <p className="text-white/70 text-sm">
-            Configura qué herramientas puede usar tu hijo/a y establece límites
-            de tiempo.
+            {t("parent_dashboard.controls_description")}
           </p>
         </div>
       </div>
@@ -152,10 +165,13 @@ const ParentalControlsPanel = ({ authToken, studentId }) => {
       <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
         <div className="flex items-center justify-between mb-4">
           <h4 className="font-bold text-[#004B63] text-sm flex items-center gap-2">
-            <span>🛠️</span> Herramientas Habilitadas
+            <span>🛠️</span> {t("parent_dashboard.controls_tools_header")}
           </h4>
           <span className="text-xs text-[#94A3B8]">
-            {enabledCount}/{FEATURE_TOGGLES.length} activas
+            {t("parent_dashboard.controls_tools_count", {
+              count: enabledCount,
+              total: FEATURE_TOGGLES.length,
+            })}
           </span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -175,7 +191,7 @@ const ParentalControlsPanel = ({ authToken, studentId }) => {
                 <span
                   className={`text-sm font-medium flex-1 ${enabled ? "text-emerald-800" : "text-gray-500"}`}
                 >
-                  {feat.labelKey}
+                  {t(feat.i18nKey)}
                 </span>
                 <div
                   className={`w-10 h-6 rounded-full relative transition-colors ${
@@ -197,7 +213,7 @@ const ParentalControlsPanel = ({ authToken, studentId }) => {
       {/* Dani Chat Toggle */}
       <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
         <h4 className="font-bold text-[#004B63] text-sm mb-3 flex items-center gap-2">
-          <span>🤖</span> Tutor IA (Dani)
+          <span>🤖</span> {t("parent_dashboard.controls_dani_header")}
         </h4>
         <button
           onClick={toggleChat}
@@ -212,10 +228,10 @@ const ParentalControlsPanel = ({ authToken, studentId }) => {
             <p
               className={`text-sm font-medium ${controls.chatEnabled ? "text-blue-800" : "text-gray-500"}`}
             >
-              Chat con Dani
+              {t("parent_dashboard.controls_dani_chat")}
             </p>
             <p className="text-xs text-gray-500">
-              Tutor de IA que ayuda con dudas y explicaciones
+              {t("parent_dashboard.controls_dani_description")}
             </p>
           </div>
           <div
@@ -235,10 +251,11 @@ const ParentalControlsPanel = ({ authToken, studentId }) => {
       {/* Daily Time Limit */}
       <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
         <h4 className="font-bold text-[#004B63] text-sm mb-3 flex items-center gap-2">
-          <Clock className="w-4 h-4" /> Límite de Tiempo Diario
+          <Clock className="w-4 h-4" />{" "}
+          {t("parent_dashboard.controls_time_limit")}
         </h4>
         <p className="text-xs text-[#94A3B8] mb-3">
-          Establece cuánto tiempo máximo puede usar SmartBoard por día.
+          {t("parent_dashboard.controls_time_limit_description")}
         </p>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
           {TIME_LIMITS.map((tl) => (
@@ -251,7 +268,7 @@ const ParentalControlsPanel = ({ authToken, studentId }) => {
                   : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100"
               }`}
             >
-              {tl.label}
+              {tl.labelKey ? t(tl.labelKey) : tl.label}
             </button>
           ))}
         </div>
@@ -272,15 +289,15 @@ const ParentalControlsPanel = ({ authToken, studentId }) => {
         {saving ? (
           <>
             <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-            Guardando...
+            {t("parent_dashboard.controls_saving")}
           </>
         ) : saved ? (
           <>
-            <Check className="w-4 h-4" /> Guardado
+            <Check className="w-4 h-4" /> {t("parent_dashboard.controls_saved")}
           </>
         ) : (
           <>
-            <Save className="w-4 h-4" /> Guardar Configuración
+            <Save className="w-4 h-4" /> {t("parent_dashboard.controls_save")}
           </>
         )}
       </motion.button>

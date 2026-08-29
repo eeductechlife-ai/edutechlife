@@ -67,3 +67,6 @@
 {"type":"edit","file":"/Users/home/Desktop/edutechlife/supabase/migrations/045_students_insert_rls.sql","timestamp":1787318385467,"sessionId":null}
 {"type":"edit","file":"/Users/home/Desktop/edutechlife/edutechlife-frontend/src/hooks/useTimetable.js","timestamp":1787318566353,"sessionId":null}
 {"type":"edit","file":"/Users/home/Desktop/edutechlife/edutechlife-frontend/src/components/kids-dashboard/schedule/WeeklyScheduleView.jsx","timestamp":1787318576116,"sessionId":null}
+{"type":"edit","file":"/Users/home/Desktop/edutechlife/edutechlife-backend/src/routes/smartboard.js","timestamp":1787847581261,"sessionId":null}
+{"type":"edit","file":"/Users/home/Desktop/edutechlife/edutechlife-backend/src/routes/smartboard.js","timestamp":1787847590905,"sessionId":null}
+{"type":"edit","file":"/Users/home/Desktop/edutechlife/edutechlife-backend/src/routes/__tests__/admin.test.js","timestamp":1787943404068,"sessionId":null}
