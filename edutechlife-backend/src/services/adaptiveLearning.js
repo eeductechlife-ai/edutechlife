@@ -132,7 +132,7 @@ async function getStudentState(studentId) {
 
   const avgSessionMin =
     sessions.length
-      ? Math.round(sessions.reduce((sum, s) => sum + (s.duration || 0), 0) / sessions.length / 60)
+      ? Math.round(sessions.reduce((sum, s) => sum + (s.duration_minutes || 0), 0) / sessions.length)
       : 0;
 
   const strengths = detectStrengths(masteryBySubject, gradeMap);
@@ -183,6 +183,65 @@ function detectWeaknesses(masteryBySubject, gradeMap) {
     const g = gradeMap[s];
     return m < 0.4 || (g !== undefined && g < 3.5);
   });
+}
+
+/**
+ * Por-subject MIN mastery a nivel competencia. Detecta déficits puntuales que
+ * el promedio de materia enmascara (p. ej. ecuaciones 0.35 dentro de
+ * matemáticas 0.425).
+ */
+function computeSubjectMinMastery(masteryRows) {
+  const min = {};
+  for (const row of masteryRows || []) {
+    const subject = subjectFromCompetencyId(row.competency_id);
+    if (!subject) continue;
+    if (!(subject in min) || Number(row.mastery_level) < min[subject]) {
+      min[subject] = Number(row.mastery_level);
+    }
+  }
+  return min;
+}
+
+const LEARNING_MIN = 0.4;
+const ENGAGEMENT_ACTIVE_DAYS = 3;
+
+/**
+ * SMARTBOARD PRIORITY (E5) — separa conceptualmente LEARNING NEED de
+ * ENGAGEMENT NEED y produce una decisión final:
+ *   - si existe un déficit de aprendizaje real (min mastery < 0.4) → gana
+ *     LEARNING (práctica en la competencia más débil), sin importar la
+ *     actividad reciente (Student A: math 35% → prioriza aprender).
+ *   - si no hay déficit real pero la actividad es baja → gana ENGAGEMENT
+ *     (motivación/racha) (Student B: math 90% → puede priorizar engagement).
+ *   - si no hay déficit ni baja actividad → fortaleza (challenge/transfer).
+ */
+function computeSmartboardPriority(state) {
+  const subjectMin = computeSubjectMinMastery(state.masteryRows || []);
+  const weakest = Object.entries(subjectMin).sort((a, b) => a[1] - b[1])[0];
+  const minMastery = weakest ? weakest[1] : 1;
+  const { activeDaysLast14 = 0 } = state.behavior || {};
+
+  const learningNeed = Math.min(1, (LEARNING_MIN - minMastery) / LEARNING_MIN + 0.5);
+  const engagementNeed = Math.min(1, 1 - activeDaysLast14 / ENGAGEMENT_ACTIVE_DAYS);
+  const totalPractice = (state.masteryRows || []).reduce((s, r) => s + (r.practice_count || 0), 0);
+  const confidence = state.masteryRows?.length
+    ? Math.min(1, totalPractice / (state.masteryRows.length * 4))
+    : 0;
+  const urgency = minMastery < LEARNING_MIN ? Math.round((LEARNING_MIN - minMastery) * 100) : 0;
+  const goal = minMastery < 0.3 ? "recovery" : minMastery < 0.6 ? "practice" : minMastery < 0.8 ? "mastery" : "transfer";
+  const winning = minMastery < LEARNING_MIN ? "learning" : engagementNeed > 0.5 ? "engagement" : "strength";
+
+  return {
+    subjectMinMastery: subjectMin,
+    weakestSubject: weakest ? weakest[0] : null,
+    minMastery: Math.round(minMastery * 1000) / 1000,
+    learningNeed: Math.round(Math.max(0, learningNeed) * 100) / 100,
+    engagementNeed: Math.round(engagementNeed * 100) / 100,
+    confidence: Math.round(confidence * 100) / 100,
+    urgency,
+    goal,
+    winning,
+  };
 }
 
 function detectRisks({ activeDaysLast14, streak, weaknesses }) {
@@ -298,7 +357,11 @@ async function recommendContent(studentId, state) {
   const age = state.age || null;
   const out = [];
 
-  for (const subj of (state.weaknesses || []).slice(0, 2)) {
+  const subjectsToCover = (state.weaknesses || []).slice(0, 2);
+  const targetSubject = subjectsToCover[0] || Object.keys(state.masteryBySubject || {})[0] || "matematicas";
+
+  // 1. Contenido exacto para las debilidades (fácil)
+  for (const subj of subjectsToCover) {
     const [content] = await fetchContentForSubject(subj, { difficultyMax: 2, age });
     if (content) {
       out.push({
@@ -312,6 +375,7 @@ async function recommendContent(studentId, state) {
     }
   }
 
+  // 2. Reto para una fortaleza (difícil)
   for (const subj of (state.strengths || []).slice(0, 1)) {
     const [content] = await fetchContentForSubject(subj, { difficultyMin: 3, difficultyMax: 5, age });
     if (content) {
@@ -326,41 +390,93 @@ async function recommendContent(studentId, state) {
     }
   }
 
+  // 3. FALLBACKS — nunca devolver [] cuando exista una alternativa útil (E6)
+  if (out.length === 0) {
+    // Fallback 1: contenido relacionado (cualquier dificultad en la materia débil)
+    const [related] = await fetchContentForSubject(targetSubject, { difficultyMin: 1, difficultyMax: 5, age });
+    if (related) {
+      out.push({
+        type: "reinforcement",
+        contentId: related.id,
+        competencyId: related.competency_id,
+        priority: 4,
+        reason: `Contenido relacionado con ${SUBJECT_MAP[targetSubject] || targetSubject}: "${related.title}".`,
+        metadata: { subject: targetSubject, difficulty: related.difficulty, source: "fallback_related" },
+      });
+    } else {
+      // Fallback 2: prerrequisito (concepto base de la materia)
+      const [prereq] = await fetchContentForSubject(targetSubject, { difficultyMax: 5, age });
+      if (prereq) {
+        out.push({
+          type: "reinforcement",
+          contentId: prereq.id,
+          competencyId: prereq.competency_id,
+          priority: 4,
+          reason: `Base de ${SUBJECT_MAP[targetSubject] || targetSubject}: "${prereq.title}".`,
+          metadata: { subject: targetSubject, difficulty: prereq.difficulty, source: "fallback_prerequisite" },
+        });
+      } else {
+        // Fallback 3: diagnóstico (siempre generable)
+        out.push({
+          type: "diagnostic",
+          priority: 4,
+          reason: `Hagamos un diagnóstico rápido de ${SUBJECT_MAP[targetSubject] || targetSubject} para afinar tu plan.`,
+          metadata: { subject: targetSubject, source: "fallback_diagnostic" },
+        });
+        // Fallback 4: exploración
+        out.push({
+          type: "exploration",
+          priority: 2,
+          reason: "Explora un tema nuevo o un recurso distinto para mantener el interés.",
+          metadata: { source: "fallback_exploration" },
+        });
+      }
+    }
+  }
+
   const persisted = await persistRecommendations(studentId, out);
   return { recommendations: out, persisted };
 }
 
 /**
- * Returns the single best next action for the student with an explanation.
+ * Returns the single best next action for the student with an explanation,
+ * driven by the SMARTBOARD PRIORITY (E5): learning need > engagement > strength.
  */
 function getNextBestAction(state) {
-  // Highest priority: a weak subject that needs immediate attention
-  if (state.weaknesses.length > 0) {
-    const subj = state.weaknesses[0];
+  const smartboardPriority = computeSmartboardPriority(state);
+
+  // 1. LEARNING NEED: existe un déficit real (< 40% min) → práctica en la
+  //    competencia/materia más débil, aunque la actividad reciente sea alta.
+  if (smartboardPriority.winning === "learning" && smartboardPriority.weakestSubject) {
+    const subj = smartboardPriority.weakestSubject;
     return {
       subject: subj,
       label: SUBJECT_MAP[subj] || subj,
       action: "practice",
-      reason: `${SUBJECT_MAP[subj] || subj} necesita más atención. Practicar ahora tiene el mayor impacto en tu promedio.`,
+      reason: `${SUBJECT_MAP[subj] || subj} está en ${Math.round(smartboardPriority.minMastery * 100)}% de dominio (meta: ${smartboardPriority.goal}). Practicar ahora tiene el mayor impacto en tu aprendizaje.`,
       estimatedMinutes: 10,
       priority: "high",
+      difficulty: smartboardPriority.minMastery < 0.4 ? "easy" : "medium",
+      smartboardPriority,
     };
   }
 
-  // Next: streak recovery
-  if (state.behavior.streak === 0) {
+  // 2. ENGAGEMENT NEED: sin déficit real pero poca actividad → motivación.
+  if (smartboardPriority.winning === "engagement") {
     const subj = state.strengths[0] || "matematicas";
     return {
       subject: subj,
       label: SUBJECT_MAP[subj] || subj,
       action: "quick",
-      reason: "No has estudiado hoy. Una actividad rápida reactiva tu racha.",
+      reason: "No has estudiado hoy. Una actividad rápida reactiva tu racha y mantiene el hábito.",
       estimatedMinutes: 5,
       priority: "medium",
+      difficulty: "easy",
+      smartboardPriority,
     };
   }
 
-  // Default: reinforce a strength
+  // 3. STRENGTH: sin déficit y con hábito → reto/transferencia.
   const subj = state.strengths[0] || "matematicas";
   return {
     subject: subj,
@@ -369,6 +485,8 @@ function getNextBestAction(state) {
     reason: `Estás progresando bien en ${SUBJECT_MAP[subj] || subj}. Sube el nivel para mantener el impulso.`,
     estimatedMinutes: 15,
     priority: "low",
+    difficulty: "hard",
+    smartboardPriority,
   };
 }
 
@@ -513,6 +631,7 @@ module.exports = {
   getStudentState,
   detectStrengths,
   detectWeaknesses,
+  computeSmartboardPriority,
   detectRisks,
   generateRecommendations,
   recommendContent,

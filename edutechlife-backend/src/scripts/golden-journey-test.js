@@ -146,10 +146,11 @@ async function run() {
   });
 
   const recs = await api('/api/smartboard/adaptive/recommendations', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A }) }, tokenA);
-  step('journey: recommendation A', recs.status === 200, { status: recs.status, recs: (recs.body?.recommendations || []).slice(0, 3).map((r) => r.reason || r.type) });
+  step('journey: recommendation A (E6: no vacía)', recs.status === 200 && (recs.body?.recommendations || []).length > 0, { status: recs.status, recs: (recs.body?.recommendations || []).map((r) => r.type || r.reason) });
 
   const nba = await api(`/api/smartboard/adaptive/next-action?studentId=${studentIds.A}`, {}, tokenA);
-  step('journey: next best action A', nba.status === 200, { status: nba.status, action: nba.body?.action });
+  const nbaA = nba.body?.action || {};
+  step('journey: next best action A (E5: learning priority)', nba.status === 200 && nbaA.action === 'practice' && nbaA.subject === 'matematicas', { status: nba.status, action: nbaA.action, subject: nbaA.subject, priority: nbaA.smartboardPriority });
 
   const plan = await api('/api/smartboard/adaptive/daily-plan', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, availableMinutes: 20 }) }, tokenA);
   step('journey: daily plan A', plan.status === 200, { status: plan.status, plan: plan.body?.plan });
@@ -241,9 +242,52 @@ async function run() {
     step('RLS: sin anon key en env — no probado', false, { nota: 'requiere STAGING_ANON_KEY' });
   }
 
-  // ── EARLY WARNING ─────────────────────────────────────────────────────
-  const last = await api(`/api/smartboard/adaptive/warnings?studentId=${studentIds.A}`, {}, tokenA2);
-  step('early warning: /adaptive/warnings responde', last.status === 200, { status: last.status, warnings: (last.body?.warnings || []).map((w) => w.type) });
+  // ── E3: PERSISTENCE COMPLETE (DB = fuente de verdad) ───────────────────
+  const dbCount = async (table, filter) => {
+    let q = supabase.from(table).select('id', { count: 'exact', head: true });
+    for (const [k, v] of Object.entries(filter)) q = q.eq(k, v);
+    const { count } = await q;
+    return count || 0;
+  };
+
+  // datos adicionales que la API no escribe (points/sessions van directo del
+  // frontend en el flujo real) — se siembran vía service para probar
+  // persistencia DB tras logout/login
+  await supabase.from('points_history').insert({ student_id: studentIds.A, points: 10, reason: 'test_persistence', category: 'participation' });
+  await supabase.from('sessions').insert({ student_id: studentIds.A, subject: 'math', type: 'quiz', duration_minutes: 10 });
+
+  const pers = {};
+  pers.plan = await dbCount('learning_plans', { student_id: studentIds.A, is_active: true });
+  pers.mission = await dbCount('student_missions', { student_id: studentIds.A });
+  pers.points = await dbCount('points_history', { student_id: studentIds.A, reason: 'test_persistence' });
+  pers.badge = await dbCount('student_badges', { student_id: studentIds.A });
+  pers.session = await dbCount('sessions', { student_id: studentIds.A });
+  const persOk = pers.plan >= 1 && pers.mission >= 1 && pers.points >= 1 && pers.session >= 1;
+  step('persistence: plan/mission/points/badge/session en DB (fuente de verdad)', persOk, pers);
+  step('persistence: dani_memory (requiere DEEPSEEK_API_KEY)', false, { blocked: 'secret' }, true);
+
+  // ── E4: EARLY WARNING SCENARIO ─────────────────────────────────────────
+  // BASELINE (ya verificado): sin warnings en golden data.
+
+  // DETERIORO controlado: actividad baja + errores altos + mastery bajo
+  await supabase.from('learning_streaks').upsert(
+    { student_id: studentIds.A, current_streak: 0, best_streak: 3, last_activity_date: new Date(Date.now() - 5 * 86400000).toISOString().slice(0, 10), total_days_active: 6 },
+    { onConflict: 'student_id' });
+  await supabase.from('student_competency_mastery').upsert(
+    { student_id: studentIds.A, competency_id: 'co_matematicas_6-7_1', mastery_level: 0.2, practice_count: 6, updated_at: new Date().toISOString() },
+    { onConflict: 'student_id,competency_id' });
+
+  const warn = await api(`/api/smartboard/adaptive/warnings?studentId=${studentIds.A}`, {}, tokenA2);
+  const warnTypes = (warn.body?.warnings || []).map((w) => w.type);
+  step('early warning: deterioro dispara warning (inactivity/repeated_errors)', warn.status === 200 && warnTypes.length > 0, { status: warn.status, warnings: warnTypes });
+
+  const insightAfter = parentLogin ? await api(`/api/smartboard/parent/insights?studentId=${studentIds.A}`, {}, parentLogin) : null;
+  const insightTypes = insightAfter?.body?.insights?.map((i) => i.type) || [];
+  const ewEvidence = (warn.body?.warnings || [])[0] || null;
+  step('early warning → parent insight refleja el riesgo (WHAT/WHY/ACTION/EVIDENCE)', insightAfter?.status === 200 && insightTypes.includes('risk'), {
+    insight_types: insightTypes,
+    warning_evidence: ewEvidence ? { type: ewEvidence.type, severity: ewEvidence.severity, recommendation: ewEvidence.recommendation } : null,
+  });
 
   evidence.finishedAt = new Date().toISOString();
   require('fs').writeFileSync('/tmp/golden-journey-evidence.json', JSON.stringify(evidence, null, 2));
