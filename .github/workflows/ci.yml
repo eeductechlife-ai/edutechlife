@@ -380,6 +380,7 @@ jobs:
             OUT=$(supabase projects create edutechlife-staging \
               --org-id "$ORG_ID" \
               --db-password "${{ secrets.SUPABASE_DB_PASSWORD }}" \
+              --region us-east-1 \
               --output json)
             echo "$OUT"
             echo "::endgroup::"
