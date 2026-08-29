@@ -13,7 +13,7 @@ on:
         required: false
         default: all
         type: choice
-        options: [all, migrations-check, staging-setup]
+        options: [all, migrations-check, staging-setup, staging-journey]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -458,3 +458,74 @@ jobs:
               raise SystemExit(1)
           print("SCHEMA_OK")
           PY
+
+  staging-journey:
+    name: Golden User Journey (staging real)
+    if: ${{ github.event.inputs.target == 'staging-journey' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Resolve staging project + keys (in-CI, sin exponer)
+        id: resolve
+        run: |
+          set -euo pipefail
+          LIST=$(supabase projects list --output json || echo "[]")
+          REF=$(printf '%s' "$LIST" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(next((p.get("ref") or p.get("id","") for p in d if "staging" in (p.get("name","")).lower()), ""))')
+          if [ -z "$REF" ]; then echo "no staging project"; exit 1; fi
+          KEYS=$(supabase projects api-keys --project-ref "$REF" --output json)
+          ANON=$(printf '%s' "$KEYS" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(next((k["api_key"] for k in d if "anon" in k.get("name","").lower()), ""))')
+          SVC=$(printf '%s' "$KEYS" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(next((k["api_key"] for k in d if "service" in k.get("name","").lower()), ""))')
+          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+          echo "anon=$ANON" >> "$GITHUB_OUTPUT"
+          echo "service=$SVC" >> "$GITHUB_OUTPUT"
+          echo "STAGING_REF=$REF"
+
+      - name: Install backend deps
+        working-directory: edutechlife-backend
+        run: npm ci
+
+      - name: Boot backend (staging)
+        env:
+          SUPABASE_URL: https://${{ steps.resolve.outputs.ref }}.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ steps.resolve.outputs.service }}
+          SUPABASE_SERVICE_KEY: ${{ steps.resolve.outputs.service }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          PORT: '3001'
+          FRONTEND_URL: http://localhost:3001
+          BACKEND_URL: http://localhost:3001
+          NODE_ENV: production
+        working-directory: edutechlife-backend
+        run: |
+          nohup node src/index.js > /tmp/backend.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -s -o /dev/null http://localhost:3001/api/health && break
+            sleep 1
+          done
+          echo "health:"
+          curl -s http://localhost:3001/api/health
+
+      - name: Run Golden User Journey (no mocks)
+        env:
+          STAGING_SUPABASE_URL: https://${{ steps.resolve.outputs.ref }}.supabase.co
+          STAGING_SUPABASE_SERVICE_ROLE_KEY: ${{ steps.resolve.outputs.service }}
+          STAGING_ANON_KEY: ${{ steps.resolve.outputs.anon }}
+          BASE_URL: http://localhost:3001
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        working-directory: edutechlife-backend
+        run: node src/scripts/golden-journey-test.js
+
+      - name: Upload journey evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-journey-evidence
+          path: /tmp/golden-journey-evidence.json
+          if-no-files-found: warn
