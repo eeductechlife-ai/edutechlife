@@ -15,13 +15,13 @@ ALTER TABLE push_subscriptions ENABLE ROW LEVEL SECURITY;
 
 -- Los usuarios solo pueden ver/modificar sus propias suscripciones
 CREATE POLICY "push_select_own" ON push_subscriptions
-  FOR SELECT USING (user_id = auth.uid());
+  FOR SELECT USING (user_id = auth.uid()::text);
 
 CREATE POLICY "push_insert_own" ON push_subscriptions
-  FOR INSERT WITH CHECK (user_id = auth.uid());
+  FOR INSERT WITH CHECK (user_id = auth.uid()::text);
 
 CREATE POLICY "push_update_own" ON push_subscriptions
-  FOR UPDATE USING (user_id = auth.uid());
+  FOR UPDATE USING (user_id = auth.uid()::text);
 
 CREATE POLICY "push_delete_own" ON push_subscriptions
-  FOR DELETE USING (user_id = auth.uid());
+  FOR DELETE USING (user_id = auth.uid()::text);
