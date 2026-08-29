@@ -1,6 +1,18 @@
 import globals from 'globals';
 import security from 'eslint-plugin-security';
 
+const vitestGlobals = {
+  describe: 'readonly',
+  it: 'readonly',
+  test: 'readonly',
+  expect: 'readonly',
+  vi: 'readonly',
+  beforeEach: 'readonly',
+  afterEach: 'readonly',
+  beforeAll: 'readonly',
+  afterAll: 'readonly',
+};
+
 export default [
   {
     ignores: ['node_modules', 'coverage', 'eslint.config.js', 'src/__tests__', 'src/test-setup.js', 'src/docs'],
@@ -12,6 +24,7 @@ export default [
       sourceType: 'module',
       globals: {
         ...globals.node,
+        ...vitestGlobals,
       },
     },
     plugins: {

@@ -2,7 +2,7 @@ const { createClient } = require("@supabase/supabase-js");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY,
 );
 
 // ── Data Access ───────────────────────────────────────────────────────────────
@@ -10,7 +10,7 @@ const supabase = createClient(
 async function fetchStudentRow(studentId) {
   const { data } = await supabase
     .from("students")
-    .select("id, grade_level, country_code, school_name, created_at")
+    .select("id, grade_level, country_code, school, created_at")
     .eq("id", studentId)
     .maybeSingle();
   return data;
@@ -28,7 +28,7 @@ async function fetchRecentSessions(studentId, days = 14) {
   const since = new Date(Date.now() - days * 86400000).toISOString();
   const { data } = await supabase
     .from("sessions")
-    .select("subject, duration, created_at")
+    .select("subject, duration_minutes, created_at")
     .eq("student_id", studentId)
     .gte("created_at", since)
     .order("created_at", { ascending: false });
@@ -38,7 +38,7 @@ async function fetchRecentSessions(studentId, days = 14) {
 async function fetchStreak(studentId) {
   const { data } = await supabase
     .from("learning_streaks")
-    .select("current_streak, longest_streak, last_activity_date")
+    .select("current_streak, best_streak, last_activity_date")
     .eq("student_id", studentId)
     .maybeSingle();
   return data;
@@ -153,7 +153,7 @@ async function getStudentState(studentId) {
       activeDaysLast14,
       avgSessionMin,
       streak: streak?.current_streak || 0,
-      longestStreak: streak?.longest_streak || 0,
+      longestStreak: streak?.best_streak || 0,
     },
     rawSessions: sessions,
   };

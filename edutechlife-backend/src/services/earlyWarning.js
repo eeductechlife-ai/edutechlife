@@ -15,7 +15,7 @@ const { createClient } = require("@supabase/supabase-js");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY,
 );
 
 const INACTIVITY_THRESHOLD_DAYS = 3;
@@ -51,9 +51,9 @@ async function detectInactivity(studentId) {
 async function detectPerformanceDrop(studentId) {
   const { data: rows } = await supabase
     .from("student_competency_mastery")
-    .select("competency_id, mastery_score, last_updated")
+    .select("competency_id, mastery_level, updated_at")
     .eq("student_id", studentId)
-    .order("last_updated", { ascending: false })
+    .order("updated_at", { ascending: false })
     .limit(60);
 
   if (!rows || rows.length === 0) return null;
@@ -61,13 +61,13 @@ async function detectPerformanceDrop(studentId) {
   const now = Date.now();
   const oneWeek = 7 * 24 * 60 * 60 * 1000;
 
-  const recent = rows.filter((r) => new Date(r.last_updated).getTime() > now - oneWeek);
-  const older = rows.filter((r) => new Date(r.last_updated).getTime() <= now - oneWeek);
+  const recent = rows.filter((r) => new Date(r.updated_at).getTime() > now - oneWeek);
+  const older = rows.filter((r) => new Date(r.updated_at).getTime() <= now - oneWeek);
 
   if (recent.length === 0 || older.length === 0) return null;
 
-  const avgRecent = recent.reduce((s, r) => s + r.mastery_score, 0) / recent.length;
-  const avgOlder = older.reduce((s, r) => s + r.mastery_score, 0) / older.length;
+  const avgRecent = recent.reduce((s, r) => s + r.mastery_level, 0) / recent.length;
+  const avgOlder = older.reduce((s, r) => s + r.mastery_level, 0) / older.length;
 
   if (avgOlder - avgRecent < PERFORMANCE_DROP_THRESHOLD) return null;
 
@@ -86,14 +86,14 @@ async function detectPerformanceDrop(studentId) {
 async function detectRepeatedErrors(studentId) {
   const { data: rows } = await supabase
     .from("student_competency_mastery")
-    .select("competency_id, mastery_score, attempts")
+    .select("competency_id, mastery_level, practice_count")
     .eq("student_id", studentId);
 
   if (!rows || rows.length === 0) return null;
 
   // Find competencies with many attempts but still very low mastery
   const stuck = rows.filter(
-    (r) => r.mastery_score < MASTERY_CRITICAL && (r.attempts || 0) >= MIN_ATTEMPTS_FOR_REPETITIVE,
+    (r) => r.mastery_level < MASTERY_CRITICAL && (r.practice_count || 0) >= MIN_ATTEMPTS_FOR_REPETITIVE,
   );
 
   if (stuck.length === 0) return null;

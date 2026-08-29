@@ -14,7 +14,7 @@ const { getAgePolicy } = require("./aiSafetyGateway");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY,
 );
 
 const PEDAGOGICAL_CYCLE = `
@@ -39,7 +39,7 @@ Responde SOLO con preguntas. Nunca afirmes la respuesta. Lleva al estudiante a d
 async function fetchStudentProfile(studentId) {
   const { data } = await supabase
     .from("students")
-    .select("id, grade_level, country_code, school_name, age, name")
+    .select("id, grade_level, country_code, school, age, name")
     .eq("id", studentId)
     .maybeSingle();
   return data;
@@ -48,9 +48,9 @@ async function fetchStudentProfile(studentId) {
 async function fetchMastery(studentId) {
   const { data } = await supabase
     .from("student_competency_mastery")
-    .select("competency_id, mastery_score, last_updated")
+    .select("competency_id, mastery_level, updated_at")
     .eq("student_id", studentId)
-    .order("mastery_score", { ascending: true })
+    .order("mastery_level", { ascending: true })
     .limit(30);
   return data || [];
 }
@@ -58,16 +58,25 @@ async function fetchMastery(studentId) {
 async function fetchDaniMemory(studentId) {
   const { data } = await supabase
     .from("dani_memory")
-    .select("memory_data")
+    .select("communication_style, strengths, weaknesses, interests, frequent_errors, pending_topics, last_mood")
     .eq("student_id", studentId)
     .maybeSingle();
-  return data?.memory_data || null;
+  if (!data) return null;
+  return {
+    communicationStyle: data.communication_style,
+    strengths: data.strengths || [],
+    weaknesses: data.weaknesses || [],
+    interests: data.interests || [],
+    frequentErrors: data.frequent_errors || [],
+    pendingTopics: data.pending_topics || [],
+    lastMood: data.last_mood,
+  };
 }
 
 async function fetchActivePlan(studentId) {
   const { data } = await supabase
     .from("learning_plans")
-    .select("type, plan_data, created_at")
+    .select("type, plan_json, generated_at")
     .eq("student_id", studentId)
     .eq("is_active", true)
     .limit(1)
@@ -76,12 +85,23 @@ async function fetchActivePlan(studentId) {
 }
 
 async function fetchTodaySchedule(studentId) {
-  const today = new Date().toLocaleDateString("en-US", { weekday: "long" }).toLowerCase();
-  const { data } = await supabase
-    .from("schedule_slots")
-    .select("subject, start_time, end_time, teacher")
+  // day_of_week en timetable_slots: SMALLINT, Mon=1 … Sun=7
+  const day = new Date().getDay(); // 0=Sun .. 6=Sat
+  const dayOfWeek = day === 0 ? 7 : day;
+
+  const { data: timetable } = await supabase
+    .from("student_timetable")
+    .select("id")
     .eq("student_id", studentId)
-    .eq("day_of_week", today)
+    .eq("is_active", true)
+    .maybeSingle();
+  if (!timetable?.id) return [];
+
+  const { data } = await supabase
+    .from("timetable_slots")
+    .select("subject, subject_label, start_time, end_time, teacher")
+    .eq("timetable_id", timetable.id)
+    .eq("day_of_week", dayOfWeek)
     .order("start_time");
   return data || [];
 }
@@ -118,11 +138,11 @@ function buildSystemPrompt(ctx, opts = {}) {
   const grade = profile?.grade_level || "desconocido";
   const age = profile?.age || null;
   const name = profile?.name || "estudiante";
-  const school = profile?.school_name || "";
-  const commStyle = memory?.studentProfile?.communicationStyle || "neutral";
-  const interests = memory?.studentProfile?.interests || [];
-  const recentTopics = memory?.recentTopics || [];
-  const studentMood = memory?.studentProfile?.studentMood || "";
+  const school = profile?.school || "";
+  const commStyle = memory?.communicationStyle || "neutral";
+  const interests = memory?.interests || [];
+  const recentTopics = memory?.pendingTopics || [];
+  const studentMood = memory?.lastMood || "";
 
   // Base identity
   let prompt = `Eres Dani, tutora virtual de EdutechLife. Eres amigable, paciente y pedagógica.
@@ -150,7 +170,7 @@ Estudiante: ${name} | Grado: ${grade}${school ? ` | Colegio: ${school}` : ""}
 
   // Mastery summary (weakest subjects)
   if (mastery.length > 0) {
-    const weak = mastery.filter((m) => m.mastery_score < 0.5).slice(0, 3);
+    const weak = mastery.filter((m) => m.mastery_level < 0.5).slice(0, 3);
     if (weak.length > 0) {
       const weakSubjects = weak
         .map((m) => m.competency_id.split("_").slice(1, 2).join(""))
@@ -170,8 +190,8 @@ Estudiante: ${name} | Grado: ${grade}${school ? ` | Colegio: ${school}` : ""}
   }
 
   // Active learning plan summary
-  if (activePlan?.plan_data) {
-    const plan = activePlan.plan_data;
+  if (activePlan?.plan_json) {
+    const plan = activePlan.plan_json;
     const todayActivities = Array.isArray(plan.activities)
       ? plan.activities.slice(0, 2).map((a) => a.label || a.subject).join(", ")
       : "";
@@ -183,7 +203,7 @@ Estudiante: ${name} | Grado: ${grade}${school ? ` | Colegio: ${school}` : ""}
   // Schedule
   if (todaySchedule.length > 0) {
     const scheduleText = todaySchedule
-      .map((s) => `${s.subject} (${s.start_time}–${s.end_time})`)
+      .map((s) => `${s.subject_label || s.subject} (${s.start_time}–${s.end_time})`)
       .join(", ");
     prompt += `\n\n## HORARIO DE HOY\n${scheduleText}`;
   }

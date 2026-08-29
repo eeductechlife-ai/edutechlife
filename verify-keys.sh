@@ -27,10 +27,10 @@ test_connection() {
     echo -n "Testing $name... "
     if eval "$cmd" > /dev/null 2>&1; then
         echo -e "${GREEN}✅ PASSED${NC}"
-        ((PASSED++))
+        PASSED=$((PASSED+1))
     else
         echo -e "${RED}❌ FAILED${NC}"
-        ((FAILED++))
+        FAILED=$((FAILED+1))
     fi
 }
 
@@ -76,10 +76,13 @@ echo ""
 echo "2️⃣  Checking environment variables..."
 
 check_env "SUPABASE_URL" "edutechlife-backend/.env"
-check_env "SUPABASE_ANON_KEY" "edutechlife-backend/.env"
-check_env "SUPABASE_SERVICE_KEY" "edutechlife-backend/.env"
+check_env "SUPABASE_SERVICE_ROLE_KEY" "edutechlife-backend/.env"
 check_env "GOOGLE_TTS_API_KEY" "edutechlife-backend/.env"
-check_env "STRIPE_SECRET_KEY" "edutechlife-backend/.env"
+if grep -q "^STRIPE_SECRET_KEY=" "edutechlife-backend/.env" 2>/dev/null; then
+    check_env "STRIPE_SECRET_KEY" "edutechlife-backend/.env"
+else
+    echo -e "${YELLOW}⚠️  STRIPE_SECRET_KEY not set (opcional — Stripe desactivado)${NC}"
+fi
 
 # 3. Verificar formato de keys
 echo ""
@@ -88,16 +91,16 @@ echo "3️⃣  Checking key formats..."
 # SUPABASE ANON KEY should start with eyJ (base64 encoded JWT)
 if grep "^VITE_SUPABASE_ANON_KEY=eyJ" "edutechlife-frontend/.env" > /dev/null; then
     echo -e "${GREEN}✅ SUPABASE_ANON_KEY format correct${NC}"
-    ((PASSED++))
+    PASSED=$((PASSED+1))
 else
     echo -e "${RED}❌ SUPABASE_ANON_KEY format incorrect (should start with eyJ)${NC}"
-    ((FAILED++))
+    FAILED=$((FAILED+1))
 fi
 
 # GOOGLE TTS KEY should start with AIza
 if grep "^GOOGLE_TTS_API_KEY=AIza" "edutechlife-backend/.env" > /dev/null; then
     echo -e "${GREEN}✅ GOOGLE_TTS_API_KEY format correct${NC}"
-    ((PASSED++))
+    PASSED=$((PASSED+1))
 else
     echo -e "${YELLOW}⚠️  GOOGLE_TTS_API_KEY format not verified (check manually)${NC}"
 fi
@@ -105,7 +108,7 @@ fi
 # STRIPE KEY should start with sk_
 if grep "^STRIPE_SECRET_KEY=sk_" "edutechlife-backend/.env" > /dev/null; then
     echo -e "${GREEN}✅ STRIPE_SECRET_KEY format correct${NC}"
-    ((PASSED++))
+    PASSED=$((PASSED+1))
 else
     echo -e "${YELLOW}⚠️  STRIPE_SECRET_KEY format not verified (check manually)${NC}"
 fi
@@ -115,10 +118,10 @@ echo ""
 echo "4️⃣  Checking .env is NOT tracked in git..."
 if git ls-files | grep -E "^\\.env$|backend/\\.env$|frontend/\\.env$" > /dev/null; then
     echo -e "${RED}❌ .env files are tracked in git! Run: git rm --cached .env${NC}"
-    ((FAILED++))
+    FAILED=$((FAILED+1))
 else
     echo -e "${GREEN}✅ .env files properly in .gitignore${NC}"
-    ((PASSED++))
+    PASSED=$((PASSED+1))
 fi
 
 # 5. Verificar cambios de código de seguridad
@@ -127,26 +130,26 @@ echo "5️⃣  Checking security code changes..."
 
 if grep -q "unsafe-inline" "edutechlife-backend/src/app.js" 2>/dev/null; then
     echo -e "${RED}❌ unsafe-inline still in CSP${NC}"
-    ((FAILED++))
+    FAILED=$((FAILED+1))
 else
     echo -e "${GREEN}✅ unsafe-inline removed from CSP${NC}"
-    ((PASSED++))
+    PASSED=$((PASSED+1))
 fi
 
 if grep -q "unsafe-eval" "edutechlife-backend/src/app.js" 2>/dev/null; then
     echo -e "${RED}❌ unsafe-eval still in CSP${NC}"
-    ((FAILED++))
+    FAILED=$((FAILED+1))
 else
     echo -e "${GREEN}✅ unsafe-eval removed from CSP${NC}"
-    ((PASSED++))
+    PASSED=$((PASSED+1))
 fi
 
 if grep -q "username === '123'" "edutechlife-frontend/src/components/AdminLoginModal.jsx" 2>/dev/null; then
     echo -e "${RED}❌ Hardcoded admin credentials still present${NC}"
-    ((FAILED++))
+    FAILED=$((FAILED+1))
 else
     echo -e "${GREEN}✅ Hardcoded admin credentials removed${NC}"
-    ((PASSED++))
+    PASSED=$((PASSED+1))
 fi
 
 # 6. Resumen

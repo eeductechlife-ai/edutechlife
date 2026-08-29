@@ -5,6 +5,8 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
+  # Permitir ejecución manual desde cualquier rama (p. ej. migrations-check).
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -299,3 +301,37 @@ jobs:
 
       - run: node -c src/index.js
       - run: npm test
+
+  migrations-check:
+    name: Migrations (fresh DB)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # Levanta el stack local de Supabase (Postgres con auth schema) en Docker.
+      - name: Start Supabase local
+        run: supabase start
+        timeout-minutes: 20
+
+      # Aplica TODAS las migraciones desde una base limpia (000 → 059).
+      - name: Apply migrations from scratch
+        run: supabase db reset
+
+      - name: Install postgresql-client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      # Valida que el schema final tenga las tablas/columnas críticas.
+      - name: Validate schema
+        run: psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -v ON_ERROR_STOP=1 -f supabase/validate_schema.sql
+
+      # Ejecuta los tests de contrato contra el schema recién creado.
+      - name: Backend contract tests
+        working-directory: edutechlife-backend
+        run: |
+          npm ci
+          npm test

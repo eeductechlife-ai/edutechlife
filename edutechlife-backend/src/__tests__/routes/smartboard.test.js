@@ -171,12 +171,18 @@ describe('Smartboard POST /weekly-report', () => {
   });
 
   it('returns 404 when no parent email is registered', async () => {
-    // First call: kid data. Second call: parent_consents (no email).
+    // 1) kid data blob · 2) students resolve (auth_id → id) · 3) parent_consents (no email).
+    // Nota: getStudentMastery usa su propio cliente (no consume los mocks de aquí).
     mockSupabase.from
       .mockReturnValueOnce({
         select: vi.fn().mockReturnThis(),
         eq: vi.fn().mockReturnThis(),
         single: vi.fn().mockResolvedValue({ data: { data: { totalPoints: 10 } }, error: null }),
+      })
+      .mockReturnValueOnce({
+        select: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        maybeSingle: vi.fn().mockResolvedValue({ data: { id: 'student-1' }, error: null }),
       })
       .mockReturnValueOnce({
         select: vi.fn().mockReturnThis(),
@@ -198,17 +204,33 @@ describe('Smartboard POST /weekly-report', () => {
 });
 
 describe('Smartboard GET /wellbeing-status', () => {
+  const linksFor = (rows) => ({
+    select: vi.fn().mockReturnThis(),
+    eq: vi.fn().mockResolvedValue({ data: rows, error: null }),
+  });
+
+  const alertsFor = (rows, error = null) => ({
+    select: vi.fn().mockReturnThis(),
+    in: vi.fn().mockReturnThis(),
+    gte: vi.fn().mockResolvedValue({ data: rows, error }),
+  });
+
+  // mockImplementation por tabla: inmune a leaks de mockReturnValueOnce de otros tests.
+  const setupWellbeing = (links, alertsData, alertsError) => {
+    mockSupabase.from.mockImplementation((table) =>
+      table === 'parent_student_links'
+        ? linksFor(links)
+        : alertsFor(alertsData, alertsError),
+    );
+  };
+
   it('returns calm status when there are no high alerts', async () => {
-    mockSupabase.from.mockReturnValue({
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      gte: vi.fn().mockResolvedValue({ data: [], error: null }),
-    });
+    setupWellbeing([{ student_user_id: 'kid-1' }], []);
 
     const res = await request(app)
       .get('/api/smartboard/wellbeing-status')
       .set('Authorization', 'Bearer test-token')
-      .set('x-test-user-id', 'kid-1');
+      .set('x-test-user-id', 'parent-1');
 
     expect(res.status).toBe(200);
     expect(res.body.monitoring).toBe(true);
@@ -217,19 +239,15 @@ describe('Smartboard GET /wellbeing-status', () => {
   });
 
   it('returns attention status when a high alert exists (no sensitive content)', async () => {
-    mockSupabase.from.mockReturnValue({
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      gte: vi.fn().mockResolvedValue({
-        data: [{ crisis_level: 'high', created_at: '2026-08-01T10:00:00Z' }],
-        error: null,
-      }),
-    });
+    setupWellbeing(
+      [{ student_user_id: 'kid-1' }],
+      [{ crisis_level: 'high', created_at: '2026-08-01T10:00:00Z' }],
+    );
 
     const res = await request(app)
       .get('/api/smartboard/wellbeing-status')
       .set('Authorization', 'Bearer test-token')
-      .set('x-test-user-id', 'kid-1');
+      .set('x-test-user-id', 'parent-1');
 
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('attention');
@@ -239,16 +257,12 @@ describe('Smartboard GET /wellbeing-status', () => {
   });
 
   it('stays healthy (monitoring true) when the table is missing', async () => {
-    mockSupabase.from.mockReturnValue({
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      gte: vi.fn().mockResolvedValue({ data: null, error: { code: '42P01' } }),
-    });
+    setupWellbeing([{ student_user_id: 'kid-1' }], null, { code: '42P01' });
 
     const res = await request(app)
       .get('/api/smartboard/wellbeing-status')
       .set('Authorization', 'Bearer test-token')
-      .set('x-test-user-id', 'kid-1');
+      .set('x-test-user-id', 'parent-1');
 
     expect(res.status).toBe(200);
     expect(res.body.monitoring).toBe(true);

@@ -79,13 +79,13 @@ export function useSkillPassport() {
           if (!subj) continue;
           if (!bySubject[subj])
             bySubject[subj] = { sum: 0, count: 0, lastUpdated: null };
-          bySubject[subj].sum += row.mastery_score;
+          bySubject[subj].sum += row.mastery_level;
           bySubject[subj].count++;
           if (
             !bySubject[subj].lastUpdated ||
-            row.last_updated > bySubject[subj].lastUpdated
+            row.last_practiced_at > bySubject[subj].lastUpdated
           ) {
-            bySubject[subj].lastUpdated = row.last_updated;
+            bySubject[subj].lastUpdated = row.last_practiced_at;
           }
         }
 

@@ -5,7 +5,7 @@ import { track } from "../lib/analytics";
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
 async function postMastery(studentId, entries) {
-  const token = localStorage.getItem("sb_auth_token") || "";
+  const token = sessionStorage.getItem("auth_token") || "";
   const res = await fetch(`${API_BASE_URL}/api/smartboard/adaptive/mastery`, {
     method: "POST",
     headers: {

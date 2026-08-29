@@ -8,14 +8,14 @@ const { createClient } = require("@supabase/supabase-js");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY,
 );
 
 async function getStudentData(studentId) {
   const [masteryRes, streakRes, missionsRes, badgesRes] = await Promise.allSettled([
     supabase
       .from("student_competency_mastery")
-      .select("competency_id, mastery_score")
+      .select("competency_id, mastery_level")
       .eq("student_id", studentId),
     supabase
       .from("learning_streaks")
@@ -62,7 +62,7 @@ function criteriaIsMet(criteria, { mastery, streak, completedMissions }) {
   if (criteria.subject && criteria.min_mastery !== undefined) {
     const bySubject = mastery.filter((m) => m.competency_id.includes(criteria.subject));
     if (bySubject.length === 0) return false;
-    const avg = bySubject.reduce((s, m) => s + m.mastery_score, 0) / bySubject.length;
+    const avg = bySubject.reduce((s, m) => s + m.mastery_level, 0) / bySubject.length;
     if (avg < criteria.min_mastery) return false;
   }
 

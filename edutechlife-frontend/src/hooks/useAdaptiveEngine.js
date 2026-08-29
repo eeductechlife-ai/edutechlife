@@ -6,7 +6,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
 function getToken() {
   try {
-    return localStorage.getItem("sb_auth_token") || "";
+    return sessionStorage.getItem("auth_token") || "";
   } catch {
     return "";
   }
@@ -61,8 +61,9 @@ export function useAdaptiveEngine() {
         );
         setNextAction(data.action ?? null);
         setRecommendations(data.recommendations ?? []);
-      } catch {
-        // Non-blocking
+      } catch (err) {
+        // No romper la UI, pero el fallo debe ser observable
+        console.error("[AdaptiveEngine] fetchNextAction failed:", err);
       } finally {
         setLoading(false);
       }
@@ -82,8 +83,8 @@ export function useAdaptiveEngine() {
         });
         setDailyPlan(data.plan ?? null);
         track("plan_generated", { type: "daily", minutes: availableMinutes });
-      } catch {
-        // Non-blocking
+      } catch (err) {
+        console.error("[AdaptiveEngine] fetchDailyPlan failed:", err);
       } finally {
         setLoading(false);
       }
@@ -103,8 +104,8 @@ export function useAdaptiveEngine() {
         });
         setWeeklyPlan(data.plan ?? null);
         track("plan_generated", { type: "weekly" });
-      } catch {
-        // Non-blocking
+      } catch (err) {
+        console.error("[AdaptiveEngine] fetchWeeklyPlan failed:", err);
       } finally {
         setLoading(false);
       }
@@ -126,8 +127,8 @@ export function useAdaptiveEngine() {
           },
         );
         setRecommendations(data.recommendations ?? []);
-      } catch {
-        // Non-blocking
+      } catch (err) {
+        console.error("[AdaptiveEngine] fetchRecommendations failed:", err);
       } finally {
         setLoading(false);
       }

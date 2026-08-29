@@ -4,12 +4,12 @@ describe('supabase client', () => {
 
   beforeAll(() => {
     originalUrl = process.env.SUPABASE_URL;
-    originalKey = process.env.SUPABASE_SERVICE_KEY;
+    originalKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   });
 
   afterEach(() => {
     process.env.SUPABASE_URL = originalUrl;
-    process.env.SUPABASE_SERVICE_KEY = originalKey;
+    process.env.SUPABASE_SERVICE_ROLE_KEY = originalKey;
   });
 
   it('exports an object', () => {
@@ -27,6 +27,7 @@ describe('supabase client', () => {
     delete require.cache[supabasePath];
 
     delete process.env.SUPABASE_URL;
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
     delete process.env.SUPABASE_SERVICE_KEY;
 
     const supabase = require('../../db/supabase');

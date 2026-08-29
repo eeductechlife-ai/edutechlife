@@ -8,6 +8,9 @@ const { detectCrisis } = require('../services/crisisDetection');
 const { sendCrisisAlert, logCrisisIncident, sendEmail, sendConsentVerificationEmail } = require('../services/emailService');
 const { buildWeeklySummary, renderWeeklyEmail, aggregateMasterySummary } = require('../services/weeklyReport');
 
+// Logger con requestId cuando existe (app.js lo inyecta); fallback a console en tests/apps bare.
+const routeLogger = (req) => req.log || console;
+
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
@@ -681,6 +684,17 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
   const userId = req.userId;
   const { studentName, preview = false } = req.body || {};
 
+  // Resolver students.id a partir del auth uid: los motores normalizados
+  // (mastery, planes, memoria) están keyed por students.id.
+  async function resolveStudentIdByAuthId(authId) {
+    const { data } = await supabase
+      .from('students')
+      .select('id')
+      .eq('auth_id', authId)
+      .maybeSingle();
+    return data?.id || null;
+  }
+
   try {
     // 1. Datos del niño desde el blob ya sincronizado en Supabase
     const { data: row, error: dataError } = await supabase
@@ -701,12 +715,17 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
     // 1b. Mastery data from adaptive engine (optional — non-blocking)
     let masterySummary = null;
     try {
-      const masteryRows = await getStudentMastery(userId);
-      if (masteryRows.length > 0) {
-        masterySummary = aggregateMasterySummary(masteryRows);
+      const studentId = await resolveStudentIdByAuthId(userId);
+      if (!studentId) {
+        routeLogger(req).warn('Weekly report: no students row for auth user', { userId });
+      } else {
+        const masteryRows = await getStudentMastery(studentId);
+        if (masteryRows.length > 0) {
+          masterySummary = aggregateMasterySummary(masteryRows);
+        }
       }
     } catch (masteryErr) {
-      console.warn('Weekly report: mastery data unavailable', masteryErr.message);
+      routeLogger(req).error('Weekly report: mastery data unavailable', { error: masteryErr.message });
     }
 
     // Modo preview: útil para el frontend sin disparar correo
@@ -1599,7 +1618,9 @@ router.post('/adaptive/daily-plan', requireAuth, async (req, res) => {
     const mins = Math.min(Math.max(parseInt(availableMinutes, 10) || 20, 5), 60);
     const state = await getStudentState(studentId);
     const plan = generateDailyPlan(state, mins);
-    await saveLearningPlan(studentId, plan).catch(() => {});
+    await saveLearningPlan(studentId, plan).catch((err) => {
+      routeLogger(req).error('Failed to persist daily plan', { studentId, error: err.message });
+    });
     res.json({ plan });
   } catch (e) {
     console.error('[Adaptive daily-plan]', e.message);
@@ -1615,7 +1636,9 @@ router.post('/adaptive/weekly-plan', requireAuth, async (req, res) => {
     if (!studentId) return res.status(400).json({ error: 'studentId required' });
     const state = await getStudentState(studentId);
     const plan = generateWeeklyPlan(state);
-    await saveLearningPlan(studentId, plan).catch(() => {});
+    await saveLearningPlan(studentId, plan).catch((err) => {
+      routeLogger(req).error('Failed to persist weekly plan', { studentId, error: err.message });
+    });
     res.json({ plan });
   } catch (e) {
     console.error('[Adaptive weekly-plan]', e.message);

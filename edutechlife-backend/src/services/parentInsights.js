@@ -9,7 +9,7 @@ const { createClient } = require("@supabase/supabase-js");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY,
 );
 
 const SUBJECT_NAMES = {
@@ -30,33 +30,45 @@ async function loadInsightData(studentId) {
       .maybeSingle(),
     supabase
       .from("student_competency_mastery")
-      .select("competency_id, mastery_score, attempts, last_updated")
+      .select("competency_id, mastery_level, practice_count, updated_at")
       .eq("student_id", studentId)
-      .order("last_updated", { ascending: false })
+      .order("updated_at", { ascending: false })
       .limit(50),
     supabase
       .from("dani_memory")
-      .select("memory_data")
+      .select("communication_style, strengths, weaknesses, interests, frequent_errors, pending_topics, last_mood")
       .eq("student_id", studentId)
       .maybeSingle(),
     supabase
       .from("learning_plans")
-      .select("type, plan_data, created_at")
+      .select("type, plan_json, generated_at")
       .eq("student_id", studentId)
       .eq("is_active", true)
       .maybeSingle(),
     supabase
-      .from("activity_sessions")
-      .select("completed_at, duration_seconds, subject")
+      .from("sessions")
+      .select("created_at, duration_minutes, subject")
       .eq("student_id", studentId)
-      .order("completed_at", { ascending: false })
+      .order("created_at", { ascending: false })
       .limit(20),
   ]);
 
   return {
     profile: profileRes.status === "fulfilled" ? profileRes.value.data : null,
     mastery: masteryRes.status === "fulfilled" ? (masteryRes.value.data || []) : [],
-    memory: memoryRes.status === "fulfilled" ? memoryRes.value.data?.memory_data : null,
+    memory: memoryRes.status === "fulfilled"
+      ? (memoryRes.value.data
+          ? {
+              communicationStyle: memoryRes.value.data.communication_style,
+              strengths: memoryRes.value.data.strengths || [],
+              weaknesses: memoryRes.value.data.weaknesses || [],
+              interests: memoryRes.value.data.interests || [],
+              frequentErrors: memoryRes.value.data.frequent_errors || [],
+              pendingTopics: memoryRes.value.data.pending_topics || [],
+              lastMood: memoryRes.value.data.last_mood,
+            }
+          : null)
+      : null,
     plan: planRes.status === "fulfilled" ? planRes.value.data : null,
     sessions: sessionsRes.status === "fulfilled" ? (sessionsRes.value.data || []) : [],
   };
@@ -80,7 +92,7 @@ function aggregateMasteryBySubject(masteryRows) {
     const subj = subjectFromCompetencyId(row.competency_id);
     if (!subj) continue;
     if (!bySubject[subj]) bySubject[subj] = { sum: 0, count: 0 };
-    bySubject[subj].sum += row.mastery_score;
+    bySubject[subj].sum += row.mastery_level;
     bySubject[subj].count++;
   }
   const result = {};
@@ -144,8 +156,8 @@ async function generateParentInsights(studentId) {
   }
 
   // 3. FOCUS insight — current learning plan
-  if (plan?.plan_data) {
-    const planData = plan.plan_data;
+  if (plan?.plan_json) {
+    const planData = plan.plan_json;
     const activities = Array.isArray(planData.activities) ? planData.activities : [];
     const focusSubject = activities[0]?.subject || planData.focusSubject || null;
     if (focusSubject) {
@@ -162,7 +174,7 @@ async function generateParentInsights(studentId) {
   // 4. HABIT insight — session consistency
   if (sessions.length > 0) {
     const lastSession = sessions[0];
-    const daysSinceLast = daysSince(lastSession.completed_at);
+    const daysSinceLast = daysSince(lastSession.created_at);
     if (daysSinceLast !== null && daysSinceLast <= 1) {
       insights.push({
         type: "habit",
@@ -183,7 +195,7 @@ async function generateParentInsights(studentId) {
   }
 
   // 5. EMOTIONAL insight — from Dani memory
-  const studentMood = memory?.studentProfile?.studentMood;
+  const studentMood = memory?.lastMood;
   if (studentMood === "frustrated") {
     insights.push({
       type: "emotional",
@@ -212,4 +224,11 @@ async function buildLearningGraphSummary(studentId) {
   }));
 }
 
-module.exports = { generateParentInsights, buildLearningGraphSummary };
+module.exports = {
+  generateParentInsights,
+  buildLearningGraphSummary,
+  // Helpers puros (exportados para testing; sin comportamiento de producto)
+  subjectFromCompetencyId,
+  aggregateMasteryBySubject,
+  daysSince,
+};
