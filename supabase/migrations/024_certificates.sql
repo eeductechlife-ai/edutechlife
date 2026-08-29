@@ -13,14 +13,28 @@ CREATE TABLE IF NOT EXISTS certificates (
   cert_name TEXT DEFAULT 'Certificado de Especialista en IA - Edutechlife',
   overall_score INT CHECK (overall_score BETWEEN 0 AND 100),
   modules_completed INT DEFAULT 5 CHECK (modules_completed = 5),
-  cert_number TEXT GENERATED ALWAYS AS (
-    'EDL-' || EXTRACT(YEAR FROM issued_at) || '-' || LPAD(id::TEXT, 8, '0')
-  ) STORED,
+  cert_number TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(user_id)
 );
 
 COMMENT ON TABLE certificates IS 'Certificados otorgados al completar los 5 módulos del curso';
+
+-- El número EDL-YYYY-######## se calcula en un trigger BEFORE INSERT: una
+-- columna GENERATED no puede usar EXTRACT(YEAR FROM timestamptz) (stable, no
+-- immutable → SQLSTATE 42P17).
+CREATE OR REPLACE FUNCTION set_cert_number()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.cert_number := 'EDL-' || EXTRACT(YEAR FROM NEW.issued_at) || '-' || LPAD(NEW.id::TEXT, 8, '0');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_cert_number ON certificates;
+CREATE TRIGGER trg_cert_number
+  BEFORE INSERT ON certificates
+  FOR EACH ROW EXECUTE FUNCTION set_cert_number();
 
 -- 2. Índices (perfil de carga: lecturas por user_id y listado por emisión)
 CREATE INDEX IF NOT EXISTS idx_certificates_user ON certificates(user_id);
