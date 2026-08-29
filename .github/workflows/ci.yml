@@ -523,6 +523,7 @@ jobs:
         run: node src/scripts/golden-journey-test.js
 
       - name: Run Security Live tests (IDOR/RLS/authorization — FASE D)
+        if: always()
         env:
           STAGING_SUPABASE_URL: https://${{ steps.resolve.outputs.ref }}.supabase.co
           STAGING_SUPABASE_SERVICE_ROLE_KEY: ${{ steps.resolve.outputs.service }}
