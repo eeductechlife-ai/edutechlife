@@ -29,7 +29,7 @@ ALTER TABLE students ADD COLUMN IF NOT EXISTS last_activity TIMESTAMPTZ DEFAULT 
 
 -- ── sessions (011) ───────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS sessions (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   start_time TIMESTAMPTZ DEFAULT now(),
   end_time TIMESTAMPTZ,
@@ -134,7 +134,7 @@ CREATE TRIGGER trg_update_streak AFTER INSERT ON sessions
 
 -- ── points_history (011) ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS points_history (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   points INTEGER NOT NULL CHECK (points != 0),
   reason TEXT NOT NULL,
@@ -170,7 +170,7 @@ END $$;
 
 -- ── conversations (011) ──────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS conversations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   user_message TEXT NOT NULL,
   ai_response TEXT NOT NULL,
@@ -211,7 +211,7 @@ END $$;
 
 -- ── achievements (011, student-scoped) ───────────────────────────────────────
 CREATE TABLE IF NOT EXISTS achievements (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   achievement_type TEXT NOT NULL,
   title TEXT NOT NULL,
@@ -293,7 +293,7 @@ END $$;
 
 -- ── academic_context (necesario para el trigger de sessions; 011) ───────────
 CREATE TABLE IF NOT EXISTS academic_context (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   subject TEXT NOT NULL CHECK (subject IN ('math', 'language', 'science', 'history', 'art', 'general')),
   performance_level TEXT DEFAULT 'beginner' CHECK (performance_level IN ('beginner', 'intermediate', 'advanced', 'expert')),

@@ -44,7 +44,7 @@ CREATE INDEX IF NOT EXISTS idx_module_lessons_module ON module_lessons(module_id
 
 -- 3. Topics con recursos
 CREATE TABLE IF NOT EXISTS module_topics (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   module_id INTEGER NOT NULL REFERENCES module_content(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
   description TEXT DEFAULT '',
@@ -61,7 +61,7 @@ CREATE INDEX IF NOT EXISTS idx_module_topics_module ON module_topics(module_id);
 
 -- 4. Recursos por topic
 CREATE TABLE IF NOT EXISTS module_resources (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   topic_id UUID NOT NULL REFERENCES module_topics(id) ON DELETE CASCADE,
   type TEXT NOT NULL CHECK (type IN ('video', 'pdf', 'ova_interactive', 'ova', 'document', 'image')),
   title TEXT NOT NULL,
@@ -87,7 +87,7 @@ CREATE INDEX IF NOT EXISTS idx_module_resources_topic ON module_resources(topic_
 
 -- 5. Quiz questions
 CREATE TABLE IF NOT EXISTS quiz_questions (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   module_id INTEGER NOT NULL REFERENCES module_content(id) ON DELETE CASCADE,
   question TEXT NOT NULL,
   options JSONB NOT NULL DEFAULT '[]'::jsonb,

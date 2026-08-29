@@ -7,7 +7,7 @@
 -- ============================================================================
 -- Core student profile with auth integration
 CREATE TABLE IF NOT EXISTS students (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   auth_id UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   age INTEGER NOT NULL CHECK (age >= 6 AND age <= 16),
@@ -43,7 +43,7 @@ CREATE INDEX IF NOT EXISTS idx_students_is_active ON students(is_active);
 -- ============================================================================
 -- Study sessions with subject, points, and session type tracking
 CREATE TABLE IF NOT EXISTS sessions (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   start_time TIMESTAMPTZ DEFAULT now(),
   end_time TIMESTAMPTZ,
@@ -69,7 +69,7 @@ CREATE INDEX IF NOT EXISTS idx_sessions_student_start ON sessions(student_id, st
 -- ============================================================================
 -- Detailed point transaction log for gamification
 CREATE TABLE IF NOT EXISTS points_history (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   points INTEGER NOT NULL CHECK (points != 0),
   reason TEXT NOT NULL,
@@ -96,7 +96,7 @@ CREATE INDEX IF NOT EXISTS idx_points_history_student_timestamp ON points_histor
 -- ============================================================================
 -- Learning style assessment results (Visual, Auditory, Kinesthetic)
 CREATE TABLE IF NOT EXISTS vak_results (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   visual_score INTEGER NOT NULL CHECK (visual_score >= 0 AND visual_score <= 100),
   auditory_score INTEGER NOT NULL CHECK (auditory_score >= 0 AND auditory_score <= 100),
@@ -119,7 +119,7 @@ CREATE INDEX IF NOT EXISTS idx_vak_results_detected_at ON vak_results(detected_a
 -- ============================================================================
 -- Student-uploaded tasks/assignments with AI analysis support
 CREATE TABLE IF NOT EXISTS student_tasks (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
   description TEXT,
@@ -149,7 +149,7 @@ CREATE INDEX IF NOT EXISTS idx_student_tasks_student_subject ON student_tasks(st
 -- ============================================================================
 -- Chat history with Nico AI tutor for memory and personalization
 CREATE TABLE IF NOT EXISTS conversations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   user_message TEXT NOT NULL,
   ai_response TEXT NOT NULL,
@@ -181,7 +181,7 @@ CREATE INDEX IF NOT EXISTS idx_conversations_parent_session ON conversations(par
 -- ============================================================================
 -- Per-subject performance tracking and learning progression
 CREATE TABLE IF NOT EXISTS academic_context (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   subject TEXT NOT NULL CHECK (subject IN ('math', 'language', 'science', 'history', 'art', 'general')),
   performance_level TEXT DEFAULT 'beginner' CHECK (performance_level IN ('beginner', 'intermediate', 'advanced', 'expert')),
@@ -210,7 +210,7 @@ CREATE INDEX IF NOT EXISTS idx_academic_context_student_subject ON academic_cont
 -- ============================================================================
 -- Parent access and notification preferences
 CREATE TABLE IF NOT EXISTS parent_dashboards (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   parent_email TEXT NOT NULL,
   access_granted_at TIMESTAMPTZ DEFAULT now(),
@@ -234,7 +234,7 @@ CREATE INDEX IF NOT EXISTS idx_parent_dashboards_active ON parent_dashboards(is_
 -- ============================================================================
 -- Badge and achievement system for gamification
 CREATE TABLE IF NOT EXISTS achievements (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   achievement_type TEXT NOT NULL,
   title TEXT NOT NULL,
@@ -255,7 +255,7 @@ CREATE INDEX IF NOT EXISTS idx_achievements_type ON achievements(achievement_typ
 -- ============================================================================
 -- Track daily learning engagement and streaks
 CREATE TABLE IF NOT EXISTS learning_streaks (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   current_streak INTEGER DEFAULT 0,
   best_streak INTEGER DEFAULT 0,
@@ -274,7 +274,7 @@ CREATE INDEX IF NOT EXISTS idx_learning_streaks_student ON learning_streaks(stud
 -- ============================================================================
 -- Per-student customizable settings and preferences
 CREATE TABLE IF NOT EXISTS smartboard_settings (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
   difficulty_level TEXT DEFAULT 'medium' CHECK (difficulty_level IN ('easy', 'medium', 'hard')),
   daily_goal_minutes INTEGER DEFAULT 30 CHECK (daily_goal_minutes > 0 AND daily_goal_minutes <= 1440),
