@@ -56,6 +56,8 @@ const ALLOWED_ORIGINS = [
   'https://edutechlife.co',
   'https://www.edutechlife.co',
   'https://edutechlife-api.vercel.app',
+  // Entornos staging/preview: agregar dominios vía CORS_ORIGINS (coma-separado).
+  ...(process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',').map((o) => o.trim()).filter(Boolean) : []),
 ];
 
 // Precompile regex for performance (avoid recompilation per request)
