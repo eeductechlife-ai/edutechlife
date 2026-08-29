@@ -7,8 +7,9 @@ BEGIN
 
     -- Indexes for efficient queries
     CREATE INDEX IF NOT EXISTS idx_students_last_activity ON students(last_activity);
-    CREATE INDEX IF NOT EXISTS idx_students_activity_by_school ON students(school, last_activity)
-      WHERE last_activity > NOW() - INTERVAL '2 hours';
+    -- NOTA: sin predicado parcial — NOW() es volátil y no se permite en
+    -- predicate de índice (SQLSTATE 42P17).
+    CREATE INDEX IF NOT EXISTS idx_students_activity_by_school ON students(school, last_activity);
 
     -- RLS policy for heartbeat updates (guard: CREATE POLICY no soporta IF NOT EXISTS)
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'students' AND policyname = 'Students can update their own heartbeat') THEN
