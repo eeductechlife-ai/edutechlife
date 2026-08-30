@@ -252,6 +252,7 @@ async function run() {
 
   // Escribe vía API (misión + badge con actividad dani_chat) y vía service
   // (points/sessions, que en el flujo real el frontend escribe directo).
+  await api(`/api/smartboard/gamification/missions?studentId=${studentIds.A}`, {}, tokenA2); // seed de misiones
   await api('/api/smartboard/gamification/activity', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, activityType: 'dani_chat', meta: {} }) }, tokenA2);
   await supabase.from('points_history').insert({ student_id: studentIds.A, points: 10, reason: 'test_persistence', category: 'participation' });
   await supabase.from('sessions').insert({ student_id: studentIds.A, subject: 'math', type: 'quiz', duration_minutes: 10 });
