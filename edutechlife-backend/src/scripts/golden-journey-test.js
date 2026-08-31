@@ -175,6 +175,8 @@ async function run() {
   const askDani = async (message) => {
     const r = await api('/api/smartboard/dani/chat', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, message }) }, tokenA, 60000);
     const raw = typeof r.body === 'string' ? r.body : (r.body?.error ? `ERR:${r.body.error}` : JSON.stringify(r.body));
+    console.log(`DANI_RAW[${message.slice(0, 24)}] status=${r.status} rawLen=${raw.length}`);
+    console.log('  ', raw.slice(0, 500));
     return { status: r.status, raw, text: parseSse(raw) };
   };
 
