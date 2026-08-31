@@ -108,7 +108,10 @@ async function chatStream(apiKey, body, onChunk) {
     for (const line of lines) {
       if (line.startsWith('data: ')) {
         const data = line.slice(6).trim();
-        if (data === '[DONE]') return;
+        if (data === '[DONE]') {
+          console.log('[chatStream] DONE. bytesRead=', _bytes, 'contentChunks=', _chunks);
+          return;
+        }
         try {
           const parsed = JSON.parse(data);
           const content = parsed.choices?.[0]?.delta?.content || '';

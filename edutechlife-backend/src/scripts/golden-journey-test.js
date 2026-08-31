@@ -173,10 +173,15 @@ async function run() {
   };
 
   const askDani = async (message) => {
-    const r = await api('/api/smartboard/dani/chat', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, message }) }, tokenA, 60000);
-    const raw = typeof r.body === 'string' ? r.body : (r.body?.error ? `ERR:${r.body.error}` : JSON.stringify(r.body));
-    console.log(`DANI_RAW[${message.slice(0, 24)}] status=${r.status} rawLen=${raw.length}`);
-    console.log('  ', raw.slice(0, 500));
+    const r = await fetch(BASE_URL + '/api/smartboard/dani/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tokenA}` },
+      body: JSON.stringify({ studentId: studentIds.A, message }),
+    });
+    const buf = await r.arrayBuffer();
+    const raw = new TextDecoder().decode(buf);
+    console.log(`DANI_RAW[${message.slice(0, 24)}] status=${r.status} bodyBytes=${buf.byteLength}`);
+    console.log('  ', raw.slice(0, 400));
     return { status: r.status, raw, text: parseSse(raw) };
   };
 
