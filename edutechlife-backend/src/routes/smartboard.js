@@ -1504,8 +1504,15 @@ router.post('/dani/chat', requireAuth, requireStudentAccess, requireVerifiedPare
     ctx = { profile: null, mastery: [], memory: null, activePlan: null, todaySchedule: [] };
   }
 
-  // 4. Build system prompt
-  const systemPrompt = buildOrchestratorPrompt(ctx, { socraticMode, documentContext });
+  // 4. Build system prompt (observable: no fallos silenciosos)
+  let systemPrompt;
+  try {
+    systemPrompt = buildOrchestratorPrompt(ctx, { socraticMode, documentContext });
+  } catch (e) {
+    console.error('[Dani2 Prompt build failed]', e.stack || e.message);
+    console.error('[Dani2 ctx sample]', JSON.stringify(ctx).slice(0, 600));
+    return res.status(500).json({ error: 'Error generando contexto' });
+  }
 
   // 5. Assemble messages array
   const safeHistory = Array.isArray(history)
