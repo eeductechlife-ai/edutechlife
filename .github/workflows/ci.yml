@@ -56,7 +56,7 @@ jobs:
       - if: steps.cache-nm.outputs.cache-hit != 'true'
         run: npm ci
 
-      - run: npm run test:smoke -- --no-file-parallelism
+      - run: npm run test:smoke -- --no-file-parallelism --reporter=verbose
       - run: npm run build -- --logLevel error
         timeout-minutes: 8
 
