@@ -56,7 +56,36 @@ jobs:
       - if: steps.cache-nm.outputs.cache-hit != 'true'
         run: npm ci
 
-      - run: npm run test:smoke -- --no-file-parallelism --reporter=verbose
+      - name: Smoke tests (por directorio — aísla crashes de worker)
+        run: |
+          set +e
+          FAILED=""
+          for dir in \
+            src/store/__tests__ \
+            src/components/IALab/__tests__ \
+            src/components/IALab/IALabValerioPanel/__tests__ \
+            src/components/IALab/IALabQuizModal/__tests__ \
+            src/components/DiagnosticoVAK/__tests__ \
+            src/components/Nico/__tests__ \
+            src/components/kids-dashboard/dani/__tests__ \
+            src/components/__tests__ \
+            src/services/__tests__ \
+            src/utils/__tests__ \
+            src/tests/a11y \
+            src/tests/integration \
+            src/components/IALab/PDFThumbnail.test.jsx
+          do
+            echo "=== DIR $dir ==="
+            if ! npx vitest run "$dir" --no-file-parallelism --reporter=dot --bail=3; then
+              echo "FAIL_DIR $dir"
+              FAILED="$FAILED $dir"
+            fi
+          done
+          if [ -n "$FAILED" ]; then
+            echo "RESULT=FAILED:$FAILED"
+            exit 1
+          fi
+          echo "RESULT=ALL_PASS"
       - run: npm run build -- --logLevel error
         timeout-minutes: 8
 
