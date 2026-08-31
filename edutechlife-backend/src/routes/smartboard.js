@@ -1574,6 +1574,12 @@ router.post('/dani/chat', requireAuth, requireStudentAccess, requireVerifiedPare
   } catch (e) {
     if (streamClosed) return;
     console.error('[Dani2 Stream Error]', e.message);
+    if (res.headersSent) {
+      // El stream SSE ya empezó: no se pueden cambiar headers; terminar el
+      // stream con una señal de error en lugar de res.status().json().
+      try { res.write('data: {"error":"stream_failed"}\n\n'); res.end(); } catch (_) {}
+      return;
+    }
     const status = e.status;
     if (status === 402) return res.status(402).json({ error: 'API sin saldo.' });
     res.status(500).json({ error: 'Error interno del servidor' });

@@ -80,7 +80,9 @@ async function chat(apiKey, body) {
 
 async function chatStream(apiKey, body, onChunk) {
   const payload = buildPayload({ ...body, stream: true });
-  const response = await fetch(DEEPSEEK_API_URL, {
+  // Usar el fetch global (WHATWG ReadableStream con getReader); node-fetch v3
+  // expone PassThrough (sin getReader) y rompería el streaming.
+  const response = await globalThis.fetch(DEEPSEEK_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
