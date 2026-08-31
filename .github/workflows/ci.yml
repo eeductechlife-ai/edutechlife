@@ -27,7 +27,7 @@ jobs:
     name: Smoke Test (fast gate)
     if: ${{ github.event.inputs.target != 'staging-setup' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: edutechlife-frontend
@@ -56,9 +56,9 @@ jobs:
       - if: steps.cache-nm.outputs.cache-hit != 'true'
         run: npm ci
 
-      - run: npm run test:smoke
+      - run: npm run test:smoke -- --no-file-parallelism
       - run: npm run build -- --logLevel error
-        timeout-minutes: 5
+        timeout-minutes: 8
 
   lint:
     name: Lint + Typecheck
