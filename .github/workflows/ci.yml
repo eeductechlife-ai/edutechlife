@@ -13,7 +13,7 @@ on:
         required: false
         default: all
         type: choice
-        options: [all, migrations-check, staging-setup, staging-journey]
+        options: [all, migrations-check, staging-setup, staging-journey, lockfile-regenerate]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -317,6 +317,32 @@ jobs:
 
       - run: node -c src/index.js
       - run: npm test
+
+  lockfile-regenerate:
+    name: Regenerate frontend package-lock (esbuild)
+    if: ${{ github.event.inputs.target == 'lockfile-regenerate' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Regenerate lock (with override esbuild 0.28.2 under vitest>vite)
+        working-directory: edutechlife-frontend
+        run: |
+          rm -f package-lock.json
+          npm install --package-lock-only --force --no-audit --no-fund
+      - name: Verify esbuild 0.28 present
+        working-directory: edutechlife-frontend
+        run: |
+          node -e "const p=require('./package-lock.json').packages; const v=Object.keys(p).filter(k=>k.includes('esbuild')&&p[k].version&&p[k].version.startsWith('0.28')); console.log('esbuild_0_28_entries=', v.length); if(v.length===0) process.exit(1)"
+      - name: Upload regenerated lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: regenerated-lock
+          path: edutechlife-frontend/package-lock.json
+          if-no-files-found: error
 
   migrations-check:
     name: Migrations (fresh DB)
