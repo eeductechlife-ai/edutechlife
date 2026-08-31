@@ -95,10 +95,13 @@ async function chatStream(apiKey, body, onChunk) {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
+  let _bytes = 0;
+  let _chunks = 0;
 
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
+    _bytes += value.length;
     buffer += decoder.decode(value, { stream: true });
     const lines = buffer.split('\n');
     buffer = lines.pop() || '';
@@ -109,11 +112,15 @@ async function chatStream(apiKey, body, onChunk) {
         try {
           const parsed = JSON.parse(data);
           const content = parsed.choices?.[0]?.delta?.content || '';
-          if (content) onChunk(content);
+          if (content) {
+            onChunk(content);
+            _chunks++;
+          }
         } catch { /* skip malformed SSE frames */ }
       }
     }
   }
+  console.log('[chatStream] done. bytesRead=', _bytes, 'contentChunks=', _chunks);
 }
 
 module.exports = { chat, chatStream, validateMessages, buildPayload, fetchWithRetry };
