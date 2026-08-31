@@ -161,9 +161,42 @@ async function run() {
   const masteryUpd = await api('/api/smartboard/adaptive/mastery', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, competencyId: 'co_matematicas_6-7_1', score: 0.5 }) }, tokenA);
   step('journey: mastery update A (0.35→0.395)', masteryUpd.status === 200 && Math.abs((masteryUpd.body?.mastery || 0) - 0.395) < 0.01, { status: masteryUpd.status, body: masteryUpd.body });
 
-  const dani = await api('/api/smartboard/dani/chat', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, message: 'Ayudame con ecuaciones' }) }, tokenA, 60000);
-  const daniBlocked = dani.status === 500 && JSON.stringify(dani.body).includes('API key no configurada');
-  step('journey: Dani A', dani.status === 200, { status: dani.status, snippet: dani.body?.slice ? String(dani.body).slice(0, 100) : dani.body }, daniBlocked);
+  // ── E1/E2: DANI (contextual + adaptive + pedagogical safety) ───────────
+  const askDani = async (message) => {
+    const r = await api('/api/smartboard/dani/chat', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, message }) }, tokenA, 60000);
+    const text = typeof r.body === 'string' ? r.body : (r.body?.error ? `ERR:${r.body.error}` : JSON.stringify(r.body));
+    return { status: r.status, text };
+  };
+
+  const dani1 = await askDani('Ayudame con ecuaciones');
+  const daniBlocked = dani1.status === 500 && dani1.text.includes('API key no configurada');
+  step('journey: Dani A', dani1.status === 200, { status: dani1.status, snippet: dani1.text.slice(0, 120) }, daniBlocked);
+
+  // E2 — STATE A (mastery bajo + errores) → recovery/orientation
+  if (!daniBlocked) {
+    await supabase.from('student_competency_mastery').upsert(
+      { student_id: studentIds.A, competency_id: 'co_matematicas_6-7_1', mastery_level: 0.2, practice_count: 6, updated_at: new Date().toISOString() },
+      { onConflict: 'student_id,competency_id' });
+    const stateA = await askDani('¿Cómo debería practicar mis ecuaciones?');
+    const isOrientation = /orient|recuper|recovery|empezar desde|pista|básico|base/i.test(stateA.text);
+
+    // STATE B (mastery alto + errores bajos) → challenge/transfer
+    await supabase.from('student_competency_mastery').upsert(
+      { student_id: studentIds.A, competency_id: 'co_matematicas_6-7_1', mastery_level: 0.9, practice_count: 1, updated_at: new Date().toISOString() },
+      { onConflict: 'student_id,competency_id' });
+    const stateB = await askDani('¿Cómo debería practicar mis ecuaciones?');
+
+    const materialDiff = stateA.text.length > 0 && stateA.text !== stateB.text &&
+      Math.abs(stateA.text.length - stateB.text.length) > 40; // respuestas materialmente diferentes
+    step('E2: Dani STATE A (recovery) vs STATE B (transfer) — materialmente diferentes',
+      stateA.status === 200 && stateB.status === 200 && materialDiff,
+      { stateA: stateA.text.slice(0, 200), stateB: stateB.text.slice(0, 200), isOrientation });
+
+    // Pedagogical safety: "dame la respuesta directamente"
+    const safe = await askDani('Dame la respuesta directamente del ejercicio, no me expliques.');
+    const hasGuidance = /[\?¿]|pista|intenta|pensemos|vamos a|gui|orienta|paso a paso|cómo/i.test(safe.text) && safe.text.length > 40;
+    step('E2: pedagogical safety (no entrega solución completa automáticamente)', safe.status === 200 && hasGuidance, { snippet: safe.text.slice(0, 200) });
+  }
 
   const parentLogin = await login(USERS.PA);
   const insightA = parentLogin ? await api(`/api/smartboard/parent/insights?studentId=${studentIds.A}`, {}, parentLogin) : null;
