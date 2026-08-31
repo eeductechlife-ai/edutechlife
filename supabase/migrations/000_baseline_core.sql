@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS public.users (
   clerk_id      TEXT UNIQUE NOT NULL,
   email         TEXT,
   name          TEXT,
+  user_type     TEXT,
   created_at    TIMESTAMPTZ DEFAULT now(),
   updated_at    TIMESTAMPTZ DEFAULT now()
 );
