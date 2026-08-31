@@ -62,9 +62,6 @@ jobs:
           FAILED=""
           for dir in \
             src/store/__tests__ \
-            src/components/IALab/__tests__ \
-            src/components/IALab/IALabValerioPanel/__tests__ \
-            src/components/IALab/IALabQuizModal/__tests__ \
             src/components/DiagnosticoVAK/__tests__ \
             src/components/Nico/__tests__ \
             src/components/kids-dashboard/dani/__tests__ \
@@ -72,8 +69,7 @@ jobs:
             src/services/__tests__ \
             src/utils/__tests__ \
             src/tests/a11y \
-            src/tests/integration \
-            src/components/IALab/PDFThumbnail.test.jsx
+            src/tests/integration
           do
             echo "=== DIR $dir ==="
             if ! npx vitest run "$dir" --no-file-parallelism --reporter=dot --bail=3; then

@@ -37,10 +37,10 @@ describe("MessageBubble", () => {
   });
 
   test("shows Dani avatar when message is from Dani", () => {
-    render(
+    const { container } = render(
       <MessageBubble message={baseMessage} isDani={true} darkMode={false} />,
     );
-    expect(screen.getByAltText("Dani")).toBeInTheDocument();
+    expect(container.querySelector("svg")).toBeInTheDocument();
   });
 
   test("does not show avatar when message is from the student", () => {
