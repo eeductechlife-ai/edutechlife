@@ -1529,7 +1529,10 @@ router.post('/dani/chat', requireAuth, requireStudentAccess, requireVerifiedPare
   const crisisDetection = detectCrisis(sanitized, 'es');
 
   let streamClosed = false;
-  req.on('close', () => { streamClosed = true; res.end(); });
+  // Detectar cliente desconectado con res.on('close'): req.on('close') se
+  // dispara al terminar el body de la request (POST) y cortaría el SSE antes
+  // de tiempo. res.on('close') solo ocurre cuando la respuesta se cierra.
+  res.on('close', () => { streamClosed = true; });
 
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
