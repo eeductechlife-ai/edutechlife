@@ -4699,6 +4699,7 @@
   "reset.error.link_invalid": "This link is invalid or has expired. Request a new one from the sign-in screen.",
   "reset.error.passwords_mismatch": "Passwords do not match.",
   "reset.error.failed": "Could not update the password. Please try again.",
+  "login.retrying": "Reconnecting to server...",
   "login.error.connection": "Connection error",
   "ialab.progress_label": "Progress",
   "ialab.xp_earned": "+{amount} XP",

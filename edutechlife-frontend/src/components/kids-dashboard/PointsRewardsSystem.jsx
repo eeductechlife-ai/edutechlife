@@ -344,18 +344,6 @@ const PointsRewardsSystem = memo(() => {
                     points: 300,
                     color: "#FF6B9D",
                   },
-                  {
-                    icon: "📚",
-                    actionKey: "kid.points_rewards.action_complete_subject",
-                    points: 200,
-                    color: "#B2D8E5",
-                  },
-                  {
-                    icon: "🔥",
-                    actionKey: "kid.points_rewards.action_daily_streak",
-                    points: 150,
-                    color: "#4DA8C4",
-                  },
                 ].map((item, index) => (
                   <motion.div
                     key={item.actionKey}

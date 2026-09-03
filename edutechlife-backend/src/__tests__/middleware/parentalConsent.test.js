@@ -129,9 +129,7 @@ describe('requireVerifiedParentalConsent', () => {
     expect(next).toHaveBeenCalled();
   });
 
-  it('fails open when the consent table is missing (PGRST205)', async () => {
-    // Tabla parent_consents ausente en despliegues sin la migración: no debe
-    // bloquear con 500, sino dejar pasar (el gate de entrada es del frontend).
+  it('fails closed when the consent table is missing (PGRST205)', async () => {
     mockSupabase.from.mockReturnValueOnce(
       consentChain({ data: null, error: { code: 'PGRST205', message: 'table not found' } }),
     );
@@ -139,7 +137,7 @@ describe('requireVerifiedParentalConsent', () => {
     const { res, next, promise } = runMiddleware();
     await promise;
 
-    expect(next).toHaveBeenCalled();
-    expect(res.status).not.toHaveBeenCalledWith(500);
+    expect(next).not.toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(503);
   });
 });

@@ -1,5 +1,58 @@
-import { speakTextConversational, iniciarReconocimiento, stopRecognition } from "../../../utils/speech";
+import {
+  speakTextConversational,
+  iniciarReconocimiento,
+  stopRecognition,
+} from "../../../utils/speech";
 import { getVoiceOverrides, stripEmoji } from "./DaniVoiceController";
+
+// ----- Sentence queue so all sentences play sequentially without cancelling each other -----
+let _sentenceQueue = [];
+let _queueRunning = false;
+
+function _drainQueue(context) {
+  if (_queueRunning || _sentenceQueue.length === 0) return;
+  _queueRunning = true;
+  const { text, setIsSpeaking, isSpeakingRef, daniMood, setVoiceBlocked } =
+    _sentenceQueue.shift();
+
+  setIsSpeaking(true);
+  isSpeakingRef.current = true;
+
+  const voiceOverrides = getVoiceOverrides(daniMood);
+  speakTextConversational(
+    text,
+    "dani",
+    voiceOverrides,
+    () => {
+      _queueRunning = false;
+      if (_sentenceQueue.length > 0) {
+        _drainQueue();
+      } else {
+        setIsSpeaking(false);
+        isSpeakingRef.current = false;
+      }
+    },
+    (err) => {
+      _queueRunning = false;
+      setIsSpeaking(false);
+      isSpeakingRef.current = false;
+      if (err && err.includes("bloqueado")) setVoiceBlocked(true);
+      // Try next sentence even on error
+      if (_sentenceQueue.length > 0) _drainQueue();
+    },
+  );
+}
+
+function _enqueueSentence(sentence, context) {
+  _sentenceQueue.push({ text: sentence, ...context });
+  _drainQueue();
+}
+
+function _clearQueue() {
+  _sentenceQueue = [];
+  _queueRunning = false;
+}
+// ----- end queue -----
 
 export function retrySpeech({ setVoiceBlocked, speechPrimed }) {
   setVoiceBlocked(false);
@@ -13,8 +66,16 @@ export function retrySpeech({ setVoiceBlocked, speechPrimed }) {
   }
 }
 
-export function toggleVoice({ isSpeaking, stopSpeech, setVoiceEnabled, setVoiceBlocked }) {
-  if (isSpeaking) stopSpeech();
+export function toggleVoice({
+  isSpeaking,
+  stopSpeech,
+  setVoiceEnabled,
+  setVoiceBlocked,
+}) {
+  if (isSpeaking) {
+    _clearQueue();
+    stopSpeech();
+  }
   setVoiceEnabled((prev) => !prev);
   setVoiceBlocked(false);
 }
@@ -61,8 +122,9 @@ export function processStreamChunkVoice(
     pendingSentenceRef.current = pendingSentenceRef.current.slice(
       endIdx + match[0].length,
     );
-    if (voiceEnabled && sentence.length >= 8 && !isSpeakingRef.current) {
-      speakSentence(sentence, {
+    const clean = stripEmoji(sentence);
+    if (voiceEnabled && clean.length >= 8) {
+      _enqueueSentence(clean, {
         setIsSpeaking,
         isSpeakingRef,
         daniMood,
@@ -77,8 +139,9 @@ export function speakRemainingText(
   remaining,
   { voiceEnabled, isSpeakingRef, daniMood, setIsSpeaking, setVoiceBlocked },
 ) {
-  if (remaining.length >= 8 && voiceEnabled) {
-    speakSentence(remaining, {
+  const clean = stripEmoji(remaining.trim());
+  if (clean.length >= 8 && voiceEnabled) {
+    _enqueueSentence(clean, {
       setIsSpeaking,
       isSpeakingRef,
       daniMood,
@@ -87,33 +150,6 @@ export function speakRemainingText(
   }
 }
 
-function speakSentence(
-  sentence,
-  { setIsSpeaking, isSpeakingRef, daniMood, setVoiceBlocked },
-) {
-  // NOTE: daniMood comes from a callback closure and may be stale.
-  // The caller in useDaniChat.js should capture the current mood in a local variable.
-  setIsSpeaking(true);
-  isSpeakingRef.current = true;
-  const cleanSentence = stripEmoji(sentence);
-  if (cleanSentence.length > 0) {
-    const voiceOverrides = getVoiceOverrides(daniMood);
-    speakTextConversational(
-      cleanSentence,
-      "dani",
-      voiceOverrides,
-      () => {
-        setIsSpeaking(false);
-        isSpeakingRef.current = false;
-      },
-      (err) => {
-        setIsSpeaking(false);
-        isSpeakingRef.current = false;
-        if (err && err.includes("bloqueado")) setVoiceBlocked(true);
-      },
-    );
-  } else {
-    setIsSpeaking(false);
-    isSpeakingRef.current = false;
-  }
+export function clearVoiceQueue() {
+  _clearQueue();
 }

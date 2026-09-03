@@ -81,3 +81,8 @@ terraform.rc
 
 # ruflo/claude-flow tooling state (not source)
 **/.claude-flow/
+
+# Loose SQL scripts at root or in frontend (belong in supabase/migrations/ only)
+/*.sql
+/edutechlife-frontend/*.sql
+/edutechlife-frontend/sql/

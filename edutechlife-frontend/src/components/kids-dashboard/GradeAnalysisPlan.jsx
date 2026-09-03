@@ -13,7 +13,13 @@ const GradeAnalysisPlan = memo(
           className="space-y-4"
         >
           {/* Dani message card */}
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#0077B6] text-white space-y-3">
+          <div
+            className="p-4 rounded-2xl text-white space-y-3"
+            style={{
+              background:
+                "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
+            }}
+          >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">🤖</span>
@@ -77,7 +83,7 @@ const GradeAnalysisPlan = memo(
 
           {/* Full study plan (collapsible) */}
           <details className="group">
-            <summary className="cursor-pointer flex items-center justify-between p-4 rounded-2xl bg-[#F1F5F9] border border-[#E2E8F0] font-bold text-[#004B63] text-sm select-none">
+            <summary className="cursor-pointer flex items-center justify-between p-4 rounded-2xl bg-[#F1F5F9] border border-[#E2E8F0] font-bold text-[#1E293B] text-sm select-none">
               <span>📋 Ver plan de estudio completo</span>
               <span className="text-[#64748B] group-open:rotate-180 transition-transform">
                 ▼
@@ -86,7 +92,7 @@ const GradeAnalysisPlan = memo(
             <div className="mt-2 space-y-3">
               {plan.weaknesses?.length > 0 && (
                 <div className="space-y-3">
-                  <p className="font-bold text-[#004B63] px-1">
+                  <p className="font-bold text-[#1E293B] px-1">
                     {t("kid.grades.to_improve")}
                   </p>
                   {plan.weaknesses.map((w, i) => (
@@ -95,7 +101,7 @@ const GradeAnalysisPlan = memo(
                       className="p-4 rounded-2xl bg-white border-2 border-orange-200 shadow-sm space-y-3"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-black text-[#004B63] flex items-center gap-1.5">
+                        <span className="font-black text-[#1E293B] flex items-center gap-1.5">
                           <span>{w.emoji || getSubjectEmoji(w.subject)}</span>
                           {w.subject}
                         </span>
@@ -138,7 +144,7 @@ const GradeAnalysisPlan = memo(
               )}
               {plan.studyPlan?.length > 0 && (
                 <div className="space-y-3">
-                  <p className="font-bold text-[#004B63] px-1">
+                  <p className="font-bold text-[#1E293B] px-1">
                     {t("kid.grades.study_plan")}
                   </p>
                   {plan.studyPlan.map((week, i) => (
@@ -147,10 +153,16 @@ const GradeAnalysisPlan = memo(
                       className="p-4 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm"
                     >
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="w-7 h-7 rounded-full bg-[#4DA8C4] text-white text-xs font-black flex items-center justify-center">
+                        <span
+                          className="w-7 h-7 rounded-full text-white text-xs font-black flex items-center justify-center"
+                          style={{
+                            background:
+                              "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
+                          }}
+                        >
                           {week.week}
                         </span>
-                        <span className="font-bold text-[#004B63] text-sm">
+                        <span className="font-bold text-[#1E293B] text-sm">
                           {t("kid.grades.week", {
                             week: week.week,
                             focus: week.focus,
@@ -163,12 +175,12 @@ const GradeAnalysisPlan = memo(
                             key={j}
                             className="text-xs text-[#374151] flex items-start gap-1.5"
                           >
-                            <span className="text-[#4DA8C4]">•</span>
+                            <span className="text-[#FB8500]">•</span>
                             {a}
                           </li>
                         ))}
                       </ul>
-                      <div className="flex items-center gap-1.5 text-xs text-[#4DA8C4] bg-[#4DA8C4]/10 rounded-lg p-2">
+                      <div className="flex items-center gap-1.5 text-xs text-[#92400E] bg-[#FB8500]/10 rounded-lg p-2">
                         <span>🤖</span>
                         <span>{week.daniTip}</span>
                       </div>
@@ -218,7 +230,8 @@ const GradeAnalysisPlan = memo(
               whileTap={{ scale: 0.98 }}
               className="w-full py-3 rounded-2xl font-bold text-white text-sm shadow-md"
               style={{
-                background: "linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%)",
+                background:
+                  "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
               }}
             >
               {t("kid.grades.talk_about_plan")}

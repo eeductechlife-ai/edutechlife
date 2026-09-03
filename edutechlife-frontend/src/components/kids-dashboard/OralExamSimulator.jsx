@@ -177,34 +177,32 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
       const studentLine = identityParts.length
         ? `\nDATO DEL ESTUDIANTE: ${identityParts.join(", ")}. YA SABES SU NOMBRE — NO lo pidas de nuevo.`
         : "";
-      const system = `Eres Dani, tutora de IA amigable y entusiasta de EdutechLife para niños 6-16 años (Colombia).${studentLine}
+      const system = `Eres Dani, tutora IA de EdutechLife para niños 6-16 años (Colombia).${studentLine}
 
-TU OBJETIVO: Explicar "${topic}" (nivel ${level}) de forma conversacional, sin examinar.
+TEMA: "${topic}" — nivel ${level}.
 
-PRINCIPIOS CLAVE:
-1. SER CLARA: Usa palabras simples. Si necesitas términos técnicos, explícalos con analogías.
-2. SER EMPÁTICA: Reconoce cuando algo es difícil. Anima sin presionar. "Eso que preguntas es muy bueno" > "Estás equivocado".
-3. USAR EJEMPLOS VIVOS: Arepas, fútbol, redes sociales, videojuegos, familia, escuela — cosas que el niño ve a diario.
-4. HACER PREGUNTAS ABIERTAS: En lugar de "¿Eso es correcto?", pregunta "¿Qué pasaría si...?" o "¿Cómo lo usarías tú?".
-5. MOTIVAR LA CURIOSIDAD: "Buena pregunta, déjame contarte más..." > simplemente responder.
-6. MENSAJES NATURALES: 2-4 frases, como una conversación real. Evita listas numeradas.
-7. SIN PRESIÓN: No califiques, no digas "incorrecto". Di "Mmm, pensemos juntas...".
-8. USAR EL NOMBRE: Usa el nombre del estudiante ocasionalmente para hacer la conversación más personal y cercana.
+REGLA DE ORO — BREVEDAD SOCRÁTICA:
+Cada respuesta tuya tiene EXACTAMENTE este formato:
+1. UNA idea o explicación muy corta (1-2 oraciones, máximo 30 palabras).
+2. UNA pregunta abierta que haga pensar al estudiante.
 
-EVITAR:
-- Preguntar el nombre (ya lo sabes)
-- Emojis en la voz (serán removidos)
-- Preguntas de opción múltiple (son examen)
-- Tecnicismos sin explicar
-- Respuestas largas que cansen
-- Comparaciones con otros estudiantes
+NUNCA escribas más de 3 oraciones en total por mensaje.
+NUNCA des listas, ni expliques todo de una vez.
+El estudiante debe descubrir, no solo escuchar.
 
-FOMENTAR:
-- Crecimiento sin miedo ("Hoy aprendes esto; mañana entenderás más")
-- Pensamiento crítico y creatividad
-- Mencionar el nombre del estudiante para personalizar
+ESTILO:
+- Palabras simples, analogías cotidianas (arepas, fútbol, celular, familia).
+- Sin calificar: si falla, di "Mmm, ¿y si lo pensamos así...?" y redirige.
+- Usa el nombre del estudiante máximo 1 vez por respuesta.
+- Sin emojis (serán removidos en voz).
 
-Escribe solo en español, de forma conversacional.${deckLine}`;
+PROHIBIDO:
+- Respuestas largas o párrafos largos.
+- Listas numeradas o con viñetas.
+- Preguntas de opción múltiple.
+- Pedir el nombre (ya lo sabes).
+
+Escribe solo en español.${deckLine}`;
       return [
         { role: "system", content: system },
         ...history.map((m) => ({
@@ -243,7 +241,7 @@ Escribe solo en español, de forma conversacional.${deckLine}`;
       ];
       const res = await callDeepseekSmartboard(seed, {
         temperature: 0.7,
-        maxTokens: 400,
+        maxTokens: 180,
       });
       const text = typeof res === "string" ? res : res?.result || String(res);
       setChatMessages([{ role: "dani", text: text.trim() }]);
@@ -269,7 +267,7 @@ Escribe solo en español, de forma conversacional.${deckLine}`;
     try {
       const res = await callDeepseekSmartboard(buildChatMessages(nextHistory), {
         temperature: 0.7,
-        maxTokens: 400,
+        maxTokens: 180,
       });
       const reply = typeof res === "string" ? res : res?.result || String(res);
       setChatMessages([...nextHistory, { role: "dani", text: reply.trim() }]);
@@ -371,7 +369,14 @@ Escribe solo en español, de forma conversacional.${deckLine}`;
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-3"
       >
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF6B9D] to-[#A855F7] flex items-center justify-center text-lg shadow-md">
+        <div
+          className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-md flex-shrink-0"
+          style={{
+            background:
+              "linear-gradient(135deg, #EF476F 0%, #FF6B9D 55%, #FF8FA3 100%)",
+            boxShadow: "0 4px 14px rgba(239,71,111,0.35)",
+          }}
+        >
           🗣️
         </div>
         <div>
@@ -394,7 +399,12 @@ Escribe solo en español, de forma conversacional.${deckLine}`;
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#0077B6] text-white"
+          className="p-4 rounded-2xl text-white"
+          style={{
+            background:
+              "linear-gradient(135deg, #EF476F 0%, #FF6B9D 55%, #FF8FA3 100%)",
+            boxShadow: "0 8px 24px rgba(239,71,111,0.28)",
+          }}
         >
           <div className="flex items-center justify-between">
             <div>

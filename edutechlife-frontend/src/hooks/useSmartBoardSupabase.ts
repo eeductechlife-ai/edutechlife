@@ -473,6 +473,131 @@ export const useLearningStreaks = (): UseQueryResult<LearningStreak | null> => {
   });
 };
 
+// Mutation: Upsert learning streak
+export const useUpsertStreak = (): UseMutationResult<
+  LearningStreak,
+  Error,
+  { current_streak: number; best_streak: number; last_activity_date: string }
+> => {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      current_streak,
+      best_streak,
+      last_activity_date,
+    }: {
+      current_streak: number;
+      best_streak: number;
+      last_activity_date: string;
+    }) => {
+      if (!user?.id) throw new Error("No authenticated user");
+
+      const student = await supabase
+        .from("students")
+        .select("id")
+        .eq("auth_id", user.id)
+        .single();
+
+      if (student.error) throw student.error;
+
+      const { data, error } = await supabase
+        .from("learning_streaks")
+        .upsert(
+          {
+            student_id: student.data.id,
+            current_streak,
+            best_streak,
+            last_activity_date,
+            total_days_active: current_streak,
+          },
+          { onConflict: "student_id" },
+        )
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data as LearningStreak;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: smartBoardQueryKeys.streaks(user?.id || ""),
+      });
+    },
+  });
+};
+
+// Mutation: Sync achievement to DB
+export const useSyncAchievement = (): UseMutationResult<
+  Achievement,
+  Error,
+  {
+    achievement_type: string;
+    title: string;
+    description: string;
+    points_awarded?: number;
+  }
+> => {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      achievement_type,
+      title,
+      description,
+      points_awarded = 0,
+    }: {
+      achievement_type: string;
+      title: string;
+      description: string;
+      points_awarded?: number;
+    }) => {
+      if (!user?.id) throw new Error("No authenticated user");
+
+      const student = await supabase
+        .from("students")
+        .select("id")
+        .eq("auth_id", user.id)
+        .single();
+
+      if (student.error) throw student.error;
+
+      const { data: existing } = await supabase
+        .from("achievements")
+        .select("id")
+        .eq("student_id", student.data.id)
+        .eq("achievement_type", achievement_type)
+        .maybeSingle();
+
+      if (existing) return existing as Achievement;
+
+      const { data, error } = await supabase
+        .from("achievements")
+        .insert({
+          student_id: student.data.id,
+          achievement_type,
+          title,
+          description,
+          points_awarded,
+          earned_at: new Date().toISOString(),
+          is_milestone: false,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data as Achievement;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: smartBoardQueryKeys.achievements(user?.id || ""),
+      });
+    },
+  });
+};
+
 // Hook: Fetch smartboard settings
 export const useSmartboardSettings =
   (): UseQueryResult<SmartboardSettings | null> => {

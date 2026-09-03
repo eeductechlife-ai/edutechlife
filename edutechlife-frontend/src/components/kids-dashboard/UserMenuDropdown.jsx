@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
-import { Edit3, Loader2, LogOut, BarChart3 } from "lucide-react";
+import { Edit3, Loader2, LogOut, BarChart3, Moon, Sun } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { getInitials } from "./userMenuConstants";
+import { SB_GRADIENTS, glow } from "./smartboardTheme";
 
 const UserMenuDropdown = ({
   displayName,
@@ -20,160 +21,260 @@ const UserMenuDropdown = ({
 }) => {
   const { t } = useTranslation();
 
+  const card = darkMode ? "rgba(30,41,59,0.96)" : "rgba(255,255,255,0.98)";
+  const border = darkMode ? "rgba(51,65,85,0.7)" : "rgba(226,232,240,0.8)";
+  const textPrimary = darkMode ? "#F1F5F9" : "#0F172A";
+  const textSecondary = darkMode ? "#94A3B8" : "#64748B";
+  const chipBg = darkMode ? "rgba(255,255,255,0.07)" : "rgba(0,75,99,0.06)";
+  const rowHover = darkMode ? "rgba(255,255,255,0.06)" : "rgba(0,119,182,0.06)";
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-gray-200 z-50 overflow-hidden"
-    >
-      {/* Header */}
-      <div className="bg-gradient-to-r from-[#0077B6] to-[#00B4D8] p-4 text-white">
-        <div className="flex items-center gap-3">
-          <div className="w-14 h-14 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center text-white overflow-hidden flex-shrink-0">
-            {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt={displayName}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-lg font-bold">
-                {getInitials(displayName)}
-              </span>
-            )}
-          </div>
-          <div className="min-w-0">
-            <p className="font-bold text-base truncate">{displayName}</p>
-            <p className="text-xs text-white/80">
-              {t("kid.user.smartboard_profile")}
-            </p>
-            {vakMeta && (
-              <span
-                className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
-                style={{ background: "rgba(255,255,255,0.2)" }}
-              >
-                {vakMeta.icon} {t(vakMeta.labelKey)}
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
+    <>
+      {/* Backdrop — closes the dropdown when clicking outside */}
+      <div
+        className="fixed inset-0 z-40"
+        onClick={onClose}
+        aria-hidden="true"
+      />
 
-      {/* Loading State */}
-      {loading && (
-        <div className="p-4 text-center">
-          <Loader2 className="w-5 h-5 animate-spin inline text-[#0077B6]" />
-          <p className="text-sm text-gray-600 mt-2">{t("kid.user.loading")}</p>
-        </div>
-      )}
-
-      {/* Profile Data */}
-      {!loading && profile && (
-        <div className="p-4 space-y-3">
-          <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-xl bg-[#F0F9FF] border border-[#BAE6FD] p-3">
-              <p className="text-[10px] font-bold uppercase tracking-wide text-[#0284C7]">
-                {t("kid.user.age")}
-              </p>
-              <p className="text-sm text-gray-800 mt-0.5">
-                {profile.age
-                  ? t("kid.user.age_value", { age: profile.age })
-                  : t("kid.user.not_specified_age")}
-              </p>
-            </div>
-            <div className="rounded-xl bg-[#F0FDF4] border border-[#BBF7D0] p-3">
-              <p className="text-[10px] font-bold uppercase tracking-wide text-[#15803D]">
-                {t("kid.user.grade")}
-              </p>
-              <p className="text-sm text-gray-800 mt-0.5">
-                {profile.grade || t("kid.user.not_specified")}
-              </p>
-            </div>
-          </div>
-
-          <div className="rounded-xl bg-[#FFFBEB] border border-[#FDE68A] p-3">
-            <p className="text-[10px] font-bold uppercase tracking-wide text-[#B45309]">
-              {t("kid.user.vak_type")}
-            </p>
-            <div className="flex items-center gap-2 mt-1">
-              {vakMeta ? (
-                <>
-                  <span
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
-                    style={{
-                      backgroundColor: vakMeta.bg,
-                      color: vakMeta.color,
-                    }}
-                  >
-                    {vakMeta.icon} {t(vakMeta.labelKey)}
-                  </span>
-                </>
+      {/* Panel */}
+      <motion.div
+        initial={{ opacity: 0, y: -8, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -8, scale: 0.97 }}
+        transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94] }}
+        className="absolute right-0 mt-2 w-72 max-w-[calc(100vw-1rem)] rounded-2xl z-50 overflow-hidden"
+        style={{
+          background: card,
+          border: `1px solid ${border}`,
+          boxShadow: darkMode
+            ? "0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)"
+            : "0 20px 40px rgba(0,75,99,0.18), 0 4px 12px rgba(0,0,0,0.08)",
+        }}
+      >
+        {/* Header — brand gradient */}
+        <div className="px-4 py-4" style={{ background: SB_GRADIENTS.hero }}>
+          <div className="flex items-center gap-3">
+            <div
+              className="w-12 h-12 rounded-xl flex items-center justify-center text-white overflow-hidden flex-shrink-0"
+              style={{
+                background: "rgba(255,255,255,0.2)",
+                border: "1.5px solid rgba(255,255,255,0.35)",
+                boxShadow: glow("#48CAE4", 0.3),
+              }}
+            >
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={displayName}
+                  className="w-full h-full object-cover"
+                />
               ) : (
-                <p className="text-sm text-gray-800">
-                  {t("kid.user.not_detected")}
-                </p>
+                <span className="text-base font-black">
+                  {getInitials(displayName)}
+                </span>
+              )}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-black text-sm text-white truncate leading-tight">
+                {displayName}
+              </p>
+              <p className="text-[11px] text-white/65 mt-0.5">
+                {t("kid.user.smartboard_profile")}
+              </p>
+              {vakMeta && (
+                <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold text-white/90 bg-white/15 border border-white/20">
+                  {vakMeta.icon} {t(vakMeta.labelKey)}
+                </span>
               )}
             </div>
           </div>
+        </div>
 
-          <div className="rounded-xl bg-[#F8FAFC] border border-gray-200 p-3">
-            <p className="text-[10px] font-bold uppercase tracking-wide text-gray-500">
-              {t("kid.user.school")}
-            </p>
-            <p className="text-sm text-gray-800 mt-0.5">
-              {profile.school || t("kid.user.not_specified")}
+        {/* Loading */}
+        {loading && (
+          <div className="py-6 flex flex-col items-center gap-2">
+            <Loader2
+              className="w-5 h-5 animate-spin"
+              style={{ color: "#0077B6" }}
+            />
+            <p className="text-xs" style={{ color: textSecondary }}>
+              {t("kid.user.loading")}
             </p>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Error State */}
-      {error && !loading && (
-        <div className="p-4 text-center text-red-600 text-sm">
-          {t("kid.user.load_error")}
-        </div>
-      )}
+        {/* Profile data */}
+        {!loading && profile && (
+          <div className="px-3 py-3 space-y-2">
+            <div className="grid grid-cols-2 gap-2">
+              <div
+                className="rounded-xl p-2.5"
+                style={{ background: chipBg, border: `1px solid ${border}` }}
+              >
+                <p
+                  className="text-[9px] font-black uppercase tracking-widest mb-0.5"
+                  style={{ color: "#0096C7" }}
+                >
+                  {t("kid.user.age")}
+                </p>
+                <p className="text-sm font-bold" style={{ color: textPrimary }}>
+                  {profile.age
+                    ? t("kid.user.age_value", { age: profile.age })
+                    : "—"}
+                </p>
+              </div>
+              <div
+                className="rounded-xl p-2.5"
+                style={{ background: chipBg, border: `1px solid ${border}` }}
+              >
+                <p
+                  className="text-[9px] font-black uppercase tracking-widest mb-0.5"
+                  style={{ color: "#06D6A0" }}
+                >
+                  {t("kid.user.grade")}
+                </p>
+                <p className="text-sm font-bold" style={{ color: textPrimary }}>
+                  {profile.grade || "—"}
+                </p>
+              </div>
+            </div>
 
-      {/* Actions */}
-      {!loading && (
-        <div className="p-3 border-t border-gray-200 space-y-2">
-          <button
-            onClick={() => {
-              toggleDarkMode();
-              onClose();
-            }}
-            className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-[#F0F9FF] transition-colors"
+            {vakMeta && (
+              <div
+                className="rounded-xl p-2.5 flex items-center justify-between"
+                style={{ background: chipBg, border: `1px solid ${border}` }}
+              >
+                <p
+                  className="text-[9px] font-black uppercase tracking-widest"
+                  style={{ color: "#F59E0B" }}
+                >
+                  {t("kid.user.vak_type")}
+                </p>
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold"
+                  style={{ backgroundColor: vakMeta.bg, color: vakMeta.color }}
+                >
+                  {vakMeta.icon} {t(vakMeta.labelKey)}
+                </span>
+              </div>
+            )}
+
+            {profile.school && (
+              <div
+                className="rounded-xl p-2.5"
+                style={{ background: chipBg, border: `1px solid ${border}` }}
+              >
+                <p
+                  className="text-[9px] font-black uppercase tracking-widest mb-0.5"
+                  style={{ color: textSecondary }}
+                >
+                  {t("kid.user.school")}
+                </p>
+                <p
+                  className="text-sm font-semibold truncate"
+                  style={{ color: textPrimary }}
+                >
+                  {profile.school}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Error */}
+        {error && !loading && (
+          <p className="px-4 py-3 text-xs text-center text-[#EF476F]">
+            {t("kid.user.load_error")}
+          </p>
+        )}
+
+        {/* Actions */}
+        {!loading && (
+          <div
+            className="px-3 pb-3 space-y-1"
+            style={{ borderTop: `1px solid ${border}`, paddingTop: "10px" }}
           >
-            <span className="text-base leading-none">
-              {darkMode ? "☀️" : "\u{1F319}"}
-            </span>
-            {darkMode ? "Modo claro" : "Modo oscuro"}
-          </button>
-          <button
-            onClick={onProgressClick}
-            className="w-full flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-[#F0F9FF] transition-colors"
-          >
-            <BarChart3 className="w-4 h-4 text-[#0077B6]" />
-            {t("kid.user.progress")}
-          </button>
-          <button
-            onClick={onEditProfile}
-            className="w-full flex items-center justify-center gap-2 bg-[#0077B6] hover:bg-[#005fa3] text-white py-2 rounded-lg text-sm font-semibold transition-colors"
-          >
-            <Edit3 className="w-4 h-4" />
-            {t("kid.user.edit_profile")}
-          </button>
-          <button
-            onClick={onLogout}
-            className="w-full flex items-center justify-center gap-2 text-red-600 hover:bg-red-50 py-2 rounded-lg text-sm font-semibold transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            {t("kid.user.logout")}
-          </button>
-        </div>
-      )}
-    </motion.div>
+            {/* Dark mode toggle */}
+            <button
+              onClick={() => {
+                toggleDarkMode();
+                onClose();
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors text-left"
+              style={{ color: textPrimary }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = rowHover)
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = "transparent")
+              }
+            >
+              {darkMode ? (
+                <Sun
+                  className="w-4 h-4 flex-shrink-0"
+                  style={{ color: "#F59E0B" }}
+                />
+              ) : (
+                <Moon
+                  className="w-4 h-4 flex-shrink-0"
+                  style={{ color: "#6366F1" }}
+                />
+              )}
+              {darkMode ? "Modo claro" : "Modo oscuro"}
+            </button>
+
+            {/* Progress */}
+            <button
+              onClick={onProgressClick}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors text-left"
+              style={{ color: textPrimary }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = rowHover)
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = "transparent")
+              }
+            >
+              <BarChart3
+                className="w-4 h-4 flex-shrink-0"
+                style={{ color: "#FB8500" }}
+              />
+              {t("kid.user.progress")}
+            </button>
+
+            {/* Edit profile — CTA */}
+            <button
+              onClick={onEditProfile}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold text-white transition-opacity hover:opacity-90 active:scale-[0.98]"
+              style={{
+                background: SB_GRADIENTS.brand,
+                boxShadow: glow("#00B4D8", 0.3),
+              }}
+            >
+              <Edit3 className="w-4 h-4" />
+              {t("kid.user.edit_profile")}
+            </button>
+
+            {/* Logout */}
+            <button
+              onClick={onLogout}
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-semibold transition-colors"
+              style={{ color: "#EF476F" }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = "rgba(239,71,111,0.08)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = "transparent")
+              }
+            >
+              <LogOut className="w-4 h-4" />
+              {t("kid.user.logout")}
+            </button>
+          </div>
+        )}
+      </motion.div>
+    </>
   );
 };
 

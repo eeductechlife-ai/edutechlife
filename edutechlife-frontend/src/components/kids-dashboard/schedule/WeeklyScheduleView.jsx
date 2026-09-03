@@ -24,47 +24,104 @@ const groupByDay = (slots) => {
   return map;
 };
 
-// ── Current / Next class banner ──────────────────────────────────────────
-const NowNextBanner = ({ current, next }) => {
-  if (!current && !next) return null;
+const nowMinutes = () => {
+  const d = new Date();
+  return d.getHours() * 60 + d.getMinutes();
+};
+
+// ── Clase actual ─────────────────────────────────────────────────────────
+const AhoraCard = ({ current, next, todayIso }) => {
+  const nowM = nowMinutes();
+
+  if (!current) {
+    return (
+      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4 flex items-center gap-4">
+        <span className="text-4xl">☕</span>
+        <div className="flex-1 min-w-0">
+          <div className="text-xs text-[#64748B] mb-0.5">Sin clase ahora</div>
+          {next ? (
+            <>
+              <div className="text-base font-bold text-[#004B63]">
+                {subjectEmoji(next.subject_label || next.subject)}{" "}
+                {next.subject_label || next.subject}
+              </div>
+              <div className="text-xs text-[#64748B]">
+                Próxima ·{" "}
+                {next.day_of_week === todayIso
+                  ? formatHHMM(next.start_time)
+                  : `${DAY_LABELS.es[next.day_of_week]} ${formatHHMM(next.start_time)}`}
+              </div>
+            </>
+          ) : (
+            <div className="text-sm font-semibold text-[#004B63]">
+              No hay más clases por hoy
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  const color = current.color || subjectColor(current.subject);
+  const startM = timeToMinutes(current.start_time);
+  const endM = timeToMinutes(current.end_time);
+  const duration = endM - startM || 1;
+  const elapsed = nowM - startM;
+  const remaining = Math.max(0, endM - nowM);
+  const progress = Math.min(100, Math.round((elapsed / duration) * 100));
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl p-4 sm:p-5 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white shadow-lg"
+      className="rounded-2xl p-5 relative overflow-hidden"
+      style={{ backgroundColor: `${color}16`, border: `2px solid ${color}50` }}
     >
-      {current ? (
-        <div className="flex items-start gap-3">
-          <span className="text-3xl" aria-hidden>
-            {subjectEmoji(current.subject_label || current.subject)}
-          </span>
-          <div className="flex-1 min-w-0">
-            <div className="text-xs uppercase tracking-wide opacity-80">
-              Ahora mismo
-            </div>
-            <div className="text-lg sm:text-xl font-bold truncate">
-              {current.subject_label || current.subject}
-            </div>
-            <div className="text-sm opacity-90">
-              {formatHHMM(current.start_time)} – {formatHHMM(current.end_time)}
-              {current.teacher ? ` · ${current.teacher}` : ""}
-              {current.room ? ` · Aula ${current.room}` : ""}
-            </div>
+      <div className="flex items-start gap-4">
+        <span className="text-5xl leading-none mt-0.5">
+          {subjectEmoji(current.subject_label || current.subject)}
+        </span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+            <span
+              className="text-[11px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full text-white"
+              style={{ backgroundColor: color }}
+            >
+              ● En curso
+            </span>
+            {remaining > 0 && (
+              <span className="text-xs text-[#64748B]">
+                {remaining} min restantes
+              </span>
+            )}
+          </div>
+          <div className="text-2xl font-black text-[#004B63] leading-tight truncate">
+            {current.subject_label || current.subject}
+          </div>
+          <div className="text-sm text-[#64748B] mt-0.5">
+            {formatHHMM(current.start_time)} – {formatHHMM(current.end_time)}
+            {current.teacher ? ` · ${current.teacher}` : ""}
+            {current.room ? ` · Aula ${current.room}` : ""}
           </div>
         </div>
-      ) : (
-        <div className="text-sm opacity-90">Sin clase en este momento.</div>
-      )}
-      {next && (!current || next.id !== current.id) && (
-        <div className="mt-3 pt-3 border-t border-white/20 text-sm">
-          <span className="opacity-80">Sigue: </span>
-          <span className="font-semibold">
+      </div>
+
+      <div className="mt-4 h-1.5 rounded-full bg-white/60">
+        <div
+          className="h-1.5 rounded-full"
+          style={{ width: `${progress}%`, backgroundColor: color }}
+        />
+      </div>
+
+      {next && next.id !== current.id && (
+        <div className="mt-3 pt-3 border-t border-black/5 flex items-center gap-2 text-xs">
+          <span className="text-[#64748B]">Sigue:</span>
+          <span className="font-semibold text-[#004B63]">
             {subjectEmoji(next.subject_label || next.subject)}{" "}
             {next.subject_label || next.subject}
           </span>
-          <span className="opacity-80">
-            {" "}
-            · {DAY_LABELS.es[next.day_of_week]} {formatHHMM(next.start_time)}
+          <span className="text-[#64748B] ml-auto">
+            {formatHHMM(next.start_time)}
           </span>
         </div>
       )}
@@ -72,74 +129,156 @@ const NowNextBanner = ({ current, next }) => {
   );
 };
 
-// ── Weekly grid ──────────────────────────────────────────────────────────
+// ── Horario de hoy ───────────────────────────────────────────────────────
+const TodayTimeline = ({ slots, todayIso }) => {
+  const nowM = nowMinutes();
+  const todaySlots = slots
+    .filter((s) => s.day_of_week === todayIso)
+    .sort((a, b) => timeToMinutes(a.start_time) - timeToMinutes(b.start_time));
+
+  if (todaySlots.length === 0) {
+    return (
+      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 text-center">
+        <div className="text-3xl mb-2">🎉</div>
+        <div className="text-sm font-semibold text-[#004B63]">
+          Hoy no tienes clases
+        </div>
+        <div className="text-xs text-[#64748B] mt-1">
+          ¡Disfruta tu día libre!
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl border border-[#E2E8F0] bg-white overflow-hidden">
+      <div className="px-4 pt-3 pb-2 flex items-center gap-2 border-b border-[#F1F5F9]">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#004B63]">
+          Hoy
+        </span>
+        <span className="text-xs text-[#94A3B8]">
+          {todaySlots.length} {todaySlots.length === 1 ? "clase" : "clases"}
+        </span>
+      </div>
+      <ul>
+        {todaySlots.map((s, i) => {
+          const startM = timeToMinutes(s.start_time);
+          const endM = timeToMinutes(s.end_time);
+          const isCurrent = startM <= nowM && endM > nowM;
+          const isPast = endM <= nowM;
+          const color = s.color || subjectColor(s.subject);
+
+          return (
+            <li
+              key={s.id || `${s.day_of_week}-${s.start_time}`}
+              className={`flex items-center gap-3 px-4 py-3 ${
+                i < todaySlots.length - 1 ? "border-b border-[#F1F5F9]" : ""
+              } ${isCurrent ? "bg-[#F0F9FB]" : ""} ${isPast ? "opacity-40" : ""}`}
+            >
+              <div className="text-xs text-[#64748B] w-[68px] shrink-0 tabular-nums">
+                {formatHHMM(s.start_time)}
+                <div className="text-[10px]">{formatHHMM(s.end_time)}</div>
+              </div>
+              <div
+                className="w-1 self-stretch rounded-full shrink-0 min-h-[2.5rem]"
+                style={{ backgroundColor: color }}
+              />
+              <div className="flex-1 min-w-0">
+                <div
+                  className={`text-sm text-[#004B63] truncate ${
+                    isCurrent ? "font-black" : "font-semibold"
+                  }`}
+                >
+                  <span aria-hidden className="mr-1">
+                    {subjectEmoji(s.subject_label || s.subject)}
+                  </span>
+                  {s.subject_label || s.subject}
+                </div>
+                {(s.teacher || s.room) && (
+                  <div className="text-xs text-[#94A3B8] truncate">
+                    {[s.teacher, s.room && `Aula ${s.room}`]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </div>
+                )}
+              </div>
+              {isCurrent && (
+                <span
+                  className="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded-full text-white shrink-0"
+                  style={{ backgroundColor: color }}
+                >
+                  Ahora
+                </span>
+              )}
+              {isPast && (
+                <span className="text-[#94A3B8] shrink-0 text-sm">✓</span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
+
+// ── Semana completa (colapsable) ─────────────────────────────────────────
 const WeeklyGrid = ({ slots, todayIso }) => {
   const grouped = useMemo(() => groupByDay(slots), [slots]);
   return (
     <div className="overflow-x-auto -mx-4 sm:mx-0 pb-2">
-      <div className="min-w-[640px] grid grid-cols-7 gap-2 px-4 sm:px-0">
+      <div className="min-w-[560px] grid grid-cols-7 gap-1.5 px-4 sm:px-0">
         {DAY_KEYS.map((d) => {
-          const daySlots = grouped.get(d) || [];
+          const daySlots = (grouped.get(d) || []).sort(
+            (a, b) => timeToMinutes(a.start_time) - timeToMinutes(b.start_time),
+          );
           const isToday = d === todayIso;
           return (
             <div
               key={d}
-              className={`rounded-2xl border ${
+              className={`rounded-xl border p-2 space-y-1.5 ${
                 isToday
                   ? "border-[#4DA8C4] bg-[#F0F9FB]"
                   : "border-[#E2E8F0] bg-white"
-              } p-2 sm:p-3 space-y-2`}
+              }`}
             >
               <div
-                className={`text-xs font-bold text-center uppercase ${
-                  isToday ? "text-[#004B63]" : "text-[#64748B]"
+                className={`text-[10px] font-bold text-center uppercase ${
+                  isToday ? "text-[#004B63]" : "text-[#94A3B8]"
                 }`}
               >
                 {DAY_LABELS.es[d]}
                 {isToday && (
-                  <div className="text-[10px] font-normal text-[#4DA8C4]">
+                  <div className="text-[9px] text-[#4DA8C4] font-normal">
                     HOY
                   </div>
                 )}
               </div>
               {daySlots.length === 0 && (
-                <div className="text-[10px] text-center text-[#94A3B8] py-4">
-                  Libre
+                <div className="text-[10px] text-center text-[#CBD5E1] py-2">
+                  –
                 </div>
               )}
-              {daySlots
-                .sort(
-                  (a, b) =>
-                    timeToMinutes(a.start_time) - timeToMinutes(b.start_time),
-                )
-                .map((s) => {
-                  const color = s.color || subjectColor(s.subject);
-                  return (
-                    <div
-                      key={s.id || `${s.day_of_week}-${s.start_time}`}
-                      className="rounded-xl px-2 py-1.5 text-left shadow-sm border-l-4"
-                      style={{
-                        borderLeftColor: color,
-                        backgroundColor: `${color}12`,
-                      }}
-                    >
-                      <div className="text-[10px] text-[#64748B]">
-                        {formatHHMM(s.start_time)}–{formatHHMM(s.end_time)}
-                      </div>
-                      <div className="text-xs font-semibold text-[#004B63] leading-tight">
-                        <span aria-hidden className="mr-1">
-                          {subjectEmoji(s.subject_label || s.subject)}
-                        </span>
-                        {s.subject_label || s.subject}
-                      </div>
-                      {s.room && (
-                        <div className="text-[10px] text-[#64748B]">
-                          {s.room}
-                        </div>
-                      )}
+              {daySlots.map((s) => {
+                const color = s.color || subjectColor(s.subject);
+                return (
+                  <div
+                    key={s.id || `${s.day_of_week}-${s.start_time}`}
+                    className="rounded-lg px-1.5 py-1 border-l-2 text-left"
+                    style={{
+                      borderLeftColor: color,
+                      backgroundColor: `${color}12`,
+                    }}
+                  >
+                    <div className="text-[9px] text-[#64748B]">
+                      {formatHHMM(s.start_time)}
                     </div>
-                  );
-                })}
+                    <div className="text-[10px] font-semibold text-[#004B63] leading-tight">
+                      {subjectEmoji(s.subject_label || s.subject)}{" "}
+                      {s.subject_label || s.subject}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           );
         })}
@@ -148,83 +287,23 @@ const WeeklyGrid = ({ slots, todayIso }) => {
   );
 };
 
-// ── Upcoming exams strip ────────────────────────────────────────────────
-const UpcomingExams = ({ exams, onRemove }) => {
-  if (!exams.length) return null;
-  return (
-    <section className="rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-sm">
-      <header className="flex items-center gap-2 mb-3">
-        <span className="text-lg" aria-hidden>
-          📋
-        </span>
-        <h4 className="text-sm font-bold text-[#004B63]">Próximos exámenes</h4>
-      </header>
-      <ul className="space-y-2">
-        {exams.map((x) => (
-          <li
-            key={x.id}
-            className="flex items-center gap-3 rounded-xl border border-[#F1F5F9] p-2.5"
-          >
-            <span
-              className="text-xl"
-              aria-hidden
-              style={{ color: subjectColor(x.subject) }}
-            >
-              {subjectEmoji(x.subject)}
-            </span>
-            <div className="flex-1 min-w-0">
-              <div className="text-sm font-semibold text-[#004B63] truncate">
-                {x.exam_name || x.subject}
-              </div>
-              <div className="text-xs text-[#64748B]">
-                {new Date(x.exam_date + "T00:00:00").toLocaleDateString(
-                  "es-ES",
-                  {
-                    weekday: "short",
-                    day: "2-digit",
-                    month: "short",
-                  },
-                )}
-                {x.topic ? ` · ${x.topic}` : ""}
-              </div>
-            </div>
-            {onRemove && (
-              <button
-                type="button"
-                onClick={() => onRemove(x.id)}
-                className="text-red-300 hover:text-red-500 px-2 py-1 rounded-lg text-sm"
-                aria-label="Eliminar examen"
-              >
-                ✕
-              </button>
-            )}
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-};
-
-// ── Main container ──────────────────────────────────────────────────────
+// ── Contenedor principal ─────────────────────────────────────────────────
 const WeeklyScheduleView = () => {
   const {
     timetable,
     slots,
     timetableLoading,
     timetableError,
-    saveTimetable,
-    saveSlots,
+    saveTimetableWithSlots,
     currentClass,
     nextClass,
-    upcomingExams,
-    removeExam,
   } = useSmartBoardKids();
 
-  // Map the context loading/error names to the original names used in the component
   const loading = timetableLoading;
   const error = timetableError;
 
-  const [mode, setMode] = useState("view"); // view | scan | edit
+  const [mode, setMode] = useState("view");
+  const [showWeek, setShowWeek] = useState(false);
   const [pendingSlots, setPendingSlots] = useState(null);
   const [pendingMeta, setPendingMeta] = useState({});
   const [saving, setSaving] = useState(false);
@@ -246,35 +325,22 @@ const WeeklyScheduleView = () => {
       setSaving(true);
       setSaveError("");
       try {
-        const tt = await saveTimetable({
-          ...meta,
-          source: pendingSlots ? "scan" : "manual",
+        await saveTimetableWithSlots({
+          meta: { ...meta, source: pendingSlots ? "scan" : "manual" },
+          slots: edited,
         });
-        // Pass tt.id directly so saveSlots doesn't depend on the React state
-        // update (which arrives after re-render, too late for the next await).
-        await saveSlots(edited, tt?.id);
         setPendingSlots(null);
         setPendingMeta({});
         setMode("view");
       } catch (e) {
-        const msg = e?.message || "";
-        if (
-          msg.includes("student") ||
-          msg.includes("profile") ||
-          msg.includes("Profile")
-        ) {
-          // Reset to view so the empty state (not a red error) shows
-          setPendingSlots(null);
-          setPendingMeta({});
-          setMode("view");
-        } else {
-          setSaveError(msg || "No se pudo guardar el horario.");
-        }
+        setSaveError(
+          e?.message || "No se pudo guardar el horario. Intenta de nuevo.",
+        );
       } finally {
         setSaving(false);
       }
     },
-    [saveTimetable, saveSlots, pendingSlots],
+    [saveTimetableWithSlots, pendingSlots],
   );
 
   if (loading) {
@@ -285,64 +351,46 @@ const WeeklyScheduleView = () => {
     );
   }
 
-  if (error) {
-    // Show a friendlier message for any error (assume it's missing schedule)
-    // since we only show this when useTimetable can't load data
-    const errorStr = String(error || "").toLowerCase();
-    const isScheduleError =
-      errorStr.includes("student") ||
-      errorStr.includes("profile") ||
-      errorStr.includes("no rows") ||
-      errorStr.includes("404") ||
-      error; // If there's any error, show friendly message
-
-    if (isScheduleError) {
-      return (
-        <div className="space-y-4">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl bg-gradient-to-br from-[#004B63] via-[#4DA8C4] to-[#66CCCC] text-white p-6 sm:p-8 shadow-lg text-center"
-          >
-            <div className="text-5xl mb-3">📅</div>
-            <h3 className="text-2xl font-black mb-1">Agrega tu horario</h3>
-            <p className="text-sm opacity-90 mb-5 max-w-md mx-auto">
-              Escanea el horario del colegio y SmartBoard te recordará tus
-              clases y exámenes. También podrás hablar con Dani sobre la materia
-              del momento.
-            </p>
-            <div className="flex flex-wrap gap-2 justify-center">
-              <button
-                type="button"
-                onClick={() => setMode("scan")}
-                className="px-5 py-3 rounded-xl bg-white text-[#004B63] font-bold shadow hover:shadow-md"
-              >
-                📸 Escanear horario
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setPendingSlots([]);
-                  setPendingMeta({});
-                  setMode("edit");
-                }}
-                className="px-5 py-3 rounded-xl bg-white/15 text-white font-semibold border border-white/40 hover:bg-white/25"
-              >
-                ✏️ Ingresar manualmente
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      );
-    }
+  // Estado vacío (error o sin horario)
+  if ((error || !timetable || slots.length === 0) && mode === "view") {
     return (
-      <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-        {error}
+      <div className="space-y-4">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-2xl bg-gradient-to-br from-[#004B63] via-[#4DA8C4] to-[#66CCCC] text-white p-6 sm:p-8 shadow-lg text-center"
+        >
+          <div className="text-5xl mb-3">📅</div>
+          <h3 className="text-2xl font-black mb-1">Agrega tu horario</h3>
+          <p className="text-sm opacity-90 mb-5 max-w-md mx-auto">
+            Escanea el horario del colegio y SmartBoard te recordará tus clases
+            y exámenes.
+          </p>
+          <div className="flex flex-wrap gap-2 justify-center">
+            <button
+              type="button"
+              onClick={() => setMode("scan")}
+              className="px-5 py-3 rounded-xl bg-white text-[#004B63] font-bold shadow hover:shadow-md"
+            >
+              📸 Escanear horario
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setPendingSlots([]);
+                setPendingMeta({});
+                setMode("edit");
+              }}
+              className="px-5 py-3 rounded-xl bg-white/15 text-white font-semibold border border-white/40 hover:bg-white/25"
+            >
+              ✏️ Ingresar manualmente
+            </button>
+          </div>
+        </motion.div>
       </div>
     );
   }
 
-  // Editor takes priority (either fresh scan or edit existing).
   if (mode === "edit") {
     const initial = pendingSlots ? pendingSlots : slots.map((s) => ({ ...s }));
     const meta = pendingSlots
@@ -384,82 +432,46 @@ const WeeklyScheduleView = () => {
     );
   }
 
-  // Empty state.
-  if (!timetable || slots.length === 0) {
-    return (
-      <div className="space-y-4">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl bg-gradient-to-br from-[#004B63] via-[#4DA8C4] to-[#66CCCC] text-white p-6 sm:p-8 shadow-lg text-center"
-        >
-          <div className="text-5xl mb-3">📅</div>
-          <h3 className="text-2xl font-black mb-1">Agrega tu horario</h3>
-          <p className="text-sm opacity-90 mb-5 max-w-md mx-auto">
-            Escanea el horario del colegio y SmartBoard te recordará tus clases
-            y exámenes. También podrás hablar con Dani sobre la materia del
-            momento.
-          </p>
-          <div className="flex flex-wrap gap-2 justify-center">
-            <button
-              type="button"
-              onClick={() => setMode("scan")}
-              className="px-5 py-3 rounded-xl bg-white text-[#004B63] font-bold shadow hover:shadow-md"
-            >
-              📸 Escanear horario
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setPendingSlots([]);
-                setPendingMeta({});
-                setMode("edit");
-              }}
-              className="px-5 py-3 rounded-xl bg-white/15 text-white font-semibold border border-white/40 hover:bg-white/25"
-            >
-              ✏️ Ingresar manualmente
-            </button>
-          </div>
-        </motion.div>
-      </div>
-    );
-  }
-
-  // Normal view.
+  // Vista principal — hoy primero
   return (
-    <div className="space-y-4">
-      <NowNextBanner current={currentClass} next={nextClass} />
+    <div className="space-y-3">
+      <AhoraCard current={currentClass} next={nextClass} todayIso={todayIso} />
 
-      <div className="flex flex-wrap gap-2 items-center justify-between">
-        <div className="text-sm text-[#64748B]">
-          {timetable.school_name || "Mi horario"}
-          {timetable.term_label ? ` · ${timetable.term_label}` : ""}
-          {" · "}
-          <span className="text-[#004B63] font-semibold">
-            {slots.length} bloques
-          </span>
-        </div>
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => setMode("edit")}
-            className="px-3 py-2 rounded-lg text-sm border border-[#E2E8F0] text-[#004B63] hover:bg-[#F0F9FB] font-semibold"
-          >
-            ✏️ Editar
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("scan")}
-            className="px-3 py-2 rounded-lg text-sm bg-[#004B63] text-white font-semibold hover:bg-[#003347]"
-          >
-            📸 Escanear de nuevo
-          </button>
-        </div>
+      <TodayTimeline slots={slots} todayIso={todayIso} />
+
+      <button
+        type="button"
+        onClick={() => setShowWeek((v) => !v)}
+        className="w-full py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-sm text-[#004B63] font-semibold hover:bg-[#F0F9FB] flex items-center justify-center gap-2"
+      >
+        {showWeek ? "▲ Ocultar semana" : "📆 Ver semana completa"}
+      </button>
+
+      {showWeek && (
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <WeeklyGrid slots={slots} todayIso={todayIso} />
+        </motion.div>
+      )}
+
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => setMode("edit")}
+          className="flex-1 py-2.5 rounded-xl text-sm border border-[#E2E8F0] text-[#004B63] hover:bg-[#F0F9FB] font-semibold"
+        >
+          ✏️ Editar
+        </button>
+        <button
+          type="button"
+          onClick={() => setMode("scan")}
+          className="flex-1 py-2.5 rounded-xl text-sm bg-[#004B63] text-white font-semibold hover:bg-[#003347]"
+        >
+          📸 Actualizar horario
+        </button>
       </div>
-
-      <WeeklyGrid slots={slots} todayIso={todayIso} />
-
-      <UpcomingExams exams={upcomingExams} onRemove={removeExam} />
     </div>
   );
 };

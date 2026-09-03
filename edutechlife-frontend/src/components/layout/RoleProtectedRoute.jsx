@@ -4,6 +4,7 @@ import { PageLoader } from "../LoadingScreen";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { supabase } from "../../lib/supabase";
+import { API_BASE_URL as API_BASE } from "../../config/api";
 
 /**
  * Componente RoleProtectedRoute - Patrón simplificado con Supabase Auth
@@ -33,9 +34,8 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
   const { t } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [verifiedRole, setVerifiedRole] = useState(null);
 
-  // Perfil (incluye account_type). Ya está cacheado y usado en otras partes,
-  // así que no añade peticiones nuevas.
   const { profile, isAdmin, isLoading } = useStudentProfile();
 
   useEffect(() => {
@@ -60,18 +60,21 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
 
         // En producción, validar con Supabase
         const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error("Session validation timeout")), 3000)
+          setTimeout(
+            () => reject(new Error("Session validation timeout")),
+            3000,
+          ),
         );
 
         const {
           data: { session },
-        } = await Promise.race([
-          supabase.auth.getSession(),
-          timeoutPromise,
-        ]);
+        } = await Promise.race([supabase.auth.getSession(), timeoutPromise]);
 
-        if (session?.user && session.access_token) {
-          setIsAuthenticated(session.access_token === token);
+        if (session?.user) {
+          setIsAuthenticated(true);
+          if (session.access_token && session.access_token !== token) {
+            sessionStorage.setItem("auth_token", session.access_token);
+          }
         } else {
           const alreadyRetried = sessionStorage.getItem("auth_restore_retried");
           if (!alreadyRetried) {
@@ -96,6 +99,20 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
     validateSession();
   }, []);
 
+  useEffect(() => {
+    if (!isAuthenticated || !isLoaded) return;
+    const token = sessionStorage.getItem("auth_token");
+    if (!token) return;
+    fetch(`${API_BASE}/api/smartboard/user-role`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.role) setVerifiedRole(data.role);
+      })
+      .catch(() => {});
+  }, [isAuthenticated, isLoaded]);
+
   if (!isLoaded) {
     return <PageLoader message={t("page_loader.permisos")} />;
   }
@@ -111,15 +128,10 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
     );
   }
 
-  // --- Gate de producto por account_type (fail-open) -----------------------
   const config = PRODUCT_ROUTES[requiredRole];
   const accountType = profile?.account_type;
-  const isParent =
-    typeof localStorage !== "undefined" &&
-    localStorage.getItem("user_role") === "parent";
+  const isParent = verifiedRole === "parent";
 
-  // Solo redirige con evidencia positiva de cruce de producto. Cualquier
-  // ambigüedad (cargando, sin tipo, padre, admin) deja pasar.
   if (
     config &&
     !isLoading &&

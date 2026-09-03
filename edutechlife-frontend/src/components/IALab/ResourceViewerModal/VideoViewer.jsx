@@ -58,10 +58,6 @@ const VideoViewer = ({
     };
     window.addEventListener("message", suppressPostMsgError, true);
 
-    return () => {
-      window.removeEventListener("message", suppressPostMsgError, true);
-    };
-
     const init = () => {
       if (playerRef.current)
         try {
@@ -127,7 +123,14 @@ const VideoViewer = ({
     };
     if (window.YT && window.YT.Player && window.YT.loaded) {
       init();
-      return;
+      return () => {
+        if (progressTimer.current) clearInterval(progressTimer.current);
+        if (playerRef.current)
+          try {
+            playerRef.current.destroy();
+          } catch {}
+        window.removeEventListener("message", suppressPostMsgError, true);
+      };
     }
     const tag = document.createElement("script");
     tag.src = `https://www.youtube.com/iframe_api?origin=${encodeURIComponent(window.location.origin)}`;

@@ -42,19 +42,37 @@ export default memo(function GradeScanner({ onTabChange }) {
     setDocumentForDani,
   } = useGradeScanner();
 
+  const PROGRESS_GRADIENT =
+    "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)";
+
   return (
     <div className="space-y-5">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#FB8500] to-[#FFD166] flex items-center justify-center shadow-md">
-          <span className="text-xl">📊</span>
+      {/* Header banner */}
+      <div
+        className="relative rounded-2xl overflow-hidden p-5"
+        style={{ background: PROGRESS_GRADIENT }}
+      >
+        <div className="relative z-10 flex items-center gap-4">
+          <div
+            className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md"
+            style={{ background: "rgba(255,255,255,0.25)" }}
+          >
+            <span className="text-2xl">📊</span>
+          </div>
+          <div>
+            <h3 className="text-xl font-black text-white drop-shadow-sm">
+              {t("kid.grades.title")}
+            </h3>
+            <p className="text-xs text-white/80">{t("kid.grades.subtitle")}</p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-lg font-black text-[#004B63]">
-            {t("kid.grades.title")}
-          </h3>
-          <p className="text-xs text-[#64748B]">{t("kid.grades.subtitle")}</p>
-        </div>
+        <div
+          className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10"
+          style={{
+            background: "rgba(255,255,255,0.4)",
+            transform: "translate(30%, -30%)",
+          }}
+        />
       </div>
 
       {/* Mode toggle */}
@@ -68,7 +86,7 @@ export default memo(function GradeScanner({ onTabChange }) {
             onClick={() => setScanMode(m.id)}
             className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${
               scanMode === m.id
-                ? "bg-white text-[#004B63] shadow-sm"
+                ? "bg-white text-[#1E293B] shadow-sm"
                 : "text-[#64748B]"
             }`}
           >
@@ -102,7 +120,7 @@ export default memo(function GradeScanner({ onTabChange }) {
                   <div className="w-full py-5 px-4 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] flex items-center gap-3">
                     <span className="text-3xl">📄</span>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-[#004B63] text-sm truncate">
+                      <p className="font-semibold text-[#1E293B] text-sm truncate">
                         {imgFile.name}
                       </p>
                       <p className="text-xs text-[#64748B]">
@@ -130,7 +148,7 @@ export default memo(function GradeScanner({ onTabChange }) {
             ) : (
               <button
                 onClick={() => fileRef.current?.click()}
-                className="w-full py-10 border-2 border-dashed border-[#4DA8C4]/40 rounded-2xl text-center space-y-2 hover:border-[#4DA8C4] transition-colors"
+                className="w-full py-10 border-2 border-dashed border-[#FB8500]/40 rounded-2xl text-center space-y-2 hover:border-[#FB8500] transition-colors"
               >
                 <span className="text-4xl block">📷</span>
                 <p className="text-sm font-semibold text-[#004B63]">
@@ -142,9 +160,9 @@ export default memo(function GradeScanner({ onTabChange }) {
               </button>
             )}
             {extracting && (
-              <div className="flex items-center gap-2 text-sm text-[#4DA8C4]">
+              <div className="flex items-center gap-2 text-sm text-[#FB8500]">
                 <motion.div
-                  className="w-4 h-4 border-2 border-[#4DA8C4] border-t-transparent rounded-full"
+                  className="w-4 h-4 border-2 border-[#FB8500] border-t-transparent rounded-full"
                   animate={{ rotate: 360 }}
                   transition={{
                     repeat: Infinity,
@@ -185,7 +203,7 @@ export default memo(function GradeScanner({ onTabChange }) {
       {/* Manual grade entry */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-bold text-[#004B63]">
+          <p className="text-sm font-bold text-[#1E293B]">
             📋 {t("kid.grades.my_notes")}{" "}
             {grades.length > 0 && Number(avg) > 0 && (
               <span
@@ -201,7 +219,7 @@ export default memo(function GradeScanner({ onTabChange }) {
           </p>
           <button
             onClick={addRow}
-            className="text-xs text-[#4DA8C4] font-semibold hover:underline"
+            className="text-xs text-[#FB8500] font-semibold hover:underline"
           >
             {t("kid.grades.add_subject")}
           </button>
@@ -214,7 +232,11 @@ export default memo(function GradeScanner({ onTabChange }) {
             </p>
             <button
               onClick={addRow}
-              className="mt-2 px-4 py-2 rounded-xl bg-[#4DA8C4] text-white text-sm font-bold shadow-sm hover:bg-[#3d97b3] transition-colors"
+              className="mt-2 px-4 py-2 rounded-xl text-white text-sm font-bold shadow-sm transition-colors"
+              style={{
+                background:
+                  "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
+              }}
             >
               + Agregar primera materia
             </button>
@@ -309,7 +331,7 @@ export default memo(function GradeScanner({ onTabChange }) {
         <div className="border border-[#E2E8F0] rounded-2xl overflow-visible">
           <button
             onClick={() => setShowHistory((v) => !v)}
-            className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-[#004B63] hover:bg-[#F8FAFC] transition-colors"
+            className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-[#1E293B] hover:bg-[#F8FAFC] transition-colors"
           >
             <span>📚 Historial de análisis ({history.length})</span>
             <span className="text-[#64748B]">{showHistory ? "▲" : "▼"}</span>

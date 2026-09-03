@@ -9,11 +9,36 @@ const TIMEOUT_MS = 60000; // 60 segundos timeout (Deepseek tarda en empezar)
  * atribuir la llamada al usuario; el chat público sigue funcionando
  * sin sesión.
  */
-function getAuthToken() {
+function isJwtExpired(token) {
   try {
-    return typeof window !== "undefined"
-      ? sessionStorage.getItem("auth_token")
-      : null;
+    const payload = JSON.parse(
+      atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")),
+    );
+    return payload.exp ? payload.exp < Math.floor(Date.now() / 1000) : false;
+  } catch {
+    return false;
+  }
+}
+
+function getAuthToken() {
+  if (typeof window === "undefined") return null;
+  try {
+    const stored = sessionStorage.getItem("auth_token");
+    if (stored && !isJwtExpired(stored)) return stored;
+
+    // Token expirado o ausente — buscar la sesión interna del SDK de Supabase
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith("sb-") && key.endsWith("-auth-token")) {
+        const parsed = JSON.parse(localStorage.getItem(key) || "{}");
+        const fresh = parsed?.access_token;
+        if (fresh && !isJwtExpired(fresh)) {
+          sessionStorage.setItem("auth_token", fresh);
+          return fresh;
+        }
+      }
+    }
+    return stored; // último recurso (puede estar expirado)
   } catch {
     return null;
   }
@@ -299,14 +324,16 @@ export async function callDeepseek(
     throw e;
   }
 }
-
 /**
  * SmartBoard-specific AI call — routes through /api/smartboard/ai which enforces
  * requireAuth + requireVerifiedParentalConsent. Use this instead of callDeepseek()
  * for all AI calls made from within the SmartBoard kids dashboard.
+ *
+ * Si el backend desplegado aún no expone /api/smartboard/ai (404), hace fallback
+ * a /api/smartboard/chat, que exige la misma autorización y consentimiento
+ * parental y responde con la misma forma { result }.
  */
 export async function callDeepseekSmartboard(messages, opts = {}) {
-  const url = `${API_BASE_URL}/api/smartboard/ai`;
   const token = getAuthToken();
   if (!token) throw new Error("No auth token — user must be logged in");
 
@@ -317,52 +344,92 @@ export async function callDeepseekSmartboard(messages, opts = {}) {
     maxTokens: opts.maxTokens ?? 2000,
   };
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(
-    () => controller.abort(new DOMException("Timeout agotado", "TimeoutError")),
-    30000,
-  );
+  const attempt = async (url) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(
+      () =>
+        controller.abort(new DOMException("Timeout agotado", "TimeoutError")),
+      30000,
+    );
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+        mode: "cors",
+        credentials: "omit",
+        signal: controller.signal,
+      });
+
+      if (response.status === 404) {
+        return { notFound: true };
+      }
+
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        if (
+          response.status === 403 &&
+          body?.error?.code === "PARENTAL_CONSENT_REQUIRED"
+        ) {
+          const err = new Error(
+            "Se requiere consentimiento parental para usar esta función.",
+          );
+          err.code = "PARENTAL_CONSENT_REQUIRED";
+          throw err;
+        }
+        if (
+          response.status === 503 &&
+          body?.error?.code === "CONSENT_CHECK_UNAVAILABLE"
+        ) {
+          const err = new Error(
+            "No se pudo verificar el consentimiento. Intenta de nuevo.",
+          );
+          err.code = "CONSENT_CHECK_UNAVAILABLE";
+          throw err;
+        }
+        const detail =
+          body?.error?.message || body?.error || response.statusText;
+        throw new Error(
+          `API responded with status ${response.status}${detail ? `: ${detail}` : ""}`,
+        );
+      }
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      if (opts.isJson) {
+        const parsed = parseJsonResult(data.result);
+        if (parsed === null) {
+          const err = new Error("La respuesta de la IA no fue un JSON válido.");
+          err.raw = data.result || "";
+          throw err;
+        }
+        return { value: parsed };
+      }
+
+      return { value: data.result };
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  };
 
   try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-      mode: "cors",
-      credentials: "omit",
-      signal: controller.signal,
-    });
+    const primary = await attempt(`${API_BASE_URL}/api/smartboard/ai`);
+    if (!primary.notFound) return primary.value;
 
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      const body = await response.json().catch(() => null);
-      const detail = body?.error || response.statusText;
+    const fallback = await attempt(`${API_BASE_URL}/api/smartboard/chat`);
+    if (fallback.notFound) {
       throw new Error(
-        `API responded with status ${response.status}${detail ? `: ${detail}` : ""}`,
+        "El servidor no reconoce los endpoints de IA del SmartBoard.",
       );
     }
-
-    const data = await response.json();
-    if (data.error) throw new Error(data.error);
-
-    if (opts.isJson) {
-      const parsed = parseJsonResult(data.result);
-      if (parsed === null) {
-        const err = new Error("La respuesta de la IA no fue un JSON válido.");
-        err.raw = data.result || "";
-        throw err;
-      }
-      return parsed;
-    }
-
-    return data.result;
+    return fallback.value;
   } catch (e) {
-    clearTimeout(timeoutId);
     if (e.name === "AbortError" || e.name === "TimeoutError") {
       throw new Error("El servidor no respondió a tiempo. Intenta de nuevo.");
     }
@@ -429,6 +496,71 @@ export async function callDeepseekStream(
   }
 }
 
+function consumeSSEStream(response, onChunk, isJson) {
+  return new Promise((resolve, reject) => {
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let fullText = "";
+
+    function read() {
+      reader
+        .read()
+        .then(({ done, value }) => {
+          if (done) {
+            if (isJson) {
+              try {
+                const parsed = JSON.parse(
+                  fullText.replace(/```json|```/g, "").trim(),
+                );
+                resolve(parsed);
+              } catch (e) {
+                resolve({ error: true, message: "Failed to parse JSON" });
+              }
+            } else {
+              resolve(fullText);
+            }
+            return;
+          }
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop() || "";
+
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              const data = line.slice(6);
+              try {
+                const parsed = JSON.parse(data);
+                if (parsed.chunk) {
+                  fullText += parsed.chunk;
+                  if (onChunk) onChunk(parsed.chunk);
+                } else if (parsed.crisisAlert) {
+                  // Pass crisis alerts through onChunk with special marker
+                  if (onChunk)
+                    onChunk(
+                      JSON.stringify({ __crisisAlert: parsed.crisisAlert }),
+                    );
+                } else if (parsed.error) {
+                  // Backend stream error — propagate so callers can show a proper message
+                  reject(new Error(`Stream error 500: ${parsed.error}`));
+                  return;
+                }
+              } catch (e) {
+                // Skip parsing errors (e.g. [DONE])
+              }
+            }
+          }
+
+          read();
+        })
+        .catch(reject);
+    }
+
+    read();
+  });
+}
+
 async function streamFetch(
   url,
   payload,
@@ -464,61 +596,9 @@ async function streamFetch(
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = "";
-        let fullText = "";
-
-        function read() {
-          reader.read().then(({ done, value }) => {
-            if (done) {
-              if (isJson) {
-                try {
-                  const parsed = JSON.parse(
-                    fullText.replace(/```json|```/g, "").trim(),
-                  );
-                  resolve(parsed);
-                } catch (e) {
-                  resolve({ error: true, message: "Failed to parse JSON" });
-                }
-              } else {
-                resolve(fullText);
-              }
-              return;
-            }
-
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split("\n");
-            buffer = lines.pop() || "";
-
-            for (const line of lines) {
-              if (line.startsWith("data: ")) {
-                const data = line.slice(6);
-                try {
-                  const parsed = JSON.parse(data);
-                  if (parsed.chunk) {
-                    fullText += parsed.chunk;
-                    if (onChunk) onChunk(parsed.chunk);
-                  } else if (parsed.crisisAlert) {
-                    // Pass crisis alerts through onChunk with special marker
-                    if (onChunk)
-                      onChunk(
-                        JSON.stringify({ __crisisAlert: parsed.crisisAlert }),
-                      );
-                  }
-                } catch (e) {
-                  // Skip parsing errors
-                }
-              }
-            }
-
-            read();
-          });
-        }
-
-        read();
+        return consumeSSEStream(response, onChunk, isJson);
       })
+      .then(resolve)
       .catch((err) => {
         clearTimeout(timeoutId);
         if (err.name === "AbortError") {
@@ -563,13 +643,7 @@ export async function callDaniChatStream(messages, opts = {}, onChunk) {
   let token = opts.token;
 
   if (!token) {
-    try {
-      if (typeof window !== "undefined") {
-        token = sessionStorage.getItem("auth_token");
-      }
-    } catch {
-      token = null;
-    }
+    token = getAuthToken();
   }
 
   if (!token) {
@@ -593,20 +667,71 @@ export async function callDaniChatStream(messages, opts = {}, onChunk) {
  * @param {{ message, studentId, socraticMode?, documentContext?, history? }} payload
  * @param {Object} opts - { token, signal }
  * @param {Function} onChunk - callback for each streamed chunk
+ *
+ * Si el backend desplegado aún no expone /api/smartboard/dani/chat (404), hace
+ * fallback a /api/smartboard/chat/stream (misma seguridad requireAuth +
+ * requireVerifiedParentalConsent y mismo formato { chunk }), convirtiendo el
+ * payload mínimo del orquestador al formato { messages } legacy.
  */
 export async function callDaniOrchestrator(payload, opts = {}, onChunk) {
-  const url = `${API_BASE_URL}/api/smartboard/dani/chat`;
   let token = opts.token;
   if (!token) {
-    try {
-      token = sessionStorage.getItem("auth_token");
-    } catch {
-      token = null;
-    }
+    token = getAuthToken();
   }
   if (!token)
     throw new Error("No auth token available — user must be logged in");
-  return streamFetch(url, payload, onChunk, false, opts.signal, {
-    Authorization: `Bearer ${token}`,
-  });
+
+  const authHeaders = { Authorization: `Bearer ${token}` };
+  const primaryUrl = `${API_BASE_URL}/api/smartboard/dani/chat`;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(
+    () =>
+      controller.abort(
+        new Error("Timeout agotado: el servidor tardo demasiado en responder"),
+      ),
+    60000,
+  );
+
+  let response;
+  try {
+    response = await fetch(primaryUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...authHeaders },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === "AbortError") {
+      throw new Error("El servidor no respondio a tiempo. Intenta de nuevo.");
+    }
+    throw err;
+  }
+  clearTimeout(timeoutId);
+
+  if (response.status === 404) {
+    const messages = [
+      ...(Array.isArray(payload.history) ? payload.history : []),
+      { role: "user", content: payload.message },
+    ];
+    return streamFetch(
+      `${API_BASE_URL}/api/smartboard/chat/stream`,
+      { messages, context: payload.documentContext || undefined },
+      onChunk,
+      false,
+      opts.signal,
+      authHeaders,
+    );
+  }
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => null);
+    const detail = body?.error || response.statusText;
+    throw new Error(
+      `API responded with status ${response.status}${detail ? `: ${detail}` : ""}`,
+    );
+  }
+
+  return consumeSSEStream(response, onChunk, false);
 }

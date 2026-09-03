@@ -78,6 +78,7 @@ const SmartBoardKidsDashboard = () => {
     vakResult,
     darkMode,
     fondoGalaxia,
+    avatarAnimado,
     lastUnlockedReward,
     lastUnlockedBadge,
     streak,
@@ -88,7 +89,7 @@ const SmartBoardKidsDashboard = () => {
     studentAge,
   } = useSmartBoardKids();
   const ageGroup =
-    studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior";
+    studentAge <= 9 ? "early" : studentAge <= 12 ? "middle" : "senior";
   const prefersReducedMotion = useReducedMotion();
   const { isFeatureEnabled, controls: parentalControls } =
     useParentalControls();
@@ -315,6 +316,7 @@ const SmartBoardKidsDashboard = () => {
             onLogout={handleLogout}
             subscriptionTier={subscriptionTier}
             isFeatureEnabled={isFeatureEnabled}
+            ageGroup={ageGroup}
           />
 
           {/* Main Content Area */}
@@ -414,6 +416,7 @@ const SmartBoardKidsDashboard = () => {
           darkMode={darkMode}
           subscriptionTier={subscriptionTier}
           isFeatureEnabled={isFeatureEnabled}
+          ageGroup={ageGroup}
         />
 
         {/* DaniFAB - Floating Action Button */}
@@ -423,6 +426,7 @@ const SmartBoardKidsDashboard = () => {
             onDaniOpen={handleDaniOpen}
             darkMode={darkMode}
             unreadCount={0}
+            avatarAnimado={avatarAnimado}
           />
         )}
 
@@ -439,6 +443,7 @@ const SmartBoardKidsDashboard = () => {
               isOpen={isDaniOpen}
               onClose={handleDaniClose}
               activeTab={activeTab}
+              onTabChange={setActiveTab}
             />
           )}
         </AnimatePresence>

@@ -4,6 +4,9 @@ import { useNewsFeed } from "../../../hooks/useNewsFeed";
 import { CATEGORIES, CATEGORY_COLORS } from "../../../data/newsData";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 
+const EXPLORE_GRADIENT =
+  "linear-gradient(135deg, #7B2FF7 0%, #9D4EDD 55%, #C77DFF 100%)";
+
 const CategoryTab = memo(({ cat, active, unread, onClick }) => {
   const color = CATEGORY_COLORS[cat.id] || "#4DA8C4";
   return (
@@ -42,20 +45,20 @@ const ArticleCard = memo(({ article, isRead, onRead, darkMode }) => {
       exit={{ opacity: 0, scale: 0.97 }}
       transition={{ duration: 0.3 }}
       onClick={handleClick}
-      className={`rounded-2xl overflow-hidden border cursor-pointer transition-all shadow-sm hover:shadow-md ${
+      className={`rounded-2xl overflow-hidden border cursor-pointer transition-all shadow-sm hover:shadow-md hover:border-[#9D4EDD]/30 ${
         darkMode
           ? "bg-[#1E293B]/80 border-[#334155]/50"
           : "bg-white/90 border-[#E2E8F0]"
-      } ${isRead ? "opacity-70" : ""}`}
+      } ${isRead ? "opacity-60" : ""}`}
     >
       {/* Color strip */}
-      <div className="h-1" style={{ backgroundColor: color }} />
+      <div className="h-1.5" style={{ backgroundColor: color }} />
 
       <div className="p-4">
         <div className="flex items-start justify-between gap-3 mb-2">
           <h3
             className={`text-sm font-bold leading-snug flex-1 ${
-              darkMode ? "text-white" : "text-[#004B63]"
+              darkMode ? "text-white" : "text-[#1E293B]"
             }`}
           >
             {article.title}
@@ -155,7 +158,7 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
           </button>
           <h2
             className={`text-base font-black leading-snug mb-3 ${
-              darkMode ? "text-white" : "text-[#004B63]"
+              darkMode ? "text-white" : "text-[#1E293B]"
             }`}
           >
             {article.title}
@@ -207,7 +210,7 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
               }}
               className="w-full mt-5 py-3 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2"
               style={{
-                background: `linear-gradient(135deg, ${color}, #48CAE4)`,
+                background: `linear-gradient(135deg, ${color} 0%, #9D4EDD 100%)`,
               }}
             >
               🤖 Rétame con Dani sobre esto →
@@ -263,37 +266,41 @@ const TechNewsFeed = () => {
 
   return (
     <div className="space-y-5">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2
-            className={`text-lg font-black ${
-              darkMode ? "text-white" : "text-[#004B63]"
-            }`}
+      {/* Section header banner */}
+      <div
+        className="relative rounded-2xl overflow-hidden p-5"
+        style={{ background: EXPLORE_GRADIENT }}
+      >
+        <div className="relative z-10 flex items-center gap-4">
+          <div
+            className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md"
+            style={{ background: "rgba(255,255,255,0.2)" }}
           >
-            🚀 Tech & IA
-          </h2>
-          <p
-            className={`text-xs ${
-              darkMode ? "text-[#64748B]" : "text-[#94A3B8]"
-            }`}
-          >
-            {unreadCount > 0
-              ? `${unreadCount} artículos nuevos para ti`
-              : "¡Estás al día! 🎉"}
-          </p>
+            <span className="text-2xl">🚀</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-xl font-black text-white drop-shadow-sm">
+              Tech & IA
+            </h3>
+            <p className="text-xs text-white/80 mt-0.5">
+              {unreadCount > 0
+                ? `${unreadCount} artículos nuevos para ti`
+                : "¡Estás al día con el mundo tech! 🎉"}
+            </p>
+          </div>
+          {isFallback && (
+            <span className="flex-shrink-0 text-[10px] px-2 py-1 rounded-full bg-white/20 text-white/80 font-semibold">
+              curado
+            </span>
+          )}
         </div>
-        {isFallback && (
-          <span
-            className={`text-[10px] px-2 py-1 rounded-full ${
-              darkMode
-                ? "bg-[#1E293B] text-[#475569]"
-                : "bg-[#F1F5F9] text-[#CBD5E1]"
-            }`}
-          >
-            contenido curado
-          </span>
-        )}
+        <div
+          className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10 pointer-events-none"
+          style={{
+            background: "rgba(255,255,255,0.4)",
+            transform: "translate(30%,-30%)",
+          }}
+        />
       </div>
 
       {/* Category tabs */}

@@ -13,6 +13,7 @@ import {
   DEFAULT_SUBJECTS,
 } from "./smartBoardData";
 import { getSubjectEmoji } from "../config/subjectMappings";
+import { API_BASE_URL } from "../config/api";
 import {
   useSmartBoardPersistence,
   getLocalStorage,
@@ -29,6 +30,8 @@ import {
   useAcademicContext,
   useAchievements,
   useLearningStreaks,
+  useUpsertStreak,
+  useSyncAchievement,
   useSmartboardSettings,
   useUpdateSettings,
   useTotalPoints,
@@ -161,6 +164,8 @@ export const SmartBoardKidsProvider = ({ children }) => {
   const addPointsMutation = useAddPointsMutation();
   const setVAKMutation = useSetVAKResult();
   const sessionCreateMutation = useSessionCreateMutation();
+  const upsertStreakMutation = useUpsertStreak();
+  const syncAchievementMutation = useSyncAchievement();
 
   // Calculated total points from Supabase
   const supabaseTotalPoints = useTotalPoints();
@@ -448,6 +453,45 @@ export const SmartBoardKidsProvider = ({ children }) => {
     }
   }, [studentDataQuery.data]);
 
+  // Load Dani chat history from server (P0.6 — localStorage→DB migration)
+  const daniHistoryLoaded = useRef(false);
+  useEffect(() => {
+    if (!dataLoaded || !userId || daniHistoryLoaded.current) return;
+    daniHistoryLoaded.current = true;
+
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+    const token = (() => {
+      try {
+        return sessionStorage.getItem("auth_token") || "";
+      } catch {
+        return "";
+      }
+    })();
+    if (!token) return;
+
+    fetch(`${API_BASE_URL}/api/smartboard/dani/history`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.messages?.length) {
+          setDaniChatHistory(
+            data.messages.map((m) => ({
+              role: m.role,
+              text: m.text,
+              type: "text",
+              data: null,
+              id:
+                Date.now().toString(36) +
+                Math.random().toString(36).slice(2, 8),
+              timestamp: m.timestamp,
+            })),
+          );
+        }
+      })
+      .catch(() => {});
+  }, [dataLoaded, userId]);
+
   // Earn points for active minutes
   useEffect(() => {
     if (!dataLoaded) return;
@@ -490,16 +534,38 @@ export const SmartBoardKidsProvider = ({ children }) => {
     };
   }, [userId, dataLoaded]);
 
-  // Sync grades from localStorage keyed by userId (refreshes the eager-loaded value)
+  // Sync grades from localStorage keyed by userId, fallback to backend
   useEffect(() => {
     if (!userId) return;
     try {
       const stored = localStorage.getItem(`edutechlife_grades_${userId}`);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length) setStudentGrades(parsed);
+        if (Array.isArray(parsed) && parsed.length) {
+          setStudentGrades(parsed);
+          return;
+        }
       }
     } catch {}
+    const token = sessionStorage.getItem("auth_token");
+    if (!token) return;
+    fetch(`${API_BASE_URL}/api/smartboard/student-grades`, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(10000),
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (Array.isArray(data?.grades) && data.grades.length) {
+          setStudentGrades(data.grades);
+          try {
+            localStorage.setItem(
+              `edutechlife_grades_${userId}`,
+              JSON.stringify(data.grades),
+            );
+          } catch {}
+        }
+      })
+      .catch(() => {});
   }, [userId]);
 
   // Daily streak
@@ -533,6 +599,89 @@ export const SmartBoardKidsProvider = ({ children }) => {
       ].slice(-90);
     });
   }, [userId, dataLoaded]);
+
+  // Persist streak to DB when it changes
+  useEffect(() => {
+    if (!dataLoaded || !userId || !streak.lastActive) return;
+    upsertStreakMutation.mutate({
+      current_streak: streak.current,
+      best_streak: streak.longest,
+      last_activity_date: streak.lastActive,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streak.current, streak.longest, streak.lastActive, dataLoaded, userId]);
+
+  // Sync computed achievements to DB
+  const syncedAchievementsRef = useRef(new Set());
+  useEffect(() => {
+    if (!dataLoaded || !userId) return;
+    const completedMissions = missions.filter((m) => m.completed);
+    const checks = [];
+    if (completedMissions.length >= missions.length && missions.length > 0)
+      checks.push({
+        achievement_type: "all_missions",
+        title: "Estrella del Mes",
+        description: "Completaste todas las misiones",
+      });
+    if (completedMissions.length >= 5)
+      checks.push({
+        achievement_type: "five_missions",
+        title: "Rápido Aprendiz",
+        description: `${completedMissions.length} misiones completadas`,
+      });
+    if (totalPoints >= 500)
+      checks.push({
+        achievement_type: "points_500",
+        title: "Acumulador",
+        description: `${totalPoints} puntos acumulados`,
+      });
+    if (totalPoints >= 1000)
+      checks.push({
+        achievement_type: "points_1000",
+        title: "Preciso",
+        description: "Más de 1000 puntos acumulados",
+      });
+    if (streak.current >= 7)
+      checks.push({
+        achievement_type: "streak_7",
+        title: "Consistente",
+        description: `${streak.current} días seguidos activo`,
+      });
+    if (streak.current >= 3)
+      checks.push({
+        achievement_type: "streak_3",
+        title: "Racha Activa",
+        description: `${streak.current} días de racha`,
+      });
+    if (vakResult)
+      checks.push({
+        achievement_type: "vak_complete",
+        title: "Conoces tu Estilo",
+        description: `Perfil ${vakResult.predominantStyle || vakResult.primary_style || "identificado"}`,
+      });
+    if (totalActiveMinutes >= 600)
+      checks.push({
+        achievement_type: "study_600min",
+        title: "Dedicado",
+        description: `Más de ${Math.floor(totalActiveMinutes / 60)}h de estudio`,
+      });
+
+    for (const a of checks) {
+      if (!syncedAchievementsRef.current.has(a.achievement_type)) {
+        syncedAchievementsRef.current.add(a.achievement_type);
+        syncAchievementMutation.mutate(a);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dataLoaded,
+    userId,
+    missions,
+    totalPoints,
+    streak.current,
+    vakResult,
+    totalActiveMinutes,
+  ]);
 
   const trackSubjectTime = useCallback((subjectId, minutes) => {
     setSubjectTime((prev) => ({
@@ -912,6 +1061,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     exams: timetableData.exams,
     timetableLoading: timetableData.loading,
     timetableError: timetableData.error,
+    saveTimetableWithSlots: timetableData.saveTimetableWithSlots,
     saveTimetable: timetableData.saveTimetable,
     saveSlots: timetableData.saveSlots,
     addExam: timetableData.addExam,

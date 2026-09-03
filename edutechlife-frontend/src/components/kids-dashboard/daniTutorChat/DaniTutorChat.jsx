@@ -40,7 +40,7 @@ const MOOD_COLORS = {
   confundido: "text-[#64748B]",
 };
 
-const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
+const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
   const { t } = useTranslation();
   const { studentAge } = useSmartBoardKids();
   const isKid = studentAge && studentAge <= 11;
@@ -156,6 +156,11 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
     [handleSendMessage, inputText],
   );
 
+  const handleOralExamMode = useCallback(() => {
+    onClose();
+    onTabChange?.("oral");
+  }, [onClose, onTabChange]);
+
   if (!isOpen) return null;
 
   return createPortal(
@@ -187,18 +192,20 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
               onKeyDown={handleBackdropKeyDown}
               onClick={handleContentClick}
             >
-              <DaniChatHeader
-                isSpeaking={isSpeaking}
-                isTyping={isTyping}
-                conversationCount={conversationCount}
-                toggleVoice={toggleVoice}
-                voiceEnabled={voiceEnabled}
-                voiceBlocked={voiceBlocked}
-                streak={streak}
-                socraticMode={socraticMode}
-                setSocraticMode={setSocraticMode}
-                onClose={onClose}
-              />
+              <div className="flex-shrink-0">
+                <DaniChatHeader
+                  isSpeaking={isSpeaking}
+                  isTyping={isTyping}
+                  conversationCount={conversationCount}
+                  toggleVoice={toggleVoice}
+                  voiceEnabled={voiceEnabled}
+                  voiceBlocked={voiceBlocked}
+                  streak={streak}
+                  socraticMode={socraticMode}
+                  setSocraticMode={setSocraticMode}
+                  onClose={onClose}
+                />
+              </div>
 
               {showCrisisResources && (
                 <motion.div
@@ -348,22 +355,54 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab }) => {
                 messagesEndRef={messagesEndRef}
               />
 
-              {/* Bottom controls — flex-shrink-0 ensures they always get space */}
-              <div className="flex-shrink-0">
-                <QuickActions
-                  onAction={handleQuickAction}
-                  darkMode={darkMode}
-                  studentAge={studentAge}
-                  hasHistory={daniChatHistory.length > 0}
-                />
+              {/* Bottom controls — flex-shrink-0 keeps this block at the bottom */}
+              <div className="flex-shrink-0 flex flex-col min-h-0">
+                {/* Scrollable optional extras (quick actions, topics, oral exam) */}
+                <div
+                  className="overflow-y-auto"
+                  style={{ maxHeight: "clamp(0px, 30dvh, 180px)" }}
+                >
+                  <QuickActions
+                    onAction={handleQuickAction}
+                    darkMode={darkMode}
+                    studentAge={studentAge}
+                    hasHistory={daniChatHistory.length > 0}
+                  />
 
-                <RecentTopics
-                  topics={academicTopics.filter((t) => t.count > 0)}
-                  onTopicClick={handleTopicClick}
-                  darkMode={darkMode}
-                />
+                  <RecentTopics
+                    topics={academicTopics.filter((t) => t.count > 0)}
+                    onTopicClick={handleTopicClick}
+                    darkMode={darkMode}
+                  />
 
-                {/* Improved Chat Input */}
+                  {/* Oral Exam Mode trigger */}
+                  <div
+                    className={`px-4 pt-2 pb-1 border-t ${darkMode ? "border-[#1E293B]" : "border-[#F1F5F9]"}`}
+                  >
+                    <motion.button
+                      type="button"
+                      onClick={handleOralExamMode}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.97 }}
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
+                        darkMode
+                          ? "bg-[#1E293B] hover:bg-[#243347] text-[#7DD3FC] border border-[#2A3A54]"
+                          : "bg-[#F0F9FF] hover:bg-[#E0F2FE] text-[#0369A1] border border-[#BAE6FD]"
+                      }`}
+                    >
+                      <span className="text-base">🎤</span>
+                      <span>Modo Examen Oral</span>
+                      <span
+                        className={`ml-auto text-[10px] font-medium ${darkMode ? "text-[#64748B]" : "text-[#94A3B8]"}`}
+                      >
+                        Habla con Dani
+                      </span>
+                    </motion.button>
+                  </div>
+                </div>
+                {/* end scrollable extras */}
+
+                {/* Improved Chat Input — always fully visible */}
                 <motion.div
                   className="flex flex-col gap-3 px-4 pb-4"
                   style={{

@@ -48,7 +48,7 @@ const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
         <select
           value={grade.subject}
           onChange={(e) => onUpdate(grade.id, "subject", e.target.value)}
-          className="flex-1 text-sm text-[#004B63] font-semibold bg-transparent border-none outline-none min-w-0"
+          className="flex-1 text-sm text-[#1E293B] font-semibold bg-transparent border-none outline-none min-w-0"
         >
           {subjects.map((s) => (
             <option key={s.v} value={s.v}>

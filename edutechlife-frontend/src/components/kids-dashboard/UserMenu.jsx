@@ -75,11 +75,13 @@ const UserMenu = ({
       <div className="relative">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors"
+          className={`flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full transition-colors ${
+            darkMode ? "hover:bg-white/10" : "hover:bg-[#E8F4F8]"
+          }`}
           aria-label={t("kid.user.open_menu")}
           aria-expanded={isOpen}
         >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0077B6] to-[#00B4D8] flex items-center justify-center text-white overflow-hidden">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0077B6] to-[#00B4D8] flex items-center justify-center text-white overflow-hidden ring-2 ring-white/30">
             {avatarUrl ? (
               <img
                 src={avatarUrl}
@@ -92,7 +94,9 @@ const UserMenu = ({
               </span>
             )}
           </div>
-          <ChevronDown className="w-4 h-4 text-gray-600" />
+          <ChevronDown
+            className={`w-3.5 h-3.5 transition-transform ${isOpen ? "rotate-180" : ""} ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+          />
         </button>
 
         {/* Dropdown Menu */}

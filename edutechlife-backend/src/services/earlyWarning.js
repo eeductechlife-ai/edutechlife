@@ -8,7 +8,7 @@
  *   1. inactivity        — streak.last_activity_date > N days ago
  *   2. performance_drop  — avg mastery decreased > 20% vs 7 days ago
  *   3. repeated_errors   — same subject mastery < 0.3 after ≥ 3 attempts
- *   4. low_completion    — (not yet: requires activity_log with started vs completed)
+ *   4. low_completion    — avg completion_percentage < 40% across last 10 sessions
  *   5. streak_breaks     — current_streak = 0 AND total_days_active > 5
  */
 const { createClient } = require("@supabase/supabase-js");
@@ -112,6 +112,34 @@ async function detectRepeatedErrors(studentId) {
   };
 }
 
+const LOW_COMPLETION_THRESHOLD = 0.4; // < 40% avg completion
+const MIN_SESSIONS_FOR_COMPLETION = 3;
+
+async function detectLowCompletion(studentId) {
+  const { data: rows, error } = await supabase
+    .from("sessions")
+    .select("completion_percentage")
+    .eq("student_id", studentId)
+    .order("start_time", { ascending: false })
+    .limit(10);
+
+  if (error && (error.code === "42P01" || error.code === "PGRST205")) return null;
+  if (!rows || rows.length < MIN_SESSIONS_FOR_COMPLETION) return null;
+
+  const avg = rows.reduce((s, r) => s + (r.completion_percentage || 0), 0) / rows.length;
+  if (avg / 100 >= LOW_COMPLETION_THRESHOLD) return null;
+
+  return {
+    type: "low_completion",
+    severity: avg < 20 ? "high" : "medium",
+    evidence_json: {
+      avg_completion: Math.round(avg),
+      sessions_checked: rows.length,
+    },
+    recommendation: `El promedio de actividades completadas es solo ${Math.round(avg)}%. Actividades más cortas o variadas pueden ayudar a mantener la motivación.`,
+  };
+}
+
 async function detectStreakBreaks(studentId) {
   const { data } = await supabase
     .from("learning_streaks")
@@ -166,6 +194,7 @@ async function runAllDetectors(studentId) {
     detectInactivity(studentId),
     detectPerformanceDrop(studentId),
     detectRepeatedErrors(studentId),
+    detectLowCompletion(studentId),
     detectStreakBreaks(studentId),
   ]);
 

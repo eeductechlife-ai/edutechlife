@@ -31,7 +31,7 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
       } backdrop-blur-xl`}
     >
       <h3
-        className={`text-sm font-bold mb-4 flex items-center gap-2 ${darkMode ? "text-white" : "text-[#004B63]"}`}
+        className={`text-sm font-bold mb-4 flex items-center gap-2 ${darkMode ? "text-white" : "text-[#1E293B]"}`}
       >
         📅 {monthName}
       </h3>
@@ -56,13 +56,21 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
               whileHover={{ scale: 1.2 }}
               className={`relative w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium cursor-default transition-colors ${
                 status === "active"
-                  ? "bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4] text-white shadow-sm"
+                  ? "text-white shadow-sm"
                   : status === "missed"
                     ? darkMode
                       ? "bg-[#334155] text-[#64748B]"
                       : "bg-[#F1F5F9] text-[#94A3B8]"
                     : "text-transparent"
               }`}
+              style={
+                status === "active"
+                  ? {
+                      background:
+                        "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
+                    }
+                  : {}
+              }
               title={
                 hour
                   ? t("smartboard.connected_at", { day: d.day, hour })
@@ -79,7 +87,13 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
       </div>
       <div className="flex items-center gap-4 mt-4 text-[10px] text-[#64748B]">
         <span className="flex items-center gap-1">
-          <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-[#66CCCC] to-[#4DA8C4]" />{" "}
+          <span
+            className="w-2.5 h-2.5 rounded-full"
+            style={{
+              background:
+                "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
+            }}
+          />{" "}
           {t("smartboard.connected")}
         </span>
         <span className="flex items-center gap-1">

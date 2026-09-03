@@ -67,4 +67,21 @@ async function requireStudentAccess(req, res, next) {
   }
 }
 
-module.exports = { requireStudentAccess, assertStudentAccess };
+async function assertAuthIdAccess(req, targetAuthId) {
+  if (req.userId === targetAuthId) {
+    return { ok: true, ownerRole: 'student' };
+  }
+
+  const { data: link } = await supabase
+    .from('parent_student_links')
+    .select('parent_user_id')
+    .eq('parent_user_id', req.userId)
+    .eq('student_user_id', targetAuthId)
+    .eq('is_active', true)
+    .maybeSingle();
+
+  if (link) return { ok: true, ownerRole: 'parent' };
+  return { ok: false, reason: 'ownership' };
+}
+
+module.exports = { requireStudentAccess, assertStudentAccess, assertAuthIdAccess };

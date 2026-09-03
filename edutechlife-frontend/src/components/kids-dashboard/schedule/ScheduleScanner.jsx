@@ -7,14 +7,29 @@ import { coerceSlot } from "./timetableUtils";
 const ACCEPT = "image/*,application/pdf,.pdf,.jpg,.jpeg,.png";
 
 const buildUserPrompt = (rawText) => `
-${rawText.slice(0, 4500)}
+Analiza este texto OCR de un horario escolar colombiano. El OCR viene de escanear una tabla y puede estar desordenado.
 
-Extrae los bloques de clase. Responde SOLO con JSON:
-{"school_name":null,"term_label":null,"slots":[{"day_of_week":1,"start_time":"07:00","end_time":"08:00","subject":"Matemáticas"}]}
+El horario tiene columnas en este orden fijo: LUNES(1), MARTES(2), MIÉRCOLES(3), JUEVES(4), VIERNES(5), SÁBADO(6).
 
-- day_of_week: 1=Mon...7=Sun
-- time: HH:MM
-- Si no hay datos: {"slots":[]}
+INSTRUCCIÓN CLAVE: Para cada rango horario (p.ej. "7:00-7:50"), las materias que siguen en el OCR corresponden a los días en el orden arriba. Asigna la primera materia a Lunes(1), la segunda a Martes(2), etc. Si hay menos materias que días, asigna las que hay.
+
+IGNORAR completamente: DESCANSO, ALMUERZO, REFLEXIÓN, RECESO, nombres de colegio, "Colombo Americano", tiempos con "AM/PM" sin materia, "9:00 AM", y el nombre del estudiante.
+
+Abreviaturas comunes: MAT/Mat=Matemáticas, ESP/LC=Lengua Castellana, ING/Ing=Inglés, C.NAT=Ciencias Naturales, C.SOC=Ciencias Sociales, ED.FIS/Educ.Fís=Educación Física, ART=Artística, TEC=Tecnología, REL=Religión, ET/Ética=Ética y Religión, FIL=Filosofía, QUI=Química, FIS/Fís=Física
+
+Texto OCR:
+---
+${rawText.slice(0, 4000)}
+---
+
+Responde ÚNICAMENTE con JSON válido, sin explicaciones:
+{"school_name":null,"term_label":null,"slots":[{"day_of_week":1,"start_time":"HH:MM","end_time":"HH:MM","subject":"nombre"}]}
+
+Reglas del JSON:
+- day_of_week: entero 1-6
+- start_time y end_time: formato HH:MM en 24h
+- subject: nombre completo de la materia en español
+- NO incluyas DESCANSO, ALMUERZO, REFLEXIÓN como slots
 `;
 
 // OCR via backend (Google Vision) — same pattern as GradeScanner
@@ -105,7 +120,7 @@ const ScheduleScanner = memo(({ onExtracted, onCancel }) => {
 
       const res = await callDeepseekSmartboard(
         [{ role: "user", content: buildUserPrompt(text) }],
-        { isJson: true, temperature: 0.05, maxTokens: 3000 },
+        { isJson: true, temperature: 0.05, maxTokens: 6000 },
       );
 
       // Second-pass parsing (same as GradeScanner) in case parseJsonResult returned a string
@@ -115,8 +130,16 @@ const ScheduleScanner = memo(({ onExtracted, onCancel }) => {
       const slots = rawSlots.map(coerceSlot).filter(Boolean);
 
       if (!slots.length) {
+        if (rawSlots.length) {
+          console.warn(
+            "[ScheduleScanner] AI returned slots but coerceSlot rejected all:",
+            JSON.stringify(rawSlots.slice(0, 3)),
+          );
+        }
         throw new Error(
-          "La IA no encontró bloques válidos. Revisa que el horario sea legible o edita manualmente.",
+          rawSlots.length
+            ? "La IA detectó clases pero el formato no es compatible. Intenta con otra foto o ingresa manualmente."
+            : "La IA no encontró bloques válidos. Revisa que el horario sea legible o edita manualmente.",
         );
       }
 

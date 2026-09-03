@@ -6,7 +6,13 @@ import { track } from "../../lib/analytics";
 import { EVENTS } from "../../lib/analyticsEvents";
 
 const DaniFAB = memo(
-  ({ isDaniOpen, onDaniOpen, darkMode, unreadCount = 0 }) => {
+  ({
+    isDaniOpen,
+    onDaniOpen,
+    darkMode,
+    unreadCount = 0,
+    avatarAnimado = false,
+  }) => {
     const { t } = useTranslation();
 
     const handleClick = useCallback(() => {
@@ -95,6 +101,23 @@ const DaniFAB = memo(
             className="absolute inset-0 rounded-full border-2 border-white/30"
             animate={{ scale: [1, 1.2], opacity: [1, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
+            aria-hidden="true"
+          />
+        )}
+
+        {/* Avatar Animado: arco iris pulsante cuando está desbloqueado */}
+        {avatarAnimado && !isDaniOpen && (
+          <motion.div
+            className="absolute -inset-1.5 rounded-full"
+            style={{
+              background:
+                "conic-gradient(from 0deg, #FF6B9D, #FFD166, #66CCCC, #4DA8C4, #9D4EDD, #FF6B9D)",
+            }}
+            animate={{ rotate: 360, scale: [1, 1.05, 1] }}
+            transition={{
+              rotate: { duration: 3, repeat: Infinity, ease: "linear" },
+              scale: { duration: 1.5, repeat: Infinity },
+            }}
             aria-hidden="true"
           />
         )}

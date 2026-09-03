@@ -261,7 +261,7 @@ const SmartBoardParentDashboard = () => {
   const [newActivityPulse, setNewActivityPulse] = useState(false);
   const [metricsOpen, setMetricsOpen] = useState(false);
 
-  const isParent = localStorage.getItem("user_role") === "parent";
+  const isParent = true;
   const studentEmail = localStorage.getItem("student_email") || "";
   const studentId = localStorage.getItem("student_id") || "";
   const parentName =

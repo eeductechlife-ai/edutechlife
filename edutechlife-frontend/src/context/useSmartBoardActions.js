@@ -65,29 +65,6 @@ export const useSmartBoardActions = (stateAndSetters) => {
     }
   }, []);
 
-  const unlockReward = useCallback((reward) => {
-    const {
-      setUnlockedRewards,
-      setDarkMode,
-      setAvatarAnimado,
-      setFondoGalaxia,
-      setLastUnlockedReward,
-    } = ref.current;
-    setUnlockedRewards((prev) => [...prev, reward.id]);
-    addPoints(-reward.cost, `Canjeó recompensa: ${reward.name}`);
-    track(EVENTS.BADGE_UNLOCKED, { reward_id: reward.id, name: reward.name });
-    setLastUnlockedReward(reward);
-    setTimeout(() => setLastUnlockedReward(null), 4000);
-    if (reward.id === 1) setDarkMode(true);
-    if (reward.id === 2) setAvatarAnimado(true);
-    if (reward.id === 3) setFondoGalaxia(true);
-  }, []);
-
-  const toggleDarkMode = useCallback(() => {
-    const { setDarkMode } = ref.current;
-    setDarkMode((prev) => !prev);
-  }, []);
-
   const addDaniMessage = useCallback((message) => {
     const { setDaniChatHistory, setConversationCount } = ref.current;
     setDaniChatHistory((prev) => [
@@ -106,6 +83,70 @@ export const useSmartBoardActions = (stateAndSetters) => {
     if (message.role === "user") {
       setConversationCount((prev) => prev + 1);
     }
+  }, []);
+
+  const unlockReward = useCallback(
+    (reward) => {
+      const {
+        setUnlockedRewards,
+        setDarkMode,
+        setAvatarAnimado,
+        setFondoGalaxia,
+        setLastUnlockedReward,
+        vakResult,
+      } = ref.current;
+      setUnlockedRewards((prev) => [...prev, reward.id]);
+      addPoints(-reward.cost, `Canjeó recompensa: ${reward.name}`);
+      track(EVENTS.BADGE_UNLOCKED, { reward_id: reward.id, name: reward.name });
+      setLastUnlockedReward(reward);
+      setTimeout(() => setLastUnlockedReward(null), 4000);
+      if (reward.id === 1) setDarkMode(true);
+      if (reward.id === 2) setAvatarAnimado(true);
+      if (reward.id === 3) setFondoGalaxia(true);
+      // Reward 4: Día Libre — Dani confirms and opens chat
+      if (reward.id === 4) {
+        addDaniMessage({
+          role: "assistant",
+          text: "🏖️ ¡Felicitaciones! Canjeaste tu **Día Libre**. Hoy puedes descansar y disfrutar sin presión académica. ¡Te lo ganaste! Vuelve mañana con energías recargadas 💪",
+        });
+        setTimeout(
+          () => window.dispatchEvent(new CustomEvent("smartboard:open-dani")),
+          800,
+        );
+      }
+      // Reward 5: Curso IA Básico — Dani gives course access info
+      if (reward.id === 5) {
+        addDaniMessage({
+          role: "assistant",
+          text: "🤖 ¡Genial! Desbloqueaste el **Curso de IA Básico**. Para acceder, ve a IALab desde el menú principal. Allí encontrarás módulos de Inteligencia Artificial diseñados especialmente para ti. ¡Es el futuro del aprendizaje y tú ya eres parte de él! 🚀",
+        });
+        setTimeout(
+          () => window.dispatchEvent(new CustomEvent("smartboard:open-dani")),
+          800,
+        );
+      }
+      // Reward 6: Certificado VAK — Dani generates and shows certificate
+      if (reward.id === 6) {
+        const style =
+          vakResult?.predominantStyle || vakResult?.dominant || "Visual";
+        const styleEmojis = { visual: "👁️", auditivo: "👂", kinestesico: "🤸" };
+        const emoji = styleEmojis[style?.toLowerCase()] || "🧠";
+        addDaniMessage({
+          role: "assistant",
+          text: `📜 ¡Felicitaciones! Aquí está tu **Certificado VAK Oficial**:\n\n${emoji} Estilo de Aprendizaje: **${style.charAt(0).toUpperCase() + style.slice(1)}**\n\nEste certificado confirma que conoces cómo aprendes mejor y usas esa información para estudiar de manera más efectiva. ¡Eres un estudiante consciente de tu propio aprendizaje! Puedes tomar una captura de pantalla de este mensaje como constancia 🎓`,
+        });
+        setTimeout(
+          () => window.dispatchEvent(new CustomEvent("smartboard:open-dani")),
+          800,
+        );
+      }
+    },
+    [addDaniMessage],
+  );
+
+  const toggleDarkMode = useCallback(() => {
+    const { setDarkMode } = ref.current;
+    setDarkMode((prev) => !prev);
   }, []);
 
   const recordMoodInference = useCallback((mood, confidence, context) => {

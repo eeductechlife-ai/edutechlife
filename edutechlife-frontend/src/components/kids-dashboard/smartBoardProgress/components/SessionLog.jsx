@@ -22,7 +22,7 @@ const SessionLog = ({ sessions, darkMode }) => {
       } backdrop-blur-xl`}
     >
       <h3
-        className={`text-sm font-bold mb-4 flex items-center gap-2 ${darkMode ? "text-white" : "text-[#004B63]"}`}
+        className={`text-sm font-bold mb-4 flex items-center gap-2 ${darkMode ? "text-white" : "text-[#1E293B]"}`}
       >
         🕐 Sesiones Recientes
       </h3>

@@ -28,7 +28,6 @@ const SmartBoardSignUpPage = lazy(
   () => import("../components/SmartBoardSignUpPage"),
 );
 const AILabPage = lazy(() => import("../components/pages/AILabPage"));
-const SmartBoardPage = lazy(() => import("../components/pages/SmartBoardPage"));
 const SmartBoardLandingPage = lazy(
   () => import("../components/pages/SmartBoardLandingPage"),
 );
@@ -339,19 +338,6 @@ const AppRoutes = () => {
               <Suspense fallback={<IALabSkeleton />}>
                 <AILabPage />
               </Suspense>
-            </RoleProtectedRoute>
-          }
-        />
-
-        <Route
-          path="smartboard/app"
-          element={
-            <RoleProtectedRoute requiredRole="smartboard">
-              <SectionErrorBoundary name="SmartBoardApp">
-                <Suspense fallback={<SmartBoardSkeleton />}>
-                  <SmartBoardPage />
-                </Suspense>
-              </SectionErrorBoundary>
             </RoleProtectedRoute>
           }
         />

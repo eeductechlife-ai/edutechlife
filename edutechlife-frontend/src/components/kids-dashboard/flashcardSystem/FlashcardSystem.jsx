@@ -21,7 +21,13 @@ const LEARNING_PATH = (t) => [
   { tab: "examenes", label: t("kid.flashcards.tab_exam"), icon: "📝" },
 ];
 
-const FlashcardSystem = memo(({ onTabChange }) => {
+// Practice category theme
+const PRACTICE_GRADIENT =
+  "linear-gradient(135deg, #EF476F 0%, #FF6B9D 55%, #FF8FA3 100%)";
+const PRACTICE_COLOR = "#FF6B9D";
+const PRACTICE_GLOW = "#EF476F";
+
+const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
   const { t } = useTranslation();
   const { activeStudyDeck, setActiveStudyDeck, setDocumentForDani } =
     useSmartBoardKids();
@@ -163,6 +169,7 @@ const FlashcardSystem = memo(({ onTabChange }) => {
           onRestart={() => startStudy(currentDeckId)}
           onBack={() => setMode("decks")}
           onTalkToDani={handleTalkToDani}
+          darkMode={darkMode}
         />
       );
     }
@@ -175,21 +182,26 @@ const FlashcardSystem = memo(({ onTabChange }) => {
           className="space-y-6"
         >
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-bold text-[#004B63]">
+            <h3
+              className={`text-lg font-bold ${darkMode ? "text-white" : "text-[#004B63]"}`}
+            >
               📖 {deck.title}
             </h3>
             <motion.button
               onClick={() => setMode("decks")}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="text-sm text-[#64748B] hover:text-[#004B63]"
+              className={`text-sm ${darkMode ? "text-[#94A3B8] hover:text-white" : "text-[#64748B] hover:text-[#004B63]"}`}
             >
               ✕ {t("common.close")}
             </motion.button>
           </div>
-          <div className="w-full h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
+          <div
+            className={`w-full h-2 rounded-full overflow-hidden ${darkMode ? "bg-[#2A3A54]" : "bg-[#E2E8F0]"}`}
+          >
             <motion.div
-              className="h-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]"
+              className="h-full"
+              style={{ background: PRACTICE_GRADIENT }}
               initial={{ width: 0 }}
               animate={{
                 width: `${((cardIdx + 1) / deck.cards.length) * 100}%`,
@@ -206,7 +218,14 @@ const FlashcardSystem = memo(({ onTabChange }) => {
             themeColor={deck.metadata?.theme?.color}
             themeIcon={deck.metadata?.theme?.icon}
             gradeLabel={
-              deck.metadata?.grade ? GRADE_LABELS(t)[deck.metadata.grade] : ""
+              deck.metadata?.grade
+                ? ({
+                    "1-3": t("kid.flashcards.grade_1_3"),
+                    "4-6": t("kid.flashcards.grade_4_6"),
+                    "7-9": t("kid.flashcards.grade_7_9"),
+                    "10-12": t("kid.flashcards.grade_10_12"),
+                  }[deck.metadata.grade] ?? "")
+                : ""
             }
           />
         </motion.div>
@@ -256,23 +275,48 @@ const FlashcardSystem = memo(({ onTabChange }) => {
     );
   }
 
+  const textPrimary = darkMode ? "text-white" : "text-[#004B63]";
+  const textSecondary = darkMode ? "text-[#94A3B8]" : "text-[#64748B]";
+  const cardBg = darkMode ? "bg-[#1E293B]" : "bg-white";
+  const borderColor = darkMode ? "border-[#2A3A54]/60" : "border-[#E2E8F0]";
+  const tabBarBg = darkMode ? "bg-[#151F32]" : "bg-[#F1F5F9]";
+  const tabActiveBg = darkMode ? "bg-[#1E293B]" : "bg-white";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="space-y-6"
     >
+      {/* Section header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-[#004B63]">
-          {t("kid.flashcards.my_decks_title")}
-        </h3>
+        <div className="flex items-center gap-3">
+          <span
+            className="w-10 h-10 rounded-2xl flex items-center justify-center text-white text-xl flex-shrink-0"
+            style={{
+              background: PRACTICE_GRADIENT,
+              boxShadow: `0 4px 14px ${PRACTICE_GLOW}40`,
+            }}
+          >
+            🎴
+          </span>
+          <div>
+            <h3 className={`text-lg font-black leading-tight ${textPrimary}`}>
+              {t("kid.flashcards.my_decks_title")}
+            </h3>
+            <p className={`text-xs ${textSecondary}`}>
+              Repasa con tarjetas inteligentes
+            </p>
+          </div>
+        </div>
         {decks.length > 0 && (
           <div className="flex gap-2">
             <motion.button
               onClick={() => setMultiplayerActive(true)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="px-4 py-2 bg-gradient-to-r from-[#FF6B9D] to-[#FFD166] text-white rounded-xl font-bold text-sm shadow-md"
+              className="px-3 py-2 text-white rounded-xl font-bold text-xs shadow-md"
+              style={{ background: PRACTICE_GRADIENT }}
             >
               🆚 Multijugador
             </motion.button>
@@ -285,9 +329,9 @@ const FlashcardSystem = memo(({ onTabChange }) => {
               }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="px-4 py-2 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-xl font-bold text-sm shadow-md"
+              className={`px-3 py-2 rounded-xl font-bold text-xs border ${darkMode ? "bg-[#1E293B] border-[#2A3A54] text-white" : "bg-white border-[#E2E8F0] text-[#004B63]"} shadow-sm`}
             >
-              {t("kid.flashcards.new_deck_btn")}
+              + {t("kid.flashcards.new_deck_btn")}
             </motion.button>
           </div>
         )}
@@ -298,7 +342,11 @@ const FlashcardSystem = memo(({ onTabChange }) => {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="p-4 rounded-2xl bg-gradient-to-br from-[#004B63] to-[#0077B6] text-white"
+          className="p-4 rounded-2xl text-white"
+          style={{
+            background: PRACTICE_GRADIENT,
+            boxShadow: `0 8px 24px ${PRACTICE_GLOW}30`,
+          }}
         >
           <p className="text-xs font-semibold text-white/70 mb-1">
             {t("kid.flashcards.active_deck")}
@@ -313,7 +361,7 @@ const FlashcardSystem = memo(({ onTabChange }) => {
                 >
                   {step.icon} {step.label}
                 </button>
-                {i < LEARNING_PATH.length - 1 && (
+                {i < LEARNING_PATH(t).length - 1 && (
                   <span className="text-white/50 text-xs">→</span>
                 )}
               </div>
@@ -323,7 +371,7 @@ const FlashcardSystem = memo(({ onTabChange }) => {
       )}
 
       {/* Create tab switcher */}
-      <div className="flex gap-2 p-1 bg-[#F1F5F9] rounded-xl">
+      <div className={`flex gap-2 p-1 rounded-xl ${tabBarBg}`}>
         {[
           { id: "text", label: t("kid.flashcards.write_topic") },
           { id: "scan", label: t("kid.flashcards.scan_pdf") },
@@ -332,10 +380,8 @@ const FlashcardSystem = memo(({ onTabChange }) => {
             key={tb.id}
             onClick={() => setCreateTab(tb.id)}
             className={`flex-1 py-3 sm:py-2 rounded-lg text-sm font-semibold transition-all ${
-              createTab === tb.id
-                ? "bg-white text-[#004B63] shadow-sm"
-                : "text-[#64748B]"
-            }`}
+              createTab === tb.id ? `${tabActiveBg} shadow-sm` : ""
+            } ${createTab === tb.id ? textPrimary : textSecondary}`}
           >
             {tb.label}
           </button>
@@ -347,14 +393,14 @@ const FlashcardSystem = memo(({ onTabChange }) => {
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-2xl bg-gradient-to-br from-[#4DA8C4]/10 to-[#66CCCC]/10 border border-[#4DA8C4]/30 flex flex-col sm:flex-row sm:items-start gap-3"
+          className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-start gap-3 ${darkMode ? "border-[#FF6B9D]/20 bg-[#FF6B9D]/5" : "border-[#FF6B9D]/20 bg-[#FF6B9D]/5"}`}
         >
           <span className="text-2xl flex-shrink-0">🤖</span>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold text-[#004B63] truncate">
+            <p className={`text-sm font-bold truncate ${textPrimary}`}>
               {t("kid.flashcards.dani_read", { title: lastScanSummary.title })}
             </p>
-            <p className="text-xs text-[#64748B] mt-0.5">
+            <p className={`text-xs mt-0.5 ${textSecondary}`}>
               {t("kid.flashcards.dani_ask")}
             </p>
           </div>
@@ -380,13 +426,14 @@ const FlashcardSystem = memo(({ onTabChange }) => {
               }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="px-3 py-1.5 bg-[#4DA8C4] text-white rounded-xl text-xs font-bold shadow-sm"
+              className="px-3 py-1.5 text-white rounded-xl text-xs font-bold shadow-sm"
+              style={{ background: PRACTICE_GRADIENT }}
             >
               {t("kid.flashcards.dani_talk_yes")}
             </motion.button>
             <button
               onClick={() => setLastScanSummary(null)}
-              className="text-[10px] text-[#64748B] text-center hover:text-[#004B63]"
+              className={`text-[10px] text-center ${textSecondary}`}
             >
               {t("kid.flashcards.dismiss")}
             </button>
@@ -395,7 +442,10 @@ const FlashcardSystem = memo(({ onTabChange }) => {
       )}
 
       {createTab === "text" ? (
-        <GenerateFlashcards onGenerated={handleGenerateFlashcards} />
+        <GenerateFlashcards
+          onGenerated={handleGenerateFlashcards}
+          darkMode={darkMode}
+        />
       ) : (
         <ScannerTab onGenerated={handleScanGenerated} />
       )}
@@ -409,6 +459,7 @@ const FlashcardSystem = memo(({ onTabChange }) => {
               onStudy={startStudy}
               onStudyDue={startStudyDue}
               dueCount={dueToday[d.id] ?? 0}
+              darkMode={darkMode}
               onEdit={(id) => {
                 setCurrentDeckId(id);
                 const d2 = decks.find((x) => x.id === id);
@@ -427,9 +478,16 @@ const FlashcardSystem = memo(({ onTabChange }) => {
               whileTap={{ scale: 0.98 }}
               className={`w-full py-2 rounded-xl text-xs font-bold transition-all border ${
                 activeStudyDeck?.deckId === d.id
-                  ? "bg-[#004B63] text-white border-[#004B63]"
-                  : "bg-white text-[#4DA8C4] border-[#4DA8C4]/40 hover:border-[#4DA8C4]"
+                  ? "text-white border-transparent"
+                  : darkMode
+                    ? `${cardBg} text-[#FF6B9D] border-[#FF6B9D]/30 hover:border-[#FF6B9D]/60`
+                    : "bg-white text-[#EF476F] border-[#EF476F]/30 hover:border-[#EF476F]/60"
               }`}
+              style={
+                activeStudyDeck?.deckId === d.id
+                  ? { background: PRACTICE_GRADIENT }
+                  : {}
+              }
             >
               {activeStudyDeck?.deckId === d.id
                 ? t("kid.flashcards.deck_active_status")
@@ -443,11 +501,13 @@ const FlashcardSystem = memo(({ onTabChange }) => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center py-8"
+          className={`text-center py-12 rounded-2xl border ${cardBg} ${borderColor}`}
         >
-          <span className="text-6xl mb-4 block">📚</span>
-          <p className="text-[#64748B]">{t("kid.flashcards.no_decks")}</p>
-          <p className="text-sm text-[#64748B] mt-2">
+          <span className="text-5xl mb-4 block">🎴</span>
+          <p className={`font-bold ${textPrimary}`}>
+            {t("kid.flashcards.no_decks")}
+          </p>
+          <p className={`text-sm mt-2 ${textSecondary}`}>
             {t("kid.flashcards.no_decks_hint")}
           </p>
         </motion.div>
@@ -458,6 +518,7 @@ const FlashcardSystem = memo(({ onTabChange }) => {
           decks={decks}
           saveDecks={saveDecks}
           onStartMultiplayer={startMultiplayer}
+          darkMode={darkMode}
         />
       )}
     </motion.div>

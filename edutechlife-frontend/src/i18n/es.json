@@ -4702,6 +4702,7 @@
   "reset.error.link_invalid": "Este enlace no es válido o ya expiró. Solicita uno nuevo desde la pantalla de inicio de sesión.",
   "reset.error.passwords_mismatch": "Las contraseñas no coinciden.",
   "reset.error.failed": "No se pudo actualizar la contraseña. Intenta de nuevo.",
+  "login.retrying": "Reconectando con el servidor...",
   "login.error.connection": "Error de conexión",
   "login.email_or_username": "Correo electrónico o usuario",
   "login.email_or_username_placeholder": "usuario@ejemplo.com o tu usuario",

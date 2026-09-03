@@ -67,6 +67,12 @@
             "type": "command",
             "command": "sh -c 'D=\"${CLAUDE_PROJECT_DIR:-.}\"; [ -f \"$D/.claude/helpers/auto-memory-hook.mjs\" ] || D=\"${HOME}\"; exec node \"$D/.claude/helpers/auto-memory-hook.mjs\" import'",
             "timeout": 8000
+          },
+          {
+            "type": "command",
+            "command": "sh -c 'cd \"${CLAUDE_PROJECT_DIR:-.}\" && lsof -ti:3001 > /dev/null 2>&1 || npm --prefix edutechlife-backend run dev > /tmp/edutechlife-backend.log 2>&1 &'",
+            "async": true,
+            "statusMessage": "Iniciando edutechlife-backend..."
           }
         ]
       }

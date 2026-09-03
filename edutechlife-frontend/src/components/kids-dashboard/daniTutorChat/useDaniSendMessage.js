@@ -3,7 +3,11 @@ import { useTranslation } from "../../../i18n/I18nProvider";
 import { callDaniOrchestrator } from "../../../utils/api";
 import { inferMoodFromText, extractTopic } from "../dani/chatUtils";
 import { getQuickActionMessage } from "./daniQuickActions";
-import { processStreamChunkVoice, speakRemainingText } from "./daniChatVoice";
+import {
+  processStreamChunkVoice,
+  speakRemainingText,
+  clearVoiceQueue,
+} from "./daniChatVoice";
 import {
   isEmotionalBannerNeeded,
   isCrisisAlert,
@@ -86,6 +90,7 @@ export default function useDaniSendMessage({
 
         let fullResponse = "";
         pendingSentenceRef.current = "";
+        clearVoiceQueue(); // clear any pending audio from previous response
 
         const token = await getToken();
         if (!token) throw new Error("No auth token — user must be logged in");
@@ -98,7 +103,7 @@ export default function useDaniSendMessage({
         await callDaniOrchestrator(
           {
             message: userMessage.text,
-            studentId: studentDbId || null,
+            ...(studentDbId ? { studentId: studentDbId } : {}),
             socraticMode,
             documentContext: hasDocumentContext ? documentForDani : null,
             history,

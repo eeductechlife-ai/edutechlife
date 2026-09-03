@@ -138,17 +138,17 @@ export const useTimetable = () => {
     setLoading(true);
     setError(null);
     try {
-      const sid = await resolveStudentId();
+      let sid = await resolveStudentId();
+      if (!sid) {
+        await new Promise((r) => setTimeout(r, 1500));
+        sid = await resolveStudentId();
+      }
       setStudentId(sid);
       if (!sid) {
-        const sid2 = await resolveStudentId();
-        if (!sid2) {
-          setTimetable(null);
-          setSlots([]);
-          setExams([]);
-          return;
-        }
-        setStudentId(sid2);
+        setTimetable(null);
+        setSlots([]);
+        setExams([]);
+        return;
       }
 
       const [ttRows, exRows] = await Promise.all([
@@ -184,8 +184,39 @@ export const useTimetable = () => {
   }, [load]);
 
   /**
-   * Create or update the active timetable header.
-   * Payload: { school_name?, term_label?, term_start?, term_end?, timezone?, source? }
+   * Save the full timetable (header + slots) through the backend in one call.
+   * Routes through the backend to use service-role and bypass RLS.
+   * Returns { timetableId, slots }.
+   */
+  const saveTimetableWithSlots = useCallback(
+    async ({ meta = {}, slots: newSlots = [] }) => {
+      const token = sessionStorage.getItem("auth_token");
+      const resp = await fetch(`${API_BASE_URL}/api/smartboard/timetable`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ meta, slots: newSlots }),
+        signal: AbortSignal.timeout(20000),
+      });
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${resp.status}`);
+      }
+      const json = await resp.json();
+      // Update local state so the view refreshes without a full reload
+      const ordered = orderSlots(Array.isArray(json.slots) ? json.slots : []);
+      setTimetable({ id: json.timetableId, is_active: true, ...meta });
+      setSlots(ordered);
+      return json;
+    },
+    [],
+  );
+
+  /**
+   * @deprecated Use saveTimetableWithSlots instead.
+   * Kept for backward-compatibility with any callers that use the two-step API.
    */
   const saveTimetable = useCallback(
     async (payload) => {
@@ -194,7 +225,10 @@ export const useTimetable = () => {
         await new Promise((r) => setTimeout(r, 1500));
         sid = await resolveStudentId();
       }
-      if (!sid) throw new Error("No student profile");
+      if (!sid)
+        throw new Error(
+          "No se pudo encontrar tu perfil de estudiante. Cierra sesión y vuelve a entrar.",
+        );
 
       if (timetable?.id) {
         const rows = await sbFetch(`student_timetable?id=eq.${timetable.id}`, {
@@ -220,37 +254,24 @@ export const useTimetable = () => {
   );
 
   /**
-   * Replace the full set of slots for the active timetable in one atomic-ish
-   * operation (delete + insert). newSlots items:
-   *   { day_of_week, start_time, end_time, subject, subject_label?,
-   *     teacher?, room?, color?, notes? }
-   *
-   * Atomicity: if DELETE succeeds but INSERT fails, old slots are backed up and
-   * restored to prevent data loss. This ensures either all slots are updated or
-   * none are (no partial deletions).
+   * @deprecated Use saveTimetableWithSlots instead.
+   * Kept for backward-compatibility.
    */
   const saveSlots = useCallback(
     async (newSlots, overrideTimetableId) => {
-      // overrideTimetableId is passed by callers that have the fresh return value
-      // from saveTimetable before React re-renders (avoids stale closure).
       const ttId = overrideTimetableId ?? timetable?.id;
       if (!ttId) throw new Error("Create a timetable first");
 
-      // Backup current slots in case insertion fails
       const oldSlots = [...slots];
-
-      // Delete all existing slots
       await sbFetch(`timetable_slots?timetable_id=eq.${ttId}`, {
         method: "DELETE",
       });
 
-      // If no new slots, clear and return
       if (!newSlots.length) {
         setSlots([]);
         return [];
       }
 
-      // Prepare new slot rows
       const rows = newSlots.map((s) => ({
         timetable_id: ttId,
         day_of_week: s.day_of_week,
@@ -264,7 +285,6 @@ export const useTimetable = () => {
         notes: s.notes || null,
       }));
 
-      // Attempt to insert new slots; on error restore old slots
       let data;
       try {
         data = await sbFetch("timetable_slots", {
@@ -394,6 +414,7 @@ export const useTimetable = () => {
     loading,
     error,
     reload: load,
+    saveTimetableWithSlots,
     saveTimetable,
     saveSlots,
     addExam,

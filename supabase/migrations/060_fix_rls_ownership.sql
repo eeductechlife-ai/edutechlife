@@ -30,18 +30,18 @@ DO $$ BEGIN
   END IF;
 END $$;
 
--- ── 3. vak_results: SELECT own + INSERT own (011) + service ────────────────
+-- ── 3. vak_results: uses user_id (TEXT = auth_id), not student_id ──────────
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'vak_results' AND policyname = 'Students read own vak') THEN
     CREATE POLICY "Students read own vak" ON vak_results
-      FOR SELECT USING (student_id = (SELECT id FROM students WHERE auth_id = auth.uid()));
+      FOR SELECT USING (user_id = auth.uid()::TEXT);
   END IF;
 END $$;
 
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'vak_results' AND policyname = 'Students create vak') THEN
     CREATE POLICY "Students create vak" ON vak_results
-      FOR INSERT WITH CHECK (student_id = (SELECT id FROM students WHERE auth_id = auth.uid()));
+      FOR INSERT WITH CHECK (user_id = auth.uid()::TEXT);
   END IF;
 END $$;
 

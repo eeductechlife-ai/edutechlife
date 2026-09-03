@@ -117,11 +117,60 @@ export const formatHHMM = (hhmm, locale = "es") => {
 };
 
 // Coerce a raw JSON slot from OCR into the shape saveSlots expects.
+const DAY_NAMES = {
+  lunes: 1,
+  martes: 2,
+  miercoles: 3,
+  miércoles: 3,
+  jueves: 4,
+  viernes: 5,
+  sabado: 6,
+  sábado: 6,
+  domingo: 7,
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
+  sunday: 7,
+  lun: 1,
+  mar: 2,
+  mie: 3,
+  mié: 3,
+  jue: 4,
+  vie: 5,
+  sab: 6,
+  sáb: 6,
+  dom: 7,
+  mon: 1,
+  tue: 2,
+  wed: 3,
+  thu: 4,
+  fri: 5,
+  sat: 6,
+  sun: 7,
+};
+
+const parseDayOfWeek = (val) => {
+  if (val == null) return NaN;
+  const n = Number(val);
+  if (n >= 1 && n <= 7) return n;
+  const key = String(val)
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "");
+  return DAY_NAMES[key] || DAY_NAMES[String(val).trim().toLowerCase()] || NaN;
+};
+
 export const coerceSlot = (raw) => {
-  const day = Number(raw.day_of_week ?? raw.day);
-  const start = parseTimeToHHMM(raw.start_time || raw.start);
-  const end = parseTimeToHHMM(raw.end_time || raw.end);
-  const subjectLabel = (raw.subject || "").toString().trim();
+  const day = parseDayOfWeek(raw.day_of_week ?? raw.day ?? raw.dia);
+  const start = parseTimeToHHMM(raw.start_time || raw.start || raw.hora_inicio);
+  const end = parseTimeToHHMM(raw.end_time || raw.end || raw.hora_fin);
+  const subjectLabel = (raw.subject || raw.materia || raw.asignatura || "")
+    .toString()
+    .trim();
   if (!day || !start || !end || !subjectLabel) return null;
   const subject = normalizeSubject(subjectLabel);
   return {

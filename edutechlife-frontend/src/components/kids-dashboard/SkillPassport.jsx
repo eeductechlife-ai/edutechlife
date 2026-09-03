@@ -66,8 +66,8 @@ function CompetencyRadar({ subjects }) {
         ))}
         <polygon
           points={polyPoints}
-          fill="rgba(77,168,196,0.2)"
-          stroke="#4DA8C4"
+          fill="rgba(251,133,0,0.15)"
+          stroke="#FB8500"
           strokeWidth="2"
         />
         {points.map((p, i) => (
@@ -122,7 +122,7 @@ const SkillPassport = memo(() => {
     return (
       <div className="text-center py-10 space-y-2">
         <span className="text-4xl block">🎒</span>
-        <p className="text-sm font-bold text-[#004B63]">
+        <p className="text-sm font-bold text-[#1E293B]">
           Tu Pasaporte de Habilidades está vacío
         </p>
         <p className="text-xs text-[#64748B]">
@@ -143,7 +143,7 @@ const SkillPassport = memo(() => {
           animate={{ opacity: 1, scale: 1 }}
           className="p-4 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm"
         >
-          <p className="text-xs font-bold text-[#004B63] mb-2 text-center">
+          <p className="text-xs font-bold text-[#1E293B] mb-2 text-center">
             🕸️ Mapa de Competencias
           </p>
           <CompetencyRadar subjects={passport} />
@@ -165,7 +165,7 @@ const SkillPassport = memo(() => {
             </span>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <p className="text-sm font-bold text-[#004B63] truncate">
+                <p className="text-sm font-bold text-[#1E293B] truncate">
                   {item.label}
                 </p>
                 <span

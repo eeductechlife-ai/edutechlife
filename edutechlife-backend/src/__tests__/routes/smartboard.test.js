@@ -65,10 +65,19 @@ describe('Smartboard GET /data/:userId', () => {
   });
 
   it('returns 403 when userId mismatch', async () => {
-    mockSupabase.from.mockReturnValue({
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      single: vi.fn().mockResolvedValue({ data: { data: {} }, error: null }),
+    mockSupabase.from.mockImplementation((table) => {
+      if (table === 'parent_student_links') {
+        return {
+          select: vi.fn().mockReturnThis(),
+          eq: vi.fn().mockReturnThis(),
+          maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+        };
+      }
+      return {
+        select: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        single: vi.fn().mockResolvedValue({ data: { data: {} }, error: null }),
+      };
     });
 
     const res = await request(app)
