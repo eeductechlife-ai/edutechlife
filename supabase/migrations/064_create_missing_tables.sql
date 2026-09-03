@@ -68,12 +68,17 @@ DROP POLICY IF EXISTS "Users can delete own notifications" ON public.notificatio
 DROP POLICY IF EXISTS notifications_user_read              ON public.notifications;
 DROP POLICY IF EXISTS notifications_user_update            ON public.notifications;
 DROP POLICY IF EXISTS notifications_user_delete            ON public.notifications;
+DROP POLICY IF EXISTS "notifications_select_own"           ON public.notifications;
+DROP POLICY IF EXISTS "notifications_insert_own"           ON public.notifications;
+DROP POLICY IF EXISTS "notifications_update_own"           ON public.notifications;
+DROP POLICY IF EXISTS "notifications_delete_own"           ON public.notifications;
 
+-- Cast to text to tolerate user_id columns that are TEXT instead of UUID (schema drift).
 CREATE POLICY "notifications_select_own" ON public.notifications
-  FOR SELECT USING (auth.uid() = user_id);
+  FOR SELECT USING (auth.uid()::text = user_id::text);
 CREATE POLICY "notifications_insert_own" ON public.notifications
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
+  FOR INSERT WITH CHECK (auth.uid()::text = user_id::text);
 CREATE POLICY "notifications_update_own" ON public.notifications
-  FOR UPDATE USING (auth.uid() = user_id);
+  FOR UPDATE USING (auth.uid()::text = user_id::text);
 CREATE POLICY "notifications_delete_own" ON public.notifications
-  FOR DELETE USING (auth.uid() = user_id);
+  FOR DELETE USING (auth.uid()::text = user_id::text);
