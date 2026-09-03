@@ -1,13 +1,32 @@
 const rateLimit = require('express-rate-limit');
 const { ipKeyGenerator } = require('express-rate-limit');
 
+// Use Redis store when available so rate limits survive restarts and work
+// across multiple instances. Falls back to in-memory when Redis is absent.
+function buildStore() {
+  if (!process.env.UPSTASH_REDIS_URL) return undefined;
+  try {
+    const { RedisStore } = require('rate-limit-redis');
+    const redis = require('../lib/redis');
+    return new RedisStore({
+      sendCommand: (...args) => redis.getClient()?.sendCommand(args),
+      prefix: 'rl:',
+    });
+  } catch {
+    return undefined;
+  }
+}
+
+const store = buildStore();
+
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
+  store,
   message: { error: 'Demasiadas solicitudes, intenta de nuevo más tarde.' },
-  skip: (req) => process.env.NODE_ENV !== 'production'
+  skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
 const deepseekLimiter = rateLimit({
@@ -15,8 +34,9 @@ const deepseekLimiter = rateLimit({
   max: 20,
   standardHeaders: true,
   legacyHeaders: false,
+  store,
   message: { error: 'Demasiadas solicitudes a DeepSeek, espera un momento.' },
-  skip: (req) => process.env.NODE_ENV !== 'production'
+  skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
 const authLimiter = rateLimit({
@@ -24,8 +44,9 @@ const authLimiter = rateLimit({
   max: 10,
   standardHeaders: true,
   legacyHeaders: false,
+  store,
   message: { error: 'Demasiados intentos, espera un momento.' },
-  skip: (req) => process.env.NODE_ENV !== 'production'
+  skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
 // Limiters granulares para endpoints específicos (IALab)
@@ -34,9 +55,10 @@ const chatMessageLimiter = rateLimit({
   max: 10,
   standardHeaders: true,
   legacyHeaders: false,
+  store,
   message: { error: 'Demasiados mensajes. Intenta de nuevo en 1 minuto.', retryAfter: 60 },
   keyGenerator: (req) => req.userId || ipKeyGenerator(req),
-  skip: (req) => process.env.NODE_ENV !== 'production'
+  skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
 const examSubmissionLimiter = rateLimit({
@@ -44,9 +66,10 @@ const examSubmissionLimiter = rateLimit({
   max: 3,
   standardHeaders: true,
   legacyHeaders: false,
+  store,
   message: { error: 'Demasiados envíos. Intenta de nuevo después.', retryAfter: 30 },
   keyGenerator: (req) => `${req.userId || ipKeyGenerator(req)}-${req.params.examId || 'unknown'}`,
-  skip: (req) => process.env.NODE_ENV !== 'production'
+  skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
 const challengeSubmissionLimiter = rateLimit({
@@ -54,9 +77,10 @@ const challengeSubmissionLimiter = rateLimit({
   max: 5,
   standardHeaders: true,
   legacyHeaders: false,
+  store,
   message: { error: 'Demasiados envíos de desafío. Intenta de nuevo.', retryAfter: 60 },
   keyGenerator: (req) => `${req.userId || ipKeyGenerator(req)}-${req.params.challengeId || 'unknown'}`,
-  skip: (req) => process.env.NODE_ENV !== 'production'
+  skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
 // Google Vision API — billed per call; limit tightly per authenticated user
@@ -65,9 +89,10 @@ const visionLimiter = rateLimit({
   max: 5,
   standardHeaders: true,
   legacyHeaders: false,
+  store,
   message: { error: 'Límite de escaneos alcanzado. Intenta de nuevo en 1 minuto.', retryAfter: 60 },
   keyGenerator: (req) => req.userId || ipKeyGenerator(req),
-  skip: (req) => process.env.NODE_ENV !== 'production'
+  skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
 module.exports = {
