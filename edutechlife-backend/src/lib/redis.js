@@ -8,7 +8,8 @@
  * - cache:<key> — transient data (configurable TTL)
  */
 
-const redis = require('redis');
+let redis;
+try { redis = require('redis'); } catch { redis = null; }
 const logger = require('../utils/logger');
 
 // Connection string: redis://:[password]@[host]:[port]
@@ -21,8 +22,8 @@ let isConnected = false;
  * Initialize Redis client (Upstash serverless)
  */
 async function initializeRedis() {
-  if (!REDIS_URL) {
-    logger.warn('UPSTASH_REDIS_URL not set. Redis features will be disabled (fallback to in-memory).');
+  if (!REDIS_URL || !redis) {
+    logger.warn('Redis not configured. Redis features will be disabled (fallback to in-memory).');
     return;
   }
 
