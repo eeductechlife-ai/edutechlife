@@ -10,6 +10,8 @@ const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./docs/swagger');
 const logger = require('./utils/logger');
+const { sessionMiddleware } = require('./middleware/session');
+const redis = require('./lib/redis');
 const healthRoutes = require('./routes/health');
 const chatRoutes = require('./routes/chat');
 const ialabRoutes = require('./routes/ialab');
@@ -108,6 +110,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), webho
 
 app.use(express.json({ limit: '8mb' }));
 app.use(sanitizeMiddleware);
+app.use(sessionMiddleware);
 
 app.use('/api', apiLimiter);
 app.use('/api/chat', deepseekLimiter);
@@ -134,5 +137,9 @@ app.use('/api/admin', adminRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
+
+// Export both app and Redis initialization function
+app.initializeRedis = redis.initializeRedis;
+app.redis = redis;
 
 module.exports = app;
