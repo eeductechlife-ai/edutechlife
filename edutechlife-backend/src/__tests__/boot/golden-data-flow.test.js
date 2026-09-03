@@ -33,7 +33,7 @@ describe('golden data flow — una sola fuente de verdad (B.10)', () => {
       expect(file, `${r} debe leer mastery_level`).toContain('mastery_level');
     }
     // Las rutas delegan en el servicio (getStudentMastery), no en el cliente directo.
-    expect(src('src/routes/smartboard.js')).toContain('getStudentMastery');
+    expect(src('src/routes/smartboard/core.js')).toContain('getStudentMastery');
   });
 
   test('PLAN: escritor y lectores usan learning_plans.plan_json', () => {
