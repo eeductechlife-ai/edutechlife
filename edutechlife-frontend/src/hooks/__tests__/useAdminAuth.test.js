@@ -2,11 +2,17 @@
  * useAdminAuth Hook Tests
  */
 
-import { renderHook, waitFor } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import { useAdminAuth } from "../useAdminAuth";
 
+vi.mock("../lib/supabase", () => ({
+  createSupabaseClient: vi.fn(() => ({
+    auth: { signOut: vi.fn().mockResolvedValue({}) },
+  })),
+}));
+
 // Mock fetch
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
 // Mock sessionStorage
 const sessionStorageMock = (() => {
@@ -35,7 +41,11 @@ describe("useAdminAuth", () => {
     sessionStorage.clear();
   });
 
-  test("should return isLoading=true initially", () => {
+  test("should return isLoading=true initially (while fetch is in-flight)", async () => {
+    // Use a never-resolving fetch so the hook stays in loading state.
+    fetch.mockReturnValueOnce(new Promise(() => {}));
+    sessionStorage.setItem("auth_token", "valid-token");
+
     const { result } = renderHook(() => useAdminAuth());
     expect(result.current.isLoading).toBe(true);
     expect(result.current.user).toBeNull();
@@ -127,8 +137,10 @@ describe("useAdminAuth", () => {
 
     expect(result.current.user).not.toBeNull();
 
-    // Logout
-    await result.current.logout();
+    // Wrap logout in act so React flushes the setUser(null) state update.
+    await act(async () => {
+      await result.current.logout();
+    });
 
     expect(result.current.user).toBeNull();
     expect(sessionStorage.getItem("auth_token")).toBeNull();

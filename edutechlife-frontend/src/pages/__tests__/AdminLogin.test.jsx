@@ -2,28 +2,30 @@
  * AdminLogin Page Tests
  */
 
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
 import AdminLogin from "../AdminLogin";
 
-// Mock createSupabaseClient
-jest.mock("../../lib/supabase", () => ({
-  createSupabaseClient: jest.fn(() => ({
-    auth: {
-      signInWithPassword: jest.fn(),
-    },
-  })),
+vi.mock("../../lib/supabase", () => ({
+  createSupabaseClient: vi.fn(),
 }));
 
-// Mock fetch
-global.fetch = jest.fn();
+import { createSupabaseClient } from "../../lib/supabase";
+
+global.fetch = vi.fn();
 
 describe("AdminLogin Page", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     global.fetch.mockClear();
     sessionStorage.clear();
+
+    createSupabaseClient.mockReturnValue({
+      auth: {
+        signInWithPassword: vi.fn(),
+      },
+    });
   });
 
   test("renders login form with email and password fields", () => {
@@ -71,10 +73,9 @@ describe("AdminLogin Page", () => {
   });
 
   test("displays error message on failed login", async () => {
-    const { createSupabaseClient } = require("../../lib/supabase");
     createSupabaseClient.mockReturnValue({
       auth: {
-        signInWithPassword: jest.fn().mockResolvedValue({
+        signInWithPassword: vi.fn().mockResolvedValue({
           data: { session: null },
           error: { message: "Invalid credentials" },
         }),
@@ -101,10 +102,9 @@ describe("AdminLogin Page", () => {
   });
 
   test("clears token from sessionStorage on error", async () => {
-    const { createSupabaseClient } = require("../../lib/supabase");
     createSupabaseClient.mockReturnValue({
       auth: {
-        signInWithPassword: jest.fn().mockResolvedValue({
+        signInWithPassword: vi.fn().mockResolvedValue({
           data: { session: { access_token: "token" } },
           error: null,
         }),
