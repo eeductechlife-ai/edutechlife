@@ -6,6 +6,22 @@ const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
+/**
+ * Look up a Supabase Auth user by email using server-side filtering.
+ * Avoids fetching all users — safe above 1000 registrations.
+ * @returns {Promise<object|null>} auth user or null
+ */
+async function findAuthUserByEmail(email) {
+  const normalized = email.toLowerCase();
+  const { data, error } = await supabase.auth.admin.listUsers({
+    page: 1,
+    perPage: 10,
+    filter: normalized,
+  });
+  if (error) throw error;
+  return data?.users?.find(u => u.email?.toLowerCase() === normalized) ?? null;
+}
+
 const OAUTH_PROVIDERS = {
   google: {
     authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
@@ -458,15 +474,9 @@ router.get('/callback', async (req, res) => {
 
     let authUser = null;
     try {
-      // Use listUsers with pagination to find user by email
-      const { data: users, error: listError } = await supabase.auth.admin.listUsers({
-        perPage: 1000,
-      });
-      if (!listError && users?.users) {
-        authUser = users.users.find(u => u.email?.toLowerCase() === normalizedEmail);
-      }
+      authUser = await findAuthUserByEmail(normalizedEmail);
     } catch (e) {
-      console.error('listUsers failed:', e.message);
+      console.error('findAuthUserByEmail failed:', e.message);
     }
 
     let userId;
@@ -488,10 +498,7 @@ router.get('/callback', async (req, res) => {
         if (authError.message?.includes('email_exists')) {
           console.warn('User already exists, retrieving ID:', normalizedEmail);
           try {
-            const { data: users, error: listError } = await supabase.auth.admin.listUsers({
-              perPage: 1000,
-            });
-            const existingUser = users?.users?.find(u => u.email?.toLowerCase() === normalizedEmail);
+            const existingUser = await findAuthUserByEmail(normalizedEmail);
             if (existingUser?.id) {
               userId = existingUser.id;
             } else {
@@ -499,7 +506,7 @@ router.get('/callback', async (req, res) => {
               return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
             }
           } catch (retryErr) {
-            console.error('Retry listUsers failed:', retryErr.message);
+            console.error('findAuthUserByEmail (retry) failed:', retryErr.message);
             return res.redirect(`${frontendUrl}/login?error=user_creation_failed`);
           }
         } else {
@@ -610,9 +617,10 @@ router.get('/oauth-demo/:provider', async (req, res) => {
       if (authError) {
         // If user already exists in Auth but not in users table, just get the user
         if (authError.code === 'email_exists') {
-          const { data: users, error: lookupError } = await supabase.auth.admin.listUsers({ perPage: 1000 });
-          const authUser = users?.users?.find(u => u.email?.toLowerCase() === demoEmail.toLowerCase()) || null;
-          if (lookupError) console.error('listUsers failed:', lookupError.message);
+          const authUser = await findAuthUserByEmail(demoEmail).catch((e) => {
+            console.error('findAuthUserByEmail failed:', e.message);
+            return null;
+          });
 
           if (authUser) {
             userId = authUser.id;

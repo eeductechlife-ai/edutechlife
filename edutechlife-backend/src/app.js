@@ -66,8 +66,8 @@ const LOCALHOST_REGEX = /^https?:\/\/(localhost|127\.0\.0\.1):(3000|3001|517[0-9
 const isAllowed = (origin) => {
   if (!origin) return true;
   if (ALLOWED_ORIGINS.includes(origin)) return true;
-  // Always allow localhost origins for local development, regardless of NODE_ENV
-  if (LOCALHOST_REGEX.test(origin)) return true;
+  // Allow localhost only outside production (prevents accidental prod access from local)
+  if (process.env.NODE_ENV !== 'production' && LOCALHOST_REGEX.test(origin)) return true;
   return false;
 };
 
@@ -116,6 +116,8 @@ app.use('/api/voice-token', requireAuth, authLimiter);
 app.use('/api/smartboard/data', requireAuth);
 app.use('/api/smartboard/progress', requireAuth);
 app.use('/api/smartboard/chat', requireAuth, deepseekLimiter);
+app.use('/api/smartboard/dani/chat', requireAuth, deepseekLimiter);
+app.use('/api/smartboard/ai', requireAuth, deepseekLimiter);
 app.use('/api/ialab/progress', requireAuth);
 app.use('/api/ialab/templates', requireAuth);
 

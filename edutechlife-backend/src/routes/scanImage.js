@@ -1,5 +1,6 @@
 const { Router } = require('express');
-const { optionalAuth } = require('../middleware/auth');
+const { requireAuth } = require('../middleware/auth');
+const { visionLimiter } = require('../middleware/rateLimiter');
 
 const router = Router();
 
@@ -12,7 +13,7 @@ const GOOGLE_API_KEY = process.env.GOOGLE_VISION_API_KEY || process.env.GOOGLE_T
 //
 // Uses Google Cloud Vision API (TEXT_DETECTION). Returns raw OCR text —
 // the frontend passes it to DeepSeek to structure into subject/score pairs.
-router.post('/scan-image', optionalAuth, async (req, res) => {
+router.post('/scan-image', requireAuth, visionLimiter, async (req, res) => {
   const { imageBase64 } = req.body;
 
   if (!imageBase64 || typeof imageBase64 !== 'string') {

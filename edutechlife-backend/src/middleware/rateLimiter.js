@@ -59,11 +59,23 @@ const challengeSubmissionLimiter = rateLimit({
   skip: (req) => process.env.NODE_ENV !== 'production'
 });
 
+// Google Vision API — billed per call; limit tightly per authenticated user
+const visionLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Límite de escaneos alcanzado. Intenta de nuevo en 1 minuto.', retryAfter: 60 },
+  keyGenerator: (req) => req.userId || ipKeyGenerator(req),
+  skip: (req) => process.env.NODE_ENV !== 'production'
+});
+
 module.exports = {
   apiLimiter,
   deepseekLimiter,
   authLimiter,
   chatMessageLimiter,
   examSubmissionLimiter,
-  challengeSubmissionLimiter
+  challengeSubmissionLimiter,
+  visionLimiter,
 };
