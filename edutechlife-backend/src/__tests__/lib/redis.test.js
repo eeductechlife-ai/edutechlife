@@ -5,7 +5,6 @@
  * To run tests locally, set UPSTASH_REDIS_URL=redis://localhost:6379
  */
 
-const { describe, it, expect, beforeAll, afterAll, vi } = require('vitest');
 const redis = require('../../lib/redis');
 
 // Skip all tests if Redis URL not configured

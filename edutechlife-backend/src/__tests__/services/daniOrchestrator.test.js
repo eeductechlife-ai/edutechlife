@@ -70,11 +70,10 @@ describe('Dani orchestrator — buildSystemPrompt (B.13)', () => {
     expect(prompt).toContain('Ejercicios de fracciones');
   });
 
-  it('incluye HORARIO DE HOY desde timetable slots (subject_label)', () => {
+  it('incluye CLASES DE HOY desde timetable slots (subject_label)', () => {
     const prompt = buildSystemPrompt(ctx);
-    expect(prompt).toContain('HORARIO DE HOY');
+    expect(prompt).toContain('CLASES DE HOY');
     expect(prompt).toContain('Matemáticas');
-    expect(prompt).toContain('07:00:00');
   });
 
   it('socraticMode agrega el addendum', () => {

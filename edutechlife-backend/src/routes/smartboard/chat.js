@@ -273,6 +273,28 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
     studentId = selfStudent?.id || null;
   }
   if (!studentId) return res.status(404).json({ error: 'Perfil de estudiante no encontrado' });
+
+  // Authorization: if studentId came from the body, verify ownership.
+  // Either the student's auth_id matches the authenticated user, or the user
+  // is a linked parent of that student.
+  if (bodyStudentId) {
+    const { data: studentRow } = await supabase
+      .from('students')
+      .select('auth_id')
+      .eq('id', bodyStudentId)
+      .maybeSingle();
+    const isOwner = studentRow?.auth_id === req.userId;
+    if (!isOwner) {
+      const { data: parentLink } = await supabase
+        .from('parent_student_links')
+        .select('id')
+        .eq('student_id', bodyStudentId)
+        .eq('parent_user_id', req.userId)
+        .maybeSingle();
+      if (!parentLink) return res.status(403).json({ error: 'Acceso no autorizado' });
+    }
+  }
+
   req.studentId = studentId;
 
   if (!DEEPSEEK_API_KEY) return res.status(500).json({ error: 'API key no configurada' });
