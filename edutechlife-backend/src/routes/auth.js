@@ -557,9 +557,40 @@ router.get('/callback', async (req, res) => {
       provider,
     });
 
-    // Redirect to frontend with token and refresh token for session pre-seeding
-    const redirectUrl = `${frontendUrl}/auth/callback?token=${encodeURIComponent(sessionToken)}&refreshToken=${encodeURIComponent(refreshToken)}&email=${encodeURIComponent(normalizedEmail)}`;
-    res.redirect(redirectUrl);
+    // Render a secure form that POSTs tokens to the frontend (no tokens in URL)
+    // This approach: tokens are sent in POST body, never exposed in history/logs/Referer
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Autenticando...</title>
+          <script>
+            // Auto-submit form immediately to POST tokens securely
+            window.onload = function() {
+              document.getElementById('oauth-form').submit();
+            };
+          </script>
+        </head>
+        <body style="background: #004B63; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh;">
+          <form id="oauth-form" method="POST" action="${frontendUrl}/auth/exchange-token" style="display: none;">
+            <input type="hidden" name="token" value="${sessionToken}">
+            <input type="hidden" name="refreshToken" value="${refreshToken}">
+            <input type="hidden" name="email" value="${normalizedEmail}">
+          </form>
+          <div style="text-align: center;">
+            <div style="width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; margin: 0 auto 16px; animation: spin 1s linear infinite;"></div>
+            <p style="color: white; font-size: 18px; margin: 0; font-family: system-ui;">Procesando autenticación...</p>
+          </div>
+          <style>
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          </style>
+        </body>
+      </html>
+    `;
+    res.set('Content-Type', 'text/html');
+    res.send(html);
   } catch (err) {
     console.error('OAuth callback error:', err);
     req.log.error('OAuth callback error', { error: err.message });
@@ -933,6 +964,48 @@ router.post('/refresh', async (req, res) => {
   } catch (e) {
     console.error('Refresh error:', e.message);
     res.status(401).json({ error: 'Invalid refresh token' });
+  }
+});
+
+/**
+ * POST /api/auth/exchange-token
+ * Exchange OAuth tokens (POSTed securely from the OAuth callback page) for cookies.
+ * This endpoint:
+ * - Receives tokens via POST (not URL), avoiding exposure in history/logs
+ * - Sets HttpOnly, Secure, SameSite cookies
+ * - Redirects to frontend callback (no tokens in URL)
+ */
+router.post('/exchange-token', (req, res) => {
+  try {
+    const { token, refreshToken, email } = req.body;
+
+    if (!token || !email) {
+      return res.status(400).json({ error: 'Missing token or email' });
+    }
+
+    const expiresIn = 3600; // 1 hour
+    const refreshExpiresIn = 7 * 24 * 60 * 60; // 7 days
+
+    // Set tokens as HttpOnly, Secure, SameSite cookies
+    // These are safe: never appear in URL, history, logs, or Referer headers
+    const setCookieHeaders = [
+      `sb-access-token=${token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${expiresIn}${
+        process.env.NODE_ENV === 'production' ? '; Secure' : ''
+      }`,
+      `sb-refresh-token=${refreshToken}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${refreshExpiresIn}${
+        process.env.NODE_ENV === 'production' ? '; Secure' : ''
+      }`,
+    ];
+
+    res.setHeader('Set-Cookie', setCookieHeaders);
+
+    // Redirect to frontend callback (no tokens exposed)
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const redirectUrl = `${frontendUrl}/auth/callback?email=${encodeURIComponent(email)}`;
+    res.redirect(302, redirectUrl);
+  } catch (err) {
+    console.error('Token exchange error:', err);
+    res.status(500).json({ error: 'Token exchange failed' });
   }
 });
 

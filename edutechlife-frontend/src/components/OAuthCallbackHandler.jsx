@@ -12,22 +12,13 @@ const OAuthCallbackHandler = () => {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Get all search params for debugging
-        const allParams = Object.fromEntries(searchParams);
-        console.log("OAuth Callback - All params:", allParams);
-
-        const token = searchParams.get("token");
-        const refreshToken = searchParams.get("refreshToken");
-        const email = searchParams.get("email");
         const error = searchParams.get("error");
+        const email = searchParams.get("email");
 
-        console.log("OAuth Callback - Token:", token ? "present" : "missing");
-        console.log(
-          "OAuth Callback - RefreshToken:",
-          refreshToken ? "present" : "missing",
-        );
-        console.log("OAuth Callback - Email:", email);
-        console.log("OAuth Callback - Error:", error);
+        console.log("OAuth Callback - Received (tokens in HttpOnly cookies)", {
+          email,
+          error: error || "none",
+        });
 
         if (error) {
           console.error("OAuth error:", error);
@@ -35,26 +26,35 @@ const OAuthCallbackHandler = () => {
           return;
         }
 
-        if (!token || !email) {
-          console.error("Missing token or email", { token: !!token, email });
+        if (!email) {
+          console.error("Missing email from OAuth callback");
           navigate("/login?error=invalid_callback");
           return;
         }
 
-        if (!refreshToken) {
-          console.warn("Missing refreshToken from OAuth callback");
-        }
-
-        // Save authentication tokens
-        sessionStorage.setItem("auth_token", token);
+        // Tokens are now in HttpOnly cookies (sb-access-token, sb-refresh-token)
+        // The browser sends them automatically with all requests.
+        // We don't need to extract them from the URL or store them in localStorage.
+        // Just store the email for the UI.
         localStorage.setItem("user_email", email);
-        if (refreshToken) {
-          localStorage.setItem("refresh_token", refreshToken);
-        }
 
-        // Pre-seed the Supabase session so the role gate's getSession() finds it
-        // when /ialab mounts. This is critical for OAuth flow to work correctly.
-        await seedClientSession(token, refreshToken || "");
+        // Fetch current session from the backend (uses cookies automatically)
+        // This ensures the Supabase session is initialized before navigation
+        try {
+          const sessionRes = await fetch("/api/auth/session", {
+            credentials: "include", // Send cookies
+          });
+          if (sessionRes.ok) {
+            const session = await sessionRes.json();
+            console.log("OAuth session established:", {
+              user_id: session.user?.id,
+              email: session.user?.email,
+            });
+          }
+        } catch (fetchErr) {
+          console.warn("Session fetch error (non-blocking):", fetchErr);
+          // Continue anyway — cookies are set, they'll be used in subsequent requests
+        }
 
         // Progress is stored per account. Claim the namespace for this user and
         // reload rather than client-side navigating, so the stores rehydrate
