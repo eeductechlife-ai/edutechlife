@@ -144,7 +144,7 @@ jobs:
       - if: steps.cache-nm.outputs.cache-hit != 'true'
         run: npm ci
 
-      - run: npm test
+      - run: npx vitest run --no-file-parallelism --reporter=dot
 
   security:
     name: Security Audit
