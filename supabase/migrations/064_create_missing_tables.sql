@@ -1,66 +1,38 @@
 -- ============================================================================
 -- 064_create_missing_tables.sql
--- Create tables that existed in ad-hoc scripts but not in prior migrations.
--- All statements are idempotent (IF NOT EXISTS / DROP IF EXISTS).
+-- Add RLS to tables that existed via ad-hoc scripts (user_progress, quiz_attempts,
+-- notifications). All three tables already exist in production with user_id TEXT —
+-- CREATE TABLE is skipped; only policies are added.
+-- Cast to ::text throughout to handle UUID vs TEXT schema drift.
 -- ============================================================================
 
--- ── user_progress (IALab — referenced by progressController.js) ──────────────
-CREATE TABLE IF NOT EXISTS public.user_progress (
-  id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id             UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  module_id           INTEGER NOT NULL,
-  progress_percentage INTEGER DEFAULT 0 CHECK (progress_percentage >= 0 AND progress_percentage <= 100),
-  completed           BOOLEAN DEFAULT false,
-  last_accessed       TIMESTAMPTZ DEFAULT now(),
-  created_at          TIMESTAMPTZ DEFAULT now(),
-  updated_at          TIMESTAMPTZ DEFAULT now(),
-  UNIQUE(user_id, module_id)
-);
-
+-- ── user_progress: RLS ────────────────────────────────────────────────────────
 ALTER TABLE public.user_progress ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "user_progress_select_own" ON public.user_progress;
 CREATE POLICY "user_progress_select_own" ON public.user_progress
-  FOR SELECT USING (auth.uid() = user_id);
+  FOR SELECT USING (auth.uid()::text = user_id::text);
 
 DROP POLICY IF EXISTS "user_progress_insert_own" ON public.user_progress;
 CREATE POLICY "user_progress_insert_own" ON public.user_progress
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
+  FOR INSERT WITH CHECK (auth.uid()::text = user_id::text);
 
 DROP POLICY IF EXISTS "user_progress_update_own" ON public.user_progress;
 CREATE POLICY "user_progress_update_own" ON public.user_progress
-  FOR UPDATE USING (auth.uid() = user_id);
+  FOR UPDATE USING (auth.uid()::text = user_id::text);
 
-CREATE INDEX IF NOT EXISTS idx_user_progress_user    ON public.user_progress(user_id);
-CREATE INDEX IF NOT EXISTS idx_user_progress_module  ON public.user_progress(module_id);
-
--- ── quiz_attempts ─────────────────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS public.quiz_attempts (
-  id                   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  student_id           UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  quiz_id              TEXT NOT NULL,
-  questions_attempted  INTEGER NOT NULL DEFAULT 0,
-  questions_correct    INTEGER NOT NULL DEFAULT 0,
-  score                DECIMAL(5,2),
-  duration_seconds     INTEGER,
-  attempted_at         TIMESTAMPTZ DEFAULT now()
-);
-
+-- ── quiz_attempts: RLS ────────────────────────────────────────────────────────
+-- Production table has user_id TEXT (not student_id).
 ALTER TABLE public.quiz_attempts ENABLE ROW LEVEL SECURITY;
 
-DROP POLICY IF EXISTS "quiz_attempts_own" ON public.quiz_attempts;
-CREATE POLICY "quiz_attempts_own" ON public.quiz_attempts
-  FOR SELECT USING (auth.uid() = student_id);
-
+DROP POLICY IF EXISTS "quiz_attempts_own"        ON public.quiz_attempts;
 DROP POLICY IF EXISTS "quiz_attempts_insert_own" ON public.quiz_attempts;
+CREATE POLICY "quiz_attempts_own" ON public.quiz_attempts
+  FOR SELECT USING (auth.uid()::text = user_id::text);
 CREATE POLICY "quiz_attempts_insert_own" ON public.quiz_attempts
-  FOR INSERT WITH CHECK (auth.uid() = student_id);
+  FOR INSERT WITH CHECK (auth.uid()::text = user_id::text);
 
-CREATE INDEX IF NOT EXISTS idx_quiz_attempts_student ON public.quiz_attempts(student_id);
-CREATE INDEX IF NOT EXISTS idx_quiz_attempts_quiz    ON public.quiz_attempts(quiz_id);
-
--- ── notifications RLS hardening (table already created in 000_baseline_core) ─
--- Drop and recreate policies with current_user → auth.uid() to align with rest.
+-- ── notifications RLS hardening ───────────────────────────────────────────────
 DROP POLICY IF EXISTS "Users can view own notifications"   ON public.notifications;
 DROP POLICY IF EXISTS "Users can insert own notifications" ON public.notifications;
 DROP POLICY IF EXISTS "Users can update own notifications" ON public.notifications;
@@ -73,7 +45,6 @@ DROP POLICY IF EXISTS "notifications_insert_own"           ON public.notificatio
 DROP POLICY IF EXISTS "notifications_update_own"           ON public.notifications;
 DROP POLICY IF EXISTS "notifications_delete_own"           ON public.notifications;
 
--- Cast to text to tolerate user_id columns that are TEXT instead of UUID (schema drift).
 CREATE POLICY "notifications_select_own" ON public.notifications
   FOR SELECT USING (auth.uid()::text = user_id::text);
 CREATE POLICY "notifications_insert_own" ON public.notifications

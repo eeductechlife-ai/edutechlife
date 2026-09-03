@@ -42,15 +42,15 @@ ALTER TABLE public.ialab_progress ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "ialab_progress_select_own" ON public.ialab_progress;
 CREATE POLICY "ialab_progress_select_own" ON public.ialab_progress
-  FOR SELECT USING (auth.uid() = student_id);
+  FOR SELECT USING (auth.uid()::text = student_id::text);
 
 DROP POLICY IF EXISTS "ialab_progress_insert_own" ON public.ialab_progress;
 CREATE POLICY "ialab_progress_insert_own" ON public.ialab_progress
-  FOR INSERT WITH CHECK (auth.uid() = student_id);
+  FOR INSERT WITH CHECK (auth.uid()::text = student_id::text);
 
 DROP POLICY IF EXISTS "ialab_progress_update_own" ON public.ialab_progress;
 CREATE POLICY "ialab_progress_update_own" ON public.ialab_progress
-  FOR UPDATE USING (auth.uid() = student_id);
+  FOR UPDATE USING (auth.uid()::text = student_id::text);
 
 CREATE INDEX IF NOT EXISTS idx_ialab_progress_student  ON public.ialab_progress(student_id);
 CREATE INDEX IF NOT EXISTS idx_ialab_progress_module   ON public.ialab_progress(module_id);
@@ -76,7 +76,7 @@ ALTER TABLE public.usage_metrics ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "usage_metrics_select_own" ON public.usage_metrics;
 CREATE POLICY "usage_metrics_select_own" ON public.usage_metrics
-  FOR SELECT USING (auth.uid() = student_id);
+  FOR SELECT USING (auth.uid()::text = student_id::text);
 
 CREATE INDEX IF NOT EXISTS idx_usage_metrics_student ON public.usage_metrics(student_id);
 CREATE INDEX IF NOT EXISTS idx_usage_metrics_period  ON public.usage_metrics(student_id, period_start);
