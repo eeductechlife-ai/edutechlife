@@ -1,57 +1,43 @@
-import { renderHook, act } from '@testing-library/react';
-import { useStudyNotesSync } from '../useStudyNotesSync';
+import { renderHook, act } from "@testing-library/react";
+import { useStudyNotesSync } from "../useStudyNotesSync";
 
+// The hook uses useSupabase (Supabase-native auth, not Clerk).
+// Build a mock client whose methods return proper Promises.
 function buildMockSupabase() {
   return {
-    from: vi.fn((table) => ({
-      upsert: vi.fn((data) => ({
-        then: undefined,
-        error: null,
-        select: undefined,
-        onConflict: undefined,
-      })),
+    from: vi.fn(() => ({
+      upsert: vi.fn(() => Promise.resolve({ error: null })),
       select: vi.fn(() => ({
-        eq: vi.fn(() => ({
-          then: undefined,
-        })),
+        eq: vi.fn(() => Promise.resolve({ data: [], error: null })),
       })),
     })),
   };
 }
 
-const VALID_PAYLOAD = btoa(JSON.stringify({ sub: 'user-123' }));
-const VALID_TOKEN = `header.${VALID_PAYLOAD}.sig`;
+const mockSupabase = { client: null };
 
-const mockState = {
-  session: { id: 'test-session' },
-  supabaseClient: null,
-};
-
-const mockSupabase = {
-  client: null,
-};
-
-const getTokenMock = vi.fn();
-vi.mock('@clerk/react', () => ({
-  useSession: () => ({ session: mockState.session, isLoaded: true }),
-  useAuth: () => ({ getToken: getTokenMock }),
-}));
-
-vi.mock('../../../lib/supabase', () => ({
-  createSupabaseClient: (...args) => mockSupabase.client,
+const mockUseSupabase = vi.fn();
+vi.mock("../../useSupabase", () => ({
+  useSupabase: () => mockUseSupabase(),
 }));
 
 let localStorageStore = {};
 
 beforeEach(() => {
-  mockState.session = { id: 'test-session' };
-  getTokenMock.mockResolvedValue(VALID_TOKEN);
   mockSupabase.client = buildMockSupabase();
-  mockState.supabaseClient = mockSupabase.client;
+  mockUseSupabase.mockReturnValue({
+    supabase: mockSupabase.client,
+    userId: "user-123",
+    isLoading: false,
+  });
   localStorageStore = {};
 
-  vi.spyOn(Storage.prototype, 'getItem').mockImplementation((key) => localStorageStore[key] || null);
-  vi.spyOn(Storage.prototype, 'setItem').mockImplementation((key, val) => { localStorageStore[key] = val; });
+  vi.spyOn(Storage.prototype, "getItem").mockImplementation(
+    (key) => localStorageStore[key] || null,
+  );
+  vi.spyOn(Storage.prototype, "setItem").mockImplementation((key, val) => {
+    localStorageStore[key] = val;
+  });
 });
 
 afterEach(() => {
@@ -59,15 +45,16 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe('useStudyNotesSync', () => {
-  test('returns initial state', () => {
+describe("useStudyNotesSync", () => {
+  test("returns initial state", () => {
     const { result } = renderHook(() => useStudyNotesSync());
 
-    expect(result.current.isConnected).toBe(false);
+    // isConnected = !!supabase && !!userId — both provided by the mock → true.
+    expect(result.current.isConnected).toBe(true);
     expect(result.current.lastSync).toBeNull();
   });
 
-  test('has all expected functions', () => {
+  test("has all expected functions", () => {
     const { result } = renderHook(() => useStudyNotesSync());
 
     expect(result.current.syncModuleNote).toBeInstanceOf(Function);
@@ -76,160 +63,210 @@ describe('useStudyNotesSync', () => {
     expect(result.current.syncDayNotes).toBeInstanceOf(Function);
   });
 
-  test('initializes with Clerk session and creates supabase client', async () => {
+  test("initializes with Supabase client and reports connected", async () => {
     const { result } = renderHook(() => useStudyNotesSync());
 
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
 
     expect(result.current.isConnected).toBe(true);
   });
 
-  test('syncModuleNote calls upsert after debounce', async () => {
+  test("syncModuleNote calls upsert after debounce", async () => {
     const { result } = renderHook(() => useStudyNotesSync());
 
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
 
-    const initialCalls = mockState.supabaseClient.from.mock.calls.length;
+    const initialCalls = mockSupabase.client.from.mock.calls.length;
 
     act(() => {
-      result.current.syncModuleNote('1', 'my note');
+      result.current.syncModuleNote("1", "my note");
     });
 
     await act(async () => {
       await new Promise((r) => setTimeout(r, 2500));
     });
 
-    expect(mockState.supabaseClient.from.mock.calls.length).toBeGreaterThan(initialCalls);
+    expect(mockSupabase.client.from.mock.calls.length).toBeGreaterThan(
+      initialCalls,
+    );
   });
 
-  test('syncDayNote calls upsert after debounce', async () => {
+  test("syncDayNote calls upsert after debounce", async () => {
     const { result } = renderHook(() => useStudyNotesSync());
 
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
 
-    const initialCalls = mockState.supabaseClient.from.mock.calls.length;
+    const initialCalls = mockSupabase.client.from.mock.calls.length;
 
     act(() => {
-      result.current.syncDayNote('2024-01-01', 'day notes');
+      result.current.syncDayNote("2024-01-01", "day notes");
     });
 
     await act(async () => {
       await new Promise((r) => setTimeout(r, 2500));
     });
 
-    expect(mockState.supabaseClient.from.mock.calls.length).toBeGreaterThan(initialCalls);
+    expect(mockSupabase.client.from.mock.calls.length).toBeGreaterThan(
+      initialCalls,
+    );
   });
 
-  test('syncModuleNotes upserts all non-empty module notes', async () => {
+  test("syncModuleNotes upserts all non-empty module notes", async () => {
     const { result } = renderHook(() => useStudyNotesSync());
 
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
 
-    const notes = { '1': 'module 1 notes', '2': '', '3': 'module 3 notes' };
+    const notes = { 1: "module 1 notes", 2: "", 3: "module 3 notes" };
 
     await act(async () => {
       await result.current.syncModuleNotes(notes);
     });
 
-    expect(mockState.supabaseClient.from).toHaveBeenCalledWith('study_notes');
+    expect(mockSupabase.client.from).toHaveBeenCalledWith("study_notes");
     expect(result.current.lastSync).toBeTruthy();
   });
 
-  test('syncDayNotes upserts all non-empty day notes', async () => {
+  test("syncDayNotes upserts all non-empty day notes", async () => {
     const { result } = renderHook(() => useStudyNotesSync());
 
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
 
-    const dayNotes = { '2024-01-01': 'day 1', '2024-01-02': '' };
+    const dayNotes = { "2024-01-01": "day 1", "2024-01-02": "" };
 
     await act(async () => {
       await result.current.syncDayNotes(dayNotes);
     });
 
-    expect(mockState.supabaseClient.from).toHaveBeenCalledWith('study_notes');
+    expect(mockSupabase.client.from).toHaveBeenCalledWith("study_notes");
   });
 
-  test('updates lastSync after successful sync', async () => {
+  test("updates lastSync after successful sync", async () => {
     const { result } = renderHook(() => useStudyNotesSync());
 
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
 
     expect(result.current.lastSync).toBeNull();
 
     await act(async () => {
-      await result.current.syncModuleNotes({ '1': 'test' });
+      await result.current.syncModuleNotes({ 1: "test" });
     });
 
     expect(result.current.lastSync).toBeInstanceOf(Date);
   });
 
-  test('merges remote notes into localStorage on init', async () => {
+  test("merges remote notes into localStorage on init", async () => {
     mockSupabase.client = buildMockSupabase();
-    mockSupabase.client.from = vi.fn((table) => ({
+    mockSupabase.client.from = vi.fn(() => ({
       select: vi.fn(() => ({
-        eq: vi.fn(() => Promise.resolve({
-          data: [
-            { note_type: 'module', key: '1', content: 'remote note' },
-            { note_type: 'day', key: '2024-01-01', content: 'remote day note' },
-          ],
-          error: null,
-        })),
+        eq: vi.fn(() =>
+          Promise.resolve({
+            data: [
+              { note_type: "module", key: "1", content: "remote note" },
+              {
+                note_type: "day",
+                key: "2024-01-01",
+                content: "remote day note",
+              },
+            ],
+            error: null,
+          }),
+        ),
       })),
     }));
-    mockState.supabaseClient = mockSupabase.client;
+    mockUseSupabase.mockReturnValue({
+      supabase: mockSupabase.client,
+      userId: "user-123",
+      isLoading: false,
+    });
 
     renderHook(() => useStudyNotesSync());
 
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
 
-    const storedNotes = JSON.parse(localStorageStore['ialab_notes'] || '{}');
-    expect(storedNotes['1']).toBe('remote note');
+    const storedNotes = JSON.parse(localStorageStore["ialab_notes"] || "{}");
+    expect(storedNotes["1"]).toBe("remote note");
 
-    const storedDayNotes = JSON.parse(localStorageStore['ialab_day_notes'] || '{}');
-    expect(storedDayNotes['2024-01-01']).toBe('remote day note');
+    const storedDayNotes = JSON.parse(
+      localStorageStore["ialab_day_notes"] || "{}",
+    );
+    expect(storedDayNotes["2024-01-01"]).toBe("remote day note");
   });
 
-  test('handles null/empty remote notes gracefully', async () => {
+  test("handles null/empty remote notes gracefully", async () => {
     mockSupabase.client = buildMockSupabase();
-    mockSupabase.client.from = vi.fn((table) => ({
+    mockSupabase.client.from = vi.fn(() => ({
       select: vi.fn(() => ({
         eq: vi.fn(() => Promise.resolve({ data: null, error: null })),
       })),
     }));
-    mockState.supabaseClient = mockSupabase.client;
+    mockUseSupabase.mockReturnValue({
+      supabase: mockSupabase.client,
+      userId: "user-123",
+      isLoading: false,
+    });
 
     const { result } = renderHook(() => useStudyNotesSync());
 
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
 
     expect(result.current.isConnected).toBe(true);
   });
 
-  test('handles missing session gracefully', async () => {
-    mockState.session = null;
+  test("reports disconnected when userId is null", async () => {
+    mockUseSupabase.mockReturnValue({
+      supabase: mockSupabase.client,
+      userId: null,
+      isLoading: false,
+    });
 
     const { result } = renderHook(() => useStudyNotesSync());
 
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
 
     expect(result.current.isConnected).toBe(false);
   });
 
-  test('handles token error gracefully', async () => {
-    getTokenMock.mockRejectedValue(new Error('Token error'));
+  test("reports disconnected when supabase client is null", async () => {
+    mockUseSupabase.mockReturnValue({
+      supabase: null,
+      userId: "user-123",
+      isLoading: false,
+    });
 
     const { result } = renderHook(() => useStudyNotesSync());
 
-    await act(async () => { await new Promise((r) => setTimeout(r, 0)); });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 0));
+    });
 
     expect(result.current.isConnected).toBe(false);
   });
 
-  test('debounce ref is cleaned up on unmount', () => {
-    const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
+  test("debounce ref is cleaned up on unmount", () => {
+    const clearTimeoutSpy = vi.spyOn(global, "clearTimeout");
 
     const { result, unmount } = renderHook(() => useStudyNotesSync());
-    act(() => { result.current.syncModuleNote('1', 'my note'); });
+    act(() => {
+      result.current.syncModuleNote("1", "my note");
+    });
     unmount();
 
     expect(clearTimeoutSpy).toHaveBeenCalled();

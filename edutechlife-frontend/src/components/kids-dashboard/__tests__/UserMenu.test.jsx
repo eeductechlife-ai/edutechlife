@@ -6,6 +6,16 @@ vi.mock("../../../i18n/I18nProvider", () => ({
   useTranslation: () => ({ t: (key) => key }),
 }));
 
+vi.mock("../../../context/SmartBoardKidsContext", () => ({
+  useSmartBoardKids: () => ({
+    toggleDarkMode: vi.fn(),
+    gradeLevel: null,
+    setGradeLevel: vi.fn(),
+    setSchoolName: vi.fn(),
+    darkMode: false,
+  }),
+}));
+
 vi.mock("../../../hooks/useStudentProfileSmartBoard", () => ({
   useStudentProfileSmartBoard: vi.fn(() => ({
     profile: null,
