@@ -6,7 +6,18 @@
 -- Cast to ::text throughout to handle UUID vs TEXT schema drift.
 -- ============================================================================
 
--- ── user_progress: RLS ────────────────────────────────────────────────────────
+-- ── user_progress: create if missing (CI fresh DB), then enable RLS ──────────
+-- In production this table already exists (created via ad-hoc scripts).
+-- IF NOT EXISTS ensures CI can run migrations from scratch.
+CREATE TABLE IF NOT EXISTS public.user_progress (
+  id         BIGSERIAL PRIMARY KEY,
+  user_id    TEXT NOT NULL,
+  module_id  TEXT,
+  progress   INTEGER DEFAULT 0,
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 ALTER TABLE public.user_progress ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "user_progress_select_own" ON public.user_progress;
@@ -21,7 +32,15 @@ DROP POLICY IF EXISTS "user_progress_update_own" ON public.user_progress;
 CREATE POLICY "user_progress_update_own" ON public.user_progress
   FOR UPDATE USING (auth.uid()::text = user_id::text);
 
--- ── quiz_attempts: RLS ────────────────────────────────────────────────────────
+-- ── quiz_attempts: create if missing (CI fresh DB), then enable RLS ──────────
+CREATE TABLE IF NOT EXISTS public.quiz_attempts (
+  id         BIGSERIAL PRIMARY KEY,
+  user_id    TEXT NOT NULL,
+  quiz_id    TEXT,
+  score      INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Production table has user_id TEXT (not student_id).
 ALTER TABLE public.quiz_attempts ENABLE ROW LEVEL SECURITY;
 
