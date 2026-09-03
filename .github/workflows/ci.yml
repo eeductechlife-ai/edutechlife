@@ -144,10 +144,15 @@ jobs:
       - if: steps.cache-nm.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Run npm test
-        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot
+      - name: Run npm test (shard 1/2)
+        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot --shard=1/2
         env:
-          NODE_OPTIONS: "--max-old-space-size=5120"
+          NODE_OPTIONS: "--max-old-space-size=4096"
+
+      - name: Run npm test (shard 2/2)
+        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot --shard=2/2
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
 
   security:
     name: Security Audit
