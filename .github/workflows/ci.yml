@@ -147,7 +147,7 @@ jobs:
       - name: Run npm test
         run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot
         env:
-          NODE_OPTIONS: "--max-old-space-size=4096"
+          NODE_OPTIONS: "--max-old-space-size=5120"
 
   security:
     name: Security Audit
