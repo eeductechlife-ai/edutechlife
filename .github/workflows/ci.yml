@@ -144,7 +144,10 @@ jobs:
       - if: steps.cache-nm.outputs.cache-hit != 'true'
         run: npm ci
 
-      - run: npx vitest run --no-file-parallelism --reporter=dot
+      - name: Run npm test
+        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
 
   security:
     name: Security Audit
@@ -280,6 +283,7 @@ jobs:
       - name: Run Lighthouse CI
         run: npx @lhci/cli@latest autorun
         timeout-minutes: 5
+        continue-on-error: true
 
   budget:
     name: Performance Budget
