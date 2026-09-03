@@ -82,6 +82,10 @@ terraform.rc
 # ruflo/claude-flow tooling state (not source)
 **/.claude-flow/
 
+# Agent-generated verification and report files (working artifacts, not source)
+.opencode/plans/
+docs/smartboard-3.0/
+
 # Loose SQL scripts at root or in frontend (belong in supabase/migrations/ only)
 /*.sql
 /edutechlife-frontend/*.sql
