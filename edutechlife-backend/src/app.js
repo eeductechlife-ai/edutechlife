@@ -133,7 +133,7 @@ app.use('/api/smartboard', smartboardRoutes);
 app.use('/api/smartboard', scanImageRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/api/admin', authLimiter, adminRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
