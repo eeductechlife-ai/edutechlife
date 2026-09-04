@@ -74,6 +74,21 @@ vi.mock("../../components/IALab/GlobalSearchBar", () => ({
   default: () => null,
 }));
 
+// Prevents loading 2700+ lines of locale module content (3 locale files)
+// that GlobalSearchBar imports — would cause the fork to OOM in CI.
+vi.mock("../../components/IALab/constants/moduleContent/selectors", () => ({
+  getModuleOverviewData: () => ({
+    topics: [{ id: "t1", title: "Topic 1", slug: "topic-1" }],
+  }),
+}));
+
+vi.mock("../../components/IALab/constants/moduleContent", () => ({
+  getModuleContent: () => ({}),
+  getModuleOverviewData: () => ({
+    topics: [{ id: "t1", title: "Topic 1", slug: "topic-1" }],
+  }),
+}));
+
 vi.mock("../../components/UserDropdownMenuSimplified", () => ({
   default: () => null,
 }));
