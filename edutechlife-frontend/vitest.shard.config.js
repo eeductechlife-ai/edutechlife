@@ -8,6 +8,10 @@ import base from './vitest.config.js';
 export default mergeConfig(base, defineConfig({
   test: {
     pool: 'forks',
+    isolate: true,
+    poolOptions: {
+      forks: { maxForks: 1 },
+    },
     exclude: ['src/tests/a11y/**'],
   },
 }));
