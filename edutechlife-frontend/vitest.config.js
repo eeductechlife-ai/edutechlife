@@ -17,10 +17,6 @@ export default defineConfig({
       VITE_SUPABASE_ANON_KEY: 'test-anon-key',
     },
     include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
-    // a11y tests run axe-core and accumulate >5 GB per fork in the fork pool.
-    // They are covered by the Smoke Test job (thread pool). Exclude here so
-    // the sharded fork-pool run in CI never picks them up.
-    exclude: ['src/tests/a11y/**'],
     css: true,
     pool: 'threads',
     testTimeout: 30000,
