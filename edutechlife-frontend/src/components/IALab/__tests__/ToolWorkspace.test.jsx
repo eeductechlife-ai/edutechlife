@@ -34,8 +34,13 @@ vi.mock("../workspace/toolbits", () => ({
       {title}
     </button>
   ),
-  SendCircle: ({ onClick, disabled }) => (
-    <button type="button" onClick={onClick} disabled={disabled} />
+  SendCircle: ({ onClick, disabled, label }) => (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+    />
   ),
 }));
 
