@@ -145,22 +145,22 @@ jobs:
         run: npm ci
 
       - name: Run npm test (shard 1/4)
-        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot --shard=1/4 --exclude 'src/tests/a11y/**'
+        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot --shard=1/4
         env:
           NODE_OPTIONS: "--max-old-space-size=5120"
 
       - name: Run npm test (shard 2/4)
-        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot --shard=2/4 --exclude 'src/tests/a11y/**'
+        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot --shard=2/4
         env:
           NODE_OPTIONS: "--max-old-space-size=5120"
 
       - name: Run npm test (shard 3/4)
-        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot --shard=3/4 --exclude 'src/tests/a11y/**'
+        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot --shard=3/4
         env:
           NODE_OPTIONS: "--max-old-space-size=5120"
 
       - name: Run npm test (shard 4/4)
-        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot --shard=4/4 --exclude 'src/tests/a11y/**'
+        run: npx vitest run --pool=forks --no-file-parallelism --reporter=dot --shard=4/4
         env:
           NODE_OPTIONS: "--max-old-space-size=5120"
 
