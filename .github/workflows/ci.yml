@@ -145,44 +145,44 @@ jobs:
         run: npm ci
 
       - name: Run npm test (shard 1/8)
-        run: npx vitest run --config vitest.shard.config.js --no-file-parallelism --reporter=dot --shard=1/8
+        run: npx vitest run --config vitest.shard.config.js --reporter=dot --shard=1/8
         env:
-          NODE_OPTIONS: "--max-old-space-size=4096"
+          NODE_OPTIONS: "--max-old-space-size=2048"
 
       - name: Run npm test (shard 2/8)
-        run: npx vitest run --config vitest.shard.config.js --no-file-parallelism --reporter=dot --shard=2/8
+        run: npx vitest run --config vitest.shard.config.js --reporter=dot --shard=2/8
         env:
-          NODE_OPTIONS: "--max-old-space-size=4096"
+          NODE_OPTIONS: "--max-old-space-size=2048"
 
       - name: Run npm test (shard 3/8)
-        run: npx vitest run --config vitest.shard.config.js --no-file-parallelism --reporter=dot --shard=3/8
+        run: npx vitest run --config vitest.shard.config.js --reporter=dot --shard=3/8
         env:
-          NODE_OPTIONS: "--max-old-space-size=4096"
+          NODE_OPTIONS: "--max-old-space-size=2048"
 
       - name: Run npm test (shard 4/8)
-        run: npx vitest run --config vitest.shard.config.js --no-file-parallelism --reporter=dot --shard=4/8
+        run: npx vitest run --config vitest.shard.config.js --reporter=dot --shard=4/8
         env:
-          NODE_OPTIONS: "--max-old-space-size=4096"
+          NODE_OPTIONS: "--max-old-space-size=2048"
 
       - name: Run npm test (shard 5/8)
-        run: npx vitest run --config vitest.shard.config.js --no-file-parallelism --reporter=dot --shard=5/8
+        run: npx vitest run --config vitest.shard.config.js --reporter=dot --shard=5/8
         env:
-          NODE_OPTIONS: "--max-old-space-size=4096"
+          NODE_OPTIONS: "--max-old-space-size=2048"
 
       - name: Run npm test (shard 6/8)
-        run: npx vitest run --config vitest.shard.config.js --no-file-parallelism --reporter=dot --shard=6/8
+        run: npx vitest run --config vitest.shard.config.js --reporter=dot --shard=6/8
         env:
-          NODE_OPTIONS: "--max-old-space-size=4096"
+          NODE_OPTIONS: "--max-old-space-size=2048"
 
       - name: Run npm test (shard 7/8)
-        run: npx vitest run --config vitest.shard.config.js --no-file-parallelism --reporter=dot --shard=7/8
+        run: npx vitest run --config vitest.shard.config.js --reporter=dot --shard=7/8
         env:
-          NODE_OPTIONS: "--max-old-space-size=4096"
+          NODE_OPTIONS: "--max-old-space-size=2048"
 
       - name: Run npm test (shard 8/8)
-        run: npx vitest run --config vitest.shard.config.js --no-file-parallelism --reporter=dot --shard=8/8
+        run: npx vitest run --config vitest.shard.config.js --reporter=dot --shard=8/8
         env:
-          NODE_OPTIONS: "--max-old-space-size=4096"
+          NODE_OPTIONS: "--max-old-space-size=2048"
 
   security:
     name: Security Audit
