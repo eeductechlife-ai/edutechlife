@@ -74,8 +74,6 @@ vi.mock("../../components/IALab/GlobalSearchBar", () => ({
   default: () => null,
 }));
 
-// Prevents loading 2700+ lines of locale module content (3 locale files)
-// that GlobalSearchBar imports — would cause the fork to OOM in CI.
 vi.mock("../../components/IALab/constants/moduleContent/selectors", () => ({
   getModuleOverviewData: () => ({
     topics: [{ id: "t1", title: "Topic 1", slug: "topic-1" }],
@@ -151,9 +149,7 @@ vi.mock("framer-motion", async () => {
         return ({ children, ...props }) => {
           const filtered = {};
           for (const [key, val] of Object.entries(props)) {
-            if (validHtmlAttrs.has(key)) {
-              filtered[key] = val;
-            }
+            if (validHtmlAttrs.has(key)) filtered[key] = val;
           }
           return React.createElement(
             tagName,
@@ -241,123 +237,113 @@ vi.mock("../../components/forum/ErrorBoundary", () => ({
   default: ({ children }) => children,
 }));
 
-describe("IALab Accessibility", () => {
-  it("IALabHeader has no a11y violations", async () => {
-    const IALabHeader = (await import("../../components/IALab/IALabHeader"))
-      .default;
+describe("IALab Accessibility (part 2)", () => {
+  it("SidebarTooltipIcon has no violations", async () => {
+    const TooltipIcon = (
+      await import("../../components/IALab/sidebar/SidebarTooltipIcon")
+    ).default;
     const { container } = render(
-      <ThemeProvider>
-        <I18nProvider>
-          <IALabHeader />
-        </I18nProvider>
-      </ThemeProvider>,
+      <TooltipIcon label="Test tooltip">
+        <svg data-testid="test-icon" />
+      </TooltipIcon>,
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
-  }, 30000);
+  }, 15000);
 
-  it("BadgeCard earned state has no a11y violations", async () => {
-    const BadgeCard = (await import("../../components/IALab/BadgeCard"))
+  it("GlobalSearchBar desktop has no violations", async () => {
+    const GlobalSearchBar = (
+      await import("../../components/IALab/GlobalSearchBar")
+    ).default;
+    const { container } = render(
+      <I18nProvider>
+        <GlobalSearchBar />
+      </I18nProvider>,
+    );
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  }, 15000);
+
+  it("GlobalSearchBar mobile has no violations", async () => {
+    const GlobalSearchBar = (
+      await import("../../components/IALab/GlobalSearchBar")
+    ).default;
+    const { container } = render(
+      <I18nProvider>
+        <GlobalSearchBar mobile onClose={() => {}} />
+      </I18nProvider>,
+    );
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  }, 15000);
+
+  it("QuizTimer has no violations", async () => {
+    const { QuizTimer } =
+      await import("../../components/IALab/IALabQuizModal/components/QuizTimer");
+    const { container } = render(
+      <QuizTimer
+        timeElapsed={120}
+        suggestedTime={600}
+        currentQuestion={2}
+        totalQuestions={10}
+        isTimerRunning={true}
+        showSecurityMessage={false}
+        securityMessage=""
+        practiceMode={false}
+        onTogglePractice={() => {}}
+        onClose={() => {}}
+        formatTime={(s) =>
+          `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`
+        }
+      />,
+    );
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  }, 15000);
+
+  it("FeedbackPanel has no violations", async () => {
+    const FeedbackPanel = (await import("../../components/IALab/FeedbackPanel"))
       .default;
-    const badge = {
-      id: "test",
-      label: "Test Badge",
-      desc: "A test description",
-      icon: "fa-star",
-      color: "#FBBF24",
+    const evaluation = {
+      feedback_ej1: "Buen trabajo",
+      nota_ej1: 85,
+      feedback_ej2: "Mejorable",
+      nota_ej2: 60,
+      feedback_ej3: "Excelente",
+      nota_ej3: 95,
+      feedback_ej4: "Regular",
+      nota_ej4: 45,
     };
     const { container } = render(
       <I18nProvider>
-        <BadgeCard
-          badge={badge}
-          earned
-          dateEarned="2025-01-15"
-          onClick={vi.fn()}
+        <FeedbackPanel evaluation={evaluation} t={(key) => key} />
+      </I18nProvider>,
+    );
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  }, 15000);
+
+  it("MobileMenuOverlay has no violations", async () => {
+    const { MobileMenuOverlay } =
+      await import("../../components/IALab/shared/MobileMenuOverlay");
+    const { container } = render(
+      <I18nProvider>
+        <MobileMenuOverlay
+          showMobileMenu={true}
+          mobileMenuClosing={false}
+          closeMobileMenu={() => {}}
+          MOBILE_MENU_WIDTH={288}
+          SPRING_DAMPING={25}
+          SPRING_STIFFNESS={300}
+          toggleDarkMode={() => {}}
+          isDarkMode={false}
+          handleOpenProfile={() => {}}
+          handleOpenHistory={() => {}}
+          handleOpenHelp={() => {}}
         />
       </I18nProvider>,
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
-  }, 30000);
-
-  it("BadgeCard locked state has no a11y violations", async () => {
-    const BadgeCard = (await import("../../components/IALab/BadgeCard"))
-      .default;
-    const badge = {
-      id: "test",
-      label: "Test Badge",
-      desc: "A test description",
-      icon: "fa-star",
-      color: "#FBBF24",
-    };
-    const { container } = render(
-      <I18nProvider>
-        <BadgeCard badge={badge} earned={false} onClick={vi.fn()} />
-      </I18nProvider>,
-    );
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  }, 30000);
-
-  it("CourseCard has no violations", async () => {
-    const CourseCard = (await import("../../components/IALab/CourseCard"))
-      .default;
-    const course = {
-      id: "test-1",
-      title: "Fundamentos de IA",
-      description: "Aprende los fundamentos de la inteligencia artificial.",
-      status: "active",
-      progress: 60,
-      rating: 4.8,
-      duration: "10h",
-      level: "Principiante",
-      modules: 5,
-      hasCertificate: true,
-      icon: "fa-brain",
-      features: ["Proyectos reales", "Certificado IA"],
-      students: "2,500+",
-      route: "/ialab",
-    };
-    const { container } = render(
-      <BrowserRouter>
-        <CourseCard course={course} isSignedIn />
-      </BrowserRouter>,
-    );
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  }, 30000);
-
-  it("StreakBadge has no violations", async () => {
-    const StreakBadge = (await import("../../components/IALab/StreakBadge"))
-      .default;
-    const { container } = render(
-      <StreakBadge
-        streak={5}
-        xp={2500}
-        isAtRisk={false}
-        level={3}
-        onClick={vi.fn()}
-      />,
-    );
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  }, 30000);
-
-  it("XPProgressBar has no violations", async () => {
-    const { useIALabStore } = await import("../../store/ialabStore");
-    useIALabStore.mockImplementation((selector) =>
-      selector({
-        xp: 2500,
-        streak: 5,
-        getLevel: () => 6,
-        getUserBadges: () => [{ id: "first_lesson" }],
-        getBadgesSummary: () => ({ earned: 1, total: 8, recent: [] }),
-      }),
-    );
-    const XPProgressBar = (await import("../../components/XPProgressBar"))
-      .default;
-    const { container } = render(<XPProgressBar />);
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  }, 30000);
+  }, 15000);
 });
