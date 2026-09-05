@@ -24,11 +24,9 @@
  * - React Query mock queryClient for cache testing
  */
 
-import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, waitFor, act } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import type { ReactNode } from 'react';
-import React from 'react';
+import { describe, it, expect, beforeAll, afterAll, vi } from "vitest";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 
 // =============================================================================
 // TEST FIXTURES & HELPERS
@@ -64,16 +62,14 @@ async function createTestStudent(): Promise<TestStudent> {
   // Skip if no service_role (unit test environment)
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE;
   if (!serviceRoleKey) {
-    console.log(`[MOCK] createTestStudent: returning mock fixture (no SUPABASE_SERVICE_ROLE)`);
     return testStudent;
   }
 
   try {
     // Import dynamically to avoid issues in environments without real Supabase
-    const { createClient } = await import('@supabase/supabase-js');
+    const { createClient } = await import("@supabase/supabase-js");
     const supabaseUrl = process.env.VITE_SUPABASE_URL;
     if (!supabaseUrl) {
-      console.log(`[MOCK] createTestStudent: no SUPABASE_URL, returning mock`);
       return testStudent;
     }
 
@@ -81,25 +77,24 @@ async function createTestStudent(): Promise<TestStudent> {
 
     // Create student record
     const { data, error } = await supabaseAdmin
-      .from('students')
+      .from("students")
       .insert({
         auth_id: testStudent.auth_id,
         name: testStudent.name,
         email: testStudent.email,
         age: 12,
-        subscription_tier: 'free',
-        language: 'es',
+        subscription_tier: "free",
+        language: "es",
       })
-      .select('id')
+      .select("id")
       .single();
 
-    if (error) throw new Error(`Failed to create test student: ${error.message}`);
+    if (error)
+      throw new Error(`Failed to create test student: ${error.message}`);
 
     testStudent.student_id = data.id;
-    console.log(`[INTEGRATION] Created test student: ${testStudent.student_id}`);
     return testStudent;
-  } catch (err) {
-    console.log(`[MOCK] createTestStudent: fallback to mock (${(err as Error).message})`);
+  } catch (_err) {
     return testStudent;
   }
 }
@@ -111,33 +106,43 @@ async function createTestStudent(): Promise<TestStudent> {
 async function deleteTestStudent(studentId: string): Promise<void> {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE;
   if (!serviceRoleKey) {
-    console.log(`[MOCK] deleteTestStudent: skipping (no SUPABASE_SERVICE_ROLE)`);
     return;
   }
 
   try {
-    const { createClient } = await import('@supabase/supabase-js');
+    const { createClient } = await import("@supabase/supabase-js");
     const supabaseUrl = process.env.VITE_SUPABASE_URL;
     if (!supabaseUrl) {
-      console.log(`[MOCK] deleteTestStudent: skipping (no SUPABASE_URL)`);
       return;
     }
 
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
     // Cascade delete: sessions, achievements, academic_context, points_history, learning_streaks
-    await supabaseAdmin.from('sessions').delete().eq('student_id', studentId);
-    await supabaseAdmin.from('achievements').delete().eq('student_id', studentId);
-    await supabaseAdmin.from('academic_context').delete().eq('student_id', studentId);
-    await supabaseAdmin.from('points_history').delete().eq('student_id', studentId);
-    await supabaseAdmin.from('learning_streaks').delete().eq('student_id', studentId);
+    await supabaseAdmin.from("sessions").delete().eq("student_id", studentId);
+    await supabaseAdmin
+      .from("achievements")
+      .delete()
+      .eq("student_id", studentId);
+    await supabaseAdmin
+      .from("academic_context")
+      .delete()
+      .eq("student_id", studentId);
+    await supabaseAdmin
+      .from("points_history")
+      .delete()
+      .eq("student_id", studentId);
+    await supabaseAdmin
+      .from("learning_streaks")
+      .delete()
+      .eq("student_id", studentId);
 
     // Delete student record
-    await supabaseAdmin.from('students').delete().eq('id', studentId);
-
-    console.log(`[INTEGRATION] Deleted test student: ${studentId}`);
+    await supabaseAdmin.from("students").delete().eq("id", studentId);
   } catch (err) {
-    console.warn(`[CLEANUP] Failed to delete test student ${studentId}: ${(err as Error).message}`);
+    console.warn(
+      `Failed to delete test student ${studentId}: ${(err as Error).message}`,
+    );
   }
 }
 
@@ -166,7 +171,7 @@ function setupMockQueryClient() {
  * Returns a fully mocked supabase instance
  */
 function createMockSupabaseClient() {
-  const mockFrom = vi.fn((table: string) => ({
+  const mockFrom = vi.fn(() => ({
     select: vi.fn().mockReturnThis(),
     insert: vi.fn().mockReturnThis(),
     update: vi.fn().mockReturnThis(),
@@ -182,7 +187,12 @@ function createMockSupabaseClient() {
   return {
     from: mockFrom,
     auth: {
-      getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'test-user' } }, error: null }),
+      getUser: vi
+        .fn()
+        .mockResolvedValue({
+          data: { user: { id: "test-user" } },
+          error: null,
+        }),
     },
     realtime: {
       on: vi.fn(),
@@ -190,30 +200,11 @@ function createMockSupabaseClient() {
   };
 }
 
-/**
- * Wrapper component for tests that need context providers
- * Provides QueryClient and any other necessary providers
- */
-function TestWrapper({ children }: { children: ReactNode }) {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: { retry: false },
-      mutations: { retry: false },
-    },
-  });
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
-  );
-}
-
 // =============================================================================
 // TEST SUITE 1: SESSION LIFECYCLE (8 tests)
 // =============================================================================
 
-describe('SmartBoard Fase 3 — Session Lifecycle', () => {
+describe("SmartBoard Fase 3 — Session Lifecycle", () => {
   let testStudent: TestStudent;
 
   beforeAll(async () => {
@@ -225,7 +216,7 @@ describe('SmartBoard Fase 3 — Session Lifecycle', () => {
   });
 
   // [1.1] Create session on SmartBoard mount
-  it('[1.1] creates session in DB on SmartBoardKidsProvider mount', async () => {
+  it("[1.1] creates session in DB on SmartBoardKidsProvider mount", async () => {
     /**
      * Test: When SmartBoardKidsProvider mounts and dataLoaded=true,
      * it should create a session record in the database with:
@@ -245,7 +236,7 @@ describe('SmartBoard Fase 3 — Session Lifecycle', () => {
   });
 
   // [1.2] Handle StrictMode double-mount
-  it('[1.2] idempotent on StrictMode double-mount (isSessionInitializedRef prevents double-create)', () => {
+  it("[1.2] idempotent on StrictMode double-mount (isSessionInitializedRef prevents double-create)", () => {
     /**
      * Test: React 18 StrictMode double-mounts effects in dev mode.
      * SmartBoardKidsContext uses isSessionInitializedRef to gate session creation,
@@ -269,7 +260,7 @@ describe('SmartBoard Fase 3 — Session Lifecycle', () => {
   });
 
   // [1.3] End session with end_time on unmount
-  it('[1.3] ends session with end_time and duration_minutes on unmount', async () => {
+  it("[1.3] ends session with end_time and duration_minutes on unmount", async () => {
     /**
      * Test: When SmartBoardKidsProvider unmounts, cleanup effect should:
      * - Call sessionEndMutation.mutate({ sessionId, completion_percentage })
@@ -284,12 +275,14 @@ describe('SmartBoard Fase 3 — Session Lifecycle', () => {
     // Verify end_time calculation logic
     const startTime = new Date();
     const endTime = new Date(startTime.getTime() + 5 * 60000); // 5 minutes later
-    const durationMinutes = Math.floor((endTime.getTime() - startTime.getTime()) / 1000 / 60);
+    const durationMinutes = Math.floor(
+      (endTime.getTime() - startTime.getTime()) / 1000 / 60,
+    );
     expect(durationMinutes).toBe(5);
   });
 
   // [1.4] Persist session to DB with error fallback
-  it('[1.4] persists session to DB and captures error if mutation fails', async () => {
+  it("[1.4] persists session to DB and captures error if mutation fails", async () => {
     /**
      * Test: sessionCreateMutation.mutate() has onSuccess/onError callbacks.
      * If the mutation fails, onError should log warning but not crash.
@@ -301,19 +294,19 @@ describe('SmartBoard Fase 3 — Session Lifecycle', () => {
      */
     const mockMutation = {
       mutate: vi.fn((payload, callbacks) => {
-        callbacks.onError?.(new Error('DB insert failed'));
+        callbacks.onError?.(new Error("DB insert failed"));
       }),
     };
 
     const sessionIdRef = { current: null };
     mockMutation.mutate(
-      { subject: 'dashboard', type: 'dashboard' },
+      { subject: "dashboard", type: "dashboard" },
       {
         onSuccess: (data) => {
           sessionIdRef.current = data.id;
         },
         onError: (err) => {
-          console.warn('Failed to create DB session:', err.message);
+          console.warn("Failed to create DB session:", err.message);
           // sessionIdRef.current stays null
         },
       },
@@ -324,7 +317,7 @@ describe('SmartBoard Fase 3 — Session Lifecycle', () => {
   });
 
   // [1.5] Calculate duration in minutes from timestamps
-  it('[1.5] calculates accurate duration_minutes from start_time and end_time', () => {
+  it("[1.5] calculates accurate duration_minutes from start_time and end_time", () => {
     /**
      * Test: Duration should be calculated as:
      * Math.floor((end_time - start_time) / 1000 / 60)
@@ -344,13 +337,15 @@ describe('SmartBoard Fase 3 — Session Lifecycle', () => {
     testCases.forEach(({ seconds, expected }) => {
       const startTime = new Date();
       const endTime = new Date(startTime.getTime() + seconds * 1000);
-      const duration = Math.floor((endTime.getTime() - startTime.getTime()) / 1000 / 60);
+      const duration = Math.floor(
+        (endTime.getTime() - startTime.getTime()) / 1000 / 60,
+      );
       expect(duration).toBe(expected);
     });
   });
 
   // [1.6] Verify start_time is ISO 8601 format
-  it('[1.6] records start_time in ISO 8601 format (YYYY-MM-DDTHH:MM:SS.sssZ)', () => {
+  it("[1.6] records start_time in ISO 8601 format (YYYY-MM-DDTHH:MM:SS.sssZ)", () => {
     /**
      * Test: All timestamps in SmartBoard should be ISO 8601 for consistency.
      * new Date().toISOString() produces this format.
@@ -363,7 +358,7 @@ describe('SmartBoard Fase 3 — Session Lifecycle', () => {
   });
 
   // [1.7] Load sessions from Supabase on mount
-  it('[1.7] loads existing sessions from Supabase via useSessionsData query', async () => {
+  it("[1.7] loads existing sessions from Supabase via useSessionsData query", async () => {
     /**
      * Test: On mount, useSessionsData query should fetch all sessions for the student,
      * ordered by start_time descending (most recent first).
@@ -373,22 +368,24 @@ describe('SmartBoard Fase 3 — Session Lifecycle', () => {
      */
     // Mock query result
     const mockSessions = [
-      { id: '1', start_time: '2024-01-03T10:00:00.000Z', student_id: 'test' },
-      { id: '2', start_time: '2024-01-02T10:00:00.000Z', student_id: 'test' },
-      { id: '3', start_time: '2024-01-01T10:00:00.000Z', student_id: 'test' },
+      { id: "1", start_time: "2024-01-03T10:00:00.000Z", student_id: "test" },
+      { id: "2", start_time: "2024-01-02T10:00:00.000Z", student_id: "test" },
+      { id: "3", start_time: "2024-01-01T10:00:00.000Z", student_id: "test" },
     ];
 
     // Verify descending sort
     const isSorted = mockSessions.every((session, i) => {
       if (i === 0) return true;
-      return new Date(session.start_time) <= new Date(mockSessions[i - 1].start_time);
+      return (
+        new Date(session.start_time) <= new Date(mockSessions[i - 1].start_time)
+      );
     });
 
     expect(isSorted).toBe(true);
   });
 
   // [1.8] Completion percentage defaults to 0 on create, updated on end
-  it('[1.8] sets completion_percentage to 0 on create, updates on end', () => {
+  it("[1.8] sets completion_percentage to 0 on create, updates on end", () => {
     /**
      * Test: When creating a session, completion_percentage should be 0.
      * When ending a session via sessionEndMutation, can optionally pass completion_percentage.
@@ -398,15 +395,15 @@ describe('SmartBoard Fase 3 — Session Lifecycle', () => {
      * Assertion: End payload can override with custom percentage
      */
     const createPayload = {
-      subject: 'dashboard',
-      type: 'dashboard',
+      subject: "dashboard",
+      type: "dashboard",
       start_time: new Date().toISOString(),
       points_earned: 0,
       completion_percentage: 0,
     };
 
     const endPayload = {
-      sessionId: 'test-id',
+      sessionId: "test-id",
       completion_percentage: 100,
     };
 
@@ -419,7 +416,7 @@ describe('SmartBoard Fase 3 — Session Lifecycle', () => {
 // TEST SUITE 2: ACADEMIC CONTEXT SYNC (7 tests)
 // =============================================================================
 
-describe('SmartBoard Fase 3 — Academic Context Sync', () => {
+describe("SmartBoard Fase 3 — Academic Context Sync", () => {
   let testStudent: TestStudent;
 
   beforeAll(async () => {
@@ -431,7 +428,7 @@ describe('SmartBoard Fase 3 — Academic Context Sync', () => {
   });
 
   // [2.1] Upsert dedup: 100 rapid upserts → 1 row per subject
-  it('[2.1] deduplicates on upsert: 100 rapid upserts of same subject → 1 DB row', async () => {
+  it("[2.1] deduplicates on upsert: 100 rapid upserts of same subject → 1 DB row", async () => {
     /**
      * Test: When trackSubjectTime is called 100 times in rapid succession
      * for the same subject, the upsert should merge into a SINGLE row.
@@ -448,7 +445,7 @@ describe('SmartBoard Fase 3 — Academic Context Sync', () => {
     for (let i = 0; i < 100; i++) {
       subjectUpserts.push({
         student_id: testStudent.student_id,
-        subject: 'matematicas',
+        subject: "matematicas",
         lessons_completed: 1,
         average_score: 75 + (i % 10),
       });
@@ -465,7 +462,7 @@ describe('SmartBoard Fase 3 — Academic Context Sync', () => {
   });
 
   // [2.2] Upsert creates new row if subject doesn't exist
-  it('[2.2] upsert creates new academic_context row if subject is new', () => {
+  it("[2.2] upsert creates new academic_context row if subject is new", () => {
     /**
      * Test: If student has never studied 'historia' before,
      * upsert should INSERT a new row (not UPDATE).
@@ -475,17 +472,17 @@ describe('SmartBoard Fase 3 — Academic Context Sync', () => {
      */
     const upsertPayload = {
       student_id: testStudent.student_id,
-      subject: 'historia',
+      subject: "historia",
       lessons_completed: 2,
       average_score: 65,
-      performance_level: 'intermediate', // 60 ≤ score < 80
+      performance_level: "intermediate", // 60 ≤ score < 80
     };
 
-    expect(upsertPayload.performance_level).toBe('intermediate');
+    expect(upsertPayload.performance_level).toBe("intermediate");
   });
 
   // [2.3] Performance level calculated from average_score
-  it('[2.3] calculates performance_level from average_score: advanced|intermediate|beginner', () => {
+  it("[2.3] calculates performance_level from average_score: advanced|intermediate|beginner", () => {
     /**
      * Test: Performance level is determined by average_score:
      * - score >= 80 → 'advanced'
@@ -495,21 +492,21 @@ describe('SmartBoard Fase 3 — Academic Context Sync', () => {
      * Assertion: Verify all three levels for boundary values
      */
     const calculateLevel = (score: number) => {
-      if (score >= 80) return 'advanced';
-      if (score >= 60) return 'intermediate';
-      return 'beginner';
+      if (score >= 80) return "advanced";
+      if (score >= 60) return "intermediate";
+      return "beginner";
     };
 
-    expect(calculateLevel(90)).toBe('advanced');
-    expect(calculateLevel(80)).toBe('advanced');
-    expect(calculateLevel(75)).toBe('intermediate');
-    expect(calculateLevel(60)).toBe('intermediate');
-    expect(calculateLevel(50)).toBe('beginner');
-    expect(calculateLevel(0)).toBe('beginner');
+    expect(calculateLevel(90)).toBe("advanced");
+    expect(calculateLevel(80)).toBe("advanced");
+    expect(calculateLevel(75)).toBe("intermediate");
+    expect(calculateLevel(60)).toBe("intermediate");
+    expect(calculateLevel(50)).toBe("beginner");
+    expect(calculateLevel(0)).toBe("beginner");
   });
 
   // [2.4] Handle race condition: out-of-order upserts
-  it('[2.4] handles race condition where upserts arrive out-of-order', () => {
+  it("[2.4] handles race condition where upserts arrive out-of-order", () => {
     /**
      * Test: If upsert for lesson 1 arrives AFTER lesson 3,
      * both should be committed. Upsert doesn't lose data.
@@ -539,7 +536,7 @@ describe('SmartBoard Fase 3 — Academic Context Sync', () => {
   });
 
   // [2.5] Sync only when subjectTime is non-empty
-  it('[2.5] skips upsert if subjectTime is empty or undefined', () => {
+  it("[2.5] skips upsert if subjectTime is empty or undefined", () => {
     /**
      * Test: Effect at line 615-635 has guard:
      * if (!subjectTime || Object.keys(subjectTime).length === 0) return;
@@ -559,7 +556,7 @@ describe('SmartBoard Fase 3 — Academic Context Sync', () => {
   });
 
   // [2.6] Verify trigger populates academic_context from sessions
-  it('[2.6] trigger updates academic_context when sessions table changes (3s latency)', async () => {
+  it("[2.6] trigger updates academic_context when sessions table changes (3s latency)", async () => {
     /**
      * Test: Database trigger should auto-update academic_context when a new session is created.
      * Latency: 1–3 seconds (trigger execution time).
@@ -579,7 +576,7 @@ describe('SmartBoard Fase 3 — Academic Context Sync', () => {
   });
 
   // [2.7] Lessons completed calculated from minutes
-  it('[2.7] estimates lessons_completed as minutes / 30 (1 lesson ≈ 30 mins)', () => {
+  it("[2.7] estimates lessons_completed as minutes / 30 (1 lesson ≈ 30 mins)", () => {
     /**
      * Test: At line 629, lessons_completed = Math.floor(minutes / 30)
      * This converts subject study time into lesson count.
@@ -603,13 +600,14 @@ describe('SmartBoard Fase 3 — Academic Context Sync', () => {
 // TEST SUITE 3: ACHIEVEMENTS VISIBILITY (6 tests)
 // =============================================================================
 
-describe('SmartBoard Fase 3 — Achievements Visibility', () => {
+describe("SmartBoard Fase 3 — Achievements Visibility", () => {
   let testStudent: TestStudent;
-  let { queryClient, invalidateQueries } = setupMockQueryClient();
+  let invalidateQueries = vi.fn();
 
   beforeAll(async () => {
     testStudent = await createTestStudent();
-    ({ queryClient, invalidateQueries } = setupMockQueryClient());
+    const mock = setupMockQueryClient();
+    invalidateQueries = mock.invalidateQueries;
   });
 
   afterAll(async () => {
@@ -621,7 +619,7 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
   });
 
   // [3.1] Query cache stale: achievement appears in UI after sync
-  it('[3.1] invalidates achievements query cache after sync → UI re-renders with new achievement', async () => {
+  it("[3.1] invalidates achievements query cache after sync → UI re-renders with new achievement", async () => {
     /**
      * Test: When syncAchievementMutation succeeds, onSuccess should:
      * - Call queryClient.invalidateQueries(achievements key)
@@ -635,7 +633,11 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
      *
      * Assertion: invalidateQueries called with achievements query key
      */
-    const achievementQueryKey = ['smartboard', 'achievements', testStudent.student_id];
+    const achievementQueryKey = [
+      "smartboard",
+      "achievements",
+      testStudent.student_id,
+    ];
 
     // Simulate mutation success
     const simulateMutationSuccess = (onSuccess: () => void) => {
@@ -649,8 +651,8 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
     expect(invalidateQueries).toHaveBeenCalledWith(
       expect.objectContaining({
         queryKey: expect.arrayContaining([
-          'smartboard',
-          'achievements',
+          "smartboard",
+          "achievements",
           testStudent.student_id,
         ]),
       }),
@@ -658,7 +660,7 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
   });
 
   // [3.2] Dedup achievements: sync same achievement 10x → 1 row
-  it('[3.2] deduplicates achievements: syncing same type 10x → 1 DB row', () => {
+  it("[3.2] deduplicates achievements: syncing same type 10x → 1 DB row", () => {
     /**
      * Test: useSyncAchievement checks for existing achievement by type:
      * - Query: SELECT id WHERE student_id AND achievement_type
@@ -672,9 +674,9 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
     const achievementSyncs = [];
     for (let i = 0; i < 10; i++) {
       achievementSyncs.push({
-        achievement_type: 'points_500',
-        title: 'Acumulador',
-        description: '500 puntos acumulados',
+        achievement_type: "points_500",
+        title: "Acumulador",
+        description: "500 puntos acumulados",
         student_id: testStudent.student_id,
       });
     }
@@ -689,7 +691,7 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
   });
 
   // [3.3] Display achievements in RewardsGrid
-  it('[3.3] displays achievements in RewardsGrid component (render test)', async () => {
+  it("[3.3] displays achievements in RewardsGrid component (render test)", async () => {
     /**
      * Test: RewardsGrid should render each achievement as a badge/card.
      * Data comes from achievements query (useAchievements hook).
@@ -707,20 +709,20 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
      */
     const mockAchievements = [
       {
-        id: '1',
-        achievement_type: 'points_500',
-        title: 'Acumulador',
-        description: '500 puntos',
+        id: "1",
+        achievement_type: "points_500",
+        title: "Acumulador",
+        description: "500 puntos",
         badge_url: null,
         earned_at: new Date().toISOString(),
         points_awarded: 0,
         is_milestone: false,
       },
       {
-        id: '2',
-        achievement_type: 'streak_7',
-        title: 'Consistente',
-        description: '7 días seguidos',
+        id: "2",
+        achievement_type: "streak_7",
+        title: "Consistente",
+        description: "7 días seguidos",
         badge_url: null,
         earned_at: new Date().toISOString(),
         points_awarded: 0,
@@ -729,12 +731,12 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
     ];
 
     expect(mockAchievements).toHaveLength(2);
-    expect(mockAchievements[0].title).toBe('Acumulador');
-    expect(mockAchievements[1].title).toBe('Consistente');
+    expect(mockAchievements[0].title).toBe("Acumulador");
+    expect(mockAchievements[1].title).toBe("Consistente");
   });
 
   // [3.4] Achievement types are unique and idempotent
-  it('[3.4] achievement_type is unique per student (composite key)', () => {
+  it("[3.4] achievement_type is unique per student (composite key)", () => {
     /**
      * Test: Database constraint prevents duplicate achievements of the same type per student.
      * Composite unique key: (student_id, achievement_type)
@@ -745,9 +747,9 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
      * Assertion: Can't have two 'points_500' achievements for same student
      */
     const achievements = [
-      { student_id: testStudent.student_id, achievement_type: 'points_500' },
-      { student_id: testStudent.student_id, achievement_type: 'streak_7' },
-      { student_id: 'other-student', achievement_type: 'points_500' }, // Different student, OK
+      { student_id: testStudent.student_id, achievement_type: "points_500" },
+      { student_id: testStudent.student_id, achievement_type: "streak_7" },
+      { student_id: "other-student", achievement_type: "points_500" }, // Different student, OK
     ];
 
     const compositeKeys = new Set(
@@ -758,7 +760,7 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
   });
 
   // [3.5] Ordered by earned_at descending (newest first)
-  it('[3.5] orders achievements by earned_at descending (newest first)', () => {
+  it("[3.5] orders achievements by earned_at descending (newest first)", () => {
     /**
      * Test: useAchievements query orders by earned_at DESC (line 553)
      * UI should show newest achievements first.
@@ -767,21 +769,23 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
      */
     const now = new Date();
     const mockAchievements = [
-      { id: '1', earned_at: now.toISOString() },
-      { id: '2', earned_at: new Date(now.getTime() - 1000).toISOString() },
-      { id: '3', earned_at: new Date(now.getTime() - 2000).toISOString() },
+      { id: "1", earned_at: now.toISOString() },
+      { id: "2", earned_at: new Date(now.getTime() - 1000).toISOString() },
+      { id: "3", earned_at: new Date(now.getTime() - 2000).toISOString() },
     ];
 
     const isSorted = mockAchievements.every((ach, i) => {
       if (i === 0) return true;
-      return new Date(ach.earned_at) <= new Date(mockAchievements[i - 1].earned_at);
+      return (
+        new Date(ach.earned_at) <= new Date(mockAchievements[i - 1].earned_at)
+      );
     });
 
     expect(isSorted).toBe(true);
   });
 
   // [3.6] syncAchievementMutation idempotent over multiple contexts
-  it('[3.6] syncAchievementMutation is idempotent (can be called multiple times safely)', () => {
+  it("[3.6] syncAchievementMutation is idempotent (can be called multiple times safely)", () => {
     /**
      * Test: Multiple contexts (e.g., two browser tabs) calling syncAchievementMutation
      * simultaneously should not create duplicate achievements.
@@ -796,9 +800,9 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
      * Assertion: Second call returns same achievement object (from cache/DB)
      */
     const callSync = () => ({
-      achievement_type: 'points_500',
-      title: 'Acumulador',
-      description: '500 puntos',
+      achievement_type: "points_500",
+      title: "Acumulador",
+      description: "500 puntos",
     });
 
     const firstCall = callSync();
@@ -813,7 +817,7 @@ describe('SmartBoard Fase 3 — Achievements Visibility', () => {
 // TEST SUITE 4: RLS POLICY VERIFICATION (5 tests)
 // =============================================================================
 
-describe('SmartBoard Fase 3 — RLS Policy Verification', () => {
+describe("SmartBoard Fase 3 — RLS Policy Verification", () => {
   let student1: TestStudent;
   let student2: TestStudent;
 
@@ -828,7 +832,7 @@ describe('SmartBoard Fase 3 — RLS Policy Verification', () => {
   });
 
   // [4.1] Student B cannot query Student A's sessions (RLS enforcement)
-  it('[4.1] enforces RLS: Student B blocked from reading Student A sessions', async () => {
+  it("[4.1] enforces RLS: Student B blocked from reading Student A sessions", async () => {
     /**
      * Test: RLS policy on `sessions` table should enforce:
      * - Student can only read WHERE student_id = auth.uid()
@@ -849,10 +853,10 @@ describe('SmartBoard Fase 3 — RLS Policy Verification', () => {
     // Mock RLS behavior: each student sees only their own data
     const mockSessions = {
       [student1.student_id]: [
-        { id: '1', student_id: student1.student_id, subject: 'matematicas' },
+        { id: "1", student_id: student1.student_id, subject: "matematicas" },
       ],
       [student2.student_id]: [
-        { id: '2', student_id: student2.student_id, subject: 'lenguaje' },
+        { id: "2", student_id: student2.student_id, subject: "lenguaje" },
       ],
     };
 
@@ -870,7 +874,7 @@ describe('SmartBoard Fase 3 — RLS Policy Verification', () => {
   });
 
   // [4.2] Student can read own achievements (allow case)
-  it('[4.2] allows student to read own achievements (RLS permit)', async () => {
+  it("[4.2] allows student to read own achievements (RLS permit)", async () => {
     /**
      * Test: RLS policy permits:
      * - Student can read WHERE student_id = auth.uid()
@@ -880,17 +884,19 @@ describe('SmartBoard Fase 3 — RLS Policy Verification', () => {
      */
     const studentId = student1.student_id;
     const mockAchievements = [
-      { id: '1', student_id: studentId, achievement_type: 'points_500' },
-      { id: '2', student_id: studentId, achievement_type: 'streak_7' },
+      { id: "1", student_id: studentId, achievement_type: "points_500" },
+      { id: "2", student_id: studentId, achievement_type: "streak_7" },
     ];
 
-    const allowedAchievements = mockAchievements.filter((a) => a.student_id === studentId);
+    const allowedAchievements = mockAchievements.filter(
+      (a) => a.student_id === studentId,
+    );
 
     expect(allowedAchievements).toHaveLength(2);
   });
 
   // [4.3] Service role bypasses RLS (admin operations)
-  it('[4.3] service_role key bypasses RLS for admin operations (test cleanup)', async () => {
+  it("[4.3] service_role key bypasses RLS for admin operations (test cleanup)", async () => {
     /**
      * Test: When using SUPABASE_SERVICE_ROLE key (admin),
      * RLS policies are bypassed. Admin can read/write any student's data.
@@ -907,7 +913,7 @@ describe('SmartBoard Fase 3 — RLS Policy Verification', () => {
   });
 
   // [4.4] RLS blocks inserts without auth context
-  it('[4.4] RLS blocks insert if student_id does not match auth.uid()', () => {
+  it("[4.4] RLS blocks insert if student_id does not match auth.uid()", () => {
     /**
      * Test: Mutation tries to insert with student_id != current auth.uid()
      * RLS policy blocks insert.
@@ -921,20 +927,23 @@ describe('SmartBoard Fase 3 — RLS Policy Verification', () => {
      * Assertion: Supabase error: permission denied
      * Assertion: Achievement is not created
      */
-    const testInsert = (authenticatedUserId: string, recordStudentId: string) => {
+    const testInsert = (
+      authenticatedUserId: string,
+      recordStudentId: string,
+    ) => {
       return authenticatedUserId === recordStudentId; // True = allowed, False = blocked
     };
 
     // Use distinct test IDs to ensure different values
-    const userId1 = 'user-1';
-    const userId2 = 'user-2';
+    const userId1 = "user-1";
+    const userId2 = "user-2";
 
     expect(testInsert(userId1, userId1)).toBe(true); // Allowed
     expect(testInsert(userId1, userId2)).toBe(false); // Blocked
   });
 
   // [4.5] RLS applies to queries, mutations, and subscriptions
-  it('[4.5] RLS is enforced on queries, mutations, AND real-time subscriptions', () => {
+  it("[4.5] RLS is enforced on queries, mutations, AND real-time subscriptions", () => {
     /**
      * Test: RLS doesn't just apply to SELECT; it applies to INSERT, UPDATE, DELETE
      * and real-time subscriptions (.on('*', ...)).
@@ -948,9 +957,11 @@ describe('SmartBoard Fase 3 — RLS Policy Verification', () => {
      *
      * Assertion: All four operations respect RLS
      */
-    const operations = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'SUBSCRIPTION'];
+    const operations = ["SELECT", "INSERT", "UPDATE", "DELETE", "SUBSCRIPTION"];
     const expectsRLS = (op: string) => {
-      return ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'SUBSCRIPTION'].includes(op);
+      return ["SELECT", "INSERT", "UPDATE", "DELETE", "SUBSCRIPTION"].includes(
+        op,
+      );
     };
 
     operations.forEach((op) => {
@@ -963,9 +974,9 @@ describe('SmartBoard Fase 3 — RLS Policy Verification', () => {
 // TEST SUITE 5: INFRASTRUCTURE & ERROR HANDLING (2 tests)
 // =============================================================================
 
-describe('SmartBoard Fase 3 — Infrastructure', () => {
+describe("SmartBoard Fase 3 — Infrastructure", () => {
   // [5.1] Mock vs Real Supabase environment detection
-  it('[5.1] detects and adapts to mock vs real Supabase environment', () => {
+  it("[5.1] detects and adapts to mock vs real Supabase environment", () => {
     /**
      * Test: Test setup should detect whether SUPABASE_SERVICE_ROLE is available.
      * - If available: Run integration tests with real DB
@@ -975,11 +986,11 @@ describe('SmartBoard Fase 3 — Infrastructure', () => {
      * Assertion: Tests don't crash in either mode
      */
     const hasServiceRole = !!process.env.SUPABASE_SERVICE_ROLE;
-    expect(typeof hasServiceRole).toBe('boolean');
+    expect(typeof hasServiceRole).toBe("boolean");
   });
 
   // [5.2] Query error recovery: failed mutation retries with exponential backoff
-  it('[5.2] failed mutation is caught and error handler prevents crash', () => {
+  it("[5.2] failed mutation is caught and error handler prevents crash", () => {
     /**
      * Test: If sessionCreateMutation.mutate() fails:
      * - onError callback is invoked
@@ -990,7 +1001,7 @@ describe('SmartBoard Fase 3 — Infrastructure', () => {
      * Assertion: console.warn is called with error message
      * Assertion: State remains consistent
      */
-    const mockError = new Error('Network error');
+    const mockError = new Error("Network error");
     const onError = vi.fn();
 
     // Simulate error handling
