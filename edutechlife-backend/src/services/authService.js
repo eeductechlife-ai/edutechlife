@@ -10,8 +10,8 @@ async function signUp({ email, password, username, firstName, lastName, userType
     throw new Error('Email and password required');
   }
 
-  if (password.length < 6) {
-    throw new Error('Password must be at least 6 characters');
+  if (password.length < 10) {
+    throw new Error('Password must be at least 10 characters');
   }
 
   try {
@@ -260,8 +260,8 @@ async function signUpParent({ studentEmail, parentPassword, parentName, invitati
   if (!studentEmail || !parentPassword) {
     throw new Error('El correo del estudiante y la contraseña son requeridos');
   }
-  if (parentPassword.length < 6) {
-    throw new Error('La contraseña debe tener al menos 6 caracteres');
+  if (parentPassword.length < 10) {
+    throw new Error('La contraseña debe tener al menos 10 caracteres');
   }
   if (!invitationToken) {
     throw new Error('Se requiere el código de invitación que genera el estudiante desde su cuenta');

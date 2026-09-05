@@ -1,44 +1,70 @@
-import { encryptData, decryptData } from './crypto';
+import { encryptData, decryptData } from "./crypto";
 
-const STORAGE_KEY = 'edutechlife_leads';
-const USER_ID_KEY = 'ialab_user_id';
+const STORAGE_KEY = "edutechlife_leads";
+const USER_ID_KEY = "ialab_user_id";
 
 export const LEAD_STATUS = {
-  NUEVO: 'nuevo',
-  EN_PROCESO: 'en_proceso',
-  CONTACTADO: 'contactado',
-  CONVERTIDO: 'convertido',
-  NO_INTERESADO: 'no_interesado'
+  NUEVO: "nuevo",
+  EN_PROCESO: "en_proceso",
+  CONTACTADO: "contactado",
+  CONVERTIDO: "convertido",
+  NO_INTERESADO: "no_interesado",
 };
 
 export const LEAD_INTEREST = {
-  DIAGNOSTICO_VAK: 'diagnostico_vak',
-  CURSOS: 'cursos',
-  METODOLOGIA: 'metodologia',
-  PRECIOS: 'precios',
-  GENERAL: 'general',
-  OTRO: 'otro'
+  DIAGNOSTICO_VAK: "diagnostico_vak",
+  CURSOS: "cursos",
+  METODOLOGIA: "metodologia",
+  PRECIOS: "precios",
+  GENERAL: "general",
+  OTRO: "otro",
 };
 
 const TRIGGER_WORDS = [
-  'precio', 'cuesta', 'cotización', 'cuánto', 'cuanto',
-  'interesa', 'quiero', 'me gustaría', 'quisiera',
-  'cómo funciona', 'contactar', 'asesor', 'asesoría',
-  'inscribirme', 'matricular', 'comprar', 'adquirir',
-  'servicio', 'planes', 'suscripción', 'suscripcion',
-  'demo', 'prueba', 'estudiar', 'aprender',
-  'niño', 'niña', 'estudiante', 'colegio', 'escuela',
-  'steam', 'vak', 'diagnóstico', 'diagnostico'
+  "precio",
+  "cuesta",
+  "cotización",
+  "cuánto",
+  "cuanto",
+  "interesa",
+  "quiero",
+  "me gustaría",
+  "quisiera",
+  "cómo funciona",
+  "contactar",
+  "asesor",
+  "asesoría",
+  "inscribirme",
+  "matricular",
+  "comprar",
+  "adquirir",
+  "servicio",
+  "planes",
+  "suscripción",
+  "suscripcion",
+  "demo",
+  "prueba",
+  "estudiar",
+  "aprender",
+  "niño",
+  "niña",
+  "estudiante",
+  "colegio",
+  "escuela",
+  "steam",
+  "vak",
+  "diagnóstico",
+  "diagnostico",
 ];
 
 export const detectInterest = (message) => {
   if (!message) return null;
-  
+
   const lowerMessage = message.toLowerCase();
-  
+
   const interestMapping = {
     diagnostico: LEAD_INTEREST.DIAGNOSTICO_VAK,
-    'diagnóstico': LEAD_INTEREST.DIAGNOSTICO_VAK,
+    diagnóstico: LEAD_INTEREST.DIAGNOSTICO_VAK,
     vak: LEAD_INTEREST.DIAGNOSTICO_VAK,
     steam: LEAD_INTEREST.METODOLOGIA,
     metodología: LEAD_INTEREST.METODOLOGIA,
@@ -60,7 +86,7 @@ export const detectInterest = (message) => {
     }
   }
 
-  if (TRIGGER_WORDS.some(word => lowerMessage.includes(word))) {
+  if (TRIGGER_WORDS.some((word) => lowerMessage.includes(word))) {
     return LEAD_INTEREST.GENERAL;
   }
 
@@ -75,97 +101,99 @@ export const shouldPromptForLead = (messageCount, hasInterest, hasLeadData) => {
 
 export const saveLead = async (leadData) => {
   try {
-    const userId = localStorage.getItem(USER_ID_KEY) || 'anonymous';
+    const userId = localStorage.getItem(USER_ID_KEY) || "anonymous";
     const now = new Date();
     const lead = {
       id: `lead_${Date.now()}`,
-      fecha: now.toLocaleDateString('es-CO'),
-      hora: now.toLocaleTimeString('es-CO'),
+      fecha: now.toLocaleDateString("es-CO"),
+      hora: now.toLocaleTimeString("es-CO"),
       fechaCompleta: now.toISOString(),
-      nombre: await encryptData(leadData.nombre || '', userId),
-      email: await encryptData(leadData.email || '', userId),
-      telefono: await encryptData(leadData.telefono || '', userId),
+      nombre: await encryptData(leadData.nombre || "", userId),
+      email: await encryptData(leadData.email || "", userId),
+      telefono: await encryptData(leadData.telefono || "", userId),
       interes: leadData.interes || LEAD_INTEREST.GENERAL,
-      tema: leadData.tema || '',
+      tema: leadData.tema || "",
       estado: LEAD_STATUS.NUEVO,
-      notas: ''
+      notas: "",
     };
 
     const existingData = localStorage.getItem(STORAGE_KEY);
     let leads = existingData ? JSON.parse(existingData) : [];
-    
+
     leads.push(lead);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
-    
+
     downloadLeadExcel(lead);
 
     return { success: true, lead };
   } catch (error) {
-    console.error('[LEAD] Error al guardar:', error);
+    console.error("[LEAD] Error al guardar:", error);
     return { success: false, error };
   }
 };
 
-export const downloadLeadExcel = async (lead) => {
+const csvRow = (values) =>
+  values.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",");
+
+const downloadCSV = (rows, filename) => {
+  const csv = rows.map(csvRow).join("\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+const LEAD_HEADERS = [
+  "Fecha",
+  "Hora",
+  "Nombre",
+  "Email",
+  "Teléfono",
+  "Interés",
+  "Tema",
+  "Estado",
+];
+
+const leadToRow = (lead) => [
+  lead.fecha,
+  lead.hora,
+  lead.nombre,
+  lead.email,
+  lead.telefono,
+  formatInterest(lead.interes),
+  lead.tema,
+  lead.estado,
+];
+
+export const downloadLeadExcel = (lead) => {
   try {
-    const XLSX = await import('xlsx').then(m => m.default || m);
-    const data = [{
-      'Fecha': lead.fecha,
-      'Hora': lead.hora,
-      'Nombre': lead.nombre,
-      'Email': lead.email,
-      'Teléfono': lead.telefono,
-      'Interés': formatInterest(lead.interes),
-      'Tema': lead.tema,
-      'Estado': lead.estado
-    }];
-
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Leads');
-    
-    const filename = `Lead-${lead.nombre.replace(/\s+/g, '_')}-${lead.fecha.replace(/\//g, '-')}.xlsx`;
-    XLSX.writeFile(wb, filename);
-
+    const filename = `Lead-${String(lead.nombre).replace(/\s+/g, "_")}-${lead.fecha.replace(/\//g, "-")}.csv`;
+    downloadCSV([LEAD_HEADERS, leadToRow(lead)], filename);
     return true;
   } catch (error) {
-    console.error('[LEAD] Error al descargar Excel:', error);
+    console.error("[LEAD] Error al descargar CSV:", error);
     return false;
   }
 };
 
-export const downloadAllLeadsExcel = async () => {
+export const downloadAllLeadsExcel = () => {
   try {
-    const XLSX = await import('xlsx').then(m => m.default || m);
     const existingData = localStorage.getItem(STORAGE_KEY);
     const leads = existingData ? JSON.parse(existingData) : [];
-    
+
     if (leads.length === 0) {
-      alert('No hay leads guardados');
+      alert("No hay leads guardados");
       return false;
     }
 
-    const data = leads.map(lead => ({
-      'Fecha': lead.fecha,
-      'Hora': lead.hora,
-      'Nombre': lead.nombre,
-      'Email': lead.email,
-      'Teléfono': lead.telefono,
-      'Interés': formatInterest(lead.interes),
-      'Tema': lead.tema,
-      'Estado': lead.estado
-    }));
-
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Todos los Leads');
-    
-    const filename = `Leads-Edutechlife-${new Date().toISOString().split('T')[0]}.xlsx`;
-    XLSX.writeFile(wb, filename);
-
+    const filename = `Leads-Edutechlife-${new Date().toISOString().split("T")[0]}.csv`;
+    downloadCSV([LEAD_HEADERS, ...leads.map(leadToRow)], filename);
     return true;
   } catch (error) {
-    console.error('[LEAD] Error al descargar Excel completo:', error);
+    console.error("[LEAD] Error al descargar CSV completo:", error);
     return false;
   }
 };
@@ -175,24 +203,26 @@ export const getLeads = () => {
     const existingData = localStorage.getItem(STORAGE_KEY);
     return existingData ? JSON.parse(existingData) : [];
   } catch (error) {
-    console.error('[LEAD] Error al obtener leads:', error);
+    console.error("[LEAD] Error al obtener leads:", error);
     return [];
   }
 };
 
 export const getLeadsDecrypted = async () => {
   try {
-    const userId = localStorage.getItem(USER_ID_KEY) || 'anonymous';
+    const userId = localStorage.getItem(USER_ID_KEY) || "anonymous";
     const existingData = localStorage.getItem(STORAGE_KEY);
     const leads = existingData ? JSON.parse(existingData) : [];
-    return Promise.all(leads.map(async (lead) => ({
-      ...lead,
-      nombre: await decryptData(lead.nombre, userId),
-      email: await decryptData(lead.email, userId),
-      telefono: await decryptData(lead.telefono, userId),
-    })));
+    return Promise.all(
+      leads.map(async (lead) => ({
+        ...lead,
+        nombre: await decryptData(lead.nombre, userId),
+        email: await decryptData(lead.email, userId),
+        telefono: await decryptData(lead.telefono, userId),
+      })),
+    );
   } catch (error) {
-    console.error('[LEAD] Error al obtener leads descifrados:', error);
+    console.error("[LEAD] Error al obtener leads descifrados:", error);
     return [];
   }
 };
@@ -201,29 +231,29 @@ export const updateLeadStatus = (leadId, newStatus) => {
   try {
     const existingData = localStorage.getItem(STORAGE_KEY);
     let leads = existingData ? JSON.parse(existingData) : [];
-    
-    leads = leads.map(lead => 
-      lead.id === leadId ? { ...lead, estado: newStatus } : lead
+
+    leads = leads.map((lead) =>
+      lead.id === leadId ? { ...lead, estado: newStatus } : lead,
     );
-    
+
     localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
     return true;
   } catch (error) {
-    console.error('[LEAD] Error al actualizar estado:', error);
+    console.error("[LEAD] Error al actualizar estado:", error);
     return false;
   }
 };
 
 const formatInterest = (interes) => {
   const mapping = {
-    [LEAD_INTEREST.DIAGNOSTICO_VAK]: 'Diagnóstico VAK',
-    [LEAD_INTEREST.CURSOS]: 'Cursos',
-    [LEAD_INTEREST.METODOLOGIA]: 'Metodología',
-    [LEAD_INTEREST.PRECIOS]: 'Precios',
-    [LEAD_INTEREST.GENERAL]: 'Consulta General',
-    [LEAD_INTEREST.OTRO]: 'Otro'
+    [LEAD_INTEREST.DIAGNOSTICO_VAK]: "Diagnóstico VAK",
+    [LEAD_INTEREST.CURSOS]: "Cursos",
+    [LEAD_INTEREST.METODOLOGIA]: "Metodología",
+    [LEAD_INTEREST.PRECIOS]: "Precios",
+    [LEAD_INTEREST.GENERAL]: "Consulta General",
+    [LEAD_INTEREST.OTRO]: "Otro",
   };
-  return mapping[interes] || 'No especificado';
+  return mapping[interes] || "No especificado";
 };
 
 export const getInterestLabel = (interes) => {

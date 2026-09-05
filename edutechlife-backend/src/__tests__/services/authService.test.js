@@ -28,7 +28,7 @@ describe('authService.signUpParent', () => {
     await expect(
       authService.signUpParent({
         studentEmail: 'kid@school.co',
-        parentPassword: 'secret123',
+        parentPassword: 'secret12345',
         parentName: 'Ana',
       }),
     ).rejects.toThrow('invitación');
@@ -46,7 +46,7 @@ describe('authService.signUpParent', () => {
     await expect(
       authService.signUpParent({
         studentEmail: 'kid@school.co',
-        parentPassword: 'secret123',
+        parentPassword: 'secret12345',
         parentName: 'Ana',
         invitationToken: 'tok-pending',
       }),
@@ -81,7 +81,7 @@ describe('authService.signUpParent', () => {
 
     const result = await authService.signUpParent({
       studentEmail: 'kid@school.co',
-      parentPassword: 'secret123',
+      parentPassword: 'secret12345',
       parentName: 'Ana',
       invitationToken: 'tok-verified',
     });
@@ -104,7 +104,7 @@ describe('authService.signUpParent', () => {
     await expect(
       authService.signUpParent({
         studentEmail: 'ghost@school.co',
-        parentPassword: 'secret123',
+        parentPassword: 'secret12345',
         parentName: 'Ana',
         invitationToken: 'tok-1',
       }),
