@@ -106,4 +106,67 @@ router.patch('/users/:userId/role', requireAdmin, async (req, res) => {
   }
 });
 
+/**
+ * GET /api/admin/analytics/students
+ * Aggregated performance metrics across all students.
+ * Returns top-level stats: total students, avg mastery, at-risk count.
+ */
+router.get('/analytics/students', requireAdmin, async (req, res) => {
+  try {
+    const { data: students, error: sErr } = await supabase
+      .from('students')
+      .select('id, grade', { count: 'exact' });
+
+    if (sErr) return res.status(500).json({ error: 'Failed to fetch students' });
+
+    const { data: mastery } = await supabase
+      .from('student_competency_mastery')
+      .select('mastery_level');
+
+    const levels = (mastery || []).map((r) => Number(r.mastery_level) || 0);
+    const avgMastery = levels.length ? levels.reduce((a, b) => a + b, 0) / levels.length : 0;
+    const atRisk = levels.filter((l) => l < 0.4).length;
+
+    res.json({
+      totalStudents: students?.length ?? 0,
+      avgMastery: Math.round(avgMastery * 100) / 100,
+      atRiskCount: atRisk,
+      dataPoints: levels.length,
+    });
+  } catch (err) {
+    console.error('[admin/analytics/students] error:', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
+ * GET /api/admin/health
+ * Backend health for admin dashboard: uptime, memory, DB connectivity.
+ */
+router.get('/health', requireAdmin, async (req, res) => {
+  const start = Date.now();
+  let dbOk = false;
+  let dbLatencyMs = null;
+
+  try {
+    const t0 = Date.now();
+    const { error } = await supabase.from('users').select('id').limit(1);
+    dbLatencyMs = Date.now() - t0;
+    dbOk = !error;
+  } catch { /* db unreachable */ }
+
+  const mem = process.memoryUsage();
+  res.json({
+    status: dbOk ? 'ok' : 'degraded',
+    uptimeSeconds: Math.floor(process.uptime()),
+    dbLatencyMs,
+    dbOk,
+    responseMs: Date.now() - start,
+    memory: {
+      heapUsedMB: Math.round(mem.heapUsed / 1024 / 1024),
+      heapTotalMB: Math.round(mem.heapTotal / 1024 / 1024),
+    },
+  });
+});
+
 module.exports = router;

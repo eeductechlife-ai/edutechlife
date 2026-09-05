@@ -73,7 +73,7 @@ async function setup() {
   // 1. Users sintéticos (idempotente)
   const ids = {};
   for (const [k, u] of Object.entries(USERS)) {
-    const { data: list } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
+    const { data: list } = await supabase.auth.admin.listUsers({ page: 1, perPage: 10, filter: u.email });
     let user = (list?.users || []).find((x) => x.email === u.email);
     if (!user) {
       const { data, error } = await supabase.auth.admin.createUser({
