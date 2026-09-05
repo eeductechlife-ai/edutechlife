@@ -26,6 +26,7 @@ export const CATEGORY_MAP = {
   vak: "profile", // hidden; inside perfil
   // explore — noticias is internal ExplorarTab sub-view
   misiones: "explore",
+  retos: "explore",
   noticias: "explore",
 };
 
@@ -123,6 +124,7 @@ export const PREMIUM_TABS = ["oral", "misiones"];
 
 export const TOP_BAR_LABELS = {
   inicio: "Inicio",
+  perfil: "Mi Perfil",
   materias: "Materias",
   calificaciones: "Mis Notas",
   plan: "Mi Plan de Mejora",

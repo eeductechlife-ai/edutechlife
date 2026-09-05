@@ -389,6 +389,25 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                           ? "bg-[#1E293B] hover:bg-[#243347] text-[#7DD3FC] border border-[#2A3A54]"
                           : "bg-[#F0F9FF] hover:bg-[#E0F2FE] text-[#0369A1] border border-[#BAE6FD]"
                       }`}
+                      style={
+                        !isListening
+                          ? {
+                              background: darkMode
+                                ? SB_COLORS.surfaceDarkAlt
+                                : SB_COLORS.surfaceLight,
+                              borderColor: darkMode
+                                ? SB_COLORS.borderDark
+                                : SB_COLORS.borderLight,
+                              color: SB_COLORS.textMutedLight,
+                            }
+                          : {}
+                      }
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      type="button"
+                      aria-label={
+                        isListening ? "Detener micrófono" : "Activar micrófono"
+                      }
                     >
                       <span className="text-base">🎤</span>
                       <span>Modo Examen Oral</span>

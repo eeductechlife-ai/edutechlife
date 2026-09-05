@@ -15,6 +15,8 @@ import {
   ClipboardCheck,
 } from "lucide-react";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useAdaptiveEngine } from "../../hooks/useAdaptiveEngine";
+import WhatDoIDoToday from "./WhatDoIDoToday";
 import { useTranslation } from "../../i18n/I18nProvider";
 import DaniAvatar3D from "./DaniAvatar3D";
 import { SB_GRADIENTS, SB_COLORS } from "./smartboardTheme";

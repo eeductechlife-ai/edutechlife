@@ -86,6 +86,8 @@ function createTabRenderer(deps) {
 
   return {
     inicio: {
+      // UX hierarchy (brief §40): greeting + progress + NextBestAction (Hero) lead,
+      // then the learning path, today's mission, exploration, and metrics last.
       component: () => (
         <>
           <HeroSection onTabChange={onTabChange} onDaniOpen={deps.onDaniOpen} />
