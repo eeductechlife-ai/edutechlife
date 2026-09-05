@@ -27,7 +27,9 @@ import {
   useVAKResult,
   useSetVAKResult,
   useSessionCreate as useSessionCreateMutation,
+  useSessionEnd,
   useAcademicContext,
+  useUpsertAcademicContext,
   useAchievements,
   useLearningStreaks,
   useUpsertStreak,
@@ -75,6 +77,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
   const [unlockedRewards, setUnlockedRewards] = useState([]);
 
   const sessionStartRef = useRef(new Date());
+  const dbSessionIdRef = useRef(null);
   const [totalActiveMinutes, setTotalActiveMinutes] = useState(0);
 
   // Persistent progress: subject time + sessions
@@ -164,7 +167,9 @@ export const SmartBoardKidsProvider = ({ children }) => {
   const addPointsMutation = useAddPointsMutation();
   const setVAKMutation = useSetVAKResult();
   const sessionCreateMutation = useSessionCreateMutation();
+  const sessionEndMutation = useSessionEnd();
   const upsertStreakMutation = useUpsertStreak();
+  const upsertAcademicContextMutation = useUpsertAcademicContext();
   const syncAchievementMutation = useSyncAchievement();
 
   // Calculated total points from Supabase
@@ -508,17 +513,39 @@ export const SmartBoardKidsProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, [totalActiveMinutes, dataLoaded]);
 
-  // Session tracking
+  // Session tracking — create session in DB on mount, end on unmount
   useEffect(() => {
     if (!dataLoaded) return;
-    const session = {
+
+    // Create local session object for UI
+    const localSession = {
       id: Date.now(),
       start: new Date(),
       date: new Date().toISOString().split("T")[0],
       subject: null,
     };
-    currentSessionRef.current = session;
+    currentSessionRef.current = localSession;
+
+    // Create session in DB — fire-and-forget with ref to save sessionId
+    if (sessionCreateMutation.isPending === false) {
+      sessionCreateMutation.mutate(
+        {
+          subject: "dashboard",
+          type: "dashboard",
+        },
+        {
+          onSuccess: (data) => {
+            dbSessionIdRef.current = data.id;
+          },
+          onError: (err) => {
+            console.warn("Failed to create DB session:", err.message);
+          },
+        },
+      );
+    }
+
     return () => {
+      // Add to local sessions array
       if (currentSessionRef.current) {
         const ended = {
           ...currentSessionRef.current,
@@ -531,8 +558,24 @@ export const SmartBoardKidsProvider = ({ children }) => {
         };
         setSessions((prev) => [...prev, ended]);
       }
+
+      // End session in DB if one was created
+      if (dbSessionIdRef.current) {
+        sessionEndMutation.mutate(
+          {
+            sessionId: dbSessionIdRef.current,
+            completion_percentage: 100,
+          },
+          {
+            onError: (err) => {
+              console.warn("Failed to end DB session:", err.message);
+            },
+          },
+        );
+        dbSessionIdRef.current = null;
+      }
     };
-  }, [userId, dataLoaded]);
+  }, [userId, dataLoaded, sessionCreateMutation, sessionEndMutation]);
 
   // Sync grades from localStorage keyed by userId, fallback to backend
   useEffect(() => {
@@ -567,6 +610,29 @@ export const SmartBoardKidsProvider = ({ children }) => {
       })
       .catch(() => {});
   }, [userId]);
+
+  // Sync academic context to DB when subject time changes
+  useEffect(() => {
+    if (
+      !dataLoaded ||
+      !userId ||
+      !subjectTime ||
+      Object.keys(subjectTime).length === 0
+    )
+      return;
+
+    // Upsert each subject with its time
+    Object.entries(subjectTime).forEach(([subject, minutes]) => {
+      if (minutes > 0) {
+        upsertAcademicContextMutation.mutate({
+          subject,
+          lessons_completed: Math.floor(minutes / 30), // Estimate: 1 lesson ≈ 30 mins
+          average_score: 75, // Default; can be updated by content-specific logic
+        });
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subjectTime, dataLoaded, userId]);
 
   // Daily streak
   useEffect(() => {
@@ -996,6 +1062,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
     streakLog,
     subjectTime,
     trackSubjectTime,
+    createSession: createSessionWithSupabase,
 
     // Calendar
     calendarEvents,

@@ -10,11 +10,14 @@ import IALabView from "./components/IALabView";
 import ProgressView from "./components/ProgressView";
 import ReportModal from "./components/ReportModal";
 import WeeklyScheduleView from "@/components/kids-dashboard/schedule/WeeklyScheduleView";
+import { useSmartBoardKidsSafe } from "@/context/SmartBoardKidsContext";
 
 const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
   const [activeTab, setActiveTab] = useState("inicio");
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportData, setReportData] = useState(null);
+
+  const smartBoard = useSmartBoardKidsSafe();
 
   const {
     userXP,
@@ -37,10 +40,14 @@ const SmartBoardDashboard = ({ onNavigate, onLogout }) => {
           ...(studentData.topicsExplored || []),
           subject.name,
         ]);
+        // Create session for this subject in Supabase
+        if (smartBoard?.createSession) {
+          smartBoard.createSession(subject.name, "lesson");
+        }
         setActiveTab("materias");
       }
     },
-    [trackInteraction, studentData.topicsExplored],
+    [trackInteraction, studentData.topicsExplored, smartBoard],
   );
 
   const generateStudentReport = useCallback(() => {

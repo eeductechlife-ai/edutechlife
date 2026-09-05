@@ -384,6 +384,111 @@ export const useSessionCreate = (): UseMutationResult<
   });
 };
 
+// Mutation: End session (update with end_time and duration)
+export const useSessionEnd = (): UseMutationResult<
+  Session,
+  Error,
+  { sessionId: string; points_earned?: number; completion_percentage?: number }
+> => {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      sessionId,
+      points_earned = 0,
+      completion_percentage = 0,
+    }: {
+      sessionId: string;
+      points_earned?: number;
+      completion_percentage?: number;
+    }) => {
+      if (!user?.id) throw new Error("No authenticated user");
+
+      const { data, error } = await supabase
+        .from("sessions")
+        .update({
+          end_time: new Date().toISOString(),
+          points_earned,
+          completion_percentage,
+        })
+        .eq("id", sessionId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data as Session;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: smartBoardQueryKeys.sessions(user?.id || ""),
+      });
+    },
+  });
+};
+
+// Mutation: Upsert academic context for a subject
+export const useUpsertAcademicContext = (): UseMutationResult<
+  AcademicContext,
+  Error,
+  { subject: string; lessons_completed?: number; average_score?: number }
+> => {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      subject,
+      lessons_completed = 0,
+      average_score = 0,
+    }: {
+      subject: string;
+      lessons_completed?: number;
+      average_score?: number;
+    }) => {
+      if (!user?.id) throw new Error("No authenticated user");
+
+      const student = await supabase
+        .from("students")
+        .select("id")
+        .eq("auth_id", user.id)
+        .single();
+
+      if (student.error) throw student.error;
+
+      // Upsert: update if exists, insert if not
+      const { data, error } = await supabase
+        .from("academic_context")
+        .upsert(
+          {
+            student_id: student.data.id,
+            subject,
+            performance_level:
+              average_score >= 80
+                ? "advanced"
+                : average_score >= 60
+                  ? "intermediate"
+                  : "beginner",
+            lessons_completed,
+            average_score,
+            total_points: 0, // default; can be updated separately
+          },
+          { onConflict: "student_id,subject" },
+        )
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data as AcademicContext;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: smartBoardQueryKeys.academicContext(user?.id || ""),
+      });
+    },
+  });
+};
+
 // Hook: Fetch academic context for all subjects
 export const useAcademicContext = (): UseQueryResult<AcademicContext[]> => {
   const { user } = useAuth();
