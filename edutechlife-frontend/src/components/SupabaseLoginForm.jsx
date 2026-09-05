@@ -8,6 +8,7 @@ import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 import { API_BASE_URL } from "../config/api";
 import { supabaseStorageKey } from "../lib/supabase";
 import { decodeJwtPayload } from "../hooks/useAuthIdentity";
+import MFAVerify from "./MFAVerify";
 
 // Pre-sembra la sesión del cliente supabase-js ANTES de navegar al dashboard.
 // El role gate (RoleProtectedRoute) lee esta clave con supabase.auth.
@@ -53,6 +54,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
+  const [mfaChallengeToken, setMfaChallengeToken] = useState(null);
 
   const handleOAuthLogin = (provider) => {
     const apiUrl = API_BASE_URL;
@@ -137,6 +139,13 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
 
         setInfo("");
 
+        // MFA gate: backend returned a challenge token instead of the real JWT
+        if (data.requires_mfa && data.mfa_challenge_token) {
+          setMfaChallengeToken(data.mfa_challenge_token);
+          setLoading(false);
+          return;
+        }
+
         sessionStorage.setItem("auth_token", data.token);
         localStorage.setItem("refresh_token", data.refreshToken);
         localStorage.setItem(
@@ -168,6 +177,27 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
     console.error("Login error:", lastError);
     setLoading(false);
   };
+
+  const handleMfaSuccess = async (data) => {
+    sessionStorage.setItem("auth_token", data.token);
+    localStorage.setItem("refresh_token", data.refreshToken);
+    localStorage.setItem("user_email", (data.user?.email || "").toLowerCase());
+    claimStorageForCurrentUser();
+    await seedClientSession(data.token, data.refreshToken);
+    navigate(returnTo, { replace: true });
+  };
+
+  if (mfaChallengeToken) {
+    return (
+      <div className="w-full">
+        <MFAVerify
+          mfaChallengeToken={mfaChallengeToken}
+          onSuccess={handleMfaSuccess}
+          onCancel={() => setMfaChallengeToken(null)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full space-y-4">

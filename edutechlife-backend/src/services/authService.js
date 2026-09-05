@@ -1,5 +1,6 @@
 const supabase = require('../db/supabase');
 const { createSessionClient } = require('../db/sessionClient');
+const mfaService = require('./mfaService');
 
 /**
  * Sign up a new user with email + password
@@ -166,6 +167,23 @@ async function signIn({ email, password }) {
       }
     }
 
+    const userType = userProfile?.user_type || 'student';
+
+    // MFA gate: if the user has MFA enabled, store session tokens and return a challenge.
+    if (mfaService.requiresMfa(userType) && userProfile?.mfa_enabled) {
+      // Stash the real tokens temporarily so verify-login can retrieve them.
+      await supabase
+        .from('users')
+        .update({
+          mfa_session_token: session.access_token,
+          mfa_session_refresh: session.refresh_token,
+        })
+        .eq('id', authData.user.id);
+
+      const challengeToken = await mfaService.issueChallengeToken(authData.user.id);
+      return { requires_mfa: true, mfa_challenge_token: challengeToken };
+    }
+
     return {
       token: session.access_token,
       refreshToken: session.refresh_token,
@@ -175,7 +193,7 @@ async function signIn({ email, password }) {
         username: userProfile?.username || email.split('@')[0],
         firstName: userProfile?.first_name,
         lastName: userProfile?.last_name,
-        userType: userProfile?.user_type || 'student',
+        userType,
       },
     };
   } catch (e) {
