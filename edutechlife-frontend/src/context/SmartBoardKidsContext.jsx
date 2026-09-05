@@ -78,6 +78,7 @@ export const SmartBoardKidsProvider = ({ children }) => {
 
   const sessionStartRef = useRef(new Date());
   const dbSessionIdRef = useRef(null);
+  const isSessionInitializedRef = useRef(false);
   const [totalActiveMinutes, setTotalActiveMinutes] = useState(0);
 
   // Persistent progress: subject time + sessions
@@ -515,7 +516,8 @@ export const SmartBoardKidsProvider = ({ children }) => {
 
   // Session tracking — create session in DB on mount, end on unmount
   useEffect(() => {
-    if (!dataLoaded) return;
+    if (!dataLoaded || isSessionInitializedRef.current) return;
+    isSessionInitializedRef.current = true;
 
     // Create local session object for UI
     const localSession = {
@@ -527,22 +529,20 @@ export const SmartBoardKidsProvider = ({ children }) => {
     currentSessionRef.current = localSession;
 
     // Create session in DB — fire-and-forget with ref to save sessionId
-    if (sessionCreateMutation.isPending === false) {
-      sessionCreateMutation.mutate(
-        {
-          subject: "dashboard",
-          type: "dashboard",
+    sessionCreateMutation.mutate(
+      {
+        subject: "dashboard",
+        type: "dashboard",
+      },
+      {
+        onSuccess: (data) => {
+          dbSessionIdRef.current = data.id;
         },
-        {
-          onSuccess: (data) => {
-            dbSessionIdRef.current = data.id;
-          },
-          onError: (err) => {
-            console.warn("Failed to create DB session:", err.message);
-          },
+        onError: (err) => {
+          console.warn("Failed to create DB session:", err.message);
         },
-      );
-    }
+      },
+    );
 
     return () => {
       // Add to local sessions array

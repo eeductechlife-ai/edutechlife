@@ -405,6 +405,14 @@ export const useSessionEnd = (): UseMutationResult<
     }) => {
       if (!user?.id) throw new Error("No authenticated user");
 
+      const student = await supabase
+        .from("students")
+        .select("id")
+        .eq("auth_id", user.id)
+        .single();
+
+      if (student.error) throw student.error;
+
       const { data, error } = await supabase
         .from("sessions")
         .update({
@@ -413,6 +421,7 @@ export const useSessionEnd = (): UseMutationResult<
           completion_percentage,
         })
         .eq("id", sessionId)
+        .eq("student_id", student.data.id)
         .select()
         .single();
 
@@ -420,9 +429,11 @@ export const useSessionEnd = (): UseMutationResult<
       return data as Session;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: smartBoardQueryKeys.sessions(user?.id || ""),
-      });
+      if (user?.id) {
+        queryClient.invalidateQueries({
+          queryKey: smartBoardQueryKeys.sessions(user.id),
+        });
+      }
     },
   });
 };

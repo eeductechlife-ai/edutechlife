@@ -9,7 +9,7 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
   const { t } = useTranslation();
   const smartBoard = useSmartBoardKidsSafe();
   const [rewards, setRewards] = useState(FALLBACK_REWARDS);
-  const achievements = smartBoard?._queries?.achievements?.data || [];
+  const achievements = smartBoard?.supabaseQueries?.achievements?.data || [];
 
   useEffect(() => {
     supabase
