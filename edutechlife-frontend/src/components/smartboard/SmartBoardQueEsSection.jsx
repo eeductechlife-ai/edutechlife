@@ -52,13 +52,13 @@ export default function SmartBoardQueEsSection({ t }) {
               {[
                 {
                   icon: "fa-chart-line",
-                  label: "94% mejora académica",
-                  desc: "Comprobado en 2,500+ estudiantes",
+                  label: "Aprendizaje adaptativo",
+                  desc: "Rutas que se ajustan al nivel de tu hijo",
                 },
                 {
-                  icon: "fa-user-tie",
-                  label: "Coaches humanos",
-                  desc: "Certificados y expertos",
+                  icon: "fa-robot",
+                  label: "Tutoría con IA",
+                  desc: "Dani, tutora virtual personalizada",
                 },
                 {
                   icon: "fa-brain",

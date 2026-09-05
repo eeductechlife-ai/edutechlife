@@ -157,7 +157,8 @@ export const mergeWithLocal = (localData, remoteData) => {
     }
 
     if (Array.isArray(localVal) && Array.isArray(remoteVal)) {
-      // Deduplicate merge: keep all unique items from both sides
+      // Deduplicate merge: remote (source of truth) primero; local solo aporta
+      // ítems nuevos. Historial capado a 100 (FIFO) para no crecer sin límite.
       const mergedArr = [...remoteVal];
       for (const item of localVal) {
         const key_ =
@@ -172,7 +173,7 @@ export const mergeWithLocal = (localData, remoteData) => {
         });
         if (!exists) mergedArr.push(item);
       }
-      merged[key] = mergedArr;
+      merged[key] = mergedArr.slice(0, 100);
     } else if (typeof localVal === "object" && typeof remoteVal === "object") {
       merged[key] = { ...remoteVal, ...localVal };
     } else if (typeof localVal === "number" && typeof remoteVal === "number") {

@@ -1,23 +1,20 @@
 import { useCallback } from "react";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
-import { callDaniChatStream } from "../../../utils/api";
-import {
-  PROMPT_DANI_EXPERTO,
-  PROMPT_TUTOR_TAREAS,
-  PROMPT_DANI_SOCRATICO,
-} from "../../../constants/prompts";
+import { callDaniOrchestrator } from "../../../utils/api";
 import { inferMoodFromText, extractTopic } from "../dani/chatUtils";
 import { getQuickActionMessage } from "./daniQuickActions";
-import { processStreamChunkVoice, speakRemainingText } from "./daniChatVoice";
 import {
-  getMoodSupportPrompt,
-  getCrisisUserMessage,
+  processStreamChunkVoice,
+  speakRemainingText,
+  clearVoiceQueue,
+} from "./daniChatVoice";
+import {
   isEmotionalBannerNeeded,
   isCrisisAlert,
   recordMoodIfNeeded,
 } from "./daniChatMood";
 import { trackTopicFromMessage } from "./daniChatTopics";
+import { track } from "../../../lib/analytics";
 
 export default function useDaniSendMessage({
   getToken,
@@ -47,15 +44,9 @@ export default function useDaniSendMessage({
   setCrisisAlertLevel,
   setStreamingMessage,
   studentAge,
+  studentDbId,
 }) {
   const { t } = useTranslation();
-  const {
-    currentClass,
-    nextClass,
-    todayClasses,
-    upcomingExams,
-    slots
-  } = useSmartBoardKids();
   const isKid = studentAge && studentAge <= 11;
 
   const kidErrorMessages = {
@@ -83,159 +74,82 @@ export default function useDaniSendMessage({
       try {
         const currentMood = daniMood;
         const hasDocumentContext = !!documentForDani;
-        let systemPrompt = hasDocumentContext
-          ? PROMPT_TUTOR_TAREAS
-          : PROMPT_DANI_EXPERTO;
 
-        const memoryInjection = buildMemoryInjection();
-        if (memoryInjection) {
-          systemPrompt += "\n\n" + memoryInjection;
-        }
-
-        const cs = daniMemory?.studentProfile?.communicationStyle;
-        if (cs === "shy") {
-          systemPrompt +=
-            "\n\n## ADAPTACIÓN\nEste estudiante es reservado. Sé paciente, usa preguntas abiertas y celebra cada intento.";
-        } else if (cs === "direct") {
-          systemPrompt +=
-            "\n\n## ADAPTACIÓN\nEste estudiante es directo. Ve al grano, respuestas concisas.";
-        } else if (cs === "playful") {
-          systemPrompt +=
-            "\n\n## ADAPTACIÓN\nEste estudiante es juguetón. Usa emojis, mantén un tono alegre.";
-        } else if (cs === "curious") {
-          systemPrompt +=
-            "\n\n## ADAPTACIÓN\nEste estudiante es curioso. Ofrece datos interesantes, invita a explorar.";
-        }
-
-        if (socraticMode) {
-          systemPrompt += `\n\n${PROMPT_DANI_SOCRATICO}`;
-        }
-
-        let contextInfo = buildDaniContext();
-
-        // Add academic schedule context
-        let scheduleContext = "";
-        if (slots && slots.length > 0) {
-          scheduleContext = "\n\n## HORARIO ESCOLAR DEL ESTUDIANTE\n";
-
-          // Format today's classes
-          if (todayClasses && todayClasses.length > 0) {
-            scheduleContext += "Clases de hoy:\n";
-            todayClasses.forEach((cls) => {
-              scheduleContext += `- ${cls.subject_label || cls.subject} (${cls.start_time} - ${cls.end_time})${cls.teacher ? ` con ${cls.teacher}` : ""}\n`;
-            });
-          } else {
-            scheduleContext += "Sin clases programadas para hoy.\n";
-          }
-
-          // Current class
-          if (currentClass) {
-            scheduleContext += `\nClase actual: ${currentClass.subject_label || currentClass.subject} (${currentClass.start_time} - ${currentClass.end_time})\n`;
-          }
-
-          // Next class
-          if (nextClass) {
-            scheduleContext += `Próxima clase: ${nextClass.subject_label || nextClass.subject} (${nextClass.start_time})\n`;
-          }
-
-          // Upcoming exams
-          if (upcomingExams && upcomingExams.length > 0) {
-            scheduleContext += "\nExámenes próximos:\n";
-            upcomingExams.slice(0, 5).forEach((exam) => {
-              scheduleContext += `- ${exam.subject} (${exam.exam_date})${exam.topic ? ` - ${exam.topic}` : ""}\n`;
-            });
-          }
-
-          contextInfo += scheduleContext;
-        }
-
-        if (hasDocumentContext) {
-          contextInfo += `\n\n## ANÁLISIS DE DOCUMENTO DEL ESTUDIANTE\n`;
-          contextInfo += `Título: ${documentForDani.title || "Documento"}\n`;
-          contextInfo += `Materia: ${documentForDani.subject || "General"}\n`;
-          contextInfo += `Resumen: ${documentForDani.summary || ""}\n`;
-          contextInfo += `Fortalezas: ${documentForDani.strengths?.join(", ") || ""}\n`;
-          contextInfo += `Áreas de mejora: ${documentForDani.improvements?.join(", ") || ""}\n`;
-          contextInfo += `Puntuación: ${documentForDani.score}/100\n`;
-          contextInfo += `Dificultad: ${documentForDani.difficulty || "N/A"}\n`;
-          contextInfo += `\nPreguntas guía para la tutoría:\n${documentForDani.tutoringQuestions?.map((q, i) => `${i + 1}. ${q}`).join("\n") || ""}\n`;
-          contextInfo += `\nIMPORTANTE: El estudiante acaba de subir este documento. Usa el análisis para guiar la tutoría. Pregúntale qué parte quiere mejorar o qué no entiende.`;
-        }
-
+        // Detect mood for emotional UI (stays frontend-side)
         const mood = inferMoodFromText(userMessage.text);
+        if (isEmotionalBannerNeeded(mood)) setShowEmotionalBanner(true);
+        if (isCrisisAlert(mood)) setShowCrisisResources(true);
 
-        if (isEmotionalBannerNeeded(mood)) {
-          setShowEmotionalBanner(true);
-          const supportPrompt = getMoodSupportPrompt(mood, userMessage.text);
-          if (supportPrompt) systemPrompt += supportPrompt;
-        }
-
-        if (isCrisisAlert(mood)) {
-          setShowCrisisResources(true);
-        }
-
-        const messages = [{ role: "system", content: systemPrompt }];
-
-        if (contextInfo) {
-          messages.push({
-            role: "user",
-            content: `[INFORMACIÓN DEL ESTUDIANTE - USA ESTO PARA PERSONALIZAR TU RESPUESTA]\n${contextInfo}\n\nNota: Esta información se actualiza en cada mensaje. No la repitas textualmente en tu respuesta, úsala para adaptar tu tono y sugerencias.`,
-          });
-        }
-
-        if (isCrisisAlert(mood)) {
-          const crisisMsg = getCrisisUserMessage(mood);
-          if (crisisMsg) {
-            messages.push({
-              role: "user",
-              content: crisisMsg,
-            });
-          }
-        }
-
+        // Build lean history for orchestrator (last 12 turns)
         const history = daniChatHistory
-          .slice(-15)
+          .slice(-12)
           .filter((msg) => msg.text && typeof msg.text === "string")
-          .map((msg) => ({
-            role: msg.role,
-            content: msg.text,
-          }));
-        messages.push(...history);
-        messages.push({ role: "user", content: userMessage.text });
+          .map((msg) => ({ role: msg.role, content: msg.text }));
 
-        if (hasDocumentContext) {
-          setDocumentForDani(null);
-        }
+        if (hasDocumentContext) setDocumentForDani(null);
 
         let fullResponse = "";
         pendingSentenceRef.current = "";
+        clearVoiceQueue(); // clear any pending audio from previous response
 
         const token = await getToken();
-        if (!token) {
-          throw new Error("No auth token — user must be logged in");
-        }
+        if (!token) throw new Error("No auth token — user must be logged in");
 
-        await callDaniChatStream(
-          messages,
+        track("dani_message_sent", {
+          socratic_mode: socraticMode,
+          has_document: !!hasDocumentContext,
+        });
+
+        await callDaniOrchestrator(
           {
-            temperature: 0.7,
-            maxTokens: 800,
-            token,
+            message: userMessage.text,
+            ...(studentDbId ? { studentId: studentDbId } : {}),
+            socraticMode,
+            documentContext: hasDocumentContext ? documentForDani : null,
+            history,
           },
+          { token },
           (data) => {
             try {
               const parsed = JSON.parse(data);
+              // Handle metadata events from orchestrator
+              if (
+                parsed.emotionalState &&
+                parsed.emotionalState !== "neutral"
+              ) {
+                if (parsed.emotionalState === "frustrated")
+                  setShowEmotionalBanner(true);
+              }
+              if (parsed.crisisAlert) {
+                setCrisisAlertLevel(parsed.crisisAlert);
+                setShowCrisisResources(true);
+                return;
+              }
               if (parsed.__crisisAlert) {
                 setCrisisAlertLevel(parsed.__crisisAlert);
                 setShowCrisisResources(true);
                 return;
               }
+              // Orchestrator sends { chunk } objects
+              if (parsed.chunk) {
+                fullResponse += parsed.chunk;
+                setDaniMood("explaining");
+                setStreamingMessage(fullResponse);
+                processStreamChunkVoice(parsed.chunk, {
+                  pendingSentenceRef,
+                  voiceEnabled,
+                  isSpeakingRef,
+                  daniMood: currentMood,
+                  setIsSpeaking,
+                  setVoiceBlocked,
+                });
+                return;
+              }
             } catch {}
-
+            // Fallback: raw text chunk
             fullResponse += data;
             setDaniMood("explaining");
             setStreamingMessage(fullResponse);
-
             processStreamChunkVoice(data, {
               pendingSentenceRef,
               voiceEnabled,
@@ -328,8 +242,6 @@ export default function useDaniSendMessage({
     },
     [
       addDaniMessage,
-      buildDaniContext,
-      buildMemoryInjection,
       daniChatHistory,
       recordMoodInference,
       trackAcademicTopic,
@@ -351,13 +263,8 @@ export default function useDaniSendMessage({
       setShowCrisisResources,
       setCrisisAlertLevel,
       setStreamingMessage,
-      daniMemory,
       updateDaniMemory,
-      currentClass,
-      nextClass,
-      todayClasses,
-      upcomingExams,
-      slots,
+      studentDbId,
     ],
   );
 

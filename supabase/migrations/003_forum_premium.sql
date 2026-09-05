@@ -3,7 +3,7 @@
 
 -- 1. Comments anidados (threaded)
 CREATE TABLE IF NOT EXISTS forum_comments (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   post_id UUID REFERENCES forum_posts(id) ON DELETE CASCADE,
   parent_id UUID REFERENCES forum_comments(id) ON DELETE CASCADE,
   user_id TEXT NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS forum_profiles (
 
 -- 3. Notificaciones
 CREATE TABLE IF NOT EXISTS forum_notifications (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id TEXT NOT NULL,
   type TEXT NOT NULL CHECK (type IN ('reply', 'like', 'mention', 'system', 'answer')),
   source_user_id TEXT,
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS forum_bookmarks (
 
 -- 5. Reports (moderación)
 CREATE TABLE IF NOT EXISTS forum_reports (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   post_id UUID REFERENCES forum_posts(id) ON DELETE CASCADE,
   comment_id UUID REFERENCES forum_comments(id) ON DELETE CASCADE,
   reported_by TEXT NOT NULL,

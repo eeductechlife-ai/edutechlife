@@ -35,26 +35,31 @@ CREATE POLICY "service role manage links"
 
 -- 2. Actualizar RLS de smartboard_kids_data
 --    Añade permiso de lectura para padres vinculados
+--    (guardado: en fresh DB la tabla se crea en 046)
 -- ============================================================================
 
--- Eliminar policy antigua si existe
-DROP POLICY IF EXISTS "Parents read child smartboard data" ON smartboard_kids_data;
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'smartboard_kids_data') THEN
+    -- Eliminar policy antigua si existe
+    DROP POLICY IF EXISTS "Parents read child smartboard data" ON smartboard_kids_data;
 
--- Nueva policy: estudiante ve lo suyo; padre ve lo de su hijo vinculado
-CREATE POLICY "Parents read child smartboard data"
-  ON smartboard_kids_data FOR SELECT
-  USING (
-    -- El propio estudiante
-    auth.jwt() ->> 'sub' = user_id
-    OR
-    -- Un padre vinculado
-    EXISTS (
-      SELECT 1 FROM parent_student_links psl
-      WHERE psl.parent_user_id  = auth.uid()::TEXT
-        AND psl.student_user_id = smartboard_kids_data.user_id
-        AND psl.is_active = true
-    )
-  );
+    -- Nueva policy: estudiante ve lo suyo; padre ve lo de su hijo vinculado
+    CREATE POLICY "Parents read child smartboard data"
+      ON smartboard_kids_data FOR SELECT
+      USING (
+        -- El propio estudiante
+        auth.jwt() ->> 'sub' = user_id
+        OR
+        -- Un padre vinculado
+        EXISTS (
+          SELECT 1 FROM parent_student_links psl
+          WHERE psl.parent_user_id  = auth.uid()::TEXT
+            AND psl.student_user_id = smartboard_kids_data.user_id
+            AND psl.is_active = true
+        )
+      );
+  END IF;
+END $$;
 
 -- Verificación final
 SELECT 'parent_student_links creada y RLS de smartboard_kids_data actualizado ✓' AS resultado;

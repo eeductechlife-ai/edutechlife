@@ -11,6 +11,7 @@ import AppLayout from "../components/layout/AppLayout";
 import AuthRouter from "./auth-router";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
 import RoleProtectedRoute from "../components/layout/RoleProtectedRoute";
+import { AdminRoute } from "../components/AdminRoute";
 import { PageLoader, SkeletonLoader } from "../components/LoadingScreen";
 import { useTranslation } from "../i18n/I18nProvider";
 import SmartBoardLoginRedirect from "../components/SmartBoardLoginRedirect";
@@ -27,7 +28,6 @@ const SmartBoardSignUpPage = lazy(
   () => import("../components/SmartBoardSignUpPage"),
 );
 const AILabPage = lazy(() => import("../components/pages/AILabPage"));
-const SmartBoardPage = lazy(() => import("../components/pages/SmartBoardPage"));
 const SmartBoardLandingPage = lazy(
   () => import("../components/pages/SmartBoardLandingPage"),
 );
@@ -70,6 +70,8 @@ const SmartBoardConsentGate = lazy(
   () => import("../components/kids-dashboard/SmartBoardConsentGate"),
 );
 const SmartBoardLogin = lazy(() => import("../pages/SmartBoardLogin"));
+const AdminLogin = lazy(() => import("../pages/AdminLogin"));
+const AdminDashboard = lazy(() => import("../pages/AdminDashboard"));
 const IALabDashboard = lazy(() => import("../components/IALab/IALabDashboard"));
 const PublicProfilePage = lazy(
   () => import("../components/userProfilePublic/PublicProfilePage"),
@@ -148,8 +150,10 @@ const AppRoutes = () => {
     const params = new URLSearchParams(location.search);
     if (params.get("checkout") === "success") {
       track("checkout_completed", {});
+      track("subscription_started", {});
     } else if (params.get("checkout") === "cancelled") {
       track("checkout_cancelled", {});
+      track("subscription_cancelled", {});
     }
   }, [location.search]);
 
@@ -339,19 +343,6 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="smartboard/app"
-          element={
-            <RoleProtectedRoute requiredRole="smartboard">
-              <SectionErrorBoundary name="SmartBoardApp">
-                <Suspense fallback={<SmartBoardSkeleton />}>
-                  <SmartBoardPage />
-                </Suspense>
-              </SectionErrorBoundary>
-            </RoleProtectedRoute>
-          }
-        />
-
-        <Route
           path="admin"
           element={
             <RoleProtectedRoute requiredRole="admin">
@@ -359,6 +350,26 @@ const AppRoutes = () => {
                 <AdminPage />
               </Suspense>
             </RoleProtectedRoute>
+          }
+        />
+
+        <Route
+          path="admin/login"
+          element={
+            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+              <AdminLogin />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="admin/dashboard"
+          element={
+            <AdminRoute>
+              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+                <AdminDashboard />
+              </Suspense>
+            </AdminRoute>
           }
         />
 

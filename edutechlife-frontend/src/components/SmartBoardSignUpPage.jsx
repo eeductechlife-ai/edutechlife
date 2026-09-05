@@ -1,6 +1,8 @@
 import SupabaseLoginForm from "./SupabaseLoginForm";
 import SupabaseSignUpForm from "./SupabaseSignUpForm";
 import { useState } from "react";
+import { track } from "../lib/analytics";
+import { EVENTS } from "../lib/analyticsEvents";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import FloatingParticles from "./FloatingParticles";
@@ -64,33 +66,57 @@ const SmartBoardSignUpPage = () => {
     e.preventDefault();
     setParentError("");
     setParentLoading(true);
-    try {
-      const res = await fetch(`${API_BASE}/api/auth/parent-login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          studentEmail: parentForm.studentEmail,
-          parentPassword: parentForm.parentPassword,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Error al iniciar sesión");
 
-      sessionStorage.setItem("auth_token", data.token);
-      localStorage.setItem("refresh_token", data.refreshToken);
-      localStorage.setItem("user_role", "parent");
-      localStorage.setItem("student_email", data.user.studentEmail);
-      localStorage.setItem("student_id", data.user.studentId || "");
-      localStorage.setItem(
-        "parent_name",
-        `${data.user.firstName} ${data.user.lastName}`.trim(),
-      );
-      navigate("/smartboard");
-    } catch (err) {
-      setParentError(err.message);
-    } finally {
-      setParentLoading(false);
+    for (let attempt = 0; attempt <= 2; attempt++) {
+      try {
+        if (attempt > 0) {
+          setParentSuccess("Reconectando con el servidor...");
+          await new Promise((r) => setTimeout(r, attempt * 2000));
+        }
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 15000);
+        const res = await fetch(`${API_BASE}/api/auth/parent-login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            studentEmail: parentForm.studentEmail,
+            parentPassword: parentForm.parentPassword,
+          }),
+          signal: controller.signal,
+        });
+        clearTimeout(tid);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Error al iniciar sesión");
+
+        setParentSuccess("");
+        sessionStorage.setItem("auth_token", data.token);
+        localStorage.setItem("refresh_token", data.refreshToken);
+        localStorage.setItem("user_role", "parent");
+        localStorage.setItem("student_email", data.user.studentEmail);
+        localStorage.setItem("student_id", data.user.studentId || "");
+        localStorage.setItem(
+          "parent_name",
+          `${data.user.firstName} ${data.user.lastName}`.trim(),
+        );
+        navigate("/smartboard");
+        return;
+      } catch (err) {
+        if (
+          attempt < 2 &&
+          (err.name === "AbortError" || err.name === "TypeError")
+        ) {
+          continue;
+        }
+        setParentSuccess("");
+        setParentError(
+          err.name === "AbortError" || err.name === "TypeError"
+            ? "Error de conexión. Verifica tu internet e intenta de nuevo."
+            : err.message,
+        );
+        break;
+      }
     }
+    setParentLoading(false);
   };
 
   const handleParentRegister = async (e) => {
@@ -110,6 +136,7 @@ const SmartBoardSignUpPage = () => {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error al crear cuenta");
+      track(EVENTS.USER_REGISTERED, { role: "parent" });
       setParentSuccess(
         data.message || "Cuenta creada. Ya puedes iniciar sesión.",
       );

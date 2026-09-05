@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { track } from "../../lib/analytics";
+import { EVENTS } from "../../lib/analyticsEvents";
 
 // ==========================================
 // VAK Diagnostic Enhanced - 20 Questions
@@ -138,6 +140,12 @@ const VAKDiagnosticEnhanced = ({ vakResult: propVakResult, onComplete }) => {
   const [answers, setAnswers] = useState([]);
   const [isCompleted, setIsCompleted] = useState(!!vakResult);
 
+  // Fire diagnostic_started once per fresh diagnostic (not when re-viewing a result)
+  useEffect(() => {
+    if (!vakResult) track(EVENTS.DIAGNOSTIC_STARTED, { type: "vak" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleAnswer = useCallback(
     (type) => {
       const newAnswers = [...answers, type];
@@ -170,46 +178,91 @@ const VAKDiagnosticEnhanced = ({ vakResult: propVakResult, onComplete }) => {
         };
 
         setIsCompleted(true);
+        track(EVENTS.DIAGNOSTIC_COMPLETED, {
+          type: "vak",
+          predominant_style: predominantStyle,
+        });
         onComplete(vakResultData);
       }
     },
     [currentQuestion, answers, onComplete],
   );
 
+  const STYLE_CHIP_COLORS = {
+    visual: "#06D6A0",
+    auditivo: "#A855F7",
+    kinestesico: "#FB8500",
+  };
+
   if (isCompleted && vakResult) {
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0] text-center"
+        className="rounded-2xl overflow-hidden shadow-lg border border-[#E2E8F0]"
       >
-        <div className="text-6xl mb-4">🎉</div>
-        <h3 className="text-2xl font-bold text-[#004B63] mb-2">
-          {t("kid.vak.result_title")}
-        </h3>
-        <p className="text-lg text-[#4DA8C4] font-semibold mb-6">
-          {t("kid.vak.result_subtitle")}{" "}
-          {vakResult.predominantStyle.toUpperCase()}
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          {Object.entries(vakResult.scores).map(([key, value]) => (
-            <div key={key} className="p-4 bg-[#F8FAFC] rounded-xl">
-              <p className="text-2xl sm:text-3xl font-black text-[#4DA8C4]">
-                {value}%
-              </p>
-              <p className="text-xs text-[#64748B] mt-1">
-                {key === "visual"
-                  ? t("kid.vak.style_visual")
-                  : key === "auditivo"
-                    ? t("kid.vak.style_auditory")
-                    : t("kid.vak.style_kinesthetic")}
-              </p>
-            </div>
-          ))}
+        {/* Gradient header banner */}
+        <div
+          className="relative p-6 text-center"
+          style={{
+            background:
+              "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
+          }}
+        >
+          <div
+            className="absolute top-0 right-0 w-28 h-28 rounded-full opacity-10 pointer-events-none"
+            style={{
+              background: "rgba(255,255,255,0.4)",
+              transform: "translate(30%,-30%)",
+            }}
+          />
+          <div className="text-5xl mb-3">🎉</div>
+          <h3 className="text-xl font-bold text-white drop-shadow-sm mb-1">
+            {t("kid.vak.result_title")}
+          </h3>
+          <p className="text-sm text-white/90 font-semibold">
+            {t("kid.vak.result_subtitle")}{" "}
+            <span className="font-black">
+              {vakResult.predominantStyle.toUpperCase()}
+            </span>
+          </p>
         </div>
 
-        <p className="text-sm text-[#64748B]">{t("kid.vak.result_message")}</p>
+        {/* Score cards */}
+        <div className="bg-white p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            {Object.entries(vakResult.scores).map(([key, value]) => {
+              const chip = STYLE_CHIP_COLORS[key] || "#FB8500";
+              return (
+                <div
+                  key={key}
+                  className="p-4 rounded-xl text-center"
+                  style={{
+                    background: `${chip}10`,
+                    border: `1px solid ${chip}30`,
+                  }}
+                >
+                  <p
+                    className="text-2xl sm:text-3xl font-black"
+                    style={{ color: chip }}
+                  >
+                    {value}%
+                  </p>
+                  <p className="text-xs text-[#64748B] mt-1">
+                    {key === "visual"
+                      ? t("kid.vak.style_visual")
+                      : key === "auditivo"
+                        ? t("kid.vak.style_auditory")
+                        : t("kid.vak.style_kinesthetic")}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+          <p className="text-sm text-[#64748B] text-center">
+            {t("kid.vak.result_message")}
+          </p>
+        </div>
       </motion.div>
     );
   }
@@ -218,7 +271,7 @@ const VAKDiagnosticEnhanced = ({ vakResult: propVakResult, onComplete }) => {
     <div className="bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0]">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-lg font-bold text-[#004B63]">
+          <h3 className="text-lg font-bold text-[#1E293B]">
             {t("kid.vak.diagnostic_title")}
           </h3>
           <span className="text-sm text-[#64748B]">
@@ -227,7 +280,11 @@ const VAKDiagnosticEnhanced = ({ vakResult: propVakResult, onComplete }) => {
         </div>
         <div className="w-full h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
           <motion.div
-            className="h-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]"
+            className="h-full"
+            style={{
+              background:
+                "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
+            }}
             animate={{
               width: `${((currentQuestion + 1) / questions.length) * 100}%`,
             }}
@@ -242,7 +299,7 @@ const VAKDiagnosticEnhanced = ({ vakResult: propVakResult, onComplete }) => {
         animate={{ opacity: 1, x: 0 }}
         className="mb-8"
       >
-        <p className="text-xl text-[#004B63] font-semibold mb-6">
+        <p className="text-xl text-[#1E293B] font-semibold mb-6">
           {questions[currentQuestion].q}
         </p>
 
@@ -270,12 +327,12 @@ const VAKDiagnosticEnhanced = ({ vakResult: propVakResult, onComplete }) => {
             <motion.button
               key={option.type}
               onClick={() => handleAnswer(option.type)}
-              className="w-full p-4 bg-[#F8FAFC] rounded-xl border-2 border-[#E2E8F0] hover:border-[#4DA8C4]/50 text-left transition-all flex items-center gap-3"
+              className="w-full p-4 bg-[#F8FAFC] rounded-xl border-2 border-[#E2E8F0] hover:border-[#FB8500]/50 text-left transition-all flex items-center gap-3"
               whileHover={{ scale: 1.01, x: 4 }}
               whileTap={{ scale: 0.99 }}
             >
               <span className="text-2xl">{option.emoji}</span>
-              <span className="font-medium text-[#004B63]">{option.label}</span>
+              <span className="font-medium text-[#1E293B]">{option.label}</span>
             </motion.button>
           ))}
         </div>

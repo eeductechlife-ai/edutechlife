@@ -7,12 +7,14 @@ import DashboardErrorBoundary from "../DashboardErrorBoundary";
 import HeroSection from "../HeroSection";
 import { VAKDiagnosticEnhanced } from "../VAKDiagnosticEnhanced";
 import PremiumGate from "../PremiumGate";
-import MissionsView from "./MissionsView";
 import SubjectsView from "./SubjectsView";
-import MisionDelDia from "./MisionDelDia";
 import { SectionFallback } from "./SkeletonLoader";
 import { PREMIUM_FEATURES } from "../kidsDashboardConfig";
-import RutaAprendizaje from "../RutaAprendizaje";
+import NextBestAction from "../NextBestAction";
+import PerfilTab from "./PerfilTab";
+import MateriasTab from "./MateriasTab";
+import ExplorarTab from "./ExplorarTab";
+import { isFeatureEnabled } from "../../../hooks/useFeatureFlag";
 
 const PointsRewardsSystem = lazy(() => import("../PointsRewardsSystem"));
 const SmartBoardProgress = lazy(() => import("../smartBoardProgress"));
@@ -20,12 +22,8 @@ const PersonalizedPlan = lazy(() => import("../PersonalizedPlan"));
 const ExamPrep = lazy(() => import("../examPrep"));
 const FlashcardSystem = lazy(() => import("../flashcardSystem"));
 const OralExamSimulator = lazy(() => import("../OralExamSimulator"));
-const GradeScanner = lazy(() => import("../GradeScanner"));
-const WeeklyScheduleView = lazy(() => import("../schedule"));
-const ImprovementPlan = lazy(
-  () => import("../improvementPlan/ImprovementPlan"),
-);
-const TechNewsFeed = lazy(() => import("../news/TechNewsFeed"));
+const ChallengeEngine = lazy(() => import("../challengeEngine"));
+const FutureExplorer = lazy(() => import("../FutureExplorer"));
 
 const sharedTransition = { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] };
 
@@ -67,47 +65,88 @@ function createTabRenderer(deps) {
     t,
     navigate,
     onTabChange,
+    onDaniOpen,
+    studentAge,
+    darkMode,
+    ageGroup,
   } = deps;
+
+  const materiasProps = {
+    subjects,
+    onTabChange,
+    ageGroup,
+    vakResult,
+  };
+
+  const explorarProps = {
+    missions,
+    onCompleteMission: completeMission,
+    ageGroup,
+  };
 
   return {
     inicio: {
       component: () => (
         <>
-          <RutaAprendizaje onTabChange={onTabChange} />
-          <HeroSection onTabChange={onTabChange} />
-          <MisionDelDia onTabChange={onTabChange} />
-          <InViewSection>
-            <LazyLoad fallback={<SectionFallback tab="inicio" />}>
-              <PointsRewardsSystem />
-            </LazyLoad>
-          </InViewSection>
+          <HeroSection onTabChange={onTabChange} onDaniOpen={deps.onDaniOpen} />
+          <NextBestAction onTabChange={onTabChange} />
         </>
       ),
-      className: "space-y-6 md:space-y-8",
+      className: "space-y-5 md:space-y-6",
       errorKey: "inicio",
       errorMsg: t("smartboard.error_load_home"),
     },
+    perfil: {
+      component: () => (
+        <PerfilTab
+          onTabChange={onTabChange}
+          handleVakComplete={handleVakComplete}
+        />
+      ),
+      errorKey: "perfil",
+      errorMsg: "Error al cargar el perfil",
+      className: "space-y-6",
+    },
+    // Explorar: misiones + noticias united in ExplorarTab
     misiones: {
       component: () => (
-        <MissionsView missions={missions} onCompleteMission={completeMission} />
+        <ExplorarTab {...explorarProps} defaultView="misiones" />
       ),
       errorKey: "misiones",
       errorMsg: t("smartboard.error_load_missions"),
     },
+    noticias: {
+      // Backward-compat for URL ?tab=noticias — opens ExplorarTab on noticias view
+      component: () => (
+        <ExplorarTab {...explorarProps} defaultView="noticias" />
+      ),
+      errorKey: "noticias",
+      errorMsg: "Error al cargar noticias",
+    },
+    // Aprender: materias + horario + calificaciones + plan united in MateriasTab
     materias: {
-      component: () => <SubjectsView subjects={subjects} />,
+      component: () => (
+        <MateriasTab {...materiasProps} defaultView="materias" />
+      ),
       errorKey: "materias",
       errorMsg: t("smartboard.error_load_subjects"),
     },
     horario: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="horario" />}>
-          <WeeklyScheduleView />
-        </LazyLoad>
-      ),
+      component: () => <MateriasTab {...materiasProps} defaultView="horario" />,
       errorKey: "horario",
       errorMsg: "Error al cargar el horario",
-      className: "space-y-4",
+    },
+    calificaciones: {
+      component: () => (
+        <MateriasTab {...materiasProps} defaultView="calificaciones" />
+      ),
+      errorKey: "calificaciones",
+      errorMsg: "Error al cargar calificaciones",
+    },
+    plan: {
+      component: () => <MateriasTab {...materiasProps} defaultView="plan" />,
+      errorKey: "plan",
+      errorMsg: "Error al cargar el plan de mejora",
     },
     puntos: {
       component: () => (
@@ -133,17 +172,6 @@ function createTabRenderer(deps) {
       errorMsg: t("smartboard.error_load_vak"),
       className: "space-y-6",
     },
-    // curriculo: TODO — placeholder implementation pending (was just showing SectionFallback)
-    calificaciones: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="calificaciones" />}>
-          <GradeScanner onTabChange={onTabChange} />
-        </LazyLoad>
-      ),
-      errorKey: "calificaciones",
-      errorMsg: "Error al cargar calificaciones",
-      className: "space-y-4",
-    },
     oral: {
       component: () => (
         <LazyLoad fallback={<SectionFallback tab="oral" />}>
@@ -166,7 +194,7 @@ function createTabRenderer(deps) {
     flashcards: {
       component: () => (
         <LazyLoad fallback={<SectionFallback tab="flashcards" />}>
-          <FlashcardSystem onTabChange={onTabChange} />
+          <FlashcardSystem onTabChange={onTabChange} darkMode={darkMode} />
         </LazyLoad>
       ),
       errorKey: "flashcards",
@@ -182,31 +210,21 @@ function createTabRenderer(deps) {
       errorMsg: "Error al cargar progreso",
       className: "h-full",
     },
-    plan: {
+    retos: {
       component: () => (
-        <LazyLoad fallback={<SectionFallback tab="plan" />}>
-          <ImprovementPlan />
+        <LazyLoad fallback={<SectionFallback tab="retos" />}>
+          <ChallengeEngine onTabChange={onTabChange} />
         </LazyLoad>
       ),
-      errorKey: "plan",
-      errorMsg: "Error al cargar el plan de mejora",
-      className: "space-y-4",
-    },
-    noticias: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="noticias" />}>
-          <TechNewsFeed />
-        </LazyLoad>
-      ),
-      errorKey: "noticias",
-      errorMsg: "Error al cargar noticias",
+      errorKey: "retos",
+      errorMsg: "Error al cargar retos",
       className: "space-y-4",
     },
   };
 }
 
 const CinematicContent = memo(
-  ({ activeTab, onTabChange, darkMode, subscriptionTier }) => {
+  ({ activeTab, onTabChange, darkMode, subscriptionTier, onDaniOpen }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const isPremium = subscriptionTier === "premium";
@@ -217,7 +235,11 @@ const CinematicContent = memo(
       subjects,
       subjectsWithGrades,
       completeMission,
+      studentAge,
     } = useSmartBoardKids();
+
+    const ageGroup =
+      studentAge <= 9 ? "early" : studentAge <= 12 ? "middle" : "senior";
 
     const handleVakComplete = useCallback(
       (result) => {
@@ -238,6 +260,10 @@ const CinematicContent = memo(
           t,
           navigate,
           onTabChange,
+          onDaniOpen,
+          studentAge,
+          darkMode,
+          ageGroup,
         }),
       [
         isPremium,
@@ -250,6 +276,10 @@ const CinematicContent = memo(
         t,
         navigate,
         onTabChange,
+        onDaniOpen,
+        studentAge,
+        darkMode,
+        ageGroup,
       ],
     );
 

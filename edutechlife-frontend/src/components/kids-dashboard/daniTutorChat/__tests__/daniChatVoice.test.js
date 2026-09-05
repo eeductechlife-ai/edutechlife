@@ -5,6 +5,7 @@ import {
   handleMicClick,
   processStreamChunkVoice,
   speakRemainingText,
+  clearVoiceQueue,
 } from "../daniChatVoice";
 
 vi.mock("../../../../utils/speech", () => ({
@@ -20,17 +21,19 @@ vi.mock("../DaniVoiceController", () => ({
   ),
 }));
 
-import { speakTextConversational, iniciarReconocimiento, stopRecognition } from "../../../../utils/speech";
+import {
+  speakTextConversational,
+  iniciarReconocimiento,
+  stopRecognition,
+} from "../../../../utils/speech";
 
 describe("retrySpeech", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     window.speechSynthesis = { cancel: vi.fn(), speak: vi.fn() };
-    global.SpeechSynthesisUtterance = vi
-      .fn()
-      .mockImplementation(function () {
-        return { volume: 0 };
-      });
+    global.SpeechSynthesisUtterance = vi.fn().mockImplementation(function () {
+      return { volume: 0 };
+    });
   });
 
   test("unblocks voice and primes speech synthesis", () => {
@@ -152,6 +155,9 @@ describe("handleMicClick", () => {
 describe("processStreamChunkVoice", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // The queue uses module-level state (_sentenceQueue, _queueRunning).
+    // Reset it before each test so prior test runs don't pollute results.
+    clearVoiceQueue();
   });
 
   test("extracts a complete sentence from a chunk and speaks it", () => {
@@ -208,7 +214,9 @@ describe("processStreamChunkVoice", () => {
     expect(speakTextConversational).not.toHaveBeenCalled();
   });
 
-  test("does not speak when isSpeakingRef is true", () => {
+  test("queues sentence even when isSpeakingRef is already true", () => {
+    // The queue does NOT gate on isSpeakingRef — it uses its own _queueRunning
+    // flag. A sentence is enqueued and spoken immediately when the queue is idle.
     const pendingSentenceRef = { current: "" };
 
     processStreamChunkVoice("Frase completa.", {
@@ -220,7 +228,7 @@ describe("processStreamChunkVoice", () => {
       setVoiceBlocked: vi.fn(),
     });
 
-    expect(speakTextConversational).not.toHaveBeenCalled();
+    expect(speakTextConversational).toHaveBeenCalledTimes(1);
   });
 
   test("skips sentences shorter than 8 characters", () => {
@@ -290,6 +298,7 @@ describe("processStreamChunkVoice", () => {
 describe("speakRemainingText", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    clearVoiceQueue();
   });
 
   test("speaks remaining text when conditions are met", () => {

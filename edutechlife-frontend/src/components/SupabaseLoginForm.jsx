@@ -95,59 +95,78 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
     setError("");
     setInfo("");
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+    const maxRetries = 2;
+    let lastError = null;
 
-      const data = await response.json();
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        if (attempt > 0) {
+          setInfo(t("login.retrying") || "Reconectando con el servidor...");
+          await new Promise((r) => setTimeout(r, attempt * 2000));
+        }
 
-      if (!response.ok) {
-        if (data.error === "oauth_account") {
-          const provider = data.provider === "facebook" ? "Facebook" : "Google";
-          setError(t("login.error.oauth_account", { provider }));
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (data.error === "oauth_account") {
+            const provider =
+              data.provider === "facebook" ? "Facebook" : "Google";
+            setError(t("login.error.oauth_account", { provider }));
+            setLoading(false);
+            return;
+          }
+          const key =
+            data.error === "email_not_confirmed"
+              ? "login.error.email_not_confirmed"
+              : "login.error.invalid_credentials";
+          setError(t(key) || data.message || "Invalid credentials");
           setLoading(false);
           return;
         }
-        const key =
-          data.error === "email_not_confirmed"
-            ? "login.error.email_not_confirmed"
-            : "login.error.invalid_credentials";
-        setError(t(key) || data.message || "Invalid credentials");
-        setLoading(false);
+
+        setInfo("");
+
+        sessionStorage.setItem("auth_token", data.token);
+        localStorage.setItem("refresh_token", data.refreshToken);
+        localStorage.setItem(
+          "user_email",
+          (data.user?.email || data.email || "").toLowerCase(),
+        );
+
+        claimStorageForCurrentUser();
+        await seedClientSession(data.token, data.refreshToken);
+        navigate(returnTo, { replace: true });
         return;
+      } catch (err) {
+        lastError = err;
+        if (
+          attempt < maxRetries &&
+          (err.name === "AbortError" || err.name === "TypeError")
+        ) {
+          continue;
+        }
+        break;
       }
-
-      // Save token
-      sessionStorage.setItem("auth_token", data.token);
-      localStorage.setItem("refresh_token", data.refreshToken);
-      localStorage.setItem(
-        "user_email",
-        (data.user?.email || data.email || "").toLowerCase(),
-      );
-
-      // Claim storage for current user (creates isolated namespace)
-      // Token is now in localStorage; useAuthIdentity will read it on next render
-      claimStorageForCurrentUser();
-
-      // Pre-seed the supabase-js session so the role gate's getSession() finds
-      // it already persisted when /ialab mounts. AWAITED: navigating before the
-      // seed completes reintroduces the gate hang (mount → getSession() null →
-      // setSession() → notify chain that never settles). The internal 1.5s
-      // timeout + manual-write fallback bound the wait.
-      await seedClientSession(data.token, data.refreshToken);
-
-      // Use client-side navigation instead of hard reload
-      // Preserves browser cache, avoids re-parsing bundles, faster than window.location.replace()
-      // Store subscriptions will rehydrate automatically via Zustand persist middleware
-      navigate(returnTo, { replace: true });
-    } catch (err) {
-      setError(t("login.error.connection") || "Connection error");
-      console.error("Login error:", err);
-      setLoading(false);
     }
+
+    setInfo("");
+    setError(
+      t("login.error.connection") ||
+        "Error de conexión. Verifica tu internet e intenta de nuevo.",
+    );
+    console.error("Login error:", lastError);
+    setLoading(false);
   };
 
   return (

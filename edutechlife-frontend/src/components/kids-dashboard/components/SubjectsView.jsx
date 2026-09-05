@@ -10,7 +10,42 @@ const gradeColor = (score) => {
   return "#EF4444";
 };
 
-const SubjectsView = memo(function SubjectsView({ subjects }) {
+export function getMasteryState(progress) {
+  const p = Number(progress) || 0;
+  if (p < 30)
+    return {
+      key: "recovery",
+      label: "Recuperación",
+      emoji: "🆘",
+      color: "#EF4444",
+      bg: "#FEF2F2",
+    };
+  if (p < 60)
+    return {
+      key: "practice",
+      label: "Práctica",
+      emoji: "📖",
+      color: "#F59E0B",
+      bg: "#FFFBEB",
+    };
+  if (p < 80)
+    return {
+      key: "mastery",
+      label: "Dominio",
+      emoji: "⭐",
+      color: "#10B981",
+      bg: "#ECFDF5",
+    };
+  return {
+    key: "transfer",
+    label: "Transferencia",
+    emoji: "🚀",
+    color: "#7C3AED",
+    bg: "#F5F3FF",
+  };
+}
+
+const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
   const { t } = useTranslation();
   return (
     <div className="space-y-4">
@@ -33,58 +68,75 @@ const SubjectsView = memo(function SubjectsView({ subjects }) {
               whileHover={{ y: -3 }}
               className="bg-white p-5 rounded-2xl border border-[#E2E8F0] shadow-[0_10px_30px_-18px_rgba(0,48,63,0.35)] hover:shadow-[0_18px_40px_-18px_rgba(0,48,63,0.4)] transition-all"
             >
-              <div className="flex items-center gap-3 mb-3">
-                <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center text-xl"
-                  style={{
-                    background: `linear-gradient(135deg, ${subject.color}26, ${subject.color}14)`,
-                    boxShadow: `inset 0 1px 0 rgba(255,255,255,0.5)`,
-                  }}
-                >
-                  {subject.icon}
-                </div>
-                <h4 className="font-bold text-[#00303F]">{subject.name}</h4>
-              </div>
+              {(() => {
+                const ms = getMasteryState(subject.progress);
+                return (
+                  <>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div
+                        className="w-11 h-11 rounded-xl flex items-center justify-center text-xl"
+                        style={{
+                          background: `linear-gradient(135deg, ${subject.color}26, ${subject.color}14)`,
+                          boxShadow: `inset 0 1px 0 rgba(255,255,255,0.5)`,
+                        }}
+                      >
+                        {subject.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-[#00303F] truncate">
+                          {subject.name}
+                        </h4>
+                        <span
+                          className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full mt-0.5"
+                          style={{ backgroundColor: ms.bg, color: ms.color }}
+                        >
+                          {ms.emoji} {ms.label}
+                        </span>
+                      </div>
+                    </div>
 
-              <div className="w-full h-2.5 bg-[#EDF3F7] rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full rounded-full"
-                  style={{
-                    background: `linear-gradient(90deg, ${barColor}, ${barColor}bb)`,
-                  }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${subject.progress}%` }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                />
-              </div>
+                    <div className="w-full h-2.5 bg-[#EDF3F7] rounded-full overflow-hidden">
+                      <motion.div
+                        className="h-full rounded-full"
+                        style={{
+                          background: `linear-gradient(90deg, ${barColor}, ${barColor}bb)`,
+                        }}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${subject.progress}%` }}
+                        transition={{ duration: 1, ease: "easeOut" }}
+                      />
+                    </div>
 
-              <div className="flex justify-between items-center mt-2">
-                {hasGrade ? (
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#93A6B2]">
-                    Nota boletín
-                  </span>
-                ) : (
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#93A6B2]">
-                    {t("smartboard.progress")}
-                  </span>
-                )}
-                <div className="flex items-center gap-2">
-                  {hasGrade && (
-                    <span
-                      className="text-xs font-bold px-1.5 py-0.5 rounded-full text-white"
-                      style={{ backgroundColor: barColor }}
-                    >
-                      {subject.gradeScore.toFixed(1)}/5
-                    </span>
-                  )}
-                  <span
-                    className="text-sm font-black tabular-nums"
-                    style={{ color: barColor }}
-                  >
-                    {subject.progress}%
-                  </span>
-                </div>
-              </div>
+                    <div className="flex justify-between items-center mt-2">
+                      {hasGrade ? (
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#93A6B2]">
+                          Nota boletín
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#93A6B2]">
+                          {t("smartboard.progress")}
+                        </span>
+                      )}
+                      <div className="flex items-center gap-2">
+                        {hasGrade && (
+                          <span
+                            className="text-xs font-bold px-1.5 py-0.5 rounded-full text-white"
+                            style={{ backgroundColor: barColor }}
+                          >
+                            {subject.gradeScore.toFixed(1)}/5
+                          </span>
+                        )}
+                        <span
+                          className="text-sm font-black tabular-nums"
+                          style={{ color: barColor }}
+                        >
+                          {subject.progress}%
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
             </motion.div>
           );
         })}

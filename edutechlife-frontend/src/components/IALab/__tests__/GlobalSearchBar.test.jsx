@@ -14,6 +14,13 @@ vi.mock("@/utils/iconMapping", () => ({
   Icon: ({ name, className }) => null,
 }));
 
+vi.mock("@/i18n/I18nProvider", () => {
+  const t = (k) => k;
+  return {
+    useTranslation: () => ({ t, locale: "es", setLocale: () => {} }),
+  };
+});
+
 // Este mock reproducía la forma que el componente creía leer (`accordion` con
 // los recursos anidados). Esa forma no existe en el catálogo real, así que el
 // mock validaba un contrato roto y ocultaba que la búsqueda nunca encontraba

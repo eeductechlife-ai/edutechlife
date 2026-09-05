@@ -5,9 +5,9 @@ import { useTranslation } from "../../i18n/I18nProvider";
 import { sanitize } from "../../utils/sanitize";
 
 const STYLE_COLORS = {
-  visual: "#4DA8C4",
-  auditivo: "#66CCCC",
-  kinestesico: "#FFD166",
+  visual: "#06D6A0",
+  auditivo: "#A855F7",
+  kinestesico: "#FB8500",
 };
 
 const STYLE_EMOJIS = {
@@ -103,7 +103,7 @@ const PersonalizedPlan = () => {
         className="bg-white rounded-2xl p-8 shadow-lg border border-[#E2E8F0] text-center"
       >
         <div className="text-6xl mb-4">📋</div>
-        <h3 className="text-2xl font-bold text-[#004B63] mb-3">
+        <h3 className="text-2xl font-bold text-[#1E293B] mb-3">
           {t("kid.personalized_plan.title_empty")}
         </h3>
         <p
@@ -112,15 +112,49 @@ const PersonalizedPlan = () => {
             __html: sanitize(t("kid.personalized_plan.desc_empty")),
           }}
         />
-        <p className="text-sm text-[#4DA8C4] mt-4">
+        <p className="text-sm text-[#FB8500] mt-4">
           {t("kid.personalized_plan.hint_empty")}
         </p>
       </motion.div>
     );
   }
 
+  const PROGRESS_GRADIENT =
+    "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)";
+
   return (
     <div className="space-y-6">
+      {/* Section header banner */}
+      <div
+        className="relative rounded-2xl overflow-hidden p-5"
+        style={{ background: PROGRESS_GRADIENT }}
+      >
+        <div className="relative z-10 flex items-center gap-4">
+          <div
+            className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md"
+            style={{ background: "rgba(255,255,255,0.25)" }}
+          >
+            <span className="text-2xl">📋</span>
+          </div>
+          <div>
+            <h3 className="text-xl font-black text-white drop-shadow-sm">
+              Mi Plan
+            </h3>
+            <p className="text-xs text-white/80">
+              Plan personalizado según tu estilo de aprendizaje{" "}
+              {STYLE_EMOJIS[dominantStyle]} {STYLE_NAMES[dominantStyle]}
+            </p>
+          </div>
+        </div>
+        <div
+          className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10 pointer-events-none"
+          style={{
+            background: "rgba(255,255,255,0.4)",
+            transform: "translate(30%,-30%)",
+          }}
+        />
+      </div>
+
       {showConfetti && (
         <motion.div
           initial={{ opacity: 0, scale: 0 }}
@@ -138,16 +172,22 @@ const PersonalizedPlan = () => {
         className="bg-white rounded-2xl p-6 shadow-lg border border-[#E2E8F0]"
       >
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] flex items-center justify-center text-2xl shadow-lg">
+          <div
+            className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg"
+            style={{
+              background:
+                "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
+            }}
+          >
             📋
           </div>
           <div>
-            <h2 className="text-2xl font-black text-[#004B63]">
+            <h2 className="text-2xl font-black text-[#1E293B]">
               {t("kid.personalized_plan.title")}
             </h2>
             <p className="text-sm text-[#64748B]">
               {t("kid.personalized_plan.subtitle")}{" "}
-              <span className="font-bold text-[#4DA8C4]">
+              <span className="font-bold text-[#FB8500]">
                 {STYLE_EMOJIS[dominantStyle]}{" "}
                 {t(
                   `kid.vak.style_${dominantStyle === "kinestesico" ? "kinesthetic" : dominantStyle}`,
@@ -198,7 +238,7 @@ const PersonalizedPlan = () => {
         transition={{ delay: 0.1 }}
         className="bg-white rounded-2xl p-6 shadow-lg border border-[#E2E8F0]"
       >
-        <h3 className="text-lg font-bold text-[#004B63] mb-4">
+        <h3 className="text-lg font-bold text-[#1E293B] mb-4">
           {t("kid.personalized_plan.recommendations_title")}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -218,7 +258,7 @@ const PersonalizedPlan = () => {
                   {rec.type === "activity" ? "🎮" : "📚"}
                 </span>
               </div>
-              <h4 className="font-semibold text-[#004B63] text-sm mb-1">
+              <h4 className="font-semibold text-[#1E293B] text-sm mb-1">
                 {rec.name}
               </h4>
               <p className="text-xs text-[#64748B]">{rec.description}</p>
@@ -233,7 +273,7 @@ const PersonalizedPlan = () => {
         transition={{ delay: 0.2 }}
         className="bg-white rounded-2xl p-6 shadow-lg border border-[#E2E8F0]"
       >
-        <h3 className="text-lg font-bold text-[#004B63] mb-4">
+        <h3 className="text-lg font-bold text-[#1E293B] mb-4">
           {t("kid.personalized_plan.weekly_plan_title")}
         </h3>
         <div className="space-y-3">
@@ -248,7 +288,7 @@ const PersonalizedPlan = () => {
                 className={`p-4 rounded-xl border-2 transition-all ${
                   isCompleted
                     ? "bg-green-50 border-green-200"
-                    : "bg-[#F8FAFC] border-[#E2E8F0] hover:border-[#4DA8C4]/30"
+                    : "bg-[#F8FAFC] border-[#E2E8F0] hover:border-[#FB8500]/30"
                 }`}
               >
                 <div className="flex items-center gap-4">
@@ -259,21 +299,21 @@ const PersonalizedPlan = () => {
                     className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
                       isCompleted
                         ? "bg-green-500 border-green-500 text-white"
-                        : "border-[#4DA8C4] text-[#4DA8C4] hover:bg-[#4DA8C4]/10"
+                        : "border-[#FB8500] text-[#FB8500] hover:bg-[#FB8500]/10"
                     }`}
                   >
                     {isCompleted ? "✓" : <span className="text-sm">+</span>}
                   </motion.button>
                   <div className="flex-1 min-w-0">
                     <h4
-                      className={`font-semibold text-sm ${isCompleted ? "text-green-600 line-through" : "text-[#004B63]"}`}
+                      className={`font-semibold text-sm ${isCompleted ? "text-green-600 line-through" : "text-[#1E293B]"}`}
                     >
                       {activity.name}
                     </h4>
                     <p className="text-xs text-[#64748B]">{activity.days}</p>
                   </div>
                   {!isCompleted && (
-                    <span className="text-xs font-bold text-[#4DA8C4]">
+                    <span className="text-xs font-bold text-[#FB8500]">
                       +25 pts
                     </span>
                   )}
@@ -290,7 +330,7 @@ const PersonalizedPlan = () => {
         transition={{ delay: 0.3 }}
         className="bg-white rounded-2xl p-6 shadow-lg border border-[#E2E8F0]"
       >
-        <h3 className="text-lg font-bold text-[#004B63] mb-4">
+        <h3 className="text-lg font-bold text-[#1E293B] mb-4">
           {t("kid.personalized_plan.daily_routine_title")}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -317,7 +357,7 @@ const PersonalizedPlan = () => {
               >
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-lg">{cfg.emoji}</span>
-                  <span className="font-bold text-sm text-[#004B63]">
+                  <span className="font-bold text-sm text-[#1E293B]">
                     {t(cfg.key)}
                   </span>
                 </div>

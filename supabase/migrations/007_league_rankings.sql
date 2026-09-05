@@ -1,6 +1,6 @@
 -- Tabla de rankings semanales para leaderboard social multi-usuario
 CREATE TABLE IF NOT EXISTS league_rankings (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id TEXT NOT NULL,
   league_tier TEXT NOT NULL CHECK (league_tier IN ('bronze', 'silver', 'gold', 'diamond')),
   week_start DATE NOT NULL,

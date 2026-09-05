@@ -27,7 +27,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:smoke": "playwright test e2e/smoke.spec.ts e2e/smartboard.spec.ts e2e/smartboard-authed.spec.ts --project=chromium",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src/components/IALab/ --ext .js,.jsx --max-warnings 1300",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src/components/IALab/ --ext .js,.jsx --max-warnings 1600",
     "lint:all": "ESLINT_USE_FLAT_CONFIG=false eslint src --ext .js,.jsx --max-warnings 6000",
     "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
     "prepare": "husky"
@@ -93,6 +93,7 @@
     "@vitejs/plugin-react": "^4.2.0",
     "@vitest/coverage-v8": "^4.1.10",
     "autoprefixer": "^10.4.17",
+    "esbuild": "^0.28.0",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",

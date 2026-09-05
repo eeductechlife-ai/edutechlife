@@ -4,6 +4,25 @@ import DaniAvatar from "../daniTutorChat/components/DaniAvatar";
 import { getRelativeTime } from "./chatUtils";
 import { useTranslation } from "../../../i18n/I18nProvider";
 
+// Renders a message string with inline bold (**text**) and italic (*text*) markdown.
+export function renderInlineMarkdown(text) {
+  const parts = [];
+  const pattern = /(\*\*(.+?)\*\*|\*(.+?)\*)/g;
+  let last = 0;
+  let match;
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > last) parts.push(text.slice(last, match.index));
+    if (match[2] !== undefined) {
+      parts.push(<strong key={match.index}>{match[2]}</strong>);
+    } else {
+      parts.push(<em key={match.index}>{match[3]}</em>);
+    }
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+}
+
 const LOCALE_MAP = { en: "en-US", pt: "pt-BR", es: "es-ES" };
 
 // ==========================================
@@ -42,7 +61,7 @@ const MessageBubble = memo(({ message, isDani, darkMode }) => {
         } shadow-sm`}
       >
         <p className="text-sm leading-relaxed whitespace-pre-wrap">
-          {message.text}
+          {renderInlineMarkdown(message.text || "")}
         </p>
         <p
           className={`text-[10px] mt-1 ${isDani ? "text-[#64748B]" : "text-white/70"}`}

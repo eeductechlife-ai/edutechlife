@@ -6,6 +6,9 @@ import { signOutUser } from "../../hooks/useAuthIdentity";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import useExamReminders from "../../hooks/useExamReminders";
+import { useSmartBoardNotifications } from "../../hooks/useSmartBoardNotifications";
+import { track } from "../../lib/analytics";
+import { EVENTS } from "../../lib/analyticsEvents";
 import "../../styles/a11y.css";
 import ParticlesBackground from "./ParticlesBackground";
 import DaniTutorChat from "./daniTutorChat";
@@ -20,6 +23,8 @@ import { WifiOff, CloudSync } from "lucide-react";
 import SmartBoardLoadingSkeleton from "./SmartBoardLoadingSkeleton";
 import ParentalConsentBlocker from "./ParentalConsentBlocker";
 import TopBar from "./components/TopBar";
+import { useParentalControls } from "../../hooks/useParentalControls";
+import useFunnelTracking from "../../hooks/useFunnelTracking";
 
 const SmartBoardKidsDashboard = () => {
   const { t } = useTranslation();
@@ -28,6 +33,7 @@ const SmartBoardKidsDashboard = () => {
     const urlTab = params.get("tab");
     const TAB_WHITELIST = [
       "inicio",
+      "perfil",
       "materias",
       "horario",
       "flashcards",
@@ -37,6 +43,7 @@ const SmartBoardKidsDashboard = () => {
       "progreso",
       "calificaciones",
       "misiones",
+      "retos",
       "noticias",
       "plan",
       "puntos",
@@ -51,6 +58,10 @@ const SmartBoardKidsDashboard = () => {
   // Background: watches upcoming exams and posts in-app reminders at
   // T-24h / T-3h / T-30min. Silent when there is no timetable/exams.
   useExamReminders();
+  // SmartBoard domain notifications: daily mission ready + reinforcement opportunity (§42)
+  useSmartBoardNotifications();
+  // Activation/retention funnel tracking
+  useFunnelTracking();
   useEffect(() => {
     try {
       localStorage.setItem("edutechlife_current_tab", activeTab);
@@ -67,7 +78,9 @@ const SmartBoardKidsDashboard = () => {
     vakResult,
     darkMode,
     fondoGalaxia,
+    avatarAnimado,
     lastUnlockedReward,
+    lastUnlockedBadge,
     streak,
     subscriptionTier,
     dataLoaded,
@@ -76,8 +89,10 @@ const SmartBoardKidsDashboard = () => {
     studentAge,
   } = useSmartBoardKids();
   const ageGroup =
-    studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior";
+    studentAge <= 9 ? "early" : studentAge <= 12 ? "middle" : "senior";
   const prefersReducedMotion = useReducedMotion();
+  const { isFeatureEnabled, controls: parentalControls } =
+    useParentalControls();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -87,20 +102,10 @@ const SmartBoardKidsDashboard = () => {
 
   const handleDaniOpen = useCallback(() => {
     setIsDaniOpen(true);
-    document.body.style.overflow = "hidden";
   }, []);
   const handleDaniClose = useCallback(() => {
     setIsDaniOpen(false);
-    document.body.style.overflow = "";
   }, []);
-
-  // Restore body scroll if component unmounts while Dani is open
-  useEffect(
-    () => () => {
-      document.body.style.overflow = "";
-    },
-    [],
-  );
 
   // Allow child components to open Dani panel via custom event
   useEffect(() => {
@@ -149,6 +154,7 @@ const SmartBoardKidsDashboard = () => {
       tab &&
       [
         "inicio",
+        "perfil",
         "vak",
         "misiones",
         "materias",
@@ -165,6 +171,15 @@ const SmartBoardKidsDashboard = () => {
       setActiveTab(tab);
     }
   }, [searchParams]);
+
+  // Track session end on page unload
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      track(EVENTS.SESSION_END, { last_tab: activeTab });
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [activeTab]);
 
   if (!dataLoaded) {
     return (
@@ -235,6 +250,24 @@ const SmartBoardKidsDashboard = () => {
           )}
         </AnimatePresence>
 
+        {/* Badge Unlock Notification */}
+        <AnimatePresence>
+          {lastUnlockedBadge && (
+            <motion.div
+              initial={{ y: -100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -100, opacity: 0 }}
+              className="fixed top-4 left-4 z-[100] bg-gradient-to-r from-[#9D4EDD] to-[#4DA8C4] text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4"
+            >
+              <span className="text-3xl">{lastUnlockedBadge.icon || "🏅"}</span>
+              <div>
+                <p className="font-bold">Nuevo badge desbloqueado</p>
+                <p className="text-sm opacity-90">{lastUnlockedBadge.name}</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Animated Background Particles */}
         <ParticlesBackground
           count={30}
@@ -282,6 +315,8 @@ const SmartBoardKidsDashboard = () => {
             onNavigate={navigate}
             onLogout={handleLogout}
             subscriptionTier={subscriptionTier}
+            isFeatureEnabled={isFeatureEnabled}
+            ageGroup={ageGroup}
           />
 
           {/* Main Content Area */}
@@ -302,6 +337,7 @@ const SmartBoardKidsDashboard = () => {
               activeTab={activeTab}
               onTabChange={setActiveTab}
               darkMode={darkMode}
+              isFeatureEnabled={isFeatureEnabled}
             />
 
             {/* Scrollable Content */}
@@ -310,6 +346,7 @@ const SmartBoardKidsDashboard = () => {
               onTabChange={setActiveTab}
               darkMode={darkMode}
               subscriptionTier={subscriptionTier}
+              onDaniOpen={handleDaniOpen}
             />
           </div>
         </div>
@@ -378,15 +415,20 @@ const SmartBoardKidsDashboard = () => {
           onTabChange={setActiveTab}
           darkMode={darkMode}
           subscriptionTier={subscriptionTier}
+          isFeatureEnabled={isFeatureEnabled}
+          ageGroup={ageGroup}
         />
 
         {/* DaniFAB - Floating Action Button */}
-        <DaniFAB
-          isDaniOpen={isDaniOpen}
-          onDaniOpen={handleDaniOpen}
-          darkMode={darkMode}
-          unreadCount={0}
-        />
+        {parentalControls.chatEnabled && (
+          <DaniFAB
+            isDaniOpen={isDaniOpen}
+            onDaniOpen={handleDaniOpen}
+            darkMode={darkMode}
+            unreadCount={0}
+            avatarAnimado={avatarAnimado}
+          />
+        )}
 
         {/* Onboarding Guide - First Time Welcome Screen */}
         <OnboardingGuide onTabChange={setActiveTab} />
@@ -396,11 +438,12 @@ const SmartBoardKidsDashboard = () => {
 
         {/* Dani Chat Modal - Full Premium Experience */}
         <AnimatePresence>
-          {isDaniOpen && (
+          {isDaniOpen && parentalControls.chatEnabled && (
             <DaniTutorChat
               isOpen={isDaniOpen}
               onClose={handleDaniClose}
               activeTab={activeTab}
+              onTabChange={setActiveTab}
             />
           )}
         </AnimatePresence>

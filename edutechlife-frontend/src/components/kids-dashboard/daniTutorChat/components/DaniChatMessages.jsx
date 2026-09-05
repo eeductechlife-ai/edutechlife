@@ -4,7 +4,7 @@ import { useTranslation } from "../../../../i18n/I18nProvider";
 import DaniAvatar from "../components/DaniAvatar";
 import ChartRenderer from "../../dani/ChartRenderer";
 import VideoEmbed from "../../dani/VideoEmbed";
-import MessageBubble from "../../dani/MessageBubble";
+import MessageBubble, { renderInlineMarkdown } from "../../dani/MessageBubble";
 
 const DaniChatMessages = memo(
   ({
@@ -69,7 +69,7 @@ const DaniChatMessages = memo(
               }`}
             >
               <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                {streamingMessage}
+                {renderInlineMarkdown(streamingMessage)}
                 <motion.span
                   className="inline-block w-1.5 h-4 bg-[#4DA8C4] ml-0.5 align-middle"
                   animate={{ opacity: [1, 0] }}

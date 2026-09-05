@@ -3,61 +3,52 @@ import { motion } from "framer-motion";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 
 const STEPS = [
-  { key: "vak", emoji: "🧠", label: "VAK", tab: "vak" },
-  { key: "horario", emoji: "📅", label: "Horario", tab: "horario" },
+  {
+    key: "vak",
+    emoji: "🧠",
+    label: "Estilo VAK",
+    doneLabel: "Descubriste tu estilo",
+    pendingLabel: "Descubre cómo aprendes mejor",
+    tab: "perfil",
+    color: "#9D4EDD",
+  },
+  {
+    key: "horario",
+    emoji: "📅",
+    label: "Horario",
+    doneLabel: "Horario registrado",
+    pendingLabel: "Agrega tu horario de clases",
+    tab: "horario",
+    color: "#0096C7",
+  },
   {
     key: "grades",
     emoji: "📊",
     label: "Calificaciones",
+    doneLabel: "Notas registradas",
+    pendingLabel: "Sube tus calificaciones",
     tab: "calificaciones",
+    color: "#F59E0B",
   },
-  { key: "plan", emoji: "📋", label: "Mi Plan", tab: "plan" },
-  { key: "practico", emoji: "🚀", label: "Practicando", tab: "inicio" },
+  {
+    key: "plan",
+    emoji: "📋",
+    label: "Plan de estudio",
+    doneLabel: "Plan creado",
+    pendingLabel: "Crea tu plan de estudio",
+    tab: "plan",
+    color: "#06D6A0",
+  },
+  {
+    key: "practico",
+    emoji: "🚀",
+    label: "Practicando",
+    doneLabel: "¡Estás en racha!",
+    pendingLabel: "Empieza a practicar",
+    tab: "inicio",
+    color: "#EF4444",
+  },
 ];
-
-const COLOR_DONE = "#06D6A0";
-const COLOR_CURRENT = "#0096C7";
-const COLOR_PENDING = "#CBD5E1";
-
-function StepCircle({ emoji, done, current, onClick }) {
-  const bg = done ? COLOR_DONE : current ? COLOR_CURRENT : COLOR_PENDING;
-  const inner = done ? (
-    <span className="text-white font-bold text-base">✓</span>
-  ) : (
-    <span className="text-base">{emoji}</span>
-  );
-
-  if (current) {
-    return (
-      <motion.button
-        onClick={onClick}
-        animate={{
-          scale: [1, 1.08, 1],
-          boxShadow: [
-            `0 0 0px ${COLOR_CURRENT}`,
-            `0 0 14px ${COLOR_CURRENT}88`,
-            `0 0 0px ${COLOR_CURRENT}`,
-          ],
-        }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer"
-        style={{ background: bg }}
-        aria-label="Ir a este paso"
-      >
-        {inner}
-      </motion.button>
-    );
-  }
-
-  return (
-    <div
-      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-      style={{ background: bg }}
-    >
-      {inner}
-    </div>
-  );
-}
 
 const RutaAprendizaje = memo(({ onTabChange }) => {
   const {
@@ -79,102 +70,152 @@ const RutaAprendizaje = memo(({ onTabChange }) => {
   ];
 
   const allDone = stepDone.every(Boolean);
-
-  // Hide if onboarding is complete and all prior steps done
   if (onboardingComplete && allDone) return null;
 
+  const completedCount = stepDone.filter(Boolean).length;
+  const totalCount = STEPS.length;
+  const progress = Math.round((completedCount / totalCount) * 100);
   const currentIdx = stepDone.findIndex((d) => !d);
+  const currentStep = currentIdx >= 0 ? STEPS[currentIdx] : null;
 
-  const cardBg = darkMode ? "rgba(15,23,42,0.85)" : "rgba(255,255,255,0.92)";
-  const borderColor = darkMode ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
+  const cardBg = darkMode ? "rgba(15,23,42,0.88)" : "rgba(255,255,255,0.95)";
+  const border = darkMode ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
   const textPrimary = darkMode ? "#F1F5F9" : "#0F172A";
   const textSecondary = darkMode ? "#94A3B8" : "#64748B";
+  const trackBg = darkMode ? "rgba(255,255,255,0.10)" : "#E2E8F0";
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="rounded-2xl p-4 md:p-5 mb-2"
+      transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="rounded-2xl p-4 md:p-5"
       style={{
         background: cardBg,
-        border: `1px solid ${borderColor}`,
+        border: `1px solid ${border}`,
         boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
       }}
     >
-      <p
-        className="text-xs font-bold uppercase tracking-widest mb-4"
-        style={{ color: textSecondary }}
-      >
-        Tu ruta de aprendizaje
-      </p>
+      {/* Header: título + progreso */}
+      <div className="flex items-center justify-between mb-3">
+        <p
+          className="text-xs font-bold uppercase tracking-widest"
+          style={{ color: textSecondary }}
+        >
+          Tu ruta de aprendizaje
+        </p>
+        <span
+          className="text-xs font-black"
+          style={{ color: currentStep?.color || "#06D6A0" }}
+        >
+          {completedCount}/{totalCount}
+        </span>
+      </div>
+
+      {/* Barra de progreso */}
+      <div className="h-2 rounded-full mb-4" style={{ background: trackBg }}>
+        <motion.div
+          className="h-2 rounded-full"
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          style={{
+            background: currentStep?.color
+              ? `linear-gradient(to right, ${currentStep.color}bb, ${currentStep.color})`
+              : "#06D6A0",
+          }}
+        />
+      </div>
 
       {allDone ? (
         <p className="text-base font-bold" style={{ color: textPrimary }}>
-          🎉 ¡Journey completo! Sigue aprendiendo cada día.
+          🎉 ¡Ruta completa! Sigue aprendiendo cada día.
         </p>
       ) : (
-        <div className="overflow-x-auto pb-1">
-          <div className="flex items-start gap-0 min-w-max md:min-w-0 md:w-full">
-            {STEPS.map((step, i) => {
-              const done = stepDone[i];
-              const current = i === currentIdx;
-              const last = i === STEPS.length - 1;
+        <>
+          {/* Pasos completados — chips pequeños */}
+          {completedCount > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {STEPS.slice(0, currentIdx).map((step) => (
+                <span
+                  key={step.key}
+                  className="flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full"
+                  style={{
+                    backgroundColor: `${step.color}18`,
+                    color: step.color,
+                    border: `1px solid ${step.color}30`,
+                  }}
+                >
+                  ✓ {step.label}
+                </span>
+              ))}
+            </div>
+          )}
 
-              return (
-                <div key={step.key} className="flex items-start">
-                  {/* Step column */}
-                  <div className="flex flex-col items-center gap-1.5 w-16">
-                    <StepCircle
-                      emoji={step.emoji}
-                      done={done}
-                      current={current}
-                      onClick={
-                        current ? () => onTabChange?.(step.tab) : undefined
-                      }
-                    />
-                    <span
-                      className="text-[10px] font-semibold text-center leading-tight px-0.5"
-                      style={{
-                        color: current
-                          ? COLOR_CURRENT
-                          : done
-                            ? COLOR_DONE
-                            : textSecondary,
-                      }}
-                    >
-                      {step.label}
-                    </span>
-                    {current && (
-                      <button
-                        onClick={() => onTabChange?.(step.tab)}
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-                        style={{ background: COLOR_CURRENT }}
-                      >
-                        → Ir
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Connector line */}
-                  {!last && (
-                    <div
-                      className="h-0.5 w-6 mt-6 flex-shrink-0"
-                      style={{
-                        background:
-                          stepDone[i] && stepDone[i + 1]
-                            ? COLOR_DONE
-                            : stepDone[i]
-                              ? `linear-gradient(to right, ${COLOR_DONE}, ${COLOR_PENDING})`
-                              : COLOR_PENDING,
-                      }}
-                    />
-                  )}
+          {/* Siguiente paso — CTA grande */}
+          {currentStep && (
+            <motion.button
+              type="button"
+              onClick={() => onTabChange?.(currentStep.tab)}
+              whileTap={{ scale: 0.97 }}
+              className="w-full flex items-center gap-4 p-4 rounded-2xl text-left transition-all hover:opacity-90 active:scale-98"
+              style={{
+                background: `${currentStep.color}14`,
+                border: `1.5px solid ${currentStep.color}40`,
+              }}
+            >
+              <motion.span
+                className="text-3xl leading-none flex-shrink-0"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                {currentStep.emoji}
+              </motion.span>
+              <div className="flex-1 min-w-0">
+                <div
+                  className="text-[10px] font-bold uppercase tracking-wider mb-0.5"
+                  style={{ color: currentStep.color }}
+                >
+                  Siguiente paso
                 </div>
-              );
-            })}
-          </div>
-        </div>
+                <div
+                  className="text-base font-black leading-tight"
+                  style={{ color: textPrimary }}
+                >
+                  {currentStep.pendingLabel}
+                </div>
+              </div>
+              <span
+                className="text-xs font-bold px-3 py-1.5 rounded-full text-white flex-shrink-0"
+                style={{ backgroundColor: currentStep.color }}
+              >
+                Ir →
+              </span>
+            </motion.button>
+          )}
+
+          {/* Próximos pasos (los que faltan después del actual) */}
+          {currentIdx < STEPS.length - 1 && (
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {STEPS.slice(currentIdx + 1).map((step) => (
+                <span
+                  key={step.key}
+                  className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full"
+                  style={{
+                    backgroundColor: trackBg,
+                    color: textSecondary,
+                  }}
+                >
+                  {step.emoji} {step.label}
+                </span>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </motion.div>
   );

@@ -1,5 +1,7 @@
 import { useCallback, useRef } from "react";
 import { VAK_RECOMMENDATIONS } from "./smartBoardData";
+import { track } from "../lib/analytics";
+import { EVENTS } from "../lib/analyticsEvents";
 
 export const useSmartBoardActions = (stateAndSetters) => {
   const ref = useRef(stateAndSetters);
@@ -26,29 +28,41 @@ export const useSmartBoardActions = (stateAndSetters) => {
     const mission = missions.find((m) => m.id === missionId);
     if (mission && !mission.completed) {
       addPoints(mission.xp || 0, `Misión completada: ${mission.title || ""}`);
+      track(EVENTS.MISSION_COMPLETED, {
+        mission_id: missionId,
+        title: mission.title || "",
+        xp: mission.xp || 0,
+      });
+      const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+      const token = (() => {
+        try {
+          return sessionStorage.getItem("auth_token") || "";
+        } catch {
+          return "";
+        }
+      })();
+      fetch(`${API_BASE_URL}/api/smartboard/gamification/activity`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          type: "mission_complete",
+          missionId,
+          xp: mission.xp || 0,
+        }),
+      })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => {
+          if (data?.newBadges?.length) {
+            const { setLastUnlockedBadge } = ref.current;
+            setLastUnlockedBadge(data.newBadges[0]);
+            setTimeout(() => setLastUnlockedBadge(null), 5000);
+          }
+        })
+        .catch(() => {});
     }
-  }, []);
-
-  const unlockReward = useCallback((reward) => {
-    const {
-      setUnlockedRewards,
-      setDarkMode,
-      setAvatarAnimado,
-      setFondoGalaxia,
-      setLastUnlockedReward,
-    } = ref.current;
-    setUnlockedRewards((prev) => [...prev, reward.id]);
-    addPoints(-reward.cost, `Canjeó recompensa: ${reward.name}`);
-    setLastUnlockedReward(reward);
-    setTimeout(() => setLastUnlockedReward(null), 4000);
-    if (reward.id === 1) setDarkMode(true);
-    if (reward.id === 2) setAvatarAnimado(true);
-    if (reward.id === 3) setFondoGalaxia(true);
-  }, []);
-
-  const toggleDarkMode = useCallback(() => {
-    const { setDarkMode } = ref.current;
-    setDarkMode((prev) => !prev);
   }, []);
 
   const addDaniMessage = useCallback((message) => {
@@ -69,6 +83,70 @@ export const useSmartBoardActions = (stateAndSetters) => {
     if (message.role === "user") {
       setConversationCount((prev) => prev + 1);
     }
+  }, []);
+
+  const unlockReward = useCallback(
+    (reward) => {
+      const {
+        setUnlockedRewards,
+        setDarkMode,
+        setAvatarAnimado,
+        setFondoGalaxia,
+        setLastUnlockedReward,
+        vakResult,
+      } = ref.current;
+      setUnlockedRewards((prev) => [...prev, reward.id]);
+      addPoints(-reward.cost, `Canjeó recompensa: ${reward.name}`);
+      track(EVENTS.BADGE_UNLOCKED, { reward_id: reward.id, name: reward.name });
+      setLastUnlockedReward(reward);
+      setTimeout(() => setLastUnlockedReward(null), 4000);
+      if (reward.id === 1) setDarkMode(true);
+      if (reward.id === 2) setAvatarAnimado(true);
+      if (reward.id === 3) setFondoGalaxia(true);
+      // Reward 4: Día Libre — Dani confirms and opens chat
+      if (reward.id === 4) {
+        addDaniMessage({
+          role: "assistant",
+          text: "🏖️ ¡Felicitaciones! Canjeaste tu **Día Libre**. Hoy puedes descansar y disfrutar sin presión académica. ¡Te lo ganaste! Vuelve mañana con energías recargadas 💪",
+        });
+        setTimeout(
+          () => window.dispatchEvent(new CustomEvent("smartboard:open-dani")),
+          800,
+        );
+      }
+      // Reward 5: Curso IA Básico — Dani gives course access info
+      if (reward.id === 5) {
+        addDaniMessage({
+          role: "assistant",
+          text: "🤖 ¡Genial! Desbloqueaste el **Curso de IA Básico**. Para acceder, ve a IALab desde el menú principal. Allí encontrarás módulos de Inteligencia Artificial diseñados especialmente para ti. ¡Es el futuro del aprendizaje y tú ya eres parte de él! 🚀",
+        });
+        setTimeout(
+          () => window.dispatchEvent(new CustomEvent("smartboard:open-dani")),
+          800,
+        );
+      }
+      // Reward 6: Certificado VAK — Dani generates and shows certificate
+      if (reward.id === 6) {
+        const style =
+          vakResult?.predominantStyle || vakResult?.dominant || "Visual";
+        const styleEmojis = { visual: "👁️", auditivo: "👂", kinestesico: "🤸" };
+        const emoji = styleEmojis[style?.toLowerCase()] || "🧠";
+        addDaniMessage({
+          role: "assistant",
+          text: `📜 ¡Felicitaciones! Aquí está tu **Certificado VAK Oficial**:\n\n${emoji} Estilo de Aprendizaje: **${style.charAt(0).toUpperCase() + style.slice(1)}**\n\nEste certificado confirma que conoces cómo aprendes mejor y usas esa información para estudiar de manera más efectiva. ¡Eres un estudiante consciente de tu propio aprendizaje! Puedes tomar una captura de pantalla de este mensaje como constancia 🎓`,
+        });
+        setTimeout(
+          () => window.dispatchEvent(new CustomEvent("smartboard:open-dani")),
+          800,
+        );
+      }
+    },
+    [addDaniMessage],
+  );
+
+  const toggleDarkMode = useCallback(() => {
+    const { setDarkMode } = ref.current;
+    setDarkMode((prev) => !prev);
   }, []);
 
   const recordMoodInference = useCallback((mood, confidence, context) => {
@@ -93,7 +171,17 @@ export const useSmartBoardActions = (stateAndSetters) => {
   }, []);
 
   const updateDaniMemory = useCallback((parsed) => {
-    if (!parsed || !parsed.topics) return;
+    if (
+      !parsed ||
+      (!parsed.topics &&
+        !parsed.interests &&
+        !parsed.challengeObserved &&
+        !parsed.strengthObserved &&
+        !parsed.communicationStyle &&
+        !parsed.studentMood &&
+        !parsed.parentGoal)
+    )
+      return;
     const { setDaniMemory } = ref.current;
     setDaniMemory((prev) => {
       const next = { ...prev, studentProfile: { ...prev.studentProfile } };
@@ -139,6 +227,12 @@ export const useSmartBoardActions = (stateAndSetters) => {
       if (parsed.studentMood) {
         next.studentProfile.lastKnownMood = parsed.studentMood;
       }
+      if (Array.isArray(parsed.interests) && parsed.interests.length) {
+        next.studentProfile.interests = parsed.interests;
+      }
+      if (parsed.parentGoal) {
+        next.studentProfile.parentGoal = parsed.parentGoal;
+      }
       return next;
     });
   }, []);
@@ -159,6 +253,10 @@ export const useSmartBoardActions = (stateAndSetters) => {
       parts.push(`Fortalezas: ${profile.strengths.slice(-3).join(", ")}.`);
     if (profile.lastKnownMood)
       parts.push(`Último estado de ánimo: ${profile.lastKnownMood}.`);
+    if (profile.parentGoal)
+      parts.push(
+        `Objetivo del padre/madre: ${profile.parentGoal}. Adapta tu ayuda a este objetivo cuando sea relevante.`,
+      );
 
     const pending = daniMemory.pendingTopics.filter((t) => {
       const daysSince =

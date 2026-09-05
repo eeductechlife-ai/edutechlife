@@ -1,20 +1,13 @@
 import { memo, useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  GraduationCap,
-  Flame,
-  Gem,
-  LogOut,
-  Lock,
-  Star,
-  ChevronDown,
-} from "lucide-react";
+import { GraduationCap, LogOut, Lock, Star, ChevronDown } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import {
   CATEGORY_MAP,
   CATEGORIES,
   CATEGORY_TAB_LABELS,
   PREMIUM_TABS,
+  getTabsForAgeGroup,
 } from "../kidsDashboardConfig";
 import { SB_GRADIENTS, glow } from "../smartboardTheme";
 
@@ -36,9 +29,12 @@ const PremiumSidebar = memo(
     onNavigate,
     onLogout,
     subscriptionTier,
+    isFeatureEnabled = () => true,
+    ageGroup = "middle",
   }) => {
     const { t } = useTranslation();
     const isPremium = subscriptionTier === "premium";
+    const visibleCategories = getTabsForAgeGroup(ageGroup);
 
     const [expandedCat, setExpandedCat] = useState(() => {
       return localStorage.getItem("edutechlife_sidebar_cat") || "home";
@@ -139,45 +135,10 @@ const PremiumSidebar = memo(
                       SmartBoard
                     </h2>
                     <p
-                      className={`text-[9px] font-black uppercase tracking-[0.2em] mt-1 ${darkMode ? "text-[#48CAE4]" : "text-[#0096C7]"}`}
+                      className={`text-[9px] font-semibold mt-0.5 ${darkMode ? "text-[#48CAE4]/60" : "text-[#0096C7]/60"}`}
                     >
-                      Versión 2.0
+                      by EdutechLife
                     </p>
-                  </div>
-                </div>
-                {/* Stat chips */}
-                <div className="flex items-center gap-2 mt-3">
-                  <div
-                    className="flex-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-[#FB8500]/15"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(251,133,0,0.14), rgba(255,209,102,0.12))",
-                    }}
-                  >
-                    <Flame
-                      className="w-4 h-4 text-[#FB8500]"
-                      strokeWidth={2.4}
-                    />
-                    <span className="font-black text-sm text-[#FB8500] tabular-nums">
-                      {streak?.current ?? 0}
-                    </span>
-                  </div>
-                  <div
-                    className="flex-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-[#0096C7]/15"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(0,150,199,0.14), rgba(72,202,228,0.12))",
-                    }}
-                  >
-                    <Gem
-                      className={`w-4 h-4 ${darkMode ? "text-[#48CAE4]" : "text-[#0096C7]"}`}
-                      strokeWidth={2.4}
-                    />
-                    <span
-                      className={`font-black text-sm tabular-nums ${darkMode ? "text-[#48CAE4]" : "text-[#0096C7]"}`}
-                    >
-                      {totalPoints?.toLocaleString() || 0}
-                    </span>
                   </div>
                 </div>
               </div>
@@ -190,7 +151,7 @@ const PremiumSidebar = memo(
           {collapsed ? (
             /* Collapsed: icon-only per category */
             <div className="p-2 space-y-1">
-              {CATEGORIES.map((cat) => {
+              {visibleCategories.map((cat) => {
                 const isActive = activeCategory === cat.id;
                 return (
                   <motion.button
@@ -210,13 +171,15 @@ const PremiumSidebar = memo(
                     }
                   >
                     <span
-                      className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                      className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors"
+                      style={
                         isActive
-                          ? "bg-white/20 text-white"
-                          : darkMode
-                            ? "bg-[#1E293B] text-[#94A3B8]"
-                            : "bg-[#F1F5F9] text-[#475569]"
-                      }`}
+                          ? {
+                              background: "rgba(255,255,255,0.20)",
+                              color: "white",
+                            }
+                          : { background: `${cat.color}18`, color: cat.color }
+                      }
                     >
                       <cat.Icon
                         className="w-[18px] h-[18px]"
@@ -230,7 +193,7 @@ const PremiumSidebar = memo(
           ) : (
             /* Expanded: accordion */
             <div className="p-3 space-y-1.5">
-              {CATEGORIES.map((cat) => {
+              {visibleCategories.map((cat) => {
                 const isActiveCategory = expandedCat === cat.id;
                 const hasActiveTab = activeCategory === cat.id;
                 const anyPremiumInCategory = cat.tabs.some((tb) =>
@@ -247,30 +210,27 @@ const PremiumSidebar = memo(
                       }}
                       whileHover={{ x: hasActiveTab ? 0 : 3 }}
                       whileTap={{ scale: 0.98 }}
-                      className={`w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-2xl transition-all text-sm font-bold ${
-                        hasActiveTab
-                          ? "text-white"
-                          : darkMode
-                            ? "text-[#94A3B8] hover:bg-[#1E293B]/70"
-                            : "text-[#475569] hover:bg-[#F1F5F9]"
-                      }`}
+                      className="w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-2xl transition-all text-sm font-bold"
                       style={
                         hasActiveTab
                           ? {
                               background: cat.gradient,
                               boxShadow: glow(cat.glowColor, 0.45),
+                              color: "white",
                             }
-                          : {}
+                          : { color: cat.color }
                       }
                     >
                       <span
-                        className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                        className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors"
+                        style={
                           hasActiveTab
-                            ? "bg-white/20 text-white"
-                            : darkMode
-                              ? "bg-[#1E293B] text-[#94A3B8]"
-                              : "bg-[#F1F5F9] text-[#475569]"
-                        }`}
+                            ? {
+                                background: "rgba(255,255,255,0.20)",
+                                color: "white",
+                              }
+                            : { background: `${cat.color}18`, color: cat.color }
+                        }
                       >
                         <cat.Icon
                           className="w-[18px] h-[18px]"
@@ -307,7 +267,10 @@ const PremiumSidebar = memo(
                             style={{ borderColor: `${cat.color}55` }}
                           >
                             {cat.tabs
-                              .filter(() => cat.id !== "home")
+                              .filter(
+                                (tabId) =>
+                                  cat.id !== "home" && isFeatureEnabled(tabId),
+                              )
                               .map((tabId) => {
                                 const isActive = activeTab === tabId;
                                 const isPremiumTab =
@@ -382,16 +345,24 @@ const PremiumSidebar = memo(
             onClick={onLogout}
             whileTap={{ scale: 0.98 }}
             title={collapsed ? t("smartboard.logout") : undefined}
-            className={`w-full flex items-center ${collapsed ? "justify-center" : "gap-2.5 px-2.5"} py-2 rounded-xl text-xs font-medium transition-all ${
-              darkMode
-                ? "text-[#64748B] hover:bg-[#1E293B]/50"
-                : "text-[#94A3B8] hover:bg-[#F1F5F9]"
-            }`}
+            className="w-full flex items-center py-2 rounded-xl text-xs font-semibold transition-all group"
+            style={{ color: "#EF476F" }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.background = "rgba(239,71,111,0.08)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = "transparent")
+            }
           >
-            <span className="w-8 h-8 rounded-xl flex items-center justify-center">
-              <LogOut className="w-[18px] h-[18px]" strokeWidth={2.3} />
+            <span
+              className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${collapsed ? "mx-auto" : "ml-0.5"}`}
+              style={{ background: "rgba(239,71,111,0.10)" }}
+            >
+              <LogOut className="w-[16px] h-[16px]" strokeWidth={2.3} />
             </span>
-            {!collapsed && <span>{t("smartboard.logout")}</span>}
+            {!collapsed && (
+              <span className="ml-2">{t("smartboard.logout")}</span>
+            )}
           </motion.button>
         </div>
       </motion.aside>

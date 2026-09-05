@@ -215,7 +215,7 @@ export default defineConfig({
       'canvas-confetti',
       'prop-types',
     ],
-    exclude: ['lottie-web', '@solana/web3.js', 'tesseract.js', 'mammoth', 'xlsx']
+    exclude: ['lottie-web', '@solana/web3.js', 'tesseract.js', 'mammoth']
   },
 
   resolve: {

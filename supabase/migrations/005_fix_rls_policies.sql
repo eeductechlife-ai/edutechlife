@@ -8,33 +8,33 @@
 DROP POLICY IF EXISTS "comments_insert_own" ON forum_comments;
 DROP POLICY IF EXISTS "comments_update_own" ON forum_comments;
 CREATE POLICY "comments_insert_own" ON forum_comments
-  FOR INSERT WITH CHECK (user_id = auth.uid());
+  FOR INSERT WITH CHECK (user_id = auth.uid()::text);
 CREATE POLICY "comments_update_own" ON forum_comments
-  FOR UPDATE USING (user_id = auth.uid());
+  FOR UPDATE USING (user_id = auth.uid()::text);
 
 -- Forum bookmarks
 DROP POLICY IF EXISTS "bookmarks_insert_own" ON forum_bookmarks;
 DROP POLICY IF EXISTS "bookmarks_delete_own" ON forum_bookmarks;
 CREATE POLICY "bookmarks_insert_own" ON forum_bookmarks
-  FOR INSERT WITH CHECK (user_id = auth.uid());
+  FOR INSERT WITH CHECK (user_id = auth.uid()::text);
 CREATE POLICY "bookmarks_delete_own" ON forum_bookmarks
-  FOR DELETE USING (user_id = auth.uid());
+  FOR DELETE USING (user_id = auth.uid()::text);
 
 -- Forum notifications
 DROP POLICY IF EXISTS "notifications_read_own" ON forum_notifications;
 DROP POLICY IF EXISTS "notifications_update_own" ON forum_notifications;
 CREATE POLICY "notifications_read_own" ON forum_notifications
-  FOR SELECT USING (user_id = auth.uid());
+  FOR SELECT USING (user_id = auth.uid()::text);
 CREATE POLICY "notifications_update_own" ON forum_notifications
-  FOR UPDATE USING (user_id = auth.uid());
+  FOR UPDATE USING (user_id = auth.uid()::text);
 
 -- Profiles (if exists)
 DROP POLICY IF EXISTS "profiles_read_own" ON forum_profiles;
 DROP POLICY IF EXISTS "profiles_update_own" ON forum_profiles;
 CREATE POLICY "profiles_read_own" ON forum_profiles
-  FOR SELECT USING (user_id = auth.uid());
+  FOR SELECT USING (user_id = auth.uid()::text);
 CREATE POLICY "profiles_update_own" ON forum_profiles
-  FOR UPDATE USING (user_id = auth.uid());
+  FOR UPDATE USING (user_id = auth.uid()::text);
 
 -- Verificar otras tablas existentes que puedan tener el mismo problema
 DO $$

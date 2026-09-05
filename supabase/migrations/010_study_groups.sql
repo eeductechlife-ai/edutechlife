@@ -3,7 +3,7 @@
 
 -- 1. Study Groups
 CREATE TABLE IF NOT EXISTS study_groups (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   description TEXT DEFAULT '',
   module_id INTEGER NOT NULL,
@@ -31,7 +31,7 @@ CREATE INDEX IF NOT EXISTS idx_study_group_members_user ON study_group_members(u
 
 -- 3. Study Group Sessions (study sessions with goals and duration)
 CREATE TABLE IF NOT EXISTS study_group_sessions (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   group_id UUID REFERENCES study_groups(id) ON DELETE CASCADE,
   started_by TEXT NOT NULL,
   goal TEXT DEFAULT '',

@@ -22,7 +22,7 @@ const PointsHistory = ({ pointsHistory, darkMode }) => {
       } backdrop-blur-xl`}
     >
       <h3
-        className={`text-sm font-bold mb-4 flex items-center gap-2 ${darkMode ? "text-white" : "text-[#004B63]"}`}
+        className={`text-sm font-bold mb-4 flex items-center gap-2 ${darkMode ? "text-white" : "text-[#1E293B]"}`}
       >
         💳 Historial de Puntos
       </h3>
@@ -52,7 +52,7 @@ const PointsHistory = ({ pointsHistory, darkMode }) => {
                 {entry.reason}
               </span>
               <span
-                className={`w-16 text-right font-bold ${isNeg ? "text-red-400" : "text-[#66CCCC]"}`}
+                className={`w-16 text-right font-bold ${isNeg ? "text-red-400" : "text-[#FB8500]"}`}
               >
                 {isNeg ? "" : "+"}
                 {entry.points}

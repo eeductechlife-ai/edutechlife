@@ -14,6 +14,36 @@ vi.mock("../IALabModuleHeader", () => ({
   __esModule: true,
 }));
 
+// Prevents loading 2700+ lines of module content data (3 locale files) which
+// causes the fork process to exceed the 4 GB heap limit in CI.
+vi.mock("../constants/moduleContent/selectors", () => ({
+  getModuleOverviewData: () => ({
+    topics: [{ id: "t1", title: "Topic 1", slug: "topic-1" }],
+  }),
+}));
+
+// Lightweight stubs for framer-motion-based presentation components.
+vi.mock("../workspace/toolbits", () => ({
+  ConversationItem: ({ onClick, children }) => (
+    <button type="button" onClick={onClick}>
+      {children}
+    </button>
+  ),
+  PromptCard: ({ title, onClick }) => (
+    <button type="button" onClick={onClick}>
+      {title}
+    </button>
+  ),
+  SendCircle: ({ onClick, disabled, label }) => (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+    />
+  ),
+}));
+
 const defaultProps = {
   theme: "chatgpt",
   activeMod: 2,

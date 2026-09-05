@@ -1,4 +1,4 @@
-import { callDeepseek } from "../../utils/api";
+import { callDeepseekSmartboard } from "../../utils/api";
 import { GRADE_LEVELS } from "./config";
 import { buildSystemPrompt } from "./promptBuilder";
 import { detectCardIcon } from "./iconDetection";
@@ -35,7 +35,9 @@ export function normalizeCards(result) {
   return null;
 }
 
-const buildCorrectionPrompt = (broken) => `El siguiente texto debía ser un JSON válido con un array de tarjetas de estudio, pero está malformado:
+const buildCorrectionPrompt = (
+  broken,
+) => `El siguiente texto debía ser un JSON válido con un array de tarjetas de estudio, pero está malformado:
 
 """${broken.slice(0, 3000)}"""
 
@@ -67,13 +69,13 @@ export async function generateFlashcards(topic, grade = "4-6") {
     let parsed;
     try {
       if (i === 0) {
-        parsed = await callDeepseek(messages, {
+        parsed = await callDeepseekSmartboard(messages, {
           isJson: true,
           temperature: 0.7,
           maxTokens: 2500,
         });
       } else {
-        parsed = await callDeepseek(
+        parsed = await callDeepseekSmartboard(
           [
             { role: "system", content: systemPrompt },
             { role: "user", content: buildCorrectionPrompt(lastBroken) },

@@ -12,22 +12,33 @@ if (!DEEPSEEK_API_KEY || DEEPSEEK_API_KEY === 'your_api_key_here') {
   console.warn('  Get your key from: https://platform.deepseek.com/');
 }
 
-app.listen(PORT, () => {
-  console.log('Server running on http://localhost:' + PORT);
-  console.log('API Key configured: ' + !!DEEPSEEK_API_KEY);
-  console.log('Keep-alive: enabled (10 min interval)');
+async function startServer() {
+  // Initialize Redis (non-blocking; logs warning if unavailable)
+  await app.initializeRedis();
 
+  app.listen(PORT, () => {
+    console.log('Server running on http://localhost:' + PORT);
+    console.log('API Key configured: ' + !!DEEPSEEK_API_KEY);
+    console.log('Redis: ' + (app.redis.isReady() ? 'connected' : 'unavailable (fallback)'));
+    console.log('Keep-alive: enabled (10 min interval)');
 
-  // Keep-alive: ping own /api/health every 10 min to prevent Render free-tier hibernation.
-  const SELF_URL = process.env.BACKEND_URL || `http://localhost:${PORT}`;
-  const pingUrl = `${SELF_URL}/api/health`;
-  const client = pingUrl.startsWith('https') ? https : http;
+    // Keep-alive: ping own /api/health every 10 min to prevent Render free-tier hibernation.
+    const SELF_URL = process.env.BACKEND_URL || `http://localhost:${PORT}`;
+    const pingUrl = `${SELF_URL}/api/health`;
+    const client = pingUrl.startsWith('https') ? https : http;
 
-  setInterval(() => {
-    client.get(pingUrl, (res) => {
-      res.resume();
-    }).on('error', () => {
-      // Silently ignore ping errors — the server is still running.
-    });
-  }, 10 * 60 * 1000); // 10 minutes
+    setInterval(() => {
+      client.get(pingUrl, (res) => {
+        res.resume();
+      }).on('error', () => {
+        // Silently ignore ping errors — the server is still running.
+      });
+    }, 10 * 60 * 1000); // 10 minutes
+  });
+}
+
+// Start server
+startServer().catch((err) => {
+  console.error('Failed to start server:', err);
+  process.exit(1);
 });

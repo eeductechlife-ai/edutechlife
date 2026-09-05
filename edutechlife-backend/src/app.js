@@ -10,6 +10,8 @@ const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./docs/swagger');
 const logger = require('./utils/logger');
+const { sessionMiddleware } = require('./middleware/session');
+const redis = require('./lib/redis');
 const healthRoutes = require('./routes/health');
 const chatRoutes = require('./routes/chat');
 const ialabRoutes = require('./routes/ialab');
@@ -19,6 +21,7 @@ const smartboardRoutes = require('./routes/smartboard');
 const scanImageRoutes = require('./routes/scanImage');
 const stripeRoutes = require('./routes/stripe');
 const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
 const { webhookHandler } = require('./routes/stripe');
 
 const CSP_DIRECTIVES = {
@@ -55,6 +58,8 @@ const ALLOWED_ORIGINS = [
   'https://edutechlife.co',
   'https://www.edutechlife.co',
   'https://edutechlife-api.vercel.app',
+  // Entornos staging/preview: agregar dominios vía CORS_ORIGINS (coma-separado).
+  ...(process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',').map((o) => o.trim()).filter(Boolean) : []),
 ];
 
 // Precompile regex for performance (avoid recompilation per request)
@@ -63,8 +68,8 @@ const LOCALHOST_REGEX = /^https?:\/\/(localhost|127\.0\.0\.1):(3000|3001|517[0-9
 const isAllowed = (origin) => {
   if (!origin) return true;
   if (ALLOWED_ORIGINS.includes(origin)) return true;
-  // Always allow localhost origins for local development, regardless of NODE_ENV
-  if (LOCALHOST_REGEX.test(origin)) return true;
+  // Allow localhost only outside production (prevents accidental prod access from local)
+  if (process.env.NODE_ENV !== 'production' && LOCALHOST_REGEX.test(origin)) return true;
   return false;
 };
 
@@ -105,6 +110,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), webho
 
 app.use(express.json({ limit: '8mb' }));
 app.use(sanitizeMiddleware);
+app.use(sessionMiddleware);
 
 app.use('/api', apiLimiter);
 app.use('/api/chat', deepseekLimiter);
@@ -113,6 +119,8 @@ app.use('/api/voice-token', requireAuth, authLimiter);
 app.use('/api/smartboard/data', requireAuth);
 app.use('/api/smartboard/progress', requireAuth);
 app.use('/api/smartboard/chat', requireAuth, deepseekLimiter);
+app.use('/api/smartboard/dani/chat', requireAuth, deepseekLimiter);
+app.use('/api/smartboard/ai', requireAuth, deepseekLimiter);
 app.use('/api/ialab/progress', requireAuth);
 app.use('/api/ialab/templates', requireAuth);
 
@@ -125,8 +133,13 @@ app.use('/api/smartboard', smartboardRoutes);
 app.use('/api/smartboard', scanImageRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', authLimiter, adminRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
+
+// Export both app and Redis initialization function
+app.initializeRedis = redis.initializeRedis;
+app.redis = redis;
 
 module.exports = app;

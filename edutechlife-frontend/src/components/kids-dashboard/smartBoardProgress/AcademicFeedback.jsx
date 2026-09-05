@@ -35,7 +35,7 @@ const cardClass = (darkMode) =>
   }`;
 
 const headingClass = (darkMode) =>
-  `text-sm font-bold mb-3 flex items-center gap-2 ${darkMode ? "text-white" : "text-[#004B63]"}`;
+  `text-sm font-bold mb-3 flex items-center gap-2 ${darkMode ? "text-white" : "text-[#1E293B]"}`;
 
 const AcademicFeedback = ({ onTabChange }) => {
   const { studentGrades, vakResult, upcomingExams, darkMode } =
@@ -178,18 +178,21 @@ const AcademicFeedback = ({ onTabChange }) => {
         </p>
         {vakStyle ? (
           <span
-            className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full ${
-              darkMode
-                ? "bg-[#1E3A5F] text-[#93C5FD]"
-                : "bg-[#EFF6FF] text-[#2563EB]"
-            }`}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full"
+            style={{
+              background: darkMode
+                ? "rgba(251,133,0,0.15)"
+                : "rgba(251,133,0,0.10)",
+              color: "#FB8500",
+            }}
           >
             🧠 {vakStyle}
           </span>
         ) : (
           <button
             onClick={() => onTabChange?.("vak")}
-            className="text-xs font-medium text-[#4DA8C4] underline underline-offset-2 hover:text-[#2d8fa8] transition-colors"
+            className="text-xs font-medium underline underline-offset-2 transition-colors"
+            style={{ color: "#FB8500" }}
           >
             Haz tu diagnóstico VAK →
           </button>
@@ -244,11 +247,13 @@ const AcademicFeedback = ({ onTabChange }) => {
       {/* Consejo personalizado */}
       {tip && (
         <div
-          className={`rounded-xl px-4 py-3 text-xs leading-relaxed ${
-            darkMode
-              ? "bg-[#0F172A]/60 text-[#94A3B8]"
-              : "bg-[#F0F9FF] text-[#0369A1]"
-          }`}
+          className="rounded-xl px-4 py-3 text-xs leading-relaxed"
+          style={{
+            background: darkMode
+              ? "rgba(251,133,0,0.10)"
+              : "rgba(251,133,0,0.07)",
+            color: darkMode ? "#FCD34D" : "#92400E",
+          }}
         >
           💡 {tip}
         </div>

@@ -174,16 +174,16 @@ describe("useSmartBoardSync", () => {
       // Should not call immediately due to debounce
       expect(saveToSupabase).not.toHaveBeenCalled();
 
-      // Advance 500ms
-      vi.advanceTimersByTime(500);
-
-      await waitFor(() => {
-        expect(saveToSupabase).toHaveBeenCalledWith(
-          expect.any(Object),
-          "test-user-123",
-          kidsData,
-        );
+      // Advance 500ms and flush microtasks (avoids waitFor + fake-timer deadlock)
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(500);
       });
+
+      expect(saveToSupabase).toHaveBeenCalledWith(
+        expect.any(Object),
+        "test-user-123",
+        kidsData,
+      );
 
       vi.useRealTimers();
     });
@@ -200,24 +200,26 @@ describe("useSmartBoardSync", () => {
       });
 
       // Advance 300ms (within 500ms debounce window)
-      vi.advanceTimersByTime(300);
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(300);
+      });
 
       await act(async () => {
         result.current.saveData(data2);
       });
 
-      // Advance another 500ms
-      vi.advanceTimersByTime(500);
-
-      await waitFor(() => {
-        // Should only have called once with the latest data
-        expect(saveToSupabase).toHaveBeenCalledTimes(1);
-        expect(saveToSupabase).toHaveBeenCalledWith(
-          expect.any(Object),
-          "test-user-123",
-          data2, // Latest data wins
-        );
+      // Advance another 500ms and flush microtasks
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(500);
       });
+
+      // Should only have called once with the latest data
+      expect(saveToSupabase).toHaveBeenCalledTimes(1);
+      expect(saveToSupabase).toHaveBeenCalledWith(
+        expect.any(Object),
+        "test-user-123",
+        data2, // Latest data wins
+      );
 
       vi.useRealTimers();
     });

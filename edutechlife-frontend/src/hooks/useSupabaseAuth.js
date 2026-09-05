@@ -128,21 +128,18 @@ export const useSupabaseAuth = () => {
       setError(null);
 
       try {
-        const res = await fetch(
-          `${API_BASE_URL}/api/auth/signup`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email,
-              password,
-              username,
-              firstName,
-              lastName,
-              accountType,
-            }),
-          },
-        );
+        const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            password,
+            username,
+            firstName,
+            lastName,
+            accountType,
+          }),
+        });
 
         const data = await res.json();
 
@@ -161,67 +158,82 @@ export const useSupabaseAuth = () => {
     [],
   );
 
-  // Sign in
+  // Sign in — retries on network errors (Render cold start)
   const signIn = useCallback(async ({ email, password }) => {
     setLoading(true);
     setError(null);
 
-    try {
-      const res = await fetch(
-        `${API_BASE_URL}/api/auth/login`,
-        {
+    let lastError = null;
+    for (let attempt = 0; attempt <= 2; attempt++) {
+      try {
+        if (attempt > 0) {
+          await new Promise((r) => setTimeout(r, attempt * 2000));
+        }
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 15000);
+        const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
-        },
-      );
+          signal: controller.signal,
+        });
+        clearTimeout(tid);
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || "Sign in failed");
+        if (!res.ok) {
+          throw new Error(data.error || "Sign in failed");
+        }
+
+        sessionStorage.setItem("auth_token", data.token);
+        localStorage.setItem("refresh_token", data.refreshToken);
+        localStorage.setItem(
+          "student_name",
+          data.user.username || data.user.email.split("@")[0],
+        );
+
+        setUser({
+          id: data.user.id,
+          email: data.user.email,
+          user_metadata: {
+            username: data.user.username,
+            first_name: data.user.firstName,
+            last_name: data.user.lastName,
+          },
+        });
+        setProfile(data.user);
+
+        Promise.resolve(
+          supabase.auth.setSession({
+            access_token: data.token,
+            refresh_token: data.refreshToken,
+          }),
+        ).catch((err) =>
+          console.warn(
+            "Supabase session sync failed (non-blocking):",
+            err.message,
+          ),
+        );
+
+        return data;
+      } catch (e) {
+        lastError = e;
+        if (
+          attempt < 2 &&
+          (e.name === "AbortError" || e.name === "TypeError")
+        ) {
+          continue;
+        }
+        break;
       }
-
-      // Store tokens
-      sessionStorage.setItem("auth_token", data.token);
-      localStorage.setItem("refresh_token", data.refreshToken);
-      localStorage.setItem(
-        "student_name",
-        data.user.username || data.user.email.split("@")[0],
-      );
-
-      // Set local state immediately (no need to wait for supabase session)
-      setUser({
-        id: data.user.id,
-        email: data.user.email,
-        user_metadata: {
-          username: data.user.username,
-          first_name: data.user.firstName,
-          last_name: data.user.lastName,
-        },
-      });
-      setProfile(data.user);
-
-      // Trigger supabase session update in background (non-blocking)
-      Promise.resolve(
-        supabase.auth.setSession({
-          access_token: data.token,
-          refresh_token: data.refreshToken,
-        }),
-      ).catch((err) =>
-        console.warn(
-          "Supabase session sync failed (non-blocking):",
-          err.message,
-        ),
-      );
-
-      return data;
-    } catch (e) {
-      setError(e.message);
-      throw e;
-    } finally {
-      setLoading(false);
     }
+
+    const msg =
+      lastError?.name === "AbortError" || lastError?.name === "TypeError"
+        ? "Error de conexión. Verifica tu internet e intenta de nuevo."
+        : lastError?.message || "Sign in failed";
+    setError(msg);
+    throw new Error(msg);
   }, []);
 
   // Sign out

@@ -20,7 +20,7 @@ describe("mergeWithLocal", () => {
       const remote = { totalPoints: 300, missions: [] };
       const local = { totalPoints: 100, missions: [] };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       expect(merged.totalPoints).toBe(300);
     });
@@ -29,7 +29,7 @@ describe("mergeWithLocal", () => {
       const remote = { totalActiveMinutes: 120, missions: [] };
       const local = { totalActiveMinutes: 60, missions: [] };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       expect(merged.totalActiveMinutes).toBe(120);
     });
@@ -38,7 +38,7 @@ describe("mergeWithLocal", () => {
       const remote = { totalPoints: 100, missions: [] };
       const local = { totalPoints: 500, missions: [] };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       expect(merged.totalPoints).toBe(500);
     });
@@ -49,7 +49,7 @@ describe("mergeWithLocal", () => {
       const remote = { missions: [{ id: "a", name: "Quiz 1" }] };
       const local = { missions: [{ id: "b", name: "Quiz 2" }] };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       expect(merged.missions).toHaveLength(2);
       expect(merged.missions.map((m) => m.id)).toContain("a");
@@ -64,7 +64,7 @@ describe("mergeWithLocal", () => {
         missions: [{ id: "a", name: "Quiz 1", completed: true }],
       };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       expect(merged.missions).toHaveLength(1);
     });
@@ -73,7 +73,7 @@ describe("mergeWithLocal", () => {
       const remote = { missions: [{ id: "a", name: "Quiz 1", reward: 100 }] };
       const local = { missions: [{ id: "a", name: "Quiz 1", reward: 50 }] };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       // Remote should take precedence for duplicate IDs
       expect(merged.missions[0].reward).toBe(100);
@@ -93,7 +93,7 @@ describe("mergeWithLocal", () => {
         ],
       };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       expect(merged.pointsHistory).toHaveLength(2);
     });
@@ -116,7 +116,7 @@ describe("mergeWithLocal", () => {
         ],
       };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
       const ids = merged.pointsHistory.map((h) => h.id);
 
       expect(new Set(ids).size).toBe(ids.length); // all unique
@@ -139,7 +139,7 @@ describe("mergeWithLocal", () => {
         missions: [{ id: "a", name: "Local Quiz" }],
       };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       // Local points win (1000)
       expect(merged.totalPoints).toBe(1000);
@@ -173,7 +173,7 @@ describe("mergeWithLocal", () => {
       const remote = {};
       const local = { totalPoints: 100, missions: [] };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       expect(merged.totalPoints).toBe(100);
     });
@@ -182,7 +182,7 @@ describe("mergeWithLocal", () => {
       const remote = { totalPoints: 100, missions: [] };
       const local = {};
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       expect(merged.totalPoints).toBe(100);
     });
@@ -199,7 +199,7 @@ describe("mergeWithLocal", () => {
       const local = { missions: [{ id: "b" }] };
 
       // Should not crash
-      expect(() => mergeWithLocal(remote, local)).not.toThrow();
+      expect(() => mergeWithLocal(local, remote)).not.toThrow();
     });
   });
 
@@ -208,7 +208,7 @@ describe("mergeWithLocal", () => {
       const remote = { totalPoints: 500 };
       const local = { totalPoints: 100 };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       // Should be able to have large positive points
       expect(merged.totalPoints).toBe(500);
@@ -224,7 +224,7 @@ describe("mergeWithLocal", () => {
         pointsHistory: [{ id: "redeem", points: -50 }],
       };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       // Both entries preserved
       expect(merged.pointsHistory.length).toBeGreaterThanOrEqual(2);
@@ -255,7 +255,7 @@ describe("mergeWithLocal", () => {
         ],
       };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       // Remote should take precedence
       expect(merged.missions[0].progress.score).toBe(85);
@@ -274,7 +274,7 @@ describe("mergeWithLocal", () => {
         missions: [],
       };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       // Additional fields from remote should be preserved
       expect(merged.studentName).toBe("Alice");
@@ -298,7 +298,7 @@ describe("mergeWithLocal", () => {
         ],
       };
 
-      const merged = mergeWithLocal(remote, local);
+      const merged = mergeWithLocal(local, remote);
 
       // Local points win
       expect(merged.totalPoints).toBe(350);
@@ -315,16 +315,13 @@ describe("loadFromSupabase", () => {
     const mockSupabase = {
       from: vi.fn().mockReturnValue({
         select: vi.fn().mockReturnValue({
-          eq: vi.fn().mockResolvedValue({
-            data: [
-              {
-                id: "1",
-                user_id: "current-user",
-                totalPoints: 100,
-                missions: [],
+          eq: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({
+              data: {
+                data: { totalPoints: 100, missions: [] },
               },
-            ],
-            error: null,
+              error: null,
+            }),
           }),
         }),
       }),
@@ -354,13 +351,15 @@ describe("loadFromSupabase", () => {
     expect(result.error).toBeDefined();
   });
 
-  it("returns null data when no record found", async () => {
+  it("returns default data when no record found", async () => {
     const mockSupabase = {
       from: vi.fn().mockReturnValue({
         select: vi.fn().mockReturnValue({
-          eq: vi.fn().mockResolvedValue({
-            data: [],
-            error: null,
+          eq: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({
+              data: null,
+              error: null,
+            }),
           }),
         }),
       }),
@@ -368,7 +367,9 @@ describe("loadFromSupabase", () => {
 
     const result = await loadFromSupabase(mockSupabase, "current-user");
 
-    expect(result.data).toBeNull();
+    expect(result.success).toBe(true);
+    expect(result.data).toBeDefined();
+    expect(Array.isArray(result.data.missions)).toBe(true);
   });
 
   it("handles network errors gracefully", async () => {
@@ -391,9 +392,13 @@ describe("saveToSupabase", () => {
   it("upserts data to Supabase", async () => {
     const mockSupabase = {
       from: vi.fn().mockReturnValue({
-        upsert: vi.fn().mockResolvedValue({
-          data: { id: "1", totalPoints: 100 },
-          error: null,
+        upsert: vi.fn().mockReturnValue({
+          select: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({
+              data: { id: "1", totalPoints: 100 },
+              error: null,
+            }),
+          }),
         }),
       }),
     };
@@ -419,23 +424,29 @@ describe("saveToSupabase", () => {
     expect(result.success).toBe(false);
   });
 
-  it("includes user_id in upsert payload", async () => {
+  it("includes user_id, platform y data anidado en el upsert payload", async () => {
     const mockSupabase = {
       from: vi.fn().mockReturnValue({
-        upsert: vi.fn().mockResolvedValue({
-          data: {},
-          error: null,
+        upsert: vi.fn().mockReturnValue({
+          select: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({ data: {}, error: null }),
+          }),
         }),
       }),
     };
 
     await saveToSupabase(mockSupabase, "user-1", { totalPoints: 100 });
 
-    expect(mockSupabase.from("smartboard_data").upsert).toHaveBeenCalledWith(
-      expect.objectContaining({
+    expect(mockSupabase.from).toHaveBeenCalledWith("smartboard_kids_data");
+    expect(
+      mockSupabase.from("smartboard_kids_data").upsert,
+    ).toHaveBeenCalledWith(
+      {
         user_id: "user-1",
-        totalPoints: 100,
-      }),
+        platform: "smartboard",
+        data: { totalPoints: 100 },
+      },
+      { onConflict: "user_id" },
     );
   });
 
@@ -453,57 +464,46 @@ describe("saveToSupabase", () => {
 });
 
 describe("setupConnectionListener", () => {
-  it("sets up real-time subscription to user data", () => {
-    const mockOn = vi.fn().mockReturnValue({
-      on: vi.fn().mockReturnValue({ unsubscribe: vi.fn() }),
-    });
-
-    const mockSupabase = {
-      channel: vi.fn().mockReturnValue({
-        on: mockOn,
-        subscribe: vi.fn(),
-      }),
-    };
-
-    setupConnectionListener(mockSupabase, "user-1", () => ({}));
-
-    expect(mockSupabase.channel).toHaveBeenCalled();
-  });
-
-  it("returns cleanup function", () => {
-    const mockUnsubscribe = vi.fn();
-    const mockSupabase = {
-      channel: vi.fn().mockReturnValue({
-        on: vi.fn().mockReturnValue({
-          unsubscribe: mockUnsubscribe,
-        }),
-        subscribe: vi.fn(),
-      }),
-    };
-
-    const cleanup = setupConnectionListener(mockSupabase, "user-1", () => ({}));
-
+  it("registra un listener 'online' en window", () => {
+    const addSpy = vi.spyOn(window, "addEventListener");
+    const cleanup = setupConnectionListener(null, "user-1", () => ({}));
+    expect(addSpy).toHaveBeenCalledWith("online", expect.any(Function));
     expect(typeof cleanup).toBe("function");
+    addSpy.mockRestore();
     cleanup();
-    expect(mockUnsubscribe).toHaveBeenCalled();
   });
 
-  it("handles real-time updates when connection re-established", () => {
-    const mockCallback = vi.fn();
+  it("devuelve una función de limpieza que remueve el listener", () => {
+    const removeSpy = vi.spyOn(window, "removeEventListener");
+    const cleanup = setupConnectionListener(null, "user-1", () => ({}));
+    cleanup();
+    expect(removeSpy).toHaveBeenCalledWith("online", expect.any(Function));
+    removeSpy.mockRestore();
+  });
+
+  it("invoca getCurrentData cuando la conexión se restablece", async () => {
+    let handler;
+    const addSpy = vi
+      .spyOn(window, "addEventListener")
+      .mockImplementation((ev, fn) => {
+        if (ev === "online") handler = fn;
+      });
     const mockSupabase = {
-      channel: vi.fn().mockReturnValue({
-        on: vi.fn().mockReturnValue({
-          unsubscribe: vi.fn(),
+      from: vi.fn().mockReturnValue({
+        upsert: vi.fn().mockReturnValue({
+          select: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({ data: {}, error: null }),
+          }),
         }),
-        subscribe: vi.fn(),
       }),
     };
+    const cb = vi.fn().mockReturnValue({ totalPoints: 1 });
 
-    setupConnectionListener(mockSupabase, "user-1", mockCallback);
+    setupConnectionListener(mockSupabase, "user-1", cb);
+    await handler();
+    await new Promise((r) => setTimeout(r, 0));
 
-    // Simulate receiving update
-    expect(mockSupabase.channel).toHaveBeenCalledWith(
-      expect.stringContaining("smartboard"),
-    );
+    expect(cb).toHaveBeenCalled();
+    addSpy.mockRestore();
   });
 });

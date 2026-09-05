@@ -1,43 +1,20 @@
--- Idempotent: only applies if table exists
-DO $$
-BEGIN
-  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'students') THEN
-    -- Idempotent: only applies if table exists
-DO $$
-BEGIN
-  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'students') THEN
-    -- ============================================================================
-    -- Migration 047 — Fix students.age CHECK constraint
---
-    -- Problem: students table has CHECK (age >= 6 AND age <= 16) but the backend
-    -- endpoints accept ages 5-25 (see /api/smartboard/student-profile PUT, line 1011).
-    -- This creates a validation mismatch: the API accepts 5-25 but DB rejects anything
-    -- outside 6-16, causing INSERT/UPDATE failures for edge cases.
---
-    -- Solution: Alter the constraint to match backend expectations: age >= 5 AND age <= 25
-    -- This allows:
-    -- - Ages 5-6 for very early readers
-    -- - Ages 6-16 for primary SmartBoard users
-    -- - Ages 17-25 for older students / premium IALab users
-    -- ============================================================================
+-- ============================================================================
+-- Migration 047 — Fix students.age CHECK constraint
+-- El CHECK inline de 011 se auto-nombró students_age_check. La API acepta 5-25;
+-- la BD rechazaba fuera de 6-16. Aquí se reemplaza por 5-25. Idempotente.
+-- ============================================================================
 
-BEGIN;
-
-    -- Drop the old constraint
-ALTER TABLE students
-DROP CONSTRAINT IF EXISTS "age >= 6 AND age <= 16";
-
-    -- Add the new constraint with expanded range
-ALTER TABLE students
-ADD CONSTRAINT "age >= 5 AND age <= 25" CHECK (age >= 5 AND age <= 25);
-
-    -- Log the change
-SELECT 'students.age constraint updated: 6-16 → 5-25 ✓' AS migration_result;
-
-COMMIT;
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'students_age_check' AND conrelid = 'public.students'::regclass) THEN
+    ALTER TABLE public.students DROP CONSTRAINT students_age_check;
   END IF;
-END
-$$;
+END $$;
+
+-- Forma literal por si el constraint se creó con ese nombre explícito.
+ALTER TABLE public.students DROP CONSTRAINT IF EXISTS "age >= 6 AND age <= 16";
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'students_age_check' AND conrelid = 'public.students'::regclass) THEN
+    ALTER TABLE public.students ADD CONSTRAINT students_age_check CHECK (age >= 5 AND age <= 25);
   END IF;
-END
-$$;
+END $$;

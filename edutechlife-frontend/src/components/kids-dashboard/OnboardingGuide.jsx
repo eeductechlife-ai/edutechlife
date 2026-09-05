@@ -1,7 +1,9 @@
-import { memo } from "react";
+import { memo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { track } from "../../lib/analytics";
+import { EVENTS } from "../../lib/analyticsEvents";
 
 const FEATURES = [
   { icon: "🧠", label: "VAK", desc: "Descubre tu estilo de aprendizaje" },
@@ -34,6 +36,14 @@ const OnboardingGuide = memo(({ onTabChange }) => {
   } = useSmartBoardKids();
 
   const show = !onboardingComplete && !hasSeenWelcome;
+
+  const trackedRef = useRef(false);
+  useEffect(() => {
+    if (show && !trackedRef.current) {
+      trackedRef.current = true;
+      track(EVENTS.ONBOARDING_STARTED, {});
+    }
+  }, [show]);
 
   const ageGroup =
     studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior";

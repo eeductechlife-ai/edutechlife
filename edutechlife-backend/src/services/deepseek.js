@@ -80,7 +80,9 @@ async function chat(apiKey, body) {
 
 async function chatStream(apiKey, body, onChunk) {
   const payload = buildPayload({ ...body, stream: true });
-  const response = await fetch(DEEPSEEK_API_URL, {
+  // Usar el fetch global (WHATWG ReadableStream con getReader); node-fetch v3
+  // expone PassThrough (sin getReader) y rompería el streaming.
+  const response = await globalThis.fetch(DEEPSEEK_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -93,25 +95,35 @@ async function chatStream(apiKey, body, onChunk) {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = '';
+  let _bytes = 0;
+  let _chunks = 0;
 
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
+    _bytes += value.length;
     buffer += decoder.decode(value, { stream: true });
     const lines = buffer.split('\n');
     buffer = lines.pop() || '';
     for (const line of lines) {
       if (line.startsWith('data: ')) {
         const data = line.slice(6).trim();
-        if (data === '[DONE]') return;
+        if (data === '[DONE]') {
+          console.log('[chatStream] DONE. bytesRead=', _bytes, 'contentChunks=', _chunks);
+          return;
+        }
         try {
           const parsed = JSON.parse(data);
           const content = parsed.choices?.[0]?.delta?.content || '';
-          if (content) onChunk(content);
+          if (content) {
+            onChunk(content);
+            _chunks++;
+          }
         } catch { /* skip malformed SSE frames */ }
       }
     }
   }
+  console.log('[chatStream] done. bytesRead=', _bytes, 'contentChunks=', _chunks);
 }
 
 module.exports = { chat, chatStream, validateMessages, buildPayload, fetchWithRetry };

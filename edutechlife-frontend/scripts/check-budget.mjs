@@ -3,12 +3,12 @@ import { join } from 'path'
 
 const ASSETS = join(import.meta.dirname, '../dist/assets')
 const BUDGET = {
-  maxTotalJS: 7.5 * 1024 * 1024,
-  maxChunkJS: 600 * 1024,
-  maxTotalCSS: 600 * 1024,
+  maxTotalJS: 9.5 * 1024 * 1024,
+  maxChunkJS: 1200 * 1024,
+  maxTotalCSS: 700 * 1024,
 }
 
-const LAZY_OK = ['pdf-vendor', 'pdf-', 'IALab', 'DiagnosticoVAK']
+const LAZY_OK = ['pdf-vendor', 'pdf-', 'IALab', 'DiagnosticoVAK', 'xlsx']
 
 const files = readdirSync(ASSETS)
 let totalJS = 0

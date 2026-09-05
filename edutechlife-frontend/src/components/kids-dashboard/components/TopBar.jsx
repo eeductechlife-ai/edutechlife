@@ -1,10 +1,16 @@
-import { memo } from "react";
+import { memo, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Flame, Gem, Home } from "lucide-react";
+import { Flame, Gem, Home, Bell, GraduationCap } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import { CATEGORIES, TOP_BAR_LABELS } from "../kidsDashboardConfig";
+import {
+  CATEGORIES,
+  CATEGORY_MAP,
+  TOP_BAR_LABELS,
+} from "../kidsDashboardConfig";
 import { SB_GRADIENTS, glow } from "../smartboardTheme";
 import UserMenu from "../UserMenu";
+import SmartBoardNotificationPanel from "./SmartBoardNotificationPanel";
+import { useNotification } from "../../../context/NotificationContext";
 
 const TopBar = memo(
   ({
@@ -18,7 +24,11 @@ const TopBar = memo(
     onLogout,
   }) => {
     const { t } = useTranslation();
-    const activeCat = CATEGORIES.find((c) => c.tabs.includes(activeTab));
+    const { unreadCount } = useNotification();
+    const [notifOpen, setNotifOpen] = useState(false);
+    const bellRef = useRef(null);
+    const activeCatId = CATEGORY_MAP[activeTab] || "home";
+    const activeCat = CATEGORIES.find((c) => c.id === activeCatId);
     const ActiveIcon = activeCat?.Icon || Home;
 
     return (
@@ -31,7 +41,36 @@ const TopBar = memo(
             : "bg-white/80 border-[#E2E8F0]/50"
         }`}
       >
-        {activeTab !== "inicio" && (
+        {activeTab === "inicio" ? (
+          /* Brand mark — shown on home screen where left side was empty */
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="md:hidden flex items-center gap-2.5 min-w-0"
+          >
+            <span
+              className="w-9 h-9 rounded-xl flex items-center justify-center text-white flex-shrink-0"
+              style={{
+                background: SB_GRADIENTS.brand,
+                boxShadow: `${glow("#00B4D8", 0.35)}, inset 0 1px 0 rgba(255,255,255,0.3)`,
+              }}
+            >
+              <GraduationCap className="w-5 h-5" strokeWidth={2.2} />
+            </span>
+            <span className="hidden sm:block leading-tight">
+              <span
+                className={`block text-[9px] font-black uppercase tracking-widest ${darkMode ? "text-[#5C7386]" : "text-[#93A6B2]"}`}
+              >
+                Plataforma
+              </span>
+              <span
+                className={`block text-base font-black tracking-tight ${darkMode ? "text-white" : "text-[#00303F]"}`}
+              >
+                SmartBoard
+              </span>
+            </span>
+          </motion.div>
+        ) : (
           <div className="flex items-center gap-3 min-w-0">
             <motion.span
               key={activeCat?.id}
@@ -65,8 +104,9 @@ const TopBar = memo(
         )}
 
         <div className="flex items-center gap-2 md:gap-3 ml-auto">
+          {/* Streak — always visible; compact on mobile (icon+number only), full on sm+ */}
           <motion.div
-            className="hidden sm:flex px-3 md:px-2.5 py-2 md:py-1.5 rounded-2xl items-center gap-2 transition-colors duration-500"
+            className="flex px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-2xl items-center gap-1.5 sm:gap-2 transition-colors duration-500"
             style={{
               background: darkMode
                 ? "linear-gradient(135deg, rgba(251,133,0,0.18), rgba(255,209,102,0.12))"
@@ -76,27 +116,28 @@ const TopBar = memo(
             title={t("smartboard.streak_title")}
           >
             <span
-              className="w-8 h-8 md:w-7 md:h-7 rounded-lg flex items-center justify-center text-white flex-shrink-0"
+              className="w-7 h-7 rounded-lg flex items-center justify-center text-white flex-shrink-0"
               style={{
                 background: "linear-gradient(135deg, #FB8500, #F3722C)",
               }}
             >
-              <Flame className="w-5 md:w-4 h-5 md:h-4" strokeWidth={2.4} />
+              <Flame className="w-4 h-4" strokeWidth={2.4} />
             </span>
             <span className="leading-tight">
-              <span className="block text-base md:text-sm font-black text-[#FB8500] tabular-nums">
+              <span className="block text-sm font-black text-[#FB8500] tabular-nums">
                 {streak?.current ?? 0}
               </span>
               <span
-                className={`block text-[10px] md:text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+                className={`hidden sm:block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
               >
                 {t("smartboard.days")}
               </span>
             </span>
           </motion.div>
 
+          {/* Points — always visible; label hidden on mobile */}
           <motion.div
-            className="flex px-3 md:px-2.5 py-2 md:py-1.5 rounded-2xl items-center gap-2 transition-colors duration-500"
+            className="flex px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-2xl items-center gap-1.5 sm:gap-2 transition-colors duration-500"
             style={{
               background: darkMode
                 ? "linear-gradient(135deg, rgba(0,150,199,0.20), rgba(72,202,228,0.12))"
@@ -107,24 +148,57 @@ const TopBar = memo(
             aria-atomic="true"
           >
             <span
-              className="w-8 h-8 md:w-7 md:h-7 rounded-lg flex items-center justify-center text-white flex-shrink-0"
+              className="w-7 h-7 rounded-lg flex items-center justify-center text-white flex-shrink-0"
               style={{ background: SB_GRADIENTS.brand }}
             >
-              <Gem className="w-5 md:w-4 h-5 md:h-4" strokeWidth={2.4} />
+              <Gem className="w-4 h-4" strokeWidth={2.4} />
             </span>
             <span className="leading-tight">
               <span
-                className={`block text-base md:text-sm font-black tabular-nums ${darkMode ? "text-white" : "text-[#00303F]"}`}
+                className={`block text-sm font-black tabular-nums ${darkMode ? "text-white" : "text-[#00303F]"}`}
               >
                 {(totalPoints ?? 0).toLocaleString()}
               </span>
               <span
-                className={`block text-[10px] md:text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+                className={`hidden sm:block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
               >
                 {t("smartboard.points_display")}
               </span>
             </span>
           </motion.div>
+
+          {/* Notification bell — surfaces SmartBoard domain notifications (§42) */}
+          <div className="relative">
+            <button
+              ref={bellRef}
+              onClick={() => setNotifOpen((v) => !v)}
+              aria-label={t("smartboard.notifications") || "Notificaciones"}
+              aria-haspopup="true"
+              aria-expanded={notifOpen}
+              className={`relative flex items-center justify-center w-11 h-11 md:w-10 md:h-10 rounded-2xl transition-colors ${
+                darkMode
+                  ? "bg-[#334155]/40 hover:bg-[#334155]/70 text-[#E2F0FF]"
+                  : "bg-[#EEF4F8] hover:bg-[#DCE8EF] text-[#00303F]"
+              }`}
+            >
+              <Bell
+                className="w-5 md:w-[19px] h-5 md:h-[19px]"
+                strokeWidth={2.3}
+              />
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] text-[10px] font-bold text-white bg-[#EF476F] rounded-full border-2 border-white px-1">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
+            </button>
+            <SmartBoardNotificationPanel
+              isOpen={notifOpen}
+              onClose={() => setNotifOpen(false)}
+              triggerRef={bellRef}
+              darkMode={darkMode}
+              onNavigateTab={onTabChange}
+            />
+          </div>
 
           {authToken && (
             <UserMenu

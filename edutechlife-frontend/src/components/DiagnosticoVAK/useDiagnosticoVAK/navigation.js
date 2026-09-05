@@ -3,6 +3,8 @@ import { MOOD_MESSAGES } from "./constants";
 import { getQuestionsByAge } from "../../../data/vakQuestions";
 import { getInstitutionSlugFromURL } from "../vakHelpers";
 import { saveVakDiagnostic } from "../../../services/institutionalAnalytics";
+import { track } from "../../../lib/analytics";
+import { EVENTS } from "../../../lib/analyticsEvents";
 
 export function useNavigationHandlers({
   t,
@@ -138,6 +140,12 @@ export function useNavigationHandlers({
         });
 
         setDiagnosis(res);
+
+        track(EVENTS.VAK_COMPLETED, {
+          dominant_style: res.dominant,
+          student_age: studentAge,
+          elapsed_time: elapsedTime,
+        });
 
         updateStudentInfo({
           diagnosis: res,

@@ -1,16 +1,25 @@
-import { useState, useCallback, useEffect } from "react";
-import { callDeepseek } from "../../../utils/api";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { callDeepseekSmartboard } from "../../../utils/api";
 import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 import {
   getCurriculumPromptText,
   getGradeLabel,
 } from "../../../data/curriculum/curriculumHelper";
+import { API_BASE_URL } from "../../../config/api";
+
+function getAuthToken() {
+  try {
+    return sessionStorage.getItem("auth_token");
+  } catch {
+    return null;
+  }
+}
 
 function storageKey(userId) {
   return `improvement_plan_${userId}`;
 }
 
-function loadPlan(userId) {
+function loadPlanLocal(userId) {
   if (!userId) return null;
   try {
     const raw = localStorage.getItem(storageKey(userId));
@@ -20,12 +29,44 @@ function loadPlan(userId) {
   }
 }
 
-function savePlan(userId, plan) {
+function savePlanLocal(userId, plan) {
   if (!userId) return;
   try {
     localStorage.setItem(storageKey(userId), JSON.stringify(plan));
   } catch {
     // ignore quota errors
+  }
+}
+
+async function loadPlanFromServer() {
+  const token = getAuthToken();
+  if (!token) return null;
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/smartboard/improvement-plan`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.plan || null;
+  } catch {
+    return null;
+  }
+}
+
+async function savePlanToServer(plan) {
+  const token = getAuthToken();
+  if (!token) return;
+  try {
+    await fetch(`${API_BASE_URL}/api/smartboard/improvement-plan`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ plan }),
+    });
+  } catch {
+    // localStorage remains the fallback
   }
 }
 
@@ -39,13 +80,23 @@ export function useImprovementPlan() {
     countryCode,
   } = useSmartBoardKids();
 
-  const [plan, setPlan] = useState(() => loadPlan(userId));
+  const [plan, setPlan] = useState(() => loadPlanLocal(userId));
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState(null);
+  const loadedFromServer = useRef(false);
 
-  // Re-load plan when userId changes (e.g. login)
   useEffect(() => {
-    setPlan(loadPlan(userId));
+    if (!userId || loadedFromServer.current) return;
+    loadedFromServer.current = true;
+
+    loadPlanFromServer().then((serverPlan) => {
+      if (serverPlan) {
+        setPlan(serverPlan);
+        savePlanLocal(userId, serverPlan);
+      } else {
+        setPlan(loadPlanLocal(userId));
+      }
+    });
   }, [userId]);
 
   const generatePlan = useCallback(async () => {
@@ -71,7 +122,6 @@ export function useImprovementPlan() {
       })
       .join(", ");
 
-    // Detect weak subjects from grades (score < 3.5) to prioritize in curriculum
     const weakKeys = (studentGrades || [])
       .filter((g) => (g.score ?? g.grade ?? 5) < 3.5)
       .map((g) =>
@@ -131,10 +181,9 @@ REGLAS:
     const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     try {
-      const res = await callDeepseek(
+      const res = await callDeepseekSmartboard(
         [{ role: "user", content: prompt }],
         { temperature: 0.7, maxTokens: 2000, isJson: true },
-        controller.signal,
       );
       const parsed = typeof res === "string" ? JSON.parse(res) : res;
       if (!parsed?.weeks?.length) throw new Error("Respuesta incompleta");
@@ -147,10 +196,17 @@ REGLAS:
         generatedAt: Date.now(),
       };
       setPlan(planWithProgress);
-      savePlan(userId, planWithProgress);
+      savePlanLocal(userId, planWithProgress);
+      savePlanToServer(planWithProgress);
     } catch (e) {
       if (e.name !== "AbortError") {
-        setError(e.message || "Error al generar el plan");
+        if (e.code === "PARENTAL_CONSENT_REQUIRED") {
+          setError(
+            "Se necesita el permiso de tus padres para generar un plan de mejora. Pide a un adulto que autorice tu cuenta.",
+          );
+        } else {
+          setError(e.message || "Error al generar el plan");
+        }
       }
     } finally {
       clearTimeout(timeoutId);
@@ -183,7 +239,8 @@ REGLAS:
                 },
           ),
         };
-        savePlan(userId, updated);
+        savePlanLocal(userId, updated);
+        savePlanToServer(updated);
         return updated;
       });
     },
