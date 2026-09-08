@@ -128,7 +128,7 @@ const UserCoursesDashboard = () => {
             animate="visible"
             className="bg-gradient-to-br from-[var(--theme-emphasis)]/[0.06] to-[var(--theme-primary)]/[0.04] rounded-xl p-3 border border-[var(--theme-emphasis)]/20"
           >
-            <p className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">
+            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               {stat.label}
             </p>
             <p className="text-lg font-bold text-[var(--theme-emphasis)] mt-0.5">
@@ -140,7 +140,7 @@ const UserCoursesDashboard = () => {
 
       {/* Filter tabs */}
       <div
-        className="flex gap-1.5 bg-slate-100 rounded-xl p-1 w-fit"
+        className="flex gap-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl p-1 w-fit"
         role="tablist"
       >
         {tabs.map((tab) => (
@@ -151,8 +151,8 @@ const UserCoursesDashboard = () => {
             onClick={() => setActiveFilter(tab.id)}
             className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
               activeFilter === tab.id
-                ? "bg-white text-[var(--theme-emphasis)] shadow-sm"
-                : "text-slate-500 hover:text-slate-700"
+                ? "bg-white dark:bg-slate-700 text-[var(--theme-emphasis)] shadow-sm"
+                : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
             }`}
           >
             {tab.label}
@@ -218,24 +218,24 @@ const UserCoursesDashboard = () => {
             damping: 24,
             delay: 0.3,
           }}
-          className="border-t border-slate-100 pt-6"
+          className="border-t border-slate-100 dark:border-slate-700 pt-6"
         >
-          <h3 className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+          <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-3 flex items-center gap-2">
             <Icon name="fa-award" className="text-[var(--theme-primary)]" />
             {t("ialab.dashboard.certificates_title")}
           </h3>
-          <div className="bg-gradient-to-br from-emerald-50 to-white rounded-xl p-4 border border-emerald-200 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
+          <div className="bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950/40 dark:to-slate-800/60 rounded-xl p-4 border border-emerald-200 dark:border-emerald-900/50 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center shrink-0">
               <Icon
                 name="fa-check-circle"
-                className="text-emerald-600 text-lg"
+                className="text-emerald-600 dark:text-emerald-400 text-lg"
               />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-slate-800 truncate">
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">
                 {activeCourse.title}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 {t("ialab.dashboard.completed_at", {
                   pct: Math.round(activeCourse.progress),
                 })}
