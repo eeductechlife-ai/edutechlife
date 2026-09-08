@@ -2,144 +2,100 @@ export const MODULE_4_EN = [
   {
     id: "m4q1",
     question:
-      'You are a marine biology researcher and need to analyze 15 academic papers on climate change impact on coral reefs for a publication. Your supervisor asks: "Why would you use NotebookLM instead of ChatGPT for this research?" What is the most compelling reason?',
+      "You must analyze 15 papers from your research. Why is NotebookLM better than a general chat?",
     options: [
       {
         id: "m4q1_a",
-        label:
-          "NotebookLM works exclusively with your documents and textually cites each source, eliminating the risk of inventing data not in your papers",
+        label: "It works only with your documents and cites each source",
       },
-      {
-        id: "m4q1_b",
-        label: "ChatGPT cannot read academic PDFs, only plain text documents",
-      },
-      {
-        id: "m4q1_c",
-        label:
-          "NotebookLM is faster because it does not need internet connection",
-      },
-      {
-        id: "m4q1_d",
-        label:
-          "ChatGPT only processes information in English and papers may be in other languages",
-      },
+      { id: "m4q1_b", label: "It cannot read academic PDFs" },
+      { id: "m4q1_c", label: "It works without an internet connection" },
+      { id: "m4q1_d", label: "It only processes texts in English" },
     ],
     correctAnswer: "m4q1_a",
     topic: "NotebookLM",
     difficulty: "medium",
+    source: "Video: Getting Started with NotebookLM",
     feedback:
-      'NotebookLM is designed for research based on your own sources: zero hallucinations, verifiable citations, and deep contextual analysis. ChatGPT is excellent for general tasks, but for academic research with specific sources, NotebookLM is the right tool. Review the video "First Steps with NotebookLM".',
+      "NotebookLM answers from your documents and cites the source. Watch the getting started video.",
   },
   {
     id: "m4q2",
     question:
-      "You are an environmental science student and find 30 documents on climate change: 10 peer-reviewed academic papers, 5 verified news articles, 8 personal opinion blogs, 4 government datasets, and 3 science documentaries. Your NotebookLM notebook accepts up to 50 sources. What is the smartest curation strategy?",
+      "You have papers, news, blogs and datasets about a topic. Which sources do you prioritize in your notebook?",
     options: [
       {
         id: "m4q2_a",
-        label:
-          "Select the 10 papers + 4 datasets + 3 documentaries as priority sources, leaving out unverified opinion blogs",
+        label: "Trusted papers and datasets; leave out opinion blogs",
       },
-      {
-        id: "m4q2_b",
-        label:
-          "Upload all 30 documents because there is space available in the notebook",
-      },
+      { id: "m4q2_b", label: "All the sources because there is space" },
       {
         id: "m4q2_c",
-        label: "Upload only the 8 blogs because they use simpler language",
+        label: "Only the blogs because of their simple language",
       },
-      {
-        id: "m4q2_d",
-        label:
-          "Upload only the 5 news articles because they have the most recent dates",
-      },
+      { id: "m4q2_d", label: "Only the news because it is the most recent" },
     ],
     correctAnswer: "m4q2_a",
     topic: "NotebookLM",
     difficulty: "medium",
+    source: "NotebookLM Guide",
     feedback:
-      'Curation is not about space — it is about selecting reliable and relevant sources. Academic papers and government datasets are verifiable; opinion blogs add noise and unfounded bias. Review the lesson "Select Sources Like an Expert" and the OVA "Simulator: Document Analysis".',
+      "Source quality defines answer quality. Choose reliable and relevant sources.",
   },
   {
     id: "m4q3",
     question:
-      "You are a medical student and have 3 PDFs on cardiac physiology to study for an exam. Tomorrow you have a 45-minute bus ride and want to use that time to review. What is the best strategy using NotebookLM?",
+      "You have a bus trip and want to review 3 PDFs. What is the best option with NotebookLM?",
     options: [
       {
         id: "m4q3_a",
-        label:
-          "Upload the 3 PDFs to a notebook, generate an Audio Overview that analyzes them, and listen during the trip",
+        label: "Generate an Audio Overview and listen to it on the trip",
       },
-      {
-        id: "m4q3_b",
-        label: "Read all 3 PDFs on the bus despite movement and poor lighting",
-      },
-      {
-        id: "m4q3_c",
-        label: "Ask ChatGPT for a general summary and read it on the bus",
-      },
-      {
-        id: "m4q3_d",
-        label: "Wait until you get home to read the PDFs calmly",
-      },
+      { id: "m4q3_b", label: "Read the full PDFs on the bus" },
+      { id: "m4q3_c", label: "Ask another chat for a general summary" },
+      { id: "m4q3_d", label: "Wait until you get home to read them" },
     ],
     correctAnswer: "m4q3_a",
     topic: "Audio Overview",
     difficulty: "medium",
+    source: "Video: Getting Started with NotebookLM",
     feedback:
-      'Audio Overview turns your documents into a conversational podcast with two AI voices analyzing the content. It is ideal for reviewing dense material when you cannot read, like during a trip. Review the video "Audio Overview: Your Content as a Podcast".',
+      "Audio Overview turns your documents into a podcast to review without reading.",
   },
   {
     id: "m4q4",
     question:
-      'NotebookLM responds: "Neuroplasticity occurs mainly in childhood (Source: neuroplasticity.pdf, page 5)." You click the citation and read in the PDF: "Neuroplasticity is most active during childhood, but continues throughout life." What do you conclude?',
+      "NotebookLM cites your PDF and you read the original text. What should you do?",
     options: [
       {
         id: "m4q4_a",
-        label:
-          "The AI interpreted correctly but simplified the nuance — the original citation says something more precise, showing why you should always verify textual citations",
+        label: "Compare the quote with the original and confirm the nuance",
       },
-      {
-        id: "m4q4_b",
-        label:
-          "NotebookLM was completely wrong; the source says nothing similar",
-      },
+      { id: "m4q4_b", label: "Trust the quote without checking the original" },
       {
         id: "m4q4_c",
-        label:
-          "The PDF is poorly written and should be removed from the notebook",
+        label: "Delete the PDF because the AI already interpreted it",
       },
-      {
-        id: "m4q4_d",
-        label:
-          "The AI response is correct because it cited the PDF properly, you do not need to read the original source",
-      },
+      { id: "m4q4_d", label: "Translate the answer to check its quality" },
     ],
     correctAnswer: "m4q4_a",
-    topic: "Precision",
+    topic: "Accuracy",
     difficulty: "hard",
+    source: "NotebookLM Guide",
     feedback:
-      'This is a classic case of why verifying citations is essential. The AI did not hallucinate — it interpreted correctly but lost an important nuance ("most active" vs "occurs mainly"). AI gives you speed; you give it precision. Review the infographic "Smart Summaries with NotebookLM".',
+      "Always check citations against the original: the AI gives speed and you give accuracy.",
   },
   {
     id: "m4q5",
     question:
-      "What is the best practice when organizing your sources in NotebookLM for research?",
+      "How do you best organize your sources in NotebookLM for research?",
     options: [
-      {
-        id: "m4q5_a",
-        label: "Upload all 50 sources at once without organizing",
-      },
+      { id: "m4q5_a", label: "Upload all the sources without ordering them" },
       {
         id: "m4q5_b",
-        label:
-          "Select relevant and reliable sources, organize them by topics and categories for better results",
+        label: "Choose relevant sources and group them by topic",
       },
-      {
-        id: "m4q5_c",
-        label: "Upload only summaries, never the complete documents",
-      },
+      { id: "m4q5_c", label: "Upload only summaries, never full documents" },
       {
         id: "m4q5_d",
         label: "Mix academic sources with blogs without distinction",
@@ -148,202 +104,113 @@ export const MODULE_4_EN = [
     correctAnswer: "m4q5_b",
     topic: "Curation",
     difficulty: "medium",
+    source: "NotebookLM Guide",
     feedback:
-      'The quality of your sources determines the quality of responses. Review the topic "Select Sources Like an Expert".',
+      "Well chosen and organized sources give better answers. Review the curation topic.",
   },
   {
     id: "m4q6",
-    question:
-      "If you find two sources that contradict each other in NotebookLM, what should you do?",
+    question: "If two of your sources contradict each other, what do you do?",
     options: [
-      { id: "m4q6_a", label: "Remove both sources and look for new ones" },
-      {
-        id: "m4q6_b",
-        label:
-          "Analyze both, identify the reasons for the contradiction, and document it as part of your research",
-      },
-      { id: "m4q6_c", label: "Keep only the most recent source" },
+      { id: "m4q6_a", label: "Analyze both and document the difference" },
+      { id: "m4q6_b", label: "Delete both sources and look for others" },
+      { id: "m4q6_c", label: "Keep only the most recent one" },
       { id: "m4q6_d", label: "Ignore the contradiction and move on" },
     ],
-    correctAnswer: "m4q6_b",
+    correctAnswer: "m4q6_a",
     topic: "Critical Analysis",
     difficulty: "hard",
+    source: "NotebookLM Guide",
     feedback:
-      "Contradictions are learning opportunities. Analyzing them strengthens your research. Review the document analysis simulator.",
+      "Contradictions strengthen your research if you analyze them. Review the analysis simulator.",
   },
   {
     id: "m4q7",
     question:
-      "According to the module's best practices, what should you ALWAYS do when NotebookLM gives you an answer with citations?",
+      "What should you always do when NotebookLM answers with citations?",
     options: [
-      {
-        id: "m4q7_a",
-        label:
-          "Verify the citations by clicking them to confirm the information is correct and in context",
-      },
-      { id: "m4q7_b", label: "Copy and paste the response without reviewing" },
-      {
-        id: "m4q7_c",
-        label: "Delete the original document since you no longer need it",
-      },
-      {
-        id: "m4q7_d",
-        label: "Translate the response to another language to verify quality",
-      },
+      { id: "m4q7_a", label: "Verify the citations in the original source" },
+      { id: "m4q7_b", label: "Copy the answer without checking it" },
+      { id: "m4q7_c", label: "Delete the original documents" },
+      { id: "m4q7_d", label: "Translate the answer to validate it" },
     ],
     correctAnswer: "m4q7_a",
     topic: "Verification",
     difficulty: "medium",
+    source: "Video: Getting Started with NotebookLM",
     feedback:
-      "Always verify citations. AI is your assistant, but you are the final responsible party. Review the module OVA.",
+      "The AI is your assistant, but you are the final person in charge. Review the module OVA.",
   },
   {
     id: "m4q8",
     question:
-      "A team of 4 students researches the same topic for an integrative project. Each has different documents and they want to use NotebookLM to work together. What is the most efficient collaborative workflow?",
+      "A team wants to work with NotebookLM on the same project. What is the best workflow?",
     options: [
       {
         id: "m4q8_a",
-        label:
-          "Each student creates their notebook with their sources and shares the link with the team; everyone can consult and ask questions about each other's sources",
+        label: "Each person creates a notebook and shares the link",
       },
-      {
-        id: "m4q8_b",
-        label:
-          "One student creates a notebook and the others ask them to make queries on their behalf",
-      },
+      { id: "m4q8_b", label: "Only one asks questions for the whole team" },
       {
         id: "m4q8_c",
-        label:
-          "Each student works separately and at the end they manually compare results",
+        label: "Each person works apart and compares at the end",
       },
-      {
-        id: "m4q8_d",
-        label:
-          "All 4 students take turns using one computer with a single open notebook",
-      },
+      { id: "m4q8_d", label: "They take turns using a single computer" },
     ],
     correctAnswer: "m4q8_a",
     topic: "Collaboration",
     difficulty: "medium",
+    source: "NotebookLM Guide",
     feedback:
-      'NotebookLM allows sharing notebooks like Google Docs. Each member can have their thematic notebook and share it, giving the whole team access to consult sources and ask questions independently. Review the OVA "Lab: Create your Notebook".',
+      "NotebookLM lets you share notebooks like Google Docs. Review the module lab.",
   },
   {
     id: "m4q9",
     question:
-      'You have 10 sources in your notebook and want to extract only the main conclusions on a specific topic (e.g., "energy efficiency"). What is the most efficient way to do it?',
+      "You want to pull from your sources only the conclusions about a topic. What question works best?",
     options: [
       {
         id: "m4q9_a",
-        label:
-          'Ask NotebookLM a specific question like "According to my sources, what are the main conclusions about energy efficiency? Answers must cite sources textually"',
+        label: "A concrete question that asks to cite your sources",
       },
-      {
-        id: "m4q9_b",
-        label: "Read all 10 complete sources one by one and take manual notes",
-      },
+      { id: "m4q9_b", label: "Read the ten full sources by hand" },
       {
         id: "m4q9_c",
-        label: "Ask ChatGPT to do the analysis without uploading the sources",
+        label: "Ask a chat for the analysis without your sources",
       },
-      {
-        id: "m4q9_d",
-        label:
-          "Use the automatic Study Guide and copy everything without filtering",
-      },
+      { id: "m4q9_d", label: "Copy the study guide without filtering" },
     ],
     correctAnswer: "m4q9_a",
     topic: "NotebookLM",
     difficulty: "medium",
+    source: "Video: Getting Started with NotebookLM",
     feedback:
-      'The advantage of NotebookLM is that you can ask specific questions and get cited answers from your sources. You do not need to read everything — the AI finds the relevant sections for you. Review the video "First Steps with NotebookLM".',
+      "Specific questions with citations save you from reading everything. Review the getting started video.",
   },
   {
     id: "m4q10",
     question:
-      "What is the current limit of sources you can add to a single notebook in NotebookLM?",
+      "When you generate an Audio Overview, what control do you have over the result?",
     options: [
       {
         id: "m4q10_a",
-        label:
-          "Up to 50 sources per notebook, each source up to approximately 500,000 words",
+        label: "You guide the topics and regenerate it if you dislike it",
       },
-      {
-        id: "m4q10_b",
-        label: "Unlimited, you can upload as many sources as you want",
-      },
+      { id: "m4q10_b", label: "You have no control over the audio" },
       {
         id: "m4q10_c",
-        label: "Maximum 10 sources per notebook, regardless of size",
+        label: "You choose the voice, tone and write the script",
       },
-      { id: "m4q10_d", label: "Maximum 100 sources but each only 10 pages" },
+      {
+        id: "m4q10_d",
+        label: "You only decide whether to include background music",
+      },
     ],
     correctAnswer: "m4q10_a",
-    topic: "NotebookLM Limits",
-    difficulty: "medium",
-    feedback:
-      "Knowing the technical limits of tools is part of professional use. NotebookLM allows up to 50 sources with a considerable word limit. Review the module documentation and resources on NotebookLM.",
-  },
-  {
-    id: "m4q11",
-    question:
-      "You generate an Audio Overview from your notebook and the AI hosts discuss your sources. What control do you have over the generated audio content?",
-    options: [
-      {
-        id: "m4q11_a",
-        label:
-          "You can customize the topics to cover and regenerate if you do not like the result, but the format is conversational between two AI voices",
-      },
-      {
-        id: "m4q11_b",
-        label:
-          "You have no control, the audio is generated automatically without options",
-      },
-      {
-        id: "m4q11_c",
-        label:
-          "You can choose the exact voice, tone, and write the full script manually",
-      },
-      {
-        id: "m4q11_d",
-        label: "You can only decide whether to include background music or not",
-      },
-    ],
-    correctAnswer: "m4q11_a",
     topic: "Audio Overview",
     difficulty: "easy",
+    source: "NotebookLM Guide",
     feedback:
-      'Audio Overview generates an automatic conversational podcast. You can regenerate it if it does not fit your needs and guide it with notebook instructions. Review the video "Audio Overview: Your Content as a Podcast".',
-  },
-  {
-    id: "m4q12",
-    question:
-      'A lawyer uploads 30 legal contracts to a notebook and asks: "Which contracts have confidentiality clauses expiring in less than 2 years?" NotebookLM responds citing 5 specific contracts with page numbers. What additional validation should the lawyer do?',
-    options: [
-      {
-        id: "m4q12_a",
-        label:
-          "Click each citation to verify the AI interpretation matches the full clause text, not just the quoted fragment",
-      },
-      {
-        id: "m4q12_b",
-        label:
-          "Trust the response because NotebookLM textually cites the sources",
-      },
-      {
-        id: "m4q12_c",
-        label: "Review only 1 of the 5 cited contracts to save time",
-      },
-      {
-        id: "m4q12_d",
-        label: "Ask ChatGPT to verify whether NotebookLM was right",
-      },
-    ],
-    correctAnswer: "m4q12_a",
-    topic: "Legal Validation",
-    difficulty: "hard",
-    feedback:
-      "In legal contexts, human verification is mandatory. Although NotebookLM cites textually, the full clause context can change the interpretation. AI speeds up review, but the legal professional is the final responsible party. Review the source verification topic in the module.",
+      "The Audio Overview is conversational and can be regenerated or guided. Review the module video.",
   },
 ];

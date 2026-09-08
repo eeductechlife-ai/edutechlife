@@ -105,6 +105,12 @@ const ResourceItem = ({
               {getResourceMeta(resource, t)}
             </p>
           )}
+          {resourceLocked && (
+            <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">
+              {t("ialab.status.locked_hint") ||
+                "Completa el recurso anterior para continuar"}
+            </p>
+          )}
         </div>
         <span
           className={`text-[10px] font-semibold px-3 py-1 rounded-full transition-all flex-shrink-0 ${

@@ -129,9 +129,9 @@ const App = () => {
           import("./components/pages/LandingPage.jsx"),
           import("./components/Hero.jsx"),
           import("./components/IALab/IALabDashboard.jsx"),
-        ]).catch(() => {
-          // Prefetch failures are non-critical; silently continue
-        });
+          import("./components/pages/AILabPage.jsx"),
+          import("./components/IALab/IALab.jsx"),
+        ]).catch(() => {});
       });
       return () => cancelIdleCallback(id);
     } else {
@@ -140,6 +140,8 @@ const App = () => {
         import("./components/pages/LandingPage.jsx").catch(() => {});
         import("./components/Hero.jsx").catch(() => {});
         import("./components/IALab/IALabDashboard.jsx").catch(() => {});
+        import("./components/pages/AILabPage.jsx").catch(() => {});
+        import("./components/IALab/IALab.jsx").catch(() => {});
       }, 3000);
       return () => clearTimeout(timer);
     }

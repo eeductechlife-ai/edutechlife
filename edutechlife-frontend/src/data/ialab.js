@@ -11,7 +11,7 @@ export const modules = [
   {
     id: 1,
     title: "Artesano Digital: Prompts",
-    icon: "fa-terminal",
+    icon: "fa-wand-magic-sparkles",
     color: "#4DA8C4",
     topics: [
       "Dar instrucciones claras a la IA",
@@ -70,7 +70,7 @@ export const modules = [
   {
     id: 4,
     title: "Alquimista Digital: NotebookLM",
-    icon: "fa-microphone",
+    icon: "fa-flask",
     color: "#004B63",
     topics: [
       "Curaduría de Fuentes",
@@ -88,7 +88,7 @@ export const modules = [
   {
     id: 5,
     title: "Guardián Digital: Ética IA",
-    icon: "fa-trophy",
+    icon: "fa-shield-halved",
     color: "#FFD166",
     topics: [
       "Integración Total",
@@ -111,7 +111,7 @@ export const modules_en = [
   {
     id: 1,
     title: "Digital Artisan: Prompts",
-    icon: "fa-terminal",
+    icon: "fa-wand-magic-sparkles",
     color: "#4DA8C4",
     topics: [
       "Giving clear instructions to AI",
@@ -170,7 +170,7 @@ export const modules_en = [
   {
     id: 4,
     title: "Digital Alchemist: NotebookLM",
-    icon: "fa-microphone",
+    icon: "fa-flask",
     color: "#004B63",
     topics: [
       "Source Curation",
@@ -188,7 +188,7 @@ export const modules_en = [
   {
     id: 5,
     title: "Digital Guardian: AI Ethics",
-    icon: "fa-trophy",
+    icon: "fa-shield-halved",
     color: "#FFD166",
     topics: [
       "Total Integration",
@@ -211,7 +211,7 @@ export const modules_pt = [
   {
     id: 1,
     title: "Artesão Digital: Prompts",
-    icon: "fa-terminal",
+    icon: "fa-wand-magic-sparkles",
     color: "#4DA8C4",
     topics: [
       "Dar instruções claras à IA",
@@ -270,7 +270,7 @@ export const modules_pt = [
   {
     id: 4,
     title: "Alquimista Digital: NotebookLM",
-    icon: "fa-microphone",
+    icon: "fa-flask",
     color: "#004B63",
     topics: [
       "Curadoria de Fontes",
@@ -288,7 +288,7 @@ export const modules_pt = [
   {
     id: 5,
     title: "Guardião Digital: Ética em IA",
-    icon: "fa-trophy",
+    icon: "fa-shield-halved",
     color: "#FFD166",
     topics: [
       "Integração Total",

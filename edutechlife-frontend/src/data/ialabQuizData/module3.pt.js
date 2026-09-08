@@ -1,314 +1,207 @@
 export const MODULE_3_PT = [
   {
     id: "m3q1",
-    question: "O que é o Deep Research no Gemini e para que serve?",
+    question: "O que a ferramenta Deep Research do Gemini faz?",
     options: [
       {
         id: "m3q1_a",
-        label: "Uma função que faz buscas superficiais no Google",
+        label: "Pesquisa a fundo e monta relatórios com fontes citadas",
       },
-      {
-        id: "m3q1_b",
-        label:
-          "Uma ferramenta que pesquisa a fundo, analisa múltiplas fontes e gera relatórios com citações verificáveis",
-      },
-      { id: "m3q1_c", label: "Um jogo de perguntas e respostas" },
-      { id: "m3q1_d", label: "Uma extensão para o navegador Chrome" },
+      { id: "m3q1_b", label: "Faz buscas rápidas e superficiais no Google" },
+      { id: "m3q1_c", label: "Transforma qualquer pergunta em um jogo" },
+      { id: "m3q1_d", label: "Instala novas extensões no seu navegador" },
     ],
-    correctAnswer: "m3q1_b",
+    correctAnswer: "m3q1_a",
     topic: "Deep Research",
     difficulty: "fácil",
+    source: "Vídeo: Casos Reais: Detetives Digitais em Ação",
     feedback:
-      'O Deep Research cria relatórios detalhados com fontes citadas e verificáveis. Explore o tópico "Pesquise como um Detetive Digital".',
+      "Deep Research pesquisa várias fontes e entrega um relatório citado. Veja o vídeo de casos.",
   },
   {
     id: "m3q2",
-    question:
-      "Por que é importante verificar as fontes que o Gemini cita em suas pesquisas?",
+    question: "Por que você deve verificar as fontes que o Gemini cita?",
     options: [
-      { id: "m3q2_a", label: "Porque as citações sempre estão incorretas" },
       {
-        id: "m3q2_b",
-        label:
-          "Porque, embora o Gemini seja muito preciso, você sempre deve confirmar se a fonte é real e se o contexto está correto",
+        id: "m3q2_a",
+        label: "Para confirmar que cada fonte é real e o dado está correto",
       },
-      { id: "m3q2_c", label: "Porque o Gemini não fornece fontes" },
-      { id: "m3q2_d", label: "Porque as fontes só funcionam em inglês" },
+      { id: "m3q2_b", label: "Porque as citações do Gemini são sempre falsas" },
+      { id: "m3q2_c", label: "Porque o Gemini quase nunca mostra as fontes" },
+      { id: "m3q2_d", label: "Porque as fontes só funcionam em outro idioma" },
     ],
-    correctAnswer: "m3q2_b",
+    correctAnswer: "m3q2_a",
     topic: "Verificação de Fontes",
     difficulty: "médio",
+    source: "OVA: Laboratório: Resolva o Caso — 6 Desafios",
     feedback:
-      'A verificação humana é essencial. Até a melhor IA pode cometer erros. Revise o OVA "Do Zero a Especialista em IA".',
+      "Sempre confira: a IA pode errar. Pratique no laboratório de casos.",
   },
   {
     id: "m3q3",
-    question:
-      "Qual vantagem o Canvas oferece ao trabalhar com documentos longos em um ambiente de IA?",
+    question: "O que é o grounding (conexão em tempo real) no Gemini?",
     options: [
-      { id: "m3q3_a", label: "Só serve para fazer desenhos artísticos" },
+      {
+        id: "m3q3_a",
+        label: "Conectar as respostas a informações atuais da Busca do Google",
+      },
       {
         id: "m3q3_b",
-        label:
-          "Permite editar partes específicas de um texto sem precisar regenerar todo o conteúdo, ideal para relatórios e redações",
+        label: "Fazer a IA funcionar sem conexão com a internet",
       },
+      { id: "m3q3_c", label: "Salvar as conversas no dispositivo" },
       {
-        id: "m3q3_c",
-        label: "Converte automaticamente qualquer texto em vídeo",
+        id: "m3q3_d",
+        label: "Traduzir automaticamente tudo para outro idioma",
       },
-      { id: "m3q3_d", label: "Traduz documentos para mais de 200 idiomas" },
     ],
-    correctAnswer: "m3q3_b",
-    topic: "Canvas",
+    correctAnswer: "m3q3_a",
+    topic: "Grounding",
     difficulty: "médio",
+    source: "PDF: Gemini na Prática: Exercícios de Campo",
     feedback:
-      'O Canvas é perfeito para editar seções de documentos extensos. Revise o OVA "Gemini em Ação: Casos Reais".',
+      "O grounding ancora as respostas em dados ao vivo. Reveja os exercícios de campo.",
   },
   {
     id: "m3q4",
-    question:
-      "Como o Gemini se integra ao Google Workspace (Docs, Sheets, Gmail)?",
+    question: "O que significa o Gemini ser multimodal?",
     options: [
-      { id: "m3q4_a", label: "Não se integra; são produtos separados" },
       {
-        id: "m3q4_b",
-        label:
-          "O Gemini pode resumir e-mails, analisar dados no Sheets e ajudar a redigir no Docs diretamente de cada aplicativo",
+        id: "m3q4_a",
+        label: "Que entende texto, imagem, áudio e vídeo ao mesmo tempo",
       },
-      { id: "m3q4_c", label: "Só funciona no Google Slides" },
-      {
-        id: "m3q4_d",
-        label: "Exige instalar um programa adicional no computador",
-      },
+      { id: "m3q4_b", label: "Que só funciona com texto escrito" },
+      { id: "m3q4_c", label: "Que precisa de um modem de alta velocidade" },
+      { id: "m3q4_d", label: "Que usa vários idiomas ao mesmo tempo" },
     ],
-    correctAnswer: "m3q4_b",
-    topic: "Google Workspace",
-    difficulty: "médio",
+    correctAnswer: "m3q4_a",
+    topic: "Multimodalidade",
+    difficulty: "fácil",
+    source: "Guia visual: Mapa do Ecossistema Gemini",
     feedback:
-      'O Gemini está integrado a todo o Google Workspace. Revise o tópico "Gemini no Google Drive: Guia Completo".',
+      "Você pode mostrar uma imagem, PDF ou vídeo na mesma conversa. Veja o mapa do ecossistema.",
   },
   {
     id: "m3q5",
     question:
-      'O que é o "grounding" ou conexão com dados em tempo real no Gemini?',
+      "O que você pode fazer com o Gemini integrado ao Google Workspace?",
     options: [
-      { id: "m3q5_a", label: "Uma técnica para a IA funcionar sem internet" },
       {
-        id: "m3q5_b",
-        label:
-          "A capacidade de conectar as respostas do Gemini a informações atualizadas da Pesquisa Google e de outras fontes ao vivo",
+        id: "m3q5_a",
+        label: "Resumir e-mails e escrever no Docs direto do app",
       },
-      { id: "m3q5_c", label: "Um tipo de cabo para conectar o computador" },
-      { id: "m3q5_d", label: "Uma função que só funciona nos fins de semana" },
+      { id: "m3q5_b", label: "Só gerar imagens para apresentações" },
+      { id: "m3q5_c", label: "Usar o Gemini somente dentro do Google Slides" },
+      { id: "m3q5_d", label: "Instalar um programa separado no computador" },
     ],
-    correctAnswer: "m3q5_b",
-    topic: "Grounding",
-    difficulty: "difícil",
+    correctAnswer: "m3q5_a",
+    topic: "Google Workspace",
+    difficulty: "médio",
+    source: "OVA: Missão Interativa: Domine o Ecossistema Gemini",
     feedback:
-      'O grounding dá respostas baseadas em informações atuais. Explore o tópico "Respostas Sempre Atualizadas".',
+      "O Gemini ajuda no Gmail, Docs e Sheets em cada aplicativo. Pratique na OVA do ecossistema.",
   },
   {
     id: "m3q6",
     question:
-      "No contexto de aprendizagem guiada, qual é a melhor maneira de usar o Gemini para estudar um tema novo?",
+      "Como você analisa com o Gemini um gráfico que vê na tela durante uma reunião?",
     options: [
       {
         id: "m3q6_a",
-        label: "Pedir que ele escreva a redação inteira e entregá-la sem ler",
+        label: "Com o Gemini Live compartilhando a tela em tempo real",
       },
-      {
-        id: "m3q6_b",
-        label:
-          "Usá-lo como tutor: fazer perguntas progressivas, pedir exemplos, verificar conceitos e praticar com exercícios guiados",
-      },
-      { id: "m3q6_c", label: "Usá-lo apenas para traduzir textos" },
-      {
-        id: "m3q6_d",
-        label: "Evitar usá-lo porque confunde mais do que ajuda",
-      },
+      { id: "m3q6_b", label: "Fotografando o gráfico para enviar depois" },
+      { id: "m3q6_c", label: "Desenhando o gráfico de memória para explicar" },
+      { id: "m3q6_d", label: "Esperando receber o arquivo por e-mail" },
     ],
-    correctAnswer: "m3q6_b",
-    topic: "Aprendizagem Guiada",
-    difficulty: "fácil",
+    correctAnswer: "m3q6_a",
+    topic: "Gemini Live",
+    difficulty: "médio",
+    source: "OVA: Missão Interativa: Domine o Ecossistema Gemini",
     feedback:
-      "A IA é seu tutor pessoal 24/7. Use-a para aprender ativamente, não para evitar o esforço. Revise o laboratório guiado pelo MAX.",
+      "O Gemini Live permite compartilhar a tela e perguntar sobre o que você vê. Reveja a OVA.",
   },
   {
     id: "m3q7",
     question:
-      "Você precisa pesquisar as 5 principais tendências de IA em 2025. Qual fluxo de trabalho com o Gemini daria o resultado mais completo e verificável?",
+      "Você precisa pesquisar tendências de IA para um relatório. Qual fluxo dá o melhor resultado verificável?",
     options: [
       {
         id: "m3q7_a",
-        label:
-          'Perguntar "quais são as tendências de IA?" e aceitar a primeira resposta',
+        label: "Deep Research e depois verificar cada fonte citada",
       },
       {
         id: "m3q7_b",
-        label:
-          "Usar o Deep Research com instruções específicas, verificar cada fonte citada, cruzar dados com a Pesquisa Google e gerar um relatório estruturado",
+        label: "Perguntar uma vez e aceitar a primeira resposta",
       },
-      {
-        id: "m3q7_c",
-        label: "Buscar no Google manualmente e copiar os primeiros resultados",
-      },
-      { id: "m3q7_d", label: "Usar apenas o chat básico sem pedir fontes" },
+      { id: "m3q7_c", label: "Copiar os primeiros resultados do Google" },
+      { id: "m3q7_d", label: "Pedir um resumo sem solicitar fontes" },
     ],
-    correctAnswer: "m3q7_b",
+    correctAnswer: "m3q7_a",
     topic: "Pesquisa Profissional",
-    difficulty: "difícil",
+    difficulty: "médio",
+    source: "Vídeo: Casos Reais: Detetives Digitais em Ação",
     feedback:
-      'O fluxo profissional combina Deep Research + verificação + síntese. Pratique com o OVA "Casos Práticos do Gemini".',
+      "Combine Deep Research com verificação de fontes. Veja o vídeo de casos.",
   },
   {
     id: "m3q8",
     question:
-      "Um jornalista precisa pesquisar um tema complexo (mudança climática na América Latina) com fontes verificáveis. Ele tem 2 horas para preparar um relatório. Qual fluxo com o Gemini daria o melhor resultado no menor tempo?",
+      "Um jornalista tem 2 horas para um relatório com fontes verificáveis. O que ele faz primeiro com o Gemini?",
     options: [
       {
         id: "m3q8_a",
-        label:
-          "Usar o Deep Research com palavras-chave específicas, depois verificar as fontes citadas e sintetizar em um relatório estruturado no Google Docs com o Gemini integrado",
+        label: "Usa Deep Research com palavras-chave e confere as citações",
       },
-      {
-        id: "m3q8_b",
-        label:
-          "Ler 20 artigos manualmente no Google e escrever o relatório do zero",
-      },
-      {
-        id: "m3q8_c",
-        label:
-          "Pedir ao chat do Gemini que resuma tudo de uma vez, sem pedir fontes",
-      },
-      {
-        id: "m3q8_d",
-        label: "Usar apenas a Pesquisa Google tradicional sem ajuda de IA",
-      },
+      { id: "m3q8_b", label: "Lê vinte artigos à mão antes de escrever" },
+      { id: "m3q8_c", label: "Pede um resumo do tema sem fontes" },
+      { id: "m3q8_d", label: "Pesquisa no Google e escreve sem conferir" },
     ],
     correctAnswer: "m3q8_a",
     topic: "Deep Research",
     difficulty: "médio",
+    source: "OVA: Laboratório: Resolva o Caso — 6 Desafios",
     feedback:
-      'A combinação Deep Research + verificação + Gemini no Google Docs acelera a pesquisa sem sacrificar a precisão. O Deep Research encontra e analisa fontes; você verifica e sintetiza. Revise o tópico "Pesquise como um Detetive Digital".',
+      "Deep Research encontra e analisa fontes; você confere e redige. Pratique no laboratório.",
   },
   {
     id: "m3q9",
     question:
-      "O Gemini pode processar texto, imagens, áudio e vídeo na mesma conversa. Como essa capacidade é chamada?",
+      "Qual é a melhor forma de usar o Gemini para estudar um tema novo?",
     options: [
       {
         id: "m3q9_a",
-        label:
-          "Multimodalidade — o Gemini pode entender e raciocinar sobre múltiplos tipos de conteúdo simultaneamente",
+        label: "Como tutor: perguntar, pedir exemplos e praticar",
       },
-      {
-        id: "m3q9_b",
-        label:
-          "Transfer learning — o Gemini aprende de um tipo de dado e o aplica a outro",
-      },
-      {
-        id: "m3q9_c",
-        label:
-          "Tokenização avançada — o Gemini converte tudo em tokens numéricos",
-      },
-      {
-        id: "m3q9_d",
-        label:
-          "Processamento em lote — o Gemini processa cada tipo de dado separadamente",
-      },
+      { id: "m3q9_b", label: "Pedir o texto completo e entregar sem ler" },
+      { id: "m3q9_c", label: "Usá-lo só para traduzir os textos" },
+      { id: "m3q9_d", label: "Evitá-lo porque complica o estudo" },
     ],
     correctAnswer: "m3q9_a",
-    topic: "Multimodalidade",
+    topic: "Aprendizagem Guiada",
     difficulty: "fácil",
+    source: "PDF: Manual de Campo: Introdução ao Gemini",
     feedback:
-      'A multimodalidade é uma das capacidades mais poderosas do Gemini: você pode mostrar uma imagem, pedir que ele analise um vídeo e que leia um PDF tudo na mesma conversa. Revise o OVA "Gemini em Ação: Casos Reais".',
+      "Use-o como tutor para aprender ativamente. Reveja o manual de introdução.",
   },
   {
     id: "m3q10",
     question:
-      "Você está em uma reunião e precisa que o Gemini analise um gráfico financeiro que acabaram de mostrar no computador, sem precisar subir o arquivo. Como você pode fazer isso?",
+      "O que as extensões do Gemini (voos, mapas, hotéis) trazem no chat?",
     options: [
       {
         id: "m3q10_a",
-        label:
-          "Usar o Gemini Live para compartilhar a tela e fazer perguntas em tempo real sobre o que está sendo exibido",
+        label: "Dados atuais dos serviços do Google dentro do chat",
       },
-      {
-        id: "m3q10_b",
-        label:
-          "Tirar foto do gráfico com o celular e subi-la depois da reunião",
-      },
-      {
-        id: "m3q10_c",
-        label:
-          "Desenhar o gráfico de memória e pedir que o Gemini o interprete",
-      },
-      {
-        id: "m3q10_d",
-        label:
-          "Não é possível — o Gemini só analisa arquivos enviados explicitamente",
-      },
+      { id: "m3q10_b", label: "Substituem por completo os sites do Google" },
+      { id: "m3q10_c", label: "Servem só para reservar voos e nada mais" },
+      { id: "m3q10_d", label: "Exigem pagar uma assinatura extra" },
     ],
     correctAnswer: "m3q10_a",
-    topic: "Gemini Live",
+    topic: "Extensões Gemini",
     difficulty: "médio",
+    source: "Guia visual: Mapa do Ecossistema Gemini",
     feedback:
-      'O Gemini Live permite interações em tempo real com capacidade de compartilhamento de tela, ideal para reuniões e sessões de trabalho colaborativo. Revise o tópico "Gemini em Tempo Real" nos recursos do módulo.',
-  },
-  {
-    id: "m3q11",
-    question:
-      "Qual é a vantagem de usar as extensões do Gemini (Google Flights, Hotels, Maps) integradas ao chat?",
-    options: [
-      {
-        id: "m3q11_a",
-        label:
-          "O Gemini pode acessar informações atualizadas dos serviços do Google sem sair do chat, dando respostas contextuais com dados ao vivo",
-      },
-      {
-        id: "m3q11_b",
-        label: "As extensões substituem completamente os sites do Google",
-      },
-      {
-        id: "m3q11_c",
-        label: "Só funcionam para reservar voos, não para outras tarefas",
-      },
-      {
-        id: "m3q11_d",
-        label: "Exigem uma assinatura adicional do Google One",
-      },
-    ],
-    correctAnswer: "m3q11_a",
-    topic: "Extensões do Gemini",
-    difficulty: "médio",
-    feedback:
-      'As extensões conectam o Gemini aos serviços do Google em tempo real, permitindo respostas contextuais e atualizadas. Faz parte do ecossistema de grounding do Gemini. Revise o tópico "Amplie as Capacidades do Gemini".',
-  },
-  {
-    id: "m3q12",
-    question:
-      "Um estudante universitário usa o Gemini Advanced para pesquisar. Que benefício adicional ele obtém com o Google One AI Premium?",
-    options: [
-      {
-        id: "m3q12_a",
-        label:
-          "Acesso ao Gemini no Gmail, Docs, Sheets e Slides, além de armazenamento em nuvem e as capacidades mais avançadas do modelo",
-      },
-      {
-        id: "m3q12_b",
-        label:
-          "Apenas mais armazenamento no Google Drive, sem benefícios de IA",
-      },
-      {
-        id: "m3q12_c",
-        label: "Acesso ilimitado ao DALL-E 3 para gerar imagens",
-      },
-      { id: "m3q12_d", label: "Remoção completa dos limites de uso do Gemini" },
-    ],
-    correctAnswer: "m3q12_a",
-    topic: "Google One",
-    difficulty: "fácil",
-    feedback:
-      'O Google One AI Premium integra o Gemini em todo o Workspace + dá acesso ao modelo mais avançado + armazenamento adicional. É o plano mais completo para estudantes e pesquisadores. Revise o tópico "Planos e Assinaturas do Gemini".',
+      "As extensões trazem informações ao vivo dos serviços do Google. Reveja o mapa do ecossistema.",
   },
 ];

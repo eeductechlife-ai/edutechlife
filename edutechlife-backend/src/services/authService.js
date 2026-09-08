@@ -266,6 +266,10 @@ async function signOut(userId) {
 /**
  * Build the internal parent email alias for a given student email.
  * Parent: juan@gmail.com → juan+padre@gmail.com
+ *
+ * @deprecated Alias approach kept for backward compatibility with existing accounts.
+ * New parent registrations should use POST /api/auth/parent-entity/register
+ * which stores parents in the `parents` table with their real email.
  */
 function buildParentEmail(studentEmail) {
   const [local, domain] = String(studentEmail || '').toLowerCase().split('@');

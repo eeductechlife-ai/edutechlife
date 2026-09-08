@@ -100,7 +100,7 @@ export const useIALabQuiz = () => {
         }
       });
 
-      const percentage = (correct / TOTAL_QUESTIONS) * 100;
+      const percentage = (correct / quizQuestions.length) * 100;
       const passed = percentage >= PASSING_SCORE;
 
       return {
@@ -108,7 +108,7 @@ export const useIALabQuiz = () => {
         correctCount: correct,
         passed,
         failedQuestions,
-        neededToPass: Math.ceil((PASSING_SCORE / 100) * TOTAL_QUESTIONS),
+        neededToPass: Math.ceil((PASSING_SCORE / 100) * quizQuestions.length),
       };
     },
     [quizQuestions],
@@ -224,7 +224,7 @@ export const useIALabQuiz = () => {
         score: result.score,
         passed: result.passed,
         correctCount: result.correctCount,
-        totalQuestions: TOTAL_QUESTIONS,
+        totalQuestions: quizQuestions.length,
         date: new Date().toISOString(),
         timeElapsed: timeElapsed,
         failedQuestions: result.failedQuestions,
@@ -443,7 +443,7 @@ export const useIALabQuiz = () => {
 
   return {
     quizQuestions,
-    TOTAL_QUESTIONS,
+    TOTAL_QUESTIONS: quizQuestions.length,
     PASSING_SCORE,
     SUGGESTED_TIME_SECONDS,
     MAX_SECURITY_WARNINGS,

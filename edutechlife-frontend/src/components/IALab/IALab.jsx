@@ -43,6 +43,7 @@ import ModuleInfoSection from "./ModuleInfoSection";
 import Breadcrumbs from "./Breadcrumbs";
 import handleGlobalAction from "./handleGlobalAction";
 import { createSlideVariants } from "./IALabAnimations";
+import { Icon } from "../../utils/iconMapping.jsx";
 
 const preloadForum = () => import("./IALabForumOptimized");
 const IALabForumOptimized = lazy(preloadForum);
@@ -161,6 +162,7 @@ const IALabContent = memo(function () {
   const [refreshKey, setRefreshKey] = useState(0);
   const [isModuleTransitioning, setIsModuleTransitioning] = useState(false);
   const prevActiveModRef = useRef(activeMod);
+  const autoTabRef = useRef(null);
 
   useEffect(() => {
     if (prevActiveModRef.current !== activeMod) {
@@ -311,6 +313,36 @@ const IALabContent = memo(function () {
         )?.title
       : null;
 
+  const tabStatuses = useMemo(() => {
+    const mod = moduleProgress[activeMod];
+    return {
+      contenido: mod?.resourcesCompleted ? "done" : null,
+      actividades: mod?.exam
+        ? "done"
+        : mod?.resourcesCompleted
+          ? "ready"
+          : null,
+    };
+  }, [moduleProgress, activeMod]);
+
+  // Tab inteligente: cuando el contenido está completo pero el examen está pendiente,
+  // llevar al estudiante directamente a "Actividades" en lugar de "Todo".
+  useEffect(() => {
+    if (isLoadingProgress || viewSection !== null) return;
+    if (autoTabRef.current === activeMod) return;
+    autoTabRef.current = activeMod;
+    const mod = moduleProgress[activeMod];
+    if (mod?.resourcesCompleted && !mod?.exam) {
+      setViewSection("actividades");
+    }
+  }, [
+    activeMod,
+    isLoadingProgress,
+    moduleProgress,
+    viewSection,
+    setViewSection,
+  ]);
+
   // Handler para acciones globales
   const handleAction = useCallback((action, data) => {
     if (action === "OPEN_VALERIO") {
@@ -327,6 +359,19 @@ const IALabContent = memo(function () {
     }
     if (action === "OPEN_PRACTICE") {
       useIALabStore.getState().setPracticeTool("tutoring");
+      return;
+    }
+    if (action === "CONTENT_COMPLETED") {
+      setToast({
+        message:
+          t("ialab.content_completed_toast") ||
+          "¡Contenido completado! Ahora haz el examen para avanzar.",
+        cta: t("ialab.tab_activities") || "Actividades",
+        onCta: () => {
+          setViewSection("actividades");
+          setToast(null);
+        },
+      });
       return;
     }
     const s = useIALabStore.getState();
@@ -601,6 +646,42 @@ const IALabContent = memo(function () {
                   courseProgress={courseProgress}
                 />
 
+                {/* CTA: Sin progreso — invita a empezar */}
+                {!isLoadingProgress &&
+                  !currentLessonTitle &&
+                  viewSection === null &&
+                  !moduleProgress[activeMod]?.resourcesCompleted && (
+                    <motion.div
+                      key={`start-cta-${activeMod}`}
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[var(--theme-emphasis)]/8 to-[var(--theme-primary)]/5 border border-[var(--theme-emphasis)]/15 rounded-xl"
+                    >
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <Icon
+                          name="fa-play"
+                          className="w-3.5 h-3.5 text-white ml-0.5"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-bold text-[var(--theme-emphasis)] uppercase tracking-wide">
+                          {t("ialab.start_cta_label") || "¡Empieza aquí!"}
+                        </p>
+                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">
+                          {t("ialab.start_cta_desc") ||
+                            "Comienza con el primer video de este módulo"}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setViewSection("contenido")}
+                        className="flex-shrink-0 px-3 py-1.5 bg-[var(--theme-emphasis)] text-white text-xs font-bold rounded-lg hover:opacity-90 transition-opacity shadow-sm"
+                      >
+                        {t("ialab.start_cta_btn") || "Ver contenido →"}
+                      </button>
+                    </motion.div>
+                  )}
+
                 {/* Banner: Continuar donde lo dejaste */}
                 {!isLoadingProgress &&
                   currentLessonTitle &&
@@ -628,6 +709,40 @@ const IALabContent = memo(function () {
                         className="flex-shrink-0 px-3 py-1.5 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] text-xs font-bold rounded-lg hover:bg-[var(--theme-emphasis)]-dark transition-colors shadow-sm"
                       >
                         {t("ialab.continue_banner_cta")}
+                      </button>
+                    </motion.div>
+                  )}
+
+                {/* Banner: Contenido completo → ir al examen */}
+                {!isLoadingProgress &&
+                  moduleProgress[activeMod]?.resourcesCompleted &&
+                  !moduleProgress[activeMod]?.exam &&
+                  viewSection === null && (
+                    <motion.div
+                      key={`exam-ready-banner-${activeMod}`}
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-amber-50 to-amber-50/50 dark:from-amber-900/20 dark:to-amber-900/10 border border-amber-200 dark:border-amber-700/40 rounded-xl"
+                    >
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <Icon name="fa-star" className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wide">
+                          {t("ialab.exam_ready_title") ||
+                            "¡Contenido completado!"}
+                        </p>
+                        <p className="text-sm font-semibold text-amber-900 dark:text-amber-300 truncate">
+                          {t("ialab.exam_ready_desc") ||
+                            "Ya puedes tomar tu examen del módulo"}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setViewSection("actividades")}
+                        className="flex-shrink-0 px-3 py-1.5 bg-amber-500 text-white text-xs font-bold rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
+                      >
+                        {t("ialab.exam_ready_cta") || "Ir al examen →"}
                       </button>
                     </motion.div>
                   )}
@@ -673,6 +788,7 @@ const IALabContent = memo(function () {
                     viewSection={viewSection}
                     setViewSection={setViewSection}
                     badges={{ guardados: bookmarkBadge }}
+                    statuses={tabStatuses}
                   />
                 </div>
 
@@ -699,7 +815,7 @@ const IALabContent = memo(function () {
                             },
                           ]
                         : []),
-                      ...(viewSection === null && currentLessonTitle
+                      ...(viewSection !== null && currentLessonTitle
                         ? [{ label: currentLessonTitle }]
                         : []),
                     ]}
@@ -757,6 +873,7 @@ const IALabContent = memo(function () {
         <ValerioFloatingButton
           onClick={() => handleAction("OPEN_VALERIO")}
           t={t}
+          hasStartedCourse={hasStartedCourse}
         />
 
         <Suspense

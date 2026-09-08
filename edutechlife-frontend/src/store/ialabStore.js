@@ -171,7 +171,7 @@ export const useIALabStore = create(
         activities.push({
           type: "exam",
           id: `exam-${moduleId}`,
-          title: "Examen del Módulo",
+          title: "Mi reto del Módulo",
           duration: "30 min",
           xp: "+100 XP",
           status: examDone
@@ -207,7 +207,7 @@ export const useIALabStore = create(
             ? "Completado"
             : challengeReady
               ? "Disponible ahora"
-              : "Completa los recursos y aprueba el examen primero",
+              : "Completa los recursos y supera tu reto primero",
         });
 
         const communityDone = modProg?.community;
@@ -497,7 +497,7 @@ export const useIALabStore = create(
             return {
               action: "exam",
               moduleId: id,
-              label: "Tomar examen del Módulo " + id,
+              label: "Tomar mi reto del Módulo " + id,
             };
           if (!mp.challenge)
             return {

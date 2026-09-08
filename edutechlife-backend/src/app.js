@@ -25,6 +25,7 @@ const adminRoutes = require('./routes/admin');
 const notificationRoutes = require('./routes/notifications');
 const institutionRoutes = require('./routes/institutions');
 const complianceRoutes = require('./routes/compliance');
+const recommendationRoutes = require('./routes/recommendations');
 const { ferpaAuditLog } = require('./middleware/ferpaAudit');
 const AlertListenerService = require('./services/AlertListenerService');
 const { webhookHandler } = require('./routes/stripe');
@@ -145,15 +146,21 @@ app.use('/api/admin', authLimiter, adminRoutes);
 app.use('/api/notifications', requireAuth, notificationRoutes);
 app.use('/api/institutions', institutionRoutes);
 app.use('/api/compliance', complianceRoutes);
+app.use('/api/smartboard/recommendations', recommendationRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
 
 // Start crisis-alert realtime listener (Fase 4.1)
-const alertListener = new AlertListenerService();
-alertListener.start().catch((err) =>
-  logger.error('[app] AlertListenerService failed to start:', err.message)
+const alertListener = new AlertListenerService(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 );
+try {
+  alertListener.start();
+} catch (err) {
+  logger.error('[app] AlertListenerService failed to start:', err.message);
+}
 app.alertListener = alertListener;
 
 // Export both app and Redis initialization function

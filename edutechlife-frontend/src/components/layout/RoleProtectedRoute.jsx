@@ -32,8 +32,15 @@ const PRODUCT_ROUTES = {
 
 const RoleProtectedRoute = ({ children, requiredRole }) => {
   const { t } = useTranslation();
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Fast-path: si ya hay token en sessionStorage, no esperar al efecto asíncrono
+  // para mostrar la ruta. validateSession() aún corre para confirmar en prod.
+  const _hasToken = !!sessionStorage.getItem("auth_token");
+  const [isLoaded, setIsLoaded] = useState(
+    import.meta.env.DEV ? _hasToken : false,
+  );
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    import.meta.env.DEV ? _hasToken : false,
+  );
   const [verifiedRole, setVerifiedRole] = useState(null);
 
   const { profile, isAdmin, isLoading } = useStudentProfile();

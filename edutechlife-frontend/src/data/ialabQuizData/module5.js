@@ -2,343 +2,233 @@ export const MODULE_5 = [
   {
     id: "m5q1",
     question:
-      'Un sistema de contratación basado en IA fue entrenado con datos históricos de una empresa tecnológica donde el 78% de los empleados eran hombres. El sistema aprendió a priorizar CVs con palabras como "ingeniero" y "líder técnico", y penalizaba términos como "voluntariado" o "licencia parental". Las candidatas mujeres con calificaciones equivalentes recibían puntuaciones más bajas. ¿Qué tipo de sesgo está presente y en qué etapa del pipeline de IA se originó?',
+      "Un sistema de contratación se entrenó con datos de una empresa con mayoría de hombres y penalizaba CVs con ciertos términos. ¿Qué sesgo aparece y dónde se origina?",
     options: [
       {
         id: "m5q1_a",
-        label:
-          "Sesgo de muestreo — los datos de entrenamiento no representaban equitativamente a la población, originado en la recolección de datos",
+        label: "Sesgo de muestreo, originado en los datos de entrenamiento",
       },
       {
         id: "m5q1_b",
-        label:
-          "Sesgo de automatización — el sistema decidió por sí mismo sin supervisión humana",
+        label: "Sesgo de automatización, por falta de supervisión humana",
       },
       {
         id: "m5q1_c",
-        label:
-          "Sesgo de confirmación — los reclutadores buscaban confirmar sus propias creencias",
+        label: "Sesgo de confirmación, por ideas previas del reclutador",
       },
       {
         id: "m5q1_d",
-        label:
-          "Sesgo de etiquetado — las etiquetas fueron puestas incorrectamente por anotadores externos",
+        label: "Sesgo de etiquetado, por anotadores equivocados",
       },
     ],
     correctAnswer: "m5q1_a",
     topic: "Sesgos en IA",
     difficulty: "medio",
+    source: "OVA: Laboratorio: Detecta el Sesgo",
     feedback:
-      'Este es un caso clásico de sesgo de muestreo (sampling bias). Los datos históricos de una empresa con 78% de hombres no representan a la población general de candidatos. El sesgo se originó en la recolección de datos, antes del entrenamiento. Repasa el OVA "Laboratorio: Detecta el Sesgo" y el PDF "Guía de Detección de Sesgos".',
+      "Los datos históricos no representaban a la población, así que el sesgo nació en la recolección. Repasa el laboratorio de sesgos.",
   },
   {
     id: "m5q2",
     question:
-      'Usas ChatGPT para investigar un tratamiento contra la ansiedad. La IA responde: "Según un estudio de Harvard de 2023, el 89% de los pacientes redujo sus síntomas con esta terapia". Intentas buscar el estudio y no encuentras nada. Las cifras y la fuente parecen inventadas. ¿Cuál es la acción más responsable?',
+      "ChatGPT cita un estudio de salud que no existe en ningún buscador. ¿Qué haces?",
     options: [
       {
         id: "m5q2_a",
-        label:
-          "No usar esa información hasta verificarla con fuentes confiables, reportar el posible error y documentar que la IA alucinó",
+        label: "No usar el dato y verificar la fuente por tu cuenta",
       },
       {
         id: "m5q2_b",
-        label:
-          "Usar la información igual porque la IA rara vez se equivoca en datos concretos",
+        label: "Usar el dato porque la IA casi nunca se equivoca",
       },
       {
         id: "m5q2_c",
-        label:
-          "Pedirle a la misma IA que busque la fuente nuevamente y confiar en lo que responda",
+        label: "Preguntar otra vez a la IA y confiar en su respuesta",
       },
       {
         id: "m5q2_d",
-        label:
-          "Ignorar el incidente porque las alucinaciones son poco comunes y no afectan",
+        label: "Ignorarlo porque las alucinaciones no son frecuentes",
       },
     ],
     correctAnswer: "m5q2_a",
     topic: "Alucinaciones",
     difficulty: "medio",
+    source: "OVA: Laboratorio: Detecta el Sesgo",
     feedback:
-      'Las alucinaciones son información falsa con apariencia de verdad. Son especialmente peligrosas en contextos de salud donde pueden tener consecuencias graves. Siempre verifica fuentes de información crítica. Repasa el laboratorio "Detecta el Sesgo".',
+      "Una alucinación es información falsa con apariencia de verdad. Verifica siempre datos críticos como los de salud.",
   },
   {
     id: "m5q3",
     question:
-      "Estás usando IA para un diagnóstico médico y el resultado contradice tu criterio profesional. ¿Cómo actúas éticamente?",
+      "Una IA da un diagnóstico que contradice tu criterio profesional. ¿Cómo actúas?",
     options: [
-      {
-        id: "m5q3_a",
-        label: "Aceptas la IA sin cuestionar porque es más inteligente",
-      },
-      {
-        id: "m5q3_b",
-        label:
-          "Cuestionas el posible sesgo de automatización, verificas con otros expertos y usas tu criterio profesional",
-      },
-      { id: "m5q3_c", label: "Dejas que la IA decida el tratamiento" },
-      { id: "m5q3_d", label: "Apagas la computadora y empiezas de nuevo" },
+      { id: "m5q3_a", label: "Cuestiono la IA y consulto con otros expertos" },
+      { id: "m5q3_b", label: "Acepto la IA porque es más inteligente" },
+      { id: "m5q3_c", label: "Dejo que la IA decida el tratamiento" },
+      { id: "m5q3_d", label: "Reinicio el sistema y vuelvo a preguntar" },
     ],
-    correctAnswer: "m5q3_b",
+    correctAnswer: "m5q3_a",
     topic: "Responsabilidad",
     difficulty: "medio",
+    source: "Video: IA Ética: Principios y Práctica",
     feedback:
-      'El sesgo de automatización nos hace confiar ciegamente en la IA. Tu criterio profesional es irremplazable. Repasa el tema "Ética en IA: Lo Esencial".',
+      "No caigas en el sesgo de automatización: tu criterio profesional es irremplazable.",
   },
   {
     id: "m5q4",
-    question:
-      "¿Cuál de las siguientes NO es una buena práctica de privacidad al usar IA?",
+    question: "¿Cuál de estas NO es una buena práctica de privacidad con IA?",
     options: [
-      {
-        id: "m5q4_a",
-        label:
-          "Subir datos personales de clientes a un chatbot público para que los analice",
-      },
+      { id: "m5q4_a", label: "Subir datos de clientes a un chatbot público" },
       {
         id: "m5q4_b",
-        label:
-          "Leer las políticas de privacidad antes de usar una herramienta de IA",
+        label: "Leer las políticas de privacidad de la herramienta",
       },
       {
         id: "m5q4_c",
-        label: "No compartir información confidencial en conversaciones con IA",
+        label: "Evitar compartir información confidencial con la IA",
       },
       {
         id: "m5q4_d",
-        label: "Usar versiones empresariales que ofrecen protección de datos",
+        label: "Usar versiones empresariales con protección de datos",
       },
     ],
     correctAnswer: "m5q4_a",
     topic: "Privacidad",
-    difficulty: "medio",
+    difficulty: "fácil",
+    source: "PDF: Manual de Privacidad en IA",
     feedback:
-      'Nunca subas datos sensibles a herramientas públicas. Repasa el PDF "Manual de Privacidad en IA" y el video del módulo.',
+      "Nunca subas datos sensibles a herramientas públicas. Repasa el manual de privacidad.",
   },
   {
     id: "m5q5",
     question:
-      'Un banco implementa un sistema de IA para aprobar o rechazar solicitudes de crédito. Un cliente es rechazado y pide saber por qué. El banco responde: "Es una decisión de la IA, no podemos explicar cómo funciona internamente". ¿Qué principio ético se viola y qué debería hacer el banco?',
+      "Un banco rechaza un crédito con IA y no explica el motivo. ¿Qué principio se viola?",
     options: [
       {
         id: "m5q5_a",
-        label:
-          "Transparencia y explicabilidad — el banco debería auditar el modelo y proporcionar explicaciones comprensibles al cliente",
+        label: "La transparencia y la explicabilidad de la decisión",
       },
-      {
-        id: "m5q5_b",
-        label:
-          "Privacidad — el banco debería ocultar el uso de IA para proteger al cliente",
-      },
-      {
-        id: "m5q5_c",
-        label:
-          "Velocidad — el banco debería procesar las solicitudes más rápido",
-      },
-      {
-        id: "m5q5_d",
-        label:
-          "Eficiencia — el banco debería reemplazar a los analistas humanos",
-      },
+      { id: "m5q5_b", label: "La privacidad por ocultar el uso de la IA" },
+      { id: "m5q5_c", label: "La velocidad del proceso de decisión" },
+      { id: "m5q5_d", label: "La eficiencia al usar analistas humanos" },
     ],
     correctAnswer: "m5q5_a",
     topic: "Transparencia",
     difficulty: "medio",
+    source: "PDF: Código de Ética para Uso de IA",
     feedback:
-      'La transparencia es un pilar ético fundamental. Los ciudadanos tienen derecho a entender decisiones automatizadas que les afectan. El AI Act de la UE exige explicabilidad en decisiones de alto riesgo como créditos. Repasa el video "IA Ética: Principios y Práctica" y el PDF "Código de Ética para Uso de IA".',
+      "Las personas tienen derecho a entender las decisiones automáticas que las afectan. Revisa el código de ética.",
   },
   {
     id: "m5q6",
     question:
-      "Eres diseñador UX en una agencia digital. Tu jefe te pide usar IA para generar 50 reseñas falsas positivas de un producto que aún no se ha lanzado, para mejorar su reputación inicial en redes. ¿Cuál es la postura más ética?",
+      "Tu jefe pide generar reseñas falsas de un producto con IA. ¿Cuál es la postura ética?",
     options: [
       {
         id: "m5q6_a",
-        label:
-          "Negarte a generar reseñas falsas, explicar que viola principios éticos de transparencia y proponer alternativas legítimas de promoción",
+        label: "Negarte y proponer alternativas de promoción honestas",
       },
-      {
-        id: "m5q6_b",
-        label:
-          "Generar las reseñas porque tu jefe lo pidió y es parte de tu trabajo",
-      },
+      { id: "m5q6_b", label: "Hacerlas porque es parte de tu trabajo" },
       {
         id: "m5q6_c",
-        label:
-          "Generar las reseñas pero modificar algunos detalles para que parezcan menos falsas",
+        label: "Hacerlas cambiando detalles para que no parezcan falsas",
       },
-      { id: "m5q6_d", label: "Renunciar inmediatamente sin dar explicaciones" },
+      { id: "m5q6_d", label: "Renunciar sin dar explicaciones" },
     ],
     correctAnswer: "m5q6_a",
     topic: "Uso Responsable",
     difficulty: "medio",
+    source: "OVA: Laboratorio: Dilemas Éticos",
     feedback:
-      'Generar reseñas falsas viola principios éticos de transparencia y honestidad, y puede tener consecuencias legales (publicidad engañosa). El mejor camino es proponer alternativas éticas. Repasa el OVA "Laboratorio: Dilemas Éticos" y el decálogo del usuario ético.',
+      "Las reseñas falsas engañan y pueden ser ilegales. Propón alternativas éticas. Repasa el laboratorio de dilemas.",
   },
   {
     id: "m5q7",
     question:
-      "Un conductor con piloto automático viene distraído mirando el celular. El sistema detecta un obstáculo y frena a tiempo. El conductor confía en que siempre funcionará. Semanas después, con poca luz, el sistema no detecta un objeto pequeño y ocurre un accidente. ¿Qué sesgo describe esta situación y cómo prevenirla?",
+      "Un conductor distraído confía en el piloto automático y sufre un accidente. ¿Qué sesgo describe esto?",
     options: [
       {
         id: "m5q7_a",
-        label:
-          "Sesgo de automatización — el conductor delegó su atención sin supervisión crítica. Se previene con entrenamiento en límites del sistema y supervisión activa",
+        label: "Sesgo de automatización: se confió sin supervisión crítica",
       },
       {
         id: "m5q7_b",
-        label:
-          "Sesgo de muestreo — los datos de entrenamiento no incluían objetos pequeños con poca luz",
+        label: "Sesgo de muestreo en los datos de entrenamiento",
       },
-      {
-        id: "m5q7_c",
-        label:
-          "Sesgo algorítmico — el sistema discriminaba contra ciertos tipos de objetos",
-      },
-      {
-        id: "m5q7_d",
-        label:
-          "Error humano normal — los accidentes ocurren, no hay sesgo involucrado",
-      },
+      { id: "m5q7_c", label: "Sesgo algorítmico contra ciertos objetos" },
+      { id: "m5q7_d", label: "Un error humano normal sin sesgo alguno" },
     ],
     correctAnswer: "m5q7_a",
     topic: "Sesgo de Automatización",
-    difficulty: "difícil",
+    difficulty: "medio",
+    source: "OVA: Laboratorio: Detecta el Sesgo",
     feedback:
-      'El sesgo de automatización es la tendencia humana a confiar excesivamente en sistemas automatizados, abandonando el pensamiento crítico. El conductor asumió que el sistema era infalible. Repasa el OVA "Laboratorio: Detecta el Sesgo" y el tema "Sesgos Algorítmicos y Equidad".',
+      "El sesgo de automatización es confiar demasiado en la máquina. Mantén la supervisión activa.",
   },
   {
     id: "m5q8",
     question:
-      "Quieres usar IA para un proyecto pero te preocupa la privacidad de los datos. Según el módulo, ¿cuál es la estrategia más responsable?",
+      "¿Cuál es la estrategia más responsable para proteger datos al usar IA?",
     options: [
       {
         id: "m5q8_a",
-        label: "No usar IA nunca para nada relacionado con datos",
+        label: "Usar herramientas seguras y anonimizar la información sensible",
       },
-      {
-        id: "m5q8_b",
-        label:
-          "Usar herramientas con protección de datos empresarial, anonimizar información sensible y nunca compartir datos personales en chats públicos",
-      },
+      { id: "m5q8_b", label: "Evitar por completo usar IA con cualquier dato" },
       {
         id: "m5q8_c",
-        label:
-          "Compartir los datos en redes sociales para que la comunidad ayude",
+        label: "Publicar los datos en redes para que la comunidad ayude",
       },
       {
         id: "m5q8_d",
-        label: "Confiar en que la IA automáticamente protege todos los datos",
+        label: "Confiar en que la IA protege todo automáticamente",
       },
     ],
-    correctAnswer: "m5q8_b",
+    correctAnswer: "m5q8_a",
     topic: "Protección de Datos",
-    difficulty: "difícil",
+    difficulty: "medio",
+    source: "PDF: Manual de Privacidad en IA",
     feedback:
-      'La protección de datos es responsabilidad tuya. Usa herramientas seguras, anonimiza y nunca compartas información sensible. Repasa "Protege tus Datos en la Era de la IA".',
+      "La protección de los datos es tu responsabilidad: herramientas seguras y datos anonimizados.",
   },
   {
     id: "m5q9",
     question:
-      'La Unión Europea clasifica los sistemas de IA por nivel de riesgo (mínimo, limitado, alto, inaceptable). Un sistema que determina el acceso a servicios financieros esenciales (como aprobar una hipoteca) entraría en la categoría de "alto riesgo". ¿Qué obligación impone esta clasificación?',
+      "Un sistema de IA de alto riesgo (por ejemplo, aprobar una hipoteca) según la UE debe cumplir con:",
     options: [
-      {
-        id: "m5q9_a",
-        label:
-          "Evaluaciones de conformidad, documentación técnica, transparencia y supervisión humana obligatoria",
-      },
-      {
-        id: "m5q9_b",
-        label: "Prohibición total del uso de IA en servicios financieros",
-      },
-      {
-        id: "m5q9_c",
-        label: "Registro voluntario sin obligaciones específicas",
-      },
-      { id: "m5q9_d", label: "Solo pagar una tasa anual por usar el sistema" },
+      { id: "m5q9_a", label: "Evaluación de conformidad y supervisión humana" },
+      { id: "m5q9_b", label: "Prohibición total de usar IA en ese caso" },
+      { id: "m5q9_c", label: "Registro voluntario sin obligaciones" },
+      { id: "m5q9_d", label: "Pagar una tasa anual por usarlo" },
     ],
     correctAnswer: "m5q9_a",
     topic: "Marco Regulatorio",
     difficulty: "difícil",
+    source: "PDF: Código de Ética para Uso de IA",
     feedback:
-      'El AI Act europeo es el primer marco regulatorio integral de IA. Los sistemas de alto riesgo requieren evaluaciones de conformidad, documentación, transparencia y supervisión humana. Es importante conocer el marco regulatorio al desarrollar soluciones de IA. Revisa el tema "Marco Legal y Regulatorio de la IA".',
+      "Los sistemas de alto riesgo exigen transparencia, documentación y supervisión humana. Revisa el marco regulatorio.",
   },
   {
     id: "m5q10",
     question:
-      "Un equipo de data scientists entrena un modelo para predecir éxito académico. Descubren que el modelo asigna puntuaciones más bajas a estudiantes de ciertas regiones geográficas, incluso controlando por calificaciones y recursos. ¿Qué métrica de equidad deberían priorizar para diagnosticar el problema?",
+      "Tu app educativa recopila datos de rendimiento de estudiantes. ¿Qué práctica de minimización es correcta?",
     options: [
       {
         id: "m5q10_a",
-        label:
-          "Paridad demográfica — verificar si la tasa de predicción positiva es similar entre grupos geográficos",
+        label: "Guardar solo lo necesario con consentimiento informado",
       },
       {
         id: "m5q10_b",
-        label: "Precisión general del modelo sin desglosar por grupos",
+        label: "Recopilar todos los datos por si acaso hacen falta",
       },
-      { id: "m5q10_c", label: "Velocidad de entrenamiento del modelo" },
-      { id: "m5q10_d", label: "Cantidad total de datos de entrenamiento" },
+      { id: "m5q10_c", label: "Compartir los datos con terceros sin avisar" },
+      { id: "m5q10_d", label: "Almacenar los datos sin plan de eliminación" },
     ],
     correctAnswer: "m5q10_a",
-    topic: "Equidad Algorítmica",
-    difficulty: "difícil",
-    feedback:
-      'La paridad demográfica (demographic parity) mide si las predicciones del modelo son equitativas entre grupos. Si el modelo predice éxito con menor frecuencia para ciertas regiones, hay un sesgo que debe investigarse y corregirse. Revisa el OVA "Laboratorio: Detecta el Sesgo".',
-  },
-  {
-    id: "m5q11",
-    question:
-      "Estás desarrollando una app educativa con IA que recopila datos de rendimiento de estudiantes. Siguiendo el principio de minimización de datos, ¿cuál es la práctica correcta?",
-    options: [
-      {
-        id: "m5q11_a",
-        label:
-          "Recopilar solo los datos estrictamente necesarios para la funcionalidad educativa, con consentimiento informado y política de eliminación clara",
-      },
-      {
-        id: "m5q11_b",
-        label:
-          'Recopilar todos los datos posibles "por si acaso" se necesitan después',
-      },
-      {
-        id: "m5q11_c",
-        label:
-          "Compartir los datos automáticamente con terceros sin notificar a los usuarios",
-      },
-      {
-        id: "m5q11_d",
-        label: "Almacenar los datos indefinidamente sin plan de eliminación",
-      },
-    ],
-    correctAnswer: "m5q11_a",
     topic: "Privacidad por Diseño",
     difficulty: "medio",
+    source: "PDF: Manual de Privacidad en IA",
     feedback:
-      'La minimización de datos es un principio fundamental de privacidad: solo recopila lo necesario, con consentimiento, y ten un plan claro de eliminación. Repasa el tema "Protege tus Datos en la Era de la IA" y el PDF "Manual de Privacidad en IA".',
-  },
-  {
-    id: "m5q12",
-    question:
-      "Un equipo de IA documenta su modelo con una model card (tarjeta de modelo). Según las mejores prácticas, ¿qué información DEBE incluir?",
-    options: [
-      {
-        id: "m5q12_a",
-        label:
-          "Propósito del modelo, datos de entrenamiento, métricas de rendimiento por subgrupos, limitaciones conocidas y consideraciones éticas",
-      },
-      { id: "m5q12_b", label: "Solo el nombre del modelo y la versión" },
-      {
-        id: "m5q12_c",
-        label: "Los nombres completos de los desarrolladores y sus salarios",
-      },
-      { id: "m5q12_d", label: "El código fuente completo del modelo" },
-    ],
-    correctAnswer: "m5q12_a",
-    topic: "Documentación Ética",
-    difficulty: "medio",
-    feedback:
-      "Las model cards son un estándar de transparencia en IA. Incluyen propósito, datos, métricas por subgrupo, limitaciones y consideraciones éticas. Permiten a los usuarios entender las capacidades y limitaciones del modelo antes de usarlo. Repasa el tema de transparencia en IA en los recursos del módulo.",
+      "Minimiza los datos: solo lo necesario, con consentimiento y un plan claro de eliminación.",
   },
 ];

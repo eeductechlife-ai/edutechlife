@@ -6,7 +6,14 @@ import { memo, useCallback } from "react";
  * @param {string} props.viewSection
  * @param {(id: string) => void} props.setViewSection
  */
-export function TabPills({ TABS, viewSection, setViewSection, badges = {} }) {
+// statuses: { [tabId]: 'done' | 'ready' | 'in-progress' }
+export function TabPills({
+  TABS,
+  viewSection,
+  setViewSection,
+  badges = {},
+  statuses = {},
+}) {
   const handleKeyDown = useCallback(
     (e, tabIndex) => {
       const tabs = TABS.filter((t) => t.id !== undefined);
@@ -50,12 +57,31 @@ export function TabPills({ TABS, viewSection, setViewSection, badges = {} }) {
           }`}
         >
           {tab.label}
+          {statuses[tab.id] === "done" && (
+            <span
+              className={`ml-0.5 text-[10px] font-bold ${viewSection === tab.id ? "text-white/80" : "text-emerald-500"}`}
+            >
+              ✓
+            </span>
+          )}
+          {statuses[tab.id] === "ready" && (
+            <span
+              className={`ml-0.5 w-1.5 h-1.5 rounded-full inline-block ${viewSection === tab.id ? "bg-white/70" : "bg-amber-400"}`}
+            />
+          )}
+          {statuses[tab.id] === "in-progress" && (
+            <span
+              className={`ml-0.5 w-1.5 h-1.5 rounded-full inline-block ${viewSection === tab.id ? "bg-white/70" : "bg-[var(--theme-primary)]"}`}
+            />
+          )}
           {badges[tab.id] > 0 && (
-            <span className={`ml-1 min-w-[18px] h-[18px] px-1 text-[10px] font-bold rounded-full flex items-center justify-center ${
-              viewSection === tab.id
-                ? 'bg-white/25 text-white'
-                : 'bg-amber-400/20 text-amber-600 dark:text-amber-400'
-            }`}>
+            <span
+              className={`ml-1 min-w-[18px] h-[18px] px-1 text-[10px] font-bold rounded-full flex items-center justify-center ${
+                viewSection === tab.id
+                  ? "bg-white/25 text-white"
+                  : "bg-amber-400/20 text-amber-600 dark:text-amber-400"
+              }`}
+            >
               {badges[tab.id]}
             </span>
           )}

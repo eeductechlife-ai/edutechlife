@@ -17,8 +17,27 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Auto-cleanup: removes read notifications older than 30 days from localStorage.
+  const pruneLocalNotifications = () => {
+    try {
+      const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+      const raw = JSON.parse(
+        localStorage.getItem("ialab_notifications") || "[]",
+      );
+      const pruned = raw.filter((n) => {
+        if (!n?.id?.startsWith("local_")) return true;
+        if (!n.is_read) return true;
+        return new Date(n.created_at).getTime() > cutoff;
+      });
+      if (pruned.length !== raw.length) {
+        localStorage.setItem("ialab_notifications", JSON.stringify(pruned));
+      }
+    } catch {}
+  };
+
   // Merge local_ notifications (localStorage fallback) with remote rows, newest first.
   const mergeLocalNotifications = (remote) => {
+    pruneLocalNotifications();
     let local = [];
     try {
       local = JSON.parse(
@@ -27,10 +46,13 @@ export const NotificationProvider = ({ children }) => {
     } catch {
       local = [];
     }
-    if (!local.length) return remote;
-    return [...local, ...remote].sort(
-      (a, b) => new Date(b.created_at) - new Date(a.created_at),
-    );
+    // Cap combined list at 30 to avoid accumulation
+    const merged = !local.length
+      ? remote
+      : [...local, ...remote].sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at),
+        );
+    return merged.slice(0, 30);
   };
 
   const fetchNotifications = useCallback(async () => {

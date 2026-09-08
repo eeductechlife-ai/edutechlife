@@ -49,6 +49,7 @@ const IALabSidebar = () => {
     certificateGenerating,
   } = useIALabUIContext();
 
+  const moduleProgress = useIALabStore((s) => s.moduleProgress);
   const streak = useIALabStore((s) => s.streak);
   const getLevel = useIALabStore((s) => s.getLevel);
   const getTotalPoints = useIALabStore((s) => s.getTotalPoints);
@@ -68,9 +69,7 @@ const IALabSidebar = () => {
 
   // Auto-colapso por inactividad (3 min) solo si el sidebar está expandido y
   // estamos en escritorio. Al colapsar se libera espacio para el contenido.
-  const setSidebarCollapsedAuto = useIALabStore(
-    (s) => s.setSidebarCollapsed,
-  );
+  const setSidebarCollapsedAuto = useIALabStore((s) => s.setSidebarCollapsed);
 
   useEffect(() => {
     if (isCollapsed) return; // ya cerrado: no hay nada que colapsar
@@ -141,6 +140,7 @@ const IALabSidebar = () => {
               goToProgress={goToProgress}
               setShowLeaderboard={setShowLeaderboard}
               setShowStudyPlannerModal={setShowStudyPlannerModal}
+              moduleProgress={moduleProgress}
               onToggleSidebar={toggleSidebar}
               t={t}
             />

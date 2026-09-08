@@ -1,9 +1,14 @@
 /**
- * Multiplayer Service — Gestionar leaderboards, competencia y rankings
- * Responsabilidades:
- * - Calcular rankings por criterios
- * - Validar integridad de datos
- * - Implementar fair play (detección de anomalías)
+ * Multiplayer Service — utilidad CLIENT-SIDE de cálculo de rankings
+ *
+ * Este módulo realiza cálculos de ranking localmente (sin red). La lógica de
+ * persistencia y leaderboards en DB vive en el BACKEND:
+ *   edutechlife-backend/src/services/multiplayerService.js  →  via /api/smartboard/leaderboard
+ *
+ * Responsabilidades de este módulo:
+ * - Calcular posición y percentil de un estudiante dado un array en memoria
+ * - Detectar anomalías de fair-play localmente antes de enviar al backend
+ * - No hace fetch/Supabase directo; delega al backend para estado compartido
  */
 
 /**

@@ -35,9 +35,10 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
     storedAttempt = attempts.length > 0 ? attempts[attempts.length - 1] : null;
   } catch {}
 
+  const totalQuestions = storedAttempt?.totalQuestions || TOTAL_QUESTIONS;
   const correctCount =
-    storedAttempt?.correctCount ?? Math.round((score / 100) * TOTAL_QUESTIONS);
-  const incorrectCount = TOTAL_QUESTIONS - correctCount;
+    storedAttempt?.correctCount ?? Math.round((score / 100) * totalQuestions);
+  const incorrectCount = totalQuestions - correctCount;
   const failedTopics = storedAttempt?.failedQuestions || [];
 
   // Lógica de intentos. Antes leía y escribía `localStorage` directo, pero esas
@@ -129,7 +130,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
               </div>
               <div>
                 <div className="text-2xl font-bold text-slate-800">
-                  {TOTAL_QUESTIONS}
+                  {totalQuestions}
                 </div>
                 <div className="text-xs text-slate-500">
                   {t("ialab.exam_result.total")}

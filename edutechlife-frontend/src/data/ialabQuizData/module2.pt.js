@@ -2,323 +2,227 @@ export const MODULE_2_PT = [
   {
     id: "m2q1",
     question:
-      "Você é analista de dados em uma startup de e-commerce. Recebe um CSV com 10.000 registros de vendas do último trimestre e precisa identificar quais produtos crescem mais. Também deve comparar os resultados com as tendências atuais do mercado. Qual é a melhor estratégia combinando ferramentas do ChatGPT?",
+      "Você tem um CSV de vendas e quer descobrir quais produtos crescem mais. Qual combinação de ferramentas é a mais útil?",
     options: [
       {
         id: "m2q1_a",
-        label:
-          "Usar o Interpretador de Código para analisar o CSV e a Pesquisa Web para investigar tendências do setor",
+        label: "Interpretador de Código no CSV e Busca na Web para tendências",
       },
       {
         id: "m2q1_b",
-        label:
-          "Usar o Canvas para colar os dados manualmente e o DALL-E para gerar os gráficos",
+        label: "Canvas para colar os dados e DALL-E para os gráficos",
       },
-      {
-        id: "m2q1_c",
-        label:
-          "Usar apenas a Pesquisa Web para encontrar artigos sobre tendências de mercado",
-      },
+      { id: "m2q1_c", label: "Só Busca na Web para ler artigos do mercado" },
       {
         id: "m2q1_d",
-        label:
-          "Usar o DALL-E 3 para gerar a análise automaticamente a partir do CSV",
+        label: "DALL-E 3 para analisar o arquivo automaticamente",
       },
     ],
     correctAnswer: "m2q1_a",
-    topic: "Ferramentas do ChatGPT",
+    topic: "Ferramentas ChatGPT",
     difficulty: "médio",
+    source: "OVA: Laboratório de Ferramentas ChatGPT",
     feedback:
-      'O Interpretador de Código executa Python sobre o CSV para cálculos e gráficos, enquanto a Pesquisa Web obtém dados atuais do mercado. Combiná-los dá uma análise completa. Revise o OVA "Laboratório: Ferramentas do ChatGPT".',
+      "O Interpretador analisa o CSV e a Busca na Web traz dados do mercado. Pratique no laboratório.",
   },
   {
     id: "m2q2",
     question:
-      "Qual ferramenta do ChatGPT você deve usar para analisar um arquivo Excel com dados de vendas e criar gráficos?",
+      "Um escritório quer um GPT para redigir contratos com modelos e jurisprudência atual. Qual configuração é a adequada?",
     options: [
-      { id: "m2q2_a", label: "DALL-E 3" },
-      { id: "m2q2_b", label: "Interpretador de Código (Análise de Dados)" },
-      { id: "m2q2_c", label: "Canvas" },
-      { id: "m2q2_d", label: "Pesquisa Web" },
+      {
+        id: "m2q2_a",
+        label: "Prompt jurídico + base de conhecimento + function calling",
+      },
+      {
+        id: "m2q2_b",
+        label: "Um prompt que só diga que você é um assistente jurídico",
+      },
+      {
+        id: "m2q2_c",
+        label: "Ativar Busca na Web e DALL-E para procurar contratos",
+      },
+      { id: "m2q2_d", label: "Um GPT sem instruções, só com análise de dados" },
     ],
-    correctAnswer: "m2q2_b",
-    topic: "Análise de Dados",
+    correctAnswer: "m2q2_a",
+    topic: "GPTs Personalizados",
     difficulty: "médio",
+    source: "Guia de GPTs e Ações",
     feedback:
-      'O Interpretador de Código executa Python para processar arquivos e criar visualizações. Revise o OVA "Laboratório: Ferramentas do ChatGPT".',
+      "Um GPT útil combina prompt especializado, base de conhecimento e function calling.",
   },
   {
     id: "m2q3",
     question:
-      "Um escritório de advocacia pede que você crie um GPT personalizado para ajudar os advogados a redigir contratos. Ele deve acessar modelos jurídicos, verificar jurisprudência atualizada e gerar cláusulas conforme o caso. Qual configuração é a mais adequada?",
+      'Um GPT usa function calling para ler pedidos. O usuário escreve "Onde vai o pedido #789, email ana@exemplo.com?" O que acontece internamente?',
     options: [
       {
         id: "m2q3_a",
-        label:
-          "System prompt com instruções jurídicas detalhadas + base de conhecimento com modelos + Function Calling para uma base de jurisprudência",
+        label: "Extrai #789 e o email e executa a função do pedido",
       },
       {
         id: "m2q3_b",
-        label:
-          'Apenas um system prompt genérico dizendo "você é um assistente jurídico"',
+        label: "Pede ao usuário para preencher um formulário separado",
       },
-      {
-        id: "m2q3_c",
-        label:
-          "Ativar a Pesquisa Web e o DALL-E 3 para buscar exemplos visuais de contratos",
-      },
-      {
-        id: "m2q3_d",
-        label:
-          "Um GPT sem instruções personalizadas, apenas com análise de dados ativada",
-      },
+      { id: "m2q3_c", label: "Procura o número do pedido na internet" },
+      { id: "m2q3_d", label: "Envia a mensagem completa à API sem processar" },
     ],
     correctAnswer: "m2q3_a",
-    topic: "GPTs Personalizados",
-    difficulty: "médio",
+    topic: "Function Calling",
+    difficulty: "difícil",
+    source: "OVA: Laboratório de Ferramentas ChatGPT",
     feedback:
-      'Um GPT personalizado eficaz combina: system prompt especializado, base de conhecimento com documentos relevantes e Function Calling para dados externos. Revise o vídeo "Crie seu Primeiro GPT em 18 Minutos" e o guia visual de GPTs.',
+      "Function calling extrai os parâmetros e executa a função. Reveja o tema no módulo.",
   },
   {
     id: "m2q4",
-    question:
-      'Você tem um GPT de atendimento ao cliente conectado a uma API de pedidos via Function Calling. A função registrada extrai automaticamente dados como número do pedido e e-mail da conversa. Quando um usuário escreve "Onde está meu pedido #789? Meu e-mail é ana@exemplo.com", o que acontece internamente?',
+    question: "O que o function calling permite com a API do ChatGPT?",
     options: [
       {
         id: "m2q4_a",
-        label:
-          "O ChatGPT identifica os dados relevantes (#789, ana@exemplo.com) e executa a função automaticamente na API de pedidos",
+        label: "Conectar o ChatGPT a APIs, bancos de dados e serviços externos",
       },
       {
         id: "m2q4_b",
-        label:
-          "O usuário precisa preencher um formulário separado com seus dados antes de receber ajuda",
+        label: "Ligar por telefone para o suporte técnico do usuário",
       },
-      {
-        id: "m2q4_c",
-        label: "O ChatGPT busca na internet o número do pedido para rastreá-lo",
-      },
+      { id: "m2q4_c", label: "Criar funções matemáticas mais rápidas no chat" },
       {
         id: "m2q4_d",
-        label:
-          "O Function Calling envia a mensagem completa do usuário para a API sem processamento",
+        label: "Baixar automaticamente todos os plugins disponíveis",
       },
     ],
     correctAnswer: "m2q4_a",
     topic: "Function Calling",
-    difficulty: "difícil",
+    difficulty: "fácil",
+    source: "Guia de GPTs e Ações",
     feedback:
-      'O Function Calling permite que o ChatGPT extraia parâmetros estruturados da linguagem natural e execute funções automaticamente. Revise o tópico "Conecte o ChatGPT com o Mundo Real" e a Lição 3 do módulo.',
+      "Function calling conecta o ChatGPT ao mundo real. Reveja o guia de GPTs.",
   },
   {
     id: "m2q5",
-    question: "O que o Function Calling com a API da OpenAI permite fazer?",
+    question:
+      "Um community manager recebe muitas perguntas frequentes por dia. Como automatizar melhor as respostas com um GPT?",
     options: [
-      { id: "m2q5_a", label: "Ligar para o suporte técnico" },
+      { id: "m2q5_a", label: "GPT com tom da marca, FAQs e conexão por API" },
       {
         id: "m2q5_b",
-        label:
-          "Conectar o ChatGPT a serviços externos como bancos de dados, APIs de clima ou sistemas de e-mail",
+        label: "Responder cada comentário à mão com o ChatGPT padrão",
       },
-      { id: "m2q5_c", label: "Criar funções matemáticas mais rápidas" },
-      {
-        id: "m2q5_d",
-        label: "Baixar automaticamente todos os plugins disponíveis",
-      },
+      { id: "m2q5_c", label: "Deixar a Busca na Web responder os comentários" },
+      { id: "m2q5_d", label: "Gerar imagens e publicá-las como respostas" },
     ],
-    correctAnswer: "m2q5_b",
-    topic: "Function Calling",
-    difficulty: "difícil",
+    correctAnswer: "m2q5_a",
+    topic: "Automação",
+    difficulty: "médio",
+    source: "OVA: Construa um GPT",
     feedback:
-      'O Function Calling conecta o ChatGPT com o mundo real. Revise os recursos do tópico "Conecte o ChatGPT com o Mundo Real".',
+      "Um GPT com instruções, base de conhecimento e API automatiza respostas. Pratique no laboratório.",
   },
   {
     id: "m2q6",
     question:
-      "Você está preparando uma tese e precisa que o ChatGPT lembre do seu referencial teórico em cada sessão. Qual recurso você deve usar?",
+      "Um GPT de reclamações às vezes dá dados errados sobre devoluções. Qual é a melhor prática responsável?",
     options: [
-      { id: "m2q6_a", label: "Pesquisa Web" },
-      { id: "m2q6_b", label: "DALL-E 3" },
-      { id: "m2q6_c", label: "Projetos e Memória" },
-      { id: "m2q6_d", label: "Interpretador de Código" },
+      {
+        id: "m2q6_a",
+        label: "Revisão humana e alertas quando a IA tiver dúvida",
+      },
+      { id: "m2q6_b", label: "Desligar a IA e responder tudo à mão" },
+      { id: "m2q6_c", label: "Ignorar os erros por causa da velocidade" },
+      { id: "m2q6_d", label: "Dar só respostas genéricas sem dados" },
     ],
-    correctAnswer: "m2q6_c",
-    topic: "Projetos ChatGPT",
-    difficulty: "difícil",
+    correctAnswer: "m2q6_a",
+    topic: "Uso Responsável",
+    difficulty: "médio",
+    source: "Guia Completa de ChatGPT",
     feedback:
-      "Os Projetos agrupam conversas sob instruções comuns e a Memória guarda o contexto. Revise o guia do ChatGPT.",
+      "A IA acelera e a pessoa confere. Reveja as boas práticas de uso responsável.",
   },
   {
     id: "m2q7",
     question:
-      "Um community manager recebe mais de 200 comentários diários nas redes sociais. Muitos são perguntas frequentes (horários, preços, disponibilidade). Ele quer automatizar as respostas com um GPT personalizado. Qual é o fluxo de trabalho mais eficaz?",
+      "Uma equipe de vendas quer compartilhar conhecimento atualizado de produtos. Qual estratégia é a melhor?",
     options: [
       {
         id: "m2q7_a",
-        label:
-          "Criar um GPT com instruções sobre o tom da marca, subir uma base de conhecimento com FAQs e conectá-lo por API à plataforma de redes sociais",
+        label: "Um Projeto compartilhado com uma base de conhecimento comum",
       },
-      {
-        id: "m2q7_b",
-        label:
-          "Pedir ao ChatGPT padrão que responda cada comentário manualmente, um a um",
-      },
-      {
-        id: "m2q7_c",
-        label:
-          "Configurar a Pesquisa Web para encontrar respostas automáticas na internet",
-      },
-      {
-        id: "m2q7_d",
-        label:
-          "Usar o DALL-E 3 para gerar imagens que respondam visualmente aos comentários",
-      },
+      { id: "m2q7_b", label: "Cada vendedor guarda as próprias instruções" },
+      { id: "m2q7_c", label: "Usar um GPT público que todos baixem" },
+      { id: "m2q7_d", label: "Compartilhar capturas de chats por e-mail" },
     ],
     correctAnswer: "m2q7_a",
-    topic: "Automação",
+    topic: "Projetos ChatGPT",
     difficulty: "médio",
+    source: "Guia Completa de ChatGPT",
     feedback:
-      'Um GPT personalizado com instruções e base de conhecimento, conectado por API, automatiza as respostas mantendo a consistência. Revise o OVA "Laboratório: Construa um GPT" e o tópico de automação do módulo.',
+      "Projetos agrupam conversas com instruções e arquivos compartilhados. Reveja o guia.",
   },
   {
     id: "m2q8",
     question:
-      "Uma empresa implementa um GPT automatizado para responder reclamações de clientes nas redes sociais. O GPT é rápido, mas ocasionalmente dá informações incorretas sobre políticas de devolução. Qual é a melhor prática para usar a IA com responsabilidade neste caso?",
+      "Você quer que um GPT consulte um catálogo que atualiza diariamente. O que você ativa?",
     options: [
       {
         id: "m2q8_a",
-        label:
-          "Implementar supervisão humana com alertas automáticos quando o GPT tiver baixa confiança, e auditar as respostas periodicamente",
+        label: "Base de conhecimento e Actions (API) para dados vivos",
       },
       {
         id: "m2q8_b",
-        label:
-          "Desativar o GPT e fazer toda a equipe responder manualmente sem ajuda de IA",
+        label: "Pedir ao usuário para colar o catálogo toda vez",
       },
-      {
-        id: "m2q8_c",
-        label:
-          "Ignorar os erros porque a velocidade de resposta é o mais importante",
-      },
-      {
-        id: "m2q8_d",
-        label:
-          "Configurar o GPT para dar sempre respostas genéricas, sem informações específicas",
-      },
+      { id: "m2q8_c", label: "Gerar imagens do catálogo com DALL-E" },
+      { id: "m2q8_d", label: "Não é possível consultar dados atualizados" },
     ],
     correctAnswer: "m2q8_a",
-    topic: "Uso Responsável",
+    topic: "GPTs Personalizados",
     difficulty: "médio",
+    source: "OVA: Construa um GPT",
     feedback:
-      "A IA deve ampliar a capacidade humana, não substituí-la sem supervisão. A melhor prática é um sistema híbrido: IA para velocidade + supervisão humana para precisão. Revise as boas práticas do módulo sobre o uso responsável de IA.",
+      "A base guarda o estático e as Actions trazem o que muda. Reveja o laboratório de GPTs.",
   },
   {
     id: "m2q9",
     question:
-      "Uma equipe de 5 vendedores quer usar o ChatGPT para manter atualizada a base de conhecimentos de produtos. Cada vendedor tem conversas diferentes com clientes distintos. Qual é a melhor estratégia para que todos compartilhem informações atualizadas?",
+      "Você vai publicar na GPT Store um GPT que usa na sua empresa. O que você verifica primeiro?",
     options: [
-      {
-        id: "m2q9_a",
-        label:
-          "Criar um Projeto compartilhado com instruções de produto e atualizar a base de conhecimento centralizada",
-      },
-      {
-        id: "m2q9_b",
-        label:
-          "Cada vendedor mantém seu próprio chat com as instruções que lembrar",
-      },
-      { id: "m2q9_c", label: "Usar um GPT público que todos possam baixar" },
-      {
-        id: "m2q9_d",
-        label: "Compartilhar capturas de tela dos chats por e-mail",
-      },
+      { id: "m2q9_a", label: "Se ele guarda dados sensíveis da sua empresa" },
+      { id: "m2q9_b", label: "Se o nome é chamativo o bastante" },
+      { id: "m2q9_c", label: "Se tem funções para justificar o preço" },
+      { id: "m2q9_d", label: "Se o logotipo parece profissional" },
     ],
     correctAnswer: "m2q9_a",
-    topic: "Projetos ChatGPT",
-    difficulty: "médio",
+    topic: "Privacidade GPT",
+    difficulty: "fácil",
+    source: "Guia de GPTs e Ações",
     feedback:
-      "Os Projetos no ChatGPT permitem agrupar conversas sob instruções e arquivos compartilhados. Revise o tópico de Projetos nos recursos do módulo.",
+      "Antes de publicar, confira se não há dados confidenciais. Reveja o tema de privacidade.",
   },
   {
     id: "m2q10",
     question:
-      "Você está criando um GPT de atendimento ao cliente. Quer que ele consulte o catálogo de produtos atualizado diariamente. Qual funcionalidade você deve ativar?",
+      "Você quer que o ChatGPT detecte reclamações urgentes nas redes e avise o suporte. Qual combinação você usa?",
     options: [
       {
         id: "m2q10_a",
-        label:
-          "Subir o catálogo como base de conhecimento e usar Actions (API) para consultar atualizações em tempo real",
+        label: "Um GPT com Actions (API) conectado a um webhook",
       },
+      { id: "m2q10_b", label: "ChatGPT padrão com a Busca na Web ativada" },
       {
-        id: "m2q10_b",
-        label: "Pedir ao usuário que copie e cole o catálogo a cada vez",
+        id: "m2q10_c",
+        label: "DALL-E para responder aos comentários com imagens",
       },
-      { id: "m2q10_c", label: "Usar o DALL-E para gerar imagens do catálogo" },
       {
         id: "m2q10_d",
-        label: "Não é possível consultar dados atualizados em um GPT",
+        label: "Canvas para revisar e editar cada comentário à mão",
       },
     ],
     correctAnswer: "m2q10_a",
-    topic: "GPTs Personalizados",
-    difficulty: "difícil",
-    feedback:
-      'Os GPTs podem ter base de conhecimento estática + Actions (chamadas de API) para dados dinâmicos. Isso permite consultar informações atualizadas em tempo real. Revise o tópico "Conecte o ChatGPT com o Mundo Real".',
-  },
-  {
-    id: "m2q11",
-    question:
-      "Um GPT que você criou para a sua startup está funcionando muito bem internamente. Seu sócio sugere publicá-lo na GPT Store para que outras startups também o usem. Qual consideração de privacidade você deve avaliar PRIMEIRO?",
-    options: [
-      {
-        id: "m2q11_a",
-        label:
-          "Se o GPT contém dados sensíveis da sua empresa na base de conhecimento ou nas instruções do sistema",
-      },
-      {
-        id: "m2q11_b",
-        label: "Se o nome do GPT é chamativo o suficiente",
-      },
-      {
-        id: "m2q11_c",
-        label:
-          "Se o GPT tem funcionalidades suficientes para justificar seu preço",
-      },
-      { id: "m2q11_d", label: "Se o logotipo do GPT parece profissional" },
-    ],
-    correctAnswer: "m2q11_a",
-    topic: "Privacidade em GPT",
-    difficulty: "médio",
-    feedback:
-      "Antes de publicar um GPT, verifique se ele não contém dados confidenciais (segredos comerciais, dados de clientes, estratégias internas). O que funciona internamente nem sempre é seguro para publicação pública. Revise o tópico de privacidade em GPTs.",
-  },
-  {
-    id: "m2q12",
-    question:
-      "Você quer criar um fluxo automatizado em que o ChatGPT analise comentários de redes sociais, identifique reclamações urgentes e envie notificações à equipe de suporte. Qual combinação de ferramentas você precisa?",
-    options: [
-      {
-        id: "m2q12_a",
-        label:
-          "Um GPT personalizado com Actions (API) conectado à rede social + webhook para o sistema de tickets da equipe",
-      },
-      {
-        id: "m2q12_b",
-        label: "ChatGPT padrão com Pesquisa Web ativada",
-      },
-      {
-        id: "m2q12_c",
-        label: "DALL-E 3 para gerar respostas visuais automáticas",
-      },
-      {
-        id: "m2q12_d",
-        label: "Canvas para editar manualmente cada comentário",
-      },
-    ],
-    correctAnswer: "m2q12_a",
     topic: "Automação",
     difficulty: "difícil",
+    source: "OVA: Fluxos de Automação no Mundo Real",
     feedback:
-      "A automação com IA exige: um GPT preparado para a tarefa + Actions (API) para se conectar a serviços externos + um webhook ou API para disparar ações. Revise o tópico de automação e Function Calling no módulo.",
+      "Um GPT com Actions e um webhook automatiza o aviso. Reveja a OVA de automação.",
   },
 ];

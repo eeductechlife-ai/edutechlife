@@ -2,303 +2,203 @@ export const MODULE_2_EN = [
   {
     id: "m2q1",
     question:
-      "You are a data analyst at an e-commerce startup. You receive a CSV with 10,000 sales records from the last quarter and need to identify which products are growing the most. You also need to compare results with current market trends. What is the best strategy combining ChatGPT tools?",
+      "You have a sales CSV and want to find which products grow most. Which tool combination is the most useful?",
     options: [
       {
         id: "m2q1_a",
-        label:
-          "Use Code Interpreter to analyze the CSV and Web Browsing to research market trends",
+        label: "Code Interpreter for the CSV and Web Search for trends",
       },
-      {
-        id: "m2q1_b",
-        label: "Use Canvas to paste data manually and DALL-E to chart it",
-      },
-      {
-        id: "m2q1_c",
-        label: "Use only Web Browsing to find articles about market trends",
-      },
-      {
-        id: "m2q1_d",
-        label:
-          "Use DALL-E 3 to automatically generate the analysis from the CSV",
-      },
+      { id: "m2q1_b", label: "Canvas to paste data and DALL-E for the charts" },
+      { id: "m2q1_c", label: "Only Web Search to read market articles" },
+      { id: "m2q1_d", label: "DALL-E 3 to analyze the file automatically" },
     ],
     correctAnswer: "m2q1_a",
     topic: "ChatGPT Tools",
     difficulty: "medium",
+    source: "OVA: ChatGPT Tools Lab",
     feedback:
-      'Code Interpreter runs Python on the CSV for calculations and charts, while Web Browsing gets current market data. Combining them gives a complete analysis. Review the OVA "Lab: ChatGPT Tools".',
+      "Code Interpreter analyzes the CSV and Web Search brings market data. Practice in the tools lab.",
   },
   {
     id: "m2q2",
     question:
-      "Which ChatGPT tool should you use to analyze an Excel file with sales data and create charts?",
+      "A law firm wants a GPT to draft contracts with templates and current case law. Which setup is right?",
     options: [
-      { id: "m2q2_a", label: "DALL-E 3" },
-      { id: "m2q2_b", label: "Code Interpreter (Data Analysis)" },
-      { id: "m2q2_c", label: "Canvas" },
-      { id: "m2q2_d", label: "Web Browsing" },
+      {
+        id: "m2q2_a",
+        label: "Legal system prompt + knowledge base + function calling",
+      },
+      {
+        id: "m2q2_b",
+        label: "A system prompt that only says you are a legal assistant",
+      },
+      {
+        id: "m2q2_c",
+        label: "Enable Web Search and DALL-E to look for contracts",
+      },
+      { id: "m2q2_d", label: "A GPT without instructions, only data analysis" },
     ],
-    correctAnswer: "m2q2_b",
-    topic: "Data Analysis",
+    correctAnswer: "m2q2_a",
+    topic: "Custom GPTs",
     difficulty: "medium",
+    source: "Guide: GPTs and Actions",
     feedback:
-      'Code Interpreter runs Python to process files and create visualizations. Review the OVA "Lab: ChatGPT Tools".',
+      "A useful GPT combines a specialized prompt, knowledge base and function calling.",
   },
   {
     id: "m2q3",
     question:
-      "A law firm asks you to create a custom GPT to help lawyers draft contracts. It needs to access legal templates, verify updated case law, and generate clauses per case. What is the most appropriate configuration?",
+      'A GPT uses function calling to read orders. The user writes "Where is order #789 going, email ana@example.com?" What happens internally?',
     options: [
       {
         id: "m2q3_a",
-        label:
-          "System prompt with detailed legal instructions + knowledge base with templates + Function Calling to case law database",
+        label: "It extracts #789 and the email, and runs the order function",
       },
-      {
-        id: "m2q3_b",
-        label:
-          'Just a generic system prompt saying "you are a legal assistant"',
-      },
-      {
-        id: "m2q3_c",
-        label:
-          "Enable Web Browsing and DALL-E 3 to find visual examples of contracts",
-      },
+      { id: "m2q3_b", label: "It asks the user to fill a separate form" },
+      { id: "m2q3_c", label: "It searches for the order number on the web" },
       {
         id: "m2q3_d",
-        label:
-          "A GPT without custom instructions, just with data analysis enabled",
+        label: "It sends the full message to the API without parsing",
       },
     ],
     correctAnswer: "m2q3_a",
-    topic: "Custom GPTs",
-    difficulty: "medium",
+    topic: "Function Calling",
+    difficulty: "hard",
+    source: "OVA: ChatGPT Tools Lab",
     feedback:
-      'An effective custom GPT combines: specialized system prompt, knowledge base with relevant documents, and Function Calling for external data. Review the video "Create Your First GPT in 18 Minutes" and the GPT visual guide.',
+      "Function calling extracts parameters and runs the function. Review the topic in the module.",
   },
   {
     id: "m2q4",
-    question:
-      'You have a customer service GPT connected to an orders API via Function Calling. The registered function automatically extracts data like order number and email from the conversation. When a user writes "Where is my order #789? My email is ana@example.com", what happens internally?',
+    question: "What does function calling allow with the ChatGPT API?",
     options: [
       {
         id: "m2q4_a",
-        label:
-          "ChatGPT identifies the relevant data (#789, ana@example.com) and automatically executes the function against the orders API",
+        label: "Connect ChatGPT with APIs, databases and external services",
       },
-      {
-        id: "m2q4_b",
-        label:
-          "The user must fill out a separate form with their data before receiving help",
-      },
-      {
-        id: "m2q4_c",
-        label: "ChatGPT searches the internet for the order number to track it",
-      },
-      {
-        id: "m2q4_d",
-        label:
-          "Function Calling sends the full user message to the API without processing",
-      },
+      { id: "m2q4_b", label: "Call the user technical support by phone" },
+      { id: "m2q4_c", label: "Create faster math functions in the chat" },
+      { id: "m2q4_d", label: "Automatically download all available plugins" },
     ],
     correctAnswer: "m2q4_a",
     topic: "Function Calling",
-    difficulty: "hard",
+    difficulty: "easy",
+    source: "Guide: GPTs and Actions",
     feedback:
-      'Function Calling lets ChatGPT extract structured parameters from natural language and automatically execute functions. Review "Connect ChatGPT with the Real World" and Lesson 3 of the module.',
+      "Function calling connects ChatGPT to the real world. Review the GPTs guide.",
   },
   {
     id: "m2q5",
-    question: "What does Function Calling with the OpenAI API allow you to do?",
+    question:
+      "A community manager receives many daily FAQs. How do they automate replies best with a GPT?",
     options: [
-      { id: "m2q5_a", label: "Call technical support by phone" },
+      {
+        id: "m2q5_a",
+        label: "GPT with brand tone, FAQs and an API connection",
+      },
       {
         id: "m2q5_b",
-        label:
-          "Connect ChatGPT with external services like databases, weather APIs, or email systems",
+        label: "Answer each comment by hand with standard ChatGPT",
       },
-      { id: "m2q5_c", label: "Create faster mathematical functions" },
-      { id: "m2q5_d", label: "Automatically download all available plugins" },
+      { id: "m2q5_c", label: "Let Web Search find the answers on its own" },
+      { id: "m2q5_d", label: "Generate images to reply to the comments" },
     ],
-    correctAnswer: "m2q5_b",
-    topic: "Function Calling",
-    difficulty: "hard",
+    correctAnswer: "m2q5_a",
+    topic: "Automation",
+    difficulty: "medium",
+    source: "OVA: Build a GPT",
     feedback:
-      'Function Calling connects ChatGPT with the real world. Review the resources for the topic "Connect ChatGPT with the Real World".',
+      "A GPT with instructions, knowledge base and API automates replies. Practice in the build a GPT lab.",
   },
   {
     id: "m2q6",
     question:
-      "You are preparing a thesis and need ChatGPT to remember your theoretical framework in every session. Which feature should you use?",
+      "A complaints GPT sometimes gives wrong return-policy data. What is the best responsible practice?",
     options: [
-      { id: "m2q6_a", label: "Web Browsing" },
-      { id: "m2q6_b", label: "DALL-E 3" },
-      { id: "m2q6_c", label: "Projects and Memory" },
-      { id: "m2q6_d", label: "Code Interpreter" },
+      { id: "m2q6_a", label: "Human review and alerts when the AI is unsure" },
+      { id: "m2q6_b", label: "Turn off the AI and answer everything by hand" },
+      { id: "m2q6_c", label: "Ignore the errors because of the speed" },
+      { id: "m2q6_d", label: "Only give generic answers with no data" },
     ],
-    correctAnswer: "m2q6_c",
-    topic: "ChatGPT Projects",
-    difficulty: "hard",
+    correctAnswer: "m2q6_a",
+    topic: "Responsible Use",
+    difficulty: "medium",
+    source: "Complete ChatGPT Guide",
     feedback:
-      "Projects group conversations under common instructions and Memory saves context. Review the ChatGPT guide.",
+      "The AI speeds up and the person verifies. Review the responsible use practices.",
   },
   {
     id: "m2q7",
     question:
-      "A community manager receives 200+ daily comments on social media. Many are frequently asked questions (hours, prices, availability). They want to automate responses with a custom GPT. What is the most effective workflow?",
+      "A sales team wants to share updated product knowledge. What strategy is best?",
     options: [
-      {
-        id: "m2q7_a",
-        label:
-          "Create a GPT with brand tone instructions, upload a knowledge base with FAQs, and connect it via API to the social media platform",
-      },
-      {
-        id: "m2q7_b",
-        label:
-          "Ask standard ChatGPT to respond to each comment manually one by one",
-      },
-      {
-        id: "m2q7_c",
-        label: "Set up Web Browsing to find automatic answers on the internet",
-      },
-      {
-        id: "m2q7_d",
-        label:
-          "Use DALL-E 3 to generate images that visually respond to comments",
-      },
+      { id: "m2q7_a", label: "A shared Project with a common knowledge base" },
+      { id: "m2q7_b", label: "Each seller keeps their own instructions" },
+      { id: "m2q7_c", label: "Use a public GPT that everyone downloads" },
+      { id: "m2q7_d", label: "Share chat screenshots by email" },
     ],
     correctAnswer: "m2q7_a",
-    topic: "Automation",
+    topic: "ChatGPT Projects",
     difficulty: "medium",
+    source: "Complete ChatGPT Guide",
     feedback:
-      'A custom GPT with instructions and knowledge base, connected via API, automates responses while maintaining consistency. Review the OVA "Lab: Build a GPT" and the module\'s automation topic.',
+      "Projects group conversations with shared instructions and files. Review the ChatGPT guide.",
   },
   {
     id: "m2q8",
     question:
-      "A company implements an automated GPT to respond to customer complaints on social media. The GPT is fast but occasionally gives incorrect information about return policies. What is the best practice for using AI responsibly in this case?",
+      "You want a GPT to consult a catalog that updates daily. What do you enable?",
     options: [
-      {
-        id: "m2q8_a",
-        label:
-          "Implement human supervision with automatic alerts when GPT has low confidence, and periodically audit responses",
-      },
-      {
-        id: "m2q8_b",
-        label:
-          "Disable the GPT and have the entire team respond manually without AI help",
-      },
-      {
-        id: "m2q8_c",
-        label: "Ignore errors because response speed is what matters most",
-      },
-      {
-        id: "m2q8_d",
-        label:
-          "Configure the GPT to always give generic responses without specific information",
-      },
+      { id: "m2q8_a", label: "Knowledge base and Actions (API) for live data" },
+      { id: "m2q8_b", label: "Ask the user to paste the catalog each time" },
+      { id: "m2q8_c", label: "Generate catalog images with DALL-E" },
+      { id: "m2q8_d", label: "Live data cannot be consulted in a GPT" },
     ],
     correctAnswer: "m2q8_a",
-    topic: "Responsible Use",
+    topic: "Custom GPTs",
     difficulty: "medium",
+    source: "OVA: Build a GPT",
     feedback:
-      "AI should augment human capacity, not replace it without supervision. Best practice is a hybrid system: AI for speed + human supervision for accuracy. Review the module's best practices on responsible AI use.",
+      "The knowledge base keeps static info and Actions bring changing data. Review the GPT lab.",
   },
   {
     id: "m2q9",
     question:
-      "A team of 5 salespeople wants to use ChatGPT to keep their product knowledge base updated. Each salesperson has different conversations with different clients. What is the best strategy for everyone to share updated information?",
+      "You will publish on the GPT Store a GPT you use in your company. What do you check first?",
     options: [
-      {
-        id: "m2q9_a",
-        label:
-          "Create a shared Project with product instructions and update the centralized knowledge base",
-      },
-      {
-        id: "m2q9_b",
-        label:
-          "Each salesperson maintains their own chat with whatever instructions they remember",
-      },
-      { id: "m2q9_c", label: "Use a public GPT that everyone can download" },
-      { id: "m2q9_d", label: "Share screenshots of chats via email" },
+      { id: "m2q9_a", label: "Whether it stores sensitive company data" },
+      { id: "m2q9_b", label: "Whether the name is catchy enough" },
+      { id: "m2q9_c", label: "Whether it has features to justify its price" },
+      { id: "m2q9_d", label: "Whether its logo looks professional" },
     ],
     correctAnswer: "m2q9_a",
-    topic: "ChatGPT Projects",
-    difficulty: "medium",
+    topic: "GPT Privacy",
+    difficulty: "easy",
+    source: "Guide: GPTs and Actions",
     feedback:
-      "Projects in ChatGPT allow grouping conversations under shared instructions and files. Review the Projects topic in the module resources.",
+      "Before publishing, check that it does not contain confidential data. Review the privacy topic.",
   },
   {
     id: "m2q10",
     question:
-      "You are designing a customer service GPT. You want it to be able to query a daily-updated product catalog. What functionality should you enable?",
+      "You want ChatGPT to spot urgent complaints on social media and alert support. What combination do you use?",
     options: [
       {
         id: "m2q10_a",
-        label:
-          "Upload the catalog as a knowledge base and use Actions (API) to query real-time updates",
+        label: "A GPT with Actions (API) connected to a webhook",
       },
-      {
-        id: "m2q10_b",
-        label: "Ask the user to copy and paste the catalog each time",
-      },
-      { id: "m2q10_c", label: "Use DALL-E to generate catalog images" },
+      { id: "m2q10_b", label: "Standard ChatGPT with Web Search enabled" },
+      { id: "m2q10_c", label: "DALL-E to reply to comments with images" },
       {
         id: "m2q10_d",
-        label: "It is not possible to query updated data in a GPT",
+        label: "Canvas to review and edit each comment by hand",
       },
     ],
     correctAnswer: "m2q10_a",
-    topic: "Custom GPTs",
-    difficulty: "hard",
-    feedback:
-      'GPTs can have a static knowledge base + Actions (API calls) for dynamic data. This allows querying real-time updated information. Review "Connect ChatGPT with the Real World".',
-  },
-  {
-    id: "m2q11",
-    question:
-      "A GPT you created for your startup is working great internally. Your partner suggests publishing it on the GPT Store so other startups can use it too. What privacy consideration should you evaluate FIRST?",
-    options: [
-      {
-        id: "m2q11_a",
-        label:
-          "Whether the GPT contains sensitive company data in the knowledge base or system instructions",
-      },
-      { id: "m2q11_b", label: "Whether the GPT name is catchy enough" },
-      {
-        id: "m2q11_c",
-        label: "Whether the GPT has enough features to justify its price",
-      },
-      { id: "m2q11_d", label: "Whether the GPT logo looks professional" },
-    ],
-    correctAnswer: "m2q11_a",
-    topic: "GPT Privacy",
-    difficulty: "medium",
-    feedback:
-      "Before publishing a GPT, verify it does not contain confidential data (trade secrets, customer data, internal strategies). What works internally is not always safe for public release. Review the GPT privacy topic.",
-  },
-  {
-    id: "m2q12",
-    question:
-      "You want to create an automated flow where ChatGPT analyzes social media comments, identifies urgent complaints, and sends notifications to the support team. What combination of tools do you need?",
-    options: [
-      {
-        id: "m2q12_a",
-        label:
-          "A custom GPT with Actions (API) connected to the social network + webhook to the team ticket system",
-      },
-      { id: "m2q12_b", label: "Standard ChatGPT with Web Browsing enabled" },
-      {
-        id: "m2q12_c",
-        label: "DALL-E 3 to generate automatic visual responses",
-      },
-      { id: "m2q12_d", label: "Canvas to manually edit each comment" },
-    ],
-    correctAnswer: "m2q12_a",
     topic: "Automation",
     difficulty: "hard",
+    source: "OVA: Real-World Automation Flows",
     feedback:
-      "AI automation requires: a GPT prepared for the task + Actions (API) to connect to external services + a webhook or API to trigger actions. Review the automation and Function Calling topic in the module.",
+      "A GPT with Actions and a webhook automates the alert. Review the automation OVA.",
   },
 ];

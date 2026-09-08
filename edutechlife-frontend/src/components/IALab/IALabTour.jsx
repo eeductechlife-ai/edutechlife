@@ -1,62 +1,68 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import PropTypes from 'prop-types';
-import { Icon } from '../../utils/iconMapping.jsx';
-import { useTranslation } from '../../i18n/I18nProvider';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
+import PropTypes from "prop-types";
+import { Icon } from "../../utils/iconMapping.jsx";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const getSteps = (t) => [
   {
-    target: 'tour-sidebar',
-    title: t('ialab.tour.step_0_title'),
-    description: t('ialab.tour.step_0_desc'),
+    target: "tour-sidebar",
+    title: t("ialab.tour.step_0_title"),
+    description: t("ialab.tour.step_0_desc"),
   },
   {
-    target: 'tour-tabs',
-    title: t('ialab.tour.step_1_title'),
-    description: t('ialab.tour.step_1_desc'),
+    target: "tour-tabs",
+    title: t("ialab.tour.step_1_title"),
+    description: t("ialab.tour.step_1_desc"),
   },
   {
-    target: 'tour-ruta',
-    title: t('ialab.tour.step_2_title'),
-    description: t('ialab.tour.step_2_desc'),
+    target: "tour-ruta",
+    title: t("ialab.tour.step_2_title"),
+    description: t("ialab.tour.step_2_desc"),
   },
   {
-    target: 'tour-objetivos',
-    title: t('ialab.tour.step_3_title'),
-    description: t('ialab.tour.step_3_desc'),
+    target: "tour-objetivos",
+    title: t("ialab.tour.step_3_title"),
+    description: t("ialab.tour.step_3_desc"),
   },
   {
-    target: 'tour-temas',
-    title: t('ialab.tour.step_4_title'),
-    description: t('ialab.tour.step_4_desc'),
+    target: "tour-temas",
+    title: t("ialab.tour.step_4_title"),
+    description: t("ialab.tour.step_4_desc"),
   },
   {
-    target: 'tour-actividades',
-    title: t('ialab.tour.step_5_title'),
-    description: t('ialab.tour.step_5_desc'),
+    target: "tour-actividades",
+    title: t("ialab.tour.step_5_title"),
+    description: t("ialab.tour.step_5_desc"),
   },
   {
-    target: 'tour-notificaciones',
-    title: t('ialab.tour.step_6_title'),
-    description: t('ialab.tour.step_6_desc'),
+    target: "tour-notificaciones",
+    title: t("ialab.tour.step_6_title"),
+    description: t("ialab.tour.step_6_desc"),
   },
   {
-    target: ['tour-undermenu-mobile', 'tour-undermenu-desktop'],
-    title: t('ialab.tour.step_7_title'),
-    description: t('ialab.tour.step_7_desc'),
+    target: ["tour-undermenu-mobile", "tour-undermenu-desktop"],
+    title: t("ialab.tour.step_7_title"),
+    description: t("ialab.tour.step_7_desc"),
   },
   {
-    target: 'tour-valerio',
-    title: t('ialab.tour.step_8_title'),
-    description: t('ialab.tour.step_8_desc'),
+    target: "tour-valerio",
+    title: t("ialab.tour.step_8_title"),
+    description: t("ialab.tour.step_8_desc"),
   },
   {
-    target: 'tour-herramientas',
-    title: t('ialab.tour.step_9_title'),
-    description: t('ialab.tour.step_9_desc'),
+    target: "tour-herramientas",
+    title: t("ialab.tour.step_9_title"),
+    description: t("ialab.tour.step_9_desc"),
   },
 ];
 
-const TOUR_KEY = 'ialab_tour_completed';
+const TOUR_KEY = "ialab_tour_completed";
 const INITIAL_DELAY = 1500;
 const RETRY_INTERVAL = 300;
 const MAX_RETRIES = 10;
@@ -78,35 +84,49 @@ const IALabTour = ({ hasStartedCourse }) => {
     return Array.isArray(t) ? t : [t];
   }, []);
 
-  const findTarget = useCallback((stepIndex) => {
-    const selectors = getTargetSelectors(stepIndex);
-    if (!selectors) return null;
-    for (const sel of selectors) {
-      const el = document.querySelector(`[data-tour="${sel}"]`);
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        if (rect.width > 0 && rect.height > 0) {
-          return { el, rect };
+  const findTarget = useCallback(
+    (stepIndex) => {
+      const selectors = getTargetSelectors(stepIndex);
+      if (!selectors) return null;
+      for (const sel of selectors) {
+        const el = document.querySelector(`[data-tour="${sel}"]`);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0) {
+            return { el, rect };
+          }
         }
       }
-    }
-    return null;
-  }, [getTargetSelectors]);
+      return null;
+    },
+    [getTargetSelectors],
+  );
 
-  const scrollToTarget = useCallback((stepIndex) => {
-    if (stepIndex < 0 || stepIndex >= STEPS.length) return;
-    const result = findTarget(stepIndex);
-    if (!result) return;
-    const tooltipHeight = 180;
-    const gap = 12;
-    const rect = result.rect;
-    const roomBelow = window.innerHeight - rect.bottom;
-    if (roomBelow < tooltipHeight + gap) {
-      result.el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-    } else {
-      result.el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
-    }
-  }, [findTarget]);
+  const scrollToTarget = useCallback(
+    (stepIndex) => {
+      if (stepIndex < 0 || stepIndex >= STEPS.length) return;
+      const result = findTarget(stepIndex);
+      if (!result) return;
+      const tooltipHeight = 180;
+      const gap = 12;
+      const rect = result.rect;
+      const roomBelow = window.innerHeight - rect.bottom;
+      if (roomBelow < tooltipHeight + gap) {
+        result.el.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest",
+        });
+      } else {
+        result.el.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "nearest",
+        });
+      }
+    },
+    [findTarget],
+  );
 
   const measureTarget = useCallback(() => {
     if (step < 0 || step >= STEPS.length) return null;
@@ -125,9 +145,16 @@ const IALabTour = ({ hasStartedCourse }) => {
     const tooltipWidth = 288;
     const tooltipHeight = 180;
     const gap = 12;
-    let left = Math.max(16, Math.min(rect.left + rect.width / 2 - tooltipWidth / 2, window.innerWidth - tooltipWidth - 16));
+    let left = Math.max(
+      16,
+      Math.min(
+        rect.left + rect.width / 2 - tooltipWidth / 2,
+        window.innerWidth - tooltipWidth - 16,
+      ),
+    );
 
-    const overflowsBelow = rect.bottom + gap + tooltipHeight > window.innerHeight;
+    const overflowsBelow =
+      rect.bottom + gap + tooltipHeight > window.innerHeight;
     const overflowsAbove = rect.top - gap - tooltipHeight < 0;
 
     let top;
@@ -148,7 +175,7 @@ const IALabTour = ({ hasStartedCourse }) => {
     const attempt = () => {
       const result = findTarget(0);
       if (result && result.rect.width > 0) {
-        const scrollContainer = result.el.closest('.overflow-y-auto') || window;
+        const scrollContainer = result.el.closest(".overflow-y-auto") || window;
         scrollContainerRef.current = scrollContainer;
         setStep(0);
         setTimeout(() => setReady(true), 300);
@@ -161,13 +188,16 @@ const IALabTour = ({ hasStartedCourse }) => {
     attempt();
   }, [findTarget, scrollToTarget]);
 
-  const findNextValidStep = useCallback((fromStep) => {
-    for (let i = fromStep; i < STEPS.length; i++) {
-      const result = findTarget(i);
-      if (result) return i;
-    }
-    return -1;
-  }, [STEPS, findTarget]);
+  const findNextValidStep = useCallback(
+    (fromStep) => {
+      for (let i = fromStep; i < STEPS.length; i++) {
+        const result = findTarget(i);
+        if (result) return i;
+      }
+      return -1;
+    },
+    [STEPS, findTarget],
+  );
 
   useEffect(() => {
     const done = localStorage.getItem(TOUR_KEY);
@@ -179,8 +209,8 @@ const IALabTour = ({ hasStartedCourse }) => {
 
   useEffect(() => {
     const handler = () => startTour();
-    window.addEventListener('ialab:restartTour', handler);
-    return () => window.removeEventListener('ialab:restartTour', handler);
+    window.addEventListener("ialab:restartTour", handler);
+    return () => window.removeEventListener("ialab:restartTour", handler);
   }, [startTour]);
 
   useEffect(() => {
@@ -195,7 +225,10 @@ const IALabTour = ({ hasStartedCourse }) => {
     if (!valid) {
       const next = findNextValidStep(step + 1);
       if (next >= 0) setStep(next);
-      else { localStorage.setItem(TOUR_KEY, 'true'); setStep(-1); }
+      else {
+        localStorage.setItem(TOUR_KEY, "true");
+        setStep(-1);
+      }
       return;
     }
 
@@ -221,10 +254,10 @@ const IALabTour = ({ hasStartedCourse }) => {
 
     const container = scrollContainerRef.current;
     if (container && container.addEventListener) {
-      container.addEventListener('scroll', onScroll, { passive: true });
+      container.addEventListener("scroll", onScroll, { passive: true });
     }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
 
     const result = findTarget(step);
     if (result) {
@@ -234,10 +267,10 @@ const IALabTour = ({ hasStartedCourse }) => {
 
     return () => {
       if (container && container.removeEventListener) {
-        container.removeEventListener('scroll', onScroll);
+        container.removeEventListener("scroll", onScroll);
       }
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onResize);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
       if (resizeObserverRef.current) {
         resizeObserverRef.current.disconnect();
         resizeObserverRef.current = null;
@@ -250,13 +283,13 @@ const IALabTour = ({ hasStartedCourse }) => {
     if (next >= 0) {
       setStep(next);
     } else {
-      localStorage.setItem(TOUR_KEY, 'true');
+      localStorage.setItem(TOUR_KEY, "true");
       setStep(-1);
     }
   };
 
   const handleSkip = () => {
-    localStorage.setItem(TOUR_KEY, 'true');
+    localStorage.setItem(TOUR_KEY, "true");
     setStep(-1);
   };
 
@@ -281,42 +314,78 @@ const IALabTour = ({ hasStartedCourse }) => {
             left: targetRect.left - 3,
             width: targetRect.width + 6,
             height: targetRect.height + 6,
-            boxShadow: '0 0 0 9999px rgba(0,0,0,0.35)',
-            borderRadius: '10px',
+            boxShadow: "0 0 0 9999px rgba(0,0,0,0.35)",
+            borderRadius: "10px",
           }}
         />
       )}
 
       <div
-        className="fixed z-[70] w-72 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 p-4"
-        aria-live="polite" aria-label={t('ialab.tour.aria_label', { step: step + 1, total: STEPS.length })}
+        className="fixed z-[70] w-72 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden"
+        aria-live="polite"
+        aria-label={t("ialab.tour.aria_label", {
+          step: step + 1,
+          total: STEPS.length,
+        })}
         style={tooltipPos ? { top: tooltipPos.top, left: tooltipPos.left } : {}}
       >
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-bold text-[var(--theme-primary)] uppercase tracking-wider">
-            {t('ialab.tour.step_label', { step: step + 1, total: STEPS.length })}
-          </span>
+        {/* Progress bar strip */}
+        <div className="h-1 bg-slate-100 dark:bg-slate-700">
+          <div
+            className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] transition-all duration-500"
+            style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
+          />
+        </div>
+
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-bold text-[var(--theme-primary)] uppercase tracking-wider">
+                {t("ialab.tour.step_label", {
+                  step: step + 1,
+                  total: STEPS.length,
+                })}
+              </span>
+              <div className="flex gap-0.5">
+                {STEPS.map((_, i) => (
+                  <div
+                    key={i}
+                    className={`h-1 rounded-full transition-all duration-300 ${
+                      i === step
+                        ? "w-4 bg-[var(--theme-primary)]"
+                        : i < step
+                          ? "w-1.5 bg-[var(--theme-primary)]/40"
+                          : "w-1.5 bg-slate-200 dark:bg-slate-600"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+            <button
+              onClick={handleSkip}
+              className="text-xs text-slate-400 hover:text-slate-800 dark:text-slate-500 dark:hover:text-slate-200 transition-colors"
+            >
+              {t("ialab.tour.skip")}
+            </button>
+          </div>
+          <h4 className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-white mb-1">
+            {current.title}
+          </h4>
+          <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed mb-3">
+            {current.description}
+          </p>
           <button
-            onClick={handleSkip}
-            className="text-xs text-slate-600 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+            onClick={handleNext}
+            className="w-full py-2 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white text-xs font-bold hover:shadow-md transition-all duration-200 flex items-center justify-center gap-1.5"
           >
-            {t('ialab.tour.skip')}
+            {isLast ? t("ialab.tour.start") : t("ialab.tour.next")}
+            {!isLast && <Icon name="fa-arrow-right" className="text-[10px]" />}
           </button>
         </div>
-        <h4 className="text-sm font-bold text-[var(--theme-emphasis)] mb-1">{current.title}</h4>
-        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3">{current.description}</p>
-        <button
-          onClick={handleNext}
-          className="w-full py-2 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white text-xs font-bold hover:shadow-md transition-all duration-200 flex items-center justify-center gap-1.5"
-        >
-          {isLast ? t('ialab.tour.start') : t('ialab.tour.next')}
-          {!isLast && <Icon name="fa-arrow-right" className="text-[10px]" />}
-        </button>
       </div>
     </>
   );
 };
-
 
 IALabTour.propTypes = {
   hasStartedCourse: PropTypes.bool,

@@ -1,9 +1,14 @@
 /**
- * Achievement Service — Gestionar desbloqueos de logros y badges
- * Responsabilidades:
- * - Validar condiciones de desbloqueo
- * - Actualizar estado de achievements
- * - Disparar animaciones y notificaciones
+ * Achievement Service — utilidad CLIENT-SIDE de condiciones de logros
+ *
+ * Este módulo evalúa condiciones localmente (sin red). La persistencia real
+ * (INSERT en student_achievements, points_history) vive en el BACKEND:
+ *   edutechlife-backend/src/services/achievementService.js  →  via /api/smartboard/*
+ *
+ * Responsabilidades de este módulo:
+ * - Definir catálogo de logros con sus condiciones
+ * - Validar condiciones antes de llamar al backend
+ * - No hace fetch/Supabase directo; delega al backend para persistir
  */
 
 const ACHIEVEMENTS = {

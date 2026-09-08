@@ -1,4 +1,4 @@
-import { useMemo, lazy, Suspense } from "react";
+import { useMemo, lazy, Suspense, useEffect } from "react";
 import { useIALabStore } from "../../store/ialabStore";
 // Los tokens de tema (--theme-primary/--theme-emphasis) se definen en este CSS
 // bajo selectores [data-theme]. El curso lo importa desde IALab.jsx, pero el
@@ -61,6 +61,22 @@ function DueForReview() {
 }
 
 export default function IALabDashboard() {
+  // Prefetch del módulo en idle — cuando el usuario llega al dashboard,
+  // los chunks de IALab (AILabPage + IALab) ya están en caché para
+  // que "Continuar" sea instantáneo.
+  useEffect(() => {
+    const prefetch = () => {
+      import("../pages/AILabPage.jsx").catch(() => {});
+      import("./IALab.jsx").catch(() => {});
+    };
+    if ("requestIdleCallback" in window) {
+      const id = requestIdleCallback(prefetch, { timeout: 2000 });
+      return () => cancelIdleCallback(id);
+    }
+    const t = setTimeout(prefetch, 1500);
+    return () => clearTimeout(t);
+  }, []);
+
   const moduleProgress = useIALabStore((s) => s.moduleProgress);
   const completedExams = useIALabStore((s) => s.completedExams);
   const courseCompleted = useIALabStore((s) => s.courseCompleted);

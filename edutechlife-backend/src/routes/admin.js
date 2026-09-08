@@ -157,8 +157,26 @@ router.get('/analytics/students', requireAdmin, async (req, res) => {
 router.get('/analytics/smartboard', requireAdmin, async (req, res) => {
   try {
     const days = Math.min(90, Math.max(7, parseInt(req.query.days) || 30));
+    const { institution_id: institutionId } = req.query;
     const since = new Date(Date.now() - days * 86400000).toISOString();
     const since7d = new Date(Date.now() - 7 * 86400000).toISOString();
+
+    // Resolve institution-scoped student IDs if requested
+    let scopedStudentIds = null;
+    if (institutionId) {
+      const { data: institutionUsers } = await supabase
+        .from('users').select('id').eq('institution_id', institutionId);
+      const authIds = (institutionUsers || []).map((u) => u.id);
+      if (authIds.length) {
+        const { data: scopedStudents } = await supabase
+          .from('students').select('id').in('auth_id', authIds);
+        scopedStudentIds = (scopedStudents || []).map((s) => s.id);
+      } else {
+        scopedStudentIds = [];
+      }
+    }
+
+    const applyScope = (q) => scopedStudentIds ? q.in('student_id', scopedStudentIds) : q;
 
     const [
       { data: sessions },
@@ -167,11 +185,11 @@ router.get('/analytics/smartboard', requireAdmin, async (req, res) => {
       { data: streaks },
       { data: achievements },
     ] = await Promise.all([
-      supabase.from('sessions').select('student_id, start_time, duration_minutes, subject').gte('start_time', since),
-      supabase.from('academic_context').select('student_id, subject, average_score, performance_level'),
-      supabase.from('crisis_alerts').select('student_id, crisis_level').eq('alert_sent', false),
-      supabase.from('learning_streaks').select('student_id, current_streak'),
-      supabase.from('student_achievements').select('student_id, earned_at').gte('earned_at', since),
+      applyScope(supabase.from('sessions').select('student_id, start_time, duration_minutes, subject').gte('start_time', since)),
+      applyScope(supabase.from('academic_context').select('student_id, subject, average_score, performance_level')),
+      applyScope(supabase.from('crisis_alerts').select('student_id, crisis_level').eq('alert_sent', false)),
+      applyScope(supabase.from('learning_streaks').select('student_id, current_streak')),
+      applyScope(supabase.from('student_achievements').select('student_id, earned_at').gte('earned_at', since)),
     ]);
 
     const sessionList = sessions || [];
@@ -299,11 +317,27 @@ router.get('/health', requireAdmin, async (req, res) => {
  */
 router.get('/educator/students', requireAdmin, async (req, res) => {
   try {
-    // Fetch all students with their latest session and academic context
-    const { data: students, error: sErr } = await supabase
+    const { institution_id: institutionId } = req.query;
+
+    // When institution_id is provided, scope to students whose auth_id
+    // belongs to users in that institution (users.institution_id FK, migration 078).
+    let studentsQuery = supabase
       .from('students')
-      .select('id, name, grade, email, created_at')
+      .select('id, name, grade, email, created_at, auth_id')
       .order('name');
+
+    if (institutionId) {
+      // Get auth_ids of users in this institution, then filter students
+      const { data: institutionUsers } = await supabase
+        .from('users')
+        .select('id')
+        .eq('institution_id', institutionId);
+      const authIds = (institutionUsers || []).map((u) => u.id);
+      if (!authIds.length) return res.json({ students: [], summary: {}, institution_id: institutionId });
+      studentsQuery = studentsQuery.in('auth_id', authIds);
+    }
+
+    const { data: students, error: sErr } = await studentsQuery;
 
     if (sErr) return res.status(500).json({ error: 'Failed to fetch students' });
     if (!students?.length) return res.json({ students: [], summary: {} });
@@ -387,7 +421,7 @@ router.get('/educator/students', requireAdmin, async (req, res) => {
       needingAttention: enriched.filter((s) => s.needsAttention).length,
     };
 
-    res.json({ students: enriched, summary });
+    res.json({ students: enriched, summary, ...(institutionId ? { institution_id: institutionId } : {}) });
   } catch (err) {
     console.error('[admin/educator/students] error:', err.message);
     res.status(500).json({ error: 'Internal server error' });

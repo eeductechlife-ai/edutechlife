@@ -18,11 +18,13 @@ import DashboardBgPattern from "./DashboardBgPattern";
 import DashboardTopBar from "./DashboardTopBar";
 import DashboardTabs from "./DashboardTabs";
 import DashboardModuleList from "./DashboardModuleList";
+import DashboardNewStudent from "./DashboardNewStudent";
+import { useAuth } from "../../../context/AuthContext";
 
 const DashboardActivityView = lazy(() => import("./DashboardActivityView"));
 
 const MODULES = [1, 2, 3, 4, 5];
-const IDLE_TIMEOUT = 10000;
+const IDLE_TIMEOUT = 60000;
 
 function DashboardInProgress() {
   const { t, locale } = useTranslation();
@@ -37,6 +39,15 @@ function DashboardInProgress() {
   const courseCompleted = useIALabStore((s) => s.courseCompleted);
 
   const modulesData = useMemo(() => getModules(locale), [locale]);
+
+  const { user, profile } = useAuth();
+  const firstName = useMemo(() => {
+    if (profile?.first_name) return profile.first_name;
+    if (user?.user_metadata?.first_name) return user.user_metadata.first_name;
+    if (user?.user_metadata?.username) return user.user_metadata.username;
+    if (user?.email) return user.email.split("@")[0];
+    return null;
+  }, [user, profile]);
 
   const [idlePct, setIdlePct] = useState(0);
   const [activeTab, setActiveTab] = useState("modules");
@@ -169,15 +180,23 @@ function DashboardInProgress() {
       certificate: "fa-certificate",
     }[suggestedAction?.action] || "fa-play-circle";
 
+  const greetingText = useMemo(() => {
+    if (courseProgress >= 80) return "¡Ya casi terminas! Un último empujón 🏁";
+    if (courseProgress >= 50) return "¡Vas a la mitad! Sigue así 💪";
+    if (courseProgress >= 20) return "¡Buen ritmo! Continúa donde lo dejaste";
+    return "¡Bienvenido de vuelta! Retoma tu progreso";
+  }, [courseProgress]);
+
+  if (hasNoProgress) return <DashboardNewStudent />;
+
   return (
     <div className="relative max-w-4xl mx-auto px-4 py-8 space-y-6">
       <DashboardBgPattern />
       <DashboardTopBar />
-      {(xp > 0 || stats.completed > 0) && (
-        <p className="text-sm text-slate-500 -mt-3">
-          {t("dashboard.continue_learning")}
-        </p>
-      )}
+      <p className="text-sm font-medium text-slate-600 dark:text-white/60 -mt-3">
+        {firstName ? `¡Hola de nuevo, ${firstName}! ` : ""}
+        {greetingText}
+      </p>
 
       <section
         className="relative overflow-hidden bg-gradient-to-br from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] rounded-3xl shadow-lg"
@@ -233,6 +252,8 @@ function DashboardInProgress() {
                 />
                 <div
                   onClick={() => fileInputRef.current?.click()}
+                  title="Cambiar foto de perfil"
+                  aria-label="Cambiar foto de perfil"
                   className="w-[90px] h-[90px] max-md:w-[76px] max-md:h-[76px] rounded-full bg-white/15 backdrop-blur border-2 border-white/10 flex items-center justify-center cursor-pointer group/avatar overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_6px_24px_rgba(0,188,212,0.4)]"
                 >
                   {avatarUrl ? (
@@ -264,7 +285,12 @@ function DashboardInProgress() {
                 </div>
               </div>
             </div>
-            <p className="text-[10px] font-semibold text-white/60 uppercase tracking-[0.08em] mt-2.5">
+            {firstName && (
+              <p className="text-sm font-bold text-white mt-2 text-center leading-tight">
+                {firstName}
+              </p>
+            )}
+            <p className="text-[10px] font-semibold text-white/60 uppercase tracking-[0.08em] mt-1">
               {t("dashboard.global_progress", { pct: courseProgress })}
             </p>
           </div>
@@ -272,52 +298,57 @@ function DashboardInProgress() {
           <div className="flex flex-col justify-between gap-4">
             <div className="flex items-center justify-between bg-white/10 backdrop-blur rounded-2xl p-4 border border-white/[0.06] max-md:flex-col max-md:items-stretch max-md:gap-3">
               <div className="flex items-center gap-3.5">
-                <div className="w-[42px] h-[42px] rounded-xl bg-[var(--theme-primary)]/15 flex items-center justify-center flex-shrink-0">
+                <div className="w-[42px] h-[42px] rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 shadow-md shadow-[var(--theme-primary)]/30">
                   <Icon
                     name={actionIcon}
-                    className="w-[18px] h-[18px] text-[var(--theme-primary)]"
+                    className="w-[18px] h-[18px] text-white"
                   />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-white">
-                    {t("dashboard.accept_challenge", {
-                      id: suggestedAction?.moduleId,
-                    })}
+                  <p className="text-[10px] font-semibold text-white/50 uppercase tracking-wider mb-0.5">
+                    Tu próximo paso
                   </p>
-                  <p className="text-[11px] text-white/50 flex items-center gap-1 mt-0.5">
-                    <Icon name="fa-arrow-right" className="w-2.5 h-2.5" />
-                    {suggestedAction?.label}
+                  <p className="text-sm font-bold text-white leading-snug">
+                    {suggestedAction?.label ||
+                      t("dashboard.accept_challenge", {
+                        id: suggestedAction?.moduleId,
+                      })}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3.5">
-                <div className="relative w-11 h-11 flex items-center justify-center">
-                  <svg
-                    viewBox="0 0 40 40"
-                    className="absolute inset-0 -rotate-90"
-                  >
-                    <circle
-                      cx="20"
-                      cy="20"
-                      r="18"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.08)"
-                      strokeWidth="3"
-                    />
-                    <circle
-                      cx="20"
-                      cy="20"
-                      r="18"
-                      fill="none"
-                      stroke="rgba(0,188,212,0.6)"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeDasharray={2 * Math.PI * 18}
-                      strokeDashoffset={2 * Math.PI * 18 * (idlePct / 100)}
-                    />
-                  </svg>
-                  <span className="text-xs font-bold text-white">
-                    {Math.ceil((1 - idlePct / 100) * (IDLE_TIMEOUT / 1000))}s
+              <div className="flex items-center gap-2 max-md:w-full max-md:justify-between">
+                <div className="flex flex-col items-center gap-0.5">
+                  <div className="relative w-9 h-9 flex items-center justify-center">
+                    <svg
+                      viewBox="0 0 40 40"
+                      className="absolute inset-0 -rotate-90"
+                    >
+                      <circle
+                        cx="20"
+                        cy="20"
+                        r="18"
+                        fill="none"
+                        stroke="rgba(255,255,255,0.08)"
+                        strokeWidth="3"
+                      />
+                      <circle
+                        cx="20"
+                        cy="20"
+                        r="18"
+                        fill="none"
+                        stroke="rgba(0,188,212,0.6)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeDasharray={2 * Math.PI * 18}
+                        strokeDashoffset={2 * Math.PI * 18 * (idlePct / 100)}
+                      />
+                    </svg>
+                    <span className="text-[10px] font-bold text-white">
+                      {Math.ceil((1 - idlePct / 100) * (IDLE_TIMEOUT / 1000))}s
+                    </span>
+                  </div>
+                  <span className="text-[8px] text-white/40 leading-none text-center whitespace-nowrap">
+                    auto-navegar
                   </span>
                 </div>
                 <motion.button
@@ -334,22 +365,25 @@ function DashboardInProgress() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 max-sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-3 gap-2.5">
               {[
                 {
                   icon: "fa-star",
+                  grad: "from-amber-400 to-amber-500",
                   value: xp?.toLocaleString() || "0",
-                  label: t("dashboard.xp_earned"),
+                  label: "XP ganados",
                 },
                 {
                   icon: "fa-fire",
+                  grad: "from-orange-400 to-red-500",
                   value: streak || 0,
-                  label: t("dashboard.current_streak"),
+                  label: `día${(streak || 0) !== 1 ? "s" : ""} seguidos`,
                 },
                 {
-                  icon: "fa-chart-line",
+                  icon: "fa-target",
+                  grad: "from-[var(--theme-emphasis)] to-[var(--theme-primary)]",
                   value: `${stats.avgScore}%`,
-                  label: t("dashboard.avg_score"),
+                  label: "en exámenes",
                 },
               ].map((s) => (
                 <motion.div
@@ -357,19 +391,21 @@ function DashboardInProgress() {
                   whileHover={{ y: -2 }}
                   transition={{ duration: 0.2 }}
                   role="region"
-                  aria-label={s.label}
-                  className="bg-white/10 backdrop-blur rounded-[14px] py-3.5 px-2 text-center border border-white/[0.06]"
+                  aria-label={`${s.value} ${s.label}`}
+                  className="bg-white/10 backdrop-blur rounded-[14px] py-3 px-2 text-center border border-white/[0.06]"
                 >
-                  <div className="w-[30px] h-[30px] rounded-xl bg-[var(--theme-primary)]/15 flex items-center justify-center mx-auto mb-1.5">
+                  <div
+                    className={`w-8 h-8 rounded-xl bg-gradient-to-br ${s.grad} flex items-center justify-center mx-auto mb-1.5 shadow-sm`}
+                  >
                     <Icon
                       name={s.icon}
-                      className="w-3.5 h-3.5 text-[var(--theme-primary)]"
+                      className="w-[15px] h-[15px] text-white"
                     />
                   </div>
-                  <p className="text-lg font-bold text-white leading-tight">
+                  <p className="text-lg font-black text-white leading-tight">
                     {s.value}
                   </p>
-                  <p className="text-[8px] text-white/50 uppercase tracking-[0.06em]">
+                  <p className="text-[9px] font-semibold text-white/60 leading-tight mt-0.5 uppercase tracking-wide">
                     {s.label}
                   </p>
                 </motion.div>

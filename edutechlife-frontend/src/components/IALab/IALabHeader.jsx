@@ -56,7 +56,7 @@ const IALabHeader = () => {
       <div className="flex items-center gap-3 group rounded-xl text-left">
         <div className="w-9 h-9 theme-bg-primary rounded-xl flex items-center justify-center shadow-sm theme-shadow-primary-15">
           <Icon
-            name="fa-flask-vial"
+            name="fa-brain"
             className="text-white text-sm"
             aria-hidden="true"
           />

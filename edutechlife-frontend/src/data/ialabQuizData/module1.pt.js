@@ -1,306 +1,218 @@
 export const MODULE_1_PT = [
   {
     id: "m1q1",
-    question: "Qual é o propósito principal da engenharia de prompts?",
+    question: "Para que serve dar bons prompts a uma IA generativa?",
     options: [
-      { id: "m1q1_a", label: "Fazer perguntas mais longas à IA" },
+      {
+        id: "m1q1_a",
+        label: "Para que as respostas sejam mais longas e detalhadas",
+      },
       {
         id: "m1q1_b",
-        label: "Dar instruções claras e eficazes para obter resultados úteis",
+        label: "Para obter respostas úteis e alinhadas ao que preciso",
       },
-      { id: "m1q1_c", label: "Usar palavras técnicas complicadas" },
-      {
-        id: "m1q1_d",
-        label: "Fazer com que a IA escreva código automaticamente",
-      },
+      { id: "m1q1_c", label: "Para que a IA funcione mais rápido sem erros" },
+      { id: "m1q1_d", label: "Para que a IA escreva o código por mim" },
     ],
     correctAnswer: "m1q1_b",
     topic: "Engenharia de Prompts",
     difficulty: "fácil",
+    source: "Vídeo: Como Criar Prompts Eficazes",
     feedback:
-      'Revise o tópico "IA Generativa: Seu Primeiro Passo" nos recursos do módulo.',
+      "Um bom prompt é uma instrução clara. Reveja o vídeo e o guia de anatomia do prompt.",
   },
   {
     id: "m1q2",
     question:
-      'Um estudante escreve: "Escreva um texto sobre inteligência artificial para estudantes." Segundo o método RTF (Papel, Tarefa, Formato), quais componentes estão presentes e quais estão faltando?',
+      'Um estudante escreve: "Escreva um texto sobre inteligência artificial para estudantes." Com o método RTF (Papel, Tarefa, Formato), o que ele tem e o que falta?',
     options: [
-      {
-        id: "m1q2_a",
-        label:
-          "A Tarefa está presente; faltam o Papel e o Formato — não define qual perfil a IA deve adotar nem como estruturar a resposta",
-      },
-      {
-        id: "m1q2_b",
-        label: "Todos os componentes do RTF estão presentes no prompt",
-      },
-      {
-        id: "m1q2_c",
-        label: "Só falta o Papel; a Tarefa e o Formato estão bem definidos",
-      },
-      {
-        id: "m1q2_d",
-        label: "Só falta o Formato; o Papel e a Tarefa estão bem definidos",
-      },
+      { id: "m1q2_a", label: "Tem a Tarefa, mas faltam o Papel e o Formato" },
+      { id: "m1q2_b", label: "Tem o Papel, mas faltam a Tarefa e o Formato" },
+      { id: "m1q2_c", label: "Tem o Formato, mas faltam o Papel e a Tarefa" },
+      { id: "m1q2_d", label: "Já inclui os três componentes do RTF" },
     ],
     correctAnswer: "m1q2_a",
     topic: "Método RTF",
     difficulty: "médio",
+    source: "Guia PDF: Anatomia de um Prompt",
     feedback:
-      'O prompt tem uma Tarefa clara ("escrever um texto") mas não define o Papel da IA (divulgador? professor?) nem o Formato (lista? ensaio? quantas palavras?). Revise o guia "Anatomia de um Prompt" (PDF) e o vídeo "Como criar um bom prompt".',
+      'Esse prompt pede para "escrever um texto" (Tarefa), mas não define o papel da IA nem o formato. Reveja a anatomia do prompt.',
   },
   {
     id: "m1q3",
-    question:
-      "Qual é uma vantagem fundamental do método RTF (Papel, Tarefa, Formato)?",
+    question: "O que o método RTF (Papel, Tarefa, Formato) proporciona?",
     options: [
-      { id: "m1q3_a", label: "Deixa as perguntas mais curtas" },
+      { id: "m1q3_a", label: "Transforma a instrução em um prompt mais curto" },
       {
         id: "m1q3_b",
-        label:
-          "Estrutura as instruções para obter respostas organizadas e alinhadas",
+        label: "Organiza o pedido para uma resposta clara e objetiva",
       },
-      { id: "m1q3_c", label: "Elimina a necessidade de contexto" },
-      { id: "m1q3_d", label: "Automatiza completamente o processo" },
+      {
+        id: "m1q3_c",
+        label: "Elimina a necessidade de qualquer contexto extra",
+      },
+      { id: "m1q3_d", label: "Garante que a IA responda sem revisão" },
     ],
     correctAnswer: "m1q3_b",
-    topic: "Estrutura de Maestria",
+    topic: "Método RTF",
     difficulty: "fácil",
-    feedback: 'Revise "A Fórmula do Prompt Perfeito" nos recursos do módulo.',
+    source: "OVA: Como conversar com a IA (prompts)",
+    feedback:
+      "O RTF organiza o pedido em Papel, Tarefa e Formato. Pratique na OVA.",
   },
   {
     id: "m1q4",
     question:
-      'Segundo o guia "Anatomia de um Prompt" (PDF do módulo) e o vídeo "Como criar um bom prompt", qual destes prompts está MELHOR estruturado para obter uma resposta precisa e útil?',
+      "Você precisa de um resumo sobre o ciclo da água. Qual prompt dá o melhor resultado?",
     options: [
-      { id: "m1q4_a", label: '"Me conte tudo sobre a mudança climática"' },
+      {
+        id: "m1q4_a",
+        label:
+          '"Atue como professor de ciências e resuma o ciclo em 4 etapas."',
+      },
       {
         id: "m1q4_b",
         label:
-          '"Atue como um divulgador científico. Explique 3 causas da mudança climática e seus efeitos concretos. Use um tom acessível para o público geral e termine com uma conclusão de 2 linhas."',
+          '"Explique tudo o que você sabe sobre o ciclo da água, sem limites."',
       },
-      { id: "m1q4_c", label: '"Mudança climática: causas e efeitos"' },
+      {
+        id: "m1q4_c",
+        label: '"Ciclo da água. Dê informações gerais e variadas."',
+      },
       {
         id: "m1q4_d",
-        label:
-          '"Preciso de informações sobre a mudança climática para um trabalho escolar"',
+        label: '"Fale sobre a água e sobre outros temas da natureza."',
       },
     ],
-    correctAnswer: "m1q4_b",
+    correctAnswer: "m1q4_a",
     topic: "Estrutura de Prompts",
     difficulty: "médio",
+    source: "Vídeo: Como Criar Prompts Eficazes",
     feedback:
-      "O prompt B segue a estrutura recomendada no PDF e no vídeo: define um Papel (divulgador científico), uma Tarefa específica (explicar 3 causas e efeitos) e um Formato claro (tom acessível, conclusão de 2 linhas).",
+      "A opção A define papel, tarefa e formato. As demais são vagas ou misturam temas.",
   },
   {
     id: "m1q5",
     question:
-      'Um estudante precisa de um resumo executivo de um artigo sobre redes neurais para apresentar a executivos sem formação técnica. Ele escreve: "Resuma este artigo sobre redes neurais." A IA devolve um texto técnico de 3 páginas. Qual é a causa do problema e como o prompt deveria ser modificado?',
+      'Você pede um resumo executivo para diretores sem conhecimento técnico. O prompt é: "Resuma este artigo." A IA devolve um texto muito técnico. O que falta?',
     options: [
-      {
-        id: "m1q5_a",
-        label:
-          "O artigo é extenso demais; ele deveria dividir o texto em partes menores",
-      },
-      {
-        id: "m1q5_b",
-        label:
-          'Faltam o Papel, o Público-alvo e o Formato. Deveria ser: "Atue como um consultor de tecnologia. Resumo executivo em 5 tópicos para executivos sem formação técnica. Máximo 200 palavras."',
-      },
+      { id: "m1q5_a", label: "Dizer para quem é e o estilo do resumo" },
+      { id: "m1q5_b", label: "Dividir o artigo em partes menores" },
       {
         id: "m1q5_c",
-        label:
-          "A IA não entende o tema; ele deveria usar outra ferramenta de IA",
+        label: "Trocar de ferramenta porque a IA não entendeu o tema",
       },
-      {
-        id: "m1q5_d",
-        label:
-          'O problema é a palavra "resuma"; ele deveria usar "sintetize" no lugar',
-      },
+      { id: "m1q5_d", label: "Usar sinônimos da palavra resumo" },
     ],
-    correctAnswer: "m1q5_b",
+    correctAnswer: "m1q5_a",
     topic: "Aplicação RTF",
-    difficulty: "difícil",
+    difficulty: "médio",
+    source: "OVA: Como conversar com a IA (prompts)",
     feedback:
-      'O prompt original só tem uma Tarefa genérica. Para um resultado útil, é preciso definir o Papel (consultor de tecnologia), o Público-alvo (executivos sem formação técnica) e o Formato (5 tópicos, 200 palavras). Revise o OVA "Como se comunicar com a IA" e o guia em PDF.',
+      "Um prompt genérico não indica público nem formato. Acrescente papel, público e extensão.",
   },
   {
     id: "m1q6",
-    question:
-      "Quais considerações éticas são fundamentais ao usar IA generativa?",
+    question: "O que é a inteligência artificial generativa?",
     options: [
-      { id: "m1q6_a", label: "Apenas a velocidade de resposta" },
+      {
+        id: "m1q6_a",
+        label: "Um sistema que cria conteúdo novo a partir do que aprendeu",
+      },
       {
         id: "m1q6_b",
-        label: "Vieses, privacidade, transparência e uso responsável",
+        label: "Um banco de dados que guarda respostas já escritas",
       },
-      { id: "m1q6_c", label: "O custo da API" },
-      { id: "m1q6_d", label: "A quantidade de tokens usados" },
+      { id: "m1q6_c", label: "Um programa que só classifica imagens e textos" },
+      { id: "m1q6_d", label: "Um buscador que devolve páginas da internet" },
     ],
-    correctAnswer: "m1q6_b",
-    topic: "Ética em IA",
-    difficulty: "médio",
-    feedback: "Revise os recursos do módulo sobre o uso responsável de IA.",
+    correctAnswer: "m1q6_a",
+    topic: "IA Generativa",
+    difficulty: "fácil",
+    source: "Vídeo: O que é a IA e como está mudando o mundo",
+    feedback:
+      "A IA generativa produz texto, imagens ou outro conteúdo novo. Assista ao vídeo.",
   },
   {
     id: "m1q7",
-    question:
-      'Compare estes dois prompts para a mesma tarefa:\n\nPrompt A: "Fale sobre o ciclo da água."\nPrompt B: "Atue como um professor de ciências naturais. Explique o ciclo da água em 4 etapas-chave para estudantes de 10 a 12 anos. Inclua uma analogia simples para cada etapa e termine com uma pergunta de verificação."\n\nQual é a principal razão pela qual o Prompt B obterá um resultado melhor?',
+    question: "O que é um prompt?",
     options: [
       {
         id: "m1q7_a",
-        label:
-          "O Prompt B é mais longo; portanto, a IA se esforça mais na resposta",
+        label: "A instrução ou mensagem que você escreve para a IA",
       },
-      {
-        id: "m1q7_b",
-        label:
-          "O Prompt B usa o método RTF completo (Papel + Tarefa + Formato + Público-alvo), dando instruções claras e específicas",
-      },
-      {
-        id: "m1q7_c",
-        label: "O Prompt A usa palavras simples demais para a IA",
-      },
-      { id: "m1q7_d", label: "O Prompt B usa um tom mais formal e técnico" },
+      { id: "m1q7_b", label: "A resposta automática que a IA gera" },
+      { id: "m1q7_c", label: "O design visual da interface da ferramenta" },
+      { id: "m1q7_d", label: "Um tipo de arquivo que a IA pode abrir" },
     ],
-    correctAnswer: "m1q7_b",
-    topic: "Análise Comparativa RTF",
-    difficulty: "difícil",
+    correctAnswer: "m1q7_a",
+    topic: "Fundamentos de Prompts",
+    difficulty: "fácil",
+    source: "OVA: Como conversar com a IA (prompts)",
     feedback:
-      'O Prompt B segue o método RTF: define um Papel (professor de ciências), uma Tarefa específica (explicar em 4 etapas), um Público-alvo (estudantes de 10 a 12 anos) e um Formato (analogias + pergunta). O Prompt A é genérico e carece de estrutura. Revise o PDF "Anatomia de um Prompt".',
+      "Um prompt é o que você pede à IA. O guia de anatomia explica como montá-lo.",
   },
   {
     id: "m1q8",
     question:
-      "Como você estrutura um prompt usando RTF para análise de mercado?",
+      'Por que é útil dar um papel à IA (por exemplo, "aja como um tutor")?',
     options: [
-      { id: "m1q8_a", label: 'Pedindo diretamente "analise o mercado"' },
-      {
-        id: "m1q8_b",
-        label:
-          "Definindo Papel, Tarefa e Formato para orientar a resposta da IA",
-      },
-      { id: "m1q8_c", label: "Usando a menor quantidade de palavras possível" },
-      { id: "m1q8_d", label: "Copiando prompts da internet" },
+      { id: "m1q8_a", label: "Porque ajusta o estilo e o foco da resposta" },
+      { id: "m1q8_b", label: "Porque faz a IA responder sempre mais curto" },
+      { id: "m1q8_c", label: "Porque impede a IA de precisar de contexto" },
+      { id: "m1q8_d", label: "Porque é obrigatório para a IA funcionar" },
     ],
-    correctAnswer: "m1q8_b",
-    topic: "Estrutura de Maestria",
-    difficulty: "difícil",
+    correctAnswer: "m1q8_a",
+    topic: "Método RTF",
+    difficulty: "fácil",
+    source: "Guia PDF: Anatomia de um Prompt",
     feedback:
-      "Pratique com os modelos JSON do módulo para dominar a estrutura RTF.",
+      "O papel dá foco e tom à IA, deixando a resposta mais adequada ao objetivo.",
   },
   {
     id: "m1q9",
     question:
-      "Você trabalha em uma empresa que lança um novo produto todo mês. Precisa que o ChatGPT redija e-mails promocionais consistentes com a voz da marca. Qual é a estratégia mais eficiente para manter a consistência sem reescrever instruções a cada vez?",
+      "A IA devolve uma resposta genérica ou fora do tema. Qual é a melhor próxima ação?",
     options: [
       {
         id: "m1q9_a",
-        label:
-          "Criar um GPT personalizado com instruções de tom, voz e exemplos da marca na base de conhecimento",
+        label: "Acrescentar contexto claro: objetivo, público e formato",
       },
-      {
-        id: "m1q9_b",
-        label: "Copiar e colar as instruções manualmente em cada nova conversa",
-      },
-      {
-        id: "m1q9_c",
-        label: "Usar o chat padrão e pedir que ele lembre o tom a cada vez",
-      },
-      {
-        id: "m1q9_d",
-        label: "Escrever os e-mails manualmente sem ajuda de IA",
-      },
+      { id: "m1q9_b", label: "Repetir o mesmo prompt sem mudar nada" },
+      { id: "m1q9_c", label: "Escolher outra IA sem entender o problema" },
+      { id: "m1q9_d", label: "Perguntar de novo até melhorar sozinha" },
     ],
     correctAnswer: "m1q9_a",
-    topic: "GPTs Personalizados",
-    difficulty: "médio",
+    topic: "Refinamento de Prompts",
+    difficulty: "fácil",
+    source: "OVA: Laboratório de Prompts ao Vivo",
     feedback:
-      "Um GPT personalizado com instruções persistentes e base de conhecimento é a forma mais eficiente de manter a consistência. Revise o tópico de GPTs personalizados nos recursos do módulo.",
+      "Refine o prompt acrescentando contexto. Pratique no laboratório ao vivo.",
   },
   {
     id: "m1q10",
     question:
-      "Você escreve um prompt pedindo um plano de marketing. A IA dá algo genérico. Qual é o melhor próximo passo?",
+      "Você quer que a IA explique um tema difícil. Qual prompt pede uma explicação mais clara?",
     options: [
       {
         id: "m1q10_a",
-        label:
-          "Aceitar o resultado genérico porque a IA já deu o melhor que podia",
+        label: '"Explique com exemplos simples e linguagem do dia a dia."',
       },
       {
         id: "m1q10_b",
-        label:
-          "Refinar o prompt adicionando contexto específico: setor, orçamento, público-alvo e exemplos de campanhas anteriores",
+        label: '"Dê toda a teoria sobre o tema em uma só resposta."',
       },
+      { id: "m1q10_c", label: '"Fale do tema e também de outros parecidos."' },
       {
-        id: "m1q10_c",
-        label: "Mudar completamente de tema e começar do zero",
-      },
-      { id: "m1q10_d", label: "Reclamar com a equipe de suporte da IA" },
-    ],
-    correctAnswer: "m1q10_b",
-    topic: "Refinamento Iterativo",
-    difficulty: "fácil",
-    feedback:
-      'A engenharia de prompts é um processo iterativo. Cada refinamento adiciona o contexto que a IA precisa para dar resultados específicos e úteis. Revise o tópico "Refinamento de Prompts" nos recursos do módulo.',
-  },
-  {
-    id: "m1q11",
-    question:
-      "Qual é a diferença fundamental entre um prompt zero-shot e um few-shot?",
-    options: [
-      {
-        id: "m1q11_a",
-        label:
-          "Zero-shot não usa exemplos; few-shot inclui exemplos no prompt para orientar a IA",
-      },
-      {
-        id: "m1q11_b",
-        label: "Zero-shot funciona sem internet; few-shot precisa de conexão",
-      },
-      {
-        id: "m1q11_c",
-        label: "Zero-shot só funciona com imagens; few-shot só com texto",
-      },
-      {
-        id: "m1q11_d",
-        label: "Não há diferença, são termos intercambiáveis",
+        id: "m1q10_d",
+        label: '"Explique como faria um especialista avançado."',
       },
     ],
-    correctAnswer: "m1q11_a",
-    topic: "Estratégias de Prompting",
+    correctAnswer: "m1q10_a",
+    topic: "Clareza em Prompts",
     difficulty: "médio",
+    source: "OVA: Como conversar com a IA (prompts)",
     feedback:
-      "No zero-shot você dá uma instrução direta (uma única vez). No few-shot você fornece exemplos (várias amostras) para estabelecer o padrão de resposta desejado. Revise o tópico de estratégias de prompting nos recursos do módulo.",
-  },
-  {
-    id: "m1q12",
-    question:
-      "Qual vantagem há em usar um system prompt (instrução do sistema) em vez de incluir instruções em cada mensagem?",
-    options: [
-      {
-        id: "m1q12_a",
-        label:
-          "O system prompt define o comportamento base da IA para toda a conversa, evitando repetir instruções",
-      },
-      {
-        id: "m1q12_b",
-        label: "O system prompt faz a IA responder mais rápido",
-      },
-      {
-        id: "m1q12_c",
-        label: "O system prompt só funciona na versão paga do ChatGPT",
-      },
-      {
-        id: "m1q12_d",
-        label: "Não há diferença, os dois métodos funcionam igual",
-      },
-    ],
-    correctAnswer: "m1q12_a",
-    topic: "System Prompts",
-    difficulty: "médio",
-    feedback:
-      "Os system prompts definem o papel, o tom e as regras base para toda a interação. Isso é especialmente útil em GPTs personalizados e aplicações onde a consistência é essencial. Revise o tópico de system prompts nos recursos do módulo.",
+      "Pedir exemplos e linguagem simples torna a explicação mais clara.",
   },
 ];

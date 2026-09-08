@@ -2,345 +2,206 @@ export const MODULE_5_PT = [
   {
     id: "m5q1",
     question:
-      'Um sistema de contratação baseado em IA foi treinado com dados históricos de uma empresa de tecnologia em que 78% dos funcionários eram homens. O sistema aprendeu a priorizar currículos com palavras como "engenheiro" e "líder técnico", e penalizava termos como "voluntariado" ou "licença parental". Candidatas mulheres com qualificações equivalentes recebiam pontuações mais baixas. Que tipo de viés está presente e em que etapa do pipeline de IA ele se originou?',
+      "Um sistema de contratação foi treinado com dados de uma empresa com maioria masculina e penalizava currículos com certos termos. Qual viés aparece e onde ele começa?",
     options: [
       {
         id: "m5q1_a",
-        label:
-          "Viés de amostragem — os dados de treinamento não representavam a população de forma equitativa, originado na coleta de dados",
+        label: "Viés de amostragem, originado nos dados de treino",
       },
       {
         id: "m5q1_b",
-        label:
-          "Viés de automação — o sistema decidiu por conta própria sem supervisão humana",
+        label: "Viés de automação, por falta de supervisão humana",
       },
-      {
-        id: "m5q1_c",
-        label:
-          "Viés de confirmação — os recrutadores buscavam confirmar suas próprias crenças",
-      },
-      {
-        id: "m5q1_d",
-        label:
-          "Viés de rotulagem — os rótulos foram colocados incorretamente por anotadores externos",
-      },
+      { id: "m5q1_c", label: "Viés de confirmação, por ideias do recrutador" },
+      { id: "m5q1_d", label: "Viés de rotulagem, por anotadores errados" },
     ],
     correctAnswer: "m5q1_a",
     topic: "Vieses em IA",
     difficulty: "médio",
+    source: "OVA: Laboratório: Detecte o Viés",
     feedback:
-      'Este é um caso clássico de viés de amostragem (sampling bias). Os dados históricos de uma empresa com 78% de homens não representam a população geral de candidatos. O viés se originou na coleta de dados, antes do treinamento. Revise o OVA "Laboratório: Detecte o Viés" e o PDF "Guia de Detecção de Vieses".',
+      "Os dados históricos não representavam a população, então o viés nasceu na coleta. Reveja o laboratório.",
   },
   {
     id: "m5q2",
     question:
-      'Você usa o ChatGPT para pesquisar um tratamento contra a ansiedade. A IA responde: "Segundo um estudo de Harvard de 2023, 89% dos pacientes reduziram os sintomas com esta terapia". Você tenta encontrar o estudo e não encontra nada. Os números e a fonte parecem inventados. Qual é a ação mais responsável?',
+      "O ChatGPT cita um estudo de saúde que não existe em nenhum buscador. O que você faz?",
     options: [
       {
         id: "m5q2_a",
-        label:
-          "Não usar essa informação até verificá-la com fontes confiáveis, relatar o possível erro e documentar que a IA alucinou",
+        label: "Não uso o dado e confiro a fonte por conta própria",
       },
-      {
-        id: "m5q2_b",
-        label:
-          "Usar a informação mesmo assim, porque a IA raramente erra dados concretos",
-      },
-      {
-        id: "m5q2_c",
-        label:
-          "Pedir à própria IA que busque a fonte novamente e confiar no que ela responder",
-      },
-      {
-        id: "m5q2_d",
-        label:
-          "Ignorar o incidente porque as alucinações são raras e não têm impacto",
-      },
+      { id: "m5q2_b", label: "Uso o dado porque a IA quase nunca erra" },
+      { id: "m5q2_c", label: "Pergunto de novo à IA e confio na resposta" },
+      { id: "m5q2_d", label: "Ignoro porque alucinações não são comuns" },
     ],
     correctAnswer: "m5q2_a",
     topic: "Alucinações",
     difficulty: "médio",
+    source: "OVA: Laboratório: Detecte o Viés",
     feedback:
-      'As alucinações são informações falsas com aparência de verdade. São especialmente perigosas em contextos de saúde, onde podem ter consequências graves. Sempre verifique as fontes de informações críticas. Revise o laboratório "Detecte o Viés".',
+      "Uma alucinação é uma informação falsa que parece real. Sempre confira dados críticos como saúde.",
   },
   {
     id: "m5q3",
     question:
-      "Você está usando IA para um diagnóstico médico e o resultado contradiz seu julgamento profissional. Como você age eticamente?",
+      "Uma IA dá um diagnóstico que contradiz seu julgamento profissional. Como você age?",
     options: [
-      {
-        id: "m5q3_a",
-        label: "Aceita a IA sem questionar, porque ela é mais inteligente",
-      },
-      {
-        id: "m5q3_b",
-        label:
-          "Questiona o possível viés de automação, verifica com outros especialistas e usa seu julgamento profissional",
-      },
-      { id: "m5q3_c", label: "Deixa a IA decidir o tratamento" },
-      { id: "m5q3_d", label: "Desliga o computador e recomeça do zero" },
+      { id: "m5q3_a", label: "Questiono a IA e consulto outros especialistas" },
+      { id: "m5q3_b", label: "Aceito a IA porque ela é mais inteligente" },
+      { id: "m5q3_c", label: "Deixo a IA decidir o tratamento" },
+      { id: "m5q3_d", label: "Reinicio o sistema e pergunto de novo" },
     ],
-    correctAnswer: "m5q3_b",
+    correctAnswer: "m5q3_a",
     topic: "Responsabilidade",
     difficulty: "médio",
+    source: "Vídeo: IA Ética: Princípios e Prática",
     feedback:
-      'O viés de automação nos faz confiar cegamente na IA. Seu julgamento profissional é insubstituível. Revise o tópico "Ética em IA: O Essencial".',
+      "Não caia no viés de automação: seu julgamento profissional é insubstituível.",
   },
   {
     id: "m5q4",
-    question:
-      "Qual das alternativas NÃO é uma boa prática de privacidade ao usar IA?",
+    question: "Qual destas NÃO é uma boa prática de privacidade com IA?",
     options: [
-      {
-        id: "m5q4_a",
-        label:
-          "Subir dados pessoais de clientes para um chatbot público para que ele os analise",
-      },
-      {
-        id: "m5q4_b",
-        label:
-          "Ler as políticas de privacidade antes de usar uma ferramenta de IA",
-      },
+      { id: "m5q4_a", label: "Enviar dados de clientes a um chatbot público" },
+      { id: "m5q4_b", label: "Ler as políticas de privacidade da ferramenta" },
       {
         id: "m5q4_c",
-        label: "Não compartilhar informações confidenciais em conversas com IA",
+        label: "Evitar compartilhar dados confidenciais com a IA",
       },
       {
         id: "m5q4_d",
-        label: "Usar versões empresariais que oferecem proteção de dados",
+        label: "Usar versões empresariais com proteção de dados",
       },
     ],
     correctAnswer: "m5q4_a",
     topic: "Privacidade",
-    difficulty: "médio",
+    difficulty: "fácil",
+    source: "PDF: Manual de Privacidade em IA",
     feedback:
-      'Nunca suba dados sensíveis em ferramentas públicas. Revise o PDF "Manual de Privacidade em IA" e o vídeo do módulo.',
+      "Nunca envie dados sensíveis a ferramentas públicas. Reveja o manual de privacidade.",
   },
   {
     id: "m5q5",
     question:
-      'Um banco implementa um sistema de IA para aprovar ou rejeitar solicitações de crédito. Um cliente é rejeitado e pede para saber o motivo. O banco responde: "É uma decisão da IA, não podemos explicar como ela funciona internamente". Qual princípio ético é violado e o que o banco deveria fazer?',
+      "Um banco rejeita um empréstimo com IA e não explica o motivo. Qual princípio é violado?",
     options: [
-      {
-        id: "m5q5_a",
-        label:
-          "Transparência e explicabilidade — o banco deveria auditar o modelo e fornecer explicações compreensíveis ao cliente",
-      },
-      {
-        id: "m5q5_b",
-        label:
-          "Privacidade — o banco deveria ocultar o uso de IA para proteger o cliente",
-      },
-      {
-        id: "m5q5_c",
-        label:
-          "Velocidade — o banco deveria processar as solicitações mais rápido",
-      },
-      {
-        id: "m5q5_d",
-        label: "Eficiência — o banco deveria substituir os analistas humanos",
-      },
+      { id: "m5q5_a", label: "A transparência e a explicabilidade da decisão" },
+      { id: "m5q5_b", label: "A privacidade por esconder o uso da IA" },
+      { id: "m5q5_c", label: "A velocidade do processo de decisão" },
+      { id: "m5q5_d", label: "A eficiência ao usar analistas humanos" },
     ],
     correctAnswer: "m5q5_a",
     topic: "Transparência",
     difficulty: "médio",
+    source: "PDF: Código de Ética para Uso de IA",
     feedback:
-      'A transparência é um pilar ético fundamental. Os cidadãos têm direito a entender decisões automatizadas que os afetam. O AI Act da UE exige explicabilidade em decisões de alto risco, como créditos. Revise o vídeo "IA Ética: Princípios e Prática" e o PDF "Código de Ética para Uso de IA".',
+      "As pessoas têm o direito de entender decisões automáticas que as afetam. Reveja o código de ética.",
   },
   {
     id: "m5q6",
     question:
-      "Você é designer de UX em uma agência digital. Seu chefe pede que você use IA para gerar 50 avaliações falsas positivas de um produto que ainda não foi lançado, para melhorar sua reputação inicial nas redes. Qual é a postura mais ética?",
+      "Seu chefe pede para gerar avaliações falsas de um produto com IA. Qual é a postura ética?",
     options: [
       {
         id: "m5q6_a",
-        label:
-          "Recusar-se a gerar avaliações falsas, explicar que isso viola princípios éticos de transparência e propor alternativas legítimas de divulgação",
+        label: "Recusar e propor alternativas honestas de divulgação",
       },
-      {
-        id: "m5q6_b",
-        label:
-          "Gerar as avaliações porque seu chefe pediu e faz parte do seu trabalho",
-      },
+      { id: "m5q6_b", label: "Fazer porque faz parte do seu trabalho" },
       {
         id: "m5q6_c",
-        label:
-          "Gerar as avaliações, mas modificar alguns detalhes para que pareçam menos falsas",
+        label: "Fazer mudando detalhes para não parecerem falsas",
       },
-      {
-        id: "m5q6_d",
-        label: "Pedir demissão imediatamente, sem dar explicações",
-      },
+      { id: "m5q6_d", label: "Pedir demissão sem explicação" },
     ],
     correctAnswer: "m5q6_a",
     topic: "Uso Responsável",
     difficulty: "médio",
+    source: "OVA: Laboratório: Dilemas Éticos",
     feedback:
-      'Gerar avaliações falsas viola princípios éticos de transparência e honestidade, e pode ter consequências legais (publicidade enganosa). O melhor caminho é propor alternativas éticas. Revise o OVA "Laboratório: Dilemas Éticos" e o decálogo do usuário ético.',
+      "Avaliações falsas enganam e podem ser ilegais. Proponha alternativas éticas. Reveja o laboratório.",
   },
   {
     id: "m5q7",
     question:
-      "Um motorista com piloto automático vem distraído, olhando para o celular. O sistema detecta um obstáculo e freia a tempo. O motorista confia que isso sempre vai funcionar. Semanas depois, com pouca luz, o sistema não detecta um objeto pequeno e ocorre um acidente. Que viés descreve essa situação e como preveni-lo?",
+      "Um motorista distraído confia no piloto automático e sofre um acidente. Qual viés isso descreve?",
     options: [
       {
         id: "m5q7_a",
-        label:
-          "Viés de automação — o motorista delegou sua atenção sem supervisão crítica. Previne-se com treinamento sobre os limites do sistema e supervisão ativa",
+        label: "Viés de automação: confiou sem supervisão crítica",
       },
-      {
-        id: "m5q7_b",
-        label:
-          "Viés de amostragem — os dados de treinamento não incluíam objetos pequenos com pouca luz",
-      },
-      {
-        id: "m5q7_c",
-        label:
-          "Viés algorítmico — o sistema discriminava certos tipos de objetos",
-      },
-      {
-        id: "m5q7_d",
-        label:
-          "Erro humano normal — acidentes acontecem, não há viés envolvido",
-      },
+      { id: "m5q7_b", label: "Viés de amostragem nos dados de treino" },
+      { id: "m5q7_c", label: "Viés algorítmico contra certos objetos" },
+      { id: "m5q7_d", label: "Um erro humano normal, sem viés" },
     ],
     correctAnswer: "m5q7_a",
     topic: "Viés de Automação",
-    difficulty: "difícil",
+    difficulty: "médio",
+    source: "OVA: Laboratório: Detecte o Viés",
     feedback:
-      'O viés de automação é a tendência humana de confiar excessivamente em sistemas automatizados, abandonando o pensamento crítico. O motorista assumiu que o sistema era infalível. Revise o OVA "Laboratório: Detecte o Viés" e o tópico "Vieses Algorítmicos e Equidade".',
+      "O viés de automação é confiar demais na máquina. Mantenha a supervisão ativa.",
   },
   {
     id: "m5q8",
     question:
-      "Você quer usar IA para um projeto, mas está preocupado com a privacidade dos dados. Segundo o módulo, qual é a estratégia mais responsável?",
+      "Qual é a estratégia mais responsável para proteger dados ao usar IA?",
     options: [
-      { id: "m5q8_a", label: "Nunca usar IA para nada relacionado a dados" },
       {
-        id: "m5q8_b",
-        label:
-          "Usar ferramentas com proteção empresarial de dados, anonimizar informações sensíveis e nunca compartilhar dados pessoais em chats públicos",
+        id: "m5q8_a",
+        label: "Usar ferramentas seguras e anonimizar dados sensíveis",
       },
+      { id: "m5q8_b", label: "Evitar por completo usar IA com qualquer dado" },
       {
         id: "m5q8_c",
-        label:
-          "Compartilhar os dados nas redes sociais para a comunidade ajudar",
+        label: "Publicar os dados nas redes para a comunidade ajudar",
       },
-      {
-        id: "m5q8_d",
-        label: "Confiar que a IA protege automaticamente todos os dados",
-      },
+      { id: "m5q8_d", label: "Confiar que a IA protege tudo automaticamente" },
     ],
-    correctAnswer: "m5q8_b",
+    correctAnswer: "m5q8_a",
     topic: "Proteção de Dados",
-    difficulty: "difícil",
+    difficulty: "médio",
+    source: "PDF: Manual de Privacidade em IA",
     feedback:
-      'A proteção de dados é sua responsabilidade. Use ferramentas seguras, anonimize e nunca compartilhe informações sensíveis. Revise "Proteja seus Dados na Era da IA".',
+      "Proteger os dados é sua responsabilidade: ferramentas seguras e dados anonimizados.",
   },
   {
     id: "m5q9",
     question:
-      'A União Europeia classifica os sistemas de IA por nível de risco (mínimo, limitado, alto, inaceitável). Um sistema que determina o acesso a serviços financeiros essenciais (como a aprovação de uma hipoteca) entraria na categoria de "alto risco". Que obrigação essa classificação impõe?',
+      "Um sistema de IA de alto risco (por exemplo, aprovar uma hipoteca) na UE deve cumprir:",
     options: [
-      {
-        id: "m5q9_a",
-        label:
-          "Avaliações de conformidade, documentação técnica, transparência e supervisão humana obrigatória",
-      },
-      {
-        id: "m5q9_b",
-        label: "Proibição total do uso de IA em serviços financeiros",
-      },
-      {
-        id: "m5q9_c",
-        label: "Registro voluntário, sem obrigações específicas",
-      },
-      {
-        id: "m5q9_d",
-        label: "Apenas pagar uma taxa anual pelo uso do sistema",
-      },
+      { id: "m5q9_a", label: "Avaliação de conformidade e supervisão humana" },
+      { id: "m5q9_b", label: "Proibição total de usar IA nesse caso" },
+      { id: "m5q9_c", label: "Registro voluntário sem obrigações" },
+      { id: "m5q9_d", label: "Pagar uma taxa anual para usá-lo" },
     ],
     correctAnswer: "m5q9_a",
     topic: "Marco Regulatório",
     difficulty: "difícil",
+    source: "PDF: Código de Ética para Uso de IA",
     feedback:
-      'O AI Act europeu é o primeiro marco regulatório abrangente de IA. Os sistemas de alto risco exigem avaliações de conformidade, documentação, transparência e supervisão humana. É importante conhecer o marco regulatório ao desenvolver soluções de IA. Revise o tópico "Marco Legal e Regulatório da IA".',
+      "Sistemas de alto risco exigem transparência, documentação e supervisão humana. Reveja o marco regulatório.",
   },
   {
     id: "m5q10",
     question:
-      "Uma equipe de cientistas de dados treina um modelo para prever sucesso acadêmico. Eles descobrem que o modelo atribui pontuações mais baixas a estudantes de certas regiões geográficas, mesmo controlando notas e recursos. Qual métrica de equidade eles deveriam priorizar para diagnosticar o problema?",
+      "Seu app educacional coleta dados de desempenho dos alunos. Qual prática de minimização é correta?",
     options: [
       {
         id: "m5q10_a",
-        label:
-          "Paridade demográfica — verificar se a taxa de previsão positiva é semelhante entre os grupos geográficos",
+        label: "Guardar só o necessário com consentimento informado",
       },
+      { id: "m5q10_b", label: "Coletar todos os dados por precaução" },
       {
-        id: "m5q10_b",
-        label: "Precisão geral do modelo, sem desmembrar por grupos",
+        id: "m5q10_c",
+        label: "Compartilhar os dados com terceiros sem avisar",
       },
-      { id: "m5q10_c", label: "Velocidade de treinamento do modelo" },
-      { id: "m5q10_d", label: "Quantidade total de dados de treinamento" },
+      { id: "m5q10_d", label: "Armazenar os dados sem plano de exclusão" },
     ],
     correctAnswer: "m5q10_a",
-    topic: "Equidade Algorítmica",
-    difficulty: "difícil",
-    feedback:
-      'A paridade demográfica (demographic parity) mede se as previsões do modelo são equitativas entre grupos. Se o modelo prevê sucesso com menor frequência para certas regiões, há um viés que deve ser investigado e corrigido. Revise o OVA "Laboratório: Detecte o Viés".',
-  },
-  {
-    id: "m5q11",
-    question:
-      "Você está desenvolvendo um aplicativo educacional com IA que coleta dados de desempenho dos estudantes. Seguindo o princípio da minimização de dados, qual é a prática correta?",
-    options: [
-      {
-        id: "m5q11_a",
-        label:
-          "Coletar apenas os dados estritamente necessários para a funcionalidade educacional, com consentimento informado e uma política de exclusão clara",
-      },
-      {
-        id: "m5q11_b",
-        label:
-          'Coletar todos os dados possíveis, "por via das dúvidas", caso sejam necessários depois',
-      },
-      {
-        id: "m5q11_c",
-        label:
-          "Compartilhar os dados automaticamente com terceiros, sem notificar os usuários",
-      },
-      {
-        id: "m5q11_d",
-        label: "Armazenar os dados indefinidamente, sem plano de exclusão",
-      },
-    ],
-    correctAnswer: "m5q11_a",
     topic: "Privacidade por Design",
     difficulty: "médio",
+    source: "PDF: Manual de Privacidade em IA",
     feedback:
-      'A minimização de dados é um princípio fundamental de privacidade: colete apenas o necessário, com consentimento, e tenha um plano claro de exclusão. Revise o tópico "Proteja seus Dados na Era da IA" e o PDF "Manual de Privacidade em IA".',
-  },
-  {
-    id: "m5q12",
-    question:
-      "Uma equipe de IA documenta seu modelo com uma model card (cartão do modelo). Segundo as melhores práticas, qual informação DEVE ser incluída?",
-    options: [
-      {
-        id: "m5q12_a",
-        label:
-          "Propósito do modelo, dados de treinamento, métricas de desempenho por subgrupos, limitações conhecidas e considerações éticas",
-      },
-      { id: "m5q12_b", label: "Apenas o nome do modelo e a versão" },
-      {
-        id: "m5q12_c",
-        label: "Os nomes completos dos desenvolvedores e seus salários",
-      },
-      { id: "m5q12_d", label: "O código-fonte completo do modelo" },
-    ],
-    correctAnswer: "m5q12_a",
-    topic: "Documentação Ética",
-    difficulty: "médio",
-    feedback:
-      "As model cards são um padrão de transparência em IA. Incluem propósito, dados, métricas por subgrupo, limitações e considerações éticas. Permitem que os usuários entendam as capacidades e limitações do modelo antes de usá-lo. Revise o tópico de transparência em IA nos recursos do módulo.",
+      "Minimize os dados: só o necessário, com consentimento e um plano claro de exclusão.",
   },
 ];
