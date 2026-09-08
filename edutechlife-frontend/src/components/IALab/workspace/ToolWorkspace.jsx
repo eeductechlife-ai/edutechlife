@@ -178,6 +178,127 @@ export default function ToolWorkspace({
           <span aria-hidden="true">☰</span>
           {newChatLabel}
         </button>
+
+        {/* Pantalla de bienvenida estilo ChatGPT — solo cuando no hay sección activa */}
+        {theme === "chatgpt" && viewSection === null && (
+          <motion.div
+            key="chatgpt-welcome"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 0.61, 0.36, 1] }}
+            className="mx-auto w-full max-w-3xl pt-8 pb-4"
+          >
+            {/* Logo + heading */}
+            <div className="flex flex-col items-center gap-3 mb-8 text-center">
+              {Logo ? (
+                <div className="w-10 h-10 flex items-center justify-center">
+                  <Logo />
+                </div>
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-[#10a37f] flex items-center justify-center">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 41 41"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M37.5 20.5c0 9.39-7.61 17-17 17s-17-7.61-17-17 7.61-17 17-17 17 7.61 17 17Z"
+                      fill="#10a37f"
+                    />
+                    <path
+                      d="M20.5 10.5v20M10.5 20.5h20"
+                      stroke="#fff"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </div>
+              )}
+              <h2
+                className="text-2xl md:text-3xl font-bold theme-text"
+                style={{ fontFamily: "var(--theme-font)" }}
+              >
+                ¿Por dónde empezamos?
+              </h2>
+              <p className="text-sm theme-text-muted max-w-sm">
+                Módulo 2 · Arquitecto Digital — explora el contenido del módulo
+                o inicia una actividad
+              </p>
+            </div>
+
+            {/* Tarjetas de sugerencia — 2×2 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                {
+                  icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
+                  label: "Explorar el módulo",
+                  desc: "Objetivos, temas y recursos del Módulo 2",
+                  section: null,
+                  scroll: true,
+                },
+                {
+                  icon: "M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2zM14 2v6h6",
+                  label: "Contenido del módulo",
+                  desc: "Videos, PDFs y recursos interactivos",
+                  section: "contenido",
+                },
+                {
+                  icon: "M13 2 3 14h9l-1 8 10-12h-9l1-8z",
+                  label: "Actividades y retos",
+                  desc: "Desafíos prácticos y ejercicios de ChatGPT",
+                  section: "actividades",
+                },
+                {
+                  icon: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4l3 3",
+                  label: "Práctica guiada",
+                  desc: "Ejercicios paso a paso con ChatGPT",
+                  section: "practica",
+                },
+              ].map(({ icon, label, desc, section, scroll }) => (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() => {
+                    if (section)
+                      onSelectTopic(section === "contenido" ? 0 : -1);
+                    else if (scroll) {
+                      document
+                        .querySelector("[data-testid='module-info-section']")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
+                  className="theme-prompt-card group flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10a37f]/40"
+                >
+                  <span className="mt-0.5 flex-shrink-0 h-8 w-8 rounded-xl theme-chip flex items-center justify-center">
+                    <svg
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d={icon} />
+                    </svg>
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold theme-text leading-snug">
+                      {label}
+                    </p>
+                    <p className="text-xs theme-text-muted mt-0.5 leading-snug">
+                      {desc}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         <div className="mx-auto w-full max-w-3xl">
           <div className="flex flex-col gap-5">{children}</div>
         </div>
