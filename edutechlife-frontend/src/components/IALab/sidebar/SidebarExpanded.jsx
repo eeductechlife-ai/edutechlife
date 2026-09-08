@@ -84,7 +84,7 @@ const SidebarExpanded = ({ onOpenStreak }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={fadeTransition}
-      className="px-3 py-4 space-y-3"
+      className="h-full flex flex-col px-3 py-4 gap-3"
     >
       {/* ── ZONA 1: MÓDULOS (navegación primero) ── */}
       <SidebarModuleList
@@ -122,8 +122,8 @@ const SidebarExpanded = ({ onOpenStreak }) => {
         </button>
       )}
 
-      {/* ── ZONA 2: PROGRESO + HERRAMIENTAS (tarjeta unificada) ── */}
-      <div className="rounded-xl border border-[var(--theme-emphasis)]/12 dark:border-[var(--theme-emphasis)]/22 bg-[var(--theme-emphasis)]/[0.03] dark:bg-[var(--theme-emphasis)]/[0.08] p-3 space-y-2.5">
+      {/* ── ZONA 2: PROGRESO + HERRAMIENTAS (tarjeta unificada, crece para llenar) ── */}
+      <div className="flex-1 flex flex-col rounded-xl border border-[var(--theme-emphasis)]/12 dark:border-[var(--theme-emphasis)]/22 bg-[var(--theme-emphasis)]/[0.03] dark:bg-[var(--theme-emphasis)]/[0.08] p-4 gap-3">
         {/* Fila: Círculo + Stats */}
         <div className="flex items-center gap-3">
           {/* Círculo compacto de progreso */}
@@ -222,23 +222,23 @@ const SidebarExpanded = ({ onOpenStreak }) => {
         {/* Separador interno */}
         <div className="h-px bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/20" />
 
-        {/* Herramientas dentro de la tarjeta */}
-        <div className="grid grid-cols-2 gap-2">
+        {/* Herramientas — flex-1 para ocupar todo el espacio restante */}
+        <div className="flex-1 grid grid-cols-2 gap-2">
           <button
             onClick={() => setShowStudyPlannerModal(true)}
-            className="flex items-center justify-center gap-1.5 px-2 py-2 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[#4DA8C4] transition-all duration-200 text-[11px] font-bold focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
+            className="h-full flex flex-col items-center justify-center gap-2 px-2 py-3 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[#4DA8C4] transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
           >
             <Icon
               name="fa-calendar"
-              className="text-[var(--theme-primary)] text-xs"
+              className="text-[var(--theme-primary)] text-base"
             />
             <span>{t("ialab.sidebar_plan_short") || "Plan"}</span>
           </button>
           <button
             onClick={() => setShowLeaderboard(true)}
-            className="flex items-center justify-center gap-1.5 px-2 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25 text-amber-700 dark:text-amber-400 transition-all duration-200 text-[11px] font-bold focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+            className="h-full flex flex-col items-center justify-center gap-2 px-2 py-3 rounded-lg bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25 text-amber-700 dark:text-amber-400 transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-amber-400/30"
           >
-            <Icon name="fa-trophy" className="text-amber-500 text-xs" />
+            <Icon name="fa-trophy" className="text-amber-500 text-base" />
             <span>{t("ialab.sidebar_leaderboard") || "Ranking"}</span>
           </button>
         </div>

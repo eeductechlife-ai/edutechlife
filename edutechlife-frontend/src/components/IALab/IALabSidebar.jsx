@@ -117,7 +117,7 @@ const IALabSidebar = () => {
       }}
       className="relative flex-shrink-0 border-r theme-border-primary-20 backdrop-blur-lg shadow-sm transition-[width] duration-300"
     >
-      <div className="h-full overflow-y-auto overflow-x-hidden relative">
+      <div className="h-full overflow-hidden overflow-x-hidden relative flex flex-col">
         <div className="absolute top-0 left-0 right-0 h-[1px] theme-bg-primary-20 pointer-events-none z-10" />
         <div className="absolute -bottom-20 -left-10 w-32 h-32 theme-bg-primary-5 rounded-full blur-3xl pointer-events-none" />
 

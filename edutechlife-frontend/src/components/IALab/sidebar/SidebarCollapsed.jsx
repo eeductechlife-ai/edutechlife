@@ -59,7 +59,7 @@ const SidebarCollapsed = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={fadeTransition}
-      className="relative flex flex-col items-center px-2 py-4 gap-2 ring-1 ring-inset ring-[var(--theme-emphasis)]/10 dark:ring-[var(--theme-emphasis)]/20"
+      className="relative flex flex-col items-center px-2 pt-8 pb-4 gap-2 ring-1 ring-inset ring-[var(--theme-emphasis)]/10 dark:ring-[var(--theme-emphasis)]/20"
     >
       <div className="absolute top-0 left-3 right-3 h-[1px] bg-gradient-to-r from-[var(--theme-emphasis)]/30 via-[var(--theme-primary)]/30 to-transparent rounded-full pointer-events-none" />
       <div className="absolute -bottom-20 -left-8 w-28 h-28 bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-full blur-3xl pointer-events-none" />
@@ -179,10 +179,10 @@ const SidebarCollapsed = ({
       <MiniDivider />
 
       {/* ── ZONA 2: MÓDULOS ── */}
-      <h2 className="text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--theme-emphasis)]/65 dark:text-[#4DA8C4]/55 select-none whitespace-nowrap">
+      <h2 className="mt-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--theme-emphasis)]/65 dark:text-[#4DA8C4]/55 select-none whitespace-nowrap">
         Módulos
       </h2>
-      <div className="flex flex-col gap-1 w-full" role="list">
+      <div className="flex flex-col gap-1.5 w-full" role="list">
         {modules.map((mod) => {
           const locked = isModuleLocked(mod.id);
           const isActive = activeMod === mod.id;
