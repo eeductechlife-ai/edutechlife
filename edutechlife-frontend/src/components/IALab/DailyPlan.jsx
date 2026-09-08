@@ -171,12 +171,28 @@ const DailyPlan = ({ onAction, isLoading }) => {
           </span>
           {atRisk ? (
             <span className="text-[10px] font-semibold text-amber-300 leading-tight block">
-              {t("ialab.streak_risk_title") || "Racha en riesgo · actúa hoy"}
+              {t("ialab.streak_risk_title") ||
+                "¡Tu racha está en riesgo! Actúa ahora"}
             </span>
           ) : !isOpen && pendingCount > 0 && firstItemTitle ? (
             <span className="text-[10px] text-white/70 leading-tight block truncate">
-              {firstItemTitle}
-              {pendingCount > 1 && ` · +${pendingCount - 1} más`}
+              {t("ialab.daily_plan.start_with") || "Empieza con:"}{" "}
+              <span className="font-semibold text-white/90">
+                {firstItemTitle}
+              </span>
+              {pendingCount > 1 && (
+                <span className="text-white/60">
+                  {" "}
+                  · +{pendingCount - 1} más
+                </span>
+              )}
+            </span>
+          ) : isOpen ? (
+            <span className="text-[10px] text-white/60 leading-tight block">
+              {pendingCount > 0
+                ? t("ialab.daily_plan.n_tasks", { n: pendingCount }) ||
+                  `${pendingCount} ${pendingCount === 1 ? "tarea pendiente" : "tareas pendientes"}`
+                : t("ialab.daily_plan.all_done_short") || "¡Todo al día!"}
             </span>
           ) : null}
         </div>
@@ -227,20 +243,28 @@ const DailyPlan = ({ onAction, isLoading }) => {
               <div className="flex flex-col gap-2">
                 {/* Barra de progreso del curso */}
                 <div className="flex items-center justify-between px-1 py-0.5">
-                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                    {t("ialab.daily_plan.steps_label") ||
-                      `Haz esto hoy · ${pendingCount} ${pendingCount === 1 ? "tarea" : "tareas"}`}
-                  </span>
                   <div className="flex items-center gap-1.5">
-                    <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <Icon
+                      name="fa-list-check"
+                      className="text-[10px] text-[var(--theme-emphasis)]"
+                    />
+                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                      {t("ialab.daily_plan.steps_label") || "Completa hoy"}
+                      <span className="ml-1 text-[var(--theme-emphasis)] font-black">
+                        ({pendingCount})
+                      </span>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-16 h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
-                        className="h-full theme-bg-emphasis rounded-full transition-all duration-500"
+                        className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full transition-all duration-500"
                         style={{
                           width: `${Math.min(courseProgress || 0, 100)}%`,
                         }}
                       />
                     </div>
-                    <span className="text-[10px] font-semibold text-slate-400">
+                    <span className="text-[10px] font-black text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
                       {Math.round(courseProgress || 0)}%
                     </span>
                   </div>
