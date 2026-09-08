@@ -9,8 +9,10 @@ import {
   Clock,
   Award,
   BookOpen,
+  RefreshCw,
 } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { useEducatorDashboard } from "../../hooks/useEducatorDashboard";
 
 const StudentCard = ({ student, onSelect }) => (
   <motion.div
@@ -123,64 +125,45 @@ const ClassOverview = ({ classData }) => (
 const EducatorDashboard = memo(() => {
   const { t } = useTranslation();
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const {
+    students,
+    summary: classData,
+    isLoading,
+    isError,
+    refetch,
+  } = useEducatorDashboard();
 
-  const classData = {
-    totalStudents: 28,
-    activeStudents: 25,
-    averageProgress: 76,
-    needingAttention: 3,
-  };
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-400">
+            Cargando datos del aula...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
-  const students = [
-    {
-      id: 1,
-      name: "Juan Martínez",
-      grade: "6to Grado",
-      streak: 12,
-      progress: 94,
-      needsAttention: false,
-    },
-    {
-      id: 2,
-      name: "María García",
-      grade: "6to Grado",
-      streak: 8,
-      progress: 87,
-      needsAttention: false,
-    },
-    {
-      id: 3,
-      name: "Carlos López",
-      grade: "6to Grado",
-      streak: 2,
-      progress: 42,
-      needsAttention: true,
-    },
-    {
-      id: 4,
-      name: "Sofia Rodríguez",
-      grade: "6to Grado",
-      streak: 7,
-      progress: 79,
-      needsAttention: false,
-    },
-    {
-      id: 5,
-      name: "Lucas Fernández",
-      grade: "6to Grado",
-      streak: 0,
-      progress: 35,
-      needsAttention: true,
-    },
-    {
-      id: 6,
-      name: "Emma Sánchez",
-      grade: "6to Grado",
-      streak: 14,
-      progress: 98,
-      needsAttention: false,
-    },
-  ];
+  if (isError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="text-center">
+          <AlertTriangle className="w-12 h-12 text-amber-600 mx-auto mb-4" />
+          <p className="text-gray-700 dark:text-gray-300 mb-4">
+            Error al cargar datos de estudiantes
+          </p>
+          <button
+            onClick={refetch}
+            className="flex items-center gap-2 mx-auto px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+          >
+            <RefreshCw className="w-4 h-4" /> Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
