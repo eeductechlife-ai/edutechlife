@@ -1,232 +1,146 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   TrendingUp,
   Users,
   Activity,
-  Zap,
+  AlertTriangle,
   BarChart3,
   Clock,
+  Award,
+  Flame,
+  RefreshCw,
 } from "lucide-react";
 
 /**
- * SmartBoardMetrics Component
- *
- * Displays team operational metrics:
- * - DAU/WAU/MAU (Daily/Weekly/Monthly Active Users)
- * - Feature adoption rates
- * - User engagement metrics
- * - Learning completion rates
- *
- * Data comes from PostHog via backend endpoint or localStorage cache
+ * SmartBoardMetrics — Fase 4.3 Valeria Analytics
+ * Receives real data from useAdminAnalytics (sessions + academic_context + crisis_alerts).
+ * Falls back to demo values when analytics.isLoading or no data yet.
  */
+const SmartBoardMetrics = ({ analytics }) => {
+  const {
+    overview,
+    subjectPerformance,
+    dailySessions,
+    streakDistribution,
+    achievementRate,
+    meta,
+    isLoading,
+    isError,
+    refetch,
+  } = analytics || {};
 
-const SmartBoardMetrics = ({ dataSource = "demo" }) => {
-  const [metrics, setMetrics] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [trend, setTrend] = useState("up"); // up, down, neutral
+  if (isLoading) return <MetricsLoadingSkeleton />;
 
-  useEffect(() => {
-    if (dataSource === "demo") {
-      // Demo data for development/staging
-      setMetrics(DEMO_METRICS);
-      setLoading(false);
-      return;
-    }
-
-    // Fetch real metrics from backend
-    const fetchMetrics = async () => {
-      try {
-        const response = await fetch("/api/admin/metrics/engagement?days=30");
-        if (!response.ok) throw new Error("Failed to fetch metrics");
-
-        const data = await response.json();
-        setMetrics(data);
-
-        // Calculate trend
-        if (
-          data.current_dau &&
-          data.previous_dau &&
-          data.current_dau > data.previous_dau
-        ) {
-          setTrend("up");
-        } else if (
-          data.current_dau &&
-          data.previous_dau &&
-          data.current_dau < data.previous_dau
-        ) {
-          setTrend("down");
-        } else {
-          setTrend("neutral");
-        }
-      } catch (error) {
-        console.error("Error fetching metrics:", error);
-        setMetrics(DEMO_METRICS);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMetrics();
-    // Refresh every 5 minutes
-    const interval = setInterval(fetchMetrics, 5 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, [dataSource]);
-
-  if (loading) {
-    return <MetricsLoadingSkeleton />;
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 gap-4">
+        <AlertTriangle className="w-10 h-10 text-amber-400" />
+        <p className="text-[#B2D8E5]">Error al cargar analíticas SmartBoard</p>
+        <button
+          onClick={refetch}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#4DA8C4]/20 text-[#4DA8C4] hover:bg-[#4DA8C4]/30 transition-all"
+        >
+          <RefreshCw className="w-4 h-4" /> Reintentar
+        </button>
+      </div>
+    );
   }
 
-  if (!metrics) {
-    return <div className="text-red-500">Error loading metrics</div>;
-  }
+  const ov = overview || {};
+  const subjects = subjectPerformance || [];
+  const daily = dailySessions || [];
+  const streaks = streakDistribution || {};
+  const achieve = achievementRate || {};
+
+  const totalStreakStudents =
+    (streaks.noStreak || 0) +
+    (streaks.short || 0) +
+    (streaks.medium || 0) +
+    (streaks.long || 0);
 
   return (
     <div className="space-y-8">
-      {/* Active Users Section */}
+      {/* Overview KPIs */}
       <div>
         <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-          <Users className="w-5 h-5 text-[#4DA8C4]" />
-          Active Users (User Engagement)
+          <Activity className="w-5 h-5 text-[#4DA8C4]" />
+          Resumen SmartBoard — últimos {meta?.days ?? 30} días
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <MetricCard
-            label="Daily Active Users (DAU)"
-            value={metrics.dau?.toLocaleString("es-CO")}
-            subtext={`Last 24 hours`}
+            label="Sesiones Totales"
+            value={ov.totalSessions?.toLocaleString("es-CO") ?? "0"}
+            subtext="Sesiones de aprendizaje registradas"
             icon={Activity}
             color="#4DA8C4"
             bgColor="rgba(77, 168, 196, 0.15)"
-            trend={trend}
-            change={metrics.dau_change}
           />
           <MetricCard
-            label="Weekly Active Users (WAU)"
-            value={metrics.wau?.toLocaleString("es-CO")}
-            subtext={`Last 7 days`}
-            icon={TrendingUp}
+            label="Estudiantes Activos"
+            value={ov.activeLast7Days?.toLocaleString("es-CO") ?? "0"}
+            subtext="Sesión en los últimos 7 días"
+            icon={Users}
             color="#66CCCC"
             bgColor="rgba(102, 204, 204, 0.15)"
-            trend={metrics.wau > metrics.wau_prev ? "up" : "down"}
-            change={metrics.wau_change}
           />
           <MetricCard
-            label="Monthly Active Users (MAU)"
-            value={metrics.mau?.toLocaleString("es-CO")}
-            subtext={`Last 30 days`}
-            icon={BarChart3}
-            color="#FFD166"
-            bgColor="rgba(255, 209, 102, 0.15)"
-            trend={metrics.mau > metrics.mau_prev ? "up" : "down"}
-            change={metrics.mau_change}
-          />
-        </div>
-      </div>
-
-      {/* Feature Adoption Section */}
-      <div>
-        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-          <Zap className="w-5 h-5 text-[#FF6B9D]" />
-          Feature Adoption Rates
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {metrics.features?.map((feature, idx) => (
-            <FeatureAdoptionCard
-              key={idx}
-              name={feature.name}
-              adoptionRate={feature.adoption_rate}
-              activeUsers={feature.active_users}
-              totalUsers={feature.total_users}
-              trend={feature.trend}
-              change={feature.change}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Learning Metrics Section */}
-      <div>
-        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-          <Clock className="w-5 h-5 text-[#66CCCC]" />
-          Learning Engagement
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <MetricCard
-            label="Lesson Completion Rate"
-            value={`${metrics.completion_rate}%`}
-            subtext={`Lessons completed / started`}
-            icon={TrendingUp}
-            color="#4DA8C4"
-            bgColor="rgba(77, 168, 196, 0.15)"
-            trend={
-              metrics.completion_rate > metrics.completion_rate_prev
-                ? "up"
-                : "down"
-            }
-            change={metrics.completion_rate_change}
-          />
-          <MetricCard
-            label="Avg Session Duration"
-            value={`${metrics.avg_session_minutes}m`}
-            subtext={`Average time per session`}
+            label="Duración Promedio"
+            value={`${ov.avgSessionMinutes ?? 0}m`}
+            subtext="Por sesión de aprendizaje"
             icon={Clock}
             color="#FFD166"
             bgColor="rgba(255, 209, 102, 0.15)"
-            trend={
-              metrics.avg_session_minutes > metrics.avg_session_minutes_prev
-                ? "up"
-                : "down"
-            }
-            change={metrics.session_duration_change}
           />
           <MetricCard
-            label="Parent Engagement"
-            value={`${metrics.parent_engagement_rate}%`}
-            subtext={`Parents viewing child progress`}
-            icon={Users}
+            label="Alertas Activas"
+            value={ov.atRiskCount?.toLocaleString("es-CO") ?? "0"}
+            subtext="Crisis alerts sin resolver"
+            icon={AlertTriangle}
             color="#FF6B9D"
             bgColor="rgba(255, 107, 157, 0.15)"
-            trend={
-              metrics.parent_engagement_rate >
-              metrics.parent_engagement_rate_prev
-                ? "up"
-                : "down"
-            }
-            change={metrics.parent_engagement_change}
+            alert={ov.atRiskCount > 0}
           />
         </div>
       </div>
 
-      {/* Product Breakdown Section */}
-      <div>
-        <h2 className="text-xl font-bold text-white mb-4">
-          Product Performance
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <ProductMetricsCard
-            name="IALab (AI Literacy Training)"
-            dau={metrics.ialabDAU}
-            wau={metrics.ialabWAU}
-            mau={metrics.ialabMAU}
-            completionRate={metrics.ialabCompletion}
-            color="#4DA8C4"
-          />
-          <ProductMetricsCard
-            name="SmartBoard (Kids Learning)"
-            dau={metrics.smartboardDAU}
-            wau={metrics.smartboardWAU}
-            mau={metrics.smartboardMAU}
-            completionRate={metrics.smartboardCompletion}
-            color="#66CCCC"
-          />
+      {/* Subject Performance */}
+      {subjects.length > 0 && (
+        <div>
+          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <BarChart3 className="w-5 h-5 text-[#66CCCC]" />
+            Rendimiento por Materia
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {subjects.slice(0, 6).map((subj) => (
+              <SubjectCard key={subj.subject} subject={subj} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Retention Metrics Section */}
-      <div>
-        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-[#FFD166]" />
-          Retention Cohorts
-        </h2>
+      {/* Daily Sessions Trend */}
+      {daily.length > 0 && (
+        <div>
+          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-[#FFD166]" />
+            Sesiones Diarias (últimos {Math.min(daily.length, 30)} días)
+          </h2>
+          <div
+            className="rounded-2xl p-6 border border-[#004B63]/30"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(0, 75, 99, 0.4) 0%, rgba(11, 15, 25, 0.9) 100%)",
+              backdropFilter: "blur(20px)",
+            }}
+          >
+            <DailySessionsChart daily={daily.slice(-30)} />
+          </div>
+        </div>
+      )}
+
+      {/* Streaks + Achievements side by side */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Streak Distribution */}
         <div
           className="rounded-2xl p-6 border border-[#004B63]/30"
           style={{
@@ -235,39 +149,92 @@ const SmartBoardMetrics = ({ dataSource = "demo" }) => {
             backdropFilter: "blur(20px)",
           }}
         >
+          <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <Flame className="w-5 h-5 text-orange-400" />
+            Distribución de Rachas
+          </h3>
+          <div className="space-y-3">
+            <StreakRow
+              label="Sin racha"
+              count={streaks.noStreak ?? 0}
+              total={totalStreakStudents}
+              color="bg-gray-500/40"
+            />
+            <StreakRow
+              label="Corta (1–3 días)"
+              count={streaks.short ?? 0}
+              total={totalStreakStudents}
+              color="bg-blue-500/40"
+            />
+            <StreakRow
+              label="Media (4–14 días)"
+              count={streaks.medium ?? 0}
+              total={totalStreakStudents}
+              color="bg-orange-500/40"
+            />
+            <StreakRow
+              label="Larga (15+ días)"
+              count={streaks.long ?? 0}
+              total={totalStreakStudents}
+              color="bg-green-500/40"
+            />
+          </div>
+        </div>
+
+        {/* Achievement Rate */}
+        <div
+          className="rounded-2xl p-6 border border-[#004B63]/30"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(0, 75, 99, 0.4) 0%, rgba(11, 15, 25, 0.9) 100%)",
+            backdropFilter: "blur(20px)",
+          }}
+        >
+          <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <Award className="w-5 h-5 text-yellow-400" />
+            Logros Desbloqueados
+          </h3>
           <div className="space-y-4">
-            <RetentionRow
-              label="Day 1 Retention"
-              percentage={metrics.retention_day1}
-              target={90}
-            />
-            <RetentionRow
-              label="Day 7 Retention"
-              percentage={metrics.retention_day7}
-              target={60}
-            />
-            <RetentionRow
-              label="Day 30 Retention"
-              percentage={metrics.retention_day30}
-              target={40}
-            />
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-[#B2D8E5]">Total logros</span>
+              <span className="text-2xl font-bold text-white">
+                {achieve.totalEarned?.toLocaleString("es-CO") ?? 0}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-[#B2D8E5]">
+                Estudiantes con logros
+              </span>
+              <span className="text-2xl font-bold text-[#66CCCC]">
+                {achieve.uniqueStudents?.toLocaleString("es-CO") ?? 0}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-[#B2D8E5]">
+                Promedio / estudiante activo
+              </span>
+              <span className="text-2xl font-bold text-[#FFD166]">
+                {achieve.avgPerActiveStudent ?? 0}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Metrics Legend */}
-      <div className="text-xs text-[#B2D8E5] text-center pt-4">
-        Last updated: {new Date().toLocaleTimeString("es-CO")} | Data refreshes
-        every 5 minutes
+      <div className="text-xs text-[#B2D8E5]/60 text-center pt-2">
+        Generado:{" "}
+        {meta?.generatedAt
+          ? new Date(meta.generatedAt).toLocaleString("es-CO")
+          : "—"}
+        {" · "}Fuente: sessions + academic_context + crisis_alerts +
+        learning_streaks
       </div>
     </div>
   );
 };
 
-/**
- * MetricCard Component
- * Reusable card for displaying individual metrics
- */
+// ── Sub-components ──────────────────────────────────────────────────────────
+
 const MetricCard = ({
   label,
   value,
@@ -275,202 +242,124 @@ const MetricCard = ({
   icon: Icon,
   color,
   bgColor,
-  trend,
-  change,
-}) => {
-  return (
+  alert,
+}) => (
+  <div
+    className="relative overflow-hidden rounded-2xl p-6 border transition-colors"
+    style={{
+      background:
+        "linear-gradient(135deg, rgba(0, 75, 99, 0.4) 0%, rgba(11, 15, 25, 0.9) 100%)",
+      backdropFilter: "blur(20px)",
+      borderColor: alert ? "rgba(255,107,157,0.5)" : "rgba(0,75,99,0.3)",
+    }}
+  >
     <div
-      className="relative overflow-hidden rounded-2xl p-6 border border-[#004B63]/30 hover:border-[#004B63]/60 transition-colors"
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(0, 75, 99, 0.4) 0%, rgba(11, 15, 25, 0.9) 100%)",
-        backdropFilter: "blur(20px)",
-      }}
-    >
+      className="absolute top-0 right-0 w-28 h-28 opacity-10"
+      style={{ background: color, borderRadius: "0 0 0 100%" }}
+    />
+    <div className="relative">
       <div
-        className="absolute top-0 right-0 w-32 h-32 opacity-10"
-        style={{
-          background: color,
-          borderRadius: "0 0 0 100%",
-        }}
-      ></div>
+        className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
+        style={{ background: bgColor }}
+      >
+        <Icon className="w-5 h-5" style={{ color }} />
+      </div>
+      <h3 className="text-sm text-[#B2D8E5] mb-1">{label}</h3>
+      <div className="text-3xl font-bold text-white mb-1">{value}</div>
+      <div className="text-xs text-[#7A8FA3]">{subtext}</div>
+    </div>
+  </div>
+);
 
-      <div className="relative">
-        <div className="flex items-start justify-between mb-4">
+const SubjectCard = ({ subject }) => {
+  const pct = Math.min(100, subject.avgScore || 0);
+  const barColor = pct >= 70 ? "#66CCCC" : pct >= 50 ? "#FFD166" : "#FF6B9D";
+  return (
+    <div
+      className="rounded-2xl p-5 border border-[#004B63]/30"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(0, 75, 99, 0.3) 0%, rgba(11, 15, 25, 0.9) 100%)",
+        backdropFilter: "blur(20px)",
+      }}
+    >
+      <div className="flex items-start justify-between mb-3">
+        <h3 className="font-semibold text-white capitalize">
+          {subject.subject}
+        </h3>
+        <span className="text-sm font-bold" style={{ color: barColor }}>
+          {pct}%
+        </span>
+      </div>
+      <div className="h-2 rounded-full bg-[#0B0F19] overflow-hidden mb-3">
+        <div
+          className="h-full transition-all duration-700"
+          style={{ width: `${pct}%`, background: barColor }}
+        />
+      </div>
+      <div className="flex justify-between text-xs text-[#7A8FA3]">
+        <span>{subject.sessionCount} sesiones</span>
+        <span>
+          {Object.entries(subject.performanceLevels || {})
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 2)
+            .map(([lvl, n]) => `${n} ${lvl}`)
+            .join(" · ")}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+const DailySessionsChart = ({ daily }) => {
+  const maxCount = Math.max(...daily.map((d) => d.count), 1);
+  return (
+    <div className="flex items-end gap-1 h-24 overflow-x-auto pb-2">
+      {daily.map((day) => {
+        const pct = Math.round((day.count / maxCount) * 100);
+        return (
           <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center"
-            style={{ background: bgColor }}
+            key={day.date}
+            className="flex flex-col items-center gap-1 min-w-[20px] flex-1"
           >
-            <Icon className="w-6 h-6" style={{ color }} />
-          </div>
-          {change !== undefined && (
             <div
-              className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
-                trend === "up"
-                  ? "bg-green-500/20 text-green-400"
-                  : trend === "down"
-                    ? "bg-red-500/20 text-red-400"
-                    : "bg-gray-500/20 text-gray-400"
-              }`}
-            >
-              {trend === "up" ? "↑" : trend === "down" ? "↓" : "→"} {change}%
-            </div>
-          )}
-        </div>
-
-        <h3 className="text-sm text-[#B2D8E5] mb-1 font-open-sans">{label}</h3>
-        <div className="text-3xl font-bold text-white font-montserrat mb-2">
-          {value}
-        </div>
-        <div className="text-xs text-[#7A8FA3]">{subtext}</div>
-      </div>
-    </div>
-  );
-};
-
-/**
- * FeatureAdoptionCard Component
- * Shows adoption rate for specific features
- */
-const FeatureAdoptionCard = ({
-  name,
-  adoptionRate,
-  activeUsers,
-  totalUsers,
-  trend,
-  change,
-}) => {
-  return (
-    <div
-      className="rounded-2xl p-6 border border-[#004B63]/30"
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(0, 75, 99, 0.4) 0%, rgba(11, 15, 25, 0.9) 100%)",
-        backdropFilter: "blur(20px)",
-      }}
-    >
-      <div className="flex items-start justify-between mb-4">
-        <h3 className="text-base font-semibold text-white">{name}</h3>
-        <div
-          className={`text-sm font-bold ${
-            adoptionRate > 50 ? "text-green-400" : "text-yellow-400"
-          }`}
-        >
-          {adoptionRate}%
-        </div>
-      </div>
-
-      <div className="mb-3">
-        <div className="h-3 rounded-full bg-[#0B0F19] overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]"
-            style={{ width: `${adoptionRate}%` }}
-          ></div>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between text-xs text-[#B2D8E5]">
-        <div>
-          {activeUsers?.toLocaleString("es-CO")} of{" "}
-          {totalUsers?.toLocaleString("es-CO")} users
-        </div>
-        <div
-          className={`font-semibold ${
-            trend === "up"
-              ? "text-green-400"
-              : trend === "down"
-                ? "text-red-400"
-                : "text-gray-400"
-          }`}
-        >
-          {trend === "up" ? "↑" : trend === "down" ? "↓" : "→"} {change}%
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/**
- * ProductMetricsCard Component
- * Shows metrics breakdown by product (IALab vs SmartBoard)
- */
-const ProductMetricsCard = ({ name, dau, wau, mau, completionRate, color }) => {
-  return (
-    <div
-      className="rounded-2xl p-6 border border-[#004B63]/30"
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(0, 75, 99, 0.4) 0%, rgba(11, 15, 25, 0.9) 100%)",
-        backdropFilter: "blur(20px)",
-      }}
-    >
-      <h3 className="text-lg font-bold text-white mb-4">{name}</h3>
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-[#B2D8E5]">DAU</span>
-          <span className="text-lg font-semibold text-white">
-            {dau?.toLocaleString("es-CO")}
-          </span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-[#B2D8E5]">WAU</span>
-          <span className="text-lg font-semibold text-white">
-            {wau?.toLocaleString("es-CO")}
-          </span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-[#B2D8E5]">MAU</span>
-          <span className="text-lg font-semibold text-white">
-            {mau?.toLocaleString("es-CO")}
-          </span>
-        </div>
-        <div className="border-t border-[#004B63]/30 pt-3 mt-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-[#B2D8E5]">Completion Rate</span>
-            <span className="text-lg font-semibold" style={{ color }}>
-              {completionRate}%
-            </span>
+              className="w-full rounded-t-sm bg-gradient-to-t from-[#4DA8C4] to-[#66CCCC] opacity-80 hover:opacity-100 transition-opacity"
+              style={{ height: `${Math.max(4, pct)}%` }}
+              title={`${day.date}: ${day.count} sesiones`}
+            />
+            {daily.length <= 14 && (
+              <span className="text-[8px] text-[#7A8FA3] rotate-45 origin-left">
+                {day.date.slice(5)}
+              </span>
+            )}
           </div>
-        </div>
-      </div>
+        );
+      })}
     </div>
   );
 };
 
-/**
- * RetentionRow Component
- * Shows retention percentage with progress bar
- */
-const RetentionRow = ({ label, percentage, target }) => {
-  const isAboveTarget = percentage >= target;
+const StreakRow = ({ label, count, total, color }) => {
+  const pct = total > 0 ? Math.round((count / total) * 100) : 0;
   return (
     <div>
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-1">
         <span className="text-sm text-[#B2D8E5]">{label}</span>
-        <span
-          className={`font-semibold ${isAboveTarget ? "text-green-400" : "text-yellow-400"}`}
-        >
-          {percentage}% (Target: {target}%)
+        <span className="text-sm font-semibold text-white">
+          {count} <span className="text-[#7A8FA3] font-normal">({pct}%)</span>
         </span>
       </div>
       <div className="h-2 rounded-full bg-[#0B0F19] overflow-hidden">
-        <div
-          className={`h-full ${isAboveTarget ? "bg-green-500/50" : "bg-yellow-500/50"}`}
-          style={{ width: `${Math.min(percentage, 100)}%` }}
-        ></div>
+        <div className={`h-full ${color}`} style={{ width: `${pct}%` }} />
       </div>
     </div>
   );
 };
 
-/**
- * MetricsLoadingSkeleton Component
- * Shows loading state while metrics are being fetched
- */
 const MetricsLoadingSkeleton = () => (
   <div className="space-y-8 animate-pulse">
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {[1, 2, 3].map((i) => (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      {[1, 2, 3, 4].map((i) => (
         <div
           key={i}
           className="h-32 rounded-2xl bg-gradient-to-r from-[#004B63]/30 to-transparent"
@@ -487,84 +376,5 @@ const MetricsLoadingSkeleton = () => (
     </div>
   </div>
 );
-
-/**
- * Demo Metrics Data
- * Used when dataSource is "demo" or API fails
- */
-export const DEMO_METRICS = {
-  // Active users
-  dau: 1250,
-  dau_change: 15,
-  wau: 4200,
-  wau_change: 12,
-  wau_prev: 3750,
-  mau: 8500,
-  mau_change: 8,
-  mau_prev: 7850,
-
-  // Learning engagement
-  completion_rate: 76,
-  completion_rate_prev: 72,
-  completion_rate_change: 4,
-  avg_session_minutes: 18,
-  avg_session_minutes_prev: 16,
-  session_duration_change: 12,
-  parent_engagement_rate: 68,
-  parent_engagement_rate_prev: 62,
-  parent_engagement_change: 6,
-
-  // Product breakdown
-  ialabDAU: 800,
-  ialabWAU: 2800,
-  ialabMAU: 5200,
-  ialabCompletion: 79,
-
-  smartboardDAU: 450,
-  smartboardWAU: 1400,
-  smartboardMAU: 3300,
-  smartboardCompletion: 72,
-
-  // Retention cohorts
-  retention_day1: 85,
-  retention_day7: 52,
-  retention_day30: 32,
-
-  // Feature adoption
-  features: [
-    {
-      name: "Crisis Alert Notifications",
-      adoption_rate: 92,
-      active_users: 780,
-      total_users: 850,
-      trend: "up",
-      change: 8,
-    },
-    {
-      name: "Valerio Voice Assistant",
-      adoption_rate: 68,
-      active_users: 578,
-      total_users: 850,
-      trend: "up",
-      change: 12,
-    },
-    {
-      name: "Parent Dashboard",
-      adoption_rate: 74,
-      active_users: 629,
-      total_users: 850,
-      trend: "up",
-      change: 5,
-    },
-    {
-      name: "VAK Diagnostics",
-      adoption_rate: 55,
-      active_users: 468,
-      total_users: 850,
-      trend: "down",
-      change: -2,
-    },
-  ],
-};
 
 export default SmartBoardMetrics;

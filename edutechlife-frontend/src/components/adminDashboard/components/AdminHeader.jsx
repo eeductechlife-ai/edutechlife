@@ -5,9 +5,16 @@ import {
   BarChart3,
   FolderOpen,
   LogOut,
+  BookOpen,
 } from "lucide-react";
 
-const AdminHeader = ({ onLogout, onBack, activeTab, setActiveTab, dataSource }) => {
+const AdminHeader = ({
+  onLogout,
+  onBack,
+  activeTab,
+  setActiveTab,
+  dataSource,
+}) => {
   return (
     <header
       className="sticky top-0 z-50 backdrop-blur-xl border-b border-[#004B63]/30"
@@ -62,6 +69,17 @@ const AdminHeader = ({ onLogout, onBack, activeTab, setActiveTab, dataSource }) 
               >
                 <FolderOpen className="w-4 h-4" />
                 <span className="text-sm">Leads</span>
+              </button>
+              <button
+                onClick={() => setActiveTab("smartboard")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                  activeTab === "smartboard"
+                    ? "bg-[#66CCCC]/30 text-white border border-[#66CCCC]/50"
+                    : "text-[#66CCCC] hover:text-white hover:bg-white/5"
+                }`}
+              >
+                <BookOpen className="w-4 h-4" />
+                <span className="text-sm">SmartBoard</span>
               </button>
             </div>
           </div>

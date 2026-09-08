@@ -140,6 +140,128 @@ router.get('/analytics/students', requireAdmin, async (req, res) => {
 });
 
 /**
+ * GET /api/admin/analytics/smartboard
+ * Institutional SmartBoard metrics for Valeria Analytics (Fase 4.3).
+ * Aggregates sessions + academic_context + crisis_alerts + learning_streaks.
+ *
+ * Query params:
+ *   days (int, default 30) — rolling window for trend calculations
+ *
+ * Response:
+ *   overview: { totalSessions, activeLast7Days, avgSessionMinutes, atRiskCount }
+ *   subjectPerformance: [{ subject, avgScore, sessionCount, performanceLevels }]
+ *   dailySessions: [{ date, count, totalMinutes }]  — last `days` days
+ *   streakDistribution: { noStreak, short, medium, long }
+ *   achievementRate: { earned, possible, rate }
+ */
+router.get('/analytics/smartboard', requireAdmin, async (req, res) => {
+  try {
+    const days = Math.min(90, Math.max(7, parseInt(req.query.days) || 30));
+    const since = new Date(Date.now() - days * 86400000).toISOString();
+    const since7d = new Date(Date.now() - 7 * 86400000).toISOString();
+
+    const [
+      { data: sessions },
+      { data: academic },
+      { data: crisisAlerts },
+      { data: streaks },
+      { data: achievements },
+    ] = await Promise.all([
+      supabase.from('sessions').select('student_id, start_time, duration_minutes, subject').gte('start_time', since),
+      supabase.from('academic_context').select('student_id, subject, average_score, performance_level'),
+      supabase.from('crisis_alerts').select('student_id, crisis_level').eq('alert_sent', false),
+      supabase.from('learning_streaks').select('student_id, current_streak'),
+      supabase.from('student_achievements').select('student_id, earned_at').gte('earned_at', since),
+    ]);
+
+    const sessionList = sessions || [];
+    const academicList = academic || [];
+    const crisisList = crisisAlerts || [];
+    const streakList = streaks || [];
+    const achievementList = achievements || [];
+
+    // Active students in last 7 days
+    const activeStudentIds = new Set(
+      sessionList.filter((s) => s.start_time >= since7d).map((s) => s.student_id)
+    );
+
+    // Overview
+    const totalMinutes = sessionList.reduce((sum, s) => sum + (s.duration_minutes || 0), 0);
+    const overview = {
+      totalSessions: sessionList.length,
+      activeLast7Days: activeStudentIds.size,
+      avgSessionMinutes: sessionList.length ? Math.round(totalMinutes / sessionList.length) : 0,
+      atRiskCount: crisisList.length,
+      totalMinutes,
+    };
+
+    // Subject performance from academic_context
+    const bySubject = {};
+    for (const row of academicList) {
+      if (!row.subject) continue;
+      if (!bySubject[row.subject]) bySubject[row.subject] = { scores: [], levels: {}, sessions: 0 };
+      bySubject[row.subject].scores.push(row.average_score || 0);
+      const lvl = row.performance_level || 'unknown';
+      bySubject[row.subject].levels[lvl] = (bySubject[row.subject].levels[lvl] || 0) + 1;
+    }
+    for (const s of sessionList) {
+      if (s.subject && bySubject[s.subject]) bySubject[s.subject].sessions++;
+    }
+    const subjectPerformance = Object.entries(bySubject).map(([subject, data]) => ({
+      subject,
+      avgScore: data.scores.length ? Math.round(data.scores.reduce((a, b) => a + b, 0) / data.scores.length) : 0,
+      sessionCount: data.sessions,
+      performanceLevels: data.levels,
+    })).sort((a, b) => b.sessionCount - a.sessionCount);
+
+    // Daily sessions grouped by date
+    const dailyMap = {};
+    for (const s of sessionList) {
+      const date = s.start_time ? s.start_time.slice(0, 10) : null;
+      if (!date) continue;
+      if (!dailyMap[date]) dailyMap[date] = { count: 0, totalMinutes: 0 };
+      dailyMap[date].count++;
+      dailyMap[date].totalMinutes += s.duration_minutes || 0;
+    }
+    const dailySessions = Object.entries(dailyMap)
+      .map(([date, d]) => ({ date, count: d.count, totalMinutes: d.totalMinutes }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    // Streak distribution
+    const streakDistribution = { noStreak: 0, short: 0, medium: 0, long: 0 };
+    for (const s of streakList) {
+      const streak = s.current_streak || 0;
+      if (streak === 0) streakDistribution.noStreak++;
+      else if (streak <= 3) streakDistribution.short++;
+      else if (streak <= 14) streakDistribution.medium++;
+      else streakDistribution.long++;
+    }
+
+    // Achievement rate
+    const uniqueEarners = new Set(achievementList.map((a) => a.student_id)).size;
+    const achievementRate = {
+      totalEarned: achievementList.length,
+      uniqueStudents: uniqueEarners,
+      avgPerActiveStudent: activeStudentIds.size
+        ? Math.round((achievementList.length / activeStudentIds.size) * 10) / 10
+        : 0,
+    };
+
+    res.json({
+      overview,
+      subjectPerformance,
+      dailySessions,
+      streakDistribution,
+      achievementRate,
+      meta: { days, since, generatedAt: new Date().toISOString() },
+    });
+  } catch (err) {
+    console.error('[admin/analytics/smartboard] error:', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
  * GET /api/admin/health
  * Backend health for admin dashboard: uptime, memory, DB connectivity.
  */

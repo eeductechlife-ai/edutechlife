@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  Users,
-  Brain,
-  GraduationCap,
-  Activity,
-} from "lucide-react";
+import { Users, Brain, GraduationCap, Activity } from "lucide-react";
 import LeadsManager from "../LeadsManager";
+import SmartBoardMetrics from "./components/SmartBoardMetrics";
 import { useSupabase } from "../../hooks/useSupabase";
+import { useAdminAnalytics } from "../../hooks/useAdminAnalytics";
 import {
   fetchVakDiagnostics,
   aggregateDiagnostics,
@@ -30,6 +27,7 @@ const AdminDashboard = ({ onLogout, onBack }) => {
   const [institutionFilter, setInstitutionFilter] = useState("all");
 
   const { supabase, isLoading: supabaseLoading } = useSupabase();
+  const adminAnalytics = useAdminAnalytics(30);
 
   useEffect(() => {
     if (supabaseLoading || !supabase) return;
@@ -157,6 +155,9 @@ const AdminDashboard = ({ onLogout, onBack }) => {
           />
         </div>
         {activeTab === "leads" && <LeadsManager />}
+        {activeTab === "smartboard" && (
+          <SmartBoardMetrics analytics={adminAnalytics} />
+        )}
       </div>
     </div>
   );
