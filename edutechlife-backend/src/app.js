@@ -4,8 +4,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const crypto = require('crypto');
 const sanitizeMiddleware = require('./middleware/sanitize');
-const { requireAuth } = require('./middleware/auth');
-const { apiLimiter, deepseekLimiter, authLimiter } = require('./middleware/rateLimiter');
+const { requireAuth, optionalAuth } = require('./middleware/auth');
+const { apiLimiter, deepseekLimiter, authLimiter, ttsLimiter, ttsHourlyLimiter } = require('./middleware/rateLimiter');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./docs/swagger');
@@ -22,6 +22,7 @@ const scanImageRoutes = require('./routes/scanImage');
 const stripeRoutes = require('./routes/stripe');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
+const notificationRoutes = require('./routes/notifications');
 const { webhookHandler } = require('./routes/stripe');
 
 const CSP_DIRECTIVES = {
@@ -128,12 +129,16 @@ app.use('/api/health', healthRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/ialab', ialabRoutes);
 app.use('/api/voice-token', voiceRoutes);
-app.use('/api/tts', requireAuth, ttsRoutes);
+// /api/tts es público (optionalAuth) para que Nico —el asistente del sitio
+// público— pueda usar voz Google Neural sin sesión. Los limiters + allow-list
+// de idioma en routes/tts.js contienen el costo por IP/usuario.
+app.use('/api/tts', optionalAuth, ttsLimiter, ttsHourlyLimiter, ttsRoutes);
 app.use('/api/smartboard', smartboardRoutes);
 app.use('/api/smartboard', scanImageRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', authLimiter, adminRoutes);
+app.use('/api/notifications', requireAuth, notificationRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

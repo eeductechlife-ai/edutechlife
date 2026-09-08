@@ -1,0 +1,263 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: var(--color-bg-primary, #fff);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.container h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: var(--color-text-primary, #333);
+}
+
+.description {
+  font-size: 14px;
+  color: var(--color-text-secondary, #666);
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.loading {
+  padding: 32px;
+  text-align: center;
+  color: var(--color-text-secondary, #666);
+}
+
+.section {
+  margin: 32px 0;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-border, #eee);
+}
+
+.section:last-of-type {
+  border-bottom: none;
+}
+
+.section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: var(--color-text-primary, #333);
+}
+
+.preference {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-border-light, #f0f0f0);
+}
+
+.preference:last-child {
+  border-bottom: none;
+}
+
+.preferenceLabel {
+  flex: 1;
+}
+
+.preferenceLabel label {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 4px;
+}
+
+.preferenceLabel strong {
+  color: var(--color-text-primary, #333);
+  font-size: 14px;
+}
+
+.preferenceLabel .description {
+  font-size: 12px;
+  color: var(--color-text-secondary, #999);
+  margin: 0;
+}
+
+.preferenceControl {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toggle {
+  width: 48px;
+  height: 24px;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--color-border, #ddd);
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.toggle:checked {
+  background-color: var(--color-success, #4caf50);
+}
+
+.toggle::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: white;
+  top: 2px;
+  left: 2px;
+  transition: left 0.3s ease;
+}
+
+.toggle:checked::before {
+  left: 26px;
+}
+
+.toggleLabel {
+  font-size: 12px;
+  color: var(--color-text-secondary, #666);
+  min-width: 70px;
+}
+
+.frequencyOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  border: 2px solid var(--color-border-light, #f0f0f0);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.radioLabel:hover {
+  border-color: var(--color-border, #ddd);
+  background-color: var(--color-bg-hover, #f9f9f9);
+}
+
+.radioLabel input[type="radio"] {
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: var(--color-primary, #4a90e2);
+}
+
+.radioLabel input[type="radio"]:checked {
+  accent-color: var(--color-primary, #4a90e2);
+}
+
+.radioLabel span {
+  font-size: 14px;
+  color: var(--color-text-primary, #333);
+  line-height: 1.4;
+}
+
+.radioLabel strong {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.radioLabel small {
+  color: var(--color-text-secondary, #999);
+}
+
+.message {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 16px 0;
+  font-size: 14px;
+}
+
+.message-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-left: 4px solid #4caf50;
+}
+
+.message-error {
+  background-color: #ffebee;
+  color: #c62828;
+  border-left: 4px solid #f44336;
+}
+
+.message-info {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  border-left: 4px solid #2196f3;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.saveButton {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--color-primary, #4a90e2);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.saveButton:hover:not(:disabled) {
+  background-color: var(--color-primary-hover, #357abd);
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.saveButton:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .container {
+    padding: 16px;
+  }
+
+  .container h2 {
+    font-size: 20px;
+  }
+
+  .preference {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .preferenceControl {
+    width: 100%;
+  }
+
+  .frequencyOptions {
+    gap: 12px;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .saveButton {
+    width: 100%;
+  }
+}
