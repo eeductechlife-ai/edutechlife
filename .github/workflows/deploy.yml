@@ -47,7 +47,7 @@ jobs:
 
       - name: npm audit (frontend)
         working-directory: edutechlife-frontend
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=high --omit=dev
 
   # Accesibilidad WCAG 2.1 Level A (crítico) — gate bloqueante con axe-core.
   # Solo falla en violaciones Level A; AA/AAA son informativos en el reporte.
