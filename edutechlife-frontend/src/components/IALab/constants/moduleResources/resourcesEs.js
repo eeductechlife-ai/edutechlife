@@ -193,22 +193,6 @@ const RESOURCES_ES = {
         thumbnailType: "premium",
         fullscreen: true,
       },
-    ],
-  },
-
-  "El Flujo del Arquitecto: Automatización en el Mundo Real": {
-    title: "El Flujo del Arquitecto: Automatización en el Mundo Real",
-    description:
-      "La teoría de herramientas cobra vida cuando las orquestas en flujos reales. Descubre cómo marketeros, educadores y emprendedores usan ChatGPT en cadena para multiplicar su productividad por 10.",
-    learningObjectives: [
-      "Entender el framework ideal de automatización: entrada → orquestación → salida",
-      "Analizar 3 casos reales de flujos en marketing, educación y emprendimiento",
-      "Reconocer patrones de orquestación entre herramientas integradas",
-      "Diseñar tu propio flujo de automatización adaptado a tu contexto",
-    ],
-    estimatedTime: "22 minutos",
-    difficulty: "Intermedio",
-    resources: [
       {
         id: "automation-flows-ova-1",
         type: "ova_interactive",

@@ -20,16 +20,26 @@ const CONTENT_ES = {
     objective:
       "Domina el arte de forjar instrucciones precisas con la IA como aprendiz de artesano digital, creando prompts que cualquier modelo entienda a la perfección.",
     learningPoints: [
-      { text: "Forjar instrucciones claras como un maestro artesano", icon: "fa-bullseye" },
+      {
+        text: "Forjar instrucciones claras como un maestro artesano",
+        icon: "fa-bullseye",
+      },
       {
         text: "Perfeccionar preguntas y respuestas con precisión milimétrica",
         icon: "fa-wand-magic-sparkles",
       },
-      { text: "Detectar y corregir imperfecciones en tus creaciones", icon: "fa-exclamation-triangle" },
-      { text: "Aplicar tu oficio artesanal en estudio y trabajo", icon: "fa-rocket" },
+      {
+        text: "Detectar y corregir imperfecciones en tus creaciones",
+        icon: "fa-exclamation-triangle",
+      },
+      {
+        text: "Aplicar tu oficio artesanal en estudio y trabajo",
+        icon: "fa-rocket",
+      },
     ],
     overviewData: {
-      title: "El Artesano Digital: Ingeniería de Prompts — La Base de Toda Interacción con IA",
+      title:
+        "El Artesano Digital: Ingeniería de Prompts — La Base de Toda Interacción con IA",
       description:
         "Todo artesano comienza con las herramientas básicas y, con práctica, se convierte en maestro. Aquí aprenderás a esculpir instrucciones que la IA entiende a la perfección. Desde los fundamentos hasta técnicas avanzadas que transformarán tu forma de trabajar con inteligencia artificial.",
       mission:
@@ -71,13 +81,20 @@ const CONTENT_ES = {
     objective:
       "Diseña y construye sistemas inteligentes con ChatGPT: desde los cimientos hasta la automatización completa de tu trabajo diario como un verdadero arquitecto digital.",
     learningPoints: [
-      { text: "Diseñar planos maestros con System Prompts avanzados", icon: "fa-sliders" },
+      {
+        text: "Diseñar planos maestros con System Prompts avanzados",
+        icon: "fa-sliders",
+      },
       { text: "Conectar estructuras con APIs externas", icon: "fa-code" },
-      { text: "Construir tu propio GPT como un módulo arquitectónico", icon: "fa-robot" },
+      {
+        text: "Construir tu propio GPT como un módulo arquitectónico",
+        icon: "fa-robot",
+      },
       { text: "Automatizar flujos de obra completos", icon: "fa-cog" },
     ],
     overviewData: {
-      title: "El Arquitecto Digital: ChatGPT y Automatización — Construye tu Propio Ecosistema de Trabajo",
+      title:
+        "El Arquitecto Digital: ChatGPT y Automatización — Construye tu Propio Ecosistema de Trabajo",
       description:
         "Bienvenido a la obra maestra de la automatización. Aquí no solo usarás ChatGPT — construirás con él. Aprenderás a diseñar prompts de sistema como si trazaras planos, a usar herramientas integradas como andamios, a crear GPTs como módulos de construcción y a conectar todo con APIs externas para levantar estructuras digitales que trabajan solas.",
       mission:
@@ -92,14 +109,8 @@ const CONTENT_ES = {
         {
           title: "El Andamio del Arquitecto: Herramientas Integradas",
           icon: "fa-layer-group",
-          resources: 2,
-          duration: "20 min",
-        },
-        {
-          title: "El Flujo del Arquitecto: Automatización en el Mundo Real",
-          icon: "fa-robot",
-          resources: 1,
-          duration: "22 min",
+          resources: 3,
+          duration: "42 min",
         },
         {
           title: "La Fachada del Edificio: GPTs y Function Calling",
@@ -188,8 +199,7 @@ const CONTENT_ES = {
         },
       },
       2: {
-        objective:
-          "🏗️ El Andamio del Arquitecto",
+        objective: "🏗️ El Andamio del Arquitecto",
         objectiveDesc:
           "Domina el ecosistema de herramientas de ChatGPT: Búsqueda Web, Código, DALL-E 3, Canvas y Proyectos.",
         achievements: [
@@ -240,7 +250,10 @@ const CONTENT_ES = {
             icon: "fa-check",
             text: "Definir funciones con esquemas JSON claros — los planos de tus conexiones",
           },
-          { icon: "fa-check", text: "Crear flujos automatizados multi-paso que funcionan 24/7" },
+          {
+            icon: "fa-check",
+            text: "Crear flujos automatizados multi-paso que funcionan 24/7",
+          },
         ],
         warnings: [
           {
@@ -278,10 +291,22 @@ const CONTENT_ES = {
     objective:
       "Afilia tu lupa digital: investiga a fondo, verifica cada pista y analiza información con la precisión de un detective profesional.",
     learningPoints: [
-      { text: "Analizar texto, imagen y código como un solo cuerpo de evidencia", icon: "fa-cubes" },
-      { text: "Obtener pistas frescas del mundo real al instante", icon: "fa-signal" },
-      { text: "Excavar hasta la verdad: investigaciones que ningún otro detective hace", icon: "fa-search" },
-      { text: "Separar los hechos de las alucinaciones: verificación forense con IA", icon: "fa-shield-alt" },
+      {
+        text: "Analizar texto, imagen y código como un solo cuerpo de evidencia",
+        icon: "fa-cubes",
+      },
+      {
+        text: "Obtener pistas frescas del mundo real al instante",
+        icon: "fa-signal",
+      },
+      {
+        text: "Excavar hasta la verdad: investigaciones que ningún otro detective hace",
+        icon: "fa-search",
+      },
+      {
+        text: "Separar los hechos de las alucinaciones: verificación forense con IA",
+        icon: "fa-shield-alt",
+      },
     ],
     overviewData: {
       title: "El Detective de Datos: Investigación de Élite con Gemini",
@@ -314,7 +339,8 @@ const CONTENT_ES = {
       {
         id: 1,
         title: "El Despertar del Detective Multimodal",
-        description: "Gemini: tu lupa todoterreno que ve, lee y escucha a la vez",
+        description:
+          "Gemini: tu lupa todoterreno que ve, lee y escucha a la vez",
         detailedDescription:
           "Imagina una lupa que no solo ve imágenes, sino que también lee documentos, escucha audios y analiza videos — todo al mismo tiempo. Esa es Gemini. En esta lección, aprenderás a usar este superpoder multimodal para analizar, crear y resolver casos que antes requerían 4 herramientas diferentes.",
         duration: "20 min",
@@ -326,7 +352,8 @@ const CONTENT_ES = {
       {
         id: 2,
         title: "Grounding: Cuando la IA Toca el Mundo Real",
-        description: "Conecta tu lupa con la tierra firme: datos vivos del mundo real",
+        description:
+          "Conecta tu lupa con la tierra firme: datos vivos del mundo real",
         detailedDescription:
           "¿De qué sirve una lupa si no puedes verificar lo que ves? El grounding conecta a Gemini con información viva de internet. Aprende a combinar imágenes, documentos y datos en tiempo real para obtener respuestas que no solo son inteligentes — son verificables.",
         duration: "20 min",
@@ -338,7 +365,8 @@ const CONTENT_ES = {
       {
         id: 3,
         title: "Deep Research: La Caja de Herramientas Forenses",
-        description: "Excava hasta encontrar la verdad con herramientas de investigación profunda",
+        description:
+          "Excava hasta encontrar la verdad con herramientas de investigación profunda",
         detailedDescription:
           "Los casos más complejos requieren las herramientas más poderosas. Domina la investigación profunda con IA: Deep Research para explorar temas en su totalidad, fact-checking automático para verificar cada fuente, y generación de informes técnicos que cualquier experto firmaría.",
         duration: "20 min",
@@ -376,7 +404,10 @@ const CONTENT_ES = {
             icon: "fa-times",
             text: "Ignorar su capacidad de análisis visual — la evidencia más rica suele estar en las imágenes",
           },
-          { icon: "fa-times", text: "No usar el grounding — es como investigar con los ojos cerrados" },
+          {
+            icon: "fa-times",
+            text: "No usar el grounding — es como investigar con los ojos cerrados",
+          },
         ],
         example: {
           label: "Ejemplo práctico",
@@ -473,20 +504,34 @@ const CONTENT_ES = {
     objective:
       "Convierte documentos en oro: podcasts que suenan a radio profesional, resúmenes que van al grano y respuestas que citan cada fuente sin inventar nada.",
     learningPoints: [
-      { text: "Curar tus fuentes como un joyero elige gemas", icon: "fa-book-open" },
-      { text: "Destilar documentos en conocimiento puro con IA", icon: "fa-file-alt" },
-      { text: "Crear podcasts que parecen programa de radio desde tus archivos", icon: "fa-microphone" },
-      { text: "Gestionar tu biblioteca digital con inteligencia sobrehumana", icon: "fa-folder-open" },
+      {
+        text: "Curar tus fuentes como un joyero elige gemas",
+        icon: "fa-book-open",
+      },
+      {
+        text: "Destilar documentos en conocimiento puro con IA",
+        icon: "fa-file-alt",
+      },
+      {
+        text: "Crear podcasts que parecen programa de radio desde tus archivos",
+        icon: "fa-microphone",
+      },
+      {
+        text: "Gestionar tu biblioteca digital con inteligencia sobrehumana",
+        icon: "fa-folder-open",
+      },
     ],
     overviewData: {
-      title: "El Alquimista Digital: NotebookLM — Donde tus Documentos se Convierten en Conocimiento",
+      title:
+        "El Alquimista Digital: NotebookLM — Donde tus Documentos se Convierten en Conocimiento",
       description:
         "En este módulo, te convertirás en un alquimista digital: tus PDFs, artículos y apuntes tienen un potencial oculto que ni imaginas. Aprende a extraerlo, transformarlo y compartirlo en formatos que cautivan, educan y transforman.",
       mission:
         "Conviértete en un alquimista digital: tus PDFs, artículos y apuntes tienen un potencial oculto que ni imaginas. Aprende a extraerlo, transformarlo y compartirlo en formas que cautivan, educan y transforman.",
       topics: [
         {
-          title: "El Alquimista de Documentos: Tu Primer Hechizo con NotebookLM",
+          title:
+            "El Alquimista de Documentos: Tu Primer Hechizo con NotebookLM",
           icon: "fa-microphone",
           resources: 3,
           duration: "20 min",
@@ -559,14 +604,20 @@ const CONTENT_ES = {
             icon: "fa-check",
             text: "Comprender por qué la IA basada en tus propias fuentes es más confiable",
           },
-          { icon: "fa-check", text: "Crear tu primer notebook y ver los documentos cobrar vida" },
+          {
+            icon: "fa-check",
+            text: "Crear tu primer notebook y ver los documentos cobrar vida",
+          },
           {
             icon: "fa-check",
             text: "Distinguir un bibliotecario experto (NotebookLM) de un chatbot genérico",
           },
         ],
         warnings: [
-          { icon: "fa-times", text: "Subir documentos sin orden ni concierto como quien llena un cajón" },
+          {
+            icon: "fa-times",
+            text: "Subir documentos sin orden ni concierto como quien llena un cajón",
+          },
           {
             icon: "fa-times",
             text: "Esperar magia sin poner fuentes de calidad en el caldero",
@@ -610,7 +661,10 @@ const CONTENT_ES = {
             icon: "fa-times",
             text: "Mezclar fuentes contradictorias sin contexto, como juntar agua y aceite",
           },
-          { icon: "fa-times", text: "Dejar las fuentes envejecer sin actualizarlas — el conocimiento caduca" },
+          {
+            icon: "fa-times",
+            text: "Dejar las fuentes envejecer sin actualizarlas — el conocimiento caduca",
+          },
         ],
         example: {
           label: "Ejemplo práctico",
@@ -673,13 +727,23 @@ const CONTENT_ES = {
     objective:
       "Domina los 4 pilares éticos que las empresas buscan hoy y conviértete en el guardián que asegura que la IA sirva a la humanidad.",
     learningPoints: [
-      { text: "Detectar sesgos algorítmicos como un guardián", icon: "fa-shield-check" },
-      { text: "Conocer la regulación IA que protege a millones", icon: "fa-briefcase" },
+      {
+        text: "Detectar sesgos algorítmicos como un guardián",
+        icon: "fa-shield-check",
+      },
+      {
+        text: "Conocer la regulación IA que protege a millones",
+        icon: "fa-briefcase",
+      },
       { text: "Blindar datos y privacidad contra amenazas", icon: "fa-lock" },
-      { text: "Crear protocolos éticos que salvan reputaciones", icon: "fa-clipboard-check" },
+      {
+        text: "Crear protocolos éticos que salvan reputaciones",
+        icon: "fa-clipboard-check",
+      },
     ],
     overviewData: {
-      title: "El Guardián Digital: Ética y Gobernanza de IA — El Sello del Profesional Responsable",
+      title:
+        "El Guardián Digital: Ética y Gobernanza de IA — El Sello del Profesional Responsable",
       description:
         "Cada vez que usas IA, estás tomando decisiones éticas — aunque no lo sepas. ¿Los datos que subes están protegidos? ¿El resultado es justo para todos? ¿Sabes quién es responsable si algo sale mal? Este módulo no es solo teoría: es tu entrenamiento para convertirte en un guardián de la IA.",
       mission:
@@ -709,7 +773,8 @@ const CONTENT_ES = {
       {
         id: 1,
         title: "El Voto del Guardián: Los 4 Principios Sagrados",
-        description: "Los fundamentos éticos que todo guardián de IA debe conocer",
+        description:
+          "Los fundamentos éticos que todo guardián de IA debe conocer",
         detailedDescription:
           "Bienvenido al entrenamiento de guardianes. Antes de usar cualquier herramienta de IA, hay 4 principios que debes grabar en tu ADN profesional: transparencia, equidad, responsabilidad y privacidad. No son teoría abstracta — son el escudo que protege a tus usuarios, tu organización y tu reputación.",
         duration: "20 min",
@@ -733,7 +798,8 @@ const CONTENT_ES = {
       {
         id: 3,
         title: "El Legado del Guardián: Navegando la Ley",
-        description: "El marco legal y las mejores prácticas que todo guardián debe dominar",
+        description:
+          "El marco legal y las mejores prácticas que todo guardián debe dominar",
         detailedDescription:
           "No basta con querer hacer lo correcto — hay que conocer la ley. Desde el AI Act de la UE hasta las regulaciones locales, pasando por protección de datos y gobernanza corporativa. Esta lección te da el mapa legal para navegar la IA sin poner en riesgo a nadie.",
         duration: "20 min",
@@ -827,7 +893,10 @@ const CONTENT_ES = {
         objectiveDesc:
           "Conoce las leyes que gobiernan la IA y diseña protocolos que blinden a tu organización.",
         achievements: [
-          { icon: "fa-check", text: "Dominar el AI Act de la Unión Europea como un experto en cumplimiento" },
+          {
+            icon: "fa-check",
+            text: "Dominar el AI Act de la Unión Europea como un experto en cumplimiento",
+          },
           {
             icon: "fa-check",
             text: "Entender las obligaciones legales de privacidad y transparencia",
@@ -838,7 +907,10 @@ const CONTENT_ES = {
           },
         ],
         warnings: [
-          { icon: "fa-times", text: "Ignorar la regulación vigente — la ignorancia no exime de multas" },
+          {
+            icon: "fa-times",
+            text: "Ignorar la regulación vigente — la ignorancia no exime de multas",
+          },
           {
             icon: "fa-times",
             text: "Procesar datos personales con IA sin protección legal",

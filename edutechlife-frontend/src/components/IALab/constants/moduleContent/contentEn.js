@@ -10,16 +10,23 @@ const CONTENT_EN = {
     objective:
       "Master the art of forging precise instructions with AI as a digital artisan apprentice, creating prompts any model understands perfectly.",
     learningPoints: [
-      { text: "Forge clear instructions like a master artisan", icon: "fa-bullseye" },
+      {
+        text: "Forge clear instructions like a master artisan",
+        icon: "fa-bullseye",
+      },
       {
         text: "Refine questions and answers with surgical precision",
         icon: "fa-wand-magic-sparkles",
       },
-      { text: "Detect and fix imperfections in your creations", icon: "fa-exclamation-triangle" },
+      {
+        text: "Detect and fix imperfections in your creations",
+        icon: "fa-exclamation-triangle",
+      },
       { text: "Apply your artisan craft in study and work", icon: "fa-rocket" },
     ],
     overviewData: {
-      title: "The Digital Artisan: Prompt Engineering — The Foundation of Every AI Interaction",
+      title:
+        "The Digital Artisan: Prompt Engineering — The Foundation of Every AI Interaction",
       description:
         "Every artisan starts with basic tools and, with practice, becomes a master. Here you'll learn to sculpt instructions that AI understands perfectly. From fundamentals to advanced techniques that will transform how you work with artificial intelligence.",
       mission:
@@ -58,13 +65,20 @@ const CONTENT_EN = {
     objective:
       "Design and build intelligent systems with ChatGPT: from foundations to full automation of your daily work as a true digital architect.",
     learningPoints: [
-      { text: "Design master blueprints with advanced System Prompts", icon: "fa-sliders" },
+      {
+        text: "Design master blueprints with advanced System Prompts",
+        icon: "fa-sliders",
+      },
       { text: "Connect structures with external APIs", icon: "fa-code" },
-      { text: "Build your own custom GPT as an architectural module", icon: "fa-robot" },
+      {
+        text: "Build your own custom GPT as an architectural module",
+        icon: "fa-robot",
+      },
       { text: "Automate complete construction workflows", icon: "fa-cog" },
     ],
     overviewData: {
-      title: "The Digital Architect: ChatGPT & Automation — Build Your Own Work Ecosystem",
+      title:
+        "The Digital Architect: ChatGPT & Automation — Build Your Own Work Ecosystem",
       description:
         "Welcome to the masterpiece of automation. Here you won't just use ChatGPT — you'll build with it. Learn to design system prompts like architectural blueprints, use integrated tools as scaffolding, create GPTs as construction modules, and connect everything with external APIs to raise digital structures that work on their own.",
       mission:
@@ -79,14 +93,8 @@ const CONTENT_EN = {
         {
           title: "The Architect's Scaffolding: Integrated Tools",
           icon: "fa-layer-group",
-          resources: 2,
-          duration: "20 min",
-        },
-        {
-          title: "The Architect's Flow: Real-World Automation",
-          icon: "fa-robot",
-          resources: 1,
-          duration: "22 min",
+          resources: 3,
+          duration: "42 min",
         },
         {
           title: "The Building's Facade: GPTs and Function Calling",
@@ -226,7 +234,10 @@ const CONTENT_EN = {
             icon: "fa-check",
             text: "Define functions with clear JSON schemas — the blueprints of your connections",
           },
-          { icon: "fa-check", text: "Create multi-step automated workflows that run 24/7" },
+          {
+            icon: "fa-check",
+            text: "Create multi-step automated workflows that run 24/7",
+          },
         ],
         warnings: [
           {
@@ -261,10 +272,22 @@ const CONTENT_EN = {
     objective:
       "Wield your digital magnifying glass: investigate deeply, verify every clue, and analyze information with the precision of a master detective.",
     learningPoints: [
-      { text: "Analyze text, images, and code as a single body of evidence", icon: "fa-cubes" },
-      { text: "Pull fresh clues from the real world in real-time", icon: "fa-signal" },
-      { text: "Dig until you find the truth — deep investigations no other detective can match", icon: "fa-search" },
-      { text: "Separate facts from hallucinations with AI-powered forensic verification", icon: "fa-shield-alt" },
+      {
+        text: "Analyze text, images, and code as a single body of evidence",
+        icon: "fa-cubes",
+      },
+      {
+        text: "Pull fresh clues from the real world in real-time",
+        icon: "fa-signal",
+      },
+      {
+        text: "Dig until you find the truth — deep investigations no other detective can match",
+        icon: "fa-search",
+      },
+      {
+        text: "Separate facts from hallucinations with AI-powered forensic verification",
+        icon: "fa-shield-alt",
+      },
     ],
     overviewData: {
       title: "The Data Detective: Elite Research with Gemini",
@@ -297,7 +320,8 @@ const CONTENT_EN = {
       {
         id: 1,
         title: "The Multimodal Detective Awakens",
-        description: "Gemini: your all-terrain magnifying glass that sees, reads, and listens simultaneously",
+        description:
+          "Gemini: your all-terrain magnifying glass that sees, reads, and listens simultaneously",
         detailedDescription:
           "Imagine a magnifying glass that doesn't just see images — it reads documents, listens to audio, and analyzes video, all at the same time. That's Gemini. In this lesson, you'll learn to wield this multimodal superpower to analyze, create, and crack cases that used to require 4 different tools.",
         duration: "20 min",
@@ -309,7 +333,8 @@ const CONTENT_EN = {
       {
         id: 2,
         title: "Grounding: When Evidence Touches the Real World",
-        description: "Connect your magnifying glass to solid ground: live data from the real world",
+        description:
+          "Connect your magnifying glass to solid ground: live data from the real world",
         detailedDescription:
           "What good is a magnifying glass if you can't verify what you see? Grounding connects Gemini to live internet information. Learn to combine images, documents, and real-time data to get answers that aren't just smart — they're verifiable.",
         duration: "20 min",
@@ -321,7 +346,8 @@ const CONTENT_EN = {
       {
         id: 3,
         title: "Deep Research: The Forensic Toolkit",
-        description: "Dig until you find the truth with deep investigation tools",
+        description:
+          "Dig until you find the truth with deep investigation tools",
         detailedDescription:
           "The most complex cases demand the most powerful tools. Master deep research with AI: Deep Research to explore topics in their entirety, automatic fact-checking to verify every source, and technical report generation any expert would endorse.",
         duration: "20 min",
@@ -359,7 +385,10 @@ const CONTENT_EN = {
             icon: "fa-times",
             text: "Ignoring its visual analysis power — the richest evidence is often in images",
           },
-          { icon: "fa-times", text: "Not using grounding — it's like investigating with your eyes closed" },
+          {
+            icon: "fa-times",
+            text: "Not using grounding — it's like investigating with your eyes closed",
+          },
         ],
         example: {
           label: "Practical example",
@@ -412,7 +441,10 @@ const CONTENT_EN = {
         objectiveDesc:
           "For complex cases: deep investigations with verifiable sources and automatic fact-checking.",
         achievements: [
-          { icon: "fa-check", text: "Execute deep investigations that cross-reference dozens of sources automatically" },
+          {
+            icon: "fa-check",
+            text: "Execute deep investigations that cross-reference dozens of sources automatically",
+          },
           {
             icon: "fa-check",
             text: "Verify every fact instantly — your safety net against misinformation",
@@ -423,7 +455,10 @@ const CONTENT_EN = {
           },
         ],
         warnings: [
-          { icon: "fa-times", text: "Accepting unverified sources — even the best detective double-checks" },
+          {
+            icon: "fa-times",
+            text: "Accepting unverified sources — even the best detective double-checks",
+          },
           {
             icon: "fa-times",
             text: "Stopping at the first answer — the truth is usually in the second layer",
@@ -447,13 +482,26 @@ const CONTENT_EN = {
     objective:
       "Turn documents into gold: podcasts that sound like professional radio, summaries that cut to the chase, and answers that cite every source without making things up.",
     learningPoints: [
-      { text: "Curate your sources like a jeweler picks gemstones", icon: "fa-book-open" },
-      { text: "Distill documents into pure knowledge with AI", icon: "fa-file-alt" },
-      { text: "Create radio-quality podcasts from your files", icon: "fa-microphone" },
-      { text: "Manage your digital library with superhuman intelligence", icon: "fa-folder-open" },
+      {
+        text: "Curate your sources like a jeweler picks gemstones",
+        icon: "fa-book-open",
+      },
+      {
+        text: "Distill documents into pure knowledge with AI",
+        icon: "fa-file-alt",
+      },
+      {
+        text: "Create radio-quality podcasts from your files",
+        icon: "fa-microphone",
+      },
+      {
+        text: "Manage your digital library with superhuman intelligence",
+        icon: "fa-folder-open",
+      },
     ],
     overviewData: {
-      title: "The Digital Alchemist: NotebookLM — Where Your Documents Become Knowledge",
+      title:
+        "The Digital Alchemist: NotebookLM — Where Your Documents Become Knowledge",
       description:
         "In this module, you will become a digital alchemist: your PDFs, articles, and notes hold hidden potential you never imagined. Learn to extract, transform, and share them in formats that captivate, educate, and transform.",
       mission:
@@ -590,7 +638,10 @@ const CONTENT_EN = {
             icon: "fa-times",
             text: "Mixing contradictory sources without context, like mixing oil and water",
           },
-          { icon: "fa-times", text: "Letting sources grow stale — knowledge expires" },
+          {
+            icon: "fa-times",
+            text: "Letting sources grow stale — knowledge expires",
+          },
         ],
         example: {
           label: "Practical example",
@@ -608,7 +659,10 @@ const CONTENT_EN = {
             icon: "fa-check",
             text: "Generate Audio Overviews from your documents and hear them come alive",
           },
-          { icon: "fa-check", text: "Customize the tone: deep academic or casual chat — you choose" },
+          {
+            icon: "fa-check",
+            text: "Customize the tone: deep academic or casual chat — you choose",
+          },
           {
             icon: "fa-check",
             text: "Turn studying into an audio experience you can take anywhere",
@@ -647,13 +701,23 @@ const CONTENT_EN = {
     objective:
       "Master the 4 ethical pillars that companies demand today and become the guardian who ensures AI serves humanity.",
     learningPoints: [
-      { text: "Detect algorithmic biases like a guardian", icon: "fa-shield-check" },
-      { text: "Master AI regulations that protect millions", icon: "fa-briefcase" },
+      {
+        text: "Detect algorithmic biases like a guardian",
+        icon: "fa-shield-check",
+      },
+      {
+        text: "Master AI regulations that protect millions",
+        icon: "fa-briefcase",
+      },
       { text: "Shield data and privacy from threats", icon: "fa-lock" },
-      { text: "Create ethical protocols that save reputations", icon: "fa-clipboard-check" },
+      {
+        text: "Create ethical protocols that save reputations",
+        icon: "fa-clipboard-check",
+      },
     ],
     overviewData: {
-      title: "The Digital Guardian: AI Ethics & Governance — The Mark of a Responsible Professional",
+      title:
+        "The Digital Guardian: AI Ethics & Governance — The Mark of a Responsible Professional",
       description:
         "Every time you use AI, you're making ethical decisions — whether you know it or not. Are your uploaded files protected? Is the output fair for everyone? Who's accountable if something goes wrong? This module isn't just theory — it's your training to become an AI guardian.",
       mission:
@@ -707,7 +771,8 @@ const CONTENT_EN = {
       {
         id: 3,
         title: "The Guardian's Legacy: Navigating the Law",
-        description: "The legal framework and best practices every guardian must master",
+        description:
+          "The legal framework and best practices every guardian must master",
         detailedDescription:
           "Wanting to do right isn't enough — you need to know the law. From the EU AI Act to local regulations, data protection to corporate governance, this lesson gives you the legal map to navigate AI without putting anyone at risk.",
         duration: "20 min",
@@ -745,7 +810,10 @@ const CONTENT_EN = {
             icon: "fa-times",
             text: "Believing AI is neutral — unguarded technology is dangerous",
           },
-          { icon: "fa-times", text: "Ignoring unintended consequences until it's too late" },
+          {
+            icon: "fa-times",
+            text: "Ignoring unintended consequences until it's too late",
+          },
         ],
         example: {
           label: "The Guardian vs. The Reckless",
@@ -777,8 +845,14 @@ const CONTENT_EN = {
             icon: "fa-times",
             text: "Blindly trusting AI results without verifying fairness",
           },
-          { icon: "fa-times", text: "Feeding AI training data that excludes entire groups" },
-          { icon: "fa-times", text: "Never auditing AI outputs — silence is not safety" },
+          {
+            icon: "fa-times",
+            text: "Feeding AI training data that excludes entire groups",
+          },
+          {
+            icon: "fa-times",
+            text: "Never auditing AI outputs — silence is not safety",
+          },
         ],
         example: {
           label: "The AI That Discriminated Without Knowing It",
@@ -792,7 +866,10 @@ const CONTENT_EN = {
         objectiveDesc:
           "Learn the laws governing AI and design protocols that shield your organization.",
         achievements: [
-          { icon: "fa-check", text: "Master the European Union AI Act like a compliance expert" },
+          {
+            icon: "fa-check",
+            text: "Master the European Union AI Act like a compliance expert",
+          },
           {
             icon: "fa-check",
             text: "Understand legal obligations for privacy and transparency",
@@ -803,7 +880,10 @@ const CONTENT_EN = {
           },
         ],
         warnings: [
-          { icon: "fa-times", text: "Ignoring current AI regulations — ignorance is no defense" },
+          {
+            icon: "fa-times",
+            text: "Ignoring current AI regulations — ignorance is no defense",
+          },
           {
             icon: "fa-times",
             text: "Processing personal data with AI without legal protection",

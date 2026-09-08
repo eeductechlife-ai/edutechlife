@@ -109,14 +109,8 @@ const CONTENT_PT = {
         {
           title: "O Andaime do Arquiteto: Ferramentas Integradas",
           icon: "fa-layer-group",
-          resources: 2,
-          duration: "20 min",
-        },
-        {
-          title: "O Fluxo do Arquiteto: Automação no Mundo Real",
-          icon: "fa-robot",
-          resources: 1,
-          duration: "22 min",
+          resources: 3,
+          duration: "42 min",
         },
         {
           title: "A Fachada do Edifício: GPTs e Function Calling",

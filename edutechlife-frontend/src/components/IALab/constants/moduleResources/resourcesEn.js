@@ -193,22 +193,6 @@ const RESOURCES_EN = {
         thumbnailType: "premium",
         fullscreen: true,
       },
-    ],
-  },
-
-  "The Architect's Flow: Real-World Automation": {
-    title: "The Architect's Flow: Real-World Automation",
-    description:
-      "Tool theory comes to life when you orchestrate them into real flows. Discover how marketers, educators and entrepreneurs use ChatGPT in chains to multiply their productivity by 10.",
-    learningObjectives: [
-      "Understand the ideal automation framework: input → orchestration → output",
-      "Analyze 3 real cases of flows in marketing, education and entrepreneurship",
-      "Recognize orchestration patterns between integrated tools",
-      "Design your own automation flow adapted to your context",
-    ],
-    estimatedTime: "22 minutes",
-    difficulty: "Intermediate",
-    resources: [
       {
         id: "automation-flows-ova-1",
         type: "ova_interactive",
