@@ -31,15 +31,13 @@ const COMPLIANCE_INFO = {
     },
     {
       name: 'FERPA (Family Educational Rights and Privacy Act)',
-      status: 'partial',
+      status: 'compliant',
       controls: [
         'Registros educativos accesibles solo al estudiante y padres/tutores autorizados',
-        'RLS (Row Level Security) en todas las tablas — 73/73 habilitadas',
+        'RLS (Row Level Security) en todas las tablas — 93/93 habilitadas',
         'Autenticación requerida para todos los endpoints de datos educativos',
         'Acceso administrativo limitado por RBAC (roles: admin, content_creator)',
-      ],
-      pending: [
-        'Auditoría formal de acceso a registros educativos por terceros (en roadmap)',
+        'Audit log formal de acceso a registros educativos (tabla ferpa_access_log) — GET /api/admin/ferpa-audit',
       ],
     },
   ],

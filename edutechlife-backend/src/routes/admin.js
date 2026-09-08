@@ -394,4 +394,25 @@ router.get('/educator/students', requireAdmin, async (req, res) => {
   }
 });
 
+/**
+ * GET /api/admin/ferpa-audit?limit=50&from=ISO&to=ISO
+ * FERPA audit log — records of access to educational data.
+ */
+router.get('/ferpa-audit', requireAdmin, async (req, res) => {
+  const limit = Math.min(parseInt(req.query.limit) || 50, 200);
+  let query = supabase
+    .from('ferpa_access_log')
+    .select('id, user_id, target_user_id, endpoint, method, ip_address, requestor_type, data_category, accessed_at')
+    .order('accessed_at', { ascending: false })
+    .limit(limit);
+
+  if (req.query.from) query = query.gte('accessed_at', req.query.from);
+  if (req.query.to)   query = query.lte('accessed_at', req.query.to);
+  if (req.query.user) query = query.eq('target_user_id', req.query.user);
+
+  const { data, error } = await query;
+  if (error) return res.status(500).json({ error: error.message });
+  res.json({ count: data.length, entries: data });
+});
+
 module.exports = router;

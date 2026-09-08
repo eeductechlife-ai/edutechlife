@@ -411,7 +411,16 @@ router.get('/oauth-demo/:provider', async (req, res) => {
 
     req.log.info('Demo OAuth login', { userId, email: demoEmail, provider });
 
-    const redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:5174'}/auth/callback?token=${encodeURIComponent(signInData.session.access_token)}&refreshToken=${encodeURIComponent(signInData.session.refresh_token)}&email=${encodeURIComponent(demoEmail)}`;
+    // Set tokens as HttpOnly cookies — same pattern as POST /exchange-token.
+    // Keeps tokens out of the URL, browser history, and server logs.
+    const expiresIn = 3600;
+    const refreshExpiresIn = 7 * 24 * 60 * 60;
+    const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+    res.setHeader('Set-Cookie', [
+      `sb-access-token=${signInData.session.access_token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${expiresIn}${secure}`,
+      `sb-refresh-token=${signInData.session.refresh_token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${refreshExpiresIn}${secure}`,
+    ]);
+    const redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:5174'}/auth/callback?email=${encodeURIComponent(demoEmail)}`;
     res.redirect(redirectUrl);
   } catch (err) {
     console.error('Demo OAuth error:', err);

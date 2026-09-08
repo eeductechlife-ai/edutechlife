@@ -25,6 +25,7 @@ const adminRoutes = require('./routes/admin');
 const notificationRoutes = require('./routes/notifications');
 const institutionRoutes = require('./routes/institutions');
 const complianceRoutes = require('./routes/compliance');
+const { ferpaAuditLog } = require('./middleware/ferpaAudit');
 const AlertListenerService = require('./services/AlertListenerService');
 const { webhookHandler } = require('./routes/stripe');
 
@@ -136,8 +137,8 @@ app.use('/api/voice-token', voiceRoutes);
 // público— pueda usar voz Google Neural sin sesión. Los limiters + allow-list
 // de idioma en routes/tts.js contienen el costo por IP/usuario.
 app.use('/api/tts', optionalAuth, ttsLimiter, ttsHourlyLimiter, ttsRoutes);
-app.use('/api/smartboard', smartboardRoutes);
-app.use('/api/smartboard', scanImageRoutes);
+app.use('/api/smartboard', ferpaAuditLog, smartboardRoutes);
+app.use('/api/smartboard', ferpaAuditLog, scanImageRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', authLimiter, adminRoutes);
