@@ -148,59 +148,22 @@ const SidebarCollapsed = ({
         </button>
       </TooltipIcon>
 
-      {/* Mi Progreso — acción primaria, justo bajo el círculo de avance */}
-      <TooltipIcon label={t("ialab.tab_progress")}>
-        <div className="flex flex-col items-center gap-0">
-          <button
-            onClick={goToProgress}
-            className="w-7 h-7 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm hover:scale-110 active:scale-95 transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
-            aria-label={t("ialab.tab_progress")}
-          >
-            <Icon
-              name="fa-chart-line"
-              className="text-white text-xs"
-              aria-hidden="true"
-            />
-          </button>
-          <span className="text-[10px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] mt-0.5 leading-tight">
-            {t("ialab.sidebar_progress_short") || "Avance"}
-          </span>
-        </div>
-      </TooltipIcon>
-
-      <div className="flex flex-col items-center gap-1.5 w-full">
+      {/* Racha en riesgo — única alerta urgente visible en colapsado */}
+      {isStreakAtRisk() && streak > 0 && (
         <TooltipIcon
-          decorative
-          label={t("sidebar.level_label", { level: getLevel() })}
+          label={`${t("sidebar.streak_days", { streak })} — ${t("sidebar.streak_study_today")}`}
           premium
         >
-          <div className="flex flex-col items-center gap-0">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm">
-              <Icon
-                name="fa-graduation-cap"
-                className="text-white text-xs"
-                aria-hidden="true"
-              />
-            </div>
-            <span className="text-[11px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] mt-0.5 leading-tight">
-              {t("sidebar.level", { level: getLevel() })}
-            </span>
-          </div>
-        </TooltipIcon>
-
-        <TooltipIcon
-          decorative
-          label={`${t("sidebar.streak_days", { streak })}${isStreakAtRisk() && streak > 0 ? ` — ${t("sidebar.streak_study_today")}` : ""}`}
-          premium
-        >
-          <div className="flex flex-col items-center gap-0 relative">
+          <div className="relative">
             <motion.div
-              animate={streak > 0 ? { scale: [1, 1.08, 1] } : {}}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              animate={{ scale: [1, 1.1, 1] }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             >
-              <div
-                className={`w-7 h-7 rounded-lg flex items-center justify-center shadow-sm ${isStreakAtRisk() && streak > 0 ? "bg-gradient-to-br from-amber-400 to-amber-500" : "bg-gradient-to-br from-orange-400 to-orange-500"}`}
-              >
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center shadow-sm">
                 <Icon
                   name="fa-fire"
                   className="text-white text-xs"
@@ -208,52 +171,14 @@ const SidebarCollapsed = ({
                 />
               </div>
             </motion.div>
-            <span
-              className={`text-[11px] font-bold mt-0.5 leading-tight ${streak >= 3 ? "text-orange-600" : "text-slate-500"}`}
-            >
-              {streak}
-            </span>
-            {isStreakAtRisk() && streak > 0 && (
-              <span className="absolute top-0.5 right-0 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-            )}
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
           </div>
         </TooltipIcon>
-
-        <TooltipIcon
-          decorative
-          label={t("sidebar.points_accumulated", {
-            points: formatPoints(getTotalPoints()),
-          })}
-          premium
-        >
-          <div className="flex flex-col items-center gap-0">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm">
-              <Icon
-                name="fa-award"
-                className="text-white text-xs"
-                aria-hidden="true"
-              />
-            </div>
-            <span className="text-[11px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] mt-0.5 leading-tight">
-              {formatPoints(getTotalPoints())}
-            </span>
-          </div>
-        </TooltipIcon>
-      </div>
+      )}
 
       <MiniDivider />
 
       {/* ── ZONA 2: MÓDULOS ── */}
-      <TooltipIcon decorative label={t("sidebar.modules")}>
-        <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm flex-shrink-0">
-          <Icon
-            name="fa-layer-group"
-            className="text-white text-[11px]"
-            aria-hidden="true"
-          />
-        </div>
-      </TooltipIcon>
-
       <h2 className="sr-only">{t("sidebar.modules")}</h2>
       <div className="flex flex-col gap-1 w-full" role="list">
         {modules.map((mod) => {
@@ -299,47 +224,6 @@ const SidebarCollapsed = ({
           );
         })}
       </div>
-
-      <MiniDivider />
-
-      {/* ── ZONA 3: HERRAMIENTAS ── */}
-      <TooltipIcon label={t("ialab.sidebar_study_plan")}>
-        <div className="flex flex-col items-center gap-0">
-          <button
-            onClick={() => setShowStudyPlannerModal(true)}
-            className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-sm hover:scale-110 active:scale-95 transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
-            aria-label={t("ialab.sidebar_study_plan")}
-          >
-            <Icon
-              name="fa-calendar"
-              className="text-white text-xs"
-              aria-hidden="true"
-            />
-          </button>
-          <span className="text-[10px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] mt-0.5 leading-tight">
-            {t("ialab.sidebar_plan_short")}
-          </span>
-        </div>
-      </TooltipIcon>
-
-      <TooltipIcon label={t("ialab.sidebar_leaderboard")}>
-        <div className="flex flex-col items-center gap-0">
-          <button
-            onClick={() => setShowLeaderboard(true)}
-            className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center shadow-sm hover:scale-110 active:scale-95 transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
-            aria-label={t("ialab.sidebar_leaderboard")}
-          >
-            <Icon
-              name="fa-trophy"
-              className="text-white text-xs"
-              aria-hidden="true"
-            />
-          </button>
-          <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 mt-0.5 leading-tight">
-            {t("ialab.sidebar_leaderboard")}
-          </span>
-        </div>
-      </TooltipIcon>
 
       {storedCertificate && (
         <>
