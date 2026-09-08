@@ -222,23 +222,23 @@ const SidebarExpanded = ({ onOpenStreak }) => {
         {/* Separador interno */}
         <div className="h-px bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/20" />
 
-        {/* Herramientas — flex-1 para ocupar todo el espacio restante */}
-        <div className="flex-1 grid grid-cols-2 gap-2">
+        {/* Herramientas — flex-1 + flex para que los botones llenen toda la altura */}
+        <div className="flex-1 flex gap-2 min-h-0">
           <button
             onClick={() => setShowStudyPlannerModal(true)}
-            className="h-full flex flex-col items-center justify-center gap-2 px-2 py-3 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[#4DA8C4] transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
+            className="flex-1 flex flex-col items-center justify-center gap-2 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[#4DA8C4] transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
           >
             <Icon
               name="fa-calendar"
-              className="text-[var(--theme-primary)] text-base"
+              className="text-[var(--theme-primary)] text-xl"
             />
             <span>{t("ialab.sidebar_plan_short") || "Plan"}</span>
           </button>
           <button
             onClick={() => setShowLeaderboard(true)}
-            className="h-full flex flex-col items-center justify-center gap-2 px-2 py-3 rounded-lg bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25 text-amber-700 dark:text-amber-400 transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+            className="flex-1 flex flex-col items-center justify-center gap-2 rounded-lg bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25 text-amber-700 dark:text-amber-400 transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-amber-400/30"
           >
-            <Icon name="fa-trophy" className="text-amber-500 text-base" />
+            <Icon name="fa-trophy" className="text-amber-500 text-xl" />
             <span>{t("ialab.sidebar_leaderboard") || "Ranking"}</span>
           </button>
         </div>
