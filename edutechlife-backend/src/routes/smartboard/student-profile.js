@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const supabase = require('../../db/supabase');
+const { createUserClient } = require('../../db/supabaseUser');
 const { requireAuth } = require('../../middleware/auth');
 const { requireVerifiedParentalConsent } = require('../../middleware/parentalConsent');
 
@@ -106,9 +107,12 @@ router.delete('/delete-user-data', requireAuth, requireVerifiedParentalConsent, 
 
 router.get('/student-profile', requireAuth, async (req, res) => {
   const userId = req.userId;
+  // Use user-scoped client (enforces RLS) when token is available; fall back to
+  // service_role only in environments where the token is absent (e.g. tests).
+  const db = req.userToken ? createUserClient(req.userToken) : supabase;
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from('students')
       .select(STUDENT_PROFILE_FIELDS)
       .eq('auth_id', userId)

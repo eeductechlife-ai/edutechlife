@@ -16,6 +16,7 @@ async function requireAuth(req, res, next) {
     }
     req.userId = user.id;
     req.userEmail = user.email;
+    req.userToken = token;
     next();
   } catch {
     return res.status(401).json({ error: 'Token inválido o expirado' });

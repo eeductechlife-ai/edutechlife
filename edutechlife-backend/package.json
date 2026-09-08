@@ -14,6 +14,8 @@
     "lint:fix": "eslint src/ --fix"
   },
   "dependencies": {
+    "@opentelemetry/auto-instrumentations-node": "^0.80.0",
+    "@opentelemetry/sdk-node": "^0.222.0",
     "@supabase/supabase-js": "^2.107.0",
     "axios": "^1.14.0",
     "compression": "^1.8.1",
