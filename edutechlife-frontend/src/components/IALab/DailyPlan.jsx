@@ -176,7 +176,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
             </span>
           ) : !isOpen && pendingCount > 0 && firstItemTitle ? (
             <span className="text-[10px] text-white/70 leading-tight block truncate">
-              {t("ialab.daily_plan.start_with") || "Empieza con:"}{" "}
+              {"Empieza con:"}{" "}
               <span className="font-semibold text-white/90">
                 {firstItemTitle}
               </span>
@@ -190,9 +190,8 @@ const DailyPlan = ({ onAction, isLoading }) => {
           ) : isOpen ? (
             <span className="text-[10px] text-white/60 leading-tight block">
               {pendingCount > 0
-                ? t("ialab.daily_plan.n_tasks", { n: pendingCount }) ||
-                  `${pendingCount} ${pendingCount === 1 ? "tarea pendiente" : "tareas pendientes"}`
-                : t("ialab.daily_plan.all_done_short") || "¡Todo al día!"}
+                ? `${pendingCount} ${pendingCount === 1 ? "tarea pendiente" : "tareas pendientes"}`
+                : "¡Todo al día!"}
             </span>
           ) : null}
         </div>
@@ -249,7 +248,7 @@ const DailyPlan = ({ onAction, isLoading }) => {
                       className="text-[10px] text-[var(--theme-emphasis)]"
                     />
                     <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-                      {t("ialab.daily_plan.steps_label") || "Completa hoy"}
+                      Completa hoy
                       <span className="ml-1 text-[var(--theme-emphasis)] font-black">
                         ({pendingCount})
                       </span>
