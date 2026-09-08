@@ -1,92 +1,32 @@
 # Dependencies
 node_modules/
 
-# Environment variables — ALL variants
-.env
-.env.*
-!.env.example
-.envrc
-.envrc.*
-.flaskenv
-
 # Build outputs
 dist/
 build/
-dist.zip
 
-# Repo-scan / analysis artifacts (no deben rastrearse)
-repomix-output.xml
+# Test coverage (generated, never commit)
+coverage/
+.nyc_output/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Backup files
+*.bak
+*.orig
 
 # IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# OS
 .DS_Store
-Thumbs.db
+.vscode/settings.json
+.idea/
 
 # Logs
 *.log
 npm-debug.log*
 
-# Cache
-.cache/
-.vercel
-
-# === SECURITY CREDENTIALS ===
-# SSH / TLS / Certificates
-*.key
-*.pem
-*.crt
-*.cert
-*.p12
-*.pfx
-*.keystore
-*.jks
-id_rsa*
-id_ed25519*
-*.p8
-*.pub
-
-# Service accounts & credentials
-service-account*.json
-credentials*.json
-*.cred
-*.secret
-**/service-account-keys/**
-**/gcp-credentials/**
-**/aws-credentials/**
-**/service-keys/**
-api-keys.json
-oauth-*.json
-token-*.json
-
-# Security scan reports
-security-report*
-vulnerability-report*
-snyk-report*
-trivy-*
-
-# Terraform state (may contain secrets)
-*.tfstate
-*.tfstate.*
-crash.log
-crash.*.log
-override.tf
-override.tf.json
-terraform.rc
-.terraformrc
-
-# ruflo/claude-flow tooling state (not source)
-**/.claude-flow/
-
-# Agent-generated verification and report files (working artifacts, not source)
-.opencode/plans/
-docs/smartboard-3.0/
-
-# Loose SQL scripts at root or in frontend (belong in supabase/migrations/ only)
-/*.sql
-/edutechlife-frontend/*.sql
-/edutechlife-frontend/sql/
+# Temp
+*.tmp
+*.temp
