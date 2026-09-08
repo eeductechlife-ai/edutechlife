@@ -43,7 +43,6 @@ export function useNicoSendMessage({
   showAppointmentSuccess,
   currentLead,
   audioEnabled,
-  greetingSent,
 
   setMessage,
   setMessages,
@@ -55,7 +54,6 @@ export function useNicoSendMessage({
   setShowedConversationOptions,
   setShowLeadSuccess,
   setShowAppointmentSuccess,
-  setGreetingSent,
 
   initialName,
 
@@ -76,6 +74,7 @@ export function useNicoSendMessage({
 
   // Academic context and conversation memory
   systemPromptContext = "",
+  pageContext = "",
   conversationHistoryContext = "",
   saveConversation,
   nicoContext,
@@ -364,6 +363,10 @@ export function useNicoSendMessage({
 
         if (contextInfo) {
           enhancedSystemPrompt += `\n\n${contextInfo}`;
+        }
+
+        if (pageContext) {
+          enhancedSystemPrompt += `\n\nContexto de página actual: el usuario está viendo ${pageContext}. Úsalo para ser más útil y concreto, sin repetirlo textualmente.`;
         }
 
         const placeholderObj = createStreamingPlaceholder();

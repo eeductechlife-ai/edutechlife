@@ -216,7 +216,7 @@ const StrategiesScreen = () => {
         ))}
       </div>
       {active ? (
-        <div className="p-4 bg-[var(--theme-emphasis)] text-white rounded-xl">
+        <div className="p-4 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] rounded-xl">
           <h5 className="theme-text-primary font-[900] text-xs uppercase tracking-[0.2em] mb-2">
             {t(`ova.ecosystem.strategies_${active}_title`)}
           </h5>
@@ -639,7 +639,7 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
                   <button
                     key={id}
                     onClick={() => goToScreen(id)}
-                    className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? "bg-[var(--theme-emphasis)] text-white shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
+                    className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? "bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
                   >
                     <div className="flex items-center gap-3">
                       <div

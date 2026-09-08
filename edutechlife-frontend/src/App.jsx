@@ -1,4 +1,5 @@
 import { useState, useEffect, lazy, Suspense, useRef } from "react";
+import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 import AppRoutes from "./routes/index.jsx";
 import { StudentProvider } from "./context/StudentContext";
@@ -31,13 +32,21 @@ const LazyCustomCursor = () => {
   );
 };
 
-// Lazy-load NicoModern only when user scrolls near footer
-const LazyNicoModern = () => {
+// Nico: en la página de inicio (immediate=true) el botón aparece apenas carga,
+// sin esperar a hacer scroll. En el resto de páginas se mantiene la carga
+// perezosa cuando el usuario se acerca al footer.
+const LazyNicoModern = ({ immediate = false }) => {
   const [showNico, setShowNico] = useState(false);
   const observerRef = useRef(null);
 
   useEffect(() => {
     if (showNico) return; // Already loaded
+
+    // Página de inicio: mostrar el botón inmediatamente al cargar.
+    if (immediate) {
+      const id = setTimeout(() => setShowNico(true), 250);
+      return () => clearTimeout(id);
+    }
 
     // Wait for footer to exist before setting up observer (avoid observing body during route transition)
     let attempts = 0;
@@ -81,7 +90,7 @@ const LazyNicoModern = () => {
         observerRef.current.disconnect();
       }
     };
-  }, [showNico]);
+  }, [showNico, immediate]);
 
   if (!showNico) return null;
 
@@ -90,6 +99,10 @@ const LazyNicoModern = () => {
       <NicoModern />
     </Suspense>
   );
+};
+
+LazyNicoModern.propTypes = {
+  immediate: PropTypes.bool,
 };
 
 const App = () => {
@@ -150,7 +163,7 @@ const App = () => {
           )}
           <AppRoutes />
           {!isIALabRoute && !isSmartBoardRoute && !isVAKRoute && (
-            <LazyNicoModern />
+            <LazyNicoModern immediate={location.pathname === "/"} />
           )}
         </div>
       </StudentProvider>

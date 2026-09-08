@@ -568,7 +568,7 @@ export default function OVANotebookBase({
                     <div className="mt-8 flex justify-end animate-[fadeIn_0.6s_ease-out_forwards]">
                       <button
                         onClick={nextQuestion}
-                        className="px-8 py-3.5 bg-[var(--theme-emphasis)] hover:bg-[var(--theme-primary)] text-white font-semibold rounded-xl transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-[0_8px_20px_rgba(0,188,212,0.4)] hover:-translate-y-1"
+                        className="px-8 py-3.5 bg-[var(--theme-emphasis)] hover:bg-[var(--theme-primary)] text-[var(--theme-on-emphasis)] font-semibold rounded-xl transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-[0_8px_20px_rgba(0,188,212,0.4)] hover:-translate-y-1"
                       >
                         {currentQIndex === questionsData.length - 1
                           ? tk("process_results")

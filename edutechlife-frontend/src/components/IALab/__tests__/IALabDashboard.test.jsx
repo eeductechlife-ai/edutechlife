@@ -152,6 +152,17 @@ describe("IALabDashboard", () => {
     ).toBeInTheDocument();
   });
 
+  test("envuelve el dashboard en data-theme=default con tokens (evita blanco)", async () => {
+    const { container } = render(<IALabDashboard />);
+    await screen.findByText("dashboard.continue_learning");
+    const themed = container.querySelector('[data-theme="default"]');
+    expect(themed).not.toBeNull();
+    // Los tokens críticos se fijan inline para que el texto blanco y los
+    // botones nunca queden transparentes sobre fondo claro.
+    expect(themed.getAttribute("style")).toContain("--theme-emphasis");
+    expect(themed.getAttribute("style")).toContain("--theme-primary");
+  });
+
   test("renders DashboardInProgress when user has progress", () => {
     setupStore({
       moduleProgress: {

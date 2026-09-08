@@ -29,9 +29,8 @@ const VOICE_PROFILES = {
     languageCode: "es-US",
     name: "es-US-Neural2-B",
     pitch: 0,
-    speakingRate: 1.05,
+    speakingRate: 1.03,
     volumeGainDb: 3.0,
-    effectsProfileId: ["telephony-class-application"],
   },
   nico_authority: {
     languageCode: "es-US",

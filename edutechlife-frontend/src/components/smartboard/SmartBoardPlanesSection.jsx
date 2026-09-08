@@ -63,7 +63,6 @@ export default function SmartBoardPlanesSection({ t, pricingPlans, paymentMethod
                   <span className={`text-4xl lg:text-5xl font-black ${plan.popular ? 'text-white' : 'text-petroleum'}`}>{plan.price}</span>
                   <span className={`text-sm ${plan.popular ? 'text-white/60' : 'text-slate-400'}`}>{plan.period}</span>
                 </div>
-                <span className={`text-[11px] ${plan.popular ? 'text-white/50' : 'text-slate-400'} block mt-1`}>≈ {plan.priceUSD} USD</span>
               </div>
               <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((feat) => (

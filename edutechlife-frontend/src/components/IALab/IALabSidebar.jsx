@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
@@ -15,6 +15,11 @@ import SidebarExpanded from "./sidebar/SidebarExpanded";
 
 const COLLAPSED_WIDTH = 72;
 const EXPANDED_WIDTH = 256;
+
+// Si el estudiante no interactúa por este tiempo y el sidebar está expandido,
+// se colapsa solo para darle más espacio al contenido. Cualquier interacción
+// reinicia el contador.
+const SIDEBAR_AUTO_COLLAPSE_MS = 3 * 60 * 1000;
 
 /**
  * IALabSidebar — Navegación lateral principal del IA Lab.
@@ -60,6 +65,43 @@ const IALabSidebar = () => {
     [setShowHistoryModal],
   );
   const [showStreakModal, setShowStreakModal] = useState(false);
+
+  // Auto-colapso por inactividad (3 min) solo si el sidebar está expandido y
+  // estamos en escritorio. Al colapsar se libera espacio para el contenido.
+  const setSidebarCollapsedAuto = useIALabStore(
+    (s) => s.setSidebarCollapsed,
+  );
+
+  useEffect(() => {
+    if (isCollapsed) return; // ya cerrado: no hay nada que colapsar
+    if (typeof window !== "undefined" && window.innerWidth < 1024) return;
+
+    let idleTimer = null;
+    const scheduleCollapse = () => {
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(
+        () => setSidebarCollapsedAuto(true),
+        SIDEBAR_AUTO_COLLAPSE_MS,
+      );
+    };
+
+    scheduleCollapse();
+    const events = [
+      "pointerdown",
+      "pointermove",
+      "keydown",
+      "wheel",
+      "touchstart",
+      "scroll",
+    ];
+    const reset = () => scheduleCollapse();
+    events.forEach((e) => window.addEventListener(e, reset, { passive: true }));
+
+    return () => {
+      if (idleTimer) clearTimeout(idleTimer);
+      events.forEach((e) => window.removeEventListener(e, reset));
+    };
+  }, [isCollapsed, setSidebarCollapsedAuto]);
 
   const isInfographicCompleted = useInfographicCompletion();
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import useConversationMemory from "../../hooks/useConversationMemory";
 import useLeadManagement from "../../hooks/useLeadManagement";
 import useLeadCaptureLogic from "../../hooks/useLeadCaptureLogic";
@@ -16,6 +17,7 @@ import {
 } from "../../utils/speech";
 import { COLORS } from "./nicoColors";
 import { responseCache } from "./nicoCache";
+import { getPageContext } from "./nicoContext";
 import { useNicoVoice } from "./useNicoVoice";
 import { useNicoSendMessage } from "./useNicoSendMessage";
 import { ChatButton, ChatHeader } from "./nicoChatComponents";
@@ -29,13 +31,25 @@ const NicoModern = ({
   onInteraction,
 }) => {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+  // Qué página está viendo el usuario → Nico adapta sus respuestas al contexto.
+  const pageContext = getPageContext(pathname);
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [typingDots, setTypingDots] = useState(0);
-  const [audioEnabled, setAudioEnabled] = useState(true);
+  // Preferencia de audio persistida: no obligar a desactivar la voz en cada
+  // visita ni a re-activarla si el usuario la apagó.
+  const [audioEnabled, setAudioEnabled] = useState(() => {
+    try {
+      const stored = window.localStorage.getItem("nico_audio_enabled");
+      return stored === null ? true : stored === "true";
+    } catch {
+      return true;
+    }
+  });
   const [audioActivated, setAudioActivated] = useState(false);
   const [audioPermissionError, setAudioPermissionError] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -62,6 +76,7 @@ const NicoModern = ({
 
   const inputRef = useRef(null);
   const handleSendMessageRef = useRef(null);
+  const audioPrefetchedRef = useRef(false);
 
   // Load academic context and conversation memory
   const { context: nicoContext, isLoading: contextLoading } = useNicoContext();
@@ -116,7 +131,6 @@ const NicoModern = ({
   });
 
   const [showAppointmentSuccess, setShowAppointmentSuccess] = useState(false);
-  const [greetingSent, setGreetingSent] = useState(false);
   const [systemPromptContext, setSystemPromptContext] = useState("");
   const [conversationHistoryContext, setConversationHistoryContext] =
     useState("");
@@ -152,7 +166,6 @@ const NicoModern = ({
     showAppointmentSuccess,
     currentLead,
     audioEnabled,
-    greetingSent,
 
     setMessage,
     setMessages,
@@ -164,7 +177,6 @@ const NicoModern = ({
     setShowedConversationOptions,
     setShowLeadSuccess,
     setShowAppointmentSuccess,
-    setGreetingSent,
 
     initialName,
 
@@ -185,6 +197,7 @@ const NicoModern = ({
 
     // Academic context and conversation memory
     systemPromptContext,
+    pageContext,
     conversationHistoryContext,
     saveConversation,
     nicoContext,
@@ -204,30 +217,12 @@ const NicoModern = ({
   handleSendMessageRef.current = handleSendMessage;
 
   useEffect(() => {
-    if (isOpen && !greetingSent && (!messages || messages.length === 0)) {
-      setGreetingSent(true);
-
-      const greeting = t("nico.greeting");
-
-      const greetingMessageObj = {
-        role: "assistant",
-        content: greeting,
-        timestamp: new Date().toISOString(),
-      };
-
-      setMessages((prev) => [...(prev || []), greetingMessageObj]);
-
-      if (audioEnabled) {
-        speakTextConversational(
-          greeting,
-          "nico_premium",
-          {},
-          undefined,
-          setAudioPermissionError,
-        );
-      }
+    try {
+      window.localStorage.setItem("nico_audio_enabled", String(audioEnabled));
+    } catch {
+      /* almacenamiento no disponible */
     }
-  }, [isOpen, greetingSent, messages, audioEnabled, t]);
+  }, [audioEnabled]);
 
   useEffect(() => {
     if (messages.length === 0 && memory?.conversationHistory?.length > 0) {
@@ -263,9 +258,9 @@ const NicoModern = ({
     const initializeServices = async () => {
       try {
         warmupTts();
-        prefetchTts(t("nico.greeting_tts"), "nico_premium");
-        prefetchTts(t("nico.farewell_tts"), "nico_premium");
-        prefetchTts(t("nico.free_class_tts"), "nico_premium");
+        // El precálculo de audio se dispara en la primera apertura del chat
+        // (gesto del usuario), no al hacer scroll al footer: evita consumo de
+        // TTS para visitantes que nunca abren la conversación.
       } catch (error) {
         console.error("Error inicializando servicios:", error);
       }
@@ -352,7 +347,6 @@ const NicoModern = ({
     setIsLoading(false);
     setShowSuggestions(true);
     setShowedConversationOptions(false);
-    setGreetingSent(false);
     voice.isSpeakingRef.current = false;
     voice.clearSpeechSafetyTimeout();
     voice.sentenceQueueRef.current = [];
@@ -385,18 +379,30 @@ const NicoModern = ({
       navigator.vibrate(50);
     }
 
-    if (willOpen && inputRef.current) {
-      setTimeout(() => inputRef.current.focus(), 100);
+    if (willOpen && !audioPrefetchedRef.current && audioEnabled) {
+      // Primer apertura con voz activa: precargar frases recurrentes para que
+      // no haya silencios/cortes la primera vez que se usan.
+      audioPrefetchedRef.current = true;
+      prefetchTts(t("nico.farewell_tts"), "nico_premium");
+      prefetchTts(t("nico.free_class_tts"), "nico_premium");
+    }
 
+    if (willOpen) {
+      // Saludo al abrir: se muestra y (si la voz está activa) se dice
+      // automáticamente. No depende de que el input esté montado.
       if (messages.length === 0) {
         const welcomeMessage = t("nico.greeting");
-        const welcomeMessageObj = {
-          role: "assistant",
-          content: welcomeMessage,
-          timestamp: new Date().toISOString(),
-        };
-
-        setMessages((prev) => [...prev, welcomeMessageObj]);
+        setMessages((prev) => {
+          if (prev.length > 0) return prev; // evita duplicar si ya hay mensaje
+          return [
+            ...prev,
+            {
+              role: "assistant",
+              content: welcomeMessage,
+              timestamp: new Date().toISOString(),
+            },
+          ];
+        });
 
         if (audioEnabled) {
           speakTextConversational(
@@ -422,6 +428,10 @@ const NicoModern = ({
           setAudioPermissionError,
         );
       }
+    }
+
+    if (willOpen && inputRef.current) {
+      setTimeout(() => inputRef.current.focus(), 100);
     }
   };
 

@@ -25,7 +25,11 @@ Personalidad:
 - Medicamentos o tratamientos clínicos
 - Sustitución de profesionales de la salud mental
 
-Siempre ofreces recursos, información de contacto con especialistas si es necesario.`;
+Siempre ofreces recursos, información de contacto con especialistas si es necesario.
+
+Precios y planes:
+- No hables de precios, planes ni monedas. No inventes montos ni uses símbolos de moneda ($, USD, COP).
+- Si el padre/madre pregunta por costos o contratación, indícale brevemente que escriba por WhatsApp +57 323 836 5517 o a info@edutechlife.com para recibir la información comercial vigente.`;
 
 /**
  * Create or get a conversation with a student

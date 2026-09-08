@@ -481,3 +481,25 @@ export const getGreeting = () => {
     return "Buenas noches";
   }
 };
+
+// Contexto de la página actual para que Nico ayude acorde a lo que el usuario
+// está viendo en edutechlife.co. Devuelve un sintagma nominal en español que
+// se incrusta en el system prompt; fallback genérico para rutas desconocidas.
+export const getPageContext = (pathname = "") => {
+  const p = String(pathname).toLowerCase();
+  if (p === "/" || p === "") return "la página principal de edutechlife.co (inicio)";
+  if (p.startsWith("/ialab-academic")) return "la página de IALab Academic";
+  if (p.startsWith("/ialab-pro")) return "la página de IALab Pro";
+  if (p.startsWith("/ialab")) return "el dashboard o landing de IALab (aprender con IA)";
+  if (p.startsWith("/smartboard")) return "la plataforma SmartBoard (niños y colegios)";
+  if (p.startsWith("/vak")) return "la página del test y diagnóstico VAK";
+  if (p.startsWith("/sign-up")) return "el formulario de registro de una cuenta";
+  if (p.startsWith("/login")) return "la página de inicio de sesión";
+  if (p.startsWith("/auth")) return "un flujo de autenticación";
+  if (p.startsWith("/precios") || p.startsWith("/planes") || p.includes("price"))
+    return "la página de planes y precios";
+  if (p.startsWith("/contact") || p.startsWith("/nosotros") || p.startsWith("/about"))
+    return "la página de contacto / sobre nosotros";
+  if (p.startsWith("/blog")) return "el blog de Edutechlife";
+  return `la página "${pathname || "/"}" del sitio edutechlife.co`;
+};

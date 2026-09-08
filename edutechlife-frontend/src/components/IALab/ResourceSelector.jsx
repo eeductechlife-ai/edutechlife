@@ -70,7 +70,7 @@ const ResourceSelector = ({
           <div className="px-3 py-2 border-b border-slate-200/60 bg-white flex flex-wrap gap-1.5">
             <button onClick={() => setTypeFilter(null)} className={cn(
               "px-2 py-1 rounded-md text-xs font-medium transition-colors",
-              typeFilter === null ? "bg-[var(--theme-emphasis)] text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              typeFilter === null ? "bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)]" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
             )}>{t('ialab.tab_all')}</button>
             {types.map(type => {
               const cfg = RESOURCE_TYPE_CONFIG[type] || { label: type, color: "#64748B", bg: "bg-slate-50" };

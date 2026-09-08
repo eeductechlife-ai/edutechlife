@@ -13,6 +13,7 @@ const MobileHeader = ({
   searchQuery,
   setSearchQuery,
   isSearchOpen,
+  isMenuOpen = false,
 }) => {
   const { t } = useTranslation();
   const { unreadCount } = useNotification();
@@ -27,9 +28,9 @@ const MobileHeader = ({
       onTouchStart={(e) => e.stopPropagation()}
       className="md:hidden fixed top-0 left-0 right-0 h-16 landscape:h-12 bg-white dark:bg-slate-800 z-50 flex items-center justify-between px-4 landscape:px-3 border-b border-slate-200 dark:border-slate-700 pt-[var(--safe-area-top)]"
     >
-      <h1 className="text-2xl font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)] tracking-tight">
+      <div className="text-2xl font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)] tracking-tight">
         {t("ialab.title")}
-      </h1>
+      </div>
       <div className="flex items-center gap-1.5">
         <LocaleSwitcher />
 
@@ -67,10 +68,11 @@ const MobileHeader = ({
         </button>
         <button
           onClick={onOpenMobileMenu}
+          id="ialab-mobile-menu-trigger"
           className="h-11 w-11 rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/50"
           aria-label={t("ialab.menu_aria")}
           aria-controls="ialab-mobile-menu"
-          aria-expanded="false"
+          aria-expanded={isMenuOpen}
           data-tour="tour-undermenu-mobile"
         >
           <svg
@@ -100,6 +102,7 @@ MobileHeader.propTypes = {
   searchQuery: PropTypes.string,
   setSearchQuery: PropTypes.func,
   isSearchOpen: PropTypes.bool,
+  isMenuOpen: PropTypes.bool,
 };
 
 export default MobileHeader;

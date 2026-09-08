@@ -114,7 +114,7 @@ const IALabForumCreatePost = ({ onClose, onCreated }) => {
                 onClick={() => setCategory(opt.id)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all border ${
                   category === opt.id
-                    ? "bg-[var(--theme-emphasis)] text-white border-[var(--theme-emphasis)]"
+                    ? "bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] border-[var(--theme-emphasis)]"
                     : "bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:border-[var(--theme-emphasis)]/30"
                 }`}
               >

@@ -320,6 +320,9 @@ const speakTextConversational = async (
 
   const voiceFallbacks = VOICE_FALLBACKS[profile] || [];
 
+  // Token opcional: /api/tts es público (optionalAuth) para el asistente del
+  // sitio. Si hay sesión se adjunta para atribuir la llamada y aplicar límites
+  // por usuario; sin sesión el request funciona igual (rate-limit por IP).
   let authToken = null;
   try {
     authToken =
@@ -327,12 +330,6 @@ const speakTextConversational = async (
         ? sessionStorage.getItem("auth_token")
         : null;
   } catch {}
-
-  if (!authToken) {
-    debugLog("🎤 TTS remoto requiere sesión; usando voz nativa...");
-    await useNativeSpeech();
-    return;
-  }
 
   for (const currentApi of backends) {
     if (gotAudio) break;

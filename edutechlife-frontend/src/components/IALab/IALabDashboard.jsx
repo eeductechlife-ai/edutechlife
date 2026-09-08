@@ -1,5 +1,10 @@
 import { useMemo, lazy, Suspense } from "react";
 import { useIALabStore } from "../../store/ialabStore";
+// Los tokens de tema (--theme-primary/--theme-emphasis) se definen en este CSS
+// bajo selectores [data-theme]. El curso lo importa desde IALab.jsx, pero el
+// dashboard (ruta /ialab) se monta fuera de ese chunk: sin este import las
+// variables quedan sin definir y el contenido "se ve en blanco".
+import "./themes/themes.css";
 
 const WelcomeTour = lazy(() => import("./WelcomeTour"));
 const DashboardCompleted = lazy(() => import("./dashboard/DashboardCompleted"));
@@ -75,17 +80,35 @@ export default function IALabDashboard() {
 
   return (
     <>
-      <Suspense fallback={null}>
-        <WelcomeTour />
-      </Suspense>
-      <Suspense fallback={<DashboardFallback />}>
-        <DueForReview />
-        {courseCompleted || stats.completed === 5 ? (
-          <DashboardCompleted />
-        ) : (
-          <DashboardInProgress />
-        )}
-      </Suspense>
+      {/* El dashboard vive fuera del ThemeProvider inmersivo del curso (solo
+          envuelve los módulos). Sin un ancestro [data-theme], los tokens CSS
+          var(--theme-emphasis/primary) quedan indefinidos: el degradado y los
+          botones se vuelven transparentes y el texto blanco "desaparece".
+          Aplicamos el tema Edutechlife por defecto a todo el dashboard y, por
+          defensa, fijamos los tokens clave inline para que el contraste no
+          dependa de la carga del CSS ni de un ancestro .dark. */}
+      <div
+        data-theme="default"
+        style={{
+          "--theme-primary": "#259eb5",
+          "--theme-primary-hover": "#1e8194",
+          "--theme-emphasis": "#004b63",
+          "--theme-emphasis-hover": "#0a3550",
+          "--theme-on-emphasis": "#ffffff",
+        }}
+      >
+        <Suspense fallback={null}>
+          <WelcomeTour />
+        </Suspense>
+        <Suspense fallback={<DashboardFallback />}>
+          <DueForReview />
+          {courseCompleted || stats.completed === 5 ? (
+            <DashboardCompleted />
+          ) : (
+            <DashboardInProgress />
+          )}
+        </Suspense>
+      </div>
     </>
   );
 }

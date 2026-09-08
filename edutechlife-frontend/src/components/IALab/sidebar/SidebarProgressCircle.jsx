@@ -54,8 +54,8 @@ const SidebarProgressCircle = ({
               x2="100%"
               y2="100%"
             >
-              <stop offset="0%" stopColor="var(--color-[var(--theme-emphasis)])" />
-              <stop offset="100%" stopColor="var(--color-[var(--theme-primary)])" />
+              <stop offset="0%" stopColor="var(--theme-emphasis)" />
+              <stop offset="100%" stopColor="var(--theme-primary)" />
             </linearGradient>
           </defs>
         </svg>

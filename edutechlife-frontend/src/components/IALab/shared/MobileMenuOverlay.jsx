@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { forwardRef, memo } from "react";
+import { forwardRef, memo, useEffect } from "react";
 import { motion } from "framer-motion";
 import IALabMobileMenu from "../IALabMobileMenu";
 import { useTranslation } from "../../../i18n/I18nProvider";
@@ -21,6 +21,24 @@ export const MobileMenuOverlay = forwardRef(function MobileMenuOverlay(
   ref,
 ) {
   const { t } = useTranslation();
+
+  // Cerrar con Esc y devolver el foco al botón que abrió el menú.
+  useEffect(() => {
+    if (!showMobileMenu) return undefined;
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeMobileMenu();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      const trigger = document.getElementById("ialab-mobile-menu-trigger");
+      if (trigger) trigger.focus();
+    };
+  }, [showMobileMenu, closeMobileMenu]);
+
   return showMobileMenu || mobileMenuClosing ? (
     <div
       ref={ref}

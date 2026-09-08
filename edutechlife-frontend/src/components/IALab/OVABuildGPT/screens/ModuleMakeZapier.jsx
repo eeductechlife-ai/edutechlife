@@ -20,7 +20,7 @@ export default function ModuleMakeZapier({ onNext, addXp }) {
       <h2 className="text-3xl font-bold text-[var(--theme-emphasis)] mb-2">{t('ova.buildgpt.api_title')}</h2>
       <p className="text-gray-600 dark:text-slate-300 mb-6">{t('ova.buildgpt.api_desc')}</p>
       <div className="flex gap-4 mb-6" role="tablist">
-        <button onClick={() => setTab('make')} role="tab" aria-selected={tab === 'make'} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'make' ? 'bg-[var(--theme-emphasis)] text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-[var(--theme-emphasis)]'}`}>
+        <button onClick={() => setTab('make')} role="tab" aria-selected={tab === 'make'} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'make' ? 'bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-[var(--theme-emphasis)]'}`}>
           <Workflow className="inline mr-2" size={20}/> {t('ova.buildgpt.api_rest')}
         </button>
         <button onClick={() => setTab('zapier')} role="tab" aria-selected={tab === 'zapier'} className={`flex-1 py-3 font-bold rounded-xl transition-all ${tab === 'zapier' ? 'bg-[var(--theme-primary)] text-white shadow-lg' : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 border dark:border-slate-600 hover:border-[var(--theme-primary)]'}`}>
@@ -53,7 +53,7 @@ export default function ModuleMakeZapier({ onNext, addXp }) {
               </div>
               <div className="w-12 h-1 bg-slate-300 dark:bg-slate-600"></div>
               <div className="flex flex-col items-center">
-                <div className="w-14 h-14 bg-[var(--theme-emphasis)] rounded-full flex items-center justify-center text-white shadow-lg z-10"><CheckCircle/></div>
+                <div className="w-14 h-14 bg-[var(--theme-emphasis)] rounded-full flex items-center justify-center text-[var(--theme-on-emphasis)] shadow-lg z-10"><CheckCircle/></div>
                 <span className="text-xs font-bold mt-2 text-slate-600 dark:text-slate-300">{t('ova.buildgpt.api_response')}</span>
               </div>
             </div>

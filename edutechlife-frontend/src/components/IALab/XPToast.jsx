@@ -35,7 +35,11 @@ const XPToast = () => {
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
           className="fixed bottom-6 right-6 z-50"
         >
-          <div className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 border-l-4 border-l-amber-500 rounded-lg shadow-lg">
+          <div
+            role="status"
+            aria-live="polite"
+            className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 border-l-4 border-l-amber-500 rounded-lg shadow-lg"
+          >
             <motion.div
               animate={{ scale: [1, 1.3, 1] }}
               transition={{ duration: 0.5, repeat: 1 }}

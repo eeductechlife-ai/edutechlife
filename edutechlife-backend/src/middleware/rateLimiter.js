@@ -83,6 +83,32 @@ const challengeSubmissionLimiter = rateLimit({
   skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
+// Google TTS — billed per character; open to anonymous visitors (public Nico
+// assistant) so it MUST be rate-limited per user (when authed) or per IP.
+// The frontend speaks short sentences (~1 request each) plus cached audio,
+// so generous per-minute + a harder per-hour ceiling contain abuse cost.
+const ttsLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 40,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store,
+  message: { error: 'Demasiadas solicitudes de voz. Espera un momento.', retryAfter: 60 },
+  keyGenerator: (req) => req.userId || ipKeyGenerator(req),
+  skip: (req) => process.env.NODE_ENV !== 'production',
+});
+
+const ttsHourlyLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 600,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store,
+  message: { error: 'Has alcanzado el límite de voz de esta hora.', retryAfter: 3600 },
+  keyGenerator: (req) => req.userId || ipKeyGenerator(req),
+  skip: (req) => process.env.NODE_ENV !== 'production',
+});
+
 // Google Vision API — billed per call; limit tightly per authenticated user
 const visionLimiter = rateLimit({
   windowMs: 60 * 1000,
@@ -102,5 +128,7 @@ module.exports = {
   chatMessageLimiter,
   examSubmissionLimiter,
   challengeSubmissionLimiter,
+  ttsLimiter,
+  ttsHourlyLimiter,
   visionLimiter,
 };

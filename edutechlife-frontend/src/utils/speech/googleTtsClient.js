@@ -31,7 +31,6 @@ const getAuthToken = () => {
 const prefetchTts = async (text, profile = "valeria", overrides = {}) => {
   if (!text || text.length < 3) return;
   const token = getAuthToken();
-  if (!token) return;
   try {
     const cached = audioCache.get(profile, text);
     if (cached) return;

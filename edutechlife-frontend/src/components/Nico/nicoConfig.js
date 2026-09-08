@@ -5,7 +5,7 @@ export const AppointmentScheduler = lazy(
   () => import("./AppointmentScheduler"),
 );
 
-export const SPEECH_SAFETY_TIMEOUT = 12000;
+export const SPEECH_SAFETY_TIMEOUT = 20000;
 
 export const CHAT_CONFIG = {
   MIN_MESSAGES_BEFORE_ASK: 3,

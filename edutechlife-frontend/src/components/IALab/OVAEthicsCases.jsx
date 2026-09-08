@@ -187,7 +187,7 @@ const CaseView = ({ caseKey, icon, color, onDecide }) => {
       </div>
 
       {choice && (
-        <div className="p-4 rounded-xl bg-[var(--theme-emphasis)] text-white">
+        <div className="p-4 rounded-xl bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)]">
           <div className="flex items-center gap-2 mb-1.5">
             <Sparkles className="w-4 h-4 text-[var(--theme-primary)]" />
             <span className="text-[var(--theme-primary)] font-black uppercase text-[10px] tracking-[0.2em]">
@@ -567,7 +567,7 @@ function OVAEthicsCases({ onComplete, onClose }) {
                     key={id}
                     onClick={() => goToScreen(id)}
                     className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${
-                      isCurrent ? 'bg-[var(--theme-emphasis)] text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
+                      isCurrent ? 'bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     <div className="flex items-center gap-3">

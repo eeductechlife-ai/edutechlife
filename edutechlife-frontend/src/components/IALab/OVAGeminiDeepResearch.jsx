@@ -187,7 +187,7 @@ const OVAGeminiDeepResearch = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="px-8 py-3 bg-[var(--theme-emphasis)] text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
+              className="px-8 py-3 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
             >
               {t("ialab.gemini_research.start_btn")}
             </motion.button>
@@ -357,7 +357,7 @@ const OVAGeminiDeepResearch = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                className="px-6 py-2.5 bg-[var(--theme-emphasis)] text-white font-semibold rounded-xl text-sm shadow-sm hover:shadow-md transition-all duration-200"
+                className="px-6 py-2.5 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] font-semibold rounded-xl text-sm shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Icon name="fa-rotate" className="mr-2" />
                 {t("ialab.gemini_research.try_again")}

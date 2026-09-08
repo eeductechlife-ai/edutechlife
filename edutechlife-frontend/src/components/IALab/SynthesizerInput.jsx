@@ -20,6 +20,7 @@ const SynthesizerInput = memo(({
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={onKeyDown}
+        aria-label={t('ialab.synthesizer_input.placeholder')}
         placeholder={t('ialab.synthesizer_input.placeholder')}
         className={cn(
           FORUM_COMPONENTS.TEXTAREA_BASE,

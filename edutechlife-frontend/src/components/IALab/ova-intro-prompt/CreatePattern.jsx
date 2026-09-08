@@ -25,7 +25,7 @@ const CreatePattern = () => {
           </div>
           <h4 className="text-[var(--theme-emphasis)] font-[900] text-lg tracking-tighter lowercase mb-2">{t('ova.introprompt.create_result_title')}</h4>
           <p className="text-xs text-slate-500 mb-4">{t('ova.introprompt.create_result_desc')}</p>
-          <div className="bg-[var(--theme-emphasis)] text-white p-4 rounded-xl text-left text-xs leading-relaxed font-medium">
+          <div className="bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] p-4 rounded-xl text-left text-xs leading-relaxed font-medium">
             {t('ova.introprompt.create_prompt_result')}
           </div>
         </div>

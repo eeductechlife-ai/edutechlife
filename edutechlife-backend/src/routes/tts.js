@@ -4,6 +4,31 @@ const router = Router();
 const GOOGLE_TTS_URL = 'https://texttospeech.googleapis.com/v1/text:synthesize';
 const GOOGLE_TTS_API_KEY = process.env.GOOGLE_TTS_API_KEY;
 
+// El endpoint es público (asistente Nico del sitio) pero la marca es
+// hispanohablante: solo se sintetizan voces en español. Restringir el idioma
+// limita la superficie de abuso/costo incluso si alguien usa el endpoint
+// sin sesión. Google valida el par languageCode/name y rechaza combinaciones
+// inválidas (400), así que esta es una primera barrera, no la única.
+const ALLOWED_LANG_PREFIX = 'es-';
+
+function isValidSpanishVoice(voice = {}) {
+  const languageCode = String(voice.languageCode || '');
+  const name = String(voice.name || '');
+  if (!languageCode.startsWith(ALLOWED_LANG_PREFIX)) return false;
+  if (name && !name.startsWith(languageCode)) return false;
+  return true;
+}
+
+function sanitizeAudioConfig(audioConfig = {}) {
+  const pitch = Number(audioConfig.pitch);
+  const speakingRate = Number(audioConfig.speakingRate);
+  return {
+    audioEncoding: 'MP3',
+    pitch: Number.isFinite(pitch) ? pitch : 0,
+    speakingRate: Number.isFinite(speakingRate) ? speakingRate : 1.0,
+  };
+}
+
 /**
  * @swagger
  * /api/tts:
@@ -62,6 +87,26 @@ router.post('/', async (req, res) => {
     const fetch = (await import('node-fetch')).default;
     const text = req.body.input?.text || '';
 
+    if (!text.trim()) {
+      return res.status(400).json({ error: 'input.text es requerido' });
+    }
+
+    // Barrera de idioma: solo voces en español (marca hispanohablante).
+    if (!isValidSpanishVoice(req.body.voice)) {
+      return res.status(400).json({ error: 'Solo se permiten voces en español (es-*)' });
+    }
+
+    // Reconstruir el payload con los campos que Google acepta; evita reenviar
+    // claves desconocidas o parámetros no validados del cuerpo original.
+    const buildGoogleBody = (segmentText) => ({
+      input: { text: segmentText },
+      voice: {
+        languageCode: req.body.voice.languageCode,
+        name: req.body.voice.name,
+      },
+      audioConfig: sanitizeAudioConfig(req.body.audioConfig),
+    });
+
     // Google TTS has a 5000 character limit per request.
     // If text is longer, split into chunks and concatenate audio.
     const MAX_CHARS = 5000;
@@ -69,7 +114,7 @@ router.post('/', async (req, res) => {
       const response = await fetch(GOOGLE_TTS_URL + '?key=' + GOOGLE_TTS_API_KEY, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(req.body)
+        body: JSON.stringify(buildGoogleBody(text))
       });
 
       if (!response.ok) {
@@ -101,14 +146,10 @@ router.post('/', async (req, res) => {
     // Fetch audio for each chunk and concatenate
     const audioBuffers = [];
     for (const chunk of chunks) {
-      const chunkBody = {
-        ...req.body,
-        input: { text: chunk }
-      };
       const response = await fetch(GOOGLE_TTS_URL + '?key=' + GOOGLE_TTS_API_KEY, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(chunkBody)
+        body: JSON.stringify(buildGoogleBody(chunk))
       });
 
       if (!response.ok) {

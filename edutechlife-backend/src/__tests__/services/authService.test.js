@@ -19,6 +19,96 @@ require.cache[supabasePath] = {
 
 const authService = require('../../services/authService');
 
+// ── Regression: self-heal on signIn must include clerk_id ────────────────────
+// La columna users.clerk_id es NOT NULL. El insert de auto-curado que omite
+// clerk_id falla con 23502, dejando al usuario huérfano (sin perfil) y al
+// dashboard sin poder operar la cuenta.
+const sessionClientPath = require.resolve('../../db/sessionClient');
+const mockSessionClient = {
+  auth: { signInWithPassword: vi.fn() },
+};
+
+describe('authService.signIn self-heal (profile missing)', () => {
+  let freshAuthService;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    delete require.cache[sessionClientPath];
+    require.cache[sessionClientPath] = {
+      id: sessionClientPath,
+      filename: sessionClientPath,
+      loaded: true,
+      exports: { createSessionClient: () => mockSessionClient },
+    };
+    const svcPath = require.resolve('../../services/authService');
+    delete require.cache[svcPath];
+    freshAuthService = require('../../services/authService');
+  });
+
+  it('creates the missing profile with clerk_id so the insert does not violate NOT NULL', async () => {
+    mockSessionClient.auth.signInWithPassword.mockResolvedValue({
+      data: {
+        session: { access_token: 'tok-123', refresh_token: 'rt-123' },
+        user: { id: 'orphan-1', email: 'orphan@x.com' },
+      },
+      error: null,
+    });
+
+    const chain = {
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      insert: vi.fn().mockReturnThis(),
+      single: vi.fn()
+        // 1) profile fetch: no rows → triggers self-heal
+        .mockResolvedValueOnce({ data: null, error: { code: 'PGRST116', message: 'No rows' } })
+        // 2) healing insert: success
+        .mockResolvedValueOnce({ data: { id: 'orphan-1', username: 'orphan', user_type: 'student' }, error: null }),
+    };
+    mockSupabase.from.mockImplementation(() => chain);
+
+    const result = await freshAuthService.signIn({
+      email: 'orphan@x.com',
+      password: 'secret12345',
+    });
+
+    expect(result.token).toBe('tok-123');
+    expect(chain.insert).toHaveBeenCalledTimes(1);
+    const payload = chain.insert.mock.calls[0][0][0];
+    expect(payload.id).toBe('orphan-1');
+    expect(payload.clerk_id).toBe('orphan-1');
+    expect(payload.email).toBe('orphan@x.com');
+  });
+
+  it('does not call the healing insert when the profile already exists', async () => {
+    mockSessionClient.auth.signInWithPassword.mockResolvedValue({
+      data: {
+        session: { access_token: 'tok-456', refresh_token: 'rt-456' },
+        user: { id: 'user-1', email: 'ok@x.com' },
+      },
+      error: null,
+    });
+
+    const chain = {
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      insert: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({
+        data: { id: 'user-1', username: 'okuser', user_type: 'student', email: 'ok@x.com' },
+        error: null,
+      }),
+    };
+    mockSupabase.from.mockImplementation(() => chain);
+
+    const result = await freshAuthService.signIn({
+      email: 'ok@x.com',
+      password: 'secret12345',
+    });
+
+    expect(result.token).toBe('tok-456');
+    expect(chain.insert).not.toHaveBeenCalled();
+  });
+});
+
 describe('authService.signUpParent', () => {
   beforeEach(() => {
     vi.clearAllMocks();

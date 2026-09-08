@@ -69,7 +69,7 @@ const DetectAndFix = () => {
           </div>
           <p className="text-xs text-slate-700 dark:text-slate-200 font-medium leading-relaxed">{fixes[round]}</p>
           {round < 2 && (
-            <button onClick={nextRound} className="mt-3 px-4 py-2 bg-[var(--theme-emphasis)] text-white rounded-xl text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
+            <button onClick={nextRound} className="mt-3 px-4 py-2 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] rounded-xl text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
               {t('ova.introprompt.next')} <ChevronRight className="w-3 h-3" />
             </button>
           )}

@@ -19,7 +19,7 @@ const CertificateScreen = ({ texts, quizScore }) => {
       <h2 className="text-3xl font-black text-[var(--theme-emphasis)] mb-2 uppercase tracking-tighter">{texts.quiz_result_title}</h2>
       {quizScore !== null ? (
         <>
-          <div className="bg-[var(--theme-emphasis)] text-white inline-block px-10 py-5 rounded-[2rem] text-5xl font-black shadow-lg border-b-4 border-[var(--theme-primary)] mb-5">
+          <div className="bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] inline-block px-10 py-5 rounded-[2rem] text-5xl font-black shadow-lg border-b-4 border-[var(--theme-primary)] mb-5">
             {quizScore} / 5
           </div>
           <div className="flex justify-center gap-1.5 mb-5">

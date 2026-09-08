@@ -151,7 +151,7 @@ const CaseView = ({ caseKey, icon, gradient, onComplete }) => {
         <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-2">
           {[1, 2, 3].map((step) => (
             <div key={step} className="flex items-center gap-2">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--theme-emphasis)] text-white text-[10px] font-black flex items-center justify-center">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] text-[10px] font-black flex items-center justify-center">
                 {step}
               </span>
               <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
@@ -270,7 +270,7 @@ const DesignYourFlow = ({ onCompleted }) => {
             <div className="flex items-center gap-1.5 flex-wrap">
               {elements.map((e, i) => (
                 <React.Fragment key={e}>
-                  <span className="px-2.5 py-1 rounded-full bg-[var(--theme-emphasis)] text-white text-xs font-black">
+                  <span className="px-2.5 py-1 rounded-full bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] text-xs font-black">
                     {elementOptions.find((x) => x.k === e)?.label}
                   </span>
                   {i < elements.length - 1 && <ArrowRight className="w-3 h-3 text-slate-400" />}
@@ -563,7 +563,7 @@ function OVADocumentMastery({ onComplete, onClose }) {
                     key={id}
                     onClick={() => goToScreen(id)}
                     className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${
-                      isCurrent ? 'bg-[var(--theme-emphasis)] text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
+                      isCurrent ? 'bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     <div className="flex items-center gap-3">

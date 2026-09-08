@@ -73,7 +73,7 @@ const FinalChallenge = () => {
           </button>
         )}
         {revealed && (
-          <div role="alert" className="p-4 bg-[var(--theme-emphasis)] text-white rounded-xl text-center mt-3">
+          <div role="alert" className="p-4 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] rounded-xl text-center mt-3">
             <Rocket className="w-8 h-8 mx-auto mb-2 text-[var(--theme-primary)]" aria-hidden="true" />
             <p className="font-bold text-sm text-white leading-relaxed">{t('ova.introprompt.challenge_complete')}</p>
           </div>

@@ -80,4 +80,19 @@ describe('Dani orchestrator — buildSystemPrompt (B.13)', () => {
     const prompt = buildSystemPrompt(ctx, { socraticMode: true });
     expect(prompt).toContain('MODO SOCRÁTICO');
   });
+
+  it('incluye el contexto básico de EdutechLife/SmartBoard (sin precio)', () => {
+    const prompt = buildSystemPrompt(ctx);
+    expect(prompt).toContain('SmartBoard');
+    expect(prompt).toContain('IALab');
+    expect(prompt).toContain('WhatsApp +57 323 836 5517');
+  });
+
+  it('PROHÍBE hablar de precios/monedas en el prompt de Dani', () => {
+    const prompt = buildSystemPrompt(ctx);
+    expect(prompt).toContain('NUNCA menciones precios');
+    expect(prompt.toLowerCase()).toContain('dólares');
+    // El prompt instruye a no citar cifras ni monedas.
+    expect(prompt).toContain('NUNCA inventes montos');
+  });
 });

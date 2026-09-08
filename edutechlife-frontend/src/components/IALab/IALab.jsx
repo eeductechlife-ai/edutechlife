@@ -52,9 +52,9 @@ const ModuleActions = lazy(() => import("./ModuleActions"));
 const ModulePractice = lazy(() => import("./ModulePractice"));
 const IALabTour = lazy(() => import("./IALabTour"));
 const AchievementToast = lazy(() => import("./AchievementToast"));
+const GlobalSearchBar = lazy(() => import("./GlobalSearchBar"));
 
 import OfflineBanner from "./OfflineBanner";
-import GlobalSearchBar from "./GlobalSearchBar";
 import {
   RouteSkeleton,
   ModuleInfoSkeleton,
@@ -221,6 +221,21 @@ const IALabContent = memo(function () {
     }
   }, [urlMod]);
   // === Fin Deep Linking ===
+
+  // Store → URL: cuando el módulo cambia por swipe / "siguiente módulo" /
+  // plan de estudio (que mutan el store sin tocar la ruta), reflejar la ruta
+  // para que la posición sobreviva a un refresh. No toca el deep-linking: si
+  // la URL ya coincide con activeMod, no hace nada.
+  useEffect(() => {
+    const numeric = urlMod ? parseInt(urlMod, 10) : NaN;
+    if (
+      activeMod >= 1 &&
+      activeMod <= 5 &&
+      (isNaN(numeric) || numeric !== activeMod)
+    ) {
+      navigate(`/ialab/${activeMod}`, { replace: true });
+    }
+  }, [activeMod, urlMod, navigate]);
 
   const handleOpenProfile = () => {
     closeMobileMenu();
@@ -485,7 +500,7 @@ const IALabContent = memo(function () {
         data-testid="ialab-container"
         data-theme={mapModuleToTheme(activeMod)}
         data-chrome={chromeActive ? "on" : "off"}
-        className={`flex flex-col h-dvh touch-manipulation${isDarkMode ? " dark" : ""}`}
+        className={`flex flex-col h-screen h-dvh touch-manipulation${isDarkMode ? " dark" : ""}`}
         style={{
           background: "var(--theme-bg)",
           fontFamily: "var(--theme-font)",
@@ -496,12 +511,15 @@ const IALabContent = memo(function () {
       >
         <MobileHeader
           onOpenMobileMenu={() => setShowMobileMenu(true)}
+          isMenuOpen={showMobileMenu}
           setIsSearchOpen={setIsSearchOpen}
           isSearchOpen={isSearchOpen}
         />
 
         {isSearchOpen && (
-          <GlobalSearchBar mobile onClose={() => setIsSearchOpen(false)} />
+          <Suspense fallback={null}>
+            <GlobalSearchBar mobile onClose={() => setIsSearchOpen(false)} />
+          </Suspense>
         )}
 
         <header role="banner" className="hidden md:block">
@@ -607,7 +625,7 @@ const IALabContent = memo(function () {
                       </div>
                       <button
                         onClick={() => setViewSection("contenido")}
-                        className="flex-shrink-0 px-3 py-1.5 bg-[var(--theme-emphasis)] text-white text-xs font-bold rounded-lg hover:bg-[var(--theme-emphasis)]-dark transition-colors shadow-sm"
+                        className="flex-shrink-0 px-3 py-1.5 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] text-xs font-bold rounded-lg hover:bg-[var(--theme-emphasis)]-dark transition-colors shadow-sm"
                       >
                         {t("ialab.continue_banner_cta")}
                       </button>
@@ -664,7 +682,7 @@ const IALabContent = memo(function () {
                       {
                         label: t("ialab.breadcrumb_home"),
                         icon: "fa-house",
-                        onClick: resetViewSection,
+                        onClick: () => navigate("/ialab"),
                       },
                       {
                         label:

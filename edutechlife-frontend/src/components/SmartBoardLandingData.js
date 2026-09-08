@@ -132,7 +132,6 @@ const PRICING_PLANS_ES = [
   {
     name: "Básico",
     price: "$30.000",
-    priceUSD: "$7",
     period: "/mes",
     popular: false,
     trial: "7 días gratis",
@@ -150,7 +149,6 @@ const PRICING_PLANS_ES = [
   {
     name: "Premium",
     price: "$50.000",
-    priceUSD: "$12",
     period: "/mes",
     popular: true,
     trial: "7 días gratis",
@@ -173,7 +171,6 @@ const PRICING_PLANS_EN = [
   {
     name: "Basic",
     price: "$30.000",
-    priceUSD: "$7",
     period: "/mo",
     popular: false,
     trial: "7 days free",
@@ -191,7 +188,6 @@ const PRICING_PLANS_EN = [
   {
     name: "Premium",
     price: "$50.000",
-    priceUSD: "$12",
     period: "/mo",
     popular: true,
     trial: "7 days free",
@@ -214,7 +210,6 @@ const PRICING_PLANS_PT = [
   {
     name: "Básico",
     price: "$30.000",
-    priceUSD: "$7",
     period: "/mês",
     popular: false,
     trial: "7 dias grátis",
@@ -232,7 +227,6 @@ const PRICING_PLANS_PT = [
   {
     name: "Premium",
     price: "$50.000",
-    priceUSD: "$12",
     period: "/mês",
     popular: true,
     trial: "7 dias grátis",

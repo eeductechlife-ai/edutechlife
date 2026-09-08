@@ -1,151 +1,111 @@
 {
-  "version": "1.0",
-  "source": "Consolidado de knowledgeBase.js, edutechlifeKnowledge.js, Pricing.jsx, Hero.jsx, AIToolsSection.jsx, EcoSystem.jsx, nicoPrompt.js, nicoCache.js, prompts.js, NicoModern.jsx",
+  "version": "2.1",
+  "source": "Verificado contra edutechlife.co (textos i18n pricing/metodo/ecosystem, data/ialab.js, SmartBoardLandingData.js, rutas /vak /smartboard /ialab-academic).",
   "identity": {
     "name": "Nico",
-    "role": "Asistente virtual oficial de EdutechLife",
-    "tone": "Español latino natural, directo, sin emojis, sin markdown, como llamada telefónica",
+    "role": "Asistente virtual de EdutechLife en edutechlife.co",
+    "tone": "Español latino natural, directo, sin emojis, sin markdown, como una conversación por WhatsApp",
     "company": "EdutechLife"
   },
   "company": {
     "name": "EdutechLife",
-    "tagline": "Liderando la Educación del Futuro",
-    "description": "Plataforma educativa que combina pedagogía de alto impacto con inteligencia artificial para despertar el potencial único de cada estudiante. Cursos, diagnósticos y herramientas que se adaptan a su ritmo y estilo de aprendizaje.",
-    "problem": "Desconexión entre el éxito académico y el bienestar emocional. Muchos niños y adolescentes enfrentan desafíos en aprendizaje y salud mental. EdutechLife proporciona herramientas para mejorar rendimiento académico y fortalecer salud emocional.",
-    "metrics": {
-      "students": "+6,000 estudiantes",
-      "successRate": "90% de éxito",
-      "yearsExperience": "+15 años",
-      "activeUsersGrowth": "50% aumento en últimos 6 meses",
-      "totalStudents": "10,000 estudiantes",
-      "retention": "80% retención",
-      "annualRenewal": "90% renovación anual",
-      "gradeImprovement": "20% aumento en calificaciones matemáticas y ciencias",
-      "parentSatisfaction": "95% padres reportan mejoras en confianza y motivación"
-    },
-    "awards": [
-      "Premio a la Innovación Educativa",
-      "Alianza con Secretaría de Educación local",
-      "CEO invitado como ponente en Conferencia Nacional de Educación"
-    ],
-    "partners": [
-      "Microsoft Education",
-      "Khan Academy",
-      "IBM",
-      "Coursera",
-      "Operadores oficiales SenaTIC"
-    ]
+    "description": "Pedagogía colombiana con inteligencia artificial: democratizamos la educación de calidad en Latinoamérica adaptando cada experiencia de aprendizaje al cerebro único de cada estudiante. Integramos VAK + STEAM + neurociencia + IA, con acompañamiento de un coach IA con voz y de tutores humanos. Nuestras 4 herramientas: IALab (curso de IA generativa con laboratorios), SmartBoard para niños y jóvenes, Diagnóstico VAK y IA Empresarial. Precios en pesos colombianos, primera clase gratis y becas."
   },
-  "team": {
-    "ceo": "Juan Pérez - CEO y Fundador, visionario con +15 años en soluciones educativas",
-    "coo": "María Rodríguez - Directiva de Operaciones",
-    "academic": "Luis García - Director de Desarrollo Académico",
-    "cto": "Ana Martínez - Directiva de Innovación Tecnológica",
-    "cx": "Carlos López - Director de Experiencia del Cliente"
+  "metrics": {
+    "students": "+6,000 estudiantes",
+    "successRate": "90% de éxito",
+    "yearsExperience": "+15 años",
+    "parentSatisfaction": "95% padres reportan mejoras en confianza y motivación"
   },
   "products": [
     {
-      "id": "ai-lab-academic",
-      "name": "AI Lab Academic",
-      "description": "Entrenamiento de élite con agentes de IA para potenciar productividad y aprendizaje cognitivo. Curso certificado de IA.",
+      "id": "ialab",
+      "name": "IALab",
+      "description": "Curso de IA generativa de EdutechLife para jóvenes y adultos: aprender a usar la inteligencia artificial para estudiar y trabajar, con coach IA (MAX) con voz, laboratorios prácticos, examen final y certificado.",
       "path": "/ialab-academic",
       "modules": [
-        {"name": "Ingeniería de Prompts", "lessons": 5},
-        {"name": "Potencia ChatGPT", "lessons": 3},
-        {"name": "Rastreo Profundo", "lessons": 0},
-        {"name": "Inmersión NotebookLM", "lessons": 0},
-        {"name": "Proyecto Disruptivo", "lessons": 0}
+        { "name": "Artesano Digital: Prompts", "lessons": 12 },
+        { "name": "Arquitecto Digital: ChatGPT (GPTs y Function Calling)", "lessons": 15 },
+        { "name": "Detective de Datos: Gemini (Deep Research)", "lessons": 10 },
+        { "name": "Alquimista Digital: NotebookLM", "lessons": 8 },
+        { "name": "Guardián Digital: Ética de la IA", "lessons": 6 }
       ]
     },
     {
       "id": "vak",
       "name": "Diagnóstico VAK",
-      "description": "Identificación del estilo de aprendizaje único (Visual, Auditivo, Kinestésico) mediante algoritmos de visión cognitiva y procesamiento de lenguaje natural. Diagnóstico gratuito que toma 10-30 minutos.",
+      "description": "Identificación gratuita del estilo de aprendizaje (Visual, Auditivo, Kinestésico) mediante IA. Toma 10-30 minutos y entrega un perfil con recomendaciones personalizadas.",
       "path": "/vak",
       "styles": {
-        "visual": "Aprende viendo imágenes, gráficos, diagramas. Recomendación: usar colores y mapas mentales.",
-        "auditivo": "Aprende escuchando. Recomendación: grabar notas y escucharlas mientras estudia.",
-        "kinestesico": "Aprende haciendo. Recomendación: pausas activas cada 30 minutos."
+        "visual": "Aprende viendo imágenes, gráficos y diagramas. Recomendación: mapas mentales y colores.",
+        "auditivo": "Aprende escuchando. Recomendación: grabar notas y repasarlas.",
+        "kinestesico": "Aprende haciendo. Recomendación: práctica activa y pausas cada 30 minutos."
       }
     },
     {
       "id": "smartboard",
       "name": "SmartBoard",
-      "description": "Dashboard de acompañamiento académico y emocional para estudiantes de 8-16 años. Incluye misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Dani AI.",
+      "description": "Dashboard de acompañamiento académico y emocional para niños y jóvenes (6-16 años): tutor IA Dani, misiones, seguimiento de progreso, diagnóstico VAK y reportes para los padres.",
       "path": "/smartboard"
     },
     {
-      "id": "neuroentorno",
-      "name": "Neuro Entorno",
-      "description": "Entorno de aprendizaje neuro-cognitivo.",
-      "path": "/neuroentorno"
-    },
-    {
-      "id": "automation",
-      "name": "Automatización IA Empresarial",
-      "description": "Centro de Automatización Empresarial con IA. Diagnóstico, ROI y arquitectura alineados con estándares ISO/IEC 42001 y NIST AI RMF.",
+      "id": "ia-empresarial",
+      "name": "IA Empresarial",
+      "description": "Agentes de IA, automatización y consultoría para empresas e instituciones educativas.",
       "path": "/automation"
-    },
-    {
-      "id": "consultoria-b2b",
-      "name": "Consultoría B2B",
-      "description": "Consultoría para instituciones educativas y empresas.",
-      "path": "/consultoria-b2b"
-    },
-    {
-      "id": "proyectos-nacionales",
-      "name": "Proyectos Nacionales",
-      "description": "Proyectos educativos de impacto nacional.",
-      "path": "/proyectos"
     }
   ],
   "services": {
     "diagnostico_vak": {
       "name": "Diagnóstico VAK",
-      "description": "Evaluación de estilo de aprendizaje (Visual, Auditivo, Kinestésico). Gratuito. Toma 10-30 minutos. Incluye perfil detallado con recomendaciones personalizadas.",
-      "ages": "5-17 años y adultos"
-    },
-    "stem_steam": {
-      "name": "Programas STEM/STEAM",
-      "description": "Ciencia, Tecnología, Ingeniería, Arte y Matemáticas. Robótica con LEGO y Arduino, programación (Scratch, Python, JavaScript), pensamiento computacional.",
-      "ages": "Niños desde 5 años hasta adolescentes"
-    },
-    "tutoring": {
-      "name": "Tutoría Académica Personalizada",
-      "description": "Matemáticas (todos los niveles), Ciencias (física, química, biología), Inglés (conversacional, gramática, exámenes), técnicas de estudio.",
+      "description": "Evaluación gratuita del estilo de aprendizaje (Visual, Auditivo, Kinestésico). Toma 10-30 minutos e incluye un perfil con recomendaciones personalizadas.",
       "ages": "Todas las edades"
     },
-    "bienestar_emocional": {
-      "name": "Bienestar Educativo",
-      "description": "Acompañamiento psicológico escolar, desarrollo de inteligencia emocional, manejo de ansiedad académica, coaching motivacional."
+    "ialab": {
+      "name": "IALab / AI Lab — curso de IA",
+      "description": "Curso práctico para aprender a usar la IA (prompts, ChatGPT, Gemini, NotebookLM, ética) con el coach MAX: laboratorios, retos y certificado.",
+      "ages": "Jóvenes y adultos"
     },
-    "certificaciones": {
-      "name": "Certificaciones",
-      "description": "Certificaciones en colaboración con IBM y Coursera, reconocidas internacionalmente. Como operadores SenaTIC, certificaciones con validez oficial en Colombia."
+    "smartboard": {
+      "name": "SmartBoard para niños y jóvenes",
+      "description": "Acompañamiento académico y emocional con IA: tutor Dani, misiones, VAK y reportes a padres.",
+      "ages": "6-16 años"
+    },
+    "stem_steam": {
+      "name": "Método STEAM",
+      "description": "Ciencia, Tecnología, Ingeniería, Arte y Matemáticas con metodología VAK: ruta personalizada y ejecución práctica.",
+      "ages": "Según programa"
+    },
+    "automation": {
+      "name": "IA para empresas e instituciones",
+      "description": "Automatización, diagnóstico y consultoría de IA para organizaciones.",
+      "ages": "B2B"
     }
   },
   "modalities": {
-    "presencial": "Clases presenciales en Bogotá y otras ciudades con aulas equipadas con tecnología de punta.",
-    "online": "Clases por videollamada desde cualquier lugar. Plataformas interactivas y seguimiento personalizado.",
-    "hibrido": "Combinación de presencial y online. Flexibilidad total manteniendo el contacto humano."
+    "online": "100% online: cursos y acompañamiento por videollamada desde cualquier lugar.",
+    "presencial": "Presencial en Bogotá para programas que lo requieran.",
+    "hibrido": "Combinación de sesiones online y presenciales según el programa."
   },
   "age_groups": {
-    "kids": {"label": "Niños", "range": "5-11 años"},
-    "teens": {"label": "Adolescentes", "range": "12-17 años"},
-    "adults": {"label": "Adultos", "range": "18+ años"}
+    "kids": { "label": "Niños y jóvenes", "range": "6-16 años (SmartBoard)" },
+    "ialab": { "label": "IALab", "range": "jóvenes y adultos" },
+    "vak": { "label": "Diagnóstico VAK", "range": "todas las edades" }
   },
   "pricing": {
+    "currency": "COP (pesos colombianos)",
+    "no_usd": true,
     "first_class_free": true,
     "plans": [
       {
         "name": "Estudiante",
         "price": "$99.000/mes COP",
         "features": [
-          "Diagnóstico VAK incluido",
+          "Diagnóstico VAK completo",
           "Plan de estudio personalizado",
-          "Contenido STEAM",
-          "Chat con MAX (50 mensajes/mes)",
-          "Certificado por módulo completado"
+          "Acceso a contenido STEAM y a IALab",
+          "Chat con MAX (50 msgs/mes)",
+          "Certificado de finalización"
         ]
       },
       {
@@ -153,18 +113,18 @@
         "price": "$199.000/mes COP",
         "features": [
           "Todo lo de Estudiante",
-          "SmartBoard con IA",
-          "Creación de contenido VAK",
+          "SmartBoard con análisis de IA",
+          "Creación de contenidos VAK",
           "Hasta 100 estudiantes",
-          "MAX ilimitado",
+          "Chat con MAX (ilimitado)",
           "Reportes de progreso",
-          "Certificaciones IBM y Coursera",
+          "Certificaciones SENA + IBM/Coursera",
           "Soporte prioritario"
         ]
       },
       {
         "name": "Institución",
-        "price": "$499.000/mes COP",
+        "price": "desde $499.000/mes COP",
         "features": [
           "Todo lo de Educador",
           "Usuarios ilimitados",
@@ -172,19 +132,27 @@
           "Proyectos de impacto nacional",
           "Consultoría B2B incluida",
           "Dashboard administrativo",
-          "Integración con sistemas existentes",
-          "Gerente de cuenta dedicado",
           "SLA de respuesta 24/7"
+        ]
+      },
+      {
+        "name": "SmartBoard (niños) — plan aparte",
+        "price": "$30.000/mes COP (Básico) · $50.000/mes COP (Premium)",
+        "features": [
+          "Tutor Dani con chat ilimitado",
+          "Diagnóstico VAK",
+          "Misiones, puntos y recompensas",
+          "Reporte a padres (semanal o en tiempo real)",
+          "7 días de prueba gratis"
         ]
       }
     ],
     "discounts": [
       "Descuentos para hermanos",
-      "Planes especiales grupos 10+ personas",
-      "Becas para casos especiales",
-      "Descuentos institucionales para colegios y universidades"
+      "Planes especiales para colegios e instituciones",
+      "Becas por rendimiento o situación socioeconómica (consultar convocatorias)"
     ],
-    "cancellation": "Cancelación en cualquier momento sin permanencia mínima ni costos. Acceso hasta fin del período pagado."
+    "cancellation": "Cancelación en cualquier momento, sin permanencia. Todos los precios se publican en pesos colombianos (COP); no trabajamos en dólares."
   },
   "schedule": {
     "weekdays": "Lunes a sábado",
@@ -196,45 +164,40 @@
     "whatsapp": "+57 323 836 5517",
     "email": "info@edutechlife.com",
     "website": "www.edutechlife.com",
-    "socialMedia": "Redes sociales oficiales"
+    "socialMedia": "Redes sociales oficiales de EdutechLife"
   },
   "faq": [
-    {"q": "¿Cómo funciona el Diagnóstico VAK?", "a": "Evalúa tus preferencias de aprendizaje en tres canales: Visual (imágenes y gráficos), Auditivo (sonidos y verbalizaciones) y Kinestésico (experiencias prácticas). Toma 10-30 minutos y proporciona un perfil detallado con recomendaciones personalizadas. Es gratuito."},
-    {"q": "¿Qué es el método STEAM?", "a": "STEAM integra Ciencia, Tecnología, Ingeniería, Artes y Matemáticas. En EdutechLife lo aplicamos con metodologías VAK para crear experiencias de aprendizaje adaptadas a cada estudiante."},
-    {"q": "¿Puedo cancelar en cualquier momento?", "a": "Sí, puedes cancelar tu suscripción en cualquier momento desde tu panel de usuario. No hay permanencia mínima ni costos de cancelación. Mantienes acceso hasta el final del período pagado."},
-    {"q": "¿Las certificaciones son reconocidas internacionalmente?", "a": "Sí, emitimos certificaciones en colaboración con IBM y Coursera reconocidas internacionalmente. Además, como operadores oficiales SenaTIC, nuestras certificaciones tienen validez oficial en Colombia."},
-    {"q": "¿Cómo funciona el coaching con MAX?", "a": "MAX es tu coach virtual basado en IA, entrenado con metodologías socráticas y pedagógicas. Puede responder preguntas sobre aprendizaje, analizar documentos, crear planes de estudio y guiarte en tu proceso de aprendizaje."},
-    {"q": "¿Ofrecen descuentos para grupos?", "a": "Sí, tenemos planes especiales para grupos de 10+ personas y descuentos institucionales para colegios y universidades. Contáctanos para una cotización personalizada."},
-    {"q": "¿Qué edades tienen los programas?", "a": "Tenemos programas para Niños (5-11 años), Adolescentes (12-17 años) y Adultos (18+ años). También ofrecemos programas para padres y docentes."},
-    {"q": "¿Qué modalidades tienen?", "a": "Presencial (Bogotá y otras ciudades), Online (videollamada desde cualquier lugar) e Híbrido (combinación de ambas)."},
-    {"q": "¿La primera clase es gratis?", "a": "Sí, la primera clase es completamente gratuita y sin compromiso. Dura 30-45 minutos para que conozcas nuestra metodología."},
-    {"q": "¿Qué es SmartBoard?", "a": "SmartBoard es un dashboard de acompañamiento académico y emocional para estudiantes de 8-16 años con misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Dani AI."},
-    {"q": "¿Qué es AI Lab Academic?", "a": "Entrenamiento de élite con agentes de IA para potenciar tu productividad y aprendizaje. Incluye 5 módulos: Ingeniería de Prompts, ChatGPT, Rastreo Profundo, NotebookLM y Proyecto Final."},
-      {"q": "¿Qué es el Neuro Entorno?", "a": "Es un entorno de aprendizaje neuro-cognitivo diseñado para potenciar las capacidades de aprendizaje mediante tecnología adaptativa."}
+    { "q": "¿Qué es EdutechLife?", "a": "EdutechLife es una plataforma educativa que une pedagogía de alto impacto e inteligencia artificial. Nuestro método: diagnóstico VAK, ruta personalizada STEAM, ejecución práctica y certificación. Productos principales: IALab (curso de IA con MAX), SmartBoard para niños y jóvenes, y el diagnóstico VAK gratuito." },
+    { "q": "¿Qué es IALab / AI Lab?", "a": "Es el curso de IA de EdutechLife (AI Lab Academic). Son 5 módulos prácticos: Artesano Digital (prompts), Arquitecto Digital (ChatGPT y GPTs), Detective de Datos (Gemini y Deep Research), Alquimista Digital (NotebookLM) y Guardián Digital (ética de la IA), guiados por MAX, el coach IA. Incluye laboratorios, examen y certificado." },
+    { "q": "¿Qué es SmartBoard?", "a": "SmartBoard es el espacio de EdutechLife para niños y jóvenes (6-16 años): acompañamiento académico y emocional con el tutor virtual Dani, misiones, diagnóstico VAK y reportes para los padres." },
+    { "q": "¿Cómo funciona el Diagnóstico VAK?", "a": "Es gratuito y 100% online: identifica tu estilo de aprendizaje (Visual, Auditivo o Kinestésico). Toma 10-30 minutos y entrega recomendaciones personalizadas." },
+    { "q": "¿Cuánto cuesta y en qué moneda?", "a": "Trabajamos en pesos colombianos (COP), no en dólares. El diagnóstico VAK es gratuito y la primera clase también. Los planes van desde $99.000/mes (Estudiante) y SmartBoard desde $30.000/mes. Para una cotización exacta escribe por WhatsApp +57 323 836 5517." },
+    { "q": "¿Cómo funciona el coaching con MAX?", "a": "MAX es el coach de IA de IALab: responde sobre el curso, guía laboratorios, explica conceptos y da ejemplos prácticos, por texto o voz." },
+    { "q": "¿Qué es el método STEAM?", "a": "STEAM integra Ciencia, Tecnología, Ingeniería, Arte y Matemáticas. En EdutechLife se aplica con metodología VAK para crear rutas de aprendizaje personalizadas." },
+    { "q": "¿Cómo me inscribo?", "a": "Agenda tu primera clase gratuita o escribe por WhatsApp +57 323 836 5517. Un asesor te guía y resuelve tus dudas." }
   ],
   "sales_scripts": {
     "qualification": {
       "questions": [
-        "¿Para quién estás buscando el programa?",
-        "¿Qué edad tiene?",
-        "¿Qué área le interesa más?",
-        "¿Prefieres modalidad presencial u online?"
+        "¿Para quién es: para ti, para un niño o joven, o para una institución?",
+        "¿Qué quieres lograr: aprender a usar IA, acompañar a un estudiante, o automatizar procesos?",
+        "¿Prefieres empezar con el diagnóstico VAK gratuito o con una primera clase gratis?"
       ]
     },
     "objections": {
-      "expensive": "Entendemos. Tenemos planes desde $99.000/mes y primera clase gratis. Es una inversión en el futuro educativo.",
-      "no_time": "Nuestras sesiones son flexibles con horarios de lunes a sábado. También ofrecemos online para mayor comodidad.",
+      "expensive": "Entendemos. Trabajamos en pesos colombianos con planes desde $99.000/mes (IALab) o $30.000/mes (SmartBoard), y la primera clase o el diagnóstico VAK son gratis. Escríbenos por WhatsApp y vemos cuál se ajusta a ti.",
+      "no_time": "Todo es online y flexible. IALab y SmartBoard se adaptan a tu horario; también puedes empezar con el diagnóstico VAK que toma 10-30 minutos.",
       "not_sure": "Te entiendo. ¿Qué te parece agendar una llamada informativa sin compromiso? Resolvemos todas tus dudas."
     },
     "closing": [
       "¿Te gustaría agendar tu primera clase gratuita?",
-      "¿Quieres que te guíe en el proceso de inscripción?",
-      "¿Te parece bien si un especialista te llama para darte más información?"
+      "¿Quieres empezar con el diagnóstico VAK gratis?",
+      "¿Te parece bien que un asesor te escriba por WhatsApp para darte más información?"
     ]
   },
   "troubleshooting": {
-    "platform_access": "Si tienes problemas para acceder a la plataforma, verifica tu conexión a internet o intenta con otro navegador. Si el problema persiste, contacta a soporte por WhatsApp.",
-    "payment_issues": "Si tu pago no fue procesado, verifica los datos de tu tarjeta o intenta con otro método de pago. Puedes contactarnos por WhatsApp para asistencia.",
-    "class_rescheduling": "Si necesitas reprogramar una clase, hazlo con al menos 24 horas de anticipación desde tu perfil en la plataforma o contactándonos directamente."
+    "platform_access": "Si tienes problemas para acceder a la plataforma, verifica tu conexión y prueba con otro navegador. Si persiste, escríbenos por WhatsApp.",
+    "payment_issues": "Si un pago no fue procesado, verifica los datos de tu método de pago o escríbenos por WhatsApp +57 323 836 5517. Los pagos se manejan en pesos colombianos.",
+    "class_rescheduling": "Si necesitas reprogramar una clase o sesión, hazlo con al menos 24 horas de anticipación desde tu perfil o por WhatsApp."
   }
 }

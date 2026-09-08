@@ -70,7 +70,7 @@ const TypesPrompts = () => {
         ))}
       </div>
       {sel && (
-        <div className="p-4 bg-[var(--theme-emphasis)] text-white rounded-xl">
+        <div className="p-4 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] rounded-xl">
           <p className="text-xs text-white font-medium"><span className="theme-text-primary font-black uppercase text-xs">{labels[sel.k]}:</span> {t(`ova.introprompt.types_desc_${sel.k}`)}</p>
         </div>
       )}
@@ -89,7 +89,7 @@ const UniversalTemplate = () => {
           <h4 className="theme-text-emphasis font-[900] text-xl tracking-tighter lowercase">{t('ova.introprompt.universal_title')}</h4>
         </div>
         <div className="flex flex-wrap gap-2 mb-4">
-          <span className="px-3 py-1.5 bg-[var(--theme-emphasis)] text-white rounded-full text-[10px] font-black uppercase tracking-wider">Rol</span>
+          <span className="px-3 py-1.5 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] rounded-full text-[10px] font-black uppercase tracking-wider">Rol</span>
           <span className="text-slate-300 flex items-center text-lg">+</span>
           <span className="px-3 py-1.5 bg-[var(--theme-primary)] text-white rounded-full text-[10px] font-black uppercase tracking-wider">Contexto</span>
           <span className="text-slate-300 flex items-center text-lg">+</span>
@@ -125,7 +125,7 @@ const HowAIThinks = () => {
         ))}
       </div>
       {active ? (
-        <div className="p-4 bg-[var(--theme-emphasis)] text-white rounded-xl">
+        <div className="p-4 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] rounded-xl">
           <h5 className="theme-text-primary font-[900] text-xs uppercase tracking-[0.2em] mb-2">{t(`ova.introprompt.howit_${active}_title`)}</h5>
           <p className="text-sm text-white leading-relaxed font-medium">{t(`ova.introprompt.howit_${active}_desc`)}</p>
           {active === 'temp' && (
@@ -370,7 +370,7 @@ export default function OVAIntroPrompt({ onComplete, onClose }) {
                 const isCompleted = completed.includes(id);
                 const isCurrent = screen === id;
                 return (
-                  <button key={id} onClick={() => goToScreen(id)} className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? 'bg-[var(--theme-emphasis)] text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'}`}>
+                  <button key={id} onClick={() => goToScreen(id)} className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? 'bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'}`}>
                     <div className="flex items-center gap-3">
                       <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${isCompleted ? 'bg-[var(--theme-primary)] text-white' : isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400'}`}>{stepNum}</div>
                       <div className="flex-1 min-w-0">

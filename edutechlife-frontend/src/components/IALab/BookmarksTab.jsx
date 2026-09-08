@@ -148,7 +148,7 @@ const BookmarksTab = () => {
                     </button>
                     <button
                       onClick={() => openResource(resource, resources)}
-                      className="px-3 py-1.5 bg-[var(--theme-emphasis)] text-white text-xs font-bold rounded-lg hover:bg-[var(--theme-emphasis)]-dark transition-colors shadow-sm"
+                      className="px-3 py-1.5 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] text-xs font-bold rounded-lg hover:bg-[var(--theme-emphasis)]-dark transition-colors shadow-sm"
                     >
                       {t("ialab.bookmarks_open")}
                     </button>

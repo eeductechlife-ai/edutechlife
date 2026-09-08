@@ -397,7 +397,7 @@ const EthicsStep3 = ({ exercise, response, onResponseChange, topic = '', exercis
                         onClick={() => updateAction(bias.index, 'timeline', tl.id)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
                           action.timeline === tl.id
-                            ? 'bg-[var(--theme-emphasis)] text-white border-[var(--theme-emphasis)]'
+                            ? 'bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] border-[var(--theme-emphasis)]'
                             : 'bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-600 hover:border-[var(--theme-emphasis)]/40'
                         }`}
                       >

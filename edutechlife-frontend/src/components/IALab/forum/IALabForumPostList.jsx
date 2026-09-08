@@ -103,7 +103,7 @@ const IALabForumPostList = ({ onSelectPost, onAction }) => {
                   onClick={() => setSortBy(opt.id)}
                   className={`px-3 py-2 rounded-lg text-[10px] font-medium transition-all ${
                     sortBy === opt.id
-                      ? 'bg-[var(--theme-emphasis)] text-white dark:bg-[var(--theme-emphasis)] dark:text-white'
+                      ? 'bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] dark:bg-[var(--theme-emphasis)] dark:text-[var(--theme-on-emphasis)]'
                       : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700'
                   }`}
                 >

@@ -140,12 +140,16 @@ async function signIn({ email, password }) {
     let userProfile = profileData;
     if (profileError) {
       console.warn('Profile fetch failed:', profileError.message);
-      // Auth succeeded but profile missing — create minimal one (service-role client bypasses RLS)
+      // Auth succeeded but profile missing — create minimal one (service-role client bypasses RLS).
+      // clerk_id is NOT NULL on the users table (contract test + production schema):
+      // omitting it made every self-heal insert fail with 23502, permanently
+      // stranding orphaned auth users without a profile.
       const { data: createdProfile, error: insertError } = await supabase
         .from('users')
         .insert([
           {
             id: authData.user.id,
+            clerk_id: authData.user.id,
             email,
             username: email.split('@')[0],
             user_type: 'student',

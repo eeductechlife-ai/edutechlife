@@ -132,7 +132,7 @@ const PromptAnatomy = () => {
         ))}
       </div>
       {selected && (
-        <div className="p-4 bg-[var(--theme-emphasis)] text-white rounded-xl">
+        <div className="p-4 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] rounded-xl">
           <span className="text-[var(--theme-primary)] font-black uppercase text-xs mb-1 block">{t('ova.promptlab.anatomy_example_label')}: {selected.label}</span>
           <p className="text-sm text-white italic">{selected.example}</p>
         </div>
@@ -200,7 +200,7 @@ const PromptTechniques = () => {
         ))}
       </div>
       {active && (
-        <div className="p-4 bg-[var(--theme-emphasis)] text-white rounded-xl">
+        <div className="p-4 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] rounded-xl">
           <span className="text-[var(--theme-primary)] font-black uppercase text-xs mb-1 block">{t('ova.promptlab.tech_example_label')}</span>
           <p className="text-sm text-white font-mono italic">{techniques.find((tech) => tech.k === active)?.example}</p>
         </div>
@@ -561,7 +561,7 @@ function OVAPromptLab({ onComplete, onClose }) {
                     key={id}
                     onClick={() => goToScreen(id)}
                     className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${
-                      isCurrent ? 'bg-[var(--theme-emphasis)] text-white shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
+                      isCurrent ? 'bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] shadow-lg' : 'hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     <div className="flex items-center gap-3">

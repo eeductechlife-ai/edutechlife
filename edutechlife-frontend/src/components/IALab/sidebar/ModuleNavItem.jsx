@@ -61,33 +61,33 @@ const ModuleNavItem = ({
         }}
         className={`w-full group flex items-center gap-2 min-h-[44px] p-2.5 rounded-xl transition-all duration-300 ${isActive
           ? 'theme-bg-emphasis shadow-md'
-          : 'hover:theme-surface-2 theme-text'
+          : 'hover:theme-surface-2 text-slate-700 dark:text-slate-100'
         } ${isLocked ? 'cursor-pointer' : ''} focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)]/30 focus:ring-offset-1 ${className}`}
         aria-current={isActive ? 'page' : undefined}
         aria-label={`${mod.title}${isLocked ? ' (bloqueado)' : ''}`}
         aria-expanded={isLocked ? showUnlockTip : undefined}
       >
         <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-300 ${isActive
-          ? 'bg-white/20'
+          ? 'bg-[var(--theme-on-emphasis)]/15'
           : isLocked
-            ? 'bg-slate-100 dark:bg-slate-700/50'
-            : 'theme-bg-primary-10 group-hover:theme-bg-primary-20'
+            ? 'bg-slate-100 dark:bg-slate-700/70'
+            : 'theme-bg-primary-10 dark:bg-[var(--theme-primary)]/15 group-hover:theme-bg-primary-20'
         }`}>
           {isLocked
-            ? <Icon name="fa-lock" className="text-xs text-slate-400 dark:text-slate-500" aria-hidden="true" />
-            : <span className={`${isActive ? 'text-white' : 'theme-text-primary'} text-sm font-bold`}>{mod.id}</span>
+            ? <Icon name="fa-lock" className="text-xs text-slate-500 dark:text-slate-300" aria-hidden="true" />
+            : <span className={`${isActive ? 'theme-text-on-emphasis' : 'text-slate-700 dark:text-slate-100'} text-sm font-bold`}>{mod.id}</span>
           }
         </div>
         <div className="flex-1 min-w-0 text-left">
-          <p className={`font-semibold text-sm truncate transition-colors ${isActive ? 'text-white' : isLocked ? 'text-slate-400 dark:text-slate-500' : 'group-hover:theme-text-primary'}`}>{mod.title}</p>
+          <p className={`font-semibold text-sm truncate transition-colors ${isActive ? 'theme-text-on-emphasis' : isLocked ? 'text-slate-400 dark:text-slate-300' : 'text-slate-700 dark:text-slate-100 group-hover:text-[var(--theme-primary)]'}`}>{mod.title}</p>
           {!isLocked && score > 0 && (
             <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-              <div className={`h-full rounded-full transition-all duration-500 ${isActive ? 'bg-white/60' : 'theme-bg-primary'}`}
+              <div className={`h-full rounded-full transition-all duration-500 ${isActive ? 'bg-[var(--theme-on-emphasis)]/60' : 'theme-bg-primary'}`}
                    style={{ width: `${score}%` }} />
             </div>
           )}
           {isLocked && prevModId && (
-            <p className="text-[10px] text-slate-400 dark:text-slate-500 leading-tight mt-0.5">
+            <p className="text-[10px] text-slate-400 dark:text-slate-400 leading-tight mt-0.5">
               {t("ialab.unlock_requirement", { prev: prevModId })}
             </p>
           )}

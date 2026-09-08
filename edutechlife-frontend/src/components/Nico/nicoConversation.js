@@ -33,8 +33,8 @@ export function getProactiveMessageByContext(phase, detectedTopics, userName) {
     const interest = topics[topics.length - 1]
     const label = typeof interest === 'string' ? interest : 'este programa'
     return name
-      ? `${name}, ¿sabías que tenemos planes desde $99.000 mensuales y primera clase gratuita en ${label}?`
-      : `¿Sabías que tenemos planes desde $99.000 mensuales y primera clase gratuita en ${label}?`
+      ? `${name}, ¿sabías que trabajamos con planes mensuales en pesos colombianos y que la primera clase es gratuita? Te cuento más sobre ${label}.`
+      : `¿Sabías que trabajamos con planes mensuales en pesos colombianos y que la primera clase es gratuita? Te cuento más sobre ${label}.`
   }
 
   return name

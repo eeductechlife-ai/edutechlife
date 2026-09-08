@@ -157,7 +157,7 @@ const ModuleHistory = ({ texts }) => {
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${active === i ? "bg-[var(--theme-emphasis)] text-white shadow-md" : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400"}`}
+                className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${active === i ? "bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] shadow-md" : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400"}`}
               >
                 {s.era}
               </button>
@@ -248,7 +248,7 @@ const ModuleAnatomy = ({ texts }) => {
           </button>
         ))}
       </div>
-      <div className="bg-[var(--theme-emphasis)] text-white p-5 rounded-[1.8rem] shadow-lg relative min-h-[180px] flex flex-col justify-center border-b-2 border-[var(--theme-primary)]">
+      <div className="bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] p-5 rounded-[1.8rem] shadow-lg relative min-h-[180px] flex flex-col justify-center border-b-2 border-[var(--theme-primary)]">
         {sel ? (
           <div className="animate-[slideInRight_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]">
             <h5 className="text-[var(--theme-primary)] font-[900] text-xs uppercase tracking-[0.3em] mb-3">
@@ -313,7 +313,7 @@ const TechniquesSection = ({ texts }) => (
         key={i}
         className="flex items-start gap-4 p-5 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-[2.2rem] shadow-sm hover:shadow-lg transition-all group"
       >
-        <div className="p-3 bg-slate-50 dark:bg-slate-700 text-[var(--theme-emphasis)] rounded-[1rem] shadow-inner group-hover:bg-[var(--theme-emphasis)] group-hover:text-white transition-all">
+        <div className="p-3 bg-slate-50 dark:bg-slate-700 text-[var(--theme-emphasis)] rounded-[1rem] shadow-inner group-hover:bg-[var(--theme-emphasis)] group-hover:text-[var(--theme-on-emphasis)] transition-all">
           {s.i}
         </div>
         <div>
@@ -767,7 +767,7 @@ export default function OVAEtica({ onComplete }) {
                       setScreen(id);
                       setIsMenuOpen(false);
                     }}
-                    className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? "bg-[var(--theme-emphasis)] text-white shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
+                    className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? "bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
                   >
                     <div className="flex items-center gap-3">
                       {id.startsWith("m") ? (

@@ -35,9 +35,9 @@ const QuizScreen = ({ texts, onNext, addXp, onScore }) => {
       <div className="text-center py-4 animate-[zoomIn_0.6s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
         <div className="w-20 h-20 bg-[var(--theme-primary)]/10 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg border-4 border-white dark:border-slate-700"><Trophy className="w-10 h-10 text-[var(--theme-primary)]" /></div>
         <h2 className="text-3xl font-black text-[var(--theme-emphasis)] tracking-tighter leading-none mb-2 uppercase">{texts.quiz_result_title}</h2>
-        <div className="bg-[var(--theme-emphasis)] text-white inline-block px-8 py-4 rounded-[2rem] mt-4 text-4xl font-black shadow-lg border-b-4 border-[var(--theme-primary)]">{score} / 5</div>
+        <div className="bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] inline-block px-8 py-4 rounded-[2rem] mt-4 text-4xl font-black shadow-lg border-b-4 border-[var(--theme-primary)]">{score} / 5</div>
         <p className="text-slate-500 dark:text-slate-300 mt-4 font-bold text-sm">{score === 5 ? texts.quiz_result_perfect : score >= 3 ? texts.quiz_result_good : texts.quiz_result_keep_trying}</p>
-        <Button onClick={onNext} className="mt-6 bg-[var(--theme-emphasis)] text-white mx-auto">{texts.quiz_result_cta}</Button>
+        <Button onClick={onNext} className="mt-6 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] mx-auto">{texts.quiz_result_cta}</Button>
       </div>
     );
   }
@@ -77,7 +77,7 @@ const QuizScreen = ({ texts, onNext, addXp, onScore }) => {
           className="p-5 bg-slate-100 dark:bg-slate-700 rounded-[2rem]"
         >
           <p className="text-xs font-bold leading-relaxed">{questions[currentQ].f}</p>
-          <button onClick={handleNext} aria-label={currentQ === 4 ? texts.quiz_label_see_results : texts.quiz_label_continue} className="mt-4 w-full py-3 bg-[var(--theme-emphasis)] text-white font-black rounded-xl flex items-center justify-center gap-2 text-xs">{currentQ === 4 ? texts.quiz_label_see_results : texts.quiz_label_continue} <ChevronRight size={14} /></button>
+          <button onClick={handleNext} aria-label={currentQ === 4 ? texts.quiz_label_see_results : texts.quiz_label_continue} className="mt-4 w-full py-3 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] font-black rounded-xl flex items-center justify-center gap-2 text-xs">{currentQ === 4 ? texts.quiz_label_see_results : texts.quiz_label_continue} <ChevronRight size={14} /></button>
         </motion.div>
       )}
     </div>
