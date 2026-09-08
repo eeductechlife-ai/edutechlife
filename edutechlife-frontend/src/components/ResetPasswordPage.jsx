@@ -46,7 +46,7 @@ const ResetPasswordPage = () => {
     e.preventDefault();
     setError("");
 
-    if (password.length < 8) {
+    if (password.length < 10) {
       setError(t("signup.error.password_min_length"));
       return;
     }
@@ -142,7 +142,7 @@ const ResetPasswordPage = () => {
                       placeholder="••••••••"
                       className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004B63] focus:border-transparent"
                       required
-                      minLength={8}
+                      minLength={10}
                     />
                     <button
                       type="button"
@@ -172,7 +172,7 @@ const ResetPasswordPage = () => {
                       placeholder="••••••••"
                       className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#004B63] focus:border-transparent"
                       required
-                      minLength={8}
+                      minLength={10}
                     />
                   </div>
                 </div>

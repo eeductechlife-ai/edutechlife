@@ -129,9 +129,9 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
         newErrors.username = t("signup.error.username_required") || "Required";
       if (!formData.password)
         newErrors.password = t("signup.error.password_required") || "Required";
-      else if (formData.password.length < 8)
+      else if (formData.password.length < 10)
         newErrors.password =
-          t("signup.error.password_min_length") || "At least 8 characters";
+          t("signup.error.password_min_length") || "At least 10 characters";
       if (formData.phone.trim() && !/^[\d\s+()/-]{7,}$/.test(formData.phone))
         newErrors.phone = t("signup.error.phone_invalid") || "Invalid phone";
     }
