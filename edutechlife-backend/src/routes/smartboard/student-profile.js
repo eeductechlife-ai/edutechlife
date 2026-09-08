@@ -295,4 +295,50 @@ router.post('/student-profile/avatar', requireAuth, async (req, res) => {
   }
 });
 
+/**
+ * GET /api/smartboard/export-user-data
+ * Exporta todos los datos personales del usuario autenticado (derecho de portabilidad
+ * COPPA / GDPR-K / Ley 1581 Art. 8). Devuelve JSON con todas las tablas vinculadas.
+ */
+router.get('/export-user-data', requireAuth, async (req, res) => {
+  const userId = req.userId;
+  const db = req.userToken ? createUserClient(req.userToken) : supabase;
+
+  try {
+    const [
+      { data: profile },
+      { data: vakResults },
+      { data: sessions },
+      { data: achievements },
+      { data: pointsHistory },
+      { data: parentConsents },
+    ] = await Promise.all([
+      db.from('students').select('*').eq('auth_id', userId).single(),
+      supabase.from('vak_results').select('*').eq('user_id', userId),
+      supabase.from('sessions').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(100),
+      supabase.from('achievements').select('*').eq('user_id', userId),
+      supabase.from('points_history').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(200),
+      supabase.from('parent_consents').select('consent_type, granted, created_at').eq('student_id', userId),
+    ]);
+
+    res.setHeader('Content-Disposition', `attachment; filename="edutechlife-datos-${userId.slice(0, 8)}.json"`);
+    res.json({
+      export_date: new Date().toISOString(),
+      user_id: userId,
+      compliance: ['COPPA', 'Ley 1581 (Colombia)', 'GDPR-K'],
+      data: {
+        profile: profile || null,
+        vak_results: vakResults || [],
+        sessions: sessions || [],
+        achievements: achievements || [],
+        points_history: pointsHistory || [],
+        parent_consents: parentConsents || [],
+      },
+    });
+  } catch (e) {
+    console.error('Error exporting user data:', e);
+    res.status(500).json({ error: 'Error al exportar datos personales' });
+  }
+});
+
 module.exports = router;

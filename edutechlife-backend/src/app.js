@@ -23,6 +23,8 @@ const stripeRoutes = require('./routes/stripe');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const notificationRoutes = require('./routes/notifications');
+const institutionRoutes = require('./routes/institutions');
+const complianceRoutes = require('./routes/compliance');
 const AlertListenerService = require('./services/AlertListenerService');
 const { webhookHandler } = require('./routes/stripe');
 
@@ -140,6 +142,8 @@ app.use('/api/stripe', stripeRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', authLimiter, adminRoutes);
 app.use('/api/notifications', requireAuth, notificationRoutes);
+app.use('/api/institutions', institutionRoutes);
+app.use('/api/compliance', complianceRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
