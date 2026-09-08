@@ -1,7 +1,13 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { safeStorage } from '../utils/storage';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import { safeStorage } from "../utils/storage";
 
-const THEME_KEY = 'edutechlife-theme';
+const THEME_KEY = "edutechlife-theme";
 
 const ThemeContext = createContext(null);
 
@@ -11,25 +17,29 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     const storedTheme = safeStorage.getItem(THEME_KEY);
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setIsDarkMode(storedTheme === 'dark' || (!storedTheme && prefersDark));
+    // Por defecto el sitio se muestra CLARO. Solo se usa el modo oscuro si el
+    // usuario lo eligió explícitamente (guardado) o lo activa con el toggle.
+    // No seguimos el esquema de color del sistema para no "forzar" oscuro.
+    setIsDarkMode(storedTheme === "dark");
   }, []);
 
   useEffect(() => {
     const shouldApplyDark = isDarkMode && !forceLightMode;
-    document.documentElement.classList.toggle('dark', shouldApplyDark);
+    document.documentElement.classList.toggle("dark", shouldApplyDark);
   }, [isDarkMode, forceLightMode]);
 
   const toggleDarkMode = useCallback(() => {
-    setIsDarkMode(prev => {
+    setIsDarkMode((prev) => {
       const next = !prev;
-      safeStorage.setItem(THEME_KEY, next ? 'dark' : 'light');
+      safeStorage.setItem(THEME_KEY, next ? "dark" : "light");
       return next;
     });
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode, forceLightMode, setForceLightMode }}>
+    <ThemeContext.Provider
+      value={{ isDarkMode, toggleDarkMode, forceLightMode, setForceLightMode }}
+    >
       {children}
     </ThemeContext.Provider>
   );
@@ -37,7 +47,7 @@ export function ThemeProvider({ children }) {
 
 export function useTheme() {
   const context = useContext(ThemeContext);
-  if (!context) throw new Error('useTheme must be used within a ThemeProvider');
+  if (!context) throw new Error("useTheme must be used within a ThemeProvider");
   return context;
 }
 

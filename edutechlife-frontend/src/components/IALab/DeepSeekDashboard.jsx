@@ -18,10 +18,10 @@ const DeepSeekDashboard = memo(
                 <Icon name="fa-brain" className="text-white text-xl" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-slate-800 font-sans">
+                <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 font-sans">
                   {t("ialab.synthesizer.dashboard_title")}
                 </h3>
-                <p className="text-slate-600 font-sans">
+                <p className="text-slate-600 dark:text-slate-400 font-sans">
                   {t("ialab.synthesizer.dashboard_desc")}
                 </p>
               </div>
@@ -34,30 +34,32 @@ const DeepSeekDashboard = memo(
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white p-4 rounded-xl border border-slate-100">
-              <div className="text-sm text-slate-500 mb-1 font-sans">
+            <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+              <div className="text-sm text-slate-500 dark:text-slate-400 mb-1 font-sans">
                 {t("ialab.synthesizer.model")}
               </div>
-              <div className="font-bold text-slate-800 font-sans">
+              <div className="font-bold text-slate-800 dark:text-slate-100 font-sans">
                 deepseek-chat
               </div>
             </div>
-            <div className="bg-white p-4 rounded-xl border border-slate-100">
-              <div className="text-sm text-slate-500 mb-1 font-sans">
+            <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+              <div className="text-sm text-slate-500 dark:text-slate-400 mb-1 font-sans">
                 {t("ialab.synthesizer.temperature")}
               </div>
-              <div className="font-bold text-slate-800 font-sans">0.7</div>
+              <div className="font-bold text-slate-800 dark:text-slate-100 font-sans">
+                0.7
+              </div>
             </div>
-            <div className="bg-white p-4 rounded-xl border border-slate-100">
-              <div className="text-sm text-slate-500 mb-1 font-sans">
+            <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+              <div className="text-sm text-slate-500 dark:text-slate-400 mb-1 font-sans">
                 {t("ialab.synthesizer.tokens")}
               </div>
-              <div className="font-bold text-slate-800 font-sans">
+              <div className="font-bold text-slate-800 dark:text-slate-100 font-sans">
                 ~{Math.round(deepSeekData.prompt_maestro.length / 4)}
               </div>
             </div>
-            <div className="bg-white p-4 rounded-xl border border-slate-100">
-              <div className="text-sm text-slate-500 mb-1 font-sans">
+            <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+              <div className="text-sm text-slate-500 dark:text-slate-400 mb-1 font-sans">
                 {t("ialab.synthesizer.quality")}
               </div>
               <div className="font-bold text-green-600 font-sans">Premium</div>
@@ -66,38 +68,44 @@ const DeepSeekDashboard = memo(
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8 animate-in slide-in-from-bottom-4 duration-300">
-          <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
             <div className="flex items-center gap-2 mb-3">
-              <Icon name="fa-user-tie" className="text-[var(--theme-emphasis)]" />
+              <Icon
+                name="fa-user-tie"
+                className="text-[var(--theme-emphasis)]"
+              />
               <span className="text-xs font-black text-[var(--theme-emphasis)] tracking-widest uppercase font-sans">
                 {t("ialab.synthesizer.rol")}
               </span>
             </div>
-            <p className="text-slate-800 font-medium leading-relaxed font-sans">
+            <p className="text-slate-800 dark:text-slate-200 font-medium leading-relaxed font-sans">
               {deepSeekData.rol}
             </p>
             <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[var(--theme-emphasis)]/5 rounded-full blur-sm"></div>
           </div>
-          <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
             <div className="flex items-center gap-2 mb-3">
               <Icon name="fa-target" className="text-[var(--theme-primary)]" />
               <span className="text-xs font-black text-[var(--theme-primary)] tracking-widest uppercase font-sans">
                 {t("ialab.synthesizer.task")}
               </span>
             </div>
-            <p className="text-slate-800 font-medium leading-relaxed font-sans">
+            <p className="text-slate-800 dark:text-slate-200 font-medium leading-relaxed font-sans">
               {deepSeekData.tarea}
             </p>
             <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[var(--theme-primary)]/5 rounded-full blur-sm"></div>
           </div>
-          <div className="bg-white border border-slate-200/60 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 shadow-sm rounded-3xl p-6 hover:-translate-y-1 hover:shadow transition-all duration-300 relative overflow-hidden">
             <div className="flex items-center gap-2 mb-3">
-              <Icon name="fa-file-alt" className="text-[var(--theme-emphasis)]" />
+              <Icon
+                name="fa-file-alt"
+                className="text-[var(--theme-emphasis)]"
+              />
               <span className="text-xs font-black text-[var(--theme-emphasis)] tracking-widest uppercase font-sans">
                 {t("ialab.synthesizer.format")}
               </span>
             </div>
-            <p className="text-slate-800 font-medium leading-relaxed font-sans">
+            <p className="text-slate-800 dark:text-slate-200 font-medium leading-relaxed font-sans">
               {deepSeekData.formato}
             </p>
             <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[var(--theme-emphasis)]/5 rounded-full blur-sm"></div>
@@ -151,7 +159,7 @@ const DeepSeekDashboard = memo(
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-indigo-50 to-blue-50 border-l-4 border-[var(--theme-emphasis)] rounded-r-3xl rounded-l-md p-8 shadow-sm relative mb-8 overflow-hidden animate-in slide-in-from-right-4 duration-300">
+        <div className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/40 dark:to-blue-950/40 border-l-4 border-[var(--theme-emphasis)] rounded-r-3xl rounded-l-md p-8 shadow-sm relative mb-8 overflow-hidden animate-in slide-in-from-right-4 duration-300">
           <Icon
             name="fa-lightbulb"
             className="absolute right-4 bottom-4 text-[var(--theme-emphasis)]/10 opacity-20 w-32 h-32"
@@ -170,35 +178,38 @@ const DeepSeekDashboard = memo(
             </div>
           </div>
           <div className="relative z-10">
-            <p className="text-slate-700 font-medium leading-relaxed mb-6 font-sans">
+            <p className="text-slate-700 dark:text-slate-300 font-medium leading-relaxed mb-6 font-sans">
               {deepSeekData.analisis_tecnico}
             </p>
             <div className="flex flex-wrap gap-2">
-              <span className="bg-white border border-[var(--theme-emphasis)]/20 text-[var(--theme-emphasis)] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+              <span className="bg-white dark:bg-slate-800 border border-[var(--theme-emphasis)]/20 text-[var(--theme-emphasis)] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
                 {t("ialab.synthesizer.structure_rtf")}
               </span>
-              <span className="bg-white border border-[var(--theme-primary)]/20 text-[var(--theme-primary)] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+              <span className="bg-white dark:bg-slate-800 border border-[var(--theme-primary)]/20 text-[var(--theme-primary)] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
                 {t("ialab.synthesizer.specificity")}
               </span>
-              <span className="bg-white border border-[var(--theme-emphasis)]/20 text-[var(--theme-emphasis)] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+              <span className="bg-white dark:bg-slate-800 border border-[var(--theme-emphasis)]/20 text-[var(--theme-emphasis)] px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
                 {t("ialab.synthesizer.clarity")}
               </span>
-              <span className="bg-white border border-slate-200 text-slate-600 px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
+              <span className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 px-4 py-1.5 rounded-full text-xs font-black shadow-sm font-sans">
                 {t("ialab.synthesizer.context")}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-slate-50 to-white p-6 rounded-2xl border border-slate-200">
+        <div className="bg-gradient-to-r from-slate-50 to-white dark:from-slate-800/60 dark:to-slate-800/40 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Icon name="fa-info-circle" className="text-slate-600" />
+              <Icon
+                name="fa-info-circle"
+                className="text-slate-600 dark:text-slate-400"
+              />
               <div>
-                <p className="text-sm font-medium text-slate-700 font-sans">
+                <p className="text-sm font-medium text-slate-700 dark:text-slate-300 font-sans">
                   {t("ialab.synthesizer.generated_with")}
                 </p>
-                <p className="text-xs text-slate-500 font-sans">
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-sans">
                   {t("ialab.synthesizer.model_label")}: deepseek-chat •{" "}
                   {t("ialab.synthesizer.temperature_label")}: 0.7 •{" "}
                   {t("ialab.synthesizer.response_format_label")}: JSON
