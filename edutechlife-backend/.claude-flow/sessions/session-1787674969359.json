@@ -1,0 +1,14 @@
+{
+  "id": "session-1787674969359",
+  "startedAt": "2026-08-25T16:22:49.359Z",
+  "cwd": "/Users/home/Desktop/edutechlife/edutechlife-backend",
+  "context": {},
+  "metrics": {
+    "edits": 5,
+    "commands": 0,
+    "tasks": 0,
+    "errors": 0
+  },
+  "endedAt": "2026-09-01T18:49:28.206Z",
+  "duration": 613598849
+}
