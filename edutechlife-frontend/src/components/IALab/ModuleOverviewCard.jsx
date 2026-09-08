@@ -264,18 +264,19 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     if (!allIds.length || confettiFiredRef.current) return;
     if (allIds.every((id) => viewedIds.includes(id))) {
       confettiFiredRef.current = true;
-      useIALabStore.getState().markLessonComplete(
-        activeMod,
-        Math.min(moduleData.topics.length, 3),
-      );
-      import('canvas-confetti').then(({ default: confetti }) => {
-        confetti({
-          particleCount: 130,
-          spread: 72,
-          origin: { y: 0.65 },
-          colors: ['#004B63', '#00BCD4', '#F59E0B', '#10B981', '#8B5CF6'],
-        });
-      }).catch(() => {});
+      useIALabStore
+        .getState()
+        .markLessonComplete(activeMod, Math.min(moduleData.topics.length, 3));
+      import("canvas-confetti")
+        .then(({ default: confetti }) => {
+          confetti({
+            particleCount: 130,
+            spread: 72,
+            origin: { y: 0.65 },
+            colors: ["#004B63", "#00BCD4", "#F59E0B", "#10B981", "#8B5CF6"],
+          });
+        })
+        .catch(() => {});
     }
   }, [viewedIds, moduleData, locale]);
 
@@ -289,10 +290,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     const ids = tr?.resources?.map((r) => r.id) || [];
     const allDone = ids.length > 0 && ids.every((id) => viewedIds.includes(id));
     if (allDone) {
-      useIALabStore.getState().markLessonComplete(
-        activeMod,
-        expandedTopic + 1,
-      );
+      useIALabStore.getState().markLessonComplete(activeMod, expandedTopic + 1);
       const timer = setTimeout(() => {
         setExpandedTopic((prev) => (prev !== null ? prev + 1 : null));
       }, 1500);
@@ -343,34 +341,31 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
           transition={{ duration: 0.2 }}
           className="relative z-10 bg-[var(--theme-surface)] rounded-[calc(2rem-1.5px)] shadow-sm p-4 md:p-6 overflow-hidden"
         >
+          {/* Contenido principal */}
+          <div className="flex flex-col gap-3">
+            {/* Badges superior derecha */}
+            <div className="flex items-center justify-end gap-2">
+              <span className="px-3 py-1.5 theme-bg-primary-10 theme-text-primary text-xs font-bold rounded-lg border theme-border-primary-20 shadow-sm">
+                {moduleData.badge.duration}
+              </span>
+              {(() => {
+                const prog = lessonProgress[activeMod] || {};
+                const total = (getAllLessons(locale)[activeMod] || []).length;
+                const done = Object.values(prog).filter(
+                  (s) => s === "completed",
+                ).length;
+                if (!total) return null;
+                return (
+                  <span
+                    className={`px-2.5 py-1 text-xs font-bold rounded-lg border ${done === total ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-blue-50 text-blue-700 border-blue-200"}`}
+                  >
+                    {t("ialab.module.lessons", { done, total })}
+                  </span>
+                );
+              })()}
+            </div>
 
-        {/* Contenido principal */}
-        <div className="flex flex-col gap-3">
-          {/* Badges superior derecha */}
-          <div className="flex items-center justify-end gap-2">
-            <span className="px-3 py-1.5 theme-bg-primary-10 theme-text-primary text-[10px] font-bold rounded-lg border theme-border-primary-20 shadow-sm">
-              {moduleData.badge.duration}
-            </span>
-            {(() => {
-              const prog = lessonProgress[activeMod] || {};
-              const total = (getAllLessons(locale)[activeMod] || []).length;
-              const done = Object.values(prog).filter(
-                (s) => s === "completed",
-              ).length;
-              if (!total) return null;
-              return (
-                <span
-                  className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border ${done === total ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-blue-50 text-blue-700 border-blue-200"}`}
-                >
-                  {t("ialab.module.lessons", { done, total })}
-                </span>
-              );
-            })()}
-          </div>
-
-          <ModuleHeaderSection
-              moduleData={moduleData}
-            />
+            <ModuleHeaderSection moduleData={moduleData} />
 
             {allResourcesOrdered.length > 0 &&
               (() => {
@@ -381,21 +376,21 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                 const pct = Math.round((viewed / total) * 100);
                 return (
                   <div>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                         <Icon
                           name="fa-chart-line"
-                          className="text-[10px] theme-text-primary"
+                          className="text-xs theme-text-primary"
                         />
                         {t("ialab.module.progress_title")}
                       </span>
-                      <span className="text-[10px] font-bold theme-text-primary">
+                      <span className="text-xs font-black theme-text-primary">
                         {viewed}/{total} &middot; {pct}%
                       </span>
                     </div>
-                    <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div className="w-full h-2.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
-                        className="h-full theme-bg-primary rounded-full transition-all duration-500 ease-out"
+                        className={`h-full rounded-full transition-all duration-500 ease-out ${pct >= 100 ? "bg-gradient-to-r from-emerald-400 to-emerald-500" : "bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)]"}`}
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -441,13 +436,13 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                 t={t}
               />
             </div>
-        </div>
+          </div>
 
-        <div className="absolute top-0 left-0 right-0 h-1.5 theme-bg-primary rounded-t-[calc(2rem-1.5px)]" />
-      </motion.div>
-      <div className="absolute top-0 left-0 right-0 h-[1.5px] theme-bg-primary-10 rounded-t-[2rem] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-[1.5px] theme-bg-primary-10 rounded-b-[2rem] pointer-events-none" />
-    </div>
+          <div className="absolute top-0 left-0 right-0 h-1.5 theme-bg-primary rounded-t-[calc(2rem-1.5px)]" />
+        </motion.div>
+        <div className="absolute top-0 left-0 right-0 h-[1.5px] theme-bg-primary-10 rounded-t-[2rem] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-[1.5px] theme-bg-primary-10 rounded-b-[2rem] pointer-events-none" />
+      </div>
 
       {/* Modal de Recursos */}
       <Suspense
