@@ -124,22 +124,22 @@ const SidebarExpanded = ({ onOpenStreak }) => {
 
       {/* ── ZONA 2: PROGRESO + HERRAMIENTAS (tarjeta unificada, crece para llenar) ── */}
       <div className="flex-1 flex flex-col rounded-xl border border-[var(--theme-emphasis)]/12 dark:border-[var(--theme-emphasis)]/22 bg-[var(--theme-emphasis)]/[0.03] dark:bg-[var(--theme-emphasis)]/[0.08] p-4 gap-3">
-        {/* Fila: Círculo + Stats */}
-        <div className="flex items-center gap-3">
-          {/* Círculo compacto de progreso */}
+        {/* Progreso centrado */}
+        <div className="flex flex-col items-center gap-2">
+          {/* Círculo grande centrado */}
           <button
             type="button"
             onClick={toggleSidebar}
             aria-label={`${Math.round(courseProgress || 0)}% ${t("sidebar.completed")}`}
-            className="flex-shrink-0 relative w-12 h-12 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 hover:scale-105 transition-transform duration-150"
+            className="relative w-20 h-20 flex-shrink-0 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 hover:scale-105 transition-transform duration-150"
           >
-            <svg className="w-12 h-12 -rotate-90" viewBox="0 0 40 40">
+            <svg className="w-20 h-20 -rotate-90" viewBox="0 0 40 40">
               <circle
                 cx="20"
                 cy="20"
                 r="16"
                 className="stroke-slate-200 dark:stroke-slate-700"
-                strokeWidth="4"
+                strokeWidth="3.5"
                 fill="none"
               />
               <circle
@@ -147,7 +147,7 @@ const SidebarExpanded = ({ onOpenStreak }) => {
                 cy="20"
                 r="16"
                 stroke="url(#prog-grad-exp)"
-                strokeWidth="4"
+                strokeWidth="3.5"
                 fill="none"
                 strokeLinecap="round"
                 strokeDasharray="100.53"
@@ -169,54 +169,59 @@ const SidebarExpanded = ({ onOpenStreak }) => {
                 </linearGradient>
               </defs>
             </svg>
-            <span className="absolute inset-0 flex items-center justify-center text-[13px] font-black text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
+            <span className="absolute inset-0 flex items-center justify-center text-lg font-black text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
               {Math.round(courseProgress || 0)}%
             </span>
           </button>
 
-          {/* Stats + Mi Progreso */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1 flex-nowrap mb-1.5 overflow-hidden">
-              {levelNum > 0 && (
-                <span className="inline-flex items-center gap-0.5 rounded-full bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 px-1.5 py-0.5 text-[9px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] shrink-0">
-                  <Icon
-                    name="fa-graduation-cap"
-                    className="text-[7px]"
-                    aria-hidden="true"
-                  />
-                  Nv.{levelNum}
-                </span>
-              )}
-              {streak > 0 && (
-                <button
-                  type="button"
-                  onClick={onOpenStreak}
-                  className={`inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold transition-transform hover:scale-105 focus:outline-none shrink-0 ${atRisk ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300" : "bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[#4DA8C4]"}`}
-                >
-                  <Icon
-                    name="fa-fire"
-                    className={`text-[7px] ${atRisk ? "text-amber-500" : "text-orange-500"}`}
-                    aria-hidden="true"
-                  />
-                  {streak}d
-                </button>
-              )}
-              <span className="inline-flex items-center gap-0.5 rounded-full bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 px-1.5 py-0.5 text-[9px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] shrink-0">
+          {/* Chips centrados — sin overflow-hidden para que no corten iconos */}
+          <div className="flex items-center gap-1.5 justify-center flex-wrap">
+            {levelNum > 0 && (
+              <span className="inline-flex items-center gap-0.5 rounded-full bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 px-2 py-0.5 text-[10px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
                 <Icon
-                  name="fa-star"
-                  className="text-[7px] text-[var(--theme-primary)]"
+                  name="fa-graduation-cap"
+                  className="text-[8px]"
                   aria-hidden="true"
                 />
-                {xp}
+                Nv.{levelNum}
               </span>
-            </div>
-            <button
-              onClick={goToProgress}
-              className="text-[10px] font-semibold text-[var(--theme-emphasis)]/70 dark:text-[#4DA8C4]/70 hover:text-[var(--theme-emphasis)] dark:hover:text-[#4DA8C4] transition-colors duration-150 focus:outline-none"
-            >
-              {t("ialab.tab_progress") || "Mi Progreso"} →
-            </button>
+            )}
+            {streak > 0 && (
+              <button
+                type="button"
+                onClick={onOpenStreak}
+                className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[10px] font-bold transition-transform hover:scale-105 focus:outline-none ${atRisk ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300" : "bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[#4DA8C4]"}`}
+              >
+                <Icon
+                  name="fa-fire"
+                  className={`text-[8px] ${atRisk ? "text-amber-500" : "text-orange-500"}`}
+                  aria-hidden="true"
+                />
+                {streak}d
+              </button>
+            )}
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 px-2 py-0.5 text-[10px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
+              <Icon
+                name="fa-star"
+                className="text-[8px] text-amber-400"
+                aria-hidden="true"
+              />
+              {xp}
+            </span>
           </div>
+
+          {/* Mi Progreso — pill button más visible */}
+          <button
+            onClick={goToProgress}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 text-[11px] font-semibold text-[var(--theme-emphasis)]/75 dark:text-[#4DA8C4]/75 hover:bg-[var(--theme-emphasis)]/14 hover:text-[var(--theme-emphasis)] dark:hover:text-[#4DA8C4] transition-all duration-150 focus:outline-none"
+          >
+            <Icon
+              name="fa-chart-bar"
+              className="text-[9px]"
+              aria-hidden="true"
+            />
+            {t("ialab.tab_progress") || "Mi Progreso"}
+          </button>
         </div>
 
         {/* Separador interno */}
@@ -226,19 +231,19 @@ const SidebarExpanded = ({ onOpenStreak }) => {
         <div className="flex-1 flex gap-2 min-h-0">
           <button
             onClick={() => setShowStudyPlannerModal(true)}
-            className="flex-1 flex flex-col items-center justify-center gap-2 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[#4DA8C4] transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
+            className="flex-1 flex flex-col items-center justify-center gap-2 rounded-xl bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[#4DA8C4] transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 border border-[var(--theme-emphasis)]/8 dark:border-[var(--theme-emphasis)]/18"
           >
             <Icon
               name="fa-calendar"
-              className="text-[var(--theme-primary)] text-xl"
+              className="text-[var(--theme-primary)] text-2xl"
             />
             <span>{t("ialab.sidebar_plan_short") || "Plan"}</span>
           </button>
           <button
             onClick={() => setShowLeaderboard(true)}
-            className="flex-1 flex flex-col items-center justify-center gap-2 rounded-lg bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25 text-amber-700 dark:text-amber-400 transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+            className="flex-1 flex flex-col items-center justify-center gap-2 rounded-xl bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25 text-amber-700 dark:text-amber-400 transition-all duration-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-amber-400/30 border border-amber-200/50 dark:border-amber-700/20"
           >
-            <Icon name="fa-trophy" className="text-amber-500 text-xl" />
+            <Icon name="fa-trophy" className="text-amber-500 text-2xl" />
             <span>{t("ialab.sidebar_leaderboard") || "Ranking"}</span>
           </button>
         </div>
