@@ -140,7 +140,7 @@ const SidebarCollapsed = ({
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-display text-sm font-black text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
+              <span className="font-display text-base font-black text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
                 {Math.round(courseProgress)}%
               </span>
             </div>
@@ -179,7 +179,7 @@ const SidebarCollapsed = ({
       <MiniDivider />
 
       {/* ── ZONA 2: MÓDULOS ── */}
-      <h2 className="text-[8px] font-bold uppercase tracking-[0.12em] text-[var(--theme-emphasis)]/50 dark:text-[#4DA8C4]/40 select-none whitespace-nowrap">
+      <h2 className="text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--theme-emphasis)]/65 dark:text-[#4DA8C4]/55 select-none whitespace-nowrap">
         Módulos
       </h2>
       <div className="flex flex-col gap-1 w-full" role="list">
