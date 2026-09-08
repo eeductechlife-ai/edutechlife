@@ -10,6 +10,28 @@ const getResourceIcon = (type) => {
   return "fa-file";
 };
 
+const getResourceTypeStyle = (type) => {
+  if (type === "video")
+    return {
+      bg: "bg-blue-50 dark:bg-blue-900/20 group-hover/res:bg-blue-100 dark:group-hover/res:bg-blue-900/30",
+      icon: "text-blue-600 dark:text-blue-400",
+    };
+  if (type === "pdf" || type === "document")
+    return {
+      bg: "bg-amber-50 dark:bg-amber-900/20 group-hover/res:bg-amber-100 dark:group-hover/res:bg-amber-900/30",
+      icon: "text-amber-600 dark:text-amber-400",
+    };
+  if (type === "ova" || type === "ova_interactive")
+    return {
+      bg: "bg-teal-50 dark:bg-teal-900/20 group-hover/res:bg-teal-100 dark:group-hover/res:bg-teal-900/30",
+      icon: "text-teal-600 dark:text-teal-400",
+    };
+  return {
+    bg: "bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 group-hover/res:from-[var(--theme-emphasis)]/15 group-hover/res:to-[var(--theme-primary)]/15 dark:from-[var(--theme-emphasis)]/20 dark:to-[var(--theme-primary)]/20",
+    icon: "text-[var(--theme-emphasis)]",
+  };
+};
+
 const getResourceMeta = (res, t) => {
   if (res.type === "video") return res.duration || "";
   if (res.pages) return t("ialab.resource_pages", { pages: res.pages });
@@ -65,27 +87,34 @@ const ResourceItem = ({
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--theme-primary)]/[0.03] to-transparent opacity-0 group-hover/res:opacity-100 transition-opacity duration-500 pointer-events-none" />
       )}
       <div className="relative flex items-center gap-3 p-3">
-        <div
-          className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-            resourceLocked
-              ? "bg-slate-100 dark:bg-slate-700"
-              : isResourceCompleted
-                ? "bg-emerald-100 dark:bg-emerald-900/30"
-                : "bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 group-hover/res:from-[var(--theme-emphasis)]/15 group-hover/res:to-[var(--theme-primary)]/15 dark:from-[var(--theme-emphasis)]/20 dark:to-[var(--theme-primary)]/20"
-          }`}
-        >
-          <Icon
-            name={resourceLocked ? "fa-lock" : getResourceIcon(resource.type)}
-            className={`w-4 h-4 ${
-              resourceLocked
-                ? "text-slate-300 dark:text-slate-500"
-                : isResourceCompleted
-                  ? "text-emerald-600 dark:text-emerald-400"
-                  : "text-[var(--theme-emphasis)]"
-            }`}
-            aria-hidden="true"
-          />
-        </div>
+        {(() => {
+          const typeStyle = getResourceTypeStyle(resource.type);
+          return (
+            <div
+              className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                resourceLocked
+                  ? "bg-slate-100 dark:bg-slate-700"
+                  : isResourceCompleted
+                    ? "bg-emerald-100 dark:bg-emerald-900/30"
+                    : typeStyle.bg
+              }`}
+            >
+              <Icon
+                name={
+                  resourceLocked ? "fa-lock" : getResourceIcon(resource.type)
+                }
+                className={`w-4 h-4 ${
+                  resourceLocked
+                    ? "text-slate-300 dark:text-slate-500"
+                    : isResourceCompleted
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : typeStyle.icon
+                }`}
+                aria-hidden="true"
+              />
+            </div>
+          );
+        })()}
         <div className="flex-1 min-w-0 text-left">
           <p
             className={`text-sm font-medium truncate transition-colors ${
