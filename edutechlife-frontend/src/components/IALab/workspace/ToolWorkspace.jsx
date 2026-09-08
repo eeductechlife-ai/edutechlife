@@ -15,12 +15,12 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { toolChromeFor, TOOL_BRAND_ICONS } from "../themes/toolConfig";
+import { toolChromeFor } from "../themes/toolConfig";
 import { THEME_META } from "../themes/themeMap";
 import { TOOL_LOGOS } from "../IALabModuleHeader";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { getModuleOverviewData } from "../constants/moduleContent/selectors";
-import { ConversationItem, PromptCard, SendCircle } from "./toolbits";
+import { ConversationItem } from "./toolbits";
 
 const CHAT_GLYPH = "M21 12a8 8 0 0 1-8 8H4l1.5-2.5A8 8 0 1 1 21 12Z";
 const PLUS_GLYPH = "M12 5v14m-7-7h14";
@@ -301,39 +301,6 @@ export default function ToolWorkspace({
 
         <div className="mx-auto w-full max-w-3xl">
           <div className="flex flex-col gap-5">{children}</div>
-        </div>
-        <PromptCard
-          title={meta.tagline}
-          subtitle={t("ialab.workspace.simulated_note")}
-          icon={TOOL_BRAND_ICONS.sparkles}
-          onClick={undefined}
-        />
-        <div
-          className="sticky bottom-4 z-30"
-          data-testid="tool-workspace-composer"
-        >
-          <div className="theme-composer theme-text mx-auto w-full max-w-3xl rounded-2xl border shadow-xl">
-            <label className="sr-only" htmlFor="tool-workspace-input">
-              {t("ialab.workspace.composer_label")}
-            </label>
-            <div className="flex items-end gap-2 p-2 pl-4">
-              <input
-                id="tool-workspace-input"
-                type="text"
-                readOnly
-                placeholder={`${t("ialab.workspace.composer_placeholder")} ${cfg.label}…`}
-                className="w-full bg-transparent py-2 text-sm outline-none disabled:cursor-not-allowed"
-              />
-              <SendCircle
-                iconName={theme === "gemini" ? "sparkles" : "sendArrow"}
-                label={t("ialab.workspace.composer_send")}
-                disabled
-              />
-            </div>
-            <p className="theme-text-muted border-t border-inherit px-4 pb-2.5 pt-2 text-[10.5px] leading-relaxed">
-              {t("ialab.workspace.composer_hint")}
-            </p>
-          </div>
         </div>
       </div>
     </div>
