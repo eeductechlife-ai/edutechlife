@@ -23,6 +23,7 @@ const stripeRoutes = require('./routes/stripe');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const notificationRoutes = require('./routes/notifications');
+const AlertListenerService = require('./services/AlertListenerService');
 const { webhookHandler } = require('./routes/stripe');
 
 const CSP_DIRECTIVES = {
@@ -142,6 +143,13 @@ app.use('/api/notifications', requireAuth, notificationRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
+
+// Start crisis-alert realtime listener (Fase 4.1)
+const alertListener = new AlertListenerService();
+alertListener.start().catch((err) =>
+  logger.error('[app] AlertListenerService failed to start:', err.message)
+);
+app.alertListener = alertListener;
 
 // Export both app and Redis initialization function
 app.initializeRedis = redis.initializeRedis;

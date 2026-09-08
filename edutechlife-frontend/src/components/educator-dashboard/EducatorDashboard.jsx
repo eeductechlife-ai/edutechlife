@@ -219,20 +219,27 @@ const EducatorDashboard = memo(() => {
               Top 3 Estudiantes
             </h4>
             <div className="space-y-3">
-              {[
-                { name: "Emma Sánchez", score: 98 },
-                { name: "Juan Martínez", score: 94 },
-                { name: "María García", score: 87 },
-              ].map((student, idx) => (
-                <div key={idx} className="flex items-center justify-between">
-                  <span className="text-gray-700 dark:text-gray-300">
-                    {idx + 1}. {student.name}
-                  </span>
-                  <span className="font-bold text-green-600">
-                    {student.score}%
-                  </span>
-                </div>
-              ))}
+              {[...students]
+                .sort((a, b) => b.progress - a.progress)
+                .slice(0, 3)
+                .map((student, idx) => (
+                  <div
+                    key={student.id}
+                    className="flex items-center justify-between"
+                  >
+                    <span className="text-gray-700 dark:text-gray-300">
+                      {idx + 1}. {student.name}
+                    </span>
+                    <span className="font-bold text-green-600">
+                      {student.progress}%
+                    </span>
+                  </div>
+                ))}
+              {students.length === 0 && (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Sin datos aún
+                </p>
+              )}
             </div>
           </div>
 
@@ -243,33 +250,33 @@ const EducatorDashboard = memo(() => {
               Requieren Atención
             </h4>
             <div className="space-y-3">
-              {[
-                {
-                  name: "Carlos López",
-                  reason: "Bajo progreso",
-                  action: "Contactar",
-                },
-                {
-                  name: "Lucas Fernández",
-                  reason: "Sin actividad",
-                  action: "Revisar",
-                },
-              ].map((student, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-200 dark:border-amber-800"
-                >
-                  <p className="font-semibold text-amber-900 dark:text-amber-100">
-                    {student.name}
-                  </p>
-                  <p className="text-sm text-amber-700 dark:text-amber-300">
-                    {student.reason}
-                  </p>
-                  <button className="mt-2 text-sm font-bold text-amber-600 hover:text-amber-700">
-                    {student.action} →
-                  </button>
-                </div>
-              ))}
+              {students
+                .filter((s) => s.needsAttention)
+                .slice(0, 5)
+                .map((student) => (
+                  <div
+                    key={student.id}
+                    className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-200 dark:border-amber-800"
+                  >
+                    <p className="font-semibold text-amber-900 dark:text-amber-100">
+                      {student.name}
+                    </p>
+                    <p className="text-sm text-amber-700 dark:text-amber-300">
+                      {student.atRiskLevel ? "Alerta activa" : "Bajo progreso"}
+                    </p>
+                    <button
+                      onClick={() => setSelectedStudent(student)}
+                      className="mt-2 text-sm font-bold text-amber-600 hover:text-amber-700"
+                    >
+                      Revisar →
+                    </button>
+                  </div>
+                ))}
+              {students.filter((s) => s.needsAttention).length === 0 && (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Todos los estudiantes al día
+                </p>
+              )}
             </div>
           </div>
         </motion.div>
