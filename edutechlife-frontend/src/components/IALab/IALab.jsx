@@ -457,7 +457,7 @@ const IALabContent = memo(function () {
 
       {/* 2. SECCIÓN INFORMATIVA DEL MÓDULO */}
       <AnimatedSection
-        show={viewSection === null || viewSection === "objetivos"}
+        show={viewSection === "objetivos"}
         loading={
           (isLoadingProgress && !loadingTimedOut) || isModuleTransitioning
         }
@@ -512,7 +512,7 @@ const IALabContent = memo(function () {
 
       {/* 4. ACTIVIDADES DEL MÓDULO */}
       <AnimatedSection
-        show={viewSection === null || viewSection === "actividades"}
+        show={viewSection === "actividades"}
         loading={
           (isLoadingProgress && !loadingTimedOut) || isModuleTransitioning
         }
@@ -542,7 +542,7 @@ const IALabContent = memo(function () {
 
       {/* 5. PRÁCTICA DEL MÓDULO */}
       <AnimatedSection
-        show={viewSection === null || viewSection === "practica"}
+        show={viewSection === "practica"}
         loading={
           (isLoadingProgress && !loadingTimedOut) || isModuleTransitioning
         }
@@ -582,20 +582,19 @@ const IALabContent = memo(function () {
       </AnimatedSection>
 
       {/* 6. FORO DEL MÓDULO */}
-      {(viewSection === null || viewSection === "actividades") &&
-        isForumOpen && (
-          <div id="forum-section">
-            <SectionErrorBoundary name="Forum">
-              <Suspense
-                fallback={
-                  <div className="h-20 bg-white/50 rounded-xl animate-pulse" />
-                }
-              >
-                <IALabForumOptimized compact={false} initialLimit={3} />
-              </Suspense>
-            </SectionErrorBoundary>
-          </div>
-        )}
+      {viewSection === "actividades" && isForumOpen && (
+        <div id="forum-section">
+          <SectionErrorBoundary name="Forum">
+            <Suspense
+              fallback={
+                <div className="h-20 bg-white/50 rounded-xl animate-pulse" />
+              }
+            >
+              <IALabForumOptimized compact={false} initialLimit={3} />
+            </Suspense>
+          </SectionErrorBoundary>
+        </div>
+      )}
     </>
   );
 
@@ -970,6 +969,7 @@ const IALabContent = memo(function () {
                       setSelectedTopicIndex(i);
                       setViewSection("contenido");
                     }}
+                    onSelectSection={setViewSection}
                   >
                     {moduleSections}
                   </ToolWorkspace>

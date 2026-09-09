@@ -38,6 +38,7 @@ export default function ToolWorkspace({
   selectedTopicIndex,
   onNewChat,
   onSelectTopic,
+  onSelectSection,
   children,
 }) {
   const { t, locale } = useTranslation();
@@ -228,8 +229,7 @@ export default function ToolWorkspace({
                   icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
                   label: "Explorar el módulo",
                   desc: "Objetivos, temas y recursos del Módulo 3",
-                  section: null,
-                  scroll: true,
+                  section: "objetivos",
                 },
                 {
                   icon: "M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2zM14 2v6h6",
@@ -249,18 +249,13 @@ export default function ToolWorkspace({
                   desc: "Ejercicios paso a paso con Gemini",
                   section: "practica",
                 },
-              ].map(({ icon, label, desc, section, scroll }) => (
+              ].map(({ icon, label, desc, section }) => (
                 <button
                   key={label}
                   type="button"
                   onClick={() => {
-                    if (section)
-                      onSelectTopic(section === "contenido" ? 0 : -1);
-                    else if (scroll) {
-                      document
-                        .querySelector("[data-testid='module-info-section']")
-                        ?.scrollIntoView({ behavior: "smooth" });
-                    }
+                    if (section === "contenido") onSelectTopic(0);
+                    else onSelectSection(section);
                   }}
                   className="theme-prompt-card group flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4285f4]/40"
                 >
@@ -334,8 +329,7 @@ export default function ToolWorkspace({
                   icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
                   label: "Explorar el módulo",
                   desc: "Objetivos, temas y recursos del Módulo 4",
-                  section: null,
-                  scroll: true,
+                  section: "objetivos",
                 },
                 {
                   icon: "M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2zM14 2v6h6",
@@ -355,18 +349,13 @@ export default function ToolWorkspace({
                   desc: "Ejercicios paso a paso con NotebookLM",
                   section: "practica",
                 },
-              ].map(({ icon, label, desc, section, scroll }) => (
+              ].map(({ icon, label, desc, section }) => (
                 <button
                   key={label}
                   type="button"
                   onClick={() => {
-                    if (section)
-                      onSelectTopic(section === "contenido" ? 0 : -1);
-                    else if (scroll) {
-                      document
-                        .querySelector("[data-testid='module-info-section']")
-                        ?.scrollIntoView({ behavior: "smooth" });
-                    }
+                    if (section === "contenido") onSelectTopic(0);
+                    else onSelectSection(section);
                   }}
                   className="theme-prompt-card group flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1e40af]/40"
                 >
@@ -446,28 +435,6 @@ export default function ToolWorkspace({
               </span>
             </div>
 
-            {/* Respuesta estilo ChatGPT — texto directo sin card */}
-            <div className="w-full mb-6 text-left space-y-3">
-              <p className="text-[11px] font-semibold text-[#10a37f] uppercase tracking-wide">
-                Módulo 2 · Arquitecto Digital
-              </p>
-              <p className="text-[15px] font-bold theme-text leading-snug">
-                Bienvenido a la obra maestra de la automatización.
-              </p>
-              <p className="text-[15px] theme-text leading-[1.65]">
-                Aquí no solo usarás ChatGPT:{" "}
-                <strong>aprenderás a construir con él.</strong>
-              </p>
-              <p className="text-[15px] theme-text leading-[1.65]">
-                Diseña prompts, crea GPTs, conecta herramientas y APIs, y
-                transforma la inteligencia artificial en{" "}
-                <strong>sistemas que trabajan por ti.</strong>
-              </p>
-              <p className="text-[15px] font-bold theme-text leading-snug">
-                No solo uses la IA. Constrúyela.
-              </p>
-            </div>
-
             {/* Tarjetas de sugerencia — 2×2 */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
@@ -475,8 +442,7 @@ export default function ToolWorkspace({
                   icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
                   label: "Explorar el módulo",
                   desc: "Objetivos, temas y recursos del Módulo 2",
-                  section: null,
-                  scroll: true,
+                  section: "objetivos",
                 },
                 {
                   icon: "M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2zM14 2v6h6",
@@ -496,18 +462,13 @@ export default function ToolWorkspace({
                   desc: "Ejercicios paso a paso con ChatGPT",
                   section: "practica",
                 },
-              ].map(({ icon, label, desc, section, scroll }) => (
+              ].map(({ icon, label, desc, section }) => (
                 <button
                   key={label}
                   type="button"
                   onClick={() => {
-                    if (section)
-                      onSelectTopic(section === "contenido" ? 0 : -1);
-                    else if (scroll) {
-                      document
-                        .querySelector("[data-testid='module-info-section']")
-                        ?.scrollIntoView({ behavior: "smooth" });
-                    }
+                    if (section === "contenido") onSelectTopic(0);
+                    else onSelectSection(section);
                   }}
                   className="theme-prompt-card group flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10a37f]/40"
                 >
@@ -555,5 +516,6 @@ ToolWorkspace.propTypes = {
   selectedTopicIndex: PropTypes.number,
   onNewChat: PropTypes.func.isRequired,
   onSelectTopic: PropTypes.func.isRequired,
+  onSelectSection: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };
