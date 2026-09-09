@@ -180,14 +180,18 @@ const IALabModuleHeader = () => {
       <div className="w-full">
         {/* Barra estilo "model picker" de ChatGPT */}
         <div className="flex items-center justify-between gap-3 px-1 py-1">
-          {/* Módulo pill — izquierda */}
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold theme-chip">
-            <span className="font-bold">{activeMod}</span>
-            <span className="opacity-60">·</span>
-            <span className="truncate max-w-[120px]">{curr?.title}</span>
-          </span>
+          {/* Badge herramienta — esquina izquierda */}
+          {tool.badgeLabel && Logo && (
+            <span
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold theme-chip flex-shrink-0"
+              style={{ color: tool.badgeColor }}
+            >
+              <Logo />
+              <span>{tool.badgeLabel}</span>
+            </span>
+          )}
 
-          {/* Nombre de herramienta centrado — el "modelo" */}
+          {/* Título del módulo centrado — el "tema de conversación" */}
           <button
             type="button"
             onClick={chrome.supported ? chrome.toggle : undefined}
@@ -198,23 +202,15 @@ const IALabModuleHeader = () => {
                   : t("ialab.workspace.toggle_on")
                 : undefined
             }
-            aria-label={tool.badgeLabel}
-            className={`flex items-center gap-2 rounded-xl px-3 py-1.5 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-current/30 ${
+            aria-label={curr?.title}
+            className={`flex items-center gap-2 rounded-xl px-3 py-1.5 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-current/30 min-w-0 ${
               chrome.supported
                 ? "cursor-pointer hover:bg-black/5 dark:hover:bg-white/8 active:bg-black/8"
                 : "cursor-default"
             }`}
           >
-            {Logo && (
-              <span
-                className="flex-shrink-0"
-                style={{ color: tool.badgeColor }}
-              >
-                <Logo />
-              </span>
-            )}
-            <span className="text-[15px] font-bold theme-text">
-              {tool.badgeLabel}
+            <span className="text-[15px] font-bold theme-text truncate">
+              {curr?.title}
             </span>
             {chrome.supported && (
               <svg
