@@ -29,8 +29,11 @@ function shuffleArray(arr) {
 }
 
 export const useIALabQuiz = () => {
-  const { activeMod, updateModuleActivity, markExamComplete } =
-    useIALabProgressContext();
+  const {
+    activeMod = 1,
+    updateModuleActivity = () => {},
+    markExamComplete = () => {},
+  } = useIALabProgressContext() ?? {};
   const { locale } = useTranslation();
   const shuffledQuestionsRef = useRef(null);
 

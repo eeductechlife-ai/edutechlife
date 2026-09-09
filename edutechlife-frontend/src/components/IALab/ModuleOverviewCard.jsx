@@ -31,14 +31,14 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   }
   const prefersReducedMotion = useReducedMotion();
   const {
-    activeMod,
-    modules,
-    moduleContent,
-    completedExams,
-    challengeScores,
-    moduleProgress,
-    markResourceAsViewed: markResourceInContext,
-  } = useIALabProgressContext();
+    activeMod = 1,
+    modules = [],
+    moduleContent = {},
+    completedExams = {},
+    challengeScores = {},
+    moduleProgress = {},
+    markResourceAsViewed: markResourceInContext = () => {},
+  } = useIALabProgressContext() ?? {};
   const { trackResourceViewed } = useIALabProgress();
   const lessonProgress = useIALabStore((s) => s.lessonProgress);
 

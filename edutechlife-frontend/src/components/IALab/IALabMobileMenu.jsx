@@ -1,50 +1,72 @@
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react'
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
-import { Icon } from '../../utils/iconMapping.jsx';
-import { useIALabProgressContext, useIALabUIContext } from '../../context/IALabContext';
-import { useIALabStore } from '../../store/ialabStore';
-import { useTranslation } from '../../i18n/I18nProvider';
-import ModuleNavItem from './sidebar/ModuleNavItem';
-const StudyCalendarSection = lazy(() => import('./StudyCalendarSection'));
+import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import { Icon } from "../../utils/iconMapping.jsx";
+import {
+  useIALabProgressContext,
+  useIALabUIContext,
+} from "../../context/IALabContext";
+import { useIALabStore } from "../../store/ialabStore";
+import { useTranslation } from "../../i18n/I18nProvider";
+import ModuleNavItem from "./sidebar/ModuleNavItem";
+const StudyCalendarSection = lazy(() => import("./StudyCalendarSection"));
 
-const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenProfile, onOpenHistory, onOpenHelp }) => {
+const IALabMobileMenu = ({
+  closeMobileMenu,
+  toggleDarkMode,
+  isDarkMode,
+  onOpenProfile,
+  onOpenHistory,
+  onOpenHelp,
+}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {
-    activeMod, setActiveMod, courseProgress, modules,
-    isModuleLocked, calculateModuleScore
-  } = useIALabProgressContext();
+    activeMod = 1,
+    setActiveMod = () => {},
+    courseProgress = 0,
+    modules = [],
+    isModuleLocked = () => false,
+    calculateModuleScore = () => 0,
+  } = useIALabProgressContext() ?? {};
 
-  const {
-    user,
-    setShowCertificateModal,
-    courseCompleted
-  } = useIALabUIContext();
+  const { user, setShowCertificateModal, courseCompleted } =
+    useIALabUIContext() ?? {};
 
-  const streak = useIALabStore(s => s.streak);
-  const getLevel = useIALabStore(s => s.getLevel);
-  const isStreakAtRisk = useIALabStore(s => s.isStreakAtRisk);
-  const getBadgesSummary = useIALabStore(s => s.getBadgesSummary);
+  const streak = useIALabStore((s) => s.streak);
+  const getLevel = useIALabStore((s) => s.getLevel);
+  const isStreakAtRisk = useIALabStore((s) => s.isStreakAtRisk);
+  const getBadgesSummary = useIALabStore((s) => s.getBadgesSummary);
   const [showStudyPlanner, setShowStudyPlanner] = useState(false);
   const containerRef = useRef(null);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const focusable = el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    const focusable = el.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
     if (focusable.length) focusable[0].focus();
     const handleKeyDown = (e) => {
-      if (e.key !== 'Tab') return;
-      const focusableEls = [...el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')];
+      if (e.key !== "Tab") return;
+      const focusableEls = [
+        ...el.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ),
+      ];
       if (!focusableEls.length) return;
       const first = focusableEls[0];
       const last = focusableEls[focusableEls.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   const handleCloseSection = () => {
@@ -58,70 +80,120 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       <div className="px-3 py-3 border-b border-slate-100 dark:border-slate-700">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-            {user?.full_name ? user.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
+            {user?.full_name
+              ? user.full_name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .substring(0, 2)
+                  .toUpperCase()
+              : "U"}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{user?.full_name || t('mobile_menu.user_fallback')}</p>
+            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">
+              {user?.full_name || t("mobile_menu.user_fallback")}
+            </p>
             <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-              <span>{t('mobile_menu.level')}{getLevel()}</span>
-              <Icon name="fa-fire" className="text-amber-500 text-xs" /> {streak}
-              {isStreakAtRisk() && streak > 0 && <Icon name="fa-exclamation-triangle" className="text-amber-500 text-[9px]" />}
+              <span>
+                {t("mobile_menu.level")}
+                {getLevel()}
+              </span>
+              <Icon name="fa-fire" className="text-amber-500 text-xs" />{" "}
+              {streak}
+              {isStreakAtRisk() && streak > 0 && (
+                <Icon
+                  name="fa-exclamation-triangle"
+                  className="text-amber-500 text-[9px]"
+                />
+              )}
             </div>
           </div>
         </div>
         <div className="mt-2 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full transition-all duration-700"
-               style={{ width: `${Math.min(courseProgress, 100)}%` }} />
+          <div
+            className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full transition-all duration-700"
+            style={{ width: `${Math.min(courseProgress, 100)}%` }}
+          />
         </div>
       </div>
 
       {/* UNDERMENU - Acciones de usuario */}
       <div className="px-3 py-3">
         <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-[var(--theme-primary)] mb-2 flex items-center gap-1.5">
-          <Icon name="fa-user" className="text-[var(--theme-primary)] text-xs" />
-          {t('mobile_menu.undermenu')}
+          <Icon
+            name="fa-user"
+            className="text-[var(--theme-primary)] text-xs"
+          />
+          {t("mobile_menu.undermenu")}
         </h3>
         <div className="space-y-0.5">
-          <button onClick={onOpenProfile}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+          <button
+            onClick={onOpenProfile}
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]"
+          >
             <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-user" className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]" />
+              <Icon
+                name="fa-user"
+                className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]"
+              />
             </div>
-            {t('mobile_menu.my_profile')}
+            {t("mobile_menu.my_profile")}
           </button>
 
-          <button onClick={onOpenHistory}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+          <button
+            onClick={onOpenHistory}
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]"
+          >
             <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-chart-line" className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]" />
+              <Icon
+                name="fa-chart-line"
+                className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]"
+              />
             </div>
-            {t('mobile_menu.my_history')}
+            {t("mobile_menu.my_history")}
           </button>
 
-          <button onClick={() => setShowStudyPlanner(true)}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+          <button
+            onClick={() => setShowStudyPlanner(true)}
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]"
+          >
             <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-calendar" className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]" />
+              <Icon
+                name="fa-calendar"
+                className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]"
+              />
             </div>
-            {t('mobile_menu.study_plan')}
+            {t("mobile_menu.study_plan")}
           </button>
 
-          <button onClick={() => { closeMobileMenu(); setShowCertificateModal(true); }}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+          <button
+            onClick={() => {
+              closeMobileMenu();
+              setShowCertificateModal(true);
+            }}
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]"
+          >
             <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-certificate" className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]" />
+              <Icon
+                name="fa-certificate"
+                className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]"
+              />
             </div>
-            {t('mobile_menu.certificates')}
+            {t("mobile_menu.certificates")}
           </button>
 
-          <button onClick={onOpenHelp}
-            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+          <button
+            onClick={onOpenHelp}
+            className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]"
+          >
             <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-question-circle" className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]" />
+              <Icon
+                name="fa-question-circle"
+                className="text-xs text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)]"
+              />
             </div>
-            {t('mobile_menu.help')}
+            {t("mobile_menu.help")}
           </button>
-
         </div>
       </div>
 
@@ -130,8 +202,11 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       {/* MODULOS DEL CURSO */}
       <div className="px-3 py-3">
         <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-[var(--theme-primary)] mb-2 flex items-center gap-1.5">
-          <Icon name="fa-layer-group" className="text-[var(--theme-primary)] text-xs" />
-          {t('mobile_menu.modules')}
+          <Icon
+            name="fa-layer-group"
+            className="text-[var(--theme-primary)] text-xs"
+          />
+          {t("mobile_menu.modules")}
         </h3>
         <div className="space-y-0.5">
           {modules.map((mod) => {
@@ -146,7 +221,10 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
                 isLocked={isLocked}
                 score={modScore}
                 variant="expanded"
-                onClick={(id) => { setActiveMod(id); closeMobileMenu(); }}
+                onClick={(id) => {
+                  setActiveMod(id);
+                  closeMobileMenu();
+                }}
               />
             );
           })}
@@ -162,20 +240,47 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
             <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
             <div className="px-3 py-3 space-y-2">
               <h3 className="text-[10px] font-bold tracking-[0.08em] uppercase text-[var(--theme-primary)] flex items-center gap-1.5">
-                <Icon name="fa-award" className="text-[var(--theme-primary)] text-xs" /> {t('mobile_menu.badges')}
+                <Icon
+                  name="fa-award"
+                  className="text-[var(--theme-primary)] text-xs"
+                />{" "}
+                {t("mobile_menu.badges")}
               </h3>
               <div className="flex items-center justify-between px-1">
-                <span className="text-xs text-slate-500">{t('mobile_menu.badges_earned', { earned: badgesSummary.earned, total: badgesSummary.total })}</span>
-                <span className="text-xs font-semibold text-[var(--theme-primary)]">{Math.round((badgesSummary.earned / badgesSummary.total) * 100)}%</span>
+                <span className="text-xs text-slate-500">
+                  {t("mobile_menu.badges_earned", {
+                    earned: badgesSummary.earned,
+                    total: badgesSummary.total,
+                  })}
+                </span>
+                <span className="text-xs font-semibold text-[var(--theme-primary)]">
+                  {Math.round(
+                    (badgesSummary.earned / badgesSummary.total) * 100,
+                  )}
+                  %
+                </span>
               </div>
               <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full transition-all duration-700"
-                     style={{ width: `${(badgesSummary.earned / badgesSummary.total) * 100}%` }} />
+                <div
+                  className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full transition-all duration-700"
+                  style={{
+                    width: `${(badgesSummary.earned / badgesSummary.total) * 100}%`,
+                  }}
+                />
               </div>
               {courseCompleted && (
-                <button onClick={() => { setShowCertificateModal(true); closeMobileMenu(); }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)] bg-[var(--theme-emphasis)]/5 hover:bg-[var(--theme-emphasis)]/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/30 min-h-[44px]">
-                  <Icon name="fa-certificate" className="text-[var(--theme-primary)] text-sm" /> {t('mobile_menu.view_certificate')}
+                <button
+                  onClick={() => {
+                    setShowCertificateModal(true);
+                    closeMobileMenu();
+                  }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)] bg-[var(--theme-emphasis)]/5 hover:bg-[var(--theme-emphasis)]/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/30 min-h-[44px]"
+                >
+                  <Icon
+                    name="fa-certificate"
+                    className="text-[var(--theme-primary)] text-sm"
+                  />{" "}
+                  {t("mobile_menu.view_certificate")}
                 </button>
               )}
             </div>
@@ -186,14 +291,27 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       {/* DARK MODE */}
       <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
       <div className="px-3 py-3">
-        <button onClick={toggleDarkMode}
-          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/30 min-h-[44px]">
+        <button
+          onClick={toggleDarkMode}
+          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/30 min-h-[44px]"
+        >
           <span className="flex items-center gap-2.5">
-            <Icon name={isDarkMode ? 'fa-sun' : 'fa-moon'} className={`text-sm ${isDarkMode ? 'text-amber-400' : 'text-slate-500'}`} />
-            {t('mobile_menu.theme_mode', { mode: isDarkMode ? t('mobile_menu.theme_light') : t('mobile_menu.theme_dark') })}
+            <Icon
+              name={isDarkMode ? "fa-sun" : "fa-moon"}
+              className={`text-sm ${isDarkMode ? "text-amber-400" : "text-slate-500"}`}
+            />
+            {t("mobile_menu.theme_mode", {
+              mode: isDarkMode
+                ? t("mobile_menu.theme_light")
+                : t("mobile_menu.theme_dark"),
+            })}
           </span>
-          <div className={`w-9 h-5 rounded-full transition-colors duration-200 ${isDarkMode ? 'bg-[var(--theme-emphasis)]' : 'bg-slate-300'} relative`}>
-            <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${isDarkMode ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+          <div
+            className={`w-9 h-5 rounded-full transition-colors duration-200 ${isDarkMode ? "bg-[var(--theme-emphasis)]" : "bg-slate-300"} relative`}
+          >
+            <div
+              className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${isDarkMode ? "translate-x-[18px]" : "translate-x-0.5"}`}
+            />
           </div>
         </button>
       </div>
@@ -201,45 +319,71 @@ const IALabMobileMenu = ({ closeMobileMenu, toggleDarkMode, isDarkMode, onOpenPr
       {/* CERRAR SECCION */}
       <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
       <div className="px-3 py-3">
-        <button onClick={handleCloseSection}
-          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)] hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]">
+        <button
+          onClick={handleCloseSection}
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)] hover:bg-[var(--theme-emphasis)]/5 dark:hover:bg-[var(--theme-emphasis)]/10 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40 min-h-[44px]"
+        >
           <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
-            <Icon name="fa-sign-out-alt" className="text-xs text-[var(--theme-emphasis)]" />
+            <Icon
+              name="fa-sign-out-alt"
+              className="text-xs text-[var(--theme-emphasis)]"
+            />
           </div>
-          {t('mobile_menu.close_section')}
+          {t("mobile_menu.close_section")}
         </button>
       </div>
 
       {showStudyPlanner && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4">
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setShowStudyPlanner(false)} />
+          <div
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+            onClick={() => setShowStudyPlanner(false)}
+          />
           <div
             className="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden max-h-[90vh] flex flex-col"
-            onClick={e => e.stopPropagation()}
-            role="dialog" aria-modal="true" aria-label={t('ialab.study_planner.title')}
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t("ialab.study_planner.title")}
           >
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-700">
               <div className="flex items-center gap-2">
-                <Icon name="fa-calendar" className="text-[var(--theme-emphasis)] text-sm" />
-                <h2 className="text-sm font-bold text-[var(--theme-emphasis)]">{t('ialab.study_planner.title')}</h2>
+                <Icon
+                  name="fa-calendar"
+                  className="text-[var(--theme-emphasis)] text-sm"
+                />
+                <h2 className="text-sm font-bold text-[var(--theme-emphasis)]">
+                  {t("ialab.study_planner.title")}
+                </h2>
               </div>
-              <button onClick={() => setShowStudyPlanner(false)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" aria-label={t('ialab.study_planner.close_aria')}>
-                <Icon name="fa-times" className="text-slate-600 dark:text-slate-400 text-sm" />
+              <button
+                onClick={() => setShowStudyPlanner(false)}
+                className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                aria-label={t("ialab.study_planner.close_aria")}
+              >
+                <Icon
+                  name="fa-times"
+                  className="text-slate-600 dark:text-slate-400 text-sm"
+                />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto">
-              <Suspense fallback={<div className="p-8 text-center text-sm text-slate-500">{t('common.loading')}</div>}>
+              <Suspense
+                fallback={
+                  <div className="p-8 text-center text-sm text-slate-500">
+                    {t("common.loading")}
+                  </div>
+                }
+              >
                 <StudyCalendarSection />
               </Suspense>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 };
-
 
 IALabMobileMenu.propTypes = {
   closeMobileMenu: PropTypes.func,

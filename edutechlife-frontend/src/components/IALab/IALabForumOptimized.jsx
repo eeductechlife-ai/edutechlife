@@ -1,421 +1,478 @@
-import { useState, useEffect, useRef, useCallback, memo } from 'react'
-import PropTypes from 'prop-types';
-import { motion, useReducedMotion } from 'framer-motion';
-import { Icon } from '../../utils/iconMapping.jsx';
-import { useAuth } from '../../context/AuthContext';
-import { useIALabProgressContext } from '../../context/IALabContext';
-import { useIALabProgress } from '../../hooks/IALab/useIALabProgress';
-import useIALabForum from '../../hooks/IALab/useIALabForum';
-import { cn } from '../forum/forumDesignSystem';
-import { useTranslation } from '../../i18n/I18nProvider';
-import IALabForumOptimizedInput from './forum/IALabForumOptimizedInput';
+import { useState, useEffect, useRef, useCallback, memo } from "react";
+import PropTypes from "prop-types";
+import { motion, useReducedMotion } from "framer-motion";
+import { Icon } from "../../utils/iconMapping.jsx";
+import { useAuth } from "../../context/AuthContext";
+import { useIALabProgressContext } from "../../context/IALabContext";
+import { useIALabProgress } from "../../hooks/IALab/useIALabProgress";
+import useIALabForum from "../../hooks/IALab/useIALabForum";
+import { cn } from "../forum/forumDesignSystem";
+import { useTranslation } from "../../i18n/I18nProvider";
+import IALabForumOptimizedInput from "./forum/IALabForumOptimizedInput";
 
 const IALabForumOptimized = ({
-    compact = false,
-    initialLimit = 5,
-    className = '',
-    ...rest
+  compact = false,
+  initialLimit = 5,
+  className = "",
+  ...rest
 }) => {
-    const { user } = useAuth();
-    const { t } = useTranslation();
-    const { activeMod } = useIALabProgressContext();
-    const { trackCommunityComment } = useIALabProgress();
-    const prefersReducedMotion = useReducedMotion();
-    const {
-        forumPosts,
-        isLoading,
-        error,
-        likeStates,
-        loadForumPosts,
-        toggleLike,
-        createPost,
-        getForumStats,
-        formatLikeCount
-    } = useIALabForum();
+  const { user } = useAuth();
+  const { t } = useTranslation();
+  const { activeMod = 1 } = useIALabProgressContext() ?? {};
+  const { trackCommunityComment } = useIALabProgress();
+  const prefersReducedMotion = useReducedMotion();
+  const {
+    forumPosts,
+    isLoading,
+    error,
+    likeStates,
+    loadForumPosts,
+    toggleLike,
+    createPost,
+    getForumStats,
+    formatLikeCount,
+  } = useIALabForum();
 
-    const [hasTrackedCommunity, setHasTrackedCommunity] = useState(false);
-    const [visiblePosts, setVisiblePosts] = useState([]);
-    const [showAll, setShowAll] = useState(false);
-    const [newMessage, setNewMessage] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showLiveIndicator, setShowLiveIndicator] = useState(true);
-    const [isMobile, setIsMobile] = useState(() =>
-      typeof window !== 'undefined' ? window.matchMedia('(max-width: 767px)').matches : false
-    );
-    const [forumStats, setForumStats] = useState({ totalPosts: 0, totalComments: 0, totalLikes: 0, activeUsers: 0 });
-    const messagesEndRef = useRef(null);
-    const messagesContainerRef = useRef(null);
+  const [hasTrackedCommunity, setHasTrackedCommunity] = useState(false);
+  const [visiblePosts, setVisiblePosts] = useState([]);
+  const [showAll, setShowAll] = useState(false);
+  const [newMessage, setNewMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showLiveIndicator, setShowLiveIndicator] = useState(true);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 767px)").matches
+      : false,
+  );
+  const [forumStats, setForumStats] = useState({
+    totalPosts: 0,
+    totalComments: 0,
+    totalLikes: 0,
+    activeUsers: 0,
+  });
+  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
-    useEffect(() => {
-        loadForumPosts(showAll ? 20 : initialLimit);
-    }, [loadForumPosts, showAll, initialLimit]);
+  useEffect(() => {
+    loadForumPosts(showAll ? 20 : initialLimit);
+  }, [loadForumPosts, showAll, initialLimit]);
 
-    useEffect(() => {
-        let mounted = true;
-        getForumStats().then((stats) => {
-            if (mounted) setForumStats(stats || { totalPosts: 0, totalComments: 0, totalLikes: 0, activeUsers: 0 });
-        }).catch(() => {});
-        return () => { mounted = false; };
-    }, [getForumStats]);
-
-    useEffect(() => {
-        if (forumPosts.length > 0) {
-            const postsToShow = showAll ? forumPosts : forumPosts.slice(0, initialLimit);
-            setVisiblePosts(postsToShow);
-        }
-    }, [forumPosts, showAll, initialLimit]);
-
-    useEffect(() => {
-      const mq = window.matchMedia('(max-width: 767px)');
-      const handler = (e) => setIsMobile(e.matches);
-      mq.addEventListener('change', handler);
-      return () => mq.removeEventListener('change', handler);
-    }, []);
-
-    useEffect(() => {
-        if (messagesEndRef.current && !isLoading) {
-            try {
-                messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-            } catch {}
-        }
-    }, [visiblePosts, isLoading]);
-
-    const handleSubmitMessage = useCallback(async (e) => {
-        e.preventDefault();
-        if (!newMessage.trim() || !user) return;
-
-        setIsSubmitting(true);
-        try {
-            const result = await createPost({
-                title: `Mensaje de ${user.full_name || user.email}`,
-                content: newMessage.trim(),
-                tags: ['Chat']
-            });
-            
-            if (!result.success) {
-                if (import.meta.env.DEV) console.error('Error al crear post:', result.error);
-                return;
-            }
-            
-            if (activeMod && !hasTrackedCommunity) {
-                await trackCommunityComment(activeMod);
-                setHasTrackedCommunity(true);
-            }
-            
-            setNewMessage('');
-            setShowLiveIndicator(true);
-            setTimeout(() => setShowLiveIndicator(false), 3000);
-        } catch (err) {
-            if (import.meta.env.DEV) console.error('Error al enviar mensaje:', err);
-        } finally {
-            setIsSubmitting(false);
-        }
-    }, [newMessage, user, createPost, activeMod, hasTrackedCommunity, trackCommunityComment, t]);
-
-    const handleLoadMore = useCallback(() => {
-        setShowAll(true);
-    }, []);
-
-    const getInitials = (name) => {
-        if (!name) return '?';
-        return name
-            .split(' ')
-            .map(part => part[0])
-            .join('')
-            .toUpperCase()
-            .substring(0, 2);
+  useEffect(() => {
+    let mounted = true;
+    getForumStats()
+      .then((stats) => {
+        if (mounted)
+          setForumStats(
+            stats || {
+              totalPosts: 0,
+              totalComments: 0,
+              totalLikes: 0,
+              activeUsers: 0,
+            },
+          );
+      })
+      .catch(() => {});
+    return () => {
+      mounted = false;
     };
+  }, [getForumStats]);
 
-    const getAvatarGradient = (name) => {
-        if (!name) return 'from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark';
+  useEffect(() => {
+    if (forumPosts.length > 0) {
+      const postsToShow = showAll
+        ? forumPosts
+        : forumPosts.slice(0, initialLimit);
+      setVisiblePosts(postsToShow);
+    }
+  }, [forumPosts, showAll, initialLimit]);
 
-        const colors = [
-            'from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark',
-            'from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]',
-            'from-[var(--theme-emphasis)] to-[var(--theme-primary)]',
-            'from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]',
-            'from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark'
-        ];
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
-        const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        return colors[hash % colors.length];
-    };
+  useEffect(() => {
+    if (messagesEndRef.current && !isLoading) {
+      try {
+        messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      } catch {}
+    }
+  }, [visiblePosts, isLoading]);
 
-    const formatRelativeTime = (dateString) => {
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffMs = now - date;
-        const diffMins = Math.floor(diffMs / 60000);
-        const diffHours = Math.floor(diffMs / 3600000);
-        const diffDays = Math.floor(diffMs / 86400000);
+  const handleSubmitMessage = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!newMessage.trim() || !user) return;
 
-        if (diffMins < 1) return 'Ahora mismo';
-        if (diffMins < 60) return `Hace ${diffMins} min`;
-        if (diffHours < 24) return `Hace ${diffHours} h`;
-        if (diffDays < 7) return `Hace ${diffDays} d`;
-        return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
-    };
+      setIsSubmitting(true);
+      try {
+        const result = await createPost({
+          title: `Mensaje de ${user.full_name || user.email}`,
+          content: newMessage.trim(),
+          tags: ["Chat"],
+        });
 
-    return (
-        <motion.div
-            whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -4 }}
-            whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-            transition={{ duration: 0.2 }}
-            className={cn(
-                "relative z-10 bg-white dark:bg-slate-800 rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 dark:border-slate-700",
-                "flex flex-col",
-                compact ? "max-h-[50dvh] h-fit min-h-[200px]" : "h-fit",
-                className
+        if (!result.success) {
+          if (import.meta.env.DEV)
+            console.error("Error al crear post:", result.error);
+          return;
+        }
+
+        if (activeMod && !hasTrackedCommunity) {
+          await trackCommunityComment(activeMod);
+          setHasTrackedCommunity(true);
+        }
+
+        setNewMessage("");
+        setShowLiveIndicator(true);
+        setTimeout(() => setShowLiveIndicator(false), 3000);
+      } catch (err) {
+        if (import.meta.env.DEV) console.error("Error al enviar mensaje:", err);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [
+      newMessage,
+      user,
+      createPost,
+      activeMod,
+      hasTrackedCommunity,
+      trackCommunityComment,
+      t,
+    ],
+  );
+
+  const handleLoadMore = useCallback(() => {
+    setShowAll(true);
+  }, []);
+
+  const getInitials = (name) => {
+    if (!name) return "?";
+    return name
+      .split(" ")
+      .map((part) => part[0])
+      .join("")
+      .toUpperCase()
+      .substring(0, 2);
+  };
+
+  const getAvatarGradient = (name) => {
+    if (!name)
+      return "from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark";
+
+    const colors = [
+      "from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark",
+      "from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]",
+      "from-[var(--theme-emphasis)] to-[var(--theme-primary)]",
+      "from-[var(--theme-emphasis)]-dark to-[var(--theme-primary)]",
+      "from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark",
+    ];
+
+    const hash = name
+      .split("")
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return colors[hash % colors.length];
+  };
+
+  const formatRelativeTime = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return "Ahora mismo";
+    if (diffMins < 60) return `Hace ${diffMins} min`;
+    if (diffHours < 24) return `Hace ${diffHours} h`;
+    if (diffDays < 7) return `Hace ${diffDays} d`;
+    return date.toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+  };
+
+  return (
+    <motion.div
+      whileHover={prefersReducedMotion ? {} : { scale: 1.02, y: -4 }}
+      whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+      transition={{ duration: 0.2 }}
+      className={cn(
+        "relative z-10 bg-white dark:bg-slate-800 rounded-2xl shadow-[0px_4px_16px_rgba(17,17,26,0.05)] border border-slate-100 dark:border-slate-700",
+        "flex flex-col",
+        compact ? "max-h-[50dvh] h-fit min-h-[200px]" : "h-fit",
+        className,
+      )}
+      {...rest}
+    >
+      {/* Elementos decorativos */}
+      <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-[var(--theme-emphasis)]/6 to-[var(--theme-primary)]/4 rounded-full blur-2xl pointer-events-none"></div>
+      <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[var(--theme-emphasis)]/4 to-[var(--theme-primary)]/2 rounded-full blur-2xl pointer-events-none"></div>
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] rounded-t-2xl" />
+
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 md:p-6 border-b border-slate-100 dark:border-slate-700">
+        <div className="flex items-center gap-4">
+          <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark flex items-center justify-center flex-shrink-0">
+            <Icon name="fa-comments" className="text-white text-sm" />
+            {showLiveIndicator && (
+              <div className="absolute -top-1 -right-1 w-3 h-3">
+                <div className="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-75" />
+                <div className="absolute inset-0 bg-emerald-500 rounded-full" />
+              </div>
             )}
-            {...rest}
-        >
-            {/* Elementos decorativos */}
-            <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-[var(--theme-emphasis)]/6 to-[var(--theme-primary)]/4 rounded-full blur-2xl pointer-events-none"></div>
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[var(--theme-emphasis)]/4 to-[var(--theme-primary)]/2 rounded-full blur-2xl pointer-events-none"></div>
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] rounded-t-2xl" />
-
-
-
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 md:p-6 border-b border-slate-100 dark:border-slate-700">
-                <div className="flex items-center gap-4">
-                    <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark flex items-center justify-center flex-shrink-0">
-                        <Icon name="fa-comments" className="text-white text-sm" />
-                        {showLiveIndicator && (
-                            <div className="absolute -top-1 -right-1 w-3 h-3">
-                                <div className="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-75" />
-                                <div className="absolute inset-0 bg-emerald-500 rounded-full" />
-                            </div>
-                        )}
-                    </div>
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <h3 className="text-lg font-bold text-[var(--theme-emphasis)]">
-                                {t('ialab.forum.optimized.title')}
-                            </h3>
-                            {showLiveIndicator && (
-                                <span className="flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-semibold rounded-full">
-                                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full live-pulse" />
-                                    {t('ialab.forum.optimized.live_badge')}
-                                </span>
-                            )}
-                        </div>
-                        <p className="text-xs text-slate-500">
-                            {t('ialab.forum.optimized.stats_line', { posts: forumStats.totalPosts, likes: forumStats.totalLikes })}
-                        </p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                    <div className="flex -space-x-2">
-                        {forumPosts.slice(0, 3).map((post, index) => (
-                            <div
-                                key={post.id}
-                                className={cn(
-                                    "w-6 h-6 rounded-full border-2 border-white",
-                                    "bg-gradient-to-tr",
-                                    getAvatarGradient(post.profiles?.full_name)
-                                )}
-                                style={{ zIndex: 3 - index }}
-                            >
-                                <span className="flex items-center justify-center w-full h-full text-[10px] font-bold text-white">
-                                    {getInitials(post.profiles?.full_name)}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                    {forumPosts.length > 3 && (
-                        <span className="text-xs text-slate-500">
-                            +{forumPosts.length - 3}
-                        </span>
-                    )}
-                </div>
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-bold text-[var(--theme-emphasis)]">
+                {t("ialab.forum.optimized.title")}
+              </h3>
+              {showLiveIndicator && (
+                <span className="flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-semibold rounded-full">
+                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full live-pulse" />
+                  {t("ialab.forum.optimized.live_badge")}
+                </span>
+              )}
             </div>
+            <p className="text-xs text-slate-500">
+              {t("ialab.forum.optimized.stats_line", {
+                posts: forumStats.totalPosts,
+                likes: forumStats.totalLikes,
+              })}
+            </p>
+          </div>
+        </div>
 
-            {/* Área de Mensajes */}
-            <div
-                ref={messagesContainerRef}
+        <div className="flex items-center gap-2">
+          <div className="flex -space-x-2">
+            {forumPosts.slice(0, 3).map((post, index) => (
+              <div
+                key={post.id}
                 className={cn(
-                    "flex-1 overflow-y-auto",
-                    "px-4 md:px-6 py-4",
-                    "scrollbar-thin"
+                  "w-6 h-6 rounded-full border-2 border-white",
+                  "bg-gradient-to-tr",
+                  getAvatarGradient(post.profiles?.full_name),
                 )}
-                style={{ maxHeight: isMobile ? '50dvh' : '400px' }}
-            >
-                {isLoading ? (
-                    <div className="flex items-center justify-center h-full">
-                        <div className="text-center">
-                            <div className="w-8 h-8 border-2 border-[var(--theme-emphasis)]/20 border-t-[#004B63] rounded-full animate-spin mx-auto mb-3" />
-                            <p className="text-sm text-slate-500">{t('ialab.forum.optimized.loading')}</p>
-                        </div>
-                    </div>
-                ) : error ? (
-                    <div className="flex items-center justify-center h-full">
-                        <div className="text-center p-4">
-                            <Icon name="fa-exclamation-triangle" className="text-amber-500 text-2xl mb-3" />
-                            <p className="text-sm text-slate-600 mb-2">{error}</p>
-                            <button
-                                onClick={() => loadForumPosts(initialLimit)}
-                                className="text-xs text-[var(--theme-emphasis)] hover:text-[var(--theme-emphasis)]-dark font-medium"
-                            >
-                                {t('ialab.forum.optimized.retry')}
-                            </button>
-                        </div>
-                    </div>
-                ) : visiblePosts.length === 0 ? (
-                    <div className="flex items-center justify-center h-full">
-                        <div className="text-center p-4">
-                            <div className="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 border border-[var(--theme-emphasis)]/10 flex items-center justify-center mb-4">
-                                <Icon name="fa-comment-dots" className="text-[var(--theme-emphasis)] text-xl" />
-                            </div>
-                            <h4 className="text-sm font-bold text-slate-800 mb-1">
-                                {t('ialab.forum.optimized.empty_title')}
-                            </h4>
-                            <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                                {t('ialab.forum.optimized.empty_desc')}
-                            </p>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="space-y-3">
-                        {visiblePosts.map((post, index) => {
-                            const isLiked = likeStates[post.id]?.userLiked || false;
-                            const likeCount = likeStates[post.id]?.likeCount || post.upvote_count || 0;
-                            const isLoadingLike = likeStates[post.id]?.isLoading || false;
+                style={{ zIndex: 3 - index }}
+              >
+                <span className="flex items-center justify-center w-full h-full text-[10px] font-bold text-white">
+                  {getInitials(post.profiles?.full_name)}
+                </span>
+              </div>
+            ))}
+          </div>
+          {forumPosts.length > 3 && (
+            <span className="text-xs text-slate-500">
+              +{forumPosts.length - 3}
+            </span>
+          )}
+        </div>
+      </div>
 
-                            return (
-                                <div
-                                    key={post.id}
-                                    className={cn(
-                                        "bg-white dark:bg-slate-700/60 border border-slate-100 dark:border-slate-600 rounded-xl p-4",
-                                        "message-bubble",
-                                        "ialab-animate-in fade-in-up",
-                                        index === 0 ? "animation-delay-100" :
-                                        index === 1 ? "animation-delay-200" :
-                                        index === 2 ? "animation-delay-300" : ""
-                                    )}
-                                >
-                                    <div className="flex items-start justify-between mb-3">
-                                        <div className="flex items-center gap-3">
-                                            <div className={cn(
-                                                "w-8 h-8 rounded-full",
-                                                "bg-gradient-to-tr",
-                                                getAvatarGradient(post.profiles?.full_name),
-                                                "flex items-center justify-center",
-                                                "shadow-sm"
-                                            )}>
-                                                <span className="text-xs font-bold text-white">
-                                                    {getInitials(post.profiles?.full_name)}
-                                                </span>
-                                            </div>
-
-                                            <div>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
-                                                        {post.profiles?.full_name || t('ialab.forum.optimized.user_fallback')}
-                                                    </span>
-                                                    {post.tags?.includes('Mentor') && (
-                                                        <span className="px-1.5 py-0.5 bg-[var(--theme-emphasis)]/5 text-[var(--theme-emphasis)] text-[10px] font-medium rounded-full">
-                                                            {t('ialab.forum.optimized.mentor_badge')}
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <span className="text-[10px] text-slate-600">
-                                                    {formatRelativeTime(post.created_at)}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <button
-                                            onClick={() => toggleLike(post.id)}
-                                            disabled={isLoadingLike || !user}
-                                            className={cn(
-                                                "flex items-center gap-1",
-                                                "text-xs font-medium",
-                                                isLiked ? "text-red-500" : "text-slate-500",
-                                                "hover:text-red-500",
-                                                "transition-colors",
-                                                "disabled:opacity-50 disabled:cursor-not-allowed",
-                                                "min-h-[44px]"
-                                            )}
-                                        >
-                                            {isLoadingLike ? (
-                                                <div className="w-3 h-3 border border-[var(--theme-emphasis)]/20 border-t-[#004B63] rounded-full animate-spin" />
-                                            ) : (
-                                                <Icon name={isLiked ? "fa-heart" : "fa-heart"} className={isLiked ? "fill-current" : ""} />
-                                            )}
-                                            <span>{formatLikeCount(likeCount)}</span>
-                                        </button>
-                                    </div>
-
-                                    <div className="mb-3">
-                                        <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-1">
-                                            {post.title}
-                                        </h4>
-                                        <p className="text-sm text-slate-600 dark:text-slate-300 leading-snug">
-                                            {post.content}
-                                        </p>
-                                    </div>
-
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex flex-wrap gap-1">
-                                            {post.tags?.slice(0, 2).map((tag, tagIndex) => (
-                                                <span
-                                                    key={tagIndex}
-                                                    className="px-2 py-0.5 bg-[var(--theme-emphasis)]/5 text-[var(--theme-emphasis)] text-[10px] font-medium rounded-full"
-                                                >
-                                                    {tag}
-                                                </span>
-                                            ))}
-                                            {post.tags && post.tags.length > 2 && (
-                                                <span className="text-[10px] text-slate-600">
-                                                    +{post.tags.length - 2}
-                                                </span>
-                                            )}
-                                        </div>
-
-                                        {post.comment_count > 0 && (
-                                            <div className="flex items-center gap-1 text-[10px] text-slate-600">
-                                                <Icon name="fa-comment" />
-                                                <span>{post.comment_count}</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            );
-                        })}
-
-                        {!showAll && forumPosts.length > initialLimit && (
-                            <div className="text-center pt-2">
-                                <button
-                                    onClick={handleLoadMore}
-                                    className="text-xs text-[var(--theme-emphasis)] hover:text-[var(--theme-emphasis)]-dark font-medium"
-                                >
-                                    {t('ialab.forum.optimized.show_more', { count: forumPosts.length - initialLimit })}
-                                </button>
-                            </div>
-                        )}
-
-                        <div ref={messagesEndRef} />
-                    </div>
-                )}
+      {/* Área de Mensajes */}
+      <div
+        ref={messagesContainerRef}
+        className={cn(
+          "flex-1 overflow-y-auto",
+          "px-4 md:px-6 py-4",
+          "scrollbar-thin",
+        )}
+        style={{ maxHeight: isMobile ? "50dvh" : "400px" }}
+      >
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <div className="w-8 h-8 border-2 border-[var(--theme-emphasis)]/20 border-t-[#004B63] rounded-full animate-spin mx-auto mb-3" />
+              <p className="text-sm text-slate-500">
+                {t("ialab.forum.optimized.loading")}
+              </p>
             </div>
+          </div>
+        ) : error ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center p-4">
+              <Icon
+                name="fa-exclamation-triangle"
+                className="text-amber-500 text-2xl mb-3"
+              />
+              <p className="text-sm text-slate-600 mb-2">{error}</p>
+              <button
+                onClick={() => loadForumPosts(initialLimit)}
+                className="text-xs text-[var(--theme-emphasis)] hover:text-[var(--theme-emphasis)]-dark font-medium"
+              >
+                {t("ialab.forum.optimized.retry")}
+              </button>
+            </div>
+          </div>
+        ) : visiblePosts.length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center p-4">
+              <div className="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 border border-[var(--theme-emphasis)]/10 flex items-center justify-center mb-4">
+                <Icon
+                  name="fa-comment-dots"
+                  className="text-[var(--theme-emphasis)] text-xl"
+                />
+              </div>
+              <h4 className="text-sm font-bold text-slate-800 mb-1">
+                {t("ialab.forum.optimized.empty_title")}
+              </h4>
+              <p className="text-xs text-slate-500 max-w-xs mx-auto">
+                {t("ialab.forum.optimized.empty_desc")}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {visiblePosts.map((post, index) => {
+              const isLiked = likeStates[post.id]?.userLiked || false;
+              const likeCount =
+                likeStates[post.id]?.likeCount || post.upvote_count || 0;
+              const isLoadingLike = likeStates[post.id]?.isLoading || false;
 
-            <IALabForumOptimizedInput
-                handleSubmitMessage={handleSubmitMessage}
-                user={user}
-                newMessage={newMessage}
-                setNewMessage={setNewMessage}
-                isSubmitting={isSubmitting}
-                prefersReducedMotion={prefersReducedMotion}
-                getInitials={getInitials}
-                t={t}
-                cn={cn}
-            />
-        </motion.div>
-    );
+              return (
+                <div
+                  key={post.id}
+                  className={cn(
+                    "bg-white dark:bg-slate-700/60 border border-slate-100 dark:border-slate-600 rounded-xl p-4",
+                    "message-bubble",
+                    "ialab-animate-in fade-in-up",
+                    index === 0
+                      ? "animation-delay-100"
+                      : index === 1
+                        ? "animation-delay-200"
+                        : index === 2
+                          ? "animation-delay-300"
+                          : "",
+                  )}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={cn(
+                          "w-8 h-8 rounded-full",
+                          "bg-gradient-to-tr",
+                          getAvatarGradient(post.profiles?.full_name),
+                          "flex items-center justify-center",
+                          "shadow-sm",
+                        )}
+                      >
+                        <span className="text-xs font-bold text-white">
+                          {getInitials(post.profiles?.full_name)}
+                        </span>
+                      </div>
+
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
+                            {post.profiles?.full_name ||
+                              t("ialab.forum.optimized.user_fallback")}
+                          </span>
+                          {post.tags?.includes("Mentor") && (
+                            <span className="px-1.5 py-0.5 bg-[var(--theme-emphasis)]/5 text-[var(--theme-emphasis)] text-[10px] font-medium rounded-full">
+                              {t("ialab.forum.optimized.mentor_badge")}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-[10px] text-slate-600">
+                          {formatRelativeTime(post.created_at)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => toggleLike(post.id)}
+                      disabled={isLoadingLike || !user}
+                      className={cn(
+                        "flex items-center gap-1",
+                        "text-xs font-medium",
+                        isLiked ? "text-red-500" : "text-slate-500",
+                        "hover:text-red-500",
+                        "transition-colors",
+                        "disabled:opacity-50 disabled:cursor-not-allowed",
+                        "min-h-[44px]",
+                      )}
+                    >
+                      {isLoadingLike ? (
+                        <div className="w-3 h-3 border border-[var(--theme-emphasis)]/20 border-t-[#004B63] rounded-full animate-spin" />
+                      ) : (
+                        <Icon
+                          name={isLiked ? "fa-heart" : "fa-heart"}
+                          className={isLiked ? "fill-current" : ""}
+                        />
+                      )}
+                      <span>{formatLikeCount(likeCount)}</span>
+                    </button>
+                  </div>
+
+                  <div className="mb-3">
+                    <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-1">
+                      {post.title}
+                    </h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-snug">
+                      {post.content}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap gap-1">
+                      {post.tags?.slice(0, 2).map((tag, tagIndex) => (
+                        <span
+                          key={tagIndex}
+                          className="px-2 py-0.5 bg-[var(--theme-emphasis)]/5 text-[var(--theme-emphasis)] text-[10px] font-medium rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {post.tags && post.tags.length > 2 && (
+                        <span className="text-[10px] text-slate-600">
+                          +{post.tags.length - 2}
+                        </span>
+                      )}
+                    </div>
+
+                    {post.comment_count > 0 && (
+                      <div className="flex items-center gap-1 text-[10px] text-slate-600">
+                        <Icon name="fa-comment" />
+                        <span>{post.comment_count}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {!showAll && forumPosts.length > initialLimit && (
+              <div className="text-center pt-2">
+                <button
+                  onClick={handleLoadMore}
+                  className="text-xs text-[var(--theme-emphasis)] hover:text-[var(--theme-emphasis)]-dark font-medium"
+                >
+                  {t("ialab.forum.optimized.show_more", {
+                    count: forumPosts.length - initialLimit,
+                  })}
+                </button>
+              </div>
+            )}
+
+            <div ref={messagesEndRef} />
+          </div>
+        )}
+      </div>
+
+      <IALabForumOptimizedInput
+        handleSubmitMessage={handleSubmitMessage}
+        user={user}
+        newMessage={newMessage}
+        setNewMessage={setNewMessage}
+        isSubmitting={isSubmitting}
+        prefersReducedMotion={prefersReducedMotion}
+        getInitials={getInitials}
+        t={t}
+        cn={cn}
+      />
+    </motion.div>
+  );
 };
-
 
 IALabForumOptimized.propTypes = {
   compact: PropTypes.bool,

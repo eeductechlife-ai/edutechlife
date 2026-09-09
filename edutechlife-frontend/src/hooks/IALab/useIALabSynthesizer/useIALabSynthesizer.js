@@ -1,8 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useIALabProgressContext } from "../../../context/IALabContext";
-import {
-  analyzePromptQuality,
-} from "../../../utils/promptAnalyzer.js";
+import { analyzePromptQuality } from "../../../utils/promptAnalyzer.js";
 import {
   selectAppropriateTechnique,
   applyTechnique,
@@ -46,7 +44,11 @@ import { callDeepSeekApi } from "./synthesizerApi";
  * @returns {Object} Funciones y estados para sintetizador de prompts
  */
 export const useIALabSynthesizer = () => {
-  const { activeMod, modules, completedModules } = useIALabProgressContext();
+  const {
+    activeMod = 1,
+    modules = [],
+    completedModules = [],
+  } = useIALabProgressContext() ?? {};
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);

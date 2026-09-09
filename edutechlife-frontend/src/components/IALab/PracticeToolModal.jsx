@@ -28,7 +28,7 @@ const MODULE_TOOL_CONFIG = {
 
 const PracticeToolModal = ({ isOpen, toolType, onClose }) => {
   const { t } = useTranslation();
-  const { activeMod } = useIALabProgressContext();
+  const { activeMod = 1 } = useIALabProgressContext() ?? {};
 
   const handleOverlayClick = useCallback(
     (e) => {

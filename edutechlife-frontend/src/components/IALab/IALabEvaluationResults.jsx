@@ -19,7 +19,7 @@ const IALabEvaluationResults = ({
   onRetry,
 }) => {
   const { t } = useTranslation();
-  const { activeMod } = useIALabProgressContext();
+  const { activeMod = 1 } = useIALabProgressContext() ?? {};
   const { trackActivity } = useActivityTracker();
   const { isPremium } = usePremiumStatus();
   const [gradeSaved, setGradeSaved] = useState(false);
@@ -190,7 +190,10 @@ const IALabEvaluationResults = ({
 
           <div className="bg-gradient-to-r from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 rounded-xl p-5 border border-[var(--theme-primary)]/20 dark:from-[var(--theme-emphasis)]/20 dark:to-[var(--theme-primary)]/20 dark:border-[var(--theme-primary)]/40">
             <div className="flex items-center gap-3">
-              <Icon name="fa-chart-line" className="text-[var(--theme-emphasis)] text-xl" />
+              <Icon
+                name="fa-chart-line"
+                className="text-[var(--theme-emphasis)] text-xl"
+              />
               <div>
                 <h3 className="text-lg font-bold text-[var(--theme-emphasis)] mb-1">
                   {t("ialab.evaluation.results.score_weight_info", {
@@ -236,7 +239,10 @@ const IALabEvaluationResults = ({
           <div
             className={`flex items-center gap-3 ${isApproved ? "bg-emerald-50/60" : "bg-slate-50"} border border-slate-200 dark:bg-slate-800/50 dark:border-slate-700 rounded-xl p-4`}
           >
-            <Icon name="fa-chart-pie" className="text-[var(--theme-primary)] text-xl" />
+            <Icon
+              name="fa-chart-pie"
+              className="text-[var(--theme-primary)] text-xl"
+            />
             <div>
               <p className="text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 font-bold">
                 {t("ialab.evaluation.results.competencies_label")}
@@ -372,7 +378,9 @@ const IALabEvaluationResults = ({
                     <Icon
                       name={isApproved ? "fa-trophy" : "fa-certificate"}
                       className={
-                        isApproved ? "text-emerald-500" : "text-[var(--theme-emphasis)]"
+                        isApproved
+                          ? "text-emerald-500"
+                          : "text-[var(--theme-emphasis)]"
                       }
                     />
                     <h4

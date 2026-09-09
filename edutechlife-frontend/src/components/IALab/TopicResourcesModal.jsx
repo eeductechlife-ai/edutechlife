@@ -29,8 +29,10 @@ const TopicResourcesModal = ({
   className = "",
 }) => {
   const { t, locale } = useTranslation();
-  const { activeMod, markResourceAsViewed: markResourceInContext } =
-    useIALabProgressContext();
+  const {
+    activeMod = 1,
+    markResourceAsViewed: markResourceInContext = () => {},
+  } = useIALabProgressContext() ?? {};
   const { trackResourceViewed } = useIALabProgress();
 
   const [activeResourceIndex, setActiveResourceIndex] = useState(0);

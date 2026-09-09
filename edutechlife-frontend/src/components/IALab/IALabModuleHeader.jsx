@@ -160,7 +160,11 @@ TOOL_CONFIG.default = {
 /* ─── Componente ─────────────────────────────────────────────────────────── */
 const IALabModuleHeader = () => {
   const { t } = useTranslation();
-  const { activeMod, modules, courseProgress } = useIALabProgressContext();
+  const {
+    activeMod = 1,
+    modules = [],
+    courseProgress = 0,
+  } = useIALabProgressContext() ?? {};
   const { theme } = useIALabTheme();
   const curr = modules.find((m) => m.id === activeMod) || modules[0];
   const moduleProgress = Math.round(curr?.progress ?? 0);

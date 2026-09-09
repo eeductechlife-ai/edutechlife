@@ -71,7 +71,8 @@ const GlobalSearchBar = forwardRef(function GlobalSearchBar(
   ref,
 ) {
   const { t, locale } = useTranslation();
-  const { modules, setActiveMod } = useIALabProgressContext();
+  const { modules = [], setActiveMod = () => {} } =
+    useIALabProgressContext() ?? {};
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [isOpen, setIsOpen] = useState(false);

@@ -46,7 +46,8 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     penalizeAttempt,
   } = useIALabQuiz();
 
-  const { activeMod, markExamComplete } = useIALabProgressContext();
+  const { activeMod = 1, markExamComplete = () => {} } =
+    useIALabProgressContext() ?? {};
 
   const quizAnswers = useIALabStore((s) => s.quizAnswers);
   const quizScore = useIALabStore((s) => s.quizScore);
@@ -316,7 +317,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     <div
       className="fixed inset-0 pointer-events-none z-[101] opacity-[0.03] select-none"
       style={{
-        background: `repeating-linear-gradient(45deg, var(--color-[var(--theme-emphasis)]), var(--color-[var(--theme-emphasis)]) 2px, transparent 2px, transparent 60px)`,
+        background: `repeating-linear-gradient(45deg, var(--theme-emphasis), var(--theme-emphasis) 2px, transparent 2px, transparent 60px)`,
       }}
     >
       <div className="absolute inset-0 flex items-center justify-center overflow-hidden max-w-full">

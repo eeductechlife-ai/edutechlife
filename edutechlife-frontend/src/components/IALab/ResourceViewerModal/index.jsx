@@ -43,11 +43,11 @@ const ResourceViewerModal = ({
 }) => {
   const { t } = useTranslation();
   const {
-    activeMod,
-    modules,
-    markResourceAsViewed: markResourceInContext,
-    recordLastTopic,
-  } = useIALabProgressContext();
+    activeMod = 1,
+    modules = [],
+    markResourceAsViewed: markResourceInContext = () => {},
+    recordLastTopic = () => {},
+  } = useIALabProgressContext() ?? {};
   const { trackResourceViewed } = useIALabProgress();
 
   const [isMarkedAsViewed, setIsMarkedAsViewed] = useState(false);
@@ -60,7 +60,9 @@ const ResourceViewerModal = ({
     useResourceNotes(resource);
 
   const setShowValerioDrawer = useIALabStore((s) => s.setShowValerioDrawer);
-  const setValerioInitialMessage = useIALabStore((s) => s.setValerioInitialMessage);
+  const setValerioInitialMessage = useIALabStore(
+    (s) => s.setValerioInitialMessage,
+  );
 
   const RESOURCE_ICONS = {
     video: "fa-video",
@@ -120,7 +122,7 @@ const ResourceViewerModal = ({
     if (!isOpen || !resource?.id || !recordAdaptiveView) return;
     const openedAt = Date.now();
     recordAdaptiveView(resource.id, {
-      type: resourceType || resource.type || 'resource',
+      type: resourceType || resource.type || "resource",
     });
     return () => {
       // Al cerrar, si estuvo >30s, programa un repaso en Box 1
@@ -129,7 +131,13 @@ const ResourceViewerModal = ({
         scheduleAdaptiveReview(resource.id, 1);
       }
     };
-  }, [isOpen, resource?.id, resourceType, recordAdaptiveView, scheduleAdaptiveReview]);
+  }, [
+    isOpen,
+    resource?.id,
+    resourceType,
+    recordAdaptiveView,
+    scheduleAdaptiveReview,
+  ]);
 
   const handleMarkAsViewed = useCallback(async () => {
     setIsMarkedAsViewed(true);
@@ -142,8 +150,8 @@ const ResourceViewerModal = ({
       const rt = resource.type || "document";
       // Recompensa XP silenciosa la primera vez que se marca como visto (aditivo, idempotente)
       try {
-        const XP_KEY = 'ialab_resource_xp_awarded';
-        const awarded = JSON.parse(localStorage.getItem(XP_KEY) || '{}');
+        const XP_KEY = "ialab_resource_xp_awarded";
+        const awarded = JSON.parse(localStorage.getItem(XP_KEY) || "{}");
         if (!awarded[resource.id]) {
           const XP_BY_TYPE = {
             ova_interactive: 15,
@@ -152,7 +160,7 @@ const ResourceViewerModal = ({
             document: 8,
             documento: 8,
             pdf: 8,
-            'pdf-thumbnail': 8,
+            "pdf-thumbnail": 8,
             infographic: 6,
             reading: 6,
             interactive: 10,
@@ -160,11 +168,13 @@ const ResourceViewerModal = ({
           };
           const xp = XP_BY_TYPE[rt] || 5;
           const st = useIALabStore.getState();
-          if (typeof st.addXp === 'function') st.addXp(xp);
+          if (typeof st.addXp === "function") st.addXp(xp);
           awarded[resource.id] = { xp, ts: Date.now() };
           localStorage.setItem(XP_KEY, JSON.stringify(awarded));
         }
-      } catch (e) { /* silent — no romper flujo si storage falla */ }
+      } catch (e) {
+        /* silent — no romper flujo si storage falla */
+      }
       await trackResourceViewed(currentMod, resource.id, rt);
       if (recordLastTopic) {
         const typeLabels = {
@@ -553,7 +563,10 @@ const ResourceViewerModal = ({
                       </button>
                       <button
                         onClick={() => {
-                          setValerioInitialMessage(t("ialab.ask_max_context") + (resource?.title || ''));
+                          setValerioInitialMessage(
+                            t("ialab.ask_max_context") +
+                              (resource?.title || ""),
+                          );
                           setShowValerioDrawer(true);
                           handleClose();
                         }}
@@ -561,8 +574,13 @@ const ResourceViewerModal = ({
                         aria-label={t("ialab.ask_max_btn")}
                         title={t("ialab.ask_max_btn")}
                       >
-                        <Icon name="fa-robot" className="w-3 h-3 sm:w-4 sm:h-4" />
-                        <span className="hidden sm:inline">{t("ialab.ask_max_btn")}</span>
+                        <Icon
+                          name="fa-robot"
+                          className="w-3 h-3 sm:w-4 sm:h-4"
+                        />
+                        <span className="hidden sm:inline">
+                          {t("ialab.ask_max_btn")}
+                        </span>
                       </button>
                     </div>
                     {totalResources > 1 && (
@@ -665,7 +683,7 @@ const ResourceViewerModal = ({
         </>
       )}
     </AnimatePresence>,
-    document.body
+    document.body,
   );
 };
 

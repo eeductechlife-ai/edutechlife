@@ -84,11 +84,15 @@ const splitIntoSentences = (text) => {
 
 const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
   const { t, locale } = useTranslation();
-  const { activeMod, modules, completedModules } = useIALabProgressContext();
+  const {
+    activeMod = 1,
+    modules = [],
+    completedModules = [],
+  } = useIALabProgressContext() ?? {};
   // Shared Supabase singleton for academic memory (optional)
   const supabaseClient = supabase;
 
-  const { user } = useIALabUIContext();
+  const { user } = useIALabUIContext() ?? {};
 
   const [valerioState, setValerioState] = useState("idle");
   const [message, setMessage] = useState("");

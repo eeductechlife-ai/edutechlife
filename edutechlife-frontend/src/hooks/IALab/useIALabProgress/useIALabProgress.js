@@ -58,26 +58,30 @@ const PROGRESS_FETCH_TIMEOUT_MS = 6000;
 
 export const useIALabProgress = () => {
   const {
-    activeMod,
-    completedModules,
-    setCompletedModules,
-    visitedModules,
-    setVisitedModules,
-    isLoadingProgress,
-    setIsLoadingProgress,
-    courseProgress,
-    setCourseProgress,
-    modules,
-    updateModuleActivity,
-  } = useIALabProgressContext();
+    activeMod = 1,
+    completedModules = [],
+    setCompletedModules = () => {},
+    visitedModules = [],
+    setVisitedModules = () => {},
+    isLoadingProgress = false,
+    setIsLoadingProgress = () => {},
+    courseProgress = 0,
+    setCourseProgress = () => {},
+    modules = [],
+    updateModuleActivity = () => {},
+  } = useIALabProgressContext() ?? {};
 
   const isChallengeCompleted = useIALabStore((s) => s.isChallengeCompleted);
   const challengeScore = useIALabStore((s) => s.challengeScore);
   const quizPassed = useIALabStore((s) => s.quizPassed);
   const quizScore = useIALabStore((s) => s.quizScore);
 
-  const { user, isLoaded, currentLessonIndex, setCurrentLessonIndex } =
-    useIALabUIContext();
+  const {
+    user,
+    isLoaded,
+    currentLessonIndex,
+    setCurrentLessonIndex = () => {},
+  } = useIALabUIContext() ?? {};
 
   const { supabase: supabaseClient, isLoading: supabaseLoading } =
     useSupabase();

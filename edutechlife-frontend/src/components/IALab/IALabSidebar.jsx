@@ -32,13 +32,13 @@ const IALabSidebar = () => {
   const navigate = useNavigate();
   const goToModule = (id) => navigate(`/ialab/${id}`);
   const {
-    activeMod,
-    courseProgress,
-    modules,
-    isModuleLocked,
-    calculateModuleScore,
-    completedModules,
-  } = useIALabProgressContext();
+    activeMod = 1,
+    courseProgress = 0,
+    modules = [],
+    isModuleLocked = () => false,
+    calculateModuleScore = () => 0,
+    completedModules = [],
+  } = useIALabProgressContext() ?? {};
 
   const {
     sidebarDropdowns,
@@ -47,7 +47,7 @@ const IALabSidebar = () => {
     setShowCertificateModal,
     storedCertificate,
     certificateGenerating,
-  } = useIALabUIContext();
+  } = useIALabUIContext() ?? {};
 
   const moduleProgress = useIALabStore((s) => s.moduleProgress);
   const streak = useIALabStore((s) => s.streak);

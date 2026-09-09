@@ -15,8 +15,11 @@ import { useTranslation } from "../../i18n/I18nProvider";
  */
 const ModuleInfoSection = ({ className = "", ...rest }) => {
   const { t } = useTranslation();
-  const { activeMod, moduleContent, calculateModuleScore } =
-    useIALabProgressContext();
+  const {
+    activeMod = 1,
+    moduleContent = {},
+    calculateModuleScore = () => 0,
+  } = useIALabProgressContext() ?? {};
   const moduleScore = calculateModuleScore(activeMod);
   const isModuleCompleted = moduleScore >= 80;
 
