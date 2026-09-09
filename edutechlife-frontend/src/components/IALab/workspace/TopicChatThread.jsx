@@ -139,26 +139,6 @@ export default function TopicChatThread({ topicIndex, activeMod }) {
             {lesson.detailedDescription}
           </p>
 
-          {topicData.learningObjectives?.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-[15px] font-bold theme-text leading-snug">
-                Lo que aprenderás:
-              </p>
-              <ul className="space-y-1.5">
-                {topicData.learningObjectives.map((obj, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="text-[#10a37f] text-[13px] mt-[3px] flex-shrink-0">
-                      •
-                    </span>
-                    <p className="text-[15px] theme-text leading-[1.65]">
-                      {obj}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
           <p className="text-[15px] font-bold theme-text leading-snug">
             Recursos de este tema:
           </p>
