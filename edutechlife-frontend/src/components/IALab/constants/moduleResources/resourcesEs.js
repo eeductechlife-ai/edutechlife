@@ -16,7 +16,7 @@ const RESOURCES_ES = {
       {
         id: "intro-video-1",
         type: "video",
-        title: "Qué es la I.A y como esta cambiando el mundo",
+        title: "Qué es la IA y cómo está cambiando el mundo",
         url: "https://www.youtube.com/embed/Gq6qG_oK6HY",
         duration: "6:11",
         thumbnail: "https://img.youtube.com/vi/Gq6qG_oK6HY/maxresdefault.jpg",
@@ -587,7 +587,7 @@ const RESOURCES_ES = {
       {
         id: "bias-video-1",
         type: "video",
-        title: "Los Pilares de la I.A",
+        title: "Los Pilares de la IA",
         url: "https://www.youtube.com/embed/QAyIrImVUx8",
         duration: "1:56",
         thumbnail: "https://img.youtube.com/vi/QAyIrImVUx8/maxresdefault.jpg",

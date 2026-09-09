@@ -17,7 +17,7 @@ const CATEGORIES_EN = [
 const COURSES_ES = [
   {
     id: "ia-generativa",
-    title: "Introducción a la I.A Generativa",
+    title: "Introducción a la IA Generativa",
     description:
       "Domina la inteligencia artificial generativa con prompts, APIs, DeepResearch y NotebookLM.",
     category: "ia-generativa",

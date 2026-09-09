@@ -138,6 +138,9 @@ const ModuleInfoSection = ({ className = "", ...rest }) => {
                 name={isModuleCompleted ? "fa-check-circle" : "fa-star"}
                 className="text-[9px]"
               />
+              <span className="font-semibold opacity-70">
+                {t("ialab.module_info.score_label")}
+              </span>
               {moduleScore}%
             </div>
           )}
@@ -146,14 +149,10 @@ const ModuleInfoSection = ({ className = "", ...rest }) => {
 
       {/* ── LO QUE APRENDERÁS ── */}
       <div className="px-4 md:px-6 pt-4 pb-3">
-        <div className="flex items-center justify-between mb-2.5">
+        <div className="flex items-center mb-2.5">
           <h4 className="text-xs font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider font-montserrat">
             {t("ialab.module_info.learning_title")}
           </h4>
-          <span className="text-[10px] font-bold text-[var(--theme-emphasis)]/50 dark:text-[#4DA8C4]/40">
-            {isModuleCompleted ? moduleData.learningPoints.length : 0}/
-            {moduleData.learningPoints.length}
-          </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">

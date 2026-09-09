@@ -15,7 +15,7 @@ import { useTranslation } from "../../i18n/I18nProvider";
 const CertificatePreview = lazy(() => import("../IALab/CertificatePreview"));
 
 const TOTAL_MODULES = 5;
-const COURSE_NAME = "Introducción a la I.A Generativa";
+const COURSE_NAME = "Introducción a la IA Generativa";
 
 const CertificatesModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();

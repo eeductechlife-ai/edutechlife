@@ -608,7 +608,7 @@ const RESOURCES_EN = {
       {
         id: "bias-video-1",
         type: "video",
-        title: "Los Pilares de la I.A",
+        title: "Los Pilares de la IA",
         url: "https://www.youtube.com/embed/QAyIrImVUx8",
         duration: "1:56",
         thumbnail: "https://img.youtube.com/vi/QAyIrImVUx8/maxresdefault.jpg",

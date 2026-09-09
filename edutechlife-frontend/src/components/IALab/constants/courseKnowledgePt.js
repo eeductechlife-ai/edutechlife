@@ -38,7 +38,7 @@ const COURSE_KNOWLEDGE_PT = [
           },
           {
             type: "ova",
-            title: "Laboratório: Ética na I.A.",
+            title: "Laboratório: Ética na IA",
             estimatedTime: "10 minutos",
           },
         ],
@@ -326,7 +326,7 @@ const COURSE_KNOWLEDGE_PT = [
           "Aplicar um checklist ético infalível antes de cada uso de IA",
         ],
         resources: [
-          { type: "video", title: "Os Pilares da I.A", duration: "1:56" },
+          { type: "video", title: "Os Pilares da IA", duration: "1:56" },
           {
             type: "pdf",
             title: "Ética da Inteligência Artificial",

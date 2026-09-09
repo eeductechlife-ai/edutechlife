@@ -38,7 +38,7 @@ const COURSE_KNOWLEDGE = [
           },
           {
             type: "ova",
-            title: "Laboratorio: Ética en la I.A.",
+            title: "Laboratorio: Ética en la IA",
             estimatedTime: "10 minutos",
           },
         ],
@@ -157,9 +157,20 @@ const COURSE_KNOWLEDGE = [
           "Descubrir por qué Gemini ve el mundo diferente a ChatGPT, Claude y otros modelos",
         ],
         resources: [
-          { type: "video", title: "Gemini: Tu Primera Inmersión", duration: "7:34" },
-          { type: "pdf", title: "El Compendio del Detective: 16 Páginas de Poder Multimodal", pages: 16 },
-          { type: "ova", title: "Laboratorio: Pon a Prueba tu Lupa Multimodal" },
+          {
+            type: "video",
+            title: "Gemini: Tu Primera Inmersión",
+            duration: "7:34",
+          },
+          {
+            type: "pdf",
+            title: "El Compendio del Detective: 16 Páginas de Poder Multimodal",
+            pages: 16,
+          },
+          {
+            type: "ova",
+            title: "Laboratorio: Pon a Prueba tu Lupa Multimodal",
+          },
         ],
       },
       {
@@ -178,12 +189,19 @@ const COURSE_KNOWLEDGE = [
             title: "Gemini en tu Oficina: Tutorial Definitivo de Workspace",
             duration: "20:15",
           },
-          { type: "document", title: "Kit de Supervivencia: Plantillas para Google Workspace" },
-          { type: "ova", title: "Gemini: Misión Interactiva — Explora y Domina" },
+          {
+            type: "document",
+            title: "Kit de Supervivencia: Plantillas para Google Workspace",
+          },
+          {
+            type: "ova",
+            title: "Gemini: Misión Interactiva — Explora y Domina",
+          },
         ],
       },
       {
-        title: "El Arte de la Investigación: Convierte Datos en Verdades Ocultas",
+        title:
+          "El Arte de la Investigación: Convierte Datos en Verdades Ocultas",
         description:
           "Los mejores detectives del mundo digital ya usan Gemini. Descubre casos reales en marketing, programación, educación e investigación donde la IA resolvió lo que parecía imposible.",
         difficulty: "Avanzado",
@@ -198,8 +216,15 @@ const COURSE_KNOWLEDGE = [
             title: "Casos que Inspiran: Detectives Reales, Resultados Reales",
             duration: "16:30",
           },
-          { type: "pdf", title: "Archivo de Casos: 24 Páginas de Misiones Cumplidas", pages: 24 },
-          { type: "ova", title: "Laboratorio: Resuelve el Caso — 6 Desafíos Reales" },
+          {
+            type: "pdf",
+            title: "Archivo de Casos: 24 Páginas de Misiones Cumplidas",
+            pages: 24,
+          },
+          {
+            type: "ova",
+            title: "Laboratorio: Resuelve el Caso — 6 Desafíos Reales",
+          },
         ],
       },
     ],
@@ -211,10 +236,12 @@ const COURSE_KNOWLEDGE = [
       "Convierte documentos en oro: podcasts que cautivan, resúmenes que iluminan y un asistente que solo habla de lo que sabe.",
     description:
       "Imagina un bibliotecario que ha leído cada palabra de tus PDFs, los entiende a profundidad y te responde con citas exactas. Sin alucinaciones. Sin inventos. Eso es NotebookLM: la herramienta de Google que transforma documentos en conocimiento vivo.",
-    challenge: "MISIÓN: Crea un programa de radio científico. Convierte 5 papers sobre neuroplasticidad en un podcast de 15 minutos que hasta tu abuela entendería.",
+    challenge:
+      "MISIÓN: Crea un programa de radio científico. Convierte 5 papers sobre neuroplasticidad en un podcast de 15 minutos que hasta tu abuela entendería.",
     topics: [
       {
-        title: "El Alquimista de Documentos: Convierte PDFs en Oro de Conocimiento",
+        title:
+          "El Alquimista de Documentos: Convierte PDFs en Oro de Conocimiento",
         description:
           "Conoce a tu nuevo superpoder: NotebookLM, el asistente de Google que lee todas tus fuentes y te responde solo con información verificada. No es un chatbot cualquiera — es tu bibliotecario personal con memoria impecable.",
         difficulty: "Principiante",
@@ -292,7 +319,7 @@ const COURSE_KNOWLEDGE = [
           "Aplicar un checklist ético infalible antes de cada uso de IA",
         ],
         resources: [
-          { type: "video", title: "Los Pilares de la I.A", duration: "1:56" },
+          { type: "video", title: "Los Pilares de la IA", duration: "1:56" },
           {
             type: "pdf",
             title: "Etica de la Inteligencia artificial",

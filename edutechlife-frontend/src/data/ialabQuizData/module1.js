@@ -154,9 +154,9 @@ export const MODULE_1 = [
     correctAnswer: "m1q6_a",
     topic: "IA Generativa",
     difficulty: "fácil",
-    source: "Video: Qué es la I.A y cómo está cambiando el mundo",
+    source: "Video: Qué es la IA y cómo está cambiando el mundo",
     feedback:
-      'La IA generativa produce texto, imágenes u otro contenido nuevo. Mira el video "Qué es la I.A y cómo está cambiando el mundo".',
+      'La IA generativa produce texto, imágenes u otro contenido nuevo. Mira el video "Qué es la IA y cómo está cambiando el mundo".',
   },
   {
     id: "m1q7",
