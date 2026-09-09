@@ -36,20 +36,20 @@ const SidebarExpanded = ({ onOpenStreak }) => {
       };
 
   const {
-    courseProgress,
-    modules,
-    activeMod,
-    isModuleLocked,
-    calculateModuleScore,
-    completedModules,
-  } = useIALabProgressContext();
+    courseProgress = 0,
+    modules = [],
+    activeMod = 1,
+    isModuleLocked = () => false,
+    calculateModuleScore = () => 0,
+    completedModules = [],
+  } = useIALabProgressContext() ?? {};
 
   const {
     courseCompleted,
     setShowCertificateModal,
     storedCertificate,
     certificateGenerating,
-  } = useIALabUIContext();
+  } = useIALabUIContext() ?? {};
 
   const streak = useIALabStore((s) => s.streak);
   const getLevel = useIALabStore((s) => s.getLevel);

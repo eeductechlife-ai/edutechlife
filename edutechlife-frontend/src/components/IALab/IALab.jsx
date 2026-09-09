@@ -109,19 +109,19 @@ const IALabContent = memo(function () {
     () => useIALabStore.getState().getBookmarkedResources().length,
     [_bookmarkVersion],
   );
-  const { user } = useIALabUIContext();
+  const { user } = useIALabUIContext() ?? {};
   const { toasts: achievementToasts, removeToast: removeAchievementToast } =
     useAchievementNotifications(useIALabStore);
   const {
-    completedModules,
-    courseProgress,
-    activeMod,
-    setActiveMod,
-    completedExams,
-    challengeScores,
-    moduleProgress,
-    modules,
-  } = useIALabProgressContext();
+    completedModules = [],
+    courseProgress = 0,
+    activeMod = 1,
+    setActiveMod = () => {},
+    completedExams = {},
+    challengeScores = {},
+    moduleProgress = {},
+    modules = [],
+  } = useIALabProgressContext() ?? {};
   const { isDarkMode, toggleDarkMode } = useTheme();
   const [showValerioPanel, setShowValerioPanel] = useState(false);
   const showValerioDrawer = useIALabStore((s) => s.showValerioDrawer);
