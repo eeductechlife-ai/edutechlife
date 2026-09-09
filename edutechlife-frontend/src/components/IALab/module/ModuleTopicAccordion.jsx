@@ -12,7 +12,6 @@ import {
 import { getModuleAccordionContent } from "../constants/moduleContent";
 import TopicHeader from "./TopicHeader";
 import ResourceItem from "./ResourceItem";
-import ModuleProgressBar from "./ModuleProgressBar";
 
 const ModuleTopicAccordion = ({
   moduleData,
@@ -48,9 +47,6 @@ const ModuleTopicAccordion = ({
           topicResourceIds.length > 0 &&
           topicResourceIds.every((id) => viewedIds.includes(id));
         const totalResources = topicResources?.resources?.length || 0;
-        const topicCompletedCount = topicResourceIds.filter((id) =>
-          viewedIds.includes(id),
-        ).length;
 
         const topicDuration = calculateTopicDuration(tema.title);
         const accordionContent = getModuleAccordionContent(activeMod, locale);
@@ -151,6 +147,10 @@ const ModuleTopicAccordion = ({
                         const resourceLocked = isAdmin
                           ? false
                           : isResourceLocked(index, resIndex, resource.id);
+                        const prevResourceTitle =
+                          resourceLocked && resIndex > 0
+                            ? topicResources.resources[resIndex - 1]?.title
+                            : null;
                         return (
                           <ResourceItem
                             key={resource.id}
@@ -161,6 +161,7 @@ const ModuleTopicAccordion = ({
                             bookmarkedIds={bookmarkedIds}
                             toggleBookmark={toggleBookmark}
                             prefersReducedMotion={prefersReducedMotion}
+                            prevResourceTitle={prevResourceTitle}
                             t={t}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -186,101 +187,9 @@ const ModuleTopicAccordion = ({
                       })}
                   </motion.div>
 
-                  {totalResources > 0 && (
-                    <div className="pl-4 md:pl-8 lg:pl-14 pr-4 pb-3 space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1" role="none">
-                          <ModuleProgressBar
-                            viewedCount={topicCompletedCount}
-                            totalCount={totalResources}
-                            t={t}
-                          />
-                        </div>
-                        <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">
-                          {t("ialab.topic.completed", {
-                            completed: topicCompletedCount,
-                            total: totalResources,
-                          })}
-                        </span>
-                      </div>
-
-                      {(() => {
-                        const isLastTopic =
-                          index === moduleData.topics.length - 1;
-                        const allDone = moduleData.topics.every((t) => {
-                          const tr = getResourcesForTopic(t.title, locale);
-                          const ids = tr?.resources?.map((r) => r.id) || [];
-                          return (
-                            ids.length > 0 &&
-                            ids.every((id) => viewedIds.includes(id))
-                          );
-                        });
-
-                        if (allDone && isLastTopic) {
-                          return (
-                            <button
-                              disabled
-                              className="w-full py-2.5 rounded-xl bg-emerald-500 text-white text-sm font-bold flex items-center justify-center gap-2 cursor-not-allowed opacity-80"
-                            >
-                              <Icon
-                                name="fa-check"
-                                className="w-4 h-4"
-                                aria-hidden="true"
-                              />
-                              {t("ialab.completed")}
-                            </button>
-                          );
-                        }
-
-                        if (isLastTopic && activeMod < 5) {
-                          return (
-                            <motion.button
-                              whileHover={
-                                prefersReducedMotion ? {} : { scale: 1.01 }
-                              }
-                              whileTap={
-                                prefersReducedMotion ? {} : { scale: 0.97 }
-                              }
-                              onClick={() => {
-                                useIALabStore
-                                  .getState()
-                                  .setActiveMod(activeMod + 1);
-                                setExpandedTopic(0);
-                              }}
-                              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white text-sm font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-200"
-                            >
-                              {t("ialab.continue_lesson")}
-                              <Icon
-                                name="fa-arrow-right"
-                                className="w-4 h-4"
-                                aria-hidden="true"
-                              />
-                            </motion.button>
-                          );
-                        }
-                        if (isLastTopic) return null;
-                        return (
-                          <motion.button
-                            whileHover={
-                              prefersReducedMotion ? {} : { scale: 1.01 }
-                            }
-                            whileTap={
-                              prefersReducedMotion ? {} : { scale: 0.97 }
-                            }
-                            onClick={() => setExpandedTopic(index + 1)}
-                            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white text-sm font-bold flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-200"
-                          >
-                            {t("ialab.continue_lesson")}
-                            <Icon
-                              name="fa-arrow-right"
-                              className="w-4 h-4"
-                              aria-hidden="true"
-                            />
-                          </motion.button>
-                        );
-                      })()}
-
-                      {index === moduleData.topics.length - 1 && (
+                  {index === moduleData.topics.length - 1 && totalResources > 0 && (
+                    <div className="pl-4 md:pl-8 lg:pl-14 pr-4 pb-3">
+                      {(
                         <button
                           onClick={(e) => {
                             e.stopPropagation();

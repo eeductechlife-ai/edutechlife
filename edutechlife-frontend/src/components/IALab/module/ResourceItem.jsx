@@ -50,6 +50,8 @@ const ResourceItem = ({
   toggleBookmark,
   onClick,
   prefersReducedMotion,
+  isNext,
+  prevResourceTitle,
   t,
 }) => (
   <motion.div
@@ -117,7 +119,7 @@ const ResourceItem = ({
         })()}
         <div className="flex-1 min-w-0 text-left">
           <p
-            className={`text-sm font-medium truncate transition-colors ${
+            className={`text-sm font-medium line-clamp-2 leading-snug transition-colors ${
               isResourceCompleted
                 ? "text-emerald-700 dark:text-emerald-400"
                 : resourceLocked
@@ -136,8 +138,9 @@ const ResourceItem = ({
           )}
           {resourceLocked && (
             <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">
-              {t("ialab.status.locked_hint") ||
-                "Completa el recurso anterior para continuar"}
+              {prevResourceTitle
+                ? `Termina "${prevResourceTitle}" para desbloquear`
+                : t("ialab.status.locked_hint") || "Completa el recurso anterior para continuar"}
             </p>
           )}
         </div>
@@ -206,6 +209,8 @@ ResourceItem.propTypes = {
   toggleBookmark: PropTypes.func,
   onClick: PropTypes.func,
   prefersReducedMotion: PropTypes.bool,
+  isNext: PropTypes.bool,
+  prevResourceTitle: PropTypes.string,
   t: PropTypes.func,
 };
 

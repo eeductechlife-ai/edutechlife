@@ -95,6 +95,92 @@ const ModuleInfoSection = ({ className = "", ...rest }) => {
   ];
 
   const isNotebookLM = activeMod === 4;
+  const isArtesano = activeMod === 1 || activeMod === 5;
+
+  /* Estilos Artesano Digital (M1) — usa el tema "default" del sistema */
+  if (isArtesano) {
+    return (
+      <motion.div
+        aria-live="polite"
+        aria-label="Información del módulo 1"
+        className={cn("relative z-10", className)}
+        {...rest}
+      >
+        <div className="rounded-2xl border theme-border overflow-hidden theme-surface">
+
+          {/* Header con color del tema default */}
+          <div className="px-6 py-4 border-b theme-border flex items-center justify-between theme-bg-emphasis">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-white/10">
+                {activeMod === 5 ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="text-white" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="text-white" aria-hidden="true">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                  </svg>
+                )}
+              </div>
+              <span className="text-[15px] font-semibold text-white">
+                {t("ialab.module_info.objective_title")}
+              </span>
+            </div>
+            {moduleScore > 0 && (
+              <span className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                isModuleCompleted ? "bg-emerald-500/20 text-emerald-200" : "bg-white/15 text-white"
+              }`}>
+                {isModuleCompleted ? "✓" : "★"} {t("ialab.module_info.score_label")} {moduleScore}%
+              </span>
+            )}
+          </div>
+
+          {/* Objetivo */}
+          <div className="px-6 py-5 border-b theme-border">
+            <p className="text-[15px] theme-text leading-[1.7]">
+              {renderObjective()}
+            </p>
+          </div>
+
+          {/* Lo que aprenderás */}
+          <div className="px-6 py-5 border-b theme-border">
+            <p className="text-[11px] font-semibold theme-text-muted uppercase tracking-wider mb-3">
+              {t("ialab.module_info.learning_title")}
+            </p>
+            <ul className="space-y-2.5">
+              {moduleData.learningPoints.map((point, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <span className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                    isModuleCompleted ? "bg-emerald-500" : "bg-[var(--theme-emphasis)]"
+                  }`} />
+                  <p className={`text-[14px] leading-[1.65] ${
+                    isModuleCompleted ? "text-emerald-700 dark:text-emerald-400" : "theme-text"
+                  }`}>
+                    {point.text}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Composición de nota */}
+          <div className="px-6 py-5">
+            <p className="text-[11px] font-semibold theme-text-muted uppercase tracking-wider mb-3">
+              {t("ialab.module_info.grade_composition_title")}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {gradeItems.map(({ label, pct, cls }) => (
+                <span key={label} className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold ${cls}`}>
+                  {label} <span className="font-black">{pct}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </motion.div>
+    );
+  }
 
   /* Estilos NotebookLM — Google Sans, azul profundo, fichas Google */
   if (isNotebookLM) {

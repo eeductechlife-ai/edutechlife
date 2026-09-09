@@ -236,7 +236,7 @@ const SidebarCollapsed = ({
       <TooltipIcon label={t("ialab.sidebar_plan_short") || "Plan"} premium>
         <button
           onClick={() => setShowStudyPlannerModal(true)}
-          className="w-9 h-9 rounded-xl bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/25 flex items-center justify-center text-[var(--theme-emphasis)] dark:text-[#4DA8C4] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
+          className="flex flex-col items-center gap-0.5 rounded-xl px-1 py-1.5 bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 w-full"
           aria-label={t("ialab.sidebar_plan_short") || "Plan"}
         >
           <Icon
@@ -244,13 +244,16 @@ const SidebarCollapsed = ({
             className="text-[var(--theme-primary)] text-sm"
             aria-hidden="true"
           />
+          <span className="text-[9px] font-semibold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] leading-none">
+            {t("ialab.sidebar_plan_short") || "Plan"}
+          </span>
         </button>
       </TooltipIcon>
 
       <TooltipIcon label={t("ialab.sidebar_leaderboard") || "Ranking"} premium>
         <button
           onClick={() => setShowLeaderboard(true)}
-          className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25 flex items-center justify-center text-amber-600 dark:text-amber-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+          className="flex flex-col items-center gap-0.5 rounded-xl px-1 py-1.5 bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400/30 w-full"
           aria-label={t("ialab.sidebar_leaderboard") || "Ranking"}
         >
           <Icon
@@ -258,6 +261,9 @@ const SidebarCollapsed = ({
             className="text-amber-500 text-sm"
             aria-hidden="true"
           />
+          <span className="text-[9px] font-semibold text-amber-600 dark:text-amber-400 leading-none">
+            {t("ialab.sidebar_leaderboard") || "Ranking"}
+          </span>
         </button>
       </TooltipIcon>
 

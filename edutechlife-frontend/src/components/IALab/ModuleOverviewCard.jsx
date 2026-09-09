@@ -330,11 +330,12 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
   }, [moduleData, activeMod, locale]);
 
   const isNLM = activeMod === 4;
+  const isArtesano = activeMod === 1 || activeMod === 5;
   const nlmFont = { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif" };
 
   const innerContent = (
     <div className="flex flex-col gap-3">
-      {!isNLM && (
+      {!isNLM && !isArtesano && (
         <div className="flex items-center justify-end gap-2">
           <span className="px-3 py-1.5 theme-bg-primary-10 theme-text-primary text-xs font-bold rounded-lg border theme-border-primary-20 shadow-sm">
             {moduleData.badge.duration}
@@ -342,7 +343,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
         </div>
       )}
 
-      <ModuleHeaderSection moduleData={moduleData} />
+      {!isArtesano && <ModuleHeaderSection moduleData={moduleData} />}
 
             {allResourcesOrdered.length > 0 &&
               (() => {
@@ -359,7 +360,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
                           name="fa-chart-line"
                           className="text-xs theme-text-primary"
                         />
-                        {t("ialab.module.progress_title")}
+                        Módulo completo
                       </span>
                       <span className="text-xs font-black theme-text-primary">
                         {viewed}/{total} &middot; {pct}%
@@ -395,6 +396,31 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
             </div>
             <span style={{ ...nlmFont, fontSize: 15, fontWeight: 600, color: "#202124" }}>{moduleData.title || t("ialab.module.topics_title")}</span>
             <span className="ml-auto px-2.5 py-1 rounded-full text-[11px] font-semibold" style={{ background: "#e8f0fe", color: "#1a73e8" }}>{moduleData.badge.duration}</span>
+          </div>
+          <div className="px-6 py-5">{innerContent}</div>
+        </div>
+      ) : isArtesano ? (
+        <div className="rounded-2xl border theme-border overflow-hidden theme-surface">
+          <div className="px-6 py-4 border-b theme-border flex items-center justify-between theme-bg-emphasis">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-white/10">
+                {activeMod === 5 ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="text-white" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="text-white" aria-hidden="true">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                  </svg>
+                )}
+              </div>
+              <span className="text-[15px] font-semibold text-white">
+                {moduleData.title || t("ialab.module.topics_title")}
+              </span>
+            </div>
+            <span className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold bg-white/15 text-white">
+              {moduleData.badge.duration}
+            </span>
           </div>
           <div className="px-6 py-5">{innerContent}</div>
         </div>

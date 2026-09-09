@@ -884,25 +884,7 @@ const IALabContent = memo(function () {
                   </motion.div>
                 )}
 
-                {/* TAB PILLS - Navegación entre secciones */}
-                {/* TabPills: solo visibles en vista clásica (M1/M5 o chrome desactivado) */}
-                {!chromeActive && (
-                  <div
-                    data-tour="tour-tabs"
-                    data-testid="ialab-tabs"
-                    role="tablist"
-                    className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin-ialab"
-                  >
-                    <TabPills
-                      TABS={TABS}
-                      viewSection={viewSection}
-                      setViewSection={setViewSection}
-                      badges={{ guardados: bookmarkBadge }}
-                      statuses={tabStatuses}
-                    />
-                  </div>
-                )}
-
+                {/* 1. TÍTULO PRINCIPAL (siempre full-width) */}
                 <div className="flex flex-col gap-5">
                   {viewSection !== null && (
                     <Breadcrumbs
@@ -935,7 +917,6 @@ const IALabContent = memo(function () {
                     />
                   )}
 
-                  {/* 1. TÍTULO PRINCIPAL */}
                   <AnimatedSection
                     show={viewSection === null}
                     loading={
@@ -961,17 +942,7 @@ const IALabContent = memo(function () {
                   </AnimatedSection>
                 </div>
 
-                {/* Welcome inmersivo para M1 y M5 (sin ToolWorkspace chrome) */}
-                {!chromeActive &&
-                  viewSection === null &&
-                  (activeMod === 1 || activeMod === 5) && (
-                    <DefaultModuleWelcome
-                      activeMod={activeMod}
-                      onSelectSection={setViewSection}
-                    />
-                  )}
-
-                {/* 2–6. Secciones del módulo (envueltas en el workspace inmersivo cuando aplica) */}
+                {/* 2–6. Secciones — layout según modo */}
                 {chromeActive ? (
                   <ToolWorkspace
                     theme={mapModuleToTheme(activeMod)}
@@ -988,7 +959,55 @@ const IALabContent = memo(function () {
                     {moduleSections}
                   </ToolWorkspace>
                 ) : (
-                  moduleSections
+                  /* M1/M5: sidebar vertical (desktop) + contenido */
+                  <div className="flex flex-col gap-4 w-full">
+                    {/* Tabs móvil: encima del contenido, solo en pantallas pequeñas */}
+                    <div
+                      data-tour="tour-tabs"
+                      data-testid="ialab-tabs"
+                      role="tablist"
+                      className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin-ialab md:hidden"
+                    >
+                      <TabPills
+                        TABS={TABS}
+                        viewSection={viewSection}
+                        setViewSection={setViewSection}
+                        badges={{ guardados: bookmarkBadge }}
+                        statuses={tabStatuses}
+                      />
+                    </div>
+
+                    {/* Desktop: 2 columnas */}
+                    <div className="flex w-full gap-5">
+                      {/* Sidebar izquierdo: tabs verticales */}
+                      <aside
+                        aria-label={t("ialab.workspace.rail_label") || "Navegación del módulo"}
+                        className="md:sticky md:top-8 hidden max-h-[calc(100dvh-11rem)] w-52 flex-shrink-0 self-start md:flex md:flex-col md:gap-1.5"
+                        data-testid="ialab-tabs-desktop"
+                        role="tablist"
+                      >
+                        <TabPills
+                          TABS={TABS}
+                          viewSection={viewSection}
+                          setViewSection={setViewSection}
+                          badges={{ guardados: bookmarkBadge }}
+                          statuses={tabStatuses}
+                        />
+                      </aside>
+
+                      {/* Contenido principal */}
+                      <div className="flex min-w-0 flex-1 flex-col gap-5">
+                        {viewSection === null &&
+                          (activeMod === 1 || activeMod === 5) && (
+                            <DefaultModuleWelcome
+                              activeMod={activeMod}
+                              onSelectSection={setViewSection}
+                            />
+                          )}
+                        {moduleSections}
+                      </div>
+                    </div>
+                  </div>
                 )}
               </motion.div>
             </AnimatePresence>

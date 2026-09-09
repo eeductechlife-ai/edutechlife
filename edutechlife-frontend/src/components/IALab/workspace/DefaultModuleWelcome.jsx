@@ -10,6 +10,8 @@ const WELCOME_CONFIG = {
     heading: "¿Qué forjamos hoy?",
     subtitle:
       "Módulo 1 · Artesano Digital — construye tus primeras instrucciones con precisión artesanal",
+    intro:
+      "Todo artesano comienza con las herramientas básicas y, con práctica, se convierte en maestro. Aquí aprenderás a esculpir instrucciones que la IA entiende a la perfección. Desde los fundamentos hasta técnicas avanzadas que transformarán tu forma de trabajar con inteligencia artificial.",
     cards: [
       {
         icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
@@ -45,6 +47,8 @@ const WELCOME_CONFIG = {
     heading: "¿Qué protegemos hoy?",
     subtitle:
       "Módulo 5 · Guardián Digital — explora el uso ético e inteligente de la IA",
+    intro:
+      "Cada vez que usas IA, estás tomando decisiones éticas — aunque no lo sepas. ¿Los datos que subes están protegidos? ¿El resultado es justo para todos? ¿Sabes quién es responsable si algo sale mal? Este módulo no es solo teoría: es tu entrenamiento para convertirte en un guardián de la IA.",
     cards: [
       {
         icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
@@ -120,6 +124,12 @@ export default function DefaultModuleWelcome({ activeMod, onSelectSection }) {
         </h2>
         <p className="text-sm theme-text-muted max-w-sm">{cfg.subtitle}</p>
       </div>
+
+      {cfg.intro && (
+        <p className="text-sm theme-text-muted leading-relaxed mb-6 max-w-xl mx-auto text-center">
+          {cfg.intro}
+        </p>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {cfg.cards.map(({ icon, label, desc, action }) => (

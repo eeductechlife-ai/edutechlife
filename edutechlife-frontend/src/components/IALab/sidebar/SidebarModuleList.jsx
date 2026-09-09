@@ -9,14 +9,14 @@ const SidebarModuleList = ({
   moduleListVariants, moduleItemVariants, t,
 }) => (
   <div className="px-2 w-full" aria-labelledby="sidebar-modules-heading">
-    <div className="mb-2">
+    <div className="mb-3">
       <ZoneHeading icon="fa-layer-group" label={t('sidebar.modules')} id="sidebar-modules-heading" />
     </div>
     <motion.div
       variants={moduleListVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-2"
+      className="space-y-2.5"
       role="list"
     >
       {modules.map((mod) => {

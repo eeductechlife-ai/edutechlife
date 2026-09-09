@@ -86,7 +86,7 @@ const ModuleNavItem = ({
           }
           onClick?.(mod.id);
         }}
-        className={`w-full group flex items-center gap-2 min-h-[44px] p-2.5 rounded-xl transition-all duration-300 ${
+        className={`w-full group flex items-center gap-2 min-h-[48px] p-3 rounded-xl transition-all duration-300 ${
           isActive
             ? "theme-bg-emphasis shadow-md"
             : "hover:theme-surface-2 text-slate-700 dark:text-slate-100"
