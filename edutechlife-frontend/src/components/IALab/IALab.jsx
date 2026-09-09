@@ -30,6 +30,7 @@ import "./themes/themes.css";
 import ThemeProvider from "./themes/ThemeProvider";
 import { mapModuleToTheme } from "./themes/themeMap";
 import ToolWorkspace from "./workspace/ToolWorkspace";
+import DefaultModuleWelcome from "./workspace/DefaultModuleWelcome";
 import MobileMenuOverlay from "./shared/MobileMenuOverlay";
 import TabPills from "./shared/TabPills";
 import AnimatedSection from "./shared/AnimatedSection";
@@ -847,6 +848,16 @@ const IALabContent = memo(function () {
                     </SectionErrorBoundary>
                   </AnimatedSection>
                 </div>
+
+                {/* Welcome inmersivo para M1 y M5 (sin ToolWorkspace chrome) */}
+                {!chromeActive &&
+                  viewSection === null &&
+                  (activeMod === 1 || activeMod === 5) && (
+                    <DefaultModuleWelcome
+                      activeMod={activeMod}
+                      onSelectSection={setViewSection}
+                    />
+                  )}
 
                 {/* 2–6. Secciones del módulo (envueltas en el workspace inmersivo cuando aplica) */}
                 {chromeActive ? (
