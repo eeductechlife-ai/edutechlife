@@ -440,13 +440,53 @@ export default function ToolWorkspace({
               >
                 ¿Por dónde empezamos?
               </h2>
-              <div className="flex flex-wrap items-center gap-1.5 max-w-sm">
-                <span className="theme-chip inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
-                  Módulo 2 · Arquitecto Digital
-                </span>
-                <span className="text-xs theme-text-muted leading-snug">
-                  explora el contenido del módulo o inicia una actividad
-                </span>
+              <span className="text-xs theme-text-muted">
+                explora el contenido del módulo o inicia una actividad
+              </span>
+            </div>
+
+            {/* Mensaje estilo ChatGPT */}
+            <div className="w-full mb-6">
+              <div className="flex gap-3 text-left">
+                <div className="w-7 h-7 rounded-full bg-[#10a37f] flex-shrink-0 flex items-center justify-center mt-0.5">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 41 41"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M37.5 20.5c0 9.39-7.61 17-17 17s-17-7.61-17-17 7.61-17 17-17 17 7.61 17 17Z"
+                      fill="#10a37f"
+                    />
+                    <path
+                      d="M20.5 10.5v20M10.5 20.5h20"
+                      stroke="#fff"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </div>
+                <div className="flex-1 space-y-2.5">
+                  <p className="text-[11px] font-semibold theme-text-muted uppercase tracking-wide">
+                    Módulo 2 · Arquitecto Digital
+                  </p>
+                  <p className="text-sm font-semibold theme-text leading-snug">
+                    Bienvenido a la obra maestra de la automatización.
+                  </p>
+                  <p className="text-sm theme-text-muted leading-relaxed">
+                    Aquí no solo usarás ChatGPT: aprenderás a construir con él.
+                  </p>
+                  <p className="text-sm theme-text-muted leading-relaxed">
+                    Diseña prompts, crea GPTs, conecta herramientas y APIs, y
+                    transforma la inteligencia artificial en sistemas que
+                    trabajan por ti.
+                  </p>
+                  <p className="text-sm font-semibold theme-text leading-snug">
+                    No solo uses la IA. Constrúyela.
+                  </p>
+                </div>
               </div>
             </div>
 
