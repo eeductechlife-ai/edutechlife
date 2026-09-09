@@ -226,16 +226,19 @@ const IALabContent = memo(function () {
 
   // Store → URL: cuando el módulo cambia por swipe / "siguiente módulo" /
   // plan de estudio (que mutan el store sin tocar la ruta), reflejar la ruta
-  // para que la posición sobreviva a un refresh. No toca el deep-linking: si
-  // la URL ya coincide con activeMod, no hace nada.
+  // para que la posición sobreviva a un refresh.
+  // IMPORTANTE: leer del store Zustand directamente (no del contexto) para
+  // evitar el flicker: el useLayoutEffect ya actualizó el store antes de que
+  // este effect corra, pero el contexto React todavía tiene el valor anterior.
   useEffect(() => {
     const numeric = urlMod ? parseInt(urlMod, 10) : NaN;
+    const storeActiveMod = useIALabStore.getState().activeMod;
     if (
-      activeMod >= 1 &&
-      activeMod <= 5 &&
-      (isNaN(numeric) || numeric !== activeMod)
+      storeActiveMod >= 1 &&
+      storeActiveMod <= 5 &&
+      (isNaN(numeric) || numeric !== storeActiveMod)
     ) {
-      navigate(`/ialab/${activeMod}`, { replace: true });
+      navigate(`/ialab/${storeActiveMod}`, { replace: true });
     }
   }, [activeMod, urlMod, navigate]);
 
