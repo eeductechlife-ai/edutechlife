@@ -94,6 +94,90 @@ const ModuleInfoSection = ({ className = "", ...rest }) => {
     },
   ];
 
+  const isNotebookLM = activeMod === 4;
+
+  /* Estilos NotebookLM — Google Sans, azul profundo, fichas Google */
+  if (isNotebookLM) {
+    const nlmFont = { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif" };
+    const nlmGradeItems = [
+      { label: "Comunidad", pct: "5%",  bg: "#f3e8fd", color: "#9334e9" },
+      { label: "Desafío",   pct: "30%", bg: "#e8f0fe", color: "#1a73e8" },
+      { label: "Reto",      pct: "35%", bg: "#fce8e6", color: "#d93025" },
+      { label: "Recursos",  pct: "30%", bg: "#fff8e1", color: "#f9ab00" },
+    ];
+    return (
+      <motion.div
+        aria-live="polite"
+        aria-label={`Información del módulo ${activeMod}`}
+        className={cn("relative z-10", className)}
+        {...rest}
+      >
+        <div className="rounded-2xl border bg-white overflow-hidden" style={{ borderColor: "#e0e0e6" }}>
+
+          {/* Header — barra azul NotebookLM */}
+          <div className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: "#e0e0e6", background: "#f8f9ff" }}>
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "#e8f0fe" }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" />
+                </svg>
+              </div>
+              <span style={{ ...nlmFont, fontSize: 15, fontWeight: 600, color: "#202124" }}>
+                {t("ialab.module_info.objective_title")}
+              </span>
+            </div>
+            {moduleScore > 0 && (
+              <span className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                style={{ background: isModuleCompleted ? "#e6f4ea" : "#e8f0fe", color: isModuleCompleted ? "#188038" : "#1a73e8" }}>
+                {isModuleCompleted ? "✓" : "★"} {t("ialab.module_info.score_label")} {moduleScore}%
+              </span>
+            )}
+          </div>
+
+          {/* Objetivo */}
+          <div className="px-6 py-5 border-b" style={{ borderColor: "#f1f3f4" }}>
+            <p style={{ ...nlmFont, fontSize: 15, color: "#3c4043", lineHeight: 1.7 }}>
+              {renderObjective()}
+            </p>
+          </div>
+
+          {/* Lo que aprenderás */}
+          <div className="px-6 py-5 border-b" style={{ borderColor: "#f1f3f4" }}>
+            <p style={{ ...nlmFont, fontSize: 12, fontWeight: 600, color: "#5f6368", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 12 }}>
+              {t("ialab.module_info.learning_title")}
+            </p>
+            <ul className="space-y-2.5">
+              {moduleData.learningPoints.map((point, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: isModuleCompleted ? "#188038" : "#1a73e8" }} />
+                  <p style={{ ...nlmFont, fontSize: 14, color: isModuleCompleted ? "#188038" : "#3c4043", lineHeight: 1.65 }}>
+                    {point.text}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Composición de nota */}
+          <div className="px-6 py-5">
+            <p style={{ ...nlmFont, fontSize: 12, fontWeight: 600, color: "#5f6368", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 12 }}>
+              {t("ialab.module_info.grade_composition_title")}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {nlmGradeItems.map(({ label, pct, bg, color }) => (
+                <span key={label} className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5"
+                  style={{ background: bg, fontFamily: nlmFont.fontFamily, fontSize: 12, fontWeight: 600, color }}>
+                  {label} <span style={{ fontWeight: 800 }}>{pct}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div
       aria-live="polite"

@@ -162,52 +162,41 @@ const ModuleActions = ({
     }
   }, [effectiveExamScore, onAction]);
 
+  const nlmFont = { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif" };
+  const isNLM = activeMod === 4;
+
+  const cards = (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <ActionCard icon="fa-comments" label={t("ialab.module_actions.community")} weightKey="ialab.module_actions.weight_community" onClick={handleCommunity} completed={moduleProgress?.[activeMod]?.community} score={100} t={t} />
+      <ActionCard icon="fa-rocket" label={t("ialab.module_actions.challenge")} weightKey="ialab.module_actions.weight_challenge" onClick={handleChallenge} completed={!!challengeScores?.[activeMod]} score={challengeScores?.[activeMod]} remainingAttempts={!challengeScores?.[activeMod] ? challengeAttempts : undefined} t={t} />
+      <ActionCard icon="fa-clipboard-check" label={t("ialab.module_actions.exam")} weightKey="ialab.module_actions.weight_exam" onClick={handleExam} completed={effectiveExamScore !== undefined} score={effectiveExamScore} remainingAttempts={effectiveExamScore === undefined ? examAttempts : undefined} t={t} />
+    </div>
+  );
+
+  if (isNLM) {
+    return (
+      <div className="rounded-2xl border bg-white overflow-hidden" style={{ borderColor: "#e0e0e6" }}>
+        <div className="flex items-center gap-2.5 px-6 py-4 border-b" style={{ background: "#f8f9ff", borderColor: "#e0e0e6" }}>
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "#fce8e6" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d93025" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <span style={{ ...nlmFont, fontSize: 15, fontWeight: 600, color: "#202124" }}>{t("ialab.module_actions.title")}</span>
+        </div>
+        <div className="px-6 py-2 border-b" style={{ borderColor: "#f1f3f4" }}>
+          <p style={{ ...nlmFont, fontSize: 14, color: "#5f6368", lineHeight: 1.6 }}>{t("ialab.module_actions.subtitle")}</p>
+        </div>
+        <div className="px-6 py-5">{cards}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        <h4 className="text-[15px] font-bold theme-text">
-          {t("ialab.module_actions.title")}
-        </h4>
-        <p className="text-[15px] theme-text-muted leading-[1.65]">
-          {t("ialab.module_actions.subtitle")}
-        </p>
+        <h4 className="text-[15px] font-bold theme-text">{t("ialab.module_actions.title")}</h4>
+        <p className="text-[15px] theme-text-muted leading-[1.65]">{t("ialab.module_actions.subtitle")}</p>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        <ActionCard
-          icon="fa-comments"
-          label={t("ialab.module_actions.community")}
-          weightKey="ialab.module_actions.weight_community"
-          onClick={handleCommunity}
-          completed={moduleProgress?.[activeMod]?.community}
-          score={100}
-          t={t}
-        />
-        <ActionCard
-          icon="fa-rocket"
-          label={t("ialab.module_actions.challenge")}
-          weightKey="ialab.module_actions.weight_challenge"
-          onClick={handleChallenge}
-          completed={!!challengeScores?.[activeMod]}
-          score={challengeScores?.[activeMod]}
-          remainingAttempts={
-            !challengeScores?.[activeMod] ? challengeAttempts : undefined
-          }
-          t={t}
-        />
-        <ActionCard
-          icon="fa-clipboard-check"
-          label={t("ialab.module_actions.exam")}
-          weightKey="ialab.module_actions.weight_exam"
-          onClick={handleExam}
-          completed={effectiveExamScore !== undefined}
-          score={effectiveExamScore}
-          remainingAttempts={
-            effectiveExamScore === undefined ? examAttempts : undefined
-          }
-          t={t}
-        />
-      </div>
+      {cards}
     </div>
   );
 };

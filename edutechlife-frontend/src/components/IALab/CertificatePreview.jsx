@@ -423,7 +423,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
                   <span className="text-[8px] font-bold leading-tight text-[var(--theme-emphasis)]">
                     {t('ialab.certificate_preview.verified')}
                   </span>
-                  <span className="text-[7px] font-semibold leading-tight" style={{ color: 'var(--color-[var(--theme-emphasis)]-dark)' }}>
+                  <span className="text-[7px] font-semibold leading-tight" style={{ color: 'var(--theme-emphasis-hover)' }}>
                     EDUTECHLIFE
                   </span>
                 </div>

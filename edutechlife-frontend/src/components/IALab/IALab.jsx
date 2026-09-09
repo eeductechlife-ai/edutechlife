@@ -716,26 +716,31 @@ const IALabContent = memo(function () {
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[var(--theme-emphasis)]/8 to-[var(--theme-primary)]/5 border border-[var(--theme-emphasis)]/15 rounded-xl"
+                      className={activeMod === 4 ? "flex items-center gap-3 px-4 py-3 rounded-xl border bg-white" : "flex items-center gap-3 px-4 py-3 theme-surface theme-border border rounded-xl"}
+                      style={activeMod === 4 ? { borderColor: "#c5d0f0" } : undefined}
                     >
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 shadow-sm">
-                        <Icon
-                          name="fa-play"
-                          className="w-3.5 h-3.5 text-white ml-0.5"
+                      <div className={activeMod === 4 ? "w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" : "w-9 h-9 rounded-xl theme-chip flex items-center justify-center flex-shrink-0"}
+                        style={activeMod === 4 ? { background: "#e8f0fe" } : undefined}
+                      >
+                        <Icon name="fa-play"
+                          className={activeMod === 4 ? "w-3.5 h-3.5 ml-0.5" : "w-3.5 h-3.5 text-[var(--theme-emphasis)] ml-0.5"}
+                          style={activeMod === 4 ? { color: "#1a73e8" } : undefined}
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[11px] font-bold text-[var(--theme-emphasis)] uppercase tracking-wide">
+                        <p className={activeMod === 4 ? "text-[11px] font-semibold uppercase tracking-wide" : "text-[11px] font-semibold text-[var(--theme-emphasis)] uppercase tracking-wide"}
+                          style={activeMod === 4 ? { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif", color: "#1a73e8" } : undefined}>
                           {t("ialab.start_cta_label") || "¡Empieza aquí!"}
                         </p>
-                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">
-                          {t("ialab.start_cta_desc") ||
-                            "Comienza con el primer video de este módulo"}
+                        <p className={activeMod === 4 ? "truncate" : "text-[15px] font-medium theme-text truncate"}
+                          style={activeMod === 4 ? { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif", fontSize: 15, fontWeight: 500, color: "#202124" } : undefined}>
+                          {t("ialab.start_cta_desc") || "Comienza con el primer video de este módulo"}
                         </p>
                       </div>
                       <button
                         onClick={() => setViewSection("contenido")}
-                        className="flex-shrink-0 px-3 py-1.5 bg-[var(--theme-emphasis)] text-white text-xs font-bold rounded-lg hover:opacity-90 transition-opacity shadow-sm"
+                        className={activeMod === 4 ? "flex-shrink-0 px-3 py-1.5 text-[13px] font-medium rounded-lg hover:opacity-90 transition-opacity" : "flex-shrink-0 px-3 py-1.5 theme-bg-emphasis text-white text-[13px] font-medium rounded-lg hover:opacity-90 transition-opacity"}
+                        style={activeMod === 4 ? { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif", background: "#1a73e8", color: "#fff" } : undefined}
                       >
                         {t("ialab.start_cta_btn") || "Ver contenido →"}
                       </button>
@@ -751,22 +756,27 @@ const IALabContent = memo(function () {
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/8 border border-[var(--theme-emphasis)]/20 rounded-xl"
+                      className={activeMod === 4 ? "flex items-center gap-3 px-4 py-3 rounded-xl border bg-white" : "flex items-center gap-3 px-4 py-3 theme-surface theme-border border rounded-xl"}
+                      style={activeMod === 4 ? { borderColor: "#c5d0f0" } : undefined}
                     >
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0 shadow-sm">
-                        <span className="text-white text-sm">▶</span>
+                      <div className={activeMod === 4 ? "w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" : "w-9 h-9 rounded-xl theme-chip flex items-center justify-center flex-shrink-0"}
+                        style={activeMod === 4 ? { background: "#e8f0fe" } : undefined}>
+                        <span className={activeMod === 4 ? "text-sm ml-0.5" : "text-[var(--theme-emphasis)] text-sm"} style={activeMod === 4 ? { color: "#1a73e8" } : undefined}>▶</span>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[11px] font-bold text-[var(--theme-emphasis)] uppercase tracking-wide">
+                        <p className={activeMod === 4 ? "text-[11px] font-semibold uppercase tracking-wide" : "text-[11px] font-semibold text-[var(--theme-emphasis)] uppercase tracking-wide"}
+                          style={activeMod === 4 ? { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif", color: "#1a73e8" } : undefined}>
                           {t("ialab.continue_banner_lesson")}
                         </p>
-                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">
+                        <p className={activeMod === 4 ? "truncate" : "text-[15px] font-medium theme-text truncate"}
+                          style={activeMod === 4 ? { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif", fontSize: 15, fontWeight: 500, color: "#202124" } : undefined}>
                           {currentLessonTitle}
                         </p>
                       </div>
                       <button
                         onClick={() => setViewSection("contenido")}
-                        className="flex-shrink-0 px-3 py-1.5 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] text-xs font-bold rounded-lg hover:bg-[var(--theme-emphasis)]-dark transition-colors shadow-sm"
+                        className={activeMod === 4 ? "flex-shrink-0 px-3 py-1.5 text-[13px] font-medium rounded-lg hover:opacity-90 transition-colors" : "flex-shrink-0 px-3 py-1.5 theme-bg-emphasis text-white text-[13px] font-medium rounded-lg hover:opacity-90 transition-colors"}
+                        style={activeMod === 4 ? { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif", background: "#1a73e8", color: "#fff" } : undefined}
                       >
                         {t("ialab.continue_banner_cta")}
                       </button>
@@ -783,24 +793,24 @@ const IALabContent = memo(function () {
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3 }}
-                      className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-amber-50 to-amber-50/50 dark:from-amber-900/20 dark:to-amber-900/10 border border-amber-200 dark:border-amber-700/40 rounded-xl"
+                      className="flex items-center gap-3 px-4 py-3 theme-surface border border-amber-200/60 dark:border-amber-700/30 rounded-xl"
                     >
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center flex-shrink-0 shadow-sm">
-                        <Icon name="fa-star" className="w-4 h-4 text-white" />
+                      <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center flex-shrink-0">
+                        <Icon name="fa-star" className="w-4 h-4 text-amber-500" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wide">
+                        <p className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wide">
                           {t("ialab.exam_ready_title") ||
                             "¡Contenido completado!"}
                         </p>
-                        <p className="text-sm font-semibold text-amber-900 dark:text-amber-300 truncate">
+                        <p className="text-[15px] font-medium theme-text truncate">
                           {t("ialab.exam_ready_desc") ||
                             "Ya puedes tomar tu examen del módulo"}
                         </p>
                       </div>
                       <button
                         onClick={() => setViewSection("actividades")}
-                        className="flex-shrink-0 px-3 py-1.5 bg-amber-500 text-white text-xs font-bold rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
+                        className="flex-shrink-0 px-3 py-1.5 bg-amber-500 text-white text-[13px] font-medium rounded-lg hover:opacity-90 transition-colors"
                       >
                         {t("ialab.exam_ready_cta") || "Ir al examen →"}
                       </button>
@@ -866,6 +876,7 @@ const IALabContent = memo(function () {
                           <DailyPlan
                             onAction={handleAction}
                             isLoading={isLoadingProgress}
+                            activeMod={activeMod}
                           />
                         </div>
                       </SectionErrorBoundary>

@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { motion, useReducedMotion } from "framer-motion";
 import { Icon } from "../../utils/iconMapping.jsx";
@@ -79,32 +78,45 @@ const ModulePractice = ({ onAction, activeMod }) => {
     onAction?.(action);
   };
 
+  const nlmFont = { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif" };
+  const isNLM = activeMod === 4;
+
+  const grid = (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {tools.map((tool) => (
+        <PracticeCard key={tool.action} icon={tool.icon} label={tool.label} description={tool.description} onClick={() => handleClick(tool.action)} />
+      ))}
+    </div>
+  );
+
+  if (isNLM) {
+    return (
+      <div className="rounded-2xl border bg-white overflow-hidden" style={{ borderColor: "#e0e0e6" }}>
+        <div className="flex items-center gap-2.5 px-6 py-4 border-b" style={{ background: "#f8f9ff", borderColor: "#e0e0e6" }}>
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "#f3e8fd" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7c4dff" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v1H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3V5a3 3 0 0 0-3-3z"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <span style={{ ...nlmFont, fontSize: 15, fontWeight: 600, color: "#202124" }}>{t("ialab.practice.title")}</span>
+        </div>
+        <div className="px-6 py-2 border-b" style={{ borderColor: "#f1f3f4" }}>
+          <p style={{ ...nlmFont, fontSize: 14, color: "#5f6368", lineHeight: 1.6 }}>{t("ialab.practice.subtitle")}</p>
+        </div>
+        <div className="px-6 py-5 space-y-4">
+          {grid}
+          <p style={{ ...nlmFont, fontSize: 13, color: "#5f6368", lineHeight: 1.6 }}>{t("ialab.practice.flashcards_hint")}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="space-y-1">
-        <h4 className="text-[15px] font-bold theme-text">
-          {t("ialab.practice.title")}
-        </h4>
-        <p className="text-[15px] theme-text-muted leading-[1.65]">
-          {t("ialab.practice.subtitle")}
-        </p>
+        <h4 className="text-[15px] font-bold theme-text">{t("ialab.practice.title")}</h4>
+        <p className="text-[15px] theme-text-muted leading-[1.65]">{t("ialab.practice.subtitle")}</p>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {tools.map((tool) => (
-          <PracticeCard
-            key={tool.action}
-            icon={tool.icon}
-            label={tool.label}
-            description={tool.description}
-            onClick={() => handleClick(tool.action)}
-          />
-        ))}
-      </div>
-
-      <p className="text-[13px] theme-text-muted leading-[1.65]">
-        {t("ialab.practice.flashcards_hint")}
-      </p>
+      {grid}
+      <p className="text-[13px] theme-text-muted leading-[1.65]">{t("ialab.practice.flashcards_hint")}</p>
     </div>
   );
 };

@@ -329,26 +329,20 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     return () => window.removeEventListener("ialab:openTopic", handleOpenTopic);
   }, [moduleData, activeMod, locale]);
 
-  return (
-    <Fragment>
-      <div className="p-[1.5px] rounded-[2rem] theme-bg-primary-20 relative overflow-hidden">
-        <div className="absolute -top-6 -right-6 w-40 h-40 theme-bg-primary-10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-6 -left-6 w-40 h-40 theme-bg-primary-10 rounded-full blur-3xl pointer-events-none" />
-        <motion.div
-          whileHover={prefersReducedMotion ? {} : { scale: 1.01 }}
-          transition={{ duration: 0.2 }}
-          className="relative z-10 bg-[var(--theme-surface)] rounded-[calc(2rem-1.5px)] shadow-sm p-4 md:p-6 overflow-hidden"
-        >
-          {/* Contenido principal */}
-          <div className="flex flex-col gap-3">
-            {/* Badges superior derecha */}
-            <div className="flex items-center justify-end gap-2">
-              <span className="px-3 py-1.5 theme-bg-primary-10 theme-text-primary text-xs font-bold rounded-lg border theme-border-primary-20 shadow-sm">
-                {moduleData.badge.duration}
-              </span>
-            </div>
+  const isNLM = activeMod === 4;
+  const nlmFont = { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif" };
 
-            <ModuleHeaderSection moduleData={moduleData} />
+  const innerContent = (
+    <div className="flex flex-col gap-3">
+      {!isNLM && (
+        <div className="flex items-center justify-end gap-2">
+          <span className="px-3 py-1.5 theme-bg-primary-10 theme-text-primary text-xs font-bold rounded-lg border theme-border-primary-20 shadow-sm">
+            {moduleData.badge.duration}
+          </span>
+        </div>
+      )}
+
+      <ModuleHeaderSection moduleData={moduleData} />
 
             {allResourcesOrdered.length > 0 &&
               (() => {
@@ -384,48 +378,38 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
             {/* Temas en columna única - Tarjetas premium */}
             <div className="flex flex-col gap-3">
               {bookmarkedResources.length > 0 && (
-                <ModuleBookmarkFilter
-                  bookmarkedResources={bookmarkedResources}
-                  showBookmarked={showBookmarked}
-                  setShowBookmarked={setShowBookmarked}
-                  toggleBookmark={toggleBookmark}
-                  setSelectedResource={setSelectedResource}
-                  setSelectedResourceType={setSelectedResourceType}
-                  setViewerModalOpen={setViewerModalOpen}
-                  t={t}
-                />
+                <ModuleBookmarkFilter bookmarkedResources={bookmarkedResources} showBookmarked={showBookmarked} setShowBookmarked={setShowBookmarked} toggleBookmark={toggleBookmark} setSelectedResource={setSelectedResource} setSelectedResourceType={setSelectedResourceType} setViewerModalOpen={setViewerModalOpen} t={t} />
               )}
-              <ModuleTopicAccordion
-                moduleData={moduleData}
-                expandedTopic={expandedTopic}
-                setExpandedTopic={setExpandedTopic}
-                filterType={filterType}
-                setFilterType={setFilterType}
-                resourcesByTopic={resourcesByTopic}
-                viewedIds={viewedIds}
-                isAdmin={isAdmin}
-                isResourceLocked={isResourceLocked}
-                calculateTopicDuration={calculateTopicDuration}
-                toggleBookmark={toggleBookmark}
-                prefersReducedMotion={prefersReducedMotion}
-                activeMod={activeMod}
-                setSelectedResource={setSelectedResource}
-                setSelectedResourceType={setSelectedResourceType}
-                setCurrentTopicResources={setCurrentTopicResources}
-                setActiveResourceIndex={setActiveResourceIndex}
-                setViewerModalOpen={setViewerModalOpen}
-                justCompletedId={justCompletedId}
-                bookmarkedIds={bookmarkedIds}
-                t={t}
-              />
+              <ModuleTopicAccordion moduleData={moduleData} expandedTopic={expandedTopic} setExpandedTopic={setExpandedTopic} filterType={filterType} setFilterType={setFilterType} resourcesByTopic={resourcesByTopic} viewedIds={viewedIds} isAdmin={isAdmin} isResourceLocked={isResourceLocked} calculateTopicDuration={calculateTopicDuration} toggleBookmark={toggleBookmark} prefersReducedMotion={prefersReducedMotion} activeMod={activeMod} setSelectedResource={setSelectedResource} setSelectedResourceType={setSelectedResourceType} setCurrentTopicResources={setCurrentTopicResources} setActiveResourceIndex={setActiveResourceIndex} setViewerModalOpen={setViewerModalOpen} justCompletedId={justCompletedId} bookmarkedIds={bookmarkedIds} t={t} />
             </div>
-          </div>
+    </div>
+  );
 
-          <div className="absolute top-0 left-0 right-0 h-1.5 theme-bg-primary rounded-t-[calc(2rem-1.5px)]" />
-        </motion.div>
-        <div className="absolute top-0 left-0 right-0 h-[1.5px] theme-bg-primary-10 rounded-t-[2rem] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 right-0 h-[1.5px] theme-bg-primary-10 rounded-b-[2rem] pointer-events-none" />
-      </div>
+  return (
+    <Fragment>
+      {isNLM ? (
+        <div className="rounded-2xl border bg-white overflow-hidden" style={{ borderColor: "#e0e0e6" }}>
+          <div className="flex items-center gap-2.5 px-6 py-4 border-b" style={{ background: "#f8f9ff", borderColor: "#e0e0e6" }}>
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "#e8f0fe" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <span style={{ ...nlmFont, fontSize: 15, fontWeight: 600, color: "#202124" }}>{moduleData.title || t("ialab.module.topics_title")}</span>
+            <span className="ml-auto px-2.5 py-1 rounded-full text-[11px] font-semibold" style={{ background: "#e8f0fe", color: "#1a73e8" }}>{moduleData.badge.duration}</span>
+          </div>
+          <div className="px-6 py-5">{innerContent}</div>
+        </div>
+      ) : (
+        <div className="p-[1.5px] rounded-[2rem] theme-bg-primary-20 relative overflow-hidden">
+          <div className="absolute -top-6 -right-6 w-40 h-40 theme-bg-primary-10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-6 -left-6 w-40 h-40 theme-bg-primary-10 rounded-full blur-3xl pointer-events-none" />
+          <motion.div whileHover={prefersReducedMotion ? {} : { scale: 1.01 }} transition={{ duration: 0.2 }} className="relative z-10 bg-[var(--theme-surface)] rounded-[calc(2rem-1.5px)] shadow-sm p-4 md:p-6 overflow-hidden">
+            {innerContent}
+            <div className="absolute top-0 left-0 right-0 h-1.5 theme-bg-primary rounded-t-[calc(2rem-1.5px)]" />
+          </motion.div>
+          <div className="absolute top-0 left-0 right-0 h-[1.5px] theme-bg-primary-10 rounded-t-[2rem] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 right-0 h-[1.5px] theme-bg-primary-10 rounded-b-[2rem] pointer-events-none" />
+        </div>
+      )}
 
       {/* Modal de Recursos */}
       <Suspense

@@ -17,10 +17,11 @@ const MobileInfoBar = ({ user, activeMod, courseProgress }) => {
   const progress = Math.round(courseProgress || 0);
 
   return (
-    <div className="md:hidden flex flex-col gap-2 px-3 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-[var(--theme-emphasis)]/8 dark:border-[var(--theme-emphasis)]/20 shadow-sm">
+    <div className="md:hidden flex flex-col gap-2 px-3 py-2.5 theme-surface rounded-xl theme-border border">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 min-w-0 flex-1">
-          <div className="w-8 h-8 flex-shrink-0 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark flex items-center justify-center text-white text-xs font-bold">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+          {/* Avatar — ChatGPT style: simple circle with accent bg */}
+          <div className="w-8 h-8 flex-shrink-0 rounded-full theme-bg-emphasis flex items-center justify-center text-white text-[11px] font-bold">
             {user?.full_name
               ? user.full_name
                   .split(" ")
@@ -31,55 +32,45 @@ const MobileInfoBar = ({ user, activeMod, courseProgress }) => {
               : "U"}
           </div>
           <div className="flex flex-col min-w-0">
-            <p className="text-xs font-semibold text-slate-800 dark:text-slate-100 leading-tight truncate">
+            <p className="text-[13px] font-medium theme-text leading-tight truncate">
               {user?.full_name || t("ialab.user_fallback")}
             </p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-[11px] theme-text-muted mt-0.5">
               {t("ialab.module_progress", { current: activeMod, total: 5 })}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 flex-shrink-0">
-          {/* Streak indicator */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Streak */}
           {streakValue > 0 && (
             <div
-              className={`flex items-center gap-1 px-2 py-1 rounded-md border ${
-                atRisk
-                  ? "bg-red-50 border-red-200"
-                  : "bg-amber-50 border-amber-200"
+              className={`flex items-center gap-1 px-2 py-1 rounded-lg theme-chip ${
+                atRisk ? "text-red-500 dark:text-red-400" : "text-amber-500"
               }`}
               title={`Racha: ${streakValue} días`}
             >
-              <Icon
-                name="fa-fire"
-                className={`text-[10px] ${atRisk ? "text-red-500" : "text-amber-500"}`}
-                aria-hidden="true"
-              />
-              <span
-                className={`text-[10px] font-bold ${atRisk ? "text-red-600" : "text-amber-600"}`}
-              >
-                {streakValue}
-              </span>
+              <Icon name="fa-fire" className="text-[10px]" aria-hidden="true" />
+              <span className="text-[11px] font-semibold">{streakValue}</span>
             </div>
           )}
 
-          {/* Progress badge */}
-          <div className="flex flex-col items-end px-2.5 py-1 bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 border border-[var(--theme-emphasis)]/15 rounded-lg">
-            <span className="text-[8px] font-bold text-[var(--theme-emphasis)]/60 uppercase tracking-wide leading-none">
+          {/* Progreso curso */}
+          <div className="flex items-center gap-1 theme-chip px-2.5 py-1 rounded-lg">
+            <span className="text-[10px] font-medium theme-text-muted uppercase tracking-wide">
               {t("ialab.mobile_info.course_label")}
             </span>
-            <span className="text-[11px] font-semibold text-[var(--theme-emphasis)] leading-tight">
+            <span className="text-[12px] font-bold text-[var(--theme-emphasis)]">
               {progress}%
             </span>
           </div>
         </div>
       </div>
 
-      {/* Progress bar visual */}
-      <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+      {/* Barra de progreso — 2px sutil como IALabModuleHeader chrome */}
+      <div className="w-full h-[2px] bg-black/5 dark:bg-white/10 rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-primary)] to-[var(--theme-emphasis)] rounded-full transition-all duration-700 ease-out"
+          className="h-full bg-[var(--theme-emphasis)] rounded-full transition-all duration-700 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>

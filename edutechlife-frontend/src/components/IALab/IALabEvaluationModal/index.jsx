@@ -203,13 +203,29 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
       const evaluation = await evaluateAnswers(state.responses);
       if (evaluation) {
         setIsSavingGrade(true);
-        const saveResult = await saveGradeToSupabase(evaluation, effectiveModuleId);
-        if (saveResult.success) {
-          if (onComplete) onComplete(evaluation.notaGlobal || 0);
-          setStep('results');
-        } else {
-          setFormError(t('ialab.evaluation.modal.form_error_save', { error: saveResult.error }));
-          setTimeoutFormError(6000);
+        // Guardado best-effort: nunca debe dejar al estudiante sin su resultado.
+        // Si el guardado falla (offline, tabla/RLS), igual se muestra la nota y
+        // se reintenta en segundo plano para no perder la persistencia.
+        let saveFailed = false;
+        try {
+          const saveResult = await saveGradeToSupabase(evaluation, effectiveModuleId);
+          if (!saveResult.success) saveFailed = true;
+        } catch (saveError) {
+          saveFailed = true;
+          if (import.meta.env.DEV) console.warn('⚠️ No crítico, guardado falló:', saveError);
+        }
+
+        if (onComplete) onComplete(evaluation.notaGlobal || 0);
+        setStep('results');
+
+        if (saveFailed) {
+          // Reintento en segundo plano para conservar el resultado en la BD.
+          try {
+            const retry = await saveGradeToSupabase(evaluation, effectiveModuleId);
+            if (!retry.success && import.meta.env.DEV) console.warn('Reintento de guardado falló:', retry.error);
+          } catch {
+            /* mejor esfuerzo */
+          }
         }
       }
     } catch (error) {
@@ -306,7 +322,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
 
           {showWatermark && (
             <div className="fixed inset-0 pointer-events-none z-[101] opacity-[0.03] select-none" style={{
-              background: `repeating-linear-gradient(45deg, var(--color-[var(--theme-emphasis)]), var(--color-[var(--theme-emphasis)]) 2px, transparent 2px, transparent 60px)`,
+              background: `repeating-linear-gradient(45deg, var(--theme-emphasis), var(--theme-emphasis) 2px, transparent 2px, transparent 60px)`,
             }}>
               <div className="absolute inset-0 flex items-center justify-center overflow-hidden max-w-full">
                 <span className="text-[var(--theme-emphasis)] text-8xl md:text-9xl font-bold -rotate-12 select-none whitespace-nowrap">

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useIALabStore } from "../../store/ialabStore";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { useIALabProgressContext } from "../../context/IALabContext";
 import {
   RESOURCES_ES,
   RESOURCES_EN,
@@ -41,6 +42,9 @@ function buildFlatResourceMap(locale) {
 
 const BookmarksTab = () => {
   const { t, locale } = useTranslation();
+  const { activeMod = 1 } = useIALabProgressContext() ?? {};
+  const nlmFont = { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif" };
+  const isNLM = activeMod === 4;
   const storeToggle = useIALabStore((s) => s.toggleBookmark);
   const getFromStore = useIALabStore((s) => s.getBookmarkedResources);
 
@@ -76,20 +80,40 @@ const BookmarksTab = () => {
   };
 
   if (!bookmarkedIds.length) {
-    return (
-      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm p-10 flex flex-col items-center justify-center text-center gap-3">
-        <div className="w-14 h-14 rounded-2xl bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 flex items-center justify-center">
-          <Icon
-            name="fa-bookmark"
-            className="text-2xl text-[var(--theme-emphasis)]/40 dark:text-[var(--theme-emphasis)]/50"
-          />
+    const emptyContent = (
+      <div className="p-10 flex flex-col items-center justify-center text-center gap-3">
+        <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={isNLM ? { background: "#e6f4ea" } : { background: "color-mix(in srgb, var(--theme-emphasis) 8%, transparent)" }}>
+          <Icon name="fa-bookmark" className="text-2xl" style={isNLM ? { color: "#188038" } : {}} />
         </div>
-        <h4 className="text-sm font-bold text-slate-700 dark:text-slate-200">
-          {t("ialab.bookmarks_empty_title")}
-        </h4>
-        <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs">
-          {t("ialab.bookmarks_empty_desc")}
-        </p>
+        {isNLM ? (
+          <>
+            <p style={{ ...nlmFont, fontSize: 14, fontWeight: 600, color: "#202124" }}>{t("ialab.bookmarks_empty_title")}</p>
+            <p style={{ ...nlmFont, fontSize: 13, color: "#5f6368", maxWidth: 280 }}>{t("ialab.bookmarks_empty_desc")}</p>
+          </>
+        ) : (
+          <>
+            <h4 className="text-sm font-bold text-slate-700 dark:text-slate-200">{t("ialab.bookmarks_empty_title")}</h4>
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs">{t("ialab.bookmarks_empty_desc")}</p>
+          </>
+        )}
+      </div>
+    );
+    if (isNLM) {
+      return (
+        <div className="rounded-2xl border bg-white overflow-hidden" style={{ borderColor: "#e0e0e6" }}>
+          <div className="flex items-center gap-2.5 px-6 py-4 border-b" style={{ background: "#f8f9ff", borderColor: "#e0e0e6" }}>
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "#e6f4ea" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#188038" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <span style={{ ...nlmFont, fontSize: 15, fontWeight: 600, color: "#202124" }}>{t("ialab.bookmarks_tab_label") || "Guardados"}</span>
+          </div>
+          {emptyContent}
+        </div>
+      );
+    }
+    return (
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm">
+        {emptyContent}
       </div>
     );
   }
@@ -99,10 +123,9 @@ const BookmarksTab = () => {
     return acc;
   }, {});
 
-  return (
-    <>
-      <div className="space-y-4">
-        {Object.entries(byTopic).map(([topicTitle, resources]) => (
+  const list = (
+    <div className="space-y-4">
+      {Object.entries(byTopic).map(([topicTitle, resources]) => (
           <div
             key={topicTitle}
             className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 shadow-sm overflow-hidden"
@@ -158,7 +181,22 @@ const BookmarksTab = () => {
             </div>
           </div>
         ))}
-      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {isNLM ? (
+        <div className="rounded-2xl border bg-white overflow-hidden" style={{ borderColor: "#e0e0e6" }}>
+          <div className="flex items-center gap-2.5 px-6 py-4 border-b" style={{ background: "#f8f9ff", borderColor: "#e0e0e6" }}>
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "#e6f4ea" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#188038" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <span style={{ ...nlmFont, fontSize: 15, fontWeight: 600, color: "#202124" }}>{t("ialab.bookmarks_tab_label") || "Guardados"}</span>
+          </div>
+          <div className="px-6 py-5">{list}</div>
+        </div>
+      ) : list}
 
       <ResourceViewerModal
         isOpen={viewerOpen}

@@ -43,7 +43,7 @@ export const seedClientSession = async (token, refreshToken) => {
   }
 };
 
-const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
+const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
   const { t } = useTranslation();
   returnTo = safeReturnTo(returnTo);
   const navigate = useNavigate();
@@ -337,7 +337,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab" }) => {
       <div className="text-center text-sm text-gray-600">
         {t("login.no_account") || "¿No tienes cuenta?"}{" "}
         <button
-          onClick={() => navigate("/sign-up/smartboard")}
+          onClick={() => (onShowSignUp ? onShowSignUp() : navigate("/sign-up/smartboard"))}
           className="text-[#004B63] hover:text-[#0A3550] font-semibold"
         >
           {t("login.signup_link") || "Regístrate aquí"}
