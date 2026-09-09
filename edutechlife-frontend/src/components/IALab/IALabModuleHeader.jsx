@@ -173,6 +173,99 @@ const IALabModuleHeader = () => {
   const { Logo } = tool;
   const chrome = useToolChrome(theme);
 
+  /* Cuando el chrome está activo, renderizamos un header estilo ChatGPT:
+     sin banner de color, solo el nombre de herramienta + contexto del módulo */
+  if (chrome.enabled && tool.badgeLabel) {
+    return (
+      <div className="w-full">
+        {/* Barra estilo "model picker" de ChatGPT */}
+        <div className="flex items-center justify-between gap-3 px-1 py-1">
+          {/* Módulo pill — izquierda */}
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold theme-chip">
+            <span className="font-bold">{activeMod}</span>
+            <span className="opacity-60">·</span>
+            <span className="truncate max-w-[120px]">{curr?.title}</span>
+          </span>
+
+          {/* Nombre de herramienta centrado — el "modelo" */}
+          <button
+            type="button"
+            onClick={chrome.supported ? chrome.toggle : undefined}
+            title={
+              chrome.supported
+                ? chrome.enabled
+                  ? t("ialab.workspace.toggle_off")
+                  : t("ialab.workspace.toggle_on")
+                : undefined
+            }
+            aria-label={tool.badgeLabel}
+            className={`flex items-center gap-2 rounded-xl px-3 py-1.5 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-current/30 ${
+              chrome.supported
+                ? "cursor-pointer hover:bg-black/5 dark:hover:bg-white/8 active:bg-black/8"
+                : "cursor-default"
+            }`}
+          >
+            {Logo && (
+              <span
+                className="flex-shrink-0"
+                style={{ color: tool.badgeColor }}
+              >
+                <Logo />
+              </span>
+            )}
+            <span className="text-[15px] font-bold theme-text">
+              {tool.badgeLabel}
+            </span>
+            {chrome.supported && (
+              <svg
+                className="w-3.5 h-3.5 theme-text-muted"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            )}
+          </button>
+
+          {/* Nivel + progreso — derecha */}
+          <div className="flex items-center gap-2">
+            {moduleProgress > 0 && (
+              <span className="text-[11px] font-semibold theme-text-muted tabular-nums">
+                {moduleProgress}%
+              </span>
+            )}
+            <LevelBadge
+              level={level}
+              size="sm"
+              compact
+              showStars
+              className="flex-shrink-0"
+            />
+          </div>
+        </div>
+
+        {/* Barra de progreso — muy sutil, ancho completo */}
+        {moduleProgress > 0 && (
+          <div className="mt-1 h-[2px] w-full bg-black/5 dark:bg-white/8 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full rounded-full"
+              style={{ background: tool.badgeColor || "var(--theme-emphasis)" }}
+              initial={{ width: 0 }}
+              animate={{ width: `${moduleProgress}%` }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  /* Vista clásica (M1, M5, o chrome desactivado) — banner con gradiente */
   return (
     <motion.div
       whileHover={{ scale: 1.01 }}
@@ -180,7 +273,6 @@ const IALabModuleHeader = () => {
       className="rounded-2xl shadow-md border theme-border overflow-hidden"
       style={{ background: "var(--theme-surface)" }}
     >
-      {/* Banner principal */}
       <div
         className={
           !tool.headerBg
@@ -190,7 +282,6 @@ const IALabModuleHeader = () => {
         style={tool.headerBg ? { background: tool.headerBg } : undefined}
       >
         <div className="flex items-center gap-2.5">
-          {/* Número de módulo */}
           <div className="w-10 h-10 md:w-11 md:h-11 bg-white/15 rounded-full flex flex-col items-center justify-center shadow-inner flex-shrink-0">
             <div className="text-base md:text-lg font-bold text-white leading-none">
               {activeMod}
@@ -200,14 +291,12 @@ const IALabModuleHeader = () => {
             </div>
           </div>
 
-          {/* Título */}
           <div className="flex-1 min-w-0">
             <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-white leading-tight font-montserrat truncate">
               {curr?.title}
             </h1>
           </div>
 
-          {/* Toggle Vista herramienta / Vista clásica (solo M2–M4) */}
           {chrome.supported && (
             <button
               type="button"
@@ -237,7 +326,6 @@ const IALabModuleHeader = () => {
             </button>
           )}
 
-          {/* Badge de herramienta con logo SVG auténtico */}
           {tool.badgeLabel && Logo && (
             <div
               className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide border backdrop-blur-sm"
@@ -261,7 +349,6 @@ const IALabModuleHeader = () => {
           />
         </div>
 
-        {/* Barra de progreso */}
         <div className="mt-2 md:mt-2.5">
           <div className="w-full h-1 md:h-1.5 bg-white/15 rounded-full overflow-hidden">
             <motion.div
