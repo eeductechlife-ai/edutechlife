@@ -659,11 +659,12 @@ const IALabContent = memo(function () {
                   courseProgress={courseProgress}
                 />
 
-                {/* CTA: Sin progreso — invita a empezar */}
+                {/* CTA: Sin progreso — invita a empezar (se suprime cuando DefaultModuleWelcome ya lo hace) */}
                 {!isLoadingProgress &&
                   !currentLessonTitle &&
                   viewSection === null &&
-                  !moduleProgress[activeMod]?.resourcesCompleted && (
+                  !moduleProgress[activeMod]?.resourcesCompleted &&
+                  (chromeActive || (activeMod !== 1 && activeMod !== 5)) && (
                     <motion.div
                       key={`start-cta-${activeMod}`}
                       initial={{ opacity: 0, y: -8 }}
@@ -843,34 +844,36 @@ const IALabContent = memo(function () {
                 </div>
 
                 <div className="flex flex-col gap-5">
-                  <Breadcrumbs
-                    segments={[
-                      {
-                        label: t("ialab.breadcrumb_home"),
-                        icon: "fa-house",
-                        onClick: () => navigate("/ialab"),
-                      },
-                      {
-                        label:
-                          modules?.find((m) => m.id === activeMod)?.title ||
-                          t("ialab.breadcrumb_module", { id: activeMod }),
-                        onClick: resetViewSection,
-                      },
-                      ...(viewSection
-                        ? [
-                            {
-                              label:
-                                TABS.find((t) => t.id === viewSection)?.label ||
-                                viewSection,
-                            },
-                          ]
-                        : []),
-                      ...(viewSection !== null && currentLessonTitle
-                        ? [{ label: currentLessonTitle }]
-                        : []),
-                    ]}
-                    size="text-[10px] md:text-xs"
-                  />
+                  {viewSection !== null && (
+                    <Breadcrumbs
+                      segments={[
+                        {
+                          label: t("ialab.breadcrumb_home"),
+                          icon: "fa-house",
+                          onClick: () => navigate("/ialab"),
+                        },
+                        {
+                          label:
+                            modules?.find((m) => m.id === activeMod)?.title ||
+                            t("ialab.breadcrumb_module", { id: activeMod }),
+                          onClick: resetViewSection,
+                        },
+                        ...(viewSection
+                          ? [
+                              {
+                                label:
+                                  TABS.find((t) => t.id === viewSection)
+                                    ?.label || viewSection,
+                              },
+                            ]
+                          : []),
+                        ...(viewSection !== null && currentLessonTitle
+                          ? [{ label: currentLessonTitle }]
+                          : []),
+                      ]}
+                      size="text-[10px] md:text-xs"
+                    />
+                  )}
 
                   {/* 1. TÍTULO PRINCIPAL */}
                   <AnimatedSection

@@ -13,9 +13,9 @@ const WELCOME_CONFIG = {
     cards: [
       {
         icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
-        label: "Explorar el módulo",
-        desc: "Objetivos, temas y recursos del Módulo 1",
-        action: "scroll",
+        label: "Mi ruta de hoy",
+        desc: "Tu plan de aprendizaje personalizado",
+        action: "plan",
       },
       {
         icon: "M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2zM14 2v6h6",
@@ -48,9 +48,9 @@ const WELCOME_CONFIG = {
     cards: [
       {
         icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
-        label: "Explorar el módulo",
-        desc: "Objetivos, temas y recursos del Módulo 5",
-        action: "scroll",
+        label: "Mi ruta de hoy",
+        desc: "Tu plan de aprendizaje personalizado",
+        action: "plan",
       },
       {
         icon: "M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2zM14 2v6h6",
@@ -79,10 +79,10 @@ export default function DefaultModuleWelcome({ activeMod, onSelectSection }) {
   if (!cfg) return null;
 
   const handleClick = (action) => {
-    if (action === "scroll") {
+    if (action === "plan") {
       document
-        .querySelector("[data-testid='module-info-section']")
-        ?.scrollIntoView({ behavior: "smooth" });
+        .querySelector("[data-tour='tour-ruta']")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
       onSelectSection(action);
     }
