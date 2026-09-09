@@ -49,6 +49,7 @@ import { Icon } from "../../utils/iconMapping.jsx";
 const preloadForum = () => import("./IALabForumOptimized");
 const IALabForumOptimized = lazy(preloadForum);
 const ModuleOverviewCard = lazy(() => import("./ModuleOverviewCard"));
+const TopicChatThread = lazy(() => import("./workspace/TopicChatThread"));
 const DailyPlan = lazy(() => import("./DailyPlan"));
 const ModuleActions = lazy(() => import("./ModuleActions"));
 const ModulePractice = lazy(() => import("./ModulePractice"));
@@ -149,6 +150,7 @@ const IALabContent = memo(function () {
   };
   const [isForumOpen, setIsForumOpen] = useState(false);
   const [toast, setToast] = useState(null);
+  const [selectedTopicIndex, setSelectedTopicIndex] = useState(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const viewSection = searchParams.get("tab") || null;
@@ -476,7 +478,7 @@ const IALabContent = memo(function () {
         </div>
       </AnimatedSection>
 
-      {/* 3. TEMAS DEL MÓDULO - ACORDEÓN (solo al navegar, no en home para no saturar) */}
+      {/* 3. TEMA SELECCIONADO — hilo estilo ChatGPT */}
       <AnimatedSection
         show={viewSection === "contenido"}
         loading={
@@ -491,11 +493,18 @@ const IALabContent = memo(function () {
           data-tour="tour-temas"
         >
           <Suspense fallback={<ModuleOverviewSkeleton />}>
-            <SectionErrorBoundary name="ModuleOverviewCard">
-              <ModuleOverviewCard
-                onAction={handleAction}
-                onToggleForum={setIsForumOpen}
-              />
+            <SectionErrorBoundary name="TopicChatThread">
+              {chromeActive ? (
+                <TopicChatThread
+                  topicIndex={selectedTopicIndex}
+                  activeMod={activeMod}
+                />
+              ) : (
+                <ModuleOverviewCard
+                  onAction={handleAction}
+                  onToggleForum={setIsForumOpen}
+                />
+              )}
             </SectionErrorBoundary>
           </Suspense>
         </div>
@@ -955,8 +964,12 @@ const IALabContent = memo(function () {
                     theme={mapModuleToTheme(activeMod)}
                     activeMod={activeMod}
                     viewSection={viewSection}
+                    selectedTopicIndex={selectedTopicIndex}
                     onNewChat={resetViewSection}
-                    onSelectTopic={() => setViewSection("contenido")}
+                    onSelectTopic={(i) => {
+                      setSelectedTopicIndex(i);
+                      setViewSection("contenido");
+                    }}
                   >
                     {moduleSections}
                   </ToolWorkspace>

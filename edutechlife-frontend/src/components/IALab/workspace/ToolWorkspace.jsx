@@ -35,6 +35,7 @@ export default function ToolWorkspace({
   theme,
   activeMod,
   viewSection,
+  selectedTopicIndex,
   onNewChat,
   onSelectTopic,
   children,
@@ -108,7 +109,7 @@ export default function ToolWorkspace({
               title={topic.title}
               subtitle={topic.duration}
               icon={CHAT_GLYPH}
-              active={viewSection === "contenido"}
+              active={viewSection === "contenido" && selectedTopicIndex === i}
               onClick={() => onSelectTopic(i)}
             />
           ))}
@@ -551,6 +552,7 @@ ToolWorkspace.propTypes = {
     .isRequired,
   activeMod: PropTypes.number.isRequired,
   viewSection: PropTypes.string,
+  selectedTopicIndex: PropTypes.number,
   onNewChat: PropTypes.func.isRequired,
   onSelectTopic: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
