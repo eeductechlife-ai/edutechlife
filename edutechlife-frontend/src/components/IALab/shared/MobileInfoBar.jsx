@@ -65,8 +65,13 @@ const MobileInfoBar = ({ user, activeMod, courseProgress }) => {
           )}
 
           {/* Progress badge */}
-          <div className="px-2.5 py-1 bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 border border-[var(--theme-emphasis)]/15 text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis)] rounded-lg font-semibold text-[11px]">
-            {progress}%
+          <div className="flex flex-col items-end px-2.5 py-1 bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 border border-[var(--theme-emphasis)]/15 rounded-lg">
+            <span className="text-[8px] font-bold text-[var(--theme-emphasis)]/60 uppercase tracking-wide leading-none">
+              {t("ialab.mobile_info.course_label")}
+            </span>
+            <span className="text-[11px] font-semibold text-[var(--theme-emphasis)] leading-tight">
+              {progress}%
+            </span>
           </div>
         </div>
       </div>

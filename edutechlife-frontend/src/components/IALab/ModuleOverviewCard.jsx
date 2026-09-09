@@ -346,20 +346,6 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
               <span className="px-3 py-1.5 theme-bg-primary-10 theme-text-primary text-xs font-bold rounded-lg border theme-border-primary-20 shadow-sm">
                 {moduleData.badge.duration}
               </span>
-              {allResourcesOrdered.length > 0 &&
-                (() => {
-                  const total = allResourcesOrdered.length;
-                  const done = allResourcesOrdered.filter((r) =>
-                    viewedIds.includes(r.id),
-                  ).length;
-                  return (
-                    <span
-                      className={`px-2.5 py-1 text-xs font-bold rounded-lg border ${done === total ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-blue-50 text-blue-700 border-blue-200"}`}
-                    >
-                      {t("ialab.module.resources_badge", { done, total })}
-                    </span>
-                  );
-                })()}
             </div>
 
             <ModuleHeaderSection moduleData={moduleData} />

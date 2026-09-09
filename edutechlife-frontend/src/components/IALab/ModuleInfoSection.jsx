@@ -193,6 +193,9 @@ const ModuleInfoSection = ({ className = "", ...rest }) => {
 
       {/* ── COMPOSICIÓN DE NOTA ── */}
       <div className="px-4 md:px-6 pb-4">
+        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+          {t("ialab.module_info.grade_composition_title")}
+        </p>
         <div className="flex flex-wrap gap-1.5">
           {gradeItems.map(({ label, pct, cls }) => (
             <span
