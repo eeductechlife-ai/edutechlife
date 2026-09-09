@@ -476,9 +476,9 @@ const IALabContent = memo(function () {
         </div>
       </AnimatedSection>
 
-      {/* 3. TEMAS DEL MÓDULO - ACORDEÓN */}
+      {/* 3. TEMAS DEL MÓDULO - ACORDEÓN (solo al navegar, no en home para no saturar) */}
       <AnimatedSection
-        show={viewSection === null || viewSection === "contenido"}
+        show={viewSection === "contenido"}
         loading={
           (isLoadingProgress && !loadingTimedOut) || isModuleTransitioning
         }
