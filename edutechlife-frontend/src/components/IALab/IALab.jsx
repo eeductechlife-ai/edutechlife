@@ -874,20 +874,23 @@ const IALabContent = memo(function () {
                 )}
 
                 {/* TAB PILLS - Navegación entre secciones */}
-                <div
-                  data-tour="tour-tabs"
-                  data-testid="ialab-tabs"
-                  role="tablist"
-                  className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin-ialab"
-                >
-                  <TabPills
-                    TABS={TABS}
-                    viewSection={viewSection}
-                    setViewSection={setViewSection}
-                    badges={{ guardados: bookmarkBadge }}
-                    statuses={tabStatuses}
-                  />
-                </div>
+                {/* TabPills: solo visibles en vista clásica (M1/M5 o chrome desactivado) */}
+                {!chromeActive && (
+                  <div
+                    data-tour="tour-tabs"
+                    data-testid="ialab-tabs"
+                    role="tablist"
+                    className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin-ialab"
+                  >
+                    <TabPills
+                      TABS={TABS}
+                      viewSection={viewSection}
+                      setViewSection={setViewSection}
+                      badges={{ guardados: bookmarkBadge }}
+                      statuses={tabStatuses}
+                    />
+                  </div>
+                )}
 
                 <div className="flex flex-col gap-5">
                   {viewSection !== null && (

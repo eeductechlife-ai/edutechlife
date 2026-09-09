@@ -69,50 +69,45 @@ export function ConversationItem({
 }) {
   const Comp = onClick ? "button" : "div";
   return (
-    <motion.div
-      whileHover={onClick ? { x: 3 } : undefined}
-      transition={{ duration: 0.2, ease }}
+    <Comp
+      type={onClick ? "button" : undefined}
+      onClick={onClick}
+      aria-current={active ? "true" : undefined}
+      className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors duration-150 focus:outline-none focus-visible:ring-2 ${
+        active ? "theme-rail-active" : "theme-rail-hover"
+      }`}
     >
-      <Comp
-        type={onClick ? "button" : undefined}
-        onClick={onClick}
-        aria-current={active ? "true" : undefined}
-        className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left transition-colors duration-150 focus:outline-none focus-visible:ring-2 ${
-          active ? "theme-rail-active" : "theme-rail-hover"
-        }`}
-      >
-        {icon && (
-          <svg
-            className="theme-text-rail-muted h-4 w-4 flex-shrink-0"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d={icon} />
-          </svg>
-        )}
-        <span className="min-w-0 flex-1">
-          <span
-            className={`block truncate text-[13px] font-medium leading-tight ${
-              active ? "theme-text-rail" : "theme-text-rail-muted"
-            }`}
-          >
-            {title}
-          </span>
-          {subtitle && (
-            <span className="theme-text-rail-muted block truncate text-[11px] leading-tight opacity-80">
-              {subtitle}
-            </span>
-          )}
+      {icon && (
+        <svg
+          className="theme-text-rail-muted h-5 w-5 flex-shrink-0"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d={icon} />
+        </svg>
+      )}
+      <span className="min-w-0 flex-1">
+        <span
+          className={`block truncate text-[15px] font-medium leading-tight ${
+            active ? "theme-text-rail" : "theme-text-rail-muted"
+          }`}
+        >
+          {title}
         </span>
-      </Comp>
-    </motion.div>
+        {subtitle && (
+          <span className="theme-text-rail-muted block truncate text-[11px] leading-tight opacity-70 mt-0.5">
+            {subtitle}
+          </span>
+        )}
+      </span>
+    </Comp>
   );
 }
 

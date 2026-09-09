@@ -74,7 +74,7 @@ export default function ToolWorkspace({
       <button
         type="button"
         onClick={onNewChat}
-        className={`theme-rail-hover theme-text-rail mx-3 mt-3 flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-current/40 ${
+        className={`theme-rail-hover theme-text-rail mx-2 mt-2 flex items-center gap-3 rounded-lg px-4 py-3 text-[15px] font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-current/40 ${
           viewSection === null ? "theme-rail-active" : ""
         }`}
         aria-current={viewSection === null ? "true" : undefined}
@@ -95,26 +95,84 @@ export default function ToolWorkspace({
         {newChatLabel}
       </button>
 
-      {/* Conversaciones / tópicos del módulo */}
-      <div className="mt-3 flex-1 overflow-y-auto px-3 pb-3">
-        <p className="theme-text-rail-muted px-2.5 pb-1.5 text-[11px] font-semibold uppercase tracking-wide">
-          {t("ialab.workspace.topics_label")}
-        </p>
-        <div
-          className="flex flex-col gap-0.5"
-          data-testid="tool-workspace-topics"
-        >
-          {topics.map((topic, i) => (
-            <ConversationItem
-              key={`${topic.title}-${i}`}
-              title={topic.title}
-              subtitle={topic.duration}
-              icon={CHAT_GLYPH}
-              active={viewSection === "contenido" && selectedTopicIndex === i}
-              onClick={() => onSelectTopic(i)}
-            />
-          ))}
-        </div>
+      {/* Navegación del rail */}
+      <div className="mt-2 flex-1 overflow-y-auto px-2 pb-3 flex flex-col gap-1">
+        {/* Secciones primero — estilo ChatGPT sidebar items */}
+        {[
+          {
+            id: "objetivos",
+            label: t("ialab.tab_objectives") || "Objetivos",
+            glyph:
+              "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
+          },
+          {
+            id: "actividades",
+            label: t("ialab.tab_activities") || "Actividades",
+            glyph: "M13 2 3 14h9l-1 8 10-12h-9l1-8z",
+          },
+          {
+            id: "practica",
+            label: t("ialab.tab_practice") || "Práctica",
+            glyph:
+              "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4l3 3",
+          },
+          {
+            id: "guardados",
+            label: t("ialab.tab_bookmarks") || "Guardados",
+            glyph: "M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z",
+          },
+        ].map(({ id, label, glyph }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => onSelectSection(id)}
+            aria-current={viewSection === id ? "true" : undefined}
+            className={`theme-rail-hover theme-text-rail w-full flex items-center gap-3 rounded-lg px-4 py-3 text-[15px] font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-current/40 ${
+              viewSection === id ? "theme-rail-active" : ""
+            }`}
+          >
+            <svg
+              className="h-5 w-5 flex-shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d={glyph} />
+            </svg>
+            {label}
+          </button>
+        ))}
+
+        {/* Divisor */}
+        {topics.length > 0 && (
+          <div className="my-1 mx-2 h-px bg-current opacity-10" />
+        )}
+
+        {/* Temas del módulo */}
+        {topics.length > 0 && (
+          <div
+            className="flex flex-col gap-0.5"
+            data-testid="tool-workspace-topics"
+          >
+            <p className="theme-text-rail-muted px-4 pb-1 pt-1 text-[11px] font-semibold uppercase tracking-wide">
+              {t("ialab.workspace.topics_label")}
+            </p>
+            {topics.map((topic, i) => (
+              <ConversationItem
+                key={`${topic.title}-${i}`}
+                title={topic.title}
+                subtitle={topic.duration}
+                icon={CHAT_GLYPH}
+                active={viewSection === "contenido" && selectedTopicIndex === i}
+                onClick={() => onSelectTopic(i)}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Chip de transparencia */}
