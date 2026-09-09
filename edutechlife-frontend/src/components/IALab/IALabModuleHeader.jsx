@@ -180,18 +180,7 @@ const IALabModuleHeader = () => {
       <div className="w-full">
         {/* Barra estilo "model picker" de ChatGPT */}
         <div className="flex items-center justify-between gap-3 px-1 py-1">
-          {/* Badge herramienta — esquina izquierda */}
-          {tool.badgeLabel && Logo && (
-            <span
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold theme-chip flex-shrink-0"
-              style={{ color: tool.badgeColor }}
-            >
-              <Logo />
-              <span>{tool.badgeLabel}</span>
-            </span>
-          )}
-
-          {/* Título del módulo centrado — el "tema de conversación" */}
+          {/* Título del módulo con logo — centro */}
           <button
             type="button"
             onClick={chrome.supported ? chrome.toggle : undefined}
@@ -209,6 +198,14 @@ const IALabModuleHeader = () => {
                 : "cursor-default"
             }`}
           >
+            {Logo && (
+              <span
+                className="flex-shrink-0"
+                style={{ color: tool.badgeColor }}
+              >
+                <Logo />
+              </span>
+            )}
             <span className="text-[15px] font-bold theme-text truncate">
               {curr?.title}
             </span>
