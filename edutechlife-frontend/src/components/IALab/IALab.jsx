@@ -308,6 +308,15 @@ const IALabContent = memo(function () {
 
   // Tour: no mostrar si ya empezó el curso
   const isLoadingProgress = useIALabStore((s) => s.isLoadingProgress);
+  const [loadingTimedOut, setLoadingTimedOut] = useState(false);
+  useEffect(() => {
+    if (!isLoadingProgress) {
+      setLoadingTimedOut(false);
+      return;
+    }
+    const tid = setTimeout(() => setLoadingTimedOut(true), 8000);
+    return () => clearTimeout(tid);
+  }, [isLoadingProgress]);
   const hasStartedCourse = useIALabStore((s) => s.hasStartedCourse());
   const lastVisitedLesson = useIALabStore((s) => s.lastVisitedLesson);
   const currentLessonTitle =
@@ -757,7 +766,44 @@ const IALabContent = memo(function () {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.15 }}
                   >
-                    <RouteSkeleton />
+                    {loadingTimedOut ? (
+                      <div className="flex flex-col items-center gap-4 py-12 text-center">
+                        <div className="w-12 h-12 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center">
+                          <svg
+                            className="w-6 h-6 text-amber-500"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth="1.75"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                            {t("ialab.loading_timeout_title") ||
+                              "No se pudo cargar el módulo"}
+                          </p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                            {t("ialab.loading_timeout_desc") ||
+                              "Verifica tu conexión e inténtalo de nuevo"}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => window.location.reload()}
+                          className="px-4 py-2 text-sm font-semibold rounded-xl bg-[var(--theme-primary)] text-white hover:opacity-90 transition-opacity"
+                        >
+                          {t("ialab.loading_timeout_retry") || "Reintentar"}
+                        </button>
+                      </div>
+                    ) : (
+                      <RouteSkeleton />
+                    )}
                   </motion.div>
                 ) : (
                   <motion.div
