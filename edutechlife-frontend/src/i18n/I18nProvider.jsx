@@ -32,10 +32,18 @@ const interpolate = (str, params) => {
 
 export const I18nContext = createContext(null);
 
+const FALLBACK_T = (key) => key;
+const FALLBACK_CTX = { t: FALLBACK_T, locale: "es", setLocale: () => {} };
+
 export const useTranslation = () => {
   const ctx = useContext(I18nContext);
   if (!ctx) {
-    throw new Error("useTranslation debe usarse dentro de I18nProvider");
+    if (import.meta.env.DEV) {
+      console.warn(
+        "[I18n] useTranslation: contexto no disponible, usando fallback.",
+      );
+    }
+    return FALLBACK_CTX;
   }
   return ctx;
 };

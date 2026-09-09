@@ -423,10 +423,42 @@ const IALabContent = memo(function () {
      chrome inmersivo está activo; si no, se montan sin wrapper. */
   const moduleSections = (
     <>
+      {/* Banner de timeout global — visible cuando progress no carga tras 8 s */}
+      {isLoadingProgress && loadingTimedOut && (
+        <div className="flex items-center gap-3 px-4 py-3 mb-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 rounded-xl">
+          <svg
+            className="w-4 h-4 text-amber-500 flex-shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+            />
+          </svg>
+          <span className="text-sm text-amber-800 dark:text-amber-200 flex-1">
+            {t("ialab.loading_timeout_desc") ||
+              "Verifica tu conexión e inténtalo de nuevo"}
+          </span>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-amber-100 dark:bg-amber-800/40 text-amber-800 dark:text-amber-200 hover:opacity-80 transition-opacity"
+          >
+            {t("ialab.loading_timeout_retry") || "Reintentar"}
+          </button>
+        </div>
+      )}
+
       {/* 2. SECCIÓN INFORMATIVA DEL MÓDULO */}
       <AnimatedSection
         show={viewSection === null || viewSection === "objetivos"}
-        loading={isLoadingProgress || isModuleTransitioning}
+        loading={
+          (isLoadingProgress && !loadingTimedOut) || isModuleTransitioning
+        }
         skeleton={<ModuleInfoSkeleton />}
       >
         <div
@@ -447,7 +479,9 @@ const IALabContent = memo(function () {
       {/* 3. TEMAS DEL MÓDULO - ACORDEÓN */}
       <AnimatedSection
         show={viewSection === null || viewSection === "contenido"}
-        loading={isLoadingProgress || isModuleTransitioning}
+        loading={
+          (isLoadingProgress && !loadingTimedOut) || isModuleTransitioning
+        }
         skeleton={<ModuleOverviewSkeleton />}
       >
         <div
@@ -470,7 +504,9 @@ const IALabContent = memo(function () {
       {/* 4. ACTIVIDADES DEL MÓDULO */}
       <AnimatedSection
         show={viewSection === null || viewSection === "actividades"}
-        loading={isLoadingProgress || isModuleTransitioning}
+        loading={
+          (isLoadingProgress && !loadingTimedOut) || isModuleTransitioning
+        }
         skeleton={<ModuleActionsSkeleton />}
       >
         <div
@@ -498,7 +534,9 @@ const IALabContent = memo(function () {
       {/* 5. PRÁCTICA DEL MÓDULO */}
       <AnimatedSection
         show={viewSection === null || viewSection === "practica"}
-        loading={isLoadingProgress || isModuleTransitioning}
+        loading={
+          (isLoadingProgress && !loadingTimedOut) || isModuleTransitioning
+        }
         skeleton={<ModuleActionsSkeleton />}
       >
         <div
@@ -878,7 +916,10 @@ const IALabContent = memo(function () {
                   {/* 1. TÍTULO PRINCIPAL */}
                   <AnimatedSection
                     show={viewSection === null}
-                    loading={isLoadingProgress || isModuleTransitioning}
+                    loading={
+                      (isLoadingProgress && !loadingTimedOut) ||
+                      isModuleTransitioning
+                    }
                     skeleton={
                       <div className="flex items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                         <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
