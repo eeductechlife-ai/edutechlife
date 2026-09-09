@@ -34,17 +34,28 @@ const ActionCard = memo(
         whileHover={prefersReducedMotion ? {} : { y: -1 }}
         whileTap={prefersReducedMotion ? {} : { scale: 0.99 }}
         title={weightKey ? t(weightKey) : ""}
-        className="theme-prompt-card group w-full flex items-center gap-3 rounded-2xl border p-4 text-left transition-all duration-150 shadow-sm cursor-pointer hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
+        className="theme-prompt-card group w-full flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-150 shadow-sm cursor-pointer hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
       >
         <span
-          className={`mt-0.5 flex-shrink-0 w-2.5 h-2.5 rounded-full ${
+          className={`mt-1 flex-shrink-0 h-8 w-8 rounded-xl flex items-center justify-center ${
             isApproved
-              ? "bg-emerald-500"
+              ? "bg-emerald-100 dark:bg-emerald-900/30"
               : isFailed
-                ? "bg-red-400"
-                : "bg-slate-300 dark:bg-slate-600"
+                ? "bg-red-100 dark:bg-red-900/30"
+                : "theme-chip"
           }`}
-        />
+        >
+          <Icon
+            name={icon}
+            className={`text-sm ${
+              isApproved
+                ? "text-emerald-600 dark:text-emerald-400"
+                : isFailed
+                  ? "text-red-500 dark:text-red-400"
+                  : "text-[var(--theme-chip-text)]"
+            }`}
+          />
+        </span>
         <div className="flex-1 min-w-0">
           <span
             className={`font-semibold text-[15px] block leading-snug ${
