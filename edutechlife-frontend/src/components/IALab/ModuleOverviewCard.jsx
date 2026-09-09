@@ -16,7 +16,6 @@ import { useIALabProgressContext } from "../../context/IALabContext";
 import { useIALabStore } from "../../store/ialabStore";
 import { useIALabProgress } from "../../hooks/IALab/useIALabProgress";
 import { getResourcesForTopic } from "./constants/moduleResources";
-import { getAllLessons } from "../../data/ialab";
 import { useTranslation } from "../../i18n/I18nProvider";
 import ModuleHeaderSection from "./module/ModuleHeaderSection";
 import ModuleBookmarkFilter from "./module/ModuleBookmarkFilter";
@@ -40,7 +39,6 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     markResourceAsViewed: markResourceInContext = () => {},
   } = useIALabProgressContext() ?? {};
   const { trackResourceViewed } = useIALabProgress();
-  const lessonProgress = useIALabStore((s) => s.lessonProgress);
 
   // Estado para el acordeón de temas
   const [expandedTopic, setExpandedTopic] = useState(0);
@@ -348,21 +346,20 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
               <span className="px-3 py-1.5 theme-bg-primary-10 theme-text-primary text-xs font-bold rounded-lg border theme-border-primary-20 shadow-sm">
                 {moduleData.badge.duration}
               </span>
-              {(() => {
-                const prog = lessonProgress[activeMod] || {};
-                const total = (getAllLessons(locale)[activeMod] || []).length;
-                const done = Object.values(prog).filter(
-                  (s) => s === "completed",
-                ).length;
-                if (!total) return null;
-                return (
-                  <span
-                    className={`px-2.5 py-1 text-xs font-bold rounded-lg border ${done === total ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-blue-50 text-blue-700 border-blue-200"}`}
-                  >
-                    {t("ialab.module.lessons", { done, total })}
-                  </span>
-                );
-              })()}
+              {allResourcesOrdered.length > 0 &&
+                (() => {
+                  const total = allResourcesOrdered.length;
+                  const done = allResourcesOrdered.filter((r) =>
+                    viewedIds.includes(r.id),
+                  ).length;
+                  return (
+                    <span
+                      className={`px-2.5 py-1 text-xs font-bold rounded-lg border ${done === total ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-blue-50 text-blue-700 border-blue-200"}`}
+                    >
+                      {t("ialab.module.resources_badge", { done, total })}
+                    </span>
+                  );
+                })()}
             </div>
 
             <ModuleHeaderSection moduleData={moduleData} />

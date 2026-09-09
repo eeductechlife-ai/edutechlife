@@ -126,7 +126,7 @@ const CONTENT_ES = {
         title: "Los Planos del Arquitecto: Guía Completa de ChatGPT",
         description: "Los cimientos de toda gran construcción digital",
         detailedDescription:
-          "Todo edificio comienza con un plano. En esta lección, conocerás la arquitectura completa de ChatGPT: desde los modelos disponibles hasta las mejores prácticas de prompt engineering. Aprende a seleccionar la herramienta correcta para cada fase de tu construcción y sienta las bases de tus proyectos de automatización.",
+          "Todo edificio comienza con un plano. En esta lección conocerás ChatGPT de punta a punta: qué modelos existen, cuándo usar cada uno y cómo escribir prompts profesionales que obtienen resultados en el primer intento. La base que necesitas antes de automatizar cualquier cosa.",
         duration: "20 min",
         format: "Reading",
         icon: "fa-book-open",
@@ -138,7 +138,7 @@ const CONTENT_ES = {
         title: "El Andamio del Arquitecto: Herramientas Integradas",
         description: "Las herramientas que levantan tu construcción digital",
         detailedDescription:
-          "Un arquitecto no construye solo con las manos — usa grúas, andamios y herramientas especializadas. Descubre el arsenal de ChatGPT: Búsqueda Web, Análisis de Datos con Python, DALL-E 3, Canvas y Proyectos. Aprende a combinarlos para levantar automatizaciones poderosas que multiplican tu productividad.",
+          "Un arquitecto usa las herramientas correctas para cada fase. Descubre el arsenal completo de ChatGPT: Búsqueda Web para datos actuales, Análisis de Datos con Python para procesar cifras, DALL-E 3 para generar imágenes, Canvas para editar documentos y Proyectos para organizar tu trabajo. Aprende a combinarlos en flujos que multiplican tu productividad real.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
@@ -150,7 +150,7 @@ const CONTENT_ES = {
         title: "La Fachada del Edificio: GPTs y Function Calling",
         description: "Conecta tu obra con el mundo real",
         detailedDescription:
-          "La fachada es lo que el mundo ve, pero detrás hay una estructura compleja que la sostiene. Lleva tus construcciones al siguiente nivel: conecta GPTs personalizados con APIs, bases de datos y servicios externos. Crea flujos automatizados que resuelven problemas reales mientras tú diseñas el próximo proyecto.",
+          "La fachada es lo que el mundo ve, pero detrás hay una estructura compleja que la sostiene. Lleva tus construcciones al siguiente nivel: conecta GPTs personalizados (asistentes IA a tu medida) con APIs, bases de datos y servicios externos usando Function Calling (la capacidad de ChatGPT para llamar herramientas externas automáticamente). Crea flujos automatizados que resuelven problemas reales mientras tú diseñas el próximo proyecto.",
         duration: "20 min",
         format: "Video",
         icon: "fa-code",
@@ -355,7 +355,7 @@ const CONTENT_ES = {
         description:
           "Conecta tu lupa con la tierra firme: datos vivos del mundo real",
         detailedDescription:
-          "¿De qué sirve una lupa si no puedes verificar lo que ves? El grounding conecta a Gemini con información viva de internet. Aprende a combinar imágenes, documentos y datos en tiempo real para obtener respuestas que no solo son inteligentes — son verificables.",
+          "¿De qué sirve una lupa si no puedes verificar lo que ves? El grounding (conectar la IA con fuentes de internet en tiempo real) hace que Gemini responda con datos vivos, no con conocimiento congelado. Aprende a combinar imágenes, documentos y datos en tiempo real para obtener respuestas que no solo son inteligentes — son verificables.",
         duration: "20 min",
         format: "Lab",
         icon: "fa-layer-group",
