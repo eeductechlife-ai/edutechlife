@@ -17,7 +17,7 @@ const MobileInfoBar = ({ user, activeMod, courseProgress }) => {
   const progress = Math.round(courseProgress || 0);
 
   return (
-    <div className="lg:hidden flex flex-col gap-2 px-3 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-[var(--theme-emphasis)]/8 dark:border-[var(--theme-emphasis)]/20 shadow-sm">
+    <div className="md:hidden flex flex-col gap-2 px-3 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-[var(--theme-emphasis)]/8 dark:border-[var(--theme-emphasis)]/20 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 min-w-0 flex-1">
           <div className="w-8 h-8 flex-shrink-0 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-emphasis)]-dark flex items-center justify-center text-white text-xs font-bold">

@@ -78,26 +78,23 @@ const ModuleTopicAccordion = ({
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                   {topicAccordion && (
-                    <div className="pl-4 md:pl-8 lg:pl-14 pr-4 pb-3">
-                      <div className="rounded-2xl border border-[var(--theme-emphasis)]/10 bg-[var(--theme-emphasis)]/[0.03] dark:bg-slate-800/60 p-4 space-y-3">
-                        <div>
-                          <h4 className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
-                            {topicAccordion.objective}
-                          </h4>
-                          {topicAccordion.objectiveDesc && (
-                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                              {topicAccordion.objectiveDesc}
-                            </p>
-                          )}
-                        </div>
-                      </div>
+                    <div className="pl-4 md:pl-8 lg:pl-14 pr-4 pb-2">
+                      <p className="text-xs font-semibold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] leading-snug">
+                        {topicAccordion.objective}
+                      </p>
+                      {topicAccordion.objectiveDesc && (
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
+                          {topicAccordion.objectiveDesc}
+                        </p>
+                      )}
                     </div>
                   )}
 
                   {(() => {
                     const types = getResourceTypesForTopic(tema.title, locale);
                     const counts = countResourcesByType(tema.title, locale);
-                    if (!types || types.length <= 1) return null;
+                    if (!types || types.length <= 1 || totalResources < 4)
+                      return null;
                     const typeLabels = {
                       video: t("ialab.resource_type.video"),
                       pdf: t("ialab.resource_type.pdf"),

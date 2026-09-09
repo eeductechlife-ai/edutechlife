@@ -176,21 +176,16 @@ const DailyPlan = ({ onAction, isLoading }) => {
             </span>
           ) : !isOpen && pendingCount > 0 && firstItemTitle ? (
             <span className="text-[10px] text-white/70 leading-tight block truncate">
-              {"Empieza con:"}{" "}
               <span className="font-semibold text-white/90">
-                {firstItemTitle}
+                {pendingCount} {pendingCount === 1 ? "paso" : "pasos"}
               </span>
-              {pendingCount > 1 && (
-                <span className="text-white/60">
-                  {" "}
-                  · +{pendingCount - 1} más
-                </span>
-              )}
+              {" · "}
+              {firstItemTitle}
             </span>
           ) : isOpen ? (
             <span className="text-[10px] text-white/60 leading-tight block">
               {pendingCount > 0
-                ? `${pendingCount} ${pendingCount === 1 ? "tarea pendiente" : "tareas pendientes"}`
+                ? `${pendingCount} ${pendingCount === 1 ? "paso pendiente" : "pasos pendientes"}`
                 : "¡Todo al día!"}
             </span>
           ) : null}

@@ -209,10 +209,15 @@ export default function ToolWorkspace({
               >
                 ¿Qué investigamos hoy?
               </h2>
-              <p className="text-sm theme-text-muted max-w-sm">
-                Módulo 3 · Detective de Datos — explora el contenido del módulo
-                o inicia una actividad con Gemini
-              </p>
+              <div className="flex flex-wrap items-center gap-1.5 max-w-sm">
+                <span className="theme-chip inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                  Módulo 3 · Detective de Datos
+                </span>
+                <span className="text-xs theme-text-muted leading-snug">
+                  explora el contenido del módulo o inicia una actividad con
+                  Gemini
+                </span>
+              </div>
             </div>
 
             {/* Tarjetas de sugerencia — 2×2 */}
@@ -310,10 +315,15 @@ export default function ToolWorkspace({
               >
                 Vamos a empezar con tu cuaderno...
               </h2>
-              <p className="text-sm theme-text-muted max-w-sm">
-                Módulo 4 · Alquimista de Documentos — explora el contenido del
-                módulo o crea algo nuevo con NotebookLM
-              </p>
+              <div className="flex flex-wrap items-center gap-1.5 max-w-sm">
+                <span className="theme-chip inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                  Módulo 4 · Alquimista de Documentos
+                </span>
+                <span className="text-xs theme-text-muted leading-snug">
+                  explora el contenido del módulo o crea algo nuevo con
+                  NotebookLM
+                </span>
+              </div>
             </div>
 
             {/* Tarjetas de sugerencia — 2×2 */}
@@ -430,10 +440,14 @@ export default function ToolWorkspace({
               >
                 ¿Por dónde empezamos?
               </h2>
-              <p className="text-sm theme-text-muted max-w-sm">
-                Módulo 2 · Arquitecto Digital — explora el contenido del módulo
-                o inicia una actividad
-              </p>
+              <div className="flex flex-wrap items-center gap-1.5 max-w-sm">
+                <span className="theme-chip inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                  Módulo 2 · Arquitecto Digital
+                </span>
+                <span className="text-xs theme-text-muted leading-snug">
+                  explora el contenido del módulo o inicia una actividad
+                </span>
+              </div>
             </div>
 
             {/* Tarjetas de sugerencia — 2×2 */}
