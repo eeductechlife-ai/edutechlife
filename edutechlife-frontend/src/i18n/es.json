@@ -217,6 +217,7 @@
   "ialab.workspace.simulated_note": "Interfaz educativa: la herramienta real no está conectada a este curso.",
   "ialab.workspace.rail_label": "Panel de conversaciones de la herramienta",
   "ialab.workspace.topics_label": "Temas del módulo",
+  "ialab.workspace.default.new_workshop": "Nuevo taller",
   "ialab.workspace.chatgpt.new_chat": "Nuevo chat",
   "ialab.workspace.gemini.new_session": "Nueva sesión",
   "ialab.workspace.notebooklm.new_notebook": "Nuevo notebook",

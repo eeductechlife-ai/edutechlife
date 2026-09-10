@@ -31,7 +31,7 @@ export async function saveGradeToSupabase({
         {
           user_id: user.id,
           module_id: numericModuleId,
-          activity_type: "challenge",
+          activity_type: "exam",
           resource_id: null,
           score: Math.round(Number(evaluation.notaGlobal)),
           completed_lessons: evaluation,

@@ -48,6 +48,8 @@ export const resourcesFactory = (db) => ({
 
       if (error) throw error;
 
+      // ignoreDuplicates:true → solo inserta la fila resumen si no existe.
+      // Evita resetear resources_viewed a 0 en filas que ya tienen un conteo.
       await db.from(TABLE_NAME).upsert(
         {
           user_id: actualUserId,
@@ -61,7 +63,7 @@ export const resourcesFactory = (db) => ({
         },
         {
           onConflict: "user_id,module_id,activity_type,resource_id",
-          ignoreDuplicates: false,
+          ignoreDuplicates: true,
         },
       );
 

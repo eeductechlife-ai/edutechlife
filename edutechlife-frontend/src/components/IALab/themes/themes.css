@@ -641,16 +641,12 @@
 }
 
 [data-theme="default"] {
-  --theme-rail-bg: var(--theme-surface-2);
-  --theme-rail-hover: var(--theme-surface);
-  --theme-rail-active: color-mix(
-    in srgb,
-    var(--theme-primary) 10%,
-    transparent
-  );
-  --theme-rail-text: var(--theme-text);
-  --theme-rail-muted: var(--theme-text-muted);
-  --theme-rail-border: var(--theme-border);
+  --theme-rail-bg: #003d52;
+  --theme-rail-hover: #005270;
+  --theme-rail-active: rgba(37, 158, 181, 0.25);
+  --theme-rail-text: #d0eef5;
+  --theme-rail-muted: #7cb8c9;
+  --theme-rail-border: rgba(37, 158, 181, 0.2);
   --theme-send-bg: var(--theme-primary);
   --theme-send-hover: var(--theme-primary-hover);
   --theme-send-fg: #ffffff;

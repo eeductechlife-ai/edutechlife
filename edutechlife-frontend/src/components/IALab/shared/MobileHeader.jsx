@@ -8,12 +8,10 @@ import { useNotification } from "../../../context/NotificationContext";
 import useForumNotifications from "../../../hooks/IALab/forum/useForumNotifications";
 
 const MobileHeader = ({
-  onOpenMobileMenu,
   setIsSearchOpen,
   searchQuery,
   setSearchQuery,
   isSearchOpen,
-  isMenuOpen = false,
 }) => {
   const { t } = useTranslation();
   const { unreadCount } = useNotification();
@@ -66,29 +64,6 @@ const MobileHeader = ({
         >
           <Icon name="fa-search" className="w-4 h-4" aria-hidden="true" />
         </button>
-        <button
-          onClick={onOpenMobileMenu}
-          id="ialab-mobile-menu-trigger"
-          className="h-11 w-11 rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/50"
-          aria-label={t("ialab.menu_aria")}
-          aria-controls="ialab-mobile-menu"
-          aria-expanded={isMenuOpen}
-          data-tour="tour-undermenu-mobile"
-        >
-          <svg
-            className="w-6 h-6 text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </button>
       </div>
     </div>
   );
@@ -97,12 +72,10 @@ const MobileHeader = ({
 MobileHeader.displayName = "MobileHeader";
 
 MobileHeader.propTypes = {
-  onOpenMobileMenu: PropTypes.func,
   setIsSearchOpen: PropTypes.func,
   searchQuery: PropTypes.string,
   setSearchQuery: PropTypes.func,
   isSearchOpen: PropTypes.bool,
-  isMenuOpen: PropTypes.bool,
 };
 
 export default MobileHeader;

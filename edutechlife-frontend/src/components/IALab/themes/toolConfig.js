@@ -12,6 +12,38 @@
  */
 
 export const TOOL_CHROME_CONFIG = {
+  default: {
+    label: "Edutechlife",
+    headerBg: "linear-gradient(135deg, #003d52 0%, #004b63 50%, #259eb5 100%)",
+    badgeBg: "rgba(37,158,181,0.15)",
+    badgeColor: "#259eb5",
+    badgeBorder: "rgba(37,158,181,0.4)",
+    progressBarColor: "#259eb5",
+    railBg: "#003d52",
+    railHeaderBg: "#003d52",
+    railHover: "#005270",
+    railActiveBg: "rgba(37,158,181,0.25)",
+    railText: "#d0eef5",
+    railTextMuted: "#7cb8c9",
+    railBorder: "rgba(37,158,181,0.2)",
+    railNewChatBg: "#259eb5",
+    railNewChatText: "#ffffff",
+    composerBg: "var(--theme-surface)",
+    composerBorder: "var(--theme-border)",
+    composerPlaceholder: "var(--theme-text-muted)",
+    sendBg: "#259eb5",
+    sendHover: "#1e8194",
+    chipBg: "var(--theme-surface-2)",
+    chipText: "var(--theme-text)",
+    msgUserBg: "var(--theme-surface-2)",
+    msgUserText: "var(--theme-text)",
+    msgAssistantBg: "var(--theme-surface)",
+    msgAssistantText: "var(--theme-text)",
+    promptCardBg: "var(--theme-surface)",
+    promptCardBorder: "var(--theme-border)",
+    promptCardHoverBg: "var(--theme-surface-2)",
+    subtle: "var(--theme-surface-2)",
+  },
   chatgpt: {
     label: "ChatGPT",
     /* Banner del módulo */

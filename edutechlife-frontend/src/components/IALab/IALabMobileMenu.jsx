@@ -117,6 +117,40 @@ const IALabMobileMenu = ({
         </div>
       </div>
 
+      {/* MODULOS DEL CURSO */}
+      <div className="px-3 py-3">
+        <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-[var(--theme-primary)] mb-2 flex items-center gap-1.5">
+          <Icon
+            name="fa-layer-group"
+            className="text-[var(--theme-primary)] text-xs"
+          />
+          {t("mobile_menu.modules")}
+        </h3>
+        <div className="space-y-0.5">
+          {modules.map((mod) => {
+            const modScore = calculateModuleScore(mod.id);
+            const isLocked = isModuleLocked(mod.id);
+            const isActive = activeMod === mod.id;
+            return (
+              <ModuleNavItem
+                key={mod.id}
+                mod={mod}
+                isActive={isActive}
+                isLocked={isLocked}
+                score={modScore}
+                variant="expanded"
+                onClick={(id) => {
+                  setActiveMod(id);
+                  closeMobileMenu();
+                }}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
+
       {/* UNDERMENU - Acciones de usuario */}
       <div className="px-3 py-3">
         <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-[var(--theme-primary)] mb-2 flex items-center gap-1.5">
@@ -194,40 +228,6 @@ const IALabMobileMenu = ({
             </div>
             {t("mobile_menu.help")}
           </button>
-        </div>
-      </div>
-
-      <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
-
-      {/* MODULOS DEL CURSO */}
-      <div className="px-3 py-3">
-        <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-[var(--theme-primary)] mb-2 flex items-center gap-1.5">
-          <Icon
-            name="fa-layer-group"
-            className="text-[var(--theme-primary)] text-xs"
-          />
-          {t("mobile_menu.modules")}
-        </h3>
-        <div className="space-y-0.5">
-          {modules.map((mod) => {
-            const modScore = calculateModuleScore(mod.id);
-            const isLocked = isModuleLocked(mod.id);
-            const isActive = activeMod === mod.id;
-            return (
-              <ModuleNavItem
-                key={mod.id}
-                mod={mod}
-                isActive={isActive}
-                isLocked={isLocked}
-                score={modScore}
-                variant="expanded"
-                onClick={(id) => {
-                  setActiveMod(id);
-                  closeMobileMenu();
-                }}
-              />
-            );
-          })}
         </div>
       </div>
 

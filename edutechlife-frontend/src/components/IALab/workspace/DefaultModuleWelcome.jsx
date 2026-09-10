@@ -126,9 +126,27 @@ export default function DefaultModuleWelcome({ activeMod, onSelectSection }) {
       </div>
 
       {cfg.intro && (
-        <p className="text-sm theme-text-muted leading-relaxed mb-6 max-w-xl mx-auto text-center">
-          {cfg.intro}
-        </p>
+        <div className="w-full mb-6 flex gap-3 max-w-xl mx-auto">
+          <div
+            className="flex-shrink-0 mt-0.5 h-6 w-6 rounded-full flex items-center justify-center shadow-sm"
+            style={{ background: cfg.iconBg }}
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d={cfg.iconPath} />
+            </svg>
+          </div>
+          <p className="flex-1 text-sm theme-text-muted leading-relaxed">{cfg.intro}</p>
+        </div>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

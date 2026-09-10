@@ -24,14 +24,22 @@ import { ConversationItem } from "./toolbits";
 import NotebookLMWelcome from "./NotebookLMWelcome";
 import GeminiWelcome from "./GeminiWelcome";
 import ChatGPTWelcome from "./ChatGPTWelcome";
+import ArtesanoWelcome from "./ArtesanoWelcome";
+import GuardianWelcome from "./GuardianWelcome";
 
 const CHAT_GLYPH = "M21 12a8 8 0 0 1-8 8H4l1.5-2.5A8 8 0 1 1 21 12Z";
 const PLUS_GLYPH = "M12 5v14m-7-7h14";
 
 const TOOL_TITLE_KEY = {
+  default: "ialab.workspace.default.new_workshop",
   chatgpt: "ialab.workspace.chatgpt.new_chat",
   gemini: "ialab.workspace.gemini.new_session",
   notebooklm: "ialab.workspace.notebooklm.new_notebook",
+};
+
+const DEFAULT_MODULE_BRAND = {
+  1: { label: "Artesano Digital", tagline: "Fundamentos de prompts con precisión artesanal" },
+  5: { label: "Guardián Digital", tagline: "Uso ético e inteligente de la IA" },
 };
 
 export default function ToolWorkspace({
@@ -49,13 +57,29 @@ export default function ToolWorkspace({
   const meta = THEME_META[theme] || { label: "IA", tagline: "" };
   const Logo = TOOL_LOGOS[theme] || null;
   const [railOpen, setRailOpen] = useState(false);
+  const [desktopOpen, setDesktopOpen] = useState(true);
   const shouldReduceMotion = useReducedMotion();
 
   const overview = getModuleOverviewData(activeMod, locale);
   const topics = overview?.topics || [];
 
   if (!cfg) return children;
-  const newChatLabel = t(TOOL_TITLE_KEY[theme] || TOOL_TITLE_KEY.chatgpt);
+  const newChatLabel = t(TOOL_TITLE_KEY[theme] || TOOL_TITLE_KEY.default);
+  const modBrand = theme === "default" ? DEFAULT_MODULE_BRAND[activeMod] : null;
+  const railLabel = modBrand?.label || cfg.label;
+
+  /* Logo SVG propio por módulo para el tema default */
+  const DefaultModLogo = theme === "default" ? () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#259eb5"
+      strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d={
+        activeMod === 5
+          ? "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+          : "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+      } />
+    </svg>
+  ) : null;
+  const RailLogo = DefaultModLogo || Logo;
 
   const rail = (
     <div
@@ -67,11 +91,22 @@ export default function ToolWorkspace({
         className="theme-border-rail flex items-center gap-2.5 border-b px-4 py-3.5"
         data-testid="tool-workspace-brand"
       >
-        {Logo && <Logo />}
-        <span className="theme-text-rail text-sm font-bold">{cfg.label}</span>
+        {RailLogo && <RailLogo />}
+        <span className="theme-text-rail text-sm font-bold">{railLabel}</span>
         <span className="theme-chip ml-auto rounded-full px-2 py-0.5 text-[10px] font-semibold opacity-80">
           {t("ialab.workspace.simulated")}
         </span>
+        {/* Botón cerrar — solo desktop */}
+        <button
+          type="button"
+          onClick={() => setDesktopOpen(false)}
+          aria-label="Cerrar panel de navegación"
+          className="theme-text-rail-muted ml-1 hidden rounded-md p-1 opacity-60 transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-current/40 lg:flex"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
       </div>
 
       {/* Nuevo chat / sesión */}
@@ -182,16 +217,24 @@ export default function ToolWorkspace({
       {/* Chip de transparencia */}
       <div className="theme-border-rail border-t p-3">
         <p className="theme-text-rail-muted text-[10.5px] leading-relaxed">
-          {meta.tagline}
+          {modBrand?.tagline || meta.tagline}
         </p>
       </div>
     </div>
   );
 
+  /* El rail desktop se oculta solo cuando la pantalla de bienvenida propia
+     de la herramienta ya trae su propia navegación lateral (GeminiWelcome
+     con sidebar 260px, NotebookLMWelcome con 3 columnas). En vista de sección
+     y en móvil el rail siempre está disponible con la marca del tema activo. */
+  const hideDesktopRail =
+    (theme === "gemini" || theme === "notebooklm") && viewSection === null;
+  const isDefaultWelcome = theme === "default" && viewSection === null;
+
   return (
     <div className="flex w-full gap-5" data-testid={`tool-workspace-${theme}`}>
-      {/* Rail desktop — oculto en notebooklm y gemini-welcome (tienen nav propia) */}
-      {theme !== "notebooklm" && !(theme === "gemini" && viewSection === null) && (
+      {/* Rail desktop — oculto en welcome de gemini/notebooklm o cuando el usuario lo cierra */}
+      {!hideDesktopRail && desktopOpen && (
         <aside
           aria-label={t("ialab.workspace.rail_label")}
           className="lg:sticky lg:top-8 hidden max-h-[calc(100dvh-11rem)] w-72 flex-shrink-0 self-start lg:block"
@@ -202,52 +245,51 @@ export default function ToolWorkspace({
         </aside>
       )}
 
-      {/* Rail móvil (drawer) — oculto en notebooklm y gemini-welcome */}
-      {theme !== "notebooklm" && !(theme === "gemini" && viewSection === null) && (
-        <AnimatePresence>
-          {railOpen && (
+      {/* Rail móvil (drawer) — siempre disponible para los 3 temas */}
+      <AnimatePresence>
+        {railOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={shouldReduceMotion ? { duration: 0 } : undefined}
+            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+            onClick={() => setRailOpen(false)}
+          >
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={shouldReduceMotion ? { duration: 0 } : undefined}
-              className="fixed inset-0 z-40 bg-black/50 lg:hidden"
-              onClick={() => setRailOpen(false)}
+              initial={{ x: shouldReduceMotion ? 0 : "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: shouldReduceMotion ? 0 : "-100%" }}
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0 }
+                  : { type: "spring", stiffness: 380, damping: 34 }
+              }
+              className="h-full w-72 max-w-[85vw]"
+              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-label={t("ialab.workspace.rail_label")}
             >
-              <motion.div
-                initial={{ x: shouldReduceMotion ? 0 : "-100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: shouldReduceMotion ? 0 : "-100%" }}
-                transition={
-                  shouldReduceMotion
-                    ? { duration: 0 }
-                    : { type: "spring", stiffness: 380, damping: 34 }
-                }
-                className="h-full w-72 max-w-[85vw]"
-                onClick={(e) => e.stopPropagation()}
-                role="dialog"
-                aria-modal="true"
-                aria-label={t("ialab.workspace.rail_label")}
-              >
-                {rail}
-              </motion.div>
+              {rail}
             </motion.div>
-          )}
-        </AnimatePresence>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Hilo + composer */}
       <div className="flex min-w-0 flex-1 flex-col gap-5">
-        {theme !== "notebooklm" && !(theme === "gemini" && viewSection === null) && (
-          <button
-            type="button"
-            onClick={() => setRailOpen(true)}
-            className="theme-composer theme-text-muted flex w-max items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-semibold shadow-sm transition-colors lg:hidden"
-          >
-            <span aria-hidden="true">☰</span>
-            {newChatLabel}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => {
+            if (window.innerWidth >= 1024) setDesktopOpen(true);
+            else setRailOpen(true);
+          }}
+          className={`theme-composer theme-text-muted flex w-max items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-semibold shadow-sm transition-colors${(hideDesktopRail || desktopOpen) ? " lg:hidden" : ""}`}
+        >
+          <span aria-hidden="true">☰</span>
+          {newChatLabel}
+        </button>
 
         {/* Pantalla de bienvenida estilo Gemini — solo cuando no hay sección activa */}
         {theme === "gemini" && viewSection === null && (
@@ -272,6 +314,26 @@ export default function ToolWorkspace({
         {theme === "chatgpt" && viewSection === null && (
           <ChatGPTWelcome
             topics={topics}
+            onSelectSection={onSelectSection}
+            onSelectTopic={onSelectTopic}
+          />
+        )}
+
+        {/* Pantalla de bienvenida M1 — solo cuando no hay sección activa */}
+        {isDefaultWelcome && activeMod === 1 && (
+          <ArtesanoWelcome
+            topics={topics}
+            description={overview?.description}
+            onSelectSection={onSelectSection}
+            onSelectTopic={onSelectTopic}
+          />
+        )}
+
+        {/* Pantalla de bienvenida M5 — solo cuando no hay sección activa */}
+        {isDefaultWelcome && activeMod === 5 && (
+          <GuardianWelcome
+            topics={topics}
+            description={overview?.description}
             onSelectSection={onSelectSection}
             onSelectTopic={onSelectTopic}
           />

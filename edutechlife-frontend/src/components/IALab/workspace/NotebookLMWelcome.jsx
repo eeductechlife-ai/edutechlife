@@ -78,7 +78,7 @@ export default function NotebookLMWelcome({ topics = [], onSelectSection, onSele
       style={{ minHeight: "calc(100dvh - 14rem)", background: "#fff", borderColor: "#e0e0e6" }}
     >
       {/* ── Mobile Tab Bar ── visible only < md ────────────── */}
-      <div className="md:hidden flex border-b" style={{ borderColor: "#e0e0e6" }}>
+      <div className="lg:hidden flex border-b" style={{ borderColor: "#e0e0e6" }}>
         {MOBILE_TABS.map(({ id, label }) => (
           <button
             key={id}
@@ -98,7 +98,7 @@ export default function NotebookLMWelcome({ topics = [], onSelectSection, onSele
       <div className="flex h-full" style={{ minHeight: "inherit" }}>
 
         {/* ══ FUENTES ══════════════════════════════════════════ */}
-        <div className={`flex-col flex-shrink-0 border-r ${mobileTab === "fuentes" ? "flex w-full" : "hidden md:flex"} md:w-[260px]`} style={{ borderColor: "#e0e0e6" }}>
+        <div className={`flex-col flex-shrink-0 border-r ${mobileTab === "fuentes" ? "flex w-full" : "hidden lg:flex"} lg:w-[260px]`} style={{ borderColor: "#e0e0e6" }}>
 
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "#e0e0e6" }}>
@@ -197,7 +197,7 @@ export default function NotebookLMWelcome({ topics = [], onSelectSection, onSele
         </div>
 
         {/* ══ CHAT ════════════════════════════════════════════ */}
-        <div className={`flex-col flex-1 min-w-0 ${mobileTab === "chat" ? "flex" : "hidden md:flex"}`}>
+        <div className={`flex-col flex-1 min-w-0 ${mobileTab === "chat" ? "flex" : "hidden lg:flex"}`}>
 
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "#e0e0e6" }}>
@@ -232,12 +232,25 @@ export default function NotebookLMWelcome({ topics = [], onSelectSection, onSele
               </div>
             </div>
 
-            {/* Misión */}
-            <div className="rounded-xl px-5 py-4 mb-6 border" style={{ background: "#f8f9ff", borderColor: "#c5d0f0" }}>
-              <p style={{ fontSize: 13, fontWeight: 600, color: "#1a73e8", letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 6 }}>Misión del módulo</p>
-              <p style={{ fontSize: 15, color: "#3c4043", lineHeight: 1.7 }}>
-                Convierte documentos en oro: podcasts que suenan a radio profesional, resúmenes que van al grano y respuestas que citan cada fuente sin inventar nada.
-              </p>
+            {/* Mensaje intro — avatar NotebookLM + texto, estilo nuevo chat */}
+            <div className="w-full mb-6 flex gap-3">
+              <div
+                className="flex-shrink-0 mt-0.5 h-6 w-6 rounded-full flex items-center justify-center"
+                style={{ background: "#1a73e8" }}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+              </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif", fontSize: 14, fontWeight: 600, color: "#202124", marginBottom: 6 }}>
+                  Bienvenido al taller de transformación documental.
+                </p>
+                <p style={{ fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif", fontSize: 14, color: "#3c4043", lineHeight: 1.7 }}>
+                  Convierte documentos en oro: podcasts que suenan a radio profesional, resúmenes que van al grano y respuestas que citan cada fuente sin inventar nada.
+                </p>
+              </div>
             </div>
 
             {/* ¿Por dónde empezar? */}

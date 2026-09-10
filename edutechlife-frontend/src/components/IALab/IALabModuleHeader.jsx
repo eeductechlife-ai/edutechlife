@@ -123,10 +123,28 @@ const NotebookLMLogo = () => (
   </svg>
 );
 
+/** Edutechlife — ícono llave de herramienta (fallback genérico para el tema default) */
+const EdutechlifeLogo = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#259eb5"
+    strokeWidth="1.75"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+  </svg>
+);
+
 /* ─── Configuración visual por herramienta ─────────────────────────────────
    Fuente única de verdad: themes/toolConfig.js (TOOL_CHROME_CONFIG).
    Solo las logos SVG viven aquí; los colores/gradientes se centralizan. */
 export const TOOL_LOGOS = {
+  default: EdutechlifeLogo,
   chatgpt: ChatGPTLogo,
   gemini: GeminiLogo,
   notebooklm: NotebookLMLogo,
@@ -157,6 +175,19 @@ TOOL_CONFIG.default = {
   progressBarColor: "#ffffff",
 };
 
+/* Ícono y eyebrow propios para los módulos con tema default (M1, M5) */
+const DEFAULT_MODULE_META = {
+  1: {
+    eyebrow: "Módulo 1",
+    iconPath:
+      "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z",
+  },
+  5: {
+    eyebrow: "Módulo 5",
+    iconPath: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+  },
+};
+
 /* ─── Componente ─────────────────────────────────────────────────────────── */
 const IALabModuleHeader = () => {
   const { t } = useTranslation();
@@ -172,6 +203,7 @@ const IALabModuleHeader = () => {
   const tool = TOOL_CONFIG[theme] || TOOL_CONFIG.default;
   const { Logo } = tool;
   const chrome = useToolChrome(theme);
+  const modMeta = theme === "default" ? DEFAULT_MODULE_META[activeMod] : null;
 
   /* Cuando el chrome está activo, renderizamos un header estilo ChatGPT:
      sin banner de color, solo el nombre de herramienta + contexto del módulo */
@@ -275,16 +307,29 @@ const IALabModuleHeader = () => {
         style={tool.headerBg ? { background: tool.headerBg } : undefined}
       >
         <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 md:w-11 md:h-11 bg-white/15 rounded-full flex flex-col items-center justify-center shadow-inner flex-shrink-0">
-            <div className="text-base md:text-lg font-bold text-white leading-none">
-              {activeMod}
+          {/* Chip con ícono propio por módulo (M1/M5) o número genérico */}
+          {modMeta ? (
+            <div className="w-10 h-10 md:w-11 md:h-11 bg-white/15 rounded-xl flex items-center justify-center border border-white/20 backdrop-blur-sm flex-shrink-0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white"
+                strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d={modMeta.iconPath} />
+              </svg>
             </div>
-            <div className="text-[8px] font-semibold text-white/70 uppercase tracking-wide leading-none mt-0.5">
-              {t("ialab.module_header.module")}
+          ) : (
+            <div className="w-10 h-10 md:w-11 md:h-11 bg-white/15 rounded-full flex flex-col items-center justify-center shadow-inner flex-shrink-0">
+              <div className="text-base md:text-lg font-bold text-white leading-none">{activeMod}</div>
+              <div className="text-[8px] font-semibold text-white/70 uppercase tracking-wide leading-none mt-0.5">
+                {t("ialab.module_header.module")}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="flex-1 min-w-0">
+            {modMeta && (
+              <p className="text-[9px] font-semibold text-white/60 uppercase tracking-widest leading-none mb-1">
+                {modMeta.eyebrow}
+              </p>
+            )}
             <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-white leading-tight font-montserrat truncate">
               {curr?.title}
             </h1>
@@ -346,7 +391,7 @@ const IALabModuleHeader = () => {
           <div className="w-full h-1 md:h-1.5 bg-white/15 rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full"
-              style={{ background: tool.progressBarColor }}
+              style={{ background: modMeta ? "rgba(37,158,181,0.85)" : tool.progressBarColor }}
               initial={{ width: 0 }}
               animate={{ width: `${moduleProgress}%` }}
               transition={{ duration: 0.8, ease: "easeOut" }}

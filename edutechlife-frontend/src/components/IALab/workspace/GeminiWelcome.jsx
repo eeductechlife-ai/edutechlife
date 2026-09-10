@@ -93,7 +93,7 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
     >
       {/* ── Left sidebar ─────────────────────────────────────── */}
       <aside
-        className="hidden md:flex flex-col flex-shrink-0 border-r overflow-y-auto"
+        className="hidden lg:flex flex-col flex-shrink-0 border-r overflow-y-auto"
         style={{ width: 260, borderColor: "#e8eaed", background: "#fff" }}
       >
         {/* Header */}
@@ -203,14 +203,33 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
           >
             ¿Qué investigamos hoy?
           </h1>
-          <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, color: "#5f6368", marginBottom: description ? 16 : 28 }}>
+          <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, color: "#5f6368", marginBottom: 20 }}>
             explora el contenido del módulo o inicia una actividad con Gemini
           </p>
-          {description && (
-            <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 15, color: "#3c4043", lineHeight: 1.65, marginBottom: 28, maxWidth: 560 }}>
-              {description.split(". ").filter(Boolean).slice(0, 3).join(". ").trim().replace(/\.$/, "") + "."}
-            </p>
-          )}
+
+          {/* Mensaje intro — avatar Gemini + texto, estilo nuevo chat */}
+          <div className="w-full mb-7 flex gap-3 max-w-2xl text-left">
+            <div
+              className="flex-shrink-0 mt-0.5 h-6 w-6 rounded-full overflow-hidden flex items-center justify-center"
+              style={{ background: "linear-gradient(135deg,#4285f4 0%,#9b59b6 50%,#ea4335 100%)" }}
+            >
+              <GeminiDiamond size={14} />
+            </div>
+            <div className="flex-1 space-y-2">
+              <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, fontWeight: 600, color: "#202124" }}>
+                Bienvenido al laboratorio de investigación multimodal.
+              </p>
+              {description ? (
+                <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, color: "#5f6368", lineHeight: 1.65 }}>
+                  {description.split(". ").filter(Boolean).slice(0, 3).join(". ").trim().replace(/\.$/, "") + "."}
+                </p>
+              ) : (
+                <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, color: "#5f6368", lineHeight: 1.65 }}>
+                  Con Gemini aprenderás a buscar, sintetizar y crear en múltiples formatos. Texto, imagen, código y audio — todo desde una sola conversación.
+                </p>
+              )}
+            </div>
+          </div>
 
           {/* Suggestion cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl">

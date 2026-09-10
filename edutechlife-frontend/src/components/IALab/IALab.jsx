@@ -91,6 +91,7 @@ const IALabValerioPanel = lazy(() => import("./IALabValerioPanel"));
 const BookmarksTab = lazy(() => import("./BookmarksTab"));
 import MobileHeader from "./shared/MobileHeader";
 import MobileInfoBar from "./shared/MobileInfoBar";
+import MobileBottomNav from "./shared/MobileBottomNav";
 import ToastNotification from "./shared/ToastNotification";
 import XPToast from "./XPToast";
 
@@ -123,6 +124,7 @@ const IALabContent = memo(function () {
     challengeScores = {},
     moduleProgress = {},
     modules = [],
+    updateModuleActivity = () => {},
   } = useIALabProgressContext() ?? {};
   const { isDarkMode, toggleDarkMode } = useTheme();
   const [showValerioPanel, setShowValerioPanel] = useState(false);
@@ -150,13 +152,41 @@ const IALabContent = memo(function () {
   };
   const [isForumOpen, setIsForumOpen] = useState(false);
   const [toast, setToast] = useState(null);
-  const [selectedTopicIndex, setSelectedTopicIndex] = useState(0);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const viewSection = searchParams.get("tab") || null;
+
+  // selectedTopicIndex vive en la URL (?topic=N) para que el botón atrás y
+  // los enlaces directos (/ialab/3?tab=contenido&topic=2) funcionen.
+  const selectedTopicIndex = useMemo(() => {
+    const n = parseInt(searchParams.get("topic") ?? "", 10);
+    return isNaN(n) || n < 0 ? 0 : n;
+  }, [searchParams]);
+
+  // setViewSection: fusiona params para no borrar ?topic al cambiar de tab.
   const setViewSection = useCallback(
     (tabId) => {
-      setSearchParams(tabId ? { tab: tabId } : {}, { replace: true });
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          if (tabId) { next.set("tab", tabId); } else { next.delete("tab"); }
+          return next;
+        },
+        { replace: true },
+      );
+    },
+    [setSearchParams],
+  );
+
+  const setSelectedTopicIndex = useCallback(
+    (i) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          next.set("topic", String(i));
+          return next;
+        },
+        { replace: true },
+      );
     },
     [setSearchParams],
   );
@@ -263,12 +293,18 @@ const IALabContent = memo(function () {
     useIALabStore.getState().setShowHelpModal(true);
   };
 
-  // Escuchar eventos de examen completado para forzar refresco UI
+  // Escuchar eventos de examen completado para forzar refresco UI y guardar progreso
   useEffect(() => {
-    const handler = () => setExamRefreshKey((k) => k + 1);
+    const handler = (e) => {
+      setExamRefreshKey((k) => k + 1);
+      const { score, moduleId } = e.detail ?? {};
+      if (typeof score === "number" && moduleId) {
+        updateModuleActivity(moduleId, "exam", score >= 80, score);
+      }
+    };
     window.addEventListener("ialab:examCompleted", handler);
     return () => window.removeEventListener("ialab:examCompleted", handler);
-  }, []);
+  }, [updateModuleActivity]);
 
   useEffect(() => {
     let rafId;
@@ -340,23 +376,6 @@ const IALabContent = memo(function () {
     };
   }, [moduleProgress, activeMod]);
 
-  // Tab inteligente: cuando el contenido está completo pero el examen está pendiente,
-  // llevar al estudiante directamente a "Actividades" en lugar de "Todo".
-  useEffect(() => {
-    if (isLoadingProgress || viewSection !== null) return;
-    if (autoTabRef.current === activeMod) return;
-    autoTabRef.current = activeMod;
-    const mod = moduleProgress[activeMod];
-    if (mod?.resourcesCompleted && !mod?.exam) {
-      setViewSection("actividades");
-    }
-  }, [
-    activeMod,
-    isLoadingProgress,
-    moduleProgress,
-    viewSection,
-    setViewSection,
-  ]);
 
   // Handler para acciones globales
   const handleAction = useCallback((action, data) => {
@@ -415,10 +434,20 @@ const IALabContent = memo(function () {
   });
 
   const toolChrome = useToolChrome(mapModuleToTheme(activeMod));
-  /* Chrome inmersivo activo en módulos con herramienta soportada
-     (ChatGPT M2, Gemini M3, NotebookLM M4). M1/M5 caen en vista clásica. */
-  const chromeActive =
-    toolChrome.enabled && mapModuleToTheme(activeMod) !== "default";
+  const chromeActive = toolChrome.enabled;
+
+  // Tab inteligente: elige el tab más útil al abrir un módulo sin tab activo.
+  useEffect(() => {
+    if (isLoadingProgress || viewSection !== null) return;
+    if (autoTabRef.current === activeMod) return;
+    autoTabRef.current = activeMod;
+    const mod = moduleProgress[activeMod];
+    if (mod?.resourcesCompleted && !mod?.exam) {
+      setViewSection("actividades");
+    } else if (!mod?.resourcesCompleted && chromeActive) {
+      setViewSection("actividades");
+    }
+  }, [activeMod, isLoadingProgress, moduleProgress, viewSection, setViewSection, chromeActive]);
 
   /* 2–6. Secciones del módulo: paneles informativo, temas, actividades,
      práctica, guardados y foro. Se envuelven en ToolWorkspace cuando el
@@ -614,8 +643,6 @@ const IALabContent = memo(function () {
         onTouchEnd={swipeEnd}
       >
         <MobileHeader
-          onOpenMobileMenu={() => setShowMobileMenu(true)}
-          isMenuOpen={showMobileMenu}
           setIsSearchOpen={setIsSearchOpen}
           isSearchOpen={isSearchOpen}
         />
@@ -660,7 +687,7 @@ const IALabContent = memo(function () {
             ref={setMainRef}
             id="main-content"
             tabIndex={-1}
-            className="flex-1 outline-none overflow-y-auto px-4 pt-16 landscape:pt-12 pb-2 safe-area-bottom md:px-5 md:pt-0 lg:px-8 lg:pt-0 lg:pb-8 xl:px-12 2xl:px-16"
+            className="flex-1 outline-none overflow-y-auto px-4 pt-16 landscape:pt-12 pb-[calc(4rem+env(safe-area-inset-bottom,0px))] md:pb-2 safe-area-bottom md:px-5 md:pt-0 lg:px-8 lg:pt-0 lg:pb-8 xl:px-12 2xl:px-16"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -710,7 +737,7 @@ const IALabContent = memo(function () {
                   !currentLessonTitle &&
                   viewSection === null &&
                   !moduleProgress[activeMod]?.resourcesCompleted &&
-                  (chromeActive || (activeMod !== 1 && activeMod !== 5)) && (
+                  chromeActive && (
                     <motion.div
                       key={`start-cta-${activeMod}`}
                       initial={{ opacity: 0, y: -8 }}
@@ -1045,6 +1072,14 @@ const IALabContent = memo(function () {
 
         {/* Banner de conectividad */}
         <OfflineBanner />
+
+        {/* Bottom navigation bar — solo móvil */}
+        <MobileBottomNav
+          viewSection={viewSection}
+          onSelectSection={setViewSection}
+          onOpenMenu={() => setShowMobileMenu(true)}
+          badgeCount={bookmarkBadge}
+        />
 
         {/* Tour interactivo contextual */}
         <Suspense

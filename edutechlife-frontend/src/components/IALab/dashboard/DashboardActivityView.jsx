@@ -3,6 +3,8 @@ import { useMemo, memo } from 'react';
 import { useTranslation } from '../../../i18n/I18nProvider';
 import useActivityTracker from '../../../hooks/useActivityTracker';
 import { useIALabStore } from '../../../store/ialabStore';
+import StreakCalendar from './StreakCalendar';
+import ActivityFeed from './ActivityFeed';
 
 const MODULES = [1, 2, 3, 4, 5];
 
@@ -58,6 +60,8 @@ function DashboardActivityView() {
         ))}
       </div>
 
+      <StreakCalendar />
+
       <motion.div initial={noMotion ? false : 'hidden'} whileInView={noMotion ? undefined : 'visible'}
         viewport={vp} variants={sectionVariants}
         className="bg-white rounded-xl p-4 shadow-sm border border-slate-100">
@@ -97,6 +101,8 @@ function DashboardActivityView() {
           ))}
         </div>
       </motion.div>
+
+      <ActivityFeed />
     </div>
   );
 }

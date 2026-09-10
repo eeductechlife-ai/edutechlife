@@ -7,13 +7,14 @@ const STORAGE_KEY = "ialab-tool-chrome";
    mantener el toggle sincronizado (header ↔ workspace). */
 const SYNC_EVENT = "ialab-tool-chrome-change";
 
-export const TOOL_CHROME_THEMES = ["chatgpt", "gemini", "notebooklm"];
+export const TOOL_CHROME_THEMES = ["chatgpt"];
 
 const THEME_DEFAULT = {
   chatgpt: true,
-  gemini: true,
-  notebooklm: true,
 };
+
+/* Temas que siempre muestran la vista herramientas, sin opción de cambiar */
+const FORCE_CHROME_ON = new Set(["gemini", "default", "notebooklm"]);
 
 function readStored() {
   try {
@@ -28,6 +29,7 @@ function readStored() {
 }
 
 function isEnabledFor(stored, theme) {
+  if (FORCE_CHROME_ON.has(theme)) return true;
   if (theme in stored) return stored[theme];
   if ("*" in stored) return stored["*"];
   return THEME_DEFAULT[theme] || false;
