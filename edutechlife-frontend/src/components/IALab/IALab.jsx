@@ -436,7 +436,10 @@ const IALabContent = memo(function () {
   const toolChrome = useToolChrome(mapModuleToTheme(activeMod));
   const chromeActive = toolChrome.enabled;
 
-  // Tab inteligente: elige el tab más útil al abrir un módulo sin tab activo.
+  // Tab inteligente: redirige a actividades solo cuando el contenido ya está
+  // completo y el examen sigue pendiente (el estudiante sabe el camino y el
+  // siguiente paso lógico es el examen).  Los módulos chrome (M2/M3/M4) abren
+  // siempre en el intro para que el estudiante vea la pantalla de bienvenida.
   useEffect(() => {
     if (isLoadingProgress || viewSection !== null) return;
     if (autoTabRef.current === activeMod) return;
@@ -444,10 +447,8 @@ const IALabContent = memo(function () {
     const mod = moduleProgress[activeMod];
     if (mod?.resourcesCompleted && !mod?.exam) {
       setViewSection("actividades");
-    } else if (!mod?.resourcesCompleted && chromeActive) {
-      setViewSection("actividades");
     }
-  }, [activeMod, isLoadingProgress, moduleProgress, viewSection, setViewSection, chromeActive]);
+  }, [activeMod, isLoadingProgress, moduleProgress, viewSection, setViewSection]);
 
   /* 2–6. Secciones del módulo: paneles informativo, temas, actividades,
      práctica, guardados y foro. Se envuelven en ToolWorkspace cuando el
@@ -913,7 +914,7 @@ const IALabContent = memo(function () {
 
                 {/* 1. TÍTULO PRINCIPAL (siempre full-width) */}
                 <div className="flex flex-col gap-5">
-                  {viewSection !== null && (
+                  {viewSection !== null && !chromeActive && (
                     <Breadcrumbs
                       segments={[
                         {

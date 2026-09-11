@@ -9,6 +9,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import {
   getModuleLessons,
   getModuleAccordionContent,
+  getModuleOverviewData,
 } from "../constants/moduleContent/selectors";
 import { getResourcesForTopic } from "../constants/moduleResources";
 import { useIALabStore } from "../../../store/ialabStore";
@@ -38,7 +39,9 @@ export default function TopicChatThread({ topicIndex, activeMod }) {
   const prefersReducedMotion = useReducedMotion();
 
   const lessons = getModuleLessons(activeMod, locale);
-  const lesson = lessons[topicIndex];
+  const overview = getModuleOverviewData(activeMod, locale);
+  const topics = overview?.topics || [];
+  const lesson = lessons[topicIndex] || (topics[topicIndex] ? { title: topics[topicIndex].title, detailedDescription: "" } : null);
   const topicData = lesson ? getResourcesForTopic(lesson.title, locale) : null;
   const content = getModuleAccordionContent(activeMod, locale)?.[
     topicIndex + 1
