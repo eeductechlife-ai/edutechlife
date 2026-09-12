@@ -149,6 +149,11 @@ export default defineConfig({
     host: true,
     open: true,
     cors: true,
+    // No vigilar salidas de build commiteadas: evita recargas espurias del
+    // dev server que abortan imports dinámicos en curso.
+    watch: {
+      ignored: ['**/storybook-static/**', '**/dist/**']
+    },
     hmr: {
       overlay: true
     },
@@ -204,6 +209,12 @@ export default defineConfig({
     cssMinify: true
   },
   optimizeDeps: {
+    // Solo el entry real de la app. Por defecto Vite escanea `**/*.html` del
+    // root e intenta pre-bundlear `storybook-static/` (salida de build
+    // commiteada), lo que dispara re-optimizaciones y recargas ("optimized
+    // dependencies changed. reloading") que abortan imports dinámicos en
+    // curso — la causa de "Failed to fetch dynamically imported module".
+    entries: ['index.html'],
     include: [
       'react',
       'react-dom',

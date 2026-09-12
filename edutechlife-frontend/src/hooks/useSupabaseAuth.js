@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 // ("Export 'X' is not defined" → pantalla en blanco).
 import { supabase } from "../lib/supabase";
 import { API_BASE_URL } from "../config/api";
+import { readAuthIdentity } from "./useAuthIdentity";
 
 // Native Supabase Auth hook (replaces Clerk)
 export const useSupabaseAuth = () => {
@@ -12,6 +13,60 @@ export const useSupabaseAuth = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Recupera la sesión desde lo que realmente persiste el login: la sesión
+  // sembrada para supabase-js (localStorage) o, si no, el token de
+  // sessionStorage que usa el resto de la app. Sin esto, tras el login con
+  // navegación client-side el AuthProvider ya montado nunca se enteraba y
+  // `useAuth().user` quedaba null (el foro pedía iniciar sesión aunque el
+  // usuario estuviera logueado).
+  const hydrateSession = useCallback(async () => {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUser(session.user);
+        sessionStorage.setItem("auth_token", session.access_token);
+        localStorage.setItem("refresh_token", session.refresh_token);
+        try {
+          const { data: profileData } = await supabase
+            .from("users")
+            .select("*")
+            .eq("id", session.user.id)
+            .single();
+          setProfile(profileData);
+        } catch {
+          /* perfil no crítico */
+        }
+        return;
+      }
+    } catch (e) {
+      console.warn("hydrateSession getSession failed:", e?.message);
+    }
+    const identity = readAuthIdentity();
+    if (identity.isSignedIn) {
+      setUser({ id: identity.userId, email: identity.email });
+    }
+  }, []);
+
+  // Login/logout en la MISMA pestaña: reacciona al evento que dispara el login
+  // (y al signOutUser), replicando lo que antes solo ocurría con un reload.
+  useEffect(() => {
+    const onSignedIn = () => {
+      hydrateSession();
+    };
+    const onSignedOut = () => {
+      setUser(null);
+      setProfile(null);
+    };
+    window.addEventListener("auth:signed-in", onSignedIn);
+    window.addEventListener("auth:signout", onSignedOut);
+    return () => {
+      window.removeEventListener("auth:signed-in", onSignedIn);
+      window.removeEventListener("auth:signout", onSignedOut);
+    };
+  }, [hydrateSession]);
 
   // Initialize auth state from Supabase session
   useEffect(() => {
@@ -46,11 +101,18 @@ export const useSupabaseAuth = () => {
           const storedToken = sessionStorage.getItem("auth_token");
           const storedRefresh = localStorage.getItem("refresh_token");
           if (storedToken) {
-            const { data: restored, error: restoreError } =
-              await supabase.auth.setSession({
+            let restored = null;
+            let restoreError = null;
+            try {
+              const res = await supabase.auth.setSession({
                 access_token: storedToken,
                 refresh_token: storedRefresh || undefined,
               });
+              restored = res?.data;
+              restoreError = res?.error;
+            } catch (restoreErr) {
+              restoreError = restoreErr;
+            }
             if (restored?.user && !restoreError) {
               setUser(restored.user);
               const { data: profileData } = await supabase
@@ -59,6 +121,15 @@ export const useSupabaseAuth = () => {
                 .eq("id", restored.user.id)
                 .single();
               setProfile(profileData);
+              return;
+            }
+            // setSession no pudo restaurar la sesión del SDK, pero el token
+            // de sessionStorage puede ser válido (es lo que usa el resto de la
+            // app). No lo borres: trátalo como sesión activa para no mostrar
+            // "inicia sesión" a un usuario logueado.
+            const identity = readAuthIdentity();
+            if (identity.isSignedIn) {
+              setUser({ id: identity.userId, email: identity.email });
               return;
             }
           }
@@ -78,7 +149,9 @@ export const useSupabaseAuth = () => {
 
     // Listen for auth state changes
     const setupListener = async () => {
-      const { data: listener } = supabase.auth.onAuthStateChange(
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange(
         async (event, session) => {
           if (session?.user) {
             setUser(session.user);
@@ -93,6 +166,15 @@ export const useSupabaseAuth = () => {
 
             setProfile(profileData);
           } else {
+            // El SDK puede emitir INITIAL_SESSION/SIGNED_OUT con sesión null
+            // tras un login que sembró la sesión a mano. Si la identidad que
+            // usa el resto de la app sigue siendo válida, NO cierres sesión:
+            // antes esto borraba el token y el foro pedía iniciar sesión.
+            const identity = readAuthIdentity();
+            if (identity.isSignedIn) {
+              setUser({ id: identity.userId, email: identity.email });
+              return;
+            }
             setUser(null);
             setProfile(null);
             sessionStorage.removeItem("auth_token");
@@ -101,7 +183,7 @@ export const useSupabaseAuth = () => {
         },
       );
 
-      return listener;
+      return subscription;
     };
 
     let listener;
@@ -110,7 +192,7 @@ export const useSupabaseAuth = () => {
     });
 
     return () => {
-      listener?.unsubscribe();
+      listener?.unsubscribe?.();
     };
   }, []);
 

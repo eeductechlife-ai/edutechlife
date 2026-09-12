@@ -177,12 +177,17 @@ const IALabContent = memo(function () {
     [setSearchParams],
   );
 
-  const setSelectedTopicIndex = useCallback(
+  // openTopic: selecciona tema Y abre la sección de contenido en UNA sola
+  // actualización de URL. Llamar a setSelectedTopicIndex + setViewSection por
+  // separado pierde `topic`, porque cada setSearchParams parte del mismo
+  // location.search y la segunda sobrescribe a la primera.
+  const openTopic = useCallback(
     (i) => {
       setSearchParams(
         (prev) => {
           const next = new URLSearchParams(prev);
           next.set("topic", String(i));
+          next.set("tab", "contenido");
           return next;
         },
         { replace: true },
@@ -421,7 +426,14 @@ const IALabContent = memo(function () {
     mainRef.current = el;
     containerRef.current = el;
   }, []);
-  const resetViewSection = useCallback(() => setViewSection(null), []);
+  // "Inicio": quita la sección activa para mostrar la bienvenida del módulo
+  // (intro + accesos) y sube al tope para que se vea desde el principio.
+  const resetViewSection = useCallback(() => {
+    setViewSection(null);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [setViewSection]);
   const {
     handleTouchStart: swipeStart,
     handleTouchMove: swipeMove,
@@ -528,6 +540,8 @@ const IALabContent = memo(function () {
                 <TopicChatThread
                   topicIndex={selectedTopicIndex}
                   activeMod={activeMod}
+                  onAdvanceTopic={openTopic}
+                  onGoToActivities={() => setViewSection("actividades")}
                 />
               ) : (
                 <ModuleOverviewCard
@@ -979,8 +993,7 @@ const IALabContent = memo(function () {
                     selectedTopicIndex={selectedTopicIndex}
                     onNewChat={resetViewSection}
                     onSelectTopic={(i) => {
-                      setSelectedTopicIndex(i);
-                      setViewSection("contenido");
+                      openTopic(i);
                     }}
                     onSelectSection={setViewSection}
                   >

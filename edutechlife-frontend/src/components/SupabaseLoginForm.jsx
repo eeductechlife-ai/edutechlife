@@ -155,6 +155,10 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
 
         claimStorageForCurrentUser();
         await seedClientSession(data.token, data.refreshToken);
+        // Avisa al AuthProvider ya montado (navegación client-side, sin reload):
+        // así useAuth().user queda poblado y el foro/comunidad no pide iniciar
+        // sesión a un usuario que sí lo está.
+        window.dispatchEvent(new CustomEvent("auth:signed-in"));
         navigate(returnTo, { replace: true });
         return;
       } catch (err) {
@@ -184,6 +188,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
     localStorage.setItem("user_email", (data.user?.email || "").toLowerCase());
     claimStorageForCurrentUser();
     await seedClientSession(data.token, data.refreshToken);
+    window.dispatchEvent(new CustomEvent("auth:signed-in"));
     navigate(returnTo, { replace: true });
   };
 

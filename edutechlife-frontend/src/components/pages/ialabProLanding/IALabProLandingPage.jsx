@@ -21,7 +21,7 @@ import Footer from "../../Footer";
 import HeroSection from "./components/HeroSection";
 import IAFeaturesSection from "./components/IAFeaturesSection";
 import IACourseGrid from "./components/IACourseGrid";
-import MobileCTA from "./components/MobileCTA";
+
 
 const IALabProLandingPage = () => {
   const { t, locale } = useTranslation();
@@ -31,12 +31,10 @@ const IALabProLandingPage = () => {
   const { scrollYProgress, scrollY } = useScroll();
   const prefersReducedMotion = useReducedMotion();
   const [showFAB, setShowFAB] = useState(false);
-  const [showMobileCTA, setShowMobileCTA] = useState(false);
 
   useEffect(() => {
     const unsub = scrollY.on("change", (latest) => {
       setShowFAB(latest > 600);
-      setShowMobileCTA(latest > 400);
     });
     return () => unsub();
   }, [scrollY]);
@@ -143,8 +141,6 @@ const IALabProLandingPage = () => {
             </motion.button>
           )}
         </AnimatePresence>
-
-        <MobileCTA t={t} showMobileCTA={showMobileCTA} />
 
         <Footer />
         <NicoModern />

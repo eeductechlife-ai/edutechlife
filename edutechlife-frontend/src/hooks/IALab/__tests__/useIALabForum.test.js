@@ -1,3 +1,4 @@
+import React from 'react';
 import { renderHook, act } from '@testing-library/react';
 import { useIALabForum } from '../useIALabForum';
 
@@ -188,6 +189,22 @@ describe('useIALabForum', () => {
 
       expect(res.success).toBe(true);
       expect(res.post.title).toBe('Test');
+    });
+
+    test('createPost succeeds bajo React.StrictMode (cancelledRef se resetea)', async () => {
+      const { result } = renderHook(() => useIALabForum(), {
+        wrapper: React.StrictMode,
+      });
+
+      let res;
+      await act(async () => {
+        res = await result.current.createPost({
+          title: 'Strict',
+          content: 'Strict content',
+        });
+      });
+
+      expect(res.success).toBe(true);
     });
 
     test('returns error when user is null', async () => {

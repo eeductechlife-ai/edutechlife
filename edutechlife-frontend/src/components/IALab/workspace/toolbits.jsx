@@ -64,22 +64,26 @@ export function ConversationItem({
   title,
   subtitle,
   active = false,
+  completed = false,
+  locked = false,
   icon,
   onClick,
 }) {
-  const Comp = onClick ? "button" : "div";
+  const Comp = onClick && !locked ? "button" : "div";
   return (
     <Comp
-      type={onClick ? "button" : undefined}
-      onClick={onClick}
+      type={Comp === "button" ? "button" : undefined}
+      onClick={locked ? undefined : onClick}
       aria-current={active ? "true" : undefined}
+      aria-disabled={locked || undefined}
+      data-testid={locked ? "topic-locked" : completed ? "topic-completed" : undefined}
       className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors duration-150 focus:outline-none focus-visible:ring-2 ${
         active ? "theme-rail-active" : "theme-rail-hover"
-      }`}
+      } ${locked ? "opacity-55 cursor-not-allowed" : ""}`}
     >
       {icon && (
         <svg
-          className="theme-text-rail-muted h-5 w-5 flex-shrink-0"
+          className={`h-5 w-5 flex-shrink-0 ${completed ? "text-emerald-400" : "theme-text-rail-muted"}`}
           width="20"
           height="20"
           viewBox="0 0 24 24"
@@ -107,6 +111,16 @@ export function ConversationItem({
           </span>
         )}
       </span>
+      {locked ? (
+        <svg className="h-4 w-4 flex-shrink-0 opacity-70" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+      ) : completed ? (
+        <svg className="h-4 w-4 flex-shrink-0 text-emerald-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      ) : null}
     </Comp>
   );
 }
@@ -193,6 +207,8 @@ ConversationItem.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
   active: PropTypes.bool,
+  completed: PropTypes.bool,
+  locked: PropTypes.bool,
   icon: PropTypes.string,
   onClick: PropTypes.func,
 };

@@ -4,7 +4,6 @@ import { resolveAvatarUrl } from "./resolveAvatar";
 import { shouldDisableSave } from "./profileSaveLogic";
 import { useProfileData } from "./useProfileData";
 import ProfileInfoSection from "./components/ProfileInfoSection";
-import ProfileProgressSection from "./components/ProfileProgressSection";
 import ProfileSecuritySection from "./components/ProfileSecuritySection";
 
 const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
@@ -122,8 +121,6 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
             handleTempChange={handleTempChange}
             handleCancelEdit={handleCancelEdit}
           />
-
-          <ProfileProgressSection t={t} stats={stats} />
 
           {hasPendingChanges() && (
             <div className="mb-5">

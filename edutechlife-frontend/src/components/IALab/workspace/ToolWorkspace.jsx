@@ -20,6 +20,7 @@ import { THEME_META } from "../themes/themeMap";
 import { TOOL_LOGOS } from "../IALabModuleHeader";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { getModuleOverviewData } from "../constants/moduleContent/selectors";
+import { useContentSequence } from "../../../hooks/IALab/useContentSequence";
 import { ConversationItem } from "./toolbits";
 import NotebookLMWelcome from "./NotebookLMWelcome";
 import GeminiWelcome from "./GeminiWelcome";
@@ -28,14 +29,9 @@ import ArtesanoWelcome from "./ArtesanoWelcome";
 import GuardianWelcome from "./GuardianWelcome";
 
 const CHAT_GLYPH = "M21 12a8 8 0 0 1-8 8H4l1.5-2.5A8 8 0 1 1 21 12Z";
-const PLUS_GLYPH = "M12 5v14m-7-7h14";
-
-const TOOL_TITLE_KEY = {
-  default: "ialab.workspace.default.new_workshop",
-  chatgpt: "ialab.workspace.chatgpt.new_chat",
-  gemini: "ialab.workspace.gemini.new_session",
-  notebooklm: "ialab.workspace.notebooklm.new_notebook",
-};
+// Mismo glifo de casa para los 5 módulos: el botón "Inicio" vuelve a la
+// pantalla de bienvenida (intro + accesos) de cada módulo.
+const HOME_GLYPH = "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z";
 
 const DEFAULT_MODULE_BRAND = {
   1: { label: "Artesano Digital", tagline: "Fundamentos de prompts con precisión artesanal" },
@@ -63,8 +59,12 @@ export default function ToolWorkspace({
   const overview = getModuleOverviewData(activeMod, locale);
   const topics = overview?.topics || [];
 
+  const { topics: sequenceTopics } = useContentSequence(activeMod, locale);
+  const sequenceByIndex = new Map(sequenceTopics.map((s) => [s.index, s]));
+
   if (!cfg) return children;
-  const newChatLabel = t(TOOL_TITLE_KEY[theme] || TOOL_TITLE_KEY.default);
+  // "Inicio" en los 5 módulos: lleva a la pantalla de bienvenida del módulo.
+  const newChatLabel = t("ialab.workspace.home") || "Inicio";
   const modBrand = theme === "default" ? DEFAULT_MODULE_BRAND[activeMod] : null;
   const railLabel = modBrand?.label || cfg.label;
 
@@ -109,7 +109,7 @@ export default function ToolWorkspace({
         </button>
       </div>
 
-      {/* Nuevo chat / sesión */}
+      {/* Inicio del módulo (antes "Nuevo chat/sesión/taller") */}
       <button
         type="button"
         onClick={onNewChat}
@@ -127,9 +127,10 @@ export default function ToolWorkspace({
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
+          strokeLinejoin="round"
           aria-hidden="true"
         >
-          <path d={PLUS_GLYPH} />
+          <path d={HOME_GLYPH} />
         </svg>
         {newChatLabel}
       </button>
@@ -207,6 +208,8 @@ export default function ToolWorkspace({
                 subtitle={topic.duration}
                 icon={CHAT_GLYPH}
                 active={viewSection === "contenido" && selectedTopicIndex === i}
+                completed={sequenceByIndex.get(i)?.isCompleted}
+                locked={sequenceByIndex.has(i) ? !sequenceByIndex.get(i).isUnlocked : false}
                 onClick={() => onSelectTopic(i)}
               />
             ))}
@@ -298,6 +301,7 @@ export default function ToolWorkspace({
             description={overview?.description}
             onSelectSection={onSelectSection}
             onSelectTopic={onSelectTopic}
+            onHome={onNewChat}
           />
         )}
 
@@ -307,6 +311,7 @@ export default function ToolWorkspace({
             topics={topics}
             onSelectSection={onSelectSection}
             onSelectTopic={onSelectTopic}
+            onHome={onNewChat}
           />
         )}
 

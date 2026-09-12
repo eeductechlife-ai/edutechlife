@@ -18,6 +18,12 @@ export const useIALabForum = () => {
   const loadingPromiseRef = useRef(null);
 
   useEffect(() => {
+    // Reset en el mount: React.StrictMode (dev) monta, desmonta y vuelve a
+    // montar el efecto. Como el ref es del mismo instance, sin este reset
+    // quedaba en `true` para siempre y todos los checks posteriores a un await
+    // devolvían "Cancelado" — los posts no cargaban ni se mostraba el enviado,
+    // y por eso la comunidad no se marcaba como completa.
+    cancelledRef.current = false;
     return () => {
       cancelledRef.current = true;
     };

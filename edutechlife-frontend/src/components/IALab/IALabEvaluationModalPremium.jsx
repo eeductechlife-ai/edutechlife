@@ -57,12 +57,21 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
   }, [isOpen, user?.id, activeMod, saveProgress, PROGRESS_STATUS]);
 
   const handleComplete = async (score) => {
-    if (!score || !activeMod || isProcessing) return;
+    if (score == null || !activeMod || isProcessing) return;
     setIsProcessing(true);
 
     try {
       // Guardar desafío en user_progress (ruta IALab) - esto ya actualiza updateModuleActivity internamente
       const challengeResult = await trackChallengeResult(activeMod, score);
+
+      // Consumir un intento al COMPLETAR el desafío (no al reintentar): así el
+      // usuario puede hacer los 3 seguidos y solo al agotarlos se aplica el
+      // cooldown de 12h hasta recargar.
+      try {
+        useIALabStore.getState().decrementChallengeAttempt(activeMod);
+      } catch {
+        /* no crítico */
+      }
 
       // trackChallengeResult ya llama a updateModuleActivity, no es necesario llamarla de nuevo
 

@@ -54,6 +54,7 @@ const ResourceViewerModal = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const modalRef = useRef(null);
+  const contentRef = useRef(null);
   const focusTrapRef = useFocusTrap(isOpen);
   const prefersReducedMotion = useReducedMotion();
   const { noteText, showNotes, setShowNotes, noteSaved, handleNoteChange } =
@@ -80,14 +81,44 @@ const ResourceViewerModal = ({
   };
 
   const handleClose = useCallback(() => {
+    try {
+      if (document.fullscreenElement) document.exitFullscreen?.();
+    } catch {
+      /* ignore */
+    }
     stopSpeech();
     onClose?.();
   }, [onClose]);
 
+  // Pantalla completa REAL (Fullscreen API) sobre el CONTENIDO, no solo agrandar
+  // el modal. Antes el botón solo cambiaba el tamaño del contenedor y el video
+  // seguía "dentro del modal" con su cabecera/pie; ahora el recurso ocupa toda
+  // la pantalla como en YouTube.
+  const toggleFullscreen = useCallback(() => {
+    const el = contentRef.current || modalRef.current;
+    try {
+      if (document.fullscreenElement) {
+        document.exitFullscreen?.();
+      } else if (el?.requestFullscreen) {
+        el.requestFullscreen();
+      }
+    } catch {
+      setIsFullscreen((prev) => !prev);
+    }
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
+
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape" && isOpen) {
-        if (isFullscreen) {
+        if (document.fullscreenElement) {
+          document.exitFullscreen?.();
+        } else if (isFullscreen) {
           setIsFullscreen(false);
         } else {
           handleClose();
@@ -486,7 +517,7 @@ const ResourceViewerModal = ({
                   </div>
                   <div className="flex-shrink-0 mt-3 sm:mt-0 ml-0 sm:ml-2 flex items-center gap-2">
                     <button
-                      onClick={() => setIsFullscreen((prev) => !prev)}
+                      onClick={toggleFullscreen}
                       className="w-9 h-9 rounded-lg theme-border border theme-chip flex items-center justify-center theme-text-muted hover:theme-text transition-colors duration-150 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current/30"
                       aria-label={
                         isFullscreen
@@ -508,7 +539,10 @@ const ResourceViewerModal = ({
                     </button>
                   </div>
                 </div>
-                <div className="flex-1 overflow-auto min-h-0 bg-white dark:bg-slate-800">
+                <div
+                  ref={contentRef}
+                  className="flex-1 overflow-auto min-h-0 bg-white dark:bg-slate-800"
+                >
                   {renderViewer()}
                   {showNotes && (
                     <div className="border-t border-slate-200/60 dark:border-slate-700/60 px-4 sm:px-6 py-4 bg-white dark:bg-slate-800">

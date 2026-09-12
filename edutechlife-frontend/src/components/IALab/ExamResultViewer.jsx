@@ -49,15 +49,12 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
   const nextAttempt =
     useIALabStore.getState().getExamNextAttemptTime(moduleId) || 0;
   const now = Date.now();
-  const inCooldown = nextAttempt > 0 && now < nextAttempt;
   const hoursLeft = Math.ceil((nextAttempt - now) / 3600000);
 
   const handleRetry = () => {
-    if (remaining <= 0) return;
-    if (inCooldown) return;
-    // decrementExamAttempt aplica el cooldown, respeta el rol admin y emite
-    // 'ialab:attemptsUpdated' por su cuenta.
-    useIALabStore.getState().decrementExamAttempt(moduleId);
+    // El intento se descuenta al ENVIAR, no al reintentar. Aquí solo se
+    // comprueba que queden intentos (el store ya maneja la recarga de 12h).
+    if (!useIALabStore.getState().canAttemptExamRetry(moduleId)) return;
     if (onRetry) onRetry();
   };
 
@@ -161,7 +158,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
           {/* Intentos / Retry */}
           {!passed && (
             <div className="mb-4">
-              {remaining > 0 && !inCooldown && (
+              {remaining > 0 ? (
                 <>
                   <button
                     onClick={handleRetry}
@@ -172,23 +169,17 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
                   </button>
                   <p className="text-xs text-center text-slate-600">
                     {t("ialab.exam_result.retry_info", {
-                      remaining: remaining - 1,
+                      remaining,
                       max: MAX_ATTEMPTS,
                     })}
                   </p>
                 </>
-              )}
-              {remaining > 0 && inCooldown && (
+              ) : (
                 <p className="text-xs text-center text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
                   {t("ialab.exam_result.cooldown", {
                     hours: hoursLeft,
                     max: MAX_ATTEMPTS,
                   })}
-                </p>
-              )}
-              {remaining <= 0 && (
-                <p className="text-xs text-center text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-                  {t("ialab.exam_result.no_attempts", { max: MAX_ATTEMPTS })}
                 </p>
               )}
             </div>

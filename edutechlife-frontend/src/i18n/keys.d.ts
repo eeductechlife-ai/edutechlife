@@ -1203,6 +1203,7 @@ export type TranslationKeys = {
   "ialab.continue_banner_lesson": string;
   "ialab.continue_banner_title": string;
   "ialab.continue_lesson": string;
+  "ialab.continue_to_activities": string;
   "ialab.course_card.btn_enroll": string;
   "ialab.course_card.btn_explore": string;
   "ialab.course_card.btn_start": string;
@@ -2350,6 +2351,7 @@ export type TranslationKeys = {
   "ialab.topic.completed": string;
   "ialab.topic.progress_aria": string;
   "ialab.topic.resources_aria": string;
+  "ialab.topic_completed_advancing": string;
   "ialab.topic_resources.immersive_view": string;
   "ialab.topic_resources.learning_objective": string;
   "ialab.topic_resources.resources_count": string;
@@ -5845,6 +5847,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.continue_banner_lesson": true,
   "ialab.continue_banner_title": true,
   "ialab.continue_lesson": true,
+  "ialab.continue_to_activities": true,
   "ialab.course_card.btn_enroll": true,
   "ialab.course_card.btn_explore": true,
   "ialab.course_card.btn_start": true,
@@ -6992,6 +6995,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.topic.completed": true,
   "ialab.topic.progress_aria": true,
   "ialab.topic.resources_aria": true,
+  "ialab.topic_completed_advancing": true,
   "ialab.topic_resources.immersive_view": true,
   "ialab.topic_resources.learning_objective": true,
   "ialab.topic_resources.resources_count": true,

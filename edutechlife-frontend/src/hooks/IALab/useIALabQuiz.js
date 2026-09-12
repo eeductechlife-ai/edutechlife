@@ -118,15 +118,10 @@ export const useIALabQuiz = () => {
   );
 
   const canAttemptQuiz = useCallback(() => {
-    const remaining = useIALabStore
-      .getState()
-      .storageGetInt(`exam_attempts_remaining_m${activeMod}`, MAX_ATTEMPTS);
-    if (remaining <= 0) return false;
-    const nextTime = useIALabStore
-      .getState()
-      .storageGet(`exam_next_attempt_m${activeMod}`, null);
-    if (nextTime && Date.now() < nextTime) return false;
-    return true;
+    // La política de intentos y el cooldown viven en el store: 3 seguidos y,
+    // al agotarlos, 12h hasta recargar. Antes este hook leía localStorage
+    // directo y no contemplaba la recarga.
+    return useIALabStore.getState().canAttemptExamRetry(activeMod);
   }, [activeMod]);
 
   const generateTopicFeedback = useCallback(
@@ -239,6 +234,15 @@ export const useIALabQuiz = () => {
         .getState()
         .storageSet(`quizAttempts_${activeMod}`, updatedAttempts);
 
+      // Consumir un intento al enviar. Es aquí (no al "reintentar") para que
+      // cada envío cuente exactamente una vez: 3 intentos, sin espera entre
+      // ellos; al agotar el 3º se aplica el cooldown de 12h para recargar.
+      try {
+        useIALabStore.getState().decrementExamAttempt(activeMod);
+      } catch {
+        /* no crítico */
+      }
+
       setIsTimerRunning(false);
 
       return { success: true, result };
@@ -274,17 +278,15 @@ export const useIALabQuiz = () => {
 
   const openEvaluation = useCallback(() => {
     if (!canAttemptQuiz()) {
-      const nextTime = useIALabStore
-        .getState()
-        .storageGet(`exam_next_attempt_m${activeMod}`, null);
+      const nextTime = useIALabStore.getState().getExamNextAttemptTime(activeMod);
       const hoursLeft = nextTime
-        ? Math.ceil((nextTime - Date.now()) / 3600000)
+        ? Math.max(1, Math.ceil((nextTime - Date.now()) / 3600000))
         : 12;
       setSecurityMessage(
-        `Debes esperar ${hoursLeft}h para intentar de nuevo. (${MAX_ATTEMPTS} intentos máximo, 12h entre cada uno).`,
+        `Has agotado tus ${MAX_ATTEMPTS} intentos. Podrás intentarlo de nuevo en ${hoursLeft}h.`,
       );
       setShowSecurityMessage(true);
-      setTimeout(() => setShowSecurityMessage(false), 4000);
+      setTimeout(() => setShowSecurityMessage(false), 5000);
       return false;
     }
 

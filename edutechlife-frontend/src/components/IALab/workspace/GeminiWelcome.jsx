@@ -81,7 +81,7 @@ const SUGGEST_CARDS = [
   },
 ];
 
-export default function GeminiWelcome({ topics = [], description, onSelectSection, onSelectTopic }) {
+export default function GeminiWelcome({ topics = [], description, onSelectSection, onSelectTopic, onHome }) {
   return (
     <motion.div
       key="gemini-welcome"
@@ -114,18 +114,18 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
           </button>
         </div>
 
-        {/* Nueva conversación */}
+        {/* Inicio (vuelve a la pantalla de bienvenida del módulo) */}
         <div className="px-3 pb-2">
           <button
             type="button"
-            onClick={() => onSelectSection("actividades")}
+            onClick={() => onHome?.()}
             className="flex items-center gap-2.5 w-full rounded-full px-4 py-2.5 text-[14px] font-medium transition-colors hover:bg-[#f1f3f4]"
             style={{ color: "#202124", fontFamily: "'Google Sans Text',sans-serif" }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5f6368" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 5v14M5 12h14" />
             </svg>
-            Nueva conversación
+            Inicio
           </button>
         </div>
 
@@ -274,4 +274,5 @@ GeminiWelcome.propTypes = {
   description: PropTypes.string,
   onSelectSection: PropTypes.func.isRequired,
   onSelectTopic: PropTypes.func.isRequired,
+  onHome: PropTypes.func,
 };

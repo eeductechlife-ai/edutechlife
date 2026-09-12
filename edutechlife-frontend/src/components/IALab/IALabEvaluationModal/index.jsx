@@ -262,7 +262,18 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
       );
     }
     if (state.step === 'results') {
-      return <IALabEvaluationResults evaluation={state.evaluation} onClose={handleCloseModal} />;
+      return (
+        <IALabEvaluationResults
+          evaluation={state.evaluation}
+          onClose={handleCloseModal}
+          onRetry={() => {
+            // Reintento del desafío: reinicia los pasos sin cerrar el modal.
+            resetEvaluation();
+            clearDraft();
+            generateExercises(locale);
+          }}
+        />
+      );
     }
     return (
       <StepContent

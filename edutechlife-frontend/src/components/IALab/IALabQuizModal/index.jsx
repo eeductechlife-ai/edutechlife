@@ -285,19 +285,14 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   const handleRetry = useCallback(() => {
     const store = useIALabStore.getState();
     if (!store.canAttemptExamRetry(activeMod)) {
-      const remaining = store.getExamRemainingAttempts(activeMod);
-      if (remaining <= 0) {
-        alert(t("ialab.quiz.exam_retry_alert_attempts"));
-        return;
-      }
       const nextTime = store.getExamNextAttemptTime(activeMod);
-      if (nextTime && Date.now() < nextTime) {
-        const hoursLeft = Math.ceil((nextTime - Date.now()) / 3600000);
-        alert(t("ialab.quiz.exam_retry_alert_cooldown", { hours: hoursLeft }));
-        return;
-      }
+      const hoursLeft = nextTime
+        ? Math.max(1, Math.ceil((nextTime - Date.now()) / 3600000))
+        : 12;
+      alert(t("ialab.quiz.exam_retry_alert_cooldown", { hours: hoursLeft }));
+      return;
     }
-    store.decrementExamAttempt(activeMod);
+    // El intento ya se descontó al enviar; aquí solo se reabre.
     handleClose();
     setTimeout(() => {
       openEvaluation();

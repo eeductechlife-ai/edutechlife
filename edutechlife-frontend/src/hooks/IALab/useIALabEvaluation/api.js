@@ -102,21 +102,30 @@ export async function evaluateAnswers({
 
   const evaluation = JSON.parse(jsonMatch[1] || jsonMatch[0]);
 
-  const notas = ["nota_ej1", "nota_ej2", "nota_ej3", "nota_ej4"];
+  // Solo existen tantos ejercicios como pasos tenga el módulo. Antes se
+  // normalizaba SIEMPRE nota_ej1..nota_ej4 (los que faltaran a 0), así que en
+  // un desafío de 3 pasos aparecía un "ejercicio 4" en 0% y el alumno lo
+  // percibía como perdido. Aquí se recortan a config.totalSteps y se eliminan
+  // las notas sobrantes que la IA haya podido devolver.
+  const ALL_NOTE_KEYS = ["nota_ej1", "nota_ej2", "nota_ej3", "nota_ej4"];
+  const totalSteps = Math.min(
+    Math.max(Number(config?.totalSteps) || ALL_NOTE_KEYS.length, 1),
+    ALL_NOTE_KEYS.length,
+  );
+  const notas = ALL_NOTE_KEYS.slice(0, totalSteps);
+
   for (const key of notas) {
     if (typeof evaluation[key] !== "number") evaluation[key] = 0;
   }
-  if (typeof evaluation.notaGlobal !== "number") {
-    evaluation.notaGlobal =
-      Math.round(
-        (((evaluation.nota_ej1 || 0) +
-          (evaluation.nota_ej2 || 0) +
-          (evaluation.nota_ej3 || 0) +
-          (evaluation.nota_ej4 || 0)) /
-          config.totalSteps) *
-          10,
-      ) / 10;
+  for (const key of ALL_NOTE_KEYS.slice(totalSteps)) {
+    delete evaluation[key];
   }
+
+  // La nota global SIEMPRE se recalcula sobre los pasos reales del módulo. Si
+  // la IA devuelve un promedio que incluye una nota_ej4 fantasma (0), bajaría
+  // la nota sin motivo; aquí queda consistente con el desglose visible.
+  const sum = notas.reduce((acc, key) => acc + (evaluation[key] || 0), 0);
+  evaluation.notaGlobal = Math.round((sum / totalSteps) * 10) / 10;
 
   return evaluation;
 }

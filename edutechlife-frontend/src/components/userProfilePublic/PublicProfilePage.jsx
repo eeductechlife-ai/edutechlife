@@ -8,7 +8,6 @@ import { useProfileData } from '../userProfileSmartCard/useProfileData';
 import { resolveAvatarUrl } from '../userProfileSmartCard/resolveAvatar';
 import { shouldDisableSave } from '../userProfileSmartCard/profileSaveLogic';
 import ProfileInfoSection from '../userProfileSmartCard/components/ProfileInfoSection';
-import ProfileProgressSection from '../userProfileSmartCard/components/ProfileProgressSection';
 import useForumProfile from '../../hooks/IALab/forum/useForumProfile';
 import { useTranslation } from '../../i18n/I18nProvider';
 
@@ -130,8 +129,6 @@ const OwnProfileView = () => {
             handleTempChange={handleTempChange}
             handleCancelEdit={handleCancelEdit}
           />
-
-          <ProfileProgressSection t={t} stats={stats} />
 
           {hasPendingChanges() && (
             <div className="mb-4">

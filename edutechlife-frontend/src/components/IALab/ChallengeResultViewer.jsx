@@ -5,6 +5,7 @@ import { supabase } from "../../lib/supabase";
 import { Icon } from "../../utils/iconMapping.jsx";
 import IALabEvaluationResults from "./IALabEvaluationResults";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { MODULE_CONFIG } from "../../hooks/IALab/useIALabEvaluation/moduleConfig";
 
 const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
   const { t } = useTranslation();
@@ -12,6 +13,27 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
   const { userId } = useAuthIdentity();
   const [loading, setLoading] = useState(true);
   const [evaluation, setEvaluation] = useState(null);
+
+  // Un desafío solo tiene tantos ejercicios como pasos tenga el módulo (3 o 4).
+  // Antes se armaba siempre con nota_ej1..nota_ej4, así que en un desafío de 3
+  // pasos el resultado mostraba un "ejercicio 4" en 0%.
+  const totalSteps = Math.min(
+    Math.max(MODULE_CONFIG[moduleId]?.totalSteps || 3, 1),
+    4,
+  );
+
+  const buildEvaluation = (lessons, { score, emptyText }) => {
+    const base = { notaGlobal: score ?? 0 };
+    for (let i = 1; i <= totalSteps; i++) {
+      base[`nota_ej${i}`] =
+        lessons && typeof lessons[`nota_ej${i}`] === "number"
+          ? lessons[`nota_ej${i}`]
+          : 0;
+      base[`feedback_ej${i}`] =
+        (lessons && lessons[`feedback_ej${i}`]) || emptyText;
+    }
+    return base;
+  };
 
   useEffect(() => {
     if (!userId || !moduleId) return;
@@ -29,49 +51,29 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
           .maybeSingle();
 
         if (!error && data) {
-          const lessons = data.completed_lessons || {};
-          setEvaluation({
-            notaGlobal: data.score ?? 0,
-            nota_ej1: lessons.nota_ej1 || 0,
-            nota_ej2: lessons.nota_ej2 || 0,
-            nota_ej3: lessons.nota_ej3 || 0,
-            nota_ej4: lessons.nota_ej4 || 0,
-            feedback_ej1:
-              lessons.feedback_ej1 || t("ialab.challenge_result.no_feedback"),
-            feedback_ej2:
-              lessons.feedback_ej2 || t("ialab.challenge_result.no_feedback"),
-            feedback_ej3:
-              lessons.feedback_ej3 || t("ialab.challenge_result.no_feedback"),
-            feedback_ej4:
-              lessons.feedback_ej4 || t("ialab.challenge_result.no_feedback"),
-          });
+          setEvaluation(
+            buildEvaluation(data.completed_lessons || {}, {
+              score: data.score,
+              emptyText: t("ialab.challenge_result.no_feedback"),
+            }),
+          );
         } else {
-          setEvaluation({
-            notaGlobal: 0,
-            nota_ej1: 0,
-            nota_ej2: 0,
-            nota_ej3: 0,
-            nota_ej4: 0,
-            feedback_ej1: t("ialab.challenge_result.no_feedback_stored"),
-            feedback_ej2: t("ialab.challenge_result.no_feedback_stored"),
-            feedback_ej3: t("ialab.challenge_result.no_feedback_stored"),
-            feedback_ej4: t("ialab.challenge_result.no_feedback_stored"),
-          });
+          setEvaluation(
+            buildEvaluation(null, {
+              score: 0,
+              emptyText: t("ialab.challenge_result.no_feedback_stored"),
+            }),
+          );
         }
       } catch (err) {
         if (import.meta.env.DEV)
           console.error("[CHALLENGE_RESULT] Error loading:", err);
-        setEvaluation({
-          notaGlobal: 0,
-          nota_ej1: 0,
-          nota_ej2: 0,
-          nota_ej3: 0,
-          nota_ej4: 0,
-          feedback_ej1: t("ialab.challenge_result.error_feedback"),
-          feedback_ej2: t("ialab.challenge_result.error_feedback"),
-          feedback_ej3: t("ialab.challenge_result.error_feedback"),
-          feedback_ej4: t("ialab.challenge_result.error_feedback"),
-        });
+        setEvaluation(
+          buildEvaluation(null, {
+            score: 0,
+            emptyText: t("ialab.challenge_result.error_feedback"),
+          }),
+        );
       } finally {
         setLoading(false);
       }

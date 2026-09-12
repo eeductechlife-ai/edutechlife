@@ -39,16 +39,13 @@ const IALabEvaluationResults = ({
     const state = useIALabStore.getState();
     if (!state.canAttemptChallengeRetry(activeMod)) {
       const nextTime = state.getNextAttemptTime(activeMod);
-      if (nextTime && Date.now() < nextTime) {
-        const hoursLeft = Math.ceil((nextTime - Date.now()) / 3600000);
-        alert(
-          t("ialab.challenge.notification_retry_wait", { hours: hoursLeft }),
-        );
-      }
+      const hoursLeft = nextTime
+        ? Math.max(1, Math.ceil((nextTime - Date.now()) / 3600000))
+        : 12;
+      alert(t("ialab.challenge.notification_retry_wait", { hours: hoursLeft }));
       return;
     }
-    const newVal = state.decrementChallengeAttempt(activeMod);
-    setRemainingAttempts(newVal);
+    // El intento se descuenta al COMPLETAR el desafío, no al reintentar.
     if (onRetry) onRetry();
   }, [activityType, activeMod, onRetry, t]);
 

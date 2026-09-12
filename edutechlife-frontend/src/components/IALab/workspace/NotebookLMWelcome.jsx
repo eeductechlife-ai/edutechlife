@@ -65,7 +65,7 @@ const MOBILE_TABS = [
   { id: "studio",  label: "Studio"  },
 ];
 
-export default function NotebookLMWelcome({ topics = [], onSelectSection, onSelectTopic }) {
+export default function NotebookLMWelcome({ topics = [], onSelectSection, onSelectTopic, onHome }) {
   const [mobileTab, setMobileTab] = useState("chat");
 
   return (
@@ -110,16 +110,16 @@ export default function NotebookLMWelcome({ topics = [], onSelectSection, onSele
             </button>
           </div>
 
-          {/* Añadir fuentes */}
+          {/* Inicio (vuelve a la pantalla de bienvenida del módulo) */}
           <div className="px-3 pt-3 pb-2">
             <button
               type="button"
-              onClick={() => onSelectTopic(0)}
+              onClick={() => onHome?.()}
               className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-full border text-sm font-medium hover:bg-gray-50 transition-colors"
               style={{ borderColor: "#dadce0", color: "#3c4043" }}
             >
               <SvgIcon path={ICONS.plus} size={15} color="#3c4043" />
-              Añadir fuentes
+              Inicio
             </button>
           </div>
 
@@ -350,7 +350,7 @@ export default function NotebookLMWelcome({ topics = [], onSelectSection, onSele
               style={{ background: "#202124" }}
             >
               <SvgIcon path={ICONS.note} size={16} color="white" />
-              Añadir nota
+              Actividades
             </button>
           </div>
 
@@ -365,4 +365,5 @@ NotebookLMWelcome.propTypes = {
   topics:          PropTypes.arrayOf(PropTypes.shape({ title: PropTypes.string, duration: PropTypes.string })),
   onSelectSection: PropTypes.func.isRequired,
   onSelectTopic:   PropTypes.func.isRequired,
+  onHome:          PropTypes.func,
 };

@@ -55,6 +55,9 @@ const mockState = {
     storageGetInt: vi.fn(),
     storageSet: vi.fn(),
     storageRemove: vi.fn(),
+    canAttemptExamRetry: vi.fn(() => true),
+    getExamNextAttemptTime: vi.fn(() => null),
+    decrementExamAttempt: vi.fn(() => 2),
   },
 };
 
@@ -105,6 +108,8 @@ beforeEach(() => {
   mockState.storeState.storageGet.mockReturnValue(null);
   mockState.storeState.storageGetInt.mockReturnValue(3);
   mockState.storeState.storageSet.mockClear();
+  mockState.storeState.canAttemptExamRetry.mockReturnValue(true);
+  mockState.storeState.getExamNextAttemptTime.mockReturnValue(null);
   mockState.context.activeMod = 1;
   mockState.context.user = { id: 'user-1' };
 });
@@ -118,7 +123,7 @@ describe('useIALabQuiz', () => {
     const { result } = renderHook(() => useIALabQuiz());
 
     expect(result.current.quizQuestions).toBeDefined();
-    expect(result.current.TOTAL_QUESTIONS).toBe(12);
+    expect(result.current.TOTAL_QUESTIONS).toBe(10);
     expect(result.current.PASSING_SCORE).toBe(80);
     expect(result.current.SUGGESTED_TIME_SECONDS).toBe(1200);
     expect(result.current.canAttemptQuiz).toBeInstanceOf(Function);
@@ -134,7 +139,7 @@ describe('useIALabQuiz', () => {
     const { result } = renderHook(() => useIALabQuiz());
 
     expect(Array.isArray(result.current.quizQuestions)).toBe(true);
-    expect(result.current.quizQuestions.length).toBe(12);
+    expect(result.current.quizQuestions.length).toBe(10);
     expect(result.current.quizQuestions[0].id).toBe('m1q1');
   });
 
@@ -200,46 +205,27 @@ describe('useIALabQuiz', () => {
   });
 
   describe('canAttemptQuiz', () => {
-    test('returns true when attempts remain', () => {
-      mockState.storeState.storageGetInt.mockReturnValue(3);
-      mockState.storeState.storageGet.mockReturnValue(null);
+    test('delega en el store: true mientras queden intentos', () => {
+      mockState.storeState.canAttemptExamRetry.mockReturnValue(true);
 
       const { result } = renderHook(() => useIALabQuiz());
 
       expect(result.current.canAttemptQuiz()).toBe(true);
+      expect(mockState.storeState.canAttemptExamRetry).toHaveBeenCalledWith(1);
     });
 
-    test('returns false when no attempts remain', () => {
-      mockState.storeState.storageGetInt.mockReturnValue(0);
+    test('delega en el store: false cuando se agotaron los 3 intentos', () => {
+      mockState.storeState.canAttemptExamRetry.mockReturnValue(false);
 
       const { result } = renderHook(() => useIALabQuiz());
 
       expect(result.current.canAttemptQuiz()).toBe(false);
-    });
-
-    test('returns false when cooldown active', () => {
-      mockState.storeState.storageGetInt.mockReturnValue(2);
-      mockState.storeState.storageGet.mockReturnValue(Date.now() + 3600000);
-
-      const { result } = renderHook(() => useIALabQuiz());
-
-      expect(result.current.canAttemptQuiz()).toBe(false);
-    });
-
-    test('returns true after cooldown expires', () => {
-      mockState.storeState.storageGetInt.mockReturnValue(2);
-      mockState.storeState.storageGet.mockReturnValue(Date.now() - 1000);
-
-      const { result } = renderHook(() => useIALabQuiz());
-
-      expect(result.current.canAttemptQuiz()).toBe(true);
     });
   });
 
   describe('openEvaluation', () => {
     test('opens modal when can attempt', () => {
-      mockState.storeState.storageGetInt.mockReturnValue(3);
-      mockState.storeState.storageGet.mockReturnValue(null);
+      mockState.storeState.canAttemptExamRetry.mockReturnValue(true);
 
       const { result } = renderHook(() => useIALabQuiz());
 
@@ -251,7 +237,7 @@ describe('useIALabQuiz', () => {
     });
 
     test('returns false when cannot attempt and shows message', () => {
-      mockState.storeState.storageGetInt.mockReturnValue(0);
+      mockState.storeState.canAttemptExamRetry.mockReturnValue(false);
 
       const { result } = renderHook(() => useIALabQuiz());
 

@@ -1,24 +1,39 @@
 import { lazy } from 'react';
 import InteractiveViewer from './InteractiveViewer';
 
-const OVAChatGPTTools = lazy(() => import('../OVAChatGPTTools.jsx'));
-const OVAEcosystemGuide = lazy(() => import('../OVAEcosystemGuide.jsx'));
-const OVABuildGPT = lazy(() => import('../OVABuildGPT'));
-const OVAEtica = lazy(() => import('../OVAEtica.jsx'));
-const OVAIntroPrompt = lazy(() => import('../OVAIntroPrompt.jsx'));
-const OVANotebookLab = lazy(() => import('../OVANotebookLab.jsx'));
-const OVANotebookSimulator = lazy(() => import('../OVANotebookSimulator.jsx'));
-const OVANotebookPodcastGuide = lazy(() => import('../OVANotebookPodcastGuide.jsx'));
-const OVAPodcastStudio = lazy(() => import('../OVAPodcastStudio.jsx'));
-const OVABiasLab = lazy(() => import('../OVABiasLab.jsx'));
-const OVARiskSimulator = lazy(() => import('../OVARiskSimulator.jsx'));
-const OVAEthicalDilemmas = lazy(() => import('../OVAEthicalDilemmas.jsx'));
-const OvaEdutechlife = lazy(() => import('../OvaEdutechlife.jsx'));
-const OVAPracticalCases = lazy(() => import('../OVAPracticalCases.jsx'));
-const OVAPromptLab = lazy(() => import('../OVAPromptLab.jsx'));
-const OVAEthicsCases = lazy(() => import('../OVAEthicsCases.jsx'));
-const OVAAutomationFlows = lazy(() => import('../OVAAutomationFlows.jsx'));
-const OVADocumentMastery = lazy(() => import('../OVADocumentMastery.jsx'));
+// Reintenta la carga del chunk ante fallos transitorios (reinicio del dev
+// server, re-optimización de deps o chunk obsoleto tras un deploy). Sin esto,
+// React.lazy memoriza el rechazo y "Reintentar" nunca puede recuperarse.
+const lazyWithRetry = (importFn, retries = 2) =>
+  lazy(() => {
+    const attempt = (remaining) =>
+      importFn().catch((error) => {
+        if (remaining <= 0) throw error;
+        return new Promise((resolve) => setTimeout(resolve, 400)).then(() =>
+          attempt(remaining - 1),
+        );
+      });
+    return attempt(retries);
+  });
+
+const OVAChatGPTTools = lazyWithRetry(() => import('../OVAChatGPTTools.jsx'));
+const OVAEcosystemGuide = lazyWithRetry(() => import('../OVAEcosystemGuide.jsx'));
+const OVABuildGPT = lazyWithRetry(() => import('../OVABuildGPT'));
+const OVAEtica = lazyWithRetry(() => import('../OVAEtica.jsx'));
+const OVAIntroPrompt = lazyWithRetry(() => import('../OVAIntroPrompt.jsx'));
+const OVANotebookLab = lazyWithRetry(() => import('../OVANotebookLab.jsx'));
+const OVANotebookSimulator = lazyWithRetry(() => import('../OVANotebookSimulator.jsx'));
+const OVANotebookPodcastGuide = lazyWithRetry(() => import('../OVANotebookPodcastGuide.jsx'));
+const OVAPodcastStudio = lazyWithRetry(() => import('../OVAPodcastStudio.jsx'));
+const OVABiasLab = lazyWithRetry(() => import('../OVABiasLab.jsx'));
+const OVARiskSimulator = lazyWithRetry(() => import('../OVARiskSimulator.jsx'));
+const OVAEthicalDilemmas = lazyWithRetry(() => import('../OVAEthicalDilemmas.jsx'));
+const OvaEdutechlife = lazyWithRetry(() => import('../OvaEdutechlife.jsx'));
+const OVAPracticalCases = lazyWithRetry(() => import('../OVAPracticalCases.jsx'));
+const OVAPromptLab = lazyWithRetry(() => import('../OVAPromptLab.jsx'));
+const OVAEthicsCases = lazyWithRetry(() => import('../OVAEthicsCases.jsx'));
+const OVAAutomationFlows = lazyWithRetry(() => import('../OVAAutomationFlows.jsx'));
+const OVADocumentMastery = lazyWithRetry(() => import('../OVADocumentMastery.jsx'));
 
 export const OVA_COMPONENTS = {
   'workflow-ova-herramientas': OVAChatGPTTools,

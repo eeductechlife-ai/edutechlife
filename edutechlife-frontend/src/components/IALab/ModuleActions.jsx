@@ -149,10 +149,20 @@ const ModuleActions = ({
   const handleChallenge = useCallback(() => {
     if (challengeScores?.[activeMod]) {
       onAction?.("SHOW_CHALLENGE_RESULT");
-    } else {
-      onAction?.("OPEN_CHALLENGE");
+      return;
     }
-  }, [challengeScores, activeMod, onAction]);
+    // Bloqueo solo cuando se agotaron los 3 intentos (y corre el cooldown de 12h).
+    const store = useIALabStore.getState();
+    if (!store.canAttemptChallengeRetry(activeMod)) {
+      const nextTime = store.getNextAttemptTime(activeMod);
+      const hoursLeft = nextTime
+        ? Math.max(1, Math.ceil((nextTime - Date.now()) / 3600000))
+        : 12;
+      alert(t("ialab.challenge.notification_retry_wait", { hours: hoursLeft }));
+      return;
+    }
+    onAction?.("OPEN_CHALLENGE");
+  }, [challengeScores, activeMod, onAction, t]);
 
   const handleExam = useCallback(() => {
     if (effectiveExamScore !== undefined) {

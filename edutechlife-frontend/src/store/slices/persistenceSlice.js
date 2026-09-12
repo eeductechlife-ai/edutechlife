@@ -250,37 +250,53 @@ export const createPersistenceSlice = (set, get) => ({
   },
 
   // ==================== LÍMITE DE INTENTOS ====================
+  // Política: 3 intentos seguidos (sin espera entre uno y otro). Solo cuando
+  // se agotan los 3 se escribe un cooldown de 12h; al cumplirse se recargan los
+  // 3 intentos automáticamente. Antes el cooldown se escribía en cada intento,
+  // así que el primer reintento quedaba bloqueado para siempre.
   _attemptOps: (prefix) => {
-    const isAdmin = get().userRole === "admin";
+    const isAdmin = () => get().userRole === "admin";
+    const remKey = (m) => `${prefix}_attempts_remaining_m${m}`;
+    const nextKey = (m) => `${prefix}_next_attempt_m${m}`;
+
+    // Si el cooldown ya expiró, devuelve los 3 intentos y limpia la marca.
+    const rechargeIfDue = (moduleId) => {
+      const next = ls.get(nextKey(moduleId), null);
+      if (next && Date.now() >= next) {
+        ls.set(remKey(moduleId), 3);
+        ls.remove(nextKey(moduleId));
+      }
+    };
+
+    const getRemaining = (moduleId) => {
+      if (isAdmin()) return 99;
+      rechargeIfDue(moduleId);
+      return ls.get(remKey(moduleId), 3);
+    };
+
     return {
-      getRemainingAttempts: (moduleId) => {
-        if (isAdmin) return 99;
-        const key = `${prefix}_attempts_remaining_m${moduleId}`;
-        return ls.get(key, 3);
-      },
+      getRemainingAttempts: getRemaining,
       getNextAttemptTime: (moduleId) => {
-        if (isAdmin) return null;
-        const key = `${prefix}_next_attempt_m${moduleId}`;
-        return ls.get(key, null);
+        if (isAdmin()) return null;
+        rechargeIfDue(moduleId);
+        if (getRemaining(moduleId) > 0) return null;
+        return ls.get(nextKey(moduleId), null);
       },
       canAttemptRetry: (moduleId) => {
-        if (isAdmin) return true;
-        const key = `${prefix}_attempts_remaining_m${moduleId}`;
-        const remaining = ls.get(key, 3);
-        if (remaining <= 0) return false;
-        const nextKey = `${prefix}_next_attempt_m${moduleId}`;
-        const nextTime = ls.get(nextKey, null);
-        if (nextTime && Date.now() < nextTime) return false;
-        return true;
+        if (isAdmin()) return true;
+        // Mientras queden intentos no hay espera; canAttempt es true.
+        return getRemaining(moduleId) > 0;
       },
       decrementAttempt: (moduleId) => {
-        if (isAdmin) return 99;
-        const key = `${prefix}_attempts_remaining_m${moduleId}`;
-        const current = ls.get(key, 3);
-        const newVal = Math.max(0, current - 1);
-        ls.set(key, newVal);
-        const nextKey = `${prefix}_next_attempt_m${moduleId}`;
-        ls.set(nextKey, Date.now() + 12 * 60 * 60 * 1000);
+        if (isAdmin()) return 99;
+        const newVal = Math.max(0, getRemaining(moduleId) - 1);
+        ls.set(remKey(moduleId), newVal);
+        if (newVal <= 0) {
+          // Se agotaron los 3: recién aquí empieza el cooldown de 12h.
+          ls.set(nextKey(moduleId), Date.now() + 12 * 60 * 60 * 1000);
+        } else {
+          ls.remove(nextKey(moduleId));
+        }
         return newVal;
       },
     };
