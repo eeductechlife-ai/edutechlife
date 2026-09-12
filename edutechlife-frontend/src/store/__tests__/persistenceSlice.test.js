@@ -76,6 +76,55 @@ describe("persistenceSlice — syncFromPersistence", () => {
     expect(useIALabStore.getState().isLoadingProgress).toBe(false);
   });
 
+  test("regresión 'vuelve a cero': un payload vacío/0 no degrada el avance local", () => {
+    const store = useIALabStore.getState();
+    store.syncFromPersistence({
+      completedExams: {},
+      completedModules: [],
+      completedVideos: [],
+      completedInfographics: [],
+      completedActivities: [],
+      challengeScores: {},
+      completedCommunity: [],
+      courseProgress: 0,
+      gamification: null,
+      syncStatus: null,
+      isUsingJWT: false,
+      userId: "test_user",
+      isLoading: false,
+    });
+    const s = useIALabStore.getState();
+    expect(s.courseProgress).toBe(30);
+    expect(s.completedModules).toContain(1);
+    expect(s.completedVideos).toContain("m1v1");
+    expect(s.completedExams[1]).toBe(85);
+    expect(s.challengeScores[1]).toBe(90);
+  });
+
+  test("adopta un remoto más nuevo y con más avance (sin perder lo local)", () => {
+    const store = useIALabStore.getState();
+    store.syncFromPersistence({
+      completedExams: { 2: 95 },
+      completedModules: [2],
+      completedVideos: [],
+      completedInfographics: [],
+      completedActivities: [],
+      challengeScores: { 1: 95 },
+      courseProgress: 55,
+      gamification: { lastActivityDate: new Date(Date.now() + 60000).toISOString() },
+      syncStatus: "synced",
+      isUsingJWT: true,
+      userId: "test_user",
+      isLoading: false,
+    });
+    const s = useIALabStore.getState();
+    expect(s.courseProgress).toBe(55);
+    expect(s.completedModules).toEqual(expect.arrayContaining([1, 2]));
+    expect(s.challengeScores[1]).toBe(95);
+    expect(s.completedExams[1]).toBe(85);
+    expect(s.completedExams[2]).toBe(95);
+  });
+
   test("merges gamification data with local state", () => {
     const store = useIALabStore.getState();
     store.syncFromPersistence({

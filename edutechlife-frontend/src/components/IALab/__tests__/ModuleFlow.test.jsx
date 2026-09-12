@@ -93,6 +93,10 @@ vi.mock('../../../store/ialabStore', () => {
     closeModal: vi.fn(),
     markResourceAsViewed: vi.fn(),
     trackResourceViewed: vi.fn(),
+    _viewedResourcesVersion: 0,
+    getViewedResources: () => [],
+    setViewedResources: vi.fn(),
+    addViewedResource: vi.fn(),
   };
   const fn = (selector) => selector ? selector(storeState) : storeState;
   fn.getState = () => storeState;
@@ -196,6 +200,11 @@ vi.mock('../../../hooks/IALab/useSwipeNavigation', () => ({
 }));
 vi.mock('../../../hooks/IALab/useCelebrationEffects', () => ({ useCelebrationEffects: () => {} }));
 vi.mock('../../../hooks/IALab/useIALabKeyboardShortcuts', () => ({ default: () => {} }));
+// IALab monta useIALabProgress al entrar; en integración lo neutralizamos para
+// no disparar red (Supabase) ni side-effects de carga.
+vi.mock('../../../hooks/IALab/useIALabProgress', () => ({
+  useIALabProgress: () => ({}),
+}));
 vi.mock('../../NotificationPanel', () => ({ default: () => null }));
 vi.mock('../GlobalSearchBar', () => ({ default: () => null }));
 
@@ -212,7 +221,10 @@ vi.mock('../IALabSidebar', () => ({
 }));
 
 vi.mock('../IALabModals', () => ({ default: () => null }));
-vi.mock('../IALabModuleHeader', () => ({ default: () => null }));
+vi.mock('../IALabModuleHeader', () => ({
+  default: () => null,
+  TOOL_LOGOS: { chatgpt: null, gemini: null, notebooklm: null },
+}));
 vi.mock('../ModuleInfoSection', () => ({ default: () => null }));
 vi.mock('../Breadcrumbs', () => ({ default: () => null }));
 vi.mock('../shared/MobileMenuOverlay', () => ({ default: () => null }));

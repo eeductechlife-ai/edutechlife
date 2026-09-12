@@ -82,7 +82,7 @@ describe("VideoEmbed", () => {
     expect(iframe).toBeInTheDocument();
     expect(iframe).toHaveAttribute(
       "src",
-      "https://www.youtube.com/embed/abcdefghijk",
+      "https://www.youtube.com/embed/abcdefghijk?vq=hd1080&rel=0&modestbranding=1",
     );
   });
 
@@ -99,7 +99,7 @@ describe("VideoEmbed", () => {
     fireEvent.click(screen.getByText("t"));
     expect(screen.getByTitle("t")).toHaveAttribute(
       "src",
-      "https://www.youtube.com/embed/abcdefghijk",
+      "https://www.youtube.com/embed/abcdefghijk?vq=hd1080&rel=0&modestbranding=1",
     );
   });
 });

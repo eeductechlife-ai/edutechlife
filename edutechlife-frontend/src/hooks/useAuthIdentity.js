@@ -57,6 +57,14 @@ const tryRecoverSupabaseSession = () => {
       if (payload.exp && Date.now() >= payload.exp * 1000) continue; // also expired
       // Valid token found — sync it to sessionStorage
       sessionStorage.setItem("auth_token", accessToken);
+      // Fija el scope del progreso (user_email) si viene en el token.
+      if (payload.email) {
+        try {
+          localStorage.setItem("user_email", payload.email.trim().toLowerCase());
+        } catch {
+          /* ignore */
+        }
+      }
       return { userId: payload.sub, token: accessToken, payload };
     }
   } catch {

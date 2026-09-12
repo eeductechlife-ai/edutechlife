@@ -84,6 +84,14 @@ export const useSupabaseAuth = () => {
             "student_name",
             session.user.email?.split("@")[0] || "Estudiante",
           );
+          // El scope del progreso (localStorage) depende de user_email. Si se
+          // recupera la sesión sin pasar por el formulario, hay que fijarlo o
+          // el avance se lee/escribe bajo "anon" y parece perderse.
+          if (session.user.email)
+            localStorage.setItem(
+              "user_email",
+              session.user.email.trim().toLowerCase(),
+            );
 
           // Fetch profile
           const { data: profileData } = await supabase
@@ -115,6 +123,11 @@ export const useSupabaseAuth = () => {
             }
             if (restored?.user && !restoreError) {
               setUser(restored.user);
+              if (restored.user.email)
+                localStorage.setItem(
+                  "user_email",
+                  restored.user.email.trim().toLowerCase(),
+                );
               const { data: profileData } = await supabase
                 .from("users")
                 .select("*")
@@ -130,6 +143,11 @@ export const useSupabaseAuth = () => {
             const identity = readAuthIdentity();
             if (identity.isSignedIn) {
               setUser({ id: identity.userId, email: identity.email });
+              if (identity.email)
+                localStorage.setItem(
+                  "user_email",
+                  identity.email.trim().toLowerCase(),
+                );
               return;
             }
           }
@@ -157,6 +175,11 @@ export const useSupabaseAuth = () => {
             setUser(session.user);
             sessionStorage.setItem("auth_token", session.access_token);
             localStorage.setItem("refresh_token", session.refresh_token);
+            if (session.user.email)
+              localStorage.setItem(
+                "user_email",
+                session.user.email.trim().toLowerCase(),
+              );
 
             const { data: profileData } = await supabase
               .from("users")
@@ -173,6 +196,11 @@ export const useSupabaseAuth = () => {
             const identity = readAuthIdentity();
             if (identity.isSignedIn) {
               setUser({ id: identity.userId, email: identity.email });
+              if (identity.email)
+                localStorage.setItem(
+                  "user_email",
+                  identity.email.trim().toLowerCase(),
+                );
               return;
             }
             setUser(null);
@@ -273,6 +301,12 @@ export const useSupabaseAuth = () => {
           "student_name",
           data.user.username || data.user.email.split("@")[0],
         );
+        // user_email fija el scope del progreso en localStorage.
+        if (data.user.email)
+          localStorage.setItem(
+            "user_email",
+            data.user.email.trim().toLowerCase(),
+          );
 
         setUser({
           id: data.user.id,

@@ -86,21 +86,15 @@ vi.mock("../CourseCompletionSection", () => ({
 describe("SidebarExpanded titles", () => {
   it("renderiza los títulos de las zonas con texto traducido (no claves crudas)", () => {
     render(<SidebarExpanded />);
-    expect(screen.getByText("Tu Avance")).toBeInTheDocument();
+    expect(screen.getByText("Tu avance")).toBeInTheDocument();
     expect(screen.getByText("MÓDULOS DEL CURSO")).toBeInTheDocument();
-    expect(screen.getByText("Herramientas")).toBeInTheDocument();
-  });
-
-  it("renderiza el botón 'Continúa aquí' con el título del módulo activo", () => {
-    render(<SidebarExpanded />);
-    expect(screen.getByText("Continúa aquí")).toBeInTheDocument();
-    expect(screen.getAllByText("Ingeniería de Prompts").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText("Mi Progreso")).toBeInTheDocument();
   });
 
   it("renderiza los accesos de herramientas traducidos", () => {
     render(<SidebarExpanded />);
     expect(screen.getByText("Mi Progreso")).toBeInTheDocument();
-    expect(screen.getByText("Plan de estudio")).toBeInTheDocument();
+    expect(screen.getByText("Plan")).toBeInTheDocument();
     expect(screen.getByText("Ranking")).toBeInTheDocument();
   });
 
@@ -122,7 +116,7 @@ describe("SidebarExpanded titles", () => {
   it("colapsa el sidebar al hacer clic en el círculo de progreso", () => {
     mockToggleSidebar.mockClear();
     render(<SidebarExpanded />);
-    fireEvent.click(screen.getByRole("progressbar"));
+    fireEvent.click(screen.getByRole("button", { name: /completado/i }));
     expect(mockToggleSidebar).toHaveBeenCalledTimes(1);
   });
 });

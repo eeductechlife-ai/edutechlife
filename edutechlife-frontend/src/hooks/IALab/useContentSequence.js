@@ -21,13 +21,32 @@
  * Fail-open: un recurso/tema que no pertenece al módulo activo nunca se
  * bloquea, para no dejar al usuario en un callejón sin salida.
  */
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useIALabStore } from "../../store/ialabStore";
 import { getModuleOverviewData } from "../../components/IALab/constants/moduleContent/selectors";
 import { getResourcesForTopic } from "../../components/IALab/constants/moduleResources";
 
 export function useContentSequence(activeMod, locale = "es") {
   const viewedVersion = useIALabStore((s) => s._viewedResourcesVersion);
+
+  // Reconciliar el "visto" persistido en el store (por cuenta) hacia la lista
+  // plana que usa esta UI. Si al salir/volver la lista plana se perdió pero el
+  // bucket del store sobrevivió, esto vuelve a marcar en verde videos/OVAs/
+  // textos ya vistos. Se ejecuta al montar la vista de contenido.
+  useEffect(() => {
+    try {
+      const store = useIALabStore.getState();
+      const flat = store.getViewedResources?.() || [];
+      const fromStore = Object.values(store.moduleProgress || {}).flatMap(
+        (m) => m?.viewedResources || [],
+      );
+      fromStore.forEach((id) => {
+        if (id && !flat.includes(id)) store.addViewedResource(id);
+      });
+    } catch {
+      /* no crítico */
+    }
+  }, []);
 
   const viewedIds = useMemo(
     () => useIALabStore.getState().getViewedResources(),

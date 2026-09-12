@@ -23,6 +23,7 @@ import {
   useIALabUIContext,
 } from "../../../context/IALabContext";
 import { useIALabStore } from "../../../store/ialabStore";
+import { RESOURCE_MODULE_MAP } from "../../../constants/ialab";
 import { useSupabase } from "../../useSupabase";
 import {
   setSupabaseClient,
@@ -169,6 +170,32 @@ export const useIALabProgress = () => {
 
         if (cancelledRef.current) return;
 
+        // Reconciliar "recursos vistos" (el verde): unir lo que está en el
+        // store (persistido por cuenta), lo que devuelve la base de datos y la
+        // lista plana. Así, al salir y volver a IALab, videos/OVAs/textos ya
+        // vistos siguen marcados aunque una de las fuentes se haya perdido.
+        try {
+          const store = useIALabStore.getState();
+          const existing = store.getViewedResources?.() || [];
+          const fromStore = Object.values(store.moduleProgress || {}).flatMap(
+            (m) => m?.viewedResources || [],
+          );
+          const fromDb = allProgress
+            .filter((p) => p.resource_id && p.is_completed)
+            .map((p) => p.resource_id);
+          const union = new Set([...existing, ...fromStore, ...fromDb]);
+          union.forEach((id) => {
+            if (id && !existing.includes(id)) {
+              const modId = RESOURCE_MODULE_MAP[id];
+              if (modId) store.markResourceAsViewed(modId, id);
+              store.addViewedResource(id);
+            }
+          });
+        } catch (e) {
+          if (import.meta.env.DEV)
+            console.warn("[PROGRESS] No se pudo reconciliar vistos:", e);
+        }
+
         // Restaurar no es progresar: `silent` evita volver a premiar con XP,
         // marcar la racha del día y reenviar a Supabase lo ya leído. Sin él,
         // cada recarga inflaba el XP y falseaba la constancia.
@@ -223,10 +250,15 @@ export const useIALabProgress = () => {
 
         if (cancelledRef.current) return;
 
+        // Persistir la caché SIN degradar: se combina con lo ya cacheado para
+        // que un remoto parcial/en cero no borre el avance local.
+        const cached = loadFromCache(user?.id);
         persistProgressToCache(
-          globalProgress > 0 ? globalProgress : 0,
-          completed,
-          visited,
+          Math.max(globalProgress || 0, cached?.courseProgress || 0),
+          Array.from(
+            new Set([...(cached?.completedModules || []), ...completed]),
+          ),
+          Array.from(new Set([...(cached?.visitedModules || []), ...visited])),
           user?.id,
         );
 
@@ -242,9 +274,28 @@ export const useIALabProgress = () => {
           }
         }
       } else {
+        // DB vacía (RLS, cold start, timeout) o sin filas: NO borrar el avance
+        // que ya existe en este dispositivo. Solo se limpia si de verdad no hay
+        // nada local (ni cache, ni recursos vistos, ni módulos con actividad).
         if (!cancelledRef.current) {
-          setCompletedModules([]);
-          setVisitedModules([1]);
+          const store = useIALabStore.getState();
+          const hasLocalProgress =
+            (store.getViewedResources?.()?.length || 0) > 0 ||
+            (store.completedModules?.length || 0) > 0 ||
+            (store.courseProgress || 0) > 0 ||
+            Object.values(store.moduleProgress || {}).some(
+              (m) =>
+                (m?.viewedResources?.length || 0) > 0 ||
+                m?.exam ||
+                m?.challenge ||
+                m?.community,
+            ) ||
+            !!loadFromCache(user?.id);
+
+          if (!hasLocalProgress) {
+            setCompletedModules([]);
+            setVisitedModules([1]);
+          }
         }
       }
 
@@ -257,7 +308,21 @@ export const useIALabProgress = () => {
       if (!cancelledRef.current) {
         setProgressError(error.message || "Error al cargar progreso");
 
-        if (!loadFromCache(user?.id)) {
+        const store = useIALabStore.getState();
+        const hasLocalProgress =
+          (store.getViewedResources?.()?.length || 0) > 0 ||
+          (store.completedModules?.length || 0) > 0 ||
+          (store.courseProgress || 0) > 0 ||
+          Object.values(store.moduleProgress || {}).some(
+            (m) =>
+              (m?.viewedResources?.length || 0) > 0 ||
+              m?.exam ||
+              m?.challenge ||
+              m?.community,
+          ) ||
+          !!loadFromCache(user?.id);
+
+        if (!hasLocalProgress) {
           setCompletedModules([]);
           setVisitedModules([1]);
         }

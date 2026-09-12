@@ -19,7 +19,6 @@
  */
 import {
   LS_KEYS,
-  INITIAL_MODULE_PROGRESS,
   MODULE_RESOURCE_COUNTS,
   RESOURCE_MODULE_MAP,
 } from "@/constants/ialab";
@@ -45,6 +44,39 @@ function resolveProgressConflict(local, remote) {
   return localScore >= remoteScore ? local : remote;
 }
 
+/**
+ * Fusión MONÓTONA: el progreso de un estudiante nunca debe retroceder. Un
+ * remoto vacío (RLS, cold start, timeout) o un estado inicial (0) no puede
+ * borrar lo que ya existe localmente. Arrays → unión; números → máximo;
+ * booleanos/objetos → OR/merge.
+ */
+function mergeMonotonic(local, incoming) {
+  if (incoming === null || incoming === undefined) return local;
+  if (Array.isArray(local) || Array.isArray(incoming)) {
+    const localArr = Array.isArray(local) ? local : [];
+    const incomingArr = Array.isArray(incoming) ? incoming : [];
+    return Array.from(new Set([...localArr, ...incomingArr]));
+  }
+  if (typeof local === "object" || typeof incoming === "object") {
+    const out = { ...(local || {}) };
+    Object.entries(incoming || {}).forEach(([key, value]) => {
+      const prev = out[key];
+      if (typeof value === "number" && typeof prev === "number") {
+        out[key] = Math.max(prev, value);
+      } else if (typeof value === "boolean" && typeof prev === "boolean") {
+        out[key] = prev || value;
+      } else {
+        out[key] = value === undefined || value === null ? prev : value;
+      }
+    });
+    return out;
+  }
+  if (typeof local === "number" && typeof incoming === "number") {
+    return Math.max(local, incoming);
+  }
+  return incoming;
+}
+
 export const createPersistenceSlice = (set, get) => ({
   syncFromPersistence: (data) => {
     const state = get();
@@ -67,6 +99,8 @@ export const createPersistenceSlice = (set, get) => ({
       },
     );
     const effectiveProgress = resolvedProgress.courseProgress || 0;
+    // Nunca bajar el porcentaje global ya logrado en este dispositivo.
+    const safeProgress = Math.max(state.courseProgress || 0, effectiveProgress);
 
     const localGamification = {
       xp: state.xp,
@@ -127,16 +161,32 @@ export const createPersistenceSlice = (set, get) => ({
         }
       : localGamification;
     set({
-      completedModules: data.completedModules ?? state.completedModules,
-      completedVideos: data.completedVideos ?? state.completedVideos,
-      completedExams: persistedExams,
-      completedInfographics:
-        data.completedInfographics ?? state.completedInfographics,
-      completedActivities:
-        data.completedActivities ?? state.completedActivities,
-      challengeScores: data.challengeScores ?? state.challengeScores,
-      completedCommunity: data.completedCommunity ?? state.completedCommunity,
-      courseProgress: effectiveProgress,
+      completedModules: mergeMonotonic(
+        state.completedModules,
+        data.completedModules,
+      ),
+      completedVideos: mergeMonotonic(
+        state.completedVideos,
+        data.completedVideos,
+      ),
+      completedExams: mergeMonotonic(persistedExams, data.completedExams),
+      completedInfographics: mergeMonotonic(
+        state.completedInfographics,
+        data.completedInfographics,
+      ),
+      completedActivities: mergeMonotonic(
+        state.completedActivities,
+        data.completedActivities,
+      ),
+      challengeScores: mergeMonotonic(
+        state.challengeScores,
+        data.challengeScores,
+      ),
+      completedCommunity: mergeMonotonic(
+        state.completedCommunity,
+        data.completedCommunity,
+      ),
+      courseProgress: safeProgress,
       syncStatus: data.syncStatus ?? state.syncStatus,
       isUsingJWT: data.isUsingJWT ?? state.isUsingJWT,
       userId: data.userId ?? state.userId,
@@ -164,8 +214,10 @@ export const createPersistenceSlice = (set, get) => ({
     if (!hasAnyViewed) {
       const flatViewed = get().getViewedResources();
       if (Array.isArray(flatViewed) && flatViewed.length > 0) {
+        // Se parte del estado ACTUAL (no de INITIAL) para no perder
+        // exam/challenge/community/score de otros módulos al reconstruir.
         const rebuiltProgress = JSON.parse(
-          JSON.stringify(INITIAL_MODULE_PROGRESS),
+          JSON.stringify(currentModuleProgress),
         );
         const completedMods = get().completedModules || [];
 
@@ -183,10 +235,15 @@ export const createPersistenceSlice = (set, get) => ({
           const viewed = mod.viewedResources || [];
           const total = MODULE_RESOURCE_COUNTS[mid] || 8;
           const pct = Math.round((viewed.length / total) * 100);
-          mod.resourcesPct = pct;
+          mod.resourcesPct = Math.max(mod.resourcesPct || 0, pct);
           mod.resourcesCompleted =
-            completedMods.includes(mid) || viewed.length >= total;
-          mod.currentScore = calcModuleScore(mod);
+            mod.resourcesCompleted ||
+            completedMods.includes(mid) ||
+            viewed.length >= total;
+          mod.currentScore = Math.max(
+            mod.currentScore || 0,
+            calcModuleScore(mod),
+          );
         });
 
         set({ moduleProgress: rebuiltProgress });

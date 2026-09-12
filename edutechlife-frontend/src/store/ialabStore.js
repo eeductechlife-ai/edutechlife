@@ -542,6 +542,7 @@ export const useIALabStore = create(
         forumCommentCount: state.forumCommentCount,
         lessonProgress: state.lessonProgress,
         checkpointAnswers: state.checkpointAnswers,
+        lastVisitedLesson: state.lastVisitedLesson,
         moduleProgress: state.moduleProgress,
         courseProgress: state.courseProgress,
         completedModules: state.completedModules,

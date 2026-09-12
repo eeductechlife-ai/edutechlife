@@ -9,7 +9,7 @@ beforeEach(() => {
 });
 
 describe("useToolChrome", () => {
-  test("activa el chrome por defecto solo en temas de herramienta", () => {
+  test("activa el chrome en temas de herramienta y en el tema default", () => {
     const gemini = renderHook(() => useToolChrome("gemini"));
     const chatgpt = renderHook(() => useToolChrome("chatgpt"));
     const notebooklm = renderHook(() => useToolChrome("notebooklm"));
@@ -18,7 +18,8 @@ describe("useToolChrome", () => {
     expect(gemini.result.current.enabled).toBe(true);
     expect(chatgpt.result.current.enabled).toBe(true);
     expect(notebooklm.result.current.enabled).toBe(true);
-    expect(neutral.result.current.enabled).toBe(false);
+    // Módulos 1 y 5 usan el tema `default` con el chrome inmersivo activo.
+    expect(neutral.result.current.enabled).toBe(true);
   });
 
   test("supported es true solo para temas de herramienta", () => {

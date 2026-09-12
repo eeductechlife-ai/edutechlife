@@ -58,6 +58,21 @@ const VideoViewer = ({
     };
     window.addEventListener("message", suppressPostMsgError, true);
 
+    // Fuerza la mejor calidad disponible. El embed elige "auto" por defecto y
+    // suele arrancar en 360/480p aunque el reproductor sea grande; con texto en
+    // pantalla eso se ve mal. `vq` fija la preferencia inicial y estas llamadas
+    // la reaplican cuando YouTube la reevalúa (al empezar a reproducir o al
+    // entrar/salir de pantalla completa).
+    const applyBestQuality = (player = playerRef.current) => {
+      if (!player) return;
+      try {
+        player.setPlaybackQuality?.("hd1080");
+      } catch {}
+      try {
+        player.setPlaybackQualityRange?.("hd1080", "hd1080");
+      } catch {}
+    };
+
     const init = () => {
       if (playerRef.current)
         try {
@@ -67,6 +82,7 @@ const VideoViewer = ({
         height: "100%",
         width: "100%",
         videoId,
+        suggestedQuality: "hd1080",
         playerVars: {
           autoplay: 1,
           controls: 0,
@@ -76,6 +92,8 @@ const VideoViewer = ({
           enablejsapi: 1,
           origin: window.location.origin,
           cc_load_policy: 0,
+          // Preferencia de calidad inicial en HD.
+          vq: "hd1080",
         },
         events: {
           onReady: (e) => {
@@ -83,6 +101,11 @@ const VideoViewer = ({
             setDuration(e.target.getDuration());
             setVolume(e.target.getVolume());
             setPlayerError(null);
+            // La API de calidad necesita el video cargado; reintenta un poco
+            // después por si aún no está lista.
+            applyBestQuality(e.target);
+            setTimeout(() => applyBestQuality(e.target), 800);
+            setTimeout(() => applyBestQuality(e.target), 2000);
           },
           onError: (e) => {
             const msg =
@@ -103,6 +126,7 @@ const VideoViewer = ({
               endedRef.current?.();
             }
             if (e.data === window.YT.PlayerState.PLAYING) {
+              applyBestQuality(playerRef.current);
               try {
                 setDuration(playerRef.current.getDuration());
               } catch {}
@@ -151,6 +175,21 @@ const VideoViewer = ({
       window.removeEventListener("message", suppressPostMsgError, true);
     };
   }, [videoId]);
+
+  // Al entrar o salir de pantalla completa YouTube recalcula la calidad; la
+  // reaplicamos para que no baje a 360/480p en el cambio.
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      const p = playerRef.current;
+      if (!p) return;
+      try {
+        p.setPlaybackQuality?.("hd1080");
+      } catch {}
+    };
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", onFullscreenChange);
+  }, []);
 
   useEffect(() => {
     return () => {

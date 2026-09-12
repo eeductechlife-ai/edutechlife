@@ -126,15 +126,20 @@ describe("ModuleTopicAccordion accordionContent rendering", () => {
     expect(screen.getByText(topic1.objectiveDesc)).toBeInTheDocument();
   });
 
-  it("renders the intro for the last topic of module 2 (topic 4, previously missing)", () => {
+  it("renders the intro for the last topic of module 2", () => {
     const moduleId = 2;
     const locale = "es";
     const accordion = getModuleAccordionContent(moduleId, locale);
-    const lastTopic = accordion[4];
+    const lastTopicIndex = getModuleOverviewData(moduleId, locale).topics.length - 1;
+    const lastTopic = accordion[lastTopicIndex + 1];
 
     expect(lastTopic.objective).toBeDefined();
 
-    render(<ModuleTopicAccordion {...buildProps({ moduleId, locale, expandedTopic: 3 })} />);
+    render(
+      <ModuleTopicAccordion
+        {...buildProps({ moduleId, locale, expandedTopic: lastTopicIndex })}
+      />,
+    );
 
     expect(screen.getByText(lastTopic.objective)).toBeInTheDocument();
     expect(screen.getByText(lastTopic.objectiveDesc)).toBeInTheDocument();

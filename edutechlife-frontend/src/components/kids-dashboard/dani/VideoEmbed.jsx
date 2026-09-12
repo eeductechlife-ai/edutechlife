@@ -27,10 +27,10 @@ const VideoEmbed = memo(({ videoData, darkMode }) => {
       {loaded ? (
         <div className="relative" style={{ paddingBottom: "56.25%" }}>
           <iframe
-            src={`https://www.youtube.com/embed/${videoId}`}
+            src={`https://www.youtube.com/embed/${videoId}?vq=hd1080&rel=0&modestbranding=1`}
             title={videoData.title || t("dani.video_title")}
             className="absolute inset-0 w-full h-full rounded-xl"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
             allowFullScreen
           />
         </div>

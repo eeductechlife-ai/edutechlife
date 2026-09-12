@@ -55,7 +55,7 @@ const defaultProps = {
 describe("ToolWorkspace", () => {
   test("tema desconocido: renderiza hijos sin wrapper", () => {
     const { container } = render(
-      <ToolWorkspace {...defaultProps} theme="default">
+      <ToolWorkspace {...defaultProps} theme="desconocido">
         <p>contenido</p>
       </ToolWorkspace>,
     );
@@ -73,22 +73,7 @@ describe("ToolWorkspace", () => {
     );
     expect(screen.getByTestId("tool-workspace-chatgpt")).toBeInTheDocument();
     expect(screen.getByTestId("tool-workspace-rail")).toBeInTheDocument();
-    expect(screen.getByTestId("tool-workspace-composer")).toBeInTheDocument();
     expect(screen.getByText("sección de temas")).toBeInTheDocument();
-  });
-
-  test("composer es decorativo: input readOnly y enviar deshabilitado", () => {
-    render(
-      <ToolWorkspace {...defaultProps}>
-        <p>x</p>
-      </ToolWorkspace>,
-    );
-    const input = screen.getByLabelText("ialab.workspace.composer_label");
-    expect(input).toHaveAttribute("readonly");
-    const send = screen.getByRole("button", {
-      name: "ialab.workspace.composer_send",
-    });
-    expect(send).toBeDisabled();
   });
 
   test("el rail muestra tópicos reales del módulo 2", () => {
@@ -125,27 +110,27 @@ describe("ToolWorkspace", () => {
       </ToolWorkspace>,
     );
     const [newChatBtn] = screen.getAllByRole("button", {
-      name: "ialab.workspace.chatgpt.new_chat",
+      name: "ialab.workspace.home",
     });
     newChatBtn.click();
     expect(defaultProps.onNewChat).toHaveBeenCalled();
   });
 
   test.each(["gemini", "notebooklm"])(
-    "tema %s: monta workspace con rail y composer",
+    "tema %s: monta workspace con rail",
     (theme) => {
       render(
         <ToolWorkspace
           {...defaultProps}
           theme={theme}
           activeMod={theme === "gemini" ? 3 : 4}
+          viewSection="contenido"
         >
           <p>sección</p>
         </ToolWorkspace>,
       );
       expect(screen.getByTestId(`tool-workspace-${theme}`)).toBeInTheDocument();
       expect(screen.getByTestId("tool-workspace-rail")).toBeInTheDocument();
-      expect(screen.getByTestId("tool-workspace-composer")).toBeInTheDocument();
       expect(screen.getByTestId(`logo-${theme}`)).toBeInTheDocument();
       expect(screen.getByText("sección")).toBeInTheDocument();
     },

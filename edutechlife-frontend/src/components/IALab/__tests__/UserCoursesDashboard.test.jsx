@@ -106,7 +106,7 @@ describe('UserCoursesDashboard', () => {
     fireEvent.click(screen.getByText('ialab.dashboard.filter_in_progress'));
     const cards = screen.getAllByTestId('course-card');
     expect(cards.length).toBe(1);
-    expect(cards[0]).toHaveTextContent('Introducción a la I.A Generativa');
+    expect(cards[0]).toHaveTextContent('Introducción a la IA Generativa');
   });
 
   test('shows empty state when no courses match filter', () => {

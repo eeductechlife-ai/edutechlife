@@ -21,6 +21,7 @@ import {
 } from "../../context/IALabContext";
 import { getAllLessons } from "../../data/ialab";
 import { useIALabStore } from "../../store/ialabStore";
+import { useIALabProgress } from "../../hooks/IALab/useIALabProgress";
 import { usePullToRefresh } from "../../hooks/IALab/usePullToRefresh";
 import { useSwipeNavigation } from "../../hooks/IALab/useSwipeNavigation";
 import { useToolChrome } from "../../hooks/IALab/useToolChrome";
@@ -126,6 +127,9 @@ const IALabContent = memo(function () {
     modules = [],
     updateModuleActivity = () => {},
   } = useIALabProgressContext() ?? {};
+  // Carga y reconcilia el progreso desde la DB al entrar a IALab (vistos +
+  // última posición), sin depender de que la vista de contenido monte el hook.
+  useIALabProgress();
   const { isDarkMode, toggleDarkMode } = useTheme();
   const [showValerioPanel, setShowValerioPanel] = useState(false);
   const showValerioDrawer = useIALabStore((s) => s.showValerioDrawer);
@@ -158,9 +162,21 @@ const IALabContent = memo(function () {
   // selectedTopicIndex vive en la URL (?topic=N) para que el botón atrás y
   // los enlaces directos (/ialab/3?tab=contenido&topic=2) funcionen.
   const selectedTopicIndex = useMemo(() => {
-    const n = parseInt(searchParams.get("topic") ?? "", 10);
-    return isNaN(n) || n < 0 ? 0 : n;
-  }, [searchParams]);
+    const raw = searchParams.get("topic");
+    const n = parseInt(raw ?? "", 10);
+    if (!isNaN(n) && n >= 0) return n;
+    // Sin ?topic en la URL: retomar el tema donde quedó la cuenta.
+    try {
+      const last = useIALabStore.getState().lastVisitedLesson;
+      if (last && Number(last.moduleId) === Number(activeMod)) {
+        const idx = Number(last.lessonId) - 1;
+        if (idx >= 0) return idx;
+      }
+    } catch {
+      /* ignore */
+    }
+    return 0;
+  }, [searchParams, activeMod]);
 
   // setViewSection: fusiona params para no borrar ?topic al cambiar de tab.
   const setViewSection = useCallback(
