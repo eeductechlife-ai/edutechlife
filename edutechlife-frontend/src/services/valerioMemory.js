@@ -1,15 +1,18 @@
+import { readAuthIdentity } from '../hooks/useAuthIdentity'
+
 const MEMORY_KEY = 'ialab_valerio_session'
 const SESSION_KEY = 'ialab_valerio_active_session'
 
 // ── Supabase sync layer ────────────────────────────────────────────────
 
+// Identidad desde la sesión de Supabase (antes Clerk, ya inexistente → el
+// id salía 'anonymous' y la memoria de Valerio no se sincronizaba por cuenta).
 export const isSupabaseSyncAvailable =
-  typeof window !== 'undefined' &&
-  !!window.Clerk?.session?.user?.id
+  typeof window !== 'undefined' && !!readAuthIdentity().userId
 
 const getUserId = () => {
   try {
-    return window.Clerk?.session?.user?.id || 'anonymous'
+    return readAuthIdentity().userId || 'anonymous'
   } catch {
     return 'anonymous'
   }

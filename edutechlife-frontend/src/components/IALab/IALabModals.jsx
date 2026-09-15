@@ -72,6 +72,7 @@ const ModalsSection = ({ handleGlobalAction, activeMod, completedExams }) => {
               isOpen={showExamModal}
               onClose={() => handleGlobalAction("CLOSE_EVALUATION")}
               moduleId={activeMod}
+              activityType="exam"
               onComplete={(score) => {
                 window.dispatchEvent(
                   new CustomEvent("ialab:examCompleted", {

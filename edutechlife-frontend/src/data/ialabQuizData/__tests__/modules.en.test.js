@@ -12,11 +12,13 @@ const modules = [
   MODULE_4_EN,
   MODULE_5_EN,
 ];
+// Tamaño del banco por módulo (se amplía a 40 conforme se traduce cada uno).
+const EXPECTED_COUNTS = [40, 40, 40, 40, 40];
 const words = (s) => String(s).trim().split(/\s+/).filter(Boolean).length;
 
 describe("Exámenes EN (checkpoints) módulos 1-5", () => {
-  it("cada módulo tiene exactamente 10 preguntas", () => {
-    for (const mod of modules) expect(mod).toHaveLength(10);
+  it("cada módulo tiene el tamaño de banco esperado", () => {
+    modules.forEach((mod, i) => expect(mod).toHaveLength(EXPECTED_COUNTS[i]));
   });
 
   it("estructura válida (ids únicos, 4 opciones, correcta presente, source)", () => {

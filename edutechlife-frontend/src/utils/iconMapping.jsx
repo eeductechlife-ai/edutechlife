@@ -215,7 +215,9 @@ import {
       Images,
       CreditCard,
        CloudUpload,
-       Compass
+       Compass,
+       Hammer,
+       Gavel
 } from 'lucide-react';
 
 // Mapping of Font Awesome class names to Lucide components
@@ -450,6 +452,10 @@ export const faToLucideMap = {
     'fa-pdf': FileText,
      'fa-bullet': CircleDot,
      'fa-compass': Compass,
+     'fa-hammer': Hammer,
+     'fa-arrows-spin': RotateCw,
+     'fa-scale-balanced': Scale,
+     'fa-gavel': Gavel,
        };
 
 // Helper function to get Lucide component from Font Awesome class name

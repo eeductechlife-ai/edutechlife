@@ -38,7 +38,7 @@ const COURSE_KNOWLEDGE = [
           },
           {
             type: "ova",
-            title: "Laboratorio: Ética en la IA",
+            title: "El Juramento",
             estimatedTime: "10 minutos",
           },
         ],
@@ -60,7 +60,7 @@ const COURSE_KNOWLEDGE = [
             duration: "4:30",
           },
           { type: "pdf", title: "Guía: Anatomía de un Prompt", pages: 12 },
-          { type: "ova", title: "Infografía Interactiva: Prompt Engineering" },
+          { type: "ova", title: "El Cincel" },
         ],
       },
     ],
@@ -92,7 +92,7 @@ const COURSE_KNOWLEDGE = [
             duration: "5:43",
           },
           { type: "pdf", title: "Guía Completa de ChatGPT", pages: 25 },
-          { type: "ova_interactive", title: "Dominando el Ecosistema ChatGPT" },
+          { type: "ova_interactive", title: "El Plano Maestro" },
         ],
       },
       {
@@ -111,7 +111,7 @@ const COURSE_KNOWLEDGE = [
             title: "Las Herramientas Integradas de ChatGPT",
             pages: 20,
           },
-          { type: "ova_interactive", title: "Simulador: Crea tu Primer Flujo" },
+          { type: "ova_interactive", title: "La Línea de Montaje" },
         ],
       },
       {
@@ -131,7 +131,7 @@ const COURSE_KNOWLEDGE = [
             duration: "18:45",
           },
           { type: "image", title: "Guía de GPTs y Acciones" },
-          { type: "ova", title: "Laboratorio: Construye un GPT" },
+          { type: "ova", title: "La Fábrica de Asistentes" },
         ],
       },
     ],
@@ -169,7 +169,7 @@ const COURSE_KNOWLEDGE = [
           },
           {
             type: "ova",
-            title: "Laboratorio: Pon a Prueba tu Lupa Multimodal",
+            title: "La Lupa Multimodal",
           },
         ],
       },
@@ -195,7 +195,7 @@ const COURSE_KNOWLEDGE = [
           },
           {
             type: "ova",
-            title: "Gemini: Misión Interactiva — Explora y Domina",
+            title: "La Lupa Multimodal",
           },
         ],
       },
@@ -223,7 +223,7 @@ const COURSE_KNOWLEDGE = [
           },
           {
             type: "ova",
-            title: "Laboratorio: Resuelve el Caso — 6 Desafíos Reales",
+            title: "El Caso Abierto",
           },
         ],
       },
@@ -257,7 +257,7 @@ const COURSE_KNOWLEDGE = [
             duration: "10:15",
           },
           { type: "pdf", title: "Guía de NotebookLM", pages: 14 },
-          { type: "ova", title: "Laboratorio: Crea tu Notebook" },
+          { type: "ova", title: "El Grimorio" },
         ],
       },
       {
@@ -277,7 +277,7 @@ const COURSE_KNOWLEDGE = [
             duration: "3:33",
           },
           { type: "document", title: "Plantillas de Resumen" },
-          { type: "ova", title: "Simulador: Análisis de Documentos" },
+          { type: "ova", title: "El Crisol" },
         ],
       },
       {
@@ -293,7 +293,7 @@ const COURSE_KNOWLEDGE = [
         resources: [
           { type: "video", title: "Crea tu propio podcast", duration: "2:16" },
           { type: "pdf", title: "Notebook LM", pages: 10 },
-          { type: "ova", title: "Laboratorio: Crea tu Podcast IA" },
+          { type: "ova", title: "El Estudio Alquímico" },
         ],
       },
     ],
@@ -325,7 +325,7 @@ const COURSE_KNOWLEDGE = [
             title: "Etica de la Inteligencia artificial",
             pages: 9,
           },
-          { type: "ova", title: "Laboratorio: Detecta el Sesgo" },
+          { type: "ova", title: "El Espejo de la Verdad" },
         ],
       },
       {
@@ -345,7 +345,7 @@ const COURSE_KNOWLEDGE = [
             duration: "9:20",
           },
           { type: "pdf", title: "Manual de Privacidad en IA", pages: 13 },
-          { type: "ova", title: "Simulador: Evaluación de Riesgos" },
+          { type: "ova", title: "La Brújula de Riesgos" },
         ],
       },
       {
@@ -364,7 +364,7 @@ const COURSE_KNOWLEDGE = [
             title: "IA Ética: Principios y Práctica",
             duration: "6:05",
           },
-          { type: "ova", title: "Laboratorio: Dilemas Éticos" },
+          { type: "ova", title: "El Tribunal Ético" },
         ],
       },
     ],

@@ -201,11 +201,15 @@ const IALabTour = ({ hasStartedCourse }) => {
 
   useEffect(() => {
     const done = localStorage.getItem(TOUR_KEY);
-    if (!done) {
-      const timer = setTimeout(startTour, INITIAL_DELAY);
-      return () => clearTimeout(timer);
+    if (done) return;
+    // No mostrar el tour a estudiantes que ya empezaron el curso.
+    if (hasStartedCourse) {
+      localStorage.setItem(TOUR_KEY, "true");
+      return;
     }
-  }, [startTour]);
+    const timer = setTimeout(startTour, INITIAL_DELAY);
+    return () => clearTimeout(timer);
+  }, [startTour, hasStartedCourse]);
 
   useEffect(() => {
     const handler = () => startTour();

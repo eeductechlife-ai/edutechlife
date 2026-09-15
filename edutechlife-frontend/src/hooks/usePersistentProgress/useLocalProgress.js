@@ -2,40 +2,58 @@ import { useCallback } from "react";
 import { STORAGE_KEYS } from "./storageKeys";
 import { MODULE_THRESHOLD } from "./courseModuleConfig";
 import { calculateGlobalProgressInternal } from "./courseProgressUtils";
+import { scopedKey } from "../../utils/userScopedStorage";
+
+// Lee/scribe por cuenta. Si existe el dato legacy sin scope y la cuenta aún no
+// tiene el suyo, lo migra (defensivo, por si el claim no alcanzó a hacerlo).
+const readScoped = (baseKey) => {
+  try {
+    let raw = localStorage.getItem(scopedKey(baseKey));
+    if (raw === null) {
+      const legacy = localStorage.getItem(baseKey);
+      if (legacy !== null) {
+        localStorage.setItem(scopedKey(baseKey), legacy);
+        raw = legacy;
+      }
+    }
+    return raw;
+  } catch {
+    return null;
+  }
+};
+
+const writeScoped = (baseKey, value) => {
+  try {
+    localStorage.setItem(scopedKey(baseKey), value);
+  } catch (error) {
+    console.error("❌ Error guardando en localStorage:", error);
+  }
+};
 
 const useLocalProgress = () => {
   const saveToLocalStorage = useCallback((data) => {
     try {
-      localStorage.setItem(
-        STORAGE_KEYS.videos,
-        JSON.stringify(data.completedVideos),
-      );
-      localStorage.setItem(
-        STORAGE_KEYS.modules,
-        JSON.stringify(data.completedModules),
-      );
-      localStorage.setItem(
-        STORAGE_KEYS.exams,
-        JSON.stringify(data.completedExams),
-      );
-      localStorage.setItem(
+      writeScoped(STORAGE_KEYS.videos, JSON.stringify(data.completedVideos));
+      writeScoped(STORAGE_KEYS.modules, JSON.stringify(data.completedModules));
+      writeScoped(STORAGE_KEYS.exams, JSON.stringify(data.completedExams));
+      writeScoped(
         STORAGE_KEYS.infographics,
         JSON.stringify(data.completedInfographics),
       );
-      localStorage.setItem(
+      writeScoped(
         STORAGE_KEYS.activities,
         JSON.stringify(data.completedActivities),
       );
-      localStorage.setItem(
+      writeScoped(
         STORAGE_KEYS.challenges,
         JSON.stringify(data.challengeScores || {}),
       );
-      localStorage.setItem(
+      writeScoped(
         STORAGE_KEYS.community,
         JSON.stringify(data.completedCommunity || []),
       );
 
-      localStorage.setItem(
+      writeScoped(
         STORAGE_KEYS.progress,
         JSON.stringify({
           percent: calculateGlobalProgressInternal(
@@ -67,13 +85,13 @@ const useLocalProgress = () => {
 
   const loadFromLocalStorage = useCallback(() => {
     try {
-      const savedVideos = localStorage.getItem(STORAGE_KEYS.videos);
-      const savedModules = localStorage.getItem(STORAGE_KEYS.modules);
-      const savedExams = localStorage.getItem(STORAGE_KEYS.exams);
-      const savedInfographics = localStorage.getItem(STORAGE_KEYS.infographics);
-      const savedActivities = localStorage.getItem(STORAGE_KEYS.activities);
-      const savedChallenges = localStorage.getItem(STORAGE_KEYS.challenges);
-      const savedCommunity = localStorage.getItem(STORAGE_KEYS.community);
+      const savedVideos = readScoped(STORAGE_KEYS.videos);
+      const savedModules = readScoped(STORAGE_KEYS.modules);
+      const savedExams = readScoped(STORAGE_KEYS.exams);
+      const savedInfographics = readScoped(STORAGE_KEYS.infographics);
+      const savedActivities = readScoped(STORAGE_KEYS.activities);
+      const savedChallenges = readScoped(STORAGE_KEYS.challenges);
+      const savedCommunity = readScoped(STORAGE_KEYS.community);
 
       return {
         completedVideos: savedVideos ? JSON.parse(savedVideos) : [],
@@ -94,10 +112,7 @@ const useLocalProgress = () => {
 
   const recordActivity = useCallback(() => {
     try {
-      localStorage.setItem(
-        "ialab_last_activity_date",
-        new Date().toISOString(),
-      );
+      writeScoped("ialab_last_activity_date", new Date().toISOString());
     } catch (err) {
       console.warn("[PROGRESS] Error registrando actividad:", err);
     }
@@ -106,7 +121,7 @@ const useLocalProgress = () => {
   const recordLastTopic = useCallback(
     (moduleId, moduleName, resourceType, resourceTitle, resourceId) => {
       try {
-        localStorage.setItem(
+        writeScoped(
           "ialab_last_viewed_topic",
           JSON.stringify({
             moduleId,

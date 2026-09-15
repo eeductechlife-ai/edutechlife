@@ -20,7 +20,8 @@ vi.mock("../../../i18n/I18nProvider", () => ({
 }));
 
 vi.mock("../../../utils/iconMapping", () => ({
-  Icon: () => React.createElement("span", { "data-testid": "icon" }),
+  Icon: ({ name }) =>
+    React.createElement("span", { "data-testid": "icon", "data-icon": name }),
 }));
 
 describe("ModuleNavItem (contraste en dark mode)", () => {
@@ -47,5 +48,30 @@ describe("ModuleNavItem (contraste en dark mode)", () => {
     );
     const title = screen.getByText("Mod 3");
     expect(title.className).toContain("theme-text-on-emphasis");
+  });
+
+  it("muestra el chulo si el módulo está en completedModules aunque el score sea < 80", () => {
+    const { container } = render(
+      <ModuleNavItem
+        mod={{ id: 1, title: "Mod 1" }}
+        isCompleted
+        score={70}
+        onClick={() => {}}
+      />,
+    );
+    expect(
+      container.querySelector('[data-icon="fa-check"]'),
+    ).toBeInTheDocument();
+  });
+
+  it("no muestra el chulo si no está completado y el score es < 80", () => {
+    const { container } = render(
+      <ModuleNavItem
+        mod={{ id: 1, title: "Mod 1" }}
+        score={70}
+        onClick={() => {}}
+      />,
+    );
+    expect(container.querySelector('[data-icon="fa-check"]')).toBeNull();
   });
 });

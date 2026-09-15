@@ -28,6 +28,7 @@ const IALabMobileMenu = ({
     modules = [],
     isModuleLocked = () => false,
     calculateModuleScore = () => 0,
+    completedModules = [],
   } = useIALabProgressContext() ?? {};
 
   const { user, setShowCertificateModal, courseCompleted } =
@@ -137,6 +138,7 @@ const IALabMobileMenu = ({
                 mod={mod}
                 isActive={isActive}
                 isLocked={isLocked}
+                isCompleted={completedModules.includes(mod.id)}
                 score={modScore}
                 variant="expanded"
                 onClick={(id) => {

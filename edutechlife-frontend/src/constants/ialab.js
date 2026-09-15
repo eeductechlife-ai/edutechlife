@@ -124,7 +124,7 @@ const RESOURCE_IDS_EN = collectResourceIdsByModule(CONTENT_EN, RESOURCES_EN);
 /**
  * Cuántos recursos tiene realmente cada módulo. Se deriva del catálogo en vez
  * de fijarse a mano: estaba puesto en 8 para los cinco módulos cuando los
- * reales son 6/7/7/9/9, así que los módulos 1-3 nunca alcanzaban
+ * reales son 6/8/7/10/9, así que los módulos 1-3 nunca alcanzaban
  * `resourcesCompleted` y el curso quedaba imposible de completar.
  *
  * Se toma el español como inventario canónico. Un módulo con más recursos en

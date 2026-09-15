@@ -119,4 +119,16 @@ describe("SidebarExpanded titles", () => {
     fireEvent.click(screen.getByRole("button", { name: /completado/i }));
     expect(mockToggleSidebar).toHaveBeenCalledTimes(1);
   });
+
+  it("muestra el aviso de toggle (cue) sobre el anillo", () => {
+    render(<SidebarExpanded />);
+    expect(screen.getByTestId("sidebar-toggle-cue")).toBeInTheDocument();
+  });
+
+  it("la zona de progreso no se encoge (shrink-0) para no perder el anillo", () => {
+    render(<SidebarExpanded />);
+    const zone = screen.getByTestId("sidebar-progress-zone");
+    expect(zone.className).toContain("shrink-0");
+    expect(screen.getByText("Tu avance")).toBeInTheDocument();
+  });
 });

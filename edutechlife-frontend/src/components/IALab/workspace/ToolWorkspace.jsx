@@ -46,6 +46,7 @@ export default function ToolWorkspace({
   onNewChat,
   onSelectTopic,
   onSelectSection,
+  onAction,
   children,
 }) {
   const { t, locale } = useTranslation();
@@ -298,6 +299,7 @@ export default function ToolWorkspace({
         {theme === "gemini" && viewSection === null && (
           <GeminiWelcome
             topics={topics}
+            sequenceByIndex={sequenceByIndex}
             description={overview?.description}
             onSelectSection={onSelectSection}
             onSelectTopic={onSelectTopic}
@@ -309,8 +311,10 @@ export default function ToolWorkspace({
         {theme === "notebooklm" && viewSection === null && (
           <NotebookLMWelcome
             topics={topics}
+            sequenceByIndex={sequenceByIndex}
             onSelectSection={onSelectSection}
             onSelectTopic={onSelectTopic}
+            onAction={onAction}
             onHome={onNewChat}
           />
         )}

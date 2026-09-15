@@ -16,7 +16,6 @@ export const CATEGORY_MAP = {
   horario: "learn",
   // practice — flashcards is internal/hidden; accessible via NBA or retos
   flashcards: "practice",
-  retos: "practice",
   examenes: "practice", // hidden; inside ChallengeEngine
   oral: "practice", // hidden; via Dani FAB
   // progress
@@ -130,7 +129,6 @@ export const TOP_BAR_LABELS = {
   plan: "Mi Plan de Mejora",
   flashcards: "Educards",
   retos: "Retos Inteligentes",
-  perfil: "Mi Perfil",
   progreso: "Mis Estadísticas",
   misiones: "Misiones Diarias",
   noticias: "Tech & IA",

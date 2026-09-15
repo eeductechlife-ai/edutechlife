@@ -44,12 +44,19 @@ const GeminiStep3 = ({
   onResponseChange,
   t: tProp,
   topic = "",
+  exercises,
 }) => {
   const { t } = useTranslation();
   const translate = tProp || t;
   const shouldReduceMotion = useReducedMotion();
 
-  const afirmaciones = useMemo(() => exercise?.afirmaciones || [], [exercise]);
+  const afirmaciones = useMemo(
+    () =>
+      exercises?.afirmaciones ||
+      exercise?.afirmaciones ||
+      (Array.isArray(exercise) ? exercise : []),
+    [exercise, exercises],
+  );
 
   const [claims, setClaims] = useState(() =>
     afirmaciones.map((_, i) => ({
@@ -253,6 +260,7 @@ GeminiStep3.propTypes = {
   onResponseChange: PropTypes.func,
   t: PropTypes.func,
   topic: PropTypes.string,
+  exercises: PropTypes.object,
 };
 
 export default GeminiStep3;

@@ -21,6 +21,7 @@ import {
 } from "../../../utils/speech";
 import { cleanTextForTTS } from "../../../utils/textCleaner";
 import { callDeepseekStream } from "../../../utils/api";
+import { readAuthIdentity } from "../../../hooks/useAuthIdentity";
 
 import SectionErrorBoundary from "../SectionErrorBoundary";
 import { useValerioVoice } from "./useValerioVoice";
@@ -51,6 +52,7 @@ import {
 } from "./valerioPerfOptimizations";
 import { useToast } from "./ValerioUIEnhancements";
 import { createSpeechQueue } from "./valerioSpeechQueue";
+import { buildValerioQuickActions } from "./quickActionsBuilder";
 import {
   ALL_LESSONS,
   ALL_LESSONS_EN,
@@ -155,7 +157,7 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
 
     const buildPrompt = async () => {
       try {
-        const userId = user?.id || window.Clerk?.session?.user?.id;
+        const userId = user?.id || readAuthIdentity().userId;
         const prompt = await buildValerioSystemPrompt({
           locale,
           currentModule,
@@ -443,59 +445,13 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
       ? lessons.find((l) => l.id === currentLesson.lessonId)
       : null;
     const lessonTitle = currentLessonData?.title || "";
-    const topicRef = lessonTitle
-      ? `"${currentModule?.title}" > "${lessonTitle}"`
-      : `"${currentModule?.title}"`;
-    const actions = [
-      {
-        id: "explain_topic",
-        label: t("ialab.valerio.quick_explain_topic"),
-        icon: "fa-book",
-        prompt:
-          {
-            en: `Explain the main topic of ${topicRef} clearly and concisely.`,
-            pt: `Explique o tópico principal de ${topicRef} de forma clara e concisa.`,
-            es: `Explica el tema principal de ${topicRef} de manera clara y concisa.`,
-          }[locale] ||
-          `Explica el tema principal de ${topicRef} de manera clara y concisa.`,
-      },
-      {
-        id: "give_example",
-        label: t("ialab.valerio.quick_give_example"),
-        icon: "fa-lightbulb",
-        prompt:
-          {
-            en: `Provide a practical example related to "${currentModule?.challenge || "prompt engineering"}".`,
-            pt: `Forneça um exemplo prático relacionado a "${currentModule?.challenge || "engenharia de prompts"}".`,
-            es: `Proporciona un ejemplo práctico relacionado con "${currentModule?.challenge || "ingeniería de prompts"}".`,
-          }[locale] ||
-          `Proporciona un ejemplo práctico relacionado con "${currentModule?.challenge || "ingeniería de prompts"}".`,
-      },
-      {
-        id: "help_challenge",
-        label: t("ialab.valerio.quick_help_challenge"),
-        icon: "fa-puzzle-piece",
-        prompt:
-          {
-            en: `How can I effectively approach the "${currentModule?.challenge}" challenge?`,
-            pt: `Como posso abordar o desafio "${currentModule?.challenge}" de forma eficaz?`,
-            es: `¿Cómo puedo abordar el desafío "${currentModule?.challenge}" de manera efectiva?`,
-          }[locale] ||
-          `¿Cómo puedo abordar el desafío "${currentModule?.challenge}" de manera efectiva?`,
-      },
-      {
-        id: "study_tips",
-        label: t("ialab.valerio.quick_study_tips"),
-        icon: "fa-graduation-cap",
-        prompt:
-          {
-            en: `Give me study tips for the "${currentModule?.title}" module (level ${userLevel < 3 ? "beginner" : userLevel < 6 ? "intermediate" : "advanced"}). I am currently on the lesson "${lessonTitle || currentModule?.title}".`,
-            pt: `Dê-me dicas de estudo para o módulo "${currentModule?.title}" (nível ${userLevel < 3 ? "iniciante" : userLevel < 6 ? "intermediário" : "avançado"}). Estou na lição "${lessonTitle || currentModule?.title}".`,
-            es: `Dame consejos de estudio para el módulo "${currentModule?.title}" (nivel ${userLevel < 3 ? "principiante" : userLevel < 6 ? "intermedio" : "avanzado"}). Estoy en la lección "${lessonTitle || currentModule?.title}".`,
-          }[locale] ||
-          `Dame consejos de estudio para el módulo "${currentModule?.title}" (nivel ${userLevel < 3 ? "principiante" : userLevel < 6 ? "intermedio" : "avanzado"}). Estoy en la lección "${lessonTitle || currentModule?.title}".`,
-      },
-    ];
+    const actions = buildValerioQuickActions({
+      locale,
+      currentModule,
+      lessonTitle,
+      userLevel,
+      t,
+    });
     setQuickActions(actions);
   }, [currentModule, userLevel, locale, currentLesson?.lessonId]);
 

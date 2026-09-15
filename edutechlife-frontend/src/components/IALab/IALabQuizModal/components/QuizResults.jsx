@@ -5,7 +5,7 @@ import { fireConfetti } from "../../../../utils/speech";
 import { useIALabStore } from "../../../../store/ialabStore";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 
-function AnswerReview({ quizQuestions, quizAnswers }) {
+export function AnswerReview({ quizQuestions, quizAnswers }) {
   const { t } = useTranslation();
   const [showReview, setShowReview] = useState(false);
 
@@ -92,6 +92,22 @@ function AnswerReview({ quizQuestions, quizAnswers }) {
                           difficulty: q.difficulty,
                         })}
                       </p>
+                      {!isCorrect && q.feedback && (
+                        <p className="text-slate-600 dark:text-slate-300 mt-2">
+                          <span className="font-medium">
+                            {t("ialab.quiz.explanation")}
+                          </span>{" "}
+                          {q.feedback}
+                        </p>
+                      )}
+                      {q.source && (
+                        <p className="text-slate-500 mt-1">
+                          <span className="font-medium">
+                            {t("ialab.quiz.source_label")}
+                          </span>{" "}
+                          {q.source}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

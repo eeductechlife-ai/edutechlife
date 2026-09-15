@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 
 const mockSetQuizAnswer = vi.fn();
@@ -79,6 +80,21 @@ vi.mock('@/components/IALab/SecurityWarningModal', () => ({
 
 vi.mock('@/components/IALab/ScreenshotProtectionOverlay', () => ({
   default: () => null,
+}));
+
+// La ruleta es la puerta de entrada del reto: en el test la hacemos revelar
+// de inmediato para comprobar que la pregunta se renderiza al abrir el modal.
+vi.mock('../IALabQuizModal/components/RouletteSpin', () => ({
+  default: ({ onReveal }) => {
+    const done = React.useRef(false);
+    React.useEffect(() => {
+      if (!done.current) {
+        done.current = true;
+        onReveal?.();
+      }
+    }, [onReveal]);
+    return null;
+  },
 }));
 
 vi.mock('../IALabQuizModal/hooks/useQuizSecurity', () => ({

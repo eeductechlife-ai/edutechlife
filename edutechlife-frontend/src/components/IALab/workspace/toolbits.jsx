@@ -99,7 +99,8 @@ export function ConversationItem({
       )}
       <span className="min-w-0 flex-1">
         <span
-          className={`block truncate text-[15px] font-medium leading-tight ${
+          title={title}
+          className={`block text-[15px] font-medium leading-snug ${
             active ? "theme-text-rail" : "theme-text-rail-muted"
           }`}
         >

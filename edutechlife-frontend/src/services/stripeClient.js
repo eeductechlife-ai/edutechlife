@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../config/api";
+import { readAuthIdentity } from "../hooks/useAuthIdentity";
 const API_BASE = API_BASE_URL;
 
 export async function getPlans() {
@@ -33,7 +34,6 @@ async function getAuthToken() {
   if (typeof window === "undefined") return null;
 
   // La app autentica con Supabase: el token vive en sessionStorage (auth_token).
-  // Clerk quedó como fallback por compatibilidad con sesiones antiguas.
   try {
     const supabaseToken = sessionStorage.getItem("auth_token");
     if (supabaseToken) return supabaseToken;
@@ -41,13 +41,10 @@ async function getAuthToken() {
     /* localStorage no disponible */
   }
 
-  if (window.Clerk?.session) {
-    try {
-      return await window.Clerk.session.getToken();
-    } catch {
-      return null;
-    }
+  // Respaldo: token recuperado de la sesión de Supabase (antes Clerk).
+  try {
+    return readAuthIdentity().token || null;
+  } catch {
+    return null;
   }
-
-  return null;
 }

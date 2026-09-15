@@ -5,8 +5,10 @@ import { Icon } from "../../../../utils/iconMapping.jsx";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 import AutoGrowTextarea from "../shared/AutoGrowTextarea";
 import CaseContextBanner from "./CaseContextBanner";
+import ExampleToggle from "../shared/ExampleToggle";
 import StepFeedback from "../shared/StepFeedback";
 import ProgressStepper from "../shared/ProgressStepper";
+import { buildStep1Requirements } from "./requirements";
 
 const CASES = [
   {
@@ -132,6 +134,11 @@ const ChatGPTStep1 = ({ exercise, response, onResponseChange }) => {
   const completed = [selectedCase, taskDescription.length >= 20].filter(
     Boolean,
   ).length;
+  const requirements = buildStep1Requirements({
+    selectedCase,
+    taskDescription,
+    t,
+  });
 
   return (
     <div className="space-y-6">
@@ -258,6 +265,9 @@ const ChatGPTStep1 = ({ exercise, response, onResponseChange }) => {
               onChange={handleTaskChange}
               placeholder={t("ialab.challenge.m2.step1_task_placeholder")}
             />
+            <ExampleToggle
+              example={t("ialab.challenge.m2.step1_example_answer")}
+            />
             <div className="flex items-center justify-between">
               {validationErrors.task && (
                 <span className="text-xs text-amber-600 flex items-center gap-1">
@@ -276,6 +286,7 @@ const ChatGPTStep1 = ({ exercise, response, onResponseChange }) => {
       <StepFeedback
         completed={completed}
         total={2}
+        requirements={requirements}
         hints={[
           t("ialab.challenge.m2.step1_tip_1"),
           t("ialab.challenge.m2.step1_tip_2"),

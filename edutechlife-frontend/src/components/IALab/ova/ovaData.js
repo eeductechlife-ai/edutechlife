@@ -165,174 +165,33 @@ export const SLIDE_CONTENT_EN = [
 ];
 
 export const OVA_CATALOG = [
-  {
-    id: "intro-ova-1",
-    title: "Ética en la IA",
-    module: 1,
-    icon: "fa-balance-scale",
-    duration: "15 min",
-    description:
-      "Comprende los principios fundamentales de la ética aplicada a la inteligencia artificial y su impacto en la sociedad.",
-    component: "OVAEtica",
-  },
-  {
-    id: "prompt-ova-html-1",
-    title: "Introducción a Prompts",
-    module: 1,
-    icon: "fa-brain",
-    duration: "15 min",
-    description:
-      "Domina el arte de crear instrucciones precisas para IA: estructura, tipos y mejores prácticas.",
-    component: "OVAIntroPrompt",
-  },
-  {
-    id: "workflow-ova-herramientas",
-    title: "ChatGPT Tools",
-    module: 2,
-    icon: "fa-wand-magic-sparkles",
-    duration: "20 min",
-    description:
-      "Explora las herramientas integradas de ChatGPT: búsqueda web, análisis de datos, DALL·E 3 y más.",
-    component: "OVAChatGPTTools",
-  },
-  {
-    id: "chatgpt-ova-ecosystem",
-    title: "Ecosistema ChatGPT",
-    module: 2,
-    icon: "fa-sitemap",
-    duration: "20 min",
-    description:
-      "Conoce el ecosistema completo de ChatGPT: modelos, APIs y casos de uso avanzados.",
-    component: "OVAEcosystemGuide",
-  },
-  {
-    id: "gpts-ova-1",
-    title: "Build Your GPT",
-    module: 2,
-    icon: "fa-robot",
-    duration: "20 min",
-    description:
-      "Aprende a construir tus propios GPTs personalizados con instrucciones, conocimientos y acciones.",
-    component: "OVABuildGPT",
-  },
-  {
-    id: "workspace-ova-1",
-    title: "Gemini en Acción",
-    module: 3,
-    icon: "fa-atom",
-    duration: "20 min",
-    description:
-      "Descubre Gemini: el modelo multimodal de Google que procesa texto, imágenes, audio y video.",
-    component: "OvaEdutechlife",
-  },
-  {
-    id: "gemini-cases-ova-1",
-    title: "Casos Prácticos Gemini",
-    module: 3,
-    icon: "fa-briefcase",
-    duration: "20 min",
-    description:
-      "Aplica Gemini a casos reales de negocio: investigación, análisis y automatización.",
-    component: "OVAPracticalCases",
-  },
-  {
-    id: "notebooklm-ova-1",
-    title: "NotebookLM Lab",
-    module: 4,
-    icon: "fa-flask-vial",
-    duration: "15 min",
-    description:
-      "Experimenta con NotebookLM convirtiendo documentos en conversaciones y resúmenes inteligentes.",
-    component: "OVANotebookLab",
-  },
-  {
-    id: "notebook-summary-ova-1",
-    title: "NotebookLM Resúmenes",
-    module: 4,
-    icon: "fa-file-text",
-    duration: "15 min",
-    description:
-      "Domina el arte de sintetizar documentos con IA: resúmenes precisos con citas verificables.",
-    component: "OVANotebookSimulator",
-  },
-  {
-    id: "notebook-audio-guide-1",
-    title: "Guía de Audio Overviews",
-    module: 4,
-    icon: "fa-podcast",
-    duration: "15 min",
-    description:
-      "Guía interactiva para crear Audio Overviews convincentes a partir de tus documentos.",
-    component: "OVANotebookPodcastGuide",
-  },
-  {
-    id: "notebook-audio-ova-1",
-    title: "Podcast Studio",
-    module: 4,
-    icon: "fa-microphone",
-    duration: "20 min",
-    description:
-      "Convierte cualquier documento en un podcast profesional con dos presentadores IA.",
-    component: "OVAPodcastStudio",
-  },
-  {
-    id: "ethics-ova-1",
-    title: "Dilemas Éticos",
-    module: 5,
-    icon: "fa-scale",
-    duration: "15 min",
-    description:
-      "Analiza dilemas éticos reales de la IA: privacidad, sesgo, transparencia y responsabilidad.",
-    component: "OVAEthicalDilemmas",
-  },
-  {
-    id: "bias-ova-1",
-    title: "Bias Lab",
-    module: 5,
-    icon: "fa-exclamation-triangle",
-    duration: "15 min",
-    description:
-      "Detecta y mitiga sesgos algorítmicos en sistemas de IA con herramientas forenses.",
-    component: "OVABiasLab",
-  },
-  {
-    id: "privacy-ova-1",
-    title: "Simulador de Riesgos",
-    module: 5,
-    icon: "fa-shield-alt",
-    duration: "15 min",
-    description:
-      "Simula escenarios de riesgo en IA: privacidad, seguridad y gobernanza responsable.",
-    component: "OVARiskSimulator",
-  },
+  { id: "prompt-ova-html-1", title: "El Cincel", module: 1, icon: "fa-brain", duration: "15 min", description: "Fundamentos del prompt y su anatomía.", component: "OVAIntroPrompt" },
+  { id: "prompt-lab-ova-1", title: "El Martillo", module: 1, icon: "fa-hammer", duration: "15 min", description: "Laboratorio de prompts en vivo con retroalimentación.", component: "OVAPromptLab" },
+  { id: "chatgpt-ova-ecosystem", title: "El Plano Maestro", module: 2, icon: "fa-sitemap", duration: "20 min", description: "Mapa del ecosistema ChatGPT.", component: "OVAEcosystemGuide" },
+  { id: "workflow-ova-herramientas", title: "La Caja de Herramientas", module: 2, icon: "fa-wand-magic-sparkles", duration: "25 min", description: "Arsenal integrado de ChatGPT.", component: "OVAChatGPTTools" },
+  { id: "automation-flows-ova-1", title: "La Línea de Montaje", module: 2, icon: "fa-diagram-project", duration: "22 min", description: "Flujos de automatización en el mundo real.", component: "OVAAutomationFlows" },
+  { id: "gpts-ova-1", title: "La Fábrica de Asistentes", module: 2, icon: "fa-robot", duration: "25 min", description: "Construye tu GPT personalizado.", component: "OVABuildGPT" },
+  { id: "workspace-ova-1", title: "La Lupa Multimodal", module: 3, icon: "fa-atom", duration: "25 min", description: "Misión Gemini: capacidades multimodales y Workspace.", component: "OvaEdutechlife" },
+  { id: "gemini-cases-ova-1", title: "El Caso Abierto", module: 3, icon: "fa-briefcase", duration: "25 min", description: "Casos prácticos con Gemini.", component: "OVAPracticalCases" },
+  { id: "gemini-deep-research-ova-1", title: "El Archivo Forense", module: 3, icon: "fa-magnifying-glass", duration: "25 min", description: "Investigación profunda y verificación de fuentes.", component: "OVAGeminiDeepResearch" },
+  { id: "notebooklm-ova-1", title: "El Grimorio", module: 4, icon: "fa-flask-vial", duration: "15 min", description: "Construye tu notebook inteligente.", component: "OVANotebookLab" },
+  { id: "notebook-summary-ova-1", title: "El Crisol", module: 4, icon: "fa-file-text", duration: "20 min", description: "Simulador de análisis documental.", component: "OVANotebookSimulator" },
+  { id: "notebook-audio-guide-1", title: "La Fórmula Sonora", module: 4, icon: "fa-podcast", duration: "30 min", description: "Guía de Audio Overviews.", component: "OVANotebookPodcastGuide" },
+  { id: "notebook-audio-ova-1", title: "El Estudio Alquímico", module: 4, icon: "fa-microphone", duration: "15 min", description: "Crea tu podcast IA.", component: "OVAPodcastStudio" },
+  { id: "document-mastery-ova-1", title: "La Transmutación", module: 4, icon: "fa-arrows-spin", duration: "24 min", description: "Del documento al podcast sin perder profundidad.", component: "OVADocumentMastery" },
+  { id: "intro-ova-1", title: "La Materia Prima", module: 1, icon: "fa-book-open", duration: "15 min", description: "Orígenes de la IA y fundamentos del prompt.", component: "OVAEtica" },
+  { id: "bias-ova-1", title: "El Espejo de la Verdad", module: 5, icon: "fa-exclamation-triangle", duration: "15 min", description: "Detector de sesgos algorítmicos.", component: "OVABiasLab" },
+  { id: "privacy-ova-1", title: "La Brújula de Riesgos", module: 5, icon: "fa-shield-alt", duration: "20 min", description: "Privacidad y evaluación de riesgos.", component: "OVARiskSimulator" },
+  { id: "ethics-ova-1", title: "El Tribunal Ético", module: 5, icon: "fa-scale-balanced", duration: "25 min", description: "Dilemas éticos con consecuencias reales.", component: "OVAEthicalDilemmas" },
+  { id: "ethics-cases-ova-1", title: "Casos del Guardián", module: 5, icon: "fa-gavel", duration: "20 min", description: "Ética aplicada al mundo real.", component: "OVAEthicsCases" },
 ];
 
 export const MODULE_NAMES = {
-  1: {
-    es: "El Artesano Digital — Ingeniería de Prompts",
-    en: "The Digital Artisan — Prompt Engineering",
-    pt: "Artesão Digital: Prompts",
-  },
-  2: {
-    es: "El Arquitecto de Automatización — Potencia ChatGPT",
-    en: "The Automation Architect — ChatGPT Power",
-    pt: "Arquiteto Digital: ChatGPT",
-  },
-  3: {
-    es: "Rastreo Profundo con Gemini",
-    en: "Deep Tracking with Gemini",
-    pt: "Detetive de Dados: Gemini",
-  },
-  4: {
-    es: "El Alquimista del Conocimiento — NotebookLM",
-    en: "The Knowledge Alchemist — NotebookLM",
-    pt: "Alquimista Digital: NotebookLM",
-  },
-  5: {
-    es: "Ética Aplicada a IA Generativa",
-    en: "Applied Ethics for Generative AI",
-    pt: "Guardião Digital: Ética em IA",
-  },
+  1: { es: "El Artesano Digital — Ingeniería de Prompts", en: "The Digital Artisan — Prompt Engineering", pt: "O Artesão Digital — Engenharia de Prompts" },
+  2: { es: "El Arquitecto de Automatización — ChatGPT", en: "The Automation Architect — ChatGPT", pt: "O Arquiteto de Automação — ChatGPT" },
+  3: { es: "El Detective de Datos — Rastreo Profundo con Gemini", en: "The Data Detective — Deep Tracking with Gemini", pt: "O Detetive de Dados — Rastreamento com Gemini" },
+  4: { es: "El Alquimista del Conocimiento — NotebookLM", en: "The Knowledge Alchemist — NotebookLM", pt: "O Alquimista do Conhecimento — NotebookLM" },
+  5: { es: "El Guardián de la IA — Ética y Gobernanza", en: "The AI Guardian — Ethics and Governance", pt: "O Guardião da IA — Ética e Governança" },
 };
 
 export const QUIZ_DATA = {

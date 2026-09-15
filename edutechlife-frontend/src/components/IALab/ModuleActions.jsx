@@ -4,10 +4,15 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useIALabStore } from "../../store/ialabStore";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { scopedKey } from "../../utils/userScopedStorage";
 
 const readLocalExamScores = () => {
   try {
-    return JSON.parse(localStorage.getItem("ialab_completed_exams") || "{}");
+    // Clave POR CUENTA (antes sin scope: un cambio de usuario la borraba).
+    const raw =
+      localStorage.getItem(scopedKey("ialab_completed_exams")) ||
+      localStorage.getItem("ialab_completed_exams");
+    return JSON.parse(raw || "{}");
   } catch {
     return {};
   }

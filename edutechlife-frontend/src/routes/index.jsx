@@ -72,9 +72,12 @@ const SmartBoardConsentGate = lazy(
 const SmartBoardLogin = lazy(() => import("../pages/SmartBoardLogin"));
 const AdminLogin = lazy(() => import("../pages/AdminLogin"));
 const AdminDashboard = lazy(() => import("../pages/AdminDashboard"));
-const IALabDashboard = lazy(() => import("../components/IALab/IALabDashboard"));
+const CourseHome = lazy(() => import("../components/IALab/CourseHome"));
 const PublicProfilePage = lazy(
   () => import("../components/userProfilePublic/PublicProfilePage"),
+);
+const CertificateVerificationPage = lazy(
+  () => import("../components/pages/CertificateVerificationPage"),
 );
 import SectionErrorBoundary from "../components/IALab/SectionErrorBoundary";
 import IALabSkeleton from "../components/skeletons/IALabSkeleton";
@@ -326,7 +329,7 @@ const AppRoutes = () => {
           element={
             <RoleProtectedRoute requiredRole="ialab">
               <Suspense fallback={<IALabSkeleton />}>
-                <IALabDashboard />
+                <CourseHome />
               </Suspense>
             </RoleProtectedRoute>
           }
@@ -447,6 +450,15 @@ const AppRoutes = () => {
           element={
             <Suspense fallback={<IALabSkeleton />}>
               <PublicProfilePage />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="verificar/:certNumber"
+          element={
+            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+              <CertificateVerificationPage />
             </Suspense>
           }
         />

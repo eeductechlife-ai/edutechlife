@@ -9,6 +9,7 @@ import { supabase } from "../../../lib/supabase";
 import { modules as STATIC_MODULES } from "@/data/ialab";
 import { LS_KEYS } from "@/constants/ialab";
 import { useIALabStore } from "../../../store/ialabStore";
+import { evaluateCertificateRequirements } from "../../../utils/certificateRequirements";
 import { getAnalyzingMsgs } from "./ialabAnalyzingMsgs";
 
 export function useIALabUI(onBack) {
@@ -138,6 +139,7 @@ export function useIALabUI(onBack) {
       const s = useIALabStore.getState();
       syncGamificationToSupabase({
         xp: s.xp,
+        weeklyXp: s.getWeeklyXP().weekly,
         streak: s.streak,
         lastActivityDate: s.lastActivityDate,
         badges: s.badges,
@@ -218,6 +220,18 @@ export function useIALabUI(onBack) {
         const overallScore = Math.round(
           moduleScores.reduce((a, b) => a + b, 0) / 5,
         );
+
+        const requirements = evaluateCertificateRequirements({
+          moduleScores,
+          courseProgress: s.courseProgress,
+          completedModules: s.completedModules,
+        });
+        if (!requirements.eligible) {
+          return {
+            success: false,
+            error: t("modals.certificates.requirements_not_met"),
+          };
+        }
 
         const certData = {
           user_id: user.id,

@@ -9,12 +9,16 @@ import ExampleToggle from '../../challenges/shared/ExampleToggle';
 
 const TOPIC_ICONS = ['fa-atom', 'fa-brain', 'fa-microchip'];
 
-const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp, topic = '' }) => {
+const GeminiStep1 = ({ exercise, response, onResponseChange, t: tProp, topic = '', exercises }) => {
   const { t } = useTranslation();
   const translate = tProp || t;
   const shouldReduceMotion = useReducedMotion();
 
-  const tema = exercise?.temaInvestigacion || '';
+  const tema =
+    exercises?.temaInvestigacion ||
+    exercise?.temaInvestigacion ||
+    (typeof exercise === 'string' ? exercise : '') ||
+    '';
 
   const topics = React.useMemo(() => {
     if (!tema) return [];
@@ -218,6 +222,7 @@ GeminiStep1.propTypes = {
   onResponseChange: PropTypes.func,
   t: PropTypes.func,
   topic: PropTypes.string,
+  exercises: PropTypes.object,
 };
 
 export default GeminiStep1;

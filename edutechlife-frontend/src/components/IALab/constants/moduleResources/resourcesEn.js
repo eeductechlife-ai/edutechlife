@@ -27,7 +27,7 @@ const RESOURCES_EN = {
       {
         id: "intro-ova-1",
         type: "ova_interactive",
-        title: "Beginnings of Artificial Intelligence",
+        title: "The Raw Material",
         description:
           "Explore the origins of artificial intelligence with 5 interactive activities that will take you from Alan Turing to ChatGPT. Like learning the history of your craft before picking up the tools.",
         estimatedTime: "10 minutes",
@@ -78,7 +78,7 @@ const RESOURCES_EN = {
       {
         id: "prompt-ova-html-1",
         type: "ova_interactive",
-        title: "How to communicate with AI (prompts)",
+        title: "The Chisel",
         description:
           "Put what you've learned into practice: sculpt your own prompts and get immediate feedback. The artisan's workshop where every practice brings you closer to mastery.",
         estimatedTime: "10 minutes",
@@ -88,7 +88,7 @@ const RESOURCES_EN = {
       {
         id: "prompt-lab-ova-1",
         type: "ova_interactive",
-        title: "Live Prompt Laboratory",
+        title: "The Hammer",
         description:
           "The digital artisan's workbench: write real prompts, run them against the model, and refine until you get the exact result. Four proven techniques plus a final challenge.",
         estimatedTime: "15 minutes",
@@ -143,7 +143,7 @@ const RESOURCES_EN = {
       {
         id: "chatgpt-ova-ecosystem",
         type: "ova_interactive",
-        title: "Explore the ChatGPT Ecosystem",
+        title: "The Master Blueprint",
         description:
           "Interactive journey through the ChatGPT universe: discover each tool, learn to combine them, and become an automation architect. The complete tour of your new construction site.",
         estimatedTime: "20 minutes",
@@ -184,7 +184,7 @@ const RESOURCES_EN = {
       {
         id: "workflow-ova-herramientas",
         type: "ova_interactive",
-        title: "Lab: ChatGPT Tools",
+        title: "The Toolbox",
         description:
           "Explore each ChatGPT tool with practical exercises and guided audio. Like an architect testing their tools before the big project. Complete the challenge to prove your mastery.",
         estimatedTime: "25 minutes",
@@ -196,7 +196,7 @@ const RESOURCES_EN = {
       {
         id: "automation-flows-ova-1",
         type: "ova_interactive",
-        title: "Real-World Automation Flows",
+        title: "The Assembly Line",
         description:
           "Framework + 3 practical cases: how a marketer, educator and entrepreneur use ChatGPT's integrated tools in flows that multiply their productivity.",
         estimatedTime: "22 minutes",
@@ -236,7 +236,7 @@ const RESOURCES_EN = {
       {
         id: "gpts-ova-1",
         type: "ova_interactive",
-        title: "Lab: Build a GPT",
+        title: "The Assistant Factory",
         description:
           "Hands-on: build a GPT from scratch with guided exercises and feedback at every step. Like the architect supervising every detail of their creation.",
         estimatedTime: "25 minutes",
@@ -340,7 +340,7 @@ const RESOURCES_EN = {
       {
         id: "workspace-ova-1",
         type: "ova_interactive",
-        title: "Simulator: Gemini in the Field — Workspace Edition",
+        title: "The Multimodal Lens",
         description:
           "Simulate real investigation scenarios with Gemini integrated into your Google Workspace. Practice before the real case lands on your desk.",
         estimatedTime: "20 minutes",
@@ -392,12 +392,24 @@ const RESOURCES_EN = {
       {
         id: "gemini-cases-ova-1",
         type: "ova_interactive",
-        title: "Lab: Crack the Case — 6 Challenges",
+        title: "The Open Case",
         description:
           "Face 6 real cases — from analyzing a contract to debunking fake news — and solve them using Gemini as your investigation partner.",
         estimatedTime: "25 minutes",
         difficulty: "Advanced",
         interactiveElements: 6,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
+      {
+        id: "gemini-deep-research-ova-1",
+        type: "ova_interactive",
+        title: "The Forensic Archive",
+        description:
+          "Research in depth and verify every source: analyze evidence, cross-check data and produce reports with forensic traceability using Gemini Deep Research.",
+        estimatedTime: "25 minutes",
+        difficulty: "Advanced",
+        interactiveElements: 3,
         thumbnailType: "premium",
         fullscreen: true,
       },
@@ -447,7 +459,7 @@ const RESOURCES_EN = {
       {
         id: "notebooklm-ova-1",
         type: "ova_interactive",
-        title: "Lab: Create Your Notebook",
+        title: "The Grimoire",
         description:
           "7 questions that will make you a NotebookLM expert. Complete the challenge with Valerio as your personal guide on this alchemical journey.",
         estimatedTime: "15 minutes",
@@ -498,7 +510,7 @@ const RESOURCES_EN = {
       {
         id: "notebook-summary-ova-1",
         type: "ova_interactive",
-        title: "Simulator: Document Analysis",
+        title: "The Crucible",
         description:
           "Practical simulator: take real documents and generate professional-level summaries in minutes. Put your alchemical skills to the test.",
         estimatedTime: "20 minutes",
@@ -537,7 +549,7 @@ const RESOURCES_EN = {
       {
         id: "notebook-audio-guide-1",
         type: "ova_interactive",
-        title: "Notebook LM",
+        title: "The Sound Formula",
         description:
           "Complete NotebookLM course: 6 interactive modules with practical exercises and a final challenge to become a master alchemist.",
         estimatedTime: "30 minutes",
@@ -549,7 +561,7 @@ const RESOURCES_EN = {
       {
         id: "notebook-audio-ova-1",
         type: "ova_interactive",
-        title: "Lab: Create Your AI Podcast",
+        title: "The Alchemical Studio",
         description:
           "Create your first AI podcast: choose the topic, customize the tone, and hear the result in minutes. Audio alchemy at your fingertips.",
         estimatedTime: "15 minutes",
@@ -558,26 +570,10 @@ const RESOURCES_EN = {
         thumbnailType: "premium",
         fullscreen: true,
       },
-    ],
-  },
-
-  "The Master Alchemist: Complete Document-to-Podcast Flow": {
-    title: "The Master Alchemist: Complete Document-to-Podcast Flow",
-    description:
-      "Close the circle: connect analysis, synthesis and audio into an integrated flow. How researchers, educators and companies transform mountains of documents into captivating podcasts.",
-    learningObjectives: [
-      "Master the ideal flow: sources → synthesis → podcast",
-      "Analyze 3 real cases of document-to-podcast transformation",
-      "Recognize orchestration patterns between NotebookLM tools",
-      "Design your own document-to-podcast flow adapted to your context",
-    ],
-    estimatedTime: "24 minutes",
-    difficulty: "Advanced",
-    resources: [
       {
         id: "document-mastery-ova-1",
         type: "ova_interactive",
-        title: "Document Mastery: From Paper to Podcast",
+        title: "The Transmutation",
         description:
           "Framework + 3 practical cases: researcher, educator, enterprise. How to transform complex documents into listenable podcasts without losing depth.",
         estimatedTime: "24 minutes",
@@ -632,7 +628,7 @@ const RESOURCES_EN = {
       {
         id: "bias-ova-1",
         type: "ova_interactive",
-        title: "Lab: Detect the Bias",
+        title: "The Mirror of Truth",
         description:
           "Test your guardian eye: analyze real AI responses and uncover biases most people would never notice. 6 challenges that will sharpen your instinct.",
         estimatedTime: "15 minutes",
@@ -684,7 +680,7 @@ const RESOURCES_EN = {
       {
         id: "privacy-ova-1",
         type: "ova_interactive",
-        title: "Simulator: Risk Assessment",
+        title: "The Risk Compass",
         description:
           "Face real risk scenarios and learn to protect your data like a guardian. Includes the ethical stars game that will test your decisions.",
         estimatedTime: "20 minutes",
@@ -723,7 +719,7 @@ const RESOURCES_EN = {
       {
         id: "ethics-ova-1",
         type: "ova_interactive",
-        title: "Lab: Ethical Dilemmas",
+        title: "The Ethical Tribunal",
         description:
           "Face 8 real ethical dilemmas where there are no easy answers. Every decision you make has consequences. Are you ready to be a guardian?",
         estimatedTime: "25 minutes",
@@ -735,7 +731,7 @@ const RESOURCES_EN = {
       {
         id: "ethics-cases-ova-1",
         type: "ova_interactive",
-        title: "Applied Ethics: Practical Cases",
+        title: "The Guardian's Cases",
         description:
           "A 5-question framework plus 3 real AI cases: hiring, healthcare, and copyright. Make decisions and discover how an ethical guardian thinks.",
         estimatedTime: "20 minutes",

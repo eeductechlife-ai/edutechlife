@@ -6,9 +6,9 @@ import ZoneHeading from './ZoneHeading';
 
 const SidebarModuleList = ({
   modules, activeMod, calculateModuleScore, isModuleLocked, goToModule,
-  moduleListVariants, moduleItemVariants, t,
+  completedModules = [], moduleListVariants, moduleItemVariants, t,
 }) => (
-  <div className="px-2 w-full" aria-labelledby="sidebar-modules-heading">
+  <div className="px-2 w-full shrink-0" aria-labelledby="sidebar-modules-heading">
     <div className="mb-3">
       <ZoneHeading icon="fa-layer-group" label={t('sidebar.modules')} id="sidebar-modules-heading" />
     </div>
@@ -30,6 +30,7 @@ const SidebarModuleList = ({
               mod={mod}
               isActive={isActive}
               isLocked={locked}
+              isCompleted={completedModules.includes(mod.id)}
               score={modScore}
               variant="expanded"
               onClick={goToModule}
@@ -48,6 +49,7 @@ SidebarModuleList.propTypes = {
   calculateModuleScore: PropTypes.func,
   isModuleLocked: PropTypes.func,
   goToModule: PropTypes.func,
+  completedModules: PropTypes.array,
   moduleListVariants: PropTypes.object,
   moduleItemVariants: PropTypes.object,
   t: PropTypes.func,

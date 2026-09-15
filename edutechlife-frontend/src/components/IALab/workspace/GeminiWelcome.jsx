@@ -5,6 +5,7 @@
  */
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 const GeminiDiamond = ({ size = 28 }) => (
   <svg width={size} height={size} viewBox="0 0 28 28" fill="none" aria-hidden="true">
@@ -26,22 +27,22 @@ const GeminiDiamond = ({ size = 28 }) => (
 const NAV_ITEMS = [
   {
     icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
-    label: "Objetivos",
+    labelKey: "ialab.tab_objectives",
     section: "objetivos",
   },
   {
     icon: "M13 2 3 14h9l-1 8 10-12h-9l1-8z",
-    label: "Actividades",
+    labelKey: "ialab.tab_activities",
     section: "actividades",
   },
   {
     icon: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4l3 3",
-    label: "Práctica",
+    labelKey: "ialab.tab_practice",
     section: "practica",
   },
   {
     icon: "M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z",
-    label: "Guardados",
+    labelKey: "ialab.tab_bookmarks",
     section: "guardados",
   },
 ];
@@ -49,39 +50,40 @@ const NAV_ITEMS = [
 const SUGGEST_CARDS = [
   {
     icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
-    label: "Explorar el módulo",
-    desc: "Objetivos, temas y recursos de Gemini",
+    labelKey: "ialab.workspace.gemini.card_explore",
+    descKey: "ialab.workspace.gemini.card_explore_desc",
     section: "objetivos",
     bg: "rgba(66,133,244,0.08)",
     color: "#4285f4",
   },
   {
     icon: "M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2zM14 2v6h6",
-    label: "Contenido del módulo",
-    desc: "Videos, PDFs y recursos de Gemini AI",
+    labelKey: "ialab.workspace.gemini.card_content",
+    descKey: "ialab.workspace.gemini.card_content_desc",
     section: "contenido",
     bg: "rgba(52,168,83,0.08)",
     color: "#34a853",
   },
   {
     icon: "M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z",
-    label: "Deep Research",
-    desc: "Investigación multimodal con Gemini",
+    labelKey: "ialab.workspace.gemini.card_deep",
+    descKey: "ialab.workspace.gemini.card_deep_desc",
     section: "actividades",
     bg: "rgba(251,188,4,0.1)",
     color: "#f9ab00",
   },
   {
     icon: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4l3 3",
-    label: "Práctica guiada",
-    desc: "Ejercicios paso a paso con Gemini",
+    labelKey: "ialab.workspace.gemini.card_practice",
+    descKey: "ialab.workspace.gemini.card_practice_desc",
     section: "practica",
     bg: "rgba(234,67,53,0.08)",
     color: "#ea4335",
   },
 ];
 
-export default function GeminiWelcome({ topics = [], description, onSelectSection, onSelectTopic, onHome }) {
+export default function GeminiWelcome({ topics = [], sequenceByIndex, description, onSelectSection, onSelectTopic, onHome }) {
+  const { t } = useTranslation();
   return (
     <motion.div
       key="gemini-welcome"
@@ -105,7 +107,7 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
           <button
             type="button"
             className="ml-auto flex-shrink-0 rounded-full p-1.5 transition-colors hover:bg-[#f1f3f4]"
-            title="Editar"
+            title={t("ialab.workspace.edit")}
             onClick={() => onSelectSection("actividades")}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5f6368" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -125,15 +127,15 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5f6368" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 5v14M5 12h14" />
             </svg>
-            Inicio
+            {t("ialab.workspace.home")}
           </button>
         </div>
 
         {/* Nav items */}
         <nav className="px-3 space-y-0.5">
-          {NAV_ITEMS.map(({ icon, label, section }) => (
+          {NAV_ITEMS.map(({ icon, labelKey, section }) => (
             <button
-              key={label}
+              key={labelKey}
               type="button"
               onClick={() => section && onSelectSection(section)}
               className="flex items-center gap-3 w-full rounded-full px-4 py-2.5 text-[14px] transition-colors hover:bg-[#f1f3f4]"
@@ -142,7 +144,7 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5f6368" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d={icon} />
               </svg>
-              {label}
+              {t(labelKey)}
             </button>
           ))}
         </nav>
@@ -152,24 +154,37 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
           <div className="mt-4 px-3 flex-1">
             <div className="px-4 pb-1">
               <span style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 13, fontWeight: 500, color: "#3c4043" }}>
-                Recientes
+                {t("ialab.workspace.gemini.recent")}
               </span>
             </div>
             <div className="space-y-0.5 mt-1">
-              {topics.slice(0, 5).map((topic, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => onSelectTopic(i)}
-                  className="flex items-center gap-2.5 w-full rounded-full px-4 py-2 text-[13px] text-left transition-colors hover:bg-[#f1f3f4] truncate"
-                  style={{ color: "#3c4043", fontFamily: "'Google Sans Text',sans-serif" }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9aa0a6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="flex-shrink-0">
-                    <path d="M21 12a8 8 0 0 1-8 8H4l1.5-2.5A8 8 0 1 1 21 12Z" />
-                  </svg>
-                  <span className="truncate">{topic.title}</span>
-                </button>
-              ))}
+              {topics.slice(0, 5).map((topic, i) => {
+                const completed = Boolean(
+                  sequenceByIndex?.get?.(i)?.isCompleted,
+                );
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => onSelectTopic(i)}
+                    data-testid={
+                      completed ? `gem-topic-completed-${i}` : undefined
+                    }
+                    className="flex items-start gap-2.5 w-full rounded-full px-4 py-2 text-[13px] text-left transition-colors hover:bg-[#f1f3f4]"
+                    style={{ color: completed ? "#188038" : "#3c4043", fontFamily: "'Google Sans Text',sans-serif" }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={completed ? "#188038" : "#9aa0a6"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="flex-shrink-0 mt-0.5">
+                      <path d="M21 12a8 8 0 0 1-8 8H4l1.5-2.5A8 8 0 1 1 21 12Z" />
+                    </svg>
+                    <span className="min-w-0" title={topic.title}>{topic.title}</span>
+                    {completed && (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#188038" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="flex-shrink-0 mt-0.5 ml-auto">
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -201,10 +216,10 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
               backgroundClip: "text",
             }}
           >
-            ¿Qué investigamos hoy?
+            {t("ialab.workspace.gemini.heading")}
           </h1>
           <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, color: "#5f6368", marginBottom: 20 }}>
-            explora el contenido del módulo o inicia una actividad con Gemini
+            {t("ialab.workspace.gemini.sub")}
           </p>
 
           {/* Mensaje intro — avatar Gemini + texto, estilo nuevo chat */}
@@ -217,7 +232,7 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
             </div>
             <div className="flex-1 space-y-2">
               <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, fontWeight: 600, color: "#202124" }}>
-                Bienvenido al laboratorio de investigación multimodal.
+                {t("ialab.workspace.gemini.intro_title")}
               </p>
               {description ? (
                 <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, color: "#5f6368", lineHeight: 1.65 }}>
@@ -225,7 +240,7 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
                 </p>
               ) : (
                 <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, color: "#5f6368", lineHeight: 1.65 }}>
-                  Con Gemini aprenderás a buscar, sintetizar y crear en múltiples formatos. Texto, imagen, código y audio — todo desde una sola conversación.
+                  {t("ialab.workspace.gemini.intro_desc")}
                 </p>
               )}
             </div>
@@ -233,9 +248,9 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
 
           {/* Suggestion cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl">
-            {SUGGEST_CARDS.map(({ icon, label, desc, section, bg, color }) => (
+            {SUGGEST_CARDS.map(({ icon, labelKey, descKey, section, bg, color }) => (
               <button
-                key={label}
+                key={labelKey}
                 type="button"
                 onClick={() => {
                   if (section === "contenido") onSelectTopic(0);
@@ -254,10 +269,10 @@ export default function GeminiWelcome({ topics = [], description, onSelectSectio
                 </span>
                 <div className="min-w-0">
                   <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, fontWeight: 500, color: "#202124" }} className="leading-snug">
-                    {label}
+                    {t(labelKey)}
                   </p>
                   <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 12, color: "#5f6368" }} className="mt-0.5 leading-snug">
-                    {desc}
+                    {t(descKey)}
                   </p>
                 </div>
               </button>

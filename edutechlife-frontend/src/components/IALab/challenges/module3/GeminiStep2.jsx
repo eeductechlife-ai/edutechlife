@@ -33,12 +33,19 @@ const GeminiStep2 = ({
   onResponseChange,
   t: tProp,
   topic = "",
+  exercises,
 }) => {
   const { t } = useTranslation();
   const translate = tProp || t;
   const shouldReduceMotion = useReducedMotion();
 
-  const fuentes = useMemo(() => exercise?.fuentes || [], [exercise]);
+  const fuentes = useMemo(
+    () =>
+      exercises?.fuentes ||
+      exercise?.fuentes ||
+      (Array.isArray(exercise) ? exercise : []),
+    [exercise, exercises],
+  );
 
   const [sources, setSources] = useState(() =>
     fuentes.map((_, i) => ({ index: i, isRelevant: false, keyData: "" })),
@@ -259,6 +266,7 @@ GeminiStep2.propTypes = {
   onResponseChange: PropTypes.func,
   t: PropTypes.func,
   topic: PropTypes.string,
+  exercises: PropTypes.object,
 };
 
 export default GeminiStep2;

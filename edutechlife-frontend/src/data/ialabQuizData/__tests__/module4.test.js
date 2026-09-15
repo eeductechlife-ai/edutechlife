@@ -5,7 +5,7 @@ const words = (s) => String(s).trim().split(/\s+/).filter(Boolean).length;
 
 describe("MODULE_4 (examen / mi reto)", () => {
   it("tiene exactamente 10 preguntas", () => {
-    expect(MODULE_4).toHaveLength(10);
+    expect(MODULE_4).toHaveLength(40);
   });
 
   it("tiene ids únicos y estructura válida", () => {

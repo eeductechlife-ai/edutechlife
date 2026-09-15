@@ -6,6 +6,7 @@ import { useTranslation } from "../../../../i18n/I18nProvider";
 import CaseContextBanner from "./CaseContextBanner";
 import AutoGrowTextarea from "../shared/AutoGrowTextarea";
 import StepFeedback from "../shared/StepFeedback";
+import { buildStep2Requirements } from "./requirements";
 import ProgressStepper from "../shared/ProgressStepper";
 
 const TONE_OPTIONS = [
@@ -163,6 +164,15 @@ const ChatGPTStep2 = ({
     knowledge.length > 0,
     capabilities.length > 0,
   ].filter(Boolean).length;
+
+  const requirements = buildStep2Requirements({
+    gptRole,
+    tone,
+    rules,
+    knowledge,
+    capabilities,
+    t,
+  });
 
   const toneLabel = TONE_OPTIONS.find((o) => o.id === tone);
   const previewLines = [];
@@ -490,6 +500,7 @@ const ChatGPTStep2 = ({
       <StepFeedback
         completed={completed}
         total={4}
+        requirements={requirements}
         hints={[
           t("ialab.challenge.m2.step2_tip_1"),
           t("ialab.challenge.m2.step2_tip_2"),

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import SectionErrorBoundary from './SectionErrorBoundary';
@@ -8,6 +8,7 @@ import { useIALabStore } from '../../store/ialabStore';
 import { Icon } from '../../utils/iconMapping';
 import { useTranslation } from '../../i18n/I18nProvider';
 import useFocusTrap from '../../hooks/useFocusTrap';
+import { LEADERBOARD_PERIODS, rankEntries } from './leaderboardPeriod';
 
 const POSITION_ICONS = {
   1: { icon: 'fa-trophy', color: 'text-amber-400', bg: 'bg-amber-50 dark:bg-amber-900/20' },
@@ -20,8 +21,10 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
   const { supabase, userId } = useSupabase();
   const myXp = useIALabStore(s => s.xp);
   const myStreak = useIALabStore(s => s.streak);
+  const getWeeklyXP = useIALabStore(s => s.getWeeklyXP);
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [period, setPeriod] = useState(LEADERBOARD_PERIODS[0]);
 
   const fetchLeaderboard = useCallback(async () => {
     if (!supabase) return;
@@ -60,6 +63,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
         name: profiles[row.user_id]?.full_name || row.user_id?.slice(0, 8) || 'Usuario',
         avatar: profiles[row.user_id]?.avatar_url || null,
         xp: row.gamification_data?.xp || 0,
+        weeklyXp: row.gamification_data?.weeklyXp || 0,
         streak: row.gamification_data?.streak || 0,
         badges: (row.gamification_data?.badges || []).length,
       }));
@@ -78,8 +82,11 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
 
   const focusTrapRef = useFocusTrap(isOpen);
 
-  const myEntry = entries.find(e => e.userId === userId);
+  const ranked = useMemo(() => rankEntries(entries, period), [entries, period]);
+  const myEntry = ranked.find(e => e.userId === userId);
   const myRank = myEntry?.rank || null;
+  const weeklyHasData = ranked.some((e) => e.rankedXp > 0);
+  const myPeriodXp = period === 'weekly' ? getWeeklyXP().weekly : myXp;
 
   return (
     <SectionErrorBoundary name="LeaderboardModal">
@@ -116,6 +123,24 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
               </button>
             </div>
 
+            <div className="flex items-center gap-1.5 px-6 pt-3" role="tablist" aria-label={t('leaderboard.title')}>
+              {LEADERBOARD_PERIODS.map((p) => (
+                <button
+                  key={p}
+                  role="tab"
+                  aria-selected={period === p}
+                  onClick={() => setPeriod(p)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                    period === p
+                      ? 'bg-[var(--theme-emphasis)] text-white'
+                      : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                  }`}
+                >
+                  {t(`leaderboard.period_${p}`)}
+                </button>
+              ))}
+            </div>
+
             <div className="overflow-y-auto" style={{ maxHeight: 'calc(80vh - 73px)' }}>
               {loading ? (
                 <div className="flex items-center justify-center py-16">
@@ -129,7 +154,10 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
                 </div>
               ) : (
                 <div className="p-4 space-y-1">
-                  {entries.map((entry) => {
+                  {period === 'weekly' && !weeklyHasData && (
+                    <p className="px-1 pb-2 text-xs text-slate-400">{t('leaderboard.weekly_empty')}</p>
+                  )}
+                  {ranked.map((entry) => {
                     const isMe = entry.userId === userId;
                     const positionStyle = POSITION_ICONS[entry.rank];
                     return (
@@ -172,7 +200,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
                         </div>
 
                         <div className="text-right flex-shrink-0">
-                          <p className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]">{entry.xp.toLocaleString()}</p>
+                          <p className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]">{entry.rankedXp.toLocaleString()}</p>
                           <p className="text-[10px] text-slate-400">{t('streak.xp')}</p>
                         </div>
                       </div>
@@ -192,10 +220,10 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('leaderboard.position')}</p>
-                      <p className="text-xs text-slate-400">{t('streak.position_line', { xp: myXp.toLocaleString(), days: myStreak })}</p>
+                      <p className="text-xs text-slate-400">{t('streak.position_line', { xp: myPeriodXp.toLocaleString(), days: myStreak })}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]">{myXp.toLocaleString()}</p>
+                      <p className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]">{myPeriodXp.toLocaleString()}</p>
                       <p className="text-[10px] text-slate-400">{t('streak.xp')}</p>
                     </div>
                   </div>

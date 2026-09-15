@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
 
-const StepFeedback = ({ completed, total, hints = [], t }) => {
+const StepFeedback = ({ completed, total, hints = [], requirements, t }) => {
   if (completed === undefined) return null;
   const allDone = completed >= total;
   const progress = total > 0 ? (completed / total) * 100 : 0;
@@ -35,6 +35,23 @@ const StepFeedback = ({ completed, total, hints = [], t }) => {
               </div>
               <span className="text-xs text-slate-500 font-medium">{completed}/{total}</span>
             </div>
+            {Array.isArray(requirements) && requirements.length > 0 && (
+              <div aria-live="polite">
+                <p className="font-medium text-slate-600 mb-1">{t('ialab.challenge.step_requirements_title')}</p>
+                <ul className="space-y-1">
+                  {requirements.slice(0, 6).map((r) => (
+                    <li key={r.id} className="flex items-start gap-2">
+                      <Icon
+                        name={r.met ? 'fa-check-circle' : 'fa-circle'}
+                        className={`text-xs mt-0.5 flex-shrink-0 ${r.met ? 'text-emerald-500' : 'text-slate-300'}`}
+                      />
+                      <span className={r.met ? 'text-emerald-700' : 'text-slate-500'}>{r.label}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {hints.length > 0 && completed < total && (
               <div className="text-xs text-slate-500">
                 <p className="font-medium text-slate-600 mb-1">{t('ialab.challenge.step_tips_label')}</p>
@@ -60,6 +77,13 @@ StepFeedback.propTypes = {
   completed: PropTypes.number,
   total: PropTypes.number,
   hints: PropTypes.arrayOf(PropTypes.string),
+  requirements: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      label: PropTypes.string,
+      met: PropTypes.bool,
+    }),
+  ),
   t: PropTypes.func.isRequired,
 };
 

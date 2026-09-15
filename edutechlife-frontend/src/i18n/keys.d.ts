@@ -377,6 +377,19 @@ export type TranslationKeys = {
   "certificate.title_pdf": string;
   "certificate.verified_pdf": string;
   "certificate.verified_seal": string;
+  "certificate_verify.back_home": string;
+  "certificate_verify.course": string;
+  "certificate_verify.course_name": string;
+  "certificate_verify.holder": string;
+  "certificate_verify.invalid_desc": string;
+  "certificate_verify.issued": string;
+  "certificate_verify.loading": string;
+  "certificate_verify.not_found_desc": string;
+  "certificate_verify.number": string;
+  "certificate_verify.score": string;
+  "certificate_verify.title": string;
+  "certificate_verify.unavailable_desc": string;
+  "certificate_verify.valid_title": string;
   "chatbot.close": string;
   "chatbot.error": string;
   "chatbot.greeting": string;
@@ -558,6 +571,7 @@ export type TranslationKeys = {
   "dani.chart_title": string;
   "dani.chat_placeholder": string;
   "dani.chat_title": string;
+  "dani.clear_aria": string;
   "dani.close": string;
   "dani.conversation_count": string;
   "dani.crisis_line1": string;
@@ -573,11 +587,28 @@ export type TranslationKeys = {
   "dani.error_generic": string;
   "dani.error_network": string;
   "dani.error_timeout": string;
+  "dani.helper_text": string;
+  "dani.input_aria": string;
   "dani.messages_label": string;
   "dani.mic_start": string;
+  "dani.mic_start_aria": string;
   "dani.mic_stop": string;
+  "dani.mic_stop_aria": string;
   "dani.mood_label": string;
   "dani.placeholder": string;
+  "dani.qa_emotional_subtitle": string;
+  "dani.qa_emotional_title": string;
+  "dani.qa_explain_subtitle": string;
+  "dani.qa_explain_title": string;
+  "dani.qa_homework_subtitle": string;
+  "dani.qa_homework_title": string;
+  "dani.qa_label": string;
+  "dani.qa_motivation_subtitle": string;
+  "dani.qa_motivation_title": string;
+  "dani.qa_today_subtitle": string;
+  "dani.qa_today_title": string;
+  "dani.qa_vak_subtitle": string;
+  "dani.qa_vak_title": string;
   "dani.quick_explain": string;
   "dani.quick_help": string;
   "dani.quick_motivate": string;
@@ -585,6 +616,7 @@ export type TranslationKeys = {
   "dani.quick_support": string;
   "dani.quick_vak": string;
   "dani.send": string;
+  "dani.send_aria": string;
   "dani.socratic_label": string;
   "dani.socratic_off": string;
   "dani.socratic_on": string;
@@ -592,9 +624,22 @@ export type TranslationKeys = {
   "dani.status_speaking": string;
   "dani.status_writing": string;
   "dani.streak_label": string;
+  "dani.time_hours": string;
+  "dani.time_min": string;
+  "dani.time_now": string;
   "dani.title": string;
+  "dani.topic_art": string;
+  "dani.topic_english": string;
+  "dani.topic_history": string;
+  "dani.topic_language": string;
+  "dani.topic_math": string;
   "dani.topic_recent": string;
+  "dani.topic_science": string;
+  "dani.topic_technology": string;
+  "dani.typing_status": string;
+  "dani.video_click_to_load": string;
   "dani.video_title": string;
+  "dani.video_watch": string;
   "dani.voice_blocked": string;
   "dani.voice_disable": string;
   "dani.voice_enable": string;
@@ -620,6 +665,7 @@ export type TranslationKeys = {
   "dashboard.day_tue": string;
   "dashboard.day_wed": string;
   "dashboard.days_consecutive": string;
+  "dashboard.exam_btn": string;
   "dashboard.exams_completed": string;
   "dashboard.explore_courses": string;
   "dashboard.global_progress": string;
@@ -746,6 +792,7 @@ export type TranslationKeys = {
   "footer.contact_phone_text": string;
   "footer.copyright": string;
   "footer.docs": string;
+  "footer.email_error": string;
   "footer.email_placeholder": string;
   "footer.ialab": string;
   "footer.methodology": string;
@@ -868,6 +915,11 @@ export type TranslationKeys = {
   "ialab.challenge.intro_3": string;
   "ialab.challenge.intro_4": string;
   "ialab.challenge.intro_5": string;
+  "ialab.challenge.m2.building_for": string;
+  "ialab.challenge.m2.case_label_dev": string;
+  "ialab.challenge.m2.case_label_marketing": string;
+  "ialab.challenge.m2.case_label_support": string;
+  "ialab.challenge.m2.case_step_label": string;
   "ialab.challenge.m2.resource_ova": string;
   "ialab.challenge.m2.resource_pdf": string;
   "ialab.challenge.m2.resource_video": string;
@@ -879,6 +931,11 @@ export type TranslationKeys = {
   "ialab.challenge.m2.step1_case_support_desc": string;
   "ialab.challenge.m2.step1_chars": string;
   "ialab.challenge.m2.step1_desc": string;
+  "ialab.challenge.m2.step1_example_answer": string;
+  "ialab.challenge.m2.step1_req_case": string;
+  "ialab.challenge.m2.step1_req_criteria": string;
+  "ialab.challenge.m2.step1_req_justify": string;
+  "ialab.challenge.m2.step1_req_predictive": string;
   "ialab.challenge.m2.step1_scenario": string;
   "ialab.challenge.m2.step1_select_case": string;
   "ialab.challenge.m2.step1_subtitle": string;
@@ -912,6 +969,11 @@ export type TranslationKeys = {
   "ialab.challenge.m2.step2_knowledge_schema_desc": string;
   "ialab.challenge.m2.step2_preview_empty": string;
   "ialab.challenge.m2.step2_preview_title": string;
+  "ialab.challenge.m2.step2_req_capabilities": string;
+  "ialab.challenge.m2.step2_req_knowledge": string;
+  "ialab.challenge.m2.step2_req_role": string;
+  "ialab.challenge.m2.step2_req_rules": string;
+  "ialab.challenge.m2.step2_req_tone": string;
   "ialab.challenge.m2.step2_role": string;
   "ialab.challenge.m2.step2_role_placeholder": string;
   "ialab.challenge.m2.step2_rules": string;
@@ -941,6 +1003,10 @@ export type TranslationKeys = {
   "ialab.challenge.m2.step3_field_tags": string;
   "ialab.challenge.m2.step3_function_name": string;
   "ialab.challenge.m2.step3_function_name_placeholder": string;
+  "ialab.challenge.m2.step3_generated_note": string;
+  "ialab.challenge.m2.step3_req_data": string;
+  "ialab.challenge.m2.step3_req_name": string;
+  "ialab.challenge.m2.step3_req_return": string;
   "ialab.challenge.m2.step3_return": string;
   "ialab.challenge.m2.step3_return_placeholder": string;
   "ialab.challenge.m2.step3_schema_desc": string;
@@ -1039,6 +1105,7 @@ export type TranslationKeys = {
   "ialab.challenge.m4.step1_title": string;
   "ialab.challenge.m4.step2.doc_context_selected": string;
   "ialab.challenge.m4.step2.no_questions": string;
+  "ialab.challenge.m4.step2.questions_title": string;
   "ialab.challenge.m4.step2.subtitle": string;
   "ialab.challenge.m4.step2.synthesis_desc": string;
   "ialab.challenge.m4.step2.synthesis_placeholder": string;
@@ -1080,6 +1147,7 @@ export type TranslationKeys = {
   "ialab.challenge.m4.step3_howto_title": string;
   "ialab.challenge.m4.step3_title": string;
   "ialab.challenge.m4.step_label": string;
+  "ialab.challenge.m5.researching": string;
   "ialab.challenge.m5.step1.bias_hint": string;
   "ialab.challenge.m5.step1.bias_title": string;
   "ialab.challenge.m5.step1.case_title": string;
@@ -1104,7 +1172,11 @@ export type TranslationKeys = {
   "ialab.challenge.m5.step2.affected_candidates": string;
   "ialab.challenge.m5.step2.affected_company": string;
   "ialab.challenge.m5.step2.affected_society": string;
+  "ialab.challenge.m5.step2.cause_data": string;
+  "ialab.challenge.m5.step2.cause_human": string;
   "ialab.challenge.m5.step2.cause_placeholder": string;
+  "ialab.challenge.m5.step2.cause_process": string;
+  "ialab.challenge.m5.step2.cause_technical": string;
   "ialab.challenge.m5.step2.causes_title": string;
   "ialab.challenge.m5.step2.connect_biases": string;
   "ialab.challenge.m5.step2.impact_candidates": string;
@@ -1160,6 +1232,7 @@ export type TranslationKeys = {
   "ialab.challenge.m5.step3_howto_desc": string;
   "ialab.challenge.m5.step3_howto_title": string;
   "ialab.challenge.m5.step3_title": string;
+  "ialab.challenge.m5.step_label": string;
   "ialab.challenge.minimum_80": string;
   "ialab.challenge.notification_advanced_error": string;
   "ialab.challenge.notification_advanced_started": string;
@@ -1169,6 +1242,8 @@ export type TranslationKeys = {
   "ialab.challenge.section_label_failed": string;
   "ialab.challenge.section_label_passed": string;
   "ialab.challenge.section_label_pending": string;
+  "ialab.challenge.shared.auto_save_saved": string;
+  "ialab.challenge.shared.auto_save_saving": string;
   "ialab.challenge.status_completed": string;
   "ialab.challenge.status_failed": string;
   "ialab.challenge.status_not_passed": string;
@@ -1176,6 +1251,7 @@ export type TranslationKeys = {
   "ialab.challenge.status_pending": string;
   "ialab.challenge.step_completed": string;
   "ialab.challenge.step_completed_desc": string;
+  "ialab.challenge.step_requirements_title": string;
   "ialab.challenge.step_tips_label": string;
   "ialab.challenge.summary_date": string;
   "ialab.challenge.summary_module": string;
@@ -1197,8 +1273,20 @@ export type TranslationKeys = {
   "ialab.challenge_result.no_feedback": string;
   "ialab.challenge_result.no_feedback_stored": string;
   "ialab.challenge_result.title": string;
+  "ialab.competency.distribution": string;
+  "ialab.competency.empty": string;
+  "ialab.competency.level_creator": string;
+  "ialab.competency.level_expert": string;
+  "ialab.competency.level_explorer": string;
+  "ialab.competency.module_label": string;
+  "ialab.competency.overall_level": string;
+  "ialab.competency.overall_value": string;
+  "ialab.competency.strongest": string;
+  "ialab.competency.title": string;
+  "ialab.competency.weakest": string;
   "ialab.completed": string;
   "ialab.completed_pct": string;
+  "ialab.content_completed_toast": string;
   "ialab.continue_banner_cta": string;
   "ialab.continue_banner_lesson": string;
   "ialab.continue_banner_title": string;
@@ -1230,17 +1318,26 @@ export type TranslationKeys = {
   "ialab.daily_challenges.title": string;
   "ialab.daily_plan.challenge_badge": string;
   "ialab.daily_plan.complete": string;
+  "ialab.daily_plan.complete_today": string;
   "ialab.daily_plan.continue": string;
+  "ialab.daily_plan.done_btn": string;
   "ialab.daily_plan.empty_desc": string;
   "ialab.daily_plan.empty_title": string;
   "ialab.daily_plan.morning_streak": string;
   "ialab.daily_plan.next_action": string;
+  "ialab.daily_plan.steps_count": string;
+  "ialab.daily_plan.steps_label": string;
   "ialab.daily_plan.title": string;
+  "ialab.daily_plan.urgency_optional": string;
+  "ialab.daily_plan.urgency_soon": string;
+  "ialab.daily_plan.urgency_today": string;
   "ialab.dashboard.certificates_title": string;
   "ialab.dashboard.completed_at": string;
   "ialab.dashboard.filter_all": string;
   "ialab.dashboard.filter_completed": string;
   "ialab.dashboard.filter_in_progress": string;
+  "ialab.dashboard.no_courses": string;
+  "ialab.dashboard.stats_label": string;
   "ialab.dashboard.view_certificate": string;
   "ialab.error_boundary.details": string;
   "ialab.error_boundary.message": string;
@@ -1326,6 +1423,7 @@ export type TranslationKeys = {
   "ialab.ethics_explorer.welcome_desc": string;
   "ialab.ethics_explorer.yes": string;
   "ialab.evaluation.modal.ai_designing": string;
+  "ialab.evaluation.modal.complete_step_hint": string;
   "ialab.evaluation.modal.dialog_label": string;
   "ialab.evaluation.modal.evaluating": string;
   "ialab.evaluation.modal.exit": string;
@@ -1354,9 +1452,21 @@ export type TranslationKeys = {
   "ialab.evaluation.modal_premium.module_name": string;
   "ialab.evaluation.modal_premium.result_failed": string;
   "ialab.evaluation.modal_premium.result_passed": string;
+  "ialab.evaluation.results.axis_apply": string;
+  "ialab.evaluation.results.axis_create": string;
+  "ialab.evaluation.results.axis_identify": string;
+  "ialab.evaluation.results.axis_synthesize": string;
   "ialab.evaluation.results.back_to_start": string;
+  "ialab.evaluation.results.certificate_final_desc": string;
+  "ialab.evaluation.results.certificate_final_kicker": string;
   "ialab.evaluation.results.challenge_failed": string;
   "ialab.evaluation.results.challenge_passed": string;
+  "ialab.evaluation.results.competence_label": string;
+  "ialab.evaluation.results.competencies_high": string;
+  "ialab.evaluation.results.competencies_label": string;
+  "ialab.evaluation.results.competencies_low": string;
+  "ialab.evaluation.results.competencies_mid": string;
+  "ialab.evaluation.results.competencies_title": string;
   "ialab.evaluation.results.congrats_approved": string;
   "ialab.evaluation.results.cooldown_24h": string;
   "ialab.evaluation.results.detailed_analysis": string;
@@ -1364,6 +1474,7 @@ export type TranslationKeys = {
   "ialab.evaluation.results.exercise_1": string;
   "ialab.evaluation.results.exercise_2": string;
   "ialab.evaluation.results.exercise_3": string;
+  "ialab.evaluation.results.exercise_4": string;
   "ialab.evaluation.results.exercise_breakdown": string;
   "ialab.evaluation.results.exercise_scores": string;
   "ialab.evaluation.results.exercises_completed": string;
@@ -1373,6 +1484,9 @@ export type TranslationKeys = {
   "ialab.evaluation.results.final_grade": string;
   "ialab.evaluation.results.global_score": string;
   "ialab.evaluation.results.grade_registered": string;
+  "ialab.evaluation.results.level_creator": string;
+  "ialab.evaluation.results.level_expert": string;
+  "ialab.evaluation.results.level_explorer": string;
   "ialab.evaluation.results.mastery_high": string;
   "ialab.evaluation.results.mastery_level": string;
   "ialab.evaluation.results.mastery_medium": string;
@@ -1391,6 +1505,7 @@ export type TranslationKeys = {
   "ialab.evaluation.results.passed_status": string;
   "ialab.evaluation.results.performance_analysis": string;
   "ialab.evaluation.results.personalized_recommendations": string;
+  "ialab.evaluation.results.radar_label": string;
   "ialab.evaluation.results.registering_grade": string;
   "ialab.evaluation.results.remaining_attempts": string;
   "ialab.evaluation.results.result_subtitle": string;
@@ -1399,6 +1514,8 @@ export type TranslationKeys = {
   "ialab.evaluation.results.retry_exercise1_hint": string;
   "ialab.evaluation.results.retry_exercise2_hint": string;
   "ialab.evaluation.results.retry_exercise3_hint": string;
+  "ialab.evaluation.results.review_recommended": string;
+  "ialab.evaluation.results.review_recommended_desc": string;
   "ialab.evaluation.results.score_weight_desc": string;
   "ialab.evaluation.results.score_weight_info": string;
   "ialab.evaluation.results.stats_title": string;
@@ -1505,6 +1622,9 @@ export type TranslationKeys = {
   "ialab.evaluation.step3.tab_editor": string;
   "ialab.evaluation.step3.title": string;
   "ialab.evaluation.step3.use_case": string;
+  "ialab.exam_ready_cta": string;
+  "ialab.exam_ready_desc": string;
+  "ialab.exam_ready_title": string;
   "ialab.exam_result.back_to_module": string;
   "ialab.exam_result.cooldown": string;
   "ialab.exam_result.correct": string;
@@ -1826,10 +1946,16 @@ export type TranslationKeys = {
   "ialab.level_badge.level3_name": string;
   "ialab.level_badge.level4_desc": string;
   "ialab.level_badge.level4_name": string;
+  "ialab.loading_timeout_desc": string;
+  "ialab.loading_timeout_retry": string;
+  "ialab.loading_timeout_title": string;
   "ialab.menu_aria": string;
+  "ialab.mobile_info.course_label": string;
+  "ialab.mobile_menu_aria": string;
   "ialab.module.lessons": string;
   "ialab.module.module_label": string;
   "ialab.module.progress_title": string;
+  "ialab.module.resources_badge": string;
   "ialab.module_actions.attempts_left": string;
   "ialab.module_actions.challenge": string;
   "ialab.module_actions.community": string;
@@ -1844,6 +1970,7 @@ export type TranslationKeys = {
   "ialab.module_actions.weight_exam": string;
   "ialab.module_header.module": string;
   "ialab.module_info.composition": string;
+  "ialab.module_info.grade_composition_title": string;
   "ialab.module_info.learning_1": string;
   "ialab.module_info.learning_2": string;
   "ialab.module_info.learning_3": string;
@@ -1853,6 +1980,7 @@ export type TranslationKeys = {
   "ialab.module_info.objective_highlight": string;
   "ialab.module_info.objective_suffix": string;
   "ialab.module_info.objective_title": string;
+  "ialab.module_info.score_label": string;
   "ialab.module_progress": string;
   "ialab.module_progress_bar.challenge": string;
   "ialab.module_progress_bar.challenge_pending": string;
@@ -1870,6 +1998,9 @@ export type TranslationKeys = {
   "ialab.module_roadmap.subtitle": string;
   "ialab.module_roadmap.title": string;
   "ialab.nav_menu_aria": string;
+  "ialab.next_step_content": string;
+  "ialab.next_step_exam_done": string;
+  "ialab.next_step_ready_exam": string;
   "ialab.notif_mobile_aria": string;
   "ialab.notifications_aria": string;
   "ialab.objectives_learn": string;
@@ -2073,17 +2204,21 @@ export type TranslationKeys = {
   "ialab.quiz.exam_retry_alert_attempts": string;
   "ialab.quiz.exam_retry_alert_cooldown": string;
   "ialab.quiz.exit": string;
+  "ialab.quiz.explanation": string;
   "ialab.quiz.failed": string;
   "ialab.quiz.failed_msg": string;
   "ialab.quiz.good_work": string;
   "ialab.quiz.good_work_msg": string;
   "ialab.quiz.improvement_areas": string;
   "ialab.quiz.incorrect_count": string;
+  "ialab.quiz.landed": string;
   "ialab.quiz.mark_review": string;
   "ialab.quiz.marked": string;
   "ialab.quiz.max_violations": string;
   "ialab.quiz.min_score": string;
   "ialab.quiz.next": string;
+  "ialab.quiz.number_label": string;
+  "ialab.quiz.number_result": string;
   "ialab.quiz.options_group": string;
   "ialab.quiz.passed": string;
   "ialab.quiz.passed_msg": string;
@@ -2092,10 +2227,14 @@ export type TranslationKeys = {
   "ialab.quiz.question_count": string;
   "ialab.quiz.retry": string;
   "ialab.quiz.review_answers": string;
+  "ialab.quiz.roulette_label": string;
   "ialab.quiz.security_print": string;
   "ialab.quiz.security_warning_1": string;
   "ialab.quiz.security_warning_2": string;
   "ialab.quiz.security_warning_3": string;
+  "ialab.quiz.source_label": string;
+  "ialab.quiz.spin": string;
+  "ialab.quiz.spin_hint": string;
   "ialab.quiz.submit": string;
   "ialab.quiz.submitting": string;
   "ialab.quiz.sync_error_msg": string;
@@ -2124,6 +2263,20 @@ export type TranslationKeys = {
   "ialab.reactive_prompt.subtitle": string;
   "ialab.reactive_prompt.title": string;
   "ialab.reactive_prompt.write_to_analyze": string;
+  "ialab.reading_mode.controls_aria_close": string;
+  "ialab.reading_mode.controls_aria_open": string;
+  "ialab.reading_mode.font_aria": string;
+  "ialab.reading_mode.font_mono": string;
+  "ialab.reading_mode.font_sans": string;
+  "ialab.reading_mode.font_serif": string;
+  "ialab.reading_mode.font_size_aria": string;
+  "ialab.reading_mode.hide": string;
+  "ialab.reading_mode.reading": string;
+  "ialab.reading_mode.reset_aria": string;
+  "ialab.reading_mode.theme_aria": string;
+  "ialab.reading_mode.theme_dark": string;
+  "ialab.reading_mode.theme_light": string;
+  "ialab.reading_mode.theme_sepia": string;
   "ialab.recommendations.pending_count": string;
   "ialab.recommendations.title": string;
   "ialab.recommendations.toggle_hide": string;
@@ -2190,7 +2343,9 @@ export type TranslationKeys = {
   "ialab.see_more": string;
   "ialab.sidebar_flashcards": string;
   "ialab.sidebar_leaderboard": string;
+  "ialab.sidebar_plan_short": string;
   "ialab.sidebar_practice": string;
+  "ialab.sidebar_progress_short": string;
   "ialab.sidebar_study_plan": string;
   "ialab.signup_back_to_login": string;
   "ialab.signup_feature_1": string;
@@ -2208,7 +2363,11 @@ export type TranslationKeys = {
   "ialab.skip_link": string;
   "ialab.speech.course_completed": string;
   "ialab.speech.module_passed": string;
+  "ialab.start_cta_btn": string;
+  "ialab.start_cta_desc": string;
+  "ialab.start_cta_label": string;
   "ialab.status.locked": string;
+  "ialab.status.locked_hint": string;
   "ialab.status.start_here": string;
   "ialab.status.viewed": string;
   "ialab.streak_calendar.active": string;
@@ -2294,6 +2453,7 @@ export type TranslationKeys = {
   "ialab.synthesizer.metric_context": string;
   "ialab.synthesizer.metric_precision": string;
   "ialab.synthesizer.model": string;
+  "ialab.synthesizer.model_label": string;
   "ialab.synthesizer.optimization_summary": string;
   "ialab.synthesizer.optimized_prompt": string;
   "ialab.synthesizer.original_prompt": string;
@@ -2301,6 +2461,7 @@ export type TranslationKeys = {
   "ialab.synthesizer.prompt_engineering": string;
   "ialab.synthesizer.quality": string;
   "ialab.synthesizer.recent_history": string;
+  "ialab.synthesizer.response_format_label": string;
   "ialab.synthesizer.rol": string;
   "ialab.synthesizer.specificity": string;
   "ialab.synthesizer.structure_label": string;
@@ -2311,11 +2472,13 @@ export type TranslationKeys = {
   "ialab.synthesizer.technical_analysis": string;
   "ialab.synthesizer.technical_analysis_desc": string;
   "ialab.synthesizer.temperature": string;
+  "ialab.synthesizer.temperature_label": string;
   "ialab.synthesizer.terminal_header": string;
   "ialab.synthesizer.title": string;
   "ialab.synthesizer.tokens": string;
   "ialab.synthesizer.total_optimizations": string;
   "ialab.synthesizer.validation_error": string;
+  "ialab.synthesizer.word_char_count": string;
   "ialab.synthesizer_input.chars_count": string;
   "ialab.synthesizer_input.generate_aria": string;
   "ialab.synthesizer_input.generate_btn": string;
@@ -2405,6 +2568,10 @@ export type TranslationKeys = {
   "ialab.tour.welcome_step5_highlight": string;
   "ialab.tour.welcome_step5_title": string;
   "ialab.tour.welcome_step_aria": string;
+  "ialab.traffic_light.close": string;
+  "ialab.traffic_light.fullscreen_enter": string;
+  "ialab.traffic_light.fullscreen_exit": string;
+  "ialab.traffic_light.group_aria": string;
   "ialab.tutorias_virtuales.countdown": string;
   "ialab.tutorias_virtuales.description": string;
   "ialab.tutorias_virtuales.join": string;
@@ -2456,6 +2623,8 @@ export type TranslationKeys = {
   "ialab.valerio.quick_explain_topic": string;
   "ialab.valerio.quick_give_example": string;
   "ialab.valerio.quick_help_challenge": string;
+  "ialab.valerio.quick_micro_plan": string;
+  "ialab.valerio.quick_step_by_step": string;
   "ialab.valerio.quick_study_tips": string;
   "ialab.valerio.send_aria": string;
   "ialab.valerio.short_greeting_high": string;
@@ -2477,6 +2646,8 @@ export type TranslationKeys = {
   "ialab.valerio.voice_stop_aria": string;
   "ialab.valerio_aria": string;
   "ialab.valerio_nudge": string;
+  "ialab.valerio_nudge_return": string;
+  "ialab.valerio_nudge_return_sub": string;
   "ialab.valerio_nudge_sub": string;
   "ialab.valerio_talk": string;
   "ialab.valerio_tooltip": string;
@@ -2535,8 +2706,429 @@ export type TranslationKeys = {
   "ialab.voice_reader.listen": string;
   "ialab.voice_reader.stop": string;
   "ialab.voice_reader.title": string;
+  "ialab.workspace.artesano.card_activities": string;
+  "ialab.workspace.artesano.card_activities_desc": string;
+  "ialab.workspace.artesano.card_content": string;
+  "ialab.workspace.artesano.card_content_desc": string;
+  "ialab.workspace.artesano.card_objectives": string;
+  "ialab.workspace.artesano.card_objectives_desc": string;
+  "ialab.workspace.artesano.card_practice": string;
+  "ialab.workspace.artesano.card_practice_desc": string;
+  "ialab.workspace.artesano.heading": string;
+  "ialab.workspace.artesano.intro_1": string;
+  "ialab.workspace.artesano.intro_2": string;
+  "ialab.workspace.artesano.intro_3": string;
+  "ialab.workspace.artesano.sub": string;
+  "ialab.workspace.chatgpt.card_activities": string;
+  "ialab.workspace.chatgpt.card_activities_desc": string;
+  "ialab.workspace.chatgpt.card_content": string;
+  "ialab.workspace.chatgpt.card_content_desc": string;
+  "ialab.workspace.chatgpt.card_objectives": string;
+  "ialab.workspace.chatgpt.card_objectives_desc": string;
+  "ialab.workspace.chatgpt.card_practice": string;
+  "ialab.workspace.chatgpt.card_practice_desc": string;
+  "ialab.workspace.chatgpt.heading": string;
+  "ialab.workspace.chatgpt.intro_1": string;
+  "ialab.workspace.chatgpt.intro_2": string;
+  "ialab.workspace.chatgpt.intro_3": string;
+  "ialab.workspace.chatgpt.intro_4": string;
+  "ialab.workspace.chatgpt.new_chat": string;
+  "ialab.workspace.chatgpt.sub": string;
+  "ialab.workspace.collapse_panel": string;
+  "ialab.workspace.composer_hint": string;
+  "ialab.workspace.composer_label": string;
+  "ialab.workspace.composer_placeholder": string;
+  "ialab.workspace.composer_send": string;
+  "ialab.workspace.default.new_workshop": string;
+  "ialab.workspace.edit": string;
+  "ialab.workspace.filters": string;
+  "ialab.workspace.gemini.card_content": string;
+  "ialab.workspace.gemini.card_content_desc": string;
+  "ialab.workspace.gemini.card_deep": string;
+  "ialab.workspace.gemini.card_deep_desc": string;
+  "ialab.workspace.gemini.card_explore": string;
+  "ialab.workspace.gemini.card_explore_desc": string;
+  "ialab.workspace.gemini.card_practice": string;
+  "ialab.workspace.gemini.card_practice_desc": string;
+  "ialab.workspace.gemini.heading": string;
+  "ialab.workspace.gemini.intro_desc": string;
+  "ialab.workspace.gemini.intro_title": string;
+  "ialab.workspace.gemini.new_session": string;
+  "ialab.workspace.gemini.recent": string;
+  "ialab.workspace.gemini.sub": string;
+  "ialab.workspace.guardian.card_content": string;
+  "ialab.workspace.guardian.card_content_desc": string;
+  "ialab.workspace.guardian.card_ethics": string;
+  "ialab.workspace.guardian.card_ethics_desc": string;
+  "ialab.workspace.guardian.card_objectives": string;
+  "ialab.workspace.guardian.card_objectives_desc": string;
+  "ialab.workspace.guardian.card_practice": string;
+  "ialab.workspace.guardian.card_practice_desc": string;
+  "ialab.workspace.guardian.heading": string;
+  "ialab.workspace.guardian.intro_1": string;
+  "ialab.workspace.guardian.intro_2": string;
+  "ialab.workspace.guardian.intro_3": string;
+  "ialab.workspace.guardian.sub": string;
+  "ialab.workspace.home": string;
+  "ialab.workspace.more_options": string;
+  "ialab.workspace.nlm.activities": string;
+  "ialab.workspace.nlm.brand": string;
+  "ialab.workspace.nlm.card_challenge": string;
+  "ialab.workspace.nlm.card_challenge_desc": string;
+  "ialab.workspace.nlm.card_content": string;
+  "ialab.workspace.nlm.card_content_desc": string;
+  "ialab.workspace.nlm.card_objectives": string;
+  "ialab.workspace.nlm.card_objectives_desc": string;
+  "ialab.workspace.nlm.card_retos": string;
+  "ialab.workspace.nlm.card_retos_desc": string;
+  "ialab.workspace.nlm.chip_fast": string;
+  "ialab.workspace.nlm.chip_web": string;
+  "ialab.workspace.nlm.empty_cta": string;
+  "ialab.workspace.nlm.empty_desc": string;
+  "ialab.workspace.nlm.empty_title": string;
+  "ialab.workspace.nlm.intro_desc": string;
+  "ialab.workspace.nlm.intro_title": string;
+  "ialab.workspace.nlm.module_label": string;
+  "ialab.workspace.nlm.search_web": string;
+  "ialab.workspace.nlm.start_where": string;
+  "ialab.workspace.nlm.studio_empty_desc": string;
+  "ialab.workspace.nlm.studio_empty_title": string;
+  "ialab.workspace.nlm.tab_chat": string;
+  "ialab.workspace.nlm.tab_sources": string;
+  "ialab.workspace.nlm.tab_studio": string;
+  "ialab.workspace.notebooklm.new_notebook": string;
+  "ialab.workspace.rail_label": string;
+  "ialab.workspace.search": string;
+  "ialab.workspace.simulated": string;
+  "ialab.workspace.simulated_note": string;
+  "ialab.workspace.studio.challenge": string;
+  "ialab.workspace.studio.community": string;
+  "ialab.workspace.studio.exam": string;
+  "ialab.workspace.studio.objective": string;
+  "ialab.workspace.studio.saved": string;
+  "ialab.workspace.studio.tool": string;
+  "ialab.workspace.studio.tutoring": string;
+  "ialab.workspace.toggle_off": string;
+  "ialab.workspace.toggle_on": string;
+  "ialab.workspace.toggle_view_classic": string;
+  "ialab.workspace.toggle_view_tool": string;
+  "ialab.workspace.topics_label": string;
   "ialab.xp_earned": string;
   "ialab.xp_excellent_work": string;
+  "kid.activity.analysis_completed": string;
+  "kid.activity.analyzing_detail": string;
+  "kid.activity.click_select": string;
+  "kid.activity.close": string;
+  "kid.activity.drag_activity": string;
+  "kid.activity.empty_desc": string;
+  "kid.activity.empty_points": string;
+  "kid.activity.empty_title": string;
+  "kid.activity.improvements": string;
+  "kid.activity.modal_aria": string;
+  "kid.activity.my_activities": string;
+  "kid.activity.parsing_detail": string;
+  "kid.activity.points": string;
+  "kid.activity.recommendations": string;
+  "kid.activity.status_analyzed": string;
+  "kid.activity.status_analyzing": string;
+  "kid.activity.status_complete": string;
+  "kid.activity.status_error": string;
+  "kid.activity.status_in_progress": string;
+  "kid.activity.status_parsing": string;
+  "kid.activity.status_pending": string;
+  "kid.activity.status_processing": string;
+  "kid.activity.strengths": string;
+  "kid.activity.subject_arte": string;
+  "kid.activity.subject_ciencias": string;
+  "kid.activity.subject_difficulty": string;
+  "kid.activity.subject_ingles": string;
+  "kid.activity.subject_label": string;
+  "kid.activity.subject_lenguaje": string;
+  "kid.activity.subject_matematicas": string;
+  "kid.activity.subject_sociales": string;
+  "kid.activity.talk_with_dani": string;
+  "kid.activity.upload_title": string;
+  "kid.activity.view_analysis": string;
+  "kid.calendar.aria_new_activity": string;
+  "kid.calendar.cancel": string;
+  "kid.calendar.description_placeholder": string;
+  "kid.calendar.new_activity": string;
+  "kid.calendar.next_month": string;
+  "kid.calendar.prev_month": string;
+  "kid.calendar.save": string;
+  "kid.calendar.title_placeholder": string;
+  "kid.calendar.type_estudio": string;
+  "kid.calendar.type_examen": string;
+  "kid.calendar.type_recordatorio": string;
+  "kid.calendar.type_tarea": string;
+  "kid.calendar.type_tutoria": string;
+  "kid.calendar.type_vak": string;
+  "kid.calendar.vak_tip_auditory": string;
+  "kid.calendar.vak_tip_kinesthetic": string;
+  "kid.calendar.vak_tip_prefix": string;
+  "kid.calendar.vak_tip_visual": string;
+  "kid.crisis.alert_1": string;
+  "kid.crisis.alert_2": string;
+  "kid.crisis.alert_3": string;
+  "kid.crisis.call": string;
+  "kid.crisis.close_aria": string;
+  "kid.crisis.emotional.crisis_text_line": string;
+  "kid.crisis.emotional.crisis_text_line_desc": string;
+  "kid.crisis.emotional.crisis_text_line_value": string;
+  "kid.crisis.emotional.school_counselor": string;
+  "kid.crisis.emotional.school_counselor_desc": string;
+  "kid.crisis.emotional.talk_parents": string;
+  "kid.crisis.emotional.talk_parents_desc": string;
+  "kid.crisis.footer": string;
+  "kid.crisis.immediate.emergencies": string;
+  "kid.crisis.immediate.emergencies_desc": string;
+  "kid.crisis.immediate.friend_phone": string;
+  "kid.crisis.immediate.friend_phone_desc": string;
+  "kid.crisis.immediate.friend_phone_value": string;
+  "kid.crisis.immediate.pas_line": string;
+  "kid.crisis.immediate.pas_line_desc": string;
+  "kid.crisis.reasons.emotions_change": string;
+  "kid.crisis.reasons.emotions_change_desc": string;
+  "kid.crisis.reasons.future_surprises": string;
+  "kid.crisis.reasons.future_surprises_desc": string;
+  "kid.crisis.reasons.life_matters": string;
+  "kid.crisis.reasons.life_matters_desc": string;
+  "kid.crisis.reasons.people_love_you": string;
+  "kid.crisis.reasons.people_love_you_desc": string;
+  "kid.crisis.section_emotional": string;
+  "kid.crisis.section_immediate": string;
+  "kid.crisis.section_reasons": string;
+  "kid.crisis.support_subtitle": string;
+  "kid.crisis.tab_emotional": string;
+  "kid.crisis.tab_immediate": string;
+  "kid.crisis.tab_reasons": string;
+  "kid.crisis.understood_thanks": string;
+  "kid.crisis.we_are_here": string;
+  "kid.curriculum.competencias": string;
+  "kid.curriculum.competencias_count": string;
+  "kid.curriculum.subtitle": string;
+  "kid.curriculum.title": string;
+  "kid.error.go_home": string;
+  "kid.error.message": string;
+  "kid.error.retry": string;
+  "kid.error.title": string;
+  "kid.exam.add_exam": string;
+  "kid.exam.analyzing_material": string;
+  "kid.exam.answer": string;
+  "kid.exam.ask_dani": string;
+  "kid.exam.back": string;
+  "kid.exam.cancel": string;
+  "kid.exam.cards_ready": string;
+  "kid.exam.correct": string;
+  "kid.exam.date_label": string;
+  "kid.exam.days_left": string;
+  "kid.exam.days_remaining": string;
+  "kid.exam.deck_exam_points": string;
+  "kid.exam.deck_exam_title": string;
+  "kid.exam.deck_quiz_desc": string;
+  "kid.exam.desired_grade_label": string;
+  "kid.exam.empty_hint": string;
+  "kid.exam.empty_title": string;
+  "kid.exam.exam_today": string;
+  "kid.exam.generate_deck_exam": string;
+  "kid.exam.generating": string;
+  "kid.exam.guide_questions": string;
+  "kid.exam.improvements": string;
+  "kid.exam.incorrect": string;
+  "kid.exam.meta_label": string;
+  "kid.exam.meta_short": string;
+  "kid.exam.name_label": string;
+  "kid.exam.name_placeholder": string;
+  "kid.exam.new": string;
+  "kid.exam.one_day": string;
+  "kid.exam.review_flashcards": string;
+  "kid.exam.score_correct": string;
+  "kid.exam.strengths": string;
+  "kid.exam.study_plan_title": string;
+  "kid.exam.study_progress": string;
+  "kid.exam.study_tips": string;
+  "kid.exam.subject_arte": string;
+  "kid.exam.subject_ciencias": string;
+  "kid.exam.subject_historia": string;
+  "kid.exam.subject_ingles": string;
+  "kid.exam.subject_label": string;
+  "kid.exam.subject_lenguaje": string;
+  "kid.exam.subject_matematicas": string;
+  "kid.exam.take_deck_exam": string;
+  "kid.exam.title": string;
+  "kid.exam.today": string;
+  "kid.exam.tomorrow": string;
+  "kid.exam.upload_hint": string;
+  "kid.exam.view_detail": string;
+  "kid.flashcards.active_deck": string;
+  "kid.flashcards.add_card": string;
+  "kid.flashcards.add_card_btn": string;
+  "kid.flashcards.back": string;
+  "kid.flashcards.cancel": string;
+  "kid.flashcards.card_back_placeholder": string;
+  "kid.flashcards.card_front_placeholder": string;
+  "kid.flashcards.card_unavailable": string;
+  "kid.flashcards.cards_count": string;
+  "kid.flashcards.cards_label": string;
+  "kid.flashcards.code_copied": string;
+  "kid.flashcards.confidence_1": string;
+  "kid.flashcards.confidence_2": string;
+  "kid.flashcards.confidence_3": string;
+  "kid.flashcards.confidence_4": string;
+  "kid.flashcards.correct_count": string;
+  "kid.flashcards.correct_label": string;
+  "kid.flashcards.create_deck": string;
+  "kid.flashcards.dani_ask": string;
+  "kid.flashcards.dani_read": string;
+  "kid.flashcards.dani_reads_card": string;
+  "kid.flashcards.dani_talk_yes": string;
+  "kid.flashcards.deck_activate": string;
+  "kid.flashcards.deck_active_status": string;
+  "kid.flashcards.deck_description": string;
+  "kid.flashcards.deck_description_placeholder": string;
+  "kid.flashcards.deck_name": string;
+  "kid.flashcards.deck_name_placeholder": string;
+  "kid.flashcards.definition_label": string;
+  "kid.flashcards.definition_short": string;
+  "kid.flashcards.dismiss": string;
+  "kid.flashcards.edit_deck": string;
+  "kid.flashcards.example_label": string;
+  "kid.flashcards.generate_btn": string;
+  "kid.flashcards.generate_title": string;
+  "kid.flashcards.generating": string;
+  "kid.flashcards.generating_for": string;
+  "kid.flashcards.grade_10_12": string;
+  "kid.flashcards.grade_1_3": string;
+  "kid.flashcards.grade_4_6": string;
+  "kid.flashcards.grade_7_9": string;
+  "kid.flashcards.grade_label_10_12": string;
+  "kid.flashcards.grade_label_1_3": string;
+  "kid.flashcards.grade_label_4_6": string;
+  "kid.flashcards.grade_label_7_9": string;
+  "kid.flashcards.import_btn": string;
+  "kid.flashcards.import_deck": string;
+  "kid.flashcards.keyword_label": string;
+  "kid.flashcards.my_decks_title": string;
+  "kid.flashcards.new_deck": string;
+  "kid.flashcards.new_deck_btn": string;
+  "kid.flashcards.no_decks": string;
+  "kid.flashcards.no_decks_hint": string;
+  "kid.flashcards.not_understood": string;
+  "kid.flashcards.related_terms_label": string;
+  "kid.flashcards.retry": string;
+  "kid.flashcards.reviewed_label": string;
+  "kid.flashcards.save_changes": string;
+  "kid.flashcards.scan_error": string;
+  "kid.flashcards.scan_generate": string;
+  "kid.flashcards.scan_grade_10_12": string;
+  "kid.flashcards.scan_grade_1_3": string;
+  "kid.flashcards.scan_grade_4_6": string;
+  "kid.flashcards.scan_grade_7_9": string;
+  "kid.flashcards.scan_or_text": string;
+  "kid.flashcards.scan_pdf": string;
+  "kid.flashcards.scan_processing": string;
+  "kid.flashcards.scan_stage_cards": string;
+  "kid.flashcards.scan_stage_reading": string;
+  "kid.flashcards.scan_stage_summary": string;
+  "kid.flashcards.scan_subtitle": string;
+  "kid.flashcards.scan_summary_generated": string;
+  "kid.flashcards.scan_title": string;
+  "kid.flashcards.scan_topic_placeholder": string;
+  "kid.flashcards.scan_upload": string;
+  "kid.flashcards.select_grade": string;
+  "kid.flashcards.share_deck": string;
+  "kid.flashcards.stop": string;
+  "kid.flashcards.streak_count": string;
+  "kid.flashcards.studied_count": string;
+  "kid.flashcards.study": string;
+  "kid.flashcards.study_again": string;
+  "kid.flashcards.study_completed": string;
+  "kid.flashcards.tab_exam": string;
+  "kid.flashcards.tab_flashcards": string;
+  "kid.flashcards.tab_oral": string;
+  "kid.flashcards.tap_or_swipe": string;
+  "kid.flashcards.tap_to_reveal": string;
+  "kid.flashcards.term_label": string;
+  "kid.flashcards.topic_placeholder": string;
+  "kid.flashcards.two_player_mode": string;
+  "kid.flashcards.understood": string;
+  "kid.flashcards.write_topic": string;
+  "kid.grades.add_subject": string;
+  "kid.grades.analyze_btn": string;
+  "kid.grades.analyzing": string;
+  "kid.grades.average": string;
+  "kid.grades.boletin_hint": string;
+  "kid.grades.dani_says": string;
+  "kid.grades.doc_subject": string;
+  "kid.grades.doc_title": string;
+  "kid.grades.error_analyze": string;
+  "kid.grades.error_no_grades": string;
+  "kid.grades.error_read": string;
+  "kid.grades.extracting": string;
+  "kid.grades.go_flashcards": string;
+  "kid.grades.my_notes": string;
+  "kid.grades.strengths": string;
+  "kid.grades.study_plan": string;
+  "kid.grades.subject_arte": string;
+  "kid.grades.subject_ciencias": string;
+  "kid.grades.subject_educacion_fisica": string;
+  "kid.grades.subject_ingles": string;
+  "kid.grades.subject_lenguaje": string;
+  "kid.grades.subject_matematicas": string;
+  "kid.grades.subject_sociales": string;
+  "kid.grades.subject_tecnologia": string;
+  "kid.grades.subtitle": string;
+  "kid.grades.tab_image": string;
+  "kid.grades.tab_manual": string;
+  "kid.grades.talk_about_plan": string;
+  "kid.grades.title": string;
+  "kid.grades.to_improve": string;
+  "kid.grades.upload_boletin": string;
+  "kid.grades.week": string;
+  "kid.hero.action_exams_hint": string;
+  "kid.hero.action_exams_label": string;
+  "kid.hero.action_flashcards_hint": string;
+  "kid.hero.action_flashcards_label": string;
+  "kid.hero.action_grades_hint": string;
+  "kid.hero.action_grades_label": string;
+  "kid.hero.action_oral_hint": string;
+  "kid.hero.action_oral_label": string;
+  "kid.hero.active_deck": string;
+  "kid.hero.continue": string;
+  "kid.hero.discover_style": string;
+  "kid.hero.greeting_afternoon": string;
+  "kid.hero.greeting_evening": string;
+  "kid.hero.greeting_morning": string;
+  "kid.hero.here_for_you": string;
+  "kid.hero.points": string;
+  "kid.hero.power_auditory": string;
+  "kid.hero.power_kinesthetic": string;
+  "kid.hero.power_visual": string;
+  "kid.hero.talk_with_dani": string;
+  "kid.hero.title_after": string;
+  "kid.hero.title_before": string;
+  "kid.hero.unique_style": string;
+  "kid.hero.your_style": string;
+  "kid.mision.aria_label": string;
+  "kid.mision.complete_mission": string;
+  "kid.mision.earn_up_to": string;
+  "kid.mision.streak_many": string;
+  "kid.mision.streak_one": string;
+  "kid.mision.subject_percent": string;
+  "kid.mision.subject_progress": string;
+  "kid.mision.subject_start": string;
+  "kid.mision.title": string;
+  "kid.mision.vak_audio_subtitle": string;
+  "kid.mision.vak_audio_title": string;
+  "kid.mision.vak_kine_subtitle": string;
+  "kid.mision.vak_kine_title": string;
+  "kid.mision.vak_subtitle": string;
+  "kid.mision.vak_title": string;
+  "kid.mision.vak_visual_subtitle": string;
+  "kid.mision.vak_visual_title": string;
+  "kid.news.category_dani-tips": string;
+  "kid.news.category_did-you-know": string;
+  "kid.news.category_new-tools": string;
   "kid.news.empty_category": string;
   "kid.news.featured_badge": string;
   "kid.news.filter_all": string;
@@ -2561,6 +3153,18 @@ export type TranslationKeys = {
   "kid.personalized_plan.title": string;
   "kid.personalized_plan.title_empty": string;
   "kid.personalized_plan.weekly_plan_title": string;
+  "kid.podcast.duration_fallback": string;
+  "kid.podcast.generate_btn": string;
+  "kid.podcast.generating": string;
+  "kid.podcast.points_desc": string;
+  "kid.podcast.role_host": string;
+  "kid.podcast.role_tip": string;
+  "kid.podcast.role_tip_prefix": string;
+  "kid.podcast.subtitle": string;
+  "kid.podcast.text_label": string;
+  "kid.podcast.textarea_placeholder": string;
+  "kid.podcast.title": string;
+  "kid.podcast.title_fallback": string;
   "kid.points_rewards.action_active_minute": string;
   "kid.points_rewards.action_complete_mission": string;
   "kid.points_rewards.action_complete_subject": string;
@@ -2581,13 +3185,97 @@ export type TranslationKeys = {
   "kid.points_rewards.tab_points": string;
   "kid.points_rewards.tab_store": string;
   "kid.points_rewards.your_points": string;
+  "kid.premium.keep_exploring": string;
+  "kid.premium.opening": string;
+  "kid.premium.unlock": string;
+  "kid.scanner.ask_dani": string;
+  "kid.scanner.diff_advanced": string;
+  "kid.scanner.diff_basic": string;
+  "kid.scanner.diff_intermediate": string;
+  "kid.scanner.example": string;
+  "kid.scanner.key_concepts": string;
+  "kid.scanner.material_alt": string;
+  "kid.scanner.new": string;
+  "kid.scanner.overview": string;
+  "kid.scanner.remember": string;
+  "kid.scanner.teacher_summary": string;
+  "kid.scanner.teacher_summary_subject": string;
+  "kid.smartbook.analyze": string;
+  "kid.smartbook.close": string;
+  "kid.smartbook.create_another": string;
+  "kid.smartbook.empty_desc": string;
+  "kid.smartbook.empty_title": string;
+  "kid.smartbook.history": string;
+  "kid.smartbook.key_concepts": string;
+  "kid.smartbook.or": string;
+  "kid.smartbook.paste_text": string;
+  "kid.smartbook.sections": string;
+  "kid.smartbook.step_analyzing": string;
+  "kid.smartbook.step_extracting": string;
+  "kid.smartbook.step_organizing": string;
+  "kid.smartbook.stepbar_analyzing": string;
+  "kid.smartbook.stepbar_extracting": string;
+  "kid.smartbook.stepbar_organizing": string;
+  "kid.smartbook.subtitle": string;
+  "kid.smartbook.summary": string;
+  "kid.smartbook.textarea_placeholder": string;
+  "kid.smartbook.title": string;
+  "kid.smartbook.upload_file": string;
+  "kid.user.age": string;
+  "kid.user.age_placeholder": string;
+  "kid.user.age_value": string;
+  "kid.user.avatar_invalid": string;
+  "kid.user.avatar_remove": string;
+  "kid.user.avatar_saved": string;
+  "kid.user.avatar_too_big": string;
+  "kid.user.avatar_update": string;
+  "kid.user.avatar_upload": string;
+  "kid.user.cancel": string;
+  "kid.user.edit_profile": string;
+  "kid.user.edit_profile_title": string;
+  "kid.user.fullname": string;
+  "kid.user.fullname_placeholder": string;
+  "kid.user.grade": string;
+  "kid.user.grade_placeholder": string;
+  "kid.user.load_error": string;
+  "kid.user.loading": string;
+  "kid.user.logout": string;
+  "kid.user.no_profile_data": string;
+  "kid.user.not_detected": string;
+  "kid.user.not_specified": string;
+  "kid.user.not_specified_age": string;
+  "kid.user.open_menu": string;
+  "kid.user.progress": string;
+  "kid.user.save": string;
+  "kid.user.save_error": string;
+  "kid.user.saved": string;
+  "kid.user.saving": string;
+  "kid.user.school": string;
+  "kid.user.school_placeholder": string;
+  "kid.user.select_vak": string;
+  "kid.user.smartboard_profile": string;
+  "kid.user.student": string;
+  "kid.user.vak_placeholder": string;
+  "kid.user.vak_type": string;
   "kid.vak.diagnostic_title": string;
+  "kid.vak.rec_auditory": string;
+  "kid.vak.rec_kinesthetic": string;
+  "kid.vak.rec_visual": string;
   "kid.vak.result_message": string;
   "kid.vak.result_subtitle": string;
   "kid.vak.result_title": string;
   "kid.vak.style_auditory": string;
   "kid.vak.style_kinesthetic": string;
   "kid.vak.style_visual": string;
+  "kid.vak.tip_auditory_1": string;
+  "kid.vak.tip_auditory_2": string;
+  "kid.vak.tip_auditory_3": string;
+  "kid.vak.tip_kinesthetic_1": string;
+  "kid.vak.tip_kinesthetic_2": string;
+  "kid.vak.tip_kinesthetic_3": string;
+  "kid.vak.tip_visual_1": string;
+  "kid.vak.tip_visual_2": string;
+  "kid.vak.tip_visual_3": string;
   "leadCapture.context_courses": string;
   "leadCapture.context_default": string;
   "leadCapture.context_diagnosis": string;
@@ -2609,9 +3297,12 @@ export type TranslationKeys = {
   "leaderboard.badges": string;
   "leaderboard.empty": string;
   "leaderboard.empty_hint": string;
+  "leaderboard.period_global": string;
+  "leaderboard.period_weekly": string;
   "leaderboard.position": string;
   "leaderboard.streak": string;
   "leaderboard.title": string;
+  "leaderboard.weekly_empty": string;
   "leaderboard.you_label": string;
   "loading.feature_ai": string;
   "loading.feature_cert": string;
@@ -2622,19 +3313,52 @@ export type TranslationKeys = {
   "loading.status_vak": string;
   "login.button.signin": string;
   "login.button.signing_in": string;
+  "login.create_my_account": string;
+  "login.create_parent_account": string;
   "login.email": string;
   "login.email_or_username": string;
   "login.email_or_username_placeholder": string;
+  "login.enter_as_parent": string;
+  "login.enter_smartboard": string;
   "login.error.connection": string;
   "login.error.email_not_confirmed": string;
   "login.error.email_required_for_reset": string;
   "login.error.invalid_credentials": string;
+  "login.error.login_failed": string;
   "login.error.oauth_account": string;
+  "login.error.register_failed": string;
   "login.forgot_password": string;
+  "login.has_account_footer": string;
+  "login.label.email": string;
+  "login.label.first_name": string;
+  "login.label.invitation_code": string;
+  "login.label.last_name": string;
+  "login.label.parent_full_name": string;
+  "login.label.parent_password": string;
+  "login.label.student_email": string;
   "login.no_account": string;
+  "login.no_account_footer": string;
+  "login.parent_hint": string;
+  "login.parent_no_account": string;
+  "login.parent_register_hint": string;
   "login.password": string;
+  "login.password_min_length": string;
+  "login.placeholder.first_name": string;
+  "login.placeholder.invitation_code": string;
+  "login.placeholder.last_name": string;
+  "login.placeholder.parent_full_name": string;
+  "login.placeholder.parent_password": string;
+  "login.placeholder.username": string;
   "login.reset_email_sent": string;
+  "login.retrying": string;
   "login.signup_link": string;
+  "login.subtitle": string;
+  "login.success.account_created": string;
+  "login.success.email_confirmation": string;
+  "login.tab.create_account": string;
+  "login.tab.parent": string;
+  "login.tab.register": string;
+  "login.tab.student": string;
   "metodo.cta_text": string;
   "metodo.form_email_label": string;
   "metodo.form_email_placeholder": string;
@@ -2753,6 +3477,10 @@ export type TranslationKeys = {
   "modals.certificates.my_courses_title": string;
   "modals.certificates.name_label": string;
   "modals.certificates.name_placeholder": string;
+  "modals.certificates.req_global": string;
+  "modals.certificates.req_module_score": string;
+  "modals.certificates.req_modules_done": string;
+  "modals.certificates.requirements_not_met": string;
   "modals.certificates.start_course": string;
   "modals.certificates.start_course_desc": string;
   "modals.certificates.student_fallback": string;
@@ -2848,6 +3576,45 @@ export type TranslationKeys = {
   "nav.send_message": string;
   "nav.smartboard": string;
   "nav.whatsapp": string;
+  "nico.appointment_saved_desc": string;
+  "nico.appointment_saved_title": string;
+  "nico.audio_blocked": string;
+  "nico.audio_enabled": string;
+  "nico.audio_off": string;
+  "nico.audio_on": string;
+  "nico.cache_cleared": string;
+  "nico.clear_cache": string;
+  "nico.clear_conversation": string;
+  "nico.close": string;
+  "nico.close_chat_aria": string;
+  "nico.empty_description": string;
+  "nico.empty_hint": string;
+  "nico.empty_subtitle": string;
+  "nico.farewell_tts": string;
+  "nico.free_class_tts": string;
+  "nico.greeting": string;
+  "nico.greeting_tts": string;
+  "nico.hide_suggestions": string;
+  "nico.input_hint": string;
+  "nico.input_placeholder": string;
+  "nico.lead_saved_desc": string;
+  "nico.lead_saved_title": string;
+  "nico.listen_response": string;
+  "nico.loading_calendar": string;
+  "nico.loading_form": string;
+  "nico.new_conversation": string;
+  "nico.new_conversation_aria": string;
+  "nico.open_chat_aria": string;
+  "nico.question_meet_tutors": string;
+  "nico.question_vak_test": string;
+  "nico.show_suggestions": string;
+  "nico.stop_recording": string;
+  "nico.stop_voice": string;
+  "nico.suggestions_label": string;
+  "nico.support_subtitle": string;
+  "nico.talk_to_nico": string;
+  "nico.typing": string;
+  "nico.you_label": string;
   "notfound.button": string;
   "notification.clear_all": string;
   "notification.close_aria": string;
@@ -2875,6 +3642,43 @@ export type TranslationKeys = {
   "notification.type_lesson_reminder": string;
   "notification.type_module_complete": string;
   "notification.unread_count": string;
+  "oral.active_deck": string;
+  "oral.answer_continue": string;
+  "oral.answer_placeholder": string;
+  "oral.cards_count": string;
+  "oral.change_topic": string;
+  "oral.chat_placeholder": string;
+  "oral.correct": string;
+  "oral.correct_count": string;
+  "oral.difficulty_dificil": string;
+  "oral.difficulty_facil": string;
+  "oral.difficulty_medio": string;
+  "oral.finish_exam": string;
+  "oral.generating_questions": string;
+  "oral.go_flashcards": string;
+  "oral.im_ready_exam": string;
+  "oral.incorrect": string;
+  "oral.loading": string;
+  "oral.multiple_choice": string;
+  "oral.open_question": string;
+  "oral.pick_subject": string;
+  "oral.points_desc": string;
+  "oral.ready_final_exam": string;
+  "oral.review_again": string;
+  "oral.reviewing_deck": string;
+  "oral.select_difficulty": string;
+  "oral.start_review": string;
+  "oral.subject_ciencias": string;
+  "oral.subject_ingles": string;
+  "oral.subject_lenguaje": string;
+  "oral.subject_matematicas": string;
+  "oral.subject_sociales": string;
+  "oral.subtitle_no_deck": string;
+  "oral.talk_with_dani": string;
+  "oral.tip_desc": string;
+  "oral.tip_label": string;
+  "oral.title": string;
+  "oral.xp_earned": string;
   "ova.automation.analyze_workflow": string;
   "ova.automation.analyzed": string;
   "ova.automation.badge": string;
@@ -3827,6 +4631,196 @@ export type TranslationKeys = {
   "page_loader.projects": string;
   "page_loader.redirect": string;
   "page_loader.vak": string;
+  "parent_dashboard.a_subject": string;
+  "parent_dashboard.achieved_subtitle": string;
+  "parent_dashboard.achieved_title": string;
+  "parent_dashboard.active_time": string;
+  "parent_dashboard.activity_fallback": string;
+  "parent_dashboard.advanced_subjects": string;
+  "parent_dashboard.alert_points_today": string;
+  "parent_dashboard.alert_streak_days": string;
+  "parent_dashboard.alert_unexplored": string;
+  "parent_dashboard.avg_progress": string;
+  "parent_dashboard.cloud": string;
+  "parent_dashboard.connected_now": string;
+  "parent_dashboard.controls_dani_chat": string;
+  "parent_dashboard.controls_dani_description": string;
+  "parent_dashboard.controls_dani_header": string;
+  "parent_dashboard.controls_description": string;
+  "parent_dashboard.controls_no_limit": string;
+  "parent_dashboard.controls_save": string;
+  "parent_dashboard.controls_saved": string;
+  "parent_dashboard.controls_saving": string;
+  "parent_dashboard.controls_time_limit": string;
+  "parent_dashboard.controls_time_limit_description": string;
+  "parent_dashboard.controls_title": string;
+  "parent_dashboard.controls_tools_count": string;
+  "parent_dashboard.controls_tools_header": string;
+  "parent_dashboard.current_streak": string;
+  "parent_dashboard.disconnected": string;
+  "parent_dashboard.emotional_pulse": string;
+  "parent_dashboard.feature_1": string;
+  "parent_dashboard.feature_2": string;
+  "parent_dashboard.feature_3": string;
+  "parent_dashboard.feature_4": string;
+  "parent_dashboard.feature_5": string;
+  "parent_dashboard.feature_6": string;
+  "parent_dashboard.feature_challenges": string;
+  "parent_dashboard.feature_flashcards": string;
+  "parent_dashboard.feature_grades": string;
+  "parent_dashboard.feature_missions": string;
+  "parent_dashboard.feature_oral": string;
+  "parent_dashboard.feature_podcast": string;
+  "parent_dashboard.feature_practice_exams": string;
+  "parent_dashboard.feature_vak": string;
+  "parent_dashboard.header_greeting": string;
+  "parent_dashboard.hours_ago": string;
+  "parent_dashboard.how_learns": string;
+  "parent_dashboard.last_activity_label": string;
+  "parent_dashboard.last_connection_label": string;
+  "parent_dashboard.learns_best": string;
+  "parent_dashboard.level_avanzado": string;
+  "parent_dashboard.level_experto": string;
+  "parent_dashboard.level_intermedio": string;
+  "parent_dashboard.level_maestro": string;
+  "parent_dashboard.level_principiante": string;
+  "parent_dashboard.live": string;
+  "parent_dashboard.local": string;
+  "parent_dashboard.logout": string;
+  "parent_dashboard.longest_streak": string;
+  "parent_dashboard.longest_streak_desc": string;
+  "parent_dashboard.minutes_ago": string;
+  "parent_dashboard.minutes_total_label": string;
+  "parent_dashboard.missions": string;
+  "parent_dashboard.missions_completed": string;
+  "parent_dashboard.missions_completed_pct": string;
+  "parent_dashboard.missions_done": string;
+  "parent_dashboard.monitoring": string;
+  "parent_dashboard.nav_actividad": string;
+  "parent_dashboard.nav_bienestar": string;
+  "parent_dashboard.nav_controles": string;
+  "parent_dashboard.nav_plan": string;
+  "parent_dashboard.nav_progreso": string;
+  "parent_dashboard.nav_recursos": string;
+  "parent_dashboard.nav_resumen": string;
+  "parent_dashboard.no_activity": string;
+  "parent_dashboard.now": string;
+  "parent_dashboard.offline": string;
+  "parent_dashboard.panel_title": string;
+  "parent_dashboard.parent_fallback": string;
+  "parent_dashboard.parent_role": string;
+  "parent_dashboard.points_earned": string;
+  "parent_dashboard.progress_by_subject": string;
+  "parent_dashboard.report_child": string;
+  "parent_dashboard.report_failed": string;
+  "parent_dashboard.report_login_required": string;
+  "parent_dashboard.report_no_data": string;
+  "parent_dashboard.report_offline": string;
+  "parent_dashboard.report_send": string;
+  "parent_dashboard.report_sending": string;
+  "parent_dashboard.report_sent": string;
+  "parent_dashboard.report_sent_short": string;
+  "parent_dashboard.report_sent_to": string;
+  "parent_dashboard.report_weekly_desc": string;
+  "parent_dashboard.report_weekly_title": string;
+  "parent_dashboard.resources_book1_desc": string;
+  "parent_dashboard.resources_book1_title": string;
+  "parent_dashboard.resources_book2_desc": string;
+  "parent_dashboard.resources_book2_title": string;
+  "parent_dashboard.resources_book3_desc": string;
+  "parent_dashboard.resources_book3_title": string;
+  "parent_dashboard.resources_books_title": string;
+  "parent_dashboard.resources_free": string;
+  "parent_dashboard.resources_freq_biweekly": string;
+  "parent_dashboard.resources_freq_weekly": string;
+  "parent_dashboard.resources_podcast1_desc": string;
+  "parent_dashboard.resources_podcast1_title": string;
+  "parent_dashboard.resources_podcast2_desc": string;
+  "parent_dashboard.resources_podcast2_title": string;
+  "parent_dashboard.resources_podcast3_desc": string;
+  "parent_dashboard.resources_podcast3_title": string;
+  "parent_dashboard.resources_podcasts_title": string;
+  "parent_dashboard.resources_premium": string;
+  "parent_dashboard.resources_tool1_desc": string;
+  "parent_dashboard.resources_tool2_desc": string;
+  "parent_dashboard.resources_tool3_desc": string;
+  "parent_dashboard.resources_tool4_desc": string;
+  "parent_dashboard.resources_tools_title": string;
+  "parent_dashboard.resources_vak_auditivo_tip1": string;
+  "parent_dashboard.resources_vak_auditivo_tip2": string;
+  "parent_dashboard.resources_vak_auditivo_tip3": string;
+  "parent_dashboard.resources_vak_auditivo_title": string;
+  "parent_dashboard.resources_vak_how": string;
+  "parent_dashboard.resources_vak_kinestesico_tip1": string;
+  "parent_dashboard.resources_vak_kinestesico_tip2": string;
+  "parent_dashboard.resources_vak_kinestesico_tip3": string;
+  "parent_dashboard.resources_vak_kinestesico_title": string;
+  "parent_dashboard.resources_vak_pending": string;
+  "parent_dashboard.resources_vak_visual_tip1": string;
+  "parent_dashboard.resources_vak_visual_tip2": string;
+  "parent_dashboard.resources_vak_visual_tip3": string;
+  "parent_dashboard.resources_vak_visual_title": string;
+  "parent_dashboard.resources_weekly_tip_body1": string;
+  "parent_dashboard.resources_weekly_tip_body2": string;
+  "parent_dashboard.resources_weekly_tip_citation": string;
+  "parent_dashboard.resources_weekly_tip_strong": string;
+  "parent_dashboard.resources_weekly_tip_title": string;
+  "parent_dashboard.seo_desc": string;
+  "parent_dashboard.seo_title": string;
+  "parent_dashboard.sessions_today": string;
+  "parent_dashboard.source_backend": string;
+  "parent_dashboard.source_local": string;
+  "parent_dashboard.source_supabase": string;
+  "parent_dashboard.streak_days_consecutive": string;
+  "parent_dashboard.streak_label": string;
+  "parent_dashboard.student_status": string;
+  "parent_dashboard.student_studying": string;
+  "parent_dashboard.study_habits": string;
+  "parent_dashboard.study_hours": string;
+  "parent_dashboard.studying_now": string;
+  "parent_dashboard.studying_subject": string;
+  "parent_dashboard.subjects_count": string;
+  "parent_dashboard.subjects_of": string;
+  "parent_dashboard.subjects_with_progress": string;
+  "parent_dashboard.subscription_includes": string;
+  "parent_dashboard.tab_actividades": string;
+  "parent_dashboard.tab_analitica": string;
+  "parent_dashboard.tab_calendario": string;
+  "parent_dashboard.tab_curriculo": string;
+  "parent_dashboard.tab_escaner": string;
+  "parent_dashboard.tab_examenes": string;
+  "parent_dashboard.tab_flashcards": string;
+  "parent_dashboard.tab_inicio": string;
+  "parent_dashboard.tab_libros": string;
+  "parent_dashboard.tab_materias": string;
+  "parent_dashboard.tab_misiones": string;
+  "parent_dashboard.tab_noticias": string;
+  "parent_dashboard.tab_oral": string;
+  "parent_dashboard.tab_podcast": string;
+  "parent_dashboard.tab_progreso": string;
+  "parent_dashboard.tab_vak": string;
+  "parent_dashboard.time_studied": string;
+  "parent_dashboard.tip_for_you": string;
+  "parent_dashboard.total_time_desc": string;
+  "parent_dashboard.total_time_invested": string;
+  "parent_dashboard.vak_auditivo_style": string;
+  "parent_dashboard.vak_kinestesico_style": string;
+  "parent_dashboard.vak_predominant": string;
+  "parent_dashboard.vak_visual_style": string;
+  "parent_dashboard.wellbeing_attention_title": string;
+  "parent_dashboard.wellbeing_badge": string;
+  "parent_dashboard.wellbeing_calm_desc": string;
+  "parent_dashboard.wellbeing_calm_title": string;
+  "parent_dashboard.wellbeing_last_alert": string;
+  "parent_dashboard.wellness_bien": string;
+  "parent_dashboard.wellness_bien_tip": string;
+  "parent_dashboard.wellness_excelente": string;
+  "parent_dashboard.wellness_excelente_tip": string;
+  "parent_dashboard.wellness_regular": string;
+  "parent_dashboard.wellness_regular_tip": string;
+  "parent_dashboard.wellness_sin_actividad": string;
+  "parent_dashboard.wellness_sin_actividad_tip": string;
+  "parent_dashboard.your_child": string;
   "pricing.annual": string;
   "pricing.badge": string;
   "pricing.cta_button": string;
@@ -3992,6 +4986,8 @@ export type TranslationKeys = {
   "scanner.summary_title": string;
   "seo.automation.desc": string;
   "seo.automation.title": string;
+  "seo.certificate_verify.desc": string;
+  "seo.certificate_verify.title": string;
   "seo.consultoria.desc": string;
   "seo.consultoria.title": string;
   "seo.consultoria_b2b.desc": string;
@@ -4248,6 +5244,9 @@ export type TranslationKeys = {
   "smartboard.landing_tranquility_desc": string;
   "smartboard.landing_tranquility_title_line1": string;
   "smartboard.landing_tranquility_title_line2": string;
+  "smartboard.landing_trial_terms": string;
+  "smartboard.landing_trust_badge": string;
+  "smartboard.landing_trust_subtitle": string;
   "smartboard.landing_vak_badge": string;
   "smartboard.landing_vak_desc": string;
   "smartboard.landing_vak_title": string;
@@ -4438,11 +5437,11 @@ export type TranslationKeys = {
   "study_groups.no_groups": string;
   "study_groups.subtitle": string;
   "study_groups.title": string;
-  time_avg: string;
-  time_days_active: string;
-  time_title: string;
-  time_today: string;
-  time_week: string;
+  "time_avg": string;
+  "time_days_active": string;
+  "time_title": string;
+  "time_today": string;
+  "time_week": string;
   "vak.ui.accept_and_continue": string;
   "vak.ui.accept_data_policy": string;
   "vak.ui.accessibility_label": string;
@@ -5021,6 +6020,19 @@ const translationKeySet: Record<string, true> = {
   "certificate.title_pdf": true,
   "certificate.verified_pdf": true,
   "certificate.verified_seal": true,
+  "certificate_verify.back_home": true,
+  "certificate_verify.course": true,
+  "certificate_verify.course_name": true,
+  "certificate_verify.holder": true,
+  "certificate_verify.invalid_desc": true,
+  "certificate_verify.issued": true,
+  "certificate_verify.loading": true,
+  "certificate_verify.not_found_desc": true,
+  "certificate_verify.number": true,
+  "certificate_verify.score": true,
+  "certificate_verify.title": true,
+  "certificate_verify.unavailable_desc": true,
+  "certificate_verify.valid_title": true,
   "chatbot.close": true,
   "chatbot.error": true,
   "chatbot.greeting": true,
@@ -5202,6 +6214,7 @@ const translationKeySet: Record<string, true> = {
   "dani.chart_title": true,
   "dani.chat_placeholder": true,
   "dani.chat_title": true,
+  "dani.clear_aria": true,
   "dani.close": true,
   "dani.conversation_count": true,
   "dani.crisis_line1": true,
@@ -5217,11 +6230,28 @@ const translationKeySet: Record<string, true> = {
   "dani.error_generic": true,
   "dani.error_network": true,
   "dani.error_timeout": true,
+  "dani.helper_text": true,
+  "dani.input_aria": true,
   "dani.messages_label": true,
   "dani.mic_start": true,
+  "dani.mic_start_aria": true,
   "dani.mic_stop": true,
+  "dani.mic_stop_aria": true,
   "dani.mood_label": true,
   "dani.placeholder": true,
+  "dani.qa_emotional_subtitle": true,
+  "dani.qa_emotional_title": true,
+  "dani.qa_explain_subtitle": true,
+  "dani.qa_explain_title": true,
+  "dani.qa_homework_subtitle": true,
+  "dani.qa_homework_title": true,
+  "dani.qa_label": true,
+  "dani.qa_motivation_subtitle": true,
+  "dani.qa_motivation_title": true,
+  "dani.qa_today_subtitle": true,
+  "dani.qa_today_title": true,
+  "dani.qa_vak_subtitle": true,
+  "dani.qa_vak_title": true,
   "dani.quick_explain": true,
   "dani.quick_help": true,
   "dani.quick_motivate": true,
@@ -5229,6 +6259,7 @@ const translationKeySet: Record<string, true> = {
   "dani.quick_support": true,
   "dani.quick_vak": true,
   "dani.send": true,
+  "dani.send_aria": true,
   "dani.socratic_label": true,
   "dani.socratic_off": true,
   "dani.socratic_on": true,
@@ -5236,9 +6267,22 @@ const translationKeySet: Record<string, true> = {
   "dani.status_speaking": true,
   "dani.status_writing": true,
   "dani.streak_label": true,
+  "dani.time_hours": true,
+  "dani.time_min": true,
+  "dani.time_now": true,
   "dani.title": true,
+  "dani.topic_art": true,
+  "dani.topic_english": true,
+  "dani.topic_history": true,
+  "dani.topic_language": true,
+  "dani.topic_math": true,
   "dani.topic_recent": true,
+  "dani.topic_science": true,
+  "dani.topic_technology": true,
+  "dani.typing_status": true,
+  "dani.video_click_to_load": true,
   "dani.video_title": true,
+  "dani.video_watch": true,
   "dani.voice_blocked": true,
   "dani.voice_disable": true,
   "dani.voice_enable": true,
@@ -5264,6 +6308,7 @@ const translationKeySet: Record<string, true> = {
   "dashboard.day_tue": true,
   "dashboard.day_wed": true,
   "dashboard.days_consecutive": true,
+  "dashboard.exam_btn": true,
   "dashboard.exams_completed": true,
   "dashboard.explore_courses": true,
   "dashboard.global_progress": true,
@@ -5390,6 +6435,7 @@ const translationKeySet: Record<string, true> = {
   "footer.contact_phone_text": true,
   "footer.copyright": true,
   "footer.docs": true,
+  "footer.email_error": true,
   "footer.email_placeholder": true,
   "footer.ialab": true,
   "footer.methodology": true,
@@ -5512,6 +6558,11 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.intro_3": true,
   "ialab.challenge.intro_4": true,
   "ialab.challenge.intro_5": true,
+  "ialab.challenge.m2.building_for": true,
+  "ialab.challenge.m2.case_label_dev": true,
+  "ialab.challenge.m2.case_label_marketing": true,
+  "ialab.challenge.m2.case_label_support": true,
+  "ialab.challenge.m2.case_step_label": true,
   "ialab.challenge.m2.resource_ova": true,
   "ialab.challenge.m2.resource_pdf": true,
   "ialab.challenge.m2.resource_video": true,
@@ -5523,6 +6574,11 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.m2.step1_case_support_desc": true,
   "ialab.challenge.m2.step1_chars": true,
   "ialab.challenge.m2.step1_desc": true,
+  "ialab.challenge.m2.step1_example_answer": true,
+  "ialab.challenge.m2.step1_req_case": true,
+  "ialab.challenge.m2.step1_req_criteria": true,
+  "ialab.challenge.m2.step1_req_justify": true,
+  "ialab.challenge.m2.step1_req_predictive": true,
   "ialab.challenge.m2.step1_scenario": true,
   "ialab.challenge.m2.step1_select_case": true,
   "ialab.challenge.m2.step1_subtitle": true,
@@ -5556,6 +6612,11 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.m2.step2_knowledge_schema_desc": true,
   "ialab.challenge.m2.step2_preview_empty": true,
   "ialab.challenge.m2.step2_preview_title": true,
+  "ialab.challenge.m2.step2_req_capabilities": true,
+  "ialab.challenge.m2.step2_req_knowledge": true,
+  "ialab.challenge.m2.step2_req_role": true,
+  "ialab.challenge.m2.step2_req_rules": true,
+  "ialab.challenge.m2.step2_req_tone": true,
   "ialab.challenge.m2.step2_role": true,
   "ialab.challenge.m2.step2_role_placeholder": true,
   "ialab.challenge.m2.step2_rules": true,
@@ -5585,6 +6646,10 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.m2.step3_field_tags": true,
   "ialab.challenge.m2.step3_function_name": true,
   "ialab.challenge.m2.step3_function_name_placeholder": true,
+  "ialab.challenge.m2.step3_generated_note": true,
+  "ialab.challenge.m2.step3_req_data": true,
+  "ialab.challenge.m2.step3_req_name": true,
+  "ialab.challenge.m2.step3_req_return": true,
   "ialab.challenge.m2.step3_return": true,
   "ialab.challenge.m2.step3_return_placeholder": true,
   "ialab.challenge.m2.step3_schema_desc": true,
@@ -5683,6 +6748,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.m4.step1_title": true,
   "ialab.challenge.m4.step2.doc_context_selected": true,
   "ialab.challenge.m4.step2.no_questions": true,
+  "ialab.challenge.m4.step2.questions_title": true,
   "ialab.challenge.m4.step2.subtitle": true,
   "ialab.challenge.m4.step2.synthesis_desc": true,
   "ialab.challenge.m4.step2.synthesis_placeholder": true,
@@ -5724,6 +6790,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.m4.step3_howto_title": true,
   "ialab.challenge.m4.step3_title": true,
   "ialab.challenge.m4.step_label": true,
+  "ialab.challenge.m5.researching": true,
   "ialab.challenge.m5.step1.bias_hint": true,
   "ialab.challenge.m5.step1.bias_title": true,
   "ialab.challenge.m5.step1.case_title": true,
@@ -5748,7 +6815,11 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.m5.step2.affected_candidates": true,
   "ialab.challenge.m5.step2.affected_company": true,
   "ialab.challenge.m5.step2.affected_society": true,
+  "ialab.challenge.m5.step2.cause_data": true,
+  "ialab.challenge.m5.step2.cause_human": true,
   "ialab.challenge.m5.step2.cause_placeholder": true,
+  "ialab.challenge.m5.step2.cause_process": true,
+  "ialab.challenge.m5.step2.cause_technical": true,
   "ialab.challenge.m5.step2.causes_title": true,
   "ialab.challenge.m5.step2.connect_biases": true,
   "ialab.challenge.m5.step2.impact_candidates": true,
@@ -5804,6 +6875,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.m5.step3_howto_desc": true,
   "ialab.challenge.m5.step3_howto_title": true,
   "ialab.challenge.m5.step3_title": true,
+  "ialab.challenge.m5.step_label": true,
   "ialab.challenge.minimum_80": true,
   "ialab.challenge.notification_advanced_error": true,
   "ialab.challenge.notification_advanced_started": true,
@@ -5813,6 +6885,8 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.section_label_failed": true,
   "ialab.challenge.section_label_passed": true,
   "ialab.challenge.section_label_pending": true,
+  "ialab.challenge.shared.auto_save_saved": true,
+  "ialab.challenge.shared.auto_save_saving": true,
   "ialab.challenge.status_completed": true,
   "ialab.challenge.status_failed": true,
   "ialab.challenge.status_not_passed": true,
@@ -5820,6 +6894,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.status_pending": true,
   "ialab.challenge.step_completed": true,
   "ialab.challenge.step_completed_desc": true,
+  "ialab.challenge.step_requirements_title": true,
   "ialab.challenge.step_tips_label": true,
   "ialab.challenge.summary_date": true,
   "ialab.challenge.summary_module": true,
@@ -5841,8 +6916,20 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge_result.no_feedback": true,
   "ialab.challenge_result.no_feedback_stored": true,
   "ialab.challenge_result.title": true,
+  "ialab.competency.distribution": true,
+  "ialab.competency.empty": true,
+  "ialab.competency.level_creator": true,
+  "ialab.competency.level_expert": true,
+  "ialab.competency.level_explorer": true,
+  "ialab.competency.module_label": true,
+  "ialab.competency.overall_level": true,
+  "ialab.competency.overall_value": true,
+  "ialab.competency.strongest": true,
+  "ialab.competency.title": true,
+  "ialab.competency.weakest": true,
   "ialab.completed": true,
   "ialab.completed_pct": true,
+  "ialab.content_completed_toast": true,
   "ialab.continue_banner_cta": true,
   "ialab.continue_banner_lesson": true,
   "ialab.continue_banner_title": true,
@@ -5874,17 +6961,26 @@ const translationKeySet: Record<string, true> = {
   "ialab.daily_challenges.title": true,
   "ialab.daily_plan.challenge_badge": true,
   "ialab.daily_plan.complete": true,
+  "ialab.daily_plan.complete_today": true,
   "ialab.daily_plan.continue": true,
+  "ialab.daily_plan.done_btn": true,
   "ialab.daily_plan.empty_desc": true,
   "ialab.daily_plan.empty_title": true,
   "ialab.daily_plan.morning_streak": true,
   "ialab.daily_plan.next_action": true,
+  "ialab.daily_plan.steps_count": true,
+  "ialab.daily_plan.steps_label": true,
   "ialab.daily_plan.title": true,
+  "ialab.daily_plan.urgency_optional": true,
+  "ialab.daily_plan.urgency_soon": true,
+  "ialab.daily_plan.urgency_today": true,
   "ialab.dashboard.certificates_title": true,
   "ialab.dashboard.completed_at": true,
   "ialab.dashboard.filter_all": true,
   "ialab.dashboard.filter_completed": true,
   "ialab.dashboard.filter_in_progress": true,
+  "ialab.dashboard.no_courses": true,
+  "ialab.dashboard.stats_label": true,
   "ialab.dashboard.view_certificate": true,
   "ialab.error_boundary.details": true,
   "ialab.error_boundary.message": true,
@@ -5970,6 +7066,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.ethics_explorer.welcome_desc": true,
   "ialab.ethics_explorer.yes": true,
   "ialab.evaluation.modal.ai_designing": true,
+  "ialab.evaluation.modal.complete_step_hint": true,
   "ialab.evaluation.modal.dialog_label": true,
   "ialab.evaluation.modal.evaluating": true,
   "ialab.evaluation.modal.exit": true,
@@ -5998,9 +7095,21 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.modal_premium.module_name": true,
   "ialab.evaluation.modal_premium.result_failed": true,
   "ialab.evaluation.modal_premium.result_passed": true,
+  "ialab.evaluation.results.axis_apply": true,
+  "ialab.evaluation.results.axis_create": true,
+  "ialab.evaluation.results.axis_identify": true,
+  "ialab.evaluation.results.axis_synthesize": true,
   "ialab.evaluation.results.back_to_start": true,
+  "ialab.evaluation.results.certificate_final_desc": true,
+  "ialab.evaluation.results.certificate_final_kicker": true,
   "ialab.evaluation.results.challenge_failed": true,
   "ialab.evaluation.results.challenge_passed": true,
+  "ialab.evaluation.results.competence_label": true,
+  "ialab.evaluation.results.competencies_high": true,
+  "ialab.evaluation.results.competencies_label": true,
+  "ialab.evaluation.results.competencies_low": true,
+  "ialab.evaluation.results.competencies_mid": true,
+  "ialab.evaluation.results.competencies_title": true,
   "ialab.evaluation.results.congrats_approved": true,
   "ialab.evaluation.results.cooldown_24h": true,
   "ialab.evaluation.results.detailed_analysis": true,
@@ -6008,6 +7117,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.results.exercise_1": true,
   "ialab.evaluation.results.exercise_2": true,
   "ialab.evaluation.results.exercise_3": true,
+  "ialab.evaluation.results.exercise_4": true,
   "ialab.evaluation.results.exercise_breakdown": true,
   "ialab.evaluation.results.exercise_scores": true,
   "ialab.evaluation.results.exercises_completed": true,
@@ -6017,6 +7127,9 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.results.final_grade": true,
   "ialab.evaluation.results.global_score": true,
   "ialab.evaluation.results.grade_registered": true,
+  "ialab.evaluation.results.level_creator": true,
+  "ialab.evaluation.results.level_expert": true,
+  "ialab.evaluation.results.level_explorer": true,
   "ialab.evaluation.results.mastery_high": true,
   "ialab.evaluation.results.mastery_level": true,
   "ialab.evaluation.results.mastery_medium": true,
@@ -6035,6 +7148,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.results.passed_status": true,
   "ialab.evaluation.results.performance_analysis": true,
   "ialab.evaluation.results.personalized_recommendations": true,
+  "ialab.evaluation.results.radar_label": true,
   "ialab.evaluation.results.registering_grade": true,
   "ialab.evaluation.results.remaining_attempts": true,
   "ialab.evaluation.results.result_subtitle": true,
@@ -6043,6 +7157,8 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.results.retry_exercise1_hint": true,
   "ialab.evaluation.results.retry_exercise2_hint": true,
   "ialab.evaluation.results.retry_exercise3_hint": true,
+  "ialab.evaluation.results.review_recommended": true,
+  "ialab.evaluation.results.review_recommended_desc": true,
   "ialab.evaluation.results.score_weight_desc": true,
   "ialab.evaluation.results.score_weight_info": true,
   "ialab.evaluation.results.stats_title": true,
@@ -6149,6 +7265,9 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.step3.tab_editor": true,
   "ialab.evaluation.step3.title": true,
   "ialab.evaluation.step3.use_case": true,
+  "ialab.exam_ready_cta": true,
+  "ialab.exam_ready_desc": true,
+  "ialab.exam_ready_title": true,
   "ialab.exam_result.back_to_module": true,
   "ialab.exam_result.cooldown": true,
   "ialab.exam_result.correct": true,
@@ -6470,10 +7589,16 @@ const translationKeySet: Record<string, true> = {
   "ialab.level_badge.level3_name": true,
   "ialab.level_badge.level4_desc": true,
   "ialab.level_badge.level4_name": true,
+  "ialab.loading_timeout_desc": true,
+  "ialab.loading_timeout_retry": true,
+  "ialab.loading_timeout_title": true,
   "ialab.menu_aria": true,
+  "ialab.mobile_info.course_label": true,
+  "ialab.mobile_menu_aria": true,
   "ialab.module.lessons": true,
   "ialab.module.module_label": true,
   "ialab.module.progress_title": true,
+  "ialab.module.resources_badge": true,
   "ialab.module_actions.attempts_left": true,
   "ialab.module_actions.challenge": true,
   "ialab.module_actions.community": true,
@@ -6488,6 +7613,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.module_actions.weight_exam": true,
   "ialab.module_header.module": true,
   "ialab.module_info.composition": true,
+  "ialab.module_info.grade_composition_title": true,
   "ialab.module_info.learning_1": true,
   "ialab.module_info.learning_2": true,
   "ialab.module_info.learning_3": true,
@@ -6497,6 +7623,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.module_info.objective_highlight": true,
   "ialab.module_info.objective_suffix": true,
   "ialab.module_info.objective_title": true,
+  "ialab.module_info.score_label": true,
   "ialab.module_progress": true,
   "ialab.module_progress_bar.challenge": true,
   "ialab.module_progress_bar.challenge_pending": true,
@@ -6514,6 +7641,9 @@ const translationKeySet: Record<string, true> = {
   "ialab.module_roadmap.subtitle": true,
   "ialab.module_roadmap.title": true,
   "ialab.nav_menu_aria": true,
+  "ialab.next_step_content": true,
+  "ialab.next_step_exam_done": true,
+  "ialab.next_step_ready_exam": true,
   "ialab.notif_mobile_aria": true,
   "ialab.notifications_aria": true,
   "ialab.objectives_learn": true,
@@ -6717,17 +7847,21 @@ const translationKeySet: Record<string, true> = {
   "ialab.quiz.exam_retry_alert_attempts": true,
   "ialab.quiz.exam_retry_alert_cooldown": true,
   "ialab.quiz.exit": true,
+  "ialab.quiz.explanation": true,
   "ialab.quiz.failed": true,
   "ialab.quiz.failed_msg": true,
   "ialab.quiz.good_work": true,
   "ialab.quiz.good_work_msg": true,
   "ialab.quiz.improvement_areas": true,
   "ialab.quiz.incorrect_count": true,
+  "ialab.quiz.landed": true,
   "ialab.quiz.mark_review": true,
   "ialab.quiz.marked": true,
   "ialab.quiz.max_violations": true,
   "ialab.quiz.min_score": true,
   "ialab.quiz.next": true,
+  "ialab.quiz.number_label": true,
+  "ialab.quiz.number_result": true,
   "ialab.quiz.options_group": true,
   "ialab.quiz.passed": true,
   "ialab.quiz.passed_msg": true,
@@ -6736,10 +7870,14 @@ const translationKeySet: Record<string, true> = {
   "ialab.quiz.question_count": true,
   "ialab.quiz.retry": true,
   "ialab.quiz.review_answers": true,
+  "ialab.quiz.roulette_label": true,
   "ialab.quiz.security_print": true,
   "ialab.quiz.security_warning_1": true,
   "ialab.quiz.security_warning_2": true,
   "ialab.quiz.security_warning_3": true,
+  "ialab.quiz.source_label": true,
+  "ialab.quiz.spin": true,
+  "ialab.quiz.spin_hint": true,
   "ialab.quiz.submit": true,
   "ialab.quiz.submitting": true,
   "ialab.quiz.sync_error_msg": true,
@@ -6768,6 +7906,20 @@ const translationKeySet: Record<string, true> = {
   "ialab.reactive_prompt.subtitle": true,
   "ialab.reactive_prompt.title": true,
   "ialab.reactive_prompt.write_to_analyze": true,
+  "ialab.reading_mode.controls_aria_close": true,
+  "ialab.reading_mode.controls_aria_open": true,
+  "ialab.reading_mode.font_aria": true,
+  "ialab.reading_mode.font_mono": true,
+  "ialab.reading_mode.font_sans": true,
+  "ialab.reading_mode.font_serif": true,
+  "ialab.reading_mode.font_size_aria": true,
+  "ialab.reading_mode.hide": true,
+  "ialab.reading_mode.reading": true,
+  "ialab.reading_mode.reset_aria": true,
+  "ialab.reading_mode.theme_aria": true,
+  "ialab.reading_mode.theme_dark": true,
+  "ialab.reading_mode.theme_light": true,
+  "ialab.reading_mode.theme_sepia": true,
   "ialab.recommendations.pending_count": true,
   "ialab.recommendations.title": true,
   "ialab.recommendations.toggle_hide": true,
@@ -6834,7 +7986,9 @@ const translationKeySet: Record<string, true> = {
   "ialab.see_more": true,
   "ialab.sidebar_flashcards": true,
   "ialab.sidebar_leaderboard": true,
+  "ialab.sidebar_plan_short": true,
   "ialab.sidebar_practice": true,
+  "ialab.sidebar_progress_short": true,
   "ialab.sidebar_study_plan": true,
   "ialab.signup_back_to_login": true,
   "ialab.signup_feature_1": true,
@@ -6852,7 +8006,11 @@ const translationKeySet: Record<string, true> = {
   "ialab.skip_link": true,
   "ialab.speech.course_completed": true,
   "ialab.speech.module_passed": true,
+  "ialab.start_cta_btn": true,
+  "ialab.start_cta_desc": true,
+  "ialab.start_cta_label": true,
   "ialab.status.locked": true,
+  "ialab.status.locked_hint": true,
   "ialab.status.start_here": true,
   "ialab.status.viewed": true,
   "ialab.streak_calendar.active": true,
@@ -6938,6 +8096,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.synthesizer.metric_context": true,
   "ialab.synthesizer.metric_precision": true,
   "ialab.synthesizer.model": true,
+  "ialab.synthesizer.model_label": true,
   "ialab.synthesizer.optimization_summary": true,
   "ialab.synthesizer.optimized_prompt": true,
   "ialab.synthesizer.original_prompt": true,
@@ -6945,6 +8104,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.synthesizer.prompt_engineering": true,
   "ialab.synthesizer.quality": true,
   "ialab.synthesizer.recent_history": true,
+  "ialab.synthesizer.response_format_label": true,
   "ialab.synthesizer.rol": true,
   "ialab.synthesizer.specificity": true,
   "ialab.synthesizer.structure_label": true,
@@ -6955,11 +8115,13 @@ const translationKeySet: Record<string, true> = {
   "ialab.synthesizer.technical_analysis": true,
   "ialab.synthesizer.technical_analysis_desc": true,
   "ialab.synthesizer.temperature": true,
+  "ialab.synthesizer.temperature_label": true,
   "ialab.synthesizer.terminal_header": true,
   "ialab.synthesizer.title": true,
   "ialab.synthesizer.tokens": true,
   "ialab.synthesizer.total_optimizations": true,
   "ialab.synthesizer.validation_error": true,
+  "ialab.synthesizer.word_char_count": true,
   "ialab.synthesizer_input.chars_count": true,
   "ialab.synthesizer_input.generate_aria": true,
   "ialab.synthesizer_input.generate_btn": true,
@@ -7049,6 +8211,10 @@ const translationKeySet: Record<string, true> = {
   "ialab.tour.welcome_step5_highlight": true,
   "ialab.tour.welcome_step5_title": true,
   "ialab.tour.welcome_step_aria": true,
+  "ialab.traffic_light.close": true,
+  "ialab.traffic_light.fullscreen_enter": true,
+  "ialab.traffic_light.fullscreen_exit": true,
+  "ialab.traffic_light.group_aria": true,
   "ialab.tutorias_virtuales.countdown": true,
   "ialab.tutorias_virtuales.description": true,
   "ialab.tutorias_virtuales.join": true,
@@ -7100,6 +8266,8 @@ const translationKeySet: Record<string, true> = {
   "ialab.valerio.quick_explain_topic": true,
   "ialab.valerio.quick_give_example": true,
   "ialab.valerio.quick_help_challenge": true,
+  "ialab.valerio.quick_micro_plan": true,
+  "ialab.valerio.quick_step_by_step": true,
   "ialab.valerio.quick_study_tips": true,
   "ialab.valerio.send_aria": true,
   "ialab.valerio.short_greeting_high": true,
@@ -7121,6 +8289,8 @@ const translationKeySet: Record<string, true> = {
   "ialab.valerio.voice_stop_aria": true,
   "ialab.valerio_aria": true,
   "ialab.valerio_nudge": true,
+  "ialab.valerio_nudge_return": true,
+  "ialab.valerio_nudge_return_sub": true,
   "ialab.valerio_nudge_sub": true,
   "ialab.valerio_talk": true,
   "ialab.valerio_tooltip": true,
@@ -7179,8 +8349,429 @@ const translationKeySet: Record<string, true> = {
   "ialab.voice_reader.listen": true,
   "ialab.voice_reader.stop": true,
   "ialab.voice_reader.title": true,
+  "ialab.workspace.artesano.card_activities": true,
+  "ialab.workspace.artesano.card_activities_desc": true,
+  "ialab.workspace.artesano.card_content": true,
+  "ialab.workspace.artesano.card_content_desc": true,
+  "ialab.workspace.artesano.card_objectives": true,
+  "ialab.workspace.artesano.card_objectives_desc": true,
+  "ialab.workspace.artesano.card_practice": true,
+  "ialab.workspace.artesano.card_practice_desc": true,
+  "ialab.workspace.artesano.heading": true,
+  "ialab.workspace.artesano.intro_1": true,
+  "ialab.workspace.artesano.intro_2": true,
+  "ialab.workspace.artesano.intro_3": true,
+  "ialab.workspace.artesano.sub": true,
+  "ialab.workspace.chatgpt.card_activities": true,
+  "ialab.workspace.chatgpt.card_activities_desc": true,
+  "ialab.workspace.chatgpt.card_content": true,
+  "ialab.workspace.chatgpt.card_content_desc": true,
+  "ialab.workspace.chatgpt.card_objectives": true,
+  "ialab.workspace.chatgpt.card_objectives_desc": true,
+  "ialab.workspace.chatgpt.card_practice": true,
+  "ialab.workspace.chatgpt.card_practice_desc": true,
+  "ialab.workspace.chatgpt.heading": true,
+  "ialab.workspace.chatgpt.intro_1": true,
+  "ialab.workspace.chatgpt.intro_2": true,
+  "ialab.workspace.chatgpt.intro_3": true,
+  "ialab.workspace.chatgpt.intro_4": true,
+  "ialab.workspace.chatgpt.new_chat": true,
+  "ialab.workspace.chatgpt.sub": true,
+  "ialab.workspace.collapse_panel": true,
+  "ialab.workspace.composer_hint": true,
+  "ialab.workspace.composer_label": true,
+  "ialab.workspace.composer_placeholder": true,
+  "ialab.workspace.composer_send": true,
+  "ialab.workspace.default.new_workshop": true,
+  "ialab.workspace.edit": true,
+  "ialab.workspace.filters": true,
+  "ialab.workspace.gemini.card_content": true,
+  "ialab.workspace.gemini.card_content_desc": true,
+  "ialab.workspace.gemini.card_deep": true,
+  "ialab.workspace.gemini.card_deep_desc": true,
+  "ialab.workspace.gemini.card_explore": true,
+  "ialab.workspace.gemini.card_explore_desc": true,
+  "ialab.workspace.gemini.card_practice": true,
+  "ialab.workspace.gemini.card_practice_desc": true,
+  "ialab.workspace.gemini.heading": true,
+  "ialab.workspace.gemini.intro_desc": true,
+  "ialab.workspace.gemini.intro_title": true,
+  "ialab.workspace.gemini.new_session": true,
+  "ialab.workspace.gemini.recent": true,
+  "ialab.workspace.gemini.sub": true,
+  "ialab.workspace.guardian.card_content": true,
+  "ialab.workspace.guardian.card_content_desc": true,
+  "ialab.workspace.guardian.card_ethics": true,
+  "ialab.workspace.guardian.card_ethics_desc": true,
+  "ialab.workspace.guardian.card_objectives": true,
+  "ialab.workspace.guardian.card_objectives_desc": true,
+  "ialab.workspace.guardian.card_practice": true,
+  "ialab.workspace.guardian.card_practice_desc": true,
+  "ialab.workspace.guardian.heading": true,
+  "ialab.workspace.guardian.intro_1": true,
+  "ialab.workspace.guardian.intro_2": true,
+  "ialab.workspace.guardian.intro_3": true,
+  "ialab.workspace.guardian.sub": true,
+  "ialab.workspace.home": true,
+  "ialab.workspace.more_options": true,
+  "ialab.workspace.nlm.activities": true,
+  "ialab.workspace.nlm.brand": true,
+  "ialab.workspace.nlm.card_challenge": true,
+  "ialab.workspace.nlm.card_challenge_desc": true,
+  "ialab.workspace.nlm.card_content": true,
+  "ialab.workspace.nlm.card_content_desc": true,
+  "ialab.workspace.nlm.card_objectives": true,
+  "ialab.workspace.nlm.card_objectives_desc": true,
+  "ialab.workspace.nlm.card_retos": true,
+  "ialab.workspace.nlm.card_retos_desc": true,
+  "ialab.workspace.nlm.chip_fast": true,
+  "ialab.workspace.nlm.chip_web": true,
+  "ialab.workspace.nlm.empty_cta": true,
+  "ialab.workspace.nlm.empty_desc": true,
+  "ialab.workspace.nlm.empty_title": true,
+  "ialab.workspace.nlm.intro_desc": true,
+  "ialab.workspace.nlm.intro_title": true,
+  "ialab.workspace.nlm.module_label": true,
+  "ialab.workspace.nlm.search_web": true,
+  "ialab.workspace.nlm.start_where": true,
+  "ialab.workspace.nlm.studio_empty_desc": true,
+  "ialab.workspace.nlm.studio_empty_title": true,
+  "ialab.workspace.nlm.tab_chat": true,
+  "ialab.workspace.nlm.tab_sources": true,
+  "ialab.workspace.nlm.tab_studio": true,
+  "ialab.workspace.notebooklm.new_notebook": true,
+  "ialab.workspace.rail_label": true,
+  "ialab.workspace.search": true,
+  "ialab.workspace.simulated": true,
+  "ialab.workspace.simulated_note": true,
+  "ialab.workspace.studio.challenge": true,
+  "ialab.workspace.studio.community": true,
+  "ialab.workspace.studio.exam": true,
+  "ialab.workspace.studio.objective": true,
+  "ialab.workspace.studio.saved": true,
+  "ialab.workspace.studio.tool": true,
+  "ialab.workspace.studio.tutoring": true,
+  "ialab.workspace.toggle_off": true,
+  "ialab.workspace.toggle_on": true,
+  "ialab.workspace.toggle_view_classic": true,
+  "ialab.workspace.toggle_view_tool": true,
+  "ialab.workspace.topics_label": true,
   "ialab.xp_earned": true,
   "ialab.xp_excellent_work": true,
+  "kid.activity.analysis_completed": true,
+  "kid.activity.analyzing_detail": true,
+  "kid.activity.click_select": true,
+  "kid.activity.close": true,
+  "kid.activity.drag_activity": true,
+  "kid.activity.empty_desc": true,
+  "kid.activity.empty_points": true,
+  "kid.activity.empty_title": true,
+  "kid.activity.improvements": true,
+  "kid.activity.modal_aria": true,
+  "kid.activity.my_activities": true,
+  "kid.activity.parsing_detail": true,
+  "kid.activity.points": true,
+  "kid.activity.recommendations": true,
+  "kid.activity.status_analyzed": true,
+  "kid.activity.status_analyzing": true,
+  "kid.activity.status_complete": true,
+  "kid.activity.status_error": true,
+  "kid.activity.status_in_progress": true,
+  "kid.activity.status_parsing": true,
+  "kid.activity.status_pending": true,
+  "kid.activity.status_processing": true,
+  "kid.activity.strengths": true,
+  "kid.activity.subject_arte": true,
+  "kid.activity.subject_ciencias": true,
+  "kid.activity.subject_difficulty": true,
+  "kid.activity.subject_ingles": true,
+  "kid.activity.subject_label": true,
+  "kid.activity.subject_lenguaje": true,
+  "kid.activity.subject_matematicas": true,
+  "kid.activity.subject_sociales": true,
+  "kid.activity.talk_with_dani": true,
+  "kid.activity.upload_title": true,
+  "kid.activity.view_analysis": true,
+  "kid.calendar.aria_new_activity": true,
+  "kid.calendar.cancel": true,
+  "kid.calendar.description_placeholder": true,
+  "kid.calendar.new_activity": true,
+  "kid.calendar.next_month": true,
+  "kid.calendar.prev_month": true,
+  "kid.calendar.save": true,
+  "kid.calendar.title_placeholder": true,
+  "kid.calendar.type_estudio": true,
+  "kid.calendar.type_examen": true,
+  "kid.calendar.type_recordatorio": true,
+  "kid.calendar.type_tarea": true,
+  "kid.calendar.type_tutoria": true,
+  "kid.calendar.type_vak": true,
+  "kid.calendar.vak_tip_auditory": true,
+  "kid.calendar.vak_tip_kinesthetic": true,
+  "kid.calendar.vak_tip_prefix": true,
+  "kid.calendar.vak_tip_visual": true,
+  "kid.crisis.alert_1": true,
+  "kid.crisis.alert_2": true,
+  "kid.crisis.alert_3": true,
+  "kid.crisis.call": true,
+  "kid.crisis.close_aria": true,
+  "kid.crisis.emotional.crisis_text_line": true,
+  "kid.crisis.emotional.crisis_text_line_desc": true,
+  "kid.crisis.emotional.crisis_text_line_value": true,
+  "kid.crisis.emotional.school_counselor": true,
+  "kid.crisis.emotional.school_counselor_desc": true,
+  "kid.crisis.emotional.talk_parents": true,
+  "kid.crisis.emotional.talk_parents_desc": true,
+  "kid.crisis.footer": true,
+  "kid.crisis.immediate.emergencies": true,
+  "kid.crisis.immediate.emergencies_desc": true,
+  "kid.crisis.immediate.friend_phone": true,
+  "kid.crisis.immediate.friend_phone_desc": true,
+  "kid.crisis.immediate.friend_phone_value": true,
+  "kid.crisis.immediate.pas_line": true,
+  "kid.crisis.immediate.pas_line_desc": true,
+  "kid.crisis.reasons.emotions_change": true,
+  "kid.crisis.reasons.emotions_change_desc": true,
+  "kid.crisis.reasons.future_surprises": true,
+  "kid.crisis.reasons.future_surprises_desc": true,
+  "kid.crisis.reasons.life_matters": true,
+  "kid.crisis.reasons.life_matters_desc": true,
+  "kid.crisis.reasons.people_love_you": true,
+  "kid.crisis.reasons.people_love_you_desc": true,
+  "kid.crisis.section_emotional": true,
+  "kid.crisis.section_immediate": true,
+  "kid.crisis.section_reasons": true,
+  "kid.crisis.support_subtitle": true,
+  "kid.crisis.tab_emotional": true,
+  "kid.crisis.tab_immediate": true,
+  "kid.crisis.tab_reasons": true,
+  "kid.crisis.understood_thanks": true,
+  "kid.crisis.we_are_here": true,
+  "kid.curriculum.competencias": true,
+  "kid.curriculum.competencias_count": true,
+  "kid.curriculum.subtitle": true,
+  "kid.curriculum.title": true,
+  "kid.error.go_home": true,
+  "kid.error.message": true,
+  "kid.error.retry": true,
+  "kid.error.title": true,
+  "kid.exam.add_exam": true,
+  "kid.exam.analyzing_material": true,
+  "kid.exam.answer": true,
+  "kid.exam.ask_dani": true,
+  "kid.exam.back": true,
+  "kid.exam.cancel": true,
+  "kid.exam.cards_ready": true,
+  "kid.exam.correct": true,
+  "kid.exam.date_label": true,
+  "kid.exam.days_left": true,
+  "kid.exam.days_remaining": true,
+  "kid.exam.deck_exam_points": true,
+  "kid.exam.deck_exam_title": true,
+  "kid.exam.deck_quiz_desc": true,
+  "kid.exam.desired_grade_label": true,
+  "kid.exam.empty_hint": true,
+  "kid.exam.empty_title": true,
+  "kid.exam.exam_today": true,
+  "kid.exam.generate_deck_exam": true,
+  "kid.exam.generating": true,
+  "kid.exam.guide_questions": true,
+  "kid.exam.improvements": true,
+  "kid.exam.incorrect": true,
+  "kid.exam.meta_label": true,
+  "kid.exam.meta_short": true,
+  "kid.exam.name_label": true,
+  "kid.exam.name_placeholder": true,
+  "kid.exam.new": true,
+  "kid.exam.one_day": true,
+  "kid.exam.review_flashcards": true,
+  "kid.exam.score_correct": true,
+  "kid.exam.strengths": true,
+  "kid.exam.study_plan_title": true,
+  "kid.exam.study_progress": true,
+  "kid.exam.study_tips": true,
+  "kid.exam.subject_arte": true,
+  "kid.exam.subject_ciencias": true,
+  "kid.exam.subject_historia": true,
+  "kid.exam.subject_ingles": true,
+  "kid.exam.subject_label": true,
+  "kid.exam.subject_lenguaje": true,
+  "kid.exam.subject_matematicas": true,
+  "kid.exam.take_deck_exam": true,
+  "kid.exam.title": true,
+  "kid.exam.today": true,
+  "kid.exam.tomorrow": true,
+  "kid.exam.upload_hint": true,
+  "kid.exam.view_detail": true,
+  "kid.flashcards.active_deck": true,
+  "kid.flashcards.add_card": true,
+  "kid.flashcards.add_card_btn": true,
+  "kid.flashcards.back": true,
+  "kid.flashcards.cancel": true,
+  "kid.flashcards.card_back_placeholder": true,
+  "kid.flashcards.card_front_placeholder": true,
+  "kid.flashcards.card_unavailable": true,
+  "kid.flashcards.cards_count": true,
+  "kid.flashcards.cards_label": true,
+  "kid.flashcards.code_copied": true,
+  "kid.flashcards.confidence_1": true,
+  "kid.flashcards.confidence_2": true,
+  "kid.flashcards.confidence_3": true,
+  "kid.flashcards.confidence_4": true,
+  "kid.flashcards.correct_count": true,
+  "kid.flashcards.correct_label": true,
+  "kid.flashcards.create_deck": true,
+  "kid.flashcards.dani_ask": true,
+  "kid.flashcards.dani_read": true,
+  "kid.flashcards.dani_reads_card": true,
+  "kid.flashcards.dani_talk_yes": true,
+  "kid.flashcards.deck_activate": true,
+  "kid.flashcards.deck_active_status": true,
+  "kid.flashcards.deck_description": true,
+  "kid.flashcards.deck_description_placeholder": true,
+  "kid.flashcards.deck_name": true,
+  "kid.flashcards.deck_name_placeholder": true,
+  "kid.flashcards.definition_label": true,
+  "kid.flashcards.definition_short": true,
+  "kid.flashcards.dismiss": true,
+  "kid.flashcards.edit_deck": true,
+  "kid.flashcards.example_label": true,
+  "kid.flashcards.generate_btn": true,
+  "kid.flashcards.generate_title": true,
+  "kid.flashcards.generating": true,
+  "kid.flashcards.generating_for": true,
+  "kid.flashcards.grade_10_12": true,
+  "kid.flashcards.grade_1_3": true,
+  "kid.flashcards.grade_4_6": true,
+  "kid.flashcards.grade_7_9": true,
+  "kid.flashcards.grade_label_10_12": true,
+  "kid.flashcards.grade_label_1_3": true,
+  "kid.flashcards.grade_label_4_6": true,
+  "kid.flashcards.grade_label_7_9": true,
+  "kid.flashcards.import_btn": true,
+  "kid.flashcards.import_deck": true,
+  "kid.flashcards.keyword_label": true,
+  "kid.flashcards.my_decks_title": true,
+  "kid.flashcards.new_deck": true,
+  "kid.flashcards.new_deck_btn": true,
+  "kid.flashcards.no_decks": true,
+  "kid.flashcards.no_decks_hint": true,
+  "kid.flashcards.not_understood": true,
+  "kid.flashcards.related_terms_label": true,
+  "kid.flashcards.retry": true,
+  "kid.flashcards.reviewed_label": true,
+  "kid.flashcards.save_changes": true,
+  "kid.flashcards.scan_error": true,
+  "kid.flashcards.scan_generate": true,
+  "kid.flashcards.scan_grade_10_12": true,
+  "kid.flashcards.scan_grade_1_3": true,
+  "kid.flashcards.scan_grade_4_6": true,
+  "kid.flashcards.scan_grade_7_9": true,
+  "kid.flashcards.scan_or_text": true,
+  "kid.flashcards.scan_pdf": true,
+  "kid.flashcards.scan_processing": true,
+  "kid.flashcards.scan_stage_cards": true,
+  "kid.flashcards.scan_stage_reading": true,
+  "kid.flashcards.scan_stage_summary": true,
+  "kid.flashcards.scan_subtitle": true,
+  "kid.flashcards.scan_summary_generated": true,
+  "kid.flashcards.scan_title": true,
+  "kid.flashcards.scan_topic_placeholder": true,
+  "kid.flashcards.scan_upload": true,
+  "kid.flashcards.select_grade": true,
+  "kid.flashcards.share_deck": true,
+  "kid.flashcards.stop": true,
+  "kid.flashcards.streak_count": true,
+  "kid.flashcards.studied_count": true,
+  "kid.flashcards.study": true,
+  "kid.flashcards.study_again": true,
+  "kid.flashcards.study_completed": true,
+  "kid.flashcards.tab_exam": true,
+  "kid.flashcards.tab_flashcards": true,
+  "kid.flashcards.tab_oral": true,
+  "kid.flashcards.tap_or_swipe": true,
+  "kid.flashcards.tap_to_reveal": true,
+  "kid.flashcards.term_label": true,
+  "kid.flashcards.topic_placeholder": true,
+  "kid.flashcards.two_player_mode": true,
+  "kid.flashcards.understood": true,
+  "kid.flashcards.write_topic": true,
+  "kid.grades.add_subject": true,
+  "kid.grades.analyze_btn": true,
+  "kid.grades.analyzing": true,
+  "kid.grades.average": true,
+  "kid.grades.boletin_hint": true,
+  "kid.grades.dani_says": true,
+  "kid.grades.doc_subject": true,
+  "kid.grades.doc_title": true,
+  "kid.grades.error_analyze": true,
+  "kid.grades.error_no_grades": true,
+  "kid.grades.error_read": true,
+  "kid.grades.extracting": true,
+  "kid.grades.go_flashcards": true,
+  "kid.grades.my_notes": true,
+  "kid.grades.strengths": true,
+  "kid.grades.study_plan": true,
+  "kid.grades.subject_arte": true,
+  "kid.grades.subject_ciencias": true,
+  "kid.grades.subject_educacion_fisica": true,
+  "kid.grades.subject_ingles": true,
+  "kid.grades.subject_lenguaje": true,
+  "kid.grades.subject_matematicas": true,
+  "kid.grades.subject_sociales": true,
+  "kid.grades.subject_tecnologia": true,
+  "kid.grades.subtitle": true,
+  "kid.grades.tab_image": true,
+  "kid.grades.tab_manual": true,
+  "kid.grades.talk_about_plan": true,
+  "kid.grades.title": true,
+  "kid.grades.to_improve": true,
+  "kid.grades.upload_boletin": true,
+  "kid.grades.week": true,
+  "kid.hero.action_exams_hint": true,
+  "kid.hero.action_exams_label": true,
+  "kid.hero.action_flashcards_hint": true,
+  "kid.hero.action_flashcards_label": true,
+  "kid.hero.action_grades_hint": true,
+  "kid.hero.action_grades_label": true,
+  "kid.hero.action_oral_hint": true,
+  "kid.hero.action_oral_label": true,
+  "kid.hero.active_deck": true,
+  "kid.hero.continue": true,
+  "kid.hero.discover_style": true,
+  "kid.hero.greeting_afternoon": true,
+  "kid.hero.greeting_evening": true,
+  "kid.hero.greeting_morning": true,
+  "kid.hero.here_for_you": true,
+  "kid.hero.points": true,
+  "kid.hero.power_auditory": true,
+  "kid.hero.power_kinesthetic": true,
+  "kid.hero.power_visual": true,
+  "kid.hero.talk_with_dani": true,
+  "kid.hero.title_after": true,
+  "kid.hero.title_before": true,
+  "kid.hero.unique_style": true,
+  "kid.hero.your_style": true,
+  "kid.mision.aria_label": true,
+  "kid.mision.complete_mission": true,
+  "kid.mision.earn_up_to": true,
+  "kid.mision.streak_many": true,
+  "kid.mision.streak_one": true,
+  "kid.mision.subject_percent": true,
+  "kid.mision.subject_progress": true,
+  "kid.mision.subject_start": true,
+  "kid.mision.title": true,
+  "kid.mision.vak_audio_subtitle": true,
+  "kid.mision.vak_audio_title": true,
+  "kid.mision.vak_kine_subtitle": true,
+  "kid.mision.vak_kine_title": true,
+  "kid.mision.vak_subtitle": true,
+  "kid.mision.vak_title": true,
+  "kid.mision.vak_visual_subtitle": true,
+  "kid.mision.vak_visual_title": true,
+  "kid.news.category_dani-tips": true,
+  "kid.news.category_did-you-know": true,
+  "kid.news.category_new-tools": true,
   "kid.news.empty_category": true,
   "kid.news.featured_badge": true,
   "kid.news.filter_all": true,
@@ -7205,6 +8796,18 @@ const translationKeySet: Record<string, true> = {
   "kid.personalized_plan.title": true,
   "kid.personalized_plan.title_empty": true,
   "kid.personalized_plan.weekly_plan_title": true,
+  "kid.podcast.duration_fallback": true,
+  "kid.podcast.generate_btn": true,
+  "kid.podcast.generating": true,
+  "kid.podcast.points_desc": true,
+  "kid.podcast.role_host": true,
+  "kid.podcast.role_tip": true,
+  "kid.podcast.role_tip_prefix": true,
+  "kid.podcast.subtitle": true,
+  "kid.podcast.text_label": true,
+  "kid.podcast.textarea_placeholder": true,
+  "kid.podcast.title": true,
+  "kid.podcast.title_fallback": true,
   "kid.points_rewards.action_active_minute": true,
   "kid.points_rewards.action_complete_mission": true,
   "kid.points_rewards.action_complete_subject": true,
@@ -7225,13 +8828,97 @@ const translationKeySet: Record<string, true> = {
   "kid.points_rewards.tab_points": true,
   "kid.points_rewards.tab_store": true,
   "kid.points_rewards.your_points": true,
+  "kid.premium.keep_exploring": true,
+  "kid.premium.opening": true,
+  "kid.premium.unlock": true,
+  "kid.scanner.ask_dani": true,
+  "kid.scanner.diff_advanced": true,
+  "kid.scanner.diff_basic": true,
+  "kid.scanner.diff_intermediate": true,
+  "kid.scanner.example": true,
+  "kid.scanner.key_concepts": true,
+  "kid.scanner.material_alt": true,
+  "kid.scanner.new": true,
+  "kid.scanner.overview": true,
+  "kid.scanner.remember": true,
+  "kid.scanner.teacher_summary": true,
+  "kid.scanner.teacher_summary_subject": true,
+  "kid.smartbook.analyze": true,
+  "kid.smartbook.close": true,
+  "kid.smartbook.create_another": true,
+  "kid.smartbook.empty_desc": true,
+  "kid.smartbook.empty_title": true,
+  "kid.smartbook.history": true,
+  "kid.smartbook.key_concepts": true,
+  "kid.smartbook.or": true,
+  "kid.smartbook.paste_text": true,
+  "kid.smartbook.sections": true,
+  "kid.smartbook.step_analyzing": true,
+  "kid.smartbook.step_extracting": true,
+  "kid.smartbook.step_organizing": true,
+  "kid.smartbook.stepbar_analyzing": true,
+  "kid.smartbook.stepbar_extracting": true,
+  "kid.smartbook.stepbar_organizing": true,
+  "kid.smartbook.subtitle": true,
+  "kid.smartbook.summary": true,
+  "kid.smartbook.textarea_placeholder": true,
+  "kid.smartbook.title": true,
+  "kid.smartbook.upload_file": true,
+  "kid.user.age": true,
+  "kid.user.age_placeholder": true,
+  "kid.user.age_value": true,
+  "kid.user.avatar_invalid": true,
+  "kid.user.avatar_remove": true,
+  "kid.user.avatar_saved": true,
+  "kid.user.avatar_too_big": true,
+  "kid.user.avatar_update": true,
+  "kid.user.avatar_upload": true,
+  "kid.user.cancel": true,
+  "kid.user.edit_profile": true,
+  "kid.user.edit_profile_title": true,
+  "kid.user.fullname": true,
+  "kid.user.fullname_placeholder": true,
+  "kid.user.grade": true,
+  "kid.user.grade_placeholder": true,
+  "kid.user.load_error": true,
+  "kid.user.loading": true,
+  "kid.user.logout": true,
+  "kid.user.no_profile_data": true,
+  "kid.user.not_detected": true,
+  "kid.user.not_specified": true,
+  "kid.user.not_specified_age": true,
+  "kid.user.open_menu": true,
+  "kid.user.progress": true,
+  "kid.user.save": true,
+  "kid.user.save_error": true,
+  "kid.user.saved": true,
+  "kid.user.saving": true,
+  "kid.user.school": true,
+  "kid.user.school_placeholder": true,
+  "kid.user.select_vak": true,
+  "kid.user.smartboard_profile": true,
+  "kid.user.student": true,
+  "kid.user.vak_placeholder": true,
+  "kid.user.vak_type": true,
   "kid.vak.diagnostic_title": true,
+  "kid.vak.rec_auditory": true,
+  "kid.vak.rec_kinesthetic": true,
+  "kid.vak.rec_visual": true,
   "kid.vak.result_message": true,
   "kid.vak.result_subtitle": true,
   "kid.vak.result_title": true,
   "kid.vak.style_auditory": true,
   "kid.vak.style_kinesthetic": true,
   "kid.vak.style_visual": true,
+  "kid.vak.tip_auditory_1": true,
+  "kid.vak.tip_auditory_2": true,
+  "kid.vak.tip_auditory_3": true,
+  "kid.vak.tip_kinesthetic_1": true,
+  "kid.vak.tip_kinesthetic_2": true,
+  "kid.vak.tip_kinesthetic_3": true,
+  "kid.vak.tip_visual_1": true,
+  "kid.vak.tip_visual_2": true,
+  "kid.vak.tip_visual_3": true,
   "leadCapture.context_courses": true,
   "leadCapture.context_default": true,
   "leadCapture.context_diagnosis": true,
@@ -7253,9 +8940,12 @@ const translationKeySet: Record<string, true> = {
   "leaderboard.badges": true,
   "leaderboard.empty": true,
   "leaderboard.empty_hint": true,
+  "leaderboard.period_global": true,
+  "leaderboard.period_weekly": true,
   "leaderboard.position": true,
   "leaderboard.streak": true,
   "leaderboard.title": true,
+  "leaderboard.weekly_empty": true,
   "leaderboard.you_label": true,
   "loading.feature_ai": true,
   "loading.feature_cert": true,
@@ -7266,19 +8956,52 @@ const translationKeySet: Record<string, true> = {
   "loading.status_vak": true,
   "login.button.signin": true,
   "login.button.signing_in": true,
+  "login.create_my_account": true,
+  "login.create_parent_account": true,
   "login.email": true,
   "login.email_or_username": true,
   "login.email_or_username_placeholder": true,
+  "login.enter_as_parent": true,
+  "login.enter_smartboard": true,
   "login.error.connection": true,
   "login.error.email_not_confirmed": true,
   "login.error.email_required_for_reset": true,
   "login.error.invalid_credentials": true,
+  "login.error.login_failed": true,
   "login.error.oauth_account": true,
+  "login.error.register_failed": true,
   "login.forgot_password": true,
+  "login.has_account_footer": true,
+  "login.label.email": true,
+  "login.label.first_name": true,
+  "login.label.invitation_code": true,
+  "login.label.last_name": true,
+  "login.label.parent_full_name": true,
+  "login.label.parent_password": true,
+  "login.label.student_email": true,
   "login.no_account": true,
+  "login.no_account_footer": true,
+  "login.parent_hint": true,
+  "login.parent_no_account": true,
+  "login.parent_register_hint": true,
   "login.password": true,
+  "login.password_min_length": true,
+  "login.placeholder.first_name": true,
+  "login.placeholder.invitation_code": true,
+  "login.placeholder.last_name": true,
+  "login.placeholder.parent_full_name": true,
+  "login.placeholder.parent_password": true,
+  "login.placeholder.username": true,
   "login.reset_email_sent": true,
+  "login.retrying": true,
   "login.signup_link": true,
+  "login.subtitle": true,
+  "login.success.account_created": true,
+  "login.success.email_confirmation": true,
+  "login.tab.create_account": true,
+  "login.tab.parent": true,
+  "login.tab.register": true,
+  "login.tab.student": true,
   "metodo.cta_text": true,
   "metodo.form_email_label": true,
   "metodo.form_email_placeholder": true,
@@ -7397,6 +9120,10 @@ const translationKeySet: Record<string, true> = {
   "modals.certificates.my_courses_title": true,
   "modals.certificates.name_label": true,
   "modals.certificates.name_placeholder": true,
+  "modals.certificates.req_global": true,
+  "modals.certificates.req_module_score": true,
+  "modals.certificates.req_modules_done": true,
+  "modals.certificates.requirements_not_met": true,
   "modals.certificates.start_course": true,
   "modals.certificates.start_course_desc": true,
   "modals.certificates.student_fallback": true,
@@ -7492,6 +9219,45 @@ const translationKeySet: Record<string, true> = {
   "nav.send_message": true,
   "nav.smartboard": true,
   "nav.whatsapp": true,
+  "nico.appointment_saved_desc": true,
+  "nico.appointment_saved_title": true,
+  "nico.audio_blocked": true,
+  "nico.audio_enabled": true,
+  "nico.audio_off": true,
+  "nico.audio_on": true,
+  "nico.cache_cleared": true,
+  "nico.clear_cache": true,
+  "nico.clear_conversation": true,
+  "nico.close": true,
+  "nico.close_chat_aria": true,
+  "nico.empty_description": true,
+  "nico.empty_hint": true,
+  "nico.empty_subtitle": true,
+  "nico.farewell_tts": true,
+  "nico.free_class_tts": true,
+  "nico.greeting": true,
+  "nico.greeting_tts": true,
+  "nico.hide_suggestions": true,
+  "nico.input_hint": true,
+  "nico.input_placeholder": true,
+  "nico.lead_saved_desc": true,
+  "nico.lead_saved_title": true,
+  "nico.listen_response": true,
+  "nico.loading_calendar": true,
+  "nico.loading_form": true,
+  "nico.new_conversation": true,
+  "nico.new_conversation_aria": true,
+  "nico.open_chat_aria": true,
+  "nico.question_meet_tutors": true,
+  "nico.question_vak_test": true,
+  "nico.show_suggestions": true,
+  "nico.stop_recording": true,
+  "nico.stop_voice": true,
+  "nico.suggestions_label": true,
+  "nico.support_subtitle": true,
+  "nico.talk_to_nico": true,
+  "nico.typing": true,
+  "nico.you_label": true,
   "notfound.button": true,
   "notification.clear_all": true,
   "notification.close_aria": true,
@@ -7519,6 +9285,43 @@ const translationKeySet: Record<string, true> = {
   "notification.type_lesson_reminder": true,
   "notification.type_module_complete": true,
   "notification.unread_count": true,
+  "oral.active_deck": true,
+  "oral.answer_continue": true,
+  "oral.answer_placeholder": true,
+  "oral.cards_count": true,
+  "oral.change_topic": true,
+  "oral.chat_placeholder": true,
+  "oral.correct": true,
+  "oral.correct_count": true,
+  "oral.difficulty_dificil": true,
+  "oral.difficulty_facil": true,
+  "oral.difficulty_medio": true,
+  "oral.finish_exam": true,
+  "oral.generating_questions": true,
+  "oral.go_flashcards": true,
+  "oral.im_ready_exam": true,
+  "oral.incorrect": true,
+  "oral.loading": true,
+  "oral.multiple_choice": true,
+  "oral.open_question": true,
+  "oral.pick_subject": true,
+  "oral.points_desc": true,
+  "oral.ready_final_exam": true,
+  "oral.review_again": true,
+  "oral.reviewing_deck": true,
+  "oral.select_difficulty": true,
+  "oral.start_review": true,
+  "oral.subject_ciencias": true,
+  "oral.subject_ingles": true,
+  "oral.subject_lenguaje": true,
+  "oral.subject_matematicas": true,
+  "oral.subject_sociales": true,
+  "oral.subtitle_no_deck": true,
+  "oral.talk_with_dani": true,
+  "oral.tip_desc": true,
+  "oral.tip_label": true,
+  "oral.title": true,
+  "oral.xp_earned": true,
   "ova.automation.analyze_workflow": true,
   "ova.automation.analyzed": true,
   "ova.automation.badge": true,
@@ -8471,6 +10274,196 @@ const translationKeySet: Record<string, true> = {
   "page_loader.projects": true,
   "page_loader.redirect": true,
   "page_loader.vak": true,
+  "parent_dashboard.a_subject": true,
+  "parent_dashboard.achieved_subtitle": true,
+  "parent_dashboard.achieved_title": true,
+  "parent_dashboard.active_time": true,
+  "parent_dashboard.activity_fallback": true,
+  "parent_dashboard.advanced_subjects": true,
+  "parent_dashboard.alert_points_today": true,
+  "parent_dashboard.alert_streak_days": true,
+  "parent_dashboard.alert_unexplored": true,
+  "parent_dashboard.avg_progress": true,
+  "parent_dashboard.cloud": true,
+  "parent_dashboard.connected_now": true,
+  "parent_dashboard.controls_dani_chat": true,
+  "parent_dashboard.controls_dani_description": true,
+  "parent_dashboard.controls_dani_header": true,
+  "parent_dashboard.controls_description": true,
+  "parent_dashboard.controls_no_limit": true,
+  "parent_dashboard.controls_save": true,
+  "parent_dashboard.controls_saved": true,
+  "parent_dashboard.controls_saving": true,
+  "parent_dashboard.controls_time_limit": true,
+  "parent_dashboard.controls_time_limit_description": true,
+  "parent_dashboard.controls_title": true,
+  "parent_dashboard.controls_tools_count": true,
+  "parent_dashboard.controls_tools_header": true,
+  "parent_dashboard.current_streak": true,
+  "parent_dashboard.disconnected": true,
+  "parent_dashboard.emotional_pulse": true,
+  "parent_dashboard.feature_1": true,
+  "parent_dashboard.feature_2": true,
+  "parent_dashboard.feature_3": true,
+  "parent_dashboard.feature_4": true,
+  "parent_dashboard.feature_5": true,
+  "parent_dashboard.feature_6": true,
+  "parent_dashboard.feature_challenges": true,
+  "parent_dashboard.feature_flashcards": true,
+  "parent_dashboard.feature_grades": true,
+  "parent_dashboard.feature_missions": true,
+  "parent_dashboard.feature_oral": true,
+  "parent_dashboard.feature_podcast": true,
+  "parent_dashboard.feature_practice_exams": true,
+  "parent_dashboard.feature_vak": true,
+  "parent_dashboard.header_greeting": true,
+  "parent_dashboard.hours_ago": true,
+  "parent_dashboard.how_learns": true,
+  "parent_dashboard.last_activity_label": true,
+  "parent_dashboard.last_connection_label": true,
+  "parent_dashboard.learns_best": true,
+  "parent_dashboard.level_avanzado": true,
+  "parent_dashboard.level_experto": true,
+  "parent_dashboard.level_intermedio": true,
+  "parent_dashboard.level_maestro": true,
+  "parent_dashboard.level_principiante": true,
+  "parent_dashboard.live": true,
+  "parent_dashboard.local": true,
+  "parent_dashboard.logout": true,
+  "parent_dashboard.longest_streak": true,
+  "parent_dashboard.longest_streak_desc": true,
+  "parent_dashboard.minutes_ago": true,
+  "parent_dashboard.minutes_total_label": true,
+  "parent_dashboard.missions": true,
+  "parent_dashboard.missions_completed": true,
+  "parent_dashboard.missions_completed_pct": true,
+  "parent_dashboard.missions_done": true,
+  "parent_dashboard.monitoring": true,
+  "parent_dashboard.nav_actividad": true,
+  "parent_dashboard.nav_bienestar": true,
+  "parent_dashboard.nav_controles": true,
+  "parent_dashboard.nav_plan": true,
+  "parent_dashboard.nav_progreso": true,
+  "parent_dashboard.nav_recursos": true,
+  "parent_dashboard.nav_resumen": true,
+  "parent_dashboard.no_activity": true,
+  "parent_dashboard.now": true,
+  "parent_dashboard.offline": true,
+  "parent_dashboard.panel_title": true,
+  "parent_dashboard.parent_fallback": true,
+  "parent_dashboard.parent_role": true,
+  "parent_dashboard.points_earned": true,
+  "parent_dashboard.progress_by_subject": true,
+  "parent_dashboard.report_child": true,
+  "parent_dashboard.report_failed": true,
+  "parent_dashboard.report_login_required": true,
+  "parent_dashboard.report_no_data": true,
+  "parent_dashboard.report_offline": true,
+  "parent_dashboard.report_send": true,
+  "parent_dashboard.report_sending": true,
+  "parent_dashboard.report_sent": true,
+  "parent_dashboard.report_sent_short": true,
+  "parent_dashboard.report_sent_to": true,
+  "parent_dashboard.report_weekly_desc": true,
+  "parent_dashboard.report_weekly_title": true,
+  "parent_dashboard.resources_book1_desc": true,
+  "parent_dashboard.resources_book1_title": true,
+  "parent_dashboard.resources_book2_desc": true,
+  "parent_dashboard.resources_book2_title": true,
+  "parent_dashboard.resources_book3_desc": true,
+  "parent_dashboard.resources_book3_title": true,
+  "parent_dashboard.resources_books_title": true,
+  "parent_dashboard.resources_free": true,
+  "parent_dashboard.resources_freq_biweekly": true,
+  "parent_dashboard.resources_freq_weekly": true,
+  "parent_dashboard.resources_podcast1_desc": true,
+  "parent_dashboard.resources_podcast1_title": true,
+  "parent_dashboard.resources_podcast2_desc": true,
+  "parent_dashboard.resources_podcast2_title": true,
+  "parent_dashboard.resources_podcast3_desc": true,
+  "parent_dashboard.resources_podcast3_title": true,
+  "parent_dashboard.resources_podcasts_title": true,
+  "parent_dashboard.resources_premium": true,
+  "parent_dashboard.resources_tool1_desc": true,
+  "parent_dashboard.resources_tool2_desc": true,
+  "parent_dashboard.resources_tool3_desc": true,
+  "parent_dashboard.resources_tool4_desc": true,
+  "parent_dashboard.resources_tools_title": true,
+  "parent_dashboard.resources_vak_auditivo_tip1": true,
+  "parent_dashboard.resources_vak_auditivo_tip2": true,
+  "parent_dashboard.resources_vak_auditivo_tip3": true,
+  "parent_dashboard.resources_vak_auditivo_title": true,
+  "parent_dashboard.resources_vak_how": true,
+  "parent_dashboard.resources_vak_kinestesico_tip1": true,
+  "parent_dashboard.resources_vak_kinestesico_tip2": true,
+  "parent_dashboard.resources_vak_kinestesico_tip3": true,
+  "parent_dashboard.resources_vak_kinestesico_title": true,
+  "parent_dashboard.resources_vak_pending": true,
+  "parent_dashboard.resources_vak_visual_tip1": true,
+  "parent_dashboard.resources_vak_visual_tip2": true,
+  "parent_dashboard.resources_vak_visual_tip3": true,
+  "parent_dashboard.resources_vak_visual_title": true,
+  "parent_dashboard.resources_weekly_tip_body1": true,
+  "parent_dashboard.resources_weekly_tip_body2": true,
+  "parent_dashboard.resources_weekly_tip_citation": true,
+  "parent_dashboard.resources_weekly_tip_strong": true,
+  "parent_dashboard.resources_weekly_tip_title": true,
+  "parent_dashboard.seo_desc": true,
+  "parent_dashboard.seo_title": true,
+  "parent_dashboard.sessions_today": true,
+  "parent_dashboard.source_backend": true,
+  "parent_dashboard.source_local": true,
+  "parent_dashboard.source_supabase": true,
+  "parent_dashboard.streak_days_consecutive": true,
+  "parent_dashboard.streak_label": true,
+  "parent_dashboard.student_status": true,
+  "parent_dashboard.student_studying": true,
+  "parent_dashboard.study_habits": true,
+  "parent_dashboard.study_hours": true,
+  "parent_dashboard.studying_now": true,
+  "parent_dashboard.studying_subject": true,
+  "parent_dashboard.subjects_count": true,
+  "parent_dashboard.subjects_of": true,
+  "parent_dashboard.subjects_with_progress": true,
+  "parent_dashboard.subscription_includes": true,
+  "parent_dashboard.tab_actividades": true,
+  "parent_dashboard.tab_analitica": true,
+  "parent_dashboard.tab_calendario": true,
+  "parent_dashboard.tab_curriculo": true,
+  "parent_dashboard.tab_escaner": true,
+  "parent_dashboard.tab_examenes": true,
+  "parent_dashboard.tab_flashcards": true,
+  "parent_dashboard.tab_inicio": true,
+  "parent_dashboard.tab_libros": true,
+  "parent_dashboard.tab_materias": true,
+  "parent_dashboard.tab_misiones": true,
+  "parent_dashboard.tab_noticias": true,
+  "parent_dashboard.tab_oral": true,
+  "parent_dashboard.tab_podcast": true,
+  "parent_dashboard.tab_progreso": true,
+  "parent_dashboard.tab_vak": true,
+  "parent_dashboard.time_studied": true,
+  "parent_dashboard.tip_for_you": true,
+  "parent_dashboard.total_time_desc": true,
+  "parent_dashboard.total_time_invested": true,
+  "parent_dashboard.vak_auditivo_style": true,
+  "parent_dashboard.vak_kinestesico_style": true,
+  "parent_dashboard.vak_predominant": true,
+  "parent_dashboard.vak_visual_style": true,
+  "parent_dashboard.wellbeing_attention_title": true,
+  "parent_dashboard.wellbeing_badge": true,
+  "parent_dashboard.wellbeing_calm_desc": true,
+  "parent_dashboard.wellbeing_calm_title": true,
+  "parent_dashboard.wellbeing_last_alert": true,
+  "parent_dashboard.wellness_bien": true,
+  "parent_dashboard.wellness_bien_tip": true,
+  "parent_dashboard.wellness_excelente": true,
+  "parent_dashboard.wellness_excelente_tip": true,
+  "parent_dashboard.wellness_regular": true,
+  "parent_dashboard.wellness_regular_tip": true,
+  "parent_dashboard.wellness_sin_actividad": true,
+  "parent_dashboard.wellness_sin_actividad_tip": true,
+  "parent_dashboard.your_child": true,
   "pricing.annual": true,
   "pricing.badge": true,
   "pricing.cta_button": true,
@@ -8636,6 +10629,8 @@ const translationKeySet: Record<string, true> = {
   "scanner.summary_title": true,
   "seo.automation.desc": true,
   "seo.automation.title": true,
+  "seo.certificate_verify.desc": true,
+  "seo.certificate_verify.title": true,
   "seo.consultoria.desc": true,
   "seo.consultoria.title": true,
   "seo.consultoria_b2b.desc": true,
@@ -8892,6 +10887,9 @@ const translationKeySet: Record<string, true> = {
   "smartboard.landing_tranquility_desc": true,
   "smartboard.landing_tranquility_title_line1": true,
   "smartboard.landing_tranquility_title_line2": true,
+  "smartboard.landing_trial_terms": true,
+  "smartboard.landing_trust_badge": true,
+  "smartboard.landing_trust_subtitle": true,
   "smartboard.landing_vak_badge": true,
   "smartboard.landing_vak_desc": true,
   "smartboard.landing_vak_title": true,
@@ -9082,11 +11080,11 @@ const translationKeySet: Record<string, true> = {
   "study_groups.no_groups": true,
   "study_groups.subtitle": true,
   "study_groups.title": true,
-  time_avg: true,
-  time_days_active: true,
-  time_title: true,
-  time_today: true,
-  time_week: true,
+  "time_avg": true,
+  "time_days_active": true,
+  "time_title": true,
+  "time_today": true,
+  "time_week": true,
   "vak.ui.accept_and_continue": true,
   "vak.ui.accept_data_policy": true,
   "vak.ui.accessibility_label": true,

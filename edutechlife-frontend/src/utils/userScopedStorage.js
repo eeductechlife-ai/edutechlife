@@ -82,6 +82,22 @@ const LEGACY_UNSCOPED_KEYS = [
   "edutechlife_student_info",
 ];
 
+// Claves de progreso "legacy" sin scope que antes eran compartidas entre
+// cuentas. Antes de borrarlas, se migran a la clave por cuenta para no perder
+// las notas/avance del usuario al iniciar sesión.
+const LEGACY_PROGRESS_KEYS = [
+  "ialab_completed_videos",
+  "ialab_completed_modules",
+  "ialab_completed_exams",
+  "ialab_completed_infographics",
+  "ialab_completed_activities",
+  "ialab_challenge_scores",
+  "ialab_completed_community",
+  "ialab_overall_progress",
+  "ialab_last_activity_date",
+  "ialab_last_viewed_topic",
+];
+
 const LEGACY_UNSCOPED_PREFIXES = [
   "exam_attempts_remaining_m",
   "exam_next_attempt_m",
@@ -106,6 +122,19 @@ export const claimStorageForCurrentUser = () => {
   if (previousOwner === currentOwner) return false;
 
   try {
+    // Primero migrar el progreso legacy a la clave por cuenta (si esa cuenta
+    // aún no tiene dato), y luego limpiar las claves sin scope. Sin este paso,
+    // borrar `ialab_completed_exams` (nota del reto) hacía "desaparecer" las
+    // notas al reingresar.
+    LEGACY_PROGRESS_KEYS.forEach((key) => {
+      const raw = localStorage.getItem(key);
+      if (raw === null) return;
+      const scoped = scopedKey(key);
+      if (localStorage.getItem(scoped) === null) {
+        localStorage.setItem(scoped, raw);
+      }
+      localStorage.removeItem(key);
+    });
     LEGACY_UNSCOPED_KEYS.forEach((key) => localStorage.removeItem(key));
     Object.keys(localStorage)
       .filter((key) =>

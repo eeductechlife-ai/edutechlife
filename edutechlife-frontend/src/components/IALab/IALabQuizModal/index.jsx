@@ -7,12 +7,14 @@ import { useIALabStore } from "../../../store/ialabStore";
 import { useNotification } from "../../../context/NotificationContext";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import useFocusTrap from "../../../hooks/useFocusTrap";
+import { scopedKey } from "../../../utils/userScopedStorage";
 import SecurityWarningModal from "../SecurityWarningModal";
 import ScreenshotProtectionOverlay from "../ScreenshotProtectionOverlay";
 import { useQuizSecurity } from "./hooks/useQuizSecurity";
 import { QuizTimer } from "./components/QuizTimer";
 import { QuestionProgressBar } from "./components/QuestionProgressBar";
 import { QuestionRenderer } from "./components/QuestionRenderer";
+import RouletteSpin from "./components/RouletteSpin";
 import { NavigationBar } from "./components/NavigationBar";
 import { QuizResults } from "./components/QuizResults";
 import { SubmitConfirmDialog } from "./components/SubmitConfirmDialog";
@@ -67,7 +69,14 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   const [practiceMode, setPracticeMode] = useState(false);
   const [markedQuestions, setMarkedQuestions] = useState(new Set());
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  // Índice de la pregunta ya revelada por la ruleta. Cada pregunta se
+  // "descubre" girando; al navegar a otra vuelve a pedir un giro.
+  const [revealedFor, setRevealedFor] = useState(-1);
   const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    setRevealedFor(-1);
+  }, [isOpen]);
 
   const toggleMarkForReview = useCallback((questionId) => {
     setMarkedQuestions((prev) => {
@@ -178,8 +187,13 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
       const st = useIALabStore.getState();
       st.updateModuleActivity(activeMod, "exam", passed, score);
       try {
-        const key = "ialab_completed_exams";
-        const current = JSON.parse(localStorage.getItem(key) || "{}");
+        // Clave POR CUENTA (antes sin scope).
+        const key = scopedKey("ialab_completed_exams");
+        const current = JSON.parse(
+          localStorage.getItem(key) ||
+            localStorage.getItem("ialab_completed_exams") ||
+            "{}",
+        );
         current[activeMod] = score;
         localStorage.setItem(key, JSON.stringify(current));
       } catch (e) {
@@ -412,15 +426,24 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                   }
                 >
                   <div id="quiz-content" className="max-w-4xl mx-auto py-6">
-                    <QuestionRenderer
-                      question={quizQuestions[currentQuestion]}
-                      questionIndex={currentQuestion}
-                      totalQuestions={TOTAL_QUESTIONS}
-                      selectedAnswer={selectedAnswer}
-                      markedQuestions={markedQuestions}
-                      onSelectAnswer={handleSelectAnswer}
-                      onToggleMark={toggleMarkForReview}
-                    />
+                    {currentQuestion !== revealedFor ? (
+                      <RouletteSpin
+                        total={TOTAL_QUESTIONS}
+                        resultNumber={currentQuestion + 1}
+                        onReveal={() => setRevealedFor(currentQuestion)}
+                      />
+                    ) : (
+                      <QuestionRenderer
+                        question={quizQuestions[currentQuestion]}
+                        questionIndex={currentQuestion}
+                        totalQuestions={TOTAL_QUESTIONS}
+                        selectedAnswer={selectedAnswer}
+                        markedQuestions={markedQuestions}
+                        onSelectAnswer={handleSelectAnswer}
+                        onToggleMark={toggleMarkForReview}
+                        showFeedback
+                      />
+                    )}
                   </div>
                 </motion.div>
               )}

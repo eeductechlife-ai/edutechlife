@@ -5,6 +5,7 @@
  */
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 const WRENCH_PATH =
   "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z";
@@ -12,32 +13,32 @@ const WRENCH_PATH =
 const SUGGEST_CARDS = [
   {
     icon: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
-    label: "Objetivos del módulo",
-    desc: "Metas y competencias del Módulo 1",
+    labelKey: "ialab.workspace.artesano.card_objectives",
+    descKey: "ialab.workspace.artesano.card_objectives_desc",
     section: "objetivos",
     bg: "rgba(0,75,99,0.08)",
     color: "#004b63",
   },
   {
     icon: "M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2zM14 2v6h6",
-    label: "Contenido del módulo",
-    desc: "Videos, PDFs y recursos interactivos",
+    labelKey: "ialab.workspace.artesano.card_content",
+    descKey: "ialab.workspace.artesano.card_content_desc",
     section: "contenido",
     bg: "rgba(37,158,181,0.08)",
     color: "#259eb5",
   },
   {
     icon: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z",
-    label: "Actividades",
-    desc: "Desafíos y ejercicios del módulo",
+    labelKey: "ialab.workspace.artesano.card_activities",
+    descKey: "ialab.workspace.artesano.card_activities_desc",
     section: "actividades",
     bg: "rgba(0,75,99,0.08)",
     color: "#004b63",
   },
   {
     icon: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4l3 3",
-    label: "Práctica guiada",
-    desc: "Ejercicios paso a paso de prompts",
+    labelKey: "ialab.workspace.artesano.card_practice",
+    descKey: "ialab.workspace.artesano.card_practice_desc",
     section: "practica",
     bg: "rgba(37,158,181,0.08)",
     color: "#259eb5",
@@ -45,6 +46,7 @@ const SUGGEST_CARDS = [
 ];
 
 export default function ArtesanoWelcome({ topics = [], description, onSelectSection, onSelectTopic }) {
+  const { t } = useTranslation();
   return (
     <motion.div
       key="artesano-welcome"
@@ -73,10 +75,10 @@ export default function ArtesanoWelcome({ topics = [], description, onSelectSect
             backgroundClip: "text",
           }}
         >
-          ¿Qué forjamos hoy?
+          {t("ialab.workspace.artesano.heading")}
         </h2>
         <p className="text-sm theme-text-muted max-w-sm">
-          Módulo 1 · Artesano Digital — construye tus primeras instrucciones con precisión artesanal
+          {t("ialab.workspace.artesano.sub", { n: 1 })}
         </p>
       </div>
 
@@ -93,7 +95,7 @@ export default function ArtesanoWelcome({ topics = [], description, onSelectSect
         </div>
         <div className="flex-1 space-y-2.5">
           <p className="text-sm font-semibold theme-text leading-snug">
-            Todo artesano comienza con las herramientas básicas.
+            {t("ialab.workspace.artesano.intro_1")}
           </p>
           {description ? (
             <p className="text-sm theme-text-muted leading-relaxed">
@@ -102,10 +104,10 @@ export default function ArtesanoWelcome({ topics = [], description, onSelectSect
           ) : (
             <>
               <p className="text-sm theme-text-muted leading-relaxed">
-                Aquí aprenderás a esculpir instrucciones que la IA entiende a la perfección. Desde los fundamentos hasta técnicas avanzadas.
+                {t("ialab.workspace.artesano.intro_2")}
               </p>
               <p className="text-sm font-semibold theme-text leading-snug">
-                Domina el arte del prompt.
+                {t("ialab.workspace.artesano.intro_3")}
               </p>
             </>
           )}
@@ -114,9 +116,9 @@ export default function ArtesanoWelcome({ topics = [], description, onSelectSect
 
       {/* Tarjetas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {SUGGEST_CARDS.map(({ icon, label, desc, section, bg, color }) => (
+        {SUGGEST_CARDS.map(({ icon, labelKey, descKey, section, bg, color }) => (
           <button
-            key={label}
+            key={labelKey}
             type="button"
             onClick={() => {
               if (section === "contenido") onSelectTopic(0);
@@ -134,8 +136,8 @@ export default function ArtesanoWelcome({ topics = [], description, onSelectSect
               </svg>
             </span>
             <div className="min-w-0">
-              <p className="text-sm font-semibold theme-text leading-snug">{label}</p>
-              <p className="text-xs theme-text-muted mt-0.5 leading-snug">{desc}</p>
+              <p className="text-sm font-semibold theme-text leading-snug">{t(labelKey)}</p>
+              <p className="text-xs theme-text-muted mt-0.5 leading-snug">{t(descKey)}</p>
             </div>
           </button>
         ))}

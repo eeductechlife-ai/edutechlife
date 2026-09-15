@@ -31,6 +31,7 @@ import "./themes/themes.css";
 import ThemeProvider from "./themes/ThemeProvider";
 import { mapModuleToTheme } from "./themes/themeMap";
 import ToolWorkspace from "./workspace/ToolWorkspace";
+import { shouldAutoOpenActivities } from "./utils/autoTab";
 import DefaultModuleWelcome from "./workspace/DefaultModuleWelcome";
 import MobileMenuOverlay from "./shared/MobileMenuOverlay";
 import TabPills from "./shared/TabPills";
@@ -466,14 +467,20 @@ const IALabContent = memo(function () {
 
   // Tab inteligente: redirige a actividades solo cuando el contenido ya está
   // completo y el examen sigue pendiente (el estudiante sabe el camino y el
-  // siguiente paso lógico es el examen).  Los módulos chrome (M2/M3/M4) abren
-  // siempre en el intro para que el estudiante vea la pantalla de bienvenida.
+  // siguiente paso lógico es el examen). Los módulos con chrome inmersivo
+  // (M2/M3/M4) abren siempre en Inicio para ver la pantalla de bienvenida.
   useEffect(() => {
     if (isLoadingProgress || viewSection !== null) return;
     if (autoTabRef.current === activeMod) return;
     autoTabRef.current = activeMod;
     const mod = moduleProgress[activeMod];
-    if (mod?.resourcesCompleted && !mod?.exam) {
+    if (
+      shouldAutoOpenActivities({
+        moduleId: activeMod,
+        resourcesCompleted: mod?.resourcesCompleted,
+        exam: mod?.exam,
+      })
+    ) {
       setViewSection("actividades");
     }
   }, [activeMod, isLoadingProgress, moduleProgress, viewSection, setViewSection]);
@@ -1012,6 +1019,7 @@ const IALabContent = memo(function () {
                       openTopic(i);
                     }}
                     onSelectSection={setViewSection}
+                    onAction={handleAction}
                   >
                     {moduleSections}
                   </ToolWorkspace>

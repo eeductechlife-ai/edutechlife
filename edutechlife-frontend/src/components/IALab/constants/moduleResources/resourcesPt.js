@@ -1,7 +1,7 @@
 const RESOURCES_PT = {
   // MÓDULO 1: O ARTESÃO DIGITAL — ENGENHARIA DE PROMPTS
-  "Os Fundamentos do Artesão: O que é a IA Generativa?": {
-    title: "Os Fundamentos do Artesão: O que é a IA Generativa?",
+  "Os Fundamentos do Artesão: O que é IA Generativa?": {
+    title: "Os Fundamentos do Artesão: O que é IA Generativa?",
     description:
       "Todo artesão conhece sua matéria-prima. Descubra o que é a IA Generativa, como funciona e por que dominá-la é a ferramenta mais valiosa na oficina do artesão digital.",
     learningObjectives: [
@@ -27,7 +27,7 @@ const RESOURCES_PT = {
       {
         id: "intro-ova-1",
         type: "ova_interactive",
-        title: "Primórdios da Inteligência Artificial",
+        title: "A Matéria-Prima",
         description:
           "Explore as origens da inteligência artificial com 5 atividades interativas que o levarão de Alan Turing até o ChatGPT. Como conhecer a história do seu ofício antes de pegar as ferramentas.",
         estimatedTime: "10 minutos",
@@ -78,7 +78,7 @@ const RESOURCES_PT = {
       {
         id: "prompt-ova-html-1",
         type: "ova_interactive",
-        title: "Como se comunicar com a IA (prompts)",
+        title: "O Cinzel",
         description:
           "Coloque em prática o que aprendeu: esculpa seus próprios prompts e receba feedback imediato. A oficina do artesão onde cada prática o aproxima da maestria.",
         estimatedTime: "10 minutos",
@@ -88,7 +88,7 @@ const RESOURCES_PT = {
       {
         id: "prompt-lab-ova-1",
         type: "ova_interactive",
-        title: "Laboratório de Prompts ao Vivo",
+        title: "O Martelo",
         description:
           "A bancada de trabalho do artesão digital: escreva prompts reais, execute-os contra o modelo e refine até obter o resultado exato. Quatro técnicas comprovadas mais um desafio final.",
         estimatedTime: "15 minutos",
@@ -103,8 +103,8 @@ const RESOURCES_PT = {
   // ============================================================================
   // MÓDULO 2: O ARQUITETO DE AUTOMAÇÃO — POTÊNCIA DO CHATGPT
   // ============================================================================
-  "As Plantas do Arquiteto: Guia Completo de ChatGPT": {
-    title: "As Plantas do Arquiteto: Guia Completo de ChatGPT",
+  "As Plantas do Arquiteto: Guia Completo do ChatGPT": {
+    title: "As Plantas do Arquiteto: Guia Completo do ChatGPT",
     description:
       "Todo grande edifício começa com uma planta-mestra. Conheça a arquitetura completa do ChatGPT: modelos, interface, técnicas de engenharia de prompt e as melhores práticas do ofício de arquiteto digital.",
     learningObjectives: [
@@ -143,7 +143,7 @@ const RESOURCES_PT = {
       {
         id: "chatgpt-ova-ecosystem",
         type: "ova_interactive",
-        title: "Explore o Ecossistema ChatGPT",
+        title: "A Planta Mestra",
         description:
           "Percorrido interativo pelo universo ChatGPT: descubra cada ferramenta, aprenda a combiná-las e torne-se um arquiteto de automação. O tour completo da sua nova obra.",
         estimatedTime: "20 minutos",
@@ -184,7 +184,7 @@ const RESOURCES_PT = {
       {
         id: "workflow-ova-herramientas",
         type: "ova_interactive",
-        title: "Laboratório: Ferramentas ChatGPT",
+        title: "A Caixa de Ferramentas",
         description:
           "Explore cada ferramenta do ChatGPT com exercícios práticos e áudio guiado. Como um arquiteto testando suas ferramentas antes da grande obra. Complete o desafio para demonstrar sua maestria.",
         estimatedTime: "25 minutos",
@@ -196,7 +196,7 @@ const RESOURCES_PT = {
       {
         id: "automation-flows-ova-1",
         type: "ova_interactive",
-        title: "Fluxos de Automação no Mundo Real",
+        title: "A Linha de Montagem",
         description:
           "Framework + 3 casos práticos: como um profissional de marketing, um educador e um empreendedor usam as ferramentas integradas do ChatGPT em fluxos que multiplicam sua produtividade.",
         estimatedTime: "22 minutos",
@@ -236,7 +236,7 @@ const RESOURCES_PT = {
       {
         id: "gpts-ova-1",
         type: "ova_interactive",
-        title: "Laboratório: Construa um GPT",
+        title: "A Fábrica de Assistentes",
         description:
           "Mãos à obra: construa um GPT do zero com exercícios guiados e feedback em cada etapa. Como o arquiteto que supervisiona cada detalhe de sua criação.",
         estimatedTime: "25 minutos",
@@ -291,8 +291,8 @@ const RESOURCES_PT = {
     ],
   },
 
-  "Grounding: Quando a Evidência Toca a Terra": {
-    title: "Grounding: Quando a Evidência Toca a Terra",
+  "Grounding: Quando a Evidência Toca o Chão": {
+    title: "Grounding: Quando a Evidência Toca o Chão",
     description:
       "O Gemini não flutua no ar — ele se conecta com suas ferramentas diárias. Aprenda a integrá-lo ao Google Docs, Sheets e Gmail para multiplicar sua velocidade de investigação.",
     learningObjectives: [
@@ -320,7 +320,7 @@ const RESOURCES_PT = {
       {
         id: "workspace-ova-1",
         type: "ova_interactive",
-        title: "Missão Interativa: Domine o Ecossistema Gemini",
+        title: "A Lupa Multimodal",
         description:
           "Percorrido interativo pela arquitetura da sua nova arma secreta: capacidades multimodais, Deep Research e integração com o Workspace. Inclui áudio guiado e exame final para certificar seu nível de detetive.",
         estimatedTime: "25 minutos",
@@ -371,12 +371,24 @@ const RESOURCES_PT = {
       {
         id: "gemini-cases-ova-1",
         type: "ova_interactive",
-        title: "Laboratório: Resolva o Caso — 6 Desafios",
+        title: "O Caso Aberto",
         description:
           "Enfrente 6 casos reais — desde analisar um contrato até verificar uma notícia falsa — e resolva-os usando o Gemini como seu assistente de investigação.",
         estimatedTime: "25 minutos",
         difficulty: "Avançado",
         interactiveElements: 6,
+        thumbnailType: "premium",
+        fullscreen: true,
+      },
+      {
+        id: "gemini-deep-research-ova-1",
+        type: "ova_interactive",
+        title: "O Arquivo Forense",
+        description:
+          "Pesquise a fundo e verifique cada fonte: analise evidências, cruze dados e gere relatórios com rastreabilidade forense usando o Gemini Deep Research.",
+        estimatedTime: "25 minutos",
+        difficulty: "Avançado",
+        interactiveElements: 3,
         thumbnailType: "premium",
         fullscreen: true,
       },
@@ -426,7 +438,7 @@ const RESOURCES_PT = {
       {
         id: "notebooklm-ova-1",
         type: "ova_interactive",
-        title: "Laboratório: Crie seu Notebook",
+        title: "O Grimório",
         description:
           "7 perguntas que o tornarão especialista em NotebookLM. Complete o desafio com Valerio como seu guia pessoal nesta jornada alquímica.",
         estimatedTime: "15 minutos",
@@ -477,7 +489,7 @@ const RESOURCES_PT = {
       {
         id: "notebook-summary-ova-1",
         type: "ova_interactive",
-        title: "Simulador: Análise de Documentos",
+        title: "O Crisol",
         description:
           "Simulador prático: pegue documentos reais e gere resumos de nível profissional em minutos. Coloque suas habilidades alquímicas à prova.",
         estimatedTime: "20 minutos",
@@ -516,7 +528,7 @@ const RESOURCES_PT = {
       {
         id: "notebook-audio-guide-1",
         type: "ova_interactive",
-        title: "Notebook LM",
+        title: "A Fórmula Sonora",
         description:
           "Curso completo de NotebookLM: 6 módulos interativos com exercícios práticos e um desafio final para você se tornar um mestre alquimista.",
         estimatedTime: "30 minutos",
@@ -528,7 +540,7 @@ const RESOURCES_PT = {
       {
         id: "notebook-audio-ova-1",
         type: "ova_interactive",
-        title: "Laboratório: Crie seu Podcast de IA",
+        title: "O Estúdio Alquímico",
         description:
           "Crie seu primeiro podcast de IA: escolha o tema, personalize o tom e ouça o resultado em minutos. A alquimia do áudio em suas mãos.",
         estimatedTime: "15 minutos",
@@ -537,26 +549,10 @@ const RESOURCES_PT = {
         thumbnailType: "premium",
         fullscreen: true,
       },
-    ],
-  },
-
-  "O Mestre Alquimista: Fluxo Completo Documento-Podcast": {
-    title: "O Mestre Alquimista: Fluxo Completo Documento-Podcast",
-    description:
-      "Feche o círculo: conecte análise, síntese e áudio em um fluxo integrado. Como investigadores, educadores e empresas transformam montanhas de documentos em podcasts que cativam.",
-    learningObjectives: [
-      "Dominar o fluxo ideal: fontes → síntese → podcast",
-      "Analisar 3 casos reais de transformação documento-em-podcast",
-      "Reconhecer padrões de orquestação entre as ferramentas do NotebookLM",
-      "Projetar seu próprio fluxo de documento-em-podcast adaptado ao seu contexto",
-    ],
-    estimatedTime: "24 minutos",
-    difficulty: "Avançado",
-    resources: [
       {
         id: "document-mastery-ova-1",
         type: "ova_interactive",
-        title: "Domínio do Documento: Do Papel ao Podcast",
+        title: "A Transmutação",
         description:
           "Framework + 3 casos práticos: investigador, educador, empresa. Como transformar documentos complexos em podcasts agradáveis de ouvir sem perder profundidade.",
         estimatedTime: "24 minutos",
@@ -611,7 +607,7 @@ const RESOURCES_PT = {
       {
         id: "bias-ova-1",
         type: "ova_interactive",
-        title: "Laboratório: Detecte o Viés",
+        title: "O Espelho da Verdade",
         description:
           "Coloque seu olhar de guardião à prova: analise respostas de IA reais e descubra os vieses que a maioria das pessoas jamais notaria. 6 desafios que aguçarão seu instinto.",
         estimatedTime: "15 minutos",
@@ -663,7 +659,7 @@ const RESOURCES_PT = {
       {
         id: "privacy-ova-1",
         type: "ova_interactive",
-        title: "Simulador: Avaliação de Riscos",
+        title: "A Bússola de Riscos",
         description:
           "Enfrente cenários reais de risco e aprenda a proteger seus dados como um guardião. Inclui o jogo das estrelas éticas que colocará suas decisões à prova.",
         estimatedTime: "20 minutos",
@@ -702,7 +698,7 @@ const RESOURCES_PT = {
       {
         id: "ethics-ova-1",
         type: "ova_interactive",
-        title: "Laboratório: Dilemas Éticos",
+        title: "O Tribunal Ético",
         description:
           "Enfrente 8 dilemas éticos reais onde não há respostas fáceis. Cada decisão que você tomar terá consequências. Você está pronto para ser um guardião?",
         estimatedTime: "25 minutos",
@@ -714,7 +710,7 @@ const RESOURCES_PT = {
       {
         id: "ethics-cases-ova-1",
         type: "ova_interactive",
-        title: "Casos Práticos de Ética Aplicada",
+        title: "Os Casos do Guardião",
         description:
           "Um framework de 5 perguntas mais 3 casos reais de IA no mundo: contratação, saúde e direitos autorais. Tome decisões e descubra como pensa um guardião ético.",
         estimatedTime: "20 minutos",

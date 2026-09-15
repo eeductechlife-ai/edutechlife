@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
+import { buildCertVerificationUrl } from '../../utils/certificateVerification';
 
 const SPONSORS = [
   { name: 'Colciencias', initials: 'CO', color: [0, 102, 179] },
@@ -19,6 +20,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
 
   const displayName = studentName || t('ialab.certificate_preview.student_fallback');
   const displayCertNumber = certNumber || 'EDL-2026-00000000';
+  const verifyUrl = buildCertVerificationUrl(displayCertNumber);
   const displayDate = issuedAt 
     ? new Date(issuedAt).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })
     : new Date().toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
@@ -230,9 +232,14 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
         doc.setFillColor(r, g, b);
         doc.rect(x, H - 12, 1, 12, 'F');
       }
+      doc.setTextColor(255, 255, 255);
+      if (verifyUrl) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(5.5);
+        doc.text(verifyUrl, W / 2, H - 8, { align: 'center' });
+      }
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7);
-      doc.setTextColor(255, 255, 255);
       doc.text(t('certificate.footer_pdf'), W / 2, H - 4, { align: 'center' });
 
       doc.save(`${t('certificate.filename_prefix')}_${courseName.replace(/\s+/g, '_')}_${displayName.replace(/\s+/g, '_')}.pdf`);
@@ -406,6 +413,16 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
               <p className="text-sm font-bold font-mono text-[var(--theme-emphasis)]">
                 {displayCertNumber}
               </p>
+              {verifyUrl && (
+                <a
+                  href={verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 inline-block text-[9px] text-[var(--theme-primary)] hover:underline break-all"
+                >
+                  {verifyUrl.replace('https://', '')}
+                </a>
+              )}
             </div>
 
             {/* Official Seal */}

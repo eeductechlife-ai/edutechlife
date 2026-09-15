@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Icon } from "../../../utils/iconMapping.jsx";
 import TooltipIcon from "./SidebarTooltipIcon";
 import ModuleNavItem from "./ModuleNavItem";
+import SidebarToggleCue from "./SidebarToggleCue";
 
 const formatPoints = (pts) => {
   if (pts >= 1000) return `${(pts / 1000).toFixed(1).replace(".0", "")}k`;
@@ -36,6 +37,7 @@ const SidebarCollapsed = ({
   activeMod,
   isModuleLocked,
   calculateModuleScore,
+  completedModules = [],
   moduleProgress,
   streak,
   isStreakAtRisk,
@@ -92,14 +94,7 @@ const SidebarCollapsed = ({
           aria-label={`${Math.round(courseProgress)}% ${t("sidebar.completed")} — ${t("sidebar.toggle_collapse_tip")}`}
         >
           <div className="relative w-14 h-14 rounded-full shadow-[0_0_14px_rgba(0,188,212,0.25)]">
-            <span
-              aria-hidden
-              className="absolute inset-0 rounded-full animate-pulse motion-reduce:animate-none pointer-events-none bg-[radial-gradient(circle,rgba(0,188,212,0.30),transparent_72%)]"
-            />
-            <span
-              aria-hidden
-              className="absolute inset-0 rounded-full ring-1 ring-[#00BCD4]/50 animate-pulse motion-reduce:animate-none pointer-events-none"
-            />
+            <SidebarToggleCue size="collapsed" />
             <svg
               className="relative w-14 h-14 -rotate-90"
               viewBox="0 0 120 120"
@@ -217,6 +212,7 @@ const SidebarCollapsed = ({
                   mod={mod}
                   isActive={isActive}
                   isLocked={locked}
+                  isCompleted={completedModules.includes(mod.id)}
                   score={modScore}
                   variant="compact"
                   onClick={goToModule}
@@ -299,6 +295,7 @@ SidebarCollapsed.propTypes = {
   activeMod: PropTypes.number,
   isModuleLocked: PropTypes.func,
   calculateModuleScore: PropTypes.func,
+  completedModules: PropTypes.array,
   moduleProgress: PropTypes.object,
   streak: PropTypes.number,
   isStreakAtRisk: PropTypes.func,

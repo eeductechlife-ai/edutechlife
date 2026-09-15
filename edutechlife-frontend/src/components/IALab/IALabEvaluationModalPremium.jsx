@@ -75,6 +75,20 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
 
       // trackChallengeResult ya llama a updateModuleActivity, no es necesario llamarla de nuevo
 
+      // Aviso NO bloqueante si la nota no llegó a la nube. El store local ya
+      // la conserva; solo informamos para que el estudiante no crea que se
+      // perdió.
+      if (challengeResult && challengeResult.success === false) {
+        createNotification({
+          type: "warning",
+          title: t("ialab.quiz.sync_error_title") || "No se pudo guardar en la nube",
+          message:
+            t("ialab.quiz.sync_error_msg") ||
+            "Tu nota quedó guardada en este dispositivo y se sincronizará al reconectar.",
+          metadata: { moduleId: activeMod, score, type: "challenge" },
+        });
+      }
+
       // Marcar como actividad completada en ProgressContext (ruta global)
       await markActivityComplete(`challenge-${activeMod}`);
 

@@ -1,5 +1,23 @@
 import { API_BASE_URL } from "../../../config/api";
 
+/**
+ * Completa un objeto de ejercicios con las claves ausentes del fallback.
+ * Aditivo: nunca sobrescribe valores ya presentes (solo rellena undefined/null).
+ * Evita pasos sin información cuando la IA devuelve un objeto parcial.
+ */
+export function completeExercisesShape(exercises, fallback = {}) {
+  if (!exercises || typeof exercises !== "object" || Array.isArray(exercises)) {
+    return exercises;
+  }
+  const result = { ...exercises };
+  for (const [key, value] of Object.entries(fallback || {})) {
+    if (result[key] === undefined || result[key] === null) {
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
 export async function generateExercises({ config, locale, signal }) {
   const activeLocale = locale || "es";
 
@@ -58,7 +76,10 @@ export async function generateExercises({ config, locale, signal }) {
     throw new Error("Estructura de ejercicios inválida");
   }
 
-  return exercises;
+  // Garantiza que ningún paso quede sin información si la IA devuelve un objeto
+  // parcial: se completan las claves ausentes con el fallback del módulo.
+  const fallback = config.fallbackExercises?.(activeLocale) || {};
+  return completeExercisesShape(exercises, fallback);
 }
 
 export async function evaluateAnswers({

@@ -11,6 +11,7 @@ import {
 import { Card, CardContent } from "../ui/card-simple";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { evaluateCertificateRequirements } from "../../utils/certificateRequirements";
 
 const CertificatePreview = lazy(() => import("../IALab/CertificatePreview"));
 
@@ -83,8 +84,13 @@ const CertificatesModal = ({ isOpen, onClose }) => {
   const modulesByContext = completedModules.length;
   const completedModulesCount = Math.max(modulesByScore, modulesByContext);
 
-  const canGenerateCertificate =
-    courseProgress >= 80 || completedModulesCount >= 5;
+  const moduleScores = [1, 2, 3, 4, 5].map((id) => calculateModuleScore(id));
+  const requirements = evaluateCertificateRequirements({
+    moduleScores,
+    courseProgress,
+    completedModules,
+  });
+  const canGenerateCertificate = requirements.eligible;
 
   const handleGenerateCertificate = async () => {
     if (!generateCertificate) {
@@ -282,6 +288,25 @@ const CertificatesModal = ({ isOpen, onClose }) => {
                     total: TOTAL_MODULES,
                   })}
                 </p>
+                {!canGenerateCertificate && (
+                  <ul className="mt-3 space-y-1.5" data-testid="certificate-requirements">
+                    {[
+                      { done: requirements.checks.fiveModules, label: t("modals.certificates.req_modules_done") },
+                      { done: requirements.checks.allModulesPassed, label: t("modals.certificates.req_module_score") },
+                      { done: requirements.checks.globalProgress, label: t("modals.certificates.req_global") },
+                    ].map((req) => (
+                      <li key={req.label} className="flex items-center gap-2 text-xs">
+                        <Icon
+                          name={req.done ? "fa-check-circle" : "fa-circle"}
+                          className={`text-[11px] flex-shrink-0 ${req.done ? "text-emerald-500" : "text-amber-400"}`}
+                        />
+                        <span className={req.done ? "text-emerald-700 line-through" : "text-amber-800"}>
+                          {req.label}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
           </div>

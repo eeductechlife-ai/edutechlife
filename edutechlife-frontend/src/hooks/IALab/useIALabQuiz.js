@@ -6,6 +6,7 @@ import {
 import { useIALabStore } from "../../store/ialabStore";
 import {
   TOTAL_QUESTIONS,
+  EXAM_QUESTION_COUNT,
   PASSING_SCORE,
   MAX_ATTEMPTS,
   SUGGESTED_TIME_SECONDS,
@@ -17,6 +18,10 @@ import {
   MODULE_EXAMS,
   getModuleExams,
 } from "../../data/ialabQuizData";
+import {
+  pickRandomQuestions,
+  calculateWeightedScore,
+} from "../../data/ialabQuizData/scoring";
 import { useTranslation } from "../../i18n/I18nProvider";
 
 function shuffleArray(arr) {
@@ -91,29 +96,7 @@ export const useIALabQuiz = () => {
   const quizQuestions = shuffledQuestionsRef.current || rawQuestions;
 
   const calculateQuizScore = useCallback(
-    (answers) => {
-      let correct = 0;
-      const failedQuestions = [];
-
-      quizQuestions.forEach((question) => {
-        if (answers[question.id] === question.correctAnswer) {
-          correct++;
-        } else {
-          failedQuestions.push(question.id);
-        }
-      });
-
-      const percentage = (correct / quizQuestions.length) * 100;
-      const passed = percentage >= PASSING_SCORE;
-
-      return {
-        score: Math.round(percentage),
-        correctCount: correct,
-        passed,
-        failedQuestions,
-        neededToPass: Math.ceil((PASSING_SCORE / 100) * quizQuestions.length),
-      };
-    },
+    (answers) => calculateWeightedScore(quizQuestions, answers, PASSING_SCORE),
     [quizQuestions],
   );
 
@@ -291,7 +274,10 @@ export const useIALabQuiz = () => {
     }
 
     const base = getModuleExams(locale)[activeMod] || MODULE_EXAMS[1];
-    shuffledQuestionsRef.current = shuffleArray(base).map((q) => ({
+    shuffledQuestionsRef.current = pickRandomQuestions(
+      base,
+      EXAM_QUESTION_COUNT,
+    ).map((q) => ({
       ...q,
       options: shuffleArray(q.options),
     }));
@@ -448,7 +434,9 @@ export const useIALabQuiz = () => {
 
   return {
     quizQuestions,
-    TOTAL_QUESTIONS: quizQuestions.length,
+    // El intento siempre responde EXAM_QUESTION_COUNT (10) aunque el banco sea
+    // mayor (ruleta): así la barra de progreso y "x de N" muestran 10.
+    TOTAL_QUESTIONS: Math.min(EXAM_QUESTION_COUNT, rawQuestions.length),
     PASSING_SCORE,
     SUGGESTED_TIME_SECONDS,
     MAX_SECURITY_WARNINGS,

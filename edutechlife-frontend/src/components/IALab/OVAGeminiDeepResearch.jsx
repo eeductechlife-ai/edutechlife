@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { Icon } from "../../utils/iconMapping.jsx";
@@ -113,7 +113,7 @@ const StepIndicator = ({ current, total }) => (
   </div>
 );
 
-const OVAGeminiDeepResearch = () => {
+const OVAGeminiDeepResearch = ({ onComplete } = {}) => {
   const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [selectedType, setSelectedType] = useState(null);
@@ -127,6 +127,10 @@ const OVAGeminiDeepResearch = () => {
     setStep(0);
     setSelectedType(null);
   };
+
+  useEffect(() => {
+    if (step === 2) onComplete?.();
+  }, [step, onComplete]);
 
   return (
     <div className="relative">

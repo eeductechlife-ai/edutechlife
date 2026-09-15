@@ -139,7 +139,9 @@ describe('useIALabQuiz', () => {
     const { result } = renderHook(() => useIALabQuiz());
 
     expect(Array.isArray(result.current.quizQuestions)).toBe(true);
-    expect(result.current.quizQuestions.length).toBe(10);
+    // Antes de girar se expone el banco completo del módulo (40); al abrir el
+    // reto se sortean 10 para el intento.
+    expect(result.current.quizQuestions.length).toBe(40);
     expect(result.current.quizQuestions[0].id).toBe('m1q1');
   });
 

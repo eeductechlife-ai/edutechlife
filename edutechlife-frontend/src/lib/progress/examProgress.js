@@ -1,5 +1,6 @@
 import { TABLE_NAME } from "./constants";
 import { coreFactory } from "./core";
+import { retryAsync } from "../../utils/retryAsync";
 
 const getUserId = (userId) => {
   if (userId && typeof userId === "string") {
@@ -81,25 +82,27 @@ export const examProgressFactory = (db) => ({
         throw new Error("moduleId debe ser un n\u00famero");
       }
 
-      const { data, error } = await db
-        .from(TABLE_NAME)
-        .upsert(
-          {
-            user_id: actualUserId,
-            module_id: numericModuleId,
-            activity_type: "exam",
-            resource_id: null,
-            score: score,
-            is_completed: passed,
-            updated_at: new Date().toISOString(),
-          },
-          {
-            onConflict: "user_id,module_id,activity_type,resource_id",
-            ignoreDuplicates: false,
-          },
-        )
-        .select("*")
-        .maybeSingle();
+      const { data, error } = await retryAsync(() =>
+        db
+          .from(TABLE_NAME)
+          .upsert(
+            {
+              user_id: actualUserId,
+              module_id: numericModuleId,
+              activity_type: "exam",
+              resource_id: null,
+              score: score,
+              is_completed: passed,
+              updated_at: new Date().toISOString(),
+            },
+            {
+              onConflict: "user_id,module_id,activity_type,resource_id",
+              ignoreDuplicates: false,
+            },
+          )
+          .select("*")
+          .maybeSingle(),
+      );
 
       if (error) throw error;
 

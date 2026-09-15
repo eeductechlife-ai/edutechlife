@@ -80,7 +80,7 @@ const STEP_DESC_KEYS = {
  * @param {number}   props.moduleId   - ID del módulo a evaluar
  * @param {Function} props.onComplete - Callback al finalizar la evaluación
  */
-const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: propModuleId, onComplete }) => {
+const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: propModuleId, onComplete, activityType = "challenge" }) => {
   const { t, locale } = useTranslation();
   const { user } = useAuth();
   const effectiveModuleId = propModuleId || 1;
@@ -97,7 +97,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
     setStep,
     setResponse,
     resetEvaluation,
-  } = useIALabEvaluation(effectiveModuleId, locale);
+  } = useIALabEvaluation(effectiveModuleId, locale, activityType);
 
   const [formError, setFormError] = useState(null);
   const errorTimeoutRef = useRef(null);
@@ -280,6 +280,7 @@ const IALabEvaluationModal = ({ isOpen, onClose, isPremium = false, moduleId: pr
         steps={steps}
         step={state.step}
         totalSteps={totalSteps}
+        moduleId={effectiveModuleId}
         exercises={state.exercises}
         responses={state.responses}
         titleKeys={titleKeys}
@@ -410,6 +411,7 @@ IALabEvaluationModal.propTypes = {
   isPremium: PropTypes.bool,
   moduleId: PropTypes.number,
   onComplete: PropTypes.func,
+  activityType: PropTypes.oneOf(["exam", "challenge"]),
 };
 
 export default IALabEvaluationModal;

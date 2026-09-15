@@ -8,6 +8,7 @@ import AutoGrowTextarea from "../shared/AutoGrowTextarea";
 import ExampleToggle from "../shared/ExampleToggle";
 import StepFeedback from "../shared/StepFeedback";
 import ProgressStepper from "../shared/ProgressStepper";
+import { buildStep3Requirements } from "./requirements";
 
 const getDataFieldsByCase = (selectedCase) => {
   const base = [
@@ -117,6 +118,12 @@ const ChatGPTStep3 = ({
     selectedFields.length > 0,
     returnValue.length >= 10,
   ].filter(Boolean).length;
+  const requirements = buildStep3Requirements({
+    functionName,
+    selectedFields,
+    returnValue,
+    t,
+  });
 
   const generatedSchema = useMemo(() => {
     const props = {};
@@ -293,12 +300,20 @@ const ChatGPTStep3 = ({
               {JSON.stringify(generatedSchema, null, 2)}
             </pre>
           </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400 flex items-start gap-2">
+            <Icon
+              name="fa-circle-info"
+              className="text-[var(--theme-primary)] mt-0.5"
+            />
+            {t("ialab.challenge.m2.step3_generated_note")}
+          </p>
         </motion.div>
       )}
 
       <StepFeedback
         completed={completed}
         total={3}
+        requirements={requirements}
         hints={[
           t("ialab.challenge.m2.step3_tip_1"),
           t("ialab.challenge.m2.step3_tip_2"),

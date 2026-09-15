@@ -34,12 +34,13 @@ const OVAPromptLab = lazyWithRetry(() => import('../OVAPromptLab.jsx'));
 const OVAEthicsCases = lazyWithRetry(() => import('../OVAEthicsCases.jsx'));
 const OVAAutomationFlows = lazyWithRetry(() => import('../OVAAutomationFlows.jsx'));
 const OVADocumentMastery = lazyWithRetry(() => import('../OVADocumentMastery.jsx'));
+const OVAGeminiDeepResearch = lazyWithRetry(() => import('../OVAGeminiDeepResearch.jsx'));
 
 export const OVA_COMPONENTS = {
   'workflow-ova-herramientas': OVAChatGPTTools,
-  'gemini-ova-1': InteractiveViewer,
   'workspace-ova-1': OvaEdutechlife,
   'gemini-cases-ova-1': OVAPracticalCases,
+  'gemini-deep-research-ova-1': OVAGeminiDeepResearch,
   'ethics-ova-1': OVAEthicalDilemmas,
   'gpts-ova-1': OVABuildGPT,
   'chatgpt-ova-ecosystem': OVAEcosystemGuide,

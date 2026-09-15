@@ -1,5 +1,5 @@
 export { default as IALab } from './IALab';
-export { default as IALabDashboard } from './IALabDashboard';
+export { default as CourseHome } from './CourseHome';
 export { default as IALabSidebar } from './IALabSidebar';
 export { default as IALabHeader } from './IALabHeader';
 export { default as IALabModals } from './IALabModals';

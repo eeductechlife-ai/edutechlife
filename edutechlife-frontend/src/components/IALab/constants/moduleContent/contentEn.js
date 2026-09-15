@@ -260,11 +260,6 @@ const CONTENT_EN = {
             "✅ Function Calling: ChatGPT detects the intent, calls the weather API, receives JSON data, and generates: The current weather in Bogotá is 18°C with 65% humidity. We recommend bringing an umbrella due to 80% rain probability this afternoon. An elegant facade connecting to live real-world data.",
         },
       },
-      4: {
-        objective: "⚡ The Building's Facade",
-        objectiveDesc:
-          "Create custom GPTs and connect them to the real world with Function Calling: automate your daily work.",
-      },
     },
   },
 
@@ -311,7 +306,7 @@ const CONTENT_EN = {
         {
           title: "Deep Research: The Forensic Toolkit",
           icon: "fa-search",
-          resources: 3,
+          resources: 4,
           duration: "20 min",
         },
       ],
@@ -522,14 +517,8 @@ const CONTENT_EN = {
         {
           title: "The Secret Formula: Audio Overviews and Document Management",
           icon: "fa-podcast",
-          resources: 3,
-          duration: "20 min",
-        },
-        {
-          title: "The Master Alchemist: Complete Document-to-Podcast Flow",
-          icon: "fa-headphones",
-          resources: 1,
-          duration: "24 min",
+          resources: 4,
+          duration: "44 min",
         },
       ],
     },
@@ -653,7 +642,7 @@ const CONTENT_EN = {
       3: {
         objective: "🎙️ Audio Overviews",
         objectiveDesc:
-          "Turn your documents into AI-generated audio conversations, like a show made just for you.",
+          "Turn your documents into AI-generated audio conversations, like a show made just for you. 🧪 The Master Alchemist: master the full workflow, from your documents to a podcast ready to share.",
         achievements: [
           {
             icon: "fa-check",
@@ -688,11 +677,6 @@ const CONTENT_EN = {
           strong:
             "✅ Focused audio: 15-minute podcast where two hosts discuss key findings from 5 papers on neuroplasticity, with practical examples, analogies, and even an 'aha!' moment that makes it unforgettable",
         },
-      },
-      4: {
-        objective: "🧪 The Master Alchemist",
-        objectiveDesc:
-          "Master the full workflow: from your documents to a podcast ready to share.",
       },
     },
   },

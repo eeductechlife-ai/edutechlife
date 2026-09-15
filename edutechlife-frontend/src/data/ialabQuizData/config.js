@@ -1,4 +1,7 @@
 export const TOTAL_QUESTIONS = 12;
+// Cuántas preguntas se sortean del banco por intento (la "ruleta"). El banco
+// puede crecer a 40; el intento siempre responde este número.
+export const EXAM_QUESTION_COUNT = 10;
 export const PASSING_SCORE = 80;
 export const MAX_ATTEMPTS = 3;
 export const ATTEMPT_COOLDOWN_MS = 12 * 60 * 60 * 1000;

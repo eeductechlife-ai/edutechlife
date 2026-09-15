@@ -114,6 +114,34 @@ export const createGamificationSlice = (set, get) => ({
     if (totalModulesCompleted >= 5 && !state.badges.includes("all_modules"))
       newBadges.push("all_modules");
 
+    const examScores = state.completedExams || {};
+    const passedAllExams = [1, 2, 3, 4, 5].every(
+      (moduleId) => (examScores[moduleId] || 0) >= 80,
+    );
+    if (
+      totalModulesCompleted >= 5 &&
+      passedAllExams &&
+      !state.badges.includes("capstone")
+    )
+      newBadges.push("capstone");
+
+    const challengeScores = state.challengeScores || {};
+    if (
+      Object.values(challengeScores).some((score) => (score || 0) > 0) &&
+      !state.badges.includes("first_challenge")
+    )
+      newBadges.push("first_challenge");
+    if (
+      [1, 2, 3, 4, 5].every((id) => (challengeScores[id] || 0) >= 80) &&
+      !state.badges.includes("all_challenges")
+    )
+      newBadges.push("all_challenges");
+    if (
+      Object.values(examScores).some((score) => (score || 0) >= 100) &&
+      !state.badges.includes("perfect_exam")
+    )
+      newBadges.push("perfect_exam");
+
     if (newBadges.length > 0) {
       const now = new Date().toISOString();
       const newDates = {};

@@ -380,10 +380,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                     className={`px-4 pt-2 pb-1 border-t ${darkMode ? "border-[#1E293B]" : "border-[#F1F5F9]"}`}
                   >
                     <motion.button
-                      type="button"
                       onClick={handleOralExamMode}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.97 }}
                       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
                         darkMode
                           ? "bg-[#1E293B] hover:bg-[#243347] text-[#7DD3FC] border border-[#2A3A54]"

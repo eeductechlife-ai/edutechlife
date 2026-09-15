@@ -276,11 +276,6 @@ const CONTENT_ES = {
             "✅ Function Calling: ChatGPT detecta la intención, llama a la API del clima, recibe datos JSON y genera: El clima actual en Bogotá es 18°C con 65% de humedad. Te recomendamos llevar paraguas por probabilidad de lluvia del 80% esta tarde. Una fachada elegante que conecta con datos vivos del mundo real.",
         },
       },
-      4: {
-        objective: "⚡ La Fachada del Edificio",
-        objectiveDesc:
-          "Crea GPTs a tu medida y conéctalos al mundo real con Function Calling: automatiza tu trabajo diario.",
-      },
     },
   },
 
@@ -330,7 +325,7 @@ const CONTENT_ES = {
         {
           title: "Deep Research: La Caja de Herramientas Forenses",
           icon: "fa-search",
-          resources: 3,
+          resources: 4,
           duration: "20 min",
         },
       ],
@@ -545,14 +540,8 @@ const CONTENT_ES = {
         {
           title: "La Fórmula Secreta: Audio Overviews y Gestión Documental",
           icon: "fa-podcast",
-          resources: 3,
-          duration: "20 min",
-        },
-        {
-          title: "El Maestro Alquimista: Flujo Completo Documento-Podcast",
-          icon: "fa-headphones",
-          resources: 1,
-          duration: "24 min",
+          resources: 4,
+          duration: "44 min",
         },
       ],
     },
@@ -676,7 +665,7 @@ const CONTENT_ES = {
       3: {
         objective: "🎙️ Audio Overviews",
         objectiveDesc:
-          "Convierte tus documentos en conversaciones de audio generadas por IA, como un programa hecho a tu medida.",
+          "Convierte tus documentos en conversaciones de audio generadas por IA, como un programa hecho a tu medida. 🧪 El Maestro Alquimista: domina el flujo completo, de tus documentos a un podcast listo para compartir.",
         achievements: [
           {
             icon: "fa-check",
@@ -711,11 +700,6 @@ const CONTENT_ES = {
           strong:
             "✅ Audio enfocado: Podcast de 15 minutos donde dos presentadores discuten los hallazgos clave de 5 papers sobre neuroplasticidad, con ejemplos prácticos, analogías y hasta un momento '¡ahá!' que lo hace inolvidable",
         },
-      },
-      4: {
-        objective: "🧪 El Maestro Alquimista",
-        objectiveDesc:
-          "Domina el flujo completo: de tus documentos a un podcast listo para compartir.",
       },
     },
   },

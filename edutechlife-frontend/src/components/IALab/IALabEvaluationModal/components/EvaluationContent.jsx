@@ -1,6 +1,7 @@
 import { Icon } from '../../../../utils/iconMapping';
 import AutoSaveIndicator from '../../challenges/shared/AutoSaveIndicator';
 import { useTranslation } from '../../../../i18n/I18nProvider';
+import { resolveDocuments, resolveStepExercise } from './stepExerciseResolvers';
 
 export function LoadingState({ loadingType }) {
   const { t } = useTranslation();
@@ -45,13 +46,12 @@ export function StepContent({
   steps, step, totalSteps, exercises, responses, titleKeys, descKeys,
   setResponse, formError, handlePrevStep, handleNextStep, handleSubmitEvaluation,
   securityWarning, generateExercises, locale, fallbackMode, isSavingGrade, loading,
-  handleSecurityEvent, t,
+  handleSecurityEvent, t, moduleId,
 }) {
   if (!exercises) return null;
 
   const StepComponent = steps[step - 1];
-  const exerciseKeys = Object.keys(exercises);
-  const currentExercise = step <= exerciseKeys.length ? exercises[exerciseKeys[step - 1]] : exercises;
+  const currentExercise = resolveStepExercise(exercises, moduleId, step);
   const responseKey = `ej${step}`;
 
   const ej1Parsed = (() => {
@@ -59,18 +59,20 @@ export function StepContent({
     catch { return {}; }
   })();
   const selectedCase = ej1Parsed.selectedCase || '';
-  const researchTopic = ej1Parsed.topic || currentExercise?.temaInvestigacion || currentExercise?.conceptos?.[0]?.tema || currentExercise?.documentos?.[0]?.tema || '';
+  const researchTopic = exercises?.temaInvestigacion || exercises?.conceptos?.[0]?.tema || ej1Parsed.topic || currentExercise?.temaInvestigacion || currentExercise?.conceptos?.[0]?.tema || currentExercise?.documentos?.[0]?.tema || '';
   const selectedDocCount = (() => {
     try { return JSON.parse(responses.ej1 || '{}').documents?.length || 0; }
     catch { return 0; }
   })();
+
+  const docSource = resolveDocuments({ exercises, exercise: currentExercise });
 
   const selectedDocs = (() => {
     try {
       const ej1 = JSON.parse(responses.ej1 || '{}');
       const docs = ej1.documents || [];
       return docs.map(d => {
-        const docObj = currentExercise?.documentos?.[d.index];
+        const docObj = docSource[d.index];
         return docObj ? { index: d.index, title: docObj.titulo, tipo: docObj.tipo } : null;
       }).filter(Boolean);
     } catch { return []; }
@@ -177,6 +179,13 @@ export function StepContent({
           <span className="text-sm text-slate-500">
             {t('ialab.evaluation.modal.step_of', { step, total: totalSteps })}
           </span>
+
+          {!responses[responseKey] && (
+            <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-1">
+              <Icon name="fa-info-circle" aria-hidden="true" />
+              {t('ialab.evaluation.modal.complete_step_hint')}
+            </p>
+          )}
 
           {step < totalSteps ? (
             <button

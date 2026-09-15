@@ -43,14 +43,19 @@ const GeminiStep4 = ({
   onResponseChange,
   t: tProp,
   topic = "",
+  exercises,
 }) => {
   const { t } = useTranslation();
   const translate = tProp || t;
   const shouldReduceMotion = useReducedMotion();
 
   const secciones = useMemo(
-    () => exercise?.informeTemplate?.secciones || [],
-    [exercise],
+    () =>
+      exercises?.informeTemplate?.secciones ||
+      exercise?.informeTemplate?.secciones ||
+      exercise?.secciones ||
+      (Array.isArray(exercise) ? exercise : []),
+    [exercise, exercises],
   );
 
   const defaultSections = useMemo(() => {
@@ -313,6 +318,7 @@ GeminiStep4.propTypes = {
   onResponseChange: PropTypes.func,
   t: PropTypes.func,
   topic: PropTypes.string,
+  exercises: PropTypes.object,
 };
 
 export default GeminiStep4;

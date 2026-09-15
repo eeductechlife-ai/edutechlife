@@ -78,7 +78,7 @@ describe('CertificatePreview', () => {
 
   test('renders default cert number if not provided', () => {
     render(<CertificatePreview />);
-    expect(screen.getByText(/EDL-2026/)).toBeInTheDocument();
+    expect(screen.getAllByText(/EDL-2026/).length).toBeGreaterThanOrEqual(1);
   });
 
   test('renders full certificate view with title', () => {

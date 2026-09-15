@@ -8,6 +8,7 @@ import StepFeedback from "../../challenges/shared/StepFeedback";
 import ExampleToggle from "../../challenges/shared/ExampleToggle";
 import ResearchContextBanner from "../../challenges/shared/ResearchContextBanner";
 import ProgressStepper from "../../challenges/shared/ProgressStepper";
+import { resolveDocuments } from "../../IALabEvaluationModal/components/stepExerciseResolvers";
 
 const CATEGORIES = [
   {
@@ -52,10 +53,11 @@ const NotebookStep1 = ({
   response,
   onResponseChange,
   topic = "",
+  exercises,
 }) => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
-  const documentos = exercise?.documentos || exercise?.conceptos || [];
+  const documentos = resolveDocuments({ exercises, exercise });
   const insightRefs = useRef({});
 
   const parseResponse = useCallback(() => {
@@ -446,6 +448,7 @@ NotebookStep1.propTypes = {
   response: PropTypes.string,
   onResponseChange: PropTypes.func,
   topic: PropTypes.string,
+  exercises: PropTypes.object,
 };
 
 export default NotebookStep1;

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '../../../../utils/iconMapping.jsx';
@@ -32,9 +32,14 @@ const buildEmptyData = (count) => ({
 
 const defaultResponse = JSON.stringify(buildEmptyData(0));
 
-const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCount = 0, selectedDocs = [] }) => {
+const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCount = 0, selectedDocs = [], exercises }) => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+
+  const preguntasSintesis = useMemo(
+    () => exercises?.preguntasSintesis || exercise?.preguntasSintesis || [],
+    [exercise, exercises],
+  );
 
   const parseResponse = useCallback(() => {
     if (!response) return buildEmptyData(selectedDocs.length);
@@ -138,6 +143,31 @@ const NotebookStep2 = ({ exercise, response, onResponseChange, topic = '', docCo
               <span className="max-w-[120px] truncate">{d.title}</span>
             </span>
           ))}
+        </motion.div>
+      )}
+
+      {preguntasSintesis.length > 0 && (
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: -3 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.06 }}
+          className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5"
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]-dark/20 flex items-center justify-center">
+              <Icon name="fa-circle-question" className="text-[var(--theme-primary)] dark:text-[var(--theme-primary)]-dark w-4 h-4" />
+            </div>
+            <h4 className="text-base font-semibold text-slate-800 dark:text-slate-100">
+              {t('ialab.challenge.m4.step2.questions_title')}
+            </h4>
+          </div>
+          <ol className="space-y-2 list-decimal list-inside">
+            {preguntasSintesis.map((q, i) => (
+              <li key={i} className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">
+                {typeof q === 'string' ? q : q?.texto || q?.question || ''}
+              </li>
+            ))}
+          </ol>
         </motion.div>
       )}
 
@@ -260,6 +290,7 @@ NotebookStep2.propTypes = {
   topic: PropTypes.string,
   docCount: PropTypes.number,
   selectedDocs: PropTypes.array,
+  exercises: PropTypes.object,
 };
 
 export default NotebookStep2;

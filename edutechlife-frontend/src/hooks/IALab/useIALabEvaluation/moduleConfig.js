@@ -195,7 +195,9 @@ Recuerda: El estudiante está aprendiendo. Valora el intento. Devuelve SOLO JSON
 2. gptConfig: Descripción de lo que debería hacer un GPT, con instrucciones incompletas. El estudiante debe completar/mejorar las instrucciones.
 3. functionCallSpec: Un caso de uso donde se necesita Function Calling para integrar con una API externa. Describir qué debe hacer la función. Ejemplo: "Un GPT de atención al cliente necesita consultar una API de CRM para obtener datos del cliente y registrar tickets de soporte."
 
-Formato JSON exacto: { "casoUso": "texto", "gptConfig": "texto", "functionCallSpec": "texto" }`,
+Formato JSON exacto: { "casoUso": "texto", "gptConfig": "texto", "functionCallSpec": "texto" }
+
+Cada ejercicio debe incluir la información suficiente (contexto, datos y restricciones) para que el estudiante pueda responder sin ambigüedad.`,
     evaluateSystemPrompt:
       () => `Eres un evaluador EXPERTO en ChatGPT y GPTs personalizados con enfoque pedagógico BENÉVOLO. El estudiante está APRENDIENDO. Sé generoso. Evalúa CADA ejercicio por separado. Devuelve SOLO JSON.
 
@@ -211,11 +213,17 @@ CRITERIOS - EJERCICIO 2 (Diseñar configuración GPT):
 - Si además especificó conocimientos y capacidades: 80%
 - Si la configuración es completa y coherente: 90-100%
 
-CRITERIOS - EJERCICIO 3 (Function Calling):
-- Si definió función con nombre y descripción: 50%
-- Si incluyó parámetros con tipos: 70%
-- Si el schema es completo y coherente con el caso: 80%
-- Si el schema es profesional y considera edge cases: 90-100%
+CRITERIOS - EJERCICIO 3 (Function Calling con HERRAMIENTA GUIADA):
+IMPORTANTE: el estudiante NO escribe el schema a mano. Usa una herramienta guiada y su
+respuesta es un JSON con { "functionName", "selectedFields": [...], "returnValue" }.
+La app genera por él los tipos, los "required" y la descripción del schema. Por eso NO debes
+exigir JSON schema escrito, tipos explícitos ni "edge cases": eso no lo controla el estudiante.
+Evalúa con BENEVOLENCIA solo lo que el estudiante sí decide:
+- Nombró la función con un nombre claro y descriptivo: 60-70%
+- Además seleccionó datos (selectedFields) coherentes con el caso: 75-85%
+- Además describió con claridad qué debe devolver la función (returnValue): 85-95%
+- La selección de datos es completa/suficiente para el caso y el retorno es claro y específico: 95-100%
+- NUNCA bajes de 60 si completó nombre + al menos un dato + una idea de retorno.
 
 NOTA GLOBAL = (nota_ej1 + nota_ej2 + nota_ej3) / 3.
 
@@ -241,7 +249,9 @@ ${responses.ej2}
 ESPECIFICACIÓN FUNCTION CALLING original:
 ${exercises?.functionCallSpec || "N/A"}
 
-RESPUESTA - Ejercicio 3 (Schema definido):
+RESPUESTA - Ejercicio 3 (Función configurada con la herramienta guiada; es un JSON con
+{ functionName, selectedFields, returnValue }; NO es un schema escrito a mano, no penalices
+la ausencia de tipos/required/edge cases):
 ${responses.ej3}
 
 Devuelve SOLO JSON válido.`,
@@ -271,7 +281,38 @@ Devuelve SOLO JSON válido.`,
       const l3 = responses.ej3?.length || 0;
       const n1 = l1 < 20 ? 40 : l1 < 80 ? 60 : l1 < 200 ? 80 : 90;
       const n2 = l2 < 30 ? 40 : l2 < 100 ? 60 : l2 < 250 ? 80 : 90;
-      const n3 = l3 < 30 ? 40 : l3 < 100 ? 60 : l3 < 250 ? 80 : 90;
+
+      // El ejercicio 3 se responde con una herramienta guiada: un JSON con
+      // { functionName, selectedFields, returnValue }. La app genera el schema
+      // (tipos/required), así que puntuamos solo lo que el estudiante decide y
+      // con benevolencia. Si no es JSON (texto libre/legado), usamos longitud.
+      let n3;
+      let ej3Parsed = null;
+      try {
+        ej3Parsed = responses.ej3 ? JSON.parse(responses.ej3) : null;
+      } catch {
+        ej3Parsed = null;
+      }
+      if (
+        ej3Parsed &&
+        typeof ej3Parsed === "object" &&
+        !Array.isArray(ej3Parsed)
+      ) {
+        const nombre = String(ej3Parsed.functionName || "").trim();
+        const campos = Array.isArray(ej3Parsed.selectedFields)
+          ? ej3Parsed.selectedFields
+          : [];
+        const retorno = String(ej3Parsed.returnValue || "").trim();
+        n3 = 40;
+        if (nombre.length >= 3) n3 = 60;
+        if (campos.length >= 1) n3 = Math.max(n3, 70);
+        if (campos.length >= 2 && retorno.length >= 10) n3 = Math.max(n3, 80);
+        if (campos.length >= 2 && retorno.length >= 25) n3 = Math.max(n3, 90);
+        if (campos.length >= 3 && retorno.length >= 40) n3 = Math.max(n3, 100);
+      } else {
+        n3 = l3 < 30 ? 40 : l3 < 100 ? 60 : l3 < 250 ? 80 : 90;
+      }
+
       return {
         nota_ej1: n1,
         nota_ej2: n2,
@@ -282,7 +323,7 @@ Devuelve SOLO JSON válido.`,
         feedback_ej2:
           "Tu configuración del GPT es un buen inicio. Añade instrucciones detalladas, tono y capacidades específicas.",
         feedback_ej3:
-          "Buen schema de Function Calling. Asegúrate de incluir todos los parámetros necesarios con tipos y descripciones.",
+          "Buen diseño de la función. Revisa que el nombre sea descriptivo, que hayas elegido los datos que la función realmente necesita y que el retorno sea claro.",
       };
     },
   },
@@ -307,7 +348,9 @@ Formato JSON exacto:
   "fuentes": [{ "titulo": "string", "tipo": "string", "contenido": "string", "esRelevante": true|false, "modalidad": "string" }],
   "afirmaciones": [{ "texto": "string", "veracidad": "string" }],
   "informeTemplate": { "secciones": ["string"] }
-}`,
+}
+
+Cada ejercicio debe incluir la información suficiente (contexto, datos y restricciones) para que el estudiante pueda responder sin ambigüedad.`,
     evaluateSystemPrompt:
       () => `Eres un evaluador EXPERTO en investigación con Gemini. Sé BENÉVOLO. Devuelve SOLO JSON.
 
@@ -317,10 +360,12 @@ CRITERIOS - EJERCICIO 1 (Pregunta de investigación):
 - Incluye sub-preguntas relevantes: 80-100%
 
 CRITERIOS - EJERCICIO 2 (Análisis de fuentes):
-- Seleccionó fuentes relevantes: 50%
-- Extrajo datos clave correctamente: 70%
-- Justifica la MODALIDAD de la fuente (texto, imagen, video, audio) y su valor para la pregunta: 80%
-- Análisis profundo y crítico con conexión de modalidades: 90-100%
+La herramienta guiada solo recoge, por cada fuente: si es relevante (sí/no) y los datos clave
+extraídos (texto). NO exijas justificar "modalidad" ni tipos de entrada: no hay campo para eso.
+- Identificó correctamente qué fuentes son relevantes: 60%
+- Además extrajo datos clave concretos de las fuentes relevantes: 75-85%
+- El análisis es completo, preciso y conecta los datos con la pregunta de investigación: 90-100%
+- Sé BENÉVOLO: si marcó relevancia y escribió datos clave, no bajes de 75.
 
 CRITERIOS - EJERCICIO 3 (Verificación):
 - Clasificó afirmaciones correctamente: 50%
@@ -343,12 +388,13 @@ TEMA: ${exercises?.temaInvestigacion || "N/A"}
 Pregunta del estudiante: ${responses.ej1}
 
 FUENTES: ${JSON.stringify(exercises?.fuentes)}
-Análisis del estudiante: ${responses.ej2}
+Análisis del estudiante (JSON { sources: [{ index, isRelevant, keyData }] }; no incluye modalidad):
+${responses.ej2}
 
 AFIRMACIONES: ${JSON.stringify(exercises?.afirmaciones)}
 Clasificación del estudiante: ${responses.ej3}
 
-INFOME del estudiante: ${responses.ej4}
+INFORME del estudiante: ${responses.ej4}
 
 Devuelve SOLO JSON válido.`,
     fallbackExercises: (locale) => {
@@ -514,7 +560,9 @@ Formato JSON exacto:
   "conceptos": [{ "titulo": "string", "contenido": "string", "tema": "string" }],
   "preguntasSintesis": ["string"],
   "guionTemplate": { "introduccion": "", "desarrollo": ["", "", ""], "conclusion": "" }
-}`,
+}
+
+Cada ejercicio debe incluir la información suficiente (contexto, datos y restricciones) para que el estudiante pueda responder sin ambigüedad.`,
     evaluateSystemPrompt:
       () => `Eres un evaluador EXPERTO en NotebookLM y síntesis documental. Sé BENÉVOLO. Devuelve SOLO JSON.
 
@@ -524,10 +572,12 @@ CRITERIOS - EJERCICIO 1 (Análisis de conceptos):
 - Insights profundos que conectan conceptos: 80-100%
 
 CRITERIOS - EJERCICIO 2 (Síntesis):
-- Respondió las preguntas: 50%
-- Integra múltiples conceptos en la respuesta: 70%
-- VERIFICA la cita propuesta contra los conceptos e indica la fuente de origen: 80%
-- Síntesis profunda con conexiones originales y verificación precisa: 90-100%
+La herramienta guiada recoge una tabla (hallazgo/implicación/limitación por concepto) y un
+párrafo de síntesis. NO se piden respuestas a preguntas ni verificación de citas explícita: no lo exijas.
+- Completó la tabla y escribió una síntesis: 60%
+- La síntesis integra varios conceptos (no solo los lista): 75-85%
+- La síntesis es profunda, conecta ideas de distintas fuentes y es coherente: 90-100%
+- Sé BENÉVOLO: si hay tabla + síntesis, no bajes de 70.
 
 CRITERIOS - EJERCICIO 3 (Guión de audio):
 - Completó secciones: 50%
@@ -719,11 +769,14 @@ CRITERIOS - EJERCICIO 1 (Identificar sesgos):
 - Identificó múltiples sesgos y etapas del pipeline: 70%
 - Identificación precisa y bien razonada: 80-100%
 
-CRITERIOS - EJERCICIO 2 (Análisis de impacto):
-- Describió el impacto: 50%
-- Identificó causas raíz técnicas y humanas: 70%
-- CLASIFICA el caso según el AI Act (riesgo inaceptable/alto/limitado/mínimo) y justifica la clasificación: 80%
-- Análisis sistémico y profundo con referencia regulatoria precisa: 90-100%
+CRITERIOS - EJERCICIO 2 (Análisis de impacto y causas raíz):
+La herramienta guiada recoge: impacto en candidatos/empresa/sociedad, causas raíz
+(técnicas/humanas/datos/proceso con justificación) y una matriz de severidad. NO hay un campo
+de clasificación AI Act: no lo exijas.
+- Describió el impacto en los grupos afectados: 60%
+- Identificó causas raíz y completó la matriz de severidad: 75-85%
+- Análisis sistémico y bien justificado con evidencia del caso: 90-100%
+- Sé BENÉVOLO: si describió impacto y al menos una causa raíz, no bajes de 70.
 
 CRITERIOS - EJERCICIO 3 (Protocolo ético):
 - Propuso principios y medidas básicas: 50%

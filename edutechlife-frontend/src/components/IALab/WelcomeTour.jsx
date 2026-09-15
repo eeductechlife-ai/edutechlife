@@ -83,12 +83,14 @@ function hasExistingProgress(store) {
       mod?.exam ||
       mod?.challenge ||
       mod?.resourcesCompleted ||
+      (mod?.viewedResources?.length || 0) > 0 ||
       (mod?.currentScore || 0) > 0,
   );
-  const hasXp = (store.totalXp || 0) > 0;
-  const hasCompletedLessons =
-    Array.isArray(store.completedLessons) && store.completedLessons.length > 0;
-  return hasAnyModuleActivity || hasXp || hasCompletedLessons;
+  const hasXp = (store.xp || 0) > 0;
+  const hasLessonProgress =
+    store.lessonProgress &&
+    Object.keys(store.lessonProgress).length > 0;
+  return hasAnyModuleActivity || hasXp || !!hasLessonProgress;
 }
 
 export default function WelcomeTour({ forceShow = false, onComplete }) {
@@ -96,8 +98,8 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState(0);
   const moduleProgress = useIALabStore((s) => s.moduleProgress);
-  const totalXp = useIALabStore((s) => s.totalXp);
-  const completedLessons = useIALabStore((s) => s.completedLessons);
+  const xp = useIALabStore((s) => s.xp);
+  const lessonProgress = useIALabStore((s) => s.lessonProgress);
 
   useEffect(() => {
     if (forceShow) {
@@ -105,14 +107,14 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
       return;
     }
 
-    // Completely new students (no activity) → No tour, go straight to dashboard
     const hasProgress = hasExistingProgress({
       moduleProgress,
-      totalXp,
-      completedLessons,
+      xp,
+      lessonProgress,
     });
-    if (!hasProgress) {
-      // New student: no tour needed
+
+    // Estudiantes que YA trabajaron en la plataforma: nunca mostrar el tour.
+    if (hasProgress) {
       if ("requestIdleCallback" in window) {
         requestIdleCallback(() => incrementVisitCount());
       } else {
@@ -121,9 +123,8 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
       return;
     }
 
-    // Students with existing progress + returning student → Show interactive tour
+    // Estudiante nuevo: mostrar el tour solo si no lo ha visto antes.
     if (isReturningStudent()) {
-      // Already seen tour before: don't show again
       if ("requestIdleCallback" in window) {
         requestIdleCallback(() => incrementVisitCount());
       } else {
@@ -132,8 +133,6 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
       return;
     }
 
-    // Student with progress but haven't seen tour → Show welcome tour
-    // (helps orient experienced students to new features)
     if ("requestIdleCallback" in window) {
       const id = requestIdleCallback(() => {
         incrementVisitCount();
@@ -142,12 +141,11 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
       });
       return () => cancelIdleCallback(id);
     } else {
-      // Fallback: show after 300ms
       incrementVisitCount();
       const timer = setTimeout(() => setIsOpen(true), 300);
       return () => clearTimeout(timer);
     }
-  }, [forceShow, moduleProgress, totalXp, completedLessons]);
+  }, [forceShow, moduleProgress, xp, lessonProgress]);
 
   const handleClose = useCallback(() => {
     safeStorage.setItem(TOUR_KEY, new Date().toISOString());

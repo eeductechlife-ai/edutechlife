@@ -10,6 +10,7 @@ import { useIALabStore } from "../../../store/ialabStore";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { Icon } from "../../../utils/iconMapping.jsx";
 import SidebarModuleList from "./SidebarModuleList";
+import SidebarToggleCue from "./SidebarToggleCue";
 import CourseCompletionSection from "../CourseCompletionSection";
 
 const SidebarExpanded = ({ onOpenStreak }) => {
@@ -77,7 +78,7 @@ const SidebarExpanded = ({ onOpenStreak }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={fadeTransition}
-      className="h-full flex flex-col px-3 py-4 gap-3"
+      className="h-full min-h-0 overflow-y-auto flex flex-col px-3 py-4 gap-3"
     >
       {/* ── ZONA 1: MÓDULOS (navegación primero) ── */}
       <SidebarModuleList
@@ -86,6 +87,7 @@ const SidebarExpanded = ({ onOpenStreak }) => {
         calculateModuleScore={calculateModuleScore}
         isModuleLocked={isModuleLocked}
         goToModule={goToModule}
+        completedModules={completedModules}
         moduleListVariants={moduleListVariants}
         moduleItemVariants={moduleItemVariants}
         t={t}
@@ -93,7 +95,10 @@ const SidebarExpanded = ({ onOpenStreak }) => {
 
 
       {/* ── ZONA 2: PROGRESO + HERRAMIENTAS (tarjeta unificada) ── */}
-      <div className="flex flex-col rounded-xl border border-[var(--theme-emphasis)]/12 dark:border-[var(--theme-emphasis)]/22 bg-[var(--theme-emphasis)]/[0.03] dark:bg-[var(--theme-emphasis)]/[0.08] overflow-hidden">
+      <div
+        data-testid="sidebar-progress-zone"
+        className="shrink-0 flex flex-col rounded-xl border border-[var(--theme-emphasis)]/12 dark:border-[var(--theme-emphasis)]/22 bg-[var(--theme-emphasis)]/[0.03] dark:bg-[var(--theme-emphasis)]/[0.08] overflow-hidden"
+      >
         {/* Header: Ring de progreso grande e independiente */}
         <div className="flex flex-col items-center gap-2 pt-5 pb-4 px-3">
           <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--theme-emphasis)]/60 dark:text-[#4DA8C4]/60 leading-none">
@@ -102,7 +107,7 @@ const SidebarExpanded = ({ onOpenStreak }) => {
           <button
             type="button"
             onClick={toggleSidebar}
-            aria-label={`${Math.round(courseProgress || 0)}% ${t("sidebar.completed")}`}
+            aria-label={`${Math.round(courseProgress || 0)}% ${t("sidebar.completed")} — ${t("sidebar.toggle_collapse_tip")}`}
             className="relative w-24 h-24 flex-shrink-0 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 hover:scale-105 transition-transform duration-150"
           >
             <svg className="w-24 h-24 -rotate-90" viewBox="0 0 40 40">
@@ -149,6 +154,7 @@ const SidebarExpanded = ({ onOpenStreak }) => {
                 completado
               </span>
             </div>
+            <SidebarToggleCue size="expanded" />
           </button>
 
           {/* Stats en fila debajo del ring */}
@@ -223,7 +229,7 @@ const SidebarExpanded = ({ onOpenStreak }) => {
       </div>
 
       {storedCertificate && (
-        <div className="px-0.5 pt-1">
+        <div className="px-0.5 pt-1 shrink-0">
           <CourseCompletionSection
             hasCertificate={!!storedCertificate}
             courseCompleted={courseCompleted}

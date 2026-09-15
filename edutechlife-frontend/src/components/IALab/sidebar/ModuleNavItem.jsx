@@ -8,6 +8,7 @@ const ModuleNavItem = ({
   mod,
   isActive = false,
   isLocked = false,
+  isCompleted = false,
   score = 0,
   variant = "expanded",
   onClick,
@@ -19,7 +20,11 @@ const ModuleNavItem = ({
 }) => {
   const { t } = useTranslation();
   const [showUnlockTip, setShowUnlockTip] = useState(false);
-  const completed = !isLocked && score >= 80;
+  // El chulo refleja "módulo completado": la fuente canónica es completedModules
+  // (igual que ModuleProgressCard), con el score >= 80 como respaldo. Antes solo
+  // miraba el score, así que un módulo completado con score < 80 (p. ej. el 1)
+  // nunca mostraba el chulo.
+  const completed = !isLocked && (isCompleted || score >= 80);
   const prevModId = mod.id > 1 ? mod.id - 1 : null;
 
   if (variant === "compact") {
@@ -161,6 +166,7 @@ ModuleNavItem.propTypes = {
   }).isRequired,
   isActive: PropTypes.bool,
   isLocked: PropTypes.bool,
+  isCompleted: PropTypes.bool,
   score: PropTypes.number,
   variant: PropTypes.oneOf(["expanded", "compact"]),
   onClick: PropTypes.func,
