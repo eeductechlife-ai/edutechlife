@@ -180,15 +180,18 @@ describe('SmartBoard Parental Consent Verification', () => {
     });
   });
 
-  describe('Middleware: requireVerifiedParentalConsent', () => {
-    it('should block minors (<18) without verified consent', () => {
-      // If age < 18 AND verification_status !== 'verified'
-      // Then block with PARENTAL_CONSENT_REQUIRED error
+  describe('Middleware: requireVerifiedParentalConsent (no bloqueante desde 2026-09)', () => {
+    it('should never block a minor without verified consent — always calls next()', () => {
+      // Decisión de producto: el estudiante nunca espera aprobación en vivo.
+      // El middleware siempre continúa; ver __tests__/middleware/parentalConsent.test.js
+      // para la prueba real contra la implementación.
       const age = 12;
       const verificationStatus = 'pending';
+      const alwaysCallsNext = true;
 
-      const isBlocked = age < 18 && verificationStatus !== 'verified';
-      expect(isBlocked).toBe(true);
+      expect(alwaysCallsNext).toBe(true);
+      expect(age < 18 && verificationStatus !== 'verified').toBe(true); // sigue sin verificar…
+      // …pero eso ya no bloquea: solo se registra para trazabilidad.
     });
 
     it('should allow minors with verified consent', () => {
