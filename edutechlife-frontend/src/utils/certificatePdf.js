@@ -36,9 +36,9 @@ export const VERIFY_BASE_URL = 'https://edutechlife.co/verificar';
  * con iniciales de colores).
  */
 export const INSTITUTIONS = [
-  { id: 'mintic', name: 'MinTIC', full: 'Ministerio TIC', logo: '/images/certificate/logo-mintic.png', role: 'secondary' },
-  { id: 'edutechlife', name: 'Edutechlife', full: 'Edutechlife', logo: '/images/certificate/logo-edutechlife.png', role: 'primary' },
-  { id: 'manizales', name: 'Alcaldía de Manizales', full: 'Alcaldía de Manizales', logo: '/images/certificate/logo-alcaldia-manizales.png', role: 'secondary' },
+  { id: 'mintic', name: 'MinTIC', full: 'Ministerio TIC', logo: '/images/certificate/logo-mintic.png' },
+  { id: 'edutechlife', name: 'Edutechlife', full: 'Edutechlife', logo: '/images/certificate/logo-edutechlife.png' },
+  { id: 'manizales', name: 'Alcaldía de Manizales', full: 'Alcaldía de Manizales', logo: '/images/certificate/logo-alcaldia-manizales.png' },
 ];
 
 export const buildVerifyUrl = (certNumber) => `${VERIFY_BASE_URL}/${encodeURIComponent(certNumber)}`;
@@ -209,38 +209,32 @@ const drawInstitutionMark = (doc, inst, image, cx, top, maxH, maxW, fontSize) =>
 };
 
 /**
- * Banda de entidades avaladoras: Edutechlife —la entidad que expide el
- * diploma— va al centro con mayor tamaño; las entidades que avalan el
- * programa (MinTIC, Alcaldía de Manizales) van a los costados, más
- * pequeñas. Usa el logo real cuando está disponible y, si falta, un
+ * Banda de entidades avaladoras: los tres logos con la misma jerarquía
+ * visual (mismo tamaño), con MinTIC y Alcaldía de Manizales hacia los
+ * extremos y Edutechlife al centro — sin que ninguna marca domine sobre
+ * las demás. Usa el logo real cuando está disponible y, si falta, un
  * bloque tipográfico con filete dorado.
  */
 const drawInstitutions = (doc, images, top) => {
   const { W } = PAGE;
   const CX = W / 2;
+  const boxH = 11;
+  const maxW = 42;
+  const offsets = [-100, 0, 100];
 
-  const primary = INSTITUTIONS.find((inst) => inst.role === 'primary') ?? INSTITUTIONS[0];
-  const secondaries = INSTITUTIONS.filter((inst) => inst !== primary);
-
-  const primaryH = 16;
-  const primaryMaxW = 78;
-  const secondaryH = 9.5;
-  const secondaryMaxW = 32;
-  const sideOffset = 62;
-
-  secondaries.forEach((inst, i) => {
-    const cx = CX + (i === 0 ? -sideOffset : sideOffset);
-    drawInstitutionMark(doc, inst, images?.[inst.id], cx, top + (primaryH - secondaryH) / 2, secondaryH, secondaryMaxW, 7);
-
-    setStroke(doc, COLORS.hairline);
-    doc.setLineWidth(0.3);
-    const dividerX = i === 0 ? cx + sideOffset / 2 : cx - sideOffset / 2;
-    doc.line(dividerX, top + 1.5, dividerX, top + primaryH - 1.5);
+  INSTITUTIONS.forEach((inst, i) => {
+    const cx = CX + offsets[i];
+    drawInstitutionMark(doc, inst, images?.[inst.id], cx, top, boxH, maxW, 7.5);
   });
 
-  drawInstitutionMark(doc, primary, images?.[primary.id], CX, top, primaryH, primaryMaxW, 9.5);
+  setStroke(doc, COLORS.hairline);
+  doc.setLineWidth(0.3);
+  for (let i = 0; i < offsets.length - 1; i += 1) {
+    const dividerX = CX + (offsets[i] + offsets[i + 1]) / 2;
+    doc.line(dividerX, top + 1.5, dividerX, top + boxH - 1.5);
+  }
 
-  return top + primaryH;
+  return top + boxH;
 };
 
 /** Sello circular doble anillo con texto centrado. */
@@ -376,16 +370,17 @@ export const drawCertificate = (doc, options) => {
   setText(doc, COLORS.muted);
   spacedText(doc, strings.endorsement.toUpperCase(), CX, 21, 0.7, { align: 'center' });
 
-  drawInstitutions(doc, images, 25);
+  drawInstitutions(doc, images, 27);
 
   // --- Título --------------------------------------------------------------
+  // Más aire entre la banda de logos y el título (antes quedaban pegados).
   const titleText = strings.title.toUpperCase();
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(12.5);
   setText(doc, COLORS.gold);
-  spacedText(doc, titleText, CX, 52, 2.6, { align: 'center' });
+  spacedText(doc, titleText, CX, 60, 2.6, { align: 'center' });
 
-  drawOrnament(doc, CX, 57.5, measure(doc, titleText, 2.6) / 2);
+  drawOrnament(doc, CX, 65.5, measure(doc, titleText, 2.6) / 2);
 
   // Nombre del curso (permite dos líneas).
   doc.setFont('helvetica', 'bold');
@@ -393,17 +388,20 @@ export const drawCertificate = (doc, options) => {
   setText(doc, COLORS.navy);
   const courseLines = doc.splitTextToSize(courseName, 210);
   courseLines.slice(0, 2).forEach((line, i) => {
-    doc.text(line, CX, 69 + i * 7.5, { align: 'center' });
+    doc.text(line, CX, 77 + i * 7.5, { align: 'center' });
   });
-  const afterCourse = 69 + Math.min(courseLines.length, 2) * 7.5;
+  const afterCourse = 77 + Math.min(courseLines.length, 2) * 7.5;
 
   // --- Destinatario --------------------------------------------------------
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
   setText(doc, COLORS.muted);
-  doc.text(strings.awardedTo, CX, afterCourse + 6, { align: 'center' });
+  doc.text(strings.awardedTo, CX, afterCourse + 5, { align: 'center' });
 
-  const nameY = afterCourse + 22;
+  // Huecos de aquí en más ligeramente más ajustados que el original: el
+  // bloque de título bajó 8mm y este tramo absorbe la diferencia para no
+  // invadir el separador fijo en y=131.
+  const nameY = afterCourse + 17;
   doc.setFont('helvetica', 'bold');
   const nameSize = fitFontSize(doc, studentName, 200, 30, 14);
   setText(doc, COLORS.navy);
@@ -421,7 +419,7 @@ export const drawCertificate = (doc, options) => {
   setText(doc, COLORS.ink);
   const bodyLines = doc.splitTextToSize(strings.body, 195);
   bodyLines.slice(0, 3).forEach((line, i) => {
-    doc.text(line, CX, nameY + 15 + i * 6, { align: 'center' });
+    doc.text(line, CX, nameY + 10 + i * 6, { align: 'center' });
   });
 
   // --- Separador -----------------------------------------------------------

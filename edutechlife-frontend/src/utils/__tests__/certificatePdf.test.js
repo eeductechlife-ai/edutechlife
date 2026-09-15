@@ -127,15 +127,8 @@ describe('drawCertificate', () => {
 });
 
 describe('INSTITUTIONS', () => {
-  test('endorses MinTIC, Alcaldía de Manizales and Edutechlife', () => {
+  test('endorses MinTIC, Alcaldía de Manizales and Edutechlife, with Edutechlife centered', () => {
     expect(INSTITUTIONS.map((i) => i.id)).toEqual(['mintic', 'edutechlife', 'manizales']);
-  });
-
-  test('Edutechlife is the primary (central) mark; the rest are secondary', () => {
-    const roles = Object.fromEntries(INSTITUTIONS.map((i) => [i.id, i.role]));
-    expect(roles.edutechlife).toBe('primary');
-    expect(roles.mintic).toBe('secondary');
-    expect(roles.manizales).toBe('secondary');
   });
 
   test('every institution declares a logo path and a display name', () => {
