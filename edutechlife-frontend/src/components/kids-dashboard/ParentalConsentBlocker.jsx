@@ -4,6 +4,8 @@ import { useAuthIdentity } from "../../hooks/useAuthIdentity";
 import SmartBoardLoadingSkeleton from "./SmartBoardLoadingSkeleton";
 import { supabase } from "../../lib/supabase";
 import { API_BASE_URL as API_BASE } from "../../config/api";
+import { track } from "../../lib/analytics";
+import { EVENTS } from "../../lib/analyticsEvents";
 
 /**
  * Puerta de entrada de SmartBoard.
@@ -51,6 +53,9 @@ const ParentalConsentBlocker = ({ children }) => {
       );
       if (!res.ok) return;
       const data = await res.json();
+      if (data?.verification_status === "verified") {
+        track(EVENTS.CONSENT_COMPLETED, { studentId: userId });
+      }
       if (data?.verification_status === "none") {
         // Dispara la solicitud una sola vez, en segundo plano. No bloquea
         // ni espera respuesta: es solo el inicio del trámite legal único.

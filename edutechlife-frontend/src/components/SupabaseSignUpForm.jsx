@@ -18,6 +18,8 @@ import FloatingParticles from "./FloatingParticles";
 import { sanitize, safeReturnTo } from "../utils/sanitize";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 import SEO from "./SEO";
+import { track } from "../lib/analytics";
+import { EVENTS } from "../lib/analyticsEvents";
 import { API_BASE_URL } from "../config/api";
 
 // Error boundary fallback
@@ -162,6 +164,29 @@ const SupabaseSignUpForm = ({
     window.location.href = `${apiUrl}${endpoint}?redirect_uri=${encodeURIComponent(redirectUri)}&provider=${provider}`;
   };
 
+  const toFriendlySignupError = (rawMsg, fallback) => {
+    if (!rawMsg) return fallback;
+    const m = String(rawMsg).toLowerCase();
+    // Known friendly backend messages (already in Spanish for the user)
+    if (m.includes("correo ya está registrado") || m.includes("already") || m.includes("exists"))
+      return t("signup.error.email_already_registered");
+    if (m.includes("contraseña") || m.includes("password"))
+      return t("signup.error.password_min_length");
+    // Technical / internal errors — never show raw details to students
+    if (
+      m.includes("auth signup failed") ||
+      m.includes("unexpected token") ||
+      m.includes("json") ||
+      m.includes("host not") ||
+      m.includes("network") ||
+      m.includes("fetch")
+    )
+      return fallback;
+    // Short, human-readable messages from the backend are safe to show
+    if (rawMsg.length <= 120 && !rawMsg.includes(":") ) return rawMsg;
+    return fallback;
+  };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
 
@@ -185,7 +210,7 @@ const SupabaseSignUpForm = ({
       });
 
       if (!registerResponse.ok) {
-        const errorData = await registerResponse.json();
+        const errorData = await registerResponse.json().catch(() => ({}));
         // Handle duplicate email with translated message
         if (
           registerResponse.status === 409 ||
@@ -194,14 +219,21 @@ const SupabaseSignUpForm = ({
           throw new Error(t("signup.error.email_already_registered"));
         }
         throw new Error(
-          errorData.message ||
-            errorData.error ||
+          toFriendlySignupError(
+            errorData.message || errorData.error,
             t("signup.error.registration_failed"),
+          ),
         );
       }
 
       const result = await registerResponse.json();
       setSuccess(true);
+
+      track(EVENTS.SIGNUP_COMPLETED, {
+        accountType,
+        userId: result.user?.id,
+        hasToken: !!result.token,
+      });
 
       setTimeout(() => {
         if (result.token) {
@@ -217,9 +249,10 @@ const SupabaseSignUpForm = ({
     } catch (err) {
       console.error("Sign-up error:", err);
       setError(
-        err.message ||
-          t("signup.error.registration_failed") ||
-          "Registration failed. Please try again.",
+        toFriendlySignupError(
+          err.message,
+          t("signup.error.registration_failed"),
+        ),
       );
     } finally {
       setLoading(false);
@@ -746,7 +779,7 @@ const SupabaseSignUpForm = ({
                       {/* Phone */}
                       <div>
                         <label className="block text-sm font-medium text-[#00374A] mb-2">
-                          {t("signup.field.phone")} (Opcional)
+                          {t("signup.field.phone")}
                         </label>
                         <div className="relative">
                           <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />

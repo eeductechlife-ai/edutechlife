@@ -98,6 +98,7 @@ const SmartBoardSignUpPage = () => {
           "parent_name",
           `${data.user.firstName} ${data.user.lastName}`.trim(),
         );
+        track(EVENTS.PARENT_LOGIN, { studentId: data.user.studentId });
         navigate("/smartboard");
         return;
       } catch (err) {
