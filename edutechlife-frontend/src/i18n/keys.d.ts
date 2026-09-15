@@ -377,6 +377,7 @@ export type TranslationKeys = {
   "certificate.title_pdf": string;
   "certificate.verified_pdf": string;
   "certificate.verified_seal": string;
+  "certificate.verify_scan": string;
   "certificate_verify.back_home": string;
   "certificate_verify.course": string;
   "certificate_verify.course_name": string;
@@ -401,6 +402,7 @@ export type TranslationKeys = {
   "chatbot.suggest": string;
   "chatbot.thinking": string;
   "chatbot.welcome_back": string;
+  "common.cancel": string;
   "common.close": string;
   "common.loading": string;
   "common.mark_viewed": string;
@@ -1283,6 +1285,7 @@ export type TranslationKeys = {
   "ialab.competency.overall_value": string;
   "ialab.competency.strongest": string;
   "ialab.competency.title": string;
+  "ialab.competency.trend_title": string;
   "ialab.competency.weakest": string;
   "ialab.completed": string;
   "ialab.completed_pct": string;
@@ -4821,6 +4824,16 @@ export type TranslationKeys = {
   "parent_dashboard.wellness_sin_actividad": string;
   "parent_dashboard.wellness_sin_actividad_tip": string;
   "parent_dashboard.your_child": string;
+  "peer_review.assignment": string;
+  "peer_review.empty": string;
+  "peer_review.error": string;
+  "peer_review.feedback_placeholder": string;
+  "peer_review.missing_error": string;
+  "peer_review.review": string;
+  "peer_review.submit": string;
+  "peer_review.submitted": string;
+  "peer_review.submitting": string;
+  "peer_review.title": string;
   "pricing.annual": string;
   "pricing.badge": string;
   "pricing.cta_button": string;
@@ -6020,6 +6033,7 @@ const translationKeySet: Record<string, true> = {
   "certificate.title_pdf": true,
   "certificate.verified_pdf": true,
   "certificate.verified_seal": true,
+  "certificate.verify_scan": true,
   "certificate_verify.back_home": true,
   "certificate_verify.course": true,
   "certificate_verify.course_name": true,
@@ -6044,6 +6058,7 @@ const translationKeySet: Record<string, true> = {
   "chatbot.suggest": true,
   "chatbot.thinking": true,
   "chatbot.welcome_back": true,
+  "common.cancel": true,
   "common.close": true,
   "common.loading": true,
   "common.mark_viewed": true,
@@ -6926,6 +6941,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.competency.overall_value": true,
   "ialab.competency.strongest": true,
   "ialab.competency.title": true,
+  "ialab.competency.trend_title": true,
   "ialab.competency.weakest": true,
   "ialab.completed": true,
   "ialab.completed_pct": true,
@@ -10464,6 +10480,16 @@ const translationKeySet: Record<string, true> = {
   "parent_dashboard.wellness_sin_actividad": true,
   "parent_dashboard.wellness_sin_actividad_tip": true,
   "parent_dashboard.your_child": true,
+  "peer_review.assignment": true,
+  "peer_review.empty": true,
+  "peer_review.error": true,
+  "peer_review.feedback_placeholder": true,
+  "peer_review.missing_error": true,
+  "peer_review.review": true,
+  "peer_review.submit": true,
+  "peer_review.submitted": true,
+  "peer_review.submitting": true,
+  "peer_review.title": true,
   "pricing.annual": true,
   "pricing.badge": true,
   "pricing.cta_button": true,

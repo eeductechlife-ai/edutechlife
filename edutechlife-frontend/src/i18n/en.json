@@ -5632,5 +5632,18 @@
   "modals.certificates.requirements_not_met": "You do not meet the requirements yet: complete all 5 modules with 80% or more each and 80% overall progress.",
   "modals.certificates.req_modules_done": "Complete all 5 modules",
   "modals.certificates.req_module_score": "80% or more in each module",
-  "modals.certificates.req_global": "80% overall progress"
+  "modals.certificates.req_global": "80% overall progress",
+  "certificate.verify_scan": "Scan to verify",
+  "ialab.competency.trend_title": "Your competency over time",
+  "common.cancel": "Cancel",
+  "peer_review.title": "Peer review",
+  "peer_review.empty": "You have no pending reviews.",
+  "peer_review.assignment": "Module {module}",
+  "peer_review.review": "Review",
+  "peer_review.submit": "Submit review",
+  "peer_review.submitting": "Submitting…",
+  "peer_review.submitted": "Review submitted! Thank you.",
+  "peer_review.feedback_placeholder": "Write constructive feedback…",
+  "peer_review.missing_error": "Complete all rubric criteria.",
+  "peer_review.error": "Could not submit the review. Please try again."
 }

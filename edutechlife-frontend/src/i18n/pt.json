@@ -5632,5 +5632,18 @@
   "modals.certificates.requirements_not_met": "Você ainda não cumpre os requisitos: conclua os 5 módulos com 80% ou mais em cada um e 80% de progresso global.",
   "modals.certificates.req_modules_done": "Concluir os 5 módulos",
   "modals.certificates.req_module_score": "80% ou mais em cada módulo",
-  "modals.certificates.req_global": "80% de progresso global"
+  "modals.certificates.req_global": "80% de progresso global",
+  "certificate.verify_scan": "Escaneie para verificar",
+  "ialab.competency.trend_title": "Evolução da sua competência",
+  "common.cancel": "Cancelar",
+  "peer_review.title": "Revisão entre pares",
+  "peer_review.empty": "Você não tem revisões pendentes.",
+  "peer_review.assignment": "Módulo {module}",
+  "peer_review.review": "Revisar",
+  "peer_review.submit": "Enviar revisão",
+  "peer_review.submitting": "Enviando…",
+  "peer_review.submitted": "Revisão enviada! Obrigado.",
+  "peer_review.feedback_placeholder": "Escreva um feedback construtivo…",
+  "peer_review.missing_error": "Complete todos os critérios da rúbrica.",
+  "peer_review.error": "Não foi possível enviar a revisão. Tente novamente."
 }

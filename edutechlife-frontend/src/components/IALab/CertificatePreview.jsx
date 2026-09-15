@@ -223,6 +223,28 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
         doc.text(s.name, cx, sponsorY + 10, { align: 'center' });
       });
 
+      // Verification QR (lazy-loaded to keep the main bundle lean)
+      if (verifyUrl) {
+        try {
+          const { default: QRCode } = await import('qrcode');
+          const qrDataUrl = await QRCode.toDataURL(verifyUrl, {
+            margin: 0,
+            width: 256,
+            color: { dark: '#004B63', light: '#FFFFFF' },
+          });
+          const qrSize = 22;
+          doc.addImage(qrDataUrl, 'PNG', W / 2 - qrSize / 2, 168, qrSize, qrSize);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(6);
+          doc.setTextColor(148, 163, 184);
+          doc.text(t('certificate.verify_scan'), W / 2, 168 + qrSize + 4, {
+            align: 'center',
+          });
+        } catch (err) {
+          if (import.meta.env.DEV) console.error('QR generation failed:', err);
+        }
+      }
+
       // Bottom bar
       for (let x = 0; x < W; x++) {
         const ratio = x / W;

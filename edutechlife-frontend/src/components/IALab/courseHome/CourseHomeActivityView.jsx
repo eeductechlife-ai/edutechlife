@@ -6,6 +6,7 @@ import { useIALabStore } from '../../../store/ialabStore';
 import StreakCalendar from './StreakCalendar';
 import ActivityFeed from './ActivityFeed';
 import CompetencyDashboard from '../CompetencyDashboard';
+import CompetencyTrend from '../CompetencyTrend';
 
 const MODULES = [1, 2, 3, 4, 5];
 
@@ -104,6 +105,8 @@ function CourseHomeActivityView() {
       </motion.div>
 
       <CompetencyDashboard t={t} modules={modules} />
+
+      <CompetencyTrend t={t} />
 
       <ActivityFeed />
     </div>
