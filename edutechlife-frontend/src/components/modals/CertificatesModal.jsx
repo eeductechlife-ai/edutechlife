@@ -1,7 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useAuthIdentity } from "../../hooks/useAuthIdentity";
-import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { supabase } from "../../lib/supabase";
 import { useProgressContext } from "../../context/ProgressContext";
 import {
@@ -22,7 +21,6 @@ const CertificatesModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
   // Identidad desde la sesion de Supabase (Clerk ya no autentica).
   const { userId } = useAuthIdentity();
-  const { displayName } = useStudentProfile();
   const {
     courseProgress,
     completedModules,
@@ -35,7 +33,10 @@ const CertificatesModal = ({ isOpen, onClose }) => {
   const ialabUIContext = useIALabUIContext();
   const calculateModuleScore =
     ialabProgressContext?.calculateModuleScore ?? (() => 0);
-  const { storedCertificate, generateCertificate } = ialabUIContext ?? {};
+  const { storedCertificate, generateCertificate, user } = ialabUIContext ?? {};
+  // Nombre real del estudiante (tabla `users`, resuelto en IALabProvider);
+  // precarga el campo de nombre y sirve de respaldo si no escribe nada.
+  const displayName = user?.full_name;
 
   const [loading, setLoading] = useState(true);
   const [certificate, setCertificate] = useState(null);

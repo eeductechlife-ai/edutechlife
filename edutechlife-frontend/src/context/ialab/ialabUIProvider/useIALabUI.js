@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAuthIdentity } from "../../../hooks/useAuthIdentity";
 import { useStudentProfile } from "../../../hooks/useStudentProfile";
 import { useProgressContext } from "../../ProgressContext";
@@ -21,7 +21,39 @@ export function useIALabUI(onBack) {
   // autentica a nadie, por lo que `user` era siempre null y todo lo que
   // dependia de `user.id` (gamificacion, notificaciones) no se ejecutaba.
   const { userId, email: authEmail, isLoaded: authLoaded } = useAuthIdentity();
-  const { profile, role: userRole } = useStudentProfile();
+  const { role: userRole } = useStudentProfile();
+
+  // Nombre real del estudiante para el certificado y el resto de la UI.
+  // `useStudentProfile` es específico del dashboard infantil (SmartBoard
+  // Kids) y devuelve `profile: null` fuera de ese árbol de contexto —
+  // IALab nunca está envuelto en SmartBoardKidsProvider — así que el
+  // nombre caía siempre en el fallback genérico ("Estudiante") en vez del
+  // nombre real del perfil. Se consulta la tabla `users` directamente,
+  // igual que hace la tarjeta de perfil (userProfileSmartCard/useProfileData.js).
+  const [userRecord, setUserRecord] = useState(null);
+  useEffect(() => {
+    if (!userId) {
+      setUserRecord(null);
+      return undefined;
+    }
+    let cancelled = false;
+    supabase
+      .from("users")
+      .select("first_name, last_name, email, created_at")
+      .eq("id", userId)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) {
+          console.error("Error cargando el nombre del estudiante:", error);
+          return;
+        }
+        setUserRecord(data);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
 
   const activeTab = useIALabStore((s) => s.activeTab);
   const setActiveTab = useIALabStore((s) => s.setActiveTab);
@@ -95,22 +127,21 @@ export function useIALabUI(onBack) {
   const user = useMemo(() => {
     if (!userId) return null;
     const fullName =
-      [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") ||
-      profile?.username ||
+      [userRecord?.first_name, userRecord?.last_name].filter(Boolean).join(" ") ||
       t("profile.user_fallback");
     return {
       id: userId,
       full_name: fullName,
-      email: profile?.email || authEmail || "",
+      email: userRecord?.email || authEmail || "",
       fullName,
-      firstName: profile?.first_name || "",
-      lastName: profile?.last_name || "",
-      username: profile?.username || "",
-      imageUrl: profile?.avatar_url || "",
-      createdAt: profile?.created_at || null,
+      firstName: userRecord?.first_name || "",
+      lastName: userRecord?.last_name || "",
+      username: "",
+      imageUrl: "",
+      createdAt: userRecord?.created_at || null,
       role: userRole,
     };
-  }, [userId, authEmail, profile, userRole, t]);
+  }, [userId, authEmail, userRecord, userRole, t]);
 
   const signOut = async () => {
     // Clerk's signOut was a no-op here (no Clerk session existed), so sessions
