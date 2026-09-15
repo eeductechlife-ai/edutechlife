@@ -43,6 +43,10 @@ export function useEarlyWarnings() {
             count: list.length,
             top_risk: list[0]?.risk_level ?? null,
           });
+          track(EVENTS.WARNING_GENERATED, {
+            count: list.length,
+            top_risk: list[0]?.risk_level ?? null,
+          });
         }
       }
     } catch {

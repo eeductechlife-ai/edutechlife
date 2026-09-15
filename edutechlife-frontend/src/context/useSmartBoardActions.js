@@ -33,6 +33,14 @@ export const useSmartBoardActions = (stateAndSetters) => {
         title: mission.title || "",
         xp: mission.xp || 0,
       });
+      // Fire plan_completed when all missions in the current plan are done
+      const allDone = missions.every((m) => m.id === missionId || m.completed);
+      if (allDone && missions.length > 0) {
+        track(EVENTS.PLAN_COMPLETED, {
+          total_missions: missions.length,
+          plan_type: missions[0]?.type || "daily",
+        });
+      }
       const API_BASE_URL = import.meta.env.VITE_API_URL || "";
       const token = (() => {
         try {

@@ -72,11 +72,37 @@ const EDUTECHLIFE_ESSENCE = `
 async function fetchStudentProfile(studentId) {
   const { data } = await supabase
     .from("students")
-    .select("id, grade_level, country_code, school, age, name")
+    .select("id, grade_level, country_code, school, age, name, vak_style")
     .eq("id", studentId)
     .maybeSingle();
   return data;
 }
+
+const VAK_INSTRUCTIONS = {
+  visual: `
+## ESTILO DE APRENDIZAJE VAK: VISUAL
+Este estudiante aprende mejor viendo. Usa siempre:
+- Analogías que construyan imágenes mentales ("imagina que...", "visualiza...", "es como si...")
+- Referencias a diagramas, esquemas o gráficas cuando expliques conceptos
+- Organiza las explicaciones de forma estructurada y secuencial para que "se vea" el proceso
+- Evita instrucciones verbales largas sin anclaje visual`,
+
+  auditivo: `
+## ESTILO DE APRENDIZAJE VAK: AUDITIVO
+Este estudiante aprende mejor escuchando y hablando. Usa siempre:
+- Ritmos, patrones y mnemotecnias ("recuerda: PEMDAS suena como...")
+- Invítalo a repetir en voz alta o explicarte el concepto con sus propias palabras
+- Usa el diálogo socrático activo: más preguntas que te responda, menos texto que leer
+- Metáforas sonoras o narrativas ("esto se parece a una canción con estribillo...")`,
+
+  kinestesico: `
+## ESTILO DE APRENDIZAJE VAK: KINESTÉSICO
+Este estudiante aprende mejor haciendo. Usa siempre:
+- Pide que resuelva ejercicios prácticos inmediatamente después de cada explicación
+- Conecta los conceptos con experimentos o situaciones físicas reales ("toma un lápiz y...")
+- Usa analogías de movimiento o acción ("es como cuando montas bicicleta...")
+- Minimiza la teoría, maximiza la práctica guiada paso a paso`,
+};
 
 async function fetchMastery(studentId) {
   const { data } = await supabase
@@ -172,6 +198,7 @@ function buildSystemPrompt(ctx, opts = {}) {
   const age = profile?.age || null;
   const name = profile?.name || "estudiante";
   const school = profile?.school || "";
+  const vakStyle = profile?.vak_style || null;
   const commStyle = memory?.communicationStyle || "neutral";
   const interests = memory?.interests || [];
   const recentTopics = memory?.pendingTopics || [];
@@ -187,6 +214,11 @@ Estudiante: ${name} | Grado: ${grade}${school ? ` | Colegio: ${school}` : ""}
 
   // Age policy
   if (age) prompt += getAgePolicy(age);
+
+  // VAK learning style — spec §12: Dani adapts explanation format to VAK result
+  if (vakStyle && VAK_INSTRUCTIONS[vakStyle]) {
+    prompt += VAK_INSTRUCTIONS[vakStyle];
+  }
 
   // Communication style adaptation
   if (commStyle === "shy") {

@@ -17,6 +17,7 @@ import ExplorarTab from "./ExplorarTab";
 import { isFeatureEnabled } from "../../../hooks/useFeatureFlag";
 
 const PointsRewardsSystem = lazy(() => import("../PointsRewardsSystem"));
+const LeagueWidget = lazy(() => import("../LeagueWidget"));
 const SmartBoardProgress = lazy(() => import("../smartBoardProgress"));
 const PersonalizedPlan = lazy(() => import("../PersonalizedPlan"));
 const ExamPrep = lazy(() => import("../examPrep"));
@@ -152,9 +153,14 @@ function createTabRenderer(deps) {
     },
     puntos: {
       component: () => (
-        <LazyLoad fallback={<SectionFallback tab="puntos" />}>
-          <PointsRewardsSystem />
-        </LazyLoad>
+        <div className="space-y-6">
+          <LazyLoad fallback={<SectionFallback tab="puntos" />}>
+            <LeagueWidget />
+          </LazyLoad>
+          <LazyLoad fallback={<SectionFallback tab="puntos" />}>
+            <PointsRewardsSystem />
+          </LazyLoad>
+        </div>
       ),
       errorKey: "puntos",
       errorMsg: t("smartboard.error_load_points"),

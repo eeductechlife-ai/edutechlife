@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   TrendingUp,
@@ -9,106 +9,209 @@ import {
   Clock,
   AlertCircle,
   CheckCircle,
+  BarChart2,
+  Calendar,
+  ChevronRight,
 } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { NotificationPreferences } from "../parent-settings/NotificationPreferences";
 import { NotificationHistory } from "./NotificationHistory";
+import { track } from "../../lib/analytics";
+import { EVENTS } from "../../lib/analyticsEvents";
+
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function authToken() {
+  try {
+    return sessionStorage.getItem("auth_token") || localStorage.getItem("auth_token") || "";
+  } catch {
+    return "";
+  }
+}
+
+function studentId() {
+  try {
+    return localStorage.getItem("student_id") || "";
+  } catch {
+    return "";
+  }
+}
+
+function studentName() {
+  try {
+    return localStorage.getItem("student_email")?.split("@")[0] || "tu hijo(a)";
+  } catch {
+    return "tu hijo(a)";
+  }
+}
+
+// ── Sub-components ────────────────────────────────────────────────────────────
 
 const StatCard = ({ icon: Icon, label, value, trend, color }) => (
   <motion.div
-    className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm"
-    whileHover={{ y: -4 }}
+    className="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm"
+    whileHover={{ y: -3 }}
   >
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-gray-600 dark:text-gray-400 text-sm mb-1">{label}</p>
-        <p className="text-3xl font-bold text-gray-900 dark:text-white">
-          {value}
+        <p className="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wide mb-1">
+          {label}
         </p>
-        {trend && (
-          <p
-            className={`text-sm font-semibold mt-2 ${trend > 0 ? "text-green-600" : "text-red-600"}`}
-          >
+        <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+        {trend != null && (
+          <p className={`text-xs font-semibold mt-1 ${trend > 0 ? "text-green-600" : "text-red-500"}`}>
             {trend > 0 ? "↑" : "↓"} {Math.abs(trend)}% esta semana
           </p>
         )}
       </div>
-      <div
-        className={`w-12 h-12 rounded-lg flex items-center justify-center ${color}`}
-      >
-        <Icon className="w-6 h-6 text-white" />
+      <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${color}`}>
+        <Icon className="w-5 h-5 text-white" />
       </div>
     </div>
   </motion.div>
 );
 
-const ActivityCard = ({ date, activity, status }) => (
-  <motion.div
-    className="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0"
-    whileHover={{ x: 4 }}
-  >
-    <div
-      className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-        status === "completed"
-          ? "bg-green-100 dark:bg-green-900"
-          : "bg-blue-100 dark:bg-blue-900"
-      }`}
-    >
-      {status === "completed" ? (
-        <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
-      ) : (
-        <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-      )}
+const SEVERITY_STYLES = {
+  success: { bg: "bg-green-50 dark:bg-green-900/20", border: "border-green-200 dark:border-green-800", icon: CheckCircle, iconColor: "text-green-600 dark:text-green-400", titleColor: "text-green-900 dark:text-green-100", textColor: "text-green-700 dark:text-green-300" },
+  warning: { bg: "bg-amber-50 dark:bg-amber-900/20", border: "border-amber-200 dark:border-amber-800", icon: AlertCircle, iconColor: "text-amber-600 dark:text-amber-400", titleColor: "text-amber-900 dark:text-amber-100", textColor: "text-amber-700 dark:text-amber-300" },
+  info: { bg: "bg-blue-50 dark:bg-blue-900/20", border: "border-blue-200 dark:border-blue-800", icon: TrendingUp, iconColor: "text-blue-600 dark:text-blue-400", titleColor: "text-blue-900 dark:text-blue-100", textColor: "text-blue-700 dark:text-blue-300" },
+  alert: { bg: "bg-red-50 dark:bg-red-900/20", border: "border-red-200 dark:border-red-800", icon: AlertCircle, iconColor: "text-red-600 dark:text-red-400", titleColor: "text-red-900 dark:text-red-100", textColor: "text-red-700 dark:text-red-300" },
+};
+
+const InsightCard = ({ insight }) => {
+  const s = SEVERITY_STYLES[insight.severity] || SEVERITY_STYLES.info;
+  const IconComp = s.icon;
+  return (
+    <div className={`p-4 rounded-xl border ${s.bg} ${s.border}`}>
+      <div className="flex gap-3 items-start">
+        <IconComp className={`w-5 h-5 flex-shrink-0 mt-0.5 ${s.iconColor}`} />
+        <div className="flex-1 min-w-0">
+          <p className={`font-semibold text-sm ${s.titleColor}`}>{insight.title}</p>
+          {insight.what && (
+            <p className={`text-sm mt-1 ${s.textColor}`}>{insight.what}</p>
+          )}
+          {insight.action && (
+            <p className={`text-xs mt-2 font-medium ${s.iconColor}`}>
+              → {insight.action}
+            </p>
+          )}
+        </div>
+      </div>
     </div>
-    <div className="flex-1">
-      <p className="font-semibold text-gray-900 dark:text-white">{activity}</p>
-      <p className="text-sm text-gray-600 dark:text-gray-400">{date}</p>
+  );
+};
+
+const MasteryBar = ({ subject, percent, trend }) => {
+  const color = percent >= 60 ? "bg-green-500" : percent >= 40 ? "bg-amber-400" : "bg-red-400";
+  return (
+    <div className="mb-3">
+      <div className="flex justify-between items-center mb-1">
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{subject}</span>
+        <span className="text-sm font-bold text-gray-900 dark:text-white">
+          {percent}%{" "}
+          {trend === "up" ? "📈" : trend === "down" ? "📉" : "➡️"}
+        </span>
+      </div>
+      <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+        <motion.div
+          className={`h-full rounded-full ${color}`}
+          initial={{ width: 0 }}
+          animate={{ width: `${percent}%` }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        />
+      </div>
     </div>
-  </motion.div>
-);
+  );
+};
+
+// ── Main component ────────────────────────────────────────────────────────────
 
 const ParentDashboard = memo(() => {
   const { t } = useTranslation();
-  const [studentName] = useState("Juan");
   const [activeSection, setActiveSection] = useState("overview");
-  const [stats] = useState({
-    streak: 7,
-    totalPoints: 2840,
-    lessonsCompleted: 24,
-    averageScore: 88,
-  });
+  const [insights, setInsights] = useState([]);
+  const [mastery, setMastery] = useState([]);
+  const [loadingInsights, setLoadingInsights] = useState(true);
+  const [loadingMastery, setLoadingMastery] = useState(true);
+  const name = studentName();
+  const sid = studentId();
+  const token = authToken();
+
+  const fetchInsights = useCallback(async () => {
+    if (!sid || !token) { setLoadingInsights(false); return; }
+    try {
+      const res = await fetch(
+        `${API_BASE}/api/smartboard/parent/insights?studentId=${sid}`,
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (!res.ok) return;
+      const data = await res.json();
+      setInsights(data.insights || []);
+      track(EVENTS.PARENT_INSIGHT_VIEWED, { studentId: sid, count: (data.insights || []).length });
+    } catch {
+      // best-effort
+    } finally {
+      setLoadingInsights(false);
+    }
+  }, [sid, token]);
+
+  const fetchMastery = useCallback(async () => {
+    if (!sid || !token) { setLoadingMastery(false); return; }
+    try {
+      const res = await fetch(
+        `${API_BASE}/api/smartboard/parent/learning-graph?studentId=${sid}`,
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      if (!res.ok) return;
+      const data = await res.json();
+      setMastery(data.summary || []);
+    } catch {
+      // best-effort
+    } finally {
+      setLoadingMastery(false);
+    }
+  }, [sid, token]);
+
+  useEffect(() => {
+    fetchInsights();
+    fetchMastery();
+  }, [fetchInsights, fetchMastery]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Header */}
       <motion.div
-        className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-8 px-4"
+        className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white py-8 px-4"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold mb-2">Dashboard de Padres</h1>
-          <p className="text-blue-100">
-            Monitorea el progreso académico de {studentName}
+        <div className="max-w-5xl mx-auto">
+          <h1 className="text-3xl font-bold mb-1">Panel de Padres</h1>
+          <p className="text-blue-100 text-sm">
+            Seguimiento académico de <strong>{name}</strong>
           </p>
         </div>
       </motion.div>
 
-      {/* Tab Navigation */}
+      {/* Tabs */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-6xl mx-auto px-4 flex gap-1">
+        <div className="max-w-5xl mx-auto px-4 flex gap-1 overflow-x-auto">
           {[
             { id: "overview", label: "Resumen" },
+            { id: "insights", label: "Perspectivas IA" },
+            { id: "mastery", label: "Dominio por Materia" },
             { id: "history", label: "Historial de Alertas" },
             { id: "preferences", label: "Preferencias" },
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveSection(tab.id)}
-              className={`px-5 py-4 text-sm font-semibold border-b-2 transition-colors ${
+              className={`px-4 py-4 text-sm font-semibold border-b-2 whitespace-nowrap transition-colors ${
                 activeSection === tab.id
-                  ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                  : "border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  ? "border-[#4DA8C4] text-[#004B63] dark:text-[#4DA8C4]"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
               }`}
             >
               {tab.label}
@@ -117,209 +220,157 @@ const ParentDashboard = memo(() => {
         </div>
       </div>
 
+      {/* History */}
       {activeSection === "history" && (
-        <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="max-w-5xl mx-auto px-4 py-8">
           <NotificationHistory />
         </div>
       )}
+
+      {/* Preferences */}
       {activeSection === "preferences" && (
-        <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="max-w-5xl mx-auto px-4 py-8">
           <NotificationPreferences />
         </div>
       )}
 
-      {/* Main Content */}
+      {/* Insights tab */}
+      {activeSection === "insights" && (
+        <div className="max-w-5xl mx-auto px-4 py-8">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+            Perspectivas generadas por IA
+          </h2>
+          {loadingInsights ? (
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-20 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
+              ))}
+            </div>
+          ) : insights.length === 0 ? (
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
+              Aún no hay perspectivas disponibles. Se generan una vez que el estudiante complete actividades.
+            </p>
+          ) : (
+            <div className="space-y-4">
+              {insights.map((ins, i) => (
+                <InsightCard key={i} insight={ins} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Mastery tab */}
+      {activeSection === "mastery" && (
+        <div className="max-w-5xl mx-auto px-4 py-8">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+            Dominio por materia
+          </h2>
+          {loadingMastery ? (
+            <div className="space-y-4">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              ))}
+            </div>
+          ) : mastery.length === 0 ? (
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
+              Sin datos de dominio aún. Disponibles tras completar el diagnóstico.
+            </p>
+          ) : (
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+              {mastery.map((m) => (
+                <MasteryBar key={m.subject} subject={m.subject} percent={m.masteryPercent} trend={m.trend} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Overview */}
       {activeSection === "overview" && (
-        <div className="max-w-6xl mx-auto px-4 py-12">
-          {/* Stats Grid */}
-          <div className="grid md:grid-cols-4 gap-6 mb-12">
-            <StatCard
-              icon={Flame}
-              label="Racha Actual"
-              value={`${stats.streak} días`}
-              trend={25}
-              color="bg-orange-500"
-            />
-            <StatCard
-              icon={Award}
-              label="Puntos Totales"
-              value={stats.totalPoints}
-              trend={15}
-              color="bg-blue-500"
-            />
-            <StatCard
-              icon={BookOpen}
-              label="Lecciones Completadas"
-              value={stats.lessonsCompleted}
-              trend={8}
-              color="bg-green-500"
-            />
-            <StatCard
-              icon={Target}
-              label="Promedio de Calificación"
-              value={`${stats.averageScore}%`}
-              trend={5}
-              color="bg-purple-500"
-            />
+        <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+          {/* Quick stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <StatCard icon={Flame} label="Racha" value={`${insights.find(i => i.type === "activity")?.evidence?.match(/\d+/) ? "—" : "—"} días`} color="bg-orange-500" />
+            <StatCard icon={Award} label="Puntos" value="—" color="bg-blue-500" />
+            <StatCard icon={BookOpen} label="Actividades" value="—" color="bg-green-500" />
+            <StatCard icon={Target} label="Promedio" value="—" color="bg-purple-500" />
           </div>
 
-          {/* Two Column Layout */}
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Recent Activity */}
-            <motion.div
-              className="lg:col-span-2"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-            >
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-                <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    Actividad Reciente
-                  </h2>
-                </div>
-                <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                  <ActivityCard
-                    date="Hoy a las 14:30"
-                    activity="Completó lección de Matemáticas - Fracciones"
-                    status="completed"
-                  />
-                  <ActivityCard
-                    date="Ayer a las 16:45"
-                    activity="Completó 10 flashcards de Biología"
-                    status="completed"
-                  />
-                  <ActivityCard
-                    date="Hace 2 días"
-                    activity="Inició examen de práctica de Español"
-                    status="in-progress"
-                  />
-                  <ActivityCard
-                    date="Hace 3 días"
-                    activity="Alcanzó 7 días de racha"
-                    status="completed"
-                  />
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Recommendations */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-            >
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                  Recomendaciones
-                </h3>
-                <div className="space-y-4">
-                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <div className="flex gap-3">
-                      <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <p className="font-semibold text-blue-900 dark:text-blue-100">
-                          Progreso Excelente
-                        </p>
-                        <p className="text-sm text-blue-700 dark:text-blue-300">
-                          {studentName} mantiene una racha de 7 días. ¡Sigue
-                          así!
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                    <div className="flex gap-3">
-                      <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <p className="font-semibold text-amber-900 dark:text-amber-100">
-                          Área de Mejora
-                        </p>
-                        <p className="text-sm text-amber-700 dark:text-amber-300">
-                          Considere más práctica en Ciencias Naturales
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                    <div className="flex gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <p className="font-semibold text-green-900 dark:text-green-100">
-                          Próximo Hito
-                        </p>
-                        <p className="text-sm text-green-700 dark:text-green-300">
-                          A 150 puntos de desbloquear recompensa
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+          {/* AI Insights preview */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+            <div className="p-5 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+              <h2 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <BarChart2 className="w-5 h-5 text-[#4DA8C4]" />
+                Perspectivas recientes
+              </h2>
+              <button
+                onClick={() => setActiveSection("insights")}
+                className="text-sm text-[#4DA8C4] font-medium flex items-center gap-1 hover:underline"
+              >
+                Ver todas <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="p-5 space-y-3">
+              {loadingInsights ? (
+                <div className="h-16 bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
+              ) : insights.length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Las perspectivas aparecerán cuando el estudiante complete actividades.
+                </p>
+              ) : (
+                insights.slice(0, 2).map((ins, i) => <InsightCard key={i} insight={ins} />)
+              )}
+            </div>
           </div>
 
-          {/* Weekly Summary */}
+          {/* Mastery preview */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+            <div className="p-5 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+              <h2 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-[#4DA8C4]" />
+                Dominio académico
+              </h2>
+              <button
+                onClick={() => setActiveSection("mastery")}
+                className="text-sm text-[#4DA8C4] font-medium flex items-center gap-1 hover:underline"
+              >
+                Ver detalle <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="p-5">
+              {loadingMastery ? (
+                <div className="h-16 bg-gray-100 dark:bg-gray-700 rounded animate-pulse" />
+              ) : mastery.length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Sin datos de dominio todavía.
+                </p>
+              ) : (
+                mastery.slice(0, 3).map((m) => (
+                  <MasteryBar key={m.subject} subject={m.subject} percent={m.masteryPercent} trend={m.trend} />
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Support CTA */}
           <motion.div
-            className="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8"
+            className="bg-gradient-to-r from-[#004B63] to-[#4DA8C4] rounded-xl p-6 text-white text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
           >
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              Resumen de la Semana
-            </h3>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div>
-                <p className="text-gray-600 dark:text-gray-400 mb-2">
-                  Horas de Estudio
-                </p>
-                <p className="text-4xl font-bold text-blue-600">8.5h</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  +2h vs semana anterior
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 dark:text-gray-400 mb-2">
-                  Tareas Completadas
-                </p>
-                <p className="text-4xl font-bold text-green-600">12/15</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  80% de tareas asignadas
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600 dark:text-gray-400 mb-2">
-                  Racha Actual
-                </p>
-                <p className="text-4xl font-bold text-orange-600">7 días</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Mejor racha: 14 días
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Contact & Support */}
-          <motion.div
-            className="mt-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg p-8 text-white text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <h3 className="text-2xl font-bold mb-2">
-              ¿Preguntas sobre el progreso?
-            </h3>
-            <p className="text-blue-100 mb-6">
-              Nuestro equipo de soporte está disponible para ayudarte
+            <h3 className="text-lg font-bold mb-1">¿Preguntas sobre el progreso?</h3>
+            <p className="text-blue-100 text-sm mb-4">
+              Nuestro equipo está disponible para ayudarte
             </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white text-blue-600 font-bold py-3 px-8 rounded-lg hover:shadow-lg transition-all"
+            <a
+              href="https://wa.me/573238365517"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-white text-[#004B63] font-bold py-2 px-6 rounded-lg hover:shadow-lg transition-all text-sm"
             >
               Contactar Soporte
-            </motion.button>
+            </a>
           </motion.div>
         </div>
       )}
