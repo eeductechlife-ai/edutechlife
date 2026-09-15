@@ -179,7 +179,7 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
                 <img
                   src={inst.logo}
                   alt={inst.full}
-                  className="max-h-[clamp(18px,3.2vw,40px)] w-auto object-contain"
+                  className="max-h-[clamp(18px,3.2vw,40px)] max-w-full w-auto object-contain"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.nextElementSibling?.classList.remove('hidden');

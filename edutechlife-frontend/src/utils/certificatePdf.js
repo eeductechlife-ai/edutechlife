@@ -38,7 +38,7 @@ export const VERIFY_BASE_URL = 'https://edutechlife.co/verificar';
 export const INSTITUTIONS = [
   { id: 'mintic', name: 'MinTIC', full: 'Ministerio TIC', logo: '/images/certificate/logo-mintic.png' },
   { id: 'manizales', name: 'Alcaldía de Manizales', full: 'Alcaldía de Manizales', logo: '/images/certificate/logo-alcaldia-manizales.png' },
-  { id: 'edutechlife', name: 'Edutechlife', full: 'Edutechlife', logo: '/images/logo-edutechlife.webp' },
+  { id: 'edutechlife', name: 'Edutechlife', full: 'Edutechlife', logo: '/images/certificate/logo-edutechlife.png' },
 ];
 
 export const buildVerifyUrl = (certNumber) => `${VERIFY_BASE_URL}/${encodeURIComponent(certNumber)}`;
@@ -62,17 +62,30 @@ const withOpacity = (doc, value, draw) => {
   }
 };
 
-/** Escribe texto con espaciado entre letras y restaura el valor previo. */
-const spacedText = (doc, text, x, y, charSpace, options = {}) => {
-  const canSpace = typeof doc.setCharSpace === 'function';
-  if (canSpace) doc.setCharSpace(charSpace);
-  doc.text(text, x, y, options);
-  if (canSpace) doc.setCharSpace(0);
-};
-
 /** Ancho real del texto teniendo en cuenta el espaciado entre letras. */
 const measure = (doc, text, charSpace = 0) =>
   doc.getTextWidth(text) + charSpace * Math.max(text.length - 1, 0) * 0.352778;
+
+/**
+ * Escribe texto con espaciado entre letras y restaura el valor previo.
+ *
+ * jsPDF centra `align: 'center'` usando el ancho SIN el letter-spacing
+ * manual (`setCharSpace` no se refleja en su cálculo interno), así que el
+ * texto espaciado queda visualmente descentrado hacia la derecha. Cuando
+ * hay `charSpace`, centramos a mano con `measure()` y dibujamos alineado a
+ * la izquierda desde el borde real del texto.
+ */
+const spacedText = (doc, text, x, y, charSpace, options = {}) => {
+  const canSpace = typeof doc.setCharSpace === 'function';
+  if (canSpace) doc.setCharSpace(charSpace);
+  if (options.align === 'center' && charSpace) {
+    const width = measure(doc, text, charSpace);
+    doc.text(text, x - width / 2, y, { ...options, align: 'left' });
+  } else {
+    doc.text(text, x, y, options);
+  }
+  if (canSpace) doc.setCharSpace(0);
+};
 
 /**
  * Reduce el cuerpo hasta que el texto quepa en `maxWidth`.
@@ -170,10 +183,13 @@ const drawInstitutions = (doc, images, top) => {
     const image = images?.[inst.id];
 
     if (image?.dataUrl) {
+      // Se acota por alto Y ancho para que un wordmark horizontal (ancho,
+      // bajo) no gane más peso visual que un escudo compacto (alto,
+      // estrecho): gana la dimensión que resulte más restrictiva.
       const ratio = image.width / image.height;
+      const maxW = slot - 30;
       let h = boxH;
       let w = h * ratio;
-      const maxW = slot - 14;
       if (w > maxW) {
         w = maxW;
         h = w / ratio;
