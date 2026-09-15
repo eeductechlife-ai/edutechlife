@@ -1,0 +1,65 @@
+{
+  "superpowers": {
+    "enabled": true,
+    "marketplace": "superpowers-marketplace",
+    "plugin": "superpowers",
+    "version": "latest",
+    "autoTriggerSkills": true,
+    "workflow": "subagent-driven-development",
+    "skills": {
+      "brainstorming": {
+        "enabled": true,
+        "description": "Auto-triggered for design questions and new features",
+        "triggerPatterns": ["design", "architecture", "how should we", "what's the best way"]
+      },
+      "sparc": {
+        "enabled": true,
+        "description": "Specification → Pseudocode → Refinement → Code methodology",
+        "triggerOn": ["complex_task", "architectural_decision"]
+      },
+      "tdd": {
+        "enabled": true,
+        "description": "Test-Driven Development practices",
+        "triggerOn": ["new_feature", "bug_fix"]
+      },
+      "review": {
+        "enabled": true,
+        "description": "Code review and quality checks",
+        "triggerOn": ["before_commit", "pr_ready"]
+      },
+      "planning": {
+        "enabled": true,
+        "description": "Subagent-driven task planning",
+        "triggerOn": ["feature_request", "refactor"]
+      }
+    },
+    "subagents": {
+      "researcher": {
+        "enabled": true,
+        "role": "Explore codebase and understand context"
+      },
+      "architect": {
+        "enabled": true,
+        "role": "Design solutions based on research"
+      },
+      "coder": {
+        "enabled": true,
+        "role": "Implement architectural designs"
+      },
+      "tester": {
+        "enabled": true,
+        "role": "Write comprehensive tests"
+      },
+      "reviewer": {
+        "enabled": true,
+        "role": "Review code quality and security"
+      }
+    },
+    "methodologyPhases": [
+      "Specification - Understand requirements deeply",
+      "Pseudocode - Design algorithm before implementation",
+      "Refinement - Iterative improvement",
+      "Code - Final implementation with TDD"
+    ]
+  }
+}
