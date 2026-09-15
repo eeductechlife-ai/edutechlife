@@ -173,23 +173,29 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
             {t('certificate.endorsement')}
           </p>
 
-          <div className="mt-[1.5%] flex items-center justify-center divide-x divide-slate-200">
-            {INSTITUTIONS.map((inst) => (
-              <div key={inst.id} className="flex-1 px-2 flex items-center justify-center min-h-[6%]">
-                <img
-                  src={inst.logo}
-                  alt={inst.full}
-                  className="max-h-[clamp(18px,3.2vw,40px)] max-w-full w-auto object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                  }}
-                />
-                <span className="hidden text-[clamp(6px,0.95vw,11px)] font-bold uppercase tracking-[0.12em] text-[#0A3049] border-y border-[#D4B56A] py-1">
-                  {inst.full}
-                </span>
-              </div>
-            ))}
+          <div className="mt-[1.5%] flex items-end justify-center divide-x divide-slate-200">
+            {INSTITUTIONS.map((inst) => {
+              const isPrimary = inst.role === 'primary';
+              return (
+                <div
+                  key={inst.id}
+                  className={`px-3 flex items-center justify-center min-h-[6%] ${isPrimary ? 'flex-[1.8]' : 'flex-1'}`}
+                >
+                  <img
+                    src={inst.logo}
+                    alt={inst.full}
+                    className={`${isPrimary ? 'max-h-[clamp(22px,4.2vw,54px)]' : 'max-h-[clamp(13px,2.2vw,28px)]'} max-w-full w-auto object-contain`}
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                    }}
+                  />
+                  <span className="hidden text-[clamp(6px,0.95vw,11px)] font-bold uppercase tracking-[0.12em] text-[#0A3049] border-y border-[#D4B56A] py-1">
+                    {inst.full}
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
           {/* Título */}

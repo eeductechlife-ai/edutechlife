@@ -36,9 +36,9 @@ export const VERIFY_BASE_URL = 'https://edutechlife.co/verificar';
  * con iniciales de colores).
  */
 export const INSTITUTIONS = [
-  { id: 'mintic', name: 'MinTIC', full: 'Ministerio TIC', logo: '/images/certificate/logo-mintic.png' },
-  { id: 'manizales', name: 'Alcaldía de Manizales', full: 'Alcaldía de Manizales', logo: '/images/certificate/logo-alcaldia-manizales.png' },
-  { id: 'edutechlife', name: 'Edutechlife', full: 'Edutechlife', logo: '/images/certificate/logo-edutechlife.png' },
+  { id: 'mintic', name: 'MinTIC', full: 'Ministerio TIC', logo: '/images/certificate/logo-mintic.png', role: 'secondary' },
+  { id: 'edutechlife', name: 'Edutechlife', full: 'Edutechlife', logo: '/images/certificate/logo-edutechlife.png', role: 'primary' },
+  { id: 'manizales', name: 'Alcaldía de Manizales', full: 'Alcaldía de Manizales', logo: '/images/certificate/logo-alcaldia-manizales.png', role: 'secondary' },
 ];
 
 export const buildVerifyUrl = (certNumber) => `${VERIFY_BASE_URL}/${encodeURIComponent(certNumber)}`;
@@ -62,18 +62,24 @@ const withOpacity = (doc, value, draw) => {
   }
 };
 
-/** Ancho real del texto teniendo en cuenta el espaciado entre letras. */
+/**
+ * Ancho real del texto teniendo en cuenta el espaciado entre letras.
+ * `charSpace` está en las mismas unidades que el documento (mm aquí): la
+ * separación se añade una vez por cada hueco entre caracteres, N-1 veces
+ * para un texto de N caracteres.
+ */
 const measure = (doc, text, charSpace = 0) =>
-  doc.getTextWidth(text) + charSpace * Math.max(text.length - 1, 0) * 0.352778;
+  doc.getTextWidth(text) + charSpace * Math.max(text.length - 1, 0);
 
 /**
  * Escribe texto con espaciado entre letras y restaura el valor previo.
  *
- * jsPDF centra `align: 'center'` usando el ancho SIN el letter-spacing
- * manual (`setCharSpace` no se refleja en su cálculo interno), así que el
- * texto espaciado queda visualmente descentrado hacia la derecha. Cuando
- * hay `charSpace`, centramos a mano con `measure()` y dibujamos alineado a
- * la izquierda desde el borde real del texto.
+ * Con fuentes estándar (Helvetica/Times/Courier, no incrustadas) jsPDF
+ * calcula `align: 'center'` ignorando por completo el `setCharSpace`
+ * activo, así que el texto espaciado queda descentrado hacia la derecha
+ * (la mitad del espaciado total añadido). Cuando hay `charSpace`,
+ * centramos a mano con `measure()` y dibujamos alineado a la izquierda
+ * desde el borde real del texto.
  */
 const spacedText = (doc, text, x, y, charSpace, options = {}) => {
   const canSpace = typeof doc.setCharSpace === 'function';
@@ -169,58 +175,72 @@ const drawOrnament = (doc, cx, y, halfWidth) => {
 };
 
 /**
- * Banda de entidades avaladoras. Usa el logo real cuando está disponible y,
- * si falta, un bloque tipográfico con filete dorado.
+ * Dibuja un logo (o, si falta, un bloque tipográfico con filete dorado)
+ * centrado en `cx`, acotado a `maxH` x `maxW` — gana la dimensión que
+ * resulte más restrictiva para que el aspect ratio nunca se deforme.
+ */
+const drawInstitutionMark = (doc, inst, image, cx, top, maxH, maxW, fontSize) => {
+  if (image?.dataUrl) {
+    const ratio = image.width / image.height;
+    let h = maxH;
+    let w = h * ratio;
+    if (w > maxW) {
+      w = maxW;
+      h = w / ratio;
+    }
+    doc.addImage(image.dataUrl, 'PNG', cx - w / 2, top + (maxH - h) / 2, w, h);
+  } else {
+    const label = inst.full.toUpperCase();
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(fontSize);
+    const half = Math.min(measure(doc, label, 0.6) / 2 + 2, maxW / 2);
+    const midY = top + maxH / 2;
+
+    setStroke(doc, COLORS.goldLight);
+    doc.setLineWidth(0.4);
+    doc.line(cx - half, midY - 3, cx + half, midY - 3);
+
+    setText(doc, COLORS.navy);
+    spacedText(doc, label, cx, midY + 1.5, 0.6, { align: 'center' });
+
+    doc.setLineWidth(0.4);
+    doc.line(cx - half, midY + 4.5, cx + half, midY + 4.5);
+  }
+};
+
+/**
+ * Banda de entidades avaladoras: Edutechlife —la entidad que expide el
+ * diploma— va al centro con mayor tamaño; las entidades que avalan el
+ * programa (MinTIC, Alcaldía de Manizales) van a los costados, más
+ * pequeñas. Usa el logo real cuando está disponible y, si falta, un
+ * bloque tipográfico con filete dorado.
  */
 const drawInstitutions = (doc, images, top) => {
   const { W } = PAGE;
-  const slot = 74;
-  const boxH = 13;
-  const startX = W / 2 - (INSTITUTIONS.length * slot) / 2;
+  const CX = W / 2;
 
-  INSTITUTIONS.forEach((inst, i) => {
-    const cx = startX + i * slot + slot / 2;
-    const image = images?.[inst.id];
+  const primary = INSTITUTIONS.find((inst) => inst.role === 'primary') ?? INSTITUTIONS[0];
+  const secondaries = INSTITUTIONS.filter((inst) => inst !== primary);
 
-    if (image?.dataUrl) {
-      // Se acota por alto Y ancho para que un wordmark horizontal (ancho,
-      // bajo) no gane más peso visual que un escudo compacto (alto,
-      // estrecho): gana la dimensión que resulte más restrictiva.
-      const ratio = image.width / image.height;
-      const maxW = slot - 30;
-      let h = boxH;
-      let w = h * ratio;
-      if (w > maxW) {
-        w = maxW;
-        h = w / ratio;
-      }
-      doc.addImage(image.dataUrl, 'PNG', cx - w / 2, top + (boxH - h) / 2, w, h);
-    } else {
-      // Bloque tipográfico: los filetes se ajustan al ancho real del texto.
-      const label = inst.full.toUpperCase();
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8.5);
-      const half = Math.min(measure(doc, label, 0.6) / 2 + 2, slot / 2 - 5);
+  const primaryH = 16;
+  const primaryMaxW = 78;
+  const secondaryH = 9.5;
+  const secondaryMaxW = 32;
+  const sideOffset = 62;
 
-      setStroke(doc, COLORS.goldLight);
-      doc.setLineWidth(0.4);
-      doc.line(cx - half, top + 2, cx + half, top + 2);
+  secondaries.forEach((inst, i) => {
+    const cx = CX + (i === 0 ? -sideOffset : sideOffset);
+    drawInstitutionMark(doc, inst, images?.[inst.id], cx, top + (primaryH - secondaryH) / 2, secondaryH, secondaryMaxW, 7);
 
-      setText(doc, COLORS.navy);
-      spacedText(doc, label, cx, top + 8.5, 0.6, { align: 'center' });
-
-      doc.setLineWidth(0.4);
-      doc.line(cx - half, top + 11.5, cx + half, top + 11.5);
-    }
-
-    if (i < INSTITUTIONS.length - 1) {
-      setStroke(doc, COLORS.hairline);
-      doc.setLineWidth(0.3);
-      doc.line(cx + slot / 2, top + 1, cx + slot / 2, top + boxH - 1);
-    }
+    setStroke(doc, COLORS.hairline);
+    doc.setLineWidth(0.3);
+    const dividerX = i === 0 ? cx + sideOffset / 2 : cx - sideOffset / 2;
+    doc.line(dividerX, top + 1.5, dividerX, top + primaryH - 1.5);
   });
 
-  return top + boxH;
+  drawInstitutionMark(doc, primary, images?.[primary.id], CX, top, primaryH, primaryMaxW, 9.5);
+
+  return top + primaryH;
 };
 
 /** Sello circular doble anillo con texto centrado. */
@@ -249,9 +269,17 @@ const drawSeal = (doc, cx, cy, strings) => {
   doc.setLineWidth(0.3);
   doc.line(cx - 8, cy - 2.2, cx + 8, cy - 2.2);
 
-  doc.setFontSize(7.5);
+  // Igual que arriba: se reduce hasta que quepa dentro del anillo (18 mm)
+  // para que "EDUTECHLIFE" nunca se salga del sello.
+  const brandSpace = 0.35;
+  let brandSize = 7.5;
+  doc.setFontSize(brandSize);
+  while (brandSize > 4.5 && measure(doc, 'EDUTECHLIFE', brandSpace) > 18) {
+    brandSize -= 0.25;
+    doc.setFontSize(brandSize);
+  }
   setText(doc, COLORS.paper);
-  spacedText(doc, 'EDUTECHLIFE', cx, cy + 1.6, 0.4, { align: 'center' });
+  spacedText(doc, 'EDUTECHLIFE', cx, cy + 1.6, brandSpace, { align: 'center' });
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(5.5);
