@@ -29,7 +29,12 @@ function SignUpFormFallback() {
   );
 }
 
-const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
+const SupabaseSignUpForm = ({
+  onBack,
+  returnTo,
+  accountType = "ialab",
+  embedded = false,
+}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -229,33 +234,60 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
 
   return (
     <>
-      <SEO
-        title={t("seo.signup_ialab.title")}
-        description={t("seo.signup_ialab.desc")}
-      />
-      <div className="min-h-screen bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#1a5f7a] flex items-center justify-center p-4 relative overflow-hidden">
-        <FloatingParticles />
+      {!embedded && (
+        <SEO
+          title={t("seo.signup_ialab.title")}
+          description={t("seo.signup_ialab.desc")}
+        />
+      )}
+      <div
+        className={
+          embedded
+            ? "w-full relative"
+            : "min-h-screen bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#1a5f7a] flex items-center justify-center p-4 relative overflow-hidden"
+        }
+      >
+        {!embedded && <FloatingParticles />}
 
         {/* Back Button */}
-        <button
-          onClick={onBack}
-          className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm font-medium">
-            {t("ialab.signup_back_to_login")}
-          </span>
-        </button>
+        {!embedded && (
+          <button
+            onClick={onBack}
+            className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm font-medium">
+              {t("ialab.signup_back_to_login")}
+            </span>
+          </button>
+        )}
 
         {/* Main Card */}
-        <div className="relative z-10 w-full max-w-5xl">
-          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/20">
+        <div
+          className={embedded ? "w-full" : "relative z-10 w-full max-w-5xl"}
+        >
+          <div
+            className={
+              embedded
+                ? "w-full"
+                : "bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/20"
+            }
+          >
             {!success ? (
-              <div className="flex flex-col lg:flex-row min-h-screen lg:min-h-auto">
-                {/* Left Side - Brand & Benefits */}
+              <div
+                className={
+                  embedded
+                    ? "w-full"
+                    : "flex flex-col lg:flex-row min-h-screen lg:min-h-auto"
+                }
+              >
+                {/* Left Side - Brand & Benefits (skipped when embedded — the
+                    host page already renders its own SmartBoard-branded left
+                    panel; showing this one too duplicated/overlapped it). */}
                 {/* pt is oversized on purpose: the "back to login" button is
                     absolutely positioned at top-6/left-6 and would otherwise
                     sit on top of the logo. */}
+                {!embedded && (
                 <div className="lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-8 pt-24 pb-8 lg:px-12 lg:pt-28 lg:pb-12 text-white flex flex-col justify-between relative overflow-hidden">
                   <div className="absolute inset-0 opacity-10">
                     <div
@@ -331,9 +363,16 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                     </p>
                   </div>
                 </div>
+                )}
 
                 {/* Right Side - Form */}
-                <div className="lg:w-3/5 p-8 lg:p-12 flex flex-col justify-center">
+                <div
+                  className={
+                    embedded
+                      ? "w-full flex flex-col justify-center"
+                      : "lg:w-3/5 p-8 lg:p-12 flex flex-col justify-center"
+                  }
+                >
                   {/* Progress Bar */}
                   <div className="mb-8">
                     <div className="flex justify-between mb-4">
@@ -766,7 +805,13 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
               </div>
             ) : (
               /* Success State */
-              <div className="min-h-screen lg:min-h-auto flex items-center justify-center p-8">
+              <div
+                className={
+                  embedded
+                    ? "flex items-center justify-center p-8"
+                    : "min-h-screen lg:min-h-auto flex items-center justify-center p-8"
+                }
+              >
                 <div className="text-center max-w-md">
                   <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle2 className="w-10 h-10 text-green-600" />
@@ -787,9 +832,11 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
           </div>
 
           {/* Trust Badges */}
-          <div className="mt-8 text-center text-white/80 text-sm">
-            <p>🔒 Tus datos están protegidos con encriptación SSL</p>
-          </div>
+          {!embedded && (
+            <div className="mt-8 text-center text-white/80 text-sm">
+              <p>🔒 Tus datos están protegidos con encriptación SSL</p>
+            </div>
+          )}
         </div>
       </div>
     </>

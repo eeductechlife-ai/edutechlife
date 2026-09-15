@@ -473,6 +473,7 @@ const SmartBoardSignUpPage = () => {
                                 returnTo={returnTo || "/smartboard/consent"}
                                 onBack={() => setMode("signin")}
                                 accountType="smartboard"
+                                embedded
                               />
                             </div>
                           </motion.div>
