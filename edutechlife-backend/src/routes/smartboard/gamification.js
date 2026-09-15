@@ -12,6 +12,94 @@ const supabase = createClient(
 
 const router = Router();
 
+// ── League XP writer ───────────────────────────────────────────────────────────
+
+const XP_BY_ACTIVITY = {
+  complete_mission: 50,
+  mission_completed: 50,
+  flashcard_session: 30,
+  flashcard_completed: 30,
+  oral_exam: 40,
+  oral_exam_completed: 40,
+  challenge: 60,
+  challenge_completed: 60,
+  vak_diagnostic: 25,
+  diagnostic_completed: 25,
+  view_content: 10,
+  content_completed: 10,
+  dani_message: 5,
+  dani_chat: 5,
+};
+
+function getISOWeekStart() {
+  const now = new Date();
+  const day = now.getDay() || 7;
+  const d = new Date(now);
+  d.setDate(now.getDate() - day + 1);
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString().split('T')[0];
+}
+
+function getISOWeekEnd() {
+  const now = new Date();
+  const day = now.getDay() || 7;
+  const d = new Date(now);
+  d.setDate(now.getDate() - day + 7);
+  d.setHours(23, 59, 59, 999);
+  return d.toISOString().split('T')[0];
+}
+
+async function updateLeagueXP(studentId, activityType) {
+  const xp = XP_BY_ACTIVITY[activityType?.toLowerCase()] || 10;
+  const weekStart = getISOWeekStart();
+  const weekEnd = getISOWeekEnd();
+
+  const { data: existing } = await supabase
+    .from('league_rankings')
+    .select('id, xp_earned')
+    .eq('user_id', studentId)
+    .eq('week_start', weekStart)
+    .maybeSingle();
+
+  if (existing) {
+    const newXP = (existing.xp_earned || 0) + xp;
+    const tier = xpToTier(newXP);
+    await supabase
+      .from('league_rankings')
+      .update({ xp_earned: newXP, league_tier: tier, updated_at: new Date().toISOString() })
+      .eq('id', existing.id);
+  } else {
+    await supabase.from('league_rankings').insert({
+      user_id: studentId,
+      week_start: weekStart,
+      week_end: weekEnd,
+      xp_earned: xp,
+      league_tier: 'bronze',
+    });
+  }
+
+  // Recompute ranks for this week (approximate — counts rows with more XP + 1)
+  const { count } = await supabase
+    .from('league_rankings')
+    .select('id', { count: 'exact', head: true })
+    .eq('week_start', weekStart)
+    .gt('xp_earned', (existing?.xp_earned || 0) + xp);
+
+  const rank = (count || 0) + 1;
+  await supabase
+    .from('league_rankings')
+    .update({ rank })
+    .eq('user_id', studentId)
+    .eq('week_start', weekStart);
+}
+
+function xpToTier(xp) {
+  if (xp >= 1500) return 'diamond';
+  if (xp >= 700) return 'gold';
+  if (xp >= 300) return 'silver';
+  return 'bronze';
+}
+
 // GET /api/smartboard/gamification/missions?studentId=uuid
 router.get('/gamification/missions', requireAuth, requireStudentAccess, async (req, res) => {
   const { studentId } = req.query;
@@ -33,6 +121,9 @@ router.post('/gamification/activity', requireAuth, requireStudentAccess, async (
   try {
     await recordActivity(studentId, activityType, meta);
     const newBadges = await checkAndUnlockBadges(studentId);
+    updateLeagueXP(studentId, activityType).catch((err) =>
+      console.error('[LeagueXP]', err.message),
+    );
     res.json({ ok: true, newBadges });
   } catch (e) {
     console.error('[Gamification Activity]', e.message);
