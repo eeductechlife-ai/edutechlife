@@ -1,268 +1,147 @@
-import React, { useRef, useState } from 'react'
+import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
+import { INSTITUTIONS, buildVerifyUrl } from '../../utils/certificatePdf';
 
-const SPONSORS = [
-  { name: 'Colciencias', initials: 'CO', color: [0, 102, 179] },
-  { name: 'MinTIC', initials: 'MT', color: [0, 153, 51] },
-  { name: 'Edutechlife', initials: 'EL', color: [0, 75, 99] },
-];
+const MODULE_COUNT = 5;
+
+/** Marca de agua de seguridad: replica la roseta del PDF en la vista previa. */
+const Guilloche = () => (
+  <svg
+    className="absolute inset-0 m-auto h-[68%] w-auto pointer-events-none select-none"
+    viewBox="-60 -60 120 120"
+    aria-hidden="true"
+  >
+    {Array.from({ length: 7 }, (_, i) => (
+      <circle key={`r${i}`} cx="0" cy="0" r={20 + i * 5.5} fill="none" stroke="#B08D3E" strokeWidth="0.18" opacity="0.13" />
+    ))}
+    {Array.from({ length: 14 }, (_, i) => {
+      const a = (i / 14) * Math.PI * 2;
+      return (
+        <circle
+          key={`p${i}`}
+          cx={Math.cos(a) * 30}
+          cy={Math.sin(a) * 30}
+          r="16"
+          fill="none"
+          stroke="#00A8C6"
+          strokeWidth="0.15"
+          opacity="0.13"
+        />
+      );
+    })}
+  </svg>
+);
+
+/** Escuadra dorada/navy de esquina. */
+const CornerBracket = ({ position }) => (
+  <span
+    className={`absolute ${position} w-8 h-8 border-[#0A3049] pointer-events-none`}
+    aria-hidden="true"
+  />
+);
+CornerBracket.propTypes = { position: PropTypes.string.isRequired };
 
 const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false }) => {
   const { t, locale } = useTranslation();
-  const courseName = t('ialab.course_title');
   const courseFullName = t('profile.course_name');
-  const certificateRef = useRef(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [error, setError] = useState(null);
 
   const displayName = studentName || t('ialab.certificate_preview.student_fallback');
-  const displayCertNumber = certNumber || 'EDL-2026-00000000';
-  const displayDate = issuedAt 
-    ? new Date(issuedAt).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })
-    : new Date().toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+  const displayCertNumber =
+    certNumber || `EDL-${new Date().getFullYear()}-00000000`;
+  const displayDate = useMemo(() => {
+    const date = issuedAt ? new Date(issuedAt) : new Date();
+    const valid = !Number.isNaN(date.getTime()) ? date : new Date();
+    return valid.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+  }, [issuedAt, locale]);
 
-  const loadLogoDataUrl = () =>
-    new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => {
-        try {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.naturalWidth;
-          canvas.height = img.naturalHeight;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-          resolve(canvas.toDataURL("image/png"));
-        } catch (err) {
-          reject(err);
-        }
-      };
-      img.onerror = () => reject(new Error("logo load failed"));
-      img.src = "/images/logo-edutechlife.webp";
-    });
+  const verifyUrl = buildVerifyUrl(displayCertNumber);
+
+  const signatures = useMemo(
+    () => [
+      { name: t('certificate.signature_1_name'), role: t('certificate.signature_1_role') },
+      { name: t('certificate.signature_2_name'), role: t('certificate.signature_2_role') },
+    ],
+    [t],
+  );
 
   const handleDownloadPDF = async () => {
     setIsDownloading(true);
+    setError(null);
     try {
-      const { default: jsPDF } = await import('jspdf');
-      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-      const W = doc.internal.pageSize.getWidth();
-      const H = doc.internal.pageSize.getHeight();
+      const [{ default: jsPDF }, pdf, assets] = await Promise.all([
+        import('jspdf'),
+        import('../../utils/certificatePdf'),
+        import('../../utils/certificateAssets'),
+      ]);
 
-      // Background
-      doc.setFillColor(255, 255, 255);
-      doc.rect(0, 0, W, H, 'F');
+      const [images, qrMatrix] = await Promise.all([
+        assets.loadInstitutionLogos(),
+        assets.buildQrMatrix(verifyUrl),
+      ]);
 
-      // Gradient header bar
-      for (let x = 0; x < W; x++) {
-        const ratio = x / W;
-        const r = Math.round(0 + (0 - 0) * ratio);
-        const g = Math.round(75 + (188 - 75) * ratio);
-        const b = Math.round(99 + (212 - 99) * ratio);
-        doc.setFillColor(r, g, b);
-        doc.rect(x, 0, 1, 18, 'F');
-      }
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4', compress: true });
 
-      // Header text
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.setTextColor(255, 255, 255);
-      doc.text(t('certificate.edutechlife'), 15, 12);
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'normal');
-      doc.text('www.edutechlife.com', W - 15, 12, { align: 'right' });
-
-      // Gold border lines
-      doc.setDrawColor(255, 209, 102);
-      doc.setLineWidth(2);
-      doc.rect(10, 22, W - 20, H - 34, 'S');
-      doc.setLineWidth(0.5);
-      doc.rect(13, 25, W - 26, H - 40, 'S');
-
-      // Corner ornaments
-      const cs = 6;
-      doc.setDrawColor(255, 209, 102);
-      doc.setLineWidth(1.5);
-      [[13, 25], [W - 13, 25], [13, H - 15], [W - 13, H - 15]].forEach(([cx, cy]) => {
-        doc.setFillColor(255, 209, 102);
-        doc.circle(cx, cy, 2.5, 'F');
+      pdf.drawCertificate(doc, {
+        studentName: displayName,
+        certNumber: displayCertNumber,
+        issuedDate: displayDate,
+        courseName: courseFullName,
+        verifyUrl,
+        qrMatrix,
+        images,
+        signatures,
+        strings: {
+          title: t('certificate.title_pdf'),
+          endorsement: t('certificate.endorsement'),
+          awardedTo: t('certificate.awarded_to'),
+          body: t('certificate.body', { count: MODULE_COUNT, course: courseFullName }),
+          scanToVerify: t('certificate.scan_to_verify'),
+          issueDate: t('certificate.issue_date_pdf'),
+          certNumber: t('certificate.cert_number_pdf'),
+          modality: t('certificate.modality'),
+          modalityValue: t('certificate.modality_value', { count: MODULE_COUNT }),
+          sealTop: t('certificate.seal_top'),
+          sealBottom: t('certificate.verified_seal'),
+          footer: t('certificate.footer_pdf'),
+        },
       });
 
-      // Watermark
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(120);
-      doc.setTextColor(0, 75, 99, 0.03);
-      doc.text('E', W / 2, H / 2 + 20, { align: 'center' });
-
-      // Edutechlife logo (wordmark 2972x392, sobre blanco)
-      try {
-        const logoDataUrl = await Promise.race([
-          loadLogoDataUrl(),
-          new Promise((res) => setTimeout(() => res(null), 2000)),
-        ]);
-        if (logoDataUrl) {
-          const LOGO_W = 104;
-          const LOGO_H = (392 / 2972) * LOGO_W;
-          doc.addImage(logoDataUrl, "PNG", (W - LOGO_W) / 2, 26, LOGO_W, LOGO_H);
-        }
-      } catch (err) {
-        if (import.meta.env.DEV) console.error('Logo no disponible en PDF:', err);
-      }
-
-      // CERTIFICADO title
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(36);
-      doc.setTextColor(0, 75, 99);
-      doc.text(t('certificate.title_pdf'), W / 2, 50, { align: 'center' });
-
-      // Cyan line under title
-      doc.setDrawColor(0, 188, 212);
-      doc.setLineWidth(0.8);
-      doc.line(W / 2 - 30, 54, W / 2 + 30, 54);
-
-      // Course name
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(13);
-      doc.setTextColor(100, 116, 139);
-      doc.text(courseFullName, W / 2, 63, { align: 'center' });
-
-      // Intro text
-      doc.setFontSize(11);
-      doc.setTextColor(100, 116, 139);
-      doc.text(t('certificate.awarded_to'), W / 2, 78, { align: 'center' });
-
-      // Student name
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(28);
-      doc.setTextColor(0, 75, 99);
-      doc.text(displayName, W / 2, 93, { align: 'center' });
-
-      // Underline for name
-      const nameW = doc.getTextWidth(displayName);
-      doc.setDrawColor(0, 75, 99);
-      doc.setLineWidth(0.5);
-      doc.line(W / 2 - nameW / 2 - 5, 97, W / 2 + nameW / 2 + 5, 97);
-
-      // Description
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(11);
-      doc.setTextColor(100, 116, 139);
-      doc.text(t('certificate.completed_course'), W / 2, 108, { align: 'center' });
-      doc.text(t('certificate.outstanding_performance', { course: courseName }), W / 2, 115, { align: 'center' });
-
-      // Seal circle
-      const sealX = W / 2 + 70;
-      const sealY = 95;
-      doc.setDrawColor(255, 209, 102);
-      doc.setFillColor(255, 209, 102);
-      doc.circle(sealX, sealY, 18, 'F');
-      doc.setDrawColor(255, 255, 255);
-      doc.setLineWidth(1);
-      doc.circle(sealX, sealY, 16, 'S');
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(7);
-      doc.setTextColor(0, 75, 99);
-      doc.text(t('certificate.verified_seal'), sealX, sealY - 2, { align: 'center' });
-      doc.text(t('certificate.edutechlife'), sealX, sealY + 4, { align: 'center' });
-
-      // Divider line
-      doc.setDrawColor(226, 232, 240);
-      doc.setLineWidth(0.3);
-      doc.line(25, 128, W - 25, 128);
-
-      // Footer info
-      const footerY = 138;
-      doc.setFontSize(8);
-      doc.setTextColor(148, 163, 184);
-
-      // Date
-      doc.text(t('certificate.issue_date_pdf'), W / 2 - 45, footerY, { align: 'center' });
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.setTextColor(0, 75, 99);
-      doc.text(displayDate, W / 2 - 45, footerY + 6, { align: 'center' });
-
-      // Certificate number
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8);
-      doc.setTextColor(148, 163, 184);
-      doc.text(t('certificate.cert_number_pdf'), W / 2, footerY, { align: 'center' });
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.setTextColor(0, 75, 99);
-      doc.text(displayCertNumber, W / 2, footerY + 6, { align: 'center' });
-
-      // Verified badge text
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8);
-      doc.setTextColor(148, 163, 184);
-      doc.text(t('certificate.verified_pdf'), W / 2 + 45, footerY, { align: 'center' });
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.setTextColor(0, 75, 99);
-      doc.text(t('certificate.edutechlife'), W / 2 + 45, footerY + 6, { align: 'center' });
-
-      // Sponsor logos
-      const sponsorY = footerY + 18;
-      const sponsorStartX = W / 2 - ((SPONSORS.length * 20) / 2);
-      SPONSORS.forEach((s, i) => {
-        const cx = sponsorStartX + i * 20 + 10;
-        doc.setFillColor(s.color[0], s.color[1], s.color[2]);
-        doc.circle(cx, sponsorY, 7, 'F');
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(5);
-        doc.setTextColor(255, 255, 255);
-        doc.text(s.initials, cx, sponsorY + 1.5, { align: 'center' });
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(4.5);
-        doc.setTextColor(148, 163, 184);
-        doc.text(s.name, cx, sponsorY + 10, { align: 'center' });
-      });
-
-      // Bottom bar
-      for (let x = 0; x < W; x++) {
-        const ratio = x / W;
-        const r = Math.round(0 + (0 - 0) * ratio);
-        const g = Math.round(75 + (188 - 75) * ratio);
-        const b = Math.round(99 + (212 - 99) * ratio);
-        doc.setFillColor(r, g, b);
-        doc.rect(x, H - 12, 1, 12, 'F');
-      }
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(7);
-      doc.setTextColor(255, 255, 255);
-      doc.text(t('certificate.footer_pdf'), W / 2, H - 4, { align: 'center' });
-
-      doc.save(`${t('certificate.filename_prefix')}_${courseName.replace(/\s+/g, '_')}_${displayName.replace(/\s+/g, '_')}.pdf`);
+      const slug = (value) => value.replace(/\s+/g, '_').replace(/[^\w\-.]/g, '');
+      doc.save(`${slug(t('certificate.filename_prefix'))}_${slug(displayName)}_${displayCertNumber}.pdf`);
     } catch (err) {
-      if (import.meta.env.DEV) console.error('Error generating PDF:', err);
+      if (import.meta.env.DEV) console.error('Error generando el certificado:', err);
+      setError(t('certificate.error_generating'));
     } finally {
       setIsDownloading(false);
     }
   };
 
+  const downloadButton = (className) => (
+    <button
+      onClick={handleDownloadPDF}
+      disabled={isDownloading}
+      className={className}
+      aria-busy={isDownloading}
+    >
+      <Icon name={isDownloading ? 'fa-spinner' : 'fa-download'} className={isDownloading ? 'animate-spin' : ''} />
+      {isDownloading
+        ? t(compact ? 'ialab.certificate_preview.generating_compact' : 'ialab.certificate_preview.generating')
+        : t('ialab.certificate_preview.download')}
+    </button>
+  );
+
   if (compact) {
     return (
-        <div className="text-center py-2">
-        <button
-          onClick={handleDownloadPDF}
-          disabled={isDownloading}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[var(--theme-emphasis)] rounded-lg shadow-sm hover:shadow hover:border-l-[var(--theme-primary)] hover:bg-slate-50 transition-all duration-300 text-xs font-semibold text-slate-800 disabled:opacity-50"
-        >
-          {isDownloading ? (
-            <>
-              <Icon name="fa-spinner" className="animate-spin" />
-              {t('ialab.certificate_preview.generating_compact')}
-            </>
-          ) : (
-            <>
-              <Icon name="fa-download" />
-              {t('ialab.certificate_preview.download')}
-            </>
-          )}
-        </button>
+      <div className="text-center py-2">
+        {downloadButton(
+          'w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200/60 border-l-4 border-l-[#B08D3E] rounded-lg shadow-sm hover:shadow hover:border-l-[#0A3049] hover:bg-slate-50 transition-all duration-300 text-xs font-semibold text-slate-800 disabled:opacity-50',
+        )}
+        {error && <p className="mt-2 text-[11px] text-red-600">{error}</p>}
       </div>
     );
   }
@@ -270,213 +149,156 @@ const CertificatePreview = ({ studentName, certNumber, issuedAt, compact = false
   return (
     <div className="space-y-4">
       <motion.div
-        ref={certificateRef}
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className="relative bg-white rounded-xl overflow-hidden shadow-xl border-[3px] border-[#FFD166]"
+        className="relative bg-white shadow-xl overflow-hidden"
+        style={{ aspectRatio: '297 / 210' }}
       >
-        {/* Outer decorative border */}
-        <div
-          className="absolute inset-2 pointer-events-none rounded-lg border border-[#FFD166]/50"
-        />
+        {/* Marco grabado: doble filete dorado */}
+        <div className="absolute inset-[3%] border-[3px] border-[#B08D3E] pointer-events-none" />
+        <div className="absolute inset-[4%] border border-[#D4B56A]/70 pointer-events-none" />
 
-        {/* Corner ornaments */}
-        {[
-          'top-3 left-3',
-          'top-3 right-3',
-          'bottom-3 left-3',
-          'bottom-3 right-3',
-        ].map((pos, i) => (
-          <div key={i} className={`absolute ${pos} w-2.5 h-2.5 rounded-full bg-[#FFD166] z-20 pointer-events-none`} />
-        ))}
+        {/* Escuadras navy */}
+        <CornerBracket position="top-[4%] left-[4%] border-t-2 border-l-2" />
+        <CornerBracket position="top-[4%] right-[4%] border-t-2 border-r-2" />
+        <CornerBracket position="bottom-[4%] left-[4%] border-b-2 border-l-2" />
+        <CornerBracket position="bottom-[4%] right-[4%] border-b-2 border-r-2" />
 
-        {/* Watermark */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
-          <span className="font-black text-[200px] md:text-[250px] opacity-[0.03] text-[var(--theme-emphasis)]">
-            E
-          </span>
-        </div>
+        <Guilloche />
 
-        {/* Header gradient */}
-        <div className="relative z-10 bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] px-6 py-3.5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <img
-                src="/images/logo-edutechlife.webp"
-                alt="Edutechlife"
-                className="h-7 w-auto object-contain"
-                style={{ filter: "brightness(0) invert(1)", opacity: 0.95 }}
-                onError={(e) => {
-                  e.target.style.display = "none";
-                }}
-              />
-              <span className="text-white font-bold text-sm tracking-[0.15em]">EDUTECHLIFE</span>
-            </div>
-            <span className="text-white/60 text-[10px] hidden sm:block">www.edutechlife.com</span>
-          </div>
-        </div>
-
-        {/* Certificate content */}
-        <div className="relative z-10 px-6 py-10 md:px-12 md:py-12 text-center">
-          {/* Title */}
-          <motion.h2
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-3xl md:text-4xl font-black tracking-[0.2em] text-[var(--theme-emphasis)]"
-          >
-            {t('ialab.certificate_preview.certificate_title_react')}
-          </motion.h2>
-
-          {/* Cyan divider */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="w-24 h-0.5 mx-auto my-3 bg-gradient-to-r from-transparent via-[var(--theme-primary)] to-transparent"
-          />
-
-          {/* Course name */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-            className="text-sm md:text-base font-medium tracking-wide uppercase mb-8 text-slate-500"
-          >
-            {courseFullName}
-          </motion.p>
-
-          {/* Intro text */}
-          <p className="text-sm mb-2 text-slate-400">
-            {t('ialab.certificate_preview.issued_to')}
+        <div className="relative h-full flex flex-col px-[8%] py-[5%] text-center">
+          {/* Aval institucional */}
+          <p className="text-[clamp(5px,0.75vw,8px)] uppercase tracking-[0.3em] text-slate-400">
+            {t('certificate.endorsement')}
           </p>
 
-          {/* Student name */}
-          <motion.h3
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-            className="text-2xl md:text-3xl font-bold mb-3 px-4 text-[var(--theme-emphasis)]"
-          >
+          <div className="mt-[1.5%] flex items-center justify-center divide-x divide-slate-200">
+            {INSTITUTIONS.map((inst) => (
+              <div key={inst.id} className="flex-1 px-2 flex items-center justify-center min-h-[6%]">
+                <img
+                  src={inst.logo}
+                  alt={inst.full}
+                  className="max-h-[clamp(18px,3.2vw,40px)] w-auto object-contain"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                  }}
+                />
+                <span className="hidden text-[clamp(6px,0.95vw,11px)] font-bold uppercase tracking-[0.12em] text-[#0A3049] border-y border-[#D4B56A] py-1">
+                  {inst.full}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Título */}
+          <h2 className="mt-[4%] text-[clamp(9px,1.5vw,18px)] font-bold uppercase tracking-[0.34em] text-[#B08D3E]">
+            {t('certificate.title_pdf')}
+          </h2>
+
+          {/* Ornamento */}
+          <div className="mt-[1.5%] flex items-center justify-center gap-2" aria-hidden="true">
+            <span className="h-px w-[18%] bg-[#D4B56A]" />
+            <span className="w-1.5 h-1.5 rotate-45 bg-[#B08D3E]" />
+            <span className="h-px w-[18%] bg-[#D4B56A]" />
+          </div>
+
+          <p className="mt-[2.5%] text-[clamp(10px,1.8vw,22px)] font-bold text-[#0A3049] leading-tight">
+            {courseFullName}
+          </p>
+
+          <p className="mt-[3%] text-[clamp(7px,1.05vw,13px)] text-slate-500">
+            {t('certificate.awarded_to')}
+          </p>
+
+          {/* Nombre */}
+          <p className="mt-[1.5%] text-[clamp(15px,3.3vw,40px)] font-bold text-[#0A3049] leading-none break-words">
             {displayName}
-          </motion.h3>
+          </p>
+          <span className="mx-auto mt-[1.5%] h-[2px] w-[55%] bg-[#B08D3E]" />
 
-          {/* Name underline */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-            className="w-48 h-0.5 mx-auto mb-6 bg-gradient-to-r from-transparent via-[var(--theme-emphasis)]/30 to-transparent"
-          />
+          <p className="mt-[3%] mx-auto max-w-[78%] text-[clamp(7px,1.1vw,13px)] text-slate-700 leading-relaxed">
+            {t('certificate.body', { count: MODULE_COUNT, course: courseFullName })}
+          </p>
 
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7, duration: 0.5 }}
-            className="text-sm max-w-md mx-auto leading-relaxed mb-8 text-slate-500"
-          >
-            {t('ialab.certificate_preview.completed_text', { count: 5, course: courseName })}
-          </motion.p>
+          <div className="mt-auto w-full">
+            <div className="h-px w-full bg-slate-200" />
 
-          {/* Divider */}
-          <div className="w-full h-px bg-slate-200 mb-8" />
+            {/* Validación: QR, firmas y sello */}
+            <div className="flex items-end justify-between gap-[3%] pt-[3.5%]">
+              <div className="flex flex-col items-center shrink-0">
+                <div className="w-[clamp(28px,5.5vw,70px)] aspect-square border border-slate-200 flex items-center justify-center bg-white">
+                  <Icon name="fa-qrcode" className="text-[#0A3049] text-[clamp(16px,3.5vw,44px)]" />
+                </div>
+                <span className="mt-1 text-[clamp(4px,0.6vw,7px)] text-slate-400">
+                  {t('certificate.scan_to_verify')}
+                </span>
+              </div>
 
-          {/* Footer info */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.5 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-16"
-          >
-            <div className="text-center">
-              <p className="text-[10px] uppercase tracking-wider mb-1 text-slate-400">
-                {t('ialab.certificate_preview.issue_date')}
-              </p>
-              <p className="text-sm font-bold text-[var(--theme-emphasis)]">
-                {displayDate}
-              </p>
-            </div>
+              {signatures.map((sig) => (
+                <div key={sig.role} className="flex-1 text-center">
+                  <span className="block h-px w-full bg-[#0A3049]" />
+                  <p className="mt-1 text-[clamp(6px,0.95vw,11px)] font-bold text-[#0A3049]">{sig.name}</p>
+                  <p className="text-[clamp(5px,0.75vw,9px)] text-slate-500">{sig.role}</p>
+                </div>
+              ))}
 
-            <div className="text-center">
-              <p className="text-[10px] uppercase tracking-wider mb-1 text-slate-400">
-                {t('ialab.certificate_preview.cert_number')}
-              </p>
-              <p className="text-sm font-bold font-mono text-[var(--theme-emphasis)]">
-                {displayCertNumber}
-              </p>
-            </div>
-
-            {/* Official Seal */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.9, type: 'spring', stiffness: 200 }}
-              className="relative"
-            >
-              <div
-                className="w-16 h-16 rounded-full flex flex-col items-center justify-center bg-gradient-to-br from-[#FFD166] to-amber-500 shadow-[0_4px_15px_rgba(255,209,102,0.4)]"
-              >
-                {/* Inner circle */}
-                <div className="w-14 h-14 rounded-full border-2 border-white/50 flex flex-col items-center justify-center">
-                  <span className="text-[8px] font-bold leading-tight text-[var(--theme-emphasis)]">
-                    {t('ialab.certificate_preview.verified')}
+              <div className="shrink-0 w-[clamp(34px,6.5vw,82px)] aspect-square rounded-full bg-[#B08D3E] p-[6%]">
+                <div className="w-full h-full rounded-full bg-[#0A3049] flex flex-col items-center justify-center text-center leading-tight">
+                  <span className="text-[clamp(3px,0.55vw,7px)] font-bold uppercase tracking-[0.1em] text-[#D4B56A]">
+                    {t('certificate.seal_top')}
                   </span>
-                  <span className="text-[7px] font-semibold leading-tight" style={{ color: 'var(--theme-emphasis-hover)' }}>
+                  <span className="text-[clamp(4px,0.7vw,9px)] font-bold tracking-[0.08em] text-white">
                     EDUTECHLIFE
+                  </span>
+                  <span className="text-[clamp(3px,0.5vw,6px)] text-[#D4B56A]">
+                    {t('certificate.verified_seal')}
                   </span>
                 </div>
               </div>
-              {/* Shimmer effect */}
-              <motion.div
-                className="absolute inset-0 rounded-full overflow-hidden bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                initial={{ x: '-100%' }}
-                animate={{ x: '100%' }}
-                transition={{ delay: 1.2, duration: 1.5, repeat: 1, repeatDelay: 3 }}
-              />
-            </motion.div>
-          </motion.div>
-        </div>
+            </div>
 
-        {/* Bottom bar */}
-        <div className="relative z-10 bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] px-6 py-2.5 text-center">
-          <p className="text-[10px] text-white/70 tracking-wide">
-            www.edutechlife.com  •  {t('ialab.certificate_preview.verified')}
-          </p>
+            {/* Metadatos */}
+            <div className="mt-[3%] pt-[2%] border-t border-slate-200 grid grid-cols-3 gap-2">
+              {[
+                { label: t('certificate.issue_date_pdf'), value: displayDate },
+                { label: t('certificate.cert_number_pdf'), value: displayCertNumber, mono: true },
+                { label: t('certificate.modality'), value: t('certificate.modality_value', { count: MODULE_COUNT }) },
+              ].map((meta) => (
+                <div key={meta.label}>
+                  <p className="text-[clamp(4px,0.62vw,8px)] uppercase tracking-[0.18em] text-slate-400">
+                    {meta.label}
+                  </p>
+                  <p className={`text-[clamp(6px,0.95vw,11px)] font-bold text-[#0A3049] ${meta.mono ? 'font-mono' : ''}`}>
+                    {meta.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-[2%] text-[clamp(4px,0.62vw,8px)] text-slate-400">
+              {t('certificate.footer_pdf')}
+            </p>
+            <p className="text-[clamp(4px,0.6vw,8px)] font-mono text-[#004B63] break-all">{verifyUrl}</p>
+          </div>
         </div>
       </motion.div>
 
-      {/* Download button */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.5 }}
-      >
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleDownloadPDF}
-          disabled={isDownloading}
-          className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50"
-        >
-          {isDownloading ? (
-            <>
-              <Icon name="fa-spinner" className="animate-spin" />
-              {t('ialab.certificate_preview.generating')}
-            </>
-          ) : (
-            <>
-              <Icon name="fa-download" />
-              {t('ialab.certificate_preview.download')}
-            </>
-          )}
-        </motion.button>
+      {error && (
+        <p role="alert" className="text-center text-sm text-red-600">
+          {error}
+        </p>
+      )}
+
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+        {downloadButton(
+          'w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-[#0A3049] to-[#004B63] text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50',
+        )}
       </motion.div>
     </div>
   );
 };
-
 
 CertificatePreview.propTypes = {
   studentName: PropTypes.string,

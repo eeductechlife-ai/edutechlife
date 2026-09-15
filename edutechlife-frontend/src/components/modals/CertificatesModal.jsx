@@ -11,6 +11,7 @@ import {
 import { Card, CardContent } from "../ui/card-simple";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { buildVerifyUrl } from "../../utils/certificatePdf";
 
 const CertificatePreview = lazy(() => import("../IALab/CertificatePreview"));
 
@@ -119,7 +120,8 @@ const CertificatesModal = ({ isOpen, onClose }) => {
 
   const renderCertificateTab = () => {
     if (certificate) {
-      const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent("https://edutechlife.com")}&title=${encodeURIComponent(`Certificado en ${COURSE_NAME}`)}&summary=${encodeURIComponent(`He completado el curso "${COURSE_NAME}" en Edutechlife. Certificado Nº ${certificate.cert_number}`)}`;
+      // Comparte la URL de verificación del certificado, no la portada del sitio.
+      const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(buildVerifyUrl(certificate.cert_number))}&title=${encodeURIComponent(`Certificado en ${COURSE_NAME}`)}&summary=${encodeURIComponent(`He completado el curso "${COURSE_NAME}" en Edutechlife. Certificado Nº ${certificate.cert_number}`)}`;
       return (
         <div className="space-y-4">
           <Suspense

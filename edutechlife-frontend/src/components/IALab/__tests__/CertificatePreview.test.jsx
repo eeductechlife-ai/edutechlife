@@ -29,28 +29,30 @@ vi.mock('framer-motion', () => {
   return { motion, AnimatePresence: ({ children }) => children };
 });
 
-vi.mock('jspdf', () => ({
-  default: vi.fn(() => ({
-    internal: { pageSize: { getWidth: () => 297, getHeight: () => 210 } },
-    setFillColor: vi.fn(),
-    rect: vi.fn(),
-    setDrawColor: vi.fn(),
-    setLineWidth: vi.fn(),
-    circle: vi.fn(),
-    setFont: vi.fn(),
-    setFontSize: vi.fn(),
-    setTextColor: vi.fn(),
-    text: vi.fn(),
-    line: vi.fn(),
-    getTextWidth: vi.fn(() => 50),
-    addImage: vi.fn(),
-    save: vi.fn(),
-  })),
+const saveSpy = vi.fn();
+const docStub = { save: saveSpy };
+// `new jsPDF(...)` necesita un constructor real, no una arrow function.
+vi.mock('jspdf', () => ({ default: vi.fn(function jsPDFStub() { return docStub; }) }));
+
+const drawCertificate = vi.fn();
+vi.mock('../../../utils/certificatePdf', async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, drawCertificate: (...args) => drawCertificate(...args) };
+});
+
+vi.mock('../../../utils/certificateAssets', () => ({
+  loadInstitutionLogos: vi.fn(async () => ({})),
+  buildQrMatrix: vi.fn(async () => [[true, false], [false, true]]),
 }));
 
+const clickDownload = () =>
+  fireEvent.click(screen.getByText(/ialab\.certificate_preview\.download/i));
+
 describe('CertificatePreview', () => {
-  afterEach(() => {
-    vi.unstubAllGlobals();
+  beforeEach(() => {
+    saveSpy.mockClear();
+    drawCertificate.mockClear();
+    drawCertificate.mockImplementation(() => {});
   });
 
   test('renders student name', () => {
@@ -64,53 +66,67 @@ describe('CertificatePreview', () => {
   });
 
   test('renders date section', () => {
-    const date = new Date('2026-06-01').toISOString();
-    render(<CertificatePreview issuedAt={date} />);
-    expect(screen.getByText(/ialab\.certificate_preview\.issue_date/)).toBeInTheDocument();
+    render(<CertificatePreview issuedAt={new Date('2026-06-01').toISOString()} />);
+    expect(screen.getByText(/ialab\.certificate_preview\.issue_date|certificate\.issue_date_pdf/)).toBeInTheDocument();
+  });
+
+  test('falls back to the current year in the default cert number', () => {
+    render(<CertificatePreview />);
+    // Aparece en el nº de certificado y en la URL de verificación.
+    expect(screen.getAllByText(new RegExp(`EDL-${new Date().getFullYear()}-`)).length).toBeGreaterThan(0);
+  });
+
+  test('ignores an invalid issue date instead of rendering NaN', () => {
+    render(<CertificatePreview issuedAt="no-es-una-fecha" />);
+    expect(screen.queryByText(/Invalid Date|NaN/)).not.toBeInTheDocument();
+  });
+
+  test('renders the three endorsing institutions', () => {
+    render(<CertificatePreview studentName="Ana Ruiz" />);
+    expect(screen.getByAltText('Edutechlife')).toBeInTheDocument();
+    expect(screen.getByAltText('Ministerio TIC')).toBeInTheDocument();
+    expect(screen.getByAltText('Alcaldía de Manizales')).toBeInTheDocument();
+  });
+
+  test('shows the on-line verification url', () => {
+    render(<CertificatePreview certNumber="EDL-2026-001234" />);
+    expect(
+      screen.getByText('https://edutechlife.co/verificar/EDL-2026-001234'),
+    ).toBeInTheDocument();
   });
 
   test('renders compact version with download button', () => {
     render(<CertificatePreview compact />);
-    const btn = screen.getByRole('button');
-    expect(btn).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeInTheDocument();
     expect(screen.getByText(/ialab\.certificate_preview\.download/i)).toBeInTheDocument();
   });
 
-  test('renders default cert number if not provided', () => {
-    render(<CertificatePreview />);
-    expect(screen.getByText(/EDL-2026/)).toBeInTheDocument();
+  test('draws and saves the pdf on download', async () => {
+    render(<CertificatePreview studentName="Test User" certNumber="EDL-2026-000001" />);
+    clickDownload();
+    expect(screen.getByText(/ialab\.certificate_preview\.generating/i)).toBeInTheDocument();
+
+    await waitFor(() => expect(saveSpy).toHaveBeenCalled());
+
+    const options = drawCertificate.mock.calls[0][1];
+    expect(options.studentName).toBe('Test User');
+    expect(options.certNumber).toBe('EDL-2026-000001');
+    expect(options.verifyUrl).toBe('https://edutechlife.co/verificar/EDL-2026-000001');
+    expect(options.qrMatrix).toHaveLength(2);
+    expect(options.signatures).toHaveLength(2);
+    expect(saveSpy.mock.calls[0][0]).toMatch(/\.pdf$/);
   });
 
-  test('renders full certificate view with title', () => {
-    render(<CertificatePreview studentName="Carlos Ruiz" />);
-    expect(screen.getByText(/ialab\.certificate_preview\.certificate_title_react/i)).toBeInTheDocument();
-    expect(screen.getByText(/ialab\.certificate_preview\.issued_to/i)).toBeInTheDocument();
-  });
-
-  test('renders edutechlife logo in header', () => {
-    render(<CertificatePreview studentName="María López" />);
-    const logo = screen.getByAltText('Edutechlife');
-    expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute('src', '/images/logo-edutechlife.webp');
-  });
-
-  test('shows generating state on download click', async () => {
-    vi.stubGlobal('Image', class {
-      constructor() {
-        this.crossOrigin = null;
-        this.src = '';
-        setTimeout(() => {
-          this.naturalWidth = 2972;
-          this.naturalHeight = 392;
-          this.onload?.();
-        }, 0);
-      }
+  test('surfaces an error instead of failing silently', async () => {
+    drawCertificate.mockImplementation(() => {
+      throw new Error('boom');
     });
     render(<CertificatePreview studentName="Test User" />);
-    fireEvent.click(screen.getByText(/ialab\.certificate_preview\.download/i));
-    expect(screen.getByText(/ialab\.certificate_preview\.generating/i)).toBeInTheDocument();
-    await waitFor(() => {
-      expect(screen.getByText(/ialab\.certificate_preview\.download/i)).toBeInTheDocument();
-    });
+    clickDownload();
+
+    await waitFor(() =>
+      expect(screen.getByRole('alert')).toHaveTextContent('certificate.error_generating'),
+    );
+    expect(saveSpy).not.toHaveBeenCalled();
   });
 });
