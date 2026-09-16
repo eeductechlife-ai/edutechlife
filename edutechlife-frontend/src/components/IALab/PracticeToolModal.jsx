@@ -14,6 +14,8 @@ const EthicsExplorer = lazy(() => import("./EthicsExplorer"));
 const OVAGeminiDeepResearch = lazy(() => import("./OVAGeminiDeepResearch"));
 const CapsulasConocimiento = lazy(() => import("./CapsulasConocimiento"));
 const IALabTutoriasVirtuales = lazy(() => import("./IALabTutoriasVirtuales"));
+const ChainOfThoughtTrainer = lazy(() => import("./ChainOfThoughtTrainer"));
+const ModelSelectionGuide = lazy(() => import("./ModelSelectionGuide"));
 
 const MODULE_TOOL_CONFIG = {
   1: { titleKey: "ialab.tool_tutor.tool_title", icon: "fa-wand-sparkles" },
@@ -60,6 +62,12 @@ const PracticeToolModal = ({ isOpen, toolType, onClose }) => {
     if (toolType === "tutoring") {
       return <IALabTutoriasVirtuales />;
     }
+    if (toolType === "cot") {
+      return <ChainOfThoughtTrainer />;
+    }
+    if (toolType === "model-selection") {
+      return <ModelSelectionGuide />;
+    }
     if (toolType === "prompts") {
       if (activeMod === 2) return <IALabInteractionAdvisor />;
       if (activeMod === 4) return <OVAPodcastStudio />;
@@ -72,6 +80,23 @@ const PracticeToolModal = ({ isOpen, toolType, onClose }) => {
 
   const config = MODULE_TOOL_CONFIG[activeMod] || MODULE_TOOL_CONFIG[1];
 
+  const modalTitle =
+    toolType === "flashcards"
+      ? t("ialab.practice.tool_flashcards")
+      : toolType === "tutoring"
+        ? t("ialab.practice.tool_tutoring")
+        : toolType === "cot"
+          ? t("ialab.practice.tool_cot")
+          : toolType === "model-selection"
+            ? t("ialab.practice.tool_model_selection")
+            : t(config?.titleKey || "ialab.tool_tutor.tool_title");
+  const modalIcon =
+    toolType === "cot"
+      ? "fa-diagram-project"
+      : toolType === "model-selection"
+        ? "fa-scale-balanced"
+        : config?.icon || "fa-wand-sparkles";
+
   return (
     <AnimatePresence>
       <motion.div
@@ -83,13 +108,7 @@ const PracticeToolModal = ({ isOpen, toolType, onClose }) => {
         className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
         role="dialog"
         aria-modal="true"
-        aria-label={
-          toolType === "flashcards"
-            ? t("ialab.practice.tool_flashcards")
-            : toolType === "tutoring"
-              ? t("ialab.practice.tool_tutoring")
-              : t(config?.titleKey || "ialab.tool_tutor.tool_title")
-        }
+        aria-label={modalTitle}
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -102,17 +121,13 @@ const PracticeToolModal = ({ isOpen, toolType, onClose }) => {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-emphasis)] flex items-center justify-center shadow-sm flex-shrink-0">
                 <Icon
-                  name={config?.icon || "fa-wand-sparkles"}
+                  name={modalIcon}
                   className="text-white text-base"
                   aria-hidden="true"
                 />
               </div>
               <h3 className="text-lg font-bold text-[var(--theme-emphasis)] dark:text-slate-100">
-                {toolType === "flashcards"
-                  ? t("ialab.practice.tool_flashcards")
-                  : toolType === "tutoring"
-                    ? t("ialab.practice.tool_tutoring")
-                    : t(config?.titleKey || "ialab.tool_tutor.tool_title")}
+                {modalTitle}
               </h3>
             </div>
             <button
@@ -141,7 +156,7 @@ const PracticeToolModal = ({ isOpen, toolType, onClose }) => {
 
 PracticeToolModal.propTypes = {
   isOpen: PropTypes.bool,
-  toolType: PropTypes.oneOf(["prompts", "flashcards", "tutoring"]),
+  toolType: PropTypes.oneOf(["prompts", "flashcards", "tutoring", "cot", "model-selection"]),
   onClose: PropTypes.func,
 };
 

@@ -338,16 +338,19 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
         </button>
       </form>
 
-      {/* Sign Up Link */}
-      <div className="text-center text-sm text-gray-600">
-        {t("login.no_account") || "¿No tienes cuenta?"}{" "}
-        <button
-          onClick={() => (onShowSignUp ? onShowSignUp() : navigate("/sign-up/smartboard"))}
-          className="text-[#004B63] hover:text-[#0A3550] font-semibold"
-        >
-          {t("login.signup_link") || "Regístrate aquí"}
-        </button>
-      </div>
+      {/* Sign Up Link — only shown when the parent has no clearer way
+          (e.g. tabs) to switch to registration. */}
+      {!onShowSignUp && (
+        <div className="text-center text-sm text-gray-600">
+          {t("login.no_account") || "¿No tienes cuenta?"}{" "}
+          <button
+            onClick={() => navigate("/sign-up/smartboard")}
+            className="text-[#004B63] hover:text-[#0A3550] font-semibold"
+          >
+            {t("login.signup_link") || "Regístrate aquí"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

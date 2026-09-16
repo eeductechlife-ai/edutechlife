@@ -208,6 +208,15 @@ export const createProgressSlice = (set, get) => ({
     }
 
     clearMemoCache();
+
+    // Peer Review (Fase B): notifica que un módulo se acaba de completar.
+    // Aditivo — sin listeners, este evento no hace nada.
+    if (justCompleted && typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("ialab:moduleCompleted", { detail: { moduleId } }),
+      );
+    }
+
     return { newScore, justCompleted };
   },
 

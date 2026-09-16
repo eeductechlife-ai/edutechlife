@@ -68,13 +68,17 @@ const Ecosystem = memo(() => {
           <p className="text-base text-slate-600 leading-relaxed">
             {t('ecosystem.subtitle')}
           </p>
+          <p className="md:hidden flex items-center justify-center gap-1.5 text-xs font-semibold text-primary-light mt-3">
+            {t('ecosystem.swipe_hint')}
+            <Icon name="fa-arrow-right" className="text-[10px]" />
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-4 md:gap-6 -mx-6 px-6 lg:-mx-8 lg:px-8 md:mx-0 md:px-0 pb-3 md:pb-0 md:grid-cols-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {cards.map((card, i) => (
             <motion.div
               key={i}
-              className="group card-clay-white overflow-hidden relative"
+              className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none group card-clay-white overflow-hidden relative"
               initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
               whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true }}

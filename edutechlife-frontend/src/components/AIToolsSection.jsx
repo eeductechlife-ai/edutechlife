@@ -162,12 +162,16 @@ function AIToolsSection() {
             <p className="text-base text-slate-500 max-w-2xl font-medium">
               {t("ai_tools.subtitle")}
             </p>
+            <p className="md:hidden flex items-center gap-1.5 text-xs font-semibold text-primary-light mt-3">
+              {t("ai_tools.swipe_hint")}
+              <Icon name="fa-arrow-right" className="text-[10px]" />
+            </p>
           </motion.div>
         </div>
 
-        {/* Bento Grid */}
+        {/* Bento Grid (desktop) / Carrusel horizontal con snap (móvil) */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-4 md:gap-6 -mx-4 px-4 md:mx-0 md:px-0 pb-3 md:pb-0 md:grid-cols-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -183,7 +187,7 @@ function AIToolsSection() {
             role="button"
             onFocus={handleMouseEnter}
             onBlur={handleMouseLeave}
-            className="col-span-1 md:col-span-2 rounded-2xl bg-gradient-to-b from-[#004B63] to-[#003545] p-[1px] relative overflow-hidden cursor-pointer shadow-lg group"
+            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none md:col-span-2 rounded-2xl bg-gradient-to-b from-[#004B63] to-[#003545] p-[1px] relative overflow-hidden cursor-pointer shadow-lg group"
           >
             {!isVideoError && (
               <video
@@ -281,7 +285,7 @@ function AIToolsSection() {
           {/* Card 2: Automatización */}
           <motion.div
             variants={itemVariants}
-            className="col-span-1 card-clay-white p-8 flex flex-col justify-between"
+            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none md:col-span-1 card-clay-white p-8 flex flex-col justify-between"
           >
             <div>
               <div className="w-14 h-14 rounded-xl bg-primary-light/10 flex items-center justify-center mb-5">
@@ -330,7 +334,7 @@ function AIToolsSection() {
           {/* Card 3: Diagnóstico VAK */}
           <motion.div
             variants={itemVariants}
-            className="col-span-1 card-clay-white p-8 flex flex-col justify-between"
+            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none md:col-span-1 card-clay-white p-8 flex flex-col justify-between"
           >
             <div>
               <div className="w-14 h-14 rounded-xl bg-primary-light/10 flex items-center justify-center mb-5">
@@ -373,7 +377,7 @@ function AIToolsSection() {
             role="button"
             onFocus={handleMouseEnterSmartboard}
             onBlur={handleMouseLeaveSmartboard}
-            className="col-span-1 md:col-span-2 card-clay bg-primary-light/5 relative overflow-hidden cursor-pointer"
+            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none md:col-span-2 card-clay bg-primary-light/5 relative overflow-hidden cursor-pointer"
           >
             {!isVideoErrorSmartboard && (
               <video

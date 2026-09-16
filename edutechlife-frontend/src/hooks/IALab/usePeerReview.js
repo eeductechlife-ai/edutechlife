@@ -7,6 +7,9 @@ import {
   validatePeerScores,
 } from "../../utils/peerRubric";
 
+const PEER_REVIEW_COURSE_ID = "ialab-ia-generativa";
+const PEER_REVIEW_DUE_DAYS = 7;
+
 /**
  * Peer Review (Fase B) — asignaciones y envío de revisiones.
  *
@@ -81,5 +84,61 @@ export default function usePeerReview({ userId, moduleId } = {}) {
     [enabled, userId],
   );
 
-  return { enabled, assignments, loading, error, reload: load, submitReview };
+  const requestAssignment = useCallback(
+    async (targetModuleId) => {
+      if (!enabled || !userId || !supabase) {
+        return { success: false, error: "peer_review_disabled" };
+      }
+      try {
+        const dueAt = new Date(
+          Date.now() + PEER_REVIEW_DUE_DAYS * 24 * 60 * 60 * 1000,
+        ).toISOString();
+        const { data, error: rpcError } = await supabase.rpc(
+          "assign_peer_reviews",
+          {
+            p_course_id: PEER_REVIEW_COURSE_ID,
+            p_module_id: targetModuleId,
+            p_due_at: dueAt,
+          },
+        );
+        if (rpcError) throw rpcError;
+        if (!moduleId || moduleId === targetModuleId) load();
+        return { success: true, data };
+      } catch (err) {
+        return { success: false, error: err?.message || "peer_review_error" };
+      }
+    },
+    [enabled, userId, moduleId, load],
+  );
+
+  return {
+    enabled,
+    assignments,
+    loading,
+    error,
+    reload: load,
+    submitReview,
+    requestAssignment,
+  };
+}
+
+/**
+ * Escucha "ialab:moduleCompleted" (disparado por progressSlice al aprobar un
+ * módulo) y pide asignación de revisores de pares. Montar una sola vez en un
+ * componente que viva mientras dure la sesión de IALab (p. ej. el provider de
+ * progreso). No-op completo si PEER_REVIEW está deshabilitado.
+ */
+export function usePeerReviewAutoAssign(userId) {
+  const { enabled, requestAssignment } = usePeerReview({ userId });
+
+  useEffect(() => {
+    if (!enabled) return undefined;
+    const onModuleCompleted = (event) => {
+      const moduleId = event?.detail?.moduleId;
+      if (typeof moduleId === "number") requestAssignment(moduleId);
+    };
+    window.addEventListener("ialab:moduleCompleted", onModuleCompleted);
+    return () =>
+      window.removeEventListener("ialab:moduleCompleted", onModuleCompleted);
+  }, [enabled, requestAssignment]);
 }

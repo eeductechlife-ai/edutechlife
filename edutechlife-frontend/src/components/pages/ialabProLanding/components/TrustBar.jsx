@@ -79,7 +79,12 @@ const TrustBar = ({ t, locale }) => (
       <div className="h-7 w-px bg-white/10" />
       <div className="flex items-center gap-1 text-amber-400">
         {[1, 2, 3, 4, 5].map((s) => (
-          <Icon key={s} name="fa-star" className="w-4 h-4" />
+          <Icon
+            key={s}
+            name="fa-star"
+            className="w-4 h-4"
+            fill="currentColor"
+          />
         ))}
         <span className="text-white ml-1.5">
           <strong className="text-white">

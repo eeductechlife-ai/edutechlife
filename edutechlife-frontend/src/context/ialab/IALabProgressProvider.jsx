@@ -18,6 +18,7 @@ import {
 import { getModules, modules as STATIC_MODULES } from "@/data/ialab";
 import { LAST_MODULE_ID } from "@/constants/ialab";
 import { useIALabStore } from "../../store/ialabStore";
+import { usePeerReviewAutoAssign } from "../../hooks/IALab/usePeerReview";
 
 export const IALabProgressContext = createContext(null);
 
@@ -68,6 +69,7 @@ export function IALabProgressProvider({ children }) {
   const syncStatus = useIALabStore((s) => s.syncStatus);
   const isUsingJWT = useIALabStore((s) => s.isUsingJWT);
   const userId = useIALabStore((s) => s.userId);
+  usePeerReviewAutoAssign(userId);
 
   const {
     courseProgress: persistentCourseProgress,

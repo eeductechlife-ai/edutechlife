@@ -11,6 +11,11 @@ import ScoreBreakdown from "./ScoreBreakdown";
 import FeedbackPanel from "./FeedbackPanel";
 import CompetenceRadar from "./CompetenceRadar";
 import { getCompetenceLevel, computeRadarScores } from "./competenceLevel.js";
+import {
+  EVALUATION_HISTORY_KEY,
+  parseEvaluationHistory,
+  recordEvaluation,
+} from "../../utils/evaluationHistory";
 
 const IALabEvaluationResults = ({
   evaluation,
@@ -33,6 +38,26 @@ const IALabEvaluationResults = ({
     const current = state.getChallengeRemainingAttempts(activeMod);
     setRemainingAttempts(current);
   }, [activityType, activeMod]);
+
+  // Historial real por eje (Fase C): guarda una entrada por módulo/día.
+  useEffect(() => {
+    if (!evaluation) return;
+    try {
+      const axes = [1, 2, 3, 4].map((i) => evaluation[`nota_ej${i}`]);
+      const prev = parseEvaluationHistory(
+        localStorage.getItem(EVALUATION_HISTORY_KEY),
+      );
+      const next = recordEvaluation(prev, {
+        moduleId: activeMod,
+        date: new Date().toISOString().split("T")[0],
+        axes,
+        global: evaluation.notaGlobal,
+      });
+      localStorage.setItem(EVALUATION_HISTORY_KEY, JSON.stringify(next));
+    } catch {
+      /* almacenamiento no disponible */
+    }
+  }, [evaluation, activeMod]);
 
   const handleRetry = useCallback(() => {
     if (activityType !== "challenge") return;

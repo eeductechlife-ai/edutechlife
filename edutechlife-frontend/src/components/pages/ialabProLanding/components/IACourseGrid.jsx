@@ -34,6 +34,10 @@ const IACourseGrid = ({ t, locale, navigate, isSignedIn, categories, courses, ac
           <p className="font-body text-lg text-[#475569] max-w-2xl mx-auto">
             {t('ialab.landing.catalog_subtitle')}
           </p>
+          <p className="md:hidden flex items-center justify-center gap-1.5 text-xs font-semibold text-[#00BCD4] mt-3">
+            {t('ialab.landing.swipe_hint')}
+            <Icon name="fa-arrow-right" className="w-3 h-3" />
+          </p>
         </motion.div>
 
         <div className="flex flex-wrap justify-center gap-3 mb-12">
@@ -69,7 +73,7 @@ const IACourseGrid = ({ t, locale, navigate, isSignedIn, categories, courses, ac
             initial="initial"
             animate="animate"
             exit={{ opacity: 0, y: 20, transition: { duration: 0.2 } }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch"
+            className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-4 md:gap-6 -mx-4 px-4 md:mx-0 md:px-0 pb-3 md:pb-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-stretch [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {filteredCourses.map((course, index) => {
               const config = statusConfig[course.status];
@@ -78,7 +82,7 @@ const IACourseGrid = ({ t, locale, navigate, isSignedIn, categories, courses, ac
                 <motion.div
                   key={course.id}
                   variants={fadeInUp}
-                  className="group relative bg-white border border-[#004B63]/10 rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,75,99,0.06)] hover:shadow-[0_12px_40px_rgba(0,75,99,0.12)] transition-all duration-300 h-full flex flex-col"
+                  className="shrink-0 w-[82vw] max-w-sm snap-center md:w-auto md:max-w-none group relative bg-white border border-[#004B63]/10 rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,75,99,0.06)] hover:shadow-[0_12px_40px_rgba(0,75,99,0.12)] transition-all duration-300 h-full flex flex-col"
                   whileHover={{ y: -6, scale: 1.015 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >
@@ -133,6 +137,7 @@ const IACourseGrid = ({ t, locale, navigate, isSignedIn, categories, courses, ac
                           <Icon
                             key={s}
                             name="fa-star"
+                            fill="currentColor"
                             className={`w-3 h-3 ${s <= fullStars ? 'text-amber-400' : 'text-white/20'}`}
                           />
                         ))}

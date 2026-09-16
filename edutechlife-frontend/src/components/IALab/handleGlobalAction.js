@@ -37,6 +37,12 @@ export default function handleGlobalAction(action, data, store) {
     case 'OPEN_TUTORING':
       store.setPracticeTool('tutoring');
       break;
+    case 'OPEN_COT_TRAINER':
+      store.setPracticeTool('cot');
+      break;
+    case 'OPEN_MODEL_SELECTION_GUIDE':
+      store.setPracticeTool('model-selection');
+      break;
     default:
       console.warn('Acción global no manejada:', action, data);
   }

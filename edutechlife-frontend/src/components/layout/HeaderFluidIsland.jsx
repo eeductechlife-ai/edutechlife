@@ -61,7 +61,9 @@ const HeaderFluidIsland = ({ onOpenMobileMenu }) => {
   const prefersReducedMotion = useReducedMotion();
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
+  const [mobileLoginDropdownOpen, setMobileLoginDropdownOpen] = useState(false);
   const loginDropdownRef = useRef(null);
+  const mobileLoginDropdownRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -70,6 +72,11 @@ const HeaderFluidIsland = ({ onOpenMobileMenu }) => {
         !loginDropdownRef.current.contains(e.target)
       )
         setLoginDropdownOpen(false);
+      if (
+        mobileLoginDropdownRef.current &&
+        !mobileLoginDropdownRef.current.contains(e.target)
+      )
+        setMobileLoginDropdownOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -78,6 +85,7 @@ const HeaderFluidIsland = ({ onOpenMobileMenu }) => {
   useEffect(() => {
     setContactModalOpen(false);
     setLoginDropdownOpen(false);
+    setMobileLoginDropdownOpen(false);
   }, [location.pathname]);
 
   const shouldShow = () => {
@@ -209,8 +217,64 @@ const HeaderFluidIsland = ({ onOpenMobileMenu }) => {
           </button>
         </div>
 
-        <div className="flex md:hidden items-center gap-2 ml-auto">
+        <div className="flex md:hidden items-center gap-1.5 ml-auto">
           <LocaleSwitcher />
+          {isSignedIn && clerkUser ? (
+            <UserDropdownMenuPremium
+              userInfo={clerkUser}
+              onNavigate={navigate}
+            />
+          ) : (
+            <div className="relative" ref={mobileLoginDropdownRef}>
+              <button
+                onClick={() => setMobileLoginDropdownOpen(!mobileLoginDropdownOpen)}
+                aria-label={t("nav.login")}
+                className="w-11 h-11 flex items-center justify-center rounded-full text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] shadow-md active:scale-[0.9] transition-all duration-300"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                  />
+                </svg>
+              </button>
+              <AnimatePresence>
+                {mobileLoginDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                    transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute top-full right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50"
+                  >
+                    <p className="px-3 pt-1 pb-2 text-[11px] font-semibold uppercase tracking-wide text-gray-400">
+                      {t("nav.login")}
+                    </p>
+                    {loginOptions.map((opt) => (
+                      <button
+                        key={opt.id}
+                        onClick={() => {
+                          navigate(opt.path);
+                          setMobileLoginDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-3 text-sm font-semibold text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-xl transition-colors flex items-center gap-3"
+                      >
+                        {opt.icon}
+                        <span>{opt.label}</span>
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
           <button
             onClick={() => onOpenMobileMenu?.()}
             className="relative w-11 h-11 flex items-center justify-center rounded-full hover:bg-petroleum/5 transition-all duration-300 active:scale-[0.9]"

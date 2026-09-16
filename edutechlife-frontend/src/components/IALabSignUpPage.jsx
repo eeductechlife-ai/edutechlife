@@ -83,7 +83,7 @@ const IALabSignUpPage = ({ onBack }) => {
                       : "text-slate-500 hover:text-[#004B63]"
                   }`}
                 >
-                  {t("welcome.signin_title")}
+                  {t("welcome.tab_signin")}
                 </button>
                 <button
                   type="button"
@@ -94,7 +94,7 @@ const IALabSignUpPage = ({ onBack }) => {
                       : "text-slate-500 hover:text-[#004B63]"
                   }`}
                 >
-                  {t("welcome.signup_title")}
+                  {t("welcome.tab_signup")}
                 </button>
               </div>
 
@@ -106,11 +106,11 @@ const IALabSignUpPage = ({ onBack }) => {
           </div>
 
           {onBack && (
-            <div className="mt-4 text-center">
+            <div className="mt-5 flex justify-center">
               <button
                 type="button"
                 onClick={onBack}
-                className="text-white/70 hover:text-white text-sm font-medium"
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-sm font-semibold rounded-xl border border-white/20 transition-all duration-300"
               >
                 ← {t("welcome.back_btn") || "Volver"}
               </button>

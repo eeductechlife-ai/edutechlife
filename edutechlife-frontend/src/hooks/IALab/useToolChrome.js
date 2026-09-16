@@ -7,14 +7,16 @@ const STORAGE_KEY = "ialab-tool-chrome";
    mantener el toggle sincronizado (header ↔ workspace). */
 const SYNC_EVENT = "ialab-tool-chrome-change";
 
-export const TOOL_CHROME_THEMES = ["chatgpt"];
+/* Ningún tema conserva el toggle a vista clásica: todos quedan fijos en la
+   vista simulada (herramienta), igual que ya ocurría con gemini/notebooklm. */
+export const TOOL_CHROME_THEMES = [];
 
 const THEME_DEFAULT = {
   chatgpt: true,
 };
 
 /* Temas que siempre muestran la vista herramientas, sin opción de cambiar */
-const FORCE_CHROME_ON = new Set(["gemini", "default", "notebooklm"]);
+const FORCE_CHROME_ON = new Set(["gemini", "default", "notebooklm", "chatgpt"]);
 
 function readStored() {
   try {

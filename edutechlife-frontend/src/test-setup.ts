@@ -1,6 +1,10 @@
 import '@testing-library/jest-dom';
-import { cleanup } from '@testing-library/react';
+import { cleanup, configure } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
+
+// Bajo carga alta (suite completa en paralelo) los imports perezosos pueden
+// tardar más de 1s; 5s evita flakes de findBy*/waitFor sin tocar la app.
+configure({ asyncUtilTimeout: 5000 });
 
 afterEach(() => {
   cleanup();

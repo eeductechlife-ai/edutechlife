@@ -55,7 +55,7 @@ const Hero = memo(() => {
   return (
     <section
       ref={heroRef}
-      className="relative w-full min-h-screen sm:min-h-[85vh] md:min-h-[90vh] flex flex-col items-center justify-center overflow-hidden"
+      className="relative w-full py-12 sm:py-0 sm:min-h-[85vh] md:min-h-[90vh] flex flex-col items-center justify-center overflow-hidden"
     >
       <FloatingParticles count={45} className="z-0" />
 

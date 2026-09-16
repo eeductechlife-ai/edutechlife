@@ -233,13 +233,13 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
         title={t("seo.signup_ialab.title")}
         description={t("seo.signup_ialab.desc")}
       />
-      <div className="min-h-screen bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#1a5f7a] flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-[100dvh] bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#1a5f7a] flex items-center justify-center p-0 sm:p-4 relative overflow-hidden">
         <FloatingParticles />
 
         {/* Back Button */}
         <button
           onClick={onBack}
-          className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
+          className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20 flex items-center gap-2 px-3 py-2 sm:px-4 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
         >
           <ArrowLeft className="w-4 h-4" />
           <span className="text-sm font-medium">
@@ -248,15 +248,32 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
         </button>
 
         {/* Main Card */}
-        <div className="relative z-10 w-full max-w-5xl">
-          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/20">
+        <div className="relative z-10 w-full max-w-5xl sm:my-4">
+          <div className="bg-white/95 backdrop-blur-xl sm:rounded-3xl shadow-2xl overflow-hidden border border-white/20 min-h-[100dvh] sm:min-h-0">
             {!success ? (
-              <div className="flex flex-col lg:flex-row min-h-screen lg:min-h-auto">
-                {/* Left Side - Brand & Benefits */}
+              <div className="flex flex-col lg:flex-row">
+                {/* Compact brand header — mobile & tablet only */}
+                <div className="lg:hidden bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-5 pt-20 pb-5 text-white relative overflow-hidden">
+                  <div className="relative z-10 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                      <Brain className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <h1 className="text-base font-bold leading-tight">
+                        {t("ialab.signup_welcome_title")}
+                      </h1>
+                      <p className="text-white/80 text-xs">
+                        {t("ialab.signup_subtitle")}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Left Side - Brand & Benefits (desktop only) */}
                 {/* pt is oversized on purpose: the "back to login" button is
                     absolutely positioned at top-6/left-6 and would otherwise
                     sit on top of the logo. */}
-                <div className="lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-8 pt-24 pb-8 lg:px-12 lg:pt-28 lg:pb-12 text-white flex flex-col justify-between relative overflow-hidden">
+                <div className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-8 pt-24 pb-8 lg:px-12 lg:pt-28 lg:pb-12 text-white flex-col justify-between relative overflow-hidden">
                   <div className="absolute inset-0 opacity-10">
                     <div
                       style={{
@@ -333,26 +350,28 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                 </div>
 
                 {/* Right Side - Form */}
-                <div className="lg:w-3/5 p-8 lg:p-12 flex flex-col justify-center">
-                  {/* Progress Bar */}
-                  <div className="mb-8">
-                    <div className="flex justify-between mb-4">
-                      <span className="text-sm font-medium text-[#004B63]">
-                        {currentStep === 1
-                          ? t("signup.step_1_info") || "Información personal"
-                          : t("signup.step_2_security") || "Seguridad"}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        Paso {currentStep}/2
-                      </span>
+                <div className="lg:w-3/5 p-5 sm:p-8 lg:p-12 flex flex-col justify-center">
+                  {/* Progress Bar — only once the multi-step form has started */}
+                  {currentStep > 0 && (
+                    <div className="mb-6 sm:mb-8">
+                      <div className="flex justify-between mb-3 sm:mb-4">
+                        <span className="text-sm font-medium text-[#004B63]">
+                          {currentStep === 1
+                            ? t("signup.step_1_info")
+                            : t("signup.step_2_security")}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {currentStep}/2
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-[#004B63] to-[#4DA8C4] rounded-full transition-all duration-300"
+                          style={{ width: `${(currentStep / 2) * 100}%` }}
+                        />
+                      </div>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-[#004B63] to-[#4DA8C4] rounded-full transition-all duration-300"
-                        style={{ width: `${(currentStep / 2) * 100}%` }}
-                      />
-                    </div>
-                  </div>
+                  )}
 
                   {/* Error Message */}
                   {error && (
@@ -364,14 +383,13 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
 
                   {/* Step 0: Welcome - Quick OAuth */}
                   {currentStep === 0 && (
-                    <div className="space-y-6 animate-in fade-in">
-                      <div className="text-center mb-8">
-                        <h3 className="text-3xl font-bold text-[#004B63] mb-2">
-                          Bienvenido
+                    <div className="space-y-5 sm:space-y-6 animate-in fade-in">
+                      <div className="text-center mb-6 sm:mb-8">
+                        <h3 className="text-2xl sm:text-3xl font-bold text-[#004B63] mb-2">
+                          {t("signup.step0_title")}
                         </h3>
-                        <p className="text-gray-600">
-                          Ingresa rápidamente a tu cuenta con las opciones
-                          disponibles
+                        <p className="text-gray-600 text-sm sm:text-base">
+                          {t("signup.step0_subtitle")}
                         </p>
                       </div>
 
@@ -392,7 +410,7 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                           </svg>
-                          Continuar con Google
+                          {t("signup.oauth_google")}
                         </button>
 
                         <button
@@ -407,7 +425,7 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                           >
                             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                           </svg>
-                          Continuar con Facebook
+                          {t("signup.oauth_facebook")}
                         </button>
                       </div>
 
@@ -418,7 +436,7 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                         </div>
                         <div className="relative flex justify-center text-sm">
                           <span className="px-2 bg-white text-gray-500">
-                            O regístrate con email
+                            {t("signup.divider_email")}
                           </span>
                         </div>
                       </div>
@@ -429,26 +447,33 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                         className="w-full px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
                       >
                         <Mail className="w-5 h-5" />
-                        Crear cuenta con email
+                        {t("signup.button.create_with_email")}
                       </button>
 
                       {/* Footer */}
-                      <p className="text-center text-xs text-gray-500">
-                        Al continuar, aceptas nuestros Términos de servicio y
-                        Política de privacidad
-                      </p>
+                      <p
+                        className="text-center text-xs text-gray-500"
+                        dangerouslySetInnerHTML={{
+                          __html: sanitize(t("ialab.signup_terms")),
+                        }}
+                      />
                     </div>
                   )}
 
                   {/* Step 1: Personal Info */}
                   {currentStep === 1 && (
                     <div className="space-y-5 animate-in fade-in">
-                      <h3 className="text-2xl font-bold text-[#004B63] mb-6">
-                        {t("signup.step_1_info") || "Información personal"}
-                      </h3>
+                      <div className="mb-6">
+                        <h3 className="text-2xl font-bold text-[#004B63]">
+                          {t("signup.step_1_info")}
+                        </h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                          {t("signup.step1_subtitle")}
+                        </p>
+                      </div>
 
                       {/* Name Row */}
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-[#00374A] mb-2">
                             {t("signup.field.first_name")}
@@ -536,7 +561,7 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                         </div>
                         <div className="relative flex justify-center text-sm">
                           <span className="px-2 bg-white text-gray-500 font-medium">
-                            O continúa con
+                            {t("signup.oauth_divider")}
                           </span>
                         </div>
                       </div>
@@ -583,7 +608,7 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                         disabled={isStep1Valid}
                         className="w-full mt-8 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white py-3 rounded-lg font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2"
                       >
-                        Continuar
+                        {t("signup.button.continue")}
                         <ArrowLeft className="w-4 h-4 rotate-180" />
                       </button>
                     </div>
@@ -595,9 +620,14 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                       onSubmit={handleSignUp}
                       className="space-y-5 animate-in fade-in"
                     >
-                      <h3 className="text-2xl font-bold text-[#004B63] mb-6">
-                        {t("signup.step_2_security") || "Seguridad y acceso"}
-                      </h3>
+                      <div className="mb-6">
+                        <h3 className="text-2xl font-bold text-[#004B63]">
+                          {t("signup.step_2_security")}
+                        </h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                          {t("signup.step2_subtitle")}
+                        </p>
+                      </div>
 
                       {/* Username */}
                       <div>
@@ -707,7 +737,7 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                       {/* Phone */}
                       <div>
                         <label className="block text-sm font-medium text-[#00374A] mb-2">
-                          {t("signup.field.phone")} (Opcional)
+                          {t("signup.field.phone")}
                         </label>
                         <div className="relative">
                           <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -748,7 +778,7 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                           onClick={() => setCurrentStep(1)}
                           className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition-all"
                         >
-                          Atrás
+                          {t("signup.button.back")}
                         </button>
                         <button
                           type="submit"
@@ -756,8 +786,8 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                           className="flex-1 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white py-3 rounded-lg font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
                         >
                           {loading
-                            ? "Creando cuenta..."
-                            : t("signup.button.register") || "Crear cuenta"}
+                            ? t("signup.button.registering")
+                            : t("signup.button.register")}
                         </button>
                       </div>
                     </form>
@@ -766,20 +796,19 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
               </div>
             ) : (
               /* Success State */
-              <div className="min-h-screen lg:min-h-auto flex items-center justify-center p-8">
+              <div className="min-h-[70vh] lg:min-h-[500px] flex items-center justify-center p-8">
                 <div className="text-center max-w-md">
                   <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle2 className="w-10 h-10 text-green-600" />
                   </div>
                   <h3 className="text-3xl font-bold text-[#004B63] mb-2">
-                    ¡Bienvenido!
+                    {t("signup.success_title")}
                   </h3>
                   <p className="text-gray-600 mb-2">
-                    {t("signup.success.registration_complete") ||
-                      "Tu cuenta ha sido creada exitosamente."}
+                    {t("signup.success.registration_complete")}
                   </p>
                   <p className="text-sm text-gray-500">
-                    Te estamos redirigiendo a la plataforma...
+                    {t("signup.success_redirecting")}
                   </p>
                 </div>
               </div>

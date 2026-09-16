@@ -79,6 +79,13 @@ export default function Footer() {
   const [subscribed, setSubscribed] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
+  const [openMobileSections, setOpenMobileSections] = useState({
+    tools: false,
+    resources: false,
+  });
+
+  const toggleMobileSection = (section) =>
+    setOpenMobileSections((prev) => ({ ...prev, [section]: !prev[section] }));
 
   const openModal = (modalName) => setActiveModal(modalName);
   const closeModal = () => setActiveModal(null);
@@ -119,10 +126,10 @@ export default function Footer() {
   return (
     <>
       <footer className="relative w-full z-50 mt-auto bg-gradient-to-b from-[#004B63] to-[#003d52]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:pt-6 lg:pb-3">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 lg:mb-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 lg:pt-6 lg:pb-3">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 mb-4 md:mb-8 lg:mb-2">
             <div className="lg:col-span-1">
-              <div className="mb-4">
+              <div className="mb-3 md:mb-4">
                 <img
                   src="/images/logo-edutechlife.webp"
                   alt="Edutechlife"
@@ -134,7 +141,7 @@ export default function Footer() {
                 />
               </div>
               <p
-                className="text-sm leading-relaxed mb-5 lg:mb-2"
+                className="text-sm leading-relaxed mb-3 md:mb-5 lg:mb-2"
                 style={{ color: "rgba(255, 255, 255, 0.7)" }}
               >
                 {t("footer.tagline")}
@@ -164,10 +171,27 @@ export default function Footer() {
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-4">
+              <button
+                type="button"
+                onClick={() => toggleMobileSection("tools")}
+                aria-expanded={openMobileSections.tools}
+                className="flex items-center justify-between w-full text-sm font-semibold uppercase tracking-wider text-white mb-2 md:mb-4 py-2.5 md:py-0 md:pointer-events-none md:cursor-default"
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  padding: undefined,
+                  fontFamily: "inherit",
+                }}
+              >
                 {t("footer.tools")}
-              </h4>
-              <ul className="space-y-2.5">
+                <Icon
+                  name="fa-chevron-down"
+                  className={`md:hidden text-xs transition-transform duration-200 ${openMobileSections.tools ? "rotate-180" : ""}`}
+                />
+              </button>
+              <ul
+                className={`space-y-2.5 ${openMobileSections.tools ? "block" : "hidden"} md:block`}
+              >
                 {toolLinks.map((item, index) => (
                   <li key={index}>
                     <button
@@ -196,10 +220,27 @@ export default function Footer() {
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-4">
+              <button
+                type="button"
+                onClick={() => toggleMobileSection("resources")}
+                aria-expanded={openMobileSections.resources}
+                className="flex items-center justify-between w-full text-sm font-semibold uppercase tracking-wider text-white mb-2 md:mb-4 py-2.5 md:py-0 md:pointer-events-none md:cursor-default"
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  padding: undefined,
+                  fontFamily: "inherit",
+                }}
+              >
                 {t("footer.resources")}
-              </h4>
-              <ul className="space-y-2.5">
+                <Icon
+                  name="fa-chevron-down"
+                  className={`md:hidden text-xs transition-transform duration-200 ${openMobileSections.resources ? "rotate-180" : ""}`}
+                />
+              </button>
+              <ul
+                className={`space-y-2.5 ${openMobileSections.resources ? "block" : "hidden"} md:block`}
+              >
                 {resourceLinks.map((item, index) => (
                   <li key={index}>
                     <button
@@ -227,12 +268,12 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-4">
+            <div className="pt-1 md:pt-0 border-t border-white/10 md:border-t-0">
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-white mb-2 md:mb-4 mt-4 md:mt-0">
                 {t("footer.newsletter")}
               </h4>
               <p
-                className="text-sm mb-4 lg:mb-2"
+                className="text-sm mb-3 md:mb-4 lg:mb-2"
                 style={{ color: "rgba(255, 255, 255, 0.85)" }}
               >
                 {t("footer.contact_modal.newsletter_tagline")}
@@ -302,11 +343,11 @@ export default function Footer() {
           </div>
 
           <div
-            className="h-px w-full mb-4 lg:mb-1.5"
+            className="h-px w-full mb-3 md:mb-4 lg:mb-1.5"
             style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
           />
 
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 lg:gap-2">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-2 md:gap-4 lg:gap-2">
             <div className="flex items-center gap-3 lg:gap-2">
               <p
                 className="text-sm"

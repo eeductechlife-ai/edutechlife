@@ -19,7 +19,9 @@ export default function CourseHomeModuleRow({
 }) {
   const { t } = useTranslation();
   const isActive = unlocked && !approved;
-  const isLocked = !unlocked;
+  // Todo el contenido es navegable (fase pre-comercial): "no desbloqueado"
+  // solo indica que aún no es el módulo recomendado, nunca bloquea el acceso.
+  const notStarted = !unlocked && !approved;
 
   const examPassed = examDone && (examScore == null || examScore >= 80);
   const examFailed = examDone && examScore != null && examScore < 80;
@@ -39,13 +41,13 @@ export default function CourseHomeModuleRow({
 
   return (
     <motion.div
-      whileHover={unlocked ? { x: 3 } : {}}
+      whileHover={{ x: 3 }}
       transition={{ type: "spring", stiffness: 300, damping: 16 }}
       className={`flex items-start gap-3.5 bg-white dark:bg-slate-800/80 rounded-xl p-3.5 shadow-sm border transition-all duration-200 ${
         isActive
           ? "border-[var(--theme-primary)]/60 shadow-[0_0_0_2px_rgba(0,188,212,0.08),0_4px_16px_rgba(0,188,212,0.1)]"
           : "border-slate-100 dark:border-slate-700"
-      } ${isLocked ? "opacity-60" : ""}`}
+      } ${notStarted ? "opacity-60" : ""}`}
     >
       <div
         className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm ${
@@ -58,11 +60,6 @@ export default function CourseHomeModuleRow({
       >
         {approved ? (
           <Icon name="fa-check-circle" className="w-5 h-5 text-white" />
-        ) : isLocked ? (
-          <Icon
-            name="fa-lock"
-            className="w-4 h-4 text-slate-400 dark:text-slate-500"
-          />
         ) : (
           <Icon
             name={isActive ? "fa-play" : icon}
@@ -73,7 +70,7 @@ export default function CourseHomeModuleRow({
 
       <div className="flex-1 min-w-0">
         <p
-          className={`text-sm font-bold truncate ${isLocked ? "text-slate-400 dark:text-slate-500" : "text-[var(--theme-emphasis)] dark:text-slate-100"}`}
+          className={`text-sm font-bold truncate ${notStarted ? "text-slate-400 dark:text-slate-500" : "text-[var(--theme-emphasis)] dark:text-slate-100"}`}
         >
           {t("dashboard.module_row_title", { id, title })}
         </p>
@@ -143,33 +140,31 @@ export default function CourseHomeModuleRow({
           </div>
         )}
 
-        {isLocked && (
+        {notStarted && (
           <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
-            Disponible al terminar M{prevModuleId ?? id - 1}
+            Sugerido después del Módulo {prevModuleId ?? id - 1}
           </p>
         )}
       </div>
 
-      {unlocked ? (
-        <motion.button
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 500, damping: 12 }}
-          onClick={onNavigate}
-          className={`flex-shrink-0 self-center text-white text-xs font-bold px-5 py-3 min-h-[44px] rounded-xl flex items-center gap-1.5 shadow-sm hover:shadow-md transition-all ${
-            !approved && resourcesDone && !examDone
-              ? "bg-amber-500 hover:bg-amber-600"
-              : "bg-[var(--theme-primary)]"
-          }`}
-        >
-          {approved
-            ? t("dashboard.review_btn")
-            : !approved && resourcesDone && !examDone
-              ? t("dashboard.exam_btn") || "Ir al examen"
-              : t("dashboard.continue_btn")}{" "}
-          <Icon name="fa-arrow-right" className="w-3 h-3" />
-        </motion.button>
-      ) : null}
+      <motion.button
+        whileHover={{ scale: 1.04 }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ type: "spring", stiffness: 500, damping: 12 }}
+        onClick={onNavigate}
+        className={`flex-shrink-0 self-center text-white text-xs font-bold px-5 py-3 min-h-[44px] rounded-xl flex items-center gap-1.5 shadow-sm hover:shadow-md transition-all ${
+          !approved && resourcesDone && !examDone
+            ? "bg-amber-500 hover:bg-amber-600"
+            : "bg-[var(--theme-primary)]"
+        }`}
+      >
+        {approved
+          ? t("dashboard.review_btn")
+          : !approved && resourcesDone && !examDone
+            ? t("dashboard.exam_btn") || "Ir al examen"
+            : t("dashboard.continue_btn")}{" "}
+        <Icon name="fa-arrow-right" className="w-3 h-3" />
+      </motion.button>
     </motion.div>
   );
 }

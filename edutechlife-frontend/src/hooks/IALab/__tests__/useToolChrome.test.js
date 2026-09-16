@@ -22,47 +22,33 @@ describe("useToolChrome", () => {
     expect(neutral.result.current.enabled).toBe(true);
   });
 
-  test("supported es true solo para temas de herramienta", () => {
+  test("supported es false para todos los temas (sin toggle a vista clásica)", () => {
     const { result } = renderHook(() => useToolChrome("default"));
     expect(result.current.supported).toBe(false);
-    expect(TOOL_CHROME_THEMES).toContain("chatgpt");
+    expect(TOOL_CHROME_THEMES).toHaveLength(0);
   });
 
-  test("lee estado persistido por tema", () => {
+  test("ignora cualquier preferencia clásica persistida y queda en simulada", () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ chatgpt: false }));
     const { result } = renderHook(() => useToolChrome("chatgpt"));
-    expect(result.current.enabled).toBe(false);
+    expect(result.current.enabled).toBe(true);
   });
 
-  test("el toggle persiste y actualiza el estado", () => {
+  test("toggle ya no cambia el estado (no-op forzado a simulada)", () => {
     const { result } = renderHook(() => useToolChrome("chatgpt"));
     expect(result.current.enabled).toBe(true);
 
     act(() => {
       result.current.toggle();
     });
-    expect(result.current.enabled).toBe(false);
-
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    expect(stored.chatgpt).toBe(false);
-
-    const fresh = renderHook(() => useToolChrome("chatgpt"));
-    expect(fresh.result.current.enabled).toBe(false);
+    // FORCE_CHROME_ON gana sobre cualquier valor guardado por el toggle.
+    expect(result.current.enabled).toBe(true);
   });
 
-  test("el tema no afeta al estado de otro tema", () => {
-    const { result } = renderHook(() => useToolChrome("chatgpt"));
-    act(() => result.current.toggle());
-    expect(result.current.enabled).toBe(false);
-
-    const gemini = renderHook(() => useToolChrome("gemini"));
-    expect(gemini.result.current.enabled).toBe(true);
-  });
-
-  test("soporta valores legacy on/off", () => {
+  test("soporta valores legacy on/off sin salir de la vista simulada", () => {
     localStorage.setItem(STORAGE_KEY, "off");
     const { result } = renderHook(() => useToolChrome("chatgpt"));
-    expect(result.current.enabled).toBe(false);
+    expect(result.current.enabled).toBe(true);
 
     localStorage.setItem(STORAGE_KEY, "on");
     const second = renderHook(() => useToolChrome("default"));
@@ -73,23 +59,5 @@ describe("useToolChrome", () => {
     localStorage.setItem(STORAGE_KEY, "not-json{{{");
     const { result } = renderHook(() => useToolChrome("chatgpt"));
     expect(result.current.enabled).toBe(true);
-  });
-
-  test("el toggle sincroniza entre instancias del hook", () => {
-    const header = renderHook(() => useToolChrome("chatgpt"));
-    const content = renderHook(() => useToolChrome("chatgpt"));
-    expect(header.result.current.enabled).toBe(true);
-    expect(content.result.current.enabled).toBe(true);
-
-    act(() => {
-      header.result.current.toggle();
-    });
-    expect(header.result.current.enabled).toBe(false);
-    expect(content.result.current.enabled).toBe(false);
-
-    act(() => {
-      header.result.current.toggle();
-    });
-    expect(content.result.current.enabled).toBe(true);
   });
 });

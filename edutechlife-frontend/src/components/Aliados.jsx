@@ -108,7 +108,7 @@ const Aliados = memo(() => {
     },
   ];
 
-  const duplicatedAliados = aliados;
+  const duplicatedAliados = [...aliados, ...aliados];
 
   return (
     <section
@@ -156,8 +156,8 @@ const Aliados = memo(() => {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="relative"
         >
-          <div className="absolute left-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-10 md:w-32 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-10 md:w-32 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
 
           <div
             ref={marqueeRef}
@@ -176,6 +176,7 @@ const Aliados = memo(() => {
               {duplicatedAliados.map((aliado, index) => (
                 <div
                   key={`${aliado.id}-${index}`}
+                  aria-hidden={index >= aliados.length}
                   className="group flex-shrink-0 badge-clay bg-white/60 backdrop-blur-md p-2.5 flex items-center gap-2.5 active:scale-[0.98]"
                   style={{ minWidth: "190px" }}
                 >
@@ -210,7 +211,7 @@ const Aliados = memo(() => {
       <style>{`
                 @keyframes marquee {
                     0% { transform: translateX(0); }
-                    100% { transform: translateX(-100%); }
+                    100% { transform: translateX(-50%); }
                 }
             `}</style>
     </section>

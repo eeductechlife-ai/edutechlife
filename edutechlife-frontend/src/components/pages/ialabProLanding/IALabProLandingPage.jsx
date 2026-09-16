@@ -21,6 +21,7 @@ import Footer from "../../Footer";
 import HeroSection from "./components/HeroSection";
 import IAFeaturesSection from "./components/IAFeaturesSection";
 import IACourseGrid from "./components/IACourseGrid";
+import MobileCTA from "./components/MobileCTA";
 
 
 const IALabProLandingPage = () => {
@@ -31,10 +32,12 @@ const IALabProLandingPage = () => {
   const { scrollYProgress, scrollY } = useScroll();
   const prefersReducedMotion = useReducedMotion();
   const [showFAB, setShowFAB] = useState(false);
+  const [showMobileCTA, setShowMobileCTA] = useState(false);
 
   useEffect(() => {
     const unsub = scrollY.on("change", (latest) => {
       setShowFAB(latest > 600);
+      setShowMobileCTA(latest > 400);
     });
     return () => unsub();
   }, [scrollY]);
@@ -120,7 +123,7 @@ const IALabProLandingPage = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-[#004B63] rounded-full shadow-lg hover:shadow-[0_0_30px_rgba(0,75,99,0.3)] flex items-center justify-center text-white transition-all duration-300 hover:bg-[#00BCD4]"
+              className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-40 w-12 h-12 bg-[#004B63] rounded-full shadow-lg hover:shadow-[0_0_30px_rgba(0,75,99,0.3)] flex items-center justify-center text-white transition-all duration-300 hover:bg-[#00BCD4]"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               aria-label="Scroll to top"
@@ -141,6 +144,8 @@ const IALabProLandingPage = () => {
             </motion.button>
           )}
         </AnimatePresence>
+
+        <MobileCTA t={t} showMobileCTA={showMobileCTA} />
 
         <Footer />
         <NicoModern />

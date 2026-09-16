@@ -417,6 +417,17 @@ const IALabContent = memo(function () {
       useIALabStore.getState().setPracticeTool("tutoring");
       return;
     }
+    if (action === "OPEN_EVALUATION" || action === "OPEN_CHALLENGE") {
+      const st = useIALabStore.getState();
+      if (st.isEvaluationLocked(st.activeMod)) {
+        setToast({
+          message: t("ialab.evaluation_locked_toast", {
+            prev: st.activeMod - 1,
+          }),
+        });
+        return;
+      }
+    }
     if (action === "CONTENT_COMPLETED") {
       setToast({
         message:

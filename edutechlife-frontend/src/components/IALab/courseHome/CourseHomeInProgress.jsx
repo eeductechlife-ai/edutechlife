@@ -22,6 +22,7 @@ import CourseHomeNewStudent from "./CourseHomeNewStudent";
 import { useAuth } from "../../../context/AuthContext";
 
 const CourseHomeActivityView = lazy(() => import("./CourseHomeActivityView"));
+const IALabTutoriasVirtuales = lazy(() => import("../IALabTutoriasVirtuales"));
 
 const MODULES = [1, 2, 3, 4, 5];
 const IDLE_TIMEOUT = 60000;
@@ -419,6 +420,10 @@ function CourseHomeInProgress() {
           </div>
         </div>
       </section>
+
+      <Suspense fallback={null}>
+        <IALabTutoriasVirtuales />
+      </Suspense>
 
       <CourseHomeTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 

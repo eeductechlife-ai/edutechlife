@@ -20,7 +20,7 @@ const MobileCTA = ({ t, showMobileCTA }) => (
             }}
             className="px-6 py-2.5 bg-gradient-to-r from-[#004B63] to-[#00BCD4] text-white text-sm font-bold rounded-lg shadow-lg"
           >
-            {t('ialab.landing.hero_badge')}
+            {t('ialab.landing.mobile_cta_button')}
           </motion.button>
         </div>
       </motion.div>

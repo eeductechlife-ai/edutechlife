@@ -136,6 +136,7 @@ export type TranslationKeys = {
   "ai_tools.card_4_name": string;
   "ai_tools.card_4_subtitle": string;
   "ai_tools.subtitle": string;
+  "ai_tools.swipe_hint": string;
   "ai_tools.title_before": string;
   "ai_tools.title_highlight": string;
   "aliados.badge": string;
@@ -693,6 +694,7 @@ export type TranslationKeys = {
   "ecosystem.card_3_desc": string;
   "ecosystem.card_3_title": string;
   "ecosystem.subtitle": string;
+  "ecosystem.swipe_hint": string;
   "ecosystem.title_before": string;
   "ecosystem.title_highlight": string;
   "esencia.carousel_aria": string;
@@ -1275,6 +1277,7 @@ export type TranslationKeys = {
   "ialab.challenge_result.no_feedback": string;
   "ialab.challenge_result.no_feedback_stored": string;
   "ialab.challenge_result.title": string;
+  "ialab.competency.by_axis": string;
   "ialab.competency.distribution": string;
   "ialab.competency.empty": string;
   "ialab.competency.level_creator": string;
@@ -1295,6 +1298,13 @@ export type TranslationKeys = {
   "ialab.continue_banner_title": string;
   "ialab.continue_lesson": string;
   "ialab.continue_to_activities": string;
+  "ialab.cot_trainer.expert_label": string;
+  "ialab.cot_trainer.intro": string;
+  "ialab.cot_trainer.prompt_label": string;
+  "ialab.cot_trainer.reveal_btn": string;
+  "ialab.cot_trainer.step_n": string;
+  "ialab.cot_trainer.step_placeholder": string;
+  "ialab.cot_trainer.title": string;
   "ialab.course_card.btn_enroll": string;
   "ialab.course_card.btn_explore": string;
   "ialab.course_card.btn_start": string;
@@ -1625,6 +1635,7 @@ export type TranslationKeys = {
   "ialab.evaluation.step3.tab_editor": string;
   "ialab.evaluation.step3.title": string;
   "ialab.evaluation.step3.use_case": string;
+  "ialab.evaluation_locked_toast": string;
   "ialab.exam_ready_cta": string;
   "ialab.exam_ready_desc": string;
   "ialab.exam_ready_title": string;
@@ -1920,10 +1931,12 @@ export type TranslationKeys = {
   "ialab.landing.certified_badge": string;
   "ialab.landing.certified_label": string;
   "ialab.landing.hero_badge": string;
+  "ialab.landing.mobile_cta_button": string;
   "ialab.landing.modules_label": string;
   "ialab.landing.progress_label": string;
   "ialab.landing.students_abbr": string;
   "ialab.landing.students_label": string;
+  "ialab.landing.swipe_hint": string;
   "ialab.landing.why_subtitle": string;
   "ialab.landing.why_title": string;
   "ialab.leaderboard_modal.close_aria": string;
@@ -2052,6 +2065,8 @@ export type TranslationKeys = {
   "ialab.practice.flashcards_hint": string;
   "ialab.practice.subtitle": string;
   "ialab.practice.title": string;
+  "ialab.practice.tool_cot": string;
+  "ialab.practice.tool_cot_desc": string;
   "ialab.practice.tool_ethics": string;
   "ialab.practice.tool_ethics_desc": string;
   "ialab.practice.tool_flashcards": string;
@@ -2060,6 +2075,8 @@ export type TranslationKeys = {
   "ialab.practice.tool_gemini_research_desc": string;
   "ialab.practice.tool_interaction": string;
   "ialab.practice.tool_interaction_desc": string;
+  "ialab.practice.tool_model_selection": string;
+  "ialab.practice.tool_model_selection_desc": string;
   "ialab.practice.tool_podcast": string;
   "ialab.practice.tool_podcast_desc": string;
   "ialab.practice.tool_prompts": string;
@@ -5090,8 +5107,12 @@ export type TranslationKeys = {
   "sidebar.zone_avance": string;
   "sidebar.zone_modules": string;
   "sidebar.zone_tools": string;
+  "signup.button.back": string;
+  "signup.button.continue": string;
+  "signup.button.create_with_email": string;
   "signup.button.register": string;
   "signup.button.registering": string;
+  "signup.divider_email": string;
   "signup.error.email_already_registered": string;
   "signup.error.email_required": string;
   "signup.error.first_name_required": string;
@@ -5109,6 +5130,9 @@ export type TranslationKeys = {
   "signup.field.phone": string;
   "signup.field.username": string;
   "signup.info.password_min_length": string;
+  "signup.oauth_divider": string;
+  "signup.oauth_facebook": string;
+  "signup.oauth_google": string;
   "signup.password_fair": string;
   "signup.password_good": string;
   "signup.password_strong": string;
@@ -5120,9 +5144,15 @@ export type TranslationKeys = {
   "signup.placeholder.password": string;
   "signup.placeholder.phone": string;
   "signup.placeholder.username": string;
+  "signup.step0_subtitle": string;
+  "signup.step0_title": string;
+  "signup.step1_subtitle": string;
+  "signup.step2_subtitle": string;
   "signup.step_1_info": string;
   "signup.step_2_security": string;
   "signup.success.registration_complete": string;
+  "signup.success_redirecting": string;
+  "signup.success_title": string;
   "smartboard.achievements": string;
   "smartboard.active": string;
   "smartboard.active_connection": string;
@@ -5647,6 +5677,8 @@ export type TranslationKeys = {
   "welcome.signin_title": string;
   "welcome.signup_subtitle": string;
   "welcome.signup_title": string;
+  "welcome.tab_signin": string;
+  "welcome.tab_signup": string;
 };
 
 export type TranslationKey = keyof TranslationKeys;
@@ -5792,6 +5824,7 @@ const translationKeySet: Record<string, true> = {
   "ai_tools.card_4_name": true,
   "ai_tools.card_4_subtitle": true,
   "ai_tools.subtitle": true,
+  "ai_tools.swipe_hint": true,
   "ai_tools.title_before": true,
   "ai_tools.title_highlight": true,
   "aliados.badge": true,
@@ -6349,6 +6382,7 @@ const translationKeySet: Record<string, true> = {
   "ecosystem.card_3_desc": true,
   "ecosystem.card_3_title": true,
   "ecosystem.subtitle": true,
+  "ecosystem.swipe_hint": true,
   "ecosystem.title_before": true,
   "ecosystem.title_highlight": true,
   "esencia.carousel_aria": true,
@@ -6931,6 +6965,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge_result.no_feedback": true,
   "ialab.challenge_result.no_feedback_stored": true,
   "ialab.challenge_result.title": true,
+  "ialab.competency.by_axis": true,
   "ialab.competency.distribution": true,
   "ialab.competency.empty": true,
   "ialab.competency.level_creator": true,
@@ -6951,6 +6986,13 @@ const translationKeySet: Record<string, true> = {
   "ialab.continue_banner_title": true,
   "ialab.continue_lesson": true,
   "ialab.continue_to_activities": true,
+  "ialab.cot_trainer.expert_label": true,
+  "ialab.cot_trainer.intro": true,
+  "ialab.cot_trainer.prompt_label": true,
+  "ialab.cot_trainer.reveal_btn": true,
+  "ialab.cot_trainer.step_n": true,
+  "ialab.cot_trainer.step_placeholder": true,
+  "ialab.cot_trainer.title": true,
   "ialab.course_card.btn_enroll": true,
   "ialab.course_card.btn_explore": true,
   "ialab.course_card.btn_start": true,
@@ -7281,6 +7323,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.step3.tab_editor": true,
   "ialab.evaluation.step3.title": true,
   "ialab.evaluation.step3.use_case": true,
+  "ialab.evaluation_locked_toast": true,
   "ialab.exam_ready_cta": true,
   "ialab.exam_ready_desc": true,
   "ialab.exam_ready_title": true,
@@ -7576,10 +7619,12 @@ const translationKeySet: Record<string, true> = {
   "ialab.landing.certified_badge": true,
   "ialab.landing.certified_label": true,
   "ialab.landing.hero_badge": true,
+  "ialab.landing.mobile_cta_button": true,
   "ialab.landing.modules_label": true,
   "ialab.landing.progress_label": true,
   "ialab.landing.students_abbr": true,
   "ialab.landing.students_label": true,
+  "ialab.landing.swipe_hint": true,
   "ialab.landing.why_subtitle": true,
   "ialab.landing.why_title": true,
   "ialab.leaderboard_modal.close_aria": true,
@@ -7708,6 +7753,8 @@ const translationKeySet: Record<string, true> = {
   "ialab.practice.flashcards_hint": true,
   "ialab.practice.subtitle": true,
   "ialab.practice.title": true,
+  "ialab.practice.tool_cot": true,
+  "ialab.practice.tool_cot_desc": true,
   "ialab.practice.tool_ethics": true,
   "ialab.practice.tool_ethics_desc": true,
   "ialab.practice.tool_flashcards": true,
@@ -7716,6 +7763,8 @@ const translationKeySet: Record<string, true> = {
   "ialab.practice.tool_gemini_research_desc": true,
   "ialab.practice.tool_interaction": true,
   "ialab.practice.tool_interaction_desc": true,
+  "ialab.practice.tool_model_selection": true,
+  "ialab.practice.tool_model_selection_desc": true,
   "ialab.practice.tool_podcast": true,
   "ialab.practice.tool_podcast_desc": true,
   "ialab.practice.tool_prompts": true,
@@ -10746,8 +10795,12 @@ const translationKeySet: Record<string, true> = {
   "sidebar.zone_avance": true,
   "sidebar.zone_modules": true,
   "sidebar.zone_tools": true,
+  "signup.button.back": true,
+  "signup.button.continue": true,
+  "signup.button.create_with_email": true,
   "signup.button.register": true,
   "signup.button.registering": true,
+  "signup.divider_email": true,
   "signup.error.email_already_registered": true,
   "signup.error.email_required": true,
   "signup.error.first_name_required": true,
@@ -10765,6 +10818,9 @@ const translationKeySet: Record<string, true> = {
   "signup.field.phone": true,
   "signup.field.username": true,
   "signup.info.password_min_length": true,
+  "signup.oauth_divider": true,
+  "signup.oauth_facebook": true,
+  "signup.oauth_google": true,
   "signup.password_fair": true,
   "signup.password_good": true,
   "signup.password_strong": true,
@@ -10776,9 +10832,15 @@ const translationKeySet: Record<string, true> = {
   "signup.placeholder.password": true,
   "signup.placeholder.phone": true,
   "signup.placeholder.username": true,
+  "signup.step0_subtitle": true,
+  "signup.step0_title": true,
+  "signup.step1_subtitle": true,
+  "signup.step2_subtitle": true,
   "signup.step_1_info": true,
   "signup.step_2_security": true,
   "signup.success.registration_complete": true,
+  "signup.success_redirecting": true,
+  "signup.success_title": true,
   "smartboard.achievements": true,
   "smartboard.active": true,
   "smartboard.active_connection": true,
@@ -11303,4 +11365,6 @@ const translationKeySet: Record<string, true> = {
   "welcome.signin_title": true,
   "welcome.signup_subtitle": true,
   "welcome.signup_title": true,
+  "welcome.tab_signin": true,
+  "welcome.tab_signup": true,
 };

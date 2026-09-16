@@ -7,6 +7,8 @@ import StreakCalendar from './StreakCalendar';
 import ActivityFeed from './ActivityFeed';
 import CompetencyDashboard from '../CompetencyDashboard';
 import CompetencyTrend from '../CompetencyTrend';
+import PeerReviewPanel from '../PeerReviewPanel';
+import { useAuthIdentity } from '../../../hooks/useAuthIdentity';
 
 const MODULES = [1, 2, 3, 4, 5];
 
@@ -27,6 +29,7 @@ function CourseHomeActivityView() {
   const completedExams = useIALabStore(s => s.completedExams);
   const challengeScores = useIALabStore(s => s.challengeScores);
   const { getTimeTrackingStats } = useActivityTracker();
+  const { userId } = useAuthIdentity();
   const timeTracking = useMemo(() => getTimeTrackingStats(), [getTimeTrackingStats]);
 
   const modules = useMemo(() =>
@@ -107,6 +110,8 @@ function CourseHomeActivityView() {
       <CompetencyDashboard t={t} modules={modules} />
 
       <CompetencyTrend t={t} />
+
+      <PeerReviewPanel userId={userId} />
 
       <ActivityFeed />
     </div>

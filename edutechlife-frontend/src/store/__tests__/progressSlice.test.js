@@ -72,6 +72,26 @@ describe('progressSlice — updateModuleActivity', () => {
     const mod = useIALabStore.getState().moduleProgress[1];
     expect(mod.community).toBe(true);
   });
+
+  test('dispatches ialab:moduleCompleted only when the module crosses 80%', () => {
+    const onCompleted = vi.fn();
+    window.addEventListener('ialab:moduleCompleted', onCompleted);
+
+    const store = useIALabStore.getState();
+    store.updateModuleActivity(1, 'exam', true, 50);
+    expect(onCompleted).not.toHaveBeenCalled();
+
+    store.updateModuleActivity(1, 'challenge', true, 90);
+    store.updateModuleActivity(1, 'resourcesCompleted', true);
+    store.updateModuleActivity(1, 'community', true);
+    store.updateModuleActivity(1, 'exam', true, 95);
+
+    expect(onCompleted).toHaveBeenCalledWith(
+      expect.objectContaining({ detail: { moduleId: 1 } }),
+    );
+
+    window.removeEventListener('ialab:moduleCompleted', onCompleted);
+  });
 });
 
 describe('progressSlice — markResourceAsViewed', () => {
@@ -102,5 +122,26 @@ describe('progressSlice — course progress', () => {
   test('setIsLoadingProgress toggles loading state', () => {
     useIALabStore.getState().setIsLoadingProgress(false);
     expect(useIALabStore.getState().isLoadingProgress).toBe(false);
+  });
+});
+
+describe('progressSlice — isEvaluationLocked', () => {
+  test('module 1 is never locked', () => {
+    expect(useIALabStore.getState().isEvaluationLocked(1)).toBe(false);
+  });
+
+  test('module N is locked when module N-1 is not completed', () => {
+    useIALabStore.setState({ completedModules: [] });
+    expect(useIALabStore.getState().isEvaluationLocked(2)).toBe(true);
+  });
+
+  test('module N unlocks once module N-1 is completed', () => {
+    useIALabStore.setState({ completedModules: [1] });
+    expect(useIALabStore.getState().isEvaluationLocked(2)).toBe(false);
+  });
+
+  test('admin role bypasses the lock', () => {
+    useIALabStore.setState({ completedModules: [], userRole: 'admin' });
+    expect(useIALabStore.getState().isEvaluationLocked(2)).toBe(false);
   });
 });

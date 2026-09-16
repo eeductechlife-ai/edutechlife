@@ -42,27 +42,27 @@ const IAFeaturesSection = ({ benefits, t }) => (
         initial="initial"
         whileInView="animate"
         viewport={{ once: true }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6"
       >
         {benefits.map((benefit, index) => (
           <motion.div
             key={index}
             variants={fadeInUp}
             whileHover={{ y: -6, scale: 1.02 }}
-            className="p-6 bg-white border border-[#004B63]/5 rounded-xl hover:border-[#4DA8C4]/30 hover:shadow-[0_0_30px_rgba(0,75,99,0.08)] transition-all duration-300 relative overflow-hidden group"
+            className="p-4 md:p-6 bg-white border border-[#004B63]/5 rounded-xl hover:border-[#4DA8C4]/30 hover:shadow-[0_0_30px_rgba(0,75,99,0.08)] transition-all duration-300 relative overflow-hidden group"
           >
             <motion.div
               className="absolute top-0 left-0 w-1 h-[25%] bg-gradient-to-b from-[#004B63] to-[#00BCD4] group-hover:h-full transition-all duration-500"
             />
             <motion.div
-              className="w-12 h-12 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-xl flex items-center justify-center mb-4"
+              className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] rounded-xl flex items-center justify-center mb-3 md:mb-4"
               whileHover={{ scale: 1.15, rotate: 5 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
-              <Icon name={benefit.icon} className="w-6 h-6 text-white" />
+              <Icon name={benefit.icon} className="w-5 h-5 md:w-6 md:h-6 text-white" />
             </motion.div>
-            <h3 className="font-display text-lg font-bold text-[#004B63] mb-2">{benefit.title}</h3>
-            <p className="text-sm text-[#475569] leading-relaxed">{benefit.desc}</p>
+            <h3 className="font-display text-sm md:text-lg font-bold text-[#004B63] mb-1.5 md:mb-2">{benefit.title}</h3>
+            <p className="text-xs md:text-sm text-[#475569] leading-relaxed">{benefit.desc}</p>
           </motion.div>
         ))}
       </motion.div>

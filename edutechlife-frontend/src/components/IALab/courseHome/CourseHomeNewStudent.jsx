@@ -1,4 +1,4 @@
-import { useMemo, memo } from "react";
+import { useMemo, memo, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "../../../i18n/I18nProvider";
@@ -7,6 +7,8 @@ import { useAuth } from "../../../context/AuthContext";
 import { Icon } from "../../../utils/iconMapping.jsx";
 import CourseHomeTopBar from "./CourseHomeTopBar";
 import CourseHomeBgPattern from "./CourseHomeBgPattern";
+
+const IALabTutoriasVirtuales = lazy(() => import("../IALabTutoriasVirtuales"));
 
 const PERKS = [
   { icon: "fa-certificate", label: "Certificado oficial",   sub: "Al completar los 5 módulos" },
@@ -106,6 +108,10 @@ function CourseHomeNewStudent() {
           </div>
         </div>
       </motion.section>
+
+      <Suspense fallback={null}>
+        <IALabTutoriasVirtuales />
+      </Suspense>
 
       {/* How it works */}
       <section>

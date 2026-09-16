@@ -66,6 +66,26 @@ const ModulePractice = ({ onAction, activeMod }) => {
       description: t(toolCfg.descKey),
       action: "OPEN_TOOL_PROMPTS",
     },
+    ...(activeMod === 2
+      ? [
+          {
+            icon: "fa-diagram-project",
+            label: t("ialab.practice.tool_cot"),
+            description: t("ialab.practice.tool_cot_desc"),
+            action: "OPEN_COT_TRAINER",
+          },
+        ]
+      : []),
+    ...(activeMod === 4
+      ? [
+          {
+            icon: "fa-scale-balanced",
+            label: t("ialab.practice.tool_model_selection"),
+            description: t("ialab.practice.tool_model_selection_desc"),
+            action: "OPEN_MODEL_SELECTION_GUIDE",
+          },
+        ]
+      : []),
     {
       icon: "fa-chalkboard-user",
       label: t("ialab.practice.tool_tutoring"),
