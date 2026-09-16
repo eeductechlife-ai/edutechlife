@@ -17,6 +17,7 @@ const DaniFAB = memo(
 
     const handleClick = useCallback(() => {
       if (!isDaniOpen) {
+        track(EVENTS.DANI_OPENED, { source: "fab" });
         track(EVENTS.DANI_CHAT_STARTED, { source: "fab" });
         onDaniOpen();
       }

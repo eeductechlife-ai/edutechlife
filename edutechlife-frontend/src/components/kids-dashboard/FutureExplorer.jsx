@@ -30,7 +30,7 @@ const AREAS = [
     title: "Arte & Diseño",
     description:
       "Diseño gráfico, arquitectura, música, cine y expresión creativa.",
-    competencies: [],
+    competencies: ["lenguaje", "tecnologia"],
     color: "#F472B6",
     missions: ["exploration_podcast"],
   },
