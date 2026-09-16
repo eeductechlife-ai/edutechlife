@@ -168,7 +168,7 @@ const SmartBoardSignUpPage = () => {
         title={t("seo.signup_smartboard.title")}
         description={t("seo.signup_smartboard.desc")}
       />
-      <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-[100dvh] bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 relative overflow-hidden">
         <FloatingParticles />
 
         <div className="absolute inset-0 opacity-5">
@@ -183,7 +183,7 @@ const SmartBoardSignUpPage = () => {
 
         <button
           onClick={handleBack}
-          className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all"
+          className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20 flex items-center gap-2 px-3 py-2 sm:px-4 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all"
         >
           <ArrowLeft className="w-4 h-4" />
           <span className="text-sm font-medium">
@@ -195,10 +195,39 @@ const SmartBoardSignUpPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="relative z-10 w-full max-w-4xl bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/20"
+          className="relative z-10 w-full max-w-4xl bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-white/20"
         >
-          <div className="flex flex-col lg:flex-row min-h-[600px]">
-            {/* ── LEFT PANEL ── */}
+          <div className="flex flex-col lg:flex-row lg:min-h-[600px]">
+            {/* ── Compact brand header — mobile & tablet only ── */}
+            <div
+              className={`lg:hidden px-5 pt-20 pb-5 text-white relative overflow-hidden bg-gradient-to-br ${
+                isParentMode
+                  ? "from-[#004B63] to-[#4DA8C4]"
+                  : "from-[#4DA8C4] to-[#66CCCC]"
+              }`}
+            >
+              <div className="relative z-10 flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                  {isParentMode ? (
+                    <Users className="w-5 h-5" />
+                  ) : (
+                    <GraduationCap className="w-5 h-5" />
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <h1 className="text-base font-bold leading-tight">
+                    SmartBoard
+                  </h1>
+                  <p className="text-white/80 text-xs">
+                    {isParentMode
+                      ? "Portal para Padres y Madres"
+                      : t("smartboard.signup_for_students")}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* ── LEFT PANEL (desktop only) ── */}
             <AnimatePresence mode="wait">
               {!isParentMode ? (
                 <motion.div
@@ -207,7 +236,7 @@ const SmartBoardSignUpPage = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="lg:w-2/5 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] p-8 lg:p-12 text-white flex flex-col justify-between"
+                  className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] p-8 lg:p-12 text-white flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center gap-3 mb-8">
@@ -288,7 +317,7 @@ const SmartBoardSignUpPage = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] p-8 lg:p-12 text-white flex flex-col justify-between"
+                  className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] p-8 lg:p-12 text-white flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center gap-3 mb-8">
@@ -366,7 +395,7 @@ const SmartBoardSignUpPage = () => {
             </AnimatePresence>
 
             {/* ── RIGHT PANEL ── */}
-            <div className="lg:w-3/5 p-8 lg:p-12 flex flex-col justify-start items-center">
+            <div className="lg:w-3/5 p-5 sm:p-8 lg:p-12 flex flex-col justify-start items-center">
               {/* ── USER TYPE SELECTOR (always visible at top) ── */}
               <div className="flex w-full max-w-sm mb-6 bg-gray-100 rounded-2xl p-1 gap-1">
                 <button
@@ -455,6 +484,7 @@ const SmartBoardSignUpPage = () => {
                           >
                             <SupabaseLoginForm
                               returnTo={returnTo || "/smartboard"}
+                              onShowSignUp={() => setMode("signup")}
                             />
                           </motion.div>
                         ) : (

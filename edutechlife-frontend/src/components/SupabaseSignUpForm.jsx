@@ -33,6 +33,32 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const isSmartBoard = accountType === "smartboard";
+  const brandName = isSmartBoard ? "SmartBoard" : "Edutechlife";
+  const brandSubtitle = isSmartBoard
+    ? t("smartboard.signup_for_students")
+    : t("ialab.signup_subtitle");
+  const brandTitle = isSmartBoard
+    ? t("smartboard.signup_welcome")
+    : t("ialab.signup_welcome_title");
+  const brandDesc = isSmartBoard
+    ? t("smartboard.signup_signup_desc")
+    : t("ialab.signup_welcome_desc");
+  const brandQuote = isSmartBoard
+    ? t("smartboard.signup_quote")
+    : t("ialab.signup_welcome_quote");
+  const brandFeatures = isSmartBoard
+    ? [
+        { icon: Zap, text: t("smartboard.signup_feature_missions") },
+        { icon: CheckCircle2, text: t("smartboard.signup_feature_community") },
+        { icon: Brain, text: t("smartboard.signup_feature_tracking") },
+      ]
+    : [
+        { icon: Zap, text: t("ialab.signup_feature_1") },
+        { icon: CheckCircle2, text: t("ialab.signup_feature_2") },
+        { icon: Brain, text: t("ialab.signup_feature_3") },
+      ];
+
   const defaultReturnTo = safeReturnTo(returnTo);
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -230,8 +256,16 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
   return (
     <>
       <SEO
-        title={t("seo.signup_ialab.title")}
-        description={t("seo.signup_ialab.desc")}
+        title={t(
+          accountType === "smartboard"
+            ? "seo.signup_smartboard.title"
+            : "seo.signup_ialab.title",
+        )}
+        description={t(
+          accountType === "smartboard"
+            ? "seo.signup_smartboard.desc"
+            : "seo.signup_ialab.desc",
+        )}
       />
       <div className="min-h-[100dvh] bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#1a5f7a] flex items-center justify-center p-0 sm:p-4 relative overflow-hidden">
         <FloatingParticles />
@@ -260,11 +294,9 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                     </div>
                     <div className="min-w-0">
                       <h1 className="text-base font-bold leading-tight">
-                        {t("ialab.signup_welcome_title")}
+                        {brandTitle}
                       </h1>
-                      <p className="text-white/80 text-xs">
-                        {t("ialab.signup_subtitle")}
-                      </p>
+                      <p className="text-white/80 text-xs">{brandSubtitle}</p>
                     </div>
                   </div>
                 </div>
@@ -290,38 +322,25 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                         <Brain className="w-7 h-7" />
                       </div>
                       <div>
-                        <h1 className="text-2xl font-bold">Edutechlife</h1>
-                        <p className="text-white/80 text-sm">
-                          {t("ialab.signup_subtitle")}
-                        </p>
+                        <h1 className="text-2xl font-bold">{brandName}</h1>
+                        <p className="text-white/80 text-sm">{brandSubtitle}</p>
                       </div>
                     </div>
 
                     <div className="mb-12">
-                      <h2 className="text-4xl font-bold mb-6">
-                        {t("ialab.signup_welcome_title")}
-                      </h2>
+                      <h2 className="text-4xl font-bold mb-6">{brandTitle}</h2>
                       <p
                         className="text-white/90 leading-relaxed mb-4 text-lg"
                         dangerouslySetInnerHTML={{
-                          __html: sanitize(t("ialab.signup_welcome_desc")),
+                          __html: sanitize(brandDesc),
                         }}
                       />
-                      <p className="text-white/70 italic">
-                        {t("ialab.signup_welcome_quote")}
-                      </p>
+                      <p className="text-white/70 italic">{brandQuote}</p>
                     </div>
 
                     {/* Features with Icons */}
                     <div className="space-y-4">
-                      {[
-                        { icon: Zap, text: t("ialab.signup_feature_1") },
-                        {
-                          icon: CheckCircle2,
-                          text: t("ialab.signup_feature_2"),
-                        },
-                        { icon: Brain, text: t("ialab.signup_feature_3") },
-                      ].map((feature, idx) => (
+                      {brandFeatures.map((feature, idx) => (
                         <div
                           key={idx}
                           className="flex items-center gap-3 group"
