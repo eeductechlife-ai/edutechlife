@@ -47,9 +47,11 @@ function AIToolsSection() {
     if (!isDesktop) setIsMobileVideoSmartboard((prev) => !prev);
   }, [isDesktop]);
 
-  const showVideo = !isVideoError && (isDesktop ? isHovered : isMobileVideoVisible);
+  const showVideo =
+    !isVideoError && (isDesktop ? isHovered : isMobileVideoVisible);
   const showVideoSmartboard =
-    !isVideoErrorSmartboard && (isDesktop ? isHoveredSmartboard : isMobileVideoSmartboard);
+    !isVideoErrorSmartboard &&
+    (isDesktop ? isHoveredSmartboard : isMobileVideoSmartboard);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -86,6 +88,26 @@ function AIToolsSection() {
       variant: "main-dark",
     },
     {
+      id: "smartboard",
+      name: t("ai_tools.card_4_name"),
+      subtitle: t("ai_tools.card_4_subtitle"),
+      path: "/conoce-smartboard",
+      icon: "fa-chalkboard",
+      description: t("ai_tools.card_4_desc"),
+      buttonText: t("ai_tools.card_4_button"),
+      variant: "horizontal",
+    },
+    {
+      id: "vak",
+      name: t("ai_tools.card_3_name"),
+      subtitle: t("ai_tools.card_3_subtitle"),
+      path: "/vak",
+      icon: "fa-brain",
+      description: t("ai_tools.card_3_desc"),
+      buttonText: t("ai_tools.card_3_button"),
+      variant: "white-card-vak",
+    },
+    {
       id: "automation",
       name: t("ai_tools.card_2_name"),
       subtitle: t("ai_tools.card_2_subtitle"),
@@ -99,26 +121,6 @@ function AIToolsSection() {
       ],
       buttonText: t("ai_tools.card_2_button"),
       variant: "white-card",
-    },
-    {
-      id: "vak",
-      name: t("ai_tools.card_3_name"),
-      subtitle: t("ai_tools.card_3_subtitle"),
-      path: "/vak",
-      icon: "fa-brain",
-      description: t("ai_tools.card_3_desc"),
-      buttonText: t("ai_tools.card_3_button"),
-      variant: "white-card-vak",
-    },
-    {
-      id: "smartboard",
-      name: t("ai_tools.card_4_name"),
-      subtitle: t("ai_tools.card_4_subtitle"),
-      path: "/conoce-smartboard",
-      icon: "fa-chalkboard",
-      description: t("ai_tools.card_4_desc"),
-      buttonText: t("ai_tools.card_4_button"),
-      variant: "horizontal",
     },
   ];
 
@@ -198,7 +200,7 @@ function AIToolsSection() {
                 preload="none"
                 onError={() => setIsVideoError(true)}
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-                  showVideo ? 'opacity-100 z-20' : 'opacity-0 z-0'
+                  showVideo ? "opacity-100 z-20" : "opacity-0 z-0"
                 }`}
               >
                 <source src="/dashboard.mp4" type="video/mp4" />
@@ -388,7 +390,7 @@ function AIToolsSection() {
                 preload="none"
                 onError={() => setIsVideoErrorSmartboard(true)}
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-                  showVideoSmartboard ? 'opacity-100 z-20' : 'opacity-0 z-0'
+                  showVideoSmartboard ? "opacity-100 z-20" : "opacity-0 z-0"
                 }`}
               >
                 <source src="/smarboard.mp4" type="video/mp4" />
