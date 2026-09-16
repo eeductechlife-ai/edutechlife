@@ -213,7 +213,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
   ];
 
   return (
-    <div className="w-full bg-white overflow-hidden">
+    <div className="w-full bg-white">
       <Helmet>
         <title>{seoTitles[currentStep]} | SmartBoard - Edutechlife</title>
         <meta name="description" content={seoDescriptions[currentStep]} />
@@ -230,14 +230,13 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         />
       </div>
 
-      <div ref={navRef}>
-        <SmartBoardSectionNav
-          currentStep={currentStep}
-          totalSteps={totalSteps}
-          stepLabels={stepLabels}
-          onGoToStep={goToStep}
-        />
-      </div>
+      <SmartBoardSectionNav
+        ref={navRef}
+        currentStep={currentStep}
+        totalSteps={totalSteps}
+        stepLabels={stepLabels}
+        onGoToStep={goToStep}
+      />
 
       <motion.div
         className="h-0.5 bg-petroleum/5"
@@ -271,11 +270,11 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         </AnimatePresence>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 pb-12 pt-6 flex items-center justify-between gap-3 sm:gap-0">
+      <div className="max-w-3xl mx-auto px-4 pb-12 pt-6 flex flex-wrap items-center justify-between gap-3 sm:flex-nowrap sm:gap-0">
         {currentStep > 0 ? (
           <button
             onClick={goPrev}
-            className="group px-5 py-2.5 rounded-full border-2 border-petroleum/20 text-petroleum hover:bg-petroleum hover:text-white hover:border-petroleum transition-all duration-300 text-sm font-semibold flex items-center gap-1.5"
+            className="order-1 group px-5 py-2.5 rounded-full border-2 border-petroleum/20 text-petroleum hover:bg-petroleum hover:text-white hover:border-petroleum transition-all duration-300 text-sm font-semibold flex items-center gap-1.5"
           >
             <motion.span
               whileHover={{ x: -3 }}
@@ -286,10 +285,10 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
             {t("smartboard.landing_prev")}
           </button>
         ) : (
-          <div />
+          <div className="order-1" />
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="order-3 w-full flex items-center justify-center gap-2 sm:order-2 sm:w-auto">
           {sections.map((_, i) => (
             <button
               key={i}
@@ -318,7 +317,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         {currentStep < totalSteps - 1 ? (
           <button
             onClick={goNext}
-            className="group px-5 py-2.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-semibold flex items-center gap-1.5 shadow-premium"
+            className="order-2 sm:order-3 group px-5 py-2.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-semibold flex items-center gap-1.5 shadow-premium"
           >
             {t("smartboard.landing_next")}
             <motion.span
@@ -331,7 +330,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         ) : (
           <button
             onClick={handleCta}
-            className="group px-5 py-2.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-semibold flex items-center gap-1.5 shadow-premium"
+            className="order-2 sm:order-3 group px-5 py-2.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-semibold flex items-center gap-1.5 shadow-premium"
           >
             {t("smartboard.landing_start_now")}
           </button>

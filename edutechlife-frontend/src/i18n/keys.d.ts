@@ -5228,6 +5228,7 @@ export type TranslationKeys = {
   "smartboard.landing_benefits_title_line1": string;
   "smartboard.landing_benefits_title_line2": string;
   "smartboard.landing_concern_label": string;
+  "smartboard.landing_cta_badge": string;
   "smartboard.landing_cta_final_btn": string;
   "smartboard.landing_cta_final_desc": string;
   "smartboard.landing_cta_final_title_line1": string;
@@ -5480,11 +5481,11 @@ export type TranslationKeys = {
   "study_groups.no_groups": string;
   "study_groups.subtitle": string;
   "study_groups.title": string;
-  "time_avg": string;
-  "time_days_active": string;
-  "time_title": string;
-  "time_today": string;
-  "time_week": string;
+  time_avg: string;
+  time_days_active: string;
+  time_title: string;
+  time_today: string;
+  time_week: string;
   "vak.ui.accept_and_continue": string;
   "vak.ui.accept_data_policy": string;
   "vak.ui.accessibility_label": string;
@@ -10916,6 +10917,7 @@ const translationKeySet: Record<string, true> = {
   "smartboard.landing_benefits_title_line1": true,
   "smartboard.landing_benefits_title_line2": true,
   "smartboard.landing_concern_label": true,
+  "smartboard.landing_cta_badge": true,
   "smartboard.landing_cta_final_btn": true,
   "smartboard.landing_cta_final_desc": true,
   "smartboard.landing_cta_final_title_line1": true,
@@ -11168,11 +11170,11 @@ const translationKeySet: Record<string, true> = {
   "study_groups.no_groups": true,
   "study_groups.subtitle": true,
   "study_groups.title": true,
-  "time_avg": true,
-  "time_days_active": true,
-  "time_title": true,
-  "time_today": true,
-  "time_week": true,
+  time_avg: true,
+  time_days_active: true,
+  time_title: true,
+  time_today: true,
+  time_week: true,
   "vak.ui.accept_and_continue": true,
   "vak.ui.accept_data_policy": true,
   "vak.ui.accessibility_label": true,

@@ -151,7 +151,7 @@ const App = () => {
     <AppErrorBoundary variant="fullscreen">
       <StudentProvider>
         <div
-          className="flex flex-col min-h-screen overflow-hidden bg-white text-[#004B63]"
+          className="flex flex-col min-h-screen bg-white text-[#004B63]"
           style={{ fontFamily: "'Montserrat', sans-serif" }}
         >
           <LazyCustomCursor />
