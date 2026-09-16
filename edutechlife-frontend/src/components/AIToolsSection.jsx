@@ -88,26 +88,6 @@ function AIToolsSection() {
       variant: "main-dark",
     },
     {
-      id: "smartboard",
-      name: t("ai_tools.card_4_name"),
-      subtitle: t("ai_tools.card_4_subtitle"),
-      path: "/conoce-smartboard",
-      icon: "fa-chalkboard",
-      description: t("ai_tools.card_4_desc"),
-      buttonText: t("ai_tools.card_4_button"),
-      variant: "horizontal",
-    },
-    {
-      id: "vak",
-      name: t("ai_tools.card_3_name"),
-      subtitle: t("ai_tools.card_3_subtitle"),
-      path: "/vak",
-      icon: "fa-brain",
-      description: t("ai_tools.card_3_desc"),
-      buttonText: t("ai_tools.card_3_button"),
-      variant: "white-card-vak",
-    },
-    {
       id: "automation",
       name: t("ai_tools.card_2_name"),
       subtitle: t("ai_tools.card_2_subtitle"),
@@ -121,6 +101,26 @@ function AIToolsSection() {
       ],
       buttonText: t("ai_tools.card_2_button"),
       variant: "white-card",
+    },
+    {
+      id: "vak",
+      name: t("ai_tools.card_3_name"),
+      subtitle: t("ai_tools.card_3_subtitle"),
+      path: "/vak",
+      icon: "fa-brain",
+      description: t("ai_tools.card_3_desc"),
+      buttonText: t("ai_tools.card_3_button"),
+      variant: "white-card-vak",
+    },
+    {
+      id: "smartboard",
+      name: t("ai_tools.card_4_name"),
+      subtitle: t("ai_tools.card_4_subtitle"),
+      path: "/conoce-smartboard",
+      icon: "fa-chalkboard",
+      description: t("ai_tools.card_4_desc"),
+      buttonText: t("ai_tools.card_4_button"),
+      variant: "horizontal",
     },
   ];
 
@@ -189,7 +189,7 @@ function AIToolsSection() {
             role="button"
             onFocus={handleMouseEnter}
             onBlur={handleMouseLeave}
-            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none md:col-span-2 rounded-2xl bg-gradient-to-b from-[#004B63] to-[#003545] p-[1px] relative overflow-hidden cursor-pointer shadow-lg group"
+            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none order-1 md:order-1 md:col-span-2 rounded-2xl bg-gradient-to-b from-[#004B63] to-[#003545] p-[1px] relative overflow-hidden cursor-pointer shadow-lg group"
           >
             {!isVideoError && (
               <video
@@ -287,7 +287,7 @@ function AIToolsSection() {
           {/* Card 2: Automatización */}
           <motion.div
             variants={itemVariants}
-            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none md:col-span-1 card-clay-white p-8 flex flex-col justify-between"
+            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none order-4 md:order-2 md:col-span-1 card-clay-white p-8 flex flex-col justify-between"
           >
             <div>
               <div className="w-14 h-14 rounded-xl bg-primary-light/10 flex items-center justify-center mb-5">
@@ -336,7 +336,7 @@ function AIToolsSection() {
           {/* Card 3: Diagnóstico VAK */}
           <motion.div
             variants={itemVariants}
-            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none md:col-span-1 card-clay-white p-8 flex flex-col justify-between"
+            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none order-3 md:order-3 md:col-span-1 card-clay-white p-8 flex flex-col justify-between"
           >
             <div>
               <div className="w-14 h-14 rounded-xl bg-primary-light/10 flex items-center justify-center mb-5">
@@ -379,7 +379,7 @@ function AIToolsSection() {
             role="button"
             onFocus={handleMouseEnterSmartboard}
             onBlur={handleMouseLeaveSmartboard}
-            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none md:col-span-2 card-clay bg-primary-light/5 relative overflow-hidden cursor-pointer"
+            className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none order-2 md:order-4 md:col-span-2 card-clay bg-primary-light/5 relative overflow-hidden cursor-pointer"
           >
             {!isVideoErrorSmartboard && (
               <video
