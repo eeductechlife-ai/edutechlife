@@ -165,6 +165,20 @@ const Hero = memo(() => {
               <span className="font-semibold">{t("hero.cta_smartboard")}</span>
             </MagneticButton>
           </motion.div>
+
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            onClick={() =>
+              document
+                .getElementById("ai-lab-academic")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="mt-6 text-sm font-semibold text-slate-500 hover:text-primary-light underline underline-offset-4 decoration-slate-300 hover:decoration-primary-light transition-colors"
+          >
+            {t("hero.cta_ver_soluciones")}
+          </motion.button>
         </div>
       </div>
     </section>

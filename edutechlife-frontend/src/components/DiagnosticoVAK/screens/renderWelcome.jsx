@@ -35,6 +35,19 @@ export default function renderWelcome({
         className="w-full max-w-4xl relative z-10"
       >
         <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8"
+        >
+          <h1 className="text-2xl md:text-4xl font-black text-[#004B63] mb-3 leading-tight">
+            {t("vak.ui.hero_title")}
+          </h1>
+          <p className="text-base md:text-lg text-[#004B63]/70 max-w-2xl mx-auto">
+            {t("vak.ui.hero_subtitle")}
+          </p>
+        </motion.div>
+
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}

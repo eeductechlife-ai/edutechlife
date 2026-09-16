@@ -123,11 +123,20 @@ const HeroSection = ({ t, navigate: navFromProps, scrollY, prefersReducedMotion,
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-6 md:mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full mb-4 md:mb-5"
           >
             <Icon name="fa-flask" className="w-4 h-4 text-[#00334A]" />
             <span className="text-sm font-semibold text-white tracking-wide">{t('ialab.landing.hero_badge')}</span>
           </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, duration: 0.6 }}
+            className="text-base md:text-lg text-white/80 text-center max-w-xl md:max-w-2xl mb-6 md:mb-8 leading-relaxed"
+          >
+            {t('ialab.landing.hero_subtitle')}
+          </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}

@@ -19,7 +19,7 @@ const COURSES_ES = [
     id: "ia-generativa",
     title: "Introducción a la IA Generativa",
     description:
-      "Domina la inteligencia artificial generativa con prompts, APIs, DeepResearch y NotebookLM.",
+      "Empieza desde cero: prompts, APIs y herramientas de IA explicados paso a paso, sin experiencia previa.",
     category: "ia-generativa",
     modules: 5,
     duration: "10h",
@@ -37,7 +37,7 @@ const COURSES_ES = [
     id: "prompt-avanzado",
     title: "Prompt Engineering Avanzado",
     description:
-      "Técnicas avanzadas de prompting para maximizar resultados con modelos de IA.",
+      "Escribe prompts que consiguen exactamente el resultado que buscas, cada vez.",
     category: "ia-generativa",
     modules: 4,
     duration: "8h",
@@ -55,7 +55,7 @@ const COURSES_ES = [
     id: "chatgpt-productividad",
     title: "ChatGPT para Productividad",
     description:
-      "Automatiza tareas diarias y aumenta tu productividad con ChatGPT avanzado.",
+      "Recupera horas de tu semana automatizando tareas repetitivas con ChatGPT.",
     category: "productividad",
     modules: 4,
     duration: "6h",
@@ -73,7 +73,7 @@ const COURSES_ES = [
     id: "automatizaciones-ia",
     title: "Automatizaciones con IA",
     description:
-      "Crea flujos de trabajo automatizados usando herramientas de IA avanzadas.",
+      "Conecta tus herramientas de trabajo para que la IA haga las tareas repetitivas por ti.",
     category: "automatizaciones",
     modules: 5,
     duration: "12h",
@@ -91,7 +91,7 @@ const COURSES_ES = [
     id: "desarrollo-ia",
     title: "Desarrollo de Apps con IA",
     description:
-      "Construye aplicaciones inteligentes integrando APIs de modelos de lenguaje.",
+      "Construye tu propia aplicación con IA integrada, desde la API hasta el despliegue.",
     category: "desarrollo",
     modules: 6,
     duration: "15h",
@@ -109,7 +109,7 @@ const COURSES_ES = [
     id: "ia-marketing",
     title: "IA para Marketing Digital",
     description:
-      "Genera contenido, campañas y estrategias de marketing con inteligencia artificial.",
+      "Crea contenido, campañas y estrategias de marketing en una fracción del tiempo, con IA.",
     category: "productividad",
     modules: 4,
     duration: "8h",
@@ -127,7 +127,7 @@ const COURSES_ES = [
     id: "notebooklm-experto",
     title: "NotebookLM Experto",
     description:
-      "Domina NotebookLM para investigación, análisis y generación de contenido.",
+      "Convierte cualquier documento en resúmenes, podcasts y respuestas con NotebookLM.",
     category: "ia-generativa",
     modules: 3,
     duration: "6h",
@@ -145,7 +145,7 @@ const COURSES_ES = [
     id: "ia-educacion",
     title: "IA para Educadores",
     description:
-      "Herramientas de IA para crear contenido educativo personalizado y efectivo.",
+      "Diseña clases y evaluaciones personalizadas en minutos, no en horas, con IA.",
     category: "productividad",
     modules: 4,
     duration: "8h",
@@ -166,7 +166,7 @@ const COURSES_EN = [
     id: "ia-generativa",
     title: "Introduction to Generative AI",
     description:
-      "Master generative artificial intelligence with prompts, APIs, DeepResearch, and NotebookLM.",
+      "Start from zero: prompts, APIs, and AI tools explained step by step, no experience needed.",
     category: "ia-generativa",
     modules: 5,
     duration: "10h",
@@ -184,7 +184,7 @@ const COURSES_EN = [
     id: "prompt-avanzado",
     title: "Advanced Prompt Engineering",
     description:
-      "Advanced prompting techniques to maximize results with AI models.",
+      "Write prompts that get exactly the result you're looking for, every time.",
     category: "ia-generativa",
     modules: 4,
     duration: "8h",
@@ -202,7 +202,7 @@ const COURSES_EN = [
     id: "chatgpt-productividad",
     title: "ChatGPT for Productivity",
     description:
-      "Automate daily tasks and boost your productivity with advanced ChatGPT.",
+      "Get hours back in your week by automating repetitive tasks with ChatGPT.",
     category: "productividad",
     modules: 4,
     duration: "6h",
@@ -219,7 +219,8 @@ const COURSES_EN = [
   {
     id: "automatizaciones-ia",
     title: "Automations with AI",
-    description: "Create automated workflows using advanced AI tools.",
+    description:
+      "Connect your work tools so AI handles the repetitive tasks for you.",
     category: "automatizaciones",
     modules: 5,
     duration: "12h",
@@ -237,7 +238,7 @@ const COURSES_EN = [
     id: "desarrollo-ia",
     title: "AI App Development",
     description:
-      "Build intelligent applications by integrating language model APIs.",
+      "Build your own AI-powered app, from the API all the way to deployment.",
     category: "desarrollo",
     modules: 6,
     duration: "15h",
@@ -255,7 +256,7 @@ const COURSES_EN = [
     id: "ia-marketing",
     title: "AI for Digital Marketing",
     description:
-      "Generate content, campaigns, and marketing strategies with artificial intelligence.",
+      "Create content, campaigns, and marketing strategies in a fraction of the time, with AI.",
     category: "productividad",
     modules: 4,
     duration: "8h",
@@ -273,7 +274,7 @@ const COURSES_EN = [
     id: "notebooklm-experto",
     title: "NotebookLM Expert",
     description:
-      "Master NotebookLM for research, analysis, and content generation.",
+      "Turn any document into summaries, podcasts, and answers with NotebookLM.",
     category: "ia-generativa",
     modules: 3,
     duration: "6h",
@@ -291,7 +292,7 @@ const COURSES_EN = [
     id: "ia-educacion",
     title: "AI for Educators",
     description:
-      "AI tools to create personalized and effective educational content.",
+      "Design personalized lessons and assessments in minutes, not hours, with AI.",
     category: "productividad",
     modules: 4,
     duration: "8h",
@@ -326,7 +327,7 @@ const BENEFITS_ES = [
   {
     icon: "fa-users",
     title: "Comunidad",
-    desc: "Conecta con otros estudiantes y profesionales de IA",
+    desc: "Aprende junto a otros estudiantes y profesionales que ya aplican IA en su trabajo",
   },
 ];
 
@@ -349,7 +350,7 @@ const BENEFITS_EN = [
   {
     icon: "fa-users",
     title: "Community",
-    desc: "Connect with other students and AI professionals",
+    desc: "Learn alongside other students and professionals already applying AI at work",
   },
 ];
 
