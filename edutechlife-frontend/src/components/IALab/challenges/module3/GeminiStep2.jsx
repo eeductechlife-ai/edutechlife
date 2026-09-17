@@ -85,12 +85,12 @@ const GeminiStep2 = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
+        className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 sm:p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
@@ -113,23 +113,30 @@ const GeminiStep2 = ({
         initial={shouldReduceMotion ? false : { opacity: 0, y: -5 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.05 }}
-        className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/10 rounded-xl p-4 border border-amber-200 dark:border-amber-700"
       >
-        <div className="flex items-center gap-2 mb-1.5">
-          <Icon
-            name="fa-lightbulb"
-            className="text-amber-500 dark:text-amber-400 text-sm"
+        <details className="group bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/10 rounded-xl p-4 border border-amber-200 dark:border-amber-700">
+          <summary className="flex items-center justify-between gap-2 cursor-pointer list-none">
+            <span className="flex items-center gap-2">
+              <Icon
+                name="fa-lightbulb"
+                className="text-amber-500 dark:text-amber-400 text-sm"
+              />
+              <h4 className="text-sm font-bold text-amber-800 dark:text-amber-300">
+                {translate("ialab.challenge.m3.step2_howto_title")}
+              </h4>
+            </span>
+            <Icon
+              name="fa-chevron-down"
+              className="text-amber-500 dark:text-amber-400 text-xs transition-transform duration-200 group-open:rotate-180"
+            />
+          </summary>
+          <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed mb-2 mt-2">
+            {translate("ialab.challenge.m3.step2_howto_desc")}
+          </p>
+          <ExampleToggle
+            example={translate("ialab.challenge.m3.step2_example_data")}
           />
-          <h4 className="text-sm font-bold text-amber-800 dark:text-amber-300">
-            {translate("ialab.challenge.m3.step2_howto_title")}
-          </h4>
-        </div>
-        <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed mb-2">
-          {translate("ialab.challenge.m3.step2_howto_desc")}
-        </p>
-        <ExampleToggle
-          example={translate("ialab.challenge.m3.step2_example_data")}
-        />
+        </details>
       </motion.div>
 
       <motion.div
@@ -165,7 +172,7 @@ const GeminiStep2 = ({
                   : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600"
               }`}
             >
-              <div className="p-5">
+              <div className="p-4 sm:p-5">
                 <div className="flex items-start gap-4">
                   <div
                     className={`w-12 h-12 rounded-xl ${bgColor} dark:opacity-80 ${borderColor} dark:border-slate-600 border flex items-center justify-center flex-shrink-0`}
@@ -174,8 +181,8 @@ const GeminiStep2 = ({
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+                      <div className="min-w-0">
                         <h4 className="font-semibold text-slate-800 dark:text-slate-100">
                           {fuente.titulo}
                         </h4>

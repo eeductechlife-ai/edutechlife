@@ -150,34 +150,6 @@ describe('useScreenshotProtection', () => {
       expect(onViolation).toHaveBeenCalledTimes(1);
     });
 
-    test('detects DevTools by window size difference', () => {
-      const onViolation = vi.fn();
-      const originalOuterWidth = window.outerWidth;
-      const originalInnerWidth = window.innerWidth;
-
-      renderHook(() => useScreenshotProtection(true, { onViolation }));
-
-      Object.defineProperty(window, 'outerWidth', { value: 1800, configurable: true });
-      Object.defineProperty(window, 'innerWidth', { value: 1400, configurable: true });
-
-      act(() => { vi.advanceTimersByTime(2000); });
-
-      expect(onViolation).toHaveBeenCalledWith('devtools_open', 1);
-
-      Object.defineProperty(window, 'outerWidth', { value: originalOuterWidth, configurable: true });
-      Object.defineProperty(window, 'innerWidth', { value: originalInnerWidth, configurable: true });
-    });
-
-    test('cleans up interval on unmount', () => {
-      const clearIntervalSpy = vi.spyOn(global, 'clearInterval');
-
-      const { unmount } = renderHook(() => useScreenshotProtection(true));
-      unmount();
-
-      expect(clearIntervalSpy).toHaveBeenCalled();
-      clearIntervalSpy.mockRestore();
-    });
-
     test('tracks violation count accurately', () => {
       const { result } = renderHook(() => useScreenshotProtection(true));
 

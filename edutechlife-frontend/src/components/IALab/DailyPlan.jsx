@@ -37,29 +37,37 @@ const loadCompletion = () => {
   return {};
 };
 
-function selectTopItems(activeChallenges, recsHigh, recsMedium) {
+function selectTopItems(activeChallenges, recsHigh, recsMedium, max = 3) {
   const items = [];
   const sortedDCs = [...activeChallenges].sort((a, b) =>
     a.id === "dc-1" ? -1 : b.id === "dc-1" ? 1 : 0,
   );
   if (sortedDCs.length > 0) items.push({ ...sortedDCs[0], type: "challenge" });
-  if (items.length < 3 && recsHigh.length > 0)
+  if (items.length < max && recsHigh.length > 0)
     items.push({ ...recsHigh[0], type: "recommendation" });
-  if (items.length < 3 && recsHigh.length > 1)
+  if (items.length < max && recsHigh.length > 1)
     items.push({ ...recsHigh[1], type: "recommendation" });
-  else if (items.length < 3 && recsMedium.length > 0)
+  else if (items.length < max && recsMedium.length > 0)
     items.push({ ...recsMedium[0], type: "recommendation" });
   return items;
 }
 
-const DailyPlan = ({ onAction, isLoading }) => {
+const DailyPlan = ({ onAction, isLoading, activeMod }) => {
   const { t } = useTranslation();
   const setActiveModAction = useIALabStore((s) => s.setActiveMod);
   const setVisitedModules = useIALabStore((s) => s.setVisitedModules);
   const addXp = useIALabStore((s) => s.addXp);
   const streak = useIALabStore((s) => s.streak);
   const isStreakAtRisk = useIALabStore((s) => s.isStreakAtRisk);
+  const moduleProgress = useIALabStore((s) => s.moduleProgress);
   const personalizedRecs = usePersonalizedRecommendations();
+
+  // El módulo activo ya muestra su propio banner "¡Contenido completado! /
+  // Ya puedes tomar tu reto" cuando solo falta el examen o desafío — evita
+  // repetir ese mismo mensaje aquí como recomendación.
+  const activeModuleBannerShown =
+    !!moduleProgress[activeMod]?.resourcesCompleted &&
+    !moduleProgress[activeMod]?.exam;
 
   const atRisk = streak > 0 && isStreakAtRisk();
 
@@ -108,16 +116,29 @@ const DailyPlan = ({ onAction, isLoading }) => {
 
   const topItems = useMemo(() => {
     const activeChallenges = DAILY_CHALLENGES.filter((c) => !completed[c.id]);
+    // Suprime recomendaciones de examen cuando el CTA de reto ocupa el paso #1
+    const dropsDuplicateBanner = (r) =>
+      !(
+        activeModuleBannerShown &&
+        (
+          (r.moduleId === activeMod && (r.type === "module_score" || r.type === "exam")) ||
+          r.type === "exams"
+        )
+      );
+    // CTA de reto ocupa el slot #1 → solo 2 pasos regulares para llegar a 3 en total
+    const max = activeModuleBannerShown ? 2 : 3;
     return selectTopItems(
       activeChallenges,
-      personalizedRecs.high,
-      personalizedRecs.medium,
+      personalizedRecs.high.filter(dropsDuplicateBanner),
+      personalizedRecs.medium.filter(dropsDuplicateBanner),
+      max,
     );
-  }, [completed, personalizedRecs]);
+  }, [completed, personalizedRecs, activeModuleBannerShown, activeMod]);
 
-  const pendingCount = topItems.length;
-  const firstItemTitle =
-    topItems[0]?.type === "challenge"
+  const pendingCount = (activeModuleBannerShown ? 1 : 0) + topItems.length;
+  const firstItemTitle = activeModuleBannerShown
+    ? t("ialab.exam_ready_title") || "¡Reto del módulo listo!"
+    : topItems[0]?.type === "challenge"
       ? t(topItems[0]?.titleKey)
       : topItems[0]?.title;
 
@@ -181,12 +202,55 @@ const DailyPlan = ({ onAction, isLoading }) => {
                   </span>
                 </div>
 
+                {activeModuleBannerShown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="border border-amber-200/60 dark:border-amber-700/30 bg-amber-50/50 dark:bg-amber-900/10 rounded-xl"
+                    data-testid="daily-plan-step"
+                  >
+                    <div className="p-3.5 flex items-start gap-3">
+                      <div className="flex flex-col items-center gap-1 flex-shrink-0 pt-0.5">
+                        <span className="w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center text-white text-[10px] font-bold">
+                          1
+                        </span>
+                        <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                          <Icon name="fa-star" className="text-sm text-amber-500" />
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <h4 className="text-[14px] font-semibold theme-text leading-snug">
+                            {t("ialab.exam_ready_title") || "¡Reto del módulo listo!"}
+                          </h4>
+                          <button
+                            type="button"
+                            onClick={() => onAction?.("OPEN_EVALUATION")}
+                            className="flex-shrink-0 text-[12px] font-medium text-white bg-amber-500 px-2.5 py-1.5 min-h-[36px] rounded-lg hover:opacity-90 active:scale-95 transition-all whitespace-nowrap flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/40"
+                          >
+                            <Icon name="fa-arrow-right" className="text-[9px]" />
+                            {t("ialab.exam_ready_cta") || "Ir al reto →"}
+                          </button>
+                        </div>
+                        <p className="text-[12px] theme-text-muted leading-relaxed">
+                          {t("ialab.exam_ready_desc") || "Ya puedes tomar tu reto del módulo"}
+                        </p>
+                        <span className="inline-flex items-center gap-1 mt-1.5 text-[10px] font-medium text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 rounded-md">
+                          <Icon name="fa-bolt" className="text-[9px]" />
+                          {t("ialab.daily_plan.urgency_today") || "Prioritario hoy"}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
                 {topItems.map((item, i) => (
                   <DailyPlanStep
                     key={item.id}
                     t={t}
                     item={item}
-                    index={i}
+                    index={activeModuleBannerShown ? i + 1 : i}
                     onComplete={completeChallenge}
                     onAction={handleAction}
                   />

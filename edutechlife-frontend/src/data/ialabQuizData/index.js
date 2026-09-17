@@ -1,3 +1,5 @@
+export * from "./config";
+
 import { MODULE_1 } from "./module1";
 import { MODULE_2 } from "./module2";
 import { MODULE_3 } from "./module3";

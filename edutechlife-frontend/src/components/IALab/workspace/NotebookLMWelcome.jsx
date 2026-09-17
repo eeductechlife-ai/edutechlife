@@ -266,6 +266,7 @@ export default function NotebookLMWelcome({ topics = [], sequenceByIndex, onSele
               <div>
                 <p style={{ fontSize: 11, fontWeight: 600, color: "#1a73e8", letterSpacing: "0.06em", textTransform: "uppercase" }}>{t("ialab.workspace.nlm.module_label", { n: 4 })}</p>
                 <h2 style={{ fontSize: 20, fontWeight: 500, color: "#202124", lineHeight: 1.3 }}>{t("ialab.workspace.nlm.brand")}</h2>
+                <p style={{ fontSize: 13, color: "#5f6368", marginTop: 2 }}>{t("ialab.workspace.nlm.sub")}</p>
               </div>
             </div>
 

@@ -119,14 +119,14 @@ const EthicsStep2 = ({ exercise, response, onResponseChange, topic = '', exercis
   const severityColors = { low: 'bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-700', medium: 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-700', high: 'bg-red-100 text-red-700 border-red-300 dark:bg-red-900/30 dark:text-red-400 dark:border-red-700' };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <ProgressStepper currentStep={2} completedSteps={{ step1: true }} t={t} steps={M5_STEPS} />
 
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 border border-slate-200 dark:border-slate-700"
+        className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 sm:p-5 border border-slate-200 dark:border-slate-700"
       >
         <div className="flex items-center gap-3 mb-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
@@ -149,21 +149,25 @@ const EthicsStep2 = ({ exercise, response, onResponseChange, topic = '', exercis
         initial={shouldReduceMotion ? false : { opacity: 0, y: -5 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.05 }}
-        className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/10 rounded-xl p-4 border border-amber-200 dark:border-amber-700"
       >
-        <div className="flex items-center gap-2 mb-1.5">
-          <Icon name="fa-lightbulb" className="text-amber-500 dark:text-amber-400 text-sm" />
-          <h4 className="text-sm font-bold text-amber-800 dark:text-amber-300">
-            {t('ialab.challenge.m5.step2_howto_title')}
-          </h4>
-        </div>
-        <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed mb-2">
-          {t('ialab.challenge.m5.step2_howto_desc')}
-        </p>
-        <ExampleToggle example={t('ialab.challenge.m5.step2_example_impact')} />
-        <div className="mt-1">
-          <ExampleToggle example={t('ialab.challenge.m5.step2_example_cause')} />
-        </div>
+        <details className="group bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/10 rounded-xl p-4 border border-amber-200 dark:border-amber-700">
+          <summary className="flex items-center justify-between gap-2 cursor-pointer list-none">
+            <span className="flex items-center gap-2">
+              <Icon name="fa-lightbulb" className="text-amber-500 dark:text-amber-400 text-sm" />
+              <h4 className="text-sm font-bold text-amber-800 dark:text-amber-300">
+                {t('ialab.challenge.m5.step2_howto_title')}
+              </h4>
+            </span>
+            <Icon name="fa-chevron-down" className="text-amber-500 dark:text-amber-400 text-xs transition-transform duration-200 group-open:rotate-180" />
+          </summary>
+          <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed mb-2 mt-2">
+            {t('ialab.challenge.m5.step2_howto_desc')}
+          </p>
+          <ExampleToggle example={t('ialab.challenge.m5.step2_example_impact')} />
+          <div className="mt-1">
+            <ExampleToggle example={t('ialab.challenge.m5.step2_example_cause')} />
+          </div>
+        </details>
       </motion.div>
 
       <motion.div
@@ -184,7 +188,7 @@ const EthicsStep2 = ({ exercise, response, onResponseChange, topic = '', exercis
         variants={shouldReduceMotion ? undefined : { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
         initial={shouldReduceMotion ? false : 'hidden'}
         animate="visible"
-        className="space-y-6"
+        className="space-y-4 sm:space-y-6"
       >
         <motion.div className="space-y-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
           <div className="flex items-center justify-between">

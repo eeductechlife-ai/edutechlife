@@ -859,39 +859,6 @@ const IALabContent = memo(function () {
                     </motion.div>
                   )}
 
-                {/* Banner: Contenido completo → ir al examen */}
-                {!isLoadingProgress &&
-                  moduleProgress[activeMod]?.resourcesCompleted &&
-                  !moduleProgress[activeMod]?.exam &&
-                  viewSection === null && (
-                    <motion.div
-                      key={`exam-ready-banner-${activeMod}`}
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex items-center gap-3 px-4 py-3 theme-surface border border-amber-200/60 dark:border-amber-700/30 rounded-xl"
-                    >
-                      <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center flex-shrink-0">
-                        <Icon name="fa-star" className="w-4 h-4 text-amber-500" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wide">
-                          {t("ialab.exam_ready_title") ||
-                            "¡Contenido completado!"}
-                        </p>
-                        <p className="text-[15px] font-medium theme-text truncate">
-                          {t("ialab.exam_ready_desc") ||
-                            "Ya puedes tomar tu examen del módulo"}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => setViewSection("actividades")}
-                        className="flex-shrink-0 px-3 py-1.5 bg-amber-500 text-white text-[13px] font-medium rounded-lg hover:opacity-90 transition-colors"
-                      >
-                        {t("ialab.exam_ready_cta") || "Ir al examen →"}
-                      </button>
-                    </motion.div>
-                  )}
 
                 {isLoadingProgress ? (
                   <motion.div

@@ -219,7 +219,7 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
             {t("ialab.workspace.gemini.heading")}
           </h1>
           <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, color: "#5f6368", marginBottom: 20 }}>
-            {t("ialab.workspace.gemini.sub")}
+            {t("ialab.workspace.gemini.sub", { n: 3 })}
           </p>
 
           {/* Mensaje intro — avatar Gemini + texto, estilo nuevo chat */}

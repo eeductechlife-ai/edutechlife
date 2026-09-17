@@ -1,9 +1,8 @@
-import { useEffect, useCallback, useState, useRef } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 
 const useScreenshotProtection = (isActive, { onViolation, onMaxViolations, maxViolations = 3 } = {}) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [violationCount, setViolationCount] = useState(0);
-  const devToolsCheckRef = useRef(null);
 
   const handleViolation = useCallback((type) => {
     if (!isActive) return;
@@ -49,21 +48,6 @@ const useScreenshotProtection = (isActive, { onViolation, onMaxViolations, maxVi
       window.removeEventListener('blur', handleBlur);
       window.removeEventListener('focus', handleFocus);
     };
-  }, [isActive, handleViolation]);
-
-  // Detectar DevTools abiertos (detección por tamaño de ventana)
-  useEffect(() => {
-    if (!isActive) return;
-    const checkDevTools = () => {
-      const threshold = 160;
-      const widthDiff = window.outerWidth - window.innerWidth;
-      const heightDiff = window.outerHeight - window.innerHeight;
-      if (widthDiff > threshold || heightDiff > threshold) {
-        handleViolation('devtools_open');
-      }
-    };
-    devToolsCheckRef.current = setInterval(checkDevTools, 2000);
-    return () => clearInterval(devToolsCheckRef.current);
   }, [isActive, handleViolation]);
 
   return { showOverlay, setShowOverlay, violationCount };

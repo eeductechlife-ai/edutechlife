@@ -25,7 +25,7 @@ export const createNavigationSlice = (set, get) => ({
 
   suggestedTime: 25 * 60,
   timeElapsed: 0,
-  setTimeElapsed: (v) => set({ timeElapsed: v }),
+  setTimeElapsed: (v) => set(typeof v === 'function' ? { timeElapsed: v(get().timeElapsed) } : { timeElapsed: v }),
   isTimerRunning: false,
   setIsTimerRunning: (v) => set({ isTimerRunning: v }),
   showTimeWarning: false,

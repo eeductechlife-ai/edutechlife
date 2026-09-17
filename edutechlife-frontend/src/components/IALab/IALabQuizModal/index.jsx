@@ -35,6 +35,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   const {
     quizQuestions,
     TOTAL_QUESTIONS,
+    QUESTION_BANK_SIZE,
     PASSING_SCORE,
     SUGGESTED_TIME_SECONDS,
     MAX_SECURITY_WARNINGS,
@@ -428,8 +429,11 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
                   <div id="quiz-content" className="max-w-4xl mx-auto py-6">
                     {currentQuestion !== revealedFor ? (
                       <RouletteSpin
-                        total={TOTAL_QUESTIONS}
-                        resultNumber={currentQuestion + 1}
+                        total={QUESTION_BANK_SIZE}
+                        resultNumber={
+                          quizQuestions[currentQuestion]?.bankNumber ??
+                          currentQuestion + 1
+                        }
                         onReveal={() => setRevealedFor(currentQuestion)}
                       />
                     ) : (

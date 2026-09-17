@@ -279,6 +279,10 @@ export const useIALabQuiz = () => {
       EXAM_QUESTION_COUNT,
     ).map((q) => ({
       ...q,
+      // Posición real dentro del banco completo (1-40): es lo que la ruleta
+      // debe mostrar como "número sorteado", no la posición dentro del
+      // intento (que siempre sería 1, 2, 3... y parecería no ser al azar).
+      bankNumber: base.indexOf(q) + 1,
       options: shuffleArray(q.options),
     }));
 
@@ -437,6 +441,10 @@ export const useIALabQuiz = () => {
     // El intento siempre responde EXAM_QUESTION_COUNT (10) aunque el banco sea
     // mayor (ruleta): así la barra de progreso y "x de N" muestran 10.
     TOTAL_QUESTIONS: Math.min(EXAM_QUESTION_COUNT, rawQuestions.length),
+    // Tamaño real del banco de preguntas del módulo (40): la ruleta lo usa
+    // para que el sorteo se sienta genuino entre todas las preguntas, no
+    // solo entre las 10 que responderás en este intento.
+    QUESTION_BANK_SIZE: rawQuestions.length,
     PASSING_SCORE,
     SUGGESTED_TIME_SECONDS,
     MAX_SECURITY_WARNINGS,

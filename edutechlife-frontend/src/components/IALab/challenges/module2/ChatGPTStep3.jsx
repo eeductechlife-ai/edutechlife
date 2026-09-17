@@ -158,10 +158,10 @@ const ChatGPTStep3 = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <ProgressStepper currentStep={3} t={t} />
 
-      <div className="bg-gradient-to-r from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-2xl p-6 border border-[var(--theme-primary)]/20">
+      <div className="bg-gradient-to-r from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-2xl p-4 sm:p-6 border border-[var(--theme-primary)]/20">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center shadow-lg shadow-[var(--theme-primary)]/20 flex-shrink-0">
             <Icon name="fa-plug" className="text-white text-xl" />
@@ -191,7 +191,7 @@ const ChatGPTStep3 = ({
 
       <CaseContextBanner selectedCase={selectedCase} stepNumber={3} />
 
-      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl p-6 space-y-4">
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl p-4 sm:p-6 space-y-4">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center">
             <Icon name="fa-cog" className="text-[var(--theme-emphasis)]" />
@@ -213,7 +213,7 @@ const ChatGPTStep3 = ({
         <ExampleToggle t={t} example={getExample()} />
       </div>
 
-      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl p-6 space-y-4">
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl p-4 sm:p-6 space-y-4">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]/20 flex items-center justify-center">
             <Icon name="fa-database" className="text-[var(--theme-primary)]" />
@@ -258,7 +258,7 @@ const ChatGPTStep3 = ({
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl p-6 space-y-4">
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl p-4 sm:p-6 space-y-4">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-[var(--theme-primary)]/10 dark:bg-[var(--theme-primary)]/20 flex items-center justify-center">
             <Icon
@@ -287,7 +287,7 @@ const ChatGPTStep3 = ({
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl p-6 space-y-4"
+          className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl p-4 sm:p-6 space-y-4"
         >
           <div className="flex items-center gap-2">
             <Icon name="fa-code" className="text-[var(--theme-primary)]" />
@@ -321,14 +321,20 @@ const ChatGPTStep3 = ({
         t={t}
       />
 
-      <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10 rounded-xl p-5 border border-amber-200 dark:border-amber-700/30">
-        <div className="flex items-center gap-3 mb-3">
-          <Icon name="fa-lightbulb" className="text-amber-500" />
-          <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
-            {t("ialab.challenge.m2.step3_tips_title")}
-          </h3>
-        </div>
-        <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+      <details className="group bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10 rounded-xl p-4 sm:p-5 border border-amber-200 dark:border-amber-700/30">
+        <summary className="flex items-center justify-between gap-3 cursor-pointer list-none">
+          <div className="flex items-center gap-3">
+            <Icon name="fa-lightbulb" className="text-amber-500" />
+            <h3 className="text-base sm:text-lg font-semibold text-slate-800 dark:text-slate-100">
+              {t("ialab.challenge.m2.step3_tips_title")}
+            </h3>
+          </div>
+          <Icon
+            name="fa-chevron-down"
+            className="text-amber-500 text-sm transition-transform duration-200 group-open:rotate-180"
+          />
+        </summary>
+        <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400 mt-3">
           <li className="flex items-start gap-2">
             <Icon
               name="fa-check-circle"
@@ -351,7 +357,7 @@ const ChatGPTStep3 = ({
             <span>{t("ialab.challenge.m2.step3_tip_3")}</span>
           </li>
         </ul>
-      </div>
+      </details>
     </div>
   );
 };
