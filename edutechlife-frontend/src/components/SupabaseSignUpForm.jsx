@@ -832,11 +832,18 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                 </div>
               </div>
             )}
-          </div>
 
-          {/* Trust Badges */}
-          <div className="mt-8 text-center text-white/80 text-sm">
-            <p>🔒 Tus datos están protegidos con encriptación SSL</p>
+            {/* Trust badge — dentro de la tarjeta para que no quede recortado
+                fuera de vista en móvil (donde la tarjeta ocupa 100dvh y el
+                contenedor raíz tiene overflow-hidden). */}
+            {!success && (
+              <div className="px-6 pb-6 lg:px-10 lg:pb-8 text-center text-gray-400 text-xs">
+                <p>
+                  🔒 Tus datos están protegidos y nunca se comparten con
+                  terceros
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

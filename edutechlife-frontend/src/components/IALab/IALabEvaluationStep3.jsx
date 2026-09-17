@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types';
 import { Icon } from '../../utils/iconMapping.jsx';
 import { useTranslation } from '../../i18n/I18nProvider';
+import { sanitize } from '../../utils/sanitize';
 
 /**
  * Componente para Paso 3: Crear un prompt desde cero
@@ -143,11 +144,11 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-4 sm:space-y-6">
             {/* Instrucciones */}
-            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
+            <div className="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0">
                         <Icon name="fa-plus-circle" className="text-white text-lg" />
                     </div>
                     <div>
@@ -160,12 +161,12 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
             </div>
 
             {/* Caso de uso */}
-            <div className="space-y-4">
+            <div className="space-y-2">
                 <div className="flex items-center gap-2">
                     <Icon name="fa-briefcase" className="text-[var(--theme-primary)]" />
                     <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step3.use_case')}</h4>
                 </div>
-                <div className="bg-slate-50/50 rounded-xl p-5 border border-slate-200">
+                <div className="bg-slate-50/50 rounded-xl p-4 sm:p-5 border border-slate-200">
                     <div className="flex items-start gap-3">
                         <Icon name="fa-star" className="text-[var(--theme-primary)] mt-1" />
                         <p className="text-slate-700 leading-relaxed">
@@ -243,7 +244,7 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                             placeholder={`## ${t('ialab.evaluation.step3.section_role')}\n${t('ialab.evaluation.step3.placeholder_role')}\n\n## ${t('ialab.evaluation.step3.section_context')}\n${t('ialab.evaluation.step3.placeholder_context')}\n\n## ${t('ialab.evaluation.step3.section_objective')}\n${t('ialab.evaluation.step3.placeholder_objective')}\n\n## ${t('ialab.evaluation.step3.section_audience')}\n${t('ialab.evaluation.step3.placeholder_audience')}\n\n## ${t('ialab.evaluation.step3.section_requirements')}\n${t('ialab.evaluation.step3.placeholder_requirement_1')}\n${t('ialab.evaluation.step3.placeholder_requirement_2')}\n\n## ${t('ialab.evaluation.step3.section_format')}\n${t('ialab.evaluation.step3.placeholder_format')}`}
                             aria-required="true"
                             aria-describedby="evaluation-step3-chars"
-                            className="w-full h-80 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-[var(--theme-primary)] focus:ring-2 focus:ring-[var(--theme-primary)]/20 resize-none font-mono text-sm leading-relaxed"
+                            className="w-full h-56 sm:h-80 bg-white border-2 border-slate-200 rounded-xl p-4 sm:p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-[var(--theme-primary)] focus:ring-2 focus:ring-[var(--theme-primary)]/20 resize-none font-mono text-sm leading-relaxed"
                             spellCheck="false"
                             autoFocus
                         />
@@ -340,14 +341,16 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                 </div>
             )}
 
-            {/* Guía de creación */}
-            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <div className="flex items-center gap-3 mb-4">
+            {/* Guía de creación — colapsada por defecto: es refuerzo/consulta
+                opcional, no algo que haya que leer para avanzar. Antes era la
+                sección más larga del paso 3 y siempre estaba expandida. */}
+            <details className="group bg-slate-50 rounded-xl border border-slate-200">
+                <summary className="list-none flex items-center gap-3 p-4 sm:p-5 cursor-pointer select-none">
                     <Icon name="fa-graduation-cap" className="text-amber-500" />
-                    <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step3.guide_title')}</h4>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <h4 className="text-lg font-semibold text-slate-800 flex-1">{t('ialab.evaluation.step3.guide_title')}</h4>
+                    <Icon name="fa-chevron-down" className="text-xs text-slate-400 transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 sm:px-5 pb-4 sm:pb-5">
                     <div className="space-y-3">
                         <h5 className="font-medium text-slate-700 flex items-center gap-2">
                             <div className="w-2 h-2 bg-[var(--theme-primary)] rounded-full"></div>
@@ -356,27 +359,27 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                         <ol className="space-y-2 text-sm text-slate-500">
                             <li className="flex items-start gap-2">
                                 <span className="text-[var(--theme-primary)] font-bold">1.</span>
-                                <span>{t('ialab.evaluation.step3.guide_role')}</span>
+                                <span dangerouslySetInnerHTML={{ __html: sanitize(t('ialab.evaluation.step3.guide_role')) }} />
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-[var(--theme-primary)] font-bold">2.</span>
-                                <span>{t('ialab.evaluation.step3.guide_context')}</span>
+                                <span dangerouslySetInnerHTML={{ __html: sanitize(t('ialab.evaluation.step3.guide_context')) }} />
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-[var(--theme-primary)] font-bold">3.</span>
-                                <span>{t('ialab.evaluation.step3.guide_objective')}</span>
+                                <span dangerouslySetInnerHTML={{ __html: sanitize(t('ialab.evaluation.step3.guide_objective')) }} />
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-[var(--theme-primary)] font-bold">4.</span>
-                                <span>{t('ialab.evaluation.step3.guide_audience')}</span>
+                                <span dangerouslySetInnerHTML={{ __html: sanitize(t('ialab.evaluation.step3.guide_audience')) }} />
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-[var(--theme-primary)] font-bold">5.</span>
-                                <span>{t('ialab.evaluation.step3.guide_requirements')}</span>
+                                <span dangerouslySetInnerHTML={{ __html: sanitize(t('ialab.evaluation.step3.guide_requirements')) }} />
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-[var(--theme-primary)] font-bold">6.</span>
-                                <span>{t('ialab.evaluation.step3.guide_format')}</span>
+                                <span dangerouslySetInnerHTML={{ __html: sanitize(t('ialab.evaluation.step3.guide_format')) }} />
                             </li>
                         </ol>
                     </div>
@@ -389,28 +392,28 @@ ${promptComponents.format[Math.floor(Math.random() * promptComponents.format.len
                         <ul className="space-y-2 text-sm text-slate-500">
                             <li className="flex items-start gap-2">
                                 <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                                <span>{t('ialab.evaluation.step3.guide_tip_specific')}</span>
+                                <span dangerouslySetInnerHTML={{ __html: sanitize(t('ialab.evaluation.step3.guide_tip_specific')) }} />
                             </li>
                             <li className="flex items-start gap-2">
                                 <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                                <span>{t('ialab.evaluation.step3.guide_tip_examples')}</span>
+                                <span dangerouslySetInnerHTML={{ __html: sanitize(t('ialab.evaluation.step3.guide_tip_examples')) }} />
                             </li>
                             <li className="flex items-start gap-2">
                                 <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                                <span>{t('ialab.evaluation.step3.guide_tip_tone')}</span>
+                                <span dangerouslySetInnerHTML={{ __html: sanitize(t('ialab.evaluation.step3.guide_tip_tone')) }} />
                             </li>
                             <li className="flex items-start gap-2">
                                 <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                                <span>{t('ialab.evaluation.step3.guide_tip_metrics')}</span>
+                                <span dangerouslySetInnerHTML={{ __html: sanitize(t('ialab.evaluation.step3.guide_tip_metrics')) }} />
                             </li>
                             <li className="flex items-start gap-2">
                                 <Icon name="fa-check" className="text-emerald-500 mt-0.5 flex-shrink-0" />
-                                <span>{t('ialab.evaluation.step3.guide_tip_limitations')}</span>
+                                <span dangerouslySetInnerHTML={{ __html: sanitize(t('ialab.evaluation.step3.guide_tip_limitations')) }} />
                             </li>
                         </ul>
                     </div>
                 </div>
-            </div>
+            </details>
         </div>
     );
 };

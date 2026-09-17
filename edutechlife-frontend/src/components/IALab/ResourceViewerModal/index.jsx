@@ -81,44 +81,29 @@ const ResourceViewerModal = ({
   };
 
   const handleClose = useCallback(() => {
-    try {
-      if (document.fullscreenElement) document.exitFullscreen?.();
-    } catch {
-      /* ignore */
-    }
     stopSpeech();
     onClose?.();
   }, [onClose]);
 
-  // Pantalla completa REAL (Fullscreen API) sobre el CONTENIDO, no solo agrandar
-  // el modal. Antes el botón solo cambiaba el tamaño del contenedor y el video
-  // seguía "dentro del modal" con su cabecera/pie; ahora el recurso ocupa toda
-  // la pantalla como en YouTube.
+  // Pantalla completa expandiendo el layout (oculta header/footer y el
+  // contenido ocupa 100dvh), NO la Fullscreen API del navegador.
+  //
+  // La Fullscreen API es poco fiable para esto: en iOS/Safari muchos
+  // elementos ni siquiera exponen requestFullscreen, y en pruebas con
+  // automatización (sin un toque real de usuario) hemos visto la promesa
+  // "resolverse" para acto seguido disparar fullscreenchange con
+  // fullscreenElement=null, revirtiendo el estado sin que el usuario haya
+  // pedido salir. Como el objetivo es simplemente que el recurso ocupe toda
+  // la pantalla, un toggle de layout puramente CSS es más simple y funciona
+  // igual en cualquier navegador, sin depender de permisos ni soporte.
   const toggleFullscreen = useCallback(() => {
-    const el = contentRef.current || modalRef.current;
-    try {
-      if (document.fullscreenElement) {
-        document.exitFullscreen?.();
-      } else if (el?.requestFullscreen) {
-        el.requestFullscreen();
-      }
-    } catch {
-      setIsFullscreen((prev) => !prev);
-    }
-  }, []);
-
-  useEffect(() => {
-    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener("fullscreenchange", onFsChange);
-    return () => document.removeEventListener("fullscreenchange", onFsChange);
+    setIsFullscreen((prev) => !prev);
   }, []);
 
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape" && isOpen) {
-        if (document.fullscreenElement) {
-          document.exitFullscreen?.();
-        } else if (isFullscreen) {
+        if (isFullscreen) {
           setIsFullscreen(false);
         } else {
           handleClose();
@@ -127,7 +112,7 @@ const ResourceViewerModal = ({
     };
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [isOpen, onClose, isFullscreen]);
+  }, [isOpen, handleClose, isFullscreen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -459,6 +444,7 @@ const ResourceViewerModal = ({
                     isFullscreen ? "" : "sm:rounded-t-[2rem]",
                   )}
                 />
+                {!isFullscreen && (
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 border-b theme-border theme-surface">
                   <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
                     <div className="w-10 h-10 rounded-xl theme-chip flex items-center justify-center flex-shrink-0">
@@ -539,6 +525,25 @@ const ResourceViewerModal = ({
                     </button>
                   </div>
                 </div>
+                )}
+                {isFullscreen && (
+                  <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
+                    <button
+                      onClick={toggleFullscreen}
+                      className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                      aria-label={t("ialab.viewer_modal.fullscreen_exit")}
+                    >
+                      <Icon name="fa-compress" className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={handleClose}
+                      className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                      aria-label={t("ialab.viewer_modal.close_aria")}
+                    >
+                      <Icon name="fa-times" className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
                 <div
                   ref={contentRef}
                   className="flex-1 overflow-auto min-h-0 bg-white dark:bg-slate-800"
@@ -569,6 +574,7 @@ const ResourceViewerModal = ({
                     </div>
                   )}
                 </div>
+                {!isFullscreen && (
                 <div className="px-4 sm:px-6 py-3 sm:py-4 border-t theme-border theme-surface relative z-[60]">
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
                     <div className="flex items-center gap-2">
@@ -705,6 +711,7 @@ const ResourceViewerModal = ({
                     )}
                   </div>
                 </div>
+                )}
               </motion.div>
             </div>
           </div>

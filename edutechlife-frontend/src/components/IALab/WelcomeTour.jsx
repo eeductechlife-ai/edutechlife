@@ -198,7 +198,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
       onClick={handleClose}
     >
       <div
-        className="relative rounded-3xl max-w-md w-full overflow-hidden"
+        className="relative rounded-3xl max-w-md w-full max-h-[90dvh] overflow-y-auto"
         style={{
           background:
             "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(240,249,252,0.98) 100%)",
@@ -213,7 +213,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
           className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all focus-visible:outline-none focus-visible:ring-2"
           style={{
             background: "rgba(255, 255, 255, 0.85)",
-            color: "var(--ialab-[var(--theme-emphasis)], #004B63)",
+            color: "var(--theme-emphasis, #004B63)",
             boxShadow: "0 2px 8px rgba(0, 75, 99, 0.15)",
           }}
           aria-label={t("ialab.tour.welcome_close_aria")}
@@ -225,7 +225,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
           className="h-32 flex items-center justify-center relative overflow-hidden"
           style={{
             background:
-              "linear-gradient(135deg, var(--ialab-[var(--theme-emphasis)], #004B63) 0%, var(--ialab-teal, #2596be) 50%, var(--ialab-cyan, #00BCD4) 100%)",
+              "linear-gradient(135deg, var(--theme-emphasis, #004B63) 0%, var(--theme-primary, #2596be) 50%, #00BCD4 100%)",
           }}
         >
           <div className="absolute inset-0 opacity-25 pointer-events-none">
@@ -247,7 +247,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
           >
             <Icon
               className="w-10 h-10"
-              style={{ color: "var(--ialab-[var(--theme-emphasis)], #004B63)" }}
+              style={{ color: "var(--theme-emphasis, #004B63)" }}
               aria-hidden="true"
             />
           </div>
@@ -258,7 +258,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
             id="tour-title"
             className="text-xl sm:text-2xl font-bold mb-2 text-center"
             style={{
-              color: "var(--ialab-[var(--theme-emphasis)], #004B63)",
+              color: "var(--theme-emphasis, #004B63)",
               fontFamily: "'Montserrat', sans-serif",
             }}
           >
@@ -286,7 +286,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
             >
               <p
                 className="text-xs font-semibold"
-                style={{ color: "var(--ialab-teal, #2596be)" }}
+                style={{ color: "var(--theme-primary, #2596be)" }}
               >
                 {t(currentStep.highlight)}
               </p>
@@ -315,7 +315,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
                   width: i === step ? "32px" : "8px",
                   background:
                     i === step
-                      ? "var(--ialab-cyan, #00BCD4)"
+                      ? "#00BCD4"
                       : i < step
                         ? "rgba(0, 188, 212, 0.4)"
                         : "rgba(148, 163, 184, 0.3)",
@@ -330,7 +330,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
               onClick={handlePrev}
               disabled={step === 0}
               className="inline-flex items-center gap-1 text-sm font-semibold px-3 py-2 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2"
-              style={{ color: "var(--ialab-[var(--theme-emphasis)], #004B63)" }}
+              style={{ color: "var(--theme-emphasis, #004B63)" }}
             >
               <ChevronLeft className="w-4 h-4" aria-hidden="true" />
               {t("ialab.tour.welcome_back")}
@@ -342,7 +342,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-white px-5 py-2.5 rounded-xl transition-all hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               style={{
                 background:
-                  "linear-gradient(135deg, var(--ialab-[var(--theme-emphasis)], #004B63) 0%, var(--ialab-teal, #2596be) 100%)",
+                  "linear-gradient(135deg, var(--theme-emphasis, #004B63) 0%, var(--theme-primary, #2596be) 100%)",
                 boxShadow: "0 6px 18px rgba(0, 75, 99, 0.35)",
               }}
             >

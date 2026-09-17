@@ -16,7 +16,10 @@ const IALabEvaluationStep2 = ({ exercise, response, onResponseChange }) => {
     const { t } = useTranslation();
     const [optimizedPrompt, setOptimizedPrompt] = useState(response || '');
     const [characterCount, setCharacterCount] = useState(response?.length || 0);
-    const [showSuggestions, setShowSuggestions] = useState(true);
+    // Colapsado por defecto: son 6 tarjetas de sugerencias + 3 plantillas,
+    // la mayor fuente de scroll de este paso. El botón "Mostrar sugerencias"
+    // sigue disponible para quien las quiera.
+    const [showSuggestions, setShowSuggestions] = useState(false);
 
     const handleChange = (value) => {
         setOptimizedPrompt(value);
@@ -151,11 +154,11 @@ Eres un [especificar rol experto]
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-4 sm:space-y-6">
             {/* Instrucciones */}
-            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
+            <div className="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0">
                         <Icon name="fa-magic" className="text-white text-lg" />
                     </div>
                     <div>
@@ -168,7 +171,7 @@ Eres un [especificar rol experto]
             </div>
 
             {/* Prompt original (mal redactado) */}
-            <div className="space-y-4">
+            <div className="space-y-2 sm:space-y-3">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Icon name="fa-exclamation-triangle" className="text-amber-500" />
@@ -178,7 +181,7 @@ Eres un [especificar rol experto]
                         {t('ialab.evaluation.step2.needs_improvement')}
                     </span>
                 </div>
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 sm:p-5">
                     <div className="flex items-start gap-3">
                         <Icon name="fa-comment-dots" className="text-amber-500 mt-1" />
                         <p className="text-amber-700 italic leading-relaxed">
@@ -189,7 +192,7 @@ Eres un [especificar rol experto]
             </div>
 
             {/* Editor de prompt optimizado */}
-            <div className="space-y-4">
+            <div className="space-y-2 sm:space-y-3">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <Icon name="fa-check-circle" className="text-emerald-500" />
@@ -216,7 +219,7 @@ Eres un [especificar rol experto]
                         placeholder={t('ialab.evaluation.step2.placeholder')}
                         aria-required="true"
                         aria-describedby="evaluation-step2-chars"
-                        className="w-full h-64 bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-[var(--theme-primary)] focus:ring-2 focus:ring-[var(--theme-primary)]/20 resize-none font-mono text-sm leading-relaxed"
+                        className="w-full h-48 sm:h-64 bg-white border-2 border-slate-200 rounded-xl p-4 sm:p-5 text-slate-700 placeholder-slate-500 focus:outline-none focus:border-[var(--theme-primary)] focus:ring-2 focus:ring-[var(--theme-primary)]/20 resize-none font-mono text-sm leading-relaxed"
                         spellCheck="false"
                         autoFocus
                     />
@@ -234,7 +237,7 @@ Eres un [especificar rol experto]
 
             {/* Sugerencias de mejora */}
             {showSuggestions && (
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                     <div className="flex items-center gap-2">
                         <Icon name="fa-lightbulb" className="text-[var(--theme-primary)]" />
                         <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step2.suggestions_title')}</h4>
@@ -294,13 +297,13 @@ Eres un [especificar rol experto]
             )}
 
             {/* Checklist de calidad */}
-            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <div className="flex items-center gap-3 mb-4">
+            <div className="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200">
+                <div className="flex items-center gap-3 mb-3">
                     <Icon name="fa-clipboard-check" className="text-emerald-500" />
                     <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step2.checklist_title')}</h4>
                 </div>
-                
-                <div className="space-y-3">
+
+                <div className="space-y-2">
                     {[
                         { text: t('ialab.evaluation.step2.checklist_specific'), met: characterCount > 50 },
                         { text: t('ialab.evaluation.step2.checklist_role_context'), met: optimizedPrompt.includes('##') || optimizedPrompt.toLowerCase().includes('rol') },

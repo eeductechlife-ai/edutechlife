@@ -165,17 +165,17 @@ export function StepContent({
         </div>
       )}
 
-      <div className="flex items-center justify-between">
-        <button
-          onClick={handlePrevStep}
-          disabled={step === 1 || loading}
-          className="px-6 py-3 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Icon name="fa-arrow-left" className="mr-2" aria-hidden="true" />
-          {t('ialab.evaluation.modal.previous')}
-        </button>
-
-        <div className="flex items-center gap-4">
+      {/*
+        En móvil, meter "Anterior", "Paso X de Y", el hint de completar y el
+        botón de acción en una sola fila los comprimía a todos (el texto del
+        centro empujaba los botones hasta casi cortarlos). Ahora la info va
+        en su propia fila arriba, y los botones ocupan una fila completa
+        abajo — cada uno con espacio real para su texto. Desde sm: vuelve a
+        una sola fila, con la info a la izquierda y ambos botones juntos a la
+        derecha (agrupar la navegación es más simple y sigue siendo claro).
+      */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col items-center gap-1 text-center sm:flex-row sm:gap-4 sm:text-left">
           <span className="text-sm text-slate-500">
             {t('ialab.evaluation.modal.step_of', { step, total: totalSteps })}
           </span>
@@ -186,12 +186,23 @@ export function StepContent({
               {t('ialab.evaluation.modal.complete_step_hint')}
             </p>
           )}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handlePrevStep}
+            disabled={step === 1 || loading}
+            className="flex-1 sm:flex-initial px-6 py-3 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+          >
+            <Icon name="fa-arrow-left" className="mr-2" aria-hidden="true" />
+            {t('ialab.evaluation.modal.previous')}
+          </button>
 
           {step < totalSteps ? (
             <button
               onClick={handleNextStep}
               disabled={!responses[responseKey] || loading}
-              className="px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 sm:flex-initial px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
             >
               {t('ialab.evaluation.modal.next')}
               <Icon name="fa-arrow-right" className="ml-2" aria-hidden="true" />
@@ -200,7 +211,7 @@ export function StepContent({
             <button
               onClick={handleSubmitEvaluation}
               disabled={!responses[responseKey] || loading || isSavingGrade}
-              className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="flex-1 sm:flex-initial px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
             >
               {isSavingGrade ? (
                 <>

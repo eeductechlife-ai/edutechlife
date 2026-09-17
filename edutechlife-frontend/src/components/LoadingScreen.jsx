@@ -4,32 +4,39 @@ import FloatingParticles from "./FloatingParticles";
 import { useTranslation } from "../i18n/I18nProvider";
 import { Icon } from "../utils/iconMapping.jsx";
 
+// Progreso y clave de traducción por paso. La clave se resuelve con t() en
+// cada render (no al disparar el timer): si el JSON de idioma —cargado con
+// import() dinámico en I18nProvider— todavía no llegó cuando el timer avanza
+// al último paso, guardar el texto ya resuelto lo dejaba congelado como la
+// clave cruda ("loading.status_done") para siempre, porque nada volvía a
+// evaluarlo después. Guardando solo el índice, el texto se recalcula solo en
+// cuanto las traducciones terminan de cargar.
+const LOADING_STEPS = [
+  { progress: 30, key: "loading.status_start" },
+  { progress: 60, key: "loading.status_vak" },
+  { progress: 85, key: "loading.status_ai" },
+  { progress: 100, key: "loading.status_done" },
+];
+
 const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
   const { t } = useTranslation();
-  const [progress, setProgress] = useState(30);
-  const [statusText, setStatusText] = useState(t("loading.status_start"));
+  const [stepIndex, setStepIndex] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
 
-  const getLoadingSteps = () => [
-    { progress: 30, text: t("loading.status_start") },
-    { progress: 60, text: t("loading.status_vak") },
-    { progress: 85, text: t("loading.status_ai") },
-    { progress: 100, text: t("loading.status_done") },
-  ];
-  const loadingSteps = getLoadingSteps();
+  const progress = LOADING_STEPS[stepIndex].progress;
+  const statusText = t(LOADING_STEPS[stepIndex].key);
 
   useEffect(() => {
     // Arranca en el primer paso de inmediato: evita el frío "0%"
     let currentStep = 1;
     const interval = setInterval(() => {
-      if (currentStep < loadingSteps.length) {
-        setProgress(loadingSteps[currentStep].progress);
-        setStatusText(loadingSteps[currentStep].text);
+      if (currentStep < LOADING_STEPS.length) {
+        setStepIndex(currentStep);
         currentStep++;
       } else {
         clearInterval(interval);
       }
-    }, minDuration / loadingSteps.length);
+    }, minDuration / LOADING_STEPS.length);
 
     return () => clearInterval(interval);
   }, [minDuration]);

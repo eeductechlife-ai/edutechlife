@@ -117,11 +117,11 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
             {/* Instrucciones */}
-            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center">
+            <div className="bg-slate-50 rounded-xl p-4 sm:p-5 border border-slate-200">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center flex-shrink-0">
                         <Icon name="fa-search" className="text-white text-lg" />
                     </div>
                     <div>
@@ -129,33 +129,49 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         <p className="text-slate-500 text-sm">
                             {t('ialab.evaluation.step1.subtitle')}
                         </p>
-                        <div className="mt-3 p-4 bg-blue-50 border border-blue-100 rounded-xl">
-                            <p className="text-xs text-slate-600 leading-relaxed">
-                                <strong className="text-[var(--theme-emphasis)]">{t('ialab.evaluation.step1.how_to_title')}</strong> {t('ialab.evaluation.step1.how_to_desc')}
-                            </p>
-                        </div>
                     </div>
                 </div>
+                {/* Colapsado por defecto: es texto de apoyo, no el ejercicio en sí.
+                    Mantenerlo siempre expandido era la mayor fuente de scroll
+                    innecesario antes de llegar al escenario real. */}
+                <details className="group mt-3">
+                    <summary className="list-none flex items-center justify-between gap-2 p-3 bg-blue-50 border border-blue-100 rounded-xl cursor-pointer select-none">
+                        <span className="text-xs font-semibold text-[var(--theme-emphasis)]">{t('ialab.evaluation.step1.how_to_title')}</span>
+                        <Icon name="fa-chevron-down" className="text-[10px] text-[var(--theme-emphasis)] transition-transform group-open:rotate-180 flex-shrink-0" />
+                    </summary>
+                    <p className="text-xs text-slate-600 leading-relaxed p-3 pt-2 bg-blue-50 border border-t-0 border-blue-100 rounded-b-xl -mt-px">
+                        {t('ialab.evaluation.step1.how_to_desc')}
+                    </p>
+                </details>
             </div>
 
             {/* Escenario generado por DeepSeek */}
-            <div className="space-y-3">
+            <div className="space-y-2">
                 <div className="flex items-center gap-2">
                     <Icon name="fa-scroll" className="text-[var(--theme-primary)]" />
                     <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.scenario')}</h4>
                 </div>
-                <div className="bg-slate-50/50 rounded-xl p-5 border border-slate-200">
+                <div className="bg-slate-50/50 rounded-xl p-4 sm:p-5 border border-slate-200">
                     <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">
                         {exercise}
                     </p>
                 </div>
             </div>
 
+            {/*
+              En móvil (una sola columna) mostrar antes la lista de frases
+              tocables y después las cajas destino: si van primero las cajas
+              vacías, hay que bajar mucho para encontrar qué tocar y volver a
+              subir para confirmar dónde cayó. flex-col-reverse invierte solo
+              el orden visual en mobile; md:contents deshace el flex en
+              desktop para no tocar el grid de 3 columnas de cada sección.
+            */}
+            <div className="flex flex-col-reverse gap-6 md:contents">
             {/* Áreas de clasificación */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Rol */}
                 <div 
-                    className="bg-white rounded-xl p-5 border-2 border-[var(--theme-primary)]/20 min-h-[200px]"
+                    className="bg-white rounded-xl p-4 sm:p-5 border-2 border-[var(--theme-primary)]/20 min-h-[130px] sm:min-h-[200px]"
                     onDrop={(e) => handleDrop(e, 'rol')}
                     onDragOver={handleDragOver}
                 >
@@ -182,7 +198,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                             </div>
                         </div>
                     ) : (
-                        <div className="text-center py-8 border-2 border-dashed border-slate-300 rounded-lg">
+                        <div className="text-center py-4 sm:py-8 border-2 border-dashed border-slate-300 rounded-lg">
                             <Icon name="fa-arrow-down" className="text-slate-600 text-xl mb-2" />
                             <p className="text-slate-600 text-sm">{t('ialab.evaluation.step1.drop_here')}</p>
                         </div>
@@ -191,7 +207,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
 
                 {/* Contexto */}
                 <div 
-                    className="bg-white rounded-xl p-5 border-2 border-[var(--theme-emphasis)]/20 min-h-[200px]"
+                    className="bg-white rounded-xl p-4 sm:p-5 border-2 border-[var(--theme-emphasis)]/20 min-h-[130px] sm:min-h-[200px]"
                     onDrop={(e) => handleDrop(e, 'contexto')}
                     onDragOver={handleDragOver}
                 >
@@ -218,7 +234,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                             </div>
                         </div>
                     ) : (
-                        <div className="text-center py-8 border-2 border-dashed border-slate-300 rounded-lg">
+                        <div className="text-center py-4 sm:py-8 border-2 border-dashed border-slate-300 rounded-lg">
                             <Icon name="fa-arrow-down" className="text-slate-600 text-xl mb-2" />
                             <p className="text-slate-600 text-sm">{t('ialab.evaluation.step1.drop_here')}</p>
                         </div>
@@ -227,7 +243,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
 
                 {/* Tarea */}
                 <div 
-                    className="bg-white rounded-xl p-5 border-2 border-emerald-500/20 min-h-[200px]"
+                    className="bg-white rounded-xl p-4 sm:p-5 border-2 border-emerald-500/20 min-h-[130px] sm:min-h-[200px]"
                     onDrop={(e) => handleDrop(e, 'tarea')}
                     onDragOver={handleDragOver}
                 >
@@ -254,7 +270,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                             </div>
                         </div>
                     ) : (
-                        <div className="text-center py-8 border-2 border-dashed border-slate-300 rounded-lg">
+                        <div className="text-center py-4 sm:py-8 border-2 border-dashed border-slate-300 rounded-lg">
                             <Icon name="fa-arrow-down" className="text-slate-600 text-xl mb-2" />
                             <p className="text-slate-600 text-sm">{t('ialab.evaluation.step1.drop_here')}</p>
                         </div>
@@ -268,7 +284,11 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                     <Icon name="fa-puzzle-piece" className="text-slate-600" />
                     <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.elements_to_classify')}</h4>
                 </div>
-                
+                <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                    <Icon name="fa-hand-pointer" className="text-slate-400" />
+                    {t('ialab.evaluation.step1.tap_hint')}
+                </p>
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {Object.entries(possibleElements).map(([type, elements]) => (
                         <div key={type} className="space-y-2">
@@ -308,14 +328,17 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                     ))}
                 </div>
             </div>
+            </div>
 
-            {/* Guía de ayuda */}
-            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
-                <div className="flex items-center gap-3 mb-3">
+            {/* Guía de ayuda — colapsada por defecto: es refuerzo opcional,
+                no algo que el estudiante deba leer para poder continuar. */}
+            <details className="group bg-slate-50 rounded-xl border border-slate-200">
+                <summary className="list-none flex items-center gap-3 p-4 sm:p-5 cursor-pointer select-none">
                     <Icon name="fa-lightbulb" className="text-amber-500" />
-                    <h4 className="text-lg font-semibold text-slate-800">{t('ialab.evaluation.step1.tips_title')}</h4>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <h4 className="text-lg font-semibold text-slate-800 flex-1">{t('ialab.evaluation.step1.tips_title')}</h4>
+                    <Icon name="fa-chevron-down" className="text-xs text-slate-400 transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 sm:px-5 pb-4 sm:pb-5">
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-[var(--theme-primary)] rounded-full"></div>
@@ -344,7 +367,7 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                         </p>
                     </div>
                 </div>
-            </div>
+            </details>
         </div>
     );
 };

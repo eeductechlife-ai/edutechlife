@@ -12,7 +12,7 @@ const loginOptions = [
   {
     id: "ialab",
     label: "iLab Academic",
-    path: "/sign-up/ialab",
+    path: "/login?returnTo=/ialab",
     icon: (
       <svg
         className="w-5 h-5"

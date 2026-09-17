@@ -170,7 +170,10 @@ const WelcomeScreen = ({ onNavigate }) => {
                     />
                   </div>
                 ) : (
-                  <SupabaseLoginForm returnTo={returnTo} />
+                  <SupabaseLoginForm
+                    returnTo={returnTo}
+                    onShowSignUp={() => setIsSignUpMode(true)}
+                  />
                 )}
               </div>
 

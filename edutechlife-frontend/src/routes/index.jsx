@@ -23,7 +23,6 @@ const OAuthCallbackHandler = lazy(
   () => import("../components/OAuthCallbackHandler"),
 );
 const ResetPasswordPage = lazy(() => import("../components/ResetPasswordPage"));
-const IALabSignUpPage = lazy(() => import("../components/IALabSignUpPage"));
 const SmartBoardSignUpPage = lazy(
   () => import("../components/SmartBoardSignUpPage"),
 );
@@ -84,19 +83,18 @@ import IALabSkeleton from "../components/skeletons/IALabSkeleton";
 import SmartBoardSkeleton from "../components/skeletons/SmartBoardSkeleton";
 import VAKSkeleton from "../components/skeletons/VAKSkeleton";
 
-// Componente wrapper para IALabSignUpPage que maneja navegación
-const IALabSignUpPageWrapper = () => {
-  const navigate = useNavigate();
+// /sign-up/ialab e /login apuntaban a dos pantallas de login distintas
+// (una desde el Header, otra desde ProtectedRoute/catálogo de cursos), lo que
+// mostraba un diseño diferente según por dónde entrara el usuario. Se unifica
+// todo en WelcomeScreen (montado en /login) y esta ruta redirige preservando
+// returnTo, para no romper enlaces o bookmarks existentes a /sign-up/ialab.
+const IALabSignUpRedirect = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const returnTo = searchParams.get("returnTo") || "/ialab";
-
-  const handleBack = (customReturnTo) => {
-    const targetReturnTo = customReturnTo || returnTo;
-    navigate(`/?returnTo=${encodeURIComponent(targetReturnTo)}`);
-  };
-
-  return <IALabSignUpPage onBack={handleBack} />;
+  return (
+    <Navigate to={`/login?returnTo=${encodeURIComponent(returnTo)}`} replace />
+  );
 };
 
 const SmartBoardSignUpPageWrapper = () => <SmartBoardSignUpPage />;
@@ -389,14 +387,7 @@ const AppRoutes = () => {
           }
         />
 
-        <Route
-          path="sign-up/ialab"
-          element={
-            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-              <IALabSignUpPageWrapper />
-            </Suspense>
-          }
-        />
+        <Route path="sign-up/ialab" element={<IALabSignUpRedirect />} />
 
         <Route
           path="sign-up/smartboard"

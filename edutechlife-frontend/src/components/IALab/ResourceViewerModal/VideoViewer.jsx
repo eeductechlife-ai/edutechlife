@@ -241,23 +241,6 @@ const VideoViewer = ({
     return;
   };
 
-  const goFullscreen = () => {
-    try {
-      const iframe = playerRef.current?.getIframe?.();
-      if (iframe) {
-        if (document.fullscreenElement) document.exitFullscreen();
-        else iframe.requestFullscreen?.();
-        return;
-      }
-    } catch {}
-    try {
-      const el =
-        containerRef.current?.querySelector("iframe") || containerRef.current;
-      if (el && document.fullscreenElement) document.exitFullscreen();
-      else if (el) el.requestFullscreen?.();
-    } catch {}
-  };
-
   const toggleCaptions = () => {
     if (!playerRef.current) return;
     try {
@@ -308,10 +291,6 @@ const VideoViewer = ({
         case "m":
           e.preventDefault();
           toggleMute();
-          break;
-        case "f":
-          e.preventDefault();
-          goFullscreen();
           break;
         case "c":
           e.preventDefault();
@@ -502,14 +481,6 @@ const VideoViewer = ({
                 name="fa-closed-captioning"
                 className={`text-[10px] ${ccActive ? "text-[var(--theme-primary)]" : "text-white/70 hover:text-white"}`}
               />
-            </button>
-
-            <button
-              onClick={goFullscreen}
-              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center text-white/70 hover:text-white transition-colors"
-              aria-label={t("ialab.viewer_modal.fullscreen")}
-            >
-              <Icon name="fa-expand" className="text-[10px]" />
             </button>
           </div>
         </div>
