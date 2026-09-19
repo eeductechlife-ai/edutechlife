@@ -1,0 +1,20 @@
+- generic [ref=f108e5]:
+  - generic [ref=f108e12]:
+    - img "Edutechlife" [ref=f108e15]
+    - generic [ref=f108e16]: 85%
+    - generic [ref=f108e21]: loading.status_ai
+    - generic [ref=f108e28]:
+      - generic [ref=f108e29]: loading.feature_ai
+      - generic [ref=f108e35]: loading.feature_vak
+      - generic [ref=f108e46]: loading.feature_cert
+  - generic [ref=f108e52]:
+    - banner [ref=f108e54]:
+      - generic [ref=f108e55]:
+        - button "nav.home_aria" [ref=f108e56] [cursor=pointer]:
+          - img "Edutechlife" [ref=f108e57]
+        - generic [ref=f108e58]:
+          - 'button "Idioma actual: Español" [ref=f108e59] [cursor=pointer]':
+            - generic [ref=f108e63]: ES
+          - button "nav.login" [ref=f108e67] [cursor=pointer]
+          - button "nav.contact" [ref=f108e72] [cursor=pointer]
+    - main [ref=f108e75]

@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useInView, AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "../i18n/I18nProvider";
 import { useABExperiment, trackConversion } from "../hooks/useABExperiment";
@@ -15,7 +15,7 @@ import {
   getPaymentMethods,
   getGuarantee,
 } from "./SmartBoardLandingData";
-import SmartBoardHeroSection from "./smartboard/SmartBoardHeroSection";
+import SmartBoardInfoHero from "./smartboard/SmartBoardInfoHero";
 import SmartBoardSectionNav from "./smartboard/SmartBoardSectionNav";
 import SmartBoardQueEsSection from "./smartboard/SmartBoardQueEsSection";
 import SmartBoardVakStylesSection from "./smartboard/SmartBoardVakStylesSection";
@@ -66,33 +66,10 @@ const DOT_GRADIENTS = [
   "from-mint to-corporate",
 ];
 
-const useAnimatedCounter = (target, duration = 2000, start = false) => {
-  const [count, setCount] = useState(0);
-  const frameRef = useRef(null);
-  useEffect(() => {
-    if (!start) return;
-    const startTime = performance.now();
-    const animate = (currentTime) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const easeOut = 1 - Math.pow(1 - progress, 4);
-      setCount(Math.floor(easeOut * target));
-      if (progress < 1) frameRef.current = requestAnimationFrame(animate);
-    };
-    frameRef.current = requestAnimationFrame(animate);
-    return () => {
-      if (frameRef.current) cancelAnimationFrame(frameRef.current);
-    };
-  }, [start, target, duration]);
-  return count;
-};
-
-const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
+const SmartBoardLandingInfo = ({ onNavigate }) => {
   const { t, locale } = useTranslation();
   const navigate = useNavigate();
-  const heroRef = useRef(null);
   const navRef = useRef(null);
-  const heroInView = useInView(heroRef, { once: true, margin: "-100px" });
 
   const [currentStep, setCurrentStep] = useState(0);
   const [direction, setDirection] = useState(0);
@@ -141,11 +118,6 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
     if (onNavigate) onNavigate("/sign-up/smartboard");
     else navigate("/sign-up/smartboard");
   }, [onNavigate, navigate, variant, currentStep, stepLabels]);
-
-  const statStart = heroInView;
-  const countStudents = useAnimatedCounter(2500, 1800, statStart);
-  const countImprovement = useAnimatedCounter(94, 2000, statStart);
-  const countHours = useAnimatedCounter(12000, 2200, statStart);
 
   const sections = [
     <SmartBoardQueEsSection key="que-es" t={t} />,
@@ -218,17 +190,7 @@ const SmartBoardLandingInfo = ({ onBack, onNavigate }) => {
         <title>{seoTitles[currentStep]} | SmartBoard - Edutechlife</title>
         <meta name="description" content={seoDescriptions[currentStep]} />
       </Helmet>
-      <div ref={heroRef}>
-        <SmartBoardHeroSection
-          t={t}
-          onBack={onBack}
-          inView={heroInView}
-          countStudents={countStudents}
-          countImprovement={countImprovement}
-          countHours={countHours}
-          handleCta={handleCta}
-        />
-      </div>
+      <SmartBoardInfoHero handleCta={handleCta} />
 
       <SmartBoardSectionNav
         ref={navRef}

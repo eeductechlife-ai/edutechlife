@@ -1,0 +1,64 @@
+- generic [active] [ref=f167e1]:
+  - generic [ref=f167e2]:
+    - generic [ref=f167e6]:
+      - navigation [ref=f167e8]:
+        - link [ref=f167e11] [cursor=pointer]:
+          - /url: https://supabase.com
+          - img "Supabase Logo" [ref=f167e12]
+        - link "Documentation" [ref=f167e14] [cursor=pointer]:
+          - /url: https://supabase.com/docs
+      - generic [ref=f167e20]:
+        - main [ref=f167e21]:
+          - generic [ref=f167e22]:
+            - generic [ref=f167e23]:
+              - heading "Welcome back" [level=1] [ref=f167e24]
+              - heading "Sign in to your account" [level=2] [ref=f167e25]
+            - generic [ref=f167e26]:
+              - button "Continue with GitHub" [ref=f167e29] [cursor=pointer]
+              - button "Continue with ChatGPT" [ref=f167e35] [cursor=pointer]
+              - link "Continue with SSO" [ref=f167e41] [cursor=pointer]:
+                - /url: /dashboard/sign-in-sso
+              - generic [ref=f167e47]: or
+              - generic [ref=f167e52]:
+                - generic [ref=f167e54]:
+                  - generic [ref=f167e55]: Email
+                  - textbox "Email" [ref=f167e60]:
+                    - /placeholder: you@example.com
+                    - text: eeductechlife-ai@gmail.com
+                - generic [ref=f167e61]:
+                  - generic [ref=f167e63]:
+                    - generic [ref=f167e64]: Password
+                    - generic [ref=f167e69]:
+                      - textbox "Password" [ref=f167e70]:
+                        - /placeholder: ••••••••
+                        - text: Edi646108@
+                      - button "Show password" [ref=f167e71] [cursor=pointer]
+                  - link "Forgot password?" [ref=f167e76] [cursor=pointer]:
+                    - /url: /dashboard/forgot-password?returnTo=%2Forganizations
+                - button "Sign in" [ref=f167e79] [cursor=pointer]
+            - generic [ref=f167e81]:
+              - text: Don’t have an account?
+              - link "Sign up" [ref=f167e82] [cursor=pointer]:
+                - /url: /dashboard/sign-up?returnTo=%2Fnew
+          - paragraph [ref=f167e84]:
+            - text: By continuing, you agree to Supabase’s
+            - link "Terms of Service" [ref=f167e85] [cursor=pointer]:
+              - /url: https://supabase.com/terms
+            - text: and
+            - link "Privacy Policy" [ref=f167e86] [cursor=pointer]:
+              - /url: https://supabase.com/privacy
+            - text: ", and to receive periodic emails with updates."
+        - complementary [ref=f167e87]:
+          - generic [ref=f167e88]:
+            - generic [ref=f167e89]: “
+            - blockquote [ref=f167e90]: Supabase is really good. ⚡
+            - link "shadcn @shadcn" [ref=f167e91] [cursor=pointer]:
+              - /url: https://x.com/shadcn/status/1672913636132790272
+              - img "shadcn" [ref=f167e92]
+              - generic [ref=f167e93]: "@shadcn"
+    - region "Notifications alt+T":
+      - list:
+        - status [ref=f167e100]:
+          - button "Close toast" [ref=f167e101] [cursor=pointer]
+          - generic [ref=f167e108]: Invalid login credentials
+  - alert [ref=f167e95]

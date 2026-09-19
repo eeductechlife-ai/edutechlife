@@ -825,6 +825,7 @@ export type TranslationKeys = {
   "header.tools": string;
   "hero.cta_conoce_smartboard": string;
   "hero.cta_smartboard": string;
+  "hero.cta_ver_soluciones": string;
   "hero.stat_anios_experiencia": string;
   "hero.stat_estudiantes": string;
   "hero.stat_exito": string;
@@ -1549,6 +1550,7 @@ export type TranslationKeys = {
   "ialab.evaluation.step1.role_tip": string;
   "ialab.evaluation.step1.scenario": string;
   "ialab.evaluation.step1.subtitle": string;
+  "ialab.evaluation.step1.tap_hint": string;
   "ialab.evaluation.step1.task": string;
   "ialab.evaluation.step1.task_hint": string;
   "ialab.evaluation.step1.task_tip": string;
@@ -1931,6 +1933,7 @@ export type TranslationKeys = {
   "ialab.landing.certified_badge": string;
   "ialab.landing.certified_label": string;
   "ialab.landing.hero_badge": string;
+  "ialab.landing.hero_subtitle": string;
   "ialab.landing.mobile_cta_button": string;
   "ialab.landing.modules_label": string;
   "ialab.landing.progress_label": string;
@@ -2813,6 +2816,7 @@ export type TranslationKeys = {
   "ialab.workspace.nlm.start_where": string;
   "ialab.workspace.nlm.studio_empty_desc": string;
   "ialab.workspace.nlm.studio_empty_title": string;
+  "ialab.workspace.nlm.sub": string;
   "ialab.workspace.nlm.tab_chat": string;
   "ialab.workspace.nlm.tab_sources": string;
   "ialab.workspace.nlm.tab_studio": string;
@@ -5240,6 +5244,7 @@ export type TranslationKeys = {
   "smartboard.landing_faq_title_highlight": string;
   "smartboard.landing_hero_brain_label": string;
   "smartboard.landing_hero_desc": string;
+  "smartboard.landing_hero_eyebrow": string;
   "smartboard.landing_hero_line1": string;
   "smartboard.landing_hero_line2": string;
   "smartboard.landing_hero_line3": string;
@@ -5481,11 +5486,11 @@ export type TranslationKeys = {
   "study_groups.no_groups": string;
   "study_groups.subtitle": string;
   "study_groups.title": string;
-  time_avg: string;
-  time_days_active: string;
-  time_title: string;
-  time_today: string;
-  time_week: string;
+  "time_avg": string;
+  "time_days_active": string;
+  "time_title": string;
+  "time_today": string;
+  "time_week": string;
   "vak.ui.accept_and_continue": string;
   "vak.ui.accept_data_policy": string;
   "vak.ui.accessibility_label": string;
@@ -5527,6 +5532,8 @@ export type TranslationKeys = {
   "vak.ui.habeas_data_title": string;
   "vak.ui.hello_greeting_name": string;
   "vak.ui.hello_results_suffix": string;
+  "vak.ui.hero_subtitle": string;
+  "vak.ui.hero_title": string;
   "vak.ui.how_feel_today": string;
   "vak.ui.kinesthetic": string;
   "vak.ui.kinesthetic_short_desc": string;
@@ -6514,6 +6521,7 @@ const translationKeySet: Record<string, true> = {
   "header.tools": true,
   "hero.cta_conoce_smartboard": true,
   "hero.cta_smartboard": true,
+  "hero.cta_ver_soluciones": true,
   "hero.stat_anios_experiencia": true,
   "hero.stat_estudiantes": true,
   "hero.stat_exito": true,
@@ -7238,6 +7246,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.step1.role_tip": true,
   "ialab.evaluation.step1.scenario": true,
   "ialab.evaluation.step1.subtitle": true,
+  "ialab.evaluation.step1.tap_hint": true,
   "ialab.evaluation.step1.task": true,
   "ialab.evaluation.step1.task_hint": true,
   "ialab.evaluation.step1.task_tip": true,
@@ -7620,6 +7629,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.landing.certified_badge": true,
   "ialab.landing.certified_label": true,
   "ialab.landing.hero_badge": true,
+  "ialab.landing.hero_subtitle": true,
   "ialab.landing.mobile_cta_button": true,
   "ialab.landing.modules_label": true,
   "ialab.landing.progress_label": true,
@@ -8502,6 +8512,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.workspace.nlm.start_where": true,
   "ialab.workspace.nlm.studio_empty_desc": true,
   "ialab.workspace.nlm.studio_empty_title": true,
+  "ialab.workspace.nlm.sub": true,
   "ialab.workspace.nlm.tab_chat": true,
   "ialab.workspace.nlm.tab_sources": true,
   "ialab.workspace.nlm.tab_studio": true,
@@ -10929,6 +10940,7 @@ const translationKeySet: Record<string, true> = {
   "smartboard.landing_faq_title_highlight": true,
   "smartboard.landing_hero_brain_label": true,
   "smartboard.landing_hero_desc": true,
+  "smartboard.landing_hero_eyebrow": true,
   "smartboard.landing_hero_line1": true,
   "smartboard.landing_hero_line2": true,
   "smartboard.landing_hero_line3": true,
@@ -11170,11 +11182,11 @@ const translationKeySet: Record<string, true> = {
   "study_groups.no_groups": true,
   "study_groups.subtitle": true,
   "study_groups.title": true,
-  time_avg: true,
-  time_days_active: true,
-  time_title: true,
-  time_today: true,
-  time_week: true,
+  "time_avg": true,
+  "time_days_active": true,
+  "time_title": true,
+  "time_today": true,
+  "time_week": true,
   "vak.ui.accept_and_continue": true,
   "vak.ui.accept_data_policy": true,
   "vak.ui.accessibility_label": true,
@@ -11216,6 +11228,8 @@ const translationKeySet: Record<string, true> = {
   "vak.ui.habeas_data_title": true,
   "vak.ui.hello_greeting_name": true,
   "vak.ui.hello_results_suffix": true,
+  "vak.ui.hero_subtitle": true,
+  "vak.ui.hero_title": true,
   "vak.ui.how_feel_today": true,
   "vak.ui.kinesthetic": true,
   "vak.ui.kinesthetic_short_desc": true,

@@ -1,0 +1,171 @@
+- main [ref=f163e52]:
+  - link "Saltar al contenido principal / Skip to main content" [ref=f163e332] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=f163e334]:
+    - banner [ref=f163e335]:
+      - generic [ref=f163e336]:
+        - heading "Introducción a la IA Generativa" [level=2] [ref=f163e347]
+        - combobox [ref=f163e351]:
+          - searchbox "Buscar módulos, temas y recursos" [ref=f163e352] [cursor=pointer]
+          - generic [ref=f163e353]: ⌘K
+        - generic [ref=f163e354]:
+          - 'button "Idioma actual: Español" [ref=f163e355] [cursor=pointer]':
+            - generic [ref=f163e359]: ES
+          - button "Notificaciones" [ref=f163e363] [cursor=pointer]
+          - button "Activar modo oscuro" [ref=f163e367] [cursor=pointer]
+          - generic [ref=f163e371]:
+            - button "Cambiar foto de perfil" [ref=f163e372] [cursor=pointer]:
+              - generic [ref=f163e373]: E
+            - button "Menú de usuario" [ref=f163e375] [cursor=pointer]:
+              - generic [ref=f163e376]:
+                - generic [ref=f163e377]: eeductechlife2
+                - generic [ref=f163e378]: Estudiante
+    - generic [ref=f163e381]:
+      - navigation "Panel lateral del laboratorio IA" [ref=f163e383]:
+        - generic [ref=f163e385]:
+          - generic "MÓDULOS DEL CURSO" [ref=f163e386]:
+            - list [ref=f163e396]:
+              - listitem [ref=f163e397]:
+                - 'button "Artesano Digital: Prompts" [ref=f163e399] [cursor=pointer]':
+                  - paragraph [ref=f163e405]: "Artesano Digital: Prompts"
+              - listitem [ref=f163e408]:
+                - 'button "Arquitecto Digital: ChatGPT" [ref=f163e410] [cursor=pointer]':
+                  - paragraph [ref=f163e416]: "Arquitecto Digital: ChatGPT"
+              - listitem [ref=f163e419]:
+                - 'button "Detective de Datos: Gemini" [ref=f163e421] [cursor=pointer]':
+                  - paragraph [ref=f163e427]: "Detective de Datos: Gemini"
+              - listitem [ref=f163e430]:
+                - 'button "Alquimista Digital: NotebookLM" [ref=f163e432] [cursor=pointer]':
+                  - paragraph [ref=f163e437]: "Alquimista Digital: NotebookLM"
+              - listitem [ref=f163e440]:
+                - 'button "Guardián Digital: Ética IA" [ref=f163e442] [cursor=pointer]':
+                  - paragraph [ref=f163e447]: "Guardián Digital: Ética IA"
+          - generic [ref=f163e450]:
+            - generic [ref=f163e451]:
+              - paragraph [ref=f163e452]: Tu avance
+              - button "33% Completado — Haz clic para colapsar o expandir el menú" [ref=f163e453] [cursor=pointer]:
+                - generic [ref=f163e457]:
+                  - generic [ref=f163e458]: 33%
+                  - generic [ref=f163e459]: completado
+              - generic [ref=f163e460]:
+                - generic [ref=f163e461]: Nv.1
+                - generic [ref=f163e465]: "331"
+            - generic [ref=f163e469]:
+              - button "Mi Progreso" [ref=f163e470] [cursor=pointer]
+              - button "Plan" [ref=f163e477] [cursor=pointer]
+              - button "Ranking" [ref=f163e484] [cursor=pointer]
+      - link "Saltar al contenido del reto" [ref=f163e495] [cursor=pointer]:
+        - /url: "#main-content"
+      - main [ref=f163e496]:
+        - generic [ref=f163e497]:
+          - generic [ref=f163e498]:
+            - generic [ref=f163e502]:
+              - paragraph [ref=f163e503]: ¡Empieza aquí!
+              - paragraph [ref=f163e504]: Comienza con el primer video de este módulo
+            - button "Ver contenido →" [ref=f163e505] [cursor=pointer]
+          - generic [ref=f163e509]:
+            - button "Plan del día 3 pasos 3" [expanded] [ref=f163e510] [cursor=pointer]:
+              - generic [ref=f163e514]:
+                - generic [ref=f163e515]: Plan del día
+                - generic [ref=f163e516]: 3 pasos
+              - generic [ref=f163e517]: "3"
+            - generic [ref=f163e523]:
+              - generic [ref=f163e525]:
+                - text: Completa hoy
+                - generic [ref=f163e526]: (3)
+              - generic [ref=f163e528]:
+                - generic [ref=f163e529]: "1"
+                - generic [ref=f163e538]:
+                  - generic [ref=f163e539]:
+                    - heading "Racha matutina" [level=4] [ref=f163e540]
+                    - button "Hecho" [ref=f163e541] [cursor=pointer]
+                  - paragraph [ref=f163e544]: Completa una lección antes de las 10 AM
+                  - generic [ref=f163e545]: +50 XP
+              - generic [ref=f163e549]:
+                - generic [ref=f163e550]: "2"
+                - generic [ref=f163e557]:
+                  - generic [ref=f163e558]:
+                    - 'heading "Módulo 2: Potencia ChatGPT" [level=4] [ref=f163e559]'
+                    - button "Ir al módulo" [ref=f163e560] [cursor=pointer]
+                  - paragraph [ref=f163e563]: "Te falta completar el módulo (24%). Pendientes: 2 videos, 3 infografías, examen pendiente, desafío pendiente."
+                  - generic [ref=f163e564]: Prioritario hoy
+              - generic [ref=f163e568]:
+                - generic [ref=f163e569]: "3"
+                - generic [ref=f163e575]:
+                  - heading "Exámenes pendientes" [level=4] [ref=f163e577]
+                  - paragraph [ref=f163e578]: Llevas solo 1/5 exámenes aprobados. Cada examen completo suma hasta 100 XP. Prioriza los módulos con lecciones terminadas.
+                  - generic [ref=f163e579]: Prioritario hoy
+          - generic [ref=f163e588]:
+            - generic [ref=f163e592]:
+              - paragraph [ref=f163e593]: Módulo 1
+              - 'heading "Artesano Digital: Prompts" [level=1] [ref=f163e594]'
+            - generic "Entendido — Entiendes las implicaciones" [ref=f163e595]:
+              - generic [ref=f163e596]: "2"
+              - generic [ref=f163e597]:
+                - generic [ref=f163e598]: ★
+                - generic [ref=f163e599]: ★
+                - generic [ref=f163e600]: ★
+                - generic [ref=f163e601]: ★
+          - generic [ref=f163e604]:
+            - complementary "Panel de conversaciones de la herramienta" [ref=f163e605]:
+              - generic [ref=f163e607]:
+                - generic [ref=f163e608]:
+                  - generic [ref=f163e611]: Artesano Digital
+                  - generic [ref=f163e612]: Simulada
+                  - button "Cerrar panel de navegación" [ref=f163e613] [cursor=pointer]
+                - button "Inicio" [ref=f163e616] [cursor=pointer]
+                - generic [ref=f163e619]:
+                  - button "Objetivos" [ref=f163e620] [cursor=pointer]
+                  - button "Actividades" [ref=f163e623] [cursor=pointer]
+                  - button "Práctica" [ref=f163e626] [cursor=pointer]
+                  - button "Guardados" [ref=f163e629] [cursor=pointer]
+                  - generic [ref=f163e633]:
+                    - paragraph [ref=f163e634]: Temas del módulo
+                    - 'button "Los Fundamentos del Artesano: ¿Qué es la IA Generativa? 20 min" [ref=f163e635] [cursor=pointer]':
+                      - generic [ref=f163e638]:
+                        - 'generic "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?" [ref=f163e639]'
+                        - generic [ref=f163e640]: 20 min
+                    - generic [ref=f163e644]:
+                      - 'generic "El Cincel del Artesano: ¿Qué es un Prompt?" [ref=f163e645]'
+                      - generic [ref=f163e646]: 20 min
+                - paragraph [ref=f163e651]: Fundamentos de prompts con precisión artesanal
+            - generic [ref=f163e653]:
+              - generic [ref=f163e654]:
+                - heading "¿Qué forjamos hoy?" [level=2] [ref=f163e658]
+                - paragraph [ref=f163e659]: Módulo 1 · Artesano Digital — construye tus primeras instrucciones con precisión artesanal
+              - generic [ref=f163e664]:
+                - paragraph [ref=f163e665]: Todo artesano comienza con las herramientas básicas.
+                - paragraph [ref=f163e666]: Todo artesano comienza con las herramientas básicas y, con práctica, se convierte en maestro. Aquí aprenderás a esculpir instrucciones que la IA entiende a la perfección. Desde los fundamentos hasta técnicas avanzadas que transformarán tu forma de trabajar con inteligencia artificial.
+              - generic [ref=f163e667]:
+                - button [ref=f163e668] [cursor=pointer]:
+                  - generic [ref=f163e672]:
+                    - paragraph [ref=f163e673]: Objetivos del módulo
+                    - paragraph [ref=f163e674]: Metas y competencias del Módulo 1
+                - button [ref=f163e675] [cursor=pointer]:
+                  - generic [ref=f163e679]:
+                    - paragraph [ref=f163e680]: Contenido del módulo
+                    - paragraph [ref=f163e681]: Videos, PDFs y recursos interactivos
+                - button [ref=f163e682] [cursor=pointer]:
+                  - generic [ref=f163e686]:
+                    - paragraph [ref=f163e687]: Actividades
+                    - paragraph [ref=f163e688]: Desafíos y ejercicios del módulo
+                - button [ref=f163e689] [cursor=pointer]:
+                  - generic [ref=f163e693]:
+                    - paragraph [ref=f163e694]: Práctica guiada
+                    - paragraph [ref=f163e695]: Ejercicios paso a paso de prompts
+    - generic [ref=f163e697]:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - paragraph: ¡Bienvenido de nuevo!
+              - paragraph: Toca para continuar donde lo dejaste
+      - button "Abrir panel de coach IA MAX" [ref=f163e698] [cursor=pointer]:
+        - img "MAX" [ref=f163e701]
+    - status:
+      - generic [ref=f163e706]:
+        - generic [ref=f163e714]:
+          - paragraph [ref=f163e715]: ¡Nuevo Logro!
+          - paragraph [ref=f163e716]: Examen Perfecto
+        - button "Cerrar notificación" [ref=f163e717] [cursor=pointer]
+  - status [ref=f163e720]

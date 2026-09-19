@@ -1,0 +1,79 @@
+- main [ref=f163e52]:
+  - generic [ref=f163e159]:
+    - generic [ref=f163e163]:
+      - heading "IALab" [level=1] [ref=f163e174]
+      - generic [ref=f163e175]:
+        - button "Dark mode" [ref=f163e176] [cursor=pointer]
+        - 'button "Idioma actual: Español" [ref=f163e179] [cursor=pointer]':
+          - generic [ref=f163e183]: ES
+    - generic [ref=f163e187]:
+      - paragraph [ref=f163e188]: ¡Hola, john! 👋
+      - heading "Domina la IA antes que los demás" [level=1] [ref=f163e189]:
+        - generic [ref=f163e190]: Domina la IA
+        - text: antes que los demás
+      - paragraph [ref=f163e191]:
+        - text: En
+        - strong [ref=f163e192]: 10 horas
+        - text: manejarás ChatGPT, Gemini y NotebookLM como un profesional. Sin código. Sin experiencia previa. A tu propio ritmo.
+      - generic [ref=f163e193]:
+        - generic [ref=f163e198]:
+          - paragraph [ref=f163e199]: Certificado oficial
+          - paragraph [ref=f163e200]: Al completar los 5 módulos
+        - generic [ref=f163e205]:
+          - paragraph [ref=f163e206]: Habilidades reales
+          - paragraph [ref=f163e207]: 5 competencias en IA que ya puedes usar
+        - generic [ref=f163e215]:
+          - paragraph [ref=f163e216]: 5 logros
+          - paragraph [ref=f163e217]: Un premio por módulo superado
+      - generic [ref=f163e218]:
+        - button "Comenzar →" [ref=f163e219] [cursor=pointer]
+        - paragraph [ref=f163e223]: ✅ +1.200 profesionales ya lo completaron
+    - generic [ref=f163e226]:
+      - generic [ref=f163e232]:
+        - heading "Tutorías Virtuales en Vivo" [level=3] [ref=f163e234]
+        - paragraph [ref=f163e235]: ¿Tienes alguna dificultad durante el curso? Te acompañamos en tu proceso. Únete a nuestras tutorías virtuales todos los domingos a las 4:00 PM para resolver tus dudas en directo.
+        - generic [ref=f163e236]: Próxima tutoría en 1d 5h 49m 41s
+      - generic [ref=f163e241]: Disponible en vivo
+    - generic [ref=f163e245]:
+      - heading "¿Cómo funciona?" [level=2] [ref=f163e246]
+      - generic [ref=f163e247]:
+        - generic [ref=f163e252]:
+          - paragraph [ref=f163e253]: Estudia el módulo
+          - paragraph [ref=f163e254]: Videos, actividades interactivas, lecturas e imágenes. ~2h por módulo.
+        - generic [ref=f163e263]:
+          - paragraph [ref=f163e264]: Mi reto + Desafío
+          - paragraph [ref=f163e265]: Pon a prueba lo aprendido y supera el desafío práctico.
+        - generic [ref=f163e271]:
+          - paragraph [ref=f163e272]: Obtén tu certificado
+          - paragraph [ref=f163e273]: Supera los 5 módulos y recibe tu certificado oficial.
+    - generic [ref=f163e274]:
+      - heading "Lo que vas a aprender — 5 módulos · 10h" [level=2] [ref=f163e275]
+      - generic [ref=f163e276]:
+        - generic [ref=f163e277] [cursor=pointer]:
+          - generic [ref=f163e278]: "1"
+          - generic [ref=f163e279]:
+            - generic [ref=f163e280]:
+              - paragraph [ref=f163e281]: "Artesano Digital: Prompts"
+              - generic [ref=f163e282]: 2h
+              - generic [ref=f163e283]: ¡Empieza aquí!
+            - paragraph [ref=f163e284]: La IA te da respuestas genéricas que no resuelven lo que necesitas. En este módulo aprenderás a escribir prompts precisos que obtengan resultados útiles a la primera. Vas a dominar la fórmula Contexto + Instrucción + Formato y a aplicar la IA en tu estudio, trabajo y vida diaria.
+            - generic [ref=f163e285]:
+              - generic [ref=f163e286]: Dar instrucciones claras
+              - generic [ref=f163e287]: Mejorar cualquier pregunta
+              - generic [ref=f163e288]: Entender por qué
+        - generic [ref=f163e298]:
+          - paragraph [ref=f163e299]: "Arquitecto Digital: ChatGPT"
+          - generic [ref=f163e300]: 2h
+          - generic [ref=f163e301]: Se desbloquea al terminar el módulo anterior
+        - generic [ref=f163e308]:
+          - paragraph [ref=f163e309]: "Detective de Datos: Gemini"
+          - generic [ref=f163e310]: 2h
+          - generic [ref=f163e311]: Se desbloquea al terminar el módulo anterior
+        - generic [ref=f163e318]:
+          - paragraph [ref=f163e319]: "Alquimista Digital: NotebookLM"
+          - generic [ref=f163e320]: 2h
+          - generic [ref=f163e321]: Se desbloquea al terminar el módulo anterior
+        - generic [ref=f163e328]:
+          - paragraph [ref=f163e329]: "Guardián Digital: Ética IA"
+          - generic [ref=f163e330]: 2h
+          - generic [ref=f163e331]: Se desbloquea al terminar el módulo anterior

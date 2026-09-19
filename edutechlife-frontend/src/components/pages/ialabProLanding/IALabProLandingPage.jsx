@@ -24,6 +24,8 @@ import IACourseGrid from "./components/IACourseGrid";
 import MobileCTA from "./components/MobileCTA";
 
 
+const WAVE_PATH = "M0,24 C360,48 1080,0 1440,24 L1440,48 L0,48 Z";
+
 const IALabProLandingPage = () => {
   const { t, locale } = useTranslation();
   const navigate = useNavigate();
@@ -85,17 +87,17 @@ const IALabProLandingPage = () => {
             fill="#F0F7FA"
           >
             <motion.path
-              d="M0,24 C360,48 1080,0 1440,24 L1440,48 L0,48 Z"
+              initial={{ d: WAVE_PATH }}
               animate={
                 !prefersReducedMotion
                   ? {
                       d: [
-                        "M0,24 C360,48 1080,0 1440,24 L1440,48 L0,48 Z",
+                        WAVE_PATH,
                         "M0,24 C360,0 1080,48 1440,24 L1440,48 L0,48 Z",
-                        "M0,24 C360,48 1080,0 1440,24 L1440,48 L0,48 Z",
+                        WAVE_PATH,
                       ],
                     }
-                  : {}
+                  : { d: WAVE_PATH }
               }
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />

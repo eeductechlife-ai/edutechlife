@@ -1,0 +1,91 @@
+- main [ref=f165e51]:
+  - generic [ref=f165e56]:
+    - generic [ref=f165e57]:
+      - generic [ref=f165e58]:
+        - img "Edutechlife" [ref=f165e60]
+        - generic [ref=f165e61]:
+          - generic [ref=f165e62]: Plataforma SaaS Premium
+          - heading "Domina la IA Generativa" [level=2] [ref=f165e64]
+          - paragraph [ref=f165e65]: Transforma tu forma de aprender y trabajar con inteligencia artificial. Un curso diseñado para llevarte desde los fundamentos hasta la creación de soluciones reales con herramientas de vanguardia.
+          - paragraph [ref=f165e66]:
+            - generic [ref=f165e67]: 10 horas
+            - text: ·
+            - generic [ref=f165e68]: 5 módulos
+            - text: ·Certificación profesional
+        - generic [ref=f165e69]:
+          - generic [ref=f165e70]: Certificación incluida
+          - generic [ref=f165e75]: Soporte 24/7
+          - generic [ref=f165e80]: Soporte personalizado
+      - paragraph [ref=f165e86]:
+        - text: ¿Necesitas ayuda?
+        - link "info@edutechlife.co" [ref=f165e87] [cursor=pointer]:
+          - /url: mailto:info@edutechlife.co
+    - generic [ref=f165e88]:
+      - generic [ref=f165e89]:
+        - heading "Comienza tu Transformación" [level=3] [ref=f165e147]
+        - paragraph [ref=f165e101]: Únete a miles de estudiantes que ya dominan la IA generativa
+      - generic [ref=f165e148]:
+        - button "Volver a Iniciar Sesión" [ref=f165e149] [cursor=pointer]
+        - generic [ref=f165e152]:
+          - button "Volver al login" [ref=f165e153] [cursor=pointer]
+          - generic [ref=f165e158]:
+            - generic [ref=f165e159]:
+              - generic [ref=f165e160]:
+                - generic [ref=f165e163]:
+                  - generic [ref=f165e174]:
+                    - heading "Edutechlife" [level=1] [ref=f165e175]
+                    - paragraph [ref=f165e176]: Crea tu cuenta
+                  - generic [ref=f165e177]:
+                    - heading "Únete a IA Lab Academic" [level=2] [ref=f165e178]
+                    - paragraph [ref=f165e179]:
+                      - text: Accede a
+                      - strong [ref=f165e180]: IA Generativa avanzada
+                      - text: ","
+                      - strong [ref=f165e181]: Prompts profesionales
+                      - text: ","
+                      - strong [ref=f165e182]: APIs empresariales
+                      - text: ","
+                      - strong [ref=f165e183]: DeepResearch
+                      - text: "y"
+                      - strong [ref=f165e184]: herramientas de productividad
+                      - text: diseñadas para profesionales y adultos.
+                    - paragraph [ref=f165e185]: "\"Potencia tu carrera y proyectos con las herramientas de IA más avanzadas.\""
+                  - generic [ref=f165e186]:
+                    - generic [ref=f165e187]: 5 módulos con proyectos reales
+                    - generic [ref=f165e192]: Certificado al completar el curso
+                    - generic [ref=f165e198]: Acceso a herramientas IA avanzadas
+                - paragraph [ref=f165e210]:
+                  - text: ¿Ya tienes cuenta?
+                  - button "Inicia sesión aquí" [ref=f165e211] [cursor=pointer]
+              - generic [ref=f165e212]:
+                - generic [ref=f165e242]:
+                  - generic [ref=f165e243]: Seguridad y acceso
+                  - generic [ref=f165e244]: 2/2
+                - generic [ref=f165e289]:
+                  - generic [ref=f165e290]:
+                    - heading "Seguridad y acceso" [level=3] [ref=f165e291]
+                    - paragraph [ref=f165e292]: Crea tu usuario y contraseña para proteger tu cuenta
+                  - generic [ref=f165e293]:
+                    - generic [ref=f165e294]: Nombre de usuario
+                    - textbox "Elige un nombre de usuario" [ref=f165e299] [cursor=pointer]
+                  - generic [ref=f165e300]:
+                    - generic [ref=f165e301]: Contraseña
+                    - generic [ref=f165e302]:
+                      - textbox "Crea una contraseña" [ref=f165e306] [cursor=pointer]
+                      - button [ref=f165e307] [cursor=pointer]
+                  - generic [ref=f165e311]:
+                    - generic [ref=f165e312]: Número de teléfono (Opcional)
+                    - textbox "+1 (555) 123-4567" [ref=f165e316] [cursor=pointer]
+                  - paragraph [ref=f165e318]:
+                    - text: Al registrarte, aceptas nuestros
+                    - link "Términos de servicio" [ref=f165e319] [cursor=pointer]:
+                      - /url: "#"
+                    - text: "y"
+                    - link "Política de privacidad" [ref=f165e320] [cursor=pointer]:
+                      - /url: "#"
+                    - text: .
+                  - generic [ref=f165e321]:
+                    - button "Atrás" [ref=f165e322] [cursor=pointer]
+                    - button "Registrarse" [ref=f165e323] [cursor=pointer]
+            - paragraph [ref=f165e240]: 🔒 Tus datos están protegidos y nunca se comparten con terceros
+      - button "Volver a AI Lab Academic" [ref=f165e144] [cursor=pointer]

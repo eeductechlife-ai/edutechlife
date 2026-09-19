@@ -101,13 +101,13 @@ const MobileDrawer = ({
               </h3>
               <div className="space-y-1">
                 <button
-                  onClick={() => navigate("/ialab")}
+                  onClick={() => navigate("/ialab-academic")}
                   className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                 >
                   {t("nav.ialab_pro")}
                 </button>
                 <button
-                  onClick={() => navigate("/sign-up/smartboard")}
+                  onClick={() => navigate("/conoce-smartboard")}
                   className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                 >
                   {t("nav.smartboard")}

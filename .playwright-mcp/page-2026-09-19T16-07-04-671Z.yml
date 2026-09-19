@@ -1,0 +1,56 @@
+- generic [active] [ref=f172e1]:
+  - generic [ref=f172e6]:
+    - navigation [ref=f172e8]:
+      - link [ref=f172e11] [cursor=pointer]:
+        - /url: https://supabase.com
+        - img "Supabase Logo" [ref=f172e12]
+      - link "Documentation" [ref=f172e14] [cursor=pointer]:
+        - /url: https://supabase.com/docs
+    - generic [ref=f172e20]:
+      - main [ref=f172e21]:
+        - generic [ref=f172e22]:
+          - generic [ref=f172e23]:
+            - heading "Welcome back" [level=1] [ref=f172e24]
+            - heading "Sign in to your account" [level=2] [ref=f172e25]
+          - generic [ref=f172e26]:
+            - button "Continue with GitHub" [ref=f172e29] [cursor=pointer]
+            - button "Continue with ChatGPT" [ref=f172e35] [cursor=pointer]
+            - link "Continue with SSO" [ref=f172e41] [cursor=pointer]:
+              - /url: /dashboard/sign-in-sso
+            - generic [ref=f172e47]: or
+            - generic [ref=f172e52]:
+              - generic [ref=f172e54]:
+                - generic [ref=f172e55]: Email
+                - textbox "Email" [ref=f172e60]:
+                  - /placeholder: you@example.com
+              - generic [ref=f172e61]:
+                - generic [ref=f172e63]:
+                  - generic [ref=f172e64]: Password
+                  - generic [ref=f172e69]:
+                    - textbox "Password" [ref=f172e70]:
+                      - /placeholder: ••••••••
+                    - button "Show password" [ref=f172e71] [cursor=pointer]
+                - link "Forgot password?" [ref=f172e76] [cursor=pointer]:
+                  - /url: /dashboard/forgot-password?returnTo=%2Forganizations
+              - button "Sign in" [ref=f172e79] [cursor=pointer]
+          - generic [ref=f172e81]:
+            - text: Don’t have an account?
+            - link "Sign up" [ref=f172e82] [cursor=pointer]:
+              - /url: /dashboard/sign-up?returnTo=%2Fnew
+        - paragraph [ref=f172e84]:
+          - text: By continuing, you agree to Supabase’s
+          - link "Terms of Service" [ref=f172e85] [cursor=pointer]:
+            - /url: https://supabase.com/terms
+          - text: and
+          - link "Privacy Policy" [ref=f172e86] [cursor=pointer]:
+            - /url: https://supabase.com/privacy
+          - text: ", and to receive periodic emails with updates."
+      - complementary [ref=f172e87]:
+        - generic [ref=f172e88]:
+          - generic [ref=f172e89]: “
+          - blockquote [ref=f172e90]: Really impressed with @supabase's Assistant. It has helped me troubleshoot and solve complex CORS Configuration issues on Pinger.
+          - link "TyronBache @TyronBache" [ref=f172e91] [cursor=pointer]:
+            - /url: https://x.com/TyronBache/status/1924425289959928039
+            - img "TyronBache" [ref=f172e92]
+            - generic [ref=f172e93]: "@TyronBache"
+  - alert [ref=f172e95]

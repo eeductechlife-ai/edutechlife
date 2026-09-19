@@ -1,0 +1,262 @@
+- generic [ref=f77e5]:
+  - generic [ref=f77e12]:
+    - img "Edutechlife" [ref=f77e15]
+    - generic [ref=f77e16]: 60%
+    - generic [ref=f77e21]: Personalizando con metodología VAK...
+    - generic [ref=f77e28]:
+      - generic [ref=f77e29]: IA Integrada
+      - generic [ref=f77e35]: VAK Metodología
+      - generic [ref=f77e46]: Certificaciones
+  - main [ref=f77e53]:
+    - generic [ref=f77e54]:
+      - generic [ref=f77e55]:
+        - button "Volver al inicio" [ref=f77e56] [cursor=pointer]: Volver
+        - generic [ref=f77e68]:
+          - heading "AI Lab Academic" [level=1] [ref=f77e69]
+          - generic [ref=f77e70]: Laboratorio de Innovación Educativa
+          - paragraph [ref=f77e74]: Cursos prácticos de IA, con mentores reales y certificación al terminar. Para dar el salto profesional que la IA ya está exigiendo.
+          - generic [ref=f77e75]: Demo
+          - generic [ref=f77e103]:
+            - generic [ref=f77e104]:
+              - generic [ref=f77e105]:
+                - generic [ref=f77e106]: A
+                - generic [ref=f77e107]: B
+                - generic [ref=f77e108]: C
+                - generic [ref=f77e109]: D
+              - generic [ref=f77e110]:
+                - strong [ref=f77e111]:
+                  - generic [ref=f77e112]: 0+
+                - text: estudiantes
+            - strong [ref=f77e126]: "0.0"
+            - generic [ref=f77e128]: Certificado profesional
+      - generic [ref=f77e139]:
+        - generic [ref=f77e140]:
+          - heading "¿Por qué AI Lab Academic?" [level=2] [ref=f77e141]
+          - paragraph [ref=f77e142]: Todo lo que necesitas para dominar la IA y aplicarla en tu trabajo, sin importar tu nivel actual
+        - generic [ref=f77e143]:
+          - generic [ref=f77e144]:
+            - heading "8+ Cursos" [level=3] [ref=f77e155]
+            - paragraph [ref=f77e156]: Más de 200h de contenido con certificación profesional al completar cada curso
+          - generic [ref=f77e157]:
+            - heading "Soporte 24/7" [level=3] [ref=f77e162]
+            - paragraph [ref=f77e163]: Asistencia personalizada cuando la necesites
+          - generic [ref=f77e164]:
+            - heading "100% Práctico" [level=3] [ref=f77e169]
+            - paragraph [ref=f77e170]: Aprende haciendo con proyectos reales y ejercicios
+          - generic [ref=f77e171]:
+            - heading "Comunidad" [level=3] [ref=f77e179]
+            - paragraph [ref=f77e180]: Aprende junto a otros estudiantes y profesionales que ya aplican IA en su trabajo
+      - generic [ref=f77e182]:
+        - generic [ref=f77e183]:
+          - heading "Catálogo de Cursos" [level=2] [ref=f77e184]
+          - paragraph [ref=f77e185]: Cursos organizados por nivel y tema, para que empieces por el que más te sirve hoy
+          - paragraph [ref=f77e186]: Desliza para ver todos
+        - generic [ref=f77e189]:
+          - button "Todos" [ref=f77e190] [cursor=pointer]
+          - button "IA Generativa" [ref=f77e195] [cursor=pointer]
+          - button "Automatizaciones" [ref=f77e205] [cursor=pointer]
+          - button "Productividad" [ref=f77e210] [cursor=pointer]
+          - button "Desarrollo" [ref=f77e215] [cursor=pointer]
+        - generic [ref=f77e220]:
+          - generic [ref=f77e221]:
+            - generic [ref=f77e222]:
+              - generic [ref=f77e225]:
+                - generic [ref=f77e226]: Disponible
+                - generic [ref=f77e227]: 10h
+              - heading "Introducción a la IA Generativa" [level=3] [ref=f77e242]
+              - generic [ref=f77e243]:
+                - generic [ref=f77e255]: "4.8"
+                - generic [ref=f77e256]: •
+                - generic [ref=f77e257]: 2,500+ est.
+            - generic [ref=f77e258]:
+              - generic [ref=f77e259]:
+                - generic [ref=f77e260]: Proyectos reales
+                - generic [ref=f77e261]: Certificado IA
+                - generic [ref=f77e262]: Soporte 24/7
+              - paragraph [ref=f77e263]: "Empieza desde cero: prompts, APIs y herramientas de IA explicados paso a paso, sin experiencia previa."
+              - generic [ref=f77e264]:
+                - generic [ref=f77e265]: 5 módulos
+                - generic [ref=f77e268]: Certificado
+                - generic [ref=f77e272]: Principiante
+              - generic [ref=f77e274]:
+                - generic [ref=f77e275]: Progreso
+                - generic [ref=f77e276]: 60%
+              - button "Inscríbete" [ref=f77e278] [cursor=pointer]
+          - generic [ref=f77e284]:
+            - generic [ref=f77e285]:
+              - generic [ref=f77e288]:
+                - generic [ref=f77e289]: Próximamente
+                - generic [ref=f77e290]: 8h
+              - heading "Prompt Engineering Avanzado" [level=3] [ref=f77e300]
+              - generic [ref=f77e301]:
+                - generic [ref=f77e313]: "4.9"
+                - generic [ref=f77e314]: •
+                - generic [ref=f77e315]: 1,200+ est.
+            - generic [ref=f77e316]:
+              - generic [ref=f77e317]:
+                - generic [ref=f77e318]: Prompts complejos
+                - generic [ref=f77e319]: APIs avanzadas
+                - generic [ref=f77e320]: Automatización
+              - paragraph [ref=f77e321]: Escribe prompts que consiguen exactamente el resultado que buscas, cada vez.
+              - generic [ref=f77e322]:
+                - generic [ref=f77e323]: 4 módulos
+                - generic [ref=f77e326]: Certificado
+                - generic [ref=f77e330]: Intermedio
+              - button "Explorar" [ref=f77e331] [cursor=pointer]
+          - generic [ref=f77e337]:
+            - generic [ref=f77e338]:
+              - generic [ref=f77e341]:
+                - generic [ref=f77e342]: Próximamente
+                - generic [ref=f77e343]: 6h
+              - heading "ChatGPT para Productividad" [level=3] [ref=f77e355]
+              - generic [ref=f77e356]:
+                - generic [ref=f77e368]: "4.7"
+                - generic [ref=f77e369]: •
+                - generic [ref=f77e370]: 3,100+ est.
+            - generic [ref=f77e371]:
+              - generic [ref=f77e372]:
+                - generic [ref=f77e373]: Automatización
+                - generic [ref=f77e374]: Plantillas GPT
+                - generic [ref=f77e375]: Workflows
+              - paragraph [ref=f77e376]: Recupera horas de tu semana automatizando tareas repetitivas con ChatGPT.
+              - generic [ref=f77e377]:
+                - generic [ref=f77e378]: 4 módulos
+                - generic [ref=f77e381]: Certificado
+                - generic [ref=f77e385]: Principiante
+              - button "Explorar" [ref=f77e386] [cursor=pointer]
+          - generic [ref=f77e392]:
+            - generic [ref=f77e393]:
+              - generic [ref=f77e396]:
+                - generic [ref=f77e397]: Próximamente
+                - generic [ref=f77e398]: 12h
+              - heading "Automatizaciones con IA" [level=3] [ref=f77e408]
+              - generic [ref=f77e409]:
+                - generic [ref=f77e421]: "4.6"
+                - generic [ref=f77e422]: •
+                - generic [ref=f77e423]: 890+ est.
+            - generic [ref=f77e424]:
+              - generic [ref=f77e425]:
+                - generic [ref=f77e426]: Zapier + IA
+                - generic [ref=f77e427]: APIs sin código
+                - generic [ref=f77e428]: Flujos multi-paso
+              - paragraph [ref=f77e429]: Conecta tus herramientas de trabajo para que la IA haga las tareas repetitivas por ti.
+              - generic [ref=f77e430]:
+                - generic [ref=f77e431]: 5 módulos
+                - generic [ref=f77e434]: Certificado
+                - generic [ref=f77e438]: Intermedio
+              - button "Explorar" [ref=f77e439] [cursor=pointer]
+          - generic [ref=f77e445]:
+            - generic [ref=f77e446]:
+              - generic [ref=f77e449]:
+                - generic [ref=f77e450]: Próximamente
+                - generic [ref=f77e451]: 15h
+              - heading "Desarrollo de Apps con IA" [level=3] [ref=f77e460]
+              - generic [ref=f77e461]:
+                - generic [ref=f77e473]: "4.9"
+                - generic [ref=f77e474]: •
+                - generic [ref=f77e475]: 650+ est.
+            - generic [ref=f77e476]:
+              - generic [ref=f77e477]:
+                - generic [ref=f77e478]: APIs OpenAI
+                - generic [ref=f77e479]: Frontend + IA
+                - generic [ref=f77e480]: Despliegue
+              - paragraph [ref=f77e481]: Construye tu propia aplicación con IA integrada, desde la API hasta el despliegue.
+              - generic [ref=f77e482]:
+                - generic [ref=f77e483]: 6 módulos
+                - generic [ref=f77e486]: Certificado
+                - generic [ref=f77e490]: Avanzado
+              - button "Explorar" [ref=f77e491] [cursor=pointer]
+          - generic [ref=f77e497]:
+            - generic [ref=f77e498]:
+              - generic [ref=f77e501]:
+                - generic [ref=f77e502]: Próximamente
+                - generic [ref=f77e503]: 8h
+              - heading "IA para Marketing Digital" [level=3] [ref=f77e513]
+              - generic [ref=f77e514]:
+                - generic [ref=f77e526]: "4.5"
+                - generic [ref=f77e527]: •
+                - generic [ref=f77e528]: 1,800+ est.
+            - generic [ref=f77e529]:
+              - generic [ref=f77e530]:
+                - generic [ref=f77e531]: Contenido IA
+                - generic [ref=f77e532]: SEO inteligente
+                - generic [ref=f77e533]: Analítica
+              - paragraph [ref=f77e534]: Crea contenido, campañas y estrategias de marketing en una fracción del tiempo, con IA.
+              - generic [ref=f77e535]:
+                - generic [ref=f77e536]: 4 módulos
+                - generic [ref=f77e539]: Certificado
+                - generic [ref=f77e543]: Principiante
+              - button "Explorar" [ref=f77e544] [cursor=pointer]
+          - generic [ref=f77e550]:
+            - generic [ref=f77e551]:
+              - generic [ref=f77e554]:
+                - generic [ref=f77e555]: Próximamente
+                - generic [ref=f77e556]: 6h
+              - heading "NotebookLM Experto" [level=3] [ref=f77e565]
+              - generic [ref=f77e566]:
+                - generic [ref=f77e578]: "4.8"
+                - generic [ref=f77e579]: •
+                - generic [ref=f77e580]: 950+ est.
+            - generic [ref=f77e581]:
+              - generic [ref=f77e582]:
+                - generic [ref=f77e583]: Deep Research
+                - generic [ref=f77e584]: Podcasts IA
+                - generic [ref=f77e585]: Fuentes
+              - paragraph [ref=f77e586]: Convierte cualquier documento en resúmenes, podcasts y respuestas con NotebookLM.
+              - generic [ref=f77e587]:
+                - generic [ref=f77e588]: 3 módulos
+                - generic [ref=f77e591]: Certificado
+                - generic [ref=f77e595]: Intermedio
+              - button "Explorar" [ref=f77e596] [cursor=pointer]
+          - generic [ref=f77e602]:
+            - generic [ref=f77e603]:
+              - generic [ref=f77e606]:
+                - generic [ref=f77e607]: Próximamente
+                - generic [ref=f77e608]: 8h
+              - heading "IA para Educadores" [level=3] [ref=f77e618]
+              - generic [ref=f77e619]:
+                - generic [ref=f77e631]: "4.7"
+                - generic [ref=f77e632]: •
+                - generic [ref=f77e633]: 1,400+ est.
+            - generic [ref=f77e634]:
+              - generic [ref=f77e635]:
+                - generic [ref=f77e636]: Planes clase IA
+                - generic [ref=f77e637]: Evaluación IA
+                - generic [ref=f77e638]: Personalización
+              - paragraph [ref=f77e639]: Diseña clases y evaluaciones personalizadas en minutos, no en horas, con IA.
+              - generic [ref=f77e640]:
+                - generic [ref=f77e641]: 4 módulos
+                - generic [ref=f77e644]: Certificado
+                - generic [ref=f77e648]: Principiante
+              - button "Explorar" [ref=f77e649] [cursor=pointer]
+      - generic [ref=f77e656]:
+        - generic [ref=f77e657]:
+          - generic [ref=f77e658]:
+            - img "Edutechlife" [ref=f77e660]
+            - paragraph [ref=f77e661]: Transformando la educación...
+            - generic [ref=f77e662]:
+              - link "Facebook" [ref=f77e663] [cursor=pointer]:
+                - /url: https://web.facebook.com/eductechlife/
+              - link "Instagram" [ref=f77e666] [cursor=pointer]:
+                - /url: https://www.instagram.com/edu_techlife/
+              - link "LinkedIn" [ref=f77e670] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/edutechlife
+              - link "YouTube" [ref=f77e675] [cursor=pointer]:
+                - /url: https://www.youtube.com/@edutechlife
+          - button "Herramientas" [ref=f77e680] [cursor=pointer]
+          - button "Recursos" [ref=f77e684] [cursor=pointer]
+          - generic [ref=f77e687]:
+            - heading "Newsletter" [level=4] [ref=f77e688]
+            - paragraph [ref=f77e689]: Recibe novedades educativas y actualizaciones de la plataforma.
+            - generic [ref=f77e690]:
+              - textbox "Ingresa un email válido" [ref=f77e692] [cursor=pointer]
+              - button "Suscribirme" [ref=f77e693] [cursor=pointer]
+        - generic [ref=f77e699]:
+          - paragraph [ref=f77e701]: © 2026 Edutechlife Premium. Todos los derechos reservados.
+          - generic [ref=f77e702]:
+            - button "Política de Privacidad" [ref=f77e703] [cursor=pointer]
+            - generic [ref=f77e704]: •
+            - button "Términos de Uso" [ref=f77e705] [cursor=pointer]
+            - generic [ref=f77e706]: •
+            - button "Contacto" [ref=f77e707] [cursor=pointer]
+      - button "Abrir chat con Nico, asistente virtual" [ref=f77e708] [cursor=pointer]
