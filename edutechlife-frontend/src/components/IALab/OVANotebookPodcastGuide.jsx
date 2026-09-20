@@ -57,15 +57,15 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
   }, [currentSlide, currentModuleIndex, currentScreen]);
 
   useEffect(() => {
-    if (
-      currentScreen === "certificate" &&
-      score >= 100 &&
-      !certCompletedRef.current
-    ) {
+    // Al llegar a la pantalla final (certificado) se marca el recurso como
+    // completado. El puntaje se conserva como dato, pero no bloquea el avance
+    // (antes exigía score 100 y dejaba el recurso sin persistir y el siguiente
+    // bloqueado).
+    if (currentScreen === "certificate" && !certCompletedRef.current) {
       certCompletedRef.current = true;
       onComplete?.();
     }
-  }, [currentScreen, score, onComplete]);
+  }, [currentScreen, onComplete]);
 
   const EdutechLogo = () => (
     <div className="flex items-center gap-2 select-none">
