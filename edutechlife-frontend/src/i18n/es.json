@@ -3734,7 +3734,7 @@
   "ialab.challenge.m2.step3_req_data": "Seleccionaste los datos que necesita",
   "ialab.challenge.m2.step3_req_return": "Describiste que debe devolver",
   "ialab.challenge.m2.step3_generated_note": "El esquema (tipos y campos obligatorios) lo genera la app automaticamente: tu solo eliges el nombre, los datos y el retorno.",
-  "ialab.evaluation.modal.complete_step_hint": "Completa este paso para continuar",
+  "ialab.evaluation.modal.complete_step_hint": "Completa «{step}» para continuar",
   "ialab.challenge.m3.step1_subtitle": "Selecciona un tema de investigacion y formula tu pregunta",
   "ialab.challenge.m3.step1_pick_topic": "Elige un tema de investigacion",
   "ialab.challenge.m3.step1_topic_label": "Tema seleccionado",
