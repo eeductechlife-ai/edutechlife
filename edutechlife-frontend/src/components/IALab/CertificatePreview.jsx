@@ -172,45 +172,43 @@ const CertificatePreview = ({
         edutechlifeCertLogo ||
         (await loadImageWithTimeout("/images/logo-edutechlife.webp", 2000));
 
-      const placeLogo = (logo, { left, right, maxH, maxW }) => {
-        if (!logo || !logo.width || !logo.height) return false;
+      // Tamaños equilibrados y grupo CENTRADO con divisores (como la referencia).
+      const sizeToHeight = (logo, maxH) => {
+        if (!logo || !logo.width || !logo.height) return null;
         const ratio = logo.width / logo.height;
-        let h = maxH;
-        let w = h * ratio;
-        if (maxW && w > maxW) {
-          w = maxW;
-          h = w / ratio;
-        }
-        const x = right != null ? right - w : left;
-        const y = 22 + (11 - h) / 2;
-        doc.addImage(logo.dataUrl, "PNG", x, y, w, h);
-        return true;
+        return { dataUrl: logo.dataUrl, w: maxH * ratio, h: maxH };
       };
 
-      // TIC (izquierda)
-      if (!placeLogo(ticLogo, { left: 18, maxH: 11 })) {
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(15);
-        setText([0, 120, 190]);
-        doc.text("TIC", 18, 30, { align: "left" });
-      }
+      const LOGO_GAP = 12;
+      const logoItems = [
+        sizeToHeight(ticLogo, 14),
+        sizeToHeight(mzlAlcaldiaLogo, 12),
+        sizeToHeight(edutechlifeLogo, 7),
+      ].filter(Boolean);
 
-      // MZL + Alcaldía de Manizales (centro)
-      if (!placeLogo(mzlAlcaldiaLogo, { left: cx - 45, maxH: 11 })) {
+      if (logoItems.length) {
+        const totalW =
+          logoItems.reduce((acc, it) => acc + it.w, 0) +
+          LOGO_GAP * (logoItems.length - 1);
+        let x = cx - totalW / 2;
+        logoItems.forEach((it, idx) => {
+          const y = 22 + (11 - it.h) / 2;
+          doc.addImage(it.dataUrl, "PNG", x, y, it.w, it.h);
+          x += it.w;
+          if (idx < logoItems.length - 1) {
+            setDraw([220, 220, 220]);
+            doc.setLineWidth(0.3);
+            doc.line(x + LOGO_GAP / 2, 23, x + LOGO_GAP / 2, 33);
+            x += LOGO_GAP;
+          }
+        });
+      } else {
         doc.setFont("helvetica", "bold");
         doc.setFontSize(12);
         setText(NAVY);
-        doc.text("MZL  ·  ALCALDÍA DE MANIZALES", cx, 29.5, {
+        doc.text("TIC  ·  ALCALDÍA DE MANIZALES  ·  Edutechlife", cx, 29.5, {
           align: "center",
         });
-      }
-
-      // Edutechlife (derecha, wordmark)
-      if (!placeLogo(edutechlifeLogo, { right: W - 18, maxH: 7, maxW: 62 })) {
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(13);
-        setText(NAVY);
-        doc.text("Edutechlife", W - 18, 29, { align: "right" });
       }
 
       // ---- Título ----
@@ -517,28 +515,30 @@ const CertificatePreview = ({
             PROGRAMA AVALADO POR LAS SIGUIENTES ENTIDADES
           </p>
 
-          {/* Logos */}
-          <div className="flex items-center justify-between px-[4cqw] mt-[1.5cqw] mb-[1cqw]">
+          {/* Logos (grupo centrado y equilibrado) */}
+          <div className="flex items-center justify-center gap-[3cqw] mt-[1.5cqw] mb-[1cqw]">
             <img
               src={CERT_LOGOS.tic}
               alt="TIC"
-              className="h-[9cqw] w-auto object-contain"
+              className="h-[11cqw] w-auto object-contain"
               onError={(e) => {
                 e.currentTarget.style.visibility = "hidden";
               }}
             />
+            <span className="w-px h-[9cqw] bg-slate-200" />
             <img
               src={CERT_LOGOS.mzlAlcaldia}
               alt="MZL · Alcaldía de Manizales"
-              className="h-[9cqw] w-auto object-contain"
+              className="h-[10cqw] w-auto object-contain"
               onError={(e) => {
                 e.currentTarget.style.visibility = "hidden";
               }}
             />
+            <span className="w-px h-[9cqw] bg-slate-200" />
             <img
               src={CERT_LOGOS.edutechlife}
               alt="Edutechlife"
-              className="h-[6cqw] w-auto object-contain max-w-[26%]"
+              className="h-[5.5cqw] w-auto object-contain"
               onError={(e) => {
                 if (e.currentTarget.dataset.fallback) {
                   e.currentTarget.style.visibility = "hidden";
