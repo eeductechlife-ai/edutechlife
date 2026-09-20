@@ -7,7 +7,9 @@ import { useIALabStore } from "../../store/ialabStore";
 import "./themes/themes.css";
 
 const WelcomeTour = lazy(() => import("./WelcomeTour"));
-const CourseHomeCompleted = lazy(() => import("./courseHome/CourseHomeCompleted"));
+const CourseHomeCompleted = lazy(
+  () => import("./courseHome/CourseHomeCompleted"),
+);
 const CourseHomeInProgress = lazy(
   () => import("./courseHome/CourseHomeInProgress"),
 );
@@ -75,6 +77,12 @@ export default function CourseHome() {
     }
     const t = setTimeout(prefetch, 1500);
     return () => clearTimeout(t);
+  }, []);
+
+  // Título de la pestaña del dashboard (evita que quede el de la ruta previa).
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.title = "IALab | Edutechlife";
   }, []);
 
   const moduleProgress = useIALabStore((s) => s.moduleProgress);
