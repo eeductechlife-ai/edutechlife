@@ -797,114 +797,6 @@ const IALabContent = memo(function () {
                   courseProgress={courseProgress}
                 />
 
-                {/* CTA: Sin progreso — invita a empezar (se suprime cuando DefaultModuleWelcome ya lo hace) */}
-                {!isLoadingProgress &&
-                  !currentLessonTitle &&
-                  viewSection === null &&
-                  !moduleProgress[activeMod]?.resourcesCompleted &&
-                  chromeActive && (
-                    <motion.div
-                      key={`start-cta-${activeMod}`}
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className={
-                        activeMod === 4
-                          ? "flex items-center gap-3 px-4 py-3 rounded-xl border bg-white"
-                          : "flex items-center gap-3 px-4 py-3 theme-surface theme-border border rounded-xl"
-                      }
-                      style={
-                        activeMod === 4 ? { borderColor: "#c5d0f0" } : undefined
-                      }
-                    >
-                      <div
-                        className={
-                          activeMod === 4
-                            ? "w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                            : "w-9 h-9 rounded-xl theme-chip flex items-center justify-center flex-shrink-0"
-                        }
-                        style={
-                          activeMod === 4
-                            ? { background: "#e8f0fe" }
-                            : undefined
-                        }
-                      >
-                        <Icon
-                          name="fa-play"
-                          className={
-                            activeMod === 4
-                              ? "w-3.5 h-3.5 ml-0.5"
-                              : "w-3.5 h-3.5 text-[var(--theme-emphasis)] ml-0.5"
-                          }
-                          style={
-                            activeMod === 4 ? { color: "#1a73e8" } : undefined
-                          }
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p
-                          className={
-                            activeMod === 4
-                              ? "text-[11px] font-semibold uppercase tracking-wide"
-                              : "text-[11px] font-semibold text-[var(--theme-emphasis)] uppercase tracking-wide"
-                          }
-                          style={
-                            activeMod === 4
-                              ? {
-                                  fontFamily:
-                                    "'Google Sans Text','Roboto','Inter',sans-serif",
-                                  color: "#1a73e8",
-                                }
-                              : undefined
-                          }
-                        >
-                          {t("ialab.start_cta_label") || "¡Empieza aquí!"}
-                        </p>
-                        <p
-                          className={
-                            activeMod === 4
-                              ? "truncate"
-                              : "text-[15px] font-medium theme-text truncate"
-                          }
-                          style={
-                            activeMod === 4
-                              ? {
-                                  fontFamily:
-                                    "'Google Sans Text','Roboto','Inter',sans-serif",
-                                  fontSize: 15,
-                                  fontWeight: 500,
-                                  color: "#202124",
-                                }
-                              : undefined
-                          }
-                        >
-                          {t("ialab.start_cta_desc") ||
-                            "Comienza con el primer video de este módulo"}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => setViewSection("contenido")}
-                        className={
-                          activeMod === 4
-                            ? "flex-shrink-0 px-3 py-1.5 text-[13px] font-medium rounded-lg hover:opacity-90 transition-opacity"
-                            : "flex-shrink-0 px-3 py-1.5 theme-bg-emphasis text-white text-[13px] font-medium rounded-lg hover:opacity-90 transition-opacity"
-                        }
-                        style={
-                          activeMod === 4
-                            ? {
-                                fontFamily:
-                                  "'Google Sans Text','Roboto','Inter',sans-serif",
-                                background: "#1a73e8",
-                                color: "#fff",
-                              }
-                            : undefined
-                        }
-                      >
-                        {t("ialab.start_cta_btn") || "Ver contenido →"}
-                      </button>
-                    </motion.div>
-                  )}
-
                 {/* Banner: Continuar donde lo dejaste */}
                 {!isLoadingProgress &&
                   currentLessonTitle &&
@@ -1069,8 +961,10 @@ const IALabContent = memo(function () {
                         <div data-tour="tour-ruta">
                           <DailyPlan
                             onAction={handleAction}
+                            onGoContent={() => setViewSection("contenido")}
                             isLoading={isLoadingProgress}
                             activeMod={activeMod}
+                            currentLessonTitle={currentLessonTitle}
                           />
                         </div>
                       </SectionErrorBoundary>

@@ -1,103 +1,99 @@
 import PropTypes from "prop-types";
-import { motion } from "framer-motion";
 import { Icon } from "../../../utils/iconMapping.jsx";
+
+const ICON_BY_TYPE = {
+  streak: "fa-fire",
+  exam: "fa-star",
+  challenge: "fa-bolt",
+  recommendation: "fa-lightbulb",
+  content: "fa-play",
+};
 
 const DailyPlanHeader = ({
   t,
-  isOpen,
-  onToggle,
+  step,
+  currentIndex = 0,
+  total = 1,
   atRisk,
-  pendingCount = 0,
-  firstItemTitle,
+  onRun,
 }) => {
-  const summary = atRisk
-    ? t("ialab.streak_risk_title") || "¡Tu racha está en riesgo! Actúa ahora"
-    : pendingCount > 0
-      ? t("ialab.daily_plan.steps_count", { count: pendingCount })
-      : t("ialab.daily_plan.empty_title");
+  if (!step) return null;
+
+  const title = step.titleKey ? t(step.titleKey) : step.title;
+  const description = step.descriptionKey
+    ? t(step.descriptionKey)
+    : step.description;
+  const actionLabel = step.actionLabelKey
+    ? t(step.actionLabelKey)
+    : step.actionLabel;
+  const icon = step.icon || ICON_BY_TYPE[step.type] || "fa-lightbulb";
 
   return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-expanded={isOpen}
+    <div
       data-testid="daily-plan-header"
-      className={`relative w-full overflow-hidden rounded-xl border py-3 px-4 flex items-center gap-3 text-left transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/30 ${
-        atRisk
-          ? "border-amber-300/60 dark:border-amber-500/40 bg-amber-50/60 dark:bg-amber-900/10"
-          : "theme-surface theme-border theme-rail-hover"
+      className={`relative p-4 flex items-start gap-3 ${
+        atRisk ? "bg-amber-50/60 dark:bg-amber-900/10" : "theme-surface"
       }`}
     >
       {atRisk && (
         <span
           aria-hidden="true"
-          className="absolute inset-0 rounded-xl ring-1 ring-amber-400/50 pointer-events-none"
+          className="absolute inset-0 ring-1 ring-amber-400/40 pointer-events-none"
         />
       )}
 
       <span
-        className={`relative w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
+        className={`relative w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
           atRisk ? "bg-amber-100 dark:bg-amber-900/30" : "theme-chip"
         }`}
       >
         <Icon
-          name={atRisk ? "fa-fire" : "fa-lightbulb"}
+          name={icon}
           className={`w-4 h-4 ${atRisk ? "text-amber-500" : "text-[var(--theme-emphasis)]"}`}
         />
-        {atRisk && (
-          <span
-            aria-hidden="true"
-            className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 border-2 border-white dark:border-slate-800 animate-ping motion-reduce:animate-none"
-          />
-        )}
       </span>
 
-      <span className="flex-1 min-w-0">
-        <span className="block leading-tight text-[15px] font-semibold theme-text">
-          {t("ialab.daily_plan.title")}
-        </span>
-        <span
-          className={`block leading-tight text-[11px] truncate ${
-            atRisk
-              ? "font-semibold text-amber-600 dark:text-amber-400"
-              : "theme-text-muted"
-          }`}
-        >
-          {summary}
-          {!atRisk && !isOpen && firstItemTitle ? ` · ${firstItemTitle}` : ""}
-        </span>
-      </span>
-
-      <span className="flex items-center gap-2 flex-shrink-0">
-        {pendingCount > 0 && (
-          <span
-            className={`px-2 py-0.5 rounded-full text-[11px] font-bold min-w-[20px] text-center ${
-              atRisk
-                ? "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400"
-                : "theme-chip text-[var(--theme-emphasis)]"
-            }`}
-          >
-            {pendingCount}
+      <div className="flex-1 min-w-0">
+        <p className="text-[10px] font-semibold uppercase tracking-wider theme-text-muted">
+          {t("ialab.next_step.title") || "Siguiente paso"}
+          <span className="ml-1.5 text-[var(--theme-emphasis)] font-bold">
+            {t("ialab.next_step.progress", {
+              current: currentIndex + 1,
+              total,
+            }) || `Paso ${currentIndex + 1} de ${total}`}
           </span>
+        </p>
+        <h3 className="text-[15px] font-semibold theme-text leading-snug mt-0.5">
+          {title}
+        </h3>
+        {description && (
+          <p className="text-[12px] theme-text-muted leading-snug mt-0.5 line-clamp-2">
+            {description}
+          </p>
         )}
-        <motion.span
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
+      </div>
+
+      {actionLabel && (
+        <button
+          type="button"
+          onClick={onRun}
+          className="flex-shrink-0 text-[12px] sm:text-[13px] font-semibold text-white theme-bg-emphasis px-3 py-2 min-h-[44px] rounded-lg hover:opacity-90 active:scale-95 transition-all whitespace-nowrap flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
         >
-          <Icon name="fa-chevron-down" className="w-3 h-3 theme-text-muted" />
-        </motion.span>
-      </span>
-    </button>
+          {actionLabel}
+          <Icon name="fa-arrow-right" className="text-[9px]" />
+        </button>
+      )}
+    </div>
   );
 };
 
 DailyPlanHeader.propTypes = {
   t: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool,
-  onToggle: PropTypes.func.isRequired,
+  step: PropTypes.object,
+  currentIndex: PropTypes.number,
+  total: PropTypes.number,
   atRisk: PropTypes.bool,
-  pendingCount: PropTypes.number,
-  firstItemTitle: PropTypes.string,
+  onRun: PropTypes.func,
 };
 
 export default DailyPlanHeader;
