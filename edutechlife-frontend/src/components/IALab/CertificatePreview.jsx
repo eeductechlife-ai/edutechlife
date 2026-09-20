@@ -481,7 +481,7 @@ const CertificatePreview = ({
           viewBox="0 0 297 210"
           preserveAspectRatio="xMidYMid slice"
         >
-          <g fill="none" stroke="#E2D8BD" strokeWidth="0.15" opacity="0.8">
+          <g fill="none" stroke="#E2D8BD" strokeWidth="0.15" opacity="0.5">
             {[30, 35.5, 41, 46.5, 52, 57.5, 63].map((r, i) => (
               <circle key={i} cx="148.5" cy="90" r={r} />
             ))}
@@ -623,7 +623,7 @@ const CertificatePreview = ({
                   className="h-px w-[92%] mx-auto bg-slate-800 mb-[1cqw]"
                   style={{ minHeight: "1px" }}
                 />
-                <span className="font-bold text-[1.5cqw]">
+                <span className="font-bold text-[1.3cqw] whitespace-nowrap">
                   Dirección Académica
                 </span>
                 <span className="block text-[1.1cqw] text-slate-400">
@@ -635,7 +635,7 @@ const CertificatePreview = ({
                   className="h-px w-[92%] mx-auto bg-slate-800 mb-[1cqw]"
                   style={{ minHeight: "1px" }}
                 />
-                <span className="font-bold text-[1.5cqw]">
+                <span className="font-bold text-[1.2cqw] whitespace-nowrap">
                   Coordinación del Programa
                 </span>
                 <span className="block text-[1.1cqw] text-slate-400">
