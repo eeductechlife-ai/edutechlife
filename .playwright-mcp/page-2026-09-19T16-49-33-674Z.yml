@@ -1,0 +1,168 @@
+- generic [active] [ref=f178e1]:
+  - main [ref=f178e52]:
+    - link "Saltar al contenido principal / Skip to main content" [ref=f178e244] [cursor=pointer]:
+      - /url: "#main-content"
+    - generic [ref=f178e246]:
+      - banner [ref=f178e247]:
+        - generic [ref=f178e248]:
+          - heading "Introducción a la IA Generativa" [level=2] [ref=f178e259]
+          - combobox [ref=f178e263]:
+            - searchbox "Buscar módulos, temas y recursos" [ref=f178e264] [cursor=pointer]
+            - generic [ref=f178e265]: ⌘K
+          - generic [ref=f178e266]:
+            - 'button "Idioma actual: Español" [ref=f178e267] [cursor=pointer]':
+              - generic [ref=f178e271]: ES
+            - button "Notificaciones" [ref=f178e275] [cursor=pointer]
+            - button "Activar modo oscuro" [ref=f178e279] [cursor=pointer]
+            - generic [ref=f178e283]:
+              - button "Cambiar foto de perfil" [ref=f178e284] [cursor=pointer]:
+                - generic [ref=f178e285]: A
+              - button "Menú de usuario" [ref=f178e287] [cursor=pointer]:
+                - generic [ref=f178e288]:
+                  - generic [ref=f178e289]: ana.auditqa.1789835597
+                  - generic [ref=f178e290]: Estudiante
+      - generic [ref=f178e293]:
+        - navigation "Panel lateral del laboratorio IA" [ref=f178e295]:
+          - generic [ref=f178e681]:
+            - progressbar "0% Completado — Haz clic para colapsar o expandir el menú" [ref=f178e683] [cursor=pointer]:
+              - generic [ref=f178e684]: 0%
+            - heading "Módulos" [level=2] [ref=f178e692]
+            - list [ref=f178e693]:
+              - listitem [ref=f178e694]:
+                - button [ref=f178e695] [cursor=pointer]:
+                  - 'button "Módulo 1: Artesano Digital: Prompts" [ref=f178e696]':
+                    - generic [ref=f178e701]: "1"
+              - listitem [ref=f178e702]:
+                - button [ref=f178e703] [cursor=pointer]:
+                  - 'button "Módulo 2: Arquitecto Digital: ChatGPT" [ref=f178e704]':
+                    - generic [ref=f178e708]: "2"
+              - listitem [ref=f178e709]:
+                - button [ref=f178e710] [cursor=pointer]:
+                  - 'button "Módulo 3: Detective de Datos: Gemini" [ref=f178e711]':
+                    - generic [ref=f178e715]: "3"
+              - listitem [ref=f178e716]:
+                - button [ref=f178e717] [cursor=pointer]:
+                  - 'button "Módulo 4: Alquimista Digital: NotebookLM" [ref=f178e718]':
+                    - generic [ref=f178e721]: "4"
+              - listitem [ref=f178e722]:
+                - button [ref=f178e723] [cursor=pointer]:
+                  - 'button "Módulo 5: Guardián Digital: Ética IA" [ref=f178e724]':
+                    - generic [ref=f178e727]: "5"
+            - button [ref=f178e730] [cursor=pointer]:
+              - button "Plan" [ref=f178e731]
+            - button [ref=f178e735] [cursor=pointer]:
+              - button "Ranking" [ref=f178e736]
+        - link "Saltar al contenido del reto" [ref=f178e397] [cursor=pointer]:
+          - /url: "#main-content"
+        - main [ref=f178e398]:
+          - generic [ref=f178e399]:
+            - button "Plan del día 3 pasos · Racha matutina 3" [ref=f178e412] [cursor=pointer]:
+              - generic [ref=f178e416]:
+                - generic [ref=f178e417]: Plan del día
+                - generic [ref=f178e418]: 3 pasos · Racha matutina
+              - generic [ref=f178e419]: "3"
+            - generic [ref=f178e446]:
+              - complementary "Panel de conversaciones de la herramienta" [ref=f178e447]:
+                - generic [ref=f178e449]:
+                  - generic [ref=f178e450]:
+                    - generic [ref=f178e453]: Artesano Digital
+                    - generic [ref=f178e454]: Simulada
+                    - button "Cerrar panel de navegación" [ref=f178e455] [cursor=pointer]
+                  - button "Inicio" [ref=f178e458] [cursor=pointer]
+                  - generic [ref=f178e461]:
+                    - button "Objetivos" [ref=f178e462] [cursor=pointer]
+                    - button "Actividades" [ref=f178e465] [cursor=pointer]
+                    - button "Práctica" [ref=f178e468] [cursor=pointer]
+                    - button "Guardados" [ref=f178e471] [cursor=pointer]
+                    - generic [ref=f178e475]:
+                      - paragraph [ref=f178e476]: Temas del módulo
+                      - 'button "Los Fundamentos del Artesano: ¿Qué es la IA Generativa? 20 min" [ref=f178e477] [cursor=pointer]':
+                        - generic [ref=f178e480]:
+                          - 'generic "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?" [ref=f178e481]'
+                          - generic [ref=f178e482]: 20 min
+                      - generic [ref=f178e486]:
+                        - 'generic "El Cincel del Artesano: ¿Qué es un Prompt?" [ref=f178e487]'
+                        - generic [ref=f178e488]: 20 min
+                  - paragraph [ref=f178e493]: Fundamentos de prompts con precisión artesanal
+              - tabpanel [ref=f178e557]:
+                - generic [ref=f178e559]:
+                  - paragraph [ref=f178e562]: "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?"
+                  - generic [ref=f178e567]:
+                    - paragraph [ref=f178e568]: Entiende qué es la IA generativa y cómo crea contenido nuevo. Aquí comienza tu oficio digital.
+                    - paragraph
+                    - paragraph [ref=f178e569]: "Recursos de este tema:"
+                    - generic [ref=f178e570]:
+                      - button "Qué es la IA y cómo está cambiando el mundo 6:11 Comenzar" [ref=f178e571] [cursor=pointer]:
+                        - generic [ref=f178e575]:
+                          - paragraph [ref=f178e576]: Qué es la IA y cómo está cambiando el mundo
+                          - paragraph [ref=f178e577]: 6:11
+                        - generic [ref=f178e578]: Comenzar
+                      - button "La Materia Prima 10 minutos Completa el recurso anterior para continuar Bloqueado" [disabled] [ref=f178e579]:
+                        - generic [ref=f178e584]:
+                          - paragraph [ref=f178e585]: La Materia Prima
+                          - paragraph [ref=f178e586]: 10 minutos
+                          - paragraph [ref=f178e587]: Completa el recurso anterior para continuar
+                        - generic [ref=f178e588]: Bloqueado
+      - button "Abrir panel de coach IA MAX" [ref=f178e540] [cursor=pointer]:
+        - img "MAX" [ref=f178e543]
+      - status
+    - status [ref=f178e548]
+  - dialog "La Materia Prima" [ref=f178e746]:
+    - generic [ref=f178e594]:
+      - generic [ref=f178e600]:
+        - navigation "Breadcrumb" [ref=f178e601]:
+          - list [ref=f178e602]:
+            - listitem [ref=f178e603]:
+              - generic [ref=f178e604]: Inicio
+            - listitem [aria-hidden] [ref=f178e605]: /
+            - listitem [ref=f178e606]:
+              - generic [ref=f178e607]: "Artesano Digital: Prompts"
+            - listitem [aria-hidden] [ref=f178e608]: /
+            - listitem [ref=f178e609]:
+              - generic [ref=f178e610]: OVA INTERACTIVE
+        - heading "La Materia Prima" [level=2] [ref=f178e755]
+        - generic [ref=f178e612]: Vista previa
+      - generic [ref=f178e616]:
+        - button "Pantalla completa" [ref=f178e617] [cursor=pointer]
+        - button "Cerrar visor y volver al tema" [ref=f178e623] [cursor=pointer]
+    - generic [ref=f178e757]:
+      - banner [ref=f178e758]:
+        - generic [ref=f178e774] [cursor=pointer]:
+          - generic [ref=f178e775]: edutech
+          - generic [ref=f178e776]: life
+        - generic [ref=f178e777]:
+          - generic [ref=f178e778]:
+            - generic [ref=f178e779]: PROGRESO
+            - progressbar "PROGRESO" [ref=f178e780]
+          - button "Menú de navegación" [ref=f178e781] [cursor=pointer]
+      - main [ref=f178e783]:
+        - generic [ref=f178e788]:
+          - generic [ref=f178e789]: Laboratorio Guiado por MAX
+          - heading "comienzos de la INTELIGENCIA ARTIFICIAL" [level=1] [ref=f178e809]
+          - paragraph [ref=f178e810]: Hola, soy MAX, tu coach de IA. En este laboratorio exploraremos los orígenes de la IA generativa y dominaremos el arte de la ingeniería de prompts.
+          - generic [ref=f178e818]:
+            - heading "Aprenderás a:" [level=3] [ref=f178e819]
+            - list [ref=f178e820]:
+              - listitem [ref=f178e821]:
+                - generic [ref=f178e823]: Comprender los fundamentos éticos de la IA
+              - listitem [ref=f178e824]:
+                - generic [ref=f178e826]: Identificar sesgos algorítmicos comunes
+              - listitem [ref=f178e827]:
+                - generic [ref=f178e829]: Aplicar principios de uso responsable de IA
+              - listitem [ref=f178e830]:
+                - generic [ref=f178e832]: Evaluar críticamente decisiones automatizadas
+          - generic [ref=f178e833]:
+            - button "Empezar" [ref=f178e834] [cursor=pointer]
+            - button "Detener" [ref=f178e838] [cursor=pointer]
+    - generic [ref=f178e657]:
+      - generic [ref=f178e658]:
+        - button "Abrir/Cerrar panel de notas" [ref=f178e659] [cursor=pointer]:
+          - generic [ref=f178e660]: Notas
+        - button "Preguntar a MAX" [ref=f178e661] [cursor=pointer]
+      - generic [ref=f178e666]:
+        - button "Recurso anterior" [ref=f178e667] [cursor=pointer]:
+          - generic [ref=f178e670]: Anterior
+        - generic [ref=f178e671]: 2 / 2
+        - button "Siguiente recurso" [disabled] [ref=f178e672] [cursor=pointer]:
+          - generic [ref=f178e673]: Siguiente
+      - generic [ref=f178e676]: Completa este recurso para marcarlo como visto

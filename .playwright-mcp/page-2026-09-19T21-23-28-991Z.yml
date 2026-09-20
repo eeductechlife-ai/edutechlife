@@ -1,0 +1,169 @@
+- generic [ref=f204e1]:
+  - main [ref=f204e7]:
+    - link "Saltar al contenido principal / Skip to main content" [ref=f204e8] [cursor=pointer]:
+      - /url: "#main-content"
+    - generic [ref=f204e10]:
+      - banner [ref=f204e11]:
+        - generic [ref=f204e12]:
+          - heading "Introducción a la IA Generativa" [level=2] [ref=f204e23]
+          - combobox [ref=f204e27]:
+            - searchbox "Buscar módulos, temas y recursos" [ref=f204e28] [cursor=pointer]
+            - generic [ref=f204e29]: ⌘K
+          - generic [ref=f204e30]:
+            - 'button "Idioma actual: Español" [ref=f204e31] [cursor=pointer]':
+              - generic [ref=f204e35]: ES
+            - button "Notificaciones" [ref=f204e39] [cursor=pointer]:
+              - generic [ref=f204e43]: "16"
+            - button "Activar modo oscuro" [ref=f204e44] [cursor=pointer]
+            - generic [ref=f204e48]:
+              - button "Cambiar foto de perfil" [ref=f204e49] [cursor=pointer]:
+                - generic [ref=f204e50]: A
+              - button "Menú de usuario" [ref=f204e52] [cursor=pointer]:
+                - generic [ref=f204e53]:
+                  - generic [ref=f204e54]: ana.auditqa.1789835597
+                  - generic [ref=f204e55]: Estudiante
+      - generic [ref=f204e58]:
+        - navigation "Panel lateral del laboratorio IA" [ref=f204e60]:
+          - generic [ref=f204e62]:
+            - progressbar "33% Completado — Haz clic para colapsar o expandir el menú" [ref=f204e64] [cursor=pointer]:
+              - generic [ref=f204e65]: 33%
+            - heading "Módulos" [level=2] [ref=f204e73]
+            - list [ref=f204e74]:
+              - listitem [ref=f204e75]:
+                - button [ref=f204e76] [cursor=pointer]:
+                  - 'button "Módulo 1: Artesano Digital: Prompts" [ref=f204e77]':
+                    - generic [ref=f204e81]: "1"
+              - listitem [ref=f204e85]:
+                - button [ref=f204e86] [cursor=pointer]:
+                  - 'button "Módulo 2: Arquitecto Digital: ChatGPT" [ref=f204e87]':
+                    - generic [ref=f204e91]: "2"
+              - listitem [ref=f204e92]:
+                - button [ref=f204e93] [cursor=pointer]:
+                  - 'button "Módulo 3: Detective de Datos: Gemini" [ref=f204e94]':
+                    - generic [ref=f204e99]: "3"
+              - listitem [ref=f204e100]:
+                - button [ref=f204e101] [cursor=pointer]:
+                  - 'button "Módulo 4: Alquimista Digital: NotebookLM" [ref=f204e102]':
+                    - generic [ref=f204e105]: "4"
+              - listitem [ref=f204e106]:
+                - button [ref=f204e107] [cursor=pointer]:
+                  - 'button "Módulo 5: Guardián Digital: Ética IA" [ref=f204e108]':
+                    - generic [ref=f204e111]: "5"
+            - button [ref=f204e114] [cursor=pointer]:
+              - button "Plan" [ref=f204e115]
+            - button [ref=f204e119] [cursor=pointer]:
+              - button "Ranking" [ref=f204e120]
+        - link "Saltar al contenido del reto" [ref=f204e128] [cursor=pointer]:
+          - /url: "#main-content"
+        - main [ref=f204e129]:
+          - generic [ref=f204e130]:
+            - button "Plan del día 3 pasos · Racha matutina 3" [ref=f204e135] [cursor=pointer]:
+              - generic [ref=f204e139]:
+                - generic [ref=f204e140]: Plan del día
+                - generic [ref=f204e141]: 3 pasos · Racha matutina
+              - generic [ref=f204e142]: "3"
+            - generic [ref=f204e147]:
+              - complementary "Panel de conversaciones de la herramienta" [ref=f204e148]:
+                - generic [ref=f204e150]:
+                  - generic [ref=f204e151]:
+                    - generic [ref=f204e154]: Gemini
+                    - generic [ref=f204e155]: Simulada
+                    - button "Cerrar panel de navegación" [ref=f204e156] [cursor=pointer]
+                  - button "Inicio" [ref=f204e159] [cursor=pointer]
+                  - generic [ref=f204e162]:
+                    - button "Objetivos" [ref=f204e163] [cursor=pointer]
+                    - button "Actividades" [ref=f204e166] [cursor=pointer]
+                    - button "Práctica" [ref=f204e169] [cursor=pointer]
+                    - button "Guardados" [ref=f204e172] [cursor=pointer]
+                    - generic [ref=f204e176]:
+                      - paragraph [ref=f204e177]: Temas del módulo
+                      - button "El Despertar del Detective Multimodal 20 min" [ref=f204e178] [cursor=pointer]:
+                        - generic [ref=f204e181]:
+                          - generic "El Despertar del Detective Multimodal" [ref=f204e182]
+                          - generic [ref=f204e183]: 20 min
+                      - 'button "Grounding: Cuando la Evidencia Toca Tierra 20 min" [ref=f204e186] [cursor=pointer]':
+                        - generic [ref=f204e189]:
+                          - 'generic "Grounding: Cuando la Evidencia Toca Tierra" [ref=f204e190]'
+                          - generic [ref=f204e191]: 20 min
+                      - generic [ref=f204e195]:
+                        - 'generic "Deep Research: La Caja de Herramientas Forenses" [ref=f204e196]'
+                        - generic [ref=f204e197]: 20 min
+                  - paragraph [ref=f204e202]: Diseño inspirado en Gemini para que domines la herramienta real
+              - tabpanel [ref=f204e208]:
+                - generic [ref=f204e210]:
+                  - paragraph [ref=f204e213]: "Grounding: Cuando la Evidencia Toca Tierra"
+                  - generic [ref=f204e218]:
+                    - paragraph [ref=f204e219]: "Procesa varios tipos de evidencia a la vez: texto, imágenes, audio y código. Cuatro detectives en una sola mente."
+                    - paragraph [ref=f204e220]: ¿De qué sirve una lupa si no puedes verificar lo que ves? El grounding (conectar la IA con fuentes de internet en tiempo real) hace que Gemini responda con datos vivos, no con conocimiento congelado. Aprende a combinar imágenes, documentos y datos en tiempo real para obtener respuestas que no solo son inteligentes — son verificables.
+                    - paragraph [ref=f204e221]: "Recursos de este tema:"
+                    - generic [ref=f204e222]:
+                      - 'button "Gemini a la Práctica: Ejercicios de Campo 10 págs. Visto" [ref=f204e223] [cursor=pointer]':
+                        - generic [ref=f204e227]:
+                          - paragraph [ref=f204e228]: "Gemini a la Práctica: Ejercicios de Campo"
+                          - paragraph [ref=f204e229]: 10 págs.
+                        - generic [ref=f204e230]: Visto
+                      - button "La Lupa Multimodal 25 minutos Comenzar" [ref=f204e231] [cursor=pointer]:
+                        - generic [ref=f204e241]:
+                          - paragraph [ref=f204e242]: La Lupa Multimodal
+                          - paragraph [ref=f204e243]: 25 minutos
+                        - generic [ref=f204e244]: Comenzar
+      - button "Abrir panel de coach IA MAX" [ref=f204e247] [cursor=pointer]:
+        - img "MAX" [ref=f204e250]
+      - status
+    - status [ref=f204e255]
+  - dialog "La Lupa Multimodal" [ref=f204e257]:
+    - generic [ref=f204e259]:
+      - generic [ref=f204e270]:
+        - navigation "Breadcrumb" [ref=f204e271]:
+          - list [ref=f204e272]:
+            - listitem [ref=f204e273]:
+              - generic [ref=f204e274]: Inicio
+            - listitem [aria-hidden] [ref=f204e275]: /
+            - listitem [ref=f204e276]:
+              - generic [ref=f204e277]: "Detective de Datos: Gemini"
+            - listitem [aria-hidden] [ref=f204e278]: /
+            - listitem [ref=f204e279]:
+              - generic [ref=f204e280]: OVA INTERACTIVE
+        - heading "La Lupa Multimodal" [level=2] [ref=f204e281]
+        - generic [ref=f204e282]: Vista previa
+      - generic [ref=f204e284]:
+        - button "Pantalla completa" [ref=f204e285] [cursor=pointer]
+        - button "Cerrar visor y volver al tema" [ref=f204e291] [cursor=pointer]
+    - generic [ref=f204e298]:
+      - 'heading "Recorrido Interactivo: Gemini" [level=2] [ref=f204e310]'
+      - generic [ref=f204e315]:
+        - generic [ref=f204e326]:
+          - heading "¿Qué hace especial a Gemini?" [level=3] [ref=f204e327]
+          - paragraph [ref=f204e328]: Cómo funciona Gemini por dentro
+        - generic [ref=f204e329]:
+          - paragraph [ref=f204e330]: "Gemini es un modelo de inteligencia artificial multimodal desarrollado por Google DeepMind. A diferencia de los modelos tradicionales que solo procesan texto, Gemini puede entender y combinar información de múltiples formatos: texto, imágenes, audio, video y código."
+          - paragraph [ref=f204e331]: "Su arquitectura está diseñada para razonar de manera similar a como lo hace un humano: integrando diferentes tipos de información para llegar a conclusiones más precisas. Esto le permite no solo \"ver\" una imagen, sino entender el contexto y relacionarlo con el texto que la acompaña."
+          - paragraph [ref=f204e332]: Una de las innovaciones clave de Gemini es su capacidad de razonamiento multimodal nativo. Esto significa que desde su núcleo, el modelo está entrenado para trabajar con múltiples tipos de datos simultáneamente, en lugar de tener módulos separados para cada formato.
+        - generic [ref=f204e333]:
+          - generic [ref=f204e334]: Procesa texto, imágenes, audio y video
+          - generic [ref=f204e339]: Razonamiento multimodal nativo
+          - generic [ref=f204e344]: Desarrollado por Google DeepMind
+          - generic [ref=f204e349]: Integra información de múltiples fuentes
+      - generic [ref=f204e355]:
+        - tablist [ref=f204e356]:
+          - tab [selected] [ref=f204e357] [cursor=pointer]
+          - tab [ref=f204e366] [cursor=pointer]
+          - tab [ref=f204e370] [cursor=pointer]
+          - tab [ref=f204e371] [cursor=pointer]
+          - tab [ref=f204e375] [cursor=pointer]
+        - button "Siguiente" [active] [ref=f204e379] [cursor=pointer]
+      - generic [ref=f204e383]:
+        - button "Escuchar con MAX" [ref=f204e384] [cursor=pointer]
+        - button "Escuchar con MAX" [ref=f204e390] [cursor=pointer]
+    - generic [ref=f204e394]:
+      - generic [ref=f204e395]:
+        - button "Abrir/Cerrar panel de notas" [ref=f204e396] [cursor=pointer]:
+          - generic [ref=f204e397]: Notas
+        - button "Preguntar a MAX" [ref=f204e398] [cursor=pointer]
+      - generic [ref=f204e403]:
+        - button "Recurso anterior" [ref=f204e404] [cursor=pointer]:
+          - generic [ref=f204e407]: Anterior
+        - generic [ref=f204e408]: 2 / 2
+        - button "Siguiente recurso" [disabled] [ref=f204e409]:
+          - generic [ref=f204e410]: Siguiente
+      - generic [ref=f204e413]: Completa este recurso para marcarlo como visto

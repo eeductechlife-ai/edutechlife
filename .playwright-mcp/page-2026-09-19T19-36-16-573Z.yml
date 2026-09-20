@@ -1,0 +1,158 @@
+- generic [ref=f193e1]:
+  - main [ref=f193e51]:
+    - link "Saltar al contenido principal / Skip to main content" [ref=f193e69] [cursor=pointer]:
+      - /url: "#main-content"
+    - generic [ref=f193e71]:
+      - banner [ref=f193e72]:
+        - generic [ref=f193e73]:
+          - heading "Introducción a la IA Generativa" [level=2] [ref=f193e84]
+          - combobox [ref=f193e88]:
+            - searchbox "Buscar módulos, temas y recursos" [ref=f193e89] [cursor=pointer]
+            - generic [ref=f193e90]: ⌘K
+          - generic [ref=f193e91]:
+            - 'button "Idioma actual: Español" [ref=f193e92] [cursor=pointer]':
+              - generic [ref=f193e96]: ES
+            - button "Notificaciones" [ref=f193e100] [cursor=pointer]:
+              - generic [ref=f193e104]: "9"
+            - button "Activar modo oscuro" [ref=f193e105] [cursor=pointer]
+            - generic [ref=f193e109]:
+              - button "Cambiar foto de perfil" [ref=f193e110] [cursor=pointer]:
+                - generic [ref=f193e111]: A
+              - button "Menú de usuario" [ref=f193e113] [cursor=pointer]:
+                - generic [ref=f193e114]:
+                  - generic [ref=f193e115]: ana.auditqa.1789835597
+                  - generic [ref=f193e116]: Estudiante
+      - generic [ref=f193e119]:
+        - navigation "Panel lateral del laboratorio IA" [ref=f193e121]:
+          - generic [ref=f193e123]:
+            - progressbar "19% Completado — Haz clic para colapsar o expandir el menú" [ref=f193e125] [cursor=pointer]:
+              - generic [ref=f193e126]: 19%
+            - heading "Módulos" [level=2] [ref=f193e134]
+            - list [ref=f193e135]:
+              - listitem [ref=f193e136]:
+                - button [ref=f193e137] [cursor=pointer]:
+                  - 'button "Módulo 1: Artesano Digital: Prompts" [ref=f193e138]':
+                    - generic [ref=f193e142]: "1"
+              - listitem [ref=f193e146]:
+                - button [ref=f193e147] [cursor=pointer]:
+                  - 'button "Módulo 2: Arquitecto Digital: ChatGPT" [ref=f193e148]':
+                    - generic [ref=f193e153]: "2"
+              - listitem [ref=f193e154]:
+                - button [ref=f193e155] [cursor=pointer]:
+                  - 'button "Módulo 3: Detective de Datos: Gemini" [ref=f193e156]':
+                    - generic [ref=f193e160]: "3"
+              - listitem [ref=f193e161]:
+                - button [ref=f193e162] [cursor=pointer]:
+                  - 'button "Módulo 4: Alquimista Digital: NotebookLM" [ref=f193e163]':
+                    - generic [ref=f193e166]: "4"
+              - listitem [ref=f193e167]:
+                - button [ref=f193e168] [cursor=pointer]:
+                  - 'button "Módulo 5: Guardián Digital: Ética IA" [ref=f193e169]':
+                    - generic [ref=f193e172]: "5"
+            - button [ref=f193e175] [cursor=pointer]:
+              - button "Plan" [ref=f193e176]
+            - button [ref=f193e180] [cursor=pointer]:
+              - button "Ranking" [ref=f193e181]
+        - link "Saltar al contenido del reto" [ref=f193e189] [cursor=pointer]:
+          - /url: "#main-content"
+        - main [ref=f193e190]:
+          - generic [ref=f193e191]:
+            - button "Plan del día 3 pasos · Racha matutina 3" [ref=f193e196] [cursor=pointer]:
+              - generic [ref=f193e200]:
+                - generic [ref=f193e201]: Plan del día
+                - generic [ref=f193e202]: 3 pasos · Racha matutina
+              - generic [ref=f193e203]: "3"
+            - generic [ref=f193e208]:
+              - complementary "Panel de conversaciones de la herramienta" [ref=f193e209]:
+                - generic [ref=f193e211]:
+                  - generic [ref=f193e212]:
+                    - generic [ref=f193e215]: ChatGPT
+                    - generic [ref=f193e216]: Simulada
+                    - button "Cerrar panel de navegación" [ref=f193e217] [cursor=pointer]
+                  - button "Inicio" [ref=f193e220] [cursor=pointer]
+                  - generic [ref=f193e223]:
+                    - button "Objetivos" [ref=f193e224] [cursor=pointer]
+                    - button "Actividades" [ref=f193e227] [cursor=pointer]
+                    - button "Práctica" [ref=f193e230] [cursor=pointer]
+                    - button "Guardados" [ref=f193e233] [cursor=pointer]
+                    - generic [ref=f193e237]:
+                      - paragraph [ref=f193e238]: Temas del módulo
+                      - 'button "Los Planos del Arquitecto: Guía Completa de ChatGPT 20 min" [ref=f193e239] [cursor=pointer]':
+                        - generic [ref=f193e242]:
+                          - 'generic "Los Planos del Arquitecto: Guía Completa de ChatGPT" [ref=f193e243]'
+                          - generic [ref=f193e244]: 20 min
+                      - 'button "El Andamio del Arquitecto: Herramientas Integradas 42 min" [ref=f193e395] [cursor=pointer]':
+                        - generic [ref=f193e398]:
+                          - 'generic "El Andamio del Arquitecto: Herramientas Integradas" [ref=f193e399]'
+                          - generic [ref=f193e400]: 42 min
+                      - generic [ref=f193e257]:
+                        - 'generic "La Fachada del Edificio: GPTs y Function Calling" [ref=f193e258]'
+                        - generic [ref=f193e259]: 20 min
+                  - paragraph [ref=f193e264]: Diseño inspirado en ChatGPT para que domines la herramienta real
+              - tabpanel [ref=f193e270]:
+                - generic [ref=f193e272]:
+                  - paragraph [ref=f193e275]: "El Andamio del Arquitecto: Herramientas Integradas"
+                  - generic [ref=f193e280]:
+                    - paragraph [ref=f193e281]: "Domina el ecosistema de herramientas de ChatGPT: Búsqueda Web, Código, DALL-E 3, Canvas y Proyectos."
+                    - paragraph [ref=f193e282]: "Un arquitecto usa las herramientas correctas para cada fase. Descubre el arsenal completo de ChatGPT: Búsqueda Web para datos actuales, Análisis de Datos con Python para procesar cifras, DALL-E 3 para generar imágenes, Canvas para editar documentos y Proyectos para organizar tu trabajo. Aprende a combinarlos en flujos que multiplican tu productividad real."
+                    - paragraph [ref=f193e283]: "Recursos de este tema:"
+                    - generic [ref=f193e284]:
+                      - button "Las Herramientas Integradas de ChatGPT 10 págs. Comenzar" [ref=f193e401] [cursor=pointer]:
+                        - generic [ref=f193e406]:
+                          - paragraph [ref=f193e407]: Las Herramientas Integradas de ChatGPT
+                          - paragraph [ref=f193e408]: 10 págs.
+                        - generic [ref=f193e409]: Comenzar
+                      - button "La Caja de Herramientas 25 minutos Completa el recurso anterior para continuar Bloqueado" [disabled] [ref=f193e410]:
+                        - generic [ref=f193e415]:
+                          - paragraph [ref=f193e416]: La Caja de Herramientas
+                          - paragraph [ref=f193e417]: 25 minutos
+                          - paragraph [ref=f193e418]: Completa el recurso anterior para continuar
+                        - generic [ref=f193e419]: Bloqueado
+                      - button "La Línea de Montaje 22 minutos Completa el recurso anterior para continuar Bloqueado" [disabled] [ref=f193e420]:
+                        - generic [ref=f193e425]:
+                          - paragraph [ref=f193e426]: La Línea de Montaje
+                          - paragraph [ref=f193e427]: 22 minutos
+                          - paragraph [ref=f193e428]: Completa el recurso anterior para continuar
+                        - generic [ref=f193e429]: Bloqueado
+      - button "Abrir panel de coach IA MAX" [ref=f193e314] [cursor=pointer]:
+        - img "MAX" [ref=f193e317]
+      - status
+    - status [ref=f193e322]
+  - dialog "Las Herramientas Integradas de ChatGPT" [ref=f193e431]:
+    - generic [ref=f193e433]:
+      - generic [ref=f193e441]:
+        - navigation "Breadcrumb" [ref=f193e442]:
+          - list [ref=f193e443]:
+            - listitem [ref=f193e444]:
+              - generic [ref=f193e445]: Inicio
+            - listitem [aria-hidden] [ref=f193e446]: /
+            - listitem [ref=f193e447]:
+              - generic [ref=f193e448]: "Arquitecto Digital: ChatGPT"
+            - listitem [aria-hidden] [ref=f193e449]: /
+            - listitem [ref=f193e450]:
+              - generic [ref=f193e451]: PDF
+        - heading "Las Herramientas Integradas de ChatGPT" [level=2] [ref=f193e452]
+        - generic [ref=f193e453]:
+          - generic [ref=f193e454]: PDF
+          - generic [ref=f193e455]: •
+          - generic [ref=f193e456]: 4.8 MB
+          - generic [ref=f193e457]: •
+          - generic [ref=f193e458]: Vista previa
+      - generic [ref=f193e459]:
+        - button "Pantalla completa" [active] [ref=f193e460] [cursor=pointer]
+        - button "Cerrar visor y volver al tema" [ref=f193e466] [cursor=pointer]
+    - generic [ref=f193e471]:
+      - generic [ref=f193e472]: Desplázate hasta el final
+      - iframe [ref=f193e474]
+    - generic [ref=f193e476]:
+      - generic [ref=f193e477]:
+        - button "Abrir/Cerrar panel de notas" [ref=f193e478] [cursor=pointer]:
+          - generic [ref=f193e479]: Notas
+        - button "Preguntar a MAX" [ref=f193e480] [cursor=pointer]
+      - generic [ref=f193e485]:
+        - button "Recurso anterior" [disabled] [ref=f193e486]:
+          - generic [ref=f193e489]: Anterior
+        - generic [ref=f193e490]: 1 / 3
+        - button "Siguiente recurso" [ref=f193e491] [cursor=pointer]:
+          - generic [ref=f193e492]: Siguiente
+      - generic [ref=f193e495]: Desplázate hasta el final del documento para marcarlo como visto

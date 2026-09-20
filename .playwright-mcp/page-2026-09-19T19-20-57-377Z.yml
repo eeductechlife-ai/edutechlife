@@ -1,0 +1,11 @@
+- generic [ref=f192e5]:
+  - generic [ref=f192e12]:
+    - img "Edutechlife" [ref=f192e15]
+    - generic [ref=f192e16]: 60%
+    - generic [ref=f192e21]: loading.status_vak
+    - generic [ref=f192e28]:
+      - generic [ref=f192e29]: loading.feature_ai
+      - generic [ref=f192e35]: loading.feature_vak
+      - generic [ref=f192e46]: loading.feature_cert
+  - main [ref=f192e54]:
+    - generic "Loading IALab" [ref=f192e55]

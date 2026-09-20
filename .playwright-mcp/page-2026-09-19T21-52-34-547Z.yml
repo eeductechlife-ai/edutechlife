@@ -1,0 +1,176 @@
+- main [ref=f213e7]:
+  - link "Saltar al contenido principal / Skip to main content" [ref=f213e8] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=f213e10]:
+    - banner [ref=f213e11]:
+      - generic [ref=f213e12]:
+        - heading "Introducción a la IA Generativa" [level=2] [ref=f213e23]
+        - combobox [ref=f213e27]:
+          - searchbox "Buscar módulos, temas y recursos" [ref=f213e28] [cursor=pointer]
+          - generic [ref=f213e29]: ⌘K
+        - generic [ref=f213e30]:
+          - 'button "Idioma actual: Español" [ref=f213e31] [cursor=pointer]':
+            - generic [ref=f213e35]: ES
+          - button "Notificaciones" [ref=f213e39] [cursor=pointer]:
+            - generic [ref=f213e43]: "18"
+          - button "Activar modo oscuro" [ref=f213e44] [cursor=pointer]
+          - generic [ref=f213e48]:
+            - button "Cambiar foto de perfil" [ref=f213e49] [cursor=pointer]:
+              - generic [ref=f213e50]: A
+            - button "Menú de usuario" [ref=f213e52] [cursor=pointer]:
+              - generic [ref=f213e53]:
+                - generic [ref=f213e54]: ana.auditqa.1789835597
+                - generic [ref=f213e55]: Estudiante
+    - generic [ref=f213e58]:
+      - navigation "Panel lateral del laboratorio IA" [ref=f213e60]:
+        - generic [ref=f213e62]:
+          - generic "MÓDULOS DEL CURSO" [ref=f213e63]:
+            - list [ref=f213e73]:
+              - listitem [ref=f213e74]:
+                - 'button "Artesano Digital: Prompts" [ref=f213e76] [cursor=pointer]':
+                  - paragraph [ref=f213e82]: "Artesano Digital: Prompts"
+              - listitem [ref=f213e87]:
+                - 'button "Arquitecto Digital: ChatGPT" [ref=f213e89] [cursor=pointer]':
+                  - paragraph [ref=f213e95]: "Arquitecto Digital: ChatGPT"
+              - listitem [ref=f213e98]:
+                - 'button "Detective de Datos: Gemini" [ref=f213e100] [cursor=pointer]':
+                  - paragraph [ref=f213e106]: "Detective de Datos: Gemini"
+              - listitem [ref=f213e109]:
+                - 'button "Alquimista Digital: NotebookLM" [ref=f213e111] [cursor=pointer]':
+                  - paragraph [ref=f213e116]: "Alquimista Digital: NotebookLM"
+              - listitem [ref=f213e117]:
+                - 'button "Guardián Digital: Ética IA" [ref=f213e119] [cursor=pointer]':
+                  - paragraph [ref=f213e124]: "Guardián Digital: Ética IA"
+          - generic [ref=f213e125]:
+            - generic [ref=f213e126]:
+              - paragraph [ref=f213e127]: Tu avance
+              - button "41% Completado — Haz clic para colapsar o expandir el menú" [ref=f213e128] [cursor=pointer]:
+                - generic [ref=f213e132]:
+                  - generic [ref=f213e133]: 41%
+                  - generic [ref=f213e134]: completado
+              - generic [ref=f213e135]:
+                - generic [ref=f213e136]: Nv.6
+                - button "1d" [ref=f213e140] [cursor=pointer]
+                - generic [ref=f213e143]: "407"
+            - generic [ref=f213e147]:
+              - button "Mi Progreso" [ref=f213e148] [cursor=pointer]
+              - button "Plan" [ref=f213e155] [cursor=pointer]
+              - button "Ranking" [ref=f213e162] [cursor=pointer]
+      - link "Saltar al contenido del reto" [ref=f213e173] [cursor=pointer]:
+        - /url: "#main-content"
+      - main [ref=f213e174]:
+        - generic [ref=f213e175]:
+          - button "Plan del día 3 pasos · Racha matutina 3" [ref=f213e180] [cursor=pointer]:
+            - generic [ref=f213e184]:
+              - generic [ref=f213e185]: Plan del día
+              - generic [ref=f213e186]: 3 pasos · Racha matutina
+            - generic [ref=f213e187]: "3"
+          - generic [ref=f213e192]:
+            - complementary "Panel de conversaciones de la herramienta" [ref=f213e193]:
+              - generic [ref=f213e195]:
+                - generic [ref=f213e196]:
+                  - generic [ref=f213e199]: Gemini
+                  - generic [ref=f213e200]: Simulada
+                  - button "Cerrar panel de navegación" [ref=f213e201] [cursor=pointer]
+                - button "Inicio" [ref=f213e204] [cursor=pointer]
+                - generic [ref=f213e207]:
+                  - button "Objetivos" [ref=f213e208] [cursor=pointer]
+                  - button "Actividades" [ref=f213e211] [cursor=pointer]
+                  - button "Práctica" [ref=f213e214] [cursor=pointer]
+                  - button "Guardados" [ref=f213e217] [cursor=pointer]
+                  - generic [ref=f213e221]:
+                    - paragraph [ref=f213e222]: Temas del módulo
+                    - button "El Despertar del Detective Multimodal 20 min" [ref=f213e223] [cursor=pointer]:
+                      - generic [ref=f213e226]:
+                        - generic "El Despertar del Detective Multimodal" [ref=f213e227]
+                        - generic [ref=f213e228]: 20 min
+                    - 'button "Grounding: Cuando la Evidencia Toca Tierra 20 min" [ref=f213e231] [cursor=pointer]':
+                      - generic [ref=f213e234]:
+                        - 'generic "Grounding: Cuando la Evidencia Toca Tierra" [ref=f213e235]'
+                        - generic [ref=f213e236]: 20 min
+                    - generic [ref=f213e240]:
+                      - 'generic "Deep Research: La Caja de Herramientas Forenses" [ref=f213e241]'
+                      - generic [ref=f213e242]: 20 min
+                - paragraph [ref=f213e247]: Diseño inspirado en Gemini para que domines la herramienta real
+            - generic [ref=f213e250]:
+              - tabpanel [ref=f213e253]:
+                - generic [ref=f213e255]:
+                  - generic [ref=f213e256]:
+                    - heading "Actividades del Módulo" [level=4] [ref=f213e257]
+                    - paragraph [ref=f213e258]: Completa cada actividad para aprobar el módulo
+                  - generic [ref=f213e259]:
+                    - button "Comunidad 100% — Aprobado 100%" [ref=f213e260] [cursor=pointer]:
+                      - generic [ref=f213e264]:
+                        - generic [ref=f213e265]: Comunidad
+                        - text: 100% — Aprobado
+                      - generic [ref=f213e266]: 100%
+                    - button "Desafío Pendiente 3 de 3 intentos restantes" [active] [ref=f213e267] [cursor=pointer]:
+                      - generic [ref=f213e274]:
+                        - generic [ref=f213e275]: Desafío
+                        - text: Pendiente
+                        - generic [ref=f213e276]: 3 de 3 intentos restantes
+                    - button "Mi reto 100% — Aprobado 100%" [ref=f213e277] [cursor=pointer]:
+                      - generic [ref=f213e283]:
+                        - generic [ref=f213e284]: Mi reto
+                        - text: 100% — Aprobado
+                      - generic [ref=f213e285]: 100%
+              - generic [ref=f213e288]:
+                - generic [ref=f213e290]:
+                  - generic [ref=f213e295]:
+                    - heading "Comunidad IALab" [level=3] [ref=f213e297]
+                    - paragraph [ref=f213e298]: 54 debates &middot; 3 likes
+                  - generic [ref=f213e299]:
+                    - generic [ref=f213e300]:
+                      - generic [ref=f213e301]: A
+                      - generic [ref=f213e303]: U
+                      - generic [ref=f213e305]: U
+                    - generic [ref=f213e307]: "+8"
+                - generic [ref=f213e309]:
+                  - generic [ref=f213e310]:
+                    - generic [ref=f213e311]:
+                      - generic [ref=f213e312]:
+                        - generic [ref=f213e313]: A
+                        - generic [ref=f213e315]:
+                          - generic [ref=f213e316]: ana.auditqa.1789835597@gmail.com
+                          - text: Ahora mismo
+                      - button "0" [ref=f213e318] [cursor=pointer]
+                    - generic [ref=f213e322]:
+                      - heading "Mensaje de ana.auditqa.1789835597@gmail.com" [level=4] [ref=f213e323]
+                      - paragraph [ref=f213e324]: "Módulo 3 muy útil: Gemini multimodal, Deep Research, Grounding, contexto largo y la integración con Google Workspace. Aprendí a triangular fuentes y a verificar hechos antes de concluir."
+                    - generic [ref=f213e325]: Chat
+                  - generic [ref=f213e328]:
+                    - generic [ref=f213e329]:
+                      - generic [ref=f213e330]:
+                        - generic [ref=f213e331]: U
+                        - generic [ref=f213e333]:
+                          - generic [ref=f213e334]: Usuario
+                          - text: Hace 1 h
+                      - button "0" [ref=f213e336] [cursor=pointer]
+                    - generic [ref=f213e340]:
+                      - heading "Mensaje de ana.auditqa.1789835597@gmail.com" [level=4] [ref=f213e341]
+                      - paragraph [ref=f213e342]: "Módulo 2 muy completo: los modelos GPT, las herramientas integradas (Canvas, Análisis de Datos, DALL-E 3), la memoria/Proyectos y Function Calling. El laboratorio de flujos me ayudó a pensar en procesos, no en herramientas aisladas."
+                    - generic [ref=f213e343]: Chat
+                  - generic [ref=f213e346]:
+                    - generic [ref=f213e347]:
+                      - generic [ref=f213e348]:
+                        - generic [ref=f213e349]: U
+                        - generic [ref=f213e351]:
+                          - generic [ref=f213e352]: Usuario
+                          - text: Hace 2 h
+                      - button "0" [ref=f213e354] [cursor=pointer]
+                    - generic [ref=f213e358]:
+                      - heading "Mensaje de ana.auditqa.1789835597@gmail.com" [level=4] [ref=f213e359]
+                      - paragraph [ref=f213e360]: "Excelente módulo 1: los 4 elementos del prompt (Rol, Contexto, Tarea, Formato) y el método CREATE me ayudaron a mejorar mis prompts. ¡Muy recomendado!"
+                    - generic [ref=f213e361]: Chat
+                  - button "Ver 8 mensajes más ↓" [ref=f213e365] [cursor=pointer]
+                - generic [ref=f213e368]:
+                  - generic [ref=f213e369]: A
+                  - textbox "Escribe tu mensaje aquí..." [ref=f213e372] [cursor=pointer]
+                  - button "Enviar" [disabled] [ref=f213e373]
+    - button "Abrir panel de coach IA MAX" [ref=f213e381] [cursor=pointer]:
+      - img "MAX" [ref=f213e384]
+    - status [ref=f213e390]:
+      - text: Completa el reto y el desafío del Módulo 2 para desbloquear esta evaluación.
+      - button "Dismiss" [ref=f213e391] [cursor=pointer]
+    - status
+  - status [ref=f213e389]

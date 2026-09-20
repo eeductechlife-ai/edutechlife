@@ -1,0 +1,181 @@
+- main [ref=f178e52]:
+  - link "Saltar al contenido principal / Skip to main content" [ref=f178e244] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=f178e246]:
+    - banner [ref=f178e247]:
+      - generic [ref=f178e248]:
+        - heading "Introducción a la IA Generativa" [level=2] [ref=f178e259]
+        - combobox [ref=f178e263]:
+          - searchbox "Buscar módulos, temas y recursos" [ref=f178e264] [cursor=pointer]
+          - generic [ref=f178e265]: ⌘K
+        - generic [ref=f178e266]:
+          - 'button "Idioma actual: Español" [ref=f178e267] [cursor=pointer]':
+            - generic [ref=f178e271]: ES
+          - button "Notificaciones" [ref=f178e275] [cursor=pointer]:
+            - generic [ref=f178e877]: "1"
+          - button "Activar modo oscuro" [ref=f178e279] [cursor=pointer]
+          - generic [ref=f178e283]:
+            - button "Cambiar foto de perfil" [ref=f178e284] [cursor=pointer]:
+              - generic [ref=f178e285]: A
+            - button "Menú de usuario" [ref=f178e287] [cursor=pointer]:
+              - generic [ref=f178e288]:
+                - generic [ref=f178e289]: ana.auditqa.1789835597
+                - generic [ref=f178e290]: Estudiante
+    - generic [ref=f178e293]:
+      - navigation "Panel lateral del laboratorio IA" [ref=f178e295]:
+        - generic [ref=f178e681]:
+          - progressbar "6% Completado — Haz clic para colapsar o expandir el menú" [ref=f178e878] [cursor=pointer]:
+            - generic [ref=f178e684]: 6%
+          - heading "Módulos" [level=2] [ref=f178e692]
+          - list [ref=f178e693]:
+            - listitem [ref=f178e694]:
+              - button [ref=f178e695] [cursor=pointer]:
+                - 'button "Módulo 1: Artesano Digital: Prompts" [ref=f178e696]':
+                  - generic [ref=f178e701]: "1"
+            - listitem [ref=f178e702]:
+              - button [ref=f178e703] [cursor=pointer]:
+                - 'button "Módulo 2: Arquitecto Digital: ChatGPT" [ref=f178e704]':
+                  - generic [ref=f178e708]: "2"
+            - listitem [ref=f178e709]:
+              - button [ref=f178e710] [cursor=pointer]:
+                - 'button "Módulo 3: Detective de Datos: Gemini" [ref=f178e711]':
+                  - generic [ref=f178e715]: "3"
+            - listitem [ref=f178e716]:
+              - button [ref=f178e717] [cursor=pointer]:
+                - 'button "Módulo 4: Alquimista Digital: NotebookLM" [ref=f178e718]':
+                  - generic [ref=f178e721]: "4"
+            - listitem [ref=f178e722]:
+              - button [ref=f178e723] [cursor=pointer]:
+                - 'button "Módulo 5: Guardián Digital: Ética IA" [ref=f178e724]':
+                  - generic [ref=f178e727]: "5"
+          - button [ref=f178e730] [cursor=pointer]:
+            - button "Plan" [ref=f178e731]
+          - button [ref=f178e735] [cursor=pointer]:
+            - button "Ranking" [ref=f178e736]
+      - link "Saltar al contenido del reto" [ref=f178e397] [cursor=pointer]:
+        - /url: "#main-content"
+      - main [ref=f178e398]:
+        - generic [ref=f178e399]:
+          - button "Plan del día 3 pasos · ¡Contenido completado! 3" [ref=f178e879] [cursor=pointer]:
+            - generic [ref=f178e416]:
+              - generic [ref=f178e417]: Plan del día
+              - generic [ref=f178e418]: 3 pasos · ¡Contenido completado!
+            - generic [ref=f178e419]: "3"
+          - generic [ref=f178e446]:
+            - complementary "Panel de conversaciones de la herramienta" [ref=f178e447]:
+              - generic [ref=f178e449]:
+                - generic [ref=f178e450]:
+                  - generic [ref=f178e453]: Artesano Digital
+                  - generic [ref=f178e454]: Simulada
+                  - button "Cerrar panel de navegación" [ref=f178e455] [cursor=pointer]
+                - button "Inicio" [ref=f178e458] [cursor=pointer]
+                - generic [ref=f178e461]:
+                  - button "Objetivos" [ref=f178e462] [cursor=pointer]
+                  - button "Actividades" [ref=f178e465] [cursor=pointer]
+                  - button "Práctica" [ref=f178e468] [cursor=pointer]
+                  - button "Guardados" [ref=f178e471] [cursor=pointer]
+                  - generic [ref=f178e475]:
+                    - paragraph [ref=f178e476]: Temas del módulo
+                    - 'button "Los Fundamentos del Artesano: ¿Qué es la IA Generativa? 20 min" [ref=f178e477] [cursor=pointer]':
+                      - generic [ref=f178e480]:
+                        - 'generic "Los Fundamentos del Artesano: ¿Qué es la IA Generativa?" [ref=f178e481]'
+                        - generic [ref=f178e482]: 20 min
+                    - 'button "El Cincel del Artesano: ¿Qué es un Prompt? 20 min" [ref=f178e884] [cursor=pointer]':
+                      - generic [ref=f178e887]:
+                        - 'generic "El Cincel del Artesano: ¿Qué es un Prompt?" [ref=f178e888]'
+                        - generic [ref=f178e889]: 20 min
+                - paragraph [ref=f178e493]: Fundamentos de prompts con precisión artesanal
+            - tabpanel [ref=f178e894]:
+              - generic [ref=f178e896]:
+                - generic [ref=f178e897]:
+                  - heading "Actividades del Módulo" [level=4] [ref=f178e898]
+                  - paragraph [ref=f178e899]: Completa cada actividad para aprobar el módulo
+                - generic [ref=f178e900]:
+                  - button "Comunidad Pendiente" [ref=f178e901] [cursor=pointer]:
+                    - generic [ref=f178e905]:
+                      - generic [ref=f178e906]: Comunidad
+                      - text: Pendiente
+                  - button "Desafío Pendiente 3 de 3 intentos restantes" [ref=f178e907] [cursor=pointer]:
+                    - generic [ref=f178e914]:
+                      - generic [ref=f178e915]: Desafío
+                      - text: Pendiente
+                      - generic [ref=f178e916]: 3 de 3 intentos restantes
+                  - button "Mi reto Pendiente 3 de 3 intentos restantes" [ref=f178e917] [cursor=pointer]:
+                    - generic [ref=f178e923]:
+                      - generic [ref=f178e924]: Mi reto
+                      - text: Pendiente
+                      - generic [ref=f178e925]: 3 de 3 intentos restantes
+    - dialog "Modal de evaluación" [ref=f178e926]:
+      - link "Saltar al contenido del reto" [ref=f178e927] [cursor=pointer]:
+        - /url: "#eval-content"
+      - generic: EDUTECHLIFE
+      - generic [ref=f178e929]: 1 de 3
+      - generic [ref=f178e930]:
+        - generic [ref=f178e931]:
+          - button "Salir" [ref=f178e932] [cursor=pointer]
+          - generic [ref=f178e936]: Paso 1 de 3
+        - generic [ref=f178e943]:
+          - generic [ref=f178e951]:
+            - generic [ref=f178e952]:
+              - 'heading "Paso 1: Identificar" [level=2] [ref=f178e953]'
+              - generic [ref=f178e954]: Guardado
+            - paragraph [ref=f178e958]: Analiza el escenario y clasifica los elementos clave
+          - 'region "Paso 1: Identificar" [ref=f178e959]':
+            - generic [ref=f178e960]:
+              - generic [ref=f178e961]:
+                - generic [ref=f178e967]:
+                  - heading "Identifica los elementos clave" [level=3] [ref=f178e968]
+                  - paragraph [ref=f178e969]: Analiza el escenario y clasifica cada parte como Rol, Contexto o Tarea
+                - group [ref=f178e970]:
+                  - generic "¿Cómo resolver este ejercicio?" [ref=f178e971] [cursor=pointer]
+              - generic [ref=f178e975]:
+                - heading "Escenario" [level=4] [ref=f178e980]
+                - paragraph [ref=f178e982]: "Eres un consultor en transformación digital con más de 10 años de experiencia en el sector retail. Trabajas para una cadena de supermercados regional que enfrenta una disminución del 15% en la afluencia de clientes en sus tiendas físicas durante el último año. La empresa quiere revertir esta tendencia implementando una estrategia omnicanal que integre la experiencia en tienda con su plataforma de comercio electrónico. Tu tarea es diseñar un plan de fidelización que aumente la retención de clientes en un 20% en los próximos seis meses, utilizando datos de compras y comportamiento de los clientes. Identifica en este escenario: Rol, Contexto y Tarea."
+              - generic [ref=f178e983]:
+                - generic [ref=f178e984]:
+                  - generic [ref=f178e985]:
+                    - heading "Rol" [level=4] [ref=f178e991]
+                    - paragraph [ref=f178e992]: ¿Quién eres? Toca aquí abajo una frase que defina el rol del asistente.
+                    - paragraph [ref=f178e996]: Toca un elemento de la lista para agregarlo aquí
+                  - generic [ref=f178e997]:
+                    - heading "Contexto" [level=4] [ref=f178e1004]
+                    - paragraph [ref=f178e1005]: ¿Dónde? Toca aquí abajo una frase sobre la situación o entorno.
+                    - generic [ref=f178e1007]:
+                      - paragraph [ref=f178e1008]: Trabajas para una cadena de supermercados regional que enfrenta una disminución del 15% en la afluencia de clientes en sus tiendas físicas durante el último año
+                      - button [ref=f178e1009] [cursor=pointer]
+                  - generic [ref=f178e1013]:
+                    - heading "Tarea" [level=4] [ref=f178e1019]
+                    - paragraph [ref=f178e1020]: ¿Qué debes hacer? Toca aquí abajo una frase sobre la tarea u objetivo.
+                    - paragraph [ref=f178e1024]: Toca un elemento de la lista para agregarlo aquí
+                - generic [ref=f178e1025]:
+                  - heading "Elementos para clasificar" [level=4] [ref=f178e1029]
+                  - paragraph [ref=f178e1030]: Toca una frase para agregarla a su categoría (o arrástrala si usas mouse)
+                  - generic [ref=f178e1037]:
+                    - generic [ref=f178e1038]:
+                      - heading "rol" [level=5] [ref=f178e1039]
+                      - paragraph [ref=f178e1045]: Eres un consultor en transformación digital con más de 10 años de experiencia en el sector retail
+                      - paragraph [ref=f178e1051]: Eres un experto en inteligencia artificial
+                      - paragraph [ref=f178e1057]: Actúas como consultor especializado en tecnología
+                    - generic [ref=f178e1058]:
+                      - heading "contexto" [level=5] [ref=f178e1059]
+                      - paragraph [ref=f178e1066]: Eres un consultor en transformación digital con más de 10 años de experiencia en el sector retail
+                      - paragraph [ref=f178e1073]: Trabajas para una cadena de supermercados regional que enfrenta una disminución del 15% en la afluencia de clientes en sus tiendas físicas durante el último año
+                      - paragraph [ref=f178e1082]: La empresa quiere revertir esta tendencia implementando una estrategia omnicanal que integre la experiencia en tienda con su plataforma de comercio electrónico
+                      - paragraph [ref=f178e1089]: Tu tarea es diseñar un plan de fidelización que aumente la retención de clientes en un 20% en los próximos seis meses, utilizando datos de compras y comportamiento de los clientes
+                      - paragraph [ref=f178e1096]: "Identifica en este escenario: Rol, Contexto y Tarea"
+                    - generic [ref=f178e1097]:
+                      - heading "tarea" [level=5] [ref=f178e1098]
+                      - paragraph [ref=f178e1104]: Tu tarea es diseñar un plan de fidelización que aumente la retención de clientes en un 20% en los próximos seis meses, utilizando datos de compras y comportamiento de los clientes
+                      - paragraph [ref=f178e1110]: "Identifica en este escenario: Rol, Contexto y Tarea"
+                      - paragraph [ref=f178e1116]: Debes analizar y resolver el desafío planteado
+              - group [ref=f178e1117]:
+                - heading "Consejos para identificar" [level=4] [ref=f178e1121] [cursor=pointer]
+          - generic [ref=f178e1124]:
+            - generic [ref=f178e1125]: Paso 1 de 3
+            - generic [ref=f178e1127]:
+              - button "Anterior" [disabled] [ref=f178e1128]
+              - button "Siguiente" [ref=f178e1131] [cursor=pointer]
+    - button "Abrir panel de coach IA MAX" [ref=f178e540] [cursor=pointer]:
+      - img "MAX" [ref=f178e543]
+    - status
+  - status [ref=f178e548]

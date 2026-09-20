@@ -274,8 +274,11 @@ export function IALabProgressProvider({ children }) {
   }, []);
 
   useEffect(() => {
+    // Re-evaluar cuando cambie el progreso: el primer render puede ocurrir
+    // ANTES de que el progreso se rehidrate desde Supabase, dejando
+    // `courseCompleted` en false aunque el curso ya esté completo.
     checkCourseCompletion();
-  }, [checkCourseCompletion]);
+  }, [checkCourseCompletion, moduleProgress, courseProgress, completedModules]);
 
   const moduleLessons = useMemo(() => {
     return getModuleLessons(activeMod, locale);

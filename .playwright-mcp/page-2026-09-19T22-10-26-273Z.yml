@@ -1,0 +1,119 @@
+- main [ref=f220e7]:
+  - link "Saltar al contenido principal / Skip to main content" [ref=f220e8] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=f220e10]:
+    - banner [ref=f220e11]:
+      - generic [ref=f220e12]:
+        - heading "Introducción a la IA Generativa" [level=2] [ref=f220e23]
+        - combobox [ref=f220e27]:
+          - searchbox "Buscar módulos, temas y recursos" [ref=f220e28] [cursor=pointer]
+          - generic [ref=f220e29]: ⌘K
+        - generic [ref=f220e30]:
+          - 'button "Idioma actual: Español" [ref=f220e31] [cursor=pointer]':
+            - generic [ref=f220e35]: ES
+          - button "Notificaciones" [ref=f220e39] [cursor=pointer]:
+            - generic [ref=f220e43]: "23"
+          - button "Activar modo oscuro" [ref=f220e44] [cursor=pointer]
+          - generic [ref=f220e48]:
+            - button "Cambiar foto de perfil" [ref=f220e49] [cursor=pointer]:
+              - generic [ref=f220e50]: A
+            - button "Menú de usuario" [ref=f220e52] [cursor=pointer]:
+              - generic [ref=f220e53]:
+                - generic [ref=f220e54]: ana.auditqa.1789835597
+                - generic [ref=f220e55]: Estudiante
+    - generic [ref=f220e58]:
+      - navigation "Panel lateral del laboratorio IA" [ref=f220e60]:
+        - generic [ref=f220e62]:
+          - progressbar "47% Completado — Haz clic para colapsar o expandir el menú" [ref=f220e64] [cursor=pointer]:
+            - generic [ref=f220e65]: 47%
+          - heading "Módulos" [level=2] [ref=f220e73]
+          - list [ref=f220e74]:
+            - listitem [ref=f220e75]:
+              - button [ref=f220e76] [cursor=pointer]:
+                - 'button "Módulo 1: Artesano Digital: Prompts" [ref=f220e77]':
+                  - generic [ref=f220e81]: "1"
+            - listitem [ref=f220e85]:
+              - button [ref=f220e86] [cursor=pointer]:
+                - 'button "Módulo 2: Arquitecto Digital: ChatGPT" [ref=f220e87]':
+                  - generic [ref=f220e91]: "2"
+            - listitem [ref=f220e92]:
+              - button [ref=f220e93] [cursor=pointer]:
+                - 'button "Módulo 3: Detective de Datos: Gemini" [ref=f220e94]':
+                  - generic [ref=f220e99]: "3"
+            - listitem [ref=f220e100]:
+              - button [ref=f220e101] [cursor=pointer]:
+                - 'button "Módulo 4: Alquimista Digital: NotebookLM" [ref=f220e102]':
+                  - generic [ref=f220e105]: "4"
+            - listitem [ref=f220e106]:
+              - button [ref=f220e107] [cursor=pointer]:
+                - 'button "Módulo 5: Guardián Digital: Ética IA" [ref=f220e108]':
+                  - generic [ref=f220e111]: "5"
+          - button [ref=f220e114] [cursor=pointer]:
+            - button "Plan" [ref=f220e115]
+          - button [ref=f220e119] [cursor=pointer]:
+            - button "Ranking" [ref=f220e120]
+      - link "Saltar al contenido del reto" [ref=f220e128] [cursor=pointer]:
+        - /url: "#main-content"
+      - main [ref=f220e129]:
+        - generic [ref=f220e130]:
+          - button "Plan del día 3 pasos · Racha matutina 3" [ref=f220e135] [cursor=pointer]:
+            - generic [ref=f220e139]:
+              - generic [ref=f220e140]: Plan del día
+              - generic [ref=f220e141]: 3 pasos · Racha matutina
+            - generic [ref=f220e142]: "3"
+          - generic [ref=f220e147]:
+            - complementary "Panel de conversaciones de la herramienta" [ref=f220e148]:
+              - generic [ref=f220e150]:
+                - generic [ref=f220e151]:
+                  - generic [ref=f220e154]: Gemini
+                  - generic [ref=f220e155]: Simulada
+                  - button "Cerrar panel de navegación" [ref=f220e156] [cursor=pointer]
+                - button "Inicio" [ref=f220e159] [cursor=pointer]
+                - generic [ref=f220e162]:
+                  - button "Objetivos" [ref=f220e163] [cursor=pointer]
+                  - button "Actividades" [ref=f220e166] [cursor=pointer]
+                  - button "Práctica" [ref=f220e169] [cursor=pointer]
+                  - button "Guardados" [ref=f220e172] [cursor=pointer]
+                  - generic [ref=f220e176]:
+                    - paragraph [ref=f220e177]: Temas del módulo
+                    - button "El Despertar del Detective Multimodal 20 min" [ref=f220e178] [cursor=pointer]:
+                      - generic [ref=f220e181]:
+                        - generic "El Despertar del Detective Multimodal" [ref=f220e182]
+                        - generic [ref=f220e183]: 20 min
+                    - 'button "Grounding: Cuando la Evidencia Toca Tierra 20 min" [ref=f220e186] [cursor=pointer]':
+                      - generic [ref=f220e189]:
+                        - 'generic "Grounding: Cuando la Evidencia Toca Tierra" [ref=f220e190]'
+                        - generic [ref=f220e191]: 20 min
+                    - 'button "Deep Research: La Caja de Herramientas Forenses 20 min" [ref=f220e194] [cursor=pointer]':
+                      - generic [ref=f220e197]:
+                        - 'generic "Deep Research: La Caja de Herramientas Forenses" [ref=f220e198]'
+                        - generic [ref=f220e199]: 20 min
+                - paragraph [ref=f220e203]: Diseño inspirado en Gemini para que domines la herramienta real
+            - tabpanel [ref=f220e209]:
+              - generic [ref=f220e211]:
+                - generic [ref=f220e212]:
+                  - heading "Actividades del Módulo" [level=4] [ref=f220e213]
+                  - paragraph [ref=f220e214]: Completa cada actividad para aprobar el módulo
+                - generic [ref=f220e215]:
+                  - button "Comunidad 100% — Aprobado 100%" [ref=f220e216] [cursor=pointer]:
+                    - generic [ref=f220e220]:
+                      - generic [ref=f220e221]: Comunidad
+                      - text: 100% — Aprobado
+                    - generic [ref=f220e222]: 100%
+                  - button "Desafío Pendiente 3 de 3 intentos restantes" [active] [ref=f220e223] [cursor=pointer]:
+                    - generic [ref=f220e230]:
+                      - generic [ref=f220e231]: Desafío
+                      - text: Pendiente
+                      - generic [ref=f220e232]: 3 de 3 intentos restantes
+                  - button "Mi reto 100% — Aprobado 100%" [ref=f220e233] [cursor=pointer]:
+                    - generic [ref=f220e239]:
+                      - generic [ref=f220e240]: Mi reto
+                      - text: 100% — Aprobado
+                    - generic [ref=f220e241]: 100%
+    - button "Abrir panel de coach IA MAX" [ref=f220e244] [cursor=pointer]:
+      - img "MAX" [ref=f220e247]
+    - status [ref=f220e253]:
+      - text: Completa el reto y el desafío del Módulo 2 para desbloquear esta evaluación.
+      - button "Dismiss" [ref=f220e254] [cursor=pointer]
+    - status
+  - status [ref=f220e252]

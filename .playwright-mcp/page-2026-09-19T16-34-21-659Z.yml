@@ -1,0 +1,55 @@
+- generic [ref=f177e5]:
+  - generic [ref=f177e12]:
+    - img "Edutechlife" [ref=f177e15]
+    - generic [ref=f177e16]: 85%
+    - generic [ref=f177e21]: Activando tus tutores con IA...
+    - generic [ref=f177e28]:
+      - generic [ref=f177e29]: IA Integrada
+      - generic [ref=f177e35]: VAK Metodología
+      - generic [ref=f177e46]: Certificaciones
+  - main [ref=f177e53]:
+    - generic [ref=f177e58]:
+      - generic [ref=f177e59]:
+        - generic [ref=f177e60]:
+          - img "Edutechlife" [ref=f177e62]
+          - generic [ref=f177e63]:
+            - generic [ref=f177e64]: Plataforma SaaS Premium
+            - heading "Domina la IA Generativa" [level=2] [ref=f177e66]
+            - paragraph [ref=f177e67]: Transforma tu forma de aprender y trabajar con inteligencia artificial. Un curso diseñado para llevarte desde los fundamentos hasta la creación de soluciones reales con herramientas de vanguardia.
+            - paragraph [ref=f177e68]:
+              - generic [ref=f177e69]: 10 horas
+              - text: ·
+              - generic [ref=f177e70]: 5 módulos
+              - text: ·Certificación profesional
+          - generic [ref=f177e71]:
+            - generic [ref=f177e72]: Certificación incluida
+            - generic [ref=f177e77]: Soporte 24/7
+            - generic [ref=f177e82]: Soporte personalizado
+        - paragraph [ref=f177e88]:
+          - text: ¿Necesitas ayuda?
+          - link "info@edutechlife.co" [ref=f177e89] [cursor=pointer]:
+            - /url: mailto:info@edutechlife.co
+      - generic [ref=f177e90]:
+        - generic [ref=f177e91]:
+          - heading "Bienvenido al Futuro del Aprendizaje" [level=3] [ref=f177e102]
+          - paragraph [ref=f177e103]: Accede a tu laboratorio de IA y continúa tu camino hacia la maestría
+        - generic [ref=f177e105]:
+          - generic [ref=f177e106]:
+            - button "Google" [ref=f177e107] [cursor=pointer]
+            - button "Facebook" [ref=f177e113] [cursor=pointer]
+          - generic [ref=f177e116]: O
+          - generic [ref=f177e121]:
+            - generic [ref=f177e122]:
+              - generic [ref=f177e123]: Correo electrónico o usuario
+              - textbox "usuario@ejemplo.com o tu usuario" [ref=f177e128] [cursor=pointer]
+            - generic [ref=f177e129]:
+              - generic [ref=f177e130]: Contraseña
+              - generic [ref=f177e131]:
+                - textbox "••••••••" [ref=f177e135] [cursor=pointer]
+                - button [ref=f177e136] [cursor=pointer]
+            - button "¿Olvidaste tu contraseña?" [ref=f177e141] [cursor=pointer]
+            - button "Iniciar Sesión" [ref=f177e142] [cursor=pointer]
+          - generic [ref=f177e143]:
+            - text: ¿No tienes cuenta?
+            - button "Regístrate aquí" [ref=f177e144] [cursor=pointer]
+        - button "Volver a AI Lab Academic" [ref=f177e146] [cursor=pointer]
