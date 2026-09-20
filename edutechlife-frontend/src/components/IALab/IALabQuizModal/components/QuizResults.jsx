@@ -212,7 +212,7 @@ export function QuizResults({
           </h2>
           <p className="text-slate-600">
             {quizPassed
-              ? t("ialab.quiz.passed_msg")
+              ? t("ialab.quiz.passed_msg", { score: PASSING_SCORE })
               : t("ialab.quiz.failed_msg", { score: PASSING_SCORE })}
           </p>
         </div>

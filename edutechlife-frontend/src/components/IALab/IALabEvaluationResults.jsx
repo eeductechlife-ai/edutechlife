@@ -11,6 +11,7 @@ import ScoreBreakdown from "./ScoreBreakdown";
 import FeedbackPanel from "./FeedbackPanel";
 import CompetenceRadar from "./CompetenceRadar";
 import { getCompetenceLevel, computeRadarScores } from "./competenceLevel.js";
+import { getMasteryMessage } from "./evaluationFeedback.js";
 import {
   EVALUATION_HISTORY_KEY,
   parseEvaluationHistory,
@@ -417,7 +418,7 @@ const IALabEvaluationResults = ({
                     className={`text-sm ${isApproved ? "text-emerald-600" : "text-slate-600"}`}
                   >
                     {isApproved
-                      ? t("ialab.evaluation.results.mastery_message")
+                      ? getMasteryMessage(activeMod, t)
                       : t("ialab.evaluation.results.need_80_retry")}
                   </p>
                 </div>
