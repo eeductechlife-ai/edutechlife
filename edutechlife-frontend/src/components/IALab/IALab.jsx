@@ -291,12 +291,12 @@ const IALabContent = memo(function () {
   // este effect corra, pero el contexto React todavía tiene el valor anterior.
   useEffect(() => {
     const numeric = urlMod ? parseInt(urlMod, 10) : NaN;
+    // Si la URL ya trae un módulo válido, es la fuente de verdad: no
+    // sobrescribirla con el "último módulo visitado" (evita redirigir, por
+    // ejemplo, /ialab/3 al módulo donde quedó la cuenta).
+    if (!isNaN(numeric) && numeric >= 1 && numeric <= 5) return;
     const storeActiveMod = useIALabStore.getState().activeMod;
-    if (
-      storeActiveMod >= 1 &&
-      storeActiveMod <= 5 &&
-      (isNaN(numeric) || numeric !== storeActiveMod)
-    ) {
+    if (storeActiveMod >= 1 && storeActiveMod <= 5) {
       navigate(`/ialab/${storeActiveMod}`, { replace: true });
     }
   }, [activeMod, urlMod, navigate]);
