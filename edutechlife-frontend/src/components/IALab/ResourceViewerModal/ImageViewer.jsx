@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion';
-import PropTypes from 'prop-types';
-import { Icon } from '../../../utils/iconMapping.jsx';
-import { cn } from '../../forum/forumDesignSystem';
-import { useTranslation } from '../../../i18n/I18nProvider';
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import PropTypes from "prop-types";
+import { Icon } from "../../../utils/iconMapping.jsx";
+import { cn } from "../../forum/forumDesignSystem";
+import { useTranslation } from "../../../i18n/I18nProvider";
 
 const ImageViewer = ({ resource, onAutoComplete }) => {
   const { t } = useTranslation();
@@ -33,23 +33,30 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
             <Icon name="fa-image" className="text-white w-5 h-5" />
           </div>
           <div>
-            <h4 className="font-semibold text-[var(--theme-emphasis)]">{resource.title}</h4>
+            <h4 className="font-semibold text-[var(--theme-emphasis)]">
+              {resource.title}
+            </h4>
             {resource.interactive && (
-              <span className="text-sm text-[var(--theme-emphasis)] font-medium">{t('ialab.viewer_modal.interactive_label')}</span>
+              <span className="text-sm text-[var(--theme-emphasis)] font-medium">
+                {t("ialab.viewer_modal.interactive_label")}
+              </span>
             )}
           </div>
         </div>
 
         <div className="flex items-center gap-3 flex-shrink-0">
-          <motion.div whileHover={{ scale: 1.03 }} transition={{ type: 'spring', stiffness: 300, damping: 24 }}>
-          <a
-            href={resource.url}
-            download
-            className="px-4 py-2 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-lg hover:from-[var(--theme-primary)]-deep hover:to-[var(--theme-primary)]-darker transition-colors duration-200 flex items-center gap-2 font-medium"
+          <motion.div
+            whileHover={{ scale: 1.03 }}
+            transition={{ type: "spring", stiffness: 300, damping: 24 }}
           >
-            <Icon name="fa-download" className="w-4 h-4" />
-            {t('ialab.viewer_modal.download')}
-          </a>
+            <a
+              href={resource.url}
+              download
+              className="px-4 py-2 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-lg hover:from-[var(--theme-primary)]-deep hover:to-[var(--theme-primary)]-darker transition-colors duration-200 flex items-center gap-2 font-medium"
+            >
+              <Icon name="fa-download" className="w-4 h-4" />
+              {t("ialab.viewer_modal.download")}
+            </a>
           </motion.div>
         </div>
       </div>
@@ -64,10 +71,12 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
         <img
           src={resource.url}
           alt={resource.title}
+          loading="lazy"
+          decoding="async"
           className={cn(
             "w-full object-contain",
             "transition-opacity duration-300",
-            isLoading ? "opacity-0" : "opacity-100"
+            isLoading ? "opacity-0" : "opacity-100",
           )}
           onLoad={() => setIsLoading(false)}
           onError={() => setIsLoading(false)}
@@ -76,13 +85,14 @@ const ImageViewer = ({ resource, onAutoComplete }) => {
 
       {resource.description && (
         <div className="p-4 bg-[var(--theme-emphasis)]/5">
-          <p className="text-sm text-[var(--theme-emphasis)]/80">{resource.description}</p>
+          <p className="text-sm text-[var(--theme-emphasis)]/80">
+            {resource.description}
+          </p>
         </div>
       )}
     </div>
   );
 };
-
 
 ImageViewer.propTypes = {
   resource: PropTypes.object,

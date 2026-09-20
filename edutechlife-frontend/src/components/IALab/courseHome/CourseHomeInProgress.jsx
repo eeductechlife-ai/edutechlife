@@ -266,6 +266,8 @@ function CourseHomeInProgress() {
                     <img
                       src={avatarUrl}
                       alt="avatar"
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover rounded-full"
                     />
                   ) : (
