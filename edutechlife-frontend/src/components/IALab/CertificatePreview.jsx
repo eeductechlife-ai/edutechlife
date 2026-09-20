@@ -11,6 +11,14 @@ const GOLD = "#B08D3F";
 const GOLD_LINE = "#C9A227";
 const LINK = "#2563EB";
 
+// Logos reales del certificado (colócalos en edutechlife-frontend/public/images/cert/).
+// Si un archivo no existe, el generador cae a un texto de respaldo (no rompe el PDF).
+const CERT_LOGOS = {
+  tic: "/images/cert/tic.png",
+  mzlAlcaldia: "/images/cert/mzl-alcaldia.png",
+  edutechlife: "/images/cert/edutechlife.png",
+};
+
 const CertificatePreview = ({
   studentName,
   certNumber,
@@ -22,6 +30,7 @@ const CertificatePreview = ({
   const courseFullName = t("profile.course_name");
   const certificateRef = useRef(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState(null);
 
   const displayName =
     studentName || t("ialab.certificate_preview.student_fallback");
@@ -39,7 +48,9 @@ const CertificatePreview = ({
         year: "numeric",
       });
 
-  const loadLogoDataUrl = () =>
+  // Carga cualquier imagen a data URL PNG y devuelve también sus dimensiones
+  // naturales (para conservar la proporción al insertarla en el PDF).
+  const loadImageDataUrl = (src) =>
     new Promise((resolve, reject) => {
       const img = new Image();
       img.crossOrigin = "anonymous";
@@ -50,14 +61,29 @@ const CertificatePreview = ({
           canvas.height = img.naturalHeight;
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0);
-          resolve(canvas.toDataURL("image/png"));
+          resolve({
+            dataUrl: canvas.toDataURL("image/png"),
+            width: img.naturalWidth,
+            height: img.naturalHeight,
+          });
         } catch (err) {
           reject(err);
         }
       };
-      img.onerror = () => reject(new Error("logo load failed"));
-      img.src = "/images/logo-edutechlife.webp";
+      img.onerror = () => reject(new Error("image load failed: " + src));
+      img.src = src;
     });
+
+  const loadImageWithTimeout = async (src, ms = 2500) => {
+    try {
+      return await Promise.race([
+        loadImageDataUrl(src),
+        new Promise((res) => setTimeout(() => res(null), ms)),
+      ]);
+    } catch {
+      return null;
+    }
+  };
 
   const handleDownloadPDF = async () => {
     setIsDownloading(true);
@@ -80,7 +106,6 @@ const CertificatePreview = ({
       const GRAY = [107, 114, 128];
       const GRAY_LT = [156, 163, 175];
       const LINK = [37, 99, 235];
-      const RED = [190, 40, 45];
 
       const setFill = (c) => doc.setFillColor(c[0], c[1], c[2]);
       const setDraw = (c) => doc.setDrawColor(c[0], c[1], c[2]);
@@ -134,63 +159,58 @@ const CertificatePreview = ({
       });
 
       // ---- Logos de entidades (línea superior) ----
-      // Divisores verticales
-      setDraw([220, 220, 220]);
-      doc.setLineWidth(0.3);
-      doc.line(cx - 62, 22, cx - 62, 33);
-      doc.line(cx + 30, 22, cx + 30, 33);
+      // Se usan los archivos reales; si falta alguno, se dibuja un texto de
+      // respaldo para que el PDF nunca falle.
+      const [ticLogo, mzlAlcaldiaLogo, edutechlifeCertLogo] = await Promise.all(
+        [
+          loadImageWithTimeout(CERT_LOGOS.tic),
+          loadImageWithTimeout(CERT_LOGOS.mzlAlcaldia),
+          loadImageWithTimeout(CERT_LOGOS.edutechlife),
+        ],
+      );
+      const edutechlifeLogo =
+        edutechlifeCertLogo ||
+        (await loadImageWithTimeout("/images/logo-edutechlife.webp", 2000));
+
+      const placeLogo = (logo, { left, right, maxH, maxW }) => {
+        if (!logo || !logo.width || !logo.height) return false;
+        const ratio = logo.width / logo.height;
+        let h = maxH;
+        let w = h * ratio;
+        if (maxW && w > maxW) {
+          w = maxW;
+          h = w / ratio;
+        }
+        const x = right != null ? right - w : left;
+        const y = 22 + (11 - h) / 2;
+        doc.addImage(logo.dataUrl, "PNG", x, y, w, h);
+        return true;
+      };
 
       // TIC (izquierda)
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(15);
-      setText([0, 120, 190]);
-      doc.text("TIC", cx - 88, 30, { align: "left" });
-      setFill([240, 150, 40]);
-      doc.rect(cx - 88, 31.5, 5, 1.2, "F");
-      setFill([60, 170, 90]);
-      doc.rect(cx - 82, 31.5, 5, 1.2, "F");
-      setFill([0, 120, 190]);
-      doc.rect(cx - 76, 31.5, 5, 1.2, "F");
+      if (!placeLogo(ticLogo, { left: 18, maxH: 11 })) {
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(15);
+        setText([0, 120, 190]);
+        doc.text("TIC", 18, 30, { align: "left" });
+      }
 
-      // MZL (centro)
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(15);
-      setText(NAVY);
-      doc.text("MZL", cx - 20, 29, { align: "left" });
-      doc.setFont("helvetica", "italic");
-      doc.setFontSize(6.5);
-      setText(GRAY);
-      doc.text("Manizales del alma", cx - 20, 33, { align: "left" });
-
-      // Escudo Alcaldía (rojo)
-      setFill(RED);
-      doc.triangle(cx + 2, 23, cx + 2, 30, cx + 7, 30, "F");
-      doc.triangle(cx + 2, 30, cx + 7, 30, cx + 4.5, 33, "F");
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(6);
-      setText(NAVY);
-      doc.text("ALCALDÍA DE", cx + 9, 27, { align: "left" });
-      doc.text("MANIZALES", cx + 9, 30.5, { align: "left" });
+      // MZL + Alcaldía de Manizales (centro)
+      if (!placeLogo(mzlAlcaldiaLogo, { left: cx - 45, maxH: 11 })) {
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(12);
+        setText(NAVY);
+        doc.text("MZL  ·  ALCALDÍA DE MANIZALES", cx, 29.5, {
+          align: "center",
+        });
+      }
 
       // Edutechlife (derecha, wordmark)
-      try {
-        const logoDataUrl = await Promise.race([
-          loadLogoDataUrl(),
-          new Promise((res) => setTimeout(() => res(null), 2000)),
-        ]);
-        if (logoDataUrl) {
-          const LOGO_W = 46;
-          const LOGO_H = (392 / 2972) * LOGO_W;
-          doc.addImage(logoDataUrl, "PNG", cx + 38, 23.5, LOGO_W, LOGO_H);
-        } else {
-          doc.setFont("helvetica", "bold");
-          doc.setFontSize(13);
-          setText(NAVY);
-          doc.text("Edutechlife", cx + 40, 29, { align: "left" });
-        }
-      } catch (err) {
-        if (import.meta.env.DEV)
-          console.error("Logo no disponible en PDF:", err);
+      if (!placeLogo(edutechlifeLogo, { right: W - 18, maxH: 7, maxW: 62 })) {
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        setText(NAVY);
+        doc.text("Edutechlife", W - 18, 29, { align: "right" });
       }
 
       // ---- Título ----
@@ -256,33 +276,18 @@ const CertificatePreview = ({
         { align: "center" },
       );
 
-      // ---- Firma: Dirección Académica ----
+      // ---- Firma única: Coordinador del Programa ----
       setDraw(NAVY);
       doc.setLineWidth(0.5);
-      doc.line(cx - 72, 138, cx - 12, 138);
+      doc.line(cx - 32, 138, cx + 32, 138);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(9.5);
       setText(NAVY);
-      doc.text("Dirección Académica", cx - 42, 143.5, { align: "center" });
+      doc.text("Coordinador del Programa", cx, 143.5, { align: "center" });
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8);
       setText(GRAY_LT);
-      doc.text("Edutechlife", cx - 42, 148.5, { align: "center" });
-
-      // ---- Firma: Coordinación del Programa ----
-      setDraw(NAVY);
-      doc.setLineWidth(0.5);
-      doc.line(cx + 18, 138, cx + 78, 138);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(9.5);
-      setText(NAVY);
-      doc.text("Coordinación del Programa", cx + 48, 143.5, {
-        align: "center",
-      });
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(8);
-      setText(GRAY_LT);
-      doc.text("Alcaldía de Manizales", cx + 48, 148.5, { align: "center" });
+      doc.text("Alcaldía de Manizales", cx, 148.5, { align: "center" });
 
       // ---- Sello (derecha) ----
       const sealX = W - 40;
@@ -366,7 +371,7 @@ const CertificatePreview = ({
       setText(NAVY);
       doc.text(displayDate, cx - 78, valY, { align: "center" });
       doc.text(displayCertNumber, cx, valY, { align: "center" });
-      doc.text("Virtual - 5 módulos", cx + 78, valY, { align: "center" });
+      doc.text("Virtual", cx + 78, valY, { align: "center" });
 
       // Línea inferior
       doc.setFont("helvetica", "normal");
@@ -387,11 +392,21 @@ const CertificatePreview = ({
         });
       }
 
-      doc.save(
-        `${t("certificate.filename_prefix")}_${courseName.replace(/\s+/g, "_")}_${displayName.replace(/\s+/g, "_")}.pdf`,
-      );
+      const fileName = `${t("certificate.filename_prefix")}_${courseName.replace(/\s+/g, "_")}_${displayName.replace(/\s+/g, "_")}.pdf`;
+      try {
+        doc.save(fileName);
+      } catch (saveErr) {
+        // Fallback (p. ej. navegadores móviles que bloquean la descarga):
+        // abrir el blob en una pestaña nueva.
+        console.error("doc.save falló, usando blob:", saveErr);
+        const blobUrl = doc.output("bloburl");
+        window.open(blobUrl, "_blank", "noopener,noreferrer");
+      }
+      setDownloadError(null);
     } catch (err) {
-      if (import.meta.env.DEV) console.error("Error generating PDF:", err);
+      // No silenciar el error en producción: mostrarlo al usuario.
+      console.error("Error generating PDF:", err);
+      setDownloadError(err?.message || "No se pudo generar el PDF");
     } finally {
       setIsDownloading(false);
     }
@@ -417,6 +432,11 @@ const CertificatePreview = ({
             </>
           )}
         </button>
+        {downloadError && (
+          <p className="mt-2 text-[11px] text-red-600" role="alert">
+            {downloadError}
+          </p>
+        )}
       </div>
     );
   }
@@ -498,57 +518,34 @@ const CertificatePreview = ({
           </p>
 
           {/* Logos */}
-          <div className="flex items-center justify-center gap-[4%] mt-[1.5%] mb-[1%]">
-            <div className="flex flex-col items-center">
-              <span
-                className="font-extrabold text-[2cqw]"
-                style={{ color: "#0078BE" }}
-              >
-                TIC
-              </span>
-              <div className="flex gap-[1px] mt-[1px]">
-                <span
-                  className="w-[0.6cqw] h-[0.35cqw]"
-                  style={{ background: "#F09628" }}
-                />
-                <span
-                  className="w-[0.6cqw] h-[0.35cqw]"
-                  style={{ background: "#3CAA5A" }}
-                />
-                <span
-                  className="w-[0.6cqw] h-[0.35cqw]"
-                  style={{ background: "#0078BE" }}
-                />
-              </div>
-            </div>
-            <span className="w-px h-[5cqw] bg-slate-200" />
-            <div className="text-left leading-tight">
-              <span className="font-extrabold text-[2cqw]">MZL</span>
-              <span className="block italic text-[1cqw] text-slate-500">
-                Manizales del alma
-              </span>
-            </div>
-            <div className="flex items-center gap-[0.5cqw]">
-              <span
-                className="inline-block w-[1.4cqw] h-[1.8cqw]"
-                style={{
-                  background: "#BE282D",
-                  clipPath: "polygon(0 0,100% 0,100% 70%,50% 100%,0 70%)",
-                }}
-              />
-              <span className="text-left leading-tight font-bold text-[1cqw]">
-                ALCALDÍA DE
-                <br />
-                MANIZALES
-              </span>
-            </div>
-            <span className="w-px h-[5cqw] bg-slate-200" />
+          <div className="flex items-center justify-between px-[4cqw] mt-[1.5cqw] mb-[1cqw]">
             <img
-              src="/images/logo-edutechlife.webp"
-              alt="Edutechlife"
-              className="h-[3.4cqw] w-auto object-contain"
+              src={CERT_LOGOS.tic}
+              alt="TIC"
+              className="h-[9cqw] w-auto object-contain"
               onError={(e) => {
-                e.target.style.display = "none";
+                e.currentTarget.style.visibility = "hidden";
+              }}
+            />
+            <img
+              src={CERT_LOGOS.mzlAlcaldia}
+              alt="MZL · Alcaldía de Manizales"
+              className="h-[9cqw] w-auto object-contain"
+              onError={(e) => {
+                e.currentTarget.style.visibility = "hidden";
+              }}
+            />
+            <img
+              src={CERT_LOGOS.edutechlife}
+              alt="Edutechlife"
+              className="h-[6cqw] w-auto object-contain max-w-[26%]"
+              onError={(e) => {
+                if (e.currentTarget.dataset.fallback) {
+                  e.currentTarget.style.visibility = "hidden";
+                } else {
+                  e.currentTarget.dataset.fallback = "1";
+                  e.currentTarget.src = "/images/logo-edutechlife.webp";
+                }
               }}
             />
           </div>
@@ -616,27 +613,15 @@ const CertificatePreview = ({
               </span>
             </div>
 
-            {/* Firmas */}
-            <div className="flex items-end justify-center gap-[8%]">
+            {/* Firma única */}
+            <div className="flex items-end justify-center">
               <div className="text-center">
                 <div
-                  className="h-px w-[92%] mx-auto bg-slate-800 mb-[1cqw]"
-                  style={{ minHeight: "1px" }}
-                />
-                <span className="font-bold text-[1.3cqw] whitespace-nowrap">
-                  Dirección Académica
-                </span>
-                <span className="block text-[1.1cqw] text-slate-400">
-                  Edutechlife
-                </span>
-              </div>
-              <div className="text-center">
-                <div
-                  className="h-px w-[92%] mx-auto bg-slate-800 mb-[1cqw]"
+                  className="h-px w-[52%] mx-auto bg-slate-800 mb-[1cqw]"
                   style={{ minHeight: "1px" }}
                 />
                 <span className="font-bold text-[1.2cqw] whitespace-nowrap">
-                  Coordinación del Programa
+                  Coordinador del Programa
                 </span>
                 <span className="block text-[1.1cqw] text-slate-400">
                   Alcaldía de Manizales
@@ -687,7 +672,7 @@ const CertificatePreview = ({
               <p className="text-[1cqw] tracking-[0.16em] text-slate-400">
                 MODALIDAD
               </p>
-              <p className="font-bold text-[1.5cqw]">Virtual - 5 módulos</p>
+              <p className="font-bold text-[1.5cqw]">Virtual</p>
             </div>
           </div>
           <p className="text-[0.95cqw] text-slate-400 mt-[0.6%]">
@@ -732,6 +717,11 @@ const CertificatePreview = ({
             </>
           )}
         </motion.button>
+        {downloadError && (
+          <p className="mt-2 text-xs text-red-600 text-center" role="alert">
+            {downloadError}
+          </p>
+        )}
       </motion.div>
     </div>
   );

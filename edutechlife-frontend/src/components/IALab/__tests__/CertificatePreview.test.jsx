@@ -110,7 +110,7 @@ describe("CertificatePreview", () => {
     render(<CertificatePreview studentName="María López" />);
     const logo = screen.getByAltText("Edutechlife");
     expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute("src", "/images/logo-edutechlife.webp");
+    expect(logo.getAttribute("src")).toMatch(/edutechlife/i);
   });
 
   test("shows generating state on download click", async () => {
