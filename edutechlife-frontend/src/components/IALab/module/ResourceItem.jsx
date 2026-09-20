@@ -139,8 +139,8 @@ const ResourceItem = ({
           {resourceLocked && (
             <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">
               {prevResourceTitle
-                ? `Termina "${prevResourceTitle}" para desbloquear`
-                : t("ialab.status.locked_hint") || "Completa el recurso anterior para continuar"}
+                ? t("ialab.status.locked_detail", { name: prevResourceTitle })
+                : t("ialab.status.locked_hint")}
             </p>
           )}
         </div>

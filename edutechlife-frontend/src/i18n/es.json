@@ -2771,6 +2771,7 @@
   "ialab.status.viewed": "Visto",
   "ialab.status.locked": "Bloqueado",
   "ialab.status.locked_hint": "Completa el recurso anterior para continuar",
+  "ialab.status.locked_detail": "Termina \"{name}\" para desbloquear este recurso",
   "ialab.status.start_here": "Comenzar",
   "ialab.topic_completed_advancing": "Tema completado. Avanzando al siguiente tema…",
   "ialab.continue_to_activities": "Continuar con las actividades del módulo",

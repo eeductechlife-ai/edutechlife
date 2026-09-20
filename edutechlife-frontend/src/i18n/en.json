@@ -2765,6 +2765,7 @@
   "ialab.status.viewed": "Viewed",
   "ialab.status.locked": "Locked",
   "ialab.status.locked_hint": "Complete the previous resource to continue",
+  "ialab.status.locked_detail": "Finish \"{name}\" to unlock this resource",
   "ialab.status.start_here": "Start here",
   "ialab.topic_completed_advancing": "Topic completed. Moving to the next topic…",
   "ialab.continue_to_activities": "Continue with the module activities",
