@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useAuthIdentity } from "../../../hooks/useAuthIdentity";
+import {
+  useAuthIdentity,
+  clearUserSession,
+} from "../../../hooks/useAuthIdentity";
 import { useStudentProfile } from "../../../hooks/useStudentProfile";
 import { useProgressContext } from "../../ProgressContext";
 import { useNotification } from "../../NotificationContext";
@@ -114,16 +117,16 @@ export function useIALabUI(onBack) {
   }, [userId, authEmail, profile, userRole, t]);
 
   const signOut = async () => {
-    // Clerk's signOut was a no-op here (no Clerk session existed), so sessions
-    // were never actually closed. Clearing the Supabase session is what signs
-    // the student out.
+    // Cierra la sesión de Supabase y borra el estado local del usuario actual
+    // (progreso, certificado y caches) para que el siguiente usuario no vea
+    // información ajena.
+    await clearUserSession();
+    clearProgressFromStorage();
     try {
-      sessionStorage.removeItem("auth_token");
-      localStorage.removeItem("user_email");
+      useIALabStore.getState().setStoredCertificate(null);
     } catch {
       /* ignore */
     }
-    clearProgressFromStorage();
     window.location.replace("/login");
   };
 

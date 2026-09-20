@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { supabase } from "../lib/supabase";
 
 /**
  * Identity of the signed-in student, sourced from the Supabase session.
@@ -60,7 +61,10 @@ const tryRecoverSupabaseSession = () => {
       // Fija el scope del progreso (user_email) si viene en el token.
       if (payload.email) {
         try {
-          localStorage.setItem("user_email", payload.email.trim().toLowerCase());
+          localStorage.setItem(
+            "user_email",
+            payload.email.trim().toLowerCase(),
+          );
         } catch {
           /* ignore */
         }
@@ -148,13 +152,44 @@ export const readAuthIdentity = () => {
  * @param {string} [redirectTo="/login"] where to land after signing out
  * @param {Function|null} [navigate] React Router navigate fn from useNavigate()
  */
-export const signOutUser = (redirectTo = "/login", navigate = null) => {
+/**
+ * Cierra la sesión de Supabase y BORRA todo el estado local del usuario
+ * (progreso IALab, certificado, caches). Sin esto, la sesión seguía viva y el
+ * siguiente usuario veía la información del anterior hasta recargar.
+ */
+export const clearUserSession = async () => {
+  // 1) Terminar la sesión real (token de Supabase).
+  try {
+    await supabase.auth.signOut();
+  } catch {
+    /* seguimos limpiando aunque falle */
+  }
+  // 2) Borrar todo el rastro local del usuario anterior.
   try {
     sessionStorage.removeItem("auth_token");
     localStorage.removeItem("user_email");
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key) continue;
+      // Claves de IALab (progreso, certificado, caches) y sesión de Supabase.
+      if (
+        /^ialab/i.test(key) ||
+        /certificate/i.test(key) ||
+        /^sb-.*-auth-token$/i.test(key)
+      ) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
+    sessionStorage.clear();
   } catch {
     /* ignore */
   }
+};
+
+export const signOutUser = async (redirectTo = "/login", navigate = null) => {
+  await clearUserSession();
   // Notify same-tab listeners (storage event only fires in other tabs).
   window.dispatchEvent(new CustomEvent("auth:signout"));
 

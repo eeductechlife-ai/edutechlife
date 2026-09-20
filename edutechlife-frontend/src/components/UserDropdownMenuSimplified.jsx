@@ -170,7 +170,9 @@ const UserDropdownMenuSimplified = ({ onNavigate }) => {
 
   const handleCloseSection = useCallback(() => {
     closeWithAnimation();
-    navigate("/");
+    // Cerrar sesión de verdad: cierra Supabase y limpia el estado del usuario
+    // anterior (antes solo navegaba a "/" sin cerrar la sesión).
+    signOutUser("/", navigate);
   }, [navigate, closeWithAnimation]);
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);

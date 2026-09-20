@@ -8,6 +8,7 @@ import {
 } from "../../context/IALabContext";
 import { useIALabStore } from "../../store/ialabStore";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { signOutUser } from "../../hooks/useAuthIdentity";
 import ModuleNavItem from "./sidebar/ModuleNavItem";
 const StudyCalendarSection = lazy(() => import("./StudyCalendarSection"));
 
@@ -72,7 +73,8 @@ const IALabMobileMenu = ({
 
   const handleCloseSection = () => {
     closeMobileMenu();
-    navigate("/");
+    // Cerrar sesión de verdad (antes solo navegaba a "/").
+    signOutUser("/", navigate);
   };
 
   return (

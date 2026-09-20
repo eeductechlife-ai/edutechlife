@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 // ("Export 'X' is not defined" → pantalla en blanco).
 import { supabase } from "../lib/supabase";
 import { API_BASE_URL } from "../config/api";
-import { readAuthIdentity } from "./useAuthIdentity";
+import { readAuthIdentity, clearUserSession } from "./useAuthIdentity";
 
 // Native Supabase Auth hook (replaces Clerk)
 export const useSupabaseAuth = () => {
@@ -169,47 +169,45 @@ export const useSupabaseAuth = () => {
     const setupListener = async () => {
       const {
         data: { subscription },
-      } = supabase.auth.onAuthStateChange(
-        async (event, session) => {
-          if (session?.user) {
-            setUser(session.user);
-            sessionStorage.setItem("auth_token", session.access_token);
-            localStorage.setItem("refresh_token", session.refresh_token);
-            if (session.user.email)
+      } = supabase.auth.onAuthStateChange(async (event, session) => {
+        if (session?.user) {
+          setUser(session.user);
+          sessionStorage.setItem("auth_token", session.access_token);
+          localStorage.setItem("refresh_token", session.refresh_token);
+          if (session.user.email)
+            localStorage.setItem(
+              "user_email",
+              session.user.email.trim().toLowerCase(),
+            );
+
+          const { data: profileData } = await supabase
+            .from("users")
+            .select("*")
+            .eq("id", session.user.id)
+            .single();
+
+          setProfile(profileData);
+        } else {
+          // El SDK puede emitir INITIAL_SESSION/SIGNED_OUT con sesión null
+          // tras un login que sembró la sesión a mano. Si la identidad que
+          // usa el resto de la app sigue siendo válida, NO cierres sesión:
+          // antes esto borraba el token y el foro pedía iniciar sesión.
+          const identity = readAuthIdentity();
+          if (identity.isSignedIn) {
+            setUser({ id: identity.userId, email: identity.email });
+            if (identity.email)
               localStorage.setItem(
                 "user_email",
-                session.user.email.trim().toLowerCase(),
+                identity.email.trim().toLowerCase(),
               );
-
-            const { data: profileData } = await supabase
-              .from("users")
-              .select("*")
-              .eq("id", session.user.id)
-              .single();
-
-            setProfile(profileData);
-          } else {
-            // El SDK puede emitir INITIAL_SESSION/SIGNED_OUT con sesión null
-            // tras un login que sembró la sesión a mano. Si la identidad que
-            // usa el resto de la app sigue siendo válida, NO cierres sesión:
-            // antes esto borraba el token y el foro pedía iniciar sesión.
-            const identity = readAuthIdentity();
-            if (identity.isSignedIn) {
-              setUser({ id: identity.userId, email: identity.email });
-              if (identity.email)
-                localStorage.setItem(
-                  "user_email",
-                  identity.email.trim().toLowerCase(),
-                );
-              return;
-            }
-            setUser(null);
-            setProfile(null);
-            sessionStorage.removeItem("auth_token");
-            localStorage.removeItem("refresh_token");
+            return;
           }
-        },
-      );
+          setUser(null);
+          setProfile(null);
+          sessionStorage.removeItem("auth_token");
+          localStorage.removeItem("refresh_token");
+        }
+      });
 
       return subscription;
     };
@@ -358,8 +356,9 @@ export const useSupabaseAuth = () => {
     setError(null);
 
     try {
-      await supabase.auth.signOut();
-      sessionStorage.removeItem("auth_token");
+      // Cierra Supabase y borra el estado user-scoped (progreso/certificado),
+      // para que otro usuario no vea datos del anterior.
+      await clearUserSession();
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("student_name");
       setUser(null);
