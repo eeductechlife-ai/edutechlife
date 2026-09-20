@@ -80,6 +80,7 @@ const CertificateVerificationPage = lazy(
 );
 import SectionErrorBoundary from "../components/IALab/SectionErrorBoundary";
 import IALabSkeleton from "../components/skeletons/IALabSkeleton";
+import { IALabProvider } from "../context/IALabContext";
 import SmartBoardSkeleton from "../components/skeletons/SmartBoardSkeleton";
 import VAKSkeleton from "../components/skeletons/VAKSkeleton";
 
@@ -327,7 +328,9 @@ const AppRoutes = () => {
           element={
             <RoleProtectedRoute requiredRole="ialab">
               <Suspense fallback={<IALabSkeleton />}>
-                <CourseHome />
+                <IALabProvider>
+                  <CourseHome />
+                </IALabProvider>
               </Suspense>
             </RoleProtectedRoute>
           }
