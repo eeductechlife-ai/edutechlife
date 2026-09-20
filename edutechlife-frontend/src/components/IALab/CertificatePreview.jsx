@@ -428,46 +428,50 @@ const CertificatePreview = ({
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative bg-white overflow-hidden shadow-xl"
-        style={{ border: `1.2mm solid ${GOLD}`, aspectRatio: "297 / 210" }}
+        className="relative bg-white shadow-xl"
+        style={{
+          containerType: "inline-size",
+          border: `0.55cqw solid ${GOLD}`,
+          minHeight: "70cqw",
+        }}
       >
         {/* Marco interior */}
         <div
           className="absolute pointer-events-none"
-          style={{ inset: "2.6mm", border: `0.5mm solid ${GOLD_LINE}` }}
+          style={{ inset: "2.1cqw", border: `0.18cqw solid ${GOLD_LINE}` }}
         />
 
         {/* Esquinas navy */}
         {[
           {
-            top: "2mm",
-            left: "2mm",
-            borderTop: `0.7mm solid ${NAVY}`,
-            borderLeft: `0.7mm solid ${NAVY}`,
+            top: "1.6cqw",
+            left: "1.6cqw",
+            borderTop: `0.3cqw solid ${NAVY}`,
+            borderLeft: `0.3cqw solid ${NAVY}`,
           },
           {
-            top: "2mm",
-            right: "2mm",
-            borderTop: `0.7mm solid ${NAVY}`,
-            borderRight: `0.7mm solid ${NAVY}`,
+            top: "1.6cqw",
+            right: "1.6cqw",
+            borderTop: `0.3cqw solid ${NAVY}`,
+            borderRight: `0.3cqw solid ${NAVY}`,
           },
           {
-            bottom: "2mm",
-            left: "2mm",
-            borderBottom: `0.7mm solid ${NAVY}`,
-            borderLeft: `0.7mm solid ${NAVY}`,
+            bottom: "1.6cqw",
+            left: "1.6cqw",
+            borderBottom: `0.3cqw solid ${NAVY}`,
+            borderLeft: `0.3cqw solid ${NAVY}`,
           },
           {
-            bottom: "2mm",
-            right: "2mm",
-            borderBottom: `0.7mm solid ${NAVY}`,
-            borderRight: `0.7mm solid ${NAVY}`,
+            bottom: "1.6cqw",
+            right: "1.6cqw",
+            borderBottom: `0.3cqw solid ${NAVY}`,
+            borderRight: `0.3cqw solid ${NAVY}`,
           },
         ].map((s, i) => (
           <div
             key={i}
             className="absolute pointer-events-none"
-            style={{ ...s, width: "8mm", height: "8mm" }}
+            style={{ ...s, width: "6cqw", height: "6cqw" }}
           />
         ))}
 
@@ -485,11 +489,11 @@ const CertificatePreview = ({
         </svg>
 
         <div
-          className="relative z-10 flex flex-col h-full px-[6%] py-[3.5%] text-center"
+          className="relative z-10 flex flex-col min-h-[70cqw] px-[4.6cqw] py-[2.6cqw] text-center"
           style={{ color: NAVY }}
         >
           {/* Aviso superior */}
-          <p className="tracking-[0.28em] text-[1.1vmin] text-slate-500 font-medium">
+          <p className="tracking-[0.28em] text-[1.1cqw] text-slate-500 font-medium">
             PROGRAMA AVALADO POR LAS SIGUIENTES ENTIDADES
           </p>
 
@@ -497,52 +501,52 @@ const CertificatePreview = ({
           <div className="flex items-center justify-center gap-[4%] mt-[1.5%] mb-[1%]">
             <div className="flex flex-col items-center">
               <span
-                className="font-extrabold text-[2vmin]"
+                className="font-extrabold text-[2cqw]"
                 style={{ color: "#0078BE" }}
               >
                 TIC
               </span>
               <div className="flex gap-[1px] mt-[1px]">
                 <span
-                  className="w-[0.6vmin] h-[0.35vmin]"
+                  className="w-[0.6cqw] h-[0.35cqw]"
                   style={{ background: "#F09628" }}
                 />
                 <span
-                  className="w-[0.6vmin] h-[0.35vmin]"
+                  className="w-[0.6cqw] h-[0.35cqw]"
                   style={{ background: "#3CAA5A" }}
                 />
                 <span
-                  className="w-[0.6vmin] h-[0.35vmin]"
+                  className="w-[0.6cqw] h-[0.35cqw]"
                   style={{ background: "#0078BE" }}
                 />
               </div>
             </div>
-            <span className="w-px h-[5vmin] bg-slate-200" />
+            <span className="w-px h-[5cqw] bg-slate-200" />
             <div className="text-left leading-tight">
-              <span className="font-extrabold text-[2vmin]">MZL</span>
-              <span className="block italic text-[1vmin] text-slate-500">
+              <span className="font-extrabold text-[2cqw]">MZL</span>
+              <span className="block italic text-[1cqw] text-slate-500">
                 Manizales del alma
               </span>
             </div>
-            <div className="flex items-center gap-[0.5vmin]">
+            <div className="flex items-center gap-[0.5cqw]">
               <span
-                className="inline-block w-[1.4vmin] h-[1.8vmin]"
+                className="inline-block w-[1.4cqw] h-[1.8cqw]"
                 style={{
                   background: "#BE282D",
                   clipPath: "polygon(0 0,100% 0,100% 70%,50% 100%,0 70%)",
                 }}
               />
-              <span className="text-left leading-tight font-bold text-[1vmin]">
+              <span className="text-left leading-tight font-bold text-[1cqw]">
                 ALCALDÍA DE
                 <br />
                 MANIZALES
               </span>
             </div>
-            <span className="w-px h-[5vmin] bg-slate-200" />
+            <span className="w-px h-[5cqw] bg-slate-200" />
             <img
               src="/images/logo-edutechlife.webp"
               alt="Edutechlife"
-              className="h-[3.4vmin] w-auto object-contain"
+              className="h-[3.4cqw] w-auto object-contain"
               onError={(e) => {
                 e.target.style.display = "none";
               }}
@@ -551,44 +555,44 @@ const CertificatePreview = ({
 
           {/* Título */}
           <h2
-            className="font-bold tracking-[0.32em] text-[2.6vmin] mt-[1.5%]"
+            className="font-bold tracking-[0.32em] text-[2.6cqw] mt-[1.5%]"
             style={{ color: GOLD }}
           >
             CERTIFICADO DE APROBACIÓN
           </h2>
-          <div className="flex items-center justify-center gap-[1vmin] my-[1%]">
+          <div className="flex items-center justify-center gap-[1cqw] my-[1%]">
             <span
-              className="h-[0.4vmin] w-[22%]"
+              className="h-[0.4cqw] w-[22%]"
               style={{ background: GOLD_LINE }}
             />
             <span
-              className="w-[1.4vmin] h-[1.4vmin] rotate-45"
+              className="w-[1.4cqw] h-[1.4cqw] rotate-45"
               style={{ background: GOLD_LINE }}
             />
             <span
-              className="h-[0.4vmin] w-[22%]"
+              className="h-[0.4cqw] w-[22%]"
               style={{ background: GOLD_LINE }}
             />
           </div>
 
           {/* Curso */}
-          <p className="font-bold text-[2.1vmin]">{courseFullName}</p>
+          <p className="font-bold text-[2.1cqw]">{courseFullName}</p>
 
-          <p className="text-[1.5vmin] text-slate-500 mt-[2%]">
+          <p className="text-[1.5cqw] text-slate-500 mt-[2%]">
             Se otorga el presente certificado a
           </p>
 
           {/* Nombre */}
-          <h3 className="font-extrabold text-[4.4vmin] leading-none mt-[1.4%]">
+          <h3 className="font-extrabold text-[4.4cqw] leading-none mt-[1.4%]">
             {displayName}
           </h3>
           <div
-            className="h-[0.45vmin] w-[60%] mx-auto mt-[1.5%]"
+            className="h-[0.45cqw] w-[60%] mx-auto mt-[1.5%]"
             style={{ background: GOLD_LINE }}
           />
 
           {/* Cuerpo */}
-          <p className="text-[1.5vmin] text-slate-500 leading-relaxed mt-[2.2%] max-w-[78%] mx-auto">
+          <p className="text-[1.5cqw] text-slate-500 leading-relaxed mt-[2.2%] max-w-[78%] mx-auto">
             Por haber cursado y aprobado satisfactoriamente los 5 módulos del
             programa Introducción a la Inteligencia Artificial Generativa,
             demostrando dominio de los fundamentos, herramientas y aplicaciones
@@ -599,7 +603,7 @@ const CertificatePreview = ({
           <div className="mt-auto grid grid-cols-3 items-end gap-[2%] pb-[1%]">
             {/* QR */}
             <div className="justify-self-start text-left">
-              <div className="w-[16vmin] h-[16vmin] border border-slate-200 p-[0.6vmin] bg-white">
+              <div className="w-[16cqw] h-[16cqw] border border-slate-200 p-[0.6cqw] bg-white">
                 <div
                   className="w-full h-full"
                   style={{
@@ -607,7 +611,7 @@ const CertificatePreview = ({
                   }}
                 />
               </div>
-              <span className="block text-[1vmin] text-slate-400 mt-[0.4vmin]">
+              <span className="block text-[1cqw] text-slate-400 mt-[0.4cqw]">
                 Escaneo para verificar
               </span>
             </div>
@@ -616,25 +620,25 @@ const CertificatePreview = ({
             <div className="flex items-end justify-center gap-[8%]">
               <div className="text-center">
                 <div
-                  className="h-px w-[92%] mx-auto bg-slate-800 mb-[1vmin]"
+                  className="h-px w-[92%] mx-auto bg-slate-800 mb-[1cqw]"
                   style={{ minHeight: "1px" }}
                 />
-                <span className="font-bold text-[1.5vmin]">
+                <span className="font-bold text-[1.5cqw]">
                   Dirección Académica
                 </span>
-                <span className="block text-[1.1vmin] text-slate-400">
+                <span className="block text-[1.1cqw] text-slate-400">
                   Edutechlife
                 </span>
               </div>
               <div className="text-center">
                 <div
-                  className="h-px w-[92%] mx-auto bg-slate-800 mb-[1vmin]"
+                  className="h-px w-[92%] mx-auto bg-slate-800 mb-[1cqw]"
                   style={{ minHeight: "1px" }}
                 />
-                <span className="font-bold text-[1.5vmin]">
+                <span className="font-bold text-[1.5cqw]">
                   Coordinación del Programa
                 </span>
-                <span className="block text-[1.1vmin] text-slate-400">
+                <span className="block text-[1.1cqw] text-slate-400">
                   Alcaldía de Manizales
                 </span>
               </div>
@@ -643,20 +647,20 @@ const CertificatePreview = ({
             {/* Sello */}
             <div className="justify-self-end">
               <div
-                className="w-[13vmin] h-[13vmin] rounded-full flex flex-col items-center justify-center"
-                style={{ background: NAVY, border: `1vmin solid ${GOLD_LINE}` }}
+                className="w-[13cqw] h-[13cqw] rounded-full flex flex-col items-center justify-center"
+                style={{ background: NAVY, border: `1cqw solid ${GOLD_LINE}` }}
               >
                 <span
-                  className="text-[0.9vmin] tracking-[0.2em]"
+                  className="text-[0.9cqw] tracking-[0.2em]"
                   style={{ color: GOLD_LINE }}
                 >
                   CERTIFICADO
                 </span>
-                <span className="text-white font-extrabold text-[1.3vmin] mt-[0.4vmin]">
+                <span className="text-white font-extrabold text-[1.3cqw] mt-[0.4cqw]">
                   EDUTECHLIFE
                 </span>
                 <span
-                  className="text-[0.9vmin] tracking-[0.2em]"
+                  className="text-[0.9cqw] tracking-[0.2em]"
                   style={{ color: GOLD_LINE }}
                 >
                   VERIFICADO
@@ -668,25 +672,25 @@ const CertificatePreview = ({
           {/* Pie */}
           <div className="border-t border-slate-200 pt-[1.2%] grid grid-cols-3 gap-[2%]">
             <div>
-              <p className="text-[1vmin] tracking-[0.16em] text-slate-400">
+              <p className="text-[1cqw] tracking-[0.16em] text-slate-400">
                 FECHA DE EMISIÓN
               </p>
-              <p className="font-bold text-[1.5vmin]">{displayDate}</p>
+              <p className="font-bold text-[1.5cqw]">{displayDate}</p>
             </div>
             <div>
-              <p className="text-[1vmin] tracking-[0.16em] text-slate-400">
+              <p className="text-[1cqw] tracking-[0.16em] text-slate-400">
                 N.º DE CERTIFICADO
               </p>
-              <p className="font-bold text-[1.5vmin]">{displayCertNumber}</p>
+              <p className="font-bold text-[1.5cqw]">{displayCertNumber}</p>
             </div>
             <div>
-              <p className="text-[1vmin] tracking-[0.16em] text-slate-400">
+              <p className="text-[1cqw] tracking-[0.16em] text-slate-400">
                 MODALIDAD
               </p>
-              <p className="font-bold text-[1.5vmin]">Virtual - 5 módulos</p>
+              <p className="font-bold text-[1.5cqw]">Virtual - 5 módulos</p>
             </div>
           </div>
-          <p className="text-[0.95vmin] text-slate-400 mt-[0.6%]">
+          <p className="text-[0.95cqw] text-slate-400 mt-[0.6%]">
             edutechlife.co - Documento digital con verificación en línea
           </p>
           {verifyUrl && (
@@ -694,7 +698,7 @@ const CertificatePreview = ({
               href={verifyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[1vmin] hover:underline break-all"
+              className="text-[1cqw] hover:underline break-all"
               style={{ color: LINK }}
             >
               {verifyUrl}

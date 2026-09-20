@@ -2331,6 +2331,7 @@
   "modals.certificates.name_placeholder": "Tu nombre completo",
   "modals.certificates.error_title": "Error al generar certificado",
   "modals.certificates.error_solution": "💡 Solución: Ejecuta el script SQL en Supabase Dashboard:",
+  "modals.certificates.share_linkedin": "Compartir en LinkedIn",
   "modals.certificates.generating": "Generando certificado...",
   "modals.certificates.generate": "Generar Certificado",
   "modals.certificates.course_enrolled": "Curso Inscrito",
