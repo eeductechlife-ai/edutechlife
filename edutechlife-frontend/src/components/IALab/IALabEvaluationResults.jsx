@@ -11,12 +11,23 @@ import ScoreBreakdown from "./ScoreBreakdown";
 import FeedbackPanel from "./FeedbackPanel";
 import CompetenceRadar from "./CompetenceRadar";
 import { getCompetenceLevel, computeRadarScores } from "./competenceLevel.js";
-import { getMasteryMessage } from "./evaluationFeedback.js";
 import {
   EVALUATION_HISTORY_KEY,
   parseEvaluationHistory,
   recordEvaluation,
 } from "../../utils/evaluationHistory";
+
+// Mensaje de dominio por módulo (inline: no crear archivos nuevos). Si el
+// módulo no tiene texto específico, cae al mensaje genérico existente.
+const getMasteryMessage = (moduleId, t) => {
+  const id = Number(moduleId);
+  if ([1, 2, 3, 4, 5].includes(id)) {
+    const key = `ialab.evaluation.results.mastery_message_m${id}`;
+    const value = t(key);
+    if (value && value !== key) return value;
+  }
+  return t("ialab.evaluation.results.mastery_message");
+};
 
 const IALabEvaluationResults = ({
   evaluation,
