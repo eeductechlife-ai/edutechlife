@@ -8,6 +8,7 @@ import {
   useIALabProgressContext,
   useIALabUIContext,
 } from "../../context/IALabContext";
+import { useIALabStore } from "../../store/ialabStore";
 import { Card, CardContent } from "../ui/card-simple";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
@@ -33,8 +34,28 @@ const CertificatesModal = ({ isOpen, onClose }) => {
   // devuelven `null` en vez de lanzar — se degrada con gracia en ese caso.
   const ialabProgressContext = useIALabProgressContext();
   const ialabUIContext = useIALabUIContext();
+  // Fallback al store de zustand: el modal también se monta en la ruta
+  // `/ialab` (CourseHome), que NO está dentro de `IALabProvider`. Ahí
+  // `useIALabProgressContext()` es null y `useProgressContext()` suele venir
+  // vacío, por lo que el certificado aparecía como "no elegible" aunque el
+  // curso estuviera completo. El store sí tiene el progreso real.
+  const storeCalculateModuleScore = useIALabStore(
+    (s) => s.calculateModuleScore,
+  );
+  const storeCourseProgress = useIALabStore((s) => s.courseProgress);
+  const storeCompletedModules = useIALabStore((s) => s.completedModules);
   const calculateModuleScore =
-    ialabProgressContext?.calculateModuleScore ?? (() => 0);
+    ialabProgressContext?.calculateModuleScore ??
+    storeCalculateModuleScore ??
+    (() => 0);
+  const effectiveCourseProgress =
+    Number.isFinite(courseProgress) && courseProgress > 0
+      ? courseProgress
+      : storeCourseProgress;
+  const effectiveCompletedModules =
+    Array.isArray(completedModules) && completedModules.length > 0
+      ? completedModules
+      : storeCompletedModules;
   const { storedCertificate, generateCertificate } = ialabUIContext ?? {};
 
   const [loading, setLoading] = useState(true);
@@ -81,14 +102,14 @@ const CertificatesModal = ({ isOpen, onClose }) => {
   const modulesByScore = [1, 2, 3, 4, 5].filter(
     (id) => calculateModuleScore(id) >= 80,
   ).length;
-  const modulesByContext = completedModules.length;
+  const modulesByContext = effectiveCompletedModules.length;
   const completedModulesCount = Math.max(modulesByScore, modulesByContext);
 
   const moduleScores = [1, 2, 3, 4, 5].map((id) => calculateModuleScore(id));
   const requirements = evaluateCertificateRequirements({
     moduleScores,
-    courseProgress,
-    completedModules,
+    courseProgress: effectiveCourseProgress,
+    completedModules: effectiveCompletedModules,
   });
   const canGenerateCertificate = requirements.eligible;
 
@@ -176,7 +197,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
                 </p>
                 <p className="text-xs text-emerald-700 mt-1">
                   {t("modals.certificates.course_completed_desc", {
-                    progress: Math.round(courseProgress),
+                    progress: Math.round(effectiveCourseProgress),
                   })}
                 </p>
               </div>
@@ -289,18 +310,39 @@ const CertificatesModal = ({ isOpen, onClose }) => {
                   })}
                 </p>
                 {!canGenerateCertificate && (
-                  <ul className="mt-3 space-y-1.5" data-testid="certificate-requirements">
+                  <ul
+                    className="mt-3 space-y-1.5"
+                    data-testid="certificate-requirements"
+                  >
                     {[
-                      { done: requirements.checks.fiveModules, label: t("modals.certificates.req_modules_done") },
-                      { done: requirements.checks.allModulesPassed, label: t("modals.certificates.req_module_score") },
-                      { done: requirements.checks.globalProgress, label: t("modals.certificates.req_global") },
+                      {
+                        done: requirements.checks.fiveModules,
+                        label: t("modals.certificates.req_modules_done"),
+                      },
+                      {
+                        done: requirements.checks.allModulesPassed,
+                        label: t("modals.certificates.req_module_score"),
+                      },
+                      {
+                        done: requirements.checks.globalProgress,
+                        label: t("modals.certificates.req_global"),
+                      },
                     ].map((req) => (
-                      <li key={req.label} className="flex items-center gap-2 text-xs">
+                      <li
+                        key={req.label}
+                        className="flex items-center gap-2 text-xs"
+                      >
                         <Icon
                           name={req.done ? "fa-check-circle" : "fa-circle"}
                           className={`text-[11px] flex-shrink-0 ${req.done ? "text-emerald-500" : "text-amber-400"}`}
                         />
-                        <span className={req.done ? "text-emerald-700 line-through" : "text-amber-800"}>
+                        <span
+                          className={
+                            req.done
+                              ? "text-emerald-700 line-through"
+                              : "text-amber-800"
+                          }
+                        >
                           {req.label}
                         </span>
                       </li>
