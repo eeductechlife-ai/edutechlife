@@ -1,7 +1,8 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { SmartBoardKidsProvider } from "../../context/SmartBoardKidsContext";
 import { useAuthIdentity } from "../../hooks/useAuthIdentity";
+import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { PageLoader } from "../LoadingScreen";
 import { useTranslation } from "../../i18n/I18nProvider";
 import SEO from "../SEO";
@@ -17,6 +18,7 @@ const SmartBoardParentDashboard = lazy(
 const SmartBoardLandingPage = () => {
   const { t } = useTranslation();
   const { isLoaded, isSignedIn, token } = useAuthIdentity();
+  const { profile, isLoading: isProfileLoading } = useStudentProfile();
   const [role, setRole] = useState(null);
 
   useEffect(() => {
@@ -29,12 +31,41 @@ const SmartBoardLandingPage = () => {
       .catch(() => setRole("student"));
   }, [isLoaded, isSignedIn, token]);
 
-  if (!isLoaded || (isSignedIn && role === null)) {
+  if (!isLoaded || (isSignedIn && (role === null || isProfileLoading))) {
     return <PageLoader message={t("smartboard.loading")} />;
   }
 
   if (!isSignedIn) {
     return <Navigate to="/sign-up/smartboard" replace />;
+  }
+
+  // Productos distintos: una cuenta de IALab (curso de IA generativa) no entra
+  // al panel de los niños. Los padres con vínculo activo sí (role='parent').
+  const accountType = profile?.account_type;
+  if (role !== "parent" && accountType === "ialab") {
+    return (
+      <div className="min-h-[100dvh] bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-6">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
+          <div className="text-4xl mb-3" aria-hidden="true">
+            🎓
+          </div>
+          <h1 className="text-xl font-bold text-[#004B63] mb-2">
+            {t("smartboard.product_mismatch_title") ||
+              "Esta cuenta es de IALab"}
+          </h1>
+          <p className="text-sm text-gray-600 mb-6">
+            {t("smartboard.product_mismatch_desc") ||
+              "SmartBoard es para niños y sus padres, con un panel y permisos distintos. Tu cuenta pertenece al curso de IA generativa del IALab."}
+          </p>
+          <Link
+            to="/ialab"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-semibold hover:shadow-lg transition-all"
+          >
+            {t("smartboard.product_mismatch_cta") || "Ir a mi curso (IALab)"}
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   if (role === "parent") {

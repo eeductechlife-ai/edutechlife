@@ -5702,5 +5702,8 @@
   "peer_review.error": "Could not submit the review. Please try again.",
   "ialab.competency.by_axis": "Competency by axis",
   "signup.button.continue": "Continue",
-  "login.error.oauth_failed": "We couldn't complete the Google sign-in. Please try again or sign in with your email."
+  "login.error.oauth_failed": "We couldn't complete the Google sign-in. Please try again or sign in with your email.",
+  "smartboard.product_mismatch_title": "This is an IALab account",
+  "smartboard.product_mismatch_desc": "SmartBoard is for children and their parents, with a different dashboard and permissions. Your account belongs to the IALab generative AI course.",
+  "smartboard.product_mismatch_cta": "Go to my course (IALab)"
 }

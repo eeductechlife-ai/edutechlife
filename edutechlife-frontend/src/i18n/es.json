@@ -5707,5 +5707,8 @@
   "peer_review.error": "No se pudo enviar la revisión. Inténtalo de nuevo.",
   "ialab.competency.by_axis": "Competencia por eje",
   "signup.button.continue": "Continuar",
-  "login.error.oauth_failed": "No pudimos completar el ingreso con Google. Inténtalo de nuevo o entra con tu correo."
+  "login.error.oauth_failed": "No pudimos completar el ingreso con Google. Inténtalo de nuevo o entra con tu correo.",
+  "smartboard.product_mismatch_title": "Esta cuenta es de IALab",
+  "smartboard.product_mismatch_desc": "SmartBoard es para niños y sus padres: tiene panel y permisos distintos. Tu cuenta pertenece al curso de IA generativa del IALab.",
+  "smartboard.product_mismatch_cta": "Ir a mi curso (IALab)"
 }

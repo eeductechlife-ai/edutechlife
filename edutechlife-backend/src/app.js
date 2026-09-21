@@ -4,7 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const crypto = require('crypto');
 const sanitizeMiddleware = require('./middleware/sanitize');
-const { requireAuth, optionalAuth } = require('./middleware/auth');
+const { requireAuth, optionalAuth, requireProduct } = require('./middleware/auth');
 const { apiLimiter, deepseekLimiter, authLimiter, ttsLimiter, ttsHourlyLimiter } = require('./middleware/rateLimiter');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const swaggerUi = require('swagger-ui-express');
@@ -132,21 +132,38 @@ app.use('/api/ialab/templates', requireAuth);
 
 app.use('/api/health', healthRoutes);
 app.use('/api/chat', chatRoutes);
-app.use('/api/ialab', ialabRoutes);
+// Guard de producto: una cuenta de SmartBoard no consume la API de IALab.
+app.use('/api/ialab', requireProduct('ialab'), ialabRoutes);
 app.use('/api/voice-token', voiceRoutes);
 // /api/tts es público (optionalAuth) para que Nico —el asistente del sitio
 // público— pueda usar voz Google Neural sin sesión. Los limiters + allow-list
 // de idioma en routes/tts.js contienen el costo por IP/usuario.
 app.use('/api/tts', optionalAuth, ttsLimiter, ttsHourlyLimiter, ttsRoutes);
-app.use('/api/smartboard', ferpaAuditLog, smartboardRoutes);
-app.use('/api/smartboard', ferpaAuditLog, scanImageRoutes);
+// Guard de producto: una cuenta de IALab no consume la API de SmartBoard.
+// /user-role queda exento (ambos productos lo consultan para resolver el rol).
+app.use(
+  '/api/smartboard',
+  ferpaAuditLog,
+  requireProduct('smartboard', { allowPaths: ['/user-role'] }),
+  smartboardRoutes
+);
+app.use(
+  '/api/smartboard',
+  ferpaAuditLog,
+  requireProduct('smartboard', { allowPaths: ['/user-role'] }),
+  scanImageRoutes
+);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', authLimiter, adminRoutes);
 app.use('/api/notifications', requireAuth, notificationRoutes);
 app.use('/api/institutions', institutionRoutes);
 app.use('/api/compliance', complianceRoutes);
-app.use('/api/smartboard/recommendations', recommendationRoutes);
+app.use(
+  '/api/smartboard/recommendations',
+  requireProduct('smartboard'),
+  recommendationRoutes
+);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
