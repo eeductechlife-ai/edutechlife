@@ -316,3 +316,40 @@ Todo lo siguiente quedó desplegado y comprobado contra `www.edutechlife.co` /
 3. **Render**: aviso de "Payment failed" en el workspace; instancia Free con spin-down (50 s de arranque en frío).
 4. **Opcional**: añadir `SUPABASE_SERVICE_ROLE_KEY` (nombre canónico) en Render; el código ya funciona con el nombre legado.
 5. **Cuentas de prueba creadas** (borrar si no se necesitan): `sofia.curso.1790015211546@gmail.com`, `valentina.curso.1790014585@gmail.com`, `juan.curso.1790014660501@gmail.com` (contraseña `CursoIalab2026!`), `qa.curso.1790012743@gmail.com` (`QaCurso2026!`), `edutechlife.qa.1790011454@gmail.com` (`QaRegistro2026!`).
+
+### 11.5 Fase 3 — separación de acceso IALab ↔ SmartBoard (aplicada 2026-09-21)
+
+**Contexto**: son dos productos con audiencias distintas (IALab: curso de IA generativa para
+cualquier persona; SmartBoard: niños 6–16 con sus padres). La separación solo existía en el
+frontend y era inerte: `RoleProtectedRoute` leía `profile.account_type` de `useStudentProfile`,
+que **no expone ese campo** (compone datos del panel de niños), así que el filtro nunca se
+aplicaba y `/smartboard` no tenía gate: cualquier cuenta logueada veía el dashboard de los niños.
+
+**Implementado**
+- `requireProduct(product)` (backend): compara `users.account_type` con el producto de la API y
+  responde `403 {error:'product_mismatch', product, message}`. Excepciones: admin/content_creator
+  (`app_metadata.role`), padres con vínculo activo en `parent_student_links`, cuentas sin
+  `account_type` (transición) y las rutas declaradas en `allowPaths`.
+- Guard aplicado a `/api/ialab*` y `/api/smartboard*` (incluye scanImage y recommendations).
+  `/api/smartboard/user-role` queda exento porque ambos productos lo consultan; ahora además
+  devuelve `account_type`.
+- `/smartboard`: si la cuenta es de IALab y no es padre, muestra el aviso “Esta cuenta es de
+  IALab” con enlace al curso (i18n es/en/pt), en lugar del panel de niños.
+
+**Evidencia (producción)**
+| Prueba | Resultado |
+|---|---|
+| IALab → `/api/smartboard/improvement-plan` | 403 `product_mismatch` |
+| IALab → `/api/ialab/modules` | 200 |
+| SmartBoard → `/api/ialab/modules` | 403 `product_mismatch` |
+| SmartBoard → `/api/smartboard/improvement-plan` | 200 |
+| `/api/smartboard/user-role` (exenta) | 200 con `account_type` correcto para ambos |
+| Sin token | 401 |
+| UI `/smartboard` con cuenta IALab | aviso claro + CTA al curso (sin panel de niños) |
+| Tests backend | 10/10 en `middleware/auth.test.js` (4 de `requireAuth` + 6 de `requireProduct`) |
+
+**Pendientes nuevos**
+- `RoleProtectedRoute` sigue leyendo `account_type` de un hook que no lo expone (gate inerte):
+  conviene que use `/api/smartboard/user-role` como ya hace `/smartboard`.
+- `/smartboard` con una cuenta IALab termina además redirigida a `/ialab/1` en algunas rutas de
+  navegación (revisar si hay un redirect heredado; el aviso ya es suficiente).
