@@ -167,6 +167,7 @@ const WelcomeScreen = ({ onNavigate }) => {
                     <SupabaseSignUpForm
                       onBack={() => setIsSignUpMode(false)}
                       returnTo={returnTo}
+                      embedded
                     />
                   </div>
                 ) : (

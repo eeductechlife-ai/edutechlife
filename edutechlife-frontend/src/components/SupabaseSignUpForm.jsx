@@ -30,7 +30,16 @@ function SignUpFormFallback() {
   );
 }
 
-const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
+const SupabaseSignUpForm = ({
+  onBack,
+  returnTo,
+  accountType = "ialab",
+  // Cuando el formulario se monta dentro de una pantalla que ya aporta el
+  // layout (WelcomeScreen / SmartBoardSignUpPage) no debe renderizar su propia
+  // página ni la columna de marketing: anidar ambas encogía el formulario a
+  // ~500px y partía los textos palabra por línea.
+  embedded = false,
+}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -273,27 +282,58 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
             : "seo.signup_ialab.desc",
         )}
       />
-      <div className="min-h-[100dvh] bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#1a5f7a] flex items-center justify-center p-0 sm:p-4 relative overflow-hidden">
-        <FloatingParticles />
+      <div
+        className={
+          embedded
+            ? "relative w-full"
+            : "min-h-[100dvh] bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#1a5f7a] flex items-center justify-center p-0 sm:p-4 relative overflow-hidden"
+        }
+      >
+        {!embedded && <FloatingParticles />}
 
-        {/* Back Button */}
-        <button
-          onClick={onBack}
-          className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20 flex items-center gap-2 px-3 py-2 sm:px-4 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm font-medium">
-            {t("ialab.signup_back_to_login")}
-          </span>
-        </button>
+        {/* Back Button — el contenedor (WelcomeScreen / SmartBoard) ya ofrece
+            su propia navegación cuando el formulario va embebido. */}
+        {!embedded && (
+          <button
+            onClick={onBack}
+            className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20 flex items-center gap-2 px-3 py-2 sm:px-4 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm font-medium">
+              {t("ialab.signup_back_to_login")}
+            </span>
+          </button>
+        )}
 
         {/* Main Card */}
-        <div className="relative z-10 w-full max-w-5xl sm:my-4">
-          <div className="bg-white/95 backdrop-blur-xl sm:rounded-3xl shadow-2xl overflow-hidden border border-white/20 min-h-[100dvh] sm:min-h-0">
+        <div
+          className={
+            embedded
+              ? "relative z-10 w-full"
+              : "relative z-10 w-full max-w-5xl sm:my-4"
+          }
+        >
+          <div
+            className={
+              embedded
+                ? "w-full"
+                : "bg-white/95 backdrop-blur-xl sm:rounded-3xl shadow-2xl overflow-hidden border border-white/20 min-h-[100dvh] sm:min-h-0"
+            }
+          >
             {!success ? (
-              <div className="flex flex-col lg:flex-row">
+              <div
+                className={
+                  embedded ? "flex flex-col" : "flex flex-col lg:flex-row"
+                }
+              >
                 {/* Compact brand header — mobile & tablet only */}
-                <div className="lg:hidden bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-5 pt-20 pb-5 text-white relative overflow-hidden">
+                <div
+                  className={
+                    embedded
+                      ? "hidden"
+                      : "lg:hidden bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-5 pt-20 pb-5 text-white relative overflow-hidden"
+                  }
+                >
                   <div className="relative z-10 flex items-center gap-3">
                     <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm flex-shrink-0">
                       <Brain className="w-5 h-5" />
@@ -311,7 +351,13 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                 {/* pt is oversized on purpose: the "back to login" button is
                     absolutely positioned at top-6/left-6 and would otherwise
                     sit on top of the logo. */}
-                <div className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-8 pt-24 pb-8 lg:px-12 lg:pt-28 lg:pb-12 text-white flex-col justify-between relative overflow-hidden">
+                <div
+                  className={
+                    embedded
+                      ? "hidden"
+                      : "hidden lg:flex lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-8 pt-24 pb-8 lg:px-12 lg:pt-28 lg:pb-12 text-white flex-col justify-between relative overflow-hidden"
+                  }
+                >
                   <div className="absolute inset-0 opacity-10">
                     <div
                       style={{
@@ -375,7 +421,13 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
                 </div>
 
                 {/* Right Side - Form */}
-                <div className="lg:w-3/5 p-5 sm:p-8 lg:p-12 flex flex-col justify-center">
+                <div
+                  className={
+                    embedded
+                      ? "w-full flex flex-col justify-center"
+                      : "lg:w-3/5 p-5 sm:p-8 lg:p-12 flex flex-col justify-center"
+                  }
+                >
                   {/* Progress Bar — only once the multi-step form has started */}
                   {currentStep > 0 && (
                     <div className="mb-6 sm:mb-8">
@@ -821,7 +873,13 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
               </div>
             ) : (
               /* Success State */
-              <div className="min-h-[70vh] lg:min-h-[500px] flex items-center justify-center p-8">
+              <div
+                className={
+                  embedded
+                    ? "flex items-center justify-center py-10"
+                    : "min-h-[70vh] lg:min-h-[500px] flex items-center justify-center p-8"
+                }
+              >
                 <div className="text-center max-w-md">
                   <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle2 className="w-10 h-10 text-green-600" />
