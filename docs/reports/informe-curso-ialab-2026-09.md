@@ -353,3 +353,35 @@ aplicaba y `/smartboard` no tenía gate: cualquier cuenta logueada veía el dash
   conviene que use `/api/smartboard/user-role` como ya hace `/smartboard`.
 - `/smartboard` con una cuenta IALab termina además redirigida a `/ialab/1` en algunas rutas de
   navegación (revisar si hay un redirect heredado; el aviso ya es suficiente).
+
+### 11.6 Separación física de datos por producto (schemas) — estado y hallazgo
+
+**Paso 1 aplicado** (aditivo, sin mover nada): migración `092_product_schemas.sql` crea los schemas
+`ialab` y `smartboard` con `USAGE` para `anon/authenticated/service_role` y default privileges.
+La exposición en la Data API queda **pendiente** a propósito (no se toca configuración viva hasta
+que algún cliente consulte esos schemas).
+
+**Hallazgo que bloquea el paso 2 (mover tablas) tal como se planteó**: 11 funciones del curso
+referencian las tablas de IALab, así que el movimiento NO es inocuo:
+
+| Función | Referencia |
+|---|---|
+| `calculate_module_score`, `get_module_breakdown`, `get_user_overall_progress`, `assign_peer_reviews` | `user_progress` + `module_*` |
+| `get_module_full`, `get_user_overall_progress` | `module_*`, `lesson_*` |
+| `calculate_global_progress`, `get_global_progress`, `check_daily_attempts` | `module_*` |
+| `handle_new_vote`, `increment_vote`, `mark_comment_as_solution` | `forum_*` |
+
+Además, la alternativa “vista de compatibilidad en `public`” **rompe el `upsert(onConflict)`** que
+usa el progreso de videos (`user_video_progress(user_id,module_id,video_id)`): Postgres no admite
+`ON CONFLICT` sobre vistas. Es decir: mover tablas exige, en el mismo release, (1) mover,
+(2) actualizar el `search_path`/cuerpo de esas 11 funciones y (3) apuntar los clientes a
+`.schema('ialab')`. Hacerlo a medias rompería el curso.
+
+**Recomendación**: preparar el movimiento como un release planificado (migración + cambio de cliente
++ verificación en preview) y no como operación suelta. La separación **funcional** ya está activa
+(guards por producto + `account_type/platform/registration_source` + vista `v_users_by_product`).
+
+**Escala**: no hay problema actual. `user_progress` ya tiene 7 índices (user, user_module, resource,
+activity, únicos), `forum_posts/comments`, `students`, `parent_student_links` y `lesson_attempts`
+están indexados, y las tablas nuevas de progreso también. Con 32 usuarios / 657 filas, el tamaño no
+es el riesgo; lo que protege a futuro es mantener los índices y las RLS simples, no el schema.
