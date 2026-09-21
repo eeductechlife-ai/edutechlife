@@ -16,7 +16,19 @@ class AlertListenerService {
    * @param {string} serviceRoleKey - Supabase service role key
    */
   constructor(supabaseUrl, serviceRoleKey) {
-    this.supabase = createClient(supabaseUrl, serviceRoleKey);
+    // No lanzar si falta configuración: antes `createClient` con una key
+    // undefined tiraba "supabaseKey is required" y tumbaba TODO el backend al
+    // importar app.js (el deploy de Render fallaba con exit 1). Ahora el
+    // listener se desactiva con un aviso y el resto de la API sigue operando.
+    this.supabase = null;
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.warn(
+        '[AlertListenerService] Desactivado: falta SUPABASE_URL o la service key ' +
+          '(SUPABASE_SERVICE_ROLE_KEY / SUPABASE_SERVICE_KEY).',
+      );
+    } else {
+      this.supabase = createClient(supabaseUrl, serviceRoleKey);
+    }
     this.subscription = null;
     this.retryCount = 0;
     this.maxRetries = 5;
@@ -28,6 +40,13 @@ class AlertListenerService {
    * Listens for INSERT events on crisis_alerts table
    */
   start() {
+    if (!this.supabase) {
+      console.warn(
+        '[AlertListenerService] Sin cliente Supabase: listener no iniciado.',
+      );
+      return;
+    }
+
     console.log('[AlertListenerService] Starting listener for crisis_alerts');
 
     try {

@@ -152,9 +152,15 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // Start crisis-alert realtime listener (Fase 4.1)
+// Se acepta el nombre canónico y el legado: en Render la variable presente es
+// SUPABASE_SERVICE_KEY, y exigir SOLO la canónica rompía el arranque entero.
+const alertListenerKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SERVICE_KEY ||
+  process.env.SUPABASE_ANON_KEY;
 const alertListener = new AlertListenerService(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  alertListenerKey,
 );
 try {
   alertListener.start();
