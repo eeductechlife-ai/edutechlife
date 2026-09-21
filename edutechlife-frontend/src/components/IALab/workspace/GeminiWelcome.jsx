@@ -8,13 +8,26 @@ import { motion } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
 
 const GeminiDiamond = ({ size = 28 }) => (
-  <svg width={size} height={size} viewBox="0 0 28 28" fill="none" aria-hidden="true">
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 28 28"
+    fill="none"
+    aria-hidden="true"
+  >
     <path
       d="M14 2C14 8.627 8.627 14 2 14C8.627 14 14 19.373 14 26C14 19.373 19.373 14 26 14C19.373 14 14 8.627 14 2Z"
       fill="url(#gem-g)"
     />
     <defs>
-      <linearGradient id="gem-g" x1="2" y1="2" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+      <linearGradient
+        id="gem-g"
+        x1="2"
+        y1="2"
+        x2="26"
+        y2="26"
+        gradientUnits="userSpaceOnUse"
+      >
         <stop offset="0%" stopColor="#4285f4" />
         <stop offset="40%" stopColor="#9b59b6" />
         <stop offset="70%" stopColor="#ea4335" />
@@ -82,7 +95,14 @@ const SUGGEST_CARDS = [
   },
 ];
 
-export default function GeminiWelcome({ topics = [], sequenceByIndex, description, onSelectSection, onSelectTopic, onHome }) {
+export default function GeminiWelcome({
+  topics = [],
+  sequenceByIndex,
+  description,
+  onSelectSection,
+  onSelectTopic,
+  onHome,
+}) {
   const { t } = useTranslation();
   return (
     <motion.div
@@ -101,7 +121,14 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
         {/* Header */}
         <div className="flex items-center gap-2.5 px-4 pt-5 pb-3">
           <GeminiDiamond size={24} />
-          <span style={{ fontFamily: "'Google Sans',sans-serif", fontSize: 20, fontWeight: 400, color: "#202124" }}>
+          <span
+            style={{
+              fontFamily: "'Google Sans',sans-serif",
+              fontSize: 20,
+              fontWeight: 400,
+              color: "#202124",
+            }}
+          >
             Gemini
           </span>
           <button
@@ -110,7 +137,17 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
             title={t("ialab.workspace.edit")}
             onClick={() => onSelectSection("actividades")}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5f6368" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#5f6368"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
             </svg>
           </button>
@@ -122,9 +159,22 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
             type="button"
             onClick={() => onHome?.()}
             className="flex items-center gap-2.5 w-full rounded-full px-4 py-2.5 text-[14px] font-medium transition-colors hover:bg-[#f1f3f4]"
-            style={{ color: "#202124", fontFamily: "'Google Sans Text',sans-serif" }}
+            style={{
+              color: "#202124",
+              fontFamily: "'Google Sans Text',sans-serif",
+            }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5f6368" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#5f6368"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <path d="M12 5v14M5 12h14" />
             </svg>
             {t("ialab.workspace.home")}
@@ -139,9 +189,22 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
               type="button"
               onClick={() => section && onSelectSection(section)}
               className="flex items-center gap-3 w-full rounded-full px-4 py-2.5 text-[14px] transition-colors hover:bg-[#f1f3f4]"
-              style={{ color: "#3c4043", fontFamily: "'Google Sans Text',sans-serif" }}
+              style={{
+                color: "#3c4043",
+                fontFamily: "'Google Sans Text',sans-serif",
+              }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5f6368" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#5f6368"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
                 <path d={icon} />
               </svg>
               {t(labelKey)}
@@ -153,7 +216,14 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
         {topics.length > 0 && (
           <div className="mt-4 px-3 flex-1">
             <div className="px-4 pb-1">
-              <span style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 13, fontWeight: 500, color: "#3c4043" }}>
+              <span
+                style={{
+                  fontFamily: "'Google Sans Text',sans-serif",
+                  fontSize: 13,
+                  fontWeight: 500,
+                  color: "#3c4043",
+                }}
+              >
                 {t("ialab.workspace.gemini.recent")}
               </span>
             </div>
@@ -171,14 +241,41 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
                       completed ? `gem-topic-completed-${i}` : undefined
                     }
                     className="flex items-start gap-2.5 w-full rounded-full px-4 py-2 text-[13px] text-left transition-colors hover:bg-[#f1f3f4]"
-                    style={{ color: completed ? "#188038" : "#3c4043", fontFamily: "'Google Sans Text',sans-serif" }}
+                    style={{
+                      color: completed ? "#188038" : "#3c4043",
+                      fontFamily: "'Google Sans Text',sans-serif",
+                    }}
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={completed ? "#188038" : "#9aa0a6"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="flex-shrink-0 mt-0.5">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke={completed ? "#188038" : "#9aa0a6"}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                      className="flex-shrink-0 mt-0.5"
+                    >
                       <path d="M21 12a8 8 0 0 1-8 8H4l1.5-2.5A8 8 0 1 1 21 12Z" />
                     </svg>
-                    <span className="min-w-0" title={topic.title}>{topic.title}</span>
+                    <span className="min-w-0" title={topic.title}>
+                      {topic.title}
+                    </span>
                     {completed && (
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#188038" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="flex-shrink-0 mt-0.5 ml-auto">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#188038"
+                        strokeWidth="2.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                        className="flex-shrink-0 mt-0.5 ml-auto"
+                      >
                         <path d="M20 6 9 17l-5-5" />
                       </svg>
                     )}
@@ -196,7 +293,10 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
       {/* ── Main content ─────────────────────────────────────── */}
       <div
         className="flex flex-1 flex-col min-w-0"
-        style={{ background: "linear-gradient(160deg, #eaf4fb 0%, #f0f6ff 30%, #fafcff 65%, #eaf4fb 100%)" }}
+        style={{
+          background:
+            "linear-gradient(160deg, #eaf4fb 0%, #f0f6ff 30%, #fafcff 65%, #eaf4fb 100%)",
+        }}
       >
         {/* Center content */}
         <div className="flex flex-col items-center justify-center flex-1 px-6 py-8 text-center">
@@ -210,7 +310,8 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
             className="text-3xl md:text-4xl font-light mb-3 leading-tight"
             style={{
               fontFamily: "'Google Sans Display','Google Sans',sans-serif",
-              background: "linear-gradient(135deg,#4285f4 0%,#9b59b6 50%,#ea4335 100%)",
+              background:
+                "linear-gradient(135deg,#4285f4 0%,#9b59b6 50%,#ea4335 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -218,7 +319,14 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
           >
             {t("ialab.workspace.gemini.heading")}
           </h1>
-          <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, color: "#5f6368", marginBottom: 20 }}>
+          <p
+            style={{
+              fontFamily: "'Google Sans Text',sans-serif",
+              fontSize: 14,
+              color: "#5f6368",
+              marginBottom: 20,
+            }}
+          >
             {t("ialab.workspace.gemini.sub", { n: 3 })}
           </p>
 
@@ -226,20 +334,50 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
           <div className="w-full mb-7 flex gap-3 max-w-2xl text-left">
             <div
               className="flex-shrink-0 mt-0.5 h-6 w-6 rounded-full overflow-hidden flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg,#4285f4 0%,#9b59b6 50%,#ea4335 100%)" }}
+              style={{
+                background:
+                  "linear-gradient(135deg,#4285f4 0%,#9b59b6 50%,#ea4335 100%)",
+              }}
             >
               <GeminiDiamond size={14} />
             </div>
             <div className="flex-1 space-y-2">
-              <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, fontWeight: 600, color: "#202124" }}>
+              <p
+                style={{
+                  fontFamily: "'Google Sans Text',sans-serif",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: "#202124",
+                }}
+              >
                 {t("ialab.workspace.gemini.intro_title")}
               </p>
               {description ? (
-                <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, color: "#5f6368", lineHeight: 1.65 }}>
-                  {description.split(". ").filter(Boolean).slice(0, 3).join(". ").trim().replace(/\.$/, "") + "."}
+                <p
+                  style={{
+                    fontFamily: "'Google Sans Text',sans-serif",
+                    fontSize: 14,
+                    color: "#5f6368",
+                    lineHeight: 1.65,
+                  }}
+                >
+                  {description
+                    .split(". ")
+                    .filter(Boolean)
+                    .slice(0, 3)
+                    .join(". ")
+                    .trim()
+                    .replace(/\.$/, "") + "."}
                 </p>
               ) : (
-                <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, color: "#5f6368", lineHeight: 1.65 }}>
+                <p
+                  style={{
+                    fontFamily: "'Google Sans Text',sans-serif",
+                    fontSize: 14,
+                    color: "#5f6368",
+                    lineHeight: 1.65,
+                  }}
+                >
                   {t("ialab.workspace.gemini.intro_desc")}
                 </p>
               )}
@@ -248,35 +386,66 @@ export default function GeminiWelcome({ topics = [], sequenceByIndex, descriptio
 
           {/* Suggestion cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl">
-            {SUGGEST_CARDS.map(({ icon, labelKey, descKey, section, bg, color }) => (
-              <button
-                key={labelKey}
-                type="button"
-                onClick={() => {
-                  if (section === "contenido") onSelectTopic(0);
-                  else onSelectSection(section);
-                }}
-                className="flex items-start gap-3 rounded-2xl p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus:outline-none"
-                style={{ background: "rgba(255,255,255,0.75)", border: "1.5px solid #e8eaed", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
-              >
-                <span
-                  className="mt-0.5 flex-shrink-0 h-8 w-8 rounded-xl flex items-center justify-center"
-                  style={{ background: bg }}
+            {SUGGEST_CARDS.map(
+              ({ icon, labelKey, descKey, section, bg, color }) => (
+                <button
+                  key={labelKey}
+                  type="button"
+                  onClick={() => {
+                    if (section === "contenido") onSelectTopic(0);
+                    else onSelectSection(section);
+                  }}
+                  className={`flex items-start gap-3 rounded-2xl p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus:outline-none ${section === "practica" ? "max-md:hidden" : ""}`}
+                  style={{
+                    background: "rgba(255,255,255,0.75)",
+                    border: "1.5px solid #e8eaed",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+                  }}
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d={icon} />
-                  </svg>
-                </span>
-                <div className="min-w-0">
-                  <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 14, fontWeight: 500, color: "#202124" }} className="leading-snug">
-                    {t(labelKey)}
-                  </p>
-                  <p style={{ fontFamily: "'Google Sans Text',sans-serif", fontSize: 12, color: "#5f6368" }} className="mt-0.5 leading-snug">
-                    {t(descKey)}
-                  </p>
-                </div>
-              </button>
-            ))}
+                  <span
+                    className="mt-0.5 flex-shrink-0 h-8 w-8 rounded-xl flex items-center justify-center"
+                    style={{ background: bg }}
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke={color}
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d={icon} />
+                    </svg>
+                  </span>
+                  <div className="min-w-0">
+                    <p
+                      style={{
+                        fontFamily: "'Google Sans Text',sans-serif",
+                        fontSize: 14,
+                        fontWeight: 500,
+                        color: "#202124",
+                      }}
+                      className="leading-snug"
+                    >
+                      {t(labelKey)}
+                    </p>
+                    <p
+                      style={{
+                        fontFamily: "'Google Sans Text',sans-serif",
+                        fontSize: 12,
+                        color: "#5f6368",
+                      }}
+                      className="mt-0.5 leading-snug"
+                    >
+                      {t(descKey)}
+                    </p>
+                  </div>
+                </button>
+              ),
+            )}
           </div>
         </div>
       </div>

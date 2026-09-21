@@ -145,7 +145,9 @@ export default function DefaultModuleWelcome({ activeMod, onSelectSection }) {
               <path d={cfg.iconPath} />
             </svg>
           </div>
-          <p className="flex-1 text-sm theme-text-muted leading-relaxed">{cfg.intro}</p>
+          <p className="flex-1 text-sm theme-text-muted leading-relaxed">
+            {cfg.intro}
+          </p>
         </div>
       )}
 
@@ -155,7 +157,7 @@ export default function DefaultModuleWelcome({ activeMod, onSelectSection }) {
             key={label}
             type="button"
             onClick={() => handleClick(action)}
-            className={`theme-prompt-card group flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 ${cfg.accentRing}`}
+            className={`theme-prompt-card group flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 ${cfg.accentRing} ${action === "practica" ? "max-md:hidden" : ""}`}
           >
             <span className="mt-0.5 flex-shrink-0 h-8 w-8 rounded-xl theme-chip flex items-center justify-center">
               <svg

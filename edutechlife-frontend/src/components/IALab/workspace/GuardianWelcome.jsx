@@ -7,7 +7,8 @@ import { motion } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
 
 const SHIELD_PATH = "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z";
-const SHIELD_CHECK_PATH = "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4";
+const SHIELD_CHECK_PATH =
+  "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4";
 
 const SUGGEST_CARDS = [
   {
@@ -44,7 +45,12 @@ const SUGGEST_CARDS = [
   },
 ];
 
-export default function GuardianWelcome({ topics = [], description, onSelectSection, onSelectTopic }) {
+export default function GuardianWelcome({
+  topics = [],
+  description,
+  onSelectSection,
+  onSelectTopic,
+}) {
   const { t } = useTranslation();
   return (
     <motion.div
@@ -58,17 +64,30 @@ export default function GuardianWelcome({ topics = [], description, onSelectSect
       <div className="flex flex-col items-center gap-3 mb-8 text-center">
         <div
           className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md"
-          style={{ background: "linear-gradient(135deg, #003d52 0%, #004b63 50%, #259eb5 100%)" }}
+          style={{
+            background:
+              "linear-gradient(135deg, #003d52 0%, #004b63 50%, #259eb5 100%)",
+          }}
         >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white"
-            strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
             <path d={SHIELD_PATH} />
           </svg>
         </div>
         <h2
           className="text-2xl md:text-3xl font-bold leading-tight"
           style={{
-            background: "linear-gradient(135deg, #003d52 0%, #004b63 50%, #259eb5 100%)",
+            background:
+              "linear-gradient(135deg, #003d52 0%, #004b63 50%, #259eb5 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
@@ -85,10 +104,21 @@ export default function GuardianWelcome({ topics = [], description, onSelectSect
       <div className="w-full mb-6 flex gap-3">
         <div
           className="flex-shrink-0 mt-1 h-6 w-6 rounded-full flex items-center justify-center shadow-sm"
-          style={{ background: "linear-gradient(135deg, #003d52, #004b63, #259eb5)" }}
+          style={{
+            background: "linear-gradient(135deg, #003d52, #004b63, #259eb5)",
+          }}
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white"
-            strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
             <path d={SHIELD_PATH} />
           </svg>
         </div>
@@ -98,7 +128,13 @@ export default function GuardianWelcome({ topics = [], description, onSelectSect
           </p>
           {description ? (
             <p className="text-sm theme-text-muted leading-relaxed">
-              {description.split(". ").filter(Boolean).slice(0, 3).join(". ").trim().replace(/\.$/, "") + "."}
+              {description
+                .split(". ")
+                .filter(Boolean)
+                .slice(0, 3)
+                .join(". ")
+                .trim()
+                .replace(/\.$/, "") + "."}
             </p>
           ) : (
             <>
@@ -115,31 +151,45 @@ export default function GuardianWelcome({ topics = [], description, onSelectSect
 
       {/* Tarjetas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {SUGGEST_CARDS.map(({ icon, labelKey, descKey, section, bg, color }) => (
-          <button
-            key={labelKey}
-            type="button"
-            onClick={() => {
-              if (section === "contenido") onSelectTopic(0);
-              else onSelectSection(section);
-            }}
-            className="theme-prompt-card flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#259eb5]/40"
-          >
-            <span
-              className="mt-0.5 flex-shrink-0 h-8 w-8 rounded-xl flex items-center justify-center"
-              style={{ background: bg }}
+        {SUGGEST_CARDS.map(
+          ({ icon, labelKey, descKey, section, bg, color }) => (
+            <button
+              key={labelKey}
+              type="button"
+              onClick={() => {
+                if (section === "contenido") onSelectTopic(0);
+                else onSelectSection(section);
+              }}
+              className={`theme-prompt-card flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#259eb5]/40 ${section === "practica" ? "max-md:hidden" : ""}`}
             >
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none"
-                stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d={icon} />
-              </svg>
-            </span>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold theme-text leading-snug">{t(labelKey)}</p>
-              <p className="text-xs theme-text-muted mt-0.5 leading-snug">{t(descKey)}</p>
-            </div>
-          </button>
-        ))}
+              <span
+                className="mt-0.5 flex-shrink-0 h-8 w-8 rounded-xl flex items-center justify-center"
+                style={{ background: bg }}
+              >
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke={color}
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d={icon} />
+                </svg>
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold theme-text leading-snug">
+                  {t(labelKey)}
+                </p>
+                <p className="text-xs theme-text-muted mt-0.5 leading-snug">
+                  {t(descKey)}
+                </p>
+              </div>
+            </button>
+          ),
+        )}
       </div>
     </motion.div>
   );

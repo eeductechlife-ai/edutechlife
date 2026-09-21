@@ -8,7 +8,15 @@ const NAV_ITEMS = [
     labelKey: "ialab.tab_all",
     fallback: "Todo",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
       </svg>
     ),
@@ -18,19 +26,34 @@ const NAV_ITEMS = [
     labelKey: "ialab.tab_activities",
     fallback: "Actividades",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
         <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
       </svg>
     ),
   },
   {
-    id: "practica",
-    labelKey: "ialab.tab_practice",
-    fallback: "Práctica",
+    id: "contenido",
+    labelKey: "ialab.tab_topics",
+    fallback: "Temas",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 8v4l3 3" />
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />
       </svg>
     ),
   },
@@ -39,7 +62,15 @@ const NAV_ITEMS = [
     labelKey: "ialab.menu_aria",
     fallback: "Menú",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
         <circle cx="12" cy="8" r="4" />
         <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
       </svg>
@@ -47,7 +78,12 @@ const NAV_ITEMS = [
   },
 ];
 
-function MobileBottomNav({ viewSection, onSelectSection, onOpenMenu, badgeCount = 0 }) {
+function MobileBottomNav({
+  viewSection,
+  onSelectSection,
+  onOpenMenu,
+  badgeCount = 0,
+}) {
   const { t } = useTranslation();
 
   return (
@@ -65,17 +101,23 @@ function MobileBottomNav({ viewSection, onSelectSection, onOpenMenu, badgeCount 
             key={String(item.id)}
             type="button"
             onClick={() => {
-              if (isMenu) { onOpenMenu(); return; }
+              if (isMenu) {
+                onOpenMenu();
+                return;
+              }
               onSelectSection(item.id);
             }}
             aria-current={isActive ? "page" : undefined}
             className={`relative flex-1 flex flex-col items-center justify-center gap-0.5 min-w-0 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--theme-emphasis)]/50
-              ${isActive
-                ? "text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]"
-                : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+              ${
+                isActive
+                  ? "text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]"
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
               }`}
           >
-            <span className={`relative w-6 h-6 ${isActive ? "[&_svg]:stroke-[2.5px]" : ""}`}>
+            <span
+              className={`relative w-6 h-6 ${isActive ? "[&_svg]:stroke-[2.5px]" : ""}`}
+            >
               {item.icon}
               {isMenu && badgeCount > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[14px] h-3.5 text-[9px] font-bold text-white bg-[var(--theme-emphasis)] rounded-full flex items-center justify-center px-0.5">
@@ -83,7 +125,9 @@ function MobileBottomNav({ viewSection, onSelectSection, onOpenMenu, badgeCount 
                 </span>
               )}
             </span>
-            <span className={`text-[10px] font-semibold truncate max-w-full px-1 leading-none ${isActive ? "font-bold" : ""}`}>
+            <span
+              className={`text-[10px] font-semibold truncate max-w-full px-1 leading-none ${isActive ? "font-bold" : ""}`}
+            >
               {t(item.labelKey) || item.fallback}
             </span>
             {isActive && (
