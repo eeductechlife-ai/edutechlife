@@ -63,15 +63,29 @@ async function signUp({ email, password, username, firstName, lastName, userType
       .single();
 
     if (profileError) {
-      console.error('Profile creation failed:', profileError);
-      // If profile already exists (rare), still consider signup a success
-      if (profileError.message.includes('duplicate')) {
-        return {
-          user: { id: userId, email, username, firstName, lastName, userType },
-          message: 'Cuenta creada exitosamente.',
-        };
+      console.error('Profile creation failed:', profileError.message);
+      const isDuplicate = /duplicate|already exists/i.test(
+        profileError.message || '',
+      );
+
+      if (!isDuplicate) {
+        // Sin perfil el usuario queda a medias: no puede entrar al curso y ese
+        // correo ya no se puede volver a registrar ("ya está registrado"), así
+        // que se revierte la creación en auth.users para que el estudiante
+        // pueda reintentar limpiamente.
+        try {
+          await supabase.auth.admin.deleteUser(userId);
+        } catch (cleanupError) {
+          console.error(
+            'Rollback del auth user falló:',
+            cleanupError?.message || cleanupError,
+          );
+        }
+        throw new Error(`Profile creation failed: ${profileError.message}`);
       }
-      throw new Error(`Profile creation failed: ${profileError.message}`);
+      // Perfil ya existente: la cuenta está completa, se continúa para
+      // devolver sesión igualmente (antes se respondía SIN token y el
+      // estudiante quedaba deslogueado tras registrarse).
     }
 
     // 3. Sign in the new user to return a session token immediately
@@ -86,7 +100,7 @@ async function signUp({ email, password, username, firstName, lastName, userType
       user: {
         id: userId,
         email,
-        username: profileData.username,
+        username: profileData?.username || username || email.split('@')[0],
         firstName,
         lastName,
         userType,
