@@ -26,6 +26,13 @@ async function signUp({ email, password, username, firstName, lastName, userType
         username: username || email.split('@')[0],
         first_name: firstName,
         last_name: lastName,
+        // Producto: el trigger handle_new_user (migración 090) usa estos
+        // metadatos para etiquetar la fila en public.users
+        // (account_type/platform/registration_source).
+        account_type: accountType === 'smartboard' ? 'smartboard' : 'ialab',
+        platform: accountType === 'smartboard' ? 'smartboard' : 'ialab',
+        registration_source:
+          accountType === 'smartboard' ? 'smartboard_signup' : 'ialab_signup',
       },
     });
 
