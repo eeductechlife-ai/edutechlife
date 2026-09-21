@@ -172,7 +172,17 @@ export const useSupabaseAuth = () => {
       } = supabase.auth.onAuthStateChange(async (event, session) => {
         if (session?.user) {
           setUser(session.user);
+          // useAuthIdentity escucha "supabase.auth.token-refreshed" para releer
+          // el token y App.jsx eleva el cliente Supabase con el JWT nuevo. Ese
+          // listener existía pero nadie emitía el evento: al refrescarse la
+          // sesión, el cliente seguía con el JWT viejo (401/RLS intermitentes).
+          const previousToken = sessionStorage.getItem("auth_token");
           sessionStorage.setItem("auth_token", session.access_token);
+          if (previousToken !== session.access_token) {
+            window.dispatchEvent(
+              new CustomEvent("supabase.auth.token-refreshed"),
+            );
+          }
           localStorage.setItem("refresh_token", session.refresh_token);
           if (session.user.email)
             localStorage.setItem(
