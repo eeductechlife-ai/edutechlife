@@ -8,7 +8,7 @@
 
 **Tech Stack:** React 18, Vite, Tailwind, framer-motion, zustand, jsPDF, Supabase, react-i18next, Workbox (PWA).
 
-#---
+---
 
 ## Estado real (actualizado 2026-09-21)
 
