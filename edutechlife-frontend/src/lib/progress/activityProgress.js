@@ -15,7 +15,6 @@ export const activityProgressFactory = (db) => ({
       }
 
       const { data, error } = await db
-        .schema("ialab")
         .from("user_activities")
         .insert([
           {
@@ -42,7 +41,6 @@ export const activityProgressFactory = (db) => ({
       if (!actualUserId) return null;
 
       const { data, error } = await db
-        .schema("ialab")
         .from("user_activities")
         .select("*")
         .eq("user_id", actualUserId)

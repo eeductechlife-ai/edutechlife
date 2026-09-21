@@ -11,7 +11,6 @@ export const useForumVotes = () => {
       if (!user || !postIds.length) return;
       try {
         const { data: votes } = await supabase
-          .schema("ialab")
           .from("forum_votes")
           .select("post_id, vote_type")
           .in("post_id", postIds)
@@ -58,7 +57,6 @@ export const useForumVotes = () => {
         if (isRemovingVote) {
           newCount = Math.max(0, newCount - 1);
           const { error: deleteError } = await supabase
-            .schema("ialab")
             .from("forum_votes")
             .delete()
             .eq("post_id", postId)
@@ -67,7 +65,6 @@ export const useForumVotes = () => {
         } else {
           newCount = newCount + 1;
           const { error: insertError } = await supabase
-            .schema("ialab")
             .from("forum_votes")
             .insert({ post_id: postId, user_id: user.id, vote_type: "upvote" });
           if (insertError) throw insertError;

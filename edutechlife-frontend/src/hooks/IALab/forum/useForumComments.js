@@ -13,7 +13,6 @@ export const useForumComments = () => {
       setIsLoading(true);
       try {
         const { data, error } = await supabase
-          .schema("ialab")
           .from("forum_comments")
           .select(
             "*, profiles:forum_profiles(full_name, avatar_url, title, badges)",
@@ -45,7 +44,6 @@ export const useForumComments = () => {
 
       try {
         const { data: comment, error } = await supabase
-          .schema("ialab")
           .from("forum_comments")
           .insert({
             post_id: postId,
@@ -83,7 +81,6 @@ export const useForumComments = () => {
       if (!user) return { success: false, error: "No autenticado" };
       try {
         const { error } = await supabase
-          .schema("ialab")
           .from("forum_comments")
           .update({ is_hidden: true })
           .eq("id", commentId)

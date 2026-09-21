@@ -15,7 +15,6 @@ export function useEvaluationDraft({
     if (!userId || !moduleId) return;
     try {
       const { data, error } = await supabase
-        .schema("ialab")
         .from("user_progress")
         .select("completed_lessons")
         .eq("user_id", userId)
@@ -43,7 +42,6 @@ export function useEvaluationDraft({
     if (!userId || !moduleId) return;
     try {
       await supabase
-        .schema("ialab")
         .from("user_progress")
         .delete()
         .eq("user_id", userId)
@@ -84,7 +82,6 @@ export function useEvaluationDraft({
     saveDraftTimerRef.current = setTimeout(async () => {
       try {
         await supabase
-          .schema("ialab")
           .from("user_progress")
           .upsert(
             {

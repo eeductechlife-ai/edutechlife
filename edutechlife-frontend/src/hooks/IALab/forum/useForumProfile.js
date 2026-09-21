@@ -13,7 +13,6 @@ export const useForumProfile = () => {
     setIsLoading(true);
     try {
       const { data, error } = await supabase
-        .schema("ialab")
         .from("forum_profiles")
         .select("*")
         .eq("user_id", userId)
@@ -42,7 +41,6 @@ export const useForumProfile = () => {
       if (!user) return { success: false, error: "No autenticado" };
       try {
         const { data, error } = await supabase
-          .schema("ialab")
           .from("forum_profiles")
           .upsert({
             user_id: user.id,

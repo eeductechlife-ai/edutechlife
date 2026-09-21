@@ -277,7 +277,7 @@ export const getEvaluationHistory = async (moduleId) => {
     }
 
     const { data, error } = await supabase
-      .schema('ialab').from('user_progress')
+      .from('user_progress')
       .select('completed_lessons, updated_at, score')
       .eq('module_id', numericModuleId)
       .not('completed_lessons', 'is', null)

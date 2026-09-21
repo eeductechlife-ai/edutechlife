@@ -61,7 +61,6 @@ export const useIALabForum = () => {
           // Cargar votos del usuario
           const postIds = posts.map((p) => p.id);
           const { data: votes, error: votesError } = await supabase
-            .schema("ialab")
             .from("forum_votes")
             .select("post_id")
             .in("post_id", postIds)
@@ -145,7 +144,6 @@ export const useIALabForum = () => {
 
         if (userLiked) {
           const { error: deleteError } = await supabase
-            .schema("ialab")
             .from("forum_votes")
             .delete()
             .eq("post_id", postId)
@@ -156,7 +154,6 @@ export const useIALabForum = () => {
             return { success: false, error: "Cancelado" };
         } else {
           const { error: insertError } = await supabase
-            .schema("ialab")
             .from("forum_votes")
             .insert({
               post_id: postId,
@@ -320,7 +317,6 @@ export const useIALabForum = () => {
         };
 
       const { count: voteCount, error: voteErr } = await supabase
-        .schema("ialab")
         .from("forum_votes")
         .select("*", { count: "exact", head: true });
 

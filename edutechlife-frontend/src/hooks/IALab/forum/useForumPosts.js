@@ -103,7 +103,6 @@ export const useForumPosts = () => {
 
       try {
         const { data: profile, error: profileError } = await supabase
-          .schema("ialab")
           .from("forum_profiles")
           .select("full_name, avatar_url")
           .eq("user_id", user.id)

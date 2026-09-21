@@ -15,7 +15,6 @@ export const videoProgressFactory = (db) => ({
       }
 
       const { data, error } = await db
-        .schema("ialab")
         .from("user_video_progress")
         .upsert(
           {
@@ -47,7 +46,6 @@ export const videoProgressFactory = (db) => ({
       if (!actualUserId) return [];
 
       const { data, error } = await db
-        .schema("ialab")
         .from("user_video_progress")
         .select("*")
         .eq("user_id", actualUserId)
