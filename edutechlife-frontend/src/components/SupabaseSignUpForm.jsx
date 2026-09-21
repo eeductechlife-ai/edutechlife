@@ -19,6 +19,7 @@ import { sanitize, safeReturnTo } from "../utils/sanitize";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 import SEO from "./SEO";
 import { API_BASE_URL } from "../config/api";
+import { seedClientSession } from "./SupabaseLoginForm";
 
 // Error boundary fallback
 function SignUpFormFallback() {
@@ -224,11 +225,16 @@ const SupabaseSignUpForm = ({ onBack, returnTo, accountType = "ialab" }) => {
       const result = await registerResponse.json();
       setSuccess(true);
 
-      setTimeout(() => {
+      setTimeout(async () => {
         if (result.token) {
           sessionStorage.setItem("auth_token", result.token);
           localStorage.setItem("refresh_token", result.refreshToken);
           localStorage.setItem("user_email", formData.email.toLowerCase());
+          // Pre-sembrar la sesión de supabase-js (mismo formato que persiste
+          // el SDK). RoleProtectedRoute valida con supabase.auth.getSession()
+          // al entrar a /ialab: sin esto, la cuenta recién creada quedaba
+          // autenticada por token pero era devuelta al login.
+          await seedClientSession(result.token, result.refreshToken);
         }
         // A new account must start with its own empty progress, never inherit
         // whatever the previous user left cached in this browser.
