@@ -5706,5 +5706,6 @@
   "peer_review.missing_error": "Completa todos los criterios de la rúbrica.",
   "peer_review.error": "No se pudo enviar la revisión. Inténtalo de nuevo.",
   "ialab.competency.by_axis": "Competencia por eje",
-  "signup.button.continue": "Continuar"
+  "signup.button.continue": "Continuar",
+  "login.error.oauth_failed": "No pudimos completar el ingreso con Google. Inténtalo de nuevo o entra con tu correo."
 }

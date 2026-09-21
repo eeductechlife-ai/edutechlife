@@ -245,40 +245,25 @@ router.get('/callback', async (req, res) => {
       provider,
     });
 
-    // Render a secure form that POSTs tokens to the frontend (no tokens in URL)
-    // This approach: tokens are sent in POST body, never exposed in history/logs/Referer
-    const html = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Autenticando...</title>
-          <script>
-            // Auto-submit form immediately to POST tokens securely
-            window.onload = function() {
-              document.getElementById('oauth-form').submit();
-            };
-          </script>
-        </head>
-        <body style="background: #004B63; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh;">
-          <form id="oauth-form" method="POST" action="${frontendUrl}/auth/exchange-token" style="display: none;">
-            <input type="hidden" name="token" value="${sessionToken}">
-            <input type="hidden" name="refreshToken" value="${refreshToken}">
-            <input type="hidden" name="email" value="${normalizedEmail}">
-          </form>
-          <div style="text-align: center;">
-            <div style="width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; margin: 0 auto 16px; animation: spin 1s linear infinite;"></div>
-            <p style="color: white; font-size: 18px; margin: 0; font-family: system-ui;">Procesando autenticación...</p>
-          </div>
-          <style>
-            @keyframes spin {
-              to { transform: rotate(360deg); }
-            }
-          </style>
-        </body>
-      </html>
-    `;
-    res.set('Content-Type', 'text/html');
-    res.send(html);
+    // Entrega de la sesión al frontend.
+    //
+    // Antes se enviaba un formulario que hacía POST a /auth/exchange-token, una
+    // ruta que NO existe en el frontend (Vercel responde 404), así que el
+    // ingreso con Google terminaba en una página de error.
+    //
+    // Ahora se redirige a /auth/callback con los tokens en el FRAGMENTO (#).
+    // El fragmento no viaja al servidor ni aparece en logs/Referer, y la SPA
+    // (OAuthCallbackHandler) los lee y siembra la sesión de supabase-js.
+    const callbackTarget = new URL(`${frontendUrl}/auth/callback`);
+    const fragment = new URLSearchParams({
+      access_token: sessionToken,
+      refresh_token: refreshToken,
+      email: normalizedEmail,
+      provider,
+    });
+    callbackTarget.hash = fragment.toString();
+
+    res.redirect(302, callbackTarget.toString());
   } catch (err) {
     console.error('OAuth callback error:', err);
     req.log.error('OAuth callback error', { error: err.message });

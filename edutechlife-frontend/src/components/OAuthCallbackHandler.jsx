@@ -12,12 +12,21 @@ const OAuthCallbackHandler = () => {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        const error = searchParams.get("error");
-        const email = searchParams.get("email");
+        // El backend entrega la sesión en el FRAGMENTO (#access_token=...),
+        // que el navegador no envía al servidor (no queda en logs ni Referer).
+        const hashParams = new URLSearchParams(
+          window.location.hash.replace(/^#/, ""),
+        );
+        const hashToken = hashParams.get("access_token");
+        const hashRefresh = hashParams.get("refresh_token");
 
-        console.log("OAuth Callback - Received (tokens in HttpOnly cookies)", {
+        const error = searchParams.get("error") || hashParams.get("error");
+        const email = searchParams.get("email") || hashParams.get("email");
+
+        console.log("OAuth Callback - Received", {
           email,
           error: error || "none",
+          hasHashToken: !!hashToken,
         });
 
         if (error) {
@@ -32,11 +41,21 @@ const OAuthCallbackHandler = () => {
           return;
         }
 
-        // Tokens are now in HttpOnly cookies (sb-access-token, sb-refresh-token)
-        // The browser sends them automatically with all requests.
-        // We don't need to extract them from the URL or store them in localStorage.
-        // Just store the email for the UI.
         localStorage.setItem("user_email", email);
+
+        if (hashToken) {
+          // Guardar el token que usa el resto de la app y sembrar la sesión
+          // de supabase-js (RoleProtectedRoute valida con getSession()).
+          sessionStorage.setItem("auth_token", hashToken);
+          if (hashRefresh) localStorage.setItem("refresh_token", hashRefresh);
+          await seedClientSession(hashToken, hashRefresh || "");
+          // Evita dejar los tokens visibles en la barra de direcciones.
+          window.history.replaceState(
+            null,
+            "",
+            window.location.pathname + window.location.search,
+          );
+        }
 
         // Fetch current session from the backend (uses cookies automatically)
         // This ensures the Supabase session is initialized before navigation
@@ -77,7 +96,9 @@ const OAuthCallbackHandler = () => {
     };
 
     // Only run if we have search params
-    if (searchParams.toString()) {
+    // El flujo por fragmento llega sin query params, así que también hay que
+    // ejecutar el handler cuando solo hay hash.
+    if (searchParams.toString() || window.location.hash.length > 1) {
       handleCallback();
     }
   }, [searchParams, navigate]);

@@ -5701,5 +5701,6 @@
   "peer_review.missing_error": "Complete all rubric criteria.",
   "peer_review.error": "Could not submit the review. Please try again.",
   "ialab.competency.by_axis": "Competency by axis",
-  "signup.button.continue": "Continue"
+  "signup.button.continue": "Continue",
+  "login.error.oauth_failed": "We couldn't complete the Google sign-in. Please try again or sign in with your email."
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
@@ -55,6 +55,17 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
   const [mfaChallengeToken, setMfaChallengeToken] = useState(null);
+
+  // El callback de OAuth vuelve a /login?error=... cuando algo falla. Antes el
+  // error se ignoraba y el usuario veía el formulario "como si nada".
+  useEffect(() => {
+    const oauthError = searchParams.get("error");
+    if (!oauthError) return;
+    setError(
+      t("login.error.oauth_failed") ||
+        "No pudimos completar el ingreso con Google. Inténtalo de nuevo o entra con tu correo.",
+    );
+  }, [searchParams, t]);
 
   const handleOAuthLogin = (provider) => {
     const apiUrl = API_BASE_URL;
@@ -346,9 +357,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
         {t("login.no_account") || "¿No tienes cuenta?"}{" "}
         <button
           onClick={() =>
-            onShowSignUp
-              ? onShowSignUp()
-              : navigate("/sign-up/smartboard")
+            onShowSignUp ? onShowSignUp() : navigate("/sign-up/smartboard")
           }
           className="text-[#004B63] hover:text-[#0A3550] font-semibold"
         >
