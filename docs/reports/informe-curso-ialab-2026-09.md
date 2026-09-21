@@ -385,3 +385,49 @@ usa el progreso de videos (`user_video_progress(user_id,module_id,video_id)`): P
 activity, únicos), `forum_posts/comments`, `students`, `parent_student_links` y `lesson_attempts`
 están indexados, y las tablas nuevas de progreso también. Con 32 usuarios / 657 filas, el tamaño no
 es el riesgo; lo que protege a futuro es mantener los índices y las RLS simples, no el schema.
+
+### 11.7 Separación de datos por schema — APLICADA y verificada (2026-09-21)
+
+**Resultado**: los datos de IALab viven en el schema `ialab`; la identidad compartida sigue en
+`public`; y **el cliente no cambió**: por cada tabla movida se creó una **vista de compatibilidad en
+`public` con `security_invoker = on`**, así que el código sigue haciendo `supabase.from('user_progress')`.
+
+| Verificación (producción) | Resultado |
+|---|---|
+| Tablas en `ialab` | **15** |
+| Vistas en `public` | 17 (15 nuevas + 2 previas) |
+| `public.user_progress` | es **VISTA** (antes tabla) |
+| `certificates` | sigue siendo **TABLA** en public (SmartBoard también la usa) |
+| `calculate_module_score` | `search_path = ialab, public` |
+| SELECT por la vista (PostgREST) | 200 con filas |
+| **INSERT** por la vista | **201** |
+| **UPSERT** `on_conflict` por la vista | **200** (camino del progreso de videos) |
+| DELETE por la vista | 204 |
+| RLS por la vista | fila ajena rechazada (`new row violates row-level security policy`) |
+| `verify_certificate` (RPC) | `is_valid: true` para EDL-2026-000003 |
+| Curso en producción | carga, 5 módulos, `TU AVANCE 71%`, plan del día, sin errores de consola |
+
+**Hallazgo que evitó un release arriesgado**: se verificó en dry-run real que PostgreSQL **sí admite**
+`ON CONFLICT` a través de una vista auto-actualizable y que `security_invoker` hace que se apliquen
+las RLS de la tabla base. Con eso se descartó el plan anterior (cambiar 41 llamadas del cliente a
+`.schema('ialab')` + exponer el schema en la Data API) por uno **solo de base de datos**, reversible en
+segundos y sin desplegar frontend/backend.
+
+**Rollback** (instantáneo, sin pérdida):
+```sql
+DO $$ DECLARE t text; BEGIN
+  FOR t IN SELECT table_name FROM information_schema.views WHERE table_schema='public'
+           AND table_name IN ('module_content','module_lessons','module_topics','module_resources',
+             'user_progress','user_video_progress','user_exams','user_activities','lesson_answers',
+             'lesson_answer_votes','lesson_questions','forum_comments','forum_votes','forum_profiles',
+             'forum_notifications') LOOP
+    EXECUTE format('DROP VIEW IF EXISTS public.%I', t);
+  END LOOP;
+  FOR t IN SELECT table_name FROM information_schema.tables WHERE table_schema='ialab' LOOP
+    EXECUTE format('ALTER TABLE ialab.%I SET SCHEMA public', t);
+  END LOOP;
+END $$;
+```
+
+**Segunda pasada pendiente**: `learning_streaks`, `certificates`, `forum_posts` y `lesson_attempts`
+(las usa también SmartBoard) y el equivalente de SmartBoard → schema `smartboard`.
