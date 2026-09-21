@@ -84,3 +84,35 @@ tabla, así que el estado previo se recupera sin pérdida de datos.
 
 `learning_streaks`, `certificates`, `forum_posts`, `lesson_attempts` (actualizando sus consumidores
 de SmartBoard) y luego el equivalente de SmartBoard → schema `smartboard`.
+
+## 8. Estado de implementación (2026-09-21)
+
+**Hecho en la rama `feat/separacion-schemas-productos`**
+- Migración `093` (mover tablas solo-IALab + `search_path` de las funciones), validada con dry-run real.
+- **Cambio de cliente implementado**: `41` llamadas en `19` archivos pasaron a
+  `.schema('ialab').from(...)` (34 frontend / 7 backend). Verificado: `41` con schema, **0 sin
+  schema**, y ninguna de las tablas excluidas (`learning_streaks`, `certificates`, `forum_posts`,
+  `lesson_attempts`) fue tocada. ESLint 0 errores, `vite build` OK, `node --check` OK, tests de
+  backend verdes (24).
+- Archivos: `hooks/IALab/useIALabForum.js`, `hooks/IALab/forum/*` (posts/votes/comments/notifications/profile),
+  `lib/progress/{video,exam,activity}Progress.js`, `lib/forum/posts.js`, `lib/rls-fixer.js`,
+  `services/aiEvaluationService.js`, `hooks/IALab/useIALabEvaluation/supabase.js`,
+  `IALabEvaluationModal/hooks/useEvaluationDraft.js`, `components/IALab/{LeaderboardModal,StreakDetailsModal,ChallengeResultViewer}.jsx`,
+  backend `controllers/ialab/progressController.js` y `routes/ialab/resources.js`.
+
+**⚠️ Aviso crítico de atomicidad**: este código asume que las tablas viven en `ialab`. Si se
+despliega **antes** de mover las tablas (o sin exponer el schema), el curso falla con
+`PGRST106` (schema no expuesto) o `42P01` (relación inexistente). **No fusionar a `main` hasta la
+ventana.**
+
+## 9. Secuencia exacta de la ventana (≈10 min)
+
+1. Dashboard → Integrations → Data API → Exposed schemas: **añadir `ialab`** (dejar `public`). Guardar.
+2. Verificar con curl que el schema responde (sin mover nada aún, debe dar 404/42P01, no PGRST106):
+   `curl -s "$URL/rest/v1/user_progress?select=id&limit=1" -H "apikey: $KEY" -H "Accept-Profile: ialab"` → debe ser error de tabla, **no** de schema.
+3. Aplicar la migración `093` (SQL editor).
+4. Merge de la rama a `main` (dispara Vercel + Render).
+5. Verificar: curso (módulo, recurso, examen, desafío, foro), `/ialab` carga sin errores de consola,
+   SmartBoard intacto, y una escritura de progreso (video/examen) persiste en `ialab.*`.
+6. Si algo falla: `ALTER TABLE ialab.<t> SET SCHEMA public;` para las 15 tablas + revertir el merge
+   (redeploy del commit anterior de `main`).

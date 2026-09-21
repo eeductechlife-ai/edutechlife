@@ -34,6 +34,7 @@ export async function saveGradeToSupabase({
     const db = await getAuthDb();
     const { data, error } = await retryAsync(() =>
       db
+        .schema("ialab")
         .from("user_progress")
         .upsert(
           {

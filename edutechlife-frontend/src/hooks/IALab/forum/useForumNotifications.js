@@ -21,6 +21,7 @@ export const useForumNotifications = () => {
     setIsLoading(true);
     try {
       const { data, error } = await supabase
+        .schema("ialab")
         .from("forum_notifications")
         .select("*")
         .eq("user_id", user.id)
@@ -103,6 +104,7 @@ export const useForumNotifications = () => {
         }
 
         await supabase
+          .schema("ialab")
           .from("forum_notifications")
           .update({ is_read: true })
           .eq("id", notificationId);
@@ -162,6 +164,7 @@ export const useForumNotifications = () => {
       setUnreadCount(0);
 
       await supabase
+        .schema("ialab")
         .from("forum_notifications")
         .update({ is_read: true })
         .eq("user_id", user.id)

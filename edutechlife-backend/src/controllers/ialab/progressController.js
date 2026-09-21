@@ -32,7 +32,7 @@ async function saveProgress(req, res) {
       };
 
       const { data: existing, error: findError } = await supabase
-        .from('user_progress')
+        .schema('ialab').from('user_progress')
         .select('id')
         .eq('user_id', userId)
         .eq('module_id', moduleId)
@@ -40,11 +40,11 @@ async function saveProgress(req, res) {
 
       let dbError;
       if (existing) {
-        const { error } = await supabase.from('user_progress').update(upsertData).eq('id', existing.id);
+        const { error } = await supabase.schema('ialab').from('user_progress').update(upsertData).eq('id', existing.id);
         dbError = error;
       } else {
         upsertData.created_at = new Date().toISOString();
-        const { error } = await supabase.from('user_progress').insert(upsertData);
+        const { error } = await supabase.schema('ialab').from('user_progress').insert(upsertData);
         dbError = error;
       }
 
@@ -54,7 +54,7 @@ async function saveProgress(req, res) {
       }
 
       const { data: allProgress } = await supabase
-        .from('user_progress')
+        .schema('ialab').from('user_progress')
         .select('*')
         .eq('user_id', userId);
 
@@ -131,7 +131,7 @@ async function getProgress(req, res) {
   try {
     if (isSupabaseReady()) {
       const { data: allProgress } = await supabase
-        .from('user_progress')
+        .schema('ialab').from('user_progress')
         .select('*')
         .eq('user_id', userId);
 

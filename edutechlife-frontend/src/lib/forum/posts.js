@@ -205,8 +205,16 @@ export const getPostsOptimized = async ({
     const postIds = data.map((post) => post.id);
 
     const [commentsResult, votesResult] = await Promise.allSettled([
-      supabase.from("forum_comments").select("post_id").in("post_id", postIds),
-      supabase.from("forum_votes").select("post_id").in("post_id", postIds),
+      supabase
+        .schema("ialab")
+        .from("forum_comments")
+        .select("post_id")
+        .in("post_id", postIds),
+      supabase
+        .schema("ialab")
+        .from("forum_votes")
+        .select("post_id")
+        .in("post_id", postIds),
     ]);
 
     const commentCountMap = {};

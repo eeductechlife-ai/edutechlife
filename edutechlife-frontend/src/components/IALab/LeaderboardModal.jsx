@@ -43,6 +43,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
     setLoading(true);
     try {
       const { data, error } = await supabase
+        .schema("ialab")
         .from("user_progress")
         .select("user_id, gamification_data")
         .eq("activity_type", "gamification")

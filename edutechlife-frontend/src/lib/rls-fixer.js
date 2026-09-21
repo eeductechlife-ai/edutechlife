@@ -48,6 +48,7 @@ async function checkAndFixRLS(supabaseClient, userId) {
     };
 
     const { data, error } = await supabaseClient
+      .schema("ialab")
       .from("user_progress")
       .insert([testData])
       .select("*");
@@ -65,6 +66,7 @@ async function checkAndFixRLS(supabaseClient, userId) {
     if (data && data.length > 0) {
       console.info("[RLS FIX] ✓ RLS test passed");
       await supabaseClient
+        .schema("ialab")
         .from("user_progress")
         .delete()
         .eq("module_id", 999)

@@ -41,6 +41,7 @@ const ChallengeResultViewer = ({ moduleId, onClose, onRetry }) => {
     const loadEvaluation = async () => {
       try {
         const { data, error } = await supabase
+          .schema("ialab")
           .from("user_progress")
           .select("completed_lessons, score")
           .eq("user_id", userId)

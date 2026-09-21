@@ -21,6 +21,7 @@ export const examProgressFactory = (db) => ({
       const passed = score >= maxScore * 0.8;
 
       const { data, error } = await db
+        .schema("ialab")
         .from("user_exams")
         .insert([
           {
@@ -56,6 +57,7 @@ export const examProgressFactory = (db) => ({
       if (!actualUserId) return [];
 
       const { data, error } = await db
+        .schema("ialab")
         .from("user_exams")
         .select("*")
         .eq("user_id", actualUserId)

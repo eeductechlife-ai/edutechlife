@@ -88,7 +88,7 @@ router.get('/', async (req, res) => {
 
     if (isSupabaseReady()) {
       try {
-        let topicQuery = supabase.from('module_topics').select('id');
+        let topicQuery = supabase.schema('ialab').from('module_topics').select('id');
         if (moduleId) {
           const modNum = parseInt(moduleId.replace('module', ''));
           topicQuery = topicQuery.eq('module_id', modNum);
@@ -98,7 +98,7 @@ router.get('/', async (req, res) => {
 
         if (topicIds.length > 0) {
           let resQuery = supabase
-            .from('module_resources')
+            .schema('ialab').from('module_resources')
             .select('id, title, type, url, description, sort_order')
             .in('topic_id', topicIds);
           if (resourceType && resourceType !== 'all') {
