@@ -12,6 +12,28 @@
  *   has not loaded yet
  * @returns {{initials: string, displayName: string, displayEmail: string, avatarUrl: string|null}}
  */
+/**
+ * Deriva un nombre legible a partir del correo, para cuando el perfil no
+ * trae nombre. "juan.perez99@gmail.com" → "Juan Perez".
+ *
+ * @param {string} email
+ * @returns {string} nombre derivado o "" si no hay nada utilizable
+ */
+export const deriveNameFromEmail = (email = "") => {
+  const local = String(email).trim().split("@")[0] || "";
+  const cleaned = local
+    .replace(/[._\-+]+/g, " ")
+    .replace(/\d+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!cleaned) return "";
+  return cleaned
+    .split(" ")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
+
 export const getUserInfo = (profile, fallbackEmail = "") => {
   const email = (profile?.email || fallbackEmail || "").trim();
 
@@ -21,10 +43,7 @@ export const getUserInfo = (profile, fallbackEmail = "") => {
     .trim();
 
   const displayName =
-    fullName ||
-    profile?.username ||
-    (email ? email.split("@")[0] : "") ||
-    "Usuario";
+    fullName || profile?.username || deriveNameFromEmail(email) || "Usuario";
 
   const initials = (() => {
     if (fullName) {
@@ -35,7 +54,13 @@ export const getUserInfo = (profile, fallbackEmail = "") => {
       return parts[0][0].toUpperCase();
     }
     if (profile?.username) return profile.username[0].toUpperCase();
-    if (email) return email[0].toUpperCase();
+    const derived = deriveNameFromEmail(email);
+    if (derived) {
+      const parts = derived.split(/\s+/);
+      return (
+        parts.length >= 2 ? `${parts[0][0]}${parts[1][0]}` : parts[0][0]
+      ).toUpperCase();
+    }
     return "U";
   })();
 

@@ -13,6 +13,7 @@ import { modules as STATIC_MODULES } from "@/data/ialab";
 import { LS_KEYS } from "@/constants/ialab";
 import { useIALabStore } from "../../../store/ialabStore";
 import { evaluateCertificateRequirements } from "../../../utils/certificateRequirements";
+import { deriveNameFromEmail } from "../../../utils/userInfo";
 import { getAnalyzingMsgs } from "./ialabAnalyzingMsgs";
 
 export function useIALabUI(onBack) {
@@ -98,16 +99,23 @@ export function useIALabUI(onBack) {
 
   const user = useMemo(() => {
     if (!userId) return null;
+    // Si el perfil no trae nombre, se deriva del correo (p. ej. "Juan Perez")
+    // antes de caer al marcador genérico, para que la app (y MAX) saluden al
+    // estudiante por su nombre en vez de "Usuario".
+    const derivedName = deriveNameFromEmail(profile?.email || authEmail);
+    const resolvedFirstName =
+      profile?.first_name || derivedName.split(" ")[0] || "";
     const fullName =
       [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") ||
       profile?.username ||
+      derivedName ||
       t("profile.user_fallback");
     return {
       id: userId,
       full_name: fullName,
       email: profile?.email || authEmail || "",
       fullName,
-      firstName: profile?.first_name || "",
+      firstName: resolvedFirstName,
       lastName: profile?.last_name || "",
       username: profile?.username || "",
       imageUrl: profile?.avatar_url || "",

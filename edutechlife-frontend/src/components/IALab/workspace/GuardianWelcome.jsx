@@ -160,7 +160,7 @@ export default function GuardianWelcome({
                 if (section === "contenido") onSelectTopic(0);
                 else onSelectSection(section);
               }}
-              className={`theme-prompt-card flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#259eb5]/40 ${section === "practica" ? "max-md:hidden" : ""}`}
+              className={`theme-prompt-card flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#259eb5]/40`}
             >
               <span
                 className="mt-0.5 flex-shrink-0 h-8 w-8 rounded-xl flex items-center justify-center"

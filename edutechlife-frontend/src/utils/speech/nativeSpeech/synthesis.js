@@ -229,7 +229,18 @@ const speakTextConversational = async (
             if (onStartCallback) onStartCallback();
           };
           utterance.onerror = (event) => {
-            console.error("❌ Error voz nativa:", event.error);
+            // "not-allowed" (falta de gesto del usuario), "interrupted" y
+            // "canceled" son situaciones esperadas en móvil: no son fallos.
+            const reason = event?.error;
+            if (
+              reason === "not-allowed" ||
+              reason === "interrupted" ||
+              reason === "canceled"
+            ) {
+              debugLog(`🎤 VOZ [NATIVA] omitida (${reason})`);
+            } else {
+              console.error("❌ Error voz nativa:", reason);
+            }
             cleanup();
             if (onEndCallback) onEndCallback();
             resolve(false);

@@ -395,7 +395,7 @@ export default function GeminiWelcome({
                     if (section === "contenido") onSelectTopic(0);
                     else onSelectSection(section);
                   }}
-                  className={`flex items-start gap-3 rounded-2xl p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus:outline-none ${section === "practica" ? "max-md:hidden" : ""}`}
+                  className={`flex items-start gap-3 rounded-2xl p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus:outline-none`}
                   style={{
                     background: "rgba(255,255,255,0.75)",
                     border: "1.5px solid #e8eaed",

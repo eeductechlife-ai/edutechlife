@@ -642,7 +642,7 @@ export default function NotebookLMWelcome({
                         ? onSelectTopic(0)
                         : onSelectSection(section)
                     }
-                    className={`group flex items-start gap-3 p-4 rounded-xl border text-left transition-all hover:shadow-sm hover:-translate-y-0.5 bg-white ${section === "practica" ? "max-md:hidden" : ""}`}
+                    className={`group flex items-start gap-3 p-4 rounded-xl border text-left transition-all hover:shadow-sm hover:-translate-y-0.5 bg-white`}
                     style={{ borderColor: "#e0e0e6" }}
                   >
                     <div

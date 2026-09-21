@@ -153,7 +153,10 @@ const EmptyState = ({ moduleTitle }) => {
     <div className="h-full flex items-center justify-center text-center p-8">
       <div>
         <div className="w-16 h-16 bg-gradient-to-r from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <Icon name="fa-comments" className="text-[var(--theme-primary)] text-2xl" />
+          <Icon
+            name="fa-comments"
+            className="text-[var(--theme-primary)] text-2xl"
+          />
         </div>
         <h3 className="text-lg font-bold text-[var(--theme-emphasis)]-darker mb-2">
           {t("ialab.valerio.empty_title", { module: moduleTitle })}
@@ -201,7 +204,7 @@ const ValerioEnhancedConversationArea = ({
   return (
     <>
       <div
-        className="flex-1 overflow-y-auto p-4"
+        className="flex-1 overflow-y-auto overscroll-contain p-4"
         data-testid="conversation-area"
         aria-live="polite"
         aria-label={t("ialab.valerio.conversation_aria")}

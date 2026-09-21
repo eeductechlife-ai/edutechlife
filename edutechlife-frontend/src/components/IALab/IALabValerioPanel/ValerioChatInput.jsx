@@ -22,9 +22,9 @@ const ValerioChatInput = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div className="border-t border-slate-200 p-4">
-      <div className="flex items-end gap-3">
-        <div className="flex-1">
+    <div className="border-t border-slate-200 px-4 pt-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.75rem)] sm:p-4">
+      <div className="flex items-end gap-2 sm:gap-3">
+        <div className="flex-1 min-w-0">
           <textarea
             value={userInput}
             onChange={(e) => onInputChange(e.target.value)}
@@ -42,9 +42,18 @@ const ValerioChatInput = ({
             })}
             aria-describedby="input-hint"
           />
-          <div className="flex items-center justify-between mt-2">
-            <div id="input-hint" className="text-xs text-slate-500">
-              {t("ialab.valerio.input_hint")}
+          <div className="flex items-center justify-between gap-2 mt-2 min-w-0">
+            <div
+              id="input-hint"
+              className="text-[11px] sm:text-xs text-slate-500 truncate min-w-0 flex-1"
+            >
+              <span className="sm:hidden">
+                {t("ialab.valerio.input_hint_mobile") ||
+                  t("ialab.valerio.input_hint")}
+              </span>
+              <span className="hidden sm:inline">
+                {t("ialab.valerio.input_hint")}
+              </span>
             </div>
             {showClearConfirm ? (
               <ValerioClearConfirm
@@ -54,7 +63,7 @@ const ValerioChatInput = ({
             ) : (
               <button
                 onClick={onClear}
-                className="text-xs text-slate-500 hover:text-red-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 rounded px-1"
+                className="flex-shrink-0 text-xs text-slate-500 hover:text-red-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 rounded px-1"
                 disabled={conversationLength === 0}
                 aria-label={t("ialab.valerio.clear_button")}
               >
@@ -63,14 +72,14 @@ const ValerioChatInput = ({
               </button>
             )}
           </div>
-        </div>
 
-        {speechError && (
-          <div className="text-xs text-amber-600 mt-1 flex items-center gap-1">
-            <Icon name="fa-triangle-exclamation" className="text-xs" />
-            {speechError}
-          </div>
-        )}
+          {speechError && (
+            <div className="text-xs text-amber-600 mt-1 flex items-center gap-1">
+              <Icon name="fa-triangle-exclamation" className="text-xs" />
+              {speechError}
+            </div>
+          )}
+        </div>
 
         {speechSupported && (
           <button

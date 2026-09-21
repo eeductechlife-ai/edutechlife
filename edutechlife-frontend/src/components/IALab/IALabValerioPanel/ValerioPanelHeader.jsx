@@ -14,19 +14,21 @@ const ValerioPanelHeader = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div className="sticky top-0 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white p-6 rounded-t-2xl">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-4">
+    <div className="sticky top-0 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white px-4 pt-[calc(env(safe-area-inset-top,0px)+1rem)] pb-4 sm:p-6 rounded-t-none sm:rounded-t-2xl">
+      <div className="flex items-start justify-between gap-2 mb-3 sm:items-center sm:gap-4 sm:mb-4">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
           <img
             src={tutorAvatars.MAX || DEFAULT_AVATAR}
             alt="MAX"
             data-testid="valerio-avatar"
-            className="w-16 h-16 rounded-full object-cover ring-2 ring-white/30"
+            className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover ring-2 ring-white/30 flex-shrink-0"
           />
-          <div className="flex items-center gap-2">
-            <div>
-              <h2 className="text-xl font-bold">{t("ialab.valerio.title")}</h2>
-              <p className="text-sm opacity-90">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="min-w-0">
+              <h2 className="text-lg sm:text-xl font-bold truncate">
+                {t("ialab.valerio.title")}
+              </h2>
+              <p className="text-xs sm:text-sm opacity-90 truncate">
                 {t("ialab.valerio.module_label", {
                   title: currentModule?.title,
                 })}
@@ -48,7 +50,7 @@ const ValerioPanelHeader = ({
         </button>
       </div>
 
-      <div className="flex items-center gap-3 text-sm">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm">
         <div className="flex items-center gap-2">
           <div
             className={`w-2 h-2 rounded-full ${

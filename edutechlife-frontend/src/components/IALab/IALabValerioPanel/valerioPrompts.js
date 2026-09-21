@@ -226,7 +226,9 @@ export const buildContextualWelcome = ({
 }) => {
   const isEn = locale === "en" || locale === "pt";
   const store = useIALabStore.getState();
-  const name = studentName || (isEn ? "Student" : "Estudiante");
+  // Se personaliza con el nombre real del estudiante; si no lo hay, el saludo
+  // se construye sin nombre (nunca "Usuario"/"Estudiante").
+  const nameTag = studentName ? `, ${studentName}` : "";
   const moduleTitle =
     currentModule?.title || (isEn ? "this module" : "este módulo");
   const levelLabel =
@@ -256,39 +258,39 @@ export const buildContextualWelcome = ({
 
   if (isEn) {
     if (daysSinceLast !== null && daysSinceLast >= 3) {
-      return `Welcome back, ${name}! It's been ${daysSinceLast} days — great to see you again. You're working on "${moduleTitle}" at ${levelLabel} level. Need a refresher or want to keep moving forward?`;
+      return `Welcome back${nameTag}! It's been ${daysSinceLast} days — great to see you again. You're working on "${moduleTitle}" at ${levelLabel} level. Need a refresher or want to keep moving forward?`;
     }
     if (streakNum > 0 && atRisk) {
-      return `Hey ${name}! Your ${streakNum}-day streak is at risk today. How about one quick activity to keep it going? You're in "${moduleTitle}" at ${levelLabel} level — let's do this!`;
+      return `Hey${nameTag}! Your ${streakNum}-day streak is at risk today. How about one quick activity to keep it going? You're in "${moduleTitle}" at ${levelLabel} level — let's do this!`;
     }
     if (streakNum >= 5) {
-      return `Wow, ${streakNum} days in a row, ${name}! Your consistency is amazing. You're making great progress in "${moduleTitle}" (${levelLabel} level). What would you like to work on today?`;
+      return `Wow, ${streakNum} days in a row${nameTag}! Your consistency is amazing. You're making great progress in "${moduleTitle}" (${levelLabel} level). What would you like to work on today?`;
     }
     if (isModComplete && overallPct < 100) {
       const recModule = store.getDailyRoute()?.nextModule;
-      return `Awesome, ${name}! You aced this module 🎉. Overall you're at ${overallPct}% of the course. ${recModule ? `Ready to jump into "${recModule.title}"?` : "Ready for the next challenge?"} Ask me anything!`;
+      return `${studentName ? `${studentName}, you` : "You"} aced this module 🎉. Overall you're at ${overallPct}% of the course. ${recModule ? `Ready to jump into "${recModule.title}"?` : "Ready for the next challenge?"} Ask me anything!`;
     }
     if (overallPct >= 80) {
-      return `You're almost there, ${name}! ${overallPct}% complete — just the final stretch left. Keep pushing, and let me know if you need help with anything!`;
+      return `You're almost there${nameTag}! ${overallPct}% complete — just the final stretch left. Keep pushing, and let me know if you need help with anything!`;
     }
-    return `Hello${studentName ? ", " + studentName : ""}! I'm MAX, your coach. I see you're in "${moduleTitle}" — great topic! You're at ${levelLabel} level, and we'll explore it together. Ask me anything: explain a topic, give you an example, or help you with the challenge. Where would you like to start?`;
+    return `Hello${nameTag}! I'm MAX, your coach. I see you're in "${moduleTitle}" — great topic! You're at ${levelLabel} level, and we'll explore it together. Ask me anything: explain a topic, give you an example, or help you with the challenge. Where would you like to start?`;
   }
 
   if (daysSinceLast !== null && daysSinceLast >= 3) {
-    return `¡Bienvenido de vuelta, ${name}! Hacía ${daysSinceLast} días — qué gusto verte de nuevo. Estás en "${moduleTitle}" nivel ${levelLabel}. ¿Necesitas un repaso o quieres seguir avanzando?`;
+    return `¡Bienvenido de vuelta${nameTag}! Hacía ${daysSinceLast} días — qué gusto verte de nuevo. Estás en "${moduleTitle}" nivel ${levelLabel}. ¿Necesitas un repaso o quieres seguir avanzando?`;
   }
   if (streakNum > 0 && atRisk) {
-    return `¡Oye ${name}! Tu racha de ${streakNum} días está en riesgo hoy. ¿Qué tal una actividad rápida para mantenerla? Estás en "${moduleTitle}" nivel ${levelLabel} — ¡vamos!`;
+    return `¡Oye${nameTag}! Tu racha de ${streakNum} días está en riesgo hoy. ¿Qué tal una actividad rápida para mantenerla? Estás en "${moduleTitle}" nivel ${levelLabel} — ¡vamos!`;
   }
   if (streakNum >= 5) {
-    return `¡${streakNum} días seguidos, ${name}! Tu constancia es increíble. Vas muy bien en "${moduleTitle}" (nivel ${levelLabel}). ¿En qué te gustaría trabajar hoy?`;
+    return `¡${streakNum} días seguidos${nameTag}! Tu constancia es increíble. Vas muy bien en "${moduleTitle}" (nivel ${levelLabel}). ¿En qué te gustaría trabajar hoy?`;
   }
   if (isModComplete && overallPct < 100) {
     const recModule = store.getDailyRoute()?.nextModule;
-    return `¡${name}, dominaste este módulo! 🎉 Llevas ${overallPct}% del curso. ${recModule ? `¿Listo para saltar a "${recModule.title}"?` : "¿Listo para el siguiente reto?"} ¡Pregúntame lo que quieras!`;
+    return `¡${studentName ? `${studentName}, dominaste` : "Dominaste"} este módulo! 🎉 Llevas ${overallPct}% del curso. ${recModule ? `¿Listo para saltar a "${recModule.title}"?` : "¿Listo para el siguiente reto?"} ¡Pregúntame lo que quieras!`;
   }
   if (overallPct >= 80) {
-    return `Ya casi terminas, ${name}! ${overallPct}% completado — solo queda el empujón final. ¡Sigue así y cuéntame si necesitas ayuda con algo!`;
+    return `Ya casi terminas${nameTag}! ${overallPct}% completado — solo queda el empujón final. ¡Sigue así y cuéntame si necesitas ayuda con algo!`;
   }
-  return `¡Hola${studentName ? ", " + studentName : ""}! Soy Valerio, tu coach. Veo que estás en "${moduleTitle}" — ¡qué tema tan interesante! Estás en nivel ${levelLabel}, y lo exploraremos juntos. Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, o ayudarte con el desafío. ¿Por dónde te gustaría empezar?`;
+  return `¡Hola${nameTag}! Soy Valerio, tu coach. Veo que estás en "${moduleTitle}" — ¡qué tema tan interesante! Estás en nivel ${levelLabel}, y lo exploraremos juntos. Pregúntame lo que quieras: explicarte un tema, darte un ejemplo, o ayudarte con el desafío. ¿Por dónde te gustaría empezar?`;
 };

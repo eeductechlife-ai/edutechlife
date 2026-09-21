@@ -5,8 +5,8 @@ import { useTranslation } from "../../../i18n/I18nProvider";
 const NAV_ITEMS = [
   {
     id: null,
-    labelKey: "ialab.tab_all",
-    fallback: "Todo",
+    labelKey: "ialab.tab_home",
+    fallback: "Inicio",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -40,9 +40,9 @@ const NAV_ITEMS = [
     ),
   },
   {
-    id: "contenido",
-    labelKey: "ialab.tab_topics",
-    fallback: "Temas",
+    id: "modulos",
+    labelKey: "ialab.tab_modules",
+    fallback: "Módulos",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -53,7 +53,9 @@ const NAV_ITEMS = [
         strokeLinejoin="round"
         aria-hidden="true"
       >
-        <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />
+        <path d="M12 2 2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5" />
+        <path d="M2 12l10 5 10-5" />
       </svg>
     ),
   },
@@ -82,6 +84,7 @@ function MobileBottomNav({
   viewSection,
   onSelectSection,
   onOpenMenu,
+  onOpenModules,
   badgeCount = 0,
 }) {
   const { t } = useTranslation();
@@ -94,15 +97,22 @@ function MobileBottomNav({
     >
       {NAV_ITEMS.map((item) => {
         const isMenu = item.id === "__menu__";
-        const isActive = !isMenu && viewSection === item.id;
+        const isModules = item.id === "modulos";
+        const isActive = !isMenu && !isModules && viewSection === item.id;
 
         return (
           <button
             key={String(item.id)}
+            id={isModules ? "ialab-modules-menu-trigger" : undefined}
             type="button"
+            aria-haspopup={isModules ? "dialog" : undefined}
             onClick={() => {
               if (isMenu) {
                 onOpenMenu();
+                return;
+              }
+              if (isModules) {
+                onOpenModules();
                 return;
               }
               onSelectSection(item.id);
@@ -147,6 +157,7 @@ MobileBottomNav.propTypes = {
   viewSection: PropTypes.string,
   onSelectSection: PropTypes.func.isRequired,
   onOpenMenu: PropTypes.func.isRequired,
+  onOpenModules: PropTypes.func.isRequired,
   badgeCount: PropTypes.number,
 };
 

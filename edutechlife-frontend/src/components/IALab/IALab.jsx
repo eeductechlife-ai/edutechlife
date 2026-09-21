@@ -34,6 +34,7 @@ import ToolWorkspace from "./workspace/ToolWorkspace";
 import { shouldAutoOpenActivities } from "./utils/autoTab";
 import DefaultModuleWelcome from "./workspace/DefaultModuleWelcome";
 import MobileMenuOverlay from "./shared/MobileMenuOverlay";
+import ModulesMenuOverlay from "./shared/ModulesMenuOverlay";
 import TabPills from "./shared/TabPills";
 import AnimatedSection from "./shared/AnimatedSection";
 import SkipLink from "./shared/SkipLink";
@@ -46,7 +47,6 @@ import ModuleInfoSection from "./ModuleInfoSection";
 import Breadcrumbs from "./Breadcrumbs";
 import handleGlobalAction from "./handleGlobalAction";
 import { createSlideVariants } from "./IALabAnimations";
-import { Icon } from "../../utils/iconMapping.jsx";
 
 const preloadForum = () => import("./IALabForumOptimized");
 const IALabForumOptimized = lazy(preloadForum);
@@ -94,12 +94,11 @@ const BookmarksTab = lazy(() => import("./BookmarksTab"));
 import MobileHeader from "./shared/MobileHeader";
 import MobileInfoBar from "./shared/MobileInfoBar";
 import MobileBottomNav from "./shared/MobileBottomNav";
-import ModuleNavItem from "./sidebar/ModuleNavItem";
 import ToastNotification from "./shared/ToastNotification";
 import XPToast from "./XPToast";
 
 const createTABS = (t) => [
-  { id: null, label: t("ialab.tab_all") },
+  { id: null, label: t("ialab.tab_home") },
   { id: "objetivos", label: t("ialab.tab_objectives") },
   { id: "contenido", label: t("ialab.tab_content") },
   { id: "actividades", label: t("ialab.tab_activities") },
@@ -119,10 +118,8 @@ const IALabContent = memo(function () {
   const { toasts: achievementToasts, removeToast: removeAchievementToast } =
     useAchievementNotifications(useIALabStore);
   const {
-    completedModules = [],
     courseProgress = 0,
     activeMod = 1,
-    setActiveMod = () => {},
     completedExams = {},
     challengeScores = {},
     moduleProgress = {},
@@ -154,6 +151,17 @@ const IALabContent = memo(function () {
     setTimeout(() => {
       setShowMobileMenu(false);
       setMobileMenuClosing(false);
+    }, 250);
+  };
+  // Panel de módulos (mismo efecto que "Abrir menú").
+  const [showModulesMenu, setShowModulesMenu] = useState(false);
+  const [modulesMenuClosing, setModulesMenuClosing] = useState(false);
+  const closeModulesMenu = () => {
+    if (modulesMenuClosing) return;
+    setModulesMenuClosing(true);
+    setTimeout(() => {
+      setShowModulesMenu(false);
+      setModulesMenuClosing(false);
     }, 250);
   };
   const [isForumOpen, setIsForumOpen] = useState(false);
@@ -585,34 +593,6 @@ const IALabContent = memo(function () {
           aria-labelledby="tab-contenido"
           data-tour="tour-temas"
         >
-          {/* Selector de módulos del curso — SOLO móvil. Vive aquí (sección
-              "Temas") y se quitó del menú lateral para que quede en un solo
-              lugar. En desktop los módulos siguen en la barra lateral. */}
-          {modules.length > 0 && (
-            <div className="md:hidden mb-4" data-testid="temas-module-switcher">
-              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[var(--theme-primary)] mb-2 flex items-center gap-1.5">
-                <Icon name="fa-layer-group" className="text-xs" />
-                {t("mobile_menu.modules")}
-              </p>
-              <div className="space-y-0.5">
-                {modules.map((mod) => (
-                  <ModuleNavItem
-                    key={mod.id}
-                    mod={mod}
-                    isActive={activeMod === mod.id}
-                    isLocked={useIALabStore.getState().isModuleLocked(mod.id)}
-                    isCompleted={completedModules.includes(mod.id)}
-                    score={useIALabStore
-                      .getState()
-                      .calculateModuleScore(mod.id)}
-                    variant="expanded"
-                    onClick={(id) => setActiveMod(id)}
-                  />
-                ))}
-              </div>
-              <div className="my-3 h-px bg-slate-200/70 dark:bg-slate-700/50" />
-            </div>
-          )}
           <Suspense fallback={<ModuleOverviewSkeleton />}>
             <SectionErrorBoundary name="TopicChatThread">
               {chromeActive ? (
@@ -770,6 +750,16 @@ const IALabContent = memo(function () {
             handleOpenProfile={handleOpenProfile}
             handleOpenHistory={handleOpenHistory}
             handleOpenHelp={handleOpenHelp}
+          />
+
+          <ModulesMenuOverlay
+            show={showModulesMenu}
+            closing={modulesMenuClosing}
+            onClose={closeModulesMenu}
+            width={MOBILE_MENU_WIDTH}
+            springDamping={SPRING_DAMPING}
+            springStiffness={SPRING_STIFFNESS}
+            triggerId="ialab-modules-menu-trigger"
           />
 
           <SkipLink />
@@ -1171,6 +1161,7 @@ const IALabContent = memo(function () {
           viewSection={viewSection}
           onSelectSection={setViewSection}
           onOpenMenu={() => setShowMobileMenu(true)}
+          onOpenModules={() => setShowModulesMenu(true)}
           badgeCount={bookmarkBadge}
         />
 

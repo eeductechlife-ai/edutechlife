@@ -108,7 +108,7 @@ export default function ChatGPTWelcome({
               if (action === "contenido") onSelectTopic(0);
               else onSelectSection(action);
             }}
-            className={`theme-prompt-card flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10a37f]/40 ${action === "practica" ? "max-md:hidden" : ""}`}
+            className={`theme-prompt-card flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10a37f]/40`}
           >
             <span className="mt-0.5 flex-shrink-0 h-8 w-8 rounded-xl theme-chip flex items-center justify-center">
               <svg

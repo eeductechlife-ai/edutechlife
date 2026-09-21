@@ -136,7 +136,21 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
   const conversationFinalizedRef = useRef(false);
   const fullResponseRef = useRef("");
 
-  const studentName = user?.firstName || user?.full_name || "";
+  // Nombre para personalizar la conversación. Si el perfil no trae nombre y el
+  // valor es el marcador genérico, se prefiere no usar nombre antes que
+  // decirle "Usuario" al estudiante.
+  const rawStudentName = user?.firstName || user?.full_name || "";
+  const studentName = [
+    "usuario",
+    "user",
+    "estudiante",
+    "student",
+    "alumno",
+    "invitado",
+    "guest",
+  ].includes(rawStudentName.trim().toLowerCase())
+    ? ""
+    : rawStudentName.trim();
   const currentModule = modules.find((m) => m.id === activeMod);
   const userLevel = completedModules.length;
   const lastVisitedLesson = useIALabStore((s) => s.lastVisitedLesson);
@@ -678,7 +692,14 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    // En pantallas táctiles Enter inserta un salto de línea (no existe Shift),
+    // así que el envío se hace con el botón. Con teclado físico se mantiene
+    // Enter = enviar.
+    const isCoarsePointer =
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(pointer: coarse)").matches;
+    if (e.key === "Enter" && !e.shiftKey && !isCoarsePointer) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -709,6 +730,30 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
     setShowClearConfirm(false);
   };
 
+  // Teclado móvil: se sube el panel con el viewport visual para que el cuadro
+  // de texto y el botón de enviar queden siempre visibles sobre el teclado.
+  const [keyboardOffset, setKeyboardOffset] = useState(0);
+  useEffect(() => {
+    const vv =
+      typeof window !== "undefined" ? window.visualViewport : undefined;
+    if (!vv) return undefined;
+    const onViewportChange = () => {
+      const offset = Math.max(
+        0,
+        Math.round(window.innerHeight - vv.height - vv.offsetTop),
+      );
+      // <80px suele ser chrome del navegador, no teclado.
+      setKeyboardOffset(offset > 80 ? offset : 0);
+    };
+    vv.addEventListener("resize", onViewportChange);
+    vv.addEventListener("scroll", onViewportChange);
+    onViewportChange();
+    return () => {
+      vv.removeEventListener("resize", onViewportChange);
+      vv.removeEventListener("scroll", onViewportChange);
+    };
+  }, []);
+
   if (!isOpen) return null;
 
   if (!currentModule) {
@@ -727,7 +772,8 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
   return (
     <SectionErrorBoundary name="ValerioPanel">
       <div
-        className="fixed right-0 top-0 bottom-0 z-[90] flex flex-col"
+        className="fixed right-0 top-0 bottom-0 z-[90] flex flex-col w-full sm:w-[85vw] sm:max-w-[380px] overflow-hidden"
+        style={{ bottom: keyboardOffset }}
         role="dialog"
         aria-label={t("ialab.valerio.panel_aria")}
         onKeyDown={(e) => {
@@ -745,7 +791,7 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
               ? undefined
               : { type: "spring", stiffness: 300, damping: 30 }
           }
-          className="relative w-full sm:w-[85vw] sm:max-w-[380px] h-full bg-white shadow-2xl flex flex-col z-10"
+          className="relative w-full h-full bg-white shadow-2xl flex flex-col z-10 overflow-hidden"
           role="document"
           style={{ willChange: "transform" }}
         >

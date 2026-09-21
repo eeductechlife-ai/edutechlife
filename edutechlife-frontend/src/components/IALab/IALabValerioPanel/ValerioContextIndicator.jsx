@@ -39,7 +39,10 @@ const ValerioContextIndicator = ({ currentModule }) => {
         onClick={() => setShowTooltip(!showTooltip)}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
-        className="w-2 h-2 rounded-full flex-shrink-0 transition-colors"
+        /* El punto mide 8px pero el área táctil es de 44px (after). Se usa
+           !min-* porque la regla global .touch-optimized button fuerza 44px
+           y tiene más especificidad que las utilidades normales. */
+        className="relative w-2 h-2 !min-w-[8px] !min-h-[8px] rounded-full flex-shrink-0 transition-colors after:absolute after:-inset-[18px] after:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
         style={{ backgroundColor: isGreen ? "#10B981" : "#F59E0B" }}
         aria-label={tooltipText}
       />
