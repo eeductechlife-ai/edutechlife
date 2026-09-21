@@ -94,6 +94,7 @@ const BookmarksTab = lazy(() => import("./BookmarksTab"));
 import MobileHeader from "./shared/MobileHeader";
 import MobileInfoBar from "./shared/MobileInfoBar";
 import MobileBottomNav from "./shared/MobileBottomNav";
+import ModuleNavItem from "./sidebar/ModuleNavItem";
 import ToastNotification from "./shared/ToastNotification";
 import XPToast from "./XPToast";
 
@@ -584,6 +585,34 @@ const IALabContent = memo(function () {
           aria-labelledby="tab-contenido"
           data-tour="tour-temas"
         >
+          {/* Selector de módulos del curso — SOLO móvil. Vive aquí (sección
+              "Temas") y se quitó del menú lateral para que quede en un solo
+              lugar. En desktop los módulos siguen en la barra lateral. */}
+          {modules.length > 0 && (
+            <div className="md:hidden mb-4" data-testid="temas-module-switcher">
+              <p className="text-[10px] font-bold tracking-[0.12em] uppercase text-[var(--theme-primary)] mb-2 flex items-center gap-1.5">
+                <Icon name="fa-layer-group" className="text-xs" />
+                {t("mobile_menu.modules")}
+              </p>
+              <div className="space-y-0.5">
+                {modules.map((mod) => (
+                  <ModuleNavItem
+                    key={mod.id}
+                    mod={mod}
+                    isActive={activeMod === mod.id}
+                    isLocked={useIALabStore.getState().isModuleLocked(mod.id)}
+                    isCompleted={completedModules.includes(mod.id)}
+                    score={useIALabStore
+                      .getState()
+                      .calculateModuleScore(mod.id)}
+                    variant="expanded"
+                    onClick={(id) => setActiveMod(id)}
+                  />
+                ))}
+              </div>
+              <div className="my-3 h-px bg-slate-200/70 dark:bg-slate-700/50" />
+            </div>
+          )}
           <Suspense fallback={<ModuleOverviewSkeleton />}>
             <SectionErrorBoundary name="TopicChatThread">
               {chromeActive ? (

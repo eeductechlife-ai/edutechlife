@@ -9,7 +9,7 @@ import {
 import { useIALabStore } from "../../store/ialabStore";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { signOutUser } from "../../hooks/useAuthIdentity";
-import ModuleNavItem from "./sidebar/ModuleNavItem";
+
 const StudyCalendarSection = lazy(() => import("./StudyCalendarSection"));
 
 const IALabMobileMenu = ({
@@ -22,15 +22,7 @@ const IALabMobileMenu = ({
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const {
-    activeMod = 1,
-    setActiveMod = () => {},
-    courseProgress = 0,
-    modules = [],
-    isModuleLocked = () => false,
-    calculateModuleScore = () => 0,
-    completedModules = [],
-  } = useIALabProgressContext() ?? {};
+  const { courseProgress = 0 } = useIALabProgressContext() ?? {};
 
   const { user, setShowCertificateModal, courseCompleted } =
     useIALabUIContext() ?? {};
@@ -120,38 +112,8 @@ const IALabMobileMenu = ({
         </div>
       </div>
 
-      {/* MODULOS DEL CURSO */}
-      <div className="px-3 py-3">
-        <h3 className="text-[10px] font-bold tracking-[0.12em] uppercase text-[var(--theme-primary)] mb-2 flex items-center gap-1.5">
-          <Icon
-            name="fa-layer-group"
-            className="text-[var(--theme-primary)] text-xs"
-          />
-          {t("mobile_menu.modules")}
-        </h3>
-        <div className="space-y-0.5">
-          {modules.map((mod) => {
-            const modScore = calculateModuleScore(mod.id);
-            const isLocked = isModuleLocked(mod.id);
-            const isActive = activeMod === mod.id;
-            return (
-              <ModuleNavItem
-                key={mod.id}
-                mod={mod}
-                isActive={isActive}
-                isLocked={isLocked}
-                isCompleted={completedModules.includes(mod.id)}
-                score={modScore}
-                variant="expanded"
-                onClick={(id) => {
-                  setActiveMod(id);
-                  closeMobileMenu();
-                }}
-              />
-            );
-          })}
-        </div>
-      </div>
+      {/* Los módulos del curso viven ahora en la sección "Temas" (bottom nav),
+          no en este menú, para que queden en un solo lugar. */}
 
       <div className="mx-3 border-t border-slate-100 dark:border-slate-700" />
 
