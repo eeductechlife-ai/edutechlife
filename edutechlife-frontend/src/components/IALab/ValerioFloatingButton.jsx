@@ -69,7 +69,7 @@ const ValerioFloatingButton = ({ onClick, t, hasStartedCourse = false }) => {
   return (
     <AnimatePresence>
       {mounted && (
-        <div className="fixed bottom-6 right-6 landscape:bottom-3 landscape:right-3 lg:bottom-10 lg:right-10 z-50">
+        <div className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+5.5rem)] right-4 landscape:bottom-[calc(env(safe-area-inset-bottom,0px)+4.5rem)] landscape:right-3 lg:bottom-10 lg:right-10 z-50 md:bottom-6 md:right-6">
           <motion.div
             initial={{ opacity: 0, scale: 0.3, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
