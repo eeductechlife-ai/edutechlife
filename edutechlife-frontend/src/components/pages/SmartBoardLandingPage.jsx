@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { SmartBoardKidsProvider } from "../../context/SmartBoardKidsContext";
 import { useAuthIdentity } from "../../hooks/useAuthIdentity";
-import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { PageLoader } from "../LoadingScreen";
 import { useTranslation } from "../../i18n/I18nProvider";
 import SEO from "../SEO";
@@ -18,8 +17,8 @@ const SmartBoardParentDashboard = lazy(
 const SmartBoardLandingPage = () => {
   const { t } = useTranslation();
   const { isLoaded, isSignedIn, token } = useAuthIdentity();
-  const { profile, isLoading: isProfileLoading } = useStudentProfile();
   const [role, setRole] = useState(null);
+  const [accountType, setAccountType] = useState(null);
 
   useEffect(() => {
     if (!isLoaded || !isSignedIn || !token) return;
@@ -27,11 +26,14 @@ const SmartBoardLandingPage = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => (r.ok ? r.json() : null))
-      .then((data) => setRole(data?.role || "student"))
+      .then((data) => {
+        setRole(data?.role || "student");
+        setAccountType(data?.account_type || null);
+      })
       .catch(() => setRole("student"));
   }, [isLoaded, isSignedIn, token]);
 
-  if (!isLoaded || (isSignedIn && (role === null || isProfileLoading))) {
+  if (!isLoaded || (isSignedIn && role === null)) {
     return <PageLoader message={t("smartboard.loading")} />;
   }
 
@@ -41,7 +43,6 @@ const SmartBoardLandingPage = () => {
 
   // Productos distintos: una cuenta de IALab (curso de IA generativa) no entra
   // al panel de los niños. Los padres con vínculo activo sí (role='parent').
-  const accountType = profile?.account_type;
   if (role !== "parent" && accountType === "ialab") {
     return (
       <div className="min-h-[100dvh] bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-6">

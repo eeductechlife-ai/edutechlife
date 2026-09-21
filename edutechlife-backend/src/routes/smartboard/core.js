@@ -268,15 +268,31 @@ router.get('/wellbeing-status', requireAuth, requireVerifiedParentalConsent, asy
 
 router.get('/user-role', requireAuth, async (req, res) => {
   try {
-    const { data: link } = await supabase
-      .from('parent_student_links')
-      .select('parent_user_id')
-      .eq('parent_user_id', req.userId)
-      .eq('is_active', true)
-      .limit(1)
-      .maybeSingle();
+    // Además del rol (padre/estudiante) se devuelve el producto de la cuenta
+    // (users.account_type, migración 090). Lo consumen el gate de /smartboard y
+    // RoleProtectedRoute: hasta ahora leían profile.account_type de un hook que
+    // no lo expone, así que el filtro por producto nunca se aplicaba.
+    const [linksRes, profileRes] = await Promise.all([
+      supabase
+        .from('parent_student_links')
+        .select('parent_user_id')
+        .eq('parent_user_id', req.userId)
+        .eq('is_active', true)
+        .limit(1),
+      supabase
+        .from('users')
+        .select('account_type')
+        .eq('id', req.userId)
+        .maybeSingle(),
+    ]);
 
-    return res.json({ role: link ? 'parent' : 'student' });
+    const isParent = Array.isArray(linksRes?.data) && linksRes.data.length > 0;
+    const accountType = profileRes?.data?.account_type || null;
+
+    return res.json({
+      role: isParent ? 'parent' : 'student',
+      account_type: accountType,
+    });
   } catch (e) {
     return res.status(500).json({ error: 'Error determining role' });
   }
