@@ -21,7 +21,7 @@ import MobileSubTabBar from "./components/MobileSubTabBar";
 import CinematicContent from "./components/CinematicContent";
 import { WifiOff, CloudSync } from "lucide-react";
 import SmartBoardLoadingSkeleton from "./SmartBoardLoadingSkeleton";
-import ParentalConsentBlocker from "./ParentalConsentBlocker";
+import ParentalNoticeBar from "./ParentalNoticeBar";
 import TopBar from "./components/TopBar";
 import { useParentalControls } from "../../hooks/useParentalControls";
 import useFunnelTracking from "../../hooks/useFunnelTracking";
@@ -190,7 +190,8 @@ const SmartBoardKidsDashboard = () => {
   }
 
   return (
-    <ParentalConsentBlocker>
+    <>
+      <ParentalNoticeBar />
       <div
         className={`relative min-h-screen overflow-hidden transition-colors duration-500 ${
           darkMode ? "bg-[#0F172A] text-white" : "bg-[#F8FAFC]"
@@ -448,7 +449,7 @@ const SmartBoardKidsDashboard = () => {
           )}
         </AnimatePresence>
       </div>
-    </ParentalConsentBlocker>
+    </>
   );
 };
 
