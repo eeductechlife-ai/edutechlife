@@ -214,104 +214,90 @@ const NextBestAction = memo(({ onTabChange }) => {
     pedagogicReason,
   } = display;
 
+  // Extract the dominant color from the gradient for accents
+  const accentColor = gradient.match(/#[0-9A-Fa-f]{6}/)?.[0] || "#7B2FF7";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="w-full rounded-3xl overflow-hidden relative"
-      style={{ background: gradient }}
+      className="w-full rounded-2xl overflow-hidden bg-white shadow-lg border border-gray-100"
     >
-      {/* Decorative circles */}
-      <div
-        className="absolute top-0 right-0 w-48 h-48 rounded-full opacity-10 pointer-events-none"
-        style={{
-          background: "rgba(255,255,255,0.5)",
-          transform: "translate(35%,-35%)",
-        }}
-      />
-      <div
-        className="absolute bottom-0 left-0 w-32 h-32 rounded-full opacity-8 pointer-events-none"
-        style={{
-          background: "rgba(255,255,255,0.3)",
-          transform: "translate(-35%,35%)",
-        }}
-      />
+      {/* Color strip — subject identity at a glance */}
+      <div className="h-1.5 w-full" style={{ background: gradient }} />
 
-      <div className="relative z-10 p-6 sm:p-7">
-        {/* Eyebrow */}
-        <div className="flex items-center gap-1.5 mb-3">
-          <span className="text-[10px] font-black uppercase tracking-widest text-white/60">
-            Tu siguiente actividad es
-          </span>
-          {fromBackend && (
-            <span className="flex items-center gap-0.5 text-[9px] font-bold bg-white/15 border border-white/20 text-white/70 px-1.5 py-0.5 rounded-full">
-              <GitBranch className="w-2 h-2" />
-              Adaptado
-            </span>
-          )}
-          {loading && (
-            <Loader2 className="w-3 h-3 text-white/40 animate-spin" />
-          )}
-        </div>
-
-        {/* Subject badge + headline */}
-        <div className="flex items-start gap-4 mb-4">
+      <div className="p-4 sm:p-5">
+        {/* Header: icon + title + badge */}
+        <div className="flex items-center gap-3 mb-3">
           <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 shadow-lg"
-            style={{ background: "rgba(255,255,255,0.2)" }}
+            className="w-11 h-11 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-sm"
+            style={{ background: `${accentColor}22` }}
           >
             {emoji}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className="text-xl font-black text-white leading-tight">
+            <div className="flex items-center gap-1 mb-0.5">
+              <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">
+                Tu siguiente actividad
+              </span>
+              {fromBackend && (
+                <span
+                  className="flex items-center gap-0.5 text-[8px] font-bold text-white px-1.5 py-0.5 rounded-full"
+                  style={{ background: accentColor }}
+                >
+                  <GitBranch className="w-2 h-2" />
+                  Adaptado
+                </span>
+              )}
+              {loading && (
+                <Loader2 className="w-3 h-3 text-gray-300 animate-spin" />
+              )}
+            </div>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-base font-black text-gray-900 leading-tight">
                 {label}
               </span>
               <span
-                className="text-[10px] font-black px-2 py-0.5 rounded-full"
-                style={{
-                  background: "rgba(255,255,255,0.2)",
-                  color: "rgba(255,255,255,0.9)",
-                }}
+                className="text-[9px] font-black px-2 py-0.5 rounded-full text-white flex-shrink-0"
+                style={{ background: accentColor }}
               >
                 {goal.emoji} {goal.label}
               </span>
             </div>
-            <p className="text-sm text-white/80 leading-snug line-clamp-2">
-              {headline}
-            </p>
-            {pedagogicReason && (
-              <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold bg-white/15 border border-white/25 text-white/80 px-2 py-0.5 rounded-full">
-                <GitBranch className="w-2.5 h-2.5" />
-                {pedagogicReason}
-              </div>
-            )}
           </div>
         </div>
+
+        {/* Description */}
+        <p className="text-xs text-gray-500 leading-snug line-clamp-2 mb-1">
+          {headline}
+        </p>
+        {pedagogicReason && (
+          <div
+            className="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full mb-3"
+            style={{ background: `${accentColor}18`, color: accentColor }}
+          >
+            <GitBranch className="w-2.5 h-2.5" />
+            {pedagogicReason}
+          </div>
+        )}
 
         {/* CTA */}
         <button
           type="button"
           onClick={() => onTabChange?.(tab)}
-          className="w-full flex items-center justify-between bg-white/20 hover:bg-white/30 active:bg-white/15 border border-white/30 rounded-2xl px-5 py-3.5 transition-all group"
+          className="mt-2 w-full flex items-center justify-between text-white rounded-xl px-4 py-3 transition-all active:scale-[0.98] shadow-sm"
+          style={{ background: gradient }}
         >
-          <div className="flex items-center gap-3">
-            <span className="text-base font-black text-white">
-              ¡Empezar ahora!
-            </span>
-            <span className="text-xs text-white/65 flex items-center gap-0.5">
-              ⏱ ~{minutes} min
-            </span>
-          </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-black text-white bg-white/20 border border-white/30 px-2.5 py-1 rounded-full">
+            <span className="text-sm font-black">¡Empezar ahora!</span>
+            <span className="text-[10px] text-white/70">⏱ ~{minutes} min</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-black bg-white/25 px-2 py-0.5 rounded-full">
               +{xp} XP
             </span>
-            <ChevronRight
-              className="w-5 h-5 text-white/80 group-hover:translate-x-0.5 transition-transform"
-              strokeWidth={2.5}
-            />
+            <ChevronRight className="w-4 h-4 text-white/80" strokeWidth={2.5} />
           </div>
         </button>
       </div>
