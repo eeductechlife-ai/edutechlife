@@ -62,7 +62,7 @@ BEGIN
     -- 1a. Mover la tabla si sigue en public (idempotente).
     IF EXISTS (
       SELECT 1 FROM information_schema.tables
-      WHERE table_schema = 'public' AND table_name = t
+      WHERE table_schema = 'public' AND table_name = t AND table_type = 'BASE TABLE'
     ) THEN
       EXECUTE format('ALTER TABLE public.%I SET SCHEMA ialab', t);
       RAISE NOTICE 'movida a ialab: %', t;
@@ -71,7 +71,7 @@ BEGIN
     -- 1b. Vista de compatibilidad en public (mismo nombre, RLS del invocador).
     IF EXISTS (
       SELECT 1 FROM information_schema.tables
-      WHERE table_schema = 'ialab' AND table_name = t
+      WHERE table_schema = 'ialab' AND table_name = t AND table_type = 'BASE TABLE'
     ) THEN
       EXECUTE format(
         'CREATE OR REPLACE VIEW public.%I WITH (security_invoker = on) AS SELECT * FROM ialab.%I',

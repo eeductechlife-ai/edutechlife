@@ -58,7 +58,7 @@ BEGIN
   FOREACH t IN ARRAY sb_tables LOOP
     IF EXISTS (
       SELECT 1 FROM information_schema.tables
-      WHERE table_schema = 'public' AND table_name = t
+      WHERE table_schema = 'public' AND table_name = t AND table_type = 'BASE TABLE'
     ) THEN
       EXECUTE format('ALTER TABLE public.%I SET SCHEMA smartboard', t);
       RAISE NOTICE 'movida a smartboard: %', t;
@@ -66,7 +66,7 @@ BEGIN
 
     IF EXISTS (
       SELECT 1 FROM information_schema.tables
-      WHERE table_schema = 'smartboard' AND table_name = t
+      WHERE table_schema = 'smartboard' AND table_name = t AND table_type = 'BASE TABLE'
     ) THEN
       EXECUTE format(
         'CREATE OR REPLACE VIEW public.%I WITH (security_invoker = on) AS SELECT * FROM smartboard.%I',
