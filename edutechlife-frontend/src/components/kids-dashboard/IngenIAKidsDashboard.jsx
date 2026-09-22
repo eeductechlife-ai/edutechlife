@@ -365,7 +365,10 @@ const IngenIAKidsDashboard = () => {
                 setIsDaniOpen(true);
               }}
               aria-label={t("smartboard.dani_reminder_open")}
-              className="fixed bottom-24 md:bottom-6 left-6 z-50 flex items-center justify-between gap-3 px-4 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl shadow-xl cursor-pointer"
+              className="fixed left-4 right-4 md:left-6 md:right-auto md:max-w-[16rem] z-[55] flex items-center justify-between gap-3 px-4 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl shadow-xl cursor-pointer"
+              style={{
+                bottom: "calc(env(safe-area-inset-bottom, 0px) + 5.5rem)",
+              }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
