@@ -139,24 +139,39 @@ const EditProfileModal = ({
   );
 
   return createPortal(
-    <>
-      {/* Backdrop */}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "1rem",
+        backgroundColor: "rgba(0,0,0,0.55)",
+      }}
+      onClick={onClose}
+    >
+      {/* Modal — stops click propagation so clicking inside doesn't close */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={onClose}
-        className="fixed inset-0 bg-black/50 z-[200]"
-        style={{ backdropFilter: "blur(2px)" }}
-      />
-
-      {/* Modal */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 8 }}
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 8 }}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl shadow-2xl p-5 sm:p-6 max-w-sm w-[calc(100%-2rem)] z-[201] max-h-[90dvh] overflow-y-auto"
-        style={{ backgroundColor: "#ffffff" }}
+        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: "relative",
+          backgroundColor: "#ffffff",
+          borderRadius: "1rem",
+          boxShadow: "0 25px 50px rgba(0,0,0,0.3)",
+          width: "100%",
+          maxWidth: "24rem",
+          maxHeight: "90dvh",
+          overflowY: "auto",
+          padding: "1.25rem",
+        }}
       >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-800">
@@ -309,7 +324,7 @@ const EditProfileModal = ({
           </button>
         </div>
       </motion.div>
-    </>,
+    </motion.div>,
     document.body,
   );
 };
