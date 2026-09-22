@@ -468,3 +468,43 @@ IALab **no toca** `learning_streaks` ni `sessions` (0 referencias); SmartBoard s
 **Tercera pasada pendiente**: tablas propias de SmartBoard → schema `smartboard`
 (`students`, `parents`, `parent_*`, `student_*`, `timetable_slots`, `missions`, `badges`,
 `smartboard_kids_data`, `lesson_attempts`, …).
+
+### 11.9 Tercera pasada: tablas de SmartBoard al schema `smartboard` (APLICADA)
+
+**Movidas (29 tablas)**: `students`, `parents`, `parent_student_links`, `parent_consents`,
+`parent_preferences`, `parent_alerts`, `parent_alerts_archive`, `parent_contact_info`,
+`parent_dashboard_views`, `parent_dani_conversations`, `student_risk_scores`, `student_rewards`,
+`student_exams`, `student_achievements`, `student_timetable`, `student_missions`, `student_badges`,
+`student_sessions`, `student_competency_mastery`, `student_competition_stats`, `timetable_slots`,
+`missions`, `badges`, `smartboard_kids_data`, `grade_analyses`, `lesson_attempts`,
+`improvement_plans`, `early_warnings`, `predictive_alerts`.
+
+**Verificación previa (código)**: ninguna de estas tablas la usa IALab (**0 referencias**); los
+consumidores son servicios/hooks de SmartBoard (badge/mission engines, adaptive, early warning,
+predicciones, multi-jugador), el middleware de ownership, notificaciones y los paneles.
+
+**Estado final de la separación**
+| Schema | Contenido |
+|---|---|
+| `public` | Identidad compartida (`auth.users`, `users`, `profiles`) + **48 vistas de compatibilidad** (el cliente no cambió) |
+| `ialab` | **17 tablas**: curso (`module_*`, `lesson_*`), progreso (`user_progress`, `user_video_progress`, `user_exams`, `user_activities`), foro (`forum_*`), `certificates` |
+| `smartboard` | **29 tablas**: niños, padres, planes, misiones, insignias, analíticas y `learning_streaks` |
+
+**Verificación en producción**
+| Prueba | Resultado |
+|---|---|
+| Ubicación | `smartboard` 29 tablas · `ialab` 17 · `public` 48 vistas; `public.students` es **VISTA** |
+| Alta real SmartBoard (`POST /api/auth/signup` accountType=smartboard) | **201 + token** y fila creada en `students` **a través de la vista** |
+| `/api/smartboard/user-role` | `{role:'student', account_type:'smartboard'}` (lee `parent_student_links` + `users` por las vistas) |
+| Guard IALab → API SmartBoard | **403** |
+| Guard SmartBoard → API SmartBoard | **200** |
+| IALab → API propia | **200** |
+| Curso en el navegador | carga, módulos, avance y plan del día; sin errores |
+| Dry-run previo | FK entre `student_missions` y `students` respetada; select/insert/update/**upsert** por la vista OK; idempotencia OK |
+
+**Idempotencia (corregida)**: las migraciones 093/094/095 usaban `information_schema.tables`, que
+también incluye vistas → una segunda ejecución intentaba mover la vista de compatibilidad y fallaba.
+Ahora exigen `table_type = 'BASE TABLE'`; verificado ejecutando las tres dos veces en un cluster limpio.
+
+**Rollback por schema** (instantáneo, sin pérdida): `DROP VIEW` de las vistas del schema +
+`ALTER TABLE <schema>.<tabla> SET SCHEMA public`. Con esto se revierte cualquier pasada.
