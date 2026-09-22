@@ -8,21 +8,11 @@ import {
   TOP_BAR_LABELS,
 } from "../kidsDashboardConfig";
 import { SB_GRADIENTS, glow } from "../ingenIATheme";
-import UserMenu from "../UserMenu";
 import IngenIANotificationPanel from "./IngenIANotificationPanel";
 import { useNotification } from "../../../context/NotificationContext";
 
 const TopBar = memo(
-  ({
-    activeTab,
-    darkMode,
-    streak,
-    totalPoints,
-    authToken,
-    studentName,
-    onTabChange,
-    onLogout,
-  }) => {
+  ({ activeTab, darkMode, streak, totalPoints, onTabChange, onLogout }) => {
     const { t } = useTranslation();
     const { unreadCount } = useNotification();
     const [notifOpen, setNotifOpen] = useState(false);
@@ -195,16 +185,6 @@ const TopBar = memo(
               onNavigateTab={onTabChange}
             />
           </div>
-
-          {authToken && (
-            <UserMenu
-              authToken={authToken}
-              studentName={studentName}
-              darkMode={darkMode}
-              onTabChange={onTabChange}
-              onLogout={onLogout}
-            />
-          )}
         </div>
       </motion.header>
     );
