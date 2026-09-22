@@ -79,11 +79,30 @@ export const saveToSupabase = async (supabase, userId, kidsData) => {
       data: kidsData,
     };
 
-    const { data, error } = await supabase
+    // public.smartboard_kids_data es una vista sobre smartboard.smartboard_kids_data
+    // (migración 095) — PostgREST no puede resolver el ON CONFLICT de un upsert
+    // a través de una vista, porque la PK vive en la tabla base, no en la vista.
+    // Por eso se hace explícito: UPDATE si ya existe la fila, INSERT si no.
+    const { data: existing, error: selectError } = await supabase
       .from(TABLE_NAME)
-      .upsert(payload, { onConflict: "user_id" })
-      .select("*")
+      .select("user_id")
+      .eq("user_id", userId)
       .maybeSingle();
+
+    if (selectError) throw selectError;
+
+    const { data, error } = existing
+      ? await supabase
+          .from(TABLE_NAME)
+          .update(payload)
+          .eq("user_id", userId)
+          .select("*")
+          .maybeSingle()
+      : await supabase
+          .from(TABLE_NAME)
+          .insert(payload)
+          .select("*")
+          .maybeSingle();
 
     if (error) {
       if (
