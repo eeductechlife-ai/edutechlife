@@ -46,7 +46,7 @@ const DaniFAB = memo(
         aria-pressed={isDaniOpen}
         role="button"
         tabIndex={0}
-        className={`fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full
+        className={`fixed right-4 md:right-8 z-40 w-14 h-14 rounded-full
         flex items-center justify-center shadow-lg
         transition-all duration-200 disabled:opacity-80
         ${
@@ -54,7 +54,6 @@ const DaniFAB = memo(
             ? "bg-gradient-to-br from-[#4DA8C4] to-[#06B6D4] hover:shadow-xl hover:shadow-[#4DA8C4]/40"
             : "bg-gradient-to-br from-[#00B4D8] to-[#0096C7] hover:shadow-xl hover:shadow-[#00B4D8]/40"
         }
-        md:bottom-8 md:right-8
         active:scale-95
         focus:outline-none focus:ring-4 focus:ring-offset-2
         ${
@@ -63,6 +62,7 @@ const DaniFAB = memo(
             : "focus:ring-[#00B4D8]/50 focus:ring-offset-[#F8FAFC]"
         }
       `}
+        style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 5.5rem)" }}
         whileHover={!isDaniOpen ? { scale: 1.1 } : {}}
         whileTap={!isDaniOpen ? { scale: 0.95 } : {}}
         initial={{ scale: 0, opacity: 0 }}
