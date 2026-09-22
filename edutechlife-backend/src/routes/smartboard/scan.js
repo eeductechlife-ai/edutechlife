@@ -5,6 +5,8 @@ const { requireVerifiedParentalConsent } = require('../../middleware/parentalCon
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
+const GOOGLE_API_KEY = process.env.GOOGLE_VISION_API_KEY || process.env.GOOGLE_TTS_API_KEY;
+const GOOGLE_VISION_URL = 'https://vision.googleapis.com/v1/images:annotate';
 
 // Niveles de lenguaje por edad
 const AGE_LEVELS = {
@@ -44,12 +46,123 @@ REGLAS:
 - Todo en español`;
 }
 
+function normalizeResult(result) {
+  return {
+    title: result.title || 'Resumen del material',
+    overview: result.overview || '',
+    keyConcepts: Array.isArray(result.keyConcepts)
+      ? result.keyConcepts.filter(c => c?.term || c?.explanation).map(c => ({
+          term: c.term || 'Concepto',
+          explanation: c.explanation || '',
+        }))
+      : [],
+    learningPoints: Array.isArray(result.learningPoints)
+      ? result.learningPoints.filter(Boolean)
+      : [],
+    example: result.example || '',
+    difficulty: ['básico', 'intermedio', 'avanzado'].includes(result.difficulty)
+      ? result.difficulty
+      : 'intermedio',
+  };
+}
+
+function parseJsonResponse(raw) {
+  if (typeof raw === 'object' && raw !== null) return raw;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    const match = raw.match(/\{[\s\S]*\}/);
+    if (match) return JSON.parse(match[0]);
+    throw new Error('La IA no devolvió JSON válido');
+  }
+}
+
+// Fallback: Google Vision API OCR → DeepSeek text analysis
+async function analyzeImageViaOCR(imageBase64, systemPrompt, subject) {
+  if (!GOOGLE_API_KEY) {
+    throw new Error('La imagen no pudo procesarse: configura Google Vision API o un modelo de IA con visión.');
+  }
+
+  const fetch = (await import('node-fetch')).default;
+  const b64 = imageBase64.split(',')[1] || imageBase64;
+
+  const visionRes = await fetch(`${GOOGLE_VISION_URL}?key=${GOOGLE_API_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      requests: [{
+        image: { content: b64 },
+        features: [{ type: 'TEXT_DETECTION', maxResults: 1 }],
+        imageContext: { languageHints: ['es'] },
+      }],
+    }),
+  });
+
+  if (!visionRes.ok) throw new Error('Error al leer el texto de la imagen');
+
+  const visionData = await visionRes.json();
+  const extractedText = visionData.responses?.[0]?.fullTextAnnotation?.text
+    || visionData.responses?.[0]?.textAnnotations?.[0]?.description
+    || '';
+
+  if (!extractedText || extractedText.trim().length < 10) {
+    throw new Error('No se pudo extraer texto de la imagen. Asegúrate de que la imagen sea nítida y tenga texto legible.');
+  }
+
+  const material = extractedText.trim().slice(0, 6000);
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    {
+      role: 'user',
+      content: `Material del estudiante${subject ? ` (materia: ${subject})` : ''} (texto extraído de imagen):\n"""\n${material}\n"""\n\nGenera el resumen educativo en JSON.`,
+    },
+  ];
+
+  const response = await chat(DEEPSEEK_API_KEY, {
+    messages,
+    isJson: true,
+    temperature: 0.5,
+    maxTokens: 2000,
+  });
+
+  return parseJsonResponse(response?.choices?.[0]?.message?.content || '');
+}
+
+// Vision via DeepSeek multimodal
+async function analyzeImageViaVision(imageBase64, systemPrompt, subject) {
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    {
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: `Analiza esta imagen${subject ? ` de ${subject}` : ''}. Identifica de qué tema trata y explícalo como un profesor. Genera el resumen educativo en JSON.`,
+        },
+        {
+          type: 'image_url',
+          image_url: { url: imageBase64 },
+        },
+      ],
+    },
+  ];
+
+  const response = await chat(DEEPSEEK_API_KEY, {
+    messages,
+    isJson: true,
+    temperature: 0.5,
+    maxTokens: 2000,
+    model: process.env.DEEPSEEK_VISION_MODEL || 'deepseek-chat',
+  });
+
+  return parseJsonResponse(response?.choices?.[0]?.message?.content || '');
+}
+
 /**
  * POST /scan
  * Body: { imageBase64?, text?, subject?, ageKey? }
- * - imageBase64: "data:image/jpeg;base64,..." — envía la imagen directamente a DeepSeek vision
+ * - imageBase64: "data:image/jpeg;base64,..." — intenta DeepSeek vision, fallback a Google Vision + texto
  * - text: texto ya extraído (PDF, DOCX) — usa solo texto
- * Returns: structured summary JSON
  */
 router.post('/scan', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   const { imageBase64, text, subject = '', ageKey = '12-14' } = req.body;
@@ -64,84 +177,59 @@ router.post('/scan', requireAuth, requireVerifiedParentalConsent, async (req, re
 
   try {
     const systemPrompt = buildSystemPrompt(subject, ageKey);
-    let messages;
+    let result;
 
     if (imageBase64) {
-      // Validate image format
       if (!imageBase64.startsWith('data:image/')) {
         return res.status(400).json({ error: 'Formato de imagen inválido' });
       }
-      // Limit image size to 4MB
       const b64data = imageBase64.split(',')[1] || '';
-      if (b64data.length > 4 * 1024 * 1024 * 4 / 3) {
-        return res.status(400).json({ error: 'La imagen es demasiado grande (máx 4MB)' });
+      if (b64data.length > 5_500_000) {
+        return res.status(400).json({ error: 'La imagen es demasiado grande (máx ~4MB)' });
       }
 
-      // Multimodal message: image + text prompt
-      messages = [
-        { role: 'system', content: systemPrompt },
-        {
-          role: 'user',
-          content: [
-            {
-              type: 'text',
-              text: `Analiza esta imagen${subject ? ` de ${subject}` : ''}. Identifica de qué tema trata y explícalo como un profesor. Genera el resumen educativo en JSON.`,
-            },
-            {
-              type: 'image_url',
-              image_url: { url: imageBase64 },
-            },
-          ],
-        },
-      ];
+      // Intenta visión nativa con DeepSeek; si falla (modelo sin visión), usa OCR fallback
+      try {
+        result = await analyzeImageViaVision(imageBase64, systemPrompt, subject);
+        console.log('[scan] vision: ok');
+      } catch (visionErr) {
+        const msg = visionErr.message || '';
+        const isVisionUnsupported =
+          msg.includes('does not support') ||
+          msg.includes('vision') ||
+          msg.includes('image') ||
+          msg.includes('multimodal') ||
+          visionErr.status === 400;
+
+        if (isVisionUnsupported) {
+          console.log('[scan] DeepSeek vision not supported, falling back to Google Vision OCR');
+          result = await analyzeImageViaOCR(imageBase64, systemPrompt, subject);
+        } else {
+          throw visionErr;
+        }
+      }
     } else {
-      // Text-only message (PDF, DOCX content)
+      // PDF, DOCX, TXT — texto ya extraído en el cliente
       const material = text.trim().slice(0, 6000);
-      messages = [
+      const messages = [
         { role: 'system', content: systemPrompt },
         {
           role: 'user',
           content: `Material del estudiante${subject ? ` (materia: ${subject})` : ''}:\n"""\n${material}\n"""\n\nGenera el resumen educativo en JSON.`,
         },
       ];
+
+      const response = await chat(DEEPSEEK_API_KEY, {
+        messages,
+        isJson: true,
+        temperature: 0.5,
+        maxTokens: 2000,
+      });
+
+      result = parseJsonResponse(response?.choices?.[0]?.message?.content || '');
     }
 
-    const response = await chat(DEEPSEEK_API_KEY, {
-      messages,
-      isJson: true,
-      temperature: 0.5,
-      maxTokens: 2000,
-      model: process.env.DEEPSEEK_VISION_MODEL || 'deepseek-chat',
-    });
-
-    const raw = response?.choices?.[0]?.message?.content || '';
-    let result;
-    try {
-      result = typeof raw === 'object' ? raw : JSON.parse(raw);
-    } catch {
-      const match = raw.match(/\{[\s\S]*\}/);
-      if (match) result = JSON.parse(match[0]);
-      else throw new Error('La IA no devolvió JSON válido');
-    }
-
-    // Normalize
-    res.json({
-      title: result.title || 'Resumen del material',
-      overview: result.overview || '',
-      keyConcepts: Array.isArray(result.keyConcepts)
-        ? result.keyConcepts.filter(c => c?.term || c?.explanation).map(c => ({
-            term: c.term || 'Concepto',
-            explanation: c.explanation || '',
-          }))
-        : [],
-      learningPoints: Array.isArray(result.learningPoints)
-        ? result.learningPoints.filter(Boolean)
-        : [],
-      example: result.example || '',
-      difficulty: ['básico', 'intermedio', 'avanzado'].includes(result.difficulty)
-        ? result.difficulty
-        : 'intermedio',
-    });
+    res.json(normalizeResult(result));
   } catch (e) {
     console.error('[scan] Error:', e.message);
     res.status(500).json({ error: e.message || 'Error procesando el material' });
