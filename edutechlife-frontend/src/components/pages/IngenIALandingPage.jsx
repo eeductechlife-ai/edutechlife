@@ -22,7 +22,7 @@ const IngenIALandingPage = () => {
 
   useEffect(() => {
     if (!isLoaded || !isSignedIn || !token) return;
-    fetch(`${API_BASE}/api/smartboard/user-role`, {
+    fetch(`${API_BASE}/api/ingenia/user-role`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => (r.ok ? r.json() : null))
@@ -38,7 +38,7 @@ const IngenIALandingPage = () => {
   }
 
   if (!isSignedIn) {
-    return <Navigate to="/sign-up/smartboard" replace />;
+    return <Navigate to="/sign-up/ingenia" replace />;
   }
 
   // Productos distintos: una cuenta de IALab (curso de IA generativa) no entra

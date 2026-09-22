@@ -21,7 +21,7 @@ const ParentalNoticeBar = () => {
     const check = async () => {
       try {
         const res = await fetch(
-          `${API_BASE}/api/smartboard/parental-consent/status`,
+          `${API_BASE}/api/ingenia/parental-consent/status`,
           { headers: { Authorization: `Bearer ${token}` } },
         );
         if (!res.ok) return;
@@ -30,7 +30,7 @@ const ParentalNoticeBar = () => {
           setVisible(true);
           if (!notified.current) {
             notified.current = true;
-            fetch(`${API_BASE}/api/smartboard/parental-consent`, {
+            fetch(`${API_BASE}/api/ingenia/parental-consent`, {
               method: "POST",
               headers: {
                 Authorization: `Bearer ${token}`,

@@ -57,7 +57,7 @@ export function useAdaptiveEngine() {
       setLoading(true);
       try {
         const data = await apiFetch(
-          `/api/smartboard/adaptive/next-action?studentId=${sid}`,
+          `/api/ingenia/adaptive/next-action?studentId=${sid}`,
         );
         setNextAction(data.action ?? null);
         setRecommendations(data.recommendations ?? []);
@@ -77,7 +77,7 @@ export function useAdaptiveEngine() {
       if (!sid) return;
       setLoading(true);
       try {
-        const data = await apiFetch("/api/smartboard/adaptive/daily-plan", {
+        const data = await apiFetch("/api/ingenia/adaptive/daily-plan", {
           method: "POST",
           body: JSON.stringify({ studentId: sid, availableMinutes }),
         });
@@ -98,7 +98,7 @@ export function useAdaptiveEngine() {
       if (!sid) return;
       setLoading(true);
       try {
-        const data = await apiFetch("/api/smartboard/adaptive/weekly-plan", {
+        const data = await apiFetch("/api/ingenia/adaptive/weekly-plan", {
           method: "POST",
           body: JSON.stringify({ studentId: sid }),
         });
@@ -119,13 +119,10 @@ export function useAdaptiveEngine() {
       if (!sid) return;
       setLoading(true);
       try {
-        const data = await apiFetch(
-          "/api/smartboard/adaptive/recommendations",
-          {
-            method: "POST",
-            body: JSON.stringify({ studentId: sid }),
-          },
-        );
+        const data = await apiFetch("/api/ingenia/adaptive/recommendations", {
+          method: "POST",
+          body: JSON.stringify({ studentId: sid }),
+        });
         setRecommendations(data.recommendations ?? []);
       } catch (err) {
         console.error("[AdaptiveEngine] fetchRecommendations failed:", err);

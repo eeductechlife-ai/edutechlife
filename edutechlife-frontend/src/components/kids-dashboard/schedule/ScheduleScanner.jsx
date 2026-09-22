@@ -41,7 +41,7 @@ const ocrImageViaBackend = async (file) => {
     reader.readAsDataURL(file);
   });
   const token = sessionStorage.getItem("auth_token");
-  const resp = await fetch(`${API_BASE_URL}/api/smartboard/scan-image`, {
+  const resp = await fetch(`${API_BASE_URL}/api/ingenia/scan-image`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

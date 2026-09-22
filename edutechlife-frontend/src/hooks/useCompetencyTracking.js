@@ -6,7 +6,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
 async function postMastery(studentId, entries) {
   const token = sessionStorage.getItem("auth_token") || "";
-  const res = await fetch(`${API_BASE_URL}/api/smartboard/adaptive/mastery`, {
+  const res = await fetch(`${API_BASE_URL}/api/ingenia/adaptive/mastery`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -9,7 +9,7 @@ function mockFetchResponse(status, body) {
   };
 }
 
-describe("callDeepseekSmartboard — fallback a /api/smartboard/chat", () => {
+describe("callDeepseekSmartboard — fallback a /api/ingenia/chat", () => {
   beforeEach(() => {
     sessionStorage.setItem("auth_token", "test-token");
     vi.stubGlobal("fetch", vi.fn());
@@ -21,7 +21,7 @@ describe("callDeepseekSmartboard — fallback a /api/smartboard/chat", () => {
     vi.restoreAllMocks();
   });
 
-  it("usa /api/smartboard/ai si la ruta existe", async () => {
+  it("usa /api/ingenia/ai si la ruta existe", async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValue(mockFetchResponse(200, { result: '{"ok":true}' }));
@@ -34,16 +34,16 @@ describe("callDeepseekSmartboard — fallback a /api/smartboard/chat", () => {
 
     expect(result).toEqual({ ok: true });
     const firstUrl = fetchMock.mock.calls[0][0];
-    expect(firstUrl).toContain("/api/smartboard/ai");
+    expect(firstUrl).toContain("/api/ingenia/ai");
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
-  it("hace fallback a /api/smartboard/chat cuando /ai responde 404", async () => {
+  it("hace fallback a /api/ingenia/chat cuando /ai responde 404", async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(
         mockFetchResponse(404, {
-          error: "Ruta no encontrada: POST /api/smartboard/ai",
+          error: "Ruta no encontrada: POST /api/ingenia/ai",
         }),
       )
       .mockResolvedValueOnce(
@@ -57,8 +57,8 @@ describe("callDeepseekSmartboard — fallback a /api/smartboard/chat", () => {
 
     expect(result).toBe("gracias por preguntar");
     expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(fetchMock.mock.calls[0][0]).toContain("/api/smartboard/ai");
-    expect(fetchMock.mock.calls[1][0]).toContain("/api/smartboard/chat");
+    expect(fetchMock.mock.calls[0][0]).toContain("/api/ingenia/ai");
+    expect(fetchMock.mock.calls[1][0]).toContain("/api/ingenia/chat");
   });
 
   it("parsea JSON aunque el fallback lo envuelva en prosa", async () => {
@@ -66,7 +66,7 @@ describe("callDeepseekSmartboard — fallback a /api/smartboard/chat", () => {
       .fn()
       .mockResolvedValueOnce(
         mockFetchResponse(404, {
-          error: "Ruta no encontrada: POST /api/smartboard/ai",
+          error: "Ruta no encontrada: POST /api/ingenia/ai",
         }),
       )
       .mockResolvedValueOnce(

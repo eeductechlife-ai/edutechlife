@@ -59,11 +59,11 @@ export function useSkillPassport() {
 
       const [masteryRes, badgesRes] = await Promise.allSettled([
         fetch(
-          `${API_BASE_URL}/api/smartboard/adaptive/mastery?studentId=${studentId}`,
+          `${API_BASE_URL}/api/ingenia/adaptive/mastery?studentId=${studentId}`,
           { headers },
         ),
         fetch(
-          `${API_BASE_URL}/api/smartboard/gamification/badges?studentId=${studentId}`,
+          `${API_BASE_URL}/api/ingenia/gamification/badges?studentId=${studentId}`,
           { headers },
         ),
       ]);

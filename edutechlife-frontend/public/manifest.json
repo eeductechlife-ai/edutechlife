@@ -2,7 +2,7 @@
   "name": "IngenIA — Aprende con Inteligencia Artificial",
   "short_name": "IngenIA",
   "description": "Plataforma de aprendizaje con IA adaptativa para estudiantes 6-16 años",
-  "start_url": "/smartboard",
+  "start_url": "/ingenia",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
@@ -34,13 +34,13 @@
       "name": "Abrir Dani",
       "short_name": "Dani",
       "description": "Abre el tutor IA Dani",
-      "url": "/smartboard?tab=inicio"
+      "url": "/ingenia?tab=inicio"
     },
     {
       "name": "Misiones",
       "short_name": "Misiones",
       "description": "Ve a tus misiones diarias",
-      "url": "/smartboard?tab=misiones"
+      "url": "/ingenia?tab=misiones"
     }
   ],
   "share_target": {

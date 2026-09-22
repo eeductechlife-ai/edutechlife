@@ -139,7 +139,7 @@ export function captureWebVitals(options = {}) {
  * Soft Navigation Tracking for SPA Route Changes
  *
  * Call this when a route changes in React Router to reset metrics
- * for the new "page" (e.g., when navigating from /smartboard/inicio to /smartboard/misiones).
+ * for the new "page" (e.g., when navigating from /ingenia/inicio to /ingenia/misiones).
  */
 export function trackSoftNavigation(routePath) {
   // Chrome 130+: Soft Navigation API

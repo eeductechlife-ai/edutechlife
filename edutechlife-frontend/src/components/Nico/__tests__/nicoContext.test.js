@@ -10,7 +10,7 @@ describe("getPageContext", () => {
   it("maps IALab, IngenIA and VAK routes", () => {
     expect(getPageContext("/ialab")).toContain("IALab");
     expect(getPageContext("/ialab-academic")).toContain("Academic");
-    expect(getPageContext("/smartboard")).toContain("IngenIA");
+    expect(getPageContext("/ingenia")).toContain("IngenIA");
     expect(getPageContext("/vak")).toContain("VAK");
   });
 

@@ -30,11 +30,11 @@ export function useParentInsights() {
       };
       const [insightsRes, graphRes] = await Promise.allSettled([
         fetch(
-          `${API_BASE_URL}/api/smartboard/parent/insights?studentId=${studentId}`,
+          `${API_BASE_URL}/api/ingenia/parent/insights?studentId=${studentId}`,
           { headers },
         ),
         fetch(
-          `${API_BASE_URL}/api/smartboard/parent/learning-graph?studentId=${studentId}`,
+          `${API_BASE_URL}/api/ingenia/parent/learning-graph?studentId=${studentId}`,
           { headers },
         ),
       ]);

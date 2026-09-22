@@ -325,12 +325,12 @@ export async function callDeepseek(
   }
 }
 /**
- * IngenIA-specific AI call — routes through /api/smartboard/ai which enforces
+ * IngenIA-specific AI call — routes through /api/ingenia/ai which enforces
  * requireAuth + requireVerifiedParentalConsent. Use this instead of callDeepseek()
  * for all AI calls made from within the IngenIA kids dashboard.
  *
- * Si el backend desplegado aún no expone /api/smartboard/ai (404), hace fallback
- * a /api/smartboard/chat, que exige la misma autorización y consentimiento
+ * Si el backend desplegado aún no expone /api/ingenia/ai (404), hace fallback
+ * a /api/ingenia/chat, que exige la misma autorización y consentimiento
  * parental y responde con la misma forma { result }.
  */
 export async function callDeepseekSmartboard(messages, opts = {}) {
@@ -419,10 +419,10 @@ export async function callDeepseekSmartboard(messages, opts = {}) {
   };
 
   try {
-    const primary = await attempt(`${API_BASE_URL}/api/smartboard/ai`);
+    const primary = await attempt(`${API_BASE_URL}/api/ingenia/ai`);
     if (!primary.notFound) return primary.value;
 
-    const fallback = await attempt(`${API_BASE_URL}/api/smartboard/chat`);
+    const fallback = await attempt(`${API_BASE_URL}/api/ingenia/chat`);
     if (fallback.notFound) {
       throw new Error(
         "El servidor no reconoce los endpoints de IA del IngenIA.",
@@ -632,13 +632,13 @@ export async function analyzeDocumentText(text, fileName, subject) {
 
 /**
  * Dani chat with authentication + server-side safeguards
- * Uses /api/smartboard/chat/stream — requires Clerk token
+ * Uses /api/ingenia/chat/stream — requires Clerk token
  * @param {Array} messages - Chat history [{role, content}]
  * @param {Object} opts - Options {temperature, maxTokens, signal, token}
  * @param {Function} onChunk - Callback for streaming chunks
  */
 export async function callDaniChatStream(messages, opts = {}, onChunk) {
-  const url = `${API_BASE_URL}/api/smartboard/chat/stream`;
+  const url = `${API_BASE_URL}/api/ingenia/chat/stream`;
 
   let token = opts.token;
 
@@ -668,8 +668,8 @@ export async function callDaniChatStream(messages, opts = {}, onChunk) {
  * @param {Object} opts - { token, signal }
  * @param {Function} onChunk - callback for each streamed chunk
  *
- * Si el backend desplegado aún no expone /api/smartboard/dani/chat (404), hace
- * fallback a /api/smartboard/chat/stream (misma seguridad requireAuth +
+ * Si el backend desplegado aún no expone /api/ingenia/dani/chat (404), hace
+ * fallback a /api/ingenia/chat/stream (misma seguridad requireAuth +
  * requireVerifiedParentalConsent y mismo formato { chunk }), convirtiendo el
  * payload mínimo del orquestador al formato { messages } legacy.
  */
@@ -682,7 +682,7 @@ export async function callDaniOrchestrator(payload, opts = {}, onChunk) {
     throw new Error("No auth token available — user must be logged in");
 
   const authHeaders = { Authorization: `Bearer ${token}` };
-  const primaryUrl = `${API_BASE_URL}/api/smartboard/dani/chat`;
+  const primaryUrl = `${API_BASE_URL}/api/ingenia/dani/chat`;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(
@@ -716,7 +716,7 @@ export async function callDaniOrchestrator(payload, opts = {}, onChunk) {
       { role: "user", content: payload.message },
     ];
     return streamFetch(
-      `${API_BASE_URL}/api/smartboard/chat/stream`,
+      `${API_BASE_URL}/api/ingenia/chat/stream`,
       { messages, context: payload.documentContext || undefined },
       onChunk,
       false,

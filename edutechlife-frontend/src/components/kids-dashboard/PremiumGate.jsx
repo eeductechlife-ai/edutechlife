@@ -29,9 +29,9 @@ const PremiumGate = ({
         window.location.href = session.url;
         return;
       }
-      navigate("/conoce-smartboard");
+      navigate("/conoce-ingenia");
     } catch {
-      navigate("/conoce-smartboard");
+      navigate("/conoce-ingenia");
     } finally {
       setUpgrading(false);
     }
@@ -101,7 +101,7 @@ const PremiumGate = ({
             </span>
           </motion.button>
           <button
-            onClick={() => navigate("/smartboard")}
+            onClick={() => navigate("/ingenia")}
             className="block mx-auto mt-4 text-xs font-semibold text-[#94A3B8] hover:text-[#64748B] transition-colors cursor-pointer"
           >
             {t("kid.premium.keep_exploring")}

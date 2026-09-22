@@ -79,7 +79,7 @@ describe("HeaderFluidIsland — login dropdown", () => {
 
   it("returns null on smartboard route", () => {
     const { container } = render(
-      <MemoryRouter initialEntries={["/smartboard"]}>
+      <MemoryRouter initialEntries={["/ingenia"]}>
         <I18nProvider>
           <HeaderFluidIsland />
         </I18nProvider>

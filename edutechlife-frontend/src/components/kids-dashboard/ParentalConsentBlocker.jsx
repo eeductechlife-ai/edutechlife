@@ -20,7 +20,7 @@ const ParentalConsentBlocker = ({ children }) => {
     if (!token) return null;
     try {
       const res = await fetch(
-        `${API_BASE}/api/smartboard/parental-consent/status`,
+        `${API_BASE}/api/ingenia/parental-consent/status`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -44,7 +44,7 @@ const ParentalConsentBlocker = ({ children }) => {
   useEffect(() => {
     if (!isLoaded) return;
     if (!isSignedIn) {
-      navigate("/sign-up/smartboard", { replace: true });
+      navigate("/sign-up/ingenia", { replace: true });
       return;
     }
     if (!token) return;
@@ -69,7 +69,7 @@ const ParentalConsentBlocker = ({ children }) => {
     setStatus("requesting");
     try {
       const res = await fetch(
-        `${API_BASE}/api/smartboard/parental-consent/request`,
+        `${API_BASE}/api/ingenia/parental-consent/request`,
         {
           method: "POST",
           headers: {

@@ -279,7 +279,7 @@ const SidebarNavigation = memo(
           </div>
 
           <motion.button
-            onClick={() => onRouteNavigate?.("/smartboard/padres")}
+            onClick={() => onRouteNavigate?.("/ingenia/padres")}
             className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#4DA8C4]/10 border border-[#4DA8C4]/30 rounded-xl hover:bg-[#4DA8C4]/20 transition-all duration-300"
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.99 }}

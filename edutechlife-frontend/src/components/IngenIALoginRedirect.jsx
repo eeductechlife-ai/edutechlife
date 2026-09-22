@@ -5,12 +5,12 @@ import { PageLoader } from "./LoadingScreen";
 import { useTranslation } from "../i18n/I18nProvider";
 
 /**
- * IngenIALoginRedirect: Intelligent routing for /smartboard/login
+ * IngenIALoginRedirect: Intelligent routing for /ingenia/login
  *
  * This route should NOT be a login page.
  * Instead, redirect based on auth status:
- * - Not authenticated → /sign-up/smartboard (registration)
- * - Authenticated → /smartboard (dashboard)
+ * - Not authenticated → /sign-up/ingenia (registration)
+ * - Authenticated → /ingenia (dashboard)
  */
 const IngenIALoginRedirect = () => {
   const navigate = useNavigate();
@@ -22,10 +22,10 @@ const IngenIALoginRedirect = () => {
 
     if (isSignedIn) {
       // Already logged in → go to dashboard
-      navigate("/smartboard", { replace: true });
+      navigate("/ingenia", { replace: true });
     } else {
       // Not logged in → go to signup
-      navigate("/sign-up/smartboard", { replace: true });
+      navigate("/sign-up/ingenia", { replace: true });
     }
   }, [isLoaded, isSignedIn, navigate]);
 

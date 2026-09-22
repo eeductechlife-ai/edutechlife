@@ -110,8 +110,8 @@ const GenericSignUpRedirect = () => {
 
     let targetSignUp = "/sign-up/ialab";
 
-    if (returnTo === "/smartboard" || returnTo.startsWith("/smartboard/")) {
-      targetSignUp = "/sign-up/smartboard";
+    if (returnTo === "/ingenia" || returnTo.startsWith("/ingenia/")) {
+      targetSignUp = "/sign-up/ingenia";
     }
 
     navigate(`${targetSignUp}?returnTo=${encodeURIComponent(returnTo)}`, {
@@ -126,7 +126,7 @@ const GenericSignUpRedirect = () => {
  *
  * Estructura:
  * - Rutas públicas: /, /neuroentorno, /proyectos, etc.
- * - Rutas protegidas: /ialab, /smartboard, /admin (requieren autenticación + rol)
+ * - Rutas protegidas: /ialab, /ingenia, /admin (requieren autenticación + rol)
  * - Rutas de autenticación: /auth-router (redirección inteligente)
  */
 const PlanesPage = lazy(() => import("../components/pages/PlanesPage"));
@@ -265,7 +265,7 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="conoce-smartboard"
+          path="conoce-ingenia"
           element={
             <SectionErrorBoundary name="IngenIAInfo">
               <Suspense fallback={<PageLoader message={t("common.loading")} />}>
@@ -285,7 +285,7 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="smartboard"
+          path="ingenia"
           element={
             <SectionErrorBoundary name="IngenIALanding">
               <Suspense fallback={<IngenIASkeleton />}>
@@ -296,7 +296,7 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="smartboard/consent"
+          path="ingenia/consent"
           element={
             <SectionErrorBoundary name="IngenIAConsentGate">
               <Suspense fallback={<PageLoader message={t("common.loading")} />}>
@@ -306,10 +306,10 @@ const AppRoutes = () => {
           }
         />
 
-        <Route path="smartboard/login" element={<IngenIALoginRedirect />} />
+        <Route path="ingenia/login" element={<IngenIALoginRedirect />} />
 
         <Route
-          path="smartboard/padres"
+          path="ingenia/padres"
           element={
             <RoleProtectedRoute requiredRole="smartboard">
               <SectionErrorBoundary name="IngenIAParentDashboard">
@@ -376,7 +376,7 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="smartboard/estadisticas"
+          path="ingenia/estadisticas"
           element={
             <RoleProtectedRoute requiredRole="smartboard">
               <SectionErrorBoundary name="IngenIAStats">
@@ -391,7 +391,7 @@ const AppRoutes = () => {
         <Route path="sign-up/ialab" element={<IALabSignUpRedirect />} />
 
         <Route
-          path="sign-up/smartboard"
+          path="sign-up/ingenia"
           element={
             <SectionErrorBoundary name="IngenIASignUp">
               <Suspense fallback={<PageLoader message={t("common.loading")} />}>

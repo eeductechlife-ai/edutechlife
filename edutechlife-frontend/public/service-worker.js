@@ -8,7 +8,7 @@ const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/smartboard',
+  '/ingenia',
 ];
 
 // Install event - cache assets

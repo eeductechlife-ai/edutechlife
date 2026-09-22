@@ -26,7 +26,7 @@ export function useEarlyWarnings() {
     try {
       const token = getToken();
       const res = await fetch(
-        `${API_BASE_URL}/api/smartboard/adaptive/warnings?studentId=${studentId}`,
+        `${API_BASE_URL}/api/ingenia/adaptive/warnings?studentId=${studentId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export function useEarlyWarnings() {
     const token = getToken();
     try {
       await fetch(
-        `${API_BASE_URL}/api/smartboard/adaptive/warnings/${warningId}/resolve`,
+        `${API_BASE_URL}/api/ingenia/adaptive/warnings/${warningId}/resolve`,
         {
           method: "POST",
           headers: {

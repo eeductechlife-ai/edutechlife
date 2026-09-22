@@ -3,7 +3,7 @@
  *
  * Este módulo evalúa condiciones localmente (sin red). La persistencia real
  * (INSERT en student_achievements, points_history) vive en el BACKEND:
- *   edutechlife-backend/src/services/achievementService.js  →  via /api/smartboard/*
+ *   edutechlife-backend/src/services/achievementService.js  →  via /api/ingenia/*
  *
  * Responsabilidades de este módulo:
  * - Definir catálogo de logros con sus condiciones

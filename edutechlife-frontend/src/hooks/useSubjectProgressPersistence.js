@@ -38,7 +38,7 @@ export const useSubjectProgressPersistence = () => {
       if (token) {
         try {
           const resp = await fetch(
-            `${API_BASE_URL}/api/smartboard/student-progress`,
+            `${API_BASE_URL}/api/ingenia/student-progress`,
             {
               headers: { Authorization: `Bearer ${token}` },
               signal: AbortSignal.timeout(5000),
@@ -90,7 +90,7 @@ export const useSubjectProgressPersistence = () => {
     // Async: sync to backend (fire-and-forget)
     const token = sessionStorage.getItem("auth_token");
     if (token) {
-      fetch(`${API_BASE_URL}/api/smartboard/student-progress`, {
+      fetch(`${API_BASE_URL}/api/ingenia/student-progress`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

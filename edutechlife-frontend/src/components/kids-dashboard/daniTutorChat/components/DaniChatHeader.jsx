@@ -33,17 +33,14 @@ const DaniChatHeader = memo(
       const msg =
         "🚨 Un estudiante ha reportado un mensaje inapropiado en el chat con Dani.";
       try {
-        fetch(
-          `${API_BASE_URL}/api/smartboard/report`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              reason: "inappropriate_content",
-              timestamp: new Date().toISOString(),
-            }),
-          },
-        );
+        fetch(`${API_BASE_URL}/api/ingenia/report`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            reason: "inappropriate_content",
+            timestamp: new Date().toISOString(),
+          }),
+        });
       } catch {}
       setShowReport(true);
       setTimeout(() => setShowReport(false), 3000);

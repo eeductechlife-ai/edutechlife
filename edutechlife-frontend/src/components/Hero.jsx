@@ -155,7 +155,7 @@ const Hero = memo(() => {
             </MagneticButton>
 
             <MagneticButton
-              onClick={() => navigate("/conoce-smartboard")}
+              onClick={() => navigate("/conoce-ingenia")}
               className="group flex items-center justify-center gap-3 px-6 sm:px-12 py-4 rounded-full text-base sm:text-lg font-bold bg-transparent border-2 border-petroleum text-petroleum hover:bg-petroleum hover:text-white transition-all duration-300"
             >
               <Icon

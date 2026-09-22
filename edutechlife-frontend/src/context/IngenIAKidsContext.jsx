@@ -429,7 +429,7 @@ export const IngenIAKidsProvider = ({ children }) => {
       }
     })();
     fetch(
-      `${API_BASE_URL}/api/smartboard/gamification/missions?studentId=${studentDbId}`,
+      `${API_BASE_URL}/api/ingenia/gamification/missions?studentId=${studentDbId}`,
       {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       },
@@ -472,7 +472,7 @@ export const IngenIAKidsProvider = ({ children }) => {
     })();
     if (!token) return;
 
-    fetch(`${API_BASE_URL}/api/smartboard/dani/history`, {
+    fetch(`${API_BASE_URL}/api/ingenia/dani/history`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => (r.ok ? r.json() : null))
@@ -589,7 +589,7 @@ export const IngenIAKidsProvider = ({ children }) => {
     } catch {}
     const token = sessionStorage.getItem("auth_token");
     if (!token) return;
-    fetch(`${API_BASE_URL}/api/smartboard/student-grades`, {
+    fetch(`${API_BASE_URL}/api/ingenia/student-grades`, {
       headers: { Authorization: `Bearer ${token}` },
       signal: AbortSignal.timeout(10000),
     })

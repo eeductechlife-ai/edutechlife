@@ -108,7 +108,7 @@ LazyNicoModern.propTypes = {
 const App = () => {
   const location = useLocation();
   const isIALabRoute = location.pathname.includes("/ialab");
-  const isIngenIARoute = location.pathname.includes("/smartboard");
+  const isIngenIARoute = location.pathname.includes("/ingenia");
   const isVAKRoute = location.pathname.includes("/vak");
   const { token: authToken } = useAuthIdentity();
   const [isLoading, setIsLoading] = useState(true);

@@ -15,16 +15,16 @@ import {
   getPaymentMethods,
   getGuarantee,
 } from "./IngenIALandingData";
-import IngenIAInfoHero from "./smartboard/IngenIAInfoHero";
-import IngenIASectionNav from "./smartboard/IngenIASectionNav";
-import IngenIAQueEsSection from "./smartboard/IngenIAQueEsSection";
-import IngenIAVakStylesSection from "./smartboard/IngenIAVakStylesSection";
-import IngenIABeneficiosSection from "./smartboard/IngenIABeneficiosSection";
-import IngenIATranquilidadSection from "./smartboard/IngenIATranquilidadSection";
-import IngenIAComoFuncionaSection from "./smartboard/IngenIAComoFuncionaSection";
-import IngenIAPlanesSection from "./smartboard/IngenIAPlanesSection";
-import IngenIATestimoniosSection from "./smartboard/IngenIATestimoniosSection";
-import IngenIAFinalSection from "./smartboard/IngenIAFinalSection";
+import IngenIAInfoHero from "./ingenia/IngenIAInfoHero";
+import IngenIASectionNav from "./ingenia/IngenIASectionNav";
+import IngenIAQueEsSection from "./ingenia/IngenIAQueEsSection";
+import IngenIAVakStylesSection from "./ingenia/IngenIAVakStylesSection";
+import IngenIABeneficiosSection from "./ingenia/IngenIABeneficiosSection";
+import IngenIATranquilidadSection from "./ingenia/IngenIATranquilidadSection";
+import IngenIAComoFuncionaSection from "./ingenia/IngenIAComoFuncionaSection";
+import IngenIAPlanesSection from "./ingenia/IngenIAPlanesSection";
+import IngenIATestimoniosSection from "./ingenia/IngenIATestimoniosSection";
+import IngenIAFinalSection from "./ingenia/IngenIAFinalSection";
 
 const stepVariants = {
   enter: (dir) => ({
@@ -115,8 +115,8 @@ const IngenIALandingInfo = ({ onNavigate }) => {
       section: stepLabels[currentStep],
       experiment_variant: variant,
     });
-    if (onNavigate) onNavigate("/sign-up/smartboard");
-    else navigate("/sign-up/smartboard");
+    if (onNavigate) onNavigate("/sign-up/ingenia");
+    else navigate("/sign-up/ingenia");
   }, [onNavigate, navigate, variant, currentStep, stepLabels]);
 
   const sections = [

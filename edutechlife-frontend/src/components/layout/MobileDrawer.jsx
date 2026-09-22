@@ -107,7 +107,7 @@ const MobileDrawer = ({
                   {t("nav.ialab_pro")}
                 </button>
                 <button
-                  onClick={() => navigate("/conoce-smartboard")}
+                  onClick={() => navigate("/conoce-ingenia")}
                   className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
                 >
                   {t("nav.smartboard")}

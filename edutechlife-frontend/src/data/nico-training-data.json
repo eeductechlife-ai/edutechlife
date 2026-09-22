@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "source": "Verificado contra edutechlife.co (textos i18n pricing/metodo/ecosystem, data/ialab.js, SmartBoardLandingData.js, rutas /vak /smartboard /ialab-academic).",
+  "source": "Verificado contra edutechlife.co (textos i18n pricing/metodo/ecosystem, data/ialab.js, SmartBoardLandingData.js, rutas /vak /ingenia /ialab-academic).",
   "identity": {
     "name": "Nico",
     "role": "Asistente virtual de EdutechLife en edutechlife.co",
@@ -46,7 +46,7 @@
       "id": "smartboard",
       "name": "SmartBoard",
       "description": "Dashboard de acompañamiento académico y emocional para niños y jóvenes (6-16 años): tutor IA Dani, misiones, seguimiento de progreso, diagnóstico VAK y reportes para los padres.",
-      "path": "/smartboard"
+      "path": "/ingenia"
     },
     {
       "id": "ia-empresarial",

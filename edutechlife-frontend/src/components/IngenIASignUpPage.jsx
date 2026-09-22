@@ -33,7 +33,7 @@ const IngenIASignUpPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const returnTo = searchParams.get("returnTo") || "/smartboard";
+  const returnTo = searchParams.get("returnTo") || "/ingenia";
   const [mode, setMode] = useState("signin");
   // "student" | "parent"
   const [userType, setUserType] = useState("student");
@@ -98,7 +98,7 @@ const IngenIASignUpPage = () => {
           "parent_name",
           `${data.user.firstName} ${data.user.lastName}`.trim(),
         );
-        navigate("/smartboard");
+        navigate("/ingenia");
         return;
       } catch (err) {
         if (
@@ -157,7 +157,7 @@ const IngenIASignUpPage = () => {
   };
 
   const handleBack = () => {
-    navigate("/conoce-smartboard");
+    navigate("/conoce-ingenia");
   };
 
   const isParentMode = userType === "parent";
@@ -481,7 +481,7 @@ const IngenIASignUpPage = () => {
                             transition={{ duration: 0.2 }}
                           >
                             <SupabaseLoginForm
-                              returnTo={returnTo || "/smartboard"}
+                              returnTo={returnTo || "/ingenia"}
                               onShowSignUp={() => setMode("signup")}
                             />
                           </motion.div>
@@ -498,7 +498,7 @@ const IngenIASignUpPage = () => {
                               style={{ minHeight: 400 }}
                             >
                               <SupabaseSignUpForm
-                                returnTo={returnTo || "/smartboard/consent"}
+                                returnTo={returnTo || "/ingenia/consent"}
                                 onBack={() => setMode("signin")}
                                 accountType="smartboard"
                                 embedded

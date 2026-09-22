@@ -86,8 +86,8 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
 
   const handlePrimaryCta = () => {
     if (handleCta) return handleCta();
-    if (onNavigate) return onNavigate("/sign-up/smartboard");
-    navigate("/sign-up/smartboard");
+    if (onNavigate) return onNavigate("/sign-up/ingenia");
+    navigate("/sign-up/ingenia");
   };
 
   return (
@@ -247,7 +247,7 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
             </svg>
 
             <motion.img
-              src="/images/smartboard-hero-kid.webp"
+              src="/images/ingenia-hero-kid.webp"
               alt="Estudiante de Edutechlife aprendiendo con IngenIA"
               loading="lazy"
               className="relative z-10 h-[240px] w-auto object-contain sm:h-[320px] lg:h-[400px]"

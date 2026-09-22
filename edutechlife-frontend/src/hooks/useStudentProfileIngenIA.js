@@ -43,7 +43,7 @@ export const useStudentProfileIngenIA = (authToken) => {
     setError(null);
 
     try {
-      const res = await fetch(`${API_BASE}/api/smartboard/student-profile`, {
+      const res = await fetch(`${API_BASE}/api/ingenia/student-profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -84,7 +84,7 @@ export const useStudentProfileIngenIA = (authToken) => {
       setError(null);
 
       try {
-        const res = await fetch(`${API_BASE}/api/smartboard/student-profile`, {
+        const res = await fetch(`${API_BASE}/api/ingenia/student-profile`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -131,7 +131,7 @@ export const useStudentProfileIngenIA = (authToken) => {
 
       try {
         const res = await fetch(
-          `${API_BASE}/api/smartboard/student-profile/avatar`,
+          `${API_BASE}/api/ingenia/student-profile/avatar`,
           {
             method: "POST",
             headers: {
@@ -170,7 +170,7 @@ export const useStudentProfileIngenIA = (authToken) => {
     setError(null);
 
     try {
-      const res = await fetch(`${API_BASE}/api/smartboard/student-profile`, {
+      const res = await fetch(`${API_BASE}/api/ingenia/student-profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

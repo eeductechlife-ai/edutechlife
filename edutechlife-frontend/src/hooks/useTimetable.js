@@ -77,13 +77,10 @@ export const useTimetable = () => {
     // 2. Backend fallback: creates the students row if missing (service role).
     try {
       const token = sessionStorage.getItem("auth_token");
-      const resp = await fetch(
-        `${API_BASE_URL}/api/smartboard/student-profile`,
-        {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-          signal: AbortSignal.timeout(8000),
-        },
-      );
+      const resp = await fetch(`${API_BASE_URL}/api/ingenia/student-profile`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        signal: AbortSignal.timeout(8000),
+      });
       if (resp.ok) {
         const json = await resp.json();
         if (json.studentId) return json.studentId;
@@ -191,7 +188,7 @@ export const useTimetable = () => {
   const saveTimetableWithSlots = useCallback(
     async ({ meta = {}, slots: newSlots = [] }) => {
       const token = sessionStorage.getItem("auth_token");
-      const resp = await fetch(`${API_BASE_URL}/api/smartboard/timetable`, {
+      const resp = await fetch(`${API_BASE_URL}/api/ingenia/timetable`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

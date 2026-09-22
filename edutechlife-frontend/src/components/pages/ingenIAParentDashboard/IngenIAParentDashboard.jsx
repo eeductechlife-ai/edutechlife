@@ -289,7 +289,7 @@ const IngenIAParentDashboard = () => {
     : false;
 
   useEffect(() => {
-    if (isLoaded && !userId && !isParent) navigate("/smartboard/login");
+    if (isLoaded && !userId && !isParent) navigate("/ingenia/login");
   }, [isLoaded, userId, isParent, navigate]);
 
   // parent_report_viewed — fires once when the parent dashboard mounts
@@ -368,7 +368,7 @@ const IngenIAParentDashboard = () => {
     ].forEach((k) => localStorage.removeItem(k));
     // signOutUser dispara el evento auth:signout (sincroniza otras pestañas)
     // y navega al login.
-    signOutUser("/smartboard/login", navigate);
+    signOutUser("/ingenia/login", navigate);
   };
 
   const level =

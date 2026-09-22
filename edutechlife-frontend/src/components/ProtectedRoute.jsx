@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!isSignedIn) {
-    return <Navigate to="/smartboard/login" replace />;
+    return <Navigate to="/ingenia/login" replace />;
   }
 
   return children;

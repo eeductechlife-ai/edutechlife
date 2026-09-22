@@ -32,7 +32,7 @@ const loginOptions = [
   {
     id: "smartboard",
     label: "IngenIA",
-    path: "/sign-up/smartboard",
+    path: "/sign-up/ingenia",
     icon: (
       <svg
         className="w-5 h-5"
@@ -93,8 +93,8 @@ const HeaderFluidIsland = ({ onOpenMobileMenu }) => {
       location.pathname.includes("/ialab") ||
       location.pathname === "/login" ||
       location.pathname.includes("/vak") ||
-      location.pathname.includes("/smartboard") ||
-      location.pathname.includes("/conoce-smartboard")
+      location.pathname.includes("/ingenia") ||
+      location.pathname.includes("/conoce-ingenia")
     ) {
       return false;
     }

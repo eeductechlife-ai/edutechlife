@@ -41,7 +41,7 @@ export const useIngenIAActions = (stateAndSetters) => {
           return "";
         }
       })();
-      fetch(`${API_BASE_URL}/api/smartboard/gamification/activity`, {
+      fetch(`${API_BASE_URL}/api/ingenia/gamification/activity`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

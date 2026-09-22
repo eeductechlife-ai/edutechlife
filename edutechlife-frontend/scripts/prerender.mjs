@@ -12,8 +12,8 @@ const distDir = path.resolve(__dirname, '../dist')
 const PUBLIC_ROUTES = [
   '/', '/neuroentorno', '/proyectos', '/consultoria', '/consultoria-b2b',
   '/automation', '/vak', '/vak-simple', '/vak-premium', '/ialab-academic',
-  '/conoce-smartboard', '/smartboard', '/smartboard/padres',
-  '/sign-up/ialab', '/sign-up/smartboard', '/login',
+  '/conoce-ingenia', '/ingenia', '/ingenia/padres',
+  '/sign-up/ialab', '/sign-up/ingenia', '/login',
 ]
 
 const CONCURRENCY = 2

@@ -72,7 +72,7 @@ const IngenIALogin = () => {
       // El vínculo padre→hijo lo crea el backend al registrar (service_role),
       // nunca desde el cliente. Ver services/authService.signUpParent.
 
-      navigate("/smartboard");
+      navigate("/ingenia");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -122,7 +122,7 @@ const IngenIALogin = () => {
       if (mode === "login") {
         await signIn({ email: formData.email, password: formData.password });
         localStorage.removeItem("user_role");
-        navigate("/smartboard");
+        navigate("/ingenia");
       } else {
         await signUp({
           email: formData.email,

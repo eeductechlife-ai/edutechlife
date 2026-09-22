@@ -81,9 +81,9 @@ const OAuthCallbackHandler = () => {
         // in-memory state (which showed everyone the same progress).
         claimStorageForCurrentUser();
         const returnTo =
-          sessionStorage.getItem("auth_return_to") === "/smartboard" ||
+          sessionStorage.getItem("auth_return_to") === "/ingenia" ||
           (sessionStorage.getItem("auth_return_to") || "").startsWith(
-            "/smartboard",
+            "/ingenia",
           )
             ? sessionStorage.getItem("auth_return_to")
             : "/ialab";

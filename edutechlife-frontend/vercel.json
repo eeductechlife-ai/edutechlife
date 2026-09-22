@@ -3,45 +3,150 @@
   "buildCommand": "npm run build:fast",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/Doc/(.*)", "destination": "/Doc/$1" },
-    { "source": "/images/(.*)", "destination": "/images/$1" },
-    { "source": "/ialab-resources/(.*)", "destination": "/ialab-resources/$1" },
+    {
+      "source": "/Doc/(.*)",
+      "destination": "/Doc/$1"
+    },
+    {
+      "source": "/images/(.*)",
+      "destination": "/images/$1"
+    },
+    {
+      "source": "/ialab-resources/(.*)",
+      "destination": "/ialab-resources/$1"
+    },
     {
       "source": "/api/:path*",
       "destination": "https://edutechlife-backend.onrender.com/api/:path*"
     },
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/auth-router", "destination": "/index.html" },
-    { "source": "/neuroentorno", "destination": "/index.html" },
-    { "source": "/proyectos", "destination": "/index.html" },
-    { "source": "/consultoria", "destination": "/index.html" },
-    { "source": "/consultoria-b2b", "destination": "/index.html" },
-    { "source": "/automation", "destination": "/index.html" },
-    { "source": "/vak", "destination": "/index.html" },
-    { "source": "/vak-simple", "destination": "/index.html" },
-    { "source": "/vak-premium", "destination": "/index.html" },
-    { "source": "/ialab-academic", "destination": "/index.html" },
-    { "source": "/ialab-pro", "destination": "/index.html" },
-    { "source": "/conoce-smartboard", "destination": "/index.html" },
-    { "source": "/planes", "destination": "/index.html" },
-    { "source": "/smartboard", "destination": "/index.html" },
-    { "source": "/smartboard/consent", "destination": "/index.html" },
-    { "source": "/smartboard/login", "destination": "/index.html" },
-    { "source": "/smartboard/padres", "destination": "/index.html" },
-    { "source": "/smartboard/estadisticas", "destination": "/index.html" },
-    { "source": "/ialab", "destination": "/index.html" },
-    { "source": "/ialab/:moduleId", "destination": "/index.html" },
-    { "source": "/admin", "destination": "/index.html" },
-    { "source": "/admin/login", "destination": "/index.html" },
-    { "source": "/admin/dashboard", "destination": "/index.html" },
-    { "source": "/sign-up", "destination": "/index.html" },
-    { "source": "/sign-up/ialab", "destination": "/index.html" },
-    { "source": "/sign-up/smartboard", "destination": "/index.html" },
-    { "source": "/login", "destination": "/index.html" },
-    { "source": "/auth/callback", "destination": "/index.html" },
-    { "source": "/auth/reset-password", "destination": "/index.html" },
-    { "source": "/profile/:userId", "destination": "/index.html" },
-    { "source": "/verificar/:certNumber", "destination": "/index.html" }
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/auth-router",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/neuroentorno",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/proyectos",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/consultoria",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/consultoria-b2b",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/automation",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/vak",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/vak-simple",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/vak-premium",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ialab-academic",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ialab-pro",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/conoce-ingenia",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/planes",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ingenia",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ingenia/consent",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ingenia/login",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ingenia/padres",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ingenia/estadisticas",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ialab",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ialab/:moduleId",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/admin/login",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/admin/dashboard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sign-up",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sign-up/ialab",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sign-up/ingenia",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/auth/callback",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/auth/reset-password",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/profile/:userId",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/verificar/:certNumber",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {
@@ -77,6 +182,43 @@
           "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/conoce-smartboard",
+      "destination": "/conoce-ingenia",
+      "permanent": false
+    },
+    {
+      "source": "/smartboard",
+      "destination": "/ingenia",
+      "permanent": false
+    },
+    {
+      "source": "/smartboard/consent",
+      "destination": "/ingenia/consent",
+      "permanent": false
+    },
+    {
+      "source": "/smartboard/login",
+      "destination": "/ingenia/login",
+      "permanent": false
+    },
+    {
+      "source": "/smartboard/padres",
+      "destination": "/ingenia/padres",
+      "permanent": false
+    },
+    {
+      "source": "/smartboard/estadisticas",
+      "destination": "/ingenia/estadisticas",
+      "permanent": false
+    },
+    {
+      "source": "/sign-up/smartboard",
+      "destination": "/sign-up/ingenia",
+      "permanent": false
     }
   ]
 }

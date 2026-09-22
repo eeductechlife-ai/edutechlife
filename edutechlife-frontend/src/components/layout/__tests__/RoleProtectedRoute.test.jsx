@@ -65,7 +65,7 @@ const renderAt = (requiredRole, path = "/target") =>
           }
         />
         <Route path="/ialab" element={<div>ialab-home</div>} />
-        <Route path="/smartboard" element={<div>smartboard-home</div>} />
+        <Route path="/ingenia" element={<div>smartboard-home</div>} />
         <Route path="/login" element={<div>login-page</div>} />
       </Routes>
     </MemoryRouter>,
@@ -135,7 +135,7 @@ describe("RoleProtectedRoute product gate", () => {
   });
 
   it.skip("FAIL-OPEN: allows parents regardless of account_type", async () => {
-    // The component fetches /api/smartboard/user-role to determine isParent, but
+    // The component fetches /api/ingenia/user-role to determine isParent, but
     // it also redirects BEFORE the fetch resolves (when accountType !== expected).
     // Once React Router navigates away the render can't come back, so the parent
     // bypass via the verifiedRole fetch can't be exercised synchronously in

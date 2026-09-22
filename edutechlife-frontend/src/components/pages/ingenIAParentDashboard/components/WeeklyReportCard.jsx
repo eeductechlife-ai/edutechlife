@@ -16,7 +16,7 @@ import { useTranslation } from "../../../../i18n/I18nProvider";
  * WeeklyReportCard
  * Lets the parent email themselves the child's weekly IngenIA summary.
  * Also displays mastery highlights from the adaptive engine when available.
- * Additive: calls POST /api/smartboard/weekly-report with the auth token.
+ * Additive: calls POST /api/ingenia/weekly-report with the auth token.
  * Fails soft — never blocks the rest of the dashboard.
  */
 const WeeklyReportCard = ({ authToken, studentName }) => {
@@ -35,7 +35,7 @@ const WeeklyReportCard = ({ authToken, studentName }) => {
     setMessage("");
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/smartboard/weekly-report`, {
+      const res = await fetch(`${API_BASE_URL}/api/ingenia/weekly-report`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

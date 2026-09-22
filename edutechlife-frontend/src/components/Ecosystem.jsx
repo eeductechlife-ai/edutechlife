@@ -76,7 +76,7 @@ const Ecosystem = memo(() => {
       ref={sectionRef}
       className="relative w-full overflow-hidden bg-white"
     >
-      <div id="conoce-smartboard" className="absolute -top-24" />
+      <div id="conoce-ingenia" className="absolute -top-24" />
       <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] rounded-full bg-primary-light/5 blur-[100px] pointer-events-none animate-pulse-slow" />
       <div
         className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-mint/5 blur-[100px] pointer-events-none animate-pulse-slow"

@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "../i18n/I18nProvider";
-import IngenIATilt3D from "./smartboard/IngenIATilt3D";
+import IngenIATilt3D from "./ingenia/IngenIATilt3D";
 
 const AutomationROICalculator = ({ onGeneratePlan }) => {
   const { t } = useTranslation();

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTranslation } from "../i18n/I18nProvider";
 import { getMetrics, getStandards } from "./AutomationData";
-import IngenIATilt3D from "./smartboard/IngenIATilt3D";
+import IngenIATilt3D from "./ingenia/IngenIATilt3D";
 
 const AutomationHero = ({ onStartDiagnosis, onViewCases }) => {
   const { t, locale } = useTranslation();

@@ -3,7 +3,7 @@
  *
  * Este módulo realiza cálculos de ranking localmente (sin red). La lógica de
  * persistencia y leaderboards en DB vive en el BACKEND:
- *   edutechlife-backend/src/services/multiplayerService.js  →  via /api/smartboard/leaderboard
+ *   edutechlife-backend/src/services/multiplayerService.js  →  via /api/ingenia/leaderboard
  *
  * Responsabilidades de este módulo:
  * - Calcular posición y percentil de un estudiante dado un array en memoria

@@ -116,7 +116,7 @@ function AIToolsSection() {
       id: "smartboard",
       name: t("ai_tools.card_4_name"),
       subtitle: t("ai_tools.card_4_subtitle"),
-      path: "/conoce-smartboard",
+      path: "/conoce-ingenia",
       icon: "fa-chalkboard",
       description: t("ai_tools.card_4_desc"),
       buttonText: t("ai_tools.card_4_button"),

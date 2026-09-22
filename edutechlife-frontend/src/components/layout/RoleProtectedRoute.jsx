@@ -26,7 +26,7 @@ import { API_BASE_URL as API_BASE } from "../../config/api";
 
 // Producto esperado por cada requiredRole y a dónde enviar si no coincide.
 const PRODUCT_ROUTES = {
-  ialab: { expected: "ialab", redirectTo: "/smartboard" },
+  ialab: { expected: "ialab", redirectTo: "/ingenia" },
   smartboard: { expected: "smartboard", redirectTo: "/ialab" },
 };
 
@@ -110,7 +110,7 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
     if (!isAuthenticated || !isLoaded) return;
     const token = sessionStorage.getItem("auth_token");
     if (!token) return;
-    fetch(`${API_BASE}/api/smartboard/user-role`, {
+    fetch(`${API_BASE}/api/ingenia/user-role`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => (r.ok ? r.json() : null))

@@ -27,7 +27,7 @@ const WellbeingCard = ({ authToken }) => {
     (async () => {
       try {
         const res = await fetch(
-          `${API_BASE_URL}/api/smartboard/wellbeing-status`,
+          `${API_BASE_URL}/api/ingenia/wellbeing-status`,
           { headers: { Authorization: `Bearer ${authToken}` } },
         );
         if (!res.ok) return;

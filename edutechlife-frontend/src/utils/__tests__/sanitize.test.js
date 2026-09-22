@@ -4,14 +4,14 @@ import { safeReturnTo } from "../sanitize";
 describe("safeReturnTo", () => {
   it("mantiene rutas internas válidas", () => {
     expect(safeReturnTo("/ialab")).toBe("/ialab");
-    expect(safeReturnTo("/smartboard")).toBe("/smartboard");
+    expect(safeReturnTo("/ingenia")).toBe("/ingenia");
     expect(safeReturnTo("/ialab/2")).toBe("/ialab/2");
   });
 
   it("rechaza destinos de eco de autenticación (bucle login)", () => {
     expect(safeReturnTo("/login")).toBe("/ialab");
     expect(safeReturnTo("/sign-up/ialab")).toBe("/ialab");
-    expect(safeReturnTo("/sign-up/smartboard")).toBe("/ialab");
+    expect(safeReturnTo("/sign-up/ingenia")).toBe("/ialab");
     expect(safeReturnTo("/auth/callback")).toBe("/ialab");
     expect(safeReturnTo("/reset-password")).toBe("/ialab");
   });
@@ -30,7 +30,7 @@ describe("safeReturnTo", () => {
   });
 
   it("respeta el fallback entregado por el caller", () => {
-    expect(safeReturnTo("/login", "/smartboard")).toBe("/smartboard");
-    expect(safeReturnTo("/ialab", "/smartboard")).toBe("/ialab");
+    expect(safeReturnTo("/login", "/ingenia")).toBe("/ingenia");
+    expect(safeReturnTo("/ialab", "/ingenia")).toBe("/ialab");
   });
 });

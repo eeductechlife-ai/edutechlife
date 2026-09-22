@@ -493,7 +493,7 @@ export const getPageContext = (pathname = "") => {
   if (p.startsWith("/ialab-pro")) return "la página de IALab Pro";
   if (p.startsWith("/ialab"))
     return "el dashboard o landing de IALab (aprender con IA)";
-  if (p.startsWith("/smartboard"))
+  if (p.startsWith("/ingenia"))
     return "la plataforma IngenIA (niños y colegios)";
   if (p.startsWith("/vak")) return "la página del test y diagnóstico VAK";
   if (p.startsWith("/sign-up"))

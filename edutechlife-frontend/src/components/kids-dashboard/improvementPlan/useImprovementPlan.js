@@ -42,7 +42,7 @@ async function loadPlanFromServer() {
   const token = getAuthToken();
   if (!token) return null;
   try {
-    const res = await fetch(`${API_BASE_URL}/api/smartboard/improvement-plan`, {
+    const res = await fetch(`${API_BASE_URL}/api/ingenia/improvement-plan`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) return null;
@@ -57,7 +57,7 @@ async function savePlanToServer(plan) {
   const token = getAuthToken();
   if (!token) return;
   try {
-    await fetch(`${API_BASE_URL}/api/smartboard/improvement-plan`, {
+    await fetch(`${API_BASE_URL}/api/ingenia/improvement-plan`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

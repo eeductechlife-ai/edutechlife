@@ -26,7 +26,7 @@ const IngenIAConsentGate = () => {
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
-      navigate("/sign-up/smartboard");
+      navigate("/sign-up/ingenia");
     }
   }, [isLoaded, isSignedIn, navigate]);
 
@@ -70,7 +70,7 @@ const IngenIAConsentGate = () => {
       track(EVENTS.SESSION_START, { student_id: userId });
 
       // Redirect to IngenIA
-      const returnTo = searchParams.get("returnTo") || "/smartboard";
+      const returnTo = searchParams.get("returnTo") || "/ingenia";
       navigate(returnTo);
     } catch (error) {
       console.error("Session start failed:", error);

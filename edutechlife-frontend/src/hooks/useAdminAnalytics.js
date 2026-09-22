@@ -4,7 +4,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 async function fetchSmartboardAnalytics(days = 30) {
   const res = await fetch(
-    `${BACKEND_URL}/api/admin/analytics/smartboard?days=${days}`,
+    `${BACKEND_URL}/api/admin/analytics/ingenia?days=${days}`,
     {
       credentials: "include",
       headers: { "Content-Type": "application/json" },

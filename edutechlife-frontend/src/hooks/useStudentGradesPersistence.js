@@ -40,7 +40,7 @@ export const useStudentGradesPersistence = () => {
       if (token) {
         try {
           const resp = await fetch(
-            `${API_BASE_URL}/api/smartboard/student-grades`,
+            `${API_BASE_URL}/api/ingenia/student-grades`,
             {
               headers: { Authorization: `Bearer ${token}` },
               signal: AbortSignal.timeout(5000),
@@ -84,7 +84,7 @@ export const useStudentGradesPersistence = () => {
       // Async: attempt backend save (fire-and-forget, no await)
       const token = sessionStorage.getItem("auth_token");
       if (token) {
-        fetch(`${API_BASE_URL}/api/smartboard/student-grades`, {
+        fetch(`${API_BASE_URL}/api/ingenia/student-grades`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -58,20 +58,17 @@ export const useStudentHeartbeat = (
 
         lastHeartbeatRef.current = now;
 
-        const response = await fetch(
-          `${API_BASE_URL}/api/smartboard/heartbeat`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              studentId,
-              timestamp: now,
-            }),
+        const response = await fetch(`${API_BASE_URL}/api/ingenia/heartbeat`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-        );
+          body: JSON.stringify({
+            studentId,
+            timestamp: now,
+          }),
+        });
 
         if (!response.ok) {
           throw new Error(`Heartbeat failed: ${response.status}`);

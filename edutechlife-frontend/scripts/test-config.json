@@ -41,7 +41,7 @@
     ],
     "protected": {
       "ialab": ["/ialab"],
-      "smartboard": ["/smartboard"],
+      "smartboard": ["/ingenia"],
       "admin": ["/admin"]
     },
     "test": [
@@ -59,26 +59,26 @@
     },
     "ialab": {
       "canAccess": ["public", "/ialab"],
-      "cannotAccess": ["/smartboard", "/admin"],
+      "cannotAccess": ["/ingenia", "/admin"],
       "redirectsFrom": {
-        "/smartboard": "/ialab",
+        "/ingenia": "/ialab",
         "/admin": "/ialab"
       }
     },
     "smartboard": {
-      "canAccess": ["public", "/smartboard"],
+      "canAccess": ["public", "/ingenia"],
       "cannotAccess": ["/ialab", "/admin"],
       "redirectsFrom": {
-        "/ialab": "/smartboard",
-        "/admin": "/smartboard"
+        "/ialab": "/ingenia",
+        "/admin": "/ingenia"
       }
     },
     "admin": {
       "canAccess": ["public", "/admin"],
-      "cannotAccess": ["/ialab", "/smartboard"],
+      "cannotAccess": ["/ialab", "/ingenia"],
       "redirectsFrom": {
         "/ialab": "/admin",
-        "/smartboard": "/admin"
+        "/ingenia": "/admin"
       }
     }
   },

@@ -24,7 +24,7 @@ function jsonResponse(status, body) {
   });
 }
 
-describe("callDaniOrchestrator — fallback a /api/smartboard/chat/stream", () => {
+describe("callDaniOrchestrator — fallback a /api/ingenia/chat/stream", () => {
   beforeEach(() => {
     sessionStorage.setItem("auth_token", "test-token");
     vi.stubGlobal("fetch", vi.fn());
@@ -36,7 +36,7 @@ describe("callDaniOrchestrator — fallback a /api/smartboard/chat/stream", () =
     vi.restoreAllMocks();
   });
 
-  it("usa /api/smartboard/dani/chat cuando la ruta existe", async () => {
+  it("usa /api/ingenia/dani/chat cuando la ruta existe", async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValue(
@@ -52,7 +52,7 @@ describe("callDaniOrchestrator — fallback a /api/smartboard/chat/stream", () =
     );
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(fetchMock.mock.calls[0][0]).toContain("/api/smartboard/dani/chat");
+    expect(fetchMock.mock.calls[0][0]).toContain("/api/ingenia/dani/chat");
     expect(chunks.join("")).toBe("Hola, soy Dani");
   });
 
@@ -61,7 +61,7 @@ describe("callDaniOrchestrator — fallback a /api/smartboard/chat/stream", () =
       .fn()
       .mockResolvedValueOnce(
         jsonResponse(404, {
-          error: "Ruta no encontrada: POST /api/smartboard/dani/chat",
+          error: "Ruta no encontrada: POST /api/ingenia/dani/chat",
         }),
       )
       .mockResolvedValueOnce(sseResponse(200, [{ chunk: "Respuesta legacy" }]));
@@ -84,8 +84,8 @@ describe("callDaniOrchestrator — fallback a /api/smartboard/chat/stream", () =
     const [primaryUrl, primaryOpts] = fetchMock.mock.calls[0];
     const [legacyUrl, legacyOpts] = fetchMock.mock.calls[1];
 
-    expect(primaryUrl).toContain("/api/smartboard/dani/chat");
-    expect(legacyUrl).toContain("/api/smartboard/chat/stream");
+    expect(primaryUrl).toContain("/api/ingenia/dani/chat");
+    expect(legacyUrl).toContain("/api/ingenia/chat/stream");
 
     const legacyBody = JSON.parse(legacyOpts.body);
     expect(legacyBody.messages).toEqual([

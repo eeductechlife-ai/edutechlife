@@ -79,7 +79,7 @@ describe("ParentalConsentBlocker", () => {
         </ParentalConsentBlocker>,
       );
 
-      expect(mockNavigate).toHaveBeenCalledWith("/sign-up/smartboard", {
+      expect(mockNavigate).toHaveBeenCalledWith("/sign-up/ingenia", {
         replace: true,
       });
     });
