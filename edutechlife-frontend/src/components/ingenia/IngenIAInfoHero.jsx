@@ -313,13 +313,15 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
           className="mt-12 rounded-[1.75rem] border border-petroleum/10 bg-white/70 px-6 py-6 shadow-[0_25px_60px_-40px_rgba(0,75,99,0.55)] backdrop-blur-xl sm:px-8"
         >
-          <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12 lg:gap-8">
-            <div className="flex items-center justify-center gap-3 lg:col-span-4 lg:justify-start">
-              <div className="flex -space-x-2">
+          {/* Mobile: trust badge + stats side by side | Desktop: 12-col grid */}
+          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-12 lg:items-center lg:gap-8">
+            {/* Trust badge */}
+            <div className="flex items-center gap-3 lg:col-span-4 lg:justify-start">
+              <div className="flex flex-shrink-0 -space-x-2">
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-petroleum to-primary-light text-xs font-bold text-white shadow-sm"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-petroleum to-primary-light text-xs font-bold text-white shadow-sm sm:h-9 sm:w-9"
                   >
                     {i}
                   </div>
@@ -329,26 +331,27 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
                 <p className="text-xs font-bold text-petroleum sm:text-sm">
                   {t("smartboard.landing_trust_badge")}
                 </p>
-                <p className="text-xs text-slate-500">
+                <p className="text-[11px] text-slate-500 sm:text-xs">
                   {t("smartboard.landing_trust_subtitle")}
                 </p>
               </div>
             </div>
 
+            {/* Stats */}
             <ul className="grid grid-cols-3 divide-x divide-petroleum/10 lg:col-span-8">
               {STATS.map((stat, i) => (
                 <li
                   key={stat.labelKey}
-                  className="flex flex-col items-center justify-center px-2 text-center sm:px-4"
+                  className="flex flex-col items-center justify-center px-1 text-center sm:px-4"
                 >
                   <span
-                    className={`text-3xl font-black tracking-tight sm:text-4xl ${stat.color}`}
+                    className={`text-xl font-black tracking-tight sm:text-3xl lg:text-4xl ${stat.color}`}
                   >
                     {stat.prefix || ""}
                     {counts[i].toLocaleString()}
                     {stat.suffix || ""}
                   </span>
-                  <span className="mt-1 text-[10px] font-normal uppercase tracking-widest text-slate-500 sm:text-xs">
+                  <span className="mt-0.5 text-[9px] font-normal uppercase leading-tight tracking-wider text-slate-500 sm:mt-1 sm:text-[10px] sm:tracking-widest">
                     {t(stat.labelKey)}
                   </span>
                 </li>
