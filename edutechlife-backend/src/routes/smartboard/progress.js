@@ -7,7 +7,7 @@ const router = Router();
 /**
  * GET/POST /api/smartboard/student-progress
  * Load or save subject progress (subjectTime, sessions) to students.progress_json.
- * Fallback for SmartBoard progress tracking when localStorage is lost.
+ * Fallback for IngenIA progress tracking when localStorage is lost.
  */
 router.get('/student-progress', requireAuth, async (req, res) => {
   const userId = req.userId;

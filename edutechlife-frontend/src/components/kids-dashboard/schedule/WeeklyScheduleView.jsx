@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import {
   DAY_KEYS,
   DAY_LABELS,
@@ -297,7 +297,7 @@ const WeeklyScheduleView = () => {
     saveTimetableWithSlots,
     currentClass,
     nextClass,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
 
   const loading = timetableLoading;
   const error = timetableError;
@@ -363,8 +363,8 @@ const WeeklyScheduleView = () => {
           <div className="text-5xl mb-3">📅</div>
           <h3 className="text-2xl font-black mb-1">Agrega tu horario</h3>
           <p className="text-sm opacity-90 mb-5 max-w-md mx-auto">
-            Escanea el horario del colegio y SmartBoard te recordará tus clases
-            y exámenes.
+            Escanea el horario del colegio y IngenIA te recordará tus clases y
+            exámenes.
           </p>
           <div className="flex flex-wrap gap-2 justify-center">
             <button

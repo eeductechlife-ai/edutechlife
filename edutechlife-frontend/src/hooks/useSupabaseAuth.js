@@ -102,7 +102,7 @@ export const useSupabaseAuth = () => {
 
           setProfile(profileData);
         } else {
-          // The SmartBoard login/sign-up flows persist the backend-issued tokens
+          // The IngenIA login/sign-up flows persist the backend-issued tokens
           // in localStorage without a supabase-js session. Restore that session
           // here (which also re-enables auto-refresh), instead of wiping the
           // tokens and leaving the dashboard stuck on its loading skeleton.

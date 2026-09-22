@@ -9,7 +9,7 @@ import {
   PREMIUM_TABS,
   getTabsForAgeGroup,
 } from "../kidsDashboardConfig";
-import { SB_GRADIENTS, glow } from "../smartboardTheme";
+import { SB_GRADIENTS, glow } from "../ingenIATheme";
 
 const categoryStyles = CATEGORIES.map((c) => ({
   id: c.id,
@@ -132,7 +132,7 @@ const PremiumSidebar = memo(
                       className="text-lg font-black tracking-tight bg-clip-text text-transparent"
                       style={{ backgroundImage: SB_GRADIENTS.brand }}
                     >
-                      SmartBoard
+                      IngenIA
                     </h2>
                     <p
                       className={`text-[9px] font-semibold mt-0.5 ${darkMode ? "text-[#48CAE4]/60" : "text-[#0096C7]/60"}`}

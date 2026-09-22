@@ -3,7 +3,7 @@ import {
   calculateNewUnlocks,
   buildUnlockPayload,
 } from "../../achievementService";
-import { loadFromSupabase } from "../../smartboardSync";
+import { loadFromSupabase } from "../../ingenIASync";
 
 /**
  * Integration Test: Achievement Unlock Flow

@@ -1,4 +1,4 @@
-import { SB_COLORS, SB_RADII } from "../smartboardTheme";
+import { SB_COLORS, SB_RADII } from "../ingenIATheme";
 
 const SIZE_STYLES = {
   sm: { padding: "0.15rem 0.55rem", fontSize: "0.7rem" },

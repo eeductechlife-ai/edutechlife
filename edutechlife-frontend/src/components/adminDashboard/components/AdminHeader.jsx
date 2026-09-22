@@ -79,7 +79,7 @@ const AdminHeader = ({
                 }`}
               >
                 <BookOpen className="w-4 h-4" />
-                <span className="text-sm">SmartBoard</span>
+                <span className="text-sm">IngenIA</span>
               </button>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { SB_COLORS, SB_RADII, SB_SHADOWS } from "../smartboardTheme";
+import { SB_COLORS, SB_RADII, SB_SHADOWS } from "../ingenIATheme";
 import Button from "./Button";
 
 export default function RecommendationCard({

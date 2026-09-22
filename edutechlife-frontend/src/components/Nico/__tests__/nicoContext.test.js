@@ -7,10 +7,10 @@ describe("getPageContext", () => {
     expect(getPageContext("")).toContain("principal");
   });
 
-  it("maps IALab, SmartBoard and VAK routes", () => {
+  it("maps IALab, IngenIA and VAK routes", () => {
     expect(getPageContext("/ialab")).toContain("IALab");
     expect(getPageContext("/ialab-academic")).toContain("Academic");
-    expect(getPageContext("/smartboard")).toContain("SmartBoard");
+    expect(getPageContext("/smartboard")).toContain("IngenIA");
     expect(getPageContext("/vak")).toContain("VAK");
   });
 
@@ -22,8 +22,6 @@ describe("getPageContext", () => {
   });
 
   it("falls back gracefully for unknown routes", () => {
-    expect(getPageContext("/ruta-desconocida")).toContain(
-      "ruta-desconocida",
-    );
+    expect(getPageContext("/ruta-desconocida")).toContain("ruta-desconocida");
   });
 });

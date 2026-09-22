@@ -7,7 +7,7 @@ import {
   PREMIUM_TABS,
   getTabsForAgeGroup,
 } from "../kidsDashboardConfig";
-import { glow } from "../smartboardTheme";
+import { glow } from "../ingenIATheme";
 
 // Hide the bar when the on-screen keyboard is up so it never covers the input.
 // Detected via visualViewport: keyboard shrinks the viewport by ≥25%.

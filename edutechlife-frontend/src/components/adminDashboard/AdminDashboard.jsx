@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Users, Brain, GraduationCap, Activity } from "lucide-react";
 import LeadsManager from "../LeadsManager";
-import SmartBoardMetrics from "./components/SmartBoardMetrics";
+import IngenIAMetrics from "./components/IngenIAMetrics";
 import { useSupabase } from "../../hooks/useSupabase";
 import { useAdminAnalytics } from "../../hooks/useAdminAnalytics";
 import {
@@ -156,7 +156,7 @@ const AdminDashboard = ({ onLogout, onBack }) => {
         </div>
         {activeTab === "leads" && <LeadsManager />}
         {activeTab === "smartboard" && (
-          <SmartBoardMetrics analytics={adminAnalytics} />
+          <IngenIAMetrics analytics={adminAnalytics} />
         )}
       </div>
     </div>

@@ -1,0 +1,378 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - link "Skip to content" [ref=e6] [cursor=pointer]:
+        - /url: "#main"
+      - generic [ref=e9]:
+        - navigation [ref=e10]:
+          - generic [ref=e11]:
+            - button "E eeductechlife-ai's Project main" [ref=e12]:
+              - generic [ref=e13]: E
+              - generic [ref=e14]:
+                - generic [ref=e15]: eeductechlife-ai's Project
+                - generic [ref=e16]: main
+            - button "Connect" [ref=e25] [cursor=pointer]
+          - generic [ref=e29]:
+            - button [ref=e30] [cursor=pointer]:
+              - img "eeductechlife-ai" [ref=e32]
+            - button "Open menu" [ref=e33] [cursor=pointer]
+        - navigation "Floating toolbar" [ref=e36]:
+          - generic [ref=e37]:
+            - button [ref=e38] [cursor=pointer]
+            - button "Help" [ref=e44] [cursor=pointer]
+            - button "Advisor Center" [ref=e52] [cursor=pointer]
+            - button "SQL Editor" [ref=e59] [cursor=pointer]
+            - button "AI Assistant" [ref=e65] [cursor=pointer]
+      - main [ref=e77]:
+        - main [ref=e82]:
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - tablist [ref=e86]:
+                - generic [ref=e87]:
+                  - generic [ref=e89]:
+                    - generic [ref=e90]:
+                      - tab "Untitled query" [ref=e91] [cursor=pointer]
+                      - button "Close tab" [ref=e103] [cursor=pointer]
+                    - separator [ref=e107]
+                  - generic [ref=e108]:
+                    - tab "New" [selected] [ref=e109] [cursor=pointer]
+                    - button "Close new tab" [ref=e115] [cursor=pointer]
+              - status [ref=e120]
+            - generic [ref=e122]:
+              - generic [ref=e123]:
+                - button "More actions" [ref=e124] [cursor=pointer]
+                - generic [ref=e130]:
+                  - 'button "Query source: Database" [ref=e131] [cursor=pointer]':
+                    - generic [ref=e137]: Database
+                  - generic [ref=e141]:
+                    - button "Save" [disabled]:
+                      - generic [aria-hidden]:
+                        - generic: ⌘S
+                    - button "Run" [ref=e142] [cursor=pointer]:
+                      - generic [ref=e145]: ⌘↵
+              - generic [ref=e146]:
+                - code [ref=e154]:
+                  - generic [ref=e155]:
+                    - generic [ref=e158]: "1"
+                    - textbox "Editor content" [active] [ref=e168]
+                    - generic: Hit CMD+SHIFT+K to generate query or just start typing
+                - separator [ref=e169]
+                - generic [ref=e180]:
+                  - tablist [ref=e181]:
+                    - generic [ref=e182]:
+                      - tab "Results" [selected] [ref=e183] [cursor=pointer]
+                      - tab "Chart" [ref=e185] [cursor=pointer]
+                  - paragraph [ref=e188]:
+                    - text: Click
+                    - code [ref=e189]: Run
+                    - text: to execute your query
+    - generic [ref=e193]:
+      - generic [aria-hidden]:
+        - generic:
+          - generic: "["
+          - generic: "{"
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: "{"
+          - generic: "}"
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "}"
+          - generic: "]"
+        - generic:
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+        - generic:
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+        - generic:
+          - generic: (
+          - generic: "["
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "["
+          - generic: "]"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: "]"
+          - generic: )
+        - generic:
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: )
+          - generic: ›
+          - generic: "}"
+        - generic:
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: (
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: )
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+        - generic:
+          - generic: ‹
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: ‹
+          - generic: (
+          - generic: )
+          - generic: ›
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: ›
+        - generic:
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: ‹
+          - generic: (
+          - generic: "["
+          - generic: "{"
+          - generic: ‹
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+          - generic: )
+          - generic: ›
+          - generic: ›
+          - generic: "}"
+          - generic: "]"
+      - generic [ref=e194]:
+        - button "Close banner" [ref=e196] [cursor=pointer]
+        - generic [ref=e201]:
+          - generic [ref=e203]:
+            - paragraph [ref=e204]: Supabase Select 2026
+            - paragraph [ref=e205]: A curated day of talks by the industry’s best builders. Join us on October 2nd in San Francisco.
+          - link "Apply to attend" [ref=e206] [cursor=pointer]:
+            - /url: https://select.supabase.com/
+  - alert [ref=e212]: Untitled query | SQL Editor | Supabase
+  - generic [ref=e213]:
+    - alert
+    - alert

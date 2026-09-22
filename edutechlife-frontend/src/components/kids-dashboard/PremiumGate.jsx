@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Crown, Lock, Loader2 } from "lucide-react";
-import { SB_GRADIENTS, glow } from "./smartboardTheme";
+import { SB_GRADIENTS, glow } from "./ingenIATheme";
 import { createCheckoutSession } from "../../services/stripeClient";
 import { useTranslation } from "../../i18n/I18nProvider";
 

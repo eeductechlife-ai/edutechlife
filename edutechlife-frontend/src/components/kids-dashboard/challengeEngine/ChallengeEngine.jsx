@@ -1,6 +1,6 @@
 import { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useChallengeEngine } from "./useChallengeEngine";
 import ChallengeSetup from "./ChallengeSetup";
 import ChallengePlay from "./ChallengePlay";
@@ -16,7 +16,7 @@ const MODE_TABS = [
 ];
 
 const ChallengeEngine = memo(({ onTabChange }) => {
-  const { darkMode } = useSmartBoardKids();
+  const { darkMode } = useIngenIAKids();
   const engine = useChallengeEngine();
   const [activeMode, setActiveMode] = useState("retos");
 

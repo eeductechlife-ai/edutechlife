@@ -1,5 +1,5 @@
 /**
- * SmartBoard 3.0 — Catálogo central de eventos de analítica (punto 43/44 del brief).
+ * IngenIA 3.0 — Catálogo central de eventos de analítica (punto 43/44 del brief).
  *
  * Separa dos dominios:
  *   LEARNING  — cómo aprende el estudiante (diagnóstico, misiones, competencias, plan).

@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { track } from "../../lib/analytics";
 import { EVENTS } from "../../lib/analyticsEvents";
 
@@ -21,9 +21,9 @@ const WELCOME_TEXT = {
   early:
     "¡Hola! Soy Dani 🤖 ¡Tu amigo robot! Aquí aprenderás cosas increíbles. ¡Empecemos!",
   middle:
-    "¡Hola! Soy Dani, tu tutor IA. En SmartBoard vas a aprender con tecnología, organizar tu horario y mejorar tus notas. ¡Vamos!",
+    "¡Hola! Soy Dani, tu tutor IA. En IngenIA vas a aprender con tecnología, organizar tu horario y mejorar tus notas. ¡Vamos!",
   senior:
-    "Bienvenido/a a SmartBoard. Soy Dani, tu asistente IA. Aquí organizarás tu estudio, analizarás tus calificaciones y te prepararás para el futuro tecnológico.",
+    "Bienvenido/a a IngenIA. Soy Dani, tu asistente IA. Aquí organizarás tu estudio, analizarás tus calificaciones y te prepararás para el futuro tecnológico.",
 };
 
 const OnboardingGuide = memo(({ onTabChange }) => {
@@ -33,7 +33,7 @@ const OnboardingGuide = memo(({ onTabChange }) => {
     setHasSeenWelcome,
     setOnboardingComplete,
     studentAge,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
 
   const show = !onboardingComplete && !hasSeenWelcome;
 
@@ -102,7 +102,7 @@ const OnboardingGuide = memo(({ onTabChange }) => {
                 🤖
               </motion.div>
               <h2 className="text-xl font-bold text-white mb-2">
-                ¡Bienvenido/a a SmartBoard!
+                ¡Bienvenido/a a IngenIA!
               </h2>
               <p className="text-white/90 text-sm leading-relaxed">
                 {welcomeText}

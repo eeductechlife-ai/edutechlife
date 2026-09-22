@@ -49,7 +49,7 @@ export const certificationsContent = {
       nivel: "Básico",
     },
     {
-      titulo: "SmartBoard Master",
+      titulo: "IngenIA Master",
       descripcion: "Certificación en pizarras interactivas inteligentes",
       nivel: "Intermedio",
     },
@@ -83,7 +83,7 @@ export const blogArticles = [
   },
   {
     id: "smartboard",
-    titulo: "SmartBoard: Guía completa 2026",
+    titulo: "IngenIA: Guía completa 2026",
     fecha: "5 Mar 2026",
     categoria: "Herramientas",
     autor: "Ing. Roberto Chen",
@@ -214,16 +214,16 @@ export const blogArticleContents = {
       "Implementar VAK no requiere tecnología avanzada, sino un cambio metodológico. Los docentes deben diseñar experiencias diversificadas que alcancen a todos los estilos, monitorear resultados y ajustar estrategias continuamente.",
   },
   smartboard: {
-    titulo: "SmartBoard: Guía completa 2026",
+    titulo: "IngenIA: Guía completa 2026",
     imagen:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=400&fit=crop",
     introduccion:
-      "Las pizarras interactivas inteligentes han evolucionado significativamente. Según el informe de EdTech Magazine 2025, las instituciones que implementaron SmartBoards reportan un 40% de aumento en participación estudiantil y 28% mejora en comprensión de conceptos complejos.",
+      "Las pizarras interactivas inteligentes han evolucionado significativamente. Según el informe de EdTech Magazine 2025, las instituciones que implementaron IngenIAs reportan un 40% de aumento en participación estudiantil y 28% mejora en comprensión de conceptos complejos.",
     secciones: [
       {
         titulo: "Evolución Tecnológica 2024-2026",
         contenido:
-          "Los SmartBoards modernos incorporan: pantallas 4K con táctil de precisión, integración con IA para reconocimiento de escritura, conectividad con dispositivos móviles, software de colaboración en tiempo real y análisis de engagement estudiantil.",
+          "Los IngenIAs modernos incorporan: pantallas 4K con táctil de precisión, integración con IA para reconocimiento de escritura, conectividad con dispositivos móviles, software de colaboración en tiempo real y análisis de engagement estudiantil.",
         grafica: "linea",
         datos: [
           { anio: "2024", capacidad: 65 },
@@ -235,7 +235,7 @@ export const blogArticleContents = {
       {
         titulo: "Casos de Implementación Exitosa",
         contenido:
-          "El Colegio Americano de México implementó 50 SmartBoards en 2023. Resultados después de 18 meses: 42% aumento en participación, 31% mejoría en matemáticas, 89% de docentes reportaron satisfacción positiva.",
+          "El Colegio Americano de México implementó 50 IngenIAs en 2023. Resultados después de 18 meses: 42% aumento en participación, 31% mejoría en matemáticas, 89% de docentes reportaron satisfacción positiva.",
         grafica: "barras",
         datos: [
           { categoria: "Participación", antes: 45, despues: 87 },
@@ -247,7 +247,7 @@ export const blogArticleContents = {
       {
         titulo: "Funcionalidades Esenciales 2026",
         contenido:
-          "Las características que todo SmartBoard debe tener incluyen: pizarra colaborativa infinita, integración con LMS institucionales, herramientas de evaluación en tiempo real, compatibilidad con dispositivos de estudiantes, análisis de patrones de atención mediante IA.",
+          "Las características que todo IngenIA debe tener incluyen: pizarra colaborativa infinita, integración con LMS institucionales, herramientas de evaluación en tiempo real, compatibilidad con dispositivos de estudiantes, análisis de patrones de atención mediante IA.",
         lista: [
           "Pizarra colaborativa con almacenamiento en la nube",
           "Integración nativa con Google Classroom y Microsoft Teams",
@@ -270,7 +270,7 @@ export const blogArticleContents = {
       },
     ],
     conclusion:
-      "La inversión en SmartBoards es una decisión estratégica que posiciona a las instituciones a la vanguardia de la educación digital. El costo inicial se recupera en 18-24 meses considerando todos los beneficios cuantificables.",
+      "La inversión en IngenIAs es una decisión estratégica que posiciona a las instituciones a la vanguardia de la educación digital. El costo inicial se recupera en 18-24 meses considerando todos los beneficios cuantificables.",
   },
   neurociencia: {
     titulo: "Neurociencia y aprendizaje efectivo",

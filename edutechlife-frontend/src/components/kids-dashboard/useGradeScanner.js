@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { callDeepseekSmartboard } from "../../utils/api";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { useStudentGradesPersistence } from "../../hooks/useStudentGradesPersistence";
 import {
@@ -28,7 +28,7 @@ export function useGradeScanner() {
     addPoints,
     setDocumentForDani,
     userId,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
   const { t } = useTranslation();
   const { grades: persistedGrades, saveGrades } = useStudentGradesPersistence();
 

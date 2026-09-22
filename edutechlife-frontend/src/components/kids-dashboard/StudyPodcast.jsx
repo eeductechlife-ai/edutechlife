@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { callDeepseekSmartboard } from "../../utils/api";
 import { speakTextConversational, stopSpeech } from "../../utils/speech";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 
 const dc = (dm, light, dark) => (dm ? dark : light);
@@ -40,7 +40,7 @@ const ScriptBlock = memo(({ block, i, currentIdx }) => {
 });
 
 const StudyPodcast = memo(() => {
-  const { darkMode: dm, addPoints } = useSmartBoardKids();
+  const { darkMode: dm, addPoints } = useIngenIAKids();
   const [mode, setMode] = useState("input");
   const [text, setText] = useState("");
   const [script, setScript] = useState(null);

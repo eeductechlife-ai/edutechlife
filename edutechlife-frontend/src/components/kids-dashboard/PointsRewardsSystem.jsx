@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Gem } from "lucide-react";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { useKidText } from "../../hooks/useKidText";
 
@@ -208,7 +208,7 @@ const PointsRewardsSystem = memo(() => {
     unlockReward,
     addPoints,
     totalActiveMinutes,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
   const [activeTab, setActiveTab] = useState("puntos");
 
   const rewards = useMemo(
@@ -218,7 +218,7 @@ const PointsRewardsSystem = memo(() => {
         name: "Primer Paso",
         icon: "🎉",
         cost: 25,
-        description: "¡Completaste tu primer día en SmartBoard!",
+        description: "¡Completaste tu primer día en IngenIA!",
         category: "milestone",
       },
       {

@@ -6,8 +6,8 @@ function getStripe() {
   return require('stripe')(process.env.STRIPE_SECRET_KEY);
 }
 
-// Planes de SmartBoard (menores 6–16): su estado vive en `students`, no en
-// `users`. Mantiene los datos de IALab (adultos) y SmartBoard (niños) separados.
+// Planes de IngenIA (menores 6–16): su estado vive en `students`, no en
+// `users`. Mantiene los datos de IALab (adultos) y IngenIA (niños) separados.
 const SMARTBOARD_PLAN_IDS = new Set(['smartboard_premium']);
 
 /**
@@ -16,7 +16,7 @@ const SMARTBOARD_PLAN_IDS = new Set(['smartboard_premium']);
  * (de aquí lee el frontend el plan/tier del usuario).
  *
  * - Planes IALab (adultos)   → `users` (columnas plan/subscription_*), key: id
- * - Planes SmartBoard (niños) → `students` (subscription_tier), key: auth_id
+ * - Planes IngenIA (niños) → `students` (subscription_tier), key: auth_id
  *
  * Nunca lanza: un fallo aquí no debe impedir devolver 200 a Stripe (evitar
  * reintentos innecesarios del webhook). `userId` es el UUID de auth.users.

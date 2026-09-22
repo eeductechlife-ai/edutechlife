@@ -15,7 +15,7 @@ export const helpArticles = [
   },
   {
     id: "tutorial-smartboard",
-    titulo: "Tutorial SmartBoard",
+    titulo: "Tutorial IngenIA",
     descripcion: "Configuración y uso de pizarra interactiva",
     icono: "fa-chalkboard",
     tiempo: "8 min",
@@ -86,7 +86,7 @@ export const helpArticleContents = {
       {
         titulo: "5. Próximos pasos",
         contenido:
-          "Una vez completado el inicio básico, te recomendamos: explorar el diagnóstico VAK para personalizar tu aprendizaje, revisar los tutoriales de SmartBoard si planeas usar pizarras interactivas, consultar la sección de automatización para optimizar procesos.",
+          "Una vez completado el inicio básico, te recomendamos: explorar el diagnóstico VAK para personalizar tu aprendizaje, revisar los tutoriales de IngenIA si planeas usar pizarras interactivas, consultar la sección de automatización para optimizar procesos.",
       },
     ],
   },
@@ -167,14 +167,14 @@ export const helpArticleContents = {
     ],
   },
   "tutorial-smartboard": {
-    titulo: "Tutorial SmartBoard",
+    titulo: "Tutorial IngenIA",
     introduccion:
-      "SmartBoard es la solución de pizarra interactiva inteligente de Edutechlife. Esta guía te ayudará a configurar y utilizar todas las funciones para maximizar el engagement de tus estudiantes.",
+      "IngenIA es la solución de pizarra interactiva inteligente de Edutechlife. Esta guía te ayudará a configurar y utilizar todas las funciones para maximizar el engagement de tus estudiantes.",
     secciones: [
       {
         titulo: "Especificaciones Técnicas",
         contenido:
-          "Antes de comenzar, conoce las especificaciones de tu SmartBoard: pantalla 4K multitáctil, tamaño de 65-86 pulgadas, tecnología infrarroja de alta precisión, conectividad HDMI, USB-C y WiFi 6.",
+          "Antes de comenzar, conoce las especificaciones de tu IngenIA: pantalla 4K multitáctil, tamaño de 65-86 pulgadas, tecnología infrarroja de alta precisión, conectividad HDMI, USB-C y WiFi 6.",
         especificacion: [
           { label: "Resolución", valor: "3840 x 2160 (4K)" },
           { label: "Táctil", valor: "20 puntos simultáneos" },
@@ -188,7 +188,7 @@ export const helpArticleContents = {
         contenido:
           "El proceso de instalación incluye: montaje en pared o soporte móvil, conexión de cables de energía y datos, calibración inicial de la pantalla, emparejamiento con el software Edutechlife.",
         pasos: [
-          "Desempaca el SmartBoard y verifica todos los componentes",
+          "Desempaca el IngenIA y verifica todos los componentes",
           "Instala el soporte siguiendo las instrucciones del fabricante",
           "Conecta el cable HDMI al puerto correspondiente",
           "Enciende el dispositivo y espera a que cargue el sistema",
@@ -198,7 +198,7 @@ export const helpArticleContents = {
       {
         titulo: "Herramientas Interactivas",
         contenido:
-          "SmartBoard incluye un conjunto completo de herramientas: pizarra colaborativa infinita, reconocimiento de escritura a mano, herramientas geométricas, editor de imágenes, grabación de sesiones.",
+          "IngenIA incluye un conjunto completo de herramientas: pizarra colaborativa infinita, reconocimiento de escritura a mano, herramientas geométricas, editor de imágenes, grabación de sesiones.",
         grafica: "linea",
         datos: [
           { anio: "2024", engagement: 65 },
@@ -223,7 +223,7 @@ export const helpArticleContents = {
           "Problemas frecuentes y sus soluciones: La pantalla no responde - verificar conexiones y reiniciar; La conexión WiFi falla - mover el router más cerca o usar cable Ethernet; El táctil no funciona - recalibrar desde configuración.",
         faqs: [
           {
-            q: "¿Puedo usar el SmartBoard sin internet?",
+            q: "¿Puedo usar el IngenIA sin internet?",
             a: "Sí, las funciones básicas funcionan offline",
           },
           {

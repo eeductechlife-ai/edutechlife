@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { getTips } from "./examUtils";
 
 // Mon=1 … Sun=7 (matches migration 042).
@@ -33,7 +33,7 @@ export default function useExamPrep() {
     slots,
     examMaterials,
     setExamMaterials,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
 
   const [mode, setMode] = useState("list");
   const [detailId, setDetailId] = useState(null);

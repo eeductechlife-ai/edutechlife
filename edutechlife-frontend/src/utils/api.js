@@ -325,9 +325,9 @@ export async function callDeepseek(
   }
 }
 /**
- * SmartBoard-specific AI call — routes through /api/smartboard/ai which enforces
+ * IngenIA-specific AI call — routes through /api/smartboard/ai which enforces
  * requireAuth + requireVerifiedParentalConsent. Use this instead of callDeepseek()
- * for all AI calls made from within the SmartBoard kids dashboard.
+ * for all AI calls made from within the IngenIA kids dashboard.
  *
  * Si el backend desplegado aún no expone /api/smartboard/ai (404), hace fallback
  * a /api/smartboard/chat, que exige la misma autorización y consentimiento
@@ -425,7 +425,7 @@ export async function callDeepseekSmartboard(messages, opts = {}) {
     const fallback = await attempt(`${API_BASE_URL}/api/smartboard/chat`);
     if (fallback.notFound) {
       throw new Error(
-        "El servidor no reconoce los endpoints de IA del SmartBoard.",
+        "El servidor no reconoce los endpoints de IA del IngenIA.",
       );
     }
     return fallback.value;

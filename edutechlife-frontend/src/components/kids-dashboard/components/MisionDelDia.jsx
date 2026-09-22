@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useTranslation } from "../../../i18n/I18nProvider";
 
 const TASK_COLORS = ["#0096C7", "#F59E0B", "#06D6A0"];
@@ -111,7 +111,7 @@ const buildTasks = ({ vakResult, missions, subjects, t }) => {
 };
 
 const MisionDelDia = ({ onTabChange }) => {
-  const { vakResult, missions, subjects, streak } = useSmartBoardKids();
+  const { vakResult, missions, subjects, streak } = useIngenIAKids();
   const { t } = useTranslation();
 
   const tasks = useMemo(

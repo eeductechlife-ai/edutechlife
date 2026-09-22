@@ -95,7 +95,7 @@ describe("callDeepseekSmartboard — fallback a /api/smartboard/chat", () => {
     await expect(
       callDeepseekSmartboard([{ role: "user", content: "hola" }]),
     ).rejects.toThrow(
-      "El servidor no reconoce los endpoints de IA del SmartBoard.",
+      "El servidor no reconoce los endpoints de IA del IngenIA.",
     );
   });
 

@@ -49,7 +49,7 @@ export const certificationsContent = {
       nivel: "Beginner",
     },
     {
-      titulo: "SmartBoard Master",
+      titulo: "IngenIA Master",
       descripcion: "Certification in intelligent interactive whiteboards",
       nivel: "Intermediate",
     },
@@ -83,7 +83,7 @@ export const blogArticles = [
   },
   {
     id: "smartboard",
-    titulo: "SmartBoard: Complete 2026 Guide",
+    titulo: "IngenIA: Complete 2026 Guide",
     fecha: "Mar 5, 2026",
     categoria: "Tools",
     autor: "Eng. Roberto Chen",
@@ -214,16 +214,16 @@ export const blogArticleContents = {
       "Implementing VAK does not require advanced technology, but a methodological shift. Teachers must design diversified experiences that reach all styles, monitor results, and adjust strategies continuously.",
   },
   smartboard: {
-    titulo: "SmartBoard: Complete 2026 Guide",
+    titulo: "IngenIA: Complete 2026 Guide",
     imagen:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=400&fit=crop",
     introduccion:
-      "Intelligent interactive whiteboards have evolved significantly. According to EdTech Magazine's 2025 report, institutions that implemented SmartBoards report a 40% increase in student participation and 28% improvement in understanding complex concepts.",
+      "Intelligent interactive whiteboards have evolved significantly. According to EdTech Magazine's 2025 report, institutions that implemented IngenIAs report a 40% increase in student participation and 28% improvement in understanding complex concepts.",
     secciones: [
       {
         titulo: "Technological Evolution 2024-2026",
         contenido:
-          "Modern SmartBoards incorporate: 4K screens with precision touch, AI integration for handwriting recognition, mobile device connectivity, real-time collaboration software, and student engagement analytics.",
+          "Modern IngenIAs incorporate: 4K screens with precision touch, AI integration for handwriting recognition, mobile device connectivity, real-time collaboration software, and student engagement analytics.",
         grafica: "linea",
         datos: [
           { anio: "2024", capacidad: 65 },
@@ -235,7 +235,7 @@ export const blogArticleContents = {
       {
         titulo: "Successful Implementation Cases",
         contenido:
-          "The American School of Mexico implemented 50 SmartBoards in 2023. Results after 18 months: 42% increase in participation, 31% improvement in mathematics, 89% of teachers reported positive satisfaction.",
+          "The American School of Mexico implemented 50 IngenIAs in 2023. Results after 18 months: 42% increase in participation, 31% improvement in mathematics, 89% of teachers reported positive satisfaction.",
         grafica: "barras",
         datos: [
           { categoria: "Participation", antes: 45, despues: 87 },
@@ -247,7 +247,7 @@ export const blogArticleContents = {
       {
         titulo: "Essential Features 2026",
         contenido:
-          "Features every SmartBoard should include: infinite collaborative canvas, institutional LMS integration, real-time assessment tools, student device compatibility, AI-powered attention pattern analysis.",
+          "Features every IngenIA should include: infinite collaborative canvas, institutional LMS integration, real-time assessment tools, student device compatibility, AI-powered attention pattern analysis.",
         lista: [
           "Collaborative whiteboard with cloud storage",
           "Native integration with Google Classroom and Microsoft Teams",
@@ -270,7 +270,7 @@ export const blogArticleContents = {
       },
     ],
     conclusion:
-      "Investing in SmartBoards is a strategic decision that positions institutions at the forefront of digital education. The initial cost is recouped in 18-24 months considering all quantifiable benefits.",
+      "Investing in IngenIAs is a strategic decision that positions institutions at the forefront of digital education. The initial cost is recouped in 18-24 months considering all quantifiable benefits.",
   },
   neurociencia: {
     titulo: "Neuroscience and Effective Learning",

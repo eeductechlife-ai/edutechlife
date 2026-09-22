@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 
 const STEPS = [
   {
@@ -57,7 +57,7 @@ const RutaAprendizaje = memo(({ onTabChange }) => {
     hasGrades,
     onboardingComplete,
     darkMode,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
 
   const hasPlan = false; // Fase 2
 

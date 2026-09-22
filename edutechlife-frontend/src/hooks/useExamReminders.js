@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { supabase } from "../lib/supabase";
 import { useNotification } from "../context/NotificationContext";
-import { useSmartBoardKids } from "../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../context/IngenIAKidsContext";
 
 // Reminder windows (minutes before exam). Order matters: farthest first.
 const REMINDER_WINDOWS = [
@@ -39,10 +39,10 @@ const emojiFor = (win) =>
  *
  * Silences during sleep hours (22:00–07:00) to avoid pinging a child at night.
  *
- * Note: Requires SmartBoardKidsProvider to be present in the component tree.
+ * Note: Requires IngenIAKidsProvider to be present in the component tree.
  */
 export const useExamReminders = () => {
-  const { upcomingExams, reloadTimetable } = useSmartBoardKids();
+  const { upcomingExams, reloadTimetable } = useIngenIAKids();
   const { createNotification } = useNotification();
   const timerRef = useRef(null);
   const checkRef = useRef(null);

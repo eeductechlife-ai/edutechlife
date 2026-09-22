@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, memo } from "react";
 import { motion } from "framer-motion";
 import useFocusTrap from "../../hooks/useFocusTrap";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 
 // ==========================================
@@ -234,7 +234,7 @@ CalendarDay.displayName = "CalendarDay";
 // Main Kids Calendar Component
 // ==========================================
 const KidsCalendar = memo(() => {
-  const { calendarEvents, addCalendarEvent, vakResult } = useSmartBoardKids();
+  const { calendarEvents, addCalendarEvent, vakResult } = useIngenIAKids();
   const { t, locale } = useTranslation();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState(null);

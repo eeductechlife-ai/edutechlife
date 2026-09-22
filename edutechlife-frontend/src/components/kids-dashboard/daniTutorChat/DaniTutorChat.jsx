@@ -21,9 +21,9 @@ import DaniChatHeader from "./components/DaniChatHeader";
 import DaniChatMessages from "./components/DaniChatMessages";
 import CrisisResourcesModal from "../CrisisResourcesModal";
 import useDaniChat from "./useDaniChat";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { track } from "../../../lib/analytics";
-import { SB_COLORS, SB_GRADIENTS, SB_SHADOWS } from "../smartboardTheme";
+import { SB_COLORS, SB_GRADIENTS, SB_SHADOWS } from "../ingenIATheme";
 
 const MOOD_ICONS = {
   feliz: Smile,
@@ -42,7 +42,7 @@ const MOOD_COLORS = {
 
 const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
   const { t } = useTranslation();
-  const { studentAge } = useSmartBoardKids();
+  const { studentAge } = useIngenIAKids();
   const isKid = studentAge && studentAge <= 11;
   const ageGroup =
     studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior";
@@ -168,7 +168,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
       <AnimatePresence mode="wait">
         {isOpen && (
           <>
-            {/* Floating chat widget — no backdrop, SmartBoard stays fully visible */}
+            {/* Floating chat widget — no backdrop, IngenIA stays fully visible */}
             <motion.div
               key="dani-panel"
               initial={{ opacity: 0, y: 20, scale: 0.95 }}

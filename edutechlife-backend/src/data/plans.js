@@ -21,14 +21,14 @@ const PLANS = [
     features: [
       'Todos los cursos IALab',
       'Nico + Valerio ilimitado',
-      'SmartBoard completo',
+      'IngenIA completo',
       'Certificados descargables',
       'Soporte prioritario',
     ],
   },
   {
     id: 'smartboard_premium',
-    name: 'SmartBoard Premium',
+    name: 'IngenIA Premium',
     price: 19900,
     currency: 'usd',
     priceId: process.env.STRIPE_SMARTBOARD_PRICE_ID || 'price_smartboard',

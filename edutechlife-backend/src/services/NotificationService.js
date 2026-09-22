@@ -259,7 +259,7 @@ async function sendEmailNotification(parentId, parentEmail, crisisAlert, student
 
     const result = await sendEmail(
       parentEmail,
-      `Alerta: ${studentName} necesita ayuda en SmartBoard`,
+      `Alerta: ${studentName} necesita ayuda en IngenIA`,
       html,
       `Recibimos una alerta de crisis para ${studentName}. Revisa el dashboard para más detalles.`
     );
@@ -306,7 +306,7 @@ async function sendPushNotification(parentId, studentName, crisisAlert) {
     // Log as sent (stub implementation)
     await logNotification(parentId, crisisAlert.id, 'push', 'sent', {
       stub: true,
-      message: `${studentName} needs help in SmartBoard`
+      message: `${studentName} needs help in IngenIA`
     });
 
     return {
@@ -342,7 +342,7 @@ async function sendSmsNotification(parentId, phoneNumber, studentName, crisisAle
     await logNotification(parentId, crisisAlert.id, 'sms', 'sent', {
       stub: true,
       phone: phoneNumber,
-      message: `${studentName} needs help in SmartBoard`
+      message: `${studentName} needs help in IngenIA`
     });
 
     return {

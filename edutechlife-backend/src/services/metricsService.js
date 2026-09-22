@@ -366,10 +366,10 @@ async function getEngagementMetrics(opts = { days: 30, productType: null }) {
       ialabMAU: Math.round(mau * 0.65),
       ialabCompletion: Math.round(completionRate * 1.04), // IALab slightly higher
 
-      smartboardDAU: Math.round(dau * 0.35), // Estimated 35% SmartBoard traffic
+      smartboardDAU: Math.round(dau * 0.35), // Estimated 35% IngenIA traffic
       smartboardWAU: Math.round(wau * 0.35),
       smartboardMAU: Math.round(mau * 0.35),
-      smartboardCompletion: Math.round(completionRate * 0.95), // SmartBoard slightly lower
+      smartboardCompletion: Math.round(completionRate * 0.95), // IngenIA slightly lower
 
       // Retention cohorts
       retention_day1: retentionDay1,

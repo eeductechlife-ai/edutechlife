@@ -161,7 +161,7 @@ export const PREMIUM_FEATURES = {
 };
 
 /**
- * Feature flags for SmartBoard 3.0 modules.
+ * Feature flags for IngenIA 3.0 modules.
  * `true` = shipped and enabled for all users. `false` = not yet built / dark.
  * Per-session override via localStorage `sb_flag_<name>` (see useFeatureFlag).
  * These will eventually be driven per-user from a Supabase feature_flags table.

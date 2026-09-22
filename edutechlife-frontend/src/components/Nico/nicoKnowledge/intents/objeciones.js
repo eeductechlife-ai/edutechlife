@@ -13,7 +13,7 @@ export const objeciones = [
     ],
     category: "objeciones",
     response:
-      "Entiendo que el presupuesto es importante. Trabajamos en pesos colombianos: SmartBoard para niños y jóvenes desde $30.000/mes (con 7 días de prueba) e IALab desde $99.000/mes. El diagnóstico VAK es gratuito y la primera clase también, para que pruebes antes de decidir. También hay descuentos para hermanos y becas.",
+      "Entiendo que el presupuesto es importante. Trabajamos en pesos colombianos: IngenIA para niños y jóvenes desde $30.000/mes (con 7 días de prueba) e IALab desde $99.000/mes. El diagnóstico VAK es gratuito y la primera clase también, para que pruebes antes de decidir. También hay descuentos para hermanos y becas.",
   },
   {
     id: "objeccion_tiempo",

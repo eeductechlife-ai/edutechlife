@@ -1,7 +1,7 @@
 import { memo, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useSkillPassport } from "../../hooks/useSkillPassport";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 
 const TREND_ICONS = { up: "📈", stable: "➡️", down: "📉" };
 
@@ -96,7 +96,7 @@ function CompetencyRadar({ subjects }) {
  * sorted from strongest to weakest, with level labels and unlocked badges.
  */
 const SkillPassport = memo(() => {
-  const { supabaseQueries } = useSmartBoardKids();
+  const { supabaseQueries } = useIngenIAKids();
   const studentDbId = supabaseQueries?.studentData?.data?.id ?? null;
   const { passport, badges, loading, fetchPassport } = useSkillPassport();
 

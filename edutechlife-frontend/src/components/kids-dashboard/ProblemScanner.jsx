@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { getFileIcon } from "../../utils/documentParser";
 import { generateStudySummary } from "../../services/documentSummaryAI";
@@ -37,7 +37,7 @@ const fmtSize = (b) => {
 
 const ProblemScanner = memo(() => {
   const { t } = useTranslation();
-  const { setDocumentForDani, darkMode: dm } = useSmartBoardKids();
+  const { setDocumentForDani, darkMode: dm } = useIngenIAKids();
   const sbj = getSubjects(t);
   const ages = getAges(t);
   const [mode, setMode] = useState("scan");
@@ -100,10 +100,7 @@ const ProblemScanner = memo(() => {
       setSummary(result);
       setMode("result");
     } catch (e) {
-      setError(
-        e.message ||
-          t("scanner.error_analysis"),
-      );
+      setError(e.message || t("scanner.error_analysis"));
       setMode("scan");
     }
   }, [file, sl, age]);

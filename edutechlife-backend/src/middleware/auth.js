@@ -27,7 +27,7 @@ async function requireAuth(req, res, next) {
 }
 
 /** Etiquetas legibles de cada producto (para mensajes de error). */
-const PRODUCT_LABELS = { ialab: 'IALab', smartboard: 'SmartBoard' };
+const PRODUCT_LABELS = { ialab: 'IALab', smartboard: 'IngenIA' };
 
 /**
  * ¿La cuenta es padre/madre con al menos un hijo vinculado?
@@ -46,7 +46,7 @@ async function hasActiveParentLink(userId) {
 
 /**
  * Guard de producto: impide que una cuenta de un producto consuma la API del
- * otro (IALab 16+ vs SmartBoard 6–16). Son audiencias distintas.
+ * otro (IALab 16+ vs IngenIA 6–16). Son audiencias distintas.
  *
  * Deja pasar:
  *   - admin / content_creator (app_metadata.role)

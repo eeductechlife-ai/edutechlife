@@ -11,7 +11,7 @@ import { API_BASE_URL as API_BASE } from "../../config/api";
  *
  * 1. Valida que exista una sesión Supabase real (token vigente). Si no,
  *    redirige a /login?returnTo=currentPath.
- * 2. Separa productos por `account_type` (IALab 16+ vs SmartBoard 6–16):
+ * 2. Separa productos por `account_type` (IALab 16+ vs IngenIA 6–16):
  *    una cuenta de un producto no debe entrar al dashboard del otro.
  *
  * El gate de producto es FAIL-OPEN por diseño — nunca bloquea a un usuario

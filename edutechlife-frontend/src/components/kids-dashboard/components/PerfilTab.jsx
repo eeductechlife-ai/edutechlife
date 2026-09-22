@@ -1,11 +1,11 @@
 import { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { VAKDiagnosticEnhanced } from "../VAKDiagnosticEnhanced";
 import SmartProfile from "../profile/SmartProfile";
 
 const PerfilTab = memo(function PerfilTab({ onTabChange, handleVakComplete }) {
-  const { vakResult } = useSmartBoardKids();
+  const { vakResult } = useIngenIAKids();
   const [showVakPanel, setShowVakPanel] = useState(false);
 
   const handleExpandVak = () => setShowVakPanel(true);

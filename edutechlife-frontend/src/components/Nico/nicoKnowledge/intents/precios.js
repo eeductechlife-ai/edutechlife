@@ -30,7 +30,7 @@ export const precios = [
     ],
     category: "precios",
     response:
-      "La robótica y la programación hoy hacen parte de la oferta de EdutechLife dentro de IALab (curso de IA para jóvenes y adultos) y SmartBoard (niños y jóvenes). Cuéntanos la edad y el objetivo por WhatsApp y te orientamos con el plan adecuado. Trabajamos en pesos colombianos.",
+      "La robótica y la programación hoy hacen parte de la oferta de EdutechLife dentro de IALab (curso de IA para jóvenes y adultos) y IngenIA (niños y jóvenes). Cuéntanos la edad y el objetivo por WhatsApp y te orientamos con el plan adecuado. Trabajamos en pesos colombianos.",
   },
   {
     id: "precios_tutorias",
@@ -45,7 +45,7 @@ export const precios = [
     ],
     category: "precios",
     response:
-      "El acompañamiento académico se ofrece dentro de nuestros programas (IALab para IA y SmartBoard para niños y jóvenes, con el tutor Dani). El valor depende del plan; escríbenos por WhatsApp +57 323 836 5517 y te enviamos la cotización vigente en pesos colombianos. La primera clase es gratuita.",
+      "El acompañamiento académico se ofrece dentro de nuestros programas (IALab para IA y IngenIA para niños y jóvenes, con el tutor Dani). El valor depende del plan; escríbenos por WhatsApp +57 323 836 5517 y te enviamos la cotización vigente en pesos colombianos. La primera clase es gratuita.",
   },
   {
     id: "precios_bienestar",
@@ -60,7 +60,7 @@ export const precios = [
     ],
     category: "precios",
     response:
-      "El bienestar y el acompañamiento emocional están integrados en SmartBoard (apoyo a niños y jóvenes con detección de señales de alerta). Los planes se publican en pesos colombianos; por WhatsApp te damos el detalle vigente.",
+      "El bienestar y el acompañamiento emocional están integrados en IngenIA (apoyo a niños y jóvenes con detección de señales de alerta). Los planes se publican en pesos colombianos; por WhatsApp te damos el detalle vigente.",
   },
   {
     id: "precios_ingles",
@@ -75,7 +75,7 @@ export const precios = [
     ],
     category: "precios",
     response:
-      "El inglés no se vende por separado hoy; la oferta actual de EdutechLife es IALab (curso de IA), SmartBoard (niños y jóvenes) y el diagnóstico VAK. Para orientarte según lo que buscas, escríbenos por WhatsApp +57 323 836 5517.",
+      "El inglés no se vende por separado hoy; la oferta actual de EdutechLife es IALab (curso de IA), IngenIA (niños y jóvenes) y el diagnóstico VAK. Para orientarte según lo que buscas, escríbenos por WhatsApp +57 323 836 5517.",
   },
   {
     id: "planes_disponibles",
@@ -91,7 +91,7 @@ export const precios = [
     ],
     category: "precios",
     response:
-      "Trabajamos en pesos colombianos (COP). Hoy los planes son: IALab desde $99.000/mes (curso de IA, incluye diagnóstico VAK y certificado); SmartBoard Básico $30.000/mes y Premium $50.000/mes para niños y jóvenes (7 días de prueba); y planes para educadores e instituciones desde $199.000/mes. El diagnóstico VAK es gratuito.",
+      "Trabajamos en pesos colombianos (COP). Hoy los planes son: IALab desde $99.000/mes (curso de IA, incluye diagnóstico VAK y certificado); IngenIA Básico $30.000/mes y Premium $50.000/mes para niños y jóvenes (7 días de prueba); y planes para educadores e instituciones desde $199.000/mes. El diagnóstico VAK es gratuito.",
   },
   {
     id: "descuentos",

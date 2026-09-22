@@ -4,7 +4,7 @@ import {
   loadFromSupabase,
   saveToSupabase,
   setupConnectionListener,
-} from "../smartboardSync";
+} from "../ingenIASync";
 
 /**
  * SmartBoardSync Service Test Suite

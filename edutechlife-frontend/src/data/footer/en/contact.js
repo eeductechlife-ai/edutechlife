@@ -15,7 +15,7 @@ export const helpArticles = [
   },
   {
     id: "tutorial-smartboard",
-    titulo: "SmartBoard Tutorial",
+    titulo: "IngenIA Tutorial",
     descripcion: "Setup and use of interactive whiteboard",
     icono: "fa-chalkboard",
     tiempo: "8 min",
@@ -86,7 +86,7 @@ export const helpArticleContents = {
       {
         titulo: "5. Next Steps",
         contenido:
-          "Once basic setup is complete, we recommend: exploring the VAK diagnostic to personalize your learning, reviewing SmartBoard tutorials if you plan to use interactive whiteboards, checking the automation section to optimize processes.",
+          "Once basic setup is complete, we recommend: exploring the VAK diagnostic to personalize your learning, reviewing IngenIA tutorials if you plan to use interactive whiteboards, checking the automation section to optimize processes.",
       },
     ],
   },
@@ -167,14 +167,14 @@ export const helpArticleContents = {
     ],
   },
   "tutorial-smartboard": {
-    titulo: "SmartBoard Tutorial",
+    titulo: "IngenIA Tutorial",
     introduccion:
-      "SmartBoard is Edutechlife's intelligent interactive whiteboard solution. This guide will help you set up and use all features to maximize your students' engagement.",
+      "IngenIA is Edutechlife's intelligent interactive whiteboard solution. This guide will help you set up and use all features to maximize your students' engagement.",
     secciones: [
       {
         titulo: "Technical Specifications",
         contenido:
-          "Before starting, know your SmartBoard specifications: 4K multi-touch screen, 65-86 inch size, high-precision infrared technology, HDMI, USB-C and WiFi 6 connectivity.",
+          "Before starting, know your IngenIA specifications: 4K multi-touch screen, 65-86 inch size, high-precision infrared technology, HDMI, USB-C and WiFi 6 connectivity.",
         especificacion: [
           { label: "Resolution", valor: "3840 x 2160 (4K)" },
           { label: "Touch", valor: "20 simultaneous points" },
@@ -188,7 +188,7 @@ export const helpArticleContents = {
         contenido:
           "The installation process includes: wall mounting or mobile stand, power and data cable connection, initial screen calibration, pairing with Edutechlife software.",
         pasos: [
-          "Unpack the SmartBoard and verify all components",
+          "Unpack the IngenIA and verify all components",
           "Install the stand following manufacturer instructions",
           "Connect the HDMI cable to the corresponding port",
           "Turn on the device and wait for the system to load",
@@ -198,7 +198,7 @@ export const helpArticleContents = {
       {
         titulo: "Interactive Tools",
         contenido:
-          "SmartBoard includes a complete set of tools: infinite collaborative canvas, handwriting recognition, geometric tools, image editor, session recording.",
+          "IngenIA includes a complete set of tools: infinite collaborative canvas, handwriting recognition, geometric tools, image editor, session recording.",
         grafica: "linea",
         datos: [
           { anio: "2024", engagement: 65 },
@@ -223,7 +223,7 @@ export const helpArticleContents = {
           "Frequent issues and their solutions: Screen not responding - check connections and restart; WiFi connection fails - move router closer or use Ethernet cable; Touch not working - recalibrate from settings.",
         faqs: [
           {
-            q: "Can I use SmartBoard without internet?",
+            q: "Can I use IngenIA without internet?",
             a: "Yes, basic functions work offline",
           },
           {

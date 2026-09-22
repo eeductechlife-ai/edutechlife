@@ -14,7 +14,7 @@ import RoleProtectedRoute from "../components/layout/RoleProtectedRoute";
 import { AdminRoute } from "../components/AdminRoute";
 import { PageLoader, SkeletonLoader } from "../components/LoadingScreen";
 import { useTranslation } from "../i18n/I18nProvider";
-import SmartBoardLoginRedirect from "../components/SmartBoardLoginRedirect";
+import IngenIALoginRedirect from "../components/IngenIALoginRedirect";
 
 // Lazy load para componentes pesados
 const LandingPage = lazy(() => import("../components/pages/LandingPage"));
@@ -23,15 +23,13 @@ const OAuthCallbackHandler = lazy(
   () => import("../components/OAuthCallbackHandler"),
 );
 const ResetPasswordPage = lazy(() => import("../components/ResetPasswordPage"));
-const SmartBoardSignUpPage = lazy(
-  () => import("../components/SmartBoardSignUpPage"),
-);
+const IngenIASignUpPage = lazy(() => import("../components/IngenIASignUpPage"));
 const AILabPage = lazy(() => import("../components/pages/AILabPage"));
-const SmartBoardLandingPage = lazy(
-  () => import("../components/pages/SmartBoardLandingPage"),
+const IngenIALandingPage = lazy(
+  () => import("../components/pages/IngenIALandingPage"),
 );
-const SmartBoardKidsDashboard = lazy(
-  () => import("../components/kids-dashboard/SmartBoardKidsDashboard"),
+const IngenIAKidsDashboard = lazy(
+  () => import("../components/kids-dashboard/IngenIAKidsDashboard"),
 );
 const NotFoundPage = lazy(() => import("../components/pages/NotFoundPage"));
 const AdminPage = lazy(() => import("../components/pages/AdminPage"));
@@ -56,19 +54,19 @@ const VAKDiagnosisPage = lazy(
 const IALabProLandingPage = lazy(
   () => import("../components/pages/IALabProLandingPage"),
 );
-const SmartBoardInfoPage = lazy(
-  () => import("../components/pages/SmartBoardInfoPage"),
+const IngenIAInfoPage = lazy(
+  () => import("../components/pages/IngenIAInfoPage"),
 );
-const SmartBoardParentDashboard = lazy(
-  () => import("../components/pages/smartBoardParentDashboard"),
+const IngenIAParentDashboard = lazy(
+  () => import("../components/pages/ingenIAParentDashboard"),
 );
-const SmartBoardStatsPage = lazy(
-  () => import("../components/pages/SmartBoardStatsPage"),
+const IngenIAStatsPage = lazy(
+  () => import("../components/pages/IngenIAStatsPage"),
 );
-const SmartBoardConsentGate = lazy(
-  () => import("../components/kids-dashboard/SmartBoardConsentGate"),
+const IngenIAConsentGate = lazy(
+  () => import("../components/kids-dashboard/IngenIAConsentGate"),
 );
-const SmartBoardLogin = lazy(() => import("../pages/SmartBoardLogin"));
+const IngenIALogin = lazy(() => import("../pages/IngenIALogin"));
 const AdminLogin = lazy(() => import("../pages/AdminLogin"));
 const AdminDashboard = lazy(() => import("../pages/AdminDashboard"));
 const CourseHome = lazy(() => import("../components/IALab/CourseHome"));
@@ -81,7 +79,7 @@ const CertificateVerificationPage = lazy(
 import SectionErrorBoundary from "../components/IALab/SectionErrorBoundary";
 import IALabSkeleton from "../components/skeletons/IALabSkeleton";
 import { IALabProvider } from "../context/IALabContext";
-import SmartBoardSkeleton from "../components/skeletons/SmartBoardSkeleton";
+import IngenIASkeleton from "../components/skeletons/IngenIASkeleton";
 import VAKSkeleton from "../components/skeletons/VAKSkeleton";
 
 // /sign-up/ialab e /login apuntaban a dos pantallas de login distintas
@@ -98,7 +96,7 @@ const IALabSignUpRedirect = () => {
   );
 };
 
-const SmartBoardSignUpPageWrapper = () => <SmartBoardSignUpPage />;
+const IngenIASignUpPageWrapper = () => <IngenIASignUpPage />;
 
 // Componente para redirección inteligente de registro
 const GenericSignUpRedirect = () => {
@@ -269,9 +267,9 @@ const AppRoutes = () => {
         <Route
           path="conoce-smartboard"
           element={
-            <SectionErrorBoundary name="SmartBoardInfo">
+            <SectionErrorBoundary name="IngenIAInfo">
               <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-                <SmartBoardInfoPage />
+                <IngenIAInfoPage />
               </Suspense>
             </SectionErrorBoundary>
           }
@@ -289,9 +287,9 @@ const AppRoutes = () => {
         <Route
           path="smartboard"
           element={
-            <SectionErrorBoundary name="SmartBoardLanding">
-              <Suspense fallback={<SmartBoardSkeleton />}>
-                <SmartBoardLandingPage />
+            <SectionErrorBoundary name="IngenIALanding">
+              <Suspense fallback={<IngenIASkeleton />}>
+                <IngenIALandingPage />
               </Suspense>
             </SectionErrorBoundary>
           }
@@ -300,23 +298,23 @@ const AppRoutes = () => {
         <Route
           path="smartboard/consent"
           element={
-            <SectionErrorBoundary name="SmartBoardConsentGate">
+            <SectionErrorBoundary name="IngenIAConsentGate">
               <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-                <SmartBoardConsentGate />
+                <IngenIAConsentGate />
               </Suspense>
             </SectionErrorBoundary>
           }
         />
 
-        <Route path="smartboard/login" element={<SmartBoardLoginRedirect />} />
+        <Route path="smartboard/login" element={<IngenIALoginRedirect />} />
 
         <Route
           path="smartboard/padres"
           element={
             <RoleProtectedRoute requiredRole="smartboard">
-              <SectionErrorBoundary name="SmartBoardParentDashboard">
-                <Suspense fallback={<SmartBoardSkeleton />}>
-                  <SmartBoardParentDashboard />
+              <SectionErrorBoundary name="IngenIAParentDashboard">
+                <Suspense fallback={<IngenIASkeleton />}>
+                  <IngenIAParentDashboard />
                 </Suspense>
               </SectionErrorBoundary>
             </RoleProtectedRoute>
@@ -381,9 +379,9 @@ const AppRoutes = () => {
           path="smartboard/estadisticas"
           element={
             <RoleProtectedRoute requiredRole="smartboard">
-              <SectionErrorBoundary name="SmartBoardStats">
-                <Suspense fallback={<SmartBoardSkeleton />}>
-                  <SmartBoardStatsPage />
+              <SectionErrorBoundary name="IngenIAStats">
+                <Suspense fallback={<IngenIASkeleton />}>
+                  <IngenIAStatsPage />
                 </Suspense>
               </SectionErrorBoundary>
             </RoleProtectedRoute>
@@ -395,9 +393,9 @@ const AppRoutes = () => {
         <Route
           path="sign-up/smartboard"
           element={
-            <SectionErrorBoundary name="SmartBoardSignUp">
+            <SectionErrorBoundary name="IngenIASignUp">
               <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-                <SmartBoardSignUpPageWrapper />
+                <IngenIASignUpPageWrapper />
               </Suspense>
             </SectionErrorBoundary>
           }

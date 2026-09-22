@@ -317,12 +317,12 @@ async function generateParentVerificationEmail({ _parentEmail, studentAge, token
 
   // Generate plain text version
   const text = `
-Verifica el acceso de tu hijo a SmartBoard
+Verifica el acceso de tu hijo a IngenIA
 
-Recibimos una solicitud para activar SmartBoard (nuestra plataforma de aprendizaje gamificado) para un estudiante de ${studentAge} años.
+Recibimos una solicitud para activar IngenIA (nuestra plataforma de aprendizaje gamificado) para un estudiante de ${studentAge} años.
 
-¿Qué es SmartBoard?
-SmartBoard es una plataforma interactiva que ayuda a estudiantes entre 8 y 16 años a aprender a través del juego.
+¿Qué es IngenIA?
+IngenIA es una plataforma interactiva que ayuda a estudiantes entre 8 y 16 años a aprender a través del juego.
 
 Verifica tu identidad en el siguiente enlace:
 ${verifyUrl}
@@ -343,7 +343,7 @@ Si no reconoces esta solicitud, simplemente ignora este correo.
   `.trim();
 
   return {
-    subject: 'Verifica el acceso de tu hijo a SmartBoard',
+    subject: 'Verifica el acceso de tu hijo a IngenIA',
     html,
     text,
   };

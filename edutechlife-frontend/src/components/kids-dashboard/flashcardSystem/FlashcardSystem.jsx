@@ -9,7 +9,7 @@ import DeckCard from "./components/DeckCard";
 import DeckEditor from "./components/DeckEditor";
 import ScannerTab from "./components/ScannerTab";
 import MultiplayerMode from "./MultiplayerMode";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useCompetencyTracking } from "../../../hooks/useCompetencyTracking";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { track } from "../../../lib/analytics";
@@ -30,7 +30,7 @@ const PRACTICE_GLOW = "#EF476F";
 const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
   const { t } = useTranslation();
   const { activeStudyDeck, setActiveStudyDeck, setDocumentForDani } =
-    useSmartBoardKids();
+    useIngenIAKids();
   const { trackActivity } = useCompetencyTracking();
 
   const [createTab, setCreateTab] = useState("text"); // "text" | "scan"

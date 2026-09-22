@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { callDeepseekSmartboard } from "../../utils/api";
 import { speakTextConversational, stopSpeech } from "../../utils/speech";
 import { stripEmoji } from "./daniTutorChat/DaniVoiceController";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useCompetencyTracking } from "../../hooks/useCompetencyTracking";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { getSubjects, getDifficulties, dc } from "./oralExamUtils";
@@ -21,7 +21,7 @@ const OralExamSimulator = memo(({ onTabChange }) => {
     addPoints,
     activeStudyDeck,
     studentAge,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
   const { trackActivity } = useCompetencyTracking();
   const { logFeedback } = useFeedbackLog();
 

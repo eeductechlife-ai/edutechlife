@@ -1,16 +1,16 @@
 import { useMemo } from "react";
-import { useSmartBoardKidsSafe } from "../context/SmartBoardKidsContext";
+import { useIngenIAKidsSafe } from "../context/IngenIAKidsContext";
 
 /**
- * Unified SmartBoard 3.0 student profile.
+ * Unified IngenIA 3.0 student profile.
  *
- * Composes data already loaded in SmartBoardKidsContext — no extra DB calls.
- * Safe to call outside SmartBoardKidsProvider (returns { profile: null, isReady: false }).
+ * Composes data already loaded in IngenIAKidsContext — no extra DB calls.
+ * Safe to call outside IngenIAKidsProvider (returns { profile: null, isReady: false }).
  *
  * @returns {{ profile: StudentProfile, isReady: boolean }}
  */
 export function useStudentProfile() {
-  const ctx = useSmartBoardKidsSafe();
+  const ctx = useIngenIAKidsSafe();
 
   const profile = useMemo(() => {
     if (!ctx) return null;

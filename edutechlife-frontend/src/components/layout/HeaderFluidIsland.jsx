@@ -31,7 +31,7 @@ const loginOptions = [
   },
   {
     id: "smartboard",
-    label: "SmartBoard",
+    label: "IngenIA",
     path: "/sign-up/smartboard",
     icon: (
       <svg
@@ -227,7 +227,9 @@ const HeaderFluidIsland = ({ onOpenMobileMenu }) => {
           ) : (
             <div className="relative" ref={mobileLoginDropdownRef}>
               <button
-                onClick={() => setMobileLoginDropdownOpen(!mobileLoginDropdownOpen)}
+                onClick={() =>
+                  setMobileLoginDropdownOpen(!mobileLoginDropdownOpen)
+                }
                 aria-label={t("nav.login")}
                 className="w-11 h-11 flex items-center justify-center rounded-full text-white bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] shadow-md active:scale-[0.9] transition-all duration-300"
               >

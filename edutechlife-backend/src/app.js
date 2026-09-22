@@ -132,14 +132,14 @@ app.use('/api/ialab/templates', requireAuth);
 
 app.use('/api/health', healthRoutes);
 app.use('/api/chat', chatRoutes);
-// Guard de producto: una cuenta de SmartBoard no consume la API de IALab.
+// Guard de producto: una cuenta de IngenIA no consume la API de IALab.
 app.use('/api/ialab', requireProduct('ialab'), ialabRoutes);
 app.use('/api/voice-token', voiceRoutes);
 // /api/tts es público (optionalAuth) para que Nico —el asistente del sitio
 // público— pueda usar voz Google Neural sin sesión. Los limiters + allow-list
 // de idioma en routes/tts.js contienen el costo por IP/usuario.
 app.use('/api/tts', optionalAuth, ttsLimiter, ttsHourlyLimiter, ttsRoutes);
-// Guard de producto: una cuenta de IALab no consume la API de SmartBoard.
+// Guard de producto: una cuenta de IALab no consume la API de IngenIA.
 // /user-role queda exento (ambos productos lo consultan para resolver el rol).
 app.use(
   '/api/smartboard',

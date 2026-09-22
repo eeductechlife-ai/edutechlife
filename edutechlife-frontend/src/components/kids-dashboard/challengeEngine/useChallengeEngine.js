@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from "react";
 import { callDeepseekSmartboard } from "../../../utils/api";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useFeedbackLog } from "../../../hooks/useFeedbackLog";
 import { track } from "../../../lib/analytics";
 
@@ -47,7 +47,7 @@ Las preguntas deben ser apropiadas para la edad, en español, y alineadas con el
 }
 
 export function useChallengeEngine() {
-  const { supabaseQueries, addPoints, studentAge } = useSmartBoardKids();
+  const { supabaseQueries, addPoints, studentAge } = useIngenIAKids();
   const studentGrade = supabaseQueries?.studentData?.data?.grade;
   const { logFeedback } = useFeedbackLog();
 

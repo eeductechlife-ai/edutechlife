@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import {
   GRADE_OPTIONS,
   COUNTRY_OPTIONS,
@@ -23,7 +23,7 @@ const LEVEL_COLORS = {
 
 export default function GradeSelector({ onSave, compact = false }) {
   const { gradeLevel, setGradeLevel, countryCode, setCountryCode, darkMode } =
-    useSmartBoardKids();
+    useIngenIAKids();
 
   const [localGrade, setLocalGrade] = useState(gradeLevel ?? "");
   const [localCountry, setLocalCountry] = useState(countryCode ?? "CO");

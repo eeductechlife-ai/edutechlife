@@ -15,7 +15,7 @@ export const helpArticles = [
   },
   {
     id: "tutorial-smartboard",
-    titulo: "Tutorial SmartBoard",
+    titulo: "Tutorial IngenIA",
     descripcion: "Configuração e uso da lousa interativa",
     icono: "fa-chalkboard",
     tiempo: "8 min",
@@ -86,7 +86,7 @@ export const helpArticleContents = {
       {
         titulo: "5. Próximos passos",
         contenido:
-          "Após completar o início básico, recomendamos: explorar o diagnóstico VAK para personalizar sua aprendizagem, revisar os tutoriais do SmartBoard se você pretende usar lousas interativas e consultar a seção de automação para otimizar processos.",
+          "Após completar o início básico, recomendamos: explorar o diagnóstico VAK para personalizar sua aprendizagem, revisar os tutoriais do IngenIA se você pretende usar lousas interativas e consultar a seção de automação para otimizar processos.",
       },
     ],
   },
@@ -168,14 +168,14 @@ export const helpArticleContents = {
     ],
   },
   "tutorial-smartboard": {
-    titulo: "Tutorial SmartBoard",
+    titulo: "Tutorial IngenIA",
     introduccion:
-      "O SmartBoard é a solução de lousa interativa inteligente da Edutechlife. Este guia ajudará você a configurar e utilizar todas as funções para maximizar o engajamento de seus estudantes.",
+      "O IngenIA é a solução de lousa interativa inteligente da Edutechlife. Este guia ajudará você a configurar e utilizar todas as funções para maximizar o engajamento de seus estudantes.",
     secciones: [
       {
         titulo: "Especificações Técnicas",
         contenido:
-          "Antes de começar, conheça as especificações do seu SmartBoard: tela 4K multitoque, tamanho de 65-86 polegadas, tecnologia infravermelha de alta precisão, conectividade HDMI, USB-C e Wi-Fi 6.",
+          "Antes de começar, conheça as especificações do seu IngenIA: tela 4K multitoque, tamanho de 65-86 polegadas, tecnologia infravermelha de alta precisão, conectividade HDMI, USB-C e Wi-Fi 6.",
         especificacion: [
           { label: "Resolução", valor: "3840 x 2160 (4K)" },
           { label: "Toque", valor: "20 pontos simultâneos" },
@@ -189,7 +189,7 @@ export const helpArticleContents = {
         contenido:
           "O processo de instalação inclui: montagem na parede ou suporte móvel, conexão dos cabos de energia e dados, calibração inicial da tela e emparelhamento com o software Edutechlife.",
         pasos: [
-          "Desembale o SmartBoard e verifique todos os componentes",
+          "Desembale o IngenIA e verifique todos os componentes",
           "Instale o suporte seguindo as instruções do fabricante",
           "Conecte o cabo HDMI à porta correspondente",
           "Ligue o dispositivo e aguarde o carregamento do sistema",
@@ -199,7 +199,7 @@ export const helpArticleContents = {
       {
         titulo: "Ferramentas Interativas",
         contenido:
-          "O SmartBoard inclui um conjunto completo de ferramentas: lousa colaborativa infinita, reconhecimento de escrita à mão, ferramentas geométricas, editor de imagens e gravação de sessões.",
+          "O IngenIA inclui um conjunto completo de ferramentas: lousa colaborativa infinita, reconhecimento de escrita à mão, ferramentas geométricas, editor de imagens e gravação de sessões.",
         grafica: "linea",
         datos: [
           { anio: "2024", engagement: 65 },
@@ -224,7 +224,7 @@ export const helpArticleContents = {
           "Problemas frequentes e suas soluções: a tela não responde — verifique as conexões e reinicie; a conexão Wi-Fi falha — aproxime o roteador ou use cabo Ethernet; o toque não funciona — recalibre nas configurações.",
         faqs: [
           {
-            q: "Posso usar o SmartBoard sem internet?",
+            q: "Posso usar o IngenIA sem internet?",
             a: "Sim, as funções básicas funcionam offline",
           },
           {

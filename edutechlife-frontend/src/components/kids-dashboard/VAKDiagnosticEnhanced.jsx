@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { track } from "../../lib/analytics";
 import { EVENTS } from "../../lib/analyticsEvents";
@@ -134,7 +134,7 @@ const questions = [
 
 const VAKDiagnosticEnhanced = ({ vakResult: propVakResult, onComplete }) => {
   const { t } = useTranslation();
-  const { vakResult: contextVakResult } = useSmartBoardKids();
+  const { vakResult: contextVakResult } = useIngenIAKids();
   const vakResult = propVakResult || contextVakResult;
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);

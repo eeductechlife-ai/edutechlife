@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo } from "react";
-import { SmartBoardKidsContext } from "./SmartBoardKidsContext";
+import { IngenIAKidsContext } from "./IngenIAKidsContext";
 
 const SessionContext = createContext(null);
 
@@ -10,7 +10,7 @@ export const useSessions = () => {
 };
 
 export const SessionProvider = ({ children }) => {
-  const ctx = useContext(SmartBoardKidsContext);
+  const ctx = useContext(IngenIAKidsContext);
   const value = useMemo(
     () => ({
       sessions: ctx?.sessions || [],

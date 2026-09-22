@@ -107,7 +107,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "SmartBoard es un dashboard de acompañamiento académico y emocional para estudiantes de 8 a 16 años. Incluye misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Dani AI.",
+      "IngenIA es un dashboard de acompañamiento académico y emocional para estudiantes de 8 a 16 años. Incluye misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Dani AI.",
   },
   {
     id: "que_es_ai_lab",
@@ -163,7 +163,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "SmartBoard incluye misiones educativas interactivas, seguimiento de progreso en tiempo real, diagnóstico VAK integrado, chat con Dani AI, y reportes para padres. Está diseñado para estudiantes de 8 a 16 años.",
+      "IngenIA incluye misiones educativas interactivas, seguimiento de progreso en tiempo real, diagnóstico VAK integrado, chat con Dani AI, y reportes para padres. Está diseñado para estudiantes de 8 a 16 años.",
   },
   {
     id: "grupales",

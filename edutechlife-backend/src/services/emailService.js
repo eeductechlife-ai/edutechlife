@@ -137,14 +137,14 @@ async function logCrisisIncident(supabase, studentId, studentAge, detectedConten
 async function sendConsentVerificationEmail({ parentEmail, studentAge, token }) {
   const verifyUrl = `https://edutechlife.co/api/smartboard/parental-consent/verify?token=${token}`;
   const html = `
-    <p>Recibimos una solicitud de consentimiento para un estudiante de SmartBoard (edad: ${studentAge}).</p>
+    <p>Recibimos una solicitud de consentimiento para un estudiante de IngenIA (edad: ${studentAge}).</p>
     <p>Para activar la cuenta, verifica tu consentimiento:</p>
     <p><a href="${verifyUrl}">Verificar consentimiento</a></p>
     <p>Este enlace es de un solo uso. Si no reconoces esta solicitud, ignora este correo.</p>
   `;
   return sendEmail(
     parentEmail,
-    'Verifica el consentimiento parental de SmartBoard',
+    'Verifica el consentimiento parental de IngenIA',
     html,
     `Verifica tu consentimiento en: ${verifyUrl}`
   );

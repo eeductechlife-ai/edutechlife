@@ -35,7 +35,7 @@ const SupabaseSignUpForm = ({
   returnTo,
   accountType = "ialab",
   // Cuando el formulario se monta dentro de una pantalla que ya aporta el
-  // layout (WelcomeScreen / SmartBoardSignUpPage) no debe renderizar su propia
+  // layout (WelcomeScreen / IngenIASignUpPage) no debe renderizar su propia
   // página ni la columna de marketing: anidar ambas encogía el formulario a
   // ~500px y partía los textos palabra por línea.
   embedded = false,
@@ -43,21 +43,21 @@ const SupabaseSignUpForm = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const isSmartBoard = accountType === "smartboard";
-  const brandName = isSmartBoard ? "SmartBoard" : "Edutechlife";
-  const brandSubtitle = isSmartBoard
+  const isIngenIA = accountType === "smartboard";
+  const brandName = isIngenIA ? "IngenIA" : "Edutechlife";
+  const brandSubtitle = isIngenIA
     ? t("smartboard.signup_for_students")
     : t("ialab.signup_subtitle");
-  const brandTitle = isSmartBoard
+  const brandTitle = isIngenIA
     ? t("smartboard.signup_welcome")
     : t("ialab.signup_welcome_title");
-  const brandDesc = isSmartBoard
+  const brandDesc = isIngenIA
     ? t("smartboard.signup_signup_desc")
     : t("ialab.signup_welcome_desc");
-  const brandQuote = isSmartBoard
+  const brandQuote = isIngenIA
     ? t("smartboard.signup_quote")
     : t("ialab.signup_welcome_quote");
-  const brandFeatures = isSmartBoard
+  const brandFeatures = isIngenIA
     ? [
         { icon: Zap, text: t("smartboard.signup_feature_missions") },
         { icon: CheckCircle2, text: t("smartboard.signup_feature_community") },
@@ -291,7 +291,7 @@ const SupabaseSignUpForm = ({
       >
         {!embedded && <FloatingParticles />}
 
-        {/* Back Button — el contenedor (WelcomeScreen / SmartBoard) ya ofrece
+        {/* Back Button — el contenedor (WelcomeScreen / IngenIA) ya ofrece
             su propia navegación cuando el formulario va embebido. */}
         {!embedded && (
           <button

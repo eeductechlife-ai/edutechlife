@@ -1,7 +1,7 @@
 import { memo, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronRight, GitBranch, Loader2 } from "lucide-react";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useAdaptiveEngine } from "../../hooks/useAdaptiveEngine";
 import { isFeatureEnabled } from "../../hooks/useFeatureFlag";
 import { getLearningGraphRecommendation } from "./learningGraph";
@@ -155,7 +155,7 @@ const NextBestAction = memo(({ onTabChange }) => {
     subjectsWithGrades,
     missions,
     supabaseQueries,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
   const { nextAction, loading, fetchNextAction } = useAdaptiveEngine();
   const graphActive = isFeatureEnabled("learning_graph");
 

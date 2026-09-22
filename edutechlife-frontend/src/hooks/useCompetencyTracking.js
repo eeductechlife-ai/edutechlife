@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useSmartBoardKids } from "../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../context/IngenIAKidsContext";
 import { track } from "../lib/analytics";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
@@ -28,7 +28,7 @@ async function postMastery(studentId, entries) {
  * @returns {{ trackActivity, getCompetencyIds }}
  */
 export function useCompetencyTracking() {
-  const { gradeLevel, countryCode, supabaseQueries } = useSmartBoardKids();
+  const { gradeLevel, countryCode, supabaseQueries } = useIngenIAKids();
   const studentDbId = supabaseQueries?.studentData?.data?.id ?? null;
 
   /**

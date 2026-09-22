@@ -1,7 +1,7 @@
 /**
  * Test Utilities and Mock Helpers
  *
- * Provides common mocking patterns for SmartBoard tests:
+ * Provides common mocking patterns for IngenIA tests:
  * - Auth mocks
  * - Supabase mocks
  * - API call mocks
@@ -222,9 +222,9 @@ export const parentDashboardFixture = (overrides = {}) => ({
 });
 
 /**
- * Setup helper: Configure all mocks for a SmartBoard test
+ * Setup helper: Configure all mocks for a IngenIA test
  */
-export const setupSmartBoardMocks = () => {
+export const setupIngenIAMocks = () => {
   const mockSupabase = createMockSupabase();
   const mockAuth = mockAuthIdentity();
   const mockFetch = vi.fn();
@@ -270,7 +270,7 @@ export const setupFakeTimers = () => {
  * Create render wrapper with necessary providers
  */
 export const createTestWrapper = (mocks = {}) => {
-  const defaultMocks = setupSmartBoardMocks();
+  const defaultMocks = setupIngenIAMocks();
 
   return {
     ...defaultMocks,

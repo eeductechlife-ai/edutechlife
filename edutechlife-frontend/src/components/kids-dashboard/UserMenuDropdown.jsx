@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Edit3, Loader2, LogOut, BarChart3, Moon, Sun } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { getInitials } from "./userMenuConstants";
-import { SB_GRADIENTS, glow } from "./smartboardTheme";
+import { SB_GRADIENTS, glow } from "./ingenIATheme";
 
 const UserMenuDropdown = ({
   displayName,

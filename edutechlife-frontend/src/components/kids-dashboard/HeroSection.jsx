@@ -14,13 +14,13 @@ import {
   Layers,
   ClipboardCheck,
 } from "lucide-react";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useAdaptiveEngine } from "../../hooks/useAdaptiveEngine";
 import { useKidText } from "../../hooks/useKidText";
 import WhatDoIDoToday from "./WhatDoIDoToday";
 import { useTranslation } from "../../i18n/I18nProvider";
 import DaniAvatar3D from "./DaniAvatar3D";
-import { SB_GRADIENTS, SB_COLORS } from "./smartboardTheme";
+import { SB_GRADIENTS, SB_COLORS } from "./ingenIATheme";
 import {
   DAY_LABELS,
   subjectColor,
@@ -54,7 +54,7 @@ const QUICK_ACTIONS = [
 
 const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
   const { vakResult, timetable, currentClass, nextClass, studentAge } =
-    useSmartBoardKids();
+    useIngenIAKids();
   const { t } = useTranslation();
   const kt = useKidText();
   const reduce = useReducedMotion();

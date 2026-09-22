@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import useFocusTrap from "../../../hooks/useFocusTrap";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { getFileIcon } from "../../../utils/documentParser";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { useActivityUpload } from "./useActivityUpload";
@@ -241,7 +241,7 @@ const ActivityUploader = memo(() => {
     analyzedActivities,
     vakRecommendations,
     vakResult,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
   const { t } = useTranslation();
 
   const {

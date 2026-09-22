@@ -2,7 +2,7 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2, Gem } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import { SB_GRADIENTS, glow } from "../smartboardTheme";
+import { SB_GRADIENTS, glow } from "../ingenIATheme";
 import { track } from "../../../lib/analytics";
 import { EVENTS } from "../../../lib/analyticsEvents";
 

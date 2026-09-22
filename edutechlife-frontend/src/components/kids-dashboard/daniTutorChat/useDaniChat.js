@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useAuthIdentity } from "../../../hooks/useAuthIdentity";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { speakTextConversational, stopSpeech } from "../../../utils/speech";
 import useFocusTrap from "../../../hooks/useFocusTrap";
 import { getVoiceOverrides, primeSpeech } from "./DaniVoiceController";
@@ -44,7 +44,7 @@ export default function useDaniChat({ isOpen, activeTab }) {
     subjects,
     studentAge,
     supabaseQueries,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
   const studentDbId = supabaseQueries?.studentData?.data?.id ?? null;
 
   const [inputText, setInputText] = useState("");

@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthIdentity, signOutUser } from "../../hooks/useAuthIdentity";
-import SmartBoardLoadingSkeleton from "./SmartBoardLoadingSkeleton";
+import IngenIALoadingSkeleton from "./IngenIALoadingSkeleton";
 import { API_BASE_URL as API_BASE } from "../../config/api";
 
 /**
- * Puerta de entrada de SmartBoard.
+ * Puerta de entrada de IngenIA.
  * - Si el backend confirma verification_status === 'verified' → acceso directo.
  * - En cualquier otro caso (error, pendiente, requerido) → pantalla
  *   "Comenzar a trabajar" que inicia sesión y notifica a padres en tiempo real.
@@ -91,7 +91,7 @@ const ParentalConsentBlocker = ({ children }) => {
   if (status === "loading") {
     return (
       <div className="bg-[#F8FAFC] min-h-screen">
-        <SmartBoardLoadingSkeleton darkMode={false} />
+        <IngenIALoadingSkeleton darkMode={false} />
       </div>
     );
   }
@@ -116,7 +116,7 @@ const ParentalConsentBlocker = ({ children }) => {
         <p className="text-sm text-slate-600 leading-relaxed mb-8">
           {isPending
             ? "Le enviamos un mensaje a tus padres. Cuando ellos autoricen, podrás entrar automáticamente."
-            : "Para usar SmartBoard, uno de tus padres debe autorizar tu acceso. Haz clic para enviarles la solicitud."}
+            : "Para usar IngenIA, uno de tus padres debe autorizar tu acceso. Haz clic para enviarles la solicitud."}
         </p>
 
         {isPending ? (

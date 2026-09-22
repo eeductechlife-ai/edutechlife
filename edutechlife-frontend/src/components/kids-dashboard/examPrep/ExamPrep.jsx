@@ -6,12 +6,12 @@ import ExamList from "./components/ExamList";
 import ExamDetail from "./components/ExamDetail";
 import DeckQuiz from "./components/DeckQuiz";
 import { PRACTICE_GRADIENT, PRACTICE_GLOW } from "./examUtils";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useTranslation } from "../../../i18n/I18nProvider";
 
 const ExamPrep = memo(({ onTabChange, dm = false }) => {
   const { t } = useTranslation();
-  const { activeStudyDeck } = useSmartBoardKids();
+  const { activeStudyDeck } = useIngenIAKids();
   const [showDeckQuiz, setShowDeckQuiz] = useState(false);
   const {
     mode,

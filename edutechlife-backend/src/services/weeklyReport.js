@@ -1,6 +1,6 @@
 /**
  * Weekly Parent Report
- * Turns a child's SmartBoard data blob into a parent-facing summary + email.
+ * Turns a child's IngenIA data blob into a parent-facing summary + email.
  * Pure functions (no I/O) so they are easy to test and reuse.
  */
 
@@ -163,12 +163,12 @@ function renderWeeklyEmail(summary, opts = {}) {
   const dashboardUrl = opts.dashboardUrl || "https://edutechlife.co/smartboard";
 
   const subject = summary.hasActivity
-    ? `📚 El progreso de ${name} esta semana en SmartBoard`
-    : `👋 ${name} te espera esta semana en SmartBoard`;
+    ? `📚 El progreso de ${name} esta semana en IngenIA`
+    : `👋 ${name} te espera esta semana en IngenIA`;
 
   const styleLine = summary.predominantStyle
-    ? `Aprende mejor de forma <strong>${summary.predominantStyle}</strong>, y SmartBoard adapta las actividades a ese estilo.`
-    : `Cuando complete su diagnóstico VAK, SmartBoard adaptará las actividades a su forma de aprender.`;
+    ? `Aprende mejor de forma <strong>${summary.predominantStyle}</strong>, y IngenIA adapta las actividades a ese estilo.`
+    : `Cuando complete su diagnóstico VAK, IngenIA adaptará las actividades a su forma de aprender.`;
 
   const subjectsHtml =
     summary.topSubjects.length > 0
@@ -206,7 +206,7 @@ function renderWeeklyEmail(summary, opts = {}) {
   <div style="max-width:560px;margin:0 auto;padding:24px">
     <div style="background:linear-gradient(135deg,#004B63,#4DA8C4);border-radius:16px;padding:24px;color:#fff">
       <h1 style="margin:0;font-size:20px">Resumen semanal de ${escapeHtml(name)}</h1>
-      <p style="margin:8px 0 0;opacity:.9;font-size:14px">Así avanzó esta semana en SmartBoard</p>
+      <p style="margin:8px 0 0;opacity:.9;font-size:14px">Así avanzó esta semana en IngenIA</p>
     </div>
 
     <div style="display:flex;gap:12px;margin:16px 0">
@@ -236,7 +236,7 @@ function renderWeeklyEmail(summary, opts = {}) {
     ${masteryHtml}
 
     <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:16px;margin-bottom:16px;font-size:13px;color:#166534">
-      🛡️ La IA de SmartBoard acompaña a ${escapeHtml(name)} y cuida su bienestar mientras aprende. Si detecta que necesita ayuda, te avisamos.
+      🛡️ La IA de IngenIA acompaña a ${escapeHtml(name)} y cuida su bienestar mientras aprende. Si detecta que necesita ayuda, te avisamos.
     </div>
 
     <div style="text-align:center;margin:24px 0">
@@ -244,7 +244,7 @@ function renderWeeklyEmail(summary, opts = {}) {
     </div>
 
     <p style="text-align:center;font-size:11px;color:#94A3B8;margin-top:24px">
-      EdutechLife · SmartBoard · Aprendizaje personalizado con IA
+      EdutechLife · IngenIA · Aprendizaje personalizado con IA
     </p>
   </div>
 </body>
@@ -262,7 +262,7 @@ function renderWeeklyEmail(summary, opts = {}) {
   }
 
   const text = [
-    `Resumen semanal de ${name} en SmartBoard`,
+    `Resumen semanal de ${name} en IngenIA`,
     ``,
     `Puntos esta semana: ${summary.pointsThisWeek}`,
     `Días activos: ${summary.activeDays}/7`,

@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useImprovementPlan } from "./useImprovementPlan";
 
 const PROGRESS_GRADIENT =
@@ -116,7 +116,7 @@ function WeekCard({ week, weekIdx, onToggle, darkMode }) {
 }
 
 function ImprovementPlan() {
-  const { vakResult, darkMode, gradeLevel } = useSmartBoardKids();
+  const { vakResult, darkMode, gradeLevel } = useIngenIAKids();
   const { plan, isGenerating, error, generatePlan, markActivityDone, hasPlan } =
     useImprovementPlan();
 

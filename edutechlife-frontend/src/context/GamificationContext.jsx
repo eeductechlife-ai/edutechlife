@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo } from "react";
-import { SmartBoardKidsContext } from "./SmartBoardKidsContext";
+import { IngenIAKidsContext } from "./IngenIAKidsContext";
 
 const GamificationContext = createContext(null);
 
@@ -11,7 +11,7 @@ export const useGamification = () => {
 };
 
 export const GamificationProvider = ({ children }) => {
-  const ctx = useContext(SmartBoardKidsContext);
+  const ctx = useContext(IngenIAKidsContext);
   const value = useMemo(
     () => ({
       totalPoints: ctx?.totalPoints || 0,

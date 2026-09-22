@@ -1,4 +1,4 @@
-import { SB_COLORS, SB_SHADOWS, SB_RADII } from "../smartboardTheme";
+import { SB_COLORS, SB_SHADOWS, SB_RADII } from "../ingenIATheme";
 
 const TREND_ICONS = { up: "↑", down: "↓", flat: "→" };
 const TREND_COLORS = {

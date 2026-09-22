@@ -1,6 +1,6 @@
 import { memo, useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSmartBoardKids } from "../../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../../context/IngenIAKidsContext";
 import { useCompetencyTracking } from "../../../../hooks/useCompetencyTracking";
 import { useFeedbackLog } from "../../../../hooks/useFeedbackLog";
 import { useTranslation } from "../../../../i18n/I18nProvider";
@@ -10,7 +10,7 @@ import { EVENTS } from "../../../../lib/analyticsEvents";
 
 const DeckQuiz = memo(({ deck, onFinish, onTabChange }) => {
   const { t } = useTranslation();
-  const { addPoints } = useSmartBoardKids();
+  const { addPoints } = useIngenIAKids();
   const { trackActivity } = useCompetencyTracking();
   const { logFeedback } = useFeedbackLog();
   const [questions, setQuestions] = useState(null);

@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "../i18n/I18nProvider";
-import SmartBoardTilt3D from "./smartboard/SmartBoardTilt3D";
+import IngenIATilt3D from "./smartboard/IngenIATilt3D";
 
 const AutomationROICalculator = ({ onGeneratePlan }) => {
   const { t } = useTranslation();
@@ -78,7 +78,7 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
   );
 
   const MetricCard = ({ label, value, sub, color, icon, delay = 0 }) => (
-    <SmartBoardTilt3D intensity={5}>
+    <IngenIATilt3D intensity={5}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -114,7 +114,7 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
         </div>
         {sub && <div className="text-xs text-slate-400 mt-1">{sub}</div>}
       </motion.div>
-    </SmartBoardTilt3D>
+    </IngenIATilt3D>
   );
 
   return (

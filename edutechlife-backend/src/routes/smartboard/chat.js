@@ -20,7 +20,7 @@ Personalidad:
 - Habla siempre en español
 
 Contexto:
-- EdutechLife es una plataforma educativa colombiana. SmartBoard es su espacio para niños y jóvenes; tú eres la tutora de SmartBoard.
+- EdutechLife es una plataforma educativa colombiana. IngenIA es su espacio para niños y jóvenes; tú eres la tutora de IngenIA.
 - No necesitas explicar toda la empresa; enfócate en ayudar al estudiante a aprender y estudiar.
 
 Reglas importantes:
@@ -176,7 +176,7 @@ router.post('/chat/stream', requireAuth, requireVerifiedParentalConsent, async (
 
 /**
  * POST /api/smartboard/ai
- * General AI endpoint for SmartBoard components (OralExam, Podcast, ImprovementPlan, etc.)
+ * General AI endpoint for IngenIA components (OralExam, Podcast, ImprovementPlan, etc.)
  * Requires auth + verified parental consent. Accepts full messages array like /api/chat.
  */
 router.post('/ai', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
@@ -204,7 +204,7 @@ router.post('/ai', requireAuth, requireVerifiedParentalConsent, async (req, res)
 
     res.json({ result: text });
   } catch (e) {
-    console.error('[SmartBoard AI] Error:', e.message);
+    console.error('[IngenIA AI] Error:', e.message);
     const status = e.status;
     if (status === 402) return res.status(402).json({ error: 'API sin saldo disponible.' });
     if (status === 401) return res.status(401).json({ error: 'API key inválida o expirada.' });

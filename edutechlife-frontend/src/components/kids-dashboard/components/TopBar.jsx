@@ -7,9 +7,9 @@ import {
   CATEGORY_MAP,
   TOP_BAR_LABELS,
 } from "../kidsDashboardConfig";
-import { SB_GRADIENTS, glow } from "../smartboardTheme";
+import { SB_GRADIENTS, glow } from "../ingenIATheme";
 import UserMenu from "../UserMenu";
-import SmartBoardNotificationPanel from "./SmartBoardNotificationPanel";
+import IngenIANotificationPanel from "./IngenIANotificationPanel";
 import { useNotification } from "../../../context/NotificationContext";
 
 const TopBar = memo(
@@ -66,7 +66,7 @@ const TopBar = memo(
               <span
                 className={`block text-base font-black tracking-tight ${darkMode ? "text-white" : "text-[#00303F]"}`}
               >
-                SmartBoard
+                IngenIA
               </span>
             </span>
           </motion.div>
@@ -167,7 +167,7 @@ const TopBar = memo(
             </span>
           </motion.div>
 
-          {/* Notification bell — surfaces SmartBoard domain notifications (§42) */}
+          {/* Notification bell — surfaces IngenIA domain notifications (§42) */}
           <div className="relative">
             <button
               ref={bellRef}
@@ -191,7 +191,7 @@ const TopBar = memo(
                 </span>
               )}
             </button>
-            <SmartBoardNotificationPanel
+            <IngenIANotificationPanel
               isOpen={notifOpen}
               onClose={() => setNotifOpen(false)}
               triggerRef={bellRef}

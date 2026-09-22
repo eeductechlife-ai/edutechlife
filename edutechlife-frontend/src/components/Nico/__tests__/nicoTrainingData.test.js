@@ -15,7 +15,7 @@ describe("Nico training data y prompt (realismo EdutechLife)", () => {
     expect(PROMPT_NICO_SOPORTE).toContain("pesos colombianos");
     expect(PROMPT_NICO_SOPORTE).toContain("dólares");
     expect(PROMPT_NICO_SOPORTE).toContain("IALab");
-    expect(PROMPT_NICO_SOPORTE).toContain("SmartBoard");
+    expect(PROMPT_NICO_SOPORTE).toContain("IngenIA");
     expect(PROMPT_NICO_SOPORTE).toContain("VAK");
     expect(PROMPT_NICO_SOPORTE).toContain("inventes precios");
   });

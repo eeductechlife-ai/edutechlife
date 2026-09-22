@@ -5,7 +5,7 @@ import { getNextStep, MODE_STYLE } from "../adaptiveNextStep";
 /**
  * NextStepCard — shared, actionable "what to do next" card for any activity
  * result. Renders the recovery / practice / transfer step from adaptiveNextStep
- * (§54–57) with a consistent SmartBoard look. Used by OralExam and Flashcards;
+ * (§54–57) with a consistent IngenIA look. Used by OralExam and Flashcards;
  * reusable by any future activity.
  *
  * @param {number} score      0–100 activity grade

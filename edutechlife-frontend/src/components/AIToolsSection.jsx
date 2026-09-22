@@ -369,7 +369,7 @@ function AIToolsSection() {
             </div>
           </motion.div>
 
-          {/* Card 4: SmartBoard (Horizontal) */}
+          {/* Card 4: IngenIA (Horizontal) */}
           <motion.div
             variants={itemVariants}
             onMouseEnter={handleMouseEnterSmartboard}

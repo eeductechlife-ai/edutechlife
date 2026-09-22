@@ -188,7 +188,7 @@ router.get('/parental-consent/verify', async (req, res) => {
         .set('Content-Type', 'text/html; charset=utf-8')
         .send(page(
           'Enlace no válido',
-          'Este enlace de verificación no existe o ya fue utilizado. Solicita uno nuevo desde la SmartBoard.'
+          'Este enlace de verificación no existe o ya fue utilizado. Solicita uno nuevo desde la IngenIA.'
         ));
     }
 
@@ -196,7 +196,7 @@ router.get('/parental-consent/verify', async (req, res) => {
       .set('Content-Type', 'text/html; charset=utf-8')
       .send(page(
         'Consentimiento verificado',
-        'Gracias. El acceso de tu hijo/a a la SmartBoard ha quedado habilitado.'
+        'Gracias. El acceso de tu hijo/a a la IngenIA ha quedado habilitado.'
       ));
   } catch (e) {
     console.error('Error verifying parental consent (GET):', e);

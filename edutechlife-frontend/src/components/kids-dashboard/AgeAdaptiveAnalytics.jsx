@@ -2,7 +2,7 @@
  * AGE-ADAPTIVE SMARTBOARD ANALYTICS
  * =================================
  *
- * Renders SmartBoardAnalytics with visual optimization for three age groups:
+ * Renders IngenIAAnalytics with visual optimization for three age groups:
  * - Primary (6-9): Colorful charts, emoji indicators, large labels
  * - Intermediate (10-13): Balanced charts, moderate colors, clear data
  * - Secondary (14-16): Sophisticated visualizations, professional colors, detailed metrics
@@ -16,7 +16,7 @@ import {
   SIZING_SCALE,
   TYPOGRAPHY_PRESETS,
 } from "../../styles/color-palettes";
-import SmartBoardAnalytics from "./SmartBoardAnalytics";
+import IngenIAAnalytics from "./IngenIAAnalytics";
 
 /**
  * Determine age group from student age
@@ -28,7 +28,7 @@ function getAgeGroup(age) {
 }
 
 /**
- * Age-Adaptive Wrapper for SmartBoardAnalytics
+ * Age-Adaptive Wrapper for IngenIAAnalytics
  */
 const AgeAdaptiveAnalytics = memo(({ studentAge = 10, darkMode = false }) => {
   const ageGroup = useMemo(() => getAgeGroup(studentAge), [studentAge]);
@@ -390,7 +390,7 @@ const AgeAdaptiveAnalytics = memo(({ studentAge = 10, darkMode = false }) => {
         }
       `}</style>
 
-      <SmartBoardAnalytics />
+      <IngenIAAnalytics />
     </div>
   );
 });

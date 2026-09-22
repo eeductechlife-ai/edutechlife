@@ -1,0 +1,928 @@
+- generic [active] [ref=f21e1]:
+  - generic [ref=f21e2]:
+    - generic [ref=f21e3]:
+      - banner [ref=f21e4]:
+        - generic [ref=f21e5]:
+          - button "Open menu" [ref=f21e6] [cursor=pointer]
+          - link [ref=f21e12] [cursor=pointer]:
+            - /url: /
+            - img "Render" [ref=f21e13]
+        - generic [ref=f21e16]:
+          - button [ref=f21e17] [cursor=pointer]:
+            - img "Open search" [ref=f21e18]
+          - button "Account menu" [ref=f21e21] [cursor=pointer]:
+            - generic [ref=f21e22]: e
+      - navigation "Breadcrumbs" [ref=f21e25]:
+        - list [ref=f21e26]:
+          - listitem [ref=f21e27]:
+            - link "Projects" [ref=f21e28] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=f21e37] [cursor=pointer]:
+            - link "edutechlife-backend" [ref=f21e38]:
+              - /url: /web/srv-d6up1qc50q8c7397jvm0
+            - button "Switch Service" [ref=f21e44]
+          - listitem [ref=f21e47] [cursor=pointer]:
+            - generic [ref=f21e48]: Deploys
+            - button "Switch page" [ref=f21e54]
+      - generic [ref=f21e58]:
+        - alert [ref=f21e60]:
+          - generic [ref=f21e68]:
+            - generic [ref=f21e69]:
+              - generic [ref=f21e70]: Payment failed
+              - generic [ref=f21e71]: Update your credit card to avoid losing access to your workspace's services.
+            - link "Update payment" [ref=f21e73] [cursor=pointer]:
+              - /url: /billing#payment-method
+        - generic [ref=f21e74]:
+          - banner [ref=f21e76]:
+            - generic [ref=f21e77]:
+              - generic [ref=f21e78]: Web Service
+              - generic [ref=f21e82]:
+                - heading "edutechlife-backend Node Free Upgrade your instance" [level=1] [ref=f21e84]:
+                  - generic [ref=f21e85]: edutechlife-backend
+                  - generic [ref=f21e86]:
+                    - generic [ref=f21e87]: Node
+                    - link "Free" [ref=f21e88] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/compute
+                    - link [ref=f21e90] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/compute
+                - generic [ref=f21e95]:
+                  - button "Connect" [ref=f21e96] [cursor=pointer]
+                  - button "Manual Deploy" [ref=f21e100] [cursor=pointer]
+            - generic [ref=f21e106]:
+              - generic [ref=f21e108]:
+                - generic [ref=f21e109]: "Service ID:"
+                - generic "Service ID:" [ref=f21e110]:
+                  - generic [ref=f21e111]: srv-d6up1qc50q8c7397jvm0
+                  - button "Copy" [ref=f21e114] [cursor=pointer]
+              - generic [ref=f21e118]:
+                - generic [ref=f21e119]:
+                  - img "GitHub" [ref=f21e121]
+                  - link "eeductechlife-ai / edutechlife main" [ref=f21e123] [cursor=pointer]:
+                    - /url: https://github.com/eeductechlife-ai/edutechlife/tree/main
+                    - generic [ref=f21e124]:
+                      - generic [ref=f21e125]: eeductechlife-ai / edutechlife
+                      - generic [ref=f21e128]: main
+                - generic [ref=f21e129]:
+                  - link "Last successfully deployed commit" [ref=f21e130] [cursor=pointer]:
+                    - /url: https://github.com/eeductechlife-ai/edutechlife/commit/3a4db03d0fb46751efbe6c85f6d89e91d8e52a40
+                    - generic [ref=f21e131]: 3a4db03
+                  - link "Live" [ref=f21e135] [cursor=pointer]:
+                    - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafm7s8ou94c73absuc0
+              - generic "Copy" [ref=f21e140]:
+                - link "https://edutechlife-backend.onrender.com" [ref=f21e142] [cursor=pointer]:
+                  - /url: https://edutechlife-backend.onrender.com
+                - button "Copy" [ref=f21e145] [cursor=pointer]
+          - generic [ref=f21e149]:
+            - link [ref=f21e150] [cursor=pointer]:
+              - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daomvgbm8hqs7381pt5g
+              - heading "Most recent deploy" [level=4] [ref=f21e151]
+            - generic:
+              - generic:
+                - generic:
+                  - term: "Status:"
+                  - definition:
+                    - link "Failed":
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daomvgbm8hqs7381pt5g
+                - generic:
+                  - term: "Commit:"
+                  - definition:
+                    - generic:
+                      - link "3a4db03" [ref=f21e156] [cursor=pointer]:
+                        - /url: https://github.com/eeductechlife-ai/edutechlife/commit/3a4db03d0fb46751efbe6c85f6d89e91d8e52a40
+                      - link "b4058f3" [ref=f21e162] [cursor=pointer]:
+                        - /url: https://github.com/eeductechlife-ai/edutechlife/commit/b4058f3ff2037a18fb756a2f0af4dbfae87824e0
+                - generic:
+                  - term: "Duration:"
+                  - definition:
+                    - time: 50.3s
+                - generic:
+                  - term: "Action:"
+                  - definition
+          - main [ref=f21e167]:
+            - generic [ref=f21e168]:
+              - alert [ref=f21e169]:
+                - generic [ref=f21e177]:
+                  - generic [ref=f21e178]: Your free instance will spin down with inactivity, which can delay requests by 50 seconds or more.
+                  - link "Upgrade now" [ref=f21e181] [cursor=pointer]:
+                    - /url: /web/srv-d6up1qc50q8c7397jvm0/plan
+              - textbox "Search deploys and commits" [ref=f21e184]
+              - generic [ref=f21e188]:
+                - heading "Deploy 30 deploys" [level=6] [ref=f21e189]:
+                  - generic [ref=f21e191]:
+                    - generic [ref=f21e192]: Deploy
+                    - generic "30 deploys" [ref=f21e193]: "30"
+                - list [ref=f21e194]:
+                  - listitem [ref=f21e195]:
+                    - link [ref=f21e199] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daomvgbm8hqs7381pt5g
+                      - img "Deploy failed" [ref=f21e200]
+                    - link [ref=f21e202] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daomvgbm8hqs7381pt5g
+                      - generic [ref=f21e203]:
+                        - term [ref=f21e204]: Deploy
+                        - definition [ref=f21e205]:
+                          - paragraph [ref=f21e206]: "fix(auth): registrar en el curso de forma transaccional y devolver sesion Dos fallos reales del registro (POST /api/auth/signup), reproducidos contra produccion: - Si el INSERT del perfil en public.users falla (p. ej. RLS porque el cliente desplegado no usa service_role), el auth user quedaba huerfano: ese correo ya no se podia registrar ('ya esta registrado') y el estudiante veia un error generico. Ahora se revierte (deleteUser) y se propaga el error para poder reintentar limpio. - Si el perfil ya existia (duplicado), la respuesta se devolvia SIN token, asi que tras registrarse el estudiante quedaba deslogueado. Ahora se inicia sesion igualmente y se devuelve token + refreshToken. Ademas el username de respuesta ya no depende de profileData (null en el caso duplicado). Verificado E2E con backend local: 201 + token, fila guardada en Supabase y login/course OK."
+                        - term [ref=f21e207]: Trigger
+                        - definition [ref=f21e208]: Auto-Deploy
+                        - term [ref=f21e209]: Duration
+                        - definition [ref=f21e210]:
+                          - time [ref=f21e212]: 50.3s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "b4058f3" [ref=f21e213] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/b4058f3ff2037a18fb756a2f0af4dbfae87824e0
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e215]:
+                              - time [ref=f21e216]: 8min ago
+                  - listitem [ref=f21e218]:
+                    - link [ref=f21e222] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dag4p33ncjis738ndrj0
+                      - img "Deploy failed" [ref=f21e223]
+                    - link [ref=f21e225] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dag4p33ncjis738ndrj0
+                      - generic [ref=f21e226]:
+                        - term [ref=f21e227]: Deploy
+                        - definition [ref=f21e228]:
+                          - paragraph [ref=f21e229]: 9septiembre
+                        - term [ref=f21e230]: Trigger
+                        - definition [ref=f21e231]: Auto-Deploy
+                        - term [ref=f21e232]: Duration
+                        - definition [ref=f21e233]:
+                          - time [ref=f21e235]: 50.3s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "9fc3247" [ref=f21e236] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/9fc3247237db70eb1f20f77705117dbef9bd2ee7
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e238]:
+                              - time [ref=f21e239]: 13d ago
+                  - listitem [ref=f21e241]:
+                    - link [ref=f21e245] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dag4lve7bikc73anfek0
+                      - img "Deploy failed" [ref=f21e246]
+                    - link [ref=f21e248] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dag4lve7bikc73anfek0
+                      - generic [ref=f21e249]:
+                        - term [ref=f21e250]: Deploy
+                        - definition [ref=f21e251]:
+                          - paragraph [ref=f21e252]: "fix(ci): eliminar vercel CLI del backend — deploy va a Render, no Vercel; resuelve npm audit high/critical en CI"
+                        - term [ref=f21e253]: Trigger
+                        - definition [ref=f21e254]: Auto-Deploy
+                        - term [ref=f21e255]: Duration
+                        - definition [ref=f21e256]:
+                          - time [ref=f21e258]: 53.4s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "4e75008" [ref=f21e259] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/4e750084e3976a4b01a4535cf0e77a3a980d51aa
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e261]:
+                              - time [ref=f21e262]: 13d ago
+                  - listitem [ref=f21e264]:
+                    - link [ref=f21e268] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dag4i1jncjis738n3v0g
+                      - img "Deploy failed" [ref=f21e269]
+                    - link [ref=f21e271] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dag4i1jncjis738n3v0g
+                      - generic [ref=f21e272]:
+                        - term [ref=f21e273]: Deploy
+                        - definition [ref=f21e274]:
+                          - paragraph [ref=f21e275]: "feat(ux): mejoras IALab — UX audit fases 1-3 + encabezado - DailyPlan: contador de pasos, etiquetas de urgencia, XP bug fix (xpReward??xp), barra de progreso del curso, animación escalonada - ValerioFloatingButton: burbuja visible móvil, mensaje contextual primer-visita vs retorno - SidebarCollapsed: etiqueta \"Avance\" bajo ícono de progreso; tooltip del círculo muestra siguiente acción (completar contenido / examen / módulo aprobado) - Celebración #7: confetti pequeño + toast al completar todos los recursos del módulo - Encabezado: ícono fa-flask-vial → fa-brain (comunicación de IA más clara) - Módulos data: M1 fa-terminal→fa-wand-magic-sparkles, M4 fa-microphone→fa-flask, M5 fa-trophy→fa-shield-halved - NotificationContext: pruneLocalNotifications (limpia locales leídas >30 días), cap 30 items - i18n es/en/pt: claves daily_plan, urgency, sidebar_progress_short, content_completed_toast, next_step_* - IALab breadcrumb: título de lección solo en tabs específicas, no en vista Todo - Quiz data: refactor preguntas módulos 1-5 (es/en/pt) - Backend: telemetría, rutas auth, admin"
+                        - term [ref=f21e276]: Trigger
+                        - definition [ref=f21e277]: Auto-Deploy
+                        - term [ref=f21e278]: Duration
+                        - definition [ref=f21e279]:
+                          - time [ref=f21e281]: 1m03s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "5508157" [ref=f21e282] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/5508157fc518d2caa226551a137d6a5d4a8884aa
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e284]:
+                              - time [ref=f21e285]: 13d ago
+                  - listitem [ref=f21e287]:
+                    - link [ref=f21e291] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafml2gou94c73ac5cag
+                      - img "Deploy failed" [ref=f21e292]
+                    - link [ref=f21e294] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafml2gou94c73ac5cag
+                      - generic [ref=f21e295]:
+                        - term [ref=f21e296]: Deploy
+                        - definition [ref=f21e297]:
+                          - paragraph [ref=f21e298]: "feat(analytics): Fase 4.3 Valeria Analytics — SmartBoard real data Backend: - GET /api/admin/analytics/smartboard (new endpoint) - Aggregates sessions + academic_context + crisis_alerts + learning_streaks + student_achievements - Returns: overview KPIs, subjectPerformance, dailySessions, streakDistribution, achievementRate - Configurable rolling window via ?days=N (7–90, default 30) - Parallel Promise.all() queries for performance Frontend: - useAdminAnalytics hook — React Query, 5min stale, 2 retries - SmartBoardMetrics rewritten to use real Fase 3 data (replaces PostHog/demo-only) - 4 overview KPIs: totalSessions, activeLast7Days, avgSessionMinutes, atRiskCount - Subject performance cards with progress bars (colored by score: green/yellow/red) - Daily sessions bar chart (last 30 days) - Streak distribution (noStreak/short/medium/long) - Achievement rate panel (total, unique students, avg per active) - AdminHeader: added SmartBoard tab (3rd tab) - AdminDashboard: renders SmartBoardMetrics on smartboard tab Data flows from Fase 3 tables: - sessions → totalSessions, dailySessions, activeLast7Days, avgSessionMinutes - academic_context → subjectPerformance (avgScore + performanceLevels) - crisis_alerts (unresolved) → atRiskCount - learning_streaks → streakDistribution - student_achievements → achievementRate Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+                        - term [ref=f21e299]: Trigger
+                        - definition [ref=f21e300]: Deploy Hook
+                        - term [ref=f21e301]: Duration
+                        - definition [ref=f21e302]:
+                          - time [ref=f21e304]: 47.2s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "59c92c0" [ref=f21e305] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/59c92c0bc9959b0645f9ec3f9d640d7d230a0100
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e307]:
+                              - time [ref=f21e308]: 13d ago
+                  - listitem [ref=f21e310]:
+                    - link [ref=f21e314] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafmkt49v7es73c8vl7g
+                      - img "Deploy failed" [ref=f21e315]
+                    - link [ref=f21e317] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafmkt49v7es73c8vl7g
+                      - generic [ref=f21e318]:
+                        - term [ref=f21e319]: Deploy
+                        - definition [ref=f21e320]:
+                          - paragraph [ref=f21e321]: "feat(analytics): Fase 4.3 Valeria Analytics — SmartBoard real data Backend: - GET /api/admin/analytics/smartboard (new endpoint) - Aggregates sessions + academic_context + crisis_alerts + learning_streaks + student_achievements - Returns: overview KPIs, subjectPerformance, dailySessions, streakDistribution, achievementRate - Configurable rolling window via ?days=N (7–90, default 30) - Parallel Promise.all() queries for performance Frontend: - useAdminAnalytics hook — React Query, 5min stale, 2 retries - SmartBoardMetrics rewritten to use real Fase 3 data (replaces PostHog/demo-only) - 4 overview KPIs: totalSessions, activeLast7Days, avgSessionMinutes, atRiskCount - Subject performance cards with progress bars (colored by score: green/yellow/red) - Daily sessions bar chart (last 30 days) - Streak distribution (noStreak/short/medium/long) - Achievement rate panel (total, unique students, avg per active) - AdminHeader: added SmartBoard tab (3rd tab) - AdminDashboard: renders SmartBoardMetrics on smartboard tab Data flows from Fase 3 tables: - sessions → totalSessions, dailySessions, activeLast7Days, avgSessionMinutes - academic_context → subjectPerformance (avgScore + performanceLevels) - crisis_alerts (unresolved) → atRiskCount - learning_streaks → streakDistribution - student_achievements → achievementRate Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+                        - term [ref=f21e322]: Trigger
+                        - definition [ref=f21e323]: Auto-Deploy
+                        - term [ref=f21e324]: Duration
+                        - definition [ref=f21e325]:
+                          - time [ref=f21e327]: 44.6s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "59c92c0" [ref=f21e328] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/59c92c0bc9959b0645f9ec3f9d640d7d230a0100
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e330]:
+                              - time [ref=f21e331]: 13d ago
+                  - listitem [ref=f21e333]:
+                    - link [ref=f21e337] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafmgdoenrgs73eg01ig
+                      - img "Deploy failed" [ref=f21e338]
+                    - link [ref=f21e340] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafmgdoenrgs73eg01ig
+                      - generic [ref=f21e341]:
+                        - term [ref=f21e342]: Deploy
+                        - definition [ref=f21e343]:
+                          - paragraph [ref=f21e344]: "fix(4.1+4.2): 4 gaps closing 100% functional verification Fase 4.1 fixes: - AlertListenerService: start at boot in app.js (was never running) - Crisis alerts were being saved to DB but realtime listener never fired - Now initializes on app load with exponential backoff retry - NotificationPreferences + NotificationHistory wired into ParentDashboard - Added 3-tab nav: Resumen / Historial de Alertas / Preferencias - Components were built but completely orphaned (not rendered anywhere) - NotificationService.test.js: rewritten to test real exported API - Previous test assumed class-based API (NotificationService is functions) - Fixed import path (lib/supabase → actual module's own createClient) - 35/35 tests passing Fase 4.2 fixes: - EducatorDashboard: Top 3 and Needs Attention sections now use real data - Was: hardcoded [Emma Sánchez, Juan Martínez, María García] - Now: derived from useEducatorDashboard() students array, sorted by progress Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+                        - term [ref=f21e345]: Trigger
+                        - definition [ref=f21e346]: Deploy Hook
+                        - term [ref=f21e347]: Duration
+                        - definition [ref=f21e348]:
+                          - time [ref=f21e350]: 44.8s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "4ec2a66" [ref=f21e351] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/4ec2a669959e06f2708a2bcf6458c09e167be3b8
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e353]:
+                              - time [ref=f21e354]: 13d ago
+                  - listitem [ref=f21e356]:
+                    - link [ref=f21e360] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafmg8favr4c73ca7q00
+                      - img "Deploy failed" [ref=f21e361]
+                    - link [ref=f21e363] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafmg8favr4c73ca7q00
+                      - generic [ref=f21e364]:
+                        - term [ref=f21e365]: Deploy
+                        - definition [ref=f21e366]:
+                          - paragraph [ref=f21e367]: "fix(4.1+4.2): 4 gaps closing 100% functional verification Fase 4.1 fixes: - AlertListenerService: start at boot in app.js (was never running) - Crisis alerts were being saved to DB but realtime listener never fired - Now initializes on app load with exponential backoff retry - NotificationPreferences + NotificationHistory wired into ParentDashboard - Added 3-tab nav: Resumen / Historial de Alertas / Preferencias - Components were built but completely orphaned (not rendered anywhere) - NotificationService.test.js: rewritten to test real exported API - Previous test assumed class-based API (NotificationService is functions) - Fixed import path (lib/supabase → actual module's own createClient) - 35/35 tests passing Fase 4.2 fixes: - EducatorDashboard: Top 3 and Needs Attention sections now use real data - Was: hardcoded [Emma Sánchez, Juan Martínez, María García] - Now: derived from useEducatorDashboard() students array, sorted by progress Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+                        - term [ref=f21e368]: Trigger
+                        - definition [ref=f21e369]: Auto-Deploy
+                        - term [ref=f21e370]: Duration
+                        - definition [ref=f21e371]:
+                          - time [ref=f21e373]: 48.1s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "4ec2a66" [ref=f21e374] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/4ec2a669959e06f2708a2bcf6458c09e167be3b8
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e376]:
+                              - time [ref=f21e377]: 13d ago
+                  - listitem [ref=f21e379]:
+                    - link [ref=f21e383] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafm7s8ou94c73absuc0
+                      - img "Live" [ref=f21e384]
+                    - link [ref=f21e386] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafm7s8ou94c73absuc0
+                      - generic [ref=f21e387]:
+                        - term [ref=f21e388]: Deploy
+                        - definition [ref=f21e389]:
+                          - paragraph [ref=f21e390]: "feat(educator): Fase 4.2 Teacher Dashboard connected to real data Backend: - GET /api/admin/educator/students — per-student engagement metrics - Joins sessions + academic_context + learning_streaks + crisis_alerts - Returns: progress %, streak, totalSessions, totalMinutes, subjectBreakdown - needsAttention flag: unresolved crisis OR progress < 50% - Class-level summary: activeStudents, averageProgress, needingAttention Frontend: - useEducatorDashboard hook — React Query, 60s stale, 2 retries - EducatorDashboard wired to real data (replaced 6 hardcoded mock students) - Loading skeleton + error state + retry button added Data sources (Fase 3 tables): - sessions → totalSessions, lastActive, totalMinutes - academic_context → progress %, subjectBreakdown, performance_level - learning_streaks → current streak - crisis_alerts → at-risk flag + crisis_level Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+                        - term [ref=f21e391]: Trigger
+                        - definition [ref=f21e392]: Deploy Hook
+                        - term [ref=f21e393]: Duration
+                        - definition [ref=f21e394]:
+                          - time [ref=f21e396]: 57.4s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "3a4db03" [ref=f21e397] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/3a4db03d0fb46751efbe6c85f6d89e91d8e52a40
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e399]:
+                              - time [ref=f21e400]: 13d ago
+                  - listitem [ref=f21e402]:
+                    - link [ref=f21e406] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafm7l7avr4c73ca1gu0
+                      - img "Deploy succeeded" [ref=f21e407]
+                    - link [ref=f21e410] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafm7l7avr4c73ca1gu0
+                      - generic [ref=f21e411]:
+                        - term [ref=f21e412]: Deploy
+                        - definition [ref=f21e413]:
+                          - paragraph [ref=f21e414]: "feat(educator): Fase 4.2 Teacher Dashboard connected to real data Backend: - GET /api/admin/educator/students — per-student engagement metrics - Joins sessions + academic_context + learning_streaks + crisis_alerts - Returns: progress %, streak, totalSessions, totalMinutes, subjectBreakdown - needsAttention flag: unresolved crisis OR progress < 50% - Class-level summary: activeStudents, averageProgress, needingAttention Frontend: - useEducatorDashboard hook — React Query, 60s stale, 2 retries - EducatorDashboard wired to real data (replaced 6 hardcoded mock students) - Loading skeleton + error state + retry button added Data sources (Fase 3 tables): - sessions → totalSessions, lastActive, totalMinutes - academic_context → progress %, subjectBreakdown, performance_level - learning_streaks → current streak - crisis_alerts → at-risk flag + crisis_level Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+                        - term [ref=f21e415]: Trigger
+                        - definition [ref=f21e416]: Auto-Deploy
+                        - term [ref=f21e417]: Duration
+                        - definition [ref=f21e418]:
+                          - time [ref=f21e420]: 47.0s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "3a4db03" [ref=f21e421] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/3a4db03d0fb46751efbe6c85f6d89e91d8e52a40
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e423]:
+                              - time [ref=f21e424]: 13d ago
+                    - button [disabled] [ref=f21e426]
+                  - listitem [ref=f21e430]:
+                    - link [ref=f21e434] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daflvk8ejobc73aikv10
+                      - img "Deploy succeeded" [ref=f21e435]
+                    - link [ref=f21e438] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daflvk8ejobc73aikv10
+                      - generic [ref=f21e439]:
+                        - term [ref=f21e440]: Deploy
+                        - definition [ref=f21e441]:
+                          - paragraph [ref=f21e442]: 7sept
+                        - term [ref=f21e443]: Trigger
+                        - definition [ref=f21e444]: Deploy Hook
+                        - term [ref=f21e445]: Duration
+                        - definition [ref=f21e446]:
+                          - time [ref=f21e448]: 48.8s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "ea23e54" [ref=f21e449] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/ea23e5461ff8b4203746ca55ce4a19e80a3b819e
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e451]:
+                              - time [ref=f21e452]: 13d ago
+                    - button [disabled] [ref=f21e454]
+                  - listitem [ref=f21e458]:
+                    - link [ref=f21e462] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daflvc79l3cc73cafh5g
+                      - img "Deploy succeeded" [ref=f21e463]
+                    - link [ref=f21e466] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daflvc79l3cc73cafh5g
+                      - generic [ref=f21e467]:
+                        - term [ref=f21e468]: Deploy
+                        - definition [ref=f21e469]:
+                          - paragraph [ref=f21e470]: 7sept
+                        - term [ref=f21e471]: Trigger
+                        - definition [ref=f21e472]: Auto-Deploy
+                        - term [ref=f21e473]: Duration
+                        - definition [ref=f21e474]:
+                          - time [ref=f21e476]: 46.7s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "ea23e54" [ref=f21e477] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/ea23e5461ff8b4203746ca55ce4a19e80a3b819e
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e479]:
+                              - time [ref=f21e480]: 13d ago
+                    - button [disabled] [ref=f21e482]
+                  - listitem [ref=f21e486]:
+                    - link [ref=f21e490] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daflus8ejobc73aiki90
+                      - img "Deploy failed" [ref=f21e491]
+                    - link [ref=f21e493] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daflus8ejobc73aiki90
+                      - generic [ref=f21e494]:
+                        - term [ref=f21e495]: Deploy
+                        - definition [ref=f21e496]:
+                          - paragraph [ref=f21e497]: "feat(notifications): Fase 4.1 parent notification system (Fase 4.1 complete) Database: - Migration 074: parent_preferences, notification_logs, parents tables - RLS policies on all tables (parents read own data only) - parent_contact_info view for simplified queries - Performance indexes on (parent_id, sent_at) Backend: - NotificationService.js — sendCrisisAlert, getPreferences, logNotification - AlertListenerService.js — Supabase realtime listener, auto-trigger on INSERT - notifications.js route — POST send-crisis-alert, GET history, GET/POST preferences - crisis-alert-email.html — responsive branded email template Frontend: - NotificationPreferences.jsx — toggles email/push/sms, frequency selector - NotificationHistory.jsx — table with pagination, status badges - NotificationPreferences.module.css + NotificationHistory.module.css Tests: - NotificationService.test.js (25 tests: send, preferences, email, RLS) - notifications.test.js (20 tests: API endpoints, auth, validation) - NotificationPreferences.test.jsx (15 tests: render, toggle, save) Status: Production-ready. Awaiting reviewer sign-off. Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+                        - term [ref=f21e498]: Trigger
+                        - definition [ref=f21e499]: Deploy Hook
+                        - term [ref=f21e500]: Duration
+                        - definition [ref=f21e501]:
+                          - time [ref=f21e503]: 47.9s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "d15f59a" [ref=f21e504] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/d15f59ad7582ecec9ae6cdb3412acdecfaf3475d
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e506]:
+                              - time [ref=f21e507]: 13d ago
+                    - button [disabled] [ref=f21e509]
+                  - listitem [ref=f21e513]:
+                    - link [ref=f21e517] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daflunnavr4c73c9orr0
+                      - img "Deploy failed" [ref=f21e518]
+                    - link [ref=f21e520] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daflunnavr4c73c9orr0
+                      - generic [ref=f21e521]:
+                        - term [ref=f21e522]: Deploy
+                        - definition [ref=f21e523]:
+                          - paragraph [ref=f21e524]: "feat(notifications): Fase 4.1 parent notification system (Fase 4.1 complete) Database: - Migration 074: parent_preferences, notification_logs, parents tables - RLS policies on all tables (parents read own data only) - parent_contact_info view for simplified queries - Performance indexes on (parent_id, sent_at) Backend: - NotificationService.js — sendCrisisAlert, getPreferences, logNotification - AlertListenerService.js — Supabase realtime listener, auto-trigger on INSERT - notifications.js route — POST send-crisis-alert, GET history, GET/POST preferences - crisis-alert-email.html — responsive branded email template Frontend: - NotificationPreferences.jsx — toggles email/push/sms, frequency selector - NotificationHistory.jsx — table with pagination, status badges - NotificationPreferences.module.css + NotificationHistory.module.css Tests: - NotificationService.test.js (25 tests: send, preferences, email, RLS) - notifications.test.js (20 tests: API endpoints, auth, validation) - NotificationPreferences.test.jsx (15 tests: render, toggle, save) Status: Production-ready. Awaiting reviewer sign-off. Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
+                        - term [ref=f21e525]: Trigger
+                        - definition [ref=f21e526]: Auto-Deploy
+                        - term [ref=f21e527]: Duration
+                        - definition [ref=f21e528]:
+                          - time [ref=f21e530]: 52.0s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "d15f59a" [ref=f21e531] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/d15f59ad7582ecec9ae6cdb3412acdecfaf3475d
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e533]:
+                              - time [ref=f21e534]: 13d ago
+                    - button [disabled] [ref=f21e536]
+                  - listitem [ref=f21e540]:
+                    - link [ref=f21e544] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dae0lm79r02s73e8uodg
+                      - img "Deploy succeeded" [ref=f21e545]
+                    - link [ref=f21e548] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dae0lm79r02s73e8uodg
+                      - generic [ref=f21e549]:
+                        - term [ref=f21e550]: Deploy
+                        - definition [ref=f21e551]:
+                          - paragraph [ref=f21e552]: "fix(test): cleanup ESLint warnings in Fase 3 test suite - Remove unused imports (afterEach, render, screen, waitFor, act) - Remove console.log statements (keep only warn/error) - Remove unused TestWrapper component - Remove unused variable assignments - Rename unused parameter to _err All 28 tests still passing, production-ready. Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>"
+                        - term [ref=f21e553]: Trigger
+                        - definition [ref=f21e554]: Deploy Hook
+                        - term [ref=f21e555]: Duration
+                        - definition [ref=f21e556]:
+                          - time [ref=f21e558]: 47.6s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "16031de" [ref=f21e559] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/16031def5dc3e72c66b41cf913ff04411f168f7f
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e561]:
+                              - time [ref=f21e562]: 16d ago
+                    - button [disabled] [ref=f21e564]
+                  - listitem [ref=f21e568]:
+                    - link [ref=f21e572] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dae0lg3m8hqs73cm5or0
+                      - img "Deploy succeeded" [ref=f21e573]
+                    - link [ref=f21e576] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dae0lg3m8hqs73cm5or0
+                      - generic [ref=f21e577]:
+                        - term [ref=f21e578]: Deploy
+                        - definition [ref=f21e579]:
+                          - paragraph [ref=f21e580]: "fix(test): cleanup ESLint warnings in Fase 3 test suite - Remove unused imports (afterEach, render, screen, waitFor, act) - Remove console.log statements (keep only warn/error) - Remove unused TestWrapper component - Remove unused variable assignments - Rename unused parameter to _err All 28 tests still passing, production-ready. Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>"
+                        - term [ref=f21e581]: Trigger
+                        - definition [ref=f21e582]: Auto-Deploy
+                        - term [ref=f21e583]: Duration
+                        - definition [ref=f21e584]:
+                          - time [ref=f21e586]: 47.2s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "16031de" [ref=f21e587] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/16031def5dc3e72c66b41cf913ff04411f168f7f
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e589]:
+                              - time [ref=f21e590]: 16d ago
+                    - button [disabled] [ref=f21e592]
+                  - listitem [ref=f21e596]:
+                    - link [ref=f21e600] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dadnvl0u01pc73bkjde0
+                      - img "Deploy succeeded" [ref=f21e601]
+                    - link [ref=f21e604] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dadnvl0u01pc73bkjde0
+                      - generic [ref=f21e605]:
+                        - term [ref=f21e606]: Deploy
+                        - definition [ref=f21e607]:
+                          - paragraph [ref=f21e608]: "feat(phase-2): complete #12 SQL schema consolidation - Track 062_fix_admin_rls.sql (was untracked) - Add 068: avatars storage bucket with RLS policies - Add 070: prompt_templates table (from sql/ standalone → numbered migration) - Add 072: metrics tables (user_sessions, lesson_attempts, feature_usage, parent_dashboard_views) - All migrations are idempotent (IF NOT EXISTS / DO blocks)"
+                        - term [ref=f21e609]: Trigger
+                        - definition [ref=f21e610]: Deploy Hook
+                        - term [ref=f21e611]: Duration
+                        - definition [ref=f21e612]:
+                          - time [ref=f21e614]: 48.8s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "5b3de4a" [ref=f21e615] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/5b3de4a3e55a5bf9487afba66e857f265bbd39b3
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e617]:
+                              - time [ref=f21e618]: 16d ago
+                    - button [disabled] [ref=f21e620]
+                  - listitem [ref=f21e624]:
+                    - link [ref=f21e628] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dadntpgou94c738u0np0
+                      - img "Deploy succeeded" [ref=f21e629]
+                    - link [ref=f21e632] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dadntpgou94c738u0np0
+                      - generic [ref=f21e633]:
+                        - term [ref=f21e634]: Deploy
+                        - definition [ref=f21e635]:
+                          - paragraph [ref=f21e636]: "test(admin): add admin routes test suite — 8/8 passing"
+                        - term [ref=f21e637]: Trigger
+                        - definition [ref=f21e638]: Deploy Hook
+                        - term [ref=f21e639]: Duration
+                        - definition [ref=f21e640]:
+                          - time [ref=f21e642]: 48.5s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "d230b8a" [ref=f21e643] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/d230b8a110a218e8d9953e649b9bbe3727417e36
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e645]:
+                              - time [ref=f21e646]: 16d ago
+                    - button [disabled] [ref=f21e648]
+                  - listitem [ref=f21e652]:
+                    - link [ref=f21e656] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dadntkh42hec73bojqc0
+                      - img "Deploy succeeded" [ref=f21e657]
+                    - link [ref=f21e660] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dadntkh42hec73bojqc0
+                      - generic [ref=f21e661]:
+                        - term [ref=f21e662]: Deploy
+                        - definition [ref=f21e663]:
+                          - paragraph [ref=f21e664]: "test(admin): add admin routes test suite — 8/8 passing"
+                        - term [ref=f21e665]: Trigger
+                        - definition [ref=f21e666]: Auto-Deploy
+                        - term [ref=f21e667]: Duration
+                        - definition [ref=f21e668]:
+                          - time [ref=f21e670]: 1m18s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "d230b8a" [ref=f21e671] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/d230b8a110a218e8d9953e649b9bbe3727417e36
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e673]:
+                              - time [ref=f21e674]: 16d ago
+                    - button [disabled] [ref=f21e676]
+                  - listitem [ref=f21e680]:
+                    - link [ref=f21e684] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dadm723rl08c73cnchn0
+                      - img "Deploy succeeded" [ref=f21e685]
+                    - link [ref=f21e688] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dadm723rl08c73cnchn0
+                      - generic [ref=f21e689]:
+                        - term [ref=f21e690]: Deploy
+                        - definition [ref=f21e691]:
+                          - paragraph [ref=f21e692]: "merge: integrate remote SmartBoard 3.0 squash — keep recovery/CI fixes (ours)"
+                        - term [ref=f21e693]: Trigger
+                        - definition [ref=f21e694]: Deploy Hook
+                        - term [ref=f21e695]: Duration
+                        - definition [ref=f21e696]:
+                          - time [ref=f21e698]: 55.3s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "0d685c2" [ref=f21e699] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/0d685c296bbce0b933e4f746e30d585959ffce45
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e701]:
+                              - time [ref=f21e702]: 16d ago
+                    - button [disabled] [ref=f21e704]
+                  - listitem [ref=f21e708]:
+                    - link [ref=f21e712] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dadm6sp7lnhs73e654l0
+                      - img "Deploy succeeded" [ref=f21e713]
+                    - link [ref=f21e716] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dadm6sp7lnhs73e654l0
+                      - generic [ref=f21e717]:
+                        - term [ref=f21e718]: Deploy
+                        - definition [ref=f21e719]:
+                          - paragraph [ref=f21e720]: "merge: integrate remote SmartBoard 3.0 squash — keep recovery/CI fixes (ours)"
+                        - term [ref=f21e721]: Trigger
+                        - definition [ref=f21e722]: Auto-Deploy
+                        - term [ref=f21e723]: Duration
+                        - definition [ref=f21e724]:
+                          - time [ref=f21e726]: 48.1s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "0d685c2" [ref=f21e727] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/0d685c296bbce0b933e4f746e30d585959ffce45
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e729]:
+                              - time [ref=f21e730]: 16d ago
+                    - button [disabled] [ref=f21e732]
+                  - listitem [ref=f21e736]:
+                    - link [ref=f21e740] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da8t55098muc73a0kv50
+                      - img "Deploy failed" [ref=f21e741]
+                    - link [ref=f21e743] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da8t55098muc73a0kv50
+                      - generic [ref=f21e744]:
+                        - term [ref=f21e745]: Deploy
+                        - definition [ref=f21e746]:
+                          - paragraph [ref=f21e747]: "feat: SmartBoard 3.0 — 99% complete (86/87) Parental controls, metrics dashboard, funnel tracking, multiplayer flashcards, 27 tests, competency radar, badge unlock, challenge engine"
+                        - term [ref=f21e748]: Trigger
+                        - definition [ref=f21e749]: Deploy Hook
+                        - term [ref=f21e750]: Duration
+                        - definition [ref=f21e751]:
+                          - time [ref=f21e753]: 46.8s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "0ca82bb" [ref=f21e754] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/0ca82bbeb2553d46838fcf40e611b6eb105d35f6
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e756]:
+                              - time [ref=f21e757]: 23d ago
+                    - button [disabled] [ref=f21e759]
+                  - listitem [ref=f21e763]:
+                    - link [ref=f21e767] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da8t4vbncjis738r3100
+                      - img "Deploy failed" [ref=f21e768]
+                    - link [ref=f21e770] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da8t4vbncjis738r3100
+                      - generic [ref=f21e771]:
+                        - term [ref=f21e772]: Deploy
+                        - definition [ref=f21e773]:
+                          - paragraph [ref=f21e774]: "feat: SmartBoard 3.0 — 99% complete (86/87) Parental controls, metrics dashboard, funnel tracking, multiplayer flashcards, 27 tests, competency radar, badge unlock, challenge engine"
+                        - term [ref=f21e775]: Trigger
+                        - definition [ref=f21e776]: Auto-Deploy
+                        - term [ref=f21e777]: Duration
+                        - definition [ref=f21e778]:
+                          - time [ref=f21e780]: 56.1s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "0ca82bb" [ref=f21e781] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/0ca82bbeb2553d46838fcf40e611b6eb105d35f6
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e783]:
+                              - time [ref=f21e784]: 23d ago
+                    - button [disabled] [ref=f21e786]
+                  - listitem [ref=f21e790]:
+                    - link [ref=f21e794] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da6upojncjis73a7qnt0
+                      - img "Deploy succeeded" [ref=f21e795]
+                    - link [ref=f21e798] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da6upojncjis73a7qnt0
+                      - generic [ref=f21e799]:
+                        - term [ref=f21e800]: Deploy
+                        - definition [ref=f21e801]:
+                          - paragraph [ref=f21e802]: "refactor(dani): QuickActions age-adaptive & responsive (6-16 años, mobile-first)"
+                        - term [ref=f21e803]: Trigger
+                        - definition [ref=f21e804]: Deploy Hook
+                        - term [ref=f21e805]: Duration
+                        - definition [ref=f21e806]:
+                          - time [ref=f21e808]: 57.8s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "9fee1a1" [ref=f21e809] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/9fee1a12433d9794b4c769849ccc80955af48d46
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e811]:
+                              - time [ref=f21e812]: 26d ago
+                    - button [disabled] [ref=f21e814]
+                  - listitem [ref=f21e818]:
+                    - link [ref=f21e822] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da6umhm7bikc739dq52g
+                      - img "Deploy succeeded" [ref=f21e823]
+                    - link [ref=f21e826] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da6umhm7bikc739dq52g
+                      - generic [ref=f21e827]:
+                        - term [ref=f21e828]: Deploy
+                        - definition [ref=f21e829]:
+                          - paragraph [ref=f21e830]: "fix(ci): migrate-db con continue-on-error — no bloquea deploy del frontend"
+                        - term [ref=f21e831]: Trigger
+                        - definition [ref=f21e832]: Deploy Hook
+                        - term [ref=f21e833]: Duration
+                        - definition [ref=f21e834]:
+                          - time [ref=f21e836]: 54.7s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "8a653ca" [ref=f21e837] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/8a653ca2a65dc05556288ba7edb4d8204d71463a
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e839]:
+                              - time [ref=f21e840]: 26d ago
+                    - button [disabled] [ref=f21e842]
+                  - listitem [ref=f21e846]:
+                    - link [ref=f21e850] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da6g2g7lk1mc73av2mjg
+                      - img "Deploy succeeded" [ref=f21e851]
+                    - link [ref=f21e854] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da6g2g7lk1mc73av2mjg
+                      - generic [ref=f21e855]:
+                        - term [ref=f21e856]: Deploy
+                        - definition [ref=f21e857]:
+                          - paragraph [ref=f21e858]: "fix(ialab-chatgpt): Fondo blanco en lugar de gris — mejor luminosidad ChatGPT theme ahora usa: - Fondo principal: blanco #ffffff (en lugar de gris #f7f7f8) - Sidebar: gris muy claro #f5f5f5 (era #ececec — más sutil) - Bordes: más claros #e5e5e5 (mejor contraste en fondo blanco) - Dark mode: Negro profundo #171717 con superficie #1a1a1a Mantiene la identidad ChatGPT (negro + blanco + verde) pero con visual más luminoso y menos cansador para estudiantes. Los elementos de énfasis (banners, botones, pills) siguen siendo negros oscuros para mantener el contraste profesional. Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>"
+                        - term [ref=f21e859]: Trigger
+                        - definition [ref=f21e860]: Auto-Deploy
+                        - term [ref=f21e861]: Duration
+                        - definition [ref=f21e862]:
+                          - time [ref=f21e864]: 59.3s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "dc6d04e" [ref=f21e865] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/dc6d04e2f527dc0ef841d3e7d2e1336a8912827f
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e867]:
+                              - time [ref=f21e868]: 27d ago
+                    - button [disabled] [ref=f21e870]
+                  - listitem [ref=f21e874]:
+                    - link [ref=f21e878] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da44k6rncjis7396dp4g
+                      - img "Deploy succeeded" [ref=f21e879]
+                    - link [ref=f21e882] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da44k6rncjis7396dp4g
+                      - generic [ref=f21e883]:
+                        - term [ref=f21e884]: Deploy
+                        - definition [ref=f21e885]:
+                          - paragraph [ref=f21e886]: "fix(smartboard): incluir studentId en serializeStudentProfile para que useTimetable pueda guardar horario"
+                        - term [ref=f21e887]: Trigger
+                        - definition [ref=f21e888]: Auto-Deploy
+                        - term [ref=f21e889]: Duration
+                        - definition [ref=f21e890]:
+                          - time [ref=f21e892]: 47.4s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "6cc5236" [ref=f21e893] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/6cc5236a3fbd032ae0aa06c81372d56d2b7644e1
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e895]:
+                              - time [ref=f21e896]: 1mo ago
+                    - button [disabled] [ref=f21e898]
+                  - listitem [ref=f21e902]:
+                    - link [ref=f21e906] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da43f6rncjis73958cng
+                      - img "Deploy succeeded" [ref=f21e907]
+                    - link [ref=f21e910] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da43f6rncjis73958cng
+                      - generic [ref=f21e911]:
+                        - term [ref=f21e912]: Deploy
+                        - definition [ref=f21e913]:
+                          - paragraph [ref=f21e914]: "fix(smartboard): persistencia de avance de materias en localStorage + backend fallback"
+                        - term [ref=f21e915]: Trigger
+                        - definition [ref=f21e916]: Auto-Deploy
+                        - term [ref=f21e917]: Duration
+                        - definition [ref=f21e918]:
+                          - time [ref=f21e920]: 47.4s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "4678a46" [ref=f21e921] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/4678a46fde31c931c672659593d875bd9b29072a
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e923]:
+                              - time [ref=f21e924]: 1mo ago
+                    - button [disabled] [ref=f21e926]
+                  - listitem [ref=f21e930]:
+                    - link [ref=f21e934] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da43dis9v7es73fsvv90
+                      - img "Deploy succeeded" [ref=f21e935]
+                    - link [ref=f21e938] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da43dis9v7es73fsvv90
+                      - generic [ref=f21e939]:
+                        - term [ref=f21e940]: Deploy
+                        - definition [ref=f21e941]:
+                          - paragraph [ref=f21e942]: "fix(smartboard): persistencia de calificaciones en localStorage + backend fallback"
+                        - term [ref=f21e943]: Trigger
+                        - definition [ref=f21e944]: Auto-Deploy
+                        - term [ref=f21e945]: Duration
+                        - definition [ref=f21e946]:
+                          - time [ref=f21e948]: 1m05s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "5eb8352" [ref=f21e949] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/5eb8352611a70b3aa95e59a4174acfa9f187e9b1
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e951]:
+                              - time [ref=f21e952]: 1mo ago
+                    - button [disabled] [ref=f21e954]
+                  - listitem [ref=f21e958]:
+                    - link [ref=f21e962] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da3ropu7bikc73d6cu50
+                      - img "Deploy succeeded" [ref=f21e963]
+                    - link [ref=f21e966] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-da3ropu7bikc73d6cu50
+                      - generic [ref=f21e967]:
+                        - term [ref=f21e968]: Deploy
+                        - definition [ref=f21e969]:
+                          - paragraph [ref=f21e970]: "fix(horario): endpoint /student-profile que crea fila students via service role + fallback en useTimetable"
+                        - term [ref=f21e971]: Trigger
+                        - definition [ref=f21e972]: Auto-Deploy
+                        - term [ref=f21e973]: Duration
+                        - definition [ref=f21e974]:
+                          - time [ref=f21e976]: 49.4s
+                    - generic:
+                      - generic:
+                        - generic:
+                          - link "1ca6ab0" [ref=f21e977] [cursor=pointer]:
+                            - /url: https://github.com/eeductechlife-ai/edutechlife/commit/1ca6ab0747977926ee1eade61a6b30a9b71ab5c1
+                          - generic [aria-hidden]: •
+                        - generic:
+                          - paragraph:
+                            - generic: Deployed
+                            - button [ref=f21e979]:
+                              - time [ref=f21e980]: 1mo ago
+                    - button [disabled] [ref=f21e982]
+    - generic [aria-hidden]:
+      - generic:
+        - generic: "0 services selected:"
+        - generic:
+          - generic:
+            - button:
+              - generic: Move
+      - generic:
+        - separator
+        - generic:
+          - generic:
+            - button
+  - iframe [aria-hidden] [ref=f21e986]

@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useNavigate } from "react-router-dom";
 import DashboardErrorBoundary from "../DashboardErrorBoundary";
 import HeroSection from "../HeroSection";
@@ -17,7 +17,7 @@ import ExplorarTab from "./ExplorarTab";
 import { isFeatureEnabled } from "../../../hooks/useFeatureFlag";
 
 const PointsRewardsSystem = lazy(() => import("../PointsRewardsSystem"));
-const SmartBoardProgress = lazy(() => import("../smartBoardProgress"));
+const IngenIAProgress = lazy(() => import("../ingenIAProgress"));
 const PersonalizedPlan = lazy(() => import("../PersonalizedPlan"));
 const ExamPrep = lazy(() => import("../examPrep"));
 const FlashcardSystem = lazy(() => import("../flashcardSystem"));
@@ -205,7 +205,7 @@ function createTabRenderer(deps) {
     progreso: {
       component: () => (
         <LazyLoad fallback={<SectionFallback tab="progreso" />}>
-          <SmartBoardProgress onTabChange={onTabChange} />
+          <IngenIAProgress onTabChange={onTabChange} />
         </LazyLoad>
       ),
       errorKey: "progreso",
@@ -238,7 +238,7 @@ const CinematicContent = memo(
       subjectsWithGrades,
       completeMission,
       studentAge,
-    } = useSmartBoardKids();
+    } = useIngenIAKids();
 
     const ageGroup =
       studentAge <= 9 ? "early" : studentAge <= 12 ? "middle" : "senior";

@@ -1,0 +1,36 @@
+- generic [active] [ref=f7e1]:
+  - generic [ref=f7e3]:
+    - generic [ref=f7e4]:
+      - link "Skip to content" [ref=f7e6] [cursor=pointer]:
+        - /url: "#main"
+      - generic [ref=f7e9]:
+        - navigation [ref=f7e10]:
+          - generic [ref=f7e13]:
+            - button [ref=f7e14] [cursor=pointer]
+            - button "Open menu" [ref=f7e19] [cursor=pointer]
+        - navigation "Floating toolbar" [ref=f7e22]:
+          - generic [ref=f7e23]:
+            - button [ref=f7e24] [cursor=pointer]
+            - button "Help" [ref=f7e30] [cursor=pointer]
+            - button "Advisor Center" [ref=f7e38] [cursor=pointer]
+      - main [ref=f7e47]:
+        - main [ref=f7e49]:
+          - list [ref=f7e52]:
+            - generic [ref=f7e55]:
+              - paragraph [ref=f7e56]
+              - paragraph [ref=f7e57]
+            - generic [ref=f7e60]:
+              - paragraph [ref=f7e61]
+              - paragraph [ref=f7e62]
+    - generic [ref=f7e67]:
+      - generic:
+        - img "Background pattern"
+      - generic [ref=f7e68]:
+        - button "Close banner" [ref=f7e70] [cursor=pointer]
+        - generic [ref=f7e75]:
+          - generic [ref=f7e76]: Notice
+          - generic [ref=f7e77]:
+            - paragraph [ref=f7e78]: We've updated our Privacy Policy
+            - paragraph [ref=f7e79]: The data controller is now Supabase Pte. Ltd. Your rights and protections are unchanged.
+          - button "Learn more" [ref=f7e80] [cursor=pointer]
+  - alert [ref=f7e82]

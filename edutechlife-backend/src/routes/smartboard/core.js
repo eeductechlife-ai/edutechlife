@@ -12,7 +12,7 @@ const router = Router();
 
 /**
  * GET /api/smartboard/data/:userId
- * Obtener datos del SmartBoard para un usuario
+ * Obtener datos del IngenIA para un usuario
  */
 router.get('/data/:userId', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   const { userId } = req.params;
@@ -50,7 +50,7 @@ router.get('/data/:userId', requireAuth, requireVerifiedParentalConsent, async (
 
 /**
  * GET /api/smartboard/progress/:userId
- * Obtener progreso del estudiante en SmartBoard
+ * Obtener progreso del estudiante en IngenIA
  */
 router.get('/progress/:userId', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
   const { userId } = req.params;

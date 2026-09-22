@@ -2,7 +2,7 @@ import { memo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNewsFeed } from "../../../hooks/useNewsFeed";
 import { CATEGORIES, CATEGORY_COLORS } from "../../../data/newsData";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 
 const EXPLORE_GRADIENT =
   "linear-gradient(135deg, #7B2FF7 0%, #9D4EDD 55%, #C77DFF 100%)";
@@ -224,7 +224,7 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
 ArticleModal.displayName = "ArticleModal";
 
 const TechNewsFeed = () => {
-  const { darkMode, setDocumentForDani } = useSmartBoardKids();
+  const { darkMode, setDocumentForDani } = useIngenIAKids();
 
   // Explora 2.0 (§35): turn a passive article into an active challenge with Dani.
   const handleChallenge = useCallback(

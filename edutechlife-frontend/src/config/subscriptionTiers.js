@@ -1,6 +1,6 @@
 /**
  * Subscription Tiers Configuration
- * Simplified 3-tier system for SmartBoard Kids
+ * Simplified 3-tier system for IngenIA Kids
  * Designed for students 8-16 and parents
  */
 

@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { SB_COLORS, SB_RADII } from "../smartboardTheme";
+import { SB_COLORS, SB_RADII } from "../ingenIATheme";
 
 const VARIANTS = {
   primary: {

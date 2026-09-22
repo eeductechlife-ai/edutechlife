@@ -1,4 +1,4 @@
-import { useSmartBoardKids } from "../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../context/IngenIAKidsContext";
 
 const TEXT = {
   early: {
@@ -50,7 +50,7 @@ const TEXT = {
     "hero.dani_tagline": "Aquí para ti",
     "missions.title": "🎯 Misiones de hoy",
     "challenge.name": "🧠 Reto IA",
-    loading: "⚡ Cargando tu SmartBoard...",
+    loading: "⚡ Cargando tu IngenIA...",
     empty: "Aún sin actividad · ¡Comienza ya!",
   },
   senior: {
@@ -74,7 +74,7 @@ const TEXT = {
 };
 
 export function useKidText() {
-  const { studentAge } = useSmartBoardKids();
+  const { studentAge } = useIngenIAKids();
   const group =
     studentAge <= 9 ? "early" : studentAge <= 12 ? "middle" : "senior";
   return (key, fallback) =>

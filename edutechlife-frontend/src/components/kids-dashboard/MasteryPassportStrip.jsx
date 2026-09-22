@@ -1,12 +1,12 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { getMasteryState } from "./components/SubjectsView";
 
 const MASTERY_ORDER = ["recovery", "practice", "mastery", "transfer"];
 
 const MasteryPassportStrip = memo(({ onTabChange }) => {
-  const { subjects, subjectsWithGrades } = useSmartBoardKids();
+  const { subjects, subjectsWithGrades } = useIngenIAKids();
   const list =
     (subjectsWithGrades?.length ? subjectsWithGrades : subjects) || [];
 

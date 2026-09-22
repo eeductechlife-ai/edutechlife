@@ -59,8 +59,8 @@ router.post('/signup', async (req, res) => {
       accountType: safeAccountType,
     });
 
-    // SmartBoard students need a row in `students` so that timetable,
-    // sessions, and other SmartBoard features can reference it via students.auth_id.
+    // IngenIA students need a row in `students` so that timetable,
+    // sessions, and other IngenIA features can reference it via students.auth_id.
     if (safeAccountType === 'smartboard' && result.user?.id) {
       const studentName =
         [firstName, lastName].filter(Boolean).join(' ').trim() ||
@@ -99,8 +99,8 @@ router.post('/login', async (req, res) => {
     }
     const result = await authService.signIn({ email: resolvedEmail, password });
 
-    // Best-effort: ensure SmartBoard students have a row in `students` so the
-    // timetable and other SmartBoard features work. Handles accounts created
+    // Best-effort: ensure IngenIA students have a row in `students` so the
+    // timetable and other IngenIA features work. Handles accounts created
     // before the signup route started auto-creating this row.
     if (result.user?.id) {
       (async () => {

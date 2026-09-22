@@ -16,7 +16,7 @@ export const NEXT_STEP_MODES = {
   TRANSFER: "transfer",
 };
 
-// Shared visual language per mode (SmartBoard palette) so every activity's
+// Shared visual language per mode (IngenIA palette) so every activity's
 // next-step card looks consistent.
 export const MODE_STYLE = {
   recovery: {

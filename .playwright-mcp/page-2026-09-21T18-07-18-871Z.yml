@@ -1,0 +1,375 @@
+- generic [active] [ref=f35e1]:
+  - generic [ref=f35e2]:
+    - generic [ref=f35e3]:
+      - banner [ref=f35e4]:
+        - generic [ref=f35e5]:
+          - button "Open menu" [ref=f35e6] [cursor=pointer]
+          - link [ref=f35e12] [cursor=pointer]:
+            - /url: /
+            - img "Render" [ref=f35e13]
+        - generic [ref=f35e16]:
+          - button [ref=f35e17] [cursor=pointer]:
+            - img "Open search" [ref=f35e18]
+          - button "Account menu" [ref=f35e21] [cursor=pointer]:
+            - generic [ref=f35e22]: e
+      - navigation "Breadcrumbs" [ref=f35e25]:
+        - list [ref=f35e26]:
+          - listitem [ref=f35e27]:
+            - link "Projects" [ref=f35e28] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=f35e37] [cursor=pointer]:
+            - link "edutechlife-backend" [ref=f35e38]:
+              - /url: /web/srv-d6up1qc50q8c7397jvm0
+            - button "Switch Service" [ref=f35e44]
+          - listitem [ref=f35e47] [cursor=pointer]:
+            - generic [ref=f35e48]: Environment
+            - button "Switch page" [ref=f35e55]
+      - generic [ref=f35e59]:
+        - alert [ref=f35e61]:
+          - generic [ref=f35e69]:
+            - generic [ref=f35e70]:
+              - generic [ref=f35e71]: Payment failed
+              - generic [ref=f35e72]: Update your credit card to avoid losing access to your workspace's services.
+            - link "Update payment" [ref=f35e74] [cursor=pointer]:
+              - /url: /billing#payment-method
+        - generic [ref=f35e75]:
+          - banner [ref=f35e77]:
+            - generic [ref=f35e78]:
+              - generic [ref=f35e79]: Web Service
+              - generic [ref=f35e83]:
+                - heading "edutechlife-backend Node Free Upgrade your instance" [level=1] [ref=f35e85]:
+                  - generic [ref=f35e86]: edutechlife-backend
+                  - generic [ref=f35e87]:
+                    - generic [ref=f35e88]: Node
+                    - link "Free" [ref=f35e89] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/compute
+                    - link [ref=f35e91] [cursor=pointer]:
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/compute
+                - generic [ref=f35e96]:
+                  - button "Connect" [ref=f35e97] [cursor=pointer]
+                  - button "Manual Deploy" [ref=f35e101] [cursor=pointer]
+            - generic [ref=f35e107]:
+              - generic [ref=f35e109]:
+                - generic [ref=f35e110]: "Service ID:"
+                - generic "Service ID:" [ref=f35e111]:
+                  - generic [ref=f35e112]: srv-d6up1qc50q8c7397jvm0
+                  - button "Copy" [ref=f35e115] [cursor=pointer]
+              - generic [ref=f35e119]:
+                - generic [ref=f35e120]:
+                  - img "GitHub" [ref=f35e122]
+                  - link "eeductechlife-ai / edutechlife main" [ref=f35e124] [cursor=pointer]:
+                    - /url: https://github.com/eeductechlife-ai/edutechlife/tree/main
+                    - generic [ref=f35e125]:
+                      - generic [ref=f35e126]: eeductechlife-ai / edutechlife
+                      - generic [ref=f35e129]: main
+                - generic [ref=f35e130]:
+                  - link "Last successfully deployed commit" [ref=f35e131] [cursor=pointer]:
+                    - /url: https://github.com/eeductechlife-ai/edutechlife/commit/3a4db03d0fb46751efbe6c85f6d89e91d8e52a40
+                    - generic [ref=f35e132]: 3a4db03
+                  - link "Live" [ref=f35e136] [cursor=pointer]:
+                    - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-dafm7s8ou94c73absuc0
+              - generic "Copy" [ref=f35e141]:
+                - link "https://edutechlife-backend.onrender.com" [ref=f35e143] [cursor=pointer]:
+                  - /url: https://edutechlife-backend.onrender.com
+                - button "Copy" [ref=f35e146] [cursor=pointer]
+          - generic [ref=f35e150]:
+            - link [ref=f35e151] [cursor=pointer]:
+              - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daomvgbm8hqs7381pt5g
+              - heading "Most recent deploy" [level=4] [ref=f35e152]
+            - generic:
+              - generic:
+                - generic:
+                  - term: "Status:"
+                  - definition:
+                    - link "Failed":
+                      - /url: /web/srv-d6up1qc50q8c7397jvm0/deploys/dep-daomvgbm8hqs7381pt5g
+                - generic:
+                  - term: "Commit:"
+                  - definition:
+                    - generic:
+                      - link "3a4db03" [ref=f35e157] [cursor=pointer]:
+                        - /url: https://github.com/eeductechlife-ai/edutechlife/commit/3a4db03d0fb46751efbe6c85f6d89e91d8e52a40
+                      - link "b4058f3" [ref=f35e163] [cursor=pointer]:
+                        - /url: https://github.com/eeductechlife-ai/edutechlife/commit/b4058f3ff2037a18fb756a2f0af4dbfae87824e0
+                - generic:
+                  - term: "Duration:"
+                  - definition:
+                    - time: 50.3s
+                - generic:
+                  - term: "Action:"
+                  - definition
+          - main [ref=f35e168]:
+            - generic [ref=f35e169]:
+              - heading "Environment" [level=2] [ref=f35e170]
+              - button [ref=f35e171] [cursor=pointer]
+            - generic [ref=f35e175]:
+              - generic [ref=f35e177]:
+                - generic [ref=f35e179]:
+                  - generic [ref=f35e180]:
+                    - heading "Environment Variables" [level=4] [ref=f35e182]
+                    - generic [ref=f35e183]:
+                      - text: Set environment-specific config and secrets (such as API keys), then read those values from your code.
+                      - link "Learn more." [ref=f35e184] [cursor=pointer]:
+                        - /url: https://render.com/docs/configure-environment-variables
+                  - generic [ref=f35e186]:
+                    - button "Export" [ref=f35e187] [cursor=pointer]
+                    - button [ref=f35e191] [cursor=pointer]
+                - generic [ref=f35e197]:
+                  - table [ref=f35e198]:
+                    - rowgroup [ref=f35e199]:
+                      - row [ref=f35e200]:
+                        - columnheader "Key" [ref=f35e201]
+                        - columnheader "Value" [ref=f35e202]
+                    - rowgroup [ref=f35e203]:
+                      - row [ref=f35e204]:
+                        - rowheader [ref=f35e205]:
+                          - generic [ref=f35e207]:
+                            - generic [ref=f35e208]: Key
+                            - textbox "Key" [ref=f35e210]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: BACKEND_URL
+                        - cell [ref=f35e211]:
+                          - generic [ref=f35e212]:
+                            - generic [ref=f35e213]:
+                              - generic [ref=f35e214]: Value
+                              - generic [ref=f35e215]:
+                                - textbox "Value" [ref=f35e216]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e217]:
+                              - button "Copy value" [ref=f35e218] [cursor=pointer]
+                              - button "Show secret" [ref=f35e222] [cursor=pointer]
+                      - row [ref=f35e226]:
+                        - rowheader [ref=f35e227]:
+                          - generic [ref=f35e229]:
+                            - generic [ref=f35e230]: Key
+                            - textbox "Key" [ref=f35e232]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: DEEPSEEK_API_KEY
+                        - cell [ref=f35e233]:
+                          - generic [ref=f35e234]:
+                            - generic [ref=f35e235]:
+                              - generic [ref=f35e236]: Value
+                              - generic [ref=f35e237]:
+                                - textbox "Value" [ref=f35e238]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e239]:
+                              - button "Copy value" [ref=f35e240] [cursor=pointer]
+                              - button "Show secret" [ref=f35e244] [cursor=pointer]
+                      - row [ref=f35e248]:
+                        - rowheader [ref=f35e249]:
+                          - generic [ref=f35e251]:
+                            - generic [ref=f35e252]: Key
+                            - textbox "Key" [ref=f35e254]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: FRONTEND_URL
+                        - cell [ref=f35e255]:
+                          - generic [ref=f35e256]:
+                            - generic [ref=f35e257]:
+                              - generic [ref=f35e258]: Value
+                              - generic [ref=f35e259]:
+                                - textbox "Value" [ref=f35e260]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e261]:
+                              - button "Copy value" [ref=f35e262] [cursor=pointer]
+                              - button "Show secret" [ref=f35e266] [cursor=pointer]
+                      - row [ref=f35e270]:
+                        - rowheader [ref=f35e271]:
+                          - generic [ref=f35e273]:
+                            - generic [ref=f35e274]: Key
+                            - textbox "Key" [ref=f35e276]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: GOOGLE_TTS_API_KEY
+                        - cell [ref=f35e277]:
+                          - generic [ref=f35e278]:
+                            - generic [ref=f35e279]:
+                              - generic [ref=f35e280]: Value
+                              - generic [ref=f35e281]:
+                                - textbox "Value" [ref=f35e282]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e283]:
+                              - button "Copy value" [ref=f35e284] [cursor=pointer]
+                              - button "Show secret" [ref=f35e288] [cursor=pointer]
+                      - row [ref=f35e292]:
+                        - rowheader [ref=f35e293]:
+                          - generic [ref=f35e295]:
+                            - generic [ref=f35e296]: Key
+                            - textbox "Key" [ref=f35e298]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: OAUTH_FACEBOOK_CLIENT_ID
+                        - cell [ref=f35e299]:
+                          - generic [ref=f35e300]:
+                            - generic [ref=f35e301]:
+                              - generic [ref=f35e302]: Value
+                              - generic [ref=f35e303]:
+                                - textbox "Value" [ref=f35e304]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e305]:
+                              - button "Copy value" [ref=f35e306] [cursor=pointer]
+                              - button "Show secret" [ref=f35e310] [cursor=pointer]
+                      - row [ref=f35e314]:
+                        - rowheader [ref=f35e315]:
+                          - generic [ref=f35e317]:
+                            - generic [ref=f35e318]: Key
+                            - textbox "Key" [ref=f35e320]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: OAUTH_FACEBOOK_CLIENT_SECRET
+                        - cell [ref=f35e321]:
+                          - generic [ref=f35e322]:
+                            - generic [ref=f35e323]:
+                              - generic [ref=f35e324]: Value
+                              - generic [ref=f35e325]:
+                                - textbox "Value" [ref=f35e326]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e327]:
+                              - button "Copy value" [ref=f35e328] [cursor=pointer]
+                              - button "Show secret" [ref=f35e332] [cursor=pointer]
+                      - row [ref=f35e336]:
+                        - rowheader [ref=f35e337]:
+                          - generic [ref=f35e339]:
+                            - generic [ref=f35e340]: Key
+                            - textbox "Key" [ref=f35e342]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: OAUTH_GOOGLE_CLIENT_ID
+                        - cell [ref=f35e343]:
+                          - generic [ref=f35e344]:
+                            - generic [ref=f35e345]:
+                              - generic [ref=f35e346]: Value
+                              - generic [ref=f35e347]:
+                                - textbox "Value" [ref=f35e348]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e349]:
+                              - button "Copy value" [ref=f35e350] [cursor=pointer]
+                              - button "Show secret" [ref=f35e354] [cursor=pointer]
+                      - row [ref=f35e358]:
+                        - rowheader [ref=f35e359]:
+                          - generic [ref=f35e361]:
+                            - generic [ref=f35e362]: Key
+                            - textbox "Key" [ref=f35e364]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: OAUTH_GOOGLE_CLIENT_SECRET
+                        - cell [ref=f35e365]:
+                          - generic [ref=f35e366]:
+                            - generic [ref=f35e367]:
+                              - generic [ref=f35e368]: Value
+                              - generic [ref=f35e369]:
+                                - textbox "Value" [ref=f35e370]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e371]:
+                              - button "Copy value" [ref=f35e372] [cursor=pointer]
+                              - button "Show secret" [ref=f35e376] [cursor=pointer]
+                      - row [ref=f35e380]:
+                        - rowheader [ref=f35e381]:
+                          - generic [ref=f35e383]:
+                            - generic [ref=f35e384]: Key
+                            - textbox "Key" [ref=f35e386]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: SUPABASE_ANON_KEY
+                        - cell [ref=f35e387]:
+                          - generic [ref=f35e388]:
+                            - generic [ref=f35e389]:
+                              - generic [ref=f35e390]: Value
+                              - generic [ref=f35e391]:
+                                - textbox "Value" [ref=f35e392]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e393]:
+                              - button "Copy value" [ref=f35e394] [cursor=pointer]
+                              - button "Show secret" [ref=f35e398] [cursor=pointer]
+                      - row [ref=f35e402]:
+                        - rowheader [ref=f35e403]:
+                          - generic [ref=f35e405]:
+                            - generic [ref=f35e406]: Key
+                            - textbox "Key" [ref=f35e408]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: SUPABASE_SERVICE_KEY
+                        - cell [ref=f35e409]:
+                          - generic [ref=f35e410]:
+                            - generic [ref=f35e411]:
+                              - generic [ref=f35e412]: Value
+                              - generic [ref=f35e413]:
+                                - textbox "Value" [ref=f35e414]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e415]:
+                              - button "Copy value" [ref=f35e416] [cursor=pointer]
+                              - button "Show secret" [ref=f35e420] [cursor=pointer]
+                      - row [ref=f35e424]:
+                        - rowheader [ref=f35e425]:
+                          - generic [ref=f35e427]:
+                            - generic [ref=f35e428]: Key
+                            - textbox "Key" [ref=f35e430]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: SUPABASE_URL
+                        - cell [ref=f35e431]:
+                          - generic [ref=f35e432]:
+                            - generic [ref=f35e433]:
+                              - generic [ref=f35e434]: Value
+                              - generic [ref=f35e435]:
+                                - textbox "Value" [ref=f35e436]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e437]:
+                              - button "Copy value" [ref=f35e438] [cursor=pointer]
+                              - button "Show secret" [ref=f35e442] [cursor=pointer]
+                      - row [ref=f35e446]:
+                        - rowheader [ref=f35e447]:
+                          - generic [ref=f35e449]:
+                            - generic [ref=f35e450]: Key
+                            - textbox "Key" [ref=f35e452]:
+                              - /placeholder: NAME_OF_VARIABLE
+                              - text: VITE_API_URL
+                        - cell [ref=f35e453]:
+                          - generic [ref=f35e454]:
+                            - generic [ref=f35e455]:
+                              - generic [ref=f35e456]: Value
+                              - generic [ref=f35e457]:
+                                - textbox "Value" [ref=f35e458]:
+                                  - /placeholder: ""
+                                - generic: • • • • • • • • • • • •
+                            - generic [ref=f35e459]:
+                              - button "Copy value" [ref=f35e460] [cursor=pointer]
+                              - button "Show secret" [ref=f35e464] [cursor=pointer]
+                  - button [ref=f35e469] [cursor=pointer]
+              - generic [ref=f35e475]:
+                - generic [ref=f35e478]:
+                  - heading "Secret Files" [level=4] [ref=f35e480]
+                  - generic [ref=f35e482]:
+                    - generic [ref=f35e483]:
+                      - text: Store plaintext files containing secret data (such as a
+                      - code [ref=f35e484]: .env
+                      - text: file or a private key).
+                    - generic [ref=f35e485]:
+                      - text: Access during builds and at runtime from your app's root, or from
+                      - code [ref=f35e486]: /etc/secrets/<filename>
+                      - text: .
+                - generic [ref=f35e491]:
+                  - button [ref=f35e492] [cursor=pointer]
+                  - button "More options" [ref=f35e496] [cursor=pointer]
+              - generic [ref=f35e501]:
+                - generic [ref=f35e504]:
+                  - heading "Linked Environment Groups" [level=4] [ref=f35e506]
+                  - generic [ref=f35e507]: Environment groups are collections of environment variables and secret files that you can share across multiple services.
+                - generic [ref=f35e511]:
+                  - img "Loading..." [ref=f35e512]
+                  - generic [ref=f35e515]: Loading...
+    - generic [aria-hidden]:
+      - generic:
+        - generic: "0 services selected:"
+        - generic:
+          - generic:
+            - button:
+              - generic: Move
+      - generic:
+        - separator
+        - generic:
+          - generic:
+            - button
+  - iframe [aria-hidden] [ref=f35e516]

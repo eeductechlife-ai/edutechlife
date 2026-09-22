@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { useStudentProfileSmartBoard } from "../../hooks/useStudentProfileSmartBoard";
+import { useStudentProfileIngenIA } from "../../hooks/useStudentProfileIngenIA";
 import { useTranslation } from "../../i18n/I18nProvider";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { VAK_STYLES_MAP, getInitials, getVakKey } from "./userMenuConstants";
 import UserMenuDropdown from "./UserMenuDropdown";
 import EditProfileModal from "./EditProfileModal";
@@ -20,13 +20,13 @@ const UserMenu = ({
 }) => {
   const { t } = useTranslation();
   const { toggleDarkMode, gradeLevel, setGradeLevel, setSchoolName } =
-    useSmartBoardKids();
+    useIngenIAKids();
   const [isOpen, setIsOpen] = useState(false);
   const [isEditingModal, setIsEditingModal] = useState(false);
   const { profile, loading, error, updateProfile, uploadAvatar, removeAvatar } =
-    useStudentProfileSmartBoard(authToken);
+    useStudentProfileIngenIA(authToken);
 
-  // Auto-sync grade and school from profile to SmartBoard context when profile loads
+  // Auto-sync grade and school from profile to IngenIA context when profile loads
   useEffect(() => {
     if (!profile) return;
     if (profile.grade && !gradeLevel) {

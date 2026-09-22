@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { extractDocumentText } from "../../../utils/documentParser";
 import { callDeepseekSmartboard } from "../../../utils/api";
 
@@ -8,7 +8,7 @@ export function useBookReader() {
     darkMode,
     smartBookHistory: history,
     setSmartBookHistory: setHistory,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
   const [mode, setMode] = useState("input");
   const [text, setText] = useState("");
   const [step, setStep] = useState(0);

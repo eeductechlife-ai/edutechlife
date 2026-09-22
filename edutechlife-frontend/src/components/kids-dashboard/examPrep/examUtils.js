@@ -52,7 +52,7 @@ const getTips = (vak) => {
 
 const sbj = (val) => subjects.find((s) => s.v === val);
 
-// SmartBoard pink theme — replaces the IALab teal palette
+// IngenIA pink theme — replaces the IALab teal palette
 const inpCls =
   "w-full px-4 py-2.5 rounded-xl border border-[#F1F5F9] text-[#1E293B] placeholder:text-[#94A3B8] text-sm focus:outline-none focus:border-[#FF6B9D] focus:ring-2 focus:ring-[#EF476F]/15 bg-[#F8FAFC] transition-all";
 

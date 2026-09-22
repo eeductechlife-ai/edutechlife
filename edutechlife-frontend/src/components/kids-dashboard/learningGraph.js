@@ -1,5 +1,5 @@
 /**
- * Learning Graph — Pedagogical recommendation engine for SmartBoard 3.0 (§6).
+ * Learning Graph — Pedagogical recommendation engine for IngenIA 3.0 (§6).
  *
  * Models subject prerequisites and computes next-action recommendations
  * based on mastery state and dependency relationships between competencies.

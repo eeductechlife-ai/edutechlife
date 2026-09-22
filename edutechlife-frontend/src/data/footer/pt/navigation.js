@@ -49,7 +49,7 @@ export const certificationsContent = {
       nivel: "Básico",
     },
     {
-      titulo: "SmartBoard Master",
+      titulo: "IngenIA Master",
       descricao: "Certificação em lousas interativas inteligentes",
       nivel: "Intermediário",
     },
@@ -83,7 +83,7 @@ export const blogArticles = [
   },
   {
     id: "smartboard",
-    titulo: "SmartBoard: guia completo 2026",
+    titulo: "IngenIA: guia completo 2026",
     fecha: "5 Mar 2026",
     categoria: "Ferramentas",
     autor: "Eng. Roberto Chen",
@@ -214,16 +214,16 @@ export const blogArticleContents = {
       "Implementar o VAK não exige tecnologia avançada, mas uma mudança metodológica. Os docentes devem projetar experiências diversificadas que alcancem todos os estilos, monitorar resultados e ajustar estratégias continuamente.",
   },
   smartboard: {
-    titulo: "SmartBoard: guia completo 2026",
+    titulo: "IngenIA: guia completo 2026",
     imagen:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=400&fit=crop",
     introduccion:
-      "As lousas interativas inteligentes evoluíram significativamente. Segundo o relatório da EdTech Magazine 2025, as instituições que implementaram SmartBoards relatam um aumento de 40% na participação estudantil e 28% de melhora na compreensão de conceitos complexos.",
+      "As lousas interativas inteligentes evoluíram significativamente. Segundo o relatório da EdTech Magazine 2025, as instituições que implementaram IngenIAs relatam um aumento de 40% na participação estudantil e 28% de melhora na compreensão de conceitos complexos.",
     secciones: [
       {
         titulo: "Evolução Tecnológica 2024-2026",
         contenido:
-          "Os SmartBoards modernos incorporam: telas 4K com toque de precisão, integração com IA para reconhecimento de escrita, conectividade com dispositivos móveis, software de colaboração em tempo real e análise de engajamento estudantil.",
+          "Os IngenIAs modernos incorporam: telas 4K com toque de precisão, integração com IA para reconhecimento de escrita, conectividade com dispositivos móveis, software de colaboração em tempo real e análise de engajamento estudantil.",
         grafica: "linea",
         datos: [
           { anio: "2024", capacidad: 65 },
@@ -235,7 +235,7 @@ export const blogArticleContents = {
       {
         titulo: "Casos de Implementação Bem-Sucedida",
         contenido:
-          "O Colégio Americano do México implementou 50 SmartBoards em 2023. Resultados após 18 meses: 42% de aumento na participação, 31% de melhora em matemática e 89% dos docentes relataram satisfação positiva.",
+          "O Colégio Americano do México implementou 50 IngenIAs em 2023. Resultados após 18 meses: 42% de aumento na participação, 31% de melhora em matemática e 89% dos docentes relataram satisfação positiva.",
         grafica: "barras",
         datos: [
           { categoria: "Participação", antes: 45, despues: 87 },
@@ -247,7 +247,7 @@ export const blogArticleContents = {
       {
         titulo: "Funcionalidades Essenciais 2026",
         contenido:
-          "As características que todo SmartBoard deve ter incluem: lousa colaborativa infinita, integração com LMS institucionais, ferramentas de avaliação em tempo real, compatibilidade com dispositivos dos estudantes e análise de padrões de atenção por meio de IA.",
+          "As características que todo IngenIA deve ter incluem: lousa colaborativa infinita, integração com LMS institucionais, ferramentas de avaliação em tempo real, compatibilidade com dispositivos dos estudantes e análise de padrões de atenção por meio de IA.",
         lista: [
           "Lousa colaborativa com armazenamento em nuvem",
           "Integração nativa com Google Classroom e Microsoft Teams",
@@ -270,7 +270,7 @@ export const blogArticleContents = {
       },
     ],
     conclusion:
-      "O investimento em SmartBoards é uma decisão estratégica que posiciona as instituições na vanguarda da educação digital. O custo inicial é recuperado em 18 a 24 meses considerando todos os benefícios quantificáveis.",
+      "O investimento em IngenIAs é uma decisão estratégica que posiciona as instituições na vanguarda da educação digital. O custo inicial é recuperado em 18 a 24 meses considerando todos os benefícios quantificáveis.",
   },
   neurociencia: {
     titulo: "Neurociência e aprendizagem eficaz",

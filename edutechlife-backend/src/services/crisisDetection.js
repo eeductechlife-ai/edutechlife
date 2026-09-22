@@ -152,14 +152,14 @@ function formatCrisisAlertEmail(studentName, studentAge, detectedContent, parent
       <div style="font-family: Montserrat, sans-serif; max-width: 600px;">
         <div style="background: linear-gradient(to right, #dc2626, #b91c1c); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
           <h1 style="margin: 0; font-size: 24px;">⚠️ ALERTA DE SEGURIDAD EMOCIONAL</h1>
-          <p style="margin: 10px 0 0 0; font-size: 14px;">SmartBoard - ${timestamp}</p>
+          <p style="margin: 10px 0 0 0; font-size: 14px;">IngenIA - ${timestamp}</p>
         </div>
 
         <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
           <h2 style="color: #004B63; font-size: 18px; margin-top: 0;">Acción Requerida</h2>
           <p style="color: #374151; line-height: 1.6;">
             Hemos detectado indicadores de posible angustia emocional o ideación suicida en
-            <strong>${studentName} (${studentAge} años)</strong> durante una sesión en SmartBoard.
+            <strong>${studentName} (${studentAge} años)</strong> durante una sesión en IngenIA.
           </p>
           <p style="color: #374151; line-height: 1.6;">
             <strong>Este mensaje requiere tu atención inmediata.</strong>
@@ -209,7 +209,7 @@ function formatCrisisAlertEmail(studentName, studentAge, detectedContent, parent
       </div>
     `,
     text: `
-ALERTA DE SEGURIDAD EMOCIONAL - SmartBoard
+ALERTA DE SEGURIDAD EMOCIONAL - IngenIA
 
 Acción Requerida: Hemos detectado indicadores de posible angustia emocional
 o ideación suicida en ${studentName} (${studentAge} años).

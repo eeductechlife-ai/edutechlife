@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { sanitize } from "../../utils/sanitize";
 
@@ -70,7 +70,7 @@ const PersonalizedPlan = () => {
     addPoints,
     planCompletedActivities: completedActivities,
     setPlanCompletedActivities: setCompletedActivities,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
   const [showConfetti, setShowConfetti] = useState(false);
 
   const dominantStyle = vakResult?.predominantStyle || "visual";

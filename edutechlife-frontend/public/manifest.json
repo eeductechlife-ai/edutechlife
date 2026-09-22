@@ -1,7 +1,7 @@
 {
-  "name": "SmartBoard Kids - Plataforma de Aprendizaje",
-  "short_name": "SmartBoard",
-  "description": "Plataforma de aprendizaje adaptativo con tutor IA para estudiantes 8-16 años",
+  "name": "IngenIA — Aprende con Inteligencia Artificial",
+  "short_name": "IngenIA",
+  "description": "Plataforma de aprendizaje con IA adaptativa para estudiantes 6-16 años",
   "start_url": "/smartboard",
   "scope": "/",
   "display": "standalone",

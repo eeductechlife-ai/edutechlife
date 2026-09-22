@@ -11,7 +11,7 @@ import { mapModuleToTheme, THEME_META } from "./themeMap";
  *   consumidor (IALab.jsx) en el container, para que las CSS custom
  *   properties del tema resuelvan por herencia dentro de todo el árbol.
  *   La razón: mantener el DOM predecible y evitar side-effects globales
- *   que rompan otras rutas (SmartBoard, Admin, etc.) cuando IALab desmonte.
+ *   que rompan otras rutas (IngenIA, Admin, etc.) cuando IALab desmonte.
  * - Adicionalmente, sincroniza `data-theme` en el elemento raíz del portal
  *   de modales (definido por `portalRootId`) si existe, porque el portal
  *   vive fuera del árbol y no heredaría el tema de otra forma.
@@ -42,7 +42,7 @@ const ThemeProvider = ({
   // Propagar el tema a targets fuera del árbol React: portal root dedicado
   // (opcional) y document.body (los OVAs y modales usan `createPortal` con
   // target document.body). Se limpian los atributos al desmontar para no
-  // filtrar el tema a otras vistas como SmartBoard o Admin.
+  // filtrar el tema a otras vistas como IngenIA o Admin.
   useEffect(() => {
     if (typeof document === "undefined") return undefined;
 

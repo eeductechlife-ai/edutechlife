@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 
 const id = () =>
   Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
@@ -43,7 +43,7 @@ function ensureSm2(card) {
 
 export function useFlashcardDeck() {
   const { flashcardDecks: decks, setFlashcardDecks: setDecks } =
-    useSmartBoardKids();
+    useIngenIAKids();
   const [mode, setMode] = useState("decks");
   const [currentDeckId, setCurrentDeckId] = useState(null);
   const [deckTitle, setDeckTitle] = useState("");

@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /**
- * Custom accessibility hook for SmartBoard
+ * Custom accessibility hook for IngenIA
  * Provides: reduced-motion detection, high-contrast mode, keyboard focus management
  */
 export function useA11y() {
@@ -11,35 +11,45 @@ export function useA11y() {
 
   useEffect(() => {
     // Detect prefers-reduced-motion
-    const motionMediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const motionMediaQuery = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
     setReducedMotion(motionMediaQuery.matches);
 
     const handleMotionChange = (e) => setReducedMotion(e.matches);
-    motionMediaQuery.addEventListener('change', handleMotionChange);
+    motionMediaQuery.addEventListener("change", handleMotionChange);
 
-    return () => motionMediaQuery.removeEventListener('change', handleMotionChange);
+    return () =>
+      motionMediaQuery.removeEventListener("change", handleMotionChange);
   }, []);
 
   useEffect(() => {
     // Detect prefers-color-scheme for dark mode
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkModeMediaQuery = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    );
     setDarkMode(darkModeMediaQuery.matches);
 
     const handleDarkModeChange = (e) => setDarkMode(e.matches);
-    darkModeMediaQuery.addEventListener('change', handleDarkModeChange);
+    darkModeMediaQuery.addEventListener("change", handleDarkModeChange);
 
-    return () => darkModeMediaQuery.removeEventListener('change', handleDarkModeChange);
+    return () =>
+      darkModeMediaQuery.removeEventListener("change", handleDarkModeChange);
   }, []);
 
   useEffect(() => {
     // Detect forced colors mode (Windows high contrast)
-    const forcedColorsMediaQuery = window.matchMedia('(forced-colors: active)');
+    const forcedColorsMediaQuery = window.matchMedia("(forced-colors: active)");
     setHighContrast(forcedColorsMediaQuery.matches);
 
     const handleForcedColorsChange = (e) => setHighContrast(e.matches);
-    forcedColorsMediaQuery.addEventListener('change', handleForcedColorsChange);
+    forcedColorsMediaQuery.addEventListener("change", handleForcedColorsChange);
 
-    return () => forcedColorsMediaQuery.removeEventListener('change', handleForcedColorsChange);
+    return () =>
+      forcedColorsMediaQuery.removeEventListener(
+        "change",
+        handleForcedColorsChange,
+      );
   }, []);
 
   // Get motion-safe animation duration
@@ -48,16 +58,16 @@ export function useA11y() {
   };
 
   // Get motion-safe transition
-  const getTransition = (normalTransition = 'all 0.3s ease') => {
-    return reducedMotion ? 'none' : normalTransition;
+  const getTransition = (normalTransition = "all 0.3s ease") => {
+    return reducedMotion ? "none" : normalTransition;
   };
 
   // Get skip to main content function
   const skipToMain = () => {
-    const mainContent = document.getElementById('main-content');
+    const mainContent = document.getElementById("main-content");
     if (mainContent) {
       mainContent.focus();
-      mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      mainContent.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -75,9 +85,9 @@ export function useA11y() {
  * Hook to announce messages to screen readers
  */
 export function useAnnouncement() {
-  const [announcement, setAnnouncement] = useState('');
+  const [announcement, setAnnouncement] = useState("");
 
-  const announce = (message, priority = 'polite') => {
+  const announce = (message, priority = "polite") => {
     const region = document.querySelector(`[aria-live="${priority}"]`);
     if (region) {
       region.textContent = message;
@@ -92,19 +102,20 @@ export function useAnnouncement() {
  * Hook for keyboard focus management
  */
 export function useFocusManagement() {
-  const moveFocus = (direction = 'next') => {
+  const moveFocus = (direction = "next") => {
     const focusableElements = document.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
 
     const focusedElement = document.activeElement;
     const focusedIndex = Array.from(focusableElements).indexOf(focusedElement);
 
     let nextIndex = focusedIndex;
-    if (direction === 'next') {
+    if (direction === "next") {
       nextIndex = (focusedIndex + 1) % focusableElements.length;
-    } else if (direction === 'prev') {
-      nextIndex = focusedIndex === 0 ? focusableElements.length - 1 : focusedIndex - 1;
+    } else if (direction === "prev") {
+      nextIndex =
+        focusedIndex === 0 ? focusableElements.length - 1 : focusedIndex - 1;
     }
 
     const nextElement = focusableElements[nextIndex];
@@ -129,18 +140,18 @@ export function getA11yClassNames(options = {}) {
   const classes = [];
 
   if (highContrast) {
-    classes.push('high-contrast-mode');
+    classes.push("high-contrast-mode");
   }
 
   if (darkMode) {
-    classes.push('dark-mode');
+    classes.push("dark-mode");
   }
 
   if (focusVisible) {
-    classes.push('focus-visible');
+    classes.push("focus-visible");
   }
 
-  return classes.join(' ');
+  return classes.join(" ");
 }
 
 export default useA11y;

@@ -1,4 +1,4 @@
-import { SB_COLORS, SB_RADII } from "../smartboardTheme";
+import { SB_COLORS, SB_RADII } from "../ingenIATheme";
 import Button from "./Button";
 
 const SEVERITY = {

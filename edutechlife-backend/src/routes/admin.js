@@ -141,7 +141,7 @@ router.get('/analytics/students', requireAdmin, async (req, res) => {
 
 /**
  * GET /api/admin/analytics/smartboard
- * Institutional SmartBoard metrics for Valeria Analytics (Fase 4.3).
+ * Institutional IngenIA metrics for Valeria Analytics (Fase 4.3).
  * Aggregates sessions + academic_context + crisis_alerts + learning_streaks.
  *
  * Query params:

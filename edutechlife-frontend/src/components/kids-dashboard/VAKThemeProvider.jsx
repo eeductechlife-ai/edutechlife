@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo } from "react";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 
 const VAK_STYLES = {
@@ -47,7 +47,7 @@ const VAKThemeContext = createContext({
 });
 
 const VAKThemeProvider = ({ children }) => {
-  const { vakResult } = useSmartBoardKids();
+  const { vakResult } = useIngenIAKids();
   const { t } = useTranslation();
 
   const value = useMemo(() => {

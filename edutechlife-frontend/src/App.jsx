@@ -108,7 +108,7 @@ LazyNicoModern.propTypes = {
 const App = () => {
   const location = useLocation();
   const isIALabRoute = location.pathname.includes("/ialab");
-  const isSmartBoardRoute = location.pathname.includes("/smartboard");
+  const isIngenIARoute = location.pathname.includes("/smartboard");
   const isVAKRoute = location.pathname.includes("/vak");
   const { token: authToken } = useAuthIdentity();
   const [isLoading, setIsLoading] = useState(true);
@@ -164,7 +164,7 @@ const App = () => {
             </Suspense>
           )}
           <AppRoutes />
-          {!isIALabRoute && !isSmartBoardRoute && !isVAKRoute && (
+          {!isIALabRoute && !isIngenIARoute && !isVAKRoute && (
             <LazyNicoModern immediate={location.pathname === "/"} />
           )}
         </div>

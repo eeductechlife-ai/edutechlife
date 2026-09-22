@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useSmartBoardKids } from "../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../context/IngenIAKidsContext";
 import { track } from "../lib/analytics";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
@@ -41,7 +41,7 @@ async function apiFetch(path, opts = {}) {
  *   - fetchWeeklyPlan(studentId)
  */
 export function useAdaptiveEngine() {
-  const { supabaseQueries } = useSmartBoardKids();
+  const { supabaseQueries } = useIngenIAKids();
   const studentDbId = supabaseQueries?.studentData?.data?.id ?? null;
 
   const [nextAction, setNextAction] = useState(null);

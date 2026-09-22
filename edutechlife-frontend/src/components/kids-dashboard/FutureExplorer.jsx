@@ -1,6 +1,6 @@
 import { memo, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useSkillPassport } from "../../hooks/useSkillPassport";
 
 const AREAS = [
@@ -159,7 +159,7 @@ const AreaDetail = memo(({ area, onClose }) => (
 AreaDetail.displayName = "AreaDetail";
 
 const FutureExplorer = memo(() => {
-  const { studentAge, supabaseQueries } = useSmartBoardKids();
+  const { studentAge, supabaseQueries } = useIngenIAKids();
   const studentDbId = supabaseQueries?.studentData?.data?.id ?? null;
   const { passport } = useSkillPassport();
   const [selected, setSelected] = useState(null);

@@ -60,7 +60,7 @@ const ParentalNoticeBar = () => {
         >
           <span className="flex items-center gap-2">
             <span aria-hidden="true">🔔</span>
-            Hemos avisado a tus padres que ya estás en SmartBoard.
+            Hemos avisado a tus padres que ya estás en IngenIA.
           </span>
           <button
             type="button"

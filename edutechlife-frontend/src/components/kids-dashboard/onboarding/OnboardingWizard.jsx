@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { GRADE_OPTIONS } from "../../../data/curriculum/curriculumHelper";
 import { track } from "../../../lib/analytics";
 import { EVENTS } from "../../../lib/analyticsEvents";
@@ -70,7 +70,7 @@ const INTEREST_OPTIONS = [
 // Inline step: school + grade + city + interests (index = -1, shown before NAV_STEPS)
 function GradeStep({ ageGroup, onDone }) {
   const { setGradeLevel, setCountryCode, setSchoolName, updateDaniMemory } =
-    useSmartBoardKids();
+    useIngenIAKids();
   const [grade, setGrade] = useState(null);
   const [school, setSchool] = useState("");
   const [city, setCity] = useState("");
@@ -269,7 +269,7 @@ const OnboardingWizard = memo(({ onTabChange }) => {
     hasGrades,
     studentAge,
     gradeLevel,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
 
   // gradeDone = either already captured (gradeLevel in context) or skipped
   const [gradeDone, setGradeDone] = useState(!!gradeLevel);

@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { callDeepseekSmartboard } from "../../../utils/api";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import {
   getCurriculumPromptText,
   getGradeLabel,
@@ -78,7 +78,7 @@ export function useImprovementPlan() {
     userId,
     gradeLevel,
     countryCode,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
 
   const [plan, setPlan] = useState(() => loadPlanLocal(userId));
   const [isGenerating, setIsGenerating] = useState(false);

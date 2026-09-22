@@ -1,8 +1,8 @@
 import { memo, useMemo } from "react";
 import { motion } from "framer-motion";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { ProgressBar } from "../ui";
-import { SB_COLORS, SB_GRADIENTS } from "../smartboardTheme";
+import { SB_COLORS, SB_GRADIENTS } from "../ingenIATheme";
 
 const PROGRESS_GRADIENT = SB_GRADIENTS.progress;
 const PROGRESS_GLOW = "#FB8500";
@@ -73,7 +73,7 @@ const SmartProfile = memo(function SmartProfile({ onTabChange, onExpandVak }) {
     streakLog,
     totalActiveMinutes,
     darkMode: dm,
-  } = useSmartBoardKids();
+  } = useIngenIAKids();
 
   const profile = daniMemory?.studentProfile ?? {};
   const studentName = useMemo(() => {

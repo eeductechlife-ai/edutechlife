@@ -1,7 +1,7 @@
 import { FEATURE_FLAGS } from "../components/kids-dashboard/kidsDashboardConfig";
 
 /**
- * Resolves a SmartBoard 3.0 feature flag.
+ * Resolves a IngenIA 3.0 feature flag.
  *
  * Override order (highest first):
  *   1. Per-session localStorage override — `sb_flag_<name>` = "true" | "false"

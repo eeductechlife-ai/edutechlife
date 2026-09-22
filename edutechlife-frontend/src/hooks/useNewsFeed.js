@@ -1,14 +1,14 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { fetchNews } from '../services/newsApi';
-import { useSmartBoardKids } from '../context/SmartBoardKidsContext';
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { fetchNews } from "../services/newsApi";
+import { useIngenIAKids } from "../context/IngenIAKidsContext";
 
 export function useNewsFeed() {
-  const { readNews, markNewsAsRead } = useSmartBoardKids();
+  const { readNews, markNewsAsRead } = useIngenIAKids();
   const [allArticles, setAllArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isFallback, setIsFallback] = useState(false);
-  const [activeCategory, setActiveCategory] = useState('did-you-know');
+  const [activeCategory, setActiveCategory] = useState("did-you-know");
   const [openArticle, setOpenArticle] = useState(null);
 
   useEffect(() => {
@@ -22,7 +22,9 @@ export function useNewsFeed() {
         const { articles, source } = await fetchNews();
         if (mounted) {
           setAllArticles(articles);
-          setIsFallback(source === 'fallback' && !!import.meta.env.VITE_NEWS_API_URL);
+          setIsFallback(
+            source === "fallback" && !!import.meta.env.VITE_NEWS_API_URL,
+          );
         }
       } catch (err) {
         if (mounted) {
@@ -37,21 +39,26 @@ export function useNewsFeed() {
     };
 
     load();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const filteredArticles = useMemo(() => {
-    return allArticles.filter(a => a.category === activeCategory);
+    return allArticles.filter((a) => a.category === activeCategory);
   }, [allArticles, activeCategory]);
 
-  const handleMarkAsRead = useCallback((id) => {
-    if (!readNews.includes(id)) {
-      markNewsAsRead(id);
-    }
-  }, [readNews, markNewsAsRead]);
+  const handleMarkAsRead = useCallback(
+    (id) => {
+      if (!readNews.includes(id)) {
+        markNewsAsRead(id);
+      }
+    },
+    [readNews, markNewsAsRead],
+  );
 
   const unreadCount = useMemo(() => {
-    return allArticles.filter(a => !readNews.includes(a.id)).length;
+    return allArticles.filter((a) => !readNews.includes(a.id)).length;
   }, [allArticles, readNews]);
 
   return {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { mergeWithLocal } from "../smartboardSync";
+import { mergeWithLocal } from "../ingenIASync";
 
 describe("mergeWithLocal", () => {
   it("merges totalPoints and minutes by taking the max (documented) but keeps both sides for arrays", () => {

@@ -41,7 +41,7 @@ describe("HeaderFluidIsland — login dropdown", () => {
     fireEvent.click(screen.getByText("nav.login"));
 
     expect(screen.getByText("iLab Academic")).toBeTruthy();
-    expect(screen.getByText("SmartBoard")).toBeTruthy();
+    expect(screen.getByText("IngenIA")).toBeTruthy();
   });
 
   it("hides dropdown on route pathname change", async () => {
