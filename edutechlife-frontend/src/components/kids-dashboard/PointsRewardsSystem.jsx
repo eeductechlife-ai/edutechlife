@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, Gem } from "lucide-react";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { useKidText } from "../../hooks/useKidText";
 
 // ==========================================
 // Reward Card Component
@@ -62,35 +63,41 @@ RewardCard.displayName = "RewardCard";
 // ==========================================
 const PointsDisplay = memo(({ totalPoints, totalActiveMinutes }) => {
   const { t } = useTranslation();
+  const kt = useKidText();
   const safeMinutes = totalActiveMinutes || 0;
   const level = useMemo(() => {
     if (totalPoints >= 5000)
       return {
         levelKey: "kid.points_rewards.level_maestro",
-        emoji: "🏆",
+        ktKey: "level.maestro",
+        defaultEmoji: "🏆",
         color: "#FFD166",
       };
     if (totalPoints >= 2500)
       return {
         levelKey: "kid.points_rewards.level_experto",
-        emoji: "⭐",
+        ktKey: "level.experto",
+        defaultEmoji: "⭐",
         color: "#4DA8C4",
       };
     if (totalPoints >= 1000)
       return {
         levelKey: "kid.points_rewards.level_avanzado",
-        emoji: "📚",
+        ktKey: "level.avanzado",
+        defaultEmoji: "📚",
         color: "#66CCCC",
       };
     if (totalPoints >= 500)
       return {
         levelKey: "kid.points_rewards.level_intermedio",
-        emoji: "🌟",
+        ktKey: "level.intermedio",
+        defaultEmoji: "🌟",
         color: "#B2D8E5",
       };
     return {
       levelKey: "kid.points_rewards.level_principiante",
-      emoji: "🌱",
+      ktKey: "level.principiante",
+      defaultEmoji: "🌱",
       color: "#66CCCC",
     };
   }, [totalPoints]);
@@ -119,8 +126,10 @@ const PointsDisplay = memo(({ totalPoints, totalActiveMinutes }) => {
             {t("kid.points_rewards.level")}
           </p>
           <p className="text-2xl font-bold text-[#00303F]">
-            <span style={{ color: level.color }}>{level.emoji}</span>{" "}
-            {t(level.levelKey)}
+            <span style={{ color: level.color }}>
+              {kt(`${level.ktKey}.emoji`, level.defaultEmoji)}
+            </span>{" "}
+            {kt(level.ktKey, t(level.levelKey))}
           </p>
         </div>
       </div>
@@ -191,6 +200,7 @@ PointsHistory.displayName = "PointsHistory";
 // ==========================================
 const PointsRewardsSystem = memo(() => {
   const { t } = useTranslation();
+  const kt = useKidText();
   const {
     totalPoints,
     pointsHistory,
@@ -308,14 +318,14 @@ const PointsRewardsSystem = memo(() => {
               />
             )}
             <span className="relative z-10">
-              {tab === "puntos" && "💎 "}
-              {tab === "tienda" && "🛒 "}
-              {tab === "historial" && "📜 "}
               {tab === "puntos"
-                ? t("kid.points_rewards.tab_points")
+                ? kt("points.tab_points", t("kid.points_rewards.tab_points"))
                 : tab === "tienda"
-                  ? t("kid.points_rewards.tab_store")
-                  : t("kid.points_rewards.tab_history")}
+                  ? kt("points.tab_store", t("kid.points_rewards.tab_store"))
+                  : kt(
+                      "points.tab_history",
+                      t("kid.points_rewards.tab_history"),
+                    )}
             </span>
           </button>
         ))}

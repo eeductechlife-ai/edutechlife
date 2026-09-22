@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useSmartBoardKids } from "../../context/SmartBoardKidsContext";
 import { useAdaptiveEngine } from "../../hooks/useAdaptiveEngine";
+import { useKidText } from "../../hooks/useKidText";
 import WhatDoIDoToday from "./WhatDoIDoToday";
 import { useTranslation } from "../../i18n/I18nProvider";
 import DaniAvatar3D from "./DaniAvatar3D";
@@ -55,6 +56,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
   const { vakResult, timetable, currentClass, nextClass, studentAge } =
     useSmartBoardKids();
   const { t } = useTranslation();
+  const kt = useKidText();
   const reduce = useReducedMotion();
 
   const activeClass = currentClass || nextClass;
@@ -207,10 +209,13 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
           <span className="text-2xl flex-shrink-0">🧠</span>
           <div className="flex-1 min-w-0">
             <div className="text-xs font-bold text-white/60 uppercase tracking-wide mb-0.5">
-              ¿Eres visual, auditivo o kinestésico?
+              {kt("hero.vak_question", "¿Eres visual, auditivo o kinestésico?")}
             </div>
             <div className="text-sm font-semibold text-white truncate">
-              Descubre tu súper poder de aprendizaje · +25 XP
+              {kt(
+                "hero.vak_subtitle",
+                "Descubre tu súper poder de aprendizaje · +25 XP",
+              )}
             </div>
           </div>
           <ChevronRight
@@ -239,9 +244,11 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
           >
             <Bot className="w-5 h-5" strokeWidth={2.3} />
           </motion.span>
-          <span className="text-base">{t("kid.hero.talk_with_dani")}</span>
+          <span className="text-base">
+            {kt("hero.talk_dani", t("kid.hero.talk_with_dani"))}
+          </span>
           <span className="text-xs opacity-60">
-            {t("kid.hero.here_for_you")}
+            {kt("hero.dani_tagline", t("kid.hero.here_for_you"))}
           </span>
         </motion.button>
       </div>
