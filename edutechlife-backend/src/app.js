@@ -127,6 +127,14 @@ app.use('/api/smartboard/progress', requireAuth);
 app.use('/api/smartboard/chat', requireAuth, deepseekLimiter);
 app.use('/api/smartboard/dani/chat', requireAuth, deepseekLimiter);
 app.use('/api/smartboard/ai', requireAuth, deepseekLimiter);
+// Alias: el frontend llama a estas mismas rutas bajo /api/ingenia/* (nombre
+// de marca del producto) — sin este alias, Dani chat, el perfil y el
+// progreso devuelven 404 en producción. Mismos guards que /api/smartboard.
+app.use('/api/ingenia/data', requireAuth);
+app.use('/api/ingenia/progress', requireAuth);
+app.use('/api/ingenia/chat', requireAuth, deepseekLimiter);
+app.use('/api/ingenia/dani/chat', requireAuth, deepseekLimiter);
+app.use('/api/ingenia/ai', requireAuth, deepseekLimiter);
 app.use('/api/ialab/progress', requireAuth);
 app.use('/api/ialab/templates', requireAuth);
 
@@ -149,6 +157,18 @@ app.use(
 );
 app.use(
   '/api/smartboard',
+  ferpaAuditLog,
+  requireProduct('smartboard', { allowPaths: ['/user-role'] }),
+  scanImageRoutes
+);
+app.use(
+  '/api/ingenia',
+  ferpaAuditLog,
+  requireProduct('smartboard', { allowPaths: ['/user-role'] }),
+  smartboardRoutes
+);
+app.use(
+  '/api/ingenia',
   ferpaAuditLog,
   requireProduct('smartboard', { allowPaths: ['/user-role'] }),
   scanImageRoutes
