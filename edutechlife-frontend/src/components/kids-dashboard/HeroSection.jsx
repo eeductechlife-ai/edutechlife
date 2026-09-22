@@ -106,7 +106,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
       style={{ background: SB_GRADIENTS.hero }}
     >
       {/* Top row: avatar + greeting */}
-      <div className="p-5 flex items-center gap-4">
+      <div className="px-4 pt-4 pb-3 flex items-center gap-3">
         <motion.div
           animate={reduce ? {} : { y: [0, -6, 0] }}
           transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
@@ -157,7 +157,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           whileTap={{ scale: 0.98 }}
-          className="mx-5 mb-4 flex items-center gap-4 w-[calc(100%-2.5rem)] p-4 rounded-2xl text-left border transition-colors"
+          className="mx-4 mb-3 flex items-center gap-3 w-[calc(100%-2rem)] p-3 rounded-2xl text-left border transition-colors"
           style={{
             backgroundColor: `${classColor}22`,
             borderColor: `${classColor}55`,
@@ -186,7 +186,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
           />
         </motion.button>
       ) : (
-        <div className="mx-5 mb-4 px-4 py-3 rounded-2xl bg-white/8 border border-white/15">
+        <div className="mx-4 mb-3 px-3 py-2.5 rounded-2xl bg-white/8 border border-white/15">
           <div className="text-xs text-white/60">Sin clase en este momento</div>
           <div className="text-sm font-semibold text-white mt-0.5">
             Aprovecha para repasar con Dani
@@ -203,7 +203,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
           whileTap={{ scale: 0.97 }}
-          className="mx-5 mb-4 w-[calc(100%-2.5rem)] flex items-center gap-3 px-4 py-3 rounded-2xl text-left border border-white/20"
+          className="mx-4 mb-3 w-[calc(100%-2rem)] flex items-center gap-3 px-3 py-2.5 rounded-2xl text-left border border-white/20"
           style={{ background: "rgba(255,255,255,0.10)" }}
         >
           <span className="text-2xl flex-shrink-0">🧠</span>
@@ -226,7 +226,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
       )}
 
       {/* CTA principal: Hablar con Dani */}
-      <div className="px-5 pb-4">
+      <div className="px-4 pb-3">
         <motion.button
           type="button"
           onClick={() => onDaniOpen?.()}
@@ -255,7 +255,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
 
       {/* Acciones rápidas — 3 compactas */}
       <motion.div
-        className="px-5 pb-5 grid grid-cols-3 gap-2"
+        className="px-4 pb-4 grid grid-cols-3 gap-2"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
@@ -265,7 +265,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
             key={action.tab}
             type="button"
             onClick={() => onTabChange?.(action.tab)}
-            className="flex flex-col items-center gap-1.5 py-3 px-2 rounded-2xl bg-white/10 border border-white/20 hover:bg-white/18 active:scale-95 transition-all"
+            className="flex flex-col items-center gap-1 py-2.5 px-2 rounded-2xl bg-white/10 border border-white/20 hover:bg-white/18 active:scale-95 transition-all"
           >
             <span className="text-2xl leading-none">{action.emoji}</span>
             <span className="text-[11px] text-white/80 font-semibold text-center leading-tight">
