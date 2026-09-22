@@ -394,7 +394,7 @@ export const useIngenIAActions = (stateAndSetters) => {
       const dominantStyle = result.predominantStyle;
       const recommendations = VAK_RECOMMENDATIONS[dominantStyle] || [];
       setVakRecommendations(recommendations);
-      addPoints(300, "Completó diagnóstico VAK");
+      addPoints(300, "Completó ADN de Aprendizaje");
     }
   }, []);
 

@@ -257,7 +257,30 @@ export const ActivityLog = ({
   newActivityPulse = false,
 }) => {
   const { t } = useTranslation();
-  const recent = history.slice(-20).reverse();
+  const NOISE_PATTERNS = [
+    "minuto activo",
+    "minute active",
+    "dashboard activo",
+    "active dashboard",
+  ];
+  const meaningful = history.filter((e) => {
+    const r = (e.reason || "").toLowerCase();
+    return !NOISE_PATTERNS.some((p) => r.includes(p));
+  });
+  const recent = meaningful.slice(-20).reverse();
+
+  const todayEntries = meaningful.filter((e) => {
+    const d = new Date(e.timestamp);
+    return d.toDateString() === new Date().toDateString();
+  });
+  const noActivityToday = todayEntries.length === 0;
+
+  const lastWeekPoints = meaningful
+    .filter((e) => {
+      const d = new Date(e.timestamp);
+      return Date.now() - d.getTime() < 7 * 24 * 60 * 60 * 1000;
+    })
+    .reduce((s, e) => s + e.points, 0);
 
   const alerts = [];
   const todayPoints = history
@@ -325,6 +348,18 @@ export const ActivityLog = ({
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Weekly summary when no activity today */}
+      {noActivityToday && lastWeekPoints > 0 && (
+        <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+          <p className="text-xs font-bold text-blue-700 mb-1">
+            {t("parent_dashboard.no_activity_today")}
+          </p>
+          <p className="text-xs text-blue-600">
+            {t("parent_dashboard.weekly_summary", { points: lastWeekPoints })}
+          </p>
         </div>
       )}
 

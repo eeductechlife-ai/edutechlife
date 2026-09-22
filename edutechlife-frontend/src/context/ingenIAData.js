@@ -37,7 +37,7 @@ export const DEFAULT_NEWS = [
 export const DEFAULT_MISSIONS = [
   {
     id: 1,
-    title: "Completa tu Diagnóstico VAK",
+    title: "Completa tu ADN de Aprendizaje",
     description: "Descubre cómo aprendes mejor",
     icon: "🧠",
     xp: 100,
