@@ -365,32 +365,28 @@ const IngenIAKidsDashboard = () => {
                 setIsDaniOpen(true);
               }}
               aria-label={t("smartboard.dani_reminder_open")}
-              className="fixed left-4 right-4 md:left-6 md:right-auto md:max-w-[16rem] z-[55] flex items-center justify-between gap-3 px-4 py-3 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl shadow-xl cursor-pointer"
+              className="fixed left-4 z-[55] flex items-center gap-2 px-3 py-2.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full shadow-xl cursor-pointer max-w-[13rem]"
               style={{
-                bottom: "calc(env(safe-area-inset-bottom, 0px) + 5.5rem)",
+                bottom: "calc(env(safe-area-inset-bottom, 0px) + 5rem)",
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <div className="flex items-center gap-3">
-                <motion.span
-                  className="text-xl flex-shrink-0"
-                  animate={{ rotate: [0, -10, 10, -10, 0] }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    repeatDelay: 2,
-                  }}
-                  aria-hidden="true"
-                >
-                  🤖
-                </motion.span>
-                <div className="text-left">
-                  <p className="text-xs font-bold">¿Necesitas ayuda?</p>
-                  <p className="text-[10px] text-white/80">
-                    Dani está aquí para ti
-                  </p>
-                </div>
+              <motion.span
+                className="text-lg flex-shrink-0"
+                animate={{ rotate: [0, -10, 10, -10, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+                aria-hidden="true"
+              >
+                🤖
+              </motion.span>
+              <div className="text-left leading-tight min-w-0">
+                <p className="text-[11px] font-bold truncate">
+                  ¿Necesitas ayuda?
+                </p>
+                <p className="text-[9px] text-white/75 truncate">
+                  Dani está aquí
+                </p>
               </div>
               <motion.span
                 onClick={(e) => {
@@ -406,7 +402,7 @@ const IngenIAKidsDashboard = () => {
                   }
                 }}
                 aria-label={t("smartboard.close_reminder")}
-                className="text-white/50 hover:text-white text-sm ml-2 flex-shrink-0 cursor-pointer hover:bg-white/20 rounded px-1.5 py-0.5 transition-colors"
+                className="text-white/60 hover:text-white text-xs flex-shrink-0 cursor-pointer hover:bg-white/20 rounded-full w-5 h-5 flex items-center justify-center transition-colors"
               >
                 ✕
               </motion.span>
