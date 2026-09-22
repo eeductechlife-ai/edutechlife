@@ -4,7 +4,11 @@ import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { VAKDiagnosticEnhanced } from "../VAKDiagnosticEnhanced";
 import SmartProfile from "../profile/SmartProfile";
 
-const PerfilTab = memo(function PerfilTab({ onTabChange, handleVakComplete }) {
+const PerfilTab = memo(function PerfilTab({
+  onTabChange,
+  handleVakComplete,
+  onLogout,
+}) {
   const { vakResult } = useIngenIAKids();
   const [showVakPanel, setShowVakPanel] = useState(false);
 
@@ -16,7 +20,11 @@ const PerfilTab = memo(function PerfilTab({ onTabChange, handleVakComplete }) {
 
   return (
     <>
-      <SmartProfile onTabChange={onTabChange} onExpandVak={handleExpandVak} />
+      <SmartProfile
+        onTabChange={onTabChange}
+        onExpandVak={handleExpandVak}
+        onLogout={onLogout}
+      />
 
       <AnimatePresence>
         {showVakPanel && (

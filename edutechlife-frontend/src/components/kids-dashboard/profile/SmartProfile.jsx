@@ -1,8 +1,11 @@
-import { memo, useMemo } from "react";
-import { motion } from "framer-motion";
+import { memo, useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Edit3, LogOut, Moon, Sun } from "lucide-react";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
+import { useStudentProfileIngenIA } from "../../../hooks/useStudentProfileIngenIA";
 import { ProgressBar } from "../ui";
-import { SB_COLORS, SB_GRADIENTS } from "../ingenIATheme";
+import { SB_COLORS, SB_GRADIENTS, glow } from "../ingenIATheme";
+import EditProfileModal from "../EditProfileModal";
 
 const PROGRESS_GRADIENT = SB_GRADIENTS.progress;
 const PROGRESS_GLOW = "#FB8500";
@@ -59,7 +62,11 @@ const ProfileCard = ({ children, dm, className = "" }) => (
   </div>
 );
 
-const SmartProfile = memo(function SmartProfile({ onTabChange, onExpandVak }) {
+const SmartProfile = memo(function SmartProfile({
+  onTabChange,
+  onExpandVak,
+  onLogout,
+}) {
   const {
     studentAge,
     gradeLevel,
@@ -73,7 +80,18 @@ const SmartProfile = memo(function SmartProfile({ onTabChange, onExpandVak }) {
     streakLog,
     totalActiveMinutes,
     darkMode: dm,
+    toggleDarkMode,
   } = useIngenIAKids();
+
+  const [editOpen, setEditOpen] = useState(false);
+  const authToken =
+    typeof window !== "undefined" ? sessionStorage.getItem("auth_token") : null;
+  const {
+    profile: editProfile,
+    updateProfile,
+    uploadAvatar,
+    removeAvatar,
+  } = useStudentProfileIngenIA(authToken);
 
   const profile = daniMemory?.studentProfile ?? {};
   const studentName = useMemo(() => {
@@ -386,7 +404,7 @@ const SmartProfile = memo(function SmartProfile({ onTabChange, onExpandVak }) {
                     border: `1px solid ${dm ? "#243152" : "#E2E8F0"}`,
                     color: textMuted,
                   }}
-                  title="Repetir diagnóstico VAK"
+                  title="Repetir ADN de Aprendizaje"
                 >
                   Repetir →
                 </button>
@@ -638,6 +656,76 @@ const SmartProfile = memo(function SmartProfile({ onTabChange, onExpandVak }) {
           </ul>
         </ProfileCard>
       )}
+
+      {/* ── Acciones de cuenta ───────────────────────────── */}
+      <ProfileCard dm={dm}>
+        <SectionLabel dm={dm}>⚙️ Cuenta y preferencias</SectionLabel>
+        <div className="space-y-2">
+          {/* Editar perfil */}
+          <button
+            type="button"
+            onClick={() => setEditOpen(true)}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors text-left"
+            style={{
+              background: SB_GRADIENTS.brand,
+              boxShadow: glow("#00B4D8", 0.25),
+              color: "white",
+            }}
+          >
+            <Edit3 className="w-4 h-4 flex-shrink-0" />
+            Editar mi perfil
+          </button>
+
+          {/* Modo oscuro */}
+          <button
+            type="button"
+            onClick={toggleDarkMode}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors"
+            style={{
+              background: dm ? "rgba(255,255,255,0.06)" : "rgba(0,75,99,0.06)",
+              border: `1px solid ${dm ? "#243152" : "#E2E8F0"}`,
+              color: textMain,
+            }}
+          >
+            {dm ? (
+              <Sun className="w-4 h-4 flex-shrink-0 text-yellow-400" />
+            ) : (
+              <Moon className="w-4 h-4 flex-shrink-0 text-indigo-500" />
+            )}
+            {dm ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+          </button>
+
+          {/* Cerrar sesión */}
+          {onLogout && (
+            <button
+              type="button"
+              onClick={onLogout}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
+              style={{ color: "#EF476F" }}
+            >
+              <LogOut className="w-4 h-4" />
+              Cerrar sesión
+            </button>
+          )}
+        </div>
+      </ProfileCard>
+
+      {/* Modal Editar Perfil */}
+      <AnimatePresence>
+        {editOpen && (
+          <EditProfileModal
+            profile={editProfile}
+            studentName={editProfile?.name || "Estudiante"}
+            displayName={editProfile?.name || "Estudiante"}
+            avatarUrl={editProfile?.avatarUrl}
+            updateProfile={updateProfile}
+            uploadAvatar={uploadAvatar}
+            removeAvatar={removeAvatar}
+            onClose={() => setEditOpen(false)}
+            onSaveSuccess={() => {}}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 });

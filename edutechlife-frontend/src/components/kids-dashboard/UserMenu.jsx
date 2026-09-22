@@ -1,142 +1,49 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import PropTypes from "prop-types";
-import { AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
 import { useStudentProfileIngenIA } from "../../hooks/useStudentProfileIngenIA";
-import { useTranslation } from "../../i18n/I18nProvider";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
-import { VAK_STYLES_MAP, getInitials, getVakKey } from "./userMenuConstants";
-import UserMenuDropdown from "./UserMenuDropdown";
-import EditProfileModal from "./EditProfileModal";
+import { getInitials } from "./userMenuConstants";
 
 export { getInitials };
 
-const UserMenu = ({
-  authToken,
-  studentName,
-  darkMode,
-  onTabChange,
-  onLogout,
-}) => {
-  const { t } = useTranslation();
-  const { toggleDarkMode, gradeLevel, setGradeLevel, setSchoolName } =
-    useIngenIAKids();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isEditingModal, setIsEditingModal] = useState(false);
-  const { profile, loading, error, updateProfile, uploadAvatar, removeAvatar } =
-    useStudentProfileIngenIA(authToken);
+const UserMenu = ({ authToken, studentName, darkMode, onTabChange }) => {
+  const { gradeLevel, setGradeLevel, setSchoolName } = useIngenIAKids();
+  const { profile } = useStudentProfileIngenIA(authToken);
 
-  // Auto-sync grade and school from profile to IngenIA context when profile loads
+  // Sync grade and school from profile to context
   useEffect(() => {
     if (!profile) return;
     if (profile.grade && !gradeLevel) {
       const parsed = parseInt(profile.grade, 10);
-      if (!Number.isNaN(parsed) && parsed >= 1 && parsed <= 11) {
-        setGradeLevel(parsed);
-      }
-    }
-    if (profile.school && setSchoolName) {
-      setSchoolName(profile.school);
-    }
-  }, [profile, gradeLevel, setGradeLevel, setSchoolName]);
-
-  const displayName = profile?.name || studentName || t("kid.user.student");
-  const vakKey = getVakKey(profile?.vakStyle);
-  const vakMeta = VAK_STYLES_MAP[vakKey];
-  const avatarUrl = profile?.avatarUrl;
-
-  const openEditModal = () => {
-    setIsEditingModal(true);
-    setIsOpen(false);
-  };
-
-  const handleLogoutClick = () => {
-    setIsOpen(false);
-    if (onLogout) onLogout();
-  };
-
-  const handleProgressClick = () => {
-    setIsOpen(false);
-    if (onTabChange) onTabChange("progreso");
-  };
-
-  const handleSaveSuccess = (payload) => {
-    if (payload.grade) {
-      const parsed = parseInt(payload.grade, 10);
       if (!Number.isNaN(parsed) && parsed >= 1 && parsed <= 11)
         setGradeLevel(parsed);
     }
-    if (payload.school && setSchoolName) setSchoolName(payload.school);
-  };
+    if (profile.school && setSchoolName) setSchoolName(profile.school);
+  }, [profile, gradeLevel, setGradeLevel, setSchoolName]);
+
+  const displayName = profile?.name || studentName || "Estudiante";
+  const avatarUrl = profile?.avatarUrl;
 
   return (
-    <>
-      {/* Dropdown Trigger */}
-      <div className="relative">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className={`flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full transition-colors ${
-            darkMode ? "hover:bg-white/10" : "hover:bg-[#E8F4F8]"
-          }`}
-          aria-label={t("kid.user.open_menu")}
-          aria-expanded={isOpen}
-        >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0077B6] to-[#00B4D8] flex items-center justify-center text-white overflow-hidden ring-2 ring-white/30">
-            {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt={displayName}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span className="text-xs font-bold">
-                {getInitials(displayName)}
-              </span>
-            )}
-          </div>
-          <ChevronDown
-            className={`w-3.5 h-3.5 transition-transform ${isOpen ? "rotate-180" : ""} ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+    <button
+      onClick={() => onTabChange?.("perfil")}
+      className={`flex items-center gap-1 pl-1 pr-2 py-1 rounded-full transition-colors ${
+        darkMode ? "hover:bg-white/10" : "hover:bg-[#E8F4F8]"
+      }`}
+      aria-label="Ir a Mi Perfil"
+    >
+      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0077B6] to-[#00B4D8] flex items-center justify-center text-white overflow-hidden ring-2 ring-white/30">
+        {avatarUrl ? (
+          <img
+            src={avatarUrl}
+            alt={displayName}
+            className="w-full h-full object-cover"
           />
-        </button>
-
-        {/* Dropdown Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <UserMenuDropdown
-              displayName={displayName}
-              avatarUrl={avatarUrl}
-              vakMeta={vakMeta}
-              loading={loading}
-              profile={profile}
-              error={error}
-              darkMode={darkMode}
-              toggleDarkMode={toggleDarkMode}
-              onClose={() => setIsOpen(false)}
-              onProgressClick={handleProgressClick}
-              onEditProfile={openEditModal}
-              onLogout={handleLogoutClick}
-            />
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Modal Editar Perfil */}
-      <AnimatePresence>
-        {isEditingModal && (
-          <EditProfileModal
-            profile={profile}
-            studentName={studentName}
-            displayName={displayName}
-            avatarUrl={avatarUrl}
-            updateProfile={updateProfile}
-            uploadAvatar={uploadAvatar}
-            removeAvatar={removeAvatar}
-            onClose={() => setIsEditingModal(false)}
-            onSaveSuccess={handleSaveSuccess}
-          />
+        ) : (
+          <span className="text-xs font-bold">{getInitials(displayName)}</span>
         )}
-      </AnimatePresence>
-    </>
+      </div>
+    </button>
   );
 };
 
@@ -145,7 +52,6 @@ UserMenu.propTypes = {
   studentName: PropTypes.string,
   darkMode: PropTypes.bool,
   onTabChange: PropTypes.func,
-  onLogout: PropTypes.func,
 };
 
 export default UserMenu;

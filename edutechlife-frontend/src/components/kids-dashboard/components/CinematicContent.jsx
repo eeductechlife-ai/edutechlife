@@ -66,6 +66,7 @@ function createTabRenderer(deps) {
     navigate,
     onTabChange,
     onDaniOpen,
+    onLogout,
     studentAge,
     darkMode,
     ageGroup,
@@ -103,6 +104,7 @@ function createTabRenderer(deps) {
         <PerfilTab
           onTabChange={onTabChange}
           handleVakComplete={handleVakComplete}
+          onLogout={onLogout}
         />
       ),
       errorKey: "perfil",
@@ -226,7 +228,14 @@ function createTabRenderer(deps) {
 }
 
 const CinematicContent = memo(
-  ({ activeTab, onTabChange, darkMode, subscriptionTier, onDaniOpen }) => {
+  ({
+    activeTab,
+    onTabChange,
+    darkMode,
+    subscriptionTier,
+    onDaniOpen,
+    onLogout,
+  }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const isPremium = subscriptionTier === "premium";
@@ -263,6 +272,7 @@ const CinematicContent = memo(
           navigate,
           onTabChange,
           onDaniOpen,
+          onLogout,
           studentAge,
           darkMode,
           ageGroup,
@@ -279,6 +289,7 @@ const CinematicContent = memo(
         navigate,
         onTabChange,
         onDaniOpen,
+        onLogout,
         studentAge,
         darkMode,
         ageGroup,

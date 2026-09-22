@@ -348,6 +348,7 @@ const IngenIAKidsDashboard = () => {
               darkMode={darkMode}
               subscriptionTier={subscriptionTier}
               onDaniOpen={handleDaniOpen}
+              onLogout={handleLogout}
             />
           </div>
         </div>
