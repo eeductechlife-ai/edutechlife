@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { Loader2, Check, X, Camera, Trash2 } from "lucide-react";
@@ -137,7 +138,7 @@ const EditProfileModal = ({
     </div>
   );
 
-  return (
+  return createPortal(
     <>
       {/* Backdrop */}
       <motion.div
@@ -145,15 +146,17 @@ const EditProfileModal = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/30 z-40"
+        className="fixed inset-0 bg-black/50 z-[200]"
+        style={{ backdropFilter: "blur(2px)" }}
       />
 
       {/* Modal */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-xl p-6 max-w-sm w-11/12 z-50 max-h-[90dvh] overflow-y-auto"
+        initial={{ opacity: 0, scale: 0.95, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 8 }}
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl shadow-2xl p-5 sm:p-6 max-w-sm w-[calc(100%-2rem)] z-[201] max-h-[90dvh] overflow-y-auto"
+        style={{ backgroundColor: "#ffffff" }}
       >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-800">
@@ -306,7 +309,8 @@ const EditProfileModal = ({
           </button>
         </div>
       </motion.div>
-    </>
+    </>,
+    document.body,
   );
 };
 

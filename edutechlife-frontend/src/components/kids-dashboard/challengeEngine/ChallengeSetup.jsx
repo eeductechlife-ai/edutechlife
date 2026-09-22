@@ -31,10 +31,10 @@ const SpinWheel = memo(({ subjects, onLand }) => {
 
   const N = subjects.length;
   const deg = 360 / N;
-  const cx = 120,
-    cy = 120,
-    r = 108,
-    textR = 70;
+  const cx = 100,
+    cy = 100,
+    r = 90,
+    textR = 58;
 
   const spin = useCallback(() => {
     if (isSpinning) return;
@@ -58,7 +58,7 @@ const SpinWheel = memo(({ subjects, onLand }) => {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="relative w-60 h-60">
+      <div className="relative w-48 h-48 sm:w-56 sm:h-56">
         {/* Pointer */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 -mt-1">
           <svg width="18" height="20">
@@ -76,7 +76,7 @@ const SpinWheel = memo(({ subjects, onLand }) => {
               : "none",
           }}
         >
-          <svg viewBox="0 0 240 240" className="w-full h-full">
+          <svg viewBox="0 0 200 200" className="w-full h-full">
             {subjects.map((s, i) => {
               const meta = SUBJECT_META[s.id] || {
                 color: "#9D4EDD",
@@ -210,7 +210,7 @@ const ChallengeSetup = memo(
           <h3 className={`text-sm font-bold mb-3 ${textPrimary}`}>
             ⚡ Nivel de dificultad
           </h3>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="flex flex-col sm:grid sm:grid-cols-3 gap-2">
             {difficulties.map((d) => {
               const sel = difficulty?.id === d.id;
               return (
@@ -219,7 +219,7 @@ const ChallengeSetup = memo(
                   onClick={() => setDifficulty(d)}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className={`p-3 rounded-xl border text-center transition-all ${
+                  className={`flex sm:flex-col items-center sm:items-center gap-3 sm:gap-1 px-4 sm:px-3 py-3.5 sm:py-3 rounded-xl border text-left sm:text-center transition-all ${
                     sel
                       ? "text-white border-transparent shadow-md"
                       : darkMode
@@ -228,13 +228,24 @@ const ChallengeSetup = memo(
                   }`}
                   style={sel ? { background: EXPLORE_GRADIENT } : {}}
                 >
-                  <div className="text-xl mb-1">{d.emoji}</div>
-                  <div className="text-xs font-bold">{d.label}</div>
-                  <div
-                    className={`text-[10px] mt-0.5 ${sel ? "text-white/80" : textSecondary}`}
-                  >
-                    {d.questions} pregs · {d.xp} XP
+                  <div className="text-2xl sm:text-xl sm:mb-1 flex-shrink-0">
+                    {d.emoji}
                   </div>
+                  <div className="flex-1 sm:flex-none">
+                    <div className="text-sm sm:text-xs font-bold">
+                      {d.label}
+                    </div>
+                    <div
+                      className={`text-xs sm:text-[10px] mt-0.5 ${sel ? "text-white/80" : textSecondary}`}
+                    >
+                      {d.questions} pregs · {d.xp} XP
+                    </div>
+                  </div>
+                  {sel && (
+                    <div className="ml-auto sm:hidden text-white text-lg">
+                      ✓
+                    </div>
+                  )}
                 </motion.button>
               );
             })}
