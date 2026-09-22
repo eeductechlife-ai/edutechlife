@@ -1,19 +1,19 @@
-import { useRef, useState, useEffect } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useRef, useState, useEffect } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
-export default function MagneticButton({ 
-  children, 
-  onClick, 
-  className = '',
+export default function MagneticButton({
+  children,
+  onClick,
+  className = "",
   intensity = 0.3,
-  springConfig = { stiffness: 350, damping: 15, mass: 1 }
+  springConfig = { stiffness: 350, damping: 15, mass: 1 },
 }) {
   const buttonRef = useRef(null);
   const [ripples, setRipples] = useState([]);
-  
+
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  
+
   const springX = useSpring(x, springConfig);
   const springY = useSpring(y, springConfig);
 
@@ -50,9 +50,9 @@ export default function MagneticButton({
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, [intensity, x, y]);
@@ -66,15 +66,15 @@ export default function MagneticButton({
     const newRipple = {
       x: rippleX,
       y: rippleY,
-      id: Date.now()
+      id: Date.now(),
     };
-    
+
     setRipples((prev) => [...prev, newRipple]);
     if (onClick) onClick(e);
   };
 
   const handleRippleEnd = (id) => {
-    setRipples((prev) => prev.filter(r => r.id !== id));
+    setRipples((prev) => prev.filter((r) => r.id !== id));
   };
 
   return (
@@ -83,17 +83,20 @@ export default function MagneticButton({
       className={`relative overflow-hidden cursor-none ${className}`}
       style={{ x: springX, y: springY }}
       onClick={handleClick}
-      onMouseLeave={() => { x.set(0); y.set(0); }}
+      onMouseLeave={() => {
+        x.set(0);
+        y.set(0);
+      }}
     >
-      <span className="relative z-10 flex items-center justify-center pointer-events-none w-full h-full">
-          {children}
+      <span className="relative z-10 flex items-center justify-center gap-3 pointer-events-none w-full h-full">
+        {children}
       </span>
       {ripples.map((ripple) => (
-        <Ripple 
-          key={ripple.id} 
-          x={ripple.x} 
-          y={ripple.y} 
-          onCompleted={() => handleRippleEnd(ripple.id)} 
+        <Ripple
+          key={ripple.id}
+          x={ripple.x}
+          y={ripple.y}
+          onCompleted={() => handleRippleEnd(ripple.id)}
         />
       ))}
     </motion.button>
@@ -108,18 +111,19 @@ const Ripple = ({ x, y, onCompleted }) => {
       transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
       onAnimationComplete={onCompleted}
       style={{
-        position: 'absolute',
+        position: "absolute",
         top: y,
         left: x,
         width: 40,
         height: 40,
         marginLeft: -20,
         marginTop: -20,
-        borderRadius: '50%',
-        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(102, 204, 204, 0.3))',
-        backdropFilter: 'blur(2px)',
-        pointerEvents: 'none',
-        zIndex: 1
+        borderRadius: "50%",
+        background:
+          "linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(102, 204, 204, 0.3))",
+        backdropFilter: "blur(2px)",
+        pointerEvents: "none",
+        zIndex: 1,
       }}
     />
   );
