@@ -3,7 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { getFileIcon } from "../../utils/documentParser";
-import { generateStudySummary } from "../../services/documentSummaryAI";
+import {
+  generateStudySummary,
+  generateStudySummaryFromImage,
+} from "../../services/documentSummaryAI";
 import ScannerSummaryResult from "./ScannerSummaryResult";
 
 const getSubjects = (t) => [
@@ -75,27 +78,40 @@ const ProblemScanner = memo(() => {
     setError("");
   }, []);
 
-  // Procesar: extraer texto + generar resumen tipo profesor
+  // Procesar: imagen → DeepSeek vision; documento → OCR cliente → DeepSeek texto
   const analyze = useCallback(async () => {
     if (!file) return;
     setMode("processing");
     setError("");
     setProgress(10);
-    setStage(t("scanner.stage_reading"));
 
     try {
-      const { extractDocumentText } =
-        await import("../../utils/documentParser");
-      setProgress(35);
-      const text = await extractDocumentText(file);
-      setOcrText(text);
-      setProgress(65);
-      setStage(t("scanner.stage_processing"));
+      let result;
 
-      const result = await generateStudySummary(text, {
-        subject: sl,
-        ageKey: age,
-      });
+      if (isImage(file)) {
+        // Ruta imagen: enviar directamente al backend con visión nativa
+        setStage("Analizando imagen con IA...");
+        setProgress(30);
+        result = await generateStudySummaryFromImage(img, {
+          subject: sl,
+          ageKey: age,
+        });
+      } else {
+        // Ruta documento (PDF, DOCX, TXT): extraer texto cliente → backend
+        setStage(t("scanner.stage_reading"));
+        const { extractDocumentText } =
+          await import("../../utils/documentParser");
+        setProgress(35);
+        const text = await extractDocumentText(file);
+        setOcrText(text);
+        setProgress(65);
+        setStage(t("scanner.stage_processing"));
+        result = await generateStudySummary(text, {
+          subject: sl,
+          ageKey: age,
+        });
+      }
+
       setProgress(100);
       setSummary(result);
       setMode("result");
@@ -103,7 +119,7 @@ const ProblemScanner = memo(() => {
       setError(e.message || t("scanner.error_analysis"));
       setMode("scan");
     }
-  }, [file, sl, age]);
+  }, [file, img, sl, age]);
 
   // Enviar a Dani para profundizar
   const askDani = useCallback(() => {

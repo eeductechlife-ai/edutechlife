@@ -1,4 +1,23 @@
 import { callDeepseek } from "../utils/api";
+import { API_BASE_URL } from "../config/api";
+
+function getAuthToken() {
+  try {
+    const stored = sessionStorage.getItem("auth_token");
+    if (stored) return stored;
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith("sb-") && key.endsWith("-auth-token")) {
+        const parsed = JSON.parse(localStorage.getItem(key) || "{}");
+        const t = parsed?.access_token;
+        if (t) return t;
+      }
+    }
+  } catch {
+    /* ok */
+  }
+  return null;
+}
 
 // Niveles por edad para adaptar la profundidad del resumen
 const AGE_LEVELS = {
@@ -55,6 +74,81 @@ REGLAS IMPORTANTES:
 - Todo en español`;
 };
 
+function normalizeSummary(result) {
+  return {
+    title: result.title || "Resumen del material",
+    overview: result.overview || "",
+    keyConcepts: Array.isArray(result.keyConcepts)
+      ? result.keyConcepts
+          .filter((c) => c && (c.term || c.explanation))
+          .map((c) => ({
+            term: c.term || "Concepto",
+            explanation: c.explanation || "",
+          }))
+      : [],
+    learningPoints: Array.isArray(result.learningPoints)
+      ? result.learningPoints.filter(Boolean)
+      : [],
+    example: result.example || "",
+    difficulty: ["básico", "intermedio", "avanzado"].includes(result.difficulty)
+      ? result.difficulty
+      : "intermedio",
+  };
+}
+
+/**
+ * Genera un resumen educativo a partir de una imagen (foto de examen, tarea, libro).
+ * Envía la imagen directamente al backend que usa DeepSeek con visión.
+ * @param {string} imageBase64 - "data:image/jpeg;base64,..." desde FileReader
+ * @param {object} opts - { subject, ageKey }
+ * @returns {Promise<object>} Resumen estructurado
+ */
+export async function generateStudySummaryFromImage(imageBase64, opts = {}) {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error("Debes iniciar sesión para usar el escáner de imágenes.");
+  }
+
+  const { subject = "", ageKey = "12-14" } = opts;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/smartboard/scan`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ imageBase64, subject, ageKey }),
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const body = await response.json().catch(() => null);
+      throw new Error(
+        body?.error || `Error ${response.status} al procesar la imagen`,
+      );
+    }
+
+    const result = await response.json();
+    if (!result || typeof result !== "object") {
+      throw new Error("No se pudo generar el resumen. Intenta de nuevo.");
+    }
+    return normalizeSummary(result);
+  } catch (e) {
+    clearTimeout(timeoutId);
+    if (e.name === "AbortError") {
+      throw new Error(
+        "La IA tardó demasiado. Intenta con una imagen más pequeña.",
+      );
+    }
+    throw e;
+  }
+}
+
 /**
  * Genera un resumen educativo tipo profesor a partir del texto extraído
  * de una foto, documento o PDF.
@@ -94,24 +188,5 @@ export async function generateStudySummary(text, opts = {}) {
     throw new Error("No se pudo generar el resumen. Intenta de nuevo.");
   }
 
-  // Normalizar la estructura para blindar el render
-  return {
-    title: result.title || "Resumen del material",
-    overview: result.overview || "",
-    keyConcepts: Array.isArray(result.keyConcepts)
-      ? result.keyConcepts
-          .filter((c) => c && (c.term || c.explanation))
-          .map((c) => ({
-            term: c.term || "Concepto",
-            explanation: c.explanation || "",
-          }))
-      : [],
-    learningPoints: Array.isArray(result.learningPoints)
-      ? result.learningPoints.filter(Boolean)
-      : [],
-    example: result.example || "",
-    difficulty: ["básico", "intermedio", "avanzado"].includes(result.difficulty)
-      ? result.difficulty
-      : "intermedio",
-  };
+  return normalizeSummary(result);
 }

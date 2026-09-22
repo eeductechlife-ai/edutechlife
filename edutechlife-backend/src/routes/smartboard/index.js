@@ -8,6 +8,7 @@ const progressRoutes = require('./progress');
 const adaptiveRoutes = require('./adaptive');
 const parentInsightsRoutes = require('./parent-insights');
 const gamificationRoutes = require('./gamification');
+const scanRoutes = require('./scan');
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.use(progressRoutes);
 router.use(adaptiveRoutes);
 router.use(parentInsightsRoutes);
 router.use(gamificationRoutes);
+router.use(scanRoutes);
 
 module.exports = router;

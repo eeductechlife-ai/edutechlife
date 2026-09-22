@@ -59,8 +59,10 @@ function validateMessages(messages) {
     return 'Messages array is required and must be non-empty';
   }
   for (const msg of messages) {
-    if (!msg.role || typeof msg.content !== 'string') {
-      return 'Each message must have role and content (string)';
+    if (!msg.role) return 'Each message must have a role';
+    // content can be a string (text) or an array (multimodal: text + image_url)
+    if (typeof msg.content !== 'string' && !Array.isArray(msg.content)) {
+      return 'Each message content must be a string or an array (multimodal)';
     }
   }
   return null;
