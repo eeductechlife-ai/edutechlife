@@ -82,7 +82,7 @@ const IngenIAStatsPage = () => {
         >
           <div>
             <button
-              onClick={() => navigate("/ingenia/app")}
+              onClick={() => navigate("/ingenia")}
               className="text-primary-light hover:text-mint flex items-center gap-2 transition-colors mb-2"
               aria-label={t("smartboard.stats_back")}
             >

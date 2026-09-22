@@ -3,7 +3,7 @@
  * Enables PWA features: offline support, caching, background sync
  */
 
-const CACHE_NAME = 'smartboard-v1';
+const CACHE_NAME = 'ingenia-v1';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

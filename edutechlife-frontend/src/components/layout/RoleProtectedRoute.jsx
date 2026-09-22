@@ -110,7 +110,7 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
     if (!isAuthenticated || !isLoaded) return;
     const token = sessionStorage.getItem("auth_token");
     if (!token) return;
-    fetch(`${API_BASE}/api/ingenia/user-role`, {
+    fetch(`${API_BASE}/api/smartboard/user-role`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => (r.ok ? r.json() : null))
