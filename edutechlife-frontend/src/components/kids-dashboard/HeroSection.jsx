@@ -112,7 +112,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
           transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
           className="flex-shrink-0"
         >
-          <DaniAvatar3D mood="happy" size="lg" />
+          <DaniAvatar3D mood="happy" size="md" />
         </motion.div>
 
         <div className="flex-1 min-w-0">

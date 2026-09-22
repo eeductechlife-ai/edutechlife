@@ -77,14 +77,14 @@ const TopBar = memo(
               initial={{ scale: 0.6, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: "spring", damping: 14 }}
-              className="w-11 h-11 md:w-10 md:h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0"
+              className="w-9 h-9 md:w-10 md:h-10 rounded-xl md:rounded-2xl flex items-center justify-center text-white flex-shrink-0"
               style={{
                 background: activeCat?.gradient || SB_GRADIENTS.brand,
                 boxShadow: `${glow(activeCat?.glowColor || "#00B4D8", 0.4)}, inset 0 1px 0 rgba(255,255,255,0.35)`,
               }}
             >
               <ActiveIcon
-                className="w-6 md:w-[21px] h-6 md:h-[21px]"
+                className="w-5 h-5 md:w-[21px] md:h-[21px]"
                 strokeWidth={2.3}
               />
             </motion.span>
@@ -103,10 +103,10 @@ const TopBar = memo(
           </div>
         )}
 
-        <div className="flex items-center gap-2 md:gap-3 ml-auto">
-          {/* Streak — always visible; compact on mobile (icon+number only), full on sm+ */}
+        <div className="flex items-center gap-1.5 md:gap-3 ml-auto">
+          {/* Streak */}
           <motion.div
-            className="flex px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-2xl items-center gap-1.5 sm:gap-2 transition-colors duration-500"
+            className="flex px-1.5 sm:px-3 py-1 sm:py-2 rounded-xl sm:rounded-2xl items-center gap-1 sm:gap-2 transition-colors duration-500"
             style={{
               background: darkMode
                 ? "linear-gradient(135deg, rgba(251,133,0,0.18), rgba(255,209,102,0.12))"
@@ -116,28 +116,26 @@ const TopBar = memo(
             title={t("smartboard.streak_title")}
           >
             <span
-              className="w-7 h-7 rounded-lg flex items-center justify-center text-white flex-shrink-0"
+              className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg flex items-center justify-center text-white flex-shrink-0"
               style={{
                 background: "linear-gradient(135deg, #FB8500, #F3722C)",
               }}
             >
-              <Flame className="w-4 h-4" strokeWidth={2.4} />
+              <Flame className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={2.4} />
             </span>
-            <span className="leading-tight">
-              <span className="block text-sm font-black text-[#FB8500] tabular-nums">
-                {streak?.current ?? 0}
-              </span>
-              <span
-                className={`hidden sm:block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
-              >
-                {t("smartboard.days")}
-              </span>
+            <span className="text-xs sm:text-sm font-black text-[#FB8500] tabular-nums leading-none">
+              {streak?.current ?? 0}
+            </span>
+            <span
+              className={`hidden sm:block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+            >
+              {t("smartboard.days")}
             </span>
           </motion.div>
 
-          {/* Points — always visible; label hidden on mobile */}
+          {/* Points */}
           <motion.div
-            className="flex px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-2xl items-center gap-1.5 sm:gap-2 transition-colors duration-500"
+            className="flex px-1.5 sm:px-3 py-1 sm:py-2 rounded-xl sm:rounded-2xl items-center gap-1 sm:gap-2 transition-colors duration-500"
             style={{
               background: darkMode
                 ? "linear-gradient(135deg, rgba(0,150,199,0.20), rgba(72,202,228,0.12))"
@@ -148,22 +146,20 @@ const TopBar = memo(
             aria-atomic="true"
           >
             <span
-              className="w-7 h-7 rounded-lg flex items-center justify-center text-white flex-shrink-0"
+              className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg flex items-center justify-center text-white flex-shrink-0"
               style={{ background: SB_GRADIENTS.brand }}
             >
-              <Gem className="w-4 h-4" strokeWidth={2.4} />
+              <Gem className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={2.4} />
             </span>
-            <span className="leading-tight">
-              <span
-                className={`block text-sm font-black tabular-nums ${darkMode ? "text-white" : "text-[#00303F]"}`}
-              >
-                {(totalPoints ?? 0).toLocaleString()}
-              </span>
-              <span
-                className={`hidden sm:block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
-              >
-                {t("smartboard.points_display")}
-              </span>
+            <span
+              className={`text-xs sm:text-sm font-black tabular-nums leading-none ${darkMode ? "text-white" : "text-[#00303F]"}`}
+            >
+              {(totalPoints ?? 0).toLocaleString()}
+            </span>
+            <span
+              className={`hidden sm:block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+            >
+              {t("smartboard.points_display")}
             </span>
           </motion.div>
 
@@ -175,7 +171,7 @@ const TopBar = memo(
               aria-label={t("smartboard.notifications") || "Notificaciones"}
               aria-haspopup="true"
               aria-expanded={notifOpen}
-              className={`relative flex items-center justify-center w-11 h-11 md:w-10 md:h-10 rounded-2xl transition-colors ${
+              className={`relative flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-xl md:rounded-2xl transition-colors ${
                 darkMode
                   ? "bg-[#334155]/40 hover:bg-[#334155]/70 text-[#E2F0FF]"
                   : "bg-[#EEF4F8] hover:bg-[#DCE8EF] text-[#00303F]"
