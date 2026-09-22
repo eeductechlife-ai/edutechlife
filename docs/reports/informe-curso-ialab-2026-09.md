@@ -431,3 +431,40 @@ END $$;
 
 **Segunda pasada pendiente**: `learning_streaks`, `certificates`, `forum_posts` y `lesson_attempts`
 (las usa también SmartBoard) y el equivalente de SmartBoard → schema `smartboard`.
+
+### 11.8 Segunda pasada: certificados, foro y rachas (APLICADA y verificada)
+
+**Qué sistema usa cada producto (verificado en código y base)**
+
+| | IALab (curso) | SmartBoard (niños) |
+|---|---|---|
+| Racha / XP / medallas | **Store del cliente**: `store/slices/gamificationSlice.js` (`xp`, `streak`, `lastActivityDate`, `badges`), persistido por cuenta en `localStorage` (`LS_KEYS.STREAK/XP`) | **Base de datos**: tabla **`learning_streaks`** |
+| Cómo se alimenta | `updateStreak()` al usar la app; el progreso va a `user_progress` (`module_score`, `earned_score`, `gamification_data`) | Trigger **`trg_update_streak` (AFTER INSERT ON `sessions`)** → `update_learning_streak()` |
+| Puntos/notas | RPCs del curso sobre `user_progress` | `student_rewards`, `badges`, mission/badge engines |
+
+IALab **no toca** `learning_streaks` ni `sessions` (0 referencias); SmartBoard sí (13 + el trigger).
+
+**Movimientos de la migración 094**
+| Tabla | Destino | Motivo |
+|---|---|---|
+| `certificates` | **`ialab`** | Solo el curso certifica (los widgets de perfil compartidos leen por la vista) |
+| `forum_posts` | **`ialab`** | Foro del curso (9 de 10 referencias en hooks de IALab) |
+| `learning_streaks` | **`smartboard`** | Lo usa SmartBoard (trigger de `sessions` + `useSmartBoardSupabase`); estaba **vacía** (0 filas) |
+
+**Verificación en producción**
+| Prueba | Resultado |
+|---|---|
+| Ubicación | `ialab.certificates` (TABLA) · `ialab.forum_posts` (TABLA) · `smartboard.learning_streaks` (TABLA) + sus vistas en `public` |
+| Lecturas por la vista | certificates 200 · forum_posts 200 · learning_streaks 200 |
+| `verify_certificate` (RPC) | `is_valid: true` |
+| Upsert por la vista (`learning_streaks`) | insert **201**, update **200** (`current_streak` 7→11) |
+| Integridad | FK `student_id → students.id` se respeta (409 con UUID inexistente) |
+| `search_path` de funciones | `ialab, smartboard, public` (resuelven cualquiera de los dos schemas) |
+| Dry-run previo | el trigger crea/actualiza la fila en `smartboard.learning_streaks` |
+
+**Mantenimiento**: si se añaden columnas a una tabla movida, hay que recrear su vista
+(`CREATE OR REPLACE VIEW public.X AS SELECT * FROM <schema>.X`) o PostgREST no verá la columna nueva.
+
+**Tercera pasada pendiente**: tablas propias de SmartBoard → schema `smartboard`
+(`students`, `parents`, `parent_*`, `student_*`, `timetable_slots`, `missions`, `badges`,
+`smartboard_kids_data`, `lesson_attempts`, …).
