@@ -192,6 +192,34 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
         </div>
       )}
 
+      {/* VAK discovery card — solo si el test no está hecho */}
+      {!vakResult && (
+        <motion.button
+          type="button"
+          onClick={() => onTabChange?.("vak")}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          whileTap={{ scale: 0.97 }}
+          className="mx-5 mb-4 w-[calc(100%-2.5rem)] flex items-center gap-3 px-4 py-3 rounded-2xl text-left border border-white/20"
+          style={{ background: "rgba(255,255,255,0.10)" }}
+        >
+          <span className="text-2xl flex-shrink-0">🧠</span>
+          <div className="flex-1 min-w-0">
+            <div className="text-xs font-bold text-white/60 uppercase tracking-wide mb-0.5">
+              ¿Eres visual, auditivo o kinestésico?
+            </div>
+            <div className="text-sm font-semibold text-white truncate">
+              Descubre tu súper poder de aprendizaje · +25 XP
+            </div>
+          </div>
+          <ChevronRight
+            className="w-4 h-4 text-white/40 flex-shrink-0"
+            strokeWidth={2}
+          />
+        </motion.button>
+      )}
+
       {/* CTA principal: Hablar con Dani */}
       <div className="px-5 pb-4">
         <motion.button

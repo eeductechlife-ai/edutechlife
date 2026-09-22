@@ -204,7 +204,23 @@ const PointsRewardsSystem = memo(() => {
   const rewards = useMemo(
     () => [
       {
+        id: 0,
+        name: "Primer Paso",
+        icon: "🎉",
+        cost: 25,
+        description: "¡Completaste tu primer día en SmartBoard!",
+        category: "milestone",
+      },
+      {
         id: 1,
+        name: "Explorador Digital",
+        icon: "🔍",
+        cost: 75,
+        description: "Terminaste tu primer reto inteligente",
+        category: "milestone",
+      },
+      {
+        id: 2,
         name: "Tema Oscuro",
         icon: "🌙",
         cost: 500,
@@ -212,7 +228,7 @@ const PointsRewardsSystem = memo(() => {
         category: "personalization",
       },
       {
-        id: 2,
+        id: 3,
         name: "Avatar Dani Animado",
         icon: "🤖",
         cost: 750,
@@ -220,7 +236,7 @@ const PointsRewardsSystem = memo(() => {
         category: "avatar",
       },
       {
-        id: 3,
+        id: 4,
         name: "Fondo Galaxia",
         icon: "🌌",
         cost: 1000,
@@ -228,7 +244,7 @@ const PointsRewardsSystem = memo(() => {
         category: "personalization",
       },
       {
-        id: 4,
+        id: 5,
         name: "Día Libre",
         icon: "🏖️",
         cost: 1500,
@@ -236,7 +252,7 @@ const PointsRewardsSystem = memo(() => {
         category: "special",
       },
       {
-        id: 5,
+        id: 6,
         name: "Curso IA Básico",
         icon: "🤖",
         cost: 2000,
@@ -244,7 +260,7 @@ const PointsRewardsSystem = memo(() => {
         category: "education",
       },
       {
-        id: 6,
+        id: 7,
         name: "Certificado VAK",
         icon: "📜",
         cost: 3000,
