@@ -195,7 +195,6 @@ export const NotificationProvider = ({ children }) => {
       const { error } = await supabase
         .from("notifications")
         .select("id", { count: "exact", head: true })
-        .limit(0)
         .eq("user_id", userId);
       if (error && error.code === "42P01") return;
       if (error && !mounted) return;
