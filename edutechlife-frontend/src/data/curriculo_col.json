@@ -10,7 +10,12 @@
           "nombre": "Matemáticas",
           "icon": "🔢",
           "color": "#4DA8C4",
-          "competencias": ["Pensamiento numérico", "Pensamiento espacial", "Pensamiento métrico", "Pensamiento aleatorio"],
+          "competencias": [
+            "Pensamiento numérico",
+            "Pensamiento espacial",
+            "Pensamiento métrico",
+            "Pensamiento aleatorio"
+          ],
           "dba": [
             "Reconoce y escribe números hasta 100",
             "Realiza sumas y restas básicas con números de una y dos cifras",
@@ -24,7 +29,11 @@
           "nombre": "Lenguaje",
           "icon": "📖",
           "color": "#FF6B9D",
-          "competencias": ["Producción textual", "Comprensión lectora", "Literatura infantil"],
+          "competencias": [
+            "Producción textual",
+            "Comprensión lectora",
+            "Literatura infantil"
+          ],
           "dba": [
             "Reconoce las letras del alfabeto y su sonido",
             "Lee y escribe palabras y oraciones simples",
@@ -37,7 +46,10 @@
           "nombre": "Ciencias Naturales",
           "icon": "🔬",
           "color": "#66CCCC",
-          "competencias": ["Exploración del entorno", "Observación y registro"],
+          "competencias": [
+            "Exploración del entorno",
+            "Observación y registro"
+          ],
           "dba": [
             "Identifica las partes del cuerpo humano",
             "Reconoce los sentidos y su función",
@@ -50,7 +62,10 @@
           "nombre": "Ciencias Sociales",
           "icon": "🌍",
           "color": "#FFD166",
-          "competencias": ["Identidad y convivencia", "Relaciones espaciales"],
+          "competencias": [
+            "Identidad y convivencia",
+            "Relaciones espaciales"
+          ],
           "dba": [
             "Reconoce su entorno familiar y escolar",
             "Identifica las normas básicas de convivencia",
@@ -68,7 +83,12 @@
           "nombre": "Matemáticas",
           "icon": "🔢",
           "color": "#4DA8C4",
-          "competencias": ["Pensamiento numérico", "Pensamiento espacial", "Pensamiento métrico", "Pensamiento aleatorio"],
+          "competencias": [
+            "Pensamiento numérico",
+            "Pensamiento espacial",
+            "Pensamiento métrico",
+            "Pensamiento aleatorio"
+          ],
           "dba": [
             "Reconoce y escribe números hasta 1000",
             "Realiza sumas y restas con llevadas",
@@ -82,7 +102,11 @@
           "nombre": "Lenguaje",
           "icon": "📖",
           "color": "#FF6B9D",
-          "competencias": ["Producción textual", "Comprensión lectora", "Literatura"],
+          "competencias": [
+            "Producción textual",
+            "Comprensión lectora",
+            "Literatura"
+          ],
           "dba": [
             "Lee y comprende textos narrativos cortos",
             "Escribe párrafos con cohesión básica",
@@ -95,7 +119,10 @@
           "nombre": "Ciencias Naturales",
           "icon": "🔬",
           "color": "#66CCCC",
-          "competencias": ["Exploración del entorno", "Indagación científica"],
+          "competencias": [
+            "Exploración del entorno",
+            "Indagación científica"
+          ],
           "dba": [
             "Clasifica animales según su hábitat y alimentación",
             "Identifica las partes de las plantas",
@@ -108,7 +135,10 @@
           "nombre": "Ciencias Sociales",
           "icon": "🌍",
           "color": "#FFD166",
-          "competencias": ["Identidad social", "Relaciones espaciales y temporales"],
+          "competencias": [
+            "Identidad social",
+            "Relaciones espaciales y temporales"
+          ],
           "dba": [
             "Reconoce los grupos sociales a los que pertenece",
             "Identifica las dependencias de su municipio",
@@ -126,7 +156,13 @@
           "nombre": "Matemáticas",
           "icon": "🔢",
           "color": "#4DA8C4",
-          "competencias": ["Pensamiento numérico", "Pensamiento espacial", "Pensamiento métrico", "Pensamiento aleatorio", "Pensamiento variacional"],
+          "competencias": [
+            "Pensamiento numérico",
+            "Pensamiento espacial",
+            "Pensamiento métrico",
+            "Pensamiento aleatorio",
+            "Pensamiento variacional"
+          ],
           "dba": [
             "Lee y escribe números hasta 10.000",
             "Comprende la multiplicación como suma repetida",
@@ -140,7 +176,12 @@
           "nombre": "Lenguaje",
           "icon": "📖",
           "color": "#FF6B9D",
-          "competencias": ["Producción textual", "Comprensión lectora", "Literatura", "Medios de comunicación"],
+          "competencias": [
+            "Producción textual",
+            "Comprensión lectora",
+            "Literatura",
+            "Medios de comunicación"
+          ],
           "dba": [
             "Lee y comprende textos informativos y literarios",
             "Produce textos narrativos con estructura clara",
@@ -153,7 +194,10 @@
           "nombre": "Ciencias Naturales",
           "icon": "🔬",
           "color": "#66CCCC",
-          "competencias": ["Uso del conocimiento científico", "Indagación"],
+          "competencias": [
+            "Uso del conocimiento científico",
+            "Indagación"
+          ],
           "dba": [
             "Identifica los sistemas del cuerpo humano",
             "Clasifica los materiales según sus propiedades",
@@ -166,7 +210,10 @@
           "nombre": "Ciencias Sociales",
           "icon": "🌍",
           "color": "#FFD166",
-          "competencias": ["Pensamiento social", "Relaciones espaciales y ambientales"],
+          "competencias": [
+            "Pensamiento social",
+            "Relaciones espaciales y ambientales"
+          ],
           "dba": [
             "Identifica las actividades económicas de su región",
             "Reconoce los derechos y deberes de los niños",
@@ -179,7 +226,10 @@
           "nombre": "Inglés",
           "icon": "🇬🇧",
           "color": "#4DA8C4",
-          "competencias": ["Comprensión oral", "Producción oral básica"],
+          "competencias": [
+            "Comprensión oral",
+            "Producción oral básica"
+          ],
           "dba": [
             "Comprende saludos y expresiones cotidianas",
             "Identifica vocabulario básico (colores, números, familia)",
@@ -197,7 +247,13 @@
           "nombre": "Matemáticas",
           "icon": "🔢",
           "color": "#4DA8C4",
-          "competencias": ["Pensamiento numérico", "Pensamiento espacial", "Pensamiento métrico", "Pensamiento aleatorio", "Pensamiento variacional"],
+          "competencias": [
+            "Pensamiento numérico",
+            "Pensamiento espacial",
+            "Pensamiento métrico",
+            "Pensamiento aleatorio",
+            "Pensamiento variacional"
+          ],
           "dba": [
             "Opera con números fraccionarios básicos",
             "Comprende el concepto de decimal y su relación con fracciones",
@@ -211,7 +267,12 @@
           "nombre": "Lenguaje",
           "icon": "📖",
           "color": "#FF6B9D",
-          "competencias": ["Producción textual", "Comprensión e interpretación", "Literatura", "Medios de comunicación"],
+          "competencias": [
+            "Producción textual",
+            "Comprensión e interpretación",
+            "Literatura",
+            "Medios de comunicación"
+          ],
           "dba": [
             "Comprende textos expositivos y argumentativos simples",
             "Produce textos con estructura de párrafo coherente",
@@ -224,7 +285,11 @@
           "nombre": "Ciencias Naturales",
           "icon": "🔬",
           "color": "#66CCCC",
-          "competencias": ["Uso del conocimiento científico", "Explicación de fenómenos", "Indagación"],
+          "competencias": [
+            "Uso del conocimiento científico",
+            "Explicación de fenómenos",
+            "Indagación"
+          ],
           "dba": [
             "Comprende los procesos de digestión y respiración",
             "Identifica la clasificación de los seres vivos",
@@ -237,7 +302,10 @@
           "nombre": "Ciencias Sociales",
           "icon": "🌍",
           "color": "#FFD166",
-          "competencias": ["Pensamiento social", "Interpretación histórica"],
+          "competencias": [
+            "Pensamiento social",
+            "Interpretación histórica"
+          ],
           "dba": [
             "Analiza las culturas precolombinas en Colombia",
             "Comprende el proceso de descubrimiento de América",
@@ -250,7 +318,11 @@
           "nombre": "Inglés",
           "icon": "🇬🇧",
           "color": "#4DA8C4",
-          "competencias": ["Comprensión oral", "Comprensión lectora", "Producción oral"],
+          "competencias": [
+            "Comprensión oral",
+            "Comprensión lectora",
+            "Producción oral"
+          ],
           "dba": [
             "Comprende descripciones cortas en inglés",
             "Lee y entiende textos cortos ilustrados",
@@ -268,7 +340,13 @@
           "nombre": "Matemáticas",
           "icon": "🔢",
           "color": "#4DA8C4",
-          "competencias": ["Pensamiento numérico", "Pensamiento espacial", "Pensamiento métrico", "Pensamiento aleatorio", "Pensamiento variacional"],
+          "competencias": [
+            "Pensamiento numérico",
+            "Pensamiento espacial",
+            "Pensamiento métrico",
+            "Pensamiento aleatorio",
+            "Pensamiento variacional"
+          ],
           "dba": [
             "Opera con fracciones y decimales en contextos cotidianos",
             "Resuelve problemas con porcentajes básicos",
@@ -282,7 +360,12 @@
           "nombre": "Lenguaje",
           "icon": "📖",
           "color": "#FF6B9D",
-          "competencias": ["Producción textual", "Comprensión e interpretación", "Literatura", "Medios de comunicación"],
+          "competencias": [
+            "Producción textual",
+            "Comprensión e interpretación",
+            "Literatura",
+            "Medios de comunicación"
+          ],
           "dba": [
             "Analiza textos literarios de diferentes géneros",
             "Produce textos argumentativos con opiniones fundamentadas",
@@ -295,7 +378,11 @@
           "nombre": "Ciencias Naturales",
           "icon": "🔬",
           "color": "#66CCCC",
-          "competencias": ["Uso del conocimiento científico", "Explicación de fenómenos", "Indagación"],
+          "competencias": [
+            "Uso del conocimiento científico",
+            "Explicación de fenómenos",
+            "Indagación"
+          ],
           "dba": [
             "Comprende los sistemas circulatorio y excretor",
             "Explica la reproducción en plantas y animales",
@@ -308,7 +395,11 @@
           "nombre": "Ciencias Sociales",
           "icon": "🌍",
           "color": "#FFD166",
-          "competencias": ["Pensamiento social", "Interpretación histórica", "Pensamiento espacial"],
+          "competencias": [
+            "Pensamiento social",
+            "Interpretación histórica",
+            "Pensamiento espacial"
+          ],
           "dba": [
             "Analiza el período de la colonia en Colombia",
             "Comprende el proceso de independencia",
@@ -321,7 +412,11 @@
           "nombre": "Inglés",
           "icon": "🇬🇧",
           "color": "#4DA8C4",
-          "competencias": ["Comprensión oral", "Comprensión lectora", "Producción oral y escrita"],
+          "competencias": [
+            "Comprensión oral",
+            "Comprensión lectora",
+            "Producción oral y escrita"
+          ],
           "dba": [
             "Comprende instrucciones escritas y orales en inglés",
             "Lee y entiende textos descriptivos cortos",
@@ -430,6 +525,60 @@
             "Produce frases y oraciones simples sobre temas familiares",
             "Participa en conversaciones breves sobre temas conocidos"
           ]
+        },
+        {
+          "id": "quimica",
+          "nombre": "Química",
+          "icon": "⚗️",
+          "color": "#E76F51",
+          "competencias": [
+            "Materia y sus transformaciones",
+            "Estructura atómica",
+            "Reacciones químicas",
+            "Química orgánica"
+          ],
+          "dba": [
+            "Identifica la materia y sus propiedades físicas y químicas en el entorno cotidiano",
+            "Diferencia cambios físicos y químicos de la materia con ejemplos del entorno",
+            "Comprende la estructura básica del átomo y los elementos de la tabla periódica",
+            "Reconoce las mezclas y los métodos de separación de mezclas homogéneas y heterogéneas"
+          ]
+        },
+        {
+          "id": "fisica",
+          "nombre": "Física",
+          "icon": "⚡",
+          "color": "#2A9D8F",
+          "competencias": [
+            "Mecánica",
+            "Termodinámica",
+            "Ondas y óptica",
+            "Electricidad y magnetismo"
+          ],
+          "dba": [
+            "Describe el movimiento de los cuerpos usando velocidad, distancia y tiempo con ejemplos reales",
+            "Explica las fuerzas y su efecto sobre el movimiento según las Leyes de Newton",
+            "Comprende la energía cinética y potencial y el principio de conservación de la energía",
+            "Identifica tipos de energía (solar, eólica, eléctrica) y sus transformaciones en el entorno"
+          ]
+        },
+        {
+          "id": "informatica",
+          "nombre": "Informática",
+          "icon": "💻",
+          "color": "#118AB2",
+          "competencias": [
+            "Pensamiento computacional",
+            "Programación",
+            "Ciudadanía digital",
+            "Tecnología e innovación"
+          ],
+          "dba": [
+            "Utiliza herramientas ofimáticas (procesador, hoja de cálculo, presentaciones) para tareas académicas",
+            "Comprende los componentes básicos de un computador, el hardware y el software",
+            "Navega de manera segura en internet y evalúa críticamente la calidad de la información",
+            "Identifica los riesgos digitales y practica la ciudadanía digital responsable"
+          ]
         }
       ]
     },
@@ -527,6 +676,60 @@
             "Expresa opiniones simples sobre temas cotidianos",
             "Escribe párrafos cortos sobre experiencias personales"
           ]
+        },
+        {
+          "id": "quimica",
+          "nombre": "Química",
+          "icon": "⚗️",
+          "color": "#E76F51",
+          "competencias": [
+            "Materia y sus transformaciones",
+            "Estructura atómica",
+            "Reacciones químicas",
+            "Química orgánica"
+          ],
+          "dba": [
+            "Comprende el enlace químico y cómo los átomos se combinan para formar moléculas",
+            "Describe las reacciones químicas básicas y las identifica en la vida cotidiana",
+            "Utiliza la tabla periódica para predecir propiedades básicas de los elementos",
+            "Explica el pH y la diferencia entre ácidos, bases y sales con ejemplos cotidianos"
+          ]
+        },
+        {
+          "id": "fisica",
+          "nombre": "Física",
+          "icon": "⚡",
+          "color": "#2A9D8F",
+          "competencias": [
+            "Mecánica",
+            "Termodinámica",
+            "Ondas y óptica",
+            "Electricidad y magnetismo"
+          ],
+          "dba": [
+            "Calcula el trabajo mecánico, la potencia y la eficiencia de máquinas simples",
+            "Explica el movimiento circular uniforme y la fuerza centrípeta con ejemplos concretos",
+            "Describe la gravedad y su efecto en los cuerpos tanto en la Tierra como en el espacio",
+            "Comprende el calor, la temperatura y los modos de transferencia de energía térmica"
+          ]
+        },
+        {
+          "id": "informatica",
+          "nombre": "Informática",
+          "icon": "💻",
+          "color": "#118AB2",
+          "competencias": [
+            "Pensamiento computacional",
+            "Programación",
+            "Ciudadanía digital",
+            "Tecnología e innovación"
+          ],
+          "dba": [
+            "Crea y edita hojas de cálculo con fórmulas y funciones básicas para resolver problemas",
+            "Comprende los fundamentos de las redes de computadores y el funcionamiento de internet",
+            "Desarrolla habilidades básicas de programación con bloques visuales (Scratch o similar)",
+            "Analiza el impacto social y ético de las tecnologías de la información en la sociedad"
+          ]
         }
       ]
     },
@@ -603,6 +806,60 @@
             "Participa en discusiones sobre temas familiares",
             "Escribe textos coherentes usando conectores básicos",
             "Comprende información detallada en conversaciones"
+          ]
+        },
+        {
+          "id": "quimica",
+          "nombre": "Química",
+          "icon": "⚗️",
+          "color": "#E76F51",
+          "competencias": [
+            "Materia y sus transformaciones",
+            "Estructura atómica",
+            "Reacciones químicas",
+            "Química orgánica"
+          ],
+          "dba": [
+            "Balancea ecuaciones químicas aplicando la ley de conservación de la masa",
+            "Calcula masas molares y realiza conversiones entre masa, moles y número de partículas",
+            "Comprende los estados de la materia y los cambios de estado con energía asociada",
+            "Explica la estequiometría de reacciones químicas simples con reactivo limitante"
+          ]
+        },
+        {
+          "id": "fisica",
+          "nombre": "Física",
+          "icon": "⚡",
+          "color": "#2A9D8F",
+          "competencias": [
+            "Mecánica",
+            "Termodinámica",
+            "Ondas y óptica",
+            "Electricidad y magnetismo"
+          ],
+          "dba": [
+            "Explica las características de las ondas mecánicas: longitud de onda, frecuencia y amplitud",
+            "Describe el sonido como onda mecánica y sus aplicaciones tecnológicas (ecografía, sonar)",
+            "Comprende la reflexión, refracción y difracción de ondas con ejemplos del entorno",
+            "Analiza el espectro electromagnético y las aplicaciones de cada tipo de radiación"
+          ]
+        },
+        {
+          "id": "informatica",
+          "nombre": "Informática",
+          "icon": "💻",
+          "color": "#118AB2",
+          "competencias": [
+            "Pensamiento computacional",
+            "Programación",
+            "Ciudadanía digital",
+            "Tecnología e innovación"
+          ],
+          "dba": [
+            "Programa algoritmos básicos usando estructuras de control: condicionales, ciclos y funciones",
+            "Comprende los sistemas de numeración binario y hexadecimal y sus conversiones",
+            "Diseña bases de datos simples y comprende la estructura de tablas y relaciones",
+            "Aplica herramientas digitales colaborativas para desarrollar proyectos académicos en equipo"
           ]
         }
       ]
@@ -681,6 +938,60 @@
             "Escribe ensayos cortos con estructura argumentativa",
             "Comprende discursos y presentaciones académicas"
           ]
+        },
+        {
+          "id": "quimica",
+          "nombre": "Química",
+          "icon": "⚗️",
+          "color": "#E76F51",
+          "competencias": [
+            "Materia y sus transformaciones",
+            "Estructura atómica",
+            "Reacciones químicas",
+            "Química orgánica"
+          ],
+          "dba": [
+            "Identifica los grupos funcionales de compuestos orgánicos básicos (alcoholes, ácidos, ésteres)",
+            "Comprende los hidrocarburos y su importancia en la industria energética",
+            "Describe las reacciones de combustión completa e incompleta y su impacto ambiental",
+            "Analiza polímeros y materiales sintéticos de uso cotidiano y sus propiedades"
+          ]
+        },
+        {
+          "id": "fisica",
+          "nombre": "Física",
+          "icon": "⚡",
+          "color": "#2A9D8F",
+          "competencias": [
+            "Mecánica",
+            "Termodinámica",
+            "Ondas y óptica",
+            "Electricidad y magnetismo"
+          ],
+          "dba": [
+            "Comprende la electricidad estática y la Ley de Coulomb para cargas puntuales",
+            "Explica los circuitos eléctricos básicos en serie y paralelo aplicando la Ley de Ohm",
+            "Describe el magnetismo, el campo magnético y el fenómeno de inducción electromagnética",
+            "Analiza la generación y transmisión de energía eléctrica en el sistema energético colombiano"
+          ]
+        },
+        {
+          "id": "informatica",
+          "nombre": "Informática",
+          "icon": "💻",
+          "color": "#118AB2",
+          "competencias": [
+            "Pensamiento computacional",
+            "Programación",
+            "Ciudadanía digital",
+            "Tecnología e innovación"
+          ],
+          "dba": [
+            "Programa aplicaciones básicas usando un lenguaje de programación textual (Python o JavaScript)",
+            "Comprende los principios del pensamiento computacional: descomposición, abstracción y algoritmos",
+            "Diseña y evalúa interfaces de usuario considerando usabilidad y experiencia del usuario",
+            "Analiza las principales amenazas de seguridad informática y las medidas de protección básicas"
+          ]
         }
       ]
     },
@@ -758,6 +1069,78 @@
             "Escribe documentos formales como ensayos e informes",
             "Participa en debates académicos en inglés"
           ]
+        },
+        {
+          "id": "quimica",
+          "nombre": "Química",
+          "icon": "⚗️",
+          "color": "#E76F51",
+          "competencias": [
+            "Materia y sus transformaciones",
+            "Estructura atómica",
+            "Reacciones químicas",
+            "Química orgánica"
+          ],
+          "dba": [
+            "Comprende la cinética química y los factores que afectan la velocidad de reacción",
+            "Explica el equilibrio químico y aplica el principio de Le Chatelier a situaciones concretas",
+            "Describe las soluciones y calcula concentraciones molares y en partes por millón",
+            "Analiza reacciones de oxidación-reducción (redox) e identifica agentes oxidantes y reductores"
+          ]
+        },
+        {
+          "id": "fisica",
+          "nombre": "Física",
+          "icon": "⚡",
+          "color": "#2A9D8F",
+          "competencias": [
+            "Mecánica",
+            "Termodinámica",
+            "Ondas y óptica",
+            "Electricidad y magnetismo"
+          ],
+          "dba": [
+            "Explica la óptica geométrica: reflexión, refracción, lentes convergentes y divergentes",
+            "Comprende el movimiento oscilatorio, el péndulo y las ondas estacionarias",
+            "Analiza los postulados de la teoría especial de la relatividad de Einstein",
+            "Describe las leyes de la termodinámica y las aplica a máquinas térmicas y ciclos"
+          ]
+        },
+        {
+          "id": "informatica",
+          "nombre": "Informática",
+          "icon": "💻",
+          "color": "#118AB2",
+          "competencias": [
+            "Pensamiento computacional",
+            "Programación",
+            "Ciudadanía digital",
+            "Tecnología e innovación"
+          ],
+          "dba": [
+            "Desarrolla proyectos básicos de programación orientada a objetos (clases, herencia, polimorfismo)",
+            "Comprende los fundamentos de la inteligencia artificial y el aprendizaje automático con ejemplos",
+            "Diseña soluciones tecnológicas a problemas del entorno usando metodologías de gestión de proyectos",
+            "Analiza el impacto de la transformación digital en la economía, el trabajo y la sociedad colombiana"
+          ]
+        },
+        {
+          "id": "filosofia",
+          "nombre": "Filosofía",
+          "icon": "🦉",
+          "color": "#6D4C94",
+          "competencias": [
+            "Lógica y argumentación",
+            "Epistemología",
+            "Ética y valores",
+            "Metafísica y ontología"
+          ],
+          "dba": [
+            "Comprende los fundamentos de la lógica formal y distingue argumentos válidos de falacias",
+            "Analiza las principales corrientes epistemológicas y las teorías del conocimiento (racionalismo, empirismo)",
+            "Reflexiona sobre los problemas éticos contemporáneos desde distintas perspectivas filosóficas",
+            "Examina críticamente las relaciones entre ciencia, tecnología y sociedad en el mundo actual"
+          ]
         }
       ]
     },
@@ -834,6 +1217,78 @@
             "Produce discursos argumentativos complejos en inglés",
             "Analiza críticamente fuentes de información en inglés",
             "Comunica con fluidez ideas complejas en contextos formales"
+          ]
+        },
+        {
+          "id": "quimica",
+          "nombre": "Química",
+          "icon": "⚗️",
+          "color": "#E76F51",
+          "competencias": [
+            "Materia y sus transformaciones",
+            "Estructura atómica",
+            "Reacciones químicas",
+            "Química orgánica"
+          ],
+          "dba": [
+            "Comprende los principios de la electroquímica y el funcionamiento de celdas galvánicas",
+            "Explica la importancia de la química en la industria farmacéutica y alimentaria colombiana",
+            "Analiza el impacto ambiental de los procesos químicos industriales y propone alternativas sostenibles",
+            "Aplica el pensamiento científico para diseñar y evaluar experimentos de química analítica"
+          ]
+        },
+        {
+          "id": "fisica",
+          "nombre": "Física",
+          "icon": "⚡",
+          "color": "#2A9D8F",
+          "competencias": [
+            "Mecánica",
+            "Termodinámica",
+            "Ondas y óptica",
+            "Electricidad y magnetismo"
+          ],
+          "dba": [
+            "Comprende los fundamentos de la física cuántica y el modelo atómico de Bohr",
+            "Explica la radiactividad, los tipos de radiación y las reacciones nucleares (fisión y fusión)",
+            "Analiza el efecto fotoeléctrico y la naturaleza dual onda-partícula de la luz",
+            "Aplica principios físicos para analizar problemas de ingeniería, tecnología y medio ambiente"
+          ]
+        },
+        {
+          "id": "informatica",
+          "nombre": "Informática",
+          "icon": "💻",
+          "color": "#118AB2",
+          "competencias": [
+            "Pensamiento computacional",
+            "Programación",
+            "Ciudadanía digital",
+            "Tecnología e innovación"
+          ],
+          "dba": [
+            "Implementa proyectos tecnológicos completos desde el análisis de requisitos hasta la evaluación",
+            "Comprende los fundamentos de la robótica, la automatización y el Internet de las Cosas (IoT)",
+            "Aplica conceptos de ciberseguridad para proteger sistemas, datos y privacidad en entornos digitales",
+            "Evalúa las tendencias tecnológicas emergentes (IA, blockchain, metaverso) y su impacto futuro"
+          ]
+        },
+        {
+          "id": "filosofia",
+          "nombre": "Filosofía",
+          "icon": "🦉",
+          "color": "#6D4C94",
+          "competencias": [
+            "Lógica y argumentación",
+            "Epistemología",
+            "Ética y valores",
+            "Metafísica y ontología"
+          ],
+          "dba": [
+            "Analiza las principales corrientes de filosofía política: justicia, democracia y derechos humanos",
+            "Comprende los problemas metafísicos fundamentales: el ser, el tiempo, la causalidad y la identidad",
+            "Reflexiona sobre la estética, la experiencia artística y el papel del arte en la sociedad",
+            "Desarrolla pensamiento crítico propio para construir y defender argumentos filosóficos coherentes"
           ]
         }
       ]

@@ -20,8 +20,11 @@ const CHALLENGE_SUBJECTS = [
   { id: "science", label: "Ciencias", emoji: "🔬" },
   { id: "language", label: "Lenguaje", emoji: "📖" },
   { id: "social", label: "Sociales", emoji: "🌍" },
-  { id: "tech", label: "Tecnología", emoji: "💻" },
   { id: "english", label: "Inglés", emoji: "🇬🇧" },
+  { id: "chemistry", label: "Química", emoji: "⚗️" },
+  { id: "physics", label: "Física", emoji: "⚡" },
+  { id: "informatics", label: "Informática", emoji: "💻" },
+  { id: "philosophy", label: "Filosofía", emoji: "🦉" },
 ];
 
 // CHALLENGE_SUBJECTS usa ids simplificados; el currículo MEN usa sus propios ids.
@@ -31,8 +34,10 @@ const SUBJECT_TO_CURRICULO_ID = {
   language: "lenguaje",
   social: "sociales",
   english: "ingles",
-  // "tech" no tiene DBA propio en el currículo MEN — sin DBA, el reto sigue
-  // funcionando genérico (dbaSequence queda vacío, ver startChallenge).
+  chemistry: "quimica",
+  physics: "fisica",
+  informatics: "informatica",
+  philosophy: "filosofia",
 };
 
 function buildChallengePrompt(

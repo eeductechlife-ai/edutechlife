@@ -9,8 +9,11 @@ const SUBJECT_META = {
   science: { color: "#06D6A0", short: "CIE" },
   language: { color: "#9D4EDD", short: "LEN" },
   social: { color: "#EF476F", short: "SOC" },
-  tech: { color: "#118AB2", short: "TEC" },
   english: { color: "#FFD166", short: "ING" },
+  chemistry: { color: "#E76F51", short: "QUI" },
+  physics: { color: "#2A9D8F", short: "FIS" },
+  informatics: { color: "#118AB2", short: "INF" },
+  philosophy: { color: "#6D4C94", short: "FIL" },
 };
 
 function polarToCart(cx, cy, r, angleDeg) {
