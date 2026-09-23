@@ -18,8 +18,9 @@ import FloatingParticles from "./FloatingParticles";
 import { sanitize, safeReturnTo } from "../utils/sanitize";
 import { claimStorageForCurrentUser } from "../utils/userScopedStorage";
 import SEO from "./SEO";
+import { track } from "../lib/analytics";
+import { EVENTS } from "../lib/analyticsEvents";
 import { API_BASE_URL } from "../config/api";
-import { seedClientSession } from "./SupabaseLoginForm";
 
 // Error boundary fallback
 function SignUpFormFallback() {
@@ -34,40 +35,10 @@ const SupabaseSignUpForm = ({
   onBack,
   returnTo,
   accountType = "ialab",
-  // Cuando el formulario se monta dentro de una pantalla que ya aporta el
-  // layout (WelcomeScreen / IngenIASignUpPage) no debe renderizar su propia
-  // página ni la columna de marketing: anidar ambas encogía el formulario a
-  // ~500px y partía los textos palabra por línea.
   embedded = false,
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  const isIngenIA = accountType === "smartboard";
-  const brandName = isIngenIA ? "IngenIA" : "Edutechlife";
-  const brandSubtitle = isIngenIA
-    ? t("smartboard.signup_for_students")
-    : t("ialab.signup_subtitle");
-  const brandTitle = isIngenIA
-    ? t("smartboard.signup_welcome")
-    : t("ialab.signup_welcome_title");
-  const brandDesc = isIngenIA
-    ? t("smartboard.signup_signup_desc")
-    : t("ialab.signup_welcome_desc");
-  const brandQuote = isIngenIA
-    ? t("smartboard.signup_quote")
-    : t("ialab.signup_welcome_quote");
-  const brandFeatures = isIngenIA
-    ? [
-        { icon: Zap, text: t("smartboard.signup_feature_missions") },
-        { icon: CheckCircle2, text: t("smartboard.signup_feature_community") },
-        { icon: Brain, text: t("smartboard.signup_feature_tracking") },
-      ]
-    : [
-        { icon: Zap, text: t("ialab.signup_feature_1") },
-        { icon: CheckCircle2, text: t("ialab.signup_feature_2") },
-        { icon: Brain, text: t("ialab.signup_feature_3") },
-      ];
 
   const defaultReturnTo = safeReturnTo(returnTo);
   const [currentStep, setCurrentStep] = useState(0);
@@ -193,6 +164,29 @@ const SupabaseSignUpForm = ({
     window.location.href = `${apiUrl}${endpoint}?redirect_uri=${encodeURIComponent(redirectUri)}&provider=${provider}`;
   };
 
+  const toFriendlySignupError = (rawMsg, fallback) => {
+    if (!rawMsg) return fallback;
+    const m = String(rawMsg).toLowerCase();
+    // Known friendly backend messages (already in Spanish for the user)
+    if (m.includes("correo ya está registrado") || m.includes("already") || m.includes("exists"))
+      return t("signup.error.email_already_registered");
+    if (m.includes("contraseña") || m.includes("password"))
+      return t("signup.error.password_min_length");
+    // Technical / internal errors — never show raw details to students
+    if (
+      m.includes("auth signup failed") ||
+      m.includes("unexpected token") ||
+      m.includes("json") ||
+      m.includes("host not") ||
+      m.includes("network") ||
+      m.includes("fetch")
+    )
+      return fallback;
+    // Short, human-readable messages from the backend are safe to show
+    if (rawMsg.length <= 120 && !rawMsg.includes(":") ) return rawMsg;
+    return fallback;
+  };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
 
@@ -216,7 +210,7 @@ const SupabaseSignUpForm = ({
       });
 
       if (!registerResponse.ok) {
-        const errorData = await registerResponse.json();
+        const errorData = await registerResponse.json().catch(() => ({}));
         // Handle duplicate email with translated message
         if (
           registerResponse.status === 409 ||
@@ -225,25 +219,27 @@ const SupabaseSignUpForm = ({
           throw new Error(t("signup.error.email_already_registered"));
         }
         throw new Error(
-          errorData.message ||
-            errorData.error ||
+          toFriendlySignupError(
+            errorData.message || errorData.error,
             t("signup.error.registration_failed"),
+          ),
         );
       }
 
       const result = await registerResponse.json();
       setSuccess(true);
 
-      setTimeout(async () => {
+      track(EVENTS.SIGNUP_COMPLETED, {
+        accountType,
+        userId: result.user?.id,
+        hasToken: !!result.token,
+      });
+
+      setTimeout(() => {
         if (result.token) {
           sessionStorage.setItem("auth_token", result.token);
           localStorage.setItem("refresh_token", result.refreshToken);
           localStorage.setItem("user_email", formData.email.toLowerCase());
-          // Pre-sembrar la sesión de supabase-js (mismo formato que persiste
-          // el SDK). RoleProtectedRoute valida con supabase.auth.getSession()
-          // al entrar a /ialab: sin esto, la cuenta recién creada quedaba
-          // autenticada por token pero era devuelta al login.
-          await seedClientSession(result.token, result.refreshToken);
         }
         // A new account must start with its own empty progress, never inherit
         // whatever the previous user left cached in this browser.
@@ -253,9 +249,10 @@ const SupabaseSignUpForm = ({
     } catch (err) {
       console.error("Sign-up error:", err);
       setError(
-        err.message ||
-          t("signup.error.registration_failed") ||
-          "Registration failed. Please try again.",
+        toFriendlySignupError(
+          err.message,
+          t("signup.error.registration_failed"),
+        ),
       );
     } finally {
       setLoading(false);
@@ -270,33 +267,26 @@ const SupabaseSignUpForm = ({
 
   return (
     <>
-      <SEO
-        title={t(
-          accountType === "smartboard"
-            ? "seo.signup_smartboard.title"
-            : "seo.signup_ialab.title",
-        )}
-        description={t(
-          accountType === "smartboard"
-            ? "seo.signup_smartboard.desc"
-            : "seo.signup_ialab.desc",
-        )}
-      />
+      {!embedded && (
+        <SEO
+          title={t("seo.signup_ialab.title")}
+          description={t("seo.signup_ialab.desc")}
+        />
+      )}
       <div
         className={
           embedded
-            ? "relative w-full"
-            : "min-h-[100dvh] bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#1a5f7a] flex items-center justify-center p-0 sm:p-4 relative overflow-hidden"
+            ? "w-full relative"
+            : "min-h-screen bg-gradient-to-br from-[#004B63] via-[#0A3550] to-[#1a5f7a] flex items-center justify-center p-4 relative overflow-hidden"
         }
       >
         {!embedded && <FloatingParticles />}
 
-        {/* Back Button — el contenedor (WelcomeScreen / IngenIA) ya ofrece
-            su propia navegación cuando el formulario va embebido. */}
+        {/* Back Button */}
         {!embedded && (
           <button
             onClick={onBack}
-            className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20 flex items-center gap-2 px-3 py-2 sm:px-4 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
+            className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm font-medium">
@@ -307,57 +297,31 @@ const SupabaseSignUpForm = ({
 
         {/* Main Card */}
         <div
-          className={
-            embedded
-              ? "relative z-10 w-full"
-              : "relative z-10 w-full max-w-5xl sm:my-4"
-          }
+          className={embedded ? "w-full" : "relative z-10 w-full max-w-5xl"}
         >
           <div
             className={
               embedded
                 ? "w-full"
-                : "bg-white/95 backdrop-blur-xl sm:rounded-3xl shadow-2xl overflow-hidden border border-white/20 min-h-[100dvh] sm:min-h-0"
+                : "bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/20"
             }
           >
             {!success ? (
               <div
                 className={
-                  embedded ? "flex flex-col" : "flex flex-col lg:flex-row"
+                  embedded
+                    ? "w-full"
+                    : "flex flex-col lg:flex-row min-h-screen lg:min-h-auto"
                 }
               >
-                {/* Compact brand header — mobile & tablet only */}
-                <div
-                  className={
-                    embedded
-                      ? "hidden"
-                      : "lg:hidden bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-5 pt-20 pb-5 text-white relative overflow-hidden"
-                  }
-                >
-                  <div className="relative z-10 flex items-center gap-3">
-                    <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm flex-shrink-0">
-                      <Brain className="w-5 h-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <h1 className="text-base font-bold leading-tight">
-                        {brandTitle}
-                      </h1>
-                      <p className="text-white/80 text-xs">{brandSubtitle}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Left Side - Brand & Benefits (desktop only) */}
+                {/* Left Side - Brand & Benefits (skipped when embedded — the
+                    host page already renders its own SmartBoard-branded left
+                    panel; showing this one too duplicated/overlapped it). */}
                 {/* pt is oversized on purpose: the "back to login" button is
                     absolutely positioned at top-6/left-6 and would otherwise
                     sit on top of the logo. */}
-                <div
-                  className={
-                    embedded
-                      ? "hidden"
-                      : "hidden lg:flex lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-8 pt-24 pb-8 lg:px-12 lg:pt-28 lg:pb-12 text-white flex-col justify-between relative overflow-hidden"
-                  }
-                >
+                {!embedded && (
+                <div className="lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-8 pt-24 pb-8 lg:px-12 lg:pt-28 lg:pb-12 text-white flex flex-col justify-between relative overflow-hidden">
                   <div className="absolute inset-0 opacity-10">
                     <div
                       style={{
@@ -374,25 +338,38 @@ const SupabaseSignUpForm = ({
                         <Brain className="w-7 h-7" />
                       </div>
                       <div>
-                        <h1 className="text-2xl font-bold">{brandName}</h1>
-                        <p className="text-white/80 text-sm">{brandSubtitle}</p>
+                        <h1 className="text-2xl font-bold">Edutechlife</h1>
+                        <p className="text-white/80 text-sm">
+                          {t("ialab.signup_subtitle")}
+                        </p>
                       </div>
                     </div>
 
                     <div className="mb-12">
-                      <h2 className="text-4xl font-bold mb-6">{brandTitle}</h2>
+                      <h2 className="text-4xl font-bold mb-6">
+                        {t("ialab.signup_welcome_title")}
+                      </h2>
                       <p
                         className="text-white/90 leading-relaxed mb-4 text-lg"
                         dangerouslySetInnerHTML={{
-                          __html: sanitize(brandDesc),
+                          __html: sanitize(t("ialab.signup_welcome_desc")),
                         }}
                       />
-                      <p className="text-white/70 italic">{brandQuote}</p>
+                      <p className="text-white/70 italic">
+                        {t("ialab.signup_welcome_quote")}
+                      </p>
                     </div>
 
                     {/* Features with Icons */}
                     <div className="space-y-4">
-                      {brandFeatures.map((feature, idx) => (
+                      {[
+                        { icon: Zap, text: t("ialab.signup_feature_1") },
+                        {
+                          icon: CheckCircle2,
+                          text: t("ialab.signup_feature_2"),
+                        },
+                        { icon: Brain, text: t("ialab.signup_feature_3") },
+                      ].map((feature, idx) => (
                         <div
                           key={idx}
                           className="flex items-center gap-3 group"
@@ -419,36 +396,35 @@ const SupabaseSignUpForm = ({
                     </p>
                   </div>
                 </div>
+                )}
 
                 {/* Right Side - Form */}
                 <div
                   className={
                     embedded
                       ? "w-full flex flex-col justify-center"
-                      : "lg:w-3/5 p-5 sm:p-8 lg:p-12 flex flex-col justify-center"
+                      : "lg:w-3/5 p-8 lg:p-12 flex flex-col justify-center"
                   }
                 >
-                  {/* Progress Bar — only once the multi-step form has started */}
-                  {currentStep > 0 && (
-                    <div className="mb-6 sm:mb-8">
-                      <div className="flex justify-between mb-3 sm:mb-4">
-                        <span className="text-sm font-medium text-[#004B63]">
-                          {currentStep === 1
-                            ? t("signup.step_1_info")
-                            : t("signup.step_2_security")}
-                        </span>
-                        <span className="text-xs text-gray-500">
-                          {currentStep}/2
-                        </span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-[#004B63] to-[#4DA8C4] rounded-full transition-all duration-300"
-                          style={{ width: `${(currentStep / 2) * 100}%` }}
-                        />
-                      </div>
+                  {/* Progress Bar */}
+                  <div className="mb-8">
+                    <div className="flex justify-between mb-4">
+                      <span className="text-sm font-medium text-[#004B63]">
+                        {currentStep === 1
+                          ? t("signup.step_1_info") || "Información personal"
+                          : t("signup.step_2_security") || "Seguridad"}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        Paso {currentStep}/2
+                      </span>
                     </div>
-                  )}
+                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-[#004B63] to-[#4DA8C4] rounded-full transition-all duration-300"
+                        style={{ width: `${(currentStep / 2) * 100}%` }}
+                      />
+                    </div>
+                  </div>
 
                   {/* Error Message */}
                   {error && (
@@ -460,13 +436,14 @@ const SupabaseSignUpForm = ({
 
                   {/* Step 0: Welcome - Quick OAuth */}
                   {currentStep === 0 && (
-                    <div className="space-y-5 sm:space-y-6 animate-in fade-in">
-                      <div className="text-center mb-6 sm:mb-8">
-                        <h3 className="text-2xl sm:text-3xl font-bold text-[#004B63] mb-2">
-                          {t("signup.step0_title")}
+                    <div className="space-y-6 animate-in fade-in">
+                      <div className="text-center mb-8">
+                        <h3 className="text-3xl font-bold text-[#004B63] mb-2">
+                          Bienvenido
                         </h3>
-                        <p className="text-gray-600 text-sm sm:text-base">
-                          {t("signup.step0_subtitle")}
+                        <p className="text-gray-600">
+                          Ingresa rápidamente a tu cuenta con las opciones
+                          disponibles
                         </p>
                       </div>
 
@@ -487,7 +464,7 @@ const SupabaseSignUpForm = ({
                             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                           </svg>
-                          {t("signup.oauth_google")}
+                          Continuar con Google
                         </button>
 
                         <button
@@ -502,7 +479,7 @@ const SupabaseSignUpForm = ({
                           >
                             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                           </svg>
-                          {t("signup.oauth_facebook")}
+                          Continuar con Facebook
                         </button>
                       </div>
 
@@ -513,7 +490,7 @@ const SupabaseSignUpForm = ({
                         </div>
                         <div className="relative flex justify-center text-sm">
                           <span className="px-2 bg-white text-gray-500">
-                            {t("signup.divider_email")}
+                            O regístrate con email
                           </span>
                         </div>
                       </div>
@@ -524,33 +501,26 @@ const SupabaseSignUpForm = ({
                         className="w-full px-6 py-3 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
                       >
                         <Mail className="w-5 h-5" />
-                        {t("signup.button.create_with_email")}
+                        Crear cuenta con email
                       </button>
 
                       {/* Footer */}
-                      <p
-                        className="text-center text-xs text-gray-500"
-                        dangerouslySetInnerHTML={{
-                          __html: sanitize(t("ialab.signup_terms")),
-                        }}
-                      />
+                      <p className="text-center text-xs text-gray-500">
+                        Al continuar, aceptas nuestros Términos de servicio y
+                        Política de privacidad
+                      </p>
                     </div>
                   )}
 
                   {/* Step 1: Personal Info */}
                   {currentStep === 1 && (
                     <div className="space-y-5 animate-in fade-in">
-                      <div className="mb-6">
-                        <h3 className="text-2xl font-bold text-[#004B63]">
-                          {t("signup.step_1_info")}
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                          {t("signup.step1_subtitle")}
-                        </p>
-                      </div>
+                      <h3 className="text-2xl font-bold text-[#004B63] mb-6">
+                        {t("signup.step_1_info") || "Información personal"}
+                      </h3>
 
                       {/* Name Row */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-[#00374A] mb-2">
                             {t("signup.field.first_name")}
@@ -638,7 +608,7 @@ const SupabaseSignUpForm = ({
                         </div>
                         <div className="relative flex justify-center text-sm">
                           <span className="px-2 bg-white text-gray-500 font-medium">
-                            {t("signup.oauth_divider")}
+                            O continúa con
                           </span>
                         </div>
                       </div>
@@ -685,7 +655,7 @@ const SupabaseSignUpForm = ({
                         disabled={isStep1Valid}
                         className="w-full mt-8 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white py-3 rounded-lg font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2"
                       >
-                        {t("signup.button.continue")}
+                        Continuar
                         <ArrowLeft className="w-4 h-4 rotate-180" />
                       </button>
                     </div>
@@ -697,14 +667,9 @@ const SupabaseSignUpForm = ({
                       onSubmit={handleSignUp}
                       className="space-y-5 animate-in fade-in"
                     >
-                      <div className="mb-6">
-                        <h3 className="text-2xl font-bold text-[#004B63]">
-                          {t("signup.step_2_security")}
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                          {t("signup.step2_subtitle")}
-                        </p>
-                      </div>
+                      <h3 className="text-2xl font-bold text-[#004B63] mb-6">
+                        {t("signup.step_2_security") || "Seguridad y acceso"}
+                      </h3>
 
                       {/* Username */}
                       <div>
@@ -855,7 +820,7 @@ const SupabaseSignUpForm = ({
                           onClick={() => setCurrentStep(1)}
                           className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition-all"
                         >
-                          {t("signup.button.back")}
+                          Atrás
                         </button>
                         <button
                           type="submit"
@@ -863,8 +828,8 @@ const SupabaseSignUpForm = ({
                           className="flex-1 bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white py-3 rounded-lg font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
                         >
                           {loading
-                            ? t("signup.button.registering")
-                            : t("signup.button.register")}
+                            ? "Creando cuenta..."
+                            : t("signup.button.register") || "Crear cuenta"}
                         </button>
                       </div>
                     </form>
@@ -876,8 +841,8 @@ const SupabaseSignUpForm = ({
               <div
                 className={
                   embedded
-                    ? "flex items-center justify-center py-10"
-                    : "min-h-[70vh] lg:min-h-[500px] flex items-center justify-center p-8"
+                    ? "flex items-center justify-center p-8"
+                    : "min-h-screen lg:min-h-auto flex items-center justify-center p-8"
                 }
               >
                 <div className="text-center max-w-md">
@@ -885,30 +850,26 @@ const SupabaseSignUpForm = ({
                     <CheckCircle2 className="w-10 h-10 text-green-600" />
                   </div>
                   <h3 className="text-3xl font-bold text-[#004B63] mb-2">
-                    {t("signup.success_title")}
+                    ¡Bienvenido!
                   </h3>
                   <p className="text-gray-600 mb-2">
-                    {t("signup.success.registration_complete")}
+                    {t("signup.success.registration_complete") ||
+                      "Tu cuenta ha sido creada exitosamente."}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {t("signup.success_redirecting")}
+                    Te estamos redirigiendo a la plataforma...
                   </p>
                 </div>
               </div>
             )}
-
-            {/* Trust badge — dentro de la tarjeta para que no quede recortado
-                fuera de vista en móvil (donde la tarjeta ocupa 100dvh y el
-                contenedor raíz tiene overflow-hidden). */}
-            {!success && (
-              <div className="px-6 pb-6 lg:px-10 lg:pb-8 text-center text-gray-400 text-xs">
-                <p>
-                  🔒 Tus datos están protegidos y nunca se comparten con
-                  terceros
-                </p>
-              </div>
-            )}
           </div>
+
+          {/* Trust Badges */}
+          {!embedded && (
+            <div className="mt-8 text-center text-white/80 text-sm">
+              <p>🔒 Tus datos están protegidos con encriptación SSL</p>
+            </div>
+          )}
         </div>
       </div>
     </>

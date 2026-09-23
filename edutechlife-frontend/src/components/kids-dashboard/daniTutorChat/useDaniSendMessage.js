@@ -15,6 +15,7 @@ import {
 } from "./daniChatMood";
 import { trackTopicFromMessage } from "./daniChatTopics";
 import { track } from "../../../lib/analytics";
+import { EVENTS } from "../../../lib/analyticsEvents";
 
 export default function useDaniSendMessage({
   getToken,
@@ -96,6 +97,10 @@ export default function useDaniSendMessage({
         if (!token) throw new Error("No auth token — user must be logged in");
 
         track("dani_message_sent", {
+          socratic_mode: socraticMode,
+          has_document: !!hasDocumentContext,
+        });
+        track(EVENTS.DANI_MESSAGE, {
           socratic_mode: socraticMode,
           has_document: !!hasDocumentContext,
         });

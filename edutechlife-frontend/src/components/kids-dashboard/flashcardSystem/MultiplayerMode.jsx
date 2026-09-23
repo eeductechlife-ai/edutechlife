@@ -266,6 +266,11 @@ const MultiplayerMode = memo(({ cards, deckTitle, onExit, darkMode }) => {
           score2: result.score2,
           total_cards: cards?.length || 0,
         });
+        track(EVENTS.CONTENT_COMPLETED, {
+          content_type: "flashcard_multiplayer",
+          deck: deckTitle,
+          total_cards: cards?.length || 0,
+        });
         setPhase(PHASES.RESULTS);
         return;
       }

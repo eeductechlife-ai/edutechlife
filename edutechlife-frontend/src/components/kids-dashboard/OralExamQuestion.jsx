@@ -1,7 +1,12 @@
-import { memo } from "react";
+import { memo, useRef, useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { dc } from "./oralExamUtils";
 import { useTranslation } from "../../i18n/I18nProvider";
+
+const SpeechRecognition =
+  typeof window !== "undefined"
+    ? window.SpeechRecognition || window.webkitSpeechRecognition
+    : null;
 
 const OralExamQuestion = memo(
   ({
@@ -17,6 +22,47 @@ const OralExamQuestion = memo(
   }) => {
     const { t } = useTranslation();
     const q = questions[currentQ];
+    const recognitionRef = useRef(null);
+    const [isListening, setIsListening] = useState(false);
+    const [micError, setMicError] = useState(null);
+    const hasSpeech = !!SpeechRecognition;
+
+    useEffect(() => {
+      setIsListening(false);
+      recognitionRef.current?.abort();
+      setMicError(null);
+    }, [currentQ]);
+
+    useEffect(() => () => recognitionRef.current?.abort(), []);
+
+    const startListening = useCallback(() => {
+      if (!SpeechRecognition || isListening || feedback) return;
+      setMicError(null);
+      const rec = new SpeechRecognition();
+      rec.lang = "es-CO";
+      rec.continuous = false;
+      rec.interimResults = false;
+      recognitionRef.current = rec;
+      rec.onstart = () => setIsListening(true);
+      rec.onresult = (e) => {
+        const transcript = e.results[0][0].transcript.trim();
+        setOpenAnswer((prev) => (prev ? prev + " " + transcript : transcript));
+        setIsListening(false);
+      };
+      rec.onerror = (e) => {
+        setIsListening(false);
+        if (e.error === "not-allowed") setMicError("Permite el micrófono para responder por voz.");
+        else if (e.error !== "no-speech") setMicError("No te escuché. ¡Intenta de nuevo!");
+      };
+      rec.onend = () => setIsListening(false);
+      rec.start();
+    }, [isListening, feedback, setOpenAnswer]);
+
+    const stopListening = useCallback(() => {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    }, []);
+
     if (!q) return null;
 
     return (
@@ -124,22 +170,62 @@ const OralExamQuestion = memo(
               })}
             </div>
           ) : (
-            <textarea
-              value={openAnswer}
-              onChange={(e) => setOpenAnswer(e.target.value)}
-              disabled={!!feedback}
-              placeholder={t("oral.answer_placeholder")}
-              rows={4}
-              className={`w-full p-3 rounded-xl border text-sm resize-none ${
-                feedback
-                  ? "border-green-400 bg-green-50"
-                  : dc(
-                      dm,
-                      "bg-[#0F172A] border-[#334155] text-white",
-                      "bg-[#F8FAFC] border-[#E2E8F0] text-[#334155]",
-                    )
-              } focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]`}
-            />
+            <div className="space-y-2">
+              <textarea
+                value={openAnswer}
+                onChange={(e) => setOpenAnswer(e.target.value)}
+                disabled={!!feedback}
+                placeholder={isListening ? "Escuchando tu respuesta..." : t("oral.answer_placeholder")}
+                rows={4}
+                className={`w-full p-3 rounded-xl border text-sm resize-none ${
+                  feedback
+                    ? "border-green-400 bg-green-50"
+                    : dc(
+                        dm,
+                        "bg-[#0F172A] border-[#334155] text-white",
+                        "bg-[#F8FAFC] border-[#E2E8F0] text-[#334155]",
+                      )
+                } focus:outline-none focus:ring-2 focus:ring-[#4DA8C4]`}
+              />
+              {hasSpeech && !feedback && (
+                <div className="flex items-center gap-2">
+                  <motion.button
+                    onClick={isListening ? stopListening : startListening}
+                    whileTap={{ scale: 0.88 }}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all"
+                    style={{
+                      background: isListening ? "rgba(239,71,111,0.12)" : dc(dm, "#F1F5F9", "#1E2E4A"),
+                      border: isListening ? "1.5px solid rgba(239,71,111,0.4)" : "1.5px solid transparent",
+                      color: isListening ? "#EF476F" : dc(dm, "#64748B", "#94A3B8"),
+                    }}
+                  >
+                    {isListening ? (
+                      <>
+                        <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 0.6, repeat: Infinity }}>⏹</motion.span>
+                        Detener
+                      </>
+                    ) : (
+                      <>🎙️ Responder con voz</>
+                    )}
+                  </motion.button>
+                  {micError && <p className="text-xs" style={{ color: "#EF476F" }}>{micError}</p>}
+                </div>
+              )}
+              {isListening && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl"
+                  style={{ background: "rgba(239,71,111,0.07)", border: "1px solid rgba(239,71,111,0.2)" }}
+                >
+                  {[1,2,3,4,3,2,1].map((h, i) => (
+                    <motion.div key={i} className="w-1 rounded-full" style={{ height: `${h*3+3}px`, background: "#EF476F" }}
+                      animate={{ scaleY: [1, 1.8, 1] }} transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.08 }} />
+                  ))}
+                  <span className="text-xs font-semibold ml-1" style={{ color: "#EF476F" }}>Escuchando...</span>
+                </motion.div>
+              )}
+            </div>
           )}
 
           <AnimatePresence>

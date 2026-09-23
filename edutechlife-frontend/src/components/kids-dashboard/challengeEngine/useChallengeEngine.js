@@ -8,6 +8,7 @@ import {
   getDbaForSubjectGrade,
 } from "../../../utils/dbaCatalog";
 import { track } from "../../../lib/analytics";
+import { EVENTS } from "../../../lib/analyticsEvents";
 
 const DIFFICULTIES = [
   { id: "easy", label: "Explorador", emoji: "🌱", questions: 3, xp: 50 },
@@ -147,7 +148,8 @@ export function useChallengeEngine() {
       setCurrentIndex(0);
       startTimeRef.current = Date.now();
       setPhase("playing");
-      track("challenge_started", {
+      track(EVENTS.MISSION_STARTED, {
+        mission_type: "challenge",
         subject: subject.id,
         difficulty: difficulty.id,
       });

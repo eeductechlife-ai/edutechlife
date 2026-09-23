@@ -339,6 +339,11 @@ Escribe solo en español.${deckLine}`;
           subject: subject?.label,
           grade,
         });
+        track(EVENTS.CONTENT_COMPLETED, {
+          content_type: "oral_exam",
+          subject: subject?.label,
+          score: grade,
+        });
         track(EVENTS.EXAM_COMPLETED, {
           exam_type: "oral",
           subject: subject?.label,

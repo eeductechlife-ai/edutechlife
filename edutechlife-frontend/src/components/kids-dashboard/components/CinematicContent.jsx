@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
+import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
 import { useNavigate } from "react-router-dom";
 import DashboardErrorBoundary from "../DashboardErrorBoundary";
 import HeroSection from "../HeroSection";
@@ -17,14 +17,14 @@ import ExplorarTab from "./ExplorarTab";
 import { isFeatureEnabled } from "../../../hooks/useFeatureFlag";
 
 const PointsRewardsSystem = lazy(() => import("../PointsRewardsSystem"));
-const IngenIAProgress = lazy(() => import("../ingenIAProgress"));
+const LeagueWidget = lazy(() => import("../LeagueWidget"));
+const SmartBoardProgress = lazy(() => import("../smartBoardProgress"));
 const PersonalizedPlan = lazy(() => import("../PersonalizedPlan"));
 const ExamPrep = lazy(() => import("../examPrep"));
 const FlashcardSystem = lazy(() => import("../flashcardSystem"));
 const OralExamSimulator = lazy(() => import("../OralExamSimulator"));
 const ChallengeEngine = lazy(() => import("../challengeEngine"));
 const FutureExplorer = lazy(() => import("../FutureExplorer"));
-const PracticarHub = lazy(() => import("../practicarHub/PracticarHub"));
 
 const sharedTransition = { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] };
 
@@ -67,7 +67,6 @@ function createTabRenderer(deps) {
     navigate,
     onTabChange,
     onDaniOpen,
-    onLogout,
     studentAge,
     darkMode,
     ageGroup,
@@ -105,7 +104,6 @@ function createTabRenderer(deps) {
         <PerfilTab
           onTabChange={onTabChange}
           handleVakComplete={handleVakComplete}
-          onLogout={onLogout}
         />
       ),
       errorKey: "perfil",
@@ -155,9 +153,14 @@ function createTabRenderer(deps) {
     },
     puntos: {
       component: () => (
-        <LazyLoad fallback={<SectionFallback tab="puntos" />}>
-          <PointsRewardsSystem />
-        </LazyLoad>
+        <div className="space-y-6">
+          <LazyLoad fallback={<SectionFallback tab="puntos" />}>
+            <LeagueWidget />
+          </LazyLoad>
+          <LazyLoad fallback={<SectionFallback tab="puntos" />}>
+            <PointsRewardsSystem />
+          </LazyLoad>
+        </div>
       ),
       errorKey: "puntos",
       errorMsg: t("smartboard.error_load_points"),
@@ -208,22 +211,12 @@ function createTabRenderer(deps) {
     progreso: {
       component: () => (
         <LazyLoad fallback={<SectionFallback tab="progreso" />}>
-          <IngenIAProgress onTabChange={onTabChange} />
+          <SmartBoardProgress onTabChange={onTabChange} />
         </LazyLoad>
       ),
       errorKey: "progreso",
       errorMsg: "Error al cargar progreso",
       className: "h-full",
-    },
-    practicar: {
-      component: () => (
-        <LazyLoad fallback={<SectionFallback tab="practicar" />}>
-          <PracticarHub onTabChange={onTabChange} darkMode={darkMode} />
-        </LazyLoad>
-      ),
-      errorKey: "practicar",
-      errorMsg: "Error al cargar Practicar",
-      className: "space-y-4",
     },
     retos: {
       component: () => (
@@ -239,14 +232,7 @@ function createTabRenderer(deps) {
 }
 
 const CinematicContent = memo(
-  ({
-    activeTab,
-    onTabChange,
-    darkMode,
-    subscriptionTier,
-    onDaniOpen,
-    onLogout,
-  }) => {
+  ({ activeTab, onTabChange, darkMode, subscriptionTier, onDaniOpen }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const isPremium = subscriptionTier === "premium";
@@ -258,7 +244,7 @@ const CinematicContent = memo(
       subjectsWithGrades,
       completeMission,
       studentAge,
-    } = useIngenIAKids();
+    } = useSmartBoardKids();
 
     const ageGroup =
       studentAge <= 9 ? "early" : studentAge <= 12 ? "middle" : "senior";
@@ -283,7 +269,6 @@ const CinematicContent = memo(
           navigate,
           onTabChange,
           onDaniOpen,
-          onLogout,
           studentAge,
           darkMode,
           ageGroup,
@@ -300,7 +285,6 @@ const CinematicContent = memo(
         navigate,
         onTabChange,
         onDaniOpen,
-        onLogout,
         studentAge,
         darkMode,
         ageGroup,

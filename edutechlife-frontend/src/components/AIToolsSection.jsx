@@ -57,6 +57,7 @@ function AIToolsSection() {
     const video = videoRef.current;
     if (!video) return;
     if (showVideo) {
+      video.playbackRate = 1.5;
       video.play().catch(() => {});
     } else {
       video.pause();
@@ -203,7 +204,7 @@ function AIToolsSection() {
                   showVideo ? "opacity-100 z-20" : "opacity-0 z-0"
                 }`}
               >
-                <source src="/dashboard.mp4" type="video/mp4" />
+                <source src="https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/video%20intro/ialab-demo.mp4" type="video/mp4" />
               </video>
             )}
             <div className="relative z-10 rounded-[calc(1.5rem-1px)] p-8 flex flex-col h-full bg-gradient-to-b from-[#003d52] to-[#002a38]">

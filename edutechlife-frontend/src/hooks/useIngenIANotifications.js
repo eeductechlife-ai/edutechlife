@@ -91,11 +91,16 @@ export function useIngenIANotifications() {
         message: `IngenIA detectó que ${target.name} (${target.gradeScore.toFixed(1)}/5) necesita atención. Practica 10 min hoy.`,
         metadata: { tab: "oral", subject: target.id },
       }),
-      () =>
+      () => {
         track(EVENTS.ALERT_GENERATED, {
           source: "reinforcement",
           subject: target.id,
-        }),
+        });
+        track(EVENTS.WARNING_GENERATED, {
+          source: "reinforcement",
+          subject: target.id,
+        });
+      },
     );
   }, [
     userId,

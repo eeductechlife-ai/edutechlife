@@ -1,31 +1,45 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import ParentalConsentBlocker from "../ParentalConsentBlocker";
 
 vi.mock("../../../hooks/useAuthIdentity", () => ({
   useAuthIdentity: vi.fn(),
-  signOutUser: vi.fn(),
 }));
 
 vi.mock("react-router-dom", () => ({
   useNavigate: vi.fn(),
 }));
 
-import { useAuthIdentity, signOutUser } from "../../../hooks/useAuthIdentity";
+const mockSend = vi.fn().mockResolvedValue(undefined);
+const mockChannel = vi.fn(() => ({ send: mockSend }));
+vi.mock("../../../lib/supabase", () => ({
+  supabase: { channel: (...args) => mockChannel(...args) },
+}));
+
+import { useAuthIdentity } from "../../../hooks/useAuthIdentity";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Desde 2026-09, ParentalConsentBlocker ya no bloquea al estudiante a la
+ * espera de que el padre apruebe en vivo: entra directo, se notifica al
+ * padre por realtime, y la solicitud de consentimiento única (si no existe
+ * aún) se dispara en segundo plano sin condicionar el acceso.
+ */
 describe("ParentalConsentBlocker", () => {
   const mockNavigate = vi.fn();
   let mockFetch;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockFetch = vi.fn();
+    mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ verification_status: "verified" }),
+    });
     global.fetch = mockFetch;
     useNavigate.mockReturnValue(mockNavigate);
     useAuthIdentity.mockReturnValue({
       token: "test-jwt-token",
+      userId: "student-123",
       isLoaded: true,
       isSignedIn: true,
     });
@@ -36,289 +50,155 @@ describe("ParentalConsentBlocker", () => {
     vi.useRealTimers();
   });
 
-  describe("Loading State", () => {
-    it("renders skeleton while checking consent status", () => {
-      mockFetch.mockImplementation(() => new Promise(() => {}));
-
-      const { container } = render(
-        <ParentalConsentBlocker>
-          <div>Dashboard</div>
-        </ParentalConsentBlocker>,
-      );
-
-      expect(container.querySelector(".min-h-screen")).toBeInTheDocument();
-      expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
+  it("shows skeleton while auth is not loaded", () => {
+    useAuthIdentity.mockReturnValue({
+      token: null,
+      userId: null,
+      isLoaded: false,
+      isSignedIn: false,
     });
 
-    it("shows skeleton when auth is not loaded", () => {
-      useAuthIdentity.mockReturnValue({
-        token: "test-token",
-        isLoaded: false,
-        isSignedIn: false,
-      });
+    render(
+      <ParentalConsentBlocker>
+        <div>Dashboard</div>
+      </ParentalConsentBlocker>,
+    );
 
-      render(
-        <ParentalConsentBlocker>
-          <div>Dashboard</div>
-        </ParentalConsentBlocker>,
-      );
+    expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
+  });
 
-      expect(screen.queryByText("Dashboard")).not.toBeInTheDocument();
+  it("redirects to sign-up if not signed in", () => {
+    useAuthIdentity.mockReturnValue({
+      token: null,
+      userId: null,
+      isLoaded: true,
+      isSignedIn: false,
     });
 
-    it("redirects to sign-up if not signed in", () => {
-      useAuthIdentity.mockReturnValue({
-        token: null,
-        isLoaded: true,
-        isSignedIn: false,
-      });
+    render(
+      <ParentalConsentBlocker>
+        <div>Dashboard</div>
+      </ParentalConsentBlocker>,
+    );
 
-      render(
-        <ParentalConsentBlocker>
-          <div>Dashboard</div>
-        </ParentalConsentBlocker>,
-      );
-
-      expect(mockNavigate).toHaveBeenCalledWith("/sign-up/ingenia", {
-        replace: true,
-      });
+    expect(mockNavigate).toHaveBeenCalledWith("/sign-up/smartboard", {
+      replace: true,
     });
   });
 
-  describe("Verified Status (Open Access)", () => {
-    it("renders children when verification_status is verified", async () => {
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: async () => ({ verification_status: "verified" }),
-      });
+  it("renders children immediately once signed in — never shows a blocking gate", async () => {
+    render(
+      <ParentalConsentBlocker>
+        <div>Dashboard Content</div>
+      </ParentalConsentBlocker>,
+    );
 
-      render(
-        <ParentalConsentBlocker>
-          <div>Dashboard Content</div>
-        </ParentalConsentBlocker>,
-      );
+    await waitFor(() => {
+      expect(screen.getByText("Dashboard Content")).toBeInTheDocument();
+    });
 
-      await waitFor(() => {
-        expect(screen.getByText("Dashboard Content")).toBeInTheDocument();
-      });
+    expect(screen.queryByText(/necesita permiso/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/esperando/i)).not.toBeInTheDocument();
+  });
+
+  it("renders children immediately even when consent has never been requested", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ verification_status: "none" }),
+    });
+
+    render(
+      <ParentalConsentBlocker>
+        <div>Dashboard Content</div>
+      </ParentalConsentBlocker>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Dashboard Content")).toBeInTheDocument();
     });
   });
 
-  describe("Unverified Status (Blocking)", () => {
-    it("blocks access and shows consent request when not verified", async () => {
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: async () => ({ verification_status: "required" }),
-      });
+  it("renders children immediately even when the status check fails", async () => {
+    mockFetch.mockRejectedValue(new Error("Network error"));
 
-      render(
-        <ParentalConsentBlocker>
-          <div>Protected Content</div>
-        </ParentalConsentBlocker>,
-      );
+    render(
+      <ParentalConsentBlocker>
+        <div>Dashboard Content</div>
+      </ParentalConsentBlocker>,
+    );
 
-      await waitFor(() => {
-        expect(screen.getByText(/necesita permiso/i)).toBeInTheDocument();
-      });
-
-      expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /solicitar permiso/i }),
-      ).toBeInTheDocument();
-    });
-
-    it("does NOT bypass consent on button click — sends request instead", async () => {
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => ({ verification_status: "pending" }),
-        })
-        .mockResolvedValueOnce({ ok: true, json: async () => ({}) });
-
-      render(
-        <ParentalConsentBlocker>
-          <div>Protected Content</div>
-        </ParentalConsentBlocker>,
-      );
-
-      await waitFor(() => {
-        expect(
-          screen.getByRole("button", { name: /solicitar permiso/i }),
-        ).toBeInTheDocument();
-      });
-
-      await userEvent.click(
-        screen.getByRole("button", { name: /solicitar permiso/i }),
-      );
-
-      await waitFor(() => {
-        expect(mockFetch).toHaveBeenCalledWith(
-          expect.stringContaining("/parental-consent/request"),
-          expect.objectContaining({ method: "POST" }),
-        );
-      });
-
-      expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-    });
-
-    it("shows pending state after successful consent request", async () => {
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => ({ verification_status: "required" }),
-        })
-        .mockResolvedValueOnce({ ok: true, json: async () => ({}) });
-
-      render(
-        <ParentalConsentBlocker>
-          <div>Protected Content</div>
-        </ParentalConsentBlocker>,
-      );
-
-      await waitFor(() => {
-        expect(
-          screen.getByRole("button", { name: /solicitar permiso/i }),
-        ).toBeInTheDocument();
-      });
-
-      await userEvent.click(
-        screen.getByRole("button", { name: /solicitar permiso/i }),
-      );
-
-      await waitFor(() => {
-        expect(screen.getByText(/esperando autorización/i)).toBeInTheDocument();
-      });
-
-      expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Dashboard Content")).toBeInTheDocument();
     });
   });
 
-  describe("Fail-Secure on Backend Error", () => {
-    it("blocks access when backend returns error", async () => {
-      mockFetch.mockResolvedValue({ ok: false, status: 500 });
+  it("notifies the parent in realtime as soon as the student enters", async () => {
+    render(
+      <ParentalConsentBlocker>
+        <div>Dashboard Content</div>
+      </ParentalConsentBlocker>,
+    );
 
-      render(
-        <ParentalConsentBlocker>
-          <div>Protected Content</div>
-        </ParentalConsentBlocker>,
-      );
-
-      await waitFor(() => {
-        expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(mockChannel).toHaveBeenCalledWith("parent-updates-student-123");
     });
 
-    it("blocks access when fetch fails (network error)", async () => {
-      mockFetch.mockRejectedValue(new Error("Network error"));
-
-      render(
-        <ParentalConsentBlocker>
-          <div>Protected Content</div>
-        </ParentalConsentBlocker>,
-      );
-
-      await waitFor(() => {
-        expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-      });
-    });
+    expect(mockSend).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: "broadcast",
+        event: "student_session",
+        payload: expect.objectContaining({
+          type: "session_started",
+          student_id: "student-123",
+        }),
+      }),
+    );
   });
 
-  describe("Polling for Verification", () => {
-    it("polls verification status every 10s", async () => {
-      vi.useFakeTimers();
-
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: async () => ({ verification_status: "pending" }),
-      });
-
-      render(
-        <ParentalConsentBlocker>
-          <div>Protected Content</div>
-        </ParentalConsentBlocker>,
-      );
-
-      await vi.advanceTimersByTimeAsync(100);
-      expect(mockFetch).toHaveBeenCalledTimes(1);
-
-      await vi.advanceTimersByTimeAsync(10000);
-      expect(mockFetch).toHaveBeenCalledTimes(2);
-
-      vi.useRealTimers();
+  it("triggers the one-time background consent request when none exists yet", async () => {
+    mockFetch.mockImplementation(async (url) => {
+      if (String(url).includes("/parental-consent/status")) {
+        return { ok: true, json: async () => ({ verification_status: "none" }) };
+      }
+      return { ok: true, json: async () => ({}) };
     });
 
-    it("opens access when poll returns verified", async () => {
-      let callCount = 0;
-      mockFetch.mockImplementation(async () => {
-        callCount++;
-        return {
-          ok: true,
-          json: async () => ({
-            verification_status: callCount <= 1 ? "pending" : "verified",
-          }),
-        };
-      });
+    render(
+      <ParentalConsentBlocker>
+        <div>Dashboard Content</div>
+      </ParentalConsentBlocker>,
+    );
 
-      render(
-        <ParentalConsentBlocker>
-          <div>Protected Content</div>
-        </ParentalConsentBlocker>,
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining("/parental-consent/request"),
+        expect.objectContaining({ method: "POST" }),
       );
+    });
 
-      await waitFor(
-        () => {
-          expect(screen.getByText("Protected Content")).toBeInTheDocument();
-        },
-        { timeout: 15000 },
-      );
-    }, 20000);
+    // Never blocked while the background request was in flight.
+    expect(screen.getByText("Dashboard Content")).toBeInTheDocument();
   });
 
-  describe("Logout", () => {
-    it("allows logout from blocking screen", async () => {
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: async () => ({ verification_status: "required" }),
-      });
-
-      render(
-        <ParentalConsentBlocker>
-          <div>Protected Content</div>
-        </ParentalConsentBlocker>,
-      );
-
-      await waitFor(() => {
-        expect(
-          screen.getByRole("button", { name: /cerrar sesión/i }),
-        ).toBeInTheDocument();
-      });
-
-      await userEvent.click(
-        screen.getByRole("button", { name: /cerrar sesión/i }),
-      );
-
-      expect(signOutUser).toHaveBeenCalledWith("/", mockNavigate);
+  it("does not re-request consent when one already exists (pending or verified)", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ verification_status: "pending" }),
     });
-  });
 
-  describe("Cleanup", () => {
-    it("clears intervals on unmount", async () => {
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: async () => ({ verification_status: "pending" }),
-      });
+    render(
+      <ParentalConsentBlocker>
+        <div>Dashboard Content</div>
+      </ParentalConsentBlocker>,
+    );
 
-      const { unmount } = render(
-        <ParentalConsentBlocker>
-          <div>Content</div>
-        </ParentalConsentBlocker>,
-      );
-
-      await waitFor(() => {
-        expect(screen.queryByText("Content")).not.toBeInTheDocument();
-      });
-
-      expect(() => unmount()).not.toThrow();
+    await waitFor(() => {
+      expect(screen.getByText("Dashboard Content")).toBeInTheDocument();
     });
+
+    expect(mockFetch).not.toHaveBeenCalledWith(
+      expect.stringContaining("/parental-consent/request"),
+      expect.anything(),
+    );
   });
 });

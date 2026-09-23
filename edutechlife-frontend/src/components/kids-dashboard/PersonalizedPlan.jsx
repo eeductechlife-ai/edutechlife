@@ -1,8 +1,17 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { sanitize } from "../../utils/sanitize";
+
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
+function authToken() {
+  try { return sessionStorage.getItem("auth_token") || localStorage.getItem("auth_token") || ""; } catch { return ""; }
+}
+function getStudentId() {
+  try { return localStorage.getItem("student_id") || ""; } catch { return ""; }
+}
 
 const STYLE_COLORS = {
   visual: "#06D6A0",
@@ -62,6 +71,16 @@ const WEEKLY_ACTIVITIES = {
   ],
 };
 
+const ACTIVITY_ICONS = {
+  practice: "📝",
+  flashcard: "🃏",
+  challenge: "⚡",
+  oral: "🎙️",
+  content: "📚",
+  video: "🎬",
+  default: "🎯",
+};
+
 const PersonalizedPlan = () => {
   const { t } = useTranslation();
   const {
@@ -72,6 +91,32 @@ const PersonalizedPlan = () => {
     setPlanCompletedActivities: setCompletedActivities,
   } = useIngenIAKids();
   const [showConfetti, setShowConfetti] = useState(false);
+  const [aiPlan, setAiPlan] = useState(null);
+  const [aiWeeklyPlan, setAiWeeklyPlan] = useState(null);
+  const [loadingPlan, setLoadingPlan] = useState(false);
+  const [availableMinutes, setAvailableMinutes] = useState(20);
+
+  useEffect(() => {
+    const sid = getStudentId();
+    const token = authToken();
+    if (!sid || !token) return;
+    setLoadingPlan(true);
+    Promise.all([
+      fetch(`${API_BASE}/api/smartboard/adaptive/daily-plan`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ studentId: sid, availableMinutes }),
+      }).then((r) => r.ok ? r.json() : null).catch(() => null),
+      fetch(`${API_BASE}/api/smartboard/adaptive/weekly-plan`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ studentId: sid, availableMinutesPerDay: 25 }),
+      }).then((r) => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([daily, weekly]) => {
+      if (daily?.plan) setAiPlan(daily.plan);
+      if (weekly?.plan) setAiWeeklyPlan(weekly.plan);
+    }).finally(() => setLoadingPlan(false));
+  }, [availableMinutes]);
 
   const dominantStyle = vakResult?.predominantStyle || "visual";
   const scores = vakResult?.scores || {
@@ -267,63 +312,130 @@ const PersonalizedPlan = () => {
         </div>
       </motion.div>
 
+      {/* AI Daily Plan */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
         className="bg-white rounded-2xl p-6 shadow-lg border border-[#E2E8F0]"
       >
-        <h3 className="text-lg font-bold text-[#1E293B] mb-4">
-          {t("kid.personalized_plan.weekly_plan_title")}
-        </h3>
-        <div className="space-y-3">
-          {weeklyActivities.map((activity, index) => {
-            const isCompleted = completedActivities.includes(activity.id);
-            return (
-              <motion.div
-                key={activity.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`p-4 rounded-xl border-2 transition-all ${
-                  isCompleted
-                    ? "bg-green-50 border-green-200"
-                    : "bg-[#F8FAFC] border-[#E2E8F0] hover:border-[#FB8500]/30"
-                }`}
-              >
-                <div className="flex items-center gap-4">
-                  <motion.button
-                    onClick={() => handleCompleteActivity(activity.id)}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
-                      isCompleted
-                        ? "bg-green-500 border-green-500 text-white"
-                        : "border-[#FB8500] text-[#FB8500] hover:bg-[#FB8500]/10"
-                    }`}
-                  >
-                    {isCompleted ? "✓" : <span className="text-sm">+</span>}
-                  </motion.button>
-                  <div className="flex-1 min-w-0">
-                    <h4
-                      className={`font-semibold text-sm ${isCompleted ? "text-green-600 line-through" : "text-[#1E293B]"}`}
-                    >
-                      {activity.name}
-                    </h4>
-                    <p className="text-xs text-[#64748B]">{activity.days}</p>
-                  </div>
-                  {!isCompleted && (
-                    <span className="text-xs font-bold text-[#FB8500]">
-                      +25 pts
-                    </span>
-                  )}
-                </div>
-              </motion.div>
-            );
-          })}
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-[#1E293B]">
+            📅 Plan de hoy — IA adaptativa
+          </h3>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-[#64748B]">Tiempo disponible:</span>
+            <select
+              value={availableMinutes}
+              onChange={(e) => setAvailableMinutes(Number(e.target.value))}
+              className="text-xs border border-[#E2E8F0] rounded-lg px-2 py-1 text-[#1E293B]"
+            >
+              {[10, 20, 30, 45, 60].map((m) => (
+                <option key={m} value={m}>{m} min</option>
+              ))}
+            </select>
+          </div>
         </div>
+
+        {loadingPlan ? (
+          <div className="space-y-2">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-14 bg-gray-100 rounded-xl animate-pulse" />
+            ))}
+          </div>
+        ) : aiPlan?.activities?.length > 0 ? (
+          <div className="space-y-3">
+            {aiPlan.activities.map((act, idx) => {
+              const actId = `ai-daily-${idx}`;
+              const isCompleted = completedActivities.includes(actId);
+              const icon = ACTIVITY_ICONS[act.type] || ACTIVITY_ICONS.default;
+              return (
+                <motion.div
+                  key={actId}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.08 }}
+                  className={`p-4 rounded-xl border-2 transition-all ${
+                    isCompleted ? "bg-green-50 border-green-200" : "bg-[#F8FAFC] border-[#E2E8F0] hover:border-[#FB8500]/30"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <motion.button
+                      onClick={() => handleCompleteActivity(actId)}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all flex-shrink-0 ${
+                        isCompleted ? "bg-green-500 border-green-500 text-white" : "border-[#FB8500] text-[#FB8500]"
+                      }`}
+                    >
+                      {isCompleted ? "✓" : <span className="text-sm">+</span>}
+                    </motion.button>
+                    <span className="text-lg flex-shrink-0">{icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <h4 className={`font-semibold text-sm ${isCompleted ? "text-green-600 line-through" : "text-[#1E293B]"}`}>
+                        {act.title}
+                      </h4>
+                      {act.reason && (
+                        <p className="text-xs text-[#64748B] truncate">{act.reason}</p>
+                      )}
+                    </div>
+                    <div className="text-right flex-shrink-0">
+                      <div className="text-xs text-[#64748B]">{act.estimatedMinutes} min</div>
+                      {!isCompleted && <div className="text-xs font-bold text-[#FB8500]">+25 pts</div>}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+            {aiPlan.nextBestAction && (
+              <div className="mt-3 p-3 bg-blue-50 rounded-xl border border-blue-100">
+                <p className="text-xs font-semibold text-blue-700">
+                  🎯 Siguiente mejor acción: {aiPlan.nextBestAction.action?.replace(/_/g, " ")} — {aiPlan.nextBestAction.label || aiPlan.nextBestAction.subject}
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {weeklyActivities.map((activity, index) => {
+              const isCompleted = completedActivities.includes(activity.id);
+              return (
+                <motion.div
+                  key={activity.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className={`p-4 rounded-xl border-2 transition-all ${
+                    isCompleted ? "bg-green-50 border-green-200" : "bg-[#F8FAFC] border-[#E2E8F0] hover:border-[#FB8500]/30"
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    <motion.button
+                      onClick={() => handleCompleteActivity(activity.id)}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all ${
+                        isCompleted ? "bg-green-500 border-green-500 text-white" : "border-[#FB8500] text-[#FB8500]"
+                      }`}
+                    >
+                      {isCompleted ? "✓" : <span className="text-sm">+</span>}
+                    </motion.button>
+                    <div className="flex-1 min-w-0">
+                      <h4 className={`font-semibold text-sm ${isCompleted ? "text-green-600 line-through" : "text-[#1E293B]"}`}>
+                        {activity.name}
+                      </h4>
+                      <p className="text-xs text-[#64748B]">{activity.days}</p>
+                    </div>
+                    {!isCompleted && <span className="text-xs font-bold text-[#FB8500]">+25 pts</span>}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
       </motion.div>
 
+      {/* AI Weekly Plan */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -331,41 +443,52 @@ const PersonalizedPlan = () => {
         className="bg-white rounded-2xl p-6 shadow-lg border border-[#E2E8F0]"
       >
         <h3 className="text-lg font-bold text-[#1E293B] mb-4">
-          {t("kid.personalized_plan.daily_routine_title")}
+          📆 Plan semanal — adaptado a tu desempeño
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {dailyTips.map((item, index) => {
-            const timeConfig = {
-              Mañana: {
-                emoji: "🌅",
-                key: "kid.personalized_plan.time_morning",
-              },
-              Tarde: {
-                emoji: "☀️",
-                key: "kid.personalized_plan.time_afternoon",
-              },
-              Noche: { emoji: "🌙", key: "kid.personalized_plan.time_night" },
-            };
-            const cfg = timeConfig[item.time] || timeConfig.Mañana;
-            return (
+        {loadingPlan ? (
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+            {[1,2,3,4,5].map((i) => (
+              <div key={i} className="h-24 bg-gray-100 rounded-xl animate-pulse" />
+            ))}
+          </div>
+        ) : aiWeeklyPlan?.days?.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+            {aiWeeklyPlan.days.map((dayPlan, idx) => (
               <motion.div
-                key={item.time}
+                key={dayPlan.day}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + index * 0.1 }}
-                className="p-4 rounded-xl bg-gradient-to-br from-[#F8FAFC] to-white border border-[#E2E8F0]"
+                transition={{ delay: 0.1 * idx }}
+                className="p-3 rounded-xl bg-gradient-to-br from-[#F8FAFC] to-white border border-[#E2E8F0]"
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-lg">{cfg.emoji}</span>
-                  <span className="font-bold text-sm text-[#1E293B]">
-                    {t(cfg.key)}
-                  </span>
+                <div className="font-bold text-xs text-[#004B63] mb-1">{dayPlan.day}</div>
+                <div className="text-xs font-semibold text-[#1E293B] truncate">{dayPlan.label}</div>
+                <div className={`text-xs mt-1 px-2 py-0.5 rounded-full inline-block ${
+                  dayPlan.focus === "Refuerzo" ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"
+                }`}>
+                  {dayPlan.focus}
                 </div>
-                <p className="text-sm text-[#64748B]">{item.tip}</p>
+                <div className="text-xs text-[#64748B] mt-1">{dayPlan.estimatedMinutes} min</div>
               </motion.div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {dailyTips.map((item, index) => {
+              const timeConfig = { Mañana: { emoji: "🌅", key: "kid.personalized_plan.time_morning" }, Tarde: { emoji: "☀️", key: "kid.personalized_plan.time_afternoon" }, Noche: { emoji: "🌙", key: "kid.personalized_plan.time_night" } };
+              const cfg = timeConfig[item.time] || timeConfig.Mañana;
+              return (
+                <motion.div key={item.time} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 + index * 0.1 }} className="p-4 rounded-xl bg-gradient-to-br from-[#F8FAFC] to-white border border-[#E2E8F0]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">{cfg.emoji}</span>
+                    <span className="font-bold text-sm text-[#1E293B]">{t(cfg.key)}</span>
+                  </div>
+                  <p className="text-sm text-[#64748B]">{item.tip}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
       </motion.div>
     </div>
   );

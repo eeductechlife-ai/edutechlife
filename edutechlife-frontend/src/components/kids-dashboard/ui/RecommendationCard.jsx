@@ -1,5 +1,8 @@
-import { SB_COLORS, SB_RADII, SB_SHADOWS } from "../ingenIATheme";
+import { useEffect } from "react";
+import { SB_COLORS, SB_RADII, SB_SHADOWS } from "../smartboardTheme";
 import Button from "./Button";
+import { track } from "../../../lib/analytics";
+import { EVENTS } from "../../../lib/analyticsEvents";
 
 export default function RecommendationCard({
   title,
@@ -12,6 +15,9 @@ export default function RecommendationCard({
   dark = false,
   style = {},
 }) {
+  useEffect(() => {
+    track(EVENTS.RECOMMENDATION_SEEN, { title, subject, difficulty });
+  }, [title, subject, difficulty]);
   const bg = dark ? SB_COLORS.surfaceDarkAlt : SB_COLORS.surfaceLight;
   const border = dark ? SB_COLORS.borderDark : SB_COLORS.borderLight;
   const textMain = dark ? "#F0F6FF" : SB_COLORS.deep;

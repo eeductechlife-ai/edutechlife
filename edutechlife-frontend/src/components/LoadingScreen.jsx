@@ -4,14 +4,7 @@ import FloatingParticles from "./FloatingParticles";
 import { useTranslation } from "../i18n/I18nProvider";
 import { Icon } from "../utils/iconMapping.jsx";
 
-// Progreso y clave de traducción por paso. La clave se resuelve con t() en
-// cada render (no al disparar el timer): si el JSON de idioma —cargado con
-// import() dinámico en I18nProvider— todavía no llegó cuando el timer avanza
-// al último paso, guardar el texto ya resuelto lo dejaba congelado como la
-// clave cruda ("loading.status_done") para siempre, porque nada volvía a
-// evaluarlo después. Guardando solo el índice, el texto se recalcula solo en
-// cuanto las traducciones terminan de cargar.
-const LOADING_STEPS = [
+const LOADING_STEP_KEYS = [
   { progress: 30, key: "loading.status_start" },
   { progress: 60, key: "loading.status_vak" },
   { progress: 85, key: "loading.status_ai" },
@@ -23,26 +16,27 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
 
-  const progress = LOADING_STEPS[stepIndex].progress;
-  const statusText = t(LOADING_STEPS[stepIndex].key);
+  const progress = LOADING_STEP_KEYS[stepIndex].progress;
+  // t() is called at render time so it uses translations once they are loaded
+  const statusText = t(LOADING_STEP_KEYS[stepIndex].key);
 
   useEffect(() => {
     // Arranca en el primer paso de inmediato: evita el frío "0%"
-    let currentStep = 1;
+    let current = 1;
     const interval = setInterval(() => {
-      if (currentStep < LOADING_STEPS.length) {
-        setStepIndex(currentStep);
-        currentStep++;
+      if (current < LOADING_STEP_KEYS.length) {
+        setStepIndex(current);
+        current++;
       } else {
         clearInterval(interval);
       }
-    }, minDuration / LOADING_STEPS.length);
+    }, minDuration / LOADING_STEP_KEYS.length);
 
     return () => clearInterval(interval);
   }, [minDuration]);
 
   useEffect(() => {
-    if (progress >= 100) {
+    if (progress >= 100 && stepIndex === LOADING_STEP_KEYS.length - 1) {
       const exitTimer = setTimeout(() => {
         setIsExiting(true);
         const completeTimer = setTimeout(() => {
@@ -52,7 +46,7 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
       }, 200);
       return () => clearTimeout(exitTimer);
     }
-  }, [progress, onComplete]);
+  }, [progress, stepIndex, onComplete]);
 
   return (
     <div className={`loading-screen ${isExiting ? "exiting" : ""}`}>

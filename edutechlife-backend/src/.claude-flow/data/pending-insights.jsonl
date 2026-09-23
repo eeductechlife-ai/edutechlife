@@ -3,3 +3,9 @@
 {"type":"edit","file":"/Users/home/Desktop/edutechlife/edutechlife-frontend/src/components/pages/smartBoardParentDashboard/SmartBoardParentDashboard.jsx","timestamp":1785846949567,"sessionId":null}
 {"type":"edit","file":"/Users/home/Desktop/edutechlife/edutechlife-frontend/src/components/pages/smartBoardParentDashboard/SmartBoardParentDashboard.jsx","timestamp":1785846957098,"sessionId":null}
 {"type":"edit","file":"/Users/home/Desktop/edutechlife/edutechlife-backend/src/__tests__/routes/smartboard.test.js","timestamp":1785846970482,"sessionId":null}
+{"type":"edit","file":"/home/user/edutechlife/edutechlife-frontend/src/components/kids-dashboard/ParentalConsentBlocker.jsx","timestamp":1789486144748,"sessionId":null}
+{"type":"edit","file":"/home/user/edutechlife/edutechlife-backend/src/routes/smartboard/parental-consent.js","timestamp":1789486179495,"sessionId":null}
+{"type":"edit","file":"/home/user/edutechlife/edutechlife-backend/src/middleware/parentalConsent.js","timestamp":1789486195688,"sessionId":null}
+{"type":"edit","file":"/home/user/edutechlife/edutechlife-backend/src/__tests__/middleware/parentalConsent.test.js","timestamp":1789486207869,"sessionId":null}
+{"type":"edit","file":"/home/user/edutechlife/edutechlife-backend/src/__tests__/routes/smartboard.parental-consent.test.js","timestamp":1789486222658,"sessionId":null}
+{"type":"edit","file":"/home/user/edutechlife/edutechlife-frontend/src/components/kids-dashboard/__tests__/ParentalConsentBlocker.test.jsx","timestamp":1789486248745,"sessionId":null}

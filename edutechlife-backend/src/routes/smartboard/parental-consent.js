@@ -99,6 +99,84 @@ router.post('/parental-consent/verify', async (req, res) => {
   }
 });
 
+// Dispara, en segundo plano y sin bloquear, la solicitud única de
+// consentimiento parental cuando aún no existe ninguna para este estudiante.
+// El email del padre se resuelve del vínculo creado por el backend
+// (parent_student_links → users), nunca del cliente. Es best-effort: si no
+// hay padre vinculado o falta la edad, responde 200 sin crear nada — el
+// estudiante nunca queda bloqueado por este endpoint.
+router.post('/parental-consent/request', requireAuth, async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const { data: existing, error: existingError } = await supabase
+      .from('parent_consents')
+      .select('verification_status')
+      .eq('student_id', userId)
+      .order('consent_timestamp', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (existingError && existingError.code !== 'PGRST205' && existingError.code !== '42P01') {
+      throw existingError;
+    }
+    if (existing) {
+      return res.status(200).json({ verification_status: existing.verification_status });
+    }
+
+    const { data: link } = await supabase
+      .from('parent_student_links')
+      .select('parent_user_id')
+      .eq('student_user_id', userId)
+      .eq('is_active', true)
+      .limit(1)
+      .maybeSingle();
+
+    const parentUser = link
+      ? (await supabase.from('users').select('email').eq('id', link.parent_user_id).maybeSingle()).data
+      : null;
+
+    const { data: student } = await supabase
+      .from('students')
+      .select('age')
+      .eq('auth_id', userId)
+      .maybeSingle();
+
+    const age = Number(student?.age);
+
+    if (!parentUser?.email || !Number.isInteger(age)) {
+      // Nada que vincular todavía (sin padre o sin edad registrada):
+      // se deja pasar; el estudiante sigue trabajando con normalidad.
+      return res.status(200).json({ verification_status: 'none' });
+    }
+
+    const verificationToken = crypto.randomBytes(24).toString('hex');
+    const { error: insertError } = await supabase
+      .from('parent_consents')
+      .insert([{
+        student_id: userId,
+        parent_email: parentUser.email,
+        student_age: age,
+        consent_timestamp: new Date().toISOString(),
+        verification_status: 'pending',
+        verification_token: verificationToken,
+      }]);
+
+    if (insertError) throw insertError;
+
+    try {
+      await sendConsentVerificationEmail({ parentEmail: parentUser.email, studentAge: age, token: verificationToken });
+    } catch (emailError) {
+      console.error('Error sending consent verification email:', emailError.message);
+    }
+
+    res.status(201).json({ verification_status: 'pending' });
+  } catch (e) {
+    console.error('Error auto-requesting parental consent (non-blocking):', e.message);
+    res.status(200).json({ verification_status: 'none' });
+  }
+});
+
 router.get('/parental-consent/status', requireAuth, async (req, res) => {
   try {
     const { data, error } = await supabase
