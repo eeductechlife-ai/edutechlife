@@ -3,7 +3,10 @@ import { callDeepseekSmartboard } from "../../../utils/api";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useFeedbackLog } from "../../../hooks/useFeedbackLog";
 import { useCompetencyTracking } from "../../../hooks/useCompetencyTracking";
-import { pickDbaSequence } from "../../../utils/dbaCatalog";
+import {
+  pickDbaSequence,
+  getDbaForSubjectGrade,
+} from "../../../utils/dbaCatalog";
 import { track } from "../../../lib/analytics";
 
 const DIFFICULTIES = [
@@ -83,6 +86,15 @@ Las preguntas deben ser apropiadas para la edad, en español, y alineadas con el
 export function useChallengeEngine() {
   const { supabaseQueries, addPoints, studentAge } = useIngenIAKids();
   const studentGrade = supabaseQueries?.studentData?.data?.grade;
+
+  // Only show subjects that have DBA data for the student's actual grade.
+  // Falls back to all mapped subjects if grade is unknown.
+  const grade = parseInt(studentGrade, 10) || 5;
+  const availableSubjects = CHALLENGE_SUBJECTS.filter((s) => {
+    const curriculoId = SUBJECT_TO_CURRICULO_ID[s.id];
+    if (!curriculoId) return false; // "tech" has no MEN DBA
+    return getDbaForSubjectGrade(curriculoId, grade).length > 0;
+  });
   const { logFeedback } = useFeedbackLog();
   const { trackActivity } = useCompetencyTracking();
 
@@ -239,6 +251,6 @@ export function useChallengeEngine() {
     submitAnswer,
     resetChallenge,
     DIFFICULTIES,
-    CHALLENGE_SUBJECTS,
+    CHALLENGE_SUBJECTS: availableSubjects,
   };
 }
