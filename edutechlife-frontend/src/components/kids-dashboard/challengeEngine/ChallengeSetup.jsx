@@ -39,7 +39,11 @@ const SpinWheel = memo(({ subjects, onLand }) => {
   const spin = useCallback(() => {
     if (isSpinning) return;
     const targetIdx = Math.floor(Math.random() * N);
-    const targetCenter = (targetIdx + 0.5) * deg;
+    // Para que el puntero (12 o'clock) quede sobre el centro del sector targetIdx,
+    // la rotación normalizada debe ser (360 - centro_del_sector) % 360 porque
+    // al rotar el SVG en sentido horario por R, el punto que estaba en ángulo α
+    // se desplaza a α+R; para que α+R=0 (puntero), R = -α = 360-α.
+    const targetCenter = (360 - (targetIdx + 0.5) * deg + 360) % 360;
     const currentNorm = ((rotation % 360) + 360) % 360;
     const delta = (targetCenter - currentNorm + 360) % 360;
     const extraSpins = (4 + Math.floor(Math.random() * 2)) * 360;
