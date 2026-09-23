@@ -293,7 +293,7 @@ const HeroSection = ({ t, navigate: navFromProps, scrollY, prefersReducedMotion,
                     )}
                     <video
                       autoPlay muted loop playsInline preload="metadata"
-                      onLoadedData={() => setVideoLoaded(true)}
+                      onLoadedData={(e) => { e.target.playbackRate = 1.5; setVideoLoaded(true); }}
                       className="w-full h-auto block"
                       style={{
                         backfaceVisibility: 'hidden',
@@ -303,7 +303,7 @@ const HeroSection = ({ t, navigate: navFromProps, scrollY, prefersReducedMotion,
                         imageRendering: 'auto',
                       }}
                     >
-                      <source src="/dashboard.mp4" type="video/mp4" />
+                      <source src="https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/video%20intro/ialab-demo.mp4" type="video/mp4" />
                     </video>
 
                     <div className="absolute inset-0 z-25 pointer-events-none"
