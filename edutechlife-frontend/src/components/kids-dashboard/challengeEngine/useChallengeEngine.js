@@ -2,6 +2,8 @@ import { useState, useCallback, useRef } from "react";
 import { callDeepseekSmartboard } from "../../../utils/api";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useFeedbackLog } from "../../../hooks/useFeedbackLog";
+import { useCompetencyTracking } from "../../../hooks/useCompetencyTracking";
+import { pickDbaSequence } from "../../../utils/dbaCatalog";
 import { track } from "../../../lib/analytics";
 
 const DIFFICULTIES = [
@@ -19,13 +21,44 @@ const CHALLENGE_SUBJECTS = [
   { id: "english", label: "Inglés", emoji: "🇬🇧" },
 ];
 
-function buildChallengePrompt(subject, difficulty, grade, questionCount) {
+// CHALLENGE_SUBJECTS usa ids simplificados; el currículo MEN usa sus propios ids.
+const SUBJECT_TO_CURRICULO_ID = {
+  math: "matematicas",
+  science: "ciencias",
+  language: "lenguaje",
+  social: "sociales",
+  english: "ingles",
+  // "tech" no tiene DBA propio en el currículo MEN — sin DBA, el reto sigue
+  // funcionando genérico (dbaSequence queda vacío, ver startChallenge).
+};
+
+function buildChallengePrompt(
+  subject,
+  difficulty,
+  grade,
+  questionCount,
+  dbaSequence,
+) {
+  const hasDba = dbaSequence.length === questionCount;
+
+  const dbaInstructions = hasDba
+    ? dbaSequence
+        .map(
+          (d, i) =>
+            `Pregunta ${i + 1} debe evaluar EXACTAMENTE este DBA: "${d.text}"`,
+        )
+        .join("\n")
+    : `Genera preguntas variadas y representativas de ${subject.label} para ese grado.`;
+
   return [
     {
       role: "system",
       content: `Eres un generador de retos educativos para niños de grado ${grade || "5to"} en Colombia.
 Genera exactamente ${questionCount} preguntas de opción múltiple sobre ${subject.label}.
 Nivel de dificultad: ${difficulty.label}.
+
+${dbaInstructions}
+
 Responde SOLO en JSON válido con este formato:
 {
   "questions": [
@@ -37,6 +70,7 @@ Responde SOLO en JSON válido con este formato:
     }
   ]
 }
+El orden de "questions" en la respuesta debe coincidir exactamente con el orden de las instrucciones de DBA de arriba.
 Las preguntas deben ser apropiadas para la edad, en español, y alineadas con el currículo colombiano MEN.`,
     },
     {
@@ -50,11 +84,13 @@ export function useChallengeEngine() {
   const { supabaseQueries, addPoints, studentAge } = useIngenIAKids();
   const studentGrade = supabaseQueries?.studentData?.data?.grade;
   const { logFeedback } = useFeedbackLog();
+  const { trackActivity } = useCompetencyTracking();
 
   const [phase, setPhase] = useState("setup");
   const [subject, setSubject] = useState(null);
   const [difficulty, setDifficulty] = useState(null);
   const [questions, setQuestions] = useState([]);
+  const [dbaSequence, setDbaSequence] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -66,11 +102,18 @@ export function useChallengeEngine() {
     setLoading(true);
     setError(null);
     try {
+      const grade = parseInt(studentGrade, 10) || 5;
+      const curriculoSubject = SUBJECT_TO_CURRICULO_ID[subject.id];
+      const dbas = curriculoSubject
+        ? pickDbaSequence(curriculoSubject, grade, difficulty.questions)
+        : [];
+
       const prompt = buildChallengePrompt(
         subject,
         difficulty,
         studentGrade,
         difficulty.questions,
+        dbas,
       );
       const result = await callDeepseekSmartboard(prompt, {
         isJson: true,
@@ -79,6 +122,10 @@ export function useChallengeEngine() {
       });
       if (!result?.questions?.length) throw new Error("No questions received");
       setQuestions(result.questions);
+      // Solo se usa la secuencia de DBA si la IA devolvió el mismo número de
+      // preguntas que se pidieron por DBA — si no coincide, no podemos confiar
+      // en el orden y el reto sigue funcionando sin tracking por tema.
+      setDbaSequence(dbas.length === result.questions.length ? dbas : []);
       setAnswers([]);
       setCurrentIndex(0);
       startTimeRef.current = Date.now();
@@ -101,6 +148,17 @@ export function useChallengeEngine() {
       const isCorrect = selectedIndex === q.correct;
       const newAnswers = [...answers, { selectedIndex, isCorrect }];
       setAnswers(newAnswers);
+
+      // Reporta el dominio de ESTE DBA específico, no un promedio de la materia —
+      // así "Refuerza Matemáticas" puede convertirse en "Refuerza fracciones".
+      const dba = dbaSequence[currentIndex];
+      if (dba) {
+        trackActivity({
+          subject: dba.subject,
+          score: isCorrect ? 1 : 0,
+          competencyIds: [dba.id],
+        });
+      }
 
       if (currentIndex + 1 < questions.length) {
         setCurrentIndex(currentIndex + 1);
@@ -142,14 +200,17 @@ export function useChallengeEngine() {
       answers,
       difficulty,
       subject,
+      dbaSequence,
       addPoints,
       logFeedback,
+      trackActivity,
     ],
   );
 
   const resetChallenge = useCallback(() => {
     setPhase("setup");
     setQuestions([]);
+    setDbaSequence([]);
     setAnswers([]);
     setCurrentIndex(0);
     setError(null);

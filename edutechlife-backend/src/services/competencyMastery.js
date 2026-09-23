@@ -1,4 +1,5 @@
 const { createClient } = require("@supabase/supabase-js");
+const { getDbaForSubjectGrade } = require("./dbaCatalog");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -15,11 +16,20 @@ const RANGE_MAP = {
 
 /**
  * Returns competency IDs relevant for a student's grade and subject.
+ * Usa los DBA reales del currículo MEN (co_{subject}_g{grade}_dba{n}) cuando
+ * existen; antes generaba 4 IDs sintéticos sin relación con contenido real
+ * (co_{subject}_{rango}_0..3), por lo que el "dominio" nunca correspondía a
+ * un tema concreto. Cae al generador genérico solo si no hay DBA (materias
+ * fuera del currículo MEN o países distintos de CO).
  * @param {string} subject - e.g. 'matematicas'
  * @param {number} grade   - 1-11
  * @param {string} [countryCode]
  */
 function getCompetencyIdsForSubject(subject, grade, countryCode = "CO") {
+  if (countryCode.toUpperCase() === "CO") {
+    const dbas = getDbaForSubjectGrade(subject, grade);
+    if (dbas.length > 0) return dbas.map((d) => d.id);
+  }
   const range = RANGE_MAP[grade] || "1-3";
   const prefix = `${countryCode.toLowerCase()}_${subject}_${range}_`;
   return [0, 1, 2, 3].map((i) => `${prefix}${i}`);

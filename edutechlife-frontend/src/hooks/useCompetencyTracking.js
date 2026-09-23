@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useIngenIAKids } from "../context/IngenIAKidsContext";
+import { getDbaForSubjectGrade } from "../utils/dbaCatalog";
 import { track } from "../lib/analytics";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
@@ -33,11 +34,23 @@ export function useCompetencyTracking() {
 
   /**
    * Map subject + grade to competency IDs (client-side, no network call needed).
-   * Mirrors the server-side getCompetencyIdsForSubject logic.
+   * Devuelve DBA reales del currículo MEN para esa materia/grado — antes
+   * generaba 4 IDs sintéticos (co_materia_rango_0..3) sin relación con
+   * contenido real, por lo que "dominio" nunca reflejaba un tema concreto.
+   * Si la materia/grado no tiene DBA en el currículo (ej. "tech", o países
+   * distintos de CO), cae de vuelta al generador genérico anterior para no
+   * romper el tracking en esos casos.
    */
   const getCompetencyIds = useCallback(
     (subject) => {
       const grade = parseInt(gradeLevel, 10) || 1;
+      const cc = (countryCode || "CO").toLowerCase();
+
+      if (cc === "co") {
+        const dbas = getDbaForSubjectGrade(subject, grade);
+        if (dbas.length > 0) return dbas.map((d) => d.id);
+      }
+
       const RANGE =
         grade <= 3
           ? "1-3"
@@ -48,7 +61,6 @@ export function useCompetencyTracking() {
               : grade <= 9
                 ? "8-9"
                 : "10-11";
-      const cc = (countryCode || "CO").toLowerCase();
       return [0, 1, 2, 3].map((i) => `${cc}_${subject}_${RANGE}_${i}`);
     },
     [gradeLevel, countryCode],

@@ -80,10 +80,15 @@ const SUBJECT_MAP = {
 };
 
 function subjectFromCompetencyId(id) {
-  // id format: co_matematicas_6-7_0
   const parts = id.split("_");
   // skip country prefix (parts[0] = 'co')
   // subject may be multi-word like ciencias_naturales
+
+  // Formato DBA real: co_matematicas_g5_dba1 (dbaCatalog.js)
+  const gradeIdx = parts.findIndex((p) => /^g\d+$/.test(p));
+  if (gradeIdx >= 2) return parts.slice(1, gradeIdx).join("_");
+
+  // Formato legado (sin DBA en el currículo para esa materia/país): co_matematicas_6-7_0
   const rangeIdx = parts.findIndex((p) => /^\d+-\d+$/.test(p));
   if (rangeIdx < 2) return null;
   return parts.slice(1, rangeIdx).join("_");
