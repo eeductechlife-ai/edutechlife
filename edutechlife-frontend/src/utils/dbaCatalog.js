@@ -1,5 +1,6 @@
 /**
  * Catálogo de DBA (Derechos Básicos de Aprendizaje, MEN Colombia) con IDs estables.
+ * v2 — fuerza rebuild de Vercel tras fallo de caché en deploy 9dce32ed.
  * Espejo del backend (src/services/dbaCatalog.js) para selección client-side
  * sin llamada de red — mismo criterio de generación de IDs en ambos lados.
  */
