@@ -24,6 +24,7 @@ const FlashcardSystem = lazy(() => import("../flashcardSystem"));
 const OralExamSimulator = lazy(() => import("../OralExamSimulator"));
 const ChallengeEngine = lazy(() => import("../challengeEngine"));
 const FutureExplorer = lazy(() => import("../FutureExplorer"));
+const PracticarHub = lazy(() => import("../practicarHub/PracticarHub"));
 
 const sharedTransition = { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] };
 
@@ -213,6 +214,16 @@ function createTabRenderer(deps) {
       errorKey: "progreso",
       errorMsg: "Error al cargar progreso",
       className: "h-full",
+    },
+    practicar: {
+      component: () => (
+        <LazyLoad fallback={<SectionFallback tab="practicar" />}>
+          <PracticarHub onTabChange={onTabChange} darkMode={darkMode} />
+        </LazyLoad>
+      ),
+      errorKey: "practicar",
+      errorMsg: "Error al cargar Practicar",
+      className: "space-y-4",
     },
     retos: {
       component: () => (

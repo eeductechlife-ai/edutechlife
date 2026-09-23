@@ -14,8 +14,10 @@ export const CATEGORY_MAP = {
   calificaciones: "learn",
   plan: "learn",
   horario: "learn",
-  // practice — flashcards is internal/hidden; accessible via NBA or retos
+  // practice — hub lands first; tools accessible from it or directly
+  practicar: "practice",
   flashcards: "practice",
+  retos: "practice",
   examenes: "practice", // hidden; inside ChallengeEngine
   oral: "practice", // hidden; via Dani FAB
   // progress
@@ -25,7 +27,6 @@ export const CATEGORY_MAP = {
   vak: "profile", // hidden; inside perfil
   // explore — noticias is internal ExplorarTab sub-view
   misiones: "explore",
-  retos: "explore",
   noticias: "explore",
 };
 
@@ -57,7 +58,7 @@ export const CATEGORIES = [
     color: "#FF6B9D",
     gradient: "linear-gradient(135deg, #EF476F 0%, #FF6B9D 55%, #FF8FA3 100%)",
     glowColor: "#EF476F",
-    tabs: ["retos"], // flashcards: accessible via NBA or retos
+    tabs: ["practicar"], // hub tab; retos + flashcards accessible from hub or directly
     minAge: 6,
   },
   {
@@ -107,6 +108,7 @@ export const CATEGORY_TAB_LABELS = {
   materias: "Materias",
   calificaciones: "Notas",
   plan: "Mi Plan",
+  practicar: "Practicar",
   flashcards: "Educards",
   retos: "Retos",
   perfil: "Mi Perfil",
@@ -127,6 +129,7 @@ export const TOP_BAR_LABELS = {
   materias: "Materias",
   calificaciones: "Mis Notas",
   plan: "Mi Plan de Mejora",
+  practicar: "Practicar",
   flashcards: "Educards",
   retos: "Retos Inteligentes",
   progreso: "Mis Estadísticas",
@@ -136,7 +139,7 @@ export const TOP_BAR_LABELS = {
   horario: "Mi Horario",
   examenes: "Exámenes",
   oral: "Habla con Dani",
-  vak: "Diagnóstico VAK",
+  vak: "ADN de Aprendizaje",
 };
 
 export const PREMIUM_FEATURES = {

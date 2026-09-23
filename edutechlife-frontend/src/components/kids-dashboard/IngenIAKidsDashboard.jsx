@@ -47,6 +47,7 @@ const IngenIAKidsDashboard = () => {
       "noticias",
       "plan",
       "puntos",
+      "practicar",
     ];
     if (urlTab && TAB_WHITELIST.includes(urlTab)) return urlTab;
     try {
