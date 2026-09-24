@@ -4,7 +4,7 @@
  * Sin breaking changes - 100% backward compatible
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { Icon } from "../../../utils/iconMapping.jsx";
 import { useTranslation } from "../../../i18n/I18nProvider";
@@ -17,11 +17,21 @@ import {
 
 const ValerioMessageBubble = ({ msg, onAction }) => {
   const { t } = useTranslation();
+  const [helpful, setHelpful] = useState(false);
   const time = new Date(msg.timestamp).toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
   });
   const isUser = msg.type === "user";
+  const textColor = isUser
+    ? "text-white"
+    : "text-slate-700 dark:text-slate-200";
+
+  const handleHelpful = () => {
+    if (helpful) return;
+    setHelpful(true);
+    onAction?.("helpful", msg.id);
+  };
 
   return (
     <div
@@ -29,7 +39,7 @@ const ValerioMessageBubble = ({ msg, onAction }) => {
       data-testid={`msg-${msg.id}`}
     >
       <div
-        className={`max-w-[80%] rounded-2xl p-4 break-words overflow-wrap-anywhere ${
+        className={`max-w-[85%] rounded-2xl p-4 break-words overflow-wrap-anywhere ${
           isUser
             ? "bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white"
             : "bg-white border border-slate-200 shadow-sm"
@@ -45,37 +55,50 @@ const ValerioMessageBubble = ({ msg, onAction }) => {
           )}
 
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between gap-3 mb-2">
               <span className="text-xs font-medium opacity-80">
                 {isUser
                   ? t("ialab.valerio.message_you")
                   : t("ialab.valerio.message_valerio")}
               </span>
-              <span className="text-xs opacity-60">{time}</span>
+              <span className="text-[11px] opacity-60 tabular-nums">
+                {time}
+              </span>
             </div>
 
-            <div
-              className={`prose prose-sm max-w-none ${
-                isUser ? "text-white" : "text-[var(--theme-emphasis)]-darker"
-              }`}
-            >
+            <div className={`max-w-none text-sm leading-relaxed ${textColor}`}>
               {msg.content.split("\n").map((line, i) => (
-                <p key={i} className="mb-2 last:mb-0">
+                <p key={i} className={`mb-2 last:mb-0 ${textColor}`}>
                   {line}
                 </p>
               ))}
             </div>
 
-            {/* ENHANCED: Copy button + Actions for MAX messages */}
+            {/* Acciones del mensaje de MAX: copiar + marcar útil */}
             {!isUser && (
-              <div className="mt-2 flex items-center gap-2">
-                <CopyButton text={msg.content} label="Copiar" />
+              <div className="mt-3 flex items-center gap-2">
+                <CopyButton
+                  text={msg.content}
+                  label={t("ialab.valerio.copy.label")}
+                />
                 <button
-                  onClick={() => onAction?.("helpful", msg.id)}
-                  className="text-xs px-2 py-1 bg-slate-100 text-slate-600 rounded hover:bg-slate-200 transition-colors"
-                  title="Marcar como útil"
+                  onClick={handleHelpful}
+                  disabled={helpful}
+                  className={`inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)] ${
+                    helpful
+                      ? "bg-emerald-100 text-emerald-700"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+                  title={t("ialab.valerio.message_actions.useful")}
+                  aria-label={t("ialab.valerio.message_actions.useful")}
                 >
-                  👍 Útil
+                  <Icon
+                    name={helpful ? "fa-check" : "fa-thumbs-up"}
+                    className="text-xs"
+                  />
+                  {helpful
+                    ? t("ialab.valerio.helpful_thanks")
+                    : t("ialab.valerio.quick_useful")}
                 </button>
               </div>
             )}
@@ -115,7 +138,7 @@ const StreamingMessage = ({ content }) => {
   const isEmpty = !content || content.trim() === "";
   return (
     <div className="flex justify-start mb-4">
-      <div className="max-w-[80%] rounded-2xl p-4 break-words overflow-wrap-anywhere bg-white border border-slate-200 shadow-sm">
+      <div className="max-w-[85%] rounded-2xl p-4 break-words overflow-wrap-anywhere bg-white border border-slate-200 shadow-sm">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
             <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] flex items-center justify-center text-white text-xs font-bold">
@@ -124,7 +147,7 @@ const StreamingMessage = ({ content }) => {
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-xs font-medium opacity-80 mb-2">MAX</div>
-            <div className="prose prose-sm max-w-none text-[var(--theme-emphasis)]-darker">
+            <div className="max-w-none text-sm leading-relaxed text-slate-700 dark:text-slate-200">
               {isEmpty ? (
                 <p className="text-[var(--theme-emphasis)] tracking-[0.2em] animate-pulse select-none">
                   ......
@@ -158,10 +181,12 @@ const EmptyState = ({ moduleTitle }) => {
             className="text-[var(--theme-primary)] text-2xl"
           />
         </div>
-        <h3 className="text-lg font-bold text-[var(--theme-emphasis)]-darker mb-2">
+        <h3 className="text-lg font-bold text-[var(--theme-emphasis)] mb-2">
           {t("ialab.valerio.empty_title", { module: moduleTitle })}
         </h3>
-        <p className="text-slate-600">{t("ialab.valerio.empty_description")}</p>
+        <p className="text-slate-600 max-w-xs mx-auto">
+          {t("ialab.valerio.empty_description")}
+        </p>
       </div>
     </div>
   );
@@ -172,7 +197,7 @@ const EmptyState = ({ moduleTitle }) => {
  * - Copy buttons on messages
  * - Helpful reaction tracking
  * - Typing indicators
- * - Fallback to original if anything breaks
+ * - Scroll-to-bottom affordance
  */
 const ValerioEnhancedConversationArea = ({
   conversation,
@@ -182,17 +207,32 @@ const ValerioEnhancedConversationArea = ({
   onMessageAction = null,
 }) => {
   const { t } = useTranslation();
+  const scrollRef = useRef(null);
   const bottomRef = useRef(null);
+  const [atBottom, setAtBottom] = useState(true);
   const { toasts, show } = useToast();
 
+  const scrollToBottom = useCallback((behavior = "smooth") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ top: el.scrollHeight, behavior });
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setAtBottom(el.scrollTop + el.clientHeight >= el.scrollHeight - 24);
+  }, []);
+
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollToBottom("smooth");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversation, streamingMessage, isProcessing]);
 
   const handleMessageAction = (action, msgId) => {
     try {
       if (action === "helpful") {
-        show("Gracias por tu feedback 👍", "success", 2000);
+        show(t("ialab.valerio.helpful_thanks"), "success", 2000);
         onMessageAction?.("helpful", msgId);
       }
     } catch (err) {
@@ -203,34 +243,50 @@ const ValerioEnhancedConversationArea = ({
 
   return (
     <>
-      <div
-        className="flex-1 overflow-y-auto overscroll-contain p-4"
-        data-testid="conversation-area"
-        aria-live="polite"
-        aria-label={t("ialab.valerio.conversation_aria")}
-      >
-        {conversation.length === 0 && !streamingMessage ? (
-          <EmptyState moduleTitle={moduleTitle} />
-        ) : (
-          <div className="space-y-4">
-            {conversation.map((msg) => (
-              <ValerioMessageBubble
-                key={msg.id}
-                msg={msg}
-                onAction={handleMessageAction}
-              />
-            ))}
-            {streamingMessage && (
-              <StreamingMessage content={streamingMessage} />
-            )}
-            {isProcessing && !streamingMessage && <ThinkingIndicator />}
-            <div ref={bottomRef} />
-          </div>
+      <div className="relative flex-1 min-h-0">
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="h-full overflow-y-auto overscroll-contain p-4"
+          data-testid="conversation-area"
+          aria-live="polite"
+          aria-label={t("ialab.valerio.conversation_aria")}
+        >
+          {conversation.length === 0 && !streamingMessage ? (
+            <EmptyState moduleTitle={moduleTitle} />
+          ) : (
+            <div className="space-y-4">
+              {conversation.map((msg) => (
+                <ValerioMessageBubble
+                  key={msg.id}
+                  msg={msg}
+                  onAction={handleMessageAction}
+                />
+              ))}
+              {streamingMessage && (
+                <StreamingMessage content={streamingMessage} />
+              )}
+              {isProcessing && !streamingMessage && <ThinkingIndicator />}
+              <div ref={bottomRef} />
+            </div>
+          )}
+        </div>
+
+        {!atBottom && (
+          <button
+            type="button"
+            onClick={() => scrollToBottom("smooth")}
+            aria-label={t("ialab.valerio.scroll_to_bottom")}
+            title={t("ialab.valerio.scroll_to_bottom")}
+            className="absolute bottom-3 right-4 w-10 h-10 rounded-full bg-white border border-slate-200 shadow-lg text-[var(--theme-emphasis)] flex items-center justify-center hover:bg-slate-50 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)]"
+          >
+            <Icon name="fa-arrow-down" className="text-sm" />
+          </button>
         )}
       </div>
 
       {/* Toast Container */}
-      <div className="fixed top-4 right-4 z-50 space-y-2 pointer-events-none">
+      <div className="fixed top-4 right-4 z-[120] space-y-2 pointer-events-none">
         {toasts.map((toast) => (
           <div key={toast.id} className="pointer-events-auto">
             <div

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
@@ -10,12 +10,18 @@ import { useSidebarState } from "../../hooks/IALab/useSidebarState";
 import { useSidebarAutoCollapse } from "../../hooks/IALab/useSidebarAutoCollapse";
 import { useTranslation } from "../../i18n/I18nProvider";
 import useInfographicCompletion from "../../hooks/IALab/useInfographicCompletion";
+import { useAuthIdentity } from "../../hooks/useAuthIdentity";
+import { scopedGet, scopedSet } from "../../utils/userScopedStorage";
 import StreakDetailsModal from "./StreakDetailsModal";
 import SidebarCollapsed from "./sidebar/SidebarCollapsed";
 import SidebarExpanded from "./sidebar/SidebarExpanded";
 
 const COLLAPSED_WIDTH = 72;
 const EXPANDED_WIDTH = 256;
+// La preferencia colapsado/expandido solo se recuerda por cuenta en escritorio;
+// por debajo de 1024 el sidebar se fuerza colapsado (no se persiste).
+const SIDEBAR_DESKTOP_MIN = 1024;
+const SIDEBAR_PREF_KEY = "ialab_sidebar_collapsed";
 
 /**
  * IALabSidebar — Navegación lateral principal del IA Lab.
@@ -71,6 +77,39 @@ const IALabSidebar = () => {
     [setSidebarCollapsedAuto],
   );
   useSidebarAutoCollapse({ isCollapsed, onCollapse: handleAutoCollapse });
+
+  // Persistencia de la preferencia colapsado/expandido por cuenta (escritorio).
+  // Se activa cuando la identidad está disponible (el scope del storage usa el
+  // correo) y se evita la carrera de hidratación: el primer cambio que proviene
+  // de restaurar no se re-persiste.
+  const { userId, email } = useAuthIdentity();
+  const hasIdentity = Boolean(email || userId);
+  const skipPersistRef = useRef(false);
+  useEffect(() => {
+    if (!hasIdentity) return undefined;
+    const applyStoredPref = () => {
+      if (window.innerWidth < SIDEBAR_DESKTOP_MIN) return;
+      const stored = scopedGet(SIDEBAR_PREF_KEY);
+      if (stored !== "true" && stored !== "false") return;
+      const next = stored === "true";
+      if (next !== useIALabStore.getState().sidebarCollapsed) {
+        skipPersistRef.current = true;
+        setSidebarCollapsedAuto(next);
+      }
+    };
+    applyStoredPref();
+    window.addEventListener("resize", applyStoredPref);
+    return () => window.removeEventListener("resize", applyStoredPref);
+  }, [hasIdentity, setSidebarCollapsedAuto]);
+  useEffect(() => {
+    if (!hasIdentity) return;
+    if (window.innerWidth < SIDEBAR_DESKTOP_MIN) return;
+    if (skipPersistRef.current) {
+      skipPersistRef.current = false;
+      return;
+    }
+    scopedSet(SIDEBAR_PREF_KEY, isCollapsed ? "true" : "false");
+  }, [isCollapsed, hasIdentity]);
 
   const isInfographicCompleted = useInfographicCompletion();
 

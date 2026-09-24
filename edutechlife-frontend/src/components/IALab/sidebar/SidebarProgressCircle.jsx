@@ -61,7 +61,7 @@ const SidebarProgressCircle = ({
         </svg>
         <span className="absolute inset-0 flex items-center justify-center">
           <span className="text-center">
-            <span className="font-display text-2xl font-extrabold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] leading-none">
+            <span className="font-display text-2xl font-extrabold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)] leading-none">
               {pct}%
             </span>
             <span className="block text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
@@ -73,7 +73,7 @@ const SidebarProgressCircle = ({
 
       <div className="flex flex-wrap items-center justify-center gap-1.5 mt-3">
         {levelName && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 px-2.5 py-1 text-[11px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
+          <span className="inline-flex items-center gap-1 rounded-full bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 px-2.5 py-1 text-[11px] font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)]">
             <Icon
               name="fa-graduation-cap"
               className="text-[var(--theme-primary)] text-[10px]"
@@ -86,7 +86,7 @@ const SidebarProgressCircle = ({
           <button
             type="button"
             onClick={onStreakClick}
-            className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold transition-transform duration-200 hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 ${atRisk ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300" : "bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 text-[var(--theme-emphasis)] dark:text-[#4DA8C4]"}`}
+            className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold transition-transform duration-200 hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 ${atRisk ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300" : "bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)]"}`}
             aria-label={`${streak} ${t("sidebar.streak_days", { streak })} — ${t("sidebar.streak_details")}`}
           >
             <Icon
@@ -101,7 +101,7 @@ const SidebarProgressCircle = ({
             {streak}d
           </button>
         )}
-        <span className="inline-flex items-center gap-1 rounded-full bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 px-2.5 py-1 text-[11px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
+        <span className="inline-flex items-center gap-1 rounded-full bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/20 px-2.5 py-1 text-[11px] font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)]">
           <Icon
             name="fa-star"
             className="text-[var(--theme-primary)] text-[10px]"

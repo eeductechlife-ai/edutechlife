@@ -12,6 +12,7 @@ import { Icon } from "../../../utils/iconMapping.jsx";
 import SidebarModuleList from "./SidebarModuleList";
 import SidebarToggleCue from "./SidebarToggleCue";
 import CourseCompletionSection from "../CourseCompletionSection";
+import UserDropdownMenuSimplified from "../../UserDropdownMenuSimplified";
 
 const SidebarExpanded = ({ onOpenStreak }) => {
   const { t } = useTranslation();
@@ -58,17 +59,11 @@ const SidebarExpanded = ({ onOpenStreak }) => {
   const isStreakAtRisk = useIALabStore((s) => s.isStreakAtRisk);
   const toggleSidebar = useIALabStore((s) => s.toggleSidebarCollapsed);
   const setShowLeaderboard = useIALabStore((s) => s.setShowLeaderboard);
-  const setShowStudyPlannerModal = useIALabStore(
-    (s) => s.setShowStudyPlannerModal,
-  );
-  const setShowHistoryModal = useIALabStore((s) => s.setShowHistoryModal);
 
   const levelNum = getLevel();
   const xp = getTotalPoints();
   const atRisk = isStreakAtRisk();
 
-  // Mi Progreso abre el mismo modal que el usermenu (ActivityHistory)
-  const goToProgress = () => setShowHistoryModal(true);
   const goToModule = (id) => navigate(`/ialab/${id}`);
 
   return (
@@ -93,6 +88,10 @@ const SidebarExpanded = ({ onOpenStreak }) => {
         t={t}
       />
 
+      {/* ── CUENTA (menú de usuario) — justo debajo del último módulo ── */}
+      <div className="shrink-0 border-t border-[var(--theme-emphasis)]/10 dark:border-[var(--theme-emphasis)]/20 pt-2">
+        <UserDropdownMenuSimplified variant="sidebar" triggerVariant="full" />
+      </div>
 
       {/* ── ZONA 2: PROGRESO + HERRAMIENTAS (tarjeta unificada) ── */}
       <div
@@ -101,7 +100,7 @@ const SidebarExpanded = ({ onOpenStreak }) => {
       >
         {/* Header: Ring de progreso grande e independiente */}
         <div className="flex flex-col items-center gap-2 pt-5 pb-4 px-3">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--theme-emphasis)]/60 dark:text-[#4DA8C4]/60 leading-none">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--theme-emphasis)]/60 dark:text-[var(--theme-emphasis-soft)]/60 leading-none">
             Tu avance
           </p>
           <button
@@ -147,10 +146,10 @@ const SidebarExpanded = ({ onOpenStreak }) => {
               </defs>
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-black text-[var(--theme-emphasis)] dark:text-[#4DA8C4] leading-none">
+              <span className="text-2xl font-black text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)] leading-none">
                 {Math.round(courseProgress || 0)}%
               </span>
-              <span className="text-[9px] font-semibold text-[var(--theme-emphasis)]/60 dark:text-[#4DA8C4]/60 mt-0.5">
+              <span className="text-[9px] font-semibold text-[var(--theme-emphasis)]/60 dark:text-[var(--theme-emphasis-soft)]/60 mt-0.5">
                 completado
               </span>
             </div>
@@ -160,8 +159,12 @@ const SidebarExpanded = ({ onOpenStreak }) => {
           {/* Stats en fila debajo del ring */}
           <div className="flex items-center gap-1.5 flex-wrap justify-center mt-1">
             {levelNum > 0 && (
-              <span className="inline-flex items-center gap-0.5 rounded-md bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 px-1.5 py-0.5 text-[10px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
-                <Icon name="fa-graduation-cap" className="text-[8px]" aria-hidden="true" />
+              <span className="inline-flex items-center gap-0.5 rounded-md bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 px-1.5 py-0.5 text-[10px] font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)]">
+                <Icon
+                  name="fa-graduation-cap"
+                  className="text-[8px]"
+                  aria-hidden="true"
+                />
                 Nv.{levelNum}
               </span>
             )}
@@ -169,14 +172,22 @@ const SidebarExpanded = ({ onOpenStreak }) => {
               <button
                 type="button"
                 onClick={onOpenStreak}
-                className={`inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[10px] font-bold transition-transform hover:scale-105 focus:outline-none ${atRisk ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300" : "bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[#4DA8C4]"}`}
+                className={`inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[10px] font-bold transition-transform hover:scale-105 focus:outline-none ${atRisk ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300" : "bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)]"}`}
               >
-                <Icon name="fa-fire" className={`text-[8px] ${atRisk ? "text-amber-500" : "text-orange-500"}`} aria-hidden="true" />
+                <Icon
+                  name="fa-fire"
+                  className={`text-[8px] ${atRisk ? "text-amber-500" : "text-orange-500"}`}
+                  aria-hidden="true"
+                />
                 {streak}d
               </button>
             )}
-            <span className="inline-flex items-center gap-0.5 rounded-md bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 px-1.5 py-0.5 text-[10px] font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
-              <Icon name="fa-star" className="text-[8px] text-amber-400" aria-hidden="true" />
+            <span className="inline-flex items-center gap-0.5 rounded-md bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/25 px-1.5 py-0.5 text-[10px] font-bold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)]">
+              <Icon
+                name="fa-star"
+                className="text-[8px] text-amber-400"
+                aria-hidden="true"
+              />
               {xp}
             </span>
           </div>
@@ -185,45 +196,27 @@ const SidebarExpanded = ({ onOpenStreak }) => {
         {/* Divisor */}
         <div className="h-px bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/20 mx-3" />
 
-        {/* Accesos rápidos: lista uniforme */}
+        {/* Acceso directo: Ranking. Mi Progreso y Plan viven en el menú de
+            usuario (arriba, bajo los módulos) para no duplicar entradas. */}
         <div className="flex flex-col p-2 gap-1">
-          <button
-            onClick={goToProgress}
-            className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-[var(--theme-emphasis)]/10 dark:hover:bg-[var(--theme-emphasis)]/20 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 group"
-          >
-            <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-chart-bar" className="text-[var(--theme-primary)] text-xs" aria-hidden="true" />
-            </div>
-            <span className="flex-1 text-left text-[12px] font-semibold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
-              {t("ialab.tab_progress") || "Mi Progreso"}
-            </span>
-            <Icon name="fa-chevron-right" className="text-[9px] text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-          </button>
-
-          <button
-            onClick={() => setShowStudyPlannerModal(true)}
-            className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-[var(--theme-emphasis)]/10 dark:hover:bg-[var(--theme-emphasis)]/20 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 group"
-          >
-            <div className="w-7 h-7 rounded-lg bg-[var(--theme-emphasis)]/10 dark:bg-[var(--theme-emphasis)]/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-calendar" className="text-[var(--theme-primary)] text-xs" aria-hidden="true" />
-            </div>
-            <span className="flex-1 text-left text-[12px] font-semibold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
-              {t("ialab.sidebar_plan_short") || "Plan"}
-            </span>
-            <Icon name="fa-chevron-right" className="text-[9px] text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-          </button>
-
           <button
             onClick={() => setShowLeaderboard(true)}
             className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-amber-100/60 dark:hover:bg-amber-900/25 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-amber-400/30 group"
           >
             <div className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
-              <Icon name="fa-trophy" className="text-amber-500 text-xs" aria-hidden="true" />
+              <Icon
+                name="fa-trophy"
+                className="text-amber-500 text-xs"
+                aria-hidden="true"
+              />
             </div>
             <span className="flex-1 text-left text-[12px] font-semibold text-amber-700 dark:text-amber-400">
               {t("ialab.sidebar_leaderboard") || "Ranking"}
             </span>
-            <Icon name="fa-chevron-right" className="text-[9px] text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+            <Icon
+              name="fa-chevron-right"
+              className="text-[9px] text-slate-400 group-hover:translate-x-0.5 transition-transform"
+            />
           </button>
         </div>
       </div>

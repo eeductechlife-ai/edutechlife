@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { Icon } from "../../../utils/iconMapping.jsx";
 import ValerioClearConfirm from "./ValerioClearConfirm";
@@ -21,20 +22,32 @@ const ValerioChatInput = ({
   moduleTitle,
 }) => {
   const { t } = useTranslation();
+  const textareaRef = useRef(null);
+
+  // Auto-crecimiento del textarea hasta un máximo, para que los mensajes
+  // largos se lean mientras se escriben sin ocupar toda la pantalla.
+  useEffect(() => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = `${Math.min(ta.scrollHeight, 96)}px`;
+  }, [userInput]);
+
   return (
-    <div className="border-t border-slate-200 px-4 pt-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.75rem)] sm:p-4">
+    <div className="border-t border-slate-200 px-3 pt-2.5 pb-[calc(env(safe-area-inset-bottom,0px)+0.625rem)] sm:px-4 sm:pt-3 sm:pb-3">
       <div className="flex items-end gap-2 sm:gap-3">
         <div className="flex-1 min-w-0">
           <textarea
+            ref={textareaRef}
             value={userInput}
             onChange={(e) => onInputChange(e.target.value)}
             onKeyDown={onKeyDown}
             placeholder={t("ialab.valerio.input_placeholder", {
               module: moduleTitle,
             })}
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)] focus:border-transparent text-[var(--theme-emphasis)]-darker placeholder-slate-500 resize-none min-h-[60px] max-h-[120px]"
+            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)] focus:border-transparent text-slate-700 dark:text-slate-200 placeholder-slate-500 resize-none overflow-y-auto min-h-[44px] max-h-[96px]"
             disabled={isProcessing}
-            rows={2}
+            rows={1}
             inputMode="text"
             autoCapitalize="sentences"
             aria-label={t("ialab.valerio.input_placeholder", {
@@ -42,10 +55,10 @@ const ValerioChatInput = ({
             })}
             aria-describedby="input-hint"
           />
-          <div className="flex items-center justify-between gap-2 mt-2 min-w-0">
+          <div className="flex items-center justify-between gap-2 mt-1.5 min-w-0">
             <div
               id="input-hint"
-              className="text-[11px] sm:text-xs text-slate-500 truncate min-w-0 flex-1"
+              className="text-[10px] sm:text-[11px] text-slate-500 truncate min-w-0 flex-1"
             >
               <span className="sm:hidden">
                 {t("ialab.valerio.input_hint_mobile") ||

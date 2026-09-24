@@ -58,12 +58,12 @@ const ModuleNavItem = ({
         ) : (
           <Icon
             name={mod.icon || "fa-graduation-cap"}
-            className={`text-sm ${isActive ? "text-white" : "text-[var(--theme-emphasis)] dark:text-[#4DA8C4]"}`}
+            className={`text-sm ${isActive ? "text-white" : "text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)]"}`}
             aria-hidden="true"
           />
         )}
         <span
-          className={`absolute bottom-1 right-1.5 text-[9px] font-extrabold leading-none ${isActive ? "text-white/80" : "text-[var(--theme-emphasis)]/60 dark:text-[#4DA8C4]/60"}`}
+          className={`absolute bottom-1 right-1.5 text-[9px] font-extrabold leading-none ${isActive ? "text-white/80" : "text-[var(--theme-emphasis)]/60 dark:text-[var(--theme-emphasis-soft)]/60"}`}
         >
           {mod.id}
         </span>
@@ -118,7 +118,7 @@ const ModuleNavItem = ({
           ) : (
             <Icon
               name={mod.icon || "fa-graduation-cap"}
-              className={`text-sm ${isActive ? "theme-text-on-emphasis" : "text-[var(--theme-emphasis)] dark:text-[#4DA8C4] group-hover:text-[var(--theme-primary)]"}`}
+              className={`text-sm ${isActive ? "theme-text-on-emphasis" : "text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)] group-hover:text-[var(--theme-primary)]"}`}
               aria-hidden="true"
             />
           )}

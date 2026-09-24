@@ -34,6 +34,12 @@
    en document.body (los portales viven allí).
    ========================================================================== */
 
+/* Cian suave para superficies oscuras (oscurece el acento en dark).
+   Reemplaza el hex ad-hoc #4DA8C4 usado antes en el sidebar. */
+:root {
+  --theme-emphasis-soft: #4da8c4;
+}
+
 /* --------------------------------------------------------------------------
    Tema DEFAULT — Edutechlife (Módulos 1, 5, catch-all)
    Identidad original preservada. Ningún rojo en la UI base — el rojo

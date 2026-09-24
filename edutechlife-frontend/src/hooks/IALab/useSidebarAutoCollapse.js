@@ -3,7 +3,7 @@ import { useEffect } from "react";
 // Si el estudiante no interactúa por este tiempo y el sidebar está expandido,
 // se colapsa solo para darle más espacio al contenido. Cualquier interacción
 // reinicia el contador.
-export const SIDEBAR_AUTO_COLLAPSE_MS = 2 * 60 * 1000;
+export const SIDEBAR_AUTO_COLLAPSE_MS = 60 * 1000;
 
 const MIN_DESKTOP_WIDTH = 1024;
 

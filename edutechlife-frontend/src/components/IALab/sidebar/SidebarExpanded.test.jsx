@@ -26,12 +26,27 @@ vi.mock("react-router-dom", () => ({
 
 vi.mock("framer-motion", () => {
   const passthrough = ({ children, ...props }) => {
-    const { initial, animate, exit, transition, variants, whileHover, whileTap } = props;
-    return React.createElement("div", { className: props.className, onClick: props.onClick }, children);
+    const {
+      initial,
+      animate,
+      exit,
+      transition,
+      variants,
+      whileHover,
+      whileTap,
+    } = props;
+    return React.createElement(
+      "div",
+      { className: props.className, onClick: props.onClick },
+      children,
+    );
   };
   return {
     AnimatePresence: ({ children }) => children,
-    motion: new Proxy({}, { get: (_, tag) => (tag === "button" ? "button" : passthrough) }),
+    motion: new Proxy(
+      {},
+      { get: (_, tag) => (tag === "button" ? "button" : passthrough) },
+    ),
     useReducedMotion: () => false,
   };
 });
@@ -83,19 +98,29 @@ vi.mock("../CourseCompletionSection", () => ({
   default: () => null,
 }));
 
+vi.mock("../../UserDropdownMenuSimplified", () => ({
+  default: ({ variant, triggerVariant }) => (
+    <div
+      data-testid="user-menu"
+      data-variant={variant}
+      data-trigger={triggerVariant}
+    />
+  ),
+}));
+
 describe("SidebarExpanded titles", () => {
   it("renderiza los títulos de las zonas con texto traducido (no claves crudas)", () => {
     render(<SidebarExpanded />);
     expect(screen.getByText("Tu avance")).toBeInTheDocument();
     expect(screen.getByText("MÓDULOS DEL CURSO")).toBeInTheDocument();
-    expect(screen.getByText("Mi Progreso")).toBeInTheDocument();
+    expect(screen.getByText("Ranking")).toBeInTheDocument();
   });
 
-  it("renderiza los accesos de herramientas traducidos", () => {
+  it("renderiza el acceso a Ranking y no duplica las entradas del menú de usuario", () => {
     render(<SidebarExpanded />);
-    expect(screen.getByText("Mi Progreso")).toBeInTheDocument();
-    expect(screen.getByText("Plan")).toBeInTheDocument();
     expect(screen.getByText("Ranking")).toBeInTheDocument();
+    expect(screen.queryByText("Mi Progreso")).not.toBeInTheDocument();
+    expect(screen.queryByText("Plan")).not.toBeInTheDocument();
   });
 
   it("no renderiza ninguna clave de traducción cruda (patrón 'sidebar.*')", () => {
@@ -103,14 +128,6 @@ describe("SidebarExpanded titles", () => {
     const bodyText = document.body.textContent;
     expect(bodyText).not.toMatch(/sidebar\./);
     expect(bodyText).not.toMatch(/ialab\./);
-  });
-
-  it("abre el modal de historial (ActivityHistory) al hacer clic en 'Mi Progreso'", () => {
-    mockShowHistory.mockClear();
-    render(<SidebarExpanded />);
-    fireEvent.click(screen.getByText("Mi Progreso"));
-    expect(mockShowHistory).toHaveBeenCalledTimes(1);
-    expect(mockShowHistory).toHaveBeenCalledWith(true);
   });
 
   it("colapsa el sidebar al hacer clic en el círculo de progreso", () => {
@@ -130,5 +147,12 @@ describe("SidebarExpanded titles", () => {
     const zone = screen.getByTestId("sidebar-progress-zone");
     expect(zone.className).toContain("shrink-0");
     expect(screen.getByText("Tu avance")).toBeInTheDocument();
+  });
+
+  it("muestra el menú de usuario al fondo del sidebar (variante sidebar, trigger full)", () => {
+    render(<SidebarExpanded />);
+    const menu = screen.getByTestId("user-menu");
+    expect(menu).toHaveAttribute("data-variant", "sidebar");
+    expect(menu).toHaveAttribute("data-trigger", "full");
   });
 });

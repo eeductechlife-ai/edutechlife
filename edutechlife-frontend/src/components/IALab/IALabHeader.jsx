@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Icon } from "../../utils/iconMapping.jsx";
-import UserDropdownMenuSimplified from "../UserDropdownMenuSimplified";
 import NotificationPanel from "../NotificationPanel";
 import { useIALabUIContext } from "../../context/IALabContext";
 import { useTheme } from "../../context/ThemeContext";
@@ -16,8 +15,7 @@ import { getBadgeInfo } from "../../data/ialab";
 const IALabHeader = () => {
   const { t, locale } = useTranslation();
   const BADGE_INFO = getBadgeInfo(locale);
-  const { onBack, courseCompleted, setShowCertificateModal } =
-    useIALabUIContext();
+  const { courseCompleted } = useIALabUIContext();
   const { unreadCount, createNotification } = useNotification();
   const { unreadCount: forumUnreadCount } = useForumNotifications();
   const { isDarkMode, toggleDarkMode } = useTheme();
@@ -151,15 +149,6 @@ const IALabHeader = () => {
             aria-hidden="true"
           />
         </button>
-        <UserDropdownMenuSimplified
-          onNavigate={(view) => {
-            if (view === "landing") {
-              onBack && onBack();
-            } else if (view === "certificados") {
-              setShowCertificateModal(true);
-            }
-          }}
-        />
       </div>
     </header>
   );

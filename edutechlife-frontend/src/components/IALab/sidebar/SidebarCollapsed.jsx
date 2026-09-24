@@ -5,6 +5,7 @@ import { Icon } from "../../../utils/iconMapping.jsx";
 import TooltipIcon from "./SidebarTooltipIcon";
 import ModuleNavItem from "./ModuleNavItem";
 import SidebarToggleCue from "./SidebarToggleCue";
+import UserDropdownMenuSimplified from "../../UserDropdownMenuSimplified";
 
 const formatPoints = (pts) => {
   if (pts >= 1000) return `${(pts / 1000).toFixed(1).replace(".0", "")}k`;
@@ -43,12 +44,9 @@ const SidebarCollapsed = ({
   isStreakAtRisk,
   getLevel,
   getTotalPoints,
-  storedCertificate,
-  setShowCertificateModal,
   goToModule,
   goToProgress,
   setShowLeaderboard,
-  setShowStudyPlannerModal,
   onToggleSidebar,
   fadeTransition,
   t,
@@ -87,13 +85,16 @@ const SidebarCollapsed = ({
           type="button"
           onClick={onToggleSidebar}
           className="w-full h-[60px] flex items-center justify-center flex-shrink-0 relative group cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 rounded-full"
-          role="progressbar"
-          aria-valuenow={Math.round(courseProgress)}
-          aria-valuemin="0"
-          aria-valuemax="100"
           aria-label={`${Math.round(courseProgress)}% ${t("sidebar.completed")} — ${t("sidebar.toggle_collapse_tip")}`}
         >
-          <div className="relative w-14 h-14 rounded-full shadow-[0_0_14px_rgba(0,188,212,0.25)]">
+          <div
+            className="relative w-14 h-14 rounded-full shadow-[0_0_14px_rgba(0,188,212,0.25)]"
+            role="progressbar"
+            aria-valuenow={Math.round(courseProgress)}
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-label={t("sidebar.progress_circle_aria")}
+          >
             <SidebarToggleCue size="collapsed" />
             <svg
               className="relative w-14 h-14 -rotate-90"
@@ -107,8 +108,8 @@ const SidebarCollapsed = ({
                   x2="100%"
                   y2="100%"
                 >
-                  <stop offset="0%" stopColor="#004B63" />
-                  <stop offset="100%" stopColor="#00BCD4" />
+                  <stop offset="0%" stopColor="var(--theme-emphasis)" />
+                  <stop offset="100%" stopColor="var(--theme-primary)" />
                 </linearGradient>
               </defs>
               <circle
@@ -135,7 +136,7 @@ const SidebarCollapsed = ({
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-display text-base font-black text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
+              <span className="font-display text-base font-black text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)]">
                 {Math.round(courseProgress)}%
               </span>
             </div>
@@ -174,8 +175,8 @@ const SidebarCollapsed = ({
       <MiniDivider />
 
       {/* ── ZONA 2: MÓDULOS ── */}
-      <h2 className="mt-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--theme-emphasis)]/65 dark:text-[#4DA8C4]/55 select-none whitespace-nowrap">
-        Módulos
+      <h2 className="mt-2 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--theme-emphasis)]/65 dark:text-[var(--theme-emphasis-soft)]/55 select-none whitespace-nowrap">
+        {t("sidebar.zone_modules")}
       </h2>
       <div className="flex flex-col gap-1.5 w-full" role="list">
         {modules.map((mod) => {
@@ -223,29 +224,22 @@ const SidebarCollapsed = ({
         })}
       </div>
 
+      {/* ── CUENTA (menú de usuario) — justo debajo del último módulo ── */}
+      <MiniDivider />
+      <TooltipIcon label={t("modals.settings.user_menu_aria")} premium>
+        <UserDropdownMenuSimplified
+          variant="sidebar"
+          triggerVariant="compact"
+        />
+      </TooltipIcon>
+
       {/* Spacer — empuja herramientas al fondo */}
       <div className="flex-1" />
 
       <MiniDivider />
 
-      {/* Herramientas compactas al fondo */}
-      <TooltipIcon label={t("ialab.sidebar_plan_short") || "Plan"} premium>
-        <button
-          onClick={() => setShowStudyPlannerModal(true)}
-          className="flex flex-col items-center gap-0.5 rounded-xl px-1 py-1.5 bg-[var(--theme-emphasis)]/8 dark:bg-[var(--theme-emphasis)]/15 hover:bg-[var(--theme-emphasis)]/15 dark:hover:bg-[var(--theme-emphasis)]/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 w-full"
-          aria-label={t("ialab.sidebar_plan_short") || "Plan"}
-        >
-          <Icon
-            name="fa-calendar"
-            className="text-[var(--theme-primary)] text-sm"
-            aria-hidden="true"
-          />
-          <span className="text-[9px] font-semibold text-[var(--theme-emphasis)] dark:text-[#4DA8C4] leading-none">
-            {t("ialab.sidebar_plan_short") || "Plan"}
-          </span>
-        </button>
-      </TooltipIcon>
-
+      {/* Herramienta: Ranking. Mi Progreso, Plan y Certificados viven en el
+          menú de usuario (arriba, bajo los módulos) para no duplicar entradas. */}
       <TooltipIcon label={t("ialab.sidebar_leaderboard") || "Ranking"} premium>
         <button
           onClick={() => setShowLeaderboard(true)}
@@ -262,28 +256,6 @@ const SidebarCollapsed = ({
           </span>
         </button>
       </TooltipIcon>
-
-      {storedCertificate && (
-        <>
-          <MiniDivider />
-          <TooltipIcon label={t("sidebar.certificate_view")}>
-            <motion.button
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              onClick={() => setShowCertificateModal(true)}
-              className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-400/40"
-              aria-label={t("sidebar.certificate_view")}
-            >
-              <Icon
-                name="fa-certificate"
-                className="text-white text-sm"
-                aria-hidden="true"
-              />
-            </motion.button>
-          </TooltipIcon>
-        </>
-      )}
       <div className="absolute bottom-0 left-3 right-3 h-[1px] bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-[var(--theme-emphasis)]/30 rounded-full pointer-events-none" />
     </motion.div>
   );

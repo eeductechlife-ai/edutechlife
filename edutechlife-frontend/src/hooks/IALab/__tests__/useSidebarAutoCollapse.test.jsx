@@ -1,7 +1,10 @@
 import React from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, act } from "@testing-library/react";
-import { useSidebarAutoCollapse, SIDEBAR_AUTO_COLLAPSE_MS } from "../useSidebarAutoCollapse";
+import {
+  useSidebarAutoCollapse,
+  SIDEBAR_AUTO_COLLAPSE_MS,
+} from "../useSidebarAutoCollapse";
 
 const Harness = ({ isCollapsed = false, onCollapse, delayMs = 1000 }) => {
   useSidebarAutoCollapse({ isCollapsed, onCollapse, delayMs });
@@ -24,8 +27,8 @@ describe("useSidebarAutoCollapse", () => {
     vi.useRealTimers();
   });
 
-  it("el auto-colapso por defecto es a los 2 minutos", () => {
-    expect(SIDEBAR_AUTO_COLLAPSE_MS).toBe(2 * 60 * 1000);
+  it("el auto-colapso por defecto es a los 60 segundos", () => {
+    expect(SIDEBAR_AUTO_COLLAPSE_MS).toBe(60 * 1000);
   });
 
   it("colapsa tras el tiempo de inactividad", () => {

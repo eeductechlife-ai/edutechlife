@@ -1,29 +1,29 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useIALabStore } from "../../store/ialabStore";
-import {
-  SECTION_DATA,
-  MODULE_DATA,
-  COURSE_DATA,
-} from "../../components/IALab/constants/sidebarData";
 
 const MOBILE_BREAKPOINT = 768;
 const TABLET_BREAKPOINT = 1024;
 
-export function useSidebarState(
-  initialState = { videos: true, recursos: false },
-) {
-  const getSidebarState = useIALabStore((s) => s.getSidebarState);
-  const setSidebarState = useIALabStore((s) => s.setSidebarState);
-  const removeSidebarState = useIALabStore((s) => s.removeSidebarState);
+/**
+ * Estado del sidebar de IALab.
+ *
+ * El colapso vive en el store (compartido con el atajo del header) y se fuerza
+ * colapsado por debajo de 1024px. `isMobile` (<768px) se usa para que los
+ * consumidores ajusten su comportamiento.
+ *
+ * Nota: antes este hook también gestionaba "secciones colapsables" legacy
+ * (SECTION_DATA/MODULE_DATA) que el sidebar ya no usa; se eliminó ese código
+ * muerto y sus datos.
+ */
+export function useSidebarState() {
   const isCollapsed = useIALabStore((s) => s.sidebarCollapsed);
   const setSidebarCollapsed = useIALabStore((s) => s.setSidebarCollapsed);
   const toggleSidebar = useIALabStore((s) => s.toggleSidebarCollapsed);
-  const persistedState = getSidebarState(null);
-  const [collapsedSections, setCollapsedSections] = useState(
-    persistedState || initialState,
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined"
+      ? window.innerWidth < MOBILE_BREAKPOINT
+      : false,
   );
-  const [isMobile, setIsMobile] = useState(false);
-  const initialRef = useRef(initialState);
   const debounceRef = useRef(null);
 
   useEffect(() => {
@@ -31,8 +31,7 @@ export function useSidebarState(
       if (debounceRef.current) clearTimeout(debounceRef.current);
       debounceRef.current = setTimeout(() => {
         const w = window.innerWidth;
-        const mobile = w < MOBILE_BREAKPOINT;
-        setIsMobile(mobile);
+        setIsMobile(w < MOBILE_BREAKPOINT);
         if (w < TABLET_BREAKPOINT) setSidebarCollapsed(true);
       }, 100);
     };
@@ -45,101 +44,7 @@ export function useSidebarState(
     };
   }, [setSidebarCollapsed]);
 
-  const persist = useCallback(
-    (state) => {
-      setSidebarState(state);
-    },
-    [setSidebarState],
-  );
-
-  const toggleSection = useCallback(
-    (name) => {
-      setCollapsedSections((prev) => {
-        const next = { ...prev, [name]: !prev[name] };
-        persist(next);
-        return next;
-      });
-    },
-    [persist],
-  );
-
-  const expandAll = useCallback(() => {
-    setCollapsedSections((prev) => {
-      const next = Object.keys(prev).reduce((acc, key) => {
-        acc[key] = false;
-        return acc;
-      }, {});
-      persist(next);
-      return next;
-    });
-  }, [persist]);
-
-  const collapseAll = useCallback(() => {
-    setCollapsedSections((prev) => {
-      const next = Object.keys(prev).reduce((acc, key) => {
-        acc[key] = true;
-        return acc;
-      }, {});
-      persist(next);
-      return next;
-    });
-  }, [persist]);
-
-  const isSectionCollapsed = useCallback(
-    (name) => {
-      return collapsedSections[name] || false;
-    },
-    [collapsedSections],
-  );
-
-  const reset = useCallback(() => {
-    setCollapsedSections(initialRef.current);
-    removeSidebarState();
-  }, [removeSidebarState]);
-
-  const getSectionData = useCallback((sectionId) => {
-    return SECTION_DATA[sectionId] || null;
-  }, []);
-
-  const getModuleData = useCallback(() => {
-    return MODULE_DATA;
-  }, []);
-
-  const getCourseData = useCallback(() => {
-    return COURSE_DATA;
-  }, []);
-
-  const getProgress = useCallback(() => {
-    const total = MODULE_DATA.reduce((sum, mod) => sum + mod.progress, 0);
-    return Math.round(total / MODULE_DATA.length);
-  }, []);
-
-  const getCompletedModules = useCallback(() => {
-    return MODULE_DATA.filter((mod) => mod.progress >= 100).map(
-      (mod) => mod.id,
-    );
-  }, []);
-
-  const isModuleLocked = useCallback((moduleId) => {
-    const mod = MODULE_DATA.find((m) => m.id === moduleId);
-    return mod ? mod.locked : true;
-  }, []);
-
-  return {
-    collapsedSections,
-    toggleSection,
-    expandAll,
-    collapseAll,
-    isSectionCollapsed,
-    reset,
-    isMobile,
-    isCollapsed,
-    toggleSidebar,
-    getSectionData,
-    getModuleData,
-    getCourseData,
-    getProgress,
-    getCompletedModules,
-    isModuleLocked,
-  };
+  return { isCollapsed, toggleSidebar, isMobile };
 }
+
+export default useSidebarState;

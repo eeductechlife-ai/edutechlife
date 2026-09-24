@@ -138,7 +138,7 @@ export const StreamingMessageOptimized = ({
                 </span>
               )}
             </div>
-            <div className="prose prose-sm max-w-none text-[var(--theme-emphasis)]-darker">
+            <div className="prose prose-sm max-w-none text-slate-700 dark:text-slate-200">
               {fullText.split("\n").map((line, i) => (
                 <p key={i} className="mb-2 last:mb-0">
                   {line}

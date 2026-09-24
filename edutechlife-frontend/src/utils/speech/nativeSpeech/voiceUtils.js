@@ -140,7 +140,11 @@ const speakValerioSentence = (text, onEnd, lang = "es-MX") => {
 };
 
 const fireConfetti = (opts) =>
-  import("canvas-confetti").then((m) => m.default(opts));
+  import("canvas-confetti").then((m) =>
+    // zIndex 80: por debajo del panel de MAX (z-90) y de modales (z-100),
+    // para que las celebraciones no tapen el contenido del tutor.
+    m.default({ zIndex: 80, ...(opts || {}) }),
+  );
 
 const speakAsValentina = async (
   text,

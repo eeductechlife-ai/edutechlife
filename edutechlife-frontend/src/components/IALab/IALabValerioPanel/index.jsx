@@ -566,7 +566,7 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
           try {
             await callDeepseekStream(
               messages,
-              { temperature: 0.7, maxTokens: 2000, signal: controller.signal },
+              { temperature: 0.7, maxTokens: 500, signal: controller.signal },
               false,
               (chunk) => {
                 fullResponse += chunk;
@@ -772,7 +772,7 @@ const IALabValerioPanel = ({ isOpen, onClose, initialMessage = "" }) => {
   return (
     <SectionErrorBoundary name="ValerioPanel">
       <div
-        className="fixed right-0 top-0 bottom-0 z-[90] flex flex-col w-full sm:w-[85vw] sm:max-w-[380px] overflow-hidden"
+        className="fixed right-0 top-0 bottom-0 z-[90] flex flex-col w-full sm:w-[85vw] sm:max-w-[400px] md:max-w-[440px] lg:max-w-[460px] overflow-hidden"
         style={{ bottom: keyboardOffset }}
         role="dialog"
         aria-label={t("ialab.valerio.panel_aria")}

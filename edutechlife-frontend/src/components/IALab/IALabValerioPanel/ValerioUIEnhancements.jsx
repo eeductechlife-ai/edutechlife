@@ -113,12 +113,36 @@ export const CopyButton = ({ text, label }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(text);
+    const markCopied = () => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    };
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        throw new Error("Clipboard API unavailable");
+      }
+      markCopied();
     } catch (err) {
-      console.error("Failed to copy:", err);
+      // Fallback para contextos sin permiso/API de portapapeles (http, iframes)
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.top = "-9999px";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        if (!ok) throw new Error("execCommand copy failed");
+        markCopied();
+      } catch (fallbackErr) {
+        console.error("Failed to copy:", fallbackErr);
+      }
     }
   };
 

@@ -31,6 +31,16 @@ vi.mock("./SidebarTooltipIcon", () => ({
 
 vi.mock("./ModuleNavItem", () => ({ default: () => null }));
 
+vi.mock("../../UserDropdownMenuSimplified", () => ({
+  default: ({ variant, triggerVariant }) => (
+    <div
+      data-testid="user-menu"
+      data-variant={variant}
+      data-trigger={triggerVariant}
+    />
+  ),
+}));
+
 import SidebarCollapsed from "./SidebarCollapsed";
 
 const baseProps = {
@@ -67,5 +77,12 @@ describe("SidebarCollapsed — aviso de toggle", () => {
     render(<SidebarCollapsed {...baseProps} onToggleSidebar={onToggle} />);
     fireEvent.click(screen.getByRole("progressbar"));
     expect(onToggle).toHaveBeenCalledTimes(1);
+  });
+
+  it("muestra el menú de usuario compacto al fondo (variante sidebar)", () => {
+    render(<SidebarCollapsed {...baseProps} />);
+    const menu = screen.getByTestId("user-menu");
+    expect(menu).toHaveAttribute("data-variant", "sidebar");
+    expect(menu).toHaveAttribute("data-trigger", "compact");
   });
 });
