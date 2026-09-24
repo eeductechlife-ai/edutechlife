@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthIdentity } from "../../hooks/useAuthIdentity";
-import SmartBoardLoadingSkeleton from "./SmartBoardLoadingSkeleton";
+import IngenIALoadingSkeleton from "./IngenIALoadingSkeleton";
 import { supabase } from "../../lib/supabase";
 import { API_BASE_URL as API_BASE } from "../../config/api";
 import { track } from "../../lib/analytics";
@@ -90,7 +90,7 @@ const ParentalConsentBlocker = ({ children }) => {
   if (!ready) {
     return (
       <div className="bg-[#F8FAFC] min-h-screen">
-        <SmartBoardLoadingSkeleton darkMode={false} />
+        <IngenIALoadingSkeleton darkMode={false} />
       </div>
     );
   }

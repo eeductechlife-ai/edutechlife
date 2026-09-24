@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { SB_COLORS, SB_RADII, SB_SHADOWS } from "../smartboardTheme";
+import { SB_COLORS, SB_RADII, SB_SHADOWS } from "../ingenIATheme";
 import Button from "./Button";
 import { track } from "../../../lib/analytics";
 import { EVENTS } from "../../../lib/analyticsEvents";
