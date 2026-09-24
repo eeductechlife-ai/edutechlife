@@ -120,13 +120,13 @@ const SkillPassport = memo(() => {
 
   if (!passport.length) {
     return (
-      <div className="text-center py-10 space-y-2">
-        <span className="text-4xl block">🎒</span>
-        <p className="text-sm font-bold text-[#1E293B]">
-          Tu Pasaporte de Habilidades está vacío
-        </p>
-        <p className="text-xs text-[#64748B]">
-          Completa actividades para ver tus competencias aquí.
+      <div className="rounded-2xl border border-dashed border-[#CBD5E1] px-4 py-5 flex items-center gap-3">
+        <span className="text-3xl shrink-0" aria-hidden="true">
+          🎒
+        </span>
+        <p className="text-sm text-[#64748B] leading-snug">
+          Cada reto que hagas llena este pasaporte con las habilidades de tu
+          grado que ya dominas.
         </p>
       </div>
     );

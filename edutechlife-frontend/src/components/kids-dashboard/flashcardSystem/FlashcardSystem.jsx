@@ -4,6 +4,7 @@ import GenerateFlashcards from "../GenerateFlashcards";
 import { useFlashcardDeck } from "./useFlashcardDeck";
 import QuizCard from "./components/QuizCard";
 import FlashcardResults from "./components/FlashcardResults";
+import { logPractice } from "../practicarHub/practicarProgress";
 import FlashcardImporter from "./components/FlashcardImporter";
 import DeckCard from "./components/DeckCard";
 import DeckEditor from "./components/DeckEditor";
@@ -27,9 +28,12 @@ const PRACTICE_GRADIENT =
 const PRACTICE_COLOR = "#FF6B9D";
 const PRACTICE_GLOW = "#EF476F";
 
+// Effort counts: 2 pts per card reviewed + 3 per card understood.
+const sessionXp = (correct, total) => total * 2 + correct * 3;
+
 const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
   const { t } = useTranslation();
-  const { activeStudyDeck, setActiveStudyDeck, setDocumentForDani } =
+  const { activeStudyDeck, setActiveStudyDeck, setDocumentForDani, addPoints } =
     useIngenIAKids();
   const { trackActivity } = useCompetencyTracking();
 
@@ -75,7 +79,6 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
     startStudyDue,
     dueToday,
     handleResult,
-    startMultiplayer,
   } = useFlashcardDeck();
 
   // Track competency mastery when a quiz session completes
@@ -91,6 +94,15 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
       if (deck?.metadata?.subject) {
         trackActivity({ subject: deck.metadata.subject, score: rate / 100 });
       }
+      addPoints?.(
+        sessionXp(correct, correct + incorrect),
+        `EduCards: ${deck?.title || "mazo"} (${Math.round(rate)}%)`,
+      );
+      logPractice({
+        type: "educards",
+        subject: deck?.metadata?.subject || deck?.title || null,
+        score: Math.round(rate),
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [done]);
@@ -166,6 +178,7 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
           rate={rate}
           correct={correct}
           incorrect={incorrect}
+          xpEarned={sessionXp(correct, correct + incorrect)}
           onRestart={() => startStudy(currentDeckId)}
           onBack={() => setMode("decks")}
           onTalkToDani={handleTalkToDani}
@@ -289,51 +302,28 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
       className="space-y-6"
     >
       {/* Section header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span
-            className="w-10 h-10 rounded-2xl flex items-center justify-center text-white text-xl flex-shrink-0"
-            style={{
-              background: PRACTICE_GRADIENT,
-              boxShadow: `0 4px 14px ${PRACTICE_GLOW}40`,
-            }}
-          >
-            🎴
-          </span>
-          <div>
-            <h3 className={`text-lg font-black leading-tight ${textPrimary}`}>
-              {t("kid.flashcards.my_decks_title")}
-            </h3>
-            <p className={`text-xs ${textSecondary}`}>
-              Repasa con tarjetas inteligentes
-            </p>
-          </div>
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className={`text-lg font-black leading-tight ${textPrimary}`}>
+            {t("kid.flashcards.my_decks_title")}
+          </h3>
+          <p className={`text-xs ${textSecondary}`}>
+            Repasa con tarjetas inteligentes
+          </p>
         </div>
         {decks.length > 0 && (
-          <div className="flex gap-2">
-            <motion.button
-              onClick={() => setMultiplayerActive(true)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="px-3 py-2 text-white rounded-xl font-bold text-xs shadow-md"
-              style={{ background: PRACTICE_GRADIENT }}
-            >
-              🆚 Multijugador
-            </motion.button>
-            <motion.button
-              onClick={() => {
-                setDeckTitle("");
-                setDeckDescription("");
-                setCurrentDeckId(null);
-                setMode("editor");
-              }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`px-3 py-2 rounded-xl font-bold text-xs border ${darkMode ? "bg-[#1E293B] border-[#2A3A54] text-white" : "bg-white border-[#E2E8F0] text-[#004B63]"} shadow-sm`}
-            >
-              + {t("kid.flashcards.new_deck_btn")}
-            </motion.button>
-          </div>
+          <motion.button
+            onClick={() => {
+              setDeckTitle("");
+              setDeckDescription("");
+              setCurrentDeckId(null);
+              setMode("editor");
+            }}
+            whileTap={{ scale: 0.98 }}
+            className={`shrink-0 px-3 py-2.5 rounded-xl font-bold text-xs border whitespace-nowrap ${darkMode ? "bg-[#1E293B] border-[#2A3A54] text-white" : "bg-white border-[#E2E8F0] text-[#004B63]"} shadow-sm`}
+          >
+            {t("kid.flashcards.new_deck_btn")}
+          </motion.button>
         )}
       </div>
 
@@ -517,7 +507,7 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
         <FlashcardImporter
           decks={decks}
           saveDecks={saveDecks}
-          onStartMultiplayer={startMultiplayer}
+          onStartMultiplayer={() => setMultiplayerActive(true)}
           darkMode={darkMode}
         />
       )}

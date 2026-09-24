@@ -37,23 +37,23 @@ const QUICK_ACTIONS = [
     color: "#F59E0B",
   },
   {
-    tab: "flashcards",
+    tab: "practicar",
     icon: Layers,
-    emoji: "🎴",
+    emoji: "🎯",
     labelKey: "kid.hero.action_flashcards_label",
     color: "#06B6D4",
   },
   {
-    tab: "retos",
+    tab: "progreso",
     icon: ClipboardCheck,
-    emoji: "⚡",
+    emoji: "📈",
     labelKey: "kid.hero.action_exams_label",
     color: "#9D4EDD",
   },
 ];
 
 const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
-  const { vakResult, timetable, currentClass, nextClass, studentAge } =
+  const { vakResult, timetable, currentClass, nextClass, supabaseQueries } =
     useIngenIAKids();
   const { t } = useTranslation();
   const kt = useKidText();
@@ -63,12 +63,10 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
   const isNow = !!currentClass;
 
   const firstName = (() => {
+    const fromProfile = supabaseQueries?.studentData?.data?.name;
+    if (fromProfile) return fromProfile.split(" ")[0];
     try {
-      const raw =
-        typeof window !== "undefined"
-          ? localStorage.getItem("student_name") || ""
-          : "";
-      return raw.split(" ")[0] || "";
+      return (localStorage.getItem("student_name") || "").split(" ")[0];
     } catch {
       return "";
     }
@@ -133,7 +131,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
                 !
               </>
             ) : (
-              "¡Bienvenido!"
+              "¡Hola! 👋"
             )}
           </div>
           {vakResult && (
@@ -185,44 +183,37 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
             strokeWidth={2}
           />
         </motion.button>
-      ) : (
-        <div className="mx-4 mb-3 px-3 py-2.5 rounded-2xl bg-white/8 border border-white/15">
-          <div className="text-xs text-white/60">Sin clase en este momento</div>
-          <div className="text-sm font-semibold text-white mt-0.5">
-            Aprovecha para repasar con Dani
+      ) : timetable ? (
+        <div className="mx-4 mb-3 px-3 py-2.5 rounded-2xl bg-white/10 border border-white/15">
+          <div className="text-sm font-semibold text-white">
+            No tienes más clases hoy 🎉
+          </div>
+          <div className="text-xs text-white/70 mt-0.5">
+            Buen momento para practicar un poquito.
           </div>
         </div>
-      )}
-
-      {/* VAK discovery card — solo si el test no está hecho */}
-      {!vakResult && (
-        <motion.button
+      ) : (
+        <button
           type="button"
-          onClick={() => onTabChange?.("vak")}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-          whileTap={{ scale: 0.97 }}
-          className="mx-4 mb-3 w-[calc(100%-2rem)] flex items-center gap-3 px-3 py-2.5 rounded-2xl text-left border border-white/20"
-          style={{ background: "rgba(255,255,255,0.10)" }}
+          onClick={() => onTabChange?.("horario")}
+          className="mx-4 mb-3 w-[calc(100%-2rem)] flex items-center gap-3 px-3 py-2.5 rounded-2xl text-left bg-white/10 border border-white/20"
         >
-          <span className="text-2xl flex-shrink-0">🧠</span>
+          <span className="text-2xl flex-shrink-0" aria-hidden="true">
+            📅
+          </span>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-bold text-white/60 uppercase tracking-wide mb-0.5">
-              {kt("hero.vak_question", "¿Eres visual, auditivo o kinestésico?")}
+            <div className="text-sm font-semibold text-white">
+              Sube tu horario
             </div>
-            <div className="text-sm font-semibold text-white truncate">
-              {kt(
-                "hero.vak_subtitle",
-                "Descubre tu súper poder de aprendizaje · +25 XP",
-              )}
+            <div className="text-xs text-white/70 mt-0.5">
+              Te aviso qué clase sigue y cuándo tienes examen.
             </div>
           </div>
           <ChevronRight
-            className="w-4 h-4 text-white/40 flex-shrink-0"
+            className="w-4 h-4 text-white/50 flex-shrink-0"
             strokeWidth={2}
           />
-        </motion.button>
+        </button>
       )}
 
       {/* CTA principal: Hablar con Dani */}

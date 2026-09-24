@@ -1,11 +1,4 @@
-import {
-  Home,
-  BookOpen,
-  PencilRuler,
-  BarChart3,
-  Gamepad2,
-  User,
-} from "lucide-react";
+import { Home, BookOpen, PencilRuler, Gamepad2, User } from "lucide-react";
 
 export const CATEGORY_MAP = {
   inicio: "home",
@@ -20,8 +13,8 @@ export const CATEGORY_MAP = {
   retos: "practice",
   examenes: "practice", // hidden; inside ChallengeEngine
   oral: "practice", // hidden; via Dani FAB
-  // progress
-  progreso: "progress",
+  // progress lives inside "Yo" (profile)
+  progreso: "profile",
   // profile
   perfil: "profile",
   vak: "profile", // hidden; inside perfil
@@ -62,16 +55,6 @@ export const CATEGORIES = [
     minAge: 6,
   },
   {
-    id: "progress",
-    Icon: BarChart3,
-    label: "Progreso",
-    color: "#FB8500",
-    gradient: "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
-    glowColor: "#FFB703",
-    tabs: ["progreso"],
-    minAge: 6,
-  },
-  {
     id: "explore",
     Icon: Gamepad2,
     label: "Explorar",
@@ -84,7 +67,7 @@ export const CATEGORIES = [
   {
     id: "profile",
     Icon: User,
-    label: "Mi Perfil",
+    label: "Yo",
     color: "#7B2FF7",
     gradient: "linear-gradient(135deg, #9D4EDD 0%, #7B2FF7 55%, #5A1DAA 100%)",
     glowColor: "#9D4EDD",
@@ -109,16 +92,24 @@ export const CATEGORY_TAB_LABELS = {
   calificaciones: "Notas",
   plan: "Mi Plan",
   practicar: "Practicar",
-  flashcards: "Educards",
+  flashcards: "EduCards",
   retos: "Retos",
   perfil: "Mi Perfil",
-  progreso: "Estadísticas",
+  progreso: "Mi Progreso",
   misiones: "Misiones",
   noticias: "Tech & IA",
   horario: "Horario",
   examenes: "Exámenes",
   oral: "Habla con Dani",
-  vak: "VAK",
+  vak: "Mi estilo",
+};
+
+// Tools opened from a hub; the top bar shows a back arrow to the parent tab.
+export const PARENT_TAB = {
+  retos: "practicar",
+  flashcards: "practicar",
+  examenes: "practicar",
+  vak: "perfil",
 };
 
 export const PREMIUM_TABS = ["oral", "misiones"];
@@ -130,10 +121,10 @@ export const TOP_BAR_LABELS = {
   calificaciones: "Mis Notas",
   plan: "Mi Plan de Mejora",
   practicar: "Practicar",
-  flashcards: "Educards",
+  flashcards: "EduCards",
   retos: "Retos Inteligentes",
-  progreso: "Mis Estadísticas",
-  misiones: "Misiones Diarias",
+  progreso: "Mi Progreso",
+  misiones: "Mis Misiones",
   noticias: "Tech & IA",
   // hidden tabs — titles preserved for internal navigation
   horario: "Mi Horario",

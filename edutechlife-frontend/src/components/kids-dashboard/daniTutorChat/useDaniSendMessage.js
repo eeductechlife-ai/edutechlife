@@ -94,7 +94,10 @@ export default function useDaniSendMessage({
         clearVoiceQueue(); // clear any pending audio from previous response
 
         const token = await getToken();
-        if (!token) throw new Error("No auth token — user must be logged in");
+        if (!token)
+          throw new Error(
+            "Tu sesión se cerró. Vuelve a iniciar sesión para seguir.",
+          );
 
         track("dani_message_sent", {
           socratic_mode: socraticMode,

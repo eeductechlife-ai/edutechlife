@@ -361,7 +361,9 @@ const WeeklyScheduleView = () => {
           className="rounded-2xl bg-gradient-to-br from-[#004B63] via-[#4DA8C4] to-[#66CCCC] text-white p-6 sm:p-8 shadow-lg text-center"
         >
           <div className="text-5xl mb-3">📅</div>
-          <h3 className="text-2xl font-black mb-1">Agrega tu horario</h3>
+          <h3 className="text-2xl font-black mb-1 text-white">
+            Agrega tu horario
+          </h3>
           <p className="text-sm opacity-90 mb-5 max-w-md mx-auto">
             Escanea el horario del colegio y IngenIA te recordará tus clases y
             exámenes.

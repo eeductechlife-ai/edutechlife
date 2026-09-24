@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { gradeColor, gradeEmoji, getAvgScore } from "./gradeUtils";
 
 const PeriodInput = ({ label, value, onChange }) => (
-  <div className="flex flex-col items-center gap-0.5">
+  <label className="flex flex-col items-center gap-0.5 min-w-0">
     <span className="text-[10px] font-bold text-[#94A3B8] uppercase">
       {label}
     </span>
@@ -22,14 +22,15 @@ const PeriodInput = ({ label, value, onChange }) => (
         const n = parseFloat(raw);
         if (!isNaN(n) && n >= 0 && n <= 5) onChange(n);
       }}
-      className="w-14 text-center text-sm font-bold border-2 rounded-lg outline-none p-1"
+      aria-label={`Nota ${label}`}
+      className="w-full min-w-0 h-11 text-center text-base font-bold border-2 rounded-lg outline-none"
       style={{
         color: value != null ? gradeColor(Number(value)) : "#94A3B8",
         borderColor:
           value != null ? gradeColor(Number(value)) + "40" : "#E2E8F0",
       }}
     />
-  </div>
+  </label>
 );
 
 const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
@@ -69,13 +70,13 @@ const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
         )}
         <button
           onClick={() => onRemove(grade.id)}
-          className="text-red-300 hover:text-red-500 transition-colors text-sm px-1 flex-shrink-0"
+          className="w-9 h-9 -mr-1 flex items-center justify-center rounded-lg text-red-300 hover:text-red-500 hover:bg-red-50 transition-colors text-sm flex-shrink-0"
           aria-label="Eliminar materia"
         >
           ✕
         </button>
       </div>
-      <div className="flex gap-2 pl-10">
+      <div className="grid grid-cols-5 gap-1.5">
         {["p1", "p2", "p3", "p4"].map((p, i) => (
           <PeriodInput
             key={p}
@@ -84,16 +85,15 @@ const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
             onChange={(val) => onUpdate(grade.id, p, val)}
           />
         ))}
-        <div className="flex-1" />
-        <div className="flex flex-col items-center gap-0.5 justify-end">
+        <div className="flex flex-col items-center gap-0.5 min-w-0">
           <span className="text-[10px] font-bold text-[#94A3B8] uppercase">
             Prom
           </span>
           <span
-            className="w-14 text-center text-sm font-black border-2 rounded-lg p-1"
+            className="w-full h-11 flex items-center justify-center text-base font-black rounded-lg"
             style={{
-              color: avg > 0 ? gradeColor(avg) : "#94A3B8",
-              borderColor: avg > 0 ? gradeColor(avg) + "40" : "#E2E8F0",
+              color: avg > 0 ? "#fff" : "#94A3B8",
+              background: avg > 0 ? gradeColor(avg) : "#F1F5F9",
             }}
           >
             {avg > 0 ? avg.toFixed(1) : "—"}

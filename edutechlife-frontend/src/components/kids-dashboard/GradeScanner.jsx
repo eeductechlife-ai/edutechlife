@@ -42,39 +42,8 @@ export default memo(function GradeScanner({ onTabChange }) {
     setDocumentForDani,
   } = useGradeScanner();
 
-  const PROGRESS_GRADIENT =
-    "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)";
-
   return (
     <div className="space-y-5">
-      {/* Header banner */}
-      <div
-        className="relative rounded-2xl overflow-hidden p-5"
-        style={{ background: PROGRESS_GRADIENT }}
-      >
-        <div className="relative z-10 flex items-center gap-4">
-          <div
-            className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md"
-            style={{ background: "rgba(255,255,255,0.25)" }}
-          >
-            <span className="text-2xl">📊</span>
-          </div>
-          <div>
-            <h3 className="text-xl font-black text-white drop-shadow-sm">
-              {t("kid.grades.title")}
-            </h3>
-            <p className="text-xs text-white/80">{t("kid.grades.subtitle")}</p>
-          </div>
-        </div>
-        <div
-          className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10"
-          style={{
-            background: "rgba(255,255,255,0.4)",
-            transform: "translate(30%, -30%)",
-          }}
-        />
-      </div>
-
       {/* Mode toggle */}
       <div className="flex gap-2 p-1 bg-[#F1F5F9] rounded-xl">
         {[
@@ -183,17 +152,10 @@ export default memo(function GradeScanner({ onTabChange }) {
       </AnimatePresence>
 
       {/* Period legend */}
-      <div className="flex items-center gap-3 px-1 text-xs text-[#94A3B8]">
-        <span className="font-semibold text-[#64748B]">Períodos:</span>
-        {["P1", "P2", "P3", "P4"].map((p) => (
-          <span key={p} className="font-mono font-bold">
-            {p}
-          </span>
-        ))}
-        <span className="ml-auto font-semibold">
-          Prom = promedio períodos ingresados
-        </span>
-      </div>
+      <p className="px-1 text-xs text-[#64748B] leading-snug">
+        <strong className="text-[#1E293B]">P1–P4</strong> son los periodos del
+        año. Escribe la nota de cada uno (de 1.0 a 5.0).
+      </p>
 
       {/* Academic Semaphore */}
       {Object.keys(gradeMap).length > 0 && (
@@ -202,9 +164,9 @@ export default memo(function GradeScanner({ onTabChange }) {
 
       {/* Manual grade entry */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-bold text-[#1E293B]">
-            📋 {t("kid.grades.my_notes")}{" "}
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <p className="text-sm font-bold text-[#1E293B] flex items-center gap-1 flex-wrap">
+            {t("kid.grades.my_notes")}{" "}
             {grades.length > 0 && Number(avg) > 0 && (
               <span
                 className="ml-2 px-2 py-0.5 rounded-full text-xs font-black"
@@ -219,7 +181,7 @@ export default memo(function GradeScanner({ onTabChange }) {
           </p>
           <button
             onClick={addRow}
-            className="text-xs text-[#FB8500] font-semibold hover:underline"
+            className="text-xs text-[#FB8500] font-bold whitespace-nowrap px-2 py-2 hover:underline"
           >
             {t("kid.grades.add_subject")}
           </button>

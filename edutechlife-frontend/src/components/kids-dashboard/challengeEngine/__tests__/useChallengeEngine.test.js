@@ -3,12 +3,18 @@ import { describe, it, expect, vi } from "vitest";
 vi.mock("../../../../utils/api", () => ({
   callDeepseekSmartboard: vi.fn(),
 }));
-vi.mock("../../../../context/SmartBoardKidsContext", () => ({
-  useSmartBoardKids: () => ({
-    supabaseQueries: { studentData: { data: { id: "student-1", grade: "5" } } },
+vi.mock("../../../../context/IngenIAKidsContext", () => ({
+  useIngenIAKids: () => ({
+    supabaseQueries: {
+      studentData: { data: { id: "student-1", grade_level: 6 } },
+    },
+    gradeLevel: 6,
+    ageGroup: "middle",
     addPoints: vi.fn(),
-    studentAge: 10,
   }),
+}));
+vi.mock("../../../../hooks/useCompetencyTracking", () => ({
+  useCompetencyTracking: () => ({ trackActivity: vi.fn() }),
 }));
 vi.mock("../../../../hooks/useFeedbackLog", () => ({
   useFeedbackLog: () => ({ logFeedback: vi.fn() }),

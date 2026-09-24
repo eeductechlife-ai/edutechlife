@@ -8,6 +8,7 @@ const PerfilTab = memo(function PerfilTab({
   onTabChange,
   handleVakComplete,
   onLogout,
+  initialTab,
 }) {
   const { vakResult } = useIngenIAKids();
   const [showVakPanel, setShowVakPanel] = useState(false);
@@ -24,6 +25,7 @@ const PerfilTab = memo(function PerfilTab({
         onTabChange={onTabChange}
         onExpandVak={handleExpandVak}
         onLogout={onLogout}
+        initialTab={initialTab}
       />
 
       <AnimatePresence>

@@ -1,7 +1,15 @@
-import { memo, useCallback, useMemo, lazy, Suspense } from "react";
+import {
+  memo,
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect,
+  lazy,
+  Suspense,
+} from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useNavigate } from "react-router-dom";
 import DashboardErrorBoundary from "../DashboardErrorBoundary";
 import HeroSection from "../HeroSection";
@@ -18,13 +26,13 @@ import { isFeatureEnabled } from "../../../hooks/useFeatureFlag";
 
 const PointsRewardsSystem = lazy(() => import("../PointsRewardsSystem"));
 const LeagueWidget = lazy(() => import("../LeagueWidget"));
-const SmartBoardProgress = lazy(() => import("../smartBoardProgress"));
 const PersonalizedPlan = lazy(() => import("../PersonalizedPlan"));
 const ExamPrep = lazy(() => import("../examPrep"));
 const FlashcardSystem = lazy(() => import("../flashcardSystem"));
 const OralExamSimulator = lazy(() => import("../OralExamSimulator"));
 const ChallengeEngine = lazy(() => import("../challengeEngine"));
 const FutureExplorer = lazy(() => import("../FutureExplorer"));
+const PracticarHub = lazy(() => import("../practicarHub/PracticarHub"));
 
 const sharedTransition = { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] };
 
@@ -67,6 +75,7 @@ function createTabRenderer(deps) {
     navigate,
     onTabChange,
     onDaniOpen,
+    onLogout,
     studentAge,
     darkMode,
     ageGroup,
@@ -82,6 +91,7 @@ function createTabRenderer(deps) {
   const explorarProps = {
     missions,
     onCompleteMission: completeMission,
+    onTabChange,
     ageGroup,
   };
 
@@ -104,6 +114,7 @@ function createTabRenderer(deps) {
         <PerfilTab
           onTabChange={onTabChange}
           handleVakComplete={handleVakComplete}
+          onLogout={onLogout}
         />
       ),
       errorKey: "perfil",
@@ -210,13 +221,26 @@ function createTabRenderer(deps) {
     },
     progreso: {
       component: () => (
-        <LazyLoad fallback={<SectionFallback tab="progreso" />}>
-          <SmartBoardProgress onTabChange={onTabChange} />
-        </LazyLoad>
+        <PerfilTab
+          onTabChange={onTabChange}
+          handleVakComplete={handleVakComplete}
+          onLogout={onLogout}
+          initialTab="progreso"
+        />
       ),
       errorKey: "progreso",
       errorMsg: "Error al cargar progreso",
-      className: "h-full",
+      className: "space-y-6",
+    },
+    practicar: {
+      component: () => (
+        <LazyLoad fallback={<SectionFallback tab="practicar" />}>
+          <PracticarHub onTabChange={onTabChange} darkMode={darkMode} />
+        </LazyLoad>
+      ),
+      errorKey: "practicar",
+      errorMsg: "Error al cargar Practicar",
+      className: "space-y-4",
     },
     retos: {
       component: () => (
@@ -232,7 +256,14 @@ function createTabRenderer(deps) {
 }
 
 const CinematicContent = memo(
-  ({ activeTab, onTabChange, darkMode, subscriptionTier, onDaniOpen }) => {
+  ({
+    activeTab,
+    onTabChange,
+    darkMode,
+    subscriptionTier,
+    onDaniOpen,
+    onLogout,
+  }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const isPremium = subscriptionTier === "premium";
@@ -244,7 +275,7 @@ const CinematicContent = memo(
       subjectsWithGrades,
       completeMission,
       studentAge,
-    } = useSmartBoardKids();
+    } = useIngenIAKids();
 
     const ageGroup =
       studentAge <= 9 ? "early" : studentAge <= 12 ? "middle" : "senior";
@@ -269,6 +300,7 @@ const CinematicContent = memo(
           navigate,
           onTabChange,
           onDaniOpen,
+          onLogout,
           studentAge,
           darkMode,
           ageGroup,
@@ -285,17 +317,27 @@ const CinematicContent = memo(
         navigate,
         onTabChange,
         onDaniOpen,
+        onLogout,
         studentAge,
         darkMode,
         ageGroup,
       ],
     );
 
+    const scrollRef = useRef(null);
+    useEffect(() => {
+      scrollRef.current?.scrollTo({ top: 0 });
+    }, [activeTab]);
+
     const tab = tabRenderer[activeTab];
     if (!tab) return null;
 
     return (
-      <div className="flex-1 overflow-y-auto relative p-4 md:p-6 pb-24 md:pb-8">
+      <div
+        ref={scrollRef}
+        data-typo="intended"
+        className="flex-1 overflow-y-auto relative p-4 md:p-6 pb-24 md:pb-8"
+      >
         <AnimatePresence mode="wait">
           <DashboardErrorBoundary
             key={activeTab}

@@ -3,9 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Edit3, LogOut, Moon, Sun } from "lucide-react";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useStudentProfileIngenIA } from "../../../hooks/useStudentProfileIngenIA";
-import { ProgressBar } from "../ui";
-import { SB_COLORS, SB_GRADIENTS, glow } from "../ingenIATheme";
+import { SB_GRADIENTS, glow } from "../ingenIATheme";
 import EditProfileModal from "../EditProfileModal";
+
+import ProgressSummary from "./ProgressSummary";
+import RewardsGrid from "../ingenIAProgress/components/RewardsGrid";
+import { getLevel } from "../ingenIAProgress/gamificationData";
 
 const PROGRESS_GRADIENT = SB_GRADIENTS.progress;
 const PROGRESS_GLOW = "#FB8500";
@@ -39,19 +42,11 @@ const VAK_LABELS = {
 };
 
 const TABS = [
-  { id: "resumen", label: "📊 Resumen" },
-  { id: "materias", label: "📚 Materias" },
-  { id: "cuenta", label: "⚙️ Cuenta" },
+  { id: "progreso", emoji: "📈", label: "Progreso" },
+  { id: "premios", emoji: "🎁", label: "Premios" },
+  { id: "estilo", emoji: "🧠", label: "Estilo" },
+  { id: "cuenta", emoji: "⚙️", label: "Cuenta" },
 ];
-
-const SectionLabel = ({ children, dm }) => (
-  <p
-    className="text-[11px] font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"
-    style={{ color: dm ? "#FB8500" : "#D97706" }}
-  >
-    {children}
-  </p>
-);
 
 const Card = ({ children, dm, className = "" }) => (
   <div
@@ -70,6 +65,7 @@ const SmartProfile = memo(function SmartProfile({
   onTabChange,
   onExpandVak,
   onLogout,
+  initialTab = "progreso",
 }) {
   const {
     studentAge,
@@ -79,15 +75,13 @@ const SmartProfile = memo(function SmartProfile({
     daniMemory,
     streak,
     totalPoints,
-    subjectsWithGrades,
-    pointsHistory,
-    streakLog,
-    totalActiveMinutes,
+    unlockedRewards,
     darkMode: dm,
     toggleDarkMode,
+    supabaseQueries,
   } = useIngenIAKids();
 
-  const [activeTab, setActiveTab] = useState("resumen");
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [editOpen, setEditOpen] = useState(false);
   const authToken =
     typeof window !== "undefined" ? sessionStorage.getItem("auth_token") : null;
@@ -99,7 +93,9 @@ const SmartProfile = memo(function SmartProfile({
   } = useStudentProfileIngenIA(authToken);
 
   const profile = daniMemory?.studentProfile ?? {};
+  const accountName = supabaseQueries?.studentData?.data?.name || "";
   const studentName = useMemo(() => {
+    if (accountName) return accountName.split(" ")[0];
     try {
       return (
         (localStorage.getItem("student_name") || "").split(" ")[0] ||
@@ -108,58 +104,13 @@ const SmartProfile = memo(function SmartProfile({
     } catch {
       return "Estudiante";
     }
-  }, []);
+  }, [accountName]);
 
   const vakStyle = vakResult?.predominantStyle || vakResult?.dominant || null;
   const goalLabel = profile.parentGoal ? GOAL_LABELS[profile.parentGoal] : null;
   const interests = Array.isArray(profile.interests) ? profile.interests : [];
 
-  const { strong, weak } = useMemo(() => {
-    const graded = (subjectsWithGrades || []).filter(
-      (s) => typeof s.gradeScore === "number" && s.gradeScore > 0,
-    );
-    const sorted = [...graded].sort((a, b) => b.gradeScore - a.gradeScore);
-    return { strong: sorted.slice(0, 3), weak: sorted.slice(-3).reverse() };
-  }, [subjectsWithGrades]);
-
-  const weekDots = useMemo(() => {
-    const log = Array.isArray(streakLog) ? streakLog : [];
-    const activeDates = new Set(log.map((e) => e.date));
-    return Array.from({ length: 7 }, (_, i) => {
-      const d = new Date();
-      d.setDate(d.getDate() - (6 - i));
-      const key = d.toISOString().split("T")[0];
-      return { key, active: activeDates.has(key), isToday: i === 6 };
-    });
-  }, [streakLog]);
-
-  const weekActiveDays = weekDots.filter((d) => d.active).length;
-  const consistency =
-    weekActiveDays >= 5
-      ? "Excelente 🌟"
-      : weekActiveDays >= 3
-        ? "Buena 👍"
-        : weekActiveDays >= 1
-          ? "En progreso 💪"
-          : "Sin actividad";
-
-  const recentActivity = useMemo(() => {
-    const hist = Array.isArray(pointsHistory) ? pointsHistory : [];
-    return [...hist]
-      .filter((e) => e?.reason)
-      .slice(-4)
-      .reverse();
-  }, [pointsHistory]);
-
-  const relTime = (ts) => {
-    if (!ts) return "";
-    const diff = Date.now() - new Date(ts).getTime();
-    const min = Math.round(diff / 60000);
-    if (min < 1) return "ahora";
-    if (min < 60) return `hace ${min} min`;
-    const h = Math.round(min / 60);
-    return h < 24 ? `hace ${h} h` : `hace ${Math.round(h / 24)} d`;
-  };
+  const level = getLevel(totalPoints ?? 0);
 
   const textMain = dm ? "#F0F6FF" : "#1E293B";
   const textMuted = dm ? "#94A3B8" : "#64748B";
@@ -178,9 +129,9 @@ const SmartProfile = memo(function SmartProfile({
           boxShadow: `0 6px 20px ${PROGRESS_GLOW}28`,
         }}
       >
-        <div className="px-4 pt-4 pb-3 flex items-center gap-3">
+        <div className="px-4 pt-3 pb-2.5 flex items-center gap-3">
           <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
+            className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
             style={{
               background: "rgba(255,255,255,0.22)",
               backdropFilter: "blur(8px)",
@@ -224,27 +175,42 @@ const SmartProfile = memo(function SmartProfile({
             },
             {
               icon: "🔥",
-              label: "Racha",
+              label: `Racha · récord ${streak?.longest ?? 0}`,
               value: `${streak?.current ?? 0} días`,
             },
             {
-              icon: "🏆",
-              label: "Récord",
-              value: `${streak?.longest ?? 0} días`,
+              icon: level.icon,
+              label: "Nivel",
+              value: level.name,
             },
           ].map(({ icon, label, value }) => (
             <div
               key={label}
-              className="py-2.5 text-center border-r last:border-r-0"
+              className="py-2 px-1 text-center border-r last:border-r-0 min-w-0"
               style={{ borderColor: "rgba(255,255,255,0.15)" }}
             >
-              <p className="text-base font-black text-white">
+              <p className="text-[13px] font-black text-white truncate">
                 {icon} {value}
               </p>
-              <p className="text-[10px] text-white/60">{label}</p>
+              <p className="text-[10px] text-white/75 truncate">{label}</p>
             </div>
           ))}
         </div>
+        {level.next && (
+          <div
+            className="h-1.5 bg-white/20"
+            role="progressbar"
+            aria-label={`Faltan ${level.next - (totalPoints ?? 0)} puntos para el siguiente nivel`}
+            aria-valuenow={Math.round(level.progress)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <div
+              className="h-full bg-white/80"
+              style={{ width: `${level.progress}%` }}
+            />
+          </div>
+        )}
       </motion.div>
 
       {/* ── Mini-tab bar ───────────────────────────────── */}
@@ -257,7 +223,8 @@ const SmartProfile = memo(function SmartProfile({
             key={tab.id}
             type="button"
             onClick={() => setActiveTab(tab.id)}
-            className="flex-1 text-[11px] font-bold py-2 px-1 rounded-lg transition-all"
+            aria-pressed={activeTab === tab.id}
+            className="flex-1 flex flex-col items-center gap-0.5 text-[11px] font-bold py-2 px-1 rounded-lg transition-all min-h-[48px]"
             style={
               activeTab === tab.id
                 ? {
@@ -268,85 +235,58 @@ const SmartProfile = memo(function SmartProfile({
                 : { color: textMuted }
             }
           >
-            {tab.label}
+            <span className="text-base leading-none" aria-hidden="true">
+              {tab.emoji}
+            </span>
+            <span>{tab.label}</span>
           </button>
         ))}
       </div>
 
       {/* ── Tab content ───────────────────────────────── */}
       <AnimatePresence mode="wait">
-        {activeTab === "resumen" && (
+        {activeTab === "progreso" && (
           <motion.div
-            key="resumen"
+            key="progreso"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ProgressSummary
+              onTabChange={onTabChange}
+              onShowRewards={() => setActiveTab("premios")}
+            />
+          </motion.div>
+        )}
+
+        {activeTab === "premios" && (
+          <motion.div
+            key="premios"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+          >
+            <RewardsGrid
+              unlockedRewards={unlockedRewards}
+              totalPoints={totalPoints ?? 0}
+              darkMode={dm}
+            />
+          </motion.div>
+        )}
+
+        {activeTab === "estilo" && (
+          <motion.div
+            key="estilo"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
             className="space-y-3"
           >
-            {/* Hábitos esta semana */}
-            <Card dm={dm}>
-              <SectionLabel dm={dm}>📅 Esta semana</SectionLabel>
-              <div className="flex justify-between items-center mb-2">
-                {weekDots.map(({ key, active, isToday }) => (
-                  <motion.div
-                    key={key}
-                    className="w-8 h-8 rounded-full flex items-center justify-center"
-                    style={{
-                      background: active
-                        ? PROGRESS_GRADIENT
-                        : dm
-                          ? "#243152"
-                          : "#F1F5F9",
-                      border: isToday
-                        ? "2px solid #FB8500"
-                        : "2px solid transparent",
-                      boxShadow: active
-                        ? `0 2px 8px ${PROGRESS_GLOW}40`
-                        : "none",
-                    }}
-                    whileHover={{ scale: 1.15 }}
-                  >
-                    {active ? (
-                      <span className="text-white text-xs font-bold">✓</span>
-                    ) : (
-                      <span
-                        className="text-[10px]"
-                        style={{ color: textMuted }}
-                      >
-                        {new Date(key).getDate()}
-                      </span>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-              <div className="flex items-center justify-between">
-                <span style={{ color: textMuted }} className="text-xs">
-                  <span
-                    className="font-black text-base"
-                    style={{ color: textMain }}
-                  >
-                    {weekActiveDays}
-                  </span>
-                  /7 días
-                  {totalActiveMinutes > 0 && (
-                    <span className="ml-2">· ⏱ {totalActiveMinutes} min</span>
-                  )}
-                </span>
-                <span
-                  className="text-[11px] font-bold px-2.5 py-0.5 rounded-full"
-                  style={{
-                    background: "rgba(251,133,0,0.10)",
-                    color: "#FB8500",
-                  }}
-                >
-                  {consistency}
-                </span>
-              </div>
-            </Card>
-
             {/* Objetivo + VAK en fila */}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {goalLabel && (
                 <div
                   className="rounded-xl px-3 py-3 flex items-start gap-2"
@@ -431,219 +371,6 @@ const SmartProfile = memo(function SmartProfile({
           </motion.div>
         )}
 
-        {activeTab === "materias" && (
-          <motion.div
-            key="materias"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2 }}
-            className="space-y-3"
-          >
-            {/* Fortalezas + A reforzar */}
-            {(strong.length > 0 || weak.length > 0) && (
-              <div className="grid grid-cols-2 gap-2">
-                {strong.length > 0 && (
-                  <Card dm={dm}>
-                    <SectionLabel dm={dm}>💪 Fuertes</SectionLabel>
-                    <div className="space-y-1.5">
-                      {strong.map((s) => (
-                        <div
-                          key={s.id}
-                          className="flex items-center justify-between rounded-lg px-2 py-1.5"
-                          style={{
-                            background: "rgba(6,214,160,0.08)",
-                            border: "1px solid rgba(6,214,160,0.18)",
-                          }}
-                        >
-                          <span
-                            className="text-xs font-semibold truncate"
-                            style={{ color: dm ? "#6EE7B7" : "#047857" }}
-                          >
-                            {s.icon} {s.name}
-                          </span>
-                          <span
-                            className="text-xs font-black tabular-nums ml-1 flex-shrink-0"
-                            style={{ color: "#06D6A0" }}
-                          >
-                            {s.gradeScore?.toFixed(1)}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                )}
-                {weak.length > 0 && (
-                  <Card dm={dm}>
-                    <SectionLabel dm={dm}>🎯 Reforzar</SectionLabel>
-                    <div className="space-y-1.5">
-                      {weak.map((s) => (
-                        <div
-                          key={s.id}
-                          className="flex items-center justify-between rounded-lg px-2 py-1.5"
-                          style={{
-                            background: "rgba(251,133,0,0.07)",
-                            border: "1px solid rgba(251,133,0,0.18)",
-                          }}
-                        >
-                          <span
-                            className="text-xs font-semibold truncate"
-                            style={{ color: dm ? "#FCD34D" : "#92400E" }}
-                          >
-                            {s.icon} {s.name}
-                          </span>
-                          <span
-                            className="text-xs font-black tabular-nums ml-1 flex-shrink-0"
-                            style={{ color: "#FB8500" }}
-                          >
-                            {s.gradeScore?.toFixed(1)}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
-                )}
-              </div>
-            )}
-
-            {/* Calificaciones — lista compacta */}
-            {(subjectsWithGrades || []).length > 0 && (
-              <Card dm={dm}>
-                <SectionLabel dm={dm}>📊 Calificaciones</SectionLabel>
-                <div className="space-y-2">
-                  {subjectsWithGrades.slice(0, 8).map((s) => {
-                    const score =
-                      typeof s.gradeScore === "number" ? s.gradeScore : null;
-                    const isWeak = score != null && score < 3.5;
-                    const t = s.trend;
-                    const trendColor =
-                      t?.dir === "up"
-                        ? SB_COLORS.success
-                        : t?.dir === "down"
-                          ? SB_COLORS.danger
-                          : textMuted;
-                    return (
-                      <div key={s.id}>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span
-                            className="text-xs font-semibold flex-1 truncate"
-                            style={{ color: textMain }}
-                          >
-                            {s.icon || "📘"} {s.name}
-                          </span>
-                          <span className="flex items-center gap-1 flex-shrink-0">
-                            {score != null && (
-                              <span
-                                className="text-xs font-black tabular-nums px-1.5 py-0.5 rounded-md"
-                                style={{
-                                  color:
-                                    score >= 3.5
-                                      ? "#06D6A0"
-                                      : score >= 3.0
-                                        ? "#FB8500"
-                                        : "#EF476F",
-                                  background:
-                                    score >= 3.5
-                                      ? "rgba(6,214,160,0.10)"
-                                      : score >= 3.0
-                                        ? "rgba(251,133,0,0.10)"
-                                        : "rgba(239,71,111,0.10)",
-                                }}
-                              >
-                                {score.toFixed(1)}
-                              </span>
-                            )}
-                            {t && (
-                              <span
-                                className="text-[10px] font-bold"
-                                style={{ color: trendColor }}
-                              >
-                                {t.dir === "up"
-                                  ? "↑"
-                                  : t.dir === "down"
-                                    ? "↓"
-                                    : "→"}
-                              </span>
-                            )}
-                          </span>
-                        </div>
-                        <ProgressBar
-                          value={s.progress ?? 0}
-                          color={s.color || SB_COLORS.amber}
-                          dark={dm}
-                        />
-                        {isWeak && (
-                          <button
-                            onClick={() => onTabChange?.("oral")}
-                            className="mt-1 text-[10px] font-bold px-2 py-0.5 rounded-md"
-                            style={{
-                              color: "#FB8500",
-                              background: "rgba(251,133,0,0.10)",
-                            }}
-                          >
-                            💬 Reforzar con Dani →
-                          </button>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </Card>
-            )}
-
-            {/* Actividad reciente — compacta */}
-            {recentActivity.length > 0 && (
-              <Card dm={dm}>
-                <SectionLabel dm={dm}>🕑 Actividad reciente</SectionLabel>
-                <ul className="space-y-1.5">
-                  {recentActivity.map((e, i) => (
-                    <li
-                      key={i}
-                      className="flex items-center justify-between gap-2 py-1.5 border-b last:border-b-0"
-                      style={{ borderColor: dm ? "#243152" : "#F1F5F9" }}
-                    >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div
-                          className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                          style={{
-                            background: e.points >= 0 ? "#FB8500" : "#EF476F",
-                          }}
-                        />
-                        <span
-                          className="text-xs truncate"
-                          style={{ color: textMain }}
-                        >
-                          {e.reason}
-                        </span>
-                      </div>
-                      <span className="flex items-center gap-1.5 flex-shrink-0">
-                        {typeof e.points === "number" && (
-                          <span
-                            className="text-xs font-black tabular-nums"
-                            style={{
-                              color:
-                                e.points >= 0 ? "#FB8500" : SB_COLORS.danger,
-                            }}
-                          >
-                            {e.points >= 0 ? "+" : ""}
-                            {e.points}
-                          </span>
-                        )}
-                        <span
-                          className="text-[10px]"
-                          style={{ color: textMuted }}
-                        >
-                          {relTime(e.timestamp)}
-                        </span>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </Card>
-            )}
-          </motion.div>
-        )}
-
         {activeTab === "cuenta" && (
           <motion.div
             key="cuenta"
@@ -708,8 +435,8 @@ const SmartProfile = memo(function SmartProfile({
         {editOpen && (
           <EditProfileModal
             profile={editProfile}
-            studentName={editProfile?.name || "Estudiante"}
-            displayName={editProfile?.name || "Estudiante"}
+            studentName={editProfile?.name || accountName || studentName}
+            displayName={editProfile?.name || accountName || studentName}
             avatarUrl={editProfile?.avatarUrl}
             updateProfile={updateProfile}
             uploadAvatar={uploadAvatar}

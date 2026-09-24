@@ -2,6 +2,9 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 
+// Fits a phone screen with the top bar and bottom nav visible.
+const CARD_H = "min(480px, calc(100dvh - 300px))";
+
 const QuizCard = memo((props) => {
   const { t } = useTranslation();
   const {
@@ -20,7 +23,7 @@ const QuizCard = memo((props) => {
     return (
       <div
         className="flex items-center justify-center w-full"
-        style={{ minHeight: "480px" }}
+        style={{ minHeight: CARD_H }}
       >
         <p className="text-sm text-[#64748B]">
           {t("kid.flashcards.card_unavailable")}
@@ -30,34 +33,37 @@ const QuizCard = memo((props) => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 w-full">
+    <div className="flex flex-col items-center gap-3 w-full">
       <p className="text-sm text-[#64748B]">
         {idx + 1} / {total}
       </p>
       <div
         className="w-full cursor-pointer"
-        style={{ perspective: "1000px", maxWidth: "700px", minHeight: "480px" }}
+        style={{ perspective: "1000px", maxWidth: "700px", minHeight: CARD_H }}
         onClick={onFlip}
       >
         <motion.div
           className="relative w-full"
           animate={{ rotateY: flipped ? 180 : 0 }}
           transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
-          style={{ transformStyle: "preserve-3d", minHeight: "480px" }}
+          style={{ transformStyle: "preserve-3d", minHeight: CARD_H }}
         >
           <div
-            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-8 flex flex-col justify-between"
+            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-5 sm:p-8 flex flex-col justify-between"
             style={{
               backfaceVisibility: "hidden",
               borderColor: themeColor || "#E2E8F0",
-              minHeight: "480px",
+              minHeight: CARD_H,
             }}
           >
             <div className="flex flex-col items-center justify-center flex-1 relative">
               {gradeLabel && (
                 <span
-                  className="absolute top-0 right-0 px-2 py-1 rounded-lg text-xs font-bold bg-opacity-10 text-white"
-                  style={{ backgroundColor: themeColor, color: themeColor }}
+                  className="absolute top-0 right-0 px-2 py-1 rounded-lg text-xs font-bold"
+                  style={{
+                    backgroundColor: `${themeColor || "#4DA8C4"}1A`,
+                    color: themeColor || "#4DA8C4",
+                  }}
                 >
                   {gradeLabel}
                 </span>
@@ -68,23 +74,25 @@ const QuizCard = memo((props) => {
               >
                 {t("kid.flashcards.keyword_label")}
               </span>
-              <p className="text-3xl font-bold text-[#004B63] text-center mb-6">
+              <p className="text-2xl sm:text-3xl font-bold text-[#004B63] text-center mb-4">
                 {card.front}
               </p>
-              <span className="text-6xl">{card.icon || themeIcon || "📚"}</span>
+              <span className="text-5xl sm:text-6xl">
+                {card.icon || themeIcon || "📚"}
+              </span>
             </div>
-            <p className="text-xs text-[#64748B] text-center">
-              {t("kid.flashcards.tap_to_reveal")}
+            <p className="text-sm font-semibold text-[#64748B] text-center">
+              👆 {t("kid.flashcards.tap_to_reveal")}
             </p>
           </div>
 
           <div
-            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-6 flex flex-col"
+            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-4 sm:p-6 flex flex-col"
             style={{
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
               borderColor: themeColor || "#4DA8C4",
-              minHeight: "480px",
+              minHeight: CARD_H,
             }}
           >
             <div className="flex-1 overflow-y-auto space-y-5 pr-1">

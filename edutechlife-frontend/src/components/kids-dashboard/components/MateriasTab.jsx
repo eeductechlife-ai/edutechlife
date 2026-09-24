@@ -20,9 +20,15 @@ const VIEWS_BASE = [
 ];
 
 const VIEW_INFO = {
-  materias: { title: "Mis Materias", sub: "Progreso y nivel por asignatura" },
+  materias: {
+    title: "Mis Materias",
+    sub: "Tu nota en cada materia y cómo mejorarla",
+  },
   horario: { title: "Mi Horario", sub: "Clases y distribución semanal" },
-  calificaciones: { title: "Mis Notas", sub: "Calificaciones por materia" },
+  calificaciones: {
+    title: "Mis Notas",
+    sub: "Escríbelas o sube una foto de tu boletín",
+  },
   plan: { title: "Mi Plan de Mejora", sub: "Actividades IA para esta semana" },
 };
 
@@ -50,7 +56,7 @@ function UnifiedPlanView({ vakResult, onTabChange }) {
         </div>
       )}
       <Suspense fallback={<SectionFallback tab="plan" />}>
-        <ImprovementPlan />
+        <ImprovementPlan onTabChange={onTabChange} />
       </Suspense>
     </div>
   );
@@ -93,7 +99,12 @@ const MateriasTab = memo(function MateriasTab({
             </div>
           </div>
 
-          <div className="flex gap-2 flex-wrap">
+          <div
+            className="grid gap-1.5"
+            style={{
+              gridTemplateColumns: `repeat(${views.length}, minmax(0, 1fr))`,
+            }}
+          >
             {views.map((v) => {
               const active = activeView === v.id;
               return (
@@ -101,14 +112,17 @@ const MateriasTab = memo(function MateriasTab({
                   key={v.id}
                   type="button"
                   onClick={() => setActiveView(v.id)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                  aria-pressed={active}
+                  className={`flex flex-col items-center justify-center gap-0.5 min-h-[52px] px-1 py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all ${
                     active
                       ? "bg-white text-[#118AB2] shadow-md"
                       : "bg-white/15 text-white/80 hover:bg-white/25"
                   }`}
                 >
-                  <span>{v.emoji}</span>
-                  {v.label}
+                  <span className="text-base leading-none" aria-hidden="true">
+                    {v.emoji}
+                  </span>
+                  <span className="truncate max-w-full">{v.label}</span>
                 </button>
               );
             })}

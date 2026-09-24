@@ -186,7 +186,9 @@ const NextBestAction = memo(({ onTabChange }) => {
           xp: rec.xp,
           minutes: 10,
           gradient: rec.gradient,
-          goal: GOAL_META.practice,
+          goal: rec.eyebrow
+            ? { label: rec.eyebrow, emoji: "" }
+            : GOAL_META.practice,
           fromBackend: false,
           pedagogicReason: rec.pedagogicReason,
         };
@@ -262,7 +264,8 @@ const NextBestAction = memo(({ onTabChange }) => {
                 className="text-[9px] font-black px-2 py-0.5 rounded-full text-white flex-shrink-0"
                 style={{ background: accentColor }}
               >
-                {goal.emoji} {goal.label}
+                {goal.emoji ? `${goal.emoji} ` : ""}
+                {goal.label}
               </span>
             </div>
           </div>

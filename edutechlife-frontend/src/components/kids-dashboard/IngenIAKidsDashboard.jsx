@@ -167,6 +167,8 @@ const IngenIAKidsDashboard = () => {
         "puntos",
         "calificaciones",
         "plan",
+        "practicar",
+        "retos",
       ].includes(tab)
     ) {
       setActiveTab(tab);
@@ -194,7 +196,7 @@ const IngenIAKidsDashboard = () => {
     <>
       <ParentalNoticeBar />
       <div
-        className={`relative min-h-screen overflow-hidden transition-colors duration-500 ${
+        className={`relative min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip transition-colors duration-500 ${
           darkMode ? "bg-[#0F172A] text-white" : "bg-[#F8FAFC]"
         } ${fondoGalaxia ? "bg-[#0F172A]" : ""}`}
         data-age-group={ageGroup}

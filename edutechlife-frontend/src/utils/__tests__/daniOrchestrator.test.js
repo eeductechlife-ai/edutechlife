@@ -111,9 +111,11 @@ describe("callDaniOrchestrator — fallback a /api/ingenia/chat/stream", () => {
         { message: "hola", studentId: "s1", history: [] },
         { token: "test-token" },
       ),
-    ).rejects.toThrow(
-      "API responded with status 500: Error interno del servidor",
-    );
+    ).rejects.toMatchObject({
+      message: "El servidor está ocupado. Intenta de nuevo en un momento.",
+      status: 500,
+      detail: "Error interno del servidor",
+    });
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
@@ -123,7 +125,7 @@ describe("callDaniOrchestrator — fallback a /api/ingenia/chat/stream", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     await expect(callDaniOrchestrator({ message: "hola" })).rejects.toThrow(
-      "No auth token available",
+      "Tu sesión se cerró",
     );
     expect(fetchMock).not.toHaveBeenCalled();
   });

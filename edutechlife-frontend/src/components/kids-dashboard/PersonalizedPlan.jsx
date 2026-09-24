@@ -13,6 +13,13 @@ function getStudentId() {
   try { return localStorage.getItem("student_id") || ""; } catch { return ""; }
 }
 
+const VAK_KEY = {
+  auditivo: "auditory",
+  kinestesico: "kinesthetic",
+  kinestésico: "kinesthetic",
+};
+const vakStyleKey = (style) => `kid.vak.style_${VAK_KEY[style] || style}`;
+
 const STYLE_COLORS = {
   visual: "#06D6A0",
   auditivo: "#A855F7",
@@ -233,10 +240,7 @@ const PersonalizedPlan = () => {
             <p className="text-sm text-[#64748B]">
               {t("kid.personalized_plan.subtitle")}{" "}
               <span className="font-bold text-[#FB8500]">
-                {STYLE_EMOJIS[dominantStyle]}{" "}
-                {t(
-                  `kid.vak.style_${dominantStyle === "kinestesico" ? "kinesthetic" : dominantStyle}`,
-                )}
+                {t(vakStyleKey(dominantStyle))}
               </span>
             </p>
           </div>
@@ -259,9 +263,7 @@ const PersonalizedPlan = () => {
                 {value}%
               </p>
               <p className="text-xs text-[#64748B] mt-1">
-                {t(
-                  `kid.vak.style_${key === "kinestesico" ? "kinesthetic" : key}`,
-                )}
+                {t(vakStyleKey(key))}
               </p>
               <div className="w-full h-1.5 bg-[#E2E8F0] rounded-full mt-2 overflow-hidden">
                 <motion.div

@@ -115,7 +115,7 @@ function WeekCard({ week, weekIdx, onToggle, darkMode }) {
   );
 }
 
-function ImprovementPlan() {
+function ImprovementPlan({ onTabChange }) {
   const { vakResult, darkMode, gradeLevel } = useIngenIAKids();
   const { plan, isGenerating, error, generatePlan, markActivityDone, hasPlan } =
     useImprovementPlan();
@@ -161,38 +161,8 @@ function ImprovementPlan() {
       <motion.div
         {...fadeIn}
         transition={transition}
-        className="flex flex-col items-center justify-center py-16 gap-6 text-center px-4"
+        className="flex flex-col items-center justify-center py-8 gap-5 text-center px-4"
       >
-        {/* Banner */}
-        <div
-          className="w-full relative rounded-2xl overflow-hidden p-5"
-          style={{ background: PROGRESS_GRADIENT }}
-        >
-          <div className="relative z-10 flex items-center gap-4">
-            <div
-              className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md"
-              style={{ background: "rgba(255,255,255,0.25)" }}
-            >
-              <span className="text-2xl">📋</span>
-            </div>
-            <div className="text-left">
-              <h3 className="text-xl font-black text-white drop-shadow-sm">
-                Mi Plan
-              </h3>
-              <p className="text-xs text-white/80">
-                Plan personalizado de mejora académica
-              </p>
-            </div>
-          </div>
-          <div
-            className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10 pointer-events-none"
-            style={{
-              background: "rgba(255,255,255,0.4)",
-              transform: "translate(30%,-30%)",
-            }}
-          />
-        </div>
-
         <span className="text-6xl">📋</span>
         <div>
           <h2
@@ -205,22 +175,29 @@ function ImprovementPlan() {
           >
             {canGenerate
               ? "Genera tu plan personalizado basado en tu estilo VAK y tus calificaciones"
-              : "Primero completa tu diagnóstico VAK para generar tu plan"}
+              : "Primero completa tu ADN de Aprendizaje para generar tu plan"}
           </p>
         </div>
         {error && <p className="text-sm text-red-500 max-w-xs">{error}</p>}
-        <button
-          onClick={generatePlan}
-          disabled={!canGenerate}
-          className={`px-6 py-3 rounded-xl font-bold text-sm transition-all ${
-            canGenerate
-              ? "text-white shadow-md hover:shadow-lg active:scale-95"
-              : "bg-gray-200 text-gray-400 cursor-not-allowed"
-          }`}
-          style={canGenerate ? { background: PROGRESS_GRADIENT } : {}}
-        >
-          🚀 Generar mi plan
-        </button>
+        {canGenerate ? (
+          <button
+            onClick={generatePlan}
+            className="px-6 py-3.5 rounded-xl font-bold text-sm text-white shadow-md hover:shadow-lg active:scale-95 transition-all"
+            style={{ background: PROGRESS_GRADIENT }}
+          >
+            🚀 Generar mi plan
+          </button>
+        ) : (
+          <button
+            onClick={() => onTabChange?.("vak")}
+            className="px-6 py-3.5 rounded-xl font-bold text-sm text-white shadow-md active:scale-95 transition-all"
+            style={{
+              background: "linear-gradient(135deg, #7B2FF7 0%, #C77DFF 100%)",
+            }}
+          >
+            🧠 Hacer mi ADN de Aprendizaje (5 min)
+          </button>
+        )}
       </motion.div>
     );
   }

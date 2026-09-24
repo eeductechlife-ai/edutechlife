@@ -10,15 +10,20 @@ import {
 } from "../kidsDashboardConfig";
 
 describe("kidsDashboardConfig", () => {
+  it("routes progress into the profile category", () => {
+    expect(CATEGORY_MAP.progreso).toBe("profile");
+  });
+
   it("defines primary categories with required ids", () => {
     const ids = CATEGORIES.map((c) => c.id).sort();
     expect(ids).toContain("explore");
     expect(ids).toContain("home");
     expect(ids).toContain("learn");
     expect(ids).toContain("practice");
-    expect(ids).toContain("progress");
-    // 'profile' category was added in Sprint 11
-    expect(CATEGORIES.length).toBeGreaterThanOrEqual(5);
+    expect(ids).toContain("profile");
+    // Progress lives inside "Yo" (profile); kids get at most 5 nav buttons.
+    expect(ids).not.toContain("progress");
+    expect(CATEGORIES.length).toBe(5);
   });
 
   it("every category exposes an Icon component", () => {

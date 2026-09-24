@@ -1,9 +1,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
-import { getMasteryState } from "./components/SubjectsView";
-
-const MASTERY_ORDER = ["recovery", "practice", "mastery", "transfer"];
+import { getMasteryState, MASTERY_STATES } from "./components/SubjectsView";
 
 const MasteryPassportStrip = memo(({ onTabChange }) => {
   const { subjects, subjectsWithGrades } = useIngenIAKids();
@@ -17,7 +15,8 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
   );
 
   const counts = { recovery: 0, practice: 0, mastery: 0, transfer: 0 };
-  for (const s of sorted) counts[getMasteryState(s.progress).key]++;
+  for (const s of sorted)
+    counts[getMasteryState(s.progress, s.gradeScore).key]++;
 
   return (
     <motion.div
@@ -32,8 +31,8 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
       <div className="flex items-center justify-between px-4 pt-4 pb-2">
         <div className="flex items-center gap-2">
           <span className="text-base">🎒</span>
-          <span className="text-sm font-black text-[#004B63] uppercase tracking-wide">
-            Nivel por materia
+          <span className="text-sm font-black text-[#004B63]">
+            Mis materias
           </span>
         </div>
         <button
@@ -41,42 +40,13 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
           onClick={() => onTabChange?.("materias")}
           className="text-[10px] font-bold text-[#0096C7] hover:underline"
         >
-          Ver detalle →
+          Ver todas →
         </button>
       </div>
 
       {/* Legend bar — 4 mastery states */}
       <div className="px-4 pb-3 flex gap-2 flex-wrap">
-        {[
-          {
-            key: "recovery",
-            label: "Recuperación",
-            emoji: "🆘",
-            color: "#EF4444",
-            bg: "#FEF2F2",
-          },
-          {
-            key: "practice",
-            label: "Práctica",
-            emoji: "📖",
-            color: "#F59E0B",
-            bg: "#FFFBEB",
-          },
-          {
-            key: "mastery",
-            label: "Dominio",
-            emoji: "⭐",
-            color: "#10B981",
-            bg: "#ECFDF5",
-          },
-          {
-            key: "transfer",
-            label: "Transferencia",
-            emoji: "🚀",
-            color: "#7C3AED",
-            bg: "#F5F3FF",
-          },
-        ].map((state) => {
+        {MASTERY_STATES.map((state) => {
           const n = counts[state.key];
           if (n === 0) return null;
           return (
@@ -94,7 +64,7 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
       {/* Subject rows */}
       <div className="border-t border-[#F1F5F9] divide-y divide-[#F1F5F9]">
         {sorted.map((s, i) => {
-          const ms = getMasteryState(s.progress);
+          const ms = getMasteryState(s.progress, s.gradeScore);
           const prog = Number(s.progress) || 0;
           return (
             <motion.button
@@ -134,10 +104,28 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
                 </div>
               </div>
               <span
-                className="text-xs font-black tabular-nums flex-shrink-0 w-9 text-right"
+                className="text-sm font-black tabular-nums flex-shrink-0 w-12 text-right"
                 style={{ color: ms.color }}
               >
-                {prog}%
+                {s.gradeScore != null
+                  ? Number(s.gradeScore).toFixed(1)
+                  : `${prog}%`}
+                {s.trend?.delta > 0 && (
+                  <span
+                    className="ml-0.5 text-[10px] text-green-600"
+                    title="Subió respecto al periodo anterior"
+                  >
+                    ▲
+                  </span>
+                )}
+                {s.trend?.delta < 0 && (
+                  <span
+                    className="ml-0.5 text-[10px] text-red-500"
+                    title="Bajó respecto al periodo anterior"
+                  >
+                    ▼
+                  </span>
+                )}
               </span>
             </motion.button>
           );

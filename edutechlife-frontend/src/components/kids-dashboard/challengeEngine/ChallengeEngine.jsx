@@ -29,64 +29,39 @@ const ChallengeEngine = memo(({ onTabChange }) => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Section header banner with mode tabs */}
-      <div
-        className="relative rounded-2xl overflow-hidden p-5"
-        style={{ background: EXPLORE_GRADIENT }}
-      >
-        <div className="relative z-10">
-          <div className="flex items-center gap-4 mb-4">
-            <div
-              className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md flex-shrink-0"
-              style={{ background: "rgba(255,255,255,0.2)" }}
-            >
-              <span className="text-2xl">
-                {activeMode === "retos" ? "⚡" : "📝"}
-              </span>
-            </div>
-            <div>
-              <h3 className="text-xl font-black text-white drop-shadow-sm">
-                {activeMode === "retos" ? "Retos Inteligentes" : "Modo Examen"}
-              </h3>
-              <p className="text-xs text-white/80">
-                {activeMode === "retos"
-                  ? "Pon a prueba lo que sabes y gana XP"
-                  : "Simulacros, materiales y práctica formal"}
-              </p>
-            </div>
-          </div>
-
-          {/* Mode tabs */}
-          <div className="flex gap-2">
-            {MODE_TABS.map((tab) => {
-              const active = activeMode === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => handleModeChange(tab.id)}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                    active
-                      ? "bg-white text-[#7B2FF7] shadow-md"
-                      : "bg-white/15 text-white/80 hover:bg-white/25"
-                  }`}
-                >
-                  <span>{tab.emoji}</span>
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+    <div data-typo="intended" className="space-y-5 max-w-2xl mx-auto">
+      {/* Mode switch: retos vs formal exam — hidden mid-challenge to avoid accidental exits */}
+      {engine.phase !== "playing" && (
         <div
-          className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10 pointer-events-none"
-          style={{
-            background: "rgba(255,255,255,0.4)",
-            transform: "translate(30%,-30%)",
-          }}
-        />
-      </div>
+          className={`flex p-1 rounded-2xl ${darkMode ? "bg-[#1E293B]" : "bg-[#EEF2F6]"}`}
+          role="tablist"
+          aria-label="Tipo de práctica"
+        >
+          {MODE_TABS.map((tab) => {
+            const active = activeMode === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => handleModeChange(tab.id)}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                  active
+                    ? "text-white shadow-md"
+                    : darkMode
+                      ? "text-[#94A3B8]"
+                      : "text-[#64748B]"
+                }`}
+                style={active ? { background: EXPLORE_GRADIENT } : {}}
+              >
+                <span aria-hidden="true">{tab.emoji}</span>
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Content — Retos mode */}
       {activeMode === "retos" && (
@@ -111,18 +86,6 @@ const ChallengeEngine = memo(({ onTabChange }) => {
                 subjects={engine.CHALLENGE_SUBJECTS}
                 difficulties={engine.DIFFICULTIES}
               />
-              {/* Switch to exam mode inline */}
-              <button
-                type="button"
-                onClick={() => setActiveMode("examenes")}
-                className={`w-full py-2.5 rounded-xl text-xs font-bold border transition-colors flex items-center justify-center gap-2 ${
-                  darkMode
-                    ? "border-[#334155] text-[#64748B] hover:text-white hover:border-[#475569]"
-                    : "border-[#E2E8F0] text-[#94A3B8] hover:text-[#1E293B] hover:border-[#CBD5E1]"
-                }`}
-              >
-                📝 Prefieres simular un examen formal →
-              </button>
             </motion.div>
           )}
 
@@ -145,6 +108,8 @@ const ChallengeEngine = memo(({ onTabChange }) => {
                 }
                 darkMode={darkMode}
                 subject={engine.subject}
+                timeLimit={engine.timeLimit}
+                onExit={engine.resetChallenge}
               />
             </motion.div>
           )}
@@ -163,6 +128,10 @@ const ChallengeEngine = memo(({ onTabChange }) => {
                 difficulty={engine.difficulty}
                 subject={engine.subject}
                 onRetry={engine.resetChallenge}
+                onEasier={() => {
+                  engine.setDifficulty(engine.DIFFICULTIES[0]);
+                  engine.resetChallenge();
+                }}
                 onTabChange={onTabChange}
                 darkMode={darkMode}
               />

@@ -1,11 +1,13 @@
 import { memo, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Flame, Gem, Home, Bell, GraduationCap } from "lucide-react";
+import { Flame, Gem, Home, Bell, GraduationCap, ArrowLeft } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import {
   CATEGORIES,
   CATEGORY_MAP,
   TOP_BAR_LABELS,
+  CATEGORY_TAB_LABELS,
+  PARENT_TAB,
 } from "../kidsDashboardConfig";
 import { SB_GRADIENTS, glow } from "../ingenIATheme";
 import IngenIANotificationPanel from "./IngenIANotificationPanel";
@@ -20,9 +22,14 @@ const TopBar = memo(
     const activeCatId = CATEGORY_MAP[activeTab] || "home";
     const activeCat = CATEGORIES.find((c) => c.id === activeCatId);
     const ActiveIcon = activeCat?.Icon || Home;
+    const parentTab = PARENT_TAB[activeTab];
+    const parentLabel = parentTab ? TOP_BAR_LABELS[parentTab] : null;
+    const fullTitle = TOP_BAR_LABELS[activeTab] || activeTab;
+    const shortTitle = CATEGORY_TAB_LABELS[activeTab] || fullTitle;
 
     return (
       <motion.header
+        data-typo="intended"
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className={`backdrop-blur-xl border-b px-4 py-3 md:p-4 flex items-center justify-between z-20 transition-colors duration-500 ${
@@ -62,23 +69,38 @@ const TopBar = memo(
           </motion.div>
         ) : (
           <div className="flex items-center gap-3 min-w-0">
-            <motion.span
-              key={activeCat?.id}
-              initial={{ scale: 0.6, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: "spring", damping: 14 }}
-              className="w-9 h-9 md:w-10 md:h-10 rounded-xl md:rounded-2xl flex items-center justify-center text-white flex-shrink-0"
-              style={{
-                background: activeCat?.gradient || SB_GRADIENTS.brand,
-                boxShadow: `${glow(activeCat?.glowColor || "#00B4D8", 0.4)}, inset 0 1px 0 rgba(255,255,255,0.35)`,
-              }}
-            >
-              <ActiveIcon
-                className="w-5 h-5 md:w-[21px] md:h-[21px]"
-                strokeWidth={2.3}
-              />
-            </motion.span>
-            <div className="leading-tight truncate">
+            {parentTab ? (
+              <button
+                type="button"
+                onClick={() => onTabChange(parentTab)}
+                aria-label={`Volver a ${parentLabel}`}
+                className={`w-11 h-11 rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0 transition-colors ${
+                  darkMode
+                    ? "bg-[#334155]/50 hover:bg-[#334155] text-white"
+                    : "bg-[#EEF4F8] hover:bg-[#DCE8EF] text-[#00303F]"
+                }`}
+              >
+                <ArrowLeft className="w-5 h-5" strokeWidth={2.5} />
+              </button>
+            ) : (
+              <motion.span
+                key={activeCat?.id}
+                initial={{ scale: 0.6, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", damping: 14 }}
+                className="w-9 h-9 md:w-10 md:h-10 rounded-xl md:rounded-2xl flex items-center justify-center text-white flex-shrink-0"
+                style={{
+                  background: activeCat?.gradient || SB_GRADIENTS.brand,
+                  boxShadow: `${glow(activeCat?.glowColor || "#00B4D8", 0.4)}, inset 0 1px 0 rgba(255,255,255,0.35)`,
+                }}
+              >
+                <ActiveIcon
+                  className="w-5 h-5 md:w-[21px] md:h-[21px]"
+                  strokeWidth={2.3}
+                />
+              </motion.span>
+            )}
+            <div className="leading-tight min-w-0">
               <span
                 className={`block text-[11px] md:text-[10px] font-black uppercase tracking-[0.14em] mb-1 ${darkMode ? "text-[#5C7386]" : "text-[#93A6B2]"}`}
               >
@@ -87,7 +109,8 @@ const TopBar = memo(
               <h1
                 className={`text-lg md:text-xl font-black tracking-tight transition-colors duration-500 truncate ${darkMode ? "text-white" : "text-[#00303F]"}`}
               >
-                {TOP_BAR_LABELS[activeTab] || activeTab}
+                <span className="sm:hidden">{shortTitle}</span>
+                <span className="hidden sm:inline">{fullTitle}</span>
               </h1>
             </div>
           </div>
@@ -104,6 +127,8 @@ const TopBar = memo(
             }}
             whileHover={{ scale: 1.03, y: -1 }}
             title={t("smartboard.streak_title")}
+            role="img"
+            aria-label={`Racha: ${streak?.current ?? 0} días seguidos practicando`}
           >
             <span
               className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg flex items-center justify-center text-white flex-shrink-0"
@@ -134,6 +159,9 @@ const TopBar = memo(
             whileHover={{ scale: 1.03, y: -1 }}
             aria-live="polite"
             aria-atomic="true"
+            role="img"
+            title="Tus puntos"
+            aria-label={`${totalPoints ?? 0} puntos`}
           >
             <span
               className="w-5 h-5 sm:w-7 sm:h-7 rounded-md sm:rounded-lg flex items-center justify-center text-white flex-shrink-0"

@@ -4,24 +4,26 @@ import { useNewsFeed } from "../../../hooks/useNewsFeed";
 import { CATEGORIES, CATEGORY_COLORS } from "../../../data/newsData";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 
-const EXPLORE_GRADIENT =
-  "linear-gradient(135deg, #7B2FF7 0%, #9D4EDD 55%, #C77DFF 100%)";
-
 const CategoryTab = memo(({ cat, active, unread, onClick }) => {
   const color = CATEGORY_COLORS[cat.id] || "#4DA8C4";
   return (
     <button
+      type="button"
       onClick={() => onClick(cat.id)}
-      className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all border-2 ${
+      aria-pressed={active}
+      className={`relative w-full min-h-[48px] px-2 py-2 rounded-2xl text-xs font-bold leading-tight text-center transition-all border-2 ${
         active
-          ? "text-white border-transparent"
-          : "bg-transparent border-transparent text-[#64748B] hover:border-[#E2E8F0]"
+          ? "text-white border-transparent shadow-md"
+          : "bg-white border-[#E2E8F0] text-[#475569]"
       }`}
       style={active ? { backgroundColor: color, borderColor: color } : {}}
     >
       {cat.label}
       {unread > 0 && (
-        <span className="bg-white/30 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full leading-none">
+        <span
+          className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-[#EF476F] text-white text-[10px] font-black leading-none border-2 border-white"
+          aria-label={`${unread} sin leer`}
+        >
           {unread}
         </span>
       )}
@@ -252,7 +254,6 @@ const TechNewsFeed = () => {
     setCategory,
     isLoading,
     error,
-    isFallback,
     readNews,
     unreadCount,
     markAsRead,
@@ -266,45 +267,19 @@ const TechNewsFeed = () => {
 
   return (
     <div className="space-y-5">
-      {/* Section header banner */}
-      <div
-        className="relative rounded-2xl overflow-hidden p-5"
-        style={{ background: EXPLORE_GRADIENT }}
-      >
-        <div className="relative z-10 flex items-center gap-4">
-          <div
-            className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md"
-            style={{ background: "rgba(255,255,255,0.2)" }}
-          >
-            <span className="text-2xl">🚀</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-xl font-black text-white drop-shadow-sm">
-              Tech & IA
-            </h3>
-            <p className="text-xs text-white/80 mt-0.5">
-              {unreadCount > 0
-                ? `${unreadCount} artículos nuevos para ti`
-                : "¡Estás al día con el mundo tech! 🎉"}
-            </p>
-          </div>
-          {isFallback && (
-            <span className="flex-shrink-0 text-[10px] px-2 py-1 rounded-full bg-white/20 text-white/80 font-semibold">
-              curado
-            </span>
-          )}
-        </div>
-        <div
-          className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10 pointer-events-none"
-          style={{
-            background: "rgba(255,255,255,0.4)",
-            transform: "translate(30%,-30%)",
-          }}
-        />
-      </div>
+      <p className="px-1 text-sm font-semibold text-[#64748B]">
+        {unreadCount > 0
+          ? `📬 ${unreadCount} artículos nuevos para ti`
+          : "¡Estás al día con el mundo tech! 🎉"}
+      </p>
 
       {/* Category tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
+      <div
+        className="grid gap-2 pt-1.5"
+        style={{
+          gridTemplateColumns: `repeat(${CATEGORIES.length}, minmax(0, 1fr))`,
+        }}
+      >
         {CATEGORIES.map((cat) => (
           <CategoryTab
             key={cat.id}

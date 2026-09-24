@@ -1,48 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  peekHandoff,
+  clearHandoff,
+  HANDOFF_FLASHCARDS_TOPIC,
+} from "./practicarHub/practicarHandoff";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   generateFlashcards,
   detectThemeFromTopic,
 } from "../../services/flashcardAI";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 
 const PRACTICE_GRADIENT =
   "linear-gradient(135deg, #EF476F 0%, #FF6B9D 55%, #FF8FA3 100%)";
 const PRACTICE_GLOW = "#EF476F";
 
-const GRADE_COLORS = {
-  "1-3": {
-    active: "linear-gradient(135deg, #F97316, #FB923C)",
-    glow: "#F97316",
-  },
-  "4-6": { active: PRACTICE_GRADIENT, glow: PRACTICE_GLOW },
-  "7-9": {
-    active: "linear-gradient(135deg, #8B5CF6, #A78BFA)",
-    glow: "#8B5CF6",
-  },
-  "10-12": {
-    active: "linear-gradient(135deg, #059669, #34D399)",
-    glow: "#059669",
-  },
-};
+// Colombian grade (1-11) → generator band; falls back to age when grade is unknown.
+function gradeBand(gradeLevel, age) {
+  const g = Number(gradeLevel) || (Number(age) ? Number(age) - 5 : null);
+  if (!g) return "4-6";
+  if (g <= 3) return "1-3";
+  if (g <= 6) return "4-6";
+  if (g <= 9) return "7-9";
+  return "10-12";
+}
 
 export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
   const { t } = useTranslation();
-  const [topic, setTopic] = useState("");
-  const [grade, setGrade] = useState("4-6");
+  const [topic, setTopic] = useState(
+    () => peekHandoff(HANDOFF_FLASHCARDS_TOPIC) || "",
+  );
+  useEffect(() => clearHandoff(HANDOFF_FLASHCARDS_TOPIC), []);
+  const { gradeLevel, studentAge } = useIngenIAKids();
+  const grade = gradeBand(gradeLevel, studentAge);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState(null);
-
-  const grades = [
-    { value: "1-3", label: t("kid.flashcards.grade_label_1_3"), emoji: "🌱" },
-    { value: "4-6", label: t("kid.flashcards.grade_label_4_6"), emoji: "📚" },
-    { value: "7-9", label: t("kid.flashcards.grade_label_7_9"), emoji: "🔬" },
-    {
-      value: "10-12",
-      label: t("kid.flashcards.grade_label_10_12"),
-      emoji: "🎓",
-    },
-  ];
 
   const handleGenerate = async () => {
     if (!topic.trim() || generating) return;
@@ -70,7 +63,6 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
   const inputBg = darkMode ? "#151F32" : "#F8FAFC";
   const inputBorder = darkMode ? "rgba(42,58,84,0.8)" : "#E2E8F0";
   const inputFocusBorder = "#FF6B9D";
-  const gradeInactiveBg = darkMode ? "rgba(42,58,84,0.5)" : "#F8FAFC";
   const gradeInactiveBorder = darkMode ? "rgba(42,58,84,0.9)" : "#E2E8F0";
 
   return (
@@ -97,63 +89,23 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
             {t("kid.flashcards.generate_title")}
           </p>
           <p className="text-[11px]" style={{ color: textSecondary }}>
-            La IA genera 10 tarjetas para tu grado
+            {gradeLevel
+              ? `La IA crea 10 tarjetas para tu grado ${gradeLevel}°`
+              : "La IA crea 10 tarjetas para tu nivel"}
           </p>
         </div>
       </div>
 
       <div className="space-y-3">
-        {/* Grade selector */}
-        <div>
-          <label
-            className="block text-[11px] font-bold uppercase tracking-wider mb-2"
-            style={{ color: textSecondary }}
-          >
-            {t("kid.flashcards.select_grade")}
-          </label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {grades.map((g) => {
-              const isActive = grade === g.value;
-              const colors = GRADE_COLORS[g.value];
-              return (
-                <motion.button
-                  key={g.value}
-                  onClick={() => setGrade(g.value)}
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.96 }}
-                  className="px-2 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1"
-                  style={
-                    isActive
-                      ? {
-                          background: colors.active,
-                          color: "#fff",
-                          boxShadow: `0 4px 12px ${colors.glow}35`,
-                          border: "1px solid transparent",
-                        }
-                      : {
-                          background: gradeInactiveBg,
-                          border: `1px solid ${gradeInactiveBorder}`,
-                          color: textSecondary,
-                        }
-                  }
-                >
-                  <span>{g.emoji}</span>
-                  <span>{g.label}</span>
-                </motion.button>
-              );
-            })}
-          </div>
-        </div>
-
         {/* Topic input + generate button */}
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <input
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleGenerate()}
             placeholder={t("kid.flashcards.topic_placeholder")}
             disabled={generating}
-            className="flex-1 px-4 py-2.5 rounded-xl text-sm focus:outline-none transition-all disabled:opacity-50"
+            className="flex-1 min-w-0 px-4 py-3 sm:py-2.5 rounded-xl text-base sm:text-sm focus:outline-none transition-all disabled:opacity-50"
             style={{
               background: inputBg,
               border: `1px solid ${inputBorder}`,
@@ -167,7 +119,7 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
             disabled={!topic.trim() || generating}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="px-4 py-2.5 text-white rounded-xl font-bold text-sm shadow-md whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+            className="px-4 py-3 sm:py-2.5 text-white rounded-xl font-bold text-sm shadow-md whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
             style={{ background: PRACTICE_GRADIENT }}
           >
             {generating ? (
@@ -176,7 +128,7 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
                 {t("kid.flashcards.generating")}
               </>
             ) : (
-              <>✨ {t("kid.flashcards.generate_btn")}</>
+              <>{t("kid.flashcards.generate_btn")}</>
             )}
           </motion.button>
         </div>
@@ -221,7 +173,7 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
               style={{ color: textSecondary }}
             >
               {t("kid.flashcards.generating_for", {
-                grade: grades.find((g) => g.value === grade)?.label,
+                grade: gradeLevel ? `${gradeLevel}°` : grade,
               })}
             </p>
           </motion.div>

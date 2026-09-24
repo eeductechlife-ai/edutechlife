@@ -25,6 +25,9 @@ const OAuthCallbackHandler = lazy(
 const ResetPasswordPage = lazy(() => import("../components/ResetPasswordPage"));
 const IngenIASignUpPage = lazy(() => import("../components/IngenIASignUpPage"));
 const AILabPage = lazy(() => import("../components/pages/AILabPage"));
+const DevIngenIAPreview = import.meta.env.DEV
+  ? lazy(() => import("../dev/DevIngenIAPreview"))
+  : null;
 const IngenIALandingPage = lazy(
   () => import("../components/pages/IngenIALandingPage"),
 );
@@ -307,6 +310,17 @@ const AppRoutes = () => {
         />
 
         <Route path="ingenia/login" element={<IngenIALoginRedirect />} />
+
+        {DevIngenIAPreview && (
+          <Route
+            path="dev/ingenia"
+            element={
+              <Suspense fallback={<IngenIASkeleton />}>
+                <DevIngenIAPreview />
+              </Suspense>
+            }
+          />
+        )}
 
         <Route
           path="ingenia/padres"

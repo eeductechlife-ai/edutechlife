@@ -1,6 +1,22 @@
 import { PROMPT_ANALIZAR_DOCUMENTO } from "../constants/prompts";
 import { API_BASE_URL } from "../config/api";
 
+// Messages shown to students (6–16); the technical detail stays on err.detail.
+function friendlyApiError(status, detail) {
+  const msg =
+    status === 401 || status === 403
+      ? "Tu sesión se cerró. Vuelve a iniciar sesión para seguir."
+      : status === 429
+        ? "Hiciste muchas preguntas seguidas. Espera un minuto y vuelve a intentarlo."
+        : status >= 500
+          ? "El servidor está ocupado. Intenta de nuevo en un momento."
+          : "Algo salió mal. Intenta de nuevo.";
+  const err = new Error(msg);
+  err.status = status;
+  err.detail = detail;
+  return err;
+}
+
 const TIMEOUT_MS = 60000; // 60 segundos timeout (Deepseek tarda en empezar)
 
 /**
@@ -335,7 +351,8 @@ export async function callDeepseek(
  */
 export async function callDeepseekSmartboard(messages, opts = {}) {
   const token = getAuthToken();
-  if (!token) throw new Error("No auth token — user must be logged in");
+  if (!token)
+    throw new Error("Tu sesión se cerró. Vuelve a iniciar sesión para seguir.");
 
   const payload = {
     messages,
@@ -394,9 +411,7 @@ export async function callDeepseekSmartboard(messages, opts = {}) {
         }
         const detail =
           body?.error?.message || body?.error || response.statusText;
-        throw new Error(
-          `API responded with status ${response.status}${detail ? `: ${detail}` : ""}`,
-        );
+        throw friendlyApiError(response.status, detail);
       }
 
       const data = await response.json();
@@ -647,7 +662,7 @@ export async function callDaniChatStream(messages, opts = {}, onChunk) {
   }
 
   if (!token) {
-    throw new Error("No auth token available — user must be logged in");
+    throw new Error("Tu sesión se cerró. Vuelve a iniciar sesión para seguir.");
   }
 
   const payload = {
@@ -679,7 +694,7 @@ export async function callDaniOrchestrator(payload, opts = {}, onChunk) {
     token = getAuthToken();
   }
   if (!token)
-    throw new Error("No auth token available — user must be logged in");
+    throw new Error("Tu sesión se cerró. Vuelve a iniciar sesión para seguir.");
 
   const authHeaders = { Authorization: `Bearer ${token}` };
   const primaryUrl = `${API_BASE_URL}/api/ingenia/dani/chat`;
@@ -728,10 +743,30 @@ export async function callDaniOrchestrator(payload, opts = {}, onChunk) {
   if (!response.ok) {
     const body = await response.json().catch(() => null);
     const detail = body?.error || response.statusText;
-    throw new Error(
-      `API responded with status ${response.status}${detail ? `: ${detail}` : ""}`,
-    );
+    throw friendlyApiError(response.status, detail);
   }
 
   return consumeSSEStream(response, onChunk, false);
+}
+
+/**
+ * Most viewed + best rated safe-search videos for a query.
+ * Resolves to null when the server has no YouTube key (caller falls back to
+ * a plain YouTube search sorted by views).
+ */
+export async function fetchTopVideos(query) {
+  const token = getAuthToken();
+  if (!token)
+    throw new Error("Tu sesión se cerró. Vuelve a iniciar sesión para seguir.");
+  const res = await fetch(
+    `${API_BASE_URL}/api/ingenia/videos?q=${encodeURIComponent(query)}`,
+    { headers: { Authorization: `Bearer ${token}` } },
+  );
+  if (res.status === 501 || res.status === 404) return null;
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw friendlyApiError(res.status, body?.error);
+  }
+  const data = await res.json();
+  return Array.isArray(data.videos) ? data.videos : [];
 }

@@ -79,7 +79,7 @@ const FlashcardImporter = memo(
               color: textSecondary,
             }}
           >
-            📤 {t("kid.flashcards.share_deck")}
+            {t("kid.flashcards.share_deck")}
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.02 }}
@@ -92,7 +92,7 @@ const FlashcardImporter = memo(
               color: textSecondary,
             }}
           >
-            📥 {t("kid.flashcards.import_deck")}
+            {t("kid.flashcards.import_deck")}
           </motion.button>
         </div>
 
@@ -118,7 +118,7 @@ const FlashcardImporter = memo(
             boxShadow: "0 4px 16px rgba(239,71,111,0.25)",
           }}
         >
-          🆚 {t("kid.flashcards.two_player_mode")}
+          {t("kid.flashcards.two_player_mode")}
         </motion.button>
 
         {/* Import modal */}
@@ -143,7 +143,7 @@ const FlashcardImporter = memo(
                   className="text-lg font-bold mb-1"
                   style={{ color: darkMode ? "#F1F5F9" : "#004B63" }}
                 >
-                  📥 {t("kid.flashcards.import_deck")}
+                  {t("kid.flashcards.import_deck")}
                 </h3>
                 <p className="text-xs mb-4" style={{ color: textSecondary }}>
                   Ingresa el código de 6 letras del mazo

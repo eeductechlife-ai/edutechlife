@@ -109,9 +109,11 @@ describe("callDeepseekSmartboard — fallback a /api/ingenia/chat", () => {
 
     await expect(
       callDeepseekSmartboard([{ role: "user", content: "hola" }]),
-    ).rejects.toThrow(
-      "API responded with status 500: Error interno del servidor",
-    );
+    ).rejects.toMatchObject({
+      message: "El servidor está ocupado. Intenta de nuevo en un momento.",
+      status: 500,
+      detail: "Error interno del servidor",
+    });
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });

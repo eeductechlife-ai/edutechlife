@@ -14,7 +14,10 @@ const VIEWS = [
 ];
 
 const VIEW_LABELS = {
-  misiones: { title: "Misiones Diarias", sub: "Completa retos y gana XP" },
+  misiones: {
+    title: "Mis Misiones",
+    sub: "Cumple la misión y reclama tus puntos",
+  },
   noticias: {
     title: "Tech & IA",
     sub: "Noticias de tecnología e inteligencia artificial",
@@ -24,6 +27,7 @@ const VIEW_LABELS = {
 const ExplorarTab = memo(function ExplorarTab({
   missions,
   onCompleteMission,
+  onTabChange,
   defaultView = "misiones",
 }) {
   const [activeView, setActiveView] = useState(defaultView);
@@ -93,6 +97,7 @@ const ExplorarTab = memo(function ExplorarTab({
             <MissionsView
               missions={missions}
               onCompleteMission={onCompleteMission}
+              onTabChange={onTabChange}
             />
           )}
           {activeView === "noticias" && (

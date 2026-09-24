@@ -1,261 +1,293 @@
 import { memo, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const OPTION_LABELS = ["A", "B", "C", "D"];
-const TIME_LIMIT = 30;
 const CIRC = 2 * Math.PI * 18;
 
-const SUBJECT_COLORS = {
-  math: "#FB8500",
-  science: "#06D6A0",
-  language: "#9D4EDD",
-  social: "#EF476F",
-  tech: "#118AB2",
-  english: "#FFD166",
-};
+const PRAISE = ["¡Correcto! 🎉", "¡Muy bien! ⭐", "¡Eso es! 🙌", "¡Genial! 🚀"];
+
+function TimerRing({ timeLeft, limit, color, darkMode }) {
+  const tone =
+    timeLeft > limit / 2 ? color : timeLeft > limit / 4 ? "#FB8500" : "#EF476F";
+  return (
+    <div
+      className="relative w-12 h-12 flex-shrink-0"
+      role="timer"
+      aria-label={`Quedan ${timeLeft} segundos`}
+    >
+      <svg width="48" height="48" aria-hidden="true">
+        <circle
+          cx="24"
+          cy="24"
+          r="18"
+          fill="none"
+          stroke={darkMode ? "#334155" : "#E2E8F0"}
+          strokeWidth="4"
+        />
+        <circle
+          cx="24"
+          cy="24"
+          r="18"
+          fill="none"
+          stroke={tone}
+          strokeWidth="4"
+          strokeDasharray={CIRC}
+          strokeDashoffset={CIRC * (1 - timeLeft / limit)}
+          strokeLinecap="round"
+          transform="rotate(-90 24 24)"
+          style={{ transition: "stroke-dashoffset 0.9s linear, stroke 0.3s" }}
+        />
+      </svg>
+      <span
+        className="absolute inset-0 flex items-center justify-center text-xs font-black tabular-nums"
+        style={{ color: tone }}
+      >
+        {timeLeft}
+      </span>
+    </div>
+  );
+}
 
 const ChallengePlay = memo(
-  ({ question, currentIndex, total, onAnswer, darkMode, subject }) => {
+  ({
+    question,
+    currentIndex,
+    total,
+    onAnswer,
+    onExit,
+    darkMode,
+    subject,
+    timeLimit,
+  }) => {
     const [selected, setSelected] = useState(null);
     const [revealed, setRevealed] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
+    const [timeLeft, setTimeLeft] = useState(timeLimit);
 
-    const subjectColor = SUBJECT_COLORS[subject?.id] || "#9D4EDD";
+    const color = subject?.color || "#9D4EDD";
+    const isLast = currentIndex + 1 >= total;
 
     useEffect(() => {
       setSelected(null);
       setRevealed(false);
-      setTimeLeft(TIME_LIMIT);
-    }, [currentIndex]);
+      setTimeLeft(timeLimit);
+    }, [currentIndex, timeLimit]);
 
     useEffect(() => {
-      if (revealed) return;
+      if (!timeLimit || revealed) return;
       if (timeLeft <= 0) {
         setRevealed(true);
-        setTimeout(() => onAnswer(-1), 1400);
         return;
       }
       const t = setTimeout(() => setTimeLeft((p) => p - 1), 1000);
       return () => clearTimeout(t);
-    }, [timeLeft, revealed, onAnswer]);
+    }, [timeLeft, revealed, timeLimit]);
 
     if (!question) return null;
 
-    const handleSelect = (idx) => {
+    const pick = (idx) => {
       if (revealed) return;
       setSelected(idx);
       setRevealed(true);
-      setTimeout(() => onAnswer(idx), 1200);
     };
 
-    const cardBg = darkMode
-      ? "bg-[#1E293B]/80 border-[#334155]/50"
-      : "bg-white/80 border-[#E2E8F0]/50";
-    const textPrimary = darkMode ? "text-white" : "text-[#1E293B]";
+    const next = () => onAnswer(selected ?? -1);
+    const gotIt = revealed && selected === question.correct;
+    const timedOut = revealed && selected === null;
 
-    const timerPct = timeLeft / TIME_LIMIT;
-    const timerColor =
-      timeLeft > 15 ? subjectColor : timeLeft > 7 ? "#FB8500" : "#EF476F";
-    const timerOffset = CIRC * (1 - timerPct);
+    const surface = darkMode
+      ? "bg-[#1E293B] border-[#334155]"
+      : "bg-white border-[#E2E8F0]";
+    const textPrimary = darkMode ? "text-white" : "text-[#1E293B]";
+    const textSub = darkMode ? "text-[#94A3B8]" : "text-[#64748B]";
 
     return (
       <div className="space-y-4">
-        {/* Header: subject + dots + timer */}
         <div className="flex items-center gap-3">
-          {/* Subject emoji pill */}
-          <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-white text-xs font-bold flex-shrink-0"
-            style={{ background: subjectColor }}
+          <span
+            className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0 text-white"
+            style={{ background: color }}
+            aria-hidden="true"
           >
-            <span>{subject?.emoji}</span>
-          </div>
-
-          {/* Progress dots */}
-          <div className="flex items-center gap-1.5 flex-1">
-            {Array.from({ length: total }).map((_, i) => (
-              <motion.div
-                key={i}
-                animate={{
-                  width:
-                    i === currentIndex
-                      ? "20px"
-                      : i < currentIndex
-                        ? "16px"
-                        : "8px",
-                  height: i === currentIndex ? "10px" : "8px",
-                }}
-                transition={{ duration: 0.3 }}
-                className="rounded-full"
-                style={{
-                  background:
-                    i <= currentIndex
-                      ? subjectColor
-                      : darkMode
-                        ? "#334155"
-                        : "#E2E8F0",
-                  opacity: i > currentIndex ? 0.6 : 1,
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Countdown ring */}
-          <div className="relative w-12 h-12 flex-shrink-0">
-            <svg width="48" height="48">
-              <circle
-                cx="24"
-                cy="24"
-                r="18"
-                fill="none"
-                stroke={darkMode ? "#334155" : "#E2E8F0"}
-                strokeWidth="4"
-              />
-              <circle
-                cx="24"
-                cy="24"
-                r="18"
-                fill="none"
-                stroke={timerColor}
-                strokeWidth="4"
-                strokeDasharray={CIRC}
-                strokeDashoffset={timerOffset}
-                strokeLinecap="round"
-                transform="rotate(-90 24 24)"
-                style={{
-                  transition: "stroke-dashoffset 0.9s linear, stroke 0.3s",
-                }}
-              />
-            </svg>
-            <span
-              className="absolute inset-0 flex items-center justify-center text-[11px] font-black tabular-nums"
-              style={{ color: timerColor }}
+            {subject?.emoji}
+          </span>
+          <div className="flex-1 min-w-0">
+            <p className={`text-xs font-bold ${textSub}`}>
+              Pregunta {currentIndex + 1} de {total}
+            </p>
+            <div
+              className={`mt-1 h-2 rounded-full overflow-hidden ${darkMode ? "bg-[#334155]" : "bg-[#EEF2F6]"}`}
             >
-              {timeLeft}
-            </span>
+              <motion.div
+                className="h-full rounded-full"
+                style={{ background: color }}
+                initial={false}
+                animate={{
+                  width: `${((currentIndex + (revealed ? 1 : 0)) / total) * 100}%`,
+                }}
+              />
+            </div>
           </div>
+          {timeLimit ? (
+            <TimerRing
+              timeLeft={timeLeft}
+              limit={timeLimit}
+              color={color}
+              darkMode={darkMode}
+            />
+          ) : null}
         </div>
 
-        {/* Question card */}
         <motion.div
           key={currentIndex}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`rounded-2xl p-5 border-2 backdrop-blur-xl ${cardBg}`}
-          style={{ borderColor: `${subjectColor}30` }}
+          className={`rounded-2xl p-5 border-2 ${surface}`}
+          style={{ borderColor: `${color}40` }}
         >
-          <div
-            className="w-8 h-1 rounded-full mb-3"
-            style={{ background: subjectColor }}
-          />
-          <p className={`font-semibold text-sm leading-relaxed ${textPrimary}`}>
+          <p
+            className={`font-bold text-base sm:text-lg leading-snug ${textPrimary}`}
+          >
             {question.question}
           </p>
         </motion.div>
 
-        {/* Options — Preguntados style */}
-        <div className="space-y-2">
+        <div
+          className="space-y-2.5"
+          role="group"
+          aria-label="Opciones de respuesta"
+        >
           {question.options.map((option, idx) => {
             const isCorrect = idx === question.correct;
             const isSelected = idx === selected;
-            const isTimeout = revealed && selected === null;
-
-            let bgStyle;
-            let borderColor;
-            let textColor;
-            let labelBg;
-            let labelText;
-
+            let tone = darkMode
+              ? {
+                  bg: "#1E293B",
+                  border: "#334155",
+                  text: "#fff",
+                  chip: "#475569",
+                  chipText: "#fff",
+                }
+              : {
+                  bg: "#fff",
+                  border: "#E2E8F0",
+                  text: "#1E293B",
+                  chip: `${color}1F`,
+                  chipText: color,
+                };
             if (revealed && isCorrect) {
-              bgStyle = "rgba(34,197,94,0.12)";
-              borderColor = "rgba(34,197,94,0.6)";
-              textColor = "#16A34A";
-              labelBg = "#22C55E";
-              labelText = "white";
-            } else if (revealed && isSelected && !isCorrect) {
-              bgStyle = "rgba(239,68,68,0.12)";
-              borderColor = "rgba(239,68,68,0.6)";
-              textColor = "#DC2626";
-              labelBg = "#EF4444";
-              labelText = "white";
-            } else if (darkMode) {
-              bgStyle = "rgba(51,65,85,0.5)";
-              borderColor = "rgba(71,85,105,0.8)";
-              textColor = "white";
-              labelBg = "#475569";
-              labelText = "white";
-            } else {
-              bgStyle = "#F8FAFC";
-              borderColor = "#E2E8F0";
-              textColor = "#1E293B";
-              labelBg = "#EDE9FE";
-              labelText = "#7C3AED";
+              tone = {
+                bg: "rgba(34,197,94,0.12)",
+                border: "#22C55E",
+                text: darkMode ? "#86EFAC" : "#15803D",
+                chip: "#22C55E",
+                chipText: "#fff",
+              };
+            } else if (revealed && isSelected) {
+              tone = {
+                bg: "rgba(239,68,68,0.10)",
+                border: "#EF4444",
+                text: darkMode ? "#FCA5A5" : "#B91C1C",
+                chip: "#EF4444",
+                chipText: "#fff",
+              };
+            } else if (revealed) {
+              tone = { ...tone, text: darkMode ? "#64748B" : "#94A3B8" };
             }
-
             return (
               <motion.button
                 key={idx}
-                onClick={() => handleSelect(idx)}
+                type="button"
+                onClick={() => pick(idx)}
                 disabled={revealed}
-                whileHover={
-                  revealed ? {} : { scale: 1.01, borderColor: subjectColor }
-                }
-                whileTap={revealed ? {} : { scale: 0.99 }}
-                className="w-full p-3.5 rounded-xl border-2 text-left flex items-center gap-3 transition-colors"
-                style={{ background: bgStyle, borderColor, color: textColor }}
+                whileTap={revealed ? {} : { scale: 0.98 }}
+                className="w-full min-h-[56px] px-3.5 py-3 rounded-2xl border-2 text-left flex items-center gap-3 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9D4EDD]"
+                style={{
+                  background: tone.bg,
+                  borderColor: tone.border,
+                  color: tone.text,
+                }}
               >
                 <span
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 transition-colors"
-                  style={{ background: labelBg, color: labelText }}
+                  className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-black flex-shrink-0"
+                  style={{ background: tone.chip, color: tone.chipText }}
+                  aria-hidden="true"
                 >
-                  {OPTION_LABELS[idx]}
+                  {revealed && isCorrect
+                    ? "✓"
+                    : revealed && isSelected
+                      ? "✕"
+                      : OPTION_LABELS[idx]}
                 </span>
-                <span className="text-sm flex-1">{option}</span>
-                {revealed && isCorrect && (
-                  <span className="ml-auto text-green-500 font-bold">✓</span>
-                )}
-                {revealed && isSelected && !isCorrect && (
-                  <span className="ml-auto text-red-500 font-bold">✕</span>
-                )}
-                {isTimeout && isCorrect && (
-                  <span className="ml-auto text-green-500 text-xs font-bold">
-                    correcta
-                  </span>
-                )}
+                <span className="text-[15px] sm:text-base font-medium leading-snug flex-1">
+                  {option}
+                </span>
               </motion.button>
             );
           })}
         </div>
 
-        {/* Time out indicator */}
-        {revealed && selected === null && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="p-3 rounded-xl border border-orange-300/50 bg-orange-50/80"
-          >
-            <p className="text-xs text-orange-700 font-semibold">
-              ⏱ ¡Tiempo agotado! La respuesta correcta está marcada.
-            </p>
-          </motion.div>
-        )}
-
-        {/* Explanation after reveal */}
-        {revealed && question.explanation && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`p-3 rounded-xl border ${
-              darkMode
-                ? "bg-[#1E293B]/60 border-[#334155]/50"
-                : "bg-purple-50/80 border-purple-200/50"
-            }`}
-          >
-            <p
-              className={`text-xs ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+        <AnimatePresence>
+          {revealed && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`rounded-2xl border-2 p-4 space-y-3 ${
+                gotIt
+                  ? darkMode
+                    ? "bg-green-500/10 border-green-500/40"
+                    : "bg-green-50 border-green-200"
+                  : darkMode
+                    ? "bg-amber-500/10 border-amber-500/40"
+                    : "bg-amber-50 border-amber-200"
+              }`}
+              role="status"
             >
-              💡 {question.explanation}
-            </p>
-          </motion.div>
+              <p
+                className={`text-base font-black ${gotIt ? "text-green-600" : "text-amber-600"}`}
+              >
+                {gotIt
+                  ? PRAISE[currentIndex % PRAISE.length]
+                  : timedOut
+                    ? "⏱ ¡Se acabó el tiempo!"
+                    : "Casi… ¡así se aprende! 💪"}
+              </p>
+              {!gotIt && (
+                <p className={`text-sm ${textPrimary}`}>
+                  La respuesta correcta es{" "}
+                  <strong>
+                    {OPTION_LABELS[question.correct]}:{" "}
+                    {question.options[question.correct]}
+                  </strong>
+                </p>
+              )}
+              {question.explanation && (
+                <p className={`text-sm leading-relaxed ${textSub}`}>
+                  💡 {question.explanation}
+                </p>
+              )}
+              <button
+                type="button"
+                onClick={next}
+                autoFocus
+                className="w-full py-3.5 rounded-xl font-black text-white text-base shadow-md"
+                style={{
+                  background: `linear-gradient(135deg, ${color} 0%, #9D4EDD 100%)`,
+                }}
+              >
+                {isLast ? "Ver mi resultado 🏁" : "Siguiente →"}
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {onExit && !revealed && (
+          <button
+            type="button"
+            onClick={onExit}
+            className={`w-full py-2 text-xs font-semibold ${textSub}`}
+          >
+            Salir del reto
+          </button>
         )}
       </div>
     );

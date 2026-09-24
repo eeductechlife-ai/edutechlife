@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { callDeepseekSmartboard } from "../../../utils/api";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useFeedbackLog } from "../../../hooks/useFeedbackLog";
@@ -9,24 +9,54 @@ import {
 } from "../../../utils/dbaCatalog";
 import { track } from "../../../lib/analytics";
 import { EVENTS } from "../../../lib/analyticsEvents";
+import {
+  peekHandoff,
+  clearHandoff,
+  HANDOFF_CHALLENGE_SUBJECT,
+} from "../practicarHub/practicarHandoff";
+import { logPractice } from "../practicarHub/practicarProgress";
 
 const DIFFICULTIES = [
-  { id: "easy", label: "Explorador", emoji: "🌱", questions: 3, xp: 50 },
-  { id: "medium", label: "Aventurero", emoji: "⚡", questions: 5, xp: 100 },
-  { id: "hard", label: "Maestro", emoji: "🔥", questions: 7, xp: 200 },
+  {
+    id: "easy",
+    label: "Explorador",
+    hint: "Fácil",
+    emoji: "🌱",
+    questions: 3,
+    xp: 50,
+  },
+  {
+    id: "medium",
+    label: "Aventurero",
+    hint: "Normal",
+    emoji: "⚡",
+    questions: 5,
+    xp: 100,
+  },
+  {
+    id: "hard",
+    label: "Maestro",
+    hint: "Difícil",
+    emoji: "🔥",
+    questions: 7,
+    xp: 200,
+  },
 ];
 
 const CHALLENGE_SUBJECTS = [
-  { id: "math", label: "Matemáticas", emoji: "🔢" },
-  { id: "science", label: "Ciencias", emoji: "🔬" },
-  { id: "language", label: "Lenguaje", emoji: "📖" },
-  { id: "social", label: "Sociales", emoji: "🌍" },
-  { id: "english", label: "Inglés", emoji: "🇬🇧" },
-  { id: "chemistry", label: "Química", emoji: "⚗️" },
-  { id: "physics", label: "Física", emoji: "⚡" },
-  { id: "informatics", label: "Informática", emoji: "💻" },
-  { id: "philosophy", label: "Filosofía", emoji: "🦉" },
+  { id: "math", label: "Matemáticas", emoji: "🔢", color: "#FB8500" },
+  { id: "science", label: "Ciencias", emoji: "🔬", color: "#06D6A0" },
+  { id: "language", label: "Lenguaje", emoji: "📖", color: "#9D4EDD" },
+  { id: "social", label: "Sociales", emoji: "🌍", color: "#EF476F" },
+  { id: "english", label: "Inglés", emoji: "🇬🇧", color: "#E9A800" },
+  { id: "chemistry", label: "Química", emoji: "⚗️", color: "#E76F51" },
+  { id: "physics", label: "Física", emoji: "⚡", color: "#2A9D8F" },
+  { id: "informatics", label: "Informática", emoji: "💻", color: "#118AB2" },
+  { id: "philosophy", label: "Filosofía", emoji: "🦉", color: "#6D4C94" },
 ];
+
+// Seconds per question by age group; null = no timer (6-8 year olds read slowly).
+export const TIME_LIMIT_BY_AGE = { early: null, middle: 45, senior: 30 };
 
 // CHALLENGE_SUBJECTS usa ids simplificados; el currículo MEN usa sus propios ids.
 const SUBJECT_TO_CURRICULO_ID = {
@@ -40,6 +70,14 @@ const SUBJECT_TO_CURRICULO_ID = {
   informatics: "informatica",
   philosophy: "filosofia",
 };
+
+export function isChallengeSubjectAvailable(challengeId, grade) {
+  const curriculoId = SUBJECT_TO_CURRICULO_ID[challengeId];
+  if (!curriculoId) return false;
+  return (
+    getDbaForSubjectGrade(curriculoId, parseInt(grade, 10) || 5).length > 0
+  );
+}
 
 function buildChallengePrompt(
   subject,
@@ -90,8 +128,9 @@ Las preguntas deben ser apropiadas para la edad, en español, y alineadas con el
 }
 
 export function useChallengeEngine() {
-  const { supabaseQueries, addPoints, studentAge } = useIngenIAKids();
-  const studentGrade = supabaseQueries?.studentData?.data?.grade;
+  const { supabaseQueries, addPoints, gradeLevel, ageGroup } = useIngenIAKids();
+  const studentGrade =
+    gradeLevel ?? supabaseQueries?.studentData?.data?.grade_level;
 
   // Only show subjects that have DBA data for the student's actual grade.
   // Falls back to all mapped subjects if grade is unknown.
@@ -105,8 +144,14 @@ export function useChallengeEngine() {
   const { trackActivity } = useCompetencyTracking();
 
   const [phase, setPhase] = useState("setup");
-  const [subject, setSubject] = useState(null);
-  const [difficulty, setDifficulty] = useState(null);
+  const [subject, setSubject] = useState(() => {
+    const preset = peekHandoff(HANDOFF_CHALLENGE_SUBJECT);
+    return availableSubjects.find((s) => s.id === preset) || null;
+  });
+  useEffect(() => clearHandoff(HANDOFF_CHALLENGE_SUBJECT), []);
+  const [difficulty, setDifficulty] = useState(() =>
+    ageGroup === "early" ? DIFFICULTIES[0] : DIFFICULTIES[1],
+  );
   const [questions, setQuestions] = useState([]);
   const [dbaSequence, setDbaSequence] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -188,6 +233,12 @@ export function useChallengeEngine() {
         const xpEarned =
           score >= 70 ? difficulty.xp : Math.round(difficulty.xp * 0.3);
         addPoints(xpEarned, `Reto ${subject.label} (${score}%)`);
+        logPractice({
+          type: "reto",
+          subject: SUBJECT_TO_CURRICULO_ID[subject.id],
+          challengeId: subject.id,
+          score,
+        });
 
         const emotion =
           score >= 80 ? "proud" : score >= 50 ? "neutral" : "frustrated";
@@ -259,5 +310,6 @@ export function useChallengeEngine() {
     resetChallenge,
     DIFFICULTIES,
     CHALLENGE_SUBJECTS: availableSubjects,
+    timeLimit: TIME_LIMIT_BY_AGE[ageGroup] ?? 45,
   };
 }

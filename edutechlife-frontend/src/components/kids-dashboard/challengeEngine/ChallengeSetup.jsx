@@ -27,13 +27,18 @@ function sectorPath(cx, cy, r, startDeg, endDeg) {
   return `M ${cx} ${cy} L ${s.x.toFixed(2)} ${s.y.toFixed(2)} A ${r} ${r} 0 0 1 ${e.x.toFixed(2)} ${e.y.toFixed(2)} Z`;
 }
 
-const SpinWheel = memo(({ subjects, onLand }) => {
-  const [rotation, setRotation] = useState(0);
-  const [isSpinning, setIsSpinning] = useState(false);
-  const [landedIdx, setLandedIdx] = useState(null);
-
+const SpinWheel = memo(({ subjects, onLand, initialSubjectId }) => {
   const N = subjects.length;
   const deg = 360 / N;
+  const initialIdx = subjects.findIndex((s) => s.id === initialSubjectId);
+  const [rotation, setRotation] = useState(() =>
+    initialIdx >= 0 ? (360 - (initialIdx + 0.5) * deg + 360) % 360 : 0,
+  );
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [landedIdx, setLandedIdx] = useState(
+    initialIdx >= 0 ? initialIdx : null,
+  );
+
   const cx = 100,
     cy = 100,
     r = 90,
@@ -85,9 +90,11 @@ const SpinWheel = memo(({ subjects, onLand }) => {
         >
           <svg viewBox="0 0 200 200" className="w-full h-full">
             {subjects.map((s, i) => {
-              const meta = SUBJECT_META[s.id] || {
-                color: "#9D4EDD",
-                short: "?",
+              const meta = {
+                color: s.color || SUBJECT_META[s.id]?.color || "#9D4EDD",
+                short:
+                  SUBJECT_META[s.id]?.short ||
+                  s.label.slice(0, 3).toUpperCase(),
               };
               const midDeg = (i + 0.5) * deg;
               const tp = polarToCart(cx, cy, textR, midDeg);
@@ -151,8 +158,7 @@ const SpinWheel = memo(({ subjects, onLand }) => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           className="flex items-center gap-3 px-5 py-2.5 rounded-2xl font-bold text-white shadow-lg"
           style={{
-            background:
-              SUBJECT_META[subjects[landedIdx]?.id]?.color || "#9D4EDD",
+            background: subjects[landedIdx]?.color || "#9D4EDD",
           }}
         >
           <span className="text-xl">{subjects[landedIdx]?.emoji}</span>
@@ -198,24 +204,33 @@ const ChallengeSetup = memo(
       : "bg-white/80 border-[#E2E8F0]/50";
     const textPrimary = darkMode ? "text-white" : "text-[#1E293B]";
     const textSecondary = darkMode ? "text-[#94A3B8]" : "text-[#64748B]";
-    const subjectColor = subject
-      ? SUBJECT_META[subject.id]?.color || "#9D4EDD"
-      : "#9D4EDD";
+    const subjectColor = subject?.color || "#9D4EDD";
 
     return (
       <div className="space-y-5">
         {/* Spinning wheel */}
         <div className={`rounded-2xl p-5 border backdrop-blur-xl ${cardBg}`}>
-          <h3 className={`text-sm font-bold mb-4 text-center ${textPrimary}`}>
-            🎡 Gira la ruleta para elegir categoría
+          <h3
+            className={`text-base font-black mb-1 text-center ${textPrimary}`}
+          >
+            {subject ? "1. Tu materia" : "1. Gira la ruleta 🎡"}
           </h3>
-          <SpinWheel subjects={subjects} onLand={handleLand} />
+          <p className={`text-xs mb-4 text-center ${textSecondary}`}>
+            {subject
+              ? "¿Quieres otra? Toca GIRAR para cambiarla."
+              : "La ruleta elige la materia de tu reto."}
+          </p>
+          <SpinWheel
+            subjects={subjects}
+            onLand={handleLand}
+            initialSubjectId={subject?.id}
+          />
         </div>
 
         {/* Difficulty */}
         <div className={`rounded-2xl p-5 border backdrop-blur-xl ${cardBg}`}>
-          <h3 className={`text-sm font-bold mb-3 ${textPrimary}`}>
-            ⚡ Nivel de dificultad
+          <h3 className={`text-base font-black mb-3 ${textPrimary}`}>
+            2. ¿Qué tan difícil?
           </h3>
           <div className="flex flex-col sm:grid sm:grid-cols-3 gap-2">
             {difficulties.map((d) => {
@@ -245,7 +260,8 @@ const ChallengeSetup = memo(
                     <div
                       className={`text-xs sm:text-[10px] mt-0.5 ${sel ? "text-white/80" : textSecondary}`}
                     >
-                      {d.questions} pregs · {d.xp} XP
+                      {d.hint ? `${d.hint} · ` : ""}
+                      {d.questions} preguntas · +{d.xp} XP
                     </div>
                   </div>
                   {sel && (

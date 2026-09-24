@@ -1,146 +1,150 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
+import {
+  setHandoff,
+  HANDOFF_PRACTICAR_SUBJECT,
+} from "../practicarHub/practicarHandoff";
 
-const gradeColor = (score) => {
-  if (score >= 4.5) return "#22C55E";
-  if (score >= 4.0) return "#84CC16";
-  if (score >= 3.5) return "#EAB308";
-  if (score >= 3.0) return "#F97316";
-  return "#EF4444";
-};
-
-export function getMasteryState(progress) {
-  const p = Number(progress) || 0;
-  if (p < 30)
-    return {
-      key: "recovery",
-      label: "Recuperación",
-      emoji: "🆘",
-      color: "#EF4444",
-      bg: "#FEF2F2",
-    };
-  if (p < 60)
-    return {
-      key: "practice",
-      label: "Práctica",
-      emoji: "📖",
-      color: "#F59E0B",
-      bg: "#FFFBEB",
-    };
-  if (p < 80)
-    return {
-      key: "mastery",
-      label: "Dominio",
-      emoji: "⭐",
-      color: "#10B981",
-      bg: "#ECFDF5",
-    };
-  return {
+// Colombian report-card scale (Decreto 1290): Bajo < 3.0, Básico 3.0–3.9,
+// Alto 4.0–4.5, Superior 4.6–5.0. Progress-only subjects map 60/80/92 %.
+export const MASTERY_STATES = [
+  {
+    key: "recovery",
+    label: "Bajo",
+    hint: "Necesitas repasar",
+    emoji: "🆘",
+    color: "#EF4444",
+    bg: "#FEF2F2",
+  },
+  {
+    key: "practice",
+    label: "Básico",
+    hint: "Vas en camino, ¡refuérzala!",
+    emoji: "📈",
+    color: "#F59E0B",
+    bg: "#FFFBEB",
+  },
+  {
+    key: "mastery",
+    label: "Alto",
+    hint: "¡Muy bien!",
+    emoji: "⭐",
+    color: "#10B981",
+    bg: "#ECFDF5",
+  },
+  {
     key: "transfer",
-    label: "Transferencia",
-    emoji: "🚀",
+    label: "Superior",
+    hint: "¡Excelente!",
+    emoji: "🏆",
     color: "#7C3AED",
     bg: "#F5F3FF",
-  };
+  },
+];
+
+export function getMasteryState(progress, gradeScore) {
+  const score =
+    gradeScore != null && !isNaN(Number(gradeScore))
+      ? Number(gradeScore)
+      : ((Number(progress) || 0) / 100) * 5;
+  if (score < 3.0) return MASTERY_STATES[0];
+  if (score < 4.0) return MASTERY_STATES[1];
+  if (score < 4.6) return MASTERY_STATES[2];
+  return MASTERY_STATES[3];
 }
 
 const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
   const { t } = useTranslation();
+
+  const practice = (subject) => {
+    setHandoff(HANDOFF_PRACTICAR_SUBJECT, subject.id);
+    onTabChange?.("practicar");
+  };
+
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-black tracking-tight text-[#00303F]">
-        {t("smartboard.subjects_view_title")}
-      </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {subjects.map((subject, index) => {
-          const hasGrade = subject.gradeScore !== undefined;
-          const barColor = hasGrade
-            ? gradeColor(subject.gradeScore)
-            : subject.color;
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {subjects.map((subject, index) => {
+        const hasGrade = subject.gradeScore != null;
+        const ms = getMasteryState(subject.progress, subject.gradeScore);
+        return (
+          <motion.div
+            key={subject.id}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.04 }}
+            className="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-[0_10px_30px_-18px_rgba(0,48,63,0.35)]"
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0"
+                style={{ background: `${subject.color}22` }}
+                aria-hidden="true"
+              >
+                {subject.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-bold text-[#00303F] truncate">
+                  {subject.name}
+                </h4>
+                <p className="text-xs text-[#64748B]">
+                  {hasGrade ? ms.hint : t("smartboard.progress")}
+                </p>
+              </div>
+              {hasGrade ? (
+                <div className="text-right shrink-0">
+                  <p
+                    className="text-2xl font-black tabular-nums leading-none"
+                    style={{ color: ms.color }}
+                  >
+                    {subject.gradeScore.toFixed(1)}
+                  </p>
+                  <span
+                    className="inline-block mt-1 text-[10px] font-black px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: ms.bg, color: ms.color }}
+                  >
+                    {ms.emoji} {ms.label}
+                  </span>
+                </div>
+              ) : (
+                <p className="text-lg font-black tabular-nums text-[#64748B] shrink-0">
+                  {subject.progress}%
+                </p>
+              )}
+            </div>
 
-          return (
-            <motion.div
-              key={subject.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.05 }}
-              whileHover={{ y: -3 }}
-              className="bg-white p-5 rounded-2xl border border-[#E2E8F0] shadow-[0_10px_30px_-18px_rgba(0,48,63,0.35)] hover:shadow-[0_18px_40px_-18px_rgba(0,48,63,0.4)] transition-all"
+            <div
+              className="mt-3 w-full h-2 bg-[#EDF3F7] rounded-full overflow-hidden"
+              role="progressbar"
+              aria-valuenow={subject.progress}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`Avance en ${subject.name}`}
             >
-              {(() => {
-                const ms = getMasteryState(subject.progress);
-                return (
-                  <>
-                    <div className="flex items-center gap-3 mb-3">
-                      <div
-                        className="w-11 h-11 rounded-xl flex items-center justify-center text-xl"
-                        style={{
-                          background: `linear-gradient(135deg, ${subject.color}26, ${subject.color}14)`,
-                          boxShadow: `inset 0 1px 0 rgba(255,255,255,0.5)`,
-                        }}
-                      >
-                        {subject.icon}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-[#00303F] truncate">
-                          {subject.name}
-                        </h4>
-                        <span
-                          className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full mt-0.5"
-                          style={{ backgroundColor: ms.bg, color: ms.color }}
-                        >
-                          {ms.emoji} {ms.label}
-                        </span>
-                      </div>
-                    </div>
+              <motion.div
+                className="h-full rounded-full"
+                style={{ background: hasGrade ? ms.color : subject.color }}
+                initial={{ width: 0 }}
+                animate={{ width: `${subject.progress}%` }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              />
+            </div>
 
-                    <div className="w-full h-2.5 bg-[#EDF3F7] rounded-full overflow-hidden">
-                      <motion.div
-                        className="h-full rounded-full"
-                        style={{
-                          background: `linear-gradient(90deg, ${barColor}, ${barColor}bb)`,
-                        }}
-                        initial={{ width: 0 }}
-                        animate={{ width: `${subject.progress}%` }}
-                        transition={{ duration: 1, ease: "easeOut" }}
-                      />
-                    </div>
-
-                    <div className="flex justify-between items-center mt-2">
-                      {hasGrade ? (
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#93A6B2]">
-                          Nota boletín
-                        </span>
-                      ) : (
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#93A6B2]">
-                          {t("smartboard.progress")}
-                        </span>
-                      )}
-                      <div className="flex items-center gap-2">
-                        {hasGrade && (
-                          <span
-                            className="text-xs font-bold px-1.5 py-0.5 rounded-full text-white"
-                            style={{ backgroundColor: barColor }}
-                          >
-                            {subject.gradeScore.toFixed(1)}/5
-                          </span>
-                        )}
-                        <span
-                          className="text-sm font-black tabular-nums"
-                          style={{ color: barColor }}
-                        >
-                          {subject.progress}%
-                        </span>
-                      </div>
-                    </div>
-                  </>
-                );
-              })()}
-            </motion.div>
-          );
-        })}
-      </div>
+            <button
+              type="button"
+              onClick={() => practice(subject)}
+              className="mt-3 w-full py-2.5 rounded-xl text-sm font-bold transition-colors"
+              style={
+                ms.key === "recovery" || ms.key === "practice"
+                  ? { background: ms.color, color: "#fff" }
+                  : { background: "#F1F5F9", color: "#00303F" }
+              }
+            >
+              🎯 Practicar {subject.name}
+            </button>
+          </motion.div>
+        );
+      })}
     </div>
   );
 });

@@ -13,6 +13,7 @@ const FlashcardResults = memo(
     rate,
     correct,
     incorrect,
+    xpEarned,
     onRestart,
     onBack,
     onTalkToDani,
@@ -74,6 +75,11 @@ const FlashcardResults = memo(
                 ? "¡Buen esfuerzo! Sigue practicando 💪"
                 : "Vamos a repasar un poco más 🎯"}
           </p>
+          {xpEarned > 0 && (
+            <p className="mt-2 inline-block px-3 py-1 rounded-full text-sm font-black text-white bg-[#22C55E]">
+              +{xpEarned} puntos
+            </p>
+          )}
 
           <div className="grid grid-cols-2 gap-3 max-w-xs mx-auto mt-4">
             <div className="p-3 rounded-xl" style={{ background: statBg }}>

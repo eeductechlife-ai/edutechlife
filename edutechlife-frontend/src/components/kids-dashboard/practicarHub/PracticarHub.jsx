@@ -1,695 +1,378 @@
-import { memo, useState, useCallback, useRef } from "react";
+import { memo, useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  BookOpen,
-  Gamepad2,
-  FileText,
-  Camera,
-  ChevronRight,
-  X,
-  Upload,
-  Loader2,
-  Sparkles,
-  AlertTriangle,
-  TrendingUp,
-} from "lucide-react";
+import { ChevronRight, ChevronDown } from "lucide-react";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
-import { callDeepseekSmartboard } from "../../../utils/api";
+import { buildSubjectList } from "./practicarConfig";
 import {
-  generateStudySummary,
-  generateStudySummaryFromImage,
-} from "../../../services/documentSummaryAI";
-import ScannerSummaryResult from "../ScannerSummaryResult";
+  setHandoff,
+  HANDOFF_CHALLENGE_SUBJECT,
+  HANDOFF_FLASHCARDS_TOPIC,
+  HANDOFF_PRACTICAR_SUBJECT,
+  peekHandoff,
+  clearHandoff,
+} from "./practicarHandoff";
+import SubjectPicker from "./SubjectPicker";
+import ContentGenerator from "./ContentGenerator";
+import DocumentScanner from "./DocumentScanner";
+import WeekProgress from "./WeekProgress";
+import { usePracticeLog } from "./practicarProgress";
+import { isChallengeSubjectAvailable } from "../challengeEngine/useChallengeEngine";
 
-// ── paleta de materias ────────────────────────────────────────────────────────
-
-const SUBJECT_META = {
-  matematicas: { emoji: "🔢", color: "#FB8500", label: "Matemáticas" },
-  lenguaje: { emoji: "📖", color: "#9D4EDD", label: "Lenguaje" },
-  ciencias: { emoji: "🔬", color: "#06D6A0", label: "Ciencias" },
-  ciencias_naturales: { emoji: "🔬", color: "#06D6A0", label: "Ciencias" },
-  sociales: { emoji: "🌍", color: "#EF476F", label: "Sociales" },
-  ciencias_sociales: { emoji: "🌍", color: "#EF476F", label: "Sociales" },
-  ingles: { emoji: "🇬🇧", color: "#FFD166", label: "Inglés" },
-  quimica: { emoji: "⚗️", color: "#E76F51", label: "Química" },
-  fisica: { emoji: "⚡", color: "#2A9D8F", label: "Física" },
-  informatica: { emoji: "💻", color: "#118AB2", label: "Informática" },
-  filosofia: { emoji: "🦉", color: "#6D4C94", label: "Filosofía" },
-};
-
-const ACCEPT =
-  "image/*,application/pdf,text/plain,.pdf,.docx,.txt,.jpg,.jpeg,.png";
-const isImage = (f) => !!f && f.type.startsWith("image/");
-
-// ── Generador de contenido ───────────────────────────────────────────────────
-
-const CONTENT_TYPES = [
-  {
-    id: "resumen",
-    label: "Resumen",
-    emoji: "📄",
-    desc: "Explicación clara del tema",
-  },
-  {
-    id: "mapa",
-    label: "Mapa conceptual",
-    emoji: "🗺️",
-    desc: "Ideas conectadas en texto",
-  },
-  {
-    id: "ejercicios",
-    label: "Ejercicios",
-    emoji: "✏️",
-    desc: "Practica con problemas",
-  },
-  {
-    id: "video",
-    label: "Videos recomendados",
-    emoji: "🎬",
-    desc: "Links y títulos de YouTube",
-  },
-];
-
-function ContentGenerator({ weakSubjects, grade, onClose, darkMode }) {
-  const [selectedSubject, setSelectedSubject] = useState(
-    weakSubjects[0]?.id || "",
-  );
-  const [customTopic, setCustomTopic] = useState("");
-  const [contentType, setContentType] = useState("resumen");
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const generate = useCallback(async () => {
-    if (!selectedSubject) return;
-    setLoading(true);
-    setError("");
-    setResult(null);
-    const topic = customTopic.trim() || selectedSubject;
-    const meta =
-      SUBJECT_META[selectedSubject] || SUBJECT_META[selectedSubject] || {};
-    const label = meta.label || selectedSubject;
-    const typeLabel =
-      CONTENT_TYPES.find((c) => c.id === contentType)?.label || contentType;
-
-    const messages = [
-      {
-        role: "system",
-        content: `Eres un tutor educativo para estudiantes colombianos de grado ${grade || 5}.
-Genera ${typeLabel} sobre el tema indicado, en español, con lenguaje claro y adecuado para la edad.
-${
-  contentType === "video"
-    ? `Lista 4-6 videos reales de YouTube educativos en español sobre ese tema. Para cada uno: Título, canal y breve descripción del contenido. No inventes URLs.`
-    : contentType === "mapa"
-      ? `Crea un mapa conceptual en texto con emojis y jerarquías claras usando guiones e indentación.`
-      : contentType === "ejercicios"
-        ? `Crea 5 ejercicios prácticos con sus respuestas al final.`
-        : `Escribe un resumen claro de máximo 400 palabras con los conceptos clave resaltados en negritas.`
-}
-Formato Markdown. Sin tablas HTML.`,
-      },
-      {
-        role: "user",
-        content: `Genera ${typeLabel} sobre: "${topic}" (materia: ${label}, grado ${grade || 5})`,
-      },
-    ];
-
-    try {
-      const raw = await callDeepseekSmartboard(messages, {
-        isJson: false,
-        temperature: 0.7,
-        maxTokens: 1200,
-      });
-      setResult(
-        typeof raw === "string"
-          ? raw
-          : raw?.content || raw?.choices?.[0]?.message?.content || "",
-      );
-    } catch (e) {
-      setError("Error al generar el contenido. Intenta de nuevo.");
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedSubject, customTopic, contentType, grade]);
-
-  const card = darkMode
-    ? "bg-[#1E293B] border-[#334155]"
-    : "bg-white border-[#E2E8F0]";
-  const text = darkMode ? "text-white" : "text-[#1E293B]";
-  const sub = darkMode ? "text-[#94A3B8]" : "text-[#64748B]";
-
-  return (
-    <div className={`rounded-2xl border p-5 space-y-4 ${card}`}>
-      <div className="flex items-center justify-between">
-        <h3 className={`font-bold text-base ${text}`}>
-          ✨ Generar contenido de estudio
-        </h3>
-        <button
-          onClick={onClose}
-          className={`p-1 rounded-lg ${sub} hover:opacity-70`}
-        >
-          <X className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* Selector de materia */}
-      <div>
-        <p className={`text-xs font-semibold mb-2 ${sub}`}>
-          Materia a reforzar
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {weakSubjects.map((s) => {
-            const m = SUBJECT_META[s.id] || {};
-            return (
-              <button
-                key={s.id}
-                onClick={() => setSelectedSubject(s.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
-                  selectedSubject === s.id
-                    ? "text-white border-transparent"
-                    : darkMode
-                      ? "bg-[#334155] border-[#475569] text-white"
-                      : "bg-[#F8FAFC] border-[#E2E8F0] text-[#1E293B]"
-                }`}
-                style={
-                  selectedSubject === s.id
-                    ? { background: m.color || "#9D4EDD" }
-                    : {}
-                }
-              >
-                {m.emoji} {m.label || s.id}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Tema personalizado */}
-      <input
-        value={customTopic}
-        onChange={(e) => setCustomTopic(e.target.value)}
-        placeholder="Tema específico (ej: fracciones, fotosíntesis…)"
-        className={`w-full px-3 py-2 rounded-xl border text-sm outline-none focus:border-[#9D4EDD] ${
-          darkMode
-            ? "bg-[#0F172A] border-[#334155] text-white placeholder-[#64748B]"
-            : "bg-[#F8FAFC] border-[#E2E8F0] text-[#1E293B] placeholder-[#94A3B8]"
-        }`}
-      />
-
-      {/* Tipo de contenido */}
-      <div>
-        <p className={`text-xs font-semibold mb-2 ${sub}`}>Tipo de contenido</p>
-        <div className="grid grid-cols-2 gap-2">
-          {CONTENT_TYPES.map((ct) => (
-            <button
-              key={ct.id}
-              onClick={() => setContentType(ct.id)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-left text-xs transition-all ${
-                contentType === ct.id
-                  ? "bg-[#9D4EDD] border-[#9D4EDD] text-white"
-                  : darkMode
-                    ? "bg-[#334155] border-[#475569] text-white"
-                    : "bg-[#F8FAFC] border-[#E2E8F0] text-[#1E293B]"
-              }`}
-            >
-              <span className="text-base">{ct.emoji}</span>
-              <span className="font-semibold">{ct.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {error && (
-        <p className="text-xs text-red-400 bg-red-500/10 px-3 py-2 rounded-xl">
-          {error}
-        </p>
-      )}
-
-      <button
-        onClick={generate}
-        disabled={loading || !selectedSubject}
-        className={`w-full py-3 rounded-xl font-bold text-sm text-white transition-all ${
-          loading || !selectedSubject
-            ? "opacity-40 cursor-not-allowed bg-[#9D4EDD]"
-            : "bg-[#9D4EDD] hover:bg-[#7B2FF7]"
-        }`}
-      >
-        {loading ? (
-          <span className="flex items-center justify-center gap-2">
-            <Loader2 className="w-4 h-4 animate-spin" />
-            Generando...
-          </span>
-        ) : (
-          "✨ Generar"
-        )}
-      </button>
-
-      {result && (
-        <div
-          className={`p-4 rounded-xl border text-sm leading-relaxed whitespace-pre-wrap max-h-80 overflow-y-auto ${
-            darkMode
-              ? "bg-[#0F172A] border-[#334155] text-[#CBD5E1]"
-              : "bg-[#F8FAFC] border-[#E2E8F0] text-[#1E293B]"
-          }`}
-        >
-          {result}
-        </div>
-      )}
-    </div>
-  );
+function pickRecommendation(subjects) {
+  const retoable = subjects.filter((s) => s.retoAvailable);
+  if (!retoable.length) return null;
+  const weak = retoable.find((s) => s.weak);
+  if (weak) return { subject: weak, why: `${weak.label} necesita refuerzo` };
+  const tried = retoable
+    .filter((s) => s.lastReto)
+    .sort((a, b) => a.lastReto.score - b.lastReto.score);
+  if (tried[0]?.lastReto.score < 70) {
+    return {
+      subject: tried[0],
+      why: `En tu último reto sacaste ${tried[0].lastReto.score}%`,
+    };
+  }
+  const untried = retoable.find((s) => !s.lastReto);
+  if (untried)
+    return {
+      subject: untried,
+      why: "Aún no has hecho un reto de esta materia",
+    };
+  const oldest = [...tried].sort((a, b) =>
+    a.lastReto.at.localeCompare(b.lastReto.at),
+  )[0];
+  return { subject: oldest, why: "Hace rato no la practicas" };
 }
 
-// ── Escáner de documento ─────────────────────────────────────────────────────
-
-function DocumentScanner({ grade, onClose, darkMode }) {
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [summary, setSummary] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const fileRef = useRef(null);
-
-  const handleFile = useCallback((f) => {
-    if (!f) return;
-    setFile(f);
-    setSummary(null);
-    setError("");
-    if (f.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (e) => setPreview(e.target.result);
-      reader.readAsDataURL(f);
-    } else {
-      setPreview(null);
-    }
-  }, []);
-
-  const scan = useCallback(async () => {
-    if (!file) return;
-    setLoading(true);
-    setError("");
-    setSummary(null);
-    try {
-      let result;
-      if (isImage(file)) {
-        result = await generateStudySummaryFromImage(file, "", `${grade || 5}`);
-      } else {
-        result = await generateStudySummary(file, "", `${grade || 5}`);
-      }
-      setSummary(result);
-    } catch {
-      setError("No se pudo procesar el documento. Intenta con otro archivo.");
-    } finally {
-      setLoading(false);
-    }
-  }, [file, grade]);
-
-  const card = darkMode
-    ? "bg-[#1E293B] border-[#334155]"
-    : "bg-white border-[#E2E8F0]";
-  const text = darkMode ? "text-white" : "text-[#1E293B]";
-  const sub = darkMode ? "text-[#94A3B8]" : "text-[#64748B]";
-
-  return (
-    <div className={`rounded-2xl border p-5 space-y-4 ${card}`}>
-      <div className="flex items-center justify-between">
-        <h3 className={`font-bold text-base ${text}`}>📷 Escanear documento</h3>
-        <button
-          onClick={onClose}
-          className={`p-1 rounded-lg ${sub} hover:opacity-70`}
-        >
-          <X className="w-4 h-4" />
-        </button>
-      </div>
-
-      <p className={`text-xs ${sub}`}>
-        Sube una foto de tu apunte, taller o página del libro. La IA extrae el
-        tema y genera un resumen de aprendizaje.
-      </p>
-
-      {/* Dropzone */}
-      <button
-        onClick={() => fileRef.current?.click()}
-        className={`w-full rounded-2xl border-2 border-dashed py-8 flex flex-col items-center gap-2 transition-colors ${
-          darkMode
-            ? "border-[#334155] hover:border-[#9D4EDD] text-[#94A3B8]"
-            : "border-[#E2E8F0] hover:border-[#9D4EDD] text-[#64748B]"
-        }`}
-      >
-        {preview ? (
-          <img
-            src={preview}
-            alt="preview"
-            className="max-h-36 rounded-xl object-contain"
-          />
-        ) : (
-          <>
-            <Upload className="w-8 h-8 opacity-50" />
-            <span className="text-sm font-medium">
-              {file ? file.name : "Toca para subir foto o documento"}
-            </span>
-            <span className="text-xs opacity-60">JPG, PNG, PDF, DOCX, TXT</span>
-          </>
-        )}
-      </button>
-      <input
-        ref={fileRef}
-        type="file"
-        accept={ACCEPT}
-        className="hidden"
-        onChange={(e) => handleFile(e.target.files?.[0])}
-      />
-
-      {error && (
-        <p className="text-xs text-red-400 bg-red-500/10 px-3 py-2 rounded-xl">
-          {error}
-        </p>
-      )}
-
-      {file && !summary && (
-        <button
-          onClick={scan}
-          disabled={loading}
-          className="w-full py-3 rounded-xl font-bold text-sm text-white bg-[#9D4EDD] hover:bg-[#7B2FF7] disabled:opacity-50 transition-all"
-        >
-          {loading ? (
-            <span className="flex items-center justify-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Analizando documento…
-            </span>
-          ) : (
-            "🔍 Analizar y aprender"
-          )}
-        </button>
-      )}
-
-      {summary && (
-        <ScannerSummaryResult
-          summary={summary}
-          fileName={file?.name}
-          darkMode={darkMode}
-        />
-      )}
-    </div>
-  );
+// Vertical-only scroll inside the dashboard's content pane; scrollIntoView would
+// also shift the overflow-hidden root sideways on phones.
+function scrollToTop(el) {
+  if (!el) return;
+  let parent = el.parentElement;
+  while (parent && !/(auto|scroll)/.test(getComputedStyle(parent).overflowY)) {
+    parent = parent.parentElement;
+  }
+  if (!parent) return;
+  const top =
+    parent.scrollTop +
+    el.getBoundingClientRect().top -
+    parent.getBoundingClientRect().top -
+    12;
+  parent.scrollTo({ top, behavior: "smooth" });
 }
 
-// ── Banner de temas débiles ──────────────────────────────────────────────────
-
-function WeakTopicsBanner({ weakSubjects, studentName, darkMode }) {
-  if (!weakSubjects.length) return null;
-  const bg = darkMode
-    ? "bg-amber-900/20 border-amber-500/30"
-    : "bg-amber-50 border-amber-200";
-
+function StepTitle({ n, children, darkMode }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -8 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`rounded-2xl border p-4 ${bg}`}
+    <h2
+      className={`flex items-center gap-2.5 text-sm sm:text-base font-black ${darkMode ? "text-white" : "text-[#1E293B]"}`}
     >
-      <div className="flex items-start gap-3">
-        <AlertTriangle className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" />
-        <div className="min-w-0">
-          <p className="text-sm font-bold text-amber-700 dark:text-amber-400">
-            {studentName ? `${studentName}, ` : ""}estos temas necesitan
-            refuerzo
-          </p>
-          <div className="flex flex-wrap gap-1.5 mt-2">
-            {weakSubjects.map((s) => {
-              const m = SUBJECT_META[s.id] || {};
-              return (
-                <span
-                  key={s.id}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold text-white"
-                  style={{ background: m.color || "#EF476F" }}
-                >
-                  {m.emoji} {m.label || s.id}
-                  {s.grade != null && (
-                    <span className="opacity-80 ml-0.5">({s.grade})</span>
-                  )}
-                </span>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </motion.div>
+      <span
+        className="w-6 h-6 rounded-full bg-[#EF476F] text-white text-xs flex items-center justify-center shrink-0"
+        aria-hidden="true"
+      >
+        {n}
+      </span>
+      <span className="min-w-0">{children}</span>
+    </h2>
   );
 }
 
-// ── Tarjetas de acción principales ───────────────────────────────────────────
-
-function ActionCard({
-  icon: Icon,
+function ToolButton({
   emoji,
   title,
   desc,
-  color,
   gradient,
   onClick,
-  badge,
+  open,
+  expandable,
+  darkMode,
 }) {
+  const surface = darkMode
+    ? "bg-[#1E293B] border-[#334155] text-white"
+    : "bg-white border-[#E2E8F0] text-[#1E293B]";
+  const Arrow = expandable ? ChevronDown : ChevronRight;
   return (
     <motion.button
+      type="button"
       onClick={onClick}
-      whileHover={{ scale: 1.03, y: -2 }}
-      whileTap={{ scale: 0.97 }}
-      className="relative flex flex-col items-start gap-3 p-5 rounded-2xl text-white text-left w-full overflow-hidden shadow-lg"
-      style={{ background: gradient }}
+      whileTap={{ scale: 0.98 }}
+      aria-expanded={expandable ? open : undefined}
+      className={`w-full flex items-center gap-3 p-3 rounded-2xl border-2 text-left min-h-[72px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9D4EDD] ${surface} ${open ? "border-[#9D4EDD]" : ""}`}
     >
-      {badge && (
-        <span className="absolute top-3 right-3 text-[10px] font-black bg-white/25 px-2 py-0.5 rounded-full">
-          {badge}
+      <span
+        className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0 shadow-sm"
+        style={{ background: gradient }}
+        aria-hidden="true"
+      >
+        {emoji}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-bold leading-tight">{title}</span>
+        <span
+          className={`block text-xs mt-0.5 leading-snug ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+        >
+          {desc}
         </span>
-      )}
-      <span className="text-3xl">{emoji}</span>
-      <div>
-        <p className="font-black text-sm leading-tight">{title}</p>
-        <p className="text-[11px] opacity-80 mt-0.5 leading-snug">{desc}</p>
-      </div>
-      <ChevronRight className="w-4 h-4 opacity-70 self-end mt-auto" />
+      </span>
+      <Arrow
+        className={`w-5 h-5 shrink-0 opacity-50 transition-transform ${open ? "rotate-180" : ""}`}
+        aria-hidden="true"
+      />
     </motion.button>
   );
 }
 
-// ── Hub principal ────────────────────────────────────────────────────────────
-
 const PracticarHub = memo(({ onTabChange, darkMode }) => {
-  const { supabaseQueries, subjectsWithGrades, studentAge } = useIngenIAKids();
+  const { supabaseQueries, subjectsWithGrades, gradeLevel, studentAge } =
+    useIngenIAKids();
   const studentData = supabaseQueries?.studentData?.data;
   const studentName = studentData?.name?.split(" ")[0] || "";
-  const grade = studentData?.grade;
+  const grade = gradeLevel ?? studentData?.grade_level ?? null;
 
-  // Temas débiles: nota < 3.5 o progress < 50
-  const weakSubjects = (subjectsWithGrades || [])
-    .filter(
-      (s) =>
-        (s.grade != null && parseFloat(s.grade) < 3.5) ||
-        (s.progress != null && s.progress < 50),
-    )
-    .slice(0, 5)
-    .map((s) => ({
-      id: s.id || s.subject,
-      grade: s.grade,
-    }));
+  const progress = usePracticeLog();
+  const subjects = useMemo(
+    () =>
+      buildSubjectList(subjectsWithGrades).map((s) => ({
+        ...s,
+        lastReto: s.challengeId
+          ? progress.lastRetoByChallenge[s.challengeId]
+          : null,
+        retoAvailable:
+          !!s.challengeId && isChallengeSubjectAvailable(s.challengeId, grade),
+      })),
+    [subjectsWithGrades, progress.lastRetoByChallenge, grade],
+  );
+  const recommendation = useMemo(
+    () => pickRecommendation(subjects),
+    [subjects],
+  );
+  const weakCount = subjects.filter((s) => s.weak).length;
 
-  // Si no hay datos de notas, sugerimos los primeros 3 temas como "práctica general"
-  const practiceSubjects = weakSubjects.length
-    ? weakSubjects
-    : (subjectsWithGrades || []).slice(0, 3).map((s) => ({
-        id: s.id || s.subject,
-        grade: null,
-      }));
+  const [selectedId, setSelectedId] = useState(() =>
+    peekHandoff(HANDOFF_PRACTICAR_SUBJECT),
+  );
+  useEffect(() => clearHandoff(HANDOFF_PRACTICAR_SUBJECT), []);
+  const [activePanel, setActivePanel] = useState(null);
+  const stepTwoRef = useRef(null);
+  const panelRef = useRef(null);
 
-  const [activePanel, setActivePanel] = useState(null); // 'generator' | 'scanner'
+  const subject =
+    subjects.find((s) => s.id === selectedId) || subjects[0] || null;
 
-  const card = darkMode
+  useEffect(() => {
+    if (activePanel) scrollToTop(panelRef.current);
+  }, [activePanel]);
+
+  const selectSubject = useCallback((id) => {
+    setSelectedId(id);
+    if (window.matchMedia?.("(max-width: 767px)").matches) {
+      setTimeout(() => scrollToTop(stepTwoRef.current), 120);
+    }
+  }, []);
+
+  const togglePanel = (name) =>
+    setActivePanel((p) => (p === name ? null : name));
+
+  const openRetos = (target = subject) => {
+    if (target?.retoAvailable)
+      setHandoff(HANDOFF_CHALLENGE_SUBJECT, target.challengeId);
+    onTabChange("retos");
+  };
+  const openEduCards = () => {
+    if (subject) setHandoff(HANDOFF_FLASHCARDS_TOPIC, subject.label);
+    onTabChange("flashcards");
+  };
+
+  const surface = darkMode
     ? "bg-[#1E293B]/80 border-[#334155]/50"
-    : "bg-white/80 border-[#E2E8F0]/50";
+    : "bg-white/80 border-[#E2E8F0]/60";
   const textPrimary = darkMode ? "text-white" : "text-[#1E293B]";
   const textSub = darkMode ? "text-[#94A3B8]" : "text-[#64748B]";
+  const label = subject ? subject.label : "tu materia";
 
   return (
-    <div className="space-y-5 pb-24 md:pb-6">
-      {/* ── Encabezado de bienvenida ── */}
-      <div className={`rounded-2xl border p-5 backdrop-blur-xl ${card}`}>
-        <div className="flex items-center gap-3">
-          <span className="text-3xl">🎯</span>
-          <div>
-            <h2 className={`font-black text-base ${textPrimary}`}>
-              {studentName ? `¡Hola, ${studentName}!` : "¡Hora de practicar!"}
-            </h2>
-            <p className={`text-xs mt-0.5 ${textSub}`}>
-              Elige cómo quieres reforzar tus conocimientos hoy.
-            </p>
-          </div>
+    <div
+      data-typo="intended"
+      className="space-y-6 pb-28 md:pb-6 max-w-3xl mx-auto"
+    >
+      <div
+        className={`rounded-2xl border p-4 sm:p-5 backdrop-blur-xl space-y-4 ${surface}`}
+      >
+        <div>
+          <p className={`font-black text-lg sm:text-xl ${textPrimary}`}>
+            {studentName
+              ? `¡Hola, ${studentName}! 👋`
+              : "¡Hora de practicar! 👋"}
+          </p>
+          <p className={`text-sm mt-0.5 leading-snug ${textSub}`}>
+            {weakCount > 0
+              ? `Tienes ${weakCount} ${weakCount === 1 ? "materia" : "materias"} por reforzar.`
+              : "Practica un poquito cada día y verás cómo mejoras."}
+          </p>
         </div>
+        <WeekProgress progress={progress} darkMode={darkMode} />
       </div>
 
-      {/* ── Banner de temas débiles ── */}
-      {weakSubjects.length > 0 && (
-        <WeakTopicsBanner
-          weakSubjects={weakSubjects}
-          studentName={studentName}
-          darkMode={darkMode}
-        />
+      {recommendation && (
+        <motion.button
+          type="button"
+          onClick={() => openRetos(recommendation.subject)}
+          whileTap={{ scale: 0.98 }}
+          className="w-full flex items-center gap-3 p-4 rounded-2xl text-left text-white shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-[#9D4EDD]/40"
+          style={{
+            background: `linear-gradient(135deg, ${recommendation.subject.color} 0%, #9D4EDD 100%)`,
+          }}
+        >
+          <span
+            className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-3xl shrink-0"
+            aria-hidden="true"
+          >
+            {recommendation.subject.emoji}
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[11px] font-black uppercase tracking-wider text-white/80">
+              Recomendado para ti
+            </span>
+            <span className="block text-lg font-black leading-tight">
+              Reto de {recommendation.subject.label}
+            </span>
+            <span className="block text-xs text-white/85 mt-0.5">
+              {recommendation.why}
+            </span>
+          </span>
+          <span
+            className="w-11 h-11 rounded-full bg-white text-[#1E293B] flex items-center justify-center text-lg font-black shrink-0"
+            aria-hidden="true"
+          >
+            ▶
+          </span>
+        </motion.button>
       )}
 
-      {/* ── Panel activo (generador o escáner) ── */}
-      <AnimatePresence mode="wait">
-        {activePanel === "generator" && (
-          <motion.div
-            key="generator"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden"
-          >
-            <ContentGenerator
-              weakSubjects={
-                practiceSubjects.length
-                  ? practiceSubjects
-                  : [{ id: "matematicas" }]
-              }
-              grade={grade}
-              onClose={() => setActivePanel(null)}
-              darkMode={darkMode}
-            />
-          </motion.div>
-        )}
-        {activePanel === "scanner" && (
-          <motion.div
-            key="scanner"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden"
-          >
-            <DocumentScanner
-              grade={grade}
-              onClose={() => setActivePanel(null)}
-              darkMode={darkMode}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ── Grid de herramientas (2×2) ── */}
-      <div>
-        <h3
-          className={`text-xs font-bold mb-3 uppercase tracking-wide ${textSub}`}
-        >
-          Herramientas de práctica
-        </h3>
-        <div className="grid grid-cols-2 gap-3">
-          <ActionCard
-            emoji="🃏"
-            title="EduCards"
-            desc="Flashcards inteligentes. Aprende y repasa con IA."
-            gradient="linear-gradient(135deg, #06D6A0 0%, #1B9AAA 55%, #118AB2 100%)"
-            onClick={() => {
-              setActivePanel(null);
-              onTabChange("flashcards");
-            }}
+      <section className="space-y-3" aria-labelledby="practicar-step-1">
+        <div id="practicar-step-1">
+          <StepTitle n={1} darkMode={darkMode}>
+            {recommendation
+              ? "O elige tú la materia"
+              : "¿Qué materia quieres practicar?"}
+          </StepTitle>
+        </div>
+        {subjects.length ? (
+          <SubjectPicker
+            subjects={subjects}
+            selectedId={subject?.id}
+            onSelect={selectSubject}
+            darkMode={darkMode}
           />
-          <ActionCard
+        ) : (
+          <p className={`text-sm ${textSub}`}>
+            Aún no tienes materias. Escanea tu boletín en Aprender para verlas
+            aquí.
+          </p>
+        )}
+      </section>
+
+      <section
+        ref={stepTwoRef}
+        className="space-y-3"
+        aria-labelledby="practicar-step-2"
+      >
+        <div id="practicar-step-2">
+          <StepTitle n={2} darkMode={darkMode}>
+            ¿Cómo quieres practicar{" "}
+            <span style={{ color: subject?.color }}>
+              {subject ? `${subject.emoji} ${label}` : label}
+            </span>
+            ?
+          </StepTitle>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <ToolButton
             emoji="🎮"
             title="Retos Inteligentes"
-            desc="Preguntas de tu grado. Gana XP y sube de nivel."
-            gradient="linear-gradient(135deg, #EF476F 0%, #FF6B9D 55%, #FF8FA3 100%)"
-            badge="🔥 DBA"
-            onClick={() => {
-              setActivePanel(null);
-              onTabChange("retos");
-            }}
+            desc={
+              subject?.retoAvailable
+                ? `Responde preguntas de ${label} y gana puntos.`
+                : "Responde preguntas de tu grado y gana puntos."
+            }
+            gradient="linear-gradient(135deg, #EF476F 0%, #FF8FA3 100%)"
+            onClick={() => openRetos()}
+            darkMode={darkMode}
           />
-          <ActionCard
+          <ToolButton
+            emoji="🃏"
+            title="EduCards"
+            desc={`Tarjetas para aprender ${label} jugando.`}
+            gradient="linear-gradient(135deg, #06D6A0 0%, #118AB2 100%)"
+            onClick={openEduCards}
+            darkMode={darkMode}
+          />
+          <ToolButton
             emoji="✨"
-            title="Generar contenido"
-            desc="Resumen, mapa conceptual, ejercicios o videos del tema."
-            gradient="linear-gradient(135deg, #7B2FF7 0%, #9D4EDD 55%, #C77DFF 100%)"
-            onClick={() =>
-              setActivePanel(activePanel === "generator" ? null : "generator")
-            }
+            title="Crear material"
+            desc="La IA te explica el tema, con ejercicios y videos."
+            gradient="linear-gradient(135deg, #7B2FF7 0%, #C77DFF 100%)"
+            onClick={() => togglePanel("generator")}
+            open={activePanel === "generator"}
+            expandable
+            darkMode={darkMode}
           />
-          <ActionCard
+          <ToolButton
             emoji="📷"
-            title="Escanear documento"
-            desc="Sube tu apunte o libro y la IA lo convierte en aprendizaje."
-            gradient="linear-gradient(135deg, #FB8500 0%, #FFB703 55%, #FFD166 100%)"
-            onClick={() =>
-              setActivePanel(activePanel === "scanner" ? null : "scanner")
-            }
+            title="Escanear mi apunte"
+            desc="Toma una foto de tu cuaderno y te lo explico."
+            gradient="linear-gradient(135deg, #FB8500 0%, #FFD166 100%)"
+            onClick={() => togglePanel("scanner")}
+            open={activePanel === "scanner"}
+            expandable
+            darkMode={darkMode}
           />
         </div>
+      </section>
+
+      <div ref={panelRef} className="scroll-mt-4">
+        <AnimatePresence mode="wait" initial={false}>
+          {activePanel === "generator" && subject && (
+            <motion.div
+              key="generator"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+            >
+              <ContentGenerator
+                key={subject.id}
+                subject={subject}
+                grade={grade}
+                age={studentAge}
+                onTabChange={onTabChange}
+                onClose={() => setActivePanel(null)}
+                darkMode={darkMode}
+              />
+            </motion.div>
+          )}
+          {activePanel === "scanner" && (
+            <motion.div
+              key="scanner"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+            >
+              <DocumentScanner
+                grade={grade}
+                subjectLabel={subject?.label}
+                onClose={() => setActivePanel(null)}
+                darkMode={darkMode}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* ── Progreso rápido ── */}
-      {weakSubjects.length > 0 && (
-        <div className={`rounded-2xl border p-4 backdrop-blur-xl ${card}`}>
-          <div className="flex items-center gap-2 mb-3">
-            <TrendingUp className="w-4 h-4 text-[#9D4EDD]" />
-            <p className={`text-xs font-bold ${textPrimary}`}>
-              Áreas a fortalecer
-            </p>
-          </div>
-          <div className="space-y-2">
-            {weakSubjects.slice(0, 4).map((s) => {
-              const m = SUBJECT_META[s.id] || {};
-              const pct =
-                s.grade != null
-                  ? Math.min((parseFloat(s.grade) / 5) * 100, 100)
-                  : 45;
-              return (
-                <div key={s.id} className="flex items-center gap-3">
-                  <span className="text-sm w-5 shrink-0">
-                    {m.emoji || "📚"}
-                  </span>
-                  <p
-                    className={`text-xs font-medium flex-1 truncate ${textPrimary}`}
-                  >
-                    {m.label || s.id}
-                  </p>
-                  <div className="w-24 h-1.5 rounded-full bg-[#E2E8F0] dark:bg-[#334155] overflow-hidden shrink-0">
-                    <div
-                      className="h-full rounded-full transition-all"
-                      style={{
-                        width: `${pct}%`,
-                        background: m.color || "#9D4EDD",
-                      }}
-                    />
-                  </div>
-                  {s.grade != null && (
-                    <span
-                      className={`text-[10px] font-bold w-6 text-right ${
-                        parseFloat(s.grade) < 3
-                          ? "text-red-400"
-                          : "text-amber-500"
-                      }`}
-                    >
-                      {parseFloat(s.grade).toFixed(1)}
-                    </span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* ── Tip motivacional ── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-        className={`rounded-2xl border p-4 text-center backdrop-blur-xl ${card}`}
-      >
-        <p className={`text-xs ${textSub} leading-relaxed`}>
-          <Sparkles className="inline w-3.5 h-3.5 mr-1 text-[#9D4EDD]" />
-          <strong>Consejo del día:</strong> Practicar 15 minutos al día es más
-          efectivo que estudiar 2 horas el día antes del examen. ¡Tú puedes!
-        </p>
-      </motion.div>
+      <p className={`text-xs text-center leading-relaxed px-2 ${textSub}`}>
+        💡 Practicar 15 minutos al día rinde más que estudiar 2 horas antes del
+        examen.
+      </p>
     </div>
   );
 });
