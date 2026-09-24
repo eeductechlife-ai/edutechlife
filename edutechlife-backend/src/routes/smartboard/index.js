@@ -9,6 +9,7 @@ const adaptiveRoutes = require('./adaptive');
 const parentInsightsRoutes = require('./parent-insights');
 const gamificationRoutes = require('./gamification');
 const scanRoutes = require('./scan');
+const videoRoutes = require('./videos');
 
 const router = Router();
 
@@ -21,5 +22,6 @@ router.use(adaptiveRoutes);
 router.use(parentInsightsRoutes);
 router.use(gamificationRoutes);
 router.use(scanRoutes);
+router.use(videoRoutes);
 
 module.exports = router;

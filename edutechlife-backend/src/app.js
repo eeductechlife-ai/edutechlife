@@ -135,6 +135,9 @@ app.use('/api/ingenia/progress', requireAuth);
 app.use('/api/ingenia/chat', requireAuth, deepseekLimiter);
 app.use('/api/ingenia/dani/chat', requireAuth, deepseekLimiter);
 app.use('/api/ingenia/ai', requireAuth, deepseekLimiter);
+// YouTube search quota is shared; same per-user budget as the AI endpoints.
+app.use('/api/ingenia/videos', requireAuth, deepseekLimiter);
+app.use('/api/smartboard/videos', requireAuth, deepseekLimiter);
 app.use('/api/ialab/progress', requireAuth);
 app.use('/api/ialab/templates', requireAuth);
 
