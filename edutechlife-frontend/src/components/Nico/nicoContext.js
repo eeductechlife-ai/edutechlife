@@ -276,11 +276,20 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
   }
 
   // Acerca de EdutechLife
-  if (
+  const asksAboutCompany =
     lowerMessage.includes("quién eres") ||
-    lowerMessage.includes("que es edutechlife") ||
-    lowerMessage.includes("qué hacen")
-  ) {
+    lowerMessage.includes("quien eres") ||
+    lowerMessage.includes("quiénes son") ||
+    lowerMessage.includes("quienes son") ||
+    lowerMessage.includes("qué hacen") ||
+    (lowerMessage.includes("edutechlife") &&
+      (lowerMessage.includes("qué es") ||
+        lowerMessage.includes("que es") ||
+        lowerMessage.includes("qué hace") ||
+        lowerMessage.includes("que hace") ||
+        lowerMessage.includes("a qué se dedican") ||
+        lowerMessage.includes("a que se dedican")));
+  if (asksAboutCompany) {
     return "Somos EdutechLife: aplicamos pedagogía e inteligencia artificial para mejorar el proceso educativo. Tenemos IALab (curso de IA), IngenIA (acompañamiento con IA para niños y jóvenes), el ADN de Aprendizaje (diagnóstico VAK gratuito) e IA para empresas.";
   }
 
