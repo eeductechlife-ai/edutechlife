@@ -39,7 +39,9 @@ const GradeGoalCard = memo(function GradeGoalCard({ onTabChange }) {
     subjectsWithGrades,
     gradeAvg,
     darkMode: dm,
+    studentAge,
   } = useIngenIAKids();
+  const early = studentAge != null && studentAge <= 9;
 
   const data = useMemo(() => {
     const grades = (studentGrades || []).filter((g) => gradeAvg(g) > 0);
@@ -113,7 +115,7 @@ const GradeGoalCard = memo(function GradeGoalCard({ onTabChange }) {
             id="grade-goal-title"
             className="!m-0 text-[11px] font-black uppercase tracking-wide text-[#118AB2]"
           >
-            Mi promedio general
+            {early ? "Mis notas" : "Mi promedio general"}
           </h3>
           <p className="!m-0 mt-1 flex items-baseline gap-2">
             <span
@@ -163,16 +165,27 @@ const GradeGoalCard = memo(function GradeGoalCard({ onTabChange }) {
               }}
             />
           </div>
-          <p className={`!m-0 mt-2 text-xs ${sub}`}>
-            Te faltan{" "}
-            <span className="font-black" style={{ color: next.state.color }}>
-              +{gap.toFixed(1)}
-            </span>{" "}
-            para llegar a{" "}
-            <span className="font-black" style={{ color: next.state.color }}>
-              {next.state.emoji} {next.state.label} ({next.min.toFixed(1)})
-            </span>
-          </p>
+          {early ? (
+            <p className={`!m-0 mt-2 text-xs ${sub}`}>
+              {gap <= 0.3 ? "¡Te falta muy poquito" : "¡Vas en camino"} para
+              llegar a{" "}
+              <span className="font-black" style={{ color: next.state.color }}>
+                {next.state.emoji} {next.state.label}
+              </span>
+              !
+            </p>
+          ) : (
+            <p className={`!m-0 mt-2 text-xs ${sub}`}>
+              Te faltan{" "}
+              <span className="font-black" style={{ color: next.state.color }}>
+                +{gap.toFixed(1)}
+              </span>{" "}
+              para llegar a{" "}
+              <span className="font-black" style={{ color: next.state.color }}>
+                {next.state.emoji} {next.state.label} ({next.min.toFixed(1)})
+              </span>
+            </p>
+          )}
         </>
       ) : (
         <p className={`!m-0 mt-2 text-xs ${sub}`}>
@@ -195,7 +208,9 @@ const GradeGoalCard = memo(function GradeGoalCard({ onTabChange }) {
           </span>
           <span className="min-w-0 flex-1">
             <span className={`block text-[11px] ${sub}`}>
-              Lo que más sube tu promedio:
+              {early
+                ? "Practica esta para mejorar:"
+                : "Lo que más sube tu promedio:"}
             </span>
             <span className="block text-sm font-black truncate">
               {lever.name} · {Number(lever.gradeScore).toFixed(1)}

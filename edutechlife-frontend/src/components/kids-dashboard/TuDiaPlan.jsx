@@ -1,6 +1,6 @@
-import { memo, useMemo } from "react";
-import { motion } from "framer-motion";
-import { CheckCircle2, ChevronRight } from "lucide-react";
+import { memo, useEffect, useMemo, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { CheckCircle2, ChevronRight, Volume2, Square } from "lucide-react";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { usePracticeLog } from "./practicarHub/practicarProgress";
 import { SUBJECT_META } from "./practicarHub/practicarConfig";
@@ -11,8 +11,53 @@ import {
   HANDOFF_CHALLENGE_DIFFICULTY,
   HANDOFF_CHALLENGE_AUTOSTART,
 } from "./practicarHub/practicarHandoff";
+import { speakAsDani, stopDani, isCurrentRun } from "./practicarHub/daniSpeak";
 
 const DAY_MS = 86400000;
+
+// Same age cut as CinematicContent: early ≤9, middle ≤12, senior 13+.
+const ageGroupOf = (age) =>
+  age == null ? "middle" : age <= 9 ? "early" : age <= 12 ? "middle" : "senior";
+
+const COPY = {
+  early: {
+    title: "Tus 3 misiones de hoy",
+    sub: "¡Complétalas y gana tu medalla! 🏅",
+    done: "¡Lo lograste! 🏅",
+    reto: (name) => (name ? `¡Juega un reto de ${name}!` : "¡Juega un reto!"),
+    retoHint: () => "Responde y gana estrellas ⭐",
+    cards: "Juega con tus tarjetas",
+    cardsHint: "Voltea y recuerda 🃏",
+    oral: "Cuéntale a Dani qué aprendiste",
+    oralHint: "¡Dani te escucha! 👂",
+  },
+  middle: {
+    title: "Tu día en 3 pasos",
+    sub: "Unos 20 minutos que sí mueven tus notas",
+    done: "¡Día completo! 🎉",
+    reto: (name) => (name ? `Reto de ${name}` : "Haz un reto"),
+    retoHint: (score) =>
+      score != null
+        ? `Tu nota: ${score.toFixed(1)} · 10 min`
+        : "10 min · sube tu nota",
+    cards: "Repasa tus EduCards",
+    cardsHint: "5 min · la memoria se entrena repasando",
+    oral: "Explícale un tema a Dani",
+    oralHint: "5 min · si lo explicas, lo entiendes",
+  },
+  senior: {
+    title: "Plan de hoy",
+    sub: "~20 min en lo que más sube tu promedio",
+    done: "Plan de hoy completo ✅",
+    reto: (name) => (name ? `Reto de ${name}` : "Haz un reto"),
+    retoHint: (score) =>
+      score != null ? `Nota actual ${score.toFixed(1)} · 10 min` : "10 min",
+    cards: "Repaso espaciado (EduCards)",
+    cardsHint: "5 min · fija lo que ya estudiaste",
+    oral: "Explica un tema en voz alta",
+    oralHint: "5 min · la mejor prueba de que lo entiendes",
+  },
+};
 
 function weakestSubject(subjects) {
   const score = (s) =>
@@ -38,8 +83,14 @@ function nextExam(exams) {
 }
 
 const TuDiaPlan = memo(function TuDiaPlan({ onTabChange, darkMode }) {
-  const { subjectsWithGrades, subjects, exams, streak } = useIngenIAKids();
+  const { subjectsWithGrades, subjects, exams, streak, studentAge } =
+    useIngenIAKids();
   const { today } = usePracticeLog();
+  const reduce = useReducedMotion();
+  const age = ageGroupOf(studentAge);
+  const copy = COPY[age];
+  const [speaking, setSpeaking] = useState(false);
+  useEffect(() => () => stopDani(), []);
   const list = subjectsWithGrades?.length ? subjectsWithGrades : subjects;
 
   const steps = useMemo(() => {
@@ -50,11 +101,10 @@ const TuDiaPlan = memo(function TuDiaPlan({ onTabChange, darkMode }) {
     const reto = {
       id: "reto",
       emoji: weak?.icon || "⚡",
-      title: weak ? `Reto de ${weak.name}` : "Haz un reto",
-      hint:
-        weak?.gradeScore != null
-          ? `Tu nota: ${Number(weak.gradeScore).toFixed(1)} · 10 min`
-          : "10 min · sube tu nota",
+      title: copy.reto(weak?.name),
+      hint: copy.retoHint(
+        weak?.gradeScore != null ? Number(weak.gradeScore) : null,
+      ),
       done: did("reto"),
       go: () => {
         const challengeId = weak && SUBJECT_META[weak.id]?.challengeId;
@@ -71,8 +121,8 @@ const TuDiaPlan = memo(function TuDiaPlan({ onTabChange, darkMode }) {
     const cards = {
       id: "cards",
       emoji: "🃏",
-      title: "Repasa tus EduCards",
-      hint: "5 min · la memoria se entrena repasando",
+      title: copy.cards,
+      hint: copy.cardsHint,
       done: did("educards"),
       go: () => onTabChange?.("flashcards"),
     };
@@ -94,18 +144,36 @@ const TuDiaPlan = memo(function TuDiaPlan({ onTabChange, darkMode }) {
       : {
           id: "oral",
           emoji: "🗣️",
-          title: "Explícale un tema a Dani",
-          hint: "5 min · si lo explicas, lo entiendes",
+          title: copy.oral,
+          hint: copy.oralHint,
           done: did("oral"),
           go: () => onTabChange?.("oral"),
         };
 
     return [reto, cards, third];
-  }, [today, list, exams, onTabChange]);
+  }, [today, list, exams, onTabChange, copy]);
 
   const doneCount = steps.filter((s) => s.done).length;
   const allDone = doneCount === steps.length;
   const pct = Math.round((doneCount / steps.length) * 100);
+
+  const toggleSpeak = () => {
+    if (speaking) {
+      stopDani();
+      setSpeaking(false);
+      return;
+    }
+    const pending = steps.filter((s) => !s.done);
+    const text = allDone
+      ? `${copy.done}. ¡Muy bien hecho!`
+      : `${copy.title}. ${pending
+          .map((s, i) => `Paso ${i + 1}: ${s.title}.`)
+          .join(" ")}`;
+    setSpeaking(true);
+    const id = speakAsDani(text, {
+      onEnd: () => isCurrentRun(id) && setSpeaking(false),
+    });
+  };
 
   const surface = darkMode
     ? "bg-[#1E293B]/80 border-[#334155]/60"
@@ -143,16 +211,46 @@ const TuDiaPlan = memo(function TuDiaPlan({ onTabChange, darkMode }) {
             id="tu-dia-title"
             className={`!m-0 text-base font-black leading-tight ${textPrimary}`}
           >
-            {allDone ? "¡Día completo! 🎉" : "Tu día en 3 pasos"}
+            {allDone ? copy.done : copy.title}
           </h3>
           <p className={`!m-0 mt-0.5 text-xs leading-snug ${textSub}`}>
             {allDone
               ? streak?.current > 1
                 ? `Llevas ${streak.current} días seguidos. ¡Así suben las notas!`
                 : "Vuelve mañana para empezar tu racha 🔥"
-              : "Unos 20 minutos que sí mueven tus notas"}
+              : copy.sub}
           </p>
         </div>
+        {allDone && (
+          <motion.span
+            className="text-3xl shrink-0"
+            aria-hidden="true"
+            initial={reduce ? false : { scale: 0, rotate: -30 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 260, damping: 12 }}
+          >
+            🏅
+          </motion.span>
+        )}
+        <button
+          type="button"
+          onClick={toggleSpeak}
+          aria-label={speaking ? "Detener lectura" : "Escuchar mi plan de hoy"}
+          aria-pressed={speaking}
+          className={`shrink-0 w-11 h-11 grid place-items-center rounded-xl border transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-[#06D6A0]/30 ${
+            speaking
+              ? "bg-[#06D6A0] border-[#06D6A0] text-white"
+              : darkMode
+                ? "border-[#334155] text-[#06D6A0]"
+                : "border-[#E2E8F0] text-[#059669] bg-[#F8FAFC]"
+          }`}
+        >
+          {speaking ? (
+            <Square className="w-4 h-4" aria-hidden="true" />
+          ) : (
+            <Volume2 className="w-5 h-5" aria-hidden="true" />
+          )}
+        </button>
       </div>
 
       <ol className="!m-0 !p-0 list-none space-y-2">
