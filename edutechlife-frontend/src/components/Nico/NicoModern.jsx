@@ -347,6 +347,23 @@ const NicoModern = ({
     setIsLoading(false);
     setShowSuggestions(true);
     setShowedConversationOptions(false);
+    // Reiniciar contexto del usuario: sin esto, el contador/estado viejo hacía
+    // que Nico pidiera el nombre de nuevo aunque se hubiera limpiado el chat.
+    setUserContext({
+      userName: null,
+      detectedInterest: null,
+      studentAge: null,
+      conversationStage: "inicio",
+      detectedTopics: [],
+      conversationPath: [],
+      messagesSinceStart: 0,
+      nameAskedOnce: false,
+      dontWantName: false,
+      nameUsageCounter: 0,
+    });
+    setUserMessageCount(0);
+    setConversationPhase("reactive");
+    setLastProactiveIndex(0);
     voice.isSpeakingRef.current = false;
     voice.clearSpeechSafetyTimeout();
     voice.sentenceQueueRef.current = [];
@@ -440,8 +457,8 @@ const NicoModern = ({
   };
 
   const clearChat = () => {
-    setMessages([]);
-    clearMemory();
+    // Reutiliza el reset completo (incluye el reinicio del contexto del usuario).
+    resetChat();
   };
 
   const clearCache = () => {

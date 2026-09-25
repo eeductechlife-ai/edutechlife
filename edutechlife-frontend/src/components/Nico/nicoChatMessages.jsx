@@ -184,191 +184,201 @@ export function ChatMessages({
   const { t } = useTranslation();
   return (
     <div
-      className="flex-1 overflow-y-auto p-4"
+      className="flex-1 flex flex-col min-h-0"
       style={{
         backgroundColor: COLORS.NAVY,
         backgroundImage: `radial-gradient(circle at 20% 80%, ${COLORS.PETROLEUM}20 0%, transparent 50%)`,
       }}
     >
-      {(messages || []).length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-full text-center p-8">
-          <div
-            className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
-            style={{ backgroundColor: COLORS.CORPORATE }}
-          >
-            <Bot className="w-10 h-10 text-white -mt-1" />
+      <div className="flex-1 overflow-y-auto p-4" data-testid="nico-scroller">
+        {(messages || []).length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-center p-8">
+            <div
+              className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
+              style={{ backgroundColor: COLORS.CORPORATE }}
+            >
+              <Bot className="w-10 h-10 text-white -mt-1" />
+            </div>
+            <h3
+              className="text-xl font-bold mb-2"
+              style={{ color: COLORS.SOFT_BLUE }}
+            >
+              Nico
+            </h3>
+            <p className="text-sm mb-6" style={{ color: COLORS.MINT }}>
+              {t("nico.empty_subtitle")}
+            </p>
+            <p className="text-sm mb-6" style={{ color: COLORS.CORPORATE }}>
+              {t("nico.empty_description")}
+            </p>
+            <p className="text-xs italic mb-4" style={{ color: COLORS.MINT }}>
+              {t("nico.empty_hint")}
+            </p>
           </div>
-          <h3
-            className="text-xl font-bold mb-2"
-            style={{ color: COLORS.SOFT_BLUE }}
-          >
-            Nico
-          </h3>
-          <p className="text-sm mb-6" style={{ color: COLORS.MINT }}>
-            {t("nico.empty_subtitle")}
-          </p>
-          <p className="text-sm mb-6" style={{ color: COLORS.CORPORATE }}>
-            {t("nico.empty_description")}
-          </p>
-          <p className="text-xs italic mb-4" style={{ color: COLORS.MINT }}>
-            {t("nico.empty_hint")}
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-            >
-              <MessageBubble
-                msg={msg}
-                onScheduleOption={onScheduleOption}
-                onAskQuestion={onAskQuestion}
-              />
-            </div>
-          ))}
+        ) : (
+          <div className="space-y-4">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+              >
+                <MessageBubble
+                  msg={msg}
+                  onScheduleOption={onScheduleOption}
+                  onAskQuestion={onAskQuestion}
+                />
+              </div>
+            ))}
 
-          {showSuggestions &&
-            messages.length > 0 &&
-            !showLeadForm &&
-            !showScheduler && (
-              <div className="mt-4 mb-2">
-                <p className="text-xs font-medium mb-2 text-gray-500">
-                  {t("nico.suggestions_label")}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {getQuestionSuggestions(messages, userContext).map(
-                    (suggestion, index) => (
-                      <button
-                        key={index}
-                        onClick={() => onSuggestionClick(suggestion)}
-                        className="text-xs px-3 py-2 rounded-full hover:scale-105 transition active:scale-95"
-                        style={{
-                          backgroundColor: COLORS.SOFT_BLUE,
-                          color: COLORS.NAVY,
-                          border: `1px solid ${COLORS.CORPORATE}40`,
-                        }}
-                      >
-                        {suggestion}
-                      </button>
-                    ),
-                  )}
-                </div>
-                <button
-                  onClick={() => onToggleSuggestions(false)}
-                  className="text-xs mt-2 text-gray-400 hover:text-gray-600"
+            {showLeadForm && leadCaptureContext && (
+              <div className="mb-4 animate-slideUp">
+                <Suspense
+                  fallback={
+                    <div className="p-4 text-center text-gray-500">
+                      {t("nico.loading_form")}
+                    </div>
+                  }
                 >
-                  {t("nico.hide_suggestions")}
-                </button>
+                  <LeadCaptureForm
+                    userName={leadCaptureContext.userName}
+                    userInterest={leadCaptureContext.userInterest}
+                    onSave={onSaveLead}
+                    onCancel={onCancelLead}
+                    autoFocus={true}
+                  />
+                </Suspense>
               </div>
             )}
 
-          {!showSuggestions &&
-            messages.length > 2 &&
-            !showLeadForm &&
-            !showScheduler && (
+            {showLeadSuccess && (
+              <div
+                className="mb-4 p-4 rounded-xl animate-fadeIn"
+                style={{
+                  backgroundColor: COLORS.MINT + "40",
+                  border: `2px solid ${COLORS.MINT}`,
+                }}
+              >
+                <div className="flex items-center">
+                  <CheckCircle
+                    className="w-5 h-5 mr-2"
+                    style={{ color: COLORS.PETROLEUM }}
+                  />
+                  <div>
+                    <p className="font-medium" style={{ color: COLORS.NAVY }}>
+                      {t("nico.lead_saved_title")}
+                    </p>
+                    <p className="text-sm" style={{ color: COLORS.PETROLEUM }}>
+                      {t("nico.lead_saved_desc")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showScheduler && schedulerContext && (
+              <div className="mb-4 animate-slideUp">
+                <Suspense
+                  fallback={
+                    <div className="p-4 text-center text-gray-500">
+                      {t("nico.loading_calendar")}
+                    </div>
+                  }
+                >
+                  <AppointmentScheduler
+                    leadData={schedulerContext.leadData}
+                    onSchedule={onSchedule}
+                    onCancel={onCancelSchedule}
+                    autoFocus={true}
+                  />
+                </Suspense>
+              </div>
+            )}
+
+            {showAppointmentSuccess && (
+              <div
+                className="mb-4 p-4 rounded-xl animate-fadeIn"
+                style={{
+                  backgroundColor: COLORS.CORPORATE + "40",
+                  border: `2px solid ${COLORS.CORPORATE}`,
+                }}
+              >
+                <div className="flex items-center">
+                  <Calendar
+                    className="w-5 h-5 mr-2"
+                    style={{ color: COLORS.PETROLEUM }}
+                  />
+                  <div>
+                    <p className="font-medium" style={{ color: COLORS.NAVY }}>
+                      {t("nico.appointment_saved_title")}
+                    </p>
+                    <p className="text-sm" style={{ color: COLORS.PETROLEUM }}>
+                      {t("nico.appointment_saved_desc")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {isLoading && <TypingIndicator />}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
+      </div>
+
+      {showSuggestions &&
+        messages.length > 0 &&
+        !showLeadForm &&
+        !showScheduler && (
+          <div
+            className="border-t px-3 py-2"
+            style={{ borderColor: COLORS.PETROLEUM }}
+          >
+            <div className="flex items-center gap-2 overflow-x-auto">
+              <span
+                className="text-[11px] font-medium whitespace-nowrap"
+                style={{ color: COLORS.MINT }}
+              >
+                {t("nico.suggestions_label")}
+              </span>
+              {getQuestionSuggestions(messages, userContext).map(
+                (suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => onSuggestionClick(suggestion)}
+                    className="text-xs px-3 py-1.5 rounded-full whitespace-nowrap hover:scale-105 transition active:scale-95"
+                    style={{
+                      backgroundColor: COLORS.SOFT_BLUE,
+                      color: COLORS.NAVY,
+                      border: `1px solid ${COLORS.CORPORATE}40`,
+                    }}
+                  >
+                    {suggestion}
+                  </button>
+                ),
+              )}
               <button
-                onClick={() => onToggleSuggestions(true)}
-                className="text-xs mt-2 text-gray-400 hover:text-gray-600 flex items-center"
+                onClick={() => onToggleSuggestions(false)}
+                title={t("nico.hide_suggestions")}
+                aria-label={t("nico.hide_suggestions")}
+                className="text-xs ml-auto px-1.5 whitespace-nowrap text-gray-400 hover:text-gray-200"
               >
-                <span>{t("nico.show_suggestions")}</span>
+                ✕
               </button>
-            )}
-
-          {showLeadForm && leadCaptureContext && (
-            <div className="mb-4 animate-slideUp">
-              <Suspense
-                fallback={
-                  <div className="p-4 text-center text-gray-500">
-                    {t("nico.loading_form")}
-                  </div>
-                }
-              >
-                <LeadCaptureForm
-                  userName={leadCaptureContext.userName}
-                  userInterest={leadCaptureContext.userInterest}
-                  onSave={onSaveLead}
-                  onCancel={onCancelLead}
-                  autoFocus={true}
-                />
-              </Suspense>
             </div>
-          )}
+          </div>
+        )}
 
-          {showLeadSuccess && (
-            <div
-              className="mb-4 p-4 rounded-xl animate-fadeIn"
-              style={{
-                backgroundColor: COLORS.MINT + "40",
-                border: `2px solid ${COLORS.MINT}`,
-              }}
-            >
-              <div className="flex items-center">
-                <CheckCircle
-                  className="w-5 h-5 mr-2"
-                  style={{ color: COLORS.PETROLEUM }}
-                />
-                <div>
-                  <p className="font-medium" style={{ color: COLORS.NAVY }}>
-                    {t("nico.lead_saved_title")}
-                  </p>
-                  <p className="text-sm" style={{ color: COLORS.PETROLEUM }}>
-                    {t("nico.lead_saved_desc")}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {showScheduler && schedulerContext && (
-            <div className="mb-4 animate-slideUp">
-              <Suspense
-                fallback={
-                  <div className="p-4 text-center text-gray-500">
-                    {t("nico.loading_calendar")}
-                  </div>
-                }
-              >
-                <AppointmentScheduler
-                  leadData={schedulerContext.leadData}
-                  onSchedule={onSchedule}
-                  onCancel={onCancelSchedule}
-                  autoFocus={true}
-                />
-              </Suspense>
-            </div>
-          )}
-
-          {showAppointmentSuccess && (
-            <div
-              className="mb-4 p-4 rounded-xl animate-fadeIn"
-              style={{
-                backgroundColor: COLORS.CORPORATE + "40",
-                border: `2px solid ${COLORS.CORPORATE}`,
-              }}
-            >
-              <div className="flex items-center">
-                <Calendar
-                  className="w-5 h-5 mr-2"
-                  style={{ color: COLORS.PETROLEUM }}
-                />
-                <div>
-                  <p className="font-medium" style={{ color: COLORS.NAVY }}>
-                    {t("nico.appointment_saved_title")}
-                  </p>
-                  <p className="text-sm" style={{ color: COLORS.PETROLEUM }}>
-                    {t("nico.appointment_saved_desc")}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {isLoading && <TypingIndicator />}
-          <div ref={messagesEndRef} />
-        </div>
-      )}
+      {!showSuggestions &&
+        messages.length > 2 &&
+        !showLeadForm &&
+        !showScheduler && (
+          <button
+            onClick={() => onToggleSuggestions(true)}
+            className="text-xs px-3 py-1 text-left text-gray-400 hover:text-gray-200"
+          >
+            {t("nico.show_suggestions")}
+          </button>
+        )}
     </div>
   );
 }

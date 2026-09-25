@@ -185,7 +185,23 @@ export function useNicoSendMessage({
       };
     });
 
-    const quickResponse = getQuickResponse(userMessage, userContext);
+    // Contexto efectivo: incluye el nombre recién detectado en este mensaje y
+    // el contador actualizado, para no volver a pedir un nombre que el usuario
+    // acaba de dar (antes se usaba el userContext obsoleto y lo pedía de nuevo).
+    const effectiveContext = {
+      ...userContext,
+      userName: detectedContext.userName || userContext.userName,
+      messagesSinceStart: (userContext.messagesSinceStart || 0) + 1,
+      dontWantName: detectedContext.dontWantName || userContext.dontWantName,
+    };
+
+    const nameJustGiven =
+      detectedContext.userName &&
+      detectedContext.userName !== userContext.userName;
+
+    const quickResponse = nameJustGiven
+      ? `Un gusto, ${detectedContext.userName}. ¿En qué te puedo ayudar hoy?`
+      : getQuickResponse(userMessage, effectiveContext);
     if (quickResponse) {
       const noMulletilla = removeGreetingMulletilla(quickResponse);
       const cleanResponse = removeEmojis(noMulletilla);
@@ -379,7 +395,7 @@ export function useNicoSendMessage({
         ];
         await callDeepseekStream(
           streamMessages,
-          { maxTokens: 2000, temperature: 0.7 },
+          { maxTokens: 500, temperature: 0.7 },
           false,
           (chunk) => {
             fullResponse += chunk;

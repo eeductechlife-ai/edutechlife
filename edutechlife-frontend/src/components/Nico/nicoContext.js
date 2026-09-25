@@ -145,6 +145,18 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
   const lowerMessage = userMessage.toLowerCase().trim();
   const { userName, messagesSinceStart = 0 } = userContext;
 
+  // Recordar/consultar el nombre (antes de pedirlo, para no responder "¿cómo
+  // te llamas?" cuando el usuario justamente pregunta cómo se llama).
+  if (
+    /c[oó]mo me llamo|cu[aá]l es mi nombre|sabes mi nombre|recuerdas mi nombre|te acuerdas de mi nombre/i.test(
+      lowerMessage,
+    )
+  ) {
+    return userContext.userName
+      ? `Te llamas ${userContext.userName}. ¿En qué más te puedo ayudar?`
+      : "Todavía no me has dicho tu nombre. ¿Cómo te llamas?";
+  }
+
   // Pedir nombre después de 2 mensajes si no se tiene
   if (shouldAskForName(userContext)) {
     return "¿Para personalizar mi ayuda, cómo te llamas?";
@@ -156,7 +168,7 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     lowerMessage.includes("buenas") ||
     lowerMessage === "hi"
   ) {
-    return "¿En qué puedo ayudarte? Puedo informarte sobre VAK, STEM, tutorías y más.";
+    return "¡Hola! Qué gusto saludarte. Cuéntame, ¿en qué te puedo ayudar hoy?";
   }
 
   // Qué es VAK
@@ -192,7 +204,7 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     lowerMessage.includes("cuanto") ||
     lowerMessage.includes("costo")
   ) {
-    return "Tenemos planes según tus necesidades. La primera clase es gratuita para que conozcas nuestro método.";
+    return "Tenemos planes que se ajustan a lo que necesitas y la primera clase es gratis para que conozcas nuestro método. ¿Quieres que te ayude a elegir el ideal?";
   }
 
   // Primera clase gratis
@@ -203,7 +215,7 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     lowerMessage.includes("prueba") ||
     lowerMessage.includes("demo")
   ) {
-    return "La primera clase es gratuita y sin compromiso. Dura 30-45 minutos. ¿Te gustaría agendar?";
+    return "¡Claro que sí! La primera clase es gratis y sin compromiso, dura 30-45 minutos. ¿Te gustaría agendarla?";
   }
 
   // Modalidades
@@ -254,7 +266,7 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     lowerMessage.includes("iniciar") ||
     lowerMessage.includes("cómo comenzar")
   ) {
-    return "Para comenzar, agendamos tu primera clase gratuita. En esa sesión conocernos tus necesidades. ¿Te gustaría agendar?";
+    return "Con gusto te acompaño. Empezamos con tu primera clase gratis y, según lo que necesites, te recomendamos el plan ideal. ¿Te la agendo?";
   }
 
   // Acerca de EdutechLife
@@ -268,7 +280,7 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
 
   // Gratitud
   if (lowerMessage.includes("gracias") || lowerMessage.includes("thank")) {
-    return "De nada. ¿Hay algo más en lo que pueda ayudarte?";
+    return "¡Con mucho gusto! Si necesitas algo más, aquí estoy para ayudarte.";
   }
 
   // Despedida
@@ -277,7 +289,7 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     lowerMessage.includes("chao") ||
     lowerMessage.includes("bye")
   ) {
-    return "Fue un gusto ayudarte. Puedes contactarnos cuando quieras. ¡Hasta pronto!";
+    return "¡Gracias por escribirnos! Cuando quieras seguimos aquí. ¡Que tengas un lindo día!";
   }
 
   // Si no hay respuesta rápida, retorna null para que la IA responda
@@ -325,7 +337,7 @@ export const getQuestionSuggestions = (messages, userContext = {}) => {
   if (mentionedTopics.length === 0 || conversationStage === "inicio") {
     return [
       "¿Qué servicios ofrecen?",
-      "¿Qué es el diagnóstico VAK?",
+      "¿Qué es el ADN de Aprendizaje?",
       "¿Tienen clases de programación?",
       "¿Cuál es el costo de las tutorías?",
     ];
@@ -431,13 +443,13 @@ export const getConversationOptions = (messages, userContext = {}) => {
   // Opciones según etapa y tema
   if (currentStage === "descubrimiento" || currentTopic === null) {
     options.push(
-      { text: "Conocer diagnóstico VAK", action: "learn_vak" },
+      { text: "Conocer ADN de Aprendizaje", action: "learn_vak" },
       { text: "Ver cursos STEM", action: "explore_stem" },
       { text: "Información de tutorías", action: "info_tutoring" },
     );
   } else if (currentTopic === "VAK") {
     options.push(
-      { text: "Agendar diagnóstico VAK", action: "schedule_vak" },
+      { text: "Agendar ADN de Aprendizaje", action: "schedule_vak" },
       { text: "Más sobre estilos de aprendizaje", action: "more_vak" },
       { text: "Ver otros servicios", action: "other_services" },
     );
@@ -495,7 +507,8 @@ export const getPageContext = (pathname = "") => {
     return "el dashboard o landing de IALab (aprender con IA)";
   if (p.startsWith("/ingenia"))
     return "la plataforma IngenIA (niños y colegios)";
-  if (p.startsWith("/vak")) return "la página del test y diagnóstico VAK";
+  if (p.startsWith("/vak"))
+    return "la página del test VAK y ADN de Aprendizaje";
   if (p.startsWith("/sign-up"))
     return "el formulario de registro de una cuenta";
   if (p.startsWith("/login")) return "la página de inicio de sesión";
