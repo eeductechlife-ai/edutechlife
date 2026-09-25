@@ -1,10 +1,21 @@
 import { memo, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Edit3, LogOut, Moon, Sun } from "lucide-react";
+import {
+  Edit3,
+  LogOut,
+  Moon,
+  Sun,
+  Users,
+  Mail,
+  Send,
+  CheckCircle2,
+  X,
+} from "lucide-react";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useStudentProfileIngenIA } from "../../../hooks/useStudentProfileIngenIA";
 import { SB_GRADIENTS, glow } from "../ingenIATheme";
 import EditProfileModal from "../EditProfileModal";
+import { API_BASE_URL as API_BASE } from "../../../config/api";
 
 import ProgressSummary from "./ProgressSummary";
 import RewardsGrid from "../ingenIAProgress/components/RewardsGrid";
@@ -83,6 +94,14 @@ const SmartProfile = memo(function SmartProfile({
 
   const [activeTab, setActiveTab] = useState(initialTab);
   const [editOpen, setEditOpen] = useState(false);
+  const [parentInviteOpen, setParentInviteOpen] = useState(false);
+  const [parentInviteForm, setParentInviteForm] = useState({
+    parentEmail: "",
+    studentAge: "",
+  });
+  const [parentInviteLoading, setParentInviteLoading] = useState(false);
+  const [parentInviteResult, setParentInviteResult] = useState(null);
+  const [parentInviteError, setParentInviteError] = useState("");
   const authToken =
     typeof window !== "undefined" ? sessionStorage.getItem("auth_token") : null;
   const {
@@ -114,6 +133,33 @@ const SmartProfile = memo(function SmartProfile({
 
   const textMain = dm ? "#F0F6FF" : "#1E293B";
   const textMuted = dm ? "#94A3B8" : "#64748B";
+
+  const handleParentInvite = async (e) => {
+    e.preventDefault();
+    setParentInviteError("");
+    setParentInviteLoading(true);
+    try {
+      const token = sessionStorage.getItem("auth_token");
+      const res = await fetch(`${API_BASE}/api/smartboard/parental-consent`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          parentEmail: parentInviteForm.parentEmail,
+          studentAge: parseInt(parentInviteForm.studentAge, 10),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error al enviar invitación");
+      setParentInviteResult(parentInviteForm.parentEmail);
+    } catch (err) {
+      setParentInviteError(err.message);
+    } finally {
+      setParentInviteLoading(false);
+    }
+  };
 
   return (
     <motion.div
@@ -413,6 +459,28 @@ const SmartProfile = memo(function SmartProfile({
                   )}
                   {dm ? "Modo claro" : "Modo oscuro"}
                 </button>
+
+                {/* Parent invitation */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setParentInviteOpen(true);
+                    setParentInviteResult(null);
+                    setParentInviteError("");
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold"
+                  style={{
+                    background: dm
+                      ? "rgba(77,168,196,0.12)"
+                      : "rgba(77,168,196,0.08)",
+                    border: `1px solid ${dm ? "#2B4A6B" : "#BAE0EC"}`,
+                    color: dm ? "#7DD8EF" : "#004B63",
+                  }}
+                >
+                  <Users className="w-4 h-4 flex-shrink-0" />
+                  Conectar con mis padres
+                </button>
+
                 {onLogout && (
                   <button
                     type="button"
@@ -426,6 +494,154 @@ const SmartProfile = memo(function SmartProfile({
                 )}
               </div>
             </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal Conectar Padres */}
+      <AnimatePresence>
+        {parentInviteOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            style={{ background: "rgba(0,0,0,0.5)" }}
+            onClick={() => setParentInviteOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 16 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 16 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-sm rounded-2xl p-6 shadow-2xl"
+              style={{ background: dm ? "#1A2744" : "#ffffff" }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3
+                  className="text-base font-black"
+                  style={{ color: textMain }}
+                >
+                  Invita a tus padres
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setParentInviteOpen(false)}
+                  className="p-1 rounded-lg hover:opacity-70 transition-opacity"
+                  style={{ color: textMuted }}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {parentInviteResult ? (
+                <div className="text-center py-4">
+                  <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-green-500" />
+                  <p
+                    className="font-semibold text-sm mb-1"
+                    style={{ color: textMain }}
+                  >
+                    ¡Invitación enviada!
+                  </p>
+                  <p className="text-xs" style={{ color: textMuted }}>
+                    Le enviamos un correo a{" "}
+                    <strong>{parentInviteResult}</strong>. Pídele que lo revise
+                    y siga las instrucciones.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setParentInviteOpen(false)}
+                    className="mt-4 px-4 py-2 rounded-xl text-sm font-semibold text-white"
+                    style={{ background: SB_GRADIENTS.brand }}
+                  >
+                    Entendido
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleParentInvite} className="space-y-4">
+                  <p className="text-xs" style={{ color: textMuted }}>
+                    Tu padre/madre recibirá un correo con un enlace para crear
+                    su cuenta y ver tu progreso.
+                  </p>
+                  <div>
+                    <label
+                      className="block text-xs font-semibold mb-1"
+                      style={{ color: textMain }}
+                    >
+                      Correo de tu padre o madre
+                    </label>
+                    <div className="relative">
+                      <Mail
+                        className="absolute left-3 top-2.5 w-4 h-4"
+                        style={{ color: textMuted }}
+                      />
+                      <input
+                        type="email"
+                        required
+                        value={parentInviteForm.parentEmail}
+                        onChange={(e) =>
+                          setParentInviteForm((p) => ({
+                            ...p,
+                            parentEmail: e.target.value,
+                          }))
+                        }
+                        placeholder="mama@ejemplo.com"
+                        className="w-full pl-9 pr-3 py-2 rounded-xl text-sm border"
+                        style={{
+                          background: dm ? "#0F172A" : "#F8FAFC",
+                          borderColor: dm ? "#243152" : "#CBD5E1",
+                          color: textMain,
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      className="block text-xs font-semibold mb-1"
+                      style={{ color: textMain }}
+                    >
+                      Tu edad
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      min="5"
+                      max="17"
+                      value={parentInviteForm.studentAge}
+                      onChange={(e) =>
+                        setParentInviteForm((p) => ({
+                          ...p,
+                          studentAge: e.target.value,
+                        }))
+                      }
+                      placeholder="ej: 13"
+                      className="w-full px-3 py-2 rounded-xl text-sm border"
+                      style={{
+                        background: dm ? "#0F172A" : "#F8FAFC",
+                        borderColor: dm ? "#243152" : "#CBD5E1",
+                        color: textMain,
+                      }}
+                    />
+                  </div>
+                  {parentInviteError && (
+                    <p className="text-xs text-red-500">{parentInviteError}</p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={parentInviteLoading}
+                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold text-white disabled:opacity-50"
+                    style={{ background: SB_GRADIENTS.brand }}
+                  >
+                    {parentInviteLoading ? (
+                      <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                    ) : (
+                      <Send className="w-4 h-4" />
+                    )}
+                    Enviar invitación
+                  </button>
+                </form>
+              )}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

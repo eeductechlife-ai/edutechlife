@@ -218,7 +218,11 @@ router.get('/parental-consent/verify', async (req, res) => {
     return res.status(400).json({ error: 'Token inválido' });
   }
 
-  const page = (title, body) =>
+  const frontendUrl = process.env.FRONTEND_URL || 'https://edutechlife.co';
+  const registerUrl = `${frontendUrl}/sign-up/ingenia?tab=padre&token=${encodeURIComponent(token)}`;
+  const loginUrl = `${frontendUrl}/sign-up/ingenia?tab=padre`;
+
+  const page = (title, body, cta, ctaUrl) =>
     `<!doctype html><html lang="es"><head><meta charset="utf-8">` +
     `<meta name="viewport" content="width=device-width, initial-scale=1">` +
     `<title>${title}</title></head>` +
@@ -227,7 +231,7 @@ router.get('/parental-consent/verify', async (req, res) => {
     `<div style="width:56px;height:56px;border-radius:50%;background:#e6f4f8;color:#004B63;font-size:28px;line-height:56px;margin:0 auto 16px">✓</div>` +
     `<h1 style="font-size:20px;margin:0 0 8px">${title}</h1>` +
     `<p style="color:#475569;margin:0 0 24px;line-height:1.5">${body}</p>` +
-    `<a href="https://edutechlife.co" style="display:inline-block;background:#004B63;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600">Ir a Edutechlife</a>` +
+    `<a href="${ctaUrl}" style="display:inline-block;background:#004B63;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600">${cta}</a>` +
     `</div></body></html>`;
 
   try {
@@ -244,7 +248,9 @@ router.get('/parental-consent/verify', async (req, res) => {
         .set('Content-Type', 'text/html; charset=utf-8')
         .send(page(
           'Consentimiento ya verificado',
-          'El consentimiento parental ya había sido confirmado anteriormente. No es necesario hacer nada más.'
+          'El consentimiento parental ya había sido confirmado. Ya puedes iniciar sesión con tu cuenta de padre/madre.',
+          'Iniciar sesión',
+          loginUrl,
         ));
     }
 
@@ -266,15 +272,19 @@ router.get('/parental-consent/verify', async (req, res) => {
         .set('Content-Type', 'text/html; charset=utf-8')
         .send(page(
           'Enlace no válido',
-          'Este enlace de verificación no existe o ya fue utilizado. Solicita uno nuevo desde la IngenIA.'
+          'Este enlace de verificación no existe o ya fue utilizado. Solicita uno nuevo desde la IngenIA.',
+          'Ir a Edutechlife',
+          frontendUrl,
         ));
     }
 
     res.status(200)
       .set('Content-Type', 'text/html; charset=utf-8')
       .send(page(
-        'Consentimiento verificado',
-        'Gracias. El acceso de tu hijo/a a la IngenIA ha quedado habilitado.'
+        '¡Consentimiento verificado!',
+        'Gracias. Ahora crea tu cuenta de padre/madre para acceder al panel de seguimiento de tu hijo/a.',
+        'Crear mi cuenta de padre/madre →',
+        registerUrl,
       ));
   } catch (e) {
     console.error('Error verifying parental consent (GET):', e);

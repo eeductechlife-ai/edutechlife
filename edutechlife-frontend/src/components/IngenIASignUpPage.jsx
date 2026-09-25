@@ -34,11 +34,15 @@ const SmartBoardSignUpPage = () => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const returnTo = searchParams.get("returnTo") || "/smartboard";
+  const urlTab = searchParams.get("tab");
+  const urlToken = searchParams.get("token") || "";
   const [mode, setMode] = useState("signin");
   // "student" | "parent"
-  const [userType, setUserType] = useState("student");
+  const [userType, setUserType] = useState(
+    urlTab === "padre" ? "parent" : "student",
+  );
   // parent sub-mode: "login" | "register"
-  const [parentMode, setParentMode] = useState("login");
+  const [parentMode, setParentMode] = useState(urlToken ? "register" : "login");
   const [showPassword, setShowPassword] = useState(false);
   const [parentLoading, setParentLoading] = useState(false);
   const [parentError, setParentError] = useState("");
@@ -47,7 +51,7 @@ const SmartBoardSignUpPage = () => {
     studentEmail: "",
     parentPassword: "",
     parentName: "",
-    invitationToken: "",
+    invitationToken: urlToken,
   });
 
   const handleParentChange = (e) => {
