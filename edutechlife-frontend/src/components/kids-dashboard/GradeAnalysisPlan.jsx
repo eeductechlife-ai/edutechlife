@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { gradeColor, gradeEmoji } from "./gradeUtils";
+import { gradeColor, gradeEmoji, getAvgScore } from "./gradeUtils";
 import { getSubjectEmoji } from "../../config/subjectMappings";
 
 const GradeAnalysisPlan = memo(
@@ -81,115 +81,104 @@ const GradeAnalysisPlan = memo(
             </div>
           )}
 
-          {/* Full study plan (collapsible) */}
-          <details className="group">
-            <summary className="cursor-pointer flex items-center justify-between p-4 rounded-2xl bg-[#F1F5F9] border border-[#E2E8F0] font-bold text-[#1E293B] text-sm select-none">
-              <span>📋 Ver plan de estudio completo</span>
-              <span className="text-[#64748B] group-open:rotate-180 transition-transform">
-                ▼
+          {/* The weekly plan now lives in "Mi Plan", where it can be ticked off. */}
+          {plan.studyPlan?.length > 0 && (
+            <motion.button
+              type="button"
+              onClick={() => onTabChange?.("plan")}
+              whileTap={{ scale: 0.98 }}
+              className="w-full !flex items-center !justify-start gap-3 p-4 rounded-2xl text-left text-white shadow-md"
+              style={{
+                background:
+                  "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
+              }}
+            >
+              <span className="text-3xl" aria-hidden="true">
+                📋
               </span>
-            </summary>
-            <div className="mt-2 space-y-3">
-              {plan.weaknesses?.length > 0 && (
-                <div className="space-y-3">
-                  <p className="font-bold text-[#1E293B] px-1">
-                    {t("kid.grades.to_improve")}
-                  </p>
-                  {plan.weaknesses.map((w, i) => (
-                    <div
-                      key={i}
-                      className="p-4 rounded-2xl bg-white border-2 border-orange-200 shadow-sm space-y-3"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-black text-[#1E293B] flex items-center gap-1.5">
-                          <span>{w.emoji || getSubjectEmoji(w.subject)}</span>
-                          {w.subject}
-                        </span>
-                        <span
-                          className="px-2 py-1 rounded-full text-xs font-bold text-white"
-                          style={{ backgroundColor: gradeColor(w.score) }}
-                        >
-                          {w.score}/5
-                        </span>
-                      </div>
-                      <p className="text-sm text-[#374151]">{w.why}</p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <div className="p-2 rounded-xl bg-purple-50 border border-purple-100">
-                          <p className="text-xs font-bold text-purple-600 mb-1">
-                            👁️ VAK
-                          </p>
-                          <p className="text-xs text-purple-700">{w.vakTip}</p>
-                        </div>
-                        <div className="p-2 rounded-xl bg-cyan-50 border border-cyan-100">
-                          <p className="text-xs font-bold text-cyan-600 mb-1">
-                            🔬 STEAM
-                          </p>
-                          <p className="text-xs text-cyan-700">{w.steamLink}</p>
-                        </div>
-                      </div>
-                      <div className="space-y-1">
-                        {w.actions?.map((a, j) => (
-                          <div
-                            key={j}
-                            className="flex items-start gap-2 text-xs text-[#374151]"
+              <span className="flex-1 min-w-0">
+                <span className="block font-black text-base leading-tight">
+                  Tu plan de {plan.studyPlan.length} semanas está listo
+                </span>
+                <span className="block text-xs text-white/90 mt-0.5">
+                  Ábrelo y marca cada actividad que hagas ✅
+                </span>
+              </span>
+              <span className="text-xl font-black" aria-hidden="true">
+                →
+              </span>
+            </motion.button>
+          )}
+
+          {/* Why each subject is weak and how to improve it (collapsible) */}
+          {plan.weaknesses?.length > 0 && (
+            <details className="group">
+              <summary className="cursor-pointer flex items-center justify-between p-4 rounded-2xl bg-[#F1F5F9] border border-[#E2E8F0] font-bold text-[#1E293B] text-sm select-none">
+                <span>🔎 Cómo mejorar cada materia</span>
+                <span className="text-[#64748B] group-open:rotate-180 transition-transform">
+                  ▼
+                </span>
+              </summary>
+              <div className="mt-2 space-y-3">
+                {plan.weaknesses?.length > 0 && (
+                  <div className="space-y-3">
+                    <p className="font-bold text-[#1E293B] px-1">
+                      {t("kid.grades.to_improve")}
+                    </p>
+                    {plan.weaknesses.map((w, i) => (
+                      <div
+                        key={i}
+                        className="p-4 rounded-2xl bg-white border-2 border-orange-200 shadow-sm space-y-3"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-black text-[#1E293B] flex items-center gap-1.5">
+                            <span>{w.emoji || getSubjectEmoji(w.subject)}</span>
+                            {w.subject}
+                          </span>
+                          <span
+                            className="px-2 py-1 rounded-full text-xs font-bold text-white"
+                            style={{ backgroundColor: gradeColor(w.score) }}
                           >
-                            <span className="text-orange-400 mt-0.5">→</span>
-                            {a}
+                            {w.score}/5
+                          </span>
+                        </div>
+                        <p className="text-sm text-[#374151]">{w.why}</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <div className="p-2 rounded-xl bg-purple-50 border border-purple-100">
+                            <p className="text-xs font-bold text-purple-600 mb-1">
+                              👁️ VAK
+                            </p>
+                            <p className="text-xs text-purple-700">
+                              {w.vakTip}
+                            </p>
                           </div>
-                        ))}
+                          <div className="p-2 rounded-xl bg-cyan-50 border border-cyan-100">
+                            <p className="text-xs font-bold text-cyan-600 mb-1">
+                              🔬 STEAM
+                            </p>
+                            <p className="text-xs text-cyan-700">
+                              {w.steamLink}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="space-y-1">
+                          {w.actions?.map((a, j) => (
+                            <div
+                              key={j}
+                              className="flex items-start gap-2 text-xs text-[#374151]"
+                            >
+                              <span className="text-orange-400 mt-0.5">→</span>
+                              {a}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {plan.studyPlan?.length > 0 && (
-                <div className="space-y-3">
-                  <p className="font-bold text-[#1E293B] px-1">
-                    {t("kid.grades.study_plan")}
-                  </p>
-                  {plan.studyPlan.map((week, i) => (
-                    <div
-                      key={i}
-                      className="p-4 rounded-2xl bg-white border border-[#E2E8F0] shadow-sm"
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        <span
-                          className="w-7 h-7 rounded-full text-white text-xs font-black flex items-center justify-center"
-                          style={{
-                            background:
-                              "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
-                          }}
-                        >
-                          {week.week}
-                        </span>
-                        <span className="font-bold text-[#1E293B] text-sm">
-                          {t("kid.grades.week", {
-                            week: week.week,
-                            focus: week.focus,
-                          })}
-                        </span>
-                      </div>
-                      <ul className="space-y-1 mb-2">
-                        {week.activities?.map((a, j) => (
-                          <li
-                            key={j}
-                            className="text-xs text-[#374151] flex items-start gap-1.5"
-                          >
-                            <span className="text-[#FB8500]">•</span>
-                            {a}
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="flex items-center gap-1.5 text-xs text-[#92400E] bg-[#FB8500]/10 rounded-lg p-2">
-                        <span>🤖</span>
-                        <span>{week.daniTip}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </details>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </details>
+          )}
 
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#F1F5F9] border border-[#E2E8F0] text-xs text-[#64748B]">
             <span>👨‍👩‍👧</span>
@@ -212,7 +201,7 @@ const GradeAnalysisPlan = memo(
                     (w) => `${w.subject}: ${w.why || ""}`,
                   ),
                   score: Math.round(
-                    (grades.reduce((s, g) => s + (g.score ?? 0), 0) /
+                    (grades.reduce((s, g) => s + getAvgScore(g), 0) /
                       Math.max(grades.length, 1)) *
                       20,
                   ),

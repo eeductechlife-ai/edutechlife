@@ -1,9 +1,26 @@
-import { memo, useState, useCallback, useEffect, lazy, Suspense } from "react";
+import {
+  memo,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  lazy,
+  Suspense,
+} from "react";
+import {
+  peekHandoff,
+  clearHandoff,
+  HANDOFF_FLASHCARDS_DECK,
+} from "../practicarHub/practicarHandoff";
 import { motion, AnimatePresence } from "framer-motion";
 import GenerateFlashcards from "../GenerateFlashcards";
 import { useFlashcardDeck } from "./useFlashcardDeck";
 import QuizCard from "./components/QuizCard";
 import FlashcardResults from "./components/FlashcardResults";
+import {
+  usePlanTaskOnFinish,
+  PlanTaskDoneBanner,
+} from "../improvementPlan/PlanTaskDone";
 import { logPractice } from "../practicarHub/practicarProgress";
 import FlashcardImporter from "./components/FlashcardImporter";
 import DeckCard from "./components/DeckCard";
@@ -80,6 +97,22 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
     dueToday,
     handleResult,
   } = useFlashcardDeck();
+
+  // A deck opened from "Mi Plan" ticks its task when the session ends.
+  const planTask = usePlanTaskOnFinish("educards", done);
+
+  // A reto's "Repasar mis errores" hands over a freshly built deck: open it
+  // straight into study mode instead of leaving the kid to find it.
+  const openedHandoffRef = useRef(false);
+  useEffect(() => {
+    if (openedHandoffRef.current) return;
+    const deckId = peekHandoff(HANDOFF_FLASHCARDS_DECK);
+    if (!deckId) return;
+    if (!decks.some((d) => d.id === deckId)) return;
+    openedHandoffRef.current = true;
+    clearHandoff(HANDOFF_FLASHCARDS_DECK);
+    startStudy(deckId);
+  }, [decks, startStudy]);
 
   // Track competency mastery when a quiz session completes
   useEffect(() => {
@@ -174,16 +207,19 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
       };
 
       return (
-        <FlashcardResults
-          rate={rate}
-          correct={correct}
-          incorrect={incorrect}
-          xpEarned={sessionXp(correct, correct + incorrect)}
-          onRestart={() => startStudy(currentDeckId)}
-          onBack={() => setMode("decks")}
-          onTalkToDani={handleTalkToDani}
-          darkMode={darkMode}
-        />
+        <>
+          <PlanTaskDoneBanner task={planTask} onTabChange={onTabChange} />
+          <FlashcardResults
+            rate={rate}
+            correct={correct}
+            incorrect={incorrect}
+            xpEarned={sessionXp(correct, correct + incorrect)}
+            onRestart={() => startStudy(currentDeckId)}
+            onBack={() => setMode("decks")}
+            onTalkToDani={handleTalkToDani}
+            darkMode={darkMode}
+          />
+        </>
       );
     }
 

@@ -179,7 +179,10 @@ function createTabRenderer(deps) {
     vak: {
       component: () => (
         <>
-          <VAKDiagnosticEnhanced onComplete={handleVakComplete} />
+          <VAKDiagnosticEnhanced
+            onComplete={handleVakComplete}
+            onTabChange={onTabChange}
+          />
           {vakResult && (
             <LazyLoad fallback={<SectionFallback tab="vak" />}>
               <PersonalizedPlan />

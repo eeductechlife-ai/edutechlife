@@ -49,6 +49,52 @@ describe("parseMaterial", () => {
     expect(parseMaterial("infografia", { bloques: [] })).toBeNull();
   });
 
+  it("keeps the 'datos' format only when every block has a number", () => {
+    const bloques = [
+      { titulo: "Agua", texto: "Cubre la Tierra", cifra: "71%" },
+      { titulo: "Dulce", texto: "Se puede beber", cifra: 3 },
+    ];
+    const out = parseMaterial("infografia", { formato: "datos", bloques });
+    expect(out.formato).toBe("datos");
+    expect(out.bloques[1].cifra).toBe("3");
+
+    const half = parseMaterial("infografia", {
+      formato: "datos",
+      bloques: [bloques[0], { titulo: "Hielo", texto: "En los polos" }],
+    });
+    expect(half.formato).toBe("pasos");
+    expect(half.bloques[0]).not.toHaveProperty("cifra");
+  });
+
+  it("builds comparisons and falls back to steps when a side is missing", () => {
+    const comparacion = {
+      izquierda: { titulo: "Vertebrados", puntos: ["Tienen columna"] },
+      derecha: { titulo: "Invertebrados", emoji: "🐛", puntos: ["Sin huesos"] },
+      semejanzas: ["Son animales", ""],
+    };
+    const out = parseMaterial("infografia", {
+      formato: "comparacion",
+      titulo: "Animales",
+      comparacion,
+    });
+    expect(out.formato).toBe("comparacion");
+    expect(out.comparacion.izquierda.emoji).toBe("🔹");
+    expect(out.comparacion.semejanzas).toEqual(["Son animales"]);
+
+    const broken = parseMaterial("infografia", {
+      formato: "comparacion",
+      comparacion: { izquierda: comparacion.izquierda },
+      bloques: [{ titulo: "Idea", texto: "Texto" }],
+    });
+    expect(broken.formato).toBe("pasos");
+    expect(
+      parseMaterial("infografia", {
+        formato: "comparacion",
+        comparacion: { izquierda: comparacion.izquierda },
+      }),
+    ).toBeNull();
+  });
+
   it("returns null for unusable output", () => {
     expect(parseMaterial("video", "no es json")).toBeNull();
     expect(parseMaterial("video", { busquedas: [] })).toBeNull();

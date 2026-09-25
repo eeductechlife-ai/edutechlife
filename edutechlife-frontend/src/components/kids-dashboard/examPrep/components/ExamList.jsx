@@ -4,7 +4,7 @@ import ExamCard from "./ExamCard";
 import { PRACTICE_GRADIENT } from "../examUtils";
 import { useTranslation } from "../../../../i18n/I18nProvider";
 
-const ExamList = memo(({ exams, onView, onDelete, dm = false }) => {
+const ExamList = memo(({ exams, onView, onDelete, onAdd, dm = false }) => {
   const { t } = useTranslation();
 
   if (exams.length === 0) {
@@ -38,22 +38,24 @@ const ExamList = memo(({ exams, onView, onDelete, dm = false }) => {
             {t("kid.exam.empty_hint")}
           </p>
         </div>
-        {/* Tip motivacional */}
-        <div
-          className="mt-2 px-4 py-3 rounded-2xl text-center max-w-xs"
-          style={{
-            background: "rgba(239,71,111,0.06)",
-            border: "1px solid rgba(239,71,111,0.14)",
-          }}
-        >
-          <p
-            className="text-xs leading-relaxed"
-            style={{ color: dm ? "#94A3B8" : "#64748B" }}
+        {/* The one thing to do here, big enough for small fingers. */}
+        {onAdd && (
+          <motion.button
+            type="button"
+            onClick={onAdd}
+            whileTap={{ scale: 0.97 }}
+            className="mt-1 w-full max-w-xs py-3.5 rounded-2xl text-white font-black text-base shadow-lg"
+            style={{ background: PRACTICE_GRADIENT }}
           >
-            💡 Agrega tu próximo examen y Dani te ayudará a prepararte con
-            tiempo.
-          </p>
-        </div>
+            📅 Agregar mi próximo examen
+          </motion.button>
+        )}
+        <p
+          className="text-xs leading-relaxed text-center max-w-xs"
+          style={{ color: dm ? "#94A3B8" : "#64748B" }}
+        >
+          💡 Dani te ayudará a prepararte con tiempo.
+        </p>
       </motion.div>
     );
   }

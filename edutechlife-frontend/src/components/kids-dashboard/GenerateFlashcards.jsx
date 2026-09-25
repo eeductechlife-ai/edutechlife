@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { buildSubjectList } from "./practicarHub/practicarConfig";
+import { gradeTopics } from "./practicarHub/materialPrompts";
+import { gradeBand } from "./flashcardSystem/gradeBand";
 import {
   peekHandoff,
   clearHandoff,
@@ -16,24 +19,28 @@ const PRACTICE_GRADIENT =
   "linear-gradient(135deg, #EF476F 0%, #FF6B9D 55%, #FF8FA3 100%)";
 const PRACTICE_GLOW = "#EF476F";
 
-// Colombian grade (1-11) → generator band; falls back to age when grade is unknown.
-function gradeBand(gradeLevel, age) {
-  const g = Number(gradeLevel) || (Number(age) ? Number(age) - 5 : null);
-  if (!g) return "4-6";
-  if (g <= 3) return "1-3";
-  if (g <= 6) return "4-6";
-  if (g <= 9) return "7-9";
-  return "10-12";
-}
-
 export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
   const { t } = useTranslation();
   const [topic, setTopic] = useState(
     () => peekHandoff(HANDOFF_FLASHCARDS_TOPIC) || "",
   );
   useEffect(() => clearHandoff(HANDOFF_FLASHCARDS_TOPIC), []);
-  const { gradeLevel, studentAge } = useIngenIAKids();
+  const { gradeLevel, studentAge, subjectsWithGrades } = useIngenIAKids();
   const grade = gradeBand(gradeLevel, studentAge);
+  // Ready-made topics from the kid's own grade (MEN DBA), weakest subjects
+  // first, so nobody is stuck in front of an empty box.
+  const ideas = useMemo(() => {
+    if (!gradeLevel) return [];
+    const subjects = buildSubjectList(subjectsWithGrades || []);
+    const ordered = [
+      ...subjects.filter((s) => s.weak),
+      ...subjects.filter((s) => !s.weak),
+    ];
+    return ordered
+      .map((s) => ({ emoji: s.emoji, text: gradeTopics(s.id, gradeLevel)[0] }))
+      .filter((x) => x.text)
+      .slice(0, 3);
+  }, [gradeLevel, subjectsWithGrades]);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState(null);
 
@@ -132,6 +139,34 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
             )}
           </motion.button>
         </div>
+        {ideas.length > 0 && !topic.trim() && !generating && (
+          <div className="space-y-1.5">
+            <p
+              className="text-[11px] font-black uppercase tracking-wide"
+              style={{ color: textSecondary }}
+            >
+              💡 Ideas para ti
+            </p>
+            <div className="flex flex-col gap-1.5">
+              {ideas.map((idea) => (
+                <button
+                  key={idea.text}
+                  type="button"
+                  onClick={() => setTopic(idea.text)}
+                  className="w-full min-h-[40px] !flex items-center !justify-start gap-2 px-3 py-2 rounded-xl text-left text-xs font-semibold"
+                  style={{
+                    background: inputBg,
+                    border: `1px solid ${inputBorder}`,
+                    color: textPrimary,
+                  }}
+                >
+                  <span aria-hidden="true">{idea.emoji}</span>
+                  <span className="truncate">{idea.text}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Generating skeleton */}

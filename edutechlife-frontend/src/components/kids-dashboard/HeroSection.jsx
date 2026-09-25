@@ -238,9 +238,6 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
           <span className="text-base">
             {kt("hero.talk_dani", t("kid.hero.talk_with_dani"))}
           </span>
-          <span className="text-xs opacity-60">
-            {kt("hero.dani_tagline", t("kid.hero.here_for_you"))}
-          </span>
         </motion.button>
       </div>
 

@@ -1,6 +1,8 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import {
+  toFive,
+  menLevel,
   subjects,
   inpCls,
   PRACTICE_GRADIENT,
@@ -30,7 +32,10 @@ const ExamForm = memo(({ n, sN, s, sS, d, sD, g, sG, onAdd, dm = false }) => {
           className="text-sm font-bold mb-1.5 block"
           style={{ color: textPrimary }}
         >
-          {t("kid.exam.name_label")}
+          {t("kid.exam.name_label")}{" "}
+          <span className="font-medium" style={{ color: textSecondary }}>
+            (opcional)
+          </span>
         </label>
         <input
           type="text"
@@ -125,21 +130,32 @@ const ExamForm = memo(({ n, sN, s, sS, d, sD, g, sG, onAdd, dm = false }) => {
           >
             {t("kid.exam.desired_grade_label")}
           </label>
+          {/* 1.0–5.0 like the report card; stored as 20–100. */}
           <div className="flex items-center gap-3 mt-2">
             <input
               type="range"
-              min="0"
+              min="60"
               max="100"
-              value={g}
+              step="2"
+              value={Math.max(60, g)}
               onChange={(e) => sG(Number(e.target.value))}
+              aria-valuetext={`${toFive(g)} de 5, nivel ${menLevel(toFive(g)).label}`}
               className="flex-1"
               style={{ accentColor: "#EF476F" }}
             />
-            <span
-              className="text-xl font-black min-w-[3ch] text-center"
-              style={{ color: "#EF476F" }}
-            >
-              {g}
+            <span className="text-center shrink-0 min-w-[4.5rem]">
+              <span
+                className="block text-xl font-black leading-none"
+                style={{ color: "#EF476F" }}
+              >
+                {toFive(g)}
+              </span>
+              <span
+                className="block text-[11px] font-bold mt-0.5"
+                style={{ color: textSecondary }}
+              >
+                {menLevel(toFive(g)).emoji} {menLevel(toFive(g)).label}
+              </span>
             </span>
           </div>
         </div>
@@ -148,7 +164,7 @@ const ExamForm = memo(({ n, sN, s, sS, d, sD, g, sG, onAdd, dm = false }) => {
       {/* Submit */}
       <motion.button
         onClick={onAdd}
-        disabled={!n.trim() || !d}
+        disabled={!d}
         whileHover={{
           scale: 1.02,
           boxShadow: `0 10px 28px ${PRACTICE_GLOW}35`,

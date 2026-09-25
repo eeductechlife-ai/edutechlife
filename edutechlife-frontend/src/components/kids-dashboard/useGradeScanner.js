@@ -11,6 +11,8 @@ import {
   uid,
 } from "./gradeUtils";
 import { track } from "../../lib/analytics";
+import { planFromAnalysis } from "./improvementPlan/planModel";
+import { storePlan } from "./improvementPlan/useImprovementPlan";
 import { EVENTS } from "../../lib/analyticsEvents";
 import {
   extractGradesFromFile,
@@ -45,10 +47,16 @@ export function useGradeScanner() {
   });
   const SUBJECTS = getSubjects(t, extractedSubjectNames);
 
+  // Saved rows have no id (persistLocalGrades strips it), and every row is a
+  // keyed list item — without one they all share `undefined` and React can
+  // duplicate or drop rows while the kid edits.
   const [grades, setGrades] = useState(() => {
-    if (persistedGrades?.length) return persistedGrades;
-    if (studentGrades?.length) return studentGrades;
-    return [];
+    const src = persistedGrades?.length
+      ? persistedGrades
+      : studentGrades?.length
+        ? studentGrades
+        : [];
+    return src.map((g) => (g.id ? g : { id: uid(), ...g }));
   });
   const [scanning, setScanning] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -297,7 +305,7 @@ export function useGradeScanner() {
           );
         } else {
           setError(
-            "📸 Imagen cargada. Mirá tu boletín arriba e ingresá tus notas abajo — Dani las analizará.",
+            "📸 Imagen cargada. Mira tu boletín arriba e ingresa tus notas abajo — Dani las analizará.",
           );
         }
       } finally {
@@ -320,9 +328,30 @@ export function useGradeScanner() {
         { temperature: 0.7, maxTokens: 2500, isJson: true },
       );
       const parsed = typeof res === "string" ? JSON.parse(res) : res;
+      if (
+        !parsed?.overall &&
+        !parsed?.weaknesses?.length &&
+        !parsed?.studyPlan?.length
+      )
+        throw new Error("unusable");
       setPlan(parsed);
+      // The analysis also becomes the kid's trackable "Mi Plan", so there is
+      // one plan to follow instead of a hidden list plus a separate one.
+      const weekly = planFromAnalysis(parsed);
+      if (weekly) storePlan(userId, weekly);
       setStudentGrades(grades);
-      addPoints?.(50);
+      // Points reward the habit, not the button: once a day, however many
+      // times "Nuevo análisis" is pressed.
+      const pointsKey = `grade_analysis_points_${userId || "anon"}`;
+      const today = new Date().toDateString();
+      try {
+        if (localStorage.getItem(pointsKey) !== today) {
+          localStorage.setItem(pointsKey, today);
+          addPoints?.(50, "Analicé mis notas con Dani");
+        }
+      } catch {
+        // storage blocked: skip the reward rather than allow repeats
+      }
       const gradeData = grades.map((g) => ({
         subject: g.subject,
         p1: g.p1 ?? null,
@@ -336,9 +365,14 @@ export function useGradeScanner() {
       saveAnalysis(parsed, gradeData);
     } catch (e) {
       const msg = e.message || "";
+      // Kid-facing: no talk of accounts or providers.
       if (msg.includes("402") || msg.toLowerCase().includes("saldo")) {
         setError(
-          "⚠️ El servicio de IA no tiene saldo. Por favor recarga tu cuenta DeepSeek.",
+          "⚠️ Dani está descansando un momento. Intenta de nuevo en unos minutos.",
+        );
+      } else if (e.code === "PARENTAL_CONSENT_REQUIRED") {
+        setError(
+          "Se necesita el permiso de tus padres para que Dani analice tus notas.",
         );
       } else {
         setError(t("kid.grades.error_analyze"));
@@ -356,6 +390,7 @@ export function useGradeScanner() {
     saveAnalysis,
     saveGrades,
     persistLocalGrades,
+    userId,
   ]);
 
   const avg = grades.length

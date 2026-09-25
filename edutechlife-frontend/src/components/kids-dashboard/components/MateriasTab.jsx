@@ -16,7 +16,9 @@ const VIEWS_BASE = [
   { id: "materias", label: "Materias", emoji: "📚" },
   { id: "horario", label: "Horario", emoji: "🗓" },
   { id: "calificaciones", label: "Notas", emoji: "📊" },
-  { id: "plan", label: "Mi Plan", emoji: "🎯", minAge: 10 },
+  // Open to every age: the plan is a simple checklist, and the grade
+  // analysis in Notas sends kids here.
+  { id: "plan", label: "Mi Plan", emoji: "🎯" },
 ];
 
 const VIEW_INFO = {
@@ -32,26 +34,33 @@ const VIEW_INFO = {
   plan: { title: "Mi Plan de Mejora", sub: "Actividades IA para esta semana" },
 };
 
+const STYLE_LABEL = {
+  visual: "👁️ Visual",
+  auditivo: "👂 Auditivo",
+  kinestesico: "🏃 Kinestésico",
+};
+
 function UnifiedPlanView({ vakResult, onTabChange }) {
+  // The ADN stores `predominantStyle`; reading `style` always showed
+  // "Personalizado".
+  const style = STYLE_LABEL[vakResult?.predominantStyle];
   return (
-    <div className="space-y-4">
-      {vakResult && (
-        <div className="rounded-2xl border border-[#9D4EDD]/20 bg-[#9D4EDD]/5 px-4 py-3 flex items-center gap-3">
-          <span className="text-lg flex-shrink-0">🧠</span>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold text-[#7B2FF7] uppercase tracking-wide">
-              Estilo VAK: {vakResult.style || "Personalizado"}
-            </p>
-            <p className="text-xs text-[#64748B] mt-0.5">
-              Tu plan incluye actividades adaptadas a cómo aprendes mejor.
-            </p>
-          </div>
+    <div className="space-y-3">
+      {style && (
+        <div className="rounded-2xl border border-[#9D4EDD]/20 bg-[#9D4EDD]/5 px-3 py-2 flex items-center gap-2">
+          <span className="text-base flex-shrink-0" aria-hidden="true">
+            🧠
+          </span>
+          <p className="!m-0 flex-1 min-w-0 text-xs text-[#475569]">
+            Plan hecho para tu estilo{" "}
+            <span className="font-black text-[#7B2FF7]">{style}</span>
+          </p>
           <button
             type="button"
-            onClick={() => onTabChange?.("perfil")}
-            className="text-[10px] font-bold text-[#9D4EDD] hover:underline whitespace-nowrap flex-shrink-0"
+            onClick={() => onTabChange?.("vak")}
+            className="min-h-[36px] px-2 text-[11px] font-bold text-[#9D4EDD] whitespace-nowrap flex-shrink-0"
           >
-            Ver perfil →
+            Ver mi ADN →
           </button>
         </div>
       )}
@@ -111,7 +120,12 @@ const MateriasTab = memo(function MateriasTab({
                 <button
                   key={v.id}
                   type="button"
-                  onClick={() => setActiveView(v.id)}
+                  onClick={() => {
+                    setActiveView(v.id);
+                    // Each view is also a dashboard tab: switching it keeps the
+                    // top bar title ("Notas", "Horario"…) in sync with the content.
+                    onTabChange?.(v.id);
+                  }}
                   aria-pressed={active}
                   className={`flex flex-col items-center justify-center gap-0.5 min-h-[52px] px-1 py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all ${
                     active

@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from "react";
+import { memo, useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const EXPLORE_GRADIENT =
@@ -27,22 +27,45 @@ function sectorPath(cx, cy, r, startDeg, endDeg) {
   return `M ${cx} ${cy} L ${s.x.toFixed(2)} ${s.y.toFixed(2)} A ${r} ${r} 0 0 1 ${e.x.toFixed(2)} ${e.y.toFixed(2)} Z`;
 }
 
-const SpinWheel = memo(({ subjects, onLand, initialSubjectId }) => {
+const SpinWheel = memo(({ subjects, onLand, selectedId }) => {
   const N = subjects.length;
   const deg = 360 / N;
-  const initialIdx = subjects.findIndex((s) => s.id === initialSubjectId);
+  const selectedIdx = subjects.findIndex((s) => s.id === selectedId);
   const [rotation, setRotation] = useState(() =>
-    initialIdx >= 0 ? (360 - (initialIdx + 0.5) * deg + 360) % 360 : 0,
+    selectedIdx >= 0 ? (360 - (selectedIdx + 0.5) * deg + 360) % 360 : 0,
   );
   const [isSpinning, setIsSpinning] = useState(false);
   const [landedIdx, setLandedIdx] = useState(
-    initialIdx >= 0 ? initialIdx : null,
+    selectedIdx >= 0 ? selectedIdx : null,
   );
+  const [turning, setTurning] = useState(false);
+
+  // A subject picked from the buttons below turns the wheel to it (short
+  // turn), so the wheel always shows the current choice.
+  useEffect(() => {
+    if (isSpinning || selectedIdx < 0 || selectedIdx === landedIdx) return;
+    const target = (360 - (selectedIdx + 0.5) * deg + 360) % 360;
+    setRotation((rot) => {
+      const cur = ((rot % 360) + 360) % 360;
+      let delta = (target - cur + 360) % 360;
+      if (delta > 180) delta -= 360;
+      return rot + delta;
+    });
+    setLandedIdx(selectedIdx);
+    setTurning(true);
+    const t = setTimeout(() => setTurning(false), 450);
+    return () => clearTimeout(t);
+  }, [selectedIdx, deg, isSpinning, landedIdx]);
 
   const cx = 100,
     cy = 100,
     r = 90,
     textR = 58;
+  const wheelTransition = isSpinning
+    ? "transform 3.2s cubic-bezier(0.17, 0.67, 0.12, 0.99)"
+    : turning
+      ? "transform 0.4s ease-out"
+      : "none";
 
   const spin = useCallback(() => {
     if (isSpinning) return;
@@ -69,8 +92,8 @@ const SpinWheel = memo(({ subjects, onLand, initialSubjectId }) => {
   }, [rotation, isSpinning, N, deg, subjects, onLand]);
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="relative w-48 h-48 sm:w-56 sm:h-56">
+    <div className="flex flex-col items-center gap-3">
+      <div className="relative w-52 h-52 sm:w-56 sm:h-56">
         {/* Pointer */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20 -mt-1">
           <svg width="18" height="20">
@@ -83,9 +106,7 @@ const SpinWheel = memo(({ subjects, onLand, initialSubjectId }) => {
           className="w-full h-full rounded-full shadow-2xl"
           style={{
             transform: `rotate(${rotation}deg)`,
-            transition: isSpinning
-              ? "transform 3.2s cubic-bezier(0.17, 0.67, 0.12, 0.99)"
-              : "none",
+            transition: wheelTransition,
           }}
         >
           <svg viewBox="0 0 200 200" className="w-full h-full">
@@ -99,33 +120,63 @@ const SpinWheel = memo(({ subjects, onLand, initialSubjectId }) => {
               const midDeg = (i + 0.5) * deg;
               const tp = polarToCart(cx, cy, textR, midDeg);
               return (
-                <g key={s.id}>
+                <g
+                  key={s.id}
+                  role="button"
+                  tabIndex={isSpinning ? -1 : 0}
+                  aria-label={`Elegir ${s.label}`}
+                  aria-pressed={i === landedIdx}
+                  onClick={() => !isSpinning && onLand(s)}
+                  onKeyDown={(e) =>
+                    (e.key === "Enter" || e.key === " ") &&
+                    !isSpinning &&
+                    onLand(s)
+                  }
+                  className="cursor-pointer outline-none"
+                  opacity={
+                    landedIdx === null || isSpinning || i === landedIdx
+                      ? 1
+                      : 0.55
+                  }
+                  style={{ transition: "opacity 0.3s" }}
+                >
                   <path
                     d={sectorPath(cx, cy, r, i * deg, (i + 1) * deg)}
                     fill={meta.color}
                     stroke="white"
                     strokeWidth="2.5"
                   />
-                  <text
-                    x={tp.x}
-                    y={tp.y - 6}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fontSize="22"
+                  {/* Counter-rotated with the same timing, so the emoji and
+                      label stay upright wherever the slice ends up. */}
+                  <g
+                    style={{
+                      transform: `rotate(${-rotation}deg)`,
+                      transformOrigin: `${tp.x}px ${tp.y}px`,
+                      transformBox: "view-box",
+                      transition: wheelTransition,
+                    }}
                   >
-                    {s.emoji}
-                  </text>
-                  <text
-                    x={tp.x}
-                    y={tp.y + 12}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fontSize="7"
-                    fontWeight="bold"
-                    fill="white"
-                  >
-                    {meta.short}
-                  </text>
+                    <text
+                      x={tp.x}
+                      y={tp.y - 6}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fontSize="22"
+                    >
+                      {s.emoji}
+                    </text>
+                    <text
+                      x={tp.x}
+                      y={tp.y + 12}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fontSize="7"
+                      fontWeight="bold"
+                      fill="white"
+                    >
+                      {meta.short}
+                    </text>
+                  </g>
                 </g>
               );
             })}
@@ -145,39 +196,35 @@ const SpinWheel = memo(({ subjects, onLand, initialSubjectId }) => {
         <button
           onClick={spin}
           disabled={isSpinning}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-white shadow-xl border-4 border-[#E2E8F0] text-[8px] font-black text-[#1E293B] tracking-widest flex items-center justify-center transition-transform hover:scale-105 active:scale-95 disabled:opacity-60"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-white shadow-xl border-4 border-[#E2E8F0] text-[10px] font-black text-[#1E293B] tracking-wider flex items-center justify-center transition-transform hover:scale-105 active:scale-95 disabled:opacity-60"
         >
           {isSpinning ? "⏳" : "GIRAR"}
         </button>
       </div>
 
-      {/* Landing indicator */}
-      {landedIdx !== null && !isSpinning ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8, y: 8 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          className="flex items-center gap-3 px-5 py-2.5 rounded-2xl font-bold text-white shadow-lg"
-          style={{
-            background: subjects[landedIdx]?.color || "#9D4EDD",
-          }}
-        >
-          <span className="text-xl">{subjects[landedIdx]?.emoji}</span>
-          <span className="text-sm">{subjects[landedIdx]?.label}</span>
-          <span>✓</span>
-        </motion.div>
-      ) : (
-        !isSpinning && (
-          <p className="text-xs text-[#94A3B8] font-medium">
-            Toca GIRAR para elegir tu categoría
-          </p>
-        )
-      )}
-
-      {isSpinning && (
-        <p className="text-xs text-[#9D4EDD] font-bold animate-pulse">
-          ¡Girando la ruleta…!
-        </p>
-      )}
+      {/* One line says what is chosen; the slices themselves are the buttons
+          (tap one to pick it, or GIRAR to let luck choose). */}
+      <p
+        className={`h-5 ${
+          isSpinning
+            ? "text-sm font-black text-[#9D4EDD] animate-pulse"
+            : landedIdx === null
+              ? "text-xs font-bold text-[#94A3B8]"
+              : "text-sm font-black"
+        }`}
+        style={
+          !isSpinning && landedIdx !== null
+            ? { color: subjects[landedIdx]?.color }
+            : undefined
+        }
+        aria-live="polite"
+      >
+        {isSpinning
+          ? "¡Girando la ruleta…!"
+          : landedIdx === null
+            ? "👆 Toca una materia o GIRAR 🎲"
+            : `✓ ${subjects[landedIdx]?.emoji} ${subjects[landedIdx]?.label}`}
+      </p>
     </div>
   );
 });
@@ -207,41 +254,38 @@ const ChallengeSetup = memo(
     const subjectColor = subject?.color || "#9D4EDD";
 
     return (
-      <div className="space-y-5">
-        {/* Spinning wheel */}
-        <div className={`rounded-2xl p-5 border backdrop-blur-xl ${cardBg}`}>
-          <h3
-            className={`text-base font-black mb-1 text-center ${textPrimary}`}
-          >
-            {subject ? "1. Tu materia" : "1. Gira la ruleta 🎡"}
+      <div className="space-y-3 sm:space-y-5">
+        <div
+          className={`rounded-2xl p-3.5 sm:p-5 border backdrop-blur-xl space-y-3 ${cardBg}`}
+        >
+          <h3 className={`text-sm sm:text-base font-black ${textPrimary}`}>
+            1. Elige tu materia
           </h3>
-          <p className={`text-xs mb-4 text-center ${textSecondary}`}>
-            {subject
-              ? "¿Quieres otra? Toca GIRAR para cambiarla."
-              : "La ruleta elige la materia de tu reto."}
-          </p>
           <SpinWheel
             subjects={subjects}
             onLand={handleLand}
-            initialSubjectId={subject?.id}
+            selectedId={subject?.id}
           />
         </div>
 
-        {/* Difficulty */}
-        <div className={`rounded-2xl p-5 border backdrop-blur-xl ${cardBg}`}>
-          <h3 className={`text-base font-black mb-3 ${textPrimary}`}>
+        <div
+          className={`rounded-2xl p-3.5 sm:p-5 border backdrop-blur-xl ${cardBg}`}
+        >
+          <h3
+            className={`text-sm sm:text-base font-black mb-2 sm:mb-3 ${textPrimary}`}
+          >
             2. ¿Qué tan difícil?
           </h3>
-          <div className="flex flex-col sm:grid sm:grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {difficulties.map((d) => {
               const sel = difficulty?.id === d.id;
               return (
                 <motion.button
                   key={d.id}
                   onClick={() => setDifficulty(d)}
-                  whileHover={{ scale: 1.03 }}
+                  aria-pressed={sel}
                   whileTap={{ scale: 0.97 }}
-                  className={`flex sm:flex-col items-center sm:items-center gap-3 sm:gap-1 px-4 sm:px-3 py-3.5 sm:py-3 rounded-xl border text-left sm:text-center transition-all ${
+                  className={`!flex flex-col !items-center !justify-start gap-0.5 px-1.5 py-2.5 rounded-xl border-2 text-center transition-all ${
                     sel
                       ? "text-white border-transparent shadow-md"
                       : darkMode
@@ -250,25 +294,23 @@ const ChallengeSetup = memo(
                   }`}
                   style={sel ? { background: EXPLORE_GRADIENT } : {}}
                 >
-                  <div className="text-2xl sm:text-xl sm:mb-1 flex-shrink-0">
+                  <span className="text-2xl leading-none" aria-hidden="true">
                     {d.emoji}
-                  </div>
-                  <div className="flex-1 sm:flex-none">
-                    <div className="text-sm sm:text-xs font-bold">
-                      {d.label}
-                    </div>
-                    <div
-                      className={`text-xs sm:text-[10px] mt-0.5 ${sel ? "text-white/80" : textSecondary}`}
-                    >
-                      {d.hint ? `${d.hint} · ` : ""}
-                      {d.questions} preguntas · +{d.xp} XP
-                    </div>
-                  </div>
-                  {sel && (
-                    <div className="ml-auto sm:hidden text-white text-lg">
-                      ✓
-                    </div>
-                  )}
+                  </span>
+                  <span className="text-xs font-bold leading-tight">
+                    {d.label}
+                  </span>
+                  <span
+                    className={`text-[10px] leading-tight ${sel ? "text-white/85" : textSecondary}`}
+                  >
+                    {d.hint ? `${d.hint} · ` : ""}
+                    {d.questions} preguntas
+                  </span>
+                  <span
+                    className={`text-[10px] font-black ${sel ? "text-white" : "text-[#9D4EDD]"}`}
+                  >
+                    +{d.xp} XP
+                  </span>
                 </motion.button>
               );
             })}
@@ -311,8 +353,10 @@ const ChallengeSetup = memo(
               </motion.span>
               Generando preguntas...
             </span>
+          ) : subject ? (
+            "🚀 ¡Empezar reto!"
           ) : (
-            `🚀 Iniciar Reto${subject ? ` de ${subject.label}` : ""}`
+            "👆 Primero elige una materia"
           )}
         </motion.button>
       </div>

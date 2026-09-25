@@ -27,6 +27,8 @@ const router = Router();
  *                   type: number
  *                 deepseekConfigured:
  *                   type: boolean
+ *                 youtubeConfigured:
+ *                   type: boolean
  *                 memoryUsage:
  *                   type: string
  *                   example: 45MB
@@ -37,6 +39,7 @@ router.get('/', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     deepseekConfigured: !!DEEPSEEK_API_KEY,
+    youtubeConfigured: !!process.env.YOUTUBE_API_KEY,
     memoryUsage: Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + 'MB',
   });
 });

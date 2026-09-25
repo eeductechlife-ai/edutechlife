@@ -1,16 +1,6 @@
 import { memo, useState, useCallback, useMemo, useRef, useEffect } from "react";
-import {
-  X,
-  Loader2,
-  Copy,
-  Check,
-  RotateCcw,
-  Star,
-  Layers,
-  Trash2,
-  ChevronDown,
-  Download,
-} from "lucide-react";
+import PanelHeader from "./PanelHeader";
+import { Loader2, Copy, Check, RotateCcw, Star, Layers } from "lucide-react";
 import { callDeepseekSmartboard } from "../../../utils/api";
 import { CONTENT_TYPES } from "./practicarConfig";
 import { logPractice } from "./practicarProgress";
@@ -21,11 +11,8 @@ import {
   parseMaterial,
 } from "./materialPrompts";
 import { useSavedMaterials } from "./useSavedMaterials";
-import {
-  MindMapImage,
-  InfographicImage,
-  downloadSvgAsPng,
-} from "./MaterialImages";
+import ImagePanel from "./images/ImagePanel";
+import SavedMaterialsList from "./SavedMaterialsList";
 import {
   SummaryView,
   ExercisesView,
@@ -44,25 +31,47 @@ const LOADING_TEXT = {
 
 const typeMeta = (id) => CONTENT_TYPES.find((c) => c.id === id);
 
+// The model's own title is more specific than the requested topic.
+const titleOf = (m) =>
+  (m.type === "mapa" && m.data?.centro) ||
+  (m.type === "infografia" && m.data?.titulo) ||
+  m.topic;
+
 const ContentGenerator = memo(
-  ({ subject, grade, age, onClose, onTabChange, darkMode: dm }) => {
+  ({
+    subject,
+    grade,
+    age,
+    onClose,
+    onTabChange,
+    darkMode: dm,
+    fullScreen,
+    planTask,
+    onFinishPlanTask,
+  }) => {
     const topics = useMemo(
       () => gradeTopics(subject.id, grade).slice(0, 4),
       [subject.id, grade],
     );
     const [pickedTopic, setPickedTopic] = useState(null);
-    const [customTopic, setCustomTopic] = useState("");
-    const [contentType, setContentType] = useState("resumen");
+    // A "Mi Plan" task arrives with its topic and the best material type.
+    const [customTopic, setCustomTopic] = useState(planTask?.topic || "");
+    const [contentType, setContentType] = useState(
+      CONTENT_TYPES.some((c) => c.id === planTask?.type)
+        ? planTask.type
+        : "resumen",
+    );
     const [material, setMaterial] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [copied, setCopied] = useState(false);
     const [savedId, setSavedId] = useState(null);
-    const [showSaved, setShowSaved] = useState(false);
     const { saved, save, remove } = useSavedMaterials();
     const resultRef = useRef(null);
-    const imageRef = useRef(null);
-    const [downloading, setDownloading] = useState(false);
+    // Once there is a result the form folds into one line so the result
+    // is what the kid sees, not the questions they already answered.
+    const [editing, setEditing] = useState(false);
+    const showForm = editing || (!material && !loading);
 
     const gradeLabel = grade ? `grado ${grade}°` : "primaria";
     const topic =
@@ -80,6 +89,7 @@ const ContentGenerator = memo(
 
     const generate = useCallback(async () => {
       setLoading(true);
+      setEditing(false);
       setError("");
       setMaterial(null);
       setSavedId(null);
@@ -98,6 +108,7 @@ const ContentGenerator = memo(
         const data = parseMaterial(contentType, raw);
         if (!data) throw new Error("unusable");
         setMaterial({
+          key: `${Date.now()}`,
           type: contentType,
           topic,
           data,
@@ -125,10 +136,18 @@ const ContentGenerator = memo(
       }
     }, [contentType, subject, topic, gradeLabel, age]);
 
+    // Plan tasks start generating at once: one tap from the plan to learning.
+    const autoStarted = useRef(false);
+    useEffect(() => {
+      if (!planTask || autoStarted.current) return;
+      autoStarted.current = true;
+      generate();
+    }, [planTask, generate]);
+
     const copy = useCallback(async () => {
       try {
         await navigator.clipboard.writeText(
-          `${material.topic}\n\n${materialToText(material.type, material.data)}`,
+          `${titleOf(material)}\n\n${materialToText(material.type, material.data)}`,
         );
         setCopied(true);
         setTimeout(() => setCopied(false), 1800);
@@ -138,7 +157,7 @@ const ContentGenerator = memo(
     }, [material]);
 
     const makeCards = () => {
-      setHandoff(HANDOFF_FLASHCARDS_TOPIC, material.topic.slice(0, 80));
+      setHandoff(HANDOFF_FLASHCARDS_TOPIC, titleOf(material).slice(0, 80));
       onTabChange?.("flashcards");
     };
 
@@ -155,141 +174,199 @@ const ContentGenerator = memo(
     return (
       <section
         aria-label="Crear material de estudio"
-        className={`rounded-2xl border p-4 sm:p-5 space-y-4 ${card}`}
+        className={
+          fullScreen
+            ? "p-4 space-y-4"
+            : `rounded-2xl border p-4 sm:p-5 space-y-4 ${card}`
+        }
       >
-        <header className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className={`font-bold text-base ${text}`}>
-              Crear material de {subject.label}
-            </h3>
-            <p className={`text-xs mt-0.5 ${sub}`}>
-              La IA lo prepara para tu {gradeLabel}.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Cerrar"
-            className={`w-11 h-11 -mr-2 -mt-2 flex items-center justify-center rounded-xl shrink-0 ${sub} hover:bg-black/5`}
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </header>
+        <PanelHeader
+          title={`${subject.emoji || "✨"} Crear material de ${subject.label}`}
+          subtitle={`La IA lo prepara para tu ${gradeLabel}.`}
+          onClose={onClose}
+          fullScreen={fullScreen}
+          darkMode={dm}
+        />
 
-        <div className="space-y-2">
-          <p className={`text-xs font-black uppercase tracking-wide ${sub}`}>
-            1. ¿De qué tema?
-          </p>
-          {topics.length > 0 && (
-            <div
-              className="grid grid-cols-1 sm:grid-cols-2 gap-2"
-              role="radiogroup"
-              aria-label="Temas de tu grado"
-            >
-              {topics.map((tp) => {
-                const sel = pickedTopic === tp && !customTopic.trim();
-                return (
-                  <button
-                    key={tp}
-                    type="button"
-                    role="radio"
-                    aria-checked={sel}
-                    onClick={() => {
-                      setPickedTopic(sel ? null : tp);
-                      setCustomTopic("");
-                    }}
-                    className={`text-left px-3 py-2.5 rounded-xl border-2 text-xs font-semibold leading-snug ${sel ? "text-white border-transparent" : idle}`}
-                    style={sel ? { background: subject.color } : {}}
-                  >
-                    {tp}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-          <label htmlFor="practicar-topic" className="sr-only">
-            Otro tema
-          </label>
-          <input
-            id="practicar-topic"
-            value={customTopic}
-            onChange={(e) => setCustomTopic(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && !loading && generate()}
-            maxLength={120}
-            placeholder={
-              topics.length
-                ? "…o escribe otro tema de tu clase"
-                : "Escribe el tema de tu clase"
-            }
-            className={`w-full px-3 py-3 rounded-xl border text-base sm:text-sm outline-none focus:border-[#9D4EDD] ${idle}`}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <p className={`text-xs font-black uppercase tracking-wide ${sub}`}>
-            2. ¿Qué quieres?
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            {CONTENT_TYPES.map((ct, i) => {
-              const sel = contentType === ct.id;
-              const lastOdd =
-                CONTENT_TYPES.length % 2 === 1 &&
-                i === CONTENT_TYPES.length - 1;
-              return (
-                <button
-                  key={ct.id}
-                  type="button"
-                  onClick={() => setContentType(ct.id)}
-                  aria-pressed={sel}
-                  className={`flex items-start gap-2 p-3 rounded-xl border-2 text-left ${lastOdd ? "col-span-2" : ""} ${sel ? "text-white border-transparent" : idle}`}
-                  style={sel ? { background: subject.color } : {}}
-                >
-                  <span className="text-lg leading-none" aria-hidden="true">
-                    {ct.emoji}
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-xs font-bold">{ct.label}</span>
-                    <span
-                      className={`block text-[11px] leading-snug mt-0.5 ${sel ? "text-white/85" : sub}`}
-                    >
-                      {ct.desc}
-                    </span>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {error && (
-          <p
-            role="alert"
-            className="text-sm text-red-600 bg-red-500/10 px-3 py-2.5 rounded-xl"
-          >
-            {error}
+        {planTask && (
+          <p className="!m-0 rounded-xl bg-[#FFF7ED] border border-[#FED7AA] px-3 py-2.5 text-xs text-[#9A3412]">
+            📋 Tarea de tu plan:{" "}
+            <span className="font-black">{planTask.topic}</span>
+            <span className="block mt-0.5 text-[11px] text-[#C2410C]">
+              Estúdiala aquí y, al final, toca «✅ Terminé esta actividad».
+            </span>
           </p>
         )}
 
-        <button
-          type="button"
-          onClick={generate}
-          disabled={loading}
-          className="w-full py-3.5 rounded-xl font-black text-sm text-white disabled:opacity-60"
-          style={{
-            background: `linear-gradient(135deg, ${subject.color} 0%, #9D4EDD 100%)`,
-          }}
-        >
-          {loading ? (
-            <span className="flex items-center justify-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin" />{" "}
-              {LOADING_TEXT[contentType]}
+        {!showForm && material && (
+          <button
+            type="button"
+            onClick={() => setEditing(true)}
+            className={`w-full !flex items-center !justify-start gap-2 px-3 py-2.5 rounded-xl border text-left ${idle}`}
+          >
+            <span className="text-lg" aria-hidden="true">
+              {typeMeta(material.type)?.emoji}
             </span>
-          ) : (
-            `✨ Crear ${typeMeta(contentType)?.label.toLowerCase()}`
-          )}
-        </button>
+            <span className="min-w-0 flex-1">
+              <span className="block text-xs font-bold truncate">
+                {titleOf(material)}
+              </span>
+              <span className={`block text-[11px] ${sub}`}>
+                {typeMeta(material.type)?.label}
+              </span>
+            </span>
+            <span
+              className="text-xs font-black shrink-0"
+              style={{ color: subject.color }}
+            >
+              ✏️ Crear otro
+            </span>
+          </button>
+        )}
+
+        {showForm && (
+          <>
+            <div className="space-y-2">
+              <p
+                className={`text-xs font-black uppercase tracking-wide ${sub}`}
+              >
+                1. ¿De qué tema?
+              </p>
+              {topics.length > 0 && (
+                <div
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-2"
+                  role="radiogroup"
+                  aria-label="Temas de tu grado"
+                >
+                  {topics.map((tp) => {
+                    const sel = pickedTopic === tp && !customTopic.trim();
+                    return (
+                      <button
+                        key={tp}
+                        type="button"
+                        role="radio"
+                        aria-checked={sel}
+                        onClick={() => {
+                          setPickedTopic(sel ? null : tp);
+                          setCustomTopic("");
+                        }}
+                        title={tp}
+                        className={`!justify-start text-left px-3 py-2 rounded-xl border-2 text-xs font-semibold leading-snug ${sel ? "text-white border-transparent" : idle}`}
+                        style={sel ? { background: subject.color } : {}}
+                      >
+                        <span className="line-clamp-2">{tp}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+              <label htmlFor="practicar-topic" className="sr-only">
+                Otro tema
+              </label>
+              <input
+                id="practicar-topic"
+                value={customTopic}
+                onChange={(e) => setCustomTopic(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && !loading && generate()}
+                maxLength={120}
+                placeholder={
+                  topics.length
+                    ? "…o escribe otro tema de tu clase"
+                    : "Escribe el tema de tu clase"
+                }
+                className={`w-full px-3 py-3 rounded-xl border text-base sm:text-sm outline-none focus:border-[#9D4EDD] ${idle}`}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <p
+                className={`text-xs font-black uppercase tracking-wide ${sub}`}
+              >
+                2. ¿Qué quieres?
+              </p>
+              {/* Phones: compact emoji chips (3 per row); the picked one's
+              description shows underneath instead of on every chip. */}
+              <div className="grid grid-cols-3 gap-2">
+                {CONTENT_TYPES.map((ct) => {
+                  const sel = contentType === ct.id;
+                  return (
+                    <button
+                      key={ct.id}
+                      type="button"
+                      onClick={() => setContentType(ct.id)}
+                      aria-pressed={sel}
+                      className={`!flex flex-col sm:flex-row !items-center sm:!items-start !justify-center sm:!justify-start gap-1 sm:gap-2 p-2 sm:p-3 min-h-[64px] rounded-xl border-2 text-center sm:text-left ${sel ? "text-white border-transparent" : idle}`}
+                      style={sel ? { background: subject.color } : {}}
+                    >
+                      <span
+                        className="text-xl sm:text-lg leading-none"
+                        aria-hidden="true"
+                      >
+                        {ct.emoji}
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[11px] sm:text-xs font-bold leading-tight">
+                          {ct.label}
+                        </span>
+                        <span
+                          className={`hidden sm:block text-[11px] leading-snug mt-0.5 ${sel ? "text-white/85" : sub}`}
+                        >
+                          {ct.desc}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+              <p className={`sm:hidden text-[11px] ${sub}`}>
+                {typeMeta(contentType)?.emoji} {typeMeta(contentType)?.desc}
+              </p>
+            </div>
+
+            {error && (
+              <p
+                role="alert"
+                className="text-sm text-red-600 bg-red-500/10 px-3 py-2.5 rounded-xl"
+              >
+                {error}
+              </p>
+            )}
+
+            <button
+              type="button"
+              onClick={generate}
+              disabled={loading}
+              className="w-full py-3.5 rounded-xl font-black text-sm text-white disabled:opacity-60"
+              style={{
+                background: `linear-gradient(135deg, ${subject.color} 0%, #9D4EDD 100%)`,
+              }}
+            >
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin" />{" "}
+                  {LOADING_TEXT[contentType]}
+                </span>
+              ) : (
+                `✨ Crear ${typeMeta(contentType)?.label.toLowerCase()}`
+              )}
+            </button>
+          </>
+        )}
 
         <div ref={resultRef}>
+          {loading && (
+            <p
+              role="status"
+              className={`flex items-center justify-center gap-2 text-sm font-bold mb-3 ${text}`}
+            >
+              <Loader2
+                className="w-4 h-4 animate-spin"
+                style={{ color: subject.color }}
+                aria-hidden="true"
+              />
+              {LOADING_TEXT[contentType]}
+            </p>
+          )}
           {loading && (
             <div className="space-y-2" aria-hidden="true">
               {[0, 1, 2].map((i) => (
@@ -313,40 +390,29 @@ const ContentGenerator = memo(
                   {typeMeta(material.type)?.emoji}{" "}
                   {typeMeta(material.type)?.label}
                 </p>
-                <p className={`text-sm font-bold leading-snug ${text}`}>
-                  {material.topic}
-                </p>
+                {material.type !== "mapa" && material.type !== "infografia" && (
+                  <p className={`text-sm font-bold leading-snug ${text}`}>
+                    {titleOf(material)}
+                  </p>
+                )}
               </header>
 
               <div className={text}>
                 {material.type === "resumen" && (
                   <SummaryView data={material.data} />
                 )}
-                {material.type === "mapa" && (
-                  <div className="rounded-2xl overflow-hidden border border-black/5">
-                    <MindMapImage
-                      ref={imageRef}
-                      data={material.data}
-                      color={subject.color}
-                      layout={
-                        typeof window !== "undefined" && window.innerWidth < 640
-                          ? "tree"
-                          : "radial"
-                      }
-                    />
-                  </div>
-                )}
-                {material.type === "infografia" && (
-                  <div className="rounded-2xl overflow-hidden border border-black/5">
-                    <InfographicImage
-                      ref={imageRef}
-                      data={material.data}
-                      color={subject.color}
-                    />
-                  </div>
+                {(material.type === "mapa" ||
+                  material.type === "infografia") && (
+                  <ImagePanel
+                    material={material}
+                    title={titleOf(material)}
+                    color={subject.color}
+                    dm={dm}
+                  />
                 )}
                 {material.type === "ejercicios" && (
                   <ExercisesView
+                    key={material.key || material.id}
                     data={material.data}
                     color={subject.color}
                     dm={dm}
@@ -357,33 +423,16 @@ const ContentGenerator = memo(
                 )}
               </div>
 
-              {(material.type === "mapa" || material.type === "infografia") && (
+              {/* Closes the loop: the task gets ticked in "Mi Plan". */}
+              {planTask?.planRef && onFinishPlanTask && (
                 <button
                   type="button"
-                  disabled={downloading}
-                  onClick={async () => {
-                    if (!imageRef.current) return;
-                    setDownloading(true);
-                    try {
-                      const name =
-                        `${typeMeta(material.type)?.label}-${material.topic}`
-                          .toLowerCase()
-                          .normalize("NFD")
-                          .replace(/[^a-z0-9]+/g, "-")
-                          .slice(0, 60);
-                      await downloadSvgAsPng(imageRef.current, name);
-                    } finally {
-                      setDownloading(false);
-                    }
-                  }}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-black text-white disabled:opacity-60"
-                  style={{ background: subject.color }}
+                  onClick={() => onFinishPlanTask(planTask.planRef)}
+                  className="w-full min-h-[48px] rounded-xl text-sm font-black text-white bg-green-500 shadow-md"
                 >
-                  <Download className="w-4 h-4" aria-hidden="true" />
-                  {downloading ? "Preparando imagen…" : "Descargar imagen"}
+                  ✅ Terminé esta actividad
                 </button>
               )}
-
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <button
                   type="button"
@@ -428,60 +477,17 @@ const ContentGenerator = memo(
           )}
         </div>
 
-        {saved.length > 0 && (
-          <div
-            className={`rounded-2xl border ${dm ? "border-[#334155]" : "border-[#E2E8F0]"}`}
-          >
-            <button
-              type="button"
-              onClick={() => setShowSaved((v) => !v)}
-              aria-expanded={showSaved}
-              className={`w-full flex items-center justify-between px-4 py-3 text-sm font-bold ${text}`}
-            >
-              <span>⭐ Mis materiales guardados ({saved.length})</span>
-              <ChevronDown
-                className={`w-4 h-4 opacity-50 transition-transform ${showSaved ? "rotate-180" : ""}`}
-                aria-hidden="true"
-              />
-            </button>
-            {showSaved && (
-              <ul className="px-2 pb-2 space-y-1">
-                {saved.map((m) => (
-                  <li key={m.id} className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMaterial(m);
-                        setSavedId(m.id);
-                        setShowSaved(false);
-                      }}
-                      className={`flex-1 min-w-0 text-left px-3 py-2.5 rounded-xl hover:bg-black/5 ${text}`}
-                    >
-                      <span className="block text-sm font-semibold truncate">
-                        {typeMeta(m.type)?.emoji} {m.topic}
-                      </span>
-                      <span className={`block text-[11px] ${sub}`}>
-                        {m.subjectLabel} ·{" "}
-                        {new Date(m.savedAt).toLocaleDateString("es-CO", {
-                          day: "numeric",
-                          month: "short",
-                        })}
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => remove(m.id)}
-                      aria-label={`Borrar ${m.topic}`}
-                      className="w-10 h-10 flex items-center justify-center rounded-xl text-red-400 hover:bg-red-50 shrink-0"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
+        <SavedMaterialsList
+          saved={saved}
+          onOpen={(m) => {
+            setMaterial(m);
+            setSavedId(m.id);
+          }}
+          onRemove={remove}
+          typeMeta={typeMeta}
+          titleOf={titleOf}
+          dm={dm}
+        />
       </section>
     );
   },

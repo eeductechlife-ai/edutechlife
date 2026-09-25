@@ -62,9 +62,16 @@ const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
     onTabChange?.("practicar");
   };
 
+  // What needs work comes first, so the top of the list is the to-do.
+  const score = (s) =>
+    s.gradeScore != null
+      ? Number(s.gradeScore)
+      : (Number(s.progress) || 0) / 20;
+  const ordered = [...subjects].sort((a, b) => score(a) - score(b));
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-      {subjects.map((subject, index) => {
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3">
+      {ordered.map((subject, index) => {
         const hasGrade = subject.gradeScore != null;
         const ms = getMasteryState(subject.progress, subject.gradeScore);
         return (
@@ -73,28 +80,29 @@ const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.04 }}
-            className="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-[0_10px_30px_-18px_rgba(0,48,63,0.35)]"
+            className="bg-white p-3 sm:p-4 rounded-2xl border border-[#E2E8F0] shadow-[0_10px_30px_-18px_rgba(0,48,63,0.35)]"
           >
             <div className="flex items-center gap-3">
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0"
+                className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-2xl shrink-0"
                 style={{ background: `${subject.color}22` }}
                 aria-hidden="true"
               >
                 {subject.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-bold text-[#00303F] truncate">
+                {/* `!m-0`: global typography adds heading/paragraph margins. */}
+                <h4 className="!m-0 text-base font-bold leading-tight text-[#00303F] truncate">
                   {subject.name}
                 </h4>
-                <p className="text-xs text-[#64748B]">
+                <p className="!m-0 mt-0.5 text-xs text-[#64748B]">
                   {hasGrade ? ms.hint : t("smartboard.progress")}
                 </p>
               </div>
               {hasGrade ? (
                 <div className="text-right shrink-0">
                   <p
-                    className="text-2xl font-black tabular-nums leading-none"
+                    className="!m-0 text-2xl font-black tabular-nums leading-none"
                     style={{ color: ms.color }}
                   >
                     {subject.gradeScore.toFixed(1)}
@@ -113,35 +121,37 @@ const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
               )}
             </div>
 
-            <div
-              className="mt-3 w-full h-2 bg-[#EDF3F7] rounded-full overflow-hidden"
-              role="progressbar"
-              aria-valuenow={subject.progress}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-label={`Avance en ${subject.name}`}
-            >
-              <motion.div
-                className="h-full rounded-full"
-                style={{ background: hasGrade ? ms.color : subject.color }}
-                initial={{ width: 0 }}
-                animate={{ width: `${subject.progress}%` }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-              />
+            <div className="mt-2.5 flex items-center gap-3">
+              <div
+                className="flex-1 h-2 bg-[#EDF3F7] rounded-full overflow-hidden"
+                role="progressbar"
+                aria-valuenow={subject.progress}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={`Avance en ${subject.name}`}
+              >
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ background: hasGrade ? ms.color : subject.color }}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${subject.progress}%` }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => practice(subject)}
+                aria-label={`Practicar ${subject.name}`}
+                className="shrink-0 min-h-[40px] px-3.5 rounded-xl text-xs font-black transition-colors"
+                style={
+                  ms.key === "recovery" || ms.key === "practice"
+                    ? { background: ms.color, color: "#fff" }
+                    : { background: "#F1F5F9", color: "#00303F" }
+                }
+              >
+                🎯 Practicar
+              </button>
             </div>
-
-            <button
-              type="button"
-              onClick={() => practice(subject)}
-              className="mt-3 w-full py-2.5 rounded-xl text-sm font-bold transition-colors"
-              style={
-                ms.key === "recovery" || ms.key === "practice"
-                  ? { background: ms.color, color: "#fff" }
-                  : { background: "#F1F5F9", color: "#00303F" }
-              }
-            >
-              🎯 Practicar {subject.name}
-            </button>
           </motion.div>
         );
       })}

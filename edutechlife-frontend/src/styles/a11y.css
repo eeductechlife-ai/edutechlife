@@ -316,6 +316,11 @@ img:not([alt]) {
   background-color: #4da8c4;
 }
 
+/* Pill-style tabs already mark the active tab with a filled background. */
+[role="tab"][data-pill][aria-selected="true"]::after {
+  content: none;
+}
+
 /* Ensure sufficient color contrast (WCAG AA) */
 .low-contrast-warning {
   color: #dc2626;

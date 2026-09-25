@@ -59,7 +59,21 @@ const inpCls =
 const gdCls =
   "text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all";
 
+// The goal is stored 0-100 (DB desired_grade) but Colombian report cards use
+// 1.0-5.0, so that is what the student sees and picks.
+const toFive = (pct) =>
+  (Math.max(0, Math.min(100, Number(pct) || 0)) / 20).toFixed(1);
+const menLevel = (five) => {
+  const n = Number(five);
+  if (n >= 4.6) return { label: "Superior", emoji: "🏆" };
+  if (n >= 4) return { label: "Alto", emoji: "⭐" };
+  if (n >= 3) return { label: "Básico", emoji: "👍" };
+  return { label: "Bajo", emoji: "🌱" };
+};
+
 export {
+  toFive,
+  menLevel,
   subjects,
   MATERIALS_LS,
   PRACTICE_GRADIENT,

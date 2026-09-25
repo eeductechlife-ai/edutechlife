@@ -1,7 +1,12 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { motion } from "framer-motion";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useImprovementPlan } from "./useImprovementPlan";
+import { activityRoute, routeLabel } from "./planActivity";
+import {
+  setHandoff,
+  HANDOFF_PLAN_ACTIVITY,
+} from "../practicarHub/practicarHandoff";
 
 const PROGRESS_GRADIENT =
   "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)";
@@ -12,7 +17,21 @@ const fadeIn = {
 };
 const transition = { duration: 0.4, ease: "easeOut" };
 
-function WeekCard({ week, weekIdx, onToggle, darkMode }) {
+const TIPO_EMOJI = {
+  visual: "👀",
+  auditivo: "🎧",
+  kinestesico: "✋",
+  lectura: "📖",
+};
+
+function WeekCard({
+  week,
+  weekIdx,
+  onToggle,
+  onOpen,
+  routeLabelFor,
+  darkMode,
+}) {
   const done = week.activities.filter((a) => a.done).length;
   const total = week.activities.length;
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
@@ -33,7 +52,7 @@ function WeekCard({ week, weekIdx, onToggle, darkMode }) {
         style={{ borderColor: darkMode ? "rgba(255,255,255,0.06)" : "#F1F5F9" }}
       >
         <h3
-          className={`font-bold text-sm ${darkMode ? "text-white" : "text-[#1E293B]"}`}
+          className={`!m-0 font-bold text-sm leading-snug pr-2 ${darkMode ? "text-white" : "text-[#1E293B]"}`}
         >
           Semana {week.week}: {week.title || week.focus}
         </h3>
@@ -60,53 +79,79 @@ function WeekCard({ week, weekIdx, onToggle, darkMode }) {
           </p>
         )}
 
+        {/* Each task: tick it (left) or go do it right now (▶ button). */}
         <ul className="space-y-2">
           {week.activities.map((act, ai) => (
-            <li key={ai} className="flex items-start gap-3">
-              <button
-                onClick={() => onToggle(weekIdx, ai)}
-                className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                  act.done
-                    ? "border-[#FB8500]"
-                    : darkMode
-                      ? "border-gray-500 hover:border-[#FB8500]"
-                      : "border-[#CBD5E1] hover:border-[#FB8500]"
-                }`}
-                style={act.done ? { background: PROGRESS_GRADIENT } : {}}
-                aria-label={
-                  act.done ? "Marcar como pendiente" : "Marcar como hecha"
-                }
-              >
-                {act.done && (
-                  <svg viewBox="0 0 10 8" className="w-3 h-3" fill="none">
-                    <path
-                      d="M1 4l3 3 5-6"
-                      stroke="white"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
-              </button>
-              <div className="flex-1 min-w-0">
-                <span
-                  className={`text-sm leading-snug ${
-                    act.done
-                      ? "line-through opacity-40"
-                      : darkMode
-                        ? "text-gray-200"
-                        : "text-[#334155]"
-                  }`}
+            <li
+              key={ai}
+              className={`rounded-xl border ${act.done ? "border-transparent opacity-80" : darkMode ? "border-gray-700" : "border-[#F1F5F9]"}`}
+            >
+              <div className="flex items-start">
+                <button
+                  type="button"
+                  role="checkbox"
+                  aria-checked={act.done}
+                  aria-label={`${act.titulo}: ${act.done ? "hecha" : "marcar como hecha"}`}
+                  onClick={() => onToggle(weekIdx, ai)}
+                  className={`flex-1 min-w-0 min-h-[44px] !flex items-start !justify-start gap-3 px-2 py-2 rounded-xl text-left transition-colors ${darkMode ? "hover:bg-white/5" : "hover:bg-[#FFF7ED]"}`}
                 >
-                  {act.titulo}
-                </span>
-                {act.duracion && (
-                  <span className="ml-2 text-xs text-[#94A3B8]">
-                    {act.duracion}
+                  <span
+                    className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                      act.done
+                        ? "border-[#FB8500]"
+                        : darkMode
+                          ? "border-gray-500"
+                          : "border-[#CBD5E1]"
+                    }`}
+                    style={act.done ? { background: PROGRESS_GRADIENT } : {}}
+                    aria-hidden="true"
+                  >
+                    {act.done && (
+                      <svg viewBox="0 0 10 8" className="w-3 h-3" fill="none">
+                        <path
+                          d="M1 4l3 3 5-6"
+                          stroke="white"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
                   </span>
-                )}
+                  <span className="flex-1 min-w-0">
+                    <span
+                      className={`text-sm leading-snug ${
+                        act.done
+                          ? "line-through opacity-40"
+                          : darkMode
+                            ? "text-gray-200"
+                            : "text-[#334155]"
+                      }`}
+                    >
+                      {TIPO_EMOJI[act.tipo] ? `${TIPO_EMOJI[act.tipo]} ` : ""}
+                      {act.titulo}
+                    </span>
+                    {act.duracion && (
+                      <span className="ml-2 text-xs text-[#94A3B8] whitespace-nowrap">
+                        ⏱ {act.duracion}
+                      </span>
+                    )}
+                  </span>
+                </button>
               </div>
+              {!act.done && onOpen && (
+                <button
+                  type="button"
+                  onClick={() => onOpen(weekIdx, ai)}
+                  className="mx-2 mb-2 w-[calc(100%-1rem)] min-h-[40px] !flex items-center !justify-between gap-2 px-3 rounded-lg text-xs font-black text-white"
+                  style={{ background: PROGRESS_GRADIENT }}
+                >
+                  <span>▶ Hazla ahora</span>
+                  <span className="font-bold text-white/90">
+                    {routeLabelFor?.(weekIdx, ai)}
+                  </span>
+                </button>
+              )}
             </li>
           ))}
         </ul>
@@ -116,11 +161,16 @@ function WeekCard({ week, weekIdx, onToggle, darkMode }) {
 }
 
 function ImprovementPlan({ onTabChange }) {
-  const { vakResult, darkMode, gradeLevel } = useIngenIAKids();
+  const { vakResult, darkMode, gradeLevel, studentGrades } = useIngenIAKids();
   const { plan, isGenerating, error, generatePlan, markActivityDone, hasPlan } =
     useImprovementPlan();
+  const [confirmRegen, setConfirmRegen] = useState(false);
+  const [openWeek, setOpenWeek] = useState(null);
 
-  const canGenerate = !!vakResult;
+  // Grades and ADN make the plan more precise, but neither blocks it.
+  const hasGrades = (studentGrades || []).length > 0;
+  const sub = darkMode ? "text-gray-400" : "text-[#64748B]";
+  const hintBtn = `w-full max-w-xs min-h-[44px] !flex items-center !justify-center gap-2 px-4 rounded-xl text-xs font-bold border ${darkMode ? "border-gray-600 text-gray-200" : "border-[#E2E8F0] text-[#334155] bg-white"}`;
 
   const totalActivities = hasPlan
     ? plan.weeks.reduce((s, w) => s + w.activities.length, 0)
@@ -135,6 +185,32 @@ function ImprovementPlan({ onTabChange }) {
     totalActivities > 0
       ? Math.round((doneActivities / totalActivities) * 100)
       : 0;
+  // Opens on the first week that still has something to do.
+  const firstPending = hasPlan
+    ? Math.max(
+        0,
+        plan.weeks.findIndex((w) => w.activities.some((a) => !a.done)),
+      )
+    : 0;
+  const shownWeek =
+    hasPlan && openWeek != null && openWeek < plan.weeks.length
+      ? openWeek
+      : firstPending;
+
+  // "▶ Hazla ahora": hand the task to Practicar, which opens the right tool
+  // with the topic filled in (and generates the material right away).
+  const routeOf = (wi, ai) =>
+    activityRoute(plan.weeks[wi].activities[ai], plan.weeks[wi], {
+      weakSubjects: plan.weakSubjects,
+      vakStyle: vakResult?.predominantStyle,
+    });
+  const openActivity = (wi, ai) => {
+    setHandoff(
+      HANDOFF_PLAN_ACTIVITY,
+      JSON.stringify({ ...routeOf(wi, ai), planRef: { week: wi, act: ai } }),
+    );
+    onTabChange?.("practicar");
+  };
 
   if (isGenerating) {
     return (
@@ -148,10 +224,11 @@ function ImprovementPlan({ onTabChange }) {
           style={{ borderColor: "#FB8500", borderTopColor: "transparent" }}
         />
         <p
-          className={`text-sm ${darkMode ? "text-gray-300" : "text-[#64748B]"}`}
+          className={`text-sm font-semibold ${darkMode ? "text-gray-300" : "text-[#64748B]"}`}
         >
-          Dani está analizando tu perfil...
+          Dani está armando tu plan… 📋
         </p>
+        <p className={`text-xs ${sub}`}>Esto tarda unos segundos.</p>
       </motion.div>
     );
   }
@@ -163,39 +240,49 @@ function ImprovementPlan({ onTabChange }) {
         transition={transition}
         className="flex flex-col items-center justify-center py-8 gap-5 text-center px-4"
       >
-        <span className="text-6xl">📋</span>
+        <span className="text-6xl" aria-hidden="true">
+          📋
+        </span>
         <div>
           <h2
-            className={`text-xl font-bold mb-2 ${darkMode ? "text-white" : "text-[#1E293B]"}`}
+            className={`!m-0 text-xl font-bold mb-2 ${darkMode ? "text-white" : "text-[#1E293B]"}`}
           >
             Tu Plan de Mejora
           </h2>
-          <p
-            className={`text-sm max-w-xs mx-auto ${darkMode ? "text-gray-400" : "text-[#64748B]"}`}
-          >
-            {canGenerate
-              ? "Genera tu plan personalizado basado en tu estilo VAK y tus calificaciones"
-              : "Primero completa tu ADN de Aprendizaje para generar tu plan"}
+          <p className={`!m-0 mt-1 text-sm max-w-xs mx-auto ${sub}`}>
+            Dani te arma un plan de 4 semanas con actividades cortas para subir
+            tus notas. Vas marcando lo que haces. ✅
           </p>
         </div>
-        {error && <p className="text-sm text-red-500 max-w-xs">{error}</p>}
-        {canGenerate ? (
+        {error && (
+          <p role="alert" className="text-sm text-red-500 max-w-xs">
+            {error}
+          </p>
+        )}
+        <button
+          type="button"
+          onClick={generatePlan}
+          className="w-full max-w-xs px-6 py-3.5 rounded-xl font-black text-base text-white shadow-md hover:shadow-lg active:scale-95 transition-all"
+          style={{ background: PROGRESS_GRADIENT }}
+        >
+          🚀 Generar mi plan
+        </button>
+        {!hasGrades && (
           <button
-            onClick={generatePlan}
-            className="px-6 py-3.5 rounded-xl font-bold text-sm text-white shadow-md hover:shadow-lg active:scale-95 transition-all"
-            style={{ background: PROGRESS_GRADIENT }}
+            type="button"
+            onClick={() => onTabChange?.("calificaciones")}
+            className={hintBtn}
           >
-            🚀 Generar mi plan
+            📊 Escribe tus notas primero para un plan más exacto
           </button>
-        ) : (
+        )}
+        {!vakResult && (
           <button
+            type="button"
             onClick={() => onTabChange?.("vak")}
-            className="px-6 py-3.5 rounded-xl font-bold text-sm text-white shadow-md active:scale-95 transition-all"
-            style={{
-              background: "linear-gradient(135deg, #7B2FF7 0%, #C77DFF 100%)",
-            }}
+            className={hintBtn}
           >
-            🧠 Hacer mi ADN de Aprendizaje (5 min)
+            🧠 Haz tu ADN de Aprendizaje para personalizarlo
           </button>
         )}
       </motion.div>
@@ -203,140 +290,168 @@ function ImprovementPlan({ onTabChange }) {
   }
 
   return (
-    <motion.div {...fadeIn} transition={transition} className="space-y-4">
-      {/* Header banner */}
+    <motion.div {...fadeIn} transition={transition} className="space-y-3">
+      {/* Progress strip — the "Mi Plan de Mejora" title is already in the
+          Aprender header, so no second banner title here. */}
       <div
-        className="relative rounded-2xl overflow-hidden p-5"
+        className="rounded-2xl px-4 py-3 text-white"
         style={{ background: PROGRESS_GRADIENT }}
       >
-        <div className="relative z-10 flex items-center gap-4">
-          <div
-            className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-md"
-            style={{ background: "rgba(255,255,255,0.25)" }}
-          >
-            <span className="text-2xl">📋</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-xl font-black text-white drop-shadow-sm">
-                Mi Plan de Mejora
-              </h3>
-              {gradeLevel && (
-                <span
-                  className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                  style={{
-                    background: "rgba(255,255,255,0.25)",
-                    color: "white",
-                  }}
-                >
-                  Grado {gradeLevel}
-                </span>
-              )}
-            </div>
-            <p className="text-xs text-white/80 mt-0.5">
-              {doneActivities} de {totalActivities} actividades completadas
-            </p>
-          </div>
-          <div className="flex-shrink-0 text-right">
-            <span className="text-2xl font-black text-white">{globalPct}%</span>
-          </div>
+        <div className="flex items-center justify-between gap-2">
+          <p className="!m-0 text-xs font-bold !text-white">
+            {globalPct === 100
+              ? "🏆 ¡Completaste tu plan!"
+              : `Llevas ${doneActivities} de ${totalActivities} actividades`}
+            {gradeLevel ? ` · Grado ${gradeLevel}` : ""}
+          </p>
+          <span className="text-xl font-black leading-none">{globalPct}%</span>
         </div>
-        {/* Progress bar inside banner */}
         <div
-          className="relative z-10 mt-3 w-full h-2 rounded-full"
+          className="mt-2 w-full h-2 rounded-full"
           style={{ background: "rgba(255,255,255,0.3)" }}
         >
           <div
             className="h-full rounded-full transition-all duration-700"
             style={{
               width: `${globalPct}%`,
-              background: "rgba(255,255,255,0.85)",
+              background: "rgba(255,255,255,0.9)",
             }}
           />
         </div>
+      </div>
+
+      {/* Key actions + subjects to reinforce, folded into one compact card. */}
+      {(plan.topActions?.length > 0 || plan.weakSubjects?.length > 0) && (
         <div
-          className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10 pointer-events-none"
-          style={{
-            background: "rgba(255,255,255,0.4)",
-            transform: "translate(30%,-30%)",
-          }}
-        />
-      </div>
-
-      {/* Top actions */}
-      {plan.topActions?.length > 0 && (
-        <div>
-          <h3
-            className={`text-xs font-semibold uppercase tracking-wider mb-2 ${darkMode ? "text-gray-400" : "text-[#64748B]"}`}
-          >
-            Acciones clave
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {plan.topActions.map((action, i) => (
-              <span
-                key={i}
-                className="text-xs px-3 py-1.5 rounded-full font-medium"
-                style={{
-                  background: [
-                    "rgba(251,133,0,0.12)",
-                    "rgba(243,114,44,0.12)",
-                    "rgba(255,209,102,0.2)",
-                  ][i % 3],
-                  color: ["#C05621", "#B34A10", "#92400E"][i % 3],
-                }}
-              >
-                {action}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Materias débiles */}
-      {plan.weakSubjects?.length > 0 && (
-        <div className="flex flex-wrap gap-2 items-center">
-          <span
-            className={`text-xs font-semibold ${darkMode ? "text-gray-400" : "text-[#64748B]"}`}
-          >
-            Reforzar:
-          </span>
-          {plan.weakSubjects.map((sub, i) => (
-            <span
-              key={i}
-              className="text-xs px-3 py-1 rounded-full font-medium"
-              style={{ background: "rgba(251,133,0,0.12)", color: "#C05621" }}
-            >
-              {sub}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* Semanas */}
-      <div className="space-y-3">
-        {plan.weeks.map((week, wi) => (
-          <WeekCard
-            key={wi}
-            week={week}
-            weekIdx={wi}
-            onToggle={markActivityDone}
-            darkMode={darkMode}
-          />
-        ))}
-      </div>
-
-      {/* Regenerar */}
-      <div className="flex justify-center pt-2 pb-4">
-        <button
-          onClick={generatePlan}
-          className={`text-xs px-4 py-2 rounded-lg border transition-colors font-medium ${
-            darkMode
-              ? "border-gray-600 text-gray-400 hover:border-[#FB8500] hover:text-[#FB8500]"
-              : "border-[#E2E8F0] text-[#64748B] hover:border-[#FB8500] hover:text-[#FB8500]"
-          }`}
+          className={`rounded-2xl border px-3.5 py-3 space-y-2 ${darkMode ? "bg-gray-800 border-gray-700" : "bg-[#FFF7ED] border-[#FED7AA]"}`}
         >
-          ↺ Regenerar plan
-        </button>
+          {plan.weakSubjects?.length > 0 && (
+            <p
+              className={`!m-0 text-xs font-bold ${darkMode ? "text-gray-200" : "text-[#9A3412]"}`}
+            >
+              💪 Reforzar: {plan.weakSubjects.join(" · ")}
+            </p>
+          )}
+          {plan.topActions?.length > 0 && (
+            <ol className="space-y-1">
+              {plan.topActions.map((action, i) => (
+                <li
+                  key={i}
+                  className={`text-xs leading-snug flex gap-1.5 ${darkMode ? "text-gray-300" : "text-[#7C2D12]"}`}
+                >
+                  <span className="font-black text-[#FB8500]">{i + 1}.</span>
+                  {action}
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      )}
+
+      {/* One week at a time: a selector instead of four stacked cards keeps
+          the plan to about one phone screen. */}
+      <div
+        role="tablist"
+        aria-label="Semanas del plan"
+        className="grid gap-1.5"
+        style={{
+          gridTemplateColumns: `repeat(${plan.weeks.length}, minmax(0, 1fr))`,
+        }}
+      >
+        {plan.weeks.map((w, wi) => {
+          const d = w.activities.filter((a) => a.done).length;
+          const complete = d === w.activities.length;
+          const active = wi === shownWeek;
+          return (
+            <button
+              key={wi}
+              type="button"
+              role="tab"
+              data-pill
+              aria-selected={active}
+              onClick={() => setOpenWeek(wi)}
+              className={`min-h-[52px] !flex flex-col !items-center !justify-center gap-0.5 rounded-xl border-2 text-xs font-black transition-colors ${
+                active
+                  ? "text-white border-transparent shadow-md"
+                  : darkMode
+                    ? "border-gray-700 text-gray-300"
+                    : "border-[#E2E8F0] text-[#334155] bg-white"
+              }`}
+              style={active ? { background: PROGRESS_GRADIENT } : {}}
+            >
+              <span>
+                {complete ? "✅ " : ""}Sem {w.week}
+              </span>
+              <span
+                className={`text-[10px] font-bold ${active ? "text-white/90" : "text-[#94A3B8]"}`}
+              >
+                {d}/{w.activities.length}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      <WeekCard
+        key={shownWeek}
+        week={plan.weeks[shownWeek]}
+        weekIdx={shownWeek}
+        onToggle={markActivityDone}
+        onOpen={onTabChange ? openActivity : null}
+        routeLabelFor={(wi, ai) => routeLabel(routeOf(wi, ai))}
+        darkMode={darkMode}
+      />
+
+      {/* Regenerar: a new plan replaces the ticks, so ask once. */}
+      <div className="flex flex-col items-center gap-2 pt-2 pb-4">
+        {error && (
+          <p role="alert" className="text-sm text-red-500 text-center max-w-xs">
+            {error}
+          </p>
+        )}
+        {confirmRegen ? (
+          <div className="flex flex-col items-center gap-2">
+            <p className={`!m-0 text-xs font-semibold text-center ${sub}`}>
+              Tu plan nuevo empieza de cero. ¿Seguro?
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setConfirmRegen(false);
+                  setOpenWeek(null);
+                  generatePlan();
+                }}
+                className="min-h-[40px] px-4 rounded-xl text-xs font-black text-white"
+                style={{ background: PROGRESS_GRADIENT }}
+              >
+                Sí, hacer uno nuevo
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirmRegen(false)}
+                className={`min-h-[40px] px-4 rounded-xl text-xs font-bold border ${darkMode ? "border-gray-600 text-gray-300" : "border-[#E2E8F0] text-[#64748B]"}`}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              if (doneActivities > 0) return setConfirmRegen(true);
+              setOpenWeek(null);
+              generatePlan();
+            }}
+            className={`min-h-[40px] text-xs px-4 py-2 rounded-lg border transition-colors font-medium ${
+              darkMode
+                ? "border-gray-600 text-gray-400 hover:border-[#FB8500] hover:text-[#FB8500]"
+                : "border-[#E2E8F0] text-[#64748B] hover:border-[#FB8500] hover:text-[#FB8500]"
+            }`}
+          >
+            ↺ Hacer un plan nuevo
+          </button>
+        )}
       </div>
     </motion.div>
   );

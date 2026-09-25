@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   daysLeft,
@@ -12,6 +12,7 @@ import { useTranslation } from "../../../../i18n/I18nProvider";
 
 const ExamCard = memo(({ e: exam, i, onView, onDelete, dm = false }) => {
   const { t } = useTranslation();
+  const [confirming, setConfirming] = useState(false);
   const d = daysLeft(exam.date);
   const isUrgent = d < 7;
 
@@ -69,18 +70,49 @@ const ExamCard = memo(({ e: exam, i, onView, onDelete, dm = false }) => {
             </p>
           </div>
         </div>
-        <motion.button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete(exam.id);
-          }}
-          whileHover={{ scale: 1.15 }}
-          className="text-lg leading-none opacity-40 hover:opacity-80 transition-opacity"
-          style={{ color: dm ? "#94A3B8" : "#64748B" }}
-          aria-label="Eliminar examen"
-        >
-          ×
-        </motion.button>
+        {/* Two taps to delete, so a stray touch doesn't erase an exam. */}
+        {confirming ? (
+          <div className="flex items-center gap-1 shrink-0 text-xs font-bold">
+            <span style={{ color: textSecondary }}>¿Borrar?</span>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(exam.id);
+              }}
+              className="min-w-[40px] min-h-[36px] px-2 rounded-lg bg-red-500 text-white"
+            >
+              Sí
+            </button>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setConfirming(false);
+              }}
+              className="min-w-[40px] min-h-[36px] px-2 rounded-lg"
+              style={{
+                color: textSecondary,
+                background: dm ? "rgba(255,255,255,0.06)" : "#F1F5F9",
+              }}
+            >
+              No
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setConfirming(true);
+            }}
+            className="w-10 h-10 -mr-2 -mt-2 shrink-0 rounded-xl text-xl leading-none opacity-50 hover:opacity-90 transition-opacity"
+            style={{ color: dm ? "#94A3B8" : "#64748B" }}
+            aria-label={`Eliminar ${exam.name}`}
+          >
+            ×
+          </button>
+        )}
       </div>
 
       {/* Badge urgency */}
@@ -131,7 +163,7 @@ const ExamCard = memo(({ e: exam, i, onView, onDelete, dm = false }) => {
           (e.currentTarget.style.background = "rgba(239,71,111,0.08)")
         }
       >
-        {t("kid.exam.view_detail")} →
+        {t("kid.exam.view_detail")}
       </motion.button>
     </motion.div>
   );

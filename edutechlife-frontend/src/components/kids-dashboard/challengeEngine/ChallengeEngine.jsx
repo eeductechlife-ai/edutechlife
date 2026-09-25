@@ -44,6 +44,7 @@ const ChallengeEngine = memo(({ onTabChange }) => {
                 key={tab.id}
                 type="button"
                 role="tab"
+                data-pill
                 aria-selected={active}
                 onClick={() => handleModeChange(tab.id)}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-bold transition-all ${
@@ -109,6 +110,7 @@ const ChallengeEngine = memo(({ onTabChange }) => {
                 darkMode={darkMode}
                 subject={engine.subject}
                 timeLimit={engine.timeLimit}
+                autoRead={engine.autoRead}
                 onExit={engine.resetChallenge}
               />
             </motion.div>

@@ -5,6 +5,7 @@ import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { SB_GRADIENTS } from "../ingenIATheme";
 import { track } from "../../../lib/analytics";
 import { EVENTS } from "../../../lib/analyticsEvents";
+import { readPracticeLog } from "../practicarHub/practicarProgress";
 
 const EXPLORE_GRADIENT = SB_GRADIENTS.explore;
 const openDani = () =>
@@ -39,10 +40,18 @@ const MISSION_RULES = {
     go: { tab: "practicar", label: "Ganar puntos" },
     progress: (c) => [c.totalPoints, 500],
   },
+  // Was a second "talk to Dani" mission (with a 10-message goal under a
+  // "5 minutes" title). Practice is what moves grades, so it rewards retos.
+  // `copy` overrides the title saved in students' existing mission lists.
   6: {
-    done: (c) => c.userMessages >= 10,
-    go: { action: openDani, label: "Hablar con Dani" },
-    progress: (c) => [c.userMessages, 10],
+    copy: {
+      title: "Haz 3 retos",
+      description: "Practica con preguntas de tus materias",
+      icon: "🎮",
+    },
+    done: (c) => c.retosDone >= 3,
+    go: { tab: "retos", label: "Hacer un reto" },
+    progress: (c) => [c.retosDone, 3],
   },
 };
 
@@ -56,6 +65,7 @@ const MissionsView = memo(function MissionsView({
     ...ctx,
     userMessages: (ctx.daniChatHistory || []).filter((m) => m?.role === "user")
       .length,
+    retosDone: readPracticeLog().filter((e) => e.type === "reto").length,
   };
 
   const completedCount = missions.filter((m) => m.completed).length;
@@ -93,8 +103,9 @@ const MissionsView = memo(function MissionsView({
         </div>
       )}
 
-      {missions.map((mission, index) => {
-        const rule = MISSION_RULES[mission.id];
+      {missions.map((stored, index) => {
+        const rule = MISSION_RULES[stored.id];
+        const mission = { ...stored, ...rule?.copy };
         const ready = !mission.completed && !!rule?.done(state);
         const [cur, goal] = rule?.progress?.(state) || [];
         const go = () => {
@@ -111,7 +122,7 @@ const MissionsView = memo(function MissionsView({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.04 }}
-            className={`p-4 rounded-2xl border-2 ${
+            className={`p-3 sm:p-4 rounded-2xl border-2 ${
               mission.completed
                 ? "bg-green-50 border-green-200"
                 : ready
@@ -135,12 +146,13 @@ const MissionsView = memo(function MissionsView({
                 )}
               </div>
               <div className="flex-1 min-w-0">
+                {/* `!m-0`: global typography adds heading/paragraph margins. */}
                 <h4
-                  className={`font-bold leading-snug ${mission.completed ? "text-green-700" : "text-[#1E293B]"}`}
+                  className={`!m-0 text-base font-bold leading-snug ${mission.completed ? "text-green-700" : "text-[#1E293B]"}`}
                 >
                   {mission.title}
                 </h4>
-                <p className="text-sm text-[#64748B] leading-snug">
+                <p className="!m-0 mt-0.5 text-xs sm:text-sm text-[#64748B] leading-snug">
                   {mission.description}
                 </p>
               </div>
@@ -158,25 +170,8 @@ const MissionsView = memo(function MissionsView({
               </span>
             </div>
 
-            {!mission.completed && goal ? (
-              <div className="mt-3">
-                <div className="w-full h-1.5 rounded-full bg-[#F1F5F9] overflow-hidden">
-                  <div
-                    className="h-full rounded-full"
-                    style={{
-                      width: `${Math.min(100, (cur / goal) * 100)}%`,
-                      background: ready ? "#22C55E" : "#9D4EDD",
-                    }}
-                  />
-                </div>
-                <p className="mt-1 text-[11px] font-semibold text-[#64748B] tabular-nums">
-                  {Math.min(cur, goal)} de {goal}
-                </p>
-              </div>
-            ) : null}
-
             {mission.completed ? (
-              <p className="mt-3 text-xs font-bold text-green-700">
+              <p className="!m-0 mt-2.5 text-xs font-bold text-green-700">
                 ✓ ¡Lograda! Ganaste {mission.xp} puntos
               </p>
             ) : ready ? (
@@ -189,15 +184,36 @@ const MissionsView = memo(function MissionsView({
                 🎁 Reclamar +{mission.xp} puntos
               </motion.button>
             ) : rule ? (
-              <button
-                type="button"
-                onClick={go}
-                className="mt-3 w-full flex items-center justify-center gap-1 py-3 rounded-xl text-sm font-bold text-white"
-                style={{ background: EXPLORE_GRADIENT }}
-              >
-                {rule.go.label}
-                <ChevronRight className="w-4 h-4" aria-hidden="true" />
-              </button>
+              // Progress and the "go do it" button share one row.
+              <div className="mt-2.5 flex items-center gap-3">
+                {goal ? (
+                  <div className="flex-1 min-w-0">
+                    <div className="w-full h-1.5 rounded-full bg-[#F1F5F9] overflow-hidden">
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${Math.min(100, (cur / goal) * 100)}%`,
+                          background: "#9D4EDD",
+                        }}
+                      />
+                    </div>
+                    <p className="!m-0 mt-1 text-[11px] font-semibold text-[#64748B] tabular-nums">
+                      {Math.min(cur, goal)} de {goal}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex-1" />
+                )}
+                <button
+                  type="button"
+                  onClick={go}
+                  className="shrink-0 min-h-[40px] inline-flex items-center justify-center gap-1 px-3.5 rounded-xl text-xs font-black text-white"
+                  style={{ background: EXPLORE_GRADIENT }}
+                >
+                  {rule.go.label}
+                  <ChevronRight className="w-4 h-4" aria-hidden="true" />
+                </button>
+              </div>
             ) : null}
           </motion.div>
         );

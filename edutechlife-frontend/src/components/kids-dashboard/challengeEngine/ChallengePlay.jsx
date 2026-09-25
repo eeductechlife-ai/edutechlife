@@ -1,10 +1,27 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, useRef } from "react";
+import { speakAsDani, stopDani } from "../practicarHub/daniSpeak";
+import { ListenButton } from "../practicarHub/MaterialViews";
 import { motion, AnimatePresence } from "framer-motion";
 
 const OPTION_LABELS = ["A", "B", "C", "D"];
 const CIRC = 2 * Math.PI * 18;
 
 const PRAISE = ["¡Correcto! 🎉", "¡Muy bien! ⭐", "¡Eso es! 🙌", "¡Genial! 🚀"];
+
+// Brings the feedback + "Siguiente" above the phone's bottom bar. Vertical
+// only: scrollIntoView would also nudge the overflow-hidden dashboard sideways.
+function revealBelow(el, bottomGap = 96) {
+  if (!el) return;
+  let box = el.parentElement;
+  while (box && !/(auto|scroll)/.test(getComputedStyle(box).overflowY))
+    box = box.parentElement;
+  const scroller = box || document.scrollingElement;
+  const viewBottom = box
+    ? box.getBoundingClientRect().bottom
+    : window.innerHeight;
+  const overflow = el.getBoundingClientRect().bottom - (viewBottom - bottomGap);
+  if (overflow > 0) scroller.scrollBy({ top: overflow, behavior: "smooth" });
+}
 
 function TimerRing({ timeLeft, limit, color, darkMode }) {
   const tone =
@@ -58,10 +75,13 @@ const ChallengePlay = memo(
     darkMode,
     subject,
     timeLimit,
+    autoRead = false,
   }) => {
     const [selected, setSelected] = useState(null);
     const [revealed, setRevealed] = useState(false);
     const [timeLeft, setTimeLeft] = useState(timeLimit);
+    const feedbackRef = useRef(null);
+    const rootRef = useRef(null);
 
     const color = subject?.color || "#9D4EDD";
     const isLast = currentIndex + 1 >= total;
@@ -70,7 +90,31 @@ const ChallengePlay = memo(
       setSelected(null);
       setRevealed(false);
       setTimeLeft(timeLimit);
+      // New question starts at the top, not where "Siguiente" was.
+      const el = rootRef.current;
+      if (!el) return;
+      let box = el.parentElement;
+      while (box && !/(auto|scroll)/.test(getComputedStyle(box).overflowY))
+        box = box.parentElement;
+      const scroller = box || document.scrollingElement;
+      const top =
+        el.getBoundingClientRect().top -
+        (box ? box.getBoundingClientRect().top : 0);
+      if (top < 0) scroller.scrollBy({ top: top - 12, behavior: "smooth" });
     }, [currentIndex, timeLimit]);
+
+    const spoken = question
+      ? `${question.question.replace(/[.\s]+$/, "")}${/[?!]$/.test(question.question.trim()) ? "" : "."} ${question.options
+          .map((o, i) => `Opción ${OPTION_LABELS[i]}: ${o}`)
+          .join(". ")}.`
+      : "";
+
+    // Young readers (6–8) hear each question automatically.
+    useEffect(() => {
+      if (!autoRead || !spoken) return;
+      speakAsDani(spoken);
+      return () => stopDani();
+    }, [autoRead, spoken]);
 
     useEffect(() => {
       if (!timeLimit || revealed) return;
@@ -82,17 +126,39 @@ const ChallengePlay = memo(
       return () => clearTimeout(t);
     }, [timeLeft, revealed, timeLimit]);
 
+    const gotIt = revealed && selected === question?.correct;
+    const timedOut = revealed && selected === null;
+
+    useEffect(() => {
+      if (!revealed || !question) return undefined;
+      const t = setTimeout(() => revealBelow(feedbackRef.current), 60);
+      // Young readers also hear the feedback, not just the question.
+      if (autoRead) {
+        const verdict = gotIt
+          ? PRAISE[currentIndex % PRAISE.length].replace(
+              /[^\p{L}\p{N}¡!¿?,. ]/gu,
+              "",
+            )
+          : `${timedOut ? "Se acabó el tiempo." : "Casi."} La respuesta correcta es ${question.options[question.correct]}.`;
+        speakAsDani(`${verdict} ${question.explanation || ""}`);
+      }
+      return () => clearTimeout(t);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [revealed]);
+
     if (!question) return null;
 
     const pick = (idx) => {
       if (revealed) return;
+      stopDani();
       setSelected(idx);
       setRevealed(true);
     };
 
-    const next = () => onAnswer(selected ?? -1);
-    const gotIt = revealed && selected === question.correct;
-    const timedOut = revealed && selected === null;
+    const next = () => {
+      stopDani();
+      onAnswer(selected ?? -1);
+    };
 
     const surface = darkMode
       ? "bg-[#1E293B] border-[#334155]"
@@ -101,7 +167,7 @@ const ChallengePlay = memo(
     const textSub = darkMode ? "text-[#94A3B8]" : "text-[#64748B]";
 
     return (
-      <div className="space-y-4">
+      <div ref={rootRef} className="space-y-4">
         <div className="flex items-center gap-3">
           <span
             className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0 text-white"
@@ -149,6 +215,11 @@ const ChallengePlay = memo(
           >
             {question.question}
           </p>
+          <ListenButton
+            text={spoken}
+            label="Escuchar"
+            className={`mt-3 inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold ${darkMode ? "bg-[#0F172A] text-white" : "bg-[#F1F5F9] text-[#1E293B]"}`}
+          />
         </motion.div>
 
         <div
@@ -229,6 +300,7 @@ const ChallengePlay = memo(
         <AnimatePresence>
           {revealed && (
             <motion.div
+              ref={feedbackRef}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               className={`rounded-2xl border-2 p-4 space-y-3 ${

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { analyzeDocumentText } from "../../../../utils/api";
 import { extractDocumentText } from "../../../../utils/documentParser";
 import {
+  toFive,
   daysLeft,
   badgeCls,
   badgeEmj,
@@ -11,6 +12,7 @@ import {
   PRACTICE_GLOW,
 } from "../examUtils";
 import { useTranslation } from "../../../../i18n/I18nProvider";
+import { practiceCountSince } from "../../practicarHub/practicarProgress";
 
 const StudyPlanCard = memo(({ material, dm = false }) => {
   const { t } = useTranslation();
@@ -207,8 +209,14 @@ const ExamDetail = memo(
   }) => {
     const { t } = useTranslation();
     const d = daysLeft(exam.date);
-    const p = Math.min(exam.studyProgress || 0, 100);
     const si = sbj(exam.subject);
+    // Real preparation, not a stored % nobody updates: practice sessions of
+    // this subject since the exam was added (or the last 30 days).
+    const since =
+      exam.createdAt || new Date(Date.now() - 30 * 86400000).toISOString();
+    const sessions = practiceCountSince(exam.subject, since);
+    const target = Math.max(3, Math.min(7, d || 3));
+    const p = Math.min(100, Math.round((sessions / target) * 100));
 
     const cardBg = dm ? "#1A2744" : "#ffffff";
     const cardBorder = dm ? "#243152" : "#E2E8F0";
@@ -228,29 +236,28 @@ const ExamDetail = memo(
           className="p-5 text-white"
           style={{ background: PRACTICE_GRADIENT }}
         >
-          <div className="flex items-center justify-between mb-3">
+          {/* Deleting lives on the exam card (with a confirm step). */}
+          <div className="flex items-center mb-3">
             <motion.button
               onClick={onBack}
               whileHover={{ x: -3 }}
-              className="text-white/80 hover:text-white text-sm"
+              className="-ml-2 min-h-[40px] px-2 rounded-xl text-white/90 hover:text-white text-sm font-bold"
             >
-              ← {t("kid.exam.back")}
-            </motion.button>
-            <motion.button
-              onClick={() => onDelete(exam.id)}
-              whileHover={{ scale: 1.1 }}
-              className="text-white/60 hover:text-white text-lg"
-            >
-              ×
+              {t("kid.exam.back")}
             </motion.button>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-3xl">{si?.i || "📚"}</span>
-            <div>
-              <h3 className="font-bold text-lg">{exam.name}</h3>
+            <span className="text-3xl" aria-hidden="true">
+              {si?.i || "📚"}
+            </span>
+            <div className="min-w-0">
+              {/* `!`: a global heading colour would otherwise paint it dark on pink. */}
+              <h3 className="font-black text-lg !text-white leading-tight">
+                {exam.name}
+              </h3>
               <p className="text-white/75 text-sm">
                 {si ? t(`kid.exam.subject_${exam.subject}`) : exam.subject} •{" "}
-                {t("kid.exam.meta_short", { grade: exam.desiredGrade })}
+                {t("kid.exam.meta_short", { grade: toFive(exam.desiredGrade) })}
               </p>
             </div>
           </div>
@@ -278,7 +285,7 @@ const ExamDetail = memo(
                 {t("kid.exam.study_progress")}
               </span>
               <span className="font-black" style={{ color: "#EF476F" }}>
-                {p}%
+                {Math.min(sessions, target)}/{target} prácticas
               </span>
             </div>
             <div
@@ -294,7 +301,9 @@ const ExamDetail = memo(
               />
             </div>
             <p className="text-xs mt-1" style={{ color: textSecondary }}>
-              {t("kid.exam.meta_short", { grade: exam.desiredGrade })}
+              {sessions >= target
+                ? `🏆 ¡Vas muy bien! Ya practicaste ${si?.l || "esta materia"} ${sessions} veces.`
+                : `Practica ${si?.l || "esta materia"} ${target - Math.min(sessions, target)} ${target - sessions === 1 ? "vez" : "veces"} más antes del examen (retos, EduCards o material).`}
             </p>
           </div>
 
@@ -311,7 +320,7 @@ const ExamDetail = memo(
                 className="text-sm font-bold mb-2"
                 style={{ color: textPrimary }}
               >
-                💡 {t("kid.exam.study_tips")}
+                {t("kid.exam.study_tips")}
               </h4>
               <ul className="space-y-1.5">
                 {tips.map((tip, i) => (
@@ -352,7 +361,7 @@ const ExamDetail = memo(
             className="w-full py-3 text-white rounded-xl font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2"
             style={{ background: PRACTICE_GRADIENT }}
           >
-            🗣️ {t("kid.exam.ask_dani")}
+            {t("kid.exam.ask_dani")}
           </motion.button>
         </div>
       </motion.div>

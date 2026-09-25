@@ -20,7 +20,7 @@ const SubjectPicker = memo(({ subjects, selectedId, onSelect, darkMode }) => {
     <div
       role="radiogroup"
       aria-label="Materias"
-      className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5"
+      className="grid grid-cols-3 lg:grid-cols-6 gap-2"
     >
       {subjects.map((s) => {
         const selected = s.id === selectedId;
@@ -30,56 +30,49 @@ const SubjectPicker = memo(({ subjects, selectedId, onSelect, darkMode }) => {
             type="button"
             role="radio"
             aria-checked={selected}
+            aria-label={`${s.label}${s.weak ? ", para reforzar" : ""}. ${statusText(s)}`}
             onClick={() => onSelect(s.id)}
             whileTap={{ scale: 0.97 }}
-            className={`relative text-left rounded-2xl border-2 p-3 min-h-[76px] flex flex-col gap-1.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9D4EDD] ${
+            className={`relative rounded-2xl border-2 px-1.5 pt-2 pb-2 min-h-[84px] !flex flex-col !items-center !justify-start gap-0.5 text-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9D4EDD] ${
               selected ? "text-white border-transparent shadow-lg" : idle
             }`}
             style={
               selected
                 ? { background: s.color }
-                : { borderColor: s.weak ? `${s.color}66` : undefined }
+                : { borderColor: s.weak ? `${s.color}88` : undefined }
             }
           >
-            <div className="flex items-center gap-2 min-w-0">
+            {selected && (
+              <Check
+                className="absolute top-1.5 right-1.5 w-3.5 h-3.5"
+                aria-hidden="true"
+              />
+            )}
+            {s.weak && !selected && (
               <span
-                className="text-xl leading-none shrink-0"
+                className="absolute top-1 right-1 w-5 h-5 rounded-full text-[11px] flex items-center justify-center text-white"
+                style={{ background: s.color }}
                 aria-hidden="true"
               >
-                {s.emoji}
+                💪
               </span>
-              <span className="text-sm font-bold leading-tight truncate">
-                {s.label}
-              </span>
-              {selected && (
-                <Check
-                  className="w-4 h-4 ml-auto shrink-0"
-                  aria-hidden="true"
-                />
-              )}
-            </div>
-
-            <div className="flex items-center gap-1.5 min-w-0">
-              {s.weak && (
-                <span
-                  className={`text-[10px] font-black px-1.5 py-0.5 rounded-md shrink-0 ${
-                    selected ? "bg-white/25 text-white" : "text-white"
-                  }`}
-                  style={selected ? {} : { background: s.color }}
-                >
-                  Reforzar
-                </span>
-              )}
-              <span
-                className={`text-[11px] truncate ${selected ? "text-white/85" : sub}`}
-              >
-                {statusText(s)}
-              </span>
-            </div>
+            )}
+            <span className="text-2xl leading-none" aria-hidden="true">
+              {s.emoji}
+            </span>
+            <span className="w-full text-xs font-bold leading-tight truncate">
+              {s.label}
+            </span>
+            <span
+              className={`w-full text-[10px] leading-tight truncate ${selected ? "text-white/85" : sub} ${s.weak ? "font-bold" : ""}`}
+              aria-hidden="true"
+            >
+              {statusText(s)}
+            </span>
 
             {s.hasData && (
               <div
-                className={`h-1 rounded-full overflow-hidden ${selected ? "bg-white/30" : track}`}
+                className={`w-full max-w-[64px] mt-0.5 h-1 rounded-full overflow-hidden ${selected ? "bg-white/30" : track}`}
               >
                 <div
                   className="h-full rounded-full"

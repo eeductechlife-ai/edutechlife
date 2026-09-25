@@ -5,7 +5,12 @@ import ExamForm from "./components/ExamForm";
 import ExamList from "./components/ExamList";
 import ExamDetail from "./components/ExamDetail";
 import DeckQuiz from "./components/DeckQuiz";
-import { PRACTICE_GRADIENT, PRACTICE_GLOW } from "./examUtils";
+import {
+  PRACTICE_GRADIENT,
+  PRACTICE_GLOW,
+  daysLeft,
+  toFive,
+} from "./examUtils";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useTranslation } from "../../../i18n/I18nProvider";
 
@@ -86,7 +91,7 @@ const ExamPrep = memo(({ onTabChange, dm = false }) => {
                 border: "1px solid rgba(255,255,255,0.25)",
               }}
             >
-              📝 {t("kid.exam.take_deck_exam")}
+              {t("kid.exam.take_deck_exam")}
             </motion.button>
           </div>
         </motion.div>
@@ -107,7 +112,7 @@ const ExamPrep = memo(({ onTabChange, dm = false }) => {
             className="flex items-center justify-between"
           >
             <h3 className="text-lg font-bold" style={{ color: textPrimary }}>
-              📝 {t("kid.exam.title")}
+              {t("kid.exam.title")}
             </h3>
             {mode === "form" ? (
               <motion.button
@@ -137,7 +142,7 @@ const ExamPrep = memo(({ onTabChange, dm = false }) => {
                 className="px-4 py-1.5 text-sm rounded-xl text-white font-semibold shadow-md"
                 style={{ background: PRACTICE_GRADIENT }}
               >
-                + {t("kid.exam.new")}
+                {t("kid.exam.new")}
               </motion.button>
             )}
           </motion.div>
@@ -173,6 +178,10 @@ const ExamPrep = memo(({ onTabChange, dm = false }) => {
                     setMode("detail");
                   }}
                   onDelete={deleteExam}
+                  onAdd={() => {
+                    setMode("form");
+                    setDetailId(null);
+                  }}
                   dm={dm}
                 />
               </motion.div>
@@ -190,13 +199,28 @@ const ExamPrep = memo(({ onTabChange, dm = false }) => {
                   setDetailId(null);
                 }}
                 onAskDani={() => {
+                  const left = daysLeft(detailExam.date);
+                  const when =
+                    left <= 0
+                      ? "es hoy"
+                      : left === 1
+                        ? "es mañana"
+                        : `es en ${left} días`;
                   setDocumentForDani({
                     type: "exam_prep",
+                    title: `Examen: ${detailExam.name}`,
+                    subject: detailExam.subject,
+                    summary: `El estudiante se prepara para "${detailExam.name}" (${detailExam.subject}), que ${when}. Quiere sacar ${toFive(detailExam.desiredGrade)} de 5.`,
                     exam: detailExam,
                     tips,
                     materials: detailMaterials,
+                    tutoringQuestions: [
+                      `¿Qué temas entran en tu examen de ${detailExam.name}?`,
+                    ],
+                    welcome: `📝 Vamos a prepararte para "${detailExam.name}", que ${when}. Tu meta es ${toFive(detailExam.desiredGrade)}. ¿Qué temas entran en el examen? Así armamos un plan y te hago preguntas de práctica.`,
                   });
-                  document.getElementById("openDaniChat")?.click();
+                  // The dashboard opens Dani on this event (no #openDaniChat).
+                  window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
                 }}
                 onUploadMaterial={handleUploadMaterial}
                 dm={dm}

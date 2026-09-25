@@ -7,6 +7,7 @@ import {
   logPractice,
   readPracticeLog,
   usePracticeLog,
+  practiceCountSince,
 } from "../practicarProgress";
 import { buildSubjectList } from "../practicarConfig";
 
@@ -25,6 +26,16 @@ describe("practicarProgress", () => {
     expect(result.current.retosThisWeek).toBe(1);
     expect(result.current.avgScore).toBe(67);
     expect(result.current.lastRetoByChallenge.math.score).toBe(67);
+  });
+
+  it("counts a subject's practice across each section's naming", () => {
+    logPractice({ type: "reto", subject: "sociales", challengeId: "social" });
+    logPractice({ type: "material", subject: "ciencias_sociales" });
+    logPractice({ type: "reto", subject: "matematicas", challengeId: "math" });
+    expect(practiceCountSince("historia")).toBe(2);
+    expect(practiceCountSince("matematicas")).toBe(1);
+    const future = new Date(Date.now() + 60000).toISOString();
+    expect(practiceCountSince("historia", future)).toBe(0);
   });
 
   it("keeps each student's log separate", () => {

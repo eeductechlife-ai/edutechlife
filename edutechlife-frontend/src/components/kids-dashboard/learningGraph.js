@@ -80,6 +80,9 @@ function checkPrerequisites(subjectId, subjectsById) {
   return { met: true };
 }
 
+// Where each mission (ids from DEFAULT_MISSIONS) is actually done.
+const MISSION_TAB = { 1: "vak", 4: "horario", 5: "practicar", 6: "retos" };
+
 const GRADIENTS = {
   default: "linear-gradient(135deg, #7B2FF7 0%, #9D4EDD 55%, #C77DFF 100%)",
   mission: "linear-gradient(135deg, #EF476F 0%, #FF6B9D 55%, #FF8FA3 100%)",
@@ -111,7 +114,7 @@ export function getLearningGraphRecommendation({
     return {
       emoji: "🧠",
       label: "Descúbrete antes de estudiar",
-      sub: "Haz el diagnóstico VAK para personalizar tu ruta de aprendizaje",
+      sub: "Haz el ADN de Aprendizaje para personalizar tu ruta de aprendizaje",
       tab: "perfil",
       xp: 100,
       gradient: GRADIENTS.default,
@@ -216,7 +219,9 @@ export function getLearningGraphRecommendation({
       emoji: firstMission.icon || "🎯",
       label: firstMission.title,
       sub: firstMission.description || "Completa esta misión y gana XP",
-      tab: "misiones",
+      // "¡Empezar ahora!" opens where the mission is done, not the list of
+      // missions (Dani-based missions still land on the list).
+      tab: MISSION_TAB[firstMission.id] || "misiones",
       xp: firstMission.xp || 50,
       gradient: GRADIENTS.mission,
       eyebrow: "Tu misión de hoy",

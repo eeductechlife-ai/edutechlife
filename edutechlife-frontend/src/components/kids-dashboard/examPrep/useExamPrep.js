@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
-import { getTips } from "./examUtils";
+import { getTips, sbj } from "./examUtils";
 
 // Mon=1 … Sun=7 (matches migration 042).
 const isoDayFromDate = (yyyyMmDd) => {
@@ -40,7 +40,7 @@ export default function useExamPrep() {
   const [name, setName] = useState("");
   const [subject, setSubject] = useState("matematicas");
   const [date, setDate] = useState("");
-  const [grade, setGrade] = useState(70);
+  const [grade, setGrade] = useState(80);
   const [suggestedSubject, setSuggestedSubject] = useState(null);
   const subjectManuallyPickedRef = useRef(false);
 
@@ -74,9 +74,11 @@ export default function useExamPrep() {
   }, []);
 
   const addExam = useCallback(() => {
-    if (!name.trim() || !date) return;
+    if (!date) return;
+    // Naming is optional: young kids just pick the subject and the day.
+    const examName = name.trim() || `Examen de ${sbj(subject)?.l || subject}`;
     contextAddExam({
-      exam_name: name.trim(),
+      exam_name: examName,
       subject,
       exam_date: date,
       desired_grade: Math.min(100, Math.max(0, grade)),
@@ -84,7 +86,7 @@ export default function useExamPrep() {
     }).catch((e) => console.warn("[exam] DB persist failed:", e?.message));
     setName("");
     setDate("");
-    setGrade(70);
+    setGrade(80);
     subjectManuallyPickedRef.current = false;
     setSuggestedSubject(null);
     setMode("list");

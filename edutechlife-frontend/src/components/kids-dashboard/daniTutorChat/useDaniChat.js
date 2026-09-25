@@ -165,9 +165,11 @@ export default function useDaniChat({ isOpen, activeTab }) {
     lastDocTitleRef.current = documentForDani.title;
     const firstQ = documentForDani.tutoringQuestions?.[0];
     const isGradePlan = documentForDani.subject === "múltiples materias";
-    const msg = isGradePlan
-      ? `📊 Cambié de contexto: ahora tengo tu plan de estudio cargado. ${firstQ || "¿Quieres que repasemos las materias donde más puedes mejorar?"}`
-      : `📖 Leí el resumen de "${documentForDani.title}". ¡Perfecto para verificar! ${firstQ || "¿Puedes explicarme con tus propias palabras de qué trata?"}`;
+    const msg = documentForDani.welcome
+      ? documentForDani.welcome
+      : isGradePlan
+        ? `📊 Cambié de contexto: ahora tengo tu plan de estudio cargado. ${firstQ || "¿Quieres que repasemos las materias donde más puedes mejorar?"}`
+        : `📖 Leí el resumen de "${documentForDani.title}". ¡Perfecto para verificar! ${firstQ || "¿Puedes explicarme con tus propias palabras de qué trata?"}`;
     const timer = setTimeout(() => {
       addDaniMessage({ role: "assistant", text: msg });
     }, 400);
@@ -186,6 +188,9 @@ export default function useDaniChat({ isOpen, activeTab }) {
     setDaniMood("thinking");
 
     const welcomeText = buildRichWelcome();
+    // The welcome already introduces the current document; without this the
+    // context effect above repeats the same intro as a second bubble.
+    if (documentForDani?.title) lastDocTitleRef.current = documentForDani.title;
 
     const showWelcome = () => {
       hasSentWelcome.current = true;

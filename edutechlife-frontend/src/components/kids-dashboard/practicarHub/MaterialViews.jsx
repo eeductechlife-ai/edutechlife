@@ -3,87 +3,43 @@ import { marked } from "marked";
 import { Youtube, Volume2, Square, ChevronDown } from "lucide-react";
 import { sanitize } from "../../../utils/sanitize";
 import { fetchTopVideos } from "../../../utils/api";
-import { speakTextConversational, stopSpeech } from "../../../utils/speech";
-import {
-  getVoiceOverrides,
-  stripEmoji,
-} from "../daniTutorChat/DaniVoiceController";
+import { speakAsDani, stopDani, isCurrentRun } from "./daniSpeak";
 
 const PROSE =
   "text-sm leading-relaxed break-words [&_h1]:font-bold [&_h1]:text-base [&_h2]:font-bold [&_h2]:text-base [&_h2]:mt-3 [&_h3]:font-bold [&_h3]:mt-2 [&_p]:my-1.5 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:my-0.5 [&_strong]:font-bold";
 
-function plainText(markdown) {
-  return stripEmoji(markdown)
-    .replace(/[#*_>`~]+/g, " ")
-    .replace(/^\s*-\s+/gm, "")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-// Dani's TTS call is capped at ~30 s, so long texts are read sentence by sentence.
-function toChunks(text, max = 220) {
-  const sentences = text.match(/[^.!?¡¿]+[.!?]*/g) || [text];
-  const chunks = [];
-  let cur = "";
-  for (const s of sentences.map((x) => x.trim()).filter(Boolean)) {
-    if ((cur + " " + s).length > max && cur) {
-      chunks.push(cur);
-      cur = s;
-    } else {
-      cur = cur ? `${cur} ${s}` : s;
-    }
-  }
-  if (cur) chunks.push(cur);
-  return chunks;
-}
-
-export function ListenButton({ text, className = "" }) {
+export function ListenButton({
+  text,
+  className = "",
+  label = "Dani lo lee",
+  stopLabel = "Detener",
+}) {
   const [speaking, setSpeaking] = useState(false);
-  const runRef = useRef(0);
-
-  const stop = useCallback(() => {
-    runRef.current += 1;
-    stopSpeech();
-    setSpeaking(false);
-  }, []);
+  const runRef = useRef(null);
 
   useEffect(
     () => () => {
-      runRef.current += 1;
-      stopSpeech();
+      if (runRef.current && isCurrentRun(runRef.current)) stopDani();
     },
     [],
   );
 
-  const start = () => {
-    const run = ++runRef.current;
-    const chunks = toChunks(plainText(text));
+  const toggle = useCallback(() => {
+    if (speaking) {
+      stopDani();
+      setSpeaking(false);
+      return;
+    }
     setSpeaking(true);
-    const playNext = (i) => {
-      if (run !== runRef.current) return;
-      if (i >= chunks.length) {
-        setSpeaking(false);
-        return;
-      }
-      speakTextConversational(
-        chunks[i],
-        "dani",
-        getVoiceOverrides("explaining"),
-        () => playNext(i + 1),
-        () => playNext(i + 1),
-      );
-    };
-    playNext(0);
-  };
+    runRef.current = speakAsDani(text, { onEnd: () => setSpeaking(false) });
+  }, [speaking, text]);
 
   return (
     <button
       type="button"
-      onClick={speaking ? stop : start}
+      onClick={toggle}
       aria-pressed={speaking}
-      aria-label={
-        speaking ? "Detener a Dani" : "Escuchar a Dani leer el resumen"
-      }
+      aria-label={speaking ? "Detener a Dani" : `${label}: escuchar a Dani`}
       className={className}
     >
       {speaking ? (
@@ -91,7 +47,7 @@ export function ListenButton({ text, className = "" }) {
       ) : (
         <Volume2 className="w-4 h-4" aria-hidden="true" />
       )}
-      {speaking ? "Detener" : "Dani lo lee"}
+      {speaking ? stopLabel : label}
     </button>
   );
 }
@@ -379,15 +335,29 @@ export function materialToText(type, data) {
       data.centro,
       ...data.ramas.map((r) => `- ${r.idea}: ${r.detalles.join("; ")}`),
     ].join("\n");
-  if (type === "infografia")
+  if (type === "infografia") {
+    const cmp = data.formato === "comparacion" && data.comparacion;
+    const body = cmp
+      ? [
+          ...[cmp.izquierda, cmp.derecha].map(
+            (s) => `${s.titulo}: ${s.puntos.join(", ")}`,
+          ),
+          cmp.semejanzas?.length
+            ? `En qué se parecen: ${cmp.semejanzas.join(", ")}`
+            : "",
+        ]
+      : data.bloques.map(
+          (b) => `${b.cifra ? `${b.cifra}, ` : ""}${b.titulo}: ${b.texto}`,
+        );
     return [
       data.titulo,
       data.subtitulo,
-      ...data.bloques.map((b) => `${b.titulo}: ${b.texto}`),
+      ...body,
       data.dato ? `Dato curioso: ${data.dato}` : "",
     ]
       .filter(Boolean)
       .join(". ");
+  }
   if (type === "ejercicios")
     return data.ejercicios
       .map((e, i) => `${i + 1}. ${e.pregunta}\n   Respuesta: ${e.respuesta}`)

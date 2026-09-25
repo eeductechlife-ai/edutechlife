@@ -23,7 +23,7 @@ const WeekProgress = memo(({ progress, darkMode }) => {
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-2 mb-2">
+      <div className="flex items-center justify-between gap-2 mb-1.5">
         <p className={`text-xs font-bold uppercase tracking-wide ${sub}`}>
           Tu semana
         </p>
@@ -31,6 +31,8 @@ const WeekProgress = memo(({ progress, darkMode }) => {
           Meta: {daysPracticed}/{WEEKLY_GOAL} días 🎯
         </p>
       </div>
+      {/* The day letter sits inside its square (a ✓ once practised) so the
+          strip is one row tall on phones. */}
       <ol
         className="grid grid-cols-7 gap-1.5"
         aria-label={`Practicaste ${daysPracticed} de 7 días esta semana`}
@@ -38,11 +40,11 @@ const WeekProgress = memo(({ progress, darkMode }) => {
         {days.map((done, i) => {
           const isToday = i === todayIdx;
           return (
-            <li key={i} className="flex flex-col items-center gap-1">
+            <li key={i} className="flex justify-center">
               <span
-                className={`w-full max-w-[40px] aspect-square rounded-xl flex items-center justify-center text-sm font-black border-2 ${
+                className={`w-full max-w-[38px] h-8 sm:h-9 rounded-lg flex items-center justify-center text-xs font-black border-2 ${
                   done ? "text-white border-transparent" : empty
-                } ${isToday && !done ? "border-[#EF476F] border-dashed" : ""}`}
+                } ${isToday && !done ? "!border-[#EF476F] border-dashed !text-[#EF476F]" : ""}`}
                 style={
                   done
                     ? {
@@ -53,24 +55,19 @@ const WeekProgress = memo(({ progress, darkMode }) => {
                 }
                 aria-label={`${DAY_LABELS[i]}${done ? ": practicaste" : ""}${isToday ? " (hoy)" : ""}`}
               >
-                {done ? "✓" : ""}
-              </span>
-              <span
-                className={`text-[10px] font-bold ${isToday ? "text-[#EF476F]" : sub}`}
-              >
-                {isToday ? "Hoy" : DAY_LABELS[i]}
+                {done ? "✓" : DAY_LABELS[i]}
               </span>
             </li>
           );
         })}
       </ol>
       <p
-        className={`text-sm mt-3 leading-snug ${darkMode ? "text-white" : "text-[#1E293B]"}`}
+        className={`text-xs sm:text-sm mt-2 leading-snug font-semibold ${darkMode ? "text-white" : "text-[#1E293B]"}`}
       >
         {message(daysPracticed, days[todayIdx])}
       </p>
       {retosThisWeek > 0 && (
-        <p className={`text-xs mt-1 ${sub}`}>
+        <p className={`hidden sm:block text-xs mt-1 ${sub}`}>
           {retosThisWeek} {retosThisWeek === 1 ? "reto" : "retos"} esta semana ·
           promedio {avgScore}%
         </p>

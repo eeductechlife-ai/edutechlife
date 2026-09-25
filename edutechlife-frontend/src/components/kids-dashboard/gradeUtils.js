@@ -47,18 +47,21 @@ export const getSubjects = (t, extractedSubjects = null) => {
   }));
 };
 
+// MEN report-card scale (Decreto 1290), the same bands Materias shows:
+// Bajo < 3.0, Básico 3.0–3.9, Alto 4.0–4.5, Superior 4.6–5.0. One scale
+// everywhere, so a 3.7 never reads "✅" in one tab and "refuérzala" in another.
 export const gradeColor = (n) => {
-  if (n >= 4.5) return "#22C55E";
-  if (n >= 3.5) return "#EAB308";
-  if (n >= 3.0) return "#F97316";
+  if (n >= 4.6) return "#7C3AED";
+  if (n >= 4.0) return "#10B981";
+  if (n >= 3.0) return "#F59E0B";
   return "#EF4444";
 };
 
 export const gradeEmoji = (n) => {
-  if (n >= 4.5) return "🌟";
-  if (n >= 3.5) return "✅";
-  if (n >= 3.0) return "⚠️";
-  return "🔴";
+  if (n >= 4.6) return "🏆";
+  if (n >= 4.0) return "⭐";
+  if (n >= 3.0) return "📈";
+  return "🆘";
 };
 
 export const getAvgScore = (g) => {

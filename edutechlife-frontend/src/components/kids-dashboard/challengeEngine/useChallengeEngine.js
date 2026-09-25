@@ -183,7 +183,10 @@ export function useChallengeEngine() {
         temperature: 0.8,
         maxTokens: 2500,
       });
-      if (!result?.questions?.length) throw new Error("No questions received");
+      if (!result?.questions?.length)
+        throw new Error(
+          "La IA no alcanzó a preparar tus preguntas. Toca «Empezar» otra vez.",
+        );
       setQuestions(result.questions);
       // Solo se usa la secuencia de DBA si la IA devolvió el mismo número de
       // preguntas que se pidieron por DBA — si no coincide, no podemos confiar
@@ -311,5 +314,6 @@ export function useChallengeEngine() {
     DIFFICULTIES,
     CHALLENGE_SUBJECTS: availableSubjects,
     timeLimit: TIME_LIMIT_BY_AGE[ageGroup] ?? 45,
+    autoRead: ageGroup === "early",
   };
 }

@@ -3,6 +3,21 @@ import { VAK_RECOMMENDATIONS } from "./ingenIAData";
 import { track } from "../lib/analytics";
 import { EVENTS } from "../lib/analyticsEvents";
 
+/** What a reward does, from its name ("Tema Oscuro" → "dark"). */
+export function rewardKind(reward) {
+  const n = String(reward?.name || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "");
+  if (/tema oscuro|modo oscuro/.test(n)) return "dark";
+  if (/avatar/.test(n)) return "avatar";
+  if (/galaxia/.test(n)) return "galaxy";
+  if (/dia libre/.test(n)) return "dayoff";
+  if (/curso/.test(n)) return "course";
+  if (/certificado/.test(n)) return "certificate";
+  return null;
+}
+
 export const useIngenIAActions = (stateAndSetters) => {
   const ref = useRef(stateAndSetters);
   ref.current = stateAndSetters;
@@ -108,11 +123,15 @@ export const useIngenIAActions = (stateAndSetters) => {
       track(EVENTS.BADGE_UNLOCKED, { reward_id: reward.id, name: reward.name });
       setLastUnlockedReward(reward);
       setTimeout(() => setLastUnlockedReward(null), 4000);
-      if (reward.id === 1) setDarkMode(true);
-      if (reward.id === 2) setAvatarAnimado(true);
-      if (reward.id === 3) setFondoGalaxia(true);
-      // Reward 4: Día Libre — Dani confirms and opens chat
-      if (reward.id === 4) {
+      // Effects go by the reward's name: ids differ between the local list
+      // (Primer Paso = 0, Tema Oscuro = 2…) and the Supabase table, and the
+      // old id checks were one position off (Tema Oscuro gave the avatar).
+      const kind = rewardKind(reward);
+      if (kind === "dark") setDarkMode(true);
+      if (kind === "avatar") setAvatarAnimado(true);
+      if (kind === "galaxy") setFondoGalaxia(true);
+      // Día Libre — Dani confirms and opens chat
+      if (kind === "dayoff") {
         addDaniMessage({
           role: "assistant",
           text: "🏖️ ¡Felicitaciones! Canjeaste tu **Día Libre**. Hoy puedes descansar y disfrutar sin presión académica. ¡Te lo ganaste! Vuelve mañana con energías recargadas 💪",
@@ -122,8 +141,8 @@ export const useIngenIAActions = (stateAndSetters) => {
           800,
         );
       }
-      // Reward 5: Curso IA Básico — Dani gives course access info
-      if (reward.id === 5) {
+      // Curso IA Básico — Dani gives course access info
+      if (kind === "course") {
         addDaniMessage({
           role: "assistant",
           text: "🤖 ¡Genial! Desbloqueaste el **Curso de IA Básico**. Para acceder, ve a IALab desde el menú principal. Allí encontrarás módulos de Inteligencia Artificial diseñados especialmente para ti. ¡Es el futuro del aprendizaje y tú ya eres parte de él! 🚀",
@@ -133,8 +152,8 @@ export const useIngenIAActions = (stateAndSetters) => {
           800,
         );
       }
-      // Reward 6: Certificado VAK — Dani generates and shows certificate
-      if (reward.id === 6) {
+      // Certificado VAK — Dani generates and shows certificate
+      if (kind === "certificate") {
         const style =
           vakResult?.predominantStyle || vakResult?.dominant || "Visual";
         const styleEmojis = { visual: "👁️", auditivo: "👂", kinestesico: "🤸" };

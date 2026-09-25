@@ -51,7 +51,10 @@ export default function DevIngenIAPreview() {
     Number(params.get("grado")) || Math.min(11, Math.max(1, age - 5));
 
   const [darkMode, setDarkMode] = useState(params.get("oscuro") === "1");
-  const [totalPoints, setTotalPoints] = useState(420);
+  const [totalPoints, setTotalPoints] = useState(
+    () => Number(params.get("puntos")) || 420,
+  );
+  const [unlockedRewards, setUnlockedRewards] = useState([]);
   const [pointsHistory, setPointsHistory] = useState([
     { points: 100, reason: "Reto Matemáticas (60%)", timestamp: daysAgo(2) },
     { points: 50, reason: "Misión completada", timestamp: daysAgo(1) },
@@ -62,6 +65,7 @@ export default function DevIngenIAPreview() {
   const [activeStudyDeck, setActiveStudyDeck] = useState(null);
   const [flashcardDecks, setFlashcardDecks] = useState([]);
   const [examMaterials, setExamMaterials] = useState({});
+  const [exams, setExams] = useState([]);
   const [smartBookHistory, setSmartBookHistory] = useState([]);
   const [planCompletedActivities, setPlanCompletedActivities] = useState([]);
   const [studentGrades, setStudentGrades] = useState(SAMPLE_GRADES);
@@ -115,7 +119,11 @@ export default function DevIngenIAPreview() {
     daniChatHistory,
     daniMood: "happy",
     setDaniMood: noop,
-    addDaniMessage: (m) => setDaniChatHistory((h) => [...h, m]),
+    addDaniMessage: (m) =>
+      setDaniChatHistory((h) => [
+        ...h,
+        { ...m, timestamp: new Date().toISOString() },
+      ]),
     studentMoodHistory: [],
     academicTopics: [],
     conversationCount: 0,
@@ -147,9 +155,12 @@ export default function DevIngenIAPreview() {
 
     totalPoints,
     pointsHistory,
-    unlockedRewards: [],
+    unlockedRewards,
     addPoints,
-    unlockReward: noop,
+    unlockReward: (reward) => {
+      setUnlockedRewards((prev) => [...prev, reward.id]);
+      addPoints(-reward.cost, `Canjeó recompensa: ${reward.name}`);
+    },
 
     darkMode,
     setDarkMode,
@@ -203,6 +214,8 @@ export default function DevIngenIAPreview() {
     planCompletedActivities,
     setPlanCompletedActivities,
 
+    // Per-student storage keys (plan, grades…) need an id, as in the real app.
+    userId: "dev-student",
     onboardingComplete: true,
     setOnboardingComplete: noop,
     hasSeenWelcome: true,
@@ -225,14 +238,16 @@ export default function DevIngenIAPreview() {
 
     timetable: null,
     slots: [],
-    exams: [],
+    exams,
     timetableLoading: false,
     timetableError: null,
     saveTimetableWithSlots: noop,
     saveTimetable: noop,
     saveSlots: noop,
-    addExam: noop,
-    removeExam: noop,
+    addExam: async (row) =>
+      setExams((prev) => [...prev, { id: `dev-exam-${Date.now()}`, ...row }]),
+    removeExam: (examId) =>
+      setExams((prev) => prev.filter((e) => e.id !== examId)),
     currentClass: null,
     nextClass: null,
     todayClasses: [],

@@ -21,6 +21,8 @@ export default function useDaniWelcome({
 
     // If Dani has document/topic context, generate a focused verification opener
     if (documentForDani?.title) {
+      if (documentForDani.welcome)
+        return `¡Hola${nameTag}! ${documentForDani.welcome}`;
       const firstQ = documentForDani.tutoringQuestions?.[0];
       const isGradePlan = documentForDani.subject === "múltiples materias";
       if (isGradePlan) {

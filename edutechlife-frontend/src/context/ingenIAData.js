@@ -75,12 +75,11 @@ export const DEFAULT_MISSIONS = [
     xp: 200,
     completed: false,
   },
-  // TODO: conectar en Fase 4 (TechNewsFeed) — reemplazar con misión de noticias tech cuando el feed esté listo
   {
     id: 6,
-    title: "Habla 5 minutos con Dani",
-    description: "Conversa con tu tutor virtual",
-    icon: "💬",
+    title: "Haz 3 retos",
+    description: "Practica con preguntas de tus materias",
+    icon: "🎮",
     xp: 80,
     completed: false,
   },

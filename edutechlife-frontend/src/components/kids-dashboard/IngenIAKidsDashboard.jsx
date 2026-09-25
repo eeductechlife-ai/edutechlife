@@ -26,6 +26,8 @@ import TopBar from "./components/TopBar";
 import { useParentalControls } from "../../hooks/useParentalControls";
 import useFunnelTracking from "../../hooks/useFunnelTracking";
 
+const REMINDER_DISMISSED_KEY = "edutechlife_dani_reminder_dismissed";
+
 const IngenIAKidsDashboard = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(() => {
@@ -142,11 +144,35 @@ const IngenIAKidsDashboard = () => {
 
     const lastDani = parseInt(closeTime, 10);
     const elapsed = Date.now() - lastDani;
-    if (lastDani > 0 && elapsed > 300000 && elapsed < 3600000) {
+    const dismissedToday =
+      localStorage.getItem(REMINDER_DISMISSED_KEY) ===
+      new Date().toDateString();
+    if (
+      !dismissedToday &&
+      lastDani > 0 &&
+      elapsed > 300000 &&
+      elapsed < 3600000
+    ) {
       const timer = setTimeout(() => setShowDaniReminder(true), 5000);
       return () => clearTimeout(timer);
     }
   }, [isDaniOpen]);
+
+  // The bubble sits over content on phones: it leaves on its own after 10 s.
+  useEffect(() => {
+    if (!showDaniReminder) return undefined;
+    const t = setTimeout(() => setShowDaniReminder(false), 10000);
+    return () => clearTimeout(t);
+  }, [showDaniReminder]);
+
+  const dismissReminder = () => {
+    setShowDaniReminder(false);
+    try {
+      localStorage.setItem(REMINDER_DISMISSED_KEY, new Date().toDateString());
+    } catch {
+      // storage blocked: it just may show again
+    }
+  };
 
   // Handle URL tab parameter
   useEffect(() => {
@@ -394,14 +420,14 @@ const IngenIAKidsDashboard = () => {
               <motion.span
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowDaniReminder(false);
+                  dismissReminder();
                 }}
                 role="button"
                 tabIndex="0"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.stopPropagation();
-                    setShowDaniReminder(false);
+                    dismissReminder();
                   }
                 }}
                 aria-label={t("smartboard.close_reminder")}

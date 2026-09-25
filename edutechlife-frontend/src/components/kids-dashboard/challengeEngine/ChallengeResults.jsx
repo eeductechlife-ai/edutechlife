@@ -4,7 +4,13 @@ import { RotateCcw, Layers, ArrowLeft } from "lucide-react";
 import {
   setHandoff,
   HANDOFF_FLASHCARDS_TOPIC,
+  HANDOFF_FLASHCARDS_DECK,
 } from "../practicarHub/practicarHandoff";
+import { useIngenIAKidsSafe } from "../../../context/IngenIAKidsContext";
+import {
+  usePlanTaskOnFinish,
+  PlanTaskDoneBanner,
+} from "../improvementPlan/PlanTaskDone";
 
 function resultCopy(score) {
   if (score >= 90)
@@ -44,6 +50,9 @@ const ChallengeResults = memo(
     onTabChange,
     darkMode,
   }) => {
+    const setFlashcardDecks = useIngenIAKidsSafe()?.setFlashcardDecks;
+    // A reto opened from "Mi Plan" ticks its task when it ends.
+    const planTask = usePlanTaskOnFinish("retos", true);
     const copy = resultCopy(score);
     const correct = answers.filter((a) => a.isCorrect).length;
     const xpEarned =
@@ -64,13 +73,44 @@ const ChallengeResults = memo(
         : "border-[#E2E8F0] text-[#1E293B] bg-white"
     }`;
 
+    // Missed questions become a ready-to-study deck, so the review is about
+    // exactly what the kid got wrong; with no mistakes, fall back to a new
+    // AI deck on the subject.
     const reviewWithCards = () => {
-      setHandoff(HANDOFF_FLASHCARDS_TOPIC, subject?.label || "");
+      if (mistakes.length && setFlashcardDecks) {
+        const deckId = `reto-${Date.now().toString(36)}`;
+        const day = new Date().toLocaleDateString("es-CO", {
+          day: "numeric",
+          month: "short",
+        });
+        setFlashcardDecks((prev) => [
+          ...prev,
+          {
+            id: deckId,
+            title: `Repaso de ${subject?.label || "mi reto"} · ${day}`,
+            description: "Las preguntas que fallaste en tu reto",
+            cards: mistakes.map(({ q }, n) => ({
+              id: `${deckId}-${n}`,
+              front: q.question,
+              back: q.options[q.correct],
+              example: q.explanation || "",
+              icon: subject?.emoji,
+            })),
+            createdAt: new Date().toISOString(),
+            stats: { totalStudied: 0, correct: 0, incorrect: 0, streak: 0 },
+            metadata: { source: "reto", challengeId: subject?.id },
+          },
+        ]);
+        setHandoff(HANDOFF_FLASHCARDS_DECK, deckId);
+      } else {
+        setHandoff(HANDOFF_FLASHCARDS_TOPIC, subject?.label || "");
+      }
       onTabChange?.("flashcards");
     };
 
     return (
       <div className="space-y-4">
+        <PlanTaskDoneBanner task={planTask} onTabChange={onTabChange} />
         <div
           className={`rounded-2xl border-2 p-6 text-center ${surface}`}
           style={{ borderColor: `${color}40` }}
@@ -176,7 +216,11 @@ const ChallengeResults = memo(
               className={secondaryBtn}
             >
               <Layers className="w-4 h-4" aria-hidden="true" />
-              Repasar con EduCards
+              Repasar mis{" "}
+              {mistakes.length === 1
+                ? "error"
+                : `${mistakes.length} errores`}{" "}
+              con EduCards
             </button>
           )}
           <button

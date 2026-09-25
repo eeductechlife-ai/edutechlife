@@ -1,6 +1,5 @@
 import { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { VAKDiagnosticEnhanced } from "../VAKDiagnosticEnhanced";
 import SmartProfile from "../profile/SmartProfile";
 
@@ -10,7 +9,6 @@ const PerfilTab = memo(function PerfilTab({
   onLogout,
   initialTab,
 }) {
-  const { vakResult } = useIngenIAKids();
   const [showVakPanel, setShowVakPanel] = useState(false);
 
   const handleExpandVak = () => setShowVakPanel(true);
@@ -51,35 +49,15 @@ const PerfilTab = memo(function PerfilTab({
               </button>
             </div>
 
-            <VAKDiagnosticEnhanced onComplete={handleVakDone} />
-
-            {vakResult && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="rounded-2xl bg-gradient-to-r from-[#06D6A0]/10 to-[#118AB2]/10 border border-[#06D6A0]/20 px-4 py-3 flex items-center gap-3"
-              >
-                <span className="text-lg">🎯</span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold text-[#118AB2]">
-                    ¡Diagnóstico completado!
-                  </p>
-                  <p className="text-xs text-[#64748B] mt-0.5">
-                    Tu plan de mejora ya está personalizado a tu estilo.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowVakPanel(false);
-                    onTabChange?.("plan");
-                  }}
-                  className="text-xs font-bold text-white bg-[#118AB2] px-3 py-1.5 rounded-xl hover:bg-[#0077B6] transition-colors whitespace-nowrap"
-                >
-                  Ver Plan →
-                </button>
-              </motion.div>
-            )}
+            {/* The result card carries its own "Crear mi plan" / "Practicar"
+                buttons, so no extra banner here. */}
+            <VAKDiagnosticEnhanced
+              onComplete={handleVakDone}
+              onTabChange={(tab) => {
+                setShowVakPanel(false);
+                onTabChange?.(tab);
+              }}
+            />
           </motion.div>
         )}
       </AnimatePresence>

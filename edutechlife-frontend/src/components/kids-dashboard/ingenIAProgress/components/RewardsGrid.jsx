@@ -10,6 +10,11 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
   const smartBoard = useIngenIAKidsSafe();
   const [rewards, setRewards] = useState(FALLBACK_REWARDS);
   const achievements = smartBoard?.supabaseQueries?.achievements?.data || [];
+  const unlockReward = smartBoard?.unlockReward;
+  const redeem = (r) => {
+    if (totalPoints >= r.cost && !unlockedRewards.includes(r.id))
+      unlockReward(r);
+  };
 
   useEffect(() => {
     supabase
@@ -48,17 +53,31 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
           {rewards.map((r) => {
             const unlocked = unlockedRewards.includes(r.id);
             const canAfford = totalPoints >= r.cost;
+            const redeemable = !unlocked && canAfford && !!unlockReward;
+            // "Disponible" used to be a label with no way to claim it.
+            const Tag = redeemable ? "button" : "div";
             return (
-              <div
+              <Tag
                 key={r.id}
-                className={`rounded-xl p-3 border text-center transition-all ${
+                {...(redeemable
+                  ? {
+                      type: "button",
+                      onClick: () => redeem(r),
+                      "aria-label": `Canjear ${r.name} por ${r.cost} puntos`,
+                    }
+                  : {})}
+                className={`rounded-xl p-3 border text-center transition-all w-full ${
                   unlocked
                     ? darkMode
                       ? "bg-[#334155]/50 border-[#FB8500]/30"
                       : "bg-[#FFF7ED] border-[#FB8500]/30"
-                    : darkMode
-                      ? "bg-[#1E293B] border-[#334155]/50 opacity-60"
-                      : "bg-[#F8FAFC] border-[#E2E8F0]/50 opacity-60"
+                    : redeemable
+                      ? darkMode
+                        ? "bg-[#1E293B] border-[#FB8500] shadow-md"
+                        : "bg-white border-[#FB8500] shadow-md"
+                      : darkMode
+                        ? "bg-[#1E293B] border-[#334155]/50 opacity-60"
+                        : "bg-[#F8FAFC] border-[#E2E8F0]/50 opacity-60"
                 }`}
               >
                 <div className="text-2xl mb-1">{r.icon}</div>
@@ -77,9 +96,9 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
                     {t("smartboard.unlocked")}
                   </div>
                 )}
-                {!unlocked && canAfford && (
-                  <div className="text-[10px] text-[#FB8500] font-semibold mt-1">
-                    {t("smartboard.available")}
+                {redeemable && (
+                  <div className="mt-1.5 rounded-lg bg-[#FB8500] text-white text-[11px] font-black py-1.5">
+                    🎁 Canjear
                   </div>
                 )}
                 {!unlocked && !canAfford && (
@@ -89,7 +108,7 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
                     })}
                   </div>
                 )}
-              </div>
+              </Tag>
             );
           })}
         </div>

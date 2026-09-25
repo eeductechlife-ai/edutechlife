@@ -32,6 +32,22 @@ const QuizCard = memo((props) => {
     );
   }
 
+  // Cards built from a reto are questions, not vocabulary: label them so.
+  const isQuestion = /[?？]\s*$/.test(card.front || "");
+  const frontLabel = t(
+    isQuestion
+      ? "kid.flashcards.question_label"
+      : "kid.flashcards.keyword_label",
+  );
+  const backLabel = t(
+    isQuestion
+      ? "kid.flashcards.answer_label"
+      : "kid.flashcards.definition_label",
+  );
+  const exampleLabel = t(
+    isQuestion ? "kid.flashcards.why_label" : "kid.flashcards.example_label",
+  );
+
   return (
     <div className="flex flex-col items-center gap-3 w-full">
       <p className="text-sm text-[#64748B]">
@@ -72,7 +88,7 @@ const QuizCard = memo((props) => {
                 className="text-xs font-semibold mb-3 block tracking-wider"
                 style={{ color: themeColor || "#4DA8C4" }}
               >
-                {t("kid.flashcards.keyword_label")}
+                {frontLabel}
               </span>
               <p className="text-2xl sm:text-3xl font-bold text-[#004B63] text-center mb-4">
                 {card.front}
@@ -101,7 +117,7 @@ const QuizCard = memo((props) => {
                   className="text-sm font-bold block mb-2"
                   style={{ color: themeColor || "#66CCCC" }}
                 >
-                  {t("kid.flashcards.definition_label")}
+                  {backLabel}
                 </span>
                 <p className="text-base font-semibold text-[#004B63] leading-relaxed">
                   {card.back}
@@ -117,7 +133,7 @@ const QuizCard = memo((props) => {
                     className="text-sm font-bold block mb-2"
                     style={{ color: themeColor || "#66CCCC" }}
                   >
-                    {t("kid.flashcards.example_label")}
+                    {exampleLabel}
                   </span>
                   <p className="text-base text-[#404B5C] leading-relaxed">
                     {card.example}

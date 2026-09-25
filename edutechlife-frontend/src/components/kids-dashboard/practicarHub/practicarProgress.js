@@ -41,6 +41,27 @@ export function logPractice(entry) {
   window.dispatchEvent(new CustomEvent(EVENT));
 }
 
+// Each section names subjects its own way (exam form, curriculum, retos).
+const SUBJECT_ALIASES = {
+  matematicas: ["matematicas", "math"],
+  lenguaje: ["lenguaje", "language"],
+  ciencias: ["ciencias", "ciencias_naturales", "science"],
+  historia: ["historia", "sociales", "ciencias_sociales", "social"],
+  ingles: ["ingles", "english"],
+  arte: ["arte"],
+};
+
+/** Practice sessions of a subject since a date (retos, EduCards, material…). */
+export function practiceCountSince(subject, sinceIso) {
+  const names = SUBJECT_ALIASES[subject] || [subject];
+  const since = sinceIso ? new Date(sinceIso) : new Date(0);
+  return readPracticeLog().filter(
+    (e) =>
+      new Date(e.at) >= since &&
+      (names.includes(e.subject) || names.includes(e.challengeId)),
+  ).length;
+}
+
 function startOfWeek(d) {
   const x = new Date(d);
   const day = (x.getDay() + 6) % 7; // Monday = 0

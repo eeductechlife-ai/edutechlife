@@ -86,8 +86,8 @@ export function useActivityUpload() {
   const handleTutorWithDani = useCallback(
     (analysis) => {
       setDocumentForDani(analysis);
-      const daniButton = document.getElementById("openDaniChat");
-      if (daniButton) daniButton.click();
+      // The dashboard opens Dani on this event (there is no #openDaniChat).
+      window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
     },
     [setDocumentForDani],
   );

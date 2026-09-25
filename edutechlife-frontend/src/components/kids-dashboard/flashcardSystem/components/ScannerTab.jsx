@@ -6,13 +6,17 @@ import {
   detectThemeFromTopic,
 } from "../../../../services/flashcardAI";
 import { generateStudySummary } from "../../../../services/documentSummaryAI";
+import { useIngenIAKids } from "../../../../context/IngenIAKidsContext";
+import { gradeBand, AGE_KEY_BY_BAND } from "../gradeBand";
 
 const ScannerTab = memo(({ onGenerated }) => {
   const { t } = useTranslation();
+  // Level comes from the student's registered grade/age — never asked again.
+  const { gradeLevel, studentAge } = useIngenIAKids();
+  const grade = gradeBand(gradeLevel, studentAge);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [topic, setTopic] = useState("");
-  const [grade, setGrade] = useState("7-9");
   const [processing, setProcessing] = useState(false);
   const [stage, setStage] = useState("");
   const [summary, setSummary] = useState(null);
@@ -51,14 +55,7 @@ const ScannerTab = memo(({ onGenerated }) => {
       setStage(t("kid.flashcards.scan_stage_summary"));
       const sum = await generateStudySummary(text, {
         subject: "general",
-        ageKey:
-          grade.split("-")[0] === "1"
-            ? "6-8"
-            : grade.split("-")[0] <= "6"
-              ? "9-11"
-              : grade.split("-")[0] <= "9"
-                ? "12-14"
-                : "15-17",
+        ageKey: AGE_KEY_BY_BAND[grade],
       });
       setSummary(sum);
 
@@ -79,13 +76,6 @@ const ScannerTab = memo(({ onGenerated }) => {
       setStage("");
     }
   }, [file, topic, grade, onGenerated, t]);
-
-  const GRADES = [
-    { v: "1-3", l: t("kid.flashcards.scan_grade_1_3") },
-    { v: "4-6", l: t("kid.flashcards.scan_grade_4_6") },
-    { v: "7-9", l: t("kid.flashcards.scan_grade_7_9") },
-    { v: "10-12", l: t("kid.flashcards.scan_grade_10_12") },
-  ];
 
   return (
     <div className="p-5 rounded-2xl bg-gradient-to-br from-[#EF476F]/5 to-[#FF6B9D]/5 border border-[#EF476F]/20 space-y-4">
@@ -172,21 +162,14 @@ const ScannerTab = memo(({ onGenerated }) => {
         className="w-full p-3 rounded-xl border border-[#E2E8F0] text-[#004B63] text-sm resize-none focus:outline-none focus:border-[#EF476F]/60"
       />
 
-      <div className="flex gap-2 flex-wrap">
-        {GRADES.map((g) => (
-          <button
-            key={g.v}
-            onClick={() => setGrade(g.v)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-              grade === g.v
-                ? "bg-[#EF476F] text-white shadow-md"
-                : "bg-white border border-[#E2E8F0] text-[#64748B]"
-            }`}
-          >
-            {g.l}
-          </button>
-        ))}
-      </div>
+      <p className="text-[11px] text-[#64748B]">
+        🎓{" "}
+        {gradeLevel
+          ? `Tarjetas y resumen para tu grado ${gradeLevel}°`
+          : studentAge
+            ? `Tarjetas y resumen para tus ${studentAge} años`
+            : "Tarjetas y resumen para tu nivel"}
+      </p>
 
       {stage && (
         <div className="flex items-center gap-2 text-sm text-[#EF476F]">
