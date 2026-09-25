@@ -6,8 +6,8 @@ vi.mock("../../lib/supabase", () => ({
     from: () => ({ insert: mockInsert }),
   },
 }));
-vi.mock("../../context/SmartBoardKidsContext", () => ({
-  useSmartBoardKids: () => ({
+vi.mock("../../context/IngenIAKidsContext", () => ({
+  useIngenIAKids: () => ({
     supabaseQueries: { studentData: { data: { id: "student-123" } } },
   }),
 }));
