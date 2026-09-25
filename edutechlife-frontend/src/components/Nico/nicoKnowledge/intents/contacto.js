@@ -30,6 +30,6 @@ export const contacto = [
     ],
     category: "contacto",
     response:
-      "Nuestras instalaciones están en Calle 13 # 4-32, Manizales. Contamos con aulas equipadas con tecnología de punta, laboratorio STEM, y espacios cómodos para aprendizaje. Si prefieres desde casa, ofrecemos clases online.",
+      "Nuestras instalaciones están en Calle 13 # 4-32, Manizales. Contamos con espacios cómodos y equipados para el aprendizaje, y también ofrecemos modalidad online desde cualquier lugar.",
   },
 ];

@@ -62,17 +62,16 @@ describe("buildErrorContent", () => {
   test("returns timeout message when isTimeout is true", () => {
     const msg = buildErrorContent(true);
     expect(msg).toContain("tardando mucho");
-    expect(msg).toContain("VAK");
-    expect(msg).toContain("STEM");
-    expect(msg).toContain("tutorías");
-    expect(msg).toContain("bienestar");
+    expect(msg).toContain("ADN de Aprendizaje");
+    expect(msg).toContain("IALab");
+    expect(msg).toContain("IngenIA");
   });
 
   test("returns connection error message when isTimeout is false", () => {
     const msg = buildErrorContent(false);
     expect(msg).toContain("problema de conexion");
-    expect(msg).toContain("VAK");
-    expect(msg).toContain("STEM");
-    expect(msg).toContain("bienestar");
+    expect(msg).toContain("ADN de Aprendizaje");
+    expect(msg).toContain("IALab");
+    expect(msg).toContain("IngenIA");
   });
 });

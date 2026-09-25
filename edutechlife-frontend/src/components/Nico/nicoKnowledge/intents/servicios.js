@@ -50,20 +50,20 @@ export const servicios = [
       "VAK significa Visual, Auditivo y Kinestésico. Es un diagnóstico que identifica tu estilo de aprendizaje predominante usando algoritmos de visión cognitiva. Te ayuda a aprender de la forma más efectiva para ti. Es gratuito y toma entre 10 y 30 minutos.",
   },
   {
-    id: "que_es_stem",
+    id: "que_es_metodo",
     patterns: [
       "qué es stem",
       "que es stem",
       "explicación stem",
-      "qué es robótica educativa",
+      "método de edutechlife",
       "para qué sirve stem",
       "en qué consiste stem",
       "qué es steam",
-      "programación para niños",
+      "ia aplicada a la educación",
     ],
     category: "servicios",
     response:
-      "STEM integra Ciencia, Tecnología, Ingeniería y Matemáticas. En EdutechLife lo aplicamos con robótica LEGO y Arduino, programación en Scratch, Python y JavaScript, y proyectos prácticos que desarrollan pensamiento crítico y habilidades tecnológicas.",
+      "En EdutechLife aplicamos pedagogía e inteligencia artificial para mejorar el proceso educativo: el ADN de Aprendizaje personaliza el aprendizaje y la IA acompaña con herramientas como MAX (IALab) y el tutor Dani (IngenIA). No enseñamos programación ni robótica.",
   },
   {
     id: "que_es_bienestar",
@@ -94,7 +94,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "Las tutorías personalizadas son sesiones uno a uno con profesionales especializados. Ofrecemos apoyo en matemáticas todos los niveles, ciencias física química y biología, inglés conversacional y gramática, y técnicas de estudio.",
+      "No damos clases particulares por materia. Acompañamos el aprendizaje con pedagogía e IA: el ADN de Aprendizaje, el coach MAX (en IALab) y el tutor Dani (en IngenIA). Cuéntanos tu objetivo y te orientamos.",
   },
   {
     id: "que_es_smartboard",
@@ -107,7 +107,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "IngenIA es un dashboard de acompañamiento académico y emocional para estudiantes de 8 a 16 años. Incluye misiones educativas, seguimiento de progreso, diagnóstico VAK y chat con Dani AI.",
+      "IngenIA es un dashboard de acompañamiento académico y emocional para estudiantes de 8 a 16 años. Incluye misiones educativas, seguimiento de progreso, ADN de Aprendizaje y chat con Dani AI.",
   },
   {
     id: "que_es_ai_lab",
@@ -121,7 +121,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "AI Lab Academic es un entrenamiento de élite con agentes de IA. Incluye 5 módulos: Ingeniería de Prompts, Potencia ChatGPT, Rastreo Profundo, Inmersión NotebookLM y Proyecto Disruptivo. Es un curso certificado.",
+      "AI Lab (IALab) es el curso de IA generativa de EdutechLife, guiado por MAX. Tiene 5 módulos: Artesano Digital (prompts), Arquitecto Digital (ChatGPT y GPTs), Detective de Datos (Gemini y Deep Research), Alquimista Digital (NotebookLM) y Guardián Digital (ética de la IA). Incluye laboratorios, examen y certificado.",
   },
   {
     id: "valerio",
@@ -163,7 +163,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "IngenIA incluye misiones educativas interactivas, seguimiento de progreso en tiempo real, diagnóstico VAK integrado, chat con Dani AI, y reportes para padres. Está diseñado para estudiantes de 8 a 16 años.",
+      "IngenIA incluye misiones educativas interactivas, seguimiento de progreso en tiempo real, ADN de Aprendizaje integrado, chat con Dani AI, y reportes para padres. Está diseñado para estudiantes de 8 a 16 años.",
   },
   {
     id: "grupales",
@@ -224,7 +224,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "Ofrecemos programas intensivos de nivelación para ponerte al día en matemáticas, ciencias e inglés. Evaluamos tu nivel actual y creamos un plan personalizado para cubrir vacíos académicos.",
+      "Acompañamos a quien necesita ponerse al día: con el ADN de Aprendizaje identificamos cómo aprende mejor y con IA (MAX o Dani) organizamos su estudio y su motivación. No dictamos clases particulares por materia.",
   },
   {
     id: "prueba_nivel",
@@ -239,7 +239,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "Realizamos una evaluación diagnóstica gratuita para determinar tu nivel actual en la materia. Esto nos permite crear un plan de estudios personalizado y medir tu progreso.",
+      "Realizamos un diagnóstico gratuito (ADN de Aprendizaje) para conocer cómo aprende cada persona. Con eso personalizamos la ruta y medimos el progreso.",
   },
   {
     id: "adaptacion_curricular",

@@ -14,7 +14,7 @@ export const generales = [
     ],
     category: "generales",
     response:
-      "Tenemos horarios flexibles de lunes a sábado. Mañanas de 8am a 12pm, tardes de 2pm a 6pm, y evenings de 6pm a 8pm. Modalidad presencial, online o híbrida.",
+      "Tenemos horarios flexibles de lunes a sábado: mañanas de 8am a 12pm, tardes de 2pm a 6pm y noches de 6pm a 8pm. Modalidad presencial, online o híbrida.",
   },
   {
     id: "modalidades",
@@ -32,7 +32,7 @@ export const generales = [
     ],
     category: "generales",
     response:
-      "Ofrecemos tres modalidades: presencial en Bogotá y otras ciudades con aulas equipadas, online en vivo con profesor desde cualquier lugar, e híbrida combinando ambas. Tú eliges la que mejor se adapte a ti.",
+      "Ofrecemos tres modalidades: presencial (según el programa), online en vivo desde cualquier lugar, e híbrida combinando ambas. Tú eliges la que mejor se adapte a ti.",
   },
   {
     id: "metodologia",
@@ -47,7 +47,7 @@ export const generales = [
     ],
     category: "generales",
     response:
-      "Nuestra metodología combina pedagogía de alto impacto con inteligencia artificial. Usamos el diagnóstico VAK para personalizar cada clase según tu estilo de aprendizaje, integramos tecnología STEM con robótica y programación, y ofrecemos acompañamiento emocional con bienestar. Todo se adapta a tu ritmo.",
+      "Nuestro método une pedagogía de alto impacto e inteligencia artificial: el ADN de Aprendizaje personaliza el proceso según el estilo de cada estudiante y la IA acompaña con herramientas como MAX (en IALab) y el tutor Dani (en IngenIA). No enseñamos programación ni robótica.",
   },
   {
     id: "duracion",
@@ -78,7 +78,7 @@ export const generales = [
     ],
     category: "generales",
     response:
-      "Todos nuestros profesionales son certificados y con amplia experiencia. Tenemos docentes especializados en educación STEM, psicólogos educativos para bienestar, y tutores expertos en refuerzo académico. Todos reciben capacitación continua.",
+      "Nuestro equipo combina pedagogos, especialistas en aprendizaje y tecnología, y profesionales de bienestar. Todos con amplia experiencia y capacitación continua en usar la IA para mejorar el proceso educativo.",
   },
   {
     id: "frecuencia_clases",

@@ -108,26 +108,29 @@ export const extractUserContext = (message) => {
     }
   }
 
-  // Detectar intereses
+  // Detectar intereses alineados con lo que SÍ hace EdutechLife
+  // (pedagogía + IA). No manejamos programación, robótica ni clases privadas.
   const interestPatterns = [
     {
-      pattern: /vak|estilo.*aprendizaje|visual|auditivo|kinestésico/i,
+      pattern:
+        /vak|estilo.*aprendizaje|visual|auditivo|kinest[eé]sico|adn de aprendizaje|diagn[oó]stico/i,
       interest: "VAK",
     },
     {
       pattern:
-        /stem|robótica|robotica|programación|scratch|python|lego|arduino/i,
-      interest: "STEM",
+        /ialab|curso.*(ia|inteligencia artificial)|prompt|chatgpt|gpt|gemini|notebooklm|herramientas? de ia|max\b/i,
+      interest: "IALab",
     },
     {
-      pattern: /tutoría|tutoria|clases.*matemáticas|clases.*ciencias|profesor/i,
-      interest: "Tutoría",
+      pattern:
+        /ingenia|smartboard|ni[ñn]os?|j[oó]venes|colegio|acompa[ñn]amiento|tutor dani|dan[ie]/i,
+      interest: "IngenIA",
     },
     {
-      pattern: /bienestar|psicología|psicologia|ansiedad|estrés|emocional/i,
-      interest: "Bienestar",
+      pattern:
+        /empresa|instituc|automatizaci[oó]n|agentes?|consultor[ií]a|b2b|docentes|profesores/i,
+      interest: "IA Empresarial",
     },
-    { pattern: /inglés|ingles|english|idioma/i, interest: "Inglés" },
   ];
 
   for (const { pattern, interest } of interestPatterns) {
@@ -179,22 +182,28 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     return "VAK son los estilos de aprendizaje: Visual, Auditivo y Kinestésico. Identificamos el tuyo con un diagnóstico gratuito.";
   }
 
-  // Qué es STEM
+  // Qué es EdutechLife / su método
   if (
     (lowerMessage.includes("qué es") || lowerMessage.includes("que es")) &&
-    (lowerMessage.includes("stem") || lowerMessage.includes("steam"))
+    (lowerMessage.includes("stem") ||
+      lowerMessage.includes("steam") ||
+      lowerMessage.includes("metodolog") ||
+      lowerMessage.includes("método") ||
+      lowerMessage.includes("metodo"))
   ) {
-    return "STEM es ciencia, tecnología, ingeniería y matemáticas. Desarrollamos habilidades del futuro con proyectos de robótica y programación.";
+    return "Nuestro método une pedagogía e inteligencia artificial: el ADN de Aprendizaje personaliza cada ruta y la IA acompaña el proceso (coach MAX en IALab, tutor Dani en IngenIA). No enseñamos programación ni robótica.";
   }
 
-  // Tutorías
+  // Acompañamiento (no damos clases particulares por materia)
   if (
     lowerMessage.includes("tutoría") ||
     lowerMessage.includes("tutoria") ||
     lowerMessage.includes("clases") ||
-    lowerMessage.includes("profesor")
+    lowerMessage.includes("profesor") ||
+    lowerMessage.includes("acompañamiento") ||
+    lowerMessage.includes("refuerzo")
   ) {
-    return "Ofrecemos tutorías en Matemáticas, Ciencias, Inglés y técnicas de estudio. ¿Qué materia necesitas?";
+    return "No damos clases particulares por materia. Acompañamos el aprendizaje con pedagogía e IA: ADN de Aprendizaje, el coach MAX en IALab y el tutor Dani en IngenIA. ¿Es para ti, para un niño o para una institución?";
   }
 
   // Precios
@@ -228,25 +237,17 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     return "Tenemos modalidad presencial en Bogotá, online por videollamada e híbrida. ¿Cuál prefieres?";
   }
 
-  // Programación/Robótica
+  // Programación/Robótica → aclarar que NO lo hacemos
   if (
     lowerMessage.includes("programación") ||
+    lowerMessage.includes("programacion") ||
     lowerMessage.includes("robotica") ||
     lowerMessage.includes("robótica") ||
     lowerMessage.includes("scratch") ||
     lowerMessage.includes("python") ||
     lowerMessage.includes("lego")
   ) {
-    return "Ofrecemos robótica con LEGO y Arduino, programación con Scratch, Python y JavaScript. ¿Qué edad tiene el estudiante?";
-  }
-
-  // Inglés
-  if (
-    lowerMessage.includes("inglés") ||
-    lowerMessage.includes("ingles") ||
-    lowerMessage.includes("english")
-  ) {
-    return "Clases de inglés para todos los niveles: básico, intermedio, avanzado y preparación para exámenes. ¿Cuál es tu nivel?";
+    return "No enseñamos programación ni robótica. En EdutechLife aplicamos pedagogía e IA para mejorar el aprendizaje: en IALab aprender a usar herramientas como ChatGPT, Gemini y NotebookLM. ¿Quieres que te cuente?";
   }
 
   // Contacto/WhatsApp
@@ -275,7 +276,7 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     lowerMessage.includes("que es edutechlife") ||
     lowerMessage.includes("qué hacen")
   ) {
-    return "Somos EdutechLife, una plataforma de educación que ofrece diagnóstico de aprendizaje, programas STEM y tutorías personalizadas.";
+    return "Somos EdutechLife: aplicamos pedagogía e inteligencia artificial para mejorar el proceso educativo. Tenemos IALab (curso de IA), IngenIA (acompañamiento con IA para niños y jóvenes), el ADN de Aprendizaje (diagnóstico VAK gratuito) e IA para empresas.";
   }
 
   // Gratitud
@@ -308,84 +309,87 @@ export const getQuestionSuggestions = (messages, userContext = {}) => {
     .join(" ");
   const mentionedTopics = [];
 
-  if (lastMessages.includes("vak") || lastMessages.includes("estilo"))
+  if (
+    lastMessages.includes("vak") ||
+    lastMessages.includes("estilo") ||
+    lastMessages.includes("adn") ||
+    lastMessages.includes("aprendizaje")
+  )
     mentionedTopics.push("VAK");
   if (
-    lastMessages.includes("stem") ||
-    lastMessages.includes("robótica") ||
-    lastMessages.includes("programación")
+    lastMessages.includes("ialab") ||
+    lastMessages.includes("inteligencia artificial") ||
+    lastMessages.includes("chatgpt") ||
+    lastMessages.includes("gemini") ||
+    lastMessages.includes("notebooklm") ||
+    lastMessages.includes("prompt") ||
+    lastMessages.includes("max")
   )
-    mentionedTopics.push("STEM");
+    mentionedTopics.push("IALab");
   if (
-    lastMessages.includes("tutoría") ||
-    lastMessages.includes("clase") ||
-    lastMessages.includes("matemática")
+    lastMessages.includes("ingenia") ||
+    lastMessages.includes("smartboard") ||
+    lastMessages.includes("niño") ||
+    lastMessages.includes("niños") ||
+    lastMessages.includes("joven") ||
+    lastMessages.includes("colegio") ||
+    lastMessages.includes("dani")
   )
-    mentionedTopics.push("Tutoría");
+    mentionedTopics.push("IngenIA");
   if (
     lastMessages.includes("precio") ||
     lastMessages.includes("cuesta") ||
+    lastMessages.includes("costo") ||
     lastMessages.includes("plan")
   )
     mentionedTopics.push("Precios");
-  if (lastMessages.includes("bienestar") || lastMessages.includes("psicología"))
-    mentionedTopics.push("Bienestar");
-  if (lastMessages.includes("inglés") || lastMessages.includes("ingles"))
-    mentionedTopics.push("Inglés");
 
   // Etapa 1: Inicio - Sin contexto previo
   if (mentionedTopics.length === 0 || conversationStage === "inicio") {
     return [
-      "¿Qué servicios ofrecen?",
+      "¿Qué hace EdutechLife?",
       "¿Qué es el ADN de Aprendizaje?",
-      "¿Tienen clases de programación?",
-      "¿Cuál es el costo de las tutorías?",
+      "¿Qué es IALab?",
+      "¿Cómo usan la IA para enseñar?",
     ];
   }
 
   // Etapa 2: Descubrimiento - Usuario mostró interés en un tema
   if (mentionedTopics.includes("VAK")) {
     suggestions.push(
-      "¿Cómo se hace el test VAK?",
+      "¿Cómo se hace el ADN de Aprendizaje?",
       "¿Cuánto tiempo dura el diagnóstico?",
       "¿Es gratuito?",
       "¿Qué incluye el resultado?",
     );
-  } else if (mentionedTopics.includes("STEM")) {
+  } else if (mentionedTopics.includes("IALab")) {
     suggestions.push(
-      "¿Para qué edad son los programas?",
-      "¿Qué proyectos prácticos hacen?",
-      "¿Necesito conocimientos previos?",
-      "¿Tienen robots LEGO o Arduino?",
+      "¿Qué módulos tiene IALab?",
+      "¿Para qué edad es?",
+      "¿Necesito experiencia previa?",
+      "¿Incluye certificado?",
     );
-  } else if (mentionedTopics.includes("Tutoría")) {
+  } else if (mentionedTopics.includes("IngenIA")) {
     suggestions.push(
-      "¿Qué materias ofrecen?",
-      "¿Son clases individuales?",
-      "¿Cómo son los tutores?",
-      "¿Puedo tomar una clase de prueba?",
+      "¿Para qué edades es IngenIA?",
+      "¿Cómo acompaña la IA al estudiante?",
+      "¿Los padres reciben reportes?",
+      "¿Hay prueba gratis?",
     );
   } else if (mentionedTopics.includes("Precios")) {
     suggestions.push(
       "¿Qué planes tienen disponibles?",
-      "¿Hay descuentos por pago anticipado?",
       "¿Ofrecen becas?",
       "¿Cómo funciona la primera clase gratuita?",
-    );
-  } else if (mentionedTopics.includes("Inglés")) {
-    suggestions.push(
-      "¿Qué nivel de inglés ofrecen?",
-      "¿Preparan para exámenes internacionales?",
-      "¿Tienen clases de conversación?",
-      "¿Cuántas clases por mes incluyen?",
+      "¿En qué moneda están los precios?",
     );
   } else {
-    //Sugerencias generales basadas en etapa
+    // Sugerencias generales basadas en etapa
     suggestions.push(
       "¿Cómo me inscribo?",
       "¿Tienen modalidad online?",
-      "¿Qué horarios tienen disponibles?",
-      "¿Primera clase es gratis?",
+      "¿Cómo funciona el acompañamiento?",
+      "¿La primera clase es gratis?",
     );
   }
 
@@ -429,13 +433,21 @@ export const getConversationOptions = (messages, userContext = {}) => {
     currentTopic = "Precios";
   } else if (
     lastMessages.includes("vak") ||
-    lastMessages.includes("stem") ||
-    lastMessages.includes("tutoría")
+    lastMessages.includes("ialab") ||
+    lastMessages.includes("inteligencia artificial") ||
+    lastMessages.includes("ingenia") ||
+    lastMessages.includes("niño") ||
+    lastMessages.includes("colegio")
   ) {
     currentStage = "interes";
     if (lastMessages.includes("vak")) currentTopic = "VAK";
-    else if (lastMessages.includes("stem")) currentTopic = "STEM";
-    else if (lastMessages.includes("tutoría")) currentTopic = "Tutoría";
+    else if (
+      lastMessages.includes("ingenia") ||
+      lastMessages.includes("niño") ||
+      lastMessages.includes("colegio")
+    )
+      currentTopic = "IngenIA";
+    else currentTopic = "IALab";
   }
 
   const options = [];
@@ -443,9 +455,9 @@ export const getConversationOptions = (messages, userContext = {}) => {
   // Opciones según etapa y tema
   if (currentStage === "descubrimiento" || currentTopic === null) {
     options.push(
-      { text: "Conocer ADN de Aprendizaje", action: "learn_vak" },
-      { text: "Ver cursos STEM", action: "explore_stem" },
-      { text: "Información de tutorías", action: "info_tutoring" },
+      { text: "Conocer el ADN de Aprendizaje", action: "learn_vak" },
+      { text: "Ver IALab (curso de IA)", action: "explore_ialab" },
+      { text: "Conocer IngenIA", action: "explore_ingenia" },
     );
   } else if (currentTopic === "VAK") {
     options.push(
@@ -453,17 +465,17 @@ export const getConversationOptions = (messages, userContext = {}) => {
       { text: "Más sobre estilos de aprendizaje", action: "more_vak" },
       { text: "Ver otros servicios", action: "other_services" },
     );
-  } else if (currentTopic === "STEM") {
+  } else if (currentTopic === "IALab") {
     options.push(
-      { text: "Ver proyectos de robótica", action: "view_robotics" },
-      { text: "Cursos de programación", action: "view_programming" },
-      { text: "Agendar clase demo", action: "demo_stem" },
+      { text: "Ver módulos de IALab", action: "view_ialab" },
+      { text: "Conocer a MAX (coach IA)", action: "meet_max" },
+      { text: "Agendar clase demo", action: "demo_ialab" },
     );
-  } else if (currentTopic === "Tutoría") {
+  } else if (currentTopic === "IngenIA") {
     options.push(
-      { text: "Ver materias disponibles", action: "view_subjects" },
-      { text: "Agendar tutoría de prueba", action: "trial_tutoring" },
-      { text: "Conocer tutores", action: "meet_tutors" },
+      { text: "Conocer IngenIA para niños", action: "view_ingenia" },
+      { text: "Cómo acompaña la IA", action: "how_ai_helps" },
+      { text: "Agendar clase demo", action: "demo_ingenia" },
     );
   } else if (currentStage === "informacion" || currentTopic === "Precios") {
     options.push(

@@ -13,7 +13,7 @@ export const ventas = [
     ],
     category: "ventas",
     response:
-      "Nos diferenciamos por nuestro enfoque integral y personalizado. Combinamos diagnóstico VAK para aprender según tu estilo, tecnología STEM y robótica educativa, acompañamiento emocional con profesionales, y modalidades flexibles presencial online e híbrido. Todo con primera clase gratuita y cancelación sin permanencia.",
+      "Nos diferencia combinar pedagogía de alto impacto con inteligencia artificial: el ADN de Aprendizaje personaliza el proceso según el estilo de cada estudiante y la IA acompaña con herramientas como MAX (IALab) y el tutor Dani (IngenIA). Ofrecemos modalidades flexibles (presencial, online e híbrida), primera clase gratuita y cancelación sin permanencia. No enseñamos programación ni robótica.",
   },
   {
     id: "resultados_esperados",

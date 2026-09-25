@@ -14,34 +14,20 @@ function ChatOptionButtons({ options, onScheduleOption, onAskQuestion }) {
           <button
             key={index}
             onClick={() => {
-              if (
-                option.action.startsWith("schedule_") ||
-                option.action.startsWith("demo_") ||
-                option.action.startsWith("trial_")
-              ) {
-                const interest = option.action.includes("vak")
+              const action = option.action || "";
+              if (/^(schedule_|demo_|trial_)/.test(action)) {
+                const interest = action.includes("vak")
                   ? "VAK"
-                  : option.action.includes("stem")
-                    ? "STEM"
-                    : option.action.includes("tutoring")
-                      ? "Tutorías"
+                  : action.includes("ialab")
+                    ? "IALab"
+                    : action.includes("ingenia")
+                      ? "IngenIA"
                       : "Consulta general";
                 onScheduleOption(interest);
-              } else if (
-                option.action.startsWith("info_") ||
-                option.action.startsWith("learn_") ||
-                option.action.startsWith("view_")
-              ) {
+              } else if (action === "test_vak") {
+                onAskQuestion(t("nico.question_vak_test"));
+              } else {
                 onAskQuestion(option.text);
-              } else if (
-                option.action === "test_vak" ||
-                option.action === "meet_tutors"
-              ) {
-                const question =
-                  option.action === "test_vak"
-                    ? t("nico.question_vak_test")
-                    : t("nico.question_meet_tutors");
-                onAskQuestion(question);
               }
             }}
             className="text-left p-3 rounded-lg hover:scale-[1.02] transition active:scale-95 text-sm"

@@ -13,7 +13,7 @@ export const precios = [
     ],
     category: "precios",
     response:
-      "El diagnóstico VAK es completamente gratuito. Incluye una evaluación completa de tu estilo de aprendizaje con resultados detallados y recomendaciones personalizadas. Los planes de seguimiento tienen costo.",
+      "El ADN de Aprendizaje es completamente gratuito. Incluye una evaluación completa de tu estilo de aprendizaje con resultados detallados y recomendaciones personalizadas. Los planes de seguimiento tienen costo.",
   },
   {
     id: "precios_stem",
@@ -30,7 +30,7 @@ export const precios = [
     ],
     category: "precios",
     response:
-      "La robótica y la programación hoy hacen parte de la oferta de EdutechLife dentro de IALab (curso de IA para jóvenes y adultos) y IngenIA (niños y jóvenes). Cuéntanos la edad y el objetivo por WhatsApp y te orientamos con el plan adecuado. Trabajamos en pesos colombianos.",
+      "No ofrecemos robótica ni programación. Nuestra oferta es IALab (curso de IA para jóvenes y adultos), IngenIA (acompañamiento con IA para niños y jóvenes) y el ADN de Aprendizaje. Cuéntanos la edad y el objetivo por WhatsApp y te orientamos con el plan adecuado. Trabajamos en pesos colombianos.",
   },
   {
     id: "precios_tutorias",
@@ -75,7 +75,7 @@ export const precios = [
     ],
     category: "precios",
     response:
-      "El inglés no se vende por separado hoy; la oferta actual de EdutechLife es IALab (curso de IA), IngenIA (niños y jóvenes) y el diagnóstico VAK. Para orientarte según lo que buscas, escríbenos por WhatsApp +57 323 836 5517.",
+      "El inglés no se vende por separado hoy; la oferta actual de EdutechLife es IALab (curso de IA), IngenIA (niños y jóvenes) y el ADN de Aprendizaje. Para orientarte según lo que buscas, escríbenos por WhatsApp +57 323 836 5517.",
   },
   {
     id: "planes_disponibles",
@@ -91,7 +91,7 @@ export const precios = [
     ],
     category: "precios",
     response:
-      "Trabajamos en pesos colombianos (COP). Hoy los planes son: IALab desde $99.000/mes (curso de IA, incluye diagnóstico VAK y certificado); IngenIA Básico $30.000/mes y Premium $50.000/mes para niños y jóvenes (7 días de prueba); y planes para educadores e instituciones desde $199.000/mes. El diagnóstico VAK es gratuito.",
+      "Trabajamos en pesos colombianos (COP). Hoy los planes son: IALab desde $99.000/mes (curso de IA, incluye ADN de Aprendizaje y certificado); IngenIA Básico $30.000/mes y Premium $50.000/mes para niños y jóvenes (7 días de prueba); y planes para educadores e instituciones desde $199.000/mes. El ADN de Aprendizaje es gratuito.",
   },
   {
     id: "descuentos",

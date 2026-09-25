@@ -26,6 +26,6 @@ export function createStreamingPlaceholder() {
 
 export function buildErrorContent(isTimeout) {
   return isTimeout
-    ? `El servicio esta tardando mucho en responder. \u00bfQuieres preguntarme por nuestros servicios educativos como VAK, STEM, tutor\u00edas o bienestar?`
-    : `Hubo un problema de conexion. Puedo contarte sobre VAK, STEM, tutor\u00edas y bienestar. \u00bfTe interesa alguno?`;
+    ? `El servicio esta tardando mucho en responder. \u00bfQuieres preguntarme por el ADN de Aprendizaje, IALab (curso de IA) o IngenIA?`
+    : `Hubo un problema de conexion. Puedo contarte sobre el ADN de Aprendizaje, IALab o IngenIA. \u00bfTe interesa alguno?`;
 }

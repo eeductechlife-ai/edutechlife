@@ -336,18 +336,19 @@ const LeadCaptureForm = ({
             }}
           >
             <option value="">Selecciona una opción</option>
-            <option value="programacion">
-              Programación para niños/adolescentes
+            <option value="ialab">IALab (curso de IA)</option>
+            <option value="ingenia">
+              IngenIA / SmartBoard (acompañamiento con IA para niños y jóvenes)
             </option>
-            <option value="robotica">Robótica educativa</option>
             <option value="vak">
-              Diagnóstico VAK (estilos de aprendizaje)
+              ADN de Aprendizaje (estilos de aprendizaje)
             </option>
-            <option value="tutoria">
-              Tutoría académica (matemáticas, ciencias)
+            <option value="ia-empresarial">
+              IA para empresas e instituciones
             </option>
-            <option value="bienestar">Bienestar emocional</option>
-            <option value="steam">Programas STEAM completos</option>
+            <option value="docentes">
+              Formación y herramientas de IA para docentes
+            </option>
             <option value="otro">Otro interés</option>
           </select>
         </div>
