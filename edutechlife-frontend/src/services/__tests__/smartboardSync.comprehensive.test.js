@@ -388,66 +388,78 @@ describe("loadFromSupabase", () => {
   });
 });
 
-describe("saveToSupabase", () => {
-  it("upserts data to Supabase", async () => {
-    const mockSupabase = {
-      from: vi.fn().mockReturnValue({
-        upsert: vi.fn().mockReturnValue({
-          select: vi.fn().mockReturnValue({
-            maybeSingle: vi.fn().mockResolvedValue({
-              data: { id: "1", totalPoints: 100 },
-              error: null,
-            }),
-          }),
-        }),
+// saveToSupabase no longer upserts (the table is a view, so ON CONFLICT
+// can't resolve): it looks the row up, then UPDATEs it or INSERTs a new one.
+function mockTable({ existing = null, lookupError = null, writeResult }) {
+  const write = {
+    select: vi.fn().mockReturnValue({
+      maybeSingle: vi.fn().mockResolvedValue(writeResult),
+    }),
+  };
+  const table = {
+    select: vi.fn().mockReturnValue({
+      eq: vi.fn().mockReturnValue({
+        maybeSingle: vi
+          .fn()
+          .mockResolvedValue({ data: existing, error: lookupError }),
       }),
-    };
+    }),
+    insert: vi.fn().mockReturnValue(write),
+    update: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue(write) }),
+  };
+  return { from: vi.fn().mockReturnValue(table), table };
+}
+
+describe("saveToSupabase", () => {
+  it("inserts a new row when the student has none", async () => {
+    const { from, table } = mockTable({
+      writeResult: { data: { id: "1", totalPoints: 100 }, error: null },
+    });
 
     const data = { totalPoints: 100, missions: [] };
-    const result = await saveToSupabase(mockSupabase, "user-1", data);
+    const result = await saveToSupabase({ from }, "user-1", data);
 
     expect(result.success).toBe(true);
+    expect(table.insert).toHaveBeenCalled();
+    expect(table.update).not.toHaveBeenCalled();
   });
 
-  it("returns error when upsert fails", async () => {
-    const mockSupabase = {
-      from: vi.fn().mockReturnValue({
-        upsert: vi.fn().mockResolvedValue({
-          data: null,
-          error: { message: "Constraint violation" },
-        }),
-      }),
-    };
+  it("updates the existing row instead of inserting a duplicate", async () => {
+    const { from, table } = mockTable({
+      existing: { user_id: "user-1" },
+      writeResult: { data: {}, error: null },
+    });
 
-    const result = await saveToSupabase(mockSupabase, "user-1", {});
+    const result = await saveToSupabase({ from }, "user-1", { a: 1 });
+
+    expect(result.success).toBe(true);
+    expect(table.update).toHaveBeenCalled();
+    expect(table.insert).not.toHaveBeenCalled();
+  });
+
+  it("returns error when the write fails", async () => {
+    const { from } = mockTable({
+      writeResult: { data: null, error: { message: "Constraint violation" } },
+    });
+
+    const result = await saveToSupabase({ from }, "user-1", {});
 
     expect(result.success).toBe(false);
   });
 
-  it("includes user_id, platform y data anidado en el upsert payload", async () => {
-    const mockSupabase = {
-      from: vi.fn().mockReturnValue({
-        upsert: vi.fn().mockReturnValue({
-          select: vi.fn().mockReturnValue({
-            maybeSingle: vi.fn().mockResolvedValue({ data: {}, error: null }),
-          }),
-        }),
-      }),
-    };
+  it("includes user_id, platform y data anidado en el payload", async () => {
+    const { from, table } = mockTable({
+      writeResult: { data: {}, error: null },
+    });
 
-    await saveToSupabase(mockSupabase, "user-1", { totalPoints: 100 });
+    await saveToSupabase({ from }, "user-1", { totalPoints: 100 });
 
-    expect(mockSupabase.from).toHaveBeenCalledWith("smartboard_kids_data");
-    expect(
-      mockSupabase.from("smartboard_kids_data").upsert,
-    ).toHaveBeenCalledWith(
-      {
-        user_id: "user-1",
-        platform: "smartboard",
-        data: { totalPoints: 100 },
-      },
-      { onConflict: "user_id" },
-    );
+    expect(from).toHaveBeenCalledWith("smartboard_kids_data");
+    expect(table.insert).toHaveBeenCalledWith({
+      user_id: "user-1",
+      platform: "smartboard",
+      data: { totalPoints: 100 },
+    });
   });
 
   it("handles network errors during save", async () => {

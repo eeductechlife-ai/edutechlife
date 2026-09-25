@@ -5,8 +5,11 @@ import FlashcardSystem from "../../components/kids-dashboard/flashcardSystem/Fla
 
 const { mockState } = vi.hoisted(() => ({ mockState: { value: null } }));
 
-vi.mock("@/context/SmartBoardKidsContext", () => ({
-  useSmartBoardKids: () => mockState.value,
+// The context was renamed SmartBoardKids → IngenIAKids; the old mock no
+// longer intercepted anything and every render threw "must be used within".
+vi.mock("@/context/IngenIAKidsContext", () => ({
+  useIngenIAKids: () => mockState.value,
+  useIngenIAKidsSafe: () => mockState.value,
 }));
 
 // Dump local opcional; en CI/otras máquinas se usa un fixture determinista.
