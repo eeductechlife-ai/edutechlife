@@ -63,6 +63,56 @@ const InViewSection = ({ children, delay = 0 }) => (
   </motion.div>
 );
 
+// Banner shown in Inicio when at least one subject has gradeScore < 3.0
+function AcademicWarningBanner({ subjects, onTabChange, darkMode }) {
+  const atRisk = (subjects || []).filter(
+    (s) => s.gradeScore != null && Number(s.gradeScore) < 3.0,
+  );
+  if (!atRisk.length) return null;
+  const first = atRisk[0];
+  return (
+    <motion.button
+      type="button"
+      onClick={() => onTabChange("calificaciones")}
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="w-full !flex items-start gap-3 p-3 sm:p-4 rounded-2xl text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#EF476F]"
+      style={{
+        background: darkMode
+          ? "rgba(239,71,111,0.12)"
+          : "rgba(239,71,111,0.07)",
+        border: "1px solid rgba(239,71,111,0.30)",
+      }}
+    >
+      <span className="text-2xl shrink-0" aria-hidden="true">
+        🚨
+      </span>
+      <span className="min-w-0">
+        <span
+          className={`block text-sm font-black ${darkMode ? "text-white" : "text-[#1E293B]"}`}
+        >
+          {atRisk.length === 1
+            ? `${first.name || first.label} está en riesgo`
+            : `${atRisk.length} materias en riesgo`}
+        </span>
+        <span
+          className={`block text-xs mt-0.5 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+        >
+          {atRisk.length === 1
+            ? `Nota ${Number(first.gradeScore).toFixed(1)} — toca para ver tu plan de mejora`
+            : `Notas por debajo de 3.0 — toca para ver el detalle`}
+        </span>
+      </span>
+      <span
+        className="text-[#EF476F] font-black text-sm shrink-0 self-center"
+        aria-hidden="true"
+      >
+        Ver →
+      </span>
+    </motion.button>
+  );
+}
+
 function createTabRenderer(deps) {
   const {
     isPremium,
@@ -97,10 +147,14 @@ function createTabRenderer(deps) {
 
   return {
     inicio: {
-      // UX hierarchy (brief §40): greeting + progress + NextBestAction (Hero) lead,
-      // then the learning path, today's mission, exploration, and metrics last.
+      // UX hierarchy: academic warning (if any) → greeting → NBA/recommended action
       component: () => (
         <>
+          <AcademicWarningBanner
+            subjects={subjects}
+            onTabChange={onTabChange}
+            darkMode={darkMode}
+          />
           <HeroSection onTabChange={onTabChange} onDaniOpen={deps.onDaniOpen} />
           <NextBestAction onTabChange={onTabChange} />
         </>

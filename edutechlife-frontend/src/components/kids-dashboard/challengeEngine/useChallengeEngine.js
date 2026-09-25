@@ -13,6 +13,8 @@ import {
   peekHandoff,
   clearHandoff,
   HANDOFF_CHALLENGE_SUBJECT,
+  HANDOFF_CHALLENGE_DIFFICULTY,
+  HANDOFF_CHALLENGE_AUTOSTART,
 } from "../practicarHub/practicarHandoff";
 import { logPractice } from "../practicarHub/practicarProgress";
 
@@ -149,9 +151,29 @@ export function useChallengeEngine() {
     return availableSubjects.find((s) => s.id === preset) || null;
   });
   useEffect(() => clearHandoff(HANDOFF_CHALLENGE_SUBJECT), []);
-  const [difficulty, setDifficulty] = useState(() =>
-    ageGroup === "early" ? DIFFICULTIES[0] : DIFFICULTIES[1],
-  );
+  const [difficulty, setDifficulty] = useState(() => {
+    const presetDiff = peekHandoff(HANDOFF_CHALLENGE_DIFFICULTY);
+    if (presetDiff) {
+      const found = DIFFICULTIES.find((d) => d.id === presetDiff);
+      if (found) return found;
+    }
+    return ageGroup === "early" ? DIFFICULTIES[0] : DIFFICULTIES[1];
+  });
+  // Auto-start: when the hub passes both a subject and the autostart flag,
+  // skip the setup screen and begin generating questions immediately.
+  const autoStartRef = useRef(false);
+  useEffect(() => {
+    const shouldAuto = peekHandoff(HANDOFF_CHALLENGE_AUTOSTART) === "1";
+    clearHandoff(HANDOFF_CHALLENGE_DIFFICULTY);
+    clearHandoff(HANDOFF_CHALLENGE_AUTOSTART);
+    if (shouldAuto && !autoStartRef.current) {
+      autoStartRef.current = true;
+      // startChallenge reads subject/difficulty from state; give React one tick.
+      const t = setTimeout(() => startChallenge(), 0);
+      return () => clearTimeout(t);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [questions, setQuestions] = useState([]);
   const [dbaSequence, setDbaSequence] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);

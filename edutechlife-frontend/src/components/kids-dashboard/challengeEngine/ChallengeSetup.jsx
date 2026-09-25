@@ -323,42 +323,45 @@ const ChallengeSetup = memo(
           </div>
         )}
 
-        <motion.button
-          onClick={onStart}
-          disabled={!subject || !difficulty || loading}
-          whileHover={{ scale: subject && difficulty ? 1.02 : 1 }}
-          whileTap={{ scale: 0.98 }}
-          className={`w-full py-3.5 rounded-2xl font-bold text-sm transition-all ${
-            subject && difficulty && !loading
-              ? "text-white shadow-lg hover:shadow-xl"
-              : darkMode
-                ? "bg-[#334155] text-[#64748B] cursor-not-allowed"
-                : "bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed"
-          }`}
-          style={
-            subject && difficulty && !loading
-              ? {
-                  background: `linear-gradient(135deg, ${subjectColor} 0%, #9D4EDD 100%)`,
-                }
-              : {}
-          }
-        >
-          {loading ? (
-            <span className="flex items-center justify-center gap-2">
-              <motion.span
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              >
-                ⏳
-              </motion.span>
-              Generando preguntas...
-            </span>
-          ) : subject ? (
-            "🚀 ¡Empezar reto!"
-          ) : (
-            "👆 Primero elige una materia"
-          )}
-        </motion.button>
+        {/* Sticky CTA — sits above the mobile bottom bar (h-16 + safe area ≈ 80px) */}
+        <div className="sticky bottom-0 z-10 pt-2 pb-[calc(env(safe-area-inset-bottom,0px)+5.5rem)] sm:pb-2 -mx-1">
+          <motion.button
+            onClick={onStart}
+            disabled={!subject || !difficulty || loading}
+            whileHover={{ scale: subject && difficulty ? 1.02 : 1 }}
+            whileTap={{ scale: 0.98 }}
+            className={`w-full py-3.5 rounded-2xl font-bold text-sm transition-all ${
+              subject && difficulty && !loading
+                ? "text-white shadow-lg hover:shadow-xl"
+                : darkMode
+                  ? "bg-[#334155] text-[#64748B] cursor-not-allowed"
+                  : "bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed"
+            }`}
+            style={
+              subject && difficulty && !loading
+                ? {
+                    background: `linear-gradient(135deg, ${subjectColor} 0%, #9D4EDD 100%)`,
+                  }
+                : {}
+            }
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <motion.span
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                >
+                  ⏳
+                </motion.span>
+                Generando preguntas...
+              </span>
+            ) : subject ? (
+              "🚀 ¡Empezar reto!"
+            ) : (
+              "👆 Primero elige una materia"
+            )}
+          </motion.button>
+        </div>
       </div>
     );
   },

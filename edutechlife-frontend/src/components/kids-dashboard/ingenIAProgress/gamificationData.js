@@ -26,10 +26,10 @@ export const REWARDS = [
   },
   {
     id: 2,
-    name: "Tema Oscuro",
+    name: "Tema Cosmos",
     icon: "🌙",
     cost: 500,
-    description: "Cambia a modo oscuro el dashboard",
+    description: "Desbloquea el tema visual Cosmos con fondos exclusivos",
   },
   {
     id: 3,

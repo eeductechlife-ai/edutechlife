@@ -2,6 +2,8 @@ import { memo, useState, useEffect, useRef } from "react";
 import { speakAsDani, stopDani } from "../practicarHub/daniSpeak";
 import { ListenButton } from "../practicarHub/MaterialViews";
 import { motion, AnimatePresence } from "framer-motion";
+import QuestionText from "./QuestionText";
+import { questionToSpeech } from "./questionTable";
 
 const OPTION_LABELS = ["A", "B", "C", "D"];
 const CIRC = 2 * Math.PI * 18;
@@ -80,6 +82,7 @@ const ChallengePlay = memo(
     const [selected, setSelected] = useState(null);
     const [revealed, setRevealed] = useState(false);
     const [timeLeft, setTimeLeft] = useState(timeLimit);
+    const [confirmExit, setConfirmExit] = useState(false);
     const feedbackRef = useRef(null);
     const rootRef = useRef(null);
 
@@ -104,7 +107,7 @@ const ChallengePlay = memo(
     }, [currentIndex, timeLimit]);
 
     const spoken = question
-      ? `${question.question.replace(/[.\s]+$/, "")}${/[?!]$/.test(question.question.trim()) ? "" : "."} ${question.options
+      ? `${questionToSpeech(question.question).replace(/[.\s]+$/, "")}${/[?!]$/.test(question.question.trim()) ? "" : "."} ${question.options
           .map((o, i) => `Opción ${OPTION_LABELS[i]}: ${o}`)
           .join(". ")}.`
       : "";
@@ -210,11 +213,11 @@ const ChallengePlay = memo(
           className={`rounded-2xl p-5 border-2 ${surface}`}
           style={{ borderColor: `${color}40` }}
         >
-          <p
+          <QuestionText
+            text={question.question}
+            darkMode={darkMode}
             className={`font-bold text-base sm:text-lg leading-snug ${textPrimary}`}
-          >
-            {question.question}
-          </p>
+          />
           <ListenButton
             text={spoken}
             label="Escuchar"
@@ -353,13 +356,60 @@ const ChallengePlay = memo(
         </AnimatePresence>
 
         {onExit && !revealed && (
-          <button
-            type="button"
-            onClick={onExit}
-            className={`w-full py-2 text-xs font-semibold ${textSub}`}
-          >
-            Salir del reto
-          </button>
+          <>
+            <button
+              type="button"
+              onClick={() => setConfirmExit(true)}
+              className={`w-full py-2 text-xs font-semibold ${textSub}`}
+            >
+              Salir del reto
+            </button>
+            <AnimatePresence>
+              {confirmExit && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  className={`rounded-2xl p-4 border text-center space-y-3 ${
+                    darkMode
+                      ? "bg-[#1E293B] border-[#334155]"
+                      : "bg-white border-[#E2E8F0]"
+                  }`}
+                >
+                  <p
+                    className={`text-sm font-bold ${darkMode ? "text-white" : "text-[#1E293B]"}`}
+                  >
+                    ¿Seguro que quieres salir? 🤔
+                  </p>
+                  <p
+                    className={`text-xs ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+                  >
+                    Perderás el progreso de este reto.
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setConfirmExit(false)}
+                      className={`flex-1 py-2 rounded-xl text-sm font-bold border ${
+                        darkMode
+                          ? "border-[#334155] text-[#94A3B8]"
+                          : "border-[#E2E8F0] text-[#64748B]"
+                      }`}
+                    >
+                      Continuar reto
+                    </button>
+                    <button
+                      type="button"
+                      onClick={onExit}
+                      className="flex-1 py-2 rounded-xl text-sm font-bold text-white bg-[#EF476F]"
+                    >
+                      Salir
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </>
         )}
       </div>
     );

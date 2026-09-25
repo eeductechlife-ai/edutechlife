@@ -11,6 +11,7 @@ import {
   DEFAULT_NEWS,
   DEFAULT_MISSIONS,
   DEFAULT_SUBJECTS,
+  getRotatingMissions,
 } from "./ingenIAData";
 import { getSubjectEmoji } from "../config/subjectMappings";
 import { API_BASE_URL } from "../config/api";
@@ -109,7 +110,11 @@ export const IngenIAKidsProvider = ({ children }) => {
   const [newsItems, setNewsItems] = useState(DEFAULT_NEWS);
   const [readNews, setReadNews] = useState([]);
 
-  const [missions, setMissions] = useState(DEFAULT_MISSIONS);
+  // Use rotating weekly missions as the local fallback; backend overrides when available.
+  const [missions, setMissions] = useState(() => [
+    ...DEFAULT_MISSIONS,
+    ...getRotatingMissions(),
+  ]);
   const [subjects, setSubjects] = useState(DEFAULT_SUBJECTS);
 
   const [uploadedActivities, setUploadedActivities] = useState([]);

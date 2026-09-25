@@ -7,6 +7,8 @@ import { buildSubjectList } from "./practicarConfig";
 import {
   setHandoff,
   HANDOFF_CHALLENGE_SUBJECT,
+  HANDOFF_CHALLENGE_DIFFICULTY,
+  HANDOFF_CHALLENGE_AUTOSTART,
   HANDOFF_FLASHCARDS_TOPIC,
   HANDOFF_PRACTICAR_SUBJECT,
   HANDOFF_PLAN_ACTIVITY,
@@ -264,9 +266,13 @@ const PracticarHub = memo(({ onTabChange, darkMode }) => {
   const togglePanel = (name) =>
     setActivePanel((p) => (p === name ? null : name));
 
-  const openRetos = (target = subject) => {
+  const openRetos = (target = subject, autoStart = false) => {
     if (target?.retoAvailable)
       setHandoff(HANDOFF_CHALLENGE_SUBJECT, target.challengeId);
+    if (autoStart) {
+      setHandoff(HANDOFF_CHALLENGE_DIFFICULTY, "medium");
+      setHandoff(HANDOFF_CHALLENGE_AUTOSTART, "1");
+    }
     onTabChange("retos");
   };
   const openEduCards = () => {
@@ -345,7 +351,7 @@ const PracticarHub = memo(({ onTabChange, darkMode }) => {
       {recommendation && (
         <motion.button
           type="button"
-          onClick={() => openRetos(recommendation.subject)}
+          onClick={() => openRetos(recommendation.subject, true)}
           whileTap={{ scale: 0.98 }}
           className="w-full !flex items-center !justify-start gap-3 p-3 sm:p-4 rounded-2xl text-left text-white shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-[#9D4EDD]/40"
           style={{
