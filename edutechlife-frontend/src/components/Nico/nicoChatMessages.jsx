@@ -333,19 +333,29 @@ export function ChatMessages({
             className="border-t px-3 py-2"
             style={{ borderColor: COLORS.PETROLEUM }}
           >
-            <div className="flex items-center gap-2 overflow-x-auto">
+            <div className="flex items-center justify-between mb-2">
               <span
                 className="text-[11px] font-medium whitespace-nowrap"
                 style={{ color: COLORS.MINT }}
               >
                 {t("nico.suggestions_label")}
               </span>
+              <button
+                onClick={() => onToggleSuggestions(false)}
+                title={t("nico.hide_suggestions")}
+                aria-label={t("nico.hide_suggestions")}
+                className="text-[11px] whitespace-nowrap text-gray-400 hover:text-gray-200"
+              >
+                {t("nico.hide_suggestions")}
+              </button>
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-1">
               {getQuestionSuggestions(messages, userContext).map(
                 (suggestion, index) => (
                   <button
                     key={index}
                     onClick={() => onSuggestionClick(suggestion)}
-                    className="text-xs px-3 py-1.5 rounded-full whitespace-nowrap hover:scale-105 transition active:scale-95"
+                    className="flex-shrink-0 text-xs px-3 py-1.5 rounded-full whitespace-nowrap hover:scale-105 transition active:scale-95"
                     style={{
                       backgroundColor: COLORS.SOFT_BLUE,
                       color: COLORS.NAVY,
@@ -356,14 +366,6 @@ export function ChatMessages({
                   </button>
                 ),
               )}
-              <button
-                onClick={() => onToggleSuggestions(false)}
-                title={t("nico.hide_suggestions")}
-                aria-label={t("nico.hide_suggestions")}
-                className="text-xs ml-auto px-1.5 whitespace-nowrap text-gray-400 hover:text-gray-200"
-              >
-                ✕
-              </button>
             </div>
           </div>
         )}
