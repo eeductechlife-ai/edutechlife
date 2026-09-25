@@ -96,11 +96,6 @@ const TrustBar = ({ t, locale }) => (
           </strong>
         </span>
       </div>
-      <div className="h-7 w-px bg-white/10" />
-      <div className="flex items-center gap-1.5 text-emerald-400">
-        <Icon name="fa-shield-check" className="w-4 h-4" />
-        <span className="text-white">{t("ialab.landing.certified_label")}</span>
-      </div>
     </div>
   </motion.div>
 );
