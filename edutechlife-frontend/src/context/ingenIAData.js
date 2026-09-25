@@ -201,14 +201,45 @@ const WEEKLY_MISSION_POOL = [
  * Returns 3 rotating weekly missions based on the current ISO week number.
  * The set changes every Monday and is the same for all students the same week.
  */
-export function getRotatingMissions() {
-  const now = new Date();
-  // ISO week number: day of year / 7, starting from first Thursday of year.
+function weekNumber(now = new Date()) {
   const start = new Date(now.getFullYear(), 0, 1);
-  const weekNum = Math.ceil(
-    ((now - start) / 86400000 + start.getDay() + 1) / 7,
+  return Math.ceil(((now - start) / 86400000 + start.getDay() + 1) / 7);
+}
+
+export function getWeekKey(now = new Date()) {
+  return `${now.getFullYear()}-W${weekNumber(now)}`;
+}
+
+export function getRotatingMissions(now = new Date()) {
+  const week = getWeekKey(now);
+  return WEEKLY_MISSION_POOL[weekNumber(now) % WEEKLY_MISSION_POOL.length].map(
+    (m) => ({ ...m, week }),
   );
-  return WEEKLY_MISSION_POOL[weekNum % WEEKLY_MISSION_POOL.length];
+}
+
+/** Days until the weekly set rotates (next Monday). */
+export function daysUntilWeeklyReset(now = new Date()) {
+  const day = (now.getDay() + 6) % 7; // Monday = 0
+  return 7 - day;
+}
+
+const isWeekly = (m) => typeof m?.id === "string" && m.id.startsWith("w_");
+
+// Saved lists freeze whatever weekly set existed when they were first stored;
+// swap in this week's set, keeping completion only for the same week.
+export function mergeWeeklyMissions(saved, now = new Date()) {
+  const permanent = (saved || []).filter((m) => !isWeekly(m));
+  const week = getWeekKey(now);
+  const doneThisWeek = new Set(
+    (saved || [])
+      .filter((m) => isWeekly(m) && m.week === week && m.completed)
+      .map((m) => m.id),
+  );
+  const weekly = getRotatingMissions(now).map((m) => ({
+    ...m,
+    completed: doneThisWeek.has(m.id),
+  }));
+  return [...(permanent.length ? permanent : DEFAULT_MISSIONS), ...weekly];
 }
 
 export const DEFAULT_SUBJECTS = [

@@ -19,6 +19,7 @@ import SubjectsView from "./SubjectsView";
 import { SectionFallback } from "./SkeletonLoader";
 import { PREMIUM_FEATURES } from "../kidsDashboardConfig";
 import NextBestAction from "../NextBestAction";
+import TuDiaPlan from "../TuDiaPlan";
 import PerfilTab from "./PerfilTab";
 import MateriasTab from "./MateriasTab";
 import ExplorarTab from "./ExplorarTab";
@@ -157,6 +158,7 @@ function createTabRenderer(deps) {
           />
           <HeroSection onTabChange={onTabChange} onDaniOpen={deps.onDaniOpen} />
           <NextBestAction onTabChange={onTabChange} />
+          <TuDiaPlan onTabChange={onTabChange} darkMode={darkMode} />
         </>
       ),
       className: "space-y-5 md:space-y-6",

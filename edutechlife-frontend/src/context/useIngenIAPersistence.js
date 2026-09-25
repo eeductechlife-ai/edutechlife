@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import useIngenIASync from "../hooks/useIngenIASync";
+import { mergeWeeklyMissions } from "./ingenIAData";
 
 const LS_PREFIX = "edutechlife_";
 
@@ -271,7 +272,8 @@ export const useIngenIAPersistence = (setters) => {
         setSubjectTime(merged.subjectTime || {});
         setCalendarEvents(merged.calendarEvents || []);
         setReadNews(merged.readNews || []);
-        if (merged.missions?.length) setMissions(merged.missions);
+        if (merged.missions?.length)
+          setMissions(mergeWeeklyMissions(merged.missions));
         if (merged.subjects?.length) setSubjects(merged.subjects);
         setUploadedActivities(merged.uploadedActivities || []);
         setAnalyzedActivities(merged.analyzedActivities || []);

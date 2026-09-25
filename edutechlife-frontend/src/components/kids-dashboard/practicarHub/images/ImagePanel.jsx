@@ -1,10 +1,11 @@
-import { memo, useRef, useState } from "react";
-import { Download } from "lucide-react";
+import { memo, useCallback, useRef, useState } from "react";
+import { Download, Maximize2 } from "lucide-react";
 import { useMediaQuery } from "../useMediaQuery";
 import { useIngenIAKidsSafe } from "../../../../context/IngenIAKidsContext";
 import { MindMapImage } from "./MindMapImage";
 import { InfographicImage } from "./InfographicImage";
 import { THEMES, THEME_LIST, downloadSvgAsPng } from "./imageKit";
+import FullscreenViewer from "./FullscreenViewer";
 
 const THEME_KEY = "practicar_image_theme";
 const KIND = { mapa: "mapa mental", infografia: "infografía" };
@@ -50,6 +51,8 @@ const fileNameFor = (type, title) =>
 const ImagePanel = memo(({ material, title, color, dm }) => {
   const [themeId, setThemeId] = useState(readTheme);
   const [downloading, setDownloading] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
+  const closeFullscreen = useCallback(() => setFullscreen(false), []);
   const imageRef = useRef(null);
   // Phones get the vertical layout so text stays readable at ~300 px wide.
   const narrow = useMediaQuery("(max-width: 639px)");
@@ -88,6 +91,19 @@ const ImagePanel = memo(({ material, title, color, dm }) => {
     window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
   };
 
+  const renderImage = (ref) =>
+    type === "mapa" ? (
+      <MindMapImage
+        ref={ref}
+        data={data}
+        color={color}
+        themeId={themeId}
+        layout={narrow ? "tree" : "radial"}
+      />
+    ) : (
+      <InfographicImage ref={ref} data={data} color={color} themeId={themeId} />
+    );
+
   const sub = dm ? "text-[#94A3B8]" : "text-[#64748B]";
   const idle = dm
     ? "bg-[#0F172A] border-[#334155] text-white"
@@ -119,35 +135,45 @@ const ImagePanel = memo(({ material, title, color, dm }) => {
         })}
       </div>
 
-      <div className="rounded-2xl overflow-hidden border border-black/5">
-        {type === "mapa" ? (
-          <MindMapImage
-            ref={imageRef}
-            data={data}
-            color={color}
-            themeId={themeId}
-            layout={narrow ? "tree" : "radial"}
-          />
-        ) : (
-          <InfographicImage
-            ref={imageRef}
-            data={data}
-            color={color}
-            themeId={themeId}
-          />
-        )}
-      </div>
-
       <button
         type="button"
-        disabled={downloading}
-        onClick={download}
-        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-black text-white disabled:opacity-60"
-        style={{ background: color }}
+        onClick={() => setFullscreen(true)}
+        aria-label={`Ver ${KIND[type]} en pantalla completa`}
+        className="group relative block w-full rounded-2xl overflow-hidden border border-black/5 text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-[#9D4EDD]/30"
       >
-        <Download className="w-4 h-4" aria-hidden="true" />
-        {downloading ? "Preparando imagen…" : "Descargar imagen"}
+        {renderImage(imageRef)}
+        <span className="absolute top-2 right-2 inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-black/55 text-white text-[11px] font-bold backdrop-blur-sm opacity-90 group-hover:opacity-100">
+          <Maximize2 className="w-3.5 h-3.5" aria-hidden="true" />
+          Ampliar
+        </span>
       </button>
+
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => setFullscreen(true)}
+          className="flex items-center justify-center gap-2 min-h-[48px] py-3 rounded-xl text-sm font-black text-white"
+          style={{ background: color }}
+        >
+          <Maximize2 className="w-4 h-4" aria-hidden="true" />
+          Pantalla completa
+        </button>
+        <button
+          type="button"
+          disabled={downloading}
+          onClick={download}
+          className={`flex items-center justify-center gap-2 min-h-[48px] py-3 rounded-xl text-sm font-black border-2 disabled:opacity-60 ${idle}`}
+        >
+          <Download className="w-4 h-4" aria-hidden="true" />
+          {downloading ? "Preparando…" : "Descargar"}
+        </button>
+      </div>
+
+      {fullscreen && (
+        <FullscreenViewer title={title} onClose={closeFullscreen}>
+          {renderImage(null)}
+        </FullscreenViewer>
+      )}
 
       {kids?.setDocumentForDani && (
         <div className="space-y-2">

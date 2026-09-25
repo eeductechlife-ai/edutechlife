@@ -5,6 +5,13 @@ import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useAdaptiveEngine } from "../../hooks/useAdaptiveEngine";
 import { isFeatureEnabled } from "../../hooks/useFeatureFlag";
 import { getLearningGraphRecommendation } from "./learningGraph";
+import { SUBJECT_META as PRACTICE_META } from "./practicarHub/practicarConfig";
+import {
+  setHandoff,
+  HANDOFF_CHALLENGE_SUBJECT,
+  HANDOFF_CHALLENGE_DIFFICULTY,
+  HANDOFF_CHALLENGE_AUTOSTART,
+} from "./practicarHub/practicarHandoff";
 
 // ── Subject palette ──────────────────────────────────────────────────────────
 
@@ -81,6 +88,32 @@ function buildLocalNBA({ vakResult, onboardingComplete, subjects, missions }) {
     };
   }
 
+  // 1. Subject declining AND at risk (grade dropping below 3.5) — highest priority
+  const declining = (subjects || [])
+    .filter(
+      (s) =>
+        s.trend?.dir === "down" &&
+        s.gradeScore != null &&
+        Number(s.gradeScore) < 3.5,
+    )
+    .sort((a, b) => Number(a.gradeScore) - Number(b.gradeScore))[0];
+
+  if (declining) {
+    return {
+      challengeId: PRACTICE_META[declining.id]?.challengeId || null,
+      emoji: "🚨",
+      label: declining.name,
+      headline: `${declining.name} bajó a ${Number(declining.gradeScore).toFixed(1)} y sigue cayendo. Un reto de 10 min hoy puede cambiar eso.`,
+      tab: "retos",
+      xp: 80,
+      minutes: 10,
+      gradient: "linear-gradient(135deg, #EF4444 0%, #FB8500 100%)",
+      goal: { label: "Recuperación urgente", emoji: "🆘" },
+      fromBackend: false,
+    };
+  }
+
+  // 2. Subject with low progress (original logic)
   const worst = (subjects || [])
     .map((s) => ({ ...s, progress: Number(s.progress) || 0 }))
     .filter((s) => s.progress < 30)
@@ -214,7 +247,17 @@ const NextBestAction = memo(({ onTabChange }) => {
     goal,
     fromBackend,
     pedagogicReason,
+    challengeId,
   } = display;
+
+  const start = () => {
+    if (challengeId) {
+      setHandoff(HANDOFF_CHALLENGE_SUBJECT, challengeId);
+      setHandoff(HANDOFF_CHALLENGE_DIFFICULTY, "medium");
+      setHandoff(HANDOFF_CHALLENGE_AUTOSTART, "1");
+    }
+    onTabChange?.(tab);
+  };
 
   // Extract the dominant color from the gradient for accents
   const accentColor = gradient.match(/#[0-9A-Fa-f]{6}/)?.[0] || "#7B2FF7";
@@ -288,7 +331,7 @@ const NextBestAction = memo(({ onTabChange }) => {
         {/* CTA */}
         <button
           type="button"
-          onClick={() => onTabChange?.(tab)}
+          onClick={start}
           className="mt-2 w-full flex items-center justify-between text-white rounded-xl px-4 py-3 transition-all active:scale-[0.98] shadow-sm"
           style={{ background: gradient }}
         >

@@ -7,6 +7,7 @@ import { WEEKLY_GOAL } from "../practicarHub/WeekProgress";
 import { getMasteryState } from "../components/SubjectsView";
 import { REWARDS } from "../ingenIAProgress/gamificationData";
 import SkillPassport from "../SkillPassport";
+import GradeGoalCard from "./GradeGoalCard";
 
 const DAY_LABELS = ["L", "M", "M", "J", "V", "S", "D"];
 
@@ -79,9 +80,10 @@ const ProgressSummary = memo(function ProgressSummary({
 
   return (
     <div className="space-y-2.5">
+      <GradeGoalCard onTabChange={onTabChange} />
       <div className="grid grid-cols-2 gap-2.5">
         <Tile
-          title="Tu semana"
+          title="Días practicando"
           accent="#EF476F"
           dm={dm}
           onClick={() => onTabChange?.("practicar")}
@@ -108,9 +110,11 @@ const ProgressSummary = memo(function ProgressSummary({
           </span>
           <span className="mt-auto">
             <span className="block text-xl font-black leading-none">
-              {practice.daysPracticed}/{WEEKLY_GOAL}
+              {practice.daysPracticed}
             </span>
-            <span className={`block text-[11px] ${sub}`}>días de tu meta</span>
+            <span className={`block text-[11px] ${sub}`}>
+              días esta semana (meta {WEEKLY_GOAL})
+            </span>
           </span>
         </Tile>
 

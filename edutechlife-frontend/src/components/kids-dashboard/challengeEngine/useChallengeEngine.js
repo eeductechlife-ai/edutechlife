@@ -161,17 +161,19 @@ export function useChallengeEngine() {
   });
   // Auto-start: when the hub passes both a subject and the autostart flag,
   // skip the setup screen and begin generating questions immediately.
-  const autoStartRef = useRef(false);
   useEffect(() => {
-    const shouldAuto = peekHandoff(HANDOFF_CHALLENGE_AUTOSTART) === "1";
-    clearHandoff(HANDOFF_CHALLENGE_DIFFICULTY);
-    clearHandoff(HANDOFF_CHALLENGE_AUTOSTART);
-    if (shouldAuto && !autoStartRef.current) {
-      autoStartRef.current = true;
-      // startChallenge reads subject/difficulty from state; give React one tick.
-      const t = setTimeout(() => startChallenge(), 0);
-      return () => clearTimeout(t);
+    if (peekHandoff(HANDOFF_CHALLENGE_AUTOSTART) !== "1") {
+      clearHandoff(HANDOFF_CHALLENGE_DIFFICULTY);
+      return undefined;
     }
+    // Flags are cleared only when the start fires: StrictMode's mount/unmount/
+    // remount cancels the first timer, and the remount must still see them.
+    const t = setTimeout(() => {
+      clearHandoff(HANDOFF_CHALLENGE_DIFFICULTY);
+      clearHandoff(HANDOFF_CHALLENGE_AUTOSTART);
+      startChallenge();
+    }, 0);
+    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [questions, setQuestions] = useState([]);
@@ -262,6 +264,7 @@ export function useChallengeEngine() {
           type: "reto",
           subject: SUBJECT_TO_CURRICULO_ID[subject.id],
           challengeId: subject.id,
+          difficulty: difficulty.id,
           score,
         });
 

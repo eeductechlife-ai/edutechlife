@@ -82,6 +82,9 @@ export function usePracticeLog() {
   return useMemo(() => {
     const weekStart = startOfWeek(new Date());
     const week = log.filter((e) => new Date(e.at) >= weekStart);
+    const midnight = new Date();
+    midnight.setHours(0, 0, 0, 0);
+    const today = log.filter((e) => new Date(e.at) >= midnight);
     const days = Array.from({ length: 7 }, (_, i) =>
       week.some((e) => (new Date(e.at).getDay() + 6) % 7 === i),
     );
@@ -104,6 +107,7 @@ export function usePracticeLog() {
       avgScore,
       lastRetoByChallenge,
       total: log.length,
+      today,
     };
   }, [log]);
 }

@@ -14,6 +14,7 @@ import OralExamSetup from "./OralExamSetup";
 import OralExamConversation from "./OralExamConversation";
 import OralExamQuestion from "./OralExamQuestion";
 import OralExamResults from "./OralExamResults";
+import { logPractice } from "./practicarHub/practicarProgress";
 
 const OralExamSimulator = memo(({ onTabChange }) => {
   const {
@@ -272,6 +273,9 @@ Escribe solo en español.${deckLine}`;
       const reply = typeof res === "string" ? res : res?.result || String(res);
       setChatMessages([...nextHistory, { role: "dani", text: reply.trim() }]);
       addPoints?.(2, t("oral.points_desc", { subject: subject?.label || "" }));
+      if (nextHistory.filter((m) => m.role === "user").length === 3) {
+        logPractice({ type: "oral", subject: subject?.id || null });
+      }
     } catch (e) {
       console.warn("Error en conversación:", e);
       setChatMessages([
@@ -326,6 +330,7 @@ Escribe solo en español.${deckLine}`;
           earnedPoints,
           t("oral.points_desc", { subject: subject.label }),
         );
+        logPractice({ type: "oral", subject: subject.id, score: grade });
         setResults({
           correctCount,
           total: questions.length,

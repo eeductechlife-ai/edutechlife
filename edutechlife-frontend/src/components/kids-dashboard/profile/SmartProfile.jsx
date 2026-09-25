@@ -76,6 +76,7 @@ const SmartProfile = memo(function SmartProfile({
   onTabChange,
   onExpandVak,
   onLogout,
+  onSectionChange,
   initialTab = "progreso",
 }) {
   const {
@@ -221,7 +222,7 @@ const SmartProfile = memo(function SmartProfile({
             },
             {
               icon: "🔥",
-              label: `Racha · récord ${streak?.longest ?? 0}`,
+              label: `Días seguidos · récord ${streak?.longest ?? 0}`,
               value: `${streak?.current ?? 0} días`,
             },
             {
@@ -268,7 +269,10 @@ const SmartProfile = memo(function SmartProfile({
           <button
             key={tab.id}
             type="button"
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => {
+              setActiveTab(tab.id);
+              onSectionChange?.(tab.id);
+            }}
             aria-pressed={activeTab === tab.id}
             className="flex-1 flex flex-col items-center gap-0.5 text-[11px] font-bold py-2 px-1 rounded-lg transition-all min-h-[48px]"
             style={
