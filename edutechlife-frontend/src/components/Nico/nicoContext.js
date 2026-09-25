@@ -160,8 +160,13 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
       : "Todavía no me has dicho tu nombre. ¿Cómo te llamas?";
   }
 
-  // Pedir nombre después de 2 mensajes si no se tiene
-  if (shouldAskForName(userContext)) {
+  // Pedir el nombre SOLO en el saludo (no secuestrar preguntas reales: antes
+  // pedía el nombre aunque el usuario preguntara algo concreto).
+  const isGreeting =
+    /^(hola|buenas|buenos d[ií]as|buenas tardes|buenas noches|hey|holi|qu[eé] tal)\b/.test(
+      lowerMessage,
+    );
+  if (isGreeting && shouldAskForName(userContext)) {
     return "¿Para personalizar mi ayuda, cómo te llamas?";
   }
 
