@@ -8,7 +8,6 @@ import {
   Ear,
   Zap,
   Target,
-  Bot,
   ChevronRight,
   BarChart2,
   Layers,
@@ -20,6 +19,7 @@ import { useKidText } from "../../hooks/useKidText";
 import WhatDoIDoToday from "./WhatDoIDoToday";
 import { useTranslation } from "../../i18n/I18nProvider";
 import DaniAvatar3D from "./DaniAvatar3D";
+import DaniCharacter from "./dani/DaniCharacter";
 import { SB_GRADIENTS, SB_COLORS } from "./ingenIATheme";
 import {
   DAY_LABELS,
@@ -233,7 +233,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
             animate={reduce ? {} : { rotate: [0, -10, 10, -10, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 3 }}
           >
-            <Bot className="w-5 h-5" strokeWidth={2.3} />
+            <DaniCharacter size={30} animated={false} />
           </motion.span>
           <span className="text-base">
             {kt("hero.talk_dani", t("kid.hero.talk_with_dani"))}

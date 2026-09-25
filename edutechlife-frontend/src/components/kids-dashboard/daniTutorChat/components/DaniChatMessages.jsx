@@ -59,7 +59,7 @@ const DaniChatMessages = memo(
             className="flex justify-start mb-4"
           >
             <div className="mr-3 mt-1 flex-shrink-0" aria-hidden="true">
-              <DaniAvatar />
+              <DaniAvatar size="sm" isSpeaking />
             </div>
             <div
               className={`max-w-[75%] px-4 py-3 rounded-2xl rounded-tl-md shadow-sm ${

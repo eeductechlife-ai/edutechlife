@@ -48,7 +48,7 @@ const MessageBubble = memo(({ message, isDani, darkMode }) => {
     >
       {isDani && (
         <div className="mr-3 mt-1 flex-shrink-0">
-          <DaniAvatar />
+          <DaniAvatar size="sm" />
         </div>
       )}
       <div

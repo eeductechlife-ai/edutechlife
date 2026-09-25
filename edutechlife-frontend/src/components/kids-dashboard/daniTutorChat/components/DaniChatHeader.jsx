@@ -71,7 +71,11 @@ const DaniChatHeader = memo(
             >
               <X size={20} strokeWidth={2.5} aria-hidden="true" />
             </motion.button>
-            <DaniAvatar />
+            <DaniAvatar
+              size="md"
+              isSpeaking={isSpeaking}
+              isThinking={isTyping && !isSpeaking}
+            />
             <div>
               <h3 className="text-white font-bold text-lg">
                 {t("dani.title")}

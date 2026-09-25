@@ -1,151 +1,88 @@
-import { useState, useEffect, memo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, memo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import DaniCharacter from "./dani/DaniCharacter";
 
 // ==========================================
-// Dani Avatar 3D - Main Protagonist
+// Dani Avatar — Main Protagonist (brand character v3 inside a glowing chip)
 // ==========================================
 const moodConfig = {
-  happy: {
-    emoji: '😊',
-    scale: 1,
-    rotate: 0,
-    glow: '#4DA8C4',
-    bgGradient: 'from-[#4DA8C4] to-[#66CCCC]',
-    shadow: '0 0 30px rgba(77, 168, 196, 0.5)',
-  },
+  happy: { face: "happy", glow: "rgba(0, 194, 224, 0.45)", scale: 1 },
   thinking: {
-    emoji: '🤔',
-    scale: 1.05,
-    rotate: [0, 5, -5, 0],
-    glow: '#FFD166',
-    bgGradient: 'from-[#FFD166] to-[#FF8E53]',
-    shadow: '0 0 30px rgba(255, 209, 102, 0.5)',
+    face: "thinking",
+    glow: "rgba(255, 209, 102, 0.45)",
+    scale: 1.03,
   },
   explaining: {
-    emoji: '📚',
-    scale: 1.1,
-    rotate: 0,
-    glow: '#66CCCC',
-    bgGradient: 'from-[#66CCCC] to-[#004B63]',
-    shadow: '0 0 30px rgba(102, 204, 204, 0.5)',
-  },
-  empathetic: {
-    emoji: '💙',
+    face: "happy",
+    glow: "rgba(67, 97, 238, 0.45)",
     scale: 1.05,
-    rotate: 0,
-    glow: '#FF6B9D',
-    bgGradient: 'from-[#FF6B9D] to-[#FF8E53]',
-    shadow: '0 0 30px rgba(255, 107, 157, 0.5)',
+    talking: true,
   },
+  empathetic: { face: "happy", glow: "rgba(123, 47, 247, 0.4)", scale: 1.03 },
   celebrating: {
-    emoji: '🎉',
-    scale: [1, 1.2, 1],
-    rotate: [0, 10, -10, 0],
-    glow: '#FFD166',
-    bgGradient: 'from-[#FFD166] to-[#FF6B9D]',
-    shadow: '0 0 40px rgba(255, 209, 102, 0.7)',
+    face: "celebrating",
+    glow: "rgba(255, 209, 102, 0.6)",
+    scale: 1.08,
   },
 };
 
-const DaniAvatar3D = memo(({ mood = 'happy', isTyping = false, isSpeaking = false, size = 'lg' }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const config = moodConfig[mood] || moodConfig.happy;
+const SIZES = { sm: 48, md: 80, lg: 128, xl: 192 };
 
-  const sizeClasses = {
-    sm: 'w-12 h-12 text-2xl',
-    md: 'w-20 h-20 text-4xl',
-    lg: 'w-32 h-32 text-6xl',
-    xl: 'w-48 h-48 text-8xl',
-  };
+const DaniAvatar3D = memo(
+  ({ mood = "happy", isTyping = false, isSpeaking = false, size = "lg" }) => {
+    const [isHovered, setIsHovered] = useState(false);
+    const config = moodConfig[mood] || moodConfig.happy;
+    const px = SIZES[size] || SIZES.lg;
 
-  return (
-    <motion.div
-      className={`relative ${sizeClasses[size] || sizeClasses.lg} rounded-full flex items-center justify-center cursor-pointer`}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      onTapStart={() => setIsHovered(true)}
-      onTapCancel={() => setIsHovered(false)}
-      animate={{
-        scale: isHovered ? 1.1 : config.scale,
-        boxShadow: config.shadow,
-      }}
-      transition={{
-        type: 'spring',
-        damping: 25,
-        stiffness: 300,
-      }}
-    >
-      {/* Glow Effect */}
+    return (
       <motion.div
-        className={`absolute inset-0 rounded-full bg-gradient-to-br ${config.bgGradient}`}
-        animate={{
-          opacity: isHovered ? 0.8 : 0.5,
-          scale: isHovered ? 1.2 : 1,
-        }}
-        style={{
-          filter: 'blur(20px)',
-        }}
-        transition={{ duration: 0.5 }}
-      />
-
-      {/* Main Avatar Circle */}
-      <motion.div
-        className={`relative z-10 w-full h-full rounded-full bg-gradient-to-br ${config.bgGradient} flex items-center justify-center shadow-2xl`}
-        animate={{
-          rotate: config.rotate,
-          scale: config.scale,
-        }}
-        transition={{
-          rotate: config.rotate.length ? {
-            duration: 2,
-            repeat: Infinity,
-            ease: 'linear',
-          } : { duration: 0.5 },
-          scale: { type: 'spring', damping: 25 },
-        }}
+        className="relative rounded-full flex items-center justify-center cursor-pointer"
+        style={{ width: px, height: px }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
+        onTapStart={() => setIsHovered(true)}
+        onTapCancel={() => setIsHovered(false)}
+        animate={{ scale: isHovered ? 1.08 : config.scale }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
       >
-        <motion.span
+        {/* Glow */}
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          style={{ background: config.glow, filter: "blur(18px)" }}
           animate={{
-            scale: isTyping ? [1, 1.1, 1] : 1,
+            opacity: isHovered ? 0.9 : 0.6,
+            scale: isHovered ? 1.2 : 1,
           }}
-          transition={{
-            duration: 1.5,
-            repeat: isTyping ? Infinity : 0,
+          transition={{ duration: 0.5 }}
+        />
+
+        {/* Chip */}
+        <div
+          className="relative z-10 w-full h-full rounded-full flex items-center justify-center"
+          style={{
+            background:
+              "radial-gradient(circle at 35% 30%, #1E3F73 0%, #0B1D3A 72%)",
+            boxShadow:
+              "0 0 0 2px rgba(111,240,255,0.5), 0 10px 26px rgba(3,10,30,0.35)",
           }}
         >
-          {config.emoji}
-        </motion.span>
-      </motion.div>
+          <DaniCharacter
+            size={Math.round(px * 0.9)}
+            mood={isTyping ? "thinking" : config.face}
+            talking={isSpeaking || !!config.talking}
+            title="Dani"
+          />
+        </div>
 
-      {/* Typing Indicator */}
-      <AnimatePresence>
-        {isTyping && (
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            className="absolute -bottom-2 -right-2 w-8 h-8 bg-[#FFD166] rounded-full flex items-center justify-center shadow-lg z-20"
-          >
-            <motion.span
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 0.5, repeat: Infinity }}
-            >
-              ✨
-            </motion.span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Speaking Indicator — Audio Waves */}
-      <AnimatePresence>
-        {isSpeaking && (
-          <>
-            {[0, 1, 2].map((i) => (
+        {/* Speaking — audio rings */}
+        <AnimatePresence>
+          {isSpeaking &&
+            [0, 1, 2].map((i) => (
               <motion.div
                 key={`wave-${i}`}
                 initial={{ scale: 0.8, opacity: 0.6 }}
                 animate={{
-                  scale: [1, 1.6 + i * 0.3, 1],
+                  scale: [1, 1.5 + i * 0.25, 1],
                   opacity: [0.5, 0, 0.5],
                 }}
                 exit={{ scale: 0, opacity: 0 }}
@@ -153,48 +90,17 @@ const DaniAvatar3D = memo(({ mood = 'happy', isTyping = false, isSpeaking = fals
                   duration: 1.2,
                   repeat: Infinity,
                   delay: i * 0.25,
-                  ease: 'easeInOut',
+                  ease: "easeInOut",
                 }}
-                className="absolute inset-0 rounded-full border-2 border-[#66CCCC] z-0"
-                style={{ boxShadow: '0 0 15px rgba(102, 204, 204, 0.4)' }}
+                className="absolute inset-0 rounded-full border-2 border-[#6FF0FF] z-0"
               />
             ))}
-          </>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>
+      </motion.div>
+    );
+  },
+);
 
-      {/* Floating Particles around Avatar */}
-      {isHovered && (
-        <>
-          {[...Array(6)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-2 h-2 rounded-full bg-[#4DA8C4] z-0"
-              initial={{
-                x: 0,
-                y: 0,
-                opacity: 1,
-                scale: 1,
-              }}
-              animate={{
-                x: Math.cos((i * 60) * Math.PI / 180) * 60,
-                y: Math.sin((i * 60) * Math.PI / 180) * 60,
-                opacity: 0,
-                scale: 0,
-              }}
-              transition={{
-                duration: 1,
-                repeat: Infinity,
-                delay: i * 0.15,
-              }}
-            />
-          ))}
-        </>
-      )}
-    </motion.div>
-  );
-});
-
-DaniAvatar3D.displayName = 'DaniAvatar3D';
+DaniAvatar3D.displayName = "DaniAvatar3D";
 
 export default DaniAvatar3D;
