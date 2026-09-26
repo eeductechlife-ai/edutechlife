@@ -139,7 +139,7 @@ const OnboardingGuide = memo(({ onTabChange }) => {
                 onClick={handleStart}
                 className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#0096C7] to-[#06D6A0] text-white font-bold text-sm hover:opacity-90 transition-opacity shadow-md"
               >
-                ¡Empezar mi diagnóstico VAK!
+                ¡Empezar mi ADN de Aprendizaje!
               </button>
               <button
                 onClick={handleExplore}

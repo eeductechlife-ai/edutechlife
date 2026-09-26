@@ -133,7 +133,7 @@ const DaniChatHeader = memo(
               )}
             </motion.button>
             {streak.current > 0 && (
-              <div className="hidden sm:flex bg-white/20 rounded-full px-3 py-1.5 text-white text-xs font-bold items-center gap-1 min-h-[28px]">
+              <div className="hidden lg:flex bg-white/20 rounded-full px-3 py-1.5 text-white text-xs font-bold items-center gap-1 min-h-[28px]">
                 <Flame
                   size={16}
                   className="text-orange-400"

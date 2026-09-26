@@ -1,6 +1,6 @@
 import { memo, useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, LogOut, Lock, Star, ChevronDown } from "lucide-react";
+import { LogOut, Lock, Star, ChevronDown } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import {
   CATEGORY_MAP,
@@ -9,7 +9,8 @@ import {
   PREMIUM_TABS,
   getTabsForAgeGroup,
 } from "../kidsDashboardConfig";
-import { SB_GRADIENTS, glow } from "../ingenIATheme";
+import { glow } from "../ingenIATheme";
+import IngenIALogo from "../../brand/IngenIALogo";
 
 const categoryStyles = CATEGORIES.map((c) => ({
   id: c.id,
@@ -102,46 +103,26 @@ const PremiumSidebar = memo(
           >
             {collapsed ? (
               <div className="flex items-center justify-center p-4">
-                <motion.div
-                  className="w-10 h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0"
-                  style={{
-                    background: SB_GRADIENTS.brand,
-                    boxShadow: glow("#00B4D8", 0.5),
-                  }}
-                >
-                  <GraduationCap className="w-5 h-5" strokeWidth={2.2} />
-                </motion.div>
+                <IngenIALogo
+                  variant="icon"
+                  height={40}
+                  title=""
+                  className="flex-shrink-0 rounded-2xl"
+                />
               </div>
             ) : (
-              <div className="p-4">
-                <div className="flex items-center gap-2.5">
-                  <motion.div
-                    initial={{ scale: 0, rotate: -30 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ type: "spring", damping: 12 }}
-                    className="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 text-white"
-                    style={{
-                      background: SB_GRADIENTS.brand,
-                      boxShadow: `${glow("#00B4D8", 0.5)}, inset 0 1px 0 rgba(255,255,255,0.4)`,
-                    }}
-                  >
-                    <GraduationCap className="w-6 h-6" strokeWidth={2.2} />
-                  </motion.div>
-                  <div className="leading-none">
-                    <h2
-                      className="text-lg font-black tracking-tight bg-clip-text text-transparent"
-                      style={{ backgroundImage: SB_GRADIENTS.brand }}
-                    >
-                      IngenIA
-                    </h2>
-                    <p
-                      className={`text-[9px] font-semibold mt-0.5 ${darkMode ? "text-[#48CAE4]/60" : "text-[#0096C7]/60"}`}
-                    >
-                      by EdutechLife
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="px-5 py-4"
+              >
+                <IngenIALogo
+                  variant="full"
+                  tone={darkMode ? "dark" : "light"}
+                  height={50}
+                  title=""
+                />
+              </motion.div>
             )}
           </button>
         </div>

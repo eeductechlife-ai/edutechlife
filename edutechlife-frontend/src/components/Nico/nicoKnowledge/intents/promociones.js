@@ -27,6 +27,6 @@ export const promociones = [
     ],
     category: "promociones",
     response:
-      "Puedes empezar con el diagnóstico VAK gratuito que te toma entre 10 y 30 minutos y obtienes un perfil detallado de tu estilo de aprendizaje. También ofrecemos primera clase gratuita en todos los programas.",
+      "Puedes empezar con el ADN de Aprendizaje gratuito que te toma entre 10 y 30 minutos y obtienes un perfil detallado de tu estilo de aprendizaje. También ofrecemos primera clase gratuita en todos los programas.",
   },
 ];

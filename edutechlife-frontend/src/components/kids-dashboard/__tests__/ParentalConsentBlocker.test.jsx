@@ -81,7 +81,7 @@ describe("ParentalConsentBlocker", () => {
       </ParentalConsentBlocker>,
     );
 
-    expect(mockNavigate).toHaveBeenCalledWith("/sign-up/smartboard", {
+    expect(mockNavigate).toHaveBeenCalledWith("/sign-up/ingenia", {
       replace: true,
     });
   });
@@ -158,7 +158,10 @@ describe("ParentalConsentBlocker", () => {
   it("triggers the one-time background consent request when none exists yet", async () => {
     mockFetch.mockImplementation(async (url) => {
       if (String(url).includes("/parental-consent/status")) {
-        return { ok: true, json: async () => ({ verification_status: "none" }) };
+        return {
+          ok: true,
+          json: async () => ({ verification_status: "none" }),
+        };
       }
       return { ok: true, json: async () => ({}) };
     });

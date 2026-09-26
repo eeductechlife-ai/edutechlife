@@ -136,7 +136,7 @@ const PRICING_PLANS_ES = [
     popular: false,
     trial: "7 días gratis",
     features: [
-      "Diagnóstico VAK completo",
+      "ADN de Aprendizaje completo",
       "Tutor IA Dani — chat ilimitado",
       "Preparación de exámenes",
       "EduCard — tarjetas de estudio con IA",
@@ -214,7 +214,7 @@ const PRICING_PLANS_PT = [
     popular: false,
     trial: "7 dias grátis",
     features: [
-      "Diagnóstico VAK completo",
+      "ADN de Aprendizaje completo",
       "Tutor IA Dani — chat ilimitado",
       "Preparação para provas",
       "EduCard — tarjetas com IA",
@@ -256,7 +256,7 @@ const TESTIMONIALS_ES = [
     name: "Carlos Rodríguez",
     role: "Papá de Valentina, 12 años",
     rating: 5,
-    text: "El diagnóstico VAK nos cambió la perspectiva. Descubrimos que Valentina es kinestésica — toda su vida le dijeron que era distraída, pero en realidad necesita aprender haciendo. Con IngenIA, sus trabajos de ciencias son los mejores de la clase y hasta ayudó a sus compañeros con un experimento.",
+    text: "El ADN de Aprendizaje nos cambió la perspectiva. Descubrimos que Valentina es kinestésica — toda su vida le dijeron que era distraída, pero en realidad necesita aprender haciendo. Con IngenIA, sus trabajos de ciencias son los mejores de la clase y hasta ayudó a sus compañeros con un experimento.",
   },
   {
     name: "Laura Méndez",
@@ -322,7 +322,7 @@ const TESTIMONIALS_PT = [
     name: "Carlos Rodríguez",
     role: "Pai da Valentina, 12 anos",
     rating: 5,
-    text: "O diagnóstico VAK mudou nossa perspectiva. Descobrimos que a Valentina é cinestésica — a vida toda disseram que ela era distraída, mas na verdade ela precisa aprender fazendo. Com o IngenIA, os trabalhos de ciências dela são os melhores da turma e ela até ajudou os colegas com um experimento.",
+    text: "O ADN de Aprendizaje mudou nossa perspectiva. Descobrimos que a Valentina é cinestésica — a vida toda disseram que ela era distraída, mas na verdade ela precisa aprender fazendo. Com o IngenIA, os trabalhos de ciências dela são os melhores da turma e ela até ajudou os colegas com um experimento.",
   },
   {
     name: "Laura Méndez",
@@ -522,7 +522,7 @@ const PASOS_ES = [
   {
     step: "02",
     icon: "fa-chart-bar",
-    title: "Diagnóstico VAK",
+    title: "ADN de Aprendizaje",
     desc: "Tu hijo hace un test interactivo de 10 preguntas. En 3 minutos sabemos cómo aprende.",
   },
   {
@@ -549,7 +549,7 @@ const PASOS_EN = [
   {
     step: "02",
     icon: "fa-chart-bar",
-    title: "VAK Diagnosis",
+    title: "Learning DNA",
     desc: "Your child takes a 10-question interactive test. In 3 minutes we know how they learn.",
   },
   {
@@ -576,7 +576,7 @@ const PASOS_PT = [
   {
     step: "02",
     icon: "fa-chart-bar",
-    title: "Diagnóstico VAK",
+    title: "ADN de Aprendizaje",
     desc: "Seu filho faz um teste interativo de 10 perguntas. Em 3 minutos descobrimos como ele aprende.",
   },
   {
@@ -642,8 +642,8 @@ const FAQ_ITEMS_ES = [
     a: "No. IngenIA está diseñado para que tu hijo aprenda de forma autónoma con el acompañamiento de Dani (coach virtual) y nuestro equipo de coaches humanos. Tú recibes reportes periódicos de su progreso.",
   },
   {
-    q: "¿Cómo funciona el diagnóstico VAK?",
-    a: "El diagnóstico VAK es un test interactivo de 10 preguntas que identifica el estilo de aprendizaje predominante de tu hijo: Visual, Auditivo o Kinestésico. A partir de los resultados, creamos un plan de estudio totalmente personalizado.",
+    q: "¿Cómo funciona el ADN de Aprendizaje?",
+    a: "El ADN de Aprendizaje es un test interactivo de 10 preguntas que identifica el estilo de aprendizaje predominante de tu hijo: Visual, Auditivo o Kinestésico. A partir de los resultados, creamos un plan de estudio totalmente personalizado.",
   },
   {
     q: "¿Qué métodos de pago aceptan?",
@@ -667,7 +667,7 @@ const FAQ_ITEMS_ES = [
   },
   {
     q: "¿Qué pasa si mi hijo no quiere usarlo?",
-    a: "Lo entendemos. Por eso el diagnóstico VAK es el primer paso: cuando un niño descubre cómo aprende mejor, estudiar deja de ser una obligación y se vuelve interesante. Además, el sistema de gamificación (puntos, logros, recompensas) mantiene su motivación alta.",
+    a: "Lo entendemos. Por eso el ADN de Aprendizaje es el primer paso: cuando un niño descubre cómo aprende mejor, estudiar deja de ser una obligación y se vuelve interesante. Además, el sistema de gamificación (puntos, logros, recompensas) mantiene su motivación alta.",
   },
 ];
 

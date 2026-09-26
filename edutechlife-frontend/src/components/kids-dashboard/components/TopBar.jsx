@@ -1,6 +1,6 @@
 import { memo, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Flame, Gem, Home, Bell, GraduationCap, ArrowLeft } from "lucide-react";
+import { Flame, Gem, Home, Bell, ArrowLeft } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import {
   CATEGORIES,
@@ -11,6 +11,7 @@ import {
 } from "../kidsDashboardConfig";
 import { SB_GRADIENTS, glow } from "../ingenIATheme";
 import IngenIANotificationPanel from "./IngenIANotificationPanel";
+import IngenIALogo from "../../brand/IngenIALogo";
 import { useNotification } from "../../../context/NotificationContext";
 
 const TopBar = memo(
@@ -43,29 +44,14 @@ const TopBar = memo(
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
-            className="md:hidden flex items-center gap-2.5 min-w-0"
+            className="md:hidden flex items-center min-w-0"
           >
-            <span
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-white flex-shrink-0"
-              style={{
-                background: SB_GRADIENTS.brand,
-                boxShadow: `${glow("#00B4D8", 0.35)}, inset 0 1px 0 rgba(255,255,255,0.3)`,
-              }}
-            >
-              <GraduationCap className="w-5 h-5" strokeWidth={2.2} />
-            </span>
-            <span className="hidden sm:block leading-tight">
-              <span
-                className={`block text-[9px] font-black uppercase tracking-widest ${darkMode ? "text-[#5C7386]" : "text-[#93A6B2]"}`}
-              >
-                Plataforma
-              </span>
-              <span
-                className={`block text-base font-black tracking-tight ${darkMode ? "text-white" : "text-[#00303F]"}`}
-              >
-                IngenIA
-              </span>
-            </span>
+            <IngenIALogo
+              variant="wordmark"
+              tone={darkMode ? "dark" : "light"}
+              height={30}
+              title="IngenIA"
+            />
           </motion.div>
         ) : (
           <div className="flex items-center gap-3 min-w-0">

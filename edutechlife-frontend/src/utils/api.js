@@ -36,6 +36,16 @@ function isJwtExpired(token) {
   }
 }
 
+// Vista de prueba local (/dev/ingenia): no hay sesión, así que la IA va por el
+// puente del dev server (vite.config.js → devIngenIAAi). En el build de
+// producción import.meta.env.DEV es false y esto siempre devuelve null.
+function devPreviewAiUrl() {
+  if (!import.meta.env.DEV || typeof window === "undefined") return null;
+  return window.location.pathname.startsWith("/dev/ingenia")
+    ? "/__dev/ai"
+    : null;
+}
+
 function getAuthToken() {
   if (typeof window === "undefined") return null;
   try {
@@ -226,7 +236,7 @@ export async function callDeepseek(
   systemPromptOrOpts = null,
   legacyIsJson = false,
 ) {
-  const url = `${API_BASE_URL}/api/chat`;
+  const url = devPreviewAiUrl() || `${API_BASE_URL}/api/chat`;
 
   let payload;
 
@@ -350,8 +360,9 @@ export async function callDeepseek(
  * parental y responde con la misma forma { result }.
  */
 export async function callDeepseekSmartboard(messages, opts = {}) {
-  const token = getAuthToken();
-  if (!token)
+  const devUrl = devPreviewAiUrl();
+  const token = devUrl ? null : getAuthToken();
+  if (!devUrl && !token)
     throw new Error("Tu sesión se cerró. Vuelve a iniciar sesión para seguir.");
 
   const payload = {
@@ -375,7 +386,7 @@ export async function callDeepseekSmartboard(messages, opts = {}) {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          Authorization: `Bearer ${token}`,
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify(payload),
         mode: "cors",
@@ -434,7 +445,7 @@ export async function callDeepseekSmartboard(messages, opts = {}) {
   };
 
   try {
-    const primary = await attempt(`${API_BASE_URL}/api/ingenia/ai`);
+    const primary = await attempt(devUrl || `${API_BASE_URL}/api/ingenia/ai`);
     if (!primary.notFound) return primary.value;
 
     const fallback = await attempt(`${API_BASE_URL}/api/ingenia/chat`);

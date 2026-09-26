@@ -16,7 +16,7 @@ const INITIAL_STUDENT_DATA = {
 const MISSION_TEMPLATES = [
   {
     id: 1,
-    title: "Completa tu Diagnóstico VAK",
+    title: "Completa tu ADN de Aprendizaje",
     description: "Descubre tu estilo de aprendizaje preferido",
     type: "quiz",
     difficulty: "easy",

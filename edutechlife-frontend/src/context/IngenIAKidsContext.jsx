@@ -137,20 +137,8 @@ export const IngenIAKidsProvider = ({ children }) => {
   const [planCompletedActivities, setPlanCompletedActivities] = useState([]);
   // Active study loop: deck selected in Flashcards → used by Habla con Dani + Examen
   const [activeStudyDeck, setActiveStudyDeck] = useState(null); // { deckId, title, cards, topic }
-  const [studentGrades, setStudentGrades] = useState(() => {
-    // Eager-load from localStorage so subjectsWithGrades populates before GradeScanner mounts
-    // (userId not yet available — will be refreshed via useEffect below)
-    try {
-      const keys = Object.keys(localStorage).filter((k) =>
-        k.startsWith("edutechlife_grades_"),
-      );
-      if (keys.length === 1) {
-        const parsed = JSON.parse(localStorage.getItem(keys[0]));
-        return Array.isArray(parsed) ? parsed : [];
-      }
-    } catch {}
-    return [];
-  });
+  // Loaded per userId below; guessing a key here showed another student's grades.
+  const [studentGrades, setStudentGrades] = useState([]);
 
   // Onboarding state (persisted per-user via localStorage pattern)
   const [onboardingComplete, setOnboardingComplete] = useState(false);
@@ -583,6 +571,7 @@ export const IngenIAKidsProvider = ({ children }) => {
   // Sync grades from localStorage keyed by userId, fallback to backend
   useEffect(() => {
     if (!userId) return;
+    setStudentGrades([]);
     try {
       const stored = localStorage.getItem(`edutechlife_grades_${userId}`);
       if (stored) {

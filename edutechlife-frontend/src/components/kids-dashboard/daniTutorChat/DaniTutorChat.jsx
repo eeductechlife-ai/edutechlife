@@ -246,7 +246,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
               transition={{ type: "spring", damping: 28, stiffness: 320 }}
               className={`fixed right-4 z-[55]
                 bottom-[5.5rem] sm:bottom-24 md:bottom-8
-                w-[calc(100vw-2rem)] sm:w-[380px] md:w-[420px]
+                w-[calc(100vw-2rem)] sm:w-[440px] md:w-[460px]
                 max-h-[70dvh] sm:max-h-[min(580px,calc(100dvh-8rem))]
                 rounded-2xl flex flex-col overflow-hidden border ${
                   darkMode ? "border-[#2A3A54]" : "border-[#E2E8F0]"

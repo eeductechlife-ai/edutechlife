@@ -338,7 +338,7 @@ const LeadCaptureForm = ({
             <option value="">Selecciona una opción</option>
             <option value="ialab">IALab (curso de IA)</option>
             <option value="ingenia">
-              IngenIA / SmartBoard (acompañamiento con IA para niños y jóvenes)
+              IngenIA (acompañamiento con IA para niños y jóvenes)
             </option>
             <option value="vak">
               ADN de Aprendizaje (estilos de aprendizaje)

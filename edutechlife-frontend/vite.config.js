@@ -1,8 +1,60 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import { visualizer } from 'rollup-plugin-visualizer'
 import path from 'path'
+
+// Solo `vite dev`: la vista de prueba /dev/ingenia no tiene sesión, así que sus
+// llamadas de IA llegan aquí y salen a DeepSeek con la clave del backend local
+// (edutechlife-backend/.env). No existe en el build (apply: 'serve'), la clave
+// nunca llega al navegador y solo atiende peticiones de este mismo equipo.
+function devIngenIAAi() {
+  return {
+    name: 'dev-ingenia-ai',
+    apply: 'serve',
+    configureServer(server) {
+      const env = loadEnv('development', path.resolve(__dirname, '../edutechlife-backend'), 'DEEPSEEK_')
+      server.middlewares.use('/__dev/ai', async (req, res) => {
+        const send = (status, body) => {
+          res.statusCode = status
+          res.setHeader('Content-Type', 'application/json')
+          res.end(JSON.stringify(body))
+        }
+        const ip = req.socket.remoteAddress || ''
+        if (req.method !== 'POST' || !/^(::1$|127\.|::ffff:127\.)/.test(ip)) {
+          return send(403, { error: 'Solo disponible desde este equipo' })
+        }
+        const key = process.env.DEEPSEEK_API_KEY || env.DEEPSEEK_API_KEY
+        if (!key) return send(500, { error: 'Falta DEEPSEEK_API_KEY en edutechlife-backend/.env' })
+        try {
+          let raw = ''
+          for await (const chunk of req) raw += chunk
+          const { messages, isJson, temperature, maxTokens } = JSON.parse(raw || '{}')
+          if (!Array.isArray(messages) || !messages.length) {
+            return send(400, { error: 'messages es obligatorio' })
+          }
+          const r = await fetch('https://api.deepseek.com/chat/completions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+            body: JSON.stringify({
+              model: 'deepseek-flash',
+              messages,
+              temperature: temperature ?? 0.7,
+              max_tokens: maxTokens || 2000,
+              ...(isJson ? { response_format: { type: 'json_object' } } : {}),
+            }),
+            signal: AbortSignal.timeout(60000),
+          })
+          const data = await r.json().catch(() => null)
+          if (!r.ok) return send(r.status, { error: data?.error?.message || `DeepSeek HTTP ${r.status}` })
+          send(200, { result: data?.choices?.[0]?.message?.content || '' })
+        } catch (e) {
+          send(500, { error: e.message })
+        }
+      })
+    },
+  }
+}
 
 export default defineConfig({
   // Con minify:'esbuild', drop_console se hace aquí (equivalente al terserOptions
@@ -17,6 +69,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    devIngenIAAi(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'offline.html'],

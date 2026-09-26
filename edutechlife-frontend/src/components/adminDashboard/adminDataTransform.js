@@ -164,7 +164,7 @@ export const mapDiagnosticToRow = (s, i) => ({
   id: `EST-${String(i + 1).padStart(3, "0")}`,
   name: s.name,
   vak: s.vak,
-  module: s.age ? `${s.age} años` : "Diagnóstico VAK",
+  module: s.age ? `${s.age} años` : "ADN de Aprendizaje",
   xp: s.percentage,
   lastConnection: s.date ? new Date(s.date).toLocaleDateString("es-CO") : "—",
   status: "active",
