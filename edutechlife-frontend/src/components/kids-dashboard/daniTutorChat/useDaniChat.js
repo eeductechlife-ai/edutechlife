@@ -80,6 +80,7 @@ export default function useDaniChat({ isOpen, activeTab }) {
     missions,
     subjects,
     documentForDani,
+    studentAge,
   });
 
   const { handleSendMessage, handleQuickAction, handleTopicClick } =

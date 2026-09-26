@@ -52,8 +52,9 @@ const OralExamSimulator = memo(({ onTabChange }) => {
     })();
 
   const { t } = useTranslation();
+  const isEarly = studentAgeVal != null && studentAgeVal <= 9;
   const SUBJECTS = getSubjects(t);
-  const DIFFICULTIES = getDifficulties(t);
+  const DIFFICULTIES = getDifficulties(t, isEarly);
 
   const [phase, setPhase] = useState("setup");
   const [subject, setSubject] = useState(null);

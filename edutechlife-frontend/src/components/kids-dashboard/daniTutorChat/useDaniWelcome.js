@@ -9,7 +9,10 @@ export default function useDaniWelcome({
   missions,
   subjects,
   documentForDani,
+  studentAge,
 }) {
+  const isEarly = studentAge != null && studentAge <= 9;
+
   const buildRichWelcome = useCallback(() => {
     // Nombre real del estudiante desde localStorage
     const rawName =
@@ -27,13 +30,40 @@ export default function useDaniWelcome({
       const isGradePlan = documentForDani.subject === "múltiples materias";
       if (isGradePlan) {
         const weakArea = documentForDani.improvements?.[0]?.split(":")[0] || "";
+        if (isEarly)
+          return `¡Hola${nameTag}! 📊 Revisé lo que estás aprendiendo. ${weakArea ? `¡Vamos a practicar ${weakArea} juntos! ` : ""}${firstQ || "¿En qué te ayudo hoy?"}`;
         return `¡Hola${nameTag}! 📊 Revisé tu plan de estudio. ${documentForDani.summary ? documentForDani.summary + " " : ""}${weakArea ? `Vamos a enfocarnos en ${weakArea}. ` : ""}${firstQ || "¿En qué puedo ayudarte hoy?"}`;
       }
+      if (isEarly)
+        return `¡Hola${nameTag}! 📖 Leí sobre "${documentForDani.title}". ¿Me puedes contar de qué se trata con tus propias palabras? 😊`;
       return `¡Hola${nameTag}! 📖 Acabo de leer "${documentForDani.title}" ${documentForDani.difficulty ? `(nivel ${documentForDani.difficulty})` : ""}. ¿Puedes explicarme con tus palabras de qué trata?`;
     }
 
     const now = new Date();
     const hour = now.getHours();
+
+    if (isEarly) {
+      // Simpler, more playful greeting for young learners
+      const timeEmoji = hour < 12 ? "☀️" : hour < 18 ? "🌤️" : "🌙";
+      const parts = [];
+      parts.push(`¡Hola${nameTag}! ${timeEmoji} ¡Qué bueno verte!`);
+      if (streak.current >= 2)
+        parts.push(
+          `¡Llevas ${streak.current} días seguidos aprendiendo! 🔥 ¡Eso es genial!`,
+        );
+      const pendingMissions = (missions || []).filter((m) => !m.completed);
+      if (pendingMissions.length > 0) {
+        parts.push(
+          pendingMissions.length === 1
+            ? `Tienes 1 aventura esperándote. ¿La hacemos? 🗺️`
+            : `Tienes ${pendingMissions.length} aventuras esperándote. ¿Cuál quieres hacer primero? 🗺️`,
+        );
+      } else {
+        parts.push("¿Qué quieres aprender hoy? 🚀");
+      }
+      return parts.join(" ");
+    }
+
     const timeOfDay =
       hour < 12 ? "Buenos días" : hour < 18 ? "Buenas tardes" : "Buenas noches";
 
@@ -89,7 +119,7 @@ export default function useDaniWelcome({
 
     if (!vakResult) {
       parts.push(
-        "¿Sabías que aún no has descubierto tu estilo de aprendizaje? Podemos hacer el diagnóstico VAK ahora mismo 🧠",
+        "¿Sabías que aún no has descubierto tu estilo de aprendizaje? Podemos hacer el ADN de Aprendizaje ahora mismo 🧠",
       );
     }
 
@@ -108,6 +138,7 @@ export default function useDaniWelcome({
 
     return parts.join(" ");
   }, [
+    isEarly,
     streak,
     vakResult,
     calendarEvents,
