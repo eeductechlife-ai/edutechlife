@@ -43,3 +43,29 @@ export function questionToSpeech(text) {
   );
   return [before, lines.join(". "), after].filter(Boolean).join(" ");
 }
+
+const SUPERSCRIPT = {
+  0: "⁰",
+  1: "¹",
+  2: "²",
+  3: "³",
+  4: "⁴",
+  5: "⁵",
+  6: "⁶",
+  7: "⁷",
+  8: "⁸",
+  9: "⁹",
+  "-": "⁻",
+};
+
+// AI questions use keyboard math ("-5t^2", "2*(-5)", "sqrt(9)"); kids read
+// textbook notation.
+export function prettyMath(text) {
+  if (typeof text !== "string") return text;
+  return text
+    .replace(/\^\(?(-?\d+)\)?/g, (_, n) =>
+      [...n].map((c) => SUPERSCRIPT[c]).join(""),
+    )
+    .replace(/(?<!\*)\s*\*\s*(?!\*)/g, " × ")
+    .replace(/\bsqrt\s*\(/gi, "√(");
+}

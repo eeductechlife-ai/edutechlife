@@ -228,7 +228,11 @@ const isWeekly = (m) => typeof m?.id === "string" && m.id.startsWith("w_");
 // Saved lists freeze whatever weekly set existed when they were first stored;
 // swap in this week's set, keeping completion only for the same week.
 export function mergeWeeklyMissions(saved, now = new Date()) {
-  const permanent = (saved || []).filter((m) => !isWeekly(m));
+  // Rows saved from the mission engine ({ key, xp_reward }) have no id/xp and
+  // rendered as dead cards; drop them so the defaults come back.
+  const permanent = (saved || []).filter(
+    (m) => m?.id != null && m?.xp != null && !isWeekly(m),
+  );
   const week = getWeekKey(now);
   const doneThisWeek = new Set(
     (saved || [])

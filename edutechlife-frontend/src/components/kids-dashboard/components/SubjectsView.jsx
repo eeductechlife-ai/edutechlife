@@ -221,9 +221,12 @@ const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
                   style={
                     urgent
                       ? { background: "#EF4444", color: "#fff" }
-                      : ms.key === "recovery" || ms.key === "practice"
-                        ? { background: ms.color, color: "#fff" }
-                        : { background: "#F1F5F9", color: "#00303F" }
+                      : !hasGrade
+                        ? // No grade yet is not a bad grade: no alarm red.
+                          { background: subject.color, color: "#fff" }
+                        : ms.key === "recovery" || ms.key === "practice"
+                          ? { background: ms.color, color: "#fff" }
+                          : { background: "#F1F5F9", color: "#00303F" }
                   }
                 >
                   {urgent ? "🚨 ¡Reforzar!" : "🎯 Practicar"}

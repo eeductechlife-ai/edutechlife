@@ -3,7 +3,7 @@ import { speakAsDani, stopDani } from "../practicarHub/daniSpeak";
 import { ListenButton } from "../practicarHub/MaterialViews";
 import { motion, AnimatePresence } from "framer-motion";
 import QuestionText from "./QuestionText";
-import { questionToSpeech } from "./questionTable";
+import { questionToSpeech, prettyMath } from "./questionTable";
 
 const OPTION_LABELS = ["A", "B", "C", "D"];
 const CIRC = 2 * Math.PI * 18;
@@ -293,7 +293,7 @@ const ChallengePlay = memo(
                       : OPTION_LABELS[idx]}
                 </span>
                 <span className="text-[15px] sm:text-base font-medium leading-snug flex-1">
-                  {option}
+                  {prettyMath(option)}
                 </span>
               </motion.button>
             );
@@ -331,13 +331,13 @@ const ChallengePlay = memo(
                   La respuesta correcta es{" "}
                   <strong>
                     {OPTION_LABELS[question.correct]}:{" "}
-                    {question.options[question.correct]}
+                    {prettyMath(question.options[question.correct])}
                   </strong>
                 </p>
               )}
               {question.explanation && (
                 <p className={`text-sm leading-relaxed ${textSub}`}>
-                  💡 {question.explanation}
+                  💡 {prettyMath(question.explanation)}
                 </p>
               )}
               <button
