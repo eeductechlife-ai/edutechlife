@@ -72,7 +72,7 @@ const ParentalConsentBlocker = ({ children }) => {
   useEffect(() => {
     if (!isLoaded) return;
     if (!isSignedIn) {
-      navigate("/sign-up/smartboard", { replace: true });
+      navigate("/sign-up/ingenia", { replace: true });
       return;
     }
     notifyParentSessionStart();
