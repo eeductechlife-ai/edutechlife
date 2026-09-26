@@ -140,3 +140,23 @@ describe("buildMaterialRequest", () => {
     );
   });
 });
+
+describe("parseMaterial with accented keys", () => {
+  it("reads video searches when the model writes «búsquedas»", () => {
+    const raw =
+      '{"búsquedas":[{"texto":"fotosíntesis fácil","aprenderás":"qué es"}]}';
+    expect(parseMaterial("video", raw)).toEqual({
+      busquedas: [{ texto: "fotosíntesis fácil", aprenderas: "qué es" }],
+    });
+  });
+
+  it("keeps the year of a timeline written as «año»", () => {
+    const out = parseMaterial("infografia", {
+      título: "Independencia",
+      formato: "cronologia",
+      eventos: [{ año: "1810", hecho: "Grito de independencia" }],
+    });
+    expect(out.titulo).toBe("Independencia");
+    expect(out.bloques[0]).toMatchObject({ titulo: "1810", cifra: "1810" });
+  });
+});
