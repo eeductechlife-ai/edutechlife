@@ -22,13 +22,19 @@ const detailsHeight = (blocks) =>
   blocks.reduce((h, l) => h + l.length * STEP, 0) +
   GAP * Math.max(0, blocks.length - 1);
 
+const CURIOSIDAD_STEP = 22;
+
 function makeNode(r, i, main, theme, ideaChars, detailChars) {
   const c = paletteColor(theme, i, main);
   const ideaLines = fit(r.idea, ideaChars, 3);
   const blocks = r.detalles.map((d) => fit(d, detailChars, 3));
+  const curiosLines = r.curiosidad ? fit(r.curiosidad, detailChars + 4, 3) : [];
   const headH = Math.max(64, 26 + ideaLines.length * 27);
-  const h = headH + 24 + detailsHeight(blocks);
-  return { c, ideaLines, blocks, headH, h, emoji: r.emoji };
+  const curiosH = curiosLines.length
+    ? 18 + curiosLines.length * CURIOSIDAD_STEP
+    : 0;
+  const h = headH + 24 + detailsHeight(blocks) + curiosH;
+  return { c, ideaLines, blocks, headH, h, emoji: r.emoji, curiosLines };
 }
 
 function DetailList({ blocks, x, y, color, theme }) {
@@ -56,7 +62,8 @@ function DetailList({ blocks, x, y, color, theme }) {
 
 // Branch card: gradient header with an emoji badge, dotted detail list below.
 function BranchCard({ id, x, y, w, node, theme }) {
-  const { c, ideaLines, blocks, headH, h, emoji } = node;
+  const { c, ideaLines, blocks, headH, h, emoji, curiosLines } = node;
+  const detailsBottom = y + headH + 30 + detailsHeight(blocks);
   return (
     <g filter={shadowUrl(id)}>
       <rect x={x} y={y} width={w} height={h} rx="22" fill={theme.card} />
@@ -107,6 +114,28 @@ function BranchCard({ id, x, y, w, node, theme }) {
         color={c}
         theme={theme}
       />
+      {curiosLines.length > 0 && (
+        <g>
+          <text
+            x={x + 18}
+            y={detailsBottom + 16}
+            fontSize="15"
+            fontFamily={FONT}
+          >
+            💡
+          </text>
+          <TextLines
+            lines={curiosLines}
+            x={x + 36}
+            y={detailsBottom + 16}
+            size={17}
+            weight={600}
+            fill={mix(c, theme.muted, 0.35)}
+            anchor="start"
+            gap={CURIOSIDAD_STEP / 17}
+          />
+        </g>
+      )}
     </g>
   );
 }

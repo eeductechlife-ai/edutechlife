@@ -332,9 +332,16 @@ export function materialToText(type, data) {
   if (type === "resumen") return data.text;
   if (type === "mapa")
     return [
+      data.subtitulo,
       data.centro,
-      ...data.ramas.map((r) => `- ${r.idea}: ${r.detalles.join("; ")}`),
-    ].join("\n");
+      ...data.ramas.map(
+        (r) =>
+          `- ${r.idea}: ${r.detalles.join("; ")}${r.curiosidad ? `. Dato: ${r.curiosidad}` : ""}`,
+      ),
+      data.conclusion ? `Recuerda: ${data.conclusion}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
   if (type === "infografia") {
     const cmp = data.formato === "comparacion" && data.comparacion;
     const body = cmp

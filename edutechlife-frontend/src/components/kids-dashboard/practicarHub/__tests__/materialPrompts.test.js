@@ -18,7 +18,16 @@ describe("parseMaterial", () => {
       'Aquí va: {"ramas":[{"idea":"Numerador","detalles":["Arriba"]}],"centro":"Fracciones"} ¡listo!';
     expect(parseMaterial("mapa", raw)).toEqual({
       centro: "Fracciones",
-      ramas: [{ idea: "Numerador", emoji: "💡", detalles: ["Arriba"] }],
+      subtitulo: "",
+      conclusion: "",
+      ramas: [
+        {
+          idea: "Numerador",
+          emoji: "💡",
+          detalles: ["Arriba"],
+          curiosidad: "",
+        },
+      ],
     });
   });
 
