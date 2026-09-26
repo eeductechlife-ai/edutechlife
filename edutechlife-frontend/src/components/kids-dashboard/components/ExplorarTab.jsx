@@ -2,25 +2,42 @@ import { memo, useState, Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import MissionsView from "./MissionsView";
 import { SectionFallback } from "./SkeletonLoader";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 
 const TechNewsFeed = lazy(() => import("../news/TechNewsFeed"));
 
 const EXPLORE_GRADIENT =
   "linear-gradient(135deg, #7B2FF7 0%, #9D4EDD 55%, #C77DFF 100%)";
 
-const VIEWS = [
+const VIEWS_EARLY = [
+  { id: "misiones", label: "Aventuras", emoji: "🎯" },
+  { id: "noticias", label: "Tech Cool", emoji: "🌐" },
+];
+const VIEWS_OTHER = [
   { id: "misiones", label: "Misiones", emoji: "🎯" },
   { id: "noticias", label: "Tech & IA", emoji: "🌐" },
 ];
 
 const VIEW_LABELS = {
-  misiones: {
-    title: "Mis Misiones",
-    sub: "Cumple la misión y reclama tus puntos",
+  early: {
+    misiones: {
+      title: "Mis Aventuras",
+      sub: "¡Completa aventuras y gana premios! 🎁",
+    },
+    noticias: {
+      title: "¡Tech Asombrosa!",
+      sub: "Curiosidades de tecnología e IA para ti 🤖",
+    },
   },
-  noticias: {
-    title: "Tech & IA",
-    sub: "Noticias de tecnología e inteligencia artificial",
+  other: {
+    misiones: {
+      title: "Mis Misiones",
+      sub: "Cumple la misión y reclama tus puntos",
+    },
+    noticias: {
+      title: "Tech & IA",
+      sub: "Noticias de tecnología e inteligencia artificial",
+    },
   },
 };
 
@@ -30,9 +47,13 @@ const ExplorarTab = memo(function ExplorarTab({
   onTabChange,
   defaultView = "misiones",
 }) {
+  const { studentAge } = useIngenIAKids();
+  const isEarly = studentAge != null && studentAge <= 9;
+  const VIEWS = isEarly ? VIEWS_EARLY : VIEWS_OTHER;
+  const labels = isEarly ? VIEW_LABELS.early : VIEW_LABELS.other;
   const [activeView, setActiveView] = useState(defaultView);
   const currentView = VIEWS.find((v) => v.id === activeView) || VIEWS[0];
-  const info = VIEW_LABELS[activeView] || VIEW_LABELS.misiones;
+  const info = labels[activeView] || labels.misiones;
 
   return (
     <div className="space-y-4">

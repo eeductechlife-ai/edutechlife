@@ -183,12 +183,40 @@ function weekStats(pointsHistory) {
   };
 }
 
+const AGE_COPY = {
+  early: {
+    ready: (n) =>
+      `¡Tienes ${n} ${n === 1 ? "sorpresa lista" : "sorpresas listas"}! 🎁`,
+    claim: (xp) => `🌟 ¡Reclamar ${xp} estrellas!`,
+    done: (xp) => `✓ ¡Super! Ganaste ${xp} ⭐`,
+    header: `{c} de {t} aventuras`,
+    weekly: "⏳ Aventuras de esta semana",
+    permanent: "🏅 Mis logros",
+    empty: "¡Vuelve pronto para nuevas aventuras! 🚀",
+    pctLabel: (c, t) => `${c} de ${t} aventuras`,
+  },
+  other: {
+    ready: (n) =>
+      `🎁 Tienes ${n} ${n === 1 ? "premio listo" : "premios listos"} para reclamar`,
+    claim: (xp) => `🎁 Reclamar +${xp} puntos`,
+    done: (xp) => `✓ ¡Lograda! Ganaste ${xp} puntos`,
+    weekly: "⏳ Misiones de la semana",
+    permanent: "🏅 Misiones de siempre",
+    empty: "Aún no hay misiones. ¡Vuelve pronto! 🚀",
+    pctLabel: (c, t) => `${c} de ${t} misiones logradas`,
+  },
+};
+
 const MissionsView = memo(function MissionsView({
   missions,
   onCompleteMission,
   onTabChange,
 }) {
   const ctx = useIngenIAKids();
+  const copy =
+    ctx.studentAge != null && ctx.studentAge <= 9
+      ? AGE_COPY.early
+      : AGE_COPY.other;
   const state = {
     ...ctx,
     userMessages: (ctx.daniChatHistory || []).filter((m) => m?.role === "user")
@@ -276,7 +304,7 @@ const MissionsView = memo(function MissionsView({
 
         {mission.completed ? (
           <p className="!m-0 mt-2.5 text-xs font-bold text-green-700">
-            ✓ ¡Lograda! Ganaste {mission.xp} puntos
+            {copy.done(mission.xp)}
           </p>
         ) : ready ? (
           <motion.button
@@ -285,7 +313,7 @@ const MissionsView = memo(function MissionsView({
             whileTap={{ scale: 0.97 }}
             className="mt-3 w-full py-3 rounded-xl text-sm font-black text-white bg-green-500 shadow-md"
           >
-            🎁 Reclamar +{mission.xp} puntos
+            {copy.claim(mission.xp)}
           </motion.button>
         ) : rule ? (
           <div className="mt-2.5 flex items-center gap-3">
@@ -329,7 +357,7 @@ const MissionsView = memo(function MissionsView({
         <div className="rounded-2xl bg-white border border-[#E2E8F0] p-4">
           <div className="flex items-center justify-between gap-2">
             <p className="text-sm font-black text-[#1E293B]">
-              {completedCount} de {total} misiones logradas
+              {copy.pctLabel(completedCount, total)}
             </p>
             <span className="text-sm font-black text-[#7B2FF7] tabular-nums">
               {pct}%
@@ -343,9 +371,7 @@ const MissionsView = memo(function MissionsView({
           </div>
           {readyCount > 0 && (
             <p className="mt-2 text-xs font-bold text-green-600">
-              🎁 Tienes {readyCount}{" "}
-              {readyCount === 1 ? "premio listo" : "premios listos"} para
-              reclamar
+              {copy.ready(readyCount)}
             </p>
           )}
         </div>
@@ -358,7 +384,7 @@ const MissionsView = memo(function MissionsView({
               id="weekly-missions"
               className="!m-0 text-sm font-black text-[#1E293B]"
             >
-              ⏳ Misiones de la semana{" "}
+              {copy.weekly}{" "}
               <span className="text-[#7B2FF7] tabular-nums">
                 {weeklyDone}/{weekly.length}
               </span>
@@ -380,7 +406,7 @@ const MissionsView = memo(function MissionsView({
               id="main-missions"
               className="!m-0 px-1 pt-2 text-sm font-black text-[#1E293B]"
             >
-              🏅 Misiones de siempre
+              {copy.permanent}
             </h3>
           )}
           {permanent.map(renderMission)}
@@ -388,9 +414,7 @@ const MissionsView = memo(function MissionsView({
       )}
 
       {total === 0 && (
-        <p className="text-center py-10 text-sm text-[#64748B]">
-          Aún no hay misiones. ¡Vuelve pronto! 🚀
-        </p>
+        <p className="text-center py-10 text-sm text-[#64748B]">{copy.empty}</p>
       )}
     </div>
   );

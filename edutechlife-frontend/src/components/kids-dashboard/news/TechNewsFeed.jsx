@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNewsFeed } from "../../../hooks/useNewsFeed";
 import { CATEGORIES, CATEGORY_COLORS } from "../../../data/newsData";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
+import { logPractice } from "../practicarHub/practicarProgress";
 
 const CategoryTab = memo(({ cat, active, unread, onClick }) => {
   const color = CATEGORY_COLORS[cat.id] || "#4DA8C4";
@@ -250,7 +251,8 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
 ArticleModal.displayName = "ArticleModal";
 
 const TechNewsFeed = () => {
-  const { darkMode, setDocumentForDani } = useIngenIAKids();
+  const { darkMode, setDocumentForDani, addPoints, studentAge } =
+    useIngenIAKids();
 
   // Explora 2.0 (§35): turn a passive article into an active challenge with Dani.
   const handleChallenge = useCallback(
@@ -293,8 +295,12 @@ const TechNewsFeed = () => {
     <div className="space-y-5">
       <p className="px-1 text-sm font-semibold text-[#64748B]">
         {unreadCount > 0
-          ? `📬 ${unreadCount} ${unreadCount === 1 ? "artículo" : "artículos"} por leer`
-          : "¡Estás al día con el mundo tech! 🎉"}
+          ? studentAge != null && studentAge <= 9
+            ? `📬 ¡${unreadCount} ${unreadCount === 1 ? "noticia" : "noticias"} nuevas para ti! +${unreadCount * 10}⭐`
+            : `📬 ${unreadCount} ${unreadCount === 1 ? "artículo" : "artículos"} por leer · +15 pts c/u`
+          : studentAge != null && studentAge <= 9
+            ? "¡Eres un experto en tech! 🏆"
+            : "¡Estás al día con el mundo tech! 🎉"}
       </p>
 
       {/* Category tabs */}
@@ -363,8 +369,20 @@ const TechNewsFeed = () => {
                 isRead={readNews.includes(article.id)}
                 darkMode={darkMode}
                 onRead={(id) => {
+                  const firstRead = !readNews.includes(id);
                   markAsRead(id);
                   setOpenArticle(article);
+                  if (firstRead) {
+                    logPractice({
+                      type: "news_read",
+                      articleId: id,
+                      category: article.category,
+                    });
+                    addPoints?.(
+                      studentAge != null && studentAge <= 9 ? 10 : 15,
+                      `Artículo leído: ${article.title}`,
+                    );
+                  }
                 }}
               />
             ))}

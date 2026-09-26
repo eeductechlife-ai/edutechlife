@@ -395,7 +395,7 @@ const CinematicContent = memo(
       <div
         ref={scrollRef}
         data-typo="intended"
-        className="flex-1 overflow-y-auto relative p-4 md:p-6 pb-24 md:pb-8"
+        className="flex-1 overflow-y-auto relative p-4 md:p-6 pb-32 md:pb-8"
       >
         <AnimatePresence mode="wait">
           <DashboardErrorBoundary
