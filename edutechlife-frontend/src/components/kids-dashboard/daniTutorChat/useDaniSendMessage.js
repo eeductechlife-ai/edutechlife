@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { callDaniOrchestrator } from "../../../utils/api";
 import { inferMoodFromText, extractTopic } from "../dani/chatUtils";
@@ -50,13 +50,16 @@ export default function useDaniSendMessage({
   const { t } = useTranslation();
   const isKid = studentAge && studentAge <= 11;
 
-  const kidErrorMessages = {
-    generic: "¡Ups! Dani se quedó pensando. ¿Puedes intentar de nuevo?",
-    timeout:
-      "Dani está pensando muy profundo... Espera un poco y vuelve a intentar.",
-    network:
-      "¡Oh! Parece que el internet se fue de paseo. Revisa tu conexión y vuelve a intentar.",
-  };
+  const kidErrorMessages = useMemo(
+    () => ({
+      generic: "¡Ups! Dani se quedó pensando. ¿Puedes intentar de nuevo?",
+      timeout:
+        "Dani está pensando muy profundo... Espera un poco y vuelve a intentar.",
+      network:
+        "¡Oh! Parece que el internet se fue de paseo. Revisa tu conexión y vuelve a intentar.",
+    }),
+    [],
+  );
 
   const handleSendMessage = useCallback(
     async (text) => {
@@ -226,19 +229,36 @@ export default function useDaniSendMessage({
         trackTopicFromMessage(userMessage, extractTopic, trackAcademicTopic);
       } catch (error) {
         console.error("Error calling Dani:", error);
-        const errorMsg = isKid
-          ? error.message?.includes("400") || error.message?.includes("500")
-            ? kidErrorMessages.generic
-            : error.message?.includes("timeout") ||
-                error.message?.includes("Tiempo de espera")
-              ? kidErrorMessages.timeout
-              : kidErrorMessages.network
-          : error.message?.includes("400") || error.message?.includes("500")
-            ? t("dani.error_generic")
-            : error.message?.includes("timeout") ||
-                error.message?.includes("Tiempo de espera")
-              ? t("dani.error_timeout")
-              : t("dani.error_network");
+        const isAuth =
+          error.status === 401 ||
+          error.status === 403 ||
+          error.message?.includes("sesión") ||
+          error.message?.includes("iniciar sesión");
+        const isServer =
+          error.status >= 400 ||
+          error.message?.includes("400") ||
+          error.message?.includes("500") ||
+          error.message?.includes("servidor");
+        const isTimeout =
+          error.message?.includes("timeout") ||
+          error.message?.includes("Tiempo de espera") ||
+          error.message?.includes("tardó") ||
+          error.name === "AbortError";
+        const errorMsg = isAuth
+          ? isKid
+            ? "¡Ups! Tu sesión expiró. Vuelve a entrar para seguir con Dani. 🔓"
+            : "Tu sesión se cerró. Vuelve a iniciar sesión para continuar."
+          : isKid
+            ? isServer
+              ? kidErrorMessages.generic
+              : isTimeout
+                ? kidErrorMessages.timeout
+                : kidErrorMessages.network
+            : isServer
+              ? t("dani.error_generic")
+              : isTimeout
+                ? t("dani.error_timeout")
+                : t("dani.error_network");
         addDaniMessage({
           role: "assistant",
           text: errorMsg,
@@ -273,6 +293,8 @@ export default function useDaniSendMessage({
       setStreamingMessage,
       updateDaniMemory,
       studentDbId,
+      kidErrorMessages,
+      setDocumentForDani,
     ],
   );
 
