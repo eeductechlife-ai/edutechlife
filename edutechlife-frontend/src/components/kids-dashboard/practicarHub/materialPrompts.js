@@ -146,13 +146,24 @@ export function buildMaterialRequest(
 
 const str = (v) => (typeof v === "string" ? v.trim() : "");
 
+// The model sometimes accents Spanish keys ("búsquedas", "título"); the
+// parsers only know the plain spelling.
+const plainKey = (k) => k.normalize("NFD").replace(/[̀-ͯ]/g, "");
+function plainKeys(v) {
+  if (Array.isArray(v)) return v.map(plainKeys);
+  if (!v || typeof v !== "object") return v;
+  return Object.fromEntries(
+    Object.entries(v).map(([k, val]) => [plainKey(k), plainKeys(val)]),
+  );
+}
+
 // Validates model output into the shape each view renders; null means unusable.
 export function parseMaterial(type, raw) {
   if (type === "resumen") {
     const text = typeof raw === "string" ? raw : raw?.content || "";
     return text.trim() ? { text } : null;
   }
-  const obj = typeof raw === "string" ? safeJson(raw) : raw;
+  const obj = plainKeys(typeof raw === "string" ? safeJson(raw) : raw);
   if (!obj) return null;
   if (type === "mapa") {
     const ramas = (obj.ramas || [])
@@ -219,9 +230,9 @@ function parseInfographic(obj) {
     const eventos = (obj.eventos || [])
       .map((e) => ({
         emoji: str(e.emoji) || "📅",
-        titulo: str(e.año || e.fecha),
+        titulo: str(e.ano || e.fecha),
         texto: str(e.hecho),
-        cifra: str(e.año || e.fecha).slice(0, 14),
+        cifra: str(e.ano || e.fecha).slice(0, 14),
       }))
       .filter((e) => e.titulo && e.texto)
       .slice(0, 7);
