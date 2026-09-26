@@ -430,9 +430,14 @@ export const IngenIAKidsProvider = ({ children }) => {
     )
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((data) => {
-        if (Array.isArray(data.missions) && data.missions.length > 0) {
-          setMissions(data.missions);
-        }
+        // The mission engine returns DB rows ({ key, xp_reward }) that
+        // MissionsView cannot render: no button, no reward number. Only
+        // replace the local missions with a list in the shape it knows.
+        const usable =
+          Array.isArray(data.missions) &&
+          data.missions.length > 0 &&
+          data.missions.every((m) => m?.id != null && m?.xp != null);
+        if (usable) setMissions(data.missions);
       })
       .catch(() => {
         /* keep DEFAULT_MISSIONS fallback */

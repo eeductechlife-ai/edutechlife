@@ -45,9 +45,9 @@ describe("MobileBottomBar", () => {
   it("marks the active category with aria-current", () => {
     renderBar({ activeTab: "materias" });
     // 'materias' maps to 'learn' category
-    const active = screen.getAllByRole("button").find(
-      (b) => b.getAttribute("aria-current") === "page",
-    );
+    const active = screen
+      .getAllByRole("button")
+      .find((b) => b.getAttribute("aria-current") === "page");
     expect(active).toBeTruthy();
   });
 
@@ -65,17 +65,13 @@ describe("MobileBottomBar", () => {
     expect(onTabChange.mock.calls[0][0]).not.toBe("inicio");
   });
 
-  it("shows a lock badge on premium categories for free users", () => {
-    const { container } = renderBar({ subscriptionTier: "free" });
-    // lucide Lock renders an <svg>, count them (there is one per locked category)
-    const locks = container.querySelectorAll("svg.lucide-lock");
-    expect(locks.length).toBeGreaterThan(0);
-  });
-
-  it("hides no lock badge for premium users", () => {
-    const { container } = renderBar({ subscriptionTier: "premium" });
-    const locks = container.querySelectorAll("svg.lucide-lock");
-    expect(locks.length).toBe(0);
+  it("never shows lock badges in the main navigation", () => {
+    // Every category opens; premium features are gated inside the section.
+    for (const tier of ["free", "premium"]) {
+      const { container, unmount } = renderBar({ subscriptionTier: tier });
+      expect(container.querySelectorAll("svg.lucide-lock")).toHaveLength(0);
+      unmount();
+    }
   });
 
   it("hides itself when the on-screen keyboard is open", () => {

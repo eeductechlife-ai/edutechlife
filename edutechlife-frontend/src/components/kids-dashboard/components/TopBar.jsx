@@ -130,7 +130,7 @@ const TopBar = memo(
             <span
               className={`hidden sm:block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
             >
-              {t("smartboard.days")}
+              {(streak?.current ?? 0) === 1 ? "día" : t("smartboard.days")}
             </span>
           </motion.div>
 

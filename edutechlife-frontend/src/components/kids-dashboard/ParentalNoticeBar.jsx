@@ -1,72 +1,73 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuthIdentity } from "../../hooks/useAuthIdentity";
 import { API_BASE_URL as API_BASE } from "../../config/api";
 
+const SEEN_KEY = "ingenia_parent_notice_seen";
+const AUTO_HIDE_MS = 6000;
+
 /**
- * Aviso informativo (no bloqueante) para el padre/madre.
- * - Consulta el estado de consentimiento parental en segundo plano.
- * - Si aún no hay consentimiento, muestra un banner suave y envía
- *   la notificación al padre automáticamente (solo una vez).
- * - El estudiante entra al dashboard sin restricciones.
+ * Aviso informativo (no bloqueante): pide en segundo plano el consentimiento
+ * parental y, solo si de verdad quedó enviado al padre, se lo cuenta al
+ * estudiante una vez por sesión.
  */
 const ParentalNoticeBar = () => {
   const { token, isLoaded, isSignedIn } = useAuthIdentity();
   const [visible, setVisible] = useState(false);
-  const notified = useRef(false);
 
   useEffect(() => {
     if (!isLoaded || !isSignedIn || !token) return;
+    try {
+      if (sessionStorage.getItem(SEEN_KEY)) return;
+    } catch {}
 
-    const check = async () => {
-      try {
-        const res = await fetch(
-          `${API_BASE}/api/ingenia/parental-consent/status`,
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
-        if (!res.ok) return;
-        const data = await res.json();
-        if (data?.verification_status !== "verified") {
-          setVisible(true);
-          if (!notified.current) {
-            notified.current = true;
-            fetch(`${API_BASE}/api/ingenia/parental-consent`, {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ notify: true }),
-            }).catch(() => {});
-          }
-        }
-      } catch {}
+    let cancelled = false;
+    // Idempotent: resolves the parent's email server-side and only sends once.
+    fetch(`${API_BASE}/api/ingenia/parental-consent/request`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (cancelled || data?.verification_status !== "pending") return;
+        try {
+          sessionStorage.setItem(SEEN_KEY, "1");
+        } catch {}
+        setVisible(true);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
     };
-
-    check();
   }, [isLoaded, isSignedIn, token]);
+
+  useEffect(() => {
+    if (!visible) return;
+    const id = setTimeout(() => setVisible(false), AUTO_HIDE_MS);
+    return () => clearTimeout(id);
+  }, [visible]);
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={{ opacity: 0, y: -8 }}
+          initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
+          exit={{ opacity: 0, y: -12 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-0 left-0 right-0 z-[70] flex items-center justify-between gap-3 px-4 py-2 bg-[#004B63] text-white text-[12px] font-medium shadow-md"
+          className="fixed left-3 right-3 top-[calc(env(safe-area-inset-top,0px)+12px)] z-[70] mx-auto max-w-md flex items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-[#004B63] text-white text-[13px] font-semibold shadow-lg"
           role="status"
           aria-live="polite"
         >
           <span className="flex items-center gap-2 text-white">
             <span aria-hidden="true">🔔</span>
-            Hemos avisado a tus padres que ya estás en IngenIA.
+            Les contamos a tus papás que ya estás en IngenIA.
           </span>
           <button
             type="button"
             onClick={() => setVisible(false)}
             aria-label="Cerrar aviso"
-            className="flex-shrink-0 text-white/70 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded"
+            className="flex-shrink-0 w-8 h-8 -mr-1 inline-flex items-center justify-center text-white/80 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-full"
           >
             ✕
           </button>

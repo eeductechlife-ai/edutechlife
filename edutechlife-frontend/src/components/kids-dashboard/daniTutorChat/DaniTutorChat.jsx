@@ -244,11 +244,12 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.95 }}
               transition={{ type: "spring", damping: 28, stiffness: 320 }}
-              className={`fixed right-4 z-[55]
-                bottom-[5.5rem] sm:bottom-24 md:bottom-8
-                w-[calc(100vw-2rem)] sm:w-[440px] md:w-[460px]
-                max-h-[70dvh] sm:max-h-[min(580px,calc(100dvh-8rem))]
-                rounded-2xl flex flex-col overflow-hidden border ${
+              className={`fixed z-[60] inset-0 sm:inset-auto sm:right-4
+                sm:bottom-24 md:bottom-8
+                w-full sm:w-[440px] md:w-[460px]
+                h-[100dvh] sm:h-auto sm:max-h-[min(580px,calc(100dvh-8rem))]
+                pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] sm:pt-0 sm:pb-0
+                sm:rounded-2xl flex flex-col overflow-hidden sm:border ${
                   darkMode ? "border-[#2A3A54]" : "border-[#E2E8F0]"
                 }`}
               style={{
@@ -505,10 +506,10 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                                 "¿Qué materia quieres estudiar?"
                               : ageGroup === "early"
                                 ? "Escríbeme tu pregunta 😊"
-                                : "Escribe tu pregunta o pega el enunciado de tu tarea..."
+                                : "Escribe tu pregunta o tu tarea…"
                         }
                         maxLength={maxChars}
-                        className={`block w-full resize-none pl-4 pr-9 rounded-xl font-medium leading-snug focus:outline-none focus:ring-2 transition-[border-color,box-shadow] border text-base ${
+                        className={`block w-full resize-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pl-4 pr-9 rounded-xl font-medium leading-snug focus:outline-none focus:ring-2 transition-[border-color,box-shadow] border text-base ${
                           ageGroup === "early" ? "py-3.5" : "py-3"
                         } ${
                           darkMode

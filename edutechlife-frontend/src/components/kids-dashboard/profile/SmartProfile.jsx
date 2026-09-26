@@ -223,7 +223,7 @@ const SmartProfile = memo(function SmartProfile({
             {
               icon: "🔥",
               label: `Días seguidos · récord ${streak?.longest ?? 0}`,
-              value: `${streak?.current ?? 0} días`,
+              value: `${streak?.current ?? 0} ${(streak?.current ?? 0) === 1 ? "día" : "días"}`,
             },
             {
               icon: level.icon,
@@ -239,7 +239,7 @@ const SmartProfile = memo(function SmartProfile({
               <p className="text-[13px] font-black text-white truncate">
                 {icon} {value}
               </p>
-              <p className="text-[10px] text-white/75 truncate">{label}</p>
+              <p className="text-[10px] leading-tight text-white/80">{label}</p>
             </div>
           ))}
         </div>
@@ -387,14 +387,22 @@ const SmartProfile = memo(function SmartProfile({
                       {VAK_LABELS[vakStyle] || vakStyle}
                     </p>
                   ) : (
-                    <button
-                      type="button"
-                      onClick={onExpandVak}
-                      className="text-xs font-bold mt-0.5"
-                      style={{ color: "#FB8500" }}
-                    >
-                      Descubrir →
-                    </button>
+                    <>
+                      <p
+                        className="text-xs leading-snug mt-0.5"
+                        style={{ color: textMain }}
+                      >
+                        ¿Aprendes mejor viendo, escuchando o haciendo?
+                      </p>
+                      <button
+                        type="button"
+                        onClick={onExpandVak}
+                        className="mt-2 min-h-[40px] px-3.5 rounded-xl text-xs font-black text-white active:scale-95 transition-transform"
+                        style={{ background: "#FB8500" }}
+                      >
+                        Descubrir mi estilo →
+                      </button>
+                    </>
                   )}
                 </div>
               </div>

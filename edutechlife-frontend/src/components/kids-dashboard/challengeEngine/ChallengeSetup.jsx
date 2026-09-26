@@ -323,8 +323,8 @@ const ChallengeSetup = memo(
           </div>
         )}
 
-        {/* Sticky CTA — sits above the mobile bottom bar (h-16 + safe area ≈ 80px) */}
-        <div className="sticky bottom-0 z-10 pt-2 pb-[calc(env(safe-area-inset-bottom,0px)+5.5rem)] sm:pb-2 -mx-1">
+        {/* Inline, right after the difficulty cards: a sticky bar covered their names. */}
+        <div className="pt-1">
           <motion.button
             onClick={onStart}
             disabled={!subject || !difficulty || loading}

@@ -1,12 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Lock } from "lucide-react";
 import { useTranslation } from "../../../i18n/I18nProvider";
-import {
-  CATEGORY_MAP,
-  PREMIUM_TABS,
-  getTabsForAgeGroup,
-} from "../kidsDashboardConfig";
+import { CATEGORY_MAP, getTabsForAgeGroup } from "../kidsDashboardConfig";
 import { glow } from "../ingenIATheme";
 
 // Hide the bar when the on-screen keyboard is up so it never covers the input.
@@ -29,12 +24,10 @@ const MobileBottomBar = memo(
     activeTab,
     onTabChange,
     darkMode,
-    subscriptionTier,
     isFeatureEnabled = () => true,
     ageGroup = "middle",
   }) => {
     const { t } = useTranslation();
-    const isPremium = subscriptionTier === "premium";
     const activeCategory = CATEGORY_MAP[activeTab] || "home";
     const keyboardVisible = useKeyboardVisible();
     const visibleCategories = getTabsForAgeGroup(ageGroup);
@@ -61,10 +54,6 @@ const MobileBottomBar = memo(
         <nav className="flex items-center py-1.5 px-1">
           {visibleCategories.map((cat) => {
             const isActive = activeCategory === cat.id;
-            const anyPremiumInCategory = cat.tabs.some((tb) =>
-              PREMIUM_TABS.includes(tb),
-            );
-            const locked = anyPremiumInCategory && !isPremium;
             return (
               <motion.button
                 key={cat.id}
@@ -77,7 +66,7 @@ const MobileBottomBar = memo(
                   isActive
                     ? {
                         background: cat.gradient,
-                        boxShadow: glow(cat.glowColor, 0.5),
+                        boxShadow: glow(cat.glowColor, 0.25),
                         color: "white",
                       }
                     : { color: cat.color + "90" }
@@ -101,14 +90,11 @@ const MobileBottomBar = memo(
                   />
                 </motion.span>
                 <span
-                  className="text-[9px] font-bold whitespace-nowrap"
+                  className="text-[11px] font-bold whitespace-nowrap"
                   style={isActive ? { color: "white" } : {}}
                 >
                   {cat.label}
                 </span>
-                {locked && (
-                  <Lock className="w-2.5 h-2.5 absolute top-0.5 right-1 opacity-70" />
-                )}
               </motion.button>
             );
           })}
