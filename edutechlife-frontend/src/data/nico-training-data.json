@@ -9,7 +9,7 @@
   },
   "company": {
     "name": "EdutechLife",
-    "description": "Pedagogía colombiana con inteligencia artificial: democratizamos la educación de calidad en Latinoamérica adaptando cada experiencia de aprendizaje al cerebro único de cada estudiante. Aplicamos pedagogía, neurociencia e IA (ADN de Aprendizaje), con acompañamiento del coach IA con voz (MAX) y del tutor Dani. Nuestras 4 herramientas: IALab (curso de IA generativa con laboratorios), SmartBoard/IngenIA para niños y jóvenes, Diagnóstico VAK y IA Empresarial. Precios en pesos colombianos, primera clase gratis y becas. No enseñamos programación ni robótica, ni damos clases particulares por materia."
+    "description": "Pedagogía colombiana con inteligencia artificial: democratizamos la educación de calidad en Latinoamérica adaptando cada experiencia de aprendizaje al cerebro único de cada estudiante. Aplicamos pedagogía, neurociencia e IA (ADN de Aprendizaje), con acompañamiento del coach IA con voz (MAX) y del tutor Dani. Nuestras 4 herramientas: IALab (curso de IA generativa con laboratorios), IngenIA para niños y jóvenes, Diagnóstico VAK y IA Empresarial. Precios en pesos colombianos, primera clase gratis y becas. No enseñamos programación ni robótica, ni damos clases particulares por materia."
   },
   "metrics": {
     "students": "+6,000 estudiantes",
@@ -43,8 +43,8 @@
       }
     },
     {
-      "id": "smartboard",
-      "name": "SmartBoard",
+      "id": "ingenia",
+      "name": "IngenIA",
       "description": "Dashboard de acompañamiento académico y emocional para niños y jóvenes (6-16 años): tutor IA Dani, misiones, seguimiento de progreso, diagnóstico VAK y reportes para los padres.",
       "path": "/ingenia"
     },
@@ -66,8 +66,8 @@
       "description": "Curso práctico para aprender a usar la IA (prompts, ChatGPT, Gemini, NotebookLM, ética) con el coach MAX: laboratorios, retos y certificado.",
       "ages": "Jóvenes y adultos"
     },
-    "smartboard": {
-      "name": "SmartBoard para niños y jóvenes",
+    "ingenia": {
+      "name": "IngenIA para niños y jóvenes",
       "description": "Acompañamiento académico y emocional con IA: tutor Dani, misiones, VAK y reportes a padres.",
       "ages": "6-16 años"
     },
@@ -88,7 +88,7 @@
     "hibrido": "Combinación de sesiones online y presenciales según el programa."
   },
   "age_groups": {
-    "kids": { "label": "Niños y jóvenes", "range": "6-16 años (SmartBoard)" },
+    "kids": { "label": "Niños y jóvenes", "range": "6-16 años (IngenIA)" },
     "ialab": { "label": "IALab", "range": "jóvenes y adultos" },
     "vak": { "label": "Diagnóstico VAK", "range": "todas las edades" }
   },
@@ -113,7 +113,7 @@
         "price": "$199.000/mes COP",
         "features": [
           "Todo lo de Estudiante",
-          "SmartBoard con análisis de IA",
+          "IngenIA con análisis de IA",
           "Creación de contenidos VAK",
           "Hasta 100 estudiantes",
           "Chat con MAX (ilimitado)",
@@ -136,7 +136,7 @@
         ]
       },
       {
-        "name": "SmartBoard (niños) — plan aparte",
+        "name": "IngenIA (niños) — plan aparte",
         "price": "$30.000/mes COP (Básico) · $50.000/mes COP (Premium)",
         "features": [
           "Tutor Dani con chat ilimitado",
@@ -167,11 +167,11 @@
     "socialMedia": "Redes sociales oficiales de EdutechLife"
   },
   "faq": [
-    { "q": "¿Qué es EdutechLife?", "a": "EdutechLife es una compañía que aplica pedagogía e inteligencia artificial para mejorar el proceso educativo. Nuestro método: ADN de Aprendizaje (diagnóstico VAK) potenciado con IA. Productos principales: IALab (curso de IA con MAX), IngenIA/SmartBoard para niños y jóvenes, el ADN de Aprendizaje gratuito e IA para empresas. No enseñamos programación ni robótica." },
+    { "q": "¿Qué es EdutechLife?", "a": "EdutechLife es una compañía que aplica pedagogía e inteligencia artificial para mejorar el proceso educativo. Nuestro método: ADN de Aprendizaje (diagnóstico VAK) potenciado con IA. Productos principales: IALab (curso de IA con MAX), IngenIA para niños y jóvenes, el ADN de Aprendizaje gratuito e IA para empresas. No enseñamos programación ni robótica." },
     { "q": "¿Qué es IALab / AI Lab?", "a": "Es el curso de IA de EdutechLife (AI Lab Academic). Son 5 módulos prácticos: Artesano Digital (prompts), Arquitecto Digital (ChatGPT y GPTs), Detective de Datos (Gemini y Deep Research), Alquimista Digital (NotebookLM) y Guardián Digital (ética de la IA), guiados por MAX, el coach IA. Incluye laboratorios, examen y certificado." },
-    { "q": "¿Qué es SmartBoard?", "a": "SmartBoard es el espacio de EdutechLife para niños y jóvenes (6-16 años): acompañamiento académico y emocional con el tutor virtual Dani, misiones, diagnóstico VAK y reportes para los padres." },
+    { "q": "¿Qué es IngenIA?", "a": "IngenIA es el espacio de EdutechLife para niños y jóvenes (6-16 años): acompañamiento académico y emocional con el tutor virtual Dani, misiones, diagnóstico VAK y reportes para los padres." },
     { "q": "¿Cómo funciona el Diagnóstico VAK?", "a": "Es gratuito y 100% online: identifica tu estilo de aprendizaje (Visual, Auditivo o Kinestésico). Toma 10-30 minutos y entrega recomendaciones personalizadas." },
-    { "q": "¿Cuánto cuesta y en qué moneda?", "a": "Trabajamos en pesos colombianos (COP), no en dólares. El diagnóstico VAK es gratuito y la primera clase también. Los planes van desde $99.000/mes (Estudiante) y SmartBoard desde $30.000/mes. Para una cotización exacta escribe por WhatsApp +57 323 836 5517." },
+    { "q": "¿Cuánto cuesta y en qué moneda?", "a": "Trabajamos en pesos colombianos (COP), no en dólares. El diagnóstico VAK es gratuito y la primera clase también. Los planes van desde $99.000/mes (Estudiante) e IngenIA desde $30.000/mes. Para una cotización exacta escribe por WhatsApp +57 323 836 5517." },
     { "q": "¿Cómo funciona el coaching con MAX?", "a": "MAX es el coach de IA de IALab: responde sobre el curso, guía laboratorios, explica conceptos y da ejemplos prácticos, por texto o voz." },
     { "q": "¿Cómo usan la IA para mejorar el aprendizaje?", "a": "La IA es una herramienta al servicio de la pedagogía: el ADN de Aprendizaje identifica cómo aprende cada estudiante y la IA (coach MAX en IALab y tutor Dani en IngenIA) acompaña, organiza el estudio y personaliza el contenido. No enseñamos programación ni robótica." },
     { "q": "¿Cómo me inscribo?", "a": "Agenda tu primera clase gratuita o escribe por WhatsApp +57 323 836 5517. Un asesor te guía y resuelve tus dudas." }
@@ -185,8 +185,8 @@
       ]
     },
     "objections": {
-      "expensive": "Entendemos. Trabajamos en pesos colombianos con planes desde $99.000/mes (IALab) o $30.000/mes (SmartBoard), y la primera clase o el diagnóstico VAK son gratis. Escríbenos por WhatsApp y vemos cuál se ajusta a ti.",
-      "no_time": "Todo es online y flexible. IALab y SmartBoard se adaptan a tu horario; también puedes empezar con el diagnóstico VAK que toma 10-30 minutos.",
+      "expensive": "Entendemos. Trabajamos en pesos colombianos con planes desde $99.000/mes (IALab) o $30.000/mes (IngenIA), y la primera clase o el diagnóstico VAK son gratis. Escríbenos por WhatsApp y vemos cuál se ajusta a ti.",
+      "no_time": "Todo es online y flexible. IALab e IngenIA se adaptan a tu horario; también puedes empezar con el diagnóstico VAK que toma 10-30 minutos.",
       "not_sure": "Te entiendo. ¿Qué te parece agendar una llamada informativa sin compromiso? Resolvemos todas tus dudas."
     },
     "closing": [

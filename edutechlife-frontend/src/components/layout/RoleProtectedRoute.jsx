@@ -79,6 +79,8 @@ const RoleProtectedRoute = ({ children, requiredRole }) => {
 
         if (session?.user) {
           setIsAuthenticated(true);
+          // Clear any stale retry flag from a previous failed session attempt
+          sessionStorage.removeItem("auth_restore_retried");
           if (session.access_token && session.access_token !== token) {
             sessionStorage.setItem("auth_token", session.access_token);
           }

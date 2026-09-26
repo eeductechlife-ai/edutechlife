@@ -13,7 +13,10 @@ const DaniChatMessages = memo(
     isTyping,
     darkMode,
     messagesEndRef,
+    onRetry,
+    ageGroup = "middle",
   }) => {
+    const textSize = ageGroup === "early" ? "text-base" : "text-[15px]";
     const { t } = useTranslation();
     return (
       <div
@@ -49,6 +52,14 @@ const DaniChatMessages = memo(
               message={msg}
               isDani={msg.role === "assistant"}
               darkMode={darkMode}
+              textSize={textSize}
+              onRetry={
+                msg.retryText &&
+                index === daniChatHistory.length - 1 &&
+                !isTyping
+                  ? () => onRetry?.(msg.retryText)
+                  : undefined
+              }
             />
           );
         })}
@@ -59,16 +70,18 @@ const DaniChatMessages = memo(
             className="flex justify-start mb-4"
           >
             <div className="mr-3 mt-1 flex-shrink-0" aria-hidden="true">
-              <DaniAvatar />
+              <DaniAvatar size="sm" isSpeaking />
             </div>
             <div
-              className={`max-w-[75%] px-4 py-3 rounded-2xl rounded-tl-md shadow-sm ${
+              className={`max-w-[85%] px-4 py-3 rounded-2xl rounded-tl-md shadow-sm ${
                 darkMode
                   ? "bg-[#1E293B] border border-[#334155] text-[#E2E8F0]"
                   : "bg-white border border-[#E2E8F0] text-[#004B63]"
               }`}
             >
-              <p className="text-sm leading-relaxed whitespace-pre-wrap">
+              <p
+                className={`${textSize} leading-relaxed whitespace-pre-wrap break-words`}
+              >
                 {renderInlineMarkdown(streamingMessage)}
                 <motion.span
                   className="inline-block w-1.5 h-4 bg-[#4DA8C4] ml-0.5 align-middle"
@@ -80,7 +93,7 @@ const DaniChatMessages = memo(
             </div>
           </motion.div>
         )}
-        {isTyping && (
+        {isTyping && !streamingMessage && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -93,7 +106,11 @@ const DaniChatMessages = memo(
                   : "bg-white border border-[#E2E8F0]"
               }`}
             >
-              <div className="flex gap-1" aria-label={t("dani.status_writing")}>
+              <div
+                className="flex items-center gap-1"
+                role="status"
+                aria-label={t("dani.status_writing")}
+              >
                 {[0, 1, 2].map((i) => (
                   <motion.div
                     key={i}
@@ -106,6 +123,11 @@ const DaniChatMessages = memo(
                     }}
                   />
                 ))}
+                <span
+                  className={`ml-2 text-xs ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+                >
+                  Dani está pensando…
+                </span>
               </div>
             </div>
           </motion.div>

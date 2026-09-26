@@ -4,6 +4,7 @@ import { IngenIAKidsContext } from "../context/IngenIAKidsContext";
 import {
   DEFAULT_NEWS,
   DEFAULT_MISSIONS,
+  getRotatingMissions,
   DEFAULT_SUBJECTS,
 } from "../context/ingenIAData";
 import { PageLoader } from "../components/LoadingScreen";
@@ -33,6 +34,12 @@ const GRADE_BY_SUBJECT = {
   arte: 5,
 };
 
+// Same shape as IngenIAKidsContext.gradeTrend.
+function devTrend(g) {
+  const delta = Math.round(((g.p3 ?? 0) - (g.p2 ?? 0)) * 10) / 10;
+  return { delta, dir: delta > 0.05 ? "up" : delta < -0.05 ? "down" : "flat" };
+}
+
 const avg = (g) => {
   const v = [g.p1, g.p2, g.p3, g.p4].filter((x) => x != null);
   return v.reduce((a, b) => a + b, 0) / v.length;
@@ -59,7 +66,10 @@ export default function DevIngenIAPreview() {
     { points: 100, reason: "Reto Matemáticas (60%)", timestamp: daysAgo(2) },
     { points: 50, reason: "Misión completada", timestamp: daysAgo(1) },
   ]);
-  const [missions, setMissions] = useState(DEFAULT_MISSIONS);
+  const [missions, setMissions] = useState(() => [
+    ...DEFAULT_MISSIONS,
+    ...getRotatingMissions(),
+  ]);
   const [readNews, setReadNews] = useState([]);
   const [documentForDani, setDocumentForDani] = useState(null);
   const [activeStudyDeck, setActiveStudyDeck] = useState(null);
@@ -90,7 +100,7 @@ export default function DevIngenIAPreview() {
           ...s,
           gradeScore,
           progress: Math.round((gradeScore / 5) * 100),
-          trend: { delta: Math.round((g.p3 - g.p2) * 10) / 10 },
+          trend: devTrend(g),
         };
       }),
     [studentGrades],
@@ -200,10 +210,14 @@ export default function DevIngenIAPreview() {
     missions,
     subjects: DEFAULT_SUBJECTS,
     subjectsWithGrades,
-    completeMission: (id) =>
+    completeMission: (id) => {
+      const mission = missions.find((m) => m.id === id);
+      if (!mission || mission.completed) return;
       setMissions((ms) =>
         ms.map((m) => (m.id === id ? { ...m, completed: true } : m)),
-      ),
+      );
+      addPoints(mission.xp || 0, `Misión completada: ${mission.title || ""}`);
+    },
 
     flashcardDecks,
     setFlashcardDecks,
@@ -232,9 +246,7 @@ export default function DevIngenIAPreview() {
     studentGrades,
     setStudentGrades,
     gradeAvg: avg,
-    gradeTrend: (g) => ({
-      delta: Math.round(((g.p3 ?? 0) - (g.p2 ?? 0)) * 10) / 10,
-    }),
+    gradeTrend: devTrend,
 
     timetable: null,
     slots: [],

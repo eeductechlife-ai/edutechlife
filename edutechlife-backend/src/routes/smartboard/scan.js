@@ -152,7 +152,7 @@ async function analyzeImageViaVision(imageBase64, systemPrompt, subject) {
     isJson: true,
     temperature: 0.5,
     maxTokens: 2000,
-    model: process.env.DEEPSEEK_VISION_MODEL || 'deepseek-chat',
+    model: process.env.DEEPSEEK_VISION_MODEL,
   });
 
   return parseJsonResponse(response?.choices?.[0]?.message?.content || '');

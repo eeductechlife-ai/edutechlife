@@ -1,7 +1,7 @@
 export const MIN_INPUT_LENGTH = 3;
 export const MAX_INPUT_LENGTH = 500;
 
-export const DEEPSEEK_MODEL = "deepseek-chat";
+export const DEEPSEEK_MODEL = "deepseek-flash";
 export const DEEPSEEK_TEMPERATURE = 0.7;
 export const DEEPSEEK_MAX_TOKENS = 1000;
 export const DEEPSEEK_ENDPOINT = "/api/chat";
@@ -27,7 +27,7 @@ export const BEFORE_COMPARISON_DEFAULTS = {
 export const DEEPSEEK_PROCESSING_TIME = 2000;
 export const LOCAL_PROCESSING_TIME = 120;
 
-export const DEEPSEEK_MODEL_VERSION = "deepseek-chat";
+export const DEEPSEEK_MODEL_VERSION = "deepseek-flash";
 export const LOCAL_MODEL_VERSION = "v2.0";
 
 export const DEEPSEEK_TECHNIQUE = {

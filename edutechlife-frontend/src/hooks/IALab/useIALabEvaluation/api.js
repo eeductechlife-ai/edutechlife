@@ -25,7 +25,7 @@ export async function generateExercises({ config, locale, signal }) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "deepseek-chat",
+      model: "deepseek-flash",
       isJson: true,
       messages: [
         { role: "system", content: config.generateSystemPrompt(activeLocale) },
@@ -92,7 +92,7 @@ export async function evaluateAnswers({
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "deepseek-chat",
+      model: "deepseek-flash",
       isJson: true,
       messages: [
         { role: "system", content: config.evaluateSystemPrompt() },

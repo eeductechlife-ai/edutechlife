@@ -29,6 +29,7 @@ import {
   Lightbulb,
 } from "lucide-react";
 import SEO from "../../SEO";
+import IngenIALogo from "../../brand/IngenIALogo";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { createSupabaseClient } from "../../../lib/supabase";
 import { LivePresenceBar, ActivityLog } from "./components/ParentControls";
@@ -164,8 +165,13 @@ const Sidebar = ({
       <div className="p-5 border-b border-white/10">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-white font-black text-lg leading-tight">
-              IngenIA
+            <h1 className="mb-1">
+              <IngenIALogo
+                variant="wordmark"
+                tone="dark"
+                height={28}
+                title="IngenIA"
+              />
             </h1>
             <span className="text-[#4DA8C4] text-xs font-semibold tracking-wide">
               {t("parent_dashboard.panel_title")}
@@ -1480,42 +1486,48 @@ const IngenIAParentDashboard = () => {
                       </div>
                     </div>
 
-                    {/* Features list */}
-                    <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
-                      <h3 className="font-bold text-[#004B63] mb-4 flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-[#4DA8C4]" />{" "}
-                        {t("parent_dashboard.subscription_includes")}
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        {FEATURES.map((f, i) => (
-                          <div
-                            key={i}
-                            className="flex items-center gap-3 p-3 bg-[#F8FAFC] rounded-lg"
-                          >
-                            <span className="text-xl">{f.icon}</span>
-                            <span className="text-sm text-[#334155] flex-1">
-                              {t(f.textKey)}
-                            </span>
-                            <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                          </div>
-                        ))}
+                    {/* Reorder on mobile: Informe first, Features+Weekly after */}
+                    <div className="flex flex-col gap-5">
+                      {/* Informe académico — order-1 mobile, order-3 desktop */}
+                      <div className="order-1 md:order-3">
+                        <h3 className="font-bold text-[#004B63] mb-3 flex items-center gap-2">
+                          <span>📊</span> Informe académico — Análisis de notas
+                        </h3>
+                        <GradeReportCard
+                          authToken={authToken}
+                          studentId={studentId || userId}
+                        />
                       </div>
-                    </div>
 
-                    <WeeklyReportCard
-                      authToken={authToken}
-                      studentName={data.vakResult?.studentName}
-                    />
+                      {/* Features list — order-2 mobile, order-1 desktop */}
+                      <div className="order-2 md:order-1 bg-white rounded-xl p-5 border border-[#E2E8F0]">
+                        <h3 className="font-bold text-[#004B63] mb-4 flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-[#4DA8C4]" />{" "}
+                          {t("parent_dashboard.subscription_includes")}
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                          {FEATURES.map((f, i) => (
+                            <div
+                              key={i}
+                              className="flex items-center gap-3 p-3 bg-[#F8FAFC] rounded-lg"
+                            >
+                              <span className="text-xl">{f.icon}</span>
+                              <span className="text-sm text-[#334155] flex-1">
+                                {t(f.textKey)}
+                              </span>
+                              <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
 
-                    {/* Informe de notas y plan académico de Dani */}
-                    <div>
-                      <h3 className="font-bold text-[#004B63] mb-3 flex items-center gap-2">
-                        <span>📊</span> Informe académico — Análisis de notas
-                      </h3>
-                      <GradeReportCard
-                        authToken={authToken}
-                        studentId={studentId || userId}
-                      />
+                      {/* WeeklyReportCard — order-3 mobile, order-2 desktop */}
+                      <div className="order-3 md:order-2">
+                        <WeeklyReportCard
+                          authToken={authToken}
+                          studentName={data.vakResult?.studentName}
+                        />
+                      </div>
                     </div>
                   </div>
                 )}

@@ -39,7 +39,7 @@ const DeepSeekDashboard = memo(
                 {t("ialab.synthesizer.model")}
               </div>
               <div className="font-bold text-slate-800 dark:text-slate-100 font-sans">
-                deepseek-chat
+                deepseek-flash
               </div>
             </div>
             <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
@@ -210,7 +210,7 @@ const DeepSeekDashboard = memo(
                   {t("ialab.synthesizer.generated_with")}
                 </p>
                 <p className="text-xs text-slate-500 dark:text-slate-400 font-sans">
-                  {t("ialab.synthesizer.model_label")}: deepseek-chat •{" "}
+                  {t("ialab.synthesizer.model_label")}: deepseek-flash •{" "}
                   {t("ialab.synthesizer.temperature_label")}: 0.7 •{" "}
                   {t("ialab.synthesizer.response_format_label")}: JSON
                 </p>

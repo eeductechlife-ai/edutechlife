@@ -122,6 +122,7 @@ function seedLocalStorage() {
     { id: "s2", subject: "Inglés", duration: 25, timestamp: daysAgo(0) },
   ]);
   set(`edutechlife_vak${sfx}`, {
+    predominantStyle: "Visual",
     dominant: "visual",
     scores: { visual: 72, auditory: 55, kinesthetic: 48 },
   });

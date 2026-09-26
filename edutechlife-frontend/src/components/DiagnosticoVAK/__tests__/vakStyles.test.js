@@ -11,9 +11,11 @@ const STYLES = ["visual", "auditivo", "kinestesico"];
 
 describe("STYLE_MAP", () => {
   test("defines an entry for each of the three VAK styles", () => {
-    expect(Object.keys(STYLE_MAP).sort()).toEqual(
-      ["auditivo", "kinestesico", "visual"],
-    );
+    expect(Object.keys(STYLE_MAP).sort()).toEqual([
+      "auditivo",
+      "kinestesico",
+      "visual",
+    ]);
   });
 
   test.each(STYLES)("%s entry has the expected shape", (style) => {
@@ -124,7 +126,7 @@ describe("getValentinaCommentary", () => {
     const result = getValentinaCommentary(diagnosis, "Otro Nombre", 16);
     // age 8 -> visual child report copy
     expect(result).toContain(
-      "Después de aplicar y analizar el Diagnóstico VAK",
+      "Después de aplicar y analizar el ADN de Aprendizaje",
     );
     expect(result).toContain("Ana");
   });

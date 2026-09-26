@@ -31,24 +31,24 @@ export const getSubjects = (t) => [
   },
 ];
 
-export const getDifficulties = (t) => [
+export const getDifficulties = (t, isEarly = false) => [
   {
     id: "facil",
-    label: t("oral.difficulty_facil"),
+    label: isEarly ? "¡Fácil!" : t("oral.difficulty_facil"),
     color: "#22C55E",
     icon: "🌱",
   },
   {
     id: "medio",
-    label: t("oral.difficulty_medio"),
+    label: isEarly ? "Normal" : t("oral.difficulty_medio"),
     color: "#EAB308",
-    icon: "🔥",
+    icon: isEarly ? "⭐" : "🔥",
   },
   {
     id: "dificil",
-    label: t("oral.difficulty_dificil"),
-    color: "#EF4444",
-    icon: "💀",
+    label: isEarly ? "¡Súper reto!" : t("oral.difficulty_dificil"),
+    color: isEarly ? "#9D4EDD" : "#EF4444",
+    icon: isEarly ? "🚀" : "💀",
   },
 ];
 

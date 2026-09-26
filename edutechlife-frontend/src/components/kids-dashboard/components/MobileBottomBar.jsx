@@ -68,11 +68,7 @@ const MobileBottomBar = memo(
             return (
               <motion.button
                 key={cat.id}
-                onClick={() =>
-                  onTabChange(
-                    activeCategory === cat.id ? activeTab : getFirstTab(cat.id),
-                  )
-                }
+                onClick={() => onTabChange(getFirstTab(cat.id))}
                 whileTap={{ scale: 0.88 }}
                 aria-label={cat.label}
                 aria-current={isActive ? "page" : undefined}

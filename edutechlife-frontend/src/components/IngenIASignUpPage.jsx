@@ -6,6 +6,7 @@ import { EVENTS } from "../lib/analyticsEvents";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import FloatingParticles from "./FloatingParticles";
+import IngenIALogo from "./brand/IngenIALogo";
 import {
   GraduationCap,
   BookOpen,
@@ -33,7 +34,7 @@ const SmartBoardSignUpPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const returnTo = searchParams.get("returnTo") || "/smartboard";
+  const returnTo = searchParams.get("returnTo") || "/ingenia";
   const urlTab = searchParams.get("tab");
   const urlToken = searchParams.get("token") || "";
   const [mode, setMode] = useState("signin");
@@ -103,7 +104,7 @@ const SmartBoardSignUpPage = () => {
           `${data.user.firstName} ${data.user.lastName}`.trim(),
         );
         track(EVENTS.PARENT_LOGIN, { studentId: data.user.studentId });
-        navigate("/smartboard");
+        navigate("/ingenia");
         return;
       } catch (err) {
         if (
@@ -162,7 +163,7 @@ const SmartBoardSignUpPage = () => {
   };
 
   const handleBack = () => {
-    navigate("/conoce-smartboard");
+    navigate("/conoce-ingenia");
   };
 
   const isParentMode = userType === "parent";
@@ -216,11 +217,15 @@ const SmartBoardSignUpPage = () => {
                 >
                   <div>
                     <div className="flex items-center gap-3 mb-8">
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <GraduationCap className="w-7 h-7" />
-                      </div>
                       <div>
-                        <h1 className="text-2xl font-bold">SmartBoard</h1>
+                        <h1 className="mb-1">
+                          <IngenIALogo
+                            variant="wordmark"
+                            tone="mono-white"
+                            height={36}
+                            title="IngenIA"
+                          />
+                        </h1>
                         <p className="text-white/80 text-sm">
                           {t("smartboard.signup_for_students")}
                         </p>
@@ -297,11 +302,15 @@ const SmartBoardSignUpPage = () => {
                 >
                   <div>
                     <div className="flex items-center gap-3 mb-8">
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                        <Users className="w-7 h-7" />
-                      </div>
                       <div>
-                        <h1 className="text-2xl font-bold">SmartBoard</h1>
+                        <h1 className="mb-1">
+                          <IngenIALogo
+                            variant="wordmark"
+                            tone="mono-white"
+                            height={36}
+                            title="IngenIA"
+                          />
+                        </h1>
                         <p className="text-white/80 text-sm">
                           Portal para Padres y Madres
                         </p>
@@ -459,7 +468,7 @@ const SmartBoardSignUpPage = () => {
                             transition={{ duration: 0.2 }}
                           >
                             <SupabaseLoginForm
-                              returnTo={returnTo || "/smartboard"}
+                              returnTo={returnTo || "/ingenia"}
                             />
                           </motion.div>
                         ) : (
@@ -475,7 +484,7 @@ const SmartBoardSignUpPage = () => {
                               style={{ minHeight: 400 }}
                             >
                               <SupabaseSignUpForm
-                                returnTo={returnTo || "/smartboard/consent"}
+                                returnTo={returnTo || "/ingenia/consent"}
                                 onBack={() => setMode("signin")}
                                 accountType="smartboard"
                                 embedded

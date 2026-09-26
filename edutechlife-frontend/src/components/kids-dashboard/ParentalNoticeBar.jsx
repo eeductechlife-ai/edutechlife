@@ -58,7 +58,7 @@ const ParentalNoticeBar = () => {
           role="status"
           aria-live="polite"
         >
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2 text-white">
             <span aria-hidden="true">🔔</span>
             Hemos avisado a tus padres que ya estás en IngenIA.
           </span>

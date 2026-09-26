@@ -1,6 +1,7 @@
-import { useCallback } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { callDaniOrchestrator } from "../../../utils/api";
+import { stopSpeech } from "../../../utils/speech";
 import { inferMoodFromText, extractTopic } from "../dani/chatUtils";
 import { getQuickActionMessage } from "./daniQuickActions";
 import {
@@ -19,7 +20,6 @@ import { EVENTS } from "../../../lib/analyticsEvents";
 
 export default function useDaniSendMessage({
   getToken,
-  inputText,
   setInputText,
   setIsTyping,
   daniMood,
@@ -28,11 +28,7 @@ export default function useDaniSendMessage({
   documentForDani,
   setDocumentForDani,
   addDaniMessage,
-  buildDaniContext,
-  buildMemoryInjection,
   daniChatHistory,
-  daniMemory,
-  updateDaniMemory,
   recordMoodInference,
   trackAcademicTopic,
   voiceEnabled,
@@ -49,28 +45,54 @@ export default function useDaniSendMessage({
 }) {
   const { t } = useTranslation();
   const isKid = studentAge && studentAge <= 11;
+  const abortRef = useRef(null);
 
-  const kidErrorMessages = {
-    generic: "¡Ups! Dani se quedó pensando. ¿Puedes intentar de nuevo?",
-    timeout:
-      "Dani está pensando muy profundo... Espera un poco y vuelve a intentar.",
-    network:
-      "¡Oh! Parece que el internet se fue de paseo. Revisa tu conexión y vuelve a intentar.",
-  };
+  const kidErrorMessages = useMemo(
+    () => ({
+      generic: "¡Ups! Dani se quedó pensando. ¿Puedes intentar de nuevo?",
+      timeout:
+        "Dani está pensando muy profundo... Espera un poco y vuelve a intentar.",
+      network:
+        "¡Oh! Parece que el internet se fue de paseo. Revisa tu conexión y vuelve a intentar.",
+    }),
+    [],
+  );
+
+  // Metadata frames arrive as JSON strings with "__"-prefixed keys.
+  const handleMeta = useCallback(
+    (meta) => {
+      if (meta.__crisisAlert) {
+        setCrisisAlertLevel(meta.__crisisAlert);
+        setShowCrisisResources(true);
+      }
+      if (meta.__emotionalState === "frustrated") setShowEmotionalBanner(true);
+      if (meta.__emotionalState === "confused") setDaniMood("thinking");
+    },
+    [
+      setCrisisAlertLevel,
+      setShowCrisisResources,
+      setShowEmotionalBanner,
+      setDaniMood,
+    ],
+  );
 
   const handleSendMessage = useCallback(
-    async (text) => {
-      if (!text.trim()) return;
+    async (text, { isRetry = false } = {}) => {
+      if (!text.trim() || abortRef.current) return;
 
       const userMessage = {
         role: "user",
         text: text.trim(),
         timestamp: new Date(),
       };
-      addDaniMessage(userMessage);
+      if (!isRetry) addDaniMessage(userMessage);
       setInputText("");
       setIsTyping(true);
       setDaniMood("thinking");
+
+      const controller = new AbortController();
+      abortRef.current = controller;
+      let fullResponse = "";
 
       try {
         const currentMood = daniMood;
@@ -81,17 +103,20 @@ export default function useDaniSendMessage({
         if (isEmotionalBannerNeeded(mood)) setShowEmotionalBanner(true);
         if (isCrisisAlert(mood)) setShowCrisisResources(true);
 
-        // Build lean history for orchestrator (last 12 turns)
-        const history = daniChatHistory
+        // Failed replies are UI-only; the model must not see them as turns.
+        const usable = daniChatHistory.filter(
+          (msg) => !msg.isError && msg.text && typeof msg.text === "string",
+        );
+        // On retry the failed question is already the last turn in history.
+        if (isRetry && usable.at(-1)?.role === "user") usable.pop();
+        const history = usable
           .slice(-12)
-          .filter((msg) => msg.text && typeof msg.text === "string")
           .map((msg) => ({ role: msg.role, content: msg.text }));
 
         if (hasDocumentContext) setDocumentForDani(null);
 
-        let fullResponse = "";
         pendingSentenceRef.current = "";
-        clearVoiceQueue(); // clear any pending audio from previous response
+        clearVoiceQueue();
 
         const token = await getToken();
         if (!token)
@@ -108,6 +133,15 @@ export default function useDaniSendMessage({
           has_document: !!hasDocumentContext,
         });
 
+        const voiceOpts = {
+          pendingSentenceRef,
+          voiceEnabled,
+          isSpeakingRef,
+          daniMood: currentMood,
+          setIsSpeaking,
+          setVoiceBlocked,
+        };
+
         await callDaniOrchestrator(
           {
             message: userMessage.text,
@@ -116,134 +150,86 @@ export default function useDaniSendMessage({
             documentContext: hasDocumentContext ? documentForDani : null,
             history,
           },
-          { token },
+          { token, signal: controller.signal },
           (data) => {
-            try {
-              const parsed = JSON.parse(data);
-              // Handle metadata events from orchestrator
-              if (
-                parsed.emotionalState &&
-                parsed.emotionalState !== "neutral"
-              ) {
-                if (parsed.emotionalState === "frustrated")
-                  setShowEmotionalBanner(true);
-              }
-              if (parsed.crisisAlert) {
-                setCrisisAlertLevel(parsed.crisisAlert);
-                setShowCrisisResources(true);
+            if (data.startsWith('{"__')) {
+              try {
+                handleMeta(JSON.parse(data));
                 return;
+              } catch {
+                // Not metadata after all: treat as text below.
               }
-              if (parsed.__crisisAlert) {
-                setCrisisAlertLevel(parsed.__crisisAlert);
-                setShowCrisisResources(true);
-                return;
-              }
-              // Orchestrator sends { chunk } objects
-              if (parsed.chunk) {
-                fullResponse += parsed.chunk;
-                setDaniMood("explaining");
-                setStreamingMessage(fullResponse);
-                processStreamChunkVoice(parsed.chunk, {
-                  pendingSentenceRef,
-                  voiceEnabled,
-                  isSpeakingRef,
-                  daniMood: currentMood,
-                  setIsSpeaking,
-                  setVoiceBlocked,
-                });
-                return;
-              }
-            } catch {}
-            // Fallback: raw text chunk
+            }
             fullResponse += data;
             setDaniMood("explaining");
             setStreamingMessage(fullResponse);
-            processStreamChunkVoice(data, {
-              pendingSentenceRef,
-              voiceEnabled,
-              isSpeakingRef,
-              daniMood: currentMood,
-              setIsSpeaking,
-              setVoiceBlocked,
-            });
+            processStreamChunkVoice(data, voiceOpts);
           },
         );
 
-        const remaining = pendingSentenceRef.current.trim();
-        speakRemainingText(remaining, {
-          voiceEnabled,
-          isSpeakingRef,
-          daniMood: currentMood,
-          setIsSpeaking,
-          setVoiceBlocked,
-        });
-
-        setDaniMood("explaining");
+        speakRemainingText(pendingSentenceRef.current.trim(), voiceOpts);
         setStreamingMessage("");
 
-        try {
-          const chartMatch = fullResponse.match(/<!CHART>(.*?)<\/!CHART>/s);
-          if (chartMatch) {
-            const chartData = JSON.parse(chartMatch[1].trim());
-            addDaniMessage({
-              role: "assistant",
-              type: "chart",
-              data: chartData,
-            });
-          }
-          const videoMatch = fullResponse.match(/<!VIDEO>(.*?)<\/!VIDEO>/s);
-          if (videoMatch) {
-            const videoData = JSON.parse(videoMatch[1].trim());
-            addDaniMessage({
-              role: "assistant",
-              type: "video",
-              data: videoData,
-            });
-          }
-        } catch {}
-
-        const cleanResponse = fullResponse
-          .replace(/<memoria>[\s\S]*?<\/memoria>/, "")
-          .trim();
-        addDaniMessage({
-          role: "assistant",
-          text: cleanResponse || fullResponse,
-        });
-
-        try {
-          const memoriaMatch = fullResponse.match(
-            /<memoria>([\s\S]*?)<\/memoria>/,
-          );
-          if (memoriaMatch) {
-            const parsed = JSON.parse(memoriaMatch[1].trim());
-            updateDaniMemory(parsed);
-          }
-        } catch (e) {
-          console.warn("[Dani] Memoria parse error:", e.message);
-        }
+        const reply = fullResponse.trim();
+        if (!reply) throw new Error("Respuesta vacía del servidor");
+        addDaniMessage({ role: "assistant", text: reply });
 
         recordMoodIfNeeded(mood, userMessage.text, recordMoodInference);
         trackTopicFromMessage(userMessage, extractTopic, trackAcademicTopic);
       } catch (error) {
+        setStreamingMessage("");
+
+        if (controller.signal.aborted) {
+          // The student pressed "stop": keep what Dani had already said.
+          const partial = fullResponse.trim();
+          if (partial)
+            addDaniMessage({
+              role: "assistant",
+              text: `${partial} …`,
+              stopped: true,
+            });
+          return;
+        }
+
         console.error("Error calling Dani:", error);
-        const errorMsg = isKid
-          ? error.message?.includes("400") || error.message?.includes("500")
-            ? kidErrorMessages.generic
-            : error.message?.includes("timeout") ||
-                error.message?.includes("Tiempo de espera")
-              ? kidErrorMessages.timeout
-              : kidErrorMessages.network
-          : error.message?.includes("400") || error.message?.includes("500")
-            ? t("dani.error_generic")
-            : error.message?.includes("timeout") ||
-                error.message?.includes("Tiempo de espera")
-              ? t("dani.error_timeout")
-              : t("dani.error_network");
+        const isAuth =
+          error.status === 401 ||
+          error.status === 403 ||
+          error.message?.includes("sesión") ||
+          error.message?.includes("iniciar sesión");
+        const isServer =
+          error.status >= 400 ||
+          error.message?.includes("400") ||
+          error.message?.includes("500") ||
+          error.message?.includes("servidor");
+        const isTimeout =
+          error.message?.includes("timeout") ||
+          error.message?.includes("Tiempo de espera") ||
+          error.message?.includes("tardó") ||
+          error.name === "AbortError";
+        const errorMsg = isAuth
+          ? isKid
+            ? "¡Ups! Tu sesión expiró. Vuelve a entrar para seguir con Dani. 🔓"
+            : "Tu sesión se cerró. Vuelve a iniciar sesión para continuar."
+          : isKid
+            ? isServer
+              ? kidErrorMessages.generic
+              : isTimeout
+                ? kidErrorMessages.timeout
+                : kidErrorMessages.network
+            : isServer
+              ? t("dani.error_generic")
+              : isTimeout
+                ? t("dani.error_timeout")
+                : t("dani.error_network");
         addDaniMessage({
           role: "assistant",
           text: errorMsg,
+          isError: true,
+          retryText: isAuth ? undefined : userMessage.text,
         });
       } finally {
+        if (abortRef.current === controller) abortRef.current = null;
         setIsTyping(false);
         setDaniMood("happy");
       }
@@ -269,12 +255,21 @@ export default function useDaniSendMessage({
       setIsSpeaking,
       setShowEmotionalBanner,
       setShowCrisisResources,
-      setCrisisAlertLevel,
       setStreamingMessage,
-      updateDaniMemory,
       studentDbId,
+      kidErrorMessages,
+      setDocumentForDani,
+      handleMeta,
     ],
   );
+
+  const stopResponse = useCallback(() => {
+    abortRef.current?.abort();
+    clearVoiceQueue();
+    stopSpeech();
+    setIsSpeaking(false);
+    isSpeakingRef.current = false;
+  }, [setIsSpeaking, isSpeakingRef]);
 
   const handleQuickAction = useCallback(
     (action) => {
@@ -292,8 +287,15 @@ export default function useDaniSendMessage({
     [handleSendMessage],
   );
 
+  const handleRetry = useCallback(
+    (text) => handleSendMessage(text, { isRetry: true }),
+    [handleSendMessage],
+  );
+
   return {
     handleSendMessage,
+    handleRetry,
+    stopResponse,
     handleQuickAction,
     handleTopicClick,
   };

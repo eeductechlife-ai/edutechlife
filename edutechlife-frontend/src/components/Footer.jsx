@@ -41,7 +41,7 @@ const socialLinks = [
 const toolLinks = [
   { label: "IA Lab con MAX", view: "ialab", key: "footer.ialab" },
   { label: "IngenIA", view: "neuroentorno", key: "footer.smartboard" },
-  { label: "Diagnóstico VAK", view: "vak", key: "footer.vak" },
+  { label: "ADN de Aprendizaje", view: "vak", key: "footer.vak" },
   { label: "ROI Calculator", view: "consultoria", key: "footer.roi" },
   {
     label: "Automatización Empresarial",

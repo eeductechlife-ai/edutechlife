@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
+import QuestionText from "./QuestionText";
 import { RotateCcw, Layers, ArrowLeft } from "lucide-react";
 import {
   setHandoff,
@@ -12,30 +13,64 @@ import {
   PlanTaskDoneBanner,
 } from "../improvementPlan/PlanTaskDone";
 
-function resultCopy(score) {
-  if (score >= 90)
-    return {
+const RESULT_COPY = {
+  early: [
+    {
+      min: 90,
+      emoji: "🏆",
+      title: "¡Eres un campeón!",
+      sub: "¡Lo lograste! ¡Eres súper inteligente! 🌟",
+    },
+    {
+      min: 70,
+      emoji: "⭐",
+      title: "¡Muy bien hecho!",
+      sub: "¡Casi perfecto! Practica un poco más y ¡llegas! 🎉",
+    },
+    {
+      min: 50,
+      emoji: "💪",
+      title: "¡Sigue intentando!",
+      sub: "¡Eso! Cada vez lo harás mejor. ¡Tú puedes! 🚀",
+    },
+    {
+      min: 0,
+      emoji: "🌱",
+      title: "¡Estás aprendiendo!",
+      sub: "Equivocarse está bien. ¡Repasa y vuelve a jugar! 😊",
+    },
+  ],
+  other: [
+    {
+      min: 90,
       emoji: "🏆",
       title: "¡Excelente!",
       sub: "Dominas este tema. ¡Prueba un nivel más difícil!",
-    };
-  if (score >= 70)
-    return {
+    },
+    {
+      min: 70,
       emoji: "⭐",
       title: "¡Muy bien!",
       sub: "Vas por buen camino. Un reto más y lo dominas.",
-    };
-  if (score >= 50)
-    return {
+    },
+    {
+      min: 50,
       emoji: "💪",
       title: "¡Buen intento!",
       sub: "Repasa lo que falló y vuelve a intentarlo.",
-    };
-  return {
-    emoji: "🌱",
-    title: "¡Estás aprendiendo!",
-    sub: "Equivocarse es parte de aprender. Repasa y prueba otra vez.",
-  };
+    },
+    {
+      min: 0,
+      emoji: "🌱",
+      title: "¡Estás aprendiendo!",
+      sub: "Equivocarse es parte de aprender. Repasa y prueba otra vez.",
+    },
+  ],
+};
+
+function resultCopy(score, isEarly) {
+  const table = isEarly ? RESULT_COPY.early : RESULT_COPY.other;
+  return table.find((r) => score >= r.min);
 }
 
 const ChallengeResults = memo(
@@ -50,10 +85,12 @@ const ChallengeResults = memo(
     onTabChange,
     darkMode,
   }) => {
-    const setFlashcardDecks = useIngenIAKidsSafe()?.setFlashcardDecks;
+    const ctx = useIngenIAKidsSafe();
+    const setFlashcardDecks = ctx?.setFlashcardDecks;
+    const isEarly = ctx?.studentAge != null && ctx.studentAge <= 9;
     // A reto opened from "Mi Plan" ticks its task when it ends.
     const planTask = usePlanTaskOnFinish("retos", true);
-    const copy = resultCopy(score);
+    const copy = resultCopy(score, isEarly);
     const correct = answers.filter((a) => a.isCorrect).length;
     const xpEarned =
       score >= 70 ? difficulty.xp : Math.round(difficulty.xp * 0.3);
@@ -144,10 +181,10 @@ const ChallengeResults = memo(
               className={`rounded-xl py-3 ${darkMode ? "bg-[#0F172A]" : "bg-[#F8FAFC]"}`}
             >
               <p className="text-2xl font-black tabular-nums text-[#22C55E]">
-                +{xpEarned}
+                {isEarly ? `+${xpEarned}⭐` : `+${xpEarned}`}
               </p>
               <p className={`text-[11px] font-semibold ${textSub}`}>
-                puntos XP
+                {isEarly ? "estrellas" : "puntos XP"}
               </p>
             </div>
             <div
@@ -168,7 +205,9 @@ const ChallengeResults = memo(
         {mistakes.length > 0 && (
           <div className={`rounded-2xl border p-4 ${surface}`}>
             <p className={`text-sm font-black mb-3 ${textPrimary}`}>
-              📚 Para repasar ({mistakes.length})
+              {isEarly
+                ? `📚 ¡Repasemos estos! (${mistakes.length})`
+                : `📚 Para repasar (${mistakes.length})`}
             </p>
             <ul className="space-y-2.5">
               {mistakes.map(({ q, i }) => (
@@ -176,7 +215,11 @@ const ChallengeResults = memo(
                   key={i}
                   className={`rounded-xl p-3 text-sm ${darkMode ? "bg-[#0F172A]" : "bg-[#FFF7ED]"}`}
                 >
-                  <p className={`font-semibold ${textPrimary}`}>{q.question}</p>
+                  <QuestionText
+                    text={q.question}
+                    darkMode={darkMode}
+                    className={`font-semibold ${textPrimary}`}
+                  />
                   <p className="mt-1 text-green-600 font-semibold">
                     ✓ {q.options[q.correct]}
                   </p>
@@ -202,7 +245,9 @@ const ChallengeResults = memo(
             }}
           >
             <RotateCcw className="w-5 h-5" aria-hidden="true" />
-            Otro reto de {subject?.label}
+            {isEarly
+              ? `¡Jugar otro reto! 🎮`
+              : `Otro reto de ${subject?.label}`}
           </motion.button>
           {score < 50 && difficulty.id !== "easy" && onEasier && (
             <button type="button" onClick={onEasier} className={secondaryBtn}>
@@ -216,11 +261,9 @@ const ChallengeResults = memo(
               className={secondaryBtn}
             >
               <Layers className="w-4 h-4" aria-hidden="true" />
-              Repasar mis{" "}
-              {mistakes.length === 1
-                ? "error"
-                : `${mistakes.length} errores`}{" "}
-              con EduCards
+              {isEarly
+                ? `Repasar ${mistakes.length === 1 ? "el error" : `los ${mistakes.length} errores`} 📖`
+                : `Repasar mis ${mistakes.length === 1 ? "error" : `${mistakes.length} errores`} con EduCards`}
             </button>
           )}
           <button
@@ -229,7 +272,7 @@ const ChallengeResults = memo(
             className={secondaryBtn}
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-            Volver a Practicar
+            {isEarly ? "Volver a practicar" : "Volver a Practicar"}
           </button>
         </div>
       </div>

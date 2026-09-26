@@ -170,7 +170,7 @@ const IngenIALandingInfo = ({ onNavigate }) => {
   ];
 
   const seoDescriptions = [
-    "Descubre cómo IngenIA combina IA, diagnóstico VAK y coaches humanos para crear una experiencia única de aprendizaje.",
+    "Descubre cómo IngenIA combina IA, ADN de Aprendizaje y coaches humanos para crear una experiencia única de aprendizaje.",
     "Aprende cómo tu hijo aprende mejor: Visual, Auditivo o Kinestésico. Planes personalizados según su estilo.",
     "Mejora académica del 94%, confianza recuperada, y reportes semanales para padres. Beneficios reales comprobados.",
     "Tranquilidad garantizada: coaches humanos certificados + soporte 24/7. Tu hijo está en buenas manos.",

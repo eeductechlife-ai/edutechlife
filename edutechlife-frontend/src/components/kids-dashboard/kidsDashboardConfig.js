@@ -109,6 +109,7 @@ export const PARENT_TAB = {
   retos: "practicar",
   flashcards: "practicar",
   examenes: "practicar",
+  oral: "practicar",
   vak: "perfil",
 };
 

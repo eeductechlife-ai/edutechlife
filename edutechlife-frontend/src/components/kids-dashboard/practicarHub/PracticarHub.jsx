@@ -7,6 +7,8 @@ import { buildSubjectList } from "./practicarConfig";
 import {
   setHandoff,
   HANDOFF_CHALLENGE_SUBJECT,
+  HANDOFF_CHALLENGE_DIFFICULTY,
+  HANDOFF_CHALLENGE_AUTOSTART,
   HANDOFF_FLASHCARDS_TOPIC,
   HANDOFF_PRACTICAR_SUBJECT,
   HANDOFF_PLAN_ACTIVITY,
@@ -27,8 +29,25 @@ import { isChallengeSubjectAvailable } from "../challengeEngine/useChallengeEngi
 function pickRecommendation(subjects) {
   const retoable = subjects.filter((s) => s.retoAvailable);
   if (!retoable.length) return null;
+
+  // Highest priority: declining + low grade
+  const declining = retoable.find(
+    (s) => s.trend?.dir === "down" && s.score != null && s.score < 3.5,
+  );
+  if (declining)
+    return {
+      subject: declining,
+      why: `Nota bajando (${declining.score.toFixed(1)}) — ¡practiquemos hoy!`,
+      urgent: true,
+    };
+
   const weak = retoable.find((s) => s.weak);
-  if (weak) return { subject: weak, why: `${weak.label} necesita refuerzo` };
+  if (weak)
+    return {
+      subject: weak,
+      why: `${weak.label} necesita refuerzo`,
+      urgent: false,
+    };
   const tried = retoable
     .filter((s) => s.lastReto)
     .sort((a, b) => a.lastReto.score - b.lastReto.score);
@@ -36,6 +55,7 @@ function pickRecommendation(subjects) {
     return {
       subject: tried[0],
       why: `En tu último reto sacaste ${tried[0].lastReto.score}%`,
+      urgent: false,
     };
   }
   const untried = retoable.find((s) => !s.lastReto);
@@ -43,11 +63,12 @@ function pickRecommendation(subjects) {
     return {
       subject: untried,
       why: "Aún no has hecho un reto de esta materia",
+      urgent: false,
     };
   const oldest = [...tried].sort((a, b) =>
     a.lastReto.at.localeCompare(b.lastReto.at),
   )[0];
-  return { subject: oldest, why: "Hace rato no la practicas" };
+  return { subject: oldest, why: "Hace rato no la practicas", urgent: false };
 }
 
 // Vertical-only scroll inside the dashboard's content pane; scrollIntoView would
@@ -264,9 +285,13 @@ const PracticarHub = memo(({ onTabChange, darkMode }) => {
   const togglePanel = (name) =>
     setActivePanel((p) => (p === name ? null : name));
 
-  const openRetos = (target = subject) => {
+  const openRetos = (target = subject, autoStart = false) => {
     if (target?.retoAvailable)
       setHandoff(HANDOFF_CHALLENGE_SUBJECT, target.challengeId);
+    if (autoStart) {
+      setHandoff(HANDOFF_CHALLENGE_DIFFICULTY, "medium");
+      setHandoff(HANDOFF_CHALLENGE_AUTOSTART, "1");
+    }
     onTabChange("retos");
   };
   const openEduCards = () => {
@@ -345,32 +370,43 @@ const PracticarHub = memo(({ onTabChange, darkMode }) => {
       {recommendation && (
         <motion.button
           type="button"
-          onClick={() => openRetos(recommendation.subject)}
+          onClick={() => openRetos(recommendation.subject, true)}
           whileTap={{ scale: 0.98 }}
-          className="w-full !flex items-center !justify-start gap-3 p-3 sm:p-4 rounded-2xl text-left text-white shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-[#9D4EDD]/40"
+          className="w-full !flex items-center !justify-start gap-3 p-3 sm:p-4 rounded-2xl text-left text-white shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-[#EF4444]/40"
           style={{
-            background: `linear-gradient(135deg, ${recommendation.subject.color} 0%, #9D4EDD 100%)`,
+            background: recommendation.urgent
+              ? "linear-gradient(135deg, #EF4444 0%, #FB8500 100%)"
+              : `linear-gradient(135deg, ${recommendation.subject.color} 0%, #9D4EDD 100%)`,
           }}
         >
           <span
             className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 flex items-center justify-center text-2xl sm:text-3xl shrink-0"
             aria-hidden="true"
           >
-            {recommendation.subject.emoji}
+            {recommendation.urgent ? "🚨" : recommendation.subject.emoji}
           </span>
           <span className="min-w-0 flex-1">
             <span className="block text-[11px] font-black uppercase tracking-wider text-white/80">
-              Recomendado para ti
+              {recommendation.urgent
+                ? "🚨 URGENTE — ¡Reforzar ya!"
+                : "Recomendado para ti"}
             </span>
             <span className="block text-lg font-black leading-tight">
-              Reto de {recommendation.subject.label}
+              {recommendation.urgent
+                ? `¡Salvar ${recommendation.subject.label}!`
+                : `Reto de ${recommendation.subject.label}`}
             </span>
             <span className="block text-xs text-white/85 mt-0.5">
               {recommendation.why}
             </span>
           </span>
           <span
-            className="w-11 h-11 rounded-full bg-white text-[#1E293B] flex items-center justify-center text-lg font-black shrink-0"
+            className="w-11 h-11 rounded-full flex items-center justify-center text-lg font-black shrink-0"
+            style={
+              recommendation.urgent
+                ? { background: "rgba(255,255,255,0.25)", color: "#fff" }
+                : { background: "#fff", color: "#1E293B" }
+            }
             aria-hidden="true"
           >
             ▶

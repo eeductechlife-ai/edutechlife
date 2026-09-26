@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNewsFeed } from "../../../hooks/useNewsFeed";
 import { CATEGORIES, CATEGORY_COLORS } from "../../../data/newsData";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
+import { logPractice } from "../practicarHub/practicarProgress";
 
 const CategoryTab = memo(({ cat, active, unread, onClick }) => {
   const color = CATEGORY_COLORS[cat.id] || "#4DA8C4";
@@ -47,7 +48,16 @@ const ArticleCard = memo(({ article, isRead, onRead, darkMode }) => {
       exit={{ opacity: 0, scale: 0.97 }}
       transition={{ duration: 0.3 }}
       onClick={handleClick}
-      className={`rounded-2xl overflow-hidden border cursor-pointer transition-all shadow-sm hover:shadow-md hover:border-[#9D4EDD]/30 ${
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label={`Leer: ${article.title}`}
+      className={`rounded-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-[#9D4EDD]/30 overflow-hidden border cursor-pointer transition-all shadow-sm hover:shadow-md hover:border-[#9D4EDD]/30 ${
         darkMode
           ? "bg-[#1E293B]/80 border-[#334155]/50"
           : "bg-white/90 border-[#E2E8F0]"
@@ -111,10 +121,11 @@ const ArticleCard = memo(({ article, isRead, onRead, darkMode }) => {
               darkMode ? "text-[#475569]" : "text-[#CBD5E1]"
             }`}
           >
-            {article.readTime} · {article.date}
+            ⏱ {article.readTime}
+            {article.source ? " · Con fuente ✓" : ""}
           </span>
           <span className="text-[11px] font-semibold" style={{ color }}>
-            Leer más →
+            {isRead ? "Leer de nuevo →" : "Leer más →"}
           </span>
         </div>
       </div>
@@ -149,8 +160,10 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
         <div className="h-1.5 shrink-0" style={{ backgroundColor: color }} />
         <div className="overflow-y-auto flex-1 p-5">
           <button
+            type="button"
             onClick={onClose}
-            className={`float-right ml-3 mb-2 w-8 h-8 flex items-center justify-center rounded-full text-lg font-bold ${
+            aria-label="Cerrar artículo"
+            className={`float-right ml-3 mb-2 w-11 h-11 flex items-center justify-center rounded-full text-lg font-bold ${
               darkMode
                 ? "bg-[#1E293B] text-[#94A3B8]"
                 : "bg-[#F1F5F9] text-[#64748B]"
@@ -170,7 +183,7 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
               darkMode ? "text-[#475569]" : "text-[#CBD5E1]"
             }`}
           >
-            {article.readTime} · {article.date}
+            ⏱ {article.readTime} de lectura
           </p>
           {article.dataPoints?.length > 0 && (
             <div className="flex gap-3 flex-wrap mb-4">
@@ -203,6 +216,18 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
             {article.content}
           </div>
 
+          {article.source && (
+            <p
+              className={`mt-4 pt-3 border-t text-[11px] leading-snug ${
+                darkMode
+                  ? "border-[#1E293B] text-[#64748B]"
+                  : "border-[#F1F5F9] text-[#94A3B8]"
+              }`}
+            >
+              <span className="font-bold">📚 Fuente:</span> {article.source}
+            </p>
+          )}
+
           {/* Explora 2.0 (§35): content → challenge with Dani */}
           {onChallenge && (
             <button
@@ -226,7 +251,8 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
 ArticleModal.displayName = "ArticleModal";
 
 const TechNewsFeed = () => {
-  const { darkMode, setDocumentForDani } = useIngenIAKids();
+  const { darkMode, setDocumentForDani, addPoints, studentAge } =
+    useIngenIAKids();
 
   // Explora 2.0 (§35): turn a passive article into an active challenge with Dani.
   const handleChallenge = useCallback(
@@ -269,8 +295,12 @@ const TechNewsFeed = () => {
     <div className="space-y-5">
       <p className="px-1 text-sm font-semibold text-[#64748B]">
         {unreadCount > 0
-          ? `📬 ${unreadCount} artículos nuevos para ti`
-          : "¡Estás al día con el mundo tech! 🎉"}
+          ? studentAge != null && studentAge <= 9
+            ? `📬 ¡${unreadCount} ${unreadCount === 1 ? "noticia" : "noticias"} nuevas para ti! +${unreadCount * 10}⭐`
+            : `📬 ${unreadCount} ${unreadCount === 1 ? "artículo" : "artículos"} por leer · +15 pts c/u`
+          : studentAge != null && studentAge <= 9
+            ? "¡Eres un experto en tech! 🏆"
+            : "¡Estás al día con el mundo tech! 🎉"}
       </p>
 
       {/* Category tabs */}
@@ -339,8 +369,20 @@ const TechNewsFeed = () => {
                 isRead={readNews.includes(article.id)}
                 darkMode={darkMode}
                 onRead={(id) => {
+                  const firstRead = !readNews.includes(id);
                   markAsRead(id);
                   setOpenArticle(article);
+                  if (firstRead) {
+                    logPractice({
+                      type: "news_read",
+                      articleId: id,
+                      category: article.category,
+                    });
+                    addPoints?.(
+                      studentAge != null && studentAge <= 9 ? 10 : 15,
+                      `Artículo leído: ${article.title}`,
+                    );
+                  }
                 }}
               />
             ))}

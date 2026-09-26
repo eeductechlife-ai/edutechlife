@@ -148,7 +148,7 @@ export default function MetodoLeadModal({ show, onClose }) {
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-light focus:border-primary-light outline-none transition-all bg-white text-petroleum text-sm"
                 >
                   <option value="">{t("metodo.form_select_default")}</option>
-                  <option value="Diagnóstico VAK">
+                  <option value="ADN de Aprendizaje">
                     {t("metodo.form_option_vak")}
                   </option>
                   <option value="Cursos STEAM">

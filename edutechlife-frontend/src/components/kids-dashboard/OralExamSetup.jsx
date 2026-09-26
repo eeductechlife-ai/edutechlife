@@ -61,7 +61,7 @@ const OralExamSetup = memo(
                 className="font-bold underline"
                 style={{ color: "#EF476F" }}
               >
-                {t("oral.go_flashcards")} →
+                {t("oral.go_flashcards")}
               </button>
             </p>
           </motion.div>

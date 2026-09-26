@@ -2,6 +2,7 @@ const { Router } = require('express');
 
 const coreRoutes = require('./core');
 const chatRoutes = require('./chat');
+const daniPhotoRoutes = require('./daniPhoto');
 const parentalConsentRoutes = require('./parental-consent');
 const studentProfileRoutes = require('./student-profile');
 const progressRoutes = require('./progress');
@@ -15,6 +16,7 @@ const router = Router();
 
 router.use(coreRoutes);
 router.use(chatRoutes);
+router.use(daniPhotoRoutes);
 router.use(parentalConsentRoutes);
 router.use(studentProfileRoutes);
 router.use(progressRoutes);

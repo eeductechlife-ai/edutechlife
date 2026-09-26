@@ -8,6 +8,10 @@ export const HANDOFF_FLASHCARDS_DECK = "practicar_flashcards_deck";
 export const HANDOFF_PLAN_ACTIVITY = "practicar_plan_activity";
 // A plan task handed to Retos / EduCards, ticked when that session ends.
 export const HANDOFF_PLAN_PENDING = "practicar_plan_pending";
+// Pre-selected difficulty id ("easy" | "medium" | "hard") for direct auto-start.
+export const HANDOFF_CHALLENGE_DIFFICULTY = "practicar_challenge_difficulty";
+// When "1", the engine starts the challenge immediately without waiting for the user.
+export const HANDOFF_CHALLENGE_AUTOSTART = "practicar_challenge_autostart";
 
 /** Takes (and clears) the pending plan task if it belongs to `tool`. */
 export function takePendingPlanTask(tool) {

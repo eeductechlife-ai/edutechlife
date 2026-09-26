@@ -22,13 +22,19 @@ const detailsHeight = (blocks) =>
   blocks.reduce((h, l) => h + l.length * STEP, 0) +
   GAP * Math.max(0, blocks.length - 1);
 
+const CURIOSIDAD_STEP = 22;
+
 function makeNode(r, i, main, theme, ideaChars, detailChars) {
   const c = paletteColor(theme, i, main);
   const ideaLines = fit(r.idea, ideaChars, 3);
   const blocks = r.detalles.map((d) => fit(d, detailChars, 3));
+  const curiosLines = r.curiosidad ? fit(r.curiosidad, detailChars + 4, 3) : [];
   const headH = Math.max(64, 26 + ideaLines.length * 27);
-  const h = headH + 24 + detailsHeight(blocks);
-  return { c, ideaLines, blocks, headH, h, emoji: r.emoji };
+  const curiosH = curiosLines.length
+    ? 18 + curiosLines.length * CURIOSIDAD_STEP
+    : 0;
+  const h = headH + 24 + detailsHeight(blocks) + curiosH;
+  return { c, ideaLines, blocks, headH, h, emoji: r.emoji, curiosLines };
 }
 
 function DetailList({ blocks, x, y, color, theme }) {
@@ -56,7 +62,8 @@ function DetailList({ blocks, x, y, color, theme }) {
 
 // Branch card: gradient header with an emoji badge, dotted detail list below.
 function BranchCard({ id, x, y, w, node, theme }) {
-  const { c, ideaLines, blocks, headH, h, emoji } = node;
+  const { c, ideaLines, blocks, headH, h, emoji, curiosLines } = node;
+  const detailsBottom = y + headH + 30 + detailsHeight(blocks);
   return (
     <g filter={shadowUrl(id)}>
       <rect x={x} y={y} width={w} height={h} rx="22" fill={theme.card} />
@@ -107,6 +114,28 @@ function BranchCard({ id, x, y, w, node, theme }) {
         color={c}
         theme={theme}
       />
+      {curiosLines.length > 0 && (
+        <g>
+          <text
+            x={x + 18}
+            y={detailsBottom + 16}
+            fontSize="15"
+            fontFamily={FONT}
+          >
+            💡
+          </text>
+          <TextLines
+            lines={curiosLines}
+            x={x + 36}
+            y={detailsBottom + 16}
+            size={17}
+            weight={600}
+            fill={mix(c, theme.muted, 0.35)}
+            anchor="start"
+            gap={CURIOSIDAD_STEP / 17}
+          />
+        </g>
+      )}
     </g>
   );
 }
@@ -118,7 +147,12 @@ function MindMapTree({ data, main, theme, svgRef }) {
   const W = 540;
   const PAD = 24;
   const centerLines = fit(data.centro || "Tema", 20, 3);
-  const headH = 66 + centerLines.length * 38;
+  const subLines = data.subtitulo ? fit(data.subtitulo, 26, 2) : [];
+  const SUB_STEP = 21;
+  const headH =
+    104 +
+    (centerLines.length - 1) * 38 +
+    (subLines.length > 0 ? 8 + subLines.length * SUB_STEP : 0);
   let y = PAD + headH + 34;
   const nodes = data.ramas.map((r, i) => {
     const n = makeNode(r, i, main, theme, 21, 34);
@@ -126,10 +160,17 @@ function MindMapTree({ data, main, theme, svgRef }) {
     y += n.h + 22;
     return node;
   });
+  const conclusionLines = data.conclusion ? fit(data.conclusion, 38, 3) : [];
+  const CONCL_H = conclusionLines.length
+    ? 20 + conclusionLines.length * 24 + 20
+    : 0;
+  if (conclusionLines.length) y += CONCL_H + 14;
   const H = y + 30;
   const spineX = PAD + 18;
   const cardX = PAD + 46;
   const cardW = W - cardX - PAD;
+  const subY = PAD + 78 + (centerLines.length - 1) * 38 + 16;
+  const conclusionY = H - 30 - CONCL_H;
 
   return (
     <svg
@@ -181,6 +222,18 @@ function MindMapTree({ data, main, theme, svgRef }) {
         fill="#FFFFFF"
         gap={1.15}
       />
+      {subLines.length > 0 && (
+        <TextLines
+          lines={subLines}
+          x={W / 2}
+          y={subY}
+          size={18}
+          weight={600}
+          fill="#FFFFFF"
+          anchor="middle"
+          gap={SUB_STEP / 18}
+        />
+      )}
       <line
         x1={spineX}
         y1={PAD + headH}
@@ -216,6 +269,40 @@ function MindMapTree({ data, main, theme, svgRef }) {
           />
         </g>
       ))}
+      {conclusionLines.length > 0 && (
+        <g>
+          <rect
+            x={PAD}
+            y={conclusionY}
+            width={W - PAD * 2}
+            height={CONCL_H}
+            rx="20"
+            fill={mix(main, theme.paper, 0.88)}
+            stroke={mix(main, theme.paper, 0.6)}
+            strokeWidth="2"
+          />
+          <text
+            x={PAD + 18}
+            y={conclusionY + 22}
+            fontSize="18"
+            fontWeight="900"
+            fill={main}
+            fontFamily={FONT}
+          >
+            🎯 Lo más importante:
+          </text>
+          <TextLines
+            lines={conclusionLines}
+            x={PAD + 18}
+            y={conclusionY + 44}
+            size={18}
+            weight={700}
+            fill={theme.ink}
+            anchor="start"
+            gap={24 / 18}
+          />
+        </g>
+      )}
       <Footer W={W} y={H - 12} theme={theme} />
     </svg>
   );
@@ -241,11 +328,16 @@ function MindMapSides({ data, main, theme, svgRef }) {
   const colH = (list) =>
     list.reduce((sum, n) => sum + n.h, 0) +
     COL_GAP * Math.max(0, list.length - 1);
-  const H =
-    Math.max(colH(cols.left), colH(cols.right), R * 2 + 60) + PAD * 2 + 30;
-  const cy = (H - 30) / 2;
+  const conclusionLines = data.conclusion ? fit(data.conclusion, 56, 3) : [];
+  const CONCL_H = conclusionLines.length
+    ? 20 + conclusionLines.length * 24 + 20
+    : 0;
+  const contentH =
+    Math.max(colH(cols.left), colH(cols.right), R * 2 + 60) + PAD * 2;
+  const H = contentH + 30 + (conclusionLines.length > 0 ? CONCL_H + 14 : 0);
+  const cy = contentH / 2;
   const place = (list, x) => {
-    let y = (H - 30 - colH(list)) / 2;
+    let y = (contentH - colH(list)) / 2;
     return list.map((n) => {
       const node = { ...n, x, y };
       y += n.h + COL_GAP;
@@ -261,6 +353,15 @@ function MindMapSides({ data, main, theme, svgRef }) {
   const centerLines = longCenter
     ? fit(data.centro, 17, 6)
     : wrap(data.centro || "Tema", 14);
+  const subLines = data.subtitulo ? fit(data.subtitulo, 16, 1) : [];
+  const centerTextY =
+    cy -
+    ((centerLines.length - 1) * centerSize * 1.15) / 2 +
+    centerSize / 3 +
+    8;
+  const centerTextBottomY =
+    centerTextY + (centerLines.length - 1) * centerSize * 1.15;
+  const conclusionY = contentH + 30 + 10;
 
   return (
     <svg
@@ -321,17 +422,24 @@ function MindMapSides({ data, main, theme, svgRef }) {
       <TextLines
         lines={centerLines}
         x={cx}
-        y={
-          cy -
-          ((centerLines.length - 1) * centerSize * 1.15) / 2 +
-          centerSize / 3 +
-          8
-        }
+        y={centerTextY}
         size={centerSize}
         weight={900}
         fill="#FFFFFF"
         gap={1.15}
       />
+      {subLines.length > 0 && (
+        <TextLines
+          lines={subLines}
+          x={cx}
+          y={centerTextBottomY + 18}
+          size={15}
+          weight={600}
+          fill="#FFFFFF"
+          anchor="middle"
+          gap={1.3}
+        />
+      )}
       {nodes.map((nd, i) => (
         <BranchCard
           key={`n${i}`}
@@ -343,6 +451,41 @@ function MindMapSides({ data, main, theme, svgRef }) {
           theme={theme}
         />
       ))}
+      {conclusionLines.length > 0 && (
+        <g>
+          <rect
+            x={PAD}
+            y={conclusionY}
+            width={W - PAD * 2}
+            height={CONCL_H}
+            rx="20"
+            fill={mix(main, theme.paper, 0.88)}
+            stroke={mix(main, theme.paper, 0.6)}
+            strokeWidth="2"
+          />
+          <text
+            x={cx}
+            y={conclusionY + 22}
+            fontSize="18"
+            fontWeight="900"
+            fill={main}
+            textAnchor="middle"
+            fontFamily={FONT}
+          >
+            🎯 Lo más importante
+          </text>
+          <TextLines
+            lines={conclusionLines}
+            x={cx}
+            y={conclusionY + 46}
+            size={18}
+            weight={700}
+            fill={theme.ink}
+            anchor="middle"
+            gap={24 / 18}
+          />
+        </g>
+      )}
       <Footer W={W} y={H - 14} theme={theme} />
     </svg>
   );

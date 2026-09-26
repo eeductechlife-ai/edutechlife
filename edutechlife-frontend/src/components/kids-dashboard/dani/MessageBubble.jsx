@@ -28,50 +28,64 @@ const LOCALE_MAP = { en: "en-US", pt: "pt-BR", es: "es-ES" };
 // ==========================================
 // Message Bubble Component
 // ==========================================
-const MessageBubble = memo(({ message, isDani, darkMode }) => {
-  const { t, locale } = useTranslation();
-  const time = new Date(message.timestamp).toLocaleTimeString(
-    LOCALE_MAP[locale] || "es-ES",
-    {
-      hour: "2-digit",
-      minute: "2-digit",
-    },
-  );
+const MessageBubble = memo(
+  ({ message, isDani, darkMode, textSize = "text-sm", onRetry }) => {
+    const { t, locale } = useTranslation();
+    const time = new Date(message.timestamp).toLocaleTimeString(
+      LOCALE_MAP[locale] || "es-ES",
+      {
+        hour: "2-digit",
+        minute: "2-digit",
+      },
+    );
 
-  const relativeTime = getRelativeTime(message.timestamp, locale, t);
+    const relativeTime = getRelativeTime(message.timestamp, locale, t);
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      className={`flex ${isDani ? "justify-start" : "justify-end"} mb-4`}
-    >
-      {isDani && (
-        <div className="mr-3 mt-1 flex-shrink-0">
-          <DaniAvatar />
-        </div>
-      )}
-      <div
-        className={`max-w-[75%] px-4 py-3 rounded-2xl ${
-          isDani
-            ? darkMode
-              ? "bg-[#1E293B] border border-[#334155] text-[#E2E8F0] rounded-tl-md"
-              : "bg-white border border-[#E2E8F0] text-[#004B63] rounded-tl-md"
-            : "bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] text-white rounded-tr-md"
-        } shadow-sm`}
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        className={`flex ${isDani ? "justify-start" : "justify-end"} mb-4`}
       >
-        <p className="text-sm leading-relaxed whitespace-pre-wrap">
-          {renderInlineMarkdown(message.text || "")}
-        </p>
-        <p
-          className={`text-[10px] mt-1 ${isDani ? "text-[#64748B]" : "text-white/70"}`}
+        {isDani && (
+          <div className="mr-3 mt-1 flex-shrink-0">
+            <DaniAvatar size="sm" />
+          </div>
+        )}
+        <div
+          className={`max-w-[85%] px-4 py-3 rounded-2xl ${
+            isDani
+              ? darkMode
+                ? "bg-[#1E293B] border border-[#334155] text-[#E2E8F0] rounded-tl-md"
+                : "bg-white border border-[#E2E8F0] text-[#004B63] rounded-tl-md"
+              : "bg-gradient-to-br from-[#4DA8C4] to-[#66CCCC] text-white rounded-tr-md"
+          } shadow-sm`}
         >
-          {relativeTime}
-        </p>
-      </div>
-    </motion.div>
-  );
-});
+          <p
+            className={`${textSize} leading-relaxed whitespace-pre-wrap break-words`}
+          >
+            {renderInlineMarkdown(message.text || "")}
+          </p>
+          {onRetry && (
+            <button
+              type="button"
+              onClick={onRetry}
+              className="mt-2 inline-flex items-center gap-1.5 min-h-[36px] px-3 rounded-lg text-xs font-bold text-white bg-[#4DA8C4] hover:bg-[#3B93AE]"
+            >
+              ↻ Reintentar
+            </button>
+          )}
+          <p
+            className={`text-[10px] mt-1 ${isDani ? "text-[#64748B]" : "text-white/70"}`}
+            title={time}
+          >
+            {relativeTime}
+          </p>
+        </div>
+      </motion.div>
+    );
+  },
+);
 
 MessageBubble.displayName = "MessageBubble";
 

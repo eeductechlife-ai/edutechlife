@@ -13,6 +13,85 @@ export function gradeTopics(subjectId, grade) {
   return getDbaForSubjectGrade(id, Number(grade)).map((d) => d.text);
 }
 
+// Extract numeric grade from a label like "Grado 7" or "7°"
+function gradeNum(gradeLabel) {
+  if (!gradeLabel) return 6;
+  const m = gradeLabel.match(/\d+/);
+  return m ? Number(m[0]) : 6;
+}
+
+// Grade-adaptive content depth: more branches/details/words for higher grades
+function gradeDepth(gradeLabel) {
+  const n = gradeNum(gradeLabel);
+  if (n <= 3)
+    return {
+      ramas: "3 o 4",
+      detalles: 2,
+      palabrasDetalle: 8,
+      bloques: 4,
+      palabrasTexto: 14,
+    };
+  if (n <= 6)
+    return {
+      ramas: "4 o 5",
+      detalles: 3,
+      palabrasDetalle: 12,
+      bloques: 5,
+      palabrasTexto: 20,
+    };
+  return {
+    ramas: "5 o 6",
+    detalles: 4,
+    palabrasDetalle: 18,
+    bloques: 6,
+    palabrasTexto: 28,
+  };
+}
+
+function mapaInstructions(d) {
+  return (
+    `Crea un mapa mental completo y educativo. Responde SOLO con JSON válido: ` +
+    `{"centro": "tema central en 2-5 palabras", ` +
+    `"subtitulo": "frase introductoria que contextualiza el tema, máximo 10 palabras", ` +
+    `"ramas": [{"idea": "concepto clave en 2-5 palabras", "emoji": "un emoji relacionado", ` +
+    `"detalles": ["detalle de máximo ${d.palabrasDetalle} palabras"], ` +
+    `"curiosidad": "dato curioso o ejemplo colombiano de la vida real, máximo 15 palabras"}], ` +
+    `"conclusion": "la idea más importante para recordar, máximo 15 palabras"}. ` +
+    `Usa ${d.ramas} ramas, cada una con exactamente ${d.detalles} detalles bien explicados. ` +
+    `El campo "curiosidad" debe sorprender al estudiante y conectar el tema con su vida cotidiana.`
+  );
+}
+
+function infografiaInstructions(d) {
+  return (
+    `Crea una infografía educativa. Elige el formato que MEJOR explica este tema: ` +
+    `"pasos" (proceso, etapas o partes de algo), ` +
+    `"datos" (cifras, porcentajes o fechas reales comprobables), ` +
+    `"comparacion" (dos cosas que se comparan), ` +
+    `"cronologia" (línea de tiempo con fechas importantes), ` +
+    `"ciclo" (fases que se repiten, como ciclos biológicos o del agua). ` +
+    `Responde SOLO con JSON válido según el formato elegido: ` +
+    `Para pasos/datos: {"formato": "pasos|datos", "titulo": "título llamativo", ` +
+    `"subtitulo": "frase que explique el tema", ` +
+    `"bloques": [{"emoji": "emoji", "titulo": "idea en 2-5 palabras", ` +
+    `"texto": "explicación de máximo ${d.palabrasTexto} palabras", ` +
+    `"cifra": "solo en datos: número real, ej: 70% o 1810"}], ` +
+    `"dato": "dato curioso y verdadero, máximo 20 palabras", ` +
+    `"conclusion": "idea clave para recordar, máximo 15 palabras"}. ` +
+    `Para comparacion: añade "comparacion": {"izquierda": {"titulo": "...", "emoji": "...", ` +
+    `"puntos": ["rasgo en máximo 10 palabras"]}, "derecha": {...}, ` +
+    `"semejanzas": ["algo en común, máximo 12 palabras"]}, ` +
+    `"conclusion": "idea clave para recordar, máximo 15 palabras". ` +
+    `Para cronologia: {"formato": "cronologia", "titulo": "...", "subtitulo": "...", ` +
+    `"eventos": [{"año": "fecha o año", "hecho": "descripción en máximo ${d.palabrasTexto} palabras", "emoji": "emoji"}], ` +
+    `"dato": "...", "conclusion": "..."}. ` +
+    `Para ciclo: {"formato": "ciclo", "titulo": "...", "subtitulo": "...", ` +
+    `"etapas": [{"emoji": "emoji", "nombre": "fase en 2-4 palabras", "descripcion": "máximo ${d.palabrasTexto} palabras"}], ` +
+    `"dato": "...", "conclusion": "..."}. ` +
+    `Usa entre ${d.bloques - 1} y ${d.bloques} elementos. Nunca inventes cifras. Sin HTML.`
+  );
+}
+
 const FORMAT = {
   resumen: {
     isJson: false,
@@ -20,18 +99,8 @@ const FORMAT = {
     instructions:
       "Escribe un resumen de máximo 250 palabras en Markdown. Usa 2 o 3 subtítulos cortos (##), viñetas y resalta los conceptos clave en **negrita**. Termina con una línea que empiece con 'Recuerda:' y la idea más importante. Sin tablas ni HTML.",
   },
-  mapa: {
-    isJson: true,
-    maxTokens: 900,
-    instructions:
-      'Crea un mapa mental. Responde SOLO con JSON válido: {"centro": "tema central en 2-5 palabras", "ramas": [{"idea": "idea principal corta", "emoji": "un emoji", "detalles": ["detalle corto", "detalle corto"]}]}. Entre 3 y 5 ramas, cada una con 2 o 3 detalles de máximo 10 palabras.',
-  },
-  infografia: {
-    isJson: true,
-    maxTokens: 1100,
-    instructions:
-      'Crea el contenido de una infografía. Primero elige el "formato" que mejor explica el tema: "pasos" (un proceso, etapas o partes), "datos" (cifras, fechas o cantidades verdaderas) o "comparacion" (dos cosas que se comparan, por ejemplo animales vertebrados e invertebrados). Responde SOLO con JSON válido: {"formato": "pasos | datos | comparacion", "titulo": "título corto y llamativo", "subtitulo": "una frase que explique el tema", "bloques": [{"emoji": "un emoji", "titulo": "idea clave en 2-5 palabras", "texto": "explicación de máximo 18 palabras", "cifra": "solo en formato datos: número corto y verdadero, por ejemplo 70% o 1810"}], "comparacion": {"izquierda": {"titulo": "cosa 1 en 1-3 palabras", "emoji": "un emoji", "puntos": ["rasgo de máximo 8 palabras"]}, "derecha": {"titulo": "cosa 2 en 1-3 palabras", "emoji": "un emoji", "puntos": ["rasgo de máximo 8 palabras"]}, "semejanzas": ["algo que comparten, máximo 12 palabras"]}, "dato": "un dato curioso y verdadero de máximo 20 palabras"}. En "pasos" y "datos" usa entre 4 y 5 bloques. En "comparacion" usa 3 o 4 puntos por lado y 1 o 2 semejanzas; ahí "bloques" puede ir vacío. Nunca inventes cifras.',
-  },
+  mapa: { isJson: true, maxTokens: 1400 },
+  infografia: { isJson: true, maxTokens: 1600 },
   ejercicios: {
     isJson: true,
     maxTokens: 1400,
@@ -51,14 +120,21 @@ export function buildMaterialRequest(
   { subjectLabel, topic, gradeLabel, age },
 ) {
   const f = FORMAT[type];
+  const depth = gradeDepth(gradeLabel);
   const reader = age ? `${age} años, ${gradeLabel}` : gradeLabel;
+  const instructions =
+    type === "mapa"
+      ? mapaInstructions(depth)
+      : type === "infografia"
+        ? infografiaInstructions(depth)
+        : f.instructions;
   return {
     isJson: f.isJson,
     maxTokens: f.maxTokens,
     messages: [
       {
         role: "system",
-        content: `Eres un tutor para estudiantes colombianos (${reader}). Escribe en español sencillo, con frases cortas y ejemplos de la vida diaria en Colombia. Ajusta la dificultad al grado y sigue el currículo del MEN. ${f.instructions}`,
+        content: `Eres un tutor para estudiantes colombianos (${reader}). Escribe en español sencillo, con frases cortas y ejemplos de la vida diaria en Colombia. Ajusta la dificultad al grado y sigue el currículo del MEN. ${instructions}`,
       },
       {
         role: "user",
@@ -84,10 +160,16 @@ export function parseMaterial(type, raw) {
         idea: str(r.idea),
         emoji: str(r.emoji) || "💡",
         detalles: (r.detalles || []).map(str).filter(Boolean).slice(0, 4),
+        curiosidad: str(r.curiosidad),
       }))
       .filter((r) => r.idea);
     return ramas.length
-      ? { centro: str(obj.centro), ramas: ramas.slice(0, 6) }
+      ? {
+          centro: str(obj.centro),
+          subtitulo: str(obj.subtitulo),
+          ramas: ramas.slice(0, 6),
+          conclusion: str(obj.conclusion),
+        }
       : null;
   }
   if (type === "infografia") return parseInfographic(obj);
@@ -125,6 +207,45 @@ function parseSide(s) {
 // Picks the drawing format; anything the model gets half right degrades to
 // "pasos" so the kid always gets an image instead of an error.
 function parseInfographic(obj) {
+  const base = {
+    titulo: str(obj.titulo) || "Infografía",
+    subtitulo: str(obj.subtitulo),
+    dato: str(obj.dato),
+    conclusion: str(obj.conclusion),
+  };
+
+  // Cronologia → render as datos (year as the big number/cifra)
+  if (obj.formato === "cronologia") {
+    const eventos = (obj.eventos || [])
+      .map((e) => ({
+        emoji: str(e.emoji) || "📅",
+        titulo: str(e.año || e.fecha),
+        texto: str(e.hecho),
+        cifra: str(e.año || e.fecha).slice(0, 14),
+      }))
+      .filter((e) => e.titulo && e.texto)
+      .slice(0, 7);
+    if (eventos.length)
+      return {
+        ...base,
+        formato: eventos.every((e) => e.cifra) ? "datos" : "pasos",
+        bloques: eventos,
+      };
+  }
+
+  // Ciclo → render as pasos (sequential steps in a cycle)
+  if (obj.formato === "ciclo") {
+    const etapas = (obj.etapas || [])
+      .map((e) => ({
+        emoji: str(e.emoji) || "🔄",
+        titulo: str(e.nombre),
+        texto: str(e.descripcion),
+      }))
+      .filter((e) => e.titulo && e.texto)
+      .slice(0, 7);
+    if (etapas.length) return { ...base, formato: "pasos", bloques: etapas };
+  }
+
   const bloques = (obj.bloques || [])
     .map((b) => ({
       emoji: str(b.emoji) || "💡",
@@ -133,12 +254,7 @@ function parseInfographic(obj) {
       cifra: str(String(b.cifra ?? "")).slice(0, 14),
     }))
     .filter((b) => b.titulo && b.texto)
-    .slice(0, 6);
-  const base = {
-    titulo: str(obj.titulo) || "Infografía",
-    subtitulo: str(obj.subtitulo),
-    dato: str(obj.dato),
-  };
+    .slice(0, 7);
   const izquierda = parseSide(obj.comparacion?.izquierda);
   const derecha = parseSide(obj.comparacion?.derecha);
   if (obj.formato === "comparacion" && izquierda && derecha) {

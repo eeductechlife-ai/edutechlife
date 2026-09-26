@@ -7,8 +7,8 @@ vi.mock("../../../utils/api", () => ({
   callDeepseekSmartboard: vi.fn(),
 }));
 
-vi.mock("../../../context/SmartBoardKidsContext", () => ({
-  useSmartBoardKids: vi.fn(),
+vi.mock("../../../context/IngenIAKidsContext", () => ({
+  useIngenIAKids: vi.fn(),
 }));
 
 vi.mock("../../../hooks/useCompetencyTracking", () => ({
@@ -82,7 +82,7 @@ vi.mock("../../../i18n/I18nProvider", () => ({
 }));
 
 import { callDeepseekSmartboard } from "../../../utils/api";
-import { useSmartBoardKids } from "../../../context/SmartBoardKidsContext";
+import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 
 describe("OralExamSimulator", () => {
   const mockAddPoints = vi.fn();
@@ -91,7 +91,7 @@ describe("OralExamSimulator", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    useSmartBoardKids.mockReturnValue({
+    useIngenIAKids.mockReturnValue({
       darkMode: false,
       addPoints: mockAddPoints,
       activeStudyDeck: null,

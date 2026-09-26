@@ -21,6 +21,7 @@ import SEO from "./SEO";
 import { track } from "../lib/analytics";
 import { EVENTS } from "../lib/analyticsEvents";
 import { API_BASE_URL } from "../config/api";
+import { seedClientSession } from "./SupabaseLoginForm";
 
 // Error boundary fallback
 function SignUpFormFallback() {
@@ -168,7 +169,11 @@ const SupabaseSignUpForm = ({
     if (!rawMsg) return fallback;
     const m = String(rawMsg).toLowerCase();
     // Known friendly backend messages (already in Spanish for the user)
-    if (m.includes("correo ya está registrado") || m.includes("already") || m.includes("exists"))
+    if (
+      m.includes("correo ya está registrado") ||
+      m.includes("already") ||
+      m.includes("exists")
+    )
       return t("signup.error.email_already_registered");
     if (m.includes("contraseña") || m.includes("password"))
       return t("signup.error.password_min_length");
@@ -183,7 +188,7 @@ const SupabaseSignUpForm = ({
     )
       return fallback;
     // Short, human-readable messages from the backend are safe to show
-    if (rawMsg.length <= 120 && !rawMsg.includes(":") ) return rawMsg;
+    if (rawMsg.length <= 120 && !rawMsg.includes(":")) return rawMsg;
     return fallback;
   };
 
@@ -235,11 +240,16 @@ const SupabaseSignUpForm = ({
         hasToken: !!result.token,
       });
 
-      setTimeout(() => {
+      setTimeout(async () => {
         if (result.token) {
           sessionStorage.setItem("auth_token", result.token);
           localStorage.setItem("refresh_token", result.refreshToken);
           localStorage.setItem("user_email", formData.email.toLowerCase());
+          // Seed the Supabase client session so RoleProtectedRoute can verify
+          // it via supabase.auth.getSession() on the next page load — without
+          // this the protected route sees no session and loops back to /login.
+          await seedClientSession(result.token, result.refreshToken);
+          window.dispatchEvent(new CustomEvent("auth:signed-in"));
         }
         // A new account must start with its own empty progress, never inherit
         // whatever the previous user left cached in this browser.
@@ -296,9 +306,7 @@ const SupabaseSignUpForm = ({
         )}
 
         {/* Main Card */}
-        <div
-          className={embedded ? "w-full" : "relative z-10 w-full max-w-5xl"}
-        >
+        <div className={embedded ? "w-full" : "relative z-10 w-full max-w-5xl"}>
           <div
             className={
               embedded
@@ -321,81 +329,83 @@ const SupabaseSignUpForm = ({
                     absolutely positioned at top-6/left-6 and would otherwise
                     sit on top of the logo. */}
                 {!embedded && (
-                <div className="lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-8 pt-24 pb-8 lg:px-12 lg:pt-28 lg:pb-12 text-white flex flex-col justify-between relative overflow-hidden">
-                  <div className="absolute inset-0 opacity-10">
-                    <div
-                      style={{
-                        backgroundImage: `radial-gradient(circle at 25px 25px, white 2%, transparent 0%)`,
-                        backgroundSize: "50px 50px",
-                      }}
-                      className="absolute inset-0"
-                    />
-                  </div>
+                  <div className="lg:w-2/5 bg-gradient-to-br from-[#004B63] to-[#4DA8C4] px-8 pt-24 pb-8 lg:px-12 lg:pt-28 lg:pb-12 text-white flex flex-col justify-between relative overflow-hidden">
+                    <div className="absolute inset-0 opacity-10">
+                      <div
+                        style={{
+                          backgroundImage: `radial-gradient(circle at 25px 25px, white 2%, transparent 0%)`,
+                          backgroundSize: "50px 50px",
+                        }}
+                        className="absolute inset-0"
+                      />
+                    </div>
 
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-3 mb-12">
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                        <Brain className="w-7 h-7" />
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 mb-12">
+                        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                          <Brain className="w-7 h-7" />
+                        </div>
+                        <div>
+                          <h1 className="text-2xl font-bold">Edutechlife</h1>
+                          <p className="text-white/80 text-sm">
+                            {t("ialab.signup_subtitle")}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h1 className="text-2xl font-bold">Edutechlife</h1>
-                        <p className="text-white/80 text-sm">
-                          {t("ialab.signup_subtitle")}
+
+                      <div className="mb-12">
+                        <h2 className="text-4xl font-bold mb-6">
+                          {t("ialab.signup_welcome_title")}
+                        </h2>
+                        <p
+                          className="text-white/90 leading-relaxed mb-4 text-lg"
+                          dangerouslySetInnerHTML={{
+                            __html: sanitize(t("ialab.signup_welcome_desc")),
+                          }}
+                        />
+                        <p className="text-white/70 italic">
+                          {t("ialab.signup_welcome_quote")}
                         </p>
                       </div>
+
+                      {/* Features with Icons */}
+                      <div className="space-y-4">
+                        {[
+                          { icon: Zap, text: t("ialab.signup_feature_1") },
+                          {
+                            icon: CheckCircle2,
+                            text: t("ialab.signup_feature_2"),
+                          },
+                          { icon: Brain, text: t("ialab.signup_feature_3") },
+                        ].map((feature, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center gap-3 group"
+                          >
+                            <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                              <feature.icon className="w-5 h-5" />
+                            </div>
+                            <span className="text-white/90">
+                              {feature.text}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
-                    <div className="mb-12">
-                      <h2 className="text-4xl font-bold mb-6">
-                        {t("ialab.signup_welcome_title")}
-                      </h2>
-                      <p
-                        className="text-white/90 leading-relaxed mb-4 text-lg"
-                        dangerouslySetInnerHTML={{
-                          __html: sanitize(t("ialab.signup_welcome_desc")),
-                        }}
-                      />
-                      <p className="text-white/70 italic">
-                        {t("ialab.signup_welcome_quote")}
+                    {/* Footer */}
+                    <div className="relative z-10 mt-8 pt-6 border-t border-white/20">
+                      <p className="text-white/70 text-sm">
+                        {t("ialab.signup_have_account")}{" "}
+                        <button
+                          onClick={onBack}
+                          className="text-white hover:underline font-semibold"
+                        >
+                          {t("ialab.signup_login_here")}
+                        </button>
                       </p>
                     </div>
-
-                    {/* Features with Icons */}
-                    <div className="space-y-4">
-                      {[
-                        { icon: Zap, text: t("ialab.signup_feature_1") },
-                        {
-                          icon: CheckCircle2,
-                          text: t("ialab.signup_feature_2"),
-                        },
-                        { icon: Brain, text: t("ialab.signup_feature_3") },
-                      ].map((feature, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center gap-3 group"
-                        >
-                          <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                            <feature.icon className="w-5 h-5" />
-                          </div>
-                          <span className="text-white/90">{feature.text}</span>
-                        </div>
-                      ))}
-                    </div>
                   </div>
-
-                  {/* Footer */}
-                  <div className="relative z-10 mt-8 pt-6 border-t border-white/20">
-                    <p className="text-white/70 text-sm">
-                      {t("ialab.signup_have_account")}{" "}
-                      <button
-                        onClick={onBack}
-                        className="text-white hover:underline font-semibold"
-                      >
-                        {t("ialab.signup_login_here")}
-                      </button>
-                    </p>
-                  </div>
-                </div>
                 )}
 
                 {/* Right Side - Form */}

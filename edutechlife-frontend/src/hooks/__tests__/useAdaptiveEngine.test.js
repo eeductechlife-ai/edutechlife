@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
 
-vi.mock("../../context/SmartBoardKidsContext", () => ({
-  useSmartBoardKids: () => ({
+vi.mock("../../context/IngenIAKidsContext", () => ({
+  useIngenIAKids: () => ({
     supabaseQueries: { studentData: { data: null } },
   }),
 }));

@@ -8,7 +8,6 @@ import {
   Ear,
   Zap,
   Target,
-  Bot,
   ChevronRight,
   BarChart2,
   Layers,
@@ -20,6 +19,7 @@ import { useKidText } from "../../hooks/useKidText";
 import WhatDoIDoToday from "./WhatDoIDoToday";
 import { useTranslation } from "../../i18n/I18nProvider";
 import DaniAvatar3D from "./DaniAvatar3D";
+import DaniCharacter from "./dani/DaniCharacter";
 import { SB_GRADIENTS, SB_COLORS } from "./ingenIATheme";
 import {
   DAY_LABELS,
@@ -53,8 +53,14 @@ const QUICK_ACTIONS = [
 ];
 
 const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
-  const { vakResult, timetable, currentClass, nextClass, supabaseQueries } =
-    useIngenIAKids();
+  const {
+    vakResult,
+    timetable,
+    currentClass,
+    nextClass,
+    supabaseQueries,
+    subjectsWithGrades,
+  } = useIngenIAKids();
   const { t } = useTranslation();
   const kt = useKidText();
   const reduce = useReducedMotion();
@@ -94,6 +100,34 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
   const classColor = activeClass
     ? activeClass.color || subjectColor(activeClass.subject)
     : SB_COLORS?.cyan || "#4DA8C4";
+
+  // Build contextual "Tu día" quick actions based on student's actual situation.
+  const quickActions = (() => {
+    const atRisk = (subjectsWithGrades || []).find(
+      (s) => s.gradeScore != null && Number(s.gradeScore) < 3.0,
+    );
+    const actions = [];
+    if (atRisk) {
+      actions.push({
+        tab: "calificaciones",
+        emoji: "🚨",
+        label: atRisk.name || atRisk.label || "En riesgo",
+      });
+    } else {
+      actions.push({
+        tab: "calificaciones",
+        emoji: "📊",
+        label: t("kid.hero.action_grades_label"),
+      });
+    }
+    actions.push({ tab: "practicar", emoji: "⚡", label: "Practicar" });
+    actions.push({
+      tab: "progreso",
+      emoji: "📈",
+      label: t("kid.hero.action_exams_label"),
+    });
+    return actions;
+  })();
 
   return (
     <motion.div
@@ -233,7 +267,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
             animate={reduce ? {} : { rotate: [0, -10, 10, -10, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 3 }}
           >
-            <Bot className="w-5 h-5" strokeWidth={2.3} />
+            <DaniCharacter size={30} animated={false} />
           </motion.span>
           <span className="text-base">
             {kt("hero.talk_dani", t("kid.hero.talk_with_dani"))}
@@ -241,23 +275,27 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
         </motion.button>
       </div>
 
-      {/* Acciones rápidas — 3 compactas */}
+      {/* Acciones rápidas — 3 contextuales según situación del estudiante */}
       <motion.div
         className="px-4 pb-4 grid grid-cols-3 gap-2"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        {QUICK_ACTIONS.map((action) => (
+        {quickActions.map((action) => (
           <button
             key={action.tab}
             type="button"
             onClick={() => onTabChange?.(action.tab)}
-            className="flex flex-col items-center gap-1 py-2.5 px-2 rounded-2xl bg-white/10 border border-white/20 hover:bg-white/18 active:scale-95 transition-all"
+            className={`flex flex-col items-center gap-1 py-2.5 px-2 rounded-2xl border active:scale-95 transition-all ${
+              action.emoji === "🚨"
+                ? "bg-[#EF476F]/20 border-[#EF476F]/40 hover:bg-[#EF476F]/30"
+                : "bg-white/10 border-white/20 hover:bg-white/18"
+            }`}
           >
             <span className="text-2xl leading-none">{action.emoji}</span>
-            <span className="text-[11px] text-white/80 font-semibold text-center leading-tight">
-              {t(action.labelKey)}
+            <span className="text-[11px] text-white/80 font-semibold text-center leading-tight line-clamp-2">
+              {action.label}
             </span>
           </button>
         ))}

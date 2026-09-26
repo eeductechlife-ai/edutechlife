@@ -13,6 +13,7 @@ import {
 import useDaniWelcome from "./useDaniWelcome";
 import useDaniSendMessage from "./useDaniSendMessage";
 import { scrollMessagesToBottom } from "../dani/chatUtils";
+import { readHomeworkPhoto } from "./daniPhoto";
 
 export default function useDaniChat({ isOpen, activeTab }) {
   const { t } = useTranslation();
@@ -27,8 +28,7 @@ export default function useDaniChat({ isOpen, activeTab }) {
     vakResult,
     totalPoints,
     streak,
-    buildDaniContext,
-    buildMemoryInjection,
+    clearDaniChat,
     recordMoodInference,
     trackAcademicTopic,
     academicTopics,
@@ -38,8 +38,6 @@ export default function useDaniChat({ isOpen, activeTab }) {
     calendarEvents,
     documentForDani,
     setDocumentForDani,
-    daniMemory,
-    updateDaniMemory,
     missions,
     subjects,
     studentAge,
@@ -80,39 +78,40 @@ export default function useDaniChat({ isOpen, activeTab }) {
     missions,
     subjects,
     documentForDani,
+    studentAge,
   });
 
-  const { handleSendMessage, handleQuickAction, handleTopicClick } =
-    useDaniSendMessage({
-      getToken,
-      inputText,
-      setInputText,
-      setIsTyping,
-      daniMood,
-      setDaniMood,
-      socraticMode,
-      documentForDani,
-      setDocumentForDani,
-      addDaniMessage,
-      buildDaniContext,
-      buildMemoryInjection,
-      daniChatHistory,
-      daniMemory,
-      updateDaniMemory,
-      recordMoodInference,
-      trackAcademicTopic,
-      voiceEnabled,
-      isSpeakingRef,
-      pendingSentenceRef,
-      setIsSpeaking,
-      setVoiceBlocked,
-      setShowEmotionalBanner,
-      setShowCrisisResources,
-      setCrisisAlertLevel,
-      setStreamingMessage,
-      studentAge,
-      studentDbId,
-    });
+  const {
+    handleSendMessage,
+    handleRetry,
+    stopResponse,
+    handleQuickAction,
+    handleTopicClick,
+  } = useDaniSendMessage({
+    getToken,
+    setInputText,
+    setIsTyping,
+    daniMood,
+    setDaniMood,
+    socraticMode,
+    documentForDani,
+    setDocumentForDani,
+    addDaniMessage,
+    daniChatHistory,
+    recordMoodInference,
+    trackAcademicTopic,
+    voiceEnabled,
+    isSpeakingRef,
+    pendingSentenceRef,
+    setIsSpeaking,
+    setVoiceBlocked,
+    setShowEmotionalBanner,
+    setShowCrisisResources,
+    setCrisisAlertLevel,
+    setStreamingMessage,
+    studentAge,
+    studentDbId,
+  });
 
   useEffect(() => {
     localStorage.setItem("edutechlife_dani_voice", voiceEnabled);
@@ -223,6 +222,35 @@ export default function useDaniChat({ isOpen, activeTab }) {
     };
   }, [isOpen]);
 
+  const [isReadingPhoto, setIsReadingPhoto] = useState(false);
+  const readPhoto = useCallback(
+    async (file) => {
+      setIsReadingPhoto(true);
+      try {
+        return await readHomeworkPhoto(file, { token: await getToken() });
+      } finally {
+        setIsReadingPhoto(false);
+      }
+    },
+    [getToken],
+  );
+
+  const startNewConversation = useCallback(() => {
+    stopResponse();
+    clearDaniChat();
+    setDocumentForDani(null);
+    setInputText("");
+    setShowEmotionalBanner(false);
+    lastDocTitleRef.current = null;
+    addDaniMessage({ role: "assistant", text: buildRichWelcome() });
+  }, [
+    stopResponse,
+    clearDaniChat,
+    setDocumentForDani,
+    addDaniMessage,
+    buildRichWelcome,
+  ]);
+
   const handleMicClick = useCallback(() => {
     handleMicClickFn({
       isListening,
@@ -260,6 +288,11 @@ export default function useDaniChat({ isOpen, activeTab }) {
     inputText,
     setInputText,
     handleSendMessage,
+    handleRetry,
+    stopResponse,
+    startNewConversation,
+    readPhoto,
+    isReadingPhoto,
     isListening,
     handleMicClick,
     crisisAlertLevel,

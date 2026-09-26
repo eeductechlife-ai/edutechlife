@@ -5,6 +5,7 @@ import { Mail, Lock, User, Loader2, Eye, EyeOff, Users } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "../i18n/I18nProvider";
 import { API_BASE_URL as API_BASE } from "../config/api";
+import IngenIALogo from "../components/brand/IngenIALogo";
 
 const IngenIALogin = () => {
   const navigate = useNavigate();
@@ -172,7 +173,14 @@ const IngenIALogin = () => {
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-[#0077B6] to-[#00B4D8] p-8 text-white text-center">
-          <h1 className="text-3xl font-black mb-2">IngenIA</h1>
+          <h1 className="mb-3 flex justify-center">
+            <IngenIALogo
+              variant="wordmark"
+              tone="mono-white"
+              height={44}
+              title="IngenIA"
+            />
+          </h1>
           <p className="text-sm text-white/90">{t("login.subtitle")}</p>
         </div>
 

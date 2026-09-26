@@ -82,7 +82,6 @@ router.post('/', async (req, res) => {
       isJson: true,
       temperature: process.env.IALAB_TEMPERATURE || 0.7,
       maxTokens: process.env.IALAB_MAX_TOKENS || 800,
-      model: 'deepseek-chat'
     });
 
     if (data.error) return res.status(400).json({ error: data.error.message });

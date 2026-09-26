@@ -85,6 +85,163 @@ export const DEFAULT_MISSIONS = [
   },
 ];
 
+// Pool of rotating weekly missions — 4 sets × 3 missions, cycled by ISO week number
+const WEEKLY_MISSION_POOL = [
+  // Week A
+  [
+    {
+      id: "w_reto3",
+      title: "¡3 Retos esta semana!",
+      description: "Haz 3 retos de diferentes materias",
+      icon: "⚡",
+      xp: 120,
+      completed: false,
+    },
+    {
+      id: "w_streak5",
+      title: "Racha de 5 días",
+      description: "Entra a IngenIA 5 días seguidos",
+      icon: "🔥",
+      xp: 150,
+      completed: false,
+    },
+    {
+      id: "w_flashcard20",
+      title: "20 EduCards",
+      description: "Repasa 20 tarjetas de estudio esta semana",
+      icon: "🃏",
+      xp: 80,
+      completed: false,
+    },
+  ],
+  // Week B
+  [
+    {
+      id: "w_dani3",
+      title: "3 preguntas a Dani",
+      description: "Consulta a tu tutora sobre algo que no entiendas",
+      icon: "🤖",
+      xp: 90,
+      completed: false,
+    },
+    {
+      id: "w_scan",
+      title: "Sube tu boletín",
+      description: "Escanea tus notas para que Dani te ayude mejor",
+      icon: "📊",
+      xp: 100,
+      completed: false,
+    },
+    {
+      id: "w_perfect",
+      title: "Reto perfecto",
+      description: "Saca 100% en un reto de dificultad Media o Difícil",
+      icon: "🏆",
+      xp: 200,
+      completed: false,
+    },
+  ],
+  // Week C
+  [
+    {
+      id: "w_schedule",
+      title: "Organiza tu semana",
+      description: "Sube o revisa tu horario de clases",
+      icon: "📅",
+      xp: 60,
+      completed: false,
+    },
+    {
+      id: "w_oral",
+      title: "Practica tu expresión oral",
+      description: "Completa una sesión de Habla con Dani",
+      icon: "🗣️",
+      xp: 110,
+      completed: false,
+    },
+    {
+      id: "w_points300",
+      title: "Colecciona 300 XP",
+      description: "Gana 300 puntos en cualquier actividad esta semana",
+      icon: "💎",
+      xp: 130,
+      completed: false,
+    },
+  ],
+  // Week D
+  [
+    {
+      id: "w_vak",
+      title: "Confirma tu estilo VAK",
+      description: "Revisa o actualiza tu ADN de aprendizaje en Mi Perfil",
+      icon: "🧠",
+      xp: 80,
+      completed: false,
+    },
+    {
+      id: "w_weak",
+      title: "Refuerza tu materia difícil",
+      description: "Haz un reto de la materia que más te cuesta",
+      icon: "💪",
+      xp: 140,
+      completed: false,
+    },
+    {
+      id: "w_mission",
+      title: "Completa una misión pendiente",
+      description: "Termina cualquier misión que tengas en Explorar",
+      icon: "🎯",
+      xp: 100,
+      completed: false,
+    },
+  ],
+];
+
+/**
+ * Returns 3 rotating weekly missions based on the current ISO week number.
+ * The set changes every Monday and is the same for all students the same week.
+ */
+function weekNumber(now = new Date()) {
+  const start = new Date(now.getFullYear(), 0, 1);
+  return Math.ceil(((now - start) / 86400000 + start.getDay() + 1) / 7);
+}
+
+export function getWeekKey(now = new Date()) {
+  return `${now.getFullYear()}-W${weekNumber(now)}`;
+}
+
+export function getRotatingMissions(now = new Date()) {
+  const week = getWeekKey(now);
+  return WEEKLY_MISSION_POOL[weekNumber(now) % WEEKLY_MISSION_POOL.length].map(
+    (m) => ({ ...m, week }),
+  );
+}
+
+/** Days until the weekly set rotates (next Monday). */
+export function daysUntilWeeklyReset(now = new Date()) {
+  const day = (now.getDay() + 6) % 7; // Monday = 0
+  return 7 - day;
+}
+
+const isWeekly = (m) => typeof m?.id === "string" && m.id.startsWith("w_");
+
+// Saved lists freeze whatever weekly set existed when they were first stored;
+// swap in this week's set, keeping completion only for the same week.
+export function mergeWeeklyMissions(saved, now = new Date()) {
+  const permanent = (saved || []).filter((m) => !isWeekly(m));
+  const week = getWeekKey(now);
+  const doneThisWeek = new Set(
+    (saved || [])
+      .filter((m) => isWeekly(m) && m.week === week && m.completed)
+      .map((m) => m.id),
+  );
+  const weekly = getRotatingMissions(now).map((m) => ({
+    ...m,
+    completed: doneThisWeek.has(m.id),
+  }));
+  return [...(permanent.length ? permanent : DEFAULT_MISSIONS), ...weekly];
+}
+
 export const DEFAULT_SUBJECTS = [
   {
     id: "matematicas",

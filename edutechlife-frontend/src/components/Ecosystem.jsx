@@ -13,7 +13,7 @@ const Ecosystem = memo(() => {
       icon: "fa-brain",
       title: "NeuroEntornos Escolares",
       subtitle: "Pilar 1",
-      desc: "Diagnóstico VAK, IA Lab con MAX, IngenIA y herramientas neuropedagógicas.",
+      desc: "ADN de Aprendizaje, IA Lab con MAX, IngenIA y herramientas neuropedagógicas.",
       stats: [
         { num: "6,000+", label: "Estudiantes" },
         { num: "98%", label: "Efectividad" },

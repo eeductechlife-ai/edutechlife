@@ -24,6 +24,9 @@ const PerfilTab = memo(function PerfilTab({
         onExpandVak={handleExpandVak}
         onLogout={onLogout}
         initialTab={initialTab}
+        onSectionChange={(id) => {
+          if (id !== "estilo") setShowVakPanel(false);
+        }}
       />
 
       <AnimatePresence>

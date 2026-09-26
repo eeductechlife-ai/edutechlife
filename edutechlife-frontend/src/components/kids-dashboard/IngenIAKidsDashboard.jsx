@@ -449,8 +449,8 @@ const IngenIAKidsDashboard = () => {
           ageGroup={ageGroup}
         />
 
-        {/* DaniFAB - Floating Action Button */}
-        {parentalControls.chatEnabled && (
+        {/* DaniFAB — hidden when playing retos to avoid covering action buttons */}
+        {parentalControls.chatEnabled && activeTab !== "retos" && (
           <DaniFAB
             isDaniOpen={isDaniOpen}
             onDaniOpen={handleDaniOpen}

@@ -12,7 +12,7 @@ const NAV_STEPS = [
   {
     tab: "vak",
     icon: "🧠",
-    title: "Diagnóstico VAK",
+    title: "ADN de Aprendizaje",
     messages: {
       early: "¡Descubramos cómo aprendes mejor! Solo 2 minutitos 🌟",
       middle: "Hagamos tu diagnóstico de estilo de aprendizaje (2 min)",

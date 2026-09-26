@@ -1,12 +1,13 @@
 const { Router } = require('express');
 const supabase = require('../../db/supabase');
-const { chat, chatStream, validateMessages } = require('../../services/deepseek');
+const { chat, chatStream, validateMessages, DEFAULT_MODEL } = require('../../services/deepseek');
 const { requireAuth } = require('../../middleware/auth');
 const { requireVerifiedParentalConsent } = require('../../middleware/parentalConsent');
 const { detectCrisis } = require('../../services/crisisDetection');
 const { sendCrisisAlert, logCrisisIncident } = require('../../services/emailService');
 const { loadStudentContext, buildSystemPrompt: buildOrchestratorPrompt } = require('../../services/daniOrchestrator');
 const { validateInput, detectEmotionalState, sanitizeOutput } = require('../../services/aiSafetyGateway');
+const { createMemoriaFilter, parseMemoria, buildMemoryRow, saveDaniMemory } = require('../../services/daniMemory');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -331,10 +332,10 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
   // Drop leading assistant turns (welcome/frontend-generated) so the LLM always
   // sees a valid user→assistant alternation. Without this DeepSeek can interpret
   // the orphaned assistant message as a fresh-start greeting and ignore context.
-  // Only keep last 6 turns, strip label patterns that poison the style
+  // Only keep last 12 messages, strip label patterns that poison the style
   const LABEL_RE = /\*?\*?(PREGUNTA|PISTA|EXPLICACI[ÓO]N|EJEMPLO|VERIFICACI[ÓO]N)\*?\*?:/i;
   const rawHistory = Array.isArray(history)
-    ? history.slice(-6).filter((m) => m.role && typeof m.content === 'string')
+    ? history.slice(-12).filter((m) => m.role && typeof m.content === 'string')
     : [];
   const firstUserIdx = rawHistory.findIndex((m) => m.role === 'user');
   const cleanHistory = firstUserIdx >= 0 ? rawHistory.slice(firstUserIdx) : [];
@@ -390,12 +391,23 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
 
   try {
     let fullResponse = '';
-    await chatStream(DEEPSEEK_API_KEY, { messages: msgs, temperature: 0.65, maxTokens: 200 }, (chunk) => {
+    const memoriaFilter = createMemoriaFilter();
+    const emit = (text) => {
+      if (!text || streamClosed) return;
+      fullResponse += text;
+      res.write(`data: ${JSON.stringify({ chunk: text })}\n\n`);
+    };
+    await chatStream(DEEPSEEK_API_KEY, { messages: msgs, temperature: 0.65, maxTokens: 450 }, (chunk) => {
       if (streamClosed) return;
-      const safe = sanitizeOutput(chunk);
-      fullResponse += safe;
-      res.write(`data: ${JSON.stringify({ chunk: safe })}\n\n`);
+      emit(memoriaFilter.push(sanitizeOutput(chunk)));
     });
+    emit(memoriaFilter.flush());
+
+    // Long-term memory: model-reported facts + this turn's detected mood.
+    saveDaniMemory(
+      supabase,
+      buildMemoryRow(studentId, ctx.memory, parseMemoria(memoriaFilter.memoria()), emotional.state)
+    ).catch((e) => console.error('[Dani2] memory save failed:', e.message));
 
     if (streamClosed) return;
     if (crisisDetection.level !== 'none') {
@@ -409,12 +421,12 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
       supabase.from('conversations').insert({
         student_id: req.studentId,
         user_message: sanitized,
-        ai_response: fullResponse.replace(/<memoria>[\s\S]*?<\/memoria>/, '').trim(),
+        ai_response: fullResponse.trim(),
         emotional_context: { sentiment: emotional.state, dependencyRisk: emotional.dependencyRisk },
         subject: ctx.profile?.currentSubject || null,
         learning_style_applied: ctx.profile?.learningStyle || null,
         messages_in_context: safeHistory.length + 1,
-        model_used: 'deepseek-chat',
+        model_used: DEFAULT_MODEL(),
       }).then(({ error: insertErr }) => {
         if (insertErr && insertErr.code !== '42P01') {
           console.error('[Dani2] Conversation save failed:', insertErr.message);

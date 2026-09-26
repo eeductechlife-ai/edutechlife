@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { useSmartBoardSync } from "../useSmartBoardSync";
+import { useIngenIASync } from "../useIngenIASync";
 
 /**
- * useSmartBoardSync Hook Test Suite
+ * useIngenIASync Hook Test Suite
  *
  * CRITICAL: Manages data persistence and sync state.
  * Failures here cause data loss or corruption.
@@ -29,7 +29,7 @@ import {
   setupConnectionListener,
 } from "../../services/ingenIASync";
 
-describe("useSmartBoardSync", () => {
+describe("useIngenIASync", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     global.fetch = vi.fn();
@@ -60,7 +60,7 @@ describe("useSmartBoardSync", () => {
 
   describe("Initialization", () => {
     it("returns functions for load, save, merge", () => {
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       expect(typeof result.current.loadData).toBe("function");
       expect(typeof result.current.saveData).toBe("function");
@@ -68,7 +68,7 @@ describe("useSmartBoardSync", () => {
     });
 
     it("initializes connected state based on online status and Supabase", () => {
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       expect(result.current.isConnected).toBe(true);
     });
@@ -80,13 +80,13 @@ describe("useSmartBoardSync", () => {
         isLoading: true,
       });
 
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       expect(result.current.isLoading).toBe(true);
     });
 
     it("exposes userId from Supabase session", () => {
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       expect(result.current.userId).toBe("test-user-123");
     });
@@ -94,7 +94,7 @@ describe("useSmartBoardSync", () => {
 
   describe("loadData", () => {
     it("loads data from Supabase for current user", async () => {
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       let data;
       await act(async () => {
@@ -115,7 +115,7 @@ describe("useSmartBoardSync", () => {
         isLoading: false,
       });
 
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       let data;
       await act(async () => {
@@ -133,7 +133,7 @@ describe("useSmartBoardSync", () => {
         isLoading: false,
       });
 
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       let data;
       await act(async () => {
@@ -149,7 +149,7 @@ describe("useSmartBoardSync", () => {
         error: "Network error",
       });
 
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       let data;
       await act(async () => {
@@ -163,7 +163,7 @@ describe("useSmartBoardSync", () => {
   describe("saveData", () => {
     it("saves data to Supabase with debounce (500ms)", async () => {
       vi.useFakeTimers();
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       const kidsData = { totalPoints: 150, missions: [] };
 
@@ -190,7 +190,7 @@ describe("useSmartBoardSync", () => {
 
     it("cancels pending save if new save requested within debounce window", async () => {
       vi.useFakeTimers();
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       const data1 = { totalPoints: 100 };
       const data2 = { totalPoints: 200 };
@@ -226,7 +226,7 @@ describe("useSmartBoardSync", () => {
 
     it("returns success promise", async () => {
       vi.useFakeTimers();
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       const promise = act(async () => {
         return result.current.saveData({ totalPoints: 100 });
@@ -248,7 +248,7 @@ describe("useSmartBoardSync", () => {
         error: "Permission denied",
       });
 
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       const promise = act(async () => {
         return result.current.saveData({ totalPoints: 100 });
@@ -270,7 +270,7 @@ describe("useSmartBoardSync", () => {
         isLoading: false,
       });
 
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       let result_data;
       await act(async () => {
@@ -283,7 +283,7 @@ describe("useSmartBoardSync", () => {
 
     it("stores last saved data internally", async () => {
       vi.useFakeTimers();
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       const kidsData = { totalPoints: 100 };
 
@@ -301,7 +301,7 @@ describe("useSmartBoardSync", () => {
 
   describe("Online/Offline Transitions", () => {
     it("tracks online status via window events", async () => {
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       expect(result.current.isConnected).toBe(true);
 
@@ -328,7 +328,7 @@ describe("useSmartBoardSync", () => {
       const addEventListenerSpy = vi.spyOn(window, "addEventListener");
       const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
 
-      const { unmount } = renderHook(() => useSmartBoardSync());
+      const { unmount } = renderHook(() => useIngenIASync());
 
       expect(addEventListenerSpy).toHaveBeenCalledWith(
         "online",
@@ -357,7 +357,7 @@ describe("useSmartBoardSync", () => {
 
   describe("Connection Listener Setup", () => {
     it("sets up connection listener when supabase and userId available", () => {
-      renderHook(() => useSmartBoardSync());
+      renderHook(() => useIngenIASync());
 
       expect(setupConnectionListener).toHaveBeenCalledWith(
         expect.any(Object), // supabase
@@ -373,7 +373,7 @@ describe("useSmartBoardSync", () => {
         isLoading: false,
       });
 
-      renderHook(() => useSmartBoardSync());
+      renderHook(() => useIngenIASync());
 
       expect(setupConnectionListener).not.toHaveBeenCalled();
     });
@@ -385,7 +385,7 @@ describe("useSmartBoardSync", () => {
         isLoading: false,
       });
 
-      renderHook(() => useSmartBoardSync());
+      renderHook(() => useIngenIASync());
 
       expect(setupConnectionListener).not.toHaveBeenCalled();
     });
@@ -401,7 +401,7 @@ describe("useSmartBoardSync", () => {
             userId,
             isLoading: false,
           });
-          return useSmartBoardSync();
+          return useIngenIASync();
         },
         { initialProps: { userId: "user-1" } },
       );
@@ -416,9 +416,9 @@ describe("useSmartBoardSync", () => {
   describe("Cleanup on Unmount", () => {
     it("clears pending save timeout on unmount", async () => {
       vi.useFakeTimers();
-      const { unmount } = renderHook(() => useSmartBoardSync());
+      const { unmount } = renderHook(() => useIngenIASync());
 
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       // Trigger a save
       await act(async () => {
@@ -440,7 +440,7 @@ describe("useSmartBoardSync", () => {
     it("clears online/offline event listeners on unmount", () => {
       const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
 
-      const { unmount } = renderHook(() => useSmartBoardSync());
+      const { unmount } = renderHook(() => useIngenIASync());
 
       unmount();
 
@@ -460,7 +460,7 @@ describe("useSmartBoardSync", () => {
       const mockCleanup = vi.fn();
       setupConnectionListener.mockReturnValue(mockCleanup);
 
-      const { unmount } = renderHook(() => useSmartBoardSync());
+      const { unmount } = renderHook(() => useIngenIASync());
 
       unmount();
 
@@ -476,7 +476,7 @@ describe("useSmartBoardSync", () => {
         error: "Permission denied",
       });
 
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       await act(async () => {
         result.current.saveData({ totalPoints: 100 });
@@ -496,7 +496,7 @@ describe("useSmartBoardSync", () => {
         isLoading: false,
       });
 
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       // Trigger offline
       await act(async () => {
@@ -514,13 +514,13 @@ describe("useSmartBoardSync", () => {
 
   describe("Merge Function Export", () => {
     it("exports mergeWithLocal function", () => {
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       expect(typeof result.current.mergeWithLocal).toBe("function");
     });
 
     it("mergeWithLocal delegates to service", () => {
-      const { result } = renderHook(() => useSmartBoardSync());
+      const { result } = renderHook(() => useIngenIASync());
 
       const remote = { totalPoints: 100 };
       const local = { totalPoints: 50 };

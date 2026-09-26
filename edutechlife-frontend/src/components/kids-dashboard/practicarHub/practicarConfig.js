@@ -126,6 +126,7 @@ export function buildSubjectList(subjectsWithGrades) {
         score != null ? Math.round((score / 5) * 100) : (s.progress ?? 0),
       hasData,
       weak,
+      trend: s.trend || null,
     };
   });
   return list.sort((a, b) => Number(b.weak) - Number(a.weak));

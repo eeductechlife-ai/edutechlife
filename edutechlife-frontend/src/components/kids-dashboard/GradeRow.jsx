@@ -2,6 +2,18 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { gradeColor, gradeEmoji, getAvgScore } from "./gradeUtils";
 
+function periodTrend(grade) {
+  const vals = ["p1", "p2", "p3", "p4"]
+    .map((k) =>
+      grade[k] != null && !isNaN(Number(grade[k])) ? Number(grade[k]) : null,
+    )
+    .filter((v) => v != null);
+  if (vals.length < 2) return null;
+  const delta =
+    Math.round((vals[vals.length - 1] - vals[vals.length - 2]) * 10) / 10;
+  return { delta, dir: delta > 0.05 ? "up" : delta < -0.05 ? "down" : "flat" };
+}
+
 const PeriodInput = ({ label, value, onChange }) => (
   <label className="flex flex-col items-center gap-0.5 min-w-0">
     <span className="text-[10px] font-bold text-[#94A3B8] uppercase">
@@ -35,12 +47,19 @@ const PeriodInput = ({ label, value, onChange }) => (
 
 const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
   const avg = getAvgScore(grade);
+  const trend = periodTrend(grade);
+  const dropping = trend?.dir === "down" && avg > 0 && avg < 3.5;
   return (
     <motion.div
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 10 }}
-      className="p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-sm space-y-2"
+      className="p-3 rounded-xl bg-white shadow-sm space-y-2"
+      style={{
+        border: dropping
+          ? "1.5px solid rgba(239,71,111,0.5)"
+          : "1px solid #E2E8F0",
+      }}
     >
       <div className="flex items-center gap-2">
         <span className="text-lg w-8 text-center flex-shrink-0">
@@ -59,13 +78,21 @@ const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
         </select>
         {avg > 0 && (
           <span
-            className="text-xs font-black px-2 py-0.5 rounded-full flex-shrink-0"
+            className="text-xs font-black px-2 py-0.5 rounded-full flex-shrink-0 flex items-center gap-1"
             style={{
               backgroundColor: gradeColor(avg) + "20",
               color: gradeColor(avg),
             }}
           >
             {gradeEmoji(avg)} {avg.toFixed(1)}
+            {trend && trend.dir !== "flat" && (
+              <span
+                className="font-black"
+                style={{ color: trend.dir === "up" ? "#10B981" : "#EF4444" }}
+              >
+                {trend.dir === "up" ? "↑" : "↓"}
+              </span>
+            )}
           </span>
         )}
         <button
@@ -76,6 +103,11 @@ const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
           ✕
         </button>
       </div>
+      {dropping && (
+        <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#EF4444]">
+          ⚠️ La nota bajó en el último periodo — ¡practica para recuperarla!
+        </div>
+      )}
       <div className="grid grid-cols-5 gap-1.5">
         {["p1", "p2", "p3", "p4"].map((p, i) => (
           <PeriodInput

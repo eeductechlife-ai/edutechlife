@@ -28,6 +28,9 @@ const AILabPage = lazy(() => import("../components/pages/AILabPage"));
 const DevIngenIAPreview = import.meta.env.DEV
   ? lazy(() => import("../dev/DevIngenIAPreview"))
   : null;
+const DevIngenIAParentPreview = import.meta.env.DEV
+  ? lazy(() => import("../dev/DevIngenIAParentPreview"))
+  : null;
 const IngenIALandingPage = lazy(
   () => import("../components/pages/IngenIALandingPage"),
 );
@@ -100,6 +103,13 @@ const IALabSignUpRedirect = () => {
 };
 
 const IngenIASignUpPageWrapper = () => <IngenIASignUpPage />;
+
+// SmartBoard was renamed to IngenIA; old links and bookmarks still point here.
+const LegacySmartboardRedirect = () => {
+  const { pathname, search } = useLocation();
+  const target = pathname.replace(/smartboard/, "ingenia");
+  return <Navigate to={`${target}${search}`} replace />;
+};
 
 // Componente para redirección inteligente de registro
 const GenericSignUpRedirect = () => {
@@ -311,12 +321,33 @@ const AppRoutes = () => {
 
         <Route path="ingenia/login" element={<IngenIALoginRedirect />} />
 
+        <Route path="smartboard/*" element={<LegacySmartboardRedirect />} />
+        <Route
+          path="sign-up/smartboard"
+          element={<LegacySmartboardRedirect />}
+        />
+        <Route
+          path="conoce-smartboard"
+          element={<LegacySmartboardRedirect />}
+        />
+
         {DevIngenIAPreview && (
           <Route
             path="dev/ingenia"
             element={
               <Suspense fallback={<IngenIASkeleton />}>
                 <DevIngenIAPreview />
+              </Suspense>
+            }
+          />
+        )}
+
+        {DevIngenIAParentPreview && (
+          <Route
+            path="dev/ingenia/padres"
+            element={
+              <Suspense fallback={<IngenIASkeleton />}>
+                <DevIngenIAParentPreview />
               </Suspense>
             }
           />

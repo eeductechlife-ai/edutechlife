@@ -3,6 +3,10 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { describe, test, expect, vi } from "vitest";
 import QuickActionsImproved from "../../daniTutorChat/components/QuickActionsImproved";
+import {
+  getQuickActionMessage,
+  QUICK_ACTION_PREFILL,
+} from "../../daniTutorChat/daniQuickActions";
 
 describe("QuickActions (QuickActionsImproved)", () => {
   test("renders six quick action buttons", () => {
@@ -23,5 +27,17 @@ describe("QuickActions (QuickActionsImproved)", () => {
       <QuickActionsImproved onAction={vi.fn()} darkMode dark />,
     );
     unmount();
+  });
+
+  test("every action id resolves to a real message or a prefill", () => {
+    const onAction = vi.fn();
+    render(<QuickActionsImproved onAction={onAction} studentAge={12} />);
+    screen.getAllByRole("button").forEach((b) => fireEvent.click(b));
+    expect(onAction.mock.calls.length).toBeGreaterThanOrEqual(6);
+    onAction.mock.calls.forEach(([id]) => {
+      const resolves =
+        QUICK_ACTION_PREFILL[id] || getQuickActionMessage(id) !== id;
+      expect(resolves).toBeTruthy();
+    });
   });
 });

@@ -1,0 +1,83 @@
+/* Dani character (v3) — idle and state animations */
+.dani-character {
+  display: block;
+  overflow: visible;
+}
+.dani-character .dani-eyes,
+.dani-character .dani-eq-bar,
+.dani-character .dani-face {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Blink every ~5 s */
+.dani-character.is-animated .dani-eyes {
+  animation: dani-blink 5.2s infinite;
+}
+@keyframes dani-blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.12);
+  }
+}
+
+/* Light strip on top breathes softly */
+.dani-character.is-animated .dani-strip {
+  animation: dani-glow 3s ease-in-out infinite;
+}
+@keyframes dani-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Talking: equalizer bars + mic tip */
+.dani-character.is-talking .dani-eq-bar {
+  animation: dani-eq 0.42s ease-in-out infinite alternate;
+}
+@keyframes dani-eq {
+  0% {
+    transform: scaleY(0.3);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+.dani-character.is-talking .dani-mic {
+  animation: dani-glow 0.5s ease-in-out infinite;
+}
+
+/* Thinking: glance left and right */
+.dani-character.is-thinking .dani-face {
+  animation: dani-glance 2.4s ease-in-out infinite;
+}
+@keyframes dani-glance {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(-3%);
+  }
+  65% {
+    transform: translateX(3%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dani-character .dani-eyes,
+  .dani-character .dani-strip,
+  .dani-character .dani-eq-bar,
+  .dani-character .dani-mic,
+  .dani-character .dani-face {
+    animation: none !important;
+  }
+}

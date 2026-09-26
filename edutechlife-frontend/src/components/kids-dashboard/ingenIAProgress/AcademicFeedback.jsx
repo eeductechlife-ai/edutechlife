@@ -2,16 +2,35 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 
-const semaforo = (nota) => {
+const semaforo = (nota, isEarly = false) => {
   if (nota >= 3.5)
-    return { color: "bg-green-500", label: "Aprobado", dot: "🟢" };
+    return {
+      color: "bg-green-500",
+      label: isEarly ? "¡Muy bien! 🌟" : "Aprobado",
+      dot: "🟢",
+    };
   if (nota >= 3.0)
-    return { color: "bg-yellow-400", label: "Riesgo", dot: "🟡" };
-  return { color: "bg-red-500", label: "Necesita mejorar", dot: "🔴" };
+    return {
+      color: "bg-yellow-400",
+      label: isEarly ? "¡Casi! 💪" : "Riesgo",
+      dot: "🟡",
+    };
+  return {
+    color: "bg-red-500",
+    label: isEarly ? "¡Sigamos! 🚀" : "Necesita mejorar",
+    dot: "🔴",
+  };
 };
 
-const consejo = (avg) => {
+const consejo = (avg, isEarly = false) => {
   if (avg === null) return null;
+  if (isEarly) {
+    if (avg >= 4.0)
+      return "¡Eres un crack! 🏆 Sigue practicando para ser el mejor.";
+    if (avg >= 3.0)
+      return "¡Vas súper bien! 💪 Practica un poquito más las que están en amarillo.";
+    return "¡No te rindas! 🌱 Dani te puede ayudar a mejorar. ¡Tú puedes!";
+  }
   if (avg >= 4.0)
     return "¡Excelente! Sigue así y usa las Educards para mantener tu nivel.";
   if (avg >= 3.0)
@@ -38,8 +57,9 @@ const headingClass = (darkMode) =>
   `text-sm font-bold mb-3 flex items-center gap-2 ${darkMode ? "text-white" : "text-[#1E293B]"}`;
 
 const AcademicFeedback = ({ onTabChange }) => {
-  const { studentGrades, vakResult, upcomingExams, darkMode } =
+  const { studentGrades, vakResult, upcomingExams, darkMode, studentAge } =
     useIngenIAKids();
+  const isEarly = studentAge != null && studentAge <= 9;
 
   const gradesArray = useMemo(() => {
     if (!studentGrades) return [];
@@ -82,7 +102,7 @@ const AcademicFeedback = ({ onTabChange }) => {
     return upcomingExams.slice(0, 3);
   }, [upcomingExams]);
 
-  const tip = consejo(average);
+  const tip = consejo(average, isEarly);
 
   return (
     <motion.div
@@ -91,14 +111,18 @@ const AcademicFeedback = ({ onTabChange }) => {
       transition={{ duration: 0.45, ease: "easeOut" }}
       className={cardClass(darkMode)}
     >
-      <h2 className={headingClass(darkMode)}>📚 Retroalimentación Académica</h2>
+      <h2 className={headingClass(darkMode)}>
+        {isEarly
+          ? "🌟 ¿Cómo vas en el cole?"
+          : "📚 Retroalimentación Académica"}
+      </h2>
 
       {/* Promedio general */}
       <div className="mb-5">
         <p
           className={`text-[11px] font-medium mb-1 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
         >
-          Promedio general
+          {isEarly ? "Tu nota promedio ⭐" : "Promedio general"}
         </p>
         {average !== null ? (
           <div className="flex items-end gap-2">
@@ -138,7 +162,7 @@ const AcademicFeedback = ({ onTabChange }) => {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {gradesArray.map((g, i) => {
-              const s = semaforo(g.grade);
+              const s = semaforo(g.grade, isEarly);
               return (
                 <div
                   key={i}
@@ -174,7 +198,7 @@ const AcademicFeedback = ({ onTabChange }) => {
         <p
           className={`text-[11px] font-medium mb-2 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
         >
-          Estilo de aprendizaje
+          {isEarly ? "¿Cómo aprendes mejor? 🧠" : "Estilo de aprendizaje"}
         </p>
         {vakStyle ? (
           <span
@@ -194,7 +218,9 @@ const AcademicFeedback = ({ onTabChange }) => {
             className="text-xs font-medium underline underline-offset-2 transition-colors"
             style={{ color: "#FB8500" }}
           >
-            Haz tu diagnóstico VAK →
+            {isEarly
+              ? "¡Descubre cómo aprendes! 🌟"
+              : "Haz tu ADN de Aprendizaje →"}
           </button>
         )}
       </div>
@@ -204,7 +230,7 @@ const AcademicFeedback = ({ onTabChange }) => {
         <p
           className={`text-[11px] font-medium mb-2 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
         >
-          📅 Próximos exámenes
+          {isEarly ? "📅 ¡Próximas pruebas!" : "📅 Próximos exámenes"}
         </p>
         {nextExams.length > 0 ? (
           <ul className="space-y-1.5">
