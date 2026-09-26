@@ -4,26 +4,31 @@ import { X } from "lucide-react";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { track } from "../../lib/analytics";
 import { EVENTS } from "../../lib/analyticsEvents";
+import DaniCharacter from "./dani/DaniCharacter";
 
 const FEATURES = [
-  { icon: "🧠", label: "VAK", desc: "Descubre tu estilo de aprendizaje" },
-  { icon: "📅", label: "Horario", desc: "Organiza tu semana escolar" },
   {
-    icon: "📊",
-    label: "Calificaciones",
-    desc: "Monitorea tu progreso académico",
+    icon: "🧠",
+    label: "ADN de Aprendizaje",
+    desc: "Descubre cómo aprendes mejor",
   },
-  { icon: "🃏", label: "Educards", desc: "Repasa con tarjetas inteligentes" },
-  { icon: "💬", label: "Habla con Dani", desc: "Tu tutor IA disponible 24/7" },
+  { icon: "📚", label: "Aprender", desc: "Materias con material a tu ritmo" },
+  {
+    icon: "🎮",
+    label: "Practicar",
+    desc: "Retos y ejercicios para subir notas",
+  },
+  { icon: "🎯", label: "Misiones", desc: "Gana XP completando desafíos" },
+  { icon: "💬", label: "Habla con Dani", desc: "Tu tutora IA disponible 24/7" },
 ];
 
 const WELCOME_TEXT = {
   early:
-    "¡Hola! Soy Dani 🤖 ¡Tu amigo robot! Aquí aprenderás cosas increíbles. ¡Empecemos!",
+    "¡Hola! Soy Dani, tu tutora en IngenIA. ¡Aquí aprenderás cosas increíbles jugando y ganando puntos!",
   middle:
-    "¡Hola! Soy Dani, tu tutor IA. En IngenIA vas a aprender con tecnología, organizar tu horario y mejorar tus notas. ¡Vamos!",
+    "¡Hola! Soy Dani, tu tutora IA. Aquí practicarás tus materias, ganarás misiones y mejorarás tus notas. ¡Vamos!",
   senior:
-    "Bienvenido/a a IngenIA. Soy Dani, tu asistente IA. Aquí organizarás tu estudio, analizarás tus calificaciones y te prepararás para el futuro tecnológico.",
+    "Hola, soy Dani, tu asistente IA. En IngenIA organizarás tu estudio, practicarás por materia y te prepararás para el futuro.",
 };
 
 const OnboardingGuide = memo(({ onTabChange }) => {
@@ -77,54 +82,73 @@ const OnboardingGuide = memo(({ onTabChange }) => {
 
           {/* Card */}
           <motion.div
-            className="relative bg-white dark:bg-[#1E293B] rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4 overflow-hidden"
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
           >
             {/* Close */}
             <button
               onClick={handleExplore}
-              className="absolute top-3 right-3 z-10 p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+              className="absolute top-3 right-3 z-10 p-1.5 rounded-full hover:bg-white/20 transition-colors"
               aria-label="Cerrar"
             >
-              <X size={18} className="text-gray-500 dark:text-gray-400" />
+              <X size={18} className="text-white" />
             </button>
 
-            {/* Header gradient */}
-            <div className="bg-gradient-to-br from-[#0096C7] to-[#06D6A0] px-6 pt-8 pb-6 text-center">
+            {/* Header — IngenIA navy */}
+            <div
+              className="px-6 pt-8 pb-6 text-center"
+              style={{
+                background: "linear-gradient(135deg, #004B63 0%, #0A2540 100%)",
+              }}
+            >
+              {/* Dani brand avatar */}
               <motion.div
-                className="text-6xl mb-3"
-                animate={{ rotate: [0, -8, 8, -8, 0] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                className="mx-auto mb-4 flex items-center justify-center rounded-full"
+                style={{
+                  width: 80,
+                  height: 80,
+                  background:
+                    "radial-gradient(circle at 35% 30%, #1E3F73 0%, #0B1D3A 70%)",
+                  boxShadow:
+                    "0 0 0 3px rgba(111,240,255,0.4), 0 6px 20px rgba(3,10,30,0.45)",
+                }}
+                animate={{ y: [0, -4, 0] }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
-                🤖
+                <DaniCharacter size={72} mood="happy" animated title="Dani" />
               </motion.div>
-              <h2 className="text-xl font-bold text-white mb-2">
+
+              <h2 className="text-lg font-bold text-white mb-1">
                 ¡Bienvenido/a a IngenIA!
               </h2>
-              <p className="text-white/90 text-sm leading-relaxed">
+              <p className="text-white/80 text-sm leading-relaxed">
                 {welcomeText}
               </p>
             </div>
 
             {/* Features */}
-            <div className="px-6 py-4">
-              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+            <div className="px-5 py-4">
+              <p className="text-[10px] font-bold text-[#004B63]/60 uppercase tracking-widest mb-3">
                 ¿Qué puedes hacer aquí?
               </p>
-              <ul className="space-y-2">
+              <ul className="space-y-2.5">
                 {FEATURES.map((f) => (
                   <li key={f.label} className="flex items-center gap-3">
-                    <span className="text-xl w-8 text-center flex-shrink-0">
+                    <span className="text-lg w-7 text-center flex-shrink-0">
                       {f.icon}
                     </span>
-                    <div>
-                      <span className="font-semibold text-sm text-gray-800 dark:text-white">
+                    <div className="min-w-0">
+                      <span className="font-semibold text-sm text-[#004B63]">
                         {f.label}
-                      </span>{" "}
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      </span>
+                      <span className="text-xs text-gray-400 ml-1">
                         — {f.desc}
                       </span>
                     </div>
@@ -134,16 +158,17 @@ const OnboardingGuide = memo(({ onTabChange }) => {
             </div>
 
             {/* Actions */}
-            <div className="px-6 pb-6 flex flex-col sm:flex-row gap-3">
+            <div className="px-5 pb-5 flex flex-col gap-2.5 pt-1">
               <button
                 onClick={handleStart}
-                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#0096C7] to-[#06D6A0] text-white font-bold text-sm hover:opacity-90 transition-opacity shadow-md"
+                className="w-full py-3 rounded-xl text-white font-bold text-sm hover:opacity-90 active:scale-95 transition-all shadow-md"
+                style={{ background: "#FB8500" }}
               >
-                ¡Empezar mi ADN de Aprendizaje!
+                ¡Descubrir mi estilo de aprendizaje!
               </button>
               <button
                 onClick={handleExplore}
-                className="flex-1 py-3 rounded-xl border-2 border-gray-200 dark:border-white/20 text-gray-600 dark:text-gray-300 font-medium text-sm hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                className="w-full py-2.5 rounded-xl border-2 border-gray-200 text-gray-500 font-medium text-sm hover:bg-gray-50 transition-colors"
               >
                 Explorar primero
               </button>
