@@ -16,14 +16,13 @@ function resolveModel(requested) {
 }
 
 async function fetchWithRetry(url, options, retries = 3) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), DEEPSEEK_TIMEOUT);
-  const finalOptions = { ...options, signal: controller.signal };
-
   let lastError;
   for (let i = 0; i < retries; i++) {
+    // One timer per attempt: a shared, already-aborted signal made every retry fail instantly.
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), DEEPSEEK_TIMEOUT);
     try {
-      const response = await fetch(url, finalOptions);
+      const response = await fetch(url, { ...options, signal: controller.signal });
       clearTimeout(timeoutId);
       if (response.ok) return await response.json();
       let body;
@@ -62,6 +61,9 @@ function buildPayload({ messages, prompt, systemPrompt, isJson, temperature, max
     max_tokens: maxTokens || 800,
     stream
   };
+  // deepseek-flash reasons by default and those tokens count against max_tokens:
+  // a 1400-token mind map came back empty. Our outputs are short and structured.
+  if (process.env.DEEPSEEK_THINKING !== 'enabled') payload.thinking = { type: 'disabled' };
   if (isJson) payload.response_format = { type: 'json_object' };
   return payload;
 }
