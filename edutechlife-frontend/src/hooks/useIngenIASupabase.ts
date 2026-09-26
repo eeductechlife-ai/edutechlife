@@ -244,13 +244,25 @@ export const useVAKResult = (): UseQueryResult<VAKResult | null> => {
 
       if (student.error) throw student.error;
 
-      const { data, error } = await supabase
+      // Production DB may not have detected_at; fall back to created_at
+      let { data, error } = await supabase
         .from("vak_results")
         .select("*")
         .eq("student_id", student.data.id)
         .order("detected_at", { ascending: false })
         .limit(1)
         .maybeSingle();
+
+      if (error?.code === "42703") {
+        // detected_at column missing — retry with created_at
+        ({ data, error } = await supabase
+          .from("vak_results")
+          .select("*")
+          .eq("student_id", student.data.id)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle());
+      }
 
       if (error) throw error;
       return (data as VAKResult) || null;
@@ -738,6 +750,13 @@ export const useSmartboardSettings =
           .eq("student_id", student.data.id)
           .maybeSingle();
 
+        // Table may not exist in all DB environments — return null gracefully
+        if (
+          error &&
+          (error.code === "42P01" || error.message?.includes("relation"))
+        ) {
+          return null;
+        }
         if (error) throw error;
         return (data as SmartboardSettings) || null;
       },
@@ -773,6 +792,12 @@ export const useUpdateSettings = (): UseMutationResult<
         .select()
         .single();
 
+      if (
+        error &&
+        (error.code === "42P01" || error.message?.includes("relation"))
+      ) {
+        return null as unknown as SmartboardSettings;
+      }
       if (error) throw error;
       return data as SmartboardSettings;
     },
@@ -813,6 +838,10 @@ export const useSessionsData = (): UseQueryResult<Session[]> => {
         .eq("student_id", student.data.id)
         .order("start_time", { ascending: false });
 
+      // Gracefully handle missing table or RLS 400
+      if (error && (error.code === "42P01" || error.code === "PGRST301")) {
+        return [] as Session[];
+      }
       if (error) throw error;
       return data as Session[];
     },
