@@ -7,6 +7,13 @@ export const QUICK_ACTIONS = [
   { icon: "🤗", label: "Apoyo emocional", value: "apoyo_emocional" },
 ];
 
+// Actions that need the student's own content (which homework, which topic):
+// they prefill the input instead of sending a generic message.
+export const QUICK_ACTION_PREFILL = {
+  ayuda_tarea: "Necesito ayuda con mi tarea de ",
+  explicar_tema: "Explícame el tema de ",
+};
+
 export function getQuickActionMessage(action) {
   const now = new Date();
   const hour = now.getHours();

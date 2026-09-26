@@ -6,42 +6,42 @@ import "../styles/quick-actions-improved.css";
 
 const QUICK_ACTIONS = [
   {
-    id: "homework",
+    id: "ayuda_tarea",
     icon: "📚",
     titleKey: "dani.qa_homework_title",
     subtitleKey: "dani.qa_homework_subtitle",
     color: "blue",
   },
   {
-    id: "motivation",
+    id: "motivame",
     icon: "💬",
     titleKey: "dani.qa_motivation_title",
     subtitleKey: "dani.qa_motivation_subtitle",
     color: "green",
   },
   {
-    id: "vak",
+    id: "vak_estrategias",
     icon: "🧠",
     titleKey: "dani.qa_vak_title",
     subtitleKey: "dani.qa_vak_subtitle",
     color: "purple",
   },
   {
-    id: "today",
+    id: "que_hacer_hoy",
     icon: "📝",
     titleKey: "dani.qa_today_title",
     subtitleKey: "dani.qa_today_subtitle",
     color: "orange",
   },
   {
-    id: "explain",
+    id: "explicar_tema",
     icon: "💡",
     titleKey: "dani.qa_explain_title",
     subtitleKey: "dani.qa_explain_subtitle",
     color: "yellow",
   },
   {
-    id: "emotional",
+    id: "apoyo_emocional",
     icon: "❤️",
     titleKey: "dani.qa_emotional_title",
     subtitleKey: "dani.qa_emotional_subtitle",

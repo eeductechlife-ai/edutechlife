@@ -16,6 +16,7 @@ import {
   Mic,
 } from "lucide-react";
 import QuickActions from "./components/QuickActionsImproved";
+import { QUICK_ACTION_PREFILL } from "./daniQuickActions";
 import RecentTopics from "../dani/RecentTopics";
 import DaniChatHeader from "./components/DaniChatHeader";
 import DaniChatMessages from "./components/DaniChatMessages";
@@ -43,22 +44,16 @@ const MOOD_COLORS = {
 const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
   const { t } = useTranslation();
   const { studentAge } = useIngenIAKids();
-  const isKid = studentAge && studentAge <= 11;
   const ageGroup =
-    studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior";
+    studentAge == null
+      ? "middle"
+      : studentAge <= 9
+        ? "early"
+        : studentAge <= 12
+          ? "middle"
+          : "senior";
   const inputRef = useRef(null);
-  const maxChars = 500;
-
-  const kidErrorMessages = useMemo(
-    () => ({
-      generic: "¡Ups! Dani se quedó pensando. ¿Puedes intentar de nuevo?",
-      timeout:
-        "Dani está pensando muy profundo... Espera un poco y vuelve a intentar.",
-      network:
-        "¡Oh! Parece que el internet se fue de paseo. Revisa tu conexión y vuelve a intentar.",
-    }),
-    [],
-  );
+  const maxChars = 800;
 
   // Hook must be called first to get handleSendMessage
   const {
@@ -89,10 +84,46 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
     inputText,
     setInputText,
     handleSendMessage,
+    handleRetry,
     isListening,
     handleMicClick,
     crisisAlertLevel,
   } = useDaniChat({ isOpen, activeTab });
+
+  const hasUserMessages = useMemo(
+    () => daniChatHistory.some((m) => m.role === "user"),
+    [daniChatHistory],
+  );
+
+  const focusInput = useCallback(() => {
+    requestAnimationFrame(() => {
+      const el = inputRef.current;
+      if (!el) return;
+      el.focus({ preventScroll: true });
+      el.setSelectionRange(el.value.length, el.value.length);
+    });
+  }, []);
+
+  // Keep the textarea as tall as its content, up to ~5 lines.
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 132)}px`;
+  }, [inputText]);
+
+  const onQuickAction = useCallback(
+    (action) => {
+      const prefill = QUICK_ACTION_PREFILL[action];
+      if (prefill) {
+        setInputText(prefill);
+        focusInput();
+        return;
+      }
+      handleQuickAction(action);
+    },
+    [handleQuickAction, setInputText, focusInput],
+  );
 
   useEffect(() => {
     if (isOpen) track("dani_opened", { tab: activeTab });
@@ -140,21 +171,26 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
     }
   }, []);
 
+  const handleSend = useCallback(() => {
+    if (!inputText.trim() || isTyping) return;
+    handleSendMessage(inputText);
+    if (window.matchMedia("(min-width: 768px)").matches) focusInput();
+  }, [handleSendMessage, inputText, isTyping, focusInput]);
+
   const handleInputKeyDown = useCallback(
     (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
+      if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
         e.preventDefault();
-        handleSendMessage(inputText);
+        handleSend();
       }
     },
-    [handleSendMessage, inputText],
+    [handleSend],
   );
 
-  const handleClearInput = useCallback(() => setInputText(""), []);
-  const handleSend = useCallback(
-    () => handleSendMessage(inputText),
-    [handleSendMessage, inputText],
-  );
+  const handleClearInput = useCallback(() => {
+    setInputText("");
+    focusInput();
+  }, [setInputText, focusInput]);
 
   const handleOralExamMode = useCallback(() => {
     onClose();
@@ -353,6 +389,8 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                 isTyping={isTyping}
                 darkMode={darkMode}
                 messagesEndRef={messagesEndRef}
+                onRetry={handleRetry}
+                ageGroup={ageGroup}
               />
 
               {/* Bottom controls — flex-shrink-0 keeps this block at the bottom */}
@@ -363,10 +401,10 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                   style={{ maxHeight: "clamp(0px, 30dvh, 180px)" }}
                 >
                   <QuickActions
-                    onAction={handleQuickAction}
+                    onAction={onQuickAction}
                     darkMode={darkMode}
-                    studentAge={studentAge}
-                    hasHistory={daniChatHistory.length > 0}
+                    studentAge={studentAge ?? 10}
+                    hasHistory={hasUserMessages}
                   />
 
                   <RecentTopics
@@ -381,30 +419,14 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                   >
                     <motion.button
                       onClick={handleOralExamMode}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
+                      className={`w-full min-h-[44px] flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
                         darkMode
                           ? "bg-[#1E293B] hover:bg-[#243347] text-[#7DD3FC] border border-[#2A3A54]"
                           : "bg-[#F0F9FF] hover:bg-[#E0F2FE] text-[#0369A1] border border-[#BAE6FD]"
                       }`}
-                      style={
-                        !isListening
-                          ? {
-                              background: darkMode
-                                ? SB_COLORS.surfaceDarkAlt
-                                : SB_COLORS.surfaceLight,
-                              borderColor: darkMode
-                                ? SB_COLORS.borderDark
-                                : SB_COLORS.borderLight,
-                              color: SB_COLORS.textMutedLight,
-                            }
-                          : {}
-                      }
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileTap={{ scale: 0.98 }}
                       type="button"
-                      aria-label={
-                        isListening ? "Detener micrófono" : "Activar micrófono"
-                      }
+                      aria-label="Modo Examen Oral: practica hablando con Dani"
                     >
                       <span className="text-base">🎤</span>
                       <span>Modo Examen Oral</span>
@@ -418,25 +440,28 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                 </div>
                 {/* end scrollable extras */}
 
-                {/* Improved Chat Input — always fully visible */}
-                <motion.div
-                  className="flex flex-col gap-3 px-4 pb-4"
+                {/* Chat input — always fully visible */}
+                <div
+                  className={`flex flex-col gap-1.5 px-3 pt-2 pb-3 border-t ${
+                    darkMode ? "border-[#1E293B]" : "border-[#F1F5F9]"
+                  }`}
                   style={{
                     background: darkMode ? SB_COLORS.bgDark : SB_COLORS.bgLight,
                   }}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
                 >
-                  {/* Input field with improved styling */}
                   <div className="flex gap-2 items-end">
                     <div className="flex-1 relative">
-                      <input
+                      <label htmlFor="dani-chat-input" className="sr-only">
+                        Escríbele a Dani
+                      </label>
+                      <textarea
+                        id="dani-chat-input"
                         ref={inputRef}
-                        type="text"
+                        rows={1}
                         value={inputText}
                         onChange={handleInputChange}
                         onKeyDown={handleInputKeyDown}
+                        enterKeyHint="send"
                         placeholder={
                           activeTab === "examenes"
                             ? t("dani.placeholder_exam") ||
@@ -444,19 +469,17 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                             : activeTab === "materias"
                               ? t("dani.placeholder_subject") ||
                                 "¿Qué materia quieres estudiar?"
-                              : t("dani.placeholder") || "Pregúntale a Dani..."
+                              : ageGroup === "early"
+                                ? "Escríbeme tu pregunta 😊"
+                                : "Escribe tu pregunta o pega el enunciado de tu tarea..."
                         }
                         maxLength={maxChars}
-                        className={`w-full px-4 rounded-xl font-medium focus:outline-none focus:ring-2 transition-all ${
-                          ageGroup === "early"
-                            ? "py-4 text-base"
-                            : ageGroup === "senior"
-                              ? "py-2.5 text-sm"
-                              : "py-3 text-sm"
+                        className={`block w-full resize-none pl-4 pr-9 rounded-xl font-medium leading-snug focus:outline-none focus:ring-2 transition-[border-color,box-shadow] border text-base ${
+                          ageGroup === "early" ? "py-3.5" : "py-3"
                         } ${
                           darkMode
-                            ? "border text-[#E2F0FF] placeholder-[#64748B]"
-                            : "border text-[#004B63] placeholder-[#94A3B8]"
+                            ? "text-[#E2F0FF] placeholder-[#64748B]"
+                            : "text-[#004B63] placeholder-[#94A3B8]"
                         }`}
                         style={{
                           background: darkMode
@@ -466,29 +489,29 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                             ? SB_COLORS.borderDark
                             : SB_COLORS.borderLight,
                           "--tw-ring-color": `${SB_COLORS.primary}80`,
+                          maxHeight: 132,
                         }}
                       />
-                      {/* Clear button */}
                       {inputText.length > 0 && (
-                        <motion.button
-                          initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: 1, scale: 1 }}
+                        <button
                           onClick={handleClearInput}
-                          className={`absolute right-3 top-1/2 -translate-y-1/2 ${
-                            darkMode ? "text-[#64748B]" : "text-[#94A3B8]"
+                          className={`absolute right-1 top-1.5 w-8 h-8 flex items-center justify-center rounded-lg ${
+                            darkMode
+                              ? "text-[#64748B] hover:text-[#E2F0FF]"
+                              : "text-[#94A3B8] hover:text-[#004B63]"
                           }`}
                           type="button"
+                          aria-label="Borrar lo que escribí"
                         >
                           <X size={16} />
-                        </motion.button>
+                        </button>
                       )}
                     </div>
 
-                    {/* Microphone Button */}
                     <motion.button
                       onClick={handleMicClick}
                       disabled={isTyping}
-                      className={`${ageGroup === "early" ? "w-12 h-12" : "w-11 h-11"} rounded-lg flex items-center justify-center flex-shrink-0 transition-all font-medium border ${
+                      className={`${ageGroup === "early" ? "w-12 h-12" : "w-11 h-11"} rounded-xl flex items-center justify-center flex-shrink-0 transition-colors border disabled:opacity-40 ${
                         isListening
                           ? "bg-red-500 text-white shadow-lg border-red-500"
                           : ""
@@ -506,23 +529,21 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                             }
                           : {}
                       }
-                      whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       type="button"
+                      aria-pressed={isListening}
                       aria-label={
-                        isListening ? "Detener micrófono" : "Activar micrófono"
+                        isListening ? "Detener micrófono" : "Hablarle a Dani"
                       }
                     >
                       <Mic size={18} strokeWidth={2} />
                     </motion.button>
 
-                    {/* Send Button */}
                     <motion.button
                       onClick={handleSend}
                       disabled={!inputText.trim() || isTyping}
-                      className={`${ageGroup === "early" ? "w-12 h-12" : "w-11 h-11"} text-white rounded-lg flex items-center justify-center disabled:opacity-40 shadow-md flex-shrink-0 font-medium transition-all`}
+                      className={`${ageGroup === "early" ? "w-12 h-12" : "w-11 h-11"} text-white rounded-xl flex items-center justify-center disabled:opacity-40 shadow-md flex-shrink-0 transition-opacity`}
                       style={{ background: SB_GRADIENTS.brandSoft }}
-                      whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       type="button"
                       aria-label="Enviar mensaje"
@@ -531,49 +552,27 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                     </motion.button>
                   </div>
 
-                  {/* Character count */}
-                  {inputText.length > 0 && (
-                    <div className="flex justify-end px-1">
+                  <div
+                    className={`flex items-center justify-between px-1 text-[11px] ${
+                      darkMode ? "text-[#64748B]" : "text-[#94A3B8]"
+                    }`}
+                  >
+                    <span className="hidden md:inline">
+                      Enter para enviar · Shift+Enter para nueva línea
+                    </span>
+                    {inputText.length > maxChars * 0.75 && (
                       <span
-                        className={`text-xs font-medium ${
+                        className={`ml-auto font-medium ${
                           inputText.length > maxChars * 0.9
                             ? "text-red-500"
-                            : inputText.length > maxChars * 0.75
-                              ? "text-amber-500"
-                              : darkMode
-                                ? "text-[#64748B]"
-                                : "text-[#94A3B8]"
+                            : "text-amber-500"
                         }`}
                       >
                         {inputText.length}/{maxChars}
                       </span>
-                    </div>
-                  )}
-
-                  {/* Status indicator */}
-                  {isTyping && (
-                    <motion.div
-                      className={`flex items-center gap-2 px-2 py-2 text-xs font-medium rounded-lg ${
-                        darkMode
-                          ? "bg-[#1E293B] text-[#64748B]"
-                          : "bg-[#F0F9FF] text-[#0369A1]"
-                      }`}
-                      animate={{ opacity: [0.5, 1, 0.5] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                      <span className="inline-block w-2 h-2 bg-current rounded-full animate-bounce" />
-                      <span
-                        className="inline-block w-2 h-2 bg-current rounded-full animate-bounce"
-                        style={{ animationDelay: "0.2s" }}
-                      />
-                      <span
-                        className="inline-block w-2 h-2 bg-current rounded-full animate-bounce"
-                        style={{ animationDelay: "0.4s" }}
-                      />
-                      <span className="ml-1">Dani está escribiendo...</span>
-                    </motion.div>
-                  )}
-                </motion.div>
+                    )}
+                  </div>
+                </div>
               </div>
               {/* end flex-shrink-0 bottom controls */}
             </motion.div>

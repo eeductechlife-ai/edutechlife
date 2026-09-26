@@ -62,7 +62,7 @@ export default function useDaniSendMessage({
   );
 
   const handleSendMessage = useCallback(
-    async (text) => {
+    async (text, { isRetry = false } = {}) => {
       if (!text.trim()) return;
 
       const userMessage = {
@@ -70,7 +70,7 @@ export default function useDaniSendMessage({
         text: text.trim(),
         timestamp: new Date(),
       };
-      addDaniMessage(userMessage);
+      if (!isRetry) addDaniMessage(userMessage);
       setInputText("");
       setIsTyping(true);
       setDaniMood("thinking");
@@ -85,9 +85,14 @@ export default function useDaniSendMessage({
         if (isCrisisAlert(mood)) setShowCrisisResources(true);
 
         // Build lean history for orchestrator (last 12 turns)
-        const history = daniChatHistory
+        // Failed replies are UI-only; the model must not see them as turns.
+        const usable = daniChatHistory.filter(
+          (msg) => !msg.isError && msg.text && typeof msg.text === "string",
+        );
+        // On retry the failed question is already the last turn in history.
+        if (isRetry && usable.at(-1)?.role === "user") usable.pop();
+        const history = usable
           .slice(-12)
-          .filter((msg) => msg.text && typeof msg.text === "string")
           .map((msg) => ({ role: msg.role, content: msg.text }));
 
         if (hasDocumentContext) setDocumentForDani(null);
@@ -208,6 +213,8 @@ export default function useDaniSendMessage({
         const cleanResponse = fullResponse
           .replace(/<memoria>[\s\S]*?<\/memoria>/, "")
           .trim();
+        if (!cleanResponse && !fullResponse.trim())
+          throw new Error("Respuesta vacía del servidor");
         addDaniMessage({
           role: "assistant",
           text: cleanResponse || fullResponse,
@@ -262,6 +269,8 @@ export default function useDaniSendMessage({
         addDaniMessage({
           role: "assistant",
           text: errorMsg,
+          isError: true,
+          retryText: isAuth ? undefined : userMessage.text,
         });
       } finally {
         setIsTyping(false);
@@ -314,8 +323,14 @@ export default function useDaniSendMessage({
     [handleSendMessage],
   );
 
+  const handleRetry = useCallback(
+    (text) => handleSendMessage(text, { isRetry: true }),
+    [handleSendMessage],
+  );
+
   return {
     handleSendMessage,
+    handleRetry,
     handleQuickAction,
     handleTopicClick,
   };

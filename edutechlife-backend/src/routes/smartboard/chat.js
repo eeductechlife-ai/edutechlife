@@ -331,10 +331,10 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
   // Drop leading assistant turns (welcome/frontend-generated) so the LLM always
   // sees a valid user→assistant alternation. Without this DeepSeek can interpret
   // the orphaned assistant message as a fresh-start greeting and ignore context.
-  // Only keep last 6 turns, strip label patterns that poison the style
+  // Only keep last 12 messages, strip label patterns that poison the style
   const LABEL_RE = /\*?\*?(PREGUNTA|PISTA|EXPLICACI[ÓO]N|EJEMPLO|VERIFICACI[ÓO]N)\*?\*?:/i;
   const rawHistory = Array.isArray(history)
-    ? history.slice(-6).filter((m) => m.role && typeof m.content === 'string')
+    ? history.slice(-12).filter((m) => m.role && typeof m.content === 'string')
     : [];
   const firstUserIdx = rawHistory.findIndex((m) => m.role === 'user');
   const cleanHistory = firstUserIdx >= 0 ? rawHistory.slice(firstUserIdx) : [];
@@ -390,7 +390,7 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
 
   try {
     let fullResponse = '';
-    await chatStream(DEEPSEEK_API_KEY, { messages: msgs, temperature: 0.65, maxTokens: 200 }, (chunk) => {
+    await chatStream(DEEPSEEK_API_KEY, { messages: msgs, temperature: 0.65, maxTokens: 350 }, (chunk) => {
       if (streamClosed) return;
       const safe = sanitizeOutput(chunk);
       fullResponse += safe;
