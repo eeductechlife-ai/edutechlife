@@ -55,6 +55,15 @@ Dani: "La fotosíntesis es el proceso que usan las plantas para hacer su propio 
 - Más de UNA pregunta por turno
 `;
 
+const MEMORY_INSTRUCTIONS = `
+## MEMORIA (INVISIBLE PARA EL ESTUDIANTE)
+Solo si en este turno descubriste algo NUEVO y duradero del estudiante (un interés, una fortaleza, una dificultad, un error que repite o un tema que quedó pendiente), agrega AL FINAL de tu respuesta, en una sola línea:
+<memoria>{"intereses":[],"fortalezas":[],"dificultades":[],"errores":[],"pendientes":[],"estilo":""}</memoria>
+- Incluye solo las claves con información nueva; cada elemento en máximo 5 palabras.
+- "estilo" solo puede ser "shy", "direct", "playful" o "curious".
+- Si no hay nada nuevo, NO agregues la etiqueta. Nunca menciones la memoria al estudiante.
+`;
+
 const SOCRATIC_ADDENDUM = `
 ## MODO SOCRÁTICO ACTIVADO
 Responde SOLO con preguntas. Nunca afirmes la respuesta. Lleva al estudiante a descubrirla por sí mismo.
@@ -253,6 +262,16 @@ Estudiante: ${name} | Grado: ${grade}${school ? ` | Colegio: ${school}` : ""}
     }
   }
 
+  // What Dani has learned about the student in past sessions
+  const known = [
+    memory?.strengths?.length && `Fortalezas: ${memory.strengths.slice(0, 5).join(", ")}`,
+    memory?.weaknesses?.length && `Le cuesta: ${memory.weaknesses.slice(0, 5).join(", ")}`,
+    memory?.frequentErrors?.length && `Errores que repite: ${memory.frequentErrors.slice(0, 5).join(", ")}`,
+  ].filter(Boolean);
+  if (known.length > 0) {
+    prompt += `\n\n## LO QUE YA SABES DEL ESTUDIANTE\n${known.join("\n")}\nÚsalo para adaptar tus explicaciones, sin recitarlo.`;
+  }
+
   // Recent topics from memory
   if (recentTopics.length > 0) {
     prompt += `\n\n## TEMAS RECIENTES\n${recentTopics.slice(0, 5).join(", ")}`;
@@ -287,6 +306,7 @@ Estudiante: ${name} | Grado: ${grade}${school ? ` | Colegio: ${school}` : ""}
 
   // Pedagogical cycle (always)
   prompt += PEDAGOGICAL_CYCLE;
+  prompt += MEMORY_INSTRUCTIONS;
 
   // Socratic mode override
   if (socraticMode) {

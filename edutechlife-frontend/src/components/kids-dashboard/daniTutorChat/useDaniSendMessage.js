@@ -1,6 +1,7 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { callDaniOrchestrator } from "../../../utils/api";
+import { stopSpeech } from "../../../utils/speech";
 import { inferMoodFromText, extractTopic } from "../dani/chatUtils";
 import { getQuickActionMessage } from "./daniQuickActions";
 import {
@@ -19,7 +20,6 @@ import { EVENTS } from "../../../lib/analyticsEvents";
 
 export default function useDaniSendMessage({
   getToken,
-  inputText,
   setInputText,
   setIsTyping,
   daniMood,
@@ -28,11 +28,7 @@ export default function useDaniSendMessage({
   documentForDani,
   setDocumentForDani,
   addDaniMessage,
-  buildDaniContext,
-  buildMemoryInjection,
   daniChatHistory,
-  daniMemory,
-  updateDaniMemory,
   recordMoodInference,
   trackAcademicTopic,
   voiceEnabled,
@@ -49,6 +45,7 @@ export default function useDaniSendMessage({
 }) {
   const { t } = useTranslation();
   const isKid = studentAge && studentAge <= 11;
+  const abortRef = useRef(null);
 
   const kidErrorMessages = useMemo(
     () => ({
@@ -61,9 +58,27 @@ export default function useDaniSendMessage({
     [],
   );
 
+  // Metadata frames arrive as JSON strings with "__"-prefixed keys.
+  const handleMeta = useCallback(
+    (meta) => {
+      if (meta.__crisisAlert) {
+        setCrisisAlertLevel(meta.__crisisAlert);
+        setShowCrisisResources(true);
+      }
+      if (meta.__emotionalState === "frustrated") setShowEmotionalBanner(true);
+      if (meta.__emotionalState === "confused") setDaniMood("thinking");
+    },
+    [
+      setCrisisAlertLevel,
+      setShowCrisisResources,
+      setShowEmotionalBanner,
+      setDaniMood,
+    ],
+  );
+
   const handleSendMessage = useCallback(
     async (text, { isRetry = false } = {}) => {
-      if (!text.trim()) return;
+      if (!text.trim() || abortRef.current) return;
 
       const userMessage = {
         role: "user",
@@ -75,6 +90,10 @@ export default function useDaniSendMessage({
       setIsTyping(true);
       setDaniMood("thinking");
 
+      const controller = new AbortController();
+      abortRef.current = controller;
+      let fullResponse = "";
+
       try {
         const currentMood = daniMood;
         const hasDocumentContext = !!documentForDani;
@@ -84,7 +103,6 @@ export default function useDaniSendMessage({
         if (isEmotionalBannerNeeded(mood)) setShowEmotionalBanner(true);
         if (isCrisisAlert(mood)) setShowCrisisResources(true);
 
-        // Build lean history for orchestrator (last 12 turns)
         // Failed replies are UI-only; the model must not see them as turns.
         const usable = daniChatHistory.filter(
           (msg) => !msg.isError && msg.text && typeof msg.text === "string",
@@ -97,9 +115,8 @@ export default function useDaniSendMessage({
 
         if (hasDocumentContext) setDocumentForDani(null);
 
-        let fullResponse = "";
         pendingSentenceRef.current = "";
-        clearVoiceQueue(); // clear any pending audio from previous response
+        clearVoiceQueue();
 
         const token = await getToken();
         if (!token)
@@ -116,6 +133,15 @@ export default function useDaniSendMessage({
           has_document: !!hasDocumentContext,
         });
 
+        const voiceOpts = {
+          pendingSentenceRef,
+          voiceEnabled,
+          isSpeakingRef,
+          daniMood: currentMood,
+          setIsSpeaking,
+          setVoiceBlocked,
+        };
+
         await callDaniOrchestrator(
           {
             message: userMessage.text,
@@ -124,117 +150,47 @@ export default function useDaniSendMessage({
             documentContext: hasDocumentContext ? documentForDani : null,
             history,
           },
-          { token },
+          { token, signal: controller.signal },
           (data) => {
-            try {
-              const parsed = JSON.parse(data);
-              // Handle metadata events from orchestrator
-              if (
-                parsed.emotionalState &&
-                parsed.emotionalState !== "neutral"
-              ) {
-                if (parsed.emotionalState === "frustrated")
-                  setShowEmotionalBanner(true);
-              }
-              if (parsed.crisisAlert) {
-                setCrisisAlertLevel(parsed.crisisAlert);
-                setShowCrisisResources(true);
+            if (data.startsWith('{"__')) {
+              try {
+                handleMeta(JSON.parse(data));
                 return;
+              } catch {
+                // Not metadata after all: treat as text below.
               }
-              if (parsed.__crisisAlert) {
-                setCrisisAlertLevel(parsed.__crisisAlert);
-                setShowCrisisResources(true);
-                return;
-              }
-              // Orchestrator sends { chunk } objects
-              if (parsed.chunk) {
-                fullResponse += parsed.chunk;
-                setDaniMood("explaining");
-                setStreamingMessage(fullResponse);
-                processStreamChunkVoice(parsed.chunk, {
-                  pendingSentenceRef,
-                  voiceEnabled,
-                  isSpeakingRef,
-                  daniMood: currentMood,
-                  setIsSpeaking,
-                  setVoiceBlocked,
-                });
-                return;
-              }
-            } catch {}
-            // Fallback: raw text chunk
+            }
             fullResponse += data;
             setDaniMood("explaining");
             setStreamingMessage(fullResponse);
-            processStreamChunkVoice(data, {
-              pendingSentenceRef,
-              voiceEnabled,
-              isSpeakingRef,
-              daniMood: currentMood,
-              setIsSpeaking,
-              setVoiceBlocked,
-            });
+            processStreamChunkVoice(data, voiceOpts);
           },
         );
 
-        const remaining = pendingSentenceRef.current.trim();
-        speakRemainingText(remaining, {
-          voiceEnabled,
-          isSpeakingRef,
-          daniMood: currentMood,
-          setIsSpeaking,
-          setVoiceBlocked,
-        });
-
-        setDaniMood("explaining");
+        speakRemainingText(pendingSentenceRef.current.trim(), voiceOpts);
         setStreamingMessage("");
 
-        try {
-          const chartMatch = fullResponse.match(/<!CHART>(.*?)<\/!CHART>/s);
-          if (chartMatch) {
-            const chartData = JSON.parse(chartMatch[1].trim());
-            addDaniMessage({
-              role: "assistant",
-              type: "chart",
-              data: chartData,
-            });
-          }
-          const videoMatch = fullResponse.match(/<!VIDEO>(.*?)<\/!VIDEO>/s);
-          if (videoMatch) {
-            const videoData = JSON.parse(videoMatch[1].trim());
-            addDaniMessage({
-              role: "assistant",
-              type: "video",
-              data: videoData,
-            });
-          }
-        } catch {}
-
-        const cleanResponse = fullResponse
-          .replace(/<memoria>[\s\S]*?<\/memoria>/, "")
-          .trim();
-        if (!cleanResponse && !fullResponse.trim())
-          throw new Error("Respuesta vacía del servidor");
-        addDaniMessage({
-          role: "assistant",
-          text: cleanResponse || fullResponse,
-        });
-
-        try {
-          const memoriaMatch = fullResponse.match(
-            /<memoria>([\s\S]*?)<\/memoria>/,
-          );
-          if (memoriaMatch) {
-            const parsed = JSON.parse(memoriaMatch[1].trim());
-            updateDaniMemory(parsed);
-          }
-        } catch (e) {
-          console.warn("[Dani] Memoria parse error:", e.message);
-        }
+        const reply = fullResponse.trim();
+        if (!reply) throw new Error("Respuesta vacía del servidor");
+        addDaniMessage({ role: "assistant", text: reply });
 
         recordMoodIfNeeded(mood, userMessage.text, recordMoodInference);
         trackTopicFromMessage(userMessage, extractTopic, trackAcademicTopic);
       } catch (error) {
+        setStreamingMessage("");
+
+        if (controller.signal.aborted) {
+          // The student pressed "stop": keep what Dani had already said.
+          const partial = fullResponse.trim();
+          if (partial)
+            addDaniMessage({
+              role: "assistant",
+              text: `${partial} …`,
+              stopped: true,
+            });
+          return;
+        }
+
         console.error("Error calling Dani:", error);
         const isAuth =
           error.status === 401 ||
@@ -273,6 +229,7 @@ export default function useDaniSendMessage({
           retryText: isAuth ? undefined : userMessage.text,
         });
       } finally {
+        if (abortRef.current === controller) abortRef.current = null;
         setIsTyping(false);
         setDaniMood("happy");
       }
@@ -298,14 +255,21 @@ export default function useDaniSendMessage({
       setIsSpeaking,
       setShowEmotionalBanner,
       setShowCrisisResources,
-      setCrisisAlertLevel,
       setStreamingMessage,
-      updateDaniMemory,
       studentDbId,
       kidErrorMessages,
       setDocumentForDani,
+      handleMeta,
     ],
   );
+
+  const stopResponse = useCallback(() => {
+    abortRef.current?.abort();
+    clearVoiceQueue();
+    stopSpeech();
+    setIsSpeaking(false);
+    isSpeakingRef.current = false;
+  }, [setIsSpeaking, isSpeakingRef]);
 
   const handleQuickAction = useCallback(
     (action) => {
@@ -331,6 +295,7 @@ export default function useDaniSendMessage({
   return {
     handleSendMessage,
     handleRetry,
+    stopResponse,
     handleQuickAction,
     handleTopicClick,
   };

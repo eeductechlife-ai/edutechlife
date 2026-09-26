@@ -10,6 +10,7 @@ import {
   MessageSquare,
   X,
   Flag,
+  RotateCcw,
 } from "lucide-react";
 import DaniAvatar from "../components/DaniAvatar";
 
@@ -17,7 +18,6 @@ const DaniChatHeader = memo(
   ({
     isSpeaking,
     isTyping,
-    conversationCount,
     toggleVoice,
     voiceEnabled,
     voiceBlocked,
@@ -25,6 +25,8 @@ const DaniChatHeader = memo(
     socraticMode,
     setSocraticMode,
     onClose,
+    onNewConversation,
+    canStartNew = false,
   }) => {
     const { t } = useTranslation();
     const [showReport, setShowReport] = useState(false);
@@ -60,27 +62,27 @@ const DaniChatHeader = memo(
             backgroundSize: "200% 100%",
           }}
         />
-        <div className="relative p-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="relative px-3 py-3 sm:p-4 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <motion.button
               onClick={onClose}
               whileHover={{ scale: 1.1, rotate: 90 }}
               whileTap={{ scale: 0.9 }}
-              className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-full bg-white/15 flex items-center justify-center text-white hover:bg-white/25 transition-all flex-shrink-0"
+              className="min-w-[40px] min-h-[40px] w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/15 flex items-center justify-center text-white hover:bg-white/25 transition-all flex-shrink-0"
               aria-label={t("dani.close")}
             >
               <X size={20} strokeWidth={2.5} aria-hidden="true" />
             </motion.button>
             <DaniAvatar
-              size="md"
+              size="sm"
               isSpeaking={isSpeaking}
               isThinking={isTyping && !isSpeaking}
             />
-            <div>
-              <h3 className="text-white font-bold text-lg">
+            <div className="min-w-0">
+              <h3 className="text-white font-bold text-lg leading-tight">
                 {t("dani.title")}
               </h3>
-              <p className="text-white/80 text-xs" aria-live="polite">
+              <p className="text-white/80 text-xs truncate" aria-live="polite">
                 {isSpeaking
                   ? t("dani.status_speaking")
                   : isTyping
@@ -89,16 +91,21 @@ const DaniChatHeader = memo(
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            {conversationCount > 0 && (
-              <div className="bg-white/15 rounded-full px-3 py-1.5 text-white text-[10px] font-medium flex items-center gap-1 min-h-[28px]">
-                <MessageSquare size={12} aria-hidden="true" />
-                {conversationCount}
-              </div>
+          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+            {canStartNew && (
+              <motion.button
+                onClick={onNewConversation}
+                className="min-w-[40px] min-h-[40px] w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/10 text-white/80 hover:bg-white/25 hover:text-white flex items-center justify-center transition-all"
+                whileTap={{ scale: 0.9 }}
+                aria-label="Nueva conversación"
+                title="Nueva conversación"
+              >
+                <RotateCcw size={18} aria-hidden="true" />
+              </motion.button>
             )}
             <motion.button
               onClick={toggleVoice}
-              className={`min-w-[44px] min-h-[44px] w-11 h-11 rounded-full flex items-center justify-center text-sm transition-all relative ${
+              className={`min-w-[40px] min-h-[40px] w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center text-sm transition-all relative ${
                 voiceEnabled
                   ? "bg-white/30 text-white hover:bg-white/40"
                   : "bg-white/10 text-white/50 hover:bg-white/20"
@@ -126,7 +133,7 @@ const DaniChatHeader = memo(
               )}
             </motion.button>
             {streak.current > 0 && (
-              <div className="bg-white/20 rounded-full px-3 py-1.5 text-white text-xs font-bold flex items-center gap-1 min-h-[28px]">
+              <div className="hidden sm:flex bg-white/20 rounded-full px-3 py-1.5 text-white text-xs font-bold items-center gap-1 min-h-[28px]">
                 <Flame
                   size={16}
                   className="text-orange-400"
@@ -137,7 +144,7 @@ const DaniChatHeader = memo(
             )}
             <motion.button
               onClick={() => setSocraticMode((prev) => !prev)}
-              className={`min-w-[44px] min-h-[44px] w-11 h-11 rounded-full flex items-center justify-center text-sm transition-all ${
+              className={`min-w-[40px] min-h-[40px] w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center text-sm transition-all ${
                 socraticMode
                   ? "bg-purple-500/40 text-purple-200 hover:bg-purple-500/50"
                   : "bg-white/10 text-white/50 hover:bg-white/20"
@@ -157,7 +164,7 @@ const DaniChatHeader = memo(
             </motion.button>
             <motion.button
               onClick={handleReport}
-              className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-full bg-white/10 text-white/50 hover:bg-red-500/40 hover:text-red-200 flex items-center justify-center transition-all"
+              className="min-w-[40px] min-h-[40px] w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/10 text-white/50 hover:bg-red-500/40 hover:text-red-200 flex items-center justify-center transition-all"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               aria-label="Reportar contenido inapropiado"

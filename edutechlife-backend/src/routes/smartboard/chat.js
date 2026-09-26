@@ -7,6 +7,7 @@ const { detectCrisis } = require('../../services/crisisDetection');
 const { sendCrisisAlert, logCrisisIncident } = require('../../services/emailService');
 const { loadStudentContext, buildSystemPrompt: buildOrchestratorPrompt } = require('../../services/daniOrchestrator');
 const { validateInput, detectEmotionalState, sanitizeOutput } = require('../../services/aiSafetyGateway');
+const { createMemoriaFilter, parseMemoria, buildMemoryRow, saveDaniMemory } = require('../../services/daniMemory');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -390,12 +391,23 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
 
   try {
     let fullResponse = '';
-    await chatStream(DEEPSEEK_API_KEY, { messages: msgs, temperature: 0.65, maxTokens: 350 }, (chunk) => {
+    const memoriaFilter = createMemoriaFilter();
+    const emit = (text) => {
+      if (!text || streamClosed) return;
+      fullResponse += text;
+      res.write(`data: ${JSON.stringify({ chunk: text })}\n\n`);
+    };
+    await chatStream(DEEPSEEK_API_KEY, { messages: msgs, temperature: 0.65, maxTokens: 450 }, (chunk) => {
       if (streamClosed) return;
-      const safe = sanitizeOutput(chunk);
-      fullResponse += safe;
-      res.write(`data: ${JSON.stringify({ chunk: safe })}\n\n`);
+      emit(memoriaFilter.push(sanitizeOutput(chunk)));
     });
+    emit(memoriaFilter.flush());
+
+    // Long-term memory: model-reported facts + this turn's detected mood.
+    saveDaniMemory(
+      supabase,
+      buildMemoryRow(studentId, ctx.memory, parseMemoria(memoriaFilter.memoria()), emotional.state)
+    ).catch((e) => console.error('[Dani2] memory save failed:', e.message));
 
     if (streamClosed) return;
     if (crisisDetection.level !== 'none') {
@@ -409,7 +421,7 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
       supabase.from('conversations').insert({
         student_id: req.studentId,
         user_message: sanitized,
-        ai_response: fullResponse.replace(/<memoria>[\s\S]*?<\/memoria>/, '').trim(),
+        ai_response: fullResponse.trim(),
         emotional_context: { sentiment: emotional.state, dependencyRisk: emotional.dependencyRisk },
         subject: ctx.profile?.currentSubject || null,
         learning_style_applied: ctx.profile?.learningStyle || null,

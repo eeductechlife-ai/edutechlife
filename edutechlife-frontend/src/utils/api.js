@@ -550,6 +550,14 @@ function consumeSSEStream(response, onChunk, isJson) {
                 if (parsed.chunk) {
                   fullText += parsed.chunk;
                   if (onChunk) onChunk(parsed.chunk);
+                } else if (parsed.emotionalState || parsed.dependencyRisk) {
+                  if (onChunk)
+                    onChunk(
+                      JSON.stringify({
+                        __emotionalState: parsed.emotionalState,
+                        __dependencyRisk: !!parsed.dependencyRisk,
+                      }),
+                    );
                 } else if (parsed.crisisAlert) {
                   // Pass crisis alerts through onChunk with special marker
                   if (onChunk)
@@ -707,6 +715,15 @@ export async function callDaniOrchestrator(payload, opts = {}, onChunk) {
       ),
     60000,
   );
+  // The caller's signal (the student's "stop" button) must also cut the
+  // response body stream, which is bound to this controller.
+  if (opts.signal) {
+    if (opts.signal.aborted) controller.abort();
+    else
+      opts.signal.addEventListener("abort", () => controller.abort(), {
+        once: true,
+      });
+  }
 
   let response;
   try {
@@ -718,7 +735,7 @@ export async function callDaniOrchestrator(payload, opts = {}, onChunk) {
     });
   } catch (err) {
     clearTimeout(timeoutId);
-    if (err.name === "AbortError") {
+    if (err.name === "AbortError" && !opts.signal?.aborted) {
       throw new Error("El servidor no respondio a tiempo. Intenta de nuevo.");
     }
     throw err;

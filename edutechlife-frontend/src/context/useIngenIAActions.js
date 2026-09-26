@@ -97,6 +97,9 @@ export const useIngenIAActions = (stateAndSetters) => {
         text: message.text || message.content || "",
         type: message.type || "text",
         data: message.data || null,
+        ...(message.isError ? { isError: true } : {}),
+        ...(message.retryText ? { retryText: message.retryText } : {}),
+        ...(message.stopped ? { stopped: true } : {}),
         id:
           message.id ||
           Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
@@ -106,6 +109,10 @@ export const useIngenIAActions = (stateAndSetters) => {
     if (message.role === "user") {
       setConversationCount((prev) => prev + 1);
     }
+  }, []);
+
+  const clearDaniChat = useCallback(() => {
+    ref.current.setDaniChatHistory([]);
   }, []);
 
   const unlockReward = useCallback(
@@ -456,6 +463,7 @@ export const useIngenIAActions = (stateAndSetters) => {
     unlockReward,
     toggleDarkMode,
     addDaniMessage,
+    clearDaniChat,
     recordMoodInference,
     trackAcademicTopic,
     updateDaniMemory,

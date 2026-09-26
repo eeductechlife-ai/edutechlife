@@ -1,4 +1,4 @@
-import { memo, useRef, useEffect, useMemo, useCallback } from "react";
+import { memo, useRef, useEffect, useMemo, useCallback, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "../../../i18n/I18nProvider";
@@ -14,9 +14,13 @@ import {
   X,
   Send,
   Mic,
+  Camera,
+  Square,
+  Loader2,
 } from "lucide-react";
 import QuickActions from "./components/QuickActionsImproved";
 import { QUICK_ACTION_PREFILL } from "./daniQuickActions";
+import { photoPrefill } from "./daniPhoto";
 import RecentTopics from "../dani/RecentTopics";
 import DaniChatHeader from "./components/DaniChatHeader";
 import DaniChatMessages from "./components/DaniChatMessages";
@@ -53,14 +57,15 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
           ? "middle"
           : "senior";
   const inputRef = useRef(null);
-  const maxChars = 800;
+  const maxChars = 1500;
+  const photoInputRef = useRef(null);
+  const [photoError, setPhotoError] = useState("");
 
   // Hook must be called first to get handleSendMessage
   const {
     focusTrapRef,
     isSpeaking,
     isTyping,
-    conversationCount,
     toggleVoice,
     voiceEnabled,
     voiceBlocked,
@@ -85,6 +90,10 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
     setInputText,
     handleSendMessage,
     handleRetry,
+    stopResponse,
+    startNewConversation,
+    readPhoto,
+    isReadingPhoto,
     isListening,
     handleMicClick,
     crisisAlertLevel,
@@ -168,6 +177,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
   const handleInputChange = useCallback((e) => {
     if (e.target.value.length <= maxChars) {
       setInputText(e.target.value);
+      setPhotoError("");
     }
   }, []);
 
@@ -191,6 +201,29 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
     setInputText("");
     focusInput();
   }, [setInputText, focusInput]);
+
+  const handlePhotoPicked = useCallback(
+    async (e) => {
+      const file = e.target.files?.[0];
+      e.target.value = "";
+      if (!file) return;
+      setPhotoError("");
+      try {
+        const text = await readPhoto(file);
+        if (!text) {
+          setPhotoError(
+            "No pude leer texto en la foto. Tómala con buena luz y la hoja derecha.",
+          );
+          return;
+        }
+        setInputText(photoPrefill(text).slice(0, maxChars));
+        focusInput();
+      } catch (err) {
+        setPhotoError(err.message || "No pude leer la foto. Intenta de nuevo.");
+      }
+    },
+    [readPhoto, setInputText, focusInput],
+  );
 
   const handleOralExamMode = useCallback(() => {
     onClose();
@@ -232,7 +265,6 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                 <DaniChatHeader
                   isSpeaking={isSpeaking}
                   isTyping={isTyping}
-                  conversationCount={conversationCount}
                   toggleVoice={toggleVoice}
                   voiceEnabled={voiceEnabled}
                   voiceBlocked={voiceBlocked}
@@ -240,6 +272,8 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                   socraticMode={socraticMode}
                   setSocraticMode={setSocraticMode}
                   onClose={onClose}
+                  onNewConversation={startNewConversation}
+                  canStartNew={hasUserMessages}
                 />
               </div>
 
@@ -508,6 +542,48 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                       )}
                     </div>
 
+                    <input
+                      ref={photoInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handlePhotoPicked}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
+                    <motion.button
+                      onClick={() => photoInputRef.current?.click()}
+                      disabled={isTyping || isReadingPhoto}
+                      className={`${ageGroup === "early" ? "w-12 h-12" : "w-11 h-11"} rounded-xl flex items-center justify-center flex-shrink-0 transition-colors border disabled:opacity-40`}
+                      style={{
+                        background: darkMode
+                          ? SB_COLORS.surfaceDarkAlt
+                          : SB_COLORS.surfaceLight,
+                        borderColor: darkMode
+                          ? SB_COLORS.borderDark
+                          : SB_COLORS.borderLight,
+                        color: SB_COLORS.textMutedLight,
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                      type="button"
+                      aria-label={
+                        isReadingPhoto
+                          ? "Leyendo tu foto"
+                          : "Enviar foto de tu tarea"
+                      }
+                      title="Foto de tu tarea"
+                    >
+                      {isReadingPhoto ? (
+                        <Loader2
+                          size={18}
+                          strokeWidth={2}
+                          className="animate-spin"
+                        />
+                      ) : (
+                        <Camera size={18} strokeWidth={2} />
+                      )}
+                    </motion.button>
+
                     <motion.button
                       onClick={handleMicClick}
                       disabled={isTyping}
@@ -540,15 +616,28 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                     </motion.button>
 
                     <motion.button
-                      onClick={handleSend}
-                      disabled={!inputText.trim() || isTyping}
+                      onClick={isTyping ? stopResponse : handleSend}
+                      disabled={!isTyping && !inputText.trim()}
                       className={`${ageGroup === "early" ? "w-12 h-12" : "w-11 h-11"} text-white rounded-xl flex items-center justify-center disabled:opacity-40 shadow-md flex-shrink-0 transition-opacity`}
                       style={{ background: SB_GRADIENTS.brandSoft }}
                       whileTap={{ scale: 0.95 }}
                       type="button"
-                      aria-label="Enviar mensaje"
+                      aria-label={
+                        isTyping
+                          ? "Detener respuesta de Dani"
+                          : "Enviar mensaje"
+                      }
+                      title={isTyping ? "Detener" : "Enviar"}
                     >
-                      <Send size={18} strokeWidth={2} />
+                      {isTyping ? (
+                        <Square
+                          size={16}
+                          strokeWidth={2.5}
+                          fill="currentColor"
+                        />
+                      ) : (
+                        <Send size={18} strokeWidth={2} />
+                      )}
                     </motion.button>
                   </div>
 
@@ -557,9 +646,17 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                       darkMode ? "text-[#64748B]" : "text-[#94A3B8]"
                     }`}
                   >
-                    <span className="hidden md:inline">
-                      Enter para enviar · Shift+Enter para nueva línea
-                    </span>
+                    {photoError ? (
+                      <span role="alert" className="text-red-500 font-medium">
+                        {photoError}
+                      </span>
+                    ) : isReadingPhoto ? (
+                      <span aria-live="polite">📷 Leyendo tu foto…</span>
+                    ) : (
+                      <span className="hidden md:inline">
+                        Enter para enviar · Shift+Enter para nueva línea
+                      </span>
+                    )}
                     {inputText.length > maxChars * 0.75 && (
                       <span
                         className={`ml-auto font-medium ${
