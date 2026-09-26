@@ -60,6 +60,20 @@ describe('buildPayload', () => {
     const result = buildPayload({ prompt: 'test', stream: true });
     expect(result.stream).toBe(true);
   });
+
+  it('disables reasoning so it cannot eat the max_tokens budget', () => {
+    expect(buildPayload({ prompt: 't' }).thinking).toEqual({ type: 'disabled' });
+    expect(buildPayload({ prompt: 't', stream: true }).thinking).toEqual({ type: 'disabled' });
+  });
+
+  it('lets DEEPSEEK_THINKING=enabled turn reasoning back on', () => {
+    process.env.DEEPSEEK_THINKING = 'enabled';
+    try {
+      expect(buildPayload({ prompt: 't' }).thinking).toBeUndefined();
+    } finally {
+      delete process.env.DEEPSEEK_THINKING;
+    }
+  });
 });
 
 describe('validateMessages', () => {
@@ -73,13 +87,13 @@ describe('validateMessages', () => {
 
   it('returns error when message lacks role', () => {
     expect(validateMessages([{ content: 'test' }])).toBe(
-      'Each message must have role and content (string)'
+      'Each message must have a role'
     );
   });
 
   it('returns error when content is not string', () => {
     expect(validateMessages([{ role: 'user', content: 123 }])).toBe(
-      'Each message must have role and content (string)'
+      'Each message content must be a string or an array (multimodal)'
     );
   });
 
