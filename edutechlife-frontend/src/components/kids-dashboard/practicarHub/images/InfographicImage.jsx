@@ -532,6 +532,50 @@ function CompareBody({ id, data, theme, main, top }) {
 
 const BODIES = { pasos: StepsBody, datos: DataBody, comparacion: CompareBody };
 
+function conclusionLayout(conclusion) {
+  if (!conclusion) return { lines: [], h: 0 };
+  const lines = fit(conclusion, 40, 3);
+  return { lines, h: lines.length ? 20 + lines.length * 24 + 20 : 0 };
+}
+
+function ConclusionBanner({ main, theme, y, layout }) {
+  if (!layout.h) return null;
+  return (
+    <g>
+      <rect
+        x={PAD}
+        y={y}
+        width={W - PAD * 2}
+        height={layout.h}
+        rx="20"
+        fill={mix(main, theme.paper, 0.88)}
+        stroke={mix(main, theme.paper, 0.6)}
+        strokeWidth="2"
+      />
+      <text
+        x={PAD + 18}
+        y={y + 22}
+        fontSize="17"
+        fontWeight="900"
+        fill={main}
+        fontFamily={FONT}
+      >
+        🎯 Lo más importante:
+      </text>
+      <TextLines
+        lines={layout.lines}
+        x={PAD + 18}
+        y={y + 44}
+        size={18}
+        weight={700}
+        fill={theme.ink}
+        anchor="start"
+        gap={24 / 18}
+      />
+    </g>
+  );
+}
+
 export const InfographicImage = memo(
   forwardRef(function InfographicImage(
     { data, color, themeId = "colorido" },
@@ -550,7 +594,9 @@ export const InfographicImage = memo(
     const body = BODIES[formato]({ id, data, theme, main, top: hd.h + 30 });
     const fact = factLayout(data);
     const factY = body.bottom + 6;
-    const H = factY + fact.h + (fact.h ? 54 : 30);
+    const concl = conclusionLayout(data.conclusion);
+    const conclY = factY + fact.h + (fact.h ? 28 : 6);
+    const H = conclY + concl.h + (concl.h ? 28 : 24);
 
     return (
       <svg
@@ -570,6 +616,7 @@ export const InfographicImage = memo(
         <Header id={id} main={main} hd={hd} label={FORMAT_LABEL[formato]} />
         {body.el}
         <FactBox id={id} y={factY} fact={fact} theme={theme} />
+        <ConclusionBanner main={main} theme={theme} y={conclY} layout={concl} />
         <Footer W={W} y={H - 16} theme={theme} />
       </svg>
     );

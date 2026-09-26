@@ -76,16 +76,18 @@ function infografiaInstructions(d) {
     `"bloques": [{"emoji": "emoji", "titulo": "idea en 2-5 palabras", ` +
     `"texto": "explicación de máximo ${d.palabrasTexto} palabras", ` +
     `"cifra": "solo en datos: número real, ej: 70% o 1810"}], ` +
-    `"dato": "dato curioso y verdadero, máximo 20 palabras"}. ` +
+    `"dato": "dato curioso y verdadero, máximo 20 palabras", ` +
+    `"conclusion": "idea clave para recordar, máximo 15 palabras"}. ` +
     `Para comparacion: añade "comparacion": {"izquierda": {"titulo": "...", "emoji": "...", ` +
     `"puntos": ["rasgo en máximo 10 palabras"]}, "derecha": {...}, ` +
-    `"semejanzas": ["algo en común, máximo 12 palabras"]}. ` +
+    `"semejanzas": ["algo en común, máximo 12 palabras"]}, ` +
+    `"conclusion": "idea clave para recordar, máximo 15 palabras". ` +
     `Para cronologia: {"formato": "cronologia", "titulo": "...", "subtitulo": "...", ` +
     `"eventos": [{"año": "fecha o año", "hecho": "descripción en máximo ${d.palabrasTexto} palabras", "emoji": "emoji"}], ` +
-    `"dato": "..."}. ` +
+    `"dato": "...", "conclusion": "..."}. ` +
     `Para ciclo: {"formato": "ciclo", "titulo": "...", "subtitulo": "...", ` +
     `"etapas": [{"emoji": "emoji", "nombre": "fase en 2-4 palabras", "descripcion": "máximo ${d.palabrasTexto} palabras"}], ` +
-    `"dato": "..."}. ` +
+    `"dato": "...", "conclusion": "..."}. ` +
     `Usa entre ${d.bloques - 1} y ${d.bloques} elementos. Nunca inventes cifras. Sin HTML.`
   );
 }
@@ -209,6 +211,7 @@ function parseInfographic(obj) {
     titulo: str(obj.titulo) || "Infografía",
     subtitulo: str(obj.subtitulo),
     dato: str(obj.dato),
+    conclusion: str(obj.conclusion),
   };
 
   // Cronologia → render as datos (year as the big number/cifra)
