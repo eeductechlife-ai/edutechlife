@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const supabase = require('../../db/supabase');
-const { chat, chatStream, validateMessages } = require('../../services/deepseek');
+const { chat, chatStream, validateMessages, DEFAULT_MODEL } = require('../../services/deepseek');
 const { requireAuth } = require('../../middleware/auth');
 const { requireVerifiedParentalConsent } = require('../../middleware/parentalConsent');
 const { detectCrisis } = require('../../services/crisisDetection');
@@ -426,7 +426,7 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
         subject: ctx.profile?.currentSubject || null,
         learning_style_applied: ctx.profile?.learningStyle || null,
         messages_in_context: safeHistory.length + 1,
-        model_used: 'deepseek-chat',
+        model_used: DEFAULT_MODEL(),
       }).then(({ error: insertErr }) => {
         if (insertErr && insertErr.code !== '42P01') {
           console.error('[Dani2] Conversation save failed:', insertErr.message);

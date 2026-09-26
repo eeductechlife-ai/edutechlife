@@ -107,7 +107,7 @@ const _evaluateWithDeepseek = async (studentPrompt, moduleId = 1) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "deepseek-chat",
+        model: "deepseek-flash",
         messages: [
           {
             role: "system",

@@ -13,7 +13,7 @@ describe('buildPayload', () => {
       { role: 'system', content: 'Be helpful' },
       { role: 'user', content: 'Hello' },
     ]);
-    expect(result.model).toBe('deepseek-chat');
+    expect(result.model).toBe('deepseek-flash');
     expect(result.temperature).toBe(0.7);
     expect(result.max_tokens).toBe(800);
     expect(result.stream).toBe(false);
@@ -30,16 +30,30 @@ describe('buildPayload', () => {
     expect(result.response_format).toEqual({ type: 'json_object' });
   });
 
-  it('uses custom model and temperature', () => {
-    const result = buildPayload({
-      prompt: 'test',
-      model: 'deepseek-reasoner',
-      temperature: 0.1,
-      maxTokens: 2000,
-    });
-    expect(result.model).toBe('deepseek-reasoner');
+  it('uses custom temperature and tokens', () => {
+    const result = buildPayload({ prompt: 'test', temperature: 0.1, maxTokens: 2000 });
     expect(result.temperature).toBe(0.1);
     expect(result.max_tokens).toBe(2000);
+  });
+
+  it('ignores models that are not server-approved', () => {
+    expect(buildPayload({ prompt: 't', model: 'deepseek-v4-pro' }).model).toBe('deepseek-flash');
+    expect(buildPayload({ prompt: 't', model: 'deepseek-chat' }).model).toBe('deepseek-flash');
+  });
+
+  it('honours DEEPSEEK_MODEL and DEEPSEEK_VISION_MODEL', () => {
+    const prev = { ...process.env };
+    process.env.DEEPSEEK_MODEL = 'deepseek-chat';
+    process.env.DEEPSEEK_VISION_MODEL = 'deepseek-flash';
+    try {
+      expect(buildPayload({ prompt: 't' }).model).toBe('deepseek-chat');
+      expect(buildPayload({ prompt: 't', model: 'deepseek-flash' }).model).toBe('deepseek-flash');
+    } finally {
+      process.env.DEEPSEEK_MODEL = prev.DEEPSEEK_MODEL;
+      process.env.DEEPSEEK_VISION_MODEL = prev.DEEPSEEK_VISION_MODEL;
+      if (prev.DEEPSEEK_MODEL === undefined) delete process.env.DEEPSEEK_MODEL;
+      if (prev.DEEPSEEK_VISION_MODEL === undefined) delete process.env.DEEPSEEK_VISION_MODEL;
+    }
   });
 
   it('respects stream option', () => {

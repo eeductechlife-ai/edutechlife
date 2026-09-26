@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { chat } = require('../../services/deepseek');
+const { chat, DEFAULT_MODEL } = require('../../services/deepseek');
 const { extractTextWithGoogle } = require('../../services/googleOcr');
 const { requireAuth } = require('../../middleware/auth');
 const { requireVerifiedParentalConsent } = require('../../middleware/parentalConsent');
@@ -44,8 +44,8 @@ async function transcribeWithVision(imageBase64, model) {
  * Returns: { text, source: "vision" | "ocr" }
  *
  * Reads the homework statement from a photo so the student can review it
- * before sending it to Dani. Uses DeepSeek vision when DEEPSEEK_VISION_MODEL
- * is set (better with formulas and diagrams) and falls back to Google OCR.
+ * before sending it to Dani. Uses DeepSeek vision (DEEPSEEK_VISION_MODEL, else
+ * the default model, which is vision-capable) and falls back to Google OCR.
  */
 router.post('/dani/photo', requireAuth, requireVerifiedParentalConsent, visionLimiter, async (req, res) => {
   const { imageBase64 } = req.body || {};
@@ -56,8 +56,8 @@ router.post('/dani/photo', requireAuth, requireVerifiedParentalConsent, visionLi
     return res.status(400).json({ error: 'La foto es demasiado grande (máx ~4MB)' });
   }
 
-  const visionModel = process.env.DEEPSEEK_VISION_MODEL;
-  if (visionModel && process.env.DEEPSEEK_API_KEY) {
+  const visionModel = process.env.DEEPSEEK_VISION_MODEL || DEFAULT_MODEL();
+  if (process.env.DEEPSEEK_API_KEY) {
     try {
       const text = await transcribeWithVision(imageBase64, visionModel);
       if (text) return res.json({ text: text.slice(0, MAX_TEXT_CHARS), source: 'vision' });

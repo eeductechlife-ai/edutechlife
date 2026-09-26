@@ -3,6 +3,18 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 const DEEPSEEK_TIMEOUT = 30000;
 
+// DeepSeek-V4.1-Flash (text + vision). Override per environment without a
+// code change, e.g. DEEPSEEK_MODEL=deepseek-chat to roll back.
+const DEFAULT_MODEL = () => process.env.DEEPSEEK_MODEL || 'deepseek-flash';
+
+// Clients (the browser included) may name a model, but only server-approved
+// ones are used; anything else falls back to the default so a request cannot
+// switch to a pricier model.
+function resolveModel(requested) {
+  const allowed = [DEFAULT_MODEL(), process.env.DEEPSEEK_VISION_MODEL].filter(Boolean);
+  return allowed.includes(requested) ? requested : DEFAULT_MODEL();
+}
+
 async function fetchWithRetry(url, options, retries = 3) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), DEEPSEEK_TIMEOUT);
@@ -44,7 +56,7 @@ function buildPayload({ messages, prompt, systemPrompt, isJson, temperature, max
     ];
   }
   const payload = {
-    model: model || 'deepseek-chat',
+    model: resolveModel(model),
     messages: msgs,
     temperature: temperature ?? 0.7,
     max_tokens: maxTokens || 800,
@@ -128,4 +140,4 @@ async function chatStream(apiKey, body, onChunk) {
   console.log('[chatStream] done. bytesRead=', _bytes, 'contentChunks=', _chunks);
 }
 
-module.exports = { chat, chatStream, validateMessages, buildPayload, fetchWithRetry };
+module.exports = { chat, chatStream, validateMessages, buildPayload, fetchWithRetry, resolveModel, DEFAULT_MODEL };
