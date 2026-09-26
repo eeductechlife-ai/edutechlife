@@ -21,12 +21,22 @@ function readTheme() {
 
 // The ideas a kid can ask Dani about, one per branch / block / side.
 export function daniTopics(type, data) {
-  if (type === "mapa")
-    return data.ramas.map((r) => ({
+  if (type === "mapa") {
+    const topics = data.ramas.map((r) => ({
       label: r.idea,
       emoji: r.emoji,
-      detail: r.detalles,
+      detail: r.curiosidad
+        ? [...r.detalles, `Dato: ${r.curiosidad}`]
+        : r.detalles,
     }));
+    if (data.conclusion)
+      topics.push({
+        label: "Conclusión",
+        emoji: "🎯",
+        detail: [data.conclusion],
+      });
+    return topics;
+  }
   if (data.formato === "comparacion" && data.comparacion)
     return [data.comparacion.izquierda, data.comparacion.derecha].map((s) => ({
       label: s.titulo,
