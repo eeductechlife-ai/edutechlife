@@ -1,29 +1,51 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import { axe, toHaveNoViolations } from 'jest-axe';
-import { BrowserRouter } from 'react-router-dom';
-import { I18nProvider } from '../../i18n/I18nProvider';
-import { ThemeProvider } from '../../context/ThemeContext';
+import React from "react";
+import { render } from "@testing-library/react";
+import { axe, toHaveNoViolations } from "jest-axe";
+import { BrowserRouter } from "react-router-dom";
+import { I18nProvider } from "../../i18n/I18nProvider";
+import { ThemeProvider } from "../../context/ThemeContext";
 
 beforeAll(() => {
-  window.matchMedia = window.matchMedia || (() => ({ matches: false, addListener: () => {}, removeListener: () => {}, addEventListener: () => {}, removeEventListener: () => {} }));
+  window.matchMedia =
+    window.matchMedia ||
+    (() => ({
+      matches: false,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    }));
 });
 
 expect.extend(toHaveNoViolations);
 
-vi.mock('../../utils/iconMapping', () => ({
-  Icon: ({ name, className }) => <svg data-testid="mock-icon" data-icon={name} className={className} />,
+vi.mock("../../utils/iconMapping", () => ({
+  Icon: ({ name, className }) => (
+    <svg data-testid="mock-icon" data-icon={name} className={className} />
+  ),
 }));
 
-vi.mock('../../utils/iconMapping.jsx', () => ({
-  Icon: ({ name, className }) => <svg data-testid="mock-icon" data-icon={name} className={className} />,
+vi.mock("../../utils/iconMapping.jsx", () => ({
+  Icon: ({ name, className }) => (
+    <svg data-testid="mock-icon" data-icon={name} className={className} />
+  ),
 }));
 
-vi.mock('../../components/hero/AnimatedTitle', () => ({
-  AnimatedTitle: ({ text1, text2 }) => <div data-testid="animated-title">{text1} {text2}</div>,
+vi.mock("../../components/hero/AnimatedTitle", () => ({
+  AnimatedTitle: ({ text1, text2 }) => (
+    <div data-testid="animated-title">
+      {text1} {text2}
+    </div>
+  ),
 }));
 
-vi.mock('lucide-react', () => ({
+vi.mock("lucide-react", () => ({
+  ArrowRight: () => <svg data-testid="mock-lucide" />,
+  Check: () => <svg data-testid="mock-lucide" />,
+  Pause: () => <svg data-testid="mock-lucide" />,
+  Play: () => <svg data-testid="mock-lucide" />,
+  Volume2: () => <svg data-testid="mock-lucide" />,
+  VolumeX: () => <svg data-testid="mock-lucide" />,
   Home: () => <div data-testid="mock-lucide">Home</div>,
   Target: () => <div data-testid="mock-lucide">Target</div>,
   BookOpen: () => <div data-testid="mock-lucide">BookOpen</div>,
@@ -52,20 +74,29 @@ vi.mock('lucide-react', () => ({
   Send: () => <div data-testid="mock-lucide">Send</div>,
 }));
 
-vi.mock('framer-motion', () => ({
+vi.mock("framer-motion", () => ({
   motion: {
     div: ({ children, ...props }) => <div {...props}>{children}</div>,
     span: ({ children, ...props }) => <span {...props}>{children}</span>,
     button: ({ children, ...props }) => <button {...props}>{children}</button>,
     p: ({ children, ...props }) => <p {...props}>{children}</p>,
-    section: ({ children, ...props }) => <section {...props}>{children}</section>,
-    article: ({ children, ...props }) => <article {...props}>{children}</article>,
+    section: ({ children, ...props }) => (
+      <section {...props}>{children}</section>
+    ),
+    article: ({ children, ...props }) => (
+      <article {...props}>{children}</article>
+    ),
     header: ({ children, ...props }) => <header {...props}>{children}</header>,
     nav: ({ children, ...props }) => <nav {...props}>{children}</nav>,
+    figure: ({ children, ...props }) => <figure {...props}>{children}</figure>,
+    img: (props) => <img {...props} />,
+    circle: (props) => <circle {...props} />,
   },
   AnimatePresence: ({ children }) => <>{children}</>,
+  MotionConfig: ({ children }) => <>{children}</>,
+  useScroll: () => ({ scrollYProgress: { get: () => 0 } }),
   useReducedMotion: () => false,
-  useMotionValue: () => ({ get: () => 0 }),
+  useMotionValue: () => ({ get: () => 0, set: () => {} }),
   useSpring: () => ({ get: () => 0 }),
   useTransform: () => ({ get: () => 0 }),
 }));
@@ -73,101 +104,113 @@ vi.mock('framer-motion', () => ({
 const Wrapper = ({ children }) => (
   <BrowserRouter>
     <I18nProvider>
-      <ThemeProvider>
-        {children}
-      </ThemeProvider>
+      <ThemeProvider>{children}</ThemeProvider>
     </I18nProvider>
   </BrowserRouter>
 );
 
-describe('Component a11y', () => {
-  it('AdminLoginModal has no violations', async () => {
-    const AdminLoginModal = (await import('../../components/AdminLoginModal')).default;
+describe("Component a11y", () => {
+  it("AdminLoginModal has no violations", async () => {
+    const AdminLoginModal = (await import("../../components/AdminLoginModal"))
+      .default;
     const { container } = render(
       <Wrapper>
         <AdminLoginModal isOpen={true} onClose={() => {}} onLogin={() => {}} />
-      </Wrapper>
+      </Wrapper>,
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
-  it('Hero has no violations', async () => {
-    const Hero = (await import('../../components/Hero')).default;
+  it("Hero has no violations", async () => {
+    const Hero = (await import("../../components/Hero")).default;
     const { container } = render(
       <Wrapper>
         <Hero />
-      </Wrapper>
+      </Wrapper>,
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
-  it('Footer has no violations', async () => {
-    const Footer = (await import('../../components/Footer')).default;
+  it("Footer has no violations", async () => {
+    const Footer = (await import("../../components/Footer")).default;
     const { container } = render(
       <Wrapper>
         <Footer />
-      </Wrapper>
+      </Wrapper>,
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
-  it('SubjectGrid has no violations', async () => {
-    const SubjectGrid = (await import('../../components/SubjectGrid')).default;
+  it("SubjectGrid has no violations", async () => {
+    const SubjectGrid = (await import("../../components/SubjectGrid")).default;
     const subjects = [
-      { id: 1, name: 'Math', icon: 'Calculator', color: '#3B82F6', progress: 60 },
-      { id: 2, name: 'Science', icon: 'Atom', color: '#10B981', progress: 30 },
+      {
+        id: 1,
+        name: "Math",
+        icon: "Calculator",
+        color: "#3B82F6",
+        progress: 60,
+      },
+      { id: 2, name: "Science", icon: "Atom", color: "#10B981", progress: 30 },
     ];
     const { container } = render(
       <Wrapper>
         <SubjectGrid subjects={subjects} onSelectSubject={() => {}} />
-      </Wrapper>
+      </Wrapper>,
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
-  it('LeadCaptureModal has no violations', async () => {
-    const LeadCaptureModal = (await import('../../components/LeadCaptureModal')).default;
+  it("LeadCaptureModal has no violations", async () => {
+    const LeadCaptureModal = (await import("../../components/LeadCaptureModal"))
+      .default;
     const { container } = render(
       <Wrapper>
-        <LeadCaptureModal isOpen={true} onClose={() => {}} context={{ interest: 'general' }} />
-      </Wrapper>
+        <LeadCaptureModal
+          isOpen={true}
+          onClose={() => {}}
+          context={{ interest: "general" }}
+        />
+      </Wrapper>,
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   }, 15000);
 
-  it('ContactModal has no violations', async () => {
-    const ContactModal = (await import('../../components/ContactModal')).default;
+  it("ContactModal has no violations", async () => {
+    const ContactModal = (await import("../../components/ContactModal"))
+      .default;
     const { container } = render(
       <Wrapper>
         <ContactModal isOpen={true} onClose={() => {}} />
-      </Wrapper>
+      </Wrapper>,
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   }, 15000);
 
-  it.skip('ModalBlog has no violations', async () => {
+  it.skip("ModalBlog has no violations", async () => {
     // Skipped: pre-existing empty heading in blog article cards
   }, 15000);
 
-  it.skip('ModalDocumentacion has no violations', async () => {
+  it.skip("ModalDocumentacion has no violations", async () => {
     // Skipped: pre-existing empty heading in help article cards
   }, 15000);
 
-  it('ModalContacto has no violations', async () => {
-    const ModalContacto = (await import('../../components/footer/modals/ModalContacto')).default;
+  it("ModalContacto has no violations", async () => {
+    const ModalContacto = (
+      await import("../../components/footer/modals/ModalContacto")
+    ).default;
     const { container } = render(
       <Wrapper>
         <ModalContacto onClose={() => {}} />
-      </Wrapper>
+      </Wrapper>,
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   }, 15000);
-
 });
