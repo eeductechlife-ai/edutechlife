@@ -112,20 +112,20 @@ export const HeroTabs = ({
               />
               <span className="min-w-0">
                 <span
-                  className={`block text-[13px] font-bold leading-tight transition-colors sm:text-sm ${
+                  className={`block font-display text-[13px] font-bold leading-tight tracking-[-0.01em] transition-colors sm:text-sm ${
                     selected
                       ? "text-petroleum-dark"
                       : "text-slate-500 group-hover:text-petroleum"
                   }`}
                 >
-                  <span className="text-inherit sm:hidden">
+                  <span className="text-inherit [font-family:inherit] [font-weight:inherit] sm:hidden">
                     {slide.tabShort}
                   </span>
-                  <span className="hidden text-inherit sm:inline">
+                  <span className="hidden text-inherit [font-family:inherit] [font-weight:inherit] sm:inline">
                     {t(slide.tabKey)}
                   </span>
                 </span>
-                <span className="hidden truncate text-xs text-slate-500 lg:block">
+                <span className="hidden truncate text-xs font-medium text-slate-500 lg:block">
                   {t(slide.tabCaptionKey)}
                 </span>
               </span>

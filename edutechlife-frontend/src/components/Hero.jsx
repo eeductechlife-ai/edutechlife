@@ -91,9 +91,9 @@ const RevealText = ({ text, offset = 0, colorAt }) => {
   const words = text.split(" ");
   return words.map((word, i) => (
     <Fragment key={`${word}-${i}`}>
-      <span className="-mb-[0.12em] inline-block overflow-hidden pb-[0.12em] align-bottom">
+      <span className="-mb-[0.12em] inline-block overflow-hidden pb-[0.12em] align-bottom [font-family:inherit]">
         <motion.span
-          className="inline-block"
+          className="inline-block [font-family:inherit]"
           custom={i + offset}
           variants={wordVariants}
           style={colorAt ? { color: colorAt(i, words.length) } : undefined}
@@ -121,13 +121,13 @@ const brandColorAt = (i, n) => {
 };
 
 const TITLE_CLASS =
-  "font-display text-[2.1rem] font-extrabold leading-[1.02] tracking-[-0.025em] text-petroleum-dark [text-wrap:balance] sm:text-5xl lg:text-[3.35rem]";
+  "font-display text-[2.1rem] font-black leading-[1.02] tracking-[-0.045em] text-petroleum [text-wrap:balance] sm:text-5xl lg:text-[3.35rem]";
 const PRODUCT_TITLE_CLASS = TITLE_CLASS.replace(
   "lg:text-[3.35rem]",
   "lg:text-[2.7rem]",
 );
 const SUBTITLE_CLASS =
-  "mt-5 max-w-[46ch] text-base leading-relaxed text-slate-600 sm:text-lg lg:mx-0 mx-auto";
+  "mt-5 max-w-[46ch] text-base leading-relaxed font-medium text-slate-500 sm:text-lg lg:mx-0 mx-auto";
 const CTA_BASE =
   "inline-flex min-h-[52px] items-center justify-center gap-3 whitespace-nowrap rounded-full text-base font-bold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petroleum";
 
@@ -137,6 +137,7 @@ const MainCopy = ({ t, isActive, stats, statsRef }) => {
     <div className="text-center lg:text-left">
       <h1 className={TITLE_CLASS}>
         <RevealText text={t("hero.title_line1")} />
+        <br className="hidden lg:inline" />
         <RevealText
           text={t("hero.title_line2")}
           offset={t("hero.title_line1").split(" ").length}
@@ -167,18 +168,18 @@ const MainCopy = ({ t, isActive, stats, statsRef }) => {
         className="mx-auto mt-9 flex max-w-md items-center justify-center gap-6 border-t border-petroleum/10 pt-6 lg:mx-0 lg:justify-start"
       >
         <div className="flex flex-col-reverse">
-          <dt className="text-xs text-slate-500 sm:text-sm">
+          <dt className="text-xs font-medium text-slate-500 sm:text-sm">
             {t("hero.stat_estudiantes")}
           </dt>
-          <dd className="font-display text-2xl font-extrabold tracking-tight text-petroleum-dark sm:text-[1.7rem]">
+          <dd className="font-display text-2xl font-black tracking-[-0.03em] text-petroleum sm:text-[1.75rem]">
             {stats.students.toLocaleString()}+
           </dd>
         </div>
         <div className="flex flex-col-reverse border-l border-petroleum/15 pl-6">
-          <dt className="text-xs text-slate-500 sm:text-sm">
+          <dt className="text-xs font-medium text-slate-500 sm:text-sm">
             {t("hero.stat_anios_experiencia")}
           </dt>
-          <dd className="font-display text-2xl font-extrabold tracking-tight text-petroleum-dark sm:text-[1.7rem]">
+          <dd className="font-display text-2xl font-black tracking-[-0.03em] text-petroleum sm:text-[1.75rem]">
             {stats.years}+
           </dd>
         </div>
