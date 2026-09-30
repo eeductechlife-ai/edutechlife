@@ -129,7 +129,7 @@ const PRODUCT_TITLE_CLASS = TITLE_CLASS.replace(
 const SUBTITLE_CLASS =
   "mt-5 max-w-[46ch] text-base leading-relaxed font-medium text-slate-500 sm:text-lg lg:mx-0 mx-auto";
 const CTA_BASE =
-  "inline-flex min-h-[52px] items-center justify-center gap-3 whitespace-nowrap rounded-full text-base font-bold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petroleum";
+  "inline-flex min-h-[52px] items-center justify-center gap-3 whitespace-nowrap rounded-full text-base font-bold transition-[background-color,border-color,color,transform,box-shadow] duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petroleum";
 
 const MainCopy = ({ t, isActive, stats, statsRef }) => {
   const tab = isActive ? 0 : -1;
@@ -145,21 +145,30 @@ const MainCopy = ({ t, isActive, stats, statsRef }) => {
         />
       </h1>
       <p className={SUBTITLE_CLASS}>{t("hero.subtitle_before")}</p>
-      <div className="mt-8 flex flex-col items-center gap-2 sm:flex-row sm:justify-center lg:justify-start">
+      <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center lg:justify-start">
         <Link
           to="/ialab-academic"
           tabIndex={tab}
-          className={`${CTA_BASE} w-full px-7 bg-petroleum text-white shadow-[0_18px_40px_-16px_rgba(0,75,99,0.7)] hover:bg-petroleum-dark sm:w-auto`}
+          className={`${CTA_BASE} group w-full px-7 bg-petroleum text-white shadow-[0_18px_40px_-16px_rgba(0,75,99,0.7)] hover:-translate-y-0.5 hover:bg-petroleum-dark sm:w-auto`}
         >
           {t("hero.cta_conoce_smartboard")}
-          <ArrowRight size={18} aria-hidden="true" />
+          <ArrowRight
+            size={18}
+            aria-hidden="true"
+            className="transition-transform duration-300 group-hover:translate-x-0.5"
+          />
         </Link>
         <Link
           to="/conoce-ingenia"
           tabIndex={tab}
-          className={`${CTA_BASE} px-4 text-petroleum underline decoration-petroleum/30 decoration-2 underline-offset-[6px] hover:decoration-petroleum`}
+          className={`${CTA_BASE} group w-full border-2 border-[rgba(0,75,99,0.4)] bg-white/80 px-7 text-petroleum shadow-[0_12px_28px_-18px_rgba(0,75,99,0.45)] backdrop-blur-md hover:-translate-y-0.5 hover:border-[#004B63] hover:bg-[#004B63] hover:text-white sm:w-auto`}
         >
           {t("hero.cta_smartboard")}
+          <ArrowRight
+            size={18}
+            aria-hidden="true"
+            className="transition-transform duration-300 group-hover:translate-x-0.5"
+          />
         </Link>
       </div>
       {/* Prueba social junto a la acción: cifras sobrias con separador fino */}
