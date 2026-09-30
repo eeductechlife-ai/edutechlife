@@ -131,7 +131,7 @@ const SUBTITLE_CLASS =
 const CTA_BASE =
   "inline-flex min-h-[52px] items-center justify-center gap-3 whitespace-nowrap rounded-full text-base font-bold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petroleum";
 
-const MainCopy = ({ t, isActive }) => {
+const MainCopy = ({ t, isActive, stats, statsRef }) => {
   const tab = isActive ? 0 : -1;
   return (
     <div className="text-center lg:text-left">
@@ -161,6 +161,28 @@ const MainCopy = ({ t, isActive }) => {
           {t("hero.cta_smartboard")}
         </Link>
       </div>
+      {/* Prueba social junto a la acción: cifras sobrias con separador fino */}
+      <dl
+        ref={statsRef}
+        className="mx-auto mt-9 flex max-w-md items-center justify-center gap-6 border-t border-petroleum/10 pt-6 lg:mx-0 lg:justify-start"
+      >
+        <div className="flex flex-col-reverse">
+          <dt className="text-xs text-slate-500 sm:text-sm">
+            {t("hero.stat_estudiantes")}
+          </dt>
+          <dd className="font-display text-2xl font-extrabold tracking-tight text-petroleum-dark sm:text-[1.7rem]">
+            {stats.students.toLocaleString()}+
+          </dd>
+        </div>
+        <div className="flex flex-col-reverse border-l border-petroleum/15 pl-6">
+          <dt className="text-xs text-slate-500 sm:text-sm">
+            {t("hero.stat_anios_experiencia")}
+          </dt>
+          <dd className="font-display text-2xl font-extrabold tracking-tight text-petroleum-dark sm:text-[1.7rem]">
+            {stats.years}+
+          </dd>
+        </div>
+      </dl>
     </div>
   );
 };
@@ -365,7 +387,12 @@ const Hero = memo(() => {
                   >
                     <motion.div style={{ y: copyY, opacity: copyFade }}>
                       {slide.kind === "photo" ? (
-                        <MainCopy t={t} isActive={isActive} />
+                        <MainCopy
+                          t={t}
+                          isActive={isActive}
+                          stats={stats}
+                          statsRef={statsRef}
+                        />
                       ) : (
                         <ProductCopy slide={slide} t={t} isActive={isActive} />
                       )}
@@ -382,9 +409,6 @@ const Hero = memo(() => {
                         running={running}
                         reducedMotion={reducedMotion}
                         stage={stage}
-                        stats={stats}
-                        statsRef={statsRef}
-                        t={t}
                       />
                     ) : (
                       <HeroVideoStage

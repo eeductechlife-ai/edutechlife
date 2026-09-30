@@ -72,6 +72,32 @@
   }
 }
 
+@keyframes hero-dash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+@keyframes hero-node {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-sweep {
+  0%,
+  55% {
+    transform: translateX(0) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(480%) skewX(-20deg);
+  }
+}
+
 .hero-wave-bar {
   transform-origin: center;
   animation: hero-wave 0.9s ease-in-out infinite;
