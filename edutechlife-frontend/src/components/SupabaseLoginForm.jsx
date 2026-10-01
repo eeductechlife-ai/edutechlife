@@ -10,6 +10,7 @@ import { supabaseStorageKey } from "../lib/supabase";
 import { decodeJwtPayload } from "../hooks/useAuthIdentity";
 import MFAVerify from "./MFAVerify";
 import { isBackendUnavailable, directSignIn } from "../lib/directAuth";
+import { warmBackend } from "../lib/warmBackend";
 
 // Pre-sembra la sesión del cliente supabase-js ANTES de navegar al dashboard.
 // El role gate (RoleProtectedRoute) lee esta clave con supabase.auth.
@@ -59,6 +60,10 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
 
   // El callback de OAuth vuelve a /login?error=... cuando algo falla. Antes el
   // error se ignoraba y el usuario veía el formulario "como si nada".
+  useEffect(() => {
+    warmBackend();
+  }, []);
+
   useEffect(() => {
     const oauthError = searchParams.get("error");
     if (!oauthError) return;
@@ -144,7 +149,9 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
     setError("");
     setInfo("");
 
-    const maxRetries = 2;
+    // Si el backend está dormido (arranque en frío) un reintento no ayuda: tras
+    // un intento corto se pasa al respaldo directo con Supabase.
+    const maxRetries = 1;
     let lastError = null;
 
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
@@ -155,7 +162,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
         }
 
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
 
         const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
           method: "POST",

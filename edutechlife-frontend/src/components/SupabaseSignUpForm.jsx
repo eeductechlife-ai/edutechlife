@@ -1,4 +1,4 @@
-import { useState, useMemo, Suspense } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Brain,
@@ -22,7 +22,12 @@ import { track } from "../lib/analytics";
 import { EVENTS } from "../lib/analyticsEvents";
 import { API_BASE_URL } from "../config/api";
 import { seedClientSession } from "./SupabaseLoginForm";
-import { isBackendUnavailable, directSignUp } from "../lib/directAuth";
+import {
+  isBackendUnavailable,
+  directSignUp,
+  directSignIn,
+} from "../lib/directAuth";
+import { warmBackend } from "../lib/warmBackend";
 
 // Error boundary fallback
 function SignUpFormFallback() {
@@ -43,6 +48,10 @@ const SupabaseSignUpForm = ({
   const navigate = useNavigate();
 
   const defaultReturnTo = safeReturnTo(returnTo);
+
+  useEffect(() => {
+    warmBackend();
+  }, []);
   const [currentStep, setCurrentStep] = useState(0);
 
   const [formData, setFormData] = useState({
@@ -212,14 +221,21 @@ const SupabaseSignUpForm = ({
 
     try {
       let registerResponse = null;
+      let backendTimedOut = false;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
       try {
         registerResponse = await fetch(`${API_BASE_URL}/api/auth/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(signupData),
+          signal: controller.signal,
         });
-      } catch {
-        // Red/CORS: el backend no responde → respaldo directo con Supabase.
+      } catch (fetchErr) {
+        // Red/CORS/tiempo agotado: el backend no responde → respaldo directo.
+        backendTimedOut = fetchErr?.name === "AbortError";
+      } finally {
+        clearTimeout(timeoutId);
       }
 
       let result;
@@ -228,9 +244,24 @@ const SupabaseSignUpForm = ({
           result = await directSignUp(signupData);
         } catch (directErr) {
           if (directErr.code === "email_already_registered") {
-            throw new Error(t("signup.error.email_already_registered"));
+            // Si el backend se agotó pero alcanzó a crear la cuenta, las mismas
+            // credenciales sirven para entrar en vez de mostrar un error falso.
+            if (backendTimedOut) {
+              try {
+                result = await directSignIn(
+                  signupData.email,
+                  signupData.password,
+                );
+              } catch {
+                /* la cuenta es de otra persona: se informa abajo */
+              }
+            }
+            if (!result) {
+              throw new Error(t("signup.error.email_already_registered"));
+            }
+          } else {
+            throw directErr;
           }
-          throw directErr;
         }
       } else if (!registerResponse.ok) {
         const errorData = await registerResponse.json().catch(() => ({}));

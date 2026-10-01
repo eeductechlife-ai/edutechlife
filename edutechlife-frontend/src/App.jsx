@@ -1,3 +1,4 @@
+import { warmBackend } from "./lib/warmBackend";
 import { useState, useEffect, lazy, Suspense, useRef } from "react";
 import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
@@ -119,6 +120,11 @@ const App = () => {
     // politicas RLS bloqueaban la lectura/escritura del progreso.
     if (authToken) initSupabaseClient(authToken);
   }, [authToken]);
+
+  useEffect(() => {
+    // Despierta el backend (plan gratuito de Render) apenas llega el visitante.
+    warmBackend();
+  }, []);
 
   useEffect(() => {
     // Prefetch only when browser is idle (more efficient than setTimeout)
