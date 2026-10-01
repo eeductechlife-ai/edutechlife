@@ -23,8 +23,14 @@ async function fetchWithRetry(url, options, retries = 3) {
     const timeoutId = setTimeout(() => controller.abort(), DEEPSEEK_TIMEOUT);
     try {
       const response = await fetch(url, { ...options, signal: controller.signal });
+      // El timer sigue activo hasta leer el cuerpo: DeepSeek, saturado, envía
+      // cabeceras y deja la conexión abierta sin datos.
+      if (response.ok) {
+        const json = await response.json();
+        clearTimeout(timeoutId);
+        return json;
+      }
       clearTimeout(timeoutId);
-      if (response.ok) return await response.json();
       let body;
       try { body = await response.json(); } catch {}
       const err = new Error(body?.error?.message || `HTTP ${response.status}`);
@@ -98,13 +104,23 @@ async function chatStream(apiKey, body, onChunk) {
   const payload = buildPayload({ ...body, stream: true });
   // Usar el fetch global (WHATWG ReadableStream con getReader); node-fetch v3
   // expone PassThrough (sin getReader) y rompería el streaming.
+  // Sin datos durante DEEPSEEK_TIMEOUT se corta: antes el chat quedaba en
+  // "......" para siempre si DeepSeek no respondía.
+  const controller = new AbortController();
+  let idleTimer = setTimeout(() => controller.abort(), DEEPSEEK_TIMEOUT);
+  const touch = () => {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => controller.abort(), DEEPSEEK_TIMEOUT);
+  };
+  try {
   const response = await globalThis.fetch(DEEPSEEK_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${apiKey}`
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    signal: controller.signal
   });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
@@ -117,6 +133,7 @@ async function chatStream(apiKey, body, onChunk) {
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
+    touch();
     _bytes += value.length;
     buffer += decoder.decode(value, { stream: true });
     const lines = buffer.split('\n');
@@ -140,6 +157,12 @@ async function chatStream(apiKey, body, onChunk) {
     }
   }
   console.log('[chatStream] done. bytesRead=', _bytes, 'contentChunks=', _chunks);
+  } catch (e) {
+    if (e.name === 'AbortError') throw new Error('DeepSeek request timed out');
+    throw e;
+  } finally {
+    clearTimeout(idleTimer);
+  }
 }
 
 module.exports = { chat, chatStream, validateMessages, buildPayload, fetchWithRetry, resolveModel, DEFAULT_MODEL };
