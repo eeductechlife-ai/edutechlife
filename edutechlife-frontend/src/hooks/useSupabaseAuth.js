@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 // Import estático (no dinámico): lib/supabase ya se importa estáticamente en
 // ~28 módulos. Mezclar import estático + dinámico del mismo módulo crea chunks
 // compartidos frágiles que Rollup enlaza mal en el build de Vercel
@@ -381,9 +381,23 @@ export const useSupabaseAuth = () => {
     }
   }, []);
 
+  // La fila `users` puede venir sin nombre aunque el registro lo guardó en
+  // user_metadata: sin esto el menú y MAX mostraban el prefijo del correo
+  // ("Edison") mientras la portada decía otro nombre.
+  const profileWithName = useMemo(() => {
+    if (!profile || profile.first_name) return profile;
+    const meta = user?.user_metadata || {};
+    if (!meta.first_name) return profile;
+    return {
+      ...profile,
+      first_name: meta.first_name,
+      last_name: profile.last_name || meta.last_name || null,
+    };
+  }, [profile, user]);
+
   return {
     user,
-    profile,
+    profile: profileWithName,
     loading,
     error,
     isSignedIn: !!user,

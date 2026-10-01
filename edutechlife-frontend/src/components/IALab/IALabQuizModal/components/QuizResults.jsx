@@ -253,6 +253,9 @@ export function QuizResults({
             </span>
             <span className="text-xs text-slate-600">100%</span>
           </div>
+          <p className="mt-3 text-[11px] text-slate-500 text-center">
+            {t("ialab.quiz.weighted_note")}
+          </p>
         </div>
 
         <AnswerReview quizQuestions={quizQuestions} quizAnswers={quizAnswers} />

@@ -37,10 +37,14 @@ export const deriveNameFromEmail = (email = "") => {
 export const getUserInfo = (profile, fallbackEmail = "") => {
   const email = (profile?.email || fallbackEmail || "").trim();
 
-  const fullName = [profile?.first_name, profile?.last_name]
-    .filter(Boolean)
-    .join(" ")
-    .trim();
+  const fullName =
+    [profile?.first_name, profile?.last_name]
+      .filter(Boolean)
+      .join(" ")
+      .trim() ||
+    (typeof profile?.full_name === "string" && !profile.full_name.includes("@")
+      ? profile.full_name.trim()
+      : "");
 
   const displayName =
     fullName || profile?.username || deriveNameFromEmail(email) || "Usuario";
