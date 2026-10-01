@@ -30,6 +30,30 @@ describe('rate limiters', () => {
     }
   });
 
+  it('apiLimiter nunca limita /api/health (health check de Render)', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    try {
+      const app = express();
+      app.use('/api', apiLimiter);
+      app.get('/api/health', (req, res) => res.json({ ok: true }));
+      app.get('/api/otro', (req, res) => res.json({ ok: true }));
+
+      let health = 200;
+      for (let i = 0; i < 110; i++) {
+        health = (await request(app).get('/api/health')).status;
+      }
+      expect(health).toBe(200);
+      // El resto de /api sigue limitado por IP (comparte contador entre pruebas).
+      let otro = 200;
+      for (let i = 0; i < 110; i++) {
+        otro = (await request(app).get('/api/otro')).status;
+      }
+      expect(otro).toBe(429);
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
   it('deepseekLimiter sets rate limit headers', async () => {
     vi.stubEnv('NODE_ENV', 'production');
     try {

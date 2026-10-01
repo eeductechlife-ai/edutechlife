@@ -26,7 +26,10 @@ const apiLimiter = rateLimit({
   legacyHeaders: false,
   store,
   message: { error: 'Demasiadas solicitudes, intenta de nuevo más tarde.' },
-  skip: (req) => process.env.NODE_ENV !== 'production',
+  // El health check de Render llama cada pocos segundos desde la misma IP:
+  // contarlo devolvía 429, Render daba la instancia por caída y respondía 502.
+  skip: (req) =>
+    process.env.NODE_ENV !== 'production' || req.originalUrl.split('?')[0] === '/api/health',
 });
 
 const deepseekLimiter = rateLimit({
