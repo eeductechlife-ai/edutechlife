@@ -9,6 +9,7 @@ import { API_BASE_URL } from "../config/api";
 import { supabaseStorageKey } from "../lib/supabase";
 import { decodeJwtPayload } from "../hooks/useAuthIdentity";
 import MFAVerify from "./MFAVerify";
+import { isBackendUnavailable, directSignIn } from "../lib/directAuth";
 
 // Pre-sembra la sesión del cliente supabase-js ANTES de navegar al dashboard.
 // El role gate (RoleProtectedRoute) lee esta clave con supabase.auth.
@@ -102,6 +103,41 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
     }
   };
 
+  const completeLogin = async (data) => {
+    sessionStorage.setItem("auth_token", data.token);
+    localStorage.setItem("refresh_token", data.refreshToken);
+    localStorage.setItem(
+      "user_email",
+      (data.user?.email || data.email || "").toLowerCase(),
+    );
+    claimStorageForCurrentUser();
+    await seedClientSession(data.token, data.refreshToken);
+    // Avisa al AuthProvider ya montado (navegación client-side, sin reload):
+    // así useAuth().user queda poblado y el foro/comunidad no pide iniciar
+    // sesión a un usuario que sí lo está.
+    window.dispatchEvent(new CustomEvent("auth:signed-in"));
+    navigate(returnTo, { replace: true });
+  };
+
+  // Inicio de sesión directo con Supabase cuando el backend no responde.
+  const loginDirect = async () => {
+    setInfo("");
+    try {
+      const data = await directSignIn(email, password);
+      await completeLogin(data);
+    } catch (err) {
+      const key =
+        err.code === "invalid_credentials"
+          ? "login.error.invalid_credentials"
+          : err.code === "email_not_confirmed"
+            ? "login.error.email_not_confirmed"
+            : "login.error.connection";
+      setError(t(key));
+      console.error("Login (respaldo) error:", err);
+      setLoading(false);
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -129,6 +165,11 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
         });
 
         clearTimeout(timeoutId);
+        // Backend caído/suspendido (5xx o página HTML): respaldo directo.
+        if (isBackendUnavailable(response)) {
+          await loginDirect();
+          return;
+        }
         const data = await response.json();
 
         if (!response.ok) {
@@ -157,20 +198,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
           return;
         }
 
-        sessionStorage.setItem("auth_token", data.token);
-        localStorage.setItem("refresh_token", data.refreshToken);
-        localStorage.setItem(
-          "user_email",
-          (data.user?.email || data.email || "").toLowerCase(),
-        );
-
-        claimStorageForCurrentUser();
-        await seedClientSession(data.token, data.refreshToken);
-        // Avisa al AuthProvider ya montado (navegación client-side, sin reload):
-        // así useAuth().user queda poblado y el foro/comunidad no pide iniciar
-        // sesión a un usuario que sí lo está.
-        window.dispatchEvent(new CustomEvent("auth:signed-in"));
-        navigate(returnTo, { replace: true });
+        await completeLogin(data);
         return;
       } catch (err) {
         lastError = err;
@@ -182,6 +210,12 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
         }
         break;
       }
+    }
+
+    // Red/CORS/timeout tras los reintentos: el backend no responde.
+    if (lastError?.name === "AbortError" || lastError?.name === "TypeError") {
+      await loginDirect();
+      return;
     }
 
     setInfo("");

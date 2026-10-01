@@ -1,19 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Video, Clock } from 'lucide-react';
-import { useTranslation } from '../../i18n/I18nProvider';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Video, Clock } from "lucide-react";
+import { useTranslation } from "../../i18n/I18nProvider";
 
-const MEETING_URL = 'https://meet.google.com/ywc-jumh-wnh';
+const MEETING_URL = "https://meet.google.com/ywc-jumh-wnh";
 const TUTORIA_HOUR = 16; // 4 PM
 const TUTORIA_END_HOUR = 18; // 6 PM
 const TUTORIA_DAY = 0; // Sunday
+
+// Enlace "Añadir a Google Calendar" para la tutoría semanal (domingo
+// 4:00–6:00 PM Bogotá = 21:00–23:00 UTC, Colombia no tiene horario de verano).
+const buildCalendarUrl = (title, details) => {
+  const now = new Date();
+  const next = new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      21,
+      0,
+      0,
+    ),
+  );
+  next.setUTCDate(next.getUTCDate() + ((7 - next.getUTCDay()) % 7));
+  if (next <= now) next.setUTCDate(next.getUTCDate() + 7);
+  const end = new Date(next.getTime() + 2 * 60 * 60 * 1000);
+  const fmt = (d) =>
+    d
+      .toISOString()
+      .replace(/[-:]/g, "")
+      .replace(/\.\d{3}/, "");
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: title,
+    details: `${details}\n${MEETING_URL}`,
+    location: MEETING_URL,
+    dates: `${fmt(next)}/${fmt(end)}`,
+    recur: "RRULE:FREQ=WEEKLY;BYDAY=SU",
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+};
 
 /**
  * Obtiene la hora actual en Bogotá (UTC-5)
  */
 const getBogotaNow = () => {
   const now = new Date();
-  const bogotaStr = now.toLocaleString('en-US', { timeZone: 'America/Bogota' });
+  const bogotaStr = now.toLocaleString("en-US", { timeZone: "America/Bogota" });
   return new Date(bogotaStr);
 };
 
@@ -23,23 +56,23 @@ const getBogotaNow = () => {
 const getTimeUntilNextTutoria = () => {
   const now = getBogotaNow();
   const daysUntilSunday = (TUTORIA_DAY - now.getDay() + 7) % 7 || 7;
-  
+
   const nextTutoria = new Date(now);
   nextTutoria.setDate(now.getDate() + daysUntilSunday);
   nextTutoria.setHours(TUTORIA_HOUR, 0, 0, 0);
-  
+
   // Si ya pasaron las 4 PM de hoy (domingo), ir al siguiente domingo
   if (now.getDay() === TUTORIA_DAY && now.getHours() >= TUTORIA_END_HOUR) {
     nextTutoria.setDate(now.getDate() + 7);
   }
-  
+
   const diff = nextTutoria - now;
-  
+
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-  
+
   return { days, hours, minutes, seconds };
 };
 
@@ -77,7 +110,7 @@ const IALabTutoriasVirtuales = () => {
     if (countdown.hours > 0) parts.push(`${countdown.hours}h`);
     parts.push(`${countdown.minutes}m`);
     parts.push(`${countdown.seconds}s`);
-    return parts.join(' ');
+    return parts.join(" ");
   };
 
   return (
@@ -99,7 +132,7 @@ const IALabTutoriasVirtuales = () => {
           <div>
             <div className="flex items-center gap-3 mb-1">
               <h3 className="text-lg md:text-xl font-bold text-[var(--theme-emphasis)]">
-                {t('ialab.tutorias_virtuales.title')}
+                {t("ialab.tutorias_virtuales.title")}
               </h3>
               {active && (
                 <span className="flex items-center gap-1.5 px-2.5 py-0.5 bg-red-100 text-red-600 text-xs font-semibold rounded-full">
@@ -107,18 +140,20 @@ const IALabTutoriasVirtuales = () => {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                   </span>
-                  {t('ialab.tutorias_virtuales.live')}
+                  {t("ialab.tutorias_virtuales.live")}
                 </span>
               )}
             </div>
             <p className="text-sm md:text-base text-slate-600 leading-relaxed mt-2">
-              {t('ialab.tutorias_virtuales.description')}
+              {t("ialab.tutorias_virtuales.description")}
             </p>
             {!active && (
               <div className="flex items-center gap-2 mt-3 text-sm text-slate-500">
                 <Clock className="w-4 h-4" />
                 <span>
-                  {t('ialab.tutorias_virtuales.countdown', { time: formatCountdown() })}
+                  {t("ialab.tutorias_virtuales.countdown", {
+                    time: formatCountdown(),
+                  })}
                 </span>
               </div>
             )}
@@ -136,16 +171,26 @@ const IALabTutoriasVirtuales = () => {
             className="flex-shrink-0 px-6 py-3 bg-gradient-to-r from-red-500 via-red-600 to-red-500 text-white rounded-xl font-semibold text-sm flex items-center gap-2 shadow-sm hover:shadow-[0_0_20px_rgba(239,68,68,0.3)] transition-all duration-300"
           >
             <Video className="w-4 h-4" />
-            {t('ialab.tutorias_virtuales.join')}
+            {t("ialab.tutorias_virtuales.join")}
           </motion.a>
         ) : (
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="flex-shrink-0 px-6 py-3 bg-slate-100 text-slate-600 rounded-xl font-semibold text-sm flex items-center gap-2 cursor-not-allowed select-none"
-          >
-            <Video className="w-4 h-4" />
-            {t('ialab.tutorias_virtuales.unavailable')}
-          </motion.div>
+          <div className="flex-shrink-0 flex flex-col items-stretch gap-1.5 text-center">
+            <span className="text-[11px] text-slate-500">
+              {t("ialab.tutorias_virtuales.unavailable")}
+            </span>
+            <a
+              href={buildCalendarUrl(
+                t("ialab.tutorias_virtuales.title"),
+                t("ialab.tutorias_virtuales.description"),
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-3 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-colors"
+            >
+              <Video className="w-4 h-4" aria-hidden="true" />
+              {t("ialab.tutorias_virtuales.add_calendar")}
+            </a>
+          </div>
         )}
       </div>
     </motion.div>

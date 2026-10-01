@@ -13,6 +13,8 @@ import { Card, CardContent } from "../ui/card-simple";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { evaluateCertificateRequirements } from "../../utils/certificateRequirements";
+import ModalPortal from "../ui/ModalPortal";
+import useEscapeKey from '../../hooks/useEscapeKey';
 
 const CertificatePreview = lazy(() => import("../IALab/CertificatePreview"));
 
@@ -96,6 +98,8 @@ const CertificatesModal = ({ isOpen, onClose }) => {
       setCertificate(storedCertificate);
     }
   }, [storedCertificate]);
+
+  useEscapeKey(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -373,11 +377,12 @@ const CertificatesModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <ModalPortal>
+    <div className="fixed inset-0 z-[1200] flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="fixed inset-0 bg-black/20"
+        className="fixed inset-0 bg-black/50"
         onClick={onClose}
       />
 
@@ -440,6 +445,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
         </CardContent>
       </motion.div>
     </div>
+    </ModalPortal>
   );
 };
 

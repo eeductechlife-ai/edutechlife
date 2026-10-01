@@ -5,6 +5,8 @@ import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import useFocusTrap from '../../hooks/useFocusTrap';
 import { useTranslation } from '../../i18n/I18nProvider';
 import IALabGuideModal from './IALabGuideModal';
+import ModalPortal from '../ui/ModalPortal';
+import useEscapeKey from '../../hooks/useEscapeKey';
 
 const SettingsSupportModal = ({ isOpen, onClose }) => {
   const { isDarkMode, toggleDarkMode } = useTheme();
@@ -31,6 +33,8 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
     { question: t('modals.settings.faq_q4'), answer: t('modals.settings.faq_a4') },
     { question: t('modals.settings.faq_q5'), answer: t('modals.settings.faq_a5') },
   ];
+
+  useEscapeKey(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -64,8 +68,9 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
   ];
 
   return (
-    <div className="fixed inset-0 z-[1002] flex items-center justify-center p-4" ref={focusTrapRef}>
-      <div className="fixed inset-0 bg-black/20" onClick={onClose} />
+    <ModalPortal>
+    <div className="fixed inset-0 z-[1200] flex items-center justify-center p-4" ref={focusTrapRef}>
+      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
       <div className="w-full max-w-lg bg-white rounded-xl border border-slate-200/60 shadow-lg max-h-[85vh] overflow-hidden relative z-10 modal-scrollable">
         {/* Header */}
         <div className="border-b border-slate-200/60 bg-gradient-to-r from-petroleum/10 to-corporate/10 pt-8 pb-0 px-6">
@@ -240,6 +245,7 @@ const SettingsSupportModal = ({ isOpen, onClose }) => {
       </div>
       <IALabGuideModal isOpen={showGuide} onClose={() => setShowGuide(false)} />
     </div>
+    </ModalPortal>
   );
 };
 

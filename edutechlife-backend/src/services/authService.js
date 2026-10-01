@@ -26,6 +26,9 @@ async function signUp({ email, password, username, firstName, lastName, userType
         username: username || email.split('@')[0],
         first_name: firstName,
         last_name: lastName,
+        // handle_new_user usa full_name para profiles.full_name; sin él cae al
+        // prefijo del correo, que luego se ve en foro y ranking.
+        full_name: [firstName, lastName].filter(Boolean).join(' ').trim() || undefined,
         // Producto: el trigger handle_new_user (migración 090) usa estos
         // metadatos para etiquetar la fila en public.users
         // (account_type/platform/registration_source).

@@ -73,10 +73,14 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   // Índice de la pregunta ya revelada por la ruleta. Cada pregunta se
   // "descubre" girando; al navegar a otra vuelve a pedir un giro.
   const [revealedFor, setRevealedFor] = useState(-1);
+  // El cronómetro y el autoenvío solo corren después de pulsar "Comenzar":
+  // antes el reloj arrancaba al abrir, mientras el estudiante aún leía.
+  const [started, setStarted] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     setRevealedFor(-1);
+    setStarted(false);
   }, [isOpen]);
 
   const toggleMarkForReview = useCallback((questionId) => {
@@ -273,16 +277,17 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   }, [handleSubmit]);
 
   useEffect(() => {
-    if (!isTimerRunning || showScoreResult) return;
+    if (!isTimerRunning || showScoreResult || !started) return;
     const interval = setInterval(() => {
       setTimeElapsed((prev) => prev + 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [isTimerRunning, showScoreResult, setTimeElapsed]);
+  }, [isTimerRunning, showScoreResult, started, setTimeElapsed]);
 
   useEffect(() => {
     if (
       isTimerRunning &&
+      started &&
       !showScoreResult &&
       !isSubmitting &&
       timeElapsed >= SUGGESTED_TIME_SECONDS
@@ -292,6 +297,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   }, [
     timeElapsed,
     isTimerRunning,
+    started,
     showScoreResult,
     isSubmitting,
     SUGGESTED_TIME_SECONDS,
@@ -309,6 +315,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
     }
     // El intento ya se descontó al enviar; aquí solo se reabre.
     handleClose();
+    setStarted(false);
     setTimeout(() => {
       openEvaluation();
     }, 300);
@@ -339,137 +346,169 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
   );
 
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          ref={focusTrapRef}
-          role="dialog"
-          aria-modal="true"
-          aria-label={t("ialab.quiz.dialog_label")}
-          className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col min-h-0 select-none"
-          style={{ WebkitUserSelect: "none", userSelect: "none" }}
-          onCopy={preventDefaultEvent}
-          onPaste={preventDefaultEvent}
-          onCut={preventDefaultEvent}
-          onContextMenu={preventDefaultEvent}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3 }}
-        >
-          <a
-            href="#quiz-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[110] focus:px-4 focus:py-2 focus:bg-white focus:text-[var(--theme-emphasis)] focus:rounded-lg focus:text-sm focus:font-bold focus:shadow-lg"
+    <>
+      <AnimatePresence>
+        {isVisible && (
+          <motion.div
+            ref={focusTrapRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t("ialab.quiz.dialog_label")}
+            className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col min-h-0 select-none"
+            style={{ WebkitUserSelect: "none", userSelect: "none" }}
+            onCopy={preventDefaultEvent}
+            onPaste={preventDefaultEvent}
+            onCut={preventDefaultEvent}
+            onContextMenu={preventDefaultEvent}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={
+              shouldReduceMotion ? { duration: 0 } : { duration: 0.3 }
+            }
           >
-            {t("ialab.skip_link")}
-          </a>
+            <a
+              href="#quiz-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[110] focus:px-4 focus:py-2 focus:bg-white focus:text-[var(--theme-emphasis)] focus:rounded-lg focus:text-sm focus:font-bold focus:shadow-lg"
+            >
+              {t("ialab.skip_link")}
+            </a>
 
-          <QuizTimer
-            timeElapsed={timeElapsed}
-            suggestedTime={SUGGESTED_TIME_SECONDS}
-            currentQuestion={currentQuestion}
-            totalQuestions={TOTAL_QUESTIONS}
-            isTimerRunning={isTimerRunning}
-            showSecurityMessage={showSecurityMessage}
-            securityMessage={securityMessage}
-            practiceMode={practiceMode}
-            onTogglePractice={() => setPracticeMode((p) => !p)}
-            onClose={handleClose}
-            formatTime={formatTime}
-          />
-
-          <QuestionProgressBar
-            quizQuestions={quizQuestions}
-            quizAnswers={quizAnswers}
-            currentQuestion={currentQuestion}
-            markedQuestions={markedQuestions}
-            onSelectQuestion={handleSelectQuestion}
-            showScoreResult={showScoreResult}
-          />
-
-          <div className="flex-1 overflow-y-auto min-h-0">
-            {watermarkContent}
-            <AnimatePresence mode="wait">
-              {showScoreResult ? (
-                <motion.div
-                  key="results"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={
-                    shouldReduceMotion ? { duration: 0 } : { duration: 0.3 }
-                  }
-                  className="h-full flex flex-col"
-                >
-                  <QuizResults
-                    quizQuestions={quizQuestions}
-                    quizAnswers={quizAnswers}
-                    quizScore={quizScore}
-                    quizPassed={quizPassed}
-                    quizResult={quizResult}
-                    activeMod={activeMod}
-                    PASSING_SCORE={PASSING_SCORE}
-                    TOTAL_QUESTIONS={TOTAL_QUESTIONS}
-                    generateTopicFeedback={generateTopicFeedback}
-                    isAdmin={isAdmin}
-                    onClose={handleClose}
-                    onRetry={handleRetry}
-                  />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key={`question-${currentQuestion}`}
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -50 }}
-                  transition={
-                    shouldReduceMotion ? { duration: 0 } : { duration: 0.3 }
-                  }
-                >
-                  <div id="quiz-content" className="max-w-4xl mx-auto py-6">
-                    {currentQuestion !== revealedFor ? (
-                      <RouletteSpin
-                        total={QUESTION_BANK_SIZE}
-                        resultNumber={
-                          quizQuestions[currentQuestion]?.bankNumber ??
-                          currentQuestion + 1
-                        }
-                        onReveal={() => setRevealedFor(currentQuestion)}
-                      />
-                    ) : (
-                      <QuestionRenderer
-                        question={quizQuestions[currentQuestion]}
-                        questionIndex={currentQuestion}
-                        totalQuestions={TOTAL_QUESTIONS}
-                        selectedAnswer={selectedAnswer}
-                        markedQuestions={markedQuestions}
-                        onSelectAnswer={handleSelectAnswer}
-                        onToggleMark={toggleMarkForReview}
-                        showFeedback
-                      />
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {!showScoreResult && (
-            <NavigationBar
+            <QuizTimer
+              timeElapsed={timeElapsed}
+              suggestedTime={SUGGESTED_TIME_SECONDS}
               currentQuestion={currentQuestion}
               totalQuestions={TOTAL_QUESTIONS}
-              hasAnsweredCurrent={
-                !!quizAnswers[quizQuestions[currentQuestion]?.id]
-              }
-              isSubmitting={isSubmitting}
-              answeredCount={Object.keys(quizAnswers).length}
-              onPrev={handlePrev}
-              onNext={handleNext}
-              onSubmit={() => handleSubmit()}
+              isTimerRunning={isTimerRunning}
+              showSecurityMessage={showSecurityMessage}
+              securityMessage={securityMessage}
+              practiceMode={practiceMode}
+              onTogglePractice={() => setPracticeMode((p) => !p)}
+              onClose={handleClose}
+              formatTime={formatTime}
             />
-          )}
-        </motion.div>
-      )}
+
+            {(started || showScoreResult) && (
+              <QuestionProgressBar
+                quizQuestions={quizQuestions}
+                quizAnswers={quizAnswers}
+                currentQuestion={currentQuestion}
+                markedQuestions={markedQuestions}
+                onSelectQuestion={handleSelectQuestion}
+                showScoreResult={showScoreResult}
+              />
+            )}
+
+            <div className="flex-1 overflow-y-auto min-h-0">
+              {watermarkContent}
+              <AnimatePresence mode="wait">
+                {showScoreResult ? (
+                  <motion.div
+                    key="results"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={
+                      shouldReduceMotion ? { duration: 0 } : { duration: 0.3 }
+                    }
+                    className="h-full flex flex-col"
+                  >
+                    <QuizResults
+                      quizQuestions={quizQuestions}
+                      quizAnswers={quizAnswers}
+                      quizScore={quizScore}
+                      quizPassed={quizPassed}
+                      quizResult={quizResult}
+                      activeMod={activeMod}
+                      PASSING_SCORE={PASSING_SCORE}
+                      TOTAL_QUESTIONS={TOTAL_QUESTIONS}
+                      generateTopicFeedback={generateTopicFeedback}
+                      isAdmin={isAdmin}
+                      onClose={handleClose}
+                      onRetry={handleRetry}
+                    />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key={`question-${currentQuestion}`}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    transition={
+                      shouldReduceMotion ? { duration: 0 } : { duration: 0.3 }
+                    }
+                  >
+                    <div id="quiz-content" className="max-w-4xl mx-auto py-6">
+                      {!started ? (
+                        <div
+                          data-testid="quiz-intro"
+                          className="mx-auto max-w-lg rounded-3xl border border-[var(--theme-emphasis)]/15 bg-white dark:bg-slate-800 p-8 text-center shadow-sm"
+                        >
+                          <h2 className="text-2xl font-extrabold text-[var(--theme-emphasis)]">
+                            {t("ialab.quiz.intro_title")}
+                          </h2>
+                          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                            {t("ialab.quiz.intro_desc", {
+                              total: TOTAL_QUESTIONS,
+                              minutes: Math.round(SUGGESTED_TIME_SECONDS / 60),
+                            })}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => setStarted(true)}
+                            className="mt-6 inline-flex items-center justify-center rounded-full px-8 py-3 font-semibold !text-white min-h-[44px]"
+                            style={{
+                              background:
+                                "linear-gradient(120deg, var(--theme-emphasis), var(--theme-primary))",
+                            }}
+                          >
+                            {t("ialab.quiz.intro_cta")}
+                          </button>
+                        </div>
+                      ) : currentQuestion !== revealedFor ? (
+                        <RouletteSpin
+                          total={QUESTION_BANK_SIZE}
+                          resultNumber={
+                            quizQuestions[currentQuestion]?.bankNumber ??
+                            currentQuestion + 1
+                          }
+                          onReveal={() => setRevealedFor(currentQuestion)}
+                        />
+                      ) : (
+                        <QuestionRenderer
+                          question={quizQuestions[currentQuestion]}
+                          questionIndex={currentQuestion}
+                          totalQuestions={TOTAL_QUESTIONS}
+                          selectedAnswer={selectedAnswer}
+                          markedQuestions={markedQuestions}
+                          onSelectAnswer={handleSelectAnswer}
+                          onToggleMark={toggleMarkForReview}
+                          showFeedback
+                        />
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {!showScoreResult && started && (
+              <NavigationBar
+                currentQuestion={currentQuestion}
+                totalQuestions={TOTAL_QUESTIONS}
+                hasAnsweredCurrent={
+                  !!quizAnswers[quizQuestions[currentQuestion]?.id]
+                }
+                isSubmitting={isSubmitting}
+                answeredCount={Object.keys(quizAnswers).length}
+                onPrev={handlePrev}
+                onNext={handleNext}
+                onSubmit={() => handleSubmit()}
+              />
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <SecurityWarningModal
         isOpen={!!securityAlert}
@@ -496,7 +535,7 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
         }}
         onCancel={() => setShowSubmitConfirm(false)}
       />
-    </AnimatePresence>
+    </>
   );
 };
 

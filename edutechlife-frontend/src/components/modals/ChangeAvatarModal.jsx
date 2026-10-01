@@ -5,6 +5,8 @@ import { useStudentProfile } from "../../hooks/useStudentProfile";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card-simple";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
+import ModalPortal from "../ui/ModalPortal";
+import useEscapeKey from '../../hooks/useEscapeKey';
 
 const ChangeAvatarModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
@@ -19,6 +21,8 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
   const [success, setSuccess] = useState("");
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
+
+  useEscapeKey(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -91,8 +95,9 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
   const initials = displayName?.[0]?.toUpperCase() || "U";
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/30" onClick={onClose} />
+    <ModalPortal>
+    <div className="fixed inset-0 z-[1200] flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
       <Card className="w-full max-w-sm bg-white rounded-xl border border-slate-200/60 shadow-lg relative z-10 animate-in fade-in-0 zoom-in-95 duration-300">
         <button
           onClick={onClose}
@@ -253,6 +258,7 @@ const ChangeAvatarModal = ({ isOpen, onClose }) => {
         </CardContent>
       </Card>
     </div>
+    </ModalPortal>
   );
 };
 

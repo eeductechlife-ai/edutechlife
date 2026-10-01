@@ -5,6 +5,8 @@ import { shouldDisableSave } from "./profileSaveLogic";
 import { useProfileData } from "./useProfileData";
 import ProfileInfoSection from "./components/ProfileInfoSection";
 import ProfileSecuritySection from "./components/ProfileSecuritySection";
+import ModalPortal from "../ui/ModalPortal";
+import useEscapeKey from "../../hooks/useEscapeKey";
 
 const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
   const {
@@ -33,6 +35,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
     handleSaveAll,
     handleOpenChangePassword,
   } = useProfileData({ isOpen, onClose, onOpenChangeAvatar });
+  useEscapeKey(isOpen, onClose);
 
   // Avatar guardado por usuario (antes venia de Clerk). Prioriza la foto local
   // de ChangeAvatarModal y cae a avatar_url de la BD.
@@ -41,8 +44,9 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/20" onClick={onClose} />
+    <ModalPortal>
+    <div className="fixed inset-0 z-[1200] flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
 
       <Card className="w-full max-w-md bg-white rounded-xl border border-slate-200/60 shadow-lg max-h-[90vh] overflow-hidden relative z-10 animate-in fade-in-0 zoom-in-95 duration-300 flex flex-col">
         <button
@@ -189,6 +193,7 @@ const UserProfileSmartCard = ({ isOpen, onClose, onOpenChangeAvatar }) => {
         </CardContent>
       </Card>
     </div>
+    </ModalPortal>
   );
 };
 

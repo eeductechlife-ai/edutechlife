@@ -48,7 +48,7 @@ const MobileInfoBar = ({ user, activeMod, courseProgress }) => {
               className={`flex items-center gap-1 px-2 py-1 rounded-lg theme-chip ${
                 atRisk ? "text-red-500 dark:text-red-400" : "text-amber-500"
               }`}
-              title={`Racha: ${streakValue} días`}
+              title={`Racha: ${streakValue} ${streakValue === 1 ? "día" : "días"}`}
             >
               <Icon name="fa-fire" className="text-[10px]" aria-hidden="true" />
               <span className="text-[11px] font-semibold">{streakValue}</span>

@@ -154,6 +154,18 @@ function CourseHomeNewStudent() {
                 initial="hidden"
                 animate="visible"
                 onClick={isFirst ? () => navigate("/ialab/1") : undefined}
+                {...(isFirst
+                  ? {
+                      role: "button",
+                      tabIndex: 0,
+                      onKeyDown: (e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          navigate("/ialab/1");
+                        }
+                      },
+                    }
+                  : {})}
                 className={[
                   "group rounded-2xl p-4 flex items-start gap-4 transition-all",
                   isFirst

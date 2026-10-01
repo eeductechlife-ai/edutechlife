@@ -5,8 +5,11 @@ import { calcModuleScore } from '../../utils/ialab';
 import { WEIGHTS } from '../../constants/ialab';
 
 const MODULE_NAMES = {
-  1: 'Ingeniería de Prompts', 2: 'Potencia ChatGPT', 3: 'Rastreo Profundo',
-  4: 'Inmersión NotebookLM', 5: 'Proyecto Disruptivo',
+  1: 'Artesano Digital: Prompts',
+  2: 'Arquitecto Digital: ChatGPT',
+  3: 'Detective de Datos: Gemini',
+  4: 'Alquimista Digital: NotebookLM',
+  5: 'Guardián Digital: Ética IA',
 };
 
 const MODULE_ICONS = {

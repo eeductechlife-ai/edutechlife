@@ -31,7 +31,7 @@ const DailyPlanHeader = ({
   return (
     <div
       data-testid="daily-plan-header"
-      className={`relative p-4 flex items-start gap-3 ${
+      className={`relative p-4 flex flex-wrap sm:flex-nowrap items-start gap-3 ${
         atRisk ? "bg-amber-50/60 dark:bg-amber-900/10" : "theme-surface"
       }`}
     >
@@ -77,7 +77,7 @@ const DailyPlanHeader = ({
         <button
           type="button"
           onClick={onRun}
-          className="flex-shrink-0 text-[12px] sm:text-[13px] font-semibold text-white theme-bg-emphasis px-3 py-2 min-h-[44px] rounded-lg hover:opacity-90 active:scale-95 transition-all whitespace-nowrap flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
+          className="flex-shrink-0 w-full sm:w-auto justify-center text-[12px] sm:text-[13px] font-semibold text-white theme-bg-emphasis px-3 py-2 min-h-[44px] rounded-lg hover:opacity-90 active:scale-95 transition-all whitespace-nowrap flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
         >
           {actionLabel}
           <Icon name="fa-arrow-right" className="text-[9px]" />

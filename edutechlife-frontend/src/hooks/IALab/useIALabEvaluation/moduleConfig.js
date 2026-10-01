@@ -16,10 +16,10 @@ Formato JSON exacto: { "ejercicio1": "texto", "ejercicio2": "texto", "ejercicio3
 
 CRITERIOS DE CALIFICACIÓN - EJERCICIO 1 (Identificar Rol/Contexto/Tarea - drag & drop):
 - Si NO respondió en ninguna categoría (todo vacío): 0%
-- Si respondió en 1 de 3 categorías: 33%
-- Si respondió en 2 de 3 categorías: 70%
-- Si respondió en las 3 categorías (todas llenas): 100%
-NOTA: Solo importa que haya completado las columnas, NO que estén perfectamente clasificadas.
+- Cada categoría completada suma 20% (máximo 60% por completar las 3)
+- Cada categoría correctamente clasificada (la frase elegida cumple realmente ese rol: Rol = quién es, Contexto = situación, Tarea = qué debe hacer) suma 13% adicional (máximo 40%)
+- Las 3 completas y correctas: 100%. Las 3 completas pero mal clasificadas: 60% como máximo.
+NOTA: Evalúa que cada frase corresponda a su categoría; explica con amabilidad cuál estaba mal ubicada y por qué.
 
 CRITERIOS DE CALIFICACIÓN - EJERCICIO 2 (Optimizar prompt):
 - Si escribió ALGO relacionado: 50%

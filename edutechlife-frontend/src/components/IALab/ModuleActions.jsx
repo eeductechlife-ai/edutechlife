@@ -27,11 +27,42 @@ const ActionCard = memo(
     completed,
     score,
     remainingAttempts,
+    locked = false,
+    lockedHint,
     t,
   }) => {
     const prefersReducedMotion = useReducedMotion();
     const isApproved = completed && score !== undefined && score >= 80;
     const isFailed = completed && score !== undefined && score < 80;
+
+    // Estado bloqueado: el módulo pertenece a una etapa posterior y aún no se
+    // desbloqueó (se permite leer la información, no realizar la actividad).
+    if (locked) {
+      return (
+        <div
+          data-testid={`action-card-${icon}`}
+          aria-disabled="true"
+          title={weightKey ? t(weightKey) : ""}
+          className="theme-prompt-card w-full flex items-start gap-3 rounded-2xl border p-4 text-left opacity-70 cursor-not-allowed"
+        >
+          <span className="mt-1 flex-shrink-0 h-8 w-8 rounded-xl flex items-center justify-center theme-chip">
+            <Icon
+              name="fa-lock"
+              className="text-sm text-[var(--theme-chip-text)]"
+            />
+          </span>
+          <div className="flex-1 min-w-0">
+            <span className="font-semibold text-[15px] block leading-snug theme-text">
+              {label}
+            </span>
+            <span className="text-[12px] leading-snug theme-text-muted block mt-0.5">
+              {lockedHint || t("ialab.module_actions.locked_hint")}
+            </span>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <motion.button
         data-testid={`action-card-${icon}`}
@@ -114,6 +145,7 @@ const ModuleActions = ({
   challengeScores,
   completedExams,
   moduleProgress,
+  evaluationLocked = false,
   isForumOpen,
   onToggleForum,
 }) => {
@@ -183,8 +215,8 @@ const ModuleActions = ({
   const cards = (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
       <ActionCard icon="fa-comments" label={t("ialab.module_actions.community")} weightKey="ialab.module_actions.weight_community" onClick={handleCommunity} completed={moduleProgress?.[activeMod]?.community} score={100} t={t} />
-      <ActionCard icon="fa-rocket" label={t("ialab.module_actions.challenge")} weightKey="ialab.module_actions.weight_challenge" onClick={handleChallenge} completed={!!challengeScores?.[activeMod]} score={challengeScores?.[activeMod]} remainingAttempts={!challengeScores?.[activeMod] ? challengeAttempts : undefined} t={t} />
-      <ActionCard icon="fa-clipboard-check" label={t("ialab.module_actions.exam")} weightKey="ialab.module_actions.weight_exam" onClick={handleExam} completed={effectiveExamScore !== undefined} score={effectiveExamScore} remainingAttempts={effectiveExamScore === undefined ? examAttempts : undefined} t={t} />
+      <ActionCard icon="fa-rocket" label={t("ialab.module_actions.challenge")} weightKey="ialab.module_actions.weight_challenge" onClick={handleChallenge} completed={!!challengeScores?.[activeMod]} score={challengeScores?.[activeMod]} remainingAttempts={!challengeScores?.[activeMod] ? challengeAttempts : undefined} locked={evaluationLocked} lockedHint={t("ialab.module_actions.locked_hint", { prev: activeMod - 1 })} t={t} />
+      <ActionCard icon="fa-clipboard-check" label={t("ialab.module_actions.exam")} weightKey="ialab.module_actions.weight_exam" onClick={handleExam} completed={effectiveExamScore !== undefined} score={effectiveExamScore} remainingAttempts={effectiveExamScore === undefined ? examAttempts : undefined} locked={evaluationLocked} lockedHint={t("ialab.module_actions.locked_hint", { prev: activeMod - 1 })} t={t} />
     </div>
   );
 
@@ -224,6 +256,8 @@ ActionCard.propTypes = {
   completed: PropTypes.bool,
   score: PropTypes.number,
   remainingAttempts: PropTypes.number,
+  locked: PropTypes.bool,
+  lockedHint: PropTypes.string,
   color: PropTypes.string,
   t: PropTypes.func,
 };

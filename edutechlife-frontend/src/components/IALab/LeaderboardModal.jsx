@@ -9,6 +9,7 @@ import { Icon } from "../../utils/iconMapping";
 import { useTranslation } from "../../i18n/I18nProvider";
 import useFocusTrap from "../../hooks/useFocusTrap";
 import { LEADERBOARD_PERIODS, rankEntries } from "./leaderboardPeriod";
+import useEscapeKey from "../../hooks/useEscapeKey";
 
 const POSITION_ICONS = {
   1: {
@@ -65,7 +66,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
       try {
         const { data: profileData } = await supabase
           .from("profiles")
-          .select("id, full_name, avatar_url, email")
+          .select("id, full_name, avatar_url")
           .in("id", userIds);
         if (profileData) {
           profileData.forEach((p) => {
@@ -77,10 +78,11 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
       const enriched = processed.map((row, idx) => ({
         rank: idx + 1,
         userId: row.user_id,
+        // Nunca se muestra el correo ni el id del usuario a otros estudiantes.
         name:
-          profiles[row.user_id]?.full_name ||
-          row.user_id?.slice(0, 8) ||
-          "Usuario",
+          [profiles[row.user_id]?.full_name].find(
+            (n) => typeof n === "string" && n.trim() && !n.includes("@"),
+          ) || "Usuario",
         avatar: profiles[row.user_id]?.avatar_url || null,
         xp: row.gamification_data?.xp || 0,
         weeklyXp: row.gamification_data?.weeklyXp || 0,
@@ -102,6 +104,7 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
   }, [isOpen, fetchLeaderboard]);
 
   const focusTrapRef = useFocusTrap(isOpen);
+  useEscapeKey(isOpen, onClose);
 
   const ranked = useMemo(() => rankEntries(entries, period), [entries, period]);
   const myEntry = ranked.find((e) => e.userId === userId);

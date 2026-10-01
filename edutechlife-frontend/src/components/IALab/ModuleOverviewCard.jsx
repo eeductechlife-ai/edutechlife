@@ -228,7 +228,18 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
     }
   }, [activeResourceIndex, currentTopicResources]);
 
+  // El siguiente recurso sigue bloqueado mientras el actual no se haya visto
+  // (el visor no debe permitir saltarse el orden que la lista sí respeta).
+  const isNextResourceLocked = (() => {
+    if (isAdmin) return false;
+    const next = currentTopicResources[activeResourceIndex + 1];
+    if (!next || viewedIds.includes(next.id)) return false;
+    const flatIdx = allResourcesOrdered.findIndex((r) => r.id === next.id);
+    return flatIdx !== -1 && flatIdx > nextResourceGlobalIndex;
+  })();
+
   const handleNextResource = useCallback(() => {
+    if (isNextResourceLocked) return;
     if (activeResourceIndex < currentTopicResources.length - 1) {
       const newIndex = activeResourceIndex + 1;
       setActiveResourceIndex(newIndex);
@@ -236,7 +247,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
       setSelectedResource(next);
       setSelectedResourceType(next.type);
     }
-  }, [activeResourceIndex, currentTopicResources]);
+  }, [activeResourceIndex, currentTopicResources, isNextResourceLocked]);
 
   useEffect(() => {
     const updateViewed = () =>
@@ -459,6 +470,7 @@ const ModuleOverviewCard = ({ onAction, onToggleForum }) => {
           onMarkAsViewed={handleMarkAsViewed}
           onPreviousResource={handlePreviousResource}
           onNextResource={handleNextResource}
+          nextDisabled={isNextResourceLocked}
           currentIndex={activeResourceIndex}
           totalResources={currentTopicResources.length}
         />

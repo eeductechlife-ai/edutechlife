@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent, within } from '@testing-library/react';
 
 const mockSetQuizAnswer = vi.fn();
 const mockSetCurrentQuestion = vi.fn();
@@ -117,8 +117,11 @@ describe('IALabQuizModal - Integration', () => {
     vi.clearAllMocks();
   });
 
-  it('renders quiz questions when open', async () => {
+  it('shows the intro first and reveals questions only after pressing start', async () => {
     render(<IALabQuizModal isOpen={true} onClose={vi.fn()} />);
+    const intro = await screen.findByTestId('quiz-intro');
+    expect(screen.queryByText('Sample Question 1?')).not.toBeInTheDocument();
+    fireEvent.click(within(intro).getByRole('button'));
     await waitFor(() => {
       expect(screen.getByText('Sample Question 1?')).toBeInTheDocument();
     });

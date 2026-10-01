@@ -3,6 +3,7 @@ import { marked } from "marked";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { sanitize } from "../../utils/sanitize";
+import ModalPortal from "../ui/ModalPortal";
 
 const IALabGuideModal = ({ isOpen, onClose }) => {
   const [html, setHtml] = useState("");
@@ -84,8 +85,9 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[1003] flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/20" onClick={onClose} />
+    <ModalPortal>
+    <div className="fixed inset-0 z-[1300] flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
       <div className="w-full max-w-2xl bg-white rounded-xl border border-slate-200/60 shadow-lg max-h-[90vh] overflow-hidden relative z-10">
         {/* Header */}
         <div className="border-b border-slate-200/60 bg-gradient-to-r from-petroleum/10 to-corporate/10 pt-8 pb-4 px-6">
@@ -166,6 +168,7 @@ const IALabGuideModal = ({ isOpen, onClose }) => {
         .ialab-guide-content blockquote { border-left: 3px solid #004B63; padding-left: 0.75rem; margin: 0.75rem 0; color: #64748b; font-style: italic; }
       `}</style>
     </div>
+    </ModalPortal>
   );
 };
 

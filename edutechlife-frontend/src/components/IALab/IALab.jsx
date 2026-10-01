@@ -124,6 +124,8 @@ const IALabContent = memo(function () {
     challengeScores = {},
     moduleProgress = {},
     modules = [],
+    completedModules = [],
+    isEvaluationLocked = () => false,
     updateModuleActivity = () => {},
   } = useIALabProgressContext() ?? {};
   // Carga y reconcilia el progreso desde la DB al entrar a IALab (vistos +
@@ -406,6 +408,15 @@ const IALabContent = memo(function () {
         )?.title
       : null;
 
+  // Bloqueo de evaluaciones: un módulo (2..5) no permite Desafío/Mi reto hasta
+  // que el módulo anterior esté completado. La INFORMACIÓN del módulo (Inicio,
+  // Objetivos, Contenido, Práctica) sigue visible para todos.
+  const evaluationLocked = useMemo(
+    () => isEvaluationLocked(activeMod),
+    // completedModules fuerza el recálculo cuando cambia el avance.
+    [isEvaluationLocked, activeMod, completedModules],
+  );
+
   const tabStatuses = useMemo(() => {
     const mod = moduleProgress[activeMod];
     return {
@@ -436,7 +447,11 @@ const IALabContent = memo(function () {
       useIALabStore.getState().setPracticeTool("tutoring");
       return;
     }
-    if (action === "OPEN_EVALUATION" || action === "OPEN_CHALLENGE") {
+    if (
+      action === "OPEN_EVALUATION" ||
+      action === "OPEN_CHALLENGE" ||
+      action === "OPEN_QUIZ"
+    ) {
       const st = useIALabStore.getState();
       if (st.isEvaluationLocked(st.activeMod)) {
         setToast({
@@ -635,6 +650,7 @@ const IALabContent = memo(function () {
                 challengeScores={challengeScores}
                 completedExams={completedExams}
                 moduleProgress={moduleProgress}
+                evaluationLocked={evaluationLocked}
                 isForumOpen={isForumOpen}
                 onToggleForum={() => setIsForumOpen((prev) => !prev)}
               />

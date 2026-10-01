@@ -457,6 +457,22 @@
     animation: pulse 3s ease-in-out infinite;
   }
 
+  /* Empujoncito del chevrón del sidebar en la dirección en que se moverá. */
+  @keyframes toggle-nudge {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    50% {
+      transform: translateX(calc(var(--nudge, 1) * 3px));
+    }
+  }
+
+  .animate-toggle-nudge {
+    animation: toggle-nudge 1.4s ease-in-out 6;
+  }
+
   .animate-warp {
     animation: warp-speed 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }

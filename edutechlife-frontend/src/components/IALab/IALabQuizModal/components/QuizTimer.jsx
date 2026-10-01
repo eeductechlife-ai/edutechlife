@@ -11,6 +11,7 @@ const QuizTimer = forwardRef(function QuizTimer({ timeElapsed, suggestedTime, cu
     <div ref={ref} className="bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] px-6 py-4 flex items-center justify-between z-50">
       <button
         onClick={onClose}
+        aria-label={t('ialab.quiz.exit')}
         className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10 px-2 sm:px-3 py-2 rounded-lg transition-colors"
       >
         <Icon name="fa-arrow-left" className="text-sm" aria-hidden="true" />

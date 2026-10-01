@@ -171,7 +171,7 @@ const screensData = {
   m3: { title: 'Plantilla Universal' },
   m4: { title: '¿Cómo "Piensa" la IA?' },
   m5: { title: 'Detecta y Corrige' },
-  m6: { title: 'CREATE: Método en 6 Pasos' },
+  m6: { title: 'CREATE: Método en 6 Pasos para revisar tus prompts' },
   m7: { title: 'Reto Final' },
   m8: { title: 'Conclusión' }
 };

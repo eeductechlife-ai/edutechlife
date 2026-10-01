@@ -36,6 +36,7 @@ const ResourceViewerModal = ({
   onMarkAsViewed,
   onPreviousResource,
   onNextResource,
+  nextDisabled = false,
   currentIndex = 0,
   totalResources = 0,
   youtubeDuration = null,
@@ -643,10 +644,10 @@ const ResourceViewerModal = ({
                         </div>
                         <button
                           onClick={onNextResource}
-                          disabled={currentIndex >= totalResources - 1}
+                          disabled={currentIndex >= totalResources - 1 || nextDisabled}
                           className={cn(
                             "px-4 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px]",
-                            currentIndex >= totalResources - 1
+                            currentIndex >= totalResources - 1 || nextDisabled
                               ? "text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-40"
                               : "theme-chip theme-border border theme-text-muted hover:theme-text transition-colors duration-150",
                           )}
@@ -730,6 +731,7 @@ ResourceViewerModal.propTypes = {
   onMarkAsViewed: PropTypes.func,
   onPreviousResource: PropTypes.func,
   onNextResource: PropTypes.func,
+  nextDisabled: PropTypes.bool,
   currentIndex: PropTypes.number,
   totalResources: PropTypes.number,
   youtubeDuration: PropTypes.string,

@@ -126,9 +126,17 @@ export default function TopicChatThread({ topicIndex, activeMod, onAdvanceTopic,
     }
   };
 
+  // El visor respeta el mismo orden que la lista: el siguiente recurso sigue
+  // bloqueado hasta completar el actual.
+  const nextResource = resources[activeResourceIndex + 1];
+  const isNextLocked =
+    !!nextResource &&
+    !viewedIds.includes(nextResource.id) &&
+    isResourceLocked(nextResource.id);
+
   const handleNext = () => {
     const next = resources[activeResourceIndex + 1];
-    if (next) {
+    if (next && !isNextLocked) {
       setSelectedResource(next);
       setSelectedResourceType(next.type);
       setActiveResourceIndex(activeResourceIndex + 1);
@@ -166,6 +174,7 @@ export default function TopicChatThread({ topicIndex, activeMod, onAdvanceTopic,
         totalResources={resources.length}
         onPreviousResource={handlePrev}
         onNextResource={handleNext}
+        nextDisabled={isNextLocked}
         onMarkAsViewed={handleMarkAsViewed}
         activeMod={activeMod}
       />

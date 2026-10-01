@@ -78,14 +78,11 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
         }
     };
 
-    const getMetricScore = (metricName) => {
+    // Se busca por clave (no por la etiqueta traducida: en inglés o portugués
+    // todas las métricas salían en 0).
+    const getMetricScore = (metricKey) => {
         if (!quickAnalysis || !quickAnalysis.analysis) return 0;
-        switch (metricName) {
-            case 'Claridad': return Math.round(quickAnalysis.analysis.clarity || 0);
-            case 'Contexto': return Math.round(quickAnalysis.analysis.context || 0);
-            case 'Precisión': return Math.round(quickAnalysis.analysis.specificity || 0);
-            default: return 0;
-        }
+        return Math.round(quickAnalysis.analysis[metricKey] || 0);
     };
 
     const getMetricColor = (score) => {
@@ -109,7 +106,10 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
     const metrics = [
         { name: t('ialab.synthesizer.clarity_label'), key: 'clarity' },
         { name: t('ialab.synthesizer.context_label'), key: 'context' },
-        { name: t('ialab.synthesizer.metric_precision'), key: 'specificity' }
+        { name: t('ialab.synthesizer.metric_precision'), key: 'specificity' },
+        // La puntuación global también pondera la estructura: mostrarla evita
+        // ver 100/100/100 con un total de 88 sin explicación.
+        { name: t('ialab.synthesizer.structure_label'), key: 'structure' }
     ];
 
     const improvements = genData?.feedback?.improvements || [];
@@ -132,8 +132,17 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[var(--theme-emphasis)] via-[var(--theme-emphasis)]-dark to-[var(--theme-primary)] rounded-t-2xl" />
 
             <div
+                role="button"
+                tabIndex={0}
+                aria-expanded={isOpen}
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center justify-between cursor-pointer group"
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setIsOpen(!isOpen);
+                    }
+                }}
+                className="flex items-center justify-between cursor-pointer group rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-primary)]/40"
             >
                 <div className="flex-1">
                     <h2 className="text-lg md:text-xl font-bold text-[var(--theme-emphasis)] group-hover:text-[var(--theme-primary)] transition-colors duration-300">
@@ -260,7 +269,7 @@ const ReactivePromptStation = ({ className = '', ...rest }) => {
 
                         <div className="space-y-3">
                             {metrics.map((metric) => {
-                                const score = getMetricScore(metric.name);
+                                const score = getMetricScore(metric.key);
                                 const colorClass = getMetricColor(score);
                                 const iconName = getMetricIcon(score);
                                 const barColor = getMetricBarColor(score);

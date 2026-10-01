@@ -330,7 +330,7 @@ const IALabModuleHeader = () => {
                 {modMeta.eyebrow}
               </p>
             )}
-            <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-white leading-tight font-montserrat truncate">
+            <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-white leading-tight font-montserrat line-clamp-2 md:truncate">
               {curr?.title}
             </h1>
           </div>

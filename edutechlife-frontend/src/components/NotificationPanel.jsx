@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../context/NotificationContext";
+import { forIALab } from "../utils/notificationScope";
 import { useTranslation } from "../i18n/I18nProvider";
 import { Icon } from "../utils/iconMapping.jsx";
 import useBrowserNotifications from "../hooks/useBrowserNotifications";
@@ -69,8 +70,7 @@ const NotificationPanel = ({
   const navigate = useNavigate();
   const { t, locale } = useTranslation();
   const {
-    notifications,
-    unreadCount,
+    notifications: allNotifications,
     loading,
     markAsRead,
     markAllAsRead,
@@ -79,6 +79,8 @@ const NotificationPanel = ({
     preferences,
     updatePreferences,
   } = useNotification();
+  const notifications = forIALab(allNotifications);
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
   const { subscribeToPush, syncPushSubscription } = useBrowserNotifications();
   const panelRef = useRef(null);
   const [confirmClear, setConfirmClear] = useState(false);

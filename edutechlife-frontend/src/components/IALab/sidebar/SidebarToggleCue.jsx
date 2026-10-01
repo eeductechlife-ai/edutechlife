@@ -1,23 +1,42 @@
 import PropTypes from "prop-types";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const SIZES = {
-  expanded: "w-3 h-3",
-  collapsed: "w-2.5 h-2.5",
+const BADGE = {
+  expanded: { box: "w-6 h-6", icon: "w-3.5 h-3.5" },
+  collapsed: { box: "w-[18px] h-[18px]", icon: "w-3 h-3" },
 };
 
-const SidebarToggleCue = ({ size = "expanded", className = "" }) => {
-  const dot = SIZES[size] || SIZES.expanded;
+/**
+ * Aviso de que el círculo de progreso abre/cierra el sidebar: un halo que
+ * pulsa unas cuantas veces y un "tirador" con chevrón en la esquina del
+ * círculo que indica la dirección (‹ ocultar, › mostrar). Una vez que el
+ * estudiante lo usa (`learned`) las animaciones se detienen y queda el
+ * chevrón estático.
+ */
+const SidebarToggleCue = ({
+  size = "expanded",
+  direction = "left",
+  learned = false,
+  className = "",
+}) => {
+  const badge = BADGE[size] || BADGE.expanded;
+  const Chevron = direction === "right" ? ChevronRight : ChevronLeft;
+  const animated = !learned;
   return (
     <span
       aria-hidden="true"
       data-testid="sidebar-toggle-cue"
       className={`pointer-events-none absolute inset-0 rounded-full ${className}`}
     >
-      <span className="absolute inset-0 rounded-full animate-pulse-slow motion-reduce:animate-none bg-[radial-gradient(circle,rgba(0,188,212,0.30),transparent_72%)]" />
+      {animated && (
+        <span className="absolute inset-0 rounded-full border-2 border-[var(--theme-primary)]/60 animate-ping [animation-iteration-count:4] motion-reduce:animate-none" />
+      )}
       <span
-        className={`absolute -top-0.5 -right-0.5 ${dot} rounded-full bg-[var(--theme-primary)]`}
+        data-testid="sidebar-toggle-handle"
+        className={`absolute -bottom-1 -right-1 ${badge.box} rounded-full flex items-center justify-center bg-[var(--theme-primary)] text-white shadow-md ring-2 ring-white dark:ring-slate-800 ${animated ? "animate-toggle-nudge motion-reduce:animate-none" : ""}`}
+        style={{ "--nudge": direction === "right" ? 1 : -1 }}
       >
-        <span className="absolute inset-0 rounded-full bg-[var(--theme-primary)] animate-ping motion-reduce:animate-none" />
+        <Chevron className={badge.icon} strokeWidth={3} />
       </span>
     </span>
   );
@@ -25,6 +44,8 @@ const SidebarToggleCue = ({ size = "expanded", className = "" }) => {
 
 SidebarToggleCue.propTypes = {
   size: PropTypes.oneOf(["expanded", "collapsed"]),
+  direction: PropTypes.oneOf(["left", "right"]),
+  learned: PropTypes.bool,
   className: PropTypes.string,
 };
 

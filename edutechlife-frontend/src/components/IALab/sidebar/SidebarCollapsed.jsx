@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
+import { useSidebarToggleLearned } from "../../../hooks/IALab/useSidebarToggleLearned";
 import { Icon } from "../../../utils/iconMapping.jsx";
 import TooltipIcon from "./SidebarTooltipIcon";
 import ModuleNavItem from "./ModuleNavItem";
@@ -52,6 +53,11 @@ const SidebarCollapsed = ({
   t,
 }) => {
   const nextStepHint = getNextStepHint(moduleProgress, activeMod, t);
+  const { learned, markLearned } = useSidebarToggleLearned();
+  const handleToggle = () => {
+    markLearned();
+    onToggleSidebar?.();
+  };
   return (
     <motion.div
       key="collapsed"
@@ -77,13 +83,16 @@ const SidebarCollapsed = ({
                 {nextStepHint}
               </p>
             )}
+            <p className="text-[10px] font-semibold text-[var(--theme-primary)] mt-1 leading-snug max-w-[140px]">
+              {t("sidebar.show_menu_hint")}
+            </p>
           </div>
         }
         premium
       >
         <button
           type="button"
-          onClick={onToggleSidebar}
+          onClick={handleToggle}
           className="w-full h-[60px] flex items-center justify-center flex-shrink-0 relative group cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 rounded-full"
           aria-label={`${Math.round(courseProgress)}% ${t("sidebar.completed")} — ${t("sidebar.toggle_collapse_tip")}`}
         >
@@ -95,7 +104,11 @@ const SidebarCollapsed = ({
             aria-valuemax="100"
             aria-label={t("sidebar.progress_circle_aria")}
           >
-            <SidebarToggleCue size="collapsed" />
+            <SidebarToggleCue
+              size="collapsed"
+              direction="right"
+              learned={learned}
+            />
             <svg
               className="relative w-14 h-14 -rotate-90"
               viewBox="0 0 120 120"

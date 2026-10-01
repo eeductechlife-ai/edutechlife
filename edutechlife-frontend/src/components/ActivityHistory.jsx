@@ -18,6 +18,7 @@ import useBodyScrollLock from "../hooks/useBodyScrollLock";
 import useFocusTrap from "../hooks/useFocusTrap";
 import { getUnifiedSessionStats } from "../hooks/useSessionTracker";
 import { supabase } from "../lib/supabase";
+import ModalPortal from "./ui/ModalPortal";
 
 import SectionHeader from "../components/ui/SectionHeader";
 import ModuleProgressCard from "../components/IALab/ModuleProgressCard";
@@ -339,6 +340,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
   ];
 
   return (
+    <ModalPortal>
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -348,7 +350,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
       aria-modal="true"
       aria-label={t("activity.title")}
       aria-describedby="activity-history-desc"
-      className={`fixed inset-0 z-[1050] flex items-start justify-center bg-black/50 transition-all duration-300 ${isExpanded ? "p-0" : "pt-16 sm:pt-20 px-2 sm:px-4"}`}
+      className={`fixed inset-0 z-[1200] flex items-start justify-center bg-black/50 transition-all duration-300 ${isExpanded ? "p-0" : "pt-16 sm:pt-20 px-2 sm:px-4"}`}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -504,6 +506,7 @@ const ActivityHistory = ({ isOpen, onClose }) => {
         </div>
       </motion.div>
     </motion.div>
+    </ModalPortal>
   );
 };
 

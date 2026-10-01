@@ -23,7 +23,7 @@ export const modules = [
     ],
     challenge:
       "¡Llegó el momento de la práctica! Aplica todo lo aprendido en este módulo resolviendo un caso real. Atrévete a consolidar tu aprendizaje, supera el desafío y lleva tus conocimientos al siguiente nivel.",
-    desc: "La IA te da respuestas genéricas que no resuelven lo que necesitas. En este módulo aprenderás a escribir prompts precisos que obtengan resultados útiles a la primera. Vas a dominar la fórmula Contexto + Instrucción + Formato y a aplicar la IA en tu estudio, trabajo y vida diaria.",
+    desc: "La IA te da respuestas genéricas que no resuelven lo que necesitas. En este módulo aprenderás a escribir prompts precisos que obtengan resultados útiles a la primera. Vas a dominar la fórmula RTF (Rol + Tarea + Formato), sumando el contexto necesario, y a aplicar la IA en tu estudio, trabajo y vida diaria.",
     duration: "2h",
     level: "Avanzado",
     videos: 12,
@@ -340,13 +340,13 @@ export const ALL_LESSONS = {
       id: 3,
       title: "Construye Prompts Impecables",
       description:
-        "Aprende la fórmula mágica: Contexto + Instrucción + Formato = Resultado preciso.",
+        "Aprende la fórmula RTF: Rol + Tarea + Formato (con el contexto necesario) = Resultado preciso.",
       duration: "20 min",
       type: "teoría",
       hasMedia: true,
       icon: "fa-sitemap",
       objectives: [
-        "Dominar la fórmula Contexto + Instrucción + Formato",
+        "Dominar la fórmula RTF: Rol + Tarea + Formato",
         "Construir prompts estructurados con resultados precisos",
         "Evaluar y refinar la calidad de las respuestas de IA",
       ],

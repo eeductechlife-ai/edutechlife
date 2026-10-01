@@ -30,7 +30,6 @@ import { stopSpeech } from "../../utils/speech";
 import { useOVATranslations } from "../../hooks/useOVATranslations";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { OVAIntro } from "./shared";
-import { learningObjectives } from "../../data/ova/biasLab";
 import VoiceReader from "./VoiceReader";
 import QuizScreen from "./ova-etica/QuizScreen";
 import CertificateScreen from "./ova-etica/CertificateScreen";
@@ -456,7 +455,7 @@ export default function OVAEtica({ onComplete }) {
               description={texts.welcome_desc}
               audioText={texts.welcome_voice}
               onStart={() => setScreen("m1")}
-              objectives={learningObjectives}
+              objectives={[1, 2, 3, 4].map((n) => t(`ova.etica.objective_${n}`))}
             />
           </>
         );
@@ -717,7 +716,8 @@ export default function OVAEtica({ onComplete }) {
                   stopSpeech();
                 }
               }}
-              className="px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em]"
+              disabled={curIdx === -1 || curIdx >= nav.length - 1}
+              className="px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {texts.btn_next} <ArrowRightCircle className="w-4 h-4" />
             </button>

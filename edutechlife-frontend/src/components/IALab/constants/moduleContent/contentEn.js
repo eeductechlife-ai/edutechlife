@@ -8,21 +8,21 @@
 const CONTENT_EN = {
   1: {
     objective:
-      "Master the art of forging precise instructions with AI as a digital artisan apprentice, creating prompts any model understands perfectly.",
+      "By the end of this module you will be able to write prompts with the RTF formula (Role + Task + Format) plus the needed context, getting useful answers from any AI model on the first try.",
     learningPoints: [
       {
-        text: "Forge clear instructions like a master artisan",
+        text: "Identify the role, context, task and format inside a prompt",
         icon: "fa-bullseye",
       },
       {
-        text: "Refine questions and answers with surgical precision",
+        text: "Rewrite a vague prompt so it is clear, specific and actionable",
         icon: "fa-wand-magic-sparkles",
       },
       {
-        text: "Detect and fix imperfections in your creations",
+        text: "Spot common prompt mistakes and fix them by iterating",
         icon: "fa-exclamation-triangle",
       },
-      { text: "Apply your artisan craft in study and work", icon: "fa-rocket" },
+      { text: "Apply the RTF formula to a real study or work case", icon: "fa-rocket" },
     ],
     overviewData: {
       title:
