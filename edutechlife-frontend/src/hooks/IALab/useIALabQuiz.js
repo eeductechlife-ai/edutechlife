@@ -261,7 +261,9 @@ export const useIALabQuiz = () => {
 
   const openEvaluation = useCallback(() => {
     if (!canAttemptQuiz()) {
-      const nextTime = useIALabStore.getState().getExamNextAttemptTime(activeMod);
+      const nextTime = useIALabStore
+        .getState()
+        .getExamNextAttemptTime(activeMod);
       const hoursLeft = nextTime
         ? Math.max(1, Math.ceil((nextTime - Date.now()) / 3600000))
         : 12;
@@ -291,7 +293,8 @@ export const useIALabQuiz = () => {
     // set y ganaba el último). Con el orden correcto el reloj corre, el
     // autoenvío por tiempo funciona y `timeElapsed` deja de guardarse en 0.
     resetQuizForRetry();
-    setShowExamModal(true);
+    // No abrir showExamModal aquí: ese es el modal del Desafío (IALabEvaluationModal)
+    // y se montaba debajo del examen, con MAX narrando la intro del Desafío.
     setSecurityWarningCount(0);
     setIsTimerRunning(true);
 
@@ -299,7 +302,6 @@ export const useIALabQuiz = () => {
   }, [
     canAttemptQuiz,
     activeMod,
-    setShowExamModal,
     setIsTimerRunning,
     setSecurityWarningCount,
     setSecurityMessage,
