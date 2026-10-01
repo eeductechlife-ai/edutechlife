@@ -6,7 +6,7 @@ const MODULE_CONFIG = {
       "Eres un experto en diseño de prompts y evaluación educativa. Genera 3 ejercicios de nivel medio para evaluación de prompts. Devuelve SOLO JSON.",
     generateUserPrompt:
       () => `Genera un JSON con 3 ejercicios de nivel medio para evaluación de prompts:
-1. ejercicio1: Un párrafo con un escenario detallado donde el usuario debe identificar (Rol, Contexto, Tarea). Ejemplo: "Eres un experto en marketing digital trabajando para una startup de e-commerce que quiere aumentar sus ventas en un 30% en el próximo trimestre. Tu tarea es crear una campaña de email marketing segmentada para clientes recurrentes."
+1. ejercicio1: Un escenario de EXACTAMENTE tres oraciones cortas, cada una separada por un punto y con un único elemento: la primera dice el ROL (quién es), la segunda el CONTEXTO (dónde/situación) y la tercera la TAREA (qué debe hacer). No fundas dos elementos en una misma oración. Ejemplo: "Eres un experto en marketing digital. Trabajas para una startup de e-commerce que quiere aumentar sus ventas en un 30% en el próximo trimestre. Tu tarea es crear una campaña de email marketing segmentada para clientes recurrentes."
 2. ejercicio2: Un prompt mal redactado que el usuario debe optimizar. Ejemplo: "haz algo para mejorar las ventas con email"
 3. ejercicio3: Un caso de uso complejo donde el usuario debe crear un prompt desde cero, indicando EXPLÍCITAMENTE el FORMATO de salida esperado (estructura, longitud, tono). Ejemplo: "Crea un prompt para generar un plan de contenido de 30 días para una marca de ropa sostenible que quiere posicionarse en TikTok"
 
@@ -77,7 +77,7 @@ Recuerda: El estudiante está aprendiendo. Valora el intento. Devuelve SOLO JSON
       return isEn
         ? {
             ejercicio1:
-              "You are a digital marketing expert working for an e-commerce startup that wants to increase its sales by 30% in the next quarter. Your task is to create a segmented email marketing campaign for recurring customers who haven't purchased in the last 60 days.",
+              "You are a digital marketing expert. You work for an e-commerce startup that wants to increase its sales by 30% in the next quarter. Your task is to create a segmented email marketing campaign for recurring customers who haven't purchased in the last 60 days.",
             ejercicio2:
               "do something to improve sales with email marketing for an online store",
             ejercicio3:
@@ -85,7 +85,7 @@ Recuerda: El estudiante está aprendiendo. Valora el intento. Devuelve SOLO JSON
           }
         : {
             ejercicio1:
-              "Eres un experto en marketing digital trabajando para una startup de e-commerce que quiere aumentar sus ventas en un 30% en el próximo trimestre. Tu tarea es crear una campaña de email marketing segmentada para clientes recurrentes que no han comprado en los últimos 60 días.",
+              "Eres un experto en marketing digital. Trabajas para una startup de e-commerce que quiere aumentar sus ventas en un 30% en el próximo trimestre. Tu tarea es crear una campaña de email marketing segmentada para clientes recurrentes que no han comprado en los últimos 60 días.",
             ejercicio2:
               "haz algo para mejorar las ventas con email marketing para una tienda online",
             ejercicio3:
