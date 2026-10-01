@@ -22,6 +22,7 @@ import { track } from "../lib/analytics";
 import { EVENTS } from "../lib/analyticsEvents";
 import { API_BASE_URL } from "../config/api";
 import { seedClientSession } from "./SupabaseLoginForm";
+import { isBackendUnavailable, directSignUp } from "../lib/directAuth";
 
 // Error boundary fallback
 function SignUpFormFallback() {
@@ -200,21 +201,38 @@ const SupabaseSignUpForm = ({
     setLoading(true);
     setError("");
 
-    try {
-      const registerResponse = await fetch(`${API_BASE_URL}/api/auth/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          username: formData.username,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          accountType,
-        }),
-      });
+    const signupData = {
+      email: formData.email,
+      password: formData.password,
+      username: formData.username,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      accountType,
+    };
 
-      if (!registerResponse.ok) {
+    try {
+      let registerResponse = null;
+      try {
+        registerResponse = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(signupData),
+        });
+      } catch {
+        // Red/CORS: el backend no responde → respaldo directo con Supabase.
+      }
+
+      let result;
+      if (isBackendUnavailable(registerResponse)) {
+        try {
+          result = await directSignUp(signupData);
+        } catch (directErr) {
+          if (directErr.code === "email_already_registered") {
+            throw new Error(t("signup.error.email_already_registered"));
+          }
+          throw directErr;
+        }
+      } else if (!registerResponse.ok) {
         const errorData = await registerResponse.json().catch(() => ({}));
         // Handle duplicate email with translated message
         if (
@@ -229,9 +247,10 @@ const SupabaseSignUpForm = ({
             t("signup.error.registration_failed"),
           ),
         );
+      } else {
+        result = await registerResponse.json();
       }
 
-      const result = await registerResponse.json();
       setSuccess(true);
 
       track(EVENTS.SIGNUP_COMPLETED, {
@@ -254,7 +273,13 @@ const SupabaseSignUpForm = ({
         // A new account must start with its own empty progress, never inherit
         // whatever the previous user left cached in this browser.
         claimStorageForCurrentUser();
-        window.location.replace(defaultReturnTo);
+        // Sin sesión (p. ej. confirmación de correo pendiente) el destino
+        // protegido rebotaría: se envía al login conservando el destino.
+        window.location.replace(
+          result.token
+            ? defaultReturnTo
+            : `/login?returnTo=${encodeURIComponent(defaultReturnTo)}`,
+        );
       }, 2000);
     } catch (err) {
       console.error("Sign-up error:", err);
