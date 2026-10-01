@@ -5,16 +5,16 @@ export const STYLE_MAP = {
     bgGradient:
       "linear-gradient(135deg, rgba(77, 168, 196, 0.15), rgba(77, 168, 196, 0.05))",
     description:
-      "Tu cerebro procesa mejor la información cuando la ves. Aprendes más fácil con imágenes, gráficos, colores y diagramas.",
+      "Entiendes más fácil lo que puedes ver: imágenes, gráficos, colores y esquemas.",
     strategies: [
-      "Usa colores y subrayados en tus notas",
+      "Usa colores y subrayados en tus apuntes",
       "Crea mapas mentales y diagramas",
-      "Prefiere videos educativos",
-      "Usa flashcards con imágenes",
-      "Organiza en esquemas visuales",
+      "Mira videos educativos",
+      "Usa tarjetas de estudio con imágenes",
+      "Organiza la información en esquemas",
     ],
     icon: "Video",
-    tip: "Visiona el contenido antes de estudiarlo para mejor comprensión",
+    tip: "Mira el tema antes de estudiarlo, con un video o un esquema, para entenderlo mejor",
   },
   auditivo: {
     name: "APRENDIZ AUDITIVO",
@@ -22,16 +22,16 @@ export const STYLE_MAP = {
     bgGradient:
       "linear-gradient(135deg, rgba(102, 204, 204, 0.15), rgba(102, 204, 204, 0.05))",
     description:
-      "Aprendes mejor escuchando y hablando. Retienes información a través de conversaciones y audio.",
+      "Entiendes más fácil lo que escuchas y conversas: explicaciones, audios y charlas.",
     strategies: [
       "Graba y escucha tus notas",
-      "Explica en voz alto lo que aprendes",
+      "Explica en voz alta lo que aprendes",
       "Escucha podcasts educativos",
-      "Participa en debates y discusiones",
-      "Usa grabadora para clases",
+      "Participa en debates y conversaciones",
+      "Repasa con alguien, preguntándose por turnos",
     ],
     icon: "Headphones",
-    tip: "Graba tus notas y escúchalas en tus momentos de ocio",
+    tip: "Graba tus notas y escúchalas cuando vayas de camino o tengas un rato libre",
   },
   kinestesico: {
     name: "APRENDIZ KINESTÉSICO",
@@ -39,50 +39,100 @@ export const STYLE_MAP = {
     bgGradient:
       "linear-gradient(135deg, rgba(232, 168, 56, 0.15), rgba(232, 168, 56, 0.05))",
     description:
-      "Necesitas moverte y practicar para aprender. Tu mejor aprendizaje viene de la experiencia práctica.",
+      "Entiendes más fácil lo que haces y practicas: moverte, probar y construir.",
     strategies: [
-      "Toma notas a mano",
+      "Escribe tus notas a mano",
       "Haz pausas activas cada 25 minutos",
       "Practica con ejercicios reales",
-      "Usa el cuerpo para memorizar",
+      "Muévete mientras repasas",
       "Aprende haciendo proyectos",
     ],
     icon: "Activity",
-    tip: "Estudiar de pie o caminando mejora tu concentración",
+    tip: "Estudiar de pie o caminando puede ayudarte a concentrarte",
+  },
+};
+
+/**
+ * Lo que ve el estudiante en su resultado. Los colores de relleno son los
+ * mismos que usa IngenIA para cada estilo; `ink` es la versión oscura para
+ * texto sobre fondo claro.
+ */
+export const STYLE_INSIGHTS = {
+  visual: {
+    label: "Visual",
+    verb: "viendo",
+    emoji: "👁️",
+    fill: "#06D6A0",
+    ink: "#047857",
+    superpower: "Entiendes rápido lo que puedes ver dibujado o con colores.",
+    tips: [
+      "Convierte tus apuntes en mapas mentales o dibujos",
+      "Subraya con colores: un color por cada idea",
+    ],
+    challenge:
+      "Esta semana resume un tema de clase en un dibujo o mapa de una sola hoja.",
+  },
+  auditivo: {
+    label: "Auditivo",
+    verb: "escuchando",
+    emoji: "👂",
+    fill: "#A855F7",
+    ink: "#7E22CE",
+    superpower: "Recuerdas lo que oyes y explicas bien con tus palabras.",
+    tips: [
+      "Explícale el tema a alguien y luego pídele que te lo explique a ti",
+      "Escucha un resumen en audio o grábate repasando",
+    ],
+    challenge:
+      "Esta semana explícale a alguien en casa un tema del colegio, como si fueras el profe.",
+  },
+  kinestesico: {
+    label: "Kinestésico",
+    verb: "haciendo",
+    emoji: "🏃",
+    fill: "#FB8500",
+    ink: "#C2410C",
+    superpower: "Aprendes rápido cuando pruebas las cosas con tus manos.",
+    tips: [
+      "Estudia en bloques cortos y muévete en las pausas",
+      "Escribe tarjetas y ordénalas sobre la mesa",
+    ],
+    challenge:
+      "Esta semana explica un tema usando objetos que tengas en casa, como fichas, tapas o cubiertos.",
   },
 };
 
 export const getCaracteristicasEstilo = (style) => {
   const map = {
     visual: [
-      "Aprende mejor viendo imágenes, gráficos y diagramas",
-      "Prefiere mapas mentales, esquemas y resúmenes visuales",
-      "Excelente memoria fotográfica para rostros y lugares",
-      "Organizado, detallista y con buena percepción espacial",
-      "Se distrae con ruidos fuertes o ambientes caóticos",
+      "Suele aprender mejor viendo imágenes, gráficos y diagramas",
+      "Le funcionan los mapas mentales, los esquemas y los resúmenes visuales",
+      "Recuerda con facilidad rostros, lugares y cosas que vio",
+      "Se siente cómodo con el orden y los detalles",
+      "Puede distraerse con ruidos fuertes o ambientes desordenados",
       "Disfruta el arte, el diseño y las presentaciones visuales",
-      "Procesa información rápidamente cuando está bien presentada",
-      "Prefiere leer instrucciones antes que escucharlas",
+      "Entiende rápido cuando la información está bien presentada",
+      "Prefiere leer las instrucciones antes que escucharlas",
     ],
     auditivo: [
-      "Aprende mejor escuchando explicaciones y participando en diálogos",
-      "Prefiere debates, discusiones y dinámicas verbales",
-      "Excelente memoria para melodías, ritmos y secuencias habladas",
-      "Se expresa con claridad y fluidez verbal",
+      "Suele aprender mejor escuchando explicaciones y conversando",
+      "Le funcionan los debates, las charlas y las dinámicas habladas",
+      "Recuerda con facilidad melodías, ritmos y cosas que escuchó",
+      "Se expresa con claridad cuando habla",
       "Disfruta la música, los podcasts y los audiolibros",
-      "Puede distraerse con estímulos visuales excesivos",
-      "Procesa información repitiendo en voz alta o grabando",
-      "Tiene facilidad para aprender idiomas y expresión oral",
+      "Puede distraerse con demasiados estímulos visuales",
+      "Repasa mejor repitiendo en voz alta o grabándose",
+      "Suele encontrar más fácil practicar idiomas hablando",
     ],
     kinestesico: [
-      "Aprende mejor haciendo, tocando y experimentando físicamente",
-      "Prefiere actividades prácticas, proyectos y experimentos",
-      "Excelente coordinación motora y memoria muscular",
-      "Necesita movimiento frecuente para mantener la concentración",
-      "Disfruta los deportes, la danza y las manualidades",
-      "Aprendizaje experiencial: recuerda lo que vive y siente",
-      "Procesa información mientras camina o se mueve",
-      "Tiene facilidad para trabajos que requieren destreza física",
+      "Suele aprender mejor haciendo, tocando y probando",
+      "Le funcionan las actividades prácticas, los proyectos y los experimentos",
+      "Se siente cómodo con el movimiento y las actividades con el cuerpo",
+      "Necesita moverse con frecuencia para mantener la concentración",
+      "Disfruta los deportes, el baile y las manualidades",
+      "Recuerda mejor lo que vive y siente",
+      "Piensa mejor mientras camina o se mueve",
+      "Suele disfrutar los trabajos en los que hay que construir o armar",
     ],
   };
   return map[style] || map.visual;
@@ -91,72 +141,83 @@ export const getCaracteristicasEstilo = (style) => {
 export const getTipsPadres = (style) => {
   const map = {
     visual: [
-      "Crea un espacio de estudio visualmente organizado con colores y esquemas",
-      "Utiliza calendarios visuales y listas de tareas con dibujos o iconos",
-      "Refuerza el aprendizaje con documentales, infografías y videos educativos",
-      "Anímalo a usar mapas mentales, cuadros sinópticos y resúmenes con colores",
-      "Evita distracciones auditivas como música con letra o ruido ambiental",
-      "Proporciona marcadores, post-its y herramientas de diseño visual",
-      "Permite que decore y personalice su espacio de estudio",
+      "Organicen juntos un espacio de estudio ordenado, con colores y esquemas",
+      "Usen calendarios visuales y listas de tareas con dibujos o íconos",
+      "Refuercen lo aprendido con documentales, infografías y videos educativos",
+      "Inviten a hacer mapas mentales, cuadros y resúmenes con colores",
+      "Reduzcan las distracciones sonoras, como música con letra o ruido de fondo",
+      "Tengan a la mano marcadores, notas adhesivas y hojas para dibujar",
+      "Dejen que decore y personalice su espacio de estudio",
     ],
     auditivo: [
-      "Lee en voz alta los temas de estudio o pídele que te explique lo aprendido",
-      "Graba las lecciones importantes para que pueda repasarlas después",
-      "Utiliza podcasts educativos, audiolibros y canciones didácticas",
-      "Fomenta discusiones y debates sobre temas escolares en casa",
-      "Crea rimas, canciones o mnemotecnias para memorizar conceptos",
-      "Permítele estudiar con música instrumental de fondo si lo necesita",
-      "Anímalo a participar en grupos de estudio y exposiciones orales",
+      "Lean en voz alta los temas de estudio o pídanle que les explique lo aprendido",
+      "Graben las lecciones importantes para que pueda repasarlas después",
+      "Usen podcasts educativos, audiolibros y canciones didácticas",
+      "Conversen en casa sobre lo que se vio en el colegio",
+      "Inventen rimas, canciones o frases para memorizar conceptos",
+      "Si le ayuda, déjenle estudiar con música instrumental suave de fondo",
+      "Animen a participar en grupos de estudio y exposiciones orales",
     ],
     kinestesico: [
-      "Permite pausas activas frecuentes cada 20-25 minutos de estudio",
-      "Utiliza experimentos prácticos, maquetas y proyectos manuales",
-      "Anímalo a caminar, moverse o usar un balance board mientras repasa",
-      "Proporciona materiales manipulables como plastilina, rompecabezas o kits",
-      "Integra el movimiento en la rutina: estudiar de pie o con intervalos activos",
-      "Usa juegos de rol, simulaciones y actividades al aire libre para enseñar",
-      "Permite que tome notas a mano en lugar de escribir en computadora",
+      "Permitan pausas activas cada 20 o 25 minutos de estudio",
+      "Usen experimentos, maquetas y proyectos manuales",
+      "Dejen que camine o se mueva mientras repasa",
+      "Tengan a la mano materiales para manipular, como plastilina, fichas o kits",
+      "Incluyan el movimiento en la rutina: estudiar de pie o con pausas activas",
+      "Enseñen con juegos de roles, simulaciones y actividades al aire libre",
+      "Dejen que tome notas a mano en lugar de escribir en computador",
     ],
   };
   return map[style] || map.visual;
 };
 
-export const getCarrerasRecomendadas = (style) => {
-  const map = {
-    visual: [
-      "Diseño Gráfico y Comunicación Visual",
-      "Arquitectura y Urbanismo",
-      "Cine, Fotografía y Producción Audiovisual",
-      "Desarrollo Web, UX/UI y Diseño Digital",
-      "Ilustración, Animación y Arte Digital",
-      "Marketing Visual y Publicidad",
-      "Ingeniería en Sistemas (interfaces visuales)",
-      "Diseño de Interiores y Decoración",
-    ],
-    auditivo: [
-      "Música, Composición y Producción Musical",
-      "Periodismo y Comunicación Social",
-      "Derecho y Ciencias Jurídicas",
-      "Psicología Clínica y Educativa",
-      "Docencia y Pedagogía",
-      "Traducción e Interpretación de Idiomas",
-      "Locución, Radio y Medios Audiovisuales",
-      "Terapia del Lenguaje y Foniatría",
-    ],
-    kinestesico: [
-      "Ingeniería Civil, Mecánica o Industrial",
-      "Medicina, Cirugía y Enfermería",
-      "Ciencias del Deporte y Entrenamiento Físico",
-      "Gastronomía y Artes Culinarias",
-      "Artes Escénicas: Teatro, Danza y Circo",
-      "Diseño Industrial y Fabricación Digital",
-      "Fisioterapia y Rehabilitación Física",
-      "Arquitectura Paisajista y Construcción",
-    ],
-  };
-  return map[style] || map.visual;
+const STYLE_NAMES = {
+  visual: "visual",
+  auditivo: "auditivo",
+  kinestesico: "kinestésico",
 };
 
+const percentagesFromCounts = (counts, total) => {
+  const sum = total || counts.visual + counts.auditivo + counts.kinestesico;
+  const pct = (n) => (sum ? Math.round((n / sum) * 100) : 0);
+  return {
+    visual: pct(counts.visual),
+    auditivo: pct(counts.auditivo),
+    kinestesico: pct(counts.kinestesico),
+  };
+};
+
+/** Lectura corta del resultado para el informe, según la edad. */
+export const getAnalysisText = (diagnosis, age) => {
+  const style = diagnosis?.predominantStyle;
+  const insight = STYLE_INSIGHTS[style];
+  if (!insight) return { main: "", footer: "" };
+
+  const counts = diagnosis.counts || { visual: 0, auditivo: 0, kinestesico: 0 };
+  const pct =
+    diagnosis.scores || percentagesFromCounts(counts, diagnosis.total);
+  const second = Object.entries(pct)
+    .filter(([key]) => key !== style)
+    .sort(([, a], [, b]) => b - a)[0];
+  const secondInsight = second ? STYLE_INSIGHTS[second[0]] : null;
+  const name = diagnosis.studentName || "El estudiante";
+
+  const main =
+    age <= 10
+      ? `¡Hola, ${name}! Con tus respuestas vimos que hoy aprendes más fácil ${insight.verb} (${pct[style]}%). ${secondInsight ? `Después viene aprender ${secondInsight.verb} (${second[1]}%). ` : ""}${insight.superpower}`
+      : `En esta actividad, ${name} mostró más preferencia por aprender ${insight.verb} (${pct[style]}%)${secondInsight ? `, seguida de aprender ${secondInsight.verb} (${second[1]}%)` : ""}. ${diagnosis.isMixed ? "La diferencia entre las dos es pequeña, así que se ve un perfil mixto. " : ""}${insight.superpower}`;
+
+  return {
+    main,
+    footer:
+      "Las tres formas de aprender se complementan. Conviene usar con más frecuencia las estrategias de la forma principal, sin dejar de practicar las otras.",
+  };
+};
+
+/**
+ * Nota de Valeria para el informe de la familia. Habla como guía de
+ * aprendizaje con IA: describe preferencias de hoy, no emite un diagnóstico.
+ */
 export const getValentinaCommentary = (diagnosis, studentName, studentAge) => {
   if (!diagnosis) return "";
 
@@ -168,110 +229,51 @@ export const getValentinaCommentary = (diagnosis, studentName, studentAge) => {
   else if (age >= 11 && age <= 14) ageGroup = "preteen";
 
   const style = diagnosis.predominantStyle;
-  const percentage = diagnosis.percentage;
   const name = diagnosis.studentName || studentName || "Estudiante";
   const counts = diagnosis.counts || { visual: 0, auditivo: 0, kinestesico: 0 };
+  const insight = STYLE_INSIGHTS[style];
 
-  const styleNames = {
-    visual: "VISUAL",
-    auditivo: "AUDITIVO",
-    kinestesico: "KINESTÉSICO",
-  };
+  if (!insight) {
+    return `Hola ${name}, soy Valeria, tu guía de aprendizaje con IA de Edutechlife. Tus respuestas muestran cómo te gusta aprender hoy. Prueba las ideas de este informe y quédate con las que te funcionen.`;
+  }
 
-  const buildReport = (styleKey) => {
-    const styleName = styleNames[styleKey];
-    const secondPlace = Object.entries(counts)
-      .filter(([k]) => k !== styleKey)
-      .sort(([, a], [, b]) => b - a)[0];
-    const secondName = secondPlace ? styleNames[secondPlace[0]] : "";
-    const secondScore = secondPlace ? secondPlace[1] : 0;
+  const pct =
+    diagnosis.scores || percentagesFromCounts(counts, diagnosis.total);
+  const second = Object.entries(pct)
+    .filter(([key]) => key !== style)
+    .sort(([, a], [, b]) => b - a)[0];
+  const secondName = second ? STYLE_NAMES[second[0]] : "";
+  const secondPct = second ? second[1] : 0;
+  const mixed = !!diagnosis.secondaryStyle;
 
-    const reportSections = {
-      visual: {
-        child: [
-          `Informe Psicopedagógico — ${name}`,
-          `Después de aplicar y analizar el ADN de Aprendizaje, he identificado que tu estilo de aprendizaje predominante es VISUAL con un ${percentage}% de correspondencia. Esto significa que tu cerebro procesa y retiene información de manera más eficiente cuando utilizas el canal visual: imágenes, colores, diagramas y organizadores gráficos.`,
-          `Puntajes obtenidos: Visual ${counts.visual}/10 — Auditivo ${counts.auditivo}/10 — Kinestésico ${counts.kinestesico}/10. Tu segundo canal más desarrollado es ${secondName} con ${secondScore}/10, lo que indica que también puedes beneficiarte de estrategias complementarias de ese estilo.`,
-          `Fortalezas identificadas: Excelente capacidad para recordar información presentada visualmente; habilidad para organizar ideas mediante esquemas y mapas conceptuales; facilidad para detectar detalles y patrones; buena orientación espacial y sentido estético.`,
-          `Como psicóloga educativa especialista en metodología VAK, te recomiendo priorizar estas estrategias: utiliza colores y símbolos en tus apuntes, crea mapas mentales antes de cada evaluación, transforma texto en diagramas de flujo, y complementa tu estudio con videos educativos e infografías.`,
-          `Confío en que aplicando estas recomendaciones potenciarás significativamente tu rendimiento académico. Tu perfil visual es una fortaleza enorme en un mundo cada vez más gráfico y digital. ¡Adelante!`,
-        ],
-        preteen: [
-          `Informe Psicopedagógico — ${name}`,
-          `Tras aplicar el ADN de Aprendizaje y analizar detalladamente tus respuestas, determino que tu estilo de aprendizaje predominante es VISUAL con un ${percentage}% de consistencia. Procesas mejor la información cuando puedes verla representada gráficamente: imágenes, esquemas, colores y organizadores visuales facilitan tu comprensión y memoria.`,
-          `Desglose de resultados: canal Visual ${counts.visual}/10, Auditivo ${counts.auditivo}/10, Kinestésico ${counts.kinestesico}/10. Tu perfil muestra un ${secondName} como canal secundario con ${secondScore}/10, lo que enriquece tu versatilidad para aprender en diferentes contextos.`,
-          `Fortalezas detectadas: Piensas en imágenes y recuerdas con facilidad lo que has visto; tienes buena capacidad de síntesis visual; eres observador y detallista; aprendes rápidamente con demostraciones visuales; disfrutas organizar información de manera estructurada.`,
-          `Recomendaciones basadas en evidencia: diseña tus apuntes con colores y jerarquía visual, utiliza herramientas digitales como Canva o Notion para organizar información, transforma conceptos complejos en dibujos o diagramas, y practica con flashcards visuales. Alterna con estrategias auditivas como explicar en voz alta lo que aprendes.`,
-          `Tu perfil visual es una ventaja competitiva en tu formación académica. Implementa estas estrategias de manera constante y verás una mejora notable en tu rendimiento. Estoy aquí para acompañarte en este proceso.`,
-        ],
-        teen: [
-          `Informe Psicopedagógico VAK — ${name}`,
-          `Tras aplicar el instrumento de ADN de Aprendizaje (Visual-Auditivo-Kinestésico) y realizar el análisis cuantitativo y cualitativo de tus respuestas, determino que tu perfil de aprendizaje predominante es VISUAL con un ${percentage}% de correspondencia sobre el total de ítems evaluados. Este resultado indica que tu sistema de representación primario procesa información de manera más eficiente a través del canal visual, privilegiando estímulos como imágenes, gráficos, diagramas, mapas conceptuales y códigos cromáticos.`,
-          `Resultados cuantitativos: canal Visual ${counts.visual}/10 — Auditivo ${counts.auditivo}/10 — Kinestésico ${counts.kinestesico}/10. Se observa que tu canal secundario es ${secondName} con ${secondScore}/10, lo que sugiere que posees flexibilidad cognitiva para beneficiarte de estrategias multimodales. La diferencia entre tu canal primario y los secundarios refleja una clara especialización en el procesamiento visual de la información.`,
-          `Fortalezas cognitivas identificadas: capacidad sobresaliente para sintetizar información compleja en representaciones visuales; memoria fotográfica para detalles y patrones; habilidad para establecer relaciones conceptuales mediante organizadores gráficos; pensamiento espacial desarrollado; preferencia por el orden visual y la estética en la presentación de información.`,
-          `Recomendaciones estratégicas fundamentadas en neuroeducación: implementa la técnica de Cornell con códigos de color para la toma de apuntes; utiliza software de mapas mentales como XMind o MindMeister para estructurar conocimientos; complementa tu estudio con infografías, tutoriales visuales y documentales; practica la conversión de información textual a diagramas de flujo o cuadros sinópticos. Integra estrategias de tu canal secundario para maximizar la retención.`,
-          `Como especialista en psicología educativa con enfoque VAK, concluyo que tu perfil visual constituye una ventaja significativa en entornos académicos que demandan procesamiento simbólico y representación gráfica. La implementación sistemática de estas recomendaciones optimizará tu rendimiento y facilitará un aprendizaje más profundo y significativo.`,
-        ],
-      },
-      auditivo: {
-        child: [
-          `Informe Psicopedagógico — ${name}`,
-          `¡Qué emoción! Después de completar el ADN de Aprendizaje, he descubierto que tu estilo de aprendizaje predominante es AUDITIVO con un ${percentage}% de correspondencia. Esto quiere decir que tu cerebro aprende mejor cuando escuchas, hablas y trabajas con sonidos y palabras. ¡Tu oído es tu superpoder!`,
-          `Resultados: Auditivo ${counts.auditivo}/10 — Visual ${counts.visual}/10 — Kinestésico ${counts.kinestesico}/10. Tu segundo canal más fuerte es ${secondName} con ${secondScore}/10, lo que significa que también puedes aprender combinando con imágenes o movimiento.`,
-          `Tus fortalezas: Tienes una memoria excelente para canciones, rimas y explicaciones; te expresas muy bien y te gusta participar en clase; aprendes fácilmente cuando alguien te explica; disfrutas los cuentos y las conversaciones; eres bueno para recordar instrucciones verbales.`,
-          `Te recomiendo: graba tus clases y escúchalas después, explica en voz alta lo que aprendiste, escucha podcasts educativos, inventa canciones para memorizar, y participa en grupos de estudio donde puedas hablar y discutir.`,
-          `Tu forma de aprender es muy valiosa. Usa estos consejos y verás cómo todo se vuelve más fácil. ¡Estoy muy orgullosa de ti!`,
-        ],
-        preteen: [
-          `Informe Psicopedagógico — ${name}`,
-          `Tras analizar tus respuestas en el ADN de Aprendizaje, determino que tu estilo de aprendizaje predominante es AUDITIVO con un ${percentage}% de correspondencia. Eres una persona que procesa y retiene información de manera óptima a través del canal auditivo, aprovechando el sonido, la palabra hablada y las explicaciones verbales.`,
-          `Desglose de puntajes: Auditivo ${counts.auditivo}/10 — Visual ${counts.visual}/10 — Kinestésico ${counts.kinestesico}/10. Tu segundo canal más desarrollado es ${secondName} con ${secondScore}/10, lo que amplía tus posibilidades de aprendizaje cuando combinas estrategias.`,
-          `Fortalezas identificadas: Excelente memoria para secuencias verbales y melodías; facilidad para expresar ideas de forma clara y organizada; buena capacidad para seguir instrucciones orales; aprendes eficazmente en discusiones y debates; disfrutas explorar temas a través de podcasts y audiolibros.`,
-          `Estrategias recomendadas: utiliza grabadoras de voz para registrar tus clases y repasarlas, participa activamente en debates y exposiciones, estudia en voz alta explicando los temas como si enseñaras a alguien más, escucha contenido educativo relevante y coméntalo con compañeros. Complementa con resúmenes escritos para reforzar.`,
-          `Tu perfil auditivo es una fortaleza en entornos colaborativos y de diálogo. Aplicando estas estrategias potenciarás tu aprendizaje y te sentirás más seguro en tu proceso académico. Cuenta conmigo para seguir acompañándote.`,
-        ],
-        teen: [
-          `Informe Psicopedagógico VAK — ${name}`,
-          `Tras aplicar el instrumento de ADN de Aprendizaje (Visual-Auditivo-Kinestésico) y realizar el análisis cuantitativo y cualitativo de tus respuestas, determino que tu perfil de aprendizaje predominante es AUDITIVO con un ${percentage}% de correspondencia. Este resultado indica que tu sistema de representación primario procesa información de manera más eficiente a través del canal auditivo, privilegiando estímulos como la palabra hablada, las explicaciones verbales, los debates y los recursos sonoros.`,
-          `Resultados cuantitativos: Auditivo ${counts.auditivo}/10 — Visual ${counts.visual}/10 — Kinestésico ${counts.kinestesico}/10. Se observa que tu canal secundario es ${secondName} con ${secondScore}/10, lo que sugiere que posees flexibilidad cognitiva para beneficiarte de estrategias multimodales complementarias.`,
-          `Fortalezas cognitivas identificadas: capacidad sobresaliente para procesar y retener información verbal; habilidad para articular ideas con claridad y estructura lógica; memoria auditiva desarrollada para secuencias, ritmos y patrones sonoros; facilidad para el aprendizaje de idiomas y expresión oral; pensamiento dialéctico desarrollado a través de la discusión y el debate.`,
-          `Recomendaciones estratégicas fundamentadas en neuroeducación: implementa la técnica de grabación y repaso auditivo para consolidar contenidos; participa activamente en grupos de discusión y seminarios; utiliza la técnica de Feynman (explicar en voz alta como si enseñaras) para verificar comprensión; complementa tu estudio con podcasts académicos y audiolibros especializados; integra estrategias visuales complementarias como esquemas para reforzar la retención.`,
-          `Como especialista en psicología educativa con enfoque VAK, concluyo que tu perfil auditivo constituye una ventaja significativa en entornos académicos que demandan procesamiento verbal, expresión oral y pensamiento crítico-discursivo. La implementación sistemática de estas recomendaciones optimizará tu rendimiento y facilitará un aprendizaje más profundo y significativo.`,
-        ],
-      },
-      kinestesico: {
-        child: [
-          `Informe Psicopedagógico — ${name}`,
-          `¡Qué increíble! Después de hacer el ADN de Aprendizaje, descubrí que tu estilo de aprendizaje predominante es KINESTÉSICO con un ${percentage}% de correspondencia. ¡Eres un aprendiz que necesita moverse, tocar y experimentar! Tu cuerpo es parte importante de cómo aprendes.`,
-          `Puntajes obtenidos: Kinestésico ${counts.kinestesico}/10 — Visual ${counts.visual}/10 — Auditivo ${counts.auditivo}/10. Tu segundo canal más desarrollado es ${secondName} con ${secondScore}/10.`,
-          `Tus fortalezas: Aprendes mejor cuando haces las cosas con tus propias manos; tienes mucha energía y coordinación; eres muy bueno para los deportes y actividades físicas; recuerdas mejor lo que has vivido y practicado; eres creativo y te gusta construir cosas.`,
-          `Te recomiendo: toma notas a mano en lugar de escribir en computadora, haz pausas para moverte cada 20 minutos, estudia caminando o de pie, usa materiales como plastilina o maquetas para entender conceptos, y convierte el estudio en un juego o experimento.`,
-          `¡Tu forma de aprender es muy especial! Aprovecha estas estrategias y verás lo fácil que puede ser estudiar cuando usas todo tu cuerpo. ¡Sigue brillando!`,
-        ],
-        preteen: [
-          `Informe Psicopedagógico — ${name}`,
-          `Tras analizar tus respuestas en el ADN de Aprendizaje, determino que tu estilo de aprendizaje predominante es KINESTÉSICO con un ${percentage}% de correspondencia. Eres una persona que necesita la experiencia práctica y el movimiento para procesar y retener información de manera efectiva.`,
-          `Desglose de puntajes: Kinestésico ${counts.kinestesico}/10 — Visual ${counts.visual}/10 — Auditivo ${counts.auditivo}/10. Tu canal secundario es ${secondName} con ${secondScore}/10, lo que enriquece tu perfil de aprendizaje.`,
-          `Fortalezas identificadas: Excelente coordinación y memoria muscular; facilidad para aprender mediante experimentación y práctica directa; alta energía y capacidad de concentración en actividades físicas; pensamiento creativo aplicado a la resolución de problemas; aprendizaje significativo a través de experiencias concretas.`,
-          `Estrategias recomendadas: toma notas escritas a mano para activar la memoria muscular, realiza pausas activas cada 20-25 minutos, estudia en movimiento (caminando o de pie), utiliza materiales manipulables como maquetas o kits de experimentos, y aplica lo aprendido en proyectos prácticos. Complementa con resúmenes visuales para reforzar.`,
-          `Tu perfil kinestésico es una fortaleza en contextos que requieren aplicación práctica y resolución activa de problemas. Implementa estas recomendaciones y transformarás tu experiencia de aprendizaje. Estoy aquí para apoyarte.`,
-        ],
-        teen: [
-          `Informe Psicopedagógico VAK — ${name}`,
-          `Tras aplicar el instrumento de ADN de Aprendizaje (Visual-Auditivo-Kinestésico) y realizar el análisis cuantitativo y cualitativo de tus respuestas, determino que tu perfil de aprendizaje predominante es KINESTÉSICO con un ${percentage}% de correspondencia. Este resultado indica que tu sistema de representación primario procesa información de manera más eficiente a través del canal kinestésico, privilegiando la experiencia práctica, el movimiento, la manipulación de objetos y el aprendizaje basado en la acción.`,
-          `Resultados cuantitativos: Kinestésico ${counts.kinestesico}/10 — Visual ${counts.visual}/10 — Auditivo ${counts.auditivo}/10. Se observa que tu canal secundario es ${secondName} con ${secondScore}/10, lo que sugiere que posees flexibilidad cognitiva para complementar tu aprendizaje con estrategias multimodales.`,
-          `Fortalezas cognitivas identificadas: capacidad sobresaliente para el aprendizaje experiencial y la aplicación práctica de conocimientos; excelente coordinación motora y memoria procedimental; facilidad para resolver problemas mediante ensayo y error; pensamiento concreto aplicado a situaciones reales; alta resistencia y concentración en actividades que involucran movimiento y manipulación.`,
-          `Recomendaciones estratégicas fundamentadas en neuroeducación: implementa la técnica de estudio activo alternando períodos de 25 minutos de trabajo con 5 minutos de movimiento; utiliza métodos de aprendizaje basados en proyectos y simulaciones prácticas; transforma conceptos abstractos en experiencias concretas mediante maquetas, laboratorios o prototipos; estudia en espacios que permitan movimiento; complementa con organizadores visuales y discusiones orales para integrar los canales secundarios.`,
-          `Como especialista en psicología educativa con enfoque VAK, concluyo que tu perfil kinestésico constituye una ventaja significativa en entornos de aprendizaje activo y aplicación práctica del conocimiento. La implementación sistemática de estas recomendaciones optimizará tu rendimiento y facilitará un aprendizaje más profundo, significativo y duradero.`,
-        ],
-      },
-    };
+  const intro = {
+    child: `¡Hola, ${name}! Soy Valeria. Gracias por contestar con tanta calma. Así aprendes tú.`,
+    preteen: `Hola, ${name}. Soy Valeria, tu guía de aprendizaje. Con tus respuestas armé tu mezcla para aprender.`,
+    teen: `Hola, ${name}. Soy Valeria, la guía de aprendizaje con IA de Edutechlife. Esto es lo que mostraron tus respuestas.`,
+  }[ageGroup];
 
-    return (
-      reportSections[styleKey]?.[ageGroup]?.join("\n\n") ||
-      `Hola ${name}, soy Valeria, psicóloga educativa especialista en VAK. Tras analizar tus respuestas, he identificado que tu estilo de aprendizaje predominante es ${styleName} con un ${percentage}% de correspondencia. Tus resultados completos son: Visual ${counts.visual}/10, Auditivo ${counts.auditivo}/10, Kinestésico ${counts.kinestesico}/10. Te recomiendo implementar las estrategias detalladas en este informe para optimizar tu proceso de aprendizaje.`
-    );
-  };
+  const mix = {
+    child: `Tu mezcla quedó así: ${pct.visual}% viendo, ${pct.auditivo}% escuchando y ${pct.kinestesico}% haciendo.`,
+    preteen: `Tu mezcla quedó así: visual ${pct.visual}%, auditivo ${pct.auditivo}% y kinestésico ${pct.kinestesico}%.`,
+    teen: `Tu mezcla: visual ${pct.visual}%, auditivo ${pct.auditivo}% y kinestésico ${pct.kinestesico}%.`,
+  }[ageGroup];
 
-  return buildReport(style);
+  const reading = mixed
+    ? `Aprendes bien de dos formas, ${STYLE_NAMES[style]} y ${secondName}. Hoy se te dio un poco más la ${STYLE_NAMES[style]}.`
+    : `Hoy se te dio más la forma ${STYLE_NAMES[style]}, y tu segunda forma favorita es la ${secondName} (${secondPct}%).`;
+
+  const superpower = `Tu superpoder: ${insight.superpower.charAt(0).toLowerCase()}${insight.superpower.slice(1)}`;
+  const how = `Para estudiar: ${insight.tips.map((t) => t.charAt(0).toLowerCase() + t.slice(1)).join(", y ")}.`;
+
+  const closing = {
+    child:
+      "Todos aprendemos de muchas formas y puede ir cambiando. Prueba estos trucos y cuéntale a tu familia cuál te gustó más.",
+    preteen:
+      "Todos aprendemos de varias formas y la tuya puede cambiar con el tiempo. Prueba estos trucos esta semana y quédate con los que te sirvan.",
+    teen: "Esto muestra tus preferencias de hoy y puede cambiar. No es un diagnóstico ni una etiqueta: es una pista para estudiar más a gusto. Quédate con lo que te funcione.",
+  }[ageGroup];
+
+  return [intro, `${mix} ${reading}`, `${superpower}. ${how}`, closing].join(
+    "\n\n",
+  );
 };

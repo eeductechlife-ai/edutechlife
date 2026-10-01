@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import { OVAIntro, OVAValerioBar } from "./shared";
+import { OVAIntro, OVAMaxBar } from "./shared";
 import SectionErrorBoundary from "./SectionErrorBoundary";
 import { FOCUS_RING } from "./constants/styles";
 import { motion, AnimatePresence } from "framer-motion";
@@ -80,7 +80,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
     </div>
   );
 
-  const getValerioText = () => {
+  const getMaxText = () => {
     if (currentScreen === "modules") {
       const module = MODULE_DATA[currentModuleIndex];
       const slide = module.content[currentSlide];
@@ -430,7 +430,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
               </AnimatePresence>
             </main>
           </div>
-          <OVAValerioBar text={getValerioText()} />
+          <OVAMaxBar text={getMaxText()} />
         </div>
       </SectionErrorBoundary>
     );
@@ -523,7 +523,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
               </div>
             </motion.div>
           </div>
-          <OVAValerioBar text={getValerioText()} />
+          <OVAMaxBar text={getMaxText()} />
         </div>
       </SectionErrorBoundary>
     );
@@ -577,7 +577,7 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
               </button>
             </motion.div>
           </div>
-          <OVAValerioBar text={getValerioText()} />
+          <OVAMaxBar text={getMaxText()} />
         </div>
       </SectionErrorBoundary>
     );

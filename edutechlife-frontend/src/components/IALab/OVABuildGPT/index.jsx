@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { GraduationCap, Star } from "lucide-react";
-import { OVAIntro, OVAValerioBar } from "../shared";
+import { OVAIntro, OVAMaxBar } from "../shared";
 
 import IntroScreen from "./screens/IntroScreen";
 import ModuleSlack from "./screens/ModuleSlack";
@@ -43,14 +43,14 @@ export default function OVABuildGPT({ onComplete }) {
     setCurrentScreen((prev) => prev + 1);
   };
 
-  const getValerioText = () => {
+  const getMaxText = () => {
     const screenTexts = [
       "",
       t("ova.buildgpt.intro_text"),
-      t("ova.buildgpt.valerio_screen_2"),
-      t("ova.buildgpt.valerio_screen_3"),
-      t("ova.buildgpt.valerio_screen_4"),
-      t("ova.buildgpt.valerio_screen_5"),
+      t("ova.buildgpt.max_screen_2"),
+      t("ova.buildgpt.max_screen_3"),
+      t("ova.buildgpt.max_screen_4"),
+      t("ova.buildgpt.max_screen_5"),
       t("ova.buildgpt.quiz_title"),
       t("ova.buildgpt.cert_desc"),
     ];
@@ -156,7 +156,7 @@ export default function OVABuildGPT({ onComplete }) {
         <p>{t("ova.buildgpt.footer")}</p>
       </footer>
 
-      <OVAValerioBar text={getValerioText()} />
+      <OVAMaxBar text={getMaxText()} />
     </div>
   );
 }

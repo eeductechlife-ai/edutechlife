@@ -20,66 +20,71 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
         tarea: ''
     });
 
-    // Parsear respuesta existente si hay
-    useEffect(() => {
-        if (response) {
-            try {
-                const parsed = JSON.parse(response);
-                setSelectedElements(parsed);
-            } catch {
-                // Si no es JSON válido, mantener estado actual
-            }
-        }
-    }, [response]);
 
-    // Extraer posibles elementos del texto del ejercicio
-    const extractPossibleElements = (text) => {
-        const sentences = text.split(/[.!?]+/).filter(s => s.trim());
-        
-        const possibleElements = {
-            rol: [],
-            contexto: [],
-            tarea: []
-        };
-
-        sentences.forEach(sentence => {
-            const lower = sentence.toLowerCase();
-            
-            // Detectar roles
-            if (lower.includes('eres un') || lower.includes('como') || lower.includes('experto') || 
-                lower.includes('consultor') || lower.includes('especialista')) {
-                possibleElements.rol.push(sentence.trim());
-            }
-            
-            // Detectar contexto
-            if (lower.includes('para') || lower.includes('en') || lower.includes('trabajando') ||
-                lower.includes('contexto') || lower.includes('situación')) {
-                possibleElements.contexto.push(sentence.trim());
-            }
-            
-            // Detectar tareas
-            if (lower.includes('debes') || lower.includes('necesitas') || lower.includes('tarea') ||
-                lower.includes('objetivo') || lower.includes('crear') || lower.includes('desarrollar')) {
-                possibleElements.tarea.push(sentence.trim());
-            }
-        });
-
-        // Garantizar mínimo 3 opciones por categoría
-        const ensureMinimum = (elements, defaults) => {
-            return elements.length >= 3 ? elements : [...elements, ...defaults.slice(0, 3 - elements.length)];
-        };
-        const rolDefaults = ["Eres un experto en inteligencia artificial", "Actúas como consultor especializado en tecnología", "Tu rol es analista y estratega digital"];
-        const contextoDefaults = ["En un entorno educativo innovador", "Para una empresa que busca transformación digital", "En el contexto de un proyecto de mejora continua"];
-        const tareaDefaults = ["Debes analizar y resolver el desafío planteado", "Necesitas estructurar una solución paso a paso", "Crea un plan detallado con objetivos medibles"];
-
-        possibleElements.rol = ensureMinimum(possibleElements.rol, rolDefaults);
-        possibleElements.contexto = ensureMinimum(possibleElements.contexto, contextoDefaults);
-        possibleElements.tarea = ensureMinimum(possibleElements.tarea, tareaDefaults);
-
-        return possibleElements;
+    // Pool de frases mezclado: ya NO se agrupa por categoría (agrupar entregaba
+    // la respuesta). Se toman las frases reales del escenario (sin la propia
+    // consigna) y se añaden distractores plausibles; el orden es estable por
+    // frase para que no "salte" en cada render.
+    const buildPool = (text) => {
+        const instruction = /^\s*(identifica|clasifica|analiza)\b/i;
+        const sentences = String(text || '')
+            .split(/(?<=[.!?])\s+/)
+            .map(s => s.replace(/[.!?]+$/, '').trim())
+            .filter(s => s.length > 12 && !instruction.test(s));
+        const distractors = [
+            'Eres un experto en inteligencia artificial',
+            'En un entorno educativo innovador',
+            'Crea un plan detallado con objetivos medibles',
+        ];
+        const seen = new Set();
+        const hash = (str) => [...str].reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 7);
+        return [...sentences, ...distractors]
+            .filter(sentence => {
+                const key = sentence.toLowerCase();
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            })
+            .sort((x, y) => hash(x) - hash(y));
     };
 
-    const possibleElements = extractPossibleElements(exercise);
+    const pool = buildPool(exercise);
+    const poolKey = pool.join('\u0001');
+
+    // Restaurar la respuesta guardada, descartando frases que ya no están en
+    // el escenario actual (un borrador de un ejercicio anterior dejaba una
+    // categoría "completa" con una frase que el estudiante no ve).
+    useEffect(() => {
+        if (!response) return;
+        try {
+            const parsed = JSON.parse(response);
+            const valid = new Set(poolKey.split('\u0001'));
+            const cleaned = {
+                rol: valid.has(parsed.rol) ? parsed.rol : '',
+                contexto: valid.has(parsed.contexto) ? parsed.contexto : '',
+                tarea: valid.has(parsed.tarea) ? parsed.tarea : '',
+            };
+            setSelectedElements(cleaned);
+            if (
+                cleaned.rol !== (parsed.rol || '') ||
+                cleaned.contexto !== (parsed.contexto || '') ||
+                cleaned.tarea !== (parsed.tarea || '')
+            ) {
+                onResponseChange(JSON.stringify(cleaned));
+            }
+        } catch {
+            // Si no es JSON válido, mantener estado actual
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [response, poolKey]);
+    const [activeElement, setActiveElement] = useState(null);
+
+    const CATEGORIES = [
+        { type: 'rol', label: t('ialab.evaluation.step1.role'), icon: 'fa-user-tie', color: 'text-[var(--theme-primary)]', selected: 'bg-[var(--theme-primary)]/10 border border-[var(--theme-primary)]' },
+        { type: 'contexto', label: t('ialab.evaluation.step1.context'), icon: 'fa-building', color: 'text-[var(--theme-emphasis)]', selected: 'bg-[var(--theme-emphasis)]/10 border border-[var(--theme-emphasis)]' },
+        { type: 'tarea', label: t('ialab.evaluation.step1.task'), icon: 'fa-tasks', color: 'text-emerald-600', selected: 'bg-emerald-500/10 border border-emerald-500' },
+    ];
+    const assignedTo = (element) => CATEGORIES.find(c => selectedElements[c.type] === element);
 
     const handleElementSelect = (type, element) => {
         const newSelection = {
@@ -289,43 +294,54 @@ const IALabEvaluationStep1 = ({ exercise, response, onResponseChange }) => {
                     {t('ialab.evaluation.step1.tap_hint')}
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {Object.entries(possibleElements).map(([type, elements]) => (
-                        <div key={type} className="space-y-2">
-                            <h5 className="text-sm font-medium text-slate-500 capitalize">{type}</h5>
-                            {elements.map((element, index) => (
-                                <div
-                                    key={index}
-                                    draggable
-                                    onDragStart={(e) => handleDragStart(e, type, element)}
-                                    className={`p-3 rounded-lg cursor-move transition-all duration-200 ${
-                                        selectedElements[type] === element
-                                            ? type === 'rol' ? 'bg-[var(--theme-primary)]/10 border border-[var(--theme-primary)]' :
-                                              type === 'contexto' ? 'bg-[var(--theme-emphasis)]/10 border border-[var(--theme-emphasis)]' :
-                                              'bg-emerald-500/10 border border-emerald-500'
-                                            : 'bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300'
-                                    }`}
-                                    onClick={() => handleElementSelect(type, element)}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {pool.map((element) => {
+                        const assigned = assignedTo(element);
+                        const isActive = activeElement === element;
+                        return (
+                            <div
+                                key={element}
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, 'pool', element)}
+                                className={`p-3 rounded-lg transition-all duration-200 ${
+                                    assigned ? assigned.selected : 'bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                                } ${isActive ? 'ring-2 ring-[var(--theme-primary)]/40' : ''}`}
+                            >
+                                <button
+                                    type="button"
+                                    onClick={() => setActiveElement(isActive ? null : element)}
+                                    aria-expanded={isActive}
+                                    className="w-full text-left flex items-start gap-2 cursor-pointer"
                                 >
-                                    <div className="flex items-start gap-2">
-                                        <Icon 
-                                            name={type === 'rol' ? 'fa-user-tie' : 
-                                                  type === 'contexto' ? 'fa-building' : 'fa-tasks'} 
-                                            className={`mt-1 ${
-                                                type === 'rol' ? 'text-[var(--theme-primary)]' :
-                                                type === 'contexto' ? 'text-[var(--theme-emphasis)]' :
-                                                'text-emerald-500'
-                                            }`}
-                                        />
-                                        <p className="text-sm text-slate-700 flex-1">{element}</p>
-                                        {selectedElements[type] === element && (
+                                    <p className="text-sm text-slate-700 flex-1">{element}</p>
+                                    {assigned && (
+                                        <span className={`inline-flex items-center gap-1 text-[11px] font-semibold ${assigned.color}`}>
                                             <Icon name="fa-check" className="text-emerald-500" />
-                                        )}
+                                            {assigned.label}
+                                        </span>
+                                    )}
+                                </button>
+                                {isActive && (
+                                    <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label={t('ialab.evaluation.step1.pick_category')}>
+                                        {CATEGORIES.map((c) => (
+                                            <button
+                                                key={c.type}
+                                                type="button"
+                                                onClick={() => {
+                                                    handleElementSelect(c.type, element);
+                                                    setActiveElement(null);
+                                                }}
+                                                className={`inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold hover:bg-slate-50 ${c.color}`}
+                                            >
+                                                <Icon name={c.icon} className="text-[11px]" />
+                                                {c.label}
+                                            </button>
+                                        ))}
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    ))}
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
             </div>

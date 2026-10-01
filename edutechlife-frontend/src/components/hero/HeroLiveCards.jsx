@@ -23,7 +23,7 @@ export const VoiceWave = ({ speaking, color }) => (
 export const SpeakerCard = ({ slide, speaking, t }) => (
   <div className={`${GLASS} max-w-[240px] px-4 py-3`}>
     <div className="flex items-center gap-2">
-      <span className="text-xs font-extrabold text-petroleum-dark">
+      <span className="font-display text-xs font-extrabold text-petroleum">
         {slide.speaker}
       </span>
       <VoiceWave speaking={speaking} color={slide.accent} />

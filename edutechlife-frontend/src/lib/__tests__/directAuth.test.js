@@ -13,8 +13,9 @@ vi.mock("@supabase/supabase-js", () => ({
   }),
 }));
 
-const { isBackendUnavailable, directSignUp, directSignIn } =
-  await import("../directAuth");
+const { isBackendUnavailable, directSignUp, directSignIn } = await import(
+  "../directAuth"
+);
 
 const res = (status, type = "application/json") => ({
   status,

@@ -1,6 +1,6 @@
 export { speakTextConversational, stopSpeech } from "./synthesis.js";
 export {
-  speakValerioSentence,
+  speakMaxSentence,
   fireConfetti,
   speakAsValentina,
   getValentinaVoiceConfig,

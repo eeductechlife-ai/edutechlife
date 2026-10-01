@@ -38,7 +38,7 @@ AILabPage.jsx (wrapper, lazy load)
         ├── IALabQuizModal (411 lines)
         ├── IALabEvaluationModal
         ├── IALabEvaluationModalPremium
-        ├── IALabValerioPanel — AI coach
+        ├── IALabMaxPanel — AI coach
         ├── ExamResultViewer / ChallengeResultViewer
         ├── ResourceViewerModal (476 lines)
         │   └── OVA components (lazy): BuildGPT, IntroPrompt, ChatGPTTools,
@@ -63,7 +63,7 @@ AILabPage.jsx (wrapper, lazy load)
 | IALab.jsx | `lazy()` en route | Navegación a /ialab/:moduleId |
 | IALabQuizModal | `lazy()` + Suspense | Click en "Examen" |
 | IALabEvaluationModal | `lazy()` + Suspense | Click en "Evaluación" |
-| IALabValerioPanel | `lazy()` + Suspense | Click en coach IA |
+| IALabMaxPanel | `lazy()` + Suspense | Click en coach IA |
 | ResourceViewerModal | `lazy()` + Suspense | Click en recurso |
 | OVA components | `lazy()` en ResourceViewer | Click en OVA específica |
 | IALabForumOptimized | `lazy()` + preload | Al hacer hover en tab foro |

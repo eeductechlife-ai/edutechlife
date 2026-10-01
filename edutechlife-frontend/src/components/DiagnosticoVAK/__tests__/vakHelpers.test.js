@@ -1,7 +1,7 @@
 import { describe, test, expect, vi } from "vitest";
 import {
   MOOD_OPTIONS,
-  buildResultsURL,
+  INGENIA_QR_URL,
   getMoodLabel,
   getMoodFeedback,
   formatTime,
@@ -32,54 +32,13 @@ describe("MOOD_OPTIONS", () => {
   });
 });
 
-describe("buildResultsURL", () => {
-  test("returns an empty string when diag is null", () => {
-    expect(buildResultsURL(null)).toBe("");
+describe("INGENIA_QR_URL", () => {
+  test("points to the public IngenIA page", () => {
+    expect(INGENIA_QR_URL).toBe("https://edutechlife.co/conoce-ingenia");
   });
 
-  test("returns an empty string when diag is undefined", () => {
-    expect(buildResultsURL(undefined)).toBe("");
-  });
-
-  test("builds a QR code API url embedding the encoded results payload", () => {
-    const diag = {
-      studentName: "Ana",
-      date: "2026-07-10",
-      predominantStyle: "visual",
-      percentage: 80,
-    };
-
-    const url = buildResultsURL(diag);
-
-    expect(url).toMatch(
-      /^https:\/\/api\.qrserver\.com\/v1\/create-qr-code\/\?size=150x150&data=/,
-    );
-
-    const encodedDataURL = url.split("data=")[1];
-    const dataURL = decodeURIComponent(encodedDataURL);
-    expect(dataURL).toMatch(
-      /^https:\/\/edutechlife\.co\/diagnosis\/vak\/results\?payload=/,
-    );
-
-    const encodedPayload = dataURL.split("payload=")[1];
-    const payload = JSON.parse(decodeURIComponent(encodedPayload));
-    expect(payload).toEqual({
-      studentName: "Ana",
-      date: "2026-07-10",
-      predominantStyle: "visual",
-      percentage: 80,
-    });
-  });
-
-  test("returns an empty string when JSON.stringify throws (circular reference)", () => {
-    // Only the picked fields (studentName, date, predominantStyle, percentage)
-    // are serialized, so the circular reference must live on one of those.
-    const circularDate = {};
-    circularDate.self = circularDate;
-
-    const diag = { studentName: "Ana", date: circularDate };
-
-    expect(buildResultsURL(diag)).toBe("");
+  test("carries no student data", () => {
+    expect(new URL(INGENIA_QR_URL).search).toBe("");
   });
 });
 

@@ -62,6 +62,10 @@ export async function directSignUp({
         username: username || email.split("@")[0],
         first_name: firstName,
         last_name: lastName,
+        // El trigger handle_new_user usa full_name para profiles.full_name; sin
+        // él cae al prefijo del correo, que luego se ve en foro y ranking.
+        full_name:
+          [firstName, lastName].filter(Boolean).join(" ").trim() || undefined,
         account_type: product,
         platform: product,
         registration_source:

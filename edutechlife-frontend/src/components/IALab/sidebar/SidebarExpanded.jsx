@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { motion, useReducedMotion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
+import { useSidebarToggleLearned } from "../../../hooks/IALab/useSidebarToggleLearned";
 import {
   useIALabProgressContext,
   useIALabUIContext,
@@ -58,6 +60,11 @@ const SidebarExpanded = ({ onOpenStreak }) => {
   const getTotalPoints = useIALabStore((s) => s.getTotalPoints);
   const isStreakAtRisk = useIALabStore((s) => s.isStreakAtRisk);
   const toggleSidebar = useIALabStore((s) => s.toggleSidebarCollapsed);
+  const { learned, markLearned } = useSidebarToggleLearned();
+  const handleToggle = () => {
+    markLearned();
+    toggleSidebar();
+  };
   const setShowLeaderboard = useIALabStore((s) => s.setShowLeaderboard);
 
   const levelNum = getLevel();
@@ -105,9 +112,9 @@ const SidebarExpanded = ({ onOpenStreak }) => {
           </p>
           <button
             type="button"
-            onClick={toggleSidebar}
+            onClick={handleToggle}
             aria-label={`${Math.round(courseProgress || 0)}% ${t("sidebar.completed")} — ${t("sidebar.toggle_collapse_tip")}`}
-            className="relative w-24 h-24 flex-shrink-0 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 hover:scale-105 transition-transform duration-150"
+            className="relative w-24 h-24 flex-shrink-0 rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30 hover:scale-105 transition-transform duration-150"
           >
             <svg className="w-24 h-24 -rotate-90" viewBox="0 0 40 40">
               <circle
@@ -153,7 +160,24 @@ const SidebarExpanded = ({ onOpenStreak }) => {
                 completado
               </span>
             </div>
-            <SidebarToggleCue size="expanded" />
+            <SidebarToggleCue
+              size="expanded"
+              direction="left"
+              learned={learned}
+            />
+          </button>
+          <button
+            type="button"
+            data-testid="sidebar-toggle-hint"
+            onClick={handleToggle}
+            className="-mt-0.5 inline-flex items-center gap-1 rounded-full border border-[var(--theme-primary)]/40 bg-[var(--theme-primary)]/10 px-2.5 py-1 text-[11px] font-semibold text-[var(--theme-emphasis)] dark:text-[var(--theme-emphasis-soft)] cursor-pointer transition-colors hover:bg-[var(--theme-primary)]/20 focus:outline-none focus:ring-2 focus:ring-[var(--theme-emphasis)]/30"
+          >
+            <ChevronLeft
+              className="w-3 h-3"
+              strokeWidth={3}
+              aria-hidden="true"
+            />
+            {t("sidebar.hide_menu_hint")}
           </button>
 
           {/* Stats en fila debajo del ring */}

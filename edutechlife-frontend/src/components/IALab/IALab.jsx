@@ -86,10 +86,10 @@ import {
 } from "./constants/IALabConfig";
 import { useTheme } from "../../context/ThemeContext";
 import { useTranslation } from "../../i18n/I18nProvider";
-import ValerioFloatingButton from "./ValerioFloatingButton";
+import MaxFloatingButton from "./MaxFloatingButton";
 import { useSessionTracker } from "../../hooks/useSessionTracker";
 import { useAchievementNotifications } from "../../hooks/useAchievementNotifications";
-const IALabValerioPanel = lazy(() => import("./IALabValerioPanel"));
+const IALabMaxPanel = lazy(() => import("./IALabMaxPanel"));
 const BookmarksTab = lazy(() => import("./BookmarksTab"));
 import MobileHeader from "./shared/MobileHeader";
 import MobileInfoBar from "./shared/MobileInfoBar";
@@ -124,25 +124,25 @@ const IALabContent = memo(function () {
     challengeScores = {},
     moduleProgress = {},
     modules = [],
+    completedModules = [],
+    isEvaluationLocked = () => false,
     updateModuleActivity = () => {},
   } = useIALabProgressContext() ?? {};
   // Carga y reconcilia el progreso desde la DB al entrar a IALab (vistos +
   // última posición), sin depender de que la vista de contenido monte el hook.
   useIALabProgress();
   const { isDarkMode, toggleDarkMode } = useTheme();
-  const [showValerioPanel, setShowValerioPanel] = useState(false);
-  const showValerioDrawer = useIALabStore((s) => s.showValerioDrawer);
-  const setShowValerioDrawer = useIALabStore((s) => s.setShowValerioDrawer);
-  const valerioInitialMessage = useIALabStore((s) => s.valerioInitialMessage);
-  const setValerioInitialMessage = useIALabStore(
-    (s) => s.setValerioInitialMessage,
-  );
+  const [showMaxPanel, setShowMaxPanel] = useState(false);
+  const showMaxDrawer = useIALabStore((s) => s.showMaxDrawer);
+  const setShowMaxDrawer = useIALabStore((s) => s.setShowMaxDrawer);
+  const maxInitialMessage = useIALabStore((s) => s.maxInitialMessage);
+  const setMaxInitialMessage = useIALabStore((s) => s.setMaxInitialMessage);
   useEffect(() => {
-    if (showValerioDrawer) {
-      setShowValerioPanel(true);
-      setShowValerioDrawer(false);
+    if (showMaxDrawer) {
+      setShowMaxPanel(true);
+      setShowMaxDrawer(false);
     }
-  }, [showValerioDrawer, setShowValerioDrawer]);
+  }, [showMaxDrawer, setShowMaxDrawer]);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [mobileMenuClosing, setMobileMenuClosing] = useState(false);
   const closeMobileMenu = () => {
@@ -383,7 +383,7 @@ const IALabContent = memo(function () {
   // Auto-cerrar MAX cuando se abre un modal inmersivo (video/OVA)
   const immersiveModalOpen = useIALabStore((s) => s.immersiveModalOpen);
   useEffect(() => {
-    if (immersiveModalOpen) setShowValerioPanel(false);
+    if (immersiveModalOpen) setShowMaxPanel(false);
   }, [immersiveModalOpen]);
 
   // Tour: no mostrar si ya empezó el curso
@@ -406,6 +406,15 @@ const IALabContent = memo(function () {
         )?.title
       : null;
 
+  // Bloqueo de evaluaciones: un módulo (2..5) no permite Desafío/Mi reto hasta
+  // que el módulo anterior esté completado. La INFORMACIÓN del módulo (Inicio,
+  // Objetivos, Contenido, Práctica) sigue visible para todos.
+  const evaluationLocked = useMemo(
+    () => isEvaluationLocked(activeMod),
+    // completedModules fuerza el recálculo cuando cambia el avance.
+    [isEvaluationLocked, activeMod, completedModules],
+  );
+
   const tabStatuses = useMemo(() => {
     const mod = moduleProgress[activeMod];
     return {
@@ -420,12 +429,12 @@ const IALabContent = memo(function () {
 
   // Handler para acciones globales
   const handleAction = useCallback((action, data) => {
-    if (action === "OPEN_VALERIO") {
-      setShowValerioPanel(true);
+    if (action === "OPEN_MAX") {
+      setShowMaxPanel(true);
       return;
     }
-    if (action === "CLOSE_VALERIO") {
-      setShowValerioPanel(false);
+    if (action === "CLOSE_MAX") {
+      setShowMaxPanel(false);
       return;
     }
     if (action === "OPEN_SEARCH") {
@@ -436,7 +445,11 @@ const IALabContent = memo(function () {
       useIALabStore.getState().setPracticeTool("tutoring");
       return;
     }
-    if (action === "OPEN_EVALUATION" || action === "OPEN_CHALLENGE") {
+    if (
+      action === "OPEN_EVALUATION" ||
+      action === "OPEN_CHALLENGE" ||
+      action === "OPEN_QUIZ"
+    ) {
       const st = useIALabStore.getState();
       if (st.isEvaluationLocked(st.activeMod)) {
         setToast({
@@ -635,6 +648,7 @@ const IALabContent = memo(function () {
                 challengeScores={challengeScores}
                 completedExams={completedExams}
                 moduleProgress={moduleProgress}
+                evaluationLocked={evaluationLocked}
                 isForumOpen={isForumOpen}
                 onToggleForum={() => setIsForumOpen((prev) => !prev)}
               />
@@ -1130,8 +1144,8 @@ const IALabContent = memo(function () {
           completedExams={completedExams}
         />
 
-        <ValerioFloatingButton
-          onClick={() => handleAction("OPEN_VALERIO")}
+        <MaxFloatingButton
+          onClick={() => handleAction("OPEN_MAX")}
           t={t}
           hasStartedCourse={hasStartedCourse}
         />
@@ -1141,14 +1155,14 @@ const IALabContent = memo(function () {
             <div className="h-20 bg-white/50 rounded-xl animate-pulse" />
           }
         >
-          {showValerioPanel && (
-            <IALabValerioPanel
-              isOpen={showValerioPanel}
+          {showMaxPanel && (
+            <IALabMaxPanel
+              isOpen={showMaxPanel}
               onClose={() => {
-                setShowValerioPanel(false);
-                setValerioInitialMessage("");
+                setShowMaxPanel(false);
+                setMaxInitialMessage("");
               }}
-              initialMessage={valerioInitialMessage}
+              initialMessage={maxInitialMessage}
             />
           )}
         </Suspense>

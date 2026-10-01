@@ -6,6 +6,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import LocaleSwitcher from "../LocaleSwitcher";
 import { useNotification } from "../../context/NotificationContext";
+import { forIALab } from "../../utils/notificationScope";
 import { useCourseReminders } from "../../hooks/useCourseReminders";
 import { useBrowserNotifications } from "../../hooks/useBrowserNotifications";
 import useForumNotifications from "../../hooks/IALab/forum/useForumNotifications";
@@ -16,7 +17,8 @@ const IALabHeader = () => {
   const { t, locale } = useTranslation();
   const BADGE_INFO = getBadgeInfo(locale);
   const { courseCompleted } = useIALabUIContext();
-  const { unreadCount, createNotification } = useNotification();
+  const { notifications, createNotification } = useNotification();
+  const unreadCount = forIALab(notifications).filter((n) => !n.is_read).length;
   const { unreadCount: forumUnreadCount } = useForumNotifications();
   const { isDarkMode, toggleDarkMode } = useTheme();
   const [notifOpen, setNotifOpen] = useState(false);
@@ -51,7 +53,7 @@ const IALabHeader = () => {
 
   return (
     <header className="h-16 flex items-center justify-between px-4 md:px-5 lg:px-6 bg-[var(--theme-surface)] border-b theme-border w-full shadow-sm">
-      <div className="flex items-center gap-3 group rounded-xl text-left">
+      <div className="flex items-center gap-3 group rounded-xl text-left min-w-0">
         <div className="w-9 h-9 theme-bg-primary rounded-xl flex items-center justify-center shadow-sm theme-shadow-primary-15">
           <Icon
             name="fa-brain"
@@ -87,7 +89,7 @@ const IALabHeader = () => {
         <GlobalSearchBar />
       </div>
 
-      <div className="flex items-center gap-2 lg:gap-3">
+      <div className="flex items-center gap-2 lg:gap-3 shrink-0">
         <LocaleSwitcher />
         {/* Campana de notificaciones */}
         <div className="relative">

@@ -20,10 +20,6 @@ const CharacteristicsSection = ({ diagnosis, sColor, styleIconBg }) => {
               <span style={styles.charText}>{c}</span>
             </div>
           ))}
-        <div style={styles.charMore(sColor)}>
-          + {getCaracteristicasEstilo(diagnosis.predominantStyle).length - 5}{" "}
-          {"caracter\u00edsticas m\u00e1s..."}
-        </div>
       </div>
     </div>
   );

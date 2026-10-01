@@ -7,7 +7,6 @@ const StudentInfoSection = ({
   diagnosis,
   studentName,
   studentAge,
-  studentEmail,
   studentMood,
 }) => {
   const { t } = useTranslation();
@@ -20,18 +19,14 @@ const StudentInfoSection = ({
       </h3>
       <div style={styles.infoRow}>
         <span style={styles.infoLabel}>{t("vak.ui.pdf_name")}:</span>
-        <span style={styles.infoValue}>{diagnosis.studentName}</span>
+        <span style={styles.infoValue}>
+          {diagnosis.studentName || studentName}
+        </span>
       </div>
       <div style={styles.infoRow}>
         <span style={styles.infoLabel}>{t("vak.ui.pdf_age")}:</span>
         <span style={styles.infoValuePlain}>
           {diagnosis.studentAge || studentAge || "N/A"} {t("vak.ui.years")}
-        </span>
-      </div>
-      <div style={styles.infoRow}>
-        <span style={styles.infoLabel}>Email:</span>
-        <span style={styles.infoValuePlain}>
-          {diagnosis.studentEmail || studentEmail || "\u2014"}
         </span>
       </div>
       <div style={styles.infoRowLast}>

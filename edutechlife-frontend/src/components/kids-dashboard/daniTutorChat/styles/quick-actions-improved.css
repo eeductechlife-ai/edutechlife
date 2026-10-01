@@ -64,7 +64,7 @@
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 }
 
-/* Avanzado (13-16): Compact like Max/Valerio, 2-3 cols */
+/* Avanzado (13-16): Compact like Max/Max, 2-3 cols */
 .quick-actions-improved.avanzado .quick-actions-grid {
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }

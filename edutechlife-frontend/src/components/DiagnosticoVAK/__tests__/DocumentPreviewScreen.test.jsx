@@ -20,9 +20,6 @@ vi.mock("../screens/documentSections/ResultHeroSection", () => ({
 vi.mock("../screens/documentSections/CharacteristicsSection", () => ({
   default: () => <div data-testid="characteristics-section" />,
 }));
-vi.mock("../screens/documentSections/CareersSection", () => ({
-  default: () => <div data-testid="careers-section" />,
-}));
 vi.mock("../screens/documentSections/ParentTipsSection", () => ({
   default: () => <div data-testid="parent-tips-section" />,
 }));
@@ -65,15 +62,16 @@ const DummyIcon = (props) => <svg data-testid="style-icon" {...props} />;
 const baseDiagnosis = {
   studentName: "Ana Pérez",
   studentAge: "12",
-  studentEmail: "ana@example.com",
   studentMood: "feliz",
   parentName: "Carlos Pérez",
-  parentPhone: "3001234567",
-  parentEmail: "carlos@example.com",
   date: "2026-07-14",
-  percentage: 80,
+  percentage: 70,
   predominantStyle: "visual",
-  counts: { visual: 8, auditivo: 1, kinestesico: 1 },
+  secondaryStyle: null,
+  isMixed: false,
+  total: 20,
+  counts: { visual: 14, auditivo: 3, kinestesico: 3 },
+  scores: { visual: 70, auditivo: 15, kinestesico: 15 },
   styleDetails: {
     icon: "Eye",
     name: "Visual",
@@ -87,11 +85,8 @@ const baseProps = {
   diagnosis: baseDiagnosis,
   studentName: "Ana Pérez",
   studentAge: "12",
-  studentEmail: "ana@example.com",
   studentMood: "feliz",
   parentName: "Carlos Pérez",
-  parentPhone: "3001234567",
-  parentEmail: "carlos@example.com",
   generatePDF: vi.fn(),
   pdfLoading: false,
   onBack: vi.fn(),
@@ -108,6 +103,29 @@ describe("DocumentPreviewScreen", () => {
     render(<DocumentPreviewScreen {...baseProps} />);
     // With mocked sections the component still renders the actions area.
     expect(screen.getByTestId("document-actions")).toBeInTheDocument();
+  });
+
+  it("does not present the report as a certified or clinical document", () => {
+    const { container } = render(<DocumentPreviewScreen {...baseProps} />);
+    const text = container.textContent;
+    expect(text).not.toMatch(
+      /certificad|oficial|verificado|dictamen|psic[oó]log/i,
+    );
+    expect(screen.getByText("vak.ui.pdf_disclaimer_text")).toBeInTheDocument();
+  });
+
+  it("only shows the guardian block when a guardian name was given", () => {
+    const { rerender } = render(<DocumentPreviewScreen {...baseProps} />);
+    expect(screen.getByTestId("guardian-section")).toBeInTheDocument();
+
+    rerender(
+      <DocumentPreviewScreen
+        {...baseProps}
+        parentName=""
+        diagnosis={{ ...baseDiagnosis, parentName: "" }}
+      />,
+    );
+    expect(screen.queryByTestId("guardian-section")).not.toBeInTheDocument();
   });
 
   it("calls onBack when the back control is triggered", () => {

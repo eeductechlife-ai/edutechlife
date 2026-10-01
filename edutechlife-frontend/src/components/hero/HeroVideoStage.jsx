@@ -150,7 +150,7 @@ export const HeroVideoStage = ({
             ref={videoRef}
             className="block aspect-video w-full rounded-2xl bg-black object-cover"
             poster={slide.poster}
-            src={slide.video}
+            src={isNear ? slide.video : undefined}
             preload={isNear ? "auto" : "none"}
             playsInline
             muted

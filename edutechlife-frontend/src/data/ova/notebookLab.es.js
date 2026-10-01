@@ -26,7 +26,7 @@ export const contentScreens = [
       "Exploración guiada de NotebookLM: crea tu primer cuaderno con documentos propios",
     objective:
       "Entender el concepto de IA basada en fuentes propias y crear tu primer notebook",
-    valerioText:
+    maxText:
       "NotebookLM es una herramienta de Google que revoluciona la gestión del conocimiento personal. A diferencia de los chatbots tradicionales, trabaja exclusivamente con los documentos que tú le entregas. Esto significa que sus respuestas están 100% fundamentadas en tus fuentes, eliminando el riesgo de alucinaciones. Tu objetivo es comprender cómo funciona y por qué es diferente a los chatbots genéricos.",
     achievements: [
       { text: "Entender el concepto de IA basada en fuentes propias" },
@@ -52,7 +52,7 @@ export const contentScreens = [
     subtitle: "Calidad sobre cantidad en tu investigación",
     objective:
       "Aprender a seleccionar, organizar y sintetizar documentos para maximizar el valor de tu notebook",
-    valerioText:
+    maxText:
       "La curaduría de fuentes es la clave para sacar el máximo provecho a NotebookLM. No se trata de subir la mayor cantidad de documentos, sino de seleccionar los más relevantes y organizarlos estratégicamente. Aprenderás a elegir fuentes confiables, categorizarlas por temas y generar síntesis cruzadas que te den una visión integral de tu investigación.",
     achievements: [
       { text: "Seleccionar fuentes relevantes y confiables" },
@@ -78,7 +78,7 @@ export const contentScreens = [
     subtitle: "Tu conocimiento en formato podcast",
     objective:
       "Transformar documentos complejos en conversaciones de audio con dos presentadores virtuales",
-    valerioText:
+    maxText:
       "Una de las funciones más impresionantes de NotebookLM es Audio Overview. Esta herramienta convierte tus documentos en conversaciones de podcast generadas por IA, con dos presentadores virtuales que discuten los hallazgos clave. Es ideal para repasar contenido mientras te desplazas, pero recuerda complementarlo con resúmenes escritos y siempre revisar el contenido generado.",
     achievements: [
       { text: "Generar Audio Overviews desde tus documentos" },

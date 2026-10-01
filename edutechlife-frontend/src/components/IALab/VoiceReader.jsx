@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types';
-import { Volume2, Square } from 'lucide-react';
-import { speakTextConversational, stopSpeech } from '../../utils/speech';
-import { useTranslation } from '../../i18n/I18nProvider';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { Volume2, Square } from "lucide-react";
+import { speakTextConversational, stopSpeech } from "../../utils/speech";
+import { useTranslation } from "../../i18n/I18nProvider";
 
 const VoiceReader = ({ text }) => {
   const { t } = useTranslation();
@@ -14,22 +14,23 @@ const VoiceReader = ({ text }) => {
       setIsPlaying(false);
       return;
     }
-    speakTextConversational(text, 'valerio', () => setIsPlaying(false));
+    speakTextConversational(text, "max", () => setIsPlaying(false));
     setIsPlaying(true);
   };
 
   return (
     <button
       onClick={speak}
-      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${isPlaying ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-[#E0F7FA] text-[var(--theme-emphasis)] hover:bg-[#B2EBF2]'}`}
-      title={t('ialab.voice_reader.title')}
+      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${isPlaying ? "bg-red-100 text-red-600 hover:bg-red-200" : "bg-[#E0F7FA] text-[var(--theme-emphasis)] hover:bg-[#B2EBF2]"}`}
+      title={t("ialab.voice_reader.title")}
     >
       {isPlaying ? <Square size={16} /> : <Volume2 size={16} />}
-      {isPlaying ? t('ialab.voice_reader.stop') : t('ialab.voice_reader.listen')}
+      {isPlaying
+        ? t("ialab.voice_reader.stop")
+        : t("ialab.voice_reader.listen")}
     </button>
   );
 };
-
 
 VoiceReader.propTypes = {
   text: PropTypes.string,

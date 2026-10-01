@@ -2,69 +2,43 @@ import { useEffect, useState, useRef } from "react";
 import { useStudent } from "../../../context/StudentContext";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import useValentinaAgent from "../../../hooks/useValentinaAgent";
-import { getQuestionsByAge } from "../../../data/vakQuestions";
+import { getQuestionsByAge, getVakMode } from "../../../data/vakQuestions";
 import { VALENTINA_MESSAGES, warmupTts } from "../vakVoice";
 import { safeStorage } from "../../../utils/storage";
-import { MOOD_OPTIONS } from "../vakHelpers";
 import { useSupabase } from "../../../hooks/useSupabase";
-import { getIconComponent } from "../getIconComponent";
 import { useNavigationHandlers } from "./navigation";
 import {
   STORAGE_KEY,
-  INTRO_TIMEOUT_MS,
+  PROGRESS_TTL_MS,
   VALENTINA_RESULT_DELAY_MS,
-  TRANSITION_DELAY_MS,
-  VALENTINA_TRANSITION_TIMEOUT_MS,
-  MOOD_FEEDBACK_MS,
-  CONFETTI_DURATION_MS,
-  SAVE_INDICATOR_MS,
 } from "./constants";
+
+const isTypingTarget = (el) =>
+  !!el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA");
 
 export default function useDiagnosticoVAK({ onNavigate }) {
   const { t } = useTranslation();
-  const { studentInfo, updateStudentInfo } = useStudent();
+  const { clearStudentInfo } = useStudent();
   const { supabase, userId } = useSupabase();
 
   const [phase, setPhase] = useState("intro");
-  const [studentName, setStudentName] = useState(studentInfo.name || "");
-  const [studentAge, setStudentAge] = useState(studentInfo.age || "");
-  const [studentEmail, setStudentEmail] = useState(studentInfo.email || "");
-  const [studentPhone, setStudentPhone] = useState(studentInfo.phone || "");
-  const [studentMood, setStudentMood] = useState(studentInfo.mood || "");
+  const [studentName, setStudentName] = useState("");
+  const [studentAge, setStudentAge] = useState("");
+  const [studentMood, setStudentMood] = useState("");
+  const [parentName, setParentName] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
-  const [diagnosis, setDiagnosis] = useState(studentInfo.diagnosis || null);
-  const [date, setDate] = useState("");
-  const [tempName, setTempName] = useState(studentInfo.name || "");
-  const [tempAge, setTempAge] = useState(studentInfo.age || "");
-  const [tempEmail, setTempEmail] = useState(studentInfo.email || "");
-  const [tempPhone, setTempPhone] = useState(studentInfo.phone || "");
-  const [tempMood, setTempMood] = useState(studentInfo.mood || "");
+  const [diagnosis, setDiagnosis] = useState(null);
+  const [startTime, setStartTime] = useState(null);
   const [error, setError] = useState(null);
   const [pdfLoading, setPdfLoading] = useState(false);
-  const [selectedMoodOption, setSelectedMoodOption] = useState(() => {
-    return MOOD_OPTIONS.find((m) => m.value === studentInfo.mood) || null;
-  });
-  const [emailError, setEmailError] = useState(false);
-  const [ageError, setAgeError] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [elapsedTime, setElapsedTime] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
-  const [showSaveIndicator, setShowSaveIndicator] = useState(false);
-
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [resumeOffer, setResumeOffer] = useState(null);
 
   const [valeriaEnabled, setValeriaEnabled] = useState(true);
-  const [valeriaVolume, setValeriaVolume] = useState(1.0);
-  const [valentinaIntroComplete, setValentinaIntroComplete] = useState(false);
-  const [feedbackPending, setFeedbackPending] = useState(false);
-  const [showFeedbackButton, setShowFeedbackButton] = useState(false);
-
-  const [parentName, setParentName] = useState("");
-  const [parentPhone, setParentPhone] = useState("");
-  const [parentEmail, setParentEmail] = useState("");
+  const [valeriaVolume] = useState(1.0);
 
   const [habeasDataAccepted, setHabeasDataAccepted] = useState(false);
   const [showHabeasModal, setShowHabeasModal] = useState(false);
@@ -72,19 +46,14 @@ export default function useDiagnosticoVAK({ onNavigate }) {
   const [moodFeedbackText, setMoodFeedbackText] = useState("");
   const [showMoodFeedback, setShowMoodFeedback] = useState(false);
 
-  const [ageQuestions, setAgeQuestions] = useState(() =>
-    getQuestionsByAge(parseInt(studentInfo.age) || 12),
-  );
+  const [ageQuestions, setAgeQuestions] = useState(() => getQuestionsByAge(12));
 
   const chartRef = useRef(null);
-  const timerRef = useRef(null);
-  const questionJustReadRef = useRef(false);
   const timeoutRefs = useRef([]);
-  const welcomeStartedRef = useRef(false);
 
   const setTimeoutSafe = (fn, delay) => {
     const id = setTimeout(() => {
-      timeoutRefs.current = timeoutRefs.current.filter((t) => t !== id);
+      timeoutRefs.current = timeoutRefs.current.filter((tid) => tid !== id);
       fn();
     }, delay);
     timeoutRefs.current.push(id);
@@ -95,288 +64,226 @@ export default function useDiagnosticoVAK({ onNavigate }) {
     isValentinaSpeaking,
     valeriaExpression,
     setValeriaVolume: setHookVolume,
-    startWelcomeSequence,
-    confirmNameAndAskAge,
-    confirmAgeAndAskEmail,
-    confirmEmailAndAskPhone,
-    confirmPhoneAndAskMood,
-    giveMoodFeedback,
-    transitionToTest,
     readQuestionWithOptions,
-    giveEncouragement,
-    giveEncouragementNoName,
-    giveProgressUpdate,
-    announceResults,
-    announceTestEnd,
-    farewell,
     speakAsValentina,
+    stopSpeaking,
   } = useValentinaAgent({
-    studentName: studentName,
     studentAge: parseInt(studentAge) || 12,
-    studentMood,
-    phase,
-    currentQuestion,
-    totalQuestions: ageQuestions.length,
-    diagnosis,
     enabled: valeriaEnabled,
   });
 
   useEffect(() => {
     warmupTts();
+    // Versiones anteriores dejaban nombre, edad y resultado guardados en el
+    // navegador; en equipos compartidos eso lo vería la siguiente persona.
+    clearStudentInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Una prueba a medias solo se ofrece retomar si es reciente.
   useEffect(() => {
-    if (phase === "intro" && valeriaEnabled && !welcomeStartedRef.current) {
-      welcomeStartedRef.current = true;
-      startWelcomeSequence(() => {
-        setValentinaIntroComplete(true);
-      });
-    }
-  }, [phase, valeriaEnabled]);
-
-  useEffect(() => {
-    if (phase !== "intro") return;
-    const timeout = setTimeout(() => {
-      setValentinaIntroComplete(true);
-    }, INTRO_TIMEOUT_MS);
-    return () => clearTimeout(timeout);
-  }, [phase]);
-
-  useEffect(() => {
-    if (
-      phase === "test" &&
-      currentQuestion < ageQuestions.length &&
-      valeriaEnabled
-    ) {
-      const q = ageQuestions[currentQuestion];
-      readQuestionWithOptions(
-        q.text,
-        q.options,
-        currentQuestion + 1,
-        ageQuestions.length,
-      );
-      questionJustReadRef.current = true;
-    }
-  }, [currentQuestion, phase, valeriaEnabled]);
-
-  useEffect(() => {
-    if (
-      !isValentinaSpeaking &&
-      questionJustReadRef.current &&
-      phase === "test" &&
-      valeriaEnabled
-    ) {
-      questionJustReadRef.current = false;
-      const questionNum = currentQuestion + 1;
-      if (questionNum === 6) {
-        setFeedbackPending(true);
-        setShowFeedbackButton(true);
+    const saved = safeStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+    try {
+      const parsed = JSON.parse(saved);
+      const fresh =
+        parsed.lastUpdate && Date.now() - parsed.lastUpdate < PROGRESS_TTL_MS;
+      if (parsed.phase === "test" && fresh && Array.isArray(parsed.answers)) {
+        setResumeOffer(parsed);
+      } else {
+        safeStorage.removeItem(STORAGE_KEY);
       }
+    } catch {
+      safeStorage.removeItem(STORAGE_KEY);
     }
-  }, [isValentinaSpeaking, currentQuestion, phase, valeriaEnabled]);
+  }, []);
 
-  useEffect(() => {
-    if (!valeriaEnabled) {
-      setFeedbackPending(false);
-      setShowFeedbackButton(false);
-      questionJustReadRef.current = false;
-    }
-  }, [valeriaEnabled]);
-
-  useEffect(() => {
-    if (phase === "result" && valeriaEnabled && diagnosis) {
-      const timer = setTimeout(async () => {
-        const age =
-          parseInt(studentAge) || parseInt(diagnosis.studentAge) || 12;
-        const message = VALENTINA_MESSAGES.all.resultsShort(
-          diagnosis.studentName || studentName || "Estudiante",
-          diagnosis.predominantStyle || "visual",
-          diagnosis.percentage || 0,
-          age,
-        );
-        await speakAsValentina(message);
-      }, VALENTINA_RESULT_DELAY_MS);
-      return () => clearTimeout(timer);
-    }
-  }, [phase, valeriaEnabled, diagnosis]);
-
-  useEffect(() => {
-    if (phase === "intro") {
-      setDate(new Date().toLocaleDateString());
-    }
-  }, [phase]);
-
-  useEffect(() => {
-    if (phase === "calibration" && studentName.length >= 2 && valeriaEnabled) {
-      const timer = setTimeout(async () => {
-        await confirmNameAndAskAge(studentName);
-      }, 800);
-      return () => clearTimeout(timer);
-    }
-  }, [studentName, phase, valeriaEnabled]);
-
-  useEffect(() => {
-    if (phase === "calibration" && studentMood && valeriaEnabled) {
-      const timer = setTimeout(async () => {
-        await giveMoodFeedback(studentMood, studentName);
-      }, 600);
-      return () => clearTimeout(timer);
-    }
-  }, [studentMood, phase, valeriaEnabled]);
-
+  // El progreso solo se guarda durante las preguntas y se borra al terminar.
   useEffect(() => {
     if (phase === "test") {
-      if (!startTime) {
-        setStartTime(Date.now());
-      }
-
-      timerRef.current = setInterval(() => {
-        setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
-      }, 1000);
-    } else if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [phase, startTime]);
-
-  useEffect(() => {
-    return () => {
-      timeoutRefs.current.forEach((id) => clearTimeout(id));
-      timeoutRefs.current = [];
-    };
-  }, []);
-
-  useEffect(() => {
-    const savedData = safeStorage.getItem(STORAGE_KEY);
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        if (parsed.phase && parsed.phase !== "intro") {
-          setPhase(parsed.phase || "intro");
-          setStudentName(parsed.studentName || "");
-          setStudentAge(parsed.studentAge || "");
-          setStudentEmail(parsed.studentEmail || "");
-          setStudentPhone(parsed.studentPhone || "");
-          setStudentMood(parsed.studentMood || "");
-          setCurrentQuestion(parsed.currentQuestion || 0);
-          setAnswers(parsed.answers || []);
-          setStartTime(parsed.startTime || null);
-        }
-      } catch (e) {}
-    }
-  }, []);
-
-  useEffect(() => {
-    const progressData = {
-      phase,
-      studentName,
-      studentAge,
-      studentEmail,
-      studentPhone,
-      studentMood,
-      currentQuestion,
-      answers,
-      startTime,
-      lastUpdate: Date.now(),
-    };
-    safeStorage.setItem(STORAGE_KEY, JSON.stringify(progressData));
-
-    if (phase === "test" || phase === "calibration") {
-      setShowSaveIndicator(true);
-      setTimeoutSafe(() => setShowSaveIndicator(false), SAVE_INDICATOR_MS);
+      safeStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          phase,
+          studentName,
+          studentAge,
+          studentMood,
+          currentQuestion,
+          answers,
+          startTime,
+          lastUpdate: Date.now(),
+        }),
+      );
+    } else if (phase === "result" || phase === "document-preview") {
+      safeStorage.removeItem(STORAGE_KEY);
     }
   }, [
     phase,
     studentName,
     studentAge,
-    studentEmail,
-    studentPhone,
     studentMood,
     currentQuestion,
     answers,
     startTime,
   ]);
 
-  const clearProgress = () => {
-    safeStorage.removeItem(STORAGE_KEY);
-  };
+  useEffect(
+    () => () => {
+      timeoutRefs.current.forEach((id) => clearTimeout(id));
+      timeoutRefs.current = [];
+    },
+    [],
+  );
 
-  const toggleHighContrast = () => {
-    setHighContrast(!highContrast);
-  };
+  // Valeria lee la pregunta, pero nunca bloquea las respuestas.
+  useEffect(() => {
+    if (phase !== "test" || !valeriaEnabled) return undefined;
+    const q = ageQuestions[currentQuestion];
+    if (!q) return undefined;
+    readQuestionWithOptions(
+      `${q.context} ${q.text}`,
+      q.options,
+      currentQuestion + 1,
+      ageQuestions.length,
+    );
+    return () => stopSpeaking();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQuestion, phase, valeriaEnabled, ageQuestions]);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.altKey && e.key === "c") {
-        e.preventDefault();
-        toggleHighContrast();
-      }
-      if (e.key === "Escape" && onNavigate) {
-        onNavigate("neuroentorno");
-      }
-    };
+    if (phase === "result" && valeriaEnabled && diagnosis) {
+      const timer = setTimeout(async () => {
+        await speakAsValentina(
+          VALENTINA_MESSAGES.all.resultsShort(
+            diagnosis.studentName || studentName || "Estudiante",
+            diagnosis.predominantStyle || "visual",
+          ),
+        );
+      }, VALENTINA_RESULT_DELAY_MS);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, valeriaEnabled, diagnosis]);
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [highContrast, onNavigate]);
+  const clearProgress = () => safeStorage.removeItem(STORAGE_KEY);
+
+  const toggleHighContrast = () => setHighContrast((v) => !v);
 
   const {
     startTest,
-    handleStart,
     submitCalibration,
-    handleFeedbackClick,
     handleAnswer,
+    goBack,
     handleMoodSelect,
-    handleParentSubmit,
   } = useNavigationHandlers({
-    t,
     studentName,
     studentAge,
     studentMood,
-    studentEmail,
-    studentPhone,
     currentQuestion,
     answers,
     ageQuestions,
-    date,
-    elapsedTime,
+    startTime,
     parentName,
-    parentPhone,
-    parentEmail,
-    valeriaEnabled,
-    valentinaIntroComplete,
-    studentInfo,
     supabase,
     userId,
     setPhase,
-    setStudentName,
-    setStudentAge,
     setStartTime,
-    setElapsedTime,
-    setIsTransitioning,
     setAgeQuestions,
-    updateStudentInfo,
     setCurrentQuestion,
     setAnswers,
     setShowConfetti,
     setShowCelebration,
     setDiagnosis,
     setError,
-    setShowFeedbackButton,
-    setFeedbackPending,
     setShowMoodFeedback,
     setMoodFeedbackText,
     setStudentMood,
-    transitionToTest,
-    giveEncouragementNoName,
-    announceTestEnd,
-    giveProgressUpdate,
+    setValeriaEnabled,
     setTimeoutSafe,
-    clearProgress,
+    stopSpeaking,
   });
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.altKey && e.key === "c") {
+        e.preventDefault();
+        toggleHighContrast();
+        return;
+      }
+      if (e.key === "Escape" && onNavigate) {
+        onNavigate("neuroentorno");
+        return;
+      }
+      if (phase === "test" && !isTypingTarget(e.target)) {
+        const option =
+          ageQuestions[currentQuestion]?.options[Number(e.key) - 1];
+        if (option) {
+          e.preventDefault();
+          handleAnswer(option);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, currentQuestion, ageQuestions, answers, onNavigate]);
+
+  const listenToQuestion = () => {
+    const q = ageQuestions[currentQuestion];
+    if (!q) return;
+    if (!valeriaEnabled) {
+      // Al activar la voz, el efecto de lectura dice la pregunta.
+      setValeriaEnabled(true);
+      return;
+    }
+    readQuestionWithOptions(
+      `${q.context} ${q.text}`,
+      q.options,
+      currentQuestion + 1,
+      ageQuestions.length,
+    );
+  };
+
+  const resumeProgress = () => {
+    if (!resumeOffer) return;
+    const age = parseInt(resumeOffer.studentAge, 10) || 12;
+    setStudentName(resumeOffer.studentName || "");
+    setStudentAge(resumeOffer.studentAge || "");
+    setStudentMood(resumeOffer.studentMood || "");
+    setAgeQuestions(getQuestionsByAge(age));
+    setValeriaEnabled(getVakMode(age) === "explorer");
+    setAnswers(resumeOffer.answers || []);
+    setCurrentQuestion(resumeOffer.currentQuestion || 0);
+    setStartTime(resumeOffer.startTime || Date.now());
+    setHabeasDataAccepted(true);
+    setResumeOffer(null);
+    setPhase("test");
+  };
+
+  const discardProgress = () => {
+    clearProgress();
+    setResumeOffer(null);
+  };
+
+  const resetAll = () => {
+    stopSpeaking();
+    clearProgress();
+    setPhase("intro");
+    setStudentName("");
+    setStudentAge("");
+    setStudentMood("");
+    setParentName("");
+    setCurrentQuestion(0);
+    setAnswers([]);
+    setDiagnosis(null);
+    setStartTime(null);
+    setError(null);
+    setHabeasDataAccepted(false);
+    setShowMoodFeedback(false);
+    setMoodFeedbackText("");
+  };
 
   return {
     t,
@@ -386,47 +293,21 @@ export default function useDiagnosticoVAK({ onNavigate }) {
     setStudentName,
     studentAge,
     setStudentAge,
-    studentEmail,
-    setStudentEmail,
-    studentPhone,
-    setStudentPhone,
     studentMood,
-    setStudentMood,
+    parentName,
+    setParentName,
     currentQuestion,
-    setCurrentQuestion,
     answers,
-    setAnswers,
     diagnosis,
-    setDiagnosis,
-    date,
     error,
     setError,
     pdfLoading,
-    setPdfLoading,
-    emailError,
-    setEmailError,
-    ageError,
-    setAgeError,
-    elapsedTime,
     showConfetti,
     showCelebration,
     highContrast,
-    showSaveIndicator,
-    isTransitioning,
     valeriaEnabled,
     setValeriaEnabled,
     valeriaVolume,
-    setValeriaVolume,
-    valentinaIntroComplete,
-    setValentinaIntroComplete,
-    feedbackPending,
-    showFeedbackButton,
-    parentName,
-    setParentName,
-    parentPhone,
-    setParentPhone,
-    parentEmail,
-    setParentEmail,
     habeasDataAccepted,
     setHabeasDataAccepted,
     showHabeasModal,
@@ -435,19 +316,18 @@ export default function useDiagnosticoVAK({ onNavigate }) {
     showMoodFeedback,
     ageQuestions,
     chartRef,
-    timerRef,
     isValentinaSpeaking,
     valeriaExpression,
-    setTimeoutSafe,
-    readQuestionWithOptions,
+    resumeOffer,
     startTest,
-    handleStart,
     submitCalibration,
-    handleFeedbackClick,
     handleAnswer,
+    goBack,
     handleMoodSelect,
-    handleParentSubmit,
-    clearProgress,
+    listenToQuestion,
+    resumeProgress,
+    discardProgress,
+    resetAll,
     toggleHighContrast,
     setHookVolume,
     generatePDF: async () => {

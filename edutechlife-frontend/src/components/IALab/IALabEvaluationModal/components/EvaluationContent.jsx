@@ -50,6 +50,28 @@ export function ErrorState({ error, onRetry }) {
   );
 }
 
+// Mínimo para avanzar: en la clasificación (Rol/Contexto/Tarea) las tres
+// categorías completas; en los pasos de redacción del módulo 1, un prompt con
+// contenido real (antes bastaba un solo carácter).
+const MIN_PROMPT_CHARS = 30;
+export const isStepResponseComplete = (response, moduleId, step) => {
+  if (!response) return false;
+  try {
+    const parsed = JSON.parse(response);
+    if (parsed && typeof parsed === "object" && "rol" in parsed) {
+      return ["rol", "contexto", "tarea"].every(
+        (k) => typeof parsed[k] === "string" && parsed[k].trim(),
+      );
+    }
+  } catch {
+    /* texto libre */
+  }
+  if (Number(moduleId) === 1 && step > 1) {
+    return String(response).trim().length >= MIN_PROMPT_CHARS;
+  }
+  return true;
+};
+
 export function StepContent({
   steps,
   step,
@@ -78,6 +100,11 @@ export function StepContent({
   const StepComponent = steps[step - 1];
   const currentExercise = resolveStepExercise(exercises, moduleId, step);
   const responseKey = `ej${step}`;
+  const stepComplete = isStepResponseComplete(
+    responses[responseKey],
+    moduleId,
+    step,
+  );
 
   const ej1Parsed = (() => {
     try {
@@ -248,17 +275,19 @@ export function StepContent({
             {t("ialab.evaluation.modal.step_of", { step, total: totalSteps })}
           </span>
 
-          {!responses[responseKey] && (
+          {!stepComplete && (
             <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-1">
               <Icon name="fa-info-circle" aria-hidden="true" />
-              {t("ialab.evaluation.modal.complete_step_hint", {
-                step: titleKeys?.[step - 1]
-                  ? t(titleKeys[step - 1])
-                  : t("ialab.evaluation.modal.step_of", {
-                      step,
-                      total: totalSteps,
-                    }),
-              })}
+              {responses[responseKey] && Number(moduleId) === 1 && step > 1
+                ? t("ialab.evaluation.modal.min_chars_hint", { min: 30 })
+                : t("ialab.evaluation.modal.complete_step_hint", {
+                    step: titleKeys?.[step - 1]
+                      ? t(titleKeys[step - 1])
+                      : t("ialab.evaluation.modal.step_of", {
+                          step,
+                          total: totalSteps,
+                        }),
+                  })}
             </p>
           )}
         </div>
@@ -276,7 +305,7 @@ export function StepContent({
           {step < totalSteps ? (
             <button
               onClick={handleNextStep}
-              disabled={!responses[responseKey] || loading}
+              disabled={!stepComplete || loading}
               className="flex-1 sm:flex-initial px-6 py-3 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-[0_0_20px_rgba(0,188,212,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
             >
               {t("ialab.evaluation.modal.next")}
@@ -285,7 +314,7 @@ export function StepContent({
           ) : (
             <button
               onClick={handleSubmitEvaluation}
-              disabled={!responses[responseKey] || loading || isSavingGrade}
+              disabled={!stepComplete || loading || isSavingGrade}
               className="flex-1 sm:flex-initial px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
             >
               {isSavingGrade ? (

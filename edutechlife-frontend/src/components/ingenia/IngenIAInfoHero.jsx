@@ -7,6 +7,7 @@ import { Icon } from "../../utils/iconMapping.jsx";
 import MagneticButton from "../MagneticButton";
 import FloatingParticles from "../FloatingParticles";
 import { containerVariants, childVariant } from "./IngenIAShared";
+import { PlatformShowcase } from "../hero/PlatformShowcase";
 
 const useAnimatedCounter = (target, duration = 2000, start = false) => {
   const [count, setCount] = useState(0);
@@ -30,12 +31,6 @@ const useAnimatedCounter = (target, duration = 2000, start = false) => {
 
   return count;
 };
-
-const ORBIT_ICONS = [
-  { icon: "fa-users", style: { top: "1%", left: "62%" } },
-  { icon: "fa-search", style: { top: "42%", left: "-4%" } },
-  { icon: "fa-chart-line", style: { bottom: "3%", right: "0%" } },
-];
 
 const STATS = [
   {
@@ -192,92 +187,13 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
           </motion.div>
 
           <motion.div
-            initial={reduce ? false : { opacity: 0, scale: 0.92 }}
+            initial={reduce ? false : { opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
-            whileHover={reduce ? undefined : { scale: 1.02 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-            className="relative mx-auto flex w-full max-w-md items-center justify-center lg:col-span-6 lg:max-w-none"
+            className="relative mx-auto w-full max-w-2xl lg:col-span-6 lg:max-w-none"
           >
-            <motion.div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-[14%] rounded-full bg-gradient-to-br from-primary-light/25 via-corporate/15 to-mint/20 blur-3xl"
-              animate={
-                reduce
-                  ? false
-                  : { opacity: [0.35, 0.65, 0.35], scale: [1, 1.06, 1] }
-              }
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            />
-
-            <svg
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 h-full w-full"
-              viewBox="0 0 500 500"
-              fill="none"
-              preserveAspectRatio="xMidYMid meet"
-            >
-              <circle
-                cx="250"
-                cy="250"
-                r="220"
-                stroke="rgba(77,168,196,0.4)"
-                strokeWidth="1.5"
-              />
-              <motion.circle
-                cx="250"
-                cy="250"
-                r="196"
-                stroke="rgba(102,204,204,0.5)"
-                strokeWidth="1"
-                strokeDasharray="4 10"
-                animate={reduce ? false : { rotate: -360 }}
-                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                style={{ transformOrigin: "250px 250px" }}
-              />
-              <motion.g
-                animate={reduce ? false : { rotate: 360 }}
-                transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-                style={{ transformOrigin: "250px 250px" }}
-              >
-                <circle cx="250" cy="30" r="4" fill="#4DA8C4" />
-                <circle cx="470" cy="250" r="4" fill="#66CCCC" />
-                <circle cx="250" cy="470" r="4" fill="#4DA8C4" />
-                <circle cx="30" cy="250" r="4" fill="#66CCCC" />
-              </motion.g>
-            </svg>
-
-            <motion.img
-              src="/images/ingenia-hero-kid.webp"
-              alt="Estudiante de Edutechlife aprendiendo con IngenIA"
-              loading="lazy"
-              className="relative z-10 h-[240px] w-auto object-contain sm:h-[320px] lg:h-[400px]"
-              animate={reduce ? false : { y: [0, -10, 0] }}
-              transition={{
-                duration: 5.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-
-            {ORBIT_ICONS.map((badge, i) => (
-              <motion.span
-                key={badge.icon}
-                className="absolute z-20 flex h-12 w-12 items-center justify-center rounded-full border border-primary-light/30 bg-white shadow-[0_10px_30px_-8px_rgba(0,75,99,0.35)] sm:h-14 sm:w-14"
-                style={badge.style}
-                animate={reduce ? false : { y: [0, -8, 0] }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: i * 0.7,
-                }}
-              >
-                <Icon
-                  name={badge.icon}
-                  className="h-5 w-5 text-primary-light sm:h-6 sm:w-6"
-                />
-              </motion.span>
-            ))}
+            {/* La plataforma en acción: Dani presentando IngenIA (igual que en el inicio) */}
+            <PlatformShowcase slideId="ingenia" />
           </motion.div>
         </div>
 

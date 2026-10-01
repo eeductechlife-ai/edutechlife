@@ -91,9 +91,9 @@ const RevealText = ({ text, offset = 0, colorAt }) => {
   const words = text.split(" ");
   return words.map((word, i) => (
     <Fragment key={`${word}-${i}`}>
-      <span className="-mb-[0.12em] inline-block overflow-hidden pb-[0.12em] align-bottom">
+      <span className="-mb-[0.12em] inline-block overflow-hidden pb-[0.12em] align-bottom [font-family:inherit]">
         <motion.span
-          className="inline-block"
+          className="inline-block [font-family:inherit]"
           custom={i + offset}
           variants={wordVariants}
           style={colorAt ? { color: colorAt(i, words.length) } : undefined}
@@ -121,22 +121,23 @@ const brandColorAt = (i, n) => {
 };
 
 const TITLE_CLASS =
-  "font-display text-[2.1rem] font-extrabold leading-[1.02] tracking-[-0.025em] text-petroleum-dark [text-wrap:balance] sm:text-5xl lg:text-[3.35rem]";
+  "font-display text-[2.1rem] font-black leading-[1.02] tracking-[-0.045em] text-petroleum [text-wrap:balance] sm:text-5xl lg:text-[3.35rem]";
 const PRODUCT_TITLE_CLASS = TITLE_CLASS.replace(
   "lg:text-[3.35rem]",
   "lg:text-[2.7rem]",
 );
 const SUBTITLE_CLASS =
-  "mt-5 max-w-[46ch] text-base leading-relaxed text-slate-600 sm:text-lg lg:mx-0 mx-auto";
+  "mt-5 max-w-[46ch] text-base leading-relaxed font-medium text-slate-500 sm:text-lg lg:mx-0 mx-auto";
 const CTA_BASE =
-  "inline-flex min-h-[52px] items-center justify-center gap-3 whitespace-nowrap rounded-full text-base font-bold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petroleum";
+  "inline-flex min-h-[52px] items-center justify-center gap-3 whitespace-nowrap rounded-full text-base font-bold transition-[background-color,border-color,color,transform,box-shadow] duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petroleum";
 
-const MainCopy = ({ t, isActive }) => {
+const MainCopy = ({ t, isActive, stats, statsRef }) => {
   const tab = isActive ? 0 : -1;
   return (
     <div className="text-center lg:text-left">
       <h1 className={TITLE_CLASS}>
         <RevealText text={t("hero.title_line1")} />
+        <br className="hidden lg:inline" />
         <RevealText
           text={t("hero.title_line2")}
           offset={t("hero.title_line1").split(" ").length}
@@ -144,23 +145,54 @@ const MainCopy = ({ t, isActive }) => {
         />
       </h1>
       <p className={SUBTITLE_CLASS}>{t("hero.subtitle_before")}</p>
-      <div className="mt-8 flex flex-col items-center gap-2 sm:flex-row sm:justify-center lg:justify-start">
+      <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center lg:justify-start">
         <Link
           to="/ialab-academic"
           tabIndex={tab}
-          className={`${CTA_BASE} w-full px-7 bg-petroleum text-white shadow-[0_18px_40px_-16px_rgba(0,75,99,0.7)] hover:bg-petroleum-dark sm:w-auto`}
+          className={`${CTA_BASE} group w-full px-7 bg-petroleum text-white shadow-[0_18px_40px_-16px_rgba(0,75,99,0.7)] hover:-translate-y-0.5 hover:bg-petroleum-dark sm:w-auto`}
         >
           {t("hero.cta_conoce_smartboard")}
-          <ArrowRight size={18} aria-hidden="true" />
+          <ArrowRight
+            size={18}
+            aria-hidden="true"
+            className="transition-transform duration-300 group-hover:translate-x-0.5"
+          />
         </Link>
         <Link
           to="/conoce-ingenia"
           tabIndex={tab}
-          className={`${CTA_BASE} px-4 text-petroleum underline decoration-petroleum/30 decoration-2 underline-offset-[6px] hover:decoration-petroleum`}
+          className={`${CTA_BASE} group w-full border-2 border-[rgba(0,75,99,0.4)] bg-white/80 px-7 text-petroleum shadow-[0_12px_28px_-18px_rgba(0,75,99,0.45)] backdrop-blur-md hover:-translate-y-0.5 hover:border-[#004B63] hover:bg-[#004B63] hover:text-white sm:w-auto`}
         >
           {t("hero.cta_smartboard")}
+          <ArrowRight
+            size={18}
+            aria-hidden="true"
+            className="transition-transform duration-300 group-hover:translate-x-0.5"
+          />
         </Link>
       </div>
+      {/* Prueba social junto a la acción: cifras sobrias con separador fino */}
+      <dl
+        ref={statsRef}
+        className="mx-auto mt-9 flex max-w-md items-center justify-center gap-6 border-t border-petroleum/10 pt-6 lg:mx-0 lg:justify-start"
+      >
+        <div className="flex flex-col-reverse">
+          <dt className="text-xs font-medium text-slate-500 sm:text-sm">
+            {t("hero.stat_estudiantes")}
+          </dt>
+          <dd className="font-display text-2xl font-black tracking-[-0.03em] text-petroleum sm:text-[1.75rem]">
+            {stats.students.toLocaleString()}+
+          </dd>
+        </div>
+        <div className="flex flex-col-reverse border-l border-petroleum/15 pl-6">
+          <dt className="text-xs font-medium text-slate-500 sm:text-sm">
+            {t("hero.stat_anios_experiencia")}
+          </dt>
+          <dd className="font-display text-2xl font-black tracking-[-0.03em] text-petroleum sm:text-[1.75rem]">
+            {stats.years}+
+          </dd>
+        </div>
+      </dl>
     </div>
   );
 };
@@ -365,7 +397,12 @@ const Hero = memo(() => {
                   >
                     <motion.div style={{ y: copyY, opacity: copyFade }}>
                       {slide.kind === "photo" ? (
-                        <MainCopy t={t} isActive={isActive} />
+                        <MainCopy
+                          t={t}
+                          isActive={isActive}
+                          stats={stats}
+                          statsRef={statsRef}
+                        />
                       ) : (
                         <ProductCopy slide={slide} t={t} isActive={isActive} />
                       )}
@@ -382,9 +419,6 @@ const Hero = memo(() => {
                         running={running}
                         reducedMotion={reducedMotion}
                         stage={stage}
-                        stats={stats}
-                        statsRef={statsRef}
-                        t={t}
                       />
                     ) : (
                       <HeroVideoStage

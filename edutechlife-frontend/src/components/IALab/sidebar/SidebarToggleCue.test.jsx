@@ -20,6 +20,27 @@ describe("SidebarToggleCue", () => {
     expect(container.querySelector(".pointer-events-none")).toBeInTheDocument();
   });
 
+  it("muestra el tirador con chevrón según la dirección", () => {
+    const { container, rerender } = render(
+      <SidebarToggleCue size="expanded" direction="left" />,
+    );
+    expect(screen.getByTestId("sidebar-toggle-handle")).toBeInTheDocument();
+    expect(container.querySelector(".lucide-chevron-left")).toBeInTheDocument();
+    rerender(<SidebarToggleCue size="collapsed" direction="right" />);
+    expect(
+      container.querySelector(".lucide-chevron-right"),
+    ).toBeInTheDocument();
+  });
+
+  it("detiene las animaciones cuando el estudiante ya lo aprendió", () => {
+    const { container } = render(<SidebarToggleCue learned />);
+    expect(container.querySelector(".animate-ping")).not.toBeInTheDocument();
+    expect(
+      container.querySelector(".animate-toggle-nudge"),
+    ).not.toBeInTheDocument();
+    expect(screen.getByTestId("sidebar-toggle-handle")).toBeInTheDocument();
+  });
+
   it("acepta variante de tamaño sin romper", () => {
     render(<SidebarToggleCue size="collapsed" />);
     expect(screen.getByTestId("sidebar-toggle-cue")).toBeInTheDocument();

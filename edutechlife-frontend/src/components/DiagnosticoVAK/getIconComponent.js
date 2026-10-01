@@ -20,6 +20,9 @@ import {
   Globe,
   Cpu,
   Lightbulb,
+  Smile,
+  Meh,
+  Frown,
 } from "lucide-react";
 
 export function getIconComponent(iconName) {
@@ -66,6 +69,12 @@ export function getIconComponent(iconName) {
       return Cpu;
     case "Lightbulb":
       return Lightbulb;
+    case "Smile":
+      return Smile;
+    case "Meh":
+      return Meh;
+    case "Frown":
+      return Frown;
     default:
       return Video;
   }

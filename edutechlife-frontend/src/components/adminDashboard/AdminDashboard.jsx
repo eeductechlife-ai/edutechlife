@@ -6,6 +6,7 @@ import { useSupabase } from "../../hooks/useSupabase";
 import { useAdminAnalytics } from "../../hooks/useAdminAnalytics";
 import {
   fetchVakDiagnostics,
+  fetchAnonymousVakResults,
   aggregateDiagnostics,
 } from "../../services/institutionalAnalytics";
 import { fetchInstitutions } from "../../services/institutionService";
@@ -54,12 +55,16 @@ const AdminDashboard = ({ onLogout, onBack }) => {
           if (!cancelled) setDataSource("demo");
           return;
         }
-        const rows = await fetchVakDiagnostics(
-          supabase,
+        const filter =
           institutionFilter !== "all"
             ? { institutionId: institutionFilter }
-            : {},
-        );
+            : {};
+        // Resultados con nombre (sesión iniciada) + anónimos (sin sesión).
+        const [named, anonymous] = await Promise.all([
+          fetchVakDiagnostics(supabase, filter),
+          fetchAnonymousVakResults(supabase, filter),
+        ]);
+        const rows = [...named, ...anonymous];
         if (cancelled) return;
         if (rows.length > 0) {
           const agg = aggregateDiagnostics(rows);

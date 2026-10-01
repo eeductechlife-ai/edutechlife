@@ -10,6 +10,12 @@ import { cn } from "../forum/forumDesignSystem";
 import { useTranslation } from "../../i18n/I18nProvider";
 import IALabForumOptimizedInput from "./forum/IALabForumOptimizedInput";
 
+// Privacidad: publicaciones antiguas guardaron el correo del autor en el
+// título ("Mensaje de x@y.com"). Nunca se muestra un correo a otros usuarios.
+const EMAIL_RE = /[\w.+-]+@[\w-]+(\.[\w-]+)+/g;
+const maskEmails = (text, fallback) =>
+  typeof text === "string" ? text.replace(EMAIL_RE, fallback) : text;
+
 const IALabForumOptimized = ({
   compact = false,
   initialLimit = 5,
@@ -109,9 +115,10 @@ const IALabForumOptimized = ({
       setIsSubmitting(true);
       try {
         const result = await createPost({
-          title: `Mensaje de ${user.full_name || user.email}`,
+          title: `Mensaje de ${user.full_name || user.fullName || t("ialab.forum.optimized.user_fallback")}`,
           content: newMessage.trim(),
-          tags: ["Chat"],
+          // La etiqueta de módulo da contexto al mensaje en la comunidad.
+          tags: activeMod ? ["Chat", `Módulo ${activeMod}`] : ["Chat"],
         });
 
         if (!result.success) {
@@ -406,10 +413,19 @@ const IALabForumOptimized = ({
 
                   <div className="mb-3">
                     <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-1">
-                      {post.title}
+                      {/^Mensaje de /.test(post.title || "") &&
+                      post.profiles?.full_name
+                        ? `Mensaje de ${post.profiles.full_name}`
+                        : maskEmails(
+                            post.title,
+                            t("ialab.forum.optimized.user_fallback"),
+                          )}
                     </h4>
                     <p className="text-sm text-slate-600 dark:text-slate-300 leading-snug">
-                      {post.content}
+                      {maskEmails(
+                        post.content,
+                        t("ialab.forum.optimized.user_fallback"),
+                      )}
                     </p>
                   </div>
 

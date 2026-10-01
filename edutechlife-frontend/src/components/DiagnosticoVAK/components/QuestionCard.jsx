@@ -1,111 +1,120 @@
 import { motion } from "framer-motion";
-import { Sparkles, RotateCcw } from "lucide-react";
+import { ArrowLeft, Volume2 } from "lucide-react";
+
+const LETTERS = ["A", "B", "C"];
 
 export default function QuestionCard({
   question,
   currentQuestion,
   totalQuestions,
-  isValentinaSpeaking,
-  feedbackPending,
-  showFeedbackButton,
+  selectedText,
+  mode,
+  isSpeaking,
   onAnswer,
-  onFeedbackClick,
-  onRepeatQuestion,
+  onBack,
+  onListen,
   t,
-  getIconComponent,
 }) {
+  const explorer = mode === "explorer";
+  const halfway = currentQuestion === Math.floor(totalQuestions / 2);
+
   return (
     <motion.div
       key={currentQuestion}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="mb-10"
+      transition={{ duration: 0.25 }}
     >
-      <h2 className="text-2xl md:text-3xl font-extrabold text-[#004B63] text-center leading-tight">
-        {question.text}
-      </h2>
-
-      {showFeedbackButton && (
-        <div className="flex justify-center my-8">
-          <motion.button
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            onClick={onFeedbackClick}
-            className="px-8 py-4 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3"
-          >
-            <Sparkles size={24} strokeWidth={2} />
-            {t("vak.ui.want_feedback")}
-          </motion.button>
-        </div>
+      {halfway && (
+        <p
+          role="status"
+          className="mb-4 text-center text-sm font-bold text-[#047857] bg-[#06D6A0]/15 rounded-full py-1.5"
+        >
+          {t("vak.ui.halfway")}
+        </p>
       )}
 
-      <div className="space-y-4 max-w-2xl mx-auto">
-        {question.options.map((opt, i) => {
-          const letter = String.fromCharCode(65 + i);
-          const IconComponent =
-            typeof opt.icon === "string"
-              ? getIconComponent(opt.icon)
-              : opt.icon;
+      <div className="rounded-2xl bg-[#F0FDFF] border border-[#B2D8E5] p-4 mb-5 flex gap-3 items-start">
+        <span
+          className={`${explorer ? "text-5xl" : "text-4xl"} leading-none shrink-0`}
+          aria-hidden="true"
+        >
+          {question.emoji}
+        </span>
+        <div className="min-w-0">
+          <p className="!m-0 text-sm text-[#004B63]/70 leading-snug">
+            {question.context}
+          </p>
+          <h2
+            className={`!m-0 mt-1 font-extrabold text-[#004B63] leading-tight ${
+              explorer ? "text-2xl" : "text-xl md:text-2xl"
+            }`}
+          >
+            {question.text}
+          </h2>
+        </div>
+      </div>
 
+      <div className="space-y-3" role="group" aria-label={question.text}>
+        {question.options.map((opt, i) => {
+          const picked = selectedText === opt.text;
           return (
             <motion.button
-              key={i}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05 }}
-              whileHover={
-                isValentinaSpeaking || feedbackPending
-                  ? {}
-                  : { scale: 1.01, x: 5 }
-              }
-              whileTap={
-                isValentinaSpeaking || feedbackPending ? {} : { scale: 0.99 }
-              }
-              onClick={() =>
-                !isValentinaSpeaking && !feedbackPending && onAnswer(opt)
-              }
-              disabled={isValentinaSpeaking || feedbackPending}
-              className={`w-full text-left p-5 rounded-2xl backdrop-blur-sm border transition-all duration-300 group relative overflow-hidden ${
-                isValentinaSpeaking || feedbackPending
-                  ? "bg-gray-100/50 border-gray-200 cursor-not-allowed opacity-60"
-                  : "bg-white/80 border-gray-100 hover:border-[#4DA8C4]"
+              key={opt.text}
+              type="button"
+              whileTap={{ scale: 0.98 }}
+              onClick={() => onAnswer(opt)}
+              aria-pressed={picked}
+              className={`w-full text-left rounded-2xl border-2 px-4 flex items-center gap-4 transition-colors ${
+                explorer ? "min-h-[72px] py-3" : "min-h-[60px] py-2.5"
+              } ${
+                picked
+                  ? "border-[#004B63] bg-[#E6F4F1]"
+                  : "border-[#B2D8E5] bg-white hover:border-[#4DA8C4]"
               }`}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#4DA8C4]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-
-              <div className="flex items-center gap-4 relative z-10">
-                <div className="w-10 h-10 shrink-0 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center group-hover:bg-[#4DA8C4]/20 transition-all">
-                  <span className="text-base font-bold text-[#4DA8C4]">
-                    {letter}
-                  </span>
-                </div>
-
-                <div className="flex-1 text-base font-medium text-slate-600 leading-relaxed">
-                  {opt.text}
-                </div>
-
-                {IconComponent && (
-                  <div className="w-10 h-10 shrink-0 rounded-xl bg-[#4DA8C4]/10 flex items-center justify-center text-[#4DA8C4] group-hover:bg-[#4DA8C4]/20 transition-all">
-                    <IconComponent size={20} strokeWidth={2} />
-                  </div>
-                )}
-              </div>
+              <span
+                className="w-8 h-8 shrink-0 rounded-lg bg-[#004B63] text-white text-sm font-bold flex items-center justify-center"
+                aria-hidden="true"
+              >
+                {LETTERS[i]}
+              </span>
+              <span
+                className={`${explorer ? "text-3xl" : "text-2xl"} leading-none shrink-0`}
+                aria-hidden="true"
+              >
+                {opt.emoji}
+              </span>
+              <span
+                className={`flex-1 font-semibold text-[#1E293B] leading-snug ${
+                  explorer ? "text-lg" : "text-base"
+                }`}
+              >
+                {opt.text}
+              </span>
             </motion.button>
           );
         })}
       </div>
 
-      <div className="flex justify-center mt-8">
+      <div className="mt-5 flex items-center justify-between gap-2">
         <button
-          onClick={onRepeatQuestion}
-          disabled={isValentinaSpeaking || feedbackPending}
-          className="text-[#4DA8C4] text-xs font-medium uppercase tracking-wider flex items-center gap-2 hover:text-[#66CCCC] transition-colors px-4 py-2 rounded-full hover:bg-[#4DA8C4]/5"
-          title={t("vak.ui.listen_again")}
+          type="button"
+          onClick={onBack}
+          disabled={currentQuestion === 0}
+          className="min-h-[44px] px-3 rounded-xl text-sm font-bold text-[#004B63] flex items-center gap-1.5 disabled:invisible"
         >
-          <RotateCcw size={16} strokeWidth={2} />
-          <span>{t("vak.ui.repeat_question")}</span>
+          <ArrowLeft size={18} strokeWidth={2.5} aria-hidden="true" />
+          {t("vak.ui.previous")}
+        </button>
+        <button
+          type="button"
+          onClick={onListen}
+          className="min-h-[44px] px-4 rounded-xl text-sm font-bold bg-[#E6F4F1] text-[#004B63] flex items-center gap-2"
+          aria-live="polite"
+        >
+          <Volume2 size={18} strokeWidth={2.5} aria-hidden="true" />
+          {isSpeaking ? t("vak.ui.speaking") : t("vak.ui.listen")}
         </button>
       </div>
     </motion.div>

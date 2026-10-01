@@ -18,22 +18,22 @@ const CONTENT_PT = {
   // ============================================================================
   1: {
     objective:
-      "Domine a arte de forjar instruções precisas com a IA como aprendiz de artesão digital, criando prompts que qualquer modelo entenda perfeitamente.",
+      "Ao final deste módulo você poderá redigir prompts com a fórmula RTF (Papel + Tarefa + Formato) e o contexto necessário, obtendo respostas úteis de qualquer modelo de IA já na primeira tentativa.",
     learningPoints: [
       {
-        text: "Forjar instruções claras como um mestre artesão",
+        text: "Identificar o papel, o contexto, a tarefa e o formato em um prompt",
         icon: "fa-bullseye",
       },
       {
-        text: "Aperfeiçoar perguntas e respostas com precisão milimétrica",
+        text: "Reescrever um prompt vago para que seja claro, específico e acionável",
         icon: "fa-wand-magic-sparkles",
       },
       {
-        text: "Detectar e corrigir imperfeições nas suas criações",
+        text: "Detectar erros comuns em um prompt e corrigi-los iterando",
         icon: "fa-exclamation-triangle",
       },
       {
-        text: "Aplicar seu ofício artesanal nos estudos e no trabalho",
+        text: "Aplicar a fórmula RTF a um caso real de estudo ou trabalho",
         icon: "fa-rocket",
       },
     ],

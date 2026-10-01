@@ -440,7 +440,7 @@ const RESOURCES_ES = {
         type: "ova_interactive",
         title: "El Grimorio",
         description:
-          "7 preguntas que te convertirán en experto en NotebookLM. Completa el desafío con Valerio como tu guía personal en este viaje alquímico.",
+          "7 preguntas que te convertirán en experto en NotebookLM. Completa el desafío con MAX como tu guía personal en este viaje alquímico.",
         estimatedTime: "15 minutos",
         difficulty: "Intermedio",
         interactiveElements: 7,

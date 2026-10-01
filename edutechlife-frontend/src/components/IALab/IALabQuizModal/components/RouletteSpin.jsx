@@ -348,7 +348,7 @@ export default function RouletteSpin({ total = 10, resultNumber = 1, onReveal })
               "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
           }}
         />
-        <span className="relative">{t("ialab.quiz.spin")}</span>
+        <span className="relative !text-white">{t("ialab.quiz.spin")}</span>
         <span className="relative w-9 h-9 rounded-full bg-white/15 ring-1 ring-white/25 flex items-center justify-center transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
           <motion.span
             className="inline-flex"

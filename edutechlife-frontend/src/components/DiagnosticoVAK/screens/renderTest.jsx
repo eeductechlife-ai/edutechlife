@@ -1,82 +1,66 @@
 import { motion } from "framer-motion";
-import { formatTime } from "../vakHelpers";
+import { getVakMode } from "../../../data/vakQuestions";
 import QuestionCard from "../components/QuestionCard";
 
 export default function renderTest({
   t,
   currentQuestion,
   ageQuestions,
+  answers,
+  studentAge,
   isValentinaSpeaking,
-  feedbackPending,
-  showFeedbackButton,
   handleAnswer,
-  handleFeedbackClick,
-  elapsedTime,
-  readQuestionWithOptions,
-  getIconComponent,
+  goBack,
+  listenToQuestion,
 }) {
   const question = ageQuestions[currentQuestion];
   if (!question) return null;
 
-  const progress = ((currentQuestion + 1) / ageQuestions.length) * 100;
+  const total = ageQuestions.length;
+  const progress = ((currentQuestion + 1) / total) * 100;
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <div className="flex items-center justify-between mb-6">
-        <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">
-          {t("vak.ui.question")}
-        </div>
-        <div className="bg-[#66CCCC] text-white rounded-full px-3 py-1 text-xs font-semibold">
-          {currentQuestion + 1} / {ageQuestions.length}
-        </div>
+    <div className="max-w-2xl mx-auto p-2 sm:p-4">
+      <div className="flex items-center justify-between mb-3">
+        <p className="!m-0 text-sm font-bold text-[#004B63]">
+          {t("vak.ui.progress_label", {
+            current: currentQuestion + 1,
+            total,
+          })}
+        </p>
+        <p className="!m-0 text-xs text-[#004B63]/60 hidden md:block">
+          {t("vak.ui.keys_hint")}
+        </p>
       </div>
 
-      <div className="mb-8">
-        <div
-          className="h-2 bg-gray-100 rounded-full overflow-hidden"
-          role="progressbar"
-          aria-valuenow={currentQuestion + 1}
-          aria-valuemin={1}
-          aria-valuemax={ageQuestions.length}
-          aria-label={t("vak.ui.question")}
-        >
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="h-full bg-[#4DA8C4] rounded-full"
-          />
-        </div>
+      <div
+        className="h-3 bg-[#E2E8F0] rounded-full overflow-hidden mb-6"
+        role="progressbar"
+        aria-valuenow={currentQuestion + 1}
+        aria-valuemin={1}
+        aria-valuemax={total}
+        aria-label={t("vak.ui.question")}
+      >
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="h-full bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] rounded-full"
+        />
       </div>
 
       <QuestionCard
         question={question}
         currentQuestion={currentQuestion}
-        totalQuestions={ageQuestions.length}
-        isValentinaSpeaking={isValentinaSpeaking}
-        feedbackPending={feedbackPending}
-        showFeedbackButton={showFeedbackButton}
+        totalQuestions={total}
+        selectedText={answers[currentQuestion]?.text}
+        mode={getVakMode(studentAge)}
+        isSpeaking={isValentinaSpeaking}
         onAnswer={handleAnswer}
-        onFeedbackClick={handleFeedbackClick}
-        onRepeatQuestion={() => {
-          if (!isValentinaSpeaking && !feedbackPending) {
-            readQuestionWithOptions(
-              question.text,
-              question.options,
-              currentQuestion + 1,
-              ageQuestions.length,
-            );
-          }
-        }}
+        onBack={goBack}
+        onListen={listenToQuestion}
         t={t}
-        getIconComponent={getIconComponent}
       />
-
-      <div className="text-center">
-        <span className="text-xs text-slate-400 uppercase tracking-wider">
-          {t("vak.ui.time_elapsed")}: {formatTime(elapsedTime)}
-        </span>
-      </div>
     </div>
   );
 }

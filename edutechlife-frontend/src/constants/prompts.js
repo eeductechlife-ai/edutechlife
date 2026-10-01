@@ -8,7 +8,7 @@ const locale =
 
 const prompts = locale === "en" || locale === "pt" ? enPrompts : esPrompts;
 
-export const PROMPT_VALERIO_DOCENTE = prompts.PROMPT_VALERIO_DOCENTE;
+export const PROMPT_MAX_DOCENTE = prompts.PROMPT_MAX_DOCENTE;
 export const PROMPT_PSICOLOGO_VAK = prompts.PROMPT_PSICOLOGO_VAK;
 export const PROMPT_DANI_EXPERTO = prompts.PROMPT_DANI_EXPERTO;
 export const PROMPT_EXPERTO_PSICOPEDAGOGO =

@@ -57,7 +57,7 @@ const QuickActionsImproved = memo(
     const ageGroup = useMemo(() => {
       if (studentAge <= 8) return "pequeño"; // 6-8: Large colorful cards
       if (studentAge <= 12) return "explorador"; // 9-12: Medium cards
-      return "avanzado"; // 13-16: Compact, like Max/Valerio
+      return "avanzado"; // 13-16: Compact, like Max/Max
     }, [studentAge]);
 
     const visibleCount = useMemo(() => {

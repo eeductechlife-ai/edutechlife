@@ -1,11 +1,11 @@
 import { speakTextConversational } from "./synthesis.js";
 
-const findBestSpanishVoice = (profile = "valerio") => {
+const findBestSpanishVoice = (profile = "max") => {
   if (typeof window === "undefined" || !window.speechSynthesis) return null;
   const voices = window.speechSynthesis.getVoices();
   const spanishVoices = voices.filter((v) => v.lang && v.lang.startsWith("es"));
   const isMaleProfile = [
-    "valerio",
+    "max",
     "nico",
     "nico_premium",
     "nico_authority",
@@ -104,14 +104,14 @@ const findBestSpanishVoice = (profile = "valerio") => {
   return null;
 };
 
-const speakValerioSentence = (text, onEnd, lang = "es-MX") => {
+const speakMaxSentence = (text, onEnd, lang = "es-MX") => {
   try {
     window.speechSynthesis.cancel();
     const voices = window.speechSynthesis.getVoices();
     if (voices.length === 0) {
       window.speechSynthesis.onvoiceschanged = () => {
         window.speechSynthesis.onvoiceschanged = null;
-        speakValerioSentence(text, onEnd, lang);
+        speakMaxSentence(text, onEnd, lang);
       };
       return;
     }
@@ -119,7 +119,7 @@ const speakValerioSentence = (text, onEnd, lang = "es-MX") => {
     utterance.lang = lang;
     utterance.rate = 0.9;
     if (lang.startsWith("es")) {
-      const bestVoice = findBestSpanishVoice("valerio");
+      const bestVoice = findBestSpanishVoice("max");
       if (bestVoice) {
         utterance.voice = bestVoice;
         utterance.pitch = 0.95;
@@ -203,7 +203,7 @@ const getValentinaVoiceConfig = (age = 12) => {
 
 export {
   findBestSpanishVoice,
-  speakValerioSentence,
+  speakMaxSentence,
   fireConfetti,
   speakAsValentina,
   getValentinaVoiceConfig,

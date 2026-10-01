@@ -72,6 +72,28 @@ export const useIALabForum = () => {
 
           const votedPostIds = new Set(votes?.map((v) => v.post_id) || []);
 
+          // Nombre del autor desde su perfil (forum_posts no guarda nombre).
+          // Nunca se muestra un valor que parezca correo.
+          const authorIds = [
+            ...new Set(posts.map((p) => p.user_id).filter(Boolean)),
+          ];
+          const authorNames = {};
+          if (authorIds.length) {
+            const { data: authors } = await supabase
+              .from("profiles")
+              .select("id, full_name, avatar_url")
+              .in("id", authorIds);
+            (authors || []).forEach((a) => {
+              const name =
+                typeof a.full_name === "string" ? a.full_name.trim() : "";
+              authorNames[a.id] = {
+                name: name && !name.includes("@") ? name : null,
+                avatar: a.avatar_url || null,
+              };
+            });
+          }
+          if (cancelledRef.current) return [];
+
           // Combinar datos
           const postsWithLikes = posts.map((post) => ({
             ...post,
@@ -79,8 +101,8 @@ export const useIALabForum = () => {
             like_count: post.upvotes || 0,
             upvote_count: post.upvotes || 0,
             profiles: {
-              full_name: post.user_name || "Usuario",
-              avatar_url: post.user_avatar || null,
+              full_name: authorNames[post.user_id]?.name || "Usuario",
+              avatar_url: authorNames[post.user_id]?.avatar || null,
             },
           }));
 
@@ -267,7 +289,7 @@ export const useIALabForum = () => {
           like_count: 0,
           upvote_count: 0,
           profiles: {
-            full_name: user.fullName || user.email || "Usuario",
+            full_name: user.fullName || "Usuario",
             avatar_url: user.imageUrl || null,
           },
         };

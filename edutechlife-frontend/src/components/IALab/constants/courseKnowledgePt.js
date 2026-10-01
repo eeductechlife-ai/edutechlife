@@ -2,7 +2,7 @@
  * courseKnowledgePt.js
  *
  * Base de conhecimento consolidada de todo o curso IALab (tradução pt-BR).
- * Utilizada pelo Valerio para responder perguntas dos estudantes
+ * Utilizada pelo Max para responder perguntas dos estudantes
  * com contexto real do conteúdo do curso.
  *
  * Gerado automaticamente a partir de moduleContent.js + moduleResources.js

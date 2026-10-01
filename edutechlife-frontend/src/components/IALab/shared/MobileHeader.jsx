@@ -5,6 +5,7 @@ import { useTranslation } from "../../../i18n/I18nProvider";
 import LocaleSwitcher from "../../LocaleSwitcher";
 import NotificationPanel from "../../NotificationPanel";
 import { useNotification } from "../../../context/NotificationContext";
+import { forIALab } from "../../../utils/notificationScope";
 import useForumNotifications from "../../../hooks/IALab/forum/useForumNotifications";
 
 const MobileHeader = ({
@@ -14,7 +15,8 @@ const MobileHeader = ({
   isSearchOpen,
 }) => {
   const { t } = useTranslation();
-  const { unreadCount } = useNotification();
+  const { notifications } = useNotification();
+  const unreadCount = forIALab(notifications).filter((n) => !n.is_read).length;
   const { unreadCount: forumUnreadCount } = useForumNotifications();
   const totalUnread = unreadCount + forumUnreadCount;
   const [notifOpen, setNotifOpen] = useState(false);
@@ -42,7 +44,11 @@ const MobileHeader = ({
             aria-haspopup="dialog"
             aria-expanded={notifOpen}
           >
-            <Icon name="fa-bell" className={`w-4 h-4 ${totalUnread > 0 ? "text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]" : ""}`} aria-hidden="true" />
+            <Icon
+              name="fa-bell"
+              className={`w-4 h-4 ${totalUnread > 0 ? "text-[var(--theme-emphasis)] dark:text-[var(--theme-primary)]" : ""}`}
+              aria-hidden="true"
+            />
             {totalUnread > 0 && (
               <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[16px] h-4 text-[10px] font-bold text-white bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] rounded-full border-2 border-white dark:border-slate-800 px-0.5 shadow-sm">
                 {totalUnread > 99 ? "99+" : totalUnread}

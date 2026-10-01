@@ -183,7 +183,7 @@ export const HeroConstellation = ({ running, reducedMotion }) => {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="absolute inset-0 h-full w-full opacity-80 [mask-image:linear-gradient(to_bottom,transparent,black_12%,black_85%,transparent)] lg:[mask-image:linear-gradient(to_right,transparent_5%,black_50%)]"
+      className="absolute inset-0 h-full w-full opacity-80 [mask-image:linear-gradient(to_bottom,transparent,black_12%,black_85%,transparent)] lg:[mask-image:linear-gradient(to_right,transparent_32%,black_62%)]"
     />
   );
 };

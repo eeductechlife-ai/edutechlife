@@ -17,7 +17,7 @@ export const LS_KEYS = {
   RESOURCE_STATUS: "ialab_resource_status",
   NOTIFICATIONS: "ialab_notifications",
   NOTIFIED_CERTIFICATION: "ialab_notified_certification",
-  VALERIO_WELCOMED: "ialab_valerio_welcomed",
+  MAX_WELCOMED: "ialab_valerio_welcomed",
   SIDEBAR_STATE: "ialab-sidebar-state",
   PROGRESS_CACHE: "ialab_progress_cache",
   SECURITY_WARNINGS_RESET: "securityWarningsResetDate",

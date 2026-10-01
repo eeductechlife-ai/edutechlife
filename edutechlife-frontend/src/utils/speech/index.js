@@ -10,7 +10,7 @@ export {
 export {
   speakTextConversational,
   stopSpeech,
-  speakValerioSentence,
+  speakMaxSentence,
   fireConfetti,
   speakAsValentina,
   getValentinaVoiceConfig,

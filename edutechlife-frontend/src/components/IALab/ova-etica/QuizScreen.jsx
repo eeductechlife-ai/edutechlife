@@ -1,13 +1,20 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { motion } from 'framer-motion'
 import { ChevronRight, CheckCircle2, XCircle, Trophy } from 'lucide-react'
+import { useTranslation } from '../../../i18n/I18nProvider'
+
+// Mínimo de aciertos (80%) para marcar el laboratorio como completado.
+const PASS_SCORE = 4
 
 const Button = ({ children, onClick, className = '', disabled = false }) => (
   <button onClick={onClick} disabled={disabled} className={`flex items-center justify-center gap-2 px-8 py-4 rounded-[2rem] font-black text-sm shadow-xl active:scale-95 transition-all disabled:opacity-30 ${className}`}>{children}</button>
 )
 
 const QuizScreen = ({ texts, onNext, addXp, onScore }) => {
+  const { t } = useTranslation();
+  // El XP solo se otorga en el primer intento para que repetir no sume de más.
+  const xpAwardedRef = useRef(false);
   const [currentQ, setCurrentQ] = useState(0);
   const [score, setScore] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -24,20 +31,28 @@ const QuizScreen = ({ texts, onNext, addXp, onScore }) => {
     if (showFeedback) return;
     setSelected(idx);
     setShowFeedback(true);
-    if (idx === questions[currentQ].c) { setScore(s => s + 1); addXp(100); }
+    if (idx === questions[currentQ].c) { setScore(s => s + 1); if (!xpAwardedRef.current) addXp(100); }
   };
   const handleNext = () => {
     if (currentQ < questions.length - 1) { setCurrentQ(currentQ + 1); setSelected(null); setShowFeedback(false); }
-    else { setShowResult(true); onScore?.(score); }
+    else { setShowResult(true); xpAwardedRef.current = true; onScore?.(score); }
   };
+  const handleRetry = () => { setCurrentQ(0); setScore(0); setSelected(null); setShowFeedback(false); setShowResult(false); };
   if (showResult) {
     return (
       <div className="text-center py-4 animate-[zoomIn_0.6s_cubic-bezier(0.175,0.885,0.32,1.275)_forwards]">
         <div className="w-20 h-20 bg-[var(--theme-primary)]/10 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg border-4 border-white dark:border-slate-700"><Trophy className="w-10 h-10 text-[var(--theme-primary)]" /></div>
-        <h2 className="text-3xl font-black text-[var(--theme-emphasis)] tracking-tighter leading-none mb-2 uppercase">{texts.quiz_result_title}</h2>
+        <h2 className="text-3xl font-black text-[var(--theme-emphasis)] tracking-tighter leading-none mb-2 uppercase">{score >= PASS_SCORE ? texts.quiz_result_title : t('ova.etica.quiz_not_passed_title')}</h2>
         <div className="bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] inline-block px-8 py-4 rounded-[2rem] mt-4 text-4xl font-black shadow-lg border-b-4 border-[var(--theme-primary)]">{score} / 5</div>
         <p className="text-slate-500 dark:text-slate-300 mt-4 font-bold text-sm">{score === 5 ? texts.quiz_result_perfect : score >= 3 ? texts.quiz_result_good : texts.quiz_result_keep_trying}</p>
-        <Button onClick={onNext} className="mt-6 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] mx-auto">{texts.quiz_result_cta}</Button>
+        {score >= PASS_SCORE ? (
+          <Button onClick={onNext} className="mt-6 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] mx-auto">{texts.quiz_result_cta}</Button>
+        ) : (
+          <>
+            <p className="text-slate-500 dark:text-slate-300 mt-2 text-xs">{t('ova.etica.quiz_min_hint', { min: PASS_SCORE })}</p>
+            <Button onClick={handleRetry} className="mt-4 bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] mx-auto">{t('ova.etica.quiz_retry')}</Button>
+          </>
+        )}
       </div>
     );
   }

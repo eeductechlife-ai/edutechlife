@@ -13,17 +13,15 @@ import {
 const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
   const { t } = useTranslation();
   const passed = score >= PASSING_SCORE;
-  const setShowValerioDrawer = useIALabStore((s) => s.setShowValerioDrawer);
-  const setValerioInitialMessage = useIALabStore(
-    (s) => s.setValerioInitialMessage,
-  );
+  const setShowMaxDrawer = useIALabStore((s) => s.setShowMaxDrawer);
+  const setMaxInitialMessage = useIALabStore((s) => s.setMaxInitialMessage);
 
   const handleAskMax = () => {
     const key = passed
       ? "ialab.ask_max_exam_passed"
       : "ialab.ask_max_exam_failed";
-    setValerioInitialMessage(t(key, { mod: moduleId, score }));
-    setShowValerioDrawer(true);
+    setMaxInitialMessage(t(key, { mod: moduleId, score }));
+    setShowMaxDrawer(true);
     onClose?.();
   };
 
@@ -185,7 +183,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
             </div>
           )}
 
-          {/* Valerio CTA */}
+          {/* Max CTA */}
           <button
             onClick={handleAskMax}
             className="w-full py-2.5 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white rounded-xl hover:shadow-lg transition-all duration-200 font-bold text-sm flex items-center justify-center gap-2 mb-2"

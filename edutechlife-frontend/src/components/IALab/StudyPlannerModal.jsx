@@ -6,6 +6,7 @@ import { useTranslation } from "../../i18n/I18nProvider";
 import useBodyScrollLock from "../../hooks/useBodyScrollLock";
 import useFocusTrap from "../../hooks/useFocusTrap";
 import { useActivityCalendar } from "../../hooks/useActivityCalendar";
+import ModalPortal from "../ui/ModalPortal";
 
 const DAY_NOTES_KEY = "ialab_day_notes";
 
@@ -153,12 +154,13 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
+    <ModalPortal>
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4"
+      className="fixed inset-0 z-[1200] flex items-center justify-center p-3 sm:p-4"
       ref={focusTrapRef}
     >
       <div
-        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
       <div
@@ -265,9 +267,12 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
                 </div>
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 dark:border-slate-700 text-[10px] text-slate-500">
                   <span>
-                    {t("ialab.study_planner.active_days", {
-                      count: monthlyCalendar.totalActive,
-                    })}
+                    {t(
+                      monthlyCalendar.totalActive === 1
+                        ? "ialab.study_planner.active_day_one"
+                        : "ialab.study_planner.active_days",
+                      { count: monthlyCalendar.totalActive },
+                    )}
                   </span>
                   <span>
                     {t("ialab.study_planner.sessions", {
@@ -389,6 +394,7 @@ const StudyPlannerModal = ({ isOpen, onClose }) => {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 };
 

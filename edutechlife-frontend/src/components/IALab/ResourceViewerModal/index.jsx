@@ -36,6 +36,7 @@ const ResourceViewerModal = ({
   onMarkAsViewed,
   onPreviousResource,
   onNextResource,
+  nextDisabled = false,
   currentIndex = 0,
   totalResources = 0,
   youtubeDuration = null,
@@ -60,10 +61,8 @@ const ResourceViewerModal = ({
   const { noteText, showNotes, setShowNotes, noteSaved, handleNoteChange } =
     useResourceNotes(resource);
 
-  const setShowValerioDrawer = useIALabStore((s) => s.setShowValerioDrawer);
-  const setValerioInitialMessage = useIALabStore(
-    (s) => s.setValerioInitialMessage,
-  );
+  const setShowMaxDrawer = useIALabStore((s) => s.setShowMaxDrawer);
+  const setMaxInitialMessage = useIALabStore((s) => s.setMaxInitialMessage);
 
   const RESOURCE_ICONS = {
     video: "fa-video",
@@ -445,86 +444,86 @@ const ResourceViewerModal = ({
                   )}
                 />
                 {!isFullscreen && (
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 border-b theme-border theme-surface">
-                  <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
-                    <div className="w-10 h-10 rounded-xl theme-chip flex items-center justify-center flex-shrink-0">
-                      <Icon
-                        name={RESOURCE_ICONS[resource.type] || "fa-file"}
-                        className="text-[var(--theme-emphasis)] w-4 h-4 sm:w-5 sm:h-5"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <Breadcrumbs
-                        segments={[
-                          { label: t("ialab.breadcrumb_home") },
-                          {
-                            label:
-                              modules?.find((m) => m.id === activeMod)?.title ||
-                              `Módulo ${activeMod}`,
-                          },
-                          {
-                            label: resource.type
-                              ?.replace(/_/g, " ")
-                              ?.toUpperCase(),
-                          },
-                        ]}
-                        size="text-xs"
-                        className="mb-1 text-slate-400 dark:text-slate-500"
-                      />
-                      <h2 className="text-[15px] sm:text-lg font-semibold theme-text tracking-tight truncate">
-                        {resource.title}
-                      </h2>
-                      <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1">
-                        {resource.type === "video" && (
-                          <>
-                            <span>
-                              {durationLoading
-                                ? "..."
-                                : youtubeDuration || resource.duration}
-                            </span>
-                            <span>•</span>
-                          </>
-                        )}
-                        {resource.format && (
-                          <>
-                            <span>{resource.format}</span>
-                            <span>•</span>
-                          </>
-                        )}
-                        {resource.size && (
-                          <>
-                            <span>{resource.size}</span>
-                            <span>•</span>
-                          </>
-                        )}
-                        <span>{t("ialab.viewer_modal.preview")}</span>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 border-b theme-border theme-surface">
+                    <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
+                      <div className="w-10 h-10 rounded-xl theme-chip flex items-center justify-center flex-shrink-0">
+                        <Icon
+                          name={RESOURCE_ICONS[resource.type] || "fa-file"}
+                          className="text-[var(--theme-emphasis)] w-4 h-4 sm:w-5 sm:h-5"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <Breadcrumbs
+                          segments={[
+                            { label: t("ialab.breadcrumb_home") },
+                            {
+                              label:
+                                modules?.find((m) => m.id === activeMod)
+                                  ?.title || `Módulo ${activeMod}`,
+                            },
+                            {
+                              label: resource.type
+                                ?.replace(/_/g, " ")
+                                ?.toUpperCase(),
+                            },
+                          ]}
+                          size="text-xs"
+                          className="mb-1 text-slate-400 dark:text-slate-500"
+                        />
+                        <h2 className="text-[15px] sm:text-lg font-semibold theme-text tracking-tight truncate">
+                          {resource.title}
+                        </h2>
+                        <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1">
+                          {resource.type === "video" && (
+                            <>
+                              <span>
+                                {durationLoading
+                                  ? "..."
+                                  : youtubeDuration || resource.duration}
+                              </span>
+                              <span>•</span>
+                            </>
+                          )}
+                          {resource.format && (
+                            <>
+                              <span>{resource.format}</span>
+                              <span>•</span>
+                            </>
+                          )}
+                          {resource.size && (
+                            <>
+                              <span>{resource.size}</span>
+                              <span>•</span>
+                            </>
+                          )}
+                          <span>{t("ialab.viewer_modal.preview")}</span>
+                        </div>
                       </div>
                     </div>
+                    <div className="flex-shrink-0 mt-3 sm:mt-0 ml-0 sm:ml-2 flex items-center gap-2">
+                      <button
+                        onClick={toggleFullscreen}
+                        className="w-9 h-9 rounded-lg theme-border border theme-chip flex items-center justify-center theme-text-muted hover:theme-text transition-colors duration-150 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current/30"
+                        aria-label={
+                          isFullscreen
+                            ? t("ialab.viewer_modal.fullscreen_exit")
+                            : t("ialab.viewer_modal.fullscreen_enter")
+                        }
+                      >
+                        <Icon
+                          name={isFullscreen ? "fa-compress" : "fa-expand"}
+                          className="w-4 h-4"
+                        />
+                      </button>
+                      <button
+                        onClick={handleClose}
+                        className="w-9 h-9 rounded-lg theme-border border theme-chip flex items-center justify-center theme-text-muted hover:theme-text transition-colors duration-150 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current/30"
+                        aria-label={t("ialab.viewer_modal.close_aria")}
+                      >
+                        <Icon name="fa-times" className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex-shrink-0 mt-3 sm:mt-0 ml-0 sm:ml-2 flex items-center gap-2">
-                    <button
-                      onClick={toggleFullscreen}
-                      className="w-9 h-9 rounded-lg theme-border border theme-chip flex items-center justify-center theme-text-muted hover:theme-text transition-colors duration-150 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current/30"
-                      aria-label={
-                        isFullscreen
-                          ? t("ialab.viewer_modal.fullscreen_exit")
-                          : t("ialab.viewer_modal.fullscreen_enter")
-                      }
-                    >
-                      <Icon
-                        name={isFullscreen ? "fa-compress" : "fa-expand"}
-                        className="w-4 h-4"
-                      />
-                    </button>
-                    <button
-                      onClick={handleClose}
-                      className="w-9 h-9 rounded-lg theme-border border theme-chip flex items-center justify-center theme-text-muted hover:theme-text transition-colors duration-150 flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current/30"
-                      aria-label={t("ialab.viewer_modal.close_aria")}
-                    >
-                      <Icon name="fa-times" className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
                 )}
                 {isFullscreen && (
                   <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
@@ -575,142 +574,144 @@ const ResourceViewerModal = ({
                   )}
                 </div>
                 {!isFullscreen && (
-                <div className="px-4 sm:px-6 py-3 sm:py-4 border-t theme-border theme-surface relative z-[60]">
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setShowNotes((s) => !s)}
-                        className={`px-3 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-150 text-sm sm:text-base font-medium min-h-[44px] border ${
-                          showNotes
-                            ? "theme-bg-emphasis text-white border-transparent"
-                            : "theme-chip theme-border theme-text-muted hover:theme-text"
-                        }`}
-                        aria-label={t("ialab.viewer_modal.notes_toggle_aria")}
-                      >
-                        <Icon
-                          name="fa-note-sticky"
-                          className="w-3 h-3 sm:w-4 sm:h-4"
-                        />
-                        <span className="inline">
-                          {t("ialab.viewer_modal.notes")}
-                        </span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          setValerioInitialMessage(
-                            t("ialab.ask_max_context") +
-                              (resource?.title || ""),
-                          );
-                          setShowValerioDrawer(true);
-                          handleClose();
-                        }}
-                        className="px-3 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-150 text-sm sm:text-base font-medium min-h-[44px] border theme-chip theme-border theme-text-muted hover:theme-text"
-                        aria-label={t("ialab.ask_max_btn")}
-                        title={t("ialab.ask_max_btn")}
-                      >
-                        <Icon
-                          name="fa-robot"
-                          className="w-3 h-3 sm:w-4 sm:h-4"
-                        />
-                        <span className="hidden sm:inline">
-                          {t("ialab.ask_max_btn")}
-                        </span>
-                      </button>
-                    </div>
-                    {totalResources > 1 && (
-                      <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
+                  <div className="px-4 sm:px-6 py-3 sm:py-4 border-t theme-border theme-surface relative z-[60]">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+                      <div className="flex items-center gap-2">
                         <button
-                          onClick={onPreviousResource}
-                          disabled={currentIndex <= 0}
-                          className={cn(
-                            "px-4 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px]",
-                            currentIndex <= 0
-                              ? "text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-40"
-                              : "theme-chip theme-border border theme-text-muted hover:theme-text transition-colors duration-150",
-                          )}
-                          aria-label={t("ialab.viewer_modal.previous_aria")}
+                          onClick={() => setShowNotes((s) => !s)}
+                          className={`px-3 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-150 text-sm sm:text-base font-medium min-h-[44px] border ${
+                            showNotes
+                              ? "theme-bg-emphasis text-white border-transparent"
+                              : "theme-chip theme-border theme-text-muted hover:theme-text"
+                          }`}
+                          aria-label={t("ialab.viewer_modal.notes_toggle_aria")}
                         >
                           <Icon
-                            name="fa-chevron-left"
+                            name="fa-note-sticky"
                             className="w-3 h-3 sm:w-4 sm:h-4"
                           />
                           <span className="inline">
-                            {t("ialab.viewer_modal.previous")}
+                            {t("ialab.viewer_modal.notes")}
                           </span>
                         </button>
-                        <div className="px-4 py-2 sm:px-5 sm:py-2.5 theme-chip rounded-full text-[var(--theme-emphasis)] font-semibold text-sm sm:text-base">
-                          {currentIndex + 1} / {totalResources}
+                        <button
+                          onClick={() => {
+                            setMaxInitialMessage(
+                              t("ialab.ask_max_context") +
+                                (resource?.title || ""),
+                            );
+                            setShowMaxDrawer(true);
+                            handleClose();
+                          }}
+                          className="px-3 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-colors duration-150 text-sm sm:text-base font-medium min-h-[44px] border theme-chip theme-border theme-text-muted hover:theme-text"
+                          aria-label={t("ialab.ask_max_btn")}
+                          title={t("ialab.ask_max_btn")}
+                        >
+                          <Icon
+                            name="fa-robot"
+                            className="w-3 h-3 sm:w-4 sm:h-4"
+                          />
+                          <span className="hidden sm:inline">
+                            {t("ialab.ask_max_btn")}
+                          </span>
+                        </button>
+                      </div>
+                      {totalResources > 1 && (
+                        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
+                          <button
+                            onClick={onPreviousResource}
+                            disabled={currentIndex <= 0}
+                            className={cn(
+                              "px-4 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px]",
+                              currentIndex <= 0
+                                ? "text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-40"
+                                : "theme-chip theme-border border theme-text-muted hover:theme-text transition-colors duration-150",
+                            )}
+                            aria-label={t("ialab.viewer_modal.previous_aria")}
+                          >
+                            <Icon
+                              name="fa-chevron-left"
+                              className="w-3 h-3 sm:w-4 sm:h-4"
+                            />
+                            <span className="inline">
+                              {t("ialab.viewer_modal.previous")}
+                            </span>
+                          </button>
+                          <div className="px-4 py-2 sm:px-5 sm:py-2.5 theme-chip rounded-full text-[var(--theme-emphasis)] font-semibold text-sm sm:text-base">
+                            {currentIndex + 1} / {totalResources}
+                          </div>
+                          <button
+                            onClick={onNextResource}
+                            disabled={
+                              currentIndex >= totalResources - 1 || nextDisabled
+                            }
+                            className={cn(
+                              "px-4 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px]",
+                              currentIndex >= totalResources - 1 || nextDisabled
+                                ? "text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-40"
+                                : "theme-chip theme-border border theme-text-muted hover:theme-text transition-colors duration-150",
+                            )}
+                            aria-label={t("ialab.viewer_modal.next_aria")}
+                          >
+                            <span className="inline">
+                              {t("ialab.viewer_modal.next")}
+                            </span>
+                            <Icon
+                              name="fa-chevron-right"
+                              className="w-3 h-3 sm:w-4 sm:h-4"
+                            />
+                          </button>
                         </div>
-                        <button
-                          onClick={onNextResource}
-                          disabled={currentIndex >= totalResources - 1}
-                          className={cn(
-                            "px-4 py-2.5 sm:px-4 sm:py-2.5 rounded-lg flex items-center gap-1 sm:gap-2 transition-all duration-200 text-sm sm:text-base font-medium min-h-[44px]",
-                            currentIndex >= totalResources - 1
-                              ? "text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-40"
-                              : "theme-chip theme-border border theme-text-muted hover:theme-text transition-colors duration-150",
-                          )}
-                          aria-label={t("ialab.viewer_modal.next_aria")}
-                        >
-                          <span className="inline">
-                            {t("ialab.viewer_modal.next")}
-                          </span>
+                      )}
+                      {isMarkedAsViewed ? (
+                        <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200/40 dark:border-emerald-700/30 text-emerald-700 dark:text-emerald-400 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base">
                           <Icon
-                            name="fa-chevron-right"
-                            className="w-3 h-3 sm:w-4 sm:h-4"
+                            name="fa-check-circle"
+                            className="w-4 h-4 sm:w-5 sm:h-5"
                           />
+                          <span>{t("ialab.viewer_modal.completed_auto")}</span>
+                        </div>
+                      ) : resource.type === "video" ||
+                        resource.type === "pdf" ||
+                        resource.type === "pdf-thumbnail" ? (
+                        <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-xl theme-chip theme-border border text-[var(--theme-primary)] font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
+                          <Icon
+                            name="fa-hourglass-half"
+                            className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
+                          />
+                          <span>
+                            {resource.type === "video"
+                              ? t("ialab.viewer_modal.complete_resource_hint")
+                              : t("ialab.viewer_modal.scroll_to_end_hint")}
+                          </span>
+                        </div>
+                      ) : resource.type === "ova" ||
+                        resource.type === "ova_interactive" ||
+                        resource.type === "ova-thumbnail" ? (
+                        <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-xl theme-chip theme-border border text-[var(--theme-primary)] font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
+                          <Icon
+                            name="fa-hourglass-half"
+                            className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
+                          />
+                          <span>
+                            {t("ialab.viewer_modal.complete_resource_hint")}
+                          </span>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={handleMarkAsViewed}
+                          aria-label={t("ialab.viewer_modal.mark_viewed")}
+                          className="px-4 py-3 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-opacity duration-150 flex items-center gap-2 sm:gap-3 text-sm sm:text-base min-h-[44px] w-full sm:w-auto justify-center border-none theme-bg-emphasis text-white hover:opacity-90"
+                        >
+                          <Icon
+                            name="fa-check"
+                            className="w-4 h-4 sm:w-5 sm:h-5"
+                          />
+                          <span>{t("ialab.viewer_modal.mark_viewed")}</span>
                         </button>
-                      </div>
-                    )}
-                    {isMarkedAsViewed ? (
-                      <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200/40 dark:border-emerald-700/30 text-emerald-700 dark:text-emerald-400 font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base">
-                        <Icon
-                          name="fa-check-circle"
-                          className="w-4 h-4 sm:w-5 sm:h-5"
-                        />
-                        <span>{t("ialab.viewer_modal.completed_auto")}</span>
-                      </div>
-                    ) : resource.type === "video" ||
-                      resource.type === "pdf" ||
-                      resource.type === "pdf-thumbnail" ? (
-                      <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-xl theme-chip theme-border border text-[var(--theme-primary)] font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
-                        <Icon
-                          name="fa-hourglass-half"
-                          className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
-                        />
-                        <span>
-                          {resource.type === "video"
-                            ? t("ialab.viewer_modal.complete_resource_hint")
-                            : t("ialab.viewer_modal.scroll_to_end_hint")}
-                        </span>
-                      </div>
-                    ) : resource.type === "ova" ||
-                      resource.type === "ova_interactive" ||
-                      resource.type === "ova-thumbnail" ? (
-                      <div className="px-4 py-2 sm:px-6 sm:py-3 rounded-xl theme-chip theme-border border text-[var(--theme-primary)] font-medium flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-center">
-                        <Icon
-                          name="fa-hourglass-half"
-                          className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
-                        />
-                        <span>
-                          {t("ialab.viewer_modal.complete_resource_hint")}
-                        </span>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={handleMarkAsViewed}
-                        aria-label={t("ialab.viewer_modal.mark_viewed")}
-                        className="px-4 py-3 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-opacity duration-150 flex items-center gap-2 sm:gap-3 text-sm sm:text-base min-h-[44px] w-full sm:w-auto justify-center border-none theme-bg-emphasis text-white hover:opacity-90"
-                      >
-                        <Icon
-                          name="fa-check"
-                          className="w-4 h-4 sm:w-5 sm:h-5"
-                        />
-                        <span>{t("ialab.viewer_modal.mark_viewed")}</span>
-                      </button>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
                 )}
               </motion.div>
             </div>
@@ -730,6 +731,7 @@ ResourceViewerModal.propTypes = {
   onMarkAsViewed: PropTypes.func,
   onPreviousResource: PropTypes.func,
   onNextResource: PropTypes.func,
+  nextDisabled: PropTypes.bool,
   currentIndex: PropTypes.number,
   totalResources: PropTypes.number,
   youtubeDuration: PropTypes.string,

@@ -440,7 +440,7 @@ const RESOURCES_PT = {
         type: "ova_interactive",
         title: "O Grimório",
         description:
-          "7 perguntas que o tornarão especialista em NotebookLM. Complete o desafio com Valerio como seu guia pessoal nesta jornada alquímica.",
+          "7 perguntas que o tornarão especialista em NotebookLM. Complete o desafio com MAX como seu guia pessoal nesta jornada alquímica.",
         estimatedTime: "15 minutos",
         difficulty: "Intermediário",
         interactiveElements: 7,

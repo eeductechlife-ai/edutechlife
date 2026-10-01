@@ -20,7 +20,7 @@ const PLANS = [
     description: 'Acceso completo a la plataforma',
     features: [
       'Todos los cursos IALab',
-      'Nico + Valerio ilimitado',
+      'Nico + MAX ilimitado',
       'IngenIA completo',
       'Certificados descargables',
       'Soporte prioritario',

@@ -379,7 +379,7 @@ async function getEngagementMetrics(opts = { days: 30, productType: null }) {
       // Feature adoption
       features: [
         {
-          name: "Valerio Voice Assistant",
+          name: "MAX Voice Assistant",
           adoption_rate: features[0].rate,
           active_users: features[0].activeUsers,
           total_users: features[0].totalUsers,
