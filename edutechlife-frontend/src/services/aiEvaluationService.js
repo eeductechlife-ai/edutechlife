@@ -5,7 +5,7 @@ import { withRetry, deduplicate } from "../utils/asyncHelpers";
 import { supabase } from "../lib/supabase";
 const API_URL = `${API_BASE_URL}/api/chat`;
 
-const VALERIO_SYSTEM_PROMPT = `Eres MAX, el tutor experto de Edutechlife. Evalúa el prompt del alumno. Debes responder estrictamente en formato JSON con estas llaves: "score" (0-100), "feedback" (3 consejos breves), "improvedPrompt" (el prompt optimizado) y "level" (Novato, Pro, Maestro). Responde únicamente con JSON válido, sin texto adicional.`;
+const MAX_SYSTEM_PROMPT = `Eres MAX, el tutor experto de Edutechlife. Evalúa el prompt del alumno. Debes responder estrictamente en formato JSON con estas llaves: "score" (0-100), "feedback" (3 consejos breves), "improvedPrompt" (el prompt optimizado) y "level" (Novato, Pro, Maestro). Responde únicamente con JSON válido, sin texto adicional.`;
 
 const MODULE_CONTEXT = {
   1: {
@@ -111,7 +111,7 @@ const _evaluateWithDeepseek = async (studentPrompt, moduleId = 1) => {
         messages: [
           {
             role: "system",
-            content: VALERIO_SYSTEM_PROMPT,
+            content: MAX_SYSTEM_PROMPT,
           },
           {
             role: "user",

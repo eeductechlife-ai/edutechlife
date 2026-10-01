@@ -289,7 +289,11 @@ export const answerOrder = (index) => ORDERS[index % ORDERS.length];
 
 export const CHANNEL_STYLE = { v: "visual", a: "auditivo", k: "kinestesico" };
 
-/** Percentages per style + predominant and (when close) secondary style. */
+/**
+ * Percentages per style + predominant and (when close) secondary style.
+ * A tie goes to the style answered most recently, so no channel wins
+ * just because of the order it is declared in.
+ */
 export function scoreVak(answers) {
   const counts = { visual: 0, auditivo: 0, kinestesico: 0 };
   answers.forEach((style) => {
@@ -301,7 +305,10 @@ export function scoreVak(answers) {
     auditivo: Math.round((counts.auditivo / total) * 100),
     kinestesico: Math.round((counts.kinestesico / total) * 100),
   };
-  const ranked = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const ranked = Object.entries(scores).sort(
+    (a, b) =>
+      b[1] - a[1] || answers.lastIndexOf(b[0]) - answers.lastIndexOf(a[0]),
+  );
   const [first, second] = ranked;
   return {
     scores,

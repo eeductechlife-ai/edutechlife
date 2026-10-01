@@ -26,7 +26,7 @@ export const contentScreens = [
       "Guided exploration of NotebookLM: create your first notebook with your own documents",
     objective:
       "Understand the concept of AI based on your own sources and create your first notebook",
-    valerioText:
+    maxText:
       "NotebookLM is a Google tool that revolutionizes personal knowledge management. Unlike traditional chatbots, it works exclusively with the documents you provide. This means its responses are 100% grounded in your sources, eliminating the risk of hallucinations. Your goal is to understand how it works and why it is different from generic chatbots.",
     achievements: [
       { text: "Understand the concept of AI based on your own sources" },
@@ -52,7 +52,7 @@ export const contentScreens = [
     subtitle: "Quality over quantity in your research",
     objective:
       "Learn to select, organize, and synthesize documents to maximize your notebook value",
-    valerioText:
+    maxText:
       "Source curation is the key to getting the most out of NotebookLM. It is not about uploading the largest number of documents, but about selecting the most relevant ones and organizing them strategically. You will learn to choose reliable sources, categorize them by topic, and generate cross-references that give you a comprehensive view of your research.",
     achievements: [
       { text: "Select relevant and reliable sources" },
@@ -78,7 +78,7 @@ export const contentScreens = [
     subtitle: "Your knowledge in podcast format",
     objective:
       "Transform complex documents into audio conversations with two virtual hosts",
-    valerioText:
+    maxText:
       "One of the most impressive NotebookLM features is Audio Overview. This tool turns your documents into AI-generated podcast conversations, with two virtual hosts discussing key findings. It is perfect for reviewing content on the go, but remember to complement it with written summaries and always review the generated content.",
     achievements: [
       { text: "Generate Audio Overviews from your documents" },

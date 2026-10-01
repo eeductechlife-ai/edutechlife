@@ -74,26 +74,26 @@ test.describe('IALab Flow', () => {
     });
   });
 
-  test.describe('Valerio Coach Panel', () => {
+  test.describe('Max Coach Panel', () => {
     test.beforeEach(async ({ page }) => {
       await page.goto('/ialab/1');
       await page.waitForURL('**/ialab/**', { timeout: 15000 });
       await page.waitForLoadState('networkidle');
     });
 
-    test('Valerio floating button is visible', async ({ page }) => {
-      const fab = page.locator('[data-tour="tour-valerio"]');
+    test('Max floating button is visible', async ({ page }) => {
+      const fab = page.locator('[data-tour="tour-max"]');
       await expect(fab).toBeVisible({ timeout: 10000 });
     });
 
-    test('opens Valerio panel on FAB click', async ({ page }) => {
-      const fab = page.locator('[data-tour="tour-valerio"]');
+    test('opens Max panel on FAB click', async ({ page }) => {
+      const fab = page.locator('[data-tour="tour-max"]');
       await fab.click();
-      await expect(page.locator('text=Valerio').first()).toBeVisible({ timeout: 5000 });
+      await expect(page.locator('text=Max').first()).toBeVisible({ timeout: 5000 });
     });
 
-    test('Valerio panel has chat input area', async ({ page }) => {
-      const fab = page.locator('[data-tour="tour-valerio"]');
+    test('Max panel has chat input area', async ({ page }) => {
+      const fab = page.locator('[data-tour="tour-max"]');
       await fab.click();
       await page.waitForTimeout(500);
       const textarea = page.locator('textarea').first();

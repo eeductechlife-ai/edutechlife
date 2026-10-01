@@ -2,10 +2,10 @@
  * persistenceSlice — localStorage wrappers, sync orchestration, attempt limits
  *
  * Estado: syncFromPersistence, clearProgressFromStorage, bookmark CRUD,
- *         valerioWelcomed, sidebarState, progressCache, storage get/set,
+ *         maxWelcomed, sidebarState, progressCache, storage get/set,
  *         challenge/exam attempt limits (remaining, cooldown, decrement)
  *
- * LS keys usadas: BOOKMARKED_RESOURCES, COMPLETED_VIDEOS, VALERIO_WELCOMED,
+ * LS keys usadas: BOOKMARKED_RESOURCES, COMPLETED_VIDEOS, MAX_WELCOMED,
  *   SIDEBAR_STATE, PROGRESS_CACHE, VIEWED_RESOURCES, attempt keys
  *
  * La persistencia de gamificación (xp, streak, badges, etc.) se maneja
@@ -284,8 +284,8 @@ export const createPersistenceSlice = (set, get) => ({
     set({ _bookmarkVersion: Date.now() });
   },
 
-  getValerioWelcomed: () => ls.get(LS_KEYS.VALERIO_WELCOMED, false),
-  setValerioWelcomed: () => ls.set(LS_KEYS.VALERIO_WELCOMED, true),
+  getMaxWelcomed: () => ls.get(LS_KEYS.MAX_WELCOMED, false),
+  setMaxWelcomed: () => ls.set(LS_KEYS.MAX_WELCOMED, true),
 
   getSidebarState: (fallback) => ls.get(LS_KEYS.SIDEBAR_STATE, fallback),
   setSidebarState: (data) => ls.set(LS_KEYS.SIDEBAR_STATE, data),

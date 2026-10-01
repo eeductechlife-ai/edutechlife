@@ -100,7 +100,7 @@ const speakTextConversational = async (
           utterance.rate = Math.min(1.0, voice.speakingRate || 0.9);
           utterance.volume = 1.0;
           const isMaleProfile = [
-            "valerio",
+            "max",
             "nico",
             "nico_premium",
             "nico_authority",
@@ -110,6 +110,7 @@ const speakTextConversational = async (
             const femaleKeywords = [
               "Paulina",
               "Monica",
+              "Mónica",
               "Sabina",
               "Helena",
               "Laura",
@@ -135,6 +136,8 @@ const speakTextConversational = async (
             ];
             const maleKeywords = [
               "Jorge",
+              "Juan",
+              "Diego",
               "Andres",
               "Carlos",
               "Pablo",
@@ -151,9 +154,6 @@ const speakTextConversational = async (
               "Google US English Male",
               "Microsoft David Desktop",
               "Microsoft Mark",
-              "Rocko",
-              "Eddy",
-              "Reed",
             ];
             if (maleKeywords.some((k) => name.includes(k))) return true;
             if (femaleKeywords.some((k) => name.includes(k))) return false;
@@ -173,7 +173,9 @@ const speakTextConversational = async (
                     latinMatch(v) &&
                     (v.name.includes("Microsoft") ||
                       v.name.includes("Carlos") ||
-                      v.name.includes("Jorge")),
+                      v.name.includes("Jorge") ||
+                      v.name.includes("Juan") ||
+                      v.name.includes("Diego")),
                   (v) => isMaleName(v.name) && latinMatch(v),
                 ]
               : [
@@ -191,9 +193,20 @@ const speakTextConversational = async (
             (v) => true,
           ];
 
+          // macOS trae voces "Eloquence" y de novedad (Eddy, Rocko, Grandpa…)
+          // que suenan a robot. Antes se elegían para los perfiles masculinos
+          // (MAX, Nico) por ser las únicas voces "de hombre" en español; es
+          // mejor una voz natural de mujer (Paulina) que una robótica.
+          const ROBOTIC_VOICES =
+            /^(Eddy|Flo|Grandma|Grandpa|Reed|Rocko|Sandy|Shelley|Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Fred|Good News|Jester|Junior|Kathy|Organ|Ralph|Superstar|Trinoids|Whisper|Wobble|Zarvox)\b/;
+          const naturalVoices = voicesList.filter(
+            (v) => !ROBOTIC_VOICES.test(v.name),
+          );
+          const candidates = naturalVoices.length ? naturalVoices : voicesList;
+
           let bestVoice = null;
           for (const matcher of priority) {
-            bestVoice = voicesList.find(matcher);
+            bestVoice = candidates.find(matcher);
             if (bestVoice) break;
           }
 

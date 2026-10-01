@@ -21,7 +21,8 @@ export async function saveVakDiagnostic(
   if (!client || !userId || !diagnosis)
     return { ok: false, error: "missing args" };
   try {
-    const counts = diagnosis.counts || {};
+    // Porcentaje por estilo (el banco tiene 12 o 20 preguntas, no 10).
+    const counts = diagnosis.scores || diagnosis.counts || {};
     const { error } = await client.from("vak_diagnostics").insert({
       user_id: userId,
       institution_id: institutionId || null,
@@ -47,6 +48,100 @@ export async function saveVakDiagnostic(
     return { ok: true };
   } catch (e) {
     return { ok: false, error: e.message };
+  }
+}
+
+const AGE_BANDS = [
+  [8, 8, "8"],
+  [9, 10, "9-10"],
+  [11, 13, "11-13"],
+  [14, 16, "14-16"],
+];
+
+/** Rango de edad con el que se agrupan los resultados anónimos. */
+export function ageBandFor(age) {
+  const n = parseInt(age, 10);
+  const band = AGE_BANDS.find(([min, max]) => n >= min && n <= max);
+  return band ? band[2] : null;
+}
+
+const SLUG = /^[a-z0-9-]{1,60}$/;
+
+/**
+ * Guarda un resultado SIN datos personales (sin nombre ni contacto, con la
+ * edad en rangos) para los reportes por colegio. Pensado para quien hace la
+ * actividad sin iniciar sesión. Silencioso ante fallos.
+ * @param {object} client - Cliente Supabase (anon)
+ * @param {object} params - { institutionSlug, diagnosis, mode }
+ */
+export async function saveAnonymousVakResult(
+  client,
+  { institutionSlug, diagnosis, mode },
+) {
+  if (!client || !diagnosis) return { ok: false, error: "missing args" };
+  const band = ageBandFor(diagnosis.studentAge);
+  const scores = diagnosis.scores;
+  if (!band || !scores || !diagnosis.predominantStyle)
+    return { ok: false, error: "incomplete result" };
+  try {
+    const { error } = await client.from("vak_anonymous_results").insert({
+      institution_slug: SLUG.test(institutionSlug || "")
+        ? institutionSlug
+        : null,
+      age_band: band,
+      mode: mode || null,
+      question_count: diagnosis.total || null,
+      predominant_style: diagnosis.predominantStyle,
+      secondary_style: diagnosis.secondaryStyle || null,
+      score_visual: scores.visual || 0,
+      score_auditivo: scores.auditivo || 0,
+      score_kinestesico: scores.kinestesico || 0,
+      duration_seconds: Math.min(diagnosis.timeSpent || 0, 7200),
+    });
+    if (error) return { ok: false, error: error.message };
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+/**
+ * Trae los resultados anónimos con la misma forma que las filas de
+ * vak_diagnostics, para que el panel los sume sin cambios. Si la tabla aún no
+ * existe o la lectura no está permitida, devuelve [] sin romper el panel.
+ */
+export async function fetchAnonymousVakResults(client, opts = {}) {
+  if (!client) return [];
+  const { institutionId, limit = 1000 } = opts;
+  try {
+    let query = client
+      .from("vak_anonymous_results")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    if (institutionId) query = query.eq("institution_slug", institutionId);
+    const { data, error } = await query;
+    if (error || !data) return [];
+    return data.map((r) => {
+      const style = r.predominant_style;
+      return {
+        id: `anon-${r.id}`,
+        user_id: null,
+        institution_id: r.institution_slug,
+        student_name: "Anónimo",
+        student_age: r.age_band,
+        student_mood: null,
+        predominant_style: style,
+        percentage: r[`score_${style}`] ?? 0,
+        score_visual: r.score_visual,
+        score_auditivo: r.score_auditivo,
+        score_kinestesico: r.score_kinestesico,
+        time_spent_seconds: r.duration_seconds || 0,
+        created_at: r.created_at,
+      };
+    });
+  } catch {
+    return [];
   }
 }
 

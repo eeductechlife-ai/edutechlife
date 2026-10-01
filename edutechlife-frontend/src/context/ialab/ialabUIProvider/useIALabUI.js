@@ -49,8 +49,8 @@ export function useIALabUI(onBack) {
   const setIsListening = useIALabStore((s) => s.setIsListening);
   const avatarState = useIALabStore((s) => s.avatarState);
   const setAvatarState = useIALabStore((s) => s.setAvatarState);
-  const showValerioDrawer = useIALabStore((s) => s.showValerioDrawer);
-  const setShowValerioDrawer = useIALabStore((s) => s.setShowValerioDrawer);
+  const showMaxDrawer = useIALabStore((s) => s.showMaxDrawer);
+  const setShowMaxDrawer = useIALabStore((s) => s.setShowMaxDrawer);
   const showProfileDropdown = useIALabStore((s) => s.showProfileDropdown);
   const setShowProfileDropdown = useIALabStore((s) => s.setShowProfileDropdown);
   const showEvaluationTooltip = useIALabStore((s) => s.showEvaluationTooltip);
@@ -436,8 +436,8 @@ export function useIALabUI(onBack) {
       setIsListening,
       avatarState,
       setAvatarState,
-      showValerioDrawer,
-      setShowValerioDrawer,
+      showMaxDrawer,
+      setShowMaxDrawer,
       showProfileDropdown,
       setShowProfileDropdown,
       showEvaluationTooltip,
@@ -487,7 +487,7 @@ export function useIALabUI(onBack) {
       coachLoad,
       isListening,
       avatarState,
-      showValerioDrawer,
+      showMaxDrawer,
       showProfileDropdown,
       showEvaluationTooltip,
       certName,

@@ -1,41 +1,47 @@
-export { default as IALab } from './IALab';
-export { default as CourseHome } from './CourseHome';
-export { default as IALabSidebar } from './IALabSidebar';
-export { default as IALabHeader } from './IALabHeader';
-export { default as IALabModals } from './IALabModals';
-export { default as ModuleOverviewCard } from './ModuleOverviewCard';
-export { default as Breadcrumbs } from './Breadcrumbs';
-export { default as GlobalSearchBar } from './GlobalSearchBar';
-export { default as RecommendationsPanel } from './RecommendationsPanel';
-export { default as DailyChallenges } from './DailyChallenges';
-export { default as ModuleActions } from './ModuleActions';
-export { default as IALabModuleHeader } from './IALabModuleHeader';
-export { default as ModuleInfoSection } from './ModuleInfoSection';
-export { default as ToolTutorAccordion } from './ToolTutorAccordion';
-export { default as IALabTour } from './IALabTour';
-export { default as AchievementToast } from './AchievementToast';
-export { default as OfflineBanner } from './OfflineBanner';
-export { default as ValerioFloatingButton } from './ValerioFloatingButton';
-export { default as A11yProvider } from './A11yProvider';
-export { default as IALabSkeleton } from './IALabSkeleton';
-export { default as GenerationHistory } from './GenerationHistory';
-export { default as SynthesizerSuggestions } from './SynthesizerSuggestions';
-export { default as DeepSeekDashboard } from './DeepSeekDashboard';
-export { default as ScoreBreakdown } from './ScoreBreakdown';
-export { default as FeedbackPanel } from './FeedbackPanel';
-export { default as SectionErrorBoundary } from './SectionErrorBoundary';
-export { default as CertificatePreview } from './CertificatePreview';
-export { default as StudyPlannerModal } from './StudyPlannerModal';
-export { default as UserCoursesDashboard } from './UserCoursesDashboard';
-export { default as ModuleProgressCard } from './ModuleProgressCard';
-export { default as TopicResourcesModal } from './TopicResourcesModal';
-export { default as BadgeGalleryModal } from './BadgeGalleryModal';
-export { default as StreakDetailsModal } from './StreakDetailsModal';
-export { default as OVABiasLab } from './OVABiasLab';
-export { default as OVARiskSimulator } from './OVARiskSimulator';
-export { default as OVANotebookPodcastGuide } from './OVANotebookPodcastGuide';
-export * from './shared';
+export { default as IALab } from "./IALab";
+export { default as CourseHome } from "./CourseHome";
+export { default as IALabSidebar } from "./IALabSidebar";
+export { default as IALabHeader } from "./IALabHeader";
+export { default as IALabModals } from "./IALabModals";
+export { default as ModuleOverviewCard } from "./ModuleOverviewCard";
+export { default as Breadcrumbs } from "./Breadcrumbs";
+export { default as GlobalSearchBar } from "./GlobalSearchBar";
+export { default as RecommendationsPanel } from "./RecommendationsPanel";
+export { default as DailyChallenges } from "./DailyChallenges";
+export { default as ModuleActions } from "./ModuleActions";
+export { default as IALabModuleHeader } from "./IALabModuleHeader";
+export { default as ModuleInfoSection } from "./ModuleInfoSection";
+export { default as ToolTutorAccordion } from "./ToolTutorAccordion";
+export { default as IALabTour } from "./IALabTour";
+export { default as AchievementToast } from "./AchievementToast";
+export { default as OfflineBanner } from "./OfflineBanner";
+export { default as MaxFloatingButton } from "./MaxFloatingButton";
+export { default as A11yProvider } from "./A11yProvider";
+export { default as IALabSkeleton } from "./IALabSkeleton";
+export { default as GenerationHistory } from "./GenerationHistory";
+export { default as SynthesizerSuggestions } from "./SynthesizerSuggestions";
+export { default as DeepSeekDashboard } from "./DeepSeekDashboard";
+export { default as ScoreBreakdown } from "./ScoreBreakdown";
+export { default as FeedbackPanel } from "./FeedbackPanel";
+export { default as SectionErrorBoundary } from "./SectionErrorBoundary";
+export { default as CertificatePreview } from "./CertificatePreview";
+export { default as StudyPlannerModal } from "./StudyPlannerModal";
+export { default as UserCoursesDashboard } from "./UserCoursesDashboard";
+export { default as ModuleProgressCard } from "./ModuleProgressCard";
+export { default as TopicResourcesModal } from "./TopicResourcesModal";
+export { default as BadgeGalleryModal } from "./BadgeGalleryModal";
+export { default as StreakDetailsModal } from "./StreakDetailsModal";
+export { default as OVABiasLab } from "./OVABiasLab";
+export { default as OVARiskSimulator } from "./OVARiskSimulator";
+export { default as OVANotebookPodcastGuide } from "./OVANotebookPodcastGuide";
+export * from "./shared";
 export {
-  IALabCommunityHub, IALabForumPostCardListItem, IALabForumPostList, IALabForumPostDetail,
-  IALabForumStats, IALabForumTagFilter, IALabForumSkeleton, IALabForumEmptyState,
-} from './forum';
+  IALabCommunityHub,
+  IALabForumPostCardListItem,
+  IALabForumPostList,
+  IALabForumPostDetail,
+  IALabForumStats,
+  IALabForumTagFilter,
+  IALabForumSkeleton,
+  IALabForumEmptyState,
+} from "./forum";

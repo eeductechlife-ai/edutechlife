@@ -6,7 +6,7 @@ const VOICE_PROFILES = {
     speakingRate: 0.95,
     volumeGainDb: 2.5,
   },
-  valerio: {
+  max: {
     languageCode: "es-US",
     name: "es-US-Neural2-C",
     pitch: -1.0,
@@ -94,7 +94,7 @@ const VOICE_FALLBACKS = {
       speakingRate: 0.95,
     },
   ],
-  valerio: [
+  max: [
     {
       languageCode: "es-US",
       name: "es-US-Neural2-C",

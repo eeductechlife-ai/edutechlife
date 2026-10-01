@@ -28,7 +28,7 @@ export async function generatePDF({ diagnosis, t, setError, setPdfLoading }) {
 
   setPdfLoading(true);
 
-  const fileName = `Diagnostico_VAK_${(diagnosis.studentName || "estudiante").replace(/\s+/g, "_")}_${diagnosis.date || new Date().toISOString().split("T")[0]}`;
+  const fileName = `Mi_mapa_de_aprendizaje_${(diagnosis.studentName || "estudiante").replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}`;
   const opt = {
     margin: [15, 15, 15, 15],
     filename: `${fileName}.pdf`,

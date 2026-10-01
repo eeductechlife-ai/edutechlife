@@ -12,7 +12,7 @@ import {
   Award,
   Play,
 } from "lucide-react";
-import { OVAIntro, OVAValerioBar } from "./shared";
+import { OVAIntro, OVAMaxBar } from "./shared";
 import SectionErrorBoundary from "./SectionErrorBoundary";
 
 const EdutechLogo = ({ size = "large" }) => {
@@ -137,10 +137,10 @@ export default function OVANotebookBase({
           ? 1 + contentScreens.length + currentQIndex
           : totalSteps - 1;
 
-  const getValerioText = () => {
+  const getMaxText = () => {
     if (screen === "intro") return tk("welcome_audio");
     if (gameState === "content")
-      return contentScreens[contentIdx]?.valerioText || "";
+      return contentScreens[contentIdx]?.maxText || "";
     if (gameState === "quiz")
       return questionsData[currentQIndex]?.question || "";
     return tk("completed_text");
@@ -220,7 +220,7 @@ export default function OVANotebookBase({
             </button>
           </div>
         </div>
-        <OVAValerioBar text={getValerioText()} />
+        <OVAMaxBar text={getMaxText()} />
       </div>
     );
   }
@@ -291,7 +291,7 @@ export default function OVANotebookBase({
                     {screen_data.title}
                   </h2>
                   <p className="text-[var(--theme-emphasis)]/80 dark:text-slate-100/80 text-sm leading-relaxed mb-6">
-                    {screen_data.valerioText}
+                    {screen_data.maxText}
                   </p>
 
                   <div className="mb-5">
@@ -406,7 +406,7 @@ export default function OVANotebookBase({
             </footer>
           </div>
         </div>
-        <OVAValerioBar text={getValerioText()} />
+        <OVAMaxBar text={getMaxText()} />
       </div>
     );
   }
@@ -590,7 +590,7 @@ export default function OVANotebookBase({
             </footer>
           </div>
         </div>
-        <OVAValerioBar text={getValerioText()} />
+        <OVAMaxBar text={getMaxText()} />
       </div>
     </SectionErrorBoundary>
   );

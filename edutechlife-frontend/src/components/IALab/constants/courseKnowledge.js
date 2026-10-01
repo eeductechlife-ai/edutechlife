@@ -2,7 +2,7 @@
  * courseKnowledge.js
  *
  * Base de conocimiento consolidada de todo el curso IALab.
- * Utilizada por Valerio para responder preguntas de los estudiantes
+ * Utilizada por Max para responder preguntas de los estudiantes
  * con contexto real del contenido del curso.
  *
  * Generado automáticamente desde moduleContent.js + moduleResources.js

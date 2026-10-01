@@ -26,7 +26,7 @@ export const contentScreens = [
       "Simulación práctica de curación de fuentes y análisis documental con IA",
     objective:
       "Aprender a seleccionar, organizar y evaluar fuentes para tu notebook",
-    valerioText:
+    maxText:
       "La base de un buen análisis documental comienza con la selección de fuentes. No se trata de acumular documentos, sino de elegir los más relevantes y confiables. Una fuente bien curada marca la diferencia entre un análisis superficial y uno profundo. Aprende a identificar fuentes primarias, evaluar su credibilidad y organizarlas temáticamente para maximizar el valor de tu investigación.",
     achievements: [
       { text: "Identificar fuentes primarias y secundarias relevantes" },
@@ -51,7 +51,7 @@ export const contentScreens = [
     title: "Síntesis Cruzada entre Fuentes",
     subtitle: "Conectar ideas entre múltiples documentos",
     objective: "Generar síntesis que integren información de diversas fuentes",
-    valerioText:
+    maxText:
       "El verdadero poder del análisis documental está en la capacidad de conectar ideas entre diferentes fuentes. Una síntesis cruzada te permite identificar patrones, contradicciones y complementos entre documentos que, vistos por separado, no serían evidentes. NotebookLM facilita este proceso al permitirte hacer preguntas que abarcan todas tus fuentes simultáneamente.",
     achievements: [
       { text: "Identificar puntos en común entre diferentes autores" },
@@ -76,7 +76,7 @@ export const contentScreens = [
     title: "Análisis Crítico de Contenido",
     subtitle: "Evaluar y cuestionar la información",
     objective: "Desarrollar pensamiento crítico al analizar documentos",
-    valerioText:
+    maxText:
       "El análisis crítico es la habilidad más importante que puedes desarrollar. No se trata solo de entender lo que dice un documento, sino de cuestionarlo, evaluar sus argumentos y determinar su validez. Pregúntate siempre: ¿Quién escribió esto? ¿Con qué propósito? ¿Qué evidencia respalda sus afirmaciones? ¿Qué sesgos podría tener?",
     achievements: [
       { text: "Evaluar la solidez de los argumentos presentados" },

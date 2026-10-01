@@ -49,7 +49,7 @@ export function useCelebrationEffects(activeMod, handleGlobalAction) {
         origin: { y: 0.6 },
         colors: ["#004B63", "#00BCD4", "#FFD166", "#10B981"],
       });
-      speakTextConversational(t("ialab.speech.module_passed"), "valerio");
+      speakTextConversational(t("ialab.speech.module_passed"), "max");
     }
     prevFullyApproved.current = fullyApproved;
   }, [fullyApproved, t]);
@@ -67,7 +67,7 @@ export function useCelebrationEffects(activeMod, handleGlobalAction) {
         if (Date.now() < end) requestAnimationFrame(frame);
       };
       frame();
-      speakTextConversational(t("ialab.speech.course_completed"), "valerio");
+      speakTextConversational(t("ialab.speech.course_completed"), "max");
       setTimeout(
         () => handleGlobalAction("OPEN_CERTIFICATE"),
         CERTIFICATE_DELAY,

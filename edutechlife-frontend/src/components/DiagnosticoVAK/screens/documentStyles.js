@@ -168,50 +168,6 @@ export const contentPadding = {
   position: "relative",
 };
 
-export const sealOuter = {
-  position: "absolute",
-  top: "180px",
-  right: "40px",
-  width: "90px",
-  height: "90px",
-  borderRadius: "50%",
-  border: "2.5px solid rgba(77,168,196,0.15)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  opacity: 0.6,
-  pointerEvents: "none",
-  zIndex: 1,
-};
-
-export const sealInner = {
-  width: "76px",
-  height: "76px",
-  borderRadius: "50%",
-  border: "1.5px solid rgba(77,168,196,0.1)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexDirection: "column",
-};
-
-export const sealCertLabel = {
-  color: "#4DA8C4",
-  fontSize: "6px",
-  fontWeight: "700",
-  letterSpacing: "1px",
-  textTransform: "uppercase",
-};
-
-export const sealVakLabel = {
-  color: "#004B63",
-  fontSize: "5px",
-  fontWeight: "600",
-  letterSpacing: "0.5px",
-  marginTop: "1px",
-  textTransform: "uppercase",
-};
-
 export const noteBox = {
   padding: "10px 14px",
   background: "#F8FAFC",
@@ -308,45 +264,6 @@ export const heroWrapper = (gradient) => ({
   color: "white",
   boxShadow: "0 8px 40px rgba(77,168,196,0.2)",
 });
-
-export const heroSeal = {
-  position: "absolute",
-  top: "12px",
-  right: "12px",
-  width: "52px",
-  height: "52px",
-  borderRadius: "50%",
-  border: "2px solid rgba(255,255,255,0.25)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexDirection: "column",
-  opacity: 0.8,
-};
-
-export const heroSealOficial = {
-  color: "#ffffff",
-  fontSize: "6px",
-  fontWeight: "700",
-  letterSpacing: "0.8px",
-  textTransform: "uppercase",
-  lineHeight: "1.2",
-};
-
-export const heroSealDivider = {
-  width: "16px",
-  height: "1.5px",
-  background: "rgba(255,255,255,0.4)",
-  margin: "2px 0",
-};
-
-export const heroSealVerified = {
-  color: "rgba(255,255,255,0.8)",
-  fontSize: "5px",
-  fontWeight: "600",
-  letterSpacing: "0.5px",
-  textTransform: "uppercase",
-};
 
 export const heroIconBox = {
   width: "52px",

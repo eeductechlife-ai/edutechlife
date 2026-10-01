@@ -17,28 +17,15 @@ export const MOOD_OPTIONS = [
     label: "No muy bien",
     icon: "Frown",
     message:
-      "Entiendo cómo te sientes. Este diagnóstico te ayudará a conocerte mejor.",
+      "Entiendo cómo te sientes. Esta actividad te ayudará a conocerte mejor y puedes hacerla con calma.",
   },
 ];
 
-export const buildResultsURL = (diag) => {
-  if (!diag) return "";
-  try {
-    const base = "https://edutechlife.co";
-    const payload = encodeURIComponent(
-      JSON.stringify({
-        studentName: diag.studentName,
-        date: diag.date,
-        predominantStyle: diag.predominantStyle,
-        percentage: diag.percentage,
-      }),
-    );
-    const dataURL = `${base}/diagnosis/vak/results?payload=${payload}`;
-    return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(dataURL)}`;
-  } catch (e) {
-    return "";
-  }
-};
+/**
+ * Destino del QR del informe: la página pública de IngenIA. No lleva datos
+ * del estudiante y se genera en el propio navegador.
+ */
+export const INGENIA_QR_URL = "https://edutechlife.co/conoce-ingenia";
 
 export const getMoodLabel = (moodValue, t) => {
   const labels = {

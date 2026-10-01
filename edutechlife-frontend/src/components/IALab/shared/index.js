@@ -1,6 +1,6 @@
 export { default as OVALayout } from "./OVALayout";
 export { default as OVAIntro } from "./OVAIntro";
-export { default as OVAValerioBar } from "./OVAValerioBar";
+export { default as OVAMaxBar } from "./OVAMaxBar";
 export { default as OVANavTabs } from "./OVANavTabs";
 export { default as LoadingSpinner } from "./LoadingSpinner";
 export { default as MobileHeader } from "./MobileHeader";

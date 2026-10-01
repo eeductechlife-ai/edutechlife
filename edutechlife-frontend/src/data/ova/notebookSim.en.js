@@ -26,7 +26,7 @@ export const contentScreens = [
       "Practical simulation of source curation and AI-powered document analysis",
     objective:
       "Learn to select, organize, and evaluate sources for your notebook",
-    valerioText:
+    maxText:
       "The foundation of good document analysis begins with source selection. It is not about accumulating documents, but about choosing the most relevant and reliable ones. A well-curated source makes the difference between superficial and deep analysis. Learn to identify primary sources, evaluate their credibility, and organize them thematically to maximize your research value.",
     achievements: [
       { text: "Identify relevant primary and secondary sources" },
@@ -52,7 +52,7 @@ export const contentScreens = [
     subtitle: "Connecting ideas across multiple documents",
     objective:
       "Generate syntheses that integrate information from diverse sources",
-    valerioText:
+    maxText:
       "The true power of document analysis lies in the ability to connect ideas across different sources. Cross-synthesis allows you to identify patterns, contradictions, and complements between documents that, viewed separately, would not be evident. NotebookLM facilitates this process by letting you ask questions that span all your sources simultaneously.",
     achievements: [
       { text: "Identify common points between different authors" },
@@ -77,7 +77,7 @@ export const contentScreens = [
     title: "Critical Content Analysis",
     subtitle: "Evaluate and question the information",
     objective: "Develop critical thinking when analyzing documents",
-    valerioText:
+    maxText:
       "Critical analysis is the most important skill you can develop. It is not just about understanding what a document says, but about questioning it, evaluating its arguments, and determining its validity. Always ask yourself: Who wrote this? For what purpose? What evidence supports their claims? What biases might they have?",
     achievements: [
       { text: "Evaluate the strength of the presented arguments" },

@@ -8,7 +8,7 @@ import IALabEvaluationResults from "../IALabEvaluationResults";
 import SecurityWarningModal from "../SecurityWarningModal";
 import ScreenshotProtectionOverlay from "../ScreenshotProtectionOverlay";
 import useScreenshotProtection from "../../../hooks/IALab/useScreenshotProtection";
-import ValerioChallengeIntro from "../challenges/challengeIntro/ValerioChallengeIntro";
+import MaxChallengeIntro from "../challenges/challengeIntro/MaxChallengeIntro";
 import IALabEvaluationStep1 from "../IALabEvaluationStep1";
 import IALabEvaluationStep2 from "../IALabEvaluationStep2";
 import IALabEvaluationStep3 from "../IALabEvaluationStep3";
@@ -341,7 +341,7 @@ const IALabEvaluationModal = ({
       );
     if (state.step === "intro") {
       return (
-        <ValerioChallengeIntro
+        <MaxChallengeIntro
           moduleId={effectiveModuleId}
           onStart={() => {
             setStep(1);

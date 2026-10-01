@@ -26,7 +26,7 @@ export const contentScreens = [
       "Simulação prática de curadoria de fontes e análise documental com IA",
     objective:
       "Aprender a selecionar, organizar e avaliar fontes para o seu notebook",
-    valerioText:
+    maxText:
       "A base de uma boa análise documental começa com a seleção de fontes. Não se trata de acumular documentos, mas de escolher os mais relevantes e confiáveis. Uma fonte bem curada faz a diferença entre uma análise superficial e uma profunda. Aprenda a identificar fontes primárias, avaliar sua credibilidade e organizá-las tematicamente para maximizar o valor da sua pesquisa.",
     achievements: [
       { text: "Identificar fontes primárias e secundárias relevantes" },
@@ -51,7 +51,7 @@ export const contentScreens = [
     title: "Síntese Cruzada entre Fontes",
     subtitle: "Conectar ideias entre múltiplos documentos",
     objective: "Gerar sínteses que integrem informações de diversas fontes",
-    valerioText:
+    maxText:
       "O verdadeiro poder da análise documental está na capacidade de conectar ideias entre diferentes fontes. Uma síntese cruzada permite identificar padrões, contradições e complementos entre documentos que, vistos separadamente, não seriam evidentes. O NotebookLM facilita esse processo ao permitir fazer perguntas que abrangem todas as suas fontes simultaneamente.",
     achievements: [
       { text: "Identificar pontos em comum entre diferentes autores" },
@@ -76,7 +76,7 @@ export const contentScreens = [
     title: "Análise Crítica de Conteúdo",
     subtitle: "Avaliar e questionar a informação",
     objective: "Desenvolver pensamento crítico ao analisar documentos",
-    valerioText:
+    maxText:
       "A análise crítica é a habilidade mais importante que você pode desenvolver. Não se trata apenas de entender o que um documento diz, mas de questioná-lo, avaliar seus argumentos e determinar sua validade. Pergunte-se sempre: Quem escreveu isso? Com que propósito? Que evidência respalda suas afirmações? Que vieses ele pode ter?",
     achievements: [
       { text: "Avaliar a solidez dos argumentos apresentados" },

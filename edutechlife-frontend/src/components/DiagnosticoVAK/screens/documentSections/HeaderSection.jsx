@@ -1,7 +1,7 @@
 import { useTranslation } from "../../../../i18n/I18nProvider";
 import * as styles from "../documentStyles";
 
-const HeaderSection = ({ folio, diagnosis }) => {
+const HeaderSection = ({ diagnosis }) => {
   const { t } = useTranslation();
 
   return (
@@ -19,10 +19,8 @@ const HeaderSection = ({ folio, diagnosis }) => {
           </div>
         </div>
         <div style={styles.headerFolioArea}>
-          <p style={styles.headerFolioLabel}>Folio</p>
-          <p style={styles.headerFolioValue}>{folio}</p>
           <p style={styles.headerDateText}>
-            {diagnosis.date || new Date().toLocaleDateString()}
+            {diagnosis.date || new Date().toLocaleDateString("es-CO")}
           </p>
         </div>
       </div>

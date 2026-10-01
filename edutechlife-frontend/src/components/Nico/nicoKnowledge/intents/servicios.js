@@ -124,11 +124,11 @@ export const servicios = [
       "AI Lab (IALab) es el curso de IA generativa de EdutechLife, guiado por MAX. Tiene 5 módulos: Artesano Digital (prompts), Arquitecto Digital (ChatGPT y GPTs), Detective de Datos (Gemini y Deep Research), Alquimista Digital (NotebookLM) y Guardián Digital (ética de la IA). Incluye laboratorios, examen y certificado.",
   },
   {
-    id: "valerio",
+    id: "max",
     patterns: [
-      "valerio",
+      "max",
       "coach virtual",
-      "qué es valerio",
+      "qué es max",
       "asistente de ia",
       "tutor ia",
     ],

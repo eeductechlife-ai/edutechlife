@@ -16,7 +16,7 @@ import {
   accordionData,
   learningObjectives,
 } from "../../data/ova/ethicalDilemmas";
-import { OVAIntro, OVAValerioBar } from "./shared";
+import { OVAIntro, OVAMaxBar } from "./shared";
 
 export default function OVAEthicalDilemmas({ onComplete }) {
   const { t } = useTranslation();
@@ -83,7 +83,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
     { id: "principles", icon: <Shield size={18} /> },
   ];
 
-  const getValerioText = () => {
+  const getMaxText = () => {
     if (activeSection === "intro") {
       return t("ova.ethical_dilemmas.intro_voice");
     }
@@ -112,7 +112,10 @@ export default function OVAEthicalDilemmas({ onComplete }) {
 
   return (
     <div className="w-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 text-slate-800 font-sans flex flex-col md:flex-row overflow-hidden relative min-h-[500px] rounded-2xl">
-        <aside className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-full border-r border-cyan-100 dark:border-gray-700" aria-label={t("ova.ethical_dilemmas.sidebar_subtitle")}>
+      <aside
+        className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-full border-r border-cyan-100 dark:border-gray-700"
+        aria-label={t("ova.ethical_dilemmas.sidebar_subtitle")}
+      >
         <div className="p-6 text-center border-b border-cyan-50 dark:border-gray-700">
           <div className="flex items-center gap-2 justify-center select-none">
             <div className="relative w-9 h-9 flex items-center justify-center">
@@ -201,7 +204,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
 
           {activeSection === "dilemmas" && (
             <div className="animate-[fadeIn_0.6s_ease-out_forwards] flex flex-col h-full">
-                  <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-black text-[var(--theme-emphasis)] dark:text-slate-100 font-montserrat">
                   {t("ova.ethical_dilemmas.dilemmas_title", "Dilemas Éticos")}
                 </h2>
@@ -209,7 +212,11 @@ export default function OVAEthicalDilemmas({ onComplete }) {
                   <span className="text-sm text-slate-500 dark:text-slate-400">
                     {currentDilemma + 1} / {totalDilemmas}
                   </span>
-                  <div className="flex gap-1" role="group" aria-label={t("ova.ethical_dilemmas.dilemmas_title")}>
+                  <div
+                    className="flex gap-1"
+                    role="group"
+                    aria-label={t("ova.ethical_dilemmas.dilemmas_title")}
+                  >
                     {dilemmas.map((_, i) => (
                       <div
                         key={i}
@@ -474,7 +481,7 @@ export default function OVAEthicalDilemmas({ onComplete }) {
         </footer>
       </main>
 
-      <OVAValerioBar text={getValerioText()} />
+      <OVAMaxBar text={getMaxText()} />
     </div>
   );
 }

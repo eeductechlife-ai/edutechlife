@@ -16,7 +16,7 @@ import {
   Building2,
 } from "lucide-react";
 import { challenges, learningObjectives } from "../../data/ova/practicalCases";
-import { OVAIntro, OVAValerioBar } from "./shared";
+import { OVAIntro, OVAMaxBar } from "./shared";
 
 const OVAPracticalCases = ({ onComplete }) => {
   const { t } = useTranslation();
@@ -66,7 +66,7 @@ const OVAPracticalCases = ({ onComplete }) => {
     }
   };
 
-  const getValerioText = () => {
+  const getMaxText = () => {
     if (screen === "intro") {
       return t("ova.practical.welcome_text");
     }
@@ -96,7 +96,10 @@ const OVAPracticalCases = ({ onComplete }) => {
 
   return (
     <div className="w-full bg-gradient-to-br from-cyan-50 to-white dark:from-gray-900 dark:to-gray-800 text-slate-800 font-sans flex flex-col md:flex-row overflow-hidden relative min-h-[500px] rounded-2xl">
-      <aside className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-full border-r border-cyan-100 dark:border-gray-700" aria-label={t("ova.practical.sidebar_badge")}>
+      <aside
+        className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-full border-r border-cyan-100 dark:border-gray-700"
+        aria-label={t("ova.practical.sidebar_badge")}
+      >
         <div className="p-6 text-center border-b border-cyan-50 dark:border-gray-700">
           <div className="flex items-center gap-2 justify-center select-none">
             <div className="relative w-9 h-9 flex items-center justify-center">
@@ -204,7 +207,11 @@ const OVAPracticalCases = ({ onComplete }) => {
                 </span>
               </div>
             </div>
-            <div className="flex gap-1" role="group" aria-label={t("ova.practical.progress")}>
+            <div
+              className="flex gap-1"
+              role="group"
+              aria-label={t("ova.practical.progress")}
+            >
               {challenges.map((_, i) => (
                 <div
                   key={i}
@@ -402,12 +409,15 @@ const OVAPracticalCases = ({ onComplete }) => {
             </div>
           </div>
         </div>
-        <footer className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4" aria-label={t("ova.practical.footer")}>
+        <footer
+          className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4"
+          aria-label={t("ova.practical.footer")}
+        >
           {t("ova.practical.footer")}
         </footer>
       </main>
 
-      <OVAValerioBar text={getValerioText()} />
+      <OVAMaxBar text={getMaxText()} />
     </div>
   );
 };

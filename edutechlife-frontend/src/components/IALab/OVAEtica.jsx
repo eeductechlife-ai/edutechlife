@@ -200,7 +200,11 @@ PromptConcept.propTypes = {
 const ModuleAnatomy = ({ texts }) => {
   const [sel, setSel] = useState(null);
   const elements = [
-    { k: texts.anatomy_rol, d: texts.anatomy_rol_desc, c: "bg-[var(--theme-emphasis)]" },
+    {
+      k: texts.anatomy_rol,
+      d: texts.anatomy_rol_desc,
+      c: "bg-[var(--theme-emphasis)]",
+    },
     {
       k: texts.anatomy_contexto,
       d: texts.anatomy_contexto_desc,
@@ -420,7 +424,7 @@ export default function OVAEtica({ onComplete }) {
     m6: { title: texts.screen_m6 },
   };
 
-  const getValerioText = () => {
+  const getMaxText = () => {
     switch (screen) {
       case "welcome":
         return texts.welcome_voice;
@@ -455,7 +459,9 @@ export default function OVAEtica({ onComplete }) {
               description={texts.welcome_desc}
               audioText={texts.welcome_voice}
               onStart={() => setScreen("m1")}
-              objectives={[1, 2, 3, 4].map((n) => t(`ova.etica.objective_${n}`))}
+              objectives={[1, 2, 3, 4].map((n) =>
+                t(`ova.etica.objective_${n}`),
+              )}
             />
           </>
         );
@@ -630,8 +636,13 @@ export default function OVAEtica({ onComplete }) {
           </div>
           {screen !== "welcome" && screen !== "certificate" && (
             <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full border border-[var(--theme-primary)]/20">
-              <Star className="text-[var(--theme-primary)] fill-current" size={14} />
-              <span className="font-bold text-[var(--theme-emphasis)] text-xs">{xp} XP</span>
+              <Star
+                className="text-[var(--theme-primary)] fill-current"
+                size={14}
+              />
+              <span className="font-bold text-[var(--theme-emphasis)] text-xs">
+                {xp} XP
+              </span>
             </div>
           )}
           <button
@@ -729,8 +740,10 @@ export default function OVAEtica({ onComplete }) {
         <div className="border-t border-slate-100 dark:border-slate-700 py-3 text-center text-slate-500 dark:text-slate-300 text-xs">
           <p>
             {texts.footer}{" "}
-            <strong className="text-[var(--theme-primary)]">{texts.footer_coach}</strong> —{" "}
-            {texts.footer_tagline}
+            <strong className="text-[var(--theme-primary)]">
+              {texts.footer_coach}
+            </strong>{" "}
+            — {texts.footer_tagline}
           </p>
         </div>
       )}

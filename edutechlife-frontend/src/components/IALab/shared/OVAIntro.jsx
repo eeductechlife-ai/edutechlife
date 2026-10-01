@@ -29,9 +29,7 @@ const OVAIntro = ({
 
   useEffect(() => {
     if (audioText && !started) {
-      speakTextConversational(audioText, "valerio", () =>
-        setAudioPlaying(false),
-      );
+      speakTextConversational(audioText, "max", () => setAudioPlaying(false));
       setAudioPlaying(true);
     }
   }, []);
@@ -122,7 +120,7 @@ const OVAIntro = ({
                   stopSpeech();
                   setAudioPlaying(false);
                 } else {
-                  speakTextConversational(audioText, "valerio", () =>
+                  speakTextConversational(audioText, "max", () =>
                     setAudioPlaying(false),
                   );
                   setAudioPlaying(true);

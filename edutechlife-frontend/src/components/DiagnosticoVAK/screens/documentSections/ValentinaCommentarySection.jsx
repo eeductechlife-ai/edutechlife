@@ -24,14 +24,12 @@ const ValentinaCommentarySection = ({
             }}
           />
           <div style={styles.commentAvatarFallback(sColor)}>
-            <span style={styles.commentAvatarText}>VR</span>
+            <span style={styles.commentAvatarText}>V</span>
           </div>
         </div>
         <div style={styles.commentInfo}>
           <h4 style={styles.commentName}>{t("vak.ui.pdf_valeria_name")}</h4>
-          <p style={styles.commentRole}>
-            {"Psic\u00f3loga Educativa \u2014 Especialista VAK"}
-          </p>
+          <p style={styles.commentRole}>{t("vak.ui.pdf_valeria_title")}</p>
         </div>
       </div>
       <div style={styles.commentText}>

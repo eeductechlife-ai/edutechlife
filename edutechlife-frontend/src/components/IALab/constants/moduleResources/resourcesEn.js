@@ -461,7 +461,7 @@ const RESOURCES_EN = {
         type: "ova_interactive",
         title: "The Grimoire",
         description:
-          "7 questions that will make you a NotebookLM expert. Complete the challenge with Valerio as your personal guide on this alchemical journey.",
+          "7 questions that will make you a NotebookLM expert. Complete the challenge with MAX as your personal guide on this alchemical journey.",
         estimatedTime: "15 minutes",
         difficulty: "Intermediate",
         interactiveElements: 7,

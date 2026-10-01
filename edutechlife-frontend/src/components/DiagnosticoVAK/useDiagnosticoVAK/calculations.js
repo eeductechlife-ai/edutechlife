@@ -1,52 +1,45 @@
 import { STYLE_MAP } from "../vakStyles";
+import { scoreVak } from "../../kids-dashboard/vak/vakQuestions";
 
+/**
+ * Resultado del ADN de Aprendizaje: puntaje por estilo en porcentaje,
+ * estilo principal y, cuando la diferencia es de una respuesta o menos,
+ * un segundo estilo ("perfil mixto").
+ */
 export function calculateDiagnosis({
   answers,
   studentName,
   studentAge,
-  studentEmail,
-  studentPhone,
   studentMood,
   parentName,
-  parentPhone,
-  parentEmail,
   date,
   elapsedTime,
   ageQuestions,
 }) {
   const counts = { visual: 0, auditivo: 0, kinestesico: 0 };
   answers.forEach((a) => {
-    if (a.type === "visual") counts.visual++;
-    else if (a.type === "auditivo") counts.auditivo++;
-    else if (a.type === "kinestesico") counts.kinestesico++;
+    if (a.type in counts) counts[a.type] += 1;
   });
 
-  let predominant = "visual";
-  let max = counts.visual;
-  if (counts.auditivo > max) {
-    predominant = "auditivo";
-    max = counts.auditivo;
-  }
-  if (counts.kinestesico > max) {
-    predominant = "kinestesico";
-    max = counts.kinestesico;
-  }
+  const { scores, predominantStyle, secondaryStyle } = scoreVak(
+    answers.map((a) => a.type),
+  );
 
   return {
     studentName: studentName || "Estudiante",
     studentAge: studentAge || "",
-    studentEmail,
-    studentPhone,
     studentMood,
     parentName: parentName || "",
-    parentPhone: parentPhone || "",
-    parentEmail: parentEmail || "",
     date,
     timeSpent: elapsedTime,
     counts,
-    predominantStyle: predominant,
-    styleDetails: STYLE_MAP[predominant],
-    percentage: Math.round((max / ageQuestions.length) * 100),
+    total: ageQuestions.length,
+    scores,
+    predominantStyle,
+    secondaryStyle,
+    isMixed: !!secondaryStyle,
+    styleDetails: STYLE_MAP[predominantStyle],
+    percentage: scores[predominantStyle],
     answers,
   };
 }

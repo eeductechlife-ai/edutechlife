@@ -1,20 +1,20 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Icon } from '../../../utils/iconMapping.jsx';
-import { cn } from '../../forum/forumDesignSystem';
-import OVAValerioBar from './OVAValerioBar';
-import OVANavTabs from './OVANavTabs';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { motion, AnimatePresence } from "framer-motion";
+import { Icon } from "../../../utils/iconMapping.jsx";
+import { cn } from "../../forum/forumDesignSystem";
+import OVAMaxBar from "./OVAMaxBar";
+import OVANavTabs from "./OVANavTabs";
 
 const OVALayout = ({
   children,
   title,
-  icon = 'fa-brain',
+  icon = "fa-brain",
   tabs = [],
   currentTab,
   onTabChange,
-  valerioText,
-  valerioAutoPlay = false,
+  maxText,
+  maxAutoPlay = false,
   showNav = true,
   nextLabel,
   prevLabel,
@@ -37,15 +37,20 @@ const OVALayout = ({
         </div>
       )}
 
-      <div className={cn('flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6', className)}>
+      <div
+        className={cn(
+          "flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6",
+          className,
+        )}
+      >
         <div className="max-w-4xl mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
-              key={currentTab || 'content'}
+              key={currentTab || "content"}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
             >
               {children}
             </motion.div>
@@ -58,18 +63,17 @@ const OVALayout = ({
           tabs={tabs}
           activeTab={currentTab}
           onTabChange={onTabChange}
-          currentIndex={tabs.findIndex(t => t.id === currentTab)}
+          currentIndex={tabs.findIndex((t) => t.id === currentTab)}
           totalTabs={tabs.length}
           nextLabel={nextLabel}
           prevLabel={prevLabel}
         />
       )}
 
-      <OVAValerioBar text={valerioText} autoPlay={valerioAutoPlay} />
+      <OVAMaxBar text={maxText} autoPlay={maxAutoPlay} />
     </div>
   );
 };
-
 
 OVALayout.propTypes = {
   title: PropTypes.string,
@@ -77,8 +81,8 @@ OVALayout.propTypes = {
   tabs: PropTypes.array,
   currentTab: PropTypes.string,
   onTabChange: PropTypes.func,
-  valerioText: PropTypes.string,
-  valerioAutoPlay: PropTypes.bool,
+  maxText: PropTypes.string,
+  maxAutoPlay: PropTypes.bool,
   showNav: PropTypes.bool,
   nextLabel: PropTypes.string,
   prevLabel: PropTypes.string,

@@ -2,12 +2,7 @@ import { useTranslation } from "../../../../i18n/I18nProvider";
 import { SVG_ICONS } from "../../vakIcons";
 import * as styles from "../documentStyles";
 
-const GuardianSection = ({
-  diagnosis,
-  parentName,
-  parentPhone,
-  parentEmail,
-}) => {
+const GuardianSection = ({ parentName }) => {
   const { t } = useTranslation();
 
   return (
@@ -16,23 +11,9 @@ const GuardianSection = ({
         <span dangerouslySetInnerHTML={{ __html: SVG_ICONS.users }} />
         {t("vak.ui.pdf_guardian_section")}
       </h3>
-      <div style={styles.infoRow}>
-        <span style={styles.infoLabel}>{t("vak.ui.pdf_name")}:</span>
-        <span style={styles.infoValue}>
-          {parentName || diagnosis.parentName || "N/A"}
-        </span>
-      </div>
-      <div style={styles.infoRow}>
-        <span style={styles.infoLabel}>{t("vak.ui.contact_phone_label")}:</span>
-        <span style={styles.infoValuePlain}>
-          {parentPhone || diagnosis.parentPhone || "N/A"}
-        </span>
-      </div>
       <div style={styles.infoRowLast}>
-        <span style={styles.infoLabel}>{t("vak.ui.email_label")}:</span>
-        <span style={styles.infoValuePlain}>
-          {parentEmail || diagnosis.parentEmail || "N/A"}
-        </span>
+        <span style={styles.infoLabel}>{t("vak.ui.pdf_name")}:</span>
+        <span style={styles.infoValue}>{parentName}</span>
       </div>
     </div>
   );

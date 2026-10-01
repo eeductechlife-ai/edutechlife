@@ -21,6 +21,7 @@ import { PREMIUM_FEATURES } from "../kidsDashboardConfig";
 import NextBestAction from "../NextBestAction";
 import TuDiaPlan from "../TuDiaPlan";
 import PerfilTab from "./PerfilTab";
+import VakPendingBanner from "./VakPendingBanner";
 import MateriasTab from "./MateriasTab";
 import ExplorarTab from "./ExplorarTab";
 import { isFeatureEnabled } from "../../../hooks/useFeatureFlag";
@@ -157,6 +158,11 @@ function createTabRenderer(deps) {
             darkMode={darkMode}
           />
           <HeroSection onTabChange={onTabChange} onDaniOpen={deps.onDaniOpen} />
+          <VakPendingBanner
+            vakResult={vakResult}
+            onImport={handleVakComplete}
+            darkMode={darkMode}
+          />
           <NextBestAction onTabChange={onTabChange} />
           <TuDiaPlan onTabChange={onTabChange} darkMode={darkMode} />
         </>

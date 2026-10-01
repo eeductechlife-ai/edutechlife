@@ -51,7 +51,7 @@ const getSteps = (t) => [
     description: t("ialab.tour.step_7_desc"),
   },
   {
-    target: "tour-valerio",
+    target: "tour-max",
     title: t("ialab.tour.step_8_title"),
     description: t("ialab.tour.step_8_desc"),
   },

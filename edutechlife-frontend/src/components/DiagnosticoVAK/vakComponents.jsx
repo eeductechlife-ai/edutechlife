@@ -1,4 +1,4 @@
-import { Sparkles } from 'lucide-react';
+import { Sparkles } from "lucide-react";
 
 export const Confetti = ({ active }) => {
   if (!active) return null;
@@ -6,7 +6,11 @@ export const Confetti = ({ active }) => {
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2">
-        <Sparkles size={64} strokeWidth={1} className="text-[#4DA8C4] opacity-50 animate-pulse" />
+        <Sparkles
+          size={64}
+          strokeWidth={1}
+          className="text-[#4DA8C4] opacity-50 animate-pulse"
+        />
       </div>
       {[...Array(12)].map((_, i) => (
         <div
@@ -15,8 +19,8 @@ export const Confetti = ({ active }) => {
           style={{
             left: `${i * 8.3}%`,
             top: `${(i * 7 + 10) % 90}%`,
-            background: ['#4DA8C4', '#66CCCC', '#B2D8E5'][i % 3],
-            animation: `confetti-fall ${1 + (i % 3) * 0.5}s ease-in ${(i % 5) * 0.1}s infinite`
+            background: ["#4DA8C4", "#66CCCC", "#B2D8E5"][i % 3],
+            animation: `confetti-fall ${1 + (i % 3) * 0.5}s ease-in ${(i % 5) * 0.1}s infinite`,
           }}
         />
       ))}
@@ -34,7 +38,9 @@ export const Celebration = ({ active, styleName }) => {
           <Sparkles size={32} strokeWidth={1.5} className="text-white" />
         </div>
         <div>
-          <p className="text-lg font-bold text-[#004B63]">¡Diagnóstico Completo!</p>
+          <p className="text-lg font-bold text-[#004B63]">
+            ¡Tu mezcla está lista!
+          </p>
           <p className="text-sm text-slate-500">{styleName}</p>
         </div>
       </div>
