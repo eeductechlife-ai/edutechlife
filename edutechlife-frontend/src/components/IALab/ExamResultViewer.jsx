@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useIALabStore } from "../../store/ialabStore";
 import { useTranslation } from "../../i18n/I18nProvider";
+import useFocusTrap from "../../hooks/useFocusTrap";
+import useEscapeKey from "../../hooks/useEscapeKey";
 // Estas cuatro constantes estaban duplicadas a mano y `TOTAL_QUESTIONS` valía 8
 // cuando el examen tiene 12: con 10 aciertos mostraba "-2 incorrectas".
 import {
@@ -12,6 +14,8 @@ import {
 
 const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
   const { t } = useTranslation();
+  const focusTrapRef = useFocusTrap(true);
+  useEscapeKey(true, onClose);
   const passed = score >= PASSING_SCORE;
   const setShowMaxDrawer = useIALabStore((s) => s.setShowMaxDrawer);
   const setMaxInitialMessage = useIALabStore((s) => s.setMaxInitialMessage);
@@ -69,6 +73,7 @@ const ExamResultViewer = ({ moduleId, score, onClose, onRetry }) => {
       onClick={onClose}
     >
       <div
+        ref={focusTrapRef}
         className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 max-h-[90dvh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >

@@ -83,7 +83,8 @@ const IALabForumPostCard = ({
           <div className="flex items-center gap-3 text-sm text-slate-500">
             <span className="font-medium text-[var(--theme-emphasis)]">
               {post.profiles?.full_name ||
-                t("ialab.forum.post_card.author_name")}
+                post.user_name ||
+                t("ialab.forum.optimized.user_fallback")}
             </span>
             <span>•</span>
             <span>{formattedDate}</span>

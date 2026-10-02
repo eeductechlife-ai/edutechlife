@@ -207,6 +207,14 @@ const IALabTour = ({ hasStartedCourse }) => {
       localStorage.setItem(TOUR_KEY, "true");
       return;
     }
+    // Si el tour de bienvenida se mostró en esta misma sesión, no encadenar
+    // dos recorridos seguidos: se deja el tour del módulo para la próxima
+    // visita (no se marca TOUR_KEY).
+    try {
+      if (sessionStorage.getItem("ialab_welcome_tour_shown")) return;
+    } catch {
+      /* sin sessionStorage: mostrar como antes */
+    }
     const timer = setTimeout(startTour, INITIAL_DELAY);
     return () => clearTimeout(timer);
   }, [startTour, hasStartedCourse]);

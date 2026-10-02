@@ -132,9 +132,31 @@ export const useForumPosts = () => {
 
         if (insertError) throw insertError;
 
-        setPosts((prev) => [post, ...prev]);
+        // El perfil de foro lo crea un trigger DESPUÉS del insert, así que el
+        // embed `profiles` puede venir vacío en la respuesta inmediata y el
+        // autor se veía como "Usuario" hasta recargar. Se rellena de forma
+        // optimista con los datos que ya tenemos.
+        const authorName =
+          profile?.full_name ||
+          user.fullName ||
+          user.full_name ||
+          user.email ||
+          "Usuario";
+        const postWithAuthor = post?.profiles?.full_name
+          ? post
+          : {
+              ...post,
+              profiles: {
+                ...(post?.profiles || {}),
+                full_name: authorName,
+                avatar_url:
+                  profile?.avatar_url || post?.profiles?.avatar_url || null,
+              },
+            };
+
+        setPosts((prev) => [postWithAuthor, ...prev]);
         setTotalCount((prev) => prev + 1);
-        return { success: true, post };
+        return { success: true, post: postWithAuthor };
       } catch (err) {
         return { success: false, error: err.message };
       }

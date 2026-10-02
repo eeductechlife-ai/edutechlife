@@ -1,22 +1,29 @@
-import { renderHook, act } from '@testing-library/react';
-import { useIALabStore } from '../../../store/ialabStore';
-import { useCelebrationEffects } from '../useCelebrationEffects';
+import { renderHook, act } from "@testing-library/react";
+import { useIALabStore } from "../../../store/ialabStore";
+import { useCelebrationEffects } from "../useCelebrationEffects";
 
 const mockFireConfetti = vi.fn();
 const mockSpeakText = vi.fn();
 
-vi.mock('../../../utils/speech', () => ({
+vi.mock("../../../utils/speech", () => ({
   fireConfetti: (...args) => mockFireConfetti(...args),
   speakTextConversational: (...args) => mockSpeakText(...args),
 }));
 
 const mockT = vi.fn((key) => key);
 
-vi.mock('../../../i18n/I18nProvider', () => ({
+vi.mock("../../../i18n/I18nProvider", () => ({
   useTranslation: () => ({ t: mockT }),
 }));
 
-const partialMod = { exam: true, challenge: true, resourcesCompleted: true, community: false, currentScore: 70, isUnlocked: true };
+const partialMod = {
+  exam: true,
+  challenge: true,
+  resourcesCompleted: true,
+  community: false,
+  currentScore: 70,
+  isUnlocked: true,
+};
 const allMods = {};
 for (let i = 1; i <= 5; i++) allMods[i] = { ...partialMod };
 
@@ -35,11 +42,12 @@ const freshState = {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  window.localStorage.clear();
   useIALabStore.setState(freshState);
 });
 
-describe('useCelebrationEffects', () => {
-  test('fires confetti when module becomes fully approved', () => {
+describe("useCelebrationEffects", () => {
+  test("fires confetti when module becomes fully approved", () => {
     useIALabStore.setState({
       moduleProgress: {
         1: { ...partialMod, currentScore: 70 },
@@ -60,7 +68,7 @@ describe('useCelebrationEffects', () => {
     });
   });
 
-  test('speaks text on module approval', () => {
+  test("speaks text on module approval", () => {
     useIALabStore.setState({
       moduleProgress: {
         1: { ...partialMod, currentScore: 70 },
@@ -81,29 +89,55 @@ describe('useCelebrationEffects', () => {
     });
   });
 
-  test('fires confetti on course completion', () => {
+  test("fires confetti on course completion", () => {
     const handleGlobalAction = vi.fn();
 
     renderHook(() => useCelebrationEffects(1, handleGlobalAction));
 
     act(() => {
-      const completed = { exam: true, challenge: true, resourcesCompleted: true, community: false, currentScore: 100, isUnlocked: true };
+      const completed = {
+        exam: true,
+        challenge: true,
+        resourcesCompleted: true,
+        community: false,
+        currentScore: 100,
+        isUnlocked: true,
+      };
       useIALabStore.setState({
-        moduleProgress: { 1: completed, 2: completed, 3: completed, 4: completed, 5: completed },
+        moduleProgress: {
+          1: completed,
+          2: completed,
+          3: completed,
+          4: completed,
+          5: completed,
+        },
       });
     });
   });
 
-  test('calls OPEN_CERTIFICATE after course completion delay', () => {
+  test("calls OPEN_CERTIFICATE after course completion delay", () => {
     vi.useFakeTimers();
     const handleGlobalAction = vi.fn();
 
     renderHook(() => useCelebrationEffects(1, handleGlobalAction));
 
     act(() => {
-      const completed = { exam: true, challenge: true, resourcesCompleted: true, community: false, currentScore: 100, isUnlocked: true };
+      const completed = {
+        exam: true,
+        challenge: true,
+        resourcesCompleted: true,
+        community: false,
+        currentScore: 100,
+        isUnlocked: true,
+      };
       useIALabStore.setState({
-        moduleProgress: { 1: completed, 2: completed, 3: completed, 4: completed, 5: completed },
+        moduleProgress: {
+          1: completed,
+          2: completed,
+          3: completed,
+          4: completed,
+          5: completed,
+        },
       });
     });
 
@@ -111,11 +145,11 @@ describe('useCelebrationEffects', () => {
       vi.runAllTimers();
     });
 
-    expect(handleGlobalAction).toHaveBeenCalledWith('OPEN_CERTIFICATE');
+    expect(handleGlobalAction).toHaveBeenCalledWith("OPEN_CERTIFICATE");
     vi.useRealTimers();
   });
 
-  test('does not fire confetti on initial render with already-approved module', () => {
+  test("does not fire confetti on initial render with already-approved module", () => {
     renderHook(() => useCelebrationEffects(1, vi.fn()));
   });
 });

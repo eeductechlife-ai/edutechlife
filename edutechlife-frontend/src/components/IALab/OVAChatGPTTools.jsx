@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "../../i18n/I18nProvider";
 import VoiceReader from "./VoiceReader";
@@ -26,7 +26,11 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { stopSpeech } from "../../utils/speech";
-import { tools, quizScenarios } from "../../data/ova/chatGPTTools";
+import {
+  tools,
+  quizScenarios as rawQuizScenarios,
+} from "../../data/ova/chatGPTTools";
+import { withShuffledOptions } from "../../utils/stableShuffle";
 import { OVAIntro } from "./shared";
 
 const iconMap = { Globe, Code, ImageIcon, Layout, Cpu };
@@ -49,6 +53,10 @@ ToolIcon.propTypes = {
 
 export default function OVAChatGPTTools({ onComplete }) {
   const { t } = useTranslation();
+  const quizScenarios = useMemo(
+    () => rawQuizScenarios.map((q, i) => withShuffledOptions(q, i + 1)),
+    [],
+  );
   const [screen, setScreen] = useState("welcome");
   const [activeModal, setActiveModal] = useState(null);
   const [viewedTools, setViewedTools] = useState([]);

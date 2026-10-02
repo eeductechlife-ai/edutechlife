@@ -35,6 +35,12 @@ export const LEARNING_EVENTS = {
   FLASHCARD_SESSION_COMPLETED: "flashcard_session_completed",
   GRADE_SCANNED: "grade_scanned",
   RECOMMENDATION_SEEN: "recommendation_seen",
+
+  // IALab — embudo por recurso y por pregunta (detectar abandono)
+  RESOURCE_OPENED: "course_resource_opened",
+  RESOURCE_COMPLETED: "course_resource_completed",
+  RESOURCE_ABANDONED: "course_resource_abandoned",
+  QUIZ_QUESTION_ANSWERED: "quiz_question_answered",
 };
 
 export const PRODUCT_EVENTS = {

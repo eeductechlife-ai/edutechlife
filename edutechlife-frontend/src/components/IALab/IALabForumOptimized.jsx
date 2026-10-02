@@ -127,9 +127,11 @@ const IALabForumOptimized = ({
           return;
         }
 
-        if (activeMod && !hasTrackedCommunity) {
+        if (activeMod) {
+          // Se cuenta cada aporte (no solo el primero): la Comunidad se
+          // completa con 2+ contribuciones, no con un único mensaje.
           await trackCommunityComment(activeMod);
-          setHasTrackedCommunity(true);
+          if (!hasTrackedCommunity) setHasTrackedCommunity(true);
         }
 
         setNewMessage("");
@@ -372,6 +374,7 @@ const IALabForumOptimized = ({
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
                             {post.profiles?.full_name ||
+                              post.user_name ||
                               t("ialab.forum.optimized.user_fallback")}
                           </span>
                           {post.tags?.includes("Mentor") && (
@@ -414,8 +417,8 @@ const IALabForumOptimized = ({
                   <div className="mb-3">
                     <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-1">
                       {/^Mensaje de /.test(post.title || "") &&
-                      post.profiles?.full_name
-                        ? `Mensaje de ${post.profiles.full_name}`
+                      (post.profiles?.full_name || post.user_name)
+                        ? `Mensaje de ${post.profiles?.full_name || post.user_name}`
                         : maskEmails(
                             post.title,
                             t("ialab.forum.optimized.user_fallback"),

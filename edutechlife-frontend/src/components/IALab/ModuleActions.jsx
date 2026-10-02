@@ -23,6 +23,7 @@ const ActionCard = memo(
     icon,
     label,
     weightKey,
+    descKey,
     onClick,
     completed,
     score,
@@ -104,6 +105,11 @@ const ActionCard = memo(
           >
             {label}
           </span>
+          {descKey && (
+            <span className="text-[12px] leading-snug theme-text-muted block mt-0.5">
+              {t(descKey)}
+            </span>
+          )}
           <span
             className={`text-[13px] leading-snug ${
               isApproved
@@ -222,6 +228,7 @@ const ModuleActions = ({
         icon="fa-comments"
         label={t("ialab.module_actions.community")}
         weightKey="ialab.module_actions.weight_community"
+        descKey="ialab.module_actions.community_desc"
         onClick={handleCommunity}
         completed={moduleProgress?.[activeMod]?.community}
         score={100}
@@ -231,6 +238,7 @@ const ModuleActions = ({
         icon="fa-rocket"
         label={t("ialab.module_actions.challenge")}
         weightKey="ialab.module_actions.weight_challenge"
+        descKey="ialab.module_actions.challenge_desc"
         onClick={handleChallenge}
         completed={!!challengeScores?.[activeMod]}
         score={challengeScores?.[activeMod]}
@@ -247,6 +255,7 @@ const ModuleActions = ({
         icon="fa-clipboard-check"
         label={t("ialab.module_actions.exam")}
         weightKey="ialab.module_actions.weight_exam"
+        descKey="ialab.module_actions.exam_desc"
         onClick={handleExam}
         completed={effectiveExamScore !== undefined}
         score={effectiveExamScore}
@@ -337,6 +346,7 @@ ActionCard.propTypes = {
   icon: PropTypes.string,
   label: PropTypes.string,
   weightKey: PropTypes.string,
+  descKey: PropTypes.string,
   onClick: PropTypes.func,
   completed: PropTypes.bool,
   score: PropTypes.number,

@@ -8,6 +8,8 @@ import { useNotification } from "../../../context/NotificationContext";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import useFocusTrap from "../../../hooks/useFocusTrap";
 import { scopedKey } from "../../../utils/userScopedStorage";
+import { track } from "../../../lib/analytics";
+import { EVENTS } from "../../../lib/analyticsEvents";
 import SecurityWarningModal from "../SecurityWarningModal";
 import ScreenshotProtectionOverlay from "../ScreenshotProtectionOverlay";
 import { useQuizSecurity } from "./hooks/useQuizSecurity";
@@ -141,13 +143,20 @@ const IALabQuizModal = ({ isOpen, onClose }) => {
 
   const handleSelectAnswer = useCallback(
     (answerId) => {
-      const questionId = quizQuestions[currentQuestion]?.id;
+      const q = quizQuestions[currentQuestion];
+      const questionId = q?.id;
       if (questionId) {
         updateQuizAnswer(questionId, answerId);
         setSelectedAnswer(answerId);
+        track(EVENTS.QUIZ_QUESTION_ANSWERED, {
+          moduleId: activeMod,
+          questionId,
+          questionIndex: currentQuestion,
+          correct: answerId === q.correctAnswer,
+        });
       }
     },
-    [currentQuestion, quizQuestions, updateQuizAnswer],
+    [currentQuestion, quizQuestions, updateQuizAnswer, activeMod],
   );
 
   const handleNext = useCallback(() => {

@@ -68,6 +68,15 @@ const getDataFieldsByCase = (selectedCase) => {
   return base;
 };
 
+const getFunctionSpecByCase = (selectedCase, t) => {
+  const keyByCase = {
+    marketing: "ialab.challenge.m2.step3_spec_marketing",
+    support: "ialab.challenge.m2.step3_spec_support",
+    dev: "ialab.challenge.m2.step3_spec_dev",
+  };
+  return keyByCase[selectedCase] ? t(keyByCase[selectedCase]) : "";
+};
+
 const ChatGPTStep3 = ({
   exercise,
   response,
@@ -111,7 +120,11 @@ const ChatGPTStep3 = ({
     onResponseChange(JSON.stringify(next));
   };
 
-  const functionCallSpec = exercise?.functionCallSpec || exercise || "";
+  // La especificación se arma según el caso elegido para que nunca hable de
+  // un CRM de soporte cuando el estudiante eligió marketing (o viceversa).
+  const caseSpec = getFunctionSpecByCase(selectedCase, t);
+  const functionCallSpec =
+    caseSpec || exercise?.functionCallSpec || exercise || "";
   const dataFields = getDataFieldsByCase(selectedCase);
   const completed = [
     functionName.length >= 3,

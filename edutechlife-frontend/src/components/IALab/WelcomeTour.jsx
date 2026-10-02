@@ -88,8 +88,7 @@ function hasExistingProgress(store) {
   );
   const hasXp = (store.xp || 0) > 0;
   const hasLessonProgress =
-    store.lessonProgress &&
-    Object.keys(store.lessonProgress).length > 0;
+    store.lessonProgress && Object.keys(store.lessonProgress).length > 0;
   return hasAnyModuleActivity || hasXp || !!hasLessonProgress;
 }
 
@@ -149,6 +148,14 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
 
   const handleClose = useCallback(() => {
     safeStorage.setItem(TOUR_KEY, new Date().toISOString());
+    try {
+      // Evita encadenar el tour de bienvenida con el tour del módulo en la
+      // misma sesión (dos recorridos seguidos). El tour del módulo se mostrará
+      // en la siguiente visita.
+      sessionStorage.setItem("ialab_welcome_tour_shown", "1");
+    } catch {
+      /* sin sessionStorage: comportamiento previo */
+    }
     setIsOpen(false);
     if (onComplete) onComplete();
   }, [onComplete]);

@@ -157,7 +157,9 @@ const SidebarExpanded = ({ onOpenStreak }) => {
                 {Math.round(courseProgress || 0)}%
               </span>
               <span className="text-[9px] font-semibold text-[var(--theme-emphasis)]/60 dark:text-[var(--theme-emphasis-soft)]/60 mt-0.5">
-                completado
+                {Math.round(courseProgress || 0) >= 100
+                  ? "completado"
+                  : "en progreso"}
               </span>
             </div>
             <SidebarToggleCue

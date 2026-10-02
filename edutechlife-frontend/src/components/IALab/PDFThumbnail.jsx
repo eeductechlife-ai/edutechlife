@@ -1,9 +1,9 @@
 /**
  * COMPONENTE: PDFThumbnail
- * 
+ *
  * Miniatura premium para visualización de documentos PDF con doble clic
  * para apertura inmersiva a pantalla completa
- * 
+ *
  * Características:
  * - Miniatura con diseño premium Edutechlife
  * - Evento onDoubleClick para visualización inmersiva
@@ -12,35 +12,35 @@
  * - Botón de cierre para regresar al dashboard
  */
 
-import React, { useState, useRef } from 'react'
-import PropTypes from 'prop-types';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Icon } from '../../utils/iconMapping.jsx';
-import { useTranslation } from '../../i18n/I18nProvider';
-import { cn } from '../forum/forumDesignSystem';
+import React, { useState, useRef } from "react";
+import PropTypes from "prop-types";
+import { motion, AnimatePresence } from "framer-motion";
+import { Icon } from "../../utils/iconMapping.jsx";
+import { useTranslation } from "../../i18n/I18nProvider";
+import { cn } from "../forum/forumDesignSystem";
 
 /**
  * Componente principal PDFThumbnail
  */
-const PDFThumbnail = ({ 
+const PDFThumbnail = ({
   title: titleProp,
   pdfUrl = "/Doc/guia-anatomia-prompt.pdf",
   description: descProp,
   size: sizeProp,
   pages = 12,
-  onOpenImmersiveView = null
+  onOpenImmersiveView = null,
 }) => {
   const { t } = useTranslation();
-  const title = titleProp ?? t('ialab.pdf_thumbnail.title');
-  const description = descProp ?? t('ialab.pdf_thumbnail.description');
-  const size = sizeProp ?? t('ialab.pdf_thumbnail.size');
+  const title = titleProp ?? t("ialab.pdf_thumbnail.title");
+  const description = descProp ?? t("ialab.pdf_thumbnail.description");
+  const size = sizeProp ?? t("ialab.pdf_thumbnail.size");
   // Estado para controlar la visualización inmersiva
   const [isImmersiveViewOpen, setIsImmersiveViewOpen] = useState(false);
   const iframeRef = useRef(null);
 
   // Manejar clic simple para abrir PDF en nueva pestaña
   const handleClick = () => {
-    window.open(pdfUrl, '_blank');
+    window.open(pdfUrl, "_blank");
   };
 
   // Manejar doble clic para abrir visualización inmersiva
@@ -50,7 +50,7 @@ const PDFThumbnail = ({
     } else {
       setIsImmersiveViewOpen(true);
       // Bloquear scroll del body cuando se abre el visor inmersivo
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
   };
 
@@ -58,7 +58,7 @@ const PDFThumbnail = ({
   const handleCloseImmersiveView = () => {
     setIsImmersiveViewOpen(false);
     // Restaurar scroll del body
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = "auto";
   };
 
   // Manejar clic en el overlay (fuera del visor)
@@ -78,58 +78,63 @@ const PDFThumbnail = ({
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}
         className="group relative w-full bg-white rounded-2xl border border-slate-200/60 border-l-4 border-l-[var(--theme-emphasis)] shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.02] active:scale-[0.98]"
-        aria-label={t('ialab.pdf_thumbnail.aria_label', { title })}
-        title={t('ialab.pdf_thumbnail.title_attr')}
+        aria-label={t("ialab.pdf_thumbnail.aria_label", { title })}
+        title={t("ialab.pdf_thumbnail.title_attr")}
       >
         {/* Indicador de interactividad */}
         <div className="absolute top-3 right-3 z-10">
           <div className="flex items-center gap-1 bg-[var(--theme-emphasis)]/10 px-2 py-1 rounded-full">
-            <Icon 
-              name="fa-expand" 
-              className="w-3 h-3 text-[var(--theme-emphasis)] opacity-0 group-hover:opacity-100 transition-opacity duration-200" 
+            <Icon
+              name="fa-expand"
+              className="w-3 h-3 text-[var(--theme-emphasis)] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
             />
             <span className="text-xs font-medium text-[var(--theme-emphasis)] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              {t('ialab.pdf_thumbnail.double_click')}
+              {t("ialab.pdf_thumbnail.double_click")}
             </span>
           </div>
         </div>
 
         {/* Contenido de la miniatura */}
         <div className="p-5">
-        {/* Imagen de previsualización premium */}
-        <div className="mb-4 relative">
-          <div className="w-full h-40 rounded-xl overflow-hidden bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 border border-slate-200/60 flex items-center justify-center">
-            {/* Imagen SVG de previsualización */}
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="relative">
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] shadow-lg flex items-center justify-center">
-                  <Icon name="fa-file-pdf" className="text-white text-3xl" />
-                </div>
-                
-                {/* Efectos visuales */}
-                <div className="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-white/30 flex items-center justify-center">
-                  <Icon name="fa-expand" className="text-white w-4 h-4" />
-                </div>
-                <div className="absolute -bottom-2 -left-2 w-8 h-8 rounded-full bg-white/30 flex items-center justify-center">
-                  <Icon name="fa-book" className="text-white w-3 h-3" />
+          {/* Imagen de previsualización premium */}
+          <div className="mb-4 relative">
+            <div className="w-full h-40 rounded-xl overflow-hidden bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 border border-slate-200/60 flex items-center justify-center">
+              {/* Imagen SVG de previsualización */}
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="relative">
+                  <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[var(--theme-emphasis)] to-[var(--theme-primary)] shadow-lg flex items-center justify-center">
+                    <Icon name="fa-file-pdf" className="text-white text-3xl" />
+                  </div>
+
+                  {/* Efectos visuales */}
+                  <div className="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-white/30 flex items-center justify-center">
+                    <Icon name="fa-expand" className="text-white w-4 h-4" />
+                  </div>
+                  <div className="absolute -bottom-2 -left-2 w-8 h-8 rounded-full bg-white/30 flex items-center justify-center">
+                    <Icon name="fa-book" className="text-white w-3 h-3" />
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            {/* Indicador de páginas */}
-            <div className="absolute bottom-3 right-3 bg-white px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-              <Icon name="fa-file" className="w-3 h-3 text-[var(--theme-emphasis)]" />
-              <span className="text-xs font-bold text-[var(--theme-emphasis)]">{t('ialab.pdf_thumbnail.pages_label', { pages })}</span>
+
+              {/* Indicador de páginas */}
+              <div className="absolute bottom-3 right-3 bg-white px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                <Icon
+                  name="fa-file"
+                  className="w-3 h-3 text-[var(--theme-emphasis)]"
+                />
+                <span className="text-xs font-bold text-[var(--theme-emphasis)]">
+                  {t("ialab.pdf_thumbnail.pages_label", { pages })}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
           {/* Información del documento */}
           <div className="space-y-2">
             <h4 className="font-bold text-slate-800 text-lg leading-tight">
               {title}
             </h4>
-            
+
             <p className="text-slate-600 text-sm leading-relaxed">
               {description}
             </p>
@@ -138,15 +143,18 @@ const PDFThumbnail = ({
             <div className="flex items-center gap-4 pt-2 text-sm text-slate-500">
               <div className="flex items-center gap-1">
                 <Icon name="fa-file" className="w-3 h-3" />
-                <span>{t('ialab.pdf_thumbnail.pages_label', { pages })}</span>
+                <span>{t("ialab.pdf_thumbnail.pages_label", { pages })}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Icon name="fa-weight-hanging" className="w-3 h-3" />
                 <span>{size}</span>
               </div>
               <div className="flex items-center gap-1">
-                <Icon name="fa-pdf" className="w-3 h-3 text-[var(--theme-emphasis)]" />
-                <span>{t('ialab.pdf_thumbnail.pdf_label')}</span>
+                <Icon
+                  name="fa-pdf"
+                  className="w-3 h-3 text-[var(--theme-emphasis)]"
+                />
+                <span>{t("ialab.pdf_thumbnail.pdf_label")}</span>
               </div>
             </div>
           </div>
@@ -156,17 +164,27 @@ const PDFThumbnail = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1">
-                  <Icon name="fa-mouse-pointer" className="w-3 h-3 text-[var(--theme-emphasis)]" />
-                  <span className="text-xs text-slate-600 font-medium">{t('ialab.pdf_thumbnail.click_action')}</span>
+                  <Icon
+                    name="fa-mouse-pointer"
+                    className="w-3 h-3 text-[var(--theme-emphasis)]"
+                  />
+                  <span className="text-xs text-slate-600 font-medium">
+                    {t("ialab.pdf_thumbnail.click_action")}
+                  </span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Icon name="fa-expand" className="w-3 h-3 text-[var(--theme-primary)]" />
-                  <span className="text-xs text-slate-600 font-medium">{t('ialab.pdf_thumbnail.double_click_action')}</span>
+                  <Icon
+                    name="fa-expand"
+                    className="w-3 h-3 text-[var(--theme-primary)]"
+                  />
+                  <span className="text-xs text-slate-600 font-medium">
+                    {t("ialab.pdf_thumbnail.double_click_action")}
+                  </span>
                 </div>
               </div>
-              <Icon 
-                name="fa-arrow-up-right-from-square" 
-                className="w-4 h-4 text-[var(--theme-primary)] opacity-0 group-hover:opacity-100 transition-opacity duration-200" 
+              <Icon
+                name="fa-arrow-up-right-from-square"
+                className="w-4 h-4 text-[var(--theme-primary)] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               />
             </div>
           </div>
@@ -184,7 +202,9 @@ const PDFThumbnail = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            role="presentation"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="pdf-immersive-title"
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
             onClick={handleOverlayClick}
           >
@@ -204,13 +224,18 @@ const PDFThumbnail = ({
                     <Icon name="fa-file-pdf" className="text-white text-xl" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-white">{title}</h2>
+                    <h2
+                      id="pdf-immersive-title"
+                      className="text-xl font-bold text-white"
+                    >
+                      {title}
+                    </h2>
                     <div className="flex items-center gap-3 text-white/80 text-sm">
                       <span>{size}</span>
                       <span>•</span>
                       <span>{pages} páginas</span>
                       <span>•</span>
-                      <span>{t('ialab.pdf_thumbnail.immersive_view')}</span>
+                      <span>{t("ialab.pdf_thumbnail.immersive_view")}</span>
                     </div>
                   </div>
                 </div>
@@ -224,17 +249,17 @@ const PDFThumbnail = ({
                     className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium"
                   >
                     <Icon name="fa-download" className="w-4 h-4" />
-                    {t('ialab.pdf_thumbnail.download')}
+                    {t("ialab.pdf_thumbnail.download")}
                   </a>
 
                   {/* Botón de cerrar */}
                   <button
                     onClick={handleCloseImmersiveView}
                     className="px-4 py-2 bg-white text-[var(--theme-emphasis)] hover:bg-slate-100 rounded-xl transition-colors duration-200 flex items-center gap-2 font-medium shadow-sm"
-                    aria-label={t('ialab.pdf_thumbnail.close_aria')}
+                    aria-label={t("ialab.pdf_thumbnail.close_aria")}
                   >
                     <Icon name="fa-times" className="w-4 h-4" />
-                    {t('ialab.pdf_thumbnail.close_viewer')}
+                    {t("ialab.pdf_thumbnail.close_viewer")}
                   </button>
                 </div>
               </div>
@@ -252,16 +277,19 @@ const PDFThumbnail = ({
                 {/* Overlay de instrucciones */}
                 <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
                   <div className="bg-white px-4 py-3 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
-                    <Icon name="fa-mouse-pointer" className="w-4 h-4 text-[var(--theme-emphasis)]" />
+                    <Icon
+                      name="fa-mouse-pointer"
+                      className="w-4 h-4 text-[var(--theme-emphasis)]"
+                    />
                     <span className="text-sm text-slate-700 font-medium">
-                      {t('ialab.pdf_thumbnail.zoom_instruction')}
+                      {t("ialab.pdf_thumbnail.zoom_instruction")}
                     </span>
                     <button
                       onClick={() => iframeRef.current?.requestFullscreen?.()}
                       className="px-3 py-1.5 bg-[var(--theme-primary)] text-white rounded-lg hover:bg-[var(--theme-primary)]/90 transition-colors duration-200 flex items-center gap-2 text-sm font-medium"
                     >
                       <Icon name="fa-expand" className="w-3 h-3" />
-                      {t('ialab.pdf_thumbnail.fullscreen')}
+                      {t("ialab.pdf_thumbnail.fullscreen")}
                     </button>
                   </div>
                 </div>
@@ -271,16 +299,19 @@ const PDFThumbnail = ({
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-slate-200">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <Icon name="fa-lightbulb" className="w-4 h-4 text-amber-500" />
-                    <span>{t('ialab.pdf_thumbnail.esc_hint')}</span>
+                    <Icon
+                      name="fa-lightbulb"
+                      className="w-4 h-4 text-amber-500"
+                    />
+                    <span>{t("ialab.pdf_thumbnail.esc_hint")}</span>
                   </div>
-                  
+
                   <button
                     onClick={handleCloseImmersiveView}
                     className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors duration-200 flex items-center gap-2 text-sm font-medium"
                   >
                     <Icon name="fa-arrow-left" className="w-3 h-3" />
-                    {t('ialab.pdf_thumbnail.back')}
+                    {t("ialab.pdf_thumbnail.back")}
                   </button>
                 </div>
               </div>
@@ -291,7 +322,6 @@ const PDFThumbnail = ({
     </>
   );
 };
-
 
 PDFThumbnail.propTypes = {
   title: PropTypes.string,
