@@ -67,7 +67,7 @@ function checkApiKey(req, res) {
  *         description: Error del servidor
  */
 router.post('/', chatMessageLimiter, optionalAuth, async (req, res) => {
-  const { messages, prompt, systemPrompt, isJson, temperature, maxTokens, model } = req.body;
+  const { messages, prompt, systemPrompt, isJson, temperature, maxTokens, max_tokens, model } = req.body;
 
   let msgs = messages;
   if (!msgs && prompt) {
@@ -82,7 +82,7 @@ router.post('/', chatMessageLimiter, optionalAuth, async (req, res) => {
   if (!checkApiKey(req, res)) return;
 
   try {
-    const data = await chat(DEEPSEEK_API_KEY, { messages: msgs, isJson, temperature, maxTokens, model });
+    const data = await chat(DEEPSEEK_API_KEY, { messages: msgs, isJson, temperature, maxTokens, max_tokens, model });
     if (data.error) return res.status(400).json({ error: data.error.message });
 
     const text = data.choices?.[0]?.message?.content;
@@ -151,7 +151,7 @@ router.post('/', chatMessageLimiter, optionalAuth, async (req, res) => {
  *         description: Error del servidor
  */
 router.post('/stream', optionalAuth, async (req, res) => {
-  const { messages, prompt, systemPrompt, isJson, temperature, maxTokens, model } = req.body;
+  const { messages, prompt, systemPrompt, isJson, temperature, maxTokens, max_tokens, model } = req.body;
 
   let msgs = messages;
   if (!msgs && prompt) {
@@ -176,7 +176,7 @@ router.post('/stream', optionalAuth, async (req, res) => {
   res.setHeader('Connection', 'keep-alive');
 
   try {
-    await chatStream(DEEPSEEK_API_KEY, { messages: msgs, isJson, temperature, maxTokens, model }, (chunk) => {
+    await chatStream(DEEPSEEK_API_KEY, { messages: msgs, isJson, temperature, maxTokens, max_tokens, model }, (chunk) => {
       if (streamClosed) return;
       res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
     });
