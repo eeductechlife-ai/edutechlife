@@ -43,15 +43,25 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
     if (!supabase) return;
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("user_progress")
-        .select("user_id, gamification_data")
-        .eq("activity_type", "gamification")
-        .eq("resource_id", "state")
-        .not("gamification_data", "is", null)
-        .limit(100);
-
-      if (error) throw error;
+      // El RLS de user_progress solo deja leer la fila propia: el ranking global
+      // sale de la función ialab_leaderboard (sql/ialab_leaderboard_rpc.sql). Si
+      // aún no existe en la base, se usa la consulta directa (solo verá al propio
+      // estudiante).
+      let data = null;
+      const rpc = await supabase.rpc("ialab_leaderboard", { p_limit: 50 });
+      if (!rpc.error && Array.isArray(rpc.data)) {
+        data = rpc.data;
+      } else {
+        const direct = await supabase
+          .from("user_progress")
+          .select("user_id, gamification_data")
+          .eq("activity_type", "gamification")
+          .eq("resource_id", "state")
+          .not("gamification_data", "is", null)
+          .limit(100);
+        if (direct.error) throw direct.error;
+        data = direct.data;
+      }
 
       const processed = (data || [])
         .filter((row) => row.gamification_data?.xp > 0)
@@ -80,10 +90,10 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
         userId: row.user_id,
         // Nunca se muestra el correo ni el id del usuario a otros estudiantes.
         name:
-          [profiles[row.user_id]?.full_name].find(
+          [row.full_name, profiles[row.user_id]?.full_name].find(
             (n) => typeof n === "string" && n.trim() && !n.includes("@"),
           ) || "Usuario",
-        avatar: profiles[row.user_id]?.avatar_url || null,
+        avatar: row.avatar_url || profiles[row.user_id]?.avatar_url || null,
         xp: row.gamification_data?.xp || 0,
         weeklyXp: row.gamification_data?.weeklyXp || 0,
         streak: row.gamification_data?.streak || 0,

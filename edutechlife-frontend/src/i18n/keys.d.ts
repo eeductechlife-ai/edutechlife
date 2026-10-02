@@ -2239,6 +2239,7 @@ export type TranslationKeys = {
   "ialab.quiz.marked": string;
   "ialab.quiz.max_violations": string;
   "ialab.quiz.min_score": string;
+  "ialab.quiz.weighted_note": string;
   "ialab.quiz.next": string;
   "ialab.quiz.number_label": string;
   "ialab.quiz.number_result": string;
@@ -7910,6 +7911,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.quiz.marked": true,
   "ialab.quiz.max_violations": true,
   "ialab.quiz.min_score": true,
+  "ialab.quiz.weighted_note": true,
   "ialab.quiz.next": true,
   "ialab.quiz.number_label": true,
   "ialab.quiz.number_result": true,
