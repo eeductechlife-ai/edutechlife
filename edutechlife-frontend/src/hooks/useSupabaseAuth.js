@@ -3,9 +3,13 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 // ~28 módulos. Mezclar import estático + dinámico del mismo módulo crea chunks
 // compartidos frágiles que Rollup enlaza mal en el build de Vercel
 // ("Export 'X' is not defined" → pantalla en blanco).
-import { supabase } from "../lib/supabase";
+import { supabase, refreshAuthSession } from "../lib/supabase";
 import { API_BASE_URL } from "../config/api";
-import { readAuthIdentity, clearUserSession } from "./useAuthIdentity";
+import {
+  readAuthIdentity,
+  clearUserSession,
+  decodeJwtPayload,
+} from "./useAuthIdentity";
 
 // Native Supabase Auth hook (replaces Clerk)
 export const useSupabaseAuth = () => {
@@ -229,6 +233,31 @@ export const useSupabaseAuth = () => {
 
     return () => {
       listener?.unsubscribe?.();
+    };
+  }, []);
+
+  // Renueva el JWT antes de que expire. Sin esto, una pestaña abierta >1 h
+  // seguía usando el token inicial y el foro respondía "JWT expired".
+  useEffect(() => {
+    const maybeRefresh = () => {
+      const token = sessionStorage.getItem("auth_token");
+      if (!token) return;
+      const payload = decodeJwtPayload(token);
+      if (!payload?.exp) return;
+      const msLeft = payload.exp * 1000 - Date.now();
+      if (msLeft < 15 * 60 * 1000) {
+        refreshAuthSession();
+      }
+    };
+    const interval = setInterval(maybeRefresh, 5 * 60 * 1000);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") maybeRefresh();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    maybeRefresh();
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisible);
     };
   }, []);
 

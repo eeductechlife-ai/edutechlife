@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "../../i18n/I18nProvider";
 import {
@@ -15,11 +15,19 @@ import {
   Star,
   Building2,
 } from "lucide-react";
-import { challenges, learningObjectives } from "../../data/ova/practicalCases";
+import {
+  challenges as rawChallenges,
+  learningObjectives,
+} from "../../data/ova/practicalCases";
+import { withShuffledOptions } from "../../utils/stableShuffle";
 import { OVAIntro, OVAMaxBar } from "./shared";
 
 const OVAPracticalCases = ({ onComplete }) => {
   const { t } = useTranslation();
+  const challenges = useMemo(
+    () => rawChallenges.map((c, i) => withShuffledOptions(c, (c.id ?? i) + 1)),
+    [],
+  );
   const certCompletedRef = useRef(false);
   const [screen, setScreen] = useState("intro");
   const [currentChallenge, setCurrentChallenge] = useState(0);

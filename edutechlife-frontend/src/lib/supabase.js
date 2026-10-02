@@ -69,9 +69,22 @@ export const createSupabaseClient = (accessToken = null) => {
     // CRÍTICO: apikey siempre debe estar presente (forzar sin condicional)
     headers.set("apikey", supabaseAnonKey);
 
+    // El token puede refrescarse (supabase-js autoRefreshToken) sin recrear el
+    // cliente: useSupabaseAuth actualiza sessionStorage.auth_token al renovar y
+    // App re-eleva el cliente, pero hasta entonces el cierre guardaba el JWT
+    // inicial. Leer el token vigente evita adjuntar siempre el viejo y que
+    // pasada ~1h el foro respondiera "JWT expired".
+    let activeToken = clerkToken;
+    try {
+      const liveToken = sessionStorage.getItem("auth_token");
+      if (liveToken) activeToken = liveToken;
+    } catch {
+      /* sessionStorage no disponible: usar el token inicial */
+    }
+
     // Authorization: token de sesión si está disponible, si no la anon key
-    if (clerkToken) {
-      headers.set("Authorization", `Bearer ${clerkToken}`);
+    if (activeToken) {
+      headers.set("Authorization", `Bearer ${activeToken}`);
     } else if (!headers.has("Authorization")) {
       headers.set("Authorization", `Bearer ${supabaseAnonKey}`);
     }
@@ -159,8 +172,32 @@ export const createSupabaseClient = (accessToken = null) => {
   return client;
 };
 
-// Inicializar cliente anónimo por defecto
-_currentClient = createSupabaseClient();
+// Inicializar cliente anónimo por defecto. Se guarda una referencia al cliente
+// base (persiste la sesión y tiene autoRefreshToken) para poder renovar el JWT
+// aunque el proxy ya delegue en un cliente elevado con token.
+const baseClient = createSupabaseClient();
+_currentClient = baseClient;
+
+/**
+ * Renueva la sesión de Supabase con el refresh token persistido en el cliente
+ * base y sincroniza el nuevo access token con el resto de la app. Pensado para
+ * llamarse justo antes de que expire el JWT (evita el "JWT expired" del foro).
+ * @returns {Promise<string|null>} el nuevo access token, o null si no se pudo.
+ */
+export const refreshAuthSession = async () => {
+  try {
+    const { data, error } = await baseClient.auth.refreshSession();
+    if (!error && data?.session?.access_token) {
+      sessionStorage.setItem("auth_token", data.session.access_token);
+      localStorage.setItem("refresh_token", data.session.refresh_token);
+      window.dispatchEvent(new CustomEvent("supabase.auth.token-refreshed"));
+      return data.session.access_token;
+    }
+  } catch {
+    /* sin sesión persistida: no hay nada que renovar */
+  }
+  return null;
+};
 
 /**
  * Eleva el cliente base con el JWT de la sesión.

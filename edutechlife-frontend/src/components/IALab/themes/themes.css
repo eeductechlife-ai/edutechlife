@@ -234,6 +234,11 @@
   --theme-text: #e3e3e3;
   --theme-text-muted: #9aa0a6;
   --theme-border: #3c4043;
+  /* Sin esto, --theme-emphasis seguía siendo el azul oscuro del modo claro
+     (#1e40af) sobre superficie oscura: títulos y énfasis quedaban casi
+     invisibles en NotebookLM oscuro. */
+  --theme-emphasis: #a9c0ff;
+  --theme-on-emphasis: #1e1f22;
 }
 
 /* --------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "../../i18n/I18nProvider";
 import {
@@ -13,6 +13,7 @@ import {
   Play,
 } from "lucide-react";
 import { OVAIntro, OVAMaxBar } from "./shared";
+import { withShuffledOptions } from "../../utils/stableShuffle";
 import SectionErrorBoundary from "./SectionErrorBoundary";
 
 const EdutechLogo = ({ size = "large" }) => {
@@ -48,7 +49,14 @@ export default function OVANotebookBase({
   contentPanelMaxHeight = "max-h-[600px]",
   onComplete,
 }) {
-  const { contentScreens, questionsData } = data;
+  const { contentScreens } = data;
+  const questionsData = useMemo(
+    () =>
+      (data.questionsData || []).map((q, i) =>
+        withShuffledOptions(q, (q.id ?? i) + 1),
+      ),
+    [data.questionsData],
+  );
   const { t } = useTranslation();
   const tk = (key) => t(`${translationPrefix}.${key}`);
 

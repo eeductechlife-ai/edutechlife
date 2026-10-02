@@ -56,6 +56,23 @@ export function useCelebrationEffects(activeMod, handleGlobalAction) {
 
   useEffect(() => {
     if (courseCompleted && !prevCourseCompleted.current) {
+      // La celebración y la apertura del modal de certificado deben ocurrir una
+      // sola vez. Sin esta marca, en cada visita tras completar el curso el
+      // modal "Mis Certificados" se abría solo, porque prevCourseCompleted
+      // arranca en false en cada montaje.
+      let alreadyCelebrated = false;
+      try {
+        const scope = localStorage.getItem("user_email") || "anon";
+        const key = `ialab_course_celebration_${scope}`;
+        alreadyCelebrated = localStorage.getItem(key) === "1";
+        if (!alreadyCelebrated) localStorage.setItem(key, "1");
+      } catch {
+        /* storage no disponible: se comporta como antes */
+      }
+      if (alreadyCelebrated) {
+        prevCourseCompleted.current = courseCompleted;
+        return;
+      }
       const end = Date.now() + CELEBRATION_DURATION;
       const frame = () => {
         fireConfetti({

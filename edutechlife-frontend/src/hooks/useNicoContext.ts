@@ -64,10 +64,12 @@ export const useNicoContext = (): {
       setIsLoading(true);
       setError(null);
 
-      // Fetch student data
+      // Fetch student data. `vak_result_json` no existe en el esquema actual
+      // (PostgREST 42703); se evita en el select y se lee con optional chaining
+      // para no romper el contexto de Nico con un 400.
       const { data: studentData, error: studentError } = await supabase
         .from("students")
-        .select("id, name, age, vak_result_json")
+        .select("id, name, age")
         .eq("auth_id", user.id)
         .single();
 

@@ -8,7 +8,7 @@ export const challenges = [
       "Você tem acesso ao Gemini Advanced com Deep Research e integração com o Google Workspace.",
     options: [
       "Pedir ao Gemini que gere um relatório completo com base apenas no seu conhecimento de treinamento.",
-      "Usar o Gemini com Deep Research para buscar em tempo real fontes atualizadas, analisá-las e entregar um relatório com citações verificáveis.",
+      "Usar o Deep Research para buscar fontes atualizadas e entregar um relatório com citações verificáveis.",
       "Buscar manualmente no Google, copiar os dados para um documento e depois pedir ao Gemini que os resuma.",
     ],
     correct: 1,
@@ -25,7 +25,7 @@ export const challenges = [
       "Você pode enviar arquivos ao Gemini e fazer perguntas sobre o conteúdo deles.",
     options: [
       "Ler o contrato inteiro e fazer anotações manuais, depois fazer ao Gemini perguntas específicas.",
-      "Enviar o PDF ao Gemini e pedir um resumo executivo, e depois fazer perguntas específicas sobre cláusulas de risco, datas e obrigações.",
+      "Enviar o PDF ao Gemini e pedir um resumo executivo e perguntas específicas sobre cláusulas, datas e obrigações.",
       "Pedir ao Gemini que redija uma contraproposta diretamente, sem ler o original.",
     ],
     correct: 1,
@@ -42,7 +42,7 @@ export const challenges = [
       "O Gemini está integrado ao Gmail, Docs, Sheets e Meet do Google Workspace.",
     options: [
       "Copiar e colar manualmente cada relatório no Gmail, ajustando os dados um a um.",
-      "Usar o Gemini no Sheets para analisar os dados, depois o Gemini no Docs para redigir o relatório-base e o Gemini no Gmail para personalizar e enviar cada e-mail.",
+      "Usar o Gemini no Sheets para a análise, no Docs para o relatório-base e no Gmail para enviar cada e-mail personalizado.",
       "Enviar o mesmo e-mail genérico a todos, com os dados gerais.",
     ],
     correct: 1,
@@ -59,7 +59,7 @@ export const challenges = [
       "O Gemini pode analisar imagens, extrair texto delas e reconhecer padrões visuais.",
     options: [
       "Revisar cada captura manualmente e fazer anotações em uma planilha.",
-      "Enviar todas as imagens ao Gemini e pedir uma análise visual comparativa: paletas de cores, tipos de mensagem, formatos e chamadas para ação detectadas.",
+      "Enviar as imagens ao Gemini e pedir uma análise visual comparativa de cores, mensagens, formatos e CTAs.",
       "Ler apenas o texto visível em cada captura e ignorar os elementos visuais.",
     ],
     correct: 1,
@@ -76,7 +76,7 @@ export const challenges = [
       "O Gemini tem capacidades avançadas de geração e análise de código em múltiplas linguagens.",
     options: [
       "Modificar o código ao acaso, esperando que funcione, já que você não entende Python.",
-      "Copiar o código completo para o Gemini, pedir que ele identifique os erros, explique cada problema e sugira otimizações de desempenho com explicações.",
+      "Copiar o código para o Gemini e pedir que identifique os erros e sugira otimizações explicadas.",
       "Contratar um desenvolvedor externo para revisar o código.",
     ],
     correct: 1,
@@ -93,7 +93,7 @@ export const challenges = [
       "O Gemini pode analisar arquivos de dados, gerar visualizações conceituais e encontrar padrões.",
     options: [
       "Abrir o CSV no Excel e criar gráficos manualmente para cada variável.",
-      "Enviar o CSV ao Gemini e pedir: análise de tendências por região e produto, detecção de anomalias em vendas, identificação dos canais com melhor desempenho e recomendações acionáveis.",
+      "Enviar o CSV ao Gemini e pedir tendências, anomalias, canais com melhor desempenho e recomendações acionáveis.",
       "Calcular apenas a média das vendas totais e apresentar esse número.",
     ],
     correct: 1,

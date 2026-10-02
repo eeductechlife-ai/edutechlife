@@ -14,6 +14,8 @@ import SectionErrorBoundary from "../SectionErrorBoundary";
 import { useIALabProgressContext } from "../../../context/IALabContext";
 import { useIALabStore } from "../../../store/ialabStore";
 import { useTranslation } from "../../../i18n/I18nProvider";
+import { track } from "../../../lib/analytics";
+import { EVENTS } from "../../../lib/analyticsEvents";
 import Breadcrumbs from "../Breadcrumbs";
 import { useIALabProgress } from "../../../hooks/IALab/useIALabProgress";
 
@@ -56,6 +58,7 @@ const ResourceViewerModal = ({
 
   const modalRef = useRef(null);
   const contentRef = useRef(null);
+  const completedRef = useRef(false);
   const focusTrapRef = useFocusTrap(isOpen);
   const prefersReducedMotion = useReducedMotion();
   const { noteText, showNotes, setShowNotes, noteSaved, handleNoteChange } =
@@ -128,6 +131,7 @@ const ResourceViewerModal = ({
 
   useEffect(() => {
     setIsMarkedAsViewed(false);
+    completedRef.current = false;
   }, [resource?.id]);
 
   // Auto-tracking silencioso para el sistema adaptativo (aditivo, no altera UX)
@@ -136,8 +140,12 @@ const ResourceViewerModal = ({
   useEffect(() => {
     if (!isOpen || !resource?.id || !recordAdaptiveView) return;
     const openedAt = Date.now();
-    recordAdaptiveView(resource.id, {
-      type: resourceType || resource.type || "resource",
+    const rType = resourceType || resource.type || "resource";
+    recordAdaptiveView(resource.id, { type: rType });
+    track(EVENTS.RESOURCE_OPENED, {
+      moduleId: activeMod,
+      resourceId: resource.id,
+      resourceType: rType,
     });
     return () => {
       // Al cerrar, si estuvo >30s, programa un repaso en Box 1
@@ -145,17 +153,33 @@ const ResourceViewerModal = ({
       if (timeSpent > 30000 && scheduleAdaptiveReview) {
         scheduleAdaptiveReview(resource.id, 1);
       }
+      // Abandono = se abrió y se cerró sin completarlo.
+      if (!completedRef.current) {
+        track(EVENTS.RESOURCE_ABANDONED, {
+          moduleId: activeMod,
+          resourceId: resource.id,
+          resourceType: rType,
+          seconds: Math.round(timeSpent / 1000),
+        });
+      }
     };
   }, [
     isOpen,
     resource?.id,
     resourceType,
+    activeMod,
     recordAdaptiveView,
     scheduleAdaptiveReview,
   ]);
 
   const handleMarkAsViewed = useCallback(async () => {
     setIsMarkedAsViewed(true);
+    completedRef.current = true;
+    track(EVENTS.RESOURCE_COMPLETED, {
+      moduleId: useIALabStore.getState().activeMod || activeMod,
+      resourceId: resource?.id,
+      resourceType: resourceType || resource?.type || "resource",
+    });
     const currentMod = useIALabStore.getState().activeMod || activeMod;
     if (onMarkAsViewed) {
       onMarkAsViewed(resource.id);
@@ -444,7 +468,7 @@ const ResourceViewerModal = ({
                   )}
                 />
                 {!isFullscreen && (
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 border-b theme-border theme-surface">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-2.5 sm:py-4 border-b theme-border theme-surface">
                     <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0 w-full sm:w-auto">
                       <div className="w-10 h-10 rounded-xl theme-chip flex items-center justify-center flex-shrink-0">
                         <Icon
@@ -468,12 +492,12 @@ const ResourceViewerModal = ({
                             },
                           ]}
                           size="text-xs"
-                          className="mb-1 text-slate-400 dark:text-slate-500"
+                          className="mb-1 text-slate-400 dark:text-slate-500 hidden sm:block"
                         />
                         <h2 className="text-[15px] sm:text-lg font-semibold theme-text tracking-tight truncate">
                           {resource.title}
                         </h2>
-                        <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1">
+                        <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-3 text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1">
                           {resource.type === "video" && (
                             <>
                               <span>
@@ -574,7 +598,7 @@ const ResourceViewerModal = ({
                   )}
                 </div>
                 {!isFullscreen && (
-                  <div className="px-4 sm:px-6 py-3 sm:py-4 border-t theme-border theme-surface relative z-[60]">
+                  <div className="px-4 sm:px-6 py-2.5 sm:py-4 border-t theme-border theme-surface relative z-[60]">
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
                       <div className="flex items-center gap-2">
                         <button
