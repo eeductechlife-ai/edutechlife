@@ -103,3 +103,27 @@ describe('validateMessages', () => {
     ).toBeNull();
   });
 });
+
+describe('límite de tokens de salida', () => {
+  const { buildPayload, resolveMaxTokens } = require('../../services/deepseek');
+  const msgs = [{ role: 'user', content: 'hola' }];
+
+  it('usa 800 por defecto', () => {
+    expect(buildPayload({ messages: msgs }).max_tokens).toBe(800);
+  });
+
+  it('acepta maxTokens y max_tokens (el frontend manda ambos estilos)', () => {
+    expect(buildPayload({ messages: msgs, maxTokens: 2000 }).max_tokens).toBe(2000);
+    expect(buildPayload({ messages: msgs, max_tokens: 1500 }).max_tokens).toBe(1500);
+  });
+
+  it('acota el máximo para limitar el costo', () => {
+    expect(buildPayload({ messages: msgs, maxTokens: 1000000 }).max_tokens).toBe(4000);
+  });
+
+  it('ignora valores inválidos', () => {
+    expect(resolveMaxTokens('abc')).toBe(800);
+    expect(resolveMaxTokens(-5)).toBe(800);
+    expect(resolveMaxTokens(0)).toBe(800);
+  });
+});

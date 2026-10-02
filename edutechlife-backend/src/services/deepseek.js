@@ -52,7 +52,18 @@ async function fetchWithRetry(url, options, retries = 3) {
   throw lastError;
 }
 
-function buildPayload({ messages, prompt, systemPrompt, isJson, temperature, maxTokens, model, stream = false }) {
+// Tope de salida por petición: el cliente puede pedir un límite (maxTokens o
+// max_tokens) pero nunca más que esto, para acotar el costo.
+const MAX_OUTPUT_TOKENS = 4000;
+const DEFAULT_OUTPUT_TOKENS = 800;
+
+function resolveMaxTokens(requested) {
+  const n = Number(requested);
+  if (!Number.isFinite(n) || n <= 0) return DEFAULT_OUTPUT_TOKENS;
+  return Math.min(Math.floor(n), MAX_OUTPUT_TOKENS);
+}
+
+function buildPayload({ messages, prompt, systemPrompt, isJson, temperature, maxTokens, max_tokens, model, stream = false }) {
   let msgs = messages;
   if (!msgs && prompt) {
     msgs = [
@@ -64,7 +75,7 @@ function buildPayload({ messages, prompt, systemPrompt, isJson, temperature, max
     model: resolveModel(model),
     messages: msgs,
     temperature: temperature ?? 0.7,
-    max_tokens: maxTokens || 800,
+    max_tokens: resolveMaxTokens(maxTokens ?? max_tokens),
     stream
   };
   // deepseek-flash reasons by default and those tokens count against max_tokens:
@@ -165,4 +176,4 @@ async function chatStream(apiKey, body, onChunk) {
   }
 }
 
-module.exports = { chat, chatStream, validateMessages, buildPayload, fetchWithRetry, resolveModel, DEFAULT_MODEL };
+module.exports = { chat, chatStream, validateMessages, buildPayload, fetchWithRetry, resolveModel, resolveMaxTokens, DEFAULT_MODEL };

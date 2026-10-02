@@ -32,7 +32,9 @@ export async function generateExercises({ config, locale, signal }) {
         { role: "user", content: config.generateUserPrompt(activeLocale) },
       ],
       temperature: 0.7,
-      max_tokens: 1000,
+      // El backend usa 800 tokens por defecto: con 1000 se cortaba el JSON de los
+      // ejercicios del módulo 3 y caía al modo sin conexión.
+      maxTokens: 3000,
     }),
     signal,
   });
@@ -102,7 +104,7 @@ export async function evaluateAnswers({
         },
       ],
       temperature: 0.3,
-      max_tokens: 2000,
+      maxTokens: 2000,
     }),
     signal,
   });
