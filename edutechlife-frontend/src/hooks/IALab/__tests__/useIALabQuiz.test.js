@@ -1,16 +1,16 @@
-import { renderHook, act } from '@testing-library/react';
-import { useIALabQuiz } from '../useIALabQuiz';
+import { renderHook, act } from "@testing-library/react";
+import { useIALabQuiz } from "../useIALabQuiz";
 
 const mockState = {
   context: {
     activeMod: 1,
     updateModuleActivity: vi.fn(),
     markExamComplete: vi.fn(),
-    user: { id: 'user-1' },
+    user: { id: "user-1" },
   },
   storeState: {
     activeMod: 1,
-    user: { id: 'user-1' },
+    user: { id: "user-1" },
     quizAnswers: {},
     setQuizAnswers: vi.fn(),
     quizScore: null,
@@ -47,7 +47,7 @@ const mockState = {
     setShowSecurityStatus: vi.fn(),
     showSecurityMessage: false,
     setShowSecurityMessage: vi.fn(),
-    securityMessage: '',
+    securityMessage: "",
     setSecurityMessage: vi.fn(),
     attemptsPenalized: 0,
     setAttemptsPenalized: vi.fn(),
@@ -61,23 +61,26 @@ const mockState = {
   },
 };
 
-vi.mock('../../../context/IALabContext', () => ({
+vi.mock("../../../context/IALabContext", () => ({
   useIALabContext: () => mockState.context,
   useIALabProgressContext: () => mockState.context,
   useIALabUIContext: () => mockState.context,
 }));
 
-vi.mock('../../../store/ialabStore', () => ({
+vi.mock("../../../store/ialabStore", () => ({
   useIALabStore: Object.assign(
-    (selector) => selector ? selector(mockState.storeState) : mockState.storeState,
-    { getState: () => mockState.storeState }
+    (selector) =>
+      selector ? selector(mockState.storeState) : mockState.storeState,
+    { getState: () => mockState.storeState },
   ),
 }));
 
 function mockSetQuizAnswers() {
   mockState.storeState.setQuizAnswers.mockImplementation((updater) => {
-    if (typeof updater === 'function') {
-      mockState.storeState.quizAnswers = updater(mockState.storeState.quizAnswers);
+    if (typeof updater === "function") {
+      mockState.storeState.quizAnswers = updater(
+        mockState.storeState.quizAnswers,
+      );
     } else {
       mockState.storeState.quizAnswers = updater;
     }
@@ -86,8 +89,10 @@ function mockSetQuizAnswers() {
 
 function mockSetQuizAttempts() {
   mockState.storeState.setQuizAttempts.mockImplementation((updater) => {
-    if (typeof updater === 'function') {
-      mockState.storeState.quizAttempts = updater(mockState.storeState.quizAttempts);
+    if (typeof updater === "function") {
+      mockState.storeState.quizAttempts = updater(
+        mockState.storeState.quizAttempts,
+      );
     } else {
       mockState.storeState.quizAttempts = updater;
     }
@@ -96,13 +101,13 @@ function mockSetQuizAttempts() {
 
 beforeEach(() => {
   Object.values(mockState.context).forEach((val) => {
-    if (typeof val === 'function' && val.mockClear) val.mockClear();
+    if (typeof val === "function" && val.mockClear) val.mockClear();
   });
   Object.values(mockState.storeState).forEach((val) => {
-    if (typeof val === 'function' && val.mockClear) val.mockClear();
+    if (typeof val === "function" && val.mockClear) val.mockClear();
   });
   mockState.storeState.activeMod = 1;
-  mockState.storeState.user = { id: 'user-1' };
+  mockState.storeState.user = { id: "user-1" };
   mockState.storeState.quizAnswers = {};
   mockState.storeState.quizAttempts = [];
   mockState.storeState.storageGet.mockReturnValue(null);
@@ -111,15 +116,15 @@ beforeEach(() => {
   mockState.storeState.canAttemptExamRetry.mockReturnValue(true);
   mockState.storeState.getExamNextAttemptTime.mockReturnValue(null);
   mockState.context.activeMod = 1;
-  mockState.context.user = { id: 'user-1' };
+  mockState.context.user = { id: "user-1" };
 });
 
 afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe('useIALabQuiz', () => {
-  test('returns expected interface', () => {
+describe("useIALabQuiz", () => {
+  test("returns expected interface", () => {
     const { result } = renderHook(() => useIALabQuiz());
 
     expect(result.current.quizQuestions).toBeDefined();
@@ -135,70 +140,78 @@ describe('useIALabQuiz', () => {
     expect(result.current.formatTime).toBeInstanceOf(Function);
   });
 
-  test('quizQuestions comes from MODULE_EXAMS for activeMod', () => {
+  test("quizQuestions comes from MODULE_EXAMS for activeMod", () => {
     const { result } = renderHook(() => useIALabQuiz());
 
     expect(Array.isArray(result.current.quizQuestions)).toBe(true);
     // Antes de girar se expone el banco completo del módulo (40); al abrir el
     // reto se sortean 10 para el intento.
     expect(result.current.quizQuestions.length).toBe(40);
-    expect(result.current.quizQuestions[0].id).toBe('m1q1');
+    expect(result.current.quizQuestions[0].id).toBe("m1q1");
   });
 
-  test('formatTime formats correctly', () => {
+  test("formatTime formats correctly", () => {
     const { result } = renderHook(() => useIALabQuiz());
 
-    expect(result.current.formatTime(0)).toBe('0:00');
-    expect(result.current.formatTime(5)).toBe('0:05');
-    expect(result.current.formatTime(65)).toBe('1:05');
-    expect(result.current.formatTime(3661)).toBe('61:01');
+    expect(result.current.formatTime(0)).toBe("0:00");
+    expect(result.current.formatTime(5)).toBe("0:05");
+    expect(result.current.formatTime(65)).toBe("1:05");
+    expect(result.current.formatTime(3661)).toBe("61:01");
   });
 
-  describe('updateQuizAnswer', () => {
-    test('updates a single answer', () => {
+  describe("updateQuizAnswer", () => {
+    test("updates a single answer", () => {
       mockSetQuizAnswers();
       const { result } = renderHook(() => useIALabQuiz());
 
-      act(() => result.current.updateQuizAnswer('q1', 'a'));
+      act(() => result.current.updateQuizAnswer("q1", "a"));
       expect(mockState.storeState.setQuizAnswers).toHaveBeenCalled();
     });
   });
 
-  describe('calculateQuizScore (via submitQuiz)', () => {
-    test('returns correct score info', () => {
+  describe("calculateQuizScore (via submitQuiz)", () => {
+    test("returns correct score info", () => {
       mockState.storeState.quizAnswers = {
-        m1q1: 'm1q1_b', m1q2: 'm1q2_b',
-        m1q3: 'm1q3_b', m1q4: 'm1q4_b',
-        m1q5: 'm1q5_b', m1q6: 'm1q6_b',
-        m1q7: 'm1q7_a', m1q8: 'm1q8_b',
+        m1q1: "m1q1_b",
+        m1q2: "m1q2_b",
+        m1q3: "m1q3_b",
+        m1q4: "m1q4_b",
+        m1q5: "m1q5_b",
+        m1q6: "m1q6_b",
+        m1q7: "m1q7_a",
+        m1q8: "m1q8_b",
       };
       mockSetQuizAnswers();
       mockSetQuizAttempts();
 
       const { result } = renderHook(() => useIALabQuiz());
 
-      act(() => { result.current.submitQuiz(); });
+      act(() => {
+        result.current.submitQuiz();
+      });
 
       expect(mockState.storeState.setQuizScore).toHaveBeenCalled();
-      expect(mockState.storeState.setShowScoreResult).toHaveBeenCalledWith(true);
+      expect(mockState.storeState.setShowScoreResult).toHaveBeenCalledWith(
+        true,
+      );
     });
   });
 
-  describe('generateTopicFeedback', () => {
-    test('returns feedback messages for failed questions', () => {
+  describe("generateTopicFeedback", () => {
+    test("returns feedback messages for failed questions", () => {
       const { result } = renderHook(() => useIALabQuiz());
 
-      const feedback = result.current.generateTopicFeedback(['m1q1', 'm1q3']);
+      const feedback = result.current.generateTopicFeedback(["m1q1", "m1q3"]);
 
       expect(Array.isArray(feedback)).toBe(true);
       expect(feedback.length).toBeGreaterThanOrEqual(1);
-      feedback.forEach(msg => {
-        expect(typeof msg).toBe('string');
+      feedback.forEach((msg) => {
+        expect(typeof msg).toBe("string");
         expect(msg.length).toBeGreaterThan(0);
       });
     });
 
-    test('returns empty array when no failed questions', () => {
+    test("returns empty array when no failed questions", () => {
       const { result } = renderHook(() => useIALabQuiz());
 
       const feedback = result.current.generateTopicFeedback([]);
@@ -206,8 +219,8 @@ describe('useIALabQuiz', () => {
     });
   });
 
-  describe('canAttemptQuiz', () => {
-    test('delega en el store: true mientras queden intentos', () => {
+  describe("canAttemptQuiz", () => {
+    test("delega en el store: true mientras queden intentos", () => {
       mockState.storeState.canAttemptExamRetry.mockReturnValue(true);
 
       const { result } = renderHook(() => useIALabQuiz());
@@ -216,7 +229,7 @@ describe('useIALabQuiz', () => {
       expect(mockState.storeState.canAttemptExamRetry).toHaveBeenCalledWith(1);
     });
 
-    test('delega en el store: false cuando se agotaron los 3 intentos', () => {
+    test("delega en el store: false cuando se agotaron los 3 intentos", () => {
       mockState.storeState.canAttemptExamRetry.mockReturnValue(false);
 
       const { result } = renderHook(() => useIALabQuiz());
@@ -225,37 +238,46 @@ describe('useIALabQuiz', () => {
     });
   });
 
-  describe('openEvaluation', () => {
-    test('opens modal when can attempt', () => {
+  describe("openEvaluation", () => {
+    test("opens modal when can attempt", () => {
       mockState.storeState.canAttemptExamRetry.mockReturnValue(true);
 
       const { result } = renderHook(() => useIALabQuiz());
 
       let opened;
-      act(() => { opened = result.current.openEvaluation(); });
+      act(() => {
+        opened = result.current.openEvaluation();
+      });
 
       expect(opened).toBe(true);
-      expect(mockState.storeState.setShowExamModal).toHaveBeenCalledWith(true);
+      // El examen no debe abrir el modal del Desafío (showExamModal).
+      expect(mockState.storeState.setShowExamModal).not.toHaveBeenCalledWith(
+        true,
+      );
     });
 
-    test('returns false when cannot attempt and shows message', () => {
+    test("returns false when cannot attempt and shows message", () => {
       mockState.storeState.canAttemptExamRetry.mockReturnValue(false);
 
       const { result } = renderHook(() => useIALabQuiz());
 
       let opened;
-      act(() => { opened = result.current.openEvaluation(); });
+      act(() => {
+        opened = result.current.openEvaluation();
+      });
 
       expect(opened).toBe(false);
     });
   });
 
-  describe('closeEvaluationModal', () => {
-    test('closes modal and resets', () => {
+  describe("closeEvaluationModal", () => {
+    test("closes modal and resets", () => {
       const { result } = renderHook(() => useIALabQuiz());
 
       let closed;
-      act(() => { closed = result.current.closeEvaluationModal(); });
+      act(() => {
+        closed = result.current.closeEvaluationModal();
+      });
 
       expect(closed).toBe(true);
       expect(mockState.storeState.setShowExamModal).toHaveBeenCalledWith(false);
