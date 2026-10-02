@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Icon } from "../../../utils/iconMapping.jsx";
 import { useTranslation } from "../../../i18n/I18nProvider";
+import { getVideoQuiz } from "../../../data/ialabVideoQuizzes";
+import VideoMicroQuiz from "./VideoMicroQuiz";
 
 const formatTime = (s) => {
   if (!s || isNaN(s)) return "0:00";
@@ -35,6 +37,7 @@ const VideoViewer = ({
   const [showControls, setShowControls] = useState(true);
   const [ccActive, setCcActive] = useState(false);
   const [hasEnded, setHasEnded] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
   const [playerError, setPlayerError] = useState(null);
   const hideTimer = useRef(null);
   const progressTimer = useRef(null);
@@ -123,7 +126,9 @@ const VideoViewer = ({
             setBuffering(e.data === window.YT.PlayerState.BUFFERING);
             if (e.data === window.YT.PlayerState.ENDED) {
               setHasEnded(true);
-              endedRef.current?.();
+              // Verificación de comprensión antes de marcar el video como visto.
+              if (getVideoQuiz(resource?.id, locale)) setShowQuiz(true);
+              else endedRef.current?.();
             }
             if (e.data === window.YT.PlayerState.PLAYING) {
               applyBestQuality(playerRef.current);
@@ -490,6 +495,16 @@ const VideoViewer = ({
         <div className="absolute top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-[var(--theme-primary)]/10 border border-[var(--theme-primary)]/20 rounded-lg text-xs font-medium text-[var(--theme-primary)] shadow-sm z-10 backdrop-blur-sm">
           {t("ialab.viewer_modal.warning_no_skip")}
         </div>
+      )}
+
+      {showQuiz && (
+        <VideoMicroQuiz
+          videoId={resource?.id}
+          onPassed={() => {
+            setShowQuiz(false);
+            endedRef.current?.();
+          }}
+        />
       )}
     </div>
   );
