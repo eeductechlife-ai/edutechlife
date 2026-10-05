@@ -178,7 +178,11 @@ const StrategiesScreen = () => {
   const { t } = useTranslation();
   const [active, setActive] = useState(null);
   const strategies = [
-    { k: "gpts", icon: <Bot className="w-5 h-5" />, color: "bg-[var(--theme-emphasis)]" },
+    {
+      k: "gpts",
+      icon: <Bot className="w-5 h-5" />,
+      color: "bg-[var(--theme-emphasis)]",
+    },
     {
       k: "voice",
       icon: <Volume2 className="w-5 h-5" />,
@@ -241,8 +245,16 @@ const ChallengeScreen = () => {
   const [scenario, setScenario] = useState(null);
   const [revealed, setRevealed] = useState(false);
   const scenarios = [
-    { k: "student", icon: <Star className="w-5 h-5" />, color: "bg-[var(--theme-emphasis)]" },
-    { k: "teacher", icon: <Zap className="w-5 h-5" />, color: "bg-[var(--theme-primary)]" },
+    {
+      k: "student",
+      icon: <Star className="w-5 h-5" />,
+      color: "bg-[var(--theme-emphasis)]",
+    },
+    {
+      k: "teacher",
+      icon: <Zap className="w-5 h-5" />,
+      color: "bg-[var(--theme-primary)]",
+    },
     {
       k: "pro",
       icon: <Briefcase className="w-5 h-5" />,
@@ -277,9 +289,9 @@ const ChallengeScreen = () => {
             </button>
           ))}
         </div>
-    </div>
-  );
-}
+      </div>
+    );
+  }
 
   return (
     <div className="animate-[fadeIn_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards] space-y-4">
@@ -364,6 +376,7 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [xp, setXp] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [quizDone, setQuizDone] = useState(false);
   const certCompletedRef = useRef(false);
   const m8AutoCompletedRef = useRef(false);
   const nav = ["welcome", "m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8"];
@@ -373,11 +386,11 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
   const resolvedScreensData = screensData(t);
 
   useEffect(() => {
-    if (screen === "m8" && !m8AutoCompletedRef.current) {
+    if (screen === "m8" && quizDone && !m8AutoCompletedRef.current) {
       m8AutoCompletedRef.current = true;
       handleMarkComplete();
     }
-  }, [screen]);
+  }, [screen, quizDone]);
 
   useEffect(() => {
     if (showConfetti) {
@@ -493,7 +506,10 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
       case "m6":
         return (
           <>
-            <ExpandedQuiz questions={infographicData.quiz?.questions || []} />
+            <ExpandedQuiz
+              questions={infographicData.quiz?.questions || []}
+              onCompleted={() => setQuizDone(true)}
+            />
             <div className="flex justify-center mt-6">
               <VoiceReader text={t("ova.ecosystem.quiz_voice")} />
             </div>
@@ -524,155 +540,155 @@ export default function OVAEcosystemGuide({ onComplete, onClose }) {
 
   return (
     <SectionErrorBoundary name="OVAEcosystemGuide">
-    <div className="w-full bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-blue-100 dark:selection:bg-blue-900">
-      <header className="sticky top-0 w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl border-b z-50 px-4 py-3 flex justify-between items-center shadow-sm">
-        <Logo />
-        <div className="flex items-center gap-4">
-          {screen !== "welcome" && (
-            <div className="w-32">
-              <XPTracker xp={xp} maxXp={MAX_XP} />
-            </div>
-          )}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={t("ova.ecosystem.menu_aria")}
-            className="min-w-[44px] min-h-[44px] p-2.5 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-all border border-slate-100 dark:border-slate-700"
-          >
-            <Menu className="w-5 h-5 theme-text" />
-          </button>
-        </div>
-      </header>
-
-      <main className="flex-1 px-3 py-4">
-        <div className="w-full bg-white dark:bg-slate-800 rounded-2xl shadow-md p-4 md:p-6 relative overflow-hidden border border-slate-50 dark:border-slate-700">
-          {screen.startsWith("m") && (
-            <div className="mb-4 border-b border-slate-50 dark:border-slate-700 pb-3">
-              <div className="flex items-center gap-1.5 theme-text-primary font-[900] text-[10px] tracking-[0.3em] uppercase">
-                <Sparkles className="w-3 h-3" /> {t("ova.introprompt.master")}
+      <div className="w-full bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans flex flex-col selection:bg-blue-100 dark:selection:bg-blue-900">
+        <header className="sticky top-0 w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl border-b z-50 px-4 py-3 flex justify-between items-center shadow-sm">
+          <Logo />
+          <div className="flex items-center gap-4">
+            {screen !== "welcome" && (
+              <div className="w-32">
+                <XPTracker xp={xp} maxXp={MAX_XP} />
               </div>
-              <h1 className="text-lg md:text-xl font-[900] theme-text tracking-tighter leading-tight">
-                {resolvedScreensData[screen]?.title}
-              </h1>
-            </div>
-          )}
-          <div className="relative z-10 min-h-[180px] flex flex-col justify-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={screen}
-                variants={screenVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-              >
-                {renderContent()}
-              </motion.div>
-            </AnimatePresence>
+            )}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={t("ova.ecosystem.menu_aria")}
+              className="min-w-[44px] min-h-[44px] p-2.5 bg-[#F1F5F9] dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl transition-all border border-slate-100 dark:border-slate-700"
+            >
+              <Menu className="w-5 h-5 theme-text" />
+            </button>
           </div>
-        </div>
-      </main>
+        </header>
 
-      {screen !== "welcome" && (
-        <>
-          <div className="flex justify-center border-t border-slate-100 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90">
-            <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
-              <button
-                onClick={() => {
-                  if (curIdx > 1) setScreen(nav[curIdx - 1]);
-                  stopSpeech();
-                }}
-                aria-label={t("ova.nav.prev_aria")}
-                className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:theme-text dark:hover:theme-text-primary rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700"
-                disabled={curIdx <= 1}
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <div className="flex gap-1.5">
-                {nav.slice(1).map((_, i) => (
-                  <div
-                    key={i}
-                    className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === curIdx ? "w-8 bg-[var(--theme-emphasis)]" : completed.includes(nav[i + 1]) ? "w-2 bg-[var(--theme-primary)]" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
-                  />
-                ))}
+        <main className="flex-1 px-3 py-4">
+          <div className="w-full bg-white dark:bg-slate-800 rounded-2xl shadow-md p-4 md:p-6 relative overflow-hidden border border-slate-50 dark:border-slate-700">
+            {screen.startsWith("m") && (
+              <div className="mb-4 border-b border-slate-50 dark:border-slate-700 pb-3">
+                <div className="flex items-center gap-1.5 theme-text-primary font-[900] text-[10px] tracking-[0.3em] uppercase">
+                  <Sparkles className="w-3 h-3" /> {t("ova.introprompt.master")}
+                </div>
+                <h1 className="text-lg md:text-xl font-[900] theme-text tracking-tighter leading-tight">
+                  {resolvedScreensData[screen]?.title}
+                </h1>
               </div>
-              <button
-                onClick={isLastScreen ? () => onClose?.() : nextScreen}
-                className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${isLastScreen ? "bg-emerald-500 text-white hover:bg-emerald-600" : "bg-gradient-to-r from-[var(--theme-text)] to-[var(--theme-primary)] text-white"}`}
-              >
-                {isLastScreen
-                  ? t("ova.introprompt.finish_btn")
-                  : t("ova.introprompt.next")}{" "}
-                <ArrowRightCircle className="w-4 h-4" />
-              </button>
+            )}
+            <div className="relative z-10 min-h-[180px] flex flex-col justify-center">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={screen}
+                  variants={screenVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  {renderContent()}
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
-          <div className="border-t border-slate-100 dark:border-slate-700 py-3 text-center text-slate-500 dark:text-slate-300 text-xs">
-            <p>{t("ova.ecosystem.footer")}</p>
-          </div>
-        </>
-      )}
+        </main>
 
-      {isMenuOpen && (
-        <div
-          className="fixed inset-0 z-[100] bg-slate-900/60 dark:bg-slate-950/60 backdrop-blur-md"
-          onClick={() => setIsMenuOpen(false)}
-        >
+        {screen !== "welcome" && (
+          <>
+            <div className="flex justify-center border-t border-slate-100 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90">
+              <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
+                <button
+                  onClick={() => {
+                    if (curIdx > 1) setScreen(nav[curIdx - 1]);
+                    stopSpeech();
+                  }}
+                  aria-label={t("ova.nav.prev_aria")}
+                  className="p-3 min-w-[44px] min-h-[44px] bg-[#F1F5F9] dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:theme-text dark:hover:theme-text-primary rounded-xl disabled:opacity-10 transition-all border border-slate-50 dark:border-slate-700"
+                  disabled={curIdx <= 1}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <div className="flex gap-1.5">
+                  {nav.slice(1).map((_, i) => (
+                    <div
+                      key={i}
+                      className={`h-1.5 rounded-full transition-all duration-700 ${i + 1 === curIdx ? "w-8 bg-[var(--theme-emphasis)]" : completed.includes(nav[i + 1]) ? "w-2 bg-[var(--theme-primary)]" : "w-2 bg-slate-200 dark:bg-slate-600"}`}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={isLastScreen ? () => onClose?.() : nextScreen}
+                  className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${isLastScreen ? "bg-emerald-500 text-white hover:bg-emerald-600" : "bg-gradient-to-r from-[var(--theme-text)] to-[var(--theme-primary)] text-white"}`}
+                >
+                  {isLastScreen
+                    ? t("ova.introprompt.finish_btn")
+                    : t("ova.introprompt.next")}{" "}
+                  <ArrowRightCircle className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            <div className="border-t border-slate-100 dark:border-slate-700 py-3 text-center text-slate-500 dark:text-slate-300 text-xs">
+              <p>{t("ova.ecosystem.footer")}</p>
+            </div>
+          </>
+        )}
+
+        {isMenuOpen && (
           <div
-            className="absolute right-0 h-full w-[300px] bg-white dark:bg-slate-800 shadow-2xl p-6 flex flex-col gap-4 animate-[slideInRight_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[100] bg-slate-900/60 dark:bg-slate-950/60 backdrop-blur-md"
+            onClick={() => setIsMenuOpen(false)}
           >
-            <div className="flex items-center justify-between border-b-2 border-slate-50 dark:border-slate-700 pb-4">
-              <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.3em] uppercase">
-                {t("ova.introprompt.map")}
-              </h3>
-              <div className="flex items-center gap-1.5 text-[10px] font-black theme-text">
-                <Star className="w-3 h-3 theme-text-primary fill-current" />
-                {completed.filter((id) => id.startsWith("m")).length}/
-                {nav.filter((id) => id.startsWith("m")).length}
+            <div
+              className="absolute right-0 h-full w-[300px] bg-white dark:bg-slate-800 shadow-2xl p-6 flex flex-col gap-4 animate-[slideInRight_0.8s_cubic-bezier(0.16,1,0.3,1)_forwards]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between border-b-2 border-slate-50 dark:border-slate-700 pb-4">
+                <h3 className="font-[900] text-slate-300 dark:text-slate-500 text-xs tracking-[0.3em] uppercase">
+                  {t("ova.introprompt.map")}
+                </h3>
+                <div className="flex items-center gap-1.5 text-[10px] font-black theme-text">
+                  <Star className="w-3 h-3 theme-text-primary fill-current" />
+                  {completed.filter((id) => id.startsWith("m")).length}/
+                  {nav.filter((id) => id.startsWith("m")).length}
+                </div>
+              </div>
+              <div className="flex-1 overflow-y-auto space-y-1.5">
+                {nav.map((id, idx) => {
+                  const stepNum = idx;
+                  const isCompleted = completed.includes(id);
+                  const isCurrent = screen === id;
+                  return (
+                    <button
+                      key={id}
+                      onClick={() => goToScreen(id)}
+                      className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? "bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${isCompleted ? "bg-[var(--theme-primary)] text-white" : isCurrent ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-700 text-slate-400"}`}
+                        >
+                          {stepNum}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div
+                            className={`uppercase tracking-wider ${isCurrent ? "text-white" : isCompleted ? "theme-text dark:theme-text-primary" : "text-slate-500 dark:text-slate-400"}`}
+                          >
+                            {id === "welcome"
+                              ? t("ova.introprompt.menu_welcome")
+                              : resolvedScreensData[id]?.title}
+                          </div>
+                          <div className="mt-1.5 w-full h-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all duration-700 ${isCompleted ? "w-full bg-[var(--theme-primary)]" : isCurrent ? "w-1/3 bg-[var(--theme-emphasis)]" : "w-0"}`}
+                            />
+                          </div>
+                        </div>
+                        {isCompleted && (
+                          <CheckCircle2 className="w-4 h-4 theme-text-primary shrink-0" />
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
-            <div className="flex-1 overflow-y-auto space-y-1.5">
-              {nav.map((id, idx) => {
-                const stepNum = idx;
-                const isCompleted = completed.includes(id);
-                const isCurrent = screen === id;
-                return (
-                  <button
-                    key={id}
-                    onClick={() => goToScreen(id)}
-                    className={`p-3 rounded-xl text-left text-xs font-[900] transition-all group w-full ${isCurrent ? "bg-[var(--theme-emphasis)] text-[var(--theme-on-emphasis)] shadow-lg" : "hover:bg-slate-50 dark:hover:bg-slate-700"}`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all ${isCompleted ? "bg-[var(--theme-primary)] text-white" : isCurrent ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-700 text-slate-400"}`}
-                      >
-                        {stepNum}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div
-                          className={`uppercase tracking-wider ${isCurrent ? "text-white" : isCompleted ? "theme-text dark:theme-text-primary" : "text-slate-500 dark:text-slate-400"}`}
-                        >
-                          {id === "welcome"
-                            ? t("ova.introprompt.menu_welcome")
-                            : resolvedScreensData[id]?.title}
-                        </div>
-                        <div className="mt-1.5 w-full h-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                          <div
-                            className={`h-full rounded-full transition-all duration-700 ${isCompleted ? "w-full bg-[var(--theme-primary)]" : isCurrent ? "w-1/3 bg-[var(--theme-emphasis)]" : "w-0"}`}
-                          />
-                        </div>
-                      </div>
-                      {isCompleted && (
-                        <CheckCircle2 className="w-4 h-4 theme-text-primary shrink-0" />
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     </SectionErrorBoundary>
   );
 }

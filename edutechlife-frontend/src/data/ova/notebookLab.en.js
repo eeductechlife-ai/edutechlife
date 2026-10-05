@@ -126,7 +126,7 @@ export const questionsData = [
     options: [
       "ChatGPT uses 'the whole internet' and NotebookLM uses 'only your uploaded sources'.",
       "ChatGPT is free and NotebookLM is always paid.",
-      "NotebookLM only works on phones and ChatGPT on computers.",
+      "NotebookLM uses the same general internet knowledge as ChatGPT.",
       "ChatGPT is for math and NotebookLM is for history.",
     ],
     correct: 0,

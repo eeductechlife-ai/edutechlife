@@ -215,15 +215,26 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q11",
-    question: "What is the key difference between NotebookLM and a general chat?",
+    question:
+      "What is the key difference between NotebookLM and a general chat?",
     options: [
       {
         id: "m4q11_a",
         label: "It answers only with information from the sources you upload",
       },
-      { id: "m4q11_b", label: "It searches the internet on its own for any new data" },
-      { id: "m4q11_c", label: "It invents creative answers even with no sources loaded" },
-      { id: "m4q11_d", label: "It automatically translates the documents into another language" },
+      {
+        id: "m4q11_b",
+        label: "It searches the internet on its own for any new data",
+      },
+      {
+        id: "m4q11_c",
+        label: "It invents creative answers even with no sources loaded",
+      },
+      {
+        id: "m4q11_d",
+        label:
+          "It automatically translates the documents into another language",
+      },
     ],
     correctAnswer: "m4q11_a",
     topic: "NotebookLM",
@@ -240,9 +251,18 @@ export const MODULE_4_EN = [
         id: "m4q12_a",
         label: "Quality sources loaded and organized inside the notebook",
       },
-      { id: "m4q12_b", label: "A very long question with no document loaded at all" },
-      { id: "m4q12_c", label: "Turning off the citations so it answers more creatively" },
-      { id: "m4q12_d", label: "Changing the notebook language before you ask a question" },
+      {
+        id: "m4q12_b",
+        label: "A very long question with no document loaded at all",
+      },
+      {
+        id: "m4q12_c",
+        label: "Turning off the citations so it answers more creatively",
+      },
+      {
+        id: "m4q12_d",
+        label: "Changing the notebook language before you ask a question",
+      },
     ],
     correctAnswer: "m4q12_a",
     topic: "NotebookLM",
@@ -259,9 +279,18 @@ export const MODULE_4_EN = [
         id: "m4q13_a",
         label: "Peer-reviewed papers and reliable datasets on the topic",
       },
-      { id: "m4q13_b", label: "Loose social media comments with no clear author" },
-      { id: "m4q13_c", label: "Memes and funny posts about the topic in question" },
-      { id: "m4q13_d", label: "Anonymous opinions with no source or declared date" },
+      {
+        id: "m4q13_b",
+        label: "Loose social media comments with no clear author",
+      },
+      {
+        id: "m4q13_c",
+        label: "Memes and funny posts about the topic in question",
+      },
+      {
+        id: "m4q13_d",
+        label: "Anonymous opinions with no source or declared date",
+      },
     ],
     correctAnswer: "m4q13_a",
     topic: "Curation",
@@ -272,15 +301,26 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q14",
-    question: "You have 50 sources but only need a few. What is the best decision?",
+    question:
+      "You have 50 sources but only need a few. What is the best decision?",
     options: [
       {
         id: "m4q14_a",
-        label: "Select the most relevant and highly reliable ones for the topic",
+        label:
+          "Select the most relevant and highly reliable ones for the topic",
       },
-      { id: "m4q14_b", label: "Upload all 50 without filtering because more data is better" },
-      { id: "m4q14_c", label: "Upload only the most recent ones even if they are unreliable" },
-      { id: "m4q14_d", label: "Upload only the shortest so that the notebook stays light" },
+      {
+        id: "m4q14_b",
+        label: "Upload all 50 without filtering because more data is better",
+      },
+      {
+        id: "m4q14_c",
+        label: "Upload only the most recent ones even if they are unreliable",
+      },
+      {
+        id: "m4q14_d",
+        label: "Upload only the shortest so that the notebook stays light",
+      },
     ],
     correctAnswer: "m4q14_a",
     topic: "Curation",
@@ -291,15 +331,26 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q15",
-    question: "NotebookLM answers only from your documents. What does this imply?",
+    question:
+      "NotebookLM answers only from your documents. What does this imply?",
     options: [
       {
         id: "m4q15_a",
-        label: "If a data point is not in your sources, it will not appear in the answer",
+        label:
+          "If a data point is not in your sources, it will not appear in the answer",
       },
-      { id: "m4q15_b", label: "The notebook only accesses the internet to complete data" },
-      { id: "m4q15_c", label: "It always knows more than the information you uploaded" },
-      { id: "m4q15_d", label: "It can fill gaps with information from other users" },
+      {
+        id: "m4q15_b",
+        label: "The notebook only accesses the internet to complete data",
+      },
+      {
+        id: "m4q15_c",
+        label: "It always knows more than the information you uploaded",
+      },
+      {
+        id: "m4q15_d",
+        label: "It can fill gaps with information from other users",
+      },
     ],
     correctAnswer: "m4q15_a",
     topic: "Scope",
@@ -314,11 +365,22 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q16_a",
-        label: "Condensing the essentials of the documents and guiding your reading",
+        label:
+          "Condensing the essentials of the documents and guiding your reading",
       },
-      { id: "m4q16_b", label: "Replacing the reading of all the original documents entirely" },
-      { id: "m4q16_c", label: "Generating images of each one of the documents you loaded" },
-      { id: "m4q16_d", label: "Translating the conclusions into another language automatically" },
+      {
+        id: "m4q16_b",
+        label: "Replacing the reading of all the original documents entirely",
+      },
+      {
+        id: "m4q16_c",
+        label: "Generating images of each one of the documents you loaded",
+      },
+      {
+        id: "m4q16_d",
+        label:
+          "Translating the conclusions into another language automatically",
+      },
     ],
     correctAnswer: "m4q16_a",
     topic: "Summaries",
@@ -329,15 +391,27 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q17",
-    question: "You want to connect ideas from several documents in one analysis. What do you ask for?",
+    question:
+      "You want to connect ideas from several documents in one analysis. What do you ask for?",
     options: [
       {
         id: "m4q17_a",
-        label: "A synthesis that integrates several sources and cites each contribution",
+        label:
+          "A synthesis that integrates several sources and cites each contribution",
       },
-      { id: "m4q17_b", label: "A separate summary of each document, with no relation between them" },
-      { id: "m4q17_c", label: "An answer from memory without using the documents you loaded" },
-      { id: "m4q17_d", label: "An invented text combining topics that are not loaded" },
+      {
+        id: "m4q17_b",
+        label:
+          "A separate summary of each document, with no relation between them",
+      },
+      {
+        id: "m4q17_c",
+        label: "An answer from memory without using the documents you loaded",
+      },
+      {
+        id: "m4q17_d",
+        label: "An invented text combining topics that are not loaded",
+      },
     ],
     correctAnswer: "m4q17_a",
     topic: "Synthesis",
@@ -352,11 +426,21 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q18_a",
-        label: "They show you which document each statement came from so you can verify",
+        label:
+          "They show you which document each statement came from so you can verify",
       },
-      { id: "m4q18_b", label: "They hide the sources to protect the author's privacy" },
-      { id: "m4q18_c", label: "They make the answers longer and much more detailed" },
-      { id: "m4q18_d", label: "They print the documents so that the files become physical" },
+      {
+        id: "m4q18_b",
+        label: "They hide the sources to protect the author's privacy",
+      },
+      {
+        id: "m4q18_c",
+        label: "They make the answers longer and much more detailed",
+      },
+      {
+        id: "m4q18_d",
+        label: "They print the documents so that the files become physical",
+      },
     ],
     correctAnswer: "m4q18_a",
     topic: "Verification",
@@ -372,11 +456,21 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q19_a",
-        label: "Correct the nuance with the original text and adjust your conclusion",
+        label:
+          "Correct the nuance with the original text and adjust your conclusion",
       },
-      { id: "m4q19_b", label: "Keep the AI answer and not check the original at all" },
-      { id: "m4q19_c", label: "Delete the document from the notebook to avoid conflicts" },
-      { id: "m4q19_d", label: "Ask again until it says what you were expecting" },
+      {
+        id: "m4q19_b",
+        label: "Keep the AI answer and not check the original at all",
+      },
+      {
+        id: "m4q19_c",
+        label: "Delete the document from the notebook to avoid conflicts",
+      },
+      {
+        id: "m4q19_d",
+        label: "Ask again until it says what you were expecting",
+      },
     ],
     correctAnswer: "m4q19_a",
     topic: "Accuracy",
@@ -387,15 +481,26 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q20",
-    question: "Two sources contradict each other on a point. What is the most rigorous?",
+    question:
+      "Two sources contradict each other on a point. What is the most rigorous?",
     options: [
       {
         id: "m4q20_a",
-        label: "Analyze both, document the difference and look for a third source",
+        label:
+          "Analyze both, document the difference and look for a third source",
       },
-      { id: "m4q20_b", label: "Keep the most recent one and discard the other one" },
-      { id: "m4q20_c", label: "Ignore the contradiction so the report stays simple" },
-      { id: "m4q20_d", label: "Delete both sources and keep no evidence of the point" },
+      {
+        id: "m4q20_b",
+        label: "Keep the most recent one and discard the other one",
+      },
+      {
+        id: "m4q20_c",
+        label: "Ignore the contradiction so the report stays simple",
+      },
+      {
+        id: "m4q20_d",
+        label: "Delete both sources and keep no evidence of the point",
+      },
     ],
     correctAnswer: "m4q20_a",
     topic: "Critical Analysis",
@@ -412,8 +517,14 @@ export const MODULE_4_EN = [
         id: "m4q21_a",
         label: "An audio conversation generated from your documents",
       },
-      { id: "m4q21_b", label: "A recording of you reading the document out loud" },
-      { id: "m4q21_c", label: "A written summary that you then print to read later" },
+      {
+        id: "m4q21_b",
+        label: "A recording of you reading the document out loud",
+      },
+      {
+        id: "m4q21_c",
+        label: "A written summary that you then print to read later",
+      },
       { id: "m4q21_d", label: "An automatic phone call to technical support" },
     ],
     correctAnswer: "m4q21_a",
@@ -432,8 +543,14 @@ export const MODULE_4_EN = [
         label: "For reviewing while you commute and cannot read screens",
       },
       { id: "m4q22_b", label: "For completely replacing reading and analysis" },
-      { id: "m4q22_c", label: "For uploading more documents to the notebook in less time" },
-      { id: "m4q22_d", label: "For translating the documents into another unknown language" },
+      {
+        id: "m4q22_c",
+        label: "For uploading more documents to the notebook in less time",
+      },
+      {
+        id: "m4q22_d",
+        label: "For translating the documents into another unknown language",
+      },
     ],
     correctAnswer: "m4q22_a",
     topic: "Audio Overview",
@@ -444,15 +561,26 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q23",
-    question: "When generating a podcast with your documents, what control do you have?",
+    question:
+      "When generating a podcast with your documents, what control do you have?",
     options: [
       {
         id: "m4q23_a",
-        label: "You guide the angle and can regenerate the result if it does not convince",
+        label:
+          "You guide the angle and can regenerate the result if it does not convince",
       },
-      { id: "m4q23_b", label: "You have no control and it always comes out random" },
-      { id: "m4q23_c", label: "You write word by word the final script of the audio" },
-      { id: "m4q23_d", label: "You only choose the background music for the intro" },
+      {
+        id: "m4q23_b",
+        label: "You have no control and it always comes out random",
+      },
+      {
+        id: "m4q23_c",
+        label: "You write word by word the final script of the audio",
+      },
+      {
+        id: "m4q23_d",
+        label: "You only choose the background music for the intro",
+      },
     ],
     correctAnswer: "m4q23_a",
     topic: "Audio Overview",
@@ -469,9 +597,18 @@ export const MODULE_4_EN = [
         id: "m4q24_a",
         label: "With quality sources that are well organized in the notebook",
       },
-      { id: "m4q24_b", label: "With a single two-paragraph source and no context of your own" },
-      { id: "m4q24_c", label: "With lots of messy documents unrelated to the topic" },
-      { id: "m4q24_d", label: "With no source loaded, letting it improvise freely" },
+      {
+        id: "m4q24_b",
+        label: "With a single two-paragraph source and no context of your own",
+      },
+      {
+        id: "m4q24_c",
+        label: "With lots of messy documents unrelated to the topic",
+      },
+      {
+        id: "m4q24_d",
+        label: "With no source loaded, letting it improvise freely",
+      },
     ],
     correctAnswer: "m4q24_a",
     topic: "Audio Overview",
@@ -482,15 +619,25 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q25",
-    question: "You finish an Audio Overview. What is the responsible step before sharing it?",
+    question:
+      "You finish an Audio Overview. What is the responsible step before sharing it?",
     options: [
       {
         id: "m4q25_a",
         label: "Listen to it and check that the content matches your sources",
       },
-      { id: "m4q25_b", label: "Share it right away because the tool generated it" },
-      { id: "m4q25_c", label: "Upload it without listening so you do not waste review time" },
-      { id: "m4q25_d", label: "Change the voices and publish it without reviewing the content" },
+      {
+        id: "m4q25_b",
+        label: "Share it right away because the tool generated it",
+      },
+      {
+        id: "m4q25_c",
+        label: "Upload it without listening so you do not waste review time",
+      },
+      {
+        id: "m4q25_d",
+        label: "Change the voices and publish it without reviewing the content",
+      },
     ],
     correctAnswer: "m4q25_a",
     topic: "Verification",
@@ -505,11 +652,21 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q26_a",
-        label: "Only the people you grant access to when you share the notebook",
+        label:
+          "Only the people you grant access to when you share the notebook",
       },
-      { id: "m4q26_b", label: "Any person in the world, with no invitation needed" },
-      { id: "m4q26_c", label: "All NotebookLM users automatically and by default" },
-      { id: "m4q26_d", label: "Nobody, because a notebook can never be shared" },
+      {
+        id: "m4q26_b",
+        label: "Any person in the world, with no invitation needed",
+      },
+      {
+        id: "m4q26_c",
+        label: "All NotebookLM users automatically and by default",
+      },
+      {
+        id: "m4q26_d",
+        label: "Nobody, because a notebook can never be shared",
+      },
     ],
     correctAnswer: "m4q26_a",
     topic: "Collaboration",
@@ -520,15 +677,25 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q27",
-    question: "You want to ask NotebookLM a precise question. Which one works best?",
+    question:
+      "You want to ask NotebookLM a precise question. Which one works best?",
     options: [
       {
         id: "m4q27_a",
         label: "A concrete question that asks it to cite the notebook sources",
       },
-      { id: "m4q27_b", label: "A single loose word with no context or defined intent" },
-      { id: "m4q27_c", label: "Several different questions mixed into one single message" },
-      { id: "m4q27_d", label: "A broad request with no relation to the loaded sources" },
+      {
+        id: "m4q27_b",
+        label: "A single loose word with no context or defined intent",
+      },
+      {
+        id: "m4q27_c",
+        label: "Several different questions mixed into one single message",
+      },
+      {
+        id: "m4q27_d",
+        label: "A broad request with no relation to the loaded sources",
+      },
     ],
     correctAnswer: "m4q27_a",
     topic: "NotebookLM Prompting",
@@ -539,15 +706,26 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q28",
-    question: "A document has a data point that contradicts your conclusion. What do you do?",
+    question:
+      "A document has a data point that contradicts your conclusion. What do you do?",
     options: [
       {
         id: "m4q28_a",
-        label: "Review the source and adjust your conclusion based on the evidence",
+        label:
+          "Review the source and adjust your conclusion based on the evidence",
       },
-      { id: "m4q28_b", label: "Ignore the data because it does not fit what you thought" },
-      { id: "m4q28_c", label: "Delete the document so it does not appear in the notebook" },
-      { id: "m4q28_d", label: "Ask the AI to omit the data that contradicts you" },
+      {
+        id: "m4q28_b",
+        label: "Ignore the data because it does not fit what you thought",
+      },
+      {
+        id: "m4q28_c",
+        label: "Delete the document so it does not appear in the notebook",
+      },
+      {
+        id: "m4q28_d",
+        label: "Ask the AI to omit the data that contradicts you",
+      },
     ],
     correctAnswer: "m4q28_a",
     topic: "Critical Analysis",
@@ -558,15 +736,26 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q29",
-    question: "What is the difference between a notebook's knowledge base and a general chat?",
+    question:
+      "What is the difference between a notebook's knowledge base and a general chat?",
     options: [
       {
         id: "m4q29_a",
-        label: "The notebook sticks to your sources; the general chat uses its training",
+        label:
+          "The notebook sticks to your sources; the general chat uses its training",
       },
-      { id: "m4q29_b", label: "None: both always answer the same question identically" },
-      { id: "m4q29_c", label: "The general chat only works with PDF files you have loaded" },
-      { id: "m4q29_d", label: "The notebook can invent data outside of your documents" },
+      {
+        id: "m4q29_b",
+        label: "None: both always answer the same question identically",
+      },
+      {
+        id: "m4q29_c",
+        label: "The general chat only works with PDF files you have loaded",
+      },
+      {
+        id: "m4q29_d",
+        label: "The notebook can invent data outside of your documents",
+      },
     ],
     correctAnswer: "m4q29_a",
     topic: "Scope",
@@ -581,11 +770,21 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q30_a",
-        label: "More reliable answers by starting from relevant, reliable sources",
+        label:
+          "More reliable answers by starting from relevant, reliable sources",
       },
-      { id: "m4q30_b", label: "Making the notebook heavier and harder to open" },
-      { id: "m4q30_c", label: "Making the AI invent more to fill the data gaps" },
-      { id: "m4q30_d", label: "Allowing fewer documents to be loaded in each notebook" },
+      {
+        id: "m4q30_b",
+        label: "Making the notebook heavier and harder to open",
+      },
+      {
+        id: "m4q30_c",
+        label: "Making the AI invent more to fill the data gaps",
+      },
+      {
+        id: "m4q30_d",
+        label: "Allowing fewer documents to be loaded in each notebook",
+      },
     ],
     correctAnswer: "m4q30_a",
     topic: "Curation",
@@ -596,15 +795,26 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q31",
-    question: "You want to compare where your sources agree and where they conflict. What do you ask for?",
+    question:
+      "You want to compare where your sources agree and where they conflict. What do you ask for?",
     options: [
       {
         id: "m4q31_a",
-        label: "A comparative analysis that cites each source and notes differences",
+        label:
+          "A comparative analysis that cites each source and notes differences",
       },
-      { id: "m4q31_b", label: "A summary of a single source as if it were the only one" },
-      { id: "m4q31_c", label: "A list of titles without reading the content of any" },
-      { id: "m4q31_d", label: "An invented general opinion without reviewing the documents" },
+      {
+        id: "m4q31_b",
+        label: "A summary of a single source as if it were the only one",
+      },
+      {
+        id: "m4q31_c",
+        label: "A list of titles without reading the content of any",
+      },
+      {
+        id: "m4q31_d",
+        label: "An invented general opinion without reviewing the documents",
+      },
     ],
     correctAnswer: "m4q31_a",
     topic: "Synthesis",
@@ -619,11 +829,21 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q32_a",
-        label: "Curate sources, analyze and synthesize, and generate audio to review",
+        label:
+          "Curate sources, analyze and synthesize, and generate audio to review",
       },
-      { id: "m4q32_b", label: "Load documents at random and trust the first answer" },
-      { id: "m4q32_c", label: "Ignore the citations and publish the answers without review" },
-      { id: "m4q32_d", label: "Generate the audio before uploading any base document" },
+      {
+        id: "m4q32_b",
+        label: "Load documents at random and trust the first answer",
+      },
+      {
+        id: "m4q32_c",
+        label: "Ignore the citations and publish the answers without review",
+      },
+      {
+        id: "m4q32_d",
+        label: "Generate the audio before uploading any base document",
+      },
     ],
     correctAnswer: "m4q32_a",
     topic: "Document-to-Podcast Flow",
@@ -638,11 +858,21 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q33_a",
-        label: "That it contains no sensitive data and that access is appropriate",
+        label:
+          "That it contains no sensitive data and that access is appropriate",
       },
-      { id: "m4q33_b", label: "That its name is very eye-catching for the whole team" },
-      { id: "m4q33_c", label: "That it has the greatest possible number of documents loaded" },
-      { id: "m4q33_d", label: "That the answers are long, even if they hold internal data" },
+      {
+        id: "m4q33_b",
+        label: "That its name is very eye-catching for the whole team",
+      },
+      {
+        id: "m4q33_c",
+        label: "That it has the greatest possible number of documents loaded",
+      },
+      {
+        id: "m4q33_d",
+        label: "That the answers are long, even if they hold internal data",
+      },
     ],
     correctAnswer: "m4q33_a",
     topic: "Privacy",
@@ -653,15 +883,25 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q34",
-    question: "What should you do with sources that no longer add to the notebook?",
+    question:
+      "What should you do with sources that no longer add to the notebook?",
     options: [
       {
         id: "m4q34_a",
         label: "Remove them so the notebook stays focused on what is relevant",
       },
-      { id: "m4q34_b", label: "Leave them all so the notebook looks more complete" },
-      { id: "m4q34_c", label: "Duplicate them so the AI has more repeated information" },
-      { id: "m4q34_d", label: "Keep them even if they distract the answers to your questions" },
+      {
+        id: "m4q34_b",
+        label: "Leave them all so the notebook looks more complete",
+      },
+      {
+        id: "m4q34_c",
+        label: "Duplicate them so the AI has more repeated information",
+      },
+      {
+        id: "m4q34_d",
+        label: "Keep them even if they distract the answers to your questions",
+      },
     ],
     correctAnswer: "m4q34_a",
     topic: "Curation",
@@ -672,15 +912,26 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q35",
-    question: "NotebookLM cannot find something you ask about in your sources. What does it mean?",
+    question:
+      "NotebookLM cannot find something you ask about in your sources. What does it mean?",
     options: [
       {
         id: "m4q35_a",
-        label: "That data is not in your documents and you must find another source",
+        label:
+          "That data is not in your documents and you must find another source",
       },
-      { id: "m4q35_b", label: "That the tool is broken and never answers well at all" },
-      { id: "m4q35_c", label: "That you should ask it to invent it anyway for you" },
-      { id: "m4q35_d", label: "That the data does exist even if it is in no document" },
+      {
+        id: "m4q35_b",
+        label: "That the document has a format NotebookLM cannot read",
+      },
+      {
+        id: "m4q35_c",
+        label: "That you should ask it to invent it anyway for you",
+      },
+      {
+        id: "m4q35_d",
+        label: "That the data does exist even if it is in no document",
+      },
     ],
     correctAnswer: "m4q35_a",
     topic: "Scope",
@@ -691,15 +942,25 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q36",
-    question: "What does a student gain by using NotebookLM to study their notes?",
+    question:
+      "What does a student gain by using NotebookLM to study their notes?",
     options: [
       {
         id: "m4q36_a",
         label: "Asking and getting cited answers from their own materials",
       },
-      { id: "m4q36_b", label: "Completely avoiding having to study the contents" },
-      { id: "m4q36_c", label: "Replacing their notes with generated text without review" },
-      { id: "m4q36_d", label: "Sharing their public notes with no access control" },
+      {
+        id: "m4q36_b",
+        label: "Completely avoiding having to study the contents",
+      },
+      {
+        id: "m4q36_c",
+        label: "Replacing their notes with generated text without review",
+      },
+      {
+        id: "m4q36_d",
+        label: "Sharing their public notes with no access control",
+      },
     ],
     correctAnswer: "m4q36_a",
     topic: "Learning",
@@ -710,15 +971,25 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q37",
-    question: "You are about to base a decision on a NotebookLM synthesis. What do you do first?",
+    question:
+      "You are about to base a decision on a NotebookLM synthesis. What do you do first?",
     options: [
       {
         id: "m4q37_a",
         label: "Open the cited sources and confirm the key points",
       },
-      { id: "m4q37_b", label: "Decide right away because the AI is almost never wrong" },
-      { id: "m4q37_c", label: "Change the data of the synthesis to suit your convenience" },
-      { id: "m4q37_d", label: "Ask for another synthesis and keep the longest one" },
+      {
+        id: "m4q37_b",
+        label: "Decide right away because the AI is almost never wrong",
+      },
+      {
+        id: "m4q37_c",
+        label: "Change the data of the synthesis to suit your convenience",
+      },
+      {
+        id: "m4q37_d",
+        label: "Ask for another synthesis and keep the longest one",
+      },
     ],
     correctAnswer: "m4q37_a",
     topic: "Verification",
@@ -733,11 +1004,21 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q38_a",
-        label: "Relevant sources, well organized and aligned with the work goal",
+        label:
+          "Relevant sources, well organized and aligned with the work goal",
       },
-      { id: "m4q38_b", label: "The greatest possible number of documents on any topic" },
-      { id: "m4q38_c", label: "A very long, eye-catching title with many emojis included" },
-      { id: "m4q38_d", label: "No sources loaded, to let the AI improvise on its own" },
+      {
+        id: "m4q38_b",
+        label: "The greatest possible number of documents on any topic",
+      },
+      {
+        id: "m4q38_c",
+        label: "A very long, eye-catching title with many emojis included",
+      },
+      {
+        id: "m4q38_d",
+        label: "No sources loaded, to let the AI improvise on its own",
+      },
     ],
     correctAnswer: "m4q38_a",
     topic: "Curation",
@@ -748,15 +1029,26 @@ export const MODULE_4_EN = [
   },
   {
     id: "m4q39",
-    question: "How does the Audio Overview help in the document-to-podcast flow?",
+    question:
+      "How does the Audio Overview help in the document-to-podcast flow?",
     options: [
       {
         id: "m4q39_a",
-        label: "It turns the conclusions of your documents into audio for review",
+        label:
+          "It turns the conclusions of your documents into audio for review",
       },
-      { id: "m4q39_b", label: "It replaces source curation with a simple summary" },
-      { id: "m4q39_c", label: "It generates images of the documents to illustrate the topic" },
-      { id: "m4q39_d", label: "It translates the documents into several languages at once" },
+      {
+        id: "m4q39_b",
+        label: "It replaces source curation with a simple summary",
+      },
+      {
+        id: "m4q39_c",
+        label: "It generates images of the documents to illustrate the topic",
+      },
+      {
+        id: "m4q39_d",
+        label: "It translates the documents into several languages at once",
+      },
     ],
     correctAnswer: "m4q39_a",
     topic: "Document-to-Podcast Flow",
@@ -772,11 +1064,24 @@ export const MODULE_4_EN = [
     options: [
       {
         id: "m4q40_a",
-        label: "Curate sources, synthesize with citations, verify and generate the Audio Overview",
+        label:
+          "Curate sources, synthesize with citations, verify and generate the Audio Overview",
       },
-      { id: "m4q40_b", label: "Upload the papers unordered and publish the first available audio" },
-      { id: "m4q40_c", label: "Generate the audio without checking that the citations are correct" },
-      { id: "m4q40_d", label: "Choose the papers by social media popularity without reading them" },
+      {
+        id: "m4q40_b",
+        label:
+          "Upload the papers unordered and publish the first available audio",
+      },
+      {
+        id: "m4q40_c",
+        label:
+          "Generate the audio without checking that the citations are correct",
+      },
+      {
+        id: "m4q40_d",
+        label:
+          "Choose the papers by social media popularity without reading them",
+      },
     ],
     correctAnswer: "m4q40_a",
     topic: "Document-to-Podcast Flow",

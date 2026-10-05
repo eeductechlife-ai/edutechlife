@@ -1,13 +1,17 @@
-import { useState, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types';
-import { motion, useReducedMotion } from 'framer-motion';
-import { Icon } from '../../utils/iconMapping.jsx';
-import { useTranslation } from '../../i18n/I18nProvider';
-import { track } from '../../lib/analytics';
+import { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import { motion, useReducedMotion } from "framer-motion";
+import { Icon } from "../../utils/iconMapping.jsx";
+import { useTranslation } from "../../i18n/I18nProvider";
+import { track } from "../../lib/analytics";
 
 const TOTAL_MODULES = 5;
 
-const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertificate }) => {
+const CourseCompletionSection = ({
+  hasCertificate,
+  courseProgress,
+  onViewCertificate,
+}) => {
   const prefersReducedMotion = useReducedMotion();
   const { t } = useTranslation();
   const [showContent, setShowContent] = useState(prefersReducedMotion);
@@ -16,7 +20,10 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
   useEffect(() => {
     if (hasCertificate && !tracked.current) {
       tracked.current = true;
-      track('course_complete', { courseProgress, completedModules: TOTAL_MODULES });
+      track("course_complete", {
+        courseProgress,
+        completedModules: TOTAL_MODULES,
+      });
     }
   }, [hasCertificate, courseProgress]);
 
@@ -33,35 +40,50 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
     return null;
   }
 
+  const progressDone = courseProgress >= 80;
   const requirements = [
-    { label: t('course_completion.module_completed'), done: true, current: `${TOTAL_MODULES}/${TOTAL_MODULES}` },
-    { label: t('course_completion.progress_80'), done: true, current: `${Math.max(Math.round(courseProgress), 80)}%` },
-    { label: t('course_completion.cert_obtained'), done: true, current: t('course_completion.yes') }
+    {
+      label: t("course_completion.module_completed"),
+      done: true,
+      current: `${TOTAL_MODULES}/${TOTAL_MODULES}`,
+    },
+    {
+      label: t("course_completion.progress_80"),
+      done: progressDone,
+      current: `${Math.round(courseProgress || 0)}%`,
+    },
+    {
+      label: t("course_completion.cert_obtained"),
+      done: !!hasCertificate,
+      current: hasCertificate
+        ? t("course_completion.yes")
+        : t("course_completion.no"),
+    },
   ];
 
   return (
     <motion.div
       initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       className="px-1 w-full"
     >
       <div className="relative overflow-hidden rounded-xl theme-bg-emphasis p-5 shadow-lg">
         {/* Decoración */}
         <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full -translate-y-6 translate-x-6" />
         <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/5 rounded-full translate-y-4 -translate-x-4" />
-        
+
         {/* Progress Bar */}
         <div className="mb-4">
           <div className="flex justify-between text-[10px] text-white/70 mb-1.5">
-            <span>{t('course_completion.progress')}</span>
+            <span>{t("course_completion.progress")}</span>
             <span>{Math.round(courseProgress)}%</span>
           </div>
           <div className="h-2 bg-white/15 rounded-full overflow-hidden">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
+              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
               className="h-full bg-gradient-to-r from-[#FFD166] to-[var(--theme-emphasis)] rounded-full"
               style={{ width: `${Math.min(courseProgress, 100)}%` }}
             />
@@ -81,10 +103,23 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
                   y: 60 + Math.sin(i * 0.8) * 60,
                   scale: [0, 1.2, 0],
                 }}
-                transition={{ duration: 0.8 + i * 0.1, delay: 0.5, ease: 'easeOut' }}
+                transition={{
+                  duration: 0.8 + i * 0.1,
+                  delay: 0.5,
+                  ease: "easeOut",
+                }}
                 className="absolute w-2 h-2 rounded-full"
                 style={{
-                  backgroundColor: ['#FFD166', '#00BCD4', '#10B981', '#F59E0B', '#EC4899', '#8B5CF6', '#EF4444', '#2563EB'][i],
+                  backgroundColor: [
+                    "#FFD166",
+                    "#00BCD4",
+                    "#10B981",
+                    "#F59E0B",
+                    "#EC4899",
+                    "#8B5CF6",
+                    "#EF4444",
+                    "#2563EB",
+                  ][i],
                 }}
               />
             ))}
@@ -95,7 +130,11 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
         <motion.div
           initial={prefersReducedMotion ? {} : { scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={prefersReducedMotion ? {} : { type: 'spring', stiffness: 200, damping: 10 }}
+          transition={
+            prefersReducedMotion
+              ? {}
+              : { type: "spring", stiffness: 200, damping: 10 }
+          }
           className="flex justify-center mb-4"
         >
           <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center">
@@ -106,19 +145,29 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
         {/* Mensaje de felicitación */}
         <div className="text-center relative z-10">
           <h3 className="text-sm font-bold text-white mb-1.5 tracking-wide">
-            {t('course_completion.title')}
+            {t("course_completion.title")}
           </h3>
           <p className="text-xs text-white/85 leading-relaxed mb-4">
-            {t('course_completion.message', { name: t('ialab.course_title') })}
+            {t("course_completion.message", { name: t("ialab.course_title") })}
           </p>
 
           {/* Checklist de logros */}
           <div className="space-y-1.5 mb-4 text-left">
             {requirements.map((req, i) => (
-              <div key={i} className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-1.5">
-                <Icon name="fa-check-circle" className="text-[#FFD166] text-xs flex-shrink-0" />
-                <span className="text-[10px] text-white/90 flex-1">{req.label}</span>
-                <span className="text-[10px] font-semibold text-white">{req.current}</span>
+              <div
+                key={i}
+                className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-1.5"
+              >
+                <Icon
+                  name={req.done ? "fa-check-circle" : "fa-circle-half-stroke"}
+                  className={`${req.done ? "text-[#FFD166]" : "text-white/60"} text-xs flex-shrink-0`}
+                />
+                <span className="text-[10px] text-white/90 flex-1">
+                  {req.label}
+                </span>
+                <span className="text-[10px] font-semibold text-white">
+                  {req.current}
+                </span>
               </div>
             ))}
           </div>
@@ -131,14 +180,13 @@ const CourseCompletionSection = ({ hasCertificate, courseProgress, onViewCertifi
             className="w-full flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] bg-white rounded-xl theme-text-emphasis font-bold text-xs shadow-md hover:shadow-lg transition-all duration-300"
           >
             <Icon name="fa-award" className="text-sm" />
-            {t('course_completion.view_cert')}
+            {t("course_completion.view_cert")}
           </motion.button>
         </div>
       </div>
     </motion.div>
   );
 };
-
 
 CourseCompletionSection.propTypes = {
   hasCertificate: PropTypes.bool,

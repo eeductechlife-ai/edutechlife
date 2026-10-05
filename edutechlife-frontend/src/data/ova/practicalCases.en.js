@@ -8,7 +8,7 @@ export const challenges = [
       "You have access to Gemini Advanced with Deep Research and Google Workspace integration.",
     options: [
       "Ask Gemini to generate a complete report based solely on its training data.",
-      "Use Gemini with Deep Research to search real-time sources, analyze them, and deliver a report with verifiable citations.",
+      "Use Deep Research to fetch up-to-date sources and deliver a report with verifiable citations.",
       "Manually search Google, copy data into a document, then ask Gemini to summarize it.",
     ],
     correct: 1,
@@ -25,7 +25,7 @@ export const challenges = [
       "You can upload files to Gemini and ask questions about their content.",
     options: [
       "Read the entire contract and take manual notes, then ask Gemini specific questions.",
-      "Upload the PDF to Gemini and ask for an executive summary, then ask targeted questions about risky clauses, dates, and obligations.",
+      "Upload the PDF to Gemini and ask for an executive summary and targeted questions about clauses, dates, and obligations.",
       "Ask Gemini to draft a counter-proposal directly without reading the original.",
     ],
     correct: 1,
@@ -42,7 +42,7 @@ export const challenges = [
       "Gemini is integrated into Gmail, Docs, Sheets, and Meet in Google Workspace.",
     options: [
       "Manually copy and paste each report in Gmail, adjusting data one by one.",
-      "Use Gemini in Sheets to analyze data, then Gemini in Docs to draft the base report, and Gemini in Gmail to personalize and send each email.",
+      "Use Gemini in Sheets for analysis, in Docs for the base report, and in Gmail to send each personalized email.",
       "Send the same generic email to everyone with overall data.",
     ],
     correct: 1,
@@ -59,7 +59,7 @@ export const challenges = [
       "Gemini can analyze images, extract text from them, and recognize visual patterns.",
     options: [
       "Review each screenshot manually and take notes in a spreadsheet.",
-      "Upload all images to Gemini and ask for a comparative visual analysis: color palettes, message types, formats, and detected calls to action.",
+      "Upload the images to Gemini and ask for a comparative visual analysis of colors, messages, formats, and CTAs.",
       "Only read the visible text in each screenshot and ignore visual elements.",
     ],
     correct: 1,
@@ -76,7 +76,7 @@ export const challenges = [
       "Gemini has advanced code generation and analysis capabilities in multiple languages.",
     options: [
       "Randomly modify the code hoping it works, since you don't understand Python.",
-      "Copy the complete code into Gemini, ask it to identify errors, explain each problem, and suggest performance optimizations with explanations.",
+      "Copy the code into Gemini and ask it to identify the errors and suggest explained optimizations.",
       "Hire an external developer to review the code.",
     ],
     correct: 1,
@@ -93,7 +93,7 @@ export const challenges = [
       "Gemini can analyze data files, generate conceptual visualizations, and find patterns.",
     options: [
       "Open the CSV in Excel and create manual charts for each variable.",
-      "Upload the CSV to Gemini and ask for: trend analysis by region and product, sales anomaly detection, best-performing channel identification, and actionable recommendations.",
+      "Upload the CSV to Gemini and ask for trends, anomalies, best-performing channels, and actionable recommendations.",
       "Only calculate the total sales average and present that number.",
     ],
     correct: 1,

@@ -206,7 +206,8 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q11",
-    question: "Qual destes NÃO é um tipo de conteúdo que o Gemini pode analisar?",
+    question:
+      "Qual destes NÃO é um tipo de conteúdo que o Gemini pode analisar?",
     options: [
       {
         id: "m3q11_a",
@@ -225,15 +226,26 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q12",
-    question: "Que vantagem o Gemini oferece em relação a um buscador tradicional?",
+    question:
+      "Que vantagem o Gemini oferece em relação a um buscador tradicional?",
     options: [
       {
         id: "m3q12_a",
-        label: "Compreende a sua pergunta e elabora uma resposta, não apenas links",
+        label:
+          "Compreende a sua pergunta e elabora uma resposta, não apenas links",
       },
-      { id: "m3q12_b", label: "Garante que todos os resultados que entrega sejam verdadeiros" },
-      { id: "m3q12_c", label: "Só funciona para buscar definições simples de dicionário" },
-      { id: "m3q12_d", label: "Substitui por completo todas as fontes originais" },
+      {
+        id: "m3q12_b",
+        label: "Garante que todos os resultados que entrega sejam verdadeiros",
+      },
+      {
+        id: "m3q12_c",
+        label: "Só funciona para buscar definições simples de dicionário",
+      },
+      {
+        id: "m3q12_d",
+        label: "Substitui por completo todas as fontes originais",
+      },
     ],
     correctAnswer: "m3q12_a",
     topic: "Gemini Básico",
@@ -248,10 +260,17 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q13_a",
-        label: "Para ancorar a resposta em informação atual e mostrar as fontes",
+        label:
+          "Para ancorar a resposta em informação atual e mostrar as fontes",
       },
-      { id: "m3q13_b", label: "Para desconectar a IA da internet e economizar dados" },
-      { id: "m3q13_c", label: "Para traduzir automaticamente tudo para o seu idioma natal" },
+      {
+        id: "m3q13_b",
+        label: "Para desconectar a IA da internet e economizar dados",
+      },
+      {
+        id: "m3q13_c",
+        label: "Para traduzir automaticamente tudo para o seu idioma natal",
+      },
       { id: "m3q13_d", label: "Para guardar as conversas na nuvem do Google" },
     ],
     correctAnswer: "m3q13_a",
@@ -270,9 +289,18 @@ export const MODULE_3_PT = [
         id: "m3q14_a",
         label: "Abrir a fonte citada e comprovar se ela sustenta o dado",
       },
-      { id: "m3q14_b", label: "Copiar a citação tal como está porque já traz um link" },
-      { id: "m3q14_c", label: "Assumir que a fonte existe só por ver o formato" },
-      { id: "m3q14_d", label: "Pedir ao Gemini que confirme a própria resposta dele" },
+      {
+        id: "m3q14_b",
+        label: "Copiar a citação tal como está porque já traz um link",
+      },
+      {
+        id: "m3q14_c",
+        label: "Assumir que a fonte existe só por ver o formato",
+      },
+      {
+        id: "m3q14_d",
+        label: "Pedir ao Gemini que confirme a própria resposta dele",
+      },
     ],
     correctAnswer: "m3q14_a",
     topic: "Verificação de Fontes",
@@ -287,11 +315,18 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q15_a",
-        label: "Explora muitas fontes, analisa e redige um relatório com citações",
+        label:
+          "Explora muitas fontes, analisa e redige um relatório com citações",
       },
-      { id: "m3q15_b", label: "Devolve o primeiro resultado e encerra a busca" },
+      {
+        id: "m3q15_b",
+        label: "Devolve o primeiro resultado e encerra a busca",
+      },
       { id: "m3q15_c", label: "Gera imagens para ilustrar o tema investigado" },
-      { id: "m3q15_d", label: "Só responde perguntas simples de cultura geral" },
+      {
+        id: "m3q15_d",
+        label: "Só responde perguntas simples de cultura geral",
+      },
     ],
     correctAnswer: "m3q15_a",
     topic: "Deep Research",
@@ -302,15 +337,25 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q16",
-    question: "Você quer um relatório útil de Deep Research. Qual prompt ajuda mais?",
+    question:
+      "Você quer um relatório útil de Deep Research. Qual prompt ajuda mais?",
     options: [
       {
         id: "m3q16_a",
         label: "Indicar o tema, o enfoque e o tipo de fontes desejadas",
       },
-      { id: "m3q16_b", label: "Escrever só uma palavra e deixar que ele adivinhe o enfoque" },
-      { id: "m3q16_c", label: "Pedir que busque sem limite de tema nem de fontes" },
-      { id: "m3q16_d", label: "Solicitar um resumo sem pedir fontes nem dados duros" },
+      {
+        id: "m3q16_b",
+        label: "Escrever só uma palavra e deixar que ele adivinhe o enfoque",
+      },
+      {
+        id: "m3q16_c",
+        label: "Pedir que busque sem limite de tema nem de fontes",
+      },
+      {
+        id: "m3q16_d",
+        label: "Solicitar um resumo sem pedir fontes nem dados duros",
+      },
     ],
     correctAnswer: "m3q16_a",
     topic: "Deep Research",
@@ -327,9 +372,18 @@ export const MODULE_3_PT = [
         id: "m3q17_a",
         label: "Contrastar um dado com pelo menos duas fontes independentes",
       },
-      { id: "m3q17_b", label: "Repetir a mesma pergunta três vezes para a mesma IA" },
-      { id: "m3q17_c", label: "Desenhar um triângulo para organizar as ideias" },
-      { id: "m3q17_d", label: "Usar sempre três navegadores distintos ao mesmo tempo" },
+      {
+        id: "m3q17_b",
+        label: "Repetir a mesma pergunta três vezes para a mesma IA",
+      },
+      {
+        id: "m3q17_c",
+        label: "Desenhar um triângulo para organizar as ideias",
+      },
+      {
+        id: "m3q17_d",
+        label: "Usar sempre três navegadores distintos ao mesmo tempo",
+      },
     ],
     correctAnswer: "m3q17_a",
     topic: "Verificação de Fontes",
@@ -347,9 +401,18 @@ export const MODULE_3_PT = [
         id: "m3q18_a",
         label: "Pode processar documentos extensos em uma só conversa",
       },
-      { id: "m3q18_b", label: "Obriga a resumir o documento antes de lê-lo por inteiro" },
-      { id: "m3q18_c", label: "Só admite arquivos de uma única página no máximo" },
-      { id: "m3q18_d", label: "Guarda os documentos dentro do navegador do usuário" },
+      {
+        id: "m3q18_b",
+        label: "Obriga a resumir o documento antes de lê-lo por inteiro",
+      },
+      {
+        id: "m3q18_c",
+        label: "Só admite arquivos de uma única página no máximo",
+      },
+      {
+        id: "m3q18_d",
+        label: "Guarda os documentos dentro do navegador do usuário",
+      },
     ],
     correctAnswer: "m3q18_a",
     topic: "Contexto Longo",
@@ -366,9 +429,18 @@ export const MODULE_3_PT = [
         id: "m3q19_a",
         label: "Compartilhar a tela e perguntar ao vivo sobre o que é mostrado",
       },
-      { id: "m3q19_b", label: "Gravar a reunião e publicá-la automaticamente na internet" },
-      { id: "m3q19_c", label: "Assumir o controle do computador e responder por você" },
-      { id: "m3q19_d", label: "Substituir os outros participantes com respostas automáticas" },
+      {
+        id: "m3q19_b",
+        label: "Gravar a reunião e publicá-la automaticamente na internet",
+      },
+      {
+        id: "m3q19_c",
+        label: "Assumir o controle do computador e responder por você",
+      },
+      {
+        id: "m3q19_d",
+        label: "Substituir os outros participantes com respostas automáticas",
+      },
     ],
     correctAnswer: "m3q19_a",
     topic: "Gemini Live",
@@ -387,8 +459,14 @@ export const MODULE_3_PT = [
         label: "Pedir fontes ou descartar o dado até poder verificá-lo",
       },
       { id: "m3q20_b", label: "Publicá-lo igual se o número parecer razoável" },
-      { id: "m3q20_c", label: "Acrescentar um gráfico gerado para dar credibilidade" },
-      { id: "m3q20_d", label: "Atribuir o dado a uma fonte genérica conhecida" },
+      {
+        id: "m3q20_c",
+        label: "Acrescentar um gráfico gerado para dar credibilidade",
+      },
+      {
+        id: "m3q20_d",
+        label: "Atribuir o dado a uma fonte genérica conhecida",
+      },
     ],
     correctAnswer: "m3q20_a",
     topic: "Verificação",
@@ -405,9 +483,15 @@ export const MODULE_3_PT = [
         id: "m3q21_a",
         label: "Resumir e-mails, redigir no Docs e ajudar no Sheets",
       },
-      { id: "m3q21_b", label: "Funcionar só dentro do Docs e em nenhum outro lugar" },
+      {
+        id: "m3q21_b",
+        label: "Funcionar só dentro do Docs e em nenhum outro lugar",
+      },
       { id: "m3q21_c", label: "Substituir por completo o e-mail tradicional" },
-      { id: "m3q21_d", label: "Editar apresentações sem que você revise o conteúdo" },
+      {
+        id: "m3q21_d",
+        label: "Editar apresentações sem que você revise o conteúdo",
+      },
     ],
     correctAnswer: "m3q21_a",
     topic: "Google Workspace",
@@ -418,15 +502,25 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q22",
-    question: "Você quer analisar uma tabela do Sheets com o Gemini. Qual é a melhor forma?",
+    question:
+      "Você quer analisar uma tabela do Sheets com o Gemini. Qual é a melhor forma?",
     options: [
       {
         id: "m3q22_a",
         label: "Pedir a análise diretamente onde vive a planilha",
       },
-      { id: "m3q22_b", label: "Copiar os dados à mão para dentro de uma conversa nova" },
-      { id: "m3q22_c", label: "Converter a tabela em imagens para depois enviá-las" },
-      { id: "m3q22_d", label: "Exportar tudo e pedir a análise em outra ferramenta" },
+      {
+        id: "m3q22_b",
+        label: "Copiar os dados à mão para dentro de uma conversa nova",
+      },
+      {
+        id: "m3q22_c",
+        label: "Converter a tabela em imagens para depois enviá-las",
+      },
+      {
+        id: "m3q22_d",
+        label: "Exportar tudo e pedir a análise em outra ferramenta",
+      },
     ],
     correctAnswer: "m3q22_a",
     topic: "Google Workspace",
@@ -443,9 +537,18 @@ export const MODULE_3_PT = [
         id: "m3q23_a",
         label: "Trazer dados atuais desses serviços para dentro da conversa",
       },
-      { id: "m3q23_b", label: "Substituir por completo os sites desses serviços" },
-      { id: "m3q23_c", label: "Bloquear o acesso à internet para maior segurança" },
-      { id: "m3q23_d", label: "Baixar esses serviços para usá-los sem conexão" },
+      {
+        id: "m3q23_b",
+        label: "Substituir por completo os sites desses serviços",
+      },
+      {
+        id: "m3q23_c",
+        label: "Bloquear o acesso à internet para maior segurança",
+      },
+      {
+        id: "m3q23_d",
+        label: "Baixar esses serviços para usá-los sem conexão",
+      },
     ],
     correctAnswer: "m3q23_a",
     topic: "Extensões Gemini",
@@ -456,15 +559,25 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q24",
-    question: "Você deve formular uma pergunta de pesquisa sólida. Qual é a melhor?",
+    question:
+      "Você deve formular uma pergunta de pesquisa sólida. Qual é a melhor?",
     options: [
       {
         id: "m3q24_a",
         label: "Uma pergunta específica, delimitada e verificável com fontes",
       },
-      { id: "m3q24_b", label: "Um tema amplo sem enfoque, para ver o que a IA diz" },
-      { id: "m3q24_c", label: "Uma afirmação que a IA deva confirmar de qualquer forma" },
-      { id: "m3q24_d", label: "Várias perguntas diferentes misturadas num só texto" },
+      {
+        id: "m3q24_b",
+        label: "Um tema amplo sem enfoque, para ver o que a IA diz",
+      },
+      {
+        id: "m3q24_c",
+        label: "Uma afirmação que a IA deva confirmar de qualquer forma",
+      },
+      {
+        id: "m3q24_d",
+        label: "Várias perguntas diferentes misturadas num só texto",
+      },
     ],
     correctAnswer: "m3q24_a",
     topic: "Pesquisa Profissional",
@@ -475,15 +588,22 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q25",
-    question: "O Gemini cita uma fonte que você não consegue abrir. Qual conclusão é correta?",
+    question:
+      "O Gemini cita uma fonte que você não consegue abrir. Qual conclusão é correta?",
     options: [
       {
         id: "m3q25_a",
         label: "Não usar esse dado até encontrar uma fonte verificável",
       },
       { id: "m3q25_b", label: "Usar o dado igual porque a IA o deu por certo" },
-      { id: "m3q25_c", label: "Inventar uma citação parecida para respaldar o dado" },
-      { id: "m3q25_d", label: "Publicá-lo sem citação e evitar as perguntas do leitor" },
+      {
+        id: "m3q25_c",
+        label: "Inventar uma citação parecida para respaldar o dado",
+      },
+      {
+        id: "m3q25_d",
+        label: "Publicá-lo sem citação e evitar as perguntas do leitor",
+      },
     ],
     correctAnswer: "m3q25_a",
     topic: "Verificação de Fontes",
@@ -500,9 +620,18 @@ export const MODULE_3_PT = [
         id: "m3q26_a",
         label: "Aprender com as explicações dele e verificar o que aprende",
       },
-      { id: "m3q26_b", label: "Entregar as respostas dele como trabalho próprio sem revisar" },
-      { id: "m3q26_c", label: "Copiar e colar sem ler nem entender o conteúdo" },
-      { id: "m3q26_d", label: "Usá-lo para resolver provas presenciais ao vivo" },
+      {
+        id: "m3q26_b",
+        label: "Entregar as respostas dele como trabalho próprio sem revisar",
+      },
+      {
+        id: "m3q26_c",
+        label: "Copiar e colar sem ler nem entender o conteúdo",
+      },
+      {
+        id: "m3q26_d",
+        label: "Usá-lo para resolver provas presenciais ao vivo",
+      },
     ],
     correctAnswer: "m3q26_a",
     topic: "Uso Responsável",
@@ -513,15 +642,25 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q27",
-    question: "Um documento extenso (200 páginas) deve ser analisado. Qual é a melhor prática?",
+    question:
+      "Um documento extenso (200 páginas) deve ser analisado. Qual é a melhor prática?",
     options: [
       {
         id: "m3q27_a",
         label: "Carregá-lo e pedir respostas com as páginas ou seções citadas",
       },
-      { id: "m3q27_b", label: "Resumi-lo à mão primeiro e não usar a IA para nada" },
-      { id: "m3q27_c", label: "Convertê-lo em imagens soltas para cada pergunta" },
-      { id: "m3q27_d", label: "Pedir um resumo sem citar de onde veio a informação" },
+      {
+        id: "m3q27_b",
+        label: "Resumi-lo à mão primeiro e não usar a IA para nada",
+      },
+      {
+        id: "m3q27_c",
+        label: "Convertê-lo em imagens soltas para cada pergunta",
+      },
+      {
+        id: "m3q27_d",
+        label: "Pedir um resumo sem citar de onde veio a informação",
+      },
     ],
     correctAnswer: "m3q27_a",
     topic: "Contexto Longo",
@@ -536,9 +675,13 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q28_a",
-        label: "Pode descrevê-la, extrair texto ou responder sobre o conteúdo dela",
+        label:
+          "Pode descrevê-la, extrair texto ou responder sobre o conteúdo dela",
       },
-      { id: "m3q28_b", label: "Só a guarda sem analisar nada do conteúdo dela" },
+      {
+        id: "m3q28_b",
+        label: "Só a guarda sem analisar nada do conteúdo dela",
+      },
       { id: "m3q28_c", label: "Substitui-a por uma imagem gerada parecida" },
       { id: "m3q28_d", label: "Publica-a na internet na hora sem permissão" },
     ],
@@ -551,15 +694,25 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q29",
-    question: "Antes de se basear num resumo do Deep Research, o que convém fazer?",
+    question:
+      "Antes de se basear num resumo do Deep Research, o que convém fazer?",
     options: [
       {
         id: "m3q29_a",
         label: "Revisar algumas fontes citadas para confirmar achados-chave",
       },
-      { id: "m3q29_b", label: "Confiar totalmente porque o relatório é bem extenso" },
-      { id: "m3q29_c", label: "Eliminar as citações para o texto ficar mais limpo" },
-      { id: "m3q29_d", label: "Mudar os dados que não combinam com a sua opinião" },
+      {
+        id: "m3q29_b",
+        label: "Confiar totalmente porque o relatório é bem extenso",
+      },
+      {
+        id: "m3q29_c",
+        label: "Eliminar as citações para o texto ficar mais limpo",
+      },
+      {
+        id: "m3q29_d",
+        label: "Mudar os dados que não combinam com a sua opinião",
+      },
     ],
     correctAnswer: "m3q29_a",
     topic: "Deep Research",
@@ -576,9 +729,18 @@ export const MODULE_3_PT = [
         id: "m3q30_a",
         label: "Indicar que dados você tem, o que quer obter e em que formato",
       },
-      { id: "m3q30_b", label: "Enviar o arquivo sem explicar o que você precisa dele" },
-      { id: "m3q30_c", label: "Pedir 'analisa isto' e aceitar o que ele responder" },
-      { id: "m3q30_d", label: "Solicitar uma conclusão sem mostrar os dados de base" },
+      {
+        id: "m3q30_b",
+        label: "Enviar o arquivo sem explicar o que você precisa dele",
+      },
+      {
+        id: "m3q30_c",
+        label: "Pedir 'analisa isto' e aceitar o que ele responder",
+      },
+      {
+        id: "m3q30_d",
+        label: "Solicitar uma conclusão sem mostrar os dados de base",
+      },
     ],
     correctAnswer: "m3q30_a",
     topic: "Análise com Gemini",
@@ -596,9 +758,18 @@ export const MODULE_3_PT = [
         id: "m3q31_a",
         label: "Contrastar as duas com fontes e decidir com evidência",
       },
-      { id: "m3q31_b", label: "Escolher a resposta mais longa sem comparar nada" },
-      { id: "m3q31_c", label: "Fazer a média das duas para nunca errar" },
-      { id: "m3q31_d", label: "Usar a primeira e apagar a segunda do histórico" },
+      {
+        id: "m3q31_b",
+        label: "Escolher a resposta mais longa sem comparar nada",
+      },
+      {
+        id: "m3q31_c",
+        label: "Escolher a que tiver mais citações sem revisá-las",
+      },
+      {
+        id: "m3q31_d",
+        label: "Usar a primeira e apagar a segunda do histórico",
+      },
     ],
     correctAnswer: "m3q31_a",
     topic: "Pensamento Crítico",
@@ -616,9 +787,18 @@ export const MODULE_3_PT = [
         id: "m3q32_a",
         label: "Revisar a política de dados e anonimizar o confidencial",
       },
-      { id: "m3q32_b", label: "Enviar tudo sem revisar porque a ferramenta é corporativa" },
-      { id: "m3q32_c", label: "Enviar só o que depois você não possa apagar do histórico" },
-      { id: "m3q32_d", label: "Compartilhar os acessos do sistema dentro do chat" },
+      {
+        id: "m3q32_b",
+        label: "Enviar tudo sem revisar porque a ferramenta é corporativa",
+      },
+      {
+        id: "m3q32_c",
+        label: "Enviar só o que depois você não possa apagar do histórico",
+      },
+      {
+        id: "m3q32_d",
+        label: "Compartilhar os acessos do sistema dentro do chat",
+      },
     ],
     correctAnswer: "m3q32_a",
     topic: "Privacidade",
@@ -629,15 +809,23 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q33",
-    question: "Que diferença há entre uma busca normal e o Deep Research no Gemini?",
+    question:
+      "Que diferença há entre uma busca normal e o Deep Research no Gemini?",
     options: [
       {
         id: "m3q33_a",
-        label: "O Deep Research faz uma análise profunda e extensa com relatório",
+        label:
+          "O Deep Research faz uma análise profunda e extensa com relatório",
       },
-      { id: "m3q33_b", label: "O Deep Research só busca imagens em vez de páginas" },
+      {
+        id: "m3q33_b",
+        label: "O Deep Research só busca imagens em vez de páginas",
+      },
       { id: "m3q33_c", label: "São idênticos e só muda a cor do botão" },
-      { id: "m3q33_d", label: "O Deep Research responde mais rápido que uma busca normal" },
+      {
+        id: "m3q33_d",
+        label: "O Deep Research responde mais rápido que uma busca normal",
+      },
     ],
     correctAnswer: "m3q33_a",
     topic: "Deep Research",
@@ -648,15 +836,22 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q34",
-    question: "Quando o Gemini compartilha um resultado no Workspace, o que você deve fazer?",
+    question:
+      "Quando o Gemini compartilha um resultado no Workspace, o que você deve fazer?",
     options: [
       {
         id: "m3q34_a",
         label: "Revisar o texto antes de enviá-lo ou compartilhá-lo",
       },
-      { id: "m3q34_b", label: "Enviar de imediato porque a IA raramente falha" },
+      {
+        id: "m3q34_b",
+        label: "Enviar de imediato porque a IA raramente falha",
+      },
       { id: "m3q34_c", label: "Confiar que o destinatário corrija os erros" },
-      { id: "m3q34_d", label: "Apagar os dados que não combinam com a mensagem" },
+      {
+        id: "m3q34_d",
+        label: "Apagar os dados que não combinam com a mensagem",
+      },
     ],
     correctAnswer: "m3q34_a",
     topic: "Google Workspace",
@@ -667,15 +862,23 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q35",
-    question: "Qual é a melhor forma de usar o Gemini numa prova ou trabalho acadêmico?",
+    question:
+      "Qual é a melhor forma de usar o Gemini numa prova ou trabalho acadêmico?",
     options: [
       {
         id: "m3q35_a",
-        label: "Como apoio para compreender, respeitando as normas da sua instituição",
+        label:
+          "Como apoio para compreender, respeitando as normas da sua instituição",
       },
-      { id: "m3q35_b", label: "Para produzir todo o trabalho sem declarar nunca" },
+      {
+        id: "m3q35_b",
+        label: "Para produzir todo o trabalho sem declarar nunca",
+      },
       { id: "m3q35_c", label: "Para responder a prova em tempo real por você" },
-      { id: "m3q35_d", label: "Para copiar textos completos sem citar a autoria" },
+      {
+        id: "m3q35_d",
+        label: "Para copiar textos completos sem citar a autoria",
+      },
     ],
     correctAnswer: "m3q35_a",
     topic: "Uso Responsável",
@@ -692,8 +895,14 @@ export const MODULE_3_PT = [
         id: "m3q36_a",
         label: "Uma que depende de dados recentes, como preços ou notícias",
       },
-      { id: "m3q36_b", label: "Uma pergunta inventada sem relação com o presente" },
-      { id: "m3q36_c", label: "Uma tarefa criativa de ficção sem dados externos" },
+      {
+        id: "m3q36_b",
+        label: "Uma pergunta inventada sem relação com o presente",
+      },
+      {
+        id: "m3q36_c",
+        label: "Uma tarefa criativa de ficção sem dados externos",
+      },
       { id: "m3q36_d", label: "Uma operação matemática simples sem contexto" },
     ],
     correctAnswer: "m3q36_a",
@@ -705,15 +914,22 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q37",
-    question: "O Gemini demora porque analisa um documento enorme. Qual é a melhor estratégia?",
+    question:
+      "O Gemini demora porque analisa um documento enorme. Qual é a melhor estratégia?",
     options: [
       {
         id: "m3q37_a",
         label: "Perguntar por seções concretas e pedir que cite a página",
       },
-      { id: "m3q37_b", label: "Repetir a mesma pergunta até ele responder rápido" },
+      {
+        id: "m3q37_b",
+        label: "Repetir a mesma pergunta até ele responder rápido",
+      },
       { id: "m3q37_c", label: "Eliminar o documento e adivinhar o conteúdo" },
-      { id: "m3q37_d", label: "Pedir um resumo inventado para economizar tempo" },
+      {
+        id: "m3q37_d",
+        label: "Pedir um resumo inventado para economizar tempo",
+      },
     ],
     correctAnswer: "m3q37_a",
     topic: "Contexto Longo",
@@ -730,9 +946,15 @@ export const MODULE_3_PT = [
         id: "m3q38_a",
         label: "Consultar voos ou lugares com dados atuais dentro do chat",
       },
-      { id: "m3q38_b", label: "Substituir todas as suas decisões de viagem sem revisar" },
+      {
+        id: "m3q38_b",
+        label: "Substituir todas as suas decisões de viagem sem revisar",
+      },
       { id: "m3q38_c", label: "Evitar usar qualquer outro site para sempre" },
-      { id: "m3q38_d", label: "Compartilhar seus dados pessoais com todos os serviços" },
+      {
+        id: "m3q38_d",
+        label: "Compartilhar seus dados pessoais com todos os serviços",
+      },
     ],
     correctAnswer: "m3q38_a",
     topic: "Extensões Gemini",
@@ -743,15 +965,25 @@ export const MODULE_3_PT = [
   },
   {
     id: "m3q39",
-    question: "Um dado-chave do relatório só aparece num blog sem autor. O que faz?",
+    question:
+      "Um dado-chave do relatório só aparece num blog sem autor. O que faz?",
     options: [
       {
         id: "m3q39_a",
         label: "Buscar uma fonte mais confiável que o respalde ou descartá-lo",
       },
-      { id: "m3q39_b", label: "Citá-lo igual porque o dado parece muito convincente" },
-      { id: "m3q39_c", label: "Atribuí-lo a uma instituição reconhecida sem comprovar" },
-      { id: "m3q39_d", label: "Ocultá-lo numa nota de rodapé para não chamar atenção" },
+      {
+        id: "m3q39_b",
+        label: "Citá-lo igual porque o dado parece muito convincente",
+      },
+      {
+        id: "m3q39_c",
+        label: "Atribuí-lo a uma instituição reconhecida sem comprovar",
+      },
+      {
+        id: "m3q39_d",
+        label: "Ocultá-lo numa nota de rodapé para não chamar atenção",
+      },
     ],
     correctAnswer: "m3q39_a",
     topic: "Verificação de Fontes",
@@ -767,11 +999,21 @@ export const MODULE_3_PT = [
     options: [
       {
         id: "m3q40_a",
-        label: "Deep Research com enfoque e fontes, e depois verificação das citações",
+        label:
+          "Deep Research com enfoque e fontes, e depois verificação das citações",
       },
-      { id: "m3q40_b", label: "Uma busca normal e copiar o primeiro resultado possível" },
-      { id: "m3q40_c", label: "Pedir o relatório sem fontes nem dados que se possam comprovar" },
-      { id: "m3q40_d", label: "Gerar imagens do tema em vez de investigar os dados" },
+      {
+        id: "m3q40_b",
+        label: "Uma busca normal e copiar o primeiro resultado possível",
+      },
+      {
+        id: "m3q40_c",
+        label: "Pedir o relatório sem fontes nem dados que se possam comprovar",
+      },
+      {
+        id: "m3q40_d",
+        label: "Gerar imagens do tema em vez de investigar os dados",
+      },
     ],
     correctAnswer: "m3q40_a",
     topic: "Pesquisa Profissional",

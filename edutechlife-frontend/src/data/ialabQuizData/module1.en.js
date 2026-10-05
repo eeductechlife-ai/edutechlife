@@ -232,7 +232,10 @@ export const MODULE_1_EN = [
         id: "m1q11_a",
         label: "It creates original content from learned patterns",
       },
-      { id: "m1q11_b", label: "It only copies and pastes texts that already exist online" },
+      {
+        id: "m1q11_b",
+        label: "It only copies and pastes texts that already exist online",
+      },
       { id: "m1q11_c", label: "It works only with spreadsheets" },
       { id: "m1q11_d", label: "It does not need data to learn" },
     ],
@@ -249,11 +252,23 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q12_a",
-        label: "It learns patterns from large volumes of data and generates new answers",
+        label:
+          "It learns patterns from large volumes of data and generates new answers",
       },
-      { id: "m1q12_b", label: "It is a search engine that only returns a list of internet links" },
-      { id: "m1q12_c", label: "It stores answers written by people and reuses them as they are" },
-      { id: "m1q12_d", label: "It only translates texts from one language to another" },
+      {
+        id: "m1q12_b",
+        label:
+          "It is a search engine that only returns a list of internet links",
+      },
+      {
+        id: "m1q12_c",
+        label:
+          "It stores answers written by people and reuses them as they are",
+      },
+      {
+        id: "m1q12_d",
+        label: "It only translates texts from one language to another",
+      },
     ],
     correctAnswer: "m1q12_a",
     topic: "Generative AI",
@@ -269,11 +284,21 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q13_a",
-        label: "Understanding where its current capabilities and limits come from",
+        label:
+          "Understanding where its current capabilities and limits come from",
       },
-      { id: "m1q13_b", label: "Memorizing dates to pass without really understanding" },
-      { id: "m1q13_c", label: "Programming an AI from scratch in one afternoon" },
-      { id: "m1q13_d", label: "Nothing, history does not affect current use at all" },
+      {
+        id: "m1q13_b",
+        label: "Memorizing dates to pass without really understanding",
+      },
+      {
+        id: "m1q13_c",
+        label: "Programming an AI from scratch in one afternoon",
+      },
+      {
+        id: "m1q13_d",
+        label: "Nothing, history does not affect current use at all",
+      },
     ],
     correctAnswer: "m1q13_a",
     topic: "AI History",
@@ -290,9 +315,19 @@ export const MODULE_1_EN = [
         id: "m1q14_a",
         label: "Writing, summarizing and rewording texts from an instruction",
       },
-      { id: "m1q14_b", label: "Guaranteeing that all the information given is verified and true" },
-      { id: "m1q14_c", label: "Making legal and medical decisions without human supervision" },
-      { id: "m1q14_d", label: "Accessing your personal memories and private files" },
+      {
+        id: "m1q14_b",
+        label:
+          "Guaranteeing that all the information given is verified and true",
+      },
+      {
+        id: "m1q14_c",
+        label: "Making legal and medical decisions without human supervision",
+      },
+      {
+        id: "m1q14_d",
+        label: "Accessing your personal memories and private files",
+      },
     ],
     correctAnswer: "m1q14_a",
     topic: "Generative AI",
@@ -308,11 +343,23 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q15_a",
-        label: "Hallucination: it generates information that looks true but is not",
+        label:
+          "Hallucination: it generates information that looks true but is not",
       },
-      { id: "m1q15_b", label: "Automatic translation: it changes the language without checking meaning" },
-      { id: "m1q15_c", label: "Data compression: it reduces file size so they are easier to send" },
-      { id: "m1q15_d", label: "Real-time update: it checks the internet and shows live data" },
+      {
+        id: "m1q15_b",
+        label:
+          "Automatic translation: it changes the language without checking meaning",
+      },
+      {
+        id: "m1q15_c",
+        label:
+          "Data compression: it reduces file size so they are easier to send",
+      },
+      {
+        id: "m1q15_d",
+        label: "Real-time update: it checks the internet and shows live data",
+      },
     ],
     correctAnswer: "m1q15_a",
     topic: "AI Limits",
@@ -330,9 +377,15 @@ export const MODULE_1_EN = [
         id: "m1q16_a",
         label: "Verify it in a reliable source before using it",
       },
-      { id: "m1q16_b", label: "Use it anyway because the AI is almost never wrong" },
+      {
+        id: "m1q16_b",
+        label: "Use it anyway because the AI is almost never wrong",
+      },
       { id: "m1q16_c", label: "Copy it as is without reviewing it at all" },
-      { id: "m1q16_d", label: "Ask the same AI to confirm it and then trust it" },
+      {
+        id: "m1q16_d",
+        label: "Ask the same AI to confirm it and then trust it",
+      },
     ],
     correctAnswer: "m1q16_a",
     topic: "Responsible Use",
@@ -369,7 +422,10 @@ export const MODULE_1_EN = [
         id: "m1q18_a",
         label: "So the answer fits your real situation",
       },
-      { id: "m1q18_b", label: "So the AI writes more text without any meaning" },
+      {
+        id: "m1q18_b",
+        label: "So the AI writes more text without any meaning",
+      },
       { id: "m1q18_c", label: "So the AI takes less time to respond" },
       { id: "m1q18_d", label: "So you do not have to state the task at all" },
     ],
@@ -386,11 +442,24 @@ export const MODULE_1_EN = [
     options: [
       {
         id: "m1q19_a",
-        label: '"Summarize in 5 bullets the risks of a sedentary life for older adults"',
+        label:
+          '"Summarize in 5 bullets the risks of a sedentary life for older adults"',
       },
-      { id: "m1q19_b", label: '"Tell me about health in general and other similar topics you can think of"' },
-      { id: "m1q19_c", label: '"Give me varied and extensive information on many topics of general interest"' },
-      { id: "m1q19_d", label: '"Write something interesting and useful I can use in my daily work"' },
+      {
+        id: "m1q19_b",
+        label:
+          '"Tell me about health in general and other similar topics you can think of"',
+      },
+      {
+        id: "m1q19_c",
+        label:
+          '"Give me varied and extensive information on many topics of general interest"',
+      },
+      {
+        id: "m1q19_d",
+        label:
+          '"Write something interesting and useful I can use in my daily work"',
+      },
     ],
     correctAnswer: "m1q19_a",
     topic: "Prompt Clarity",
@@ -401,7 +470,8 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q20",
-    question: "You need the answer in a table. What should you state in the prompt?",
+    question:
+      "You need the answer in a table. What should you state in the prompt?",
     options: [
       {
         id: "m1q20_a",
@@ -440,7 +510,8 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q22",
-    question: "The first answer is not what you want. What is the best strategy?",
+    question:
+      "The first answer is not what you want. What is the best strategy?",
     options: [
       {
         id: "m1q22_a",
@@ -483,9 +554,18 @@ export const MODULE_1_EN = [
         id: "m1q24_a",
         label: "Guide the AI with the style and structure you want to get",
       },
-      { id: "m1q24_b", label: "Make the AI completely ignore the example you gave it" },
-      { id: "m1q24_c", label: "Force the AI to answer in a different language than yours" },
-      { id: "m1q24_d", label: "Have no real effect on the result the AI delivers" },
+      {
+        id: "m1q24_b",
+        label: "Make the AI completely ignore the example you gave it",
+      },
+      {
+        id: "m1q24_c",
+        label: "Force the AI to answer in a different language than yours",
+      },
+      {
+        id: "m1q24_d",
+        label: "Have no real effect on the result the AI delivers",
+      },
     ],
     correctAnswer: "m1q24_a",
     topic: "Examples in Prompts",
@@ -496,7 +576,8 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q25",
-    question: "The text is for a formal report. What should you state in the prompt?",
+    question:
+      "The text is for a formal report. What should you state in the prompt?",
     options: [
       { id: "m1q25_a", label: "The tone: formal and professional" },
       { id: "m1q25_b", label: "That it should use emojis and slang" },
@@ -512,15 +593,25 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q26",
-    question: 'Prompt: "Do something about marketing." What is the main problem?',
+    question:
+      'Prompt: "Do something about marketing." What is the main problem?',
     options: [
       {
         id: "m1q26_a",
         label: "It is ambiguous: it does not state task, format or goal",
       },
-      { id: "m1q26_b", label: "It is too long and contains too much irrelevant data" },
-      { id: "m1q26_c", label: "It includes too many examples that end up confusing the AI" },
-      { id: "m1q26_d", label: "It uses a tone that is too formal for the target audience" },
+      {
+        id: "m1q26_b",
+        label: "It is too long and contains too much irrelevant data",
+      },
+      {
+        id: "m1q26_c",
+        label: "It includes too many examples that end up confusing the AI",
+      },
+      {
+        id: "m1q26_d",
+        label: "It uses a tone that is too formal for the target audience",
+      },
     ],
     correctAnswer: "m1q26_a",
     topic: "Avoiding Ambiguity",
@@ -531,15 +622,26 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q27",
-    question: "What is the difference between asking only the task and asking role + task?",
+    question:
+      "What is the difference between asking only the task and asking role + task?",
     options: [
       {
         id: "m1q27_a",
         label: "The role guides the focus and style of the answer",
       },
-      { id: "m1q27_b", label: "There is no real difference between asking role or only the task" },
-      { id: "m1q27_c", label: "The role makes the AI answer with less detail than before" },
-      { id: "m1q27_d", label: "The role completely replaces the task you asked for" },
+      {
+        id: "m1q27_b",
+        label:
+          "There is no real difference between asking role or only the task",
+      },
+      {
+        id: "m1q27_c",
+        label: "The role makes the AI answer with less detail than before",
+      },
+      {
+        id: "m1q27_d",
+        label: "The role completely replaces the task you asked for",
+      },
     ],
     correctAnswer: "m1q27_a",
     topic: "RTF Method",
@@ -550,15 +652,28 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q28",
-    question: "You want a summary for management. Which prompt is MOST appropriate?",
+    question:
+      "You want a summary for management. Which prompt is MOST appropriate?",
     options: [
       {
         id: "m1q28_a",
-        label: '"Summarize this report in 5 executive bullets for non-technical management"',
+        label:
+          '"Summarize this report in 5 executive bullets for non-technical management"',
       },
-      { id: "m1q28_b", label: '"Summarize this in whatever way you think is best and with no limits"' },
-      { id: "m1q28_c", label: '"Write a lot of text about the report and all its technical details"' },
-      { id: "m1q28_d", label: '"Translate the report into another language so it is clearer"' },
+      {
+        id: "m1q28_b",
+        label:
+          '"Summarize this in whatever way you think is best and with no limits"',
+      },
+      {
+        id: "m1q28_c",
+        label:
+          '"Write a lot of text about the report and all its technical details"',
+      },
+      {
+        id: "m1q28_d",
+        label: '"Translate the report into another language so it is clearer"',
+      },
     ],
     correctAnswer: "m1q28_a",
     topic: "RTF Application",
@@ -569,15 +684,27 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q29",
-    question: "You want 10 ideas for a campaign. Which prompt will give you better ideas?",
+    question:
+      "You want 10 ideas for a campaign. Which prompt will give you better ideas?",
     options: [
       {
         id: "m1q29_a",
-        label: '"Generate 10 campaign ideas for a local coffee shop, close tone, in bullets"',
+        label:
+          '"Generate 10 campaign ideas for a local coffee shop, close tone, in bullets"',
       },
-      { id: "m1q29_b", label: '"Give me varied ideas about marketing for businesses of any kind"' },
-      { id: "m1q29_c", label: '"What do you think about marketing and how companies use it?"' },
-      { id: "m1q29_d", label: '"Write a long, detailed essay about modern advertising"' },
+      {
+        id: "m1q29_b",
+        label:
+          '"Give me varied ideas about marketing for businesses of any kind"',
+      },
+      {
+        id: "m1q29_c",
+        label: '"What do you think about marketing and how companies use it?"',
+      },
+      {
+        id: "m1q29_d",
+        label: '"Write a long, detailed essay about modern advertising"',
+      },
     ],
     correctAnswer: "m1q29_a",
     topic: "Prompt Application",
@@ -588,15 +715,26 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q30",
-    question: "You want to learn a topic step by step. Which prompt helps most?",
+    question:
+      "You want to learn a topic step by step. Which prompt helps most?",
     options: [
       {
         id: "m1q30_a",
-        label: '"Explain it step by step, with an example in each step and simple language"',
+        label:
+          '"Explain it step by step, with an example in each step and simple language"',
       },
-      { id: "m1q30_b", label: '"Give me all the theory in one dense paragraph"' },
-      { id: "m1q30_c", label: '"Tell me about several topics at the same time"' },
-      { id: "m1q30_d", label: '"Summarize the topic in just a single short sentence"' },
+      {
+        id: "m1q30_b",
+        label: '"Give me all the theory in one dense paragraph"',
+      },
+      {
+        id: "m1q30_c",
+        label: '"Tell me about several topics at the same time"',
+      },
+      {
+        id: "m1q30_d",
+        label: '"Summarize the topic in just a single short sentence"',
+      },
     ],
     correctAnswer: "m1q30_a",
     topic: "Prompt Application",
@@ -613,9 +751,19 @@ export const MODULE_1_EN = [
         id: "m1q31_a",
         label: "Asking vaguely without goal, audience or format",
       },
-      { id: "m1q31_b", label: "Clearly stating the role the artificial intelligence should take" },
-      { id: "m1q31_c", label: "Clarifying the exact format and length you expect to receive" },
-      { id: "m1q31_d", label: "Giving a concrete example of the result you want to get" },
+      {
+        id: "m1q31_b",
+        label:
+          "Clearly stating the role the artificial intelligence should take",
+      },
+      {
+        id: "m1q31_c",
+        label: "Clarifying the exact format and length you expect to receive",
+      },
+      {
+        id: "m1q31_d",
+        label: "Giving a concrete example of the result you want to get",
+      },
     ],
     correctAnswer: "m1q31_a",
     topic: "Common Mistakes",
@@ -626,15 +774,25 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q32",
-    question: "A prompt includes a lot of irrelevant information. What effect does it have?",
+    question:
+      "A prompt includes a lot of irrelevant information. What effect does it have?",
     options: [
       {
         id: "m1q32_a",
         label: "It confuses the AI and steers the answer away from the goal",
       },
-      { id: "m1q32_b", label: "It always improves the quality of the result the AI delivers" },
-      { id: "m1q32_c", label: "It has no real effect on the final answer at all" },
-      { id: "m1q32_d", label: "It forces the AI to answer much faster than before" },
+      {
+        id: "m1q32_b",
+        label: "It always improves the quality of the result the AI delivers",
+      },
+      {
+        id: "m1q32_c",
+        label: "It has no real effect on the final answer at all",
+      },
+      {
+        id: "m1q32_d",
+        label: "It forces the AI to answer much faster than before",
+      },
     ],
     correctAnswer: "m1q32_a",
     topic: "Prompt Structure",
@@ -673,7 +831,7 @@ export const MODULE_1_EN = [
       },
       { id: "m1q34_b", label: "Choose the longest one without reading it" },
       { id: "m1q34_c", label: "Trust the first one that comes out" },
-      { id: "m1q34_d", label: "Combine fragments of both at random" },
+      { id: "m1q34_d", label: "Ask another AI which of the two it prefers" },
     ],
     correctAnswer: "m1q34_a",
     topic: "Critical Evaluation",
@@ -704,15 +862,26 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q36",
-    question: "The AI answers with bias or incomplete information. What is the best action?",
+    question:
+      "The AI answers with bias or incomplete information. What is the best action?",
     options: [
       {
         id: "m1q36_a",
         label: "Question it, ask for other perspectives and check sources",
       },
-      { id: "m1q36_b", label: "Accept it as is because the AI is always neutral and objective" },
-      { id: "m1q36_c", label: "Publish it as is without reviewing because the topic is not sensitive" },
-      { id: "m1q36_d", label: "Ignore the detected bias and continue with the next task" },
+      {
+        id: "m1q36_b",
+        label: "Accept it as is because the AI is always neutral and objective",
+      },
+      {
+        id: "m1q36_c",
+        label:
+          "Publish it as is without reviewing because the topic is not sensitive",
+      },
+      {
+        id: "m1q36_d",
+        label: "Ignore the detected bias and continue with the next task",
+      },
     ],
     correctAnswer: "m1q36_a",
     topic: "Critical Thinking",
@@ -729,7 +898,10 @@ export const MODULE_1_EN = [
         id: "m1q37_a",
         label: "Use it as support and declare when you used it",
       },
-      { id: "m1q37_b", label: "Submit its output as your own without reviewing it" },
+      {
+        id: "m1q37_b",
+        label: "Submit its output as your own without reviewing it",
+      },
       { id: "m1q37_c", label: "Copy it without citing any part of it" },
       { id: "m1q37_d", label: "Use it to impersonate another person" },
     ],
@@ -749,9 +921,19 @@ export const MODULE_1_EN = [
         id: "m1q38_a",
         label: "Review and decide the final result with your own judgment",
       },
-      { id: "m1q38_b", label: "Accept everything the AI delivers without reviewing it first" },
-      { id: "m1q38_c", label: "Delegate all important decisions to the AI completely" },
-      { id: "m1q38_d", label: "Avoid learning the topic because the AI already solves everything" },
+      {
+        id: "m1q38_b",
+        label: "Accept everything the AI delivers without reviewing it first",
+      },
+      {
+        id: "m1q38_c",
+        label: "Delegate all important decisions to the AI completely",
+      },
+      {
+        id: "m1q38_d",
+        label:
+          "Avoid learning the topic because the AI already solves everything",
+      },
     ],
     correctAnswer: "m1q38_a",
     topic: "Responsible Use",
@@ -762,15 +944,23 @@ export const MODULE_1_EN = [
   },
   {
     id: "m1q39",
-    question: "Iterating the prompt several times until reaching the goal is a…",
+    question:
+      "Iterating the prompt several times until reaching the goal is a…",
     options: [
       {
         id: "m1q39_a",
-        label: "Recommended practice: it improves the result with each adjustment",
+        label:
+          "Recommended practice: it improves the result with each adjustment",
       },
-      { id: "m1q39_b", label: "Wrong practice: you have to get it right the first time" },
+      {
+        id: "m1q39_b",
+        label: "Wrong practice: you have to get it right the first time",
+      },
       { id: "m1q39_c", label: "Forbidden practice in the tools" },
-      { id: "m1q39_d", label: "Useless practice, the AI never changes" },
+      {
+        id: "m1q39_d",
+        label: "Optional, only if the first answer comes out wrong",
+      },
     ],
     correctAnswer: "m1q39_a",
     topic: "Prompt Refinement",
@@ -789,9 +979,21 @@ export const MODULE_1_EN = [
         label:
           '"Act as an executive assistant; write a formal reminder email for the meeting on Thursday at 10 a.m., cordial tone and subject included"',
       },
-      { id: "m1q40_b", label: '"Write a short email to remind a teammate of yours about a work meeting tomorrow"' },
-      { id: "m1q40_c", label: '"Draft a simple message to announce we will have a meeting soon, no more details"' },
-      { id: "m1q40_d", label: '"Write a text about work meetings and explain their importance in modern companies today"' },
+      {
+        id: "m1q40_b",
+        label:
+          '"Write a short email to remind a teammate of yours about a work meeting tomorrow"',
+      },
+      {
+        id: "m1q40_c",
+        label:
+          '"Draft a simple message to announce we will have a meeting soon, no more details"',
+      },
+      {
+        id: "m1q40_d",
+        label:
+          '"Write a text about work meetings and explain their importance in modern companies today"',
+      },
     ],
     correctAnswer: "m1q40_a",
     topic: "RTF Application",

@@ -138,6 +138,7 @@ export const createProgressSlice = (set, get) => ({
     const prevMod = state.moduleProgress[moduleId];
     let newScore = 0;
     let justCompleted = false;
+    let communityJustDone = false;
 
     const updated = { ...prevMod };
     if (activity === "exam" && typeof score === "number") {
@@ -160,7 +161,12 @@ export const createProgressSlice = (set, get) => ({
       updated.resourcesCompleted = !!value;
     }
     if (activity === "community") {
-      updated.community = !!value;
+      // Un solo aporte no basta: la Comunidad vale 5% y pedir al menos 2
+      // contribuciones evita regalarla con un único mensaje en el foro.
+      const contributions = (prevMod?.communityContributions || 0) + 1;
+      updated.communityContributions = contributions;
+      updated.community = !!prevMod?.community || contributions >= 2;
+      communityJustDone = updated.community && !prevMod?.community;
     }
 
     updated.currentScore = calcModuleScore(updated);
@@ -190,7 +196,7 @@ export const createProgressSlice = (set, get) => ({
     });
 
     if (!options.silent) {
-      if (XP_MAP[activity]) {
+      if (XP_MAP[activity] && (activity !== "community" || communityJustDone)) {
         get().addXp(XP_MAP[activity]);
       }
       if (activity !== "community") {

@@ -4,27 +4,53 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { getModules } from "../../../data/ialab";
 import { useAuth } from "../../../context/AuthContext";
+import useCertificateCount from "../../../hooks/IALab/useCertificateCount";
 import { Icon } from "../../../utils/iconMapping.jsx";
 import CourseHomeTopBar from "./CourseHomeTopBar";
 import CourseHomeBgPattern from "./CourseHomeBgPattern";
 
+// La prueba social solo se muestra con datos reales y una base mínima que no
+// deje en ridículo la cifra (antes era un "+1.200" fijo sin respaldo).
+const SOCIAL_PROOF_MIN = 50;
+
 const IALabTutoriasVirtuales = lazy(() => import("../IALabTutoriasVirtuales"));
 
 const PERKS = [
-  { icon: "fa-certificate", label: "Certificado oficial",   sub: "Al completar los 5 módulos" },
-  { icon: "fa-check-circle",label: "Habilidades reales",    sub: "5 competencias en IA que ya puedes usar" },
-  { icon: "fa-trophy",      label: "5 logros",              sub: "Un premio por módulo superado" },
+  {
+    icon: "fa-certificate",
+    label: "Certificado oficial",
+    sub: "Al completar los 5 módulos",
+  },
+  {
+    icon: "fa-check-circle",
+    label: "Habilidades reales",
+    sub: "5 competencias en IA que ya puedes usar",
+  },
+  {
+    icon: "fa-trophy",
+    label: "5 logros",
+    sub: "Un premio por módulo superado",
+  },
 ];
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.07, duration: 0.35, ease: "easeOut" } }),
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.07, duration: 0.35, ease: "easeOut" },
+  }),
 };
 
 function CourseHomeNewStudent() {
-  const { locale } = useTranslation();
+  const { locale, t } = useTranslation();
   const navigate = useNavigate();
   const { user, profile } = useAuth();
+  const certificateCount = useCertificateCount();
+  const formattedCertificateCount =
+    typeof certificateCount === "number"
+      ? new Intl.NumberFormat(locale || "es").format(certificateCount)
+      : null;
 
   const firstName = useMemo(() => {
     if (profile?.first_name) return profile.first_name;
@@ -48,7 +74,8 @@ function CourseHomeNewStudent() {
         transition={{ duration: 0.4 }}
         className="relative overflow-hidden rounded-3xl shadow-lg text-white"
         style={{
-          background: "linear-gradient(145deg, #002c40 0%, #004b63 35%, #0a7090 70%, #259eb5 100%)",
+          background:
+            "linear-gradient(145deg, #002c40 0%, #004b63 35%, #0a7090 70%, #259eb5 100%)",
           boxShadow: "0 20px 60px rgba(0,75,99,0.35)",
         }}
       >
@@ -61,29 +88,46 @@ function CourseHomeNewStudent() {
           <h1 className="text-4xl font-black leading-tight mb-3 max-md:text-3xl">
             <span
               className="block text-white"
-              style={{ textShadow: "0 2px 20px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.5)" }}
+              style={{
+                textShadow:
+                  "0 2px 20px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.5)",
+              }}
             >
               Domina la IA
             </span>
             <span
               className="text-[#00e5ff]"
-              style={{ textShadow: "0 0 24px rgba(0,229,255,0.5), 0 2px 8px rgba(0,0,0,0.4)" }}
+              style={{
+                textShadow:
+                  "0 0 24px rgba(0,229,255,0.5), 0 2px 8px rgba(0,0,0,0.4)",
+              }}
             >
               antes que los demás
             </span>
           </h1>
           <p className="text-white/90 text-[15px] leading-relaxed max-w-lg font-medium">
-            En <strong className="text-white">10 horas</strong> manejarás ChatGPT, Gemini y NotebookLM como un profesional.{" "}
-            <span className="text-white/75">Sin código. Sin experiencia previa. A tu propio ritmo.</span>
+            En <strong className="text-white">10 horas</strong> manejarás
+            ChatGPT, Gemini y NotebookLM como un profesional.{" "}
+            <span className="text-white/75">
+              Sin código. Sin experiencia previa. A tu propio ritmo.
+            </span>
           </p>
 
           {/* Perks row */}
           <div className="flex flex-wrap gap-3 mt-5">
             {PERKS.map((p) => (
-              <div key={p.icon} className="flex items-center gap-2 bg-white/10 border border-white/10 rounded-xl px-3 py-2">
-                <Icon name={p.icon} className="w-3.5 h-3.5 text-[#00d4f0] flex-shrink-0" />
+              <div
+                key={p.icon}
+                className="flex items-center gap-2 bg-white/10 border border-white/10 rounded-xl px-3 py-2"
+              >
+                <Icon
+                  name={p.icon}
+                  className="w-3.5 h-3.5 text-[#00d4f0] flex-shrink-0"
+                />
                 <div>
-                  <p className="text-xs font-bold text-white leading-none">{p.label}</p>
+                  <p className="text-xs font-bold text-white leading-none">
+                    {p.label}
+                  </p>
                   <p className="text-[10px] text-white/50 mt-0.5">{p.sub}</p>
                 </div>
               </div>
@@ -102,9 +146,13 @@ function CourseHomeNewStudent() {
               <Icon name="fa-play-circle" className="w-4 h-4" />
               Comenzar →
             </motion.button>
-            <p className="text-white/70 text-xs">
-              ✅ +1.200 profesionales ya lo completaron
-            </p>
+            {certificateCount >= SOCIAL_PROOF_MIN && (
+              <p className="text-white/70 text-xs">
+                {t("ialab.course_home.social_proof", {
+                  count: formattedCertificateCount,
+                })}
+              </p>
+            )}
           </div>
         </div>
       </motion.section>
@@ -120,17 +168,49 @@ function CourseHomeNewStudent() {
         </h2>
         <div className="grid grid-cols-3 max-sm:grid-cols-1 gap-3">
           {[
-            { icon: "fa-book-open",    step: "1", title: "Estudia el módulo", desc: "Videos, actividades interactivas, lecturas e imágenes. ~2h por módulo.", color: "#0a7090" },
-            { icon: "fa-trophy",       step: "2", title: "Mi reto + Desafío",   desc: "Pon a prueba lo aprendido y supera el desafío práctico.", color: "#259eb5" },
-            { icon: "fa-certificate",  step: "3", title: "Obtén tu certificado", desc: "Supera los 5 módulos y recibe tu certificado oficial.", color: "#00bcd4" },
+            {
+              icon: "fa-book-open",
+              step: "1",
+              title: "Estudia el módulo",
+              desc: "Videos, actividades interactivas, lecturas e imágenes. ~2h por módulo.",
+              color: "#0a7090",
+            },
+            {
+              icon: "fa-trophy",
+              step: "2",
+              title: "Mi reto + Desafío",
+              desc: "Pon a prueba lo aprendido y supera el desafío práctico.",
+              color: "#259eb5",
+            },
+            {
+              icon: "fa-certificate",
+              step: "3",
+              title: "Obtén tu certificado",
+              desc: "Supera los 5 módulos y recibe tu certificado oficial.",
+              color: "#00bcd4",
+            },
           ].map((s) => (
-            <div key={s.step} className="flex items-start gap-3 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-4">
-              <div className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${s.color}20` }}>
-                <Icon name={s.icon} className="w-4 h-4" style={{ color: s.color }} />
+            <div
+              key={s.step}
+              className="flex items-start gap-3 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-4"
+            >
+              <div
+                className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center"
+                style={{ background: `${s.color}20` }}
+              >
+                <Icon
+                  name={s.icon}
+                  className="w-4 h-4"
+                  style={{ color: s.color }}
+                />
               </div>
               <div>
-                <p className="font-bold text-[13px] text-slate-800 dark:text-white">{s.title}</p>
-                <p className="text-xs text-slate-500 dark:text-white/50 mt-0.5 leading-relaxed">{s.desc}</p>
+                <p className="font-bold text-[13px] text-slate-800 dark:text-white">
+                  {s.title}
+                </p>
+                <p className="text-xs text-slate-500 dark:text-white/50 mt-0.5 leading-relaxed">
+                  {s.desc}
+                </p>
               </div>
             </div>
           ))}
@@ -172,19 +252,35 @@ function CourseHomeNewStudent() {
                     ? "bg-white dark:bg-white/8 border-2 cursor-pointer shadow-md hover:shadow-lg"
                     : "bg-white/60 dark:bg-white/3 border border-slate-200 dark:border-white/8 opacity-70",
                 ].join(" ")}
-                style={isFirst ? { borderColor: mod.color || "#259eb5", boxShadow: `0 4px 20px ${mod.color || "#259eb5"}22` } : {}}
+                style={
+                  isFirst
+                    ? {
+                        borderColor: mod.color || "#259eb5",
+                        boxShadow: `0 4px 20px ${mod.color || "#259eb5"}22`,
+                      }
+                    : {}
+                }
               >
                 {/* Step indicator */}
                 <div
                   className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white font-extrabold text-sm"
-                  style={{ background: isLocked ? "#94a3b8" : (mod.color || "#259eb5"), opacity: isLocked ? 0.6 : 1 }}
+                  style={{
+                    background: isLocked ? "#94a3b8" : mod.color || "#259eb5",
+                    opacity: isLocked ? 0.6 : 1,
+                  }}
                 >
-                  {isLocked ? <Icon name="fa-lock" className="w-3.5 h-3.5" /> : mod.id}
+                  {isLocked ? (
+                    <Icon name="fa-lock" className="w-3.5 h-3.5" />
+                  ) : (
+                    mod.id
+                  )}
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className={`font-bold text-sm truncate ${isLocked ? "text-slate-400 dark:text-white/40" : "text-slate-900 dark:text-white"}`}>
+                    <p
+                      className={`font-bold text-sm truncate ${isLocked ? "text-slate-400 dark:text-white/40" : "text-slate-900 dark:text-white"}`}
+                    >
                       {mod.title}
                     </p>
                     <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-white/50 whitespace-nowrap">
@@ -227,7 +323,11 @@ function CourseHomeNewStudent() {
 
                 {isFirst && (
                   <div className="flex-shrink-0 self-center">
-                    <Icon name="fa-arrow-right" className="w-4 h-4" style={{ color: mod.color || "#259eb5" }} />
+                    <Icon
+                      name="fa-arrow-right"
+                      className="w-4 h-4"
+                      style={{ color: mod.color || "#259eb5" }}
+                    />
                   </div>
                 )}
               </motion.div>
@@ -235,7 +335,6 @@ function CourseHomeNewStudent() {
           })}
         </div>
       </section>
-
     </div>
   );
 }

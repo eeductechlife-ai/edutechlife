@@ -224,7 +224,10 @@ export const MODULE_1_PT = [
         id: "m1q11_a",
         label: "Cria conteúdo original a partir de padrões aprendidos",
       },
-      { id: "m1q11_b", label: "Só copia e cola textos que já existem na internet" },
+      {
+        id: "m1q11_b",
+        label: "Só copia e cola textos que já existem na internet",
+      },
       { id: "m1q11_c", label: "Funciona apenas com planilhas eletrônicas" },
       { id: "m1q11_d", label: "Não precisa de dados para aprender" },
     ],
@@ -241,11 +244,22 @@ export const MODULE_1_PT = [
     options: [
       {
         id: "m1q12_a",
-        label: "Aprende padrões de grandes volumes de dados e gera respostas novas",
+        label:
+          "Aprende padrões de grandes volumes de dados e gera respostas novas",
       },
-      { id: "m1q12_b", label: "É um buscador que só devolve uma lista de links da internet" },
-      { id: "m1q12_c", label: "Guarda respostas escritas por pessoas e as reutiliza tal como estão" },
-      { id: "m1q12_d", label: "Serve apenas para traduzir textos de um idioma para outro" },
+      {
+        id: "m1q12_b",
+        label: "É um buscador que só devolve uma lista de links da internet",
+      },
+      {
+        id: "m1q12_c",
+        label:
+          "Guarda respostas escritas por pessoas e as reutiliza tal como estão",
+      },
+      {
+        id: "m1q12_d",
+        label: "Serve apenas para traduzir textos de um idioma para outro",
+      },
     ],
     correctAnswer: "m1q12_a",
     topic: "IA Generativa",
@@ -263,7 +277,10 @@ export const MODULE_1_PT = [
         id: "m1q13_a",
         label: "Entender de onde vêm suas capacidades e limites atuais",
       },
-      { id: "m1q13_b", label: "Memorizar datas para passar sem realmente compreender" },
+      {
+        id: "m1q13_b",
+        label: "Memorizar datas para passar sem realmente compreender",
+      },
       { id: "m1q13_c", label: "Programar uma IA do zero em uma tarde" },
       { id: "m1q13_d", label: "Nada, a história não influencia no uso atual" },
     ],
@@ -282,9 +299,19 @@ export const MODULE_1_PT = [
         id: "m1q14_a",
         label: "Redigir, resumir e reformular textos a partir de uma instrução",
       },
-      { id: "m1q14_b", label: "Garantir que toda a informação entregue esteja verificada e seja verdadeira" },
-      { id: "m1q14_c", label: "Tomar decisões legais e médicas sem supervisão humana" },
-      { id: "m1q14_d", label: "Acessar suas lembranças pessoais e seus arquivos privados" },
+      {
+        id: "m1q14_b",
+        label:
+          "Garantir que toda a informação entregue esteja verificada e seja verdadeira",
+      },
+      {
+        id: "m1q14_c",
+        label: "Tomar decisões legais e médicas sem supervisão humana",
+      },
+      {
+        id: "m1q14_d",
+        label: "Acessar suas lembranças pessoais e seus arquivos privados",
+      },
     ],
     correctAnswer: "m1q14_a",
     topic: "IA Generativa",
@@ -302,9 +329,19 @@ export const MODULE_1_PT = [
         id: "m1q15_a",
         label: "Alucinação: gera informação que parece verdadeira mas não é",
       },
-      { id: "m1q15_b", label: "Tradução automática: muda o idioma sem revisar o sentido" },
-      { id: "m1q15_c", label: "Compactação de dados: reduz o tamanho dos arquivos para enviar" },
-      { id: "m1q15_d", label: "Atualização em tempo real: consulta a internet e mostra dados ao vivo" },
+      {
+        id: "m1q15_b",
+        label: "Tradução automática: muda o idioma sem revisar o sentido",
+      },
+      {
+        id: "m1q15_c",
+        label: "Compactação de dados: reduz o tamanho dos arquivos para enviar",
+      },
+      {
+        id: "m1q15_d",
+        label:
+          "Atualização em tempo real: consulta a internet e mostra dados ao vivo",
+      },
     ],
     correctAnswer: "m1q15_a",
     topic: "Limites da IA",
@@ -322,7 +359,10 @@ export const MODULE_1_PT = [
         id: "m1q16_a",
         label: "Verificá-lo numa fonte confiável antes de usá-lo",
       },
-      { id: "m1q16_b", label: "Usá-lo igual, porque a IA quase nunca se engana" },
+      {
+        id: "m1q16_b",
+        label: "Usá-lo igual, porque a IA quase nunca se engana",
+      },
       { id: "m1q16_c", label: "Copiá-lo tal como está sem revisar nada" },
       { id: "m1q16_d", label: "Pedir à mesma IA que confirme e então confiar" },
     ],
@@ -380,20 +420,32 @@ export const MODULE_1_PT = [
         id: "m1q19_a",
         label: '"Resuma em 5 tópicos os riscos do sedentarismo para idosos"',
       },
-      { id: "m1q19_b", label: '"Fale sobre a saúde em geral e de outros temas parecidos que ocorrerem"' },
-      { id: "m1q19_c", label: '"Dê informação variada e extensa sobre muitos temas de interesse geral"' },
-      { id: "m1q19_d", label: '"Escreva algo interessante e útil que eu possa usar no meu trabalho diário"' },
+      {
+        id: "m1q19_b",
+        label:
+          '"Fale sobre a saúde em geral e de outros temas parecidos que ocorrerem"',
+      },
+      {
+        id: "m1q19_c",
+        label:
+          '"Dê informação variada e extensa sobre muitos temas de interesse geral"',
+      },
+      {
+        id: "m1q19_d",
+        label:
+          '"Escreva algo interessante e útil que eu possa usar no meu trabalho diário"',
+      },
     ],
     correctAnswer: "m1q19_a",
     topic: "Clareza em Prompts",
     difficulty: "fácil",
     source: "Vídeo: Como Criar Prompts Eficazes",
-    feedback:
-      "A define tema, formato e público; as demais são vagas.",
+    feedback: "A define tema, formato e público; as demais são vagas.",
   },
   {
     id: "m1q20",
-    question: "Você precisa da resposta numa tabela. O que deve indicar no prompt?",
+    question:
+      "Você precisa da resposta numa tabela. O que deve indicar no prompt?",
     options: [
       {
         id: "m1q20_a",
@@ -432,7 +484,8 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q22",
-    question: "A primeira resposta não é a que você quer. Qual é a melhor estratégia?",
+    question:
+      "A primeira resposta não é a que você quer. Qual é a melhor estratégia?",
     options: [
       {
         id: "m1q22_a",
@@ -475,9 +528,18 @@ export const MODULE_1_PT = [
         id: "m1q24_a",
         label: "Guiar a IA com o estilo e a estrutura que você deseja obter",
       },
-      { id: "m1q24_b", label: "Fazer a IA ignorar por completo o exemplo que você deu" },
-      { id: "m1q24_c", label: "Obrigar a IA a responder num idioma diferente do seu" },
-      { id: "m1q24_d", label: "Não ter nenhum efeito real sobre o resultado entregue" },
+      {
+        id: "m1q24_b",
+        label: "Fazer a IA ignorar por completo o exemplo que você deu",
+      },
+      {
+        id: "m1q24_c",
+        label: "Obrigar a IA a responder num idioma diferente do seu",
+      },
+      {
+        id: "m1q24_d",
+        label: "Não ter nenhum efeito real sobre o resultado entregue",
+      },
     ],
     correctAnswer: "m1q24_a",
     topic: "Exemplos no Prompt",
@@ -488,7 +550,8 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q25",
-    question: "O texto é para um relatório formal. O que deve indicar no prompt?",
+    question:
+      "O texto é para um relatório formal. O que deve indicar no prompt?",
     options: [
       { id: "m1q25_a", label: "O tom: formal e profissional" },
       { id: "m1q25_b", label: "Que use emojis e gírias" },
@@ -504,14 +567,21 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q26",
-    question: 'Prompt: "Faça algo sobre marketing." Qual é o principal problema?',
+    question:
+      'Prompt: "Faça algo sobre marketing." Qual é o principal problema?',
     options: [
       {
         id: "m1q26_a",
         label: "É ambíguo: não diz tarefa, formato nem objetivo",
       },
-      { id: "m1q26_b", label: "É longo demais e contém muitos dados irrelevantes" },
-      { id: "m1q26_c", label: "Inclui exemplos demais que acabam confundindo a IA" },
+      {
+        id: "m1q26_b",
+        label: "É longo demais e contém muitos dados irrelevantes",
+      },
+      {
+        id: "m1q26_c",
+        label: "Inclui exemplos demais que acabam confundindo a IA",
+      },
       { id: "m1q26_d", label: "Usa um tom formal demais para o público-alvo" },
     ],
     correctAnswer: "m1q26_a",
@@ -523,15 +593,25 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q27",
-    question: "Qual é a diferença entre pedir só a tarefa e pedir papel + tarefa?",
+    question:
+      "Qual é a diferença entre pedir só a tarefa e pedir papel + tarefa?",
     options: [
       {
         id: "m1q27_a",
         label: "O papel orienta o enfoque e o estilo da resposta",
       },
-      { id: "m1q27_b", label: "Não há nenhuma diferença real entre pedir papel ou só a tarefa" },
-      { id: "m1q27_c", label: "O papel faz a IA responder com menos detalhe que antes" },
-      { id: "m1q27_d", label: "O papel substitui por completo a tarefa que você pediu" },
+      {
+        id: "m1q27_b",
+        label: "Não há nenhuma diferença real entre pedir papel ou só a tarefa",
+      },
+      {
+        id: "m1q27_c",
+        label: "O papel faz a IA responder com menos detalhe que antes",
+      },
+      {
+        id: "m1q27_d",
+        label: "O papel substitui por completo a tarefa que você pediu",
+      },
     ],
     correctAnswer: "m1q27_a",
     topic: "Método RTF",
@@ -542,15 +622,27 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q28",
-    question: "Você quer um resumo para a diretoria. Qual prompt é MAIS adequado?",
+    question:
+      "Você quer um resumo para a diretoria. Qual prompt é MAIS adequado?",
     options: [
       {
         id: "m1q28_a",
-        label: '"Resuma este relatório em 5 tópicos executivos para a diretoria não técnica"',
+        label:
+          '"Resuma este relatório em 5 tópicos executivos para a diretoria não técnica"',
       },
-      { id: "m1q28_b", label: '"Resuma isto da maneira que achar melhor e sem limites"' },
-      { id: "m1q28_c", label: '"Escreva muito texto sobre o relatório e todos os seus detalhes técnicos"' },
-      { id: "m1q28_d", label: '"Traduza o relatório para outro idioma para ficar mais claro"' },
+      {
+        id: "m1q28_b",
+        label: '"Resuma isto da maneira que achar melhor e sem limites"',
+      },
+      {
+        id: "m1q28_c",
+        label:
+          '"Escreva muito texto sobre o relatório e todos os seus detalhes técnicos"',
+      },
+      {
+        id: "m1q28_d",
+        label: '"Traduza o relatório para outro idioma para ficar mais claro"',
+      },
     ],
     correctAnswer: "m1q28_a",
     topic: "Aplicação RTF",
@@ -561,15 +653,28 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q29",
-    question: "Você quer 10 ideias para uma campanha. Qual prompt dará melhores ideias?",
+    question:
+      "Você quer 10 ideias para uma campanha. Qual prompt dará melhores ideias?",
     options: [
       {
         id: "m1q29_a",
-        label: '"Gere 10 ideias de campanha para uma cafeteria local, tom próximo, em tópicos"',
+        label:
+          '"Gere 10 ideias de campanha para uma cafeteria local, tom próximo, em tópicos"',
       },
-      { id: "m1q29_b", label: '"Dê ideias variadas sobre marketing para negócios de qualquer tipo"' },
-      { id: "m1q29_c", label: '"O que você acha do marketing e de como as empresas o usam?"' },
-      { id: "m1q29_d", label: '"Escreva um ensaio longo e detalhado sobre a publicidade moderna"' },
+      {
+        id: "m1q29_b",
+        label:
+          '"Dê ideias variadas sobre marketing para negócios de qualquer tipo"',
+      },
+      {
+        id: "m1q29_c",
+        label: '"O que você acha do marketing e de como as empresas o usam?"',
+      },
+      {
+        id: "m1q29_d",
+        label:
+          '"Escreva um ensaio longo e detalhado sobre a publicidade moderna"',
+      },
     ],
     correctAnswer: "m1q29_a",
     topic: "Aplicação de Prompts",
@@ -580,15 +685,26 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q30",
-    question: "Você quer aprender um tema passo a passo. Qual prompt ajuda mais?",
+    question:
+      "Você quer aprender um tema passo a passo. Qual prompt ajuda mais?",
     options: [
       {
         id: "m1q30_a",
-        label: '"Explique passo a passo, com um exemplo em cada passo e linguagem simples"',
+        label:
+          '"Explique passo a passo, com um exemplo em cada passo e linguagem simples"',
       },
-      { id: "m1q30_b", label: '"Dê toda a teoria num único parágrafo denso de ler"' },
-      { id: "m1q30_c", label: '"Fale sobre vários temas diferentes ao mesmo tempo agora"' },
-      { id: "m1q30_d", label: '"Resuma o tema em apenas uma única frase bem curta"' },
+      {
+        id: "m1q30_b",
+        label: '"Dê toda a teoria num único parágrafo denso de ler"',
+      },
+      {
+        id: "m1q30_c",
+        label: '"Fale sobre vários temas diferentes ao mesmo tempo agora"',
+      },
+      {
+        id: "m1q30_d",
+        label: '"Resuma o tema em apenas uma única frase bem curta"',
+      },
     ],
     correctAnswer: "m1q30_a",
     topic: "Aplicação de Prompts",
@@ -605,9 +721,19 @@ export const MODULE_1_PT = [
         id: "m1q31_a",
         label: "Pedir de forma vaga sem objetivo, público nem formato",
       },
-      { id: "m1q31_b", label: "Indicar claramente o papel que a inteligência artificial deve assumir" },
-      { id: "m1q31_c", label: "Aclarar o formato e a extensão exata que você espera receber" },
-      { id: "m1q31_d", label: "Dar um exemplo concreto do resultado que você quer obter" },
+      {
+        id: "m1q31_b",
+        label:
+          "Indicar claramente o papel que a inteligência artificial deve assumir",
+      },
+      {
+        id: "m1q31_c",
+        label: "Aclarar o formato e a extensão exata que você espera receber",
+      },
+      {
+        id: "m1q31_d",
+        label: "Dar um exemplo concreto do resultado que você quer obter",
+      },
     ],
     correctAnswer: "m1q31_a",
     topic: "Erros Comuns",
@@ -618,15 +744,25 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q32",
-    question: "Um prompt inclui muita informação irrelevante. Que efeito costuma ter?",
+    question:
+      "Um prompt inclui muita informação irrelevante. Que efeito costuma ter?",
     options: [
       {
         id: "m1q32_a",
         label: "Confunde a IA e desvia a resposta do objetivo",
       },
-      { id: "m1q32_b", label: "Melhora sempre a qualidade do resultado que a IA entrega" },
-      { id: "m1q32_c", label: "Não tem nenhum efeito real sobre a resposta final" },
-      { id: "m1q32_d", label: "Obriga a IA a responder muito mais rápido do que antes" },
+      {
+        id: "m1q32_b",
+        label: "Melhora sempre a qualidade do resultado que a IA entrega",
+      },
+      {
+        id: "m1q32_c",
+        label: "Não tem nenhum efeito real sobre a resposta final",
+      },
+      {
+        id: "m1q32_d",
+        label: "Obriga a IA a responder muito mais rápido do que antes",
+      },
     ],
     correctAnswer: "m1q32_a",
     topic: "Estrutura de Prompts",
@@ -643,8 +779,14 @@ export const MODULE_1_PT = [
         id: "m1q33_a",
         label: "Economizar tempo e manter resultados consistentes",
       },
-      { id: "m1q33_b", label: "Fazer a IA parar de aprender com o passar do tempo" },
-      { id: "m1q33_c", label: "Evitar ter que revisar os resultados de algum modo" },
+      {
+        id: "m1q33_b",
+        label: "Fazer a IA parar de aprender com o passar do tempo",
+      },
+      {
+        id: "m1q33_c",
+        label: "Evitar ter que revisar os resultados de algum modo",
+      },
       { id: "m1q33_d", label: "Impedir ajustar o prompt depois de salvá-lo" },
     ],
     correctAnswer: "m1q33_a",
@@ -665,7 +807,10 @@ export const MODULE_1_PT = [
       },
       { id: "m1q34_b", label: "Escolher a mais longa sem ler o conteúdo dela" },
       { id: "m1q34_c", label: "Confiar na primeira que aparecer na tela" },
-      { id: "m1q34_d", label: "Combinar fragmentos das duas de forma aleatória" },
+      {
+        id: "m1q34_d",
+        label: "Perguntar a outra IA qual das duas ela prefere",
+      },
     ],
     correctAnswer: "m1q34_a",
     topic: "Avaliação Crítica",
@@ -683,9 +828,18 @@ export const MODULE_1_PT = [
         id: "m1q35_a",
         label: "Evitar dados sensíveis ou anonimizá-los antes de usá-los",
       },
-      { id: "m1q35_b", label: "Colar tudo igual, sem nenhum problema aparente" },
-      { id: "m1q35_c", label: "Pedir à IA que apague tudo depois de responder" },
-      { id: "m1q35_d", label: "Compartilhar os dados apenas por um chat privado" },
+      {
+        id: "m1q35_b",
+        label: "Colar tudo igual, sem nenhum problema aparente",
+      },
+      {
+        id: "m1q35_c",
+        label: "Pedir à IA que apague tudo depois de responder",
+      },
+      {
+        id: "m1q35_d",
+        label: "Compartilhar os dados apenas por um chat privado",
+      },
     ],
     correctAnswer: "m1q35_a",
     topic: "Uso Responsável",
@@ -696,15 +850,25 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q36",
-    question: "A IA responde com viés ou informação incompleta. Qual é a melhor ação?",
+    question:
+      "A IA responde com viés ou informação incompleta. Qual é a melhor ação?",
     options: [
       {
         id: "m1q36_a",
         label: "Questionar, pedir outras perspectivas e verificar as fontes",
       },
-      { id: "m1q36_b", label: "Aceitar tal como está porque a IA sempre é neutra e objetiva" },
-      { id: "m1q36_c", label: "Publicar igual sem revisar porque o tema não é sensível" },
-      { id: "m1q36_d", label: "Ignorar o viés detectado e continuar com a próxima tarefa" },
+      {
+        id: "m1q36_b",
+        label: "Aceitar tal como está porque a IA sempre é neutra e objetiva",
+      },
+      {
+        id: "m1q36_c",
+        label: "Publicar igual sem revisar porque o tema não é sensível",
+      },
+      {
+        id: "m1q36_d",
+        label: "Ignorar o viés detectado e continuar com a próxima tarefa",
+      },
     ],
     correctAnswer: "m1q36_a",
     topic: "Pensamento Crítico",
@@ -721,8 +885,14 @@ export const MODULE_1_PT = [
         id: "m1q37_a",
         label: "Usá-la como apoio e declarar quando você a utilizou",
       },
-      { id: "m1q37_b", label: "Entregar a saída dela como sua sem nenhuma revisão" },
-      { id: "m1q37_c", label: "Copiar sem citar nenhuma parte do conteúdo gerado" },
+      {
+        id: "m1q37_b",
+        label: "Entregar a saída dela como sua sem nenhuma revisão",
+      },
+      {
+        id: "m1q37_c",
+        label: "Copiar sem citar nenhuma parte do conteúdo gerado",
+      },
       { id: "m1q37_d", label: "Usá-la para se passar por outra pessoa" },
     ],
     correctAnswer: "m1q37_a",
@@ -734,15 +904,25 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q38",
-    question: "A IA é um assistente, não um substituto. O que isso implica para o estudante?",
+    question:
+      "A IA é um assistente, não um substituto. O que isso implica para o estudante?",
     options: [
       {
         id: "m1q38_a",
         label: "Revisar e decidir com critério próprio o resultado final",
       },
-      { id: "m1q38_b", label: "Aceitar tudo o que a IA entregar sem revisar antes" },
-      { id: "m1q38_c", label: "Delegar por completo à IA todas as decisões importantes" },
-      { id: "m1q38_d", label: "Evitar aprender o tema porque a IA já resolve tudo" },
+      {
+        id: "m1q38_b",
+        label: "Aceitar tudo o que a IA entregar sem revisar antes",
+      },
+      {
+        id: "m1q38_c",
+        label: "Delegar por completo à IA todas as decisões importantes",
+      },
+      {
+        id: "m1q38_d",
+        label: "Evitar aprender o tema porque a IA já resolve tudo",
+      },
     ],
     correctAnswer: "m1q38_a",
     topic: "Uso Responsável",
@@ -753,7 +933,8 @@ export const MODULE_1_PT = [
   },
   {
     id: "m1q39",
-    question: "Iterar o prompt várias vezes até alcançar o objetivo é uma prática…",
+    question:
+      "Iterar o prompt várias vezes até alcançar o objetivo é uma prática…",
     options: [
       {
         id: "m1q39_a",
@@ -761,7 +942,10 @@ export const MODULE_1_PT = [
       },
       { id: "m1q39_b", label: "Incorreta: é preciso acertar de primeira" },
       { id: "m1q39_c", label: "Proibida pelas ferramentas usadas" },
-      { id: "m1q39_d", label: "Inútil, a IA nunca muda o resultado final" },
+      {
+        id: "m1q39_d",
+        label: "Opcional, só se a primeira resposta sair errada",
+      },
     ],
     correctAnswer: "m1q39_a",
     topic: "Refinamento de Prompts",
@@ -780,9 +964,21 @@ export const MODULE_1_PT = [
         label:
           '"Aja como assistente executivo; redija um e-mail formal de lembrete para a reunião de quinta às 10h, tom cordial e assunto incluído"',
       },
-      { id: "m1q40_b", label: '"Escreva um e-mail curto para lembrar um colega do seu time de uma reunião de trabalho"' },
-      { id: "m1q40_c", label: '"Rascunhe uma mensagem simples para avisar que teremos uma reunião em breve, sem mais detalhes"' },
-      { id: "m1q40_d", label: '"Escreva um texto sobre reuniões de trabalho e a importância delas nas empresas modernas"' },
+      {
+        id: "m1q40_b",
+        label:
+          '"Escreva um e-mail curto para lembrar um colega do seu time de uma reunião de trabalho"',
+      },
+      {
+        id: "m1q40_c",
+        label:
+          '"Rascunhe uma mensagem simples para avisar que teremos uma reunião em breve, sem mais detalhes"',
+      },
+      {
+        id: "m1q40_d",
+        label:
+          '"Escreva um texto sobre reuniões de trabalho e a importância delas nas empresas modernas"',
+      },
     ],
     correctAnswer: "m1q40_a",
     topic: "Aplicação RTF",

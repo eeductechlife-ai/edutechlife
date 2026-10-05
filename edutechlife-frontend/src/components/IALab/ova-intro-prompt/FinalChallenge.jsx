@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { stopSpeech, speakTextConversational } from "../../../utils/speech";
 
-const FinalChallenge = () => {
+const FinalChallenge = ({ onCompleted }) => {
   const { t } = useTranslation();
   const [revealed, setRevealed] = useState(false);
   const [audioPlayed, setAudioPlayed] = useState(false);
@@ -96,7 +96,10 @@ const FinalChallenge = () => {
         </div>
         {!revealed && (
           <button
-            onClick={() => setRevealed(true)}
+            onClick={() => {
+              setRevealed(true);
+              onCompleted?.();
+            }}
             aria-expanded={revealed}
             className="w-full py-4 bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] text-white font-black rounded-xl flex items-center justify-center gap-2 text-sm uppercase tracking-wider shadow-lg mt-3"
           >
@@ -123,6 +126,8 @@ const FinalChallenge = () => {
   );
 };
 
-FinalChallenge.propTypes = {};
+FinalChallenge.propTypes = {
+  onCompleted: PropTypes.func,
+};
 
 export default FinalChallenge;

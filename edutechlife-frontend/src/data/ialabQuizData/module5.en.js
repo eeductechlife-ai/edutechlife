@@ -209,7 +209,8 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q11",
-    question: "What are the 4 key ethical principles that guide the responsible use of AI?",
+    question:
+      "What are the 4 key ethical principles that guide the responsible use of AI?",
     options: [
       {
         id: "m5q11_a",
@@ -234,9 +235,18 @@ export const MODULE_5_EN = [
         id: "m5q12_a",
         label: "That people can understand how and why the AI decides",
       },
-      { id: "m5q12_b", label: "That the system works without anyone knowing how it does it" },
-      { id: "m5q12_c", label: "That it uses only public data with no controls of any kind" },
-      { id: "m5q12_d", label: "That its code stays secret in order to protect the business" },
+      {
+        id: "m5q12_b",
+        label: "That the system works without anyone knowing how it does it",
+      },
+      {
+        id: "m5q12_c",
+        label: "That it uses only public data with no controls of any kind",
+      },
+      {
+        id: "m5q12_d",
+        label: "That its code stays secret in order to protect the business",
+      },
     ],
     correctAnswer: "m5q12_a",
     topic: "Transparency",
@@ -253,9 +263,18 @@ export const MODULE_5_EN = [
         id: "m5q13_a",
         label: "The training data does not represent the whole population",
       },
-      { id: "m5q13_b", label: "The system runs slowly with very large databases" },
-      { id: "m5q13_c", label: "The model switches language without you asking it to" },
-      { id: "m5q13_d", label: "The AI forgets its data when it is shut down completely" },
+      {
+        id: "m5q13_b",
+        label: "The system runs slowly with very large databases",
+      },
+      {
+        id: "m5q13_c",
+        label: "The model switches language without you asking it to",
+      },
+      {
+        id: "m5q13_d",
+        label: "The model retrains itself with every user query",
+      },
     ],
     correctAnswer: "m5q13_a",
     topic: "Bias in AI",
@@ -270,11 +289,21 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q14_a",
-        label: "The system reinforces existing patterns without questioning them",
+        label:
+          "The system reinforces existing patterns without questioning them",
       },
-      { id: "m5q14_b", label: "The AI always confirms that its data is fully complete" },
-      { id: "m5q14_c", label: "The model asks for confirmation before every answer" },
-      { id: "m5q14_d", label: "The user confirms their password in order to use the AI" },
+      {
+        id: "m5q14_b",
+        label: "The AI always confirms that its data is fully complete",
+      },
+      {
+        id: "m5q14_c",
+        label: "The model asks for confirmation before every answer",
+      },
+      {
+        id: "m5q14_d",
+        label: "The user confirms their password in order to use the AI",
+      },
     ],
     correctAnswer: "m5q14_a",
     topic: "Bias in AI",
@@ -289,11 +318,21 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q15_a",
-        label: "Training labels carry the prejudices of the people who create them",
+        label:
+          "Training labels carry the prejudices of the people who create them",
       },
-      { id: "m5q15_b", label: "The system classifies the data automatically and neutrally" },
-      { id: "m5q15_c", label: "The AI puts a visible label on each generated answer" },
-      { id: "m5q15_d", label: "The model disables the labels when there is a lot of data" },
+      {
+        id: "m5q15_b",
+        label: "The system classifies the data automatically and neutrally",
+      },
+      {
+        id: "m5q15_c",
+        label: "The AI puts a visible label on each generated answer",
+      },
+      {
+        id: "m5q15_d",
+        label: "The model disables the labels when there is a lot of data",
+      },
     ],
     correctAnswer: "m5q15_a",
     topic: "Bias in AI",
@@ -310,9 +349,18 @@ export const MODULE_5_EN = [
         id: "m5q16_a",
         label: "Trusting the machine without enough human supervision",
       },
-      { id: "m5q16_b", label: "Automating a task without documenting the internal process" },
-      { id: "m5q16_c", label: "The AI automating every single bias that is in the data" },
-      { id: "m5q16_d", label: "Using too many different AI tools at the same time" },
+      {
+        id: "m5q16_b",
+        label: "Automating a task without documenting the internal process",
+      },
+      {
+        id: "m5q16_c",
+        label: "The AI automating every single bias that is in the data",
+      },
+      {
+        id: "m5q16_d",
+        label: "Using too many different AI tools at the same time",
+      },
     ],
     correctAnswer: "m5q16_a",
     topic: "Automation Bias",
@@ -323,15 +371,25 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q17",
-    question: "An AI systematically penalizes a certain group in hiring. What do you do?",
+    question:
+      "An AI systematically penalizes a certain group in hiring. What do you do?",
     options: [
       {
         id: "m5q17_a",
         label: "Stop the system, document the bias and correct the data",
       },
-      { id: "m5q17_b", label: "Ignore it because the model works fast and cheap" },
-      { id: "m5q17_c", label: "Hide the results in order to avoid legal complaints" },
-      { id: "m5q17_d", label: "Upload more of the same historical data to the affected system" },
+      {
+        id: "m5q17_b",
+        label: "Ignore it because the model works fast and cheap",
+      },
+      {
+        id: "m5q17_c",
+        label: "Hide the results in order to avoid legal complaints",
+      },
+      {
+        id: "m5q17_d",
+        label: "Upload more of the same historical data to the affected system",
+      },
     ],
     correctAnswer: "m5q17_a",
     topic: "Bias Mitigation",
@@ -348,9 +406,18 @@ export const MODULE_5_EN = [
         id: "m5q18_a",
         label: "Treating groups fairly and avoiding disproportionate impacts",
       },
-      { id: "m5q18_b", label: "Always giving the same answer to any type of user" },
-      { id: "m5q18_c", label: "Assigning the resources to the user with the most seniority" },
-      { id: "m5q18_d", label: "Optimizing only the speed of the computer system" },
+      {
+        id: "m5q18_b",
+        label: "Always giving the same answer to any type of user",
+      },
+      {
+        id: "m5q18_c",
+        label: "Assigning the resources to the user with the most seniority",
+      },
+      {
+        id: "m5q18_d",
+        label: "Optimizing only the speed of the computer system",
+      },
     ],
     correctAnswer: "m5q18_a",
     topic: "Fairness",
@@ -367,9 +434,18 @@ export const MODULE_5_EN = [
         id: "m5q19_a",
         label: "That automatic decisions can be justified to people",
       },
-      { id: "m5q19_b", label: "That the model explains why it consumes so many resources" },
-      { id: "m5q19_c", label: "That the system summarizes its answers in fewer words" },
-      { id: "m5q19_d", label: "That its answers can be translated into other languages" },
+      {
+        id: "m5q19_b",
+        label: "That the model explains why it consumes so many resources",
+      },
+      {
+        id: "m5q19_c",
+        label: "That the system summarizes its answers in fewer words",
+      },
+      {
+        id: "m5q19_d",
+        label: "That its answers can be translated into other languages",
+      },
     ],
     correctAnswer: "m5q19_a",
     topic: "Explainability",
@@ -384,11 +460,22 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q20_a",
-        label: "That there are clear people and processes that answer for the results",
+        label:
+          "That there are clear people and processes that answer for the results",
       },
-      { id: "m5q20_b", label: "That the AI is the only one responsible for any possible failure" },
-      { id: "m5q20_c", label: "That the system is guaranteed to never have any errors" },
-      { id: "m5q20_d", label: "That responsibility is diluted among all of the users" },
+      {
+        id: "m5q20_b",
+        label:
+          "That the AI is the only one responsible for any possible failure",
+      },
+      {
+        id: "m5q20_c",
+        label: "That users accept the terms and conditions when using the AI",
+      },
+      {
+        id: "m5q20_d",
+        label: "That responsibility is diluted among all of the users",
+      },
     ],
     correctAnswer: "m5q20_a",
     topic: "Accountability",
@@ -399,15 +486,26 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q21",
-    question: "A medical AI suggests a treatment. What is the best supervision practice?",
+    question:
+      "A medical AI suggests a treatment. What is the best supervision practice?",
     options: [
       {
         id: "m5q21_a",
-        label: "A professional validates the suggestion before applying it to the patient",
+        label:
+          "A professional validates the suggestion before applying it to the patient",
       },
-      { id: "m5q21_b", label: "Applying the recommended treatment without any review at all" },
-      { id: "m5q21_c", label: "Discarding the AI because it can never be useful in health" },
-      { id: "m5q21_d", label: "Letting the patient decide without consulting anyone" },
+      {
+        id: "m5q21_b",
+        label: "Applying the recommended treatment without any review at all",
+      },
+      {
+        id: "m5q21_c",
+        label: "Discarding the AI because it can never be useful in health",
+      },
+      {
+        id: "m5q21_d",
+        label: "Letting the patient decide without consulting anyone",
+      },
     ],
     correctAnswer: "m5q21_a",
     topic: "Human Supervision",
@@ -418,7 +516,8 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q22",
-    question: "Which is an example of sensitive data you should NOT upload to a public AI?",
+    question:
+      "Which is an example of sensitive data you should NOT upload to a public AI?",
     options: [
       {
         id: "m5q22_a",
@@ -443,9 +542,18 @@ export const MODULE_5_EN = [
         id: "m5q23_a",
         label: "Building data protection in from the very start of the system",
       },
-      { id: "m5q23_b", label: "Adding privacy only if there is a user complaint" },
-      { id: "m5q23_c", label: "Hiding the data use in the small print of the contract" },
-      { id: "m5q23_d", label: "Collecting everything and deciding privacy at the end" },
+      {
+        id: "m5q23_b",
+        label: "Adding privacy only if there is a user complaint",
+      },
+      {
+        id: "m5q23_c",
+        label: "Hiding the data use in the small print of the contract",
+      },
+      {
+        id: "m5q23_d",
+        label: "Collecting everything and deciding privacy at the end",
+      },
     ],
     correctAnswer: "m5q23_a",
     topic: "Privacy by Design",
@@ -460,10 +568,17 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q24_a",
-        label: "Collecting and storing only the data that is strictly necessary",
+        label:
+          "Collecting and storing only the data that is strictly necessary",
       },
-      { id: "m5q24_b", label: "Collecting all possible data just in case it is needed" },
-      { id: "m5q24_c", label: "Compressing the data so that it takes up less space" },
+      {
+        id: "m5q24_b",
+        label: "Collecting all possible data just in case it is needed",
+      },
+      {
+        id: "m5q24_c",
+        label: "Compressing the data so that it takes up less space",
+      },
       { id: "m5q24_d", label: "Deleting the data randomly every so often" },
     ],
     correctAnswer: "m5q24_a",
@@ -494,15 +609,25 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q26",
-    question: "What kind of AI systems are prohibited because of their unacceptable risk?",
+    question:
+      "What kind of AI systems are prohibited because of their unacceptable risk?",
     options: [
       {
         id: "m5q26_a",
         label: "Those that seriously manipulate or discriminate against people",
       },
-      { id: "m5q26_b", label: "Those that summarize internal company documents" },
-      { id: "m5q26_c", label: "Those that translate texts into other common languages" },
-      { id: "m5q26_d", label: "Those that suggest ideas for a marketing campaign" },
+      {
+        id: "m5q26_b",
+        label: "Those that summarize internal company documents",
+      },
+      {
+        id: "m5q26_c",
+        label: "Those that translate texts into other common languages",
+      },
+      {
+        id: "m5q26_d",
+        label: "Those that suggest ideas for a marketing campaign",
+      },
     ],
     correctAnswer: "m5q26_a",
     topic: "Regulatory Framework",
@@ -519,9 +644,15 @@ export const MODULE_5_EN = [
         id: "m5q27_a",
         label: "Be documented, evaluated and have human supervision",
       },
-      { id: "m5q27_b", label: "Work with no registration or evaluation of any kind" },
+      {
+        id: "m5q27_b",
+        label: "Work with no registration or evaluation of any kind",
+      },
       { id: "m5q27_c", label: "Operate only at night to consume less energy" },
-      { id: "m5q27_d", label: "Publish all of its code openly as a mandatory rule" },
+      {
+        id: "m5q27_d",
+        label: "Publish all of its code openly as a mandatory rule",
+      },
     ],
     correctAnswer: "m5q27_a",
     topic: "Regulatory Framework",
@@ -532,15 +663,25 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q28",
-    question: "An AI app makes decisions about student scholarships. What must you guarantee?",
+    question:
+      "An AI app makes decisions about student scholarships. What must you guarantee?",
     options: [
       {
         id: "m5q28_a",
         label: "Fair criteria, human review and a way to appeal the decision",
       },
-      { id: "m5q28_b", label: "That it decides without ever explaining its selection criteria" },
-      { id: "m5q28_c", label: "That it grants scholarships only to whoever uses the app most" },
-      { id: "m5q28_d", label: "That the decision is final with no possibility of appeal" },
+      {
+        id: "m5q28_b",
+        label: "That it decides without ever explaining its selection criteria",
+      },
+      {
+        id: "m5q28_c",
+        label: "That it grants scholarships only to whoever uses the app most",
+      },
+      {
+        id: "m5q28_d",
+        label: "That the decision is final with no possibility of appeal",
+      },
     ],
     correctAnswer: "m5q28_a",
     topic: "Governance",
@@ -555,10 +696,17 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q29_a",
-        label: "Systematically checking whether the model treats any group unfairly",
+        label:
+          "Systematically checking whether the model treats any group unfairly",
       },
-      { id: "m5q29_b", label: "Measuring only the response speed of the whole system" },
-      { id: "m5q29_c", label: "Checking how many registered users the platform has" },
+      {
+        id: "m5q29_b",
+        label: "Measuring only the response speed of the whole system",
+      },
+      {
+        id: "m5q29_c",
+        label: "Checking how many registered users the platform has",
+      },
       { id: "m5q29_d", label: "Verifying only the monthly cost of the tool" },
     ],
     correctAnswer: "m5q29_a",
@@ -570,14 +718,21 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q30",
-    question: "A model discriminates even after the 'gender' field is removed. What do you do?",
+    question:
+      "A model discriminates even after the 'gender' field is removed. What do you do?",
     options: [
       {
         id: "m5q30_a",
         label: "Look for proxy variables and correct the indirect bias",
       },
-      { id: "m5q30_b", label: "Consider the problem solved just by removing that field" },
-      { id: "m5q30_c", label: "Add more data and trust that it will fix itself" },
+      {
+        id: "m5q30_b",
+        label: "Consider the problem solved just by removing that field",
+      },
+      {
+        id: "m5q30_c",
+        label: "Add more data and trust that it will fix itself",
+      },
       { id: "m5q30_d", label: "Hide the results until nobody notices again" },
     ],
     correctAnswer: "m5q30_a",
@@ -593,11 +748,21 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q31_a",
-        label: "Impersonating a person's identity with generated voice or image",
+        label:
+          "Impersonating a person's identity with generated voice or image",
       },
-      { id: "m5q31_b", label: "Summarizing your own report for a work meeting" },
-      { id: "m5q31_c", label: "Checking the spelling of a text before publishing it" },
-      { id: "m5q31_d", label: "Generating ideas for a personal learning project" },
+      {
+        id: "m5q31_b",
+        label: "Summarizing your own report for a work meeting",
+      },
+      {
+        id: "m5q31_c",
+        label: "Checking the spelling of a text before publishing it",
+      },
+      {
+        id: "m5q31_d",
+        label: "Generating ideas for a personal learning project",
+      },
     ],
     correctAnswer: "m5q31_a",
     topic: "Responsible Use",
@@ -608,15 +773,26 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q32",
-    question: "You must explain to a user why the AI rejected their request. What do you apply?",
+    question:
+      "You must explain to a user why the AI rejected their request. What do you apply?",
     options: [
       {
         id: "m5q32_a",
-        label: "Explainability: give understandable reasons and a review option",
+        label:
+          "Explainability: give understandable reasons and a review option",
       },
-      { id: "m5q32_b", label: "Opacity: answer only that 'the system decided it that way'" },
-      { id: "m5q32_c", label: "Speed: close the case as fast as possible without explaining" },
-      { id: "m5q32_d", label: "Automation: let nobody else intervene in the case at all" },
+      {
+        id: "m5q32_b",
+        label: "Opacity: answer only that 'the system decided it that way'",
+      },
+      {
+        id: "m5q32_c",
+        label: "Speed: close the case as fast as possible without explaining",
+      },
+      {
+        id: "m5q32_d",
+        label: "Automation: let nobody else intervene in the case at all",
+      },
     ],
     correctAnswer: "m5q32_a",
     topic: "Explainability",
@@ -627,15 +803,25 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q33",
-    question: "An educational chatbot starts giving inappropriate answers to minors. What do you do?",
+    question:
+      "An educational chatbot starts giving inappropriate answers to minors. What do you do?",
     options: [
       {
         id: "m5q33_a",
         label: "Pause the system, investigate and add content safeguards",
       },
-      { id: "m5q33_b", label: "Let it keep running and warn only if someone complains" },
-      { id: "m5q33_c", label: "Remove moderation so that it answers with more freedom" },
-      { id: "m5q33_d", label: "Blame the minors for the way they use the system" },
+      {
+        id: "m5q33_b",
+        label: "Let it keep running and warn only if someone complains",
+      },
+      {
+        id: "m5q33_c",
+        label: "Remove moderation so that it answers with more freedom",
+      },
+      {
+        id: "m5q33_d",
+        label: "Blame the minors for the way they use the system",
+      },
     ],
     correctAnswer: "m5q33_a",
     topic: "Safeguards",
@@ -652,9 +838,19 @@ export const MODULE_5_EN = [
         id: "m5q34_a",
         label: "That third parties can review how it works and how it decides",
       },
-      { id: "m5q34_b", label: "That its code stays hidden even from its own creator" },
-      { id: "m5q34_c", label: "That it needs no technical maintenance during its useful life" },
-      { id: "m5q34_d", label: "That it works the same even if the base data changes completely" },
+      {
+        id: "m5q34_b",
+        label: "That its code stays hidden even from its own creator",
+      },
+      {
+        id: "m5q34_c",
+        label: "That it needs no technical maintenance during its useful life",
+      },
+      {
+        id: "m5q34_d",
+        label:
+          "That it works the same even if the base data changes completely",
+      },
     ],
     correctAnswer: "m5q34_a",
     topic: "Audit",
@@ -665,15 +861,25 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q35",
-    question: "The AI suggests a decision that affects many people. Which principle requires reviewing it?",
+    question:
+      "The AI suggests a decision that affects many people. Which principle requires reviewing it?",
     options: [
       {
         id: "m5q35_a",
         label: "Accountability and transparency with human supervision",
       },
-      { id: "m5q35_b", label: "Efficiency, to settle the case in the shortest possible time" },
-      { id: "m5q35_c", label: "Scalability, so the AI decides the largest possible volume" },
-      { id: "m5q35_d", label: "Automation, to eliminate the intervention of people" },
+      {
+        id: "m5q35_b",
+        label: "Efficiency, to settle the case in the shortest possible time",
+      },
+      {
+        id: "m5q35_c",
+        label: "Scalability, so the AI decides the largest possible volume",
+      },
+      {
+        id: "m5q35_d",
+        label: "Automation, to eliminate the intervention of people",
+      },
     ],
     correctAnswer: "m5q35_a",
     topic: "Accountability",
@@ -690,9 +896,18 @@ export const MODULE_5_EN = [
         id: "m5q36_a",
         label: "Improving the data and adding ongoing testing and monitoring",
       },
-      { id: "m5q36_b", label: "Ignoring it, because biases usually fix themselves over time" },
-      { id: "m5q36_c", label: "Hiding the negative results of the brand-new system" },
-      { id: "m5q36_d", label: "Increasing the speed of the model so it is not noticed" },
+      {
+        id: "m5q36_b",
+        label: "Ignoring it, because biases usually fix themselves over time",
+      },
+      {
+        id: "m5q36_c",
+        label: "Hiding the negative results of the brand-new system",
+      },
+      {
+        id: "m5q36_d",
+        label: "Increasing the speed of the model so it is not noticed",
+      },
     ],
     correctAnswer: "m5q36_a",
     topic: "Bias Mitigation",
@@ -709,9 +924,18 @@ export const MODULE_5_EN = [
         id: "m5q37_a",
         label: "Transparency obligations, without being high risk",
       },
-      { id: "m5q37_b", label: "A total ban on their use in any possible context" },
-      { id: "m5q37_c", label: "A special license requirement in order to develop them" },
-      { id: "m5q37_d", label: "A ban on publishing that AI is being used in them" },
+      {
+        id: "m5q37_b",
+        label: "A total ban on their use in any possible context",
+      },
+      {
+        id: "m5q37_c",
+        label: "A special license requirement in order to develop them",
+      },
+      {
+        id: "m5q37_d",
+        label: "A ban on publishing that AI is being used in them",
+      },
     ],
     correctAnswer: "m5q37_a",
     topic: "Regulatory Framework",
@@ -722,15 +946,25 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q38",
-    question: "You are about to deploy an AI system at work. Which governance practice helps most?",
+    question:
+      "You are about to deploy an AI system at work. Which governance practice helps most?",
     options: [
       {
         id: "m5q38_a",
         label: "Defining owners, fairness metrics and a monitoring plan",
       },
-      { id: "m5q38_b", label: "Publishing it with no owners and no tracking metrics" },
-      { id: "m5q38_c", label: "Measuring only how much money the system saves each month" },
-      { id: "m5q38_d", label: "Avoiding registering any incident that happens afterward" },
+      {
+        id: "m5q38_b",
+        label: "Publishing it with no owners and no tracking metrics",
+      },
+      {
+        id: "m5q38_c",
+        label: "Measuring only how much money the system saves each month",
+      },
+      {
+        id: "m5q38_d",
+        label: "Avoiding registering any incident that happens afterward",
+      },
     ],
     correctAnswer: "m5q38_a",
     topic: "Governance",
@@ -741,15 +975,25 @@ export const MODULE_5_EN = [
   },
   {
     id: "m5q39",
-    question: "An employee uses AI to decide about people without leaving a trace. What is breached?",
+    question:
+      "An employee uses AI to decide about people without leaving a trace. What is breached?",
     options: [
       {
         id: "m5q39_a",
         label: "The traceability and the accountability of the decisions",
       },
-      { id: "m5q39_b", label: "The speed of the process for settling that single case" },
-      { id: "m5q39_c", label: "The popularity of the system among the internal users" },
-      { id: "m5q39_d", label: "The operating cost of keeping that tool active" },
+      {
+        id: "m5q39_b",
+        label: "The speed of the process for settling that single case",
+      },
+      {
+        id: "m5q39_c",
+        label: "The popularity of the system among the internal users",
+      },
+      {
+        id: "m5q39_d",
+        label: "The operating cost of keeping that tool active",
+      },
     ],
     correctAnswer: "m5q39_a",
     topic: "Accountability",
@@ -765,11 +1009,21 @@ export const MODULE_5_EN = [
     options: [
       {
         id: "m5q40_a",
-        label: "Audit biases, explain decisions, supervise humans and comply with the law",
+        label:
+          "Audit biases, explain decisions, supervise humans and comply with the law",
       },
-      { id: "m5q40_b", label: "Automate everything to eliminate any human intervention" },
-      { id: "m5q40_c", label: "Hide the criteria to avoid questions from the applicants" },
-      { id: "m5q40_d", label: "Optimize only the approval speed of each single request" },
+      {
+        id: "m5q40_b",
+        label: "Automate everything to eliminate any human intervention",
+      },
+      {
+        id: "m5q40_c",
+        label: "Hide the criteria to avoid questions from the applicants",
+      },
+      {
+        id: "m5q40_d",
+        label: "Optimize only the approval speed of each single request",
+      },
     ],
     correctAnswer: "m5q40_a",
     topic: "Governance",

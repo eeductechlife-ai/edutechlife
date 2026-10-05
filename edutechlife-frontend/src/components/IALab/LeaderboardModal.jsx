@@ -29,6 +29,19 @@ const POSITION_ICONS = {
   },
 };
 
+// Nombre público del ranking: no exponer el nombre completo real del
+// estudiante a terceros. Se conserva el nombre de pila y la inicial del
+// apellido; sin nombre válido se usa "Estudiante" (antes "Usuario").
+const toPublicName = (raw) => {
+  const name = String(raw || "").trim();
+  if (!name || name.includes("@")) return "Estudiante";
+  // Placeholders del sistema: no acortarlos ("Nuevo Usuario" → "Nuevo U.").
+  if (/^(nuevo usuario|usuario|estudiante)$/i.test(name)) return name;
+  const parts = name.split(/\s+/).filter(Boolean);
+  if (parts.length === 1) return parts[0];
+  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+};
+
 const LeaderboardModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
   const { supabase, userId } = useSupabase();
@@ -89,10 +102,11 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
         rank: idx + 1,
         userId: row.user_id,
         // Nunca se muestra el correo ni el id del usuario a otros estudiantes.
-        name:
+        name: toPublicName(
           [row.full_name, profiles[row.user_id]?.full_name].find(
             (n) => typeof n === "string" && n.trim() && !n.includes("@"),
-          ) || "Usuario",
+          ),
+        ),
         avatar: row.avatar_url || profiles[row.user_id]?.avatar_url || null,
         xp: row.gamification_data?.xp || 0,
         weeklyXp: row.gamification_data?.weeklyXp || 0,
@@ -263,9 +277,12 @@ const LeaderboardModal = ({ isOpen, onClose }) => {
                             </p>
                             <div className="flex items-center gap-2 text-xs text-slate-400">
                               <span>
-                                {t("leaderboard.streak", {
-                                  days: entry.streak,
-                                })}
+                                {t(
+                                  entry.streak === 1
+                                    ? "leaderboard.streak_one"
+                                    : "leaderboard.streak",
+                                  { days: entry.streak },
+                                )}
                               </span>
                               <span>·</span>
                               <span>

@@ -14,7 +14,8 @@ import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { evaluateCertificateRequirements } from "../../utils/certificateRequirements";
 import ModalPortal from "../ui/ModalPortal";
-import useEscapeKey from '../../hooks/useEscapeKey';
+import useEscapeKey from "../../hooks/useEscapeKey";
+import useFocusTrap from "../../hooks/useFocusTrap";
 
 const CertificatePreview = lazy(() => import("../IALab/CertificatePreview"));
 
@@ -100,6 +101,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
   }, [storedCertificate]);
 
   useEscapeKey(isOpen, onClose);
+  const focusTrapRef = useFocusTrap(isOpen);
 
   if (!isOpen) return null;
 
@@ -378,73 +380,82 @@ const CertificatesModal = ({ isOpen, onClose }) => {
 
   return (
     <ModalPortal>
-    <div className="fixed inset-0 z-[1200] flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="fixed inset-0 bg-black/50"
-        onClick={onClose}
-      />
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="w-full max-w-lg bg-white rounded-xl border border-slate-200/60 shadow-lg max-h-[90vh] overflow-hidden relative z-10 flex flex-col"
+      <div
+        ref={focusTrapRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="certificates-modal-title"
+        className="fixed inset-0 z-[1200] flex items-center justify-center p-4"
       >
-        <button
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50"
           onClick={onClose}
-          className="absolute top-4 right-4 z-50 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200"
-          aria-label={t("modals.certificates.close")}
-        >
-          <Icon name="fa-times" className="text-lg" />
-        </button>
+        />
 
-        <div className="relative bg-gradient-to-r from-[#004B63] to-[#00BCD4] px-6 pt-8 pb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-              <Icon name="fa-award" className="text-white text-lg" />
-            </div>
-            <div>
-              <h2 className="text-white font-bold text-base">
-                {t("modals.certificates.title")}
-              </h2>
-              <p className="text-xs text-white/70 mt-0.5">
-                {t("modals.certificates.course_name")}
-              </p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          className="w-full max-w-lg bg-white rounded-xl border border-slate-200/60 shadow-lg max-h-[90vh] overflow-hidden relative z-10 flex flex-col"
+        >
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 z-50 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all duration-200"
+            aria-label={t("modals.certificates.close")}
+          >
+            <Icon name="fa-times" className="text-lg" />
+          </button>
+
+          <div className="relative bg-gradient-to-r from-[#004B63] to-[#00BCD4] px-6 pt-8 pb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                <Icon name="fa-award" className="text-white text-lg" />
+              </div>
+              <div>
+                <h2
+                  id="certificates-modal-title"
+                  className="text-white font-bold text-base"
+                >
+                  {t("modals.certificates.title")}
+                </h2>
+                <p className="text-xs text-white/70 mt-0.5">
+                  {t("modals.certificates.course_name")}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <CardContent className="p-5 overflow-y-auto flex-1">
-          {loading || progressLoading ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex flex-col items-center justify-center py-16"
-            >
-              <Icon
-                name="fa-spinner"
-                className="text-3xl text-[#00BCD4] animate-spin mb-4"
-              />
-              <p className="text-sm text-slate-500">
-                {t("modals.certificates.loading")}
-              </p>
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-5"
-            >
-              {renderCertificateTab()}
-            </motion.div>
-          )}
-        </CardContent>
-      </motion.div>
-    </div>
+          <CardContent className="p-5 overflow-y-auto flex-1">
+            {loading || progressLoading ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center py-16"
+              >
+                <Icon
+                  name="fa-spinner"
+                  className="text-3xl text-[#00BCD4] animate-spin mb-4"
+                />
+                <p className="text-sm text-slate-500">
+                  {t("modals.certificates.loading")}
+                </p>
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-5"
+              >
+                {renderCertificateTab()}
+              </motion.div>
+            )}
+          </CardContent>
+        </motion.div>
+      </div>
     </ModalPortal>
   );
 };

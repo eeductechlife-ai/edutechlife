@@ -57,7 +57,7 @@ export const dilemmas = [
       "Tu jefe te pide que implementes un chatbot de IA para atención al cliente, pero te dice: 'No les digas a los clientes que están hablando con una IA'. ¿Qué haces?",
     opts: [
       "Lo implemento sin decir nada, es lo que pide el jefe.",
-      "Explicale que ocultar que es una IA viola principios de transparencia y confianza, y propongo informar claramente al inicio de la interacción.",
+      "Le explico que ocultar que es una IA viola principios de transparencia y confianza, y propongo informar claramente al inicio de la interacción.",
       "Lo implemento pero se lo cuento a un compañero en confianza.",
     ],
     correct: 1,

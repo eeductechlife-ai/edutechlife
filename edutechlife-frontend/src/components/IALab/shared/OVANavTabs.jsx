@@ -42,13 +42,18 @@ const OVANavTabs = ({
         )}
 
         {showTabs && (
-          <div className="flex items-center gap-1.5 sm:gap-2" role="tablist">
+          <div
+            className="flex items-center gap-1.5 sm:gap-2"
+            role="tablist"
+            aria-label={t("ova.nav.tabs_label") || "Secciones del laboratorio"}
+          >
             {tabs.map((tab, idx) => (
               <button
                 key={tab.id || idx}
                 onClick={() => onTabChange?.(idx)}
                 role="tab"
                 aria-selected={tab.id === activeTab || idx === currentIndex}
+                aria-label={tab.label || tab.title || `Sección ${idx + 1}`}
                 className={cn(
                   "relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl transition-all",
                   tab.id === activeTab || idx === currentIndex

@@ -193,7 +193,7 @@ Recuerda: El estudiante está aprendiendo. Valora el intento. Devuelve SOLO JSON
       () => `Genera un JSON con 3 ejercicios sobre ChatGPT y GPTs personalizados:
 1. casoUso: Un párrafo describiendo un escenario profesional donde se necesita automatizar una tarea con un GPT personalizado. Incluye: tipo de industria, tarea a automatizar, requisitos técnicos y un componente de ANÁLISIS PREDICTIVO (p. ej. prever demanda, churn o tendencia). Ejemplo: "Una agencia de marketing digital quiere automatizar la generación de informes semanales de redes sociales. Necesitan un GPT que analice datos de Instagram, Facebook y TikTok, genere un PDF con métricas clave y PREDIGA qué tipo de contenido tendrá mejor rendimiento la próxima semana según las tendencias históricas."
 2. gptConfig: Descripción de lo que debería hacer un GPT, con instrucciones incompletas. El estudiante debe completar/mejorar las instrucciones.
-3. functionCallSpec: Un caso de uso donde se necesita Function Calling para integrar con una API externa. Describir qué debe hacer la función. Ejemplo: "Un GPT de atención al cliente necesita consultar una API de CRM para obtener datos del cliente y registrar tickets de soporte."
+3. functionCallSpec: Un caso de uso de Function Calling coherente con el escenario del ejercicio 1 (misma industria y tarea). Describir qué debe hacer la función. Ejemplo: "La agencia de marketing necesita que su GPT consulte una API de analítica social para obtener métricas de campaña y generar un informe semanal."
 
 Formato JSON exacto: { "casoUso": "texto", "gptConfig": "texto", "functionCallSpec": "texto" }
 
@@ -264,7 +264,7 @@ Devuelve SOLO JSON válido.`,
             gptConfig:
               "Create a custom GPT for social media reporting. It should analyze data and generate reports.",
             functionCallSpec:
-              "A customer support GPT needs to integrate with a CRM API to retrieve customer data and create support tickets. Define the function calls needed.",
+              "The marketing agency needs its GPT to call a social analytics API to retrieve campaign metrics and generate a weekly report. Define the function calls needed.",
           }
         : {
             casoUso:
@@ -272,7 +272,7 @@ Devuelve SOLO JSON válido.`,
             gptConfig:
               "Crea un GPT personalizado para generación de informes de redes sociales. Debe analizar datos y generar reportes.",
             functionCallSpec:
-              "Un GPT de atención al cliente necesita integrarse con una API de CRM para obtener datos del cliente y crear tickets de soporte. Define las llamadas de función necesarias.",
+              "La agencia de marketing necesita que su GPT se integre con una API de analítica social para obtener métricas de campaña y generar un informe semanal. Define las llamadas de función necesarias.",
           };
     },
     localEvaluate: (responses) => {
