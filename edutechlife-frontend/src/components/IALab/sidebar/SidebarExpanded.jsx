@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { motion, useReducedMotion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ import { Icon } from "../../../utils/iconMapping.jsx";
 import SidebarModuleList from "./SidebarModuleList";
 import SidebarToggleCue from "./SidebarToggleCue";
 import CourseCompletionSection from "../CourseCompletionSection";
+import GlossaryModal from "../GlossaryModal";
 import UserDropdownMenuSimplified from "../../UserDropdownMenuSimplified";
 
 const SidebarExpanded = ({ onOpenStreak }) => {
@@ -66,6 +67,7 @@ const SidebarExpanded = ({ onOpenStreak }) => {
     toggleSidebar();
   };
   const setShowLeaderboard = useIALabStore((s) => s.setShowLeaderboard);
+  const [glossaryOpen, setGlossaryOpen] = useState(false);
 
   const levelNum = getLevel();
   const xp = getTotalPoints();
@@ -244,8 +246,33 @@ const SidebarExpanded = ({ onOpenStreak }) => {
               className="text-[9px] text-slate-400 group-hover:translate-x-0.5 transition-transform"
             />
           </button>
+
+          <button
+            onClick={() => setGlossaryOpen(true)}
+            className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-cyan-100/60 dark:hover:bg-cyan-900/25 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 group"
+          >
+            <div className="w-7 h-7 rounded-lg bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center flex-shrink-0">
+              <Icon
+                name="fa-book"
+                className="text-cyan-600 dark:text-cyan-400 text-xs"
+                aria-hidden="true"
+              />
+            </div>
+            <span className="flex-1 text-left text-[12px] font-semibold text-cyan-700 dark:text-cyan-300">
+              {t("ialab.glossary.title")}
+            </span>
+            <Icon
+              name="fa-chevron-right"
+              className="text-[9px] text-slate-400 group-hover:translate-x-0.5 transition-transform"
+            />
+          </button>
         </div>
       </div>
+
+      <GlossaryModal
+        isOpen={glossaryOpen}
+        onClose={() => setGlossaryOpen(false)}
+      />
 
       {storedCertificate && (
         <div className="px-0.5 pt-1 shrink-0">
