@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 import { useSidebarToggleLearned } from "../../../hooks/IALab/useSidebarToggleLearned";
@@ -6,6 +6,7 @@ import { Icon } from "../../../utils/iconMapping.jsx";
 import TooltipIcon from "./SidebarTooltipIcon";
 import ModuleNavItem from "./ModuleNavItem";
 import SidebarToggleCue from "./SidebarToggleCue";
+import GlossaryModal from "../GlossaryModal";
 import UserDropdownMenuSimplified from "../../UserDropdownMenuSimplified";
 
 const formatPoints = (pts) => {
@@ -54,6 +55,7 @@ const SidebarCollapsed = ({
 }) => {
   const nextStepHint = getNextStepHint(moduleProgress, activeMod, t);
   const { learned, markLearned } = useSidebarToggleLearned();
+  const [glossaryOpen, setGlossaryOpen] = useState(false);
   const handleToggle = () => {
     markLearned();
     onToggleSidebar?.();
@@ -269,7 +271,28 @@ const SidebarCollapsed = ({
           </span>
         </button>
       </TooltipIcon>
+
+      <TooltipIcon label={t("ialab.glossary.title")} premium>
+        <button
+          onClick={() => setGlossaryOpen(true)}
+          className="flex flex-col items-center gap-0.5 rounded-xl px-1 py-1.5 bg-cyan-50 dark:bg-cyan-900/15 hover:bg-cyan-100 dark:hover:bg-cyan-900/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 w-full"
+          aria-label={t("ialab.glossary.title")}
+        >
+          <Icon
+            name="fa-book"
+            className="text-cyan-600 dark:text-cyan-400 text-sm"
+            aria-hidden="true"
+          />
+          <span className="text-[9px] font-semibold text-cyan-600 dark:text-cyan-400 leading-none">
+            {t("ialab.glossary.title")}
+          </span>
+        </button>
+      </TooltipIcon>
       <div className="absolute bottom-0 left-3 right-3 h-[1px] bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-[var(--theme-emphasis)]/30 rounded-full pointer-events-none" />
+      <GlossaryModal
+        isOpen={glossaryOpen}
+        onClose={() => setGlossaryOpen(false)}
+      />
     </motion.div>
   );
 };
