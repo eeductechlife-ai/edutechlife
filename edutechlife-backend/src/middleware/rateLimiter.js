@@ -19,12 +19,38 @@ function buildStore() {
 
 const store = buildStore();
 
+// Clave de rate limit por USUARIO cuando se puede identificar, y por IP si no.
+// Motivo: en un aula los 30 estudiantes comparten IP; con la clave por IP
+// (por defecto) agotaban el cupo y recibían 429. `req.userId` lo fija el
+// middleware de auth en rutas autenticadas; para los limitadores globales
+// (que corren antes de la auth por ruta) se decodifica el `sub` del JWT del
+// header Authorization. Si no hay token válido, cae a IP (comportamiento
+// anterior). No se verifica la firma aquí: para conteo de cuota basta el sub,
+// y sin token el cupo por IP sigue aplicando.
+function userAwareKey(req) {
+  if (req.userId) return `u:${req.userId}`;
+  const header = req.headers?.authorization || "";
+  if (header.startsWith("Bearer ")) {
+    try {
+      const payload = header.slice(7).split(".")[1];
+      const json = JSON.parse(
+        Buffer.from(payload.replace(/-/g, "+").replace(/_/g, "/"), "base64").toString(),
+      );
+      if (json?.sub) return `u:${json.sub}`;
+    } catch {
+      /* token no decodificable: usar IP */
+    }
+  }
+  return ipKeyGenerator(req.ip || "");
+}
+
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
   store,
+  keyGenerator: userAwareKey,
   message: { error: 'Demasiadas solicitudes, intenta de nuevo más tarde.' },
   // El health check de Render llama cada pocos segundos desde la misma IP:
   // contarlo devolvía 429, Render daba la instancia por caída y respondía 502.
@@ -38,6 +64,7 @@ const deepseekLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   store,
+  keyGenerator: userAwareKey,
   message: { error: 'Demasiadas solicitudes a DeepSeek, espera un momento.' },
   skip: (req) => process.env.NODE_ENV !== 'production',
 });

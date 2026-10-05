@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import {
   useAuthIdentity,
   clearUserSession,
+  readAuthIdentity,
 } from "../../../hooks/useAuthIdentity";
 import { useStudentProfile } from "../../../hooks/useStudentProfile";
 import { useProgressContext } from "../../ProgressContext";
@@ -147,6 +148,11 @@ export function useIALabUI(onBack) {
     if (!user?.id || !syncGamificationToSupabase) return;
     clearTimeout(gamificationSyncRef.current);
     gamificationSyncRef.current = setTimeout(() => {
+      // Evita escribir con el id de una sesión anterior si el estudiante
+      // cambió de cuenta en el mismo navegador (RLS responde 403 si el
+      // user_id no coincide con el token actual).
+      const currentId = readAuthIdentity().userId;
+      if (!currentId || currentId !== user.id) return;
       const s = useIALabStore.getState();
       syncGamificationToSupabase({
         xp: s.xp,
