@@ -418,49 +418,46 @@ ${vakRule}
 
   const markActivityDone = useCallback(
     (weekIdx, actIdx) => {
-      // ¿Marcar esta actividad deja la semana completa?
-      const current = plan?.weeks?.[weekIdx];
-      const willComplete =
-        current &&
-        current.activities.every((a, ai) =>
-          ai === actIdx ? !a.done : a.done,
-        );
+      if (!plan?.weeks?.[weekIdx]) return;
 
-      setPlan((prev) => {
-        if (!prev?.weeks) return prev;
-        const updated = {
-          ...prev,
-          weeks: prev.weeks.map((w, wi) =>
-            wi !== weekIdx
-              ? w
-              : {
-                  ...w,
-                  activities: w.activities.map((a, ai) =>
-                    ai !== actIdx ? a : { ...a, done: !a.done },
-                  ),
-                },
-          ),
-        };
-        savePlanLocal(planOwnerId, updated);
-        savePlanToServer(updated);
-        return updated;
-      });
+      const updated = {
+        ...plan,
+        weeks: plan.weeks.map((w, wi) =>
+          wi !== weekIdx
+            ? w
+            : {
+                ...w,
+                activities: w.activities.map((a, ai) =>
+                  ai !== actIdx ? a : { ...a, done: !a.done },
+                ),
+              },
+        ),
+      };
+      const willComplete = updated.weeks[weekIdx].activities.every(
+        (a) => a.done,
+      );
 
-      // Re-secuencia SOLO al completar una semana, para que el plan siga
-      // apuntando a lo más débil sin alterar el flujo de "marcar a mano".
-      if (willComplete) {
-        const vakStyle = vakResult?.predominantStyle || vakResult?.dominant || "";
+      setPlan(updated);
+      savePlanLocal(planOwnerId, updated);
+
+      // Esperar a que el plan con los ticks quede guardado ANTES de re-secuenciar:
+      // si no, el backend leía el plan anterior (sin `done`) y se perdía el avance.
+      savePlanToServer(updated).then(() => {
+        if (!willComplete) return;
+        const vakStyle =
+          vakResult?.predominantStyle || vakResult?.dominant || "";
         resequencePlanOnServer(studentDbId, vakStyle).then((res) => {
-          if (!res?.changed || !res.plan) return;
+          if (!res?.plan) return;
           const normalized = normalizePlan(res.plan);
-          if (normalized) {
-            setPlan(normalized);
-            savePlanLocal(planOwnerId, normalized);
+          if (!normalized) return;
+          setPlan(normalized);
+          savePlanLocal(planOwnerId, normalized);
+          if (res.changed) {
             setResequenced(true);
             setTimeout(() => setResequenced(false), 7000);
           }
         });
-      }
+      });
     },
     [planOwnerId, plan, studentDbId, vakResult],
   );

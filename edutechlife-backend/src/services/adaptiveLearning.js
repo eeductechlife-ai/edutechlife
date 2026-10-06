@@ -950,11 +950,27 @@ async function resequenceImprovementPlan(studentId, { vakStyle } = {}) {
   const isWeekDone = (w) =>
     Array.isArray(w?.activities) && w.activities.length > 0 && w.activities.every((a) => a.done);
 
-  const doneWeeks = oldPlan.weeks.filter(isWeekDone);
+  // Títulos ya completados (aunque la semana no esté entera): así los ticks
+  // parciales sobreviven al reordenamiento.
+  const doneTitles = new Set();
+  for (const w of oldPlan.weeks || []) {
+    for (const a of w.activities || []) {
+      if (a.done && a.titulo) doneTitles.add(a.titulo);
+    }
+  }
+  const applyDone = (w) => ({
+    ...w,
+    activities: (w.activities || []).map((a) => ({
+      ...a,
+      done: a.done === true || doneTitles.has(a.titulo),
+    })),
+  });
+
+  const doneWeeks = oldPlan.weeks.filter(isWeekDone).map(applyDone);
   const doneCompetencies = new Set(doneWeeks.map((w) => w.competencyId).filter(Boolean));
-  const pendingFresh = fresh.weeks.filter(
-    (w) => !w.competencyId || !doneCompetencies.has(w.competencyId),
-  );
+  const pendingFresh = fresh.weeks
+    .filter((w) => !w.competencyId || !doneCompetencies.has(w.competencyId))
+    .map(applyDone);
 
   const orderOf = (plan) =>
     (plan?.weeks || []).map((w) => w.competencyId || w.focus || "").join(">");
