@@ -216,25 +216,31 @@ export function useImprovementPlan() {
 
   // students.id — lo que esperan los endpoints adaptativos (no el auth id).
   const studentDbId = supabaseQueries?.studentData?.data?.id ?? null;
+  // Identidad para cachear/leer el plan. `userId` (auth id) puede venir vacío
+  // en el primer render; students.id sí está tras cargar los datos, así que se
+  // usa como respaldo para que el plan no se pierda al recargar.
+  const planOwnerId = studentDbId || userId || null;
 
-  const [plan, setPlan] = useState(() => normalizePlan(loadPlanLocal(userId)));
+  const [plan, setPlan] = useState(() =>
+    normalizePlan(loadPlanLocal(planOwnerId)),
+  );
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState(null);
   const [resequenced, setResequenced] = useState(false);
   const loadedFromServer = useRef(false);
 
   useEffect(() => {
-    if (!userId || loadedFromServer.current) return;
+    if (!planOwnerId || loadedFromServer.current) return;
     loadedFromServer.current = true;
 
     // Muestra ya el plan cacheado en este dispositivo (si existe) y luego
     // sincroniza con el del servidor.
-    const local = normalizePlan(loadPlanLocal(userId));
+    const local = normalizePlan(loadPlanLocal(planOwnerId));
     if (local) setPlan((prev) => prev || local);
 
     loadPlanFromServer().then((serverRaw) => {
       const server = normalizePlan(serverRaw);
-      const localNow = normalizePlan(loadPlanLocal(userId));
+      const localNow = normalizePlan(loadPlanLocal(planOwnerId));
       // Un plan recién generado en Notas puede seguir viajando al servidor.
       const newest =
         server && (!localNow || server.generatedAt >= localNow.generatedAt)
@@ -242,10 +248,10 @@ export function useImprovementPlan() {
           : localNow;
       if (newest) {
         setPlan((prev) => (prev?.weeks?.length && !server ? prev : newest));
-        savePlanLocal(userId, newest);
+        savePlanLocal(planOwnerId, newest);
       }
     });
-  }, [userId]);
+  }, [planOwnerId]);
 
   const generatePlan = useCallback(async () => {
     if (isGenerating) return;
@@ -347,7 +353,7 @@ ${vakRule}
         const normalized = normalizePlan({ ...serverPlan, source: "plan" });
         if (normalized) {
           setPlan(normalized);
-          storePlan(userId, normalized);
+          storePlan(planOwnerId, normalized);
           return;
         }
       }
@@ -377,7 +383,7 @@ ${vakRule}
         throw err;
       }
       setPlan(next);
-      storePlan(userId, next);
+      storePlan(planOwnerId, next);
     } catch (e) {
       setError(
         e.code === "PARENTAL_CONSENT_REQUIRED"
@@ -403,7 +409,7 @@ ${vakRule}
     studentGrades,
     upcomingExams,
     exams,
-    userId,
+    planOwnerId,
     gradeLevel,
     studentAge,
     countryCode,
@@ -435,7 +441,7 @@ ${vakRule}
                 },
           ),
         };
-        savePlanLocal(userId, updated);
+        savePlanLocal(planOwnerId, updated);
         savePlanToServer(updated);
         return updated;
       });
@@ -449,14 +455,14 @@ ${vakRule}
           const normalized = normalizePlan(res.plan);
           if (normalized) {
             setPlan(normalized);
-            savePlanLocal(userId, normalized);
+            savePlanLocal(planOwnerId, normalized);
             setResequenced(true);
             setTimeout(() => setResequenced(false), 7000);
           }
         });
       }
     },
-    [userId, plan, studentDbId, vakResult],
+    [planOwnerId, plan, studentDbId, vakResult],
   );
 
   const hasPlan = Boolean(plan?.weeks?.length);
