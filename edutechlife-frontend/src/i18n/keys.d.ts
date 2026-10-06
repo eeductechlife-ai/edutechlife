@@ -4919,6 +4919,9 @@ export type TranslationKeys = {
   "pricing.title_line1": string;
   "pricing.title_line2": string;
   "profile.actions_title": string;
+  "profile.back_to_course": string;
+  "common.back": string;
+  "common.user_not_found": string;
   "profile.best_score": string;
   "profile.certificate_earned": string;
   "profile.change_photo": string;
