@@ -1,32 +1,49 @@
-import React, { useRef, useEffect, forwardRef } from 'react';
+import React, { useRef, useEffect, forwardRef } from "react";
 
-const AutoGrowTextarea = forwardRef(({ value, onChange, placeholder, className = '', maxLength = 2000, ariaRequired, ariaDescribedby, ...props }, ref) => {
-  const innerRef = useRef(null);
-  const textareaRef = ref || innerRef;
+const AutoGrowTextarea = forwardRef(
+  (
+    {
+      value,
+      onChange,
+      placeholder,
+      className = "",
+      maxLength = 2000,
+      ariaRequired,
+      ariaDescribedby,
+      ...props
+    },
+    ref,
+  ) => {
+    const innerRef = useRef(null);
+    const textareaRef = ref || innerRef;
 
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 320)}px`;
-    }
-  }, [value, textareaRef]);
+    useEffect(() => {
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "auto";
+        textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 320)}px`;
+      }
+    }, [value, textareaRef]);
 
-  return (
-    <textarea
-      ref={textareaRef}
-      value={value}
-      onChange={(e) => {
-        if (e.target.value.length <= maxLength) onChange(e.target.value);
-      }}
-      placeholder={placeholder}
-      aria-required={ariaRequired}
-      aria-describedby={ariaDescribedby}
-      className={`w-full bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[var(--theme-primary)] focus:ring-2 focus:ring-[var(--theme-primary)]/20 resize-none text-sm leading-relaxed min-h-[120px] max-h-[320px] ${className}`}
-      {...props}
-    />
-  );
-});
+    return (
+      <textarea
+        ref={textareaRef}
+        value={value}
+        maxLength={maxLength}
+        onChange={(e) => {
+          // Recorta en vez de descartar: al pegar un texto más largo que el
+          // límite antes se perdía todo sin ningún aviso.
+          onChange(e.target.value.slice(0, maxLength));
+        }}
+        placeholder={placeholder}
+        aria-required={ariaRequired}
+        aria-describedby={ariaDescribedby}
+        className={`w-full bg-white border-2 border-slate-200 rounded-xl p-5 text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[var(--theme-primary)] focus:ring-2 focus:ring-[var(--theme-primary)]/20 resize-none text-sm leading-relaxed min-h-[120px] max-h-[320px] ${className}`}
+        {...props}
+      />
+    );
+  },
+);
 
-AutoGrowTextarea.displayName = 'AutoGrowTextarea';
+AutoGrowTextarea.displayName = "AutoGrowTextarea";
 
 export default AutoGrowTextarea;

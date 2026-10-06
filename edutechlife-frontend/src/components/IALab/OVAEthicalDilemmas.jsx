@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "../../i18n/I18nProvider";
 import {
@@ -12,14 +12,31 @@ import {
   BookOpen,
 } from "lucide-react";
 import {
-  dilemmas,
+  dilemmas as baseDilemmas,
   accordionData,
   learningObjectives,
 } from "../../data/ova/ethicalDilemmas";
 import { OVAIntro, OVAMaxBar } from "./shared";
 
+// Los datos traen la opción correcta casi siempre en la misma posición; se
+// barajan una vez por sesión y se remapea el índice correcto.
+const shuffleDilemmaOptions = (list) =>
+  list.map((d) => {
+    const order = d.opts.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    return {
+      ...d,
+      opts: order.map((i) => d.opts[i]),
+      correct: order.indexOf(d.correct),
+    };
+  });
+
 export default function OVAEthicalDilemmas({ onComplete }) {
   const { t } = useTranslation();
+  const dilemmas = useMemo(() => shuffleDilemmaOptions(baseDilemmas), []);
   const certCompletedRef = useRef(false);
   const [screen, setScreen] = useState("intro");
   const [activeSection, setActiveSection] = useState("intro");

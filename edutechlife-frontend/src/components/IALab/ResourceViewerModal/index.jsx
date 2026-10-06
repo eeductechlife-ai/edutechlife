@@ -129,9 +129,22 @@ const ResourceViewerModal = ({
     };
   }, [isOpen]);
 
+  // Un recurso ya visto debe abrirse como "completado": antes se reiniciaba a
+  // false y mostraba "Completa este recurso..." aunque el estudiante ya lo
+  // había terminado.
   useEffect(() => {
-    setIsMarkedAsViewed(false);
-    completedRef.current = false;
+    let alreadyViewed = false;
+    try {
+      alreadyViewed =
+        !!resource?.id &&
+        (useIALabStore.getState().getViewedResources?.() || []).includes(
+          resource.id,
+        );
+    } catch {
+      /* no crítico */
+    }
+    setIsMarkedAsViewed(alreadyViewed);
+    completedRef.current = alreadyViewed;
   }, [resource?.id]);
 
   // Auto-tracking silencioso para el sistema adaptativo (aditivo, no altera UX)

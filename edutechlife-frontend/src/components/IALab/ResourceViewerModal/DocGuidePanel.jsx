@@ -12,7 +12,15 @@ import { getDocGuide } from "../../../data/ialabDocGuides";
 export default function DocGuidePanel({ resourceId }) {
   const { t, locale } = useTranslation();
   const guide = getDocGuide(resourceId, locale);
-  const [open, setOpen] = useState(true);
+  // En pantallas pequeñas la guía abierta dejaba ~300px de lectura al PDF:
+  // arranca colapsada ahí y abierta en tablet/escritorio.
+  const [open, setOpen] = useState(() => {
+    try {
+      return !window.matchMedia("(max-width: 639px)").matches;
+    } catch {
+      return true;
+    }
+  });
 
   if (!guide) return null;
 
