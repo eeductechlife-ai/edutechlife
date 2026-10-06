@@ -178,21 +178,32 @@ const IALabTour = ({ hasStartedCourse }) => {
   const startTour = useCallback(() => {
     scopedRemove(TOUR_KEY);
     retryCount.current = 0;
+    // El paso 0 (rail lateral) solo existe en escritorio: en móvil/tablet el
+    // tour nunca arrancaba. Se empieza por el primer paso con elemento visible.
+    const firstValid = () => {
+      for (let i = 0; i < STEPS.length; i++) {
+        const r = findTarget(i);
+        if (r && r.rect.width > 0) return { index: i, result: r };
+      }
+      return null;
+    };
     const attempt = () => {
-      const result = findTarget(0);
-      if (result && result.rect.width > 0) {
-        const scrollContainer = result.el.closest(".overflow-y-auto") || window;
+      const found = firstValid();
+      if (found) {
+        const scrollContainer =
+          found.result.el.closest(".overflow-y-auto") || window;
         scrollContainerRef.current = scrollContainer;
-        setStep(0);
+        setStep(found.index);
         setTimeout(() => setReady(true), 300);
       } else if (retryCount.current < MAX_RETRIES) {
         retryCount.current += 1;
         setTimeout(attempt, RETRY_INTERVAL);
       }
     };
-    scrollToTarget(0);
+    const early = firstValid();
+    scrollToTarget(early ? early.index : 0);
     attempt();
-  }, [findTarget, scrollToTarget]);
+  }, [STEPS, findTarget, scrollToTarget]);
 
   const findNextValidStep = useCallback(
     (fromStep) => {
