@@ -11,7 +11,10 @@ import { useTranslation } from "../../i18n/I18nProvider";
 
 export function useCelebrationEffects(activeMod, handleGlobalAction) {
   const { t } = useTranslation();
-  const prevFullyApproved = useRef(false);
+  // { mod, approved } del último render evaluado. null = aún no evaluado: la
+  // primera lectura de un módulo no celebra (si ya estaba aprobado al entrar,
+  // antes salía confeti y voz en cada visita).
+  const prevFullyApproved = useRef(null);
   const prevCourseCompleted = useRef(false);
   const prevResourcesCompleted = useRef(null); // null = not yet initialized
   const fullyApproved = useIALabStore((s) =>
@@ -42,7 +45,10 @@ export function useCelebrationEffects(activeMod, handleGlobalAction) {
   }, [activeMod, moduleProgress, handleGlobalAction]);
 
   useEffect(() => {
-    if (fullyApproved && !prevFullyApproved.current) {
+    const prev = prevFullyApproved.current;
+    const isTransitionInSameModule =
+      prev !== null && prev.mod === activeMod && !prev.approved;
+    if (fullyApproved && isTransitionInSameModule) {
       fireConfetti({
         particleCount: CONFETTI_PARTICLE_COUNT,
         spread: CONFETTI_SPREAD,
@@ -51,8 +57,8 @@ export function useCelebrationEffects(activeMod, handleGlobalAction) {
       });
       speakTextConversational(t("ialab.speech.module_passed"), "max");
     }
-    prevFullyApproved.current = fullyApproved;
-  }, [fullyApproved, t]);
+    prevFullyApproved.current = { mod: activeMod, approved: fullyApproved };
+  }, [fullyApproved, activeMod, t]);
 
   useEffect(() => {
     if (courseCompleted && !prevCourseCompleted.current) {
