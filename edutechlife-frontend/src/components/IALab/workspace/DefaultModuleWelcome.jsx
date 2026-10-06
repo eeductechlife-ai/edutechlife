@@ -156,6 +156,7 @@ export default function DefaultModuleWelcome({ activeMod, onSelectSection }) {
           <button
             key={label}
             type="button"
+            data-tour={action !== "plan" ? `tour-section-${action}` : undefined}
             onClick={() => handleClick(action)}
             className={`theme-prompt-card group flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 ${cfg.accentRing}`}
           >
