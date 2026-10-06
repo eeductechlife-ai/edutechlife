@@ -347,13 +347,26 @@ function OVAAutomationFlows({ onComplete, onClose }) {
   const curIdx = nav.indexOf(screen);
   const addXp = useIALabStore((s) => s.addXp);
 
+  // El recurso solo se marca como visto (y da XP) cuando se hicieron las
+  // actividades evaluables m2–m5; antes bastaba con pulsar "Siguiente".
   useEffect(() => {
-    if (screen === "m6" && !autoCompletedRef.current) {
+    const exercisesDone =
+      completed.includes("m2") &&
+      completed.includes("m3") &&
+      completed.includes("m4") &&
+      completed.includes("m5");
+    if (screen === "m6" && exercisesDone && !autoCompletedRef.current) {
       autoCompletedRef.current = true;
       if (addXp) addXp(25);
       onComplete?.();
     }
-  }, [screen, onComplete, addXp]);
+  }, [screen, completed, onComplete, addXp]);
+
+  const stepRequiresWork =
+    (screen === "m2" && !completed.includes("m2")) ||
+    (screen === "m3" && !completed.includes("m3")) ||
+    (screen === "m4" && !completed.includes("m4")) ||
+    (screen === "m5" && !completed.includes("m5"));
 
   const markCompleted = (id) => {
     setCompleted((prev) => (prev.includes(id) ? prev : [...prev, id]));
@@ -365,7 +378,8 @@ function OVAAutomationFlows({ onComplete, onClose }) {
       setScreen("m1");
       return;
     }
-    markCompleted(screen);
+    // m2–m5 se marcan desde su propia actividad (CaseView / DesignYourFlow).
+    if (screen === "m1") markCompleted(screen);
     const next = curIdx + 1;
     if (next < nav.length) setScreen(nav[next]);
   };
@@ -514,6 +528,15 @@ function OVAAutomationFlows({ onComplete, onClose }) {
         </div>
       </main>
 
+      {screen !== "welcome" && stepRequiresWork && (
+        <p
+          role="status"
+          className="text-center text-xs font-medium theme-text-muted px-4 pb-2"
+        >
+          {t("ova.common.step_requires_activity")}
+        </p>
+      )}
+
       {screen !== "welcome" && (
         <div className="flex justify-center border-t border-slate-100 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90">
           <div className="w-full max-w-4xl flex justify-between items-center gap-3 px-4 py-3">
@@ -555,7 +578,8 @@ function OVAAutomationFlows({ onComplete, onClose }) {
                     }
                   : nextScreen
               }
-              className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] ${
+              disabled={stepRequiresWork}
+              className={`px-6 min-h-[44px] rounded-xl font-[900] text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 uppercase tracking-[0.15em] disabled:opacity-40 disabled:cursor-not-allowed ${
                 isLastScreen
                   ? "bg-emerald-500 text-white hover:bg-emerald-600"
                   : "bg-gradient-to-r from-[var(--theme-text)] to-[var(--theme-primary)] text-white"
