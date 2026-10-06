@@ -81,7 +81,15 @@ const NotificationPanel = ({
   } = useNotification();
   const notifications = forIALab(allNotifications);
   const unreadCount = notifications.filter((n) => !n.is_read).length;
-  const { subscribeToPush, syncPushSubscription } = useBrowserNotifications();
+  const { subscribeToPush, syncPushSubscription, supported } =
+    useBrowserNotifications();
+  // iPhone con Safari normal y los navegadores integrados (Instagram,
+  // Facebook…) no tienen la API Notification: usarla sin comprobar lanzaba
+  // "Notification is not defined" al abrir/tocar el panel.
+  const pushSupported =
+    supported && typeof window !== "undefined" && "Notification" in window;
+  const pushGranted = pushSupported && Notification.permission === "granted";
+  const pushOn = !!preferences?.push && pushGranted;
   const panelRef = useRef(null);
   const [confirmClear, setConfirmClear] = useState(false);
 
@@ -100,8 +108,9 @@ const NotificationPanel = ({
       }
     };
 
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () =>
+      document.removeEventListener("pointerdown", handleClickOutside);
   }, [isOpen, onClose, triggerRef]);
 
   const handleClearAll = () => {
@@ -120,7 +129,7 @@ const NotificationPanel = ({
 
   return (
     <div
-      className="absolute right-0 top-full mt-2 z-[1000] w-80 animate-in fade-in-0 zoom-in-95 duration-200"
+      className="fixed left-3 right-3 top-[calc(var(--safe-area-top,0px)+4.25rem)] z-[1000] md:absolute md:left-auto md:right-0 md:top-full md:mt-2 md:w-80 animate-in fade-in-0 zoom-in-95 duration-200"
       ref={panelRef}
     >
       <div className="bg-[var(--theme-surface)] rounded-2xl border border-[var(--theme-border)] shadow-lg overflow-hidden">
@@ -174,38 +183,56 @@ const NotificationPanel = ({
           </div>
         )}
 
-        {/* Push toggle */}
+        {/* Push toggle (solo si el navegador soporta Notification) */}
         <div className="px-3 py-2 border-b border-[var(--theme-border)] bg-[var(--theme-surface-2)]">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-semibold theme-text-muted uppercase tracking-wider">
               Notif. push
             </span>
-            <button
-              onClick={async (e) => {
-                e.stopPropagation();
-                if (preferences.push && Notification.permission === "granted") {
-                  updatePreferences({ ...preferences, push: false });
-                } else {
-                  const perm = await Notification.requestPermission();
-                  if (perm === "granted") {
-                    const sub = await subscribeToPush();
-                    if (sub) await syncPushSubscription(sub);
-                    updatePreferences({ ...preferences, push: true });
+            {pushSupported ? (
+              <button
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  try {
+                    if (pushOn) {
+                      updatePreferences({ ...preferences, push: false });
+                    } else {
+                      const perm = await Notification.requestPermission();
+                      if (perm === "granted") {
+                        const sub = await subscribeToPush();
+                        if (sub) await syncPushSubscription(sub);
+                        updatePreferences({ ...preferences, push: true });
+                      }
+                    }
+                  } catch (err) {
+                    console.warn("[PUSH] toggle error:", err);
                   }
-                }
-              }}
-              className={`relative w-9 h-5 rounded-full transition-colors ${preferences.push && Notification.permission === "granted" ? "bg-[var(--theme-emphasis)]" : "bg-slate-300 dark:bg-slate-600"}`}
-              aria-label="Toggle push notifications"
-            >
-              <span
-                className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${preferences.push && Notification.permission === "granted" ? "translate-x-4" : ""}`}
-              />
-            </button>
+                }}
+                className="flex h-11 w-12 flex-shrink-0 items-center justify-center rounded-lg"
+                aria-label="Toggle push notifications"
+                aria-pressed={pushOn}
+              >
+                {/* Pastilla visual de 36x20 dentro de un área táctil de 44px:
+                    en pantallas táctiles los botones tienen mínimo de 44px y
+                    deformaban el interruptor en un círculo gris. */}
+                <span
+                  className={`relative block h-5 w-9 rounded-full transition-colors ${pushOn ? "bg-[var(--theme-emphasis)]" : "bg-slate-300 dark:bg-slate-600"}`}
+                >
+                  <span
+                    className={`absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${pushOn ? "translate-x-4" : ""}`}
+                  />
+                </span>
+              </button>
+            ) : (
+              <span className="text-[10px] theme-text-muted">
+                {t("notification.push_unsupported")}
+              </span>
+            )}
           </div>
         </div>
 
         {/* Lista de notificaciones */}
-        <div className="max-h-96 overflow-y-auto">
+        <div className="max-h-[60dvh] md:max-h-96 overflow-y-auto">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12 px-4">
               <div className="w-8 h-8 rounded-full border-2 border-[var(--theme-emphasis)] border-t-transparent animate-spin mb-3" />
@@ -216,7 +243,10 @@ const NotificationPanel = ({
           ) : notificationCount === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 flex items-center justify-center mb-3">
-                <Icon name="fa-bell" className="text-[var(--theme-emphasis)] text-lg" />
+                <Icon
+                  name="fa-bell"
+                  className="text-[var(--theme-emphasis)] text-lg"
+                />
               </div>
               <p className="text-sm font-semibold theme-text">
                 {t("notification.empty_title")}
@@ -236,7 +266,7 @@ const NotificationPanel = ({
                     key={notif.id}
                     onClick={() => {
                       if (!notif.is_read) markAsRead(notif.id);
-                      if (!notif.id?.startsWith("local_")) {
+                      if (!String(notif.id ?? "").startsWith("local_")) {
                         const metadata = notif.metadata || {};
                         const routeFn =
                           ROUTE_MAP[notif.type] || ROUTE_MAP.general;
@@ -276,7 +306,7 @@ const NotificationPanel = ({
                               e.stopPropagation();
                               dismissNotification(notif.id);
                             }}
-                            className="opacity-0 group-hover:opacity-100 p-1 theme-text-muted hover:text-rose-500 transition-all flex-shrink-0 rounded-md hover:bg-rose-50 dark:hover:bg-rose-900/20"
+                            className="opacity-100 md:opacity-0 md:group-hover:opacity-100 p-1 theme-text-muted hover:text-rose-500 transition-all flex-shrink-0 rounded-md hover:bg-rose-50 dark:hover:bg-rose-900/20"
                             aria-label={t("notification.delete_aria")}
                           >
                             <Icon name="fa-xmark" className="text-xs" />
@@ -308,7 +338,10 @@ const NotificationPanel = ({
               }}
               className="w-full flex items-center gap-2 px-4 py-2.5 bg-[var(--theme-emphasis)]/[0.03] border-t border-[var(--theme-border)] text-xs font-medium text-[var(--theme-emphasis)] hover:bg-[var(--theme-emphasis)]/[0.06] transition-colors"
             >
-              <Icon name="fa-comments" className="text-[var(--theme-primary)] text-xs" />
+              <Icon
+                name="fa-comments"
+                className="text-[var(--theme-primary)] text-xs"
+              />
               <span>
                 {t("notification.forum_count", { count: forumUnreadCount })}
               </span>
