@@ -4183,6 +4183,7 @@ export type TranslationKeys = {
   "ova.ethicscases.min_chars": string;
   "ova.ethicscases.nav_finish": string;
   "ova.ethicscases.nav_next": string;
+  "ova.common.step_requires_activity": string;
   "ova.ethicscases.nav_prev": string;
   "ova.ethicscases.q_accountability": string;
   "ova.ethicscases.q_accountability_desc": string;

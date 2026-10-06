@@ -4718,6 +4718,7 @@
   "ova.ethicscases.voice_m6": "Você completou o laboratório de casos éticos. O framework vai acompanhá-lo em cada dilema futuro.",
   "ova.ethicscases.nav_prev": "Anterior",
   "ova.ethicscases.nav_next": "Próximo",
+  "ova.common.step_requires_activity": "Conclua a atividade desta etapa para continuar.",
   "ova.ethicscases.nav_finish": "Finalizar",
   "ova.ethicscases.menu_title": "Mapa",
   "ova.ethicscases.menu_welcome": "Bem-vindo",
