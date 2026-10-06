@@ -3655,6 +3655,7 @@ export type TranslationKeys = {
   "notification.mark_all_read": string;
   "notification.mark_read_aria": string;
   "notification.panel_title": string;
+  "notification.push_unsupported": string;
   "notification.preferences": string;
   "notification.push_disabled": string;
   "notification.push_enabled": string;

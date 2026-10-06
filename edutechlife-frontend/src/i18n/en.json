@@ -3569,6 +3569,7 @@
   "notification.type_course_update": "Update",
   "notification.type_general": "General",
   "notification.panel_title": "Notifications",
+  "notification.push_unsupported": "Not available in this browser",
   "notification.unread_count": "{count} new",
   "notification.close_aria": "Close notifications",
   "notification.mark_all_read": "Mark all as read",

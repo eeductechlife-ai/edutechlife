@@ -3,6 +3,23 @@ import { useNotification } from "../context/NotificationContext";
 import { supabase } from "../lib/supabase";
 import { useAuthIdentity } from "./useAuthIdentity";
 
+// localStorage puede lanzar (Safari en modo privado, almacenamiento bloqueado):
+// sin estos envoltorios el error tumbaba el efecto y la vista.
+const lsGet = (key) => {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+const lsSet = (key, value) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    /* sin almacenamiento: se omite */
+  }
+};
+
 const STORAGE_KEY = "ialab_browser_notif_permission";
 const LAST_NOTIFIED_KEY = "ialab_last_browser_notif_id";
 const PERMISSION_REQUESTED_KEY = "ialab_push_permission_requested";
@@ -78,23 +95,23 @@ export const useBrowserNotifications = () => {
     }
 
     if (Notification.permission === "granted") {
-      localStorage.setItem(STORAGE_KEY, "granted");
-      localStorage.setItem(PERMISSION_REQUESTED_KEY, "true");
+      lsSet(STORAGE_KEY, "granted");
+      lsSet(PERMISSION_REQUESTED_KEY, "true");
       permissionRequestedRef.current = true;
       return true;
     }
 
     if (Notification.permission === "denied") {
-      localStorage.setItem(STORAGE_KEY, "denied");
-      localStorage.setItem(PERMISSION_REQUESTED_KEY, "true");
+      lsSet(STORAGE_KEY, "denied");
+      lsSet(PERMISSION_REQUESTED_KEY, "true");
       permissionRequestedRef.current = true;
       return false;
     }
 
     try {
       const permission = await Notification.requestPermission();
-      localStorage.setItem(STORAGE_KEY, permission);
-      localStorage.setItem(PERMISSION_REQUESTED_KEY, "true");
+      lsSet(STORAGE_KEY, permission);
+      lsSet(PERMISSION_REQUESTED_KEY, "true");
       permissionRequestedRef.current = true;
       if (permission === "granted") {
         const sub = await subscribeToPush();
@@ -139,7 +156,7 @@ export const useBrowserNotifications = () => {
     if (!("Notification" in window)) return;
     if (Notification.permission === "granted") return;
 
-    const alreadyRequested = localStorage.getItem(PERMISSION_REQUESTED_KEY);
+    const alreadyRequested = lsGet(PERMISSION_REQUESTED_KEY);
     if (alreadyRequested === "true") return;
     if (permissionRequestedRef.current) return;
 
@@ -162,7 +179,7 @@ export const useBrowserNotifications = () => {
     if (latest.is_read) return;
     if (notifiedIdsRef.current.has(latest.id)) return;
 
-    const lastNotifiedId = localStorage.getItem(LAST_NOTIFIED_KEY);
+    const lastNotifiedId = lsGet(LAST_NOTIFIED_KEY);
     if (lastNotifiedId === latest.id) return;
 
     sendBrowserNotification(latest.title, latest.message, {
@@ -175,7 +192,7 @@ export const useBrowserNotifications = () => {
     });
 
     notifiedIdsRef.current.add(latest.id);
-    localStorage.setItem(LAST_NOTIFIED_KEY, latest.id);
+    lsSet(LAST_NOTIFIED_KEY, latest.id);
 
     if (notifiedIdsRef.current.size > 100) {
       notifiedIdsRef.current.clear();

@@ -3525,6 +3525,7 @@
   "notification.type_course_update": "Atualização",
   "notification.type_general": "Geral",
   "notification.panel_title": "Notificações",
+  "notification.push_unsupported": "Indisponível neste navegador",
   "notification.unread_count": "{count} nova(s)",
   "notification.close_aria": "Fechar notificações",
   "notification.mark_all_read": "Marcar todas como lidas",
