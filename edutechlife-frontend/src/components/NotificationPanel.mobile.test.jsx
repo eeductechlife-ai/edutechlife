@@ -101,4 +101,15 @@ describe("NotificationPanel en celulares sin Notification", () => {
     expect(panel.className).toContain("right-3");
     expect(panel.className).toContain("md:absolute");
   });
+
+  it("el botón de borrar es visible en móvil (sin hover táctil)", () => {
+    render(
+      <MemoryRouter>
+        <NotificationPanel isOpen onClose={() => {}} />
+      </MemoryRouter>,
+    );
+    const del = screen.getByLabelText("notification.delete_aria");
+    expect(del.className).toContain("opacity-100");
+    expect(del.className).toContain("md:opacity-0");
+  });
 });

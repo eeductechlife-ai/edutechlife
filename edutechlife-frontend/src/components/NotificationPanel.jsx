@@ -208,13 +208,20 @@ const NotificationPanel = ({
                     console.warn("[PUSH] toggle error:", err);
                   }
                 }}
-                className={`relative w-9 h-5 rounded-full transition-colors ${pushOn ? "bg-[var(--theme-emphasis)]" : "bg-slate-300 dark:bg-slate-600"}`}
+                className="flex h-11 w-12 flex-shrink-0 items-center justify-center rounded-lg"
                 aria-label="Toggle push notifications"
                 aria-pressed={pushOn}
               >
+                {/* Pastilla visual de 36x20 dentro de un área táctil de 44px:
+                    en pantallas táctiles los botones tienen mínimo de 44px y
+                    deformaban el interruptor en un círculo gris. */}
                 <span
-                  className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${pushOn ? "translate-x-4" : ""}`}
-                />
+                  className={`relative block h-5 w-9 rounded-full transition-colors ${pushOn ? "bg-[var(--theme-emphasis)]" : "bg-slate-300 dark:bg-slate-600"}`}
+                >
+                  <span
+                    className={`absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${pushOn ? "translate-x-4" : ""}`}
+                  />
+                </span>
               </button>
             ) : (
               <span className="text-[10px] theme-text-muted">
@@ -299,7 +306,7 @@ const NotificationPanel = ({
                               e.stopPropagation();
                               dismissNotification(notif.id);
                             }}
-                            className="opacity-0 group-hover:opacity-100 p-1 theme-text-muted hover:text-rose-500 transition-all flex-shrink-0 rounded-md hover:bg-rose-50 dark:hover:bg-rose-900/20"
+                            className="opacity-100 md:opacity-0 md:group-hover:opacity-100 p-1 theme-text-muted hover:text-rose-500 transition-all flex-shrink-0 rounded-md hover:bg-rose-50 dark:hover:bg-rose-900/20"
                             aria-label={t("notification.delete_aria")}
                           >
                             <Icon name="fa-xmark" className="text-xs" />
