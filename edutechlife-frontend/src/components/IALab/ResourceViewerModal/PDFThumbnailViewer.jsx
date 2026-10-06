@@ -4,7 +4,11 @@ import { Icon } from "../../../utils/iconMapping.jsx";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import DocGuidePanel from "./DocGuidePanel";
 
-const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
+const PDFThumbnailViewer = ({
+  resource,
+  onAutoComplete,
+  alreadyViewed = false,
+}) => {
   const { t } = useTranslation();
   const [hasScrolledEnough, setHasScrolledEnough] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -48,7 +52,7 @@ const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
   return (
     <div className="w-full h-full flex flex-col">
       <DocGuidePanel resourceId={resource?.id} />
-      {!completedRef.current && !hasScrolledEnough && (
+      {!alreadyViewed && !completedRef.current && !hasScrolledEnough && (
         <div className="mb-2 px-1">
           <span className="text-xs text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-3 py-1 rounded-full font-medium backdrop-blur-sm">
             {t("ialab.viewer_modal.scroll_to_end")}
@@ -101,6 +105,7 @@ const PDFThumbnailViewer = ({ resource, onAutoComplete }) => {
 PDFThumbnailViewer.propTypes = {
   resource: PropTypes.object,
   onAutoComplete: PropTypes.func,
+  alreadyViewed: PropTypes.bool,
 };
 
 export default PDFThumbnailViewer;

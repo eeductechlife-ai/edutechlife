@@ -153,3 +153,45 @@ describe("useCelebrationEffects", () => {
     renderHook(() => useCelebrationEffects(1, vi.fn()));
   });
 });
+
+describe("useCelebrationEffects - módulo aprobado", () => {
+  const withScore = (score) => ({
+    1: { ...partialMod, currentScore: score },
+    2: { ...partialMod, currentScore: 0, exam: false },
+    3: { ...partialMod, currentScore: 0, exam: false },
+    4: { ...partialMod, currentScore: 0, exam: false },
+    5: { ...partialMod, currentScore: 0, exam: false },
+  });
+
+  test("no celebra al entrar a un módulo que ya estaba aprobado", () => {
+    useIALabStore.setState({ moduleProgress: withScore(100) });
+    renderHook(() => useCelebrationEffects(1, vi.fn()));
+    expect(mockFireConfetti).not.toHaveBeenCalled();
+    expect(mockSpeakText).not.toHaveBeenCalled();
+  });
+
+  test("celebra cuando el módulo pasa a aprobado dentro de la misma visita", () => {
+    useIALabStore.setState({ moduleProgress: withScore(70) });
+    renderHook(() => useCelebrationEffects(1, vi.fn()));
+    expect(mockFireConfetti).not.toHaveBeenCalled();
+    act(() => {
+      useIALabStore.setState({ moduleProgress: withScore(100) });
+    });
+    expect(mockFireConfetti).toHaveBeenCalledTimes(1);
+  });
+
+  test("no celebra al cambiar a otro módulo que ya estaba aprobado", () => {
+    useIALabStore.setState({
+      moduleProgress: {
+        ...withScore(70),
+        2: { ...partialMod, currentScore: 100 },
+      },
+    });
+    const { rerender } = renderHook(
+      ({ mod }) => useCelebrationEffects(mod, vi.fn()),
+      { initialProps: { mod: 1 } },
+    );
+    rerender({ mod: 2 });
+    expect(mockFireConfetti).not.toHaveBeenCalled();
+  });
+});
