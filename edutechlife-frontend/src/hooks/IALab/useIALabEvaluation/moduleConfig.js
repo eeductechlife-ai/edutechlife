@@ -335,9 +335,22 @@ Devuelve SOLO JSON válido.`,
     totalSteps: 4,
     generateSystemPrompt: () =>
       "Eres un experto en Google Gemini, Deep Research y verificación de hechos. Genera 4 ejercicios de nivel medio para evaluación de investigación con IA. Devuelve SOLO JSON.",
-    generateUserPrompt:
-      () => `Genera un JSON con 4 ejercicios sobre Gemini Deep Research:
-1. temaInvestigacion: Un tema de actualidad con contexto (3 oraciones). El estudiante debe formular una pregunta de investigación. Ejemplo: "La energía de fusión nuclear ha alcanzado hitos importantes en 2024. Varios países están invirtiendo en reactores experimentales. El debate sobre su viabilidad comercial continúa."
+    generateUserPrompt: () => {
+      // Sin esto el modelo repetía el ejemplo (fusión nuclear) en casi todos los
+      // intentos: se fuerza un ámbito distinto cada vez.
+      const dominios = [
+        "salud pública",
+        "educación",
+        "cambio climático y energía",
+        "economía y empleo",
+        "ciberseguridad y privacidad",
+        "agricultura y alimentación",
+        "movilidad y ciudades",
+        "inteligencia artificial y sociedad",
+      ];
+      const dominio = dominios[Math.floor(Math.random() * dominios.length)];
+      return `Genera un JSON con 4 ejercicios sobre Gemini Deep Research:
+1. temaInvestigacion: Un tema de actualidad sobre ${dominio} con contexto (3 oraciones). El estudiante debe formular una pregunta de investigación. NO uses la fusión nuclear ni copies este ejemplo; solo es una guía del formato: "La energía de fusión nuclear ha alcanzado hitos importantes en 2024. Varios países están invirtiendo en reactores experimentales. El debate sobre su viabilidad comercial continúa."
 2. fuentes: Array con 4 objetos. Cada uno: { "titulo": "string", "tipo": "articulo"|"tweet"|"grafico"|"paper", "contenido": "string", "esRelevante": true|false, "modalidad": "texto"|"imagen"|"video"|"audio" }. El estudiante debe identificar cuáles son relevantes y justificar la MODALIDAD de la fuente (qué tipo de entrada es y para qué conviene).
 3. afirmaciones: Array con 4 objetos. Cada uno: { "texto": "string", "veracidad": "verdadero"|"falso"|"no_verificable" }. El estudiante debe clasificar cada una y citar la fuente que respalda su veredicto (GROUNDING).
 4. informeTemplate: Un esquema de informe profesional con secciones a completar.
@@ -350,7 +363,8 @@ Formato JSON exacto:
   "informeTemplate": { "secciones": ["string"] }
 }
 
-Cada ejercicio debe incluir la información suficiente (contexto, datos y restricciones) para que el estudiante pueda responder sin ambigüedad.`,
+Cada ejercicio debe incluir la información suficiente (contexto, datos y restricciones) para que el estudiante pueda responder sin ambigüedad.`;
+    },
     evaluateSystemPrompt:
       () => `Eres un evaluador EXPERTO en investigación con Gemini. Sé BENÉVOLO. Devuelve SOLO JSON.
 

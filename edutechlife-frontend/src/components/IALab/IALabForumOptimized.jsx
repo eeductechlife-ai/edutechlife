@@ -40,6 +40,8 @@ const IALabForumOptimized = ({
   } = useIALabForum();
 
   const [hasTrackedCommunity, setHasTrackedCommunity] = useState(false);
+  // Aportes publicados en esta visita (la Comunidad pide 2 por módulo).
+  const [sessionContribs, setSessionContribs] = useState(0);
   const [visiblePosts, setVisiblePosts] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -132,6 +134,7 @@ const IALabForumOptimized = ({
           // completa con 2+ contribuciones, no con un único mensaje.
           await trackCommunityComment(activeMod);
           if (!hasTrackedCommunity) setHasTrackedCommunity(true);
+          setSessionContribs((n) => n + 1);
         }
 
         setNewMessage("");
@@ -477,6 +480,18 @@ const IALabForumOptimized = ({
           </div>
         )}
       </div>
+
+      <p
+        role="status"
+        aria-live="polite"
+        className="px-4 pt-2 text-xs font-medium theme-text-muted"
+      >
+        {sessionContribs >= 2
+          ? t("ialab.forum.optimized.goal_done")
+          : sessionContribs === 1
+            ? t("ialab.forum.optimized.goal_progress", { done: 1, left: 1 })
+            : t("ialab.forum.optimized.goal_start")}
+      </p>
 
       <IALabForumOptimizedInput
         handleSubmitMessage={handleSubmitMessage}

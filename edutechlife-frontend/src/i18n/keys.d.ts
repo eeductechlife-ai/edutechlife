@@ -1737,6 +1737,9 @@ export type TranslationKeys = {
   "ialab.forum.optimized.empty_desc": string;
   "ialab.forum.optimized.empty_title": string;
   "ialab.forum.optimized.input_placeholder": string;
+  "ialab.forum.optimized.goal_start": string;
+  "ialab.forum.optimized.goal_progress": string;
+  "ialab.forum.optimized.goal_done": string;
   "ialab.forum.optimized.like_aria": string;
   "ialab.forum.optimized.live_badge": string;
   "ialab.forum.optimized.loading": string;

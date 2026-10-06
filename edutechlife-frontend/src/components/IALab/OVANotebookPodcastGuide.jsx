@@ -415,7 +415,12 @@ export default function OVANotebookPodcastGuide({ onComplete }) {
                             setCurrentModuleIndex((i) => i + 1);
                             setCurrentSlide(0);
                             setActivityState(null);
-                          } else setCurrentScreen("challenge");
+                          } else {
+                            // El desafío final siempre arranca en la pregunta 1 (antes
+                            // heredaba el índice de la última diapositiva).
+                            setCurrentSlide(0);
+                            setCurrentScreen("challenge");
+                          }
                         }}
                         className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold shadow-md ${FOCUS_RING} ${activityState === "correct" ? "bg-blue-700 hover:bg-blue-800 text-white animate-pulse" : "bg-gray-200 dark:bg-slate-600 text-gray-400 dark:text-slate-400 cursor-not-allowed"}`}
                       >

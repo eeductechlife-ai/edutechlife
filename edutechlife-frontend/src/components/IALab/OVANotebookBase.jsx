@@ -58,7 +58,7 @@ export default function OVANotebookBase({
     [data.questionsData],
   );
   const { t } = useTranslation();
-  const tk = (key) => t(`${translationPrefix}.${key}`);
+  const tk = (key, params) => t(`${translationPrefix}.${key}`, params);
 
   const totalSteps = 1 + contentScreens.length + questionsData.length + 1;
 
