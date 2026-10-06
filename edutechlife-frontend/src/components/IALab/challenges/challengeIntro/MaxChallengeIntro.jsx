@@ -99,6 +99,9 @@ const MaxChallengeIntro = ({ moduleId, onStart, t, locale: localeProp }) => {
       <p className="mt-4 text-xs text-slate-400 dark:text-slate-500 text-center">
         {t("ialab.challenge.max_estimated_time")}
       </p>
+      <p className="mt-2 max-w-md text-xs text-amber-600 dark:text-amber-400 text-center">
+        {t("ialab.challenge.max_focus_notice")}
+      </p>
     </div>
   );
 };

@@ -108,7 +108,7 @@ export default function ExpandedQuiz({ questions, onCompleted }) {
       <div className="flex items-center gap-2">
         <HelpCircle className="w-4 h-4 text-[var(--theme-primary)]" />
         <span className="text-[10px] font-black text-[var(--theme-emphasis)] uppercase tracking-wider">
-          {t("ova.ecosystem.quiz_desc")}
+          {t("ova.ecosystem.quiz_desc", { count: questions.length })}
         </span>
         <span className="ml-auto text-[10px] font-black text-slate-400">
           {step + 1}/{questions.length}

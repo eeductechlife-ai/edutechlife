@@ -248,7 +248,9 @@ export default function OVAChatGPTTools({ onComplete }) {
                         {t("ova.chatgpttools.challenge_title")}
                       </h3>
                       <p className="text-slate-200 text-sm leading-relaxed mb-6">
-                        {t("ova.chatgpttools.challenge_desc")}
+                        {t("ova.chatgpttools.challenge_desc", {
+                          count: quizScenarios.length,
+                        })}
                       </p>
                     </div>
                     <div className="bg-white text-[var(--theme-text)] dark:text-slate-100 font-black py-3 px-6 rounded-xl inline-flex items-center justify-center gap-2 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-900/30 transition-colors text-sm">
