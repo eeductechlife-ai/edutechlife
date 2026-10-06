@@ -31,10 +31,14 @@ import GuardianWelcome from "./GuardianWelcome";
 const CHAT_GLYPH = "M21 12a8 8 0 0 1-8 8H4l1.5-2.5A8 8 0 1 1 21 12Z";
 // Mismo glifo de casa para los 5 módulos: el botón "Inicio" vuelve a la
 // pantalla de bienvenida (intro + accesos) de cada módulo.
-const HOME_GLYPH = "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z";
+const HOME_GLYPH =
+  "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z";
 
 const DEFAULT_MODULE_BRAND = {
-  1: { label: "Artesano Digital", tagline: "Fundamentos de prompts con precisión artesanal" },
+  1: {
+    label: "Artesano Digital",
+    tagline: "Fundamentos de prompts con precisión artesanal",
+  },
   5: { label: "Guardián Digital", tagline: "Uso ético e inteligente de la IA" },
 };
 
@@ -70,16 +74,30 @@ export default function ToolWorkspace({
   const railLabel = modBrand?.label || cfg.label;
 
   /* Logo SVG propio por módulo para el tema default */
-  const DefaultModLogo = theme === "default" ? () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#259eb5"
-      strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d={
-        activeMod === 5
-          ? "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
-          : "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
-      } />
-    </svg>
-  ) : null;
+  const DefaultModLogo =
+    theme === "default"
+      ? () => (
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#259eb5"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d={
+                activeMod === 5
+                  ? "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                  : "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+              }
+            />
+          </svg>
+        )
+      : null;
   const RailLogo = DefaultModLogo || Logo;
 
   const rail = (
@@ -104,7 +122,17 @@ export default function ToolWorkspace({
           aria-label="Cerrar panel de navegación"
           className="theme-text-rail-muted ml-1 hidden rounded-md p-1 opacity-60 transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-current/40 lg:flex"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
             <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
@@ -137,7 +165,10 @@ export default function ToolWorkspace({
       </button>
 
       {/* Navegación del rail */}
-      <div className="mt-2 flex-1 overflow-y-auto px-2 pb-3 flex flex-col gap-1">
+      <div
+        className="mt-2 flex-1 overflow-y-auto px-2 pb-3 flex flex-col gap-1"
+        data-tour="tour-tabs-rail"
+      >
         {/* Secciones primero — estilo ChatGPT sidebar items */}
         {[
           {
@@ -168,6 +199,7 @@ export default function ToolWorkspace({
             type="button"
             onClick={() => onSelectSection(id)}
             aria-current={viewSection === id ? "true" : undefined}
+            data-tour={`tour-section-${id}`}
             className={`theme-rail-hover theme-text-rail w-full flex items-center gap-3 rounded-lg px-4 py-3 text-[15px] font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-current/40 ${
               viewSection === id ? "theme-rail-active" : ""
             }`}
@@ -198,6 +230,7 @@ export default function ToolWorkspace({
           <div
             className="flex flex-col gap-0.5"
             data-testid="tool-workspace-topics"
+            data-tour="tour-topics-list"
           >
             <p className="theme-text-rail-muted px-4 pb-1 pt-1 text-[11px] font-semibold uppercase tracking-wide">
               {t("ialab.workspace.topics_label")}
@@ -210,7 +243,11 @@ export default function ToolWorkspace({
                 icon={CHAT_GLYPH}
                 active={viewSection === "contenido" && selectedTopicIndex === i}
                 completed={sequenceByIndex.get(i)?.isCompleted}
-                locked={sequenceByIndex.has(i) ? !sequenceByIndex.get(i).isUnlocked : false}
+                locked={
+                  sequenceByIndex.has(i)
+                    ? !sequenceByIndex.get(i).isUnlocked
+                    : false
+                }
                 onClick={() => onSelectTopic(i)}
               />
             ))}
@@ -289,7 +326,7 @@ export default function ToolWorkspace({
             if (window.innerWidth >= 1024) setDesktopOpen(true);
             else setRailOpen(true);
           }}
-          className={`theme-composer theme-text-muted flex w-max items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-semibold shadow-sm transition-colors${(hideDesktopRail || desktopOpen) ? " lg:hidden" : ""}`}
+          className={`theme-composer theme-text-muted flex w-max items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-semibold shadow-sm transition-colors${hideDesktopRail || desktopOpen ? " lg:hidden" : ""}`}
         >
           <span aria-hidden="true">☰</span>
           {newChatLabel}

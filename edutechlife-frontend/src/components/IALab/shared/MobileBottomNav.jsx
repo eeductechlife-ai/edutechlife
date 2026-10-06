@@ -104,6 +104,7 @@ function MobileBottomNav({
           <button
             key={String(item.id)}
             id={isModules ? "ialab-modules-menu-trigger" : undefined}
+            data-tour={isMenu ? "tour-undermenu-mobile" : undefined}
             type="button"
             aria-haspopup={isModules ? "dialog" : undefined}
             onClick={() => {

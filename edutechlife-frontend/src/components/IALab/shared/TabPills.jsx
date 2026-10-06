@@ -44,6 +44,7 @@ export function TabPills({
           key={tab.id ?? "all"}
           id={tab.id != null ? `tab-${tab.id}` : undefined}
           data-tab-id={tab.id ?? "all"}
+          data-tour={tab.id != null ? `tour-section-${tab.id}` : undefined}
           role="tab"
           aria-selected={viewSection === tab.id}
           aria-controls={tab.id != null ? `panel-${tab.id}` : undefined}

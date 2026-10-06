@@ -80,6 +80,12 @@ const LEGACY_UNSCOPED_KEYS = [
   "ialab_last_study_reminder",
   "edutechlife_student_data",
   "edutechlife_student_info",
+  // Tours: eran globales y ocultaban el tour a cualquier cuenta nueva del
+  // mismo navegador. Ahora son por cuenta; las globales se descartan (no se
+  // migran, porque pertenecen a otra cuenta).
+  "ialab_tour_completed",
+  "ialab-welcome-tour-completed",
+  "ialab-visit-count",
 ];
 
 // Claves de progreso "legacy" sin scope que antes eran compartidas entre

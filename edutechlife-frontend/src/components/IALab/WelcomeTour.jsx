@@ -9,11 +9,17 @@ import {
   MessageCircle,
   BookOpen,
 } from "lucide-react";
-import { safeStorage } from "../../utils/storage";
+import {
+  scopedGet,
+  scopedSet,
+  scopedRemove,
+} from "../../utils/userScopedStorage";
 import { useIALabStore } from "../../store/ialabStore";
 import { useTranslation } from "../../i18n/I18nProvider";
 import LearningPaceSelector from "./LearningPaceSelector";
 
+// Por cuenta: con una clave global, un estudiante nuevo en un navegador ya
+// usado por otra cuenta nunca veía el tour.
 const TOUR_KEY = "ialab-welcome-tour-completed";
 const VISIT_COUNT_KEY = "ialab-visit-count";
 
@@ -52,10 +58,10 @@ const STEPS = [
 
 function isReturningStudent() {
   try {
-    const tourCompleted = safeStorage.getItem(TOUR_KEY);
+    const tourCompleted = scopedGet(TOUR_KEY);
     if (tourCompleted) return true;
 
-    const visitCountRaw = safeStorage.getItem(VISIT_COUNT_KEY);
+    const visitCountRaw = scopedGet(VISIT_COUNT_KEY);
     const visitCount = visitCountRaw ? parseInt(visitCountRaw, 10) : 0;
     if (visitCount >= 2) return true;
 
@@ -67,9 +73,9 @@ function isReturningStudent() {
 
 function incrementVisitCount() {
   try {
-    const raw = safeStorage.getItem(VISIT_COUNT_KEY);
+    const raw = scopedGet(VISIT_COUNT_KEY);
     const count = raw ? parseInt(raw, 10) : 0;
-    safeStorage.setItem(VISIT_COUNT_KEY, String(count + 1));
+    scopedSet(VISIT_COUNT_KEY, String(count + 1));
   } catch {
     // no-op
   }
@@ -147,7 +153,7 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
   }, [forceShow, moduleProgress, xp, lessonProgress]);
 
   const handleClose = useCallback(() => {
-    safeStorage.setItem(TOUR_KEY, new Date().toISOString());
+    scopedSet(TOUR_KEY, new Date().toISOString());
     try {
       // Evita encadenar el tour de bienvenida con el tour del módulo en la
       // misma sesión (dos recorridos seguidos). El tour del módulo se mostrará
@@ -380,6 +386,6 @@ export default function WelcomeTour({ forceShow = false, onComplete }) {
 }
 
 export function resetWelcomeTour() {
-  safeStorage.removeItem(TOUR_KEY);
-  safeStorage.removeItem(VISIT_COUNT_KEY);
+  scopedRemove(TOUR_KEY);
+  scopedRemove(VISIT_COUNT_KEY);
 }
