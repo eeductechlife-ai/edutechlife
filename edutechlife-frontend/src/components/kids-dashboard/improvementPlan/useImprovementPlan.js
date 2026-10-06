@@ -41,19 +41,27 @@ function savePlanLocal(userId, plan) {
   }
 }
 
-async function loadPlanFromServer() {
-  const token = getAuthToken();
-  if (!token) return null;
-  try {
-    const res = await fetch(`${API_BASE_URL}/api/ingenia/improvement-plan`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.plan || null;
-  } catch {
-    return null;
+async function loadPlanFromServer(attempts = 4) {
+  // En una recarga dura, el token de sesión se hidrata DESPUÉS del primer
+  // render; antes el hook se rendía sin token y el plan nunca se cargaba.
+  // Reintentamos unos segundos hasta que esté disponible.
+  for (let i = 0; i < attempts; i++) {
+    const token = getAuthToken();
+    if (token) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/ingenia/improvement-plan`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data.plan || null;
+      } catch {
+        return null;
+      }
+    }
+    await new Promise((r) => setTimeout(r, 400 * (i + 1)));
   }
+  return null;
 }
 
 async function savePlanToServer(plan) {
@@ -219,16 +227,23 @@ export function useImprovementPlan() {
     if (!userId || loadedFromServer.current) return;
     loadedFromServer.current = true;
 
+    // Muestra ya el plan cacheado en este dispositivo (si existe) y luego
+    // sincroniza con el del servidor.
+    const local = normalizePlan(loadPlanLocal(userId));
+    if (local) setPlan((prev) => prev || local);
+
     loadPlanFromServer().then((serverRaw) => {
       const server = normalizePlan(serverRaw);
-      const local = normalizePlan(loadPlanLocal(userId));
-      // A plan just made in Notas may still be on its way to the server.
+      const localNow = normalizePlan(loadPlanLocal(userId));
+      // Un plan recién generado en Notas puede seguir viajando al servidor.
       const newest =
-        server && (!local || server.generatedAt >= local.generatedAt)
+        server && (!localNow || server.generatedAt >= localNow.generatedAt)
           ? server
-          : local;
-      setPlan(newest);
-      if (newest) savePlanLocal(userId, newest);
+          : localNow;
+      if (newest) {
+        setPlan((prev) => (prev?.weeks?.length && !server ? prev : newest));
+        savePlanLocal(userId, newest);
+      }
     });
   }, [userId]);
 
