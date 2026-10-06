@@ -1,16 +1,73 @@
 const { createClient } = require("@supabase/supabase-js");
+const { getDbaById } = require("./dbaCatalog");
+const { getCompetencyIdsForSubject } = require("./competencyMastery");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY,
 );
 
+// ── Subject normalization ──────────────────────────────────────────────────────
+// El boletín del estudiante trae materias crudas y en mayúsculas ("MATEMÁTICAS",
+// "QUÍMICA", "LENGUAJE"). El motor razona con claves normalizadas
+// (matematicas, ciencias_naturales, ...). Sin este mapa, las notas quedaban
+// invisibles al motor (grade_analyses vacío o subjects sin normalizar).
+const SUBJECT_ALIASES = {
+  matematicas: "matematicas",
+  matematica: "matematicas",
+  math: "matematicas",
+  lenguaje: "lenguaje",
+  "lengua castellana": "lenguaje",
+  espanol: "lenguaje",
+  castellano: "lenguaje",
+  lectura: "lenguaje",
+  "ciencias naturales": "ciencias_naturales",
+  naturales: "ciencias_naturales",
+  biologia: "ciencias_naturales",
+  quimica: "ciencias_naturales",
+  fisica: "ciencias_naturales",
+  ciencias: "ciencias_naturales",
+  "ciencias sociales": "ciencias_sociales",
+  sociales: "ciencias_sociales",
+  historia: "ciencias_sociales",
+  geografia: "ciencias_sociales",
+  ingles: "ingles",
+  english: "ingles",
+  tecnologia: "tecnologia",
+  informatica: "tecnologia",
+  tech: "tecnologia",
+};
+
+const stripAccents = (s) =>
+  String(s || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+/** "MATEMÁTICAS" → "matematicas"; null si no se reconoce. */
+function normalizeSubject(raw) {
+  if (!raw) return null;
+  const key = stripAccents(String(raw).trim().toLowerCase());
+  if (SUBJECT_ALIASES[key]) return SUBJECT_ALIASES[key];
+  for (const [alias, subject] of Object.entries(SUBJECT_ALIASES)) {
+    if (key.includes(alias)) return subject;
+  }
+  return null;
+}
+
+/** Promedio de periodos p1..p4 (los que tengan valor). */
+function avgOfPeriods(g) {
+  const ps = [g?.p1, g?.p2, g?.p3, g?.p4]
+    .map(Number)
+    .filter((n) => Number.isFinite(n) && n > 0);
+  return ps.length ? ps.reduce((a, b) => a + b, 0) / ps.length : null;
+}
+
 // ── Data Access ───────────────────────────────────────────────────────────────
 
 async function fetchStudentRow(studentId) {
   const { data } = await supabase
     .from("students")
-    .select("id, grade_level, country_code, school, created_at")
+    .select("id, auth_id, grade_level, country_code, school, created_at, age")
     .eq("id", studentId)
     .maybeSingle();
   return data;
@@ -45,27 +102,47 @@ async function fetchStreak(studentId) {
 }
 
 async function fetchGrades(studentId) {
-  // Grades are not a table of their own — they live in `grade_analyses`
-  // as a JSONB array (`grades: [{subject, score}]`) keyed by the auth user
-  // id (`student_user_id`), not by `students.id`. Resolve the auth id first,
-  // then read the most recent analysis.
+  // Las notas viven en DOS sitios:
+  //  - `students.grades_json`: es lo que escribe la app (tab Calificaciones).
+  //  - `grade_analyses`: histórico por auth id (puede estar vacío si RLS lo bloqueó).
+  // Antes solo se leía el segundo, así que el motor quedaba ciego a las notas
+  // que el estudiante SÍ había escrito. Ahora se consolidan y normalizan.
   const { data: student } = await supabase
     .from("students")
-    .select("auth_id")
+    .select("auth_id, grades_json")
     .eq("id", studentId)
     .maybeSingle();
-  if (!student?.auth_id) return [];
+  if (!student) return [];
 
-  const { data } = await supabase
-    .from("grade_analyses")
-    .select("grades, created_at")
-    .eq("student_user_id", student.auth_id)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  const out = [];
+  const seen = new Set();
 
-  const grades = Array.isArray(data?.grades) ? data.grades : [];
-  return grades.map((g) => ({ subject: g.subject, grade: g.score }));
+  const push = (rawSubject, score) => {
+    const subject = normalizeSubject(rawSubject);
+    const value = Number(score);
+    if (!subject || seen.has(subject) || !(value > 0)) return;
+    seen.add(subject);
+    out.push({ subject, grade: value });
+  };
+
+  for (const g of Array.isArray(student.grades_json) ? student.grades_json : []) {
+    push(g?.subject || g?.label || g?.name, g?.score ?? avgOfPeriods(g));
+  }
+
+  if (student.auth_id) {
+    const { data } = await supabase
+      .from("grade_analyses")
+      .select("grades, created_at")
+      .eq("student_user_id", student.auth_id)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    for (const g of Array.isArray(data?.grades) ? data.grades : []) {
+      push(g?.subject || g?.label || g?.name, g?.score ?? avgOfPeriods(g));
+    }
+  }
+
+  return out;
 }
 
 // ── Competency helpers ────────────────────────────────────────────────────────
@@ -80,18 +157,25 @@ const SUBJECT_MAP = {
 };
 
 function subjectFromCompetencyId(id) {
-  const parts = id.split("_");
+  const parts = String(id || "").split("_");
   // skip country prefix (parts[0] = 'co')
   // subject may be multi-word like ciencias_naturales
 
   // Formato DBA real: co_matematicas_g5_dba1 (dbaCatalog.js)
   const gradeIdx = parts.findIndex((p) => /^g\d+$/.test(p));
-  if (gradeIdx >= 2) return parts.slice(1, gradeIdx).join("_");
-
-  // Formato legado (sin DBA en el currículo para esa materia/país): co_matematicas_6-7_0
-  const rangeIdx = parts.findIndex((p) => /^\d+-\d+$/.test(p));
-  if (rangeIdx < 2) return null;
-  return parts.slice(1, rangeIdx).join("_");
+  let raw = null;
+  if (gradeIdx >= 2) {
+    raw = parts.slice(1, gradeIdx).join("_");
+  } else {
+    // Formato legado (sin DBA en el currículo para esa materia/país): co_matematicas_6-7_0
+    const rangeIdx = parts.findIndex((p) => /^\d+-\d+$/.test(p));
+    if (rangeIdx < 2) return null;
+    raw = parts.slice(1, rangeIdx).join("_");
+  }
+  // El currículo usa "ciencias"/"sociales" pero el motor razona con
+  // "ciencias_naturales"/"ciencias_sociales". Sin unificar, el dominio de una
+  // DBA y la nota de la materia quedaban en claves distintas.
+  return normalizeSubject(raw.replace(/_/g, " ")) || raw;
 }
 
 function groupMasteryBySubject(masteryRows) {
@@ -147,6 +231,7 @@ async function getStudentState(studentId) {
   return {
     studentId,
     grade: student.grade_level,
+    age: student.age ?? null,
     countryCode: student.country_code || "CO",
     masteryBySubject,
     masteryRows,
@@ -302,6 +387,28 @@ function generateRecommendations(state) {
       reason: "Completa una actividad corta hoy para volver a encender tu racha de estudio.",
       difficulty: "easy",
       estimatedMinutes: 5,
+    });
+  }
+
+  // FALLBACK (E6): sin notas ni dominio el plan quedaba vacío (0 actividades).
+  // Se ancla siempre en la materia con menor dominio, o en la primera conocida,
+  // para que un plan de X minutos SIEMPRE tenga al menos una actividad.
+  if (recs.length === 0) {
+    const weakest = Object.entries(state.masteryBySubject || {}).sort(
+      (a, b) => a[1] - b[1],
+    )[0];
+    const subj =
+      weakest?.[0] ||
+      state.weaknesses[0] ||
+      state.strengths[0] ||
+      "matematicas";
+    recs.push({
+      subject: subj,
+      label: SUBJECT_MAP[subj] || subj,
+      action: "practice",
+      reason: `Refuerza ${SUBJECT_MAP[subj] || subj}: es la base para tu próximo nivel.`,
+      difficulty: "easy",
+      estimatedMinutes: 15,
     });
   }
 
@@ -632,6 +739,233 @@ async function saveLearningPlan(studentId, plan) {
   if (error) throw error;
 }
 
+// ── Improvement Plan (Mi Plan) — 4 semanas desde el motor ─────────────────────
+
+function topicForCompetency(competencyId) {
+  const dba = getDbaById(competencyId);
+  if (dba) {
+    const raw = String(dba.text || "").trim();
+    const topic = raw.length > 70 ? `${raw.slice(0, 67).trim()}…` : raw;
+    const subject = normalizeSubject(dba.subject) || dba.subject;
+    return {
+      subject,
+      subjectLabel: dba.subjectLabel || SUBJECT_MAP[subject] || dba.subject,
+      topic: topic || dba.subjectLabel || dba.subject,
+    };
+  }
+  const subject = subjectFromCompetencyId(competencyId);
+  if (!subject) return null;
+  return {
+    subject,
+    subjectLabel: SUBJECT_MAP[subject] || subject,
+    topic: SUBJECT_MAP[subject] || subject,
+  };
+}
+
+/**
+ * Ordena las competencias más débiles. El déficit de dominio pesa más si la
+ * materia además tiene mala nota (< 3.5). Completa hasta `limit` con materias
+ * de nota baja y con las materias por reforzar, para que NUNCA falten semanas.
+ */
+function rankWeakCompetencies(state, limit = 4) {
+  const gradeMap = state.grades || {};
+  const ranked = (state.masteryRows || [])
+    .map((row) => {
+      const info = topicForCompetency(row.competency_id);
+      const subject = info?.subject || subjectFromCompetencyId(row.competency_id);
+      const grade = subject ? gradeMap[subject] : undefined;
+      const mastery = Number(row.mastery_level) || 0;
+      const deficit = 1 - mastery + (grade !== undefined && grade < 3.5 ? 0.2 : 0);
+      return { competencyId: row.competency_id, mastery, subject, info, deficit };
+    })
+    .filter((x) => x.subject)
+    .sort((a, b) => b.deficit - a.deficit);
+
+  const out = [];
+  const seen = new Set();
+  for (const r of ranked) {
+    if (seen.has(r.competencyId)) continue;
+    seen.add(r.competencyId);
+    out.push(r);
+    if (out.length >= limit) break;
+  }
+
+  if (out.length < limit) {
+    const weakSubjects = Object.entries(gradeMap)
+      .filter(([, g]) => Number(g) > 0 && Number(g) < 4.0)
+      .sort((a, b) => a[1] - b[1])
+      .map(([s]) => s);
+    for (const subject of weakSubjects) {
+      if (out.length >= limit) break;
+      if (out.some((o) => o.subject === subject)) continue;
+      const id = getCompetencyIdsForSubject(subject, state.grade || 6, state.countryCode || "CO")[0];
+      if (!id) continue;
+      out.push({ competencyId: id, mastery: 0, subject, info: topicForCompetency(id), deficit: 1, fromGrade: true });
+    }
+  }
+
+  if (out.length < limit) {
+    const candidates = [
+      ...(state.weaknesses || []),
+      ...(state.strengths || []),
+      ...Object.keys(state.masteryBySubject || {}),
+    ];
+    for (const subject of candidates) {
+      if (out.length >= limit) break;
+      if (!SUBJECT_MAP[subject] || out.some((o) => o.subject === subject)) continue;
+      const id = getCompetencyIdsForSubject(subject, state.grade || 6, state.countryCode || "CO")[0];
+      if (!id) continue;
+      out.push({
+        competencyId: id,
+        mastery: state.masteryBySubject?.[subject] ?? 0,
+        subject,
+        info: topicForCompetency(id),
+        deficit: 0.5,
+      });
+    }
+  }
+
+  return out;
+}
+
+function activitiesForTarget(target, vakStyle) {
+  const label = target.info?.subjectLabel || SUBJECT_MAP[target.subject] || target.subject;
+  const topic = target.info?.topic || label;
+  const dominant = ["visual", "auditivo", "kinestesico", "lectura"].includes(vakStyle) ? vakStyle : null;
+  const pct = Math.round((target.mastery || 0) * 100);
+  const reason = `Refuerza ${label} (dominio ${pct}%)`;
+
+  const base = [
+    { titulo: `Repasa ${topic} con ejemplos paso a paso`, duracion: "15-20 min", tipo: dominant || "visual" },
+    { titulo: `Reto de ${label}: ${topic}`, duracion: "10-15 min", tipo: "kinestesico" },
+    { titulo: `Tarjetas de ${topic} para recordar lo clave`, duracion: "10 min", tipo: "lectura" },
+  ];
+  // El estilo VAK va primero: coincide con el ADN de aprendizaje del estudiante.
+  if (dominant) base.sort((a, b) => (a.tipo === dominant ? -1 : b.tipo === dominant ? 1 : 0));
+  return base.map((a) => ({ ...a, done: false, competencyId: target.competencyId || null, reason }));
+}
+
+function tipForTarget(target) {
+  const label = target.info?.subjectLabel || SUBJECT_MAP[target.subject] || target.subject;
+  const pct = Math.round((target.mastery || 0) * 100);
+  if (pct < 40) return `Vamos paso a paso con ${label}: con constancia subirás rápido. 💪`;
+  return `Mantén el ritmo en ${label}; ya casi lo dominas. 🎯`;
+}
+
+/**
+ * Genera el "Mi Plan" de 4 semanas a partir del estado real del estudiante:
+ * una competencia foco por semana (la más débil), con 3 actividades. El LLM
+ * ya no decide: solo puede redactar tips.
+ */
+/**
+ * Arma las 4 semanas a partir de un estado ya cargado (función pura,
+ * testeable sin BD). `buildImprovementPlan` la alimenta con `getStudentState`.
+ */
+function assembleImprovementPlan(state, { vakStyle } = {}) {
+  const targets = rankWeakCompetencies(state, 4);
+
+  const weeks = [];
+  for (let i = 0; i < 4; i++) {
+    const target = targets[i];
+    if (!target) {
+      const subject = state.weaknesses[i] || state.strengths[i] || "matematicas";
+      const label = SUBJECT_MAP[subject] || subject;
+      weeks.push({
+        week: i + 1,
+        title: `Semana ${i + 1}: ${label}`,
+        focus: label,
+        competencyId: null,
+        mastery: state.masteryBySubject?.[subject] ?? null,
+        danTip: `Explora ${label} con actividades cortas y divertidas. ✨`,
+        activities: activitiesForTarget(
+          { subject, mastery: state.masteryBySubject?.[subject] ?? 0, info: { subjectLabel: label, topic: label } },
+          vakStyle,
+        ),
+      });
+      continue;
+    }
+    const info = target.info || {};
+    weeks.push({
+      week: i + 1,
+      title: info.topic
+        ? `Enfócate en: ${info.topic}`
+        : `Semana ${i + 1}: ${info.subjectLabel || target.subject}`,
+      focus: info.subjectLabel || SUBJECT_MAP[target.subject] || target.subject,
+      competencyId: target.competencyId,
+      mastery: target.mastery,
+      danTip: tipForTarget(target),
+      activities: activitiesForTarget(target, vakStyle),
+    });
+  }
+
+  const weakSubjects = [];
+  for (const w of weeks) {
+    if (w.focus && !weakSubjects.includes(w.focus)) weakSubjects.push(w.focus);
+  }
+
+  return {
+    weeks,
+    topActions: weeks.slice(0, 3).map((w) => `Practica 15 minutos de ${w.focus}.`),
+    weakSubjects: weakSubjects.slice(0, 3),
+    source: "plan",
+    generatedAt: Date.now(),
+    needsDiagnostic: false,
+    currentFocus: weeks[0]?.competencyId || null,
+  };
+}
+
+/** Genera "Mi Plan" para un estudiante real (carga estado + arma semanas). */
+async function buildImprovementPlan(studentId, opts = {}) {
+  const state = await getStudentState(studentId);
+  return assembleImprovementPlan(state, opts);
+}
+
+async function loadActiveMonthlyPlan(studentId) {
+  const { data } = await supabase
+    .from("learning_plans")
+    .select("plan_json")
+    .eq("student_id", studentId)
+    .eq("type", "monthly")
+    .eq("is_active", true)
+    .order("generated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return data?.plan_json || null;
+}
+
+/**
+ * Reordena las semanas según el dominio actual SIN perder el progreso:
+ *  - las semanas YA completadas se mantienen al frente, tal cual;
+ *  - las pendientes se re-rankean y se vuelven a numerar.
+ * Devuelve { plan, changed } para que la UI pueda avisar "tu plan se actualizó".
+ */
+async function resequenceImprovementPlan(studentId, { vakStyle } = {}) {
+  const [oldPlan, fresh] = await Promise.all([
+    loadActiveMonthlyPlan(studentId),
+    buildImprovementPlan(studentId, { vakStyle }),
+  ]);
+
+  if (!oldPlan?.weeks?.length) return { plan: fresh, changed: false };
+
+  const isWeekDone = (w) =>
+    Array.isArray(w?.activities) && w.activities.length > 0 && w.activities.every((a) => a.done);
+
+  const doneWeeks = oldPlan.weeks.filter(isWeekDone);
+  const doneCompetencies = new Set(doneWeeks.map((w) => w.competencyId).filter(Boolean));
+  const pendingFresh = fresh.weeks.filter(
+    (w) => !w.competencyId || !doneCompetencies.has(w.competencyId),
+  );
+
+  const orderOf = (plan) =>
+    (plan?.weeks || []).map((w) => w.competencyId || w.focus || "").join(">");
+  const weeks = [...doneWeeks, ...pendingFresh]
+    .slice(0, 4)
+    .map((w, i) => ({ ...w, week: i + 1 }));
+  const merged = { ...fresh, weeks, currentFocus: weeks[0]?.competencyId || null };
+
+  return { plan: merged, changed: orderOf(oldPlan) !== orderOf(merged) };
+}
+
 module.exports = {
   getStudentState,
   detectStrengths,
@@ -646,4 +980,10 @@ module.exports = {
   generateDailyPlan,
   generateWeeklyPlan,
   saveLearningPlan,
+  normalizeSubject,
+  rankWeakCompetencies,
+  activitiesForTarget,
+  assembleImprovementPlan,
+  buildImprovementPlan,
+  resequenceImprovementPlan,
 };

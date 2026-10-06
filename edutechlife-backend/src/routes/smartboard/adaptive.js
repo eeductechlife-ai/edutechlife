@@ -11,6 +11,8 @@ const {
   generateDailyPlan,
   generateWeeklyPlan,
   saveLearningPlan,
+  buildImprovementPlan,
+  resequenceImprovementPlan,
 } = require('../../services/adaptiveLearning');
 const {
   updateCompetencyMastery,
@@ -79,6 +81,39 @@ router.post('/adaptive/weekly-plan', requireAuth, requireStudentAccess, async (r
   } catch (e) {
     console.error('[Adaptive weekly-plan]', e.message);
     res.status(500).json({ error: 'Error generating weekly plan' });
+  }
+});
+
+// POST /api/smartboard/adaptive/improvement-plan
+// Body: { studentId, vakStyle }
+// Genera el "Mi Plan" de 4 semanas desde el motor adaptativo (una competencia
+// foco por semana) y lo persiste en learning_plans (type='monthly').
+router.post('/adaptive/improvement-plan', requireAuth, requireStudentAccess, async (req, res) => {
+  try {
+    const { studentId, vakStyle } = req.body || {};
+    if (!studentId) return res.status(400).json({ error: 'studentId required' });
+    const plan = await buildImprovementPlan(studentId, { vakStyle });
+    await saveLearningPlan(studentId, { ...plan, type: 'monthly' });
+    res.json({ plan });
+  } catch (e) {
+    console.error('[Adaptive improvement-plan]', e.message);
+    res.status(500).json({ error: 'Error generando el plan' });
+  }
+});
+
+// POST /api/smartboard/adaptive/improvement-plan/resequence
+// Body: { studentId, vakStyle }
+// Reordena las semanas según el dominio actual conservando el progreso.
+router.post('/adaptive/improvement-plan/resequence', requireAuth, requireStudentAccess, async (req, res) => {
+  try {
+    const { studentId, vakStyle } = req.body || {};
+    if (!studentId) return res.status(400).json({ error: 'studentId required' });
+    const { plan, changed } = await resequenceImprovementPlan(studentId, { vakStyle });
+    await saveLearningPlan(studentId, { ...plan, type: 'monthly' });
+    res.json({ plan, changed });
+  } catch (e) {
+    console.error('[Adaptive improvement-plan resequence]', e.message);
+    res.status(500).json({ error: 'Error actualizando el plan' });
   }
 });
 

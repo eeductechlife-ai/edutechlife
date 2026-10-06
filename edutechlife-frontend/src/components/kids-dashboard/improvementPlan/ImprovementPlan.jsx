@@ -2,6 +2,7 @@ import { memo, useState } from "react";
 import { motion } from "framer-motion";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useImprovementPlan } from "./useImprovementPlan";
+import DiagnosticQuiz from "./DiagnosticQuiz";
 import { activityRoute, routeLabel } from "./planActivity";
 import {
   setHandoff,
@@ -73,6 +74,12 @@ function WeekCard({
       </div>
 
       <div className="px-4 py-3">
+        {typeof week.mastery === "number" && (
+          <p className="text-[11px] font-semibold mb-2 text-[#C05621]">
+            🎯 Dominio actual{week.focus ? ` en ${week.focus}` : ""}:{" "}
+            {Math.round(week.mastery * 100)}%
+          </p>
+        )}
         {week.danTip && (
           <p className="text-xs italic mb-3 text-[#92400E] bg-[#FB8500]/8 rounded-xl px-3 py-2 leading-snug">
             💬 {week.danTip}
@@ -162,10 +169,17 @@ function WeekCard({
 
 function ImprovementPlan({ onTabChange }) {
   const { vakResult, darkMode, gradeLevel, studentGrades } = useIngenIAKids();
-  const { plan, isGenerating, error, generatePlan, markActivityDone, hasPlan } =
+  const { plan, isGenerating, error, generatePlan, markActivityDone, hasPlan, resequenced, submitDiagnostic } =
     useImprovementPlan();
   const [confirmRegen, setConfirmRegen] = useState(false);
   const [openWeek, setOpenWeek] = useState(null);
+  const [showDiagnostic, setShowDiagnostic] = useState(false);
+
+  // Diagnóstico exprés → siembra el dominio y genera el plan personalizado.
+  const runDiagnostic = async (answers) => {
+    await submitDiagnostic(answers);
+    await generatePlan();
+  };
 
   // Grades and ADN make the plan more precise, but neither blocks it.
   const hasGrades = (studentGrades || []).length > 0;
@@ -285,6 +299,22 @@ function ImprovementPlan({ onTabChange }) {
             🧠 Haz tu ADN de Aprendizaje para personalizarlo
           </button>
         )}
+        {!showDiagnostic ? (
+          <button
+            type="button"
+            onClick={() => setShowDiagnostic(true)}
+            className={hintBtn}
+          >
+            🎯 Diagnóstico rápido para personalizarlo desde hoy
+          </button>
+        ) : (
+          <DiagnosticQuiz
+            gradeLevel={gradeLevel}
+            darkMode={darkMode}
+            onSubmit={runDiagnostic}
+            busy={isGenerating}
+          />
+        )}
       </motion.div>
     );
   }
@@ -319,6 +349,16 @@ function ImprovementPlan({ onTabChange }) {
           />
         </div>
       </div>
+
+      {resequenced && (
+        <div
+          role="status"
+          className="rounded-xl px-3 py-2 text-xs font-bold bg-[#FFEDD5] text-[#9A3412]"
+        >
+          🔄 Actualizamos tu plan con tu último avance: ahora apunta a lo que más
+          necesitas.
+        </div>
+      )}
 
       {/* Key actions + subjects to reinforce, folded into one compact card. */}
       {(plan.topActions?.length > 0 || plan.weakSubjects?.length > 0) && (

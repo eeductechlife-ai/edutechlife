@@ -128,7 +128,12 @@ const PersonalizedPlan = () => {
     addPoints,
     planCompletedActivities: completedActivities,
     setPlanCompletedActivities: setCompletedActivities,
+    supabaseQueries,
   } = useIngenIAKids();
+  // students.id — lo que esperan los endpoints adaptativos. Antes se leía de
+  // localStorage.student_id, que nunca se escribe, así que el plan adaptativo
+  // jamás se pedía y siempre caía en la rutina estática por VAK.
+  const studentDbId = supabaseQueries?.studentData?.data?.id ?? null;
   const [showConfetti, setShowConfetti] = useState(false);
   const [aiPlan, setAiPlan] = useState(null);
   const [aiWeeklyPlan, setAiWeeklyPlan] = useState(null);
@@ -136,7 +141,7 @@ const PersonalizedPlan = () => {
   const [availableMinutes, setAvailableMinutes] = useState(20);
 
   useEffect(() => {
-    const sid = getStudentId();
+    const sid = studentDbId || getStudentId();
     const token = authToken();
     if (!sid || !token) return;
     setLoadingPlan(true);
@@ -167,7 +172,7 @@ const PersonalizedPlan = () => {
         if (weekly?.plan) setAiWeeklyPlan(weekly.plan);
       })
       .finally(() => setLoadingPlan(false));
-  }, [availableMinutes]);
+  }, [availableMinutes, studentDbId]);
 
   const dominantStyle = vakResult?.predominantStyle || "visual";
 
@@ -373,7 +378,7 @@ const PersonalizedPlan = () => {
                       <h4
                         className={`font-semibold text-sm ${isCompleted ? "text-green-600 line-through" : "text-[#1E293B]"}`}
                       >
-                        {act.title}
+                        {act.title || act.label || act.description}
                       </h4>
                       {act.reason && (
                         <p className="text-xs text-[#64748B] truncate">
@@ -387,7 +392,7 @@ const PersonalizedPlan = () => {
                     <DoneButton
                       done={isCompleted}
                       onClick={() => handleCompleteActivity(actId)}
-                      label={act.title}
+                      label={act.title || act.label || act.description}
                     />
                   </div>
                 </motion.div>

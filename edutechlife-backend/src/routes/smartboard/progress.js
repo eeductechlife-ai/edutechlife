@@ -202,7 +202,7 @@ router.get('/improvement-plan', requireAuth, async (req, res) => {
       .eq('auth_id', req.userId)
       .maybeSingle();
 
-    if (!student) return res.json({ plan: null });
+    if (!student) return res.json({ plan: null, needsDiagnostic: true, currentFocus: null });
 
     const { data: plan, error } = await supabase
       .from('learning_plans')
@@ -216,7 +216,11 @@ router.get('/improvement-plan', requireAuth, async (req, res) => {
 
     if (error && error.code !== '42P01' && error.code !== 'PGRST205') throw error;
 
-    res.json({ plan: plan?.plan_json || null });
+    res.json({
+      plan: plan?.plan_json || null,
+      needsDiagnostic: !plan?.plan_json,
+      currentFocus: plan?.plan_json?.currentFocus || null,
+    });
   } catch (e) {
     console.error('Error loading improvement plan:', e.message);
     res.status(500).json({ error: 'Error interno' });

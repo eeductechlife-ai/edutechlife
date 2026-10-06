@@ -7,6 +7,7 @@ import {
 } from "../../../data/curriculum/curriculumHelper";
 import { API_BASE_URL } from "../../../config/api";
 import { getAvgScore } from "../gradeUtils";
+import { getDbaForSubjectGrade } from "../../../utils/dbaCatalog";
 import { normalizePlan } from "./planModel";
 
 function getAuthToken() {
@@ -72,6 +73,59 @@ async function savePlanToServer(plan) {
   }
 }
 
+/**
+ * Pide al MOTOR ADAPTATIVO del backend el plan de 4 semanas (una competencia
+ * foco por semana). Devuelve null si falla, para caer al respaldo por LLM.
+ */
+async function generatePlanFromServer(studentDbId, vakStyle) {
+  const token = getAuthToken();
+  if (!studentDbId || !token) return null;
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/api/ingenia/adaptive/improvement-plan`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ studentId: studentDbId, vakStyle }),
+      },
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.plan || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Re-secuencia las semanas pendientes según el dominio actual (al completar
+ * una semana). Devuelve { plan, changed } o null si no está disponible.
+ */
+async function resequencePlanOnServer(studentDbId, vakStyle) {
+  const token = getAuthToken();
+  if (!studentDbId || !token) return null;
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}/api/ingenia/adaptive/improvement-plan/resequence`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ studentId: studentDbId, vakStyle }),
+      },
+    );
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
 /** Saves a plan where "Mi Plan" reads it (this device + the student's account). */
 export function storePlan(userId, plan) {
   savePlanLocal(userId, plan);
@@ -120,6 +174,25 @@ function parseJson(res) {
 
 const TIMEOUT_MS = 45000;
 
+// Materias del diagnóstico de arranque (frío): para un estudiante sin dominio
+// ni notas, una autoevaluación corta siembra el dominio y de una vez genera un
+// plan personalizado en vez de uno genérico.
+const DIAGNOSTIC_SUBJECTS = [
+  { id: "matematicas", label: "Matemáticas" },
+  { id: "lenguaje", label: "Lenguaje" },
+  { id: "ciencias", label: "Ciencias Naturales" },
+  { id: "sociales", label: "Ciencias Sociales" },
+  { id: "ingles", label: "Inglés" },
+];
+
+/** Materias con DBA disponibles para el grado del estudiante. */
+export function diagnosticSubjectsFor(gradeLevel) {
+  const grade = parseInt(gradeLevel, 10) || 6;
+  return DIAGNOSTIC_SUBJECTS.filter(
+    (s) => getDbaForSubjectGrade(s.id, grade).length > 0,
+  );
+}
+
 export function useImprovementPlan() {
   const {
     vakResult,
@@ -130,11 +203,16 @@ export function useImprovementPlan() {
     gradeLevel,
     studentAge,
     countryCode,
+    supabaseQueries,
   } = useIngenIAKids();
+
+  // students.id — lo que esperan los endpoints adaptativos (no el auth id).
+  const studentDbId = supabaseQueries?.studentData?.data?.id ?? null;
 
   const [plan, setPlan] = useState(() => normalizePlan(loadPlanLocal(userId)));
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState(null);
+  const [resequenced, setResequenced] = useState(false);
   const loadedFromServer = useRef(false);
 
   useEffect(() => {
@@ -247,6 +325,20 @@ ${vakRule}
 
     let timeoutId;
     try {
+      // 1) MOTOR ADAPTATIVO (servidor): plan determinista basado en el dominio
+      //    por competencia y en las notas reales. Es el camino principal.
+      const serverPlan = await generatePlanFromServer(studentDbId, vakStyle);
+      if (serverPlan) {
+        const normalized = normalizePlan({ ...serverPlan, source: "plan" });
+        if (normalized) {
+          setPlan(normalized);
+          storePlan(userId, normalized);
+          return;
+        }
+      }
+
+      // 2) RESPALDO: generación por LLM (comportamiento anterior) si el motor
+      //    no está disponible. Nunca dejamos al estudiante sin plan.
       // callDeepseekSmartboard has no abort signal: race it against a timer
       // so the spinner never stays forever.
       const res = await Promise.race([
@@ -300,10 +392,19 @@ ${vakRule}
     gradeLevel,
     studentAge,
     countryCode,
+    studentDbId,
   ]);
 
   const markActivityDone = useCallback(
     (weekIdx, actIdx) => {
+      // ¿Marcar esta actividad deja la semana completa?
+      const current = plan?.weeks?.[weekIdx];
+      const willComplete =
+        current &&
+        current.activities.every((a, ai) =>
+          ai === actIdx ? !a.done : a.done,
+        );
+
       setPlan((prev) => {
         if (!prev?.weeks) return prev;
         const updated = {
@@ -323,11 +424,70 @@ ${vakRule}
         savePlanToServer(updated);
         return updated;
       });
+
+      // Re-secuencia SOLO al completar una semana, para que el plan siga
+      // apuntando a lo más débil sin alterar el flujo de "marcar a mano".
+      if (willComplete) {
+        const vakStyle = vakResult?.predominantStyle || vakResult?.dominant || "";
+        resequencePlanOnServer(studentDbId, vakStyle).then((res) => {
+          if (!res?.changed || !res.plan) return;
+          const normalized = normalizePlan(res.plan);
+          if (normalized) {
+            setPlan(normalized);
+            savePlanLocal(userId, normalized);
+            setResequenced(true);
+            setTimeout(() => setResequenced(false), 7000);
+          }
+        });
+      }
     },
-    [userId],
+    [userId, plan, studentDbId, vakResult],
   );
 
   const hasPlan = Boolean(plan?.weeks?.length);
 
-  return { plan, isGenerating, error, generatePlan, markActivityDone, hasPlan };
+  /**
+   * Siembra el dominio desde la autoevaluación y deja listo el motor para
+   * generar un plan personalizado. No bloquea: el plan se genera igual.
+   */
+  const submitDiagnostic = useCallback(
+    async (answers) => {
+      const grade = parseInt(gradeLevel, 10) || 6;
+      const entries = [];
+      for (const [subject, score] of Object.entries(answers || {})) {
+        if (score == null) continue;
+        getDbaForSubjectGrade(subject, grade)
+          .slice(0, 3)
+          .forEach((d) =>
+            entries.push({ competencyId: d.id, score }),
+          );
+      }
+      const token = getAuthToken();
+      if (!studentDbId || !token || entries.length === 0) return;
+      try {
+        await fetch(`${API_BASE_URL}/api/ingenia/adaptive/mastery`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ studentId: studentDbId, entries }),
+        });
+      } catch {
+        // El plan se genera de todos modos.
+      }
+    },
+    [studentDbId, gradeLevel],
+  );
+
+  return {
+    plan,
+    isGenerating,
+    error,
+    generatePlan,
+    markActivityDone,
+    hasPlan,
+    resequenced,
+    submitDiagnostic,
+  };
 }

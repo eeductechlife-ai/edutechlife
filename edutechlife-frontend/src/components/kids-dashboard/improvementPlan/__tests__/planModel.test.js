@@ -28,6 +28,8 @@ describe("normalizePlan", () => {
         duracion: "15 min",
         tipo: "visual",
         done: true,
+        competencyId: null,
+        reason: "",
       },
     ]);
     expect(plan.topActions).toHaveLength(3);
@@ -44,6 +46,8 @@ describe("normalizePlan", () => {
     expect(plan.weeks[0].activities[0]).toEqual({
       titulo: "Lee 10 min",
       done: false,
+      competencyId: null,
+      reason: "",
     });
   });
 });

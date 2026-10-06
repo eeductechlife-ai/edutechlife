@@ -400,7 +400,12 @@ export const useSessionCreate = (): UseMutationResult<
 export const useSessionEnd = (): UseMutationResult<
   Session,
   Error,
-  { sessionId: string; points_earned?: number; completion_percentage?: number }
+  {
+    sessionId: string;
+    points_earned?: number;
+    completion_percentage?: number;
+    duration_minutes?: number;
+  }
 > => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -410,10 +415,12 @@ export const useSessionEnd = (): UseMutationResult<
       sessionId,
       points_earned = 0,
       completion_percentage = 0,
+      duration_minutes,
     }: {
       sessionId: string;
       points_earned?: number;
       completion_percentage?: number;
+      duration_minutes?: number;
     }) => {
       if (!user?.id) throw new Error("No authenticated user");
 
@@ -431,6 +438,9 @@ export const useSessionEnd = (): UseMutationResult<
           end_time: new Date().toISOString(),
           points_earned,
           completion_percentage,
+          ...(duration_minutes !== undefined
+            ? { duration_minutes }
+            : {}),
         })
         .eq("id", sessionId)
         .eq("student_id", student.data.id)

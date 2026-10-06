@@ -10,7 +10,9 @@ const TIPOS = ["visual", "auditivo", "kinestesico", "lectura"];
 
 function normalizeActivity(a) {
   if (typeof a === "string")
-    return a.trim() ? { titulo: a.trim(), done: false } : null;
+    return a.trim()
+      ? { titulo: a.trim(), done: false, competencyId: null, reason: "" }
+      : null;
   const titulo = str(a?.titulo || a?.title || a?.nombre);
   if (!titulo) return null;
   const tipo = str(a.tipo).toLowerCase();
@@ -19,6 +21,9 @@ function normalizeActivity(a) {
     duracion: str(a.duracion || a.duration),
     tipo: TIPOS.includes(tipo) ? tipo : "",
     done: a.done === true,
+    // Metadatos del motor adaptativo (si vienen; si no, quedan vacíos).
+    competencyId: str(a?.competencyId) || null,
+    reason: str(a?.reason) || "",
   };
 }
 
@@ -30,6 +35,8 @@ export function normalizePlan(raw) {
       title: str(w?.title),
       focus: str(w?.focus),
       danTip: str(w?.danTip || w?.daniTip),
+      competencyId: str(w?.competencyId) || null,
+      mastery: typeof w?.mastery === "number" ? w.mastery : null,
       activities: list(w?.activities)
         .map(normalizeActivity)
         .filter(Boolean)
@@ -45,6 +52,8 @@ export function normalizePlan(raw) {
     weakSubjects: list(raw?.weakSubjects).map(str).filter(Boolean).slice(0, 3),
     source: raw?.source === "notas" ? "notas" : "plan",
     generatedAt: Number(raw?.generatedAt) || Date.now(),
+    needsDiagnostic: raw?.needsDiagnostic === true,
+    currentFocus: str(raw?.currentFocus) || null,
   };
 }
 

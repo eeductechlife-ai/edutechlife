@@ -525,10 +525,15 @@ export const IngenIAKidsProvider = ({ children }) => {
     currentSessionRef.current = localSession;
 
     // Create session in DB — fire-and-forget with ref to save sessionId
+    // subject/type deben cumplir los CHECK de `sessions`
+    // (subject IN math|language|science|history|art|general,
+    //  type IN lesson|game|quiz|free_practice|challenge). Antes iba
+    // "dashboard"/"dashboard" y el insert fallaba en silencio: sin sesiones,
+    // el motor adaptativo no tenía actividad ni racha.
     sessionCreateMutation.mutate(
       {
-        subject: "dashboard",
-        type: "dashboard",
+        subject: "general",
+        type: "free_practice",
       },
       {
         onSuccess: (data) => {
@@ -542,6 +547,7 @@ export const IngenIAKidsProvider = ({ children }) => {
 
     return () => {
       // Add to local sessions array
+      let durationMinutes = 0;
       if (currentSessionRef.current) {
         const ended = {
           ...currentSessionRef.current,
@@ -552,6 +558,7 @@ export const IngenIAKidsProvider = ({ children }) => {
               60,
           ),
         };
+        durationMinutes = ended.duration;
         setSessions((prev) => [...prev, ended]);
       }
 
@@ -561,6 +568,7 @@ export const IngenIAKidsProvider = ({ children }) => {
           {
             sessionId: dbSessionIdRef.current,
             completion_percentage: 100,
+            duration_minutes: durationMinutes,
           },
           {
             onError: (err) => {
