@@ -323,6 +323,7 @@ const ResourceViewerModal = ({
         case "pdf-thumbnail":
           return (
             <PDFThumbnailViewer
+              alreadyViewed={isMarkedAsViewed}
               resource={resource}
               onAutoComplete={handleAutoComplete}
             />
