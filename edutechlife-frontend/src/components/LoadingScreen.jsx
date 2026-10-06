@@ -11,8 +11,24 @@ const LOADING_STEP_KEYS = [
   { progress: 100, key: "loading.status_done" },
 ];
 
+// El diccionario i18n se descarga después del primer pintado: mientras tanto
+// t() devuelve la clave cruda. Estos textos evitan mostrar "loading.status_*".
+const FALLBACK_TEXT = {
+  "loading.status_start": "Preparando tu experiencia...",
+  "loading.status_vak": "Personalizando con metodología VAK...",
+  "loading.status_ai": "Activando tus tutores con IA...",
+  "loading.status_done": "¡Todo listo!",
+  "loading.feature_ai": "IA Integrada",
+  "loading.feature_vak": "VAK Metodología",
+  "loading.feature_cert": "Certificaciones",
+};
+
 const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
+  const t = (key) => {
+    const value = translate(key);
+    return value === key ? (FALLBACK_TEXT[key] ?? key) : value;
+  };
   const [stepIndex, setStepIndex] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
 
@@ -125,7 +141,11 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
                 border: "1px solid rgba(0, 75, 99, 0.2)",
               }}
             >
-              <Icon name="fa-robot" className="w-6 h-6" style={{ color: "#004B63" }} />
+              <Icon
+                name="fa-robot"
+                className="w-6 h-6"
+                style={{ color: "#004B63" }}
+              />
             </div>
             <span>{t("loading.feature_ai")}</span>
           </div>
@@ -138,7 +158,11 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
                 border: "1px solid rgba(0, 75, 99, 0.2)",
               }}
             >
-              <Icon name="fa-brain" className="w-6 h-6" style={{ color: "#004B63" }} />
+              <Icon
+                name="fa-brain"
+                className="w-6 h-6"
+                style={{ color: "#004B63" }}
+              />
             </div>
             <span>{t("loading.feature_vak")}</span>
           </div>
@@ -151,7 +175,11 @@ const LoadingScreen = ({ onComplete, minDuration = 2500 }) => {
                 border: "1px solid rgba(0, 75, 99, 0.2)",
               }}
             >
-              <Icon name="fa-award" className="w-6 h-6" style={{ color: "#004B63" }} />
+              <Icon
+                name="fa-award"
+                className="w-6 h-6"
+                style={{ color: "#004B63" }}
+              />
             </div>
             <span>{t("loading.feature_cert")}</span>
           </div>

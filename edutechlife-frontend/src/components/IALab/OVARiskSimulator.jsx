@@ -146,7 +146,16 @@ export default function OVARiskSimulator({ onComplete }) {
           <h3 className="text-2xl font-black text-white mb-2">
             {t("ova.risksim.game_title")}
           </h3>
-          <p className="text-gray-300 mb-8">{t("ova.risksim.game_desc")}</p>
+          <p className="text-gray-300 mb-2">{t("ova.risksim.game_desc")}</p>
+          <p
+            className="text-sm font-bold text-yellow-300 mb-8"
+            aria-live="polite"
+          >
+            {t("ova.risksim.game_progress", {
+              done: solvedStars.length,
+              total: gameData.length,
+            })}
+          </p>
           <div className="flex justify-center gap-6">
             {gameData.map((_, i) => (
               <button
@@ -198,16 +207,16 @@ export default function OVARiskSimulator({ onComplete }) {
             </button>
           ))}
         </div>
-          {showFeedback && (
-            <div
-              role="alert"
-              className={`mt-6 p-4 rounded-xl font-medium max-w-xl mx-auto ${selectedAnswer === data.correct ? "bg-emerald-100 text-emerald-800 border border-emerald-300" : "bg-red-100 text-red-800 border border-red-300"}`}
-            >
-              {selectedAnswer === data.correct
-                ? data.feedback
-                : t("ova.risksim.fallback_feedback")}
-            </div>
-          )}
+        {showFeedback && (
+          <div
+            role="alert"
+            className={`mt-6 p-4 rounded-xl font-medium max-w-xl mx-auto ${selectedAnswer === data.correct ? "bg-emerald-100 text-emerald-800 border border-emerald-300" : "bg-red-100 text-red-800 border border-red-300"}`}
+          >
+            {selectedAnswer === data.correct
+              ? data.feedback
+              : t("ova.risksim.fallback_feedback")}
+          </div>
+        )}
         {showFeedback && (
           <button
             onClick={resetGame}
@@ -258,7 +267,10 @@ export default function OVARiskSimulator({ onComplete }) {
               <VoiceReader text={t("ova.risksim.welcome_voice")} />
             </div>
           </div>
-          <div className="flex border-b border-gray-100 dark:border-slate-700" role="tablist">
+          <div
+            className="flex border-b border-gray-100 dark:border-slate-700"
+            role="tablist"
+          >
             {[
               { id: "content", label: t("ova.risksim.tab_content") },
               { id: "game", label: t("ova.risksim.tab_game") },
@@ -354,7 +366,9 @@ export default function OVARiskSimulator({ onComplete }) {
                     t("ova.risksim.decalogue_4"),
                   ].map((item, i) => (
                     <li key={i} className="flex gap-3">
-                      <span className="text-[var(--theme-primary)] font-bold">{i + 1}.</span>
+                      <span className="text-[var(--theme-primary)] font-bold">
+                        {i + 1}.
+                      </span>
                       <span>{item}</span>
                     </li>
                   ))}

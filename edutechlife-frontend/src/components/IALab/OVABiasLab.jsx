@@ -19,7 +19,11 @@ import {
   Gamepad2,
 } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
-import { contentData, gameData, learningObjectives } from "../../data/ova/biasLab";
+import {
+  contentData,
+  gameData,
+  learningObjectives,
+} from "../../data/ova/biasLab";
 import { OVAIntro } from "./shared";
 
 const BrainIcon = ({ className = "" }) => (
@@ -126,7 +130,12 @@ export default function OVABiasLab({ onComplete }) {
         <div className="fixed inset-0 -z-10 opacity-60 bg-[linear-gradient(to_right,#EAEAEA_1px,transparent_1px),linear-gradient(to_bottom,#EAEAEA_1px,transparent_1px)] bg-[length:50px_50px]" />
         <div className="fixed -top-[15%] -left-[10%] w-[50vw] h-[50vw] -z-10 bg-[radial-gradient(circle,rgba(0,188,212,0.15)_0%,rgba(255,255,255,0)_70%)]" />
         <div className="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] -z-10 bg-[radial-gradient(circle,rgba(10,53,80,0.08)_0%,rgba(255,255,255,0)_70%)]" />
-        <aside role="dialog" aria-modal="false" aria-label={t("ova.biaslab.sidebar_subtitle")} className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-screen border-r border-blue-100">
+        <aside
+          role="dialog"
+          aria-modal="false"
+          aria-label={t("ova.biaslab.sidebar_subtitle")}
+          className="w-full md:w-64 bg-white/90 dark:bg-slate-800/90 flex flex-col shadow-xl z-10 md:min-h-screen border-r border-blue-100"
+        >
           <div className="p-6 text-center border-b border-blue-50">
             <EdutechLogo />
             <p className="text-[10px] uppercase mt-2 text-slate-600 dark:text-slate-300 font-bold tracking-[0.2em]">
@@ -235,8 +244,7 @@ export default function OVABiasLab({ onComplete }) {
                         {t("ova.biaslab.case_study")}
                       </p>
                       <p className="text-sm italic">
-                        "Domina NotebookLM como tu asistente definitivo para
-                        evitar alucinaciones."
+                        "{t("ova.biaslab.notebooklm_quote")}"
                       </p>
                     </div>
                   </div>
@@ -352,7 +360,10 @@ export default function OVABiasLab({ onComplete }) {
               </div>
             )}
           </div>
-          <footer className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4" aria-label={t("ova.biaslab.footer")}>
+          <footer
+            className="mt-4 text-center text-slate-600 dark:text-slate-300 text-xs py-4"
+            aria-label={t("ova.biaslab.footer")}
+          >
             {t("ova.biaslab.footer")}
           </footer>
         </main>

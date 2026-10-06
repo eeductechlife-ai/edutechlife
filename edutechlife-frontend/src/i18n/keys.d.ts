@@ -3781,6 +3781,7 @@ export type TranslationKeys = {
   "ova.biaslab.back_to_start": string;
   "ova.biaslab.badge": string;
   "ova.biaslab.case_study": string;
+  "ova.biaslab.notebooklm_quote": string;
   "ova.biaslab.default_voice_text": string;
   "ova.biaslab.footer": string;
   "ova.biaslab.game_complete_desc": string;
@@ -4617,6 +4618,7 @@ export type TranslationKeys = {
   "ova.risksim.fallback_feedback": string;
   "ova.risksim.footer": string;
   "ova.risksim.game_desc": string;
+  "ova.risksim.game_progress": string;
   "ova.risksim.game_title": string;
   "ova.risksim.icon_justice": string;
   "ova.risksim.icon_privacy": string;
