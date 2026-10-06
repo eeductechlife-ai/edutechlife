@@ -8,6 +8,11 @@ import React, {
 import PropTypes from "prop-types";
 import { Icon } from "../../utils/iconMapping.jsx";
 import { useTranslation } from "../../i18n/I18nProvider";
+import {
+  scopedGet,
+  scopedSet,
+  scopedRemove,
+} from "../../utils/userScopedStorage";
 
 const getSteps = (t) => [
   {
@@ -16,7 +21,7 @@ const getSteps = (t) => [
     description: t("ialab.tour.step_0_desc"),
   },
   {
-    target: "tour-tabs",
+    target: ["tour-tabs", "tour-tabs-desktop", "tour-tabs-rail"],
     title: t("ialab.tour.step_1_title"),
     description: t("ialab.tour.step_1_desc"),
   },
@@ -26,17 +31,17 @@ const getSteps = (t) => [
     description: t("ialab.tour.step_2_desc"),
   },
   {
-    target: "tour-objetivos",
+    target: ["tour-objetivos", "tour-section-objetivos"],
     title: t("ialab.tour.step_3_title"),
     description: t("ialab.tour.step_3_desc"),
   },
   {
-    target: "tour-temas",
+    target: ["tour-temas", "tour-topics-list", "tour-section-contenido"],
     title: t("ialab.tour.step_4_title"),
     description: t("ialab.tour.step_4_desc"),
   },
   {
-    target: "tour-actividades",
+    target: ["tour-actividades", "tour-section-actividades"],
     title: t("ialab.tour.step_5_title"),
     description: t("ialab.tour.step_5_desc"),
   },
@@ -56,7 +61,7 @@ const getSteps = (t) => [
     description: t("ialab.tour.step_8_desc"),
   },
   {
-    target: "tour-herramientas",
+    target: ["tour-herramientas", "tour-section-practica"],
     title: t("ialab.tour.step_9_title"),
     description: t("ialab.tour.step_9_desc"),
   },
@@ -88,9 +93,10 @@ const IALabTour = ({ hasStartedCourse }) => {
     (stepIndex) => {
       const selectors = getTargetSelectors(stepIndex);
       if (!selectors) return null;
+      // Un mismo paso puede existir en varias variantes (pestañas móviles,
+      // sidebar de escritorio, rail de herramientas): se usa la primera visible.
       for (const sel of selectors) {
-        const el = document.querySelector(`[data-tour="${sel}"]`);
-        if (el) {
+        for (const el of document.querySelectorAll(`[data-tour="${sel}"]`)) {
           const rect = el.getBoundingClientRect();
           if (rect.width > 0 && rect.height > 0) {
             return { el, rect };
@@ -170,7 +176,7 @@ const IALabTour = ({ hasStartedCourse }) => {
   }, [measureTarget]);
 
   const startTour = useCallback(() => {
-    localStorage.removeItem(TOUR_KEY);
+    scopedRemove(TOUR_KEY);
     retryCount.current = 0;
     const attempt = () => {
       const result = findTarget(0);
@@ -200,11 +206,11 @@ const IALabTour = ({ hasStartedCourse }) => {
   );
 
   useEffect(() => {
-    const done = localStorage.getItem(TOUR_KEY);
+    const done = scopedGet(TOUR_KEY);
     if (done) return;
     // No mostrar el tour a estudiantes que ya empezaron el curso.
     if (hasStartedCourse) {
-      localStorage.setItem(TOUR_KEY, "true");
+      scopedSet(TOUR_KEY, "true");
       return;
     }
     // Si el tour de bienvenida se mostró en esta misma sesión, no encadenar
@@ -238,7 +244,7 @@ const IALabTour = ({ hasStartedCourse }) => {
       const next = findNextValidStep(step + 1);
       if (next >= 0) setStep(next);
       else {
-        localStorage.setItem(TOUR_KEY, "true");
+        scopedSet(TOUR_KEY, "true");
         setStep(-1);
       }
       return;
@@ -295,13 +301,13 @@ const IALabTour = ({ hasStartedCourse }) => {
     if (next >= 0) {
       setStep(next);
     } else {
-      localStorage.setItem(TOUR_KEY, "true");
+      scopedSet(TOUR_KEY, "true");
       setStep(-1);
     }
   };
 
   const handleSkip = () => {
-    localStorage.setItem(TOUR_KEY, "true");
+    scopedSet(TOUR_KEY, "true");
     setStep(-1);
   };
 

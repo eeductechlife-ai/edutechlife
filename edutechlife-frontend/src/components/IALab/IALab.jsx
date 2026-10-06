@@ -1108,6 +1108,7 @@ const IALabContent = memo(function () {
                         }
                         className="md:sticky md:top-8 hidden max-h-[calc(100dvh-11rem)] w-52 flex-shrink-0 self-start md:flex md:flex-col md:gap-1.5"
                         data-testid="ialab-tabs-desktop"
+                        data-tour="tour-tabs-desktop"
                         role="tablist"
                       >
                         <TabPills
