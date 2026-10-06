@@ -38,6 +38,7 @@ const MobileHeader = ({
         <div className="relative">
           <button
             ref={notifTriggerRef}
+            data-tour="tour-notificaciones"
             onClick={() => setNotifOpen((v) => !v)}
             className="relative h-11 w-11 rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/50"
             aria-label={t("ialab.notif_mobile_aria")}
