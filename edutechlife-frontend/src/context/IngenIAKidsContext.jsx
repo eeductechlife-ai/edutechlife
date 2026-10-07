@@ -44,6 +44,7 @@ import {
 import useTimetable from "../hooks/useTimetable";
 import { useSubjectProgressPersistence } from "../hooks/useSubjectProgressPersistence";
 import { useDaniMemory } from "../hooks/useDaniMemory";
+import { ageGroupFor } from "../utils/studentLevel";
 
 export const IngenIAKidsContext = createContext();
 
@@ -1041,8 +1042,7 @@ export const IngenIAKidsProvider = ({ children }) => {
     // Student
     studentAge,
     setStudentAge,
-    ageGroup:
-      studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior",
+    ageGroup: ageGroupFor(studentAge),
     gradeLevel,
     setGradeLevel,
     countryCode,

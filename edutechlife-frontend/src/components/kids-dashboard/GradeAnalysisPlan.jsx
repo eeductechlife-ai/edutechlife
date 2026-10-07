@@ -144,14 +144,17 @@ const GradeAnalysisPlan = memo(
                         </div>
                         <p className="text-sm text-[#374151]">{w.why}</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          <div className="p-2 rounded-xl bg-purple-50 border border-purple-100">
-                            <p className="text-xs font-bold text-purple-600 mb-1">
-                              👁️ VAK
-                            </p>
-                            <p className="text-xs text-purple-700">
-                              {w.vakTip}
-                            </p>
-                          </div>
+                          {/* Solo con ADN hecho: sin él no hay estilo que mostrar. */}
+                          {w.vakTip && (
+                            <div className="p-2 rounded-xl bg-purple-50 border border-purple-100">
+                              <p className="text-xs font-bold text-purple-600 mb-1">
+                                👁️ VAK
+                              </p>
+                              <p className="text-xs text-purple-700">
+                                {w.vakTip}
+                              </p>
+                            </div>
+                          )}
                           <div className="p-2 rounded-xl bg-cyan-50 border border-cyan-100">
                             <p className="text-xs font-bold text-cyan-600 mb-1">
                               🔬 STEAM
@@ -183,8 +186,8 @@ const GradeAnalysisPlan = memo(
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#F1F5F9] border border-[#E2E8F0] text-xs text-[#64748B]">
             <span>👨‍👩‍👧</span>
             <span>
-              El informe completo para tus padres está disponible en su panel de
-              seguimiento.
+              Tus padres ven tu avance en su panel de seguimiento si ya están
+              conectados a tu cuenta.
             </span>
           </div>
 

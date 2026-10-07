@@ -169,8 +169,16 @@ function WeekCard({
 
 function ImprovementPlan({ onTabChange }) {
   const { vakResult, darkMode, gradeLevel, studentGrades } = useIngenIAKids();
-  const { plan, isGenerating, error, generatePlan, markActivityDone, hasPlan, resequenced, submitDiagnostic } =
-    useImprovementPlan();
+  const {
+    plan,
+    isGenerating,
+    error,
+    generatePlan,
+    markActivityDone,
+    hasPlan,
+    resequenced,
+    submitDiagnostic,
+  } = useImprovementPlan();
   const [confirmRegen, setConfirmRegen] = useState(false);
   const [openWeek, setOpenWeek] = useState(null);
   const [showDiagnostic, setShowDiagnostic] = useState(false);
@@ -264,8 +272,9 @@ function ImprovementPlan({ onTabChange }) {
             Tu Plan de Mejora
           </h2>
           <p className={`!m-0 mt-1 text-sm max-w-xs mx-auto ${sub}`}>
-            Dani te arma un plan de 4 semanas con actividades cortas para subir
-            tus notas. Vas marcando lo que haces. ✅
+            Dani te arma un plan de hasta 4 semanas, una materia por semana, con
+            actividades cortas para subir tus notas. Vas marcando lo que haces.
+            ✅
           </p>
         </div>
         {error && (
@@ -332,7 +341,11 @@ function ImprovementPlan({ onTabChange }) {
             {globalPct === 100
               ? "🏆 ¡Completaste tu plan!"
               : `Llevas ${doneActivities} de ${totalActivities} actividades`}
-            {gradeLevel ? ` · Grado ${gradeLevel}` : ""}
+            <span className="block text-[11px] font-semibold !text-white/85">
+              Plan de {plan.weeks.length}{" "}
+              {plan.weeks.length === 1 ? "semana" : "semanas"}
+              {gradeLevel ? ` · para ${gradeLevel}.º grado` : ""}
+            </span>
           </p>
           <span className="text-xl font-black leading-none">{globalPct}%</span>
         </div>
@@ -355,8 +368,8 @@ function ImprovementPlan({ onTabChange }) {
           role="status"
           className="rounded-xl px-3 py-2 text-xs font-bold bg-[#FFEDD5] text-[#9A3412]"
         >
-          🔄 Actualizamos tu plan con tu último avance: ahora apunta a lo que más
-          necesitas.
+          🔄 Actualizamos tu plan con tu último avance: ahora apunta a lo que
+          más necesitas.
         </div>
       )}
 

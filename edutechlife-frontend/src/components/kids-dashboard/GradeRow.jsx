@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { motion } from "framer-motion";
 import { gradeColor, gradeEmoji, getAvgScore } from "./gradeUtils";
 
@@ -14,41 +14,63 @@ function periodTrend(grade) {
   return { delta, dir: delta > 0.05 ? "up" : delta < -0.05 ? "down" : "flat" };
 }
 
-const PeriodInput = ({ label, value, onChange }) => (
-  <label className="flex flex-col items-center gap-0.5 min-w-0">
-    <span className="text-[10px] font-bold text-[#94A3B8] uppercase">
-      {label}
-    </span>
-    <input
-      type="text"
-      inputMode="decimal"
-      placeholder="—"
-      value={value != null ? value : ""}
-      onFocus={(e) => e.target.select()}
-      onChange={(e) => {
-        const raw = e.target.value.replace(",", ".");
-        if (raw === "" || raw === "-") {
-          onChange(null);
-          return;
-        }
-        const n = parseFloat(raw);
-        if (!isNaN(n) && n >= 0 && n <= 5) onChange(n);
-      }}
-      aria-label={`Nota ${label}`}
-      className="w-full min-w-0 h-11 text-center text-base font-bold border-2 rounded-lg outline-none"
-      style={{
-        color: value != null ? gradeColor(Number(value)) : "#94A3B8",
-        borderColor:
-          value != null ? gradeColor(Number(value)) + "40" : "#E2E8F0",
-      }}
-    />
-  </label>
-);
+export const NOTE_RANGE_MESSAGE = "Escribe una nota entre 1,0 y 5,0";
+
+// Escala MEN: 1.0–5.0. Antes un valor fuera de rango se descartaba sin
+// avisar y el campo parecía ignorar lo escrito. Ahora se muestra un mensaje y
+// al salir del campo vuelve a la última nota válida.
+const PeriodInput = ({ label, value, onChange, onInvalid }) => {
+  const [draft, setDraft] = useState(null);
+  const shown = draft != null ? draft : value != null ? String(value) : "";
+  return (
+    <label className="flex flex-col items-center gap-0.5 min-w-0">
+      <span className="text-[10px] font-bold text-[#64748B] uppercase">
+        {label}
+      </span>
+      <input
+        type="text"
+        inputMode="decimal"
+        placeholder="—"
+        value={shown}
+        onFocus={(e) => e.target.select()}
+        onChange={(e) => {
+          const typed = e.target.value;
+          setDraft(typed);
+          const text = typed.trim().replace(",", ".");
+          if (text === "") {
+            onInvalid?.("");
+            onChange(null);
+            return;
+          }
+          const n = Number(text);
+          if (Number.isNaN(n) || n < 1 || n > 5) {
+            onInvalid?.(NOTE_RANGE_MESSAGE);
+            return;
+          }
+          onInvalid?.("");
+          onChange(n);
+        }}
+        onBlur={() => {
+          setDraft(null);
+          onInvalid?.("");
+        }}
+        aria-label={`Nota ${label}`}
+        className="w-full min-w-0 h-11 text-center text-base font-bold border-2 rounded-lg outline-none"
+        style={{
+          color: value != null ? gradeColor(Number(value)) : "#64748B",
+          borderColor:
+            value != null ? gradeColor(Number(value)) + "40" : "#E2E8F0",
+        }}
+      />
+    </label>
+  );
+};
 
 const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
   const avg = getAvgScore(grade);
   const trend = periodTrend(grade);
   const dropping = trend?.dir === "down" && avg > 0 && avg < 3.5;
+  const [noteError, setNoteError] = useState("");
   return (
     <motion.div
       initial={{ opacity: 0, x: -10 }}
@@ -115,6 +137,7 @@ const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
             label={`P${i + 1}`}
             value={grade[p]}
             onChange={(val) => onUpdate(grade.id, p, val)}
+            onInvalid={setNoteError}
           />
         ))}
         <div className="flex flex-col items-center gap-0.5 min-w-0">
@@ -132,6 +155,11 @@ const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
           </span>
         </div>
       </div>
+      {noteError && (
+        <p role="alert" className="!m-0 text-xs font-bold text-[#B91C1C]">
+          {noteError}
+        </p>
+      )}
     </motion.div>
   );
 });

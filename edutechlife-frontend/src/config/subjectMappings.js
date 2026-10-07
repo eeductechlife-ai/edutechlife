@@ -22,7 +22,7 @@ const SUBJECT_EMOJI_MAP = {
   "ciencias naturales": "🔬",
   "química-física": "⚗️",
   química: "⚗️",
-  fisica: "⚛️",
+  fisica: "⚡",
   biología: "🧬",
   biologia: "🧬",
 
@@ -114,7 +114,7 @@ export function getSubjectEmoji(subjectName) {
     return "🇬🇧";
   if (normalized.includes("arte")) return "🎨";
   if (normalized.includes("física") || normalized.includes("fisica"))
-    return "⚛️";
+    return "⚡";
   if (normalized.includes("educación") || normalized.includes("educacion"))
     return "🎓";
   if (normalized.includes("tecnolog")) return "💻";

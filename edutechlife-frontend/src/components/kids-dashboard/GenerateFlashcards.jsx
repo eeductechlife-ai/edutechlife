@@ -14,6 +14,7 @@ import {
 } from "../../services/flashcardAI";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
+import { effectiveGrade } from "../../utils/studentLevel";
 
 const PRACTICE_GRADIENT =
   "linear-gradient(135deg, #EF476F 0%, #FF6B9D 55%, #FF8FA3 100%)";
@@ -26,21 +27,24 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
   );
   useEffect(() => clearHandoff(HANDOFF_FLASHCARDS_TOPIC), []);
   const { gradeLevel, studentAge, subjectsWithGrades } = useIngenIAKids();
-  const grade = gradeBand(gradeLevel, studentAge);
+  // Grado que cuadra con la edad: un perfil de 12 años en «9.º» no debe
+  // recibir ideas de ecuaciones cuadráticas ni de la Guerra Fría.
+  const level = effectiveGrade(gradeLevel, studentAge);
+  const grade = gradeBand(level, studentAge);
   // Ready-made topics from the kid's own grade (MEN DBA), weakest subjects
   // first, so nobody is stuck in front of an empty box.
   const ideas = useMemo(() => {
-    if (!gradeLevel) return [];
+    if (!level) return [];
     const subjects = buildSubjectList(subjectsWithGrades || []);
     const ordered = [
       ...subjects.filter((s) => s.weak),
       ...subjects.filter((s) => !s.weak),
     ];
     return ordered
-      .map((s) => ({ emoji: s.emoji, text: gradeTopics(s.id, gradeLevel)[0] }))
+      .map((s) => ({ emoji: s.emoji, text: gradeTopics(s.id, level)[0] }))
       .filter((x) => x.text)
       .slice(0, 3);
-  }, [gradeLevel, subjectsWithGrades]);
+  }, [level, subjectsWithGrades]);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState(null);
 
@@ -96,8 +100,8 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
             {t("kid.flashcards.generate_title")}
           </p>
           <p className="text-[11px]" style={{ color: textSecondary }}>
-            {gradeLevel
-              ? `La IA crea 10 tarjetas para tu grado ${gradeLevel}°`
+            {level
+              ? `La IA crea 10 tarjetas para tu grado ${level}°`
               : "La IA crea 10 tarjetas para tu nivel"}
           </p>
         </div>
@@ -208,7 +212,7 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
               style={{ color: textSecondary }}
             >
               {t("kid.flashcards.generating_for", {
-                grade: gradeLevel ? `${gradeLevel}°` : grade,
+                grade: level ? `${level}°` : grade,
               })}
             </p>
           </motion.div>

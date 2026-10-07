@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
+import { getCatalogSubject } from "../../config/subjectCatalog";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { getFileIcon } from "../../utils/documentParser";
 import {
@@ -9,13 +10,15 @@ import {
 } from "../../services/documentSummaryAI";
 import ScannerSummaryResult from "./ScannerSummaryResult";
 
+const emojiOf = (id) => getCatalogSubject(id).emoji;
+
 const getSubjects = (t) => [
-  { v: "matematicas", l: t("scanner.subject_math"), i: "🔢" },
-  { v: "lenguaje", l: t("scanner.subject_language"), i: "📖" },
-  { v: "ciencias", l: t("scanner.subject_science"), i: "🔬" },
-  { v: "historia", l: t("scanner.subject_history"), i: "🏛️" },
-  { v: "ingles", l: t("scanner.subject_english"), i: "🌎" },
-  { v: "arte", l: t("scanner.subject_art"), i: "🎨" },
+  { v: "matematicas", l: t("scanner.subject_math"), i: emojiOf("matematicas") },
+  { v: "lenguaje", l: t("scanner.subject_language"), i: emojiOf("lenguaje") },
+  { v: "ciencias", l: t("scanner.subject_science"), i: emojiOf("ciencias") },
+  { v: "historia", l: t("scanner.subject_history"), i: emojiOf("historia") },
+  { v: "ingles", l: t("scanner.subject_english"), i: emojiOf("ingles") },
+  { v: "arte", l: t("scanner.subject_art"), i: emojiOf("arte") },
 ];
 
 const getAges = (t) => [

@@ -1,3 +1,5 @@
+import { LEARN_SUBJECT_IDS, getCatalogSubject } from "../config/subjectCatalog";
+
 export const DEFAULT_NEWS = [
   {
     id: 1,
@@ -251,38 +253,16 @@ export function mergeWeeklyMissions(saved, now = new Date()) {
   return [...(permanent.length ? permanent : DEFAULT_MISSIONS), ...weekly];
 }
 
-export const DEFAULT_SUBJECTS = [
-  {
-    id: "matematicas",
-    name: "Matemáticas",
-    icon: "🔢",
+export const DEFAULT_SUBJECTS = LEARN_SUBJECT_IDS.map((id) => {
+  const subject = getCatalogSubject(id);
+  return {
+    id,
+    name: subject.label,
+    icon: subject.emoji,
     progress: 0,
-    color: "#4DA8C4",
-  },
-  {
-    id: "lenguaje",
-    name: "Lenguaje",
-    icon: "📖",
-    progress: 0,
-    color: "#66CCCC",
-  },
-  {
-    id: "ciencias",
-    name: "Ciencias",
-    icon: "🔬",
-    progress: 0,
-    color: "#FFD166",
-  },
-  {
-    id: "historia",
-    name: "Historia",
-    icon: "🏛️",
-    progress: 0,
-    color: "#FF6B9D",
-  },
-  { id: "ingles", name: "Inglés", icon: "🌎", progress: 0, color: "#B2D8E5" },
-  { id: "arte", name: "Arte", icon: "🎨", progress: 0, color: "#004B63" },
-];
+    color: subject.color,
+  };
+});
 
 export const VAK_RECOMMENDATIONS = {
   visual: [

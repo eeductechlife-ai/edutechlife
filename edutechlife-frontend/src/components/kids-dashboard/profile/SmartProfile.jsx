@@ -41,7 +41,7 @@ const INTEREST_LABELS = {
   musica: "🎵 Música",
   deporte: "⚽ Deporte",
   lectura: "📚 Lectura",
-  historia: "🌍 Historia",
+  historia: "📜 Historia",
 };
 
 const VAK_LABELS = {
@@ -91,6 +91,8 @@ const SmartProfile = memo(function SmartProfile({
     darkMode: dm,
     toggleDarkMode,
     supabaseQueries,
+    setStudentAge,
+    setGradeLevel,
   } = useIngenIAKids();
 
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -670,7 +672,12 @@ const SmartProfile = memo(function SmartProfile({
             uploadAvatar={uploadAvatar}
             removeAvatar={removeAvatar}
             onClose={() => setEditOpen(false)}
-            onSaveSuccess={() => {}}
+            onSaveSuccess={(saved) => {
+              // Edad y grado alimentan los retos y el plan: se actualizan en
+              // la app al guardar, no hasta la próxima recarga.
+              if (saved?.age != null) setStudentAge(saved.age);
+              if (saved?.grade) setGradeLevel(saved.grade);
+            }}
           />
         )}
       </AnimatePresence>

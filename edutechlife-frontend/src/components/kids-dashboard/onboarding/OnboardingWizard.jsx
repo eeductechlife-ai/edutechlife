@@ -3,6 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { GRADE_OPTIONS } from "../../../data/curriculum/curriculumHelper";
+import {
+  AGE_OPTIONS,
+  GRADE_MIN,
+  GRADE_MAX,
+  ageGroupFor,
+  validateAgeGrade,
+} from "../../../utils/studentLevel";
 import { track } from "../../../lib/analytics";
 import { EVENTS } from "../../../lib/analyticsEvents";
 
@@ -64,14 +71,21 @@ const INTEREST_OPTIONS = [
   { id: "musica", label: "Música", emoji: "🎵" },
   { id: "deporte", label: "Deporte", emoji: "⚽" },
   { id: "lectura", label: "Lectura", emoji: "📚" },
-  { id: "historia", label: "Historia", emoji: "🌍" },
+  { id: "historia", label: "Historia", emoji: "📜" },
 ];
 
 // Inline step: school + grade + city + interests (index = -1, shown before NAV_STEPS)
 function GradeStep({ ageGroup, onDone }) {
-  const { setGradeLevel, setCountryCode, setSchoolName, updateDaniMemory } =
-    useIngenIAKids();
+  const {
+    setGradeLevel,
+    setStudentAge,
+    studentAge,
+    setCountryCode,
+    setSchoolName,
+    updateDaniMemory,
+  } = useIngenIAKids();
   const [grade, setGrade] = useState(null);
+  const [age, setAge] = useState(studentAge ? String(studentAge) : "");
   const [school, setSchool] = useState("");
   const [city, setCity] = useState("");
   const [interests, setInterests] = useState([]);
@@ -98,8 +112,13 @@ function GradeStep({ ageGroup, onDone }) {
     senior: "Para personalizar tu plan, necesito saber tu grado:",
   };
 
+  // Edad y grado se piden juntos y se validan entre sí.
+  const check = age && grade ? validateAgeGrade(age, grade) : null;
+  const canContinue = !!grade && !!check?.ok;
+
   function handleConfirm() {
-    if (!grade) return;
+    if (!grade || !validateAgeGrade(age, grade).ok) return;
+    setStudentAge(Number(age));
     setGradeLevel(grade);
     setCountryCode("CO");
     if (school.trim()) setSchoolName(school.trim());
@@ -114,7 +133,7 @@ function GradeStep({ ageGroup, onDone }) {
     if (interests.length > 0) memoryUpdate.interests = interests;
     if (parentGoal) memoryUpdate.parentGoal = parentGoal;
     if (Object.keys(memoryUpdate).length > 0) updateDaniMemory?.(memoryUpdate);
-    onDone({ grade, school, city, interests, parentGoal });
+    onDone({ grade, age: Number(age), school, city, interests, parentGoal });
   }
 
   return (
@@ -208,13 +227,38 @@ function GradeStep({ ageGroup, onDone }) {
         </div>
       </div>
 
+      {/* Age — required, closed list */}
+      <div className="mb-3">
+        <label
+          htmlFor="onboarding-age"
+          className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1 block"
+        >
+          ¿Cuántos años tienes? *
+        </label>
+        <select
+          id="onboarding-age"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          className="w-full text-sm px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-800 dark:text-white focus:outline-none focus:border-[#0096C7]"
+        >
+          <option value="">Elige tu edad</option>
+          {AGE_OPTIONS.map((n) => (
+            <option key={n} value={n}>
+              {n} años
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Grade grid */}
       <div className="mb-5">
         <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 block">
           ¿En qué grado estás? *
         </label>
         <div className="grid grid-cols-4 gap-1.5">
-          {GRADE_OPTIONS.map((o) => {
+          {GRADE_OPTIONS.filter(
+            (o) => o.value >= GRADE_MIN && o.value <= GRADE_MAX,
+          ).map((o) => {
             const sel = grade === o.value;
             return (
               <button
@@ -242,16 +286,26 @@ function GradeStep({ ageGroup, onDone }) {
         </div>
       </div>
 
+      {check && !check.ok && (
+        <p role="alert" className="mb-3 text-sm text-amber-700">
+          {check.message}
+        </p>
+      )}
+
       <button
         onClick={handleConfirm}
-        disabled={!grade}
+        disabled={!canContinue}
         className={`w-full py-3 rounded-xl font-bold text-sm transition-all ${
-          grade
+          canContinue
             ? "bg-gradient-to-r from-[#0096C7] to-[#06D6A0] text-white hover:opacity-90 shadow-md"
             : "bg-gray-100 dark:bg-white/10 text-gray-400 cursor-not-allowed"
         }`}
       >
-        {grade ? `¡Soy de ${grade}°! Continuar →` : "Selecciona tu grado"}
+        {canContinue
+          ? `¡Soy de ${grade}°! Continuar →`
+          : !age
+            ? "Elige tu edad"
+            : "Selecciona tu grado"}
       </button>
     </div>
   );
@@ -276,8 +330,7 @@ const OnboardingWizard = memo(({ onTabChange }) => {
 
   const show = hasSeenWelcome && !onboardingComplete && onboardingStep < 3;
 
-  const ageGroup =
-    studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior";
+  const ageGroup = ageGroupFor(studentAge);
 
   const flags = { vakCompleted, hasUploadedSchedule, hasGrades };
 

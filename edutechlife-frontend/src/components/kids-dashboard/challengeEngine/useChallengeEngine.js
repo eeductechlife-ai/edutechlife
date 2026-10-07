@@ -17,6 +17,9 @@ import {
   HANDOFF_CHALLENGE_AUTOSTART,
 } from "../practicarHub/practicarHandoff";
 import { logPractice } from "../practicarHub/practicarProgress";
+import { CHALLENGE_SUBJECTS } from "../../../config/subjectCatalog";
+import { challengeGrade } from "../../../utils/studentLevel";
+import { keepSelfContained } from "./questionValidity";
 
 const DIFFICULTIES = [
   {
@@ -45,39 +48,24 @@ const DIFFICULTIES = [
   },
 ];
 
-const CHALLENGE_SUBJECTS = [
-  { id: "math", label: "Matemáticas", emoji: "🔢", color: "#FB8500" },
-  { id: "science", label: "Ciencias", emoji: "🔬", color: "#06D6A0" },
-  { id: "language", label: "Lenguaje", emoji: "📖", color: "#9D4EDD" },
-  { id: "social", label: "Sociales", emoji: "🌍", color: "#EF476F" },
-  { id: "english", label: "Inglés", emoji: "🇬🇧", color: "#E9A800" },
-  { id: "chemistry", label: "Química", emoji: "⚗️", color: "#E76F51" },
-  { id: "physics", label: "Física", emoji: "⚡", color: "#2A9D8F" },
-  { id: "informatics", label: "Informática", emoji: "💻", color: "#118AB2" },
-  { id: "philosophy", label: "Filosofía", emoji: "🦉", color: "#6D4C94" },
-];
-
 // Seconds per question by age group; null = no timer (6-8 year olds read slowly).
 export const TIME_LIMIT_BY_AGE = { early: null, middle: 45, senior: 30 };
 
-// CHALLENGE_SUBJECTS usa ids simplificados; el currículo MEN usa sus propios ids.
-const SUBJECT_TO_CURRICULO_ID = {
-  math: "matematicas",
-  science: "ciencias",
-  language: "lenguaje",
-  social: "sociales",
-  english: "ingles",
-  chemistry: "quimica",
-  physics: "fisica",
-  informatics: "informatica",
-  philosophy: "filosofia",
-};
+// Los retos usan ids de reto (math, language…); el currículo MEN, los suyos.
+// Arte no tiene DBA (curriculoId null): se genera por grado, sin secuencia.
+const CURRICULO_ID_BY_CHALLENGE = Object.fromEntries(
+  CHALLENGE_SUBJECTS.map((s) => [s.id, s.curriculoId]),
+);
 
+// Las materias base (Matemáticas, Lenguaje, Ciencias, Sociales, Inglés, Arte)
+// siempre se ofrecen. Las demás (Química, Física…) solo si el grado tiene DBA.
 export function isChallengeSubjectAvailable(challengeId, grade) {
-  const curriculoId = SUBJECT_TO_CURRICULO_ID[challengeId];
-  if (!curriculoId) return false;
+  const subject = CHALLENGE_SUBJECTS.find((s) => s.id === challengeId);
+  if (!subject) return false;
+  if (subject.core) return true;
   return (
-    getDbaForSubjectGrade(curriculoId, parseInt(grade, 10) || 5).length > 0
+    getDbaForSubjectGrade(subject.curriculoId, parseInt(grade, 10) || 5)
+      .length > 0
   );
 }
 
@@ -104,7 +92,11 @@ function buildChallengePrompt(
       role: "system",
       content: `Eres un generador de retos educativos para niños de grado ${grade || "5to"} en Colombia.
 Genera exactamente ${questionCount} preguntas de opción múltiple sobre ${subject.label}.
-Nivel de dificultad: ${difficulty.label}.
+Nivel de dificultad: ${difficulty.label}.${
+        difficulty.id === "easy"
+          ? " Es el nivel más sencillo: usa conceptos básicos de uno o dos grados por debajo."
+          : ""
+      }
 
 ${dbaInstructions}
 
@@ -120,7 +112,8 @@ Responde SOLO en JSON válido con este formato:
   ]
 }
 El orden de "questions" en la respuesta debe coincidir exactamente con el orden de las instrucciones de DBA de arriba.
-Las preguntas deben ser apropiadas para la edad, en español, y alineadas con el currículo colombiano MEN.`,
+Las preguntas deben ser apropiadas para la edad, en español, y alineadas con el currículo colombiano MEN.
+Cada pregunta debe entenderse solo con su texto: NO uses gráficas, figuras, imágenes, mapas ni tablas que el estudiante no pueda ver. Si necesitas datos, escríbelos dentro de la pregunta.`,
     },
     {
       role: "user",
@@ -130,18 +123,17 @@ Las preguntas deben ser apropiadas para la edad, en español, y alineadas con el
 }
 
 export function useChallengeEngine() {
-  const { supabaseQueries, addPoints, gradeLevel, ageGroup } = useIngenIAKids();
+  const { supabaseQueries, addPoints, gradeLevel, ageGroup, studentAge } =
+    useIngenIAKids();
   const studentGrade =
     gradeLevel ?? supabaseQueries?.studentData?.data?.grade_level;
 
-  // Only show subjects that have DBA data for the student's actual grade.
-  // Falls back to all mapped subjects if grade is unknown.
+  // Materias base siempre; las especializadas solo si hay DBA para el grado
+  // (ver isChallengeSubjectAvailable).
   const grade = parseInt(studentGrade, 10) || 5;
-  const availableSubjects = CHALLENGE_SUBJECTS.filter((s) => {
-    const curriculoId = SUBJECT_TO_CURRICULO_ID[s.id];
-    if (!curriculoId) return false; // "tech" has no MEN DBA
-    return getDbaForSubjectGrade(curriculoId, grade).length > 0;
-  });
+  const availableSubjects = CHALLENGE_SUBJECTS.filter((s) =>
+    isChallengeSubjectAvailable(s.id, grade),
+  );
   const { logFeedback } = useFeedbackLog();
   const { trackActivity } = useCompetencyTracking();
 
@@ -189,8 +181,13 @@ export function useChallengeEngine() {
     setLoading(true);
     setError(null);
     try {
-      const grade = parseInt(studentGrade, 10) || 5;
-      const curriculoSubject = SUBJECT_TO_CURRICULO_ID[subject.id];
+      // Si el grado y la edad no cuadran manda la edad, y «Fácil» baja un grado.
+      const grade = challengeGrade({
+        grade: studentGrade,
+        age: studentAge,
+        difficulty: difficulty.id,
+      });
+      const curriculoSubject = CURRICULO_ID_BY_CHALLENGE[subject.id];
       const dbas = curriculoSubject
         ? pickDbaSequence(curriculoSubject, grade, difficulty.questions)
         : [];
@@ -198,7 +195,7 @@ export function useChallengeEngine() {
       const prompt = buildChallengePrompt(
         subject,
         difficulty,
-        studentGrade,
+        grade,
         difficulty.questions,
         dbas,
       );
@@ -211,11 +208,23 @@ export function useChallengeEngine() {
         throw new Error(
           "La IA no alcanzó a preparar tus preguntas. Toca «Empezar» otra vez.",
         );
-      setQuestions(result.questions);
+      // Se descartan las preguntas que citan una gráfica o tabla que no se ve.
+      // Si la IA respetó el orden de los DBA se filtran en paralelo para no
+      // perder la correspondencia pregunta–tema.
+      const aligned = dbas.length === result.questions.length;
+      const { questions: usable, indexes } = keepSelfContained(
+        result.questions,
+      );
+      const minUsable = Math.ceil(difficulty.questions / 2);
+      if (usable.length < minUsable)
+        throw new Error(
+          "Algunas preguntas no se entendían sin una imagen. Toca «Empezar» otra vez.",
+        );
+      setQuestions(usable);
       // Solo se usa la secuencia de DBA si la IA devolvió el mismo número de
       // preguntas que se pidieron por DBA — si no coincide, no podemos confiar
       // en el orden y el reto sigue funcionando sin tracking por tema.
-      setDbaSequence(dbas.length === result.questions.length ? dbas : []);
+      setDbaSequence(aligned ? indexes.map((i) => dbas[i]) : []);
       setAnswers([]);
       setCurrentIndex(0);
       startTimeRef.current = Date.now();
@@ -230,7 +239,7 @@ export function useChallengeEngine() {
     } finally {
       setLoading(false);
     }
-  }, [subject, difficulty, studentGrade]);
+  }, [subject, difficulty, studentGrade, studentAge]);
 
   const submitAnswer = useCallback(
     (selectedIndex) => {
@@ -262,7 +271,7 @@ export function useChallengeEngine() {
         addPoints(xpEarned, `Reto ${subject.label} (${score}%)`);
         logPractice({
           type: "reto",
-          subject: SUBJECT_TO_CURRICULO_ID[subject.id],
+          subject: CURRICULO_ID_BY_CHALLENGE[subject.id],
           challengeId: subject.id,
           difficulty: difficulty.id,
           score,

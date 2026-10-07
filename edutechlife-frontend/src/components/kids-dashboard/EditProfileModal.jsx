@@ -5,6 +5,19 @@ import { motion } from "framer-motion";
 import { Loader2, Check, X, Camera, Trash2 } from "lucide-react";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { VAK_OPTIONS, getInitials } from "./userMenuConstants";
+import {
+  AGE_OPTIONS,
+  GRADE_OPTIONS,
+  gradeLabel,
+  validateAgeGrade,
+} from "../../utils/studentLevel";
+
+// El perfil guarda el grado como texto libre ("9", "6B"); el formulario solo
+// ofrece 3.º–11.º, así que un valor que no esté en la lista se pide de nuevo.
+const gradeFromProfile = (grade) => {
+  const n = parseInt(grade, 10);
+  return GRADE_OPTIONS.includes(n) ? String(n) : "";
+};
 
 const EditProfileModal = ({
   profile,
@@ -20,10 +33,10 @@ const EditProfileModal = ({
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: profile?.name || studentName || "",
-    age: profile?.age || "",
+    age: profile?.age ? String(profile.age) : "",
     vakStyle: profile?.vakStyle || "",
     school: profile?.school || "",
-    grade: profile?.grade || "",
+    grade: gradeFromProfile(profile?.grade),
   });
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
@@ -39,18 +52,20 @@ const EditProfileModal = ({
     const payload = {};
     if (formData.name !== undefined && formData.name !== (profile?.name || ""))
       payload.name = formData.name;
-    if (formData.age !== undefined && formData.age !== (profile?.age ?? "")) {
-      const ageValue = String(formData.age).trim();
-      const ageNum = Number(ageValue);
-      if (
-        ageValue !== "" &&
-        !(Number.isFinite(ageNum) && ageNum >= 5 && ageNum <= 25)
-      ) {
-        setSaveError(t("kid.user.save_error"));
+    // Edad y grado se validan juntos (A los 12 años lo habitual es 6.º o 7.º).
+    // Solo se exige si la persona los tocó: cambiar el nombre no se bloquea
+    // por un perfil antiguo incompleto.
+    const ageChanged = String(formData.age) !== String(profile?.age ?? "");
+    const gradeChanged = formData.grade !== gradeFromProfile(profile?.grade);
+    if (ageChanged || gradeChanged) {
+      const check = validateAgeGrade(formData.age, formData.grade);
+      if (!check.ok) {
+        setSaveError(check.message);
         setSaving(false);
         return;
       }
-      if (ageValue !== "") payload.age = ageNum;
+      if (ageChanged) payload.age = Number(formData.age);
+      if (gradeChanged) payload.grade = String(formData.grade);
     }
     if (
       formData.vakStyle !== undefined &&
@@ -62,12 +77,6 @@ const EditProfileModal = ({
       formData.school !== (profile?.school || "")
     )
       payload.school = formData.school;
-    if (
-      formData.grade !== undefined &&
-      formData.grade !== (profile?.grade || "")
-    )
-      payload.grade = formData.grade;
-
     const result = await updateProfile(payload);
     setSaving(false);
     if (result?.ok) {
@@ -125,10 +134,14 @@ const EditProfileModal = ({
 
   const renderField = (key, label, type = "text", placeholder = "") => (
     <div key={key} className="mb-4">
-      <label className="block text-sm font-semibold text-gray-700 mb-1">
+      <label
+        htmlFor={`profile-${key}`}
+        className="block text-sm font-semibold text-gray-700 mb-1"
+      >
         {label}
       </label>
       <input
+        id={`profile-${key}`}
         type={type}
         placeholder={placeholder}
         value={formData[key] || ""}
@@ -137,6 +150,46 @@ const EditProfileModal = ({
       />
     </div>
   );
+
+  const renderSelect = (key, label, options, placeholder) => (
+    <div key={key} className="mb-4">
+      <label
+        htmlFor={`profile-${key}`}
+        className="block text-sm font-semibold text-gray-700 mb-1"
+      >
+        {label}
+      </label>
+      <select
+        id={`profile-${key}`}
+        value={formData[key] || ""}
+        onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+        aria-invalid={pairHint ? "true" : undefined}
+        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0077B6] bg-white"
+      >
+        <option value="">{placeholder}</option>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+
+  const ageOptions = AGE_OPTIONS.map((n) => ({
+    value: String(n),
+    label: `${n} años`,
+  }));
+  const gradeOptions = GRADE_OPTIONS.map((n) => ({
+    value: String(n),
+    label: gradeLabel(n),
+  }));
+  // Aviso en vivo cuando ya hay edad y grado y no cuadran entre sí.
+  const pairCheck =
+    formData.age && formData.grade
+      ? validateAgeGrade(formData.age, formData.grade)
+      : null;
+  const pairHint = pairCheck && !pairCheck.ok ? pairCheck.message : "";
 
   return createPortal(
     <motion.div
@@ -249,19 +302,23 @@ const EditProfileModal = ({
             "text",
             t("kid.user.fullname_placeholder"),
           )}
-          {renderField(
+          {renderSelect(
             "age",
             t("kid.user.age"),
-            "number",
+            ageOptions,
             t("kid.user.age_placeholder"),
           )}
 
           {/* VAK Select */}
           <div className="mb-4">
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
+            <label
+              htmlFor="profile-vakStyle"
+              className="block text-sm font-semibold text-gray-700 mb-1"
+            >
               {t("kid.user.vak_type")}
             </label>
             <select
+              id="profile-vakStyle"
               value={formData.vakStyle || ""}
               onChange={(e) =>
                 setFormData({ ...formData, vakStyle: e.target.value })
@@ -283,11 +340,16 @@ const EditProfileModal = ({
             "text",
             t("kid.user.school_placeholder"),
           )}
-          {renderField(
+          {renderSelect(
             "grade",
             t("kid.user.grade"),
-            "text",
+            gradeOptions,
             t("kid.user.grade_placeholder"),
+          )}
+          {pairHint && (
+            <p role="alert" className="-mt-2 mb-4 text-sm text-amber-700">
+              {pairHint}
+            </p>
           )}
         </div>
 

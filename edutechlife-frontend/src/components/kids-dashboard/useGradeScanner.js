@@ -320,7 +320,7 @@ export function useGradeScanner() {
     setScanning(true);
     setError("");
     setPlan(null);
-    const vakStyle = vakResult?.dominant || "visual";
+    const vakStyle = vakResult?.predominantStyle || vakResult?.dominant || null;
     const prompt = buildAnalysisPrompt({ grades, vakStyle, SUBJECTS });
     try {
       const res = await callDeepseekSmartboard(
