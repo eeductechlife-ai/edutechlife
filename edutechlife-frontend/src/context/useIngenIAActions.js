@@ -1,5 +1,9 @@
 import { useCallback, useRef } from "react";
-import { VAK_RECOMMENDATIONS } from "./ingenIAData";
+import {
+  VAK_RECOMMENDATIONS,
+  ADN_COMPLETION_XP,
+  ADN_REWARD_REASON,
+} from "./ingenIAData";
 import { track } from "../lib/analytics";
 import { EVENTS } from "../lib/analyticsEvents";
 
@@ -33,6 +37,13 @@ export const useIngenIAActions = (stateAndSetters) => {
     ]);
   }, []);
 
+  // Premio real: se suma en pantalla y se guarda en el servidor. Antes estos
+  // premios solo se sumaban en memoria y desaparecían al recargar la página.
+  const award = useCallback((points, reason) => {
+    addPoints(points, reason);
+    ref.current.syncPoints?.(points, reason);
+  }, []);
+
   const completeMission = useCallback((missionId) => {
     const { setMissions, missions } = ref.current;
     setMissions((prev) =>
@@ -42,7 +53,7 @@ export const useIngenIAActions = (stateAndSetters) => {
     );
     const mission = missions.find((m) => m.id === missionId);
     if (mission && !mission.completed) {
-      addPoints(mission.xp || 0, `Misión completada: ${mission.title || ""}`);
+      award(mission.xp || 0, `Misión completada: ${mission.title || ""}`);
       track(EVENTS.MISSION_COMPLETED, {
         mission_id: missionId,
         title: mission.title || "",
@@ -422,13 +433,18 @@ export const useIngenIAActions = (stateAndSetters) => {
   }, []);
 
   const setVakResultAndRecommendations = useCallback((result) => {
-    const { setVakResult, setVakRecommendations } = ref.current;
+    const { setVakResult, setVakRecommendations, vakResult, pointsHistory } =
+      ref.current;
     setVakResult(result);
     if (result) {
       const dominantStyle = result.predominantStyle;
       const recommendations = VAK_RECOMMENDATIONS[dominantStyle] || [];
       setVakRecommendations(recommendations);
-      addPoints(300, "Completó ADN de Aprendizaje");
+      // El premio es de una sola vez: repetir el ADN no vuelve a pagar.
+      const alreadyRewarded =
+        !!vakResult ||
+        (pointsHistory || []).some((p) => p.reason === ADN_REWARD_REASON);
+      if (!alreadyRewarded) award(ADN_COMPLETION_XP, ADN_REWARD_REASON);
     }
   }, []);
 
@@ -443,13 +459,13 @@ export const useIngenIAActions = (stateAndSetters) => {
       ...prev,
       { ...activity, id: Date.now(), uploadedAt: new Date() },
     ]);
-    addPoints(50, "Subió actividad académica");
+    award(50, "Subió actividad académica");
   }, []);
 
   const addAnalyzedActivity = useCallback((analysis) => {
     const { setAnalyzedActivities } = ref.current;
     setAnalyzedActivities((prev) => [analysis, ...prev].slice(-20));
-    addPoints(100, "Actividad analizada por Dani");
+    award(100, "Actividad analizada por Dani");
   }, []);
 
   const markNewsAsRead = useCallback((newsId) => {

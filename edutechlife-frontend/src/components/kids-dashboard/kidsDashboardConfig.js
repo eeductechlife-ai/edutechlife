@@ -113,7 +113,16 @@ export const PARENT_TAB = {
   vak: "perfil",
 };
 
-export const PREMIUM_TABS = ["oral", "misiones"];
+// Pestañas que muestran candado en el menú. Hoy NINGUNA pantalla está bloqueada
+// (PremiumGate no está conectado), así que no se muestra ningún candado: uno que
+// no bloquea confunde a los niños y a las familias. Cuando se decida qué incluye
+// Premium y se conecte PremiumGate, vuelve a listar aquí las pestañas
+// (antes: ["oral", "misiones"]).
+export const PREMIUM_TABS = [];
+
+// Escala colombiana de 1.0 a 5.0: desde 3.0 se aprueba. Por debajo de eso, y
+// solo por debajo, se habla de refuerzo "urgente".
+export const PASSING_GRADE = 3.0;
 
 export const TOP_BAR_LABELS = {
   inicio: "Inicio",

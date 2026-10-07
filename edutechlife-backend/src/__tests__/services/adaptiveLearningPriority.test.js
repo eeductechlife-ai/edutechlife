@@ -70,3 +70,34 @@ describe('E5 — SMARTBOARD PRIORITY', () => {
     expect(b.smartboardPriority.winning).toBe('engagement');
   });
 });
+
+describe('Mensaje de «Tu siguiente actividad» (lo ve un estudiante de 8 a 16 años)', () => {
+  const fewData = {
+    studentId: 'C',
+    masteryRows: [{ competency_id: 'co_matematicas_6-7_0', mastery_level: 0, practice_count: 1 }],
+    masteryBySubject: { matematicas: 0 },
+    strengths: [],
+    weaknesses: [],
+    behavior: { activeDaysLast14: 1, streak: 1 },
+  };
+
+  test('nunca incluye palabras internas como «meta» o «recovery»', () => {
+    [stateA, fewData].forEach((state) => {
+      const { reason } = getNextBestAction(state);
+      expect(reason).not.toMatch(/meta\s*:|recovery|practice\b|mastery|transfer/i);
+    });
+  });
+
+  test('con pocos datos no dice «0% de dominio»', () => {
+    const { reason } = getNextBestAction(fewData);
+    expect(reason).not.toMatch(/0\s*%/);
+    expect(reason).toMatch(/pocos datos/i);
+    expect(reason).toMatch(/Matem/);
+  });
+
+  test('con datos suficientes sí da el porcentaje real', () => {
+    const { reason } = getNextBestAction(stateA);
+    expect(reason).toMatch(/35%/);
+    expect(reason).toMatch(/más espacio para subir/);
+  });
+});

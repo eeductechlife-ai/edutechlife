@@ -58,6 +58,13 @@ export default function DevIngenIAPreview() {
     Number(params.get("grado")) || Math.min(11, Math.max(1, age - 5));
 
   const [darkMode, setDarkMode] = useState(params.get("oscuro") === "1");
+  // ?bienvenida=1 muestra la guía de bienvenida de un estudiante nuevo.
+  const [onboardingComplete, setOnboardingComplete] = useState(
+    params.get("bienvenida") !== "1",
+  );
+  const [hasSeenWelcome, setHasSeenWelcome] = useState(
+    params.get("bienvenida") !== "1",
+  );
   const [totalPoints, setTotalPoints] = useState(
     () => Number(params.get("puntos")) || 420,
   );
@@ -230,10 +237,10 @@ export default function DevIngenIAPreview() {
 
     // Per-student storage keys (plan, grades…) need an id, as in the real app.
     userId: "dev-student",
-    onboardingComplete: true,
-    setOnboardingComplete: noop,
-    hasSeenWelcome: true,
-    setHasSeenWelcome: noop,
+    onboardingComplete,
+    setOnboardingComplete,
+    hasSeenWelcome,
+    setHasSeenWelcome,
     onboardingStep: 0,
     setOnboardingStep: noop,
     vakCompleted: !!vakResult,

@@ -83,13 +83,13 @@ const AcademicSemaphore = memo(
                   {SUBJECT_LABELS[subj]}
                 </p>
                 {mastery !== undefined && (
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
                     {Math.round(mastery * 100)}%
                   </p>
                 )}
                 {mastery === undefined && grade !== undefined && (
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500">
-                    Nota: {grade}
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    Nota: {Number(grade).toFixed(1)}
                   </p>
                 )}
               </div>

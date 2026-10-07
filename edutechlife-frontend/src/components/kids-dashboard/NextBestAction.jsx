@@ -34,7 +34,7 @@ function gradientForColor(color) {
 // ── Goal badges ───────────────────────────────────────────────────────────────
 
 const GOAL_META = {
-  recovery: { label: "Recuperación", emoji: "🆘", badge: "#EF4444" },
+  recovery: { label: "Refuerzo", emoji: "💪", badge: "#C2410C" },
   practice: { label: "Práctica", emoji: "📖", badge: "#F59E0B" },
   mastery: { label: "Dominio", emoji: "⭐", badge: "#10B981" },
   transfer: { label: "Desafío", emoji: "🚀", badge: "#7C3AED" },
@@ -101,14 +101,14 @@ function buildLocalNBA({ vakResult, onboardingComplete, subjects, missions }) {
   if (declining) {
     return {
       challengeId: PRACTICE_META[declining.id]?.challengeId || null,
-      emoji: "🚨",
+      emoji: "💪",
       label: declining.name,
-      headline: `${declining.name} bajó a ${Number(declining.gradeScore).toFixed(1)} y sigue cayendo. Un reto de 10 min hoy puede cambiar eso.`,
+      headline: `${declining.name} bajó a ${Number(declining.gradeScore).toFixed(1)}. Un reto de 10 minutos hoy ayuda a subirla.`,
       tab: "retos",
       xp: 80,
       minutes: 10,
       gradient: "linear-gradient(135deg, #EF4444 0%, #FB8500 100%)",
-      goal: { label: "Recuperación urgente", emoji: "🆘" },
+      goal: { label: "Vale la pena reforzar", emoji: "💪" },
       fromBackend: false,
     };
   }

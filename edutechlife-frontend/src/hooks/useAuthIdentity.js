@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "../lib/supabase";
+import { clearIngenIAUserData } from "../utils/userDataStorage";
 
 /**
  * Identity of the signed-in student, sourced from the Supabase session.
@@ -182,6 +183,9 @@ export const clearUserSession = async () => {
       }
     }
     keysToRemove.forEach((key) => localStorage.removeItem(key));
+    // IngenIA: chats de Dani, notas, memoria, plan y ADN de todas las cuentas
+    // que hayan pasado por este navegador, más el refresh token.
+    clearIngenIAUserData();
     sessionStorage.clear();
   } catch {
     /* ignore */

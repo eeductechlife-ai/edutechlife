@@ -1,6 +1,11 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useIngenIAActions } from "../useIngenIAActions";
+import {
+  ADN_COMPLETION_XP,
+  ADN_REWARD_REASON,
+  DEFAULT_MISSIONS,
+} from "../ingenIAData";
 
 vi.mock("../../lib/analytics", () => ({ track: vi.fn() }));
 vi.mock("../../lib/analyticsEvents", () => ({
@@ -168,5 +173,92 @@ describe("useIngenIAActions.toggleDarkMode", () => {
 
     act(() => result.current.toggleDarkMode());
     expect(dark).toBe(false);
+  });
+});
+
+describe("useIngenIAActions.setVakResultAndRecommendations (premio del ADN)", () => {
+  const build = (extra = {}) => {
+    let total = 0;
+    let history = [];
+    const synced = [];
+    const setters = {
+      setTotalPoints: (fn) => {
+        total = fn(total);
+      },
+      setPointsHistory: (fn) => {
+        history = fn(history);
+      },
+      setVakResult: () => {},
+      setVakRecommendations: () => {},
+      syncPoints: (points, reason) => synced.push({ points, reason }),
+      ...extra,
+    };
+    const { result } = renderHook(() => useIngenIAActions(setters));
+    return { result, get: () => ({ total, history, synced }) };
+  };
+
+  const adn = { predominantStyle: "visual", scores: { visual: 60 } };
+
+  it("pays the same amount the mission announces, and saves it to the server", () => {
+    const { result, get } = build();
+    act(() => result.current.setVakResultAndRecommendations(adn));
+
+    expect(get().total).toBe(ADN_COMPLETION_XP);
+    expect(DEFAULT_MISSIONS[0].xp).toBe(ADN_COMPLETION_XP);
+    expect(get().synced).toEqual([
+      { points: ADN_COMPLETION_XP, reason: ADN_REWARD_REASON },
+    ]);
+  });
+
+  it("does not pay again when the student repeats the ADN", () => {
+    const { result, get } = build({
+      vakResult: { predominantStyle: "auditivo" },
+    });
+    act(() => result.current.setVakResultAndRecommendations(adn));
+
+    expect(get().total).toBe(0);
+    expect(get().synced).toEqual([]);
+  });
+
+  it("does not pay again when the server history already has the reward", () => {
+    const { result, get } = build({
+      pointsHistory: [{ points: 100, reason: "Completó ADN de Aprendizaje" }],
+    });
+    act(() => result.current.setVakResultAndRecommendations(adn));
+
+    expect(get().total).toBe(0);
+    expect(get().synced).toEqual([]);
+  });
+});
+
+describe("useIngenIAActions: los premios se guardan en el servidor", () => {
+  it("syncs mission rewards instead of leaving them only in memory", () => {
+    const synced = [];
+    const setters = {
+      setTotalPoints: () => {},
+      setPointsHistory: () => {},
+      setMissions: () => {},
+      missions: [{ id: "m1", title: "Leer", xp: 50, completed: false }],
+      syncPoints: (points, reason) => synced.push({ points, reason }),
+    };
+    const { result } = renderHook(() => useIngenIAActions(setters));
+    act(() => result.current.completeMission("m1"));
+
+    expect(synced).toEqual([{ points: 50, reason: "Misión completada: Leer" }]);
+  });
+
+  it("keeps working when no sync function is provided", () => {
+    let total = 0;
+    const setters = {
+      setTotalPoints: (fn) => {
+        total = fn(total);
+      },
+      setPointsHistory: () => {},
+      setMissions: () => {},
+      missions: [{ id: "m1", title: "Leer", xp: 50, completed: false }],
+    };
+    const { result } = renderHook(() => useIngenIAActions(setters));
+    act(() => result.current.completeMission("m1"));
+    expect(total).toBe(50);
   });
 });

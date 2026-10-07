@@ -1,6 +1,7 @@
 import { memo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNewsFeed } from "../../../hooks/useNewsFeed";
+import { useReadReward } from "../../../hooks/useReadReward";
 import { CATEGORIES, CATEGORY_COLORS } from "../../../data/newsData";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { logPractice } from "../practicarHub/practicarProgress";
@@ -287,6 +288,20 @@ const TechNewsFeed = () => {
     setOpenArticle,
   } = useNewsFeed();
 
+  // Los puntos llegan cuando el artículo estuvo abierto un rato, no al abrirlo.
+  useReadReward(openArticle, readNews, (article) => {
+    markAsRead(article.id);
+    logPractice({
+      type: "news_read",
+      articleId: article.id,
+      category: article.category,
+    });
+    addPoints?.(
+      studentAge != null && studentAge <= 9 ? 10 : 15,
+      `Artículo leído: ${article.title}`,
+    );
+  });
+
   const unreadByCategory = (catId) =>
     allArticles.filter((a) => a.category === catId && !readNews.includes(a.id))
       .length;
@@ -297,7 +312,7 @@ const TechNewsFeed = () => {
         {unreadCount > 0
           ? studentAge != null && studentAge <= 9
             ? `📬 ¡${unreadCount} ${unreadCount === 1 ? "noticia" : "noticias"} nuevas para ti! +${unreadCount * 10}⭐`
-            : `📬 ${unreadCount} ${unreadCount === 1 ? "artículo" : "artículos"} por leer · +15 pts c/u`
+            : `📬 ${unreadCount} ${unreadCount === 1 ? "artículo" : "artículos"} por leer · +15 pts al leerlo`
           : studentAge != null && studentAge <= 9
             ? "¡Eres un experto en tech! 🏆"
             : "¡Estás al día con el mundo tech! 🎉"}
@@ -368,22 +383,7 @@ const TechNewsFeed = () => {
                 article={article}
                 isRead={readNews.includes(article.id)}
                 darkMode={darkMode}
-                onRead={(id) => {
-                  const firstRead = !readNews.includes(id);
-                  markAsRead(id);
-                  setOpenArticle(article);
-                  if (firstRead) {
-                    logPractice({
-                      type: "news_read",
-                      articleId: id,
-                      category: article.category,
-                    });
-                    addPoints?.(
-                      studentAge != null && studentAge <= 9 ? 10 : 15,
-                      `Artículo leído: ${article.title}`,
-                    );
-                  }
-                }}
+                onRead={() => setOpenArticle(article)}
               />
             ))}
           </AnimatePresence>

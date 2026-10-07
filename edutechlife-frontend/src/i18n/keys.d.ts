@@ -500,6 +500,7 @@ export type TranslationKeys = {
   "consultoria.hero_subtitle": string;
   "consultoria.hero_title": string;
   "consultoria.month": string;
+  "consultoria.months": string;
   "consultoria.pilar_03": string;
   "consultoria.roi_analyzing": string;
   "consultoria.roi_badge": string;
@@ -566,6 +567,7 @@ export type TranslationKeys = {
   "course_completion.cert_obtained": string;
   "course_completion.message": string;
   "course_completion.module_completed": string;
+  "course_completion.no": string;
   "course_completion.progress": string;
   "course_completion.progress_80": string;
   "course_completion.title": string;
@@ -599,6 +601,8 @@ export type TranslationKeys = {
   "dani.mic_stop_aria": string;
   "dani.mood_label": string;
   "dani.placeholder": string;
+  "dani.placeholder_exam": string;
+  "dani.placeholder_subject": string;
   "dani.qa_emotional_subtitle": string;
   "dani.qa_emotional_title": string;
   "dani.qa_explain_subtitle": string;
@@ -874,6 +878,7 @@ export type TranslationKeys = {
   "ialab.bookmarks_empty_title": string;
   "ialab.bookmarks_module": string;
   "ialab.bookmarks_open": string;
+  "ialab.bookmarks_tab_label": string;
   "ialab.breadcrumb.aria_label": string;
   "ialab.breadcrumb_home": string;
   "ialab.breadcrumb_module": string;
@@ -1978,6 +1983,7 @@ export type TranslationKeys = {
   "ialab.module.module_label": string;
   "ialab.module.progress_title": string;
   "ialab.module.resources_badge": string;
+  "ialab.module.topics_title": string;
   "ialab.module_actions.attempts_left": string;
   "ialab.module_actions.challenge": string;
   "ialab.module_actions.community": string;
@@ -4721,6 +4727,9 @@ export type TranslationKeys = {
   "parent_dashboard.logout": string;
   "parent_dashboard.longest_streak": string;
   "parent_dashboard.longest_streak_desc": string;
+  "parent_dashboard.mastery_improve": string;
+  "parent_dashboard.mastery_strengths": string;
+  "parent_dashboard.mastery_title": string;
   "parent_dashboard.minutes_ago": string;
   "parent_dashboard.minutes_total_label": string;
   "parent_dashboard.missions": string;
@@ -4863,6 +4872,14 @@ export type TranslationKeys = {
   "peer_review.submitted": string;
   "peer_review.submitting": string;
   "peer_review.title": string;
+  "pomodoro.focus": string;
+  "pomodoro.long_break": string;
+  "pomodoro.minutes_focused": string;
+  "pomodoro.pause": string;
+  "pomodoro.sessions": string;
+  "pomodoro.short_break": string;
+  "pomodoro.start": string;
+  "pomodoro.xp_earned": string;
   "pricing.annual": string;
   "pricing.badge": string;
   "pricing.cta_button": string;
@@ -5112,6 +5129,7 @@ export type TranslationKeys = {
   "sidebar.resource_templates_desc": string;
   "sidebar.resources": string;
   "sidebar.resources_tooltip": string;
+  "sidebar.schedule": string;
   "sidebar.streak_days": string;
   "sidebar.streak_details": string;
   "sidebar.streak_risk": string;
@@ -5343,6 +5361,7 @@ export type TranslationKeys = {
   "smartboard.no_points_data": string;
   "smartboard.no_subjects": string;
   "smartboard.not_connected": string;
+  "smartboard.notifications": string;
   "smartboard.parent_active_minutes": string;
   "smartboard.parent_alert_explore": string;
   "smartboard.parent_alert_inactive": string;

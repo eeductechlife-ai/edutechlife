@@ -34,13 +34,18 @@ export const DEFAULT_NEWS = [
   },
 ];
 
+// El ADN de Aprendizaje da este premio una sola vez por estudiante. Misión,
+// tarjeta de Inicio y premio real leen este mismo número.
+export const ADN_COMPLETION_XP = 100;
+export const ADN_REWARD_REASON = "Completó ADN de Aprendizaje";
+
 export const DEFAULT_MISSIONS = [
   {
     id: 1,
     title: "Completa tu ADN de Aprendizaje",
     description: "Descubre cómo aprendes mejor",
     icon: "🧠",
-    xp: 100,
+    xp: ADN_COMPLETION_XP,
     completed: false,
   },
   {
