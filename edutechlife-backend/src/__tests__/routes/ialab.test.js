@@ -21,6 +21,32 @@ require.cache[deepseekPath] = {
   },
 };
 
+// El router de IALab ahora cuelga de requireAuth/requireProduct en app.js: estas
+// pruebas validan los handlers, no el login, así que se simulan los guards.
+const authPath = require.resolve('../../middleware/auth');
+delete require.cache[authPath];
+require.cache[authPath] = {
+  id: authPath,
+  filename: authPath,
+  loaded: true,
+  exports: {
+    requireAuth: (req, res, next) => {
+      if (!req.headers.authorization?.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'No autorizado — token requerido' });
+      }
+      req.userId = 'test-user-id';
+      next();
+    },
+    optionalAuth: (_req, _res, next) => next(),
+    requireProduct: () => (req, res, next) => {
+      if (!req.headers.authorization?.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'No autorizado — token requerido' });
+      }
+      next();
+    },
+  },
+};
+
 const express = require('express');
 const request = require('supertest');
 const app = require('../../app');
@@ -36,9 +62,19 @@ function buildTestApp() {
 }
 const testApp = buildTestApp();
 
+// Sesión simulada: el guard del app exige "Authorization: Bearer ..." (las
+// pruebas "auth-protected" de abajo usan request(app) sin token a propósito).
+const authed = (target) => ({
+  get: (url) => request(target).get(url).set('Authorization', 'Bearer test-token'),
+  post: (url) => request(target).post(url).set('Authorization', 'Bearer test-token'),
+  put: (url) => request(target).put(url).set('Authorization', 'Bearer test-token'),
+  delete: (url) => request(target).delete(url).set('Authorization', 'Bearer test-token'),
+});
+
+
 describe('GET /api/ialab/modules', () => {
   it('returns modules list', async () => {
-    const res = await request(app).get('/api/ialab/modules');
+    const res = await authed(app).get('/api/ialab/modules');
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
@@ -46,31 +82,31 @@ describe('GET /api/ialab/modules', () => {
 
 describe('GET /api/ialab/modules/:id', () => {
   it('returns 400 for invalid module id', async () => {
-    const res = await request(app).get('/api/ialab/modules/999');
+    const res = await authed(app).get('/api/ialab/modules/999');
     expect(res.status).toBe(400);
     expect(res.body.error).toContain('Module ID');
   });
 
   it('returns 400 for non-numeric id', async () => {
-    const res = await request(app).get('/api/ialab/modules/abc');
+    const res = await authed(app).get('/api/ialab/modules/abc');
     expect(res.status).toBe(400);
     expect(res.body.error).toContain('Module ID');
   });
 
   it('returns 400 for id 0', async () => {
-    const res = await request(app).get('/api/ialab/modules/0');
+    const res = await authed(app).get('/api/ialab/modules/0');
     expect(res.status).toBe(400);
   });
 
   it('returns module data for valid id 1', async () => {
-    const res = await request(app).get('/api/ialab/modules/1');
+    const res = await authed(app).get('/api/ialab/modules/1');
     expect(res.status).toBe(200);
     expect(res.body.id).toBe(1);
     expect(res.body.title).toContain('Ingeniería');
   });
 
   it('returns module data for valid id 5', async () => {
-    const res = await request(app).get('/api/ialab/modules/5');
+    const res = await authed(app).get('/api/ialab/modules/5');
     expect(res.status).toBe(200);
     expect(res.body.id).toBe(5);
     expect(res.body.level).toBe('Experto');
@@ -79,7 +115,7 @@ describe('GET /api/ialab/modules/:id', () => {
 
 describe('POST /api/ialab/prompts', () => {
   it('returns 400 when prompt is missing', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/prompts')
       .send({});
     expect(res.status).toBe(400);
@@ -87,14 +123,14 @@ describe('POST /api/ialab/prompts', () => {
   });
 
   it('returns 400 for empty prompt', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/prompts')
       .send({ prompt: '' });
     expect(res.status).toBe(400);
   });
 
   it('returns 400 for oversize prompt', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/prompts')
       .send({ prompt: 'x'.repeat(2001) });
     expect(res.status).toBe(400);
@@ -102,7 +138,7 @@ describe('POST /api/ialab/prompts', () => {
   });
 
   it('generates a MasterPrompt for valid prompt', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/prompts')
       .send({ prompt: 'Crea una estrategia de marketing para Instagram' });
     expect(res.status).toBe(200);
@@ -111,7 +147,7 @@ describe('POST /api/ialab/prompts', () => {
   }, 15000);
 
   it('accepts templateType parameter', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/prompts')
       .send({ prompt: 'Analiza datos de ventas del trimestre', templateType: 'business' });
     expect(res.status).toBe(200);
@@ -121,7 +157,7 @@ describe('POST /api/ialab/prompts', () => {
 
 describe('POST /api/ialab/evaluate-prompt', () => {
   it('returns 400 when prompt is missing', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/evaluate-prompt')
       .send({});
     expect(res.status).toBe(400);
@@ -129,7 +165,7 @@ describe('POST /api/ialab/evaluate-prompt', () => {
   });
 
   it('evaluates a valid prompt', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/evaluate-prompt')
       .send({ prompt: 'Eres un experto en marketing. Crea una campaña para redes sociales.' });
     expect(res.status).toBe(200);
@@ -139,7 +175,7 @@ describe('POST /api/ialab/evaluate-prompt', () => {
 
   it('returns grade Bueno or higher for well-structured prompt', async () => {
     const longPrompt = 'Eres un experto en IA. ' + 'palabra '.repeat(150) + ' Tarea: haz algo. Evita errores comunes.';
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/evaluate-prompt')
       .send({ prompt: longPrompt });
     expect(res.status).toBe(200);
@@ -147,7 +183,7 @@ describe('POST /api/ialab/evaluate-prompt', () => {
   });
 
   it('returns grade Necesita mejora for very short prompt', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/evaluate-prompt')
       .send({ prompt: 'hola' });
     expect(res.status).toBe(200);
@@ -155,7 +191,7 @@ describe('POST /api/ialab/evaluate-prompt', () => {
   });
 
   it('returns grade Bueno for mid-scoring prompt', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/evaluate-prompt')
       .send({ prompt: 'Eres un experto en finanzas. Necesito un presupuesto.' });
     expect(res.status).toBe(200);
@@ -163,7 +199,7 @@ describe('POST /api/ialab/evaluate-prompt', () => {
   });
 
   it('accepts custom criteria labels', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/evaluate-prompt')
       .send({
         prompt: 'Eres un experto en marketing. Crea una campaña.',
@@ -175,7 +211,7 @@ describe('POST /api/ialab/evaluate-prompt', () => {
   });
 
   it('handles prompt with all quality markers', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/evaluate-prompt')
       .send({ prompt: 'Eres un experto en marketing. Tarea: crea una campaña. Evita usar jerga técnica.' });
     expect(res.status).toBe(200);
@@ -183,7 +219,7 @@ describe('POST /api/ialab/evaluate-prompt', () => {
   });
 
   it('returns feedback for short prompt without role', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/evaluate-prompt')
       .send({ prompt: 'Hola mundo' });
     expect(res.status).toBe(200);
@@ -192,7 +228,7 @@ describe('POST /api/ialab/evaluate-prompt', () => {
 
   it('returns grade Excelente for long structured prompt with all markers', async () => {
     const longPrompt = 'Eres un experto en tecnología. ' + 'término '.repeat(200) + ' Tarea: realiza el análisis completo. Evita errores comunes en la implementación.';
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/evaluate-prompt')
       .send({ prompt: longPrompt });
     expect(res.status).toBe(200);
@@ -200,7 +236,7 @@ describe('POST /api/ialab/evaluate-prompt', () => {
   });
 
   it('returns all feedback types for bare minimum prompt', async () => {
-    const res = await request(app)
+    const res = await authed(app)
       .post('/api/ialab/evaluate-prompt')
       .send({ prompt: 'texto corto' });
     expect(res.status).toBe(200);
@@ -455,7 +491,7 @@ describe('DELETE /api/ialab/templates/:templateId (bypassed auth)', () => {
 
 describe('GET /api/ialab/resources', () => {
   it('returns resources list', async () => {
-    const res = await request(app).get('/api/ialab/resources');
+    const res = await authed(app).get('/api/ialab/resources');
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.resources)).toBe(true);
@@ -463,13 +499,13 @@ describe('GET /api/ialab/resources', () => {
   });
 
   it('returns resources filtered by moduleId', async () => {
-    const res = await request(app).get('/api/ialab/resources?moduleId=module1');
+    const res = await authed(app).get('/api/ialab/resources?moduleId=module1');
     expect(res.status).toBe(200);
     expect(res.body.resources.length).toBeGreaterThan(0);
   });
 
   it('returns resources filtered by type', async () => {
-    const res = await request(app).get('/api/ialab/resources?resourceType=pdf');
+    const res = await authed(app).get('/api/ialab/resources?resourceType=pdf');
     expect(res.status).toBe(200);
     for (const r of res.body.resources) {
       expect(r.type).toBe('pdf');
@@ -477,7 +513,7 @@ describe('GET /api/ialab/resources', () => {
   });
 
   it('returns all resources when moduleId has no matches', async () => {
-    const res = await request(app).get('/api/ialab/resources?moduleId=nonexistent');
+    const res = await authed(app).get('/api/ialab/resources?moduleId=nonexistent');
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
   });

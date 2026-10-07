@@ -1,3 +1,18 @@
+// El router de IALab ahora cuelga de requireAuth/requireProduct en app.js: estas
+// pruebas validan los handlers, no el login, así que se simulan los guards.
+const authPath = require.resolve('../../middleware/auth');
+delete require.cache[authPath];
+require.cache[authPath] = {
+  id: authPath,
+  filename: authPath,
+  loaded: true,
+  exports: {
+    requireAuth: (req, _res, next) => { req.userId = 'test-user-id'; next(); },
+    optionalAuth: (_req, _res, next) => next(),
+    requireProduct: () => (_req, _res, next) => next(),
+  },
+};
+
 const request = require('supertest');
 const app = require('../../app');
 

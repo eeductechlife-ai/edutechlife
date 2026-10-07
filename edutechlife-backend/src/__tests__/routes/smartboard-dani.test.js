@@ -268,15 +268,16 @@ describe('GET /user-role', () => {
   });
 
   it('returns parent when active link exists', async () => {
-    mockSupabase.from.mockReturnValue({
+    // El vínculo se lee como lista (.limit(1)) y el perfil con .maybeSingle().
+    mockSupabase.from.mockImplementation((table) => ({
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
-      limit: vi.fn().mockReturnThis(),
-      maybeSingle: vi.fn().mockResolvedValue({
-        data: { parent_user_id: 'test-user-id' },
+      limit: vi.fn().mockResolvedValue({
+        data: table === 'parent_student_links' ? [{ parent_user_id: 'test-user-id' }] : [],
         error: null,
       }),
-    });
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+    }));
 
     const res = await request(app)
       .get('/api/smartboard/user-role')

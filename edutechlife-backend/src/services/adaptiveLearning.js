@@ -550,6 +550,18 @@ async function recommendContent(studentId, state) {
   return { recommendations: out, persisted };
 }
 
+// Frase que ve el estudiante (de 8 a 16 años) en «Tu siguiente actividad».
+// No lleva palabras internas (goal) y, con pocos datos, no dice «0 % de
+// dominio»: eso era "sin datos", no un nivel real.
+const MIN_CONFIDENCE_FOR_PERCENT = 0.5;
+function buildPracticeReason(label, priority) {
+  if (priority.confidence < MIN_CONFIDENCE_FOR_PERCENT) {
+    return `Todavía tengo pocos datos de ${label}. Un reto corto de 10 minutos me ayuda a conocerte mejor y a ajustar tu práctica.`;
+  }
+  const pct = Math.round(priority.minMastery * 100);
+  return `${label} es la materia con más espacio para subir (${pct}% de dominio). Practicar ahora tiene el mayor impacto en tu aprendizaje.`;
+}
+
 /**
  * Returns the single best next action for the student with an explanation,
  * driven by the SMARTBOARD PRIORITY (E5): learning need > engagement > strength.
@@ -565,7 +577,7 @@ function getNextBestAction(state) {
       subject: subj,
       label: SUBJECT_MAP[subj] || subj,
       action: "practice",
-      reason: `${SUBJECT_MAP[subj] || subj} está en ${Math.round(smartboardPriority.minMastery * 100)}% de dominio (meta: ${smartboardPriority.goal}). Practicar ahora tiene el mayor impacto en tu aprendizaje.`,
+      reason: buildPracticeReason(SUBJECT_MAP[subj] || subj, smartboardPriority),
       estimatedMinutes: 10,
       priority: "high",
       difficulty: smartboardPriority.minMastery < 0.4 ? "easy" : "medium",

@@ -81,9 +81,9 @@ describe('Dani orchestrator — buildSystemPrompt (B.13)', () => {
     expect(prompt).toContain('MODO SOCRÁTICO');
   });
 
-  it('incluye el contexto básico de EdutechLife/SmartBoard (sin precio)', () => {
+  it('incluye el contexto básico de EdutechLife/IngenIA (sin precio)', () => {
     const prompt = buildSystemPrompt(ctx);
-    expect(prompt).toContain('SmartBoard');
+    expect(prompt).toContain('IngenIA');
     expect(prompt).toContain('IALab');
     expect(prompt).toContain('WhatsApp +57 323 836 5517');
   });

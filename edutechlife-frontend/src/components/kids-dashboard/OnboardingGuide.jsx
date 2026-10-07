@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { track } from "../../lib/analytics";
@@ -50,6 +50,9 @@ const OnboardingGuide = memo(({ onTabChange }) => {
     }
   }, [show]);
 
+  const reduceMotion = useReducedMotion();
+  const startRef = useRef(null);
+
   const ageGroup =
     studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior";
 
@@ -64,12 +67,27 @@ const OnboardingGuide = memo(({ onTabChange }) => {
     setOnboardingComplete(true);
   };
 
+  // Escape cierra la bienvenida y el foco arranca en la acción principal.
+  useEffect(() => {
+    if (!show) return undefined;
+    startRef.current?.focus();
+    const onKey = (e) => {
+      if (e.key === "Escape") setOnboardingComplete(true);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [show, setOnboardingComplete]);
+
   return (
     <AnimatePresence>
       {show && (
         <motion.div
           key="onboarding-welcome"
-          className="fixed inset-0 z-[80] flex items-center justify-center p-4"
+          className="fixed inset-0 z-[80] flex items-center justify-center px-3 sm:px-4"
+          style={{
+            paddingTop: "max(0.75rem, env(safe-area-inset-top))",
+            paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))",
+          }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -78,97 +96,120 @@ const OnboardingGuide = memo(({ onTabChange }) => {
           <motion.div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={handleExplore}
+            aria-hidden="true"
           />
 
-          {/* Card */}
+          {/* Card: nunca más alta que la pantalla; el contenido se desplaza y
+              las acciones quedan siempre a la vista. */}
           <motion.div
-            className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4 overflow-hidden"
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="onboarding-title"
+            className="relative flex flex-col w-full max-w-sm max-h-full bg-white rounded-2xl shadow-2xl overflow-hidden"
+            initial={{ opacity: 0, scale: 0.95, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            exit={{ opacity: 0, scale: 0.95, y: 16 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
           >
             {/* Close */}
             <button
+              type="button"
               onClick={handleExplore}
-              className="absolute top-3 right-3 z-10 p-1.5 rounded-full hover:bg-white/20 transition-colors"
+              className="absolute top-2 right-2 z-10 w-11 h-11 flex items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
               aria-label="Cerrar"
             >
-              <X size={18} className="text-white" />
+              <X size={20} className="text-white" aria-hidden="true" />
             </button>
 
-            {/* Header — IngenIA navy */}
-            <div
-              className="px-6 pt-8 pb-6 text-center"
-              style={{
-                background: "linear-gradient(135deg, #004B63 0%, #0A2540 100%)",
-              }}
-            >
-              {/* Dani brand avatar */}
-              <motion.div
-                className="mx-auto mb-4 flex items-center justify-center rounded-full"
+            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
+              {/* Header — IngenIA navy */}
+              <div
+                className="px-5 pt-7 pb-5 sm:px-6 text-center"
                 style={{
-                  width: 80,
-                  height: 80,
                   background:
-                    "radial-gradient(circle at 35% 30%, #1E3F73 0%, #0B1D3A 70%)",
-                  boxShadow:
-                    "0 0 0 3px rgba(111,240,255,0.4), 0 6px 20px rgba(3,10,30,0.45)",
-                }}
-                animate={{ y: [0, -4, 0] }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
+                    "linear-gradient(135deg, #004B63 0%, #0A2540 100%)",
                 }}
               >
-                <DaniCharacter size={72} mood="happy" animated title="Dani" />
-              </motion.div>
+                {/* Dani brand avatar */}
+                <motion.div
+                  className="mx-auto mb-3 flex items-center justify-center rounded-full"
+                  style={{
+                    width: 68,
+                    height: 68,
+                    background:
+                      "radial-gradient(circle at 35% 30%, #1E3F73 0%, #0B1D3A 70%)",
+                    boxShadow:
+                      "0 0 0 3px rgba(111,240,255,0.4), 0 6px 20px rgba(3,10,30,0.45)",
+                  }}
+                  animate={reduceMotion ? undefined : { y: [0, -4, 0] }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <DaniCharacter
+                    size={60}
+                    mood="happy"
+                    animated={!reduceMotion}
+                    title="Dani"
+                  />
+                </motion.div>
 
-              <h2 className="text-lg font-bold text-white mb-1">
-                ¡Bienvenido/a a IngenIA!
-              </h2>
-              <p className="text-white/80 text-sm leading-relaxed">
-                {welcomeText}
-              </p>
+                <h2
+                  id="onboarding-title"
+                  className="!m-0 text-xl font-bold text-white mb-1.5"
+                >
+                  ¡Bienvenido/a a IngenIA!
+                </h2>
+                <p className="!m-0 text-white/90 text-[15px] leading-relaxed">
+                  {welcomeText}
+                </p>
+              </div>
+
+              {/* Features */}
+              <div className="px-5 py-4">
+                <h3 className="!m-0 text-xs font-bold text-[#004B63]/75 uppercase tracking-wider mb-3">
+                  ¿Qué puedes hacer aquí?
+                </h3>
+                <ul className="space-y-3 p-0 m-0 list-none">
+                  {FEATURES.map((f) => (
+                    <li key={f.label} className="flex items-start gap-3">
+                      <span
+                        className="text-xl w-8 text-center flex-shrink-0 leading-6"
+                        aria-hidden="true"
+                      >
+                        {f.icon}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="!m-0 font-semibold text-[15px] leading-5 text-[#004B63]">
+                          {f.label}
+                        </p>
+                        <p className="!m-0 text-[13px] leading-snug text-slate-600">
+                          {f.desc}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            {/* Features */}
-            <div className="px-5 py-4">
-              <p className="text-[10px] font-bold text-[#004B63]/60 uppercase tracking-widest mb-3">
-                ¿Qué puedes hacer aquí?
-              </p>
-              <ul className="space-y-2.5">
-                {FEATURES.map((f) => (
-                  <li key={f.label} className="flex items-center gap-3">
-                    <span className="text-lg w-7 text-center flex-shrink-0">
-                      {f.icon}
-                    </span>
-                    <div className="min-w-0">
-                      <span className="font-semibold text-sm text-[#004B63]">
-                        {f.label}
-                      </span>
-                      <span className="text-xs text-gray-400 ml-1">
-                        — {f.desc}
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Actions */}
-            <div className="px-5 pb-5 flex flex-col gap-2.5 pt-1">
+            {/* Actions: siempre visibles */}
+            <div className="shrink-0 px-5 pt-3 pb-4 flex flex-col gap-2.5 border-t border-slate-100 bg-white">
               <button
+                ref={startRef}
+                type="button"
                 onClick={handleStart}
-                className="w-full py-3 rounded-xl text-white font-bold text-sm hover:opacity-90 active:scale-95 transition-all shadow-md"
-                style={{ background: "#FB8500" }}
+                className="w-full min-h-[48px] px-3 rounded-xl text-white font-bold text-[15px] leading-tight hover:opacity-90 active:scale-95 transition-all shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#004B63]"
+                style={{ background: "#C2410C" }}
               >
                 ¡Descubrir mi estilo de aprendizaje!
               </button>
               <button
+                type="button"
                 onClick={handleExplore}
-                className="w-full py-2.5 rounded-xl border-2 border-gray-200 text-gray-500 font-medium text-sm hover:bg-gray-50 transition-colors"
+                className="w-full min-h-[44px] rounded-xl border-2 border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors"
               >
                 Explorar primero
               </button>

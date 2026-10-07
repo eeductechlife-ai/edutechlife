@@ -21,6 +21,7 @@ import {
   setLocalStorage,
 } from "./useIngenIAPersistence";
 import { useIngenIAActions } from "./useIngenIAActions";
+import { clearIngenIAUserData } from "../utils/userDataStorage";
 import {
   useStudentData,
   usePointsHistory,
@@ -242,8 +243,20 @@ export const IngenIAKidsProvider = ({ children }) => {
     streak,
     conversationCount,
     vakResult,
+    pointsHistory,
     userId,
+    // Guarda en el servidor los premios que da useIngenIAActions.
+    syncPoints: (points, reason) => {
+      if (!userId || !(points > 0)) return;
+      addPointsMutation.mutate({ points, reason, category: "bonus" });
+    },
   });
+
+  // Al entrar, quitar lo que otras cuentas dejaron guardado en este navegador
+  // (chats, notas, memoria de Dani…). La cuenta actual conserva lo suyo.
+  useEffect(() => {
+    if (userId) clearIngenIAUserData({ keepUserId: userId });
+  }, [userId]);
 
   // Compute average score from a grade entry (supports 4-period format or legacy single score)
   const gradeAvg = useCallback((g) => {

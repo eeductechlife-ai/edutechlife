@@ -18,6 +18,7 @@ import {
 } from "./practicarHandoff";
 import { subjectIdFor } from "../improvementPlan/planActivity";
 import { markStoredActivityDone } from "../improvementPlan/useImprovementPlan";
+import { pickRecommendation } from "./pickRecommendation";
 import SubjectPicker from "./SubjectPicker";
 import ContentGenerator from "./ContentGenerator";
 import DocumentScanner from "./DocumentScanner";
@@ -25,51 +26,6 @@ import WeekProgress from "./WeekProgress";
 import { usePracticeLog } from "./practicarProgress";
 import { useMediaQuery, PHONE_QUERY } from "./useMediaQuery";
 import { isChallengeSubjectAvailable } from "../challengeEngine/useChallengeEngine";
-
-function pickRecommendation(subjects) {
-  const retoable = subjects.filter((s) => s.retoAvailable);
-  if (!retoable.length) return null;
-
-  // Highest priority: declining + low grade
-  const declining = retoable.find(
-    (s) => s.trend?.dir === "down" && s.score != null && s.score < 3.5,
-  );
-  if (declining)
-    return {
-      subject: declining,
-      why: `Nota bajando (${declining.score.toFixed(1)}) — ¡practiquemos hoy!`,
-      urgent: true,
-    };
-
-  const weak = retoable.find((s) => s.weak);
-  if (weak)
-    return {
-      subject: weak,
-      why: `${weak.label} necesita refuerzo`,
-      urgent: false,
-    };
-  const tried = retoable
-    .filter((s) => s.lastReto)
-    .sort((a, b) => a.lastReto.score - b.lastReto.score);
-  if (tried[0]?.lastReto.score < 70) {
-    return {
-      subject: tried[0],
-      why: `En tu último reto sacaste ${tried[0].lastReto.score}%`,
-      urgent: false,
-    };
-  }
-  const untried = retoable.find((s) => !s.lastReto);
-  if (untried)
-    return {
-      subject: untried,
-      why: "Aún no has hecho un reto de esta materia",
-      urgent: false,
-    };
-  const oldest = [...tried].sort((a, b) =>
-    a.lastReto.at.localeCompare(b.lastReto.at),
-  )[0];
-  return { subject: oldest, why: "Hace rato no la practicas", urgent: false };
-}
 
 // Vertical-only scroll inside the dashboard's content pane; scrollIntoView would
 // also shift the overflow-hidden root sideways on phones.
@@ -375,7 +331,7 @@ const PracticarHub = memo(({ onTabChange, darkMode }) => {
           className="w-full !flex items-center !justify-start gap-3 p-3 sm:p-4 rounded-2xl text-left text-white shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-[#EF4444]/40"
           style={{
             background: recommendation.urgent
-              ? "linear-gradient(135deg, #EF4444 0%, #FB8500 100%)"
+              ? "linear-gradient(135deg, #F97316 0%, #FB8500 100%)"
               : `linear-gradient(135deg, ${recommendation.subject.color} 0%, #9D4EDD 100%)`,
           }}
         >
@@ -383,17 +339,17 @@ const PracticarHub = memo(({ onTabChange, darkMode }) => {
             className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 flex items-center justify-center text-2xl sm:text-3xl shrink-0"
             aria-hidden="true"
           >
-            {recommendation.urgent ? "🚨" : recommendation.subject.emoji}
+            {recommendation.urgent ? "💪" : recommendation.subject.emoji}
           </span>
           <span className="min-w-0 flex-1">
             <span className="block text-[11px] font-black uppercase tracking-wider text-white/80">
               {recommendation.urgent
-                ? "🚨 URGENTE — ¡Reforzar ya!"
+                ? "💪 Vale la pena reforzar hoy"
                 : "Recomendado para ti"}
             </span>
             <span className="block text-lg font-black leading-tight">
               {recommendation.urgent
-                ? `¡Salvar ${recommendation.subject.label}!`
+                ? `Subamos ${recommendation.subject.label}`
                 : `Reto de ${recommendation.subject.label}`}
             </span>
             <span className="block text-xs text-white/85 mt-0.5">

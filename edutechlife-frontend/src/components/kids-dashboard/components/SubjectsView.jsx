@@ -9,6 +9,7 @@ import {
   HANDOFF_CHALLENGE_SUBJECT,
 } from "../practicarHub/practicarHandoff";
 import { SUBJECT_META } from "../practicarHub/practicarConfig";
+import { PASSING_GRADE } from "../kidsDashboardConfig";
 
 function TrendBadge({ trend }) {
   if (!trend || (trend.dir !== "up" && trend.dir !== "down")) return null;
@@ -96,10 +97,13 @@ const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
     s.gradeScore != null
       ? Number(s.gradeScore)
       : (Number(s.progress) || 0) / 20;
-  const isUrgent = (s) => s.trend?.dir === "down" && score(s) < 3.5;
+  // Para ordenar: bajando y por debajo de 3.5 va primero. Para el tono: solo se
+  // marca "urgente" (rojo) por debajo de la nota para aprobar (3.0).
+  const needsFocus = (s) => s.trend?.dir === "down" && score(s) < 3.5;
+  const isUrgent = (s) => s.trend?.dir === "down" && score(s) < PASSING_GRADE;
   const ordered = [...subjects].sort((a, b) => {
-    const au = isUrgent(a) ? 0 : 1;
-    const bu = isUrgent(b) ? 0 : 1;
+    const au = needsFocus(a) ? 0 : 1;
+    const bu = needsFocus(b) ? 0 : 1;
     if (au !== bu) return au - bu;
     return score(a) - score(b);
   });
@@ -153,8 +157,9 @@ const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
               }}
             >
               {urgent && (
-                <div className="flex items-center gap-1.5 mb-2 text-[11px] font-black text-[#EF4444]">
-                  <span>⚠️</span> Nota bajando — ¡practica hoy!
+                <div className="flex items-center gap-1.5 mb-2 text-xs font-black text-[#B91C1C]">
+                  <span aria-hidden="true">💪</span> Un reto corto hoy te ayuda
+                  a subirla
                 </div>
               )}
               <div className="flex items-center gap-3">
@@ -229,7 +234,7 @@ const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
                           : { background: "#F1F5F9", color: "#00303F" }
                   }
                 >
-                  {urgent ? "🚨 ¡Reforzar!" : "🎯 Practicar"}
+                  {urgent ? "💪 Reforzar" : "🎯 Practicar"}
                 </button>
               </div>
             </motion.div>
