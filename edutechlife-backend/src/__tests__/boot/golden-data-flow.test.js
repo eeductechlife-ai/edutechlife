@@ -86,8 +86,8 @@ describe('golden data flow — una sola fuente de verdad (B.10)', () => {
     const files = [
       'src/hooks/useAdaptiveEngine.js',
       'src/hooks/useCompetencyTracking.js',
-      'src/context/useSmartBoardActions.js',
-      'src/context/SmartBoardKidsContext.jsx',
+      'src/context/useIngenIAActions.js',
+      'src/context/IngenIAKidsContext.jsx',
     ];
     for (const f of files) {
       expect(fe(f)).not.toContain('sb_auth_token');
