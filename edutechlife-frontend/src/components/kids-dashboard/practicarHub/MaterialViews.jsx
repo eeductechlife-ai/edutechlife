@@ -4,6 +4,7 @@ import { Youtube, Volume2, Square, ChevronDown } from "lucide-react";
 import { sanitize } from "../../../utils/sanitize";
 import { fetchTopVideos } from "../../../utils/api";
 import { speakAsDani, stopDani, isCurrentRun } from "./daniSpeak";
+import { readableTextOn } from "../../../utils/contrast";
 
 const PROSE =
   "text-sm leading-relaxed break-words [&_h1]:font-bold [&_h1]:text-base [&_h2]:font-bold [&_h2]:text-base [&_h2]:mt-3 [&_h3]:font-bold [&_h3]:mt-2 [&_p]:my-1.5 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:my-0.5 [&_strong]:font-bold";
@@ -105,7 +106,7 @@ function ExerciseCard({ ex, n, color, dm, onMark, mark }) {
             type="button"
             onClick={() => setOpen(true)}
             className="px-3 py-2 rounded-xl text-xs font-bold text-white"
-            style={{ background: color }}
+            style={{ background: color, color: readableTextOn(color) }}
           >
             Ver respuesta
           </button>
@@ -265,11 +266,11 @@ function VideoSearch({ search, dm, defaultOpen }) {
                       className="w-full h-full object-cover"
                     />
                   )}
-                  <span className="absolute bottom-1 right-1 px-1 rounded bg-black/75 text-white text-[10px] font-bold">
+                  <span className="absolute bottom-1 right-1 px-1 rounded bg-black/75 text-white text-xs font-bold">
                     {mmss(v.seconds)}
                   </span>
                   {i === 0 && (
-                    <span className="absolute top-1 left-1 px-1.5 rounded bg-amber-400 text-amber-950 text-[9px] font-black">
+                    <span className="absolute top-1 left-1 px-1.5 rounded bg-amber-400 text-amber-950 text-xs font-black">
                       TOP
                     </span>
                   )}
@@ -278,10 +279,10 @@ function VideoSearch({ search, dm, defaultOpen }) {
                   <span className="block text-xs font-bold leading-snug line-clamp-2 text-inherit">
                     {v.title}
                   </span>
-                  <span className={`block text-[11px] mt-0.5 truncate ${sub}`}>
+                  <span className={`block text-xs mt-0.5 truncate ${sub}`}>
                     {v.channel}
                   </span>
-                  <span className={`block text-[11px] ${sub}`}>
+                  <span className={`block text-xs ${sub}`}>
                     👁 {compact(v.views)} vistas
                     {v.likes ? ` · 👍 ${compact(v.likes)}` : ""}
                   </span>
@@ -319,7 +320,7 @@ export const VideosView = memo(function VideosView({ data, dm }) {
         <VideoSearch key={v.texto} search={v} dm={dm} defaultOpen={i === 0} />
       ))}
       <li
-        className={`text-[11px] px-1 ${dm ? "text-[#64748B]" : "text-[#94A3B8]"}`}
+        className={`text-xs px-1 ${dm ? "text-[#94A3B8]" : "text-[#64748B]"}`}
       >
         Videos con búsqueda segura, ordenados por los más vistos y mejor
         valorados. Si tienes dudas, míralos con un adulto.

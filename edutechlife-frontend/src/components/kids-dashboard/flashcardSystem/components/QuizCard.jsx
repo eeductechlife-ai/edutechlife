@@ -1,6 +1,7 @@
-import { memo } from "react";
+import { memo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "../../../../i18n/I18nProvider";
+import { readableTextOn } from "../../../../utils/contrast";
 
 // Fits a phone screen with the top bar and bottom nav visible.
 const CARD_H = "min(480px, calc(100dvh - 300px))";
@@ -18,6 +19,20 @@ const QuizCard = memo((props) => {
     themeIcon,
     gradeLabel,
   } = props;
+
+  const frontRef = useRef(null);
+  const backRef = useRef(null);
+  const mounted = useRef(false);
+
+  // El foco sigue a la cara visible: al voltear pasa a la respuesta y al pasar
+  // a la tarjeta siguiente vuelve al frente. No se mueve en el primer render.
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
+    (flipped ? backRef : frontRef).current?.focus({ preventScroll: true });
+  }, [flipped]);
 
   if (!card) {
     return (
@@ -54,9 +69,8 @@ const QuizCard = memo((props) => {
         {idx + 1} / {total}
       </p>
       <div
-        className="w-full cursor-pointer"
+        className="w-full"
         style={{ perspective: "1000px", maxWidth: "700px", minHeight: CARD_H }}
-        onClick={onFlip}
       >
         <motion.div
           className="relative w-full"
@@ -64,15 +78,24 @@ const QuizCard = memo((props) => {
           transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
           style={{ transformStyle: "preserve-3d", minHeight: CARD_H }}
         >
-          <div
-            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-5 sm:p-8 flex flex-col justify-between"
+          {/* Cara visible: un botón de verdad (Espacio/Enter). Al voltear se
+              oculta a lectores de pantalla y al foco con aria-hidden + inert. */}
+          <button
+            ref={frontRef}
+            type="button"
+            onClick={onFlip}
+            aria-expanded={flipped}
+            aria-label={`${frontLabel}: ${card.front}. ${t("kid.flashcards.tap_to_reveal")}`}
+            aria-hidden={flipped ? "true" : undefined}
+            inert={flipped ? "" : undefined}
+            className="absolute inset-0 w-full rounded-2xl bg-white border-2 shadow-lg p-5 sm:p-8 flex flex-col justify-between text-left cursor-pointer"
             style={{
               backfaceVisibility: "hidden",
               borderColor: themeColor || "#E2E8F0",
               minHeight: CARD_H,
             }}
           >
-            <div className="flex flex-col items-center justify-center flex-1 relative">
+            <span className="flex flex-col items-center justify-center flex-1 relative w-full">
               {gradeLabel && (
                 <span
                   className="absolute top-0 right-0 px-2 py-1 rounded-lg text-xs font-bold"
@@ -90,20 +113,26 @@ const QuizCard = memo((props) => {
               >
                 {frontLabel}
               </span>
-              <p className="text-2xl sm:text-3xl font-bold text-[#004B63] text-center mb-4">
+              <span className="block text-2xl sm:text-3xl font-bold text-[#004B63] text-center mb-4">
                 {card.front}
-              </p>
-              <span className="text-5xl sm:text-6xl">
+              </span>
+              <span className="text-5xl sm:text-6xl" aria-hidden="true">
                 {card.icon || themeIcon || "📚"}
               </span>
-            </div>
-            <p className="text-sm font-semibold text-[#64748B] text-center">
+            </span>
+            <span className="block w-full text-sm font-semibold text-[#64748B] text-center">
               👆 {t("kid.flashcards.tap_to_reveal")}
-            </p>
-          </div>
+            </span>
+          </button>
 
           <div
-            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-4 sm:p-6 flex flex-col"
+            ref={backRef}
+            tabIndex={-1}
+            role="group"
+            aria-label={`${backLabel}: ${card.front}`}
+            aria-hidden={flipped ? undefined : "true"}
+            inert={flipped ? undefined : ""}
+            className="absolute inset-0 rounded-2xl bg-white border-2 shadow-lg p-4 sm:p-6 flex flex-col outline-none"
             style={{
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
@@ -159,6 +188,7 @@ const QuizCard = memo((props) => {
                         className="px-3 py-1.5 rounded-lg text-sm font-semibold text-white"
                         style={{
                           backgroundColor: themeColor,
+                          color: readableTextOn(themeColor),
                         }}
                       >
                         {term}

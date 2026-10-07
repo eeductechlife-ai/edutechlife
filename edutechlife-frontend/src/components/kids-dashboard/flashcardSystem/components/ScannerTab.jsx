@@ -162,7 +162,7 @@ const ScannerTab = memo(({ onGenerated }) => {
         className="w-full p-3 rounded-xl border border-[#E2E8F0] text-[#004B63] text-sm resize-none focus:outline-none focus:border-[#EF476F]/60"
       />
 
-      <p className="text-[11px] text-[#64748B]">
+      <p className="text-xs text-[#64748B]">
         🎓{" "}
         {gradeLevel
           ? `Tarjetas y resumen para tu grado ${gradeLevel}°`

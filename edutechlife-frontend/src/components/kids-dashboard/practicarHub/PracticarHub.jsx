@@ -94,7 +94,7 @@ function ToolButton({
       <span className="min-w-0 flex-1">
         <span className="block text-sm font-bold leading-tight">{title}</span>
         <span
-          className={`block text-[11px] sm:text-xs mt-0.5 leading-snug ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+          className={`block text-xs sm:text-xs mt-0.5 leading-snug ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
         >
           {desc}
         </span>
@@ -342,7 +342,7 @@ const PracticarHub = memo(({ onTabChange, darkMode }) => {
             {recommendation.urgent ? "💪" : recommendation.subject.emoji}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block text-[11px] font-black uppercase tracking-wider text-white/80">
+            <span className="block text-xs font-black uppercase tracking-wider text-white/80">
               {recommendation.urgent
                 ? "💪 Vale la pena reforzar hoy"
                 : "Recomendado para ti"}

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { sanitize } from "../../utils/sanitize";
+import { POINTS } from "../../context/pointsEconomy";
 
 const API_BASE = import.meta.env.VITE_API_URL || "";
 
@@ -184,7 +185,7 @@ const PersonalizedPlan = () => {
     (activityId) => {
       if (!completedActivities.includes(activityId)) {
         setCompletedActivities((prev) => [...prev, activityId]);
-        addPoints(25, "Actividad del plan completada");
+        addPoints(POINTS.planActivity, "Actividad del plan completada");
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 2000);
       }

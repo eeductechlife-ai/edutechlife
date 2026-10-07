@@ -45,6 +45,7 @@ import useTimetable from "../hooks/useTimetable";
 import { useSubjectProgressPersistence } from "../hooks/useSubjectProgressPersistence";
 import { useDaniMemory } from "../hooks/useDaniMemory";
 import { ageGroupFor } from "../utils/studentLevel";
+import { capPoints, POINTS } from "./pointsEconomy";
 
 export const IngenIAKidsContext = createContext();
 
@@ -517,7 +518,7 @@ export const IngenIAKidsProvider = ({ children }) => {
       );
       if (minutes > 0 && minutes !== totalActiveMinutes) {
         setTotalActiveMinutes((prev) => prev + 1);
-        addPoints(1, "Minuto activo en dashboard");
+        addPoints(POINTS.activeMinute, "Minuto activo en dashboard");
         sessionStartRef.current = new Date();
       }
     }, 60000);
@@ -944,19 +945,26 @@ export const IngenIAKidsProvider = ({ children }) => {
   }, [computedUpcomingDeadlines]);
 
   // Wrapper functions that use React Query mutations
+  // Devuelve los puntos que de verdad se dieron: las categorías repetibles
+  // (retos, EduCards, simulacros, podcast) tienen tope diario, y las pantallas
+  // muestran este valor, no el que habrían ganado sin tope.
   const addPointsWithSupabase = useCallback(
-    (amount, reason) => {
+    (amount, reason, category) => {
+      const granted = category
+        ? capPoints({ category, amount, history: pointsHistory })
+        : amount;
+      if (!(granted > 0) && amount > 0) return 0;
       // Store previous total for potential rollback
       const previousTotal = totalPoints;
       // Add to local state immediately (optimistic)
-      addPoints(amount, reason);
+      addPoints(granted, reason, category);
       // Also sync to Supabase
       if (userId) {
         addPointsMutation.mutate(
           {
-            points: amount,
+            points: granted,
             reason,
-            category: "bonus",
+            category: category || "bonus",
           },
           {
             onError: () => {
@@ -966,8 +974,9 @@ export const IngenIAKidsProvider = ({ children }) => {
           },
         );
       }
+      return granted;
     },
-    [addPoints, userId, addPointsMutation, totalPoints],
+    [addPoints, userId, addPointsMutation, totalPoints, pointsHistory],
   );
 
   const setVakResultWithSupabase = useCallback(

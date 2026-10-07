@@ -183,7 +183,7 @@ const IngenIAAnalytics = memo(() => {
             {t("analytics.empty_title") || "¡Empieza a estudiar!"}
           </h3>
           <p
-            className={`text-sm mt-1 max-w-sm ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+            className={`text-sm mt-1 max-w-sm ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
           >
             {t("analytics.empty_desc") ||
               "Completa misiones, estudia materias y gana puntos para ver tus estadísticas aquí."}
@@ -226,7 +226,7 @@ const IngenIAAnalytics = memo(() => {
             {t("analytics.title")}
           </h3>
           <p
-            className={`text-xs font-medium ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+            className={`text-xs font-medium ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
           >
             {t("analytics.subtitle")}
           </p>
@@ -244,8 +244,8 @@ const IngenIAAnalytics = memo(() => {
             <>
               <ResponsiveContainer width="100%" height={180}>
                 <BarChart data={weeklyData}>
-                  <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                  <YAxis tick={{ fontSize: 10 }} />
+                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                  <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
                   <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                     {weeklyData.map((entry, idx) => (
@@ -264,7 +264,7 @@ const IngenIAAnalytics = memo(() => {
                 </BarChart>
               </ResponsiveContainer>
               <p
-                className={`text-xs text-center mt-2 ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+                className={`text-xs text-center mt-2 ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
               >
                 {t("analytics.metric_speed_desc")}
               </p>
@@ -272,11 +272,11 @@ const IngenIAAnalytics = memo(() => {
           ) : (
             <div className="flex flex-col items-center justify-center h-[180px] text-center">
               <p
-                className={`text-sm font-semibold ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+                className={`text-sm font-semibold ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
               >
                 Sin datos esta semana
               </p>
-              <p className="text-[10px] mt-1 text-[#94A3B8]">
+              <p className="text-xs mt-1 text-[#94A3B8]">
                 Estudia para ver tu progreso diario
               </p>
             </div>
@@ -291,11 +291,11 @@ const IngenIAAnalytics = memo(() => {
         >
           <div className="overflow-x-auto">
             <div className="grid grid-cols-6 gap-1 min-w-[250px]">
-              <div className="text-[10px] text-[#64748B] font-medium"></div>
+              <div className="text-xs text-[#64748B] font-medium"></div>
               {weekDays.slice(0, 5).map((d) => (
                 <div
                   key={d}
-                  className="text-[10px] text-[#64748B] font-medium text-center"
+                  className="text-xs text-[#64748B] font-medium text-center"
                 >
                   {d}
                 </div>
@@ -305,7 +305,7 @@ const IngenIAAnalytics = memo(() => {
                 : [{ name: "—", value: 0, color: "#ccc" }]
               ).map((subj) => (
                 <Fragment key={subj.name}>
-                  <div className="text-[10px] text-[#64748B] font-medium py-2 overflow-hidden text-ellipsis whitespace-nowrap">
+                  <div className="text-xs text-[#64748B] font-medium py-2 overflow-hidden text-ellipsis whitespace-nowrap">
                     {subj.name}
                   </div>
                   {weekDays.slice(0, 5).map((day) => {
@@ -326,7 +326,7 @@ const IngenIAAnalytics = memo(() => {
                         className={`w-full aspect-square rounded ${intensity} flex items-center justify-center`}
                         title={`${subj.name} ${day}: ${val}%`}
                       >
-                        <span className="text-[8px] text-white font-bold">
+                        <span className="text-xs text-white font-bold">
                           {val > 20 ? `${val}` : ""}
                         </span>
                       </div>
@@ -346,8 +346,8 @@ const IngenIAAnalytics = memo(() => {
         >
           <ResponsiveContainer width="100%" height={180}>
             <LineChart data={predictionData}>
-              <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-              <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
+              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+              <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
               <Tooltip />
               <Line
                 type="monotone"
@@ -359,7 +359,7 @@ const IngenIAAnalytics = memo(() => {
             </LineChart>
           </ResponsiveContainer>
           <p
-            className={`text-xs text-center mt-2 ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+            className={`text-xs text-center mt-2 ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
           >
             Proyección: {predictionData[predictionData.length - 1]?.value || 0}%
             estimado
@@ -381,18 +381,18 @@ const IngenIAAnalytics = memo(() => {
               <XAxis
                 dataKey="x"
                 name="minutos"
-                tick={{ fontSize: 10 }}
-                label={{ value: "Minutos", position: "bottom", fontSize: 10 }}
+                tick={{ fontSize: 12 }}
+                label={{ value: "Minutos", position: "bottom", fontSize: 12 }}
               />
               <YAxis
                 dataKey="y"
                 name="nota"
-                tick={{ fontSize: 10 }}
+                tick={{ fontSize: 12 }}
                 label={{
                   value: "Nota",
                   angle: -90,
                   position: "insideLeft",
-                  fontSize: 10,
+                  fontSize: 12,
                 }}
               />
               <Tooltip formatter={(v) => [`${v}`, "Valor"]} />
@@ -400,7 +400,7 @@ const IngenIAAnalytics = memo(() => {
             </ScatterChart>
           </ResponsiveContainer>
           <p
-            className={`text-xs text-center mt-2 ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+            className={`text-xs text-center mt-2 ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
           >
             Correlación: más tiempo = mejores resultados
           </p>
@@ -454,7 +454,7 @@ const IngenIAAnalytics = memo(() => {
                 {streak?.current || 0}
               </p>
               <p
-                className={`text-[10px] ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+                className={`text-xs ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
               >
                 Racha actual
               </p>
@@ -466,7 +466,7 @@ const IngenIAAnalytics = memo(() => {
                 {totalPoints || 0}
               </p>
               <p
-                className={`text-[10px] ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+                className={`text-xs ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
               >
                 Puntos totales
               </p>
@@ -478,7 +478,7 @@ const IngenIAAnalytics = memo(() => {
                 {missions?.filter((m) => m.completed).length || 0}
               </p>
               <p
-                className={`text-[10px] ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+                className={`text-xs ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
               >
                 Misiones
               </p>

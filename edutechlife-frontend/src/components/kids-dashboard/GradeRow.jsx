@@ -24,7 +24,7 @@ const PeriodInput = ({ label, value, onChange, onInvalid }) => {
   const shown = draft != null ? draft : value != null ? String(value) : "";
   return (
     <label className="flex flex-col items-center gap-0.5 min-w-0">
-      <span className="text-[10px] font-bold text-[#64748B] uppercase">
+      <span className="text-xs font-bold text-[#64748B] uppercase">
         {label}
       </span>
       <input
@@ -126,7 +126,7 @@ const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
         </button>
       </div>
       {dropping && (
-        <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#EF4444]">
+        <div className="flex items-center gap-1.5 text-xs font-bold text-[#EF4444]">
           ⚠️ La nota bajó en el último periodo — ¡practica para recuperarla!
         </div>
       )}
@@ -141,7 +141,7 @@ const GradeRow = memo(({ grade, subjects, onUpdate, onRemove }) => {
           />
         ))}
         <div className="flex flex-col items-center gap-0.5 min-w-0">
-          <span className="text-[10px] font-bold text-[#94A3B8] uppercase">
+          <span className="text-xs font-bold text-[#94A3B8] uppercase">
             Prom
           </span>
           <span

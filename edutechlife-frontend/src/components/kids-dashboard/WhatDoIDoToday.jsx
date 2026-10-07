@@ -21,7 +21,7 @@ const WhatDoIDoToday = memo(
         aria-label="Recomendación de hoy"
       >
         <div className="flex-1 min-w-0">
-          <p className="text-white/60 text-[10px] font-semibold uppercase tracking-widest mb-0.5">
+          <p className="text-white/60 text-xs font-semibold uppercase tracking-widest mb-0.5">
             ¿Qué hago hoy?
           </p>
           {loading && !nextAction ? (
@@ -31,7 +31,7 @@ const WhatDoIDoToday = memo(
               <p className="text-white font-bold text-sm leading-tight truncate">
                 {nextAction?.label}
               </p>
-              <p className="text-white/60 text-[11px] mt-0.5 line-clamp-2">
+              <p className="text-white/60 text-xs mt-0.5 line-clamp-2">
                 {nextAction?.reason}
               </p>
             </>
@@ -48,7 +48,7 @@ const WhatDoIDoToday = memo(
                   setSelected(m);
                   onMinutesChange?.(m);
                 }}
-                className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
                   selected === m
                     ? "bg-white text-[#00303F]"
                     : "bg-white/15 text-white hover:bg-white/25"

@@ -28,8 +28,8 @@ const SessionLog = ({ sessions, darkMode }) => {
       </h3>
       <div className="max-h-64 overflow-y-auto space-y-1">
         <div
-          className={`flex items-center justify-between px-3 py-2 text-[10px] font-semibold ${
-            darkMode ? "text-[#64748B]" : "text-[#94A3B8]"
+          className={`flex items-center justify-between px-3 py-2 text-xs font-semibold ${
+            darkMode ? "text-[#94A3B8]" : "text-[#64748B]"
           }`}
         >
           <span className="w-16">{t("smartboard.date")}</span>

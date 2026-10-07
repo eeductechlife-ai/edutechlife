@@ -157,7 +157,7 @@ export default function GradeSelector({ onSave, compact = false }) {
                   {o.value}°
                 </span>
                 <span
-                  className={`text-[10px] mt-0.5 leading-tight ${isSelected ? "text-white/80" : "opacity-70"}`}
+                  className={`text-xs mt-0.5 leading-tight ${isSelected ? "text-white/80" : "opacity-70"}`}
                 >
                   {o.level.replace("Básica ", "").replace(" Vocacional", "")}
                 </span>

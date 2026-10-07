@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
+import { readableTextOn } from "../../../utils/contrast";
 
 function statusText(s) {
   if (s.score != null) return `Nota ${s.score.toFixed(1)}`;
@@ -38,7 +39,7 @@ const SubjectPicker = memo(({ subjects, selectedId, onSelect, darkMode }) => {
             }`}
             style={
               selected
-                ? { background: s.color }
+                ? { background: s.color, color: readableTextOn(s.color) }
                 : { borderColor: s.weak ? `${s.color}88` : undefined }
             }
           >
@@ -50,8 +51,8 @@ const SubjectPicker = memo(({ subjects, selectedId, onSelect, darkMode }) => {
             )}
             {s.weak && !selected && (
               <span
-                className="absolute top-1 right-1 w-5 h-5 rounded-full text-[11px] flex items-center justify-center text-white"
-                style={{ background: s.color }}
+                className="absolute top-1 right-1 w-6 h-6 rounded-full text-xs flex items-center justify-center text-white"
+                style={{ background: s.color, color: readableTextOn(s.color) }}
                 aria-hidden="true"
               >
                 💪
@@ -64,7 +65,7 @@ const SubjectPicker = memo(({ subjects, selectedId, onSelect, darkMode }) => {
               {s.label}
             </span>
             <span
-              className={`w-full text-[10px] leading-tight truncate ${selected ? "text-white/85" : sub} ${s.weak ? "font-bold" : ""}`}
+              className={`w-full text-xs leading-tight truncate ${selected ? "text-white/85" : sub} ${s.weak ? "font-bold" : ""}`}
               aria-hidden="true"
             >
               {statusText(s)}

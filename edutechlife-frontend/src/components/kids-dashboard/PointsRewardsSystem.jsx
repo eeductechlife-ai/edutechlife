@@ -4,6 +4,7 @@ import { Check, Gem } from "lucide-react";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { useKidText } from "../../hooks/useKidText";
+import { POINTS } from "../../context/pointsEconomy";
 
 // ==========================================
 // Reward Card Component
@@ -254,27 +255,11 @@ const PointsRewardsSystem = memo(() => {
         category: "personalization",
       },
       {
-        id: 5,
-        name: "Día Libre",
-        icon: "🏖️",
-        cost: 1500,
-        description: "Un día sin tareas asignadas",
-        category: "special",
-      },
-      {
         id: 6,
         name: "Curso IA Básico",
         icon: "🤖",
         cost: 2000,
         description: "Acceso a curso introductorio de IA",
-        category: "education",
-      },
-      {
-        id: 7,
-        name: "Certificado VAK",
-        icon: "📜",
-        cost: 3000,
-        description: "Certificado oficial de tu perfil VAK",
         category: "education",
       },
     ],
@@ -349,25 +334,31 @@ const PointsRewardsSystem = memo(() => {
                   {
                     icon: "⏱️",
                     actionKey: "kid.points_rewards.action_active_minute",
-                    points: 1,
+                    points: POINTS.activeMinute,
                     color: "#4DA8C4",
                   },
                   {
                     icon: "📝",
                     actionKey: "kid.points_rewards.action_upload_activity",
-                    points: 50,
+                    points: POINTS.uploadActivity,
                     color: "#66CCCC",
+                  },
+                  {
+                    icon: "🎮",
+                    actionKey: "kid.points_rewards.action_complete_challenge",
+                    points: `${POINTS.challenge.easy} a ${POINTS.challenge.hard}`,
+                    color: "#9D4EDD",
                   },
                   {
                     icon: "✅",
                     actionKey: "kid.points_rewards.action_complete_mission",
-                    points: 100,
+                    points: `${POINTS.daniMission} a 200`,
                     color: "#FFD166",
                   },
                   {
                     icon: "🧠",
                     actionKey: "kid.points_rewards.action_vak_diagnosis",
-                    points: 300,
+                    points: POINTS.adn,
                     color: "#FF6B9D",
                   },
                 ].map((item, index) => (
@@ -389,15 +380,15 @@ const PointsRewardsSystem = memo(() => {
                         })}
                       </p>
                     </div>
-                    <span
-                      className="text-sm font-bold"
-                      style={{ color: item.color }}
-                    >
+                    <span className="text-sm font-bold text-[#004B63]">
                       +{item.points}
                     </span>
                   </motion.div>
                 ))}
               </div>
+              <p className="mt-4 text-xs leading-relaxed text-[#475569]">
+                {t("kid.points_rewards.daily_cap_note")}
+              </p>
             </div>
           )}
 

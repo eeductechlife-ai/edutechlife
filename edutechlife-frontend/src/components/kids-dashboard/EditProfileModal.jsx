@@ -256,7 +256,7 @@ const EditProfileModal = ({
                 {getInitials(formData.name || displayName)}
               </span>
             )}
-            <span className="absolute bottom-0 inset-x-0 bg-black/40 text-white text-[9px] py-0.5 flex items-center justify-center gap-0.5">
+            <span className="absolute bottom-0 inset-x-0 bg-black/40 text-white text-xs py-0.5 flex items-center justify-center gap-0.5">
               {uploadingAvatar ? (
                 <Loader2 className="w-3 h-3 animate-spin" />
               ) : (

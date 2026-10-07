@@ -46,25 +46,11 @@ export const REWARDS = [
     description: "Fondo de pantalla espacial",
   },
   {
-    id: 5,
-    name: "Día Libre",
-    icon: "🏖️",
-    cost: 1500,
-    description: "Un día sin tareas asignadas",
-  },
-  {
     id: 6,
     name: "Curso IA Básico",
     icon: "🤖",
     cost: 2000,
     description: "Acceso a curso introductorio de IA",
-  },
-  {
-    id: 7,
-    name: "Certificado VAK",
-    icon: "📜",
-    cost: 3000,
-    description: "Certificado oficial de tu perfil VAK",
   },
 ];
 

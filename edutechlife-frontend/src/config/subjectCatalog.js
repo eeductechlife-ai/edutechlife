@@ -98,7 +98,7 @@ export const SUBJECT_CATALOG = [
     id: "informatica",
     label: "Informática",
     emoji: "💻",
-    color: "#118AB2",
+    color: "#0E7EA6",
     challengeId: "informatics",
     curriculoId: "informatica",
     core: false,

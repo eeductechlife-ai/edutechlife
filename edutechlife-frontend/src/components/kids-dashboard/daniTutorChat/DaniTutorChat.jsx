@@ -356,7 +356,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                       : "border-[#E2E8F0] bg-white/50"
                   }`}
                 >
-                  <span className="text-[10px] text-[#64748B] mr-1">
+                  <span className="text-xs text-[#64748B] mr-1">
                     {t("dani.mood_label")}
                   </span>
                   {studentMoodHistory.slice(-5).map((m, i) => {
@@ -398,7 +398,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                         {t("dani.document_analyzing")}{" "}
                         {documentForDani.title || t("dani.document_summary")}
                       </p>
-                      <p className="text-[10px] text-[#64748B]">
+                      <p className="text-xs text-[#64748B]">
                         {documentForDani.score != null
                           ? `${t("dani.document_score")} ${documentForDani.score}/100`
                           : t("dani.document_summary")}
@@ -466,7 +466,7 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                       <span className="text-base">🎤</span>
                       <span>Modo Examen Oral</span>
                       <span
-                        className={`ml-auto text-[10px] font-medium ${darkMode ? "text-[#64748B]" : "text-[#94A3B8]"}`}
+                        className={`ml-auto text-xs font-medium ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
                       >
                         Habla con Dani
                       </span>
@@ -532,8 +532,8 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                           onClick={handleClearInput}
                           className={`absolute right-1 top-1.5 w-8 h-8 flex items-center justify-center rounded-lg ${
                             darkMode
-                              ? "text-[#64748B] hover:text-[#E2F0FF]"
-                              : "text-[#94A3B8] hover:text-[#004B63]"
+                              ? "text-[#94A3B8] hover:text-[#E2F0FF]"
+                              : "text-[#64748B] hover:text-[#004B63]"
                           }`}
                           type="button"
                           aria-label="Borrar lo que escribí"
@@ -643,8 +643,8 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                   </div>
 
                   <div
-                    className={`flex items-center justify-between px-1 text-[11px] ${
-                      darkMode ? "text-[#64748B]" : "text-[#94A3B8]"
+                    className={`flex items-center justify-between px-1 text-xs ${
+                      darkMode ? "text-[#94A3B8]" : "text-[#64748B]"
                     }`}
                   >
                     {photoError ? (

@@ -1,4 +1,5 @@
 import { LEARN_SUBJECT_IDS, getCatalogSubject } from "../config/subjectCatalog";
+import { POINTS } from "./pointsEconomy";
 
 export const DEFAULT_NEWS = [
   {
@@ -38,7 +39,7 @@ export const DEFAULT_NEWS = [
 
 // El ADN de Aprendizaje da este premio una sola vez por estudiante. Misión,
 // tarjeta de Inicio y premio real leen este mismo número.
-export const ADN_COMPLETION_XP = 100;
+export const ADN_COMPLETION_XP = POINTS.adn;
 export const ADN_REWARD_REASON = "Completó ADN de Aprendizaje";
 
 export const DEFAULT_MISSIONS = [
@@ -63,7 +64,7 @@ export const DEFAULT_MISSIONS = [
     title: "Habla con Dani 5 veces",
     description: "Haz preguntas a tu tutor virtual",
     icon: "💬",
-    xp: 75,
+    xp: POINTS.daniMission,
     completed: false,
   },
   {
@@ -128,7 +129,7 @@ const WEEKLY_MISSION_POOL = [
       title: "3 preguntas a Dani",
       description: "Consulta a tu tutora sobre algo que no entiendas",
       icon: "🤖",
-      xp: 90,
+      xp: POINTS.daniMission,
       completed: false,
     },
     {

@@ -187,7 +187,7 @@ const OralExamConversation = memo(
                     {isSpeaking &&
                       chatMessages[chatMessages.length - 1] === m && (
                         <motion.span
-                          className="text-[10px]"
+                          className="text-xs"
                           animate={{ opacity: [0.4, 1, 0.4] }}
                           transition={{ duration: 1.5, repeat: Infinity }}
                           style={{ color: "#FF6B9D" }}
@@ -471,7 +471,7 @@ const OralExamConversation = memo(
 
         {/* Hints */}
         <p
-          className="text-[11px] text-center"
+          className="text-xs text-center"
           style={{ color: dc(dm, "#CBD5E1", "#3A5070"), marginTop: -8 }}
         >
           {hasSpeech

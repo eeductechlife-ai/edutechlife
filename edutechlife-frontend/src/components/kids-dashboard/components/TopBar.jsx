@@ -41,18 +41,22 @@ const TopBar = memo(
       >
         {activeTab === "inicio" ? (
           /* Brand mark — shown on home screen where left side was empty */
-          <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="md:hidden flex items-center min-w-0"
-          >
-            <IngenIALogo
-              variant="wordmark"
-              tone={darkMode ? "dark" : "light"}
-              height={30}
-              title="IngenIA"
-            />
-          </motion.div>
+          <>
+            {/* Todas las pantallas tienen un h1; en Inicio el título es la marca. */}
+            <h1 className="sr-only">{fullTitle}</h1>
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="md:hidden flex items-center min-w-0"
+            >
+              <IngenIALogo
+                variant="wordmark"
+                tone={darkMode ? "dark" : "light"}
+                height={30}
+                title="IngenIA"
+              />
+            </motion.div>
+          </>
         ) : (
           <div className="flex items-center gap-3 min-w-0">
             {parentTab ? (
@@ -88,7 +92,7 @@ const TopBar = memo(
             )}
             <div className="leading-tight min-w-0">
               <span
-                className={`block text-[11px] md:text-[10px] font-black uppercase tracking-[0.14em] mb-1 ${darkMode ? "text-[#5C7386]" : "text-[#93A6B2]"}`}
+                className={`block text-xs md:text-xs font-black uppercase tracking-[0.14em] mb-1 ${darkMode ? "text-[#5C7386]" : "text-[#93A6B2]"}`}
               >
                 {activeCat?.label}
               </span>
@@ -128,7 +132,7 @@ const TopBar = memo(
               {streak?.current ?? 0}
             </span>
             <span
-              className={`hidden sm:block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+              className={`hidden sm:block text-xs font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
             >
               {(streak?.current ?? 0) === 1 ? "día" : t("smartboard.days")}
             </span>
@@ -161,7 +165,7 @@ const TopBar = memo(
               {(totalPoints ?? 0).toLocaleString()}
             </span>
             <span
-              className={`hidden sm:block text-[9px] font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+              className={`hidden sm:block text-xs font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
             >
               {t("smartboard.points_display")}
             </span>
@@ -186,7 +190,7 @@ const TopBar = memo(
                 strokeWidth={2.3}
               />
               {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] text-[10px] font-bold text-white bg-[#EF476F] rounded-full border-2 border-white px-1">
+                <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[20px] h-[20px] text-xs font-bold text-white bg-[#EF476F] rounded-full border-2 border-white px-1">
                   {unreadCount > 99 ? "99+" : unreadCount}
                 </span>
               )}

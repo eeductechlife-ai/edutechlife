@@ -15,6 +15,7 @@ import OralExamConversation from "./OralExamConversation";
 import OralExamQuestion from "./OralExamQuestion";
 import OralExamResults from "./OralExamResults";
 import { logPractice } from "./practicarHub/practicarProgress";
+import { POINTS, CATEGORY } from "../../context/pointsEconomy";
 
 const OralExamSimulator = memo(({ onTabChange }) => {
   const {
@@ -326,11 +327,15 @@ Escribe solo en español.${deckLine}`;
       setTimeout(() => {
         const correctCount = newAnswers.filter((a) => a.correct).length;
         const grade = Math.round((correctCount / questions.length) * 100);
-        const earnedPoints = correctCount * 10;
-        addPoints(
-          earnedPoints,
+        const expectedPoints = correctCount * POINTS.oralPerCorrect;
+        const granted = addPoints(
+          expectedPoints,
           t("oral.points_desc", { subject: subject.label }),
+          CATEGORY.oral,
         );
+        // Lo que se muestra es lo que se dio (con tope diario puede ser menos).
+        const earnedPoints =
+          typeof granted === "number" ? granted : expectedPoints;
         logPractice({ type: "oral", subject: subject.id, score: grade });
         setResults({
           correctCount,

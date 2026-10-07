@@ -149,7 +149,7 @@ const MisionDelDia = ({ onTabChange }) => {
           )}
         </div>
         <div className="text-right">
-          <div className="text-[10px] text-[#64748B] font-semibold leading-none">
+          <div className="text-xs text-[#64748B] font-semibold leading-none">
             Ganas hasta
           </div>
           <div className="text-lg font-black text-[#FB8500] leading-tight">
@@ -178,7 +178,7 @@ const MisionDelDia = ({ onTabChange }) => {
         </span>
         <div className="flex-1 min-w-0">
           <div
-            className="text-[10px] font-bold uppercase tracking-wider mb-0.5"
+            className="text-xs font-bold uppercase tracking-wider mb-0.5"
             style={{ color: primaryColor }}
           >
             Haz esto primero

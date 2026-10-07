@@ -4,6 +4,7 @@ import { callDeepseekSmartboard } from "../../utils/api";
 import { speakTextConversational, stopSpeech } from "../../utils/speech";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { POINTS, CATEGORY } from "../../context/pointsEconomy";
 
 const dc = (dm, light, dark) => (dm ? dark : light);
 const gd = "bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]";
@@ -71,7 +72,11 @@ ${input.substring(0, 3000)}`;
         const parsed = typeof result === "string" ? JSON.parse(result) : result;
         setScript({ ...parsed, source: input });
         setMode("player");
-        addPoints(20, "Creó un podcast de estudio");
+        addPoints(
+          POINTS.podcast,
+          "Creó un podcast de estudio",
+          CATEGORY.podcast,
+        );
       } catch (e) {
         console.warn("Error generating podcast:", e);
       }

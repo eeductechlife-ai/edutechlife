@@ -18,8 +18,8 @@ const WeekProgress = memo(({ progress, darkMode }) => {
   const { days, daysPracticed, retosThisWeek, avgScore } = progress;
   const sub = darkMode ? "text-[#94A3B8]" : "text-[#64748B]";
   const empty = darkMode
-    ? "bg-[#0F172A] border-[#334155] text-[#64748B]"
-    : "bg-[#F1F5F9] border-[#E2E8F0] text-[#94A3B8]";
+    ? "bg-[#0F172A] border-[#334155] text-[#94A3B8]"
+    : "bg-[#F1F5F9] border-[#E2E8F0] text-[#64748B]";
 
   return (
     <div>

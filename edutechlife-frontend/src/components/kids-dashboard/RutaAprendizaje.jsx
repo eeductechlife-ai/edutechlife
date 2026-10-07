@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
+import { readableTextOn } from "../../utils/contrast";
 
 const STEPS = [
   {
@@ -139,7 +140,7 @@ const RutaAprendizaje = memo(({ onTabChange }) => {
               {STEPS.slice(0, currentIdx).map((step) => (
                 <span
                   key={step.key}
-                  className="flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full"
+                  className="flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full"
                   style={{
                     backgroundColor: `${step.color}18`,
                     color: step.color,
@@ -177,7 +178,7 @@ const RutaAprendizaje = memo(({ onTabChange }) => {
               </motion.span>
               <div className="flex-1 min-w-0">
                 <div
-                  className="text-[10px] font-bold uppercase tracking-wider mb-0.5"
+                  className="text-xs font-bold uppercase tracking-wider mb-0.5"
                   style={{ color: currentStep.color }}
                 >
                   Siguiente paso
@@ -191,7 +192,10 @@ const RutaAprendizaje = memo(({ onTabChange }) => {
               </div>
               <span
                 className="text-xs font-bold px-3 py-1.5 rounded-full text-white flex-shrink-0"
-                style={{ backgroundColor: currentStep.color }}
+                style={{
+                  backgroundColor: currentStep.color,
+                  color: readableTextOn(currentStep.color),
+                }}
               >
                 Ir →
               </span>
@@ -204,7 +208,7 @@ const RutaAprendizaje = memo(({ onTabChange }) => {
               {STEPS.slice(currentIdx + 1).map((step) => (
                 <span
                   key={step.key}
-                  className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full"
+                  className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full"
                   style={{
                     backgroundColor: trackBg,
                     color: textSecondary,

@@ -10,13 +10,14 @@ import {
 } from "../practicarHub/practicarHandoff";
 import { SUBJECT_META } from "../practicarHub/practicarConfig";
 import { PASSING_GRADE } from "../kidsDashboardConfig";
+import { readableTextOn } from "../../../utils/contrast";
 
 function TrendBadge({ trend }) {
   if (!trend || (trend.dir !== "up" && trend.dir !== "down")) return null;
   const up = trend.dir === "up";
   return (
     <span
-      className="inline-flex items-center gap-0.5 text-[10px] font-black px-1.5 py-0.5 rounded-full ml-1"
+      className="inline-flex items-center gap-0.5 text-xs font-black px-1.5 py-0.5 rounded-full ml-1"
       style={{
         background: up ? "#ECFDF5" : "#FEF2F2",
         color: up ? "#10B981" : "#EF4444",
@@ -188,7 +189,7 @@ const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
                       <TrendBadge trend={subject.trend} />
                     </p>
                     <span
-                      className="inline-block mt-1 text-[10px] font-black px-2 py-0.5 rounded-full"
+                      className="inline-block mt-1 text-xs font-black px-2 py-0.5 rounded-full"
                       style={{ backgroundColor: ms.bg, color: ms.color }}
                     >
                       {ms.emoji} {ms.label}
@@ -228,9 +229,15 @@ const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
                       ? { background: "#EF4444", color: "#fff" }
                       : !hasGrade
                         ? // No grade yet is not a bad grade: no alarm red.
-                          { background: subject.color, color: "#fff" }
+                          {
+                            background: subject.color,
+                            color: readableTextOn(subject.color),
+                          }
                         : ms.key === "recovery" || ms.key === "practice"
-                          ? { background: ms.color, color: "#fff" }
+                          ? {
+                              background: ms.color,
+                              color: readableTextOn(ms.color),
+                            }
                           : { background: "#F1F5F9", color: "#00303F" }
                   }
                 >

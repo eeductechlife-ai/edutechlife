@@ -196,7 +196,7 @@ const SpinWheel = memo(({ subjects, onLand, selectedId }) => {
         <button
           onClick={spin}
           disabled={isSpinning}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-white shadow-xl border-4 border-[#E2E8F0] text-[10px] font-black text-[#1E293B] tracking-wider flex items-center justify-center transition-transform hover:scale-105 active:scale-95 disabled:opacity-60"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-white shadow-xl border-4 border-[#E2E8F0] text-xs font-black text-[#1E293B] tracking-wider flex items-center justify-center transition-transform hover:scale-105 active:scale-95 disabled:opacity-60"
         >
           {isSpinning ? "⏳" : "GIRAR"}
         </button>
@@ -301,13 +301,13 @@ const ChallengeSetup = memo(
                     {d.label}
                   </span>
                   <span
-                    className={`text-[10px] leading-tight ${sel ? "text-white/85" : textSecondary}`}
+                    className={`text-xs leading-tight ${sel ? "text-white/85" : textSecondary}`}
                   >
                     {d.hint ? `${d.hint} · ` : ""}
                     {d.questions} preguntas
                   </span>
                   <span
-                    className={`text-[10px] font-black ${sel ? "text-white" : "text-[#9D4EDD]"}`}
+                    className={`text-xs font-black ${sel ? "text-white" : "text-[#9D4EDD]"}`}
                   >
                     +{d.xp} XP
                   </span>
@@ -334,8 +334,8 @@ const ChallengeSetup = memo(
               subject && difficulty && !loading
                 ? "text-white shadow-lg hover:shadow-xl"
                 : darkMode
-                  ? "bg-[#334155] text-[#64748B] cursor-not-allowed"
-                  : "bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed"
+                  ? "bg-[#334155] text-[#94A3B8] cursor-not-allowed"
+                  : "bg-[#E2E8F0] text-[#64748B] cursor-not-allowed"
             }`}
             style={
               subject && difficulty && !loading

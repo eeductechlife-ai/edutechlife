@@ -175,7 +175,7 @@ const VAKDiagnosticEnhanced = ({
                   >
                     {value}%
                   </p>
-                  <p className="!m-0 mt-0.5 text-[11px] sm:text-xs text-[#64748B]">
+                  <p className="!m-0 mt-0.5 text-xs sm:text-xs text-[#64748B]">
                     {info.emoji} {info.name}
                   </p>
                 </div>
@@ -258,7 +258,7 @@ const VAKDiagnosticEnhanced = ({
             transition={{ duration: 0.3 }}
           />
         </div>
-        <p className="!m-0 mt-2 text-[11px] text-[#94A3B8]">
+        <p className="!m-0 mt-2 text-xs text-[#94A3B8]">
           No hay respuestas buenas ni malas: escoge lo que harías tú. 😊
         </p>
       </div>

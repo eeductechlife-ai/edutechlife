@@ -19,6 +19,7 @@ import {
 import { logPractice } from "../practicarHub/practicarProgress";
 import { CHALLENGE_SUBJECTS } from "../../../config/subjectCatalog";
 import { challengeGrade } from "../../../utils/studentLevel";
+import { POINTS, CATEGORY } from "../../../context/pointsEconomy";
 import { keepSelfContained } from "./questionValidity";
 
 const DIFFICULTIES = [
@@ -28,7 +29,7 @@ const DIFFICULTIES = [
     hint: "Fácil",
     emoji: "🌱",
     questions: 3,
-    xp: 50,
+    xp: POINTS.challenge.easy,
   },
   {
     id: "medium",
@@ -36,7 +37,7 @@ const DIFFICULTIES = [
     hint: "Normal",
     emoji: "⚡",
     questions: 5,
-    xp: 100,
+    xp: POINTS.challenge.medium,
   },
   {
     id: "hard",
@@ -44,7 +45,7 @@ const DIFFICULTIES = [
     hint: "Difícil",
     emoji: "🔥",
     questions: 7,
-    xp: 200,
+    xp: POINTS.challenge.hard,
   },
 ];
 
@@ -174,6 +175,9 @@ export function useChallengeEngine() {
   const [answers, setAnswers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  // Puntos que de verdad se dieron (puede ser menos que los del reto si ya se
+  // llegó al tope diario de retos).
+  const [xpGranted, setXpGranted] = useState(null);
   const startTimeRef = useRef(null);
 
   const startChallenge = useCallback(async () => {
@@ -227,6 +231,7 @@ export function useChallengeEngine() {
       setDbaSequence(aligned ? indexes.map((i) => dbas[i]) : []);
       setAnswers([]);
       setCurrentIndex(0);
+      setXpGranted(null);
       startTimeRef.current = Date.now();
       setPhase("playing");
       track(EVENTS.MISSION_STARTED, {
@@ -267,8 +272,16 @@ export function useChallengeEngine() {
         const score = Math.round((correctCount / questions.length) * 100);
         const elapsed = Date.now() - (startTimeRef.current || Date.now());
         const xpEarned =
-          score >= 70 ? difficulty.xp : Math.round(difficulty.xp * 0.3);
-        addPoints(xpEarned, `Reto ${subject.label} (${score}%)`);
+          score >= 70
+            ? difficulty.xp
+            : Math.round(difficulty.xp * POINTS.challengeLowScoreFactor);
+        const granted = addPoints(
+          xpEarned,
+          `Reto ${subject.label} (${score}%)`,
+          CATEGORY.challenge,
+        );
+        const xpFinal = typeof granted === "number" ? granted : xpEarned;
+        setXpGranted(xpFinal);
         logPractice({
           type: "reto",
           subject: CURRICULO_ID_BY_CHALLENGE[subject.id],
@@ -296,7 +309,7 @@ export function useChallengeEngine() {
           correct: correctCount,
           total: questions.length,
           timeMs: elapsed,
-          xp: xpEarned,
+          xp: xpFinal,
         });
         setPhase("results");
       }
@@ -320,6 +333,7 @@ export function useChallengeEngine() {
     setDbaSequence([]);
     setAnswers([]);
     setCurrentIndex(0);
+    setXpGranted(null);
     setError(null);
   }, []);
 
@@ -342,6 +356,7 @@ export function useChallengeEngine() {
     loading,
     error,
     score,
+    xpGranted,
     startChallenge,
     submitAnswer,
     resetChallenge,

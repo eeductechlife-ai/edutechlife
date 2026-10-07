@@ -276,7 +276,7 @@ function GradeStep({ ageGroup, onDone }) {
                   {o.value}°
                 </span>
                 <span
-                  className={`text-[9px] leading-tight ${sel ? "text-white/80" : "text-gray-400 dark:text-gray-500"}`}
+                  className={`text-xs leading-tight ${sel ? "text-white/80" : "text-gray-400 dark:text-gray-500"}`}
                 >
                   {o.level.replace("Básica ", "").replace(" Vocacional", "")}
                 </span>
@@ -422,7 +422,7 @@ const OnboardingWizard = memo(({ onTabChange }) => {
                   />
                 ))}
               </div>
-              <p className="text-[10px] text-gray-400 dark:text-gray-500 text-right">
+              <p className="text-xs text-gray-400 dark:text-gray-500 text-right">
                 Paso {currentStepNum + 1} de {totalSteps}
               </p>
             </div>

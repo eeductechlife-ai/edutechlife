@@ -38,7 +38,7 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
         <button
           type="button"
           onClick={() => onTabChange?.("materias")}
-          className="text-[10px] font-bold text-[#0096C7] hover:underline"
+          className="text-xs font-bold text-[#0096C7] hover:underline"
         >
           Ver todas →
         </button>
@@ -52,7 +52,7 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
           return (
             <span
               key={state.key}
-              className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full"
+              className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full"
               style={{ backgroundColor: state.bg, color: state.color }}
             >
               {state.emoji} {state.label} · {n}
@@ -83,7 +83,7 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
                     {s.name}
                   </span>
                   <span
-                    className="text-[9px] font-black px-1.5 py-0.5 rounded-full ml-2 flex-shrink-0"
+                    className="text-xs font-black px-1.5 py-0.5 rounded-full ml-2 flex-shrink-0"
                     style={{ backgroundColor: ms.bg, color: ms.color }}
                   >
                     {ms.emoji} {ms.label}
@@ -112,7 +112,7 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
                   : `${prog}%`}
                 {s.trend?.delta > 0 && (
                   <span
-                    className="ml-0.5 text-[10px] text-green-600"
+                    className="ml-0.5 text-xs text-green-600"
                     title="Subió respecto al periodo anterior"
                   >
                     ▲
@@ -120,7 +120,7 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
                 )}
                 {s.trend?.delta < 0 && (
                   <span
-                    className="ml-0.5 text-[10px] text-red-500"
+                    className="ml-0.5 text-xs text-red-500"
                     title="Bajó respecto al periodo anterior"
                   >
                     ▼

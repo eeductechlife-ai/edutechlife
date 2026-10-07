@@ -34,6 +34,8 @@ const MobileBottomBar = memo(
 
     if (keyboardVisible) return null;
 
+    const inactiveColor = darkMode ? "#CBD5E1" : "#475569";
+
     const getFirstTab = (catId) => {
       const cat = visibleCategories.find((c) => c.id === catId);
       if (!cat) return "inicio";
@@ -69,7 +71,9 @@ const MobileBottomBar = memo(
                         boxShadow: glow(cat.glowColor, 0.25),
                         color: "white",
                       }
-                    : { color: cat.color + "90" }
+                    : // Inactivo: gris opaco con contraste ≥ 4,5:1 en ambos temas
+                      // (antes: el color de la categoría al 56 %, ≈ 1,7:1).
+                      { color: inactiveColor }
                 }
               >
                 {/* Active indicator bar at top */}
@@ -90,8 +94,10 @@ const MobileBottomBar = memo(
                   />
                 </motion.span>
                 <span
-                  className="text-[11px] font-bold whitespace-nowrap"
-                  style={isActive ? { color: "white" } : {}}
+                  className="text-xs font-bold whitespace-nowrap"
+                  // Color propio: el span toma el gris global (#334155) y no el del
+                  // botón, así que en oscuro la etiqueta quedaba a ≈ 1,5:1.
+                  style={{ color: isActive ? "white" : inactiveColor }}
                 >
                   {cat.label}
                 </span>

@@ -79,11 +79,11 @@ const UserMenuDropdown = ({
               <p className="font-black text-sm text-white truncate leading-tight">
                 {displayName}
               </p>
-              <p className="text-[11px] text-white/65 mt-0.5">
+              <p className="text-xs text-white/65 mt-0.5">
                 {t("kid.user.smartboard_profile")}
               </p>
               {vakMeta && (
-                <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold text-white/90 bg-white/15 border border-white/20">
+                <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-xs font-bold text-white/90 bg-white/15 border border-white/20">
                   {vakMeta.icon} {t(vakMeta.labelKey)}
                 </span>
               )}
@@ -113,7 +113,7 @@ const UserMenuDropdown = ({
                 style={{ background: chipBg, border: `1px solid ${border}` }}
               >
                 <p
-                  className="text-[9px] font-black uppercase tracking-widest mb-0.5"
+                  className="text-xs font-black uppercase tracking-widest mb-0.5"
                   style={{ color: "#0096C7" }}
                 >
                   {t("kid.user.age")}
@@ -129,7 +129,7 @@ const UserMenuDropdown = ({
                 style={{ background: chipBg, border: `1px solid ${border}` }}
               >
                 <p
-                  className="text-[9px] font-black uppercase tracking-widest mb-0.5"
+                  className="text-xs font-black uppercase tracking-widest mb-0.5"
                   style={{ color: "#06D6A0" }}
                 >
                   {t("kid.user.grade")}
@@ -146,13 +146,13 @@ const UserMenuDropdown = ({
                 style={{ background: chipBg, border: `1px solid ${border}` }}
               >
                 <p
-                  className="text-[9px] font-black uppercase tracking-widest"
+                  className="text-xs font-black uppercase tracking-widest"
                   style={{ color: "#F59E0B" }}
                 >
                   {t("kid.user.vak_type")}
                 </p>
                 <span
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold"
                   style={{ backgroundColor: vakMeta.bg, color: vakMeta.color }}
                 >
                   {vakMeta.icon} {t(vakMeta.labelKey)}
@@ -166,7 +166,7 @@ const UserMenuDropdown = ({
                 style={{ background: chipBg, border: `1px solid ${border}` }}
               >
                 <p
-                  className="text-[9px] font-black uppercase tracking-widest mb-0.5"
+                  className="text-xs font-black uppercase tracking-widest mb-0.5"
                   style={{ color: textSecondary }}
                 >
                   {t("kid.user.school")}

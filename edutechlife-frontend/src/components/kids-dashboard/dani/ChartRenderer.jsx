@@ -27,8 +27,8 @@ const ChartRenderer = memo(({ chartData, darkMode }) => {
       >
         <ResponsiveContainer width="100%" height={160}>
           <BarChart data={chartData.data}>
-            <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-            <YAxis tick={{ fontSize: 10 }} />
+            <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} />
             <Tooltip
               contentStyle={
                 darkMode
@@ -91,8 +91,8 @@ const ChartRenderer = memo(({ chartData, darkMode }) => {
       >
         <ResponsiveContainer width="100%" height={160}>
           <LineChart data={chartData.data}>
-            <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-            <YAxis tick={{ fontSize: 10 }} />
+            <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} />
             <Tooltip
               contentStyle={
                 darkMode

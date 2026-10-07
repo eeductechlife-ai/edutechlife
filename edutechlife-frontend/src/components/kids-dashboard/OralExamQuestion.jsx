@@ -51,8 +51,10 @@ const OralExamQuestion = memo(
       };
       rec.onerror = (e) => {
         setIsListening(false);
-        if (e.error === "not-allowed") setMicError("Permite el micrófono para responder por voz.");
-        else if (e.error !== "no-speech") setMicError("No te escuché. ¡Intenta de nuevo!");
+        if (e.error === "not-allowed")
+          setMicError("Permite el micrófono para responder por voz.");
+        else if (e.error !== "no-speech")
+          setMicError("No te escuché. ¡Intenta de nuevo!");
       };
       rec.onend = () => setIsListening(false);
       rec.start();
@@ -147,7 +149,7 @@ const OralExamQuestion = memo(
                               "border-[#334155] hover:border-[#4DA8C4]/50",
                               "border-[#E2E8F0] hover:border-[#4DA8C4]/50",
                             )
-                    } ${dc(dm, "text-[#CBD5E1]", "text-[#475569]")}`}
+                    } ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
                   >
                     <span
                       className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
@@ -175,7 +177,11 @@ const OralExamQuestion = memo(
                 value={openAnswer}
                 onChange={(e) => setOpenAnswer(e.target.value)}
                 disabled={!!feedback}
-                placeholder={isListening ? "Escuchando tu respuesta..." : t("oral.answer_placeholder")}
+                placeholder={
+                  isListening
+                    ? "Escuchando tu respuesta..."
+                    : t("oral.answer_placeholder")
+                }
                 rows={4}
                 className={`w-full p-3 rounded-xl border text-sm resize-none ${
                   feedback
@@ -194,21 +200,36 @@ const OralExamQuestion = memo(
                     whileTap={{ scale: 0.88 }}
                     className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all"
                     style={{
-                      background: isListening ? "rgba(239,71,111,0.12)" : dc(dm, "#F1F5F9", "#1E2E4A"),
-                      border: isListening ? "1.5px solid rgba(239,71,111,0.4)" : "1.5px solid transparent",
-                      color: isListening ? "#EF476F" : dc(dm, "#64748B", "#94A3B8"),
+                      background: isListening
+                        ? "rgba(239,71,111,0.12)"
+                        : dc(dm, "#F1F5F9", "#1E2E4A"),
+                      border: isListening
+                        ? "1.5px solid rgba(239,71,111,0.4)"
+                        : "1.5px solid transparent",
+                      color: isListening
+                        ? "#EF476F"
+                        : dc(dm, "#64748B", "#94A3B8"),
                     }}
                   >
                     {isListening ? (
                       <>
-                        <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 0.6, repeat: Infinity }}>⏹</motion.span>
+                        <motion.span
+                          animate={{ scale: [1, 1.3, 1] }}
+                          transition={{ duration: 0.6, repeat: Infinity }}
+                        >
+                          ⏹
+                        </motion.span>
                         Detener
                       </>
                     ) : (
                       <>🎙️ Responder con voz</>
                     )}
                   </motion.button>
-                  {micError && <p className="text-xs" style={{ color: "#EF476F" }}>{micError}</p>}
+                  {micError && (
+                    <p className="text-xs" style={{ color: "#EF476F" }}>
+                      {micError}
+                    </p>
+                  )}
                 </div>
               )}
               {isListening && (
@@ -216,13 +237,33 @@ const OralExamQuestion = memo(
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl"
-                  style={{ background: "rgba(239,71,111,0.07)", border: "1px solid rgba(239,71,111,0.2)" }}
+                  style={{
+                    background: "rgba(239,71,111,0.07)",
+                    border: "1px solid rgba(239,71,111,0.2)",
+                  }}
                 >
-                  {[1,2,3,4,3,2,1].map((h, i) => (
-                    <motion.div key={i} className="w-1 rounded-full" style={{ height: `${h*3+3}px`, background: "#EF476F" }}
-                      animate={{ scaleY: [1, 1.8, 1] }} transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.08 }} />
+                  {[1, 2, 3, 4, 3, 2, 1].map((h, i) => (
+                    <motion.div
+                      key={i}
+                      className="w-1 rounded-full"
+                      style={{
+                        height: `${h * 3 + 3}px`,
+                        background: "#EF476F",
+                      }}
+                      animate={{ scaleY: [1, 1.8, 1] }}
+                      transition={{
+                        duration: 0.6,
+                        repeat: Infinity,
+                        delay: i * 0.08,
+                      }}
+                    />
                   ))}
-                  <span className="text-xs font-semibold ml-1" style={{ color: "#EF476F" }}>Escuchando...</span>
+                  <span
+                    className="text-xs font-semibold ml-1"
+                    style={{ color: "#EF476F" }}
+                  >
+                    Escuchando...
+                  </span>
                 </motion.div>
               )}
             </div>

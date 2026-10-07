@@ -4,6 +4,7 @@ import { useTranslation } from "../../../../i18n/I18nProvider";
 import { supabase } from "../../../../lib/supabase";
 import { useIngenIAKidsSafe } from "../../../../context/IngenIAKidsContext";
 import { REWARDS as FALLBACK_REWARDS, item } from "../gamificationData";
+import { storeRewards } from "../../../../context/pointsEconomy";
 
 const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
   const { t } = useTranslation();
@@ -50,7 +51,7 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
           Recompensas Especiales
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {rewards.map((r) => {
+          {storeRewards(rewards, unlockedRewards).map((r) => {
             const unlocked = unlockedRewards.includes(r.id);
             const canAfford = totalPoints >= r.cost;
             const redeemable = !unlocked && canAfford && !!unlockReward;
@@ -82,27 +83,27 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
               >
                 <div className="text-2xl mb-1">{r.icon}</div>
                 <div
-                  className={`text-[11px] font-bold mb-0.5 ${darkMode ? "text-white" : "text-[#1E293B]"}`}
+                  className={`text-xs font-bold mb-0.5 ${darkMode ? "text-white" : "text-[#1E293B]"}`}
                 >
                   {r.name}
                 </div>
                 <div
-                  className={`text-[10px] ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+                  className={`text-xs ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
                 >
                   {r.cost} pts
                 </div>
                 {unlocked && (
-                  <div className="text-[10px] text-green-500 font-semibold mt-1">
+                  <div className="text-xs text-green-500 font-semibold mt-1">
                     {t("smartboard.unlocked")}
                   </div>
                 )}
                 {redeemable && (
-                  <div className="mt-1.5 rounded-lg bg-[#FB8500] text-white text-[11px] font-black py-1.5">
+                  <div className="mt-1.5 rounded-lg bg-[#FB8500] text-white text-xs font-black py-1.5">
                     🎁 Canjear
                   </div>
                 )}
                 {!unlocked && !canAfford && (
-                  <div className="text-[10px] text-[#64748B] mt-1">
+                  <div className="text-xs text-[#64748B] mt-1">
                     {t("smartboard.missing_points", {
                       count: r.cost - totalPoints,
                     })}
@@ -134,12 +135,12 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
               >
                 <div className="text-2xl mb-1">{a.badge_url ? "🏆" : "⭐"}</div>
                 <div
-                  className={`text-[11px] font-bold mb-0.5 line-clamp-2 ${darkMode ? "text-white" : "text-[#1E293B]"}`}
+                  className={`text-xs font-bold mb-0.5 line-clamp-2 ${darkMode ? "text-white" : "text-[#1E293B]"}`}
                 >
                   {a.title}
                 </div>
                 <div
-                  className={`text-[10px] ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+                  className={`text-xs ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
                 >
                   +{a.points_awarded || 0} pts
                 </div>

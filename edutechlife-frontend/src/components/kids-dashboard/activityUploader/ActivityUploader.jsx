@@ -55,9 +55,7 @@ const AnalysisResult = memo(({ analysis, onTutorWithDani }) => {
             >
               {analysis.score}
             </span>
-            <span
-              className={`block text-[10px] ${getScoreColor(analysis.score)}`}
-            >
+            <span className={`block text-xs ${getScoreColor(analysis.score)}`}>
               {t("kid.activity.points")}
             </span>
           </div>
@@ -198,7 +196,7 @@ const ActivityCard = memo(({ activity, index, onViewAnalysis }) => {
           {activity.analysis && (
             <motion.button
               onClick={() => onViewAnalysis(activity)}
-              className="text-[10px] text-[#4DA8C4] font-semibold hover:underline"
+              className="text-xs text-[#4DA8C4] font-semibold hover:underline"
               whileHover={{ scale: 1.05 }}
             >
               {t("kid.activity.view_analysis")}

@@ -4,6 +4,7 @@ import { ListenButton } from "../practicarHub/MaterialViews";
 import { motion, AnimatePresence } from "framer-motion";
 import QuestionText from "./QuestionText";
 import { questionToSpeech, prettyMath } from "./questionTable";
+import { readableTextOn } from "../../../utils/contrast";
 
 const OPTION_LABELS = ["A", "B", "C", "D"];
 const CIRC = 2 * Math.PI * 18;
@@ -174,7 +175,7 @@ const ChallengePlay = memo(
         <div className="flex items-center gap-3">
           <span
             className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0 text-white"
-            style={{ background: color }}
+            style={{ background: color, color: readableTextOn(color) }}
             aria-hidden="true"
           >
             {subject?.emoji}

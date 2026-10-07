@@ -58,7 +58,7 @@ const FlashcardImporter = memo(
         <div className="flex items-center gap-3">
           <div className="flex-1 h-px" style={{ background: borderColor }} />
           <span
-            className="text-[11px] font-semibold uppercase tracking-wider"
+            className="text-xs font-semibold uppercase tracking-wider"
             style={{ color: textSecondary }}
           >
             Más opciones

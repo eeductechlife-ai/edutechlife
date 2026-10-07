@@ -419,7 +419,7 @@ const MultiplayerMode = memo(({ cards, deckTitle, onExit, darkMode }) => {
                   className="text-center w-full"
                 >
                   <p
-                    className="text-[10px] font-semibold mb-2"
+                    className="text-xs font-semibold mb-2"
                     style={{ color: darkMode ? "#64748B" : COLORS.muted }}
                   >
                     {flipped ? "RESPUESTA" : "PREGUNTA"}

@@ -75,7 +75,7 @@ function WeekCard({
 
       <div className="px-4 py-3">
         {typeof week.mastery === "number" && (
-          <p className="text-[11px] font-semibold mb-2 text-[#C05621]">
+          <p className="text-xs font-semibold mb-2 text-[#C05621]">
             🎯 Dominio actual{week.focus ? ` en ${week.focus}` : ""}:{" "}
             {Math.round(week.mastery * 100)}%
           </p>
@@ -341,7 +341,7 @@ function ImprovementPlan({ onTabChange }) {
             {globalPct === 100
               ? "🏆 ¡Completaste tu plan!"
               : `Llevas ${doneActivities} de ${totalActivities} actividades`}
-            <span className="block text-[11px] font-semibold !text-white/85">
+            <span className="block text-xs font-semibold !text-white/85">
               Plan de {plan.weeks.length}{" "}
               {plan.weeks.length === 1 ? "semana" : "semanas"}
               {gradeLevel ? ` · para ${gradeLevel}.º grado` : ""}
@@ -436,7 +436,7 @@ function ImprovementPlan({ onTabChange }) {
                 {complete ? "✅ " : ""}Sem {w.week}
               </span>
               <span
-                className={`text-[10px] font-bold ${active ? "text-white/90" : "text-[#94A3B8]"}`}
+                className={`text-xs font-bold ${active ? "text-white/90" : "text-[#94A3B8]"}`}
               >
                 {d}/{w.activities.length}
               </span>

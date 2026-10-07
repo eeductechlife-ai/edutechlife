@@ -32,6 +32,7 @@ import { useCompetencyTracking } from "../../../hooks/useCompetencyTracking";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import { track } from "../../../lib/analytics";
 import { EVENTS } from "../../../lib/analyticsEvents";
+import { POINTS, CATEGORY } from "../../../context/pointsEconomy";
 
 const LEARNING_PATH = (t) => [
   { tab: "flashcards", label: t("kid.flashcards.tab_flashcards"), icon: "🎴" },
@@ -46,7 +47,8 @@ const PRACTICE_COLOR = "#FF6B9D";
 const PRACTICE_GLOW = "#EF476F";
 
 // Effort counts: 2 pts per card reviewed + 3 per card understood.
-const sessionXp = (correct, total) => total * 2 + correct * 3;
+const sessionXp = (correct, total) =>
+  total * POINTS.educardsPerCard + correct * POINTS.educardsPerUnderstood;
 
 const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
   const { t } = useTranslation();
@@ -56,6 +58,7 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
 
   const [createTab, setCreateTab] = useState("text"); // "text" | "scan"
   const [lastScanSummary, setLastScanSummary] = useState(null);
+  const [xpGranted, setXpGranted] = useState(null);
   const [multiplayerActive, setMultiplayerActive] = useState(false);
   const {
     decks,
@@ -127,10 +130,14 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
       if (deck?.metadata?.subject) {
         trackActivity({ subject: deck.metadata.subject, score: rate / 100 });
       }
-      addPoints?.(
-        sessionXp(correct, correct + incorrect),
+      const xp = sessionXp(correct, correct + incorrect);
+      const granted = addPoints?.(
+        xp,
         `EduCards: ${deck?.title || "mazo"} (${Math.round(rate)}%)`,
+        CATEGORY.educards,
       );
+      // Se muestra lo que de verdad se dio (con tope diario puede ser menos).
+      setXpGranted(typeof granted === "number" ? granted : xp);
       logPractice({
         type: "educards",
         subject: deck?.metadata?.subject || deck?.title || null,
@@ -213,7 +220,7 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
             rate={rate}
             correct={correct}
             incorrect={incorrect}
-            xpEarned={sessionXp(correct, correct + incorrect)}
+            xpEarned={xpGranted ?? sessionXp(correct, correct + incorrect)}
             onRestart={() => startStudy(currentDeckId)}
             onBack={() => setMode("decks")}
             onTalkToDani={handleTalkToDani}
@@ -287,13 +294,13 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
             <div
               className={`p-3 rounded-xl shadow-lg text-center ${mpCurrentPlayer === 1 ? "ring-2 ring-[#4DA8C4] bg-white" : "bg-white/80"}`}
             >
-              <p className="text-[10px] font-semibold text-[#64748B]">J1</p>
+              <p className="text-xs font-semibold text-[#64748B]">J1</p>
               <p className="text-lg font-black text-[#004B63]">{score1}</p>
             </div>
             <div
               className={`p-3 rounded-xl shadow-lg text-center ${mpCurrentPlayer === 2 ? "ring-2 ring-[#FF6B9D] bg-white" : "bg-white/80"}`}
             >
-              <p className="text-[10px] font-semibold text-[#64748B]">J2</p>
+              <p className="text-xs font-semibold text-[#64748B]">J2</p>
               <p className="text-lg font-black text-[#004B63]">{score2}</p>
             </div>
           </motion.div>
@@ -459,7 +466,7 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
             </motion.button>
             <button
               onClick={() => setLastScanSummary(null)}
-              className={`text-[10px] text-center ${textSecondary}`}
+              className={`text-xs text-center ${textSecondary}`}
             >
               {t("kid.flashcards.dismiss")}
             </button>

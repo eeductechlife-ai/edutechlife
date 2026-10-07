@@ -124,7 +124,7 @@ export const HistoryItem = memo(({ book, i, dark, onSelect }) => {
         {book.keyConcepts?.slice(0, 3).map((c, j) => (
           <span
             key={j}
-            className="text-[10px] px-1.5 py-0.5 rounded"
+            className="text-xs px-1.5 py-0.5 rounded"
             style={{
               backgroundColor: `${COLORS[j % COLORS.length]}15`,
               color: COLORS[j % COLORS.length],

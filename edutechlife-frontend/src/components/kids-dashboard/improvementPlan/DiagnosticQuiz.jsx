@@ -16,7 +16,12 @@ const GRADIENT =
  * una autoevaluación corta siembra el dominio (POST /adaptive/mastery) y
  * permite generar un plan personalizado desde el primer día.
  */
-export default function DiagnosticQuiz({ gradeLevel, darkMode, onSubmit, busy }) {
+export default function DiagnosticQuiz({
+  gradeLevel,
+  darkMode,
+  onSubmit,
+  busy,
+}) {
   const subjects = diagnosticSubjectsFor(gradeLevel);
   const [answers, setAnswers] = useState({});
 
@@ -70,7 +75,7 @@ export default function DiagnosticQuiz({ gradeLevel, darkMode, onSubmit, busy })
                     onClick={() =>
                       setAnswers((prev) => ({ ...prev, [s.id]: o.value }))
                     }
-                    className={`min-h-[40px] rounded-xl text-[11px] font-bold border-2 transition-colors ${
+                    className={`min-h-[40px] rounded-xl text-xs font-bold border-2 transition-colors ${
                       active
                         ? "text-white border-transparent"
                         : darkMode

@@ -120,7 +120,7 @@ const AcademicFeedback = ({ onTabChange }) => {
       {/* Promedio general */}
       <div className="mb-5">
         <p
-          className={`text-[11px] font-medium mb-1 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+          className={`text-xs font-medium mb-1 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
         >
           {isEarly ? "Tu nota promedio ⭐" : "Promedio general"}
         </p>
@@ -145,7 +145,7 @@ const AcademicFeedback = ({ onTabChange }) => {
           </div>
         ) : (
           <p
-            className={`text-sm italic ${darkMode ? "text-[#64748B]" : "text-[#94A3B8]"}`}
+            className={`text-sm italic ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
           >
             Aún no tienes calificaciones registradas.
           </p>
@@ -156,7 +156,7 @@ const AcademicFeedback = ({ onTabChange }) => {
       {gradesArray.length > 0 && (
         <div className="mb-5">
           <p
-            className={`text-[11px] font-medium mb-2 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+            className={`text-xs font-medium mb-2 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
           >
             Materias
           </p>
@@ -196,7 +196,7 @@ const AcademicFeedback = ({ onTabChange }) => {
       {/* Estilo de aprendizaje VAK */}
       <div className="mb-5">
         <p
-          className={`text-[11px] font-medium mb-2 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+          className={`text-xs font-medium mb-2 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
         >
           {isEarly ? "¿Cómo aprendes mejor? 🧠" : "Estilo de aprendizaje"}
         </p>
@@ -228,7 +228,7 @@ const AcademicFeedback = ({ onTabChange }) => {
       {/* Próximos exámenes */}
       <div className="mb-5">
         <p
-          className={`text-[11px] font-medium mb-2 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+          className={`text-xs font-medium mb-2 ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
         >
           {isEarly ? "📅 ¡Próximas pruebas!" : "📅 Próximos exámenes"}
         </p>
@@ -263,7 +263,7 @@ const AcademicFeedback = ({ onTabChange }) => {
           </ul>
         ) : (
           <p
-            className={`text-xs italic ${darkMode ? "text-[#64748B]" : "text-[#94A3B8]"}`}
+            className={`text-xs italic ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
           >
             No tienes exámenes próximos registrados.
           </p>

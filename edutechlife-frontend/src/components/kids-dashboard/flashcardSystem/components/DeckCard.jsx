@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "../../../../i18n/I18nProvider";
+import { readableTextOn } from "../../../../utils/contrast";
 
 const DeckCard = memo(
   ({
@@ -80,7 +81,10 @@ const DeckCard = memo(
           <div className="mb-3">
             <span
               className="inline-block px-2.5 py-0.5 rounded-lg text-xs font-semibold text-white"
-              style={{ backgroundColor: themeColor }}
+              style={{
+                backgroundColor: themeColor,
+                color: readableTextOn(themeColor),
+              }}
             >
               👤 {gradeLabel}
             </span>

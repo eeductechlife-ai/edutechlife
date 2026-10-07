@@ -2,6 +2,7 @@ import { memo, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useSkillPassport } from "../../hooks/useSkillPassport";
+import { readableTextOn } from "../../utils/contrast";
 
 const AREAS = [
   {
@@ -99,17 +100,18 @@ const AreaCard = memo(({ area, score, isTop, onClick }) => (
   >
     {isTop && (
       <span
-        className="absolute top-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full text-white"
-        style={{ backgroundColor: area.color }}
+        className="absolute top-2 right-2 text-xs font-bold px-2 py-0.5 rounded-full text-white"
+        style={{
+          backgroundColor: area.color,
+          color: readableTextOn(area.color),
+        }}
       >
         Tu fortaleza
       </span>
     )}
     <span className="text-3xl block mb-2">{area.emoji}</span>
     <p className="text-sm font-bold text-[#004B63] mb-1">{area.title}</p>
-    <p className="text-[11px] text-[#64748B] leading-relaxed">
-      {area.description}
-    </p>
+    <p className="text-xs text-[#64748B] leading-relaxed">{area.description}</p>
     {score > 0 && (
       <div className="mt-3 flex items-center gap-2">
         <div className="flex-1 h-1.5 rounded-full bg-[#E2E8F0] overflow-hidden">
@@ -121,7 +123,7 @@ const AreaCard = memo(({ area, score, isTop, onClick }) => (
             }}
           />
         </div>
-        <span className="text-[10px] font-bold" style={{ color: area.color }}>
+        <span className="text-xs font-bold" style={{ color: area.color }}>
           {Math.round(score * 100)}%
         </span>
       </div>

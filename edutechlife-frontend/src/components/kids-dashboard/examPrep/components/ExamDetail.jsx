@@ -35,14 +35,14 @@ const StudyPlanCard = memo(({ material, dm = false }) => {
         >
           {t("kid.exam.study_plan_title")}
         </h4>
-        <span className="text-[10px] ml-auto" style={{ color: "#94A3B8" }}>
+        <span className="text-xs ml-auto" style={{ color: "#94A3B8" }}>
           {material.fileName}
         </span>
       </div>
       {material.strengths?.length > 0 && (
         <div>
           <p
-            className="text-[10px] font-semibold uppercase tracking-wider mb-1"
+            className="text-xs font-semibold uppercase tracking-wider mb-1"
             style={{ color: "#22C55E" }}
           >
             {t("kid.exam.strengths")}
@@ -51,7 +51,7 @@ const StudyPlanCard = memo(({ material, dm = false }) => {
             {material.strengths.map((s, i) => (
               <span
                 key={i}
-                className="px-2 py-0.5 bg-green-50 text-green-700 text-[10px] rounded-full border border-green-200"
+                className="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full border border-green-200"
               >
                 {s}
               </span>
@@ -62,7 +62,7 @@ const StudyPlanCard = memo(({ material, dm = false }) => {
       {material.improvements?.length > 0 && (
         <div>
           <p
-            className="text-[10px] font-semibold uppercase tracking-wider mb-1"
+            className="text-xs font-semibold uppercase tracking-wider mb-1"
             style={{ color: "#EF476F" }}
           >
             {t("kid.exam.improvements")}
@@ -71,7 +71,7 @@ const StudyPlanCard = memo(({ material, dm = false }) => {
             {material.improvements.map((s, i) => (
               <span
                 key={i}
-                className="px-2 py-0.5 bg-red-50 text-red-600 text-[10px] rounded-full border border-red-200"
+                className="px-2 py-0.5 bg-red-50 text-red-600 text-xs rounded-full border border-red-200"
               >
                 {s}
               </span>
@@ -82,7 +82,7 @@ const StudyPlanCard = memo(({ material, dm = false }) => {
       {material.tutoringQuestions?.length > 0 && (
         <div>
           <p
-            className="text-[10px] font-semibold uppercase tracking-wider mb-1"
+            className="text-xs font-semibold uppercase tracking-wider mb-1"
             style={{ color: "#FF6B9D" }}
           >
             {t("kid.exam.guide_questions")}

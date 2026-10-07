@@ -283,12 +283,12 @@ const NextBestAction = memo(({ onTabChange }) => {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1 mb-0.5">
-              <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">
+              <span className="text-xs font-black uppercase tracking-widest text-gray-400">
                 Tu siguiente actividad
               </span>
               {fromBackend && (
                 <span
-                  className="flex items-center gap-0.5 text-[8px] font-bold text-white px-1.5 py-0.5 rounded-full"
+                  className="flex items-center gap-0.5 text-xs font-bold text-white px-1.5 py-0.5 rounded-full"
                   style={{ background: accentColor }}
                 >
                   <GitBranch className="w-2 h-2" />
@@ -304,7 +304,7 @@ const NextBestAction = memo(({ onTabChange }) => {
                 {label}
               </span>
               <span
-                className="text-[9px] font-black px-2 py-0.5 rounded-full text-white flex-shrink-0"
+                className="text-xs font-black px-2 py-0.5 rounded-full text-white flex-shrink-0"
                 style={{ background: accentColor }}
               >
                 {goal.emoji ? `${goal.emoji} ` : ""}
@@ -320,7 +320,7 @@ const NextBestAction = memo(({ onTabChange }) => {
         </p>
         {pedagogicReason && (
           <div
-            className="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full mb-3"
+            className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full mb-3"
             style={{ background: `${accentColor}18`, color: accentColor }}
           >
             <GitBranch className="w-2.5 h-2.5" />
@@ -337,10 +337,10 @@ const NextBestAction = memo(({ onTabChange }) => {
         >
           <div className="flex items-center gap-2">
             <span className="text-sm font-black">¡Empezar ahora!</span>
-            <span className="text-[10px] text-white/70">⏱ ~{minutes} min</span>
+            <span className="text-xs text-white/70">⏱ ~{minutes} min</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="text-[11px] font-black bg-white/25 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-black bg-white/25 px-2 py-0.5 rounded-full">
               +{xp} XP
             </span>
             <ChevronRight className="w-4 h-4 text-white/80" strokeWidth={2.5} />

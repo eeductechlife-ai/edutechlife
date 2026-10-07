@@ -169,7 +169,7 @@ const SkillPassport = memo(() => {
                   {item.label}
                 </p>
                 <span
-                  className="text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0"
+                  className="text-xs font-bold px-2 py-0.5 rounded-full flex-shrink-0"
                   style={{
                     backgroundColor: item.level.color + "20",
                     color: item.level.color,
