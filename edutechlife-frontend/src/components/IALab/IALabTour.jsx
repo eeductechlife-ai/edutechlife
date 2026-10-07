@@ -79,6 +79,7 @@ const IALabTour = ({ hasStartedCourse }) => {
   const [targetRect, setTargetRect] = useState(null);
   const [ready, setReady] = useState(false);
   const [tooltipPos, setTooltipPos] = useState(null);
+  const tooltipRef = useRef(null);
   const retryCount = useRef(0);
   const resizeObserverRef = useRef(null);
   const scrollContainerRef = useRef(null);
@@ -113,7 +114,7 @@ const IALabTour = ({ hasStartedCourse }) => {
       if (stepIndex < 0 || stepIndex >= STEPS.length) return;
       const result = findTarget(stepIndex);
       if (!result) return;
-      const tooltipHeight = 180;
+      const tooltipHeight = tooltipRef.current?.offsetHeight || 260;
       const gap = 12;
       const rect = result.rect;
       const roomBelow = window.innerHeight - rect.bottom;
@@ -149,7 +150,9 @@ const IALabTour = ({ hasStartedCourse }) => {
     setTargetRect(rect);
 
     const tooltipWidth = 288;
-    const tooltipHeight = 180;
+    // Altura real del globo (≈250px); con 180 el globo se salía por abajo
+    // cuando no cabía ni arriba ni debajo del objetivo (tablet, rail lateral).
+    const tooltipHeight = tooltipRef.current?.offsetHeight || 260;
     const gap = 12;
     let left = Math.max(
       16,
@@ -350,6 +353,7 @@ const IALabTour = ({ hasStartedCourse }) => {
       )}
 
       <div
+        ref={tooltipRef}
         className="fixed z-[70] w-72 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden"
         aria-live="polite"
         aria-label={t("ialab.tour.aria_label", {

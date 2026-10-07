@@ -637,6 +637,7 @@ export default function NotebookLMWelcome({
                   <button
                     key={labelKey}
                     type="button"
+                    data-tour={`tour-section-${section}`}
                     onClick={() =>
                       section === "contenido"
                         ? onSelectTopic(0)

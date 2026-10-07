@@ -391,6 +391,7 @@ export default function GeminiWelcome({
                 <button
                   key={labelKey}
                   type="button"
+                  data-tour={`tour-section-${section}`}
                   onClick={() => {
                     if (section === "contenido") onSelectTopic(0);
                     else onSelectSection(section);

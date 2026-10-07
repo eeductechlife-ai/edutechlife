@@ -104,6 +104,7 @@ export default function ChatGPTWelcome({
           <button
             key={labelKey}
             type="button"
+            data-tour={`tour-section-${action}`}
             onClick={() => {
               if (action === "contenido") onSelectTopic(0);
               else onSelectSection(action);

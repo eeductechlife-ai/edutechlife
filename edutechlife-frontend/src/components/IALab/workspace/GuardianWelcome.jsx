@@ -156,6 +156,7 @@ export default function GuardianWelcome({
             <button
               key={labelKey}
               type="button"
+              data-tour={`tour-section-${section}`}
               onClick={() => {
                 if (section === "contenido") onSelectTopic(0);
                 else onSelectSection(section);
