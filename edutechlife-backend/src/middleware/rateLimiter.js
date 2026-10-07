@@ -27,6 +27,12 @@ const store = buildStore();
 // header Authorization. Si no hay token válido, cae a IP (comportamiento
 // anterior). No se verifica la firma aquí: para conteo de cuota basta el sub,
 // y sin token el cupo por IP sigue aplicando.
+//
+// OJO: `ipKeyGenerator` recibe una IP (string), no el `req`. Llamarlo con `req`
+// devolvía "[object Object]" para TODOS los clientes: un único contador global
+// (con 30 alumnos en el aula, 10 mensajes/min para toda la plataforma). Además
+// chatMessageLimiter corre antes de optionalAuth, así que `req.userId` aún no
+// existe ahí: por eso todos usan userAwareKey (que decodifica el sub del JWT).
 function userAwareKey(req) {
   if (req.userId) return `u:${req.userId}`;
   const header = req.headers?.authorization || "";
@@ -87,7 +93,7 @@ const chatMessageLimiter = rateLimit({
   legacyHeaders: false,
   store,
   message: { error: 'Demasiados mensajes. Intenta de nuevo en 1 minuto.', retryAfter: 60 },
-  keyGenerator: (req) => req.userId || ipKeyGenerator(req),
+  keyGenerator: userAwareKey,
   skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
@@ -98,7 +104,7 @@ const examSubmissionLimiter = rateLimit({
   legacyHeaders: false,
   store,
   message: { error: 'Demasiados envíos. Intenta de nuevo después.', retryAfter: 30 },
-  keyGenerator: (req) => `${req.userId || ipKeyGenerator(req)}-${req.params.examId || 'unknown'}`,
+  keyGenerator: (req) => `${userAwareKey(req)}-${req.params.examId || 'unknown'}`,
   skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
@@ -109,7 +115,7 @@ const challengeSubmissionLimiter = rateLimit({
   legacyHeaders: false,
   store,
   message: { error: 'Demasiados envíos de desafío. Intenta de nuevo.', retryAfter: 60 },
-  keyGenerator: (req) => `${req.userId || ipKeyGenerator(req)}-${req.params.challengeId || 'unknown'}`,
+  keyGenerator: (req) => `${userAwareKey(req)}-${req.params.challengeId || 'unknown'}`,
   skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
@@ -124,7 +130,7 @@ const ttsLimiter = rateLimit({
   legacyHeaders: false,
   store,
   message: { error: 'Demasiadas solicitudes de voz. Espera un momento.', retryAfter: 60 },
-  keyGenerator: (req) => req.userId || ipKeyGenerator(req),
+  keyGenerator: userAwareKey,
   skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
@@ -135,7 +141,7 @@ const ttsHourlyLimiter = rateLimit({
   legacyHeaders: false,
   store,
   message: { error: 'Has alcanzado el límite de voz de esta hora.', retryAfter: 3600 },
-  keyGenerator: (req) => req.userId || ipKeyGenerator(req),
+  keyGenerator: userAwareKey,
   skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
@@ -147,11 +153,12 @@ const visionLimiter = rateLimit({
   legacyHeaders: false,
   store,
   message: { error: 'Límite de escaneos alcanzado. Intenta de nuevo en 1 minuto.', retryAfter: 60 },
-  keyGenerator: (req) => req.userId || ipKeyGenerator(req),
+  keyGenerator: userAwareKey,
   skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
 module.exports = {
+  userAwareKey,
   apiLimiter,
   deepseekLimiter,
   authLimiter,
