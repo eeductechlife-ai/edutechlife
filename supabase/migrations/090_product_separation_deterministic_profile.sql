@@ -34,6 +34,14 @@
 
 BEGIN;
 
+-- ── 0. Columnas que esta migración (y el backend) ya usan ───────────────────
+-- public.users.platform y registration_source existen en producción pero ninguna
+-- migración anterior las crea (la base se armó a mano): en una base limpia el
+-- backfill de la sección 3 fallaba con «column "platform" does not exist».
+-- ADD COLUMN IF NOT EXISTS: en producción no hace nada.
+ALTER TABLE public.users ADD COLUMN IF NOT EXISTS platform TEXT;
+ALTER TABLE public.users ADD COLUMN IF NOT EXISTS registration_source TEXT;
+
 -- ── 1. handle_new_user: perfil universal + fila de producto ─────────────────
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger
