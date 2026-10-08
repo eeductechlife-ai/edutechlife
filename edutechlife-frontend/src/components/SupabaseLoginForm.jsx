@@ -67,10 +67,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
   useEffect(() => {
     const oauthError = searchParams.get("error");
     if (!oauthError) return;
-    setError(
-      t("login.error.oauth_failed") ||
-        "No pudimos completar el ingreso con Google. Inténtalo de nuevo o entra con tu correo.",
-    );
+    setError(t("login.error.oauth_failed"));
   }, [searchParams, t]);
 
   const handleOAuthLogin = (provider) => {
@@ -157,7 +154,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         if (attempt > 0) {
-          setInfo(t("login.retrying") || "Reconectando con el servidor...");
+          setInfo(t("login.retrying"));
           await new Promise((r) => setTimeout(r, attempt * 2000));
         }
 
@@ -226,10 +223,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
     }
 
     setInfo("");
-    setError(
-      t("login.error.connection") ||
-        "Error de conexión. Verifica tu internet e intenta de nuevo.",
-    );
+    setError(t("login.error.connection"));
     console.error("Login error:", lastError);
     setLoading(false);
   };
@@ -341,7 +335,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            {t("login.password") || "Contraseña"}
+            {t("login.password")}
           </label>
           <div className="relative">
             <Lock className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
@@ -384,9 +378,7 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
           disabled={loading}
           className="w-full bg-[#004B63] hover:bg-[#0A3550] text-white font-semibold py-2 px-4 rounded-lg transition-colors disabled:opacity-50"
         >
-          {loading
-            ? t("login.button.signing_in") || "Iniciando sesión..."
-            : t("login.button.signin") || "Iniciar Sesión"}
+          {loading ? t("login.button.signing_in") : t("login.button.signin")}
         </button>
       </form>
 
@@ -395,14 +387,14 @@ const SupabaseLoginForm = ({ returnTo = "/ialab", onShowSignUp }) => {
           the user keeps their original returnTo (e.g. /ialab) instead of
           being sent to an unrelated product's sign-up. */}
       <div className="text-center text-sm text-gray-600">
-        {t("login.no_account") || "¿No tienes cuenta?"}{" "}
+        {t("login.no_account")}{" "}
         <button
           onClick={() =>
             onShowSignUp ? onShowSignUp() : navigate("/sign-up/ingenia")
           }
           className="text-[#004B63] hover:text-[#0A3550] font-semibold"
         >
-          {t("login.signup_link") || "Regístrate aquí"}
+          {t("login.signup_link")}
         </button>
       </div>
     </div>

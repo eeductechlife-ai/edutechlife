@@ -33,15 +33,11 @@ const IngenIAHabeasDataModal = ({ studentAge, onClose, onAccept }) => {
 
     if (isMinor && showParentalForm) {
       if (!parentEmail.trim()) {
-        setEmailError(
-          t("smartboard.habeas_parent_email_required") || "Email requerido",
-        );
+        setEmailError(t("smartboard.habeas_parent_email_required"));
         return;
       }
       if (!validateEmail(parentEmail)) {
-        setEmailError(
-          t("smartboard.habeas_parent_email_invalid") || "Email inválido",
-        );
+        setEmailError(t("smartboard.habeas_parent_email_invalid"));
         return;
       }
     }

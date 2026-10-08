@@ -297,15 +297,13 @@ const TuDiaPlan = memo(function TuDiaPlan({ onTabChange, darkMode }) {
                 >
                   {step.title}
                 </span>
-                <span
-                  className={`block text-[11px] mt-0.5 truncate ${textSub}`}
-                >
+                <span className={`block text-xs mt-0.5 truncate ${textSub}`}>
                   {step.done ? "¡Listo por hoy!" : step.hint}
                 </span>
               </span>
               {!step.done && (
                 <ChevronRight
-                  className="w-4 h-4 shrink-0 text-[#06D6A0]"
+                  className="w-4 h-4 shrink-0 text-[#037658]"
                   strokeWidth={2.5}
                   aria-hidden="true"
                 />

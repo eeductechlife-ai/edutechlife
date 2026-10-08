@@ -6,6 +6,7 @@ import { MindMapImage } from "./MindMapImage";
 import { InfographicImage } from "./InfographicImage";
 import { THEMES, THEME_LIST, downloadSvgAsPng } from "./imageKit";
 import FullscreenViewer from "./FullscreenViewer";
+import { readableTextOn } from "../../../../utils/contrast";
 
 const THEME_KEY = "practicar_image_theme";
 const KIND = { mapa: "mapa mental", infografia: "infografía" };
@@ -136,7 +137,9 @@ const ImagePanel = memo(({ material, title, color, dm }) => {
               aria-checked={sel}
               onClick={() => pickTheme(t.id)}
               className={`min-h-[44px] flex items-center justify-center gap-1.5 rounded-xl border-2 text-xs font-bold ${sel ? "text-white border-transparent" : idle}`}
-              style={sel ? { background: color } : {}}
+              style={
+                sel ? { background: color, color: readableTextOn(color) } : {}
+              }
             >
               <span aria-hidden="true">{t.emoji}</span>
               {t.label}
@@ -152,7 +155,7 @@ const ImagePanel = memo(({ material, title, color, dm }) => {
         className="group relative block w-full rounded-2xl overflow-hidden border border-black/5 text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-[#9D4EDD]/30"
       >
         {renderImage(imageRef)}
-        <span className="absolute top-2 right-2 inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-black/55 text-white text-[11px] font-bold backdrop-blur-sm opacity-90 group-hover:opacity-100">
+        <span className="absolute top-2 right-2 inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-black/55 text-white text-xs font-bold backdrop-blur-sm opacity-90 group-hover:opacity-100">
           <Maximize2 className="w-3.5 h-3.5" aria-hidden="true" />
           Ampliar
         </span>
@@ -163,7 +166,7 @@ const ImagePanel = memo(({ material, title, color, dm }) => {
           type="button"
           onClick={() => setFullscreen(true)}
           className="flex items-center justify-center gap-2 min-h-[48px] py-3 rounded-xl text-sm font-black text-white"
-          style={{ background: color }}
+          style={{ background: color, color: readableTextOn(color) }}
         >
           <Maximize2 className="w-4 h-4" aria-hidden="true" />
           Pantalla completa

@@ -23,9 +23,9 @@ const AnalysisResult = memo(({ analysis, onTutorWithDani }) => {
   };
 
   const difficultyColors = {
-    básico: "bg-[#66CCCC]/20 text-[#66CCCC]",
-    intermedio: "bg-[#FFD166]/20 text-[#FFD166]",
-    avanzado: "bg-[#FF6B9D]/20 text-[#FF6B9D]",
+    básico: "bg-[#66CCCC]/20 text-[#387070]",
+    intermedio: "bg-[#FFD166]/20 text-[#806933]",
+    avanzado: "bg-[#FF6B9D]/20 text-[#B34B6E]",
   };
 
   return (
@@ -55,9 +55,7 @@ const AnalysisResult = memo(({ analysis, onTutorWithDani }) => {
             >
               {analysis.score}
             </span>
-            <span
-              className={`block text-[10px] ${getScoreColor(analysis.score)}`}
-            >
+            <span className={`block text-xs ${getScoreColor(analysis.score)}`}>
               {t("kid.activity.points")}
             </span>
           </div>
@@ -183,9 +181,9 @@ const ActivityCard = memo(({ activity, index, onViewAnalysis }) => {
           <span
             className={`px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${
               activity.status === "analyzed"
-                ? "bg-[#66CCCC]/20 text-[#66CCCC]"
+                ? "bg-[#66CCCC]/20 text-[#387070]"
                 : activity.status === "in-progress"
-                  ? "bg-[#FFD166]/20 text-[#FFD166]"
+                  ? "bg-[#FFD166]/20 text-[#806933]"
                   : "bg-[#E2E8F0] text-[#64748B]"
             }`}
           >
@@ -198,7 +196,7 @@ const ActivityCard = memo(({ activity, index, onViewAnalysis }) => {
           {activity.analysis && (
             <motion.button
               onClick={() => onViewAnalysis(activity)}
-              className="text-[10px] text-[#4DA8C4] font-semibold hover:underline"
+              className="text-xs text-[#367689] font-semibold hover:underline"
               whileHover={{ scale: 1.05 }}
             >
               {t("kid.activity.view_analysis")}

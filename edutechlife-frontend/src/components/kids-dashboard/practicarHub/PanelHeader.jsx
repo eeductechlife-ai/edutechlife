@@ -30,7 +30,7 @@ export default function PanelHeader({
             {title}
           </h3>
           {subtitle && (
-            <p className={`text-[11px] leading-tight truncate ${sub}`}>
+            <p className={`text-xs leading-tight truncate ${sub}`}>
               {subtitle}
             </p>
           )}

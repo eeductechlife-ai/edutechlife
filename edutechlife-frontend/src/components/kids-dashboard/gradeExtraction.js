@@ -161,8 +161,14 @@ export function buildAnalysisPrompt({ grades, vakStyle, SUBJECTS }) {
       .map((g) => `${getLabel(g)} (${getAvgScore(g).toFixed(1)}/5)`)
       .join(", ") || "ninguna";
 
+  // Sin ADN de Aprendizaje no se inventa un estilo por defecto.
+  const vakLine = vakStyle
+    ? `Estilo de aprendizaje VAK: ${vakStyle}.`
+    : "El estudiante aún no hace su ADN de Aprendizaje: NO menciones estilos VAK ni recomiendes colores o dibujos por defecto.";
+  const vakField = vakStyle ? `"vakTip":"consejo ${vakStyle} (1 frase)",` : "";
+
   return `Eres Dani, tutora IA de EdutechLife para Colombia.
-Estilo de aprendizaje VAK: ${vakStyle}.
+${vakLine}
 
 CALIFICACIONES (escala 1.0–5.0, aprobatorio ≥ 3.0):
 - Promedio: ${avgScore}/5 | Total: ${grades.length} asignaturas
@@ -171,7 +177,7 @@ CALIFICACIONES (escala 1.0–5.0, aprobatorio ≥ 3.0):
 - REPROBADAS (< 3.0): ${fmt(failing)}
 
 Responde SOLO con JSON válido (sin markdown):
-{"overall":"Mensaje CORTO al estudiante: máx 2 frases, tutéalo, motivador","motivation":"Frase final de Dani al estudiante (1 frase)","strengths":["emoji Materia (nota)"],"topActions":["Acción urgente 1","Acción 2","Acción 3"],"weaknesses":[{"subject":"nombre","score":2.8,"emoji":"emoji","why":"razón en 1 frase","vakTip":"consejo ${vakStyle} (1 frase)","steamLink":"conexión mundo real (1 frase)","actions":["acción 1","acción 2","acción 3"]}],"studyPlan":[{"week":1,"focus":"materia","activities":["actividad 1","actividad 2","actividad 3"],"daniTip":"consejo de Dani"}],"parentReport":{"summary":"Párrafo formal 3-4 frases para los padres. Promedio ${avgScore}/5.","concerns":["Preocupación 1"],"recommendations":["Recomendación 1","Recomendación 2","Recomendación 3"],"followUp":"Sugerencia de seguimiento"}}
+{"overall":"Mensaje CORTO al estudiante: máx 2 frases, tutéalo, motivador","motivation":"Frase final de Dani al estudiante (1 frase)","strengths":["emoji Materia (nota)"],"topActions":["Acción urgente 1","Acción 2","Acción 3"],"weaknesses":[{"subject":"nombre","score":2.8,"emoji":"emoji","why":"razón en 1 frase",${vakField}"steamLink":"conexión mundo real (1 frase)","actions":["acción 1","acción 2","acción 3"]}],"studyPlan":[{"week":1,"focus":"materia","activities":["actividad 1","actividad 2","actividad 3"],"daniTip":"consejo de Dani"}],"parentReport":{"summary":"Párrafo formal 3-4 frases para los padres. Promedio ${avgScore}/5.","concerns":["Preocupación 1"],"recommendations":["Recomendación 1","Recomendación 2","Recomendación 3"],"followUp":"Sugerencia de seguimiento"}}
 
 REGLAS: overall+motivation MUY CORTOS para niños 6-16; weaknesses máx ${weakCount}; studyPlan ${planWeeks} semanas; parentReport formal sin emojis.`;
 }

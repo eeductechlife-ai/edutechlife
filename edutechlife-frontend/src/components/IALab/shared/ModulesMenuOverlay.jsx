@@ -59,7 +59,7 @@ export const ModulesMenuOverlay = forwardRef(function ModulesMenuOverlay(
       className="fixed inset-0 z-[1001] md:hidden"
       role="dialog"
       aria-modal="true"
-      aria-label={t("ialab.tab_modules") || "Módulos"}
+      aria-label={t("ialab.tab_modules")}
     >
       <div
         className={`absolute inset-0 bg-black/40 transition-opacity duration-250 ${
@@ -91,12 +91,12 @@ export const ModulesMenuOverlay = forwardRef(function ModulesMenuOverlay(
             aria-hidden="true"
           />
           <span className="text-sm font-bold text-[var(--theme-primary)] dark:text-slate-100">
-            {t("ialab.tab_modules") || "Módulos"}
+            {t("ialab.tab_modules")}
           </span>
           <button
             type="button"
             onClick={onClose}
-            aria-label={t("common.close") || "Cerrar"}
+            aria-label={t("common.close")}
             className="ml-auto w-10 h-10 -mr-2 flex items-center justify-center rounded-lg text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/50"
           >
             <Icon name="fa-xmark" className="text-sm" aria-hidden="true" />

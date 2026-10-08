@@ -2849,6 +2849,7 @@ export type TranslationKeys = {
   "ialab.workspace.topics_label": string;
   "ialab.xp_earned": string;
   "ialab.xp_excellent_work": string;
+  "kid.a11y.skip_to_content": string;
   "kid.activity.analysis_completed": string;
   "kid.activity.analyzing_detail": string;
   "kid.activity.click_select": string;
@@ -3200,11 +3201,13 @@ export type TranslationKeys = {
   "kid.podcast.title": string;
   "kid.podcast.title_fallback": string;
   "kid.points_rewards.action_active_minute": string;
+  "kid.points_rewards.action_complete_challenge": string;
   "kid.points_rewards.action_complete_mission": string;
   "kid.points_rewards.action_complete_subject": string;
   "kid.points_rewards.action_daily_streak": string;
   "kid.points_rewards.action_upload_activity": string;
   "kid.points_rewards.action_vak_diagnosis": string;
+  "kid.points_rewards.daily_cap_note": string;
   "kid.points_rewards.how_to_earn_title": string;
   "kid.points_rewards.level": string;
   "kid.points_rewards.level_avanzado": string;
@@ -3289,8 +3292,10 @@ export type TranslationKeys = {
   "kid.user.select_vak": string;
   "kid.user.smartboard_profile": string;
   "kid.user.student": string;
+  "kid.user.vak_from_adn": string;
   "kid.user.vak_placeholder": string;
   "kid.user.vak_type": string;
+  "kid.user.vak_unknown": string;
   "kid.vak.diagnostic_title": string;
   "kid.vak.rec_auditory": string;
   "kid.vak.rec_kinesthetic": string;

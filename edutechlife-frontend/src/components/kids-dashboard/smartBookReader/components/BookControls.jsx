@@ -72,7 +72,7 @@ export const StepBar = memo(({ step }) => {
               i === step
                 ? "bg-[#4DA8C4]/20 text-[#004B63]"
                 : i < step
-                  ? "bg-[#66CCCC]/20 text-[#66CCCC]"
+                  ? "bg-[#66CCCC]/20 text-[#387070]"
                   : "bg-[#E2E8F0] text-[#94A3B8]"
             }`}
             animate={i === step ? { scale: [1, 1.05, 1] } : {}}
@@ -124,7 +124,7 @@ export const HistoryItem = memo(({ book, i, dark, onSelect }) => {
         {book.keyConcepts?.slice(0, 3).map((c, j) => (
           <span
             key={j}
-            className="text-[10px] px-1.5 py-0.5 rounded"
+            className="text-xs px-1.5 py-0.5 rounded"
             style={{
               backgroundColor: `${COLORS[j % COLORS.length]}15`,
               color: COLORS[j % COLORS.length],

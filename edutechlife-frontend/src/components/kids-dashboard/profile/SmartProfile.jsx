@@ -15,6 +15,8 @@ import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useStudentProfileIngenIA } from "../../../hooks/useStudentProfileIngenIA";
 import { SB_GRADIENTS, glow } from "../ingenIATheme";
 import EditProfileModal from "../EditProfileModal";
+import AccountDataSection from "./AccountDataSection";
+import { readableTextOn } from "../../../utils/contrast";
 import { API_BASE_URL as API_BASE } from "../../../config/api";
 
 import ProgressSummary from "./ProgressSummary";
@@ -41,7 +43,7 @@ const INTEREST_LABELS = {
   musica: "🎵 Música",
   deporte: "⚽ Deporte",
   lectura: "📚 Lectura",
-  historia: "🌍 Historia",
+  historia: "📜 Historia",
 };
 
 const VAK_LABELS = {
@@ -91,6 +93,8 @@ const SmartProfile = memo(function SmartProfile({
     darkMode: dm,
     toggleDarkMode,
     supabaseQueries,
+    setStudentAge,
+    setGradeLevel,
   } = useIngenIAKids();
 
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -133,7 +137,7 @@ const SmartProfile = memo(function SmartProfile({
   const level = getLevel(totalPoints ?? 0);
 
   const textMain = dm ? "#F0F6FF" : "#1E293B";
-  const textMuted = dm ? "#94A3B8" : "#64748B";
+  const textMuted = dm ? "#94A3B8" : "#475569";
 
   const handleParentInvite = async (e) => {
     e.preventDefault();
@@ -149,7 +153,8 @@ const SmartProfile = memo(function SmartProfile({
         },
         body: JSON.stringify({
           parentEmail: parentInviteForm.parentEmail,
-          studentAge: parseInt(parentInviteForm.studentAge, 10),
+          // La edad ya está en el perfil: solo se pregunta si falta.
+          studentAge: parseInt(parentInviteForm.studentAge || studentAge, 10),
         }),
       });
       const data = await res.json();
@@ -192,17 +197,17 @@ const SmartProfile = memo(function SmartProfile({
             </h2>
             <div className="flex flex-wrap items-center gap-1 mt-1">
               {gradeLevel && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-white">
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white/20 text-white">
                   Grado {gradeLevel}
                 </span>
               )}
               {studentAge != null && (
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/15 text-white">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-white/15 text-white">
                   {studentAge} años
                 </span>
               )}
               {schoolName && (
-                <span className="text-[10px] px-2 py-0.5 rounded-full text-white/75 bg-white/10">
+                <span className="text-xs px-2 py-0.5 rounded-full text-white/75 bg-white/10">
                   🏫 {schoolName}
                 </span>
               )}
@@ -239,7 +244,7 @@ const SmartProfile = memo(function SmartProfile({
               <p className="text-[13px] font-black text-white truncate">
                 {icon} {value}
               </p>
-              <p className="text-[10px] leading-tight text-white/80">{label}</p>
+              <p className="text-xs leading-tight text-white/80">{label}</p>
             </div>
           ))}
         </div>
@@ -274,12 +279,13 @@ const SmartProfile = memo(function SmartProfile({
               onSectionChange?.(tab.id);
             }}
             aria-pressed={activeTab === tab.id}
-            className="flex-1 flex flex-col items-center gap-0.5 text-[11px] font-bold py-2 px-1 rounded-lg transition-all min-h-[48px]"
+            className="flex-1 flex flex-col items-center gap-0.5 text-xs font-bold py-2 px-1 rounded-lg transition-all min-h-[48px]"
             style={
               activeTab === tab.id
                 ? {
                     background: dm ? "#243152" : "#ffffff",
-                    color: "#FB8500",
+                    // Naranja de marca oscurecido para leerse (antes 2,5:1).
+                    color: dm ? "#FB8500" : "#A35600",
                     boxShadow: "0 1px 4px rgba(0,0,0,0.10)",
                   }
                 : { color: textMuted }
@@ -350,8 +356,8 @@ const SmartProfile = memo(function SmartProfile({
                   </span>
                   <div className="min-w-0">
                     <p
-                      className="text-[10px] font-bold uppercase tracking-wide"
-                      style={{ color: "#D97706" }}
+                      className="text-xs font-bold uppercase tracking-wide"
+                      style={{ color: dm ? "#FBBF24" : "#92400E" }}
                     >
                       Objetivo
                     </p>
@@ -374,8 +380,8 @@ const SmartProfile = memo(function SmartProfile({
                 <span className="text-xl mt-0.5">🧠</span>
                 <div className="min-w-0">
                   <p
-                    className="text-[10px] font-bold uppercase tracking-wide"
-                    style={{ color: "#D97706" }}
+                    className="text-xs font-bold uppercase tracking-wide"
+                    style={{ color: dm ? "#FBBF24" : "#92400E" }}
                   >
                     Estilo
                   </p>
@@ -397,8 +403,11 @@ const SmartProfile = memo(function SmartProfile({
                       <button
                         type="button"
                         onClick={onExpandVak}
-                        className="mt-2 min-h-[40px] px-3.5 rounded-xl text-xs font-black text-white active:scale-95 transition-transform"
-                        style={{ background: "#FB8500" }}
+                        className="mt-2 min-h-[40px] px-3.5 rounded-xl text-xs font-black active:scale-95 transition-transform"
+                        style={{
+                          background: "#FB8500",
+                          color: readableTextOn("#FB8500"),
+                        }}
                       >
                         Descubrir mi estilo →
                       </button>
@@ -414,7 +423,7 @@ const SmartProfile = memo(function SmartProfile({
                 {interests.map((id) => (
                   <span
                     key={id}
-                    className="text-[11px] font-semibold px-2.5 py-1 rounded-full"
+                    className="text-xs font-semibold px-2.5 py-1 rounded-full"
                     style={{
                       background: "rgba(251,133,0,0.09)",
                       border: "1px solid rgba(251,133,0,0.18)",
@@ -493,12 +502,14 @@ const SmartProfile = memo(function SmartProfile({
                   Conectar con mis padres
                 </button>
 
+                <AccountDataSection dm={dm} />
+
                 {onLogout && (
                   <button
                     type="button"
                     onClick={onLogout}
                     className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold"
-                    style={{ color: "#EF476F" }}
+                    style={{ color: dm ? "#FF6B9D" : "#BF3959" }}
                   >
                     <LogOut className="w-4 h-4" />
                     Cerrar sesión
@@ -577,6 +588,7 @@ const SmartProfile = memo(function SmartProfile({
                   </p>
                   <div>
                     <label
+                      htmlFor="parent-invite-email"
                       className="block text-xs font-semibold mb-1"
                       style={{ color: textMain }}
                     >
@@ -588,6 +600,7 @@ const SmartProfile = memo(function SmartProfile({
                         style={{ color: textMuted }}
                       />
                       <input
+                        id="parent-invite-email"
                         type="email"
                         required
                         value={parentInviteForm.parentEmail}
@@ -607,34 +620,38 @@ const SmartProfile = memo(function SmartProfile({
                       />
                     </div>
                   </div>
-                  <div>
-                    <label
-                      className="block text-xs font-semibold mb-1"
-                      style={{ color: textMain }}
-                    >
-                      Tu edad
-                    </label>
-                    <input
-                      type="number"
-                      required
-                      min="5"
-                      max="17"
-                      value={parentInviteForm.studentAge}
-                      onChange={(e) =>
-                        setParentInviteForm((p) => ({
-                          ...p,
-                          studentAge: e.target.value,
-                        }))
-                      }
-                      placeholder="ej: 13"
-                      className="w-full px-3 py-2 rounded-xl text-sm border"
-                      style={{
-                        background: dm ? "#0F172A" : "#F8FAFC",
-                        borderColor: dm ? "#243152" : "#CBD5E1",
-                        color: textMain,
-                      }}
-                    />
-                  </div>
+                  {!studentAge && (
+                    <div>
+                      <label
+                        htmlFor="parent-invite-age"
+                        className="block text-xs font-semibold mb-1"
+                        style={{ color: textMain }}
+                      >
+                        Tu edad
+                      </label>
+                      <input
+                        id="parent-invite-age"
+                        type="number"
+                        required
+                        min="5"
+                        max="17"
+                        value={parentInviteForm.studentAge}
+                        onChange={(e) =>
+                          setParentInviteForm((p) => ({
+                            ...p,
+                            studentAge: e.target.value,
+                          }))
+                        }
+                        placeholder="ej: 13"
+                        className="w-full px-3 py-2 rounded-xl text-sm border"
+                        style={{
+                          background: dm ? "#0F172A" : "#F8FAFC",
+                          borderColor: dm ? "#243152" : "#CBD5E1",
+                          color: textMain,
+                        }}
+                      />
+                    </div>
+                  )}
                   {parentInviteError && (
                     <p className="text-xs text-red-500">{parentInviteError}</p>
                   )}
@@ -670,7 +687,12 @@ const SmartProfile = memo(function SmartProfile({
             uploadAvatar={uploadAvatar}
             removeAvatar={removeAvatar}
             onClose={() => setEditOpen(false)}
-            onSaveSuccess={() => {}}
+            onSaveSuccess={(saved) => {
+              // Edad y grado alimentan los retos y el plan: se actualizan en
+              // la app al guardar, no hasta la próxima recarga.
+              if (saved?.age != null) setStudentAge(saved.age);
+              if (saved?.grade) setGradeLevel(saved.grade);
+            }}
           />
         )}
       </AnimatePresence>

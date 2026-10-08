@@ -1,77 +1,18 @@
+import { SUBJECT_CATALOG } from "../../../config/subjectCatalog";
+
+// Un solo catálogo (config/subjectCatalog.js); aquí solo se indexa por id y
+// por los nombres alternos con los que llegan las materias del servidor.
+const metaOf = (subject) => ({
+  emoji: subject.emoji,
+  color: subject.color,
+  label: subject.label,
+  challengeId: subject.challengeId,
+});
+
 export const SUBJECT_META = {
-  matematicas: {
-    emoji: "🔢",
-    color: "#FB8500",
-    label: "Matemáticas",
-    challengeId: "math",
-  },
-  lenguaje: {
-    emoji: "📖",
-    color: "#9D4EDD",
-    label: "Lenguaje",
-    challengeId: "language",
-  },
-  ciencias: {
-    emoji: "🔬",
-    color: "#06D6A0",
-    label: "Ciencias",
-    challengeId: "science",
-  },
-  ciencias_naturales: {
-    emoji: "🔬",
-    color: "#06D6A0",
-    label: "Ciencias",
-    challengeId: "science",
-  },
-  sociales: {
-    emoji: "🌍",
-    color: "#EF476F",
-    label: "Sociales",
-    challengeId: "social",
-  },
-  ciencias_sociales: {
-    emoji: "🌍",
-    color: "#EF476F",
-    label: "Sociales",
-    challengeId: "social",
-  },
-  historia: {
-    emoji: "📜",
-    color: "#EF476F",
-    label: "Historia",
-    challengeId: "social",
-  },
-  ingles: {
-    emoji: "🇬🇧",
-    color: "#E9A800",
-    label: "Inglés",
-    challengeId: "english",
-  },
-  arte: { emoji: "🎨", color: "#F72585", label: "Arte" },
-  quimica: {
-    emoji: "⚗️",
-    color: "#E76F51",
-    label: "Química",
-    challengeId: "chemistry",
-  },
-  fisica: {
-    emoji: "⚡",
-    color: "#2A9D8F",
-    label: "Física",
-    challengeId: "physics",
-  },
-  informatica: {
-    emoji: "💻",
-    color: "#118AB2",
-    label: "Informática",
-    challengeId: "informatics",
-  },
-  filosofia: {
-    emoji: "🦉",
-    color: "#6D4C94",
-    label: "Filosofía",
-    challengeId: "philosophy",
-  },
+  ...Object.fromEntries(SUBJECT_CATALOG.map((s) => [s.id, metaOf(s)])),
+  ciencias_naturales: metaOf(SUBJECT_CATALOG.find((s) => s.id === "ciencias")),
+  ciencias_sociales: metaOf(SUBJECT_CATALOG.find((s) => s.id === "sociales")),
 };
 
 export const CONTENT_TYPES = [

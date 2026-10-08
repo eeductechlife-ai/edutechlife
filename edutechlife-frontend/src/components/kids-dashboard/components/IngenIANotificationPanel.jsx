@@ -167,7 +167,7 @@ const IngenIANotificationPanel = ({
                 Notificaciones
               </h3>
               {unreadCount > 0 && (
-                <span className="bg-white/25 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                <span className="bg-white/25 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                   {unreadCount} nueva{unreadCount === 1 ? "" : "s"}
                 </span>
               )}
@@ -193,14 +193,14 @@ const IngenIANotificationPanel = ({
               <button
                 onClick={markAllAsRead}
                 disabled={unreadCount === 0}
-                className="flex items-center gap-1.5 text-[11px] font-bold px-2 py-1 rounded-lg transition-colors disabled:opacity-40"
+                className="flex items-center gap-1.5 text-xs font-bold px-2 py-1 rounded-lg transition-colors disabled:opacity-40"
                 style={{ color: SB_COLORS.primary }}
               >
                 ✓ Marcar leídas
               </button>
               <button
                 onClick={handleClearAll}
-                className="flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-lg transition-colors"
                 style={
                   confirmClear
                     ? { color: "#fff", background: SB_COLORS.danger }
@@ -319,7 +319,7 @@ const IngenIANotificationPanel = ({
                           </p>
                           <div className="flex items-center gap-2 mt-1.5">
                             <span
-                              className="text-[10px]"
+                              className="text-xs"
                               style={{ color: textMuted }}
                             >
                               {timeAgo(n.created_at)}

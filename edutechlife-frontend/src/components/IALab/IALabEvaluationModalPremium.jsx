@@ -81,10 +81,8 @@ const IALabEvaluationModalPremium = ({ isOpen, onClose }) => {
       if (challengeResult && challengeResult.success === false) {
         createNotification({
           type: "warning",
-          title: t("ialab.quiz.sync_error_title") || "No se pudo guardar en la nube",
-          message:
-            t("ialab.quiz.sync_error_msg") ||
-            "Tu nota quedó guardada en este dispositivo y se sincronizará al reconectar.",
+          title: t("ialab.quiz.sync_error_title"),
+          message: t("ialab.quiz.sync_error_msg"),
           metadata: { moduleId: activeMod, score, type: "challenge" },
         });
       }

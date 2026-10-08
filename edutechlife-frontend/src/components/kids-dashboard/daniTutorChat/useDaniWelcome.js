@@ -1,5 +1,35 @@
 import { useCallback } from "react";
 
+/**
+ * Elige UNA sugerencia para el saludo, por prioridad: lo que pasa hoy, una
+ * materia que necesita práctica, las misiones pendientes (solo el número) y, al
+ * final, el ADN. Devuelve "" si no hay nada que sugerir.
+ */
+export function pickWelcomeSuggestion({
+  todayEvents = [],
+  lowProgress = [],
+  pendingMissions = [],
+  hasVak = true,
+}) {
+  if (todayEvents.length > 0) {
+    const names = todayEvents.map((e) => e.title).join(", ");
+    return `Hoy tienes agendado: ${names}. ¿Cómo te sientes al respecto?`;
+  }
+  if (lowProgress.length > 0) {
+    const subject = lowProgress[0].name;
+    return `Noté que ${subject} necesita un poco más de práctica. ¿Quieres repasar algún tema?`;
+  }
+  if (pendingMissions.length > 0) {
+    return pendingMissions.length === 1
+      ? "Tienes 1 misión pendiente. ¿La hacemos juntos?"
+      : `Tienes ${pendingMissions.length} misiones pendientes. ¿Quieres empezar por una?`;
+  }
+  if (!hasVak) {
+    return "Si quieres, te ayudo a descubrir cómo aprendes mejor con el ADN de Aprendizaje.";
+  }
+  return "";
+}
+
 export default function useDaniWelcome({
   streak,
   vakResult,
@@ -88,49 +118,18 @@ export default function useDaniWelcome({
     const tabContext = tabMessages[activeTab] || "";
     if (tabContext) parts.push(tabContext);
 
-    const pendingMissions = (missions || []).filter((m) => !m.completed);
-    if (pendingMissions.length > 0) {
-      const names = pendingMissions
-        .slice(0, 3)
-        .map((m) => `"${m.title}"`)
-        .join(", ");
-      const missionText =
-        pendingMissions.length === 1
-          ? `Tienes 1 misión pendiente: ${names}.`
-          : `Tienes ${pendingMissions.length} misiones pendientes: ${names}${pendingMissions.length > 3 ? " y más." : "."}`;
-      parts.push(missionText);
-      parts.push("¿Quieres que empecemos con alguna?");
-    }
-
-    if (!parts.some((p) => p.includes("misiones"))) {
-      const lowProgress = (subjects || []).filter(
-        (s) => (s.progress || 0) > 0 && (s.progress || 0) < 50,
-      );
-      if (lowProgress.length > 0) {
-        const names = lowProgress
-          .slice(0, 3)
-          .map((s) => `${s.name} (${s.progress}%)`)
-          .join(", ");
-        parts.push(
-          `Noté que ${names} necesitan un poco más de práctica. ¿Quieres repasar algún tema en específico?`,
-        );
-      }
-    }
-
-    if (!vakResult) {
-      parts.push(
-        "¿Sabías que aún no has descubierto tu estilo de aprendizaje? Podemos hacer el ADN de Aprendizaje ahora mismo 🧠",
-      );
-    }
-
+    // Una sola sugerencia, la más útil. Antes el saludo juntaba las misiones
+    // pendientes con sus nombres, las materias flojas, el ADN y el calendario.
     const todayStr = now.toISOString().split("T")[0];
-    const todayEvents = calendarEvents.filter((e) => e.date === todayStr);
-    if (todayEvents.length > 0) {
-      const eventNames = todayEvents.map((e) => e.title).join(", ");
-      parts.push(
-        `Hoy tienes agendado: ${eventNames}. ¿Cómo te sientes al respecto?`,
-      );
-    }
+    const suggestion = pickWelcomeSuggestion({
+      todayEvents: calendarEvents.filter((e) => e.date === todayStr),
+      lowProgress: (subjects || []).filter(
+        (s) => (s.progress || 0) > 0 && (s.progress || 0) < 50,
+      ),
+      pendingMissions: (missions || []).filter((m) => !m.completed),
+      hasVak: !!vakResult,
+    });
+    if (suggestion) parts.push(suggestion);
 
     if (!parts.some((p) => p.includes("¿"))) {
       parts.push(t("dani.welcome_first"));

@@ -84,6 +84,19 @@ const EDUTECHLIFE_ESSENCE = `
 - Si el estudiante pregunta por precios, inscripción o pagos, responde con 1 oración amable: que eso lo manejan sus padres o acudientes y que pueden escribir por WhatsApp +57 323 836 5517 o a info@edutechlife.com. Luego vuelve al tema académico.
 `;
 
+// Qué hace Dani cuando el estudiante habla de cómo se siente. Antes, ante «nadie
+// me quiere», seguía con el ciclo de preguntas sin invitarlo a hablar con una
+// persona. No se inventan líneas de ayuda: se remite a un adulto de confianza y,
+// si hay peligro, al 123 (el mismo recurso que muestra la app).
+const WELLBEING_INSTRUCTIONS = `
+
+## BIENESTAR EMOCIONAL (TIENE PRIORIDAD SOBRE EL TUTORIAL)
+- Si el estudiante expresa tristeza, soledad, miedo, mucho estrés o frases como "nadie me quiere" o "no sirvo para nada": primero reconoce lo que siente con calidez, sin minimizarlo ni regañar. Luego pregúntale con suavidad: "¿Hay alguien de confianza (mamá, papá, un familiar o un profesor) con quien puedas hablar hoy?" y anímalo a contarle cómo se siente.
+- En esos casos olvida el paso a paso: la prioridad es la persona, no la tarea. Ofrece volver al estudio solo si él quiere.
+- Si menciona hacerse daño, no querer vivir o estar en peligro: dile con calma que no está solo o sola, que busque ya a un adulto de confianza y que, si hay peligro ahora, llame al 123. No des detalles ni instrucciones sobre cómo hacerse daño.
+- Nunca digas que eres su única compañía ni le pidas guardar el secreto.
+`;
+
 async function fetchStudentProfile(studentId) {
   const { data } = await supabase
     .from("students")
@@ -226,6 +239,7 @@ Estudiante: ${name} | Grado: ${grade}${school ? ` | Colegio: ${school}` : ""}
 
   // Company context + commercial boundaries (no prices, no currencies)
   prompt += EDUTECHLIFE_ESSENCE;
+  prompt += WELLBEING_INSTRUCTIONS;
 
   // Age policy
   if (age) prompt += getAgePolicy(age);

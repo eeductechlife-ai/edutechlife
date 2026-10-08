@@ -1,11 +1,12 @@
-const subjects = [
-  { v: "matematicas", l: "Matemáticas", i: "🔢" },
-  { v: "lenguaje", l: "Lenguaje", i: "📖" },
-  { v: "ciencias", l: "Ciencias", i: "🔬" },
-  { v: "historia", l: "Historia", i: "🏛️" },
-  { v: "ingles", l: "Inglés", i: "🌎" },
-  { v: "arte", l: "Arte", i: "🎨" },
-];
+import {
+  LEARN_SUBJECT_IDS,
+  getCatalogSubject,
+} from "../../../config/subjectCatalog";
+
+const subjects = LEARN_SUBJECT_IDS.map((id) => {
+  const subject = getCatalogSubject(id);
+  return { v: id, l: subject.label, i: subject.emoji };
+});
 
 const MATERIALS_LS = "edutechlife_exam_materials";
 

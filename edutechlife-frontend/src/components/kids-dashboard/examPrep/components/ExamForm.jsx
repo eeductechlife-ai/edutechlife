@@ -151,7 +151,7 @@ const ExamForm = memo(({ n, sN, s, sS, d, sD, g, sG, onAdd, dm = false }) => {
                 {toFive(g)}
               </span>
               <span
-                className="block text-[11px] font-bold mt-0.5"
+                className="block text-xs font-bold mt-0.5"
                 style={{ color: textSecondary }}
               >
                 {menLevel(toFive(g)).emoji} {menLevel(toFive(g)).label}

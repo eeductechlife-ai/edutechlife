@@ -20,6 +20,7 @@ import {
   resolveGradeLevel,
   buildAnalysisPrompt,
 } from "./gradeExtraction";
+import { POINTS } from "../../context/pointsEconomy";
 
 export function useGradeScanner() {
   const {
@@ -320,7 +321,7 @@ export function useGradeScanner() {
     setScanning(true);
     setError("");
     setPlan(null);
-    const vakStyle = vakResult?.dominant || "visual";
+    const vakStyle = vakResult?.predominantStyle || vakResult?.dominant || null;
     const prompt = buildAnalysisPrompt({ grades, vakStyle, SUBJECTS });
     try {
       const res = await callDeepseekSmartboard(
@@ -347,7 +348,7 @@ export function useGradeScanner() {
       try {
         if (localStorage.getItem(pointsKey) !== today) {
           localStorage.setItem(pointsKey, today);
-          addPoints?.(50, "Analicé mis notas con Dani");
+          addPoints?.(POINTS.gradeAnalysis, "Analicé mis notas con Dani");
         }
       } catch {
         // storage blocked: skip the reward rather than allow repeats

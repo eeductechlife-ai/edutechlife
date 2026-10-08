@@ -76,7 +76,7 @@ const MessageBubble = memo(
             </button>
           )}
           <p
-            className={`text-[10px] mt-1 ${isDani ? "text-[#64748B]" : "text-white/70"}`}
+            className={`text-xs mt-1 ${isDani ? "text-[#64748B]" : "text-white/70"}`}
             title={time}
           >
             {relativeTime}

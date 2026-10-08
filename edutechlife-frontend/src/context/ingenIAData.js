@@ -1,3 +1,6 @@
+import { LEARN_SUBJECT_IDS, getCatalogSubject } from "../config/subjectCatalog";
+import { POINTS } from "./pointsEconomy";
+
 export const DEFAULT_NEWS = [
   {
     id: 1,
@@ -36,7 +39,7 @@ export const DEFAULT_NEWS = [
 
 // El ADN de Aprendizaje da este premio una sola vez por estudiante. Misión,
 // tarjeta de Inicio y premio real leen este mismo número.
-export const ADN_COMPLETION_XP = 100;
+export const ADN_COMPLETION_XP = POINTS.adn;
 export const ADN_REWARD_REASON = "Completó ADN de Aprendizaje";
 
 export const DEFAULT_MISSIONS = [
@@ -61,7 +64,7 @@ export const DEFAULT_MISSIONS = [
     title: "Habla con Dani 5 veces",
     description: "Haz preguntas a tu tutor virtual",
     icon: "💬",
-    xp: 75,
+    xp: POINTS.daniMission,
     completed: false,
   },
   {
@@ -126,7 +129,7 @@ const WEEKLY_MISSION_POOL = [
       title: "3 preguntas a Dani",
       description: "Consulta a tu tutora sobre algo que no entiendas",
       icon: "🤖",
-      xp: 90,
+      xp: POINTS.daniMission,
       completed: false,
     },
     {
@@ -251,38 +254,16 @@ export function mergeWeeklyMissions(saved, now = new Date()) {
   return [...(permanent.length ? permanent : DEFAULT_MISSIONS), ...weekly];
 }
 
-export const DEFAULT_SUBJECTS = [
-  {
-    id: "matematicas",
-    name: "Matemáticas",
-    icon: "🔢",
+export const DEFAULT_SUBJECTS = LEARN_SUBJECT_IDS.map((id) => {
+  const subject = getCatalogSubject(id);
+  return {
+    id,
+    name: subject.label,
+    icon: subject.emoji,
     progress: 0,
-    color: "#4DA8C4",
-  },
-  {
-    id: "lenguaje",
-    name: "Lenguaje",
-    icon: "📖",
-    progress: 0,
-    color: "#66CCCC",
-  },
-  {
-    id: "ciencias",
-    name: "Ciencias",
-    icon: "🔬",
-    progress: 0,
-    color: "#FFD166",
-  },
-  {
-    id: "historia",
-    name: "Historia",
-    icon: "🏛️",
-    progress: 0,
-    color: "#FF6B9D",
-  },
-  { id: "ingles", name: "Inglés", icon: "🌎", progress: 0, color: "#B2D8E5" },
-  { id: "arte", name: "Arte", icon: "🎨", progress: 0, color: "#004B63" },
-];
+    color: subject.color,
+  };
+});
 
 export const VAK_RECOMMENDATIONS = {
   visual: [

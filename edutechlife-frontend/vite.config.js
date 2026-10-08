@@ -41,6 +41,10 @@ function devIngenIAAi() {
               messages,
               temperature: temperature ?? 0.7,
               max_tokens: maxTokens || 2000,
+              // Igual que el backend (services/deepseek.js): deepseek-flash razona
+              // por defecto y esos tokens salen del límite, así que el JSON llegaba
+              // vacío o cortado (p. ej. un mapa mental de 1400 tokens).
+              ...(process.env.DEEPSEEK_THINKING === 'enabled' ? {} : { thinking: { type: 'disabled' } }),
               ...(isJson ? { response_format: { type: 'json_object' } } : {}),
             }),
             signal: AbortSignal.timeout(60000),

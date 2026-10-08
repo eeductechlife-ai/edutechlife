@@ -44,6 +44,9 @@ import {
 import useTimetable from "../hooks/useTimetable";
 import { useSubjectProgressPersistence } from "../hooks/useSubjectProgressPersistence";
 import { useDaniMemory } from "../hooks/useDaniMemory";
+import { ageGroupFor } from "../utils/studentLevel";
+import { capPoints, POINTS } from "./pointsEconomy";
+import { retainChat } from "../utils/chatRetention";
 
 export const IngenIAKidsContext = createContext();
 
@@ -516,7 +519,7 @@ export const IngenIAKidsProvider = ({ children }) => {
       );
       if (minutes > 0 && minutes !== totalActiveMinutes) {
         setTotalActiveMinutes((prev) => prev + 1);
-        addPoints(1, "Minuto activo en dashboard");
+        addPoints(POINTS.activeMinute, "Minuto activo en dashboard");
         sessionStartRef.current = new Date();
       }
     }, 60000);
@@ -778,7 +781,8 @@ export const IngenIAKidsProvider = ({ children }) => {
   useEffect(() => {
     if (!dataLoaded || !userId) return;
 
-    setLocalStorage(`dani_chat_${userId}`, daniChatHistory);
+    // En el navegador solo lo reciente (14 días, 100 mensajes): ver chatRetention.
+    setLocalStorage(`dani_chat_${userId}`, retainChat(daniChatHistory));
     setLocalStorage(`mood_history_${userId}`, studentMoodHistory);
     setLocalStorage(`academic_topics_${userId}`, academicTopics);
     setLocalStorage(`conversation_count_${userId}`, conversationCount);
@@ -943,19 +947,26 @@ export const IngenIAKidsProvider = ({ children }) => {
   }, [computedUpcomingDeadlines]);
 
   // Wrapper functions that use React Query mutations
+  // Devuelve los puntos que de verdad se dieron: las categorías repetibles
+  // (retos, EduCards, simulacros, podcast) tienen tope diario, y las pantallas
+  // muestran este valor, no el que habrían ganado sin tope.
   const addPointsWithSupabase = useCallback(
-    (amount, reason) => {
+    (amount, reason, category) => {
+      const granted = category
+        ? capPoints({ category, amount, history: pointsHistory })
+        : amount;
+      if (!(granted > 0) && amount > 0) return 0;
       // Store previous total for potential rollback
       const previousTotal = totalPoints;
       // Add to local state immediately (optimistic)
-      addPoints(amount, reason);
+      addPoints(granted, reason, category);
       // Also sync to Supabase
       if (userId) {
         addPointsMutation.mutate(
           {
-            points: amount,
+            points: granted,
             reason,
-            category: "bonus",
+            category: category || "bonus",
           },
           {
             onError: () => {
@@ -965,8 +976,9 @@ export const IngenIAKidsProvider = ({ children }) => {
           },
         );
       }
+      return granted;
     },
-    [addPoints, userId, addPointsMutation, totalPoints],
+    [addPoints, userId, addPointsMutation, totalPoints, pointsHistory],
   );
 
   const setVakResultWithSupabase = useCallback(
@@ -1041,8 +1053,7 @@ export const IngenIAKidsProvider = ({ children }) => {
     // Student
     studentAge,
     setStudentAge,
-    ageGroup:
-      studentAge <= 8 ? "early" : studentAge <= 12 ? "middle" : "senior",
+    ageGroup: ageGroupFor(studentAge),
     gradeLevel,
     setGradeLevel,
     countryCode,

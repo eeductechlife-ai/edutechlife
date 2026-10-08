@@ -13,6 +13,7 @@ import {
 } from "../practicarHub/practicarHandoff";
 import { SUBJECT_META } from "../practicarHub/practicarConfig";
 import { daysUntilWeeklyReset } from "../../../context/ingenIAData";
+import { missionXp } from "../../../context/pointsEconomy";
 
 const EXPLORE_GRADIENT = SB_GRADIENTS.explore;
 const openDani = () =>
@@ -207,12 +208,54 @@ const AGE_COPY = {
   },
 };
 
+// Colores por tema: la vista no tenía modo oscuro (tarjetas blancas sobre fondo
+// oscuro y el título a 1,2:1). Todos los textos cumplen 4,5:1 en su fondo.
+const TONE = {
+  light: {
+    card: "bg-white border-[#E2E8F0]",
+    cardReady:
+      "bg-white border-green-400 shadow-[0_8px_24px_-14px_rgba(34,197,94,0.6)]",
+    cardDone: "bg-green-50 border-green-200",
+    icon: "bg-[#F5F0FF]",
+    iconDone: "bg-green-100 text-green-700",
+    title: "text-[#1E293B]",
+    titleDone: "text-green-800",
+    muted: "text-[#64748B]",
+    xp: "text-[#7B2FF7]",
+    xpDone: "text-green-700",
+    doneText: "text-green-800",
+    ready: "text-green-700",
+    track: "bg-[#F1F5F9]",
+    accent: "text-[#7B2FF7]",
+    panel: "bg-white border-[#E2E8F0]",
+  },
+  dark: {
+    card: "bg-[#1E293B] border-[#334155]",
+    cardReady:
+      "bg-[#1E293B] border-green-500 shadow-[0_8px_24px_-14px_rgba(34,197,94,0.5)]",
+    cardDone: "bg-[#0F2A22] border-[#166534]",
+    icon: "bg-[#2D2250]",
+    iconDone: "bg-[#14532D] text-green-300",
+    title: "text-white",
+    titleDone: "text-green-300",
+    muted: "text-[#94A3B8]",
+    xp: "text-[#C77DFF]",
+    xpDone: "text-green-300",
+    doneText: "text-green-300",
+    ready: "text-green-300",
+    track: "bg-[#334155]",
+    accent: "text-[#C77DFF]",
+    panel: "bg-[#1E293B] border-[#334155]",
+  },
+};
+
 const MissionsView = memo(function MissionsView({
   missions,
   onCompleteMission,
   onTabChange,
 }) {
   const ctx = useIngenIAKids();
+  const tone = ctx.darkMode ? TONE.dark : TONE.light;
   const copy =
     ctx.studentAge != null && ctx.studentAge <= 9
       ? AGE_COPY.early
@@ -242,7 +285,9 @@ const MissionsView = memo(function MissionsView({
 
   const renderMission = (stored, index) => {
     const rule = ALL_RULES[stored.id];
-    const mission = { ...stored, ...rule?.copy };
+    // El valor sale de la tabla de puntos: las misiones guardadas en la cuenta
+    // traen el que tenían al crearse.
+    const mission = { ...stored, ...rule?.copy, xp: missionXp(stored) };
     const ready = !mission.completed && !!rule?.done(state);
     const [cur, goal] = rule?.progress?.(state) || [];
     const go = () => {
@@ -261,17 +306,13 @@ const MissionsView = memo(function MissionsView({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.04 }}
         className={`p-3 sm:p-4 rounded-2xl border-2 ${
-          mission.completed
-            ? "bg-green-50 border-green-200"
-            : ready
-              ? "bg-white border-green-400 shadow-[0_8px_24px_-14px_rgba(34,197,94,0.6)]"
-              : "bg-white border-[#E2E8F0]"
+          mission.completed ? tone.cardDone : ready ? tone.cardReady : tone.card
         }`}
       >
         <div className="flex items-start gap-3">
           <div
             className={`w-11 h-11 rounded-xl flex items-center justify-center text-2xl shrink-0 ${
-              mission.completed ? "bg-green-100 text-green-600" : "bg-[#F5F0FF]"
+              mission.completed ? tone.iconDone : tone.icon
             }`}
             aria-hidden="true"
           >
@@ -284,17 +325,19 @@ const MissionsView = memo(function MissionsView({
           <div className="flex-1 min-w-0">
             {/* `!m-0`: global typography adds heading/paragraph margins. */}
             <h4
-              className={`!m-0 text-base font-bold leading-snug ${mission.completed ? "text-green-700" : "text-[#1E293B]"}`}
+              className={`!m-0 text-base font-bold leading-snug ${mission.completed ? tone.titleDone : tone.title}`}
             >
               {mission.title}
             </h4>
-            <p className="!m-0 mt-0.5 text-xs sm:text-sm text-[#64748B] leading-snug">
+            <p
+              className={`!m-0 mt-0.5 text-xs sm:text-sm leading-snug ${tone.muted}`}
+            >
               {mission.description}
             </p>
           </div>
           <span
             className={`inline-flex items-center gap-1 text-sm font-black tabular-nums shrink-0 ${
-              mission.completed ? "text-green-600" : "text-[#9D4EDD]"
+              mission.completed ? tone.xpDone : tone.xp
             }`}
           >
             <Gem className="w-3.5 h-3.5" strokeWidth={2.4} aria-hidden="true" />
@@ -303,7 +346,7 @@ const MissionsView = memo(function MissionsView({
         </div>
 
         {mission.completed ? (
-          <p className="!m-0 mt-2.5 text-xs font-bold text-green-700">
+          <p className={`!m-0 mt-2.5 text-xs font-bold ${tone.doneText}`}>
             {copy.done(mission.xp)}
           </p>
         ) : ready ? (
@@ -311,7 +354,7 @@ const MissionsView = memo(function MissionsView({
             type="button"
             onClick={() => onCompleteMission(mission.id)}
             whileTap={{ scale: 0.97 }}
-            className="mt-3 w-full py-3 rounded-xl text-sm font-black text-white bg-green-500 shadow-md"
+            className="mt-3 w-full py-3 rounded-xl text-sm font-black text-white bg-green-700 shadow-md"
           >
             {copy.claim(mission.xp)}
           </motion.button>
@@ -319,7 +362,9 @@ const MissionsView = memo(function MissionsView({
           <div className="mt-2.5 flex items-center gap-3">
             {goal ? (
               <div className="flex-1 min-w-0">
-                <div className="w-full h-1.5 rounded-full bg-[#F1F5F9] overflow-hidden">
+                <div
+                  className={`w-full h-1.5 rounded-full overflow-hidden ${tone.track}`}
+                >
                   <div
                     className="h-full rounded-full"
                     style={{
@@ -328,7 +373,9 @@ const MissionsView = memo(function MissionsView({
                     }}
                   />
                 </div>
-                <p className="!m-0 mt-1 text-[11px] font-semibold text-[#64748B] tabular-nums">
+                <p
+                  className={`!m-0 mt-1 text-xs font-semibold tabular-nums ${tone.muted}`}
+                >
                   {Math.min(cur, goal)} de {goal}
                   {rule.unit ? ` ${rule.unit}` : ""}
                 </p>
@@ -354,23 +401,25 @@ const MissionsView = memo(function MissionsView({
   return (
     <div className="space-y-3">
       {total > 0 && (
-        <div className="rounded-2xl bg-white border border-[#E2E8F0] p-4">
+        <div className={`rounded-2xl border p-4 ${tone.panel}`}>
           <div className="flex items-center justify-between gap-2">
-            <p className="text-sm font-black text-[#1E293B]">
+            <p className={`text-sm font-black ${tone.title}`}>
               {copy.pctLabel(completedCount, total)}
             </p>
-            <span className="text-sm font-black text-[#7B2FF7] tabular-nums">
+            <span className={`text-sm font-black tabular-nums ${tone.accent}`}>
               {pct}%
             </span>
           </div>
-          <div className="mt-2 w-full h-2.5 rounded-full bg-[#F1F5F9] overflow-hidden">
+          <div
+            className={`mt-2 w-full h-2.5 rounded-full overflow-hidden ${tone.track}`}
+          >
             <div
               className="h-full rounded-full transition-all duration-700"
               style={{ width: `${pct}%`, background: EXPLORE_GRADIENT }}
             />
           </div>
           {readyCount > 0 && (
-            <p className="mt-2 text-xs font-bold text-green-600">
+            <p className={`mt-2 text-xs font-bold ${tone.ready}`}>
               {copy.ready(readyCount)}
             </p>
           )}
@@ -382,14 +431,16 @@ const MissionsView = memo(function MissionsView({
           <div className="flex items-end justify-between gap-2 px-1 pt-1">
             <h3
               id="weekly-missions"
-              className="!m-0 text-sm font-black text-[#1E293B]"
+              className={`!m-0 text-sm font-black ${tone.title}`}
             >
               {copy.weekly}{" "}
-              <span className="text-[#7B2FF7] tabular-nums">
+              <span className={`tabular-nums ${tone.accent}`}>
                 {weeklyDone}/{weekly.length}
               </span>
             </h3>
-            <span className="text-[11px] font-bold text-[#64748B] whitespace-nowrap">
+            <span
+              className={`text-xs font-bold whitespace-nowrap ${tone.muted}`}
+            >
               {resetDays === 1
                 ? "Cambian mañana"
                 : `Cambian en ${resetDays} días`}
@@ -404,7 +455,7 @@ const MissionsView = memo(function MissionsView({
           {weekly.length > 0 && (
             <h3
               id="main-missions"
-              className="!m-0 px-1 pt-2 text-sm font-black text-[#1E293B]"
+              className={`!m-0 px-1 pt-2 text-sm font-black ${tone.title}`}
             >
               {copy.permanent}
             </h3>
@@ -414,7 +465,9 @@ const MissionsView = memo(function MissionsView({
       )}
 
       {total === 0 && (
-        <p className="text-center py-10 text-sm text-[#64748B]">{copy.empty}</p>
+        <p className={`text-center py-10 text-sm ${tone.muted}`}>
+          {copy.empty}
+        </p>
       )}
     </div>
   );

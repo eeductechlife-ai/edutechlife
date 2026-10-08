@@ -20,6 +20,7 @@ import {
   ListenButton,
   materialToText,
 } from "./MaterialViews";
+import { readableTextOn } from "../../../utils/contrast";
 
 const LOADING_TEXT = {
   resumen: "Escribiendo tu resumen…",
@@ -192,7 +193,7 @@ const ContentGenerator = memo(
           <p className="!m-0 rounded-xl bg-[#FFF7ED] border border-[#FED7AA] px-3 py-2.5 text-xs text-[#9A3412]">
             📋 Tarea de tu plan:{" "}
             <span className="font-black">{planTask.topic}</span>
-            <span className="block mt-0.5 text-[11px] text-[#C2410C]">
+            <span className="block mt-0.5 text-xs text-[#C2410C]">
               Estúdiala aquí y, al final, toca «✅ Terminé esta actividad».
             </span>
           </p>
@@ -211,7 +212,7 @@ const ContentGenerator = memo(
               <span className="block text-xs font-bold truncate">
                 {titleOf(material)}
               </span>
-              <span className={`block text-[11px] ${sub}`}>
+              <span className={`block text-xs ${sub}`}>
                 {typeMeta(material.type)?.label}
               </span>
             </span>
@@ -252,7 +253,14 @@ const ContentGenerator = memo(
                         }}
                         title={tp}
                         className={`!justify-start text-left px-3 py-2 rounded-xl border-2 text-xs font-semibold leading-snug ${sel ? "text-white border-transparent" : idle}`}
-                        style={sel ? { background: subject.color } : {}}
+                        style={
+                          sel
+                            ? {
+                                background: subject.color,
+                                color: readableTextOn(subject.color),
+                              }
+                            : {}
+                        }
                       >
                         <span className="line-clamp-2">{tp}</span>
                       </button>
@@ -296,7 +304,14 @@ const ContentGenerator = memo(
                       onClick={() => setContentType(ct.id)}
                       aria-pressed={sel}
                       className={`!flex flex-col sm:flex-row !items-center sm:!items-start !justify-center sm:!justify-start gap-1 sm:gap-2 p-2 sm:p-3 min-h-[64px] rounded-xl border-2 text-center sm:text-left ${sel ? "text-white border-transparent" : idle}`}
-                      style={sel ? { background: subject.color } : {}}
+                      style={
+                        sel
+                          ? {
+                              background: subject.color,
+                              color: readableTextOn(subject.color),
+                            }
+                          : {}
+                      }
                     >
                       <span
                         className="text-xl sm:text-lg leading-none"
@@ -305,11 +320,11 @@ const ContentGenerator = memo(
                         {ct.emoji}
                       </span>
                       <span className="min-w-0">
-                        <span className="block text-[11px] sm:text-xs font-bold leading-tight">
+                        <span className="block text-xs sm:text-xs font-bold leading-tight">
                           {ct.label}
                         </span>
                         <span
-                          className={`hidden sm:block text-[11px] leading-snug mt-0.5 ${sel ? "text-white/85" : sub}`}
+                          className={`hidden sm:block text-xs leading-snug mt-0.5 ${sel ? "text-white/85" : sub}`}
                         >
                           {ct.desc}
                         </span>
@@ -318,7 +333,7 @@ const ContentGenerator = memo(
                   );
                 })}
               </div>
-              <p className={`sm:hidden text-[11px] ${sub}`}>
+              <p className={`sm:hidden text-xs ${sub}`}>
                 {typeMeta(contentType)?.emoji} {typeMeta(contentType)?.desc}
               </p>
             </div>
@@ -384,7 +399,7 @@ const ContentGenerator = memo(
             >
               <header>
                 <p
-                  className="text-[11px] font-black uppercase tracking-wide"
+                  className="text-xs font-black uppercase tracking-wide"
                   style={{ color: subject.color }}
                 >
                   {typeMeta(material.type)?.emoji}{" "}

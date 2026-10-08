@@ -65,6 +65,10 @@ const ALLOWED_ORIGINS = [
   'https://edutechlife.co',
   'https://www.edutechlife.co',
   'https://edutechlife-api.vercel.app',
+  // Apps nativas (Capacitor): el WebView carga la app desde estos orígenes.
+  // Android usa https://localhost; iOS, capacitor://localhost.
+  'https://localhost',
+  'capacitor://localhost',
   // Entornos staging/preview: agregar dominios vía CORS_ORIGINS (coma-separado).
   ...(process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',').map((o) => o.trim()).filter(Boolean) : []),
 ];

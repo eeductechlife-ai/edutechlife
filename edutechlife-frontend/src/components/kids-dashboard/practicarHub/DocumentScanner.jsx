@@ -130,7 +130,7 @@ const DocumentScanner = memo(
             >
               <Upload className="w-7 h-7 opacity-70" aria-hidden="true" />
               Subir archivo
-              <span className={`text-[10px] font-medium ${sub}`}>
+              <span className={`text-xs font-medium ${sub}`}>
                 Foto, PDF, Word o TXT
               </span>
             </button>

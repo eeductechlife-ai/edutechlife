@@ -18,8 +18,8 @@ const WeekProgress = memo(({ progress, darkMode }) => {
   const { days, daysPracticed, retosThisWeek, avgScore } = progress;
   const sub = darkMode ? "text-[#94A3B8]" : "text-[#64748B]";
   const empty = darkMode
-    ? "bg-[#0F172A] border-[#334155] text-[#64748B]"
-    : "bg-[#F1F5F9] border-[#E2E8F0] text-[#94A3B8]";
+    ? "bg-[#0F172A] border-[#334155] text-[#94A3B8]"
+    : "bg-[#F1F5F9] border-[#E2E8F0] text-[#475569]";
 
   return (
     <div>
@@ -44,7 +44,7 @@ const WeekProgress = memo(({ progress, darkMode }) => {
               <span
                 className={`w-full max-w-[38px] h-8 sm:h-9 rounded-lg flex items-center justify-center text-xs font-black border-2 ${
                   done ? "text-white border-transparent" : empty
-                } ${isToday && !done ? "!border-[#EF476F] border-dashed !text-[#EF476F]" : ""}`}
+                } ${isToday && !done ? "!border-[#EF476F] border-dashed !text-[#BF3959]" : ""}`}
                 style={
                   done
                     ? {

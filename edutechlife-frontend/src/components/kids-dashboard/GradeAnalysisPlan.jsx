@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { gradeColor, gradeEmoji, getAvgScore } from "./gradeUtils";
+import { readableTextOn } from "../../utils/contrast";
 import { getSubjectEmoji } from "../../config/subjectMappings";
 
 const GradeAnalysisPlan = memo(
@@ -34,7 +35,7 @@ const GradeAnalysisPlan = memo(
             </div>
             <p className="text-sm leading-relaxed">{plan.overall}</p>
             {plan.motivation && (
-              <p className="text-sm font-bold text-[#FFD166]">
+              <p className="text-sm font-bold text-[#806933]">
                 💫 {plan.motivation}
               </p>
             )}
@@ -137,21 +138,27 @@ const GradeAnalysisPlan = memo(
                           </span>
                           <span
                             className="px-2 py-1 rounded-full text-xs font-bold text-white"
-                            style={{ backgroundColor: gradeColor(w.score) }}
+                            style={{
+                              backgroundColor: gradeColor(w.score),
+                              color: readableTextOn(gradeColor(w.score)),
+                            }}
                           >
                             {w.score}/5
                           </span>
                         </div>
                         <p className="text-sm text-[#374151]">{w.why}</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          <div className="p-2 rounded-xl bg-purple-50 border border-purple-100">
-                            <p className="text-xs font-bold text-purple-600 mb-1">
-                              👁️ VAK
-                            </p>
-                            <p className="text-xs text-purple-700">
-                              {w.vakTip}
-                            </p>
-                          </div>
+                          {/* Solo con ADN hecho: sin él no hay estilo que mostrar. */}
+                          {w.vakTip && (
+                            <div className="p-2 rounded-xl bg-purple-50 border border-purple-100">
+                              <p className="text-xs font-bold text-purple-600 mb-1">
+                                👁️ VAK
+                              </p>
+                              <p className="text-xs text-purple-700">
+                                {w.vakTip}
+                              </p>
+                            </div>
+                          )}
                           <div className="p-2 rounded-xl bg-cyan-50 border border-cyan-100">
                             <p className="text-xs font-bold text-cyan-600 mb-1">
                               🔬 STEAM
@@ -183,8 +190,8 @@ const GradeAnalysisPlan = memo(
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#F1F5F9] border border-[#E2E8F0] text-xs text-[#64748B]">
             <span>👨‍👩‍👧</span>
             <span>
-              El informe completo para tus padres está disponible en su panel de
-              seguimiento.
+              Tus padres ven tu avance en su panel de seguimiento si ya están
+              conectados a tu cuenta.
             </span>
           </div>
 

@@ -4,6 +4,7 @@ import {
   ADN_COMPLETION_XP,
   ADN_REWARD_REASON,
 } from "./ingenIAData";
+import { POINTS, missionXp } from "./pointsEconomy";
 import { track } from "../lib/analytics";
 import { EVENTS } from "../lib/analyticsEvents";
 
@@ -26,14 +27,21 @@ export const useIngenIAActions = (stateAndSetters) => {
   const ref = useRef(stateAndSetters);
   ref.current = stateAndSetters;
 
-  const addPoints = useCallback((points, reason) => {
+  // `category` (opcional) es la del servidor; con ella el historial local sabe
+  // cuánto se ganó hoy en cada categoría y puede aplicar el tope diario.
+  const addPoints = useCallback((points, reason, category) => {
     const safePoints = parseInt(points, 10);
     if (Number.isNaN(safePoints)) return;
     const { setTotalPoints, setPointsHistory } = ref.current;
     setTotalPoints((prev) => prev + safePoints);
     setPointsHistory((prev) => [
       ...prev,
-      { points: safePoints, reason, timestamp: new Date() },
+      {
+        points: safePoints,
+        reason,
+        timestamp: new Date(),
+        ...(category ? { category } : {}),
+      },
     ]);
   }, []);
 
@@ -53,11 +61,11 @@ export const useIngenIAActions = (stateAndSetters) => {
     );
     const mission = missions.find((m) => m.id === missionId);
     if (mission && !mission.completed) {
-      award(mission.xp || 0, `Misión completada: ${mission.title || ""}`);
+      award(missionXp(mission), `Misión completada: ${mission.title || ""}`);
       track(EVENTS.MISSION_COMPLETED, {
         mission_id: missionId,
         title: mission.title || "",
-        xp: mission.xp || 0,
+        xp: missionXp(mission),
       });
       // Fire plan_completed when all missions in the current plan are done
       const allDone = missions.every((m) => m.id === missionId || m.completed);
@@ -84,7 +92,7 @@ export const useIngenIAActions = (stateAndSetters) => {
         body: JSON.stringify({
           type: "mission_complete",
           missionId,
-          xp: mission.xp || 0,
+          xp: missionXp(mission),
         }),
       })
         .then((r) => (r.ok ? r.json() : null))
@@ -105,6 +113,8 @@ export const useIngenIAActions = (stateAndSetters) => {
       ...prev,
       {
         role: message.role,
+        // Fecha del mensaje: permite que caduque en el navegador (chatRetention).
+        at: new Date().toISOString(),
         text: message.text || message.content || "",
         type: message.type || "text",
         data: message.data || null,
@@ -459,13 +469,13 @@ export const useIngenIAActions = (stateAndSetters) => {
       ...prev,
       { ...activity, id: Date.now(), uploadedAt: new Date() },
     ]);
-    award(50, "Subió actividad académica");
+    award(POINTS.uploadActivity, "Subió actividad académica");
   }, []);
 
   const addAnalyzedActivity = useCallback((analysis) => {
     const { setAnalyzedActivities } = ref.current;
     setAnalyzedActivities((prev) => [analysis, ...prev].slice(-20));
-    award(100, "Actividad analizada por Dani");
+    award(POINTS.analyzeActivity, "Actividad analizada por Dani");
   }, []);
 
   const markNewsAsRead = useCallback((newsId) => {

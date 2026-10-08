@@ -731,7 +731,9 @@ const getData = (locale) =>
           beneficios: BENEFICIOS_HIJO_PT,
           tranquilidad: TRANQUILIDAD_PT,
           pasos: PASOS_PT,
-          faq: FAQ_ITEMS_PT,
+          // Aún no hay FAQ en portugués: se muestra la versión en inglés en vez de
+          // romper la portada (FAQ_ITEMS_PT nunca se definió).
+          faq: FAQ_ITEMS_EN,
           paymentMethods: PAYMENT_METHODS_PT,
           guarantee: GUARANTEE_PT,
         }

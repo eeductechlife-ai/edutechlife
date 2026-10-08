@@ -66,7 +66,7 @@ function WeekCard({
           </div>
           <span
             className="text-xs font-semibold px-2 py-0.5 rounded-full"
-            style={{ background: "rgba(251,133,0,0.12)", color: "#C05621" }}
+            style={{ background: "rgba(251,133,0,0.12)", color: "#9A3412" }}
           >
             {done}/{total}
           </span>
@@ -75,7 +75,7 @@ function WeekCard({
 
       <div className="px-4 py-3">
         {typeof week.mastery === "number" && (
-          <p className="text-[11px] font-semibold mb-2 text-[#C05621]">
+          <p className="text-xs font-semibold mb-2 text-[#9A3412]">
             🎯 Dominio actual{week.focus ? ` en ${week.focus}` : ""}:{" "}
             {Math.round(week.mastery * 100)}%
           </p>
@@ -139,7 +139,7 @@ function WeekCard({
                       {act.titulo}
                     </span>
                     {act.duracion && (
-                      <span className="ml-2 text-xs text-[#94A3B8] whitespace-nowrap">
+                      <span className="ml-2 text-xs text-[#64748B] whitespace-nowrap">
                         ⏱ {act.duracion}
                       </span>
                     )}
@@ -169,8 +169,16 @@ function WeekCard({
 
 function ImprovementPlan({ onTabChange }) {
   const { vakResult, darkMode, gradeLevel, studentGrades } = useIngenIAKids();
-  const { plan, isGenerating, error, generatePlan, markActivityDone, hasPlan, resequenced, submitDiagnostic } =
-    useImprovementPlan();
+  const {
+    plan,
+    isGenerating,
+    error,
+    generatePlan,
+    markActivityDone,
+    hasPlan,
+    resequenced,
+    submitDiagnostic,
+  } = useImprovementPlan();
   const [confirmRegen, setConfirmRegen] = useState(false);
   const [openWeek, setOpenWeek] = useState(null);
   const [showDiagnostic, setShowDiagnostic] = useState(false);
@@ -264,8 +272,9 @@ function ImprovementPlan({ onTabChange }) {
             Tu Plan de Mejora
           </h2>
           <p className={`!m-0 mt-1 text-sm max-w-xs mx-auto ${sub}`}>
-            Dani te arma un plan de 4 semanas con actividades cortas para subir
-            tus notas. Vas marcando lo que haces. ✅
+            Dani te arma un plan de hasta 4 semanas, una materia por semana, con
+            actividades cortas para subir tus notas. Vas marcando lo que haces.
+            ✅
           </p>
         </div>
         {error && (
@@ -332,7 +341,11 @@ function ImprovementPlan({ onTabChange }) {
             {globalPct === 100
               ? "🏆 ¡Completaste tu plan!"
               : `Llevas ${doneActivities} de ${totalActivities} actividades`}
-            {gradeLevel ? ` · Grado ${gradeLevel}` : ""}
+            <span className="block text-xs font-semibold !text-white/85">
+              Plan de {plan.weeks.length}{" "}
+              {plan.weeks.length === 1 ? "semana" : "semanas"}
+              {gradeLevel ? ` · para ${gradeLevel}.º grado` : ""}
+            </span>
           </p>
           <span className="text-xl font-black leading-none">{globalPct}%</span>
         </div>
@@ -355,8 +368,8 @@ function ImprovementPlan({ onTabChange }) {
           role="status"
           className="rounded-xl px-3 py-2 text-xs font-bold bg-[#FFEDD5] text-[#9A3412]"
         >
-          🔄 Actualizamos tu plan con tu último avance: ahora apunta a lo que más
-          necesitas.
+          🔄 Actualizamos tu plan con tu último avance: ahora apunta a lo que
+          más necesitas.
         </div>
       )}
 
@@ -379,7 +392,7 @@ function ImprovementPlan({ onTabChange }) {
                   key={i}
                   className={`text-xs leading-snug flex gap-1.5 ${darkMode ? "text-gray-300" : "text-[#7C2D12]"}`}
                 >
-                  <span className="font-black text-[#FB8500]">{i + 1}.</span>
+                  <span className="font-black text-[#A35600]">{i + 1}.</span>
                   {action}
                 </li>
               ))}
@@ -423,7 +436,7 @@ function ImprovementPlan({ onTabChange }) {
                 {complete ? "✅ " : ""}Sem {w.week}
               </span>
               <span
-                className={`text-[10px] font-bold ${active ? "text-white/90" : "text-[#94A3B8]"}`}
+                className={`text-xs font-bold ${active ? "text-white/90" : darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
               >
                 {d}/{w.activities.length}
               </span>

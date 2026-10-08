@@ -180,7 +180,7 @@ const CertificatesModal = ({ isOpen, onClose }) => {
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0A66C2] text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg hover:bg-[#004182] transition-all duration-300"
           >
             <Icon name="fa-linkedin-in" className="text-base" />
-            {t("modals.certificates.share_linkedin") || "Compartir en LinkedIn"}
+            {t("modals.certificates.share_linkedin")}
           </motion.a>
         </div>
       );

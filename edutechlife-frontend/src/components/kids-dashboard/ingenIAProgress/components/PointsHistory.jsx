@@ -58,7 +58,7 @@ const PointsHistory = ({ pointsHistory, darkMode }) => {
                 {entry.points}
               </span>
               <span
-                className={`w-14 text-right ${darkMode ? "text-[#64748B]" : "text-[#94A3B8]"}`}
+                className={`w-14 text-right ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
               >
                 {balance}
               </span>
