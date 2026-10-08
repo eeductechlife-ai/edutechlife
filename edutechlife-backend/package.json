@@ -39,7 +39,7 @@
     "minimatch": "^10.2.5"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^5.0.0",
     "eslint": "^10.7.0",
     "eslint-plugin-security": "^4.0.1",
     "globals": "^17.7.0",
