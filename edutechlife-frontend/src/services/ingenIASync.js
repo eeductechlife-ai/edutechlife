@@ -82,27 +82,32 @@ export const saveToSupabase = async (supabase, userId, kidsData) => {
     // public.smartboard_kids_data es una vista sobre smartboard.smartboard_kids_data
     // (migración 095) — PostgREST no puede resolver el ON CONFLICT de un upsert
     // a través de una vista, porque la PK vive en la tabla base, no en la vista.
-    // Por eso se hace explícito: UPDATE si ya existe la fila, INSERT si no.
-    const { data: existing, error: selectError } = await supabase
+    // Por eso se hace explícito. Lo normal es que la fila YA exista, así que se
+    // actualiza directamente y solo se inserta si no cambió ninguna fila. Antes
+    // cada guardado hacía SELECT + UPDATE y además pedía de vuelta la fila entera
+    // (todo el JSON otra vez): dos viajes al servidor y un cuerpo grande por
+    // cada acción del estudiante.
+    const updated = await supabase
       .from(TABLE_NAME)
-      .select("user_id")
+      .update(payload)
       .eq("user_id", userId)
-      .maybeSingle();
+      .select("user_id");
 
-    if (selectError) throw selectError;
-
-    const { data, error } = existing
-      ? await supabase
-          .from(TABLE_NAME)
-          .update(payload)
-          .eq("user_id", userId)
-          .select("*")
-          .maybeSingle()
-      : await supabase
+    let data = null;
+    let error = updated.error;
+    if (!error) {
+      if (Array.isArray(updated.data) && updated.data.length > 0) {
+        data = updated.data[0];
+      } else {
+        const inserted = await supabase
           .from(TABLE_NAME)
           .insert(payload)
-          .select("*")
+          .select("user_id")
           .maybeSingle();
+        data = inserted.data;
+        error = inserted.error;
+      }
+    }
 
     if (error) {
       if (

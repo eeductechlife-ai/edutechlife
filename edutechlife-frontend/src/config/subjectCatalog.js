@@ -76,6 +76,26 @@ export const SUBJECT_CATALOG = [
     curriculoId: null,
     core: true,
   },
+  // Materias que Notas ofrece pero que no tienen DBA ni retos: están en el
+  // catálogo para que el emoji y el color sean los mismos en todas las pantallas.
+  {
+    id: "educacion_fisica",
+    label: "Educación Física",
+    emoji: "⚽",
+    color: "#2A9D8F",
+    challengeId: null,
+    curriculoId: null,
+    core: false,
+  },
+  {
+    id: "tecnologia",
+    label: "Tecnología",
+    emoji: "💻",
+    color: "#3D5A80",
+    challengeId: null,
+    curriculoId: null,
+    core: false,
+  },
   {
     id: "quimica",
     label: "Química",
@@ -141,7 +161,7 @@ export const LEARN_SUBJECT_IDS = [
 
 /** Materias de los retos: id de reto, no de catálogo (math, language…). */
 export const CHALLENGE_SUBJECTS = SUBJECT_CATALOG.filter(
-  (s) => s.id !== "historia",
+  (s) => s.id !== "historia" && s.challengeId,
 ).map((s) => ({
   id: s.challengeId,
   label: s.label,

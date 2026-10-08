@@ -103,7 +103,11 @@ const MateriasTab = memo(function MateriasTab({
               <span className="text-xl">{currentView.emoji}</span>
             </div>
             <div>
-              <h3 className="text-base font-black text-white">{info.title}</h3>
+              {/* No es un encabezado: la pantalla ya tiene su h1 en la barra superior y
+                  un h3 con el mismo texto duplicaba el título para lectores de pantalla. */}
+              <p className="!m-0 text-base font-black text-white">
+                {info.title}
+              </p>
               <p className="text-xs text-white/75">{info.sub}</p>
             </div>
           </div>

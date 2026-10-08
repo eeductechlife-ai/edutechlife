@@ -113,6 +113,8 @@ export const useIngenIAActions = (stateAndSetters) => {
       ...prev,
       {
         role: message.role,
+        // Fecha del mensaje: permite que caduque en el navegador (chatRetention).
+        at: new Date().toISOString(),
         text: message.text || message.content || "",
         type: message.type || "text",
         data: message.data || null,

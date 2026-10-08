@@ -1,5 +1,6 @@
 import { getSubjectEmoji, createSubject } from "../../config/subjectMappings";
 import { ensureContrast, tinted } from "../../utils/contrast";
+import { getCatalogSubject } from "../../config/subjectCatalog";
 
 // supabase-js hangs in dev — use direct REST fetch instead
 const SUPA_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -44,7 +45,10 @@ export const getSubjects = (t, extractedSubjects = null) => {
   return DEFAULT_SUBJECTS.map((key) => ({
     v: key,
     l: t(`kid.grades.subject_${key}`),
-    i: getSubjectEmoji(t(`kid.grades.subject_${key}`)),
+    // El emoji sale del catálogo único; el mapa por nombre queda de respaldo.
+    i:
+      getCatalogSubject(key)?.emoji ||
+      getSubjectEmoji(t(`kid.grades.subject_${key}`)),
   }));
 };
 
