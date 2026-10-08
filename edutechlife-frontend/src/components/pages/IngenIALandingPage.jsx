@@ -51,18 +51,16 @@ const IngenIALandingPage = () => {
             🎓
           </div>
           <h1 className="text-xl font-bold text-[#004B63] mb-2">
-            {t("smartboard.product_mismatch_title") ||
-              "Esta cuenta es de IALab"}
+            {t("smartboard.product_mismatch_title")}
           </h1>
           <p className="text-sm text-gray-600 mb-6">
-            {t("smartboard.product_mismatch_desc") ||
-              "IngenIA es para niños y sus padres, con un panel y permisos distintos. Tu cuenta pertenece al curso de IA generativa del IALab."}
+            {t("smartboard.product_mismatch_desc")}
           </p>
           <Link
             to="/ialab"
             className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#004B63] to-[#4DA8C4] text-white font-semibold hover:shadow-lg transition-all"
           >
-            {t("smartboard.product_mismatch_cta") || "Ir a mi curso (IALab)"}
+            {t("smartboard.product_mismatch_cta")}
           </Link>
         </div>
       </div>

@@ -38,7 +38,7 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
         <button
           type="button"
           onClick={() => onTabChange?.("materias")}
-          className="text-xs font-bold text-[#0096C7] hover:underline"
+          className="text-xs font-bold text-[#00789F] hover:underline"
         >
           Ver todas →
         </button>
@@ -53,7 +53,7 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
             <span
               key={state.key}
               className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full"
-              style={{ backgroundColor: state.bg, color: state.color }}
+              style={{ backgroundColor: state.bg, color: state.textOnTint }}
             >
               {state.emoji} {state.label} · {n}
             </span>
@@ -84,7 +84,7 @@ const MasteryPassportStrip = memo(({ onTabChange }) => {
                   </span>
                   <span
                     className="text-xs font-black px-1.5 py-0.5 rounded-full ml-2 flex-shrink-0"
-                    style={{ backgroundColor: ms.bg, color: ms.color }}
+                    style={{ backgroundColor: ms.bg, color: ms.textOnTint }}
                   >
                     {ms.emoji} {ms.label}
                   </span>

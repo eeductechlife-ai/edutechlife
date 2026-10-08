@@ -210,7 +210,7 @@ const PersonalizedPlan = () => {
             __html: sanitize(t("kid.personalized_plan.desc_empty")),
           }}
         />
-        <p className="text-sm text-[#FB8500] mt-4">
+        <p className="text-sm text-[#A35600] mt-4">
           {t("kid.personalized_plan.hint_empty")}
         </p>
       </motion.div>

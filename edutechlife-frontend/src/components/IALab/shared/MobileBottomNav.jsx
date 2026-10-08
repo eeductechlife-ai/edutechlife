@@ -92,7 +92,7 @@ function MobileBottomNav({
   return (
     <nav
       role="navigation"
-      aria-label={t("ialab.bottom_nav_aria") || "Navegación principal"}
+      aria-label={t("ialab.bottom_nav_aria")}
       className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex items-stretch h-16 pb-[env(safe-area-inset-bottom,0px)] bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 shadow-[0_-1px_8px_rgba(0,0,0,0.06)]"
     >
       {NAV_ITEMS.map((item) => {

@@ -232,7 +232,7 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
               border: "1px solid rgba(239,71,111,0.25)",
             }}
           >
-            <p className="text-sm text-[#EF476F] flex-1 mr-2">{error}</p>
+            <p className="text-sm text-[#BF3959] flex-1 mr-2">{error}</p>
             <motion.button
               onClick={handleGenerate}
               whileHover={{ scale: 1.02 }}

@@ -45,7 +45,7 @@ const OVANavTabs = ({
           <div
             className="flex items-center gap-1.5 sm:gap-2"
             role="tablist"
-            aria-label={t("ova.nav.tabs_label") || "Secciones del laboratorio"}
+            aria-label={t("ova.nav.tabs_label")}
           >
             {tabs.map((tab, idx) => (
               <button

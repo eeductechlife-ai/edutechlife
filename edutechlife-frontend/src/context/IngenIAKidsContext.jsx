@@ -46,6 +46,7 @@ import { useSubjectProgressPersistence } from "../hooks/useSubjectProgressPersis
 import { useDaniMemory } from "../hooks/useDaniMemory";
 import { ageGroupFor } from "../utils/studentLevel";
 import { capPoints, POINTS } from "./pointsEconomy";
+import { retainChat } from "../utils/chatRetention";
 
 export const IngenIAKidsContext = createContext();
 
@@ -780,7 +781,8 @@ export const IngenIAKidsProvider = ({ children }) => {
   useEffect(() => {
     if (!dataLoaded || !userId) return;
 
-    setLocalStorage(`dani_chat_${userId}`, daniChatHistory);
+    // En el navegador solo lo reciente (14 días, 100 mensajes): ver chatRetention.
+    setLocalStorage(`dani_chat_${userId}`, retainChat(daniChatHistory));
     setLocalStorage(`mood_history_${userId}`, studentMoodHistory);
     setLocalStorage(`academic_topics_${userId}`, academicTopics);
     setLocalStorage(`conversation_count_${userId}`, conversationCount);

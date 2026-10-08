@@ -69,7 +69,7 @@ export default function ToolWorkspace({
 
   if (!cfg) return children;
   // "Inicio" en los 5 módulos: lleva a la pantalla de bienvenida del módulo.
-  const newChatLabel = t("ialab.workspace.home") || "Inicio";
+  const newChatLabel = t("ialab.workspace.home");
   const modBrand = theme === "default" ? DEFAULT_MODULE_BRAND[activeMod] : null;
   const railLabel = modBrand?.label || cfg.label;
 
@@ -173,24 +173,24 @@ export default function ToolWorkspace({
         {[
           {
             id: "objetivos",
-            label: t("ialab.tab_objectives") || "Objetivos",
+            label: t("ialab.tab_objectives"),
             glyph:
               "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2",
           },
           {
             id: "actividades",
-            label: t("ialab.tab_activities") || "Actividades",
+            label: t("ialab.tab_activities"),
             glyph: "M13 2 3 14h9l-1 8 10-12h-9l1-8z",
           },
           {
             id: "practica",
-            label: t("ialab.tab_practice") || "Práctica",
+            label: t("ialab.tab_practice"),
             glyph:
               "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4l3 3",
           },
           {
             id: "guardados",
-            label: t("ialab.tab_bookmarks") || "Guardados",
+            label: t("ialab.tab_bookmarks"),
             glyph: "M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z",
           },
         ].map(({ id, label, glyph }) => (

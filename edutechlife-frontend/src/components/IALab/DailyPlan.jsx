@@ -169,10 +169,7 @@ const DailyPlan = ({
             data-testid="daily-plan-toggle"
             className="w-full px-4 py-2 flex items-center justify-between border-t theme-border text-[11px] font-semibold uppercase tracking-wider theme-text-muted hover:theme-text transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/30"
           >
-            <span>
-              {t("ialab.daily_plan.view_plan", { count: total }) ||
-                `Ver plan (${total})`}
-            </span>
+            <span>{t("ialab.daily_plan.view_plan", { count: total })}</span>
             <motion.span
               animate={{ rotate: isOpen ? 180 : 0 }}
               transition={{ duration: 0.2 }}

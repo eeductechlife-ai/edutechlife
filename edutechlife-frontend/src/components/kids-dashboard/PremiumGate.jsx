@@ -5,6 +5,7 @@ import { Crown, Lock, Loader2 } from "lucide-react";
 import { SB_GRADIENTS, glow } from "./ingenIATheme";
 import { createCheckoutSession } from "../../services/stripeClient";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { IS_NATIVE_APP } from "../../config/nativeApp";
 
 const PremiumGate = ({
   children,
@@ -77,29 +78,32 @@ const PremiumGate = ({
           <p className="text-sm text-[#64748B] leading-relaxed mb-6">
             {description}
           </p>
-          <motion.button
-            whileHover={{ scale: 1.03, y: -1 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={handleUpgrade}
-            disabled={upgrading}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[#00303F] font-black text-sm transition-all disabled:opacity-70"
-            style={{
-              background: SB_GRADIENTS.gold,
-              boxShadow: `${glow("#FB8500", 0.5)}, inset 0 1px 0 rgba(255,255,255,0.5)`,
-            }}
-          >
-            {upgrading ? (
-              <Loader2
-                className="w-[18px] h-[18px] animate-spin"
-                strokeWidth={2.4}
-              />
-            ) : (
-              <Crown className="w-[18px] h-[18px]" strokeWidth={2.4} />
-            )}
-            <span>
-              {upgrading ? t("kid.premium.opening") : t("kid.premium.unlock")}
-            </span>
-          </motion.button>
+          {/* En la app nativa no hay compra (config/nativeApp.js) */}
+          {!IS_NATIVE_APP && (
+            <motion.button
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={handleUpgrade}
+              disabled={upgrading}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[#00303F] font-black text-sm transition-all disabled:opacity-70"
+              style={{
+                background: SB_GRADIENTS.gold,
+                boxShadow: `${glow("#FB8500", 0.5)}, inset 0 1px 0 rgba(255,255,255,0.5)`,
+              }}
+            >
+              {upgrading ? (
+                <Loader2
+                  className="w-[18px] h-[18px] animate-spin"
+                  strokeWidth={2.4}
+                />
+              ) : (
+                <Crown className="w-[18px] h-[18px]" strokeWidth={2.4} />
+              )}
+              <span>
+                {upgrading ? t("kid.premium.opening") : t("kid.premium.unlock")}
+              </span>
+            </motion.button>
+          )}
           <button
             onClick={() => navigate("/ingenia")}
             className="block mx-auto mt-4 text-xs font-semibold text-[#94A3B8] hover:text-[#64748B] transition-colors cursor-pointer"

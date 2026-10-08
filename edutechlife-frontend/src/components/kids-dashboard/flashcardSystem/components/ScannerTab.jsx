@@ -172,7 +172,7 @@ const ScannerTab = memo(({ onGenerated }) => {
       </p>
 
       {stage && (
-        <div className="flex items-center gap-2 text-sm text-[#EF476F]">
+        <div className="flex items-center gap-2 text-sm text-[#BF3959]">
           <motion.span
             className="inline-block w-4 h-4 border-2 border-[#EF476F] border-t-transparent rounded-full"
             animate={{ rotate: 360 }}
@@ -196,7 +196,7 @@ const ScannerTab = memo(({ onGenerated }) => {
             <ul className="space-y-1">
               {summary.learningPoints.slice(0, 4).map((p, i) => (
                 <li key={i} className="text-xs text-[#374151] flex gap-1.5">
-                  <span className="text-[#4DA8C4]">•</span>
+                  <span className="text-[#367689]">•</span>
                   {p}
                 </li>
               ))}

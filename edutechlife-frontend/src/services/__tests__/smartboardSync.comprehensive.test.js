@@ -388,46 +388,49 @@ describe("loadFromSupabase", () => {
   });
 });
 
-// saveToSupabase no longer upserts (the table is a view, so ON CONFLICT
-// can't resolve): it looks the row up, then UPDATEs it or INSERTs a new one.
-function mockTable({ existing = null, lookupError = null, writeResult }) {
-  const write = {
-    select: vi.fn().mockReturnValue({
-      maybeSingle: vi.fn().mockResolvedValue(writeResult),
-    }),
-  };
+// saveToSupabase no hace upsert (la tabla es una vista y ON CONFLICT no se
+// resuelve). Actualiza directamente la fila del estudiante —lo normal— y solo
+// inserta si el UPDATE no cambió ninguna fila: un viaje en lugar de dos.
+function mockTable({
+  updatedRows = [],
+  updateError = null,
+  insertResult = { data: {}, error: null },
+} = {}) {
   const table = {
-    select: vi.fn().mockReturnValue({
+    update: vi.fn().mockReturnValue({
       eq: vi.fn().mockReturnValue({
-        maybeSingle: vi
+        select: vi
           .fn()
-          .mockResolvedValue({ data: existing, error: lookupError }),
+          .mockResolvedValue({ data: updatedRows, error: updateError }),
       }),
     }),
-    insert: vi.fn().mockReturnValue(write),
-    update: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue(write) }),
+    insert: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        maybeSingle: vi.fn().mockResolvedValue(insertResult),
+      }),
+    }),
   };
   return { from: vi.fn().mockReturnValue(table), table };
 }
 
 describe("saveToSupabase", () => {
-  it("inserts a new row when the student has none", async () => {
+  it("inserts a new row when the student has none (the UPDATE changed nothing)", async () => {
     const { from, table } = mockTable({
-      writeResult: { data: { id: "1", totalPoints: 100 }, error: null },
+      updatedRows: [],
+      insertResult: { data: { user_id: "user-1" }, error: null },
     });
 
     const data = { totalPoints: 100, missions: [] };
     const result = await saveToSupabase({ from }, "user-1", data);
 
     expect(result.success).toBe(true);
+    expect(table.update).toHaveBeenCalledTimes(1);
     expect(table.insert).toHaveBeenCalled();
-    expect(table.update).not.toHaveBeenCalled();
   });
 
   it("updates the existing row instead of inserting a duplicate", async () => {
     const { from, table } = mockTable({
-      existing: { user_id: "user-1" },
-      writeResult: { data: {}, error: null },
+      updatedRows: [{ user_id: "user-1" }],
     });
 
     const result = await saveToSupabase({ from }, "user-1", { a: 1 });
@@ -435,11 +438,13 @@ describe("saveToSupabase", () => {
     expect(result.success).toBe(true);
     expect(table.update).toHaveBeenCalled();
     expect(table.insert).not.toHaveBeenCalled();
+    expect(from).toHaveBeenCalledTimes(1);
   });
 
   it("returns error when the write fails", async () => {
     const { from } = mockTable({
-      writeResult: { data: null, error: { message: "Constraint violation" } },
+      updatedRows: [],
+      insertResult: { data: null, error: { message: "Constraint violation" } },
     });
 
     const result = await saveToSupabase({ from }, "user-1", {});
@@ -447,14 +452,28 @@ describe("saveToSupabase", () => {
     expect(result.success).toBe(false);
   });
 
-  it("includes user_id, platform y data anidado en el payload", async () => {
+  it("returns error when the UPDATE fails", async () => {
     const { from, table } = mockTable({
-      writeResult: { data: {}, error: null },
+      updateError: { message: "permission denied" },
     });
+
+    const result = await saveToSupabase({ from }, "user-1", {});
+
+    expect(result.success).toBe(false);
+    expect(table.insert).not.toHaveBeenCalled();
+  });
+
+  it("includes user_id, platform y data anidado en el payload", async () => {
+    const { from, table } = mockTable({ updatedRows: [] });
 
     await saveToSupabase({ from }, "user-1", { totalPoints: 100 });
 
     expect(from).toHaveBeenCalledWith("smartboard_kids_data");
+    expect(table.update).toHaveBeenCalledWith({
+      user_id: "user-1",
+      platform: "smartboard",
+      data: { totalPoints: 100 },
+    });
     expect(table.insert).toHaveBeenCalledWith({
       user_id: "user-1",
       platform: "smartboard",

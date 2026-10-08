@@ -79,7 +79,7 @@ const ExamPrep = memo(({ onTabChange, dm = false }) => {
                 border: "1px solid rgba(255,255,255,0.25)",
               }}
             >
-              🗣️ {t("oral.talk_with_dani") || "Hablar con Dani sobre esto"}
+              🗣️ {t("oral.talk_with_dani")}
             </button>
             <motion.button
               onClick={() => setShowDeckQuiz(true)}

@@ -152,7 +152,7 @@ const MisionDelDia = ({ onTabChange }) => {
           <div className="text-xs text-[#64748B] font-semibold leading-none">
             Ganas hasta
           </div>
-          <div className="text-lg font-black text-[#FB8500] leading-tight">
+          <div className="text-lg font-black text-[#A35600] leading-tight">
             +{totalXp} XP
           </div>
         </div>

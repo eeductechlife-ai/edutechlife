@@ -207,7 +207,7 @@ const SpinWheel = memo(({ subjects, onLand, selectedId }) => {
       <p
         className={`h-5 ${
           isSpinning
-            ? "text-sm font-black text-[#9D4EDD] animate-pulse"
+            ? "text-sm font-black text-[#954AD2] animate-pulse"
             : landedIdx === null
               ? "text-xs font-bold text-[#94A3B8]"
               : "text-sm font-black"
@@ -307,7 +307,7 @@ const ChallengeSetup = memo(
                     {d.questions} preguntas
                   </span>
                   <span
-                    className={`text-xs font-black ${sel ? "text-white" : "text-[#9D4EDD]"}`}
+                    className={`text-xs font-black ${sel ? "text-white" : "text-[#954AD2]"}`}
                   >
                     +{d.xp} XP
                   </span>

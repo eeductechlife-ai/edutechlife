@@ -2,11 +2,12 @@ const { Router } = require('express');
 const crypto = require('crypto');
 const supabase = require('../../db/supabase');
 const { requireAuth } = require('../../middleware/auth');
+const { parentalInviteLimiter } = require('../../middleware/rateLimiter');
 const { sendConsentVerificationEmail } = require('../../services/emailService');
 
 const router = Router();
 
-router.post('/parental-consent', requireAuth, async (req, res) => {
+router.post('/parental-consent', requireAuth, parentalInviteLimiter, async (req, res) => {
   const { parentEmail, studentAge, timestamp } = req.body;
   const userId = req.userId;
 

@@ -72,7 +72,7 @@ export const StepBar = memo(({ step }) => {
               i === step
                 ? "bg-[#4DA8C4]/20 text-[#004B63]"
                 : i < step
-                  ? "bg-[#66CCCC]/20 text-[#66CCCC]"
+                  ? "bg-[#66CCCC]/20 text-[#387070]"
                   : "bg-[#E2E8F0] text-[#94A3B8]"
             }`}
             animate={i === step ? { scale: [1, 1.05, 1] } : {}}

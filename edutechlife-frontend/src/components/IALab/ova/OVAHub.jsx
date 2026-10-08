@@ -40,7 +40,10 @@ function OVACard({ ova, moduleColor }) {
       <div className="p-5">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--theme-emphasis)]/10 to-[var(--theme-primary)]/10 flex items-center justify-center shrink-0">
-            <Icon name={ova.icon} className="w-6 h-6 text-[var(--theme-emphasis)]" />
+            <Icon
+              name={ova.icon}
+              className="w-6 h-6 text-[var(--theme-emphasis)]"
+            />
           </div>
           <div className="flex-1 min-w-0">
             <h4 className="font-bold text-slate-800 dark:text-slate-100 text-base leading-tight mb-1">
@@ -57,7 +60,7 @@ function OVACard({ ova, moduleColor }) {
             <span>{ova.duration}</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--theme-primary)] opacity-0 group-hover:opacity-100 transition-opacity">
-            <span>{t("ialab.ova_thumbnail.explore") || "Explorar"}</span>
+            <span>{t("ialab.ova_thumbnail.explore")}</span>
             <Icon name="fa-arrow-right" className="w-3 h-3" />
           </div>
         </div>
@@ -151,12 +154,11 @@ export default function OVAHub() {
             <Icon name="fa-brain" className="w-5 h-5 text-white" />
           </div>
           <h2 className="text-2xl font-black text-[var(--theme-emphasis)] dark:text-white tracking-tight">
-            {t("ialab.ova_hub.title") || "Centro de OVAs"}
+            {t("ialab.ova_hub.title")}
           </h2>
         </div>
         <p className="text-sm text-slate-500 dark:text-slate-400 ml-[52px]">
-          {t("ialab.ova_hub.subtitle") ||
-            `${totalOVAs} experiencias interactivas en ${totalModules} módulos · ~${totalDuration} min total`}
+          {t("ialab.ova_hub.subtitle")}
         </p>
       </motion.div>
 
@@ -170,20 +172,14 @@ export default function OVAHub() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder={
-            t("ialab.ova_hub.search_placeholder") ||
-            "Buscar OVA por nombre o descripción..."
-          }
-          aria-label={
-            t("ialab.ova_hub.search_placeholder") ||
-            "Buscar OVA por nombre o descripción..."
-          }
+          placeholder={t("ialab.ova_hub.search_placeholder")}
+          aria-label={t("ialab.ova_hub.search_placeholder")}
           className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)]/30 focus:border-[var(--theme-primary)] transition-all"
         />
         {search && (
           <button
             onClick={() => setSearch("")}
-            aria-label={t("ialab.ova_hub.clear_search") || "Limpiar búsqueda"}
+            aria-label={t("ialab.ova_hub.clear_search")}
             className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
           >
             <Icon
@@ -205,14 +201,13 @@ export default function OVAHub() {
             <Icon name="fa-search" className="w-6 h-6 text-slate-400" />
           </div>
           <p className="text-base font-bold text-slate-500 dark:text-slate-400">
-            {t("ialab.ova_hub.no_results") ||
-              "Ninguna OVA coincide con tu búsqueda"}
+            {t("ialab.ova_hub.no_results")}
           </p>
           <button
             onClick={() => setSearch("")}
             className="mt-3 text-sm font-bold text-[var(--theme-primary)] hover:underline"
           >
-            {t("ialab.ova_hub.clear_search") || "Limpiar búsqueda"}
+            {t("ialab.ova_hub.clear_search")}
           </button>
         </motion.div>
       ) : (

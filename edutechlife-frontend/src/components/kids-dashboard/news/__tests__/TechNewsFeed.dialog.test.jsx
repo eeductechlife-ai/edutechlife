@@ -72,7 +72,7 @@ vi.mock("../../../../hooks/useNewsFeed", () => ({
   },
 }));
 
-import TechNewsFeed from "../TechNewsFeed";
+import TechNewsFeed, { shortSource } from "../TechNewsFeed";
 
 describe("TechNewsFeed: el artículo abierto es un cuadro de diálogo", () => {
   beforeEach(() => vi.clearAllMocks());
@@ -114,5 +114,28 @@ describe("TechNewsFeed: el artículo abierto es un cuadro de diálogo", () => {
   it("sin artículo abierto no hay diálogo", () => {
     render(<TechNewsFeed />);
     expect(screen.queryByRole("dialog")).toBeNull();
+  });
+});
+
+describe("shortSource: la tarjeta muestra la cita, no una marca de verificación", () => {
+  it("usa la primera cita y la nombra", () => {
+    expect(
+      shortSource(
+        "Potter et al., MIT (2014); Paivio, teoría de la codificación dual",
+      ),
+    ).toBe("Fuente: Potter et al., MIT (2014)");
+  });
+  it("recorta las citas largas con puntos suspensivos", () => {
+    const out = shortSource(
+      "Russell Seitz (2006), citado en Discover; TeleGeography (2024)",
+    );
+    expect(out.startsWith("Fuente: Russell Seitz (2006), citado en")).toBe(
+      true,
+    );
+    expect(out.endsWith("…")).toBe(true);
+    expect(out.length).toBeLessThanOrEqual("Fuente: ".length + 38);
+  });
+  it("sin fuente no inventa nada", () => {
+    expect(shortSource("")).toBe("Fuente: ");
   });
 });

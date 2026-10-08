@@ -499,11 +499,9 @@ const DaniTutorChat = memo(({ isOpen, onClose, activeTab, onTabChange }) => {
                         enterKeyHint="send"
                         placeholder={
                           activeTab === "examenes"
-                            ? t("dani.placeholder_exam") ||
-                              "Pregúntame sobre el examen..."
+                            ? t("dani.placeholder_exam")
                             : activeTab === "materias"
-                              ? t("dani.placeholder_subject") ||
-                                "¿Qué materia quieres estudiar?"
+                              ? t("dani.placeholder_subject")
                               : ageGroup === "early"
                                 ? "Escríbeme tu pregunta 😊"
                                 : "Escribe tu pregunta o tu tarea…"

@@ -170,7 +170,7 @@ export const buildMaxSystemPrompt = async ({
 
   const sessionContext = injectSessionContext();
   const sessionStr = sessionContext
-    ? `\n\n## ${t("max.session_history") || "Sesiones anteriores"}:\n${sessionContext}`
+    ? `\n\n## ${t("max.session_history")}:\n${sessionContext}`
     : "";
 
   const lessonStr = currentLesson?.lessonId

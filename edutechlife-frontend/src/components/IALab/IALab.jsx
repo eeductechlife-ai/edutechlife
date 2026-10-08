@@ -462,10 +462,8 @@ const IALabContent = memo(function () {
     }
     if (action === "CONTENT_COMPLETED") {
       setToast({
-        message:
-          t("ialab.content_completed_toast") ||
-          "¡Contenido completado! Ahora haz el examen para avanzar.",
-        cta: t("ialab.tab_activities") || "Actividades",
+        message: t("ialab.content_completed_toast"),
+        cta: t("ialab.tab_activities"),
         onCta: () => {
           setViewSection("actividades");
           setToast(null);
@@ -556,15 +554,14 @@ const IALabContent = memo(function () {
             />
           </svg>
           <span className="text-sm text-amber-800 dark:text-amber-200 flex-1">
-            {t("ialab.loading_timeout_desc") ||
-              "Verifica tu conexión e inténtalo de nuevo"}
+            {t("ialab.loading_timeout_desc")}
           </span>
           <button
             type="button"
             onClick={() => window.location.reload()}
             className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-amber-100 dark:bg-amber-800/40 text-amber-800 dark:text-amber-200 hover:opacity-80 transition-opacity"
           >
-            {t("ialab.loading_timeout_retry") || "Reintentar"}
+            {t("ialab.loading_timeout_retry")}
           </button>
         </div>
       )}
@@ -961,12 +958,10 @@ const IALabContent = memo(function () {
                         </div>
                         <div>
                           <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-                            {t("ialab.loading_timeout_title") ||
-                              "No se pudo cargar el módulo"}
+                            {t("ialab.loading_timeout_title")}
                           </p>
                           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                            {t("ialab.loading_timeout_desc") ||
-                              "Verifica tu conexión e inténtalo de nuevo"}
+                            {t("ialab.loading_timeout_desc")}
                           </p>
                         </div>
                         <button
@@ -974,7 +969,7 @@ const IALabContent = memo(function () {
                           onClick={() => window.location.reload()}
                           className="px-4 py-2 text-sm font-semibold rounded-xl bg-[var(--theme-primary)] text-white hover:opacity-90 transition-opacity"
                         >
-                          {t("ialab.loading_timeout_retry") || "Reintentar"}
+                          {t("ialab.loading_timeout_retry")}
                         </button>
                       </div>
                     ) : (
@@ -1102,10 +1097,7 @@ const IALabContent = memo(function () {
                     <div className="flex w-full gap-5">
                       {/* Sidebar izquierdo: tabs verticales */}
                       <aside
-                        aria-label={
-                          t("ialab.workspace.rail_label") ||
-                          "Navegación del módulo"
-                        }
+                        aria-label={t("ialab.workspace.rail_label")}
                         className="md:sticky md:top-8 hidden max-h-[calc(100dvh-11rem)] w-52 flex-shrink-0 self-start md:flex md:flex-col md:gap-1.5"
                         data-testid="ialab-tabs-desktop"
                         data-tour="tour-tabs-desktop"

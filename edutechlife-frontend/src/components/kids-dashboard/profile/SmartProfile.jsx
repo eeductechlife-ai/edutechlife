@@ -16,6 +16,7 @@ import { useStudentProfileIngenIA } from "../../../hooks/useStudentProfileIngenI
 import { SB_GRADIENTS, glow } from "../ingenIATheme";
 import EditProfileModal from "../EditProfileModal";
 import AccountDataSection from "./AccountDataSection";
+import { readableTextOn } from "../../../utils/contrast";
 import { API_BASE_URL as API_BASE } from "../../../config/api";
 
 import ProgressSummary from "./ProgressSummary";
@@ -136,7 +137,7 @@ const SmartProfile = memo(function SmartProfile({
   const level = getLevel(totalPoints ?? 0);
 
   const textMain = dm ? "#F0F6FF" : "#1E293B";
-  const textMuted = dm ? "#94A3B8" : "#64748B";
+  const textMuted = dm ? "#94A3B8" : "#475569";
 
   const handleParentInvite = async (e) => {
     e.preventDefault();
@@ -283,7 +284,8 @@ const SmartProfile = memo(function SmartProfile({
               activeTab === tab.id
                 ? {
                     background: dm ? "#243152" : "#ffffff",
-                    color: "#FB8500",
+                    // Naranja de marca oscurecido para leerse (antes 2,5:1).
+                    color: dm ? "#FB8500" : "#A35600",
                     boxShadow: "0 1px 4px rgba(0,0,0,0.10)",
                   }
                 : { color: textMuted }
@@ -355,7 +357,7 @@ const SmartProfile = memo(function SmartProfile({
                   <div className="min-w-0">
                     <p
                       className="text-xs font-bold uppercase tracking-wide"
-                      style={{ color: "#D97706" }}
+                      style={{ color: dm ? "#FBBF24" : "#92400E" }}
                     >
                       Objetivo
                     </p>
@@ -379,7 +381,7 @@ const SmartProfile = memo(function SmartProfile({
                 <div className="min-w-0">
                   <p
                     className="text-xs font-bold uppercase tracking-wide"
-                    style={{ color: "#D97706" }}
+                    style={{ color: dm ? "#FBBF24" : "#92400E" }}
                   >
                     Estilo
                   </p>
@@ -401,8 +403,11 @@ const SmartProfile = memo(function SmartProfile({
                       <button
                         type="button"
                         onClick={onExpandVak}
-                        className="mt-2 min-h-[40px] px-3.5 rounded-xl text-xs font-black text-white active:scale-95 transition-transform"
-                        style={{ background: "#FB8500" }}
+                        className="mt-2 min-h-[40px] px-3.5 rounded-xl text-xs font-black active:scale-95 transition-transform"
+                        style={{
+                          background: "#FB8500",
+                          color: readableTextOn("#FB8500"),
+                        }}
                       >
                         Descubrir mi estilo →
                       </button>
@@ -504,7 +509,7 @@ const SmartProfile = memo(function SmartProfile({
                     type="button"
                     onClick={onLogout}
                     className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold"
-                    style={{ color: "#EF476F" }}
+                    style={{ color: dm ? "#FF6B9D" : "#BF3959" }}
                   >
                     <LogOut className="w-4 h-4" />
                     Cerrar sesión

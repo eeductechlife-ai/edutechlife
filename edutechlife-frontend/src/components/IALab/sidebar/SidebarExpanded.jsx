@@ -239,7 +239,7 @@ const SidebarExpanded = ({ onOpenStreak }) => {
               />
             </div>
             <span className="flex-1 text-left text-[12px] font-semibold text-amber-700 dark:text-amber-400">
-              {t("ialab.sidebar_leaderboard") || "Ranking"}
+              {t("ialab.sidebar_leaderboard")}
             </span>
             <Icon
               name="fa-chevron-right"

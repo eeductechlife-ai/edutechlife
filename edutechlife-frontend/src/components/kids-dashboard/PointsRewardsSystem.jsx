@@ -50,7 +50,7 @@ const RewardCard = memo(({ reward, isUnlocked, canAfford, onUnlock }) => (
       {reward.description}
     </p>
 
-    <div className="flex items-center justify-center gap-1 text-sm font-black text-[#FB8500] tabular-nums">
+    <div className="flex items-center justify-center gap-1 text-sm font-black text-[#A35600] tabular-nums">
       <Gem className="w-4 h-4" strokeWidth={2.4} />
       <span>{reward.cost}</span>
     </div>
@@ -182,7 +182,7 @@ const PointsHistory = memo(({ history }) => {
             >
               <span className="text-xs text-[#64748B]">{entry.reason}</span>
               <span
-                className={`text-xs font-bold ${entry.points > 0 ? "text-[#66CCCC]" : "text-[#FF6B9D]"}`}
+                className={`text-xs font-bold ${entry.points > 0 ? "text-[#387070]" : "text-[#B34B6E]"}`}
               >
                 {entry.points > 0 ? "+" : ""}
                 {entry.points}

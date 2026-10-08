@@ -184,7 +184,7 @@ const UserMenuDropdown = ({
 
         {/* Error */}
         {error && !loading && (
-          <p className="px-4 py-3 text-xs text-center text-[#EF476F]">
+          <p className="px-4 py-3 text-xs text-center text-[#BF3959]">
             {t("kid.user.load_error")}
           </p>
         )}

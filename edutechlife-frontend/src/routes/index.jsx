@@ -7,6 +7,8 @@ import {
   useLocation,
 } from "react-router-dom";
 import { track } from "../lib/analytics";
+import { applyManifestForPath } from "../utils/appManifest";
+import { IS_NATIVE_APP, NATIVE_START_PATH } from "../config/nativeApp";
 import AppLayout from "../components/layout/AppLayout";
 import AuthRouter from "./auth-router";
 import ProtectedRoute from "../components/layout/ProtectedRoute";
@@ -150,6 +152,7 @@ const AppRoutes = () => {
 
   useEffect(() => {
     track("page_view", { path: location.pathname });
+    applyManifestForPath(location.pathname);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -176,9 +179,14 @@ const AppRoutes = () => {
         <Route
           index
           element={
-            <Suspense fallback={<SkeletonLoader type="hero" />}>
-              <LandingPage />
-            </Suspense>
+            // La app nativa abre directo en su sección, sin la landing comercial
+            IS_NATIVE_APP ? (
+              <Navigate to={NATIVE_START_PATH} replace />
+            ) : (
+              <Suspense fallback={<SkeletonLoader type="hero" />}>
+                <LandingPage />
+              </Suspense>
+            )
           }
         />
 
@@ -291,9 +299,14 @@ const AppRoutes = () => {
         <Route
           path="planes"
           element={
-            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
-              <PlanesPage />
-            </Suspense>
+            // Sin precios ni checkout dentro de la app nativa (config/nativeApp.js)
+            IS_NATIVE_APP ? (
+              <Navigate to={NATIVE_START_PATH} replace />
+            ) : (
+              <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+                <PlanesPage />
+              </Suspense>
+            )
           }
         />
 
