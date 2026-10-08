@@ -14,6 +14,17 @@ const supabase = createClient(
 );
 
 /**
+ * Escapa texto para meterlo en HTML. `detected_content` es lo que ESCRIBIÓ el
+ * estudiante y el nombre lo pone él mismo al registrarse: sin escapar, un
+ * mensaje con etiquetas se inyectaba tal cual en el correo que recibe su padre.
+ */
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, (ch) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
+  ));
+}
+
+/**
  * Send crisis alert notification to parent
  * Called when a new crisis_alert is inserted in the database
  * @param {string} crisisAlertId - ID of the crisis alert (BIGINT from DB)
@@ -248,6 +259,9 @@ async function sendEmailNotification(parentId, parentEmail, crisisAlert, student
     const studentAge = student?.age || 'N/A';
     const alertMessage = crisisAlert.detected_content || 'Crisis alert detected';
 
+    // El asunto es texto plano: sin saltos de línea (evita inyectar cabeceras).
+    const subjectName = String(studentName).replace(/[\r\n]+/g, ' ').trim();
+
     const html = buildCrisisAlertEmailHtml({
       studentName,
       studentAge,
@@ -259,9 +273,9 @@ async function sendEmailNotification(parentId, parentEmail, crisisAlert, student
 
     const result = await sendEmail(
       parentEmail,
-      `Alerta: ${studentName} necesita ayuda en IngenIA`,
+      `Alerta: ${subjectName} necesita ayuda en IngenIA`,
       html,
-      `Recibimos una alerta de crisis para ${studentName}. Revisa el dashboard para más detalles.`
+      `Recibimos una alerta de crisis para ${subjectName}. Revisa el dashboard para más detalles.`
     );
 
     // Log the notification attempt
@@ -396,17 +410,14 @@ async function logNotification(parentId, crisisAlertId, channel, status, metadat
  * @private
  */
 function buildCrisisAlertEmailHtml(opts) {
-  const {
-    studentName,
-    studentAge,
-    crisisLevel,
-    alertMessage,
-    alertId,
-    dashboardUrl
-  } = opts;
-
-  const alertColor = crisisLevel === 'high' ? '#FF6B6B' : crisisLevel === 'medium' ? '#FFA500' : '#FFB84D';
-  const dashboardLink = `${dashboardUrl}/alerts/${alertId}`;
+  const alertColor = opts.crisisLevel === 'high' ? '#FF6B6B' : opts.crisisLevel === 'medium' ? '#FFA500' : '#FFB84D';
+  // Todo lo que llega de la base o del estudiante se escapa antes de entrar al HTML.
+  const studentName = escapeHtml(opts.studentName);
+  const studentAge = escapeHtml(opts.studentAge);
+  const crisisLevel = escapeHtml(opts.crisisLevel);
+  const alertMessage = escapeHtml(opts.alertMessage);
+  const dashboardUrl = escapeHtml(opts.dashboardUrl);
+  const dashboardLink = `${dashboardUrl}/alerts/${encodeURIComponent(opts.alertId ?? '')}`;
 
   return `
 <!DOCTYPE html>

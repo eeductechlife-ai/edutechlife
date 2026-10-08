@@ -50,6 +50,30 @@ router.get('/student-progress', requireAuth, async (req, res) => {
   }
 });
 
+/**
+ * Guarda una columna JSON del estudiante en UNA escritura. Antes cada guardado
+ * hacía SELECT (¿existe?), a veces INSERT y luego UPDATE: hasta tres viajes a la
+ * base por acción del estudiante. Ahora se actualiza directamente por auth_id y
+ * solo si no había fila se crea, ya con el dato incluido.
+ */
+async function saveStudentJson(userId, column, value) {
+  const { data: updated, error: updateErr } = await supabase
+    .from('students')
+    .update({ [column]: value })
+    .eq('auth_id', userId)
+    .select('id');
+  if (updateErr) return { error: updateErr.message };
+  if (Array.isArray(updated) && updated.length > 0) return { ok: true };
+
+  const { data: created } = await supabase
+    .from('students')
+    .insert([{ auth_id: userId, name: 'Estudiante', age: 12, [column]: value }])
+    .select('id')
+    .single();
+  if (!created?.id) return { error: 'Could not create student profile' };
+  return { ok: true };
+}
+
 router.post('/student-progress', requireAuth, async (req, res) => {
   const userId = req.userId;
   if (!userId) return res.status(401).json({ error: 'Unauthorized' });
@@ -57,36 +81,11 @@ router.post('/student-progress', requireAuth, async (req, res) => {
   const { subjectTime, sessions } = req.body || {};
 
   try {
-    // Ensure student exists
-    const { data: existing } = await supabase
-      .from('students')
-      .select('id')
-      .eq('auth_id', userId)
-      .maybeSingle();
-
-    const studentId = existing?.id || (
-      await supabase
-        .from('students')
-        .insert([{ auth_id: userId, name: 'Estudiante', age: 12 }])
-        .select('id')
-        .single()
-    ).data?.id;
-
-    if (!studentId) {
-      return res.status(500).json({ error: 'Could not create student profile' });
+    const saved = await saveStudentJson(userId, 'progress_json', { subjectTime, sessions });
+    if (saved.error) {
+      console.error('student-progress save error:', saved.error);
+      return res.status(500).json({ error: saved.error });
     }
-
-    // Update progress_json
-    const { error: updateErr } = await supabase
-      .from('students')
-      .update({ progress_json: { subjectTime, sessions } })
-      .eq('id', studentId);
-
-    if (updateErr) {
-      console.error('student-progress update error:', updateErr.message);
-      return res.status(500).json({ error: updateErr.message });
-    }
-
     res.json({ success: true });
   } catch (e) {
     console.error('student-progress post error:', e.message);
@@ -155,36 +154,11 @@ router.post('/student-grades', requireAuth, async (req, res) => {
   }
 
   try {
-    // Ensure student exists first
-    const { data: existing } = await supabase
-      .from('students')
-      .select('id')
-      .eq('auth_id', userId)
-      .maybeSingle();
-
-    const studentId = existing?.id || (
-      await supabase
-        .from('students')
-        .insert([{ auth_id: userId, name: 'Estudiante', age: 12 }])
-        .select('id')
-        .single()
-    ).data?.id;
-
-    if (!studentId) {
-      return res.status(500).json({ error: 'Could not create student profile' });
+    const saved = await saveStudentJson(userId, 'grades_json', grades);
+    if (saved.error) {
+      console.error('student-grades save error:', saved.error);
+      return res.status(500).json({ error: saved.error });
     }
-
-    // Update grades_json column
-    const { error: updateErr } = await supabase
-      .from('students')
-      .update({ grades_json: grades })
-      .eq('id', studentId);
-
-    if (updateErr) {
-      console.error('student-grades update error:', updateErr.message);
-      return res.status(500).json({ error: updateErr.message });
-    }
-
     res.json({ success: true, grades });
   } catch (e) {
     console.error('student-grades post error:', e.message);
