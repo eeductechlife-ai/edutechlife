@@ -72,7 +72,7 @@ const deepseekLimiter = rateLimit({
   store,
   keyGenerator: userAwareKey,
   message: { error: 'Demasiadas solicitudes a DeepSeek, espera un momento.' },
-  skip: (req) => process.env.NODE_ENV !== 'production',
+  skip: () => process.env.NODE_ENV !== 'production',
 });
 
 const authLimiter = rateLimit({
@@ -82,7 +82,7 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
   store,
   message: { error: 'Demasiados intentos, espera un momento.' },
-  skip: (req) => process.env.NODE_ENV !== 'production',
+  skip: () => process.env.NODE_ENV !== 'production',
 });
 
 // Limiters granulares para endpoints específicos (IALab)
@@ -94,7 +94,7 @@ const chatMessageLimiter = rateLimit({
   store,
   message: { error: 'Demasiados mensajes. Intenta de nuevo en 1 minuto.', retryAfter: 60 },
   keyGenerator: userAwareKey,
-  skip: (req) => process.env.NODE_ENV !== 'production',
+  skip: () => process.env.NODE_ENV !== 'production',
 });
 
 const examSubmissionLimiter = rateLimit({
@@ -105,7 +105,7 @@ const examSubmissionLimiter = rateLimit({
   store,
   message: { error: 'Demasiados envíos. Intenta de nuevo después.', retryAfter: 30 },
   keyGenerator: (req) => `${userAwareKey(req)}-${req.params.examId || 'unknown'}`,
-  skip: (req) => process.env.NODE_ENV !== 'production',
+  skip: () => process.env.NODE_ENV !== 'production',
 });
 
 const challengeSubmissionLimiter = rateLimit({
@@ -116,7 +116,7 @@ const challengeSubmissionLimiter = rateLimit({
   store,
   message: { error: 'Demasiados envíos de desafío. Intenta de nuevo.', retryAfter: 60 },
   keyGenerator: (req) => `${userAwareKey(req)}-${req.params.challengeId || 'unknown'}`,
-  skip: (req) => process.env.NODE_ENV !== 'production',
+  skip: () => process.env.NODE_ENV !== 'production',
 });
 
 // Google TTS — billed per character; open to anonymous visitors (public Nico
@@ -131,7 +131,7 @@ const ttsLimiter = rateLimit({
   store,
   message: { error: 'Demasiadas solicitudes de voz. Espera un momento.', retryAfter: 60 },
   keyGenerator: userAwareKey,
-  skip: (req) => process.env.NODE_ENV !== 'production',
+  skip: () => process.env.NODE_ENV !== 'production',
 });
 
 const ttsHourlyLimiter = rateLimit({
@@ -142,7 +142,7 @@ const ttsHourlyLimiter = rateLimit({
   store,
   message: { error: 'Has alcanzado el límite de voz de esta hora.', retryAfter: 3600 },
   keyGenerator: userAwareKey,
-  skip: (req) => process.env.NODE_ENV !== 'production',
+  skip: () => process.env.NODE_ENV !== 'production',
 });
 
 // Google Vision API — billed per call; limit tightly per authenticated user
@@ -154,7 +154,7 @@ const visionLimiter = rateLimit({
   store,
   message: { error: 'Límite de escaneos alcanzado. Intenta de nuevo en 1 minuto.', retryAfter: 60 },
   keyGenerator: userAwareKey,
-  skip: (req) => process.env.NODE_ENV !== 'production',
+  skip: () => process.env.NODE_ENV !== 'production',
 });
 
 // Invitaciones a padres: cada una manda un correo a una dirección que escribe el
@@ -171,7 +171,7 @@ const parentalInviteLimiter = rateLimit({
     retryAfter: 3600,
   },
   keyGenerator: userAwareKey,
-  skip: (req) => process.env.NODE_ENV !== 'production',
+  skip: () => process.env.NODE_ENV !== 'production',
 });
 
 module.exports = {
