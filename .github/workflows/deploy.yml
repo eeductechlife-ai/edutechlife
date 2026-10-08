@@ -85,15 +85,16 @@ jobs:
           echo "CHROMEDRIVER_PATH=$(npm root -g)/chromedriver/lib/chromedriver/chromedriver" >> "$GITHUB_ENV"
 
       # `-s` (single-page): sin el, serve devuelve su pagina 404 para /ialab y
-      # /smartboard (no existen como archivos) y axe auditaba esa pagina, sin
-      # <title> ni lang, en vez de la app.
+      # /ingenia (no existen como archivos) y axe auditaba esa pagina, sin
+      # <title> ni lang, en vez de la app. Los productos son IngenIA e IALab:
+      # /smartboard es solo una redireccion heredada del nombre anterior.
       - name: Serve and audit (routes principales)
         run: |
           npx serve -s -l 4173 dist &
           sleep 3
           axe http://localhost:4173 --tags wcag2a,wcag21a --chromedriver-path "$CHROMEDRIVER_PATH" --exit
           axe http://localhost:4173/ialab --tags wcag2a,wcag21a --chromedriver-path "$CHROMEDRIVER_PATH" --exit
-          axe http://localhost:4173/smartboard --tags wcag2a,wcag21a --chromedriver-path "$CHROMEDRIVER_PATH" --exit
+          axe http://localhost:4173/ingenia --tags wcag2a,wcag21a --chromedriver-path "$CHROMEDRIVER_PATH" --exit
 
   # Solo manual (Actions > Deploy > Run workflow). La base de produccion se
   # construyo a mano desde el panel de Supabase: su historial de migraciones
