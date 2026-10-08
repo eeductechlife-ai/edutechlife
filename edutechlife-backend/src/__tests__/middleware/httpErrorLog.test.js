@@ -87,4 +87,10 @@ describe('httpErrorLog', () => {
     expect(counts[0].key).toBe('GET /api/ingenia/inventada/* 404');
     expect(counts[0].total).toBe(400);
   });
+
+  it('la raíz se etiqueta "/" y no "//*"', async () => {
+    const app = buildApp();
+    await request(app).get('/');
+    expect(getHttpErrorCounts()[0].key).toBe('GET / 404');
+  });
 });

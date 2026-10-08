@@ -19,7 +19,9 @@ const counters = new Map();
 function routeLabel(req) {
   if (req.route?.path) return `${req.baseUrl || ''}${req.route.path}`;
   const path = String(req.originalUrl || req.url || '').split('?')[0];
-  return `${path.split('/').slice(0, 4).join('/')}/*`;
+  const head = path.split('/').filter(Boolean).slice(0, 3);
+  // La raíz ("/") no tiene segmentos: antes salía como "//*".
+  return head.length ? `/${head.join('/')}/*` : '/';
 }
 
 function count(key) {
