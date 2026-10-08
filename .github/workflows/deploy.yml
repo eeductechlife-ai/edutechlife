@@ -75,16 +75,22 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      - name: Install axe-core CLI
-        run: npm install -g @axe-core/cli
+      # @axe-core/cli trae el ChromeDriver mas nuevo (155) y el runner trae Chrome
+      # 154: "session not created", y el job fallaba sin auditar nada. Se instala
+      # el ChromeDriver de la misma version mayor que el Chrome del runner.
+      - name: Install axe-core CLI (ChromeDriver acorde al Chrome del runner)
+        run: |
+          CHROME_MAJOR=$(google-chrome --version | grep -oE '[0-9]+' | head -1)
+          npm install -g @axe-core/cli "chromedriver@${CHROME_MAJOR}"
+          echo "CHROMEDRIVER_PATH=$(npm root -g)/chromedriver/lib/chromedriver/chromedriver" >> "$GITHUB_ENV"
 
       - name: Serve and audit (routes principales)
         run: |
           npx serve -l 4173 dist &
           sleep 3
-          axe http://localhost:4173 --tags wcag2a,wcag21a --exit
-          axe http://localhost:4173/ialab --tags wcag2a,wcag21a --exit
-          axe http://localhost:4173/smartboard --tags wcag2a,wcag21a --exit
+          axe http://localhost:4173 --tags wcag2a,wcag21a --chromedriver-path "$CHROMEDRIVER_PATH" --exit
+          axe http://localhost:4173/ialab --tags wcag2a,wcag21a --chromedriver-path "$CHROMEDRIVER_PATH" --exit
+          axe http://localhost:4173/smartboard --tags wcag2a,wcag21a --chromedriver-path "$CHROMEDRIVER_PATH" --exit
 
   # Solo manual (Actions > Deploy > Run workflow). La base de produccion se
   # construyo a mano desde el panel de Supabase: su historial de migraciones
