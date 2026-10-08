@@ -30,7 +30,7 @@ const loginOptions = [
     ),
   },
   {
-    id: "smartboard",
+    id: "ingenia",
     label: "IngenIA",
     path: "/sign-up/ingenia",
     icon: (

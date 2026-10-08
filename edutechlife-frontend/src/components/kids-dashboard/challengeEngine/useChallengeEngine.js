@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { callDeepseekSmartboard } from "../../../utils/api";
+import { callDeepseekIngenia } from "../../../utils/api";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { useFeedbackLog } from "../../../hooks/useFeedbackLog";
 import { useCompetencyTracking } from "../../../hooks/useCompetencyTracking";
@@ -203,7 +203,7 @@ export function useChallengeEngine() {
         difficulty.questions,
         dbas,
       );
-      const result = await callDeepseekSmartboard(prompt, {
+      const result = await callDeepseekIngenia(prompt, {
         isJson: true,
         temperature: 0.8,
         maxTokens: 2500,

@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { callDeepseekSmartboard } from "../../../utils/api";
+import { callDeepseekIngenia } from "../../../utils/api";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import {
   getCurriculumPromptText,
@@ -49,9 +49,12 @@ async function loadPlanFromServer(attempts = 4) {
     const token = getAuthToken();
     if (token) {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/ingenia/improvement-plan`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          `${API_BASE_URL}/api/ingenia/improvement-plan`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
         if (!res.ok) return null;
         const data = await res.json();
         return data.plan || null;
@@ -360,10 +363,10 @@ ${vakRule}
 
       // 2) RESPALDO: generación por LLM (comportamiento anterior) si el motor
       //    no está disponible. Nunca dejamos al estudiante sin plan.
-      // callDeepseekSmartboard has no abort signal: race it against a timer
+      // callDeepseekIngenia has no abort signal: race it against a timer
       // so the spinner never stays forever.
       const res = await Promise.race([
-        callDeepseekSmartboard([{ role: "user", content: prompt }], {
+        callDeepseekIngenia([{ role: "user", content: prompt }], {
           temperature: 0.7,
           maxTokens: 2000,
           isJson: true,
@@ -390,7 +393,7 @@ ${vakRule}
           ? "Se necesita el permiso de tus padres para generar un plan de mejora. Pide a un adulto que autorice tu cuenta."
           : e.code === "TIMEOUT"
             ? "Dani se demoró mucho esta vez. Inténtalo otra vez."
-            : // callDeepseekSmartboard throws with `raw` when the reply isn't JSON
+            : // callDeepseekIngenia throws with `raw` when the reply isn't JSON
               e.code === "UNUSABLE" ||
                 e.raw !== undefined ||
                 e instanceof SyntaxError
@@ -476,9 +479,7 @@ ${vakRule}
         if (score == null) continue;
         getDbaForSubjectGrade(subject, grade)
           .slice(0, 3)
-          .forEach((d) =>
-            entries.push({ competencyId: d.id, score }),
-          );
+          .forEach((d) => entries.push({ competencyId: d.id, score }));
       }
       const token = getAuthToken();
       if (!studentDbId || !token || entries.length === 0) return;

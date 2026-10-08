@@ -11,7 +11,7 @@ const routeLogger = (req) => req.log || console;
 const router = Router();
 
 /**
- * GET /api/smartboard/data/:userId
+ * GET /api/ingenia/data/:userId
  * Obtener datos del IngenIA para un usuario
  */
 router.get('/data/:userId', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
@@ -49,7 +49,7 @@ router.get('/data/:userId', requireAuth, requireVerifiedParentalConsent, async (
 });
 
 /**
- * GET /api/smartboard/progress/:userId
+ * GET /api/ingenia/progress/:userId
  * Obtener progreso del estudiante en IngenIA
  */
 router.get('/progress/:userId', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
@@ -96,7 +96,7 @@ router.get('/progress/:userId', requireAuth, requireVerifiedParentalConsent, asy
 });
 
 /**
- * POST /api/smartboard/weekly-report
+ * POST /api/ingenia/weekly-report
  * Genera y envía por email el reporte semanal del hijo al padre
  */
 router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
@@ -171,7 +171,7 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
     // 3. Render + envío (sendEmail cae a log en dev si no hay Resend)
     const email = renderWeeklyEmail(summary, {
       studentName,
-      dashboardUrl: 'https://edutechlife.co/smartboard',
+      dashboardUrl: 'https://edutechlife.co/ingenia',
       mastery: masterySummary,
     });
 
@@ -200,7 +200,7 @@ router.post('/weekly-report', requireAuth, requireVerifiedParentalConsent, async
 });
 
 /**
- * GET /api/smartboard/wellbeing-status
+ * GET /api/ingenia/wellbeing-status
  * Estado agregado de bienestar del hijo para el padre (no expone contenido sensible)
  */
 router.get('/wellbeing-status', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
@@ -269,7 +269,7 @@ router.get('/wellbeing-status', requireAuth, requireVerifiedParentalConsent, asy
 router.get('/user-role', requireAuth, async (req, res) => {
   try {
     // Además del rol (padre/estudiante) se devuelve el producto de la cuenta
-    // (users.account_type, migración 090). Lo consumen el gate de /smartboard y
+    // (users.account_type, migración 090). Lo consumen el gate de /ingenia y
     // RoleProtectedRoute: hasta ahora leían profile.account_type de un hook que
     // no lo expone, así que el filtro por producto nunca se aplicaba.
     const [linksRes, profileRes] = await Promise.all([
@@ -299,7 +299,7 @@ router.get('/user-role', requireAuth, async (req, res) => {
 });
 
 /**
- * POST /api/smartboard/timetable
+ * POST /api/ingenia/timetable
  * Creates or replaces the student's active timetable and all its slots atomically.
  */
 router.post('/timetable', requireAuth, async (req, res) => {

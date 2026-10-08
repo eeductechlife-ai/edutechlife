@@ -84,17 +84,17 @@ export default function IngenIATranquilidadSection({ t, tranquilidad }) {
         >
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/10 text-white/90 text-[11px] font-bold uppercase tracking-widest mb-3 border border-white/10 backdrop-blur-sm">
             <Icon name="fa-shield" className="text-mint text-xs" />
-            {t("smartboard.landing_tranquility_badge")}
+            {t("ingenia.landing_tranquility_badge")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight mb-3">
-            {t("smartboard.landing_tranquility_title_line1")}
+            {t("ingenia.landing_tranquility_title_line1")}
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint pr-1">
-              {t("smartboard.landing_tranquility_title_line2")}
+              {t("ingenia.landing_tranquility_title_line2")}
             </span>
           </h2>
           <p className="text-sm text-white/70 leading-relaxed max-w-2xl mx-auto">
-            {t("smartboard.landing_tranquility_desc")}
+            {t("ingenia.landing_tranquility_desc")}
           </p>
         </motion.div>
 
@@ -146,7 +146,7 @@ export default function IngenIATranquilidadSection({ t, tranquilidad }) {
               <Icon name="fa-quote-left" className="text-white text-sm" />
             </div>
             <p className="text-white/80 text-xs italic max-w-md text-left">
-              {t("smartboard.landing_quote")}
+              {t("ingenia.landing_quote")}
             </p>
           </div>
         </motion.div>

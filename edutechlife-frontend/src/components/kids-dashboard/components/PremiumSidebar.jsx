@@ -352,7 +352,7 @@ const PremiumSidebar = memo(
           <motion.button
             onClick={onLogout}
             whileTap={{ scale: 0.98 }}
-            title={collapsed ? t("smartboard.logout") : undefined}
+            title={collapsed ? t("ingenia.logout") : undefined}
             className="w-full flex items-center py-2 rounded-xl text-xs font-semibold transition-all group"
             style={{ color: "#EF476F" }}
             onMouseEnter={(e) =>
@@ -373,7 +373,7 @@ const PremiumSidebar = memo(
                 className="ml-2"
                 style={{ color: darkMode ? "#FDA4AF" : "#BE123C" }}
               >
-                {t("smartboard.logout")}
+                {t("ingenia.logout")}
               </span>
             )}
           </motion.button>

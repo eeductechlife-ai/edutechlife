@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test';
 
 /**
- * SmartBoard E2E — rutas y meta públicas.
+ * IngenIA E2E — rutas y meta públicas.
  *
  * /smartboard sirve un HTML 200 OK aunque el dashboard 2.0 solo se hidrata
  * cuando hay sesión Clerk. Sin login, la app monta un <main> vacío / skeleton.
  * Estos tests cubren lo que se puede verificar sin credenciales:
  *  - las rutas responden 200 y no crashean
  *  - los meta tags de SEO están presentes
- *  - la landing pública `/conoce-smartboard` sirve como fallback informativo
+ *  - la landing pública `/conoce-ingenia` sirve como fallback informativo
  *  - los deep links no devuelven 404
  *
  * Los flujos autenticados (VAK, Dani chat, flashcards, mobile nav real) se
@@ -16,12 +16,12 @@ import { test, expect } from '@playwright/test';
  * de test), documentado en `docs/testing/e2e-auth.md`.
  */
 
-test.describe('SmartBoard @smoke', () => {
-  test('/smartboard responds 200 without runtime errors', async ({ page }) => {
+test.describe('IngenIA @smoke', () => {
+  test('/ingenia responds 200 without runtime errors', async ({ page }) => {
     const pageErrors: string[] = [];
     page.on('pageerror', (err) => pageErrors.push(err.message));
 
-    const res = await page.goto('/smartboard', {
+    const res = await page.goto('/ingenia', {
       waitUntil: 'domcontentloaded',
       timeout: 60000,
     });
@@ -30,8 +30,8 @@ test.describe('SmartBoard @smoke', () => {
     expect(pageErrors, `pageerror(s): ${pageErrors.join(' | ')}`).toEqual([]);
   });
 
-  test('/smartboard has SEO meta tags', async ({ page }) => {
-    await page.goto('/smartboard', {
+  test('/ingenia has SEO meta tags', async ({ page }) => {
+    await page.goto('/ingenia', {
       waitUntil: 'domcontentloaded',
       timeout: 60000,
     });
@@ -43,8 +43,8 @@ test.describe('SmartBoard @smoke', () => {
     );
   });
 
-  test('/conoce-smartboard is a working public info page', async ({ page }) => {
-    const res = await page.goto('/conoce-smartboard', {
+  test('/conoce-ingenia is a working public info page', async ({ page }) => {
+    const res = await page.goto('/conoce-ingenia', {
       waitUntil: 'domcontentloaded',
     });
     expect(res?.status()).toBe(200);
@@ -52,7 +52,7 @@ test.describe('SmartBoard @smoke', () => {
   });
 
   test('deep link /smartboard?tab=materias still returns 200', async ({ page }) => {
-    const res = await page.goto('/smartboard?tab=materias', {
+    const res = await page.goto('/ingenia?tab=materias', {
       waitUntil: 'domcontentloaded',
     });
     expect(res?.status()).toBe(200);
@@ -68,7 +68,7 @@ test.describe('SmartBoard @smoke', () => {
   });
 });
 
-test.describe('SmartBoard mobile @smoke', () => {
+test.describe('IngenIA mobile @smoke', () => {
   test.use({ viewport: { width: 375, height: 812 } });
 
   test('mobile /smartboard responds 200 without runtime errors', async ({
@@ -77,7 +77,7 @@ test.describe('SmartBoard mobile @smoke', () => {
     const pageErrors: string[] = [];
     page.on('pageerror', (err) => pageErrors.push(err.message));
 
-    const res = await page.goto('/smartboard', {
+    const res = await page.goto('/ingenia', {
       waitUntil: 'domcontentloaded',
       timeout: 60000,
     });

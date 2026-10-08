@@ -454,7 +454,7 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
                     .slice(0, 4)
                     .map((kc) => `¿Qué entiendes por "${kc.term}"?`),
                 });
-                window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+                window.dispatchEvent(new CustomEvent("ingenia:open-dani"));
                 setLastScanSummary(null);
               }}
               whileHover={{ scale: 1.02 }}

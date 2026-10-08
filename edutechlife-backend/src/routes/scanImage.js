@@ -5,7 +5,7 @@ const { extractTextWithGoogle } = require('../services/googleOcr');
 
 const router = Router();
 
-// POST /api/smartboard/scan-image
+// POST /api/ingenia/scan-image
 // Body: { imageBase64: "data:image/jpeg;base64,..." }
 // Returns: { text: "raw OCR text" }
 //

@@ -2,7 +2,7 @@
  * AGE-ADAPTIVE DESIGN SYSTEM — Phase 3
  * ============================================================
  * CSS variables and design tokens for age-group-specific styling
- * Applied via data-age-group attribute on SmartBoardKidsDashboard
+ * Applied via data-age-group attribute on IngenIAKidsDashboard
  *
  * Age Groups:
  * - early: 6-8 years (Grades K-2)
@@ -354,8 +354,8 @@
   transition-timing-function: var(--age-animation-easing);
 }
 
-/* ==================== CONCRETE SMARTBOARD OVERRIDES ==================== */
-/* Applied via [data-age-group] on SmartBoardKidsDashboard root element.
+/* ==================== CONCRETE INGENIA OVERRIDES ==================== */
+/* Applied via [data-age-group] on IngenIAKidsDashboard root element.
    These give real visual differentiation between the 3 tiers.           */
 
 /* ── EARLY (6–8 años): más grande, más táctil, más alegre ── */

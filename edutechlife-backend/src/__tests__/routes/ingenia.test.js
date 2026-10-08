@@ -40,8 +40,8 @@ require.cache[supabasePath] = {
 function createApp() {
   const app = express();
   app.use(express.json({ limit: '8mb' }));
-  const smartboardRoutes = require('../../routes/smartboard');
-  app.use('/api/smartboard', smartboardRoutes);
+  const ingeniaRoutes = require('../../routes/ingenia');
+  app.use('/api/ingenia', ingeniaRoutes);
   return app;
 }
 
@@ -49,7 +49,7 @@ let app;
 beforeAll(() => { app = createApp(); });
 beforeEach(() => { vi.clearAllMocks(); });
 
-describe('Smartboard GET /data/:userId', () => {
+describe('Ingenia GET /data/:userId', () => {
   it('returns 404 when data not found (PGRST116)', async () => {
     mockSupabase.from.mockReturnValue({
       select: vi.fn().mockReturnThis(),
@@ -58,7 +58,7 @@ describe('Smartboard GET /data/:userId', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/data/missing-user')
+      .get('/api/ingenia/data/missing-user')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'missing-user');
     expect(res.status).toBe(404);
@@ -81,7 +81,7 @@ describe('Smartboard GET /data/:userId', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/data/other-user')
+      .get('/api/ingenia/data/other-user')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id');
     expect(res.status).toBe(403);
@@ -96,7 +96,7 @@ describe('Smartboard GET /data/:userId', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/data/test-user-id')
+      .get('/api/ingenia/data/test-user-id')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id');
     expect(res.status).toBe(200);
@@ -104,7 +104,7 @@ describe('Smartboard GET /data/:userId', () => {
   });
 });
 
-describe('Smartboard GET /progress/:userId', () => {
+describe('Ingenia GET /progress/:userId', () => {
   it('returns 404 when progress not found', async () => {
     mockSupabase.from.mockReturnValue({
       select: vi.fn().mockReturnThis(),
@@ -113,7 +113,7 @@ describe('Smartboard GET /progress/:userId', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/progress/missing-user')
+      .get('/api/ingenia/progress/missing-user')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'missing-user');
     expect(res.status).toBe(404);
@@ -132,7 +132,7 @@ describe('Smartboard GET /progress/:userId', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/progress/test-user-id')
+      .get('/api/ingenia/progress/test-user-id')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id');
     expect(res.status).toBe(200);
@@ -141,7 +141,7 @@ describe('Smartboard GET /progress/:userId', () => {
   });
 });
 
-describe('Smartboard POST /weekly-report', () => {
+describe('Ingenia POST /weekly-report', () => {
   it('returns a preview summary without sending email', async () => {
     mockSupabase.from.mockReturnValue({
       select: vi.fn().mockReturnThis(),
@@ -153,7 +153,7 @@ describe('Smartboard POST /weekly-report', () => {
     });
 
     const res = await request(app)
-      .post('/api/smartboard/weekly-report')
+      .post('/api/ingenia/weekly-report')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'kid-1')
       .send({ preview: true });
@@ -171,7 +171,7 @@ describe('Smartboard POST /weekly-report', () => {
     });
 
     const res = await request(app)
-      .post('/api/smartboard/weekly-report')
+      .post('/api/ingenia/weekly-report')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'kid-1')
       .send({});
@@ -202,7 +202,7 @@ describe('Smartboard POST /weekly-report', () => {
       });
 
     const res = await request(app)
-      .post('/api/smartboard/weekly-report')
+      .post('/api/ingenia/weekly-report')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'kid-1')
       .send({});
@@ -212,7 +212,7 @@ describe('Smartboard POST /weekly-report', () => {
   });
 });
 
-describe('Smartboard GET /wellbeing-status', () => {
+describe('Ingenia GET /wellbeing-status', () => {
   const linksFor = (rows) => ({
     select: vi.fn().mockReturnThis(),
     eq: vi.fn().mockResolvedValue({ data: rows, error: null }),
@@ -237,7 +237,7 @@ describe('Smartboard GET /wellbeing-status', () => {
     setupWellbeing([{ student_user_id: 'kid-1' }], []);
 
     const res = await request(app)
-      .get('/api/smartboard/wellbeing-status')
+      .get('/api/ingenia/wellbeing-status')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'parent-1');
 
@@ -254,7 +254,7 @@ describe('Smartboard GET /wellbeing-status', () => {
     );
 
     const res = await request(app)
-      .get('/api/smartboard/wellbeing-status')
+      .get('/api/ingenia/wellbeing-status')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'parent-1');
 
@@ -269,7 +269,7 @@ describe('Smartboard GET /wellbeing-status', () => {
     setupWellbeing([{ student_user_id: 'kid-1' }], null, { code: '42P01' });
 
     const res = await request(app)
-      .get('/api/smartboard/wellbeing-status')
+      .get('/api/ingenia/wellbeing-status')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'parent-1');
 
@@ -279,7 +279,7 @@ describe('Smartboard GET /wellbeing-status', () => {
   });
 });
 
-describe('Smartboard DELETE /delete-user-data', () => {
+describe('Ingenia DELETE /delete-user-data', () => {
   it('deletes across all tables using the token identity and returns 200', async () => {
     const deleteEq = vi.fn().mockResolvedValue({ error: null });
     mockSupabase.from.mockReturnValue({
@@ -287,7 +287,7 @@ describe('Smartboard DELETE /delete-user-data', () => {
     });
 
     const res = await request(app)
-      .delete('/api/smartboard/delete-user-data')
+      .delete('/api/ingenia/delete-user-data')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'kid-123');
 
@@ -311,7 +311,7 @@ describe('Smartboard DELETE /delete-user-data', () => {
     });
 
     const res = await request(app)
-      .delete('/api/smartboard/delete-user-data')
+      .delete('/api/ingenia/delete-user-data')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'kid-123');
 
@@ -326,7 +326,7 @@ describe('Smartboard DELETE /delete-user-data', () => {
     });
 
     const res = await request(app)
-      .delete('/api/smartboard/delete-user-data')
+      .delete('/api/ingenia/delete-user-data')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'kid-123');
 
@@ -334,7 +334,7 @@ describe('Smartboard DELETE /delete-user-data', () => {
   });
 });
 
-describe('Smartboard GET /student-profile', () => {
+describe('Ingenia GET /student-profile', () => {
   it('returns student profile with all fields', async () => {
     mockSupabase.from.mockReturnValue({
       select: vi.fn().mockReturnThis(),
@@ -346,7 +346,7 @@ describe('Smartboard GET /student-profile', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/student-profile')
+      .get('/api/ingenia/student-profile')
       .set('x-test-user-id', 'kid-123');
 
     expect(res.status).toBe(200);
@@ -373,7 +373,7 @@ describe('Smartboard GET /student-profile', () => {
     mockSupabase.from.mockReturnValue(chain);
 
     const res = await request(app)
-      .get('/api/smartboard/student-profile')
+      .get('/api/ingenia/student-profile')
       .set('x-test-user-id', 'missing-user');
 
     expect(res.status).toBe(200);
@@ -392,7 +392,7 @@ describe('Smartboard GET /student-profile', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/student-profile')
+      .get('/api/ingenia/student-profile')
       .set('x-test-user-id', 'kid-123');
 
     expect(res.status).toBe(200);
@@ -401,7 +401,7 @@ describe('Smartboard GET /student-profile', () => {
   });
 });
 
-describe('Smartboard PUT /student-profile', () => {
+describe('Ingenia PUT /student-profile', () => {
   it('updates all fields successfully', async () => {
     mockSupabase.from.mockReturnValue({
       update: vi.fn().mockReturnThis(),
@@ -414,7 +414,7 @@ describe('Smartboard PUT /student-profile', () => {
     });
 
     const res = await request(app)
-      .put('/api/smartboard/student-profile')
+      .put('/api/ingenia/student-profile')
       .set('x-test-user-id', 'kid-123')
       .send({ name: 'Juan Pérez', age: 13, vakStyle: 'auditivo', school: 'Liceo', grade: '7A' });
 
@@ -437,7 +437,7 @@ describe('Smartboard PUT /student-profile', () => {
     });
 
     const res = await request(app)
-      .put('/api/smartboard/student-profile')
+      .put('/api/ingenia/student-profile')
       .set('x-test-user-id', 'kid-123')
       .send({ age: 14 });
 
@@ -458,7 +458,7 @@ describe('Smartboard PUT /student-profile', () => {
     mockSupabase.from.mockReturnValue(chain);
 
     const res = await request(app)
-      .put('/api/smartboard/student-profile')
+      .put('/api/ingenia/student-profile')
       .set('x-test-user-id', 'kid-123')
       .send({ avatarUrl: null });
 
@@ -468,7 +468,7 @@ describe('Smartboard PUT /student-profile', () => {
 
   it('returns 400 when age invalid', async () => {
     const res = await request(app)
-      .put('/api/smartboard/student-profile')
+      .put('/api/ingenia/student-profile')
       .set('x-test-user-id', 'kid-123')
       .send({ age: 99 });
 
@@ -478,7 +478,7 @@ describe('Smartboard PUT /student-profile', () => {
 
   it('returns 400 when vakStyle invalid', async () => {
     const res = await request(app)
-      .put('/api/smartboard/student-profile')
+      .put('/api/ingenia/student-profile')
       .set('x-test-user-id', 'kid-123')
       .send({ vakStyle: 'genio' });
 
@@ -488,7 +488,7 @@ describe('Smartboard PUT /student-profile', () => {
 
   it('returns 400 when name too long', async () => {
     const res = await request(app)
-      .put('/api/smartboard/student-profile')
+      .put('/api/ingenia/student-profile')
       .set('x-test-user-id', 'kid-123')
       .send({ name: 'x'.repeat(100) });
 
@@ -498,7 +498,7 @@ describe('Smartboard PUT /student-profile', () => {
 
   it('returns 400 when no fields to update', async () => {
     const res = await request(app)
-      .put('/api/smartboard/student-profile')
+      .put('/api/ingenia/student-profile')
       .set('x-test-user-id', 'kid-123')
       .send({});
 
@@ -522,7 +522,7 @@ describe('Smartboard PUT /student-profile', () => {
     mockSupabase.from.mockReturnValue(chain);
 
     const res = await request(app)
-      .put('/api/smartboard/student-profile')
+      .put('/api/ingenia/student-profile')
       .set('x-test-user-id', 'missing-user')
       .send({ age: 12 });
 
@@ -532,7 +532,7 @@ describe('Smartboard PUT /student-profile', () => {
   });
 });
 
-describe('Smartboard POST /student-profile/avatar', () => {
+describe('Ingenia POST /student-profile/avatar', () => {
   function mockStorageOk() {
     mockSupabase.storage = {
       from: vi.fn().mockReturnValue({
@@ -553,7 +553,7 @@ describe('Smartboard POST /student-profile/avatar', () => {
     mockStorageOk();
 
     const res = await request(app)
-      .post('/api/smartboard/student-profile/avatar')
+      .post('/api/ingenia/student-profile/avatar')
       .set('x-test-user-id', 'kid-123')
       .send({ dataUrl: tinyPng });
 
@@ -563,7 +563,7 @@ describe('Smartboard POST /student-profile/avatar', () => {
 
   it('returns 400 when dataUrl missing', async () => {
     const res = await request(app)
-      .post('/api/smartboard/student-profile/avatar')
+      .post('/api/ingenia/student-profile/avatar')
       .set('x-test-user-id', 'kid-123')
       .send({});
 
@@ -572,7 +572,7 @@ describe('Smartboard POST /student-profile/avatar', () => {
 
   it('returns 400 when not an image', async () => {
     const res = await request(app)
-      .post('/api/smartboard/student-profile/avatar')
+      .post('/api/ingenia/student-profile/avatar')
       .set('x-test-user-id', 'kid-123')
       .send({ dataUrl: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==' });
 
@@ -584,7 +584,7 @@ describe('Smartboard POST /student-profile/avatar', () => {
     const big = `data:image/png;base64,${'A'.repeat(3.5 * 1024 * 1024)}`;
 
     const res = await request(app)
-      .post('/api/smartboard/student-profile/avatar')
+      .post('/api/ingenia/student-profile/avatar')
       .set('x-test-user-id', 'kid-123')
       .send({ dataUrl: big });
 
@@ -600,7 +600,7 @@ describe('Smartboard POST /student-profile/avatar', () => {
     };
 
     const res = await request(app)
-      .post('/api/smartboard/student-profile/avatar')
+      .post('/api/ingenia/student-profile/avatar')
       .set('x-test-user-id', 'kid-123')
       .send({ dataUrl: tinyPng });
 
@@ -609,10 +609,10 @@ describe('Smartboard POST /student-profile/avatar', () => {
   });
 });
 
-describe('Smartboard POST /chat validation', () => {
+describe('Ingenia POST /chat validation', () => {
   it('returns 400 when messages missing', async () => {
     const res = await request(app)
-      .post('/api/smartboard/chat')
+      .post('/api/ingenia/chat')
       .set('Authorization', 'Bearer test-token')
       .send({});
     expect(res.status).toBe(400);
@@ -620,7 +620,7 @@ describe('Smartboard POST /chat validation', () => {
 
   it('returns 400 when messages empty', async () => {
     const res = await request(app)
-      .post('/api/smartboard/chat')
+      .post('/api/ingenia/chat')
       .set('Authorization', 'Bearer test-token')
       .send({ messages: [] });
     expect(res.status).toBe(400);
@@ -628,17 +628,17 @@ describe('Smartboard POST /chat validation', () => {
 
   it('returns 400 when message has no content', async () => {
     const res = await request(app)
-      .post('/api/smartboard/chat')
+      .post('/api/ingenia/chat')
       .set('Authorization', 'Bearer test-token')
       .send({ messages: [{ role: 'user' }] });
     expect(res.status).toBe(400);
   });
 });
 
-describe('Smartboard POST /parental-consent', () => {
+describe('Ingenia POST /parental-consent', () => {
   it('rejects invalid studentAge type', async () => {
     const res = await request(app)
-      .post('/api/smartboard/parental-consent')
+      .post('/api/ingenia/parental-consent')
       .set('x-test-user-id', 'kid-1')
       .send({ parentEmail: 'papa@x.co', studentAge: 'once' });
     expect(res.status).toBe(400);
@@ -646,7 +646,7 @@ describe('Smartboard POST /parental-consent', () => {
 
   it('rejects out-of-range studentAge', async () => {
     const res = await request(app)
-      .post('/api/smartboard/parental-consent')
+      .post('/api/ingenia/parental-consent')
       .set('x-test-user-id', 'kid-1')
       .send({ parentEmail: 'papa@x.co', studentAge: 99 });
     expect(res.status).toBe(400);
@@ -654,7 +654,7 @@ describe('Smartboard POST /parental-consent', () => {
 
   it('rejects invalid email', async () => {
     const res = await request(app)
-      .post('/api/smartboard/parental-consent')
+      .post('/api/ingenia/parental-consent')
       .set('x-test-user-id', 'kid-1')
       .send({ parentEmail: 'not-an-email', studentAge: 12 });
     expect(res.status).toBe(400);
@@ -677,7 +677,7 @@ describe('Smartboard POST /parental-consent', () => {
     mockSupabase.from.mockReturnValue(chain);
 
     const res = await request(app)
-      .post('/api/smartboard/parental-consent')
+      .post('/api/ingenia/parental-consent')
       .set('x-test-user-id', 'kid-1')
       .send({ parentEmail: 'papa@x.co', studentAge: 12 });
 
@@ -687,7 +687,7 @@ describe('Smartboard POST /parental-consent', () => {
   });
 });
 
-describe('Smartboard POST /parental-consent/verify', () => {
+describe('Ingenia POST /parental-consent/verify', () => {
   it('marks consent as verified when token matches', async () => {
     const chain = {
       update: vi.fn().mockReturnThis(),
@@ -701,7 +701,7 @@ describe('Smartboard POST /parental-consent/verify', () => {
     mockSupabase.from.mockReturnValue(chain);
 
     const res = await request(app)
-      .post('/api/smartboard/parental-consent/verify')
+      .post('/api/ingenia/parental-consent/verify')
       .send({ token: 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6' });
 
     expect(res.status).toBe(200);
@@ -718,7 +718,7 @@ describe('Smartboard POST /parental-consent/verify', () => {
     mockSupabase.from.mockReturnValue(chain);
 
     const res = await request(app)
-      .post('/api/smartboard/parental-consent/verify')
+      .post('/api/ingenia/parental-consent/verify')
       .send({ token: 'a1b2c3d4e5f6a1b2c3d4e5f6-no-such-token' });
 
     expect(res.status).toBe(404);
@@ -726,13 +726,13 @@ describe('Smartboard POST /parental-consent/verify', () => {
 
   it('returns 400 when token is missing or too short', async () => {
     const res = await request(app)
-      .post('/api/smartboard/parental-consent/verify')
+      .post('/api/ingenia/parental-consent/verify')
       .send({ token: 'short' });
     expect(res.status).toBe(400);
   });
 });
 
-describe('Smartboard GET /parental-consent/status', () => {
+describe('Ingenia GET /parental-consent/status', () => {
   it('returns none when no consent exists', async () => {
     mockSupabase.from.mockReturnValue({
       select: vi.fn().mockReturnThis(),
@@ -743,7 +743,7 @@ describe('Smartboard GET /parental-consent/status', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/parental-consent/status')
+      .get('/api/ingenia/parental-consent/status')
       .set('x-test-user-id', 'kid-1');
 
     expect(res.status).toBe(200);
@@ -771,7 +771,7 @@ describe('Smartboard GET /parental-consent/status', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/parental-consent/status')
+      .get('/api/ingenia/parental-consent/status')
       .set('x-test-user-id', 'kid-1');
 
     expect(res.status).toBe(200);
@@ -797,7 +797,7 @@ describe('Smartboard GET /parental-consent/status', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/parental-consent/status')
+      .get('/api/ingenia/parental-consent/status')
       .set('x-test-user-id', 'kid-1');
 
     expect(res.status).toBe(200);
@@ -806,10 +806,10 @@ describe('Smartboard GET /parental-consent/status', () => {
   });
 });
 
-describe('Smartboard GET /parental-consent/verify', () => {
+describe('Ingenia GET /parental-consent/verify', () => {
   it('returns 400 when token is missing or too short', async () => {
     const res = await request(app)
-      .get('/api/smartboard/parental-consent/verify?token=short');
+      .get('/api/ingenia/parental-consent/verify?token=short');
     expect(res.status).toBe(400);
   });
 
@@ -827,7 +827,7 @@ describe('Smartboard GET /parental-consent/verify', () => {
     mockSupabase.from.mockReturnValue(chain);
 
     const res = await request(app)
-      .get('/api/smartboard/parental-consent/verify?token=a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6');
+      .get('/api/ingenia/parental-consent/verify?token=a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6');
 
     expect(res.status).toBe(200);
     expect(res.headers['content-type']).toContain('text/html');
@@ -848,7 +848,7 @@ describe('Smartboard GET /parental-consent/verify', () => {
     mockSupabase.from.mockReturnValue(chain);
 
     const res = await request(app)
-      .get('/api/smartboard/parental-consent/verify?token=a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6');
+      .get('/api/ingenia/parental-consent/verify?token=a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6');
 
     expect(res.status).toBe(200);
     expect(res.text).toContain('ya verificado');
@@ -866,7 +866,7 @@ describe('Smartboard GET /parental-consent/verify', () => {
     mockSupabase.from.mockReturnValue(chain);
 
     const res = await request(app)
-      .get('/api/smartboard/parental-consent/verify?token=a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6');
+      .get('/api/ingenia/parental-consent/verify?token=a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6');
 
     expect(res.status).toBe(404);
     expect(res.text).toContain('Enlace no válido');

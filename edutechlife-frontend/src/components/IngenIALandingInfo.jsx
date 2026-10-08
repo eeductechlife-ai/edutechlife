@@ -45,14 +45,14 @@ const stepVariants = {
 };
 
 const getStepLabels = (t) => [
-  t("smartboard.landing_step_que_es"),
-  t("smartboard.landing_step_vak"),
-  t("smartboard.landing_step_beneficios"),
-  t("smartboard.landing_step_tranquilidad"),
-  t("smartboard.landing_step_como_funciona"),
-  t("smartboard.landing_step_planes"),
-  t("smartboard.landing_step_testimonios"),
-  t("smartboard.landing_step_faq"),
+  t("ingenia.landing_step_que_es"),
+  t("ingenia.landing_step_vak"),
+  t("ingenia.landing_step_beneficios"),
+  t("ingenia.landing_step_tranquilidad"),
+  t("ingenia.landing_step_como_funciona"),
+  t("ingenia.landing_step_planes"),
+  t("ingenia.landing_step_testimonios"),
+  t("ingenia.landing_step_faq"),
 ];
 
 const DOT_GRADIENTS = [
@@ -159,14 +159,14 @@ const IngenIALandingInfo = ({ onNavigate }) => {
   const progress = ((currentStep + 1) / totalSteps) * 100;
 
   const seoTitles = [
-    t("smartboard.landing_step_que_es"),
-    t("smartboard.landing_step_vak"),
-    t("smartboard.landing_step_beneficios"),
-    t("smartboard.landing_step_tranquilidad"),
-    t("smartboard.landing_step_como_funciona"),
-    t("smartboard.landing_step_planes"),
-    t("smartboard.landing_step_testimonios"),
-    t("smartboard.landing_step_faq"),
+    t("ingenia.landing_step_que_es"),
+    t("ingenia.landing_step_vak"),
+    t("ingenia.landing_step_beneficios"),
+    t("ingenia.landing_step_tranquilidad"),
+    t("ingenia.landing_step_como_funciona"),
+    t("ingenia.landing_step_planes"),
+    t("ingenia.landing_step_testimonios"),
+    t("ingenia.landing_step_faq"),
   ];
 
   const seoDescriptions = [
@@ -240,7 +240,7 @@ const IngenIALandingInfo = ({ onNavigate }) => {
             >
               ←
             </motion.span>
-            {t("smartboard.landing_prev")}
+            {t("ingenia.landing_prev")}
           </button>
         ) : (
           <div className="order-1" />
@@ -277,7 +277,7 @@ const IngenIALandingInfo = ({ onNavigate }) => {
             onClick={goNext}
             className="order-2 sm:order-3 group px-5 py-2.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-semibold flex items-center gap-1.5 shadow-premium"
           >
-            {t("smartboard.landing_next")}
+            {t("ingenia.landing_next")}
             <motion.span
               whileHover={{ x: 3 }}
               transition={{ type: "spring", stiffness: 300 }}
@@ -290,7 +290,7 @@ const IngenIALandingInfo = ({ onNavigate }) => {
             onClick={handleCta}
             className="order-2 sm:order-3 group px-5 py-2.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-semibold flex items-center gap-1.5 shadow-premium"
           >
-            {t("smartboard.landing_start_now")}
+            {t("ingenia.landing_start_now")}
           </button>
         )}
       </div>

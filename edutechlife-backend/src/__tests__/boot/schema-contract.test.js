@@ -26,7 +26,7 @@ const SCAN_FILES = [
   'src/services/missionEngine.js',
   'src/services/parentInsights.js',
   'src/services/metricsService.js',
-  'src/routes/smartboard.js',
+  'src/routes/ingenia.js',
 ];
 
 const FORBIDDEN_TOKENS = [
@@ -224,7 +224,7 @@ function columnTokensInWindow(windowSrc) {
 // ── Tests ────────────────────────────────────────────────────────────────────
 
 describe('schema contract', () => {
-  test('no quedan tokens legacy prohibidos en backend SmartBoard', () => {
+  test('no quedan tokens legacy prohibidos en backend IngenIA', () => {
     for (const rel of SCAN_FILES) {
       const src = readSource(rel);
       for (const token of FORBIDDEN_TOKENS) {
@@ -233,7 +233,7 @@ describe('schema contract', () => {
     }
   });
 
-  test('no queda sb_auth_token ni mastery_score en frontend SmartBoard', () => {
+  test('no queda sb_auth_token ni mastery_score en frontend IngenIA', () => {
     const dir = path.join(FRONTEND_ROOT, 'src');
     const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) =>
       e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)],

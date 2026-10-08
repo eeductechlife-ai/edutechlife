@@ -135,8 +135,8 @@ function studentMock() {
 function createApp() {
   const app = express();
   app.use(express.json({ limit: '8mb' }));
-  const routes = require('../../routes/smartboard');
-  app.use('/api/smartboard', routes);
+  const routes = require('../../routes/ingenia');
+  app.use('/api/ingenia', routes);
   return app;
 }
 
@@ -159,7 +159,7 @@ beforeEach(() => {
 describe('GET /adaptive/state', () => {
   it('returns 400 when studentId missing', async () => {
     const res = await request(app)
-      .get('/api/smartboard/adaptive/state')
+      .get('/api/ingenia/adaptive/state')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
     expect(res.status).toBe(400);
@@ -168,7 +168,7 @@ describe('GET /adaptive/state', () => {
   it('returns state for valid student', async () => {
     mockGetStudentState.mockResolvedValue({ mastery: [], streaks: { current: 3 } });
     const res = await request(app)
-      .get('/api/smartboard/adaptive/state?studentId=student-1')
+      .get('/api/ingenia/adaptive/state?studentId=student-1')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
     expect(res.status).toBe(200);
@@ -185,7 +185,7 @@ describe('GET /adaptive/next-action', () => {
     mockGenerateRecs.mockReturnValue([{ id: 'r1', reason: 'low mastery' }]);
 
     const res = await request(app)
-      .get('/api/smartboard/adaptive/next-action?studentId=student-1')
+      .get('/api/ingenia/adaptive/next-action?studentId=student-1')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
 
@@ -204,7 +204,7 @@ describe('POST /adaptive/daily-plan', () => {
     mockSavePlan.mockResolvedValue();
 
     const res = await request(app)
-      .post('/api/smartboard/adaptive/daily-plan')
+      .post('/api/ingenia/adaptive/daily-plan')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id')
       .send({ studentId: 'student-1' });
@@ -219,7 +219,7 @@ describe('POST /adaptive/daily-plan', () => {
     mockSavePlan.mockResolvedValue();
 
     await request(app)
-      .post('/api/smartboard/adaptive/daily-plan')
+      .post('/api/ingenia/adaptive/daily-plan')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id')
       .send({ studentId: 'student-1', availableMinutes: 999 });
@@ -237,7 +237,7 @@ describe('POST /adaptive/weekly-plan', () => {
     mockSavePlan.mockResolvedValue();
 
     const res = await request(app)
-      .post('/api/smartboard/adaptive/weekly-plan')
+      .post('/api/ingenia/adaptive/weekly-plan')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id')
       .send({ studentId: 'student-1' });
@@ -258,7 +258,7 @@ describe('POST /adaptive/recommendations', () => {
     });
 
     const res = await request(app)
-      .post('/api/smartboard/adaptive/recommendations')
+      .post('/api/ingenia/adaptive/recommendations')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id')
       .send({ studentId: 'student-1' });
@@ -278,7 +278,7 @@ describe('GET /adaptive/mastery', () => {
     ]);
 
     const res = await request(app)
-      .get('/api/smartboard/adaptive/mastery?studentId=student-1')
+      .get('/api/ingenia/adaptive/mastery?studentId=student-1')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
 
@@ -292,7 +292,7 @@ describe('GET /adaptive/mastery', () => {
 describe('GET /parent/insights', () => {
   it('returns 400 without studentId', async () => {
     const res = await request(app)
-      .get('/api/smartboard/parent/insights')
+      .get('/api/ingenia/parent/insights')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
     expect(res.status).toBe(400);
@@ -304,7 +304,7 @@ describe('GET /parent/insights', () => {
     ]);
 
     const res = await request(app)
-      .get('/api/smartboard/parent/insights?studentId=student-1')
+      .get('/api/ingenia/parent/insights?studentId=student-1')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
 
@@ -320,7 +320,7 @@ describe('GET /parent/learning-graph', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/parent/learning-graph?studentId=student-1')
+      .get('/api/ingenia/parent/learning-graph?studentId=student-1')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
 
@@ -338,7 +338,7 @@ describe('GET /adaptive/warnings', () => {
     ]);
 
     const res = await request(app)
-      .get('/api/smartboard/adaptive/warnings?studentId=student-1')
+      .get('/api/ingenia/adaptive/warnings?studentId=student-1')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
 
@@ -370,7 +370,7 @@ describe('POST /adaptive/warnings/:id/resolve', () => {
     mockResolveWarning.mockResolvedValue();
 
     const res = await request(app)
-      .post('/api/smartboard/adaptive/warnings/w1/resolve')
+      .post('/api/ingenia/adaptive/warnings/w1/resolve')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
 
@@ -386,7 +386,7 @@ describe('POST /adaptive/warnings/:id/resolve', () => {
     });
 
     const res = await request(app)
-      .post('/api/smartboard/adaptive/warnings/bad/resolve')
+      .post('/api/ingenia/adaptive/warnings/bad/resolve')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
 
@@ -403,7 +403,7 @@ describe('GET /gamification/missions', () => {
     ]);
 
     const res = await request(app)
-      .get('/api/smartboard/gamification/missions?studentId=student-1')
+      .get('/api/ingenia/gamification/missions?studentId=student-1')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
 
@@ -419,7 +419,7 @@ describe('GET /gamification/badges', () => {
     ]);
 
     const res = await request(app)
-      .get('/api/smartboard/gamification/badges?studentId=student-1')
+      .get('/api/ingenia/gamification/badges?studentId=student-1')
       .set('Authorization', 'Bearer t')
       .set('x-test-user-id', 'test-user-id');
 

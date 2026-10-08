@@ -37,13 +37,13 @@ const STATS = [
     target: 2500,
     duration: 1800,
     prefix: "+",
-    labelKey: "smartboard.landing_stat_students",
+    labelKey: "ingenia.landing_stat_students",
     color: "text-petroleum",
   },
   {
     target: 94,
     duration: 2000,
-    labelKey: "smartboard.landing_stat_improvement",
+    labelKey: "ingenia.landing_stat_improvement",
     color: "text-primary-light",
     suffix: "%",
   },
@@ -51,7 +51,7 @@ const STATS = [
     target: 12000,
     duration: 2200,
     prefix: "+",
-    labelKey: "smartboard.landing_stat_hours",
+    labelKey: "ingenia.landing_stat_hours",
     color: "text-mint",
   },
 ];
@@ -107,7 +107,7 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
               name="fa-arrow-left"
               className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5"
             />
-            {t("smartboard.back")}
+            {t("ingenia.back")}
           </button>
           <Link
             to="/"
@@ -138,27 +138,27 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
               variants={childVariant}
               className="badge-clay mb-5 inline-block rounded-full bg-mint/10 px-3.5 py-1 text-[11px] font-bold uppercase tracking-widest text-petroleum"
             >
-              {t("smartboard.landing_hero_eyebrow")}
+              {t("ingenia.landing_hero_eyebrow")}
             </motion.span>
 
             <motion.h1
               variants={childVariant}
               className="text-2xl font-black leading-tight text-petroleum sm:text-3xl md:text-4xl lg:text-[2.6rem]"
             >
-              {t("smartboard.landing_hero_line1")}
+              {t("ingenia.landing_hero_line1")}
               <br />
               <span className="animate-shimmer bg-gradient-to-r from-primary-light via-corporate to-petroleum bg-[length:200%_auto] bg-clip-text pr-1 text-transparent">
-                {t("smartboard.landing_hero_line2")}
+                {t("ingenia.landing_hero_line2")}
               </span>
               <br />
-              {t("smartboard.landing_hero_line3")}
+              {t("ingenia.landing_hero_line3")}
             </motion.h1>
 
             <motion.p
               variants={childVariant}
               className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-base lg:mx-0"
             >
-              {t("smartboard.landing_hero_desc")}
+              {t("ingenia.landing_hero_desc")}
             </motion.p>
 
             <motion.div
@@ -171,7 +171,7 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
               >
                 <span className="absolute inset-0 h-full w-[200%] -translate-x-full skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover:animate-sweep" />
                 <span className="relative z-10 font-semibold text-white">
-                  {t("smartboard.landing_cta_try")}
+                  {t("ingenia.landing_cta_try")}
                 </span>
                 <span className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                   <Icon
@@ -181,7 +181,7 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
                 </span>
               </MagneticButton>
               <p className="text-xs text-slate-500">
-                {t("smartboard.landing_trial_terms")}
+                {t("ingenia.landing_trial_terms")}
               </p>
             </motion.div>
           </motion.div>
@@ -210,14 +210,14 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
           >
             <span className="absolute inset-0 h-full w-[200%] -translate-x-full skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover:animate-sweep" />
             <span className="relative z-10 font-semibold text-white">
-              {t("smartboard.landing_cta_try")}
+              {t("ingenia.landing_cta_try")}
             </span>
             <span className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
               <Icon name="fa-arrow-right" className="h-3.5 w-3.5 text-white" />
             </span>
           </MagneticButton>
           <p className="text-xs text-slate-500">
-            {t("smartboard.landing_trial_terms")}
+            {t("ingenia.landing_trial_terms")}
           </p>
         </motion.div>
 
@@ -245,10 +245,10 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
               </div>
               <div className="text-left">
                 <p className="text-xs font-bold text-petroleum sm:text-sm">
-                  {t("smartboard.landing_trust_badge")}
+                  {t("ingenia.landing_trust_badge")}
                 </p>
                 <p className="text-[11px] text-slate-500 sm:text-xs">
-                  {t("smartboard.landing_trust_subtitle")}
+                  {t("ingenia.landing_trust_subtitle")}
                 </p>
               </div>
             </div>

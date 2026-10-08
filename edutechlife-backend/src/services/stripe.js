@@ -8,7 +8,7 @@ function getStripe() {
 
 // Planes de IngenIA (menores 6–16): su estado vive en `students`, no en
 // `users`. Mantiene los datos de IALab (adultos) y IngenIA (niños) separados.
-const SMARTBOARD_PLAN_IDS = new Set(['smartboard_premium']);
+const INGENIA_PLAN_IDS = new Set(['smartboard_premium']);
 
 /**
  * Persiste el estado de suscripción en Supabase, en la tabla correcta según el
@@ -25,7 +25,7 @@ async function updateSupabaseUserSubscription(userId, { planId, subscriptionId, 
   if (!userId) return;
   const active = status === 'active';
   try {
-    if (SMARTBOARD_PLAN_IDS.has(planId)) {
+    if (INGENIA_PLAN_IDS.has(planId)) {
       const { error } = await supabase
         .from('students')
         .update({ subscription_tier: active ? 'premium' : 'free' })

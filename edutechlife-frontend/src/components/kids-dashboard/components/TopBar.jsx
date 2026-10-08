@@ -116,7 +116,7 @@ const TopBar = memo(
                 : "linear-gradient(135deg, rgba(251,133,0,0.12), rgba(255,209,102,0.10))",
             }}
             whileHover={{ scale: 1.03, y: -1 }}
-            title={t("smartboard.streak_title")}
+            title={t("ingenia.streak_title")}
             role="img"
             aria-label={`Racha: ${streak?.current ?? 0} días seguidos practicando`}
           >
@@ -136,7 +136,7 @@ const TopBar = memo(
             <span
               className={`hidden sm:block text-xs font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
             >
-              {(streak?.current ?? 0) === 1 ? "día" : t("smartboard.days")}
+              {(streak?.current ?? 0) === 1 ? "día" : t("ingenia.days")}
             </span>
           </motion.div>
 
@@ -169,7 +169,7 @@ const TopBar = memo(
             <span
               className={`hidden sm:block text-xs font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
             >
-              {t("smartboard.points_display")}
+              {t("ingenia.points_display")}
             </span>
           </motion.div>
 
@@ -178,7 +178,7 @@ const TopBar = memo(
             <button
               ref={bellRef}
               onClick={() => setNotifOpen((v) => !v)}
-              aria-label={t("smartboard.notifications")}
+              aria-label={t("ingenia.notifications")}
               aria-haspopup="true"
               aria-expanded={notifOpen}
               className={`relative flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-xl md:rounded-2xl transition-colors ${

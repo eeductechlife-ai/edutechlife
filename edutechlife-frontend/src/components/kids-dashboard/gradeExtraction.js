@@ -2,7 +2,7 @@
  * Pure async helpers for grade extraction (image/PDF) and analysis prompt building.
  * Extracted from useGradeScanner to keep the hook under 500 lines.
  */
-import { callDeepseekSmartboard } from "../../utils/api";
+import { callDeepseekIngenia } from "../../utils/api";
 import { getAvgScore, normalizeGradeStr, uid } from "./gradeUtils";
 
 /* ─── Prompt template ──────────────────────────────────────────────── */
@@ -37,7 +37,7 @@ async function extractFromPdf(file) {
   const { parsePDF } = await import("../../utils/documentParser");
   const text = await parsePDF(file);
   if (!text) return { grades: [], gradeLevel: null };
-  const res = await callDeepseekSmartboard(
+  const res = await callDeepseekIngenia(
     [{ role: "user", content: GRADE_PROMPT(text) }],
     { temperature: 0.05, maxTokens: 1500, isJson: true },
   );
@@ -74,7 +74,7 @@ async function extractFromImage(file) {
   const { text } = await resp.json();
   if (!text || text.trim().length <= 10)
     return { grades: [], gradeLevel: null };
-  const res = await callDeepseekSmartboard(
+  const res = await callDeepseekIngenia(
     [{ role: "user", content: GRADE_PROMPT(text) }],
     { temperature: 0.05, maxTokens: 1500, isJson: true },
   );

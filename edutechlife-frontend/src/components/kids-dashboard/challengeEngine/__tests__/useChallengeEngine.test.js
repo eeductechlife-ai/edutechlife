@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 
 vi.mock("../../../../utils/api", () => ({
-  callDeepseekSmartboard: vi.fn(),
+  callDeepseekIngenia: vi.fn(),
 }));
 vi.mock("../../../../context/IngenIAKidsContext", () => ({
   useIngenIAKids: () => ({
@@ -103,8 +103,8 @@ describe("useChallengeEngine.submitAnswer", () => {
     // Manually set up questions via internal state by starting a challenge
     // We need to simulate having questions loaded. Use setSubject + setDifficulty
     // then directly test submitAnswer by calling startChallenge with mocked API.
-    const { callDeepseekSmartboard } = await import("../../../../utils/api");
-    callDeepseekSmartboard.mockResolvedValueOnce({
+    const { callDeepseekIngenia } = await import("../../../../utils/api");
+    callDeepseekIngenia.mockResolvedValueOnce({
       questions: [
         {
           question: "1+1?",

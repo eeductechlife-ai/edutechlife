@@ -87,7 +87,7 @@ export function useActivityUpload() {
     (analysis) => {
       setDocumentForDani(analysis);
       // The dashboard opens Dani on this event (there is no #openDaniChat).
-      window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+      window.dispatchEvent(new CustomEvent("ingenia:open-dani"));
     },
     [setDocumentForDani],
   );

@@ -147,7 +147,7 @@ const PersonalizedPlan = () => {
     if (!sid || !token) return;
     setLoadingPlan(true);
     Promise.all([
-      fetch(`${API_BASE}/api/smartboard/adaptive/daily-plan`, {
+      fetch(`${API_BASE}/api/ingenia/adaptive/daily-plan`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -157,7 +157,7 @@ const PersonalizedPlan = () => {
       })
         .then((r) => (r.ok ? r.json() : null))
         .catch(() => null),
-      fetch(`${API_BASE}/api/smartboard/adaptive/weekly-plan`, {
+      fetch(`${API_BASE}/api/ingenia/adaptive/weekly-plan`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

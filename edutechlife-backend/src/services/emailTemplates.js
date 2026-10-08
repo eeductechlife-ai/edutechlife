@@ -308,7 +308,7 @@ function escapeHtml(text) {
  * @returns {Promise<Object>} - Email object with subject, html, text
  */
 async function generateParentVerificationEmail({ _parentEmail, studentAge, token }) {
-  const verifyUrl = `https://edutechlife.co/api/smartboard/parental-consent/verify?token=${token}`;
+  const verifyUrl = `https://edutechlife.co/api/ingenia/parental-consent/verify?token=${token}`;
 
   const html = await loadTemplate('parent-verification', {
     studentAge,

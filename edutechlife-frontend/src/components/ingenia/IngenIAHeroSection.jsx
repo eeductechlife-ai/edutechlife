@@ -36,19 +36,19 @@ export default function IngenIAHeroSection({
   const STATS = [
     {
       value: `+${countStudents.toLocaleString()}`,
-      label: t("smartboard.landing_stat_students"),
+      label: t("ingenia.landing_stat_students"),
       icon: "fa-graduation-cap",
       color: "text-petroleum",
     },
     {
       value: `${countImprovement}%`,
-      label: t("smartboard.landing_stat_improvement"),
+      label: t("ingenia.landing_stat_improvement"),
       icon: "fa-chart-line",
       color: "text-primary-light",
     },
     {
       value: `+${countHours.toLocaleString()}`,
-      label: t("smartboard.landing_stat_hours"),
+      label: t("ingenia.landing_stat_hours"),
       icon: "fa-clock",
       color: "text-mint",
     },
@@ -56,22 +56,22 @@ export default function IngenIAHeroSection({
 
   const PAIN_POINTS = [
     {
-      text: t("smartboard.landing_pain_point1"),
+      text: t("ingenia.landing_pain_point1"),
       icon: "fa-exclamation-triangle",
       color: "bg-petroleum/5 border-petroleum/10 text-petroleum",
     },
     {
-      text: t("smartboard.landing_pain_point2"),
+      text: t("ingenia.landing_pain_point2"),
       icon: "fa-gamepad",
       color: "bg-primary-light/5 border-primary-light/10 text-primary-light",
     },
     {
-      text: t("smartboard.landing_pain_point3"),
+      text: t("ingenia.landing_pain_point3"),
       icon: "fa-eye-slash",
       color: "bg-mint/5 border-mint/10 text-mint",
     },
     {
-      text: t("smartboard.landing_pain_point4"),
+      text: t("ingenia.landing_pain_point4"),
       icon: "fa-circle-exclamation",
       color: "bg-corporate/5 border-corporate/10 text-corporate",
     },
@@ -85,10 +85,10 @@ export default function IngenIAHeroSection({
   ];
 
   const PAIN_SOLUTIONS = [
-    t("smartboard.landing_solution1"),
-    t("smartboard.landing_solution2"),
-    t("smartboard.landing_solution3"),
-    t("smartboard.landing_solution4"),
+    t("ingenia.landing_solution1"),
+    t("ingenia.landing_solution2"),
+    t("ingenia.landing_solution3"),
+    t("ingenia.landing_solution4"),
   ];
 
   const vakBadges = [
@@ -149,7 +149,7 @@ export default function IngenIAHeroSection({
       {onBack && (
         <button
           onClick={() => onBack()}
-          aria-label={t("smartboard.back")}
+          aria-label={t("ingenia.back")}
           className="fixed top-6 left-6 z-50 w-9 h-9 rounded-full bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm flex items-center justify-center text-petroleum hover:bg-petroleum hover:text-white transition-all duration-300"
         >
           <Icon name="fa-arrow-left" className="text-xs" />
@@ -172,20 +172,20 @@ export default function IngenIAHeroSection({
               className="flex flex-col items-center lg:items-start text-center lg:text-left"
             >
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-petroleum tracking-tight leading-[1.05] mb-4 max-w-4xl">
-                {t("smartboard.landing_hero_line1")}
+                {t("ingenia.landing_hero_line1")}
                 <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light via-corporate to-petroleum bg-[length:200%_auto] animate-shimmer">
-                  {t("smartboard.landing_hero_line2")}
+                  {t("ingenia.landing_hero_line2")}
                 </span>
                 <br />
-                {t("smartboard.landing_hero_line3")}
+                {t("ingenia.landing_hero_line3")}
               </h1>
 
               <motion.p
                 {...(!prefersReducedMotion ? springUp(0.12) : {})}
                 className="text-sm sm:text-base text-slate-500 leading-relaxed max-w-2xl mb-8"
               >
-                {t("smartboard.landing_hero_desc")}
+                {t("ingenia.landing_hero_desc")}
               </motion.p>
 
               <motion.div
@@ -204,10 +204,10 @@ export default function IngenIAHeroSection({
                 </div>
                 <div className="text-left">
                   <p className="text-xs sm:text-sm font-bold text-petroleum">
-                    {t("smartboard.landing_trust_badge")}
+                    {t("ingenia.landing_trust_badge")}
                   </p>
                   <p className="text-xs text-slate-500">
-                    {t("smartboard.landing_trust_subtitle")}
+                    {t("ingenia.landing_trust_subtitle")}
                   </p>
                 </div>
               </motion.div>
@@ -240,7 +240,7 @@ export default function IngenIAHeroSection({
               >
                 <span className="absolute inset-0 w-[200%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover:animate-sweep skew-x-[-20deg]" />
                 <span className="text-white relative z-10 font-semibold">
-                  {t("smartboard.landing_cta_try")}
+                  {t("ingenia.landing_cta_try")}
                 </span>
                 <Icon
                   name="fa-arrow-right"
@@ -248,7 +248,7 @@ export default function IngenIAHeroSection({
                 />
               </MagneticButton>
               <p className="text-xs text-slate-500 text-center">
-                {t("smartboard.landing_trial_terms")}
+                {t("ingenia.landing_trial_terms")}
               </p>
             </motion.div>
           </div>
@@ -402,7 +402,7 @@ export default function IngenIAHeroSection({
                       aria-hidden="true"
                     />
                     <span className="text-[9px] font-bold text-white/70 uppercase tracking-[0.2em]">
-                      {t("smartboard.landing_hero_brain_label")}
+                      {t("ingenia.landing_hero_brain_label")}
                     </span>
                   </motion.div>
                 </motion.div>

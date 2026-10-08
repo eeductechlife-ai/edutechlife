@@ -14,7 +14,7 @@ export const helpArticles = [
     tiempo: "12 min",
   },
   {
-    id: "tutorial-smartboard",
+    id: "tutorial-ingenia",
     titulo: "Tutorial IngenIA",
     descripcion: "Configuração e uso da lousa interativa",
     icono: "fa-chalkboard",
@@ -167,7 +167,7 @@ export const helpArticleContents = {
       },
     ],
   },
-  "tutorial-smartboard": {
+  "tutorial-ingenia": {
     titulo: "Tutorial IngenIA",
     introduccion:
       "O IngenIA é a solução de lousa interativa inteligente da Edutechlife. Este guia ajudará você a configurar e utilizar todas as funções para maximizar o engajamento de seus estudantes.",

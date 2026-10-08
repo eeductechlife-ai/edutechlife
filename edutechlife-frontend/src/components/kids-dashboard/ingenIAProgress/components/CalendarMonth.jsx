@@ -36,7 +36,7 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
         📅 {monthName}
       </h3>
       <div className="grid grid-cols-7 gap-1.5">
-        {t("smartboard.calendar_days")
+        {t("ingenia.calendar_days")
           .split("")
           .map((d, i) => (
             <span
@@ -73,7 +73,7 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
               }
               title={
                 hour
-                  ? t("smartboard.connected_at", { day: d.day, hour })
+                  ? t("ingenia.connected_at", { day: d.day, hour })
                   : `${d.day}`
               }
             >
@@ -94,13 +94,13 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
                 "linear-gradient(135deg, #FFD166 0%, #FB8500 60%, #F3722C 100%)",
             }}
           />{" "}
-          {t("smartboard.connected")}
+          {t("ingenia.connected")}
         </span>
         <span className="flex items-center gap-1">
           <span
             className={`w-2.5 h-2.5 rounded-full ${darkMode ? "bg-[#334155]" : "bg-[#F1F5F9]"}`}
           />{" "}
-          {t("smartboard.not_connected")}
+          {t("ingenia.not_connected")}
         </span>
       </div>
     </motion.div>

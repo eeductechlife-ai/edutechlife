@@ -169,7 +169,7 @@ function createTabRenderer(deps) {
       ),
       className: "space-y-5 md:space-y-6",
       errorKey: "inicio",
-      errorMsg: t("smartboard.error_load_home"),
+      errorMsg: t("ingenia.error_load_home"),
     },
     perfil: {
       component: () => (
@@ -189,7 +189,7 @@ function createTabRenderer(deps) {
         <ExplorarTab {...explorarProps} defaultView="misiones" />
       ),
       errorKey: "misiones",
-      errorMsg: t("smartboard.error_load_missions"),
+      errorMsg: t("ingenia.error_load_missions"),
     },
     noticias: {
       // Backward-compat for URL ?tab=noticias — opens ExplorarTab on noticias view
@@ -205,7 +205,7 @@ function createTabRenderer(deps) {
         <MateriasTab {...materiasProps} defaultView="materias" />
       ),
       errorKey: "materias",
-      errorMsg: t("smartboard.error_load_subjects"),
+      errorMsg: t("ingenia.error_load_subjects"),
     },
     horario: {
       component: () => <MateriasTab {...materiasProps} defaultView="horario" />,
@@ -236,7 +236,7 @@ function createTabRenderer(deps) {
         </div>
       ),
       errorKey: "puntos",
-      errorMsg: t("smartboard.error_load_points"),
+      errorMsg: t("ingenia.error_load_points"),
     },
     vak: {
       component: () => (
@@ -253,7 +253,7 @@ function createTabRenderer(deps) {
         </>
       ),
       errorKey: "vak",
-      errorMsg: t("smartboard.error_load_vak"),
+      errorMsg: t("ingenia.error_load_vak"),
       className: "space-y-6",
     },
     oral: {

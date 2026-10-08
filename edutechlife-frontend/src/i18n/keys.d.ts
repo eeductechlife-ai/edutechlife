@@ -362,6 +362,11 @@ export type TranslationKeys = {
   "badge.obtained": string;
   "calendar.activity_desc_placeholder": string;
   "calendar.activity_title_placeholder": string;
+  "celebrate.cta": string;
+  "celebrate.module_body": string;
+  "celebrate.module_title": string;
+  "celebrate.streak_body": string;
+  "celebrate.streak_title": string;
   "certificate.awarded_to": string;
   "certificate.cert_number_pdf": string;
   "certificate.completed_course": string;
@@ -403,12 +408,14 @@ export type TranslationKeys = {
   "chatbot.suggest": string;
   "chatbot.thinking": string;
   "chatbot.welcome_back": string;
+  "common.back": string;
   "common.cancel": string;
   "common.close": string;
   "common.loading": string;
   "common.mark_viewed": string;
   "common.not_available": string;
   "common.retry": string;
+  "common.user_not_found": string;
   "consultoria.ai_tools_access": string;
   "consultoria.ai_tools_architect_desc": string;
   "consultoria.ai_tools_architect_feature1": string;
@@ -564,6 +571,51 @@ export type TranslationKeys = {
   "contact.thanks_title": string;
   "contact.title": string;
   "contact.weekdays": string;
+  "conv.bien_auditivo": string;
+  "conv.bien_default": string;
+  "conv.bien_kinestesico": string;
+  "conv.bien_visual": string;
+  "conv.card_hint": string;
+  "conv.card_title": string;
+  "conv.excellent_auditivo": string;
+  "conv.excellent_default": string;
+  "conv.excellent_kinestesico": string;
+  "conv.excellent_visual": string;
+  "conv.inactive_auditivo": string;
+  "conv.inactive_default": string;
+  "conv.inactive_kinestesico": string;
+  "conv.inactive_visual": string;
+  "conv.kit_bien_q1a": string;
+  "conv.kit_bien_q1b": string;
+  "conv.kit_bien_q2a": string;
+  "conv.kit_bien_q2b": string;
+  "conv.kit_bien_q3a": string;
+  "conv.kit_bien_q3b": string;
+  "conv.kit_exc_q1a": string;
+  "conv.kit_exc_q1b": string;
+  "conv.kit_exc_q2a": string;
+  "conv.kit_exc_q2b": string;
+  "conv.kit_exc_q3a": string;
+  "conv.kit_exc_q3b": string;
+  "conv.kit_hint": string;
+  "conv.kit_inact_q1a": string;
+  "conv.kit_inact_q1b": string;
+  "conv.kit_inact_q2a": string;
+  "conv.kit_inact_q2b": string;
+  "conv.kit_inact_q3a": string;
+  "conv.kit_inact_q3b": string;
+  "conv.kit_reg_q1a": string;
+  "conv.kit_reg_q1b": string;
+  "conv.kit_reg_q2a": string;
+  "conv.kit_reg_q2b": string;
+  "conv.kit_reg_q3a": string;
+  "conv.kit_reg_q3b": string;
+  "conv.kit_subtitle": string;
+  "conv.kit_title": string;
+  "conv.regular_auditivo": string;
+  "conv.regular_default": string;
+  "conv.regular_kinestesico": string;
+  "conv.regular_visual": string;
   "course_completion.cert_obtained": string;
   "course_completion.message": string;
   "course_completion.module_completed": string;
@@ -573,6 +625,35 @@ export type TranslationKeys = {
   "course_completion.title": string;
   "course_completion.view_cert": string;
   "course_completion.yes": string;
+  "ctrl.accordion_goals": string;
+  "ctrl.accordion_schedule": string;
+  "ctrl.goal_2": string;
+  "ctrl.goal_3": string;
+  "ctrl.goal_5": string;
+  "ctrl.goal_7": string;
+  "ctrl.goal_none": string;
+  "ctrl.monthly_obj_desc": string;
+  "ctrl.monthly_obj_placeholder": string;
+  "ctrl.monthly_obj_title": string;
+  "ctrl.monthly_preset_explore": string;
+  "ctrl.monthly_preset_improve": string;
+  "ctrl.monthly_preset_module": string;
+  "ctrl.monthly_preset_streak": string;
+  "ctrl.notif_achievements": string;
+  "ctrl.notif_streak_risk": string;
+  "ctrl.notif_title": string;
+  "ctrl.notif_weekly_goal": string;
+  "ctrl.notif_weekly_report": string;
+  "ctrl.schedule_days": string;
+  "ctrl.schedule_desc": string;
+  "ctrl.schedule_time": string;
+  "ctrl.schedule_title": string;
+  "ctrl.time_afternoon": string;
+  "ctrl.time_evening": string;
+  "ctrl.time_morning": string;
+  "ctrl.weekly_goal_desc": string;
+  "ctrl.weekly_goal_set": string;
+  "ctrl.weekly_goal_title": string;
   "dani.chart_title": string;
   "dani.chat_placeholder": string;
   "dani.chat_title": string;
@@ -803,13 +884,13 @@ export type TranslationKeys = {
   "footer.email_error": string;
   "footer.email_placeholder": string;
   "footer.ialab": string;
+  "footer.ingenia": string;
   "footer.methodology": string;
   "footer.newsletter": string;
   "footer.privacy": string;
   "footer.projects": string;
   "footer.resources": string;
   "footer.roi": string;
-  "footer.smartboard": string;
   "footer.subscribe": string;
   "footer.tagline": string;
   "footer.terms": string;
@@ -827,15 +908,62 @@ export type TranslationKeys = {
   "header.notifications_forum": string;
   "header.request_demo": string;
   "header.tools": string;
-  "hero.cta_conoce_smartboard": string;
-  "hero.cta_smartboard": string;
+  "hero.carousel_label": string;
+  "hero.carousel_roledescription": string;
+  "hero.chip_adn_desc": string;
+  "hero.chip_adn_title": string;
+  "hero.chip_ialab_desc": string;
+  "hero.chip_ialab_title": string;
+  "hero.chip_ingenia_desc": string;
+  "hero.chip_ingenia_title": string;
+  "hero.cta_conoce_ingenia": string;
+  "hero.cta_ingenia": string;
   "hero.cta_ver_soluciones": string;
+  "hero.ialab_chip": string;
+  "hero.ialab_cta": string;
+  "hero.ialab_fact_1": string;
+  "hero.ialab_fact_2": string;
+  "hero.ialab_listen": string;
+  "hero.ialab_live_from": string;
+  "hero.ialab_live_title": string;
+  "hero.ialab_live_to": string;
+  "hero.ialab_mute": string;
+  "hero.ialab_subtitle": string;
+  "hero.ialab_title": string;
+  "hero.ialab_video_label": string;
+  "hero.ingenia_chip": string;
+  "hero.ingenia_cta": string;
+  "hero.ingenia_fact_1": string;
+  "hero.ingenia_fact_2": string;
+  "hero.ingenia_listen": string;
+  "hero.ingenia_live_lang": string;
+  "hero.ingenia_live_math": string;
+  "hero.ingenia_live_sci": string;
+  "hero.ingenia_live_title": string;
+  "hero.ingenia_mute": string;
+  "hero.ingenia_subtitle": string;
+  "hero.ingenia_title": string;
+  "hero.ingenia_video_label": string;
+  "hero.pause": string;
+  "hero.photo_caption": string;
+  "hero.photo_main_alt": string;
+  "hero.photo_teacher_alt": string;
+  "hero.play": string;
+  "hero.scene_chip": string;
+  "hero.slide_roledescription": string;
   "hero.stat_anios_experiencia": string;
   "hero.stat_estudiantes": string;
   "hero.stat_exito": string;
   "hero.subtitle_after": string;
   "hero.subtitle_before": string;
   "hero.subtitle_highlight": string;
+  "hero.tab_edutechlife": string;
+  "hero.tab_edutechlife_caption": string;
+  "hero.tab_ialab": string;
+  "hero.tab_ialab_caption": string;
+  "hero.tab_ingenia": string;
+  "hero.tab_ingenia_caption": string;
+  "hero.tabs_label": string;
   "hero.title_line1": string;
   "hero.title_line2": string;
   "ialab.achievement_toast.close_aria": string;
@@ -879,6 +1007,7 @@ export type TranslationKeys = {
   "ialab.bookmarks_module": string;
   "ialab.bookmarks_open": string;
   "ialab.bookmarks_tab_label": string;
+  "ialab.bottom_nav_aria": string;
   "ialab.breadcrumb.aria_label": string;
   "ialab.breadcrumb_home": string;
   "ialab.breadcrumb_module": string;
@@ -1022,6 +1151,9 @@ export type TranslationKeys = {
   "ialab.challenge.m2.step3_schema_desc": string;
   "ialab.challenge.m2.step3_schema_generated": string;
   "ialab.challenge.m2.step3_spec_context": string;
+  "ialab.challenge.m2.step3_spec_dev": string;
+  "ialab.challenge.m2.step3_spec_marketing": string;
+  "ialab.challenge.m2.step3_spec_support": string;
   "ialab.challenge.m2.step3_subtitle": string;
   "ialab.challenge.m2.step3_tip_1": string;
   "ialab.challenge.m2.step3_tip_2": string;
@@ -1243,6 +1375,14 @@ export type TranslationKeys = {
   "ialab.challenge.m5.step3_howto_title": string;
   "ialab.challenge.m5.step3_title": string;
   "ialab.challenge.m5.step_label": string;
+  "ialab.challenge.max_estimated_time": string;
+  "ialab.challenge.max_focus_notice": string;
+  "ialab.challenge.max_intro_subtitle": string;
+  "ialab.challenge.max_intro_title": string;
+  "ialab.challenge.max_label_apply": string;
+  "ialab.challenge.max_label_challenge": string;
+  "ialab.challenge.max_label_practice": string;
+  "ialab.challenge.max_start": string;
   "ialab.challenge.minimum_80": string;
   "ialab.challenge.notification_advanced_error": string;
   "ialab.challenge.notification_advanced_started": string;
@@ -1271,13 +1411,6 @@ export type TranslationKeys = {
   "ialab.challenge.title_failed": string;
   "ialab.challenge.title_passed": string;
   "ialab.challenge.title_pending": string;
-  "ialab.challenge.valerio_estimated_time": string;
-  "ialab.challenge.valerio_intro_subtitle": string;
-  "ialab.challenge.valerio_intro_title": string;
-  "ialab.challenge.valerio_label_apply": string;
-  "ialab.challenge.valerio_label_challenge": string;
-  "ialab.challenge.valerio_label_practice": string;
-  "ialab.challenge.valerio_start": string;
   "ialab.challenge_result.error_feedback": string;
   "ialab.challenge_result.loading": string;
   "ialab.challenge_result.no_feedback": string;
@@ -1328,6 +1461,7 @@ export type TranslationKeys = {
   "ialab.course_catalog.category_productividad": string;
   "ialab.course_catalog.subtitle": string;
   "ialab.course_catalog.title": string;
+  "ialab.course_home.social_proof": string;
   "ialab.course_title": string;
   "ialab.daily_challenges.complete": string;
   "ialab.daily_challenges.dc1_desc": string;
@@ -1350,6 +1484,7 @@ export type TranslationKeys = {
   "ialab.daily_plan.urgency_optional": string;
   "ialab.daily_plan.urgency_soon": string;
   "ialab.daily_plan.urgency_today": string;
+  "ialab.daily_plan.view_plan": string;
   "ialab.dashboard.certificates_title": string;
   "ialab.dashboard.completed_at": string;
   "ialab.dashboard.filter_all": string;
@@ -1358,6 +1493,10 @@ export type TranslationKeys = {
   "ialab.dashboard.no_courses": string;
   "ialab.dashboard.stats_label": string;
   "ialab.dashboard.view_certificate": string;
+  "ialab.doc_guide.after_title": string;
+  "ialab.doc_guide.before_title": string;
+  "ialab.doc_guide.questions_label": string;
+  "ialab.doc_guide.summary_label": string;
   "ialab.error_boundary.details": string;
   "ialab.error_boundary.message": string;
   "ialab.error_boundary.reload": string;
@@ -1451,6 +1590,7 @@ export type TranslationKeys = {
   "ialab.evaluation.modal.form_error_save": string;
   "ialab.evaluation.modal.load_error_title": string;
   "ialab.evaluation.modal.loading_desc": string;
+  "ialab.evaluation.modal.min_chars_hint": string;
   "ialab.evaluation.modal.next": string;
   "ialab.evaluation.modal.offline_desc": string;
   "ialab.evaluation.modal.offline_title": string;
@@ -1498,6 +1638,11 @@ export type TranslationKeys = {
   "ialab.evaluation.results.exercise_scores": string;
   "ialab.evaluation.results.exercises_completed": string;
   "ialab.evaluation.results.feedback_exceptional": string;
+  "ialab.evaluation.results.feedback_exceptional_m1": string;
+  "ialab.evaluation.results.feedback_exceptional_m2": string;
+  "ialab.evaluation.results.feedback_exceptional_m3": string;
+  "ialab.evaluation.results.feedback_exceptional_m4": string;
+  "ialab.evaluation.results.feedback_exceptional_m5": string;
   "ialab.evaluation.results.feedback_good": string;
   "ialab.evaluation.results.feedback_passing": string;
   "ialab.evaluation.results.final_grade": string;
@@ -1510,6 +1655,11 @@ export type TranslationKeys = {
   "ialab.evaluation.results.mastery_level": string;
   "ialab.evaluation.results.mastery_medium": string;
   "ialab.evaluation.results.mastery_message": string;
+  "ialab.evaluation.results.mastery_message_m1": string;
+  "ialab.evaluation.results.mastery_message_m2": string;
+  "ialab.evaluation.results.mastery_message_m3": string;
+  "ialab.evaluation.results.mastery_message_m4": string;
+  "ialab.evaluation.results.mastery_message_m5": string;
   "ialab.evaluation.results.need_80": string;
   "ialab.evaluation.results.need_80_retry": string;
   "ialab.evaluation.results.next_attempt_label": string;
@@ -1550,6 +1700,7 @@ export type TranslationKeys = {
   "ialab.evaluation.step1.elements_to_classify": string;
   "ialab.evaluation.step1.how_to_desc": string;
   "ialab.evaluation.step1.how_to_title": string;
+  "ialab.evaluation.step1.pick_category": string;
   "ialab.evaluation.step1.role": string;
   "ialab.evaluation.step1.role_hint": string;
   "ialab.evaluation.step1.role_tip": string;
@@ -1741,10 +1892,10 @@ export type TranslationKeys = {
   "ialab.forum.notifications.title": string;
   "ialab.forum.optimized.empty_desc": string;
   "ialab.forum.optimized.empty_title": string;
-  "ialab.forum.optimized.input_placeholder": string;
-  "ialab.forum.optimized.goal_start": string;
-  "ialab.forum.optimized.goal_progress": string;
   "ialab.forum.optimized.goal_done": string;
+  "ialab.forum.optimized.goal_progress": string;
+  "ialab.forum.optimized.goal_start": string;
+  "ialab.forum.optimized.input_placeholder": string;
   "ialab.forum.optimized.like_aria": string;
   "ialab.forum.optimized.live_badge": string;
   "ialab.forum.optimized.loading": string;
@@ -1890,6 +2041,11 @@ export type TranslationKeys = {
   "ialab.global_search.results_label": string;
   "ialab.global_search.search_aria": string;
   "ialab.global_search.topic_label": string;
+  "ialab.glossary.close": string;
+  "ialab.glossary.empty": string;
+  "ialab.glossary.search": string;
+  "ialab.glossary.subtitle": string;
+  "ialab.glossary.title": string;
   "ialab.header_unavailable": string;
   "ialab.info_unavailable": string;
   "ialab.integration_exercise.badge": string;
@@ -1976,6 +2132,83 @@ export type TranslationKeys = {
   "ialab.loading_timeout_desc": string;
   "ialab.loading_timeout_retry": string;
   "ialab.loading_timeout_title": string;
+  "ialab.max.clear_button": string;
+  "ialab.max.clear_confirm": string;
+  "ialab.max.clear_confirm_no": string;
+  "ialab.max.clear_confirm_no_aria": string;
+  "ialab.max.clear_confirm_yes": string;
+  "ialab.max.clear_confirm_yes_aria": string;
+  "ialab.max.close_aria": string;
+  "ialab.max.conversation_aria": string;
+  "ialab.max.copy.copied": string;
+  "ialab.max.copy.label": string;
+  "ialab.max.copy.title": string;
+  "ialab.max.empty_description": string;
+  "ialab.max.empty_title": string;
+  "ialab.max.export.header": string;
+  "ialab.max.export.html_title": string;
+  "ialab.max.export.you": string;
+  "ialab.max.greeting_anon": string;
+  "ialab.max.greeting_name": string;
+  "ialab.max.helpful_thanks": string;
+  "ialab.max.input_hint": string;
+  "ialab.max.input_hint_mobile": string;
+  "ialab.max.input_placeholder": string;
+  "ialab.max.intro_greeting": string;
+  "ialab.max.level_advanced": string;
+  "ialab.max.level_beginner": string;
+  "ialab.max.level_intermediate": string;
+  "ialab.max.level_label": string;
+  "ialab.max.loading": string;
+  "ialab.max.message_actions.download": string;
+  "ialab.max.message_actions.more": string;
+  "ialab.max.message_actions.useful": string;
+  "ialab.max.message_max": string;
+  "ialab.max.message_you": string;
+  "ialab.max.module_label": string;
+  "ialab.max.ova_intro_1": string;
+  "ialab.max.ova_intro_2": string;
+  "ialab.max.ova_intro_3": string;
+  "ialab.max.ova_intro_4": string;
+  "ialab.max.ova_intro_5": string;
+  "ialab.max.panel_aria": string;
+  "ialab.max.quick_actions_show_all": string;
+  "ialab.max.quick_actions_show_less": string;
+  "ialab.max.quick_actions_title": string;
+  "ialab.max.quick_explain_topic": string;
+  "ialab.max.quick_give_example": string;
+  "ialab.max.quick_help_challenge": string;
+  "ialab.max.quick_micro_plan": string;
+  "ialab.max.quick_step_by_step": string;
+  "ialab.max.quick_study_tips": string;
+  "ialab.max.quick_useful": string;
+  "ialab.max.scroll_to_bottom": string;
+  "ialab.max.send_aria": string;
+  "ialab.max.short_greeting_high": string;
+  "ialab.max.short_greeting_low": string;
+  "ialab.max.status_idle": string;
+  "ialab.max.status_listening": string;
+  "ialab.max.status_speaking": string;
+  "ialab.max.status_thinking": string;
+  "ialab.max.stop_audio": string;
+  "ialab.max.system_instructions": string;
+  "ialab.max.title": string;
+  "ialab.max.typing.label": string;
+  "ialab.max.voice.error": string;
+  "ialab.max.voice.https_required": string;
+  "ialab.max.voice.no_speech": string;
+  "ialab.max.voice.not_supported": string;
+  "ialab.max.voice.permission_denied": string;
+  "ialab.max.voice.start_error": string;
+  "ialab.max.voice_start_aria": string;
+  "ialab.max.voice_stop_aria": string;
+  "ialab.max_aria": string;
+  "ialab.max_nudge": string;
+  "ialab.max_nudge_return": string;
+  "ialab.max_nudge_return_sub": string;
+  "ialab.max_nudge_sub": string;
+  "ialab.max_talk": string;
+  "ialab.max_tooltip": string;
   "ialab.menu_aria": string;
   "ialab.mobile_info.course_label": string;
   "ialab.mobile_menu_aria": string;
@@ -1986,8 +2219,12 @@ export type TranslationKeys = {
   "ialab.module.topics_title": string;
   "ialab.module_actions.attempts_left": string;
   "ialab.module_actions.challenge": string;
+  "ialab.module_actions.challenge_desc": string;
   "ialab.module_actions.community": string;
+  "ialab.module_actions.community_desc": string;
   "ialab.module_actions.exam": string;
+  "ialab.module_actions.exam_desc": string;
+  "ialab.module_actions.locked_hint": string;
   "ialab.module_actions.status_failed": string;
   "ialab.module_actions.status_passed": string;
   "ialab.module_actions.status_pending": string;
@@ -2026,6 +2263,10 @@ export type TranslationKeys = {
   "ialab.module_roadmap.subtitle": string;
   "ialab.module_roadmap.title": string;
   "ialab.nav_menu_aria": string;
+  "ialab.next_step.current": string;
+  "ialab.next_step.pending": string;
+  "ialab.next_step.progress": string;
+  "ialab.next_step.title": string;
   "ialab.next_step_content": string;
   "ialab.next_step_exam_done": string;
   "ialab.next_step_ready_exam": string;
@@ -2243,12 +2484,14 @@ export type TranslationKeys = {
   "ialab.quiz.good_work_msg": string;
   "ialab.quiz.improvement_areas": string;
   "ialab.quiz.incorrect_count": string;
+  "ialab.quiz.intro_cta": string;
+  "ialab.quiz.intro_desc": string;
+  "ialab.quiz.intro_title": string;
   "ialab.quiz.landed": string;
   "ialab.quiz.mark_review": string;
   "ialab.quiz.marked": string;
   "ialab.quiz.max_violations": string;
   "ialab.quiz.min_score": string;
-  "ialab.quiz.weighted_note": string;
   "ialab.quiz.next": string;
   "ialab.quiz.number_label": string;
   "ialab.quiz.number_result": string;
@@ -2277,6 +2520,7 @@ export type TranslationKeys = {
   "ialab.quiz.unanswered": string;
   "ialab.quiz.unmark_review": string;
   "ialab.quiz.watermark": string;
+  "ialab.quiz.weighted_note": string;
   "ialab.quiz.your_answer": string;
   "ialab.reactive_prompt.analyzing": string;
   "ialab.reactive_prompt.chars": string;
@@ -2400,6 +2644,7 @@ export type TranslationKeys = {
   "ialab.start_cta_desc": string;
   "ialab.start_cta_label": string;
   "ialab.status.locked": string;
+  "ialab.status.locked_detail": string;
   "ialab.status.locked_hint": string;
   "ialab.status.start_here": string;
   "ialab.status.viewed": string;
@@ -2417,6 +2662,7 @@ export type TranslationKeys = {
   "ialab.study_calendar.no_deadlines": string;
   "ialab.study_calendar.pending_challenge": string;
   "ialab.study_calendar.pending_exam": string;
+  "ialab.study_planner.active_day_one": string;
   "ialab.study_planner.active_days": string;
   "ialab.study_planner.auto_save": string;
   "ialab.study_planner.close_aria": string;
@@ -2524,10 +2770,13 @@ export type TranslationKeys = {
   "ialab.tab_all": string;
   "ialab.tab_bookmarks": string;
   "ialab.tab_content": string;
+  "ialab.tab_home": string;
+  "ialab.tab_modules": string;
   "ialab.tab_objectives": string;
   "ialab.tab_practice": string;
   "ialab.tab_progress": string;
   "ialab.tab_tools": string;
+  "ialab.tab_topics": string;
   "ialab.title": string;
   "ialab.tool_tutor.ethics_subtitle": string;
   "ialab.tool_tutor.ethics_title": string;
@@ -2605,6 +2854,7 @@ export type TranslationKeys = {
   "ialab.traffic_light.fullscreen_enter": string;
   "ialab.traffic_light.fullscreen_exit": string;
   "ialab.traffic_light.group_aria": string;
+  "ialab.tutorias_virtuales.add_calendar": string;
   "ialab.tutorias_virtuales.countdown": string;
   "ialab.tutorias_virtuales.description": string;
   "ialab.tutorias_virtuales.join": string;
@@ -2614,76 +2864,16 @@ export type TranslationKeys = {
   "ialab.unlock_first_module": string;
   "ialab.unlock_requirement": string;
   "ialab.user_fallback": string;
-  "ialab.valerio.clear_button": string;
-  "ialab.valerio.clear_confirm": string;
-  "ialab.valerio.clear_confirm_no": string;
-  "ialab.valerio.clear_confirm_no_aria": string;
-  "ialab.valerio.clear_confirm_yes": string;
-  "ialab.valerio.clear_confirm_yes_aria": string;
-  "ialab.valerio.close_aria": string;
-  "ialab.valerio.conversation_aria": string;
-  "ialab.valerio.copy.copied": string;
-  "ialab.valerio.copy.label": string;
-  "ialab.valerio.copy.title": string;
-  "ialab.valerio.empty_description": string;
-  "ialab.valerio.empty_title": string;
-  "ialab.valerio.export.header": string;
-  "ialab.valerio.export.html_title": string;
-  "ialab.valerio.export.you": string;
-  "ialab.valerio.greeting_anon": string;
-  "ialab.valerio.greeting_name": string;
-  "ialab.valerio.input_hint": string;
-  "ialab.valerio.input_placeholder": string;
-  "ialab.valerio.intro_greeting": string;
-  "ialab.valerio.level_advanced": string;
-  "ialab.valerio.level_beginner": string;
-  "ialab.valerio.level_intermediate": string;
-  "ialab.valerio.level_label": string;
-  "ialab.valerio.loading": string;
-  "ialab.valerio.message_actions.download": string;
-  "ialab.valerio.message_actions.more": string;
-  "ialab.valerio.message_actions.useful": string;
-  "ialab.valerio.message_valerio": string;
-  "ialab.valerio.message_you": string;
-  "ialab.valerio.module_label": string;
-  "ialab.valerio.ova_intro_1": string;
-  "ialab.valerio.ova_intro_2": string;
-  "ialab.valerio.ova_intro_3": string;
-  "ialab.valerio.ova_intro_4": string;
-  "ialab.valerio.ova_intro_5": string;
-  "ialab.valerio.panel_aria": string;
-  "ialab.valerio.quick_actions_title": string;
-  "ialab.valerio.quick_explain_topic": string;
-  "ialab.valerio.quick_give_example": string;
-  "ialab.valerio.quick_help_challenge": string;
-  "ialab.valerio.quick_micro_plan": string;
-  "ialab.valerio.quick_step_by_step": string;
-  "ialab.valerio.quick_study_tips": string;
-  "ialab.valerio.send_aria": string;
-  "ialab.valerio.short_greeting_high": string;
-  "ialab.valerio.short_greeting_low": string;
-  "ialab.valerio.status_idle": string;
-  "ialab.valerio.status_listening": string;
-  "ialab.valerio.status_speaking": string;
-  "ialab.valerio.status_thinking": string;
-  "ialab.valerio.system_instructions": string;
-  "ialab.valerio.title": string;
-  "ialab.valerio.typing.label": string;
-  "ialab.valerio.voice.error": string;
-  "ialab.valerio.voice.https_required": string;
-  "ialab.valerio.voice.no_speech": string;
-  "ialab.valerio.voice.not_supported": string;
-  "ialab.valerio.voice.permission_denied": string;
-  "ialab.valerio.voice.start_error": string;
-  "ialab.valerio.voice_start_aria": string;
-  "ialab.valerio.voice_stop_aria": string;
-  "ialab.valerio_aria": string;
-  "ialab.valerio_nudge": string;
-  "ialab.valerio_nudge_return": string;
-  "ialab.valerio_nudge_return_sub": string;
-  "ialab.valerio_nudge_sub": string;
-  "ialab.valerio_talk": string;
-  "ialab.valerio_tooltip": string;
+  "ialab.video_quiz.continue": string;
+  "ialab.video_quiz.next": string;
+  "ialab.video_quiz.passed_desc": string;
+  "ialab.video_quiz.passed_title": string;
+  "ialab.video_quiz.progress": string;
+  "ialab.video_quiz.retry": string;
+  "ialab.video_quiz.retry_desc": string;
+  "ialab.video_quiz.retry_title": string;
+  "ialab.video_quiz.see_result": string;
+  "ialab.video_quiz.title": string;
   "ialab.viewer_modal.cannot_load": string;
   "ialab.viewer_modal.cc": string;
   "ialab.viewer_modal.close": string;
@@ -2849,6 +3039,317 @@ export type TranslationKeys = {
   "ialab.workspace.topics_label": string;
   "ialab.xp_earned": string;
   "ialab.xp_excellent_work": string;
+  "ingenia.achievements": string;
+  "ingenia.active": string;
+  "ingenia.active_connection": string;
+  "ingenia.active_research_line": string;
+  "ingenia.active_time": string;
+  "ingenia.active_time_min": string;
+  "ingenia.all_missions": string;
+  "ingenia.analysis_context": string;
+  "ingenia.analysis_item_questions": string;
+  "ingenia.analysis_item_summary": string;
+  "ingenia.analysis_item_techniques": string;
+  "ingenia.auto_update": string;
+  "ingenia.available": string;
+  "ingenia.average": string;
+  "ingenia.average_progress": string;
+  "ingenia.back": string;
+  "ingenia.back_dashboard": string;
+  "ingenia.best_streak": string;
+  "ingenia.bienvenido": string;
+  "ingenia.calendar_days": string;
+  "ingenia.calendar_month": string;
+  "ingenia.chart_last_14": string;
+  "ingenia.chat_valeria": string;
+  "ingenia.chat_valeria_desc": string;
+  "ingenia.chat_valeria_title": string;
+  "ingenia.clear": string;
+  "ingenia.click_select": string;
+  "ingenia.close": string;
+  "ingenia.close_reminder": string;
+  "ingenia.close_report": string;
+  "ingenia.complete_btn": string;
+  "ingenia.completed": string;
+  "ingenia.completed_pct": string;
+  "ingenia.connected": string;
+  "ingenia.connected_at": string;
+  "ingenia.connected_ialab": string;
+  "ingenia.copy": string;
+  "ingenia.current_streak": string;
+  "ingenia.dani_fab_aria": string;
+  "ingenia.dani_reminder_open": string;
+  "ingenia.date": string;
+  "ingenia.days": string;
+  "ingenia.diagnostico_vak": string;
+  "ingenia.document_analyzer_tab": string;
+  "ingenia.download_full_report": string;
+  "ingenia.download_report": string;
+  "ingenia.drag_files": string;
+  "ingenia.drop_to_upload": string;
+  "ingenia.dropzone_label": string;
+  "ingenia.duration": string;
+  "ingenia.error_load_activities": string;
+  "ingenia.error_load_calendar": string;
+  "ingenia.error_load_home": string;
+  "ingenia.error_load_missions": string;
+  "ingenia.error_load_news": string;
+  "ingenia.error_load_points": string;
+  "ingenia.error_load_subjects": string;
+  "ingenia.error_load_vak": string;
+  "ingenia.general": string;
+  "ingenia.habeas_parent_email_invalid": string;
+  "ingenia.habeas_parent_email_required": string;
+  "ingenia.ialab_desc": string;
+  "ingenia.ialab_pro_desc": string;
+  "ingenia.ialab_pro_title": string;
+  "ingenia.ialab_title": string;
+  "ingenia.interactions": string;
+  "ingenia.interactions_with": string;
+  "ingenia.landing.choose_plan_aria": string;
+  "ingenia.landing.start_aria": string;
+  "ingenia.landing.try_aria": string;
+  "ingenia.landing_badge": string;
+  "ingenia.landing_benefits_badge": string;
+  "ingenia.landing_benefits_title_line1": string;
+  "ingenia.landing_benefits_title_line2": string;
+  "ingenia.landing_concern_label": string;
+  "ingenia.landing_cta_badge": string;
+  "ingenia.landing_cta_final_btn": string;
+  "ingenia.landing_cta_final_desc": string;
+  "ingenia.landing_cta_final_title_line1": string;
+  "ingenia.landing_cta_final_title_line2": string;
+  "ingenia.landing_cta_how": string;
+  "ingenia.landing_cta_start": string;
+  "ingenia.landing_cta_try": string;
+  "ingenia.landing_faq_title": string;
+  "ingenia.landing_faq_title_highlight": string;
+  "ingenia.landing_hero_brain_label": string;
+  "ingenia.landing_hero_desc": string;
+  "ingenia.landing_hero_eyebrow": string;
+  "ingenia.landing_hero_line1": string;
+  "ingenia.landing_hero_line2": string;
+  "ingenia.landing_hero_line3": string;
+  "ingenia.landing_how_badge": string;
+  "ingenia.landing_how_title_line1": string;
+  "ingenia.landing_how_title_line2": string;
+  "ingenia.landing_kids_count": string;
+  "ingenia.landing_kids_learning": string;
+  "ingenia.landing_next": string;
+  "ingenia.landing_pain_point1": string;
+  "ingenia.landing_pain_point2": string;
+  "ingenia.landing_pain_point3": string;
+  "ingenia.landing_pain_point4": string;
+  "ingenia.landing_prev": string;
+  "ingenia.landing_pricing_badge": string;
+  "ingenia.landing_pricing_choose": string;
+  "ingenia.landing_pricing_desc": string;
+  "ingenia.landing_pricing_popular": string;
+  "ingenia.landing_pricing_title_line1": string;
+  "ingenia.landing_pricing_title_line2": string;
+  "ingenia.landing_quote": string;
+  "ingenia.landing_solution1": string;
+  "ingenia.landing_solution2": string;
+  "ingenia.landing_solution3": string;
+  "ingenia.landing_solution4": string;
+  "ingenia.landing_start_now": string;
+  "ingenia.landing_stat_hours": string;
+  "ingenia.landing_stat_improvement": string;
+  "ingenia.landing_stat_students": string;
+  "ingenia.landing_step_beneficios": string;
+  "ingenia.landing_step_como_funciona": string;
+  "ingenia.landing_step_faq": string;
+  "ingenia.landing_step_planes": string;
+  "ingenia.landing_step_que_es": string;
+  "ingenia.landing_step_testimonios": string;
+  "ingenia.landing_step_tranquilidad": string;
+  "ingenia.landing_step_vak": string;
+  "ingenia.landing_tag_adaptive_ai": string;
+  "ingenia.landing_tag_live_reports": string;
+  "ingenia.landing_tag_real_coaches": string;
+  "ingenia.landing_tag_scientific_vak": string;
+  "ingenia.landing_testimonials_badge": string;
+  "ingenia.landing_testimonials_title_line1": string;
+  "ingenia.landing_testimonials_title_line2": string;
+  "ingenia.landing_tranquility_badge": string;
+  "ingenia.landing_tranquility_desc": string;
+  "ingenia.landing_tranquility_title_line1": string;
+  "ingenia.landing_tranquility_title_line2": string;
+  "ingenia.landing_trial_terms": string;
+  "ingenia.landing_trust_badge": string;
+  "ingenia.landing_trust_subtitle": string;
+  "ingenia.landing_vak_badge": string;
+  "ingenia.landing_vak_desc": string;
+  "ingenia.landing_vak_title": string;
+  "ingenia.landing_vak_title_highlight": string;
+  "ingenia.landing_what_badge": string;
+  "ingenia.landing_what_desc1": string;
+  "ingenia.landing_what_desc2": string;
+  "ingenia.landing_what_title_line1": string;
+  "ingenia.landing_what_title_line2": string;
+  "ingenia.learning_stats": string;
+  "ingenia.level": string;
+  "ingenia.level_label": string;
+  "ingenia.level_name": string;
+  "ingenia.live": string;
+  "ingenia.loading": string;
+  "ingenia.login_button": string;
+  "ingenia.login_desc": string;
+  "ingenia.login_error": string;
+  "ingenia.login_heading": string;
+  "ingenia.login_subtitle": string;
+  "ingenia.login_title": string;
+  "ingenia.login_verifying": string;
+  "ingenia.logout": string;
+  "ingenia.max_analysis": string;
+  "ingenia.max_analyzing": string;
+  "ingenia.max_will_analyze": string;
+  "ingenia.minutes": string;
+  "ingenia.minutes_total": string;
+  "ingenia.missing_points": string;
+  "ingenia.missions": string;
+  "ingenia.missions_day": string;
+  "ingenia.missions_label": string;
+  "ingenia.missions_view_title": string;
+  "ingenia.mobile_nav": string;
+  "ingenia.nav_label": string;
+  "ingenia.no_access": string;
+  "ingenia.no_points_data": string;
+  "ingenia.no_subjects": string;
+  "ingenia.not_connected": string;
+  "ingenia.notifications": string;
+  "ingenia.parent_active_minutes": string;
+  "ingenia.parent_alert_explore": string;
+  "ingenia.parent_alert_inactive": string;
+  "ingenia.parent_alert_points": string;
+  "ingenia.parent_alert_streak": string;
+  "ingenia.parent_alert_title": string;
+  "ingenia.parent_congrats_streak": string;
+  "ingenia.parent_current_tab": string;
+  "ingenia.parent_desc": string;
+  "ingenia.parent_last_active": string;
+  "ingenia.parent_no_activity_today": string;
+  "ingenia.parent_no_sessions": string;
+  "ingenia.parent_offline": string;
+  "ingenia.parent_online": string;
+  "ingenia.parent_panel": string;
+  "ingenia.parent_sessions_today": string;
+  "ingenia.parent_streak_days": string;
+  "ingenia.parent_today_sessions": string;
+  "ingenia.parent_try_subjects": string;
+  "ingenia.password": string;
+  "ingenia.password_placeholder": string;
+  "ingenia.pending": string;
+  "ingenia.points": string;
+  "ingenia.points_display": string;
+  "ingenia.points_history": string;
+  "ingenia.points_label": string;
+  "ingenia.points_per_day": string;
+  "ingenia.points_progress": string;
+  "ingenia.predominant_style": string;
+  "ingenia.product_mismatch_cta": string;
+  "ingenia.product_mismatch_desc": string;
+  "ingenia.product_mismatch_title": string;
+  "ingenia.progress": string;
+  "ingenia.progress_by_subject": string;
+  "ingenia.progress_general": string;
+  "ingenia.progress_label": string;
+  "ingenia.progress_pct": string;
+  "ingenia.progress_tab": string;
+  "ingenia.questions_asked": string;
+  "ingenia.quick_actions": string;
+  "ingenia.recent_activity": string;
+  "ingenia.recent_sessions": string;
+  "ingenia.record": string;
+  "ingenia.report_days": string;
+  "ingenia.report_level": string;
+  "ingenia.report_min": string;
+  "ingenia.report_streak": string;
+  "ingenia.report_time": string;
+  "ingenia.report_title": string;
+  "ingenia.report_xp": string;
+  "ingenia.request_account": string;
+  "ingenia.research_desc": string;
+  "ingenia.research_lab": string;
+  "ingenia.research_lines_tab": string;
+  "ingenia.rewards": string;
+  "ingenia.sb_name": string;
+  "ingenia.sb_subtitle": string;
+  "ingenia.score": string;
+  "ingenia.selected_line": string;
+  "ingenia.selected_line_with_name": string;
+  "ingenia.sidebar_level": string;
+  "ingenia.sidebar_logout": string;
+  "ingenia.sidebar_streak": string;
+  "ingenia.signup_back": string;
+  "ingenia.signup_feature_community": string;
+  "ingenia.signup_feature_missions": string;
+  "ingenia.signup_feature_tracking": string;
+  "ingenia.signup_for_students": string;
+  "ingenia.signup_have_account": string;
+  "ingenia.signup_login_heading": string;
+  "ingenia.signup_login_here": string;
+  "ingenia.signup_login_sub": string;
+  "ingenia.signup_login_tab": string;
+  "ingenia.signup_no_account": string;
+  "ingenia.signup_quote": string;
+  "ingenia.signup_register_heading": string;
+  "ingenia.signup_register_here": string;
+  "ingenia.signup_register_sub": string;
+  "ingenia.signup_register_tab": string;
+  "ingenia.signup_signin_desc": string;
+  "ingenia.signup_signup_desc": string;
+  "ingenia.signup_terms": string;
+  "ingenia.signup_welcome": string;
+  "ingenia.start": string;
+  "ingenia.start_today": string;
+  "ingenia.stats_back": string;
+  "ingenia.stats_desc": string;
+  "ingenia.stats_title": string;
+  "ingenia.streak_days": string;
+  "ingenia.streak_days_label": string;
+  "ingenia.streak_title": string;
+  "ingenia.study_time": string;
+  "ingenia.subject": string;
+  "ingenia.subjects_view_title": string;
+  "ingenia.tab_activities": string;
+  "ingenia.tab_calendar": string;
+  "ingenia.tab_home": string;
+  "ingenia.tab_missions": string;
+  "ingenia.tab_news": string;
+  "ingenia.tab_parents": string;
+  "ingenia.tab_progress": string;
+  "ingenia.tab_subjects": string;
+  "ingenia.tab_vak": string;
+  "ingenia.talk_dani": string;
+  "ingenia.today_missions": string;
+  "ingenia.topbar_activities": string;
+  "ingenia.topbar_calendar": string;
+  "ingenia.topbar_home": string;
+  "ingenia.topbar_missions": string;
+  "ingenia.topbar_news": string;
+  "ingenia.topbar_progress": string;
+  "ingenia.topbar_subjects": string;
+  "ingenia.topbar_vak": string;
+  "ingenia.total_hours": string;
+  "ingenia.total_points": string;
+  "ingenia.total_time": string;
+  "ingenia.transactions": string;
+  "ingenia.unlock_reward": string;
+  "ingenia.unlocked": string;
+  "ingenia.upcoming_events": string;
+  "ingenia.username": string;
+  "ingenia.username_placeholder": string;
+  "ingenia.vak_analysis": string;
+  "ingenia.vak_desc": string;
+  "ingenia.vak_profile": string;
+  "ingenia.vak_report": string;
+  "ingenia.vak_techniques": string;
+  "ingenia.vak_title": string;
+  "ingenia.valeria_ready": string;
+  "ingenia.view_all": string;
+  "ingenia.weekly_activity": string;
+  "ingenia.your_subjects": string;
   "kid.a11y.skip_to_content": string;
   "kid.activity.analysis_completed": string;
   "kid.activity.analyzing_detail": string;
@@ -2998,6 +3499,7 @@ export type TranslationKeys = {
   "kid.flashcards.active_deck": string;
   "kid.flashcards.add_card": string;
   "kid.flashcards.add_card_btn": string;
+  "kid.flashcards.answer_label": string;
   "kid.flashcards.back": string;
   "kid.flashcards.cancel": string;
   "kid.flashcards.card_back_placeholder": string;
@@ -3049,6 +3551,7 @@ export type TranslationKeys = {
   "kid.flashcards.no_decks": string;
   "kid.flashcards.no_decks_hint": string;
   "kid.flashcards.not_understood": string;
+  "kid.flashcards.question_label": string;
   "kid.flashcards.related_terms_label": string;
   "kid.flashcards.retry": string;
   "kid.flashcards.reviewed_label": string;
@@ -3087,6 +3590,7 @@ export type TranslationKeys = {
   "kid.flashcards.topic_placeholder": string;
   "kid.flashcards.two_player_mode": string;
   "kid.flashcards.understood": string;
+  "kid.flashcards.why_label": string;
   "kid.flashcards.write_topic": string;
   "kid.grades.add_subject": string;
   "kid.grades.analyze_btn": string;
@@ -3274,6 +3778,7 @@ export type TranslationKeys = {
   "kid.user.fullname_placeholder": string;
   "kid.user.grade": string;
   "kid.user.grade_placeholder": string;
+  "kid.user.ingenia_profile": string;
   "kid.user.load_error": string;
   "kid.user.loading": string;
   "kid.user.logout": string;
@@ -3290,7 +3795,6 @@ export type TranslationKeys = {
   "kid.user.school": string;
   "kid.user.school_placeholder": string;
   "kid.user.select_vak": string;
-  "kid.user.smartboard_profile": string;
   "kid.user.student": string;
   "kid.user.vak_from_adn": string;
   "kid.user.vak_placeholder": string;
@@ -3315,6 +3819,10 @@ export type TranslationKeys = {
   "kid.vak.tip_visual_1": string;
   "kid.vak.tip_visual_2": string;
   "kid.vak.tip_visual_3": string;
+  "lastact.days_ago": string;
+  "lastact.points": string;
+  "lastact.today": string;
+  "lastact.yesterday": string;
   "leadCapture.context_courses": string;
   "leadCapture.context_default": string;
   "leadCapture.context_diagnosis": string;
@@ -3340,6 +3848,7 @@ export type TranslationKeys = {
   "leaderboard.period_weekly": string;
   "leaderboard.position": string;
   "leaderboard.streak": string;
+  "leaderboard.streak_one": string;
   "leaderboard.title": string;
   "leaderboard.weekly_empty": string;
   "leaderboard.you_label": string;
@@ -3358,13 +3867,14 @@ export type TranslationKeys = {
   "login.email_or_username": string;
   "login.email_or_username_placeholder": string;
   "login.enter_as_parent": string;
-  "login.enter_smartboard": string;
+  "login.enter_ingenia": string;
   "login.error.connection": string;
   "login.error.email_not_confirmed": string;
   "login.error.email_required_for_reset": string;
   "login.error.invalid_credentials": string;
   "login.error.login_failed": string;
   "login.error.oauth_account": string;
+  "login.error.oauth_failed": string;
   "login.error.register_failed": string;
   "login.forgot_password": string;
   "login.has_account_footer": string;
@@ -3398,6 +3908,29 @@ export type TranslationKeys = {
   "login.tab.parent": string;
   "login.tab.register": string;
   "login.tab.student": string;
+  "max.advanced": string;
+  "max.at_risk": string;
+  "max.beginner": string;
+  "max.completed_modules": string;
+  "max.course_progress": string;
+  "max.current_module_label": string;
+  "max.days": string;
+  "max.failures": string;
+  "max.intermediate": string;
+  "max.last_activity": string;
+  "max.level": string;
+  "max.module_scores": string;
+  "max.name": string;
+  "max.no_activity": string;
+  "max.no_streak": string;
+  "max.none_identified": string;
+  "max.session_history": string;
+  "max.streak": string;
+  "max.student": string;
+  "max.student_context_label": string;
+  "max.total_xp": string;
+  "max.weak_topics": string;
+  "max.weekly_xp": string;
   "metodo.cta_text": string;
   "metodo.form_email_label": string;
   "metodo.form_email_placeholder": string;
@@ -3405,8 +3938,8 @@ export type TranslationKeys = {
   "metodo.form_name_label": string;
   "metodo.form_name_placeholder": string;
   "metodo.form_option_b2b": string;
+  "metodo.form_option_ingenia": string;
   "metodo.form_option_other": string;
-  "metodo.form_option_smartboard": string;
   "metodo.form_option_steam": string;
   "metodo.form_option_tutoring": string;
   "metodo.form_option_vak": string;
@@ -3520,6 +4053,7 @@ export type TranslationKeys = {
   "modals.certificates.req_module_score": string;
   "modals.certificates.req_modules_done": string;
   "modals.certificates.requirements_not_met": string;
+  "modals.certificates.share_linkedin": string;
   "modals.certificates.start_course": string;
   "modals.certificates.start_course_desc": string;
   "modals.certificates.student_fallback": string;
@@ -3608,12 +4142,12 @@ export type TranslationKeys = {
   "nav.home_aria": string;
   "nav.home_desc": string;
   "nav.ialab_pro": string;
+  "nav.ingenia": string;
   "nav.login": string;
   "nav.logo_alt": string;
   "nav.menu_aria": string;
   "nav.planes": string;
   "nav.send_message": string;
-  "nav.smartboard": string;
   "nav.whatsapp": string;
   "nico.appointment_saved_desc": string;
   "nico.appointment_saved_title": string;
@@ -3666,11 +4200,11 @@ export type TranslationKeys = {
   "notification.mark_all_read": string;
   "notification.mark_read_aria": string;
   "notification.panel_title": string;
-  "notification.push_unsupported": string;
   "notification.preferences": string;
   "notification.push_disabled": string;
   "notification.push_enabled": string;
   "notification.push_toggle": string;
+  "notification.push_unsupported": string;
   "notification.time_ago_d": string;
   "notification.time_ago_h": string;
   "notification.time_ago_min": string;
@@ -3796,7 +4330,6 @@ export type TranslationKeys = {
   "ova.biaslab.back_to_start": string;
   "ova.biaslab.badge": string;
   "ova.biaslab.case_study": string;
-  "ova.biaslab.notebooklm_quote": string;
   "ova.biaslab.default_voice_text": string;
   "ova.biaslab.footer": string;
   "ova.biaslab.game_complete_desc": string;
@@ -3814,6 +4347,7 @@ export type TranslationKeys = {
   "ova.biaslab.nav_cap4": string;
   "ova.biaslab.nav_game": string;
   "ova.biaslab.nav_intro": string;
+  "ova.biaslab.notebooklm_quote": string;
   "ova.biaslab.responsible_practices": string;
   "ova.biaslab.sidebar_subtitle": string;
   "ova.biaslab.start_btn": string;
@@ -3884,6 +4418,10 @@ export type TranslationKeys = {
   "ova.buildgpt.learning_obj_2": string;
   "ova.buildgpt.learning_obj_3": string;
   "ova.buildgpt.learning_obj_4": string;
+  "ova.buildgpt.max_screen_2": string;
+  "ova.buildgpt.max_screen_3": string;
+  "ova.buildgpt.max_screen_4": string;
+  "ova.buildgpt.max_screen_5": string;
   "ova.buildgpt.quiz_bad": string;
   "ova.buildgpt.quiz_cert_btn": string;
   "ova.buildgpt.quiz_good": string;
@@ -3906,10 +4444,6 @@ export type TranslationKeys = {
   "ova.buildgpt.start": string;
   "ova.buildgpt.step": string;
   "ova.buildgpt.summary": string;
-  "ova.buildgpt.valerio_screen_2": string;
-  "ova.buildgpt.valerio_screen_3": string;
-  "ova.buildgpt.valerio_screen_4": string;
-  "ova.buildgpt.valerio_screen_5": string;
   "ova.buildgpt.welcome_audio": string;
   "ova.buildgpt.welcome_desc": string;
   "ova.buildgpt.welcome_title": string;
@@ -3954,6 +4488,7 @@ export type TranslationKeys = {
   "ova.chatgpttools.welcome_subtitle": string;
   "ova.chatgpttools.welcome_title": string;
   "ova.chatgpttools.welcome_voice": string;
+  "ova.common.step_requires_activity": string;
   "ova.docmastery.analyze_workflow": string;
   "ova.docmastery.analyzed": string;
   "ova.docmastery.badge": string;
@@ -4195,7 +4730,6 @@ export type TranslationKeys = {
   "ova.ethicscases.min_chars": string;
   "ova.ethicscases.nav_finish": string;
   "ova.ethicscases.nav_next": string;
-  "ova.common.step_requires_activity": string;
   "ova.ethicscases.nav_prev": string;
   "ova.ethicscases.q_accountability": string;
   "ova.ethicscases.q_accountability_desc": string;
@@ -4225,6 +4759,13 @@ export type TranslationKeys = {
   "ova.ethicscases.welcome_desc": string;
   "ova.ethicscases.welcome_title": string;
   "ova.ethicscases.what_would_you_do": string;
+  "ova.etica.objective_1": string;
+  "ova.etica.objective_2": string;
+  "ova.etica.objective_3": string;
+  "ova.etica.objective_4": string;
+  "ova.etica.quiz_min_hint": string;
+  "ova.etica.quiz_not_passed_title": string;
+  "ova.etica.quiz_retry": string;
   "ova.gemini.learning_obj_1": string;
   "ova.gemini.learning_obj_2": string;
   "ova.gemini.learning_obj_3": string;
@@ -4385,6 +4926,7 @@ export type TranslationKeys = {
   "ova.nav.next": string;
   "ova.nav.prev": string;
   "ova.nav.prev_aria": string;
+  "ova.nav.tabs_label": string;
   "ova.notebooklab.completed_label": string;
   "ova.notebooklab.completed_text": string;
   "ova.notebooklab.correct_label": string;
@@ -4660,9 +5202,9 @@ export type TranslationKeys = {
   "ova.tour.learning_obj_2": string;
   "ova.tour.learning_obj_3": string;
   "ova.tour.learning_obj_4": string;
+  "ova.tour.max_quiz_text": string;
   "ova.tour.start_btn": string;
   "ova.tour.title": string;
-  "ova.tour.valerio_quiz_text": string;
   "ova.tour.welcome_audio": string;
   "page_loader.admin": string;
   "page_loader.ailab": string;
@@ -4677,6 +5219,10 @@ export type TranslationKeys = {
   "parent_dashboard.a_subject": string;
   "parent_dashboard.achieved_subtitle": string;
   "parent_dashboard.achieved_title": string;
+  "parent_dashboard.action_check_missions": string;
+  "parent_dashboard.action_encourage_start": string;
+  "parent_dashboard.action_explore_subjects": string;
+  "parent_dashboard.action_keep_going": string;
   "parent_dashboard.active_time": string;
   "parent_dashboard.activity_fallback": string;
   "parent_dashboard.advanced_subjects": string;
@@ -4684,8 +5230,11 @@ export type TranslationKeys = {
   "parent_dashboard.alert_streak_days": string;
   "parent_dashboard.alert_unexplored": string;
   "parent_dashboard.avg_progress": string;
+  "parent_dashboard.best_subject": string;
+  "parent_dashboard.chart_best_day": string;
   "parent_dashboard.cloud": string;
   "parent_dashboard.connected_now": string;
+  "parent_dashboard.contact_coach": string;
   "parent_dashboard.controls_dani_chat": string;
   "parent_dashboard.controls_dani_description": string;
   "parent_dashboard.controls_dani_header": string;
@@ -4721,6 +5270,7 @@ export type TranslationKeys = {
   "parent_dashboard.how_learns": string;
   "parent_dashboard.last_activity_label": string;
   "parent_dashboard.last_connection_label": string;
+  "parent_dashboard.learning_alerts": string;
   "parent_dashboard.learns_best": string;
   "parent_dashboard.level_avanzado": string;
   "parent_dashboard.level_experto": string;
@@ -4745,11 +5295,15 @@ export type TranslationKeys = {
   "parent_dashboard.nav_actividad": string;
   "parent_dashboard.nav_bienestar": string;
   "parent_dashboard.nav_controles": string;
+  "parent_dashboard.nav_inicio": string;
   "parent_dashboard.nav_plan": string;
   "parent_dashboard.nav_progreso": string;
+  "parent_dashboard.nav_recomendaciones": string;
   "parent_dashboard.nav_recursos": string;
   "parent_dashboard.nav_resumen": string;
+  "parent_dashboard.needs_attention": string;
   "parent_dashboard.no_activity": string;
+  "parent_dashboard.no_activity_today": string;
   "parent_dashboard.now": string;
   "parent_dashboard.offline": string;
   "parent_dashboard.panel_title": string;
@@ -4811,9 +5365,24 @@ export type TranslationKeys = {
   "parent_dashboard.resources_weekly_tip_citation": string;
   "parent_dashboard.resources_weekly_tip_strong": string;
   "parent_dashboard.resources_weekly_tip_title": string;
+  "parent_dashboard.roi_best_streak": string;
+  "parent_dashboard.roi_pending": string;
+  "parent_dashboard.semaphore_bien": string;
+  "parent_dashboard.semaphore_excelente": string;
+  "parent_dashboard.semaphore_no_data": string;
+  "parent_dashboard.semaphore_phrase_hours": string;
+  "parent_dashboard.semaphore_phrase_minutes": string;
+  "parent_dashboard.semaphore_phrase_notasks": string;
+  "parent_dashboard.semaphore_phrase_streak": string;
+  "parent_dashboard.semaphore_phrase_streaks": string;
+  "parent_dashboard.semaphore_phrase_tasks": string;
+  "parent_dashboard.semaphore_regular": string;
+  "parent_dashboard.semaphore_sin_actividad": string;
   "parent_dashboard.seo_desc": string;
   "parent_dashboard.seo_title": string;
   "parent_dashboard.sessions_today": string;
+  "parent_dashboard.show_less": string;
+  "parent_dashboard.show_more_details": string;
   "parent_dashboard.source_backend": string;
   "parent_dashboard.source_local": string;
   "parent_dashboard.source_supabase": string;
@@ -4825,6 +5394,8 @@ export type TranslationKeys = {
   "parent_dashboard.study_hours": string;
   "parent_dashboard.studying_now": string;
   "parent_dashboard.studying_subject": string;
+  "parent_dashboard.subject_not_started": string;
+  "parent_dashboard.subject_pct": string;
   "parent_dashboard.subjects_count": string;
   "parent_dashboard.subjects_of": string;
   "parent_dashboard.subjects_with_progress": string;
@@ -4853,6 +5424,11 @@ export type TranslationKeys = {
   "parent_dashboard.vak_kinestesico_style": string;
   "parent_dashboard.vak_predominant": string;
   "parent_dashboard.vak_visual_style": string;
+  "parent_dashboard.warning_inactivity": string;
+  "parent_dashboard.warning_performance_drop": string;
+  "parent_dashboard.warning_repeated_errors": string;
+  "parent_dashboard.warning_streak_broken": string;
+  "parent_dashboard.weekly_summary": string;
   "parent_dashboard.wellbeing_attention_title": string;
   "parent_dashboard.wellbeing_badge": string;
   "parent_dashboard.wellbeing_calm_desc": string;
@@ -4866,6 +5442,8 @@ export type TranslationKeys = {
   "parent_dashboard.wellness_regular_tip": string;
   "parent_dashboard.wellness_sin_actividad": string;
   "parent_dashboard.wellness_sin_actividad_tip": string;
+  "parent_dashboard.what_today": string;
+  "parent_dashboard.whatsapp_msg": string;
   "parent_dashboard.your_child": string;
   "peer_review.assignment": string;
   "peer_review.empty": string;
@@ -4942,8 +5520,6 @@ export type TranslationKeys = {
   "pricing.title_line2": string;
   "profile.actions_title": string;
   "profile.back_to_course": string;
-  "common.back": string;
-  "common.user_not_found": string;
   "profile.best_score": string;
   "profile.certificate_earned": string;
   "profile.change_photo": string;
@@ -4977,6 +5553,18 @@ export type TranslationKeys = {
   "profile.saving": string;
   "profile.tap_to_add": string;
   "profile.user_fallback": string;
+  "prog.activity_7days": string;
+  "prog.all_pending": string;
+  "prog.not_started_hint": string;
+  "prog.points_this_week": string;
+  "prog.sessions_this_week": string;
+  "prog.status_advancing": string;
+  "prog.status_great": string;
+  "prog.status_not_started": string;
+  "prog.status_starting": string;
+  "prog.streak_label": string;
+  "prog.vs_last_week": string;
+  "prog.weekly_title": string;
   "progress.analyzing_1": string;
   "progress.analyzing_2": string;
   "progress.analyzing_3": string;
@@ -5000,6 +5588,54 @@ export type TranslationKeys = {
   "progress.student_fallback": string;
   "progress.unauthenticated": string;
   "progress.unknown_error": string;
+  "rec.academic_high_body": string;
+  "rec.academic_high_title": string;
+  "rec.academic_low_body": string;
+  "rec.academic_low_title": string;
+  "rec.academic_nomissions_body": string;
+  "rec.academic_nomissions_title": string;
+  "rec.action_10min": string;
+  "rec.action_ask_today": string;
+  "rec.action_balance": string;
+  "rec.action_celebrate": string;
+  "rec.action_check_in": string;
+  "rec.action_explore_together": string;
+  "rec.action_new_challenge": string;
+  "rec.action_review_missions": string;
+  "rec.action_schedule": string;
+  "rec.action_sit_together": string;
+  "rec.emotional_great_body": string;
+  "rec.emotional_great_title": string;
+  "rec.emotional_inactive_body": string;
+  "rec.emotional_inactive_title": string;
+  "rec.emotional_regular_body": string;
+  "rec.emotional_regular_title": string;
+  "rec.footer_note": string;
+  "rec.habit_growing_body": string;
+  "rec.habit_growing_title": string;
+  "rec.habit_nostreak_body": string;
+  "rec.habit_nostreak_title": string;
+  "rec.habit_strong_body": string;
+  "rec.habit_strong_title": string;
+  "rec.no_recs_body": string;
+  "rec.no_recs_title": string;
+  "rec.section_subtitle": string;
+  "rec.section_title": string;
+  "rec.time_good_body": string;
+  "rec.time_good_title": string;
+  "rec.time_low_body": string;
+  "rec.time_low_title": string;
+  "rec.unexplored_body": string;
+  "rec.unexplored_title": string;
+  "rec.vak_auditivo_connect": string;
+  "rec.vak_auditivo_study": string;
+  "rec.vak_badge": string;
+  "rec.vak_connect_title": string;
+  "rec.vak_kinestesico_connect": string;
+  "rec.vak_kinestesico_study": string;
+  "rec.vak_title": string;
+  "rec.vak_visual_connect": string;
+  "rec.vak_visual_study": string;
   "reminder.inactivity_2_msg": string;
   "reminder.inactivity_2_title": string;
   "reminder.inactivity_4_msg": string;
@@ -5022,6 +5658,26 @@ export type TranslationKeys = {
   "reset.success_title": string;
   "reset.title": string;
   "reset.toggle_password": string;
+  "role.explore_subject_body": string;
+  "role.explore_subject_title": string;
+  "role.great_body": string;
+  "role.great_title": string;
+  "role.inactive_body": string;
+  "role.inactive_title": string;
+  "role.milestone_body": string;
+  "role.milestone_title": string;
+  "role.no_actions": string;
+  "role.no_actions_body": string;
+  "role.nomissions_body": string;
+  "role.nomissions_title": string;
+  "role.regular_body": string;
+  "role.regular_title": string;
+  "role.section_subtitle": string;
+  "role.section_title": string;
+  "role.streak_body": string;
+  "role.streak_celebrate_body": string;
+  "role.streak_celebrate_title": string;
+  "role.streak_title": string;
   "route.accept_challenge": string;
   "route.continue": string;
   "route.continue_learning": string;
@@ -5063,6 +5719,12 @@ export type TranslationKeys = {
   "seo.home.title": string;
   "seo.ialab_academic.desc": string;
   "seo.ialab_academic.title": string;
+  "seo.ingenia.desc": string;
+  "seo.ingenia.title": string;
+  "seo.ingenia_kids.desc": string;
+  "seo.ingenia_kids.title": string;
+  "seo.ingenia_parents.desc": string;
+  "seo.ingenia_parents.title": string;
   "seo.login.desc": string;
   "seo.login.title": string;
   "seo.neuroentorno.desc": string;
@@ -5075,14 +5737,8 @@ export type TranslationKeys = {
   "seo.proyectos.title": string;
   "seo.signup_ialab.desc": string;
   "seo.signup_ialab.title": string;
-  "seo.signup_smartboard.desc": string;
-  "seo.signup_smartboard.title": string;
-  "seo.smartboard.desc": string;
-  "seo.smartboard.title": string;
-  "seo.smartboard_kids.desc": string;
-  "seo.smartboard_kids.title": string;
-  "seo.smartboard_parents.desc": string;
-  "seo.smartboard_parents.title": string;
+  "seo.signup_ingenia.desc": string;
+  "seo.signup_ingenia.title": string;
   "seo.vak_premium.desc": string;
   "seo.vak_premium.title": string;
   "seo.vak_simple.desc": string;
@@ -5101,6 +5757,7 @@ export type TranslationKeys = {
   "sidebar.days": string;
   "sidebar.expand": string;
   "sidebar.expand_btn": string;
+  "sidebar.hide_menu_hint": string;
   "sidebar.home": string;
   "sidebar.lab_ia": string;
   "sidebar.leaderboard": string;
@@ -5135,6 +5792,7 @@ export type TranslationKeys = {
   "sidebar.resources": string;
   "sidebar.resources_tooltip": string;
   "sidebar.schedule": string;
+  "sidebar.show_menu_hint": string;
   "sidebar.streak_days": string;
   "sidebar.streak_details": string;
   "sidebar.streak_risk": string;
@@ -5191,314 +5849,6 @@ export type TranslationKeys = {
   "signup.success.registration_complete": string;
   "signup.success_redirecting": string;
   "signup.success_title": string;
-  "smartboard.achievements": string;
-  "smartboard.active": string;
-  "smartboard.active_connection": string;
-  "smartboard.active_research_line": string;
-  "smartboard.active_time": string;
-  "smartboard.active_time_min": string;
-  "smartboard.all_missions": string;
-  "smartboard.analysis_context": string;
-  "smartboard.analysis_item_questions": string;
-  "smartboard.analysis_item_summary": string;
-  "smartboard.analysis_item_techniques": string;
-  "smartboard.auto_update": string;
-  "smartboard.available": string;
-  "smartboard.average": string;
-  "smartboard.average_progress": string;
-  "smartboard.back": string;
-  "smartboard.back_dashboard": string;
-  "smartboard.best_streak": string;
-  "smartboard.bienvenido": string;
-  "smartboard.calendar_days": string;
-  "smartboard.calendar_month": string;
-  "smartboard.chart_last_14": string;
-  "smartboard.chat_valeria": string;
-  "smartboard.chat_valeria_desc": string;
-  "smartboard.chat_valeria_title": string;
-  "smartboard.clear": string;
-  "smartboard.click_select": string;
-  "smartboard.close": string;
-  "smartboard.close_reminder": string;
-  "smartboard.close_report": string;
-  "smartboard.complete_btn": string;
-  "smartboard.completed": string;
-  "smartboard.completed_pct": string;
-  "smartboard.connected": string;
-  "smartboard.connected_at": string;
-  "smartboard.connected_ialab": string;
-  "smartboard.copy": string;
-  "smartboard.current_streak": string;
-  "smartboard.dani_fab_aria": string;
-  "smartboard.dani_reminder_open": string;
-  "smartboard.date": string;
-  "smartboard.days": string;
-  "smartboard.diagnostico_vak": string;
-  "smartboard.document_analyzer_tab": string;
-  "smartboard.download_full_report": string;
-  "smartboard.download_report": string;
-  "smartboard.drag_files": string;
-  "smartboard.drop_to_upload": string;
-  "smartboard.dropzone_label": string;
-  "smartboard.duration": string;
-  "smartboard.error_load_activities": string;
-  "smartboard.error_load_calendar": string;
-  "smartboard.error_load_home": string;
-  "smartboard.error_load_missions": string;
-  "smartboard.error_load_news": string;
-  "smartboard.error_load_points": string;
-  "smartboard.error_load_subjects": string;
-  "smartboard.error_load_vak": string;
-  "smartboard.general": string;
-  "smartboard.habeas_parent_email_invalid": string;
-  "smartboard.habeas_parent_email_required": string;
-  "smartboard.ialab_desc": string;
-  "smartboard.ialab_pro_desc": string;
-  "smartboard.ialab_pro_title": string;
-  "smartboard.ialab_title": string;
-  "smartboard.interactions": string;
-  "smartboard.interactions_with": string;
-  "smartboard.landing.choose_plan_aria": string;
-  "smartboard.landing.start_aria": string;
-  "smartboard.landing.try_aria": string;
-  "smartboard.landing_badge": string;
-  "smartboard.landing_benefits_badge": string;
-  "smartboard.landing_benefits_title_line1": string;
-  "smartboard.landing_benefits_title_line2": string;
-  "smartboard.landing_concern_label": string;
-  "smartboard.landing_cta_badge": string;
-  "smartboard.landing_cta_final_btn": string;
-  "smartboard.landing_cta_final_desc": string;
-  "smartboard.landing_cta_final_title_line1": string;
-  "smartboard.landing_cta_final_title_line2": string;
-  "smartboard.landing_cta_how": string;
-  "smartboard.landing_cta_start": string;
-  "smartboard.landing_cta_try": string;
-  "smartboard.landing_faq_title": string;
-  "smartboard.landing_faq_title_highlight": string;
-  "smartboard.landing_hero_brain_label": string;
-  "smartboard.landing_hero_desc": string;
-  "smartboard.landing_hero_eyebrow": string;
-  "smartboard.landing_hero_line1": string;
-  "smartboard.landing_hero_line2": string;
-  "smartboard.landing_hero_line3": string;
-  "smartboard.landing_how_badge": string;
-  "smartboard.landing_how_title_line1": string;
-  "smartboard.landing_how_title_line2": string;
-  "smartboard.landing_kids_count": string;
-  "smartboard.landing_kids_learning": string;
-  "smartboard.landing_next": string;
-  "smartboard.landing_pain_point1": string;
-  "smartboard.landing_pain_point2": string;
-  "smartboard.landing_pain_point3": string;
-  "smartboard.landing_pain_point4": string;
-  "smartboard.landing_prev": string;
-  "smartboard.landing_pricing_badge": string;
-  "smartboard.landing_pricing_choose": string;
-  "smartboard.landing_pricing_desc": string;
-  "smartboard.landing_pricing_popular": string;
-  "smartboard.landing_pricing_title_line1": string;
-  "smartboard.landing_pricing_title_line2": string;
-  "smartboard.landing_quote": string;
-  "smartboard.landing_solution1": string;
-  "smartboard.landing_solution2": string;
-  "smartboard.landing_solution3": string;
-  "smartboard.landing_solution4": string;
-  "smartboard.landing_start_now": string;
-  "smartboard.landing_stat_hours": string;
-  "smartboard.landing_stat_improvement": string;
-  "smartboard.landing_stat_students": string;
-  "smartboard.landing_step_beneficios": string;
-  "smartboard.landing_step_como_funciona": string;
-  "smartboard.landing_step_faq": string;
-  "smartboard.landing_step_planes": string;
-  "smartboard.landing_step_que_es": string;
-  "smartboard.landing_step_testimonios": string;
-  "smartboard.landing_step_tranquilidad": string;
-  "smartboard.landing_step_vak": string;
-  "smartboard.landing_tag_adaptive_ai": string;
-  "smartboard.landing_tag_live_reports": string;
-  "smartboard.landing_tag_real_coaches": string;
-  "smartboard.landing_tag_scientific_vak": string;
-  "smartboard.landing_testimonials_badge": string;
-  "smartboard.landing_testimonials_title_line1": string;
-  "smartboard.landing_testimonials_title_line2": string;
-  "smartboard.landing_tranquility_badge": string;
-  "smartboard.landing_tranquility_desc": string;
-  "smartboard.landing_tranquility_title_line1": string;
-  "smartboard.landing_tranquility_title_line2": string;
-  "smartboard.landing_trial_terms": string;
-  "smartboard.landing_trust_badge": string;
-  "smartboard.landing_trust_subtitle": string;
-  "smartboard.landing_vak_badge": string;
-  "smartboard.landing_vak_desc": string;
-  "smartboard.landing_vak_title": string;
-  "smartboard.landing_vak_title_highlight": string;
-  "smartboard.landing_what_badge": string;
-  "smartboard.landing_what_desc1": string;
-  "smartboard.landing_what_desc2": string;
-  "smartboard.landing_what_title_line1": string;
-  "smartboard.landing_what_title_line2": string;
-  "smartboard.learning_stats": string;
-  "smartboard.level": string;
-  "smartboard.level_label": string;
-  "smartboard.level_name": string;
-  "smartboard.live": string;
-  "smartboard.loading": string;
-  "smartboard.login_button": string;
-  "smartboard.login_desc": string;
-  "smartboard.login_error": string;
-  "smartboard.login_heading": string;
-  "smartboard.login_subtitle": string;
-  "smartboard.login_title": string;
-  "smartboard.login_verifying": string;
-  "smartboard.logout": string;
-  "smartboard.minutes": string;
-  "smartboard.minutes_total": string;
-  "smartboard.missing_points": string;
-  "smartboard.missions": string;
-  "smartboard.missions_day": string;
-  "smartboard.missions_label": string;
-  "smartboard.missions_view_title": string;
-  "smartboard.mobile_nav": string;
-  "smartboard.nav_label": string;
-  "smartboard.no_access": string;
-  "smartboard.no_points_data": string;
-  "smartboard.no_subjects": string;
-  "smartboard.not_connected": string;
-  "smartboard.notifications": string;
-  "smartboard.parent_active_minutes": string;
-  "smartboard.parent_alert_explore": string;
-  "smartboard.parent_alert_inactive": string;
-  "smartboard.parent_alert_points": string;
-  "smartboard.parent_alert_streak": string;
-  "smartboard.parent_alert_title": string;
-  "smartboard.parent_congrats_streak": string;
-  "smartboard.parent_current_tab": string;
-  "smartboard.parent_desc": string;
-  "smartboard.parent_last_active": string;
-  "smartboard.parent_no_activity_today": string;
-  "smartboard.parent_no_sessions": string;
-  "smartboard.parent_offline": string;
-  "smartboard.parent_online": string;
-  "smartboard.parent_panel": string;
-  "smartboard.parent_sessions_today": string;
-  "smartboard.parent_streak_days": string;
-  "smartboard.parent_today_sessions": string;
-  "smartboard.parent_try_subjects": string;
-  "smartboard.password": string;
-  "smartboard.password_placeholder": string;
-  "smartboard.pending": string;
-  "smartboard.points": string;
-  "smartboard.points_display": string;
-  "smartboard.points_history": string;
-  "smartboard.points_label": string;
-  "smartboard.points_per_day": string;
-  "smartboard.points_progress": string;
-  "smartboard.predominant_style": string;
-  "smartboard.progress": string;
-  "smartboard.progress_by_subject": string;
-  "smartboard.progress_general": string;
-  "smartboard.progress_label": string;
-  "smartboard.progress_pct": string;
-  "smartboard.progress_tab": string;
-  "smartboard.questions_asked": string;
-  "smartboard.quick_actions": string;
-  "smartboard.recent_activity": string;
-  "smartboard.recent_sessions": string;
-  "smartboard.record": string;
-  "smartboard.report_days": string;
-  "smartboard.report_level": string;
-  "smartboard.report_min": string;
-  "smartboard.report_streak": string;
-  "smartboard.report_time": string;
-  "smartboard.report_title": string;
-  "smartboard.report_xp": string;
-  "smartboard.request_account": string;
-  "smartboard.research_desc": string;
-  "smartboard.research_lab": string;
-  "smartboard.research_lines_tab": string;
-  "smartboard.rewards": string;
-  "smartboard.sb_name": string;
-  "smartboard.sb_subtitle": string;
-  "smartboard.score": string;
-  "smartboard.selected_line": string;
-  "smartboard.selected_line_with_name": string;
-  "smartboard.sidebar_level": string;
-  "smartboard.sidebar_logout": string;
-  "smartboard.sidebar_streak": string;
-  "smartboard.signup_back": string;
-  "smartboard.signup_feature_community": string;
-  "smartboard.signup_feature_missions": string;
-  "smartboard.signup_feature_tracking": string;
-  "smartboard.signup_for_students": string;
-  "smartboard.signup_have_account": string;
-  "smartboard.signup_login_heading": string;
-  "smartboard.signup_login_here": string;
-  "smartboard.signup_login_sub": string;
-  "smartboard.signup_login_tab": string;
-  "smartboard.signup_no_account": string;
-  "smartboard.signup_quote": string;
-  "smartboard.signup_register_heading": string;
-  "smartboard.signup_register_here": string;
-  "smartboard.signup_register_sub": string;
-  "smartboard.signup_register_tab": string;
-  "smartboard.signup_signin_desc": string;
-  "smartboard.signup_signup_desc": string;
-  "smartboard.signup_terms": string;
-  "smartboard.signup_welcome": string;
-  "smartboard.start": string;
-  "smartboard.start_today": string;
-  "smartboard.stats_back": string;
-  "smartboard.stats_desc": string;
-  "smartboard.stats_title": string;
-  "smartboard.streak_days": string;
-  "smartboard.streak_days_label": string;
-  "smartboard.streak_title": string;
-  "smartboard.study_time": string;
-  "smartboard.subject": string;
-  "smartboard.subjects_view_title": string;
-  "smartboard.tab_activities": string;
-  "smartboard.tab_calendar": string;
-  "smartboard.tab_home": string;
-  "smartboard.tab_missions": string;
-  "smartboard.tab_news": string;
-  "smartboard.tab_parents": string;
-  "smartboard.tab_progress": string;
-  "smartboard.tab_subjects": string;
-  "smartboard.tab_vak": string;
-  "smartboard.talk_dani": string;
-  "smartboard.today_missions": string;
-  "smartboard.topbar_activities": string;
-  "smartboard.topbar_calendar": string;
-  "smartboard.topbar_home": string;
-  "smartboard.topbar_missions": string;
-  "smartboard.topbar_news": string;
-  "smartboard.topbar_progress": string;
-  "smartboard.topbar_subjects": string;
-  "smartboard.topbar_vak": string;
-  "smartboard.total_hours": string;
-  "smartboard.total_points": string;
-  "smartboard.total_time": string;
-  "smartboard.transactions": string;
-  "smartboard.unlock_reward": string;
-  "smartboard.unlocked": string;
-  "smartboard.upcoming_events": string;
-  "smartboard.username": string;
-  "smartboard.username_placeholder": string;
-  "smartboard.vak_analysis": string;
-  "smartboard.vak_desc": string;
-  "smartboard.vak_profile": string;
-  "smartboard.vak_report": string;
-  "smartboard.vak_techniques": string;
-  "smartboard.vak_title": string;
-  "smartboard.valeria_ready": string;
-  "smartboard.valerio_analysis": string;
-  "smartboard.valerio_analyzing": string;
-  "smartboard.valerio_will_analyze": string;
-  "smartboard.view_all": string;
-  "smartboard.weekly_activity": string;
-  "smartboard.your_subjects": string;
   "streak.days": string;
   "streak.leaderboard_badges": string;
   "streak.leaderboard_streak": string;
@@ -5512,6 +5862,12 @@ export type TranslationKeys = {
   "streak.tier_imparable": string;
   "streak.xp": string;
   "streak.you": string;
+  streak_ctx_0: string;
+  streak_ctx_1: string;
+  streak_ctx_2: string;
+  streak_ctx_3: string;
+  streak_ctx_5: string;
+  streak_ctx_7: string;
   "study_groups.create": string;
   "study_groups.create_first": string;
   "study_groups.form_desc_placeholder": string;
@@ -5521,6 +5877,16 @@ export type TranslationKeys = {
   "study_groups.no_groups": string;
   "study_groups.subtitle": string;
   "study_groups.title": string;
+  "summary.best_subject": string;
+  "summary.bien": string;
+  "summary.card_title": string;
+  "summary.exc_no_streak": string;
+  "summary.exc_streak": string;
+  "summary.no_activity": string;
+  "summary.regular": string;
+  "summary.stat_days": string;
+  "summary.stat_points": string;
+  "summary.stat_sessions": string;
   time_avg: string;
   time_days_active: string;
   time_title: string;
@@ -5631,29 +5997,6 @@ export type TranslationKeys = {
   "vak.ui.your_age_label": string;
   "vak.ui.your_name_label": string;
   "vak.ui.your_name_placeholder": string;
-  "valerio.advanced": string;
-  "valerio.at_risk": string;
-  "valerio.beginner": string;
-  "valerio.completed_modules": string;
-  "valerio.course_progress": string;
-  "valerio.current_module_label": string;
-  "valerio.days": string;
-  "valerio.failures": string;
-  "valerio.intermediate": string;
-  "valerio.last_activity": string;
-  "valerio.level": string;
-  "valerio.module_scores": string;
-  "valerio.name": string;
-  "valerio.no_activity": string;
-  "valerio.no_streak": string;
-  "valerio.none_identified": string;
-  "valerio.session_history": string;
-  "valerio.streak": string;
-  "valerio.student": string;
-  "valerio.student_context_label": string;
-  "valerio.total_xp": string;
-  "valerio.weak_topics": string;
-  "valerio.weekly_xp": string;
   "video.cc_off": string;
   "video.cc_on": string;
   "video.format": string;
@@ -6068,6 +6411,11 @@ const translationKeySet: Record<string, true> = {
   "badge.obtained": true,
   "calendar.activity_desc_placeholder": true,
   "calendar.activity_title_placeholder": true,
+  "celebrate.cta": true,
+  "celebrate.module_body": true,
+  "celebrate.module_title": true,
+  "celebrate.streak_body": true,
+  "celebrate.streak_title": true,
   "certificate.awarded_to": true,
   "certificate.cert_number_pdf": true,
   "certificate.completed_course": true,
@@ -6109,12 +6457,14 @@ const translationKeySet: Record<string, true> = {
   "chatbot.suggest": true,
   "chatbot.thinking": true,
   "chatbot.welcome_back": true,
+  "common.back": true,
   "common.cancel": true,
   "common.close": true,
   "common.loading": true,
   "common.mark_viewed": true,
   "common.not_available": true,
   "common.retry": true,
+  "common.user_not_found": true,
   "consultoria.ai_tools_access": true,
   "consultoria.ai_tools_architect_desc": true,
   "consultoria.ai_tools_architect_feature1": true,
@@ -6206,6 +6556,7 @@ const translationKeySet: Record<string, true> = {
   "consultoria.hero_subtitle": true,
   "consultoria.hero_title": true,
   "consultoria.month": true,
+  "consultoria.months": true,
   "consultoria.pilar_03": true,
   "consultoria.roi_analyzing": true,
   "consultoria.roi_badge": true,
@@ -6269,14 +6620,89 @@ const translationKeySet: Record<string, true> = {
   "contact.thanks_title": true,
   "contact.title": true,
   "contact.weekdays": true,
+  "conv.bien_auditivo": true,
+  "conv.bien_default": true,
+  "conv.bien_kinestesico": true,
+  "conv.bien_visual": true,
+  "conv.card_hint": true,
+  "conv.card_title": true,
+  "conv.excellent_auditivo": true,
+  "conv.excellent_default": true,
+  "conv.excellent_kinestesico": true,
+  "conv.excellent_visual": true,
+  "conv.inactive_auditivo": true,
+  "conv.inactive_default": true,
+  "conv.inactive_kinestesico": true,
+  "conv.inactive_visual": true,
+  "conv.kit_bien_q1a": true,
+  "conv.kit_bien_q1b": true,
+  "conv.kit_bien_q2a": true,
+  "conv.kit_bien_q2b": true,
+  "conv.kit_bien_q3a": true,
+  "conv.kit_bien_q3b": true,
+  "conv.kit_exc_q1a": true,
+  "conv.kit_exc_q1b": true,
+  "conv.kit_exc_q2a": true,
+  "conv.kit_exc_q2b": true,
+  "conv.kit_exc_q3a": true,
+  "conv.kit_exc_q3b": true,
+  "conv.kit_hint": true,
+  "conv.kit_inact_q1a": true,
+  "conv.kit_inact_q1b": true,
+  "conv.kit_inact_q2a": true,
+  "conv.kit_inact_q2b": true,
+  "conv.kit_inact_q3a": true,
+  "conv.kit_inact_q3b": true,
+  "conv.kit_reg_q1a": true,
+  "conv.kit_reg_q1b": true,
+  "conv.kit_reg_q2a": true,
+  "conv.kit_reg_q2b": true,
+  "conv.kit_reg_q3a": true,
+  "conv.kit_reg_q3b": true,
+  "conv.kit_subtitle": true,
+  "conv.kit_title": true,
+  "conv.regular_auditivo": true,
+  "conv.regular_default": true,
+  "conv.regular_kinestesico": true,
+  "conv.regular_visual": true,
   "course_completion.cert_obtained": true,
   "course_completion.message": true,
   "course_completion.module_completed": true,
+  "course_completion.no": true,
   "course_completion.progress": true,
   "course_completion.progress_80": true,
   "course_completion.title": true,
   "course_completion.view_cert": true,
   "course_completion.yes": true,
+  "ctrl.accordion_goals": true,
+  "ctrl.accordion_schedule": true,
+  "ctrl.goal_2": true,
+  "ctrl.goal_3": true,
+  "ctrl.goal_5": true,
+  "ctrl.goal_7": true,
+  "ctrl.goal_none": true,
+  "ctrl.monthly_obj_desc": true,
+  "ctrl.monthly_obj_placeholder": true,
+  "ctrl.monthly_obj_title": true,
+  "ctrl.monthly_preset_explore": true,
+  "ctrl.monthly_preset_improve": true,
+  "ctrl.monthly_preset_module": true,
+  "ctrl.monthly_preset_streak": true,
+  "ctrl.notif_achievements": true,
+  "ctrl.notif_streak_risk": true,
+  "ctrl.notif_title": true,
+  "ctrl.notif_weekly_goal": true,
+  "ctrl.notif_weekly_report": true,
+  "ctrl.schedule_days": true,
+  "ctrl.schedule_desc": true,
+  "ctrl.schedule_time": true,
+  "ctrl.schedule_title": true,
+  "ctrl.time_afternoon": true,
+  "ctrl.time_evening": true,
+  "ctrl.time_morning": true,
+  "ctrl.weekly_goal_desc": true,
+  "ctrl.weekly_goal_set": true,
+  "ctrl.weekly_goal_title": true,
   "dani.chart_title": true,
   "dani.chat_placeholder": true,
   "dani.chat_title": true,
@@ -6305,6 +6731,8 @@ const translationKeySet: Record<string, true> = {
   "dani.mic_stop_aria": true,
   "dani.mood_label": true,
   "dani.placeholder": true,
+  "dani.placeholder_exam": true,
+  "dani.placeholder_subject": true,
   "dani.qa_emotional_subtitle": true,
   "dani.qa_emotional_title": true,
   "dani.qa_explain_subtitle": true,
@@ -6505,13 +6933,13 @@ const translationKeySet: Record<string, true> = {
   "footer.email_error": true,
   "footer.email_placeholder": true,
   "footer.ialab": true,
+  "footer.ingenia": true,
   "footer.methodology": true,
   "footer.newsletter": true,
   "footer.privacy": true,
   "footer.projects": true,
   "footer.resources": true,
   "footer.roi": true,
-  "footer.smartboard": true,
   "footer.subscribe": true,
   "footer.tagline": true,
   "footer.terms": true,
@@ -6529,15 +6957,62 @@ const translationKeySet: Record<string, true> = {
   "header.notifications_forum": true,
   "header.request_demo": true,
   "header.tools": true,
-  "hero.cta_conoce_smartboard": true,
-  "hero.cta_smartboard": true,
+  "hero.carousel_label": true,
+  "hero.carousel_roledescription": true,
+  "hero.chip_adn_desc": true,
+  "hero.chip_adn_title": true,
+  "hero.chip_ialab_desc": true,
+  "hero.chip_ialab_title": true,
+  "hero.chip_ingenia_desc": true,
+  "hero.chip_ingenia_title": true,
+  "hero.cta_conoce_ingenia": true,
+  "hero.cta_ingenia": true,
   "hero.cta_ver_soluciones": true,
+  "hero.ialab_chip": true,
+  "hero.ialab_cta": true,
+  "hero.ialab_fact_1": true,
+  "hero.ialab_fact_2": true,
+  "hero.ialab_listen": true,
+  "hero.ialab_live_from": true,
+  "hero.ialab_live_title": true,
+  "hero.ialab_live_to": true,
+  "hero.ialab_mute": true,
+  "hero.ialab_subtitle": true,
+  "hero.ialab_title": true,
+  "hero.ialab_video_label": true,
+  "hero.ingenia_chip": true,
+  "hero.ingenia_cta": true,
+  "hero.ingenia_fact_1": true,
+  "hero.ingenia_fact_2": true,
+  "hero.ingenia_listen": true,
+  "hero.ingenia_live_lang": true,
+  "hero.ingenia_live_math": true,
+  "hero.ingenia_live_sci": true,
+  "hero.ingenia_live_title": true,
+  "hero.ingenia_mute": true,
+  "hero.ingenia_subtitle": true,
+  "hero.ingenia_title": true,
+  "hero.ingenia_video_label": true,
+  "hero.pause": true,
+  "hero.photo_caption": true,
+  "hero.photo_main_alt": true,
+  "hero.photo_teacher_alt": true,
+  "hero.play": true,
+  "hero.scene_chip": true,
+  "hero.slide_roledescription": true,
   "hero.stat_anios_experiencia": true,
   "hero.stat_estudiantes": true,
   "hero.stat_exito": true,
   "hero.subtitle_after": true,
   "hero.subtitle_before": true,
   "hero.subtitle_highlight": true,
+  "hero.tab_edutechlife": true,
+  "hero.tab_edutechlife_caption": true,
+  "hero.tab_ialab": true,
+  "hero.tab_ialab_caption": true,
+  "hero.tab_ingenia": true,
+  "hero.tab_ingenia_caption": true,
+  "hero.tabs_label": true,
   "hero.title_line1": true,
   "hero.title_line2": true,
   "ialab.achievement_toast.close_aria": true,
@@ -6580,6 +7055,8 @@ const translationKeySet: Record<string, true> = {
   "ialab.bookmarks_empty_title": true,
   "ialab.bookmarks_module": true,
   "ialab.bookmarks_open": true,
+  "ialab.bookmarks_tab_label": true,
+  "ialab.bottom_nav_aria": true,
   "ialab.breadcrumb.aria_label": true,
   "ialab.breadcrumb_home": true,
   "ialab.breadcrumb_module": true,
@@ -6723,6 +7200,9 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.m2.step3_schema_desc": true,
   "ialab.challenge.m2.step3_schema_generated": true,
   "ialab.challenge.m2.step3_spec_context": true,
+  "ialab.challenge.m2.step3_spec_dev": true,
+  "ialab.challenge.m2.step3_spec_marketing": true,
+  "ialab.challenge.m2.step3_spec_support": true,
   "ialab.challenge.m2.step3_subtitle": true,
   "ialab.challenge.m2.step3_tip_1": true,
   "ialab.challenge.m2.step3_tip_2": true,
@@ -6944,6 +7424,14 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.m5.step3_howto_title": true,
   "ialab.challenge.m5.step3_title": true,
   "ialab.challenge.m5.step_label": true,
+  "ialab.challenge.max_estimated_time": true,
+  "ialab.challenge.max_focus_notice": true,
+  "ialab.challenge.max_intro_subtitle": true,
+  "ialab.challenge.max_intro_title": true,
+  "ialab.challenge.max_label_apply": true,
+  "ialab.challenge.max_label_challenge": true,
+  "ialab.challenge.max_label_practice": true,
+  "ialab.challenge.max_start": true,
   "ialab.challenge.minimum_80": true,
   "ialab.challenge.notification_advanced_error": true,
   "ialab.challenge.notification_advanced_started": true,
@@ -6972,13 +7460,6 @@ const translationKeySet: Record<string, true> = {
   "ialab.challenge.title_failed": true,
   "ialab.challenge.title_passed": true,
   "ialab.challenge.title_pending": true,
-  "ialab.challenge.valerio_estimated_time": true,
-  "ialab.challenge.valerio_intro_subtitle": true,
-  "ialab.challenge.valerio_intro_title": true,
-  "ialab.challenge.valerio_label_apply": true,
-  "ialab.challenge.valerio_label_challenge": true,
-  "ialab.challenge.valerio_label_practice": true,
-  "ialab.challenge.valerio_start": true,
   "ialab.challenge_result.error_feedback": true,
   "ialab.challenge_result.loading": true,
   "ialab.challenge_result.no_feedback": true,
@@ -7029,6 +7510,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.course_catalog.category_productividad": true,
   "ialab.course_catalog.subtitle": true,
   "ialab.course_catalog.title": true,
+  "ialab.course_home.social_proof": true,
   "ialab.course_title": true,
   "ialab.daily_challenges.complete": true,
   "ialab.daily_challenges.dc1_desc": true,
@@ -7051,6 +7533,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.daily_plan.urgency_optional": true,
   "ialab.daily_plan.urgency_soon": true,
   "ialab.daily_plan.urgency_today": true,
+  "ialab.daily_plan.view_plan": true,
   "ialab.dashboard.certificates_title": true,
   "ialab.dashboard.completed_at": true,
   "ialab.dashboard.filter_all": true,
@@ -7059,6 +7542,10 @@ const translationKeySet: Record<string, true> = {
   "ialab.dashboard.no_courses": true,
   "ialab.dashboard.stats_label": true,
   "ialab.dashboard.view_certificate": true,
+  "ialab.doc_guide.after_title": true,
+  "ialab.doc_guide.before_title": true,
+  "ialab.doc_guide.questions_label": true,
+  "ialab.doc_guide.summary_label": true,
   "ialab.error_boundary.details": true,
   "ialab.error_boundary.message": true,
   "ialab.error_boundary.reload": true,
@@ -7152,6 +7639,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.modal.form_error_save": true,
   "ialab.evaluation.modal.load_error_title": true,
   "ialab.evaluation.modal.loading_desc": true,
+  "ialab.evaluation.modal.min_chars_hint": true,
   "ialab.evaluation.modal.next": true,
   "ialab.evaluation.modal.offline_desc": true,
   "ialab.evaluation.modal.offline_title": true,
@@ -7199,6 +7687,11 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.results.exercise_scores": true,
   "ialab.evaluation.results.exercises_completed": true,
   "ialab.evaluation.results.feedback_exceptional": true,
+  "ialab.evaluation.results.feedback_exceptional_m1": true,
+  "ialab.evaluation.results.feedback_exceptional_m2": true,
+  "ialab.evaluation.results.feedback_exceptional_m3": true,
+  "ialab.evaluation.results.feedback_exceptional_m4": true,
+  "ialab.evaluation.results.feedback_exceptional_m5": true,
   "ialab.evaluation.results.feedback_good": true,
   "ialab.evaluation.results.feedback_passing": true,
   "ialab.evaluation.results.final_grade": true,
@@ -7211,6 +7704,11 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.results.mastery_level": true,
   "ialab.evaluation.results.mastery_medium": true,
   "ialab.evaluation.results.mastery_message": true,
+  "ialab.evaluation.results.mastery_message_m1": true,
+  "ialab.evaluation.results.mastery_message_m2": true,
+  "ialab.evaluation.results.mastery_message_m3": true,
+  "ialab.evaluation.results.mastery_message_m4": true,
+  "ialab.evaluation.results.mastery_message_m5": true,
   "ialab.evaluation.results.need_80": true,
   "ialab.evaluation.results.need_80_retry": true,
   "ialab.evaluation.results.next_attempt_label": true,
@@ -7251,6 +7749,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.evaluation.step1.elements_to_classify": true,
   "ialab.evaluation.step1.how_to_desc": true,
   "ialab.evaluation.step1.how_to_title": true,
+  "ialab.evaluation.step1.pick_category": true,
   "ialab.evaluation.step1.role": true,
   "ialab.evaluation.step1.role_hint": true,
   "ialab.evaluation.step1.role_tip": true,
@@ -7442,6 +7941,9 @@ const translationKeySet: Record<string, true> = {
   "ialab.forum.notifications.title": true,
   "ialab.forum.optimized.empty_desc": true,
   "ialab.forum.optimized.empty_title": true,
+  "ialab.forum.optimized.goal_done": true,
+  "ialab.forum.optimized.goal_progress": true,
+  "ialab.forum.optimized.goal_start": true,
   "ialab.forum.optimized.input_placeholder": true,
   "ialab.forum.optimized.like_aria": true,
   "ialab.forum.optimized.live_badge": true,
@@ -7588,6 +8090,11 @@ const translationKeySet: Record<string, true> = {
   "ialab.global_search.results_label": true,
   "ialab.global_search.search_aria": true,
   "ialab.global_search.topic_label": true,
+  "ialab.glossary.close": true,
+  "ialab.glossary.empty": true,
+  "ialab.glossary.search": true,
+  "ialab.glossary.subtitle": true,
+  "ialab.glossary.title": true,
   "ialab.header_unavailable": true,
   "ialab.info_unavailable": true,
   "ialab.integration_exercise.badge": true,
@@ -7674,6 +8181,83 @@ const translationKeySet: Record<string, true> = {
   "ialab.loading_timeout_desc": true,
   "ialab.loading_timeout_retry": true,
   "ialab.loading_timeout_title": true,
+  "ialab.max.clear_button": true,
+  "ialab.max.clear_confirm": true,
+  "ialab.max.clear_confirm_no": true,
+  "ialab.max.clear_confirm_no_aria": true,
+  "ialab.max.clear_confirm_yes": true,
+  "ialab.max.clear_confirm_yes_aria": true,
+  "ialab.max.close_aria": true,
+  "ialab.max.conversation_aria": true,
+  "ialab.max.copy.copied": true,
+  "ialab.max.copy.label": true,
+  "ialab.max.copy.title": true,
+  "ialab.max.empty_description": true,
+  "ialab.max.empty_title": true,
+  "ialab.max.export.header": true,
+  "ialab.max.export.html_title": true,
+  "ialab.max.export.you": true,
+  "ialab.max.greeting_anon": true,
+  "ialab.max.greeting_name": true,
+  "ialab.max.helpful_thanks": true,
+  "ialab.max.input_hint": true,
+  "ialab.max.input_hint_mobile": true,
+  "ialab.max.input_placeholder": true,
+  "ialab.max.intro_greeting": true,
+  "ialab.max.level_advanced": true,
+  "ialab.max.level_beginner": true,
+  "ialab.max.level_intermediate": true,
+  "ialab.max.level_label": true,
+  "ialab.max.loading": true,
+  "ialab.max.message_actions.download": true,
+  "ialab.max.message_actions.more": true,
+  "ialab.max.message_actions.useful": true,
+  "ialab.max.message_max": true,
+  "ialab.max.message_you": true,
+  "ialab.max.module_label": true,
+  "ialab.max.ova_intro_1": true,
+  "ialab.max.ova_intro_2": true,
+  "ialab.max.ova_intro_3": true,
+  "ialab.max.ova_intro_4": true,
+  "ialab.max.ova_intro_5": true,
+  "ialab.max.panel_aria": true,
+  "ialab.max.quick_actions_show_all": true,
+  "ialab.max.quick_actions_show_less": true,
+  "ialab.max.quick_actions_title": true,
+  "ialab.max.quick_explain_topic": true,
+  "ialab.max.quick_give_example": true,
+  "ialab.max.quick_help_challenge": true,
+  "ialab.max.quick_micro_plan": true,
+  "ialab.max.quick_step_by_step": true,
+  "ialab.max.quick_study_tips": true,
+  "ialab.max.quick_useful": true,
+  "ialab.max.scroll_to_bottom": true,
+  "ialab.max.send_aria": true,
+  "ialab.max.short_greeting_high": true,
+  "ialab.max.short_greeting_low": true,
+  "ialab.max.status_idle": true,
+  "ialab.max.status_listening": true,
+  "ialab.max.status_speaking": true,
+  "ialab.max.status_thinking": true,
+  "ialab.max.stop_audio": true,
+  "ialab.max.system_instructions": true,
+  "ialab.max.title": true,
+  "ialab.max.typing.label": true,
+  "ialab.max.voice.error": true,
+  "ialab.max.voice.https_required": true,
+  "ialab.max.voice.no_speech": true,
+  "ialab.max.voice.not_supported": true,
+  "ialab.max.voice.permission_denied": true,
+  "ialab.max.voice.start_error": true,
+  "ialab.max.voice_start_aria": true,
+  "ialab.max.voice_stop_aria": true,
+  "ialab.max_aria": true,
+  "ialab.max_nudge": true,
+  "ialab.max_nudge_return": true,
+  "ialab.max_nudge_return_sub": true,
+  "ialab.max_nudge_sub": true,
+  "ialab.max_talk": true,
+  "ialab.max_tooltip": true,
   "ialab.menu_aria": true,
   "ialab.mobile_info.course_label": true,
   "ialab.mobile_menu_aria": true,
@@ -7681,10 +8265,15 @@ const translationKeySet: Record<string, true> = {
   "ialab.module.module_label": true,
   "ialab.module.progress_title": true,
   "ialab.module.resources_badge": true,
+  "ialab.module.topics_title": true,
   "ialab.module_actions.attempts_left": true,
   "ialab.module_actions.challenge": true,
+  "ialab.module_actions.challenge_desc": true,
   "ialab.module_actions.community": true,
+  "ialab.module_actions.community_desc": true,
   "ialab.module_actions.exam": true,
+  "ialab.module_actions.exam_desc": true,
+  "ialab.module_actions.locked_hint": true,
   "ialab.module_actions.status_failed": true,
   "ialab.module_actions.status_passed": true,
   "ialab.module_actions.status_pending": true,
@@ -7723,6 +8312,10 @@ const translationKeySet: Record<string, true> = {
   "ialab.module_roadmap.subtitle": true,
   "ialab.module_roadmap.title": true,
   "ialab.nav_menu_aria": true,
+  "ialab.next_step.current": true,
+  "ialab.next_step.pending": true,
+  "ialab.next_step.progress": true,
+  "ialab.next_step.title": true,
   "ialab.next_step_content": true,
   "ialab.next_step_exam_done": true,
   "ialab.next_step_ready_exam": true,
@@ -7940,12 +8533,14 @@ const translationKeySet: Record<string, true> = {
   "ialab.quiz.good_work_msg": true,
   "ialab.quiz.improvement_areas": true,
   "ialab.quiz.incorrect_count": true,
+  "ialab.quiz.intro_cta": true,
+  "ialab.quiz.intro_desc": true,
+  "ialab.quiz.intro_title": true,
   "ialab.quiz.landed": true,
   "ialab.quiz.mark_review": true,
   "ialab.quiz.marked": true,
   "ialab.quiz.max_violations": true,
   "ialab.quiz.min_score": true,
-  "ialab.quiz.weighted_note": true,
   "ialab.quiz.next": true,
   "ialab.quiz.number_label": true,
   "ialab.quiz.number_result": true,
@@ -7974,6 +8569,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.quiz.unanswered": true,
   "ialab.quiz.unmark_review": true,
   "ialab.quiz.watermark": true,
+  "ialab.quiz.weighted_note": true,
   "ialab.quiz.your_answer": true,
   "ialab.reactive_prompt.analyzing": true,
   "ialab.reactive_prompt.chars": true,
@@ -8097,6 +8693,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.start_cta_desc": true,
   "ialab.start_cta_label": true,
   "ialab.status.locked": true,
+  "ialab.status.locked_detail": true,
   "ialab.status.locked_hint": true,
   "ialab.status.start_here": true,
   "ialab.status.viewed": true,
@@ -8114,6 +8711,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.study_calendar.no_deadlines": true,
   "ialab.study_calendar.pending_challenge": true,
   "ialab.study_calendar.pending_exam": true,
+  "ialab.study_planner.active_day_one": true,
   "ialab.study_planner.active_days": true,
   "ialab.study_planner.auto_save": true,
   "ialab.study_planner.close_aria": true,
@@ -8221,10 +8819,13 @@ const translationKeySet: Record<string, true> = {
   "ialab.tab_all": true,
   "ialab.tab_bookmarks": true,
   "ialab.tab_content": true,
+  "ialab.tab_home": true,
+  "ialab.tab_modules": true,
   "ialab.tab_objectives": true,
   "ialab.tab_practice": true,
   "ialab.tab_progress": true,
   "ialab.tab_tools": true,
+  "ialab.tab_topics": true,
   "ialab.title": true,
   "ialab.tool_tutor.ethics_subtitle": true,
   "ialab.tool_tutor.ethics_title": true,
@@ -8302,6 +8903,7 @@ const translationKeySet: Record<string, true> = {
   "ialab.traffic_light.fullscreen_enter": true,
   "ialab.traffic_light.fullscreen_exit": true,
   "ialab.traffic_light.group_aria": true,
+  "ialab.tutorias_virtuales.add_calendar": true,
   "ialab.tutorias_virtuales.countdown": true,
   "ialab.tutorias_virtuales.description": true,
   "ialab.tutorias_virtuales.join": true,
@@ -8311,76 +8913,16 @@ const translationKeySet: Record<string, true> = {
   "ialab.unlock_first_module": true,
   "ialab.unlock_requirement": true,
   "ialab.user_fallback": true,
-  "ialab.valerio.clear_button": true,
-  "ialab.valerio.clear_confirm": true,
-  "ialab.valerio.clear_confirm_no": true,
-  "ialab.valerio.clear_confirm_no_aria": true,
-  "ialab.valerio.clear_confirm_yes": true,
-  "ialab.valerio.clear_confirm_yes_aria": true,
-  "ialab.valerio.close_aria": true,
-  "ialab.valerio.conversation_aria": true,
-  "ialab.valerio.copy.copied": true,
-  "ialab.valerio.copy.label": true,
-  "ialab.valerio.copy.title": true,
-  "ialab.valerio.empty_description": true,
-  "ialab.valerio.empty_title": true,
-  "ialab.valerio.export.header": true,
-  "ialab.valerio.export.html_title": true,
-  "ialab.valerio.export.you": true,
-  "ialab.valerio.greeting_anon": true,
-  "ialab.valerio.greeting_name": true,
-  "ialab.valerio.input_hint": true,
-  "ialab.valerio.input_placeholder": true,
-  "ialab.valerio.intro_greeting": true,
-  "ialab.valerio.level_advanced": true,
-  "ialab.valerio.level_beginner": true,
-  "ialab.valerio.level_intermediate": true,
-  "ialab.valerio.level_label": true,
-  "ialab.valerio.loading": true,
-  "ialab.valerio.message_actions.download": true,
-  "ialab.valerio.message_actions.more": true,
-  "ialab.valerio.message_actions.useful": true,
-  "ialab.valerio.message_valerio": true,
-  "ialab.valerio.message_you": true,
-  "ialab.valerio.module_label": true,
-  "ialab.valerio.ova_intro_1": true,
-  "ialab.valerio.ova_intro_2": true,
-  "ialab.valerio.ova_intro_3": true,
-  "ialab.valerio.ova_intro_4": true,
-  "ialab.valerio.ova_intro_5": true,
-  "ialab.valerio.panel_aria": true,
-  "ialab.valerio.quick_actions_title": true,
-  "ialab.valerio.quick_explain_topic": true,
-  "ialab.valerio.quick_give_example": true,
-  "ialab.valerio.quick_help_challenge": true,
-  "ialab.valerio.quick_micro_plan": true,
-  "ialab.valerio.quick_step_by_step": true,
-  "ialab.valerio.quick_study_tips": true,
-  "ialab.valerio.send_aria": true,
-  "ialab.valerio.short_greeting_high": true,
-  "ialab.valerio.short_greeting_low": true,
-  "ialab.valerio.status_idle": true,
-  "ialab.valerio.status_listening": true,
-  "ialab.valerio.status_speaking": true,
-  "ialab.valerio.status_thinking": true,
-  "ialab.valerio.system_instructions": true,
-  "ialab.valerio.title": true,
-  "ialab.valerio.typing.label": true,
-  "ialab.valerio.voice.error": true,
-  "ialab.valerio.voice.https_required": true,
-  "ialab.valerio.voice.no_speech": true,
-  "ialab.valerio.voice.not_supported": true,
-  "ialab.valerio.voice.permission_denied": true,
-  "ialab.valerio.voice.start_error": true,
-  "ialab.valerio.voice_start_aria": true,
-  "ialab.valerio.voice_stop_aria": true,
-  "ialab.valerio_aria": true,
-  "ialab.valerio_nudge": true,
-  "ialab.valerio_nudge_return": true,
-  "ialab.valerio_nudge_return_sub": true,
-  "ialab.valerio_nudge_sub": true,
-  "ialab.valerio_talk": true,
-  "ialab.valerio_tooltip": true,
+  "ialab.video_quiz.continue": true,
+  "ialab.video_quiz.next": true,
+  "ialab.video_quiz.passed_desc": true,
+  "ialab.video_quiz.passed_title": true,
+  "ialab.video_quiz.progress": true,
+  "ialab.video_quiz.retry": true,
+  "ialab.video_quiz.retry_desc": true,
+  "ialab.video_quiz.retry_title": true,
+  "ialab.video_quiz.see_result": true,
+  "ialab.video_quiz.title": true,
   "ialab.viewer_modal.cannot_load": true,
   "ialab.viewer_modal.cc": true,
   "ialab.viewer_modal.close": true,
@@ -8546,6 +9088,318 @@ const translationKeySet: Record<string, true> = {
   "ialab.workspace.topics_label": true,
   "ialab.xp_earned": true,
   "ialab.xp_excellent_work": true,
+  "ingenia.achievements": true,
+  "ingenia.active": true,
+  "ingenia.active_connection": true,
+  "ingenia.active_research_line": true,
+  "ingenia.active_time": true,
+  "ingenia.active_time_min": true,
+  "ingenia.all_missions": true,
+  "ingenia.analysis_context": true,
+  "ingenia.analysis_item_questions": true,
+  "ingenia.analysis_item_summary": true,
+  "ingenia.analysis_item_techniques": true,
+  "ingenia.auto_update": true,
+  "ingenia.available": true,
+  "ingenia.average": true,
+  "ingenia.average_progress": true,
+  "ingenia.back": true,
+  "ingenia.back_dashboard": true,
+  "ingenia.best_streak": true,
+  "ingenia.bienvenido": true,
+  "ingenia.calendar_days": true,
+  "ingenia.calendar_month": true,
+  "ingenia.chart_last_14": true,
+  "ingenia.chat_valeria": true,
+  "ingenia.chat_valeria_desc": true,
+  "ingenia.chat_valeria_title": true,
+  "ingenia.clear": true,
+  "ingenia.click_select": true,
+  "ingenia.close": true,
+  "ingenia.close_reminder": true,
+  "ingenia.close_report": true,
+  "ingenia.complete_btn": true,
+  "ingenia.completed": true,
+  "ingenia.completed_pct": true,
+  "ingenia.connected": true,
+  "ingenia.connected_at": true,
+  "ingenia.connected_ialab": true,
+  "ingenia.copy": true,
+  "ingenia.current_streak": true,
+  "ingenia.dani_fab_aria": true,
+  "ingenia.dani_reminder_open": true,
+  "ingenia.date": true,
+  "ingenia.days": true,
+  "ingenia.diagnostico_vak": true,
+  "ingenia.document_analyzer_tab": true,
+  "ingenia.download_full_report": true,
+  "ingenia.download_report": true,
+  "ingenia.drag_files": true,
+  "ingenia.drop_to_upload": true,
+  "ingenia.dropzone_label": true,
+  "ingenia.duration": true,
+  "ingenia.error_load_activities": true,
+  "ingenia.error_load_calendar": true,
+  "ingenia.error_load_home": true,
+  "ingenia.error_load_missions": true,
+  "ingenia.error_load_news": true,
+  "ingenia.error_load_points": true,
+  "ingenia.error_load_subjects": true,
+  "ingenia.error_load_vak": true,
+  "ingenia.general": true,
+  "ingenia.habeas_parent_email_invalid": true,
+  "ingenia.habeas_parent_email_required": true,
+  "ingenia.ialab_desc": true,
+  "ingenia.ialab_pro_desc": true,
+  "ingenia.ialab_pro_title": true,
+  "ingenia.ialab_title": true,
+  "ingenia.interactions": true,
+  "ingenia.interactions_with": true,
+  "ingenia.landing.choose_plan_aria": true,
+  "ingenia.landing.start_aria": true,
+  "ingenia.landing.try_aria": true,
+  "ingenia.landing_badge": true,
+  "ingenia.landing_benefits_badge": true,
+  "ingenia.landing_benefits_title_line1": true,
+  "ingenia.landing_benefits_title_line2": true,
+  "ingenia.landing_concern_label": true,
+  "ingenia.landing_cta_badge": true,
+  "ingenia.landing_cta_final_btn": true,
+  "ingenia.landing_cta_final_desc": true,
+  "ingenia.landing_cta_final_title_line1": true,
+  "ingenia.landing_cta_final_title_line2": true,
+  "ingenia.landing_cta_how": true,
+  "ingenia.landing_cta_start": true,
+  "ingenia.landing_cta_try": true,
+  "ingenia.landing_faq_title": true,
+  "ingenia.landing_faq_title_highlight": true,
+  "ingenia.landing_hero_brain_label": true,
+  "ingenia.landing_hero_desc": true,
+  "ingenia.landing_hero_eyebrow": true,
+  "ingenia.landing_hero_line1": true,
+  "ingenia.landing_hero_line2": true,
+  "ingenia.landing_hero_line3": true,
+  "ingenia.landing_how_badge": true,
+  "ingenia.landing_how_title_line1": true,
+  "ingenia.landing_how_title_line2": true,
+  "ingenia.landing_kids_count": true,
+  "ingenia.landing_kids_learning": true,
+  "ingenia.landing_next": true,
+  "ingenia.landing_pain_point1": true,
+  "ingenia.landing_pain_point2": true,
+  "ingenia.landing_pain_point3": true,
+  "ingenia.landing_pain_point4": true,
+  "ingenia.landing_prev": true,
+  "ingenia.landing_pricing_badge": true,
+  "ingenia.landing_pricing_choose": true,
+  "ingenia.landing_pricing_desc": true,
+  "ingenia.landing_pricing_popular": true,
+  "ingenia.landing_pricing_title_line1": true,
+  "ingenia.landing_pricing_title_line2": true,
+  "ingenia.landing_quote": true,
+  "ingenia.landing_solution1": true,
+  "ingenia.landing_solution2": true,
+  "ingenia.landing_solution3": true,
+  "ingenia.landing_solution4": true,
+  "ingenia.landing_start_now": true,
+  "ingenia.landing_stat_hours": true,
+  "ingenia.landing_stat_improvement": true,
+  "ingenia.landing_stat_students": true,
+  "ingenia.landing_step_beneficios": true,
+  "ingenia.landing_step_como_funciona": true,
+  "ingenia.landing_step_faq": true,
+  "ingenia.landing_step_planes": true,
+  "ingenia.landing_step_que_es": true,
+  "ingenia.landing_step_testimonios": true,
+  "ingenia.landing_step_tranquilidad": true,
+  "ingenia.landing_step_vak": true,
+  "ingenia.landing_tag_adaptive_ai": true,
+  "ingenia.landing_tag_live_reports": true,
+  "ingenia.landing_tag_real_coaches": true,
+  "ingenia.landing_tag_scientific_vak": true,
+  "ingenia.landing_testimonials_badge": true,
+  "ingenia.landing_testimonials_title_line1": true,
+  "ingenia.landing_testimonials_title_line2": true,
+  "ingenia.landing_tranquility_badge": true,
+  "ingenia.landing_tranquility_desc": true,
+  "ingenia.landing_tranquility_title_line1": true,
+  "ingenia.landing_tranquility_title_line2": true,
+  "ingenia.landing_trial_terms": true,
+  "ingenia.landing_trust_badge": true,
+  "ingenia.landing_trust_subtitle": true,
+  "ingenia.landing_vak_badge": true,
+  "ingenia.landing_vak_desc": true,
+  "ingenia.landing_vak_title": true,
+  "ingenia.landing_vak_title_highlight": true,
+  "ingenia.landing_what_badge": true,
+  "ingenia.landing_what_desc1": true,
+  "ingenia.landing_what_desc2": true,
+  "ingenia.landing_what_title_line1": true,
+  "ingenia.landing_what_title_line2": true,
+  "ingenia.learning_stats": true,
+  "ingenia.level": true,
+  "ingenia.level_label": true,
+  "ingenia.level_name": true,
+  "ingenia.live": true,
+  "ingenia.loading": true,
+  "ingenia.login_button": true,
+  "ingenia.login_desc": true,
+  "ingenia.login_error": true,
+  "ingenia.login_heading": true,
+  "ingenia.login_subtitle": true,
+  "ingenia.login_title": true,
+  "ingenia.login_verifying": true,
+  "ingenia.logout": true,
+  "ingenia.max_analysis": true,
+  "ingenia.max_analyzing": true,
+  "ingenia.max_will_analyze": true,
+  "ingenia.minutes": true,
+  "ingenia.minutes_total": true,
+  "ingenia.missing_points": true,
+  "ingenia.missions": true,
+  "ingenia.missions_day": true,
+  "ingenia.missions_label": true,
+  "ingenia.missions_view_title": true,
+  "ingenia.mobile_nav": true,
+  "ingenia.nav_label": true,
+  "ingenia.no_access": true,
+  "ingenia.no_points_data": true,
+  "ingenia.no_subjects": true,
+  "ingenia.not_connected": true,
+  "ingenia.notifications": true,
+  "ingenia.parent_active_minutes": true,
+  "ingenia.parent_alert_explore": true,
+  "ingenia.parent_alert_inactive": true,
+  "ingenia.parent_alert_points": true,
+  "ingenia.parent_alert_streak": true,
+  "ingenia.parent_alert_title": true,
+  "ingenia.parent_congrats_streak": true,
+  "ingenia.parent_current_tab": true,
+  "ingenia.parent_desc": true,
+  "ingenia.parent_last_active": true,
+  "ingenia.parent_no_activity_today": true,
+  "ingenia.parent_no_sessions": true,
+  "ingenia.parent_offline": true,
+  "ingenia.parent_online": true,
+  "ingenia.parent_panel": true,
+  "ingenia.parent_sessions_today": true,
+  "ingenia.parent_streak_days": true,
+  "ingenia.parent_today_sessions": true,
+  "ingenia.parent_try_subjects": true,
+  "ingenia.password": true,
+  "ingenia.password_placeholder": true,
+  "ingenia.pending": true,
+  "ingenia.points": true,
+  "ingenia.points_display": true,
+  "ingenia.points_history": true,
+  "ingenia.points_label": true,
+  "ingenia.points_per_day": true,
+  "ingenia.points_progress": true,
+  "ingenia.predominant_style": true,
+  "ingenia.product_mismatch_cta": true,
+  "ingenia.product_mismatch_desc": true,
+  "ingenia.product_mismatch_title": true,
+  "ingenia.progress": true,
+  "ingenia.progress_by_subject": true,
+  "ingenia.progress_general": true,
+  "ingenia.progress_label": true,
+  "ingenia.progress_pct": true,
+  "ingenia.progress_tab": true,
+  "ingenia.questions_asked": true,
+  "ingenia.quick_actions": true,
+  "ingenia.recent_activity": true,
+  "ingenia.recent_sessions": true,
+  "ingenia.record": true,
+  "ingenia.report_days": true,
+  "ingenia.report_level": true,
+  "ingenia.report_min": true,
+  "ingenia.report_streak": true,
+  "ingenia.report_time": true,
+  "ingenia.report_title": true,
+  "ingenia.report_xp": true,
+  "ingenia.request_account": true,
+  "ingenia.research_desc": true,
+  "ingenia.research_lab": true,
+  "ingenia.research_lines_tab": true,
+  "ingenia.rewards": true,
+  "ingenia.sb_name": true,
+  "ingenia.sb_subtitle": true,
+  "ingenia.score": true,
+  "ingenia.selected_line": true,
+  "ingenia.selected_line_with_name": true,
+  "ingenia.sidebar_level": true,
+  "ingenia.sidebar_logout": true,
+  "ingenia.sidebar_streak": true,
+  "ingenia.signup_back": true,
+  "ingenia.signup_feature_community": true,
+  "ingenia.signup_feature_missions": true,
+  "ingenia.signup_feature_tracking": true,
+  "ingenia.signup_for_students": true,
+  "ingenia.signup_have_account": true,
+  "ingenia.signup_login_heading": true,
+  "ingenia.signup_login_here": true,
+  "ingenia.signup_login_sub": true,
+  "ingenia.signup_login_tab": true,
+  "ingenia.signup_no_account": true,
+  "ingenia.signup_quote": true,
+  "ingenia.signup_register_heading": true,
+  "ingenia.signup_register_here": true,
+  "ingenia.signup_register_sub": true,
+  "ingenia.signup_register_tab": true,
+  "ingenia.signup_signin_desc": true,
+  "ingenia.signup_signup_desc": true,
+  "ingenia.signup_terms": true,
+  "ingenia.signup_welcome": true,
+  "ingenia.start": true,
+  "ingenia.start_today": true,
+  "ingenia.stats_back": true,
+  "ingenia.stats_desc": true,
+  "ingenia.stats_title": true,
+  "ingenia.streak_days": true,
+  "ingenia.streak_days_label": true,
+  "ingenia.streak_title": true,
+  "ingenia.study_time": true,
+  "ingenia.subject": true,
+  "ingenia.subjects_view_title": true,
+  "ingenia.tab_activities": true,
+  "ingenia.tab_calendar": true,
+  "ingenia.tab_home": true,
+  "ingenia.tab_missions": true,
+  "ingenia.tab_news": true,
+  "ingenia.tab_parents": true,
+  "ingenia.tab_progress": true,
+  "ingenia.tab_subjects": true,
+  "ingenia.tab_vak": true,
+  "ingenia.talk_dani": true,
+  "ingenia.today_missions": true,
+  "ingenia.topbar_activities": true,
+  "ingenia.topbar_calendar": true,
+  "ingenia.topbar_home": true,
+  "ingenia.topbar_missions": true,
+  "ingenia.topbar_news": true,
+  "ingenia.topbar_progress": true,
+  "ingenia.topbar_subjects": true,
+  "ingenia.topbar_vak": true,
+  "ingenia.total_hours": true,
+  "ingenia.total_points": true,
+  "ingenia.total_time": true,
+  "ingenia.transactions": true,
+  "ingenia.unlock_reward": true,
+  "ingenia.unlocked": true,
+  "ingenia.upcoming_events": true,
+  "ingenia.username": true,
+  "ingenia.username_placeholder": true,
+  "ingenia.vak_analysis": true,
+  "ingenia.vak_desc": true,
+  "ingenia.vak_profile": true,
+  "ingenia.vak_report": true,
+  "ingenia.vak_techniques": true,
+  "ingenia.vak_title": true,
+  "ingenia.valeria_ready": true,
+  "ingenia.view_all": true,
+  "ingenia.weekly_activity": true,
+  "ingenia.your_subjects": true,
+  "kid.a11y.skip_to_content": true,
   "kid.activity.analysis_completed": true,
   "kid.activity.analyzing_detail": true,
   "kid.activity.click_select": true,
@@ -8694,6 +9548,7 @@ const translationKeySet: Record<string, true> = {
   "kid.flashcards.active_deck": true,
   "kid.flashcards.add_card": true,
   "kid.flashcards.add_card_btn": true,
+  "kid.flashcards.answer_label": true,
   "kid.flashcards.back": true,
   "kid.flashcards.cancel": true,
   "kid.flashcards.card_back_placeholder": true,
@@ -8745,6 +9600,7 @@ const translationKeySet: Record<string, true> = {
   "kid.flashcards.no_decks": true,
   "kid.flashcards.no_decks_hint": true,
   "kid.flashcards.not_understood": true,
+  "kid.flashcards.question_label": true,
   "kid.flashcards.related_terms_label": true,
   "kid.flashcards.retry": true,
   "kid.flashcards.reviewed_label": true,
@@ -8783,6 +9639,7 @@ const translationKeySet: Record<string, true> = {
   "kid.flashcards.topic_placeholder": true,
   "kid.flashcards.two_player_mode": true,
   "kid.flashcards.understood": true,
+  "kid.flashcards.why_label": true,
   "kid.flashcards.write_topic": true,
   "kid.grades.add_subject": true,
   "kid.grades.analyze_btn": true,
@@ -8897,11 +9754,13 @@ const translationKeySet: Record<string, true> = {
   "kid.podcast.title": true,
   "kid.podcast.title_fallback": true,
   "kid.points_rewards.action_active_minute": true,
+  "kid.points_rewards.action_complete_challenge": true,
   "kid.points_rewards.action_complete_mission": true,
   "kid.points_rewards.action_complete_subject": true,
   "kid.points_rewards.action_daily_streak": true,
   "kid.points_rewards.action_upload_activity": true,
   "kid.points_rewards.action_vak_diagnosis": true,
+  "kid.points_rewards.daily_cap_note": true,
   "kid.points_rewards.how_to_earn_title": true,
   "kid.points_rewards.level": true,
   "kid.points_rewards.level_avanzado": true,
@@ -8968,6 +9827,7 @@ const translationKeySet: Record<string, true> = {
   "kid.user.fullname_placeholder": true,
   "kid.user.grade": true,
   "kid.user.grade_placeholder": true,
+  "kid.user.ingenia_profile": true,
   "kid.user.load_error": true,
   "kid.user.loading": true,
   "kid.user.logout": true,
@@ -8984,10 +9844,11 @@ const translationKeySet: Record<string, true> = {
   "kid.user.school": true,
   "kid.user.school_placeholder": true,
   "kid.user.select_vak": true,
-  "kid.user.smartboard_profile": true,
   "kid.user.student": true,
+  "kid.user.vak_from_adn": true,
   "kid.user.vak_placeholder": true,
   "kid.user.vak_type": true,
+  "kid.user.vak_unknown": true,
   "kid.vak.diagnostic_title": true,
   "kid.vak.rec_auditory": true,
   "kid.vak.rec_kinesthetic": true,
@@ -9007,6 +9868,10 @@ const translationKeySet: Record<string, true> = {
   "kid.vak.tip_visual_1": true,
   "kid.vak.tip_visual_2": true,
   "kid.vak.tip_visual_3": true,
+  "lastact.days_ago": true,
+  "lastact.points": true,
+  "lastact.today": true,
+  "lastact.yesterday": true,
   "leadCapture.context_courses": true,
   "leadCapture.context_default": true,
   "leadCapture.context_diagnosis": true,
@@ -9032,6 +9897,7 @@ const translationKeySet: Record<string, true> = {
   "leaderboard.period_weekly": true,
   "leaderboard.position": true,
   "leaderboard.streak": true,
+  "leaderboard.streak_one": true,
   "leaderboard.title": true,
   "leaderboard.weekly_empty": true,
   "leaderboard.you_label": true,
@@ -9050,13 +9916,14 @@ const translationKeySet: Record<string, true> = {
   "login.email_or_username": true,
   "login.email_or_username_placeholder": true,
   "login.enter_as_parent": true,
-  "login.enter_smartboard": true,
+  "login.enter_ingenia": true,
   "login.error.connection": true,
   "login.error.email_not_confirmed": true,
   "login.error.email_required_for_reset": true,
   "login.error.invalid_credentials": true,
   "login.error.login_failed": true,
   "login.error.oauth_account": true,
+  "login.error.oauth_failed": true,
   "login.error.register_failed": true,
   "login.forgot_password": true,
   "login.has_account_footer": true,
@@ -9090,6 +9957,29 @@ const translationKeySet: Record<string, true> = {
   "login.tab.parent": true,
   "login.tab.register": true,
   "login.tab.student": true,
+  "max.advanced": true,
+  "max.at_risk": true,
+  "max.beginner": true,
+  "max.completed_modules": true,
+  "max.course_progress": true,
+  "max.current_module_label": true,
+  "max.days": true,
+  "max.failures": true,
+  "max.intermediate": true,
+  "max.last_activity": true,
+  "max.level": true,
+  "max.module_scores": true,
+  "max.name": true,
+  "max.no_activity": true,
+  "max.no_streak": true,
+  "max.none_identified": true,
+  "max.session_history": true,
+  "max.streak": true,
+  "max.student": true,
+  "max.student_context_label": true,
+  "max.total_xp": true,
+  "max.weak_topics": true,
+  "max.weekly_xp": true,
   "metodo.cta_text": true,
   "metodo.form_email_label": true,
   "metodo.form_email_placeholder": true,
@@ -9097,8 +9987,8 @@ const translationKeySet: Record<string, true> = {
   "metodo.form_name_label": true,
   "metodo.form_name_placeholder": true,
   "metodo.form_option_b2b": true,
+  "metodo.form_option_ingenia": true,
   "metodo.form_option_other": true,
-  "metodo.form_option_smartboard": true,
   "metodo.form_option_steam": true,
   "metodo.form_option_tutoring": true,
   "metodo.form_option_vak": true,
@@ -9212,6 +10102,7 @@ const translationKeySet: Record<string, true> = {
   "modals.certificates.req_module_score": true,
   "modals.certificates.req_modules_done": true,
   "modals.certificates.requirements_not_met": true,
+  "modals.certificates.share_linkedin": true,
   "modals.certificates.start_course": true,
   "modals.certificates.start_course_desc": true,
   "modals.certificates.student_fallback": true,
@@ -9300,12 +10191,12 @@ const translationKeySet: Record<string, true> = {
   "nav.home_aria": true,
   "nav.home_desc": true,
   "nav.ialab_pro": true,
+  "nav.ingenia": true,
   "nav.login": true,
   "nav.logo_alt": true,
   "nav.menu_aria": true,
   "nav.planes": true,
   "nav.send_message": true,
-  "nav.smartboard": true,
   "nav.whatsapp": true,
   "nico.appointment_saved_desc": true,
   "nico.appointment_saved_title": true,
@@ -9362,6 +10253,7 @@ const translationKeySet: Record<string, true> = {
   "notification.push_disabled": true,
   "notification.push_enabled": true,
   "notification.push_toggle": true,
+  "notification.push_unsupported": true,
   "notification.time_ago_d": true,
   "notification.time_ago_h": true,
   "notification.time_ago_min": true,
@@ -9504,6 +10396,7 @@ const translationKeySet: Record<string, true> = {
   "ova.biaslab.nav_cap4": true,
   "ova.biaslab.nav_game": true,
   "ova.biaslab.nav_intro": true,
+  "ova.biaslab.notebooklm_quote": true,
   "ova.biaslab.responsible_practices": true,
   "ova.biaslab.sidebar_subtitle": true,
   "ova.biaslab.start_btn": true,
@@ -9574,6 +10467,10 @@ const translationKeySet: Record<string, true> = {
   "ova.buildgpt.learning_obj_2": true,
   "ova.buildgpt.learning_obj_3": true,
   "ova.buildgpt.learning_obj_4": true,
+  "ova.buildgpt.max_screen_2": true,
+  "ova.buildgpt.max_screen_3": true,
+  "ova.buildgpt.max_screen_4": true,
+  "ova.buildgpt.max_screen_5": true,
   "ova.buildgpt.quiz_bad": true,
   "ova.buildgpt.quiz_cert_btn": true,
   "ova.buildgpt.quiz_good": true,
@@ -9596,10 +10493,6 @@ const translationKeySet: Record<string, true> = {
   "ova.buildgpt.start": true,
   "ova.buildgpt.step": true,
   "ova.buildgpt.summary": true,
-  "ova.buildgpt.valerio_screen_2": true,
-  "ova.buildgpt.valerio_screen_3": true,
-  "ova.buildgpt.valerio_screen_4": true,
-  "ova.buildgpt.valerio_screen_5": true,
   "ova.buildgpt.welcome_audio": true,
   "ova.buildgpt.welcome_desc": true,
   "ova.buildgpt.welcome_title": true,
@@ -9644,6 +10537,7 @@ const translationKeySet: Record<string, true> = {
   "ova.chatgpttools.welcome_subtitle": true,
   "ova.chatgpttools.welcome_title": true,
   "ova.chatgpttools.welcome_voice": true,
+  "ova.common.step_requires_activity": true,
   "ova.docmastery.analyze_workflow": true,
   "ova.docmastery.analyzed": true,
   "ova.docmastery.badge": true,
@@ -9914,6 +10808,13 @@ const translationKeySet: Record<string, true> = {
   "ova.ethicscases.welcome_desc": true,
   "ova.ethicscases.welcome_title": true,
   "ova.ethicscases.what_would_you_do": true,
+  "ova.etica.objective_1": true,
+  "ova.etica.objective_2": true,
+  "ova.etica.objective_3": true,
+  "ova.etica.objective_4": true,
+  "ova.etica.quiz_min_hint": true,
+  "ova.etica.quiz_not_passed_title": true,
+  "ova.etica.quiz_retry": true,
   "ova.gemini.learning_obj_1": true,
   "ova.gemini.learning_obj_2": true,
   "ova.gemini.learning_obj_3": true,
@@ -10074,6 +10975,7 @@ const translationKeySet: Record<string, true> = {
   "ova.nav.next": true,
   "ova.nav.prev": true,
   "ova.nav.prev_aria": true,
+  "ova.nav.tabs_label": true,
   "ova.notebooklab.completed_label": true,
   "ova.notebooklab.completed_text": true,
   "ova.notebooklab.correct_label": true,
@@ -10323,6 +11225,7 @@ const translationKeySet: Record<string, true> = {
   "ova.risksim.fallback_feedback": true,
   "ova.risksim.footer": true,
   "ova.risksim.game_desc": true,
+  "ova.risksim.game_progress": true,
   "ova.risksim.game_title": true,
   "ova.risksim.icon_justice": true,
   "ova.risksim.icon_privacy": true,
@@ -10348,9 +11251,9 @@ const translationKeySet: Record<string, true> = {
   "ova.tour.learning_obj_2": true,
   "ova.tour.learning_obj_3": true,
   "ova.tour.learning_obj_4": true,
+  "ova.tour.max_quiz_text": true,
   "ova.tour.start_btn": true,
   "ova.tour.title": true,
-  "ova.tour.valerio_quiz_text": true,
   "ova.tour.welcome_audio": true,
   "page_loader.admin": true,
   "page_loader.ailab": true,
@@ -10365,6 +11268,10 @@ const translationKeySet: Record<string, true> = {
   "parent_dashboard.a_subject": true,
   "parent_dashboard.achieved_subtitle": true,
   "parent_dashboard.achieved_title": true,
+  "parent_dashboard.action_check_missions": true,
+  "parent_dashboard.action_encourage_start": true,
+  "parent_dashboard.action_explore_subjects": true,
+  "parent_dashboard.action_keep_going": true,
   "parent_dashboard.active_time": true,
   "parent_dashboard.activity_fallback": true,
   "parent_dashboard.advanced_subjects": true,
@@ -10372,8 +11279,11 @@ const translationKeySet: Record<string, true> = {
   "parent_dashboard.alert_streak_days": true,
   "parent_dashboard.alert_unexplored": true,
   "parent_dashboard.avg_progress": true,
+  "parent_dashboard.best_subject": true,
+  "parent_dashboard.chart_best_day": true,
   "parent_dashboard.cloud": true,
   "parent_dashboard.connected_now": true,
+  "parent_dashboard.contact_coach": true,
   "parent_dashboard.controls_dani_chat": true,
   "parent_dashboard.controls_dani_description": true,
   "parent_dashboard.controls_dani_header": true,
@@ -10409,6 +11319,7 @@ const translationKeySet: Record<string, true> = {
   "parent_dashboard.how_learns": true,
   "parent_dashboard.last_activity_label": true,
   "parent_dashboard.last_connection_label": true,
+  "parent_dashboard.learning_alerts": true,
   "parent_dashboard.learns_best": true,
   "parent_dashboard.level_avanzado": true,
   "parent_dashboard.level_experto": true,
@@ -10420,6 +11331,9 @@ const translationKeySet: Record<string, true> = {
   "parent_dashboard.logout": true,
   "parent_dashboard.longest_streak": true,
   "parent_dashboard.longest_streak_desc": true,
+  "parent_dashboard.mastery_improve": true,
+  "parent_dashboard.mastery_strengths": true,
+  "parent_dashboard.mastery_title": true,
   "parent_dashboard.minutes_ago": true,
   "parent_dashboard.minutes_total_label": true,
   "parent_dashboard.missions": true,
@@ -10430,11 +11344,15 @@ const translationKeySet: Record<string, true> = {
   "parent_dashboard.nav_actividad": true,
   "parent_dashboard.nav_bienestar": true,
   "parent_dashboard.nav_controles": true,
+  "parent_dashboard.nav_inicio": true,
   "parent_dashboard.nav_plan": true,
   "parent_dashboard.nav_progreso": true,
+  "parent_dashboard.nav_recomendaciones": true,
   "parent_dashboard.nav_recursos": true,
   "parent_dashboard.nav_resumen": true,
+  "parent_dashboard.needs_attention": true,
   "parent_dashboard.no_activity": true,
+  "parent_dashboard.no_activity_today": true,
   "parent_dashboard.now": true,
   "parent_dashboard.offline": true,
   "parent_dashboard.panel_title": true,
@@ -10496,9 +11414,24 @@ const translationKeySet: Record<string, true> = {
   "parent_dashboard.resources_weekly_tip_citation": true,
   "parent_dashboard.resources_weekly_tip_strong": true,
   "parent_dashboard.resources_weekly_tip_title": true,
+  "parent_dashboard.roi_best_streak": true,
+  "parent_dashboard.roi_pending": true,
+  "parent_dashboard.semaphore_bien": true,
+  "parent_dashboard.semaphore_excelente": true,
+  "parent_dashboard.semaphore_no_data": true,
+  "parent_dashboard.semaphore_phrase_hours": true,
+  "parent_dashboard.semaphore_phrase_minutes": true,
+  "parent_dashboard.semaphore_phrase_notasks": true,
+  "parent_dashboard.semaphore_phrase_streak": true,
+  "parent_dashboard.semaphore_phrase_streaks": true,
+  "parent_dashboard.semaphore_phrase_tasks": true,
+  "parent_dashboard.semaphore_regular": true,
+  "parent_dashboard.semaphore_sin_actividad": true,
   "parent_dashboard.seo_desc": true,
   "parent_dashboard.seo_title": true,
   "parent_dashboard.sessions_today": true,
+  "parent_dashboard.show_less": true,
+  "parent_dashboard.show_more_details": true,
   "parent_dashboard.source_backend": true,
   "parent_dashboard.source_local": true,
   "parent_dashboard.source_supabase": true,
@@ -10510,6 +11443,8 @@ const translationKeySet: Record<string, true> = {
   "parent_dashboard.study_hours": true,
   "parent_dashboard.studying_now": true,
   "parent_dashboard.studying_subject": true,
+  "parent_dashboard.subject_not_started": true,
+  "parent_dashboard.subject_pct": true,
   "parent_dashboard.subjects_count": true,
   "parent_dashboard.subjects_of": true,
   "parent_dashboard.subjects_with_progress": true,
@@ -10538,6 +11473,11 @@ const translationKeySet: Record<string, true> = {
   "parent_dashboard.vak_kinestesico_style": true,
   "parent_dashboard.vak_predominant": true,
   "parent_dashboard.vak_visual_style": true,
+  "parent_dashboard.warning_inactivity": true,
+  "parent_dashboard.warning_performance_drop": true,
+  "parent_dashboard.warning_repeated_errors": true,
+  "parent_dashboard.warning_streak_broken": true,
+  "parent_dashboard.weekly_summary": true,
   "parent_dashboard.wellbeing_attention_title": true,
   "parent_dashboard.wellbeing_badge": true,
   "parent_dashboard.wellbeing_calm_desc": true,
@@ -10551,6 +11491,8 @@ const translationKeySet: Record<string, true> = {
   "parent_dashboard.wellness_regular_tip": true,
   "parent_dashboard.wellness_sin_actividad": true,
   "parent_dashboard.wellness_sin_actividad_tip": true,
+  "parent_dashboard.what_today": true,
+  "parent_dashboard.whatsapp_msg": true,
   "parent_dashboard.your_child": true,
   "peer_review.assignment": true,
   "peer_review.empty": true,
@@ -10562,6 +11504,14 @@ const translationKeySet: Record<string, true> = {
   "peer_review.submitted": true,
   "peer_review.submitting": true,
   "peer_review.title": true,
+  "pomodoro.focus": true,
+  "pomodoro.long_break": true,
+  "pomodoro.minutes_focused": true,
+  "pomodoro.pause": true,
+  "pomodoro.sessions": true,
+  "pomodoro.short_break": true,
+  "pomodoro.start": true,
+  "pomodoro.xp_earned": true,
   "pricing.annual": true,
   "pricing.badge": true,
   "pricing.cta_button": true,
@@ -10618,6 +11568,7 @@ const translationKeySet: Record<string, true> = {
   "pricing.title_line1": true,
   "pricing.title_line2": true,
   "profile.actions_title": true,
+  "profile.back_to_course": true,
   "profile.best_score": true,
   "profile.certificate_earned": true,
   "profile.change_photo": true,
@@ -10651,6 +11602,18 @@ const translationKeySet: Record<string, true> = {
   "profile.saving": true,
   "profile.tap_to_add": true,
   "profile.user_fallback": true,
+  "prog.activity_7days": true,
+  "prog.all_pending": true,
+  "prog.not_started_hint": true,
+  "prog.points_this_week": true,
+  "prog.sessions_this_week": true,
+  "prog.status_advancing": true,
+  "prog.status_great": true,
+  "prog.status_not_started": true,
+  "prog.status_starting": true,
+  "prog.streak_label": true,
+  "prog.vs_last_week": true,
+  "prog.weekly_title": true,
   "progress.analyzing_1": true,
   "progress.analyzing_2": true,
   "progress.analyzing_3": true,
@@ -10674,6 +11637,54 @@ const translationKeySet: Record<string, true> = {
   "progress.student_fallback": true,
   "progress.unauthenticated": true,
   "progress.unknown_error": true,
+  "rec.academic_high_body": true,
+  "rec.academic_high_title": true,
+  "rec.academic_low_body": true,
+  "rec.academic_low_title": true,
+  "rec.academic_nomissions_body": true,
+  "rec.academic_nomissions_title": true,
+  "rec.action_10min": true,
+  "rec.action_ask_today": true,
+  "rec.action_balance": true,
+  "rec.action_celebrate": true,
+  "rec.action_check_in": true,
+  "rec.action_explore_together": true,
+  "rec.action_new_challenge": true,
+  "rec.action_review_missions": true,
+  "rec.action_schedule": true,
+  "rec.action_sit_together": true,
+  "rec.emotional_great_body": true,
+  "rec.emotional_great_title": true,
+  "rec.emotional_inactive_body": true,
+  "rec.emotional_inactive_title": true,
+  "rec.emotional_regular_body": true,
+  "rec.emotional_regular_title": true,
+  "rec.footer_note": true,
+  "rec.habit_growing_body": true,
+  "rec.habit_growing_title": true,
+  "rec.habit_nostreak_body": true,
+  "rec.habit_nostreak_title": true,
+  "rec.habit_strong_body": true,
+  "rec.habit_strong_title": true,
+  "rec.no_recs_body": true,
+  "rec.no_recs_title": true,
+  "rec.section_subtitle": true,
+  "rec.section_title": true,
+  "rec.time_good_body": true,
+  "rec.time_good_title": true,
+  "rec.time_low_body": true,
+  "rec.time_low_title": true,
+  "rec.unexplored_body": true,
+  "rec.unexplored_title": true,
+  "rec.vak_auditivo_connect": true,
+  "rec.vak_auditivo_study": true,
+  "rec.vak_badge": true,
+  "rec.vak_connect_title": true,
+  "rec.vak_kinestesico_connect": true,
+  "rec.vak_kinestesico_study": true,
+  "rec.vak_title": true,
+  "rec.vak_visual_connect": true,
+  "rec.vak_visual_study": true,
   "reminder.inactivity_2_msg": true,
   "reminder.inactivity_2_title": true,
   "reminder.inactivity_4_msg": true,
@@ -10696,6 +11707,26 @@ const translationKeySet: Record<string, true> = {
   "reset.success_title": true,
   "reset.title": true,
   "reset.toggle_password": true,
+  "role.explore_subject_body": true,
+  "role.explore_subject_title": true,
+  "role.great_body": true,
+  "role.great_title": true,
+  "role.inactive_body": true,
+  "role.inactive_title": true,
+  "role.milestone_body": true,
+  "role.milestone_title": true,
+  "role.no_actions": true,
+  "role.no_actions_body": true,
+  "role.nomissions_body": true,
+  "role.nomissions_title": true,
+  "role.regular_body": true,
+  "role.regular_title": true,
+  "role.section_subtitle": true,
+  "role.section_title": true,
+  "role.streak_body": true,
+  "role.streak_celebrate_body": true,
+  "role.streak_celebrate_title": true,
+  "role.streak_title": true,
   "route.accept_challenge": true,
   "route.continue": true,
   "route.continue_learning": true,
@@ -10737,6 +11768,12 @@ const translationKeySet: Record<string, true> = {
   "seo.home.title": true,
   "seo.ialab_academic.desc": true,
   "seo.ialab_academic.title": true,
+  "seo.ingenia.desc": true,
+  "seo.ingenia.title": true,
+  "seo.ingenia_kids.desc": true,
+  "seo.ingenia_kids.title": true,
+  "seo.ingenia_parents.desc": true,
+  "seo.ingenia_parents.title": true,
   "seo.login.desc": true,
   "seo.login.title": true,
   "seo.neuroentorno.desc": true,
@@ -10749,14 +11786,8 @@ const translationKeySet: Record<string, true> = {
   "seo.proyectos.title": true,
   "seo.signup_ialab.desc": true,
   "seo.signup_ialab.title": true,
-  "seo.signup_smartboard.desc": true,
-  "seo.signup_smartboard.title": true,
-  "seo.smartboard.desc": true,
-  "seo.smartboard.title": true,
-  "seo.smartboard_kids.desc": true,
-  "seo.smartboard_kids.title": true,
-  "seo.smartboard_parents.desc": true,
-  "seo.smartboard_parents.title": true,
+  "seo.signup_ingenia.desc": true,
+  "seo.signup_ingenia.title": true,
   "seo.vak_premium.desc": true,
   "seo.vak_premium.title": true,
   "seo.vak_simple.desc": true,
@@ -10775,6 +11806,7 @@ const translationKeySet: Record<string, true> = {
   "sidebar.days": true,
   "sidebar.expand": true,
   "sidebar.expand_btn": true,
+  "sidebar.hide_menu_hint": true,
   "sidebar.home": true,
   "sidebar.lab_ia": true,
   "sidebar.leaderboard": true,
@@ -10808,6 +11840,8 @@ const translationKeySet: Record<string, true> = {
   "sidebar.resource_templates_desc": true,
   "sidebar.resources": true,
   "sidebar.resources_tooltip": true,
+  "sidebar.schedule": true,
+  "sidebar.show_menu_hint": true,
   "sidebar.streak_days": true,
   "sidebar.streak_details": true,
   "sidebar.streak_risk": true,
@@ -10864,313 +11898,6 @@ const translationKeySet: Record<string, true> = {
   "signup.success.registration_complete": true,
   "signup.success_redirecting": true,
   "signup.success_title": true,
-  "smartboard.achievements": true,
-  "smartboard.active": true,
-  "smartboard.active_connection": true,
-  "smartboard.active_research_line": true,
-  "smartboard.active_time": true,
-  "smartboard.active_time_min": true,
-  "smartboard.all_missions": true,
-  "smartboard.analysis_context": true,
-  "smartboard.analysis_item_questions": true,
-  "smartboard.analysis_item_summary": true,
-  "smartboard.analysis_item_techniques": true,
-  "smartboard.auto_update": true,
-  "smartboard.available": true,
-  "smartboard.average": true,
-  "smartboard.average_progress": true,
-  "smartboard.back": true,
-  "smartboard.back_dashboard": true,
-  "smartboard.best_streak": true,
-  "smartboard.bienvenido": true,
-  "smartboard.calendar_days": true,
-  "smartboard.calendar_month": true,
-  "smartboard.chart_last_14": true,
-  "smartboard.chat_valeria": true,
-  "smartboard.chat_valeria_desc": true,
-  "smartboard.chat_valeria_title": true,
-  "smartboard.clear": true,
-  "smartboard.click_select": true,
-  "smartboard.close": true,
-  "smartboard.close_reminder": true,
-  "smartboard.close_report": true,
-  "smartboard.complete_btn": true,
-  "smartboard.completed": true,
-  "smartboard.completed_pct": true,
-  "smartboard.connected": true,
-  "smartboard.connected_at": true,
-  "smartboard.connected_ialab": true,
-  "smartboard.copy": true,
-  "smartboard.current_streak": true,
-  "smartboard.dani_fab_aria": true,
-  "smartboard.dani_reminder_open": true,
-  "smartboard.date": true,
-  "smartboard.days": true,
-  "smartboard.diagnostico_vak": true,
-  "smartboard.document_analyzer_tab": true,
-  "smartboard.download_full_report": true,
-  "smartboard.download_report": true,
-  "smartboard.drag_files": true,
-  "smartboard.drop_to_upload": true,
-  "smartboard.dropzone_label": true,
-  "smartboard.duration": true,
-  "smartboard.error_load_activities": true,
-  "smartboard.error_load_calendar": true,
-  "smartboard.error_load_home": true,
-  "smartboard.error_load_missions": true,
-  "smartboard.error_load_news": true,
-  "smartboard.error_load_points": true,
-  "smartboard.error_load_subjects": true,
-  "smartboard.error_load_vak": true,
-  "smartboard.general": true,
-  "smartboard.habeas_parent_email_invalid": true,
-  "smartboard.habeas_parent_email_required": true,
-  "smartboard.ialab_desc": true,
-  "smartboard.ialab_pro_desc": true,
-  "smartboard.ialab_pro_title": true,
-  "smartboard.ialab_title": true,
-  "smartboard.interactions": true,
-  "smartboard.interactions_with": true,
-  "smartboard.landing.choose_plan_aria": true,
-  "smartboard.landing.start_aria": true,
-  "smartboard.landing.try_aria": true,
-  "smartboard.landing_badge": true,
-  "smartboard.landing_benefits_badge": true,
-  "smartboard.landing_benefits_title_line1": true,
-  "smartboard.landing_benefits_title_line2": true,
-  "smartboard.landing_concern_label": true,
-  "smartboard.landing_cta_badge": true,
-  "smartboard.landing_cta_final_btn": true,
-  "smartboard.landing_cta_final_desc": true,
-  "smartboard.landing_cta_final_title_line1": true,
-  "smartboard.landing_cta_final_title_line2": true,
-  "smartboard.landing_cta_how": true,
-  "smartboard.landing_cta_start": true,
-  "smartboard.landing_cta_try": true,
-  "smartboard.landing_faq_title": true,
-  "smartboard.landing_faq_title_highlight": true,
-  "smartboard.landing_hero_brain_label": true,
-  "smartboard.landing_hero_desc": true,
-  "smartboard.landing_hero_eyebrow": true,
-  "smartboard.landing_hero_line1": true,
-  "smartboard.landing_hero_line2": true,
-  "smartboard.landing_hero_line3": true,
-  "smartboard.landing_how_badge": true,
-  "smartboard.landing_how_title_line1": true,
-  "smartboard.landing_how_title_line2": true,
-  "smartboard.landing_kids_count": true,
-  "smartboard.landing_kids_learning": true,
-  "smartboard.landing_next": true,
-  "smartboard.landing_pain_point1": true,
-  "smartboard.landing_pain_point2": true,
-  "smartboard.landing_pain_point3": true,
-  "smartboard.landing_pain_point4": true,
-  "smartboard.landing_prev": true,
-  "smartboard.landing_pricing_badge": true,
-  "smartboard.landing_pricing_choose": true,
-  "smartboard.landing_pricing_desc": true,
-  "smartboard.landing_pricing_popular": true,
-  "smartboard.landing_pricing_title_line1": true,
-  "smartboard.landing_pricing_title_line2": true,
-  "smartboard.landing_quote": true,
-  "smartboard.landing_solution1": true,
-  "smartboard.landing_solution2": true,
-  "smartboard.landing_solution3": true,
-  "smartboard.landing_solution4": true,
-  "smartboard.landing_start_now": true,
-  "smartboard.landing_stat_hours": true,
-  "smartboard.landing_stat_improvement": true,
-  "smartboard.landing_stat_students": true,
-  "smartboard.landing_step_beneficios": true,
-  "smartboard.landing_step_como_funciona": true,
-  "smartboard.landing_step_faq": true,
-  "smartboard.landing_step_planes": true,
-  "smartboard.landing_step_que_es": true,
-  "smartboard.landing_step_testimonios": true,
-  "smartboard.landing_step_tranquilidad": true,
-  "smartboard.landing_step_vak": true,
-  "smartboard.landing_tag_adaptive_ai": true,
-  "smartboard.landing_tag_live_reports": true,
-  "smartboard.landing_tag_real_coaches": true,
-  "smartboard.landing_tag_scientific_vak": true,
-  "smartboard.landing_testimonials_badge": true,
-  "smartboard.landing_testimonials_title_line1": true,
-  "smartboard.landing_testimonials_title_line2": true,
-  "smartboard.landing_tranquility_badge": true,
-  "smartboard.landing_tranquility_desc": true,
-  "smartboard.landing_tranquility_title_line1": true,
-  "smartboard.landing_tranquility_title_line2": true,
-  "smartboard.landing_trial_terms": true,
-  "smartboard.landing_trust_badge": true,
-  "smartboard.landing_trust_subtitle": true,
-  "smartboard.landing_vak_badge": true,
-  "smartboard.landing_vak_desc": true,
-  "smartboard.landing_vak_title": true,
-  "smartboard.landing_vak_title_highlight": true,
-  "smartboard.landing_what_badge": true,
-  "smartboard.landing_what_desc1": true,
-  "smartboard.landing_what_desc2": true,
-  "smartboard.landing_what_title_line1": true,
-  "smartboard.landing_what_title_line2": true,
-  "smartboard.learning_stats": true,
-  "smartboard.level": true,
-  "smartboard.level_label": true,
-  "smartboard.level_name": true,
-  "smartboard.live": true,
-  "smartboard.loading": true,
-  "smartboard.login_button": true,
-  "smartboard.login_desc": true,
-  "smartboard.login_error": true,
-  "smartboard.login_heading": true,
-  "smartboard.login_subtitle": true,
-  "smartboard.login_title": true,
-  "smartboard.login_verifying": true,
-  "smartboard.logout": true,
-  "smartboard.minutes": true,
-  "smartboard.minutes_total": true,
-  "smartboard.missing_points": true,
-  "smartboard.missions": true,
-  "smartboard.missions_day": true,
-  "smartboard.missions_label": true,
-  "smartboard.missions_view_title": true,
-  "smartboard.mobile_nav": true,
-  "smartboard.nav_label": true,
-  "smartboard.no_access": true,
-  "smartboard.no_points_data": true,
-  "smartboard.no_subjects": true,
-  "smartboard.not_connected": true,
-  "smartboard.parent_active_minutes": true,
-  "smartboard.parent_alert_explore": true,
-  "smartboard.parent_alert_inactive": true,
-  "smartboard.parent_alert_points": true,
-  "smartboard.parent_alert_streak": true,
-  "smartboard.parent_alert_title": true,
-  "smartboard.parent_congrats_streak": true,
-  "smartboard.parent_current_tab": true,
-  "smartboard.parent_desc": true,
-  "smartboard.parent_last_active": true,
-  "smartboard.parent_no_activity_today": true,
-  "smartboard.parent_no_sessions": true,
-  "smartboard.parent_offline": true,
-  "smartboard.parent_online": true,
-  "smartboard.parent_panel": true,
-  "smartboard.parent_sessions_today": true,
-  "smartboard.parent_streak_days": true,
-  "smartboard.parent_today_sessions": true,
-  "smartboard.parent_try_subjects": true,
-  "smartboard.password": true,
-  "smartboard.password_placeholder": true,
-  "smartboard.pending": true,
-  "smartboard.points": true,
-  "smartboard.points_display": true,
-  "smartboard.points_history": true,
-  "smartboard.points_label": true,
-  "smartboard.points_per_day": true,
-  "smartboard.points_progress": true,
-  "smartboard.predominant_style": true,
-  "smartboard.progress": true,
-  "smartboard.progress_by_subject": true,
-  "smartboard.progress_general": true,
-  "smartboard.progress_label": true,
-  "smartboard.progress_pct": true,
-  "smartboard.progress_tab": true,
-  "smartboard.questions_asked": true,
-  "smartboard.quick_actions": true,
-  "smartboard.recent_activity": true,
-  "smartboard.recent_sessions": true,
-  "smartboard.record": true,
-  "smartboard.report_days": true,
-  "smartboard.report_level": true,
-  "smartboard.report_min": true,
-  "smartboard.report_streak": true,
-  "smartboard.report_time": true,
-  "smartboard.report_title": true,
-  "smartboard.report_xp": true,
-  "smartboard.request_account": true,
-  "smartboard.research_desc": true,
-  "smartboard.research_lab": true,
-  "smartboard.research_lines_tab": true,
-  "smartboard.rewards": true,
-  "smartboard.sb_name": true,
-  "smartboard.sb_subtitle": true,
-  "smartboard.score": true,
-  "smartboard.selected_line": true,
-  "smartboard.selected_line_with_name": true,
-  "smartboard.sidebar_level": true,
-  "smartboard.sidebar_logout": true,
-  "smartboard.sidebar_streak": true,
-  "smartboard.signup_back": true,
-  "smartboard.signup_feature_community": true,
-  "smartboard.signup_feature_missions": true,
-  "smartboard.signup_feature_tracking": true,
-  "smartboard.signup_for_students": true,
-  "smartboard.signup_have_account": true,
-  "smartboard.signup_login_heading": true,
-  "smartboard.signup_login_here": true,
-  "smartboard.signup_login_sub": true,
-  "smartboard.signup_login_tab": true,
-  "smartboard.signup_no_account": true,
-  "smartboard.signup_quote": true,
-  "smartboard.signup_register_heading": true,
-  "smartboard.signup_register_here": true,
-  "smartboard.signup_register_sub": true,
-  "smartboard.signup_register_tab": true,
-  "smartboard.signup_signin_desc": true,
-  "smartboard.signup_signup_desc": true,
-  "smartboard.signup_terms": true,
-  "smartboard.signup_welcome": true,
-  "smartboard.start": true,
-  "smartboard.start_today": true,
-  "smartboard.stats_back": true,
-  "smartboard.stats_desc": true,
-  "smartboard.stats_title": true,
-  "smartboard.streak_days": true,
-  "smartboard.streak_days_label": true,
-  "smartboard.streak_title": true,
-  "smartboard.study_time": true,
-  "smartboard.subject": true,
-  "smartboard.subjects_view_title": true,
-  "smartboard.tab_activities": true,
-  "smartboard.tab_calendar": true,
-  "smartboard.tab_home": true,
-  "smartboard.tab_missions": true,
-  "smartboard.tab_news": true,
-  "smartboard.tab_parents": true,
-  "smartboard.tab_progress": true,
-  "smartboard.tab_subjects": true,
-  "smartboard.tab_vak": true,
-  "smartboard.talk_dani": true,
-  "smartboard.today_missions": true,
-  "smartboard.topbar_activities": true,
-  "smartboard.topbar_calendar": true,
-  "smartboard.topbar_home": true,
-  "smartboard.topbar_missions": true,
-  "smartboard.topbar_news": true,
-  "smartboard.topbar_progress": true,
-  "smartboard.topbar_subjects": true,
-  "smartboard.topbar_vak": true,
-  "smartboard.total_hours": true,
-  "smartboard.total_points": true,
-  "smartboard.total_time": true,
-  "smartboard.transactions": true,
-  "smartboard.unlock_reward": true,
-  "smartboard.unlocked": true,
-  "smartboard.upcoming_events": true,
-  "smartboard.username": true,
-  "smartboard.username_placeholder": true,
-  "smartboard.vak_analysis": true,
-  "smartboard.vak_desc": true,
-  "smartboard.vak_profile": true,
-  "smartboard.vak_report": true,
-  "smartboard.vak_techniques": true,
-  "smartboard.vak_title": true,
-  "smartboard.valeria_ready": true,
-  "smartboard.valerio_analysis": true,
-  "smartboard.valerio_analyzing": true,
-  "smartboard.valerio_will_analyze": true,
-  "smartboard.view_all": true,
-  "smartboard.weekly_activity": true,
-  "smartboard.your_subjects": true,
   "streak.days": true,
   "streak.leaderboard_badges": true,
   "streak.leaderboard_streak": true,
@@ -11184,6 +11911,12 @@ const translationKeySet: Record<string, true> = {
   "streak.tier_imparable": true,
   "streak.xp": true,
   "streak.you": true,
+  streak_ctx_0: true,
+  streak_ctx_1: true,
+  streak_ctx_2: true,
+  streak_ctx_3: true,
+  streak_ctx_5: true,
+  streak_ctx_7: true,
   "study_groups.create": true,
   "study_groups.create_first": true,
   "study_groups.form_desc_placeholder": true,
@@ -11193,6 +11926,16 @@ const translationKeySet: Record<string, true> = {
   "study_groups.no_groups": true,
   "study_groups.subtitle": true,
   "study_groups.title": true,
+  "summary.best_subject": true,
+  "summary.bien": true,
+  "summary.card_title": true,
+  "summary.exc_no_streak": true,
+  "summary.exc_streak": true,
+  "summary.no_activity": true,
+  "summary.regular": true,
+  "summary.stat_days": true,
+  "summary.stat_points": true,
+  "summary.stat_sessions": true,
   time_avg: true,
   time_days_active: true,
   time_title: true,
@@ -11200,74 +11943,53 @@ const translationKeySet: Record<string, true> = {
   time_week: true,
   "vak.ui.accept_and_continue": true,
   "vak.ui.accept_data_policy": true,
-  "vak.ui.accessibility_label": true,
   "vak.ui.accessibility_title": true,
-  "vak.ui.adapted_strategies": true,
-  "vak.ui.almost_done": true,
-  "vak.ui.answer_honestly": true,
-  "vak.ui.auditory": true,
-  "vak.ui.auditory_short_desc": true,
   "vak.ui.back_to_results": true,
-  "vak.ui.back_to_start": true,
+  "vak.ui.chip_auditory": true,
+  "vak.ui.chip_kinesthetic": true,
+  "vak.ui.chip_visual": true,
   "vak.ui.completed": true,
-  "vak.ui.confidential_label": true,
-  "vak.ui.contact_phone_label": true,
   "vak.ui.developed_by": true,
-  "vak.ui.diagnosis_completed": true,
   "vak.ui.download_pdf_btn": true,
-  "vak.ui.download_pdf_result": true,
-  "vak.ui.duration": true,
-  "vak.ui.email_label": true,
-  "vak.ui.email_placeholder": true,
-  "vak.ui.error_age_range": true,
   "vak.ui.error_loading_diagnosis": true,
-  "vak.ui.feature_colors_schemas": true,
-  "vak.ui.feature_debates_discussions": true,
-  "vak.ui.feature_diagrams": true,
-  "vak.ui.feature_explain_aloud": true,
-  "vak.ui.feature_hands_on": true,
-  "vak.ui.feature_images_videos": true,
-  "vak.ui.feature_mind_maps": true,
-  "vak.ui.feature_movement_breaks": true,
-  "vak.ui.feature_music_rhythms": true,
-  "vak.ui.feature_podcasts_audio": true,
-  "vak.ui.feature_projects": true,
-  "vak.ui.feature_role_play": true,
+  "vak.ui.feedback_no": true,
+  "vak.ui.feedback_question": true,
+  "vak.ui.feedback_some": true,
+  "vak.ui.feedback_thanks": true,
+  "vak.ui.feedback_yes": true,
   "vak.ui.fill_data_personalize": true,
   "vak.ui.generating_pdf": true,
   "vak.ui.go_home": true,
   "vak.ui.habeas_data_title": true,
-  "vak.ui.hello_greeting_name": true,
-  "vak.ui.hello_results_suffix": true,
+  "vak.ui.halfway": true,
   "vak.ui.hero_subtitle": true,
   "vak.ui.hero_title": true,
+  "vak.ui.high_contrast": true,
   "vak.ui.how_feel_today": true,
-  "vak.ui.kinesthetic": true,
-  "vak.ui.kinesthetic_short_desc": true,
-  "vak.ui.listen_again": true,
+  "vak.ui.keys_hint": true,
+  "vak.ui.listen": true,
   "vak.ui.mood_bad": true,
   "vak.ui.mood_good": true,
   "vak.ui.mood_neutral": true,
   "vak.ui.mood_neutral_fallback": true,
-  "vak.ui.mood_section": true,
   "vak.ui.mute": true,
   "vak.ui.no_diagnosis_display": true,
   "vak.ui.no_results_available": true,
-  "vak.ui.no_wrong_answers": true,
-  "vak.ui.parent_data_instruction": true,
-  "vak.ui.parent_name_label": true,
-  "vak.ui.parent_name_placeholder": true,
+  "vak.ui.parents_link": true,
+  "vak.ui.parents_note": true,
   "vak.ui.pdf_age": true,
   "vak.ui.pdf_analysis": true,
   "vak.ui.pdf_company": true,
+  "vak.ui.pdf_cover_note": true,
   "vak.ui.pdf_date": true,
+  "vak.ui.pdf_disclaimer_text": true,
+  "vak.ui.pdf_disclaimer_title": true,
   "vak.ui.pdf_error_empty": true,
   "vak.ui.pdf_error_internal": true,
   "vak.ui.pdf_error_no_data": true,
   "vak.ui.pdf_generated_by": true,
   "vak.ui.pdf_generic_error": true,
   "vak.ui.pdf_guardian_section": true,
-  "vak.ui.pdf_identified_strengths": true,
   "vak.ui.pdf_learning_profile": true,
   "vak.ui.pdf_legal": true,
   "vak.ui.pdf_mood": true,
@@ -11275,82 +11997,55 @@ const translationKeySet: Record<string, true> = {
   "vak.ui.pdf_open_results": true,
   "vak.ui.pdf_parent_tips": true,
   "vak.ui.pdf_personalized_advice": true,
+  "vak.ui.pdf_prepared_for_both": true,
+  "vak.ui.pdf_prepared_for_student": true,
   "vak.ui.pdf_qr_alt": true,
-  "vak.ui.pdf_recommended_careers": true,
-  "vak.ui.pdf_report": true,
+  "vak.ui.pdf_qr_label": true,
   "vak.ui.pdf_student_section": true,
   "vak.ui.pdf_study_strategies": true,
   "vak.ui.pdf_style_features": true,
   "vak.ui.pdf_title": true,
   "vak.ui.pdf_valeria_name": true,
   "vak.ui.pdf_valeria_title": true,
-  "vak.ui.percentage_match": true,
-  "vak.ui.personalized_diagnosis": true,
-  "vak.ui.personalized_label": true,
-  "vak.ui.personalized_tip_title": true,
-  "vak.ui.phone_placeholder": true,
-  "vak.ui.practical_tips": true,
+  "vak.ui.previous": true,
+  "vak.ui.progress_label": true,
   "vak.ui.question": true,
-  "vak.ui.questions_count": true,
-  "vak.ui.recommended_strategies": true,
-  "vak.ui.repeat_question": true,
   "vak.ui.restart_btn": true,
-  "vak.ui.save_indicator": true,
-  "vak.ui.scores": true,
+  "vak.ui.result_challenge": true,
+  "vak.ui.result_cta_practice": true,
+  "vak.ui.result_cta_report": true,
+  "vak.ui.result_family_name_hint": true,
+  "vak.ui.result_family_name_label": true,
+  "vak.ui.result_family_title": true,
+  "vak.ui.result_hello": true,
+  "vak.ui.result_mix_mixed": true,
+  "vak.ui.result_mix_single": true,
+  "vak.ui.result_note": true,
+  "vak.ui.result_retry": true,
+  "vak.ui.result_saved_note": true,
+  "vak.ui.result_superpower": true,
+  "vak.ui.result_tips": true,
+  "vak.ui.result_title": true,
+  "vak.ui.resume_body": true,
+  "vak.ui.resume_continue": true,
+  "vak.ui.resume_restart": true,
+  "vak.ui.resume_title": true,
   "vak.ui.speaking": true,
   "vak.ui.start_diagnosis_btn": true,
+  "vak.ui.start_hint": true,
   "vak.ui.start_test_btn": true,
   "vak.ui.tell_me_about_you": true,
-  "vak.ui.three_styles_title": true,
-  "vak.ui.time_elapsed": true,
-  "vak.ui.time_section": true,
-  "vak.ui.total_time": true,
   "vak.ui.unmute": true,
   "vak.ui.vak_intro": true,
-  "vak.ui.vak_profile": true,
   "vak.ui.valeria_name": true,
   "vak.ui.valeria_subtitle": true,
-  "vak.ui.valeria_will_guide": true,
-  "vak.ui.view_document_btn": true,
   "vak.ui.view_habeas_data": true,
-  "vak.ui.view_results_btn": true,
-  "vak.ui.visual": true,
-  "vak.ui.visual_short_desc": true,
   "vak.ui.volume": true,
-  "vak.ui.waiting_for_valeria": true,
-  "vak.ui.want_feedback": true,
-  "vak.ui.what_is_vak": true,
-  "vak.ui.what_to_expect_title": true,
-  "vak.ui.what_you_get_title": true,
   "vak.ui.years": true,
   "vak.ui.you_are_a_learner": true,
   "vak.ui.your_age_label": true,
-  "vak.ui.your_age_placeholder": true,
   "vak.ui.your_name_label": true,
   "vak.ui.your_name_placeholder": true,
-  "valerio.advanced": true,
-  "valerio.at_risk": true,
-  "valerio.beginner": true,
-  "valerio.completed_modules": true,
-  "valerio.course_progress": true,
-  "valerio.current_module_label": true,
-  "valerio.days": true,
-  "valerio.failures": true,
-  "valerio.intermediate": true,
-  "valerio.last_activity": true,
-  "valerio.level": true,
-  "valerio.module_scores": true,
-  "valerio.name": true,
-  "valerio.no_activity": true,
-  "valerio.no_streak": true,
-  "valerio.none_identified": true,
-  "valerio.session_history": true,
-  "valerio.streak": true,
-  "valerio.student": true,
-  "valerio.student_context_label": true,
-  "valerio.total_xp": true,
-  "valerio.weak_topics": true,
-  "valerio.weekly_xp": true,
   "video.cc_off": true,
   "video.cc_on": true,
   "video.format": true,

@@ -39,7 +39,7 @@ describe('requireAuth via HTTP', () => {
   });
 });
 
-// ── requireProduct: separación IALab ↔ SmartBoard ────────────────────────────
+// ── requireProduct: separación IALab ↔ IngenIA ────────────────────────────
 const { requireProduct } = require('../../middleware/auth');
 const supabase = require('../../db/supabase');
 
@@ -58,7 +58,7 @@ const makeProductApp = ({ userId = 'user-1', role = null } = {}) => {
   router.get('/user-role', (_req, res) => res.json({ ok: true }));
   router.get('/whatever', (_req, res) => res.json({ ok: true }));
   app.use(
-    '/api/smartboard',
+    '/api/ingenia',
     requireProduct('smartboard', { allowPaths: ['/user-role'] }),
     router,
   );
@@ -94,13 +94,13 @@ describe('requireProduct', () => {
 
   it('exime las rutas de allowPaths (user-role) aunque la cuenta sea de otro producto', async () => {
     stub({ accountType: 'ialab' });
-    const res = await request(makeProductApp()).get('/api/smartboard/user-role');
+    const res = await request(makeProductApp()).get('/api/ingenia/user-role');
     expect(res.status).toBe(200);
   });
 
   it('403 con mensaje claro cuando la cuenta es del otro producto', async () => {
     stub({ accountType: 'ialab' });
-    const res = await request(makeProductApp()).get('/api/smartboard/whatever');
+    const res = await request(makeProductApp()).get('/api/ingenia/whatever');
     expect(res.status).toBe(403);
     expect(res.body.error).toBe('product_mismatch');
     expect(res.body.product).toBe('ialab');
@@ -109,25 +109,25 @@ describe('requireProduct', () => {
 
   it('deja pasar cuando el producto coincide', async () => {
     stub({ accountType: 'smartboard' });
-    const res = await request(makeProductApp()).get('/api/smartboard/whatever');
+    const res = await request(makeProductApp()).get('/api/ingenia/whatever');
     expect(res.status).toBe(200);
   });
 
   it('deja pasar a admin (app_metadata.role)', async () => {
     stub({ accountType: 'ialab' });
-    const res = await request(makeProductApp({ role: 'admin' })).get('/api/smartboard/whatever');
+    const res = await request(makeProductApp({ role: 'admin' })).get('/api/ingenia/whatever');
     expect(res.status).toBe(200);
   });
 
   it('deja pasar a un padre con vínculo activo', async () => {
     stub({ links: [{ parent_user_id: 'user-1' }], accountType: 'ialab' });
-    const res = await request(makeProductApp()).get('/api/smartboard/whatever');
+    const res = await request(makeProductApp()).get('/api/ingenia/whatever');
     expect(res.status).toBe(200);
   });
 
   it('no bloquea cuentas sin account_type (transición)', async () => {
     stub({ accountType: null });
-    const res = await request(makeProductApp()).get('/api/smartboard/whatever');
+    const res = await request(makeProductApp()).get('/api/ingenia/whatever');
     expect(res.status).toBe(200);
   });
 });

@@ -15,7 +15,7 @@ const IngenIAPage = () => {
   };
 
   return (
-    <Suspense fallback={<PageLoader message={t("smartboard.loading")} />}>
+    <Suspense fallback={<PageLoader message={t("ingenia.loading")} />}>
       <IngenIADashboard onNavigate={navigate} onLogout={handleLogout} />
     </Suspense>
   );

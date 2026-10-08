@@ -160,7 +160,7 @@ function buildWeeklySummary(kidData = {}, opts = {}) {
  */
 function renderWeeklyEmail(summary, opts = {}) {
   const name = opts.studentName || "tu hijo";
-  const dashboardUrl = opts.dashboardUrl || "https://edutechlife.co/smartboard";
+  const dashboardUrl = opts.dashboardUrl || "https://edutechlife.co/ingenia";
 
   const subject = summary.hasActivity
     ? `📚 El progreso de ${name} esta semana en IngenIA`

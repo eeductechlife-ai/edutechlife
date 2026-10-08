@@ -30,13 +30,13 @@ export default function IngenIAComoFuncionaSection({ t, pasos, handleCta }) {
         >
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-mint/10 to-primary-light/10 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3 border border-mint/10">
             <Icon name="fa-rocket-launch" className="text-mint text-xs" />
-            {t("smartboard.landing_how_badge")}
+            {t("ingenia.landing_how_badge")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight">
-            {t("smartboard.landing_how_title_line1")}
+            {t("ingenia.landing_how_title_line1")}
             <br />
             <span className="text-gradient-accent pr-1">
-              {t("smartboard.landing_how_title_line2")}
+              {t("ingenia.landing_how_title_line2")}
             </span>
           </h2>
         </motion.div>
@@ -103,7 +103,7 @@ export default function IngenIAComoFuncionaSection({ t, pasos, handleCta }) {
           >
             <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent group-hover:animate-sweep skew-x-[-20deg]" />
             <span className="relative z-10 font-semibold">
-              {t("smartboard.landing_cta_start")}
+              {t("ingenia.landing_cta_start")}
             </span>
             <Icon
               name="fa-arrow-right"

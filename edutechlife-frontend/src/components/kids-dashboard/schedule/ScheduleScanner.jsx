@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { callDeepseekSmartboard } from "../../../utils/api";
+import { callDeepseekIngenia } from "../../../utils/api";
 import { API_BASE_URL } from "../../../config/api";
 import { coerceSlot } from "./timetableUtils";
 
@@ -118,7 +118,7 @@ const ScheduleScanner = memo(({ onExtracted, onCancel }) => {
       setProgress(55);
       setStage("analyzing");
 
-      const res = await callDeepseekSmartboard(
+      const res = await callDeepseekIngenia(
         [{ role: "user", content: buildUserPrompt(text) }],
         { isJson: true, temperature: 0.05, maxTokens: 6000 },
       );

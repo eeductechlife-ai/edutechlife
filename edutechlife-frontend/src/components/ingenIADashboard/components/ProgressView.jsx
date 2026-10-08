@@ -37,30 +37,30 @@ const ProgressView = memo(
 
         <GlassCard animate delay={0.1}>
           <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-6">
-            {t("smartboard.learning_stats")}
+            {t("ingenia.learning_stats")}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
               {
-                label: t("smartboard.total_time"),
+                label: t("ingenia.total_time"),
                 value: `${studentData.timeSpent || 0}min`,
                 color: "#4DA8C4",
                 bg: "from-[#4DA8C4]/10 to-transparent",
               },
               {
-                label: t("smartboard.interactions"),
+                label: t("ingenia.interactions"),
                 value: studentData.interactions,
                 color: "#66CCCC",
                 bg: "from-[#66CCCC]/10 to-transparent",
               },
               {
-                label: t("smartboard.average_progress"),
+                label: t("ingenia.average_progress"),
                 value: `${averageProgress}%`,
                 color: "#FFD166",
                 bg: "from-[#FFD166]/10 to-transparent",
               },
               {
-                label: t("smartboard.streak_days_label"),
+                label: t("ingenia.streak_days_label"),
                 value: streakDays,
                 color: "#FF6B9D",
                 bg: "from-[#FF6B9D]/10 to-transparent",
@@ -95,7 +95,7 @@ const ProgressView = memo(
           whileTap={{ scale: 0.99 }}
         >
           <Download className="w-5 h-5" />
-          {t("smartboard.download_full_report")}
+          {t("ingenia.download_full_report")}
         </motion.button>
       </div>
     );

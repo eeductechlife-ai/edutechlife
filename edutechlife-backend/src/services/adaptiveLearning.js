@@ -296,7 +296,7 @@ const LEARNING_MIN = 0.4;
 const ENGAGEMENT_ACTIVE_DAYS = 3;
 
 /**
- * SMARTBOARD PRIORITY (E5) — separa conceptualmente LEARNING NEED de
+ * INGENIA PRIORITY (E5) — separa conceptualmente LEARNING NEED de
  * ENGAGEMENT NEED y produce una decisión final:
  *   - si existe un déficit de aprendizaje real (min mastery < 0.4) → gana
  *     LEARNING (práctica en la competencia más débil), sin importar la
@@ -305,7 +305,7 @@ const ENGAGEMENT_ACTIVE_DAYS = 3;
  *     (motivación/racha) (Student B: math 90% → puede priorizar engagement).
  *   - si no hay déficit ni baja actividad → fortaleza (challenge/transfer).
  */
-function computeSmartboardPriority(state) {
+function computeIngeniaPriority(state) {
   const subjectMin = computeSubjectMinMastery(state.masteryRows || []);
   const weakest = Object.entries(subjectMin).sort((a, b) => a[1] - b[1])[0];
   const minMastery = weakest ? weakest[1] : 1;
@@ -564,10 +564,10 @@ function buildPracticeReason(label, priority) {
 
 /**
  * Returns the single best next action for the student with an explanation,
- * driven by the SMARTBOARD PRIORITY (E5): learning need > engagement > strength.
+ * driven by the INGENIA PRIORITY (E5): learning need > engagement > strength.
  */
 function getNextBestAction(state) {
-  const smartboardPriority = computeSmartboardPriority(state);
+  const smartboardPriority = computeIngeniaPriority(state);
 
   // 1. LEARNING NEED: existe un déficit real (< 40% min) → práctica en la
   //    competencia/materia más débil, aunque la actividad reciente sea alta.
@@ -998,7 +998,7 @@ module.exports = {
   getStudentState,
   detectStrengths,
   detectWeaknesses,
-  computeSmartboardPriority,
+  computeIngeniaPriority,
   detectRisks,
   generateRecommendations,
   recommendContent,

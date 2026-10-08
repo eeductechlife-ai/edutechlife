@@ -82,7 +82,7 @@ export const blogArticles = [
     tiempoLectura: "6 min",
   },
   {
-    id: "smartboard",
+    id: "ingenia",
     titulo: "IngenIA: Complete 2026 Guide",
     fecha: "Mar 5, 2026",
     categoria: "Tools",
@@ -213,7 +213,7 @@ export const blogArticleContents = {
     conclusion:
       "Implementing VAK does not require advanced technology, but a methodological shift. Teachers must design diversified experiences that reach all styles, monitor results, and adjust strategies continuously.",
   },
-  smartboard: {
+  ingenia: {
     titulo: "IngenIA: Complete 2026 Guide",
     imagen:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=400&fit=crop",

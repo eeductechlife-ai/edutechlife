@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { OralExamSimulator } from "../OralExamSimulator";
 
 vi.mock("../../../utils/api", () => ({
-  callDeepseekSmartboard: vi.fn(),
+  callDeepseekIngenia: vi.fn(),
 }));
 
 vi.mock("../../../context/IngenIAKidsContext", () => ({
@@ -81,7 +81,7 @@ vi.mock("../../../i18n/I18nProvider", () => ({
   }),
 }));
 
-import { callDeepseekSmartboard } from "../../../utils/api";
+import { callDeepseekIngenia } from "../../../utils/api";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 
 describe("OralExamSimulator", () => {
@@ -97,7 +97,7 @@ describe("OralExamSimulator", () => {
       activeStudyDeck: null,
     });
 
-    callDeepseekSmartboard.mockResolvedValue("¡Hola! Soy Dani, tu tutora.");
+    callDeepseekIngenia.mockResolvedValue("¡Hola! Soy Dani, tu tutora.");
   });
 
   describe("Setup Phase", () => {
@@ -177,14 +177,14 @@ describe("OralExamSimulator", () => {
       await setupAndStart(user);
 
       await waitFor(() => {
-        expect(callDeepseekSmartboard).toHaveBeenCalled();
+        expect(callDeepseekIngenia).toHaveBeenCalled();
       });
     });
 
     it("shows loading state while connecting to Dani", async () => {
       const user = userEvent.setup();
       let resolveApi;
-      callDeepseekSmartboard.mockImplementation(
+      callDeepseekIngenia.mockImplementation(
         () =>
           new Promise((res) => {
             resolveApi = res;
@@ -205,7 +205,7 @@ describe("OralExamSimulator", () => {
 
     it("switches to conversation view after API responds", async () => {
       const user = userEvent.setup();
-      callDeepseekSmartboard.mockResolvedValue("¡Hola! Soy Dani.");
+      callDeepseekIngenia.mockResolvedValue("¡Hola! Soy Dani.");
 
       render(<OralExamSimulator onTabChange={mockOnTabChange} />);
       await user.click(screen.getByText(/matemáticas/i));
@@ -221,7 +221,7 @@ describe("OralExamSimulator", () => {
 
     it("handles API errors gracefully", async () => {
       const user = userEvent.setup();
-      callDeepseekSmartboard.mockRejectedValue(new Error("Network error"));
+      callDeepseekIngenia.mockRejectedValue(new Error("Network error"));
 
       render(<OralExamSimulator onTabChange={mockOnTabChange} />);
       await user.click(screen.getByText(/matemáticas/i));
@@ -230,7 +230,7 @@ describe("OralExamSimulator", () => {
 
       // Component should still render (not crash)
       await waitFor(() => {
-        expect(callDeepseekSmartboard).toHaveBeenCalled();
+        expect(callDeepseekIngenia).toHaveBeenCalled();
       });
     });
   });
@@ -263,7 +263,7 @@ describe("OralExamSimulator", () => {
       await user.click(screen.getByText(/hablar con dani/i).closest("button"));
 
       await waitFor(() => {
-        expect(callDeepseekSmartboard).toHaveBeenCalledWith(
+        expect(callDeepseekIngenia).toHaveBeenCalledWith(
           expect.arrayContaining([expect.objectContaining({ role: "system" })]),
           expect.objectContaining({
             temperature: expect.any(Number),

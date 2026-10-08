@@ -17,7 +17,7 @@ const IngenIADashboard = ({ onNavigate, onLogout }) => {
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportData, setReportData] = useState(null);
 
-  const smartBoard = useIngenIAKidsSafe();
+  const ingenIA = useIngenIAKidsSafe();
 
   const {
     userXP,
@@ -41,13 +41,13 @@ const IngenIADashboard = ({ onNavigate, onLogout }) => {
           subject.name,
         ]);
         // Create session for this subject in Supabase
-        if (smartBoard?.createSession) {
-          smartBoard.createSession(subject.name, "lesson");
+        if (ingenIA?.createSession) {
+          ingenIA.createSession(subject.name, "lesson");
         }
         setActiveTab("materias");
       }
     },
-    [trackInteraction, studentData.topicsExplored, smartBoard],
+    [trackInteraction, studentData.topicsExplored, ingenIA],
   );
 
   const generateStudentReport = useCallback(() => {

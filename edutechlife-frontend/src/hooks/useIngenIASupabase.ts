@@ -85,7 +85,7 @@ export interface LearningStreak {
   total_days_active: number;
 }
 
-export interface SmartboardSettings {
+export interface IngeniaSettings {
   id: string;
   student_id: string;
   difficulty_level: string;
@@ -100,24 +100,24 @@ export interface SmartboardSettings {
 }
 
 // Query keys factory for better cache management
-export const smartBoardQueryKeys = {
-  all: ["smartboard"] as const,
+export const ingenIAQueryKeys = {
+  all: ["ingenia"] as const,
   student: (studentId: string) =>
-    [...smartBoardQueryKeys.all, "student", studentId] as const,
+    [...ingenIAQueryKeys.all, "student", studentId] as const,
   pointsHistory: (studentId: string) =>
-    [...smartBoardQueryKeys.all, "pointsHistory", studentId] as const,
+    [...ingenIAQueryKeys.all, "pointsHistory", studentId] as const,
   vakResults: (studentId: string) =>
-    [...smartBoardQueryKeys.all, "vakResults", studentId] as const,
+    [...ingenIAQueryKeys.all, "vakResults", studentId] as const,
   sessions: (studentId: string) =>
-    [...smartBoardQueryKeys.all, "sessions", studentId] as const,
+    [...ingenIAQueryKeys.all, "sessions", studentId] as const,
   academicContext: (studentId: string) =>
-    [...smartBoardQueryKeys.all, "academicContext", studentId] as const,
+    [...ingenIAQueryKeys.all, "academicContext", studentId] as const,
   achievements: (studentId: string) =>
-    [...smartBoardQueryKeys.all, "achievements", studentId] as const,
+    [...ingenIAQueryKeys.all, "achievements", studentId] as const,
   streaks: (studentId: string) =>
-    [...smartBoardQueryKeys.all, "streaks", studentId] as const,
+    [...ingenIAQueryKeys.all, "streaks", studentId] as const,
   settings: (studentId: string) =>
-    [...smartBoardQueryKeys.all, "settings", studentId] as const,
+    [...ingenIAQueryKeys.all, "settings", studentId] as const,
 };
 
 // Hook: Fetch student data
@@ -125,7 +125,7 @@ export const useStudentData = (): UseQueryResult<StudentData> => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: smartBoardQueryKeys.student(user?.id || ""),
+    queryKey: ingenIAQueryKeys.student(user?.id || ""),
     queryFn: async () => {
       if (!user?.id) throw new Error("No authenticated user");
 
@@ -148,7 +148,7 @@ export const usePointsHistory = (): UseQueryResult<PointsHistoryEntry[]> => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: smartBoardQueryKeys.pointsHistory(user?.id || ""),
+    queryKey: ingenIAQueryKeys.pointsHistory(user?.id || ""),
     queryFn: async () => {
       if (!user?.id) throw new Error("No authenticated user");
 
@@ -221,7 +221,7 @@ export const useAddPoints = (): UseMutationResult<
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: smartBoardQueryKeys.pointsHistory(user?.id || ""),
+        queryKey: ingenIAQueryKeys.pointsHistory(user?.id || ""),
       });
     },
   });
@@ -232,7 +232,7 @@ export const useVAKResult = (): UseQueryResult<VAKResult | null> => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: smartBoardQueryKeys.vakResults(user?.id || ""),
+    queryKey: ingenIAQueryKeys.vakResults(user?.id || ""),
     queryFn: async () => {
       if (!user?.id) throw new Error("No authenticated user");
 
@@ -336,7 +336,7 @@ export const useSetVAKResult = (): UseMutationResult<
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: smartBoardQueryKeys.vakResults(user?.id || ""),
+        queryKey: ingenIAQueryKeys.vakResults(user?.id || ""),
       });
     },
   });
@@ -390,7 +390,7 @@ export const useSessionCreate = (): UseMutationResult<
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: smartBoardQueryKeys.sessions(user?.id || ""),
+        queryKey: ingenIAQueryKeys.sessions(user?.id || ""),
       });
     },
   });
@@ -438,9 +438,7 @@ export const useSessionEnd = (): UseMutationResult<
           end_time: new Date().toISOString(),
           points_earned,
           completion_percentage,
-          ...(duration_minutes !== undefined
-            ? { duration_minutes }
-            : {}),
+          ...(duration_minutes !== undefined ? { duration_minutes } : {}),
         })
         .eq("id", sessionId)
         .eq("student_id", student.data.id)
@@ -453,7 +451,7 @@ export const useSessionEnd = (): UseMutationResult<
     onSuccess: () => {
       if (user?.id) {
         queryClient.invalidateQueries({
-          queryKey: smartBoardQueryKeys.sessions(user.id),
+          queryKey: ingenIAQueryKeys.sessions(user.id),
         });
       }
     },
@@ -516,7 +514,7 @@ export const useUpsertAcademicContext = (): UseMutationResult<
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: smartBoardQueryKeys.academicContext(user?.id || ""),
+        queryKey: ingenIAQueryKeys.academicContext(user?.id || ""),
       });
     },
   });
@@ -527,7 +525,7 @@ export const useAcademicContext = (): UseQueryResult<AcademicContext[]> => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: smartBoardQueryKeys.academicContext(user?.id || ""),
+    queryKey: ingenIAQueryKeys.academicContext(user?.id || ""),
     queryFn: async () => {
       if (!user?.id) throw new Error("No authenticated user");
 
@@ -556,7 +554,7 @@ export const useAchievements = (): UseQueryResult<Achievement[]> => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: smartBoardQueryKeys.achievements(user?.id || ""),
+    queryKey: ingenIAQueryKeys.achievements(user?.id || ""),
     queryFn: async () => {
       if (!user?.id) throw new Error("No authenticated user");
 
@@ -586,7 +584,7 @@ export const useLearningStreaks = (): UseQueryResult<LearningStreak | null> => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: smartBoardQueryKeys.streaks(user?.id || ""),
+    queryKey: ingenIAQueryKeys.streaks(user?.id || ""),
     queryFn: async () => {
       if (!user?.id) throw new Error("No authenticated user");
 
@@ -660,7 +658,7 @@ export const useUpsertStreak = (): UseMutationResult<
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: smartBoardQueryKeys.streaks(user?.id || ""),
+        queryKey: ingenIAQueryKeys.streaks(user?.id || ""),
       });
     },
   });
@@ -730,19 +728,19 @@ export const useSyncAchievement = (): UseMutationResult<
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: smartBoardQueryKeys.achievements(user?.id || ""),
+        queryKey: ingenIAQueryKeys.achievements(user?.id || ""),
       });
     },
   });
 };
 
 // Hook: Fetch smartboard settings
-export const useSmartboardSettings =
-  (): UseQueryResult<SmartboardSettings | null> => {
+export const useIngeniaSettings =
+  (): UseQueryResult<IngeniaSettings | null> => {
     const { user } = useAuth();
 
     return useQuery({
-      queryKey: smartBoardQueryKeys.settings(user?.id || ""),
+      queryKey: ingenIAQueryKeys.settings(user?.id || ""),
       queryFn: async () => {
         if (!user?.id) throw new Error("No authenticated user");
 
@@ -768,7 +766,7 @@ export const useSmartboardSettings =
           return null;
         }
         if (error) throw error;
-        return (data as SmartboardSettings) || null;
+        return (data as IngeniaSettings) || null;
       },
       enabled: !!user?.id,
     });
@@ -776,15 +774,15 @@ export const useSmartboardSettings =
 
 // Mutation: Update smartboard settings
 export const useUpdateSettings = (): UseMutationResult<
-  SmartboardSettings,
+  IngeniaSettings,
   Error,
-  Partial<SmartboardSettings>
+  Partial<IngeniaSettings>
 > => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (updates: Partial<SmartboardSettings>) => {
+    mutationFn: async (updates: Partial<IngeniaSettings>) => {
       if (!user?.id) throw new Error("No authenticated user");
 
       const student = await supabase
@@ -806,14 +804,14 @@ export const useUpdateSettings = (): UseMutationResult<
         error &&
         (error.code === "42P01" || error.message?.includes("relation"))
       ) {
-        return null as unknown as SmartboardSettings;
+        return null as unknown as IngeniaSettings;
       }
       if (error) throw error;
-      return data as SmartboardSettings;
+      return data as IngeniaSettings;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: smartBoardQueryKeys.settings(user?.id || ""),
+        queryKey: ingenIAQueryKeys.settings(user?.id || ""),
       });
     },
   });
@@ -830,7 +828,7 @@ export const useSessionsData = (): UseQueryResult<Session[]> => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: smartBoardQueryKeys.sessions(user?.id || ""),
+    queryKey: ingenIAQueryKeys.sessions(user?.id || ""),
     queryFn: async () => {
       if (!user?.id) throw new Error("No authenticated user");
 

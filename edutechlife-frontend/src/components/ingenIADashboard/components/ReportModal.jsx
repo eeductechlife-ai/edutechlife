@@ -20,7 +20,7 @@ const ReportModal = memo(
             ref={focusTrapRef}
             role="dialog"
             aria-modal="true"
-            aria-label={t("smartboard.report_title")}
+            aria-label={t("ingenia.report_title")}
             onClick={onClose}
             onKeyDown={(e) => {
               if (e.key === "Escape") onClose();
@@ -35,12 +35,12 @@ const ReportModal = memo(
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-2xl font-bold text-[#004B63]">
-                  {t("smartboard.report_title")}
+                  {t("ingenia.report_title")}
                 </h3>
                 <button
                   onClick={onClose}
                   className="text-[#64748B] hover:text-[#004B63] text-xl"
-                  aria-label={t("smartboard.close_report")}
+                  aria-label={t("ingenia.close_report")}
                 >
                   ✕
                 </button>
@@ -50,25 +50,25 @@ const ReportModal = memo(
                 <div className="grid grid-cols-2 gap-4">
                   {[
                     {
-                      label: t("smartboard.report_level"),
+                      label: t("ingenia.report_level"),
                       value: reportData.nivelActual,
                       color: "#4DA8C4",
                     },
                     {
-                      label: t("smartboard.report_xp"),
+                      label: t("ingenia.report_xp"),
                       value: reportData.xpActual,
                       color: "#66CCCC",
                     },
                     {
-                      label: t("smartboard.report_streak"),
-                      value: t("smartboard.report_days", {
+                      label: t("ingenia.report_streak"),
+                      value: t("ingenia.report_days", {
                         days: reportData.diasRacha,
                       }),
                       color: "#FFD166",
                     },
                     {
-                      label: t("smartboard.report_time"),
-                      value: t("smartboard.report_min", {
+                      label: t("ingenia.report_time"),
+                      value: t("ingenia.report_min", {
                         min: reportData.tiempoSesion,
                       }),
                       color: "#FF6B9D",
@@ -92,10 +92,10 @@ const ReportModal = memo(
 
                 <div className="bg-[#F8FAFC] p-4 rounded-xl">
                   <p className="text-sm text-[#64748B] mb-2">
-                    {t("smartboard.interactions_with")}
+                    {t("ingenia.interactions_with")}
                   </p>
                   <p className="text-lg font-bold text-[#004B63]">
-                    {t("smartboard.questions_asked", {
+                    {t("ingenia.questions_asked", {
                       count: reportData.questionsAsked,
                     })}
                   </p>
@@ -109,7 +109,7 @@ const ReportModal = memo(
                     whileTap={{ scale: 0.98 }}
                   >
                     <Download className="w-5 h-5" />
-                    {t("smartboard.download_report")}
+                    {t("ingenia.download_report")}
                   </motion.button>
                   <motion.button
                     onClick={onClose}
@@ -117,7 +117,7 @@ const ReportModal = memo(
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    {t("smartboard.close")}
+                    {t("ingenia.close")}
                   </motion.button>
                 </div>
               </div>

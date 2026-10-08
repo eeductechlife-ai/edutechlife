@@ -10,11 +10,11 @@ const MissionsView = memo(
       <GlassCard animate>
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-[#004B63] font-montserrat">
-            {t("smartboard.all_missions")}
+            {t("ingenia.all_missions")}
           </h3>
           <span className="text-sm text-[#64748B]">
             {missions.filter((m) => m.completed).length}/{missions.length}{" "}
-            {t("smartboard.completed")}
+            {t("ingenia.completed")}
           </span>
         </div>
         <div className="space-y-4">

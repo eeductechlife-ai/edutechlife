@@ -83,7 +83,7 @@ Three wrapper components automatically apply age-appropriate styling to existing
 
 ### 3. **Documentation**
 
-#### `src/SMARTBOARD_DESIGN_SYSTEM.md` (500+ lines)
+#### `src/INGENIA_DESIGN_SYSTEM.md` (500+ lines)
 Comprehensive guide including:
 - Color palette specifications with WCAG compliance notes
 - Typography presets (font families, sizes, line heights)
@@ -101,7 +101,7 @@ Comprehensive guide including:
 - Build & integration instructions
 - Troubleshooting guide
 
-#### `src/SMARTBOARD_DESIGN_SYSTEM.md` (Detailed Examples)
+#### `src/INGENIA_DESIGN_SYSTEM.md` (Detailed Examples)
 - Copy-paste ready code examples for each usage method
 - Configuration instructions for Tailwind and CSS custom properties
 - Font import URLs (Google Fonts)
@@ -255,7 +255,7 @@ edutechlife-frontend/src/
 │   └── SmartBoardAnalytics.jsx         (Original component)
 │
 ├── index.css                          (Updated to import age-based-design.css)
-├── SMARTBOARD_DESIGN_SYSTEM.md        (Complete design system documentation)
+├── INGENIA_DESIGN_SYSTEM.md        (Complete design system documentation)
 └── AGE_ADAPTIVE_DESIGN_SUMMARY.md     (This file)
 ```
 

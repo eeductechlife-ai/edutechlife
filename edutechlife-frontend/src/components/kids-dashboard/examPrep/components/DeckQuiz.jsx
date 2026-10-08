@@ -4,7 +4,7 @@ import { useIngenIAKids } from "../../../../context/IngenIAKidsContext";
 import { useCompetencyTracking } from "../../../../hooks/useCompetencyTracking";
 import { useFeedbackLog } from "../../../../hooks/useFeedbackLog";
 import { useTranslation } from "../../../../i18n/I18nProvider";
-import { callDeepseekSmartboard } from "../../../../utils/api";
+import { callDeepseekIngenia } from "../../../../utils/api";
 import { track } from "../../../../lib/analytics";
 import { EVENTS } from "../../../../lib/analyticsEvents";
 import { POINTS, CATEGORY } from "../../../../context/pointsEconomy";
@@ -51,7 +51,7 @@ Responde SOLO con JSON:
   ]
 }`;
     try {
-      const res = await callDeepseekSmartboard(
+      const res = await callDeepseekIngenia(
         [{ role: "user", content: prompt }],
         {
           temperature: 0.6,

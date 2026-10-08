@@ -99,33 +99,33 @@ async function run() {
   record('auth: login ADMIN', 'token', tADM ? 'ok' : 'no', !!tADM);
 
   // ── POSITIVE ───────────────────────────────────────────────────────────
-  const pOwn = await api(`/api/smartboard/adaptive/mastery?studentId=${studentIds.A}`, {}, tA);
+  const pOwn = await api(`/api/ingenia/adaptive/mastery?studentId=${studentIds.A}`, {}, tA);
   record('positive: A lee su mastery', '200', pOwn.status, pOwn.status === 200);
 
-  const pInsA = await api(`/api/smartboard/parent/insights?studentId=${studentIds.A}`, {}, tPA);
+  const pInsA = await api(`/api/ingenia/parent/insights?studentId=${studentIds.A}`, {}, tPA);
   record('positive: PA ve A', '200', pInsA.status, pInsA.status === 200);
 
-  const pInsB = await api(`/api/smartboard/parent/insights?studentId=${studentIds.B}`, {}, tPB);
+  const pInsB = await api(`/api/ingenia/parent/insights?studentId=${studentIds.B}`, {}, tPB);
   record('positive: PB ve B', '200', pInsB.status, pInsB.status === 200);
 
   const adminMe = tADM ? await api('/api/admin/auth/me', {}, tADM) : null;
   record('positive: ADMIN /admin/auth/me', '200', adminMe?.status, adminMe?.status === 200);
 
   // ── IDOR (negativo — esperar 403) ──────────────────────────────────────
-  const iAtoB = await api(`/api/smartboard/adaptive/mastery?studentId=${studentIds.B}`, {}, tA);
+  const iAtoB = await api(`/api/ingenia/adaptive/mastery?studentId=${studentIds.B}`, {}, tA);
   record('IDOR: A → B', '403', iAtoB.status, iAtoB.status === 403);
 
-  const iBtoA = await api(`/api/smartboard/adaptive/mastery?studentId=${studentIds.A}`, {}, tB);
+  const iBtoA = await api(`/api/ingenia/adaptive/mastery?studentId=${studentIds.A}`, {}, tB);
   record('IDOR: B → A', '403', iBtoA.status, iBtoA.status === 403);
 
-  const iPAtoB = await api(`/api/smartboard/parent/insights?studentId=${studentIds.B}`, {}, tPA);
+  const iPAtoB = await api(`/api/ingenia/parent/insights?studentId=${studentIds.B}`, {}, tPA);
   record('IDOR: PA → B', '403', iPAtoB.status, iPAtoB.status === 403);
 
-  const iPBtoA = await api(`/api/smartboard/parent/insights?studentId=${studentIds.A}`, {}, tPB);
+  const iPBtoA = await api(`/api/ingenia/parent/insights?studentId=${studentIds.A}`, {}, tPB);
   record('IDOR: PB → A', '403', iPBtoA.status, iPBtoA.status === 403);
 
   // Escritura cruzada (IDOR write)
-  const wAtoB = await api('/api/smartboard/adaptive/mastery', { method: 'POST', body: JSON.stringify({ studentId: studentIds.B, competencyId: 'co_matematicas_6-7_1', score: 0.5 }) }, tA);
+  const wAtoB = await api('/api/ingenia/adaptive/mastery', { method: 'POST', body: JSON.stringify({ studentId: studentIds.B, competencyId: 'co_matematicas_6-7_1', score: 0.5 }) }, tA);
   record('IDOR write: A → B mastery', '403', wAtoB.status, wAtoB.status === 403);
 
   // ── RLS (REST) ─────────────────────────────────────────────────────────

@@ -99,7 +99,7 @@ const ImagePanel = memo(({ material, title, color, dm }) => {
       tutoringQuestions: [`¿Qué parte de "${label}" quieres que te explique?`],
       welcome: `🧠 Hablemos de "${label}", de tu ${kind} sobre "${title}". Lo clave: ${key}. ¿Qué parte quieres que te explique con un ejemplo?`,
     });
-    window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+    window.dispatchEvent(new CustomEvent("ingenia:open-dani"));
   };
 
   const renderImage = (ref) =>

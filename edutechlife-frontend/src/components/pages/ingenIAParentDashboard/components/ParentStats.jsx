@@ -223,7 +223,7 @@ export const PointsChart = ({ history }) => {
     <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-sm font-bold text-[#004B63]">
-          {t("smartboard.chart_last_14")}
+          {t("ingenia.chart_last_14")}
         </h3>
         <span className="text-xs font-bold text-[#4DA8C4]">
           +{totalPoints} pts

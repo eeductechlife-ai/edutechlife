@@ -12,8 +12,8 @@ const COMPLIANCE_INFO = {
       status: 'compliant',
       controls: [
         'Consentimiento explícito de titular antes de recolectar datos personales',
-        'Endpoint DELETE /api/smartboard/delete-user-data — eliminación completa (Art. 8 lit. c)',
-        'Endpoint GET /api/smartboard/export-user-data — portabilidad de datos (Art. 8 lit. d)',
+        'Endpoint DELETE /api/ingenia/delete-user-data — eliminación completa (Art. 8 lit. c)',
+        'Endpoint GET /api/ingenia/export-user-data — portabilidad de datos (Art. 8 lit. d)',
         'Consentimiento parental para menores (parental consent middleware)',
         'Logs de auditoría de acceso a datos sensibles',
       ],

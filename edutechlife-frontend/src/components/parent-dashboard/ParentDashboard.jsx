@@ -25,7 +25,11 @@ const API_BASE = import.meta.env.VITE_API_URL || "";
 
 function authToken() {
   try {
-    return sessionStorage.getItem("auth_token") || localStorage.getItem("auth_token") || "";
+    return (
+      sessionStorage.getItem("auth_token") ||
+      localStorage.getItem("auth_token") ||
+      ""
+    );
   } catch {
     return "";
   }
@@ -59,14 +63,20 @@ const StatCard = ({ icon: Icon, label, value, trend, color }) => (
         <p className="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wide mb-1">
           {label}
         </p>
-        <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+        <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          {value}
+        </p>
         {trend != null && (
-          <p className={`text-xs font-semibold mt-1 ${trend > 0 ? "text-green-600" : "text-red-500"}`}>
+          <p
+            className={`text-xs font-semibold mt-1 ${trend > 0 ? "text-green-600" : "text-red-500"}`}
+          >
             {trend > 0 ? "↑" : "↓"} {Math.abs(trend)}% esta semana
           </p>
         )}
       </div>
-      <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${color}`}>
+      <div
+        className={`w-11 h-11 rounded-xl flex items-center justify-center ${color}`}
+      >
         <Icon className="w-5 h-5 text-white" />
       </div>
     </div>
@@ -74,10 +84,38 @@ const StatCard = ({ icon: Icon, label, value, trend, color }) => (
 );
 
 const SEVERITY_STYLES = {
-  success: { bg: "bg-green-50 dark:bg-green-900/20", border: "border-green-200 dark:border-green-800", icon: CheckCircle, iconColor: "text-green-600 dark:text-green-400", titleColor: "text-green-900 dark:text-green-100", textColor: "text-green-700 dark:text-green-300" },
-  warning: { bg: "bg-amber-50 dark:bg-amber-900/20", border: "border-amber-200 dark:border-amber-800", icon: AlertCircle, iconColor: "text-amber-600 dark:text-amber-400", titleColor: "text-amber-900 dark:text-amber-100", textColor: "text-amber-700 dark:text-amber-300" },
-  info: { bg: "bg-blue-50 dark:bg-blue-900/20", border: "border-blue-200 dark:border-blue-800", icon: TrendingUp, iconColor: "text-blue-600 dark:text-blue-400", titleColor: "text-blue-900 dark:text-blue-100", textColor: "text-blue-700 dark:text-blue-300" },
-  alert: { bg: "bg-red-50 dark:bg-red-900/20", border: "border-red-200 dark:border-red-800", icon: AlertCircle, iconColor: "text-red-600 dark:text-red-400", titleColor: "text-red-900 dark:text-red-100", textColor: "text-red-700 dark:text-red-300" },
+  success: {
+    bg: "bg-green-50 dark:bg-green-900/20",
+    border: "border-green-200 dark:border-green-800",
+    icon: CheckCircle,
+    iconColor: "text-green-600 dark:text-green-400",
+    titleColor: "text-green-900 dark:text-green-100",
+    textColor: "text-green-700 dark:text-green-300",
+  },
+  warning: {
+    bg: "bg-amber-50 dark:bg-amber-900/20",
+    border: "border-amber-200 dark:border-amber-800",
+    icon: AlertCircle,
+    iconColor: "text-amber-600 dark:text-amber-400",
+    titleColor: "text-amber-900 dark:text-amber-100",
+    textColor: "text-amber-700 dark:text-amber-300",
+  },
+  info: {
+    bg: "bg-blue-50 dark:bg-blue-900/20",
+    border: "border-blue-200 dark:border-blue-800",
+    icon: TrendingUp,
+    iconColor: "text-blue-600 dark:text-blue-400",
+    titleColor: "text-blue-900 dark:text-blue-100",
+    textColor: "text-blue-700 dark:text-blue-300",
+  },
+  alert: {
+    bg: "bg-red-50 dark:bg-red-900/20",
+    border: "border-red-200 dark:border-red-800",
+    icon: AlertCircle,
+    iconColor: "text-red-600 dark:text-red-400",
+    titleColor: "text-red-900 dark:text-red-100",
+    textColor: "text-red-700 dark:text-red-300",
+  },
 };
 
 const InsightCard = ({ insight }) => {
@@ -88,7 +126,9 @@ const InsightCard = ({ insight }) => {
       <div className="flex gap-3 items-start">
         <IconComp className={`w-5 h-5 flex-shrink-0 mt-0.5 ${s.iconColor}`} />
         <div className="flex-1 min-w-0">
-          <p className={`font-semibold text-sm ${s.titleColor}`}>{insight.title}</p>
+          <p className={`font-semibold text-sm ${s.titleColor}`}>
+            {insight.title}
+          </p>
           {insight.what && (
             <p className={`text-sm mt-1 ${s.textColor}`}>{insight.what}</p>
           )}
@@ -104,14 +144,20 @@ const InsightCard = ({ insight }) => {
 };
 
 const MasteryBar = ({ subject, percent, trend }) => {
-  const color = percent >= 60 ? "bg-green-500" : percent >= 40 ? "bg-amber-400" : "bg-red-400";
+  const color =
+    percent >= 60
+      ? "bg-green-500"
+      : percent >= 40
+        ? "bg-amber-400"
+        : "bg-red-400";
   return (
     <div className="mb-3">
       <div className="flex justify-between items-center mb-1">
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{subject}</span>
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          {subject}
+        </span>
         <span className="text-sm font-bold text-gray-900 dark:text-white">
-          {percent}%{" "}
-          {trend === "up" ? "📈" : trend === "down" ? "📉" : "➡️"}
+          {percent}% {trend === "up" ? "📈" : trend === "down" ? "📉" : "➡️"}
         </span>
       </div>
       <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -140,16 +186,22 @@ const ParentDashboard = memo(() => {
   const token = authToken();
 
   const fetchInsights = useCallback(async () => {
-    if (!sid || !token) { setLoadingInsights(false); return; }
+    if (!sid || !token) {
+      setLoadingInsights(false);
+      return;
+    }
     try {
       const res = await fetch(
-        `${API_BASE}/api/smartboard/parent/insights?studentId=${sid}`,
+        `${API_BASE}/api/ingenia/parent/insights?studentId=${sid}`,
         { headers: { Authorization: `Bearer ${token}` } },
       );
       if (!res.ok) return;
       const data = await res.json();
       setInsights(data.insights || []);
-      track(EVENTS.PARENT_INSIGHT_VIEWED, { studentId: sid, count: (data.insights || []).length });
+      track(EVENTS.PARENT_INSIGHT_VIEWED, {
+        studentId: sid,
+        count: (data.insights || []).length,
+      });
     } catch {
       // best-effort
     } finally {
@@ -158,10 +210,13 @@ const ParentDashboard = memo(() => {
   }, [sid, token]);
 
   const fetchMastery = useCallback(async () => {
-    if (!sid || !token) { setLoadingMastery(false); return; }
+    if (!sid || !token) {
+      setLoadingMastery(false);
+      return;
+    }
     try {
       const res = await fetch(
-        `${API_BASE}/api/smartboard/parent/learning-graph?studentId=${sid}`,
+        `${API_BASE}/api/ingenia/parent/learning-graph?studentId=${sid}`,
         { headers: { Authorization: `Bearer ${token}` } },
       );
       if (!res.ok) return;
@@ -243,12 +298,16 @@ const ParentDashboard = memo(() => {
           {loadingInsights ? (
             <div className="space-y-3">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-20 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
+                <div
+                  key={i}
+                  className="h-20 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"
+                />
               ))}
             </div>
           ) : insights.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-sm">
-              Aún no hay perspectivas disponibles. Se generan una vez que el estudiante complete actividades.
+              Aún no hay perspectivas disponibles. Se generan una vez que el
+              estudiante complete actividades.
             </p>
           ) : (
             <div className="space-y-4">
@@ -269,17 +328,26 @@ const ParentDashboard = memo(() => {
           {loadingMastery ? (
             <div className="space-y-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                <div
+                  key={i}
+                  className="h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
+                />
               ))}
             </div>
           ) : mastery.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-sm">
-              Sin datos de dominio aún. Disponibles tras completar el diagnóstico.
+              Sin datos de dominio aún. Disponibles tras completar el
+              diagnóstico.
             </p>
           ) : (
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
               {mastery.map((m) => (
-                <MasteryBar key={m.subject} subject={m.subject} percent={m.masteryPercent} trend={m.trend} />
+                <MasteryBar
+                  key={m.subject}
+                  subject={m.subject}
+                  percent={m.masteryPercent}
+                  trend={m.trend}
+                />
               ))}
             </div>
           )}
@@ -291,10 +359,30 @@ const ParentDashboard = memo(() => {
         <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
           {/* Quick stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard icon={Flame} label="Racha" value={`${insights.find(i => i.type === "activity")?.evidence?.match(/\d+/) ? "—" : "—"} días`} color="bg-orange-500" />
-            <StatCard icon={Award} label="Puntos" value="—" color="bg-blue-500" />
-            <StatCard icon={BookOpen} label="Actividades" value="—" color="bg-green-500" />
-            <StatCard icon={Target} label="Promedio" value="—" color="bg-purple-500" />
+            <StatCard
+              icon={Flame}
+              label="Racha"
+              value={`${insights.find((i) => i.type === "activity")?.evidence?.match(/\d+/) ? "—" : "—"} días`}
+              color="bg-orange-500"
+            />
+            <StatCard
+              icon={Award}
+              label="Puntos"
+              value="—"
+              color="bg-blue-500"
+            />
+            <StatCard
+              icon={BookOpen}
+              label="Actividades"
+              value="—"
+              color="bg-green-500"
+            />
+            <StatCard
+              icon={Target}
+              label="Promedio"
+              value="—"
+              color="bg-purple-500"
+            />
           </div>
 
           {/* AI Insights preview */}
@@ -316,10 +404,13 @@ const ParentDashboard = memo(() => {
                 <div className="h-16 bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
               ) : insights.length === 0 ? (
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Las perspectivas aparecerán cuando el estudiante complete actividades.
+                  Las perspectivas aparecerán cuando el estudiante complete
+                  actividades.
                 </p>
               ) : (
-                insights.slice(0, 2).map((ins, i) => <InsightCard key={i} insight={ins} />)
+                insights
+                  .slice(0, 2)
+                  .map((ins, i) => <InsightCard key={i} insight={ins} />)
               )}
             </div>
           </div>
@@ -346,9 +437,16 @@ const ParentDashboard = memo(() => {
                   Sin datos de dominio todavía.
                 </p>
               ) : (
-                mastery.slice(0, 3).map((m) => (
-                  <MasteryBar key={m.subject} subject={m.subject} percent={m.masteryPercent} trend={m.trend} />
-                ))
+                mastery
+                  .slice(0, 3)
+                  .map((m) => (
+                    <MasteryBar
+                      key={m.subject}
+                      subject={m.subject}
+                      percent={m.masteryPercent}
+                      trend={m.trend}
+                    />
+                  ))
               )}
             </div>
           </div>
@@ -359,7 +457,9 @@ const ParentDashboard = memo(() => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h3 className="text-lg font-bold mb-1">¿Preguntas sobre el progreso?</h3>
+            <h3 className="text-lg font-bold mb-1">
+              ¿Preguntas sobre el progreso?
+            </h3>
             <p className="text-blue-100 text-sm mb-4">
               Nuestro equipo está disponible para ayudarte
             </p>

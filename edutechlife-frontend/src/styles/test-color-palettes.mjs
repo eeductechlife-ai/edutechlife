@@ -18,7 +18,7 @@ const {
 } = colorPalettes;
 
 console.log('\n========================================');
-console.log('SmartBoard Color Palette Validation');
+console.log('IngenIA Color Palette Validation');
 console.log('========================================\n');
 
 function testPalette(palette, groupName) {

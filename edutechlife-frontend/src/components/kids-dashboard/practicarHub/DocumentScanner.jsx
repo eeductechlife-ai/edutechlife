@@ -70,7 +70,7 @@ const DocumentScanner = memo(
         hasImage: !!preview,
         studySummary: summary || null,
       });
-      window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+      window.dispatchEvent(new CustomEvent("ingenia:open-dani"));
     }, [setDocumentForDani, subjectLabel, summary, preview]);
 
     const reset = useCallback(() => {

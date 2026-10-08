@@ -49,7 +49,7 @@ export default function LeagueWidget({ dark = false }) {
       setLoading(false);
       return;
     }
-    fetch(`${API_BASE}/api/smartboard/league/current`, {
+    fetch(`${API_BASE}/api/ingenia/league/current`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => (r.ok ? r.json() : null))

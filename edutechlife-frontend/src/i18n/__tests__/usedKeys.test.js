@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 // t() devuelve la clave cuando no existe, así que un componente con una clave
-// que falta muestra "smartboard.notifications" a un lector de pantalla (y el
+// que falta muestra "ingenia.notifications" a un lector de pantalla (y el
 // patrón t("clave") || "texto" nunca usa su texto de respaldo). Este test falla
 // en cuanto un componente use una clave que no esté en es, en y pt.
 const SRC = path.resolve(__dirname, "..", "..");

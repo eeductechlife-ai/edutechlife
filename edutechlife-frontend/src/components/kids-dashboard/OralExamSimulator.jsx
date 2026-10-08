@@ -1,6 +1,6 @@
 import { useState, useCallback, memo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { callDeepseekSmartboard } from "../../utils/api";
+import { callDeepseekIngenia } from "../../utils/api";
 import { speakTextConversational, stopSpeech } from "../../utils/speech";
 import { stripEmoji } from "./daniTutorChat/DaniVoiceController";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
@@ -123,7 +123,7 @@ Genera una conversación de repaso oral con 4 preguntas basadas en esas tarjetas
   ]
 }`;
       }
-      const res = await callDeepseekSmartboard(
+      const res = await callDeepseekIngenia(
         [{ role: "user", content: prompt }],
         {
           temperature: 0.7,
@@ -242,7 +242,7 @@ Escribe solo en español.${deckLine}`;
         ...buildChatMessages([]),
         { role: "user", content: greeting },
       ];
-      const res = await callDeepseekSmartboard(seed, {
+      const res = await callDeepseekIngenia(seed, {
         temperature: 0.7,
         maxTokens: 180,
       });
@@ -268,7 +268,7 @@ Escribe solo en español.${deckLine}`;
     setChatInput("");
     setChatLoading(true);
     try {
-      const res = await callDeepseekSmartboard(buildChatMessages(nextHistory), {
+      const res = await callDeepseekIngenia(buildChatMessages(nextHistory), {
         temperature: 0.7,
         maxTokens: 180,
       });

@@ -220,7 +220,7 @@ const GradeAnalysisPlan = memo(
                         `¿Cómo te está yendo en ${w.subject}? ¿Qué te parece más difícil?`,
                     ),
                 });
-                window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+                window.dispatchEvent(new CustomEvent("ingenia:open-dani"));
               }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}

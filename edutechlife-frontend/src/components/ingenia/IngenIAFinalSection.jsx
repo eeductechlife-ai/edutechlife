@@ -24,18 +24,18 @@ export default function IngenIAFinalSection({ t, faqItems, handleCta }) {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm mb-4">
             <Icon name="fa-rocket-launch" className="text-mint text-xs" />
             <span className="text-[11px] font-semibold text-white/80 uppercase tracking-wider">
-              {t("smartboard.landing_cta_badge")}
+              {t("ingenia.landing_cta_badge")}
             </span>
           </div>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-white leading-tight mb-4">
-            {t("smartboard.landing_cta_final_title_line1")}
+            {t("ingenia.landing_cta_final_title_line1")}
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint pr-1">
-              {t("smartboard.landing_cta_final_title_line2")}
+              {t("ingenia.landing_cta_final_title_line2")}
             </span>
           </h2>
           <p className="text-sm text-white/70 leading-relaxed max-w-xl mx-auto mb-8">
-            {t("smartboard.landing_cta_final_desc")}
+            {t("ingenia.landing_cta_final_desc")}
           </p>
           <MagneticButton
             onClick={handleCta}
@@ -43,7 +43,7 @@ export default function IngenIAFinalSection({ t, faqItems, handleCta }) {
           >
             <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-sweep skew-x-[-20deg]" />
             <span className="relative z-10 font-semibold">
-              {t("smartboard.landing_cta_final_btn")}
+              {t("ingenia.landing_cta_final_btn")}
             </span>
             <Icon
               name="fa-arrow-right"
@@ -70,9 +70,9 @@ export default function IngenIAFinalSection({ t, faqItems, handleCta }) {
               className="text-primary-light text-sm"
               aria-hidden="true"
             />
-            {t("smartboard.landing_faq_title")}
+            {t("ingenia.landing_faq_title")}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint">
-              {t("smartboard.landing_faq_title_highlight")}
+              {t("ingenia.landing_faq_title_highlight")}
             </span>
           </h3>
           <div className="space-y-2.5">

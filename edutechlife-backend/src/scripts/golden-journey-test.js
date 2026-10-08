@@ -132,10 +132,10 @@ async function run() {
   step('journey: login STUDENT_A', !!tokenA, { status: tokenA ? 'ok' : 'no token' });
   if (!tokenA) throw new Error('No se pudo loguear STUDENT_A');
 
-  const profile = await api('/api/smartboard/student-profile', {}, tokenA);
+  const profile = await api('/api/ingenia/student-profile', {}, tokenA);
   step('journey: profile', profile.status === 200 && profile.body?.age === 12, { status: profile.status, body: profile.body });
 
-  const graph = await api(`/api/smartboard/adaptive/mastery?studentId=${studentIds.A}`, {}, tokenA);
+  const graph = await api(`/api/ingenia/adaptive/mastery?studentId=${studentIds.A}`, {}, tokenA);
   const masteryA = graph.body?.mastery || [];
   const avg = (subject) => {
     const rows = masteryA.filter((m) => m.competency_id.includes(subject));
@@ -145,20 +145,20 @@ async function run() {
     math: avg('matematicas'), equations: avg('6-7_1'), science: avg('ciencias_naturales'),
   });
 
-  const recs = await api('/api/smartboard/adaptive/recommendations', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A }) }, tokenA);
+  const recs = await api('/api/ingenia/adaptive/recommendations', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A }) }, tokenA);
   step('journey: recommendation A (E6: no vacía)', recs.status === 200 && (recs.body?.recommendations || []).length > 0, { status: recs.status, recs: (recs.body?.recommendations || []).map((r) => r.type || r.reason) });
 
-  const nba = await api(`/api/smartboard/adaptive/next-action?studentId=${studentIds.A}`, {}, tokenA);
+  const nba = await api(`/api/ingenia/adaptive/next-action?studentId=${studentIds.A}`, {}, tokenA);
   const nbaA = nba.body?.action || {};
   step('journey: next best action A (E5: learning priority)', nba.status === 200 && nbaA.action === 'practice' && nbaA.subject === 'matematicas', { status: nba.status, action: nbaA.action, subject: nbaA.subject, priority: nbaA.smartboardPriority });
 
-  const plan = await api('/api/smartboard/adaptive/daily-plan', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, availableMinutes: 20 }) }, tokenA);
+  const plan = await api('/api/ingenia/adaptive/daily-plan', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, availableMinutes: 20 }) }, tokenA);
   step('journey: daily plan A', plan.status === 200, { status: plan.status, plan: plan.body?.plan });
 
-  const activity = await api('/api/smartboard/gamification/activity', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, activityType: 'quiz', meta: { subject: 'matematicas', score: 0.5 } }) }, tokenA);
+  const activity = await api('/api/ingenia/gamification/activity', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, activityType: 'quiz', meta: { subject: 'matematicas', score: 0.5 } }) }, tokenA);
   step('journey: activity A', activity.status === 200, { status: activity.status });
 
-  const masteryUpd = await api('/api/smartboard/adaptive/mastery', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, competencyId: 'co_matematicas_6-7_1', score: 0.5 }) }, tokenA);
+  const masteryUpd = await api('/api/ingenia/adaptive/mastery', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, competencyId: 'co_matematicas_6-7_1', score: 0.5 }) }, tokenA);
   step('journey: mastery update A (0.35→0.395)', masteryUpd.status === 200 && Math.abs((masteryUpd.body?.mastery || 0) - 0.395) < 0.01, { status: masteryUpd.status, body: masteryUpd.body });
 
   // ── E1/E2: DANI (contextual + adaptive + pedagogical safety) ───────────
@@ -173,7 +173,7 @@ async function run() {
   };
 
   const askDani = async (message) => {
-    const r = await fetch(BASE_URL + '/api/smartboard/dani/chat', {
+    const r = await fetch(BASE_URL + '/api/ingenia/dani/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${tokenA}` },
       body: JSON.stringify({ studentId: studentIds.A, message }),
@@ -216,21 +216,21 @@ async function run() {
   }
 
   const parentLogin = await login(USERS.PA);
-  const insightA = parentLogin ? await api(`/api/smartboard/parent/insights?studentId=${studentIds.A}`, {}, parentLogin) : null;
+  const insightA = parentLogin ? await api(`/api/ingenia/parent/insights?studentId=${studentIds.A}`, {}, parentLogin) : null;
   step('journey: parent A → insight A', insightA?.status === 200, { status: insightA?.status, insights: insightA?.body?.insights?.map((i) => i.type) });
 
   // ── DIFFERENTIATION (A vs B) ───────────────────────────────────────────
   const tokenB = await login(USERS.B);
-  const profileB = await api('/api/smartboard/student-profile', {}, tokenB);
-  const graphB = await api(`/api/smartboard/adaptive/mastery?studentId=${studentIds.B}`, {}, tokenB);
+  const profileB = await api('/api/ingenia/student-profile', {}, tokenB);
+  const graphB = await api(`/api/ingenia/adaptive/mastery?studentId=${studentIds.B}`, {}, tokenB);
   const masteryB = graphB.body?.mastery || [];
   const avgB = (subject) => {
     const rows = masteryB.filter((m) => m.competency_id.includes(subject));
     return rows.length ? rows.reduce((s, m) => s + Number(m.mastery_level), 0) / rows.length : null;
   };
-  const recsB = await api('/api/smartboard/adaptive/recommendations', { method: 'POST', body: JSON.stringify({ studentId: studentIds.B }) }, tokenB);
-  const planB = await api('/api/smartboard/adaptive/daily-plan', { method: 'POST', body: JSON.stringify({ studentId: studentIds.B, availableMinutes: 20 }) }, tokenB);
-  const nbaB = await api(`/api/smartboard/adaptive/next-action?studentId=${studentIds.B}`, {}, tokenB);
+  const recsB = await api('/api/ingenia/adaptive/recommendations', { method: 'POST', body: JSON.stringify({ studentId: studentIds.B }) }, tokenB);
+  const planB = await api('/api/ingenia/adaptive/daily-plan', { method: 'POST', body: JSON.stringify({ studentId: studentIds.B, availableMinutes: 20 }) }, tokenB);
+  const nbaB = await api(`/api/ingenia/adaptive/next-action?studentId=${studentIds.B}`, {}, tokenB);
 
   const diffMath = Math.abs((avg('matematicas') || 0) - (avgB('matematicas') || 0)) > 0.2;
   const diffScience = Math.abs((avg('ciencias_naturales') || 0) - (avgB('ciencias_naturales') || 0)) > 0.2;
@@ -252,7 +252,7 @@ async function run() {
   const evolution = [];
   let cur = 0.35;
   for (const [label, score, expect] of [['recovery', 0.4, 0.365], ['practice', 0.6, 0.4355], ['mastery', 0.82, 0.55085], ['transfer', 0.9, 0.655595]]) {
-    const r = await api('/api/smartboard/adaptive/mastery', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, competencyId: 'co_matematicas_6-7_1', score }) }, tokenA);
+    const r = await api('/api/ingenia/adaptive/mastery', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, competencyId: 'co_matematicas_6-7_1', score }) }, tokenA);
     cur = Math.round((0.7 * cur + 0.3 * score) * 1000) / 1000;
     evolution.push({ label, sent: score, expected: expect, got: r.body?.mastery });
   }
@@ -262,14 +262,14 @@ async function run() {
   // ── PERSISTENCE (logout → login) ──────────────────────────────────────
   await api('/api/auth/logout', { method: 'POST' }, tokenA);
   const tokenA2 = await login(USERS.A);
-  const graphAfter = await api(`/api/smartboard/adaptive/mastery?studentId=${studentIds.A}`, {}, tokenA2);
+  const graphAfter = await api(`/api/ingenia/adaptive/mastery?studentId=${studentIds.A}`, {}, tokenA2);
   const mAfter = (graphAfter.body?.mastery || []).find((m) => m.competency_id === 'co_matematicas_6-7_1');
   step('persistence: mastery persiste tras logout/login', tokenA2 && mAfter && Math.abs(Number(mAfter.mastery_level) - cur) < 0.02, { mastery_after: mAfter?.mastery_level, expected: Math.round(cur * 1000) / 1000 });
 
   // ── IDOR (acceso cruzado) ─────────────────────────────────────────────
-  const idorAtoB = await api(`/api/smartboard/adaptive/mastery?studentId=${studentIds.B}`, {}, tokenA2);
-  const idorPAtoB = parentLogin ? await api(`/api/smartboard/parent/insights?studentId=${studentIds.B}`, {}, parentLogin) : null;
-  const idorPBtoA = await login(USERS.PB).then((t) => (t ? api(`/api/smartboard/parent/insights?studentId=${studentIds.A}`, {}, t) : null));
+  const idorAtoB = await api(`/api/ingenia/adaptive/mastery?studentId=${studentIds.B}`, {}, tokenA2);
+  const idorPAtoB = parentLogin ? await api(`/api/ingenia/parent/insights?studentId=${studentIds.B}`, {}, parentLogin) : null;
+  const idorPBtoA = await login(USERS.PB).then((t) => (t ? api(`/api/ingenia/parent/insights?studentId=${studentIds.A}`, {}, t) : null));
   step('IDOR: A→B DENIED', idorAtoB.status === 403, { status: idorAtoB.status });
   step('IDOR: PA→B DENIED', idorPAtoB?.status === 403, { status: idorPAtoB?.status });
   step('IDOR: PB→A DENIED', idorPBtoA?.status === 403, { status: idorPBtoA?.status });
@@ -302,8 +302,8 @@ async function run() {
 
   // Escribe vía API (misión + badge con actividad dani_chat) y vía service
   // (points/sessions, que en el flujo real el frontend escribe directo).
-  await api(`/api/smartboard/gamification/missions?studentId=${studentIds.A}`, {}, tokenA2); // seed de misiones
-  await api('/api/smartboard/gamification/activity', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, activityType: 'dani_chat', meta: {} }) }, tokenA2);
+  await api(`/api/ingenia/gamification/missions?studentId=${studentIds.A}`, {}, tokenA2); // seed de misiones
+  await api('/api/ingenia/gamification/activity', { method: 'POST', body: JSON.stringify({ studentId: studentIds.A, activityType: 'dani_chat', meta: {} }) }, tokenA2);
   await supabase.from('points_history').insert({ student_id: studentIds.A, points: 10, reason: 'test_persistence', category: 'participation' });
   await supabase.from('sessions').insert({ student_id: studentIds.A, subject: 'math', type: 'quiz', duration_minutes: 10 });
 
@@ -333,11 +333,11 @@ async function run() {
     { student_id: studentIds.A, competency_id: 'co_matematicas_6-7_1', mastery_level: 0.2, practice_count: 6, updated_at: new Date().toISOString() },
     { onConflict: 'student_id,competency_id' });
 
-  const warn = await api(`/api/smartboard/adaptive/warnings?studentId=${studentIds.A}`, {}, tokenA3);
+  const warn = await api(`/api/ingenia/adaptive/warnings?studentId=${studentIds.A}`, {}, tokenA3);
   const warnTypes = (warn.body?.warnings || []).map((w) => w.type);
   step('early warning: deterioro dispara warning (inactivity/repeated_errors)', warn.status === 200 && warnTypes.length > 0, { status: warn.status, warnings: warnTypes });
 
-  const insightAfter = parentLogin ? await api(`/api/smartboard/parent/insights?studentId=${studentIds.A}`, {}, parentLogin) : null;
+  const insightAfter = parentLogin ? await api(`/api/ingenia/parent/insights?studentId=${studentIds.A}`, {}, parentLogin) : null;
   const insightTypes = insightAfter?.body?.insights?.map((i) => i.type) || [];
   const ewEvidence = (warn.body?.warnings || [])[0] || null;
   step('early warning → parent insight refleja el riesgo (WHAT/WHY/ACTION/EVIDENCE)', insightAfter?.status === 200 && insightTypes.includes('risk'), {

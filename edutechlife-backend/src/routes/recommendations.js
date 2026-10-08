@@ -11,7 +11,7 @@ const {
 const router = Router();
 
 /**
- * GET /api/smartboard/recommendations
+ * GET /api/ingenia/recommendations
  * Returns the next best action and top content recommendations for the
  * authenticated student. Powered by adaptiveLearning.js.
  *
@@ -46,7 +46,7 @@ router.get('/', requireAuth, async (req, res) => {
 });
 
 /**
- * GET /api/smartboard/recommendations/plan/daily
+ * GET /api/ingenia/recommendations/plan/daily
  * Returns a daily learning plan for the authenticated student.
  */
 router.get('/plan/daily', requireAuth, async (req, res) => {
@@ -60,7 +60,7 @@ router.get('/plan/daily', requireAuth, async (req, res) => {
 });
 
 /**
- * GET /api/smartboard/recommendations/plan/weekly
+ * GET /api/ingenia/recommendations/plan/weekly
  * Returns a weekly learning plan for the authenticated student.
  */
 router.get('/plan/weekly', requireAuth, async (req, res) => {

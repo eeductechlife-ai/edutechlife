@@ -40,7 +40,7 @@ export const cardVariants = {
 };
 
 export const SECTION_IDS = {
-  hero: "smartboard-hero",
+  hero: "ingenia-hero",
   queEs: "que-es",
   vak: "estilos-vak",
   beneficios: "beneficios",
@@ -48,7 +48,7 @@ export const SECTION_IDS = {
   comoFunciona: "como-funciona",
   planes: "planes",
   testimonios: "testimonios",
-  final: "smartboard-final",
+  final: "ingenia-final",
 };
 
 export const SCROLL_OFFSET = 80;

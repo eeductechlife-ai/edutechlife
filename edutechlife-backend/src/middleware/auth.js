@@ -32,7 +32,7 @@ const PRODUCT_LABELS = { ialab: 'IALab', smartboard: 'IngenIA' };
 /**
  * ¿La cuenta es padre/madre con al menos un hijo vinculado?
  * La relación vive en parent_student_links (la misma fuente que usa
- * /api/smartboard/user-role), no en la tabla `parents`.
+ * /api/ingenia/user-role), no en la tabla `parents`.
  */
 async function hasActiveParentLink(userId) {
   const { data } = await supabase
@@ -58,7 +58,7 @@ async function hasActiveParentLink(userId) {
  */
 function requireProduct(product, { allowPaths = [] } = {}) {
   const guard = async (req, res, next) => {
-    // req.path es relativo al punto de montaje (app.use('/api/smartboard', …));
+    // req.path es relativo al punto de montaje (app.use('/api/ingenia', …));
     // originalUrl cubre el caso de rutas registradas directamente.
     const fullPath = String(req.originalUrl || '').split('?')[0];
     const isExempt = allowPaths.some(

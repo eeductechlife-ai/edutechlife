@@ -1,5 +1,5 @@
 /**
- * AGE-ADAPTIVE SMARTBOARD ANALYTICS
+ * AGE-ADAPTIVE INGENIA ANALYTICS
  * =================================
  *
  * Renders IngenIAAnalytics with visual optimization for three age groups:

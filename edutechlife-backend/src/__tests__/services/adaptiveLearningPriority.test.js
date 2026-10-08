@@ -1,10 +1,10 @@
 /**
- * E5 — SMARTBOARD PRIORITY: separa LEARNING NEED de ENGAGEMENT NEED y decide
+ * E5 — INGENIA PRIORITY: separa LEARNING NEED de ENGAGEMENT NEED y decide
  * la prioridad final. Casos:
  *   Student A (equations 0.35, alta actividad)  → learning (práctica).
  *   Student B (math 0.9, actividad 0)           → engagement (motivación).
  */
-const { computeSmartboardPriority, getNextBestAction } = require('../../services/adaptiveLearning');
+const { computeIngeniaPriority, getNextBestAction } = require('../../services/adaptiveLearning');
 
 const stateA = {
   studentId: 'A',
@@ -32,9 +32,9 @@ const stateB = {
   behavior: { activeDaysLast14: 0, streak: 0 },
 };
 
-describe('E5 — SMARTBOARD PRIORITY', () => {
+describe('E5 — INGENIA PRIORITY', () => {
   test('Student A: déficit real (0.35) → ganador LEARNING a pesar de alta actividad', () => {
-    const p = computeSmartboardPriority(stateA);
+    const p = computeIngeniaPriority(stateA);
     expect(p.winning).toBe('learning');
     expect(p.minMastery).toBeCloseTo(0.35, 5);
     expect(p.weakestSubject).toBe('matematicas');
@@ -43,7 +43,7 @@ describe('E5 — SMARTBOARD PRIORITY', () => {
   });
 
   test('Student B: sin déficit real (min 0.5) + actividad 0 → ganador ENGAGEMENT', () => {
-    const p = computeSmartboardPriority(stateB);
+    const p = computeIngeniaPriority(stateB);
     expect(p.winning).toBe('engagement');
     expect(p.engagementNeed).toBeCloseTo(1, 5);
   });

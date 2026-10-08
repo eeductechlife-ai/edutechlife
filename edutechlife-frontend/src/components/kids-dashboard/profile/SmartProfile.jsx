@@ -145,7 +145,7 @@ const SmartProfile = memo(function SmartProfile({
     setParentInviteLoading(true);
     try {
       const token = sessionStorage.getItem("auth_token");
-      const res = await fetch(`${API_BASE}/api/smartboard/parental-consent`, {
+      const res = await fetch(`${API_BASE}/api/ingenia/parental-consent`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -2,14 +2,14 @@ import { test, expect } from '@playwright/test';
 import { seedAuthedSession } from './helpers/auth';
 
 /**
- * SmartBoard E2E — authenticated protected route.
+ * IngenIA E2E — authenticated protected route.
  *
  * Runs with a seeded Supabase auth_token (see helpers/auth.ts) so the
  * RoleProtectedRoute guard lets us into /smartboard/app. We assert the
  * dashboard that route actually serves mounts and behaves.
  *
  * NOTE ON WHICH DASHBOARD: /smartboard/app currently renders the classic
- * SmartBoard dashboard (Valeria coach, course progress, report export). The
+ * IngenIA dashboard (Valeria coach, course progress, report export). The
  * newer Dani 2.0 kids-dashboard lives at the public /smartboard route and is
  * covered in smartboard.spec.ts. If /smartboard/app is later repointed to the
  * 2.0 dashboard, update these assertions.
@@ -17,7 +17,7 @@ import { seedAuthedSession } from './helpers/auth';
  * Out of scope (needs a live backend session): Valeria/Dani streamed replies.
  */
 
-test.describe('SmartBoard authed @smoke', () => {
+test.describe('IngenIA authed @smoke', () => {
   test.beforeEach(async ({ context }) => {
     await seedAuthedSession(context);
   });

@@ -20,16 +20,16 @@ export default function IngenIAVakStylesSection({ t, vakStyles }) {
           className="text-center mb-8"
         >
           <span className="badge-clay inline-block px-3.5 py-1 rounded-full bg-primary-light/10 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3">
-            {t("smartboard.landing_vak_badge")}
+            {t("ingenia.landing_vak_badge")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight mb-3">
-            {t("smartboard.landing_vak_title")}
+            {t("ingenia.landing_vak_title")}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-mint pr-1">
-              {t("smartboard.landing_vak_title_highlight")}
+              {t("ingenia.landing_vak_title_highlight")}
             </span>
           </h2>
           <p className="text-sm text-slate-500 leading-relaxed max-w-2xl mx-auto">
-            {t("smartboard.landing_vak_desc")}
+            {t("ingenia.landing_vak_desc")}
           </p>
         </motion.div>
 

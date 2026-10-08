@@ -8,14 +8,14 @@ import { track } from "../../lib/analytics";
 import { EVENTS } from "../../lib/analyticsEvents";
 
 /**
- * Puerta de entrada de SmartBoard.
+ * Puerta de entrada de IngenIA.
  *
  * Decisión de producto (2026-09): el estudiante nunca espera aprobación en
  * vivo de sus padres para trabajar. El consentimiento parental verificado
  * (Ley 1581/2012, COPPA) sigue solicitándose una sola vez por email; mientras
  * se verifica, el estudiante entra directo y el padre recibe notificación de
  * cada sesión en tiempo real (canal `parent-updates-<studentId>`, igual que
- * SmartBoardConsentGate). Si nunca se ha solicitado consentimiento, se
+ * IngenIAConsentGate). Si nunca se ha solicitado consentimiento, se
  * dispara la solicitud una vez en segundo plano, sin bloquear la pantalla.
  */
 const ParentalConsentBlocker = ({ children }) => {
@@ -48,7 +48,7 @@ const ParentalConsentBlocker = ({ children }) => {
     if (!token) return;
     try {
       const res = await fetch(
-        `${API_BASE}/api/smartboard/parental-consent/status`,
+        `${API_BASE}/api/ingenia/parental-consent/status`,
         { headers: { Authorization: `Bearer ${token}` } },
       );
       if (!res.ok) return;
@@ -59,7 +59,7 @@ const ParentalConsentBlocker = ({ children }) => {
       if (data?.verification_status === "none") {
         // Dispara la solicitud una sola vez, en segundo plano. No bloquea
         // ni espera respuesta: es solo el inicio del trámite legal único.
-        fetch(`${API_BASE}/api/smartboard/parental-consent/request`, {
+        fetch(`${API_BASE}/api/ingenia/parental-consent/request`, {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
         }).catch(() => {});

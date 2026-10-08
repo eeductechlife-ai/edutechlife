@@ -5,7 +5,7 @@ const supabase = require('../db/supabase');
 const MINOR_MAX_AGE = 18;
 
 /**
- * Decisión de producto (2026-09): SmartBoard ya no bloquea a un estudiante
+ * Decisión de producto (2026-09): IngenIA ya no bloquea a un estudiante
  * a la espera de que su padre/madre apruebe en vivo. El consentimiento
  * parental verificado (Ley 1581/2012, COPPA) sigue siendo el mecanismo legal
  * y se solicita una sola vez por email (ver POST /parental-consent/request);

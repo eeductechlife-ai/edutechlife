@@ -44,7 +44,7 @@ async function createStudentProfile(res, userId, email) {
 }
 
 /**
- * DELETE /api/smartboard/delete-user-data
+ * DELETE /api/ingenia/delete-user-data
  * Eliminar todos los datos personales del usuario autenticado (GDPR-K / COPPA / Habeas Data)
  */
 router.delete('/delete-user-data', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
@@ -296,7 +296,7 @@ router.post('/student-profile/avatar', requireAuth, async (req, res) => {
 });
 
 /**
- * GET /api/smartboard/export-user-data
+ * GET /api/ingenia/export-user-data
  * Exporta todos los datos personales del usuario autenticado (derecho de portabilidad
  * COPPA / GDPR-K / Ley 1581 Art. 8). Devuelve JSON con todas las tablas vinculadas.
  */

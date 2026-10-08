@@ -1,5 +1,5 @@
 /**
- * SmartBoard 3.0 — Catálogo central de eventos de analítica.
+ * IngenIA 3.0 — Catálogo central de eventos de analítica.
  *
  * Los nombres de los eventos coinciden exactamente con el spec del Documento Maestro
  * Técnico-Funcional (sección 20 — Analítica de producto).

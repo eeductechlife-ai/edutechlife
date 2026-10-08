@@ -158,7 +158,7 @@ export default function MetodoLeadModal({ show, onClose }) {
                     {t("metodo.form_option_tutoring")}
                   </option>
                   <option value="IngenIA">
-                    {t("metodo.form_option_smartboard")}
+                    {t("metodo.form_option_ingenia")}
                   </option>
                   <option value="Consultoría B2B">
                     {t("metodo.form_option_b2b")}

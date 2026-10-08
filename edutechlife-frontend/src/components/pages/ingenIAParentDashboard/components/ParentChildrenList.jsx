@@ -68,7 +68,7 @@ const ParentChildrenList = ({ sessions, events }) => {
           <div className="flex items-center gap-2 mb-4">
             <Calendar className="w-5 h-5 text-[#FF6B9D]" />
             <h3 className="text-sm font-bold text-[#004B63]">
-              {t("smartboard.upcoming_events", { count: events.length })}
+              {t("ingenia.upcoming_events", { count: events.length })}
             </h3>
           </div>
           <div className="space-y-2">

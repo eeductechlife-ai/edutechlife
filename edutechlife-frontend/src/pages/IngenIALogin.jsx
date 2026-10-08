@@ -434,7 +434,7 @@ const IngenIALogin = () => {
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                 {mode === "login"
-                  ? t("login.enter_smartboard")
+                  ? t("login.enter_ingenia")
                   : t("login.create_my_account")}
               </motion.button>
             </form>

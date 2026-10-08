@@ -10,7 +10,7 @@ const ctx = {
   supabaseQueries: { studentData: { data: { id: "s1", grade_level: 7 } } },
 };
 
-vi.mock("../../../../utils/api", () => ({ callDeepseekSmartboard: vi.fn() }));
+vi.mock("../../../../utils/api", () => ({ callDeepseekIngenia: vi.fn() }));
 vi.mock("../../../../context/IngenIAKidsContext", () => ({
   useIngenIAKids: () => ctx,
 }));
@@ -22,7 +22,7 @@ vi.mock("../../../../hooks/useFeedbackLog", () => ({
 }));
 vi.mock("../../../../lib/analytics", () => ({ track: vi.fn() }));
 
-import { callDeepseekSmartboard } from "../../../../utils/api";
+import { callDeepseekIngenia } from "../../../../utils/api";
 import { useChallengeEngine } from "../useChallengeEngine";
 import { CATEGORY } from "../../../../context/pointsEconomy";
 
@@ -34,7 +34,7 @@ const q = (n) => ({
 });
 
 async function playPerfectEasy() {
-  callDeepseekSmartboard.mockResolvedValue({ questions: [q(1), q(2), q(3)] });
+  callDeepseekIngenia.mockResolvedValue({ questions: [q(1), q(2), q(3)] });
   const { result } = renderHook(() => useChallengeEngine());
   act(() => {
     result.current.setSubject(

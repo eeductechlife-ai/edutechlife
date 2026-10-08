@@ -100,7 +100,7 @@ function xpToTier(xp) {
   return 'bronze';
 }
 
-// GET /api/smartboard/gamification/missions?studentId=uuid
+// GET /api/ingenia/gamification/missions?studentId=uuid
 router.get('/gamification/missions', requireAuth, requireStudentAccess, async (req, res) => {
   const { studentId } = req.query;
   if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
@@ -113,7 +113,7 @@ router.get('/gamification/missions', requireAuth, requireStudentAccess, async (r
   }
 });
 
-// POST /api/smartboard/gamification/activity
+// POST /api/ingenia/gamification/activity
 // Body: { studentId, activityType, meta? }
 router.post('/gamification/activity', requireAuth, requireStudentAccess, async (req, res) => {
   const { studentId, activityType, meta = {} } = req.body;
@@ -131,7 +131,7 @@ router.post('/gamification/activity', requireAuth, requireStudentAccess, async (
   }
 });
 
-// GET /api/smartboard/gamification/badges?studentId=uuid
+// GET /api/ingenia/gamification/badges?studentId=uuid
 router.get('/gamification/badges', requireAuth, requireStudentAccess, async (req, res) => {
   const { studentId } = req.query;
   if (!studentId) return res.status(400).json({ error: 'studentId requerido' });
@@ -144,7 +144,7 @@ router.get('/gamification/badges', requireAuth, requireStudentAccess, async (req
   }
 });
 
-// GET /api/smartboard/league/current
+// GET /api/ingenia/league/current
 // Returns the student's league ranking for the current week.
 router.get('/league/current', requireAuth, async (req, res) => {
   try {

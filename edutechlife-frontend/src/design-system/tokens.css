@@ -5,116 +5,116 @@
 
 :root {
   /* ==================== VARIABLES DE COLOR ==================== */
-  
+
   /* Colores primarios */
-  --color-primary-50: #F0F9FF;
-  --color-primary-100: #E0F2FE;
-  --color-primary-200: #BAE6FD;
-  --color-primary-300: #7DD3FC;
-  --color-primary-400: #38BDF8;
-  --color-primary-500: #0EA5E9;
-  --color-primary-600: #0284C7;
-  --color-primary-700: #0369A1;
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0284c7;
+  --color-primary-700: #0369a1;
   --color-primary-800: #075985;
-  --color-primary-900: #0C4A6E;
-  --color-primary-petroleum: #004B63;
-  --color-primary-corporate: #0097A7;
-  --color-primary-softBlue: #B2D8E5;
-  --color-primary-mint: #66CCCC;
-  --color-primary-navy: #0A1628;
-  --color-primary: #0097A7;
-  --color-primary-light: #4DA8C4;
-  --color-primary-dark: #2D7A94;
-  --color-accent: #66CCCC;
-  --color-accent-light: #8EDEDE;
-  --color-accent-dark: #4DB3B3;
-  
+  --color-primary-900: #0c4a6e;
+  --color-primary-petroleum: #004b63;
+  --color-primary-corporate: #0097a7;
+  --color-primary-softBlue: #b2d8e5;
+  --color-primary-mint: #66cccc;
+  --color-primary-navy: #0a1628;
+  --color-primary: #0097a7;
+  --color-primary-light: #4da8c4;
+  --color-primary-dark: #2d7a94;
+  --color-accent: #66cccc;
+  --color-accent-light: #8edede;
+  --color-accent-dark: #4db3b3;
+
   /* Colores VAK */
-  --color-vak-visual-50: #F0F9FF;
-  --color-vak-visual-100: #E0F2FE;
-  --color-vak-visual-500: #4DA8C4;
-  --color-vak-visual-600: #0284C7;
-  --color-vak-visual-900: #0C4A6E;
-  
-  --color-vak-auditivo-50: #F0FDF4;
-  --color-vak-auditivo-100: #DCFCE7;
-  --color-vak-auditivo-500: #66CCCC;
-  --color-vak-auditivo-600: #16A34A;
-  --color-vak-auditivo-900: #14532D;
-  
-  --color-vak-kinestesico-50: #FEF2F2;
-  --color-vak-kinestesico-100: #FEE2E2;
-  --color-vak-kinestesico-500: #FF6B9D;
-  --color-vak-kinestesico-600: #DC2626;
-  --color-vak-kinestesico-900: #7F1D1D;
-  
+  --color-vak-visual-50: #f0f9ff;
+  --color-vak-visual-100: #e0f2fe;
+  --color-vak-visual-500: #4da8c4;
+  --color-vak-visual-600: #0284c7;
+  --color-vak-visual-900: #0c4a6e;
+
+  --color-vak-auditivo-50: #f0fdf4;
+  --color-vak-auditivo-100: #dcfce7;
+  --color-vak-auditivo-500: #66cccc;
+  --color-vak-auditivo-600: #16a34a;
+  --color-vak-auditivo-900: #14532d;
+
+  --color-vak-kinestesico-50: #fef2f2;
+  --color-vak-kinestesico-100: #fee2e2;
+  --color-vak-kinestesico-500: #ff6b9d;
+  --color-vak-kinestesico-600: #dc2626;
+  --color-vak-kinestesico-900: #7f1d1d;
+
   /* Colores semánticos */
-  --color-semantic-success-50: #F0FDF4;
-  --color-semantic-success-100: #DCFCE7;
-  --color-semantic-success-500: #10B981;
+  --color-semantic-success-50: #f0fdf4;
+  --color-semantic-success-100: #dcfce7;
+  --color-semantic-success-500: #10b981;
   --color-semantic-success-600: #059669;
-  --color-semantic-success-900: #064E3B;
-  
-  --color-semantic-warning-50: #FFFBEB;
-  --color-semantic-warning-100: #FEF3C7;
-  --color-semantic-warning-500: #F59E0B;
-  --color-semantic-warning-600: #D97706;
-  --color-semantic-warning-900: #78350F;
-  
-  --color-semantic-error-50: #FEF2F2;
-  --color-semantic-error-100: #FEE2E2;
-  --color-semantic-error-500: #EF4444;
-  --color-semantic-error-600: #DC2626;
-  --color-semantic-error-900: #7F1D1D;
-  
-  --color-semantic-info-50: #EFF6FF;
-  --color-semantic-info-100: #DBEAFE;
-  --color-semantic-info-500: #3B82F6;
-  --color-semantic-info-600: #2563EB;
-  --color-semantic-info-900: #1E3A8A;
-  
+  --color-semantic-success-900: #064e3b;
+
+  --color-semantic-warning-50: #fffbeb;
+  --color-semantic-warning-100: #fef3c7;
+  --color-semantic-warning-500: #f59e0b;
+  --color-semantic-warning-600: #d97706;
+  --color-semantic-warning-900: #78350f;
+
+  --color-semantic-error-50: #fef2f2;
+  --color-semantic-error-100: #fee2e2;
+  --color-semantic-error-500: #ef4444;
+  --color-semantic-error-600: #dc2626;
+  --color-semantic-error-900: #7f1d1d;
+
+  --color-semantic-info-50: #eff6ff;
+  --color-semantic-info-100: #dbeafe;
+  --color-semantic-info-500: #3b82f6;
+  --color-semantic-info-600: #2563eb;
+  --color-semantic-info-900: #1e3a8a;
+
   /* Grises */
-  --color-gray-50: #F8FAFC;
-  --color-gray-100: #F1F5F9;
-  --color-gray-200: #E2E8F0;
-  --color-gray-300: #CBD5E1;
-  --color-gray-400: #94A3B8;
-  --color-gray-500: #64748B;
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
   --color-gray-600: #475569;
   --color-gray-700: #334155;
-  --color-gray-800: #1E293B;
-  --color-gray-900: #0F172A;
-  --color-slate-50: #F8FAFC;
-  --color-slate-100: #F1F5F9;
-  --color-slate-200: #E2E8F0;
-  --color-slate-300: #CBD5E1;
-  --color-slate-400: #94A3B8;
-  --color-slate-500: #64748B;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
   --color-slate-600: #475569;
   --color-slate-700: #334155;
-  --color-slate-800: #1E293B;
-  --color-slate-900: #0F172A;
-  
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
   /* Fondos - Colores más claros corporativos EdutechLife */
-  --color-background-light: #F8FCFD;
-  --color-background-dark: #E8F4F8;
+  --color-background-light: #f8fcfd;
+  --color-background-dark: #e8f4f8;
   --color-background-glass: rgba(77, 168, 196, 0.12);
   --color-background-glassDark: rgba(77, 168, 196, 0.2);
-  --color-bg-dark: #E8F4F8;
-  --color-bg-light: #FFFFFF;
+  --color-bg-dark: #e8f4f8;
+  --color-bg-light: #ffffff;
   --color-bg-glass: rgba(77, 168, 196, 0.12);
   --color-bg-glass-dark: rgba(77, 168, 196, 0.2);
-  
+
   /* ==================== TIPOGRAFÍA ==================== */
-  
+
   /* Familias */
-  --font-family-display: 'Montserrat', system-ui, -apple-system, sans-serif;
-  --font-family-body: 'Inter', 'Geist', system-ui, -apple-system, sans-serif;
-  --font-family-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
-  --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
-  --font-body: 'Inter', 'Geist', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
-  
+  --font-family-display: "Montserrat", system-ui, -apple-system, sans-serif;
+  --font-family-body: "Inter", "Geist", system-ui, -apple-system, sans-serif;
+  --font-family-mono: "JetBrains Mono", "SF Mono", Monaco, monospace;
+  --font-display: "Montserrat", system-ui, -apple-system, sans-serif;
+  --font-body: "Inter", "Geist", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", Monaco, monospace;
+
   /* Tamaños */
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
@@ -129,7 +129,7 @@
   --font-size-7xl: 4.5rem;
   --font-size-8xl: 6rem;
   --font-size-9xl: 8rem;
-  
+
   /* Line heights */
   --line-height-none: 1;
   --line-height-tight: 1.25;
@@ -137,7 +137,7 @@
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.625;
   --line-height-loose: 2;
-  
+
   /* Font weights */
   --font-weight-light: 300;
   --font-weight-normal: 400;
@@ -146,7 +146,7 @@
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
   --font-weight-black: 900;
-  
+
   /* Letter spacing */
   --letter-spacing-tighter: -0.05em;
   --letter-spacing-tight: -0.025em;
@@ -154,9 +154,9 @@
   --letter-spacing-wide: 0.025em;
   --letter-spacing-wider: 0.05em;
   --letter-spacing-widest: 0.1em;
-  
+
   /* ==================== ESPACIADO ==================== */
-  
+
   /* Sistema 8pt grid */
   --spacing-px: 1px;
   --spacing-0: 0;
@@ -205,15 +205,15 @@
   --space-3xl: 4rem;
   --space-4xl: 6rem;
   --space-5xl: 8rem;
-  
+
   /* ==================== BORDES ==================== */
-  
+
   /* Widths */
   --border-width-none: 0;
   --border-width-thin: 1px;
   --border-width-medium: 2px;
   --border-width-thick: 4px;
-  
+
   /* Radios */
   --border-radius-none: 0;
   --border-radius-sm: 0.125rem;
@@ -229,21 +229,25 @@
   --radius-lg: 1.5rem;
   --radius-xl: 2rem;
   --radius-full: 9999px;
-  
+
   /* ==================== SOMBRAS ==================== */
-  
+
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-default: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-default:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  
+
   /* Glassmorphism */
   --shadow-glass-light: 0 8px 32px rgba(31, 38, 135, 0.37);
   --shadow-glass-dark: 0 8px 32px rgba(0, 0, 0, 0.5);
   --shadow-glass-colored: 0 8px 32px rgba(77, 168, 196, 0.3);
-  
+
   /* Sombras internas */
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
   --glass-bg: rgba(255, 255, 255, 0.08);
@@ -251,36 +255,60 @@
   --glass-border: rgba(255, 255, 255, 0.15);
   --glass-shadow: 0 12px 40px rgba(0, 75, 99, 0.15);
   --glass-shadow-hover: 0 20px 60px rgba(0, 75, 99, 0.25);
-  
+
   /* ==================== GRADIENTES ==================== */
-  
+
   /* Primarios */
-  --gradient-primary-horizontal: linear-gradient(90deg, #004B63 0%, #00BCD4 100%);
-  --gradient-primary-vertical: linear-gradient(180deg, #004B63 0%, #00BCD4 100%);
-  --gradient-primary-diagonal: linear-gradient(135deg, #004B63 0%, #00BCD4 100%);
-  
+  --gradient-primary-horizontal: linear-gradient(
+    90deg,
+    #004b63 0%,
+    #00bcd4 100%
+  );
+  --gradient-primary-vertical: linear-gradient(
+    180deg,
+    #004b63 0%,
+    #00bcd4 100%
+  );
+  --gradient-primary-diagonal: linear-gradient(
+    135deg,
+    #004b63 0%,
+    #00bcd4 100%
+  );
+
   /* VAK */
-  --gradient-vak-visual: linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%);
-  --gradient-vak-auditivo: linear-gradient(135deg, #66CCCC 0%, #4DA8C4 100%);
-  --gradient-vak-kinestesico: linear-gradient(135deg, #FF6B9D 0%, #FF8E53 100%);
-  
+  --gradient-vak-visual: linear-gradient(135deg, #4da8c4 0%, #66cccc 100%);
+  --gradient-vak-auditivo: linear-gradient(135deg, #66cccc 0%, #4da8c4 100%);
+  --gradient-vak-kinestesico: linear-gradient(135deg, #ff6b9d 0%, #ff8e53 100%);
+
   /* Glass */
-  --gradient-glass-light: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  --gradient-glass-dark: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%);
-  --gradient-primary: linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%);
-  --gradient-dark: linear-gradient(135deg, #004B63 0%, #0A1628 100%);
+  --gradient-glass-light: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  --gradient-glass-dark: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.8) 0%,
+    rgba(15, 23, 42, 0.6) 100%
+  );
+  --gradient-primary: linear-gradient(135deg, #4da8c4 0%, #66cccc 100%);
+  --gradient-dark: linear-gradient(135deg, #004b63 0%, #0a1628 100%);
   --gradient-light: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  
+  --gradient-glass: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+
   /* ==================== ANIMACIONES ==================== */
-  
+
   /* Duración */
   --animation-duration-fastest: 100ms;
   --animation-duration-fast: 200ms;
   --animation-duration-normal: 300ms;
   --animation-duration-slow: 500ms;
   --animation-duration-slowest: 700ms;
-  
+
   /* Timing functions */
   --animation-timing-linear: linear;
   --animation-timing-ease: ease;
@@ -291,9 +319,9 @@
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   /* ==================== Z-INDEX ==================== */
-  
+
   --z-index-hide: -1;
   --z-index-auto: auto;
   --z-index-base: 0;
@@ -311,34 +339,34 @@
   /* ==================== TAILWIND CONFIG VARIABLES ==================== */
   /* These backfill the var(--color-*) references in tailwind.config.js */
 
-  --color-petroleum: #004B63;
-  --color-petroleum-dark: #0A3550;
-  --color-petroleum-darker: #00374A;
-  --color-corporate: #00BCD4;
-  --color-corporate-dark: #0097A7;
-  --color-corporate-darker: #00A5B8;
-  --color-corporate-deep: #003A4D;
-  --color-soft-blue: #B2D8E5;
-  --color-mint: #66CCCC;
-  --color-navy: #0A1628;
-  --color-success: #10B981;
+  --color-petroleum: #004b63;
+  --color-petroleum-dark: #0a3550;
+  --color-petroleum-darker: #00374a;
+  --color-corporate: #00bcd4;
+  --color-corporate-dark: #0097a7;
+  --color-corporate-darker: #00a5b8;
+  --color-corporate-deep: #003a4d;
+  --color-soft-blue: #b2d8e5;
+  --color-mint: #66cccc;
+  --color-navy: #0a1628;
+  --color-success: #10b981;
 
-  --color-bg-dark: #E8F4F8;
-  --color-bg-light: #F8FAFC;
-  --color-bg-card: #FFFFFF;
-  --color-bg-card-dark: #0A1628;
+  --color-bg-dark: #e8f4f8;
+  --color-bg-light: #f8fafc;
+  --color-bg-card: #ffffff;
+  --color-bg-card-dark: #0a1628;
   --color-bg-glass: rgba(77, 168, 196, 0.12);
   --color-bg-glass-dark: rgba(77, 168, 196, 0.2);
 
-  --color-border-light: #E2E8F0;
-  --color-border-dark: #CBD5E1;
+  --color-border-light: #e2e8f0;
+  --color-border-dark: #cbd5e1;
   --color-border-glass: rgba(255, 255, 255, 0.2);
 
   --color-text-main: #334155;
-  --color-text-sub: #64748B;
-  --color-text-light: #94A3B8;
-  --color-text-dark: #1E293B;
-  --color-text-inverse: #FFFFFF;
+  --color-text-sub: #64748b;
+  --color-text-light: #94a3b8;
+  --color-text-dark: #1e293b;
+  --color-text-inverse: #ffffff;
 
   --shadow-glass: 0 8px 32px rgba(77, 168, 196, 0.3);
   --shadow-glass-lg: 0 12px 48px rgba(77, 168, 196, 0.4);
@@ -356,17 +384,17 @@
   /* ==================== IALab PRO - DESIGN TOKENS ==================== */
 
   /* Brand colors (source of truth for IALab components) */
-  --ialab-petroleum: #004B63;
-  --ialab-petroleum-dark: #0A3550;
+  --ialab-petroleum: #004b63;
+  --ialab-petroleum-dark: #0a3550;
   --ialab-cyan: var(--color-corporate);
   --ialab-cyan-dark: var(--color-corporate-dark);
-  --ialab-navy: #0D2B5B;
+  --ialab-navy: #0d2b5b;
   --ialab-teal: #2596be;
   --ialab-focus-ring: 0 0 0 3px rgba(0, 188, 212, 0.4);
 
   /* Surfaces */
-  --ialab-bg: #F8FAFC;
-  --ialab-surface: #FFFFFF;
+  --ialab-bg: #f8fafc;
+  --ialab-surface: #ffffff;
   --ialab-border: rgba(0, 75, 99, 0.08);
   --ialab-border-medium: rgba(0, 75, 99, 0.15);
   --ialab-border-strong: rgba(0, 75, 99, 0.25);
@@ -374,12 +402,12 @@
   /* Glass surfaces */
   --ialab-glass-bg: rgba(255, 255, 255, 0.85);
   --ialab-glass-border: rgba(0, 188, 212, 0.15);
-  --ialab-glass-shadow: 0 8px 32px rgba(0, 75, 99, 0.10);
+  --ialab-glass-shadow: 0 8px 32px rgba(0, 75, 99, 0.1);
 
   /* Gradients */
-  --ialab-gradient-primary: linear-gradient(135deg, #004B63 0%, #00BCD4 100%);
-  --ialab-gradient-cyan: linear-gradient(135deg, #00BCD4 0%, #0097A7 100%);
-  --ialab-gradient-dark: linear-gradient(135deg, #004B63 0%, #0A3550 100%);
+  --ialab-gradient-primary: linear-gradient(135deg, #004b63 0%, #00bcd4 100%);
+  --ialab-gradient-cyan: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+  --ialab-gradient-dark: linear-gradient(135deg, #004b63 0%, #0a3550 100%);
 
   /* Shadows */
   --ialab-shadow-sm: 0 1px 3px rgba(0, 75, 99, 0.06);
@@ -387,9 +415,9 @@
   --ialab-shadow-lg: 0 8px 24px rgba(0, 75, 99, 0.12);
 
   /* Typography */
-  --ialab-font-display: 'Montserrat', system-ui, sans-serif;
-  --ialab-font-body: 'Inter', 'Geist', system-ui, sans-serif;
-  --ialab-font-mono: 'JetBrains Mono', monospace;
+  --ialab-font-display: "Montserrat", system-ui, sans-serif;
+  --ialab-font-body: "Inter", "Geist", system-ui, sans-serif;
+  --ialab-font-mono: "JetBrains Mono", monospace;
 
   /* Border radius */
   --ialab-radius-sm: 0.5rem;
@@ -407,45 +435,45 @@
   --a11y-focus-ring-color: var(--color-corporate);
   --a11y-focus-ring-width: 3px;
   --a11y-focus-ring-offset: 2px;
-  --a11y-skip-link-bg: #004B63;
-  --a11y-skip-link-text: #FFFFFF;
+  --a11y-skip-link-bg: #004b63;
+  --a11y-skip-link-text: #ffffff;
   --a11y-live-region-z-index: 9999;
 
   /* ==================== VARIABLES ADICIONALES (desde index.css) ==================== */
-  --color-corporate-light: #6BC5E0;
-  --color-mint-light: #8CE0E0;
-  --color-navy-light: #1A2744;
+  --color-corporate-light: #6bc5e0;
+  --color-mint-light: #8ce0e0;
+  --color-navy-light: #1a2744;
   --glass-refraction: 1.5;
-  --neon-cyan: #4DA8C4;
-  --neon-petroleum: #004B63;
-  --aura-violet: #8B5CF6;
-  --aura-cyan: #06B6D4;
+  --neon-cyan: #4da8c4;
+  --neon-petroleum: #004b63;
+  --aura-violet: #8b5cf6;
+  --aura-cyan: #06b6d4;
 
   /* ==================== CURSOR VARIABLES ==================== */
-  --cursor-color: #004B63;
-  --cursor-color-hover: #4DA8C4;
+  --cursor-color: #004b63;
+  --cursor-color-hover: #4da8c4;
   --cursor-size: 20px;
 
   /* ==================== LEGACY ALIASES (from index.css) ==================== */
-  --color-text-gray: #4A4A4A;
-  --color-navy-deep: #0B0F19;
-  --color-white: #FFFFFF;
-  --navy: #004B63;
-  --primary: #4DA8C4;
-  --accent: #66CCCC;
-  --bg-light: #F8FAFC;
+  --color-text-gray: #4a4a4a;
+  --color-navy-deep: #0b0f19;
+  --color-white: #ffffff;
+  --navy: #004b63;
+  --primary: #4da8c4;
+  --accent: #66cccc;
+  --bg-light: #f8fafc;
   --bg-dark: #ffffff;
-  --text-main: #004B63;
+  --text-main: #004b63;
   --text-sub: #334155;
 
   /* Prototype Dashboard Variables */
-  --dashboard-bg: #0B0F19;
+  --dashboard-bg: #0b0f19;
   --dashboard-card: rgba(255, 255, 255, 0.03);
   --dashboard-border: rgba(255, 255, 255, 0.08);
-  --dashboard-accent: #66CCCC;
+  --dashboard-accent: #66cccc;
   --dashboard-accent-glow: rgba(102, 204, 204, 0.3);
   --ai-panel-bg: rgba(0, 75, 99, 0.6);
-  --smartboard-bg: #0B0F19;
+  --ingenia-bg: #0b0f19;
 }
 
 @media (prefers-contrast: more) {
@@ -459,24 +487,24 @@
 /* Dark mode CSS variables se activan solo dentro de .dark (IALab) */
 
 .dark {
-  --color-petroleum: #4DA8C4;
-  --color-petroleum-dark: #7CC4D9;
-  --color-petroleum-darker: #B2D8E5;
-  --color-corporate: #66CCCC;
-  --color-corporate-dark: #8EDEDE;
-  --color-corporate-darker: #B2E8E8;
-  --color-corporate-deep: #003A4D;
-  --color-soft-blue: #0097A7;
-  --color-mint: #7CC4D9;
-  --color-navy: #B2D8E5;
-  --color-success: #34D399;
-  --color-primary: #7CC4D9;
-  --color-accent: #8EDEDE;
+  --color-petroleum: #4da8c4;
+  --color-petroleum-dark: #7cc4d9;
+  --color-petroleum-darker: #b2d8e5;
+  --color-corporate: #66cccc;
+  --color-corporate-dark: #8edede;
+  --color-corporate-darker: #b2e8e8;
+  --color-corporate-deep: #003a4d;
+  --color-soft-blue: #0097a7;
+  --color-mint: #7cc4d9;
+  --color-navy: #b2d8e5;
+  --color-success: #34d399;
+  --color-primary: #7cc4d9;
+  --color-accent: #8edede;
 
-  --color-bg-dark: #0A1628;
-  --color-bg-light: #0F172A;
-  --color-bg-card: #1E293B;
-  --color-bg-card-dark: #0F172A;
+  --color-bg-dark: #0a1628;
+  --color-bg-light: #0f172a;
+  --color-bg-card: #1e293b;
+  --color-bg-card-dark: #0f172a;
   --color-bg-glass: rgba(0, 151, 167, 0.08);
   --color-bg-glass-dark: rgba(0, 151, 167, 0.15);
 
@@ -484,11 +512,11 @@
   --color-border-dark: #475569;
   --color-border-glass: rgba(0, 151, 167, 0.15);
 
-  --color-text-main: #E2E8F0;
-  --color-text-sub: #94A3B8;
-  --color-text-light: #64748B;
-  --color-text-dark: #F1F5F9;
-  --color-text-inverse: #0F172A;
+  --color-text-main: #e2e8f0;
+  --color-text-sub: #94a3b8;
+  --color-text-light: #64748b;
+  --color-text-dark: #f1f5f9;
+  --color-text-inverse: #0f172a;
 
   --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
   --shadow-glass-lg: 0 12px 48px rgba(0, 0, 0, 0.5);
@@ -499,40 +527,66 @@
   --shadow-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   --shadow-outer-glow: 0 0 20px rgba(102, 204, 204, 0.15);
 
-  --ialab-bg: #0A1628;
-  --ialab-surface: #1E293B;
+  --ialab-bg: #0a1628;
+  --ialab-surface: #1e293b;
   --ialab-border: rgba(77, 168, 196, 0.1);
   --ialab-border-medium: rgba(77, 168, 196, 0.2);
   --ialab-border-strong: rgba(77, 168, 196, 0.3);
   --ialab-glass-bg: rgba(15, 23, 42, 0.85);
   --ialab-glass-border: rgba(102, 204, 204, 0.15);
   --ialab-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --ialab-gradient-primary: linear-gradient(135deg, #4DA8C4 0%, #66CCCC 100%);
-  --ialab-gradient-cyan: linear-gradient(135deg, #66CCCC 0%, #8EDEDE 100%);
-  --ialab-gradient-dark: linear-gradient(135deg, #0A1628 0%, #1E293B 100%);
+  --ialab-gradient-primary: linear-gradient(135deg, #4da8c4 0%, #66cccc 100%);
+  --ialab-gradient-cyan: linear-gradient(135deg, #66cccc 0%, #8edede 100%);
+  --ialab-gradient-dark: linear-gradient(135deg, #0a1628 0%, #1e293b 100%);
 }
 
 /* ==================== UTILIDADES CSS ==================== */
 
 /* Clases de utilidad basadas en variables CSS */
-.text-primary-500 { color: var(--color-primary-500); }
-.bg-primary-500 { background-color: var(--color-primary-500); }
-.border-primary-500 { border-color: var(--color-primary-500); }
+.text-primary-500 {
+  color: var(--color-primary-500);
+}
+.bg-primary-500 {
+  background-color: var(--color-primary-500);
+}
+.border-primary-500 {
+  border-color: var(--color-primary-500);
+}
 
-.text-vak-visual-500 { color: var(--color-vak-visual-500); }
-.bg-vak-visual-500 { background-color: var(--color-vak-visual-500); }
+.text-vak-visual-500 {
+  color: var(--color-vak-visual-500);
+}
+.bg-vak-visual-500 {
+  background-color: var(--color-vak-visual-500);
+}
 
-.text-vak-auditivo-500 { color: var(--color-vak-auditivo-500); }
-.bg-vak-auditivo-500 { background-color: var(--color-vak-auditivo-500); }
+.text-vak-auditivo-500 {
+  color: var(--color-vak-auditivo-500);
+}
+.bg-vak-auditivo-500 {
+  background-color: var(--color-vak-auditivo-500);
+}
 
-.text-vak-kinestesico-500 { color: var(--color-vak-kinestesico-500); }
-.bg-vak-kinestesico-500 { background-color: var(--color-vak-kinestesico-500); }
+.text-vak-kinestesico-500 {
+  color: var(--color-vak-kinestesico-500);
+}
+.bg-vak-kinestesico-500 {
+  background-color: var(--color-vak-kinestesico-500);
+}
 
 /* Gradientes */
-.bg-gradient-primary { background: var(--gradient-primary-diagonal); }
-.bg-gradient-vak-visual { background: var(--gradient-vak-visual); }
-.bg-gradient-vak-auditivo { background: var(--gradient-vak-auditivo); }
-.bg-gradient-vak-kinestesico { background: var(--gradient-vak-kinestesico); }
+.bg-gradient-primary {
+  background: var(--gradient-primary-diagonal);
+}
+.bg-gradient-vak-visual {
+  background: var(--gradient-vak-visual);
+}
+.bg-gradient-vak-auditivo {
+  background: var(--gradient-vak-auditivo);
+}
+.bg-gradient-vak-kinestesico {
+  background: var(--gradient-vak-kinestesico);
+}
 
 /* Glassmorphism */
 .bg-glass-light {
@@ -548,23 +602,47 @@
 }
 
 /* Sombras */
-.shadow-glass { box-shadow: var(--shadow-glass-colored); }
-.shadow-glass-light { box-shadow: var(--shadow-glass-light); }
-.shadow-glass-dark { box-shadow: var(--shadow-glass-dark); }
+.shadow-glass {
+  box-shadow: var(--shadow-glass-colored);
+}
+.shadow-glass-light {
+  box-shadow: var(--shadow-glass-light);
+}
+.shadow-glass-dark {
+  box-shadow: var(--shadow-glass-dark);
+}
 
 /* Tipografía */
-.font-display { font-family: var(--font-family-display); }
-.font-body { font-family: var(--font-family-body); }
-.font-mono { font-family: var(--font-family-mono); }
+.font-display {
+  font-family: var(--font-family-display);
+}
+.font-body {
+  font-family: var(--font-family-body);
+}
+.font-mono {
+  font-family: var(--font-family-mono);
+}
 
 /* Transiciones */
-.transition-fastest { transition-duration: var(--animation-duration-fastest); }
-.transition-fast { transition-duration: var(--animation-duration-fast); }
-.transition-normal { transition-duration: var(--animation-duration-normal); }
-.transition-slow { transition-duration: var(--animation-duration-slow); }
-.transition-slowest { transition-duration: var(--animation-duration-slowest); }
+.transition-fastest {
+  transition-duration: var(--animation-duration-fastest);
+}
+.transition-fast {
+  transition-duration: var(--animation-duration-fast);
+}
+.transition-normal {
+  transition-duration: var(--animation-duration-normal);
+}
+.transition-slow {
+  transition-duration: var(--animation-duration-slow);
+}
+.transition-slowest {
+  transition-duration: var(--animation-duration-slowest);
+}
 
-.transition-spring { transition-timing-function: var(--animation-timing-spring); }
+.transition-spring {
+  transition-timing-function: var(--animation-timing-spring);
+}
 
 /* ==================== CLAYMORPHISM CARDS ==================== */
 
@@ -603,7 +681,7 @@
 .card-clay-dark {
   border-radius: 20px;
   border: 3px solid rgba(77, 168, 196, 0.2);
-  background: linear-gradient(135deg, #004B63 0%, #003d52 100%);
+  background: linear-gradient(135deg, #004b63 0%, #003d52 100%);
   box-shadow:
     inset -2px -2px 8px rgba(0, 0, 0, 0.2),
     6px 6px 16px rgba(0, 75, 99, 0.2);
@@ -655,8 +733,15 @@
 
 /* Glow border animation for feature cards */
 @keyframes card-glow {
-  0%, 100% { border-color: rgba(77, 168, 196, 0.15); box-shadow: 0 0 8px rgba(77, 168, 196, 0.05); }
-  50% { border-color: rgba(77, 168, 196, 0.3); box-shadow: 0 0 16px rgba(77, 168, 196, 0.12); }
+  0%,
+  100% {
+    border-color: rgba(77, 168, 196, 0.15);
+    box-shadow: 0 0 8px rgba(77, 168, 196, 0.05);
+  }
+  50% {
+    border-color: rgba(77, 168, 196, 0.3);
+    box-shadow: 0 0 16px rgba(77, 168, 196, 0.12);
+  }
 }
 
 .card-glow {
@@ -664,7 +749,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

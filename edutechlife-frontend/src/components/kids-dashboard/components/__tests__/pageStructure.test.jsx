@@ -94,7 +94,7 @@ describe("PremiumSidebar: sin opciones repetidas", () => {
     expect(within(menu()).getByText("Aprender").style.color).toBe(
       "rgb(226, 232, 240)",
     );
-    expect(screen.getByText("smartboard.logout").style.color).toBe(
+    expect(screen.getByText("ingenia.logout").style.color).toBe(
       "rgb(253, 164, 175)",
     );
   });
