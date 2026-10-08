@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const sanitizeMiddleware = require('./middleware/sanitize');
 const { requireAuth, optionalAuth, requireProduct } = require('./middleware/auth');
 const { apiLimiter, deepseekLimiter, authLimiter, ttsLimiter, ttsHourlyLimiter } = require('./middleware/rateLimiter');
+const { httpErrorLog } = require('./middleware/httpErrorLog');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./docs/swagger');
@@ -106,6 +107,9 @@ app.use((req, res, next) => {
   };
   next();
 });
+
+// Deja constancia de cada 4xx/5xx por ruta (ver middleware/httpErrorLog.js).
+app.use(httpErrorLog);
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customCss: '.swagger-ui .topbar { display: none }',

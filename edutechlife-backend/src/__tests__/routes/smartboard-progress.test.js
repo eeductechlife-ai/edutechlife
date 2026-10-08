@@ -91,41 +91,60 @@ describe('GET /student-progress', () => {
   });
 });
 
+// El guardado actualiza directamente por auth_id (una sola escritura); solo si no había
+// fila la crea ya con el dato. Estas respuestas simulan ambos casos.
+const updateOnly = (rows) => (state) =>
+  state.ops.some((o) => o[0] === 'update')
+    ? { data: rows, error: null }
+    : { data: null, error: null };
+const updateThenCreate = (created) => (state) => {
+  if (state.ops.some((o) => o[0] === 'update')) return { data: [], error: null };
+  if (state.ops.some((o) => o[0] === 'insert')) return created;
+  return { data: null, error: null };
+};
+
 describe('POST /student-progress', () => {
-  it('guarda el progreso del estudiante existente', async () => {
-    const fake = use({ students: { data: { id: 's1' }, error: null } });
+  it('guarda el progreso con una sola escritura cuando el estudiante existe', async () => {
+    const fake = use({ students: updateOnly([{ id: 's1' }]) });
     const res = await request(app)
       .post('/api/ingenia/student-progress')
       .send({ subjectTime: { lenguaje: 30 }, sessions: [{ id: 2 }] });
     expect(res.body).toEqual({ success: true });
     const update = writes(fake, 'update')[0];
     expect(update.args[0]).toEqual({ progress_json: { subjectTime: { lenguaje: 30 }, sessions: [{ id: 2 }] } });
+    expect(writes(fake, 'insert')).toHaveLength(0);
+    expect(fake.calls).toHaveLength(1); // antes: consulta + (inserción) + actualización
   });
 
-  it('crea al estudiante si no existe y luego guarda', async () => {
-    const fake = use({
-      students: (state) => (state.ops.some((o) => o[0] === 'insert') ? { data: { id: 'nuevo' }, error: null } : { data: null, error: null }),
-    });
-    const res = await request(app).post('/api/ingenia/student-progress').send({ subjectTime: {}, sessions: [] });
+  it('crea al estudiante con el progreso ya incluido si no existía', async () => {
+    const fake = use({ students: updateThenCreate({ data: { id: 'nuevo' }, error: null }) });
+    const res = await request(app)
+      .post('/api/ingenia/student-progress')
+      .send({ subjectTime: { a: 1 }, sessions: [] });
     expect(res.status).toBe(200);
-    expect(writes(fake, 'insert')[0].args[0]).toEqual([{ auth_id: 'auth-1', name: 'Estudiante', age: 12 }]);
+    expect(writes(fake, 'insert')[0].args[0]).toEqual([
+      { auth_id: 'auth-1', name: 'Estudiante', age: 12, progress_json: { subjectTime: { a: 1 }, sessions: [] } },
+    ]);
   });
 
   it('si no puede crear el perfil responde 500', async () => {
-    use({ students: { data: null, error: null } });
+    use({ students: updateThenCreate({ data: null, error: { message: 'x' } }) });
     const res = await request(app).post('/api/ingenia/student-progress').send({});
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('Could not create student profile');
   });
 
-  it('si falla la escritura devuelve el mensaje; sin sesión, 401', async () => {
-    use({
-      students: (state) => (state.ops.some((o) => o[0] === 'update') ? { data: null, error: { message: 'RLS' } } : { data: { id: 's1' }, error: null }),
-    });
+  it('si falla la escritura devuelve el mensaje; sin sesión, 401; si lanza, 500 genérico', async () => {
+    use({ students: (state) => (state.ops.some((o) => o[0] === 'update') ? { data: null, error: { message: 'RLS' } } : { data: null, error: null }) });
     const res = await request(app).post('/api/ingenia/student-progress').send({});
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('RLS');
     expect((await request(app).post('/api/ingenia/student-progress').set('x-anon', '1').send({})).status).toBe(401);
+
+    use({ students: new Error('db caída') });
+    const boom = await request(app).post('/api/ingenia/student-progress').send({});
+    expect(boom.status).toBe(500);
+    expect(boom.body).toEqual({ error: 'Error interno' });
   });
 });
 
@@ -169,21 +188,28 @@ describe('GET/POST /student-grades', () => {
     expect((await request(app).get('/api/ingenia/student-grades')).status).toBe(200);
   });
 
-  it('POST guarda la lista, rechaza lo que no es una lista y exige sesión', async () => {
-    const fake = use({ students: { data: { id: 's1' }, error: null } });
+  it('POST guarda la lista con una sola escritura, rechaza lo que no es una lista y exige sesión', async () => {
+    const fake = use({ students: updateOnly([{ id: 's1' }]) });
     const grades = [{ subject: 'ingles', p1: 3.5 }];
     const ok = await request(app).post('/api/ingenia/student-grades').send({ grades });
     expect(ok.body).toEqual({ success: true, grades });
     expect(writes(fake, 'update')[0].args[0]).toEqual({ grades_json: grades });
+    expect(fake.calls).toHaveLength(1);
 
     expect((await request(app).post('/api/ingenia/student-grades').send({ grades: 'x' })).status).toBe(400);
     expect((await request(app).post('/api/ingenia/student-grades').set('x-anon', '1').send({ grades })).status).toBe(401);
   });
 
+  it('POST crea al estudiante con las notas incluidas si no existía', async () => {
+    const fake = use({ students: updateThenCreate({ data: { id: 'n' }, error: null }) });
+    const grades = [{ subject: 'arte', p1: 4 }];
+    const res = await request(app).post('/api/ingenia/student-grades').send({ grades });
+    expect(res.status).toBe(200);
+    expect(writes(fake, 'insert')[0].args[0][0]).toMatchObject({ auth_id: 'auth-1', grades_json: grades });
+  });
+
   it('POST: si falla la escritura devuelve 500 con el motivo', async () => {
-    use({
-      students: (state) => (state.ops.some((o) => o[0] === 'update') ? { data: null, error: { message: 'x' } } : { data: { id: 's1' }, error: null }),
-    });
+    use({ students: (state) => (state.ops.some((o) => o[0] === 'update') ? { data: null, error: { message: 'x' } } : { data: null, error: null }) });
     const res = await request(app).post('/api/ingenia/student-grades').send({ grades: [] });
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('x');
