@@ -220,7 +220,7 @@ const SubjectsView = memo(function SubjectsView({ subjects, onTabChange }) {
                     {subject.name}
                   </h4>
                   <p className={`!m-0 mt-0.5 text-xs ${tone.muted}`}>
-                    {hasGrade ? ms.hint : t("smartboard.progress")}
+                    {hasGrade ? ms.hint : t("ingenia.progress")}
                   </p>
                 </div>
                 {hasGrade ? (

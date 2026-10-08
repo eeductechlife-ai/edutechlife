@@ -2875,9 +2875,9 @@
 }
 
 /* =========================
-   SMARTBOARD - Premium v2286
+   INGENIA - Premium v2286
    ========================= */
-.smartboard-page {
+.ingenia-page {
   min-height: 100vh;
   background: #f8fafc;
   padding-top: 80px;
@@ -2885,8 +2885,8 @@
   overflow: hidden;
 }
 
-.smartboard-page::before,
-.smartboard-page::after {
+.ingenia-page::before,
+.ingenia-page::after {
   content: "";
   position: absolute;
   width: 40vw;
@@ -2897,33 +2897,33 @@
   z-index: 0;
 }
 
-.smartboard-page::before {
+.ingenia-page::before {
   top: -10%;
   left: -10%;
   background: rgba(102, 204, 204, 0.2);
 }
 
-.smartboard-page::after {
+.ingenia-page::after {
   bottom: -10%;
   right: -10%;
   background: rgba(77, 168, 196, 0.2);
 }
 
-.smartboard-hero,
-.smartboard-tabs,
-.smartboard-content {
+.ingenia-hero,
+.ingenia-tabs,
+.ingenia-content {
   position: relative;
   z-index: 10;
 }
 
-.smartboard-hero {
+.ingenia-hero {
   text-align: center;
   padding: 4rem 5% 2rem;
   max-width: 800px;
   margin: 0 auto;
 }
 
-.smartboard-badge {
+.ingenia-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -2944,7 +2944,7 @@
   margin-bottom: 1.5rem;
 }
 
-.smartboard-hero h1 {
+.ingenia-hero h1 {
   font-family: "Montserrat", sans-serif;
   font-size: clamp(2rem, 4vw, 2.75rem);
   font-weight: 900;
@@ -2953,13 +2953,13 @@
   margin-bottom: 1rem;
 }
 
-.smartboard-hero p {
+.ingenia-hero p {
   font-size: 1.1rem;
   color: #64748b;
   line-height: 1.7;
 }
 
-.smartboard-tabs {
+.ingenia-tabs {
   display: flex;
   justify-content: center;
   gap: 1rem;
@@ -2997,7 +2997,7 @@
   box-shadow: 0 4px 15px rgba(77, 168, 196, 0.3);
 }
 
-.smartboard-content {
+.ingenia-content {
   padding: 3rem 5%;
   max-width: 1200px;
   margin: 0 auto;
@@ -3602,8 +3602,8 @@
   color: #4da8c4;
 }
 
-/* Embedded SmartBoard (for use inside other components) */
-.smartboard-embedded {
+/* Embedded IngenIA (for use inside other components) */
+.ingenia-embedded {
   background: linear-gradient(135deg, #004b63, #0b2a3a);
   border-radius: 1.5rem;
   padding: 1.5rem;

@@ -100,13 +100,13 @@ export default function IngenIABeneficiosSection({ t, beneficios }) {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div {...fadeInUp} className="text-center mb-10">
           <span className="badge-clay inline-block px-3.5 py-1 rounded-full bg-gradient-to-r from-primary-light/10 to-mint/10 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3 border border-primary-light/10">
-            {t("smartboard.landing_benefits_badge")}
+            {t("ingenia.landing_benefits_badge")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight">
-            {t("smartboard.landing_benefits_title_line1")}
+            {t("ingenia.landing_benefits_title_line1")}
             <br />
             <span className="text-gradient-accent pr-1">
-              {t("smartboard.landing_benefits_title_line2")}
+              {t("ingenia.landing_benefits_title_line2")}
             </span>
           </h2>
         </motion.div>

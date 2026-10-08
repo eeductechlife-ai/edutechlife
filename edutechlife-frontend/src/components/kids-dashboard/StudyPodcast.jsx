@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { callDeepseekSmartboard } from "../../utils/api";
+import { callDeepseekIngenia } from "../../utils/api";
 import { speakTextConversational, stopSpeech } from "../../utils/speech";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
@@ -61,7 +61,7 @@ const StudyPodcast = memo(() => {
 Texto:
 ${input.substring(0, 3000)}`;
 
-        const result = await callDeepseekSmartboard(
+        const result = await callDeepseekIngenia(
           [{ role: "user", content: prompt }],
           {
             temperature: 0.7,

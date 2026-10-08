@@ -71,9 +71,9 @@ const AdminHeader = ({
                 <span className="text-sm">Leads</span>
               </button>
               <button
-                onClick={() => setActiveTab("smartboard")}
+                onClick={() => setActiveTab("ingenia")}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                  activeTab === "smartboard"
+                  activeTab === "ingenia"
                     ? "bg-[#66CCCC]/30 text-white border border-[#66CCCC]/50"
                     : "text-[#66CCCC] hover:text-white hover:bg-white/5"
                 }`}

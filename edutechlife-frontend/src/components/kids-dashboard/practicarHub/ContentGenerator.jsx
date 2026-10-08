@@ -1,7 +1,7 @@
 import { memo, useState, useCallback, useMemo, useRef, useEffect } from "react";
 import PanelHeader from "./PanelHeader";
 import { Loader2, Copy, Check, RotateCcw, Star, Layers } from "lucide-react";
-import { callDeepseekSmartboard } from "../../../utils/api";
+import { callDeepseekIngenia } from "../../../utils/api";
 import { CONTENT_TYPES } from "./practicarConfig";
 import { logPractice } from "./practicarProgress";
 import { setHandoff, HANDOFF_FLASHCARDS_TOPIC } from "./practicarHandoff";
@@ -101,7 +101,7 @@ const ContentGenerator = memo(
         age,
       });
       try {
-        const raw = await callDeepseekSmartboard(req.messages, {
+        const raw = await callDeepseekIngenia(req.messages, {
           isJson: req.isJson,
           temperature: 0.6,
           maxTokens: req.maxTokens,

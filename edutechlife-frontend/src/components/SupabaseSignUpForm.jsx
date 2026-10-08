@@ -377,7 +377,7 @@ const SupabaseSignUpForm = ({
                 }
               >
                 {/* Left Side - Brand & Benefits (skipped when embedded — the
-                    host page already renders its own SmartBoard-branded left
+                    host page already renders its own IngenIA-branded left
                     panel; showing this one too duplicated/overlapped it). */}
                 {/* pt is oversized on purpose: the "back to login" button is
                     absolutely positioned at top-6/left-6 and would otherwise

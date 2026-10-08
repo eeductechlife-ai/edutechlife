@@ -5,7 +5,7 @@ const { requireAuth } = require('../../middleware/auth');
 const router = Router();
 
 /**
- * GET/POST /api/smartboard/student-progress
+ * GET/POST /api/ingenia/student-progress
  * Load or save subject progress (subjectTime, sessions) to students.progress_json.
  * Fallback for IngenIA progress tracking when localStorage is lost.
  */
@@ -94,7 +94,7 @@ router.post('/student-progress', requireAuth, async (req, res) => {
 });
 
 /**
- * GET/POST /api/smartboard/student-grades
+ * GET/POST /api/ingenia/student-grades
  * Load or save student grades (calificaciones) to students.grades_json (JSONB).
  * Fallback for GradeScanner when localStorage is lost or across devices.
  */

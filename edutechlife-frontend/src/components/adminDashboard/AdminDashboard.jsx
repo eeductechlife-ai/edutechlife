@@ -160,7 +160,7 @@ const AdminDashboard = ({ onLogout, onBack }) => {
           />
         </div>
         {activeTab === "leads" && <LeadsManager />}
-        {activeTab === "smartboard" && (
+        {activeTab === "ingenia" && (
           <IngenIAMetrics analytics={adminAnalytics} />
         )}
       </div>

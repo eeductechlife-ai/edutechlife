@@ -1,4 +1,4 @@
-import { callDeepseekSmartboard } from "../../utils/api";
+import { callDeepseekIngenia } from "../../utils/api";
 import { GRADE_LEVELS } from "./config";
 import { buildSystemPrompt } from "./promptBuilder";
 import { detectCardIcon } from "./iconDetection";
@@ -69,13 +69,13 @@ export async function generateFlashcards(topic, grade = "4-6") {
     let parsed;
     try {
       if (i === 0) {
-        parsed = await callDeepseekSmartboard(messages, {
+        parsed = await callDeepseekIngenia(messages, {
           isJson: true,
           temperature: 0.7,
           maxTokens: 2500,
         });
       } else {
-        parsed = await callDeepseekSmartboard(
+        parsed = await callDeepseekIngenia(
           [
             { role: "system", content: systemPrompt },
             { role: "user", content: buildCorrectionPrompt(lastBroken) },

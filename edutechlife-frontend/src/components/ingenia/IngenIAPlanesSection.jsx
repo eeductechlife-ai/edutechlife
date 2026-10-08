@@ -25,17 +25,17 @@ export default function IngenIAPlanesSection({
         <motion.div {...fadeInUp} className="text-center mb-10">
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-corporate/10 text-petroleum text-xs font-bold uppercase tracking-widest mb-3 border border-corporate/10">
             <span className="text-corporate text-sm">✦</span>
-            {t("smartboard.landing_pricing_badge")}
+            {t("ingenia.landing_pricing_badge")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight mb-3">
-            {t("smartboard.landing_pricing_title_line1")}
+            {t("ingenia.landing_pricing_title_line1")}
             <br />
             <span className="text-gradient-accent pr-1">
-              {t("smartboard.landing_pricing_title_line2")}
+              {t("ingenia.landing_pricing_title_line2")}
             </span>
           </h2>
           <p className="text-sm text-slate-500 leading-relaxed max-w-xl mx-auto">
-            {t("smartboard.landing_pricing_desc")}
+            {t("ingenia.landing_pricing_desc")}
           </p>
         </motion.div>
 
@@ -60,7 +60,7 @@ export default function IngenIAPlanesSection({
               {plan.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white text-xs font-bold uppercase tracking-wider shadow-premium-lg whitespace-nowrap flex items-center gap-1.5">
                   <Icon name="fa-star" className="text-[10px]" />
-                  {t("smartboard.landing_pricing_popular")}
+                  {t("ingenia.landing_pricing_popular")}
                 </div>
               )}
               <div className="mb-2 text-center">
@@ -122,7 +122,7 @@ export default function IngenIAPlanesSection({
                 }`}
               >
                 <span>
-                  {t("smartboard.landing_pricing_choose", { name: plan.name })}
+                  {t("ingenia.landing_pricing_choose", { name: plan.name })}
                 </span>
                 <Icon name="fa-arrow-right" className="text-xs" />
               </MagneticButton>

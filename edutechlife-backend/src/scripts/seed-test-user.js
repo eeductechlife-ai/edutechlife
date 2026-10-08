@@ -1,5 +1,5 @@
 /**
- * Seed script: Create test user for SmartBoard
+ * Seed script: Create test user for IngenIA
  * Usage: node src/scripts/seed-test-user.js
  */
 
@@ -8,11 +8,11 @@ const crypto = require('crypto');
 
 async function seedTestUser() {
   const testEmail = 'smartboard@test.co';
-  const testPassword = 'SmartBoard@2026';
+  const testPassword = 'IngenIA@2026';
   const testUsername = 'smartboardtest';
 
   try {
-    console.log('Creating test user for SmartBoard...');
+    console.log('Creating test user for IngenIA...');
 
     // 1. Create auth user
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
@@ -45,7 +45,7 @@ async function seedTestUser() {
           email: testEmail,
           username: testUsername,
           first_name: 'Test',
-          last_name: 'SmartBoard',
+          last_name: 'IngenIA',
           user_type: 'student',
           platform: 'smartboard',
           age_range: '13-17',

@@ -9,10 +9,10 @@ const SubjectsView = memo(({ subjects, onSelectSubject, onNavigate }) => {
     <GlassCard animate>
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-xl font-bold text-[#004B63] font-montserrat">
-          {t("smartboard.your_subjects")}
+          {t("ingenia.your_subjects")}
         </h3>
         <span className="text-sm text-[#64748B]">
-          {subjects.filter((s) => !s.locked).length} {t("smartboard.active")}
+          {subjects.filter((s) => !s.locked).length} {t("ingenia.active")}
         </span>
       </div>
       <SubjectGrid subjects={subjects} onSelectSubject={onSelectSubject} />

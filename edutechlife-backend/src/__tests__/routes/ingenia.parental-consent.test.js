@@ -1,5 +1,5 @@
 /**
- * Tests for SmartBoard parental consent verification flow
+ * Tests for IngenIA parental consent verification flow
  * Covers: POST /parental-consent, GET /parental-consent/verify, token expiration
  */
 
@@ -8,7 +8,7 @@ const crypto = require('crypto');
 const app = require('../../app');
 const supabase = require('../../db/supabase');
 
-describe('SmartBoard Parental Consent Verification', () => {
+describe('IngenIA Parental Consent Verification', () => {
   const testUserId = 'test-user-id-' + Date.now();
   const testEmail = `parent-${Date.now()}@test.com`;
   const studentAge = 12;
@@ -20,7 +20,7 @@ describe('SmartBoard Parental Consent Verification', () => {
     next();
   };
 
-  describe('POST /api/smartboard/parental-consent', () => {
+  describe('POST /api/ingenia/parental-consent', () => {
     it('should register parental consent and send verification email', async () => {
       // This would need a real server instance to test
       // For now, we test the validation logic
@@ -66,7 +66,7 @@ describe('SmartBoard Parental Consent Verification', () => {
     });
   });
 
-  describe('GET /api/smartboard/parental-consent/verify?token=XXX', () => {
+  describe('GET /api/ingenia/parental-consent/verify?token=XXX', () => {
     it('should validate token format', () => {
       const validTokens = [
         crypto.randomBytes(24).toString('hex'),
@@ -129,7 +129,7 @@ describe('SmartBoard Parental Consent Verification', () => {
   describe('Email service integration', () => {
     it('should include verification link in email', () => {
       const token = crypto.randomBytes(24).toString('hex');
-      const verifyUrl = `https://edutechlife.co/api/smartboard/parental-consent/verify?token=${token}`;
+      const verifyUrl = `https://edutechlife.co/api/ingenia/parental-consent/verify?token=${token}`;
 
       expect(verifyUrl).toContain('/parental-consent/verify');
       expect(verifyUrl).toContain(`token=${token}`);

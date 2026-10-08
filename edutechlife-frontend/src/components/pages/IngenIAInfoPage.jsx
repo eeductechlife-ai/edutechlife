@@ -21,11 +21,8 @@ const IngenIAInfoPage = () => {
 
   return (
     <>
-      <SEO
-        title={t("seo.smartboard.title")}
-        description={t("seo.smartboard.desc")}
-      />
-      <Suspense fallback={<PageLoader message={t("smartboard.loading")} />}>
+      <SEO title={t("seo.ingenia.title")} description={t("seo.ingenia.desc")} />
+      <Suspense fallback={<PageLoader message={t("ingenia.loading")} />}>
         <IngenIALandingInfo onBack={handleBack} onNavigate={handleNavigate} />
       </Suspense>
       <Footer />

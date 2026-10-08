@@ -82,7 +82,7 @@ function setupTables(overrides = {}) {
 
 let app;
 beforeAll(() => {
-  const router = require('../../routes/smartboard/student-profile');
+  const router = require('../../routes/ingenia/student-profile');
   app = express();
   app.use(express.json());
   app.use('/api/ingenia', router);

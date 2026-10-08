@@ -80,7 +80,7 @@ const UserMenuDropdown = ({
                 {displayName}
               </p>
               <p className="text-xs text-white/65 mt-0.5">
-                {t("kid.user.smartboard_profile")}
+                {t("kid.user.ingenia_profile")}
               </p>
               {vakMeta && (
                 <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-xs font-bold text-white/90 bg-white/15 border border-white/20">

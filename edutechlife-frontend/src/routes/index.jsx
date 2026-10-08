@@ -107,7 +107,7 @@ const IALabSignUpRedirect = () => {
 const IngenIASignUpPageWrapper = () => <IngenIASignUpPage />;
 
 // SmartBoard was renamed to IngenIA; old links and bookmarks still point here.
-const LegacySmartboardRedirect = () => {
+const LegacyIngeniaRedirect = () => {
   const { pathname, search } = useLocation();
   const target = pathname.replace(/smartboard/, "ingenia");
   return <Navigate to={`${target}${search}`} replace />;
@@ -334,15 +334,9 @@ const AppRoutes = () => {
 
         <Route path="ingenia/login" element={<IngenIALoginRedirect />} />
 
-        <Route path="smartboard/*" element={<LegacySmartboardRedirect />} />
-        <Route
-          path="sign-up/smartboard"
-          element={<LegacySmartboardRedirect />}
-        />
-        <Route
-          path="conoce-smartboard"
-          element={<LegacySmartboardRedirect />}
-        />
+        <Route path="smartboard/*" element={<LegacyIngeniaRedirect />} />
+        <Route path="sign-up/smartboard" element={<LegacyIngeniaRedirect />} />
+        <Route path="conoce-smartboard" element={<LegacyIngeniaRedirect />} />
 
         {DevIngenIAPreview && (
           <Route

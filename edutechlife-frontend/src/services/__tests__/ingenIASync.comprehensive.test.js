@@ -7,7 +7,7 @@ import {
 } from "../ingenIASync";
 
 /**
- * SmartBoardSync Service Test Suite
+ * IngenIASync Service Test Suite
  *
  * CRITICAL: Handles conflict resolution between local and remote data.
  * Data corruption or loss will impact student progress.

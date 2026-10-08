@@ -359,7 +359,7 @@ export async function callDeepseek(
  * a /api/ingenia/chat, que exige la misma autorización y consentimiento
  * parental y responde con la misma forma { result }.
  */
-export async function callDeepseekSmartboard(messages, opts = {}) {
+export async function callDeepseekIngenia(messages, opts = {}) {
   const devUrl = devPreviewAiUrl();
   const token = devUrl ? null : getAuthToken();
   if (!devUrl && !token)

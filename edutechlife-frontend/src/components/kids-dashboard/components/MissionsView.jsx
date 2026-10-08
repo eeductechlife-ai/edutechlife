@@ -17,7 +17,7 @@ import { missionXp } from "../../../context/pointsEconomy";
 
 const EXPLORE_GRADIENT = SB_GRADIENTS.explore;
 const openDani = () =>
-  window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+  window.dispatchEvent(new CustomEvent("ingenia:open-dani"));
 
 // A mission can only be claimed once its condition is really met; otherwise the
 // button takes the student to where the mission is done.

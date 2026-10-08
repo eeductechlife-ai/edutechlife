@@ -111,9 +111,9 @@ describe("saveToSupabase: fallos", () => {
     const result = await saveToSupabase(client, "u1", data);
     expect(result).toEqual({ success: false, error: "offline", offline: true });
     expect(client.from).not.toHaveBeenCalled();
-    expect(
-      JSON.parse(localStorage.getItem("smartboard_sync_queue")),
-    ).toHaveLength(1);
+    expect(JSON.parse(localStorage.getItem("ingenia_sync_queue"))).toHaveLength(
+      1,
+    );
   });
 
   it("un error de sesión (JWT) deja la operación en cola para reintentar", async () => {
@@ -122,9 +122,9 @@ describe("saveToSupabase: fallos", () => {
     });
     const result = await saveToSupabase(client, "u1", data);
     expect(result).toMatchObject({ success: false, offline: true });
-    expect(
-      JSON.parse(localStorage.getItem("smartboard_sync_queue")),
-    ).toHaveLength(1);
+    expect(JSON.parse(localStorage.getItem("ingenia_sync_queue"))).toHaveLength(
+      1,
+    );
   });
 
   it("otro error del servidor también se encola y se informa", async () => {
@@ -133,9 +133,9 @@ describe("saveToSupabase: fallos", () => {
     });
     const result = await saveToSupabase(client, "u1", data);
     expect(result).toEqual({ success: false, error: "boom" });
-    expect(
-      JSON.parse(localStorage.getItem("smartboard_sync_queue")),
-    ).toHaveLength(1);
+    expect(JSON.parse(localStorage.getItem("ingenia_sync_queue"))).toHaveLength(
+      1,
+    );
   });
 
   it("si el insert falla se encola y se informa", async () => {
@@ -148,8 +148,8 @@ describe("saveToSupabase: fallos", () => {
     });
     const result = await saveToSupabase(client, "u1", data);
     expect(result).toEqual({ success: false, error: "sin permiso" });
-    expect(
-      JSON.parse(localStorage.getItem("smartboard_sync_queue")),
-    ).toHaveLength(1);
+    expect(JSON.parse(localStorage.getItem("ingenia_sync_queue"))).toHaveLength(
+      1,
+    );
   });
 });

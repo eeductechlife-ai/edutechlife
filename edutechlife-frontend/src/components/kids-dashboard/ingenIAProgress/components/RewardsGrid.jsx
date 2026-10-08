@@ -8,10 +8,10 @@ import { storeRewards } from "../../../../context/pointsEconomy";
 
 const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
   const { t } = useTranslation();
-  const smartBoard = useIngenIAKidsSafe();
+  const ingenIA = useIngenIAKidsSafe();
   const [rewards, setRewards] = useState(FALLBACK_REWARDS);
-  const achievements = smartBoard?.supabaseQueries?.achievements?.data || [];
-  const unlockReward = smartBoard?.unlockReward;
+  const achievements = ingenIA?.supabaseQueries?.achievements?.data || [];
+  const unlockReward = ingenIA?.unlockReward;
   const redeem = (r) => {
     if (totalPoints >= r.cost && !unlockedRewards.includes(r.id))
       unlockReward(r);
@@ -94,7 +94,7 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
                 </div>
                 {unlocked && (
                   <div className="text-xs text-green-500 font-semibold mt-1">
-                    {t("smartboard.unlocked")}
+                    {t("ingenia.unlocked")}
                   </div>
                 )}
                 {redeemable && (
@@ -104,7 +104,7 @@ const RewardsGrid = ({ unlockedRewards, totalPoints, darkMode }) => {
                 )}
                 {!unlocked && !canAfford && (
                   <div className="text-xs text-[#64748B] mt-1">
-                    {t("smartboard.missing_points", {
+                    {t("ingenia.missing_points", {
                       count: r.cost - totalPoints,
                     })}
                   </div>

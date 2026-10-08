@@ -32,10 +32,10 @@ const SessionLog = ({ sessions, darkMode }) => {
             darkMode ? "text-[#94A3B8]" : "text-[#64748B]"
           }`}
         >
-          <span className="w-16">{t("smartboard.date")}</span>
-          <span className="w-16">{t("smartboard.start")}</span>
-          <span className="w-14">{t("smartboard.duration")}</span>
-          <span className="flex-1 text-right">{t("smartboard.subject")}</span>
+          <span className="w-16">{t("ingenia.date")}</span>
+          <span className="w-16">{t("ingenia.start")}</span>
+          <span className="w-14">{t("ingenia.duration")}</span>
+          <span className="flex-1 text-right">{t("ingenia.subject")}</span>
         </div>
         {recent.map((s, i) => {
           const start = s.start
@@ -53,7 +53,7 @@ const SessionLog = ({ sessions, darkMode }) => {
                 })
               : "-");
           const dur = s.duration ? `${s.duration} min` : "-";
-          const subj = s.subject || t("smartboard.general");
+          const subj = s.subject || t("ingenia.general");
           return (
             <div
               key={i}

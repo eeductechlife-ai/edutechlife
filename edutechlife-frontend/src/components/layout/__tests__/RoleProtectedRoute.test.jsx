@@ -65,7 +65,7 @@ const renderAt = (requiredRole, path = "/target") =>
           }
         />
         <Route path="/ialab" element={<div>ialab-home</div>} />
-        <Route path="/ingenia" element={<div>smartboard-home</div>} />
+        <Route path="/ingenia" element={<div>ingenia-home</div>} />
         <Route path="/login" element={<div>login-page</div>} />
       </Routes>
     </MemoryRouter>,
@@ -106,7 +106,7 @@ describe("RoleProtectedRoute product gate", () => {
       profile({ profile: { account_type: "smartboard" } }),
     );
     renderAt("ialab");
-    expect(await screen.findByText("smartboard-home")).toBeInTheDocument();
+    expect(await screen.findByText("ingenia-home")).toBeInTheDocument();
   });
 
   it("redirects an ialab account away from a smartboard route", async () => {

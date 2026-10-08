@@ -31,13 +31,13 @@ export default function IngenIATestimoniosSection({ t, testimonials }) {
         >
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-primary-light/10 to-mint/10 text-petroleum text-xs font-bold uppercase tracking-widest mb-3 border border-primary-light/10">
             <Icon name="fa-star" className="text-corporate text-xs" />
-            {t("smartboard.landing_testimonials_badge")}
+            {t("ingenia.landing_testimonials_badge")}
           </span>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight">
-            {t("smartboard.landing_testimonials_title_line1")}
+            {t("ingenia.landing_testimonials_title_line1")}
             <br />
             <span className="text-gradient-accent pr-1">
-              {t("smartboard.landing_testimonials_title_line2")}
+              {t("ingenia.landing_testimonials_title_line2")}
             </span>
           </h2>
         </motion.div>

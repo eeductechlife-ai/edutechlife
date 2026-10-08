@@ -250,7 +250,7 @@ The system automatically supports dark mode. Just add `.dark` class:
     📄 OralExamSimulator.jsx           ← Original (unchanged)
     📄 SmartBoardAnalytics.jsx         ← Original (unchanged)
   📄 index.css                      ← Already imports age-based-design.css
-  📄 SMARTBOARD_DESIGN_SYSTEM.md    ← Full documentation
+  📄 INGENIA_DESIGN_SYSTEM.md    ← Full documentation
 📄 AGE_ADAPTIVE_DESIGN_SUMMARY.md   ← Implementation overview
 📄 DESIGN_SYSTEM_QUICKSTART.md      ← This file
 ```
@@ -269,7 +269,7 @@ The system automatically supports dark mode. Just add `.dark` class:
 
 ## Need Help?
 
-- **Full Documentation**: Read `SMARTBOARD_DESIGN_SYSTEM.md`
+- **Full Documentation**: Read `INGENIA_DESIGN_SYSTEM.md`
 - **Implementation Overview**: Read `AGE_ADAPTIVE_DESIGN_SUMMARY.md`
 - **Color Validation**: Run `node src/styles/test-color-palettes.mjs`
 - **Contrast Checker**: Use `validateContrast()` function in browser console

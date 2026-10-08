@@ -53,8 +53,8 @@ require.cache[deepseekPath] = {
 function createApp() {
   const app = express();
   app.use(express.json({ limit: '8mb' }));
-  const smartboardRoutes = require('../../routes/smartboard');
-  app.use('/api/smartboard', smartboardRoutes);
+  const ingeniaRoutes = require('../../routes/ingenia');
+  app.use('/api/ingenia', ingeniaRoutes);
   return app;
 }
 
@@ -73,7 +73,7 @@ describe('GET /dani/history', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/dani/history')
+      .get('/api/ingenia/dani/history')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id');
 
@@ -107,7 +107,7 @@ describe('GET /dani/history', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/dani/history')
+      .get('/api/ingenia/dani/history')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id');
 
@@ -148,7 +148,7 @@ describe('GET /dani/history', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/dani/history')
+      .get('/api/ingenia/dani/history')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id');
 
@@ -177,7 +177,7 @@ describe('POST /dani/chat — validation', () => {
     });
 
     const res = await request(app)
-      .post('/api/smartboard/dani/chat')
+      .post('/api/ingenia/dani/chat')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id')
       .send({ message: '', studentId: 'student-1' });
@@ -202,7 +202,7 @@ describe('POST /dani/chat — validation', () => {
     });
 
     const res = await request(app)
-      .post('/api/smartboard/dani/chat')
+      .post('/api/ingenia/dani/chat')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id')
       .send({ message: 'Hola' });
@@ -238,7 +238,7 @@ describe('POST /dani/chat — validation', () => {
     });
 
     const res = await request(app)
-      .post('/api/smartboard/dani/chat')
+      .post('/api/ingenia/dani/chat')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id')
       .send({ message: 'Hola', studentId: 'student-other' });
@@ -259,7 +259,7 @@ describe('GET /user-role', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/user-role')
+      .get('/api/ingenia/user-role')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id');
 
@@ -280,7 +280,7 @@ describe('GET /user-role', () => {
     }));
 
     const res = await request(app)
-      .get('/api/smartboard/user-role')
+      .get('/api/ingenia/user-role')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id');
 
@@ -297,7 +297,7 @@ describe('GET /user-role', () => {
     });
 
     const res = await request(app)
-      .get('/api/smartboard/user-role')
+      .get('/api/ingenia/user-role')
       .set('Authorization', 'Bearer test-token')
       .set('x-test-user-id', 'test-user-id');
 

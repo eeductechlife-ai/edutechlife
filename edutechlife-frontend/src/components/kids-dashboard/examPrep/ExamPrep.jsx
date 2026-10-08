@@ -220,7 +220,7 @@ const ExamPrep = memo(({ onTabChange, dm = false }) => {
                     welcome: `📝 Vamos a prepararte para "${detailExam.name}", que ${when}. Tu meta es ${toFive(detailExam.desiredGrade)}. ¿Qué temas entran en el examen? Así armamos un plan y te hago preguntas de práctica.`,
                   });
                   // The dashboard opens Dani on this event (no #openDaniChat).
-                  window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+                  window.dispatchEvent(new CustomEvent("ingenia:open-dani"));
                 }}
                 onUploadMaterial={handleUploadMaterial}
                 dm={dm}

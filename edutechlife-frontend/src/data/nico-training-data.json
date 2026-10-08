@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "source": "Verificado contra edutechlife.co (textos i18n pricing/metodo/ecosystem, data/ialab.js, SmartBoardLandingData.js, rutas /vak /ingenia /ialab-academic).",
+  "source": "Verificado contra edutechlife.co (textos i18n pricing/metodo/ecosystem, data/ialab.js, IngenIALandingData.js, rutas /vak /ingenia /ialab-academic).",
   "identity": {
     "name": "Nico",
     "role": "Asistente virtual de EdutechLife en edutechlife.co",

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { callDeepseekSmartboard } from "../api";
+import { callDeepseekIngenia } from "../api";
 
 function mockFetchResponse(status, body) {
   return {
@@ -9,7 +9,7 @@ function mockFetchResponse(status, body) {
   };
 }
 
-describe("callDeepseekSmartboard — fallback a /api/ingenia/chat", () => {
+describe("callDeepseekIngenia — fallback a /api/ingenia/chat", () => {
   beforeEach(() => {
     sessionStorage.setItem("auth_token", "test-token");
     vi.stubGlobal("fetch", vi.fn());
@@ -27,7 +27,7 @@ describe("callDeepseekSmartboard — fallback a /api/ingenia/chat", () => {
       .mockResolvedValue(mockFetchResponse(200, { result: '{"ok":true}' }));
     vi.stubGlobal("fetch", fetchMock);
 
-    const result = await callDeepseekSmartboard(
+    const result = await callDeepseekIngenia(
       [{ role: "user", content: "hola" }],
       { isJson: true },
     );
@@ -51,7 +51,7 @@ describe("callDeepseekSmartboard — fallback a /api/ingenia/chat", () => {
       );
     vi.stubGlobal("fetch", fetchMock);
 
-    const result = await callDeepseekSmartboard([
+    const result = await callDeepseekIngenia([
       { role: "user", content: "hola" },
     ]);
 
@@ -76,7 +76,7 @@ describe("callDeepseekSmartboard — fallback a /api/ingenia/chat", () => {
       );
     vi.stubGlobal("fetch", fetchMock);
 
-    const result = await callDeepseekSmartboard(
+    const result = await callDeepseekIngenia(
       [{ role: "user", content: "genera plan" }],
       { isJson: true },
     );
@@ -93,7 +93,7 @@ describe("callDeepseekSmartboard — fallback a /api/ingenia/chat", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     await expect(
-      callDeepseekSmartboard([{ role: "user", content: "hola" }]),
+      callDeepseekIngenia([{ role: "user", content: "hola" }]),
     ).rejects.toThrow(
       "El servidor no reconoce los endpoints de IA del IngenIA.",
     );
@@ -108,7 +108,7 @@ describe("callDeepseekSmartboard — fallback a /api/ingenia/chat", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     await expect(
-      callDeepseekSmartboard([{ role: "user", content: "hola" }]),
+      callDeepseekIngenia([{ role: "user", content: "hola" }]),
     ).rejects.toMatchObject({
       message: "El servidor está ocupado. Intenta de nuevo en un momento.",
       status: 500,

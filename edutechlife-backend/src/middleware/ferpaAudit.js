@@ -1,11 +1,11 @@
 const supabase = require('../db/supabase');
 
 const EDUCATIONAL_ENDPOINTS = [
-  '/api/smartboard/student-profile',
-  '/api/smartboard/progress',
-  '/api/smartboard/data',
-  '/api/smartboard/export-user-data',
-  '/api/smartboard/vak',
+  '/api/ingenia/student-profile',
+  '/api/ingenia/progress',
+  '/api/ingenia/data',
+  '/api/ingenia/export-user-data',
+  '/api/ingenia/vak',
   '/api/admin/users',
 ];
 
@@ -28,7 +28,7 @@ function requestorType(req) {
  * Non-blocking — audit failures never interrupt the request.
  */
 function ferpaAuditLog(req, res, next) {
-  const matched = EDUCATIONAL_ENDPOINTS.some((ep) => req.path.startsWith(ep.replace('/api/smartboard', '').replace('/api/admin', '')));
+  const matched = EDUCATIONAL_ENDPOINTS.some((ep) => req.path.startsWith(ep.replace('/api/ingenia', '').replace('/api/admin', '')));
   if (!matched) return next();
 
   res.on('finish', () => {

@@ -48,7 +48,7 @@ const HomeView = memo(
                 className="text-xl font-bold text-white font-montserrat mb-1"
                 dangerouslySetInnerHTML={{
                   __html: sanitize(
-                    t("smartboard.bienvenido", { name: studentName }),
+                    t("ingenia.bienvenido", { name: studentName }),
                   ),
                 }}
               />
@@ -56,7 +56,7 @@ const HomeView = memo(
                 className="text-white/80 text-sm font-open-sans"
                 dangerouslySetInnerHTML={{
                   __html: sanitize(
-                    t("smartboard.today_missions", {
+                    t("ingenia.today_missions", {
                       count: missions.filter((m) => !m.completed && !m.locked)
                         .length,
                       subjects: subjects.filter(
@@ -73,7 +73,7 @@ const HomeView = memo(
                   {userLevel}
                 </p>
                 <p className="text-xs text-white/70 font-open-sans">
-                  {t("smartboard.level_label")}
+                  {t("ingenia.level_label")}
                 </p>
               </div>
               <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
@@ -92,7 +92,7 @@ const HomeView = memo(
                 transition={{ duration: 2, repeat: Infinity }}
               />
               <span className="text-sm text-[#64748B] font-open-sans">
-                {t("smartboard.valeria_ready")}
+                {t("ingenia.valeria_ready")}
               </span>
             </div>
             <div className="flex gap-2">
@@ -101,20 +101,20 @@ const HomeView = memo(
                 className="px-4 py-2 bg-[#4DA8C4]/10 text-[#4DA8C4] rounded-lg text-sm font-semibold hover:bg-[#4DA8C4]/20 transition-all"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                aria-label={t("smartboard.chat_valeria")}
+                aria-label={t("ingenia.chat_valeria")}
               >
                 <MessageCircle className="w-4 h-4 inline mr-1" />
-                {t("smartboard.chat_valeria")}
+                {t("ingenia.chat_valeria")}
               </motion.button>
               <motion.button
                 onClick={() => onNavigate("vak")}
                 className="px-4 py-2 bg-[#66CCCC]/10 text-[#004B63] rounded-lg text-sm font-semibold hover:bg-[#66CCCC]/20 transition-all"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                aria-label={t("smartboard.diagnostico_vak")}
+                aria-label={t("ingenia.diagnostico_vak")}
               >
                 <Brain className="w-4 h-4 inline mr-1" />
-                {t("smartboard.diagnostico_vak")}
+                {t("ingenia.diagnostico_vak")}
               </motion.button>
             </div>
           </div>
@@ -124,21 +124,21 @@ const HomeView = memo(
           {[
             {
               icon: Target,
-              label: t("smartboard.missions_label"),
+              label: t("ingenia.missions_label"),
               count: missions.filter((m) => !m.completed).length,
               gradient: "from-[#4DA8C4] to-[#66CCCC]",
               onClick: () => onNavigate("misiones"),
             },
             {
               icon: BookOpen,
-              label: t("smartboard.your_subjects"),
+              label: t("ingenia.your_subjects"),
               count: subjects.length,
               gradient: "from-[#66CCCC] to-[#004B63]",
               onClick: () => onNavigate("materias"),
             },
             {
               icon: Download,
-              label: t("smartboard.download_report"),
+              label: t("ingenia.download_report"),
               count: "PDF",
               gradient: "from-[#FFD166] to-[#FF8E53]",
               onClick: onGenerateReport,
@@ -169,9 +169,7 @@ const HomeView = memo(
               <p className="font-semibold text-[#004B63]">{action.label}</p>
               <p className="text-xs text-[#64748B]">
                 {action.count}{" "}
-                {typeof action.count === "number"
-                  ? t("smartboard.pending")
-                  : ""}
+                {typeof action.count === "number" ? t("ingenia.pending") : ""}
               </p>
             </motion.button>
           ))}
@@ -180,14 +178,14 @@ const HomeView = memo(
         <GlassCard animate delay={0.3}>
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-bold text-[#004B63] font-montserrat">
-              {t("smartboard.missions_day")}
+              {t("ingenia.missions_day")}
             </h3>
             <button
               onClick={() => onNavigate("misiones")}
               className="text-sm text-[#4DA8C4] font-semibold hover:underline"
-              aria-label={t("smartboard.view_all")}
+              aria-label={t("ingenia.view_all")}
             >
-              {t("smartboard.view_all")} →
+              {t("ingenia.view_all")} →
             </button>
           </div>
           <div className="space-y-4">

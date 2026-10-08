@@ -189,7 +189,7 @@ describe('Stripe service', () => {
       expect(result).toEqual({ userId: 'u1', planId: 'pro', subscriptionId: 'sub_123', status: 'active' });
     });
 
-    it('persists SmartBoard plan to the students table (independent from users)', async () => {
+    it('persists IngenIA plan to the students table (independent from users)', async () => {
       const event = {
         type: 'checkout.session.completed',
         data: {

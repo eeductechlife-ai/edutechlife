@@ -24,7 +24,7 @@ const { runAllDetectors, resolveWarning } = require('../../services/earlyWarning
 
 const router = Router();
 
-// GET /api/smartboard/adaptive/state?studentId=uuid
+// GET /api/ingenia/adaptive/state?studentId=uuid
 router.get('/adaptive/state', requireAuth, requireStudentAccess, async (req, res) => {
   try {
     const { studentId } = req.query;
@@ -37,7 +37,7 @@ router.get('/adaptive/state', requireAuth, requireStudentAccess, async (req, res
   }
 });
 
-// GET /api/smartboard/adaptive/next-action?studentId=uuid
+// GET /api/ingenia/adaptive/next-action?studentId=uuid
 router.get('/adaptive/next-action', requireAuth, requireStudentAccess, async (req, res) => {
   try {
     const { studentId } = req.query;
@@ -50,7 +50,7 @@ router.get('/adaptive/next-action', requireAuth, requireStudentAccess, async (re
   }
 });
 
-// POST /api/smartboard/adaptive/daily-plan
+// POST /api/ingenia/adaptive/daily-plan
 // Body: { studentId, availableMinutes }
 router.post('/adaptive/daily-plan', requireAuth, requireStudentAccess, async (req, res) => {
   try {
@@ -67,7 +67,7 @@ router.post('/adaptive/daily-plan', requireAuth, requireStudentAccess, async (re
   }
 });
 
-// POST /api/smartboard/adaptive/weekly-plan
+// POST /api/ingenia/adaptive/weekly-plan
 // Body: { studentId, availableMinutesPerDay }
 router.post('/adaptive/weekly-plan', requireAuth, requireStudentAccess, async (req, res) => {
   try {
@@ -84,7 +84,7 @@ router.post('/adaptive/weekly-plan', requireAuth, requireStudentAccess, async (r
   }
 });
 
-// POST /api/smartboard/adaptive/improvement-plan
+// POST /api/ingenia/adaptive/improvement-plan
 // Body: { studentId, vakStyle }
 // Genera el "Mi Plan" de 4 semanas desde el motor adaptativo (una competencia
 // foco por semana) y lo persiste en learning_plans (type='monthly').
@@ -101,7 +101,7 @@ router.post('/adaptive/improvement-plan', requireAuth, requireStudentAccess, asy
   }
 });
 
-// POST /api/smartboard/adaptive/improvement-plan/resequence
+// POST /api/ingenia/adaptive/improvement-plan/resequence
 // Body: { studentId, vakStyle }
 // Reordena las semanas según el dominio actual conservando el progreso.
 router.post('/adaptive/improvement-plan/resequence', requireAuth, requireStudentAccess, async (req, res) => {
@@ -130,7 +130,7 @@ router.post('/adaptive/recommendations', requireAuth, requireStudentAccess, asyn
   }
 });
 
-// GET /api/smartboard/adaptive/mastery?subject=matematicas
+// GET /api/ingenia/adaptive/mastery?subject=matematicas
 router.get('/adaptive/mastery', requireAuth, requireStudentAccess, async (req, res) => {
   try {
     const { studentId, subject } = req.query;
@@ -143,7 +143,7 @@ router.get('/adaptive/mastery', requireAuth, requireStudentAccess, async (req, r
   }
 });
 
-// POST /api/smartboard/adaptive/mastery
+// POST /api/ingenia/adaptive/mastery
 // Body: { studentId, competencyId, score } OR { studentId, entries: [{competencyId, score}] }
 router.post('/adaptive/mastery', requireAuth, requireStudentAccess, requireVerifiedParentalConsent, async (req, res) => {
   try {
@@ -173,7 +173,7 @@ router.post('/adaptive/mastery', requireAuth, requireStudentAccess, requireVerif
 });
 
 /**
- * GET /api/smartboard/adaptive/warnings?studentId=uuid
+ * GET /api/ingenia/adaptive/warnings?studentId=uuid
  * Runs all 4 detectors and returns active (unresolved) warnings.
  */
 router.get('/adaptive/warnings', requireAuth, requireStudentAccess, requireVerifiedParentalConsent, async (req, res) => {
@@ -189,7 +189,7 @@ router.get('/adaptive/warnings', requireAuth, requireStudentAccess, requireVerif
 });
 
 /**
- * POST /api/smartboard/adaptive/warnings/:id/resolve
+ * POST /api/ingenia/adaptive/warnings/:id/resolve
  * Mark a warning as resolved.
  */
 router.post('/adaptive/warnings/:id/resolve', requireAuth, async (req, res) => {
@@ -217,7 +217,7 @@ router.post('/adaptive/warnings/:id/resolve', requireAuth, async (req, res) => {
   }
 });
 
-// GET /api/smartboard/competencies?subject=matematicas&grade=7
+// GET /api/ingenia/competencies?subject=matematicas&grade=7
 router.get('/competencies', requireAuth, async (req, res) => {
   try {
     const { subject, grade } = req.query;

@@ -36,7 +36,7 @@ import {
   useLearningStreaks,
   useUpsertStreak,
   useSyncAchievement,
-  useSmartboardSettings,
+  useIngeniaSettings,
   useUpdateSettings,
   useTotalPoints,
   useSessionsData,
@@ -158,7 +158,7 @@ export const IngenIAKidsProvider = ({ children }) => {
   const sessionsDataQuery = useSessionsData();
   const achievementsQuery = useAchievements();
   const learningStreaksQuery = useLearningStreaks();
-  const settingsQuery = useSmartboardSettings();
+  const settingsQuery = useIngeniaSettings();
   const addPointsMutation = useAddPointsMutation();
   const setVAKMutation = useSetVAKResult();
   const sessionCreateMutation = useSessionCreateMutation();

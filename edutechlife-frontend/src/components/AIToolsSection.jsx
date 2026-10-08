@@ -24,34 +24,34 @@ function AIToolsSection() {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  const [isHoveredSmartboard, setIsHoveredSmartboard] = useState(false);
-  const [isVideoErrorSmartboard, setIsVideoErrorSmartboard] = useState(false);
-  const [isMobileVideoSmartboard, setIsMobileVideoSmartboard] = useState(false);
-  const videoRefSmartboard = useRef(null);
+  const [isHoveredIngenia, setIsHoveredIngenia] = useState(false);
+  const [isVideoErrorIngenia, setIsVideoErrorIngenia] = useState(false);
+  const [isMobileVideoIngenia, setIsMobileVideoIngenia] = useState(false);
+  const videoRefIngenia = useRef(null);
 
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
   const handleMouseLeave = useCallback(() => setIsHovered(false), []);
-  const handleMouseEnterSmartboard = useCallback(() => {
-    setIsVideoErrorSmartboard(false);
-    setIsHoveredSmartboard(true);
+  const handleMouseEnterIngenia = useCallback(() => {
+    setIsVideoErrorIngenia(false);
+    setIsHoveredIngenia(true);
   }, []);
-  const handleMouseLeaveSmartboard = useCallback(
-    () => setIsHoveredSmartboard(false),
+  const handleMouseLeaveIngenia = useCallback(
+    () => setIsHoveredIngenia(false),
     [],
   );
 
   const handleClick = useCallback(() => {
     if (!isDesktop) setIsMobileVideoVisible((prev) => !prev);
   }, [isDesktop]);
-  const handleClickSmartboard = useCallback(() => {
-    if (!isDesktop) setIsMobileVideoSmartboard((prev) => !prev);
+  const handleClickIngenia = useCallback(() => {
+    if (!isDesktop) setIsMobileVideoIngenia((prev) => !prev);
   }, [isDesktop]);
 
   const showVideo =
     !isVideoError && (isDesktop ? isHovered : isMobileVideoVisible);
-  const showVideoSmartboard =
-    !isVideoErrorSmartboard &&
-    (isDesktop ? isHoveredSmartboard : isMobileVideoSmartboard);
+  const showVideoIngenia =
+    !isVideoErrorIngenia &&
+    (isDesktop ? isHoveredIngenia : isMobileVideoIngenia);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -66,15 +66,15 @@ function AIToolsSection() {
   }, [showVideo]);
 
   useEffect(() => {
-    const video = videoRefSmartboard.current;
+    const video = videoRefIngenia.current;
     if (!video) return;
-    if (showVideoSmartboard) {
+    if (showVideoIngenia) {
       video.play().catch(() => {});
     } else {
       video.pause();
       video.currentTime = 0;
     }
-  }, [showVideoSmartboard]);
+  }, [showVideoIngenia]);
 
   const tools = [
     {
@@ -114,7 +114,7 @@ function AIToolsSection() {
       variant: "white-card-vak",
     },
     {
-      id: "smartboard",
+      id: "ingenia",
       name: t("ai_tools.card_4_name"),
       subtitle: t("ai_tools.card_4_subtitle"),
       path: "/conoce-ingenia",
@@ -378,23 +378,23 @@ function AIToolsSection() {
               (anidaría un control interactivo en otro) y el foco del enlace también muestra el video. */}
           <motion.div
             variants={itemVariants}
-            onMouseEnter={handleMouseEnterSmartboard}
-            onMouseLeave={handleMouseLeaveSmartboard}
-            onClick={handleClickSmartboard}
-            onFocus={handleMouseEnterSmartboard}
-            onBlur={handleMouseLeaveSmartboard}
+            onMouseEnter={handleMouseEnterIngenia}
+            onMouseLeave={handleMouseLeaveIngenia}
+            onClick={handleClickIngenia}
+            onFocus={handleMouseEnterIngenia}
+            onBlur={handleMouseLeaveIngenia}
             className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none order-2 md:order-4 md:col-span-2 card-clay bg-primary-light/5 relative overflow-hidden cursor-pointer"
           >
-            {!isVideoErrorSmartboard && (
+            {!isVideoErrorIngenia && (
               <video
-                ref={videoRefSmartboard}
+                ref={videoRefIngenia}
                 muted
                 loop
                 playsInline
                 preload="none"
-                onError={() => setIsVideoErrorSmartboard(true)}
+                onError={() => setIsVideoErrorIngenia(true)}
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-                  showVideoSmartboard ? "opacity-100 z-20" : "opacity-0 z-0"
+                  showVideoIngenia ? "opacity-100 z-20" : "opacity-0 z-0"
                 }`}
               >
                 <source src="/smarboard.mp4" type="video/mp4" />
@@ -438,9 +438,9 @@ function AIToolsSection() {
             </div>
 
             <AnimatePresence>
-              {showVideoSmartboard && (
+              {showVideoIngenia && (
                 <motion.div
-                  key="overlay-smartboard"
+                  key="overlay-ingenia"
                   initial={prefersReducedMotion ? {} : { opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={prefersReducedMotion ? {} : { opacity: 0 }}

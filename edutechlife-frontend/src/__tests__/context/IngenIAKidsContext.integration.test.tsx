@@ -1,7 +1,7 @@
 /**
- * Fase 3 SmartBoard Context Integration Tests
+ * Fase 3 IngenIA Context Integration Tests
  *
- * Test Suite: 28 tests covering critical SmartBoard features
+ * Test Suite: 28 tests covering critical IngenIA features
  * - Session Lifecycle (8 tests): Create on mount, end on unmount, handle DB writes, verify timestamps
  * - Academic Context Sync (7 tests): Upsert per subject, dedup, handle race conditions
  * - Achievements Visibility (6 tests): Display in RewardsGrid, cache invalidation, dedup
@@ -202,7 +202,7 @@ function createMockSupabaseClient() {
 // TEST SUITE 1: SESSION LIFECYCLE (8 tests)
 // =============================================================================
 
-describe("SmartBoard Fase 3 — Session Lifecycle", () => {
+describe("IngenIA Fase 3 — Session Lifecycle", () => {
   let testStudent: TestStudent;
 
   beforeAll(async () => {
@@ -213,10 +213,10 @@ describe("SmartBoard Fase 3 — Session Lifecycle", () => {
     await deleteTestStudent(testStudent.student_id);
   });
 
-  // [1.1] Create session on SmartBoard mount
-  it("[1.1] creates session in DB on SmartBoardKidsProvider mount", async () => {
+  // [1.1] Create session on IngenIA mount
+  it("[1.1] creates session in DB on IngenIAKidsProvider mount", async () => {
     /**
-     * Test: When SmartBoardKidsProvider mounts and dataLoaded=true,
+     * Test: When IngenIAKidsProvider mounts and dataLoaded=true,
      * it should create a session record in the database with:
      * - student_id matching current student
      * - subject = 'dashboard'
@@ -227,7 +227,7 @@ describe("SmartBoard Fase 3 — Session Lifecycle", () => {
      * Assertion: SELECT sessions WHERE student_id = ? → 1 row with start_time
      */
     expect(testStudent.student_id).toBeDefined();
-    // In a real test, this would render SmartBoardKidsProvider and verify DB insert
+    // In a real test, this would render IngenIAKidsProvider and verify DB insert
     // For now, verify the mock structure is in place
     const mockSupabase = createMockSupabaseClient();
     expect(mockSupabase.from).toBeDefined();
@@ -237,13 +237,13 @@ describe("SmartBoard Fase 3 — Session Lifecycle", () => {
   it("[1.2] idempotent on StrictMode double-mount (isSessionInitializedRef prevents double-create)", () => {
     /**
      * Test: React 18 StrictMode double-mounts effects in dev mode.
-     * SmartBoardKidsContext uses isSessionInitializedRef to gate session creation,
+     * IngenIAKidsContext uses isSessionInitializedRef to gate session creation,
      * ensuring only ONE session is created even if useEffect runs twice.
      *
      * Assertion: isSessionInitializedRef.current starts false, becomes true after first mount,
      * remains true on second mount → only one sessionCreateMutation.mutate() call
      */
-    // Mocking the ref pattern used in SmartBoardKidsContext
+    // Mocking the ref pattern used in IngenIAKidsContext
     let sessionInitialized = false;
     const initSession = () => {
       if (sessionInitialized) return; // Guard: prevent double-init
@@ -260,7 +260,7 @@ describe("SmartBoard Fase 3 — Session Lifecycle", () => {
   // [1.3] End session with end_time on unmount
   it("[1.3] ends session with end_time and duration_minutes on unmount", async () => {
     /**
-     * Test: When SmartBoardKidsProvider unmounts, cleanup effect should:
+     * Test: When IngenIAKidsProvider unmounts, cleanup effect should:
      * - Call sessionEndMutation.mutate({ sessionId, completion_percentage })
      * - DB triggers calculate end_time and duration_minutes
      * - end_time should be NOW
@@ -345,7 +345,7 @@ describe("SmartBoard Fase 3 — Session Lifecycle", () => {
   // [1.6] Verify start_time is ISO 8601 format
   it("[1.6] records start_time in ISO 8601 format (YYYY-MM-DDTHH:MM:SS.sssZ)", () => {
     /**
-     * Test: All timestamps in SmartBoard should be ISO 8601 for consistency.
+     * Test: All timestamps in IngenIA should be ISO 8601 for consistency.
      * new Date().toISOString() produces this format.
      *
      * Assertion: Timestamp matches regex /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
@@ -414,7 +414,7 @@ describe("SmartBoard Fase 3 — Session Lifecycle", () => {
 // TEST SUITE 2: ACADEMIC CONTEXT SYNC (7 tests)
 // =============================================================================
 
-describe("SmartBoard Fase 3 — Academic Context Sync", () => {
+describe("IngenIA Fase 3 — Academic Context Sync", () => {
   let testStudent: TestStudent;
 
   beforeAll(async () => {
@@ -598,7 +598,7 @@ describe("SmartBoard Fase 3 — Academic Context Sync", () => {
 // TEST SUITE 3: ACHIEVEMENTS VISIBILITY (6 tests)
 // =============================================================================
 
-describe("SmartBoard Fase 3 — Achievements Visibility", () => {
+describe("IngenIA Fase 3 — Achievements Visibility", () => {
   let testStudent: TestStudent;
   let invalidateQueries = vi.fn();
 
@@ -702,7 +702,7 @@ describe("SmartBoard Fase 3 — Achievements Visibility", () => {
      * Assertion: screen.getByText('Consistente') — second achievement title
      * Assertion: screen.getByText('Conoces tu Estilo') — third achievement title
      *
-     * NOTE: Actual component rendering requires full SmartBoardKidsProvider,
+     * NOTE: Actual component rendering requires full IngenIAKidsProvider,
      * skipping in this unit test mode.
      */
     const mockAchievements = [
@@ -815,7 +815,7 @@ describe("SmartBoard Fase 3 — Achievements Visibility", () => {
 // TEST SUITE 4: RLS POLICY VERIFICATION (5 tests)
 // =============================================================================
 
-describe("SmartBoard Fase 3 — RLS Policy Verification", () => {
+describe("IngenIA Fase 3 — RLS Policy Verification", () => {
   let student1: TestStudent;
   let student2: TestStudent;
 
@@ -972,7 +972,7 @@ describe("SmartBoard Fase 3 — RLS Policy Verification", () => {
 // TEST SUITE 5: INFRASTRUCTURE & ERROR HANDLING (2 tests)
 // =============================================================================
 
-describe("SmartBoard Fase 3 — Infrastructure", () => {
+describe("IngenIA Fase 3 — Infrastructure", () => {
   // [5.1] Mock vs Real Supabase environment detection
   it("[5.1] detects and adapts to mock vs real Supabase environment", () => {
     /**

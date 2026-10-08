@@ -1,6 +1,31 @@
 const TABLE_NAME = "smartboard_kids_data";
 
-const SYNC_QUEUE_KEY = "smartboard_sync_queue";
+const SYNC_QUEUE_KEY = "ingenia_sync_queue";
+// Nombre anterior de la cola (cuando el producto se llamaba SmartBoard). Puede
+// haber operaciones sin sincronizar guardadas con él: se leen y se pasan a la
+// clave nueva para no perder datos del estudiante.
+const LEGACY_SYNC_QUEUE_KEY = "smartboard_sync_queue";
+
+const readSyncQueue = () => {
+  const queue = JSON.parse(localStorage.getItem(SYNC_QUEUE_KEY) || "[]");
+  let legacy = [];
+  try {
+    legacy = JSON.parse(localStorage.getItem(LEGACY_SYNC_QUEUE_KEY) || "[]");
+  } catch {
+    legacy = [];
+  }
+  return Array.isArray(legacy) && legacy.length ? [...legacy, ...queue] : queue;
+};
+
+const writeSyncQueue = (queue) => {
+  localStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify(queue));
+  localStorage.removeItem(LEGACY_SYNC_QUEUE_KEY);
+};
+
+const clearSyncQueue = () => {
+  localStorage.removeItem(SYNC_QUEUE_KEY);
+  localStorage.removeItem(LEGACY_SYNC_QUEUE_KEY);
+};
 
 const getDefaultData = () => ({
   daniChatHistory: [],
@@ -131,9 +156,9 @@ export const saveToSupabase = async (supabase, userId, kidsData) => {
 
 export const queueSyncOperation = (operation) => {
   try {
-    const queue = JSON.parse(localStorage.getItem(SYNC_QUEUE_KEY) || "[]");
+    const queue = readSyncQueue();
     queue.push({ ...operation, queuedAt: new Date().toISOString() });
-    localStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify(queue));
+    writeSyncQueue(queue);
   } catch (error) {
     console.error("Error encolando operación IngenIA:", error);
   }
@@ -145,13 +170,13 @@ export const processSyncQueue = async (supabase, userId, currentData) => {
   }
 
   try {
-    const queue = JSON.parse(localStorage.getItem(SYNC_QUEUE_KEY) || "[]");
+    const queue = readSyncQueue();
     if (queue.length === 0) return { success: true, processed: 0 };
 
     const result = await saveToSupabase(supabase, userId, currentData);
 
     if (result.success) {
-      localStorage.removeItem(SYNC_QUEUE_KEY);
+      clearSyncQueue();
     }
 
     return {

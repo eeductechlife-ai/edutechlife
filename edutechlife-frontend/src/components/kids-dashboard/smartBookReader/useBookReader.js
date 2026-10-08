@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { extractDocumentText } from "../../../utils/documentParser";
-import { callDeepseekSmartboard } from "../../../utils/api";
+import { callDeepseekIngenia } from "../../../utils/api";
 
 export function useBookReader() {
   const {
@@ -45,7 +45,7 @@ export function useBookReader() {
         },
       ];
       setStep(2);
-      const r = await callDeepseekSmartboard(messages, {
+      const r = await callDeepseekIngenia(messages, {
         temperature: 0.3,
         maxTokens: 1500,
         isJson: true,

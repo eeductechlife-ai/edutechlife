@@ -135,7 +135,7 @@ async function logCrisisIncident(supabase, studentId, studentAge, detectedConten
  * verificado y habilita el registro de la cuenta de padre.
  */
 async function sendConsentVerificationEmail({ parentEmail, studentAge, token }) {
-  const verifyUrl = `https://edutechlife.co/api/smartboard/parental-consent/verify?token=${token}`;
+  const verifyUrl = `https://edutechlife.co/api/ingenia/parental-consent/verify?token=${token}`;
   const html = `
     <p>Recibimos una solicitud de consentimiento para un estudiante de IngenIA (edad: ${studentAge}).</p>
     <p>Para activar la cuenta, verifica tu consentimiento:</p>

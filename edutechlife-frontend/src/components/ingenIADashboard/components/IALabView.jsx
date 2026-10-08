@@ -9,29 +9,29 @@ const IALabView = memo(({ onNavigate }) => {
     <div className="space-y-6">
       <GlassCard animate>
         <h3 className="text-xl font-bold text-[#004B63] font-montserrat mb-4">
-          {t("smartboard.ialab_title")}
+          {t("ingenia.ialab_title")}
         </h3>
-        <p className="text-[#64748B] mb-6">{t("smartboard.ialab_desc")}</p>
+        <p className="text-[#64748B] mb-6">{t("ingenia.ialab_desc")}</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
             {
               icon: "🤖",
-              title: t("smartboard.chat_valeria_title"),
-              desc: t("smartboard.chat_valeria_desc"),
+              title: t("ingenia.chat_valeria_title"),
+              desc: t("ingenia.chat_valeria_desc"),
               gradient: "from-[#4DA8C4]/10 to-[#004B63]/5",
               action: () => onNavigate("lab-ia"),
             },
             {
               icon: "🧠",
-              title: t("smartboard.vak_title"),
-              desc: t("smartboard.vak_desc"),
+              title: t("ingenia.vak_title"),
+              desc: t("ingenia.vak_desc"),
               gradient: "from-[#66CCCC]/10 to-[#4DA8C4]/5",
               action: () => onNavigate("vak"),
             },
             {
               icon: "🏆",
-              title: t("smartboard.ialab_pro_title"),
-              desc: t("smartboard.ialab_pro_desc"),
+              title: t("ingenia.ialab_pro_title"),
+              desc: t("ingenia.ialab_pro_desc"),
               gradient: "from-[#FFD166]/10 to-[#FF8E53]/5",
               action: () => onNavigate("ialab"),
             },

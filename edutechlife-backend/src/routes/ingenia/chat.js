@@ -176,7 +176,7 @@ router.post('/chat/stream', requireAuth, requireVerifiedParentalConsent, async (
 });
 
 /**
- * POST /api/smartboard/ai
+ * POST /api/ingenia/ai
  * General AI endpoint for IngenIA components (OralExam, Podcast, ImprovementPlan, etc.)
  * Requires auth + verified parental consent. Accepts full messages array like /api/chat.
  */
@@ -214,7 +214,7 @@ router.post('/ai', requireAuth, requireVerifiedParentalConsent, async (req, res)
 });
 
 /**
- * GET /api/smartboard/dani/history
+ * GET /api/ingenia/dani/history
  * Load recent Dani chat history for the authenticated student.
  */
 router.get('/dani/history', requireAuth, async (req, res) => {
@@ -255,7 +255,7 @@ router.get('/dani/history', requireAuth, async (req, res) => {
 });
 
 /**
- * POST /api/smartboard/dani/chat
+ * POST /api/ingenia/dani/chat
  * Orchestrated Dani endpoint. Frontend sends minimal payload; backend builds full context.
  * Body: { message, studentId, socraticMode?, documentContext?, history? }
  */

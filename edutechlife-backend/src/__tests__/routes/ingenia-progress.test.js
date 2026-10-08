@@ -23,8 +23,8 @@ require.cache[dbPath] = {
   loaded: true,
   exports: { from: (...a) => current.from(...a) },
 };
-delete require.cache[require.resolve('../../routes/smartboard/progress')];
-const router = require('../../routes/smartboard/progress');
+delete require.cache[require.resolve('../../routes/ingenia/progress')];
+const router = require('../../routes/ingenia/progress');
 
 const app = express();
 app.use(express.json());

@@ -1,8 +1,8 @@
-# SmartBoard Age-Adaptive Design System
+# IngenIA Age-Adaptive Design System
 
 ## Overview
 
-The SmartBoard design system provides visually optimized interfaces for three distinct age groups:
+The IngenIA design system provides visually optimized interfaces for three distinct age groups:
 
 - **Primary (6-9 years)**: Bright, playful, large touch targets
 - **Intermediate (10-13 years)**: Balanced modern design with smooth transitions
@@ -42,7 +42,7 @@ All designs are **WCAG 2.1 AA compliant** with proper contrast ratios, accessibi
    - Difficulty-appropriate feedback messaging
 
 5. **`src/components/kids-dashboard/AgeAdaptiveAnalytics.jsx`**
-   - Wraps `SmartBoardAnalytics` with age-specific charts
+   - Wraps `IngenIAAnalytics` with age-specific charts
    - Chart height adjustments (220px → 160px)
    - Color intensity and label sizing
    - Metric card styling and information density
@@ -434,7 +434,7 @@ import AgeAdaptivePointsRewards from './components/kids-dashboard/AgeAdaptivePoi
 import AgeAdaptiveOralExam from './components/kids-dashboard/AgeAdaptiveOralExam';
 import AgeAdaptiveAnalytics from './components/kids-dashboard/AgeAdaptiveAnalytics';
 
-export default function SmartBoardDashboard({ studentAge }) {
+export default function IngenIADashboard({ studentAge }) {
   return (
     <>
       <AgeAdaptiveAnalytics studentAge={studentAge} />

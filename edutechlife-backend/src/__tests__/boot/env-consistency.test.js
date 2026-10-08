@@ -3,7 +3,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..', '..');
 
-const SMARTBOARD_SERVICES = [
+const INGENIA_SERVICES = [
   'src/services/adaptiveLearning.js',
   'src/services/badgeEngine.js',
   'src/services/missionEngine.js',
@@ -16,8 +16,8 @@ const SMARTBOARD_SERVICES = [
 
 const CANONICAL = 'SUPABASE_SERVICE_ROLE_KEY';
 
-describe('env consistency — SmartBoard boot', () => {
-  describe.each(SMARTBOARD_SERVICES)('%s', (rel) => {
+describe('env consistency — IngenIA boot', () => {
+  describe.each(INGENIA_SERVICES)('%s', (rel) => {
     it('lee la env var canónica SUPABASE_SERVICE_ROLE_KEY', () => {
       const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
       expect(src).toContain(CANONICAL);

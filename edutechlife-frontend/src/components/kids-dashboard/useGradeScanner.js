@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { callDeepseekSmartboard } from "../../utils/api";
+import { callDeepseekIngenia } from "../../utils/api";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { useStudentGradesPersistence } from "../../hooks/useStudentGradesPersistence";
@@ -324,7 +324,7 @@ export function useGradeScanner() {
     const vakStyle = vakResult?.predominantStyle || vakResult?.dominant || null;
     const prompt = buildAnalysisPrompt({ grades, vakStyle, SUBJECTS });
     try {
-      const res = await callDeepseekSmartboard(
+      const res = await callDeepseekIngenia(
         [{ role: "user", content: prompt }],
         { temperature: 0.7, maxTokens: 2500, isJson: true },
       );

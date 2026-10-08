@@ -7,7 +7,7 @@ vi.mock("../../../i18n/I18nProvider", () => ({
 vi.mock("../../../context/IngenIAKidsContext", () => ({
   useIngenIAKids: () => ({ darkMode: false, addPoints: vi.fn() }),
 }));
-vi.mock("../../../utils/api", () => ({ callDeepseekSmartboard: vi.fn() }));
+vi.mock("../../../utils/api", () => ({ callDeepseekIngenia: vi.fn() }));
 vi.mock("../../../utils/speech", () => ({
   speakTextConversational: vi.fn(),
   stopSpeech: vi.fn(),

@@ -198,7 +198,7 @@ async function generateParentInsights(studentId) {
         title: `Plan activo: ${subjectName}`,
         severity: "info",
         what: `El plan de aprendizaje actual está enfocado en ${subjectName}${activities.length > 1 ? ` con ${activities.length} actividades programadas` : ""}.`,
-        why: "SmartBoard priorizó esta materia según el estado actual de dominio y las necesidades de aprendizaje detectadas.",
+        why: "IngenIA priorizó esta materia según el estado actual de dominio y las necesidades de aprendizaje detectadas.",
         action: "Revisa el plan con tu hijo(a) para que sepa qué esperar esta semana y puedas acompañarlo(a).",
         evidence: `Plan generado el ${plan.generated_at ? new Date(plan.generated_at).toLocaleDateString("es-CO") : "recientemente"}.`,
         actionLabel: "Ver plan completo",

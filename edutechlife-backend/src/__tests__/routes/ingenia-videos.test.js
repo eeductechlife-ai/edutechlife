@@ -18,10 +18,10 @@ require.cache[authPath] = {
 const { rankVideos, isoDurationToSeconds, _cache } = require('../../services/youtubeVideos');
 
 function buildApp() {
-  const routePath = require.resolve('../../routes/smartboard/videos');
+  const routePath = require.resolve('../../routes/ingenia/videos');
   delete require.cache[routePath];
   const app = express();
-  app.use('/api/ingenia', require('../../routes/smartboard/videos'));
+  app.use('/api/ingenia', require('../../routes/ingenia/videos'));
   return app;
 }
 

@@ -115,7 +115,7 @@ export async function generateStudySummaryFromImage(imageBase64, opts = {}) {
   const timeoutId = setTimeout(() => controller.abort(), 60000);
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/smartboard/scan`, {
+    const response = await fetch(`${API_BASE_URL}/api/ingenia/scan`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

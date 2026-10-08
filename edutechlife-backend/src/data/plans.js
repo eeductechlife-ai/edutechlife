@@ -31,7 +31,7 @@ const PLANS = [
     name: 'IngenIA Premium',
     price: 19900,
     currency: 'usd',
-    priceId: process.env.STRIPE_SMARTBOARD_PRICE_ID || 'price_smartboard',
+    priceId: process.env.STRIPE_INGENIA_PRICE_ID || process.env.STRIPE_SMARTBOARD_PRICE_ID || 'price_smartboard',
     description: 'Para que tu hijo aprenda a su manera, y tú lo veas avanzar',
     features: [
       'Reporte semanal de progreso a tu correo',

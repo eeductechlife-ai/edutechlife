@@ -84,23 +84,23 @@ const IngenIAStatsPage = () => {
             <button
               onClick={() => navigate("/ingenia")}
               className="text-primary-light hover:text-mint flex items-center gap-2 transition-colors mb-2"
-              aria-label={t("smartboard.stats_back")}
+              aria-label={t("ingenia.stats_back")}
             >
               <ChevronLeft className="w-4 h-4" />
-              {t("smartboard.stats_back")}
+              {t("ingenia.stats_back")}
             </button>
             <div className="flex items-center gap-3">
               <h1 className="text-3xl font-bold text-petroleum">
-                {t("smartboard.stats_title")}
+                {t("ingenia.stats_title")}
               </h1>
               {isLive && (
                 <span className="badge-clay inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 text-green-600 text-xs font-semibold border border-green-200">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                  {t("smartboard.live")}
+                  {t("ingenia.live")}
                 </span>
               )}
             </div>
-            <p className="text-text-sub mt-2">{t("smartboard.stats_desc")}</p>
+            <p className="text-text-sub mt-2">{t("ingenia.stats_desc")}</p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -109,7 +109,7 @@ const IngenIAStatsPage = () => {
               Nivel {nivel}
             </span>
             <span className="text-text-sub text-sm font-medium">
-              {t("smartboard.points", { points: puntos })}
+              {t("ingenia.points", { points: puntos })}
             </span>
           </div>
         </motion.div>
@@ -128,7 +128,7 @@ const IngenIAStatsPage = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-petroleum">
-                {t("smartboard.progress_general")}
+                {t("ingenia.progress_general")}
               </h3>
               <div className="w-12 h-12 bg-primary-light/10 rounded-2xl flex items-center justify-center">
                 <TrendingUp className="w-5 h-5 text-primary-light" />
@@ -148,7 +148,7 @@ const IngenIAStatsPage = () => {
             {racha.current > 0 && (
               <p className="text-text-sub text-sm mt-2 flex items-center gap-1">
                 <Flame className="w-3.5 h-3.5 text-orange-400" />
-                {t("smartboard.streak_days", { count: racha.current })}
+                {t("ingenia.streak_days", { count: racha.current })}
               </p>
             )}
           </motion.div>
@@ -160,7 +160,7 @@ const IngenIAStatsPage = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-petroleum">
-                {t("smartboard.missions")}
+                {t("ingenia.missions")}
               </h3>
               <div className="w-12 h-12 bg-mint/10 rounded-2xl flex items-center justify-center">
                 <Target className="w-5 h-5 text-mint" />
@@ -170,7 +170,7 @@ const IngenIAStatsPage = () => {
               {misiones.completadas}/{misiones.total}
             </div>
             <p className="text-text-sub text-sm">
-              {t("smartboard.completed_pct", { pct: misionesPct })}
+              {t("ingenia.completed_pct", { pct: misionesPct })}
             </p>
           </motion.div>
 
@@ -181,7 +181,7 @@ const IngenIAStatsPage = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-petroleum">
-                {t("smartboard.study_time")}
+                {t("ingenia.study_time")}
               </h3>
               <div className="w-12 h-12 bg-[#FF6B9D]/10 rounded-2xl flex items-center justify-center">
                 <Clock className="w-5 h-5 text-[#FF6B9D]" />
@@ -191,7 +191,7 @@ const IngenIAStatsPage = () => {
               {tiempoEstudio.horas}h
             </div>
             <p className="text-text-sub text-sm">
-              {t("smartboard.minutes_total", {
+              {t("ingenia.minutes_total", {
                 minutes: tiempoEstudio.totalMinutos,
               })}
             </p>
@@ -204,7 +204,7 @@ const IngenIAStatsPage = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-petroleum">
-                {t("smartboard.score")}
+                {t("ingenia.score")}
               </h3>
               <div className="w-12 h-12 bg-[#FFD166]/10 rounded-2xl flex items-center justify-center">
                 <Star className="w-5 h-5 text-[#FFD166]" />
@@ -219,7 +219,7 @@ const IngenIAStatsPage = () => {
             <div className="flex items-center gap-2 mt-3">
               <span className="badge-clay inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-light/10 text-primary-light text-xs font-semibold">
                 <Award className="w-3 h-3" />
-                {t("smartboard.level", { level: nivel })}
+                {t("ingenia.level", { level: nivel })}
               </span>
             </div>
           </motion.div>
@@ -238,7 +238,7 @@ const IngenIAStatsPage = () => {
             className="card-clay-white bg-white rounded-2xl border border-slate-200/60 shadow-premium p-6"
           >
             <h3 className="text-lg font-semibold text-petroleum mb-6">
-              {t("smartboard.progress_by_subject")}
+              {t("ingenia.progress_by_subject")}
             </h3>
             <div className="space-y-4">
               {materias.map((m) => (
@@ -266,7 +266,7 @@ const IngenIAStatsPage = () => {
               ))}
               {materias.length === 0 && (
                 <p className="text-text-sub text-sm text-center py-8">
-                  {t("smartboard.no_subjects")}
+                  {t("ingenia.no_subjects")}
                 </p>
               )}
             </div>
@@ -278,7 +278,7 @@ const IngenIAStatsPage = () => {
             className="card-clay-white bg-white rounded-2xl border border-slate-200/60 shadow-premium p-6"
           >
             <h3 className="text-lg font-semibold text-petroleum mb-6">
-              {t("smartboard.weekly_activity")}
+              {t("ingenia.weekly_activity")}
             </h3>
             <div className="h-64 flex items-end gap-3">
               {actividadSemanal.map((item) => (
@@ -321,7 +321,7 @@ const IngenIAStatsPage = () => {
             className="card-clay-white bg-white rounded-2xl border border-slate-200/60 shadow-premium p-6"
           >
             <h3 className="text-lg font-semibold text-petroleum mb-6">
-              {t("smartboard.achievements")}
+              {t("ingenia.achievements")}
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {logros.map((logro) => {

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
-async function fetchSmartboardAnalytics(days = 30) {
+async function fetchIngeniaAnalytics(days = 30) {
   const res = await fetch(
     `${BACKEND_URL}/api/admin/analytics/ingenia?days=${days}`,
     {
@@ -21,8 +21,8 @@ async function fetchSmartboardAnalytics(days = 30) {
 
 export function useAdminAnalytics(days = 30) {
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["admin", "analytics", "smartboard", days],
-    queryFn: () => fetchSmartboardAnalytics(days),
+    queryKey: ["admin", "analytics", "ingenia", days],
+    queryFn: () => fetchIngeniaAnalytics(days),
     staleTime: 5 * 60_000,
     retry: 2,
     refetchOnWindowFocus: false,

@@ -18,7 +18,7 @@ const chatRoutes = require('./routes/chat');
 const ialabRoutes = require('./routes/ialab');
 const voiceRoutes = require('./routes/voice');
 const ttsRoutes = require('./routes/tts');
-const smartboardRoutes = require('./routes/smartboard');
+const ingeniaRoutes = require('./routes/ingenia');
 const scanImageRoutes = require('./routes/scanImage');
 const stripeRoutes = require('./routes/stripe');
 const authRoutes = require('./routes/auth');
@@ -164,7 +164,7 @@ app.use(
   '/api/smartboard',
   ferpaAuditLog,
   requireProduct('smartboard', { allowPaths: ['/user-role'] }),
-  smartboardRoutes
+  ingeniaRoutes
 );
 app.use(
   '/api/smartboard',
@@ -176,7 +176,7 @@ app.use(
   '/api/ingenia',
   ferpaAuditLog,
   requireProduct('smartboard', { allowPaths: ['/user-role'] }),
-  smartboardRoutes
+  ingeniaRoutes
 );
 app.use(
   '/api/ingenia',
@@ -192,6 +192,13 @@ app.use('/api/institutions', institutionRoutes);
 app.use('/api/compliance', complianceRoutes);
 app.use(
   '/api/smartboard/recommendations',
+  requireProduct('smartboard'),
+  recommendationRoutes
+);
+// Gemelo bajo el nombre actual del producto; el legado de arriba se conserva
+// para clientes ya instalados.
+app.use(
+  '/api/ingenia/recommendations',
   requireProduct('smartboard'),
   recommendationRoutes
 );

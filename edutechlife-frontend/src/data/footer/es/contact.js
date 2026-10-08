@@ -14,7 +14,7 @@ export const helpArticles = [
     tiempo: "12 min",
   },
   {
-    id: "tutorial-smartboard",
+    id: "tutorial-ingenia",
     titulo: "Tutorial IngenIA",
     descripcion: "Configuración y uso de pizarra interactiva",
     icono: "fa-chalkboard",
@@ -166,7 +166,7 @@ export const helpArticleContents = {
       },
     ],
   },
-  "tutorial-smartboard": {
+  "tutorial-ingenia": {
     titulo: "Tutorial IngenIA",
     introduccion:
       "IngenIA es la solución de pizarra interactiva inteligente de Edutechlife. Esta guía te ayudará a configurar y utilizar todas las funciones para maximizar el engagement de tus estudiantes.",

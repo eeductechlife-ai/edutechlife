@@ -366,7 +366,7 @@ export const ActivityLog = ({
       {/* Activity Log */}
       <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
         <h3 className="text-sm font-bold text-[#004B63] mb-4">
-          {t("smartboard.recent_activity")}
+          {t("ingenia.recent_activity")}
         </h3>
         <div className="space-y-2 max-h-64 overflow-y-auto">
           {recent.length === 0 && (
@@ -410,7 +410,7 @@ export const ActivityLog = ({
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-4 h-4 text-[#FFD166]" />
             <h3 className="text-sm font-bold text-[#004B63]">
-              {t("smartboard.parent_alert_title")}
+              {t("ingenia.parent_alert_title")}
             </h3>
           </div>
           <div className="space-y-2">

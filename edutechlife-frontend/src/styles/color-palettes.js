@@ -1,5 +1,5 @@
 /**
- * COLOR PALETTE SYSTEM FOR AGE-ADAPTIVE SMARTBOARD
+ * COLOR PALETTE SYSTEM FOR AGE-ADAPTIVE INGENIA
  * ================================================
  *
  * Provides color palettes for three age groups with WCAG 2.1 AA

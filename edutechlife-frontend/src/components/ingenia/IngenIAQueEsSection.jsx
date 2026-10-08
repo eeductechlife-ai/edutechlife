@@ -26,26 +26,26 @@ export default function IngenIAQueEsSection({ t }) {
           >
             <motion.div {...fadeInUp} className="text-left">
               <span className="badge-clay inline-block px-3.5 py-1 rounded-full bg-mint/10 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3">
-                {t("smartboard.landing_what_badge")}
+                {t("ingenia.landing_what_badge")}
               </span>
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-petroleum leading-tight">
-                {t("smartboard.landing_what_title_line1")}
+                {t("ingenia.landing_what_title_line1")}
                 <br />
                 <span className="text-gradient-accent pr-1">
-                  {t("smartboard.landing_what_title_line2")}
+                  {t("ingenia.landing_what_title_line2")}
                 </span>
               </h2>
             </motion.div>
             <p
               className="text-sm sm:text-base text-slate-500 leading-relaxed"
               dangerouslySetInnerHTML={{
-                __html: sanitize(t("smartboard.landing_what_desc1")),
+                __html: sanitize(t("ingenia.landing_what_desc1")),
               }}
             />
             <p
               className="text-sm text-slate-500 leading-relaxed"
               dangerouslySetInnerHTML={{
-                __html: sanitize(t("smartboard.landing_what_desc2")),
+                __html: sanitize(t("ingenia.landing_what_desc2")),
               }}
             />
             <div className="flex flex-wrap gap-3 pt-3">
@@ -137,10 +137,10 @@ export default function IngenIAQueEsSection({ t }) {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-petroleum">
-                    {t("smartboard.landing_kids_count")}
+                    {t("ingenia.landing_kids_count")}
                   </p>
                   <p className="text-[11px] text-slate-500">
-                    {t("smartboard.landing_kids_learning")}
+                    {t("ingenia.landing_kids_learning")}
                   </p>
                 </div>
               </div>

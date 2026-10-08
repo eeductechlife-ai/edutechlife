@@ -9,7 +9,7 @@ const ctx = {
   supabaseQueries: { studentData: { data: { id: "s1", grade_level: 9 } } },
 };
 
-vi.mock("../../../../utils/api", () => ({ callDeepseekSmartboard: vi.fn() }));
+vi.mock("../../../../utils/api", () => ({ callDeepseekIngenia: vi.fn() }));
 vi.mock("../../../../context/IngenIAKidsContext", () => ({
   useIngenIAKids: () => ctx,
 }));
@@ -21,7 +21,7 @@ vi.mock("../../../../hooks/useFeedbackLog", () => ({
 }));
 vi.mock("../../../../lib/analytics", () => ({ track: vi.fn() }));
 
-import { callDeepseekSmartboard } from "../../../../utils/api";
+import { callDeepseekIngenia } from "../../../../utils/api";
 import { useChallengeEngine } from "../useChallengeEngine";
 
 const q = (question) => ({
@@ -51,7 +51,7 @@ async function start(difficultyId, subjectId = "math") {
 }
 
 const systemPrompt = () =>
-  callDeepseekSmartboard.mock.calls.at(-1)[0].find((m) => m.role === "system")
+  callDeepseekIngenia.mock.calls.at(-1)[0].find((m) => m.role === "system")
     .content;
 
 describe("retos: nivel según edad y grado", () => {
@@ -61,14 +61,14 @@ describe("retos: nivel según edad y grado", () => {
   });
 
   it("12 años con grado 9 en el perfil: el reto Normal es de grado 7, no de 9", async () => {
-    callDeepseekSmartboard.mockResolvedValue({ questions: good(5) });
+    callDeepseekIngenia.mockResolvedValue({ questions: good(5) });
     await start("medium");
     expect(systemPrompt()).toContain("niños de grado 7 en Colombia");
     expect(systemPrompt()).not.toContain("grado 9");
   });
 
   it("«Fácil» baja un grado y pide conceptos básicos", async () => {
-    callDeepseekSmartboard.mockResolvedValue({ questions: good(3) });
+    callDeepseekIngenia.mockResolvedValue({ questions: good(3) });
     await start("easy");
     expect(systemPrompt()).toContain("niños de grado 6 en Colombia");
     expect(systemPrompt()).toContain("uno o dos grados por debajo");
@@ -76,13 +76,13 @@ describe("retos: nivel según edad y grado", () => {
 
   it("con edad y grado coherentes usa el grado del perfil", async () => {
     Object.assign(ctx, { gradeLevel: 7, studentAge: 12 });
-    callDeepseekSmartboard.mockResolvedValue({ questions: good(5) });
+    callDeepseekIngenia.mockResolvedValue({ questions: good(5) });
     await start("medium");
     expect(systemPrompt()).toContain("niños de grado 7 en Colombia");
   });
 
   it("el prompt prohíbe gráficas, figuras y tablas que no se ven", async () => {
-    callDeepseekSmartboard.mockResolvedValue({ questions: good(5) });
+    callDeepseekIngenia.mockResolvedValue({ questions: good(5) });
     await start("medium");
     expect(systemPrompt()).toMatch(
       /NO uses gráficas, figuras, imágenes, mapas ni tablas/,
@@ -97,7 +97,7 @@ describe("retos: preguntas que citan figuras que no existen", () => {
   });
 
   it("descarta la pregunta de la gráfica y conserva el resto", async () => {
-    callDeepseekSmartboard.mockResolvedValue({
+    callDeepseekIngenia.mockResolvedValue({
       questions: [
         q(
           "La gráfica de dispersión muestra una tendencia lineal decreciente. ¿Qué indica?",
@@ -115,7 +115,7 @@ describe("retos: preguntas que citan figuras que no existen", () => {
   });
 
   it("si casi todas dependen de una imagen, no arranca y pide intentar otra vez", async () => {
-    callDeepseekSmartboard.mockResolvedValue({
+    callDeepseekIngenia.mockResolvedValue({
       questions: [
         q("Según la tabla, ¿cuál es el mayor?"),
         q("Observa la figura y calcula el área."),
@@ -147,7 +147,7 @@ describe("retos: materias disponibles", () => {
   });
 
   it("un reto de Arte se genera por grado, sin secuencia de DBA", async () => {
-    callDeepseekSmartboard.mockResolvedValue({ questions: good(5) });
+    callDeepseekIngenia.mockResolvedValue({ questions: good(5) });
     const result = await start("medium", "art");
     expect(result.current.phase).toBe("playing");
     expect(systemPrompt()).toContain("Arte");

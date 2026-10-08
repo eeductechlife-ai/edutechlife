@@ -113,8 +113,8 @@ const IngenIAKidsDashboard = () => {
   // Allow child components to open Dani panel via custom event
   useEffect(() => {
     const handler = () => handleDaniOpen();
-    window.addEventListener("smartboard:open-dani", handler);
-    return () => window.removeEventListener("smartboard:open-dani", handler);
+    window.addEventListener("ingenia:open-dani", handler);
+    return () => window.removeEventListener("ingenia:open-dani", handler);
   }, [handleDaniOpen]);
 
   // Obtener auth token y nombre del estudiante para UserMenu
@@ -271,7 +271,7 @@ const IngenIAKidsDashboard = () => {
             >
               <span className="text-3xl">🎉</span>
               <div>
-                <p className="font-bold">{t("smartboard.unlock_reward")}</p>
+                <p className="font-bold">{t("ingenia.unlock_reward")}</p>
                 <p className="text-sm opacity-90">
                   {lastUnlockedReward.icon} {lastUnlockedReward.name}
                 </p>
@@ -405,7 +405,7 @@ const IngenIAKidsDashboard = () => {
                 setShowDaniReminder(false);
                 setIsDaniOpen(true);
               }}
-              aria-label={t("smartboard.dani_reminder_open")}
+              aria-label={t("ingenia.dani_reminder_open")}
               className="fixed right-4 z-[55] flex items-center gap-2 px-3 py-2.5 bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white rounded-full shadow-xl cursor-pointer max-w-[13rem]"
               style={{
                 bottom: "calc(env(safe-area-inset-bottom, 0px) + 9.5rem)",
@@ -438,7 +438,7 @@ const IngenIAKidsDashboard = () => {
                     dismissReminder();
                   }
                 }}
-                aria-label={t("smartboard.close_reminder")}
+                aria-label={t("ingenia.close_reminder")}
                 className="text-white/60 hover:text-white text-xs flex-shrink-0 cursor-pointer hover:bg-white/20 rounded-full w-5 h-5 flex items-center justify-center transition-colors"
               >
                 ✕

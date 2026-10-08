@@ -151,7 +151,7 @@ const MainCopy = ({ t, isActive, stats, statsRef }) => {
           tabIndex={tab}
           className={`${CTA_BASE} group w-full px-7 bg-petroleum text-white shadow-[0_18px_40px_-16px_rgba(0,75,99,0.7)] hover:-translate-y-0.5 hover:bg-petroleum-dark sm:w-auto`}
         >
-          {t("hero.cta_conoce_smartboard")}
+          {t("hero.cta_conoce_ingenia")}
           <ArrowRight
             size={18}
             aria-hidden="true"
@@ -163,7 +163,7 @@ const MainCopy = ({ t, isActive, stats, statsRef }) => {
           tabIndex={tab}
           className={`${CTA_BASE} group w-full border-2 border-[rgba(0,75,99,0.4)] bg-white/80 px-7 text-petroleum shadow-[0_12px_28px_-18px_rgba(0,75,99,0.45)] backdrop-blur-md hover:-translate-y-0.5 hover:border-[#004B63] hover:bg-[#004B63] hover:text-white sm:w-auto`}
         >
-          {t("hero.cta_smartboard")}
+          {t("hero.cta_ingenia")}
           <ArrowRight
             size={18}
             aria-hidden="true"

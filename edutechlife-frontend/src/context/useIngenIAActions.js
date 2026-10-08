@@ -165,7 +165,7 @@ export const useIngenIAActions = (stateAndSetters) => {
           text: "🏖️ ¡Felicitaciones! Canjeaste tu **Día Libre**. Hoy puedes descansar y disfrutar sin presión académica. ¡Te lo ganaste! Vuelve mañana con energías recargadas 💪",
         });
         setTimeout(
-          () => window.dispatchEvent(new CustomEvent("smartboard:open-dani")),
+          () => window.dispatchEvent(new CustomEvent("ingenia:open-dani")),
           800,
         );
       }
@@ -176,7 +176,7 @@ export const useIngenIAActions = (stateAndSetters) => {
           text: "🤖 ¡Genial! Desbloqueaste el **Curso de IA Básico**. Para acceder, ve a IALab desde el menú principal. Allí encontrarás módulos de Inteligencia Artificial diseñados especialmente para ti. ¡Es el futuro del aprendizaje y tú ya eres parte de él! 🚀",
         });
         setTimeout(
-          () => window.dispatchEvent(new CustomEvent("smartboard:open-dani")),
+          () => window.dispatchEvent(new CustomEvent("ingenia:open-dani")),
           800,
         );
       }
@@ -191,7 +191,7 @@ export const useIngenIAActions = (stateAndSetters) => {
           text: `📜 ¡Felicitaciones! Aquí está tu **Certificado VAK Oficial**:\n\n${emoji} Estilo de Aprendizaje: **${style.charAt(0).toUpperCase() + style.slice(1)}**\n\nEste certificado confirma que conoces cómo aprendes mejor y usas esa información para estudiar de manera más efectiva. ¡Eres un estudiante consciente de tu propio aprendizaje! Puedes tomar una captura de pantalla de este mensaje como constancia 🎓`,
         });
         setTimeout(
-          () => window.dispatchEvent(new CustomEvent("smartboard:open-dani")),
+          () => window.dispatchEvent(new CustomEvent("ingenia:open-dani")),
           800,
         );
       }

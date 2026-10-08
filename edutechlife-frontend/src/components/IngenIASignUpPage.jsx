@@ -29,7 +29,7 @@ import { sanitize } from "../utils/sanitize";
 import SEO from "./SEO";
 import { API_BASE_URL as API_BASE } from "../config/api";
 
-const SmartBoardSignUpPage = () => {
+const IngenIASignUpPage = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -171,8 +171,8 @@ const SmartBoardSignUpPage = () => {
   return (
     <>
       <SEO
-        title={t("seo.signup_smartboard.title")}
-        description={t("seo.signup_smartboard.desc")}
+        title={t("seo.signup_ingenia.title")}
+        description={t("seo.signup_ingenia.desc")}
       />
       <div className="min-h-screen bg-gradient-to-br from-[#004B63] to-[#0A3550] flex items-center justify-center p-4 relative overflow-hidden">
         <FloatingParticles />
@@ -193,7 +193,7 @@ const SmartBoardSignUpPage = () => {
         >
           <ArrowLeft className="w-4 h-4" />
           <span className="text-sm font-medium">
-            {t("smartboard.signup_back")}
+            {t("ingenia.signup_back")}
           </span>
         </button>
 
@@ -227,41 +227,41 @@ const SmartBoardSignUpPage = () => {
                           />
                         </h1>
                         <p className="text-white/80 text-sm">
-                          {t("smartboard.signup_for_students")}
+                          {t("ingenia.signup_for_students")}
                         </p>
                       </div>
                     </div>
                     <div className="mb-8">
                       <h2 className="text-3xl font-bold mb-4">
-                        {t("smartboard.signup_welcome")}
+                        {t("ingenia.signup_welcome")}
                       </h2>
                       <p
                         className="text-white/90 leading-relaxed"
                         dangerouslySetInnerHTML={{
                           __html: sanitize(
                             mode === "signin"
-                              ? t("smartboard.signup_signin_desc")
-                              : t("smartboard.signup_signup_desc"),
+                              ? t("ingenia.signup_signin_desc")
+                              : t("ingenia.signup_signup_desc"),
                           ),
                         }}
                       />
                       <p className="text-white/80 mt-4 text-sm italic">
-                        {t("smartboard.signup_quote")}
+                        {t("ingenia.signup_quote")}
                       </p>
                     </div>
                     <div className="space-y-4">
                       {[
                         {
                           Icon: BookOpen,
-                          label: t("smartboard.signup_feature_missions"),
+                          label: t("ingenia.signup_feature_missions"),
                         },
                         {
                           Icon: Users,
-                          label: t("smartboard.signup_feature_community"),
+                          label: t("ingenia.signup_feature_community"),
                         },
                         {
                           Icon: CheckCircle,
-                          label: t("smartboard.signup_feature_tracking"),
+                          label: t("ingenia.signup_feature_tracking"),
                         },
                       ].map(({ Icon, label }, i) => (
                         <div key={i} className="flex items-center gap-3">
@@ -276,8 +276,8 @@ const SmartBoardSignUpPage = () => {
                   <div className="mt-8 pt-6 border-t border-white/20">
                     <p className="text-white/70 text-sm">
                       {mode === "signin"
-                        ? t("smartboard.signup_no_account")
-                        : t("smartboard.signup_have_account")}{" "}
+                        ? t("ingenia.signup_no_account")
+                        : t("ingenia.signup_have_account")}{" "}
                       <button
                         onClick={() =>
                           setMode(mode === "signin" ? "signup" : "signin")
@@ -285,8 +285,8 @@ const SmartBoardSignUpPage = () => {
                         className="text-white hover:underline font-medium"
                       >
                         {mode === "signin"
-                          ? t("smartboard.signup_register_here")
-                          : t("smartboard.signup_login_here")}
+                          ? t("ingenia.signup_register_here")
+                          : t("ingenia.signup_login_here")}
                       </button>
                     </p>
                   </div>
@@ -429,7 +429,7 @@ const SmartBoardSignUpPage = () => {
                         }`}
                       >
                         <LogIn className="w-4 h-4" />
-                        {t("smartboard.signup_login_tab")}
+                        {t("ingenia.signup_login_tab")}
                       </button>
                       <button
                         onClick={() => setMode("signup")}
@@ -440,20 +440,20 @@ const SmartBoardSignUpPage = () => {
                         }`}
                       >
                         <UserPlus className="w-4 h-4" />
-                        {t("smartboard.signup_register_tab")}
+                        {t("ingenia.signup_register_tab")}
                       </button>
                     </div>
 
                     <div className="mb-4 text-center w-full">
                       <h3 className="text-xl font-bold text-[#004B63] mb-1">
                         {mode === "signin"
-                          ? t("smartboard.signup_login_heading")
-                          : t("smartboard.signup_register_heading")}
+                          ? t("ingenia.signup_login_heading")
+                          : t("ingenia.signup_register_heading")}
                       </h3>
                       <p className="text-[#4DA8C4] text-sm">
                         {mode === "signin"
-                          ? t("smartboard.signup_login_sub")
-                          : t("smartboard.signup_register_sub")}
+                          ? t("ingenia.signup_login_sub")
+                          : t("ingenia.signup_register_sub")}
                       </p>
                     </div>
 
@@ -500,7 +500,7 @@ const SmartBoardSignUpPage = () => {
                         <p
                           className="text-center text-[#4DA8C4] text-xs"
                           dangerouslySetInnerHTML={{
-                            __html: sanitize(t("smartboard.signup_terms")),
+                            __html: sanitize(t("ingenia.signup_terms")),
                           }}
                         />
                       </div>
@@ -784,4 +784,4 @@ const SmartBoardSignUpPage = () => {
   );
 };
 
-export default SmartBoardSignUpPage;
+export default IngenIASignUpPage;

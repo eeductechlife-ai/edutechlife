@@ -318,7 +318,7 @@ const TechNewsFeed = () => {
           "Si yo quisiera crear algo con esta idea, ¿por dónde empiezo?",
         ],
       });
-      window.dispatchEvent(new CustomEvent("smartboard:open-dani"));
+      window.dispatchEvent(new CustomEvent("ingenia:open-dani"));
     },
     [setDocumentForDani],
   );

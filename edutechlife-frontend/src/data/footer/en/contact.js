@@ -14,7 +14,7 @@ export const helpArticles = [
     tiempo: "12 min",
   },
   {
-    id: "tutorial-smartboard",
+    id: "tutorial-ingenia",
     titulo: "IngenIA Tutorial",
     descripcion: "Setup and use of interactive whiteboard",
     icono: "fa-chalkboard",
@@ -166,7 +166,7 @@ export const helpArticleContents = {
       },
     ],
   },
-  "tutorial-smartboard": {
+  "tutorial-ingenia": {
     titulo: "IngenIA Tutorial",
     introduccion:
       "IngenIA is Edutechlife's intelligent interactive whiteboard solution. This guide will help you set up and use all features to maximize your students' engagement.",

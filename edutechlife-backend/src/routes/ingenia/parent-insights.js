@@ -7,7 +7,7 @@ const { generateParentInsights, buildLearningGraphSummary } = require('../../ser
 const router = Router();
 
 /**
- * GET /api/smartboard/parent/insights?studentId=uuid
+ * GET /api/ingenia/parent/insights?studentId=uuid
  * Returns 3-5 actionable insights for the parent from the Learning Graph.
  */
 router.get('/parent/insights', requireAuth, requireStudentAccess, requireVerifiedParentalConsent, async (req, res) => {
@@ -23,7 +23,7 @@ router.get('/parent/insights', requireAuth, requireStudentAccess, requireVerifie
 });
 
 /**
- * GET /api/smartboard/parent/learning-graph?studentId=uuid
+ * GET /api/ingenia/parent/learning-graph?studentId=uuid
  * Returns mastery-by-subject summary for parent dashboard.
  */
 router.get('/parent/learning-graph', requireAuth, requireStudentAccess, requireVerifiedParentalConsent, async (req, res) => {
