@@ -253,7 +253,7 @@ const IngenIAKidsDashboard = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed top-2 right-2 z-[60] flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#4DA8C4]/20 text-[#4DA8C4] text-[10px] font-semibold backdrop-blur-sm"
+            className="fixed top-2 right-2 z-[60] flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#4DA8C4]/20 text-[#2E6B7D] text-xs font-semibold backdrop-blur-sm"
           >
             <CloudSync className="w-3 h-3 animate-spin" />
             Sincronizando...
@@ -331,6 +331,18 @@ const IngenIAKidsDashboard = () => {
           }
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
+
+        {/* Saltar la navegación e ir directo al contenido */}
+        <a
+          href="#ingenia-main"
+          className="skip-link"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById("ingenia-main")?.focus();
+          }}
+        >
+          {t("kid.a11y.skip_to_content")}
+        </a>
 
         {/* Main Layout */}
         <div className="relative z-10 flex h-screen min-h-dvh">
@@ -410,12 +422,8 @@ const IngenIAKidsDashboard = () => {
                 🤖
               </motion.span>
               <div className="text-left leading-tight min-w-0">
-                <p className="text-[11px] font-bold truncate">
-                  ¿Necesitas ayuda?
-                </p>
-                <p className="text-[9px] text-white/75 truncate">
-                  Dani está aquí
-                </p>
+                <p className="text-xs font-bold truncate">¿Necesitas ayuda?</p>
+                <p className="text-xs text-white/75 truncate">Dani está aquí</p>
               </div>
               <motion.span
                 onClick={(e) => {

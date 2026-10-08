@@ -15,6 +15,23 @@ import useDaniSendMessage from "./useDaniSendMessage";
 import { scrollMessagesToBottom } from "../dani/chatUtils";
 import { readHomeworkPhoto } from "./daniPhoto";
 
+const VOICE_KEY = "edutechlife_dani_voice";
+
+/**
+ * La voz de Dani es opcional: sin preferencia guardada arranca apagada. Antes
+ * arrancaba encendida y leía el saludo en voz alta apenas se abría el chat, en
+ * la clase o la biblioteca. Quien ya la activó (o la dejó como estaba) conserva
+ * su preferencia.
+ */
+export function initialVoiceEnabled(storage) {
+  try {
+    const store = storage || localStorage;
+    return store.getItem(VOICE_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
 export default function useDaniChat({ isOpen, activeTab }) {
   const { t } = useTranslation();
   // El backend espera un JWT; ahora es el de la sesion de Supabase.
@@ -47,10 +64,7 @@ export default function useDaniChat({ isOpen, activeTab }) {
 
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [voiceEnabled, setVoiceEnabled] = useState(() => {
-    const saved = localStorage.getItem("edutechlife_dani_voice");
-    return saved !== null ? saved === "true" : true;
-  });
+  const [voiceEnabled, setVoiceEnabled] = useState(() => initialVoiceEnabled());
   const [socraticMode, setSocraticMode] = useState(() => {
     const saved = localStorage.getItem("edutechlife_dani_socratic");
     return saved === "true";

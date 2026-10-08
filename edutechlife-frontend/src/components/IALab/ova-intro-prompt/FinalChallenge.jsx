@@ -46,19 +46,19 @@ const FinalChallenge = ({ onCompleted }) => {
           <div className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-xl p-3 text-center border border-[var(--theme-emphasis)]/10">
             <BrainCircuit className="w-4 h-4 text-[var(--theme-primary)] mx-auto mb-1" />
             <p className="text-[9px] font-semibold text-[var(--theme-emphasis)] uppercase tracking-wider">
-              {t("ova.introprompt.challenge_badge_apply") || "Aplicar"}
+              {t("ova.introprompt.challenge_badge_apply")}
             </p>
           </div>
           <div className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-xl p-3 text-center border border-[var(--theme-emphasis)]/10">
             <Star className="w-4 h-4 text-amber-500 mx-auto mb-1 fill-amber-500" />
             <p className="text-[9px] font-semibold text-[var(--theme-emphasis)] uppercase tracking-wider">
-              {t("ova.introprompt.challenge_badge_practice") || "Practicar"}
+              {t("ova.introprompt.challenge_badge_practice")}
             </p>
           </div>
           <div className="bg-gradient-to-br from-[var(--theme-emphasis)]/5 to-[var(--theme-primary)]/5 rounded-xl p-3 text-center border border-[var(--theme-emphasis)]/10">
             <Award className="w-4 h-4 text-amber-500 mx-auto mb-1" />
             <p className="text-[9px] font-semibold text-[var(--theme-emphasis)] uppercase tracking-wider">
-              {t("ova.introprompt.challenge_badge_challenge") || "Desafiar"}
+              {t("ova.introprompt.challenge_badge_challenge")}
             </p>
           </div>
         </div>

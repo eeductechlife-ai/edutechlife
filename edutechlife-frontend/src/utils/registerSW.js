@@ -1,4 +1,8 @@
+import { IS_NATIVE_APP } from "../config/nativeApp";
+
 export function registerSW() {
+  // En la app nativa Capacitor ya sirve los archivos desde el dispositivo
+  if (IS_NATIVE_APP) return;
   if (typeof window !== "undefined" && "serviceWorker" in navigator) {
     if (import.meta.env.DEV) {
       navigator.serviceWorker

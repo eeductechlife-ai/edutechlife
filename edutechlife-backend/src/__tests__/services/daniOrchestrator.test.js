@@ -95,4 +95,41 @@ describe('Dani orchestrator — buildSystemPrompt (B.13)', () => {
     // El prompt instruye a no citar cifras ni monedas.
     expect(prompt).toContain('NUNCA inventes montos');
   });
+
+  describe('bienestar emocional', () => {
+    it('ante tristeza o soledad pide invitar a hablar con un adulto de confianza', () => {
+      const prompt = buildSystemPrompt(ctx);
+      expect(prompt).toContain('BIENESTAR EMOCIONAL');
+      expect(prompt).toContain('nadie me quiere');
+      expect(prompt).toContain('¿Hay alguien de confianza');
+      expect(prompt).toMatch(/mamá, papá, un familiar o un profesor/);
+    });
+
+    it('da prioridad a la persona sobre el tutorial paso a paso', () => {
+      const prompt = buildSystemPrompt(ctx);
+      expect(prompt).toMatch(/TIENE PRIORIDAD SOBRE EL TUTORIAL/);
+      expect(prompt).toMatch(/la prioridad es la persona, no la tarea/);
+    });
+
+    it('si hay peligro remite al 123 y a un adulto, sin dar detalles de daño', () => {
+      const prompt = buildSystemPrompt(ctx);
+      expect(prompt).toContain('llame al 123');
+      expect(prompt).toMatch(/No des detalles ni instrucciones sobre cómo hacerse daño/);
+    });
+
+    it('no inventa otras líneas de ayuda ni promete secreto', () => {
+      const prompt = buildSystemPrompt(ctx);
+      const section = prompt.slice(prompt.indexOf('## BIENESTAR EMOCIONAL'));
+      const numbers = section.slice(0, 1200).match(/\b\d{3,}\b/g) || [];
+      expect(numbers).toEqual(['123']);
+      expect(prompt).toMatch(/Nunca digas que eres su única compañía ni le pidas guardar el secreto/);
+    });
+
+    it('está en el prompt de cualquier edad', () => {
+      for (const age of [8, 12, 16]) {
+        const p = buildSystemPrompt({ ...ctx, profile: { ...ctx.profile, age } });
+        expect(p, `edad ${age}`).toContain('BIENESTAR EMOCIONAL');
+      }
+    });
+  });
 });

@@ -54,7 +54,7 @@ const MetricCard = ({ icon, label, value, subtitle, color, darkMode }) => (
       </div>
       <div className="min-w-0">
         <p
-          className={`text-xs font-medium ${darkMode ? "text-white/50" : "text-[#94A3B8]"}`}
+          className={`text-xs font-medium ${darkMode ? "text-white/50" : "text-[#64748B]"}`}
         >
           {label}
         </p>
@@ -65,7 +65,7 @@ const MetricCard = ({ icon, label, value, subtitle, color, darkMode }) => (
         </p>
         {subtitle && (
           <p
-            className={`text-xs mt-0.5 ${darkMode ? "text-white/40" : "text-[#94A3B8]"}`}
+            className={`text-xs mt-0.5 ${darkMode ? "text-white/40" : "text-[#64748B]"}`}
           >
             {subtitle}
           </p>
@@ -230,10 +230,10 @@ const InternalMetricsDashboard = ({ authToken, darkMode = false }) => {
     return (
       <div className="flex items-center justify-center py-12">
         <RefreshCw
-          className={`w-5 h-5 animate-spin ${darkMode ? "text-white/40" : "text-[#94A3B8]"}`}
+          className={`w-5 h-5 animate-spin ${darkMode ? "text-white/40" : "text-[#64748B]"}`}
         />
         <span
-          className={`ml-2 text-sm ${darkMode ? "text-white/40" : "text-[#94A3B8]"}`}
+          className={`ml-2 text-sm ${darkMode ? "text-white/40" : "text-[#64748B]"}`}
         >
           Cargando metricas...
         </span>
@@ -244,7 +244,7 @@ const InternalMetricsDashboard = ({ authToken, darkMode = false }) => {
   if (error) {
     return (
       <div
-        className={`text-center py-8 text-sm ${darkMode ? "text-white/50" : "text-[#94A3B8]"}`}
+        className={`text-center py-8 text-sm ${darkMode ? "text-white/50" : "text-[#64748B]"}`}
       >
         <p>Error: {error}</p>
         <button
@@ -326,12 +326,12 @@ const InternalMetricsDashboard = ({ authToken, darkMode = false }) => {
               <CartesianGrid stroke={gridColor} strokeDasharray="3 3" />
               <XAxis
                 dataKey="day"
-                tick={{ fill: textColor, fontSize: 11 }}
+                tick={{ fill: textColor, fontSize: 12 }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
-                tick={{ fill: textColor, fontSize: 11 }}
+                tick={{ fill: textColor, fontSize: 12 }}
                 axisLine={false}
                 tickLine={false}
                 allowDecimals={false}
@@ -365,7 +365,7 @@ const InternalMetricsDashboard = ({ authToken, darkMode = false }) => {
               />
               <XAxis
                 type="number"
-                tick={{ fill: textColor, fontSize: 11 }}
+                tick={{ fill: textColor, fontSize: 12 }}
                 axisLine={false}
                 tickLine={false}
                 allowDecimals={false}
@@ -373,7 +373,7 @@ const InternalMetricsDashboard = ({ authToken, darkMode = false }) => {
               <YAxis
                 type="category"
                 dataKey="name"
-                tick={{ fill: textColor, fontSize: 11 }}
+                tick={{ fill: textColor, fontSize: 12 }}
                 axisLine={false}
                 tickLine={false}
                 width={80}
@@ -408,7 +408,7 @@ const InternalMetricsDashboard = ({ authToken, darkMode = false }) => {
             <XAxis
               dataKey="sessions"
               name="Sesiones"
-              tick={{ fill: textColor, fontSize: 11 }}
+              tick={{ fill: textColor, fontSize: 12 }}
               axisLine={false}
               tickLine={false}
               allowDecimals={false}
@@ -417,13 +417,13 @@ const InternalMetricsDashboard = ({ authToken, darkMode = false }) => {
                 position: "insideBottom",
                 offset: -2,
                 fill: textColor,
-                fontSize: 11,
+                fontSize: 12,
               }}
             />
             <YAxis
               dataKey="minutes"
               name="Minutos"
-              tick={{ fill: textColor, fontSize: 11 }}
+              tick={{ fill: textColor, fontSize: 12 }}
               axisLine={false}
               tickLine={false}
               label={{
@@ -431,7 +431,7 @@ const InternalMetricsDashboard = ({ authToken, darkMode = false }) => {
                 angle: -90,
                 position: "insideLeft",
                 fill: textColor,
-                fontSize: 11,
+                fontSize: 12,
               }}
             />
             <Tooltip

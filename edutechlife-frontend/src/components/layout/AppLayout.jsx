@@ -57,6 +57,11 @@ const AppLayout = () => {
   };
 
   const location = useLocation();
+  // El panel de IngenIA (estudiante y padres) trae su propio <main>: con otro
+  // aquí el menú lateral quedaba dentro del contenido principal.
+  const ContentLandmark = /^\/ingenia(\/|$)/.test(location.pathname)
+    ? "div"
+    : "main";
 
   return (
     <ProgressProvider>
@@ -105,12 +110,12 @@ const AppLayout = () => {
         )}
 
         {/* Main Content Area */}
-        <main className="flex-1">
+        <ContentLandmark className="flex-1">
           <ScrollToTop />
           <Suspense fallback={<PageLoader message={t("header.loading")} />}>
             <Outlet />
           </Suspense>
-        </main>
+        </ContentLandmark>
 
         {/* Modales Globales — lazy: no cargan hasta que el usuario los abre */}
         {showContactModal && (

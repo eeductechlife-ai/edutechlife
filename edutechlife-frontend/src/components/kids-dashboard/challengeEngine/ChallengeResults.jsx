@@ -12,6 +12,7 @@ import {
   usePlanTaskOnFinish,
   PlanTaskDoneBanner,
 } from "../improvementPlan/PlanTaskDone";
+import { POINTS } from "../../../context/pointsEconomy";
 
 const RESULT_COPY = {
   early: [
@@ -80,6 +81,7 @@ const ChallengeResults = memo(
     questions,
     difficulty,
     subject,
+    xpGranted,
     onRetry,
     onEasier,
     onTabChange,
@@ -92,8 +94,13 @@ const ChallengeResults = memo(
     const planTask = usePlanTaskOnFinish("retos", true);
     const copy = resultCopy(score, isEarly);
     const correct = answers.filter((a) => a.isCorrect).length;
-    const xpEarned =
-      score >= 70 ? difficulty.xp : Math.round(difficulty.xp * 0.3);
+    const xpExpected =
+      score >= 70
+        ? difficulty.xp
+        : Math.round(difficulty.xp * POINTS.challengeLowScoreFactor);
+    // Lo que se muestra es lo que se dio: con el tope diario puede ser menos.
+    const xpEarned = xpGranted ?? xpExpected;
+    const reachedDailyCap = xpEarned < xpExpected;
     const color = subject?.color || "#9D4EDD";
     const mistakes = questions
       .map((q, i) => ({ q, i, a: answers[i] }))
@@ -173,19 +180,25 @@ const ChallengeResults = memo(
               <p className="text-2xl font-black tabular-nums" style={{ color }}>
                 {correct}/{questions.length}
               </p>
-              <p className={`text-[11px] font-semibold ${textSub}`}>
-                correctas
-              </p>
+              <p className={`text-xs font-semibold ${textSub}`}>correctas</p>
             </div>
             <div
               className={`rounded-xl py-3 ${darkMode ? "bg-[#0F172A]" : "bg-[#F8FAFC]"}`}
             >
-              <p className="text-2xl font-black tabular-nums text-[#22C55E]">
+              <p
+                className={`text-2xl font-black tabular-nums ${darkMode ? "text-[#22C55E]" : "text-[#16803D]"}`}
+              >
                 {isEarly ? `+${xpEarned}⭐` : `+${xpEarned}`}
               </p>
-              <p className={`text-[11px] font-semibold ${textSub}`}>
+              <p className={`text-xs font-semibold ${textSub}`}>
                 {isEarly ? "estrellas" : "puntos XP"}
               </p>
+              {reachedDailyCap && (
+                <p className={`mt-1 px-1 text-xs font-semibold ${textSub}`}>
+                  Hoy llegaste al tope de puntos por retos. ¡Mañana sigues
+                  sumando!
+                </p>
+              )}
             </div>
             <div
               className={`rounded-xl py-3 ${darkMode ? "bg-[#0F172A]" : "bg-[#F8FAFC]"}`}
@@ -193,9 +206,7 @@ const ChallengeResults = memo(
               <p className="text-2xl" aria-hidden="true">
                 {subject?.emoji}
               </p>
-              <p
-                className={`text-[11px] font-semibold truncate px-1 ${textSub}`}
-              >
+              <p className={`text-xs font-semibold truncate px-1 ${textSub}`}>
                 {subject?.label}
               </p>
             </div>

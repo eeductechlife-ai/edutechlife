@@ -199,7 +199,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
             {subjectEmoji(activeClass.subject_label || activeClass.subject)}
           </span>
           <div className="flex-1 min-w-0">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-white/60 mb-0.5">
+            <div className="text-xs font-bold uppercase tracking-wider text-white/60 mb-0.5">
               {isNow ? "Ahora mismo" : "Próxima clase"}
             </div>
             <div className="text-lg font-black text-white truncate leading-tight">
@@ -294,7 +294,7 @@ const HeroSection = memo(({ onTabChange, onDaniOpen }) => {
             }`}
           >
             <span className="text-2xl leading-none">{action.emoji}</span>
-            <span className="text-[11px] text-white/80 font-semibold text-center leading-tight line-clamp-2">
+            <span className="text-xs text-white/80 font-semibold text-center leading-tight line-clamp-2">
               {action.label}
             </span>
           </button>

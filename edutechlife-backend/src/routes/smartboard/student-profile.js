@@ -305,21 +305,74 @@ router.get('/export-user-data', requireAuth, async (req, res) => {
   const db = req.userToken ? createUserClient(req.userToken) : supabase;
 
   try {
-    const [
-      { data: profile },
-      { data: vakResults },
-      { data: sessions },
-      { data: achievements },
-      { data: pointsHistory },
-      { data: parentConsents },
-    ] = await Promise.all([
-      db.from('students').select('*').eq('auth_id', userId).single(),
-      supabase.from('vak_results').select('*').eq('user_id', userId),
-      supabase.from('sessions').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(100),
-      supabase.from('achievements').select('*').eq('user_id', userId),
-      supabase.from('points_history').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(200),
-      supabase.from('parent_consents').select('consent_type, granted, created_at').eq('student_id', userId),
-    ]);
+    const { data: profile } = await db
+      .from('students')
+      .select('*')
+      .eq('auth_id', userId)
+      .maybeSingle();
+
+    // Las tablas normalizadas cuelgan de students.id, no del id de autenticación:
+    // antes se consultaba por user_id, que no existe ahí, y la exportación salía
+    // vacía sin avisar. Lo que no se pudo leer se informa en `warnings`.
+    const studentId = profile?.id || null;
+    const warnings = [];
+    const fetchRows = async (table, query) => {
+      try {
+        const { data, error } = await query;
+        if (error) {
+          warnings.push(table);
+          return [];
+        }
+        return data || [];
+      } catch {
+        warnings.push(table);
+        return [];
+      }
+    };
+    const byStudent = (table, select = '*') =>
+      studentId
+        ? supabase.from(table).select(select).eq('student_id', studentId)
+        : Promise.resolve({ data: [], error: null });
+
+    const [vakResults, sessions, achievements, pointsHistory, parentConsents, kidsData] =
+      await Promise.all([
+        fetchRows('vak_results', byStudent('vak_results')),
+        fetchRows(
+          'sessions',
+          studentId
+            ? supabase
+                .from('sessions')
+                .select('*')
+                .eq('student_id', studentId)
+                .order('created_at', { ascending: false })
+                .limit(100)
+            : Promise.resolve({ data: [], error: null })
+        ),
+        fetchRows('achievements', byStudent('achievements')),
+        fetchRows(
+          'points_history',
+          studentId
+            ? supabase
+                .from('points_history')
+                .select('*')
+                .eq('student_id', studentId)
+                .order('timestamp', { ascending: false })
+                .limit(200)
+            : Promise.resolve({ data: [], error: null })
+        ),
+        fetchRows(
+          'parent_consents',
+          supabase
+            .from('parent_consents')
+            .select('consent_type, granted, created_at')
+            .in('student_id', [userId, studentId].filter(Boolean))
+        ),
+        // Aquí vive el progreso real (chats, notas, plan, ADN, puntos…).
+        fetchRows(
+          'smartboard_kids_data',
+          supabase.from('smartboard_kids_data').select('data').eq('user_id', userId)
+        ),
+      ]);
 
     res.setHeader('Content-Disposition', `attachment; filename="edutechlife-datos-${userId.slice(0, 8)}.json"`);
     res.json({
@@ -328,12 +381,14 @@ router.get('/export-user-data', requireAuth, async (req, res) => {
       compliance: ['COPPA', 'Ley 1581 (Colombia)', 'GDPR-K'],
       data: {
         profile: profile || null,
-        vak_results: vakResults || [],
-        sessions: sessions || [],
-        achievements: achievements || [],
-        points_history: pointsHistory || [],
-        parent_consents: parentConsents || [],
+        vak_results: vakResults,
+        sessions,
+        achievements,
+        points_history: pointsHistory,
+        parent_consents: parentConsents,
+        progress: kidsData[0]?.data || null,
       },
+      ...(warnings.length ? { warnings: { not_exported: warnings } } : {}),
     });
   } catch (e) {
     console.error('Error exporting user data:', e);

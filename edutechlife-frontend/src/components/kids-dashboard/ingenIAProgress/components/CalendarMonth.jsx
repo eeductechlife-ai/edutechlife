@@ -41,7 +41,7 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
           .map((d, i) => (
             <span
               key={i}
-              className="text-center text-[10px] font-semibold text-[#64748B] py-1"
+              className="text-center text-xs font-semibold text-[#64748B] py-1"
             >
               {d}
             </span>
@@ -59,8 +59,8 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
                   ? "text-white shadow-sm"
                   : status === "missed"
                     ? darkMode
-                      ? "bg-[#334155] text-[#64748B]"
-                      : "bg-[#F1F5F9] text-[#94A3B8]"
+                      ? "bg-[#334155] text-[#94A3B8]"
+                      : "bg-[#F1F5F9] text-[#64748B]"
                     : "text-transparent"
               }`}
               style={
@@ -85,7 +85,7 @@ const CalendarMonth = ({ streakLog, darkMode }) => {
           );
         })}
       </div>
-      <div className="flex items-center gap-4 mt-4 text-[10px] text-[#64748B]">
+      <div className="flex items-center gap-4 mt-4 text-xs text-[#64748B]">
         <span className="flex items-center gap-1">
           <span
             className="w-2.5 h-2.5 rounded-full"

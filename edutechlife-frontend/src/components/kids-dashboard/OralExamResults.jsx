@@ -53,7 +53,7 @@ const OralExamResults = memo(
             {results.grade}%
           </motion.p>
           <p
-            className={`text-sm ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+            className={`text-sm ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
           >
             {t("oral.correct_count", {
               correct: results.correctCount,
@@ -77,7 +77,7 @@ const OralExamResults = memo(
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className={`mt-4 text-sm font-bold ${dc(dm, "text-[#4DA8C4]", "text-[#004B63]")}`}
+            className={`mt-4 text-sm font-bold ${dc(dm, "text-[#367689]", "text-[#004B63]")}`}
           >
             {t("oral.xp_earned", { points: results.earnedPoints })}
           </motion.p>
@@ -98,7 +98,7 @@ const OralExamResults = memo(
                 className="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl bg-white border border-[#E2E8F0] hover:border-[#4DA8C4] transition-all"
               >
                 <span className="text-xl">{opt.emoji}</span>
-                <span className="text-[10px] font-bold text-[#64748B]">
+                <span className="text-xs font-bold text-[#64748B]">
                   {opt.label}
                 </span>
               </button>

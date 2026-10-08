@@ -11,22 +11,17 @@ const DetectAndFix = ({ onCompleted }) => {
   const [correct, setCorrect] = useState(false);
   const R = [
     {
-      prompt:
-        t("ova.introprompt.detect_r1_prompt") || '"Explícame la fotosíntesis"',
+      prompt: t("ova.introprompt.detect_r1_prompt"),
       errors: ["context", "format", "task"],
       correctIdx: 0,
     },
     {
-      prompt:
-        t("ova.introprompt.detect_r2_prompt") ||
-        '"Eres tutor de matemáticas. Explica fracciones a un niño de 10 años."',
+      prompt: t("ova.introprompt.detect_r2_prompt"),
       errors: ["context", "format", "task"],
       correctIdx: 1,
     },
     {
-      prompt:
-        t("ova.introprompt.detect_r3_prompt") ||
-        '"Eres experto. Dame lección del sistema solar con tabla, 5 preguntas y resumen."',
+      prompt: t("ova.introprompt.detect_r3_prompt"),
       errors: ["context", "format", "task"],
       correctIdx: 2,
     },

@@ -40,7 +40,7 @@ const SavedMaterialsList = memo(
                   <span className="block text-sm font-semibold truncate">
                     {typeMeta(m.type)?.emoji} {titleOf(m)}
                   </span>
-                  <span className={`block text-[11px] ${sub}`}>
+                  <span className={`block text-xs ${sub}`}>
                     {m.subjectLabel} ·{" "}
                     {new Date(m.savedAt).toLocaleDateString("es-CO", {
                       day: "numeric",

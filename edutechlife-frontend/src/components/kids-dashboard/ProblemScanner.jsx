@@ -267,7 +267,7 @@ const ProblemScanner = memo(() => {
                     Arrastra un archivo aquí o usa los botones
                   </p>
                   <p
-                    className={`text-xs ${dc(dm, "text-[#94A3B8]", "text-[#64748B]")}`}
+                    className={`text-xs ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
                   >
                     Formatos: JPG, PNG, PDF, DOCX, TXT
                   </p>

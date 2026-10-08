@@ -104,7 +104,7 @@ const SidebarNavigation = memo(
       },
       {
         id: "horario",
-        label: t("sidebar.schedule") || "Horario",
+        label: t("sidebar.schedule"),
         icon: Clock,
         color: "text-[#06D6A0]",
         bgActive: "bg-[#06D6A0]/20",
@@ -286,7 +286,7 @@ const SidebarNavigation = memo(
           >
             <Users className="w-4 h-4 text-[#4DA8C4]" />
             <span className="text-sm font-semibold text-[#4DA8C4] font-open-sans">
-              {t("sidebar.parent_dashboard") || "Panel de Padres"}
+              {t("sidebar.parent_dashboard")}
             </span>
           </motion.button>
 

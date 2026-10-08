@@ -322,7 +322,7 @@ const QuizCard = memo(
 
               {/* Badge */}
               <span
-                className="relative z-10 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.18em] mb-3"
+                className="relative z-10 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-[0.18em] mb-3"
                 style={{
                   backgroundColor: `${categoryColor}12`,
                   color: categoryColor,
@@ -431,7 +431,7 @@ const QuizCard = memo(
 
               {/* Badge */}
               <span
-                className="relative z-10 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.18em] mb-3"
+                className="relative z-10 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-[0.18em] mb-3"
                 style={{
                   backgroundColor: `${categoryColor}15`,
                   color: categoryColor,
@@ -493,7 +493,7 @@ const QuizCard = memo(
                     {level.emoji}
                   </motion.span>
                   <span
-                    className="text-[11px] font-black whitespace-nowrap tracking-tight"
+                    className="text-xs font-black whitespace-nowrap tracking-tight"
                     style={{ color: level.color }}
                   >
                     {t(level.labelKey)}

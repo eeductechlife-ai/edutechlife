@@ -1,5 +1,6 @@
 import LocaleSwitcher from "../LocaleSwitcher";
 import UserDropdownMenuSimplified from "../UserDropdownMenuSimplified";
+import { IS_NATIVE_APP } from "../../config/nativeApp";
 
 const MobileDrawer = ({
   drawerClosing,
@@ -124,12 +125,14 @@ const MobileDrawer = ({
                 >
                   {t("footer.automation")}
                 </button>
-                <button
-                  onClick={() => navigate("/planes")}
-                  className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
-                >
-                  {t("nav.planes")}
-                </button>
+                {!IS_NATIVE_APP && (
+                  <button
+                    onClick={() => navigate("/planes")}
+                    className="w-full text-left px-3 py-2 text-sm text-[#004B63] hover:bg-[#4DA8C4]/10 rounded-lg transition-colors"
+                  >
+                    {t("nav.planes")}
+                  </button>
+                )}
               </div>
             </div>
 

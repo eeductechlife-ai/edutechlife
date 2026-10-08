@@ -110,7 +110,7 @@ const DeckEditor = memo(
                 onClick={addCard}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full py-2 bg-[#4DA8C4]/10 text-[#4DA8C4] rounded-xl font-bold text-sm"
+                className="w-full py-2 bg-[#4DA8C4]/10 text-[#367689] rounded-xl font-bold text-sm"
               >
                 {t("kid.flashcards.add_card_btn")}
               </motion.button>

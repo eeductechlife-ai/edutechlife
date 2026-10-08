@@ -55,12 +55,12 @@ const DailyPlanHeader = ({
 
       <div className="flex-1 min-w-0">
         <p className="text-[10px] font-semibold uppercase tracking-wider theme-text-muted">
-          {t("ialab.next_step.title") || "Siguiente paso"}
+          {t("ialab.next_step.title")}
           <span className="ml-1.5 text-[var(--theme-emphasis)] font-bold">
             {t("ialab.next_step.progress", {
               current: currentIndex + 1,
               total,
-            }) || `Paso ${currentIndex + 1} de ${total}`}
+            })}
           </span>
         </p>
         <h3 className="text-[15px] font-semibold theme-text leading-snug mt-0.5">

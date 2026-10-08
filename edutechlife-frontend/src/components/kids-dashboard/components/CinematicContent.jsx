@@ -106,7 +106,7 @@ function AcademicWarningBanner({ subjects, onTabChange, darkMode }) {
         </span>
       </span>
       <span
-        className="text-[#EF476F] font-black text-sm shrink-0 self-center"
+        className="text-[#BF3959] font-black text-sm shrink-0 self-center"
         aria-hidden="true"
       >
         Ver →
@@ -398,10 +398,12 @@ const CinematicContent = memo(
     if (!tab) return null;
 
     return (
-      <div
+      <main
+        id="ingenia-main"
+        tabIndex={-1}
         ref={scrollRef}
         data-typo="intended"
-        className="flex-1 overflow-y-auto relative p-4 md:p-6 pb-32 md:pb-8"
+        className="flex-1 overflow-y-auto relative p-4 md:p-6 pb-32 md:pb-8 outline-none"
       >
         <AnimatePresence mode="wait">
           <DashboardErrorBoundary
@@ -414,7 +416,7 @@ const CinematicContent = memo(
             </AnimationWrapper>
           </DashboardErrorBoundary>
         </AnimatePresence>
-      </div>
+      </main>
     );
   },
 );

@@ -128,7 +128,10 @@ const PremiumSidebar = memo(
         </div>
 
         {/* Categories */}
-        <nav className="flex-1 overflow-y-auto overflow-x-hidden">
+        <nav
+          aria-label="Menú principal"
+          className="flex-1 overflow-y-auto overflow-x-hidden"
+        >
           {collapsed ? (
             /* Collapsed: icon-only per category */
             <div className="p-2 space-y-1">
@@ -180,7 +183,13 @@ const PremiumSidebar = memo(
                 const anyPremiumInCategory = cat.tabs.some((tb) =>
                   PREMIUM_TABS.includes(tb),
                 );
-                const showChildren = isActiveCategory;
+                // Una categoría con una sola pantalla no necesita sublista: antes
+                // «Practicar» aparecía como grupo y otra vez como subpágina.
+                const hasChildren =
+                  cat.id !== "home" &&
+                  cat.tabs.filter((tabId) => isFeatureEnabled(tabId)).length >
+                    1;
+                const showChildren = isActiveCategory && hasChildren;
 
                 return (
                   <div key={cat.id}>
@@ -191,6 +200,8 @@ const PremiumSidebar = memo(
                       }}
                       whileHover={{ x: hasActiveTab ? 0 : 3 }}
                       whileTap={{ scale: 0.98 }}
+                      aria-current={hasActiveTab ? "page" : undefined}
+                      aria-expanded={hasChildren ? showChildren : undefined}
                       className="w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-2xl transition-all text-sm font-bold"
                       style={
                         hasActiveTab
@@ -218,19 +229,35 @@ const PremiumSidebar = memo(
                           strokeWidth={2.3}
                         />
                       </span>
-                      <span className="flex-1 text-left">{cat.label}</span>
+                      {/* Color explícito: los span de este menú toman el gris global y el
+                          nombre de la categoría activa quedaba oscuro sobre el degradado. */}
+                      <span
+                        className="flex-1 text-left"
+                        style={{
+                          color: hasActiveTab
+                            ? "white"
+                            : darkMode
+                              ? "#E2E8F0"
+                              : "#334155",
+                        }}
+                      >
+                        {cat.label}
+                      </span>
                       {anyPremiumInCategory && !isPremium && (
                         <Lock
                           className={`w-3.5 h-3.5 ${hasActiveTab ? "text-white/80" : "text-[#94A3B8]"}`}
                         />
                       )}
-                      <motion.span
-                        animate={{ rotate: showChildren ? 180 : 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="opacity-60 flex items-center"
-                      >
-                        <ChevronDown className="w-4 h-4" />
-                      </motion.span>
+                      {hasChildren && (
+                        <motion.span
+                          animate={{ rotate: showChildren ? 180 : 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="opacity-60 flex items-center"
+                          aria-hidden="true"
+                        >
+                          <ChevronDown className="w-4 h-4" />
+                        </motion.span>
+                      )}
                     </motion.button>
 
                     <AnimatePresence initial={false}>
@@ -342,7 +369,12 @@ const PremiumSidebar = memo(
               <LogOut className="w-[16px] h-[16px]" strokeWidth={2.3} />
             </span>
             {!collapsed && (
-              <span className="ml-2">{t("smartboard.logout")}</span>
+              <span
+                className="ml-2"
+                style={{ color: darkMode ? "#FDA4AF" : "#BE123C" }}
+              >
+                {t("smartboard.logout")}
+              </span>
             )}
           </motion.button>
         </div>

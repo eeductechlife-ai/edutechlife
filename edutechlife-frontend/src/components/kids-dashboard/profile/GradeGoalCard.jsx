@@ -82,7 +82,7 @@ const GradeGoalCard = memo(function GradeGoalCard({ onTabChange }) {
             Sube tus notas y te muestro cuánto te falta para el siguiente nivel.
           </span>
         </span>
-        <span className="text-xs font-black text-[#118AB2] shrink-0">
+        <span className="text-xs font-black text-[#0E7597] shrink-0">
           Subir →
         </span>
       </button>
@@ -113,14 +113,14 @@ const GradeGoalCard = memo(function GradeGoalCard({ onTabChange }) {
         <div className="min-w-0">
           <h3
             id="grade-goal-title"
-            className="!m-0 text-[11px] font-black uppercase tracking-wide text-[#118AB2]"
+            className="!m-0 text-xs font-black uppercase tracking-wide text-[#0E7597]"
           >
             {early ? "Mis notas" : "Mi promedio general"}
           </h3>
           <p className="!m-0 mt-1 flex items-baseline gap-2">
             <span
               className="text-3xl font-black tabular-nums leading-none"
-              style={{ color: state.color }}
+              style={{ color: state.text }}
             >
               {avg.toFixed(1)}
             </span>
@@ -140,8 +140,8 @@ const GradeGoalCard = memo(function GradeGoalCard({ onTabChange }) {
           </p>
         </div>
         <span
-          className="shrink-0 text-[11px] font-black px-2.5 py-1 rounded-full"
-          style={{ background: state.bg, color: state.color }}
+          className="shrink-0 text-xs font-black px-2.5 py-1 rounded-full"
+          style={{ background: state.bg, color: state.textOnTint }}
         >
           {state.emoji} {state.label}
         </span>
@@ -169,7 +169,7 @@ const GradeGoalCard = memo(function GradeGoalCard({ onTabChange }) {
             <p className={`!m-0 mt-2 text-xs ${sub}`}>
               {gap <= 0.3 ? "¡Te falta muy poquito" : "¡Vas en camino"} para
               llegar a{" "}
-              <span className="font-black" style={{ color: next.state.color }}>
+              <span className="font-black" style={{ color: next.state.text }}>
                 {next.state.emoji} {next.state.label}
               </span>
               !
@@ -177,11 +177,11 @@ const GradeGoalCard = memo(function GradeGoalCard({ onTabChange }) {
           ) : (
             <p className={`!m-0 mt-2 text-xs ${sub}`}>
               Te faltan{" "}
-              <span className="font-black" style={{ color: next.state.color }}>
+              <span className="font-black" style={{ color: next.state.text }}>
                 +{gap.toFixed(1)}
               </span>{" "}
               para llegar a{" "}
-              <span className="font-black" style={{ color: next.state.color }}>
+              <span className="font-black" style={{ color: next.state.text }}>
                 {next.state.emoji} {next.state.label} ({next.min.toFixed(1)})
               </span>
             </p>
@@ -207,7 +207,7 @@ const GradeGoalCard = memo(function GradeGoalCard({ onTabChange }) {
             {lever.icon || "📚"}
           </span>
           <span className="min-w-0 flex-1">
-            <span className={`block text-[11px] ${sub}`}>
+            <span className={`block text-xs ${sub}`}>
               {early
                 ? "Practica esta para mejorar:"
                 : "Lo que más sube tu promedio:"}
@@ -216,7 +216,7 @@ const GradeGoalCard = memo(function GradeGoalCard({ onTabChange }) {
               {lever.name} · {Number(lever.gradeScore).toFixed(1)}
             </span>
           </span>
-          <span className="shrink-0 text-xs font-black text-white bg-[#118AB2] px-3 py-1.5 rounded-lg">
+          <span className="shrink-0 text-xs font-black text-white bg-[#0E7EA6] px-3 py-1.5 rounded-lg">
             Practicar
           </span>
         </button>

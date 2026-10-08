@@ -3,7 +3,15 @@
  * Burbuja del usuario (derecha) + respuesta del asistente (izquierda)
  * con recursos clicables que abren ResourceViewerModal.
  */
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import PropTypes from "prop-types";
 import { motion, useReducedMotion } from "framer-motion";
 import {
@@ -35,12 +43,20 @@ const RESOURCE_COLOR = {
   ova: "bg-teal-100 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400",
 };
 
-export default function TopicChatThread({ topicIndex, activeMod, onAdvanceTopic, onGoToActivities }) {
+export default function TopicChatThread({
+  topicIndex,
+  activeMod,
+  onAdvanceTopic,
+  onGoToActivities,
+}) {
   const { t, locale } = useTranslation();
   const prefersReducedMotion = useReducedMotion();
 
-  const { viewedIds, isResourceLocked, topics: sequenceTopics } =
-    useContentSequence(activeMod, locale);
+  const {
+    viewedIds,
+    isResourceLocked,
+    topics: sequenceTopics,
+  } = useContentSequence(activeMod, locale);
 
   const lessons = getModuleLessons(activeMod, locale);
   const overview = getModuleOverviewData(activeMod, locale);
@@ -145,14 +161,16 @@ export default function TopicChatThread({ topicIndex, activeMod, onAdvanceTopic,
 
   const ease = [0.22, 0.61, 0.36, 1];
   const isNLM = activeMod === 4;
-  const nlmFont = { fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif" };
+  const nlmFont = {
+    fontFamily: "'Google Sans Text','Roboto','Inter',sans-serif",
+  };
 
   const NLM_RESOURCE_COLOR = {
-    video:          { bg: "#e8f0fe", color: "#1a73e8" },
-    pdf:            { bg: "#fff8e1", color: "#f9ab00" },
-    ova_interactive:{ bg: "#e6f4ea", color: "#188038" },
-    ova:            { bg: "#e6f4ea", color: "#188038" },
-    document:       { bg: "#f3e8fd", color: "#9334e9" },
+    video: { bg: "#e8f0fe", color: "#1a73e8" },
+    pdf: { bg: "#fff8e1", color: "#f9ab00" },
+    ova_interactive: { bg: "#e6f4ea", color: "#188038" },
+    ova: { bg: "#e6f4ea", color: "#188038" },
+    document: { bg: "#f3e8fd", color: "#9334e9" },
   };
 
   const getResourceState = (resource) => {
@@ -161,13 +179,18 @@ export default function TopicChatThread({ topicIndex, activeMod, onAdvanceTopic,
     return { isCompleted, locked };
   };
 
-  const isCurrentTopicCompleted = resources.length > 0 && resources.every((r) => viewedIds.includes(r.id));
+  const isCurrentTopicCompleted =
+    resources.length > 0 && resources.every((r) => viewedIds.includes(r.id));
 
   const modal = viewerOpen && selectedResource && (
     <Suspense fallback={null}>
       <ResourceViewerModal
         isOpen={viewerOpen}
-        onClose={() => { setViewerOpen(false); setSelectedResource(null); setSelectedResourceType(null); }}
+        onClose={() => {
+          setViewerOpen(false);
+          setSelectedResource(null);
+          setSelectedResourceType(null);
+        }}
         resource={selectedResource}
         resourceType={selectedResourceType}
         currentIndex={activeResourceIndex}
@@ -187,44 +210,117 @@ export default function TopicChatThread({ topicIndex, activeMod, onAdvanceTopic,
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.3, ease }}
+        transition={
+          prefersReducedMotion ? { duration: 0 } : { duration: 0.3, ease }
+        }
         className="w-full max-w-3xl mx-auto pb-6"
       >
-        <div className="rounded-2xl border bg-white overflow-hidden" style={{ borderColor: "#e0e0e6" }}>
-
+        <div
+          className="rounded-2xl border bg-white overflow-hidden"
+          style={{ borderColor: "#e0e0e6" }}
+        >
           {/* Header */}
-          <div className="flex items-center gap-3 px-6 py-4 border-b" style={{ background: "#f8f9ff", borderColor: "#e0e0e6" }}>
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "#e8f0fe" }}>
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          <div
+            className="flex items-center gap-3 px-6 py-4 border-b"
+            style={{ background: "#f8f9ff", borderColor: "#e0e0e6" }}
+          >
+            <div
+              className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ background: "#e8f0fe" }}
+            >
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#1a73e8"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
               </svg>
             </div>
             <div className="flex-1 min-w-0">
-              <p style={{ ...nlmFont, fontSize: 15, fontWeight: 600, color: "#202124" }} className="truncate">{lesson.title}</p>
-              <p style={{ ...nlmFont, fontSize: 12, color: "#5f6368" }}>{resources.length} fuentes · {topicData.duration || ""}</p>
+              <p
+                style={{
+                  ...nlmFont,
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: "#202124",
+                }}
+                className="truncate"
+              >
+                {lesson.title}
+              </p>
+              <p style={{ ...nlmFont, fontSize: 12, color: "#5f6368" }}>
+                {resources.length} fuentes · {topicData.duration || ""}
+              </p>
             </div>
           </div>
 
           {/* Descripción */}
           {(content?.objectiveDesc || lesson.detailedDescription) && (
-            <div className="px-6 py-5 border-b" style={{ borderColor: "#f1f3f4" }}>
+            <div
+              className="px-6 py-5 border-b"
+              style={{ borderColor: "#f1f3f4" }}
+            >
               {content?.objectiveDesc && (
-                <p style={{ ...nlmFont, fontSize: 14, color: "#5f6368", lineHeight: 1.65, marginBottom: 10 }}>{content.objectiveDesc}</p>
+                <p
+                  style={{
+                    ...nlmFont,
+                    fontSize: 14,
+                    color: "#5f6368",
+                    lineHeight: 1.65,
+                    marginBottom: 10,
+                  }}
+                >
+                  {content.objectiveDesc}
+                </p>
               )}
-              <p style={{ ...nlmFont, fontSize: 15, color: "#3c4043", lineHeight: 1.7 }}>{lesson.detailedDescription}</p>
+              <p
+                style={{
+                  ...nlmFont,
+                  fontSize: 15,
+                  color: "#3c4043",
+                  lineHeight: 1.7,
+                }}
+              >
+                {lesson.detailedDescription}
+              </p>
             </div>
           )}
 
           {/* Fuentes del tema */}
           <div className="px-6 py-5">
-            <p style={{ ...nlmFont, fontSize: 12, fontWeight: 600, color: "#5f6368", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 12 }}>
+            <p
+              style={{
+                ...nlmFont,
+                fontSize: 12,
+                fontWeight: 600,
+                color: "#5f6368",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                marginBottom: 12,
+              }}
+            >
               Fuentes de este tema
             </p>
             <div className="space-y-2">
               {resources.map((resource) => {
                 const icon = RESOURCE_ICON[resource.type] || "fa-file";
-                const nlmColor = NLM_RESOURCE_COLOR[resource.type] || { bg: "#f1f3f4", color: "#5f6368" };
-                const meta = resource.duration || resource.estimatedTime || (resource.pages ? `${resource.pages} págs.` : "") || resource.format || "";
+                const nlmColor = NLM_RESOURCE_COLOR[resource.type] || {
+                  bg: "#f1f3f4",
+                  color: "#5f6368",
+                };
+                const meta =
+                  resource.duration ||
+                  resource.estimatedTime ||
+                  (resource.pages ? `${resource.pages} págs.` : "") ||
+                  resource.format ||
+                  "";
                 const { isCompleted, locked } = getResourceState(resource);
                 return (
                   <motion.button
@@ -232,24 +328,86 @@ export default function TopicChatThread({ topicIndex, activeMod, onAdvanceTopic,
                     data-testid={`resource-btn-${resource.id}`}
                     disabled={locked}
                     aria-disabled={locked}
-                    onClick={locked ? undefined : () => handleOpenResource(resource)}
-                    whileHover={prefersReducedMotion || locked ? {} : { backgroundColor: "#f8f9ff" }}
-                    whileTap={prefersReducedMotion || locked ? {} : { scale: 0.99 }}
+                    onClick={
+                      locked ? undefined : () => handleOpenResource(resource)
+                    }
+                    whileHover={
+                      prefersReducedMotion || locked
+                        ? {}
+                        : { backgroundColor: "#f8f9ff" }
+                    }
+                    whileTap={
+                      prefersReducedMotion || locked ? {} : { scale: 0.99 }
+                    }
                     className={`group w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-left transition-all duration-150 focus:outline-none ${locked ? "opacity-60 cursor-not-allowed bg-white" : "bg-white cursor-pointer"}`}
                     style={{ borderColor: isCompleted ? "#a8dab5" : "#e0e0e6" }}
                   >
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: locked ? "#f1f3f4" : isCompleted ? "#e6f4ea" : nlmColor.bg }}>
-                      <Icon name={locked ? "fa-lock" : isCompleted ? "fa-check" : icon} className="text-sm" style={{ color: locked ? "#9aa0a6" : isCompleted ? "#188038" : nlmColor.color }} aria-hidden="true" />
+                    <div
+                      className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{
+                        background: locked
+                          ? "#f1f3f4"
+                          : isCompleted
+                            ? "#e6f4ea"
+                            : nlmColor.bg,
+                      }}
+                    >
+                      <Icon
+                        name={
+                          locked ? "fa-lock" : isCompleted ? "fa-check" : icon
+                        }
+                        className="text-sm"
+                        style={{
+                          color: locked
+                            ? "#9aa0a6"
+                            : isCompleted
+                              ? "#188038"
+                              : nlmColor.color,
+                        }}
+                        aria-hidden="true"
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p style={{ ...nlmFont, fontSize: 14, fontWeight: 600, color: locked ? "#9aa0a6" : "#202124" }} className="truncate group-hover:text-[#1a73e8] transition-colors">
+                      <p
+                        style={{
+                          ...nlmFont,
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: locked ? "#9aa0a6" : "#202124",
+                        }}
+                        className="truncate group-hover:text-[#1a73e8] transition-colors"
+                      >
                         {resource.title}
                       </p>
-                      {meta && <p style={{ ...nlmFont, fontSize: 12, color: "#5f6368" }}>{meta}</p>}
-                      {locked && <p style={{ ...nlmFont, fontSize: 11, color: "#9aa0a6" }} className="mt-0.5">{t("ialab.status.locked_hint")}</p>}
+                      {meta && (
+                        <p
+                          style={{ ...nlmFont, fontSize: 12, color: "#5f6368" }}
+                        >
+                          {meta}
+                        </p>
+                      )}
+                      {locked && (
+                        <p
+                          style={{ ...nlmFont, fontSize: 11, color: "#9aa0a6" }}
+                          className="mt-0.5"
+                        >
+                          {t("ialab.status.locked_hint")}
+                        </p>
+                      )}
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={isCompleted ? "#188038" : "#9aa0a6"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="flex-shrink-0">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke={isCompleted ? "#188038" : "#9aa0a6"}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                      className="flex-shrink-0"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </motion.button>
                 );
@@ -265,25 +423,67 @@ export default function TopicChatThread({ topicIndex, activeMod, onAdvanceTopic,
   /* ── Chat layout (otros módulos) ───────────────────────── */
   return (
     <div className="w-full max-w-3xl mx-auto space-y-6 pb-6">
-      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.3, ease }} className="flex justify-end">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={
+          prefersReducedMotion ? { duration: 0 } : { duration: 0.3, ease }
+        }
+        className="flex justify-end"
+      >
         <div className="bg-[#f4f4f4] dark:bg-slate-700 rounded-3xl rounded-tr-md px-4 py-2.5 max-w-[80%]">
           <p className="text-[15px] theme-text font-medium">{lesson.title}</p>
         </div>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.38, delay: 0.2, ease }} className="flex items-start gap-3">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={
+          prefersReducedMotion
+            ? { duration: 0 }
+            : { duration: 0.38, delay: 0.2, ease }
+        }
+        className="flex items-start gap-3"
+      >
         <div className="flex-shrink-0 mt-0.5 w-8 h-8 rounded-full bg-[#10a37f] flex items-center justify-center">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#fff"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            aria-hidden="true"
+          >
+            <path d="M12 5v14M5 12h14" />
+          </svg>
         </div>
         <div className="flex-1 min-w-0 space-y-4 pt-0.5">
-          {content?.objectiveDesc && <p className="text-[15px] theme-text-muted leading-[1.65]">{content.objectiveDesc}</p>}
-          <p className="text-[15px] theme-text leading-[1.65]">{lesson.detailedDescription}</p>
-          <p className="text-[15px] font-bold theme-text leading-snug">Recursos de este tema:</p>
+          {content?.objectiveDesc && (
+            <p className="text-[15px] theme-text-muted leading-[1.65]">
+              {content.objectiveDesc}
+            </p>
+          )}
+          <p className="text-[15px] theme-text leading-[1.65]">
+            {lesson.detailedDescription}
+          </p>
+          <p className="text-[15px] font-bold theme-text leading-snug">
+            Recursos de este tema:
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {resources.map((resource) => {
               const icon = RESOURCE_ICON[resource.type] || "fa-file";
-              const colorCls = RESOURCE_COLOR[resource.type] || "bg-slate-100 dark:bg-slate-700 text-slate-500";
-              const meta = resource.duration || resource.estimatedTime || (resource.pages ? `${resource.pages} págs.` : "") || resource.format || "";
+              const colorCls =
+                RESOURCE_COLOR[resource.type] ||
+                "bg-slate-100 dark:bg-slate-700 text-slate-500";
+              const meta =
+                resource.duration ||
+                resource.estimatedTime ||
+                (resource.pages ? `${resource.pages} págs.` : "") ||
+                resource.format ||
+                "";
               const { isCompleted, locked } = getResourceState(resource);
               const statusLabel = isCompleted
                 ? t("ialab.status.viewed")
@@ -296,9 +496,13 @@ export default function TopicChatThread({ topicIndex, activeMod, onAdvanceTopic,
                   data-testid={`resource-btn-${resource.id}`}
                   disabled={locked}
                   aria-disabled={locked}
-                  onClick={locked ? undefined : () => handleOpenResource(resource)}
+                  onClick={
+                    locked ? undefined : () => handleOpenResource(resource)
+                  }
                   whileHover={prefersReducedMotion || locked ? {} : { y: -1 }}
-                  whileTap={prefersReducedMotion || locked ? {} : { scale: 0.99 }}
+                  whileTap={
+                    prefersReducedMotion || locked ? {} : { scale: 0.99 }
+                  }
                   className={`theme-prompt-card group w-full flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-150 shadow-sm focus:outline-none ${
                     isCompleted
                       ? "bg-emerald-50/60 dark:bg-emerald-900/15 border-emerald-200/60 dark:border-emerald-800/40 cursor-pointer hover:shadow-md"
@@ -307,14 +511,32 @@ export default function TopicChatThread({ topicIndex, activeMod, onAdvanceTopic,
                         : "cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-[#10a37f]/40"
                   }`}
                 >
-                  <span className={`relative mt-1 flex-shrink-0 h-8 w-8 rounded-xl flex items-center justify-center ${locked ? "bg-slate-100 dark:bg-slate-700 text-slate-400" : isCompleted ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400" : colorCls}`}>
-                    <Icon name={locked ? "fa-lock" : isCompleted ? "fa-check" : icon} className="text-sm" aria-hidden="true" />
+                  <span
+                    className={`relative mt-1 flex-shrink-0 h-8 w-8 rounded-xl flex items-center justify-center ${locked ? "bg-slate-100 dark:bg-slate-700 text-slate-400" : isCompleted ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400" : colorCls}`}
+                  >
+                    <Icon
+                      name={
+                        locked ? "fa-lock" : isCompleted ? "fa-check" : icon
+                      }
+                      className="text-sm"
+                      aria-hidden="true"
+                    />
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className={`font-semibold text-[15px] leading-snug ${locked ? "text-slate-400" : isCompleted ? "text-emerald-700 dark:text-emerald-400" : "theme-text"}`}>{resource.title}</p>
-                    {meta && <p className="text-[13px] theme-text-muted leading-snug mt-0.5">{meta}</p>}
+                    <p
+                      className={`font-semibold text-[15px] leading-snug ${locked ? "text-slate-400" : isCompleted ? "text-emerald-700 dark:text-emerald-400" : "theme-text"}`}
+                    >
+                      {resource.title}
+                    </p>
+                    {meta && (
+                      <p className="text-[13px] theme-text-muted leading-snug mt-0.5">
+                        {meta}
+                      </p>
+                    )}
                     {locked && (
-                      <p className="text-[11px] text-slate-400 leading-snug mt-1">{t("ialab.status.locked_hint")}</p>
+                      <p className="text-[11px] text-slate-400 leading-snug mt-1">
+                        {t("ialab.status.locked_hint")}
+                      </p>
                     )}
                   </div>
                   <span
@@ -333,23 +555,33 @@ export default function TopicChatThread({ topicIndex, activeMod, onAdvanceTopic,
             })}
           </div>
 
-          {isCurrentTopicCompleted && (
-            isLastTopic ? (
+          {isCurrentTopicCompleted &&
+            (isLastTopic ? (
               <button
                 type="button"
                 onClick={() => onGoToActivities?.()}
                 className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[var(--theme-emphasis)] to-[var(--theme-primary)] px-4 py-3 text-sm font-bold text-white shadow-md hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-emphasis)]/40"
               >
-                <Icon name="fa-circle-check" className="text-sm" aria-hidden="true" />
-                {t("ialab.continue_to_activities") || "Continuar con las actividades del módulo"}
+                <Icon
+                  name="fa-circle-check"
+                  className="text-sm"
+                  aria-hidden="true"
+                />
+                {t("ialab.continue_to_activities")}
               </button>
             ) : advancing ? (
-              <p className="flex items-center gap-2 text-[13px] font-semibold text-emerald-600 dark:text-emerald-400" role="status">
-                <Icon name="fa-circle-check" className="text-sm" aria-hidden="true" />
-                {t("ialab.topic_completed_advancing") || "Tema completado. Avanzando al siguiente tema…"}
+              <p
+                className="flex items-center gap-2 text-[13px] font-semibold text-emerald-600 dark:text-emerald-400"
+                role="status"
+              >
+                <Icon
+                  name="fa-circle-check"
+                  className="text-sm"
+                  aria-hidden="true"
+                />
+                {t("ialab.topic_completed_advancing")}
               </p>
-            ) : null
-          )}
+            ) : null)}
         </div>
       </motion.div>
       {modal}

@@ -129,6 +129,7 @@ const ChallengeEngine = memo(({ onTabChange }) => {
                 questions={engine.questions}
                 difficulty={engine.difficulty}
                 subject={engine.subject}
+                xpGranted={engine.xpGranted}
                 onRetry={engine.resetChallenge}
                 onEasier={() => {
                   engine.setDifficulty(engine.DIFFICULTIES[0]);

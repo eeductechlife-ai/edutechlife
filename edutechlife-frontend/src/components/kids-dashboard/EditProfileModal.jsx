@@ -34,10 +34,10 @@ const EditProfileModal = ({
   const [formData, setFormData] = useState({
     name: profile?.name || studentName || "",
     age: profile?.age ? String(profile.age) : "",
-    vakStyle: profile?.vakStyle || "",
     school: profile?.school || "",
     grade: gradeFromProfile(profile?.grade),
   });
+  const vakOption = VAK_OPTIONS.find((o) => o.value === profile?.vakStyle);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
@@ -67,11 +67,7 @@ const EditProfileModal = ({
       if (ageChanged) payload.age = Number(formData.age);
       if (gradeChanged) payload.grade = String(formData.grade);
     }
-    if (
-      formData.vakStyle !== undefined &&
-      formData.vakStyle !== (profile?.vakStyle || "")
-    )
-      payload.vakStyle = formData.vakStyle;
+    // El estilo VAK ya no se edita a mano: lo determina el ADN de Aprendizaje.
     if (
       formData.school !== undefined &&
       formData.school !== (profile?.school || "")
@@ -256,7 +252,7 @@ const EditProfileModal = ({
                 {getInitials(formData.name || displayName)}
               </span>
             )}
-            <span className="absolute bottom-0 inset-x-0 bg-black/40 text-white text-[9px] py-0.5 flex items-center justify-center gap-0.5">
+            <span className="absolute bottom-0 inset-x-0 bg-black/40 text-white text-xs py-0.5 flex items-center justify-center gap-0.5">
               {uploadingAvatar ? (
                 <Loader2 className="w-3 h-3 animate-spin" />
               ) : (
@@ -309,29 +305,25 @@ const EditProfileModal = ({
             t("kid.user.age_placeholder"),
           )}
 
-          {/* VAK Select */}
+          {/* Estilo de aprendizaje: solo lectura, sale del ADN. Antes se podía
+              elegir a mano y contradecía el resultado del diagnóstico. */}
           <div className="mb-4">
-            <label
-              htmlFor="profile-vakStyle"
-              className="block text-sm font-semibold text-gray-700 mb-1"
-            >
+            <p className="block text-sm font-semibold text-gray-700 mb-1">
               {t("kid.user.vak_type")}
-            </label>
-            <select
-              id="profile-vakStyle"
-              value={formData.vakStyle || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, vakStyle: e.target.value })
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0077B6] bg-white"
-            >
-              <option value="">{t("kid.user.select_vak")}</option>
-              {VAK_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.icon} {t(opt.labelKey)}
-                </option>
-              ))}
-            </select>
+            </p>
+            {vakOption ? (
+              <p className="px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-sm text-gray-800">
+                <span aria-hidden="true">{vakOption.icon} </span>
+                {t(vakOption.labelKey)}
+                <span className="block text-xs text-gray-600 mt-0.5">
+                  {t("kid.user.vak_from_adn")}
+                </span>
+              </p>
+            ) : (
+              <p className="px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-sm text-gray-700">
+                {t("kid.user.vak_unknown")}
+              </p>
+            )}
           </div>
 
           {renderField(

@@ -4,6 +4,7 @@ import { callDeepseekSmartboard } from "../../utils/api";
 import { speakTextConversational, stopSpeech } from "../../utils/speech";
 import { useIngenIAKids } from "../../context/IngenIAKidsContext";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { POINTS, CATEGORY } from "../../context/pointsEconomy";
 
 const dc = (dm, light, dark) => (dm ? dark : light);
 const gd = "bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC]";
@@ -22,7 +23,7 @@ const ScriptBlock = memo(({ block, i, currentIdx }) => {
         </span>
         <div className="flex-1 min-w-0">
           <p
-            className={`text-xs font-semibold mb-0.5 ${dc(false, "text-[#4DA8C4]", "text-[#66CCCC]")}`}
+            className={`text-xs font-semibold mb-0.5 ${dc(false, "text-[#367689]", "text-[#387070]")}`}
           >
             {block.role === "host"
               ? t("kid.podcast.role_host")
@@ -40,6 +41,7 @@ const ScriptBlock = memo(({ block, i, currentIdx }) => {
 });
 
 const StudyPodcast = memo(() => {
+  const { t } = useTranslation();
   const { darkMode: dm, addPoints } = useIngenIAKids();
   const [mode, setMode] = useState("input");
   const [text, setText] = useState("");
@@ -71,7 +73,11 @@ ${input.substring(0, 3000)}`;
         const parsed = typeof result === "string" ? JSON.parse(result) : result;
         setScript({ ...parsed, source: input });
         setMode("player");
-        addPoints(20, "Creó un podcast de estudio");
+        addPoints(
+          POINTS.podcast,
+          "Creó un podcast de estudio",
+          CATEGORY.podcast,
+        );
       } catch (e) {
         console.warn("Error generating podcast:", e);
       }

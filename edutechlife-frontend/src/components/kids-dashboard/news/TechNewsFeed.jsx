@@ -2,11 +2,14 @@ import { memo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNewsFeed } from "../../../hooks/useNewsFeed";
 import { useReadReward } from "../../../hooks/useReadReward";
+import useFocusTrap from "../../../hooks/useFocusTrap";
 import { CATEGORIES, CATEGORY_COLORS } from "../../../data/newsData";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { logPractice } from "../practicarHub/practicarProgress";
+import { POINTS } from "../../../context/pointsEconomy";
+import { readableTextOn, ensureContrast } from "../../../utils/contrast";
 
-const CategoryTab = memo(({ cat, active, unread, onClick }) => {
+const CategoryTab = memo(({ cat, active, unread, onClick, darkMode }) => {
   const color = CATEGORY_COLORS[cat.id] || "#4DA8C4";
   return (
     <button
@@ -16,14 +19,24 @@ const CategoryTab = memo(({ cat, active, unread, onClick }) => {
       className={`relative w-full min-h-[48px] px-2 py-2 rounded-2xl text-xs font-bold leading-tight text-center transition-all border-2 ${
         active
           ? "text-white border-transparent shadow-md"
-          : "bg-white border-[#E2E8F0] text-[#475569]"
+          : darkMode
+            ? "bg-[#1E293B] border-[#334155] text-[#CBD5E1]"
+            : "bg-white border-[#E2E8F0] text-[#475569]"
       }`}
-      style={active ? { backgroundColor: color, borderColor: color } : {}}
+      style={
+        active
+          ? {
+              backgroundColor: color,
+              borderColor: color,
+              color: readableTextOn(color),
+            }
+          : {}
+      }
     >
       {cat.label}
       {unread > 0 && (
         <span
-          className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-[#EF476F] text-white text-[10px] font-black leading-none border-2 border-white"
+          className="absolute -top-1.5 -right-1 min-w-[20px] h-[20px] px-1 flex items-center justify-center rounded-full bg-[#BE123C] text-white text-xs font-black leading-none border-2 border-white"
           aria-label={`${unread} sin leer`}
         >
           {unread}
@@ -33,6 +46,16 @@ const CategoryTab = memo(({ cat, active, unread, onClick }) => {
   );
 });
 CategoryTab.displayName = "CategoryTab";
+
+// En la tarjeta se muestra la cita misma («Fuente: Potter et al., MIT (2014)»),
+// no una marca de verificación: así se puede comprobar de dónde sale el dato.
+export function shortSource(source) {
+  const first = String(source || "")
+    .split(";")[0]
+    .trim();
+  const text = first.length > 38 ? `${first.slice(0, 37).trimEnd()}…` : first;
+  return `Fuente: ${text}`;
+}
 
 const ArticleCard = memo(({ article, isRead, onRead, darkMode }) => {
   const color = CATEGORY_COLORS[article.category] || "#4DA8C4";
@@ -100,13 +123,15 @@ const ArticleCard = memo(({ article, isRead, onRead, darkMode }) => {
               >
                 <span
                   className="text-sm font-black leading-none"
-                  style={{ color }}
+                  style={{
+                    color: darkMode ? color : ensureContrast(color, "#F8FAFC"),
+                  }}
                 >
                   {dp.value}
                 </span>
                 <span
-                  className={`text-[10px] mt-0.5 ${
-                    darkMode ? "text-[#64748B]" : "text-[#94A3B8]"
+                  className={`text-xs mt-0.5 ${
+                    darkMode ? "text-[#94A3B8]" : "text-[#64748B]"
                   }`}
                 >
                   {dp.label}
@@ -118,14 +143,19 @@ const ArticleCard = memo(({ article, isRead, onRead, darkMode }) => {
 
         <div className="flex items-center justify-between">
           <span
-            className={`text-[10px] ${
-              darkMode ? "text-[#475569]" : "text-[#CBD5E1]"
+            className={`text-xs ${
+              darkMode ? "text-[#94A3B8]" : "text-[#64748B]"
             }`}
           >
             ⏱ {article.readTime}
-            {article.source ? " · Con fuente ✓" : ""}
+            {article.source ? ` · ${shortSource(article.source)}` : ""}
           </span>
-          <span className="text-[11px] font-semibold" style={{ color }}>
+          <span
+            className="text-xs font-semibold"
+            style={{
+              color: darkMode ? color : ensureContrast(color, "#FFFFFF"),
+            }}
+          >
             {isRead ? "Leer de nuevo →" : "Leer más →"}
           </span>
         </div>
@@ -136,6 +166,9 @@ const ArticleCard = memo(({ article, isRead, onRead, darkMode }) => {
 ArticleCard.displayName = "ArticleCard";
 
 const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
+  // Foco dentro del cuadro mientras está abierto y de vuelta al botón que lo
+  // abrió al cerrarlo; Escape cierra.
+  const trapRef = useFocusTrap(!!article);
   if (!article) return null;
   const color = CATEGORY_COLORS[article.category] || "#4DA8C4";
 
@@ -147,8 +180,15 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
       style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
       onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") onClose();
+      }}
     >
       <motion.div
+        ref={trapRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="article-modal-title"
         initial={{ y: 60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 60, opacity: 0 }}
@@ -173,6 +213,7 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
             ×
           </button>
           <h2
+            id="article-modal-title"
             className={`text-base font-black leading-snug mb-3 ${
               darkMode ? "text-white" : "text-[#1E293B]"
             }`}
@@ -180,8 +221,8 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
             {article.title}
           </h2>
           <p
-            className={`text-[11px] mb-4 ${
-              darkMode ? "text-[#475569]" : "text-[#CBD5E1]"
+            className={`text-xs mb-4 ${
+              darkMode ? "text-[#94A3B8]" : "text-[#64748B]"
             }`}
           >
             ⏱ {article.readTime} de lectura
@@ -195,12 +236,19 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
                     darkMode ? "bg-[#1E293B]" : "bg-[#F8FAFC]"
                   }`}
                 >
-                  <span className="text-base font-black" style={{ color }}>
+                  <span
+                    className="text-base font-black"
+                    style={{
+                      color: darkMode
+                        ? color
+                        : ensureContrast(color, "#F8FAFC"),
+                    }}
+                  >
                     {dp.value}
                   </span>
                   <span
-                    className={`text-[10px] mt-0.5 ${
-                      darkMode ? "text-[#64748B]" : "text-[#94A3B8]"
+                    className={`text-xs mt-0.5 ${
+                      darkMode ? "text-[#94A3B8]" : "text-[#64748B]"
                     }`}
                   >
                     {dp.label}
@@ -219,10 +267,10 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
 
           {article.source && (
             <p
-              className={`mt-4 pt-3 border-t text-[11px] leading-snug ${
+              className={`mt-4 pt-3 border-t text-xs leading-snug ${
                 darkMode
-                  ? "border-[#1E293B] text-[#64748B]"
-                  : "border-[#F1F5F9] text-[#94A3B8]"
+                  ? "border-[#1E293B] text-[#94A3B8]"
+                  : "border-[#F1F5F9] text-[#64748B]"
               }`}
             >
               <span className="font-bold">📚 Fuente:</span> {article.source}
@@ -297,7 +345,9 @@ const TechNewsFeed = () => {
       category: article.category,
     });
     addPoints?.(
-      studentAge != null && studentAge <= 9 ? 10 : 15,
+      studentAge != null && studentAge <= 9
+        ? POINTS.newsRead.young
+        : POINTS.newsRead.older,
       `Artículo leído: ${article.title}`,
     );
   });
@@ -332,6 +382,7 @@ const TechNewsFeed = () => {
             active={activeCategory === cat.id}
             unread={unreadByCategory(cat.id)}
             onClick={setCategory}
+            darkMode={darkMode}
           />
         ))}
       </div>
@@ -368,7 +419,7 @@ const TechNewsFeed = () => {
           <p className="text-3xl mb-2">📭</p>
           <p
             className={`text-sm ${
-              darkMode ? "text-[#64748B]" : "text-[#94A3B8]"
+              darkMode ? "text-[#94A3B8]" : "text-[#64748B]"
             }`}
           >
             No hay artículos en esta categoría aún.

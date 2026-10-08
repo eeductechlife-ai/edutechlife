@@ -99,7 +99,7 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
           >
             {t("kid.flashcards.generate_title")}
           </p>
-          <p className="text-[11px]" style={{ color: textSecondary }}>
+          <p className="text-xs" style={{ color: textSecondary }}>
             {level
               ? `La IA crea 10 tarjetas para tu grado ${level}°`
               : "La IA crea 10 tarjetas para tu nivel"}
@@ -146,7 +146,7 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
         {ideas.length > 0 && !topic.trim() && !generating && (
           <div className="space-y-1.5">
             <p
-              className="text-[11px] font-black uppercase tracking-wide"
+              className="text-xs font-black uppercase tracking-wide"
               style={{ color: textSecondary }}
             >
               💡 Ideas para ti
@@ -208,7 +208,7 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
               ))}
             </div>
             <p
-              className="text-[11px] mt-2 text-center"
+              className="text-xs mt-2 text-center"
               style={{ color: textSecondary }}
             >
               {t("kid.flashcards.generating_for", {
@@ -232,7 +232,7 @@ export default function GenerateFlashcards({ onGenerated, darkMode = false }) {
               border: "1px solid rgba(239,71,111,0.25)",
             }}
           >
-            <p className="text-sm text-[#EF476F] flex-1 mr-2">{error}</p>
+            <p className="text-sm text-[#BF3959] flex-1 mr-2">{error}</p>
             <motion.button
               onClick={handleGenerate}
               whileHover={{ scale: 1.02 }}

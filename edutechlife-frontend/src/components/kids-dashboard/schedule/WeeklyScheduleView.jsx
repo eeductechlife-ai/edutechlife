@@ -9,6 +9,7 @@ import {
   formatHHMM,
   timeToMinutes,
 } from "./timetableUtils";
+import { readableTextOn } from "../../../utils/contrast";
 
 const ScheduleScanner = lazy(() => import("./ScheduleScanner"));
 const ScheduleEditor = lazy(() => import("./ScheduleEditor"));
@@ -84,8 +85,8 @@ const AhoraCard = ({ current, next, todayIso }) => {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1.5 flex-wrap">
             <span
-              className="text-[11px] font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full text-white"
-              style={{ backgroundColor: color }}
+              className="text-xs font-bold uppercase tracking-wide px-2.5 py-0.5 rounded-full text-white"
+              style={{ backgroundColor: color, color: readableTextOn(color) }}
             >
               ● En curso
             </span>
@@ -177,7 +178,7 @@ const TodayTimeline = ({ slots, todayIso }) => {
             >
               <div className="text-xs text-[#64748B] w-[68px] shrink-0 tabular-nums">
                 {formatHHMM(s.start_time)}
-                <div className="text-[10px]">{formatHHMM(s.end_time)}</div>
+                <div className="text-xs">{formatHHMM(s.end_time)}</div>
               </div>
               <div
                 className="w-1 self-stretch rounded-full shrink-0 min-h-[2.5rem]"
@@ -204,8 +205,11 @@ const TodayTimeline = ({ slots, todayIso }) => {
               </div>
               {isCurrent && (
                 <span
-                  className="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded-full text-white shrink-0"
-                  style={{ backgroundColor: color }}
+                  className="text-xs font-bold uppercase px-1.5 py-0.5 rounded-full text-white shrink-0"
+                  style={{
+                    backgroundColor: color,
+                    color: readableTextOn(color),
+                  }}
                 >
                   Ahora
                 </span>
@@ -242,21 +246,17 @@ const WeeklyGrid = ({ slots, todayIso }) => {
               }`}
             >
               <div
-                className={`text-[10px] font-bold text-center uppercase ${
+                className={`text-xs font-bold text-center uppercase ${
                   isToday ? "text-[#004B63]" : "text-[#94A3B8]"
                 }`}
               >
                 {DAY_LABELS.es[d]}
                 {isToday && (
-                  <div className="text-[9px] text-[#4DA8C4] font-normal">
-                    HOY
-                  </div>
+                  <div className="text-xs text-[#367689] font-normal">HOY</div>
                 )}
               </div>
               {daySlots.length === 0 && (
-                <div className="text-[10px] text-center text-[#CBD5E1] py-2">
-                  –
-                </div>
+                <div className="text-xs text-center text-[#CBD5E1] py-2">–</div>
               )}
               {daySlots.map((s) => {
                 const color = s.color || subjectColor(s.subject);
@@ -269,10 +269,10 @@ const WeeklyGrid = ({ slots, todayIso }) => {
                       backgroundColor: `${color}12`,
                     }}
                   >
-                    <div className="text-[9px] text-[#64748B]">
+                    <div className="text-xs text-[#64748B]">
                       {formatHHMM(s.start_time)}
                     </div>
-                    <div className="text-[10px] font-semibold text-[#004B63] leading-tight">
+                    <div className="text-xs font-semibold text-[#004B63] leading-tight">
                       {subjectEmoji(s.subject_label || s.subject)}{" "}
                       {s.subject_label || s.subject}
                     </div>

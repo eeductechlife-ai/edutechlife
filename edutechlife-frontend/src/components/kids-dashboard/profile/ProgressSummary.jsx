@@ -6,6 +6,7 @@ import { usePracticeLog } from "../practicarHub/practicarProgress";
 import { WEEKLY_GOAL } from "../practicarHub/WeekProgress";
 import { getMasteryState } from "../components/SubjectsView";
 import { REWARDS } from "../ingenIAProgress/gamificationData";
+import { ensureContrast } from "../../../utils/contrast";
 import SkillPassport from "../SkillPassport";
 import GradeGoalCard from "./GradeGoalCard";
 
@@ -26,8 +27,8 @@ function Tile({ title, onClick, children, dm, accent }) {
     >
       <span className="flex items-center justify-between gap-1">
         <span
-          className="text-[11px] font-black uppercase tracking-wide"
-          style={{ color: accent }}
+          className="text-xs font-black uppercase tracking-wide"
+          style={{ color: dm ? accent : ensureContrast(accent, "#FFFFFF") }}
         >
           {title}
         </span>
@@ -101,7 +102,7 @@ const ProgressSummary = memo(function ProgressSummary({
                   style={done ? { background: "#EF476F" } : {}}
                 />
                 <span
-                  className={`text-[8px] font-bold ${i === todayIdx ? "text-[#EF476F]" : sub}`}
+                  className={`text-xs font-bold ${i === todayIdx ? (dm ? "text-[#FF6B9D]" : "text-[#BF3959]") : sub}`}
                 >
                   {DAY_LABELS[i]}
                 </span>
@@ -112,7 +113,7 @@ const ProgressSummary = memo(function ProgressSummary({
             <span className="block text-xl font-black leading-none">
               {practice.daysPracticed}
             </span>
-            <span className={`block text-[11px] ${sub}`}>
+            <span className={`block text-xs ${sub}`}>
               días esta semana (meta {WEEKLY_GOAL})
             </span>
           </span>
@@ -126,7 +127,7 @@ const ProgressSummary = memo(function ProgressSummary({
         >
           {toReinforce.length ? (
             <>
-              <span className={`text-[11px] ${sub}`}>Para reforzar:</span>
+              <span className={`text-xs ${sub}`}>Para reforzar:</span>
               <span className="flex flex-col gap-1">
                 {toReinforce.slice(0, 2).map((s) => (
                   <span
@@ -139,7 +140,7 @@ const ProgressSummary = memo(function ProgressSummary({
                     <span
                       className="tabular-nums"
                       style={{
-                        color: getMasteryState(s.progress, s.gradeScore).color,
+                        color: getMasteryState(s.progress, s.gradeScore).text,
                       }}
                     >
                       {Number(s.gradeScore).toFixed(1)}
@@ -148,7 +149,7 @@ const ProgressSummary = memo(function ProgressSummary({
                 ))}
               </span>
               {toReinforce.length > 2 && (
-                <span className={`mt-auto text-[11px] ${sub}`}>
+                <span className={`mt-auto text-xs ${sub}`}>
                   y {toReinforce.length - 2} más
                 </span>
               )}
@@ -173,17 +174,17 @@ const ProgressSummary = memo(function ProgressSummary({
             <span className="block text-xl font-black leading-none">
               {practice.retosThisWeek}
             </span>
-            <span className={`block text-[11px] ${sub}`}>
+            <span className={`block text-xs ${sub}`}>
               {practice.retosThisWeek === 1
                 ? "reto esta semana"
                 : "retos esta semana"}
             </span>
             {practice.avgScore != null ? (
-              <span className="block mt-1 text-xs font-bold text-[#9D4EDD]">
+              <span className="block mt-1 text-xs font-bold text-[#954AD2]">
                 Promedio {practice.avgScore}%
               </span>
             ) : (
-              <span className="block mt-1 text-xs font-bold text-[#9D4EDD]">
+              <span className="block mt-1 text-xs font-bold text-[#954AD2]">
                 ¡Haz el primero! ▶
               </span>
             )}
@@ -212,7 +213,7 @@ const ProgressSummary = memo(function ProgressSummary({
                   style={{ width: `${Math.max(4, rewardPct)}%` }}
                 />
               </span>
-              <span className={`block text-[11px] mt-1 ${sub}`}>
+              <span className={`block text-xs mt-1 ${sub}`}>
                 Te faltan {nextReward.cost - (totalPoints ?? 0)} pts
               </span>
             </span>

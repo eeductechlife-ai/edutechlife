@@ -65,12 +65,12 @@ const SmartBookReader = () => {
                 disabled={!text.trim()}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${text.trim() ? "bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white shadow-md hover:shadow-lg" : darkMode ? "bg-[#334155] text-[#64748B]" : "bg-[#E2E8F0] text-[#94A3B8]"}`}
+                className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all ${text.trim() ? "bg-gradient-to-r from-[#4DA8C4] to-[#66CCCC] text-white shadow-md hover:shadow-lg" : darkMode ? "bg-[#334155] text-[#94A3B8]" : "bg-[#E2E8F0] text-[#64748B]"}`}
               >
                 {t("kid.smartbook.analyze")}
               </motion.button>
               <span
-                className={`text-xs font-semibold ${darkMode ? "text-[#64748B]" : "text-[#94A3B8]"}`}
+                className={`text-xs font-semibold ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
               >
                 {t("kid.smartbook.or")}
               </span>

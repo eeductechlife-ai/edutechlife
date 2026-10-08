@@ -7,6 +7,7 @@ import { useTranslation } from "../../../../i18n/I18nProvider";
 import { callDeepseekSmartboard } from "../../../../utils/api";
 import { track } from "../../../../lib/analytics";
 import { EVENTS } from "../../../../lib/analyticsEvents";
+import { POINTS, CATEGORY } from "../../../../context/pointsEconomy";
 
 const DeckQuiz = memo(({ deck, onFinish, onTabChange }) => {
   const { t } = useTranslation();
@@ -75,8 +76,9 @@ Responde SOLO con JSON:
       if (qIdx + 1 >= questions.length) {
         const finalScore = score + (correct ? 1 : 0);
         addPoints(
-          finalScore * 15,
+          finalScore * POINTS.deckQuizPerCorrect,
           t("kid.exam.deck_exam_points", { title: deck.title }),
+          CATEGORY.deckQuiz,
         );
         setDone(true);
         track(EVENTS.EXAM_COMPLETED, {
@@ -173,7 +175,7 @@ Responde SOLO con JSON:
             ))}
           </div>
         ) : (
-          <p className="text-xs text-[#4DA8C4] font-semibold">
+          <p className="text-xs text-[#367689] font-semibold">
             {emotionalFeedback === "hard"
               ? "¡Dani te preparará más práctica!"
               : "¡Excelente actitud!"}
