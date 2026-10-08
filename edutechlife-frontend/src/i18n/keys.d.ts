@@ -3292,8 +3292,10 @@ export type TranslationKeys = {
   "kid.user.select_vak": string;
   "kid.user.smartboard_profile": string;
   "kid.user.student": string;
+  "kid.user.vak_from_adn": string;
   "kid.user.vak_placeholder": string;
   "kid.user.vak_type": string;
+  "kid.user.vak_unknown": string;
   "kid.vak.diagnostic_title": string;
   "kid.vak.rec_auditory": string;
   "kid.vak.rec_kinesthetic": string;

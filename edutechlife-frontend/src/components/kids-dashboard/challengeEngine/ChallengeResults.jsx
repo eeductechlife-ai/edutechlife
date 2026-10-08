@@ -185,7 +185,9 @@ const ChallengeResults = memo(
             <div
               className={`rounded-xl py-3 ${darkMode ? "bg-[#0F172A]" : "bg-[#F8FAFC]"}`}
             >
-              <p className="text-2xl font-black tabular-nums text-[#22C55E]">
+              <p
+                className={`text-2xl font-black tabular-nums ${darkMode ? "text-[#22C55E]" : "text-[#16803D]"}`}
+              >
                 {isEarly ? `+${xpEarned}⭐` : `+${xpEarned}`}
               </p>
               <p className={`text-xs font-semibold ${textSub}`}>

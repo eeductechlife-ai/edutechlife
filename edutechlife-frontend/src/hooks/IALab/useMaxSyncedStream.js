@@ -52,7 +52,11 @@ export function useMaxSyncedStream() {
           if (done) {
             // Process remaining buffer
             if (textBufferRef.current.length > 0) {
-              await enqueueTTS(textBufferRef.current, ttsService);
+              await enqueueTTS(
+                textBufferRef.current,
+                ttsService,
+                audioQueueRef,
+              );
               textBufferRef.current = "";
             }
             setIsStreaming(false);
@@ -72,7 +76,11 @@ export function useMaxSyncedStream() {
             now - lastTtsTime >= maxChunkWait
           ) {
             if (textBufferRef.current.length > 0) {
-              await enqueueTTS(textBufferRef.current, ttsService);
+              await enqueueTTS(
+                textBufferRef.current,
+                ttsService,
+                audioQueueRef,
+              );
               lastTtsTime = now;
               textBufferRef.current = "";
             }
@@ -85,7 +93,7 @@ export function useMaxSyncedStream() {
 
         // Wait for all audio to be generated
         if (audioQueueRef.current.length > 0) {
-          await concatenateAndPlayAudio(audioQueueRef.current);
+          await concatenateAndPlayAudio(audioQueueRef.current, setAudioUrl);
         }
       } catch (err) {
         if (err.name !== "AbortError") {
@@ -134,7 +142,7 @@ export function useMaxSyncedStream() {
 /**
  * Enqueue text chunk for TTS conversion
  */
-async function enqueueTTS(text, ttsService) {
+async function enqueueTTS(text, ttsService, audioQueueRef) {
   try {
     const audioBlob = await ttsService(text);
     if (audioBlob) {
@@ -148,7 +156,7 @@ async function enqueueTTS(text, ttsService) {
 /**
  * Concatenate audio blobs and create playable URL
  */
-async function concatenateAndPlayAudio(audioBlobs) {
+async function concatenateAndPlayAudio(audioBlobs, setAudioUrl) {
   try {
     if (audioBlobs.length === 0) return;
 

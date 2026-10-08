@@ -1,12 +1,20 @@
 import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGradeScanner } from "./useGradeScanner";
-import { gradeColor, gradeEmoji, getAvgScore, getSubjects } from "./gradeUtils";
+import {
+  gradeColor,
+  gradeTextColor,
+  gradeChipTextColor,
+  gradeEmoji,
+  getAvgScore,
+  getSubjects,
+} from "./gradeUtils";
 import { useTranslation } from "../../i18n/I18nProvider";
 import AcademicSemaphore from "./AcademicSemaphore";
 import GradeRow from "./GradeRow";
 import GradeAnalysisPlan from "./GradeAnalysisPlan";
 import { getSubjectEmoji } from "../../config/subjectMappings";
+import { useIngenIAKidsSafe } from "../../context/IngenIAKidsContext";
 
 export default memo(function GradeScanner({ onTabChange }) {
   const { t } = useTranslation();
@@ -41,11 +49,14 @@ export default memo(function GradeScanner({ onTabChange }) {
     analyze,
     setDocumentForDani,
   } = useGradeScanner();
+  const dm = !!useIngenIAKidsSafe()?.darkMode;
 
   return (
     <div className="space-y-5">
       {/* Mode toggle */}
-      <div className="flex gap-2 p-1 bg-[#F1F5F9] rounded-xl">
+      <div
+        className={`flex gap-2 p-1 rounded-xl ${dm ? "bg-[#0F172A]" : "bg-[#F1F5F9]"}`}
+      >
         {[
           { id: "manual", label: t("kid.grades.tab_manual") },
           { id: "image", label: t("kid.grades.tab_image") },
@@ -55,8 +66,12 @@ export default memo(function GradeScanner({ onTabChange }) {
             onClick={() => setScanMode(m.id)}
             className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${
               scanMode === m.id
-                ? "bg-white text-[#1E293B] shadow-sm"
-                : "text-[#64748B]"
+                ? dm
+                  ? "bg-[#334155] text-white shadow-sm"
+                  : "bg-white text-[#1E293B] shadow-sm"
+                : dm
+                  ? "text-[#CBD5E1]"
+                  : "text-[#475569]"
             }`}
           >
             {m.label}
@@ -86,13 +101,19 @@ export default memo(function GradeScanner({ onTabChange }) {
             {imgPreview ? (
               <div className="relative">
                 {isPdf ? (
-                  <div className="w-full py-5 px-4 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] flex items-center gap-3">
+                  <div
+                    className={`w-full py-5 px-4 rounded-xl border flex items-center gap-3 ${dm ? "bg-[#0F172A] border-[#334155]" : "bg-[#F1F5F9] border-[#E2E8F0]"}`}
+                  >
                     <span className="text-3xl">📄</span>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-[#1E293B] text-sm truncate">
+                      <p
+                        className={`font-semibold text-sm truncate ${dm ? "text-white" : "text-[#1E293B]"}`}
+                      >
                         {imgFile.name}
                       </p>
-                      <p className="text-xs text-[#64748B]">
+                      <p
+                        className={`text-xs ${dm ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+                      >
                         {(imgFile.size / 1024).toFixed(0)} KB · PDF
                       </p>
                     </div>
@@ -101,7 +122,7 @@ export default memo(function GradeScanner({ onTabChange }) {
                   <img
                     src={imgPreview}
                     alt="boletín"
-                    className="w-full max-h-48 object-contain rounded-xl border border-[#E2E8F0]"
+                    className={`w-full max-h-48 object-contain rounded-xl border ${dm ? "border-[#334155]" : "border-[#E2E8F0]"}`}
                   />
                 )}
                 <button
@@ -109,7 +130,7 @@ export default memo(function GradeScanner({ onTabChange }) {
                     setImgFile(null);
                     setImgPreview(null);
                   }}
-                  className="absolute top-2 right-2 w-7 h-7 bg-white rounded-full shadow flex items-center justify-center text-red-400 text-xs"
+                  className={`absolute top-2 right-2 w-7 h-7 rounded-full shadow flex items-center justify-center text-red-400 text-xs ${dm ? "bg-[#334155]" : "bg-white"}`}
                 >
                   ✕
                 </button>
@@ -120,16 +141,22 @@ export default memo(function GradeScanner({ onTabChange }) {
                 className="w-full py-10 border-2 border-dashed border-[#FB8500]/40 rounded-2xl text-center space-y-2 hover:border-[#FB8500] transition-colors"
               >
                 <span className="text-4xl block">📷</span>
-                <p className="text-sm font-semibold text-[#004B63]">
+                <p
+                  className={`text-sm font-semibold ${dm ? "text-white" : "text-[#004B63]"}`}
+                >
                   {t("kid.grades.upload_boletin")}
                 </p>
-                <p className="text-xs text-[#64748B]">
+                <p
+                  className={`text-xs ${dm ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+                >
                   {t("kid.grades.boletin_hint")}
                 </p>
               </button>
             )}
             {extracting && (
-              <div className="flex items-center gap-2 text-sm text-[#FB8500]">
+              <div
+                className={`flex items-center gap-2 text-sm ${dm ? "text-[#FB8500]" : "text-[#A35600]"}`}
+              >
                 <motion.div
                   className="w-4 h-4 border-2 border-[#FB8500] border-t-transparent rounded-full"
                   animate={{ rotate: 360 }}
@@ -152,9 +179,13 @@ export default memo(function GradeScanner({ onTabChange }) {
       </AnimatePresence>
 
       {/* Period legend */}
-      <p className="px-1 text-xs text-[#64748B] leading-snug">
-        <strong className="text-[#1E293B]">P1–P4</strong> son los periodos del
-        año. Escribe la nota de cada uno (de 1.0 a 5.0).
+      <p
+        className={`px-1 text-xs leading-snug ${dm ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+      >
+        <strong className={`${dm ? "text-white" : "text-[#1E293B]"}`}>
+          P1–P4
+        </strong>{" "}
+        son los periodos del año. Escribe la nota de cada uno (de 1.0 a 5.0).
       </p>
 
       {/* Academic Semaphore */}
@@ -165,14 +196,16 @@ export default memo(function GradeScanner({ onTabChange }) {
       {/* Manual grade entry */}
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <p className="text-sm font-bold text-[#1E293B] flex items-center gap-1 flex-wrap">
+          <p
+            className={`text-sm font-bold flex items-center gap-1 flex-wrap ${dm ? "text-white" : "text-[#1E293B]"}`}
+          >
             {t("kid.grades.my_notes")}{" "}
             {grades.length > 0 && Number(avg) > 0 && (
               <span
                 className="ml-2 px-2 py-0.5 rounded-full text-xs font-black"
                 style={{
                   backgroundColor: gradeColor(Number(avg)) + "20",
-                  color: gradeColor(Number(avg)),
+                  color: gradeChipTextColor(Number(avg)),
                 }}
               >
                 {t("kid.grades.average", { avg })}
@@ -181,7 +214,7 @@ export default memo(function GradeScanner({ onTabChange }) {
           </p>
           <button
             onClick={addRow}
-            className="text-xs text-[#FB8500] font-bold whitespace-nowrap px-2 py-2 hover:underline"
+            className={`text-xs font-bold whitespace-nowrap px-2 py-2 hover:underline ${dm ? "text-[#FB8500]" : "text-[#A35600]"}`}
           >
             {t("kid.grades.add_subject")}
           </button>
@@ -189,7 +222,9 @@ export default memo(function GradeScanner({ onTabChange }) {
         {grades.length === 0 && (
           <div className="py-8 text-center space-y-2">
             <span className="text-4xl block">📚</span>
-            <p className="text-sm text-[#64748B]">
+            <p
+              className={`text-sm ${dm ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+            >
               Agrega tus materias y escribe la nota de cada período
             </p>
             <button
@@ -290,20 +325,29 @@ export default memo(function GradeScanner({ onTabChange }) {
 
       {/* History */}
       {history.length > 0 && !plan && (
-        <div className="border border-[#E2E8F0] rounded-2xl overflow-visible">
+        <div
+          className={`border rounded-2xl overflow-visible ${dm ? "border-[#334155]" : "border-[#E2E8F0]"}`}
+        >
           <button
             onClick={() => setShowHistory((v) => !v)}
-            className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-[#1E293B] hover:bg-[#F8FAFC] transition-colors"
+            className={`w-full flex items-center justify-between px-4 py-3 text-sm font-semibold transition-colors ${dm ? "text-white hover:bg-white/5" : "text-[#1E293B] hover:bg-[#F8FAFC]"}`}
           >
             <span>📚 Historial de análisis ({history.length})</span>
-            <span className="text-[#64748B]">{showHistory ? "▲" : "▼"}</span>
+            <span className={`${dm ? "text-[#94A3B8]" : "text-[#64748B]"}`}>
+              {showHistory ? "▲" : "▼"}
+            </span>
           </button>
           {showHistory && (
             <div className="divide-y divide-[#F1F5F9]">
               {history.map((h) => (
-                <div key={h.id} className="px-4 py-3 bg-white space-y-2">
+                <div
+                  key={h.id}
+                  className={`px-4 py-3 space-y-2 ${dm ? "bg-[#1E293B]" : "bg-white"}`}
+                >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-[#64748B]">
+                    <span
+                      className={`text-xs ${dm ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+                    >
                       {new Date(h.created_at).toLocaleDateString("es-CO", {
                         day: "numeric",
                         month: "short",
@@ -314,7 +358,7 @@ export default memo(function GradeScanner({ onTabChange }) {
                       className="text-xs font-bold px-2 py-0.5 rounded-full"
                       style={{
                         backgroundColor: gradeColor(Number(h.avg_score)) + "20",
-                        color: gradeColor(Number(h.avg_score)),
+                        color: gradeChipTextColor(Number(h.avg_score)),
                       }}
                     >
                       {gradeEmoji(Number(h.avg_score))} {h.avg_score}/5
@@ -331,7 +375,7 @@ export default memo(function GradeScanner({ onTabChange }) {
                             title={`${subject?.l || g.subject}: ${g.score}/5`}
                             style={{
                               backgroundColor: gradeColor(g.score) + "15",
-                              color: gradeColor(g.score),
+                              color: gradeChipTextColor(g.score),
                               border: `1px solid ${gradeColor(g.score)}30`,
                             }}
                           >

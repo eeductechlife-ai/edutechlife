@@ -85,4 +85,25 @@ export default [
       'security/detect-possible-timing-attacks': 'warn',
     },
   },
+  {
+    // Código de la app (no las pruebas, que usan los globales de Vitest): una
+    // variable sin definir es un error, no un aviso. Con 'warn' un `tone` sin
+    // declarar llegó hasta la pantalla y rompió una vista entera.
+    files: ['src/**/*.{js,jsx}'],
+    ignores: ['**/__tests__/**', '**/*.test.{js,jsx}', 'src/tests/**'],
+    rules: {
+      'no-undef': 'error',
+      // t() devuelve la propia clave cuando falta, así que `t("clave") || "texto"`
+      // nunca usa el texto: es código muerto que da falsa seguridad.
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "LogicalExpression[operator='||'][left.type='CallExpression'][left.callee.name='t'][right.type=/Literal|TemplateLiteral/]",
+          message:
+            'No uses `t("clave") || "texto"`: t() devuelve la clave si falta. Agrega la clave a es/en/pt.',
+        },
+      ],
+    },
+  },
 ];

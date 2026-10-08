@@ -253,7 +253,7 @@ const IngenIAKidsDashboard = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed top-2 right-2 z-[60] flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#4DA8C4]/20 text-[#4DA8C4] text-xs font-semibold backdrop-blur-sm"
+            className="fixed top-2 right-2 z-[60] flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#4DA8C4]/20 text-[#2E6B7D] text-xs font-semibold backdrop-blur-sm"
           >
             <CloudSync className="w-3 h-3 animate-spin" />
             Sincronizando...

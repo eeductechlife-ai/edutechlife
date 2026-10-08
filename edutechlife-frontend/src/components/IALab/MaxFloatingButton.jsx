@@ -152,14 +152,12 @@ const MaxFloatingButton = ({ onClick, t, hasStartedCourse = false }) => {
                       <div>
                         <p className="text-sm font-bold text-[var(--theme-emphasis)] dark:text-[#4DA8C4]">
                           {hasStartedCourse
-                            ? t("ialab.max_nudge_return") ||
-                              "¡Bienvenido de nuevo!"
+                            ? t("ialab.max_nudge_return")
                             : t("ialab.max_nudge")}
                         </p>
                         <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5 leading-snug">
                           {hasStartedCourse
-                            ? t("ialab.max_nudge_return_sub") ||
-                              "Toca para continuar donde lo dejaste"
+                            ? t("ialab.max_nudge_return_sub")
                             : t("ialab.max_nudge_sub")}
                         </p>
                       </div>

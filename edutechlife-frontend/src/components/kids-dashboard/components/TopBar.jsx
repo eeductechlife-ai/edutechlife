@@ -128,7 +128,9 @@ const TopBar = memo(
             >
               <Flame className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={2.4} />
             </span>
-            <span className="text-xs sm:text-sm font-black text-[#FB8500] tabular-nums leading-none">
+            <span
+              className={`text-xs sm:text-sm font-black tabular-nums leading-none ${darkMode ? "text-[#FB8500]" : "text-[#A35600]"}`}
+            >
               {streak?.current ?? 0}
             </span>
             <span
@@ -176,7 +178,7 @@ const TopBar = memo(
             <button
               ref={bellRef}
               onClick={() => setNotifOpen((v) => !v)}
-              aria-label={t("smartboard.notifications") || "Notificaciones"}
+              aria-label={t("smartboard.notifications")}
               aria-haspopup="true"
               aria-expanded={notifOpen}
               className={`relative flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-xl md:rounded-2xl transition-colors ${

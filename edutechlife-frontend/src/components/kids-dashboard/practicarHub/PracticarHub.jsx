@@ -26,6 +26,7 @@ import WeekProgress from "./WeekProgress";
 import { usePracticeLog } from "./practicarProgress";
 import { useMediaQuery, PHONE_QUERY } from "./useMediaQuery";
 import { isChallengeSubjectAvailable } from "../challengeEngine/useChallengeEngine";
+import { ensureContrast } from "../../../utils/contrast";
 
 // Vertical-only scroll inside the dashboard's content pane; scrollIntoView would
 // also shift the overflow-hidden root sideways on phones.
@@ -401,7 +402,16 @@ const PracticarHub = memo(({ onTabChange, darkMode }) => {
         <div id="practicar-step-2">
           <StepTitle n={2} darkMode={darkMode}>
             ¿Cómo quieres practicar{" "}
-            <span style={{ color: subject?.color }}>
+            <span
+              style={{
+                color: subject?.color
+                  ? ensureContrast(
+                      subject.color,
+                      darkMode ? "#0F172A" : "#F8FAFC",
+                    )
+                  : undefined,
+              }}
+            >
               {subject ? `${subject.emoji} ${label}` : label}
             </span>
             ?
@@ -512,8 +522,7 @@ const PracticarHub = memo(({ onTabChange, darkMode }) => {
       <p
         className={`hidden sm:block text-xs text-center leading-relaxed px-2 ${textSub}`}
       >
-        💡 Practicar 15 minutos al día rinde más que estudiar 2 horas antes del
-        examen.
+        💡 Practicar un poco cada día te ayuda a recordar mejor.
       </p>
     </div>
   );

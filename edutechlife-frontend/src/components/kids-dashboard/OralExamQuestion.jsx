@@ -104,7 +104,7 @@ const OralExamQuestion = memo(
             </span>
             <div>
               <p
-                className={`text-xs font-semibold mb-1 ${dc(dm, "text-[#4DA8C4]", "text-[#004B63]")}`}
+                className={`text-xs font-semibold mb-1 ${dc(dm, "text-[#367689]", "text-[#004B63]")}`}
               >
                 {q.type === "multiple"
                   ? t("oral.multiple_choice")

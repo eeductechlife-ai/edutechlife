@@ -161,7 +161,7 @@ export default function CourseHomeModuleRow({
         {approved
           ? t("dashboard.review_btn")
           : !approved && resourcesDone && !examDone
-            ? t("dashboard.exam_btn") || "Ir al examen"
+            ? t("dashboard.exam_btn")
             : t("dashboard.continue_btn")}{" "}
         <Icon name="fa-arrow-right" className="w-3 h-3" />
       </motion.button>

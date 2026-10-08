@@ -214,7 +214,7 @@ function GradeStep({ ageGroup, onDone }) {
                 onClick={() => toggleInterest(opt.id)}
                 className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border transition-all ${
                   sel
-                    ? "border-[#0096C7] bg-[#0096C7]/10 text-[#0096C7] dark:text-[#48CAE4]"
+                    ? "border-[#0096C7] bg-[#0096C7]/10 text-[#00789F] dark:text-[#48CAE4]"
                     : "border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-[#0096C7]/50"
                 }`}
                 aria-pressed={sel}

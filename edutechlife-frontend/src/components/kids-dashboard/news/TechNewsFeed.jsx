@@ -7,9 +7,9 @@ import { CATEGORIES, CATEGORY_COLORS } from "../../../data/newsData";
 import { useIngenIAKids } from "../../../context/IngenIAKidsContext";
 import { logPractice } from "../practicarHub/practicarProgress";
 import { POINTS } from "../../../context/pointsEconomy";
-import { readableTextOn } from "../../../utils/contrast";
+import { readableTextOn, ensureContrast } from "../../../utils/contrast";
 
-const CategoryTab = memo(({ cat, active, unread, onClick }) => {
+const CategoryTab = memo(({ cat, active, unread, onClick, darkMode }) => {
   const color = CATEGORY_COLORS[cat.id] || "#4DA8C4";
   return (
     <button
@@ -19,7 +19,9 @@ const CategoryTab = memo(({ cat, active, unread, onClick }) => {
       className={`relative w-full min-h-[48px] px-2 py-2 rounded-2xl text-xs font-bold leading-tight text-center transition-all border-2 ${
         active
           ? "text-white border-transparent shadow-md"
-          : "bg-white border-[#E2E8F0] text-[#475569]"
+          : darkMode
+            ? "bg-[#1E293B] border-[#334155] text-[#CBD5E1]"
+            : "bg-white border-[#E2E8F0] text-[#475569]"
       }`}
       style={
         active
@@ -34,7 +36,7 @@ const CategoryTab = memo(({ cat, active, unread, onClick }) => {
       {cat.label}
       {unread > 0 && (
         <span
-          className="absolute -top-1.5 -right-1 min-w-[20px] h-[20px] px-1 flex items-center justify-center rounded-full bg-[#EF476F] text-white text-xs font-black leading-none border-2 border-white"
+          className="absolute -top-1.5 -right-1 min-w-[20px] h-[20px] px-1 flex items-center justify-center rounded-full bg-[#BE123C] text-white text-xs font-black leading-none border-2 border-white"
           aria-label={`${unread} sin leer`}
         >
           {unread}
@@ -44,6 +46,16 @@ const CategoryTab = memo(({ cat, active, unread, onClick }) => {
   );
 });
 CategoryTab.displayName = "CategoryTab";
+
+// En la tarjeta se muestra la cita misma («Fuente: Potter et al., MIT (2014)»),
+// no una marca de verificación: así se puede comprobar de dónde sale el dato.
+export function shortSource(source) {
+  const first = String(source || "")
+    .split(";")[0]
+    .trim();
+  const text = first.length > 38 ? `${first.slice(0, 37).trimEnd()}…` : first;
+  return `Fuente: ${text}`;
+}
 
 const ArticleCard = memo(({ article, isRead, onRead, darkMode }) => {
   const color = CATEGORY_COLORS[article.category] || "#4DA8C4";
@@ -111,7 +123,9 @@ const ArticleCard = memo(({ article, isRead, onRead, darkMode }) => {
               >
                 <span
                   className="text-sm font-black leading-none"
-                  style={{ color }}
+                  style={{
+                    color: darkMode ? color : ensureContrast(color, "#F8FAFC"),
+                  }}
                 >
                   {dp.value}
                 </span>
@@ -134,9 +148,14 @@ const ArticleCard = memo(({ article, isRead, onRead, darkMode }) => {
             }`}
           >
             ⏱ {article.readTime}
-            {article.source ? " · Con fuente ✓" : ""}
+            {article.source ? ` · ${shortSource(article.source)}` : ""}
           </span>
-          <span className="text-xs font-semibold" style={{ color }}>
+          <span
+            className="text-xs font-semibold"
+            style={{
+              color: darkMode ? color : ensureContrast(color, "#FFFFFF"),
+            }}
+          >
             {isRead ? "Leer de nuevo →" : "Leer más →"}
           </span>
         </div>
@@ -217,7 +236,14 @@ const ArticleModal = memo(({ article, onClose, darkMode, onChallenge }) => {
                     darkMode ? "bg-[#1E293B]" : "bg-[#F8FAFC]"
                   }`}
                 >
-                  <span className="text-base font-black" style={{ color }}>
+                  <span
+                    className="text-base font-black"
+                    style={{
+                      color: darkMode
+                        ? color
+                        : ensureContrast(color, "#F8FAFC"),
+                    }}
+                  >
                     {dp.value}
                   </span>
                   <span
@@ -356,6 +382,7 @@ const TechNewsFeed = () => {
             active={activeCategory === cat.id}
             unread={unreadByCategory(cat.id)}
             onClick={setCategory}
+            darkMode={darkMode}
           />
         ))}
       </div>

@@ -1,4 +1,5 @@
 import { getSubjectEmoji, createSubject } from "../../config/subjectMappings";
+import { ensureContrast, tinted } from "../../utils/contrast";
 
 // supabase-js hangs in dev — use direct REST fetch instead
 const SUPA_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -56,6 +57,15 @@ export const gradeColor = (n) => {
   if (n >= 3.0) return "#F59E0B";
   return "#EF4444";
 };
+
+// Para TEXTO: el ámbar y el verde de `gradeColor` dan 2,1 y 2,5:1 sobre blanco.
+// `gradeColor` sigue para fondos y barras; el texto usa esta versión más oscura.
+export const gradeTextColor = (n, background = "#FFFFFF") =>
+  ensureContrast(gradeColor(n), background);
+
+/** Texto legible sobre la etiqueta con tinte (`gradeColor + "20"`, 12,5 %). */
+export const gradeChipTextColor = (n) =>
+  gradeTextColor(n, tinted(gradeColor(n), 0.125));
 
 export const gradeEmoji = (n) => {
   if (n >= 4.6) return "🏆";

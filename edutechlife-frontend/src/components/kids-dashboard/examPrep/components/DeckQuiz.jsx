@@ -175,7 +175,7 @@ Responde SOLO con JSON:
             ))}
           </div>
         ) : (
-          <p className="text-xs text-[#4DA8C4] font-semibold">
+          <p className="text-xs text-[#367689] font-semibold">
             {emotionalFeedback === "hard"
               ? "¡Dani te preparará más práctica!"
               : "¡Excelente actitud!"}

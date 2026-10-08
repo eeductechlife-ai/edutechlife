@@ -24,6 +24,18 @@ describe('App integration', () => {
     expect(res.headers['access-control-allow-origin']).toBe('https://edutechlife.co');
   });
 
+  it('allows the native app origins (Capacitor Android/iOS)', async () => {
+    for (const origin of ['https://localhost', 'capacitor://localhost']) {
+      const res = await request(app).get('/api/health').set('Origin', origin);
+      expect(res.headers['access-control-allow-origin']).toBe(origin);
+    }
+  });
+
+  it('rejects origins outside the allowlist', async () => {
+    const res = await request(app).get('/api/health').set('Origin', 'https://evil.example');
+    expect(res.headers['access-control-allow-origin']).toBeUndefined();
+  });
+
   it('applies helmet security headers', async () => {
     const res = await request(app).get('/api/health');
     expect(res.headers['x-content-type-options']).toBe('nosniff');

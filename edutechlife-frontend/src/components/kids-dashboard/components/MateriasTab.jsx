@@ -58,7 +58,7 @@ function UnifiedPlanView({ vakResult, onTabChange }) {
           <button
             type="button"
             onClick={() => onTabChange?.("vak")}
-            className="min-h-[36px] px-2 text-xs font-bold text-[#9D4EDD] whitespace-nowrap flex-shrink-0"
+            className="min-h-[36px] px-2 text-xs font-bold text-[#954AD2] whitespace-nowrap flex-shrink-0"
           >
             Ver mi ADN →
           </button>
@@ -129,7 +129,7 @@ const MateriasTab = memo(function MateriasTab({
                   aria-pressed={active}
                   className={`flex flex-col items-center justify-center gap-0.5 min-h-[52px] px-1 py-2 rounded-xl text-xs sm:text-xs font-bold transition-all ${
                     active
-                      ? "bg-white text-[#118AB2] shadow-md"
+                      ? "bg-white text-[#0E7597] shadow-md"
                       : "bg-white/15 text-white/80 hover:bg-white/25"
                   }`}
                 >

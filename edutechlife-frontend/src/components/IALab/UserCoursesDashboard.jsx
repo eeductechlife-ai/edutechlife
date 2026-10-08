@@ -111,9 +111,7 @@ const UserCoursesDashboard = () => {
       <div
         className="grid grid-cols-3 max-sm:grid-cols-2 gap-3"
         role="region"
-        aria-label={
-          t("ialab.dashboard.stats_label") || "Estadísticas de progreso"
-        }
+        aria-label={t("ialab.dashboard.stats_label")}
       >
         {[
           { label: t("streak.xp"), value: storeXp.toLocaleString() },
@@ -179,10 +177,7 @@ const UserCoursesDashboard = () => {
               variants={cardVariants}
               className="col-span-full text-center py-12 text-slate-400"
               role="status"
-              aria-label={
-                t("ialab.dashboard.no_courses") ||
-                "No hay cursos en esta categoría"
-              }
+              aria-label={t("ialab.dashboard.no_courses")}
             >
               <motion.div
                 initial={{ scale: shouldReduceMotion ? 1 : 0.8, opacity: 0 }}

@@ -23,7 +23,7 @@ const ScriptBlock = memo(({ block, i, currentIdx }) => {
         </span>
         <div className="flex-1 min-w-0">
           <p
-            className={`text-xs font-semibold mb-0.5 ${dc(false, "text-[#4DA8C4]", "text-[#66CCCC]")}`}
+            className={`text-xs font-semibold mb-0.5 ${dc(false, "text-[#367689]", "text-[#387070]")}`}
           >
             {block.role === "host"
               ? t("kid.podcast.role_host")
@@ -41,6 +41,7 @@ const ScriptBlock = memo(({ block, i, currentIdx }) => {
 });
 
 const StudyPodcast = memo(() => {
+  const { t } = useTranslation();
   const { darkMode: dm, addPoints } = useIngenIAKids();
   const [mode, setMode] = useState("input");
   const [text, setText] = useState("");

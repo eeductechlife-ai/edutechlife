@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createSupabaseClient } from "../../../../lib/supabase";
 import { getSubjectEmoji } from "../../../../config/subjectMappings";
+import { readableTextOn } from "../../../../utils/contrast";
 
 const gradeColor = (n) => {
   if (n >= 4.5) return "#22C55E";
@@ -230,7 +231,10 @@ export default function GradeReportCard({ authToken, studentId }) {
                 </div>
                 <span
                   className="px-2 py-0.5 rounded-full text-xs font-bold text-white flex-shrink-0"
-                  style={{ backgroundColor: gradeColor(w.score) }}
+                  style={{
+                    backgroundColor: gradeColor(w.score),
+                    color: readableTextOn(gradeColor(w.score)),
+                  }}
                 >
                   {w.score}/5
                 </span>

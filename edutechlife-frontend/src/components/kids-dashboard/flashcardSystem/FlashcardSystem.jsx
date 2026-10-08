@@ -514,7 +514,7 @@ const FlashcardSystem = memo(({ onTabChange, darkMode = false }) => {
                   ? "text-white border-transparent"
                   : darkMode
                     ? `${cardBg} text-[#FF6B9D] border-[#FF6B9D]/30 hover:border-[#FF6B9D]/60`
-                    : "bg-white text-[#EF476F] border-[#EF476F]/30 hover:border-[#EF476F]/60"
+                    : "bg-white text-[#BF3959] border-[#EF476F]/30 hover:border-[#EF476F]/60"
               }`}
               style={
                 activeStudyDeck?.deckId === d.id

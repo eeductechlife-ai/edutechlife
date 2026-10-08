@@ -106,7 +106,7 @@ function AcademicWarningBanner({ subjects, onTabChange, darkMode }) {
         </span>
       </span>
       <span
-        className="text-[#EF476F] font-black text-sm shrink-0 self-center"
+        className="text-[#BF3959] font-black text-sm shrink-0 self-center"
         aria-hidden="true"
       >
         Ver →

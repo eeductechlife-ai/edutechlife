@@ -23,15 +23,9 @@ const MiniDivider = () => (
 const getNextStepHint = (moduleProgress, activeMod, t) => {
   const mod = moduleProgress?.[activeMod];
   if (!mod) return null;
-  if (mod.exam)
-    return (
-      t("ialab.next_step_exam_done") || "¡Módulo aprobado! Avanza al siguiente."
-    );
-  if (mod.resourcesCompleted)
-    return (
-      t("ialab.next_step_ready_exam") || "Listo para el examen. ¡Hazlo ahora!"
-    );
-  return t("ialab.next_step_content") || "Completa el contenido del módulo.";
+  if (mod.exam) return t("ialab.next_step_exam_done");
+  if (mod.resourcesCompleted) return t("ialab.next_step_ready_exam");
+  return t("ialab.next_step_content");
 };
 
 const SidebarCollapsed = ({
@@ -255,11 +249,11 @@ const SidebarCollapsed = ({
 
       {/* Herramienta: Ranking. Mi Progreso, Plan y Certificados viven en el
           menú de usuario (arriba, bajo los módulos) para no duplicar entradas. */}
-      <TooltipIcon label={t("ialab.sidebar_leaderboard") || "Ranking"} premium>
+      <TooltipIcon label={t("ialab.sidebar_leaderboard")} premium>
         <button
           onClick={() => setShowLeaderboard(true)}
           className="flex flex-col items-center gap-0.5 rounded-xl px-1 py-1.5 bg-amber-50 dark:bg-amber-900/15 hover:bg-amber-100 dark:hover:bg-amber-900/25 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400/30 w-full"
-          aria-label={t("ialab.sidebar_leaderboard") || "Ranking"}
+          aria-label={t("ialab.sidebar_leaderboard")}
         >
           <Icon
             name="fa-trophy"
@@ -267,7 +261,7 @@ const SidebarCollapsed = ({
             aria-hidden="true"
           />
           <span className="text-[9px] font-semibold text-amber-600 dark:text-amber-400 leading-none">
-            {t("ialab.sidebar_leaderboard") || "Ranking"}
+            {t("ialab.sidebar_leaderboard")}
           </span>
         </button>
       </TooltipIcon>

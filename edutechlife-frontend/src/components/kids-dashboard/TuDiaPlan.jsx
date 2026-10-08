@@ -303,7 +303,7 @@ const TuDiaPlan = memo(function TuDiaPlan({ onTabChange, darkMode }) {
               </span>
               {!step.done && (
                 <ChevronRight
-                  className="w-4 h-4 shrink-0 text-[#06D6A0]"
+                  className="w-4 h-4 shrink-0 text-[#037658]"
                   strokeWidth={2.5}
                   aria-hidden="true"
                 />

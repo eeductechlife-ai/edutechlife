@@ -120,3 +120,54 @@ describe('userAwareKey (clave de los limitadores)', () => {
   });
 });
 
+
+describe('parentalInviteLimiter', () => {
+  const { parentalInviteLimiter } = require('../../middleware/rateLimiter');
+
+  const buildApp = () => {
+    const app = express();
+    app.post('/invite', (req, _res, next) => {
+      req.userId = req.headers['x-test-user'] || 'u-1';
+      next();
+    }, parentalInviteLimiter, (_req, res) => res.json({ ok: true }));
+    return app;
+  };
+
+  it('deja enviar cinco invitaciones por hora y bloquea la sexta (con mensaje claro)', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    try {
+      const app = buildApp();
+      for (let i = 0; i < 5; i++) {
+        const res = await request(app).post('/invite').set('x-test-user', 'estudiante-a');
+        expect(res.status, `envío ${i + 1}`).toBe(200);
+      }
+      const sixth = await request(app).post('/invite').set('x-test-user', 'estudiante-a');
+      expect(sixth.status).toBe(429);
+      expect(sixth.body.error).toMatch(/una hora/);
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
+  it('el tope es por estudiante: otro estudiante en la misma red no se ve afectado', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    try {
+      const app = buildApp();
+      for (let i = 0; i < 6; i++) {
+        await request(app).post('/invite').set('x-test-user', 'estudiante-b');
+      }
+      const other = await request(app).post('/invite').set('x-test-user', 'estudiante-c');
+      expect(other.status).toBe(200);
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
+  it('fuera de producción no limita (igual que los demás limitadores)', async () => {
+    const app = buildApp();
+    for (let i = 0; i < 8; i++) {
+      const res = await request(app).post('/invite').set('x-test-user', 'estudiante-d');
+      expect(res.status).toBe(200);
+    }
+  });
+});

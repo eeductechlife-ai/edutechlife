@@ -180,29 +180,28 @@ const IngenIAAnalytics = memo(() => {
           <h3
             className={`text-xl font-black ${dc(dm, "text-white", "text-[#00303F]")}`}
           >
-            {t("analytics.empty_title") || "¡Empieza a estudiar!"}
+            {t("analytics.empty_title")}
           </h3>
           <p
             className={`text-sm mt-1 max-w-sm ${dc(dm, "text-[#64748B]", "text-[#94A3B8]")}`}
           >
-            {t("analytics.empty_desc") ||
-              "Completa misiones, estudia materias y gana puntos para ver tus estadísticas aquí."}
+            {t("analytics.empty_desc")}
           </p>
         </div>
         <div className="flex items-center gap-3 text-xs font-medium text-[#4DA8C4]">
           <span className="flex items-center gap-1">
             <BookOpen className="w-3.5 h-3.5" />
-            {t("analytics.empty_hint_study") || "Estudia"}
+            {t("analytics.empty_hint_study")}
           </span>
           <span className="w-1 h-1 rounded-full bg-[#4DA8C4]/30" />
           <span className="flex items-center gap-1">
             <Award className="w-3.5 h-3.5" />
-            {t("analytics.empty_hint_missions") || "Completa misiones"}
+            {t("analytics.empty_hint_missions")}
           </span>
           <span className="w-1 h-1 rounded-full bg-[#4DA8C4]/30" />
           <span className="flex items-center gap-1">
             <Gauge className="w-3.5 h-3.5" />
-            {t("analytics.empty_hint_progress") || "Gana puntos"}
+            {t("analytics.empty_hint_progress")}
           </span>
         </div>
       </motion.div>
@@ -436,7 +435,7 @@ const IngenIAAnalytics = memo(() => {
                   />
                 </div>
                 <span
-                  className={`text-xs font-bold w-10 text-right ${dc(dm, "text-[#4DA8C4]", "text-[#004B63]")}`}
+                  className={`text-xs font-bold w-10 text-right ${dc(dm, "text-[#367689]", "text-[#004B63]")}`}
                 >
                   {subj.value}%
                 </span>

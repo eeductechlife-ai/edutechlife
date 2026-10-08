@@ -77,7 +77,7 @@ const OralExamResults = memo(
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className={`mt-4 text-sm font-bold ${dc(dm, "text-[#4DA8C4]", "text-[#004B63]")}`}
+            className={`mt-4 text-sm font-bold ${dc(dm, "text-[#367689]", "text-[#004B63]")}`}
           >
             {t("oral.xp_earned", { points: results.earnedPoints })}
           </motion.p>

@@ -145,3 +145,32 @@ describe("EditProfileModal: edad y grado", () => {
     expect(props.updateProfile).not.toHaveBeenCalled();
   });
 });
+
+describe("EditProfileModal: el estilo de aprendizaje sale del ADN", () => {
+  it("no ofrece un selector para elegirlo a mano", () => {
+    setup({ vakStyle: "visual" });
+    expect(screen.queryByLabelText("kid.user.vak_type")).toBeNull();
+    expect(document.querySelector("#profile-vakStyle")).toBeNull();
+  });
+
+  it("muestra el estilo del ADN como texto", () => {
+    setup({ vakStyle: "visual" });
+    expect(screen.getByText("kid.vak.style_visual")).toBeTruthy();
+    expect(screen.getByText("kid.user.vak_from_adn")).toBeTruthy();
+  });
+
+  it("sin ADN avisa que aún no se sabe", () => {
+    setup({});
+    expect(screen.getByText("kid.user.vak_unknown")).toBeTruthy();
+  });
+
+  it("guardar otros datos nunca manda vakStyle", async () => {
+    const props = setup({ vakStyle: "visual" });
+    fireEvent.change(screen.getByLabelText("kid.user.fullname"), {
+      target: { value: "Ana María" },
+    });
+    save();
+    await waitFor(() => expect(props.updateProfile).toHaveBeenCalled());
+    expect(props.updateProfile.mock.calls[0][0]).not.toHaveProperty("vakStyle");
+  });
+});

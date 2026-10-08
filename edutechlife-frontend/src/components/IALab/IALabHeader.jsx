@@ -12,11 +12,15 @@ import { useBrowserNotifications } from "../../hooks/useBrowserNotifications";
 import useForumNotifications from "../../hooks/IALab/forum/useForumNotifications";
 import GlobalSearchBar from "./GlobalSearchBar";
 import { getBadgeInfo } from "../../data/ialab";
+import { useIALabStore } from "../../store/ialabStore";
 
 const IALabHeader = () => {
   const { t, locale } = useTranslation();
   const BADGE_INFO = getBadgeInfo(locale);
   const { courseCompleted } = useIALabUIContext();
+  const setShowCertificateModal = useIALabStore(
+    (s) => s.setShowCertificateModal,
+  );
   const { notifications, createNotification } = useNotification();
   const unreadCount = forIALab(notifications).filter((n) => !n.is_read).length;
   const { unreadCount: forumUnreadCount } = useForumNotifications();

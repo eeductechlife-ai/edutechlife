@@ -52,7 +52,7 @@ export default function GradeSelector({ onSave, compact = false }) {
 
     if (saved) {
       return (
-        <span className="text-xs font-semibold text-[#06D6A0]">
+        <span className="text-xs font-semibold text-[#037658]">
           ✓ Grado {localGrade}° registrado
         </span>
       );
@@ -115,7 +115,7 @@ export default function GradeSelector({ onSave, compact = false }) {
               onClick={() => setLocalCountry(c.value)}
               className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
                 localCountry === c.value
-                  ? "border-[#0096C7] bg-[#0096C7]/10 text-[#0096C7] font-semibold"
+                  ? "border-[#0096C7] bg-[#0096C7]/10 text-[#00789F] font-semibold"
                   : darkMode
                     ? "border-gray-600 text-gray-400 hover:border-gray-400"
                     : "border-gray-200 text-gray-500 hover:border-gray-400"

@@ -85,27 +85,27 @@ const SupabaseSignUpForm = ({
       { score: 0, label: "", color: "bg-gray-300" },
       {
         score: 1,
-        label: t("signup.password_weak") || "Débil",
+        label: t("signup.password_weak"),
         color: "bg-red-500",
       },
       {
         score: 2,
-        label: t("signup.password_fair") || "Regular",
+        label: t("signup.password_fair"),
         color: "bg-orange-500",
       },
       {
         score: 3,
-        label: t("signup.password_good") || "Buena",
+        label: t("signup.password_good"),
         color: "bg-yellow-500",
       },
       {
         score: 4,
-        label: t("signup.password_strong") || "Fuerte",
+        label: t("signup.password_strong"),
         color: "bg-green-500",
       },
       {
         score: 5,
-        label: t("signup.password_very_strong") || "Muy fuerte",
+        label: t("signup.password_very_strong"),
         color: "bg-emerald-500",
       },
     ];
@@ -134,24 +134,22 @@ const SupabaseSignUpForm = ({
 
     if (step === 1) {
       if (!formData.firstName.trim())
-        newErrors.firstName =
-          t("signup.error.first_name_required") || "Required";
+        newErrors.firstName = t("signup.error.first_name_required");
       if (!formData.lastName.trim())
-        newErrors.lastName = t("signup.error.last_name_required") || "Required";
+        newErrors.lastName = t("signup.error.last_name_required");
       if (!formData.email.trim())
-        newErrors.email = t("signup.error.email_required") || "Required";
+        newErrors.email = t("signup.error.email_required");
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-        newErrors.email = t("signup.error.invalid_email") || "Invalid email";
+        newErrors.email = t("signup.error.invalid_email");
     } else if (step === 2) {
       if (!formData.username.trim())
-        newErrors.username = t("signup.error.username_required") || "Required";
+        newErrors.username = t("signup.error.username_required");
       if (!formData.password)
-        newErrors.password = t("signup.error.password_required") || "Required";
+        newErrors.password = t("signup.error.password_required");
       else if (formData.password.length < 10)
-        newErrors.password =
-          t("signup.error.password_min_length") || "At least 10 characters";
+        newErrors.password = t("signup.error.password_min_length");
       if (formData.phone.trim() && !/^[\d\s+()/-]{7,}$/.test(formData.phone))
-        newErrors.phone = t("signup.error.phone_invalid") || "Invalid phone";
+        newErrors.phone = t("signup.error.phone_invalid");
     }
 
     setFieldErrors(newErrors);
@@ -477,8 +475,8 @@ const SupabaseSignUpForm = ({
                     <div className="flex justify-between mb-4">
                       <span className="text-sm font-medium text-[#004B63]">
                         {currentStep === 1
-                          ? t("signup.step_1_info") || "Información personal"
-                          : t("signup.step_2_security") || "Seguridad"}
+                          ? t("signup.step_1_info")
+                          : t("signup.step_2_security")}
                       </span>
                       <span className="text-xs text-gray-500">
                         Paso {currentStep}/2
@@ -582,7 +580,7 @@ const SupabaseSignUpForm = ({
                   {currentStep === 1 && (
                     <div className="space-y-5 animate-in fade-in">
                       <h3 className="text-2xl font-bold text-[#004B63] mb-6">
-                        {t("signup.step_1_info") || "Información personal"}
+                        {t("signup.step_1_info")}
                       </h3>
 
                       {/* Name Row */}
@@ -734,7 +732,7 @@ const SupabaseSignUpForm = ({
                       className="space-y-5 animate-in fade-in"
                     >
                       <h3 className="text-2xl font-bold text-[#004B63] mb-6">
-                        {t("signup.step_2_security") || "Seguridad y acceso"}
+                        {t("signup.step_2_security")}
                       </h3>
 
                       {/* Username */}
@@ -829,8 +827,7 @@ const SupabaseSignUpForm = ({
                               )}
                             </div>
                             <p className="text-xs text-gray-500 mt-1">
-                              {t("signup.info.password_min_length") ||
-                                "Mínimo 8 caracteres. Usa mayúsculas, números y símbolos."}
+                              {t("signup.info.password_min_length")}
                             </p>
                           </div>
                         )}
@@ -895,7 +892,7 @@ const SupabaseSignUpForm = ({
                         >
                           {loading
                             ? "Creando cuenta..."
-                            : t("signup.button.register") || "Crear cuenta"}
+                            : t("signup.button.register")}
                         </button>
                       </div>
                     </form>
@@ -919,8 +916,7 @@ const SupabaseSignUpForm = ({
                     ¡Bienvenido!
                   </h3>
                   <p className="text-gray-600 mb-2">
-                    {t("signup.success.registration_complete") ||
-                      "Tu cuenta ha sido creada exitosamente."}
+                    {t("signup.success.registration_complete")}
                   </p>
                   <p className="text-sm text-gray-500">
                     Te estamos redirigiendo a la plataforma...

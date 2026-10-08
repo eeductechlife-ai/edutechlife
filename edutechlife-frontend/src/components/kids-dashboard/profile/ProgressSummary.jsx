@@ -6,6 +6,7 @@ import { usePracticeLog } from "../practicarHub/practicarProgress";
 import { WEEKLY_GOAL } from "../practicarHub/WeekProgress";
 import { getMasteryState } from "../components/SubjectsView";
 import { REWARDS } from "../ingenIAProgress/gamificationData";
+import { ensureContrast } from "../../../utils/contrast";
 import SkillPassport from "../SkillPassport";
 import GradeGoalCard from "./GradeGoalCard";
 
@@ -27,7 +28,7 @@ function Tile({ title, onClick, children, dm, accent }) {
       <span className="flex items-center justify-between gap-1">
         <span
           className="text-xs font-black uppercase tracking-wide"
-          style={{ color: accent }}
+          style={{ color: dm ? accent : ensureContrast(accent, "#FFFFFF") }}
         >
           {title}
         </span>
@@ -101,7 +102,7 @@ const ProgressSummary = memo(function ProgressSummary({
                   style={done ? { background: "#EF476F" } : {}}
                 />
                 <span
-                  className={`text-xs font-bold ${i === todayIdx ? "text-[#EF476F]" : sub}`}
+                  className={`text-xs font-bold ${i === todayIdx ? (dm ? "text-[#FF6B9D]" : "text-[#BF3959]") : sub}`}
                 >
                   {DAY_LABELS[i]}
                 </span>
@@ -139,7 +140,7 @@ const ProgressSummary = memo(function ProgressSummary({
                     <span
                       className="tabular-nums"
                       style={{
-                        color: getMasteryState(s.progress, s.gradeScore).color,
+                        color: getMasteryState(s.progress, s.gradeScore).text,
                       }}
                     >
                       {Number(s.gradeScore).toFixed(1)}
@@ -179,11 +180,11 @@ const ProgressSummary = memo(function ProgressSummary({
                 : "retos esta semana"}
             </span>
             {practice.avgScore != null ? (
-              <span className="block mt-1 text-xs font-bold text-[#9D4EDD]">
+              <span className="block mt-1 text-xs font-bold text-[#954AD2]">
                 Promedio {practice.avgScore}%
               </span>
             ) : (
-              <span className="block mt-1 text-xs font-bold text-[#9D4EDD]">
+              <span className="block mt-1 text-xs font-bold text-[#954AD2]">
                 ¡Haz el primero! ▶
               </span>
             )}

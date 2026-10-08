@@ -252,7 +252,7 @@ const WeeklyGrid = ({ slots, todayIso }) => {
               >
                 {DAY_LABELS.es[d]}
                 {isToday && (
-                  <div className="text-xs text-[#4DA8C4] font-normal">HOY</div>
+                  <div className="text-xs text-[#367689] font-normal">HOY</div>
                 )}
               </div>
               {daySlots.length === 0 && (

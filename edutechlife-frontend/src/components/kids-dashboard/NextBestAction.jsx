@@ -12,6 +12,7 @@ import {
   HANDOFF_CHALLENGE_DIFFICULTY,
   HANDOFF_CHALLENGE_AUTOSTART,
 } from "./practicarHub/practicarHandoff";
+import { ensureContrast, tinted, readableTextOn } from "../../utils/contrast";
 
 // ── Subject palette ──────────────────────────────────────────────────────────
 
@@ -188,6 +189,7 @@ const NextBestAction = memo(({ onTabChange }) => {
     subjectsWithGrades,
     missions,
     supabaseQueries,
+    darkMode,
   } = useIngenIAKids();
   const { nextAction, loading, fetchNextAction } = useAdaptiveEngine();
   const graphActive = isFeatureEnabled("learning_graph");
@@ -267,7 +269,7 @@ const NextBestAction = memo(({ onTabChange }) => {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="w-full rounded-2xl overflow-hidden bg-white shadow-lg border border-gray-100"
+      className={`w-full rounded-2xl overflow-hidden shadow-lg border ${darkMode ? "bg-[#1E293B] border-[#334155]" : "bg-white border-gray-100"}`}
     >
       {/* Color strip — subject identity at a glance */}
       <div className="h-1.5 w-full" style={{ background: gradient }} />
@@ -283,29 +285,39 @@ const NextBestAction = memo(({ onTabChange }) => {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1 mb-0.5">
-              <span className="text-xs font-black uppercase tracking-widest text-gray-400">
+              <span
+                className={`text-xs font-black uppercase tracking-widest ${darkMode ? "text-[#94A3B8]" : "text-[#64748B]"}`}
+              >
                 Tu siguiente actividad
               </span>
               {fromBackend && (
                 <span
-                  className="flex items-center gap-0.5 text-xs font-bold text-white px-1.5 py-0.5 rounded-full"
-                  style={{ background: accentColor }}
+                  className="flex items-center gap-0.5 text-xs font-bold px-1.5 py-0.5 rounded-full"
+                  style={{
+                    background: accentColor,
+                    color: readableTextOn(accentColor),
+                  }}
                 >
                   <GitBranch className="w-2 h-2" />
                   Adaptado
                 </span>
               )}
               {loading && (
-                <Loader2 className="w-3 h-3 text-gray-300 animate-spin" />
+                <Loader2 className="w-3 h-3 text-gray-400 animate-spin" />
               )}
             </div>
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-base font-black text-gray-900 leading-tight">
+              <span
+                className={`text-base font-black leading-tight ${darkMode ? "text-white" : "text-gray-900"}`}
+              >
                 {label}
               </span>
               <span
-                className="text-xs font-black px-2 py-0.5 rounded-full text-white flex-shrink-0"
-                style={{ background: accentColor }}
+                className="text-xs font-black px-2 py-0.5 rounded-full flex-shrink-0"
+                style={{
+                  background: accentColor,
+                  color: readableTextOn(accentColor),
+                }}
               >
                 {goal.emoji ? `${goal.emoji} ` : ""}
                 {goal.label}
@@ -315,13 +327,20 @@ const NextBestAction = memo(({ onTabChange }) => {
         </div>
 
         {/* Description */}
-        <p className="text-xs text-gray-500 leading-snug line-clamp-2 mb-1">
+        <p
+          className={`text-xs leading-snug line-clamp-2 mb-1 ${darkMode ? "text-[#CBD5E1]" : "text-[#475569]"}`}
+        >
           {headline}
         </p>
         {pedagogicReason && (
           <div
             className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full mb-3"
-            style={{ background: `${accentColor}18`, color: accentColor }}
+            style={{
+              background: `${accentColor}18`,
+              color: darkMode
+                ? ensureContrast(accentColor, "#1E293B")
+                : ensureContrast(accentColor, tinted(accentColor, 0.094)),
+            }}
           >
             <GitBranch className="w-2.5 h-2.5" />
             {pedagogicReason}

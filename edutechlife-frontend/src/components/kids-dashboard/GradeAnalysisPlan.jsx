@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { gradeColor, gradeEmoji, getAvgScore } from "./gradeUtils";
+import { readableTextOn } from "../../utils/contrast";
 import { getSubjectEmoji } from "../../config/subjectMappings";
 
 const GradeAnalysisPlan = memo(
@@ -34,7 +35,7 @@ const GradeAnalysisPlan = memo(
             </div>
             <p className="text-sm leading-relaxed">{plan.overall}</p>
             {plan.motivation && (
-              <p className="text-sm font-bold text-[#FFD166]">
+              <p className="text-sm font-bold text-[#806933]">
                 💫 {plan.motivation}
               </p>
             )}
@@ -137,7 +138,10 @@ const GradeAnalysisPlan = memo(
                           </span>
                           <span
                             className="px-2 py-1 rounded-full text-xs font-bold text-white"
-                            style={{ backgroundColor: gradeColor(w.score) }}
+                            style={{
+                              backgroundColor: gradeColor(w.score),
+                              color: readableTextOn(gradeColor(w.score)),
+                            }}
                           >
                             {w.score}/5
                           </span>

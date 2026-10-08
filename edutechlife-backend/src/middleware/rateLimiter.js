@@ -157,6 +157,23 @@ const visionLimiter = rateLimit({
   skip: (req) => process.env.NODE_ENV !== 'production',
 });
 
+// Invitaciones a padres: cada una manda un correo a una dirección que escribe el
+// estudiante. Sin tope, una cuenta podía usarlo para enviar correo a quien quisiera.
+// Cinco por hora y por estudiante bastan para equivocarse y reintentar.
+const parentalInviteLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store,
+  message: {
+    error: 'Ya enviaste varias invitaciones. Intenta de nuevo en una hora.',
+    retryAfter: 3600,
+  },
+  keyGenerator: userAwareKey,
+  skip: (req) => process.env.NODE_ENV !== 'production',
+});
+
 module.exports = {
   userAwareKey,
   apiLimiter,
@@ -168,4 +185,5 @@ module.exports = {
   ttsLimiter,
   ttsHourlyLimiter,
   visionLimiter,
+  parentalInviteLimiter,
 };
