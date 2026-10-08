@@ -4,8 +4,8 @@ import type { BrowserContext, Page } from '@playwright/test';
  * E2E auth helper.
  *
  * The app gates protected routes (RoleProtectedRoute) purely on a Supabase
- * `auth_token` in localStorage — Clerk is only used for signOut, and the
- * role check is currently a no-op. So to drive an "authenticated" session in
+ * `auth_token` in localStorage (auth is 100% Supabase) and the role check is
+ * currently a no-op. So to drive an "authenticated" session in
  * tests we just seed localStorage before the app boots. No real credentials,
  * no network login, no secrets in the repo.
  *

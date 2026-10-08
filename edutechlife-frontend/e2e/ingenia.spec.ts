@@ -3,17 +3,17 @@ import { test, expect } from '@playwright/test';
 /**
  * IngenIA E2E — rutas y meta públicas.
  *
- * /smartboard sirve un HTML 200 OK aunque el dashboard 2.0 solo se hidrata
- * cuando hay sesión Clerk. Sin login, la app monta un <main> vacío / skeleton.
+ * /ingenia sirve un HTML 200 OK aunque el dashboard solo se hidrata cuando hay
+ * sesión. Sin login, la app monta un <main> vacío / skeleton.
  * Estos tests cubren lo que se puede verificar sin credenciales:
  *  - las rutas responden 200 y no crashean
  *  - los meta tags de SEO están presentes
  *  - la landing pública `/conoce-ingenia` sirve como fallback informativo
  *  - los deep links no devuelven 404
  *
- * Los flujos autenticados (VAK, Dani chat, flashcards, mobile nav real) se
- * añadirán en otra iteración con un helper Clerk (STORAGE_STATE con sesión
- * de test), documentado en `docs/testing/e2e-auth.md`.
+ * Los flujos autenticados (VAK, Dani chat, flashcards, mobile nav real) no se
+ * cubren aquí: necesitan una sesión real de Supabase (el helper `helpers/auth.ts`
+ * solo siembra un token falso que satisface la guarda de rutas del cliente).
  */
 
 test.describe('IngenIA @smoke', () => {
