@@ -176,6 +176,7 @@ const Aliados = memo(() => {
               {duplicatedAliados.map((aliado, index) => (
                 <div
                   key={`${aliado.id}-${index}`}
+                  role="listitem"
                   aria-hidden={index >= aliados.length}
                   className="group flex-shrink-0 badge-clay bg-white/60 backdrop-blur-md p-2.5 flex items-center gap-2.5 active:scale-[0.98]"
                   style={{ minWidth: "190px" }}

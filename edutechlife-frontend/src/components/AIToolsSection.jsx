@@ -181,13 +181,13 @@ function AIToolsSection() {
           viewport={{ once: true }}
         >
           {/* Card 1: AI Lab Academic (Main Dark) */}
+          {/* El control accesible es el enlace de dentro: la tarjeta no es role="button"
+              (anidaría un control interactivo en otro) y el foco del enlace también muestra el video. */}
           <motion.div
             variants={itemVariants}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleClick}
-            tabIndex={0}
-            role="button"
             onFocus={handleMouseEnter}
             onBlur={handleMouseLeave}
             className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none order-1 md:order-1 md:col-span-2 rounded-2xl bg-gradient-to-b from-[#004B63] to-[#003545] p-[1px] relative overflow-hidden cursor-pointer shadow-lg group"
@@ -204,7 +204,10 @@ function AIToolsSection() {
                   showVideo ? "opacity-100 z-20" : "opacity-0 z-0"
                 }`}
               >
-                <source src="https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/video%20intro/ialab-demo.mp4" type="video/mp4" />
+                <source
+                  src="https://srirrwpgswlnuqfgtule.supabase.co/storage/v1/object/public/video%20intro/ialab-demo.mp4"
+                  type="video/mp4"
+                />
               </video>
             )}
             <div className="relative z-10 rounded-[calc(1.5rem-1px)] p-8 flex flex-col h-full bg-gradient-to-b from-[#003d52] to-[#002a38]">
@@ -371,13 +374,13 @@ function AIToolsSection() {
           </motion.div>
 
           {/* Card 4: IngenIA (Horizontal) */}
+          {/* El control accesible es el enlace de dentro: la tarjeta no es role="button"
+              (anidaría un control interactivo en otro) y el foco del enlace también muestra el video. */}
           <motion.div
             variants={itemVariants}
             onMouseEnter={handleMouseEnterSmartboard}
             onMouseLeave={handleMouseLeaveSmartboard}
             onClick={handleClickSmartboard}
-            tabIndex={0}
-            role="button"
             onFocus={handleMouseEnterSmartboard}
             onBlur={handleMouseLeaveSmartboard}
             className="shrink-0 w-[85vw] max-w-sm snap-center md:w-auto md:max-w-none order-2 md:order-4 md:col-span-2 card-clay bg-primary-light/5 relative overflow-hidden cursor-pointer"

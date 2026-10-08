@@ -634,6 +634,7 @@ const SmartBoardSignUpPage = () => {
                               <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
+                                aria-label={t("reset.toggle_password")}
                                 className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                               >
                                 {showPassword ? (
@@ -743,6 +744,7 @@ const SmartBoardSignUpPage = () => {
                               <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
+                                aria-label={t("reset.toggle_password")}
                                 className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                               >
                                 {showPassword ? (
