@@ -697,6 +697,7 @@ export type TranslationKeys = {
   "ecosystem.card_2_title": string;
   "ecosystem.card_3_desc": string;
   "ecosystem.card_3_title": string;
+  "ecosystem.carousel_label": string;
   "ecosystem.subtitle": string;
   "ecosystem.swipe_hint": string;
   "ecosystem.title_before": string;
@@ -6399,6 +6400,7 @@ const translationKeySet: Record<string, true> = {
   "ecosystem.card_2_title": true,
   "ecosystem.card_3_desc": true,
   "ecosystem.card_3_title": true,
+  "ecosystem.carousel_label": true,
   "ecosystem.subtitle": true,
   "ecosystem.swipe_hint": true,
   "ecosystem.title_before": true,
