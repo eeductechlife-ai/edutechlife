@@ -3,6 +3,8 @@ name: Deploy
 on:
   push:
     branches: [main]
+  # Manual: es la unica forma de correr `migrate-db` (ver el comentario del job).
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -84,8 +86,18 @@ jobs:
           axe http://localhost:4173/ialab --tags wcag2a,wcag21a --exit
           axe http://localhost:4173/smartboard --tags wcag2a,wcag21a --exit
 
+  # Solo manual (Actions > Deploy > Run workflow). La base de produccion se
+  # construyo a mano desde el panel de Supabase: su historial de migraciones
+  # tiene 47 versiones con marca de tiempo que no existen en supabase/migrations/,
+  # y `supabase db push` se niega a seguir ("Remote migration versions not found
+  # in local migrations directory"), asi que en cada push a main fallaba sin
+  # aplicar nada. Mientras ese historial no se alinee (`supabase migration repair`,
+  # con copia de seguridad), las migraciones se aplican a mano. El backend se
+  # despliega solo desde Render (auto-deploy de main); el job `deploy-backend`
+  # de abajo queda detras de este y solo corre en una ejecucion manual.
   migrate-db:
     name: Migrate Database
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
