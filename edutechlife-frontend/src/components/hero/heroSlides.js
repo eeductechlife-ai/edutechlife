@@ -55,6 +55,9 @@ export const HERO_SLIDES = [
     tabImageClass: "scale-[1.25] translate-y-[8%] bg-[#eef0ff]",
     tabCaptionKey: "hero.tab_ingenia_caption",
     accent: "#7B2FF7",
+    // IngenIA conserva su morado original en la palabra de cierre del titular.
+    titleGradient:
+      "linear-gradient(135deg, #7B2FF7 0%, #A66BFF 100%)",
     glow: "radial-gradient(55% 60% at 72% 45%, rgba(123,47,247,0.22), transparent 70%), radial-gradient(40% 45% at 60% 70%, rgba(0,194,224,0.22), transparent 70%)",
     aurora: ["rgba(123,47,247,0.3)", "rgba(0,194,224,0.35)"],
     route: "/conoce-ingenia",

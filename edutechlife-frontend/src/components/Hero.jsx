@@ -86,39 +86,45 @@ const wordVariants = {
   inactive: { y: "110%", transition: { duration: 0.3 } },
 };
 
-/** Titular con revelado por máscara, palabra por palabra. */
-const RevealText = ({ text, offset = 0, colorAt }) => {
+/** Titular con revelado por máscara, palabra por palabra. La palabra de cierre
+ *  (la última) lleva el degradado de marca `text-gradient-accent`, igual que los
+ *  títulos de sección ("Herramientas de Élite"). Un slide puede pasar su propio
+ *  `gradient` (p. ej. IngenIA con su morado original) para no romper su estilo. */
+const RevealText = ({ text, offset = 0, gradientLast = false, gradient = null }) => {
   const words = text.split(" ");
-  return words.map((word, i) => (
-    <Fragment key={`${word}-${i}`}>
-      <span className="-mb-[0.12em] inline-block overflow-hidden pb-[0.12em] align-bottom [font-family:inherit]">
-        <motion.span
-          className="inline-block [font-family:inherit]"
-          custom={i + offset}
-          variants={wordVariants}
-          style={colorAt ? { color: colorAt(i, words.length) } : undefined}
-        >
-          {word}
-        </motion.span>
-      </span>{" "}
-    </Fragment>
-  ));
+  return words.map((word, i) => {
+    const highlight = gradientLast && i === words.length - 1;
+    const style =
+      highlight && gradient
+        ? {
+            backgroundImage: gradient,
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            color: "transparent",
+          }
+        : undefined;
+    const cls = highlight && !gradient ? "text-gradient-accent" : "";
+    return (
+      <Fragment key={`${word}-${i}`}>
+        <span className="-mb-[0.12em] inline-block overflow-hidden pb-[0.12em] align-bottom [font-family:inherit]">
+          <motion.span
+            className={`inline-block [font-family:inherit] ${cls}`}
+            custom={i + offset}
+            variants={wordVariants}
+            style={style}
+          >
+            {word}
+          </motion.span>
+        </span>{" "}
+      </Fragment>
+    );
+  });
 };
 
-// Acento de marca (como en los videos de MAX): petróleo → turquesa → azul claro,
-// interpolado palabra a palabra para que el degradado sea continuo.
-const BRAND_STOPS = [
-  [0, 75, 99],
-  [0, 151, 167],
-  [77, 168, 196],
-];
-const brandColorAt = (i, n) => {
-  const t = n <= 1 ? 0 : i / (n - 1);
-  const seg = t < 0.5 ? 0 : 1;
-  const k = seg === 0 ? t / 0.5 : (t - 0.5) / 0.5;
-  const [a, b] = [BRAND_STOPS[seg], BRAND_STOPS[seg + 1]];
-  return `rgb(${a.map((v, j) => Math.round(v + (b[j] - v) * k)).join(",")})`;
-};
+// El énfasis del titular usa el degradado de marca definido en components.css
+// (`.text-gradient-accent`: petróleo → turquesa → azul claro), el mismo de los
+// títulos de sección. Se aplica a la palabra de cierre para un remate premium.
 
 const TITLE_BASE =
   "font-display font-black leading-[0.98] tracking-[-0.04em] text-petroleum [text-wrap:balance]";
@@ -140,9 +146,6 @@ const TitleRule = ({ accent = "#4DA8C4", center = false }) => (
   />
 );
 
-// Palabra de cierre con el acento del producto; el resto hereda el petróleo.
-const accentLastWord = (color) => (i, n) => (i === n - 1 ? color : undefined);
-
 
 const MainCopy = ({ t, locale, isActive, stats, statsRef }) => {
   const tab = isActive ? 0 : -1;
@@ -154,7 +157,7 @@ const MainCopy = ({ t, locale, isActive, stats, statsRef }) => {
         <RevealText
           text={t("hero.title_line2")}
           offset={t("hero.title_line1").split(" ").length}
-          colorAt={brandColorAt}
+          gradientLast
         />
       </h1>
       <TitleRule center />
@@ -228,7 +231,8 @@ const ProductCopy = ({ slide, t, isActive }) => (
     <h2 className={PRODUCT_TITLE_CLASS}>
       <RevealText
         text={t(slide.titleKey)}
-        colorAt={accentLastWord(slide.accent)}
+        gradientLast
+        gradient={slide.titleGradient || null}
       />
     </h2>
     <TitleRule accent={slide.accent} center />
