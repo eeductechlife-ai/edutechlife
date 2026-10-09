@@ -7,11 +7,11 @@ import {
   useTransform,
 } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
 import { HERO_SLIDES } from "./hero/heroSlides";
 import { useHeroCarousel } from "./hero/useHeroCarousel";
-import { HeroOrbitStage } from "./hero/HeroOrbitStage";
+import { HeroBrainStage } from "./hero/HeroBrainStage";
 import { HeroVideoStage } from "./hero/HeroVideoStage";
 import { HeroTabs } from "./hero/HeroTabs";
 import { HeroConstellation } from "./hero/HeroConstellation";
@@ -131,7 +131,7 @@ const SUBTITLE_CLASS =
 const CTA_BASE =
   "inline-flex min-h-[52px] items-center justify-center gap-3 whitespace-nowrap rounded-full text-base font-bold transition-[background-color,border-color,color,transform,box-shadow] duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petroleum";
 
-const MainCopy = ({ t, isActive, stats, statsRef }) => {
+const MainCopy = ({ t, locale, isActive, stats, statsRef }) => {
   const tab = isActive ? 0 : -1;
   return (
     <div className="text-center lg:text-left">
@@ -181,7 +181,7 @@ const MainCopy = ({ t, isActive, stats, statsRef }) => {
             {t("hero.stat_estudiantes")}
           </dt>
           <dd className="font-display text-2xl font-black tracking-[-0.03em] text-petroleum sm:text-[1.75rem]">
-            {stats.students.toLocaleString()}+
+            {stats.students.toLocaleString(locale)}+
           </dd>
         </div>
         <div className="flex flex-col-reverse border-l border-petroleum/15 pl-6">
@@ -199,26 +199,22 @@ const MainCopy = ({ t, isActive, stats, statsRef }) => {
 
 const ProductCopy = ({ slide, t, isActive }) => (
   <div className="text-center lg:text-left">
+    {/* Para quién es: orienta antes del titular */}
+    <p
+      className="mb-4 inline-flex items-center gap-2 text-sm font-semibold sm:text-[0.95rem]"
+      style={{ color: slide.accent }}
+    >
+      <span
+        aria-hidden="true"
+        className="h-2 w-2 rounded-full"
+        style={{ background: slide.accent }}
+      />
+      {t(slide.audienceKey)}
+    </p>
     <h2 className={PRODUCT_TITLE_CLASS}>
       <RevealText text={t(slide.titleKey)} />
     </h2>
     <p className={SUBTITLE_CLASS}>{t(slide.subtitleKey)}</p>
-    <ul className="mx-auto mt-6 flex max-w-md flex-col gap-2.5 text-left lg:mx-0">
-      {slide.factKeys.map((key) => (
-        <li
-          key={key}
-          className="flex items-start gap-3 text-sm font-semibold text-petroleum-dark sm:text-base"
-        >
-          <span
-            className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-white"
-            style={{ background: slide.accent }}
-          >
-            <Check size={13} strokeWidth={3} aria-hidden="true" />
-          </span>
-          {t(key)}
-        </li>
-      ))}
-    </ul>
     <div className="mt-8 flex justify-center lg:justify-start">
       <Link
         to={slide.route}
@@ -233,7 +229,7 @@ const ProductCopy = ({ slide, t, isActive }) => (
 );
 
 const Hero = memo(() => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const rootRef = useRef(null);
   const statsRef = useRef(null);
   const touchX = useRef(null);
@@ -362,7 +358,16 @@ const Hero = memo(() => {
               />
             </div>
           ))}
-          <HeroConstellation running={running} reducedMotion={reducedMotion} />
+          {/* El slide del cerebro va sin fondo: solo el cerebro y sus conexiones */}
+          <div
+            className="absolute inset-0 transition-opacity duration-1000"
+            style={{ opacity: HERO_SLIDES[active].kind === "photo" ? 0 : 1 }}
+          >
+            <HeroConstellation
+              running={running}
+              reducedMotion={reducedMotion}
+            />
+          </div>
           <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-white" />
         </div>
 
@@ -399,6 +404,7 @@ const Hero = memo(() => {
                       {slide.kind === "photo" ? (
                         <MainCopy
                           t={t}
+                          locale={locale}
                           isActive={isActive}
                           stats={stats}
                           statsRef={statsRef}
@@ -414,7 +420,7 @@ const Hero = memo(() => {
                     style={{ transformStyle: "preserve-3d" }}
                   >
                     {slide.kind === "photo" ? (
-                      <HeroOrbitStage
+                      <HeroBrainStage
                         isActive={isActive}
                         running={running}
                         reducedMotion={reducedMotion}
@@ -432,7 +438,6 @@ const Hero = memo(() => {
                         onForceMute={onAudioBlocked}
                         onProgress={reportProgress}
                         onEnded={onVideoEnded}
-                        progress={progress}
                         stage={stage}
                         t={t}
                       />
