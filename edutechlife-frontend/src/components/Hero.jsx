@@ -120,16 +120,29 @@ const brandColorAt = (i, n) => {
   return `rgb(${a.map((v, j) => Math.round(v + (b[j] - v) * k)).join(",")})`;
 };
 
-const TITLE_CLASS =
-  "font-display text-[2.1rem] font-black leading-[1.02] tracking-[-0.045em] text-petroleum [text-wrap:balance] sm:text-5xl lg:text-[3.35rem]";
-const PRODUCT_TITLE_CLASS = TITLE_CLASS.replace(
-  "lg:text-[3.35rem]",
-  "lg:text-[2.7rem]",
-);
+const TITLE_BASE =
+  "font-display font-black leading-[0.98] tracking-[-0.04em] text-petroleum [text-wrap:balance]";
+// Escala fluida única: el slide principal llega al tope; los productos, al tramo
+// medio, para no competir con el video. Un solo motor para los 3 carruseles.
+const TITLE_CLASS = `${TITLE_BASE} text-[clamp(2.05rem,4.6vw,3.35rem)]`;
+const PRODUCT_TITLE_CLASS = `${TITLE_BASE} text-[clamp(1.9rem,3.4vw,2.7rem)]`;
 const SUBTITLE_CLASS =
   "mt-5 max-w-[46ch] text-base leading-relaxed font-medium text-slate-500 sm:text-lg lg:mx-0 mx-auto";
 const CTA_BASE =
   "inline-flex min-h-[52px] items-center justify-center gap-3 whitespace-nowrap rounded-full text-base font-bold transition-[background-color,border-color,color,transform,box-shadow] duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petroleum";
+
+// Remate óptico: regla fina bajo el titular que ancla el final del bloque.
+const TitleRule = ({ accent = "#4DA8C4", center = false }) => (
+  <span
+    aria-hidden="true"
+    className={`mt-4 block h-[3px] w-9 rounded-full ${center ? "mx-auto lg:mx-0" : ""}`}
+    style={{ background: `linear-gradient(90deg, #004B63, ${accent})` }}
+  />
+);
+
+// Palabra de cierre con el acento del producto; el resto hereda el petróleo.
+const accentLastWord = (color) => (i, n) => (i === n - 1 ? color : undefined);
+
 
 const MainCopy = ({ t, locale, isActive, stats, statsRef }) => {
   const tab = isActive ? 0 : -1;
@@ -144,6 +157,7 @@ const MainCopy = ({ t, locale, isActive, stats, statsRef }) => {
           colorAt={brandColorAt}
         />
       </h1>
+      <TitleRule center />
       <p className={SUBTITLE_CLASS}>{t("hero.subtitle_before")}</p>
       <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center lg:justify-start">
         <Link
@@ -180,7 +194,7 @@ const MainCopy = ({ t, locale, isActive, stats, statsRef }) => {
           <dt className="text-xs font-medium text-slate-500 sm:text-sm">
             {t("hero.stat_estudiantes")}
           </dt>
-          <dd className="font-display text-2xl font-black tracking-[-0.03em] text-petroleum sm:text-[1.75rem]">
+          <dd className="font-display text-2xl font-black tracking-[-0.03em] text-petroleum [font-variant-numeric:tabular-nums] sm:text-[1.75rem]">
             {stats.students.toLocaleString(locale)}+
           </dd>
         </div>
@@ -188,7 +202,7 @@ const MainCopy = ({ t, locale, isActive, stats, statsRef }) => {
           <dt className="text-xs font-medium text-slate-500 sm:text-sm">
             {t("hero.stat_anios_experiencia")}
           </dt>
-          <dd className="font-display text-2xl font-black tracking-[-0.03em] text-petroleum sm:text-[1.75rem]">
+          <dd className="font-display text-2xl font-black tracking-[-0.03em] text-petroleum [font-variant-numeric:tabular-nums] sm:text-[1.75rem]">
             {stats.years}+
           </dd>
         </div>
@@ -199,21 +213,25 @@ const MainCopy = ({ t, locale, isActive, stats, statsRef }) => {
 
 const ProductCopy = ({ slide, t, isActive }) => (
   <div className="text-center lg:text-left">
-    {/* Para quién es: orienta antes del titular */}
+    {/* Kicker premium: pill micro en mayúsculas con el acento del producto */}
     <p
-      className="mb-4 inline-flex items-center gap-2 text-sm font-semibold sm:text-[0.95rem]"
-      style={{ color: slide.accent }}
+      className="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em]"
+      style={{ color: slide.accent, background: `${slide.accent}14` }}
     >
       <span
         aria-hidden="true"
-        className="h-2 w-2 rounded-full"
+        className="h-1.5 w-1.5 rounded-full"
         style={{ background: slide.accent }}
       />
       {t(slide.audienceKey)}
     </p>
     <h2 className={PRODUCT_TITLE_CLASS}>
-      <RevealText text={t(slide.titleKey)} />
+      <RevealText
+        text={t(slide.titleKey)}
+        colorAt={accentLastWord(slide.accent)}
+      />
     </h2>
+    <TitleRule accent={slide.accent} center />
     <p className={SUBTITLE_CLASS}>{t(slide.subtitleKey)}</p>
     <div className="mt-8 flex justify-center lg:justify-start">
       <Link
