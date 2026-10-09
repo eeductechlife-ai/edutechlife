@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion, useSpring, useTransform } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
-import { LiveCard, SpeakerCard } from "./HeroLiveCards";
 
 const SPRING = { stiffness: 90, damping: 20, mass: 0.8 };
 
@@ -24,7 +23,8 @@ const safePlay = (video, onBlockedWithSound) => {
 
 /**
  * Pantalla 3D que reproduce el video del producto. Capas en profundidad:
- * brillo de piso < pantalla < tarjetas vivas < avatar del tutor.
+ * brillo de piso < pantalla < avatar del tutor. Sin tarjetas flotantes: el
+ * video es el protagonista y el hero no se satura.
  * `stage.mx/my` = puntero (-0.5..0.5); `stage.scroll` = progreso de scroll del Hero.
  */
 export const HeroVideoStage = ({
@@ -38,7 +38,6 @@ export const HeroVideoStage = ({
   onForceMute,
   onProgress,
   onEnded,
-  progress,
   stage,
   t,
 }) => {
@@ -62,14 +61,6 @@ export const HeroVideoStage = ({
   );
   const nearY = useSpring(
     useTransform(my, (y) => y * -22),
-    SPRING,
-  );
-  const midX = useSpring(
-    useTransform(mx, (x) => x * -18),
-    SPRING,
-  );
-  const midY = useSpring(
-    useTransform(my, (y) => y * -12),
     SPRING,
   );
 
@@ -166,25 +157,6 @@ export const HeroVideoStage = ({
             transition={{ duration: 1.4, delay: 0.5, ease: "easeInOut" }}
           />
         </div>
-
-        <motion.div
-          className="absolute -right-3 -top-6 hidden sm:block lg:-right-10"
-          style={{ x: midX, y: midY, z: 60 }}
-        >
-          <SpeakerCard slide={slide} speaking={speaking} t={t} />
-        </motion.div>
-
-        <motion.div
-          className="absolute -left-6 top-[18%] hidden md:block lg:-left-14"
-          style={{ x: midX, y: midY, z: 80 }}
-        >
-          <LiveCard
-            slide={slide}
-            isActive={isActive}
-            progress={progress}
-            t={t}
-          />
-        </motion.div>
 
         <motion.div
           className="pointer-events-none absolute -bottom-8 left-1 w-[22%] max-w-[150px] lg:-left-10"

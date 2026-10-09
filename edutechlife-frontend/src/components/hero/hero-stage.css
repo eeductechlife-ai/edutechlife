@@ -109,3 +109,33 @@
     animation: none !important;
   }
 }
+
+/* Señal neuronal: el trazo de 7 de 100 unidades recorre la conexión (NeuralBrain) */
+@keyframes neural-signal {
+  from {
+    stroke-dashoffset: 107;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Sinapsis: destello corto y nítido, luego reposo (NeuralBrain) */
+@keyframes neural-flash {
+  0% {
+    opacity: 0.15;
+    transform: scale(0.8);
+  }
+  4% {
+    opacity: 1;
+    transform: scale(1.9);
+  }
+  14% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.15;
+    transform: scale(0.8);
+  }
+}

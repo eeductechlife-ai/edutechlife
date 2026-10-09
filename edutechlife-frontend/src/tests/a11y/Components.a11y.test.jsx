@@ -91,6 +91,7 @@ vi.mock("framer-motion", () => ({
     figure: ({ children, ...props }) => <figure {...props}>{children}</figure>,
     img: (props) => <img {...props} />,
     circle: (props) => <circle {...props} />,
+    svg: ({ children, ...props }) => <svg {...props}>{children}</svg>,
   },
   AnimatePresence: ({ children }) => <>{children}</>,
   MotionConfig: ({ children }) => <>{children}</>,
@@ -99,6 +100,8 @@ vi.mock("framer-motion", () => ({
   useMotionValue: () => ({ get: () => 0, set: () => {} }),
   useSpring: () => ({ get: () => 0 }),
   useTransform: () => ({ get: () => 0 }),
+  useAnimationFrame: () => {},
+  useMotionTemplate: () => "",
 }));
 
 const Wrapper = ({ children }) => (
