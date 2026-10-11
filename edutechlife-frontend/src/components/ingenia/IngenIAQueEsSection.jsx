@@ -4,13 +4,13 @@ import { Icon } from "../../utils/iconMapping.jsx";
 import { sanitize } from "../../utils/sanitize";
 import { fadeInUp } from "./IngenIAShared";
 
-export default function IngenIAQueEsSection({ t }) {
+export default function IngenIAQueEsSection({ t, vakStyles }) {
   return (
     <section
       id="que-es"
       role="region"
       aria-label="¿Qué es IngenIA?"
-      className="relative w-full overflow-hidden bg-white py-12 lg:py-16 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-white py-8 lg:py-10 scroll-mt-20"
     >
       <div className="absolute top-[30%] right-[10%] w-48 h-48 bg-mint/8 rounded-full blur-[80px]" />
       <div className="absolute bottom-[20%] left-[5%] w-44 h-44 bg-primary-light/6 rounded-full blur-[80px]" />
@@ -104,7 +104,7 @@ export default function IngenIAQueEsSection({ t }) {
               }}
               whileHover={{ y: -4 }}
               style={{ willChange: "transform" }}
-              className="rounded-2xl bg-petroleum/5 border border-petroleum/10 overflow-hidden relative shadow-2xl hover:shadow-[0_25px_50px_rgba(0,75,99,0.15)] transition-shadow duration-300"
+              className="rounded-2xl bg-petroleum/5 border border-petroleum/10 overflow-hidden relative shadow-2xl hover:shadow-[0_25px_50px_rgba(123,47,247,0.18)] transition-shadow duration-300"
             >
               <div className="aspect-video w-full bg-petroleum-dark/10 flex items-center justify-center">
                 <video
@@ -116,8 +116,10 @@ export default function IngenIAQueEsSection({ t }) {
                   controls
                   preload="metadata"
                 >
-                  <source src="/smarboard.mp4" type="video/mp4" />
-                  <source src="/smarboard.mov" type="video/quicktime" />
+                  <source
+                    src="/videos/hero/ingenia-dani.mp4"
+                    type="video/mp4"
+                  />
                 </video>
               </div>
               <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-white/70 backdrop-blur-xl border border-white/40 text-[11px] font-bold text-petroleum flex items-center gap-1.5 pointer-events-none shadow-sm">
@@ -147,6 +149,74 @@ export default function IngenIAQueEsSection({ t }) {
             </div>
           </motion.div>
         </div>
+
+        {/* Estilos VAK — antes era una sección aparte; ahora vive aquí para
+            acortar la página sin perder el mensaje. */}
+        {vakStyles?.length ? (
+          <div className="mt-12">
+            <div className="mb-6 text-center">
+              <span className="badge-clay mb-3 inline-block rounded-full bg-primary-light/10 px-3.5 py-1 text-[11px] font-bold uppercase tracking-widest text-petroleum">
+                {t("ingenia.landing_vak_badge")}
+              </span>
+              <h2 className="mb-2 text-2xl font-black leading-tight text-petroleum md:text-3xl">
+                {t("ingenia.landing_vak_title")}
+                <span className="bg-gradient-to-r from-primary-light to-mint bg-clip-text pr-1 text-transparent">
+                  {t("ingenia.landing_vak_title_highlight")}
+                </span>
+              </h2>
+              <p className="mx-auto max-w-2xl text-sm leading-relaxed text-slate-500">
+                {t("ingenia.landing_vak_desc")}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-3">
+              {vakStyles.map((style) => (
+                <div
+                  key={style.key}
+                  className="relative overflow-hidden rounded-2xl border border-petroleum/10 bg-white p-5 shadow-sm"
+                >
+                  <div
+                    className="absolute inset-x-0 top-0 h-1"
+                    style={{
+                      background: `linear-gradient(135deg, ${style.color}, ${style.color}88)`,
+                    }}
+                  />
+                  <div
+                    className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl"
+                    style={{
+                      background: `linear-gradient(135deg, ${style.color}15, ${style.color}08)`,
+                    }}
+                  >
+                    <Icon
+                      name={style.icon}
+                      className="text-lg"
+                      style={{ color: style.color }}
+                    />
+                  </div>
+                  <h3 className="mb-1.5 text-sm font-bold text-petroleum">
+                    {style.title}
+                  </h3>
+                  <p className="mb-3 text-xs leading-relaxed text-slate-500">
+                    {style.description}
+                  </p>
+                  <div className="space-y-1.5">
+                    {style.traits.map((trait) => (
+                      <div
+                        key={trait}
+                        className="flex items-center gap-2 text-xs text-slate-500"
+                      >
+                        <div
+                          className="h-1.5 w-1.5 flex-shrink-0 rounded-full"
+                          style={{ backgroundColor: style.color }}
+                        />
+                        <span>{trait}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
     </section>
   );
@@ -154,4 +224,5 @@ export default function IngenIAQueEsSection({ t }) {
 
 IngenIAQueEsSection.propTypes = {
   t: PropTypes.func.isRequired,
+  vakStyles: PropTypes.array,
 };

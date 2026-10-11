@@ -90,7 +90,12 @@ const wordVariants = {
  *  (la última) lleva el degradado de marca `text-gradient-accent`, igual que los
  *  títulos de sección ("Herramientas de Élite"). Un slide puede pasar su propio
  *  `gradient` (p. ej. IngenIA con su morado original) para no romper su estilo. */
-const RevealText = ({ text, offset = 0, gradientLast = false, gradient = null }) => {
+const RevealText = ({
+  text,
+  offset = 0,
+  gradientLast = false,
+  gradient = null,
+}) => {
   const words = text.split(" ");
   return words.map((word, i) => {
     const highlight = gradientLast && i === words.length - 1;
@@ -146,21 +151,25 @@ const TitleRule = ({ accent = "#4DA8C4", center = false }) => (
   />
 );
 
+const MainTitle = ({ t }) => (
+  <div className="text-center lg:text-left">
+    <h1 className={TITLE_CLASS}>
+      <RevealText text={t("hero.title_line1")} />
+      <br className="hidden lg:inline" />
+      <RevealText
+        text={t("hero.title_line2")}
+        offset={t("hero.title_line1").split(" ").length}
+        gradientLast
+      />
+    </h1>
+    <TitleRule center />
+  </div>
+);
 
-const MainCopy = ({ t, locale, isActive, stats, statsRef }) => {
+const MainBody = ({ t, locale, isActive, stats, statsRef }) => {
   const tab = isActive ? 0 : -1;
   return (
     <div className="text-center lg:text-left">
-      <h1 className={TITLE_CLASS}>
-        <RevealText text={t("hero.title_line1")} />
-        <br className="hidden lg:inline" />
-        <RevealText
-          text={t("hero.title_line2")}
-          offset={t("hero.title_line1").split(" ").length}
-          gradientLast
-        />
-      </h1>
-      <TitleRule center />
       <p className={SUBTITLE_CLASS}>{t("hero.subtitle_before")}</p>
       <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center lg:justify-start">
         <Link
@@ -214,7 +223,7 @@ const MainCopy = ({ t, locale, isActive, stats, statsRef }) => {
   );
 };
 
-const ProductCopy = ({ slide, t, isActive }) => (
+const ProductTitle = ({ slide, t }) => (
   <div className="text-center lg:text-left">
     {/* Kicker premium: pill micro en mayúsculas con el acento del producto */}
     <p
@@ -236,6 +245,11 @@ const ProductCopy = ({ slide, t, isActive }) => (
       />
     </h2>
     <TitleRule accent={slide.accent} center />
+  </div>
+);
+
+const ProductBody = ({ slide, t, isActive }) => (
+  <div className="text-center lg:text-left">
     <p className={SUBTITLE_CLASS}>{t(slide.subtitleKey)}</p>
     <div className="mt-8 flex justify-center lg:justify-start">
       <Link
@@ -418,27 +432,48 @@ const Hero = memo(() => {
                   style={{ zIndex: isActive ? 2 : 1 }}
                   className="grid items-center gap-6 [grid-area:1/1] [perspective:2000px] sm:gap-8 lg:grid-cols-12 lg:gap-10"
                 >
-                  <motion.div
-                    variants={copyVariants}
-                    className="order-3 lg:order-none lg:col-span-5"
-                  >
-                    <motion.div style={{ y: copyY, opacity: copyFade }}>
-                      {slide.kind === "photo" ? (
-                        <MainCopy
-                          t={t}
-                          locale={locale}
-                          isActive={isActive}
-                          stats={stats}
-                          statsRef={statsRef}
-                        />
-                      ) : (
-                        <ProductCopy slide={slide} t={t} isActive={isActive} />
-                      )}
+                  {/* Móvil: el TÍTULO sube arriba (order-1) y el resto del texto baja (order-3),
+                      con el video en medio (order-2). En escritorio el wrapper pasa a block y
+                      agrupa título + cuerpo en la columna izquierda: el layout NO cambia. */}
+                  <div className="contents lg:order-none lg:block lg:col-span-5">
+                    <motion.div
+                      variants={copyVariants}
+                      className="order-1 lg:order-none"
+                    >
+                      <motion.div style={{ y: copyY, opacity: copyFade }}>
+                        {slide.kind === "photo" ? (
+                          <MainTitle t={t} />
+                        ) : (
+                          <ProductTitle slide={slide} t={t} />
+                        )}
+                      </motion.div>
                     </motion.div>
-                  </motion.div>
+                    <motion.div
+                      variants={copyVariants}
+                      className="order-3 lg:order-none"
+                    >
+                      <motion.div style={{ y: copyY, opacity: copyFade }}>
+                        {slide.kind === "photo" ? (
+                          <MainBody
+                            t={t}
+                            locale={locale}
+                            isActive={isActive}
+                            stats={stats}
+                            statsRef={statsRef}
+                          />
+                        ) : (
+                          <ProductBody
+                            slide={slide}
+                            t={t}
+                            isActive={isActive}
+                          />
+                        )}
+                      </motion.div>
+                    </motion.div>
+                  </div>
                   <motion.div
                     variants={visualVariants}
-                    className="order-1 lg:order-none lg:col-span-7"
+                    className="order-2 lg:order-none lg:col-span-7"
                     style={{ transformStyle: "preserve-3d" }}
                   >
                     {slide.kind === "photo" ? (
@@ -465,7 +500,7 @@ const Hero = memo(() => {
                       />
                     )}
                   </motion.div>
-                  {/* Móvil y tablet: el selector va al final, debajo del botón de acción */}
+                  {/* Móvil y tablet: el selector va al final, debajo del título, el video y el texto */}
                   <div className="order-4 lg:hidden">
                     <HeroTabs {...tabsProps} idPrefix={`${idPrefix}-m${i}`} />
                   </div>

@@ -16,13 +16,13 @@ export default function IngenIAPlanesSection({
       id="planes"
       role="region"
       aria-label="Planes y precios"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-bg-light to-white py-12 lg:py-16 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-bg-light to-white py-8 lg:py-10 scroll-mt-20"
     >
       <div className="absolute top-[15%] right-[15%] w-56 h-56 bg-mint/8 rounded-full blur-[80px] animate-orb-2" />
       <div className="absolute bottom-[10%] left-[10%] w-44 h-44 bg-primary-light/6 rounded-full blur-[80px] animate-orb-1" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-        <motion.div {...fadeInUp} className="text-center mb-10">
+        <motion.div {...fadeInUp} className="text-center mb-7">
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-corporate/10 text-petroleum text-xs font-bold uppercase tracking-widest mb-3 border border-corporate/10">
             <span className="text-corporate text-sm">✦</span>
             {t("ingenia.landing_pricing_badge")}
@@ -51,7 +51,7 @@ export default function IngenIAPlanesSection({
               key={plan.name}
               variants={childVariant}
               style={{ willChange: "transform" }}
-              className={`relative rounded-2xl border-2 p-8 lg:p-10 flex flex-col ${
+              className={`relative rounded-2xl border-2 p-6 lg:p-8 flex flex-col ${
                 plan.popular
                   ? "border-petroleum shadow-2xl shadow-petroleum/15 lg:scale-[1.02] bg-gradient-to-b from-petroleum to-petroleum-darker"
                   : "bg-white border-white/40 shadow-sm hover:border-primary-light/40"
@@ -75,7 +75,7 @@ export default function IngenIAPlanesSection({
                   {plan.trial}
                 </span>
               </div>
-              <div className="text-center mb-6">
+              <div className="text-center mb-4">
                 <h3
                   className={`text-xl lg:text-2xl font-bold mb-1 ${plan.popular ? "text-white" : "text-petroleum"}`}
                 >
@@ -94,8 +94,8 @@ export default function IngenIAPlanesSection({
                   </span>
                 </div>
               </div>
-              <ul className="space-y-3 mb-8 flex-1">
-                {plan.features.map((feat) => (
+              <ul className="space-y-2 mb-6 flex-1">
+                {plan.features.slice(0, 6).map((feat) => (
                   <li key={feat} className="flex items-start gap-3">
                     <div
                       className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${plan.popular ? "bg-white/15" : "bg-success/10"}`}
@@ -112,6 +112,13 @@ export default function IngenIAPlanesSection({
                     </span>
                   </li>
                 ))}
+                {plan.features.length > 6 ? (
+                  <li
+                    className={`pt-1 text-xs font-bold ${plan.popular ? "text-white/70" : "text-primary-light"}`}
+                  >
+                    +{plan.features.length - 6} funciones más
+                  </li>
+                ) : null}
               </ul>
               <MagneticButton
                 onClick={handleCta}
@@ -140,7 +147,7 @@ export default function IngenIAPlanesSection({
             damping: 16,
             delay: 0.4,
           }}
-          className="mt-10 text-center"
+          className="mt-8 text-center"
         >
           <div className="inline-flex flex-wrap items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm">
             {paymentMethods.map((method, i) => (
@@ -173,7 +180,7 @@ export default function IngenIAPlanesSection({
             damping: 16,
             delay: 0.5,
           }}
-          className="mt-4 text-center"
+          className="mt-3 text-center"
         >
           <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-success/10 border border-success/20 hover:bg-success/15 transition-colors">
             <div className="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center">

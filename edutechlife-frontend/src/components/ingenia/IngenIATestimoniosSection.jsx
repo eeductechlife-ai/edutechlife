@@ -19,7 +19,7 @@ export default function IngenIATestimoniosSection({ t, testimonials }) {
       id="testimonios"
       role="region"
       aria-label="Testimonios"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-white to-petroleum/3 py-12 lg:py-16 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-white to-petroleum/3 py-8 lg:py-10 scroll-mt-20"
     >
       <div className="absolute top-[20%] left-[5%] w-48 h-48 bg-primary-light/6 rounded-full blur-[80px] animate-orb-1" />
       <div className="absolute bottom-[20%] right-[10%] w-44 h-44 bg-mint/6 rounded-full blur-[80px] animate-orb-2" />
@@ -27,7 +27,7 @@ export default function IngenIATestimoniosSection({ t, testimonials }) {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           {...(!prefersReducedMotion ? fadeInUp : {})}
-          className="text-center mb-10"
+          className="text-center mb-7"
         >
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-primary-light/10 to-mint/10 text-petroleum text-xs font-bold uppercase tracking-widest mb-3 border border-primary-light/10">
             <Icon name="fa-star" className="text-corporate text-xs" />

@@ -1,6 +1,6 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "../i18n/I18nProvider";
 import { useABExperiment, trackConversion } from "../hooks/useABExperiment";
@@ -18,61 +18,40 @@ import {
 import IngenIAInfoHero from "./ingenia/IngenIAInfoHero";
 import IngenIASectionNav from "./ingenia/IngenIASectionNav";
 import IngenIAQueEsSection from "./ingenia/IngenIAQueEsSection";
-import IngenIAVakStylesSection from "./ingenia/IngenIAVakStylesSection";
-import IngenIABeneficiosSection from "./ingenia/IngenIABeneficiosSection";
-import IngenIATranquilidadSection from "./ingenia/IngenIATranquilidadSection";
+import IngenIABeneficiosTranquilidadSection from "./ingenia/IngenIABeneficiosTranquilidadSection";
 import IngenIAComoFuncionaSection from "./ingenia/IngenIAComoFuncionaSection";
 import IngenIAPlanesSection from "./ingenia/IngenIAPlanesSection";
 import IngenIATestimoniosSection from "./ingenia/IngenIATestimoniosSection";
 import IngenIAFinalSection from "./ingenia/IngenIAFinalSection";
+import "./ingenia/ingenia-theme.css";
 
-const stepVariants = {
-  enter: (dir) => ({
-    x: dir > 0 ? 300 : -300,
-    opacity: 0,
-    scale: 0.96,
-  }),
-  center: {
-    x: 0,
-    opacity: 1,
-    scale: 1,
-  },
-  exit: (dir) => ({
-    x: dir > 0 ? -200 : 200,
-    opacity: 0,
-    scale: 0.97,
-  }),
-};
+// Anclas de cada sección. El wrapper usa un id con prefijo para NO chocar con
+// los ids que ya traen las <section> internas (que-es, planes, ...).
+const SECTION_ANCHORS = [
+  "que-es",
+  "beneficios",
+  "como-funciona",
+  "planes",
+  "testimonios",
+  "faq",
+];
+
+const anchorId = (anchor) => `ingenia-sec-${anchor}`;
 
 const getStepLabels = (t) => [
   t("ingenia.landing_step_que_es"),
-  t("ingenia.landing_step_vak"),
   t("ingenia.landing_step_beneficios"),
-  t("ingenia.landing_step_tranquilidad"),
   t("ingenia.landing_step_como_funciona"),
   t("ingenia.landing_step_planes"),
   t("ingenia.landing_step_testimonios"),
   t("ingenia.landing_step_faq"),
 ];
 
-const DOT_GRADIENTS = [
-  "from-petroleum to-primary-light",
-  "from-primary-light to-corporate",
-  "from-corporate to-mint",
-  "from-mint to-petroleum",
-  "from-petroleum to-corporate",
-  "from-primary-light to-mint",
-  "from-corporate to-primary-light",
-  "from-mint to-corporate",
-];
-
 const IngenIALandingInfo = ({ onNavigate }) => {
   const { t, locale } = useTranslation();
   const navigate = useNavigate();
-  const navRef = useRef(null);
 
-  const [currentStep, setCurrentStep] = useState(0);
-  const [direction, setDirection] = useState(0);
+  const [activeStep, setActiveStep] = useState(0);
 
   const vakStyles = getVakStyles(locale);
   const pricingPlans = getPricingPlans(locale);
@@ -84,48 +63,70 @@ const IngenIALandingInfo = ({ onNavigate }) => {
   const paymentMethods = getPaymentMethods(locale);
   const guarantee = getGuarantee(locale);
 
-  const goToStep = useCallback(
-    (index) => {
-      if (index === currentStep) return;
-      setDirection(index > currentStep ? 1 : -1);
-      setCurrentStep(index);
-      if (navRef.current) {
-        const top =
-          navRef.current.getBoundingClientRect().top + window.scrollY - 10;
-        window.scrollTo({ top, behavior: "smooth" });
-      }
-    },
-    [currentStep],
-  );
-
   const stepLabels = getStepLabels(t);
 
+  // Desplaza la vista a la sección indicada. scrollIntoView respeta el
+  // scroll-margin-top del wrapper, que compensa la barra sticky.
+  const goToStep = useCallback((index) => {
+    const el = document.getElementById(anchorId(SECTION_ANCHORS[index]));
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
   const goNext = useCallback(() => {
-    if (currentStep < stepLabels.length - 1) goToStep(currentStep + 1);
-  }, [currentStep, goToStep, stepLabels.length]);
+    setActiveStep((prev) => {
+      const next = Math.min(prev + 1, SECTION_ANCHORS.length - 1);
+      goToStep(next);
+      return next;
+    });
+  }, [goToStep]);
 
   const goPrev = useCallback(() => {
-    if (currentStep > 0) goToStep(currentStep - 1);
-  }, [currentStep, goToStep]);
+    setActiveStep((prev) => {
+      const next = Math.max(prev - 1, 0);
+      goToStep(next);
+      return next;
+    });
+  }, [goToStep]);
 
-  const { variant, experimentId } = useABExperiment();
+  // Marca la sección visible como "activa" mientras el usuario hace scroll.
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const idx = Number(entry.target.dataset.index);
+          if (!Number.isNaN(idx)) setActiveStep(idx);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: 0 },
+    );
+    SECTION_ANCHORS.forEach((anchor, i) => {
+      const el = document.getElementById(anchorId(anchor));
+      if (!el) return;
+      el.dataset.index = String(i);
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const { variant } = useABExperiment();
 
   const handleCta = useCallback(() => {
     trackConversion("cta_click", {
-      section: stepLabels[currentStep],
+      section: stepLabels[activeStep],
       experiment_variant: variant,
     });
     if (onNavigate) onNavigate("/sign-up/ingenia");
     else navigate("/sign-up/ingenia");
-  }, [onNavigate, navigate, variant, currentStep, stepLabels]);
+  }, [onNavigate, navigate, variant, activeStep, stepLabels]);
 
   const sections = [
-    <IngenIAQueEsSection key="que-es" t={t} />,
-    <IngenIAVakStylesSection key="vak-styles" t={t} vakStyles={vakStyles} />,
-    <IngenIABeneficiosSection key="beneficios" t={t} beneficios={beneficios} />,
-    <IngenIATranquilidadSection
-      key="tranquilidad"
+    <IngenIAQueEsSection key="que-es" t={t} vakStyles={vakStyles} />,
+    <IngenIABeneficiosTranquilidadSection
+      key="beneficios"
       t={t}
+      beneficios={beneficios}
       tranquilidad={tranquilidad}
     />,
     <IngenIAComoFuncionaSection
@@ -156,13 +157,11 @@ const IngenIALandingInfo = ({ onNavigate }) => {
   ];
 
   const totalSteps = sections.length;
-  const progress = ((currentStep + 1) / totalSteps) * 100;
+  const progress = ((activeStep + 1) / totalSteps) * 100;
 
   const seoTitles = [
     t("ingenia.landing_step_que_es"),
-    t("ingenia.landing_step_vak"),
     t("ingenia.landing_step_beneficios"),
-    t("ingenia.landing_step_tranquilidad"),
     t("ingenia.landing_step_como_funciona"),
     t("ingenia.landing_step_planes"),
     t("ingenia.landing_step_testimonios"),
@@ -171,9 +170,7 @@ const IngenIALandingInfo = ({ onNavigate }) => {
 
   const seoDescriptions = [
     "Descubre cómo IngenIA combina IA, ADN de Aprendizaje y coaches humanos para crear una experiencia única de aprendizaje.",
-    "Aprende cómo tu hijo aprende mejor: Visual, Auditivo o Kinestésico. Planes personalizados según su estilo.",
     "Mejora académica del 94%, confianza recuperada, y reportes semanales para padres. Beneficios reales comprobados.",
-    "Tranquilidad garantizada: coaches humanos certificados + soporte 24/7. Tu hijo está en buenas manos.",
     "Sistema adaptativo que ajusta el ritmo de aprendizaje. Paso a paso, sin presión, con éxito garantizado.",
     "2 planes simples: Starter y Premium. Elige el que mejor se adapte a tus necesidades y presupuesto.",
     "Historias reales de padres: mejoras de calificaciones, confianza y amor por aprender. Testimonios verificados.",
@@ -181,20 +178,20 @@ const IngenIALandingInfo = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="w-full bg-white">
+    <div className="ingenia-theme w-full bg-white">
       <Helmet>
-        <title>{seoTitles[currentStep]} | IngenIA - Edutechlife</title>
-        <meta name="description" content={seoDescriptions[currentStep]} />
+        <title>{seoTitles[activeStep]} | IngenIA - Edutechlife</title>
+        <meta name="description" content={seoDescriptions[activeStep]} />
       </Helmet>
-      <IngenIAInfoHero handleCta={handleCta} />
 
-      <IngenIASectionNav
-        ref={navRef}
-        currentStep={currentStep}
-        totalSteps={totalSteps}
-        stepLabels={stepLabels}
-        onGoToStep={goToStep}
-      />
+      <IngenIAInfoHero handleCta={handleCta}>
+        <IngenIASectionNav
+          currentStep={activeStep}
+          totalSteps={totalSteps}
+          stepLabels={stepLabels}
+          onGoToStep={goToStep}
+        />
+      </IngenIAInfoHero>
 
       <motion.div
         className="h-0.5 bg-petroleum/5"
@@ -207,32 +204,25 @@ const IngenIALandingInfo = ({ onNavigate }) => {
         />
       </motion.div>
 
-      <div className="relative min-h-0 pt-0">
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
-            key={currentStep}
-            custom={direction}
-            variants={stepVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              type: "spring",
-              stiffness: 200,
-              damping: 26,
-              mass: 1,
-            }}
+      {/* Todas las secciones se renderizan en el DOM (scroll vertical).
+          Antes vivían ocultas tras un carrusel, lo que dañaba UX y SEO. */}
+      <div className="relative">
+        {sections.map((section, i) => (
+          <div
+            key={SECTION_ANCHORS[i]}
+            id={anchorId(SECTION_ANCHORS[i])}
+            className="scroll-mt-16"
           >
-            {sections[currentStep]}
-          </motion.div>
-        </AnimatePresence>
+            {section}
+          </div>
+        ))}
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 pb-12 pt-6 flex flex-wrap items-center justify-between gap-3 sm:flex-nowrap sm:gap-0">
-        {currentStep > 0 ? (
+      <div className="max-w-3xl mx-auto px-4 pb-12 pt-6 flex items-center justify-between gap-3">
+        {activeStep > 0 ? (
           <button
             onClick={goPrev}
-            className="order-1 group px-5 py-2.5 rounded-full border-2 border-petroleum/20 text-petroleum hover:bg-petroleum hover:text-white hover:border-petroleum transition-all duration-300 text-sm font-semibold flex items-center gap-1.5"
+            className="group px-5 py-2.5 rounded-full border-2 border-petroleum/20 text-petroleum hover:bg-petroleum hover:text-white hover:border-petroleum transition-all duration-300 text-sm font-semibold flex items-center gap-1.5"
           >
             <motion.span
               whileHover={{ x: -3 }}
@@ -243,39 +233,13 @@ const IngenIALandingInfo = ({ onNavigate }) => {
             {t("ingenia.landing_prev")}
           </button>
         ) : (
-          <div className="order-1" />
+          <div />
         )}
 
-        <div className="order-3 w-full flex items-center justify-center gap-2 sm:order-2 sm:w-auto">
-          {sections.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goToStep(i)}
-              className="group relative"
-            >
-              <motion.div
-                className={`rounded-full transition-all duration-300 ${
-                  i === currentStep ? "w-7 h-2.5" : "w-2 h-2"
-                }`}
-                animate={
-                  i === currentStep
-                    ? {
-                        background: `linear-gradient(135deg, #4DA8C4, #66CCCC)`,
-                      }
-                    : {
-                        backgroundColor: "rgba(0, 75, 99, 0.15)",
-                      }
-                }
-                whileHover={{ scale: 1.3 }}
-              />
-            </button>
-          ))}
-        </div>
-
-        {currentStep < totalSteps - 1 ? (
+        {activeStep < totalSteps - 1 ? (
           <button
             onClick={goNext}
-            className="order-2 sm:order-3 group px-5 py-2.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-semibold flex items-center gap-1.5 shadow-premium"
+            className="group px-5 py-2.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-semibold flex items-center gap-1.5 shadow-premium"
           >
             {t("ingenia.landing_next")}
             <motion.span
@@ -288,7 +252,7 @@ const IngenIALandingInfo = ({ onNavigate }) => {
         ) : (
           <button
             onClick={handleCta}
-            className="order-2 sm:order-3 group px-5 py-2.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-semibold flex items-center gap-1.5 shadow-premium"
+            className="group px-5 py-2.5 rounded-full bg-gradient-to-r from-petroleum to-primary-light text-white hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 text-sm font-semibold flex items-center gap-1.5 shadow-premium"
           >
             {t("ingenia.landing_start_now")}
           </button>

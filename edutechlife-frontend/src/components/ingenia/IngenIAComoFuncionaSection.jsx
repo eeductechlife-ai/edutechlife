@@ -18,7 +18,7 @@ export default function IngenIAComoFuncionaSection({ t, pasos, handleCta }) {
       id="como-funciona"
       role="region"
       aria-label="Cómo funciona IngenIA"
-      className="relative w-full overflow-hidden bg-white py-12 lg:py-16 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-white py-8 lg:py-10 scroll-mt-20"
     >
       <div className="absolute top-[30%] left-[10%] w-44 h-44 bg-primary-light/6 rounded-full blur-[80px] animate-orb-3" />
       <div className="absolute bottom-[20%] right-[10%] w-48 h-48 bg-mint/6 rounded-full blur-[80px] animate-orb-2" />
@@ -26,7 +26,7 @@ export default function IngenIAComoFuncionaSection({ t, pasos, handleCta }) {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           {...(!prefersReducedMotion ? fadeInUp : {})}
-          className="text-center mb-10"
+          className="text-center mb-7"
         >
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-mint/10 to-primary-light/10 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3 border border-mint/10">
             <Icon name="fa-rocket-launch" className="text-mint text-xs" />
@@ -41,50 +41,40 @@ export default function IngenIAComoFuncionaSection({ t, pasos, handleCta }) {
           </h2>
         </motion.div>
 
-        <div className="relative">
-          <div
-            className="absolute left-1/2 top-12 bottom-12 w-0.5 bg-gradient-to-b from-primary-light via-corporate to-mint lg:opacity-20 opacity-25"
-            style={{ transform: "translateX(-50%)" }}
-          />
-
-          <motion.div
-            variants={prefersReducedMotion ? undefined : containerVariants}
-            initial={prefersReducedMotion ? false : "hidden"}
-            whileInView={prefersReducedMotion ? undefined : "visible"}
-            viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4"
-          >
-            {pasos.map((item, index) => (
-              <motion.div
-                key={item.title}
-                variants={cardVariants}
-                className="relative flex flex-col items-center text-center group"
-              >
-                <div className="relative mb-4">
+        <motion.div
+          variants={prefersReducedMotion ? undefined : containerVariants}
+          initial={prefersReducedMotion ? false : "hidden"}
+          whileInView={prefersReducedMotion ? undefined : "visible"}
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-2 gap-4 sm:grid-cols-4"
+        >
+          {pasos.map((item, index) => (
+            <motion.div
+              key={item.title}
+              variants={cardVariants}
+              className="group flex flex-col items-center text-center"
+            >
+              <div className="relative mb-2.5">
+                <div
+                  className={`w-12 h-12 rounded-xl bg-gradient-to-br ${STEP_GRADIENTS[index % STEP_GRADIENTS.length].circle} flex items-center justify-center shadow-lg shadow-petroleum/10 group-hover:scale-110 transition-transform duration-300 relative z-10`}
+                  style={{ willChange: "transform" }}
+                >
                   <div
-                    className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${STEP_GRADIENTS[index % STEP_GRADIENTS.length].circle} flex items-center justify-center shadow-lg shadow-petroleum/10 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300 relative z-10`}
-                    style={{ willChange: "transform" }}
+                    className={`absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full ${STEP_GRADIENTS[index % STEP_GRADIENTS.length].badge} border-2 border-white flex items-center justify-center shadow-md`}
                   >
-                    <div
-                      className={`absolute -top-1.5 -right-1.5 w-7 h-7 rounded-full ${STEP_GRADIENTS[index % STEP_GRADIENTS.length].badge} border-2 border-white flex items-center justify-center shadow-md`}
-                    >
-                      <span className="text-[10px] font-black text-white">
-                        {item.step}
-                      </span>
-                    </div>
-                    <Icon name={item.icon} className="text-white text-xl" />
+                    <span className="text-[9px] font-black text-white">
+                      {item.step}
+                    </span>
                   </div>
+                  <Icon name={item.icon} className="text-white text-lg" />
                 </div>
-                <h3 className="text-sm font-bold text-petroleum mb-1.5">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-slate-500 leading-relaxed max-w-[220px]">
-                  {item.desc}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
+              </div>
+              <h3 className="text-xs font-bold text-petroleum sm:text-sm">
+                {item.title}
+              </h3>
+            </motion.div>
+          ))}
+        </motion.div>
 
         <motion.div
           initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
@@ -95,7 +85,7 @@ export default function IngenIAComoFuncionaSection({ t, pasos, handleCta }) {
               ? undefined
               : { type: "spring", stiffness: 100, damping: 16, delay: 0.4 }
           }
-          className="text-center mt-10"
+          className="text-center mt-8"
         >
           <MagneticButton
             onClick={handleCta}

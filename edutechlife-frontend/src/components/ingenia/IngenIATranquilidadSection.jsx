@@ -71,7 +71,7 @@ export default function IngenIATranquilidadSection({ t, tranquilidad }) {
       id="tranquilidad"
       role="region"
       aria-label="Tranquilidad para padres"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-petroleum to-petroleum-dark py-12 lg:py-16 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-petroleum to-petroleum-dark py-10 lg:py-12 scroll-mt-20"
     >
       <div className="absolute top-[10%] right-[10%] w-56 h-56 bg-primary-light/15 rounded-full blur-[100px] animate-orb-1" />
       <div className="absolute bottom-[10%] left-[5%] w-48 h-48 bg-mint/10 rounded-full blur-[80px] animate-orb-2" />
@@ -80,7 +80,7 @@ export default function IngenIATranquilidadSection({ t, tranquilidad }) {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           {...(!prefersReducedMotion ? fadeInUp : {})}
-          className="text-center mb-10"
+          className="text-center mb-7"
         >
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/10 text-white/90 text-[11px] font-bold uppercase tracking-widest mb-3 border border-white/10 backdrop-blur-sm">
             <Icon name="fa-shield" className="text-mint text-xs" />

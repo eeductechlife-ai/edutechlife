@@ -1,13 +1,66 @@
-import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "../../i18n/I18nProvider";
 import { Icon } from "../../utils/iconMapping.jsx";
 import MagneticButton from "../MagneticButton";
 import FloatingParticles from "../FloatingParticles";
-import { containerVariants, childVariant } from "./IngenIAShared";
-import { PlatformShowcase } from "../hero/PlatformShowcase";
+import IngenIAHeroPromo from "./IngenIAHeroPromo";
+import { HERO_SLIDES } from "../hero/heroSlides";
+import "../hero/hero-stage.css";
+
+// Paleta propia de IngenIA (la misma del slide morado del carrusel del inicio).
+const INGENIA = {
+  purple: "#7B2FF7",
+  violet: "#A66BFF",
+  blue: "#4361EE",
+  cyan: "#00C2E0",
+  ink: "#170B33",
+  inkSoft: "#4C4566",
+};
+
+// Mismo lenguaje tipográfico que el carrusel del inicio, para que este hero
+// se sienta parte de la misma familia visual (y no una versión "plana").
+const TITLE_CLASS =
+  "font-display font-black leading-[0.98] tracking-[-0.04em] text-[#170B33] [text-wrap:balance] text-[clamp(2.05rem,4.6vw,3.35rem)]";
+const SUBTITLE_CLASS =
+  "mx-auto mt-5 max-w-[46ch] text-base leading-relaxed font-medium text-[#4C4566] sm:text-lg lg:mx-0";
+
+const EASE = [0.22, 1, 0.36, 1];
+
+const wordVariants = {
+  inactive: { y: "110%", transition: { duration: 0.3 } },
+  active: (i) => ({
+    y: "0%",
+    transition: { duration: 0.8, ease: EASE, delay: 0.1 + i * 0.06 },
+  }),
+};
+
+const STATS = [
+  {
+    target: 2500,
+    duration: 1800,
+    prefix: "+",
+    labelKey: "ingenia.landing_stat_students",
+    color: "text-[#7B2FF7]",
+  },
+  {
+    target: 94,
+    duration: 2000,
+    suffix: "%",
+    labelKey: "ingenia.landing_stat_improvement",
+    color: "text-[#A66BFF]",
+  },
+  {
+    target: 12000,
+    duration: 2200,
+    prefix: "+",
+    labelKey: "ingenia.landing_stat_hours",
+    color: "text-[#00C2E0]",
+  },
+];
+
+const INGENIA_SLIDE = HERO_SLIDES.find((s) => s.id === "ingenia");
 
 const useAnimatedCounter = (target, duration = 2000, start = false) => {
   const [count, setCount] = useState(0);
@@ -32,31 +85,47 @@ const useAnimatedCounter = (target, duration = 2000, start = false) => {
   return count;
 };
 
-const STATS = [
-  {
-    target: 2500,
-    duration: 1800,
-    prefix: "+",
-    labelKey: "ingenia.landing_stat_students",
-    color: "text-petroleum",
-  },
-  {
-    target: 94,
-    duration: 2000,
-    labelKey: "ingenia.landing_stat_improvement",
-    color: "text-primary-light",
-    suffix: "%",
-  },
-  {
-    target: 12000,
-    duration: 2200,
-    prefix: "+",
-    labelKey: "ingenia.landing_stat_hours",
-    color: "text-mint",
-  },
-];
+/** Titular con revelado por máscara, palabra por palabra (igual que el Hero). */
+const RevealText = ({ text, offset = 0, gradient = null }) => {
+  const words = text.split(" ");
+  return words.map((word, i) => {
+    const isLast = i === words.length - 1;
+    const style =
+      isLast && gradient
+        ? {
+            backgroundImage: gradient,
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            color: "transparent",
+          }
+        : undefined;
+    return (
+      <Fragment key={`${word}-${i}`}>
+        <span className="-mb-[0.12em] inline-block overflow-hidden pb-[0.12em] align-bottom [font-family:inherit]">
+          <motion.span
+            className="inline-block [font-family:inherit]"
+            custom={i + offset}
+            variants={wordVariants}
+            style={style}
+          >
+            {word}
+          </motion.span>
+        </span>{" "}
+      </Fragment>
+    );
+  });
+};
 
-export default function IngenIAInfoHero({ handleCta, onNavigate }) {
+const TitleRule = () => (
+  <span
+    aria-hidden="true"
+    className="mx-auto mt-4 block h-[3px] w-9 rounded-full lg:mx-0"
+    style={{ background: "linear-gradient(90deg, #7B2FF7, #A66BFF)" }}
+  />
+);
+
+export default function IngenIAInfoHero({ handleCta, onNavigate, children }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const reduce = useReducedMotion();
@@ -74,10 +143,11 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
     return () => observer.disconnect();
   }, []);
 
-  const countStudents = useAnimatedCounter(2500, 1800, statsVisible);
-  const countImprovement = useAnimatedCounter(94, 2000, statsVisible);
-  const countHours = useAnimatedCounter(12000, 2200, statsVisible);
-  const counts = [countStudents, countImprovement, countHours];
+  const counts = [
+    useAnimatedCounter(STATS[0].target, STATS[0].duration, statsVisible),
+    useAnimatedCounter(STATS[1].target, STATS[1].duration, statsVisible),
+    useAnimatedCounter(STATS[2].target, STATS[2].duration, statsVisible),
+  ];
 
   const handlePrimaryCta = () => {
     if (handleCta) return handleCta();
@@ -85,202 +155,216 @@ export default function IngenIAInfoHero({ handleCta, onNavigate }) {
     navigate("/sign-up/ingenia");
   };
 
+  const aura = INGENIA_SLIDE?.glow || "none";
+  const aurora = INGENIA_SLIDE?.aurora || ["transparent", "transparent"];
+  const titleGradient =
+    INGENIA_SLIDE?.titleGradient ||
+    "linear-gradient(135deg, #7B2FF7 0%, #A66BFF 100%)";
+
+  const heroLine1 = t("ingenia.landing_hero_line1");
+  const heroLine2 = t("ingenia.landing_hero_line2");
+  const heroLine3 = t("ingenia.landing_hero_line3");
+  const heroOffset2 = heroLine1.split(" ").length;
+  const heroOffset3 = heroOffset2 + heroLine2.split(" ").length;
+
   return (
-    <section
-      role="region"
-      aria-label="IngenIA Hero"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-white via-[#F0F9FF] to-white pb-12 pt-6 lg:pb-16 lg:pt-8"
-    >
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-[6%] top-[10%] h-64 w-64 rounded-full bg-primary-light/10 blur-[100px] animate-orb-1" />
-        <div className="absolute bottom-[8%] right-[6%] h-72 w-72 rounded-full bg-mint/10 blur-[100px] animate-orb-2" />
-        <FloatingParticles count={18} className="z-0" />
-      </div>
-
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => navigate("/")}
-            className="group inline-flex items-center gap-2 rounded-full border border-petroleum/15 bg-white/70 px-4 py-2 text-sm font-semibold text-petroleum shadow-sm backdrop-blur-xl transition-all duration-300 hover:bg-petroleum hover:text-white active:scale-[0.97]"
-          >
-            <Icon
-              name="fa-arrow-left"
-              className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5"
-            />
-            {t("ingenia.back")}
-          </button>
-          <Link
-            to="/"
-            aria-label={t("nav.home_aria")}
-            className="flex-shrink-0 transition-transform duration-300 hover:scale-[1.03]"
-          >
-            <img
-              src="/images/logo-edutechlife.webp"
-              alt="Edutechlife"
-              className="w-20 object-contain sm:w-24 md:w-28"
-              style={{
-                height: "40px",
-                transform: "scale(1.3)",
-                transformOrigin: "right center",
-              }}
-            />
-          </Link>
+    <MotionConfig reducedMotion="user">
+      <section
+        role="region"
+        aria-label="IngenIA Hero"
+        className="relative w-full overflow-hidden bg-gradient-to-b from-white via-[#F7F5FF] to-white pb-10 pt-4 sm:pt-6 lg:pb-14 lg:pt-8"
+      >
+        {/* Aura premium: radial glow + 2 auroras animadas (mismo sistema del Hero) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+        >
+          <div className="absolute inset-0" style={{ background: aura }} />
+          <div
+            className="hero-motion absolute right-[-8%] top-[-12%] h-[70%] w-[55%] rounded-full blur-[90px]"
+            style={{
+              background: aurora[0],
+              animation: "hero-aurora-a 18s ease-in-out infinite",
+            }}
+          />
+          <div
+            className="hero-motion absolute bottom-[-12%] left-[-6%] h-[55%] w-[45%] rounded-full blur-[100px]"
+            style={{
+              background: aurora[1],
+              animation: "hero-aurora-b 22s ease-in-out infinite",
+            }}
+          />
+          <FloatingParticles count={16} className="z-0" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-white" />
         </div>
 
-        <div className="mt-6 grid grid-cols-1 items-center gap-10 lg:mt-8 lg:grid-cols-12 lg:gap-10">
-          <motion.div
-            variants={containerVariants}
-            initial={reduce ? false : "hidden"}
-            animate="visible"
-            className="text-center lg:col-span-6 lg:text-left"
-          >
-            <motion.span
-              variants={childVariant}
-              className="badge-clay mb-5 inline-block rounded-full bg-mint/10 px-3.5 py-1 text-[11px] font-bold uppercase tracking-widest text-petroleum"
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => navigate("/")}
+              className="group inline-flex items-center gap-2 rounded-full border border-[#7B2FF7]/20 bg-white/70 px-4 py-2 text-sm font-semibold text-[#7B2FF7] shadow-sm backdrop-blur-xl transition-all duration-300 hover:bg-[#7B2FF7] hover:text-white active:scale-[0.97]"
             >
-              {t("ingenia.landing_hero_eyebrow")}
-            </motion.span>
+              <Icon
+                name="fa-arrow-left"
+                className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5"
+              />
+              {t("ingenia.back")}
+            </button>
+            <Link
+              to="/"
+              aria-label={t("nav.home_aria")}
+              className="flex-shrink-0 transition-transform duration-300 hover:scale-[1.03]"
+            >
+              <img
+                src="/images/logo-edutechlife.webp"
+                alt="Edutechlife"
+                className="w-20 object-contain sm:w-24 md:w-28"
+                style={{
+                  height: "40px",
+                  transform: "scale(1.3)",
+                  transformOrigin: "right center",
+                }}
+              />
+            </Link>
+          </div>
 
-            <motion.h1
-              variants={childVariant}
-              className="text-2xl font-black leading-tight text-petroleum sm:text-3xl md:text-4xl lg:text-[2.6rem]"
-            >
-              {t("ingenia.landing_hero_line1")}
-              <br />
-              <span className="animate-shimmer bg-gradient-to-r from-primary-light via-corporate to-petroleum bg-[length:200%_auto] bg-clip-text pr-1 text-transparent">
-                {t("ingenia.landing_hero_line2")}
-              </span>
-              <br />
-              {t("ingenia.landing_hero_line3")}
-            </motion.h1>
-
-            <motion.p
-              variants={childVariant}
-              className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-base lg:mx-0"
-            >
-              {t("ingenia.landing_hero_desc")}
-            </motion.p>
-
-            <motion.div
-              variants={childVariant}
-              className="mt-10 hidden flex-col items-center gap-2 lg:mt-12 lg:flex lg:items-start"
-            >
-              <MagneticButton
-                onClick={handlePrimaryCta}
-                className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-petroleum to-primary-light px-9 py-3.5 text-sm font-bold text-white shadow-xl transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 hover:shadow-[0_20px_50px_rgba(77,168,196,0.35)] active:scale-[0.98] sm:w-auto sm:px-11 sm:text-base"
+          <div className="mt-8 grid grid-cols-1 items-center gap-8 lg:mt-10 lg:grid-cols-12 lg:gap-10">
+            {/* Copia: en móvil el título va primero, luego el video */}
+            <div className="order-1 text-center lg:col-span-5 lg:text-left">
+              <motion.span
+                initial={reduce ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: EASE }}
+                className="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em]"
+                style={{
+                  color: "#7B2FF7",
+                  background: "rgba(123,47,247,0.08)",
+                }}
               >
-                <span className="absolute inset-0 h-full w-[200%] -translate-x-full skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover:animate-sweep" />
-                <span className="relative z-10 font-semibold text-white">
-                  {t("ingenia.landing_cta_try")}
-                </span>
-                <span className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                  <Icon
-                    name="fa-arrow-right"
-                    className="h-3.5 w-3.5 text-white"
-                  />
-                </span>
-              </MagneticButton>
-              <p className="text-xs text-slate-500">
-                {t("ingenia.landing_trial_terms")}
-              </p>
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-1.5 rounded-full"
+                  style={{ background: "#7B2FF7" }}
+                />
+                {t("ingenia.landing_hero_eyebrow")}
+              </motion.span>
+
+              <motion.h1
+                className={TITLE_CLASS}
+                initial={reduce ? false : "inactive"}
+                animate="active"
+              >
+                <RevealText text={heroLine1} />
+                <br className="hidden lg:inline" />
+                <RevealText
+                  text={heroLine2}
+                  offset={heroOffset2}
+                  gradient={titleGradient}
+                />
+                {heroLine3 ? (
+                  <>
+                    <br className="hidden lg:inline" />
+                    <RevealText text={heroLine3} offset={heroOffset3} />
+                  </>
+                ) : null}
+              </motion.h1>
+              <TitleRule />
+
+              <motion.p
+                initial={reduce ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: EASE, delay: 0.15 }}
+                className={SUBTITLE_CLASS}
+              >
+                {t("ingenia.landing_hero_desc")}
+              </motion.p>
+
+              <motion.div
+                initial={reduce ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: EASE, delay: 0.25 }}
+                className="mt-9 flex flex-col items-center gap-2 lg:items-start"
+              >
+                <MagneticButton
+                  onClick={handlePrimaryCta}
+                  className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-[#7B2FF7] to-[#4361EE] px-9 py-3.5 text-sm font-bold text-white shadow-xl transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 hover:shadow-[0_20px_50px_rgba(123,47,247,0.4)] active:scale-[0.98] sm:w-auto sm:px-11 sm:text-base"
+                >
+                  <span className="absolute inset-0 h-full w-[200%] -translate-x-full skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover:animate-sweep" />
+                  <span className="relative z-10 font-semibold text-white">
+                    {t("ingenia.landing_cta_try")}
+                  </span>
+                  <span className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                    <Icon
+                      name="fa-arrow-right"
+                      className="h-3.5 w-3.5 text-white"
+                    />
+                  </span>
+                </MagneticButton>
+                <p className="text-xs text-slate-500">
+                  {t("ingenia.landing_trial_terms")}
+                </p>
+              </motion.div>
+            </div>
+
+            {/* Reel de promoción en mockup de celular (el reel es vertical 9:16) */}
+            <motion.div
+              initial={reduce ? false : { opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, ease: EASE, delay: 0.15 }}
+              className="order-2 relative mx-auto w-full max-w-2xl lg:col-span-7 lg:max-w-none"
+            >
+              <IngenIAHeroPromo />
             </motion.div>
-          </motion.div>
+          </div>
 
+          {/* Prueba social: icono + texto y 3 cifras limpias con tabular-nums */}
           <motion.div
-            initial={reduce ? false : { opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-            className="relative mx-auto w-full max-w-2xl lg:col-span-6 lg:max-w-none"
+            ref={statsRef}
+            initial={reduce ? false : { opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
+            className="mt-8 flex flex-col gap-6 border-t border-petroleum/10 pt-6 lg:flex-row lg:items-center lg:justify-between"
           >
-            {/* La plataforma en acción: Dani presentando IngenIA (igual que en el inicio) */}
-            <PlatformShowcase slideId="ingenia" />
-          </motion.div>
-        </div>
-
-        {/* Mobile-only CTA — shown below the image */}
-        <motion.div
-          variants={childVariant}
-          initial={reduce ? false : "hidden"}
-          animate="visible"
-          className="mt-6 flex flex-col items-center gap-2 lg:hidden"
-        >
-          <MagneticButton
-            onClick={handlePrimaryCta}
-            className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-petroleum to-primary-light px-9 py-3.5 text-sm font-bold text-white shadow-xl transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 hover:shadow-[0_20px_50px_rgba(77,168,196,0.35)] active:scale-[0.98]"
-          >
-            <span className="absolute inset-0 h-full w-[200%] -translate-x-full skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover:animate-sweep" />
-            <span className="relative z-10 font-semibold text-white">
-              {t("ingenia.landing_cta_try")}
-            </span>
-            <span className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-              <Icon name="fa-arrow-right" className="h-3.5 w-3.5 text-white" />
-            </span>
-          </MagneticButton>
-          <p className="text-xs text-slate-500">
-            {t("ingenia.landing_trial_terms")}
-          </p>
-        </motion.div>
-
-        <motion.div
-          ref={statsRef}
-          initial={reduce ? false : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-          className="mt-12 rounded-[1.75rem] border border-petroleum/10 bg-white/70 px-6 py-6 shadow-[0_25px_60px_-40px_rgba(0,75,99,0.55)] backdrop-blur-xl sm:px-8"
-        >
-          {/* Mobile: trust badge + stats side by side | Desktop: 12-col grid */}
-          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-12 lg:items-center lg:gap-8">
-            {/* Trust badge */}
-            <div className="flex items-center gap-3 lg:col-span-4 lg:justify-start">
-              <div className="flex flex-shrink-0 -space-x-2">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-petroleum to-primary-light text-xs font-bold text-white shadow-sm sm:h-9 sm:w-9"
-                  >
-                    {i}
-                  </div>
-                ))}
-              </div>
+            <div className="flex items-center justify-center gap-3 lg:justify-start">
+              <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#7B2FF7]/10 text-[#7B2FF7]">
+                <Icon name="fa-shield-halved" className="text-sm" />
+              </span>
               <div className="text-left">
-                <p className="text-xs font-bold text-petroleum sm:text-sm">
+                <p className="text-sm font-bold text-[#170B33]">
                   {t("ingenia.landing_trust_badge")}
                 </p>
-                <p className="text-[11px] text-slate-500 sm:text-xs">
+                <p className="text-xs text-slate-500">
                   {t("ingenia.landing_trust_subtitle")}
                 </p>
               </div>
             </div>
 
-            {/* Stats */}
-            <ul className="grid grid-cols-3 divide-x divide-petroleum/10 lg:col-span-8">
+            <dl className="grid grid-cols-3 gap-4 sm:gap-10">
               {STATS.map((stat, i) => (
-                <li
+                <div
                   key={stat.labelKey}
-                  className="flex flex-col items-center justify-center px-1 text-center sm:px-4"
+                  className="flex flex-col items-center text-center lg:items-start lg:text-left"
                 >
-                  <span
-                    className={`text-xl font-black tracking-tight sm:text-3xl lg:text-4xl ${stat.color}`}
+                  <dd
+                    className={`font-display text-2xl font-black tracking-[-0.03em] [font-variant-numeric:tabular-nums] sm:text-3xl ${stat.color}`}
                   >
                     {stat.prefix || ""}
-                    {counts[i].toLocaleString()}
+                    {counts[i].toLocaleString("es-CO")}
                     {stat.suffix || ""}
-                  </span>
-                  <span className="mt-0.5 text-[9px] font-normal uppercase leading-tight tracking-wider text-slate-500 sm:mt-1 sm:text-[10px] sm:tracking-widest">
+                  </dd>
+                  <dt className="mt-0.5 text-[10px] font-medium uppercase leading-tight tracking-wider text-slate-500 sm:text-xs">
                     {t(stat.labelKey)}
-                  </span>
-                </li>
+                  </dt>
+                </div>
               ))}
-            </ul>
-          </div>
-        </motion.div>
-      </div>
-    </section>
+            </dl>
+          </motion.div>
+        </div>
+
+        {/* Pestañas de sección: viven al pie del hero (ya no son una barra sticky aparte) */}
+        {children ? <div className="mt-6">{children}</div> : null}
+      </section>
+    </MotionConfig>
   );
 }
-
-IngenIAInfoHero.propTypes = {
-  handleCta: PropTypes.func,
-  onNavigate: PropTypes.func,
-};

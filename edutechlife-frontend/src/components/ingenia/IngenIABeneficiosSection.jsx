@@ -92,13 +92,13 @@ export default function IngenIABeneficiosSection({ t, beneficios }) {
       id="beneficios"
       role="region"
       aria-label="Beneficios de IngenIA"
-      className="relative w-full overflow-hidden bg-white py-12 lg:py-16 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-white py-10 lg:py-12 scroll-mt-20"
     >
       <div className="absolute top-[20%] left-[5%] w-56 h-56 bg-primary-light/6 rounded-full blur-[80px] animate-orb-1" />
       <div className="absolute bottom-[10%] right-[10%] w-48 h-48 bg-mint/6 rounded-full blur-[80px] animate-orb-2" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-        <motion.div {...fadeInUp} className="text-center mb-10">
+        <motion.div {...fadeInUp} className="text-center mb-7">
           <span className="badge-clay inline-block px-3.5 py-1 rounded-full bg-gradient-to-r from-primary-light/10 to-mint/10 text-petroleum text-[11px] font-bold uppercase tracking-widest mb-3 border border-primary-light/10">
             {t("ingenia.landing_benefits_badge")}
           </span>
@@ -120,7 +120,7 @@ export default function IngenIABeneficiosSection({ t, beneficios }) {
         >
           {beneficios.map((item, i) => (
             <motion.div key={item.title} variants={childVariant}>
-              <TiltCard className="group relative bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm hover:shadow-[0_20px_40px_rgba(0,75,99,0.15)] hover:-translate-y-2 transition-all duration-300 p-6 h-fit hover:border-petroleum/30">
+              <TiltCard className="group relative bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm hover:shadow-[0_20px_40px_rgba(123,47,247,0.18)] hover:-translate-y-2 transition-all duration-300 p-6 h-fit hover:border-petroleum/30">
                 <div
                   className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${BENEFIT_GRADIENTS[i % BENEFIT_GRADIENTS.length].bg} flex items-center justify-center mb-3 group-hover:scale-125 transition-transform duration-300`}
                 >

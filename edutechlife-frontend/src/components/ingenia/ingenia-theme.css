@@ -1,0 +1,28 @@
+/* Tema IngenIA — recolorea la sección /conoce-ingenia con la paleta propia del
+   producto: morado #7B2FF7, violeta #A66BFF, azul #4361EE, cian #00C2E0 y navy.
+   Se activa con la clase `.ingenia-theme` en un wrapper. Los tokens `--color-*`
+   de :root NO se tocan, así que el resto del sitio (Edutechlife) queda intacto:
+   aquí solo se re-mapean dentro de este ámbito. */
+
+.ingenia-theme {
+  --color-petroleum: #1e1147; /* headings / superficies oscuras */
+  --color-petroleum-dark: #150c36;
+  --color-petroleum-darker: #0e0826;
+  --color-corporate: #7b2ff7; /* acento principal */
+  --color-corporate-dark: #6a22e0;
+  --color-corporate-darker: #5a1fc0;
+  --color-corporate-deep: #2a1b5e;
+  --color-primary-light: #a66bff; /* acento secundario */
+  --color-mint: #00c2e0; /* acento terciario */
+  --color-soft-blue: #c9b8ff;
+  --color-navy: #12082b;
+}
+
+/* El gradiente de acento de los titulares era teal fijo; en IngenIA pasa a
+   morado → violeta → cian. */
+.ingenia-theme .text-gradient-accent {
+  background: linear-gradient(135deg, #7b2ff7 0%, #a66bff 50%, #00c2e0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

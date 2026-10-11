@@ -8,19 +8,20 @@ import { fadeInUp } from "./IngenIAShared";
 
 export default function IngenIAFinalSection({ t, faqItems, handleCta }) {
   const [activeFaq, setActiveFaq] = useState(null);
+  const [showAllFaq, setShowAllFaq] = useState(false);
 
   return (
     <section
       role="region"
       aria-label="Comienza con IngenIA"
-      className="relative w-full overflow-hidden bg-gradient-to-br from-petroleum via-petroleum-darker to-petroleum-dark py-14 lg:py-20"
+      className="relative w-full overflow-hidden bg-gradient-to-br from-petroleum via-petroleum-darker to-petroleum-dark py-8 lg:py-12"
     >
       <div className="absolute top-[10%] right-[10%] w-64 h-64 bg-primary-light/12 rounded-full blur-[100px] animate-orb-1" />
       <div className="absolute bottom-[10%] left-[5%] w-56 h-56 bg-mint/8 rounded-full blur-[100px] animate-orb-2" />
       <FloatingParticles count={20} className="z-0" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-        <motion.div {...fadeInUp} className="text-center mb-12">
+        <motion.div {...fadeInUp} className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm mb-4">
             <Icon name="fa-rocket-launch" className="text-mint text-xs" />
             <span className="text-[11px] font-semibold text-white/80 uppercase tracking-wider">
@@ -39,7 +40,7 @@ export default function IngenIAFinalSection({ t, faqItems, handleCta }) {
           </p>
           <MagneticButton
             onClick={handleCta}
-            className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-10 sm:px-12 py-3.5 rounded-full text-sm sm:text-base font-bold bg-gradient-to-r from-primary-light to-mint text-white shadow-2xl hover:shadow-[0_0_30px_rgba(77,168,196,0.3)] hover:-translate-y-0.5 transition-all duration-300"
+            className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-10 sm:px-12 py-3.5 rounded-full text-sm sm:text-base font-bold bg-gradient-to-r from-primary-light to-mint text-white shadow-2xl hover:shadow-[0_0_30px_rgba(166,107,255,0.45)] hover:-translate-y-0.5 transition-all duration-300"
           >
             <span className="absolute inset-0 w-[150%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-sweep skew-x-[-20deg]" />
             <span className="relative z-10 font-semibold">
@@ -62,7 +63,7 @@ export default function IngenIAFinalSection({ t, faqItems, handleCta }) {
             damping: 16,
             delay: 0.2,
           }}
-          className="max-w-2xl mx-auto"
+          className="max-w-4xl mx-auto"
         >
           <h3 className="text-lg font-black text-white text-center mb-6 flex items-center justify-center gap-2">
             <Icon
@@ -75,15 +76,15 @@ export default function IngenIAFinalSection({ t, faqItems, handleCta }) {
               {t("ingenia.landing_faq_title_highlight")}
             </span>
           </h3>
-          <div className="space-y-2.5">
-            {faqItems.map((item, i) => (
+          <div className="grid gap-2.5 md:grid-cols-2 items-start">
+            {(showAllFaq ? faqItems : faqItems.slice(0, 4)).map((item, i) => (
               <div
                 key={item.q}
                 className="bg-white/70 backdrop-blur-xl border border-white/40 shadow-sm rounded-xl overflow-hidden hover:bg-white/80 transition-colors"
               >
                 <button
                   onClick={() => setActiveFaq(activeFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between gap-3 px-5 py-3.5 text-left"
+                  className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left"
                   id={`faq-question-${i}`}
                   aria-expanded={activeFaq === i}
                   aria-controls={`faq-answer-${i}`}
@@ -128,6 +129,25 @@ export default function IngenIAFinalSection({ t, faqItems, handleCta }) {
                 </AnimatePresence>
               </div>
             ))}
+            {faqItems.length > 4 ? (
+              <div className="mt-1 flex justify-center md:col-span-2">
+                <button
+                  onClick={() => setShowAllFaq((v) => !v)}
+                  aria-expanded={showAllFaq}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/70 px-5 py-2.5 text-xs font-bold text-petroleum backdrop-blur-xl transition-colors hover:bg-white"
+                >
+                  {t(
+                    showAllFaq
+                      ? "ingenia.landing_faq_show_less"
+                      : "ingenia.landing_faq_show_all",
+                  )}
+                  <Icon
+                    name="fa-chevron-down"
+                    className={`text-[10px] transition-transform ${showAllFaq ? "rotate-180" : ""}`}
+                  />
+                </button>
+              </div>
+            ) : null}
           </div>
         </motion.div>
       </div>

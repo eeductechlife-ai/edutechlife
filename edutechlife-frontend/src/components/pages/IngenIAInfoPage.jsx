@@ -25,7 +25,9 @@ const IngenIAInfoPage = () => {
       <Suspense fallback={<PageLoader message={t("ingenia.loading")} />}>
         <IngenIALandingInfo onBack={handleBack} onNavigate={handleNavigate} />
       </Suspense>
-      <Footer />
+      <div className="ingenia-theme">
+        <Footer />
+      </div>
     </>
   );
 };

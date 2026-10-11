@@ -8,7 +8,7 @@ const IngenIASectionNav = forwardRef(function IngenIASectionNav(
   return (
     <div
       ref={ref}
-      className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-xl border-b border-petroleum/5 shadow-premium"
+      className="relative w-full border-t border-petroleum/10 pt-4"
     >
       {/* Mobile: scroll */}
       <div className="relative lg:hidden">

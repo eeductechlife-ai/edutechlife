@@ -125,7 +125,7 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="relative w-full z-50 mt-auto bg-gradient-to-b from-[#004B63] to-[#003d52]">
+      <footer className="relative w-full z-50 mt-auto bg-gradient-to-b from-petroleum to-petroleum-darker">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 lg:pt-6 lg:pb-3">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 mb-4 md:mb-8 lg:mb-2">
             <div className="lg:col-span-1">
@@ -326,9 +326,10 @@ export default function Footer() {
                     className="w-full sm:w-auto sm:px-4 sm:shrink-0 h-11 rounded-brand-md font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-brand-primary/50 hover:-translate-y-0.5"
                     style={{
                       background:
-                        "linear-gradient(to right, #004B63, var(--brand-primary))",
+                        "linear-gradient(to right, var(--color-petroleum), var(--color-corporate))",
                       color: "#FFFFFF",
-                      boxShadow: "0 4px 15px rgba(77, 168, 196, 0.3)",
+                      boxShadow:
+                        "0 4px 15px color-mix(in srgb, var(--color-primary-light) 40%, transparent)",
                     }}
                   >
                     <span className="text-white">{t("footer.subscribe")}</span>

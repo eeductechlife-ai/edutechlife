@@ -10,7 +10,7 @@ export default function IngenIAVakStylesSection({ t, vakStyles }) {
       id="estilos-vak"
       role="region"
       aria-label="Estilos de aprendizaje VAK"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-petroleum/3 to-white py-12 lg:py-16 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-petroleum/3 to-white py-10 lg:py-12 scroll-mt-20"
     >
       <div className="absolute top-[10%] right-[15%] w-40 h-40 bg-primary-light/10 rounded-full blur-[80px]" />
 
