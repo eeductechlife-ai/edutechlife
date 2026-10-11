@@ -19,7 +19,7 @@ export default function IngenIATestimoniosSection({ t, testimonials }) {
       id="testimonios"
       role="region"
       aria-label="Testimonios"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-white to-petroleum/3 py-8 lg:py-10 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-white to-petroleum/3 py-7 lg:py-10 scroll-mt-20"
     >
       <div className="absolute top-[20%] left-[5%] w-48 h-48 bg-primary-light/6 rounded-full blur-[80px] animate-orb-1" />
       <div className="absolute bottom-[20%] right-[10%] w-44 h-44 bg-mint/6 rounded-full blur-[80px] animate-orb-2" />

@@ -40,7 +40,7 @@ export default function IngenIABeneficiosTranquilidadSection({
       id="beneficios"
       role="region"
       aria-label="Beneficios y tranquilidad"
-      className="relative w-full overflow-hidden bg-white py-8 lg:py-10 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-white py-7 lg:py-10 scroll-mt-20"
     >
       <div className="absolute left-[5%] top-[18%] h-56 w-56 rounded-full bg-primary-light/6 blur-[80px] animate-orb-1" />
 
@@ -64,11 +64,15 @@ export default function IngenIABeneficiosTranquilidadSection({
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          className="-mx-6 flex snap-x snap-mandatory items-stretch gap-3 overflow-x-auto px-6 pb-3 scrollbar-none md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0"
         >
           {beneficios.map((item, i) => (
-            <motion.div key={item.title} variants={childVariant}>
-              <div className="group h-fit rounded-2xl border border-petroleum/10 bg-white/70 p-5 shadow-sm backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-petroleum/30 hover:shadow-[0_18px_36px_rgba(123,47,247,0.16)]">
+            <motion.div
+              key={item.title}
+              variants={childVariant}
+              className="w-[80%] flex-shrink-0 snap-start md:w-auto"
+            >
+              <div className="group h-fit rounded-2xl border border-petroleum/10 bg-white/70 p-4 shadow-sm backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-petroleum/30 hover:shadow-[0_18px_36px_rgba(123,47,247,0.16)]">
                 <div
                   className={`mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br ${BENEFIT_GRADIENTS[i % BENEFIT_GRADIENTS.length].bg} transition-transform duration-300 group-hover:scale-110`}
                 >
@@ -123,11 +127,15 @@ export default function IngenIABeneficiosTranquilidadSection({
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              className="grid grid-cols-1 items-start gap-3.5 sm:grid-cols-2 lg:grid-cols-4"
+              className="-mx-6 flex snap-x snap-mandatory items-stretch gap-3 overflow-x-auto px-6 pb-3 scrollbar-none md:mx-0 md:grid md:grid-cols-4 md:overflow-visible md:px-0 md:pb-0"
             >
               {tranquilidad.map((item) => (
-                <motion.div key={item.title} variants={childVariant}>
-                  <div className="group h-fit rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-xl transition-all duration-300 hover:bg-white/15">
+                <motion.div
+                  key={item.title}
+                  variants={childVariant}
+                  className="w-[80%] flex-shrink-0 snap-start md:w-auto"
+                >
+                  <div className="group h-fit rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-xl transition-all duration-300 hover:bg-white/15">
                     <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-light/30 to-mint/20 transition-transform duration-300 group-hover:scale-110">
                       <Icon name={item.icon} className="text-base text-mint" />
                     </div>

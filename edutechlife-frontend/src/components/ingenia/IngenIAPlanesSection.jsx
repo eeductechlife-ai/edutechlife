@@ -16,7 +16,7 @@ export default function IngenIAPlanesSection({
       id="planes"
       role="region"
       aria-label="Planes y precios"
-      className="relative w-full overflow-hidden bg-gradient-to-b from-bg-light to-white py-8 lg:py-10 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-bg-light to-white py-7 lg:py-10 scroll-mt-20"
     >
       <div className="absolute top-[15%] right-[15%] w-56 h-56 bg-mint/8 rounded-full blur-[80px] animate-orb-2" />
       <div className="absolute bottom-[10%] left-[10%] w-44 h-44 bg-primary-light/6 rounded-full blur-[80px] animate-orb-1" />
@@ -44,14 +44,14 @@ export default function IngenIAPlanesSection({
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+          className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pt-6 pb-3 scrollbar-none md:mx-auto md:grid md:max-w-4xl md:grid-cols-2 md:gap-8 md:overflow-visible md:px-0 md:pt-0 md:pb-0"
         >
           {pricingPlans.map((plan) => (
             <motion.div
               key={plan.name}
               variants={childVariant}
               style={{ willChange: "transform" }}
-              className={`relative rounded-2xl border-2 p-6 lg:p-8 flex flex-col ${
+              className={`relative w-[85%] flex-shrink-0 snap-start rounded-2xl border-2 p-5 lg:p-8 flex flex-col md:w-auto ${
                 plan.popular
                   ? "border-petroleum shadow-2xl shadow-petroleum/15 lg:scale-[1.02] bg-gradient-to-b from-petroleum to-petroleum-darker"
                   : "bg-white border-white/40 shadow-sm hover:border-primary-light/40"

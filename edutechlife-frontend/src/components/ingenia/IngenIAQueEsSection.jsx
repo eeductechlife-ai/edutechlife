@@ -10,7 +10,7 @@ export default function IngenIAQueEsSection({ t, vakStyles }) {
       id="que-es"
       role="region"
       aria-label="¿Qué es IngenIA?"
-      className="relative w-full overflow-hidden bg-white py-8 lg:py-10 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-white py-7 lg:py-10 scroll-mt-20"
     >
       <div className="absolute top-[30%] right-[10%] w-48 h-48 bg-mint/8 rounded-full blur-[80px]" />
       <div className="absolute bottom-[20%] left-[5%] w-44 h-44 bg-primary-light/6 rounded-full blur-[80px]" />
@@ -168,11 +168,11 @@ export default function IngenIAQueEsSection({ t, vakStyles }) {
                 {t("ingenia.landing_vak_desc")}
               </p>
             </div>
-            <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-3">
+            <div className="-mx-6 flex snap-x snap-mandatory items-stretch gap-3 overflow-x-auto px-6 pb-3 scrollbar-none md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0">
               {vakStyles.map((style) => (
                 <div
                   key={style.key}
-                  className="relative overflow-hidden rounded-2xl border border-petroleum/10 bg-white p-5 shadow-sm"
+                  className="relative w-[80%] flex-shrink-0 snap-start overflow-hidden rounded-2xl border border-petroleum/10 bg-white p-4 shadow-sm md:w-auto"
                 >
                   <div
                     className="absolute inset-x-0 top-0 h-1"

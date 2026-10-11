@@ -18,7 +18,7 @@ export default function IngenIAComoFuncionaSection({ t, pasos, handleCta }) {
       id="como-funciona"
       role="region"
       aria-label="Cómo funciona IngenIA"
-      className="relative w-full overflow-hidden bg-white py-8 lg:py-10 scroll-mt-20"
+      className="relative w-full overflow-hidden bg-white py-7 lg:py-10 scroll-mt-20"
     >
       <div className="absolute top-[30%] left-[10%] w-44 h-44 bg-primary-light/6 rounded-full blur-[80px] animate-orb-3" />
       <div className="absolute bottom-[20%] right-[10%] w-48 h-48 bg-mint/6 rounded-full blur-[80px] animate-orb-2" />

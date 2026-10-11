@@ -40,7 +40,7 @@ export default function IngenIAHeroPromo() {
   }, [inView]);
 
   return (
-    <div className="relative mx-auto w-full max-w-[240px] [perspective:1600px] sm:max-w-[260px] lg:max-w-[290px]">
+    <div className="relative mx-auto w-full max-w-[210px] [perspective:1600px] sm:max-w-[250px] lg:max-w-[290px]">
       {/* Halo de marca IngenIA detrás del teléfono */}
       <div
         aria-hidden="true"
