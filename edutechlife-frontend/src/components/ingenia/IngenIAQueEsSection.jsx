@@ -48,7 +48,7 @@ export default function IngenIAQueEsSection({ t, vakStyles }) {
                 __html: sanitize(t("ingenia.landing_what_desc2")),
               }}
             />
-            <div className="flex flex-wrap gap-3 pt-3">
+            <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pt-3 pb-2 scrollbar-none md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:pb-0">
               {[
                 {
                   icon: "fa-chart-line",
@@ -69,7 +69,7 @@ export default function IngenIAQueEsSection({ t, vakStyles }) {
                 <motion.div
                   key={benefit.label}
                   whileHover={{ y: -2 }}
-                  className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-gradient-to-br from-petroleum/5 to-primary-light/5 border border-petroleum/10 hover:border-petroleum/30 transition-all duration-300"
+                  className="w-[68%] flex-shrink-0 snap-start flex items-center gap-2.5 px-4 py-3 rounded-xl bg-gradient-to-br from-petroleum/5 to-primary-light/5 border border-petroleum/10 hover:border-petroleum/30 transition-all duration-300 md:w-auto"
                 >
                   <Icon
                     name={benefit.icon}

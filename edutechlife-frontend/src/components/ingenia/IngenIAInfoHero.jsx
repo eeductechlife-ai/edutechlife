@@ -229,81 +229,86 @@ export default function IngenIAInfoHero({ handleCta, onNavigate, children }) {
           </div>
 
           <div className="mt-8 grid grid-cols-1 items-center gap-8 lg:mt-10 lg:grid-cols-12 lg:gap-10">
-            {/* Copia: en móvil el título va primero, luego el video */}
-            <div className="order-1 text-center lg:col-span-5 lg:text-left">
-              <motion.span
-                initial={reduce ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: EASE }}
-                className="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em]"
-                style={{
-                  color: "#7B2FF7",
-                  background: "rgba(123,47,247,0.08)",
-                }}
-              >
-                <span
-                  aria-hidden="true"
-                  className="h-1.5 w-1.5 rounded-full"
-                  style={{ background: "#7B2FF7" }}
-                />
-                {t("ingenia.landing_hero_eyebrow")}
-              </motion.span>
-
-              <motion.h1
-                className={TITLE_CLASS}
-                initial={reduce ? false : "inactive"}
-                animate="active"
-              >
-                <RevealText text={heroLine1} />
-                <br className="hidden lg:inline" />
-                <RevealText
-                  text={heroLine2}
-                  offset={heroOffset2}
-                  gradient={titleGradient}
-                />
-                {heroLine3 ? (
-                  <>
-                    <br className="hidden lg:inline" />
-                    <RevealText text={heroLine3} offset={heroOffset3} />
-                  </>
-                ) : null}
-              </motion.h1>
-              <TitleRule />
-
-              <motion.p
-                initial={reduce ? false : { opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: EASE, delay: 0.15 }}
-                className={SUBTITLE_CLASS}
-              >
-                {t("ingenia.landing_hero_desc")}
-              </motion.p>
-
-              <motion.div
-                initial={reduce ? false : { opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: EASE, delay: 0.25 }}
-                className="mt-9 flex flex-col items-center gap-2 lg:items-start"
-              >
-                <MagneticButton
-                  onClick={handlePrimaryCta}
-                  className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-[#7B2FF7] to-[#4361EE] px-9 py-3.5 text-sm font-bold text-white shadow-xl transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 hover:shadow-[0_20px_50px_rgba(123,47,247,0.4)] active:scale-[0.98] sm:w-auto sm:px-11 sm:text-base"
+            {/* Móvil: título arriba (order-1), celular (order-2) y texto+CTA debajo (order-3).
+                Escritorio: título + texto agrupados en la columna izquierda (lg:block). */}
+            <div className="contents text-center lg:order-none lg:block lg:col-span-5 lg:text-left">
+              <div className="order-1 lg:order-none">
+                <motion.span
+                  initial={reduce ? false : { opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, ease: EASE }}
+                  className="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em]"
+                  style={{
+                    color: "#7B2FF7",
+                    background: "rgba(123,47,247,0.08)",
+                  }}
                 >
-                  <span className="absolute inset-0 h-full w-[200%] -translate-x-full skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover:animate-sweep" />
-                  <span className="relative z-10 font-semibold text-white">
-                    {t("ingenia.landing_cta_try")}
-                  </span>
-                  <span className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                    <Icon
-                      name="fa-arrow-right"
-                      className="h-3.5 w-3.5 text-white"
-                    />
-                  </span>
-                </MagneticButton>
-                <p className="text-xs text-slate-500">
-                  {t("ingenia.landing_trial_terms")}
-                </p>
-              </motion.div>
+                  <span
+                    aria-hidden="true"
+                    className="h-1.5 w-1.5 rounded-full"
+                    style={{ background: "#7B2FF7" }}
+                  />
+                  {t("ingenia.landing_hero_eyebrow")}
+                </motion.span>
+
+                <motion.h1
+                  className={TITLE_CLASS}
+                  initial={reduce ? false : "inactive"}
+                  animate="active"
+                >
+                  <RevealText text={heroLine1} />
+                  <br className="hidden lg:inline" />
+                  <RevealText
+                    text={heroLine2}
+                    offset={heroOffset2}
+                    gradient={titleGradient}
+                  />
+                  {heroLine3 ? (
+                    <>
+                      <br className="hidden lg:inline" />
+                      <RevealText text={heroLine3} offset={heroOffset3} />
+                    </>
+                  ) : null}
+                </motion.h1>
+                <TitleRule />
+              </div>
+
+              <div className="order-3 lg:order-none">
+                <motion.p
+                  initial={reduce ? false : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, ease: EASE, delay: 0.15 }}
+                  className={SUBTITLE_CLASS}
+                >
+                  {t("ingenia.landing_hero_desc")}
+                </motion.p>
+
+                <motion.div
+                  initial={reduce ? false : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, ease: EASE, delay: 0.25 }}
+                  className="mt-9 flex flex-col items-center gap-2 lg:items-start"
+                >
+                  <MagneticButton
+                    onClick={handlePrimaryCta}
+                    className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-[#7B2FF7] to-[#4361EE] px-9 py-3.5 text-sm font-bold text-white shadow-xl transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 hover:shadow-[0_20px_50px_rgba(123,47,247,0.4)] active:scale-[0.98] sm:w-auto sm:px-11 sm:text-base"
+                  >
+                    <span className="absolute inset-0 h-full w-[200%] -translate-x-full skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/25 to-transparent group-hover:animate-sweep" />
+                    <span className="relative z-10 font-semibold text-white">
+                      {t("ingenia.landing_cta_try")}
+                    </span>
+                    <span className="relative z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                      <Icon
+                        name="fa-arrow-right"
+                        className="h-3.5 w-3.5 text-white"
+                      />
+                    </span>
+                  </MagneticButton>
+                  <p className="text-xs text-slate-500">
+                    {t("ingenia.landing_trial_terms")}
+                  </p>
+                </motion.div>
+              </div>
             </div>
 
             {/* Reel de promoción en mockup de celular (el reel es vertical 9:16) */}
