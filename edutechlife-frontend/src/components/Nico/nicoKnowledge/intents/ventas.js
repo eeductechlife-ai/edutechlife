@@ -13,7 +13,7 @@ export const ventas = [
     ],
     category: "ventas",
     response:
-      "Nos diferencia combinar pedagogía de alto impacto con inteligencia artificial: el ADN de Aprendizaje personaliza el proceso según el estilo de cada estudiante y la IA acompaña con herramientas como MAX (IALab) y el tutor Dani (IngenIA). Ofrecemos modalidades flexibles (presencial, online e híbrida), primera clase gratuita y cancelación sin permanencia. No enseñamos programación ni robótica.",
+      "Nos diferencia combinar pedagogía de alto impacto con inteligencia artificial: el ADN de Aprendizaje personaliza el proceso según el estilo de cada estudiante y la IA acompaña con herramientas como MAX (IALab) y el tutor Dani (IngenIA). Ofrecemos modalidades flexibles (presencial, online e híbrida), ADN de Aprendizaje gratuito y cancelación sin permanencia. No enseñamos programación ni robótica.",
   },
   {
     id: "resultados_esperados",

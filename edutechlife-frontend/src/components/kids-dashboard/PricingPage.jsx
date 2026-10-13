@@ -83,7 +83,7 @@ const TierCard = ({ tierId, isRecommended }) => {
             ) : (
               <>
                 <div className="text-4xl font-bold text-gray-900 dark:text-white">
-                  ${tier.price}
+                  {tier.priceDisplay}
                 </div>
                 <div className="text-gray-600 dark:text-gray-400 text-sm">
                   por mes, facturado mensualmente

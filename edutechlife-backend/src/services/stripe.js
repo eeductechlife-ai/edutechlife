@@ -1,4 +1,4 @@
-const { getPlanById } = require('../data/plans');
+const { getPlanById, INGENIA_PLAN_IDS } = require('../data/plans');
 const supabase = require('../db/supabase');
 
 function getStripe() {
@@ -8,7 +8,7 @@ function getStripe() {
 
 // Planes de IngenIA (menores 6–16): su estado vive en `students`, no en
 // `users`. Mantiene los datos de IALab (adultos) y IngenIA (niños) separados.
-const INGENIA_PLAN_IDS = new Set(['smartboard_premium']);
+// La lista sale de data/plans.js (Base, anual, segundo hijo, Fundador y Personalizado).
 
 /**
  * Persiste el estado de suscripción en Supabase, en la tabla correcta según el
@@ -61,6 +61,18 @@ async function createCheckoutSession({ planId, userId, email, successUrl, cancel
 
   if (plan.isCustom || plan.price === 0) {
     return { url: null, error: 'Este plan no requiere pago' };
+  }
+
+  // Precio Fundador: solo hasta la fecha límite (inclusive, hora de Colombia).
+  if (plan.availableUntil && Date.now() > Date.parse(`${plan.availableUntil}T23:59:59-05:00`)) {
+    return { url: null, error: 'Esta oferta ya no está disponible' };
+  }
+
+  // Sin ID de precio en COP configurado no se cobra: evita cobrar un precio
+  // distinto al publicado (p. ej. el precio viejo en USD).
+  if (!plan.priceId) {
+    console.warn(`Stripe: falta ${plan.priceEnv || 'priceId'} para el plan ${plan.id}`);
+    return { url: null, error: 'Plan sin precio configurado' };
   }
 
   try {

@@ -1,4 +1,5 @@
 import { shouldAskForName } from "./nicoTextUtils";
+import { PRECIOS_INGENIA, formatCOP } from "../../config/preciosIngenia";
 
 // Función para optimizar conversaciones largas
 export const optimizeLongConversation = (messages, maxMessages = 20) => {
@@ -218,10 +219,10 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     lowerMessage.includes("cuanto") ||
     lowerMessage.includes("costo")
   ) {
-    return "Tenemos planes que se ajustan a lo que necesitas y la primera clase es gratis para que conozcas nuestro método. ¿Quieres que te ayude a elegir el ideal?";
+    return `IngenIA Base cuesta ${formatCOP(PRECIOS_INGENIA.base.mensual)}/mes con ${PRECIOS_INGENIA.gratis.diasPrueba} días de prueba sin tarjeta, y el Personalizado con coach docente va desde ${formatCOP(PRECIOS_INGENIA.acompanamiento.mensualDesde)}/mes. ¿Quieres que te ayude a elegir?`;
   }
 
-  // Primera clase gratis
+  // Lo que es gratis (oferta oficial: ADN de Aprendizaje y prueba de IngenIA)
   if (
     lowerMessage.includes("primera") ||
     lowerMessage.includes("gratis") ||
@@ -229,7 +230,7 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     lowerMessage.includes("prueba") ||
     lowerMessage.includes("demo")
   ) {
-    return "¡Claro que sí! La primera clase es gratis y sin compromiso, dura 30-45 minutos. ¿Te gustaría agendarla?";
+    return `Puedes empezar gratis: el ADN de Aprendizaje no tiene costo y IngenIA tiene ${PRECIOS_INGENIA.gratis.diasPrueba} días de prueba sin tarjeta. ¿Te ayudo a empezar?`;
   }
 
   // Modalidades
@@ -272,7 +273,7 @@ export const getQuickResponse = (userMessage, userContext = {}) => {
     lowerMessage.includes("iniciar") ||
     lowerMessage.includes("cómo comenzar")
   ) {
-    return "Con gusto te acompaño. Empezamos con tu primera clase gratis y, según lo que necesites, te recomendamos el plan ideal. ¿Te la agendo?";
+    return "Con gusto te acompaño. Empezamos con el ADN de Aprendizaje gratuito y, según lo que necesites, te recomendamos el plan ideal. ¿Empezamos?";
   }
 
   // Acerca de EdutechLife
@@ -393,8 +394,8 @@ export const getQuestionSuggestions = (messages, userContext = {}) => {
   } else if (mentionedTopics.includes("Precios")) {
     suggestions.push(
       "¿Qué planes tienen disponibles?",
-      "¿Ofrecen becas?",
-      "¿Cómo funciona la primera clase gratuita?",
+      "¿Hay plan anual o descuento por segundo hijo?",
+      "¿Cómo funciona la prueba gratis?",
       "¿En qué moneda están los precios?",
     );
   } else {
@@ -403,7 +404,7 @@ export const getQuestionSuggestions = (messages, userContext = {}) => {
       "¿Cómo me inscribo?",
       "¿Tienen modalidad online?",
       "¿Cómo funciona el acompañamiento?",
-      "¿La primera clase es gratis?",
+      "¿Hay prueba gratis?",
     );
   }
 
@@ -489,13 +490,12 @@ export const getConversationOptions = (messages, userContext = {}) => {
     options.push(
       { text: "Conocer IngenIA para niños", action: "view_ingenia" },
       { text: "Cómo acompaña la IA", action: "how_ai_helps" },
-      { text: "Agendar clase demo", action: "demo_ingenia" },
+      { text: "Probar IngenIA gratis", action: "demo_ingenia" },
     );
   } else if (currentStage === "informacion" || currentTopic === "Precios") {
     options.push(
       { text: "Ver planes y precios", action: "view_pricing" },
-      { text: "Información de becas", action: "info_scholarships" },
-      { text: "Descuentos disponibles", action: "view_discounts" },
+      { text: "Plan anual y segundo hijo", action: "view_discounts" },
     );
   } else if (currentStage === "accion") {
     options.push(

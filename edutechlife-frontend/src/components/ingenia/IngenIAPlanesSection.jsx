@@ -82,6 +82,13 @@ export default function IngenIAPlanesSection({
                   {plan.name}
                 </h3>
                 <div className="flex items-baseline justify-center gap-1">
+                  {plan.pricePrefix ? (
+                    <span
+                      className={`text-sm ${plan.popular ? "text-white/60" : "text-slate-400"}`}
+                    >
+                      {plan.pricePrefix}
+                    </span>
+                  ) : null}
                   <span
                     className={`text-4xl lg:text-5xl font-black ${plan.popular ? "text-white" : "text-petroleum"}`}
                   >
@@ -93,6 +100,15 @@ export default function IngenIAPlanesSection({
                     {plan.period}
                   </span>
                 </div>
+                {plan.notes?.length ? (
+                  <ul
+                    className={`mt-2 space-y-0.5 text-xs leading-snug ${plan.popular ? "text-white/75" : "text-slate-500"}`}
+                  >
+                    {plan.notes.map((note) => (
+                      <li key={note}>{note}</li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
               <ul className="space-y-2 mb-6 flex-1">
                 {plan.features.slice(0, 6).map((feat) => (

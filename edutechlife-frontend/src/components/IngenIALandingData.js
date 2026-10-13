@@ -1,3 +1,10 @@
+import {
+  PRECIOS_INGENIA,
+  CONDICIONES_INGENIA,
+  formatCOP,
+  fechaLimiteFundador,
+} from "../config/preciosIngenia";
+
 const VAK_STYLES_ES = [
   {
     key: "visual",
@@ -128,122 +135,170 @@ const VAK_STYLES_PT = [
   },
 ];
 
-const PRICING_PLANS_ES = [
+// Precios: salen de la configuración compartida (C-005). No escribir montos aquí.
+const P = PRECIOS_INGENIA;
+const C = CONDICIONES_INGENIA;
+
+const fechaFundador = fechaLimiteFundador;
+
+// Plan Base (el Premium de antes, sin coach humano) y plan Personalizado.
+const crearPlanes = (t) => [
   {
-    name: "Básico",
-    price: "$30.000",
-    period: "/mes",
-    popular: false,
-    trial: "7 días gratis",
-    features: [
-      "ADN de Aprendizaje completo",
-      "Tutor IA Dani — chat ilimitado",
-      "Preparación de exámenes",
-      "EduCard — tarjetas de estudio con IA",
-      "Escáner de problemas con IA",
-      "Plan de estudio personalizado",
-      "Sistema de puntos y recompensas",
-      "Reporte semanal a padres",
+    id: "base",
+    name: t.base,
+    price: formatCOP(P.base.mensual),
+    period: t.period,
+    popular: true,
+    trial: t.trial,
+    notes: [
+      t.anual(formatCOP(P.base.anual)),
+      t.segundoHijo(formatCOP(P.base.segundoHijo)),
+      t.fundador(formatCOP(P.fundador.mensual), P.fundador.cupos),
     ],
+    features: t.baseFeatures,
   },
   {
-    name: "Premium",
-    price: "$50.000",
-    period: "/mes",
-    popular: true,
-    trial: "7 días gratis",
-    features: [
-      "Todo lo del plan Básico",
-      "SmartBook Reader — análisis IA de textos",
-      "Modo Socrático — pensamiento crítico",
-      "Apoyo emocional con detección de crisis",
-      "Noticias tech personalizadas",
-      "Panel padres en tiempo real",
-      "Reportes mensuales descargables PDF",
-      "Avatar 3D de Dani con emociones",
-      "Coach humano disponible",
-      "Prioridad en soporte",
+    id: "personalizado",
+    name: t.personalizado,
+    pricePrefix: t.desde,
+    price: formatCOP(P.acompanamiento.mensualDesde),
+    period: t.period,
+    popular: false,
+    trial: t.valoracion(C.valoracionGratisMinutos),
+    notes: [
+      t.intensivo(formatCOP(P.intensivo.mensual), P.intensivo.sesionesMes),
+      t.presencial(formatCOP(P.sesionPresencial)),
+      t.cupos,
     ],
+    features: t.personalizadoFeatures(P.acompanamiento.sesionesMes),
   },
 ];
 
-const PRICING_PLANS_EN = [
-  {
-    name: "Basic",
-    price: "$30.000",
-    period: "/mo",
-    popular: false,
-    trial: "7 days free",
-    features: [
-      "Complete VAK diagnosis",
-      "AI Tutor Dani — unlimited chat",
-      "Exam preparation",
-      "EduCard — AI-powered study cards",
-      "AI problem scanner",
-      "Personalized study plan",
-      "Points and rewards system",
-      "Weekly parent report",
-    ],
-  },
-  {
-    name: "Premium",
-    price: "$50.000",
-    period: "/mo",
-    popular: true,
-    trial: "7 days free",
-    features: [
-      "Everything in Basic",
-      "SmartBook Reader — AI text analysis",
-      "Socratic Mode — critical thinking",
-      "Emotional support with crisis detection",
-      "Personalized tech news feed",
-      "Real-time parent dashboard",
-      "Monthly downloadable PDF reports",
-      "3D Dani avatar with emotions",
-      "Human coach available",
-      "Priority support",
-    ],
-  },
-];
+const PRICING_PLANS_ES = crearPlanes({
+  base: "Base",
+  personalizado: "Personalizado",
+  desde: "desde",
+  period: "/mes",
+  trial: `${P.gratis.diasPrueba} días gratis sin tarjeta`,
+  valoracion: (min) => `Valoración gratis de ${min} min`,
+  anual: (v) => `Plan anual: ${v}`,
+  segundoHijo: (v) => `Segundo hijo: ${v}/mes`,
+  fundador: (v, cupos) =>
+    `Precio Fundador: ${v}/mes congelado mientras sigas activo. Primeras ${cupos} familias o hasta el ${fechaFundador("es-CO")}`,
+  intensivo: (v, n) => `Intensivo (${n} sesiones/mes): ${v}/mes`,
+  presencial: (v) => `Sesión presencial: +${v}`,
+  cupos: "Cupos limitados",
+  baseFeatures: [
+    "Tutor IA Dani — chat ilimitado",
+    "Misiones, puntos y recompensas",
+    "ADN de Aprendizaje (Diagnóstico VAK)",
+    "Panel para padres en tiempo real",
+    "Reporte semanal a padres",
+    "Plan de estudio personalizado",
+    "Preparación de exámenes",
+    "EduCard — tarjetas de estudio con IA",
+    "Escáner de problemas con IA",
+    "SmartBook Reader — análisis IA de textos",
+    "Modo Socrático — pensamiento crítico",
+    "Apoyo emocional con detección de crisis",
+    "Noticias tech personalizadas",
+    "Reportes mensuales descargables PDF",
+    "Avatar 3D de Dani con emociones",
+    "Prioridad en soporte",
+  ],
+  personalizadoFeatures: (n) => [
+    "Todo lo del plan Base",
+    "Valoración inicial de 45 min con revisión del boletín",
+    "Plan a la medida de tu hijo",
+    `${n} sesiones al mes de 45 min con coach docente`,
+    "Seguimiento al colegio (con tu autorización)",
+    "Reporte mensual con llamada de 15 min",
+  ],
+});
 
-const PRICING_PLANS_PT = [
-  {
-    name: "Básico",
-    price: "$30.000",
-    period: "/mês",
-    popular: false,
-    trial: "7 dias grátis",
-    features: [
-      "ADN de Aprendizaje completo",
-      "Tutor IA Dani — chat ilimitado",
-      "Preparação para provas",
-      "EduCard — tarjetas com IA",
-      "Scanner de problemas com IA",
-      "Plano de estudos personalizado",
-      "Sistema de pontos e recompensas",
-      "Relatório semanal para os pais",
-    ],
-  },
-  {
-    name: "Premium",
-    price: "$50.000",
-    period: "/mês",
-    popular: true,
-    trial: "7 dias grátis",
-    features: [
-      "Tudo do plano Básico",
-      "SmartBook Reader — análise de textos com IA",
-      "Modo Socrático — pensamento crítico",
-      "Apoio emocional com detecção de crises",
-      "Notícias de tecnologia personalizadas",
-      "Painel dos pais em tempo real",
-      "Relatórios mensais em PDF para download",
-      "Avatar 3D da Dani com emoções",
-      "Coach humano disponível",
-      "Prioridade no suporte",
-    ],
-  },
-];
+const PRICING_PLANS_EN = crearPlanes({
+  base: "Base",
+  personalizado: "Personalized",
+  desde: "from",
+  period: "/mo",
+  trial: `${P.gratis.diasPrueba} days free, no card`,
+  valoracion: (min) => `Free ${min}-min assessment`,
+  anual: (v) => `Annual plan: ${v}`,
+  segundoHijo: (v) => `Second child: ${v}/mo`,
+  fundador: (v, cupos) =>
+    `Founder price: ${v}/mo, locked while you stay active. First ${cupos} families or until ${fechaFundador("en-US")}`,
+  intensivo: (v, n) => `Intensive (${n} sessions/mo): ${v}/mo`,
+  presencial: (v) => `In-person session: +${v}`,
+  cupos: "Limited spots",
+  baseFeatures: [
+    "AI Tutor Dani — unlimited chat",
+    "Missions, points and rewards",
+    "Complete VAK diagnosis",
+    "Real-time parent dashboard",
+    "Weekly parent report",
+    "Personalized study plan",
+    "Exam preparation",
+    "EduCard — AI-powered study cards",
+    "AI problem scanner",
+    "SmartBook Reader — AI text analysis",
+    "Socratic Mode — critical thinking",
+    "Emotional support with crisis detection",
+    "Personalized tech news feed",
+    "Monthly downloadable PDF reports",
+    "3D Dani avatar with emotions",
+    "Priority support",
+  ],
+  personalizadoFeatures: (n) => [
+    "Everything in Base",
+    "45-min initial assessment with report card review",
+    "Plan tailored to your child",
+    `${n} monthly 45-min sessions with a teacher coach`,
+    "School follow-up (with your authorization)",
+    "Monthly report with a 15-min call",
+  ],
+});
+
+const PRICING_PLANS_PT = crearPlanes({
+  base: "Base",
+  personalizado: "Personalizado",
+  desde: "a partir de",
+  period: "/mês",
+  trial: `${P.gratis.diasPrueba} dias grátis sem cartão`,
+  valoracion: (min) => `Avaliação grátis de ${min} min`,
+  anual: (v) => `Plano anual: ${v}`,
+  segundoHijo: (v) => `Segundo filho: ${v}/mês`,
+  fundador: (v, cupos) =>
+    `Preço Fundador: ${v}/mês congelado enquanto estiver ativo. Primeiras ${cupos} famílias ou até ${fechaFundador("pt-BR")}`,
+  intensivo: (v, n) => `Intensivo (${n} sessões/mês): ${v}/mês`,
+  presencial: (v) => `Sessão presencial: +${v}`,
+  cupos: "Vagas limitadas",
+  baseFeatures: [
+    "Tutor IA Dani — chat ilimitado",
+    "Missões, pontos e recompensas",
+    "ADN de Aprendizaje completo",
+    "Painel dos pais em tempo real",
+    "Relatório semanal para os pais",
+    "Plano de estudos personalizado",
+    "Preparação para provas",
+    "EduCard — tarjetas com IA",
+    "Scanner de problemas com IA",
+    "SmartBook Reader — análise de textos com IA",
+    "Modo Socrático — pensamento crítico",
+    "Apoio emocional com detecção de crises",
+    "Notícias de tecnologia personalizadas",
+    "Relatórios mensais em PDF para download",
+    "Avatar 3D da Dani com emoções",
+    "Prioridade no suporte",
+  ],
+  personalizadoFeatures: (n) => [
+    "Tudo do plano Base",
+    "Avaliação inicial de 45 min com revisão do boletim",
+    "Plano sob medida para seu filho",
+    `${n} sessões mensais de 45 min com coach docente`,
+    "Acompanhamento com a escola (com sua autorização)",
+    "Relatório mensal com ligação de 15 min",
+  ],
+});
 
 const TESTIMONIALS_ES = [
   {
@@ -616,20 +671,20 @@ const PAYMENT_METHODS_PT = [
 
 const GUARANTEE_ES = {
   icon: "fa-shield-halved",
-  title: "Cancela cuando quieras",
-  desc: "Sin permanencia. Sin multas. Sin preguntas.",
+  title: `Garantía de ${C.garantiaDias} días`,
+  desc: "Devolución del dinero. Cancela cuando quieras, sin permanencia. Precios finales con IVA incluido (si aplica).",
 };
 
 const GUARANTEE_EN = {
   icon: "fa-shield-halved",
-  title: "Cancel anytime",
-  desc: "No commitment. No penalties. No questions asked.",
+  title: `${C.garantiaDias}-day money-back guarantee`,
+  desc: "Cancel anytime, no commitment. Final prices include VAT (if applicable).",
 };
 
 const GUARANTEE_PT = {
   icon: "fa-shield-halved",
-  title: "Cancele quando quiser",
-  desc: "Sem fidelidade. Sem multas. Sem perguntas.",
+  title: `Garantia de ${C.garantiaDias} dias`,
+  desc: "Devolução do dinheiro. Cancele quando quiser, sem fidelidade. Preços finais com IVA incluído (se aplicável).",
 };
 
 const FAQ_ITEMS_ES = [
@@ -655,7 +710,7 @@ const FAQ_ITEMS_ES = [
   },
   {
     q: "¿Hay prueba gratuita?",
-    a: "Sí. Ambos planes incluyen 7 días de prueba gratuita sin compromiso. Puedes cancelar antes de que termine el periodo y no se te cobrará nada.",
+    a: `Sí. El Diagnóstico VAK es gratuito y el plan Base incluye ${P.gratis.diasPrueba} días de prueba sin tarjeta. Para el plan Personalizado ofrecemos una valoración gratis de ${C.valoracionGratisMinutos} minutos.`,
   },
   {
     q: "¿Puedo cancelar en cualquier momento?",
@@ -694,7 +749,7 @@ const FAQ_ITEMS_EN = [
   },
   {
     q: "Is there a free trial?",
-    a: "Yes. Both plans include a 7-day free trial with no commitment. You can cancel before the trial ends and you won't be charged.",
+    a: `Yes. The VAK diagnosis is free and the Base plan includes a ${P.gratis.diasPrueba}-day trial with no card required. For the Personalized plan we offer a free ${C.valoracionGratisMinutos}-minute assessment.`,
   },
   {
     q: "Can I cancel anytime?",

@@ -9,7 +9,7 @@
   },
   "company": {
     "name": "EdutechLife",
-    "description": "Pedagogía colombiana con inteligencia artificial: democratizamos la educación de calidad en Latinoamérica adaptando cada experiencia de aprendizaje al cerebro único de cada estudiante. Aplicamos pedagogía, neurociencia e IA (ADN de Aprendizaje), con acompañamiento del coach IA con voz (MAX) y del tutor Dani. Nuestras 4 herramientas: IALab (curso de IA generativa con laboratorios), IngenIA para niños y jóvenes, Diagnóstico VAK y IA Empresarial. Precios en pesos colombianos, primera clase gratis y becas. No enseñamos programación ni robótica, ni damos clases particulares por materia."
+    "description": "Pedagogía colombiana con inteligencia artificial: democratizamos la educación de calidad en Latinoamérica adaptando cada experiencia de aprendizaje al cerebro único de cada estudiante. Aplicamos pedagogía, neurociencia e IA (ADN de Aprendizaje), con acompañamiento del coach IA con voz (MAX) y del tutor Dani. Nuestras 4 herramientas: IALab (curso de IA generativa con laboratorios), IngenIA para niños y jóvenes, Diagnóstico VAK y IA Empresarial. Precios en pesos colombianos. No enseñamos programación ni robótica, ni damos clases particulares por materia."
   },
   "metrics": {
     "students": "+6,000 estudiantes",
@@ -95,62 +95,11 @@
   "pricing": {
     "currency": "COP (pesos colombianos)",
     "no_usd": true,
-    "first_class_free": true,
-    "plans": [
-      {
-        "name": "Estudiante",
-        "price": "$99.000/mes COP",
-        "features": [
-          "Diagnóstico VAK completo",
-          "Plan de estudio personalizado",
-          "Acceso a IALab y a contenido personalizado con IA",
-          "Chat con MAX (50 msgs/mes)",
-          "Certificado de finalización"
-        ]
-      },
-      {
-        "name": "Educador",
-        "price": "$199.000/mes COP",
-        "features": [
-          "Todo lo de Estudiante",
-          "IngenIA con análisis de IA",
-          "Creación de contenidos VAK",
-          "Hasta 100 estudiantes",
-          "Chat con MAX (ilimitado)",
-          "Reportes de progreso",
-          "Certificaciones SENA + IBM/Coursera",
-          "Soporte prioritario"
-        ]
-      },
-      {
-        "name": "Institución",
-        "price": "desde $499.000/mes COP",
-        "features": [
-          "Todo lo de Educador",
-          "Usuarios ilimitados",
-          "API de agentes personalizados",
-          "Proyectos de impacto nacional",
-          "Consultoría B2B incluida",
-          "Dashboard administrativo",
-          "SLA de respuesta 24/7"
-        ]
-      },
-      {
-        "name": "IngenIA (niños) — plan aparte",
-        "price": "$30.000/mes COP (Básico) · $50.000/mes COP (Premium)",
-        "features": [
-          "Tutor Dani con chat ilimitado",
-          "Diagnóstico VAK",
-          "Misiones, puntos y recompensas",
-          "Reporte a padres (semanal o en tiempo real)",
-          "7 días de prueba gratis"
-        ]
-      }
-    ],
+    "source": "Los precios de IngenIA viven en src/config/preciosIngenia.js (fuente única); no escribirlos aquí.",
+    "plans": [],
     "discounts": [
-      "Descuentos para hermanos",
-      "Planes especiales para colegios e instituciones",
-      "Becas por rendimiento o situación socioeconómica (consultar convocatorias)"
+      "Segundo hijo y plan anual de IngenIA (montos en src/config/preciosIngenia.js)",
+      "Colegios: propuesta a la medida, sin precio publicado (contacto por WhatsApp)"
     ],
     "cancellation": "Cancelación en cualquier momento, sin permanencia. Todos los precios se publican en pesos colombianos (COP); no trabajamos en dólares."
   },
@@ -171,26 +120,26 @@
     { "q": "¿Qué es IALab / AI Lab?", "a": "Es el curso de IA de EdutechLife (AI Lab Academic). Son 5 módulos prácticos: Artesano Digital (prompts), Arquitecto Digital (ChatGPT y GPTs), Detective de Datos (Gemini y Deep Research), Alquimista Digital (NotebookLM) y Guardián Digital (ética de la IA), guiados por MAX, el coach IA. Incluye laboratorios, examen y certificado." },
     { "q": "¿Qué es IngenIA?", "a": "IngenIA es el espacio de EdutechLife para niños y jóvenes (6-16 años): acompañamiento académico y emocional con el tutor virtual Dani, misiones, diagnóstico VAK y reportes para los padres." },
     { "q": "¿Cómo funciona el Diagnóstico VAK?", "a": "Es gratuito y 100% online: identifica tu estilo de aprendizaje (Visual, Auditivo o Kinestésico). Toma 10-30 minutos y entrega recomendaciones personalizadas." },
-    { "q": "¿Cuánto cuesta y en qué moneda?", "a": "Trabajamos en pesos colombianos (COP), no en dólares. El diagnóstico VAK es gratuito y la primera clase también. Los planes van desde $99.000/mes (Estudiante) e IngenIA desde $30.000/mes. Para una cotización exacta escribe por WhatsApp +57 323 836 5517." },
+    { "q": "¿Cuánto cuesta y en qué moneda?", "a": "Trabajamos en pesos colombianos (COP), no en dólares. El diagnóstico VAK es gratuito e IngenIA tiene 7 días de prueba sin tarjeta. Para el valor vigente de cada plan escribe por WhatsApp +57 323 836 5517." },
     { "q": "¿Cómo funciona el coaching con MAX?", "a": "MAX es el coach de IA de IALab: responde sobre el curso, guía laboratorios, explica conceptos y da ejemplos prácticos, por texto o voz." },
     { "q": "¿Cómo usan la IA para mejorar el aprendizaje?", "a": "La IA es una herramienta al servicio de la pedagogía: el ADN de Aprendizaje identifica cómo aprende cada estudiante y la IA (coach MAX en IALab y tutor Dani en IngenIA) acompaña, organiza el estudio y personaliza el contenido. No enseñamos programación ni robótica." },
-    { "q": "¿Cómo me inscribo?", "a": "Agenda tu primera clase gratuita o escribe por WhatsApp +57 323 836 5517. Un asesor te guía y resuelve tus dudas." }
+    { "q": "¿Cómo me inscribo?", "a": "Empieza con el diagnóstico VAK gratuito o escribe por WhatsApp +57 323 836 5517. Un asesor te guía y resuelve tus dudas." }
   ],
   "sales_scripts": {
     "qualification": {
       "questions": [
         "¿Para quién es: para ti, para un niño o joven, o para una institución?",
         "¿Qué quieres lograr: aprender a usar IA, acompañar a un estudiante, o automatizar procesos?",
-        "¿Prefieres empezar con el diagnóstico VAK gratuito o con una primera clase gratis?"
+        "¿Prefieres empezar con el diagnóstico VAK gratuito o con la prueba gratis de IngenIA?"
       ]
     },
     "objections": {
-      "expensive": "Entendemos. Trabajamos en pesos colombianos con planes desde $99.000/mes (IALab) o $30.000/mes (IngenIA), y la primera clase o el diagnóstico VAK son gratis. Escríbenos por WhatsApp y vemos cuál se ajusta a ti.",
+      "expensive": "Entendemos. Trabajamos en pesos colombianos; el diagnóstico VAK es gratis e IngenIA tiene 7 días de prueba sin tarjeta, plan anual y precio para el segundo hijo. Escríbenos por WhatsApp y vemos cuál se ajusta a ti.",
       "no_time": "Todo es online y flexible. IALab e IngenIA se adaptan a tu horario; también puedes empezar con el diagnóstico VAK que toma 10-30 minutos.",
       "not_sure": "Te entiendo. ¿Qué te parece agendar una llamada informativa sin compromiso? Resolvemos todas tus dudas."
     },
     "closing": [
-      "¿Te gustaría agendar tu primera clase gratuita?",
+      "¿Te gustaría probar IngenIA 7 días gratis?",
       "¿Quieres empezar con el diagnóstico VAK gratis?",
       "¿Te parece bien que un asesor te escriba por WhatsApp para darte más información?"
     ]

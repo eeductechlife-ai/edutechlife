@@ -15,6 +15,6 @@ export const pagos = [
     ],
     category: "pagos",
     response:
-      "Aceptamos tarjetas de crédito y débito, transferencia bancaria, efectivo, y pagos a través de nuestra plataforma en línea. Tenemos planes mensuales y descuentos por pago anticipado.",
+      "Aceptamos tarjetas de crédito y débito, transferencia bancaria, efectivo, y pagos a través de nuestra plataforma en línea. Tenemos planes mensuales sin permanencia y un plan anual de IngenIA.",
   },
 ];

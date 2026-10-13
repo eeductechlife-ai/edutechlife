@@ -153,6 +153,44 @@ describe('Stripe service', () => {
       expect(result.sessionId).toBe('cs_test_123');
     });
 
+    it('IngenIA: no cobra si falta el ID del precio en COP', async () => {
+      delete process.env.STRIPE_PRICE_INGENIA_MENSUAL;
+      const result = await stripeService.createCheckoutSession({
+        planId: 'smartboard_premium', userId: 'kid1', email: 'p@test.com',
+      });
+      expect(result).toEqual({ url: null, error: 'Plan sin precio configurado' });
+      expect(mockSessionsCreate).not.toHaveBeenCalled();
+    });
+
+    it('IngenIA: usa el precio en COP de la variable de entorno', async () => {
+      process.env.STRIPE_PRICE_INGENIA_MENSUAL = 'price_cop_49900';
+      mockSessionsCreate.mockResolvedValue({ url: 'https://checkout.stripe.com/x', id: 'cs_1' });
+      await stripeService.createCheckoutSession({
+        planId: 'smartboard_premium', userId: 'kid1', email: 'p@test.com',
+      });
+      expect(mockSessionsCreate).toHaveBeenCalledWith(expect.objectContaining({
+        line_items: [{ price: 'price_cop_49900', quantity: 1 }],
+      }));
+      delete process.env.STRIPE_PRICE_INGENIA_MENSUAL;
+    });
+
+    it('IngenIA Fundador: se cierra después del 3-nov-2026', async () => {
+      process.env.STRIPE_PRICE_INGENIA_FUNDADOR = 'price_fundador';
+      mockSessionsCreate.mockResolvedValue({ url: 'https://checkout.stripe.com/f', id: 'cs_f' });
+      vi.useFakeTimers();
+      try {
+        vi.setSystemTime(new Date('2026-11-03T20:00:00-05:00'));
+        const abierto = await stripeService.createCheckoutSession({ planId: 'ingenia_fundador', userId: 'k' });
+        expect(abierto.url).toBe('https://checkout.stripe.com/f');
+        vi.setSystemTime(new Date('2026-11-04T08:00:00-05:00'));
+        const cerrado = await stripeService.createCheckoutSession({ planId: 'ingenia_fundador', userId: 'k' });
+        expect(cerrado).toEqual({ url: null, error: 'Esta oferta ya no está disponible' });
+      } finally {
+        vi.useRealTimers();
+        delete process.env.STRIPE_PRICE_INGENIA_FUNDADOR;
+      }
+    });
+
     it('returns error when stripe session creation throws', async () => {
       mockSessionsCreate.mockRejectedValue(new Error('Stripe API error'));
 
@@ -209,6 +247,17 @@ describe('Stripe service', () => {
         matchColumn: 'auth_id',
         matchValue: 'kid1',
       });
+    });
+
+    it('los planes nuevos de IngenIA (anual, Fundador, Personalizado) también van a students', async () => {
+      for (const planId of ['ingenia_base_anual', 'ingenia_fundador', 'ingenia_intensivo']) {
+        supabaseUpdates.length = 0;
+        await stripeService.handleWebhookEvent({
+          type: 'checkout.session.completed',
+          data: { object: { metadata: { userId: 'kid2', planId }, subscription: 'sub_x' } },
+        });
+        expect(supabaseUpdates[0].table, planId).toBe('students');
+      }
     });
 
     it('handles checkout.session.completed with missing metadata', async () => {
