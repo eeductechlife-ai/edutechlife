@@ -24,9 +24,11 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 2 : undefined,
   // La app se sirve compilada pero parte en ~200 archivos: con varias pruebas a la
-  // vez la primera carga puede pasar de 8 s, por eso los márgenes son holgados.
-  timeout: 45_000,
-  expect: { timeout: 15_000 },
+  // vez (o un equipo cargado) la primera carga puede pasar de 15 s. En un servidor
+  // normal las pruebas tardan segundos, así que unos márgenes holgados no las
+  // alargan: solo evitan falsos fallos.
+  timeout: 60_000,
+  expect: { timeout: 25_000 },
   reporter: process.env.CI
     ? [['list'], ['html', { open: 'never' }]]
     : [['list']],

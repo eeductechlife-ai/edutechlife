@@ -1,6 +1,6 @@
 import { test, expect } from './helpers/test';
 import { signIn } from './helpers/session';
-import { expectNoErrorScreen, watchPage } from './helpers/watch';
+import { expectNoErrorScreen, settle, watchPage } from './helpers/watch';
 
 const MODULES = [
   'Artesano Digital: Prompts',
@@ -36,7 +36,7 @@ test.describe('IALab', () => {
       const watch = watchPage(page);
       await page.goto('/ialab', { waitUntil: 'domcontentloaded' });
       await expect(page.getByRole('heading', { level: 1, name: /Domina la IA antes que los demás/ })).toBeVisible();
-      await page.waitForLoadState('networkidle');
+      await settle(page);
       await expectNoErrorScreen(page);
       expect(watch.problems).toEqual([]);
     });
@@ -84,7 +84,7 @@ test.describe('IALab', () => {
       const watch = watchPage(page);
       await page.reload();
       await expect(page.getByRole('heading', { level: 1, name: MODULES[0] })).toBeVisible();
-      await page.waitForLoadState('networkidle');
+      await settle(page);
       await expectNoErrorScreen(page);
       expect(watch.problems).toEqual([]);
     });
@@ -117,7 +117,7 @@ test.describe('IALab', () => {
       test(`${path} no se desborda en un iPhone (390×844)`, async ({ page }) => {
         await page.setViewportSize({ width: 390, height: 844 });
         await page.goto(path, { waitUntil: 'domcontentloaded' });
-        await page.waitForLoadState('networkidle');
+        await settle(page);
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
         expect(overflow).toBeLessThanOrEqual(1);
       });

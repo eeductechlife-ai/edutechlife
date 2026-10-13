@@ -1,5 +1,5 @@
 import { test, expect } from './helpers/test';
-import { expectNoErrorScreen, watchPage } from './helpers/watch';
+import { expectNoErrorScreen, settle, watchPage } from './helpers/watch';
 
 /**
  * Páginas públicas de edutechlife.co (sin sesión): cada una debe cargar sin
@@ -28,7 +28,7 @@ test.describe('Páginas públicas', () => {
         const res = await page.goto(route.path, { waitUntil: 'domcontentloaded' });
         expect(res?.status()).toBe(200);
         await expect(page.getByRole('main').or(page.locator('main, [role="main"], #root > *').first()).first()).toBeVisible();
-        await page.waitForLoadState('networkidle');
+        await settle(page);
         await expectNoErrorScreen(page);
         expect(watch.problems).toEqual([]);
       });

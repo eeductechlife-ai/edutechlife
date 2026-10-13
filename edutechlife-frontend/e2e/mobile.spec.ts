@@ -1,5 +1,6 @@
 import { test, expect } from './helpers/test';
 import { signIn } from './helpers/session';
+import { settle } from './helpers/watch';
 
 test.describe('iLAB Mobile Responsive', () => {
   test.beforeEach(async ({ page }) => {
@@ -9,7 +10,7 @@ test.describe('iLAB Mobile Responsive', () => {
   test('no horizontal scroll on iPhone 12/13 (390x844)', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/ialab');
-    await page.waitForLoadState('networkidle');
+    await settle(page, 1_500);
     const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
     const viewportWidth = await page.evaluate(() => window.innerWidth);
     expect(scrollWidth).toBeLessThanOrEqual(viewportWidth + 1);
@@ -18,7 +19,7 @@ test.describe('iLAB Mobile Responsive', () => {
   test('touch targets respect 44px minimum', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/ialab');
-    await page.waitForLoadState('networkidle');
+    await settle(page, 1_500);
     const smallButtons = await page.evaluate(() => {
       const buttons = document.querySelectorAll('button, a[href], [role="button"]');
       const violations: { tag: string; text: string; w: number; h: number }[] = [];
@@ -50,7 +51,7 @@ test.describe('iLAB Mobile Responsive', () => {
   test('tablet layout shows sidebar on iPad Mini (768x1024)', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
     await page.goto('/ialab/1');
-    await page.waitForLoadState('networkidle');
+    await settle(page, 1_500);
     const sidebar = page.locator('[data-tour="tour-sidebar"]');
     await expect(sidebar).toBeVisible();
   });

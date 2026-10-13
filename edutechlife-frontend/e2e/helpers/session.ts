@@ -145,13 +145,14 @@ async function mockNetwork(page: Page, product: Product, token: string) {
 
 /**
  * Deja la página con sesión iniciada en el producto indicado. Llamar ANTES de
- * `page.goto`. Con `{ tour: true }` se conserva el recorrido guiado de IALab,
- * para probarlo; por defecto se omite porque tapa la página.
+ * `page.goto`. Con `{ tour: true }` se conserva el recorrido guiado de IALab, y
+ * con `{ welcomed: false }` la bienvenida de IngenIA (primera visita), para
+ * probarlos; por defecto se omiten porque tapan la página.
  */
 export async function signIn(
   page: Page,
   product: Product = 'ialab',
-  { tour = false }: { tour?: boolean } = {},
+  { tour = false, welcomed = true }: { tour?: boolean; welcomed?: boolean } = {},
 ): Promise<void> {
   const token = fakeJwt();
   const session = {
@@ -176,6 +177,15 @@ export async function signIn(
         localStorage.setItem(init.key, init.sessionJson);
         localStorage.setItem('user_email', init.email);
         sessionStorage.setItem('auth_token', init.accessToken);
+        if (init.welcomed) {
+          // Estudiante que ya vio la bienvenida de IngenIA (lo normal tras la primera
+          // visita). La app restaura estos indicadores desde localStorage cada vez
+          // que reinicia su estado al cargar, así que la bienvenida no vuelve a tapar
+          // la pantalla. Las claves llevan el id del usuario y el prefijo de la app.
+          for (const name of ['complete', 'welcomed']) {
+            localStorage.setItem(`edutechlife_onboarding_${name}_${init.userId}`, 'true');
+          }
+        }
         if (!init.showTour) {
           // Sin esto el recorrido guiado de IALab y la burbuja de MAX tapan la
           // página con una capa a pantalla completa y los clics no llegan.
@@ -192,6 +202,8 @@ export async function signIn(
       accessToken: token,
       email: TEST_USER.email,
       showTour: tour,
+      welcomed,
+      userId: TEST_USER.id,
     },
   );
 
@@ -201,8 +213,19 @@ export async function signIn(
 /**
  * IngenIA da la bienvenida a cada estudiante nuevo con un modal que tapa la
  * pantalla. Esta función lo cierra con «Explorar primero», como haría el niño.
+ *
+ * Primero espera a que la app termine de identificar al estudiante (en ese
+ * momento escribe sus indicadores de bienvenida en localStorage). Si se cierra
+ * antes, la app reinicia su estado al identificarlo (~5 s tras cargar) y vuelve
+ * a mostrar la bienvenida, con lo que las pruebas siguientes encontrarían la
+ * pantalla tapada. Se anota como observación del producto, no se «arregla» aquí.
  */
 export async function skipIngeniaWelcome(page: Page): Promise<void> {
+  await page.waitForFunction(
+    () => Object.keys(localStorage).some((k) => k.startsWith('edutechlife_onboarding_step_')),
+    undefined,
+    { timeout: 60_000 },
+  );
   const explore = page.getByRole('button', { name: 'Explorar primero' });
   // En un equipo lento la página puede tardar en responder al primer clic: se
   // reintenta hasta que el modal desaparece, en vez de fallar por una espera fija.
