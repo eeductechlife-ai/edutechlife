@@ -2,6 +2,9 @@ import React, { useState, lazy, Suspense } from "react";
 import { Icon } from "../utils/iconMapping.jsx";
 import { useTranslation } from "../i18n/I18nProvider";
 import { getFooterContent } from "../data/footer/footerContent";
+import useLeadSubmit from "../hooks/useLeadSubmit";
+import LeadConsent from "./leads/LeadConsent";
+import LeadProfileSelect from "./leads/LeadProfileSelect";
 
 const ModalVAK = lazy(() => import("./footer/modals/ModalVAK"));
 const ModalCertificaciones = lazy(
@@ -78,6 +81,7 @@ export default function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const boletin = useLeadSubmit("boletin");
   const [activeModal, setActiveModal] = useState(null);
   const [openMobileSections, setOpenMobileSections] = useState({
     tools: false,
@@ -90,7 +94,7 @@ export default function Footer() {
   const openModal = (modalName) => setActiveModal(modalName);
   const closeModal = () => setActiveModal(null);
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -100,6 +104,12 @@ export default function Footer() {
     }
 
     setEmailError(false);
+    // Antes solo mostraba «gracias» y descartaba el correo.
+    const ok = await boletin.submit(
+      { email, producto_interes: "boletin" },
+      e.currentTarget,
+    );
+    if (!ok) return;
     setSubscribed(true);
     setEmail("");
   };
@@ -298,46 +308,61 @@ export default function Footer() {
                   </p>
                 </div>
               ) : (
-                <form
-                  onSubmit={handleSubscribe}
-                  className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2"
-                >
-                  <div className="relative flex-1">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={handleEmailChange}
-                      placeholder={t("footer.email_placeholder")}
-                      className="w-full px-4 h-11 rounded-brand-md text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+                <form onSubmit={handleSubscribe} className="space-y-2">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <div className="relative flex-1">
+                      <input
+                        type="email"
+                        aria-label={t("footer.email_placeholder")}
+                        value={email}
+                        onChange={handleEmailChange}
+                        placeholder={t("footer.email_placeholder")}
+                        className="w-full px-4 h-11 rounded-brand-md text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+                        style={{
+                          backgroundColor: "#FFFFFF",
+                          color: "#374151",
+                          border: "2px solid transparent",
+                        }}
+                      />
+                      {emailError && (
+                        <p
+                          className="text-xs mt-1"
+                          style={{ color: "#FF6B9D" }}
+                        >
+                          {t("footer.email_error")}
+                        </p>
+                      )}
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={boletin.sending}
+                      className="w-full sm:w-auto sm:px-4 sm:shrink-0 h-11 disabled:opacity-60 rounded-brand-md font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-brand-primary/50 hover:-translate-y-0.5"
                       style={{
-                        backgroundColor: "#FFFFFF",
-                        color: "#374151",
-                        border: "2px solid transparent",
+                        background:
+                          "linear-gradient(to right, var(--color-petroleum), var(--color-corporate))",
+                        color: "#FFFFFF",
+                        boxShadow:
+                          "0 4px 15px color-mix(in srgb, var(--color-primary-light) 40%, transparent)",
                       }}
-                    />
-                    {emailError && (
-                      <p className="text-xs mt-1" style={{ color: "#FF6B9D" }}>
-                        {t("footer.email_error")}
-                      </p>
-                    )}
+                    >
+                      <span className="text-white">
+                        {boletin.sending
+                          ? t("leadForm.sending")
+                          : t("footer.subscribe")}
+                      </span>
+                      <Icon
+                        name="fa-paper-plane"
+                        className="text-xs text-white"
+                      />
+                    </button>
                   </div>
-                  <button
-                    type="submit"
-                    className="w-full sm:w-auto sm:px-4 sm:shrink-0 h-11 rounded-brand-md font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-brand-primary/50 hover:-translate-y-0.5"
-                    style={{
-                      background:
-                        "linear-gradient(to right, var(--color-petroleum), var(--color-corporate))",
-                      color: "#FFFFFF",
-                      boxShadow:
-                        "0 4px 15px color-mix(in srgb, var(--color-primary-light) 40%, transparent)",
-                    }}
-                  >
-                    <span className="text-white">{t("footer.subscribe")}</span>
-                    <Icon
-                      name="fa-paper-plane"
-                      className="text-xs text-white"
-                    />
-                  </button>
+                  <LeadProfileSelect
+                    id="boletin-perfil"
+                    lead={boletin}
+                    labelClassName="block text-xs text-white/80 mb-1"
+                    selectClassName="w-full px-4 h-11 rounded-brand-md text-sm bg-white text-gray-700"
+                  />
+                  <LeadConsent id="boletin-autorizacion" lead={boletin} dark />
                 </form>
               )}
             </div>

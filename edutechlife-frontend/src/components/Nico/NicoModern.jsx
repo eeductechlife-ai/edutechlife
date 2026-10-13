@@ -93,7 +93,7 @@ const NicoModern = ({
     getContextualPrompt = () => "",
   } = useConversationMemory("nico-chat") || {};
 
-  const { currentLead, updateLeadInfo, saveLead } = useLeadManagement();
+  const { currentLead, updateLeadInfo } = useLeadManagement();
 
   const {
     showLeadForm,
@@ -192,7 +192,6 @@ const NicoModern = ({
     hideScheduler,
     updateLeadInfo,
 
-    saveLead,
     scheduleAppointment,
 
     // Academic context and conversation memory

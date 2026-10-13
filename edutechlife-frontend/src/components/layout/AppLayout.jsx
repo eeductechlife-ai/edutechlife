@@ -127,6 +127,10 @@ const AppLayout = () => {
           <Suspense fallback={null}>
             <LeadCaptureModal
               isOpen
+              context={{
+                interest: "demo",
+                topic: "Solicitar demo (menú móvil)",
+              }}
               onClose={() => setShowLeadCaptureModal(false)}
             />
           </Suspense>

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { User, Phone, Mail, Calendar, CheckCircle, X } from "lucide-react";
+import useLeadSubmit from "../../hooks/useLeadSubmit";
+import LeadConsent from "../leads/LeadConsent";
+import LeadProfileSelect from "../leads/LeadProfileSelect";
 
 const COLORS = {
   NAVY: "#0A1628",
@@ -30,6 +33,7 @@ const LeadCaptureForm = ({
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const lead = useLeadSubmit("nico");
 
   const validateForm = () => {
     const newErrors = {};
@@ -60,6 +64,7 @@ const LeadCaptureForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formEl = e.currentTarget;
 
     if (!validateForm()) {
       return;
@@ -79,7 +84,26 @@ const LeadCaptureForm = ({
         status: "nuevo",
       };
 
-      // Llamar a la función de guardado
+      // Guarda el lead en Edutechlife (antes solo quedaba en este navegador).
+      const ok = await lead.submit(
+        {
+          nombre: cleanData.nombreCompleto,
+          email: cleanData.email,
+          telefono: cleanData.telefono,
+          producto_interes: cleanData.interesPrincipal || "general",
+          mensaje: [
+            cleanData.edadEstudiante && `Edad: ${cleanData.edadEstudiante}`,
+            `Prefiere: ${cleanData.preferenciaContacto} (${cleanData.mejorHorario})`,
+            cleanData.notas,
+          ]
+            .filter(Boolean)
+            .join(" · "),
+        },
+        formEl,
+      );
+      if (!ok) return;
+
+      // El chat continúa la conversación (mensaje de éxito, agendar llamada).
       await onSave(cleanData);
 
       // Mostrar éxito
@@ -315,6 +339,19 @@ const LeadCaptureForm = ({
           )}
         </div>
 
+        <LeadProfileSelect
+          id="nico-perfil"
+          lead={lead}
+          labelClassName="block text-sm font-medium mb-1"
+          labelStyle={{ color: COLORS.NAVY }}
+          selectClassName="w-full px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-offset-1"
+          selectStyle={{
+            backgroundColor: "white",
+            borderColor: COLORS.CORPORATE,
+            color: COLORS.NAVY,
+          }}
+        />
+
         {/* Interés Principal */}
         <div>
           <label
@@ -473,6 +510,8 @@ const LeadCaptureForm = ({
             placeholder="Algo específico que quieras que sepamos..."
           />
         </div>
+
+        <LeadConsent id="nico-autorizacion" lead={lead} />
 
         {/* Error de envío */}
         {errors.submit && (

@@ -3,6 +3,9 @@ import { Icon } from "../../../utils/iconMapping.jsx";
 import { useTranslation } from "../../../i18n/I18nProvider";
 import useFocusTrap from "../../../hooks/useFocusTrap";
 import useBodyScrollLock from "../../../hooks/useBodyScrollLock";
+import useLeadSubmit from "../../../hooks/useLeadSubmit";
+import LeadConsent from "../../leads/LeadConsent";
+import LeadProfileSelect from "../../leads/LeadProfileSelect";
 
 const footerWhiteText = { color: "#FFFFFF" };
 const footerPrimaryText = { color: "#004B63" };
@@ -23,6 +26,7 @@ export default function ModalContacto({ onClose }) {
     motivo: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const lead = useLeadSubmit("contacto_footer");
 
   const focusTrapRef = useFocusTrap(true);
   useBodyScrollLock(true);
@@ -31,26 +35,24 @@ export default function ModalContacto({ onClose }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const leadData = {
-      nombre: formData.nombre,
-      email: formData.email,
-      telefono: formData.telefono,
-      interes: formData.motivo || "contacto",
-      tema: "Formulario de contacto - Footer",
-    };
-    const existing = JSON.parse(
-      localStorage.getItem("edutechlife_leads") || "[]",
+    const ok = await lead.submit(
+      {
+        nombre: formData.nombre,
+        email: formData.email,
+        telefono: formData.telefono,
+        producto_interes: formData.motivo || "contacto",
+      },
+      e.currentTarget,
     );
-    existing.push({ ...leadData, timestamp: new Date().toISOString() });
-    localStorage.setItem("edutechlife_leads", JSON.stringify(existing));
-    setSubmitted(true);
+    if (ok) setSubmitted(true);
   };
 
   const handleClose = () => {
     setFormData({ nombre: "", email: "", telefono: "", motivo: "" });
     setSubmitted(false);
+    lead.reset();
     onClose();
   };
 
@@ -424,6 +426,17 @@ export default function ModalContacto({ onClose }) {
                     autoComplete="tel"
                   />
                 </div>
+                <LeadProfileSelect
+                  id="footer-perfil"
+                  lead={lead}
+                  labelClassName="block text-sm font-semibold mb-1"
+                  labelStyle={footerPrimaryText}
+                  selectClassName="w-full px-4 py-2.5 rounded-xl text-sm bg-white"
+                  selectStyle={{
+                    border: "2px solid #E5E7EB",
+                    color: "#004B63",
+                  }}
+                />
                 <div>
                   <label
                     htmlFor="footer-motivo"
@@ -466,9 +479,11 @@ export default function ModalContacto({ onClose }) {
                     </option>
                   </select>
                 </div>
+                <LeadConsent id="footer-autorizacion" lead={lead} />
                 <button
                   type="submit"
-                  className="w-full py-3 font-semibold rounded-xl transition-all duration-300 text-white"
+                  disabled={lead.sending}
+                  className="w-full py-3 font-semibold rounded-xl transition-all duration-300 text-white disabled:opacity-60"
                   style={{
                     background: "linear-gradient(to right, #004B63, #4DA8C4)",
                     boxShadow: "0 4px 15px rgba(77, 168, 196, 0.3)",
@@ -482,7 +497,9 @@ export default function ModalContacto({ onClose }) {
                       "0 4px 15px rgba(77, 168, 196, 0.3)")
                   }
                 >
-                  {t("footer.contact_modal.submit")}
+                  {lead.sending
+                    ? t("leadForm.sending")
+                    : t("footer.contact_modal.submit")}
                 </button>
               </form>
             </div>

@@ -69,7 +69,6 @@ export function useNicoSendMessage({
   hideScheduler,
   updateLeadInfo,
 
-  saveLead,
   scheduleAppointment,
 
   // Academic context and conversation memory
@@ -504,16 +503,10 @@ export function useNicoSendMessage({
     }
   };
 
+  // El lead ya lo guardó LeadCaptureForm en el backend (POST /api/leads);
+  // aquí solo sigue la conversación. Antes se guardaba en localStorage.
   const handleSaveLead = async (leadData) => {
     try {
-      const leadId = saveLead({
-        nombre: leadData.nombreCompleto,
-        telefono: leadData.telefono,
-        email: leadData.email,
-        motivo: leadData.interesPrincipal || "Inter\u00e9s general",
-        messages: messages.slice(-10),
-      });
-
       setShowLeadSuccess(true);
 
       setTimeout(() => {
@@ -564,10 +557,7 @@ export function useNicoSendMessage({
         );
       }
 
-      const leadForScheduling = {
-        id: leadId,
-        ...leadData,
-      };
+      const leadForScheduling = { ...leadData };
 
       return leadForScheduling;
     } catch (error) {

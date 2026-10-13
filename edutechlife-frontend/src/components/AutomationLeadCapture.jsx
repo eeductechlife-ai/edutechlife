@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import { useTranslation } from "../i18n/I18nProvider";
 import { getSectorOptions } from "./AutomationData";
 import { track } from "../lib/analytics";
+import useLeadSubmit from "../hooks/useLeadSubmit";
+import LeadConsent from "./leads/LeadConsent";
+import LeadProfileSelect from "./leads/LeadProfileSelect";
 
 const AutomationLeadCapture = () => {
   const [form, setForm] = useState({
@@ -13,12 +16,30 @@ const AutomationLeadCapture = () => {
     sector: "",
   });
   const [sent, setSent] = useState(false);
+  const lead = useLeadSubmit("automatizacion");
   const { t, locale } = useTranslation();
   const sectorOptions = getSectorOptions(locale);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.nombre || !form.email) return;
+    const ok = await lead.submit(
+      {
+        nombre: form.nombre,
+        email: form.email,
+        telefono: form.telefono,
+        producto_interes: "automatizacion",
+        mensaje:
+          [
+            form.empresa && `Empresa: ${form.empresa}`,
+            form.sector && `Sector: ${form.sector}`,
+          ]
+            .filter(Boolean)
+            .join(" · ") || null,
+      },
+      e.currentTarget,
+    );
+    if (!ok) return;
     setSent(true);
     track("lead_captured", { source: "automation_page", sector: form.sector });
   };
@@ -207,19 +228,21 @@ const AutomationLeadCapture = () => {
                   ))}
                 </select>
               </div>
-              <p className="text-[11px] text-slate-400">
-                {t("automation.lead.privacy_prefix")}{" "}
-                <a href="#" className="text-primary-light hover:underline">
-                  {t("automation.lead.privacy_link")}
-                </a>
-                .{t("automation.lead.privacy_hint")}
-              </p>
+              <LeadProfileSelect
+                id="automation-perfil"
+                lead={lead}
+                labelClassName="block text-xs font-semibold text-slate-500 mb-1.5"
+                selectClassName="w-full px-4 py-2.5 border border-white/40 rounded-xl text-sm text-petroleum focus:outline-none focus:border-primary-light focus:ring-2 focus:ring-primary-light/20 transition-all bg-white/70 backdrop-blur-xl"
+              />
+              <LeadConsent id="automation-autorizacion" lead={lead} />
               <button
                 type="submit"
-                disabled={!form.nombre || !form.email}
+                disabled={!form.nombre || !form.email || lead.sending}
                 className="w-full py-3 bg-gradient-to-r from-petroleum to-primary-light text-white rounded-xl font-bold text-sm hover:shadow-premium transition-all disabled:opacity-30 disabled:cursor-not-allowed relative overflow-hidden"
               >
-                {t("automation.lead.btn_submit")}
+                {lead.sending
+                  ? t("leadForm.sending")
+                  : t("automation.lead.btn_submit")}
               </button>
             </form>
           </div>
