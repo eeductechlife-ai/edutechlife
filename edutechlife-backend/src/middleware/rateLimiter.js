@@ -174,8 +174,26 @@ const parentalInviteLimiter = rateLimit({
   skip: () => process.env.NODE_ENV !== 'production',
 });
 
+// Formularios públicos de leads (POST /api/leads): sin sesión, así que en la
+// práctica cuenta por IP. Diez por hora alcanza para una familia o la secretaría
+// de un colegio que reintenta, y frena a quien llena la tabla con basura.
+const leadLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  store,
+  message: {
+    error: 'Recibimos varios envíos desde tu conexión. Intenta de nuevo en una hora o escríbenos por WhatsApp.',
+    retryAfter: 3600,
+  },
+  keyGenerator: userAwareKey,
+  skip: () => process.env.NODE_ENV !== 'production',
+});
+
 module.exports = {
   userAwareKey,
+  leadLimiter,
   apiLimiter,
   deepseekLimiter,
   authLimiter,

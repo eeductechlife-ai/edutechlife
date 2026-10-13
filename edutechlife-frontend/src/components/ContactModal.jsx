@@ -4,6 +4,8 @@ import { useTranslation } from "../i18n/I18nProvider";
 import { track } from "../lib/analytics";
 import useFocusTrap from "../hooks/useFocusTrap";
 import useBodyScrollLock from "../hooks/useBodyScrollLock";
+import useLeadSubmit from "../hooks/useLeadSubmit";
+import LeadConsent from "./leads/LeadConsent";
 
 const ContactModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
@@ -14,6 +16,7 @@ const ContactModal = ({ isOpen, onClose }) => {
     motivo: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const lead = useLeadSubmit("contacto_header");
 
   const focusTrapRef = useFocusTrap(isOpen);
   useBodyScrollLock(isOpen);
@@ -27,29 +30,35 @@ const ContactModal = ({ isOpen, onClose }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const leadData = {
-      nombre: formData.nombre,
-      email: formData.email,
-      telefono: formData.telefono,
       interes: formData.motivo || "contacto",
       tema: "Formulario de contacto - Header",
     };
-
-    const existing = JSON.parse(
-      localStorage.getItem("edutechlife_leads") || "[]",
+    const ok = await lead.submit(
+      {
+        nombre: formData.nombre,
+        email: formData.email,
+        telefono: formData.telefono,
+        producto_interes: leadData.interes,
+      },
+      e.currentTarget,
     );
-    existing.push({ ...leadData, timestamp: new Date().toISOString() });
-    localStorage.setItem("edutechlife_leads", JSON.stringify(existing));
+    if (!ok) return;
 
     setSubmitted(true);
-    track("lead_captured", { source: "contact_modal", interes: leadData.interes, tema: leadData.tema });
+    track("lead_captured", {
+      source: "contact_modal",
+      interes: leadData.interes,
+      tema: leadData.tema,
+    });
   };
 
   const handleClose = () => {
     setFormData({ nombre: "", email: "", telefono: "", motivo: "" });
     setSubmitted(false);
+    lead.reset();
     onClose();
   };
 
@@ -443,11 +452,16 @@ const ContactModal = ({ isOpen, onClose }) => {
                     </select>
                   </div>
 
+                  <LeadConsent id="contact-autorizacion" lead={lead} />
+
                   <button
                     type="submit"
-                    className="w-full py-3 bg-gradient-to-r from-[#004B63] to-brand-primary text-white font-semibold rounded-brand-xl hover:shadow-lg hover:shadow-brand-primary/30 transition-all duration-300"
+                    disabled={lead.sending}
+                    className="w-full py-3 bg-gradient-to-r from-[#004B63] to-brand-primary text-white font-semibold rounded-brand-xl hover:shadow-lg hover:shadow-brand-primary/30 transition-all duration-300 disabled:opacity-60"
                   >
-                    {t("contact.send_button")}
+                    {lead.sending
+                      ? t("leadForm.sending")
+                      : t("contact.send_button")}
                   </button>
                 </form>
               </div>

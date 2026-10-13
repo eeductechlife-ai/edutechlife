@@ -26,6 +26,7 @@ const adminRoutes = require('./routes/admin');
 const notificationRoutes = require('./routes/notifications');
 const institutionRoutes = require('./routes/institutions');
 const complianceRoutes = require('./routes/compliance');
+const leadRoutes = require('./routes/leads');
 const recommendationRoutes = require('./routes/recommendations');
 const { ferpaAuditLog } = require('./middleware/ferpaAudit');
 const AlertListenerService = require('./services/AlertListenerService');
@@ -190,6 +191,8 @@ app.use('/api/admin', authLimiter, adminRoutes);
 app.use('/api/notifications', requireAuth, notificationRoutes);
 app.use('/api/institutions', institutionRoutes);
 app.use('/api/compliance', complianceRoutes);
+// Formularios públicos del sitio (sin sesión). Rate limit y campo trampa en la ruta.
+app.use('/api/leads', leadRoutes);
 app.use(
   '/api/smartboard/recommendations',
   requireProduct('smartboard'),

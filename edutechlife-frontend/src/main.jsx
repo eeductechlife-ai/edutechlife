@@ -11,6 +11,7 @@ import { I18nProvider } from "./i18n/I18nProvider";
 import ErrorBoundary from "./components/forum/ErrorBoundary";
 import { AnalyticsProvider } from "./providers/AnalyticsProvider";
 import { registerSW } from "./utils/registerSW";
+import { captureAttribution } from "./services/leads";
 import "./index.css";
 
 // Create a client for React Query
@@ -29,6 +30,8 @@ const queryClient = new QueryClient({
 });
 
 registerSW();
+// Guarda los UTM de la visita para atribuir los leads de los formularios.
+captureAttribution();
 
 // Sentry se inicializa después del primer render para no bloquear el LCP
 if (import.meta.env.VITE_SENTRY_DSN) {
