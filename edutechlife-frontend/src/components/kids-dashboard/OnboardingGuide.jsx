@@ -19,7 +19,11 @@ const FEATURES = [
     desc: "Retos y ejercicios para subir notas",
   },
   { icon: "🎯", label: "Misiones", desc: "Gana XP completando desafíos" },
-  { icon: "💬", label: "Habla con Dani", desc: "Tu tutora IA disponible 24/7" },
+  {
+    icon: "💬",
+    label: "Habla con Dani",
+    desc: "Tu tutora IA lista para ayudarte",
+  },
 ];
 
 const WELCOME_TEXT = {

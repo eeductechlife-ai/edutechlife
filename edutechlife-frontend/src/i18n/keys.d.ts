@@ -140,6 +140,7 @@ export type TranslationKeys = {
   "ai_tools.title_before": string;
   "ai_tools.title_highlight": string;
   "aliados.badge": string;
+  "aliados.category_alcaldia": string;
   "aliados.category_apple": string;
   "aliados.category_aws": string;
   "aliados.category_colciencias": string;
@@ -149,6 +150,8 @@ export type TranslationKeys = {
   "aliados.category_icetex": string;
   "aliados.category_microsoft": string;
   "aliados.category_ministerio": string;
+  "aliados.category_mintic": string;
+  "aliados.category_oit": string;
   "aliados.category_sena": string;
   "aliados.category_steam": string;
   "aliados.category_unesco": string;
@@ -3158,24 +3161,26 @@ export type TranslationKeys = {
   "ingenia.landing_solution3": string;
   "ingenia.landing_solution4": string;
   "ingenia.landing_start_now": string;
+  "ingenia.landing_stat_guarantee_label": string;
+  "ingenia.landing_stat_guarantee_value": string;
   "ingenia.landing_stat_hours": string;
   "ingenia.landing_stat_improvement": string;
   "ingenia.landing_stat_students": string;
+  "ingenia.landing_stat_trial_label": string;
+  "ingenia.landing_stat_trial_value": string;
+  "ingenia.landing_stat_vak_label": string;
+  "ingenia.landing_stat_vak_value": string;
   "ingenia.landing_step_beneficios": string;
   "ingenia.landing_step_como_funciona": string;
   "ingenia.landing_step_faq": string;
   "ingenia.landing_step_planes": string;
   "ingenia.landing_step_que_es": string;
-  "ingenia.landing_step_testimonios": string;
   "ingenia.landing_step_tranquilidad": string;
   "ingenia.landing_step_vak": string;
   "ingenia.landing_tag_adaptive_ai": string;
   "ingenia.landing_tag_live_reports": string;
   "ingenia.landing_tag_real_coaches": string;
   "ingenia.landing_tag_scientific_vak": string;
-  "ingenia.landing_testimonials_badge": string;
-  "ingenia.landing_testimonials_title_line1": string;
-  "ingenia.landing_testimonials_title_line2": string;
   "ingenia.landing_tranquility_badge": string;
   "ingenia.landing_tranquility_desc": string;
   "ingenia.landing_tranquility_title_line1": string;
@@ -6258,6 +6263,7 @@ const translationKeySet: Record<string, true> = {
   "ai_tools.title_before": true,
   "ai_tools.title_highlight": true,
   "aliados.badge": true,
+  "aliados.category_alcaldia": true,
   "aliados.category_apple": true,
   "aliados.category_aws": true,
   "aliados.category_colciencias": true,
@@ -6267,6 +6273,8 @@ const translationKeySet: Record<string, true> = {
   "aliados.category_icetex": true,
   "aliados.category_microsoft": true,
   "aliados.category_ministerio": true,
+  "aliados.category_mintic": true,
+  "aliados.category_oit": true,
   "aliados.category_sena": true,
   "aliados.category_steam": true,
   "aliados.category_unesco": true,
@@ -9276,24 +9284,26 @@ const translationKeySet: Record<string, true> = {
   "ingenia.landing_solution3": true,
   "ingenia.landing_solution4": true,
   "ingenia.landing_start_now": true,
+  "ingenia.landing_stat_guarantee_label": true,
+  "ingenia.landing_stat_guarantee_value": true,
   "ingenia.landing_stat_hours": true,
   "ingenia.landing_stat_improvement": true,
   "ingenia.landing_stat_students": true,
+  "ingenia.landing_stat_trial_label": true,
+  "ingenia.landing_stat_trial_value": true,
+  "ingenia.landing_stat_vak_label": true,
+  "ingenia.landing_stat_vak_value": true,
   "ingenia.landing_step_beneficios": true,
   "ingenia.landing_step_como_funciona": true,
   "ingenia.landing_step_faq": true,
   "ingenia.landing_step_planes": true,
   "ingenia.landing_step_que_es": true,
-  "ingenia.landing_step_testimonios": true,
   "ingenia.landing_step_tranquilidad": true,
   "ingenia.landing_step_vak": true,
   "ingenia.landing_tag_adaptive_ai": true,
   "ingenia.landing_tag_live_reports": true,
   "ingenia.landing_tag_real_coaches": true,
   "ingenia.landing_tag_scientific_vak": true,
-  "ingenia.landing_testimonials_badge": true,
-  "ingenia.landing_testimonials_title_line1": true,
-  "ingenia.landing_testimonials_title_line2": true,
   "ingenia.landing_tranquility_badge": true,
   "ingenia.landing_tranquility_desc": true,
   "ingenia.landing_tranquility_title_line1": true,

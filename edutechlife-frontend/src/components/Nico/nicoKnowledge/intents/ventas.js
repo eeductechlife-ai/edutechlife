@@ -29,7 +29,7 @@ export const ventas = [
     ],
     category: "ventas",
     response:
-      "Los estudiantes suelen notar mejoras significativas en las primeras 4 a 6 semanas. Con nuestra metodología personalizada y seguimiento continuo, el progreso académico es constante y medible.",
+      "Cada estudiante avanza a su ritmo. Con nuestra metodología personalizada y seguimiento continuo, el progreso se puede seguir de cerca.",
   },
   {
     id: "recomendaciones",
@@ -46,6 +46,6 @@ export const ventas = [
     ],
     category: "ventas",
     response:
-      "Nuestros estudiantes y sus familias nos recomiendan por la calidad del acompañamiento personalizado y los resultados visibles. Tenemos más de 2000 estudiantes activos y un índice de satisfacción superior al 95%.",
+      "Puedes conocer nuestra propuesta en el sitio y resolver tus dudas con nuestro equipo por WhatsApp al +57 323 836 5517.",
   },
 ];

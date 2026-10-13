@@ -31,7 +31,7 @@ export const servicios = [
     ],
     category: "servicios",
     response:
-      "Emitimos certificaciones en colaboración con IBM y Coursera, reconocidas internacionalmente. Como operadores oficiales SenaTIC, nuestras certificaciones tienen validez oficial en Colombia.",
+      "IALab incluye certificado al completar el curso. Además, trabajamos en el proyecto SenaTIC: sus estudiantes certificados lo hicieron en un curso de Coursera con certificado de IBM.",
   },
   {
     id: "que_es_vak",

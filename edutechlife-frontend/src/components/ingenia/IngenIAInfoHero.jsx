@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment } from "react";
 import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "../../i18n/I18nProvider";
@@ -39,52 +39,23 @@ const wordVariants = {
 
 const STATS = [
   {
-    target: 2500,
-    duration: 1800,
-    prefix: "+",
-    labelKey: "ingenia.landing_stat_students",
+    valueKey: "ingenia.landing_stat_trial_value",
+    labelKey: "ingenia.landing_stat_trial_label",
     color: "text-[#7B2FF7]",
   },
   {
-    target: 94,
-    duration: 2000,
-    suffix: "%",
-    labelKey: "ingenia.landing_stat_improvement",
+    valueKey: "ingenia.landing_stat_guarantee_value",
+    labelKey: "ingenia.landing_stat_guarantee_label",
     color: "text-[#A66BFF]",
   },
   {
-    target: 12000,
-    duration: 2200,
-    prefix: "+",
-    labelKey: "ingenia.landing_stat_hours",
+    valueKey: "ingenia.landing_stat_vak_value",
+    labelKey: "ingenia.landing_stat_vak_label",
     color: "text-[#00C2E0]",
   },
 ];
 
 const INGENIA_SLIDE = HERO_SLIDES.find((s) => s.id === "ingenia");
-
-const useAnimatedCounter = (target, duration = 2000, start = false) => {
-  const [count, setCount] = useState(0);
-  const frameRef = useRef(null);
-
-  useEffect(() => {
-    if (!start) return;
-    const startTime = performance.now();
-    const animate = (currentTime) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(Math.max(elapsed / duration, 0), 1);
-      const easeOut = 1 - Math.pow(1 - progress, 4);
-      setCount(Math.floor(easeOut * target));
-      if (progress < 1) frameRef.current = requestAnimationFrame(animate);
-    };
-    frameRef.current = requestAnimationFrame(animate);
-    return () => {
-      if (frameRef.current) cancelAnimationFrame(frameRef.current);
-    };
-  }, [start, target, duration]);
-
-  return count;
-};
 
 /** Titular con revelado por máscara, palabra por palabra (igual que el Hero). */
 const RevealText = ({ text, offset = 0, gradient = null }) => {
@@ -134,25 +105,6 @@ export default function IngenIAInfoHero({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const reduce = useReducedMotion();
-  const statsRef = useRef(null);
-  const [statsVisible, setStatsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setStatsVisible(true);
-      },
-      { threshold: 0.2 },
-    );
-    if (statsRef.current) observer.observe(statsRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const counts = [
-    useAnimatedCounter(STATS[0].target, STATS[0].duration, statsVisible),
-    useAnimatedCounter(STATS[1].target, STATS[1].duration, statsVisible),
-    useAnimatedCounter(STATS[2].target, STATS[2].duration, statsVisible),
-  ];
 
   // El botón principal abre el formulario corto (fuente ingenia_hero) en vez de
   // navegar al registro: el registro sigue disponible desde las demás secciones.
@@ -333,7 +285,6 @@ export default function IngenIAInfoHero({
 
           {/* Prueba social: icono + texto y 3 cifras limpias con tabular-nums */}
           <motion.div
-            ref={statsRef}
             initial={reduce ? false : { opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -363,9 +314,7 @@ export default function IngenIAInfoHero({
                   <dd
                     className={`font-display text-2xl font-black tracking-[-0.03em] [font-variant-numeric:tabular-nums] sm:text-3xl ${stat.color}`}
                   >
-                    {stat.prefix || ""}
-                    {counts[i].toLocaleString("es-CO")}
-                    {stat.suffix || ""}
+                    {t(stat.valueKey)}
                   </dd>
                   <dt className="mt-0.5 text-[10px] font-medium uppercase leading-tight tracking-wider text-slate-500 sm:text-xs">
                     {t(stat.labelKey)}

@@ -1050,7 +1050,7 @@ const IngenIAParentDashboard = () => {
                             </p>
                           )}
                           <a
-                            href={`https://wa.me/573001234567?text=${encodeURIComponent(t("parent_dashboard.whatsapp_msg", { student: studentFirst, points: data.points, streak: data.streak?.current || 0 }))}`}
+                            href={`https://wa.me/573238365517?text=${encodeURIComponent(t("parent_dashboard.whatsapp_msg", { student: studentFirst, points: data.points, streak: data.streak?.current || 0 }))}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 mt-2 px-4 py-2 rounded-lg bg-[#25D366] text-white text-sm font-semibold hover:bg-[#1da851] transition-colors"

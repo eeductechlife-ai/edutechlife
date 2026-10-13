@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import {
   getVakStyles,
   getPricingPlans,
-  getTestimonials,
   getBeneficios,
   getTranquilidad,
   getPasos,
@@ -10,11 +9,11 @@ import {
   getPaymentMethods,
   getGuarantee,
 } from "../IngenIALandingData";
+import * as landingData from "../IngenIALandingData";
 
 const getters = {
   getVakStyles,
   getPricingPlans,
-  getTestimonials,
   getBeneficios,
   getTranquilidad,
   getPasos,
@@ -32,6 +31,10 @@ describe("portada de IngenIA: datos por idioma", () => {
       }
     });
   }
+
+  it("no expone testimonios con nombres de personas (no hay autorización escrita)", () => {
+    expect(landingData).not.toHaveProperty("getTestimonials");
+  });
 
   it("pt muestra preguntas frecuentes (por ahora en inglés) en lugar de romper", () => {
     const faq = getFaqItems("pt");

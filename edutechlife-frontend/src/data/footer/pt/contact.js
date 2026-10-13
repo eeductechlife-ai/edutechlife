@@ -412,7 +412,7 @@ console.log(data);`,
         faqs: [
           {
             q: "Como entrar em contato com o suporte?",
-            a: "Pelo chat ao vivo (disponível 24/7), e-mail para suporte@edutechlife.com ou através do formulário no Centro de Ajuda.",
+            a: "Pelo chat ao vivo, e-mail para suporte@edutechlife.com ou através do formulário no Centro de Ajuda.",
           },
           {
             q: "Vocês oferecem capacitação para instituições?",

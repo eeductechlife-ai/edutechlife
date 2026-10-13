@@ -126,6 +126,6 @@ export const generales = [
     ],
     category: "generales",
     response:
-      "Tenemos alianzas con IBM, Coursera, y somos operadores oficiales SenaTIC. Nuestras certificaciones tienen validez internacional y oficial en Colombia.",
+      "Trabajamos en el proyecto SenaTIC. Sus estudiantes certificados lo hicieron en un curso de Coursera con certificado de IBM.",
   },
 ];
