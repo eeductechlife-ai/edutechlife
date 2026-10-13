@@ -21,9 +21,13 @@ const SEO = ({
   const url = canonical || `${SITE_URL}${location.pathname}`;
   const isEn = locale === "en";
   const isPt = locale === "pt";
-  const image =
-    ogImage ||
-    (isEn ? "/og-image-en.svg" : isPt ? "/og-image-pt.svg" : "/og-image.svg");
+  // Los rastreadores de WhatsApp, Facebook y LinkedIn exigen una URL completa y
+  // un formato de mapa de bits (no SVG). No existe versión en portugués: usa la
+  // de español.
+  const rawImage = ogImage || (isEn ? "/og-image-en.png" : "/og-image.png");
+  const image = /^https?:\/\//.test(rawImage)
+    ? rawImage
+    : `${SITE_URL}${rawImage}`;
   const type = ogType || "website";
   const ogLocale = isEn ? "en_US" : isPt ? "pt_BR" : "es_CO";
   const currentLang = lang || (isEn ? "en" : isPt ? "pt" : "es");

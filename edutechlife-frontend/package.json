@@ -24,13 +24,15 @@
     "test:smoke": "vitest run src/store/__tests__/ src/components/IALab/__tests__/ src/components/IALab/IALabValerioPanel/__tests__/ src/components/IALab/IALabQuizModal/__tests__/ src/components/DiagnosticoVAK/__tests__/ src/components/Nico/__tests__/ src/components/kids-dashboard/dani/__tests__/ src/components/__tests__/ src/services/__tests__/ src/utils/__tests__/ src/tests/a11y/ src/tests/integration/ src/components/IALab/PDFThumbnail.test.jsx",
     "check-budget": "node scripts/check-budget.mjs",
     "optimize-images": "node scripts/optimize-images.mjs",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --project=chromium",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:smoke": "playwright test e2e/smoke.spec.ts e2e/ingenia.spec.ts --project=chromium",
     "lint": "eslint src/components/IALab/ --max-warnings 1750",
     "lint:all": "eslint src --max-warnings 7500",
     "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
-    "prepare": "husky"
+    "prepare": "husky",
+    "build:e2e": "VITE_SUPABASE_URL=https://e2e.supabase.co VITE_SUPABASE_ANON_KEY=e2e-anon-key vite build",
+    "test:e2e:visual": "E2E_VISUAL=1 playwright test e2e/visual-regression.spec.ts --project=chromium"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [

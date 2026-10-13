@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { seedAuthedPage } from './helpers/auth';
+import { test, expect } from './helpers/test';
+import { signIn } from './helpers/session';
 
 /**
  * Flujo de registro (público, sin backend) + acceso al dashboard IALab.
@@ -59,7 +59,7 @@ test.describe('Registration flow', () => {
   });
 
   test('estudiante con sesión ve el dashboard IALab', async ({ page }) => {
-    await seedAuthedPage(page);
+    await signIn(page, 'ialab');
     await page.goto('/ialab', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('body')).toContainText(/IALab/i, {
       timeout: 15000,

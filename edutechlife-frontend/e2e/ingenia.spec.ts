@@ -1,87 +1,125 @@
-import { test, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
+import { test, expect } from './helpers/test';
+import { signIn, skipIngeniaWelcome } from './helpers/session';
+import { expectNoErrorScreen, watchPage } from './helpers/watch';
 
-/**
- * IngenIA E2E — rutas y meta públicas.
- *
- * /ingenia sirve un HTML 200 OK aunque el dashboard solo se hidrata cuando hay
- * sesión. Sin login, la app monta un <main> vacío / skeleton.
- * Estos tests cubren lo que se puede verificar sin credenciales:
- *  - las rutas responden 200 y no crashean
- *  - los meta tags de SEO están presentes
- *  - la landing pública `/conoce-ingenia` sirve como fallback informativo
- *  - los deep links no devuelven 404
- *
- * Los flujos autenticados (VAK, Dani chat, flashcards, mobile nav real) no se
- * cubren aquí: necesitan una sesión real de Supabase (el helper `helpers/auth.ts`
- * solo siembra un token falso que satisface la guarda de rutas del cliente).
- */
+/** Pulsa una sección de la navegación principal (la que esté visible: escritorio o móvil). */
+async function goTo(page: Page, section: 'Inicio' | 'Aprender' | 'Practicar' | 'Explorar' | 'Yo') {
+  await page.locator('nav:visible').first().getByText(section, { exact: true }).click();
+}
 
-test.describe('IngenIA @smoke', () => {
-  test('/ingenia responds 200 without runtime errors', async ({ page }) => {
-    const pageErrors: string[] = [];
-    page.on('pageerror', (err) => pageErrors.push(err.message));
-
-    const res = await page.goto('/ingenia', {
-      waitUntil: 'domcontentloaded',
-      timeout: 60000,
-    });
+test.describe('IngenIA: páginas públicas', () => {
+  test('/conoce-ingenia presenta el producto', async ({ page }) => {
+    const res = await page.goto('/conoce-ingenia', { waitUntil: 'domcontentloaded' });
     expect(res?.status()).toBe(200);
-    await expect(page.locator('body')).toBeAttached({ timeout: 10000 });
-    expect(pageErrors, `pageerror(s): ${pageErrors.join(' | ')}`).toEqual([]);
+    // Se comprueba que haya un encabezado principal con contenido y que la página
+    // sea la de IngenIA, sin fijar el texto de marketing (cambia con frecuencia).
+    await expect(page.getByRole('heading', { level: 1 }).first()).toContainText(/\S{3,}/);
+    await expect(page).toHaveTitle(/IngenIA/);
+    await expect(page.locator('body')).toContainText(/IngenIA/);
   });
 
-  test('/ingenia has SEO meta tags', async ({ page }) => {
-    await page.goto('/ingenia', {
-      waitUntil: 'domcontentloaded',
-      timeout: 60000,
-    });
-    const title = await page.title();
-    expect(title.length).toBeGreaterThan(0);
-    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
-      'content',
-      /.+/,
-    );
+  test('sin sesión, /ingenia lleva al registro de IngenIA', async ({ page }) => {
+    await page.goto('/ingenia', { waitUntil: 'domcontentloaded' });
+    await expect(page).toHaveURL(/\/sign-up\/ingenia/);
+    await expect(page).toHaveTitle(/Registro IngenIA/);
   });
 
-  test('/conoce-ingenia is a working public info page', async ({ page }) => {
-    const res = await page.goto('/conoce-ingenia', {
-      waitUntil: 'domcontentloaded',
-    });
-    expect(res?.status()).toBe(200);
-    await expect(page.locator('body')).toBeAttached({ timeout: 10000 });
+  test('el registro tiene el botón para ver la contraseña con nombre accesible', async ({ page }) => {
+    await page.goto('/sign-up/ingenia', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByRole('button', { name: 'Mostrar u ocultar la contraseña' }).first()).toBeVisible();
   });
 
-  test('deep link /smartboard?tab=materias still returns 200', async ({ page }) => {
-    const res = await page.goto('/ingenia?tab=materias', {
-      waitUntil: 'domcontentloaded',
-    });
-    expect(res?.status()).toBe(200);
-  });
-
-  test('/smartboard/app requires auth — should NOT return a 5xx', async ({ page }) => {
-    // Whatever the auth handling does (redirect / render sign-in), it must not
-    // 500. This catches regressions in the ProtectedRoute wrapper.
-    const res = await page.goto('/smartboard/app', {
-      waitUntil: 'domcontentloaded',
-    });
-    expect(res?.status()).toBeLessThan(500);
+  test('las rutas del nombre anterior (SmartBoard) siguen funcionando', async ({ page }) => {
+    await page.goto('/conoce-smartboard', { waitUntil: 'domcontentloaded' });
+    await expect(page).toHaveURL(/\/conoce-ingenia$/);
+    await page.goto('/sign-up/smartboard', { waitUntil: 'domcontentloaded' });
+    await expect(page).toHaveURL(/\/sign-up\/ingenia$/);
   });
 });
 
-test.describe('IngenIA mobile @smoke', () => {
-  test.use({ viewport: { width: 375, height: 812 } });
+test.describe('IngenIA: estudiante con sesión', () => {
+  test('la primera vez recibe la bienvenida y puede explorar por su cuenta', async ({ page }) => {
+    await signIn(page, 'ingenia', { welcomed: false });
+    await page.goto('/ingenia', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByText('¡Bienvenido/a a IngenIA!')).toBeVisible();
+    await expect(page.getByRole('button', { name: /Descubrir mi estilo de aprendizaje/ })).toBeVisible();
+    await skipIngeniaWelcome(page);
+    await expect(page.getByText('¡Hola, Sofía!')).toBeVisible();
+  });
 
-  test('mobile /smartboard responds 200 without runtime errors', async ({
-    page,
-  }) => {
-    const pageErrors: string[] = [];
-    page.on('pageerror', (err) => pageErrors.push(err.message));
-
-    const res = await page.goto('/ingenia', {
-      waitUntil: 'domcontentloaded',
-      timeout: 60000,
+  test.describe('con la bienvenida cerrada', () => {
+    test.beforeEach(async ({ page }) => {
+      await signIn(page, 'ingenia');
+      await page.goto('/ingenia', { waitUntil: 'domcontentloaded' });
+      await expect(page.getByText('¡Hola, Sofía!')).toBeVisible();
     });
-    expect(res?.status()).toBe(200);
-    expect(pageErrors, `pageerror(s): ${pageErrors.join(' | ')}`).toEqual([]);
+
+    test('el inicio saluda por su nombre y propone el día', async ({ page }) => {
+      await expect(page.getByText('¡Hola, Sofía!')).toBeVisible();
+      await expect(page.getByText('Tu día en 3 pasos')).toBeVisible();
+      await expect(page.getByText(/tu siguiente actividad/i)).toBeVisible();
+    });
+
+    test('muestra las cinco secciones de la navegación', async ({ page }) => {
+      const nav = page.locator('nav:visible').first();
+      for (const name of ['Inicio', 'Aprender', 'Practicar', 'Explorar', 'Yo']) {
+        await expect(nav.getByText(name, { exact: true })).toBeVisible();
+      }
+    });
+
+    test('Aprender lista las materias', async ({ page }) => {
+      await goTo(page, 'Aprender');
+      await expect(page.getByText('Mis Materias')).toBeVisible();
+      await expect(page.getByText('Matemáticas').first()).toBeVisible();
+    });
+
+    test('Practicar pide elegir materia y muestra la semana', async ({ page }) => {
+      await goTo(page, 'Practicar');
+      await expect(page.getByText(/Practica un poquito cada día/)).toBeVisible();
+      await expect(page.getByText(/Meta: 0\/4 días/)).toBeVisible();
+    });
+
+    test('Explorar muestra las misiones', async ({ page }) => {
+      await goTo(page, 'Explorar');
+      await expect(page.getByText('Mis Misiones').first()).toBeVisible();
+      await expect(page.getByText(/Misiones de la semana/)).toBeVisible();
+    });
+
+    test('Yo muestra el perfil del estudiante', async ({ page }) => {
+      await goTo(page, 'Yo');
+      await expect(page.getByText('Grado 5')).toBeVisible();
+      await expect(page.getByText(/11 años/)).toBeVisible();
+    });
+
+    test('recorrer las secciones no produce errores', async ({ page }) => {
+      test.setTimeout(90_000);
+      const watch = watchPage(page);
+      const recorrido = [
+        ['Aprender', 'Mis Materias'],
+        ['Practicar', /Practica un poquito cada día/],
+        ['Explorar', 'Mis Misiones'],
+        ['Yo', 'Grado 5'],
+        ['Inicio', '¡Hola, Sofía!'],
+      ] as const;
+      for (const [section, contenido] of recorrido) {
+        await goTo(page, section);
+        // Esperar al contenido de la sección (no a «red inactiva»: la app mantiene
+        // conexiones abiertas y nunca llega a estarlo).
+        await expect(page.getByText(contenido).first()).toBeVisible();
+        await expectNoErrorScreen(page);
+      }
+      expect(watch.problems).toEqual([]);
+    });
+  });
+
+  test('en un teléfono (390×844) no se desborda y usa la navegación inferior', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await signIn(page, 'ingenia');
+    await page.goto('/ingenia', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByText('¡Hola, Sofía!')).toBeVisible();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow).toBeLessThanOrEqual(1);
+    await expect(page.locator('nav:visible').first().getByText('Practicar', { exact: true })).toBeVisible();
   });
 });
