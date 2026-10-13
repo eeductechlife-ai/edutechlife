@@ -54,4 +54,7 @@ Si tu trabajo descubre algo que le toca a otro equipo, déjalo en tu reporte baj
 ## Reglas de verdad
 - Cifras y alianzas públicas (ej. "+6.000 certificados", "operador SenaTIC", logos de aliados) **solo** se usan
   si aparecen como VERIFICADAS en `docs/agentes/marketing/HECHOS-VERIFICADOS.md`. Si no, se marcan como pendientes.
+- Diagnóstico VAK: se comunica como autoconocimiento y punto de partida para personalizar, **nunca** prometiendo más retención o mejores
+  notas por enseñar según el estilo (la evidencia científica no lo respalda). Hasta que el CEO decida, no usar "hasta 70 % más retención".
+- Tono con la comunidad de Caldas tras el sismo del 10 de agosto de 2026: de servicio y apoyo, nunca oportunista.
 - Datos de menores: Ley 1581 de 2012 (Habeas Data). Nunca usar datos reales de estudiantes para pruebas.
