@@ -57,4 +57,17 @@ describe('supabase/migrations: versiones', () => {
     expect(sql).toMatch(/SET is_active = false/);
     expect(sql).not.toMatch(/DELETE\s+FROM/i);
   });
+
+  it('100 crea leads idempotente, con RLS, sin permisos para anon y lectura solo admin', () => {
+    const file = files.find((f) => f.startsWith('100_'));
+    expect(file).toBeTruthy();
+    const sql = fs.readFileSync(path.join(MIGRATIONS_DIR, file), 'utf8');
+    expect(sql).toContain('CREATE TABLE IF NOT EXISTS public.leads');
+    expect(sql).toContain('ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY');
+    expect(sql).toMatch(/REVOKE ALL ON public\.leads FROM anon, authenticated/);
+    expect(sql).toMatch(/CHECK \(autorizacion_datos = true\)/);
+    expect(sql).toMatch(/FOR SELECT\s+TO authenticated\s+USING \(\(auth\.jwt\(\) -> 'app_metadata' ->> 'role'\) = 'admin'\)/);
+    expect(sql).not.toMatch(/FOR (INSERT|UPDATE|DELETE|ALL)/);
+    expect(sql).not.toMatch(/TO anon/);
+  });
 });
