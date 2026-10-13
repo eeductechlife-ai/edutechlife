@@ -300,6 +300,105 @@ const PRICING_PLANS_PT = crearPlanes({
   ],
 });
 
+const TESTIMONIALS_ES = [
+  {
+    name: "Ana Lucía Romero",
+    role: "Mamá de Santiago, 10 años",
+    rating: 5,
+    text: "Al principio me daba miedo que mi hijo pasara más tiempo en pantallas, pero IngenIA es diferente. Dani lo guía paso a paso, y en dos meses sus notas en matemáticas pasaron de 3.5 a 4.8. Lo mejor es que ya no tengo que rogarle para que estudie — él solito abre la plataforma.",
+  },
+  {
+    name: "Carlos Rodríguez",
+    role: "Papá de Valentina, 12 años",
+    rating: 5,
+    text: "El ADN de Aprendizaje nos cambió la perspectiva. Descubrimos que Valentina es kinestésica — toda su vida le dijeron que era distraída, pero en realidad necesita aprender haciendo. Con IngenIA, sus trabajos de ciencias son los mejores de la clase y hasta ayudó a sus compañeros con un experimento.",
+  },
+  {
+    name: "Laura Méndez",
+    role: "Mamá de Mateo, 8 años",
+    rating: 5,
+    text: "Trabajo hasta tarde y siempre vivía angustiada por las tareas de Mateo. IngenIA me dio tranquilidad. Recibo un reporte cada semana con su avance, y si algo preocupa a su coach, me llega una alerta al celular. Ya no llego a casa con miedo de revisar la mochila.",
+  },
+  {
+    name: "Fernando Morales",
+    role: "Papá de Camila, 14 años",
+    rating: 5,
+    text: "Camila estaba perdiendo el interés en el colegio, típico de la edad. Desde que usa IngenIA su motivación cambió por completo. Habla con Dani sobre tecnología, y el sistema de puntos la mantiene enfocada en sus metas. Hasta pidió hacer cursos de programación por su cuenta.",
+  },
+  {
+    name: "Patricia Vega",
+    role: "Mamá de Tomás y Lucía, 9 y 11 años",
+    rating: 5,
+    text: "Tener dos hijos en edad escolar era una locura: tareas distintas, horarios, materias, exámenes. IngenIA los tiene a ambos organizados con su propio plan de estudio. Yo solo recibo los reportes y veo cómo avanzan cada uno a su ritmo. Mi nivel de estrés se redujo drásticamente.",
+  },
+];
+
+const TESTIMONIALS_EN = [
+  {
+    name: "Ana Lucía Romero",
+    role: "Santiago's mom, age 10",
+    rating: 5,
+    text: "At first I was afraid my son would spend more time on screens, but IngenIA is different. Dani guides him step by step, and in two months his math grades went from 3.5 to 4.8. The best part is I no longer have to beg him to study — he opens the platform on his own.",
+  },
+  {
+    name: "Carlos Rodríguez",
+    role: "Valentina's dad, age 12",
+    rating: 5,
+    text: "The VAK diagnosis changed our perspective. We discovered Valentina is kinesthetic — her whole life she was told she was distracted, but she actually needs to learn by doing. With IngenIA, her science projects are the best in class.",
+  },
+  {
+    name: "Laura Méndez",
+    role: "Mateo's mom, age 8",
+    rating: 5,
+    text: "I work late and was always stressed about Mateo's homework. IngenIA gave me peace of mind. I get a weekly report on his progress, and if something concerns his coach, I get an alert on my phone.",
+  },
+  {
+    name: "Fernando Morales",
+    role: "Camila's dad, age 14",
+    rating: 5,
+    text: "Camila was losing interest in school, typical for her age. Since using IngenIA, her motivation has completely changed. She talks with Dani about technology, and the points system keeps her focused on her goals.",
+  },
+  {
+    name: "Patricia Vega",
+    role: "Tomás & Lucía's mom, ages 9 & 11",
+    rating: 5,
+    text: "Having two school-age children was chaos: different homework, schedules, subjects, exams. IngenIA keeps both organized with their own study plan. I just receive the reports and watch them progress at their own pace.",
+  },
+];
+
+const TESTIMONIALS_PT = [
+  {
+    name: "Ana Lucía Romero",
+    role: "Mãe do Santiago, 10 anos",
+    rating: 5,
+    text: "No começo eu tinha medo de que meu filho passasse mais tempo nas telas, mas o IngenIA é diferente. A Dani o guia passo a passo, e em dois meses as notas dele em matemática subiram de 3.5 para 4.8. O melhor é que eu não preciso mais implorar para ele estudar — ele mesmo abre a plataforma.",
+  },
+  {
+    name: "Carlos Rodríguez",
+    role: "Pai da Valentina, 12 anos",
+    rating: 5,
+    text: "O ADN de Aprendizaje mudou nossa perspectiva. Descobrimos que a Valentina é cinestésica — a vida toda disseram que ela era distraída, mas na verdade ela precisa aprender fazendo. Com o IngenIA, os trabalhos de ciências dela são os melhores da turma e ela até ajudou os colegas com um experimento.",
+  },
+  {
+    name: "Laura Méndez",
+    role: "Mãe do Mateo, 8 anos",
+    rating: 5,
+    text: "Eu trabalho até tarde e sempre vivia angustiada com as tarefas do Mateo. O IngenIA me trouxe tranquilidade. Recebo um relatório toda semana com o progresso dele e, se algo preocupa o coach, chega um alerta no meu celular. Não chego mais em casa com medo de conferir a mochila.",
+  },
+  {
+    name: "Fernando Morales",
+    role: "Pai da Camila, 14 anos",
+    rating: 5,
+    text: "A Camila estava perdendo o interesse na escola, típico da idade. Desde que usa o IngenIA, a motivação dela mudou por completo. Ela conversa com a Dani sobre tecnologia, e o sistema de pontos a mantém focada nas metas. Até pediu para fazer cursos de programação por conta própria.",
+  },
+  {
+    name: "Patricia Vega",
+    role: "Mãe do Tomás e da Lucía, 9 e 11 anos",
+    rating: 5,
+    text: "Ter dois filhos em idade escolar era uma loucura: tarefas diferentes, horários, matérias, provas. O IngenIA mantém os dois organizados com o próprio plano de estudos. Eu só recebo os relatórios e vejo cada um avançando no seu ritmo. Meu nível de estresse caiu drasticamente.",
+  },
+];
+
 const BENEFICIOS_HIJO_ES = [
   {
     icon: "fa-chart-line",
@@ -671,6 +770,7 @@ const getData = (locale) =>
     ? {
         vakStyles: VAK_STYLES_EN,
         pricingPlans: PRICING_PLANS_EN,
+        testimonials: TESTIMONIALS_EN,
         beneficios: BENEFICIOS_HIJO_EN,
         tranquilidad: TRANQUILIDAD_EN,
         pasos: PASOS_EN,
@@ -682,6 +782,7 @@ const getData = (locale) =>
       ? {
           vakStyles: VAK_STYLES_PT,
           pricingPlans: PRICING_PLANS_PT,
+          testimonials: TESTIMONIALS_PT,
           beneficios: BENEFICIOS_HIJO_PT,
           tranquilidad: TRANQUILIDAD_PT,
           pasos: PASOS_PT,
@@ -694,6 +795,7 @@ const getData = (locale) =>
       : {
           vakStyles: VAK_STYLES_ES,
           pricingPlans: PRICING_PLANS_ES,
+          testimonials: TESTIMONIALS_ES,
           beneficios: BENEFICIOS_HIJO_ES,
           tranquilidad: TRANQUILIDAD_ES,
           pasos: PASOS_ES,
@@ -704,6 +806,7 @@ const getData = (locale) =>
 
 export const getVakStyles = (locale) => getData(locale).vakStyles;
 export const getPricingPlans = (locale) => getData(locale).pricingPlans;
+export const getTestimonials = (locale) => getData(locale).testimonials;
 export const getBeneficios = (locale) => getData(locale).beneficios;
 export const getTranquilidad = (locale) => getData(locale).tranquilidad;
 export const getPasos = (locale) => getData(locale).pasos;

@@ -315,7 +315,6 @@ describe("IALab Accessibility", () => {
       hasCertificate: true,
       icon: "fa-brain",
       features: ["Proyectos reales", "Certificado IA"],
-      students: "2,500+",
       route: "/ialab",
     };
     const { container } = render(

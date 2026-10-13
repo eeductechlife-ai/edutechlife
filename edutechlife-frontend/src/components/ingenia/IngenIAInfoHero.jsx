@@ -39,18 +39,18 @@ const wordVariants = {
 
 const STATS = [
   {
+    valueKey: "ingenia.landing_stat_students_value",
+    labelKey: "ingenia.landing_stat_students",
+    color: "text-[#7B2FF7]",
+  },
+  {
     valueKey: "ingenia.landing_stat_trial_value",
     labelKey: "ingenia.landing_stat_trial_label",
-    color: "text-[#7B2FF7]",
+    color: "text-[#A66BFF]",
   },
   {
     valueKey: "ingenia.landing_stat_guarantee_value",
     labelKey: "ingenia.landing_stat_guarantee_label",
-    color: "text-[#A66BFF]",
-  },
-  {
-    valueKey: "ingenia.landing_stat_vak_value",
-    labelKey: "ingenia.landing_stat_vak_label",
     color: "text-[#00C2E0]",
   },
 ];

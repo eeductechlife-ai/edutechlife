@@ -7,6 +7,7 @@ import { useABExperiment, trackConversion } from "../hooks/useABExperiment";
 import {
   getVakStyles,
   getPricingPlans,
+  getTestimonials,
   getBeneficios,
   getTranquilidad,
   getPasos,
@@ -20,6 +21,7 @@ import IngenIAQueEsSection from "./ingenia/IngenIAQueEsSection";
 import IngenIABeneficiosTranquilidadSection from "./ingenia/IngenIABeneficiosTranquilidadSection";
 import IngenIAComoFuncionaSection from "./ingenia/IngenIAComoFuncionaSection";
 import IngenIAPlanesSection from "./ingenia/IngenIAPlanesSection";
+import IngenIATestimoniosSection from "./ingenia/IngenIATestimoniosSection";
 import IngenIAFinalSection from "./ingenia/IngenIAFinalSection";
 import IngenIAWhatsappCta from "./ingenia/IngenIAWhatsappCta";
 import IngenIAMobileBar from "./ingenia/IngenIAMobileBar";
@@ -33,6 +35,7 @@ const SECTION_ANCHORS = [
   "beneficios",
   "como-funciona",
   "planes",
+  "testimonios",
   "faq",
 ];
 
@@ -43,6 +46,7 @@ const getStepLabels = (t) => [
   t("ingenia.landing_step_beneficios"),
   t("ingenia.landing_step_como_funciona"),
   t("ingenia.landing_step_planes"),
+  t("ingenia.landing_step_testimonios"),
   t("ingenia.landing_step_faq"),
 ];
 
@@ -61,6 +65,7 @@ const IngenIALandingInfo = ({ onNavigate }) => {
 
   const vakStyles = getVakStyles(locale);
   const pricingPlans = getPricingPlans(locale);
+  const testimonials = getTestimonials(locale);
   const beneficios = getBeneficios(locale);
   const tranquilidad = getTranquilidad(locale);
   const pasos = getPasos(locale);
@@ -148,6 +153,11 @@ const IngenIALandingInfo = ({ onNavigate }) => {
       guarantee={guarantee}
       handleCta={handleCta}
     />,
+    <IngenIATestimoniosSection
+      key="testimonios"
+      t={t}
+      testimonials={testimonials}
+    />,
     <IngenIAFinalSection
       key="final"
       t={t}
@@ -164,6 +174,7 @@ const IngenIALandingInfo = ({ onNavigate }) => {
     t("ingenia.landing_step_beneficios"),
     t("ingenia.landing_step_como_funciona"),
     t("ingenia.landing_step_planes"),
+    t("ingenia.landing_step_testimonios"),
     t("ingenia.landing_step_faq"),
   ];
 
@@ -172,6 +183,7 @@ const IngenIALandingInfo = ({ onNavigate }) => {
     "Confianza, motivación y reportes semanales para padres. Beneficios pensados para cada niño.",
     "Sistema adaptativo que ajusta el ritmo de aprendizaje. Paso a paso, sin presión.",
     "2 planes simples: Starter y Premium. Elige el que mejor se adapte a tus necesidades y presupuesto.",
+    "Historias reales de padres: mejoras de calificaciones, confianza y amor por aprender. Testimonios verificados.",
     "Respuestas a tus preguntas: prueba gratuita de 7 días, cancela cuando quieras, no se requiere tarjeta.",
   ];
 

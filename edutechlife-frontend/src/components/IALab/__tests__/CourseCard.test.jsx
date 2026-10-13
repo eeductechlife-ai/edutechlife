@@ -99,7 +99,6 @@ const baseCourse = {
   hasCertificate: true,
   icon: "fa-brain",
   features: ["Proyectos reales", "Certificado IA", "Soporte 24/7"],
-  students: "2,500+",
   route: "/ialab",
 };
 

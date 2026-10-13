@@ -6,6 +6,7 @@ import path from "node:path";
 // docs/agentes/marketing/HECHOS-VERIFICADOS.md. Si una de estas frases vuelve,
 // el test falla: o se verifica con soporte y se actualiza el documento, o se quita.
 //
+// Testimonios de IngenIA: el CEO decidió mantenerlos (2026-10-13), no se vigilan aquí.
 // Excepción deliberada: las claves pricing.* (planes y precios) quedan fuera;
 // los planes los decide el CEO (#83) y sus pendientes van en el PR, no aquí.
 const SRC = path.resolve(__dirname, "..");
@@ -41,10 +42,6 @@ const PROHIBIDAS = [
     /Confían en nosotros|Confiado por|Trusted by|Confiam em nós/i,
     "confianza sin verificar",
   ],
-  [
-    /TESTIMONIOS REALES|Testimonios reales|Testimonios verificados/i,
-    "testimonios reales",
-  ],
   [/Certificados Globalmente|Globally Certified/i, "certificación global"],
   [
     /IBM y Coursera|IBM and Coursera|IBM e Coursera|Coursera e IBM|IBM\/Coursera/i,
@@ -55,11 +52,20 @@ const PROHIBIDAS = [
     "10 años sin verificar",
   ],
   [/4[.,]200 estudiantes|4,200 students/i, "4.200 estudiantes"],
+  [/\+?12[.,]000\b/, "12.000 sin verificar"],
+  [
+    /Mejora académica|Academic improvement|Melhora acadêmica/i,
+    "mejora académica sin medición",
+  ],
 ];
 
 describe("afirmaciones públicas verificadas (HECHOS-VERIFICADOS)", () => {
   for (const lang of ["es", "en", "pt"]) {
     const data = load(lang);
+
+    it(`${lang}: la portada de IngenIA muestra +1.000 estudiantes (decisión del CEO, 2026-10-13)`, () => {
+      expect(data["ingenia.landing_stat_students_value"]).toBe("+1.000");
+    });
     const entries = Object.entries(data).filter(
       ([key, value]) =>
         !key.startsWith("pricing.") && typeof value === "string",
