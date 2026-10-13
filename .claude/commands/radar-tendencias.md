@@ -26,3 +26,6 @@ no con conocimiento viejo.
 3. Las acciones con dueño se agregan como sugerencias en `docs/agentes/calidad/BACKLOG.md` (P3) o en `docs/agentes/marketing/PLAN.md`.
 
 Responde con "Las 3 cosas que más importan esta semana" y nada más.
+
+**Modelo de cada subagente:** si el archivo del subagente tiene `model: sonnet` en su encabezado, lánzalo con `model: "sonnet"`
+(también cuando uses general-purpose como plan B). Si no lo tiene, no pases `model`. Así se respeta el ajuste de consumo del CEO.
