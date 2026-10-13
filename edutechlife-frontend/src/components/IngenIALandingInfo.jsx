@@ -180,8 +180,19 @@ const IngenIALandingInfo = ({ onNavigate }) => {
   return (
     <div className="ingenia-theme w-full bg-white">
       <Helmet>
-        <title>{seoTitles[activeStep]} | IngenIA - Edutechlife</title>
-        <meta name="description" content={seoDescriptions[activeStep]} />
+        <title>
+          {activeStep === 0
+            ? `${t("seo.ingenia.title")} | Edutechlife`
+            : `${seoTitles[activeStep]} | IngenIA - Edutechlife`}
+        </title>
+        <meta
+          name="description"
+          content={
+            activeStep === 0
+              ? t("seo.ingenia.desc")
+              : seoDescriptions[activeStep]
+          }
+        />
       </Helmet>
 
       <IngenIAInfoHero handleCta={handleCta}>

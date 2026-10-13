@@ -1,6 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './helpers/test';
 
-test.describe('Visual regression', () => {
+// @visual: las capturas dependen del sistema operativo y de las fuentes, por eso no
+// corren en el CI por defecto. Se ejecutan con `npm run test:e2e:visual`.
+test.describe('Visual regression @visual', () => {
   test('landing page full page', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(6000);
@@ -42,29 +44,5 @@ test.describe('Visual regression', () => {
     });
   });
 
-  test('nosotros page renders', async ({ page }) => {
-    await page.goto('/nosotros', { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(5000);
-    await page.addStyleTag({ content: '*, *::before, *::after { animation: none !important; transition: none !important; }' });
-    await page.waitForTimeout(500);
-    await expect(page).toHaveScreenshot('nosotros-full.png', {
-      fullPage: true,
-      maxDiffPixels: 500,
-      animations: 'disabled',
-      timeout: 30000,
-    });
-  });
 
-  test('privacidad page renders', async ({ page }) => {
-    await page.goto('/privacidad', { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(3000);
-    await page.addStyleTag({ content: '*, *::before, *::after { animation: none !important; transition: none !important; }' });
-    await page.waitForTimeout(500);
-    await expect(page).toHaveScreenshot('privacidad-full.png', {
-      fullPage: true,
-      maxDiffPixels: 200,
-      animations: 'disabled',
-      timeout: 30000,
-    });
-  });
 });

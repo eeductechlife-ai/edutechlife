@@ -38,3 +38,7 @@ credentials*.json
 api-keys.json
 oauth-*.json
 token-*.json
+
+# Resultados de Playwright (los genera cada ejecucion; el CI sube el informe como artefacto)
+/test-results/
+/playwright-report/

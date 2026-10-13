@@ -1,6 +1,11 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './helpers/test';
+import { signIn } from './helpers/session';
 
 test.describe('iLAB Mobile Responsive', () => {
+  test.beforeEach(async ({ page }) => {
+    await signIn(page, 'ialab');
+  });
+
   test('no horizontal scroll on iPhone 12/13 (390x844)', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/ialab');
@@ -16,7 +21,7 @@ test.describe('iLAB Mobile Responsive', () => {
     await page.waitForLoadState('networkidle');
     const smallButtons = await page.evaluate(() => {
       const buttons = document.querySelectorAll('button, a[href], [role="button"]');
-      const violations = [];
+      const violations: { tag: string; text: string; w: number; h: number }[] = [];
       buttons.forEach((el) => {
         const rect = el.getBoundingClientRect();
         if (rect.width < 44 && rect.height < 44 && rect.width > 0 && rect.height > 0) {
@@ -44,7 +49,7 @@ test.describe('iLAB Mobile Responsive', () => {
 
   test('tablet layout shows sidebar on iPad Mini (768x1024)', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
-    await page.goto('/ialab');
+    await page.goto('/ialab/1');
     await page.waitForLoadState('networkidle');
     const sidebar = page.locator('[data-tour="tour-sidebar"]');
     await expect(sidebar).toBeVisible();
