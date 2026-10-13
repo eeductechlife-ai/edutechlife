@@ -4,6 +4,11 @@
  * Designed for students 8-16 and parents
  */
 
+import { PRECIOS_INGENIA, formatCOP } from "./preciosIngenia";
+
+// Precios en COP desde la fuente única (C-005).
+const P = PRECIOS_INGENIA;
+
 export const SUBSCRIPTION_TIERS = {
   free: {
     id: "free",
@@ -61,9 +66,9 @@ export const SUBSCRIPTION_TIERS = {
 
   premium: {
     id: "premium",
-    name: "Premium",
-    price: 4.99,
-    priceDisplay: "$4.99/mes",
+    name: "Base",
+    price: P.base.mensual,
+    priceDisplay: `${formatCOP(P.base.mensual)}/mes`,
     description: "Aprendizaje sin límites con Dani",
     badge: "⭐",
     color: "#3B82F6",
@@ -100,8 +105,8 @@ export const SUBSCRIPTION_TIERS = {
       },
       {
         name: "Panel para Padres",
-        description: "Seguimiento detallado (solo Plus)",
-        included: false,
+        description: "Seguimiento y reporte semanal a padres",
+        included: true,
       },
       {
         name: "Reportes Mensuales",
@@ -115,55 +120,40 @@ export const SUBSCRIPTION_TIERS = {
 
   plus: {
     id: "plus",
-    name: "Premium Plus",
-    price: 9.99,
-    priceDisplay: "$9.99/mes",
-    description: "Para padres y educadores que quieren seguimiento completo",
+    name: "Personalizado",
+    price: P.acompanamiento.mensualDesde,
+    priceDisplay: `desde ${formatCOP(P.acompanamiento.mensualDesde)}/mes`,
+    description: "Plan Base con acompañamiento de un coach docente",
     badge: "👑",
     color: "#F59E0B",
     features: [
       {
-        name: "Todo en Premium",
-        description: "Todas las características de Premium",
+        name: "Todo en Base",
+        description: "Todas las características del plan Base",
         included: true,
       },
       {
-        name: "Panel para Padres",
-        description: "Seguimiento en tiempo real del progreso",
+        name: "Valoración inicial",
+        description: "45 min con revisión del boletín y plan a la medida",
         included: true,
       },
       {
-        name: "Reportes Mensuales",
-        description: "PDF con análisis académico detallado",
+        name: "Coach docente",
+        description: `${P.acompanamiento.sesionesMes} sesiones al mes de 45 min (Intensivo: ${P.intensivo.sesionesMes} por ${formatCOP(P.intensivo.mensual)}/mes)`,
         included: true,
       },
       {
-        name: "Alertas Personalizadas",
-        description: "Notificaciones de hitos y logros",
+        name: "Seguimiento al colegio",
+        description: "Con autorización del padre",
         included: true,
       },
       {
-        name: "Acceso para Educadores",
-        description: "Integración con aulas (si disponible)",
-        included: true,
-      },
-      {
-        name: "Chat Prioritario",
-        description: "Soporte prioritario en español",
-        included: true,
-      },
-      {
-        name: "Múltiples Estudiantes",
-        description: "Gestionar hasta 3 hijos/as",
-        included: true,
-      },
-      {
-        name: "Exportar Datos",
-        description: "Descargar progreso y reportes",
+        name: "Reporte Mensual",
+        description: "Con llamada de 15 min",
         included: true,
       },
     ],
-    cta: "Suscribirse Ahora",
+    cta: "Solicitar valoración",
     recommended: false,
   },
 };
@@ -180,7 +170,7 @@ export const TIER_LIMITS = {
     dani_messages_per_day: Infinity,
     missions_per_month: Infinity,
     can_access_podcast: true,
-    can_access_parent_dashboard: false,
+    can_access_parent_dashboard: true,
     max_students_for_parent: 1,
   },
   plus: {

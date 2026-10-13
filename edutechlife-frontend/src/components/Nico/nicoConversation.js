@@ -1,43 +1,53 @@
-export const PHASE_REACTIVE = 'reactive'
-export const PHASE_PROACTIVE = 'proactive'
-export const PROACTIVE_THRESHOLD = 5
-export const PROACTIVE_INTERVAL = 3
+export const PHASE_REACTIVE = "reactive";
+export const PHASE_PROACTIVE = "proactive";
+export const PROACTIVE_THRESHOLD = 5;
+export const PROACTIVE_INTERVAL = 3;
 
 export function getConversationPhase(messageCount) {
-  return messageCount < PROACTIVE_THRESHOLD ? PHASE_REACTIVE : PHASE_PROACTIVE
+  return messageCount < PROACTIVE_THRESHOLD ? PHASE_REACTIVE : PHASE_PROACTIVE;
 }
 
-export function shouldInsertProactiveMessage(phase, messageCount, lastProactiveIndex) {
-  if (phase !== PHASE_PROACTIVE) return false
-  if (lastProactiveIndex === null || lastProactiveIndex === undefined) return false
-  return (messageCount - lastProactiveIndex) >= PROACTIVE_INTERVAL
+export function shouldInsertProactiveMessage(
+  phase,
+  messageCount,
+  lastProactiveIndex,
+) {
+  if (phase !== PHASE_PROACTIVE) return false;
+  if (lastProactiveIndex === null || lastProactiveIndex === undefined)
+    return false;
+  return messageCount - lastProactiveIndex >= PROACTIVE_INTERVAL;
 }
 
 export function getProactiveMessageByContext(phase, detectedTopics, userName) {
-  if (phase !== PHASE_PROACTIVE) return null
+  if (phase !== PHASE_PROACTIVE) return null;
 
-  const name = userName && userName !== 'amigo' ? userName : null
-  const topics = detectedTopics || []
+  const name = userName && userName !== "amigo" ? userName : null;
+  const topics = detectedTopics || [];
 
   if (topics.length === 0) {
     return name
-      ? `${name}, ¿te gustaría conocer los servicios educativos que ofrecemos? Tenemos opciones para todas las edades y la primera clase es gratuita.`
-      : '¿Te gustaría conocer los servicios educativos que ofrecemos? Tenemos opciones para todas las edades y la primera clase es gratuita.'
+      ? `${name}, ¿te gustaría conocer los servicios educativos que ofrecemos? Tenemos opciones para todas las edades y el ADN de Aprendizaje es gratuito.`
+      : "¿Te gustaría conocer los servicios educativos que ofrecemos? Tenemos opciones para todas las edades y el ADN de Aprendizaje es gratuito.";
   }
 
-  const hasDiscussedPricing = topics.some(t =>
-    typeof t === 'string' && (t.includes('precio') || t.includes('plan') || t.includes('costo') || t.includes('pago'))
-  )
+  const hasDiscussedPricing = topics.some(
+    (t) =>
+      typeof t === "string" &&
+      (t.includes("precio") ||
+        t.includes("plan") ||
+        t.includes("costo") ||
+        t.includes("pago")),
+  );
 
   if (!hasDiscussedPricing && topics.length > 0) {
-    const interest = topics[topics.length - 1]
-    const label = typeof interest === 'string' ? interest : 'este programa'
+    const interest = topics[topics.length - 1];
+    const label = typeof interest === "string" ? interest : "este programa";
     return name
-      ? `${name}, ¿sabías que trabajamos con planes mensuales en pesos colombianos y que la primera clase es gratuita? Te cuento más sobre ${label}.`
-      : `¿Sabías que trabajamos con planes mensuales en pesos colombianos y que la primera clase es gratuita? Te cuento más sobre ${label}.`
+      ? `${name}, ¿sabías que trabajamos con planes mensuales en pesos colombianos y que el ADN de Aprendizaje es gratuito? Te cuento más sobre ${label}.`
+      : `¿Sabías que trabajamos con planes mensuales en pesos colombianos y que el ADN de Aprendizaje es gratuito? Te cuento más sobre ${label}.`;
   }
 
   return name
     ? `${name}, ¿qué te parece si agendamos una llamada gratuita con un especialista? Te ayudará a elegir el mejor plan según tus necesidades.`
-    : '¿Qué te parece si agendamos una llamada gratuita con un especialista? Te ayudará a elegir el mejor plan según tus necesidades.'
+    : "¿Qué te parece si agendamos una llamada gratuita con un especialista? Te ayudará a elegir el mejor plan según tus necesidades.";
 }

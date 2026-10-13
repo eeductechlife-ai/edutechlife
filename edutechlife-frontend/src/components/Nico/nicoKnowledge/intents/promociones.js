@@ -1,3 +1,8 @@
+import {
+  PRECIOS_INGENIA as P,
+  CONDICIONES_INGENIA as C,
+} from "../../../../config/preciosIngenia.js";
+
 export const promociones = [
   {
     id: "primera_clase_gratis",
@@ -12,8 +17,7 @@ export const promociones = [
       "gratis",
     ],
     category: "promociones",
-    response:
-      "Ofrecemos primera clase completamente gratuita en todos nuestros servicios para que puedas conocer la metodología sin compromiso. Dura entre 30 y 45 minutos.",
+    response: `No manejamos clases sueltas de prueba. Lo que sí es gratis: el ADN de Aprendizaje, ${P.gratis.diasPrueba} días de prueba de IngenIA sin tarjeta y, para el plan Personalizado, una valoración de ${C.valoracionGratisMinutos} minutos.`,
   },
   {
     id: "cuenta_gratuita",
@@ -26,7 +30,6 @@ export const promociones = [
       "plan gratis",
     ],
     category: "promociones",
-    response:
-      "Puedes empezar con el ADN de Aprendizaje gratuito que te toma entre 10 y 30 minutos y obtienes un perfil detallado de tu estilo de aprendizaje. También ofrecemos primera clase gratuita en todos los programas.",
+    response: `Puedes empezar con el ADN de Aprendizaje gratuito que te toma entre 10 y 30 minutos y obtienes un perfil detallado de tu estilo de aprendizaje. También puedes probar IngenIA ${P.gratis.diasPrueba} días sin tarjeta.`,
   },
 ];

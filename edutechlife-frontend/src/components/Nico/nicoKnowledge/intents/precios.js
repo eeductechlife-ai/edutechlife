@@ -1,3 +1,10 @@
+import {
+  PRECIOS_INGENIA as P,
+  CONDICIONES_INGENIA as C,
+  formatCOP,
+  fechaLimiteFundador,
+} from "../../../../config/preciosIngenia.js";
+
 export const precios = [
   {
     id: "precios_vak",
@@ -45,7 +52,7 @@ export const precios = [
     ],
     category: "precios",
     response:
-      "El acompañamiento académico se ofrece dentro de nuestros programas (IALab para IA y IngenIA para niños y jóvenes, con el tutor Dani). El valor depende del plan; escríbenos por WhatsApp +57 323 836 5517 y te enviamos la cotización vigente en pesos colombianos. La primera clase es gratuita.",
+      "El acompañamiento académico se ofrece dentro de nuestros programas (IALab para IA y IngenIA para niños y jóvenes, con el tutor Dani). El valor depende del plan; escríbenos por WhatsApp +57 323 836 5517 y te enviamos la cotización vigente en pesos colombianos. El ADN de Aprendizaje es gratuito.",
   },
   {
     id: "precios_bienestar",
@@ -90,8 +97,7 @@ export const precios = [
       "planes de suscripción",
     ],
     category: "precios",
-    response:
-      "Trabajamos en pesos colombianos (COP). Hoy los planes son: IALab desde $99.000/mes (curso de IA, incluye ADN de Aprendizaje y certificado); IngenIA Básico $30.000/mes y Premium $50.000/mes para niños y jóvenes (7 días de prueba); y planes para educadores e instituciones desde $199.000/mes. El ADN de Aprendizaje es gratuito.",
+    response: `Trabajamos en pesos colombianos (COP). IngenIA Base cuesta ${formatCOP(P.base.mensual)}/mes (o ${formatCOP(P.base.anual)} al año) con ${P.gratis.diasPrueba} días de prueba sin tarjeta, y el Personalizado con coach docente va desde ${formatCOP(P.acompanamiento.mensualDesde)}/mes. El ADN de Aprendizaje es gratuito. Para colegios armamos una propuesta a la medida, y el valor vigente de IALab te lo damos por WhatsApp +57 323 836 5517.`,
   },
   {
     id: "descuentos",
@@ -105,8 +111,7 @@ export const precios = [
       "descuento para hermanos",
     ],
     category: "precios",
-    response:
-      "Manejamos descuentos para hermanos, planes especiales para grupos de 10 o más personas, becas para casos especiales, y descuentos institucionales para colegios y universidades.",
+    response: `En IngenIA el segundo hijo paga ${formatCOP(P.base.segundoHijo)}/mes y el plan anual cuesta ${formatCOP(P.base.anual)}. Las primeras ${P.fundador.cupos} familias que entren hasta el ${fechaLimiteFundador()} tienen precio Fundador de ${formatCOP(P.fundador.mensual)}/mes, congelado mientras sigan activas. Para colegios hacemos una propuesta a la medida: escríbenos por WhatsApp +57 323 836 5517.`,
   },
   {
     id: "becas",
@@ -119,8 +124,7 @@ export const precios = [
       "subsidio",
     ],
     category: "precios",
-    response:
-      "Contamos con un programa de becas por rendimiento académico y situación socioeconómica. También ofrecemos descuentos para hermanos y planes especiales para grupos. Pregunta por las convocatorias vigentes.",
+    response: `Por ahora no manejamos becas. Puedes empezar gratis con el ADN de Aprendizaje y ${P.gratis.diasPrueba} días de prueba de IngenIA sin tarjeta; además, el segundo hijo paga ${formatCOP(P.base.segundoHijo)}/mes. Si es para un colegio, armamos una propuesta a la medida: escríbenos por WhatsApp +57 323 836 5517.`,
   },
   {
     id: "pago_diferido",
@@ -135,7 +139,6 @@ export const precios = [
       "plan de pagos",
     ],
     category: "precios",
-    response:
-      "Manejamos planes flexibles de pago. Puedes pagar por mes sin permanencia, o acceder a descuentos por pago anticipado del semestre o año completo.",
+    response: `Puedes pagar mes a mes, sin permanencia y cancelando cuando quieras, o tomar el plan anual de IngenIA por ${formatCOP(P.base.anual)}. Los precios son finales en pesos colombianos, con IVA incluido si aplica, y tienes garantía de devolución del dinero de ${C.garantiaDias} días.`,
   },
 ];

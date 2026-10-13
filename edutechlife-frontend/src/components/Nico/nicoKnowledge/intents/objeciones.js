@@ -1,3 +1,8 @@
+import {
+  PRECIOS_INGENIA as P,
+  formatCOP,
+} from "../../../../config/preciosIngenia.js";
+
 export const objeciones = [
   {
     id: "objeccion_caro",
@@ -12,8 +17,7 @@ export const objeciones = [
       "no puedo pagar",
     ],
     category: "objeciones",
-    response:
-      "Entiendo que el presupuesto es importante. Trabajamos en pesos colombianos: IngenIA para niños y jóvenes desde $30.000/mes (con 7 días de prueba) e IALab desde $99.000/mes. El ADN de Aprendizaje es gratuito y la primera clase también, para que pruebes antes de decidir. También hay descuentos para hermanos y becas.",
+    response: `Entiendo que el presupuesto es importante. IngenIA Base cuesta ${formatCOP(P.base.mensual)}/mes en pesos colombianos, con ${P.gratis.diasPrueba} días de prueba sin tarjeta; el plan anual sale en ${formatCOP(P.base.anual)} y el segundo hijo paga ${formatCOP(P.base.segundoHijo)}/mes. El ADN de Aprendizaje es gratuito, para que pruebes antes de decidir.`,
   },
   {
     id: "objeccion_tiempo",
@@ -43,7 +47,6 @@ export const objeciones = [
       "lo pensaré",
     ],
     category: "objeciones",
-    response:
-      "Por supuesto, tómate el tiempo que necesites. Mientras tanto, la primera clase es gratuita y sin compromiso. Así puedes conocer nuestra metodología directamente. ¿Te gustaría agendarla?",
+    response: `Por supuesto, tómate el tiempo que necesites. Mientras tanto puedes hacer gratis el ADN de Aprendizaje o probar IngenIA ${P.gratis.diasPrueba} días sin tarjeta. ¿Te gustaría empezar?`,
   },
 ];

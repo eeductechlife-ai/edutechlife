@@ -1,3 +1,5 @@
+import { CONDICIONES_INGENIA as C } from "../../../../config/preciosIngenia.js";
+
 export const politicas = [
   {
     id: "cancelacion",
@@ -28,7 +30,6 @@ export const politicas = [
       "si no funciona",
     ],
     category: "politicas",
-    response:
-      "Ofrecemos primera clase gratuita para que pruebes sin riesgo. Además, si no estás satisfecho, puedes cancelar en cualquier momento sin penalización ni permanencia. Tu satisfacción es nuestra prioridad.",
+    response: `En IngenIA tienes garantía de devolución del dinero de ${C.garantiaDias} días. Además, puedes cancelar en cualquier momento sin penalización ni permanencia.`,
   },
 ];
