@@ -4,6 +4,7 @@ import { axe, toHaveNoViolations } from "jest-axe";
 import { MemoryRouter } from "react-router-dom";
 import Aliados from "../../components/Aliados";
 import AIToolsSection from "../../components/AIToolsSection";
+import Ecosystem from "../../components/Ecosystem";
 
 expect.extend(toHaveNoViolations);
 
@@ -93,5 +94,17 @@ describe("Portada: accesibilidad WCAG 2.1 nivel A", () => {
     const { container } = renderInRouter(<AIToolsSection />);
     expect(container.querySelectorAll('[role="button"]')).toHaveLength(0);
     expect(container.querySelectorAll("a[href]").length).toBeGreaterThan(0);
+  });
+
+  it("Ecosistema: el carrusel horizontal se puede enfocar y recorrer con teclado", async () => {
+    const { container } = renderInRouter(<Ecosystem />);
+    // En móvil la franja se desplaza en horizontal y sus tarjetas no tienen nada
+    // enfocable (axe: scrollable-region-focusable): el contenedor lo es.
+    const scroller = container.querySelector(".overflow-x-auto");
+    expect(scroller).not.toBeNull();
+    expect(scroller.getAttribute("tabindex")).toBe("0");
+    expect(scroller.getAttribute("role")).toBe("region");
+    expect(scroller.getAttribute("aria-label")).toBeTruthy();
+    expect(await axe(container, LEVEL_A)).toHaveNoViolations();
   });
 });

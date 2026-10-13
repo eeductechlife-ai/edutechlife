@@ -116,7 +116,14 @@ const Ecosystem = memo(() => {
           </p>
         </motion.div>
 
-        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-4 md:gap-6 -mx-6 px-6 lg:-mx-8 lg:px-8 md:mx-0 md:px-0 pb-3 md:pb-0 md:grid-cols-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {/* En móvil esta franja se desplaza en horizontal y sus tarjetas no tienen nada
+            enfocable: sin tabIndex/role/label no se puede recorrer con teclado. */}
+        <div
+          tabIndex={0}
+          role="region"
+          aria-label={t("ecosystem.carousel_label")}
+          className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-4 md:gap-6 -mx-6 px-6 lg:-mx-8 lg:px-8 md:mx-0 md:px-0 pb-3 md:pb-0 md:grid-cols-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           {cards.map((card, i) => (
             <motion.div
               key={i}
