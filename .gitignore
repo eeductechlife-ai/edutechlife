@@ -30,3 +30,18 @@ npm-debug.log*
 # Temp
 *.tmp
 *.temp
+
+# Agentes de Edutechlife: estado de trabajo local (reportes, memoria, backlog, accesos)
+.env.agentes
+docs/agentes/calidad/*
+!docs/agentes/calidad/PLAYBOOK.md
+docs/agentes/marketing/*
+!docs/agentes/marketing/PLAYBOOK.md
+docs/agentes/informes-ceo/
+docs/agentes/FEEDBACK-CEO.md
+docs/agentes/EVOLUCION.md
+docs/agentes/RADAR-TENDENCIAS.md
+docs/agentes/comercial/*
+!docs/agentes/comercial/PLAYBOOK.md
+docs/agentes/administracion/*
+!docs/agentes/administracion/PLAYBOOK.md
