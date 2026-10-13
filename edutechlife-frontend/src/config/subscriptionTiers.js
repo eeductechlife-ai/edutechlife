@@ -1,7 +1,7 @@
 /**
  * Subscription Tiers Configuration
  * Simplified 3-tier system for IngenIA Kids
- * Designed for students 8-16 and parents
+ * Designed for students 6-16 and parents
  */
 
 export const SUBSCRIPTION_TIERS = {

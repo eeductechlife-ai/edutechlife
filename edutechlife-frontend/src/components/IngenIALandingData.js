@@ -635,7 +635,7 @@ const GUARANTEE_PT = {
 const FAQ_ITEMS_ES = [
   {
     q: "¿Desde qué edad pueden usar IngenIA?",
-    a: "IngenIA está diseñado para niños entre 8 y 16 años. Nuestro sistema adapta el contenido y las actividades según la edad y el estilo de aprendizaje de cada estudiante.",
+    a: "IngenIA está diseñado para niños entre 6 y 16 años. Nuestro sistema adapta el contenido y las actividades según la edad y el estilo de aprendizaje de cada estudiante.",
   },
   {
     q: "¿Necesito estar presente mientras mi hijo estudia?",
@@ -674,7 +674,7 @@ const FAQ_ITEMS_ES = [
 const FAQ_ITEMS_EN = [
   {
     q: "What age is IngenIA for?",
-    a: "IngenIA is designed for children ages 8 to 16. Our system adapts content and activities based on each student's age and learning style.",
+    a: "IngenIA is designed for children ages 6 to 16. Our system adapts content and activities based on each student's age and learning style.",
   },
   {
     q: "Do I need to be present while my child studies?",

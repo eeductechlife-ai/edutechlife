@@ -1,5 +1,5 @@
 /**
- * Recommends educational YouTube videos for students (8–16): strict safe
+ * Recommends educational YouTube videos for students (6–16): strict safe
  * search, Spanish, Colombia region, ranked by views and viewer approval.
  * Results are cached 24 h — each search costs 100 units of a 10k/day quota.
  */

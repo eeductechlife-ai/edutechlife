@@ -10,10 +10,10 @@ import {
 } from "../studentLevel";
 
 describe("listas cerradas", () => {
-  it("edades 8–16 y grados 3.º–11.º", () => {
-    expect(AGE_OPTIONS[0]).toBe(8);
+  it("edades 6–16 y grados 1.º–11.º", () => {
+    expect(AGE_OPTIONS[0]).toBe(6);
     expect(AGE_OPTIONS.at(-1)).toBe(16);
-    expect(GRADE_OPTIONS[0]).toBe(3);
+    expect(GRADE_OPTIONS[0]).toBe(1);
     expect(GRADE_OPTIONS.at(-1)).toBe(11);
   });
 });
@@ -52,10 +52,10 @@ describe("validateAgeGrade", () => {
   });
 
   it("rechaza edades y grados fuera de rango o mal escritos", () => {
-    expect(validateAgeGrade(7, 3)).toMatchObject({ ok: false, field: "age" });
+    expect(validateAgeGrade(5, 1)).toMatchObject({ ok: false, field: "age" });
     expect(validateAgeGrade(17, 11)).toMatchObject({ ok: false, field: "age" });
     expect(validateAgeGrade("", 6)).toMatchObject({ ok: false, field: "age" });
-    expect(validateAgeGrade(12, 2)).toMatchObject({
+    expect(validateAgeGrade(12, 0)).toMatchObject({
       ok: false,
       field: "grade",
     });

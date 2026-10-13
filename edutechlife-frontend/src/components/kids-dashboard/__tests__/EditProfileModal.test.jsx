@@ -43,7 +43,7 @@ const save = () => fireEvent.click(screen.getByText("kid.user.save"));
 describe("EditProfileModal: edad y grado", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("ofrece listas cerradas: 8–16 años y 3.º–11.º", () => {
+  it("ofrece listas cerradas: 6–16 años y 1.º–11.º", () => {
     setup();
     const ages = [
       ...screen.getByLabelText("kid.user.age").querySelectorAll("option"),
@@ -52,6 +52,8 @@ describe("EditProfileModal: edad y grado", () => {
       ...screen.getByLabelText("kid.user.grade").querySelectorAll("option"),
     ];
     expect(ages.map((o) => o.value).filter(Boolean)).toEqual([
+      "6",
+      "7",
       "8",
       "9",
       "10",
@@ -63,6 +65,8 @@ describe("EditProfileModal: edad y grado", () => {
       "16",
     ]);
     expect(grades.map((o) => o.value).filter(Boolean)).toEqual([
+      "1",
+      "2",
       "3",
       "4",
       "5",
@@ -86,8 +90,8 @@ describe("EditProfileModal: edad y grado", () => {
     expect(screen.getByLabelText("kid.user.grade").value).toBe("6");
   });
 
-  it("un grado fuera de 3.º–11.º queda vacío y se pide de nuevo", () => {
-    setup({ age: 12, grade: "1" });
+  it("un grado fuera de 1.º–11.º queda vacío y se pide de nuevo", () => {
+    setup({ age: 12, grade: "12" });
     expect(screen.getByLabelText("kid.user.grade").value).toBe("");
   });
 
@@ -140,7 +144,7 @@ describe("EditProfileModal: edad y grado", () => {
     pick("kid.user.age", "12");
     save();
     await waitFor(() =>
-      expect(screen.getByText(/Elige un grado entre 3.º y 11.º/)).toBeTruthy(),
+      expect(screen.getByText(/Elige un grado entre 1.º y 11.º/)).toBeTruthy(),
     );
     expect(props.updateProfile).not.toHaveBeenCalled();
   });

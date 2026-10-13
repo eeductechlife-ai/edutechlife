@@ -11,7 +11,7 @@ export const PROGRESS_TTL_MS = 30 * 60 * 1000;
 
 export const VALENTINA_RESULT_DELAY_MS = 1500;
 
-export const AGE_MIN = 8;
+export const AGE_MIN = 6;
 
 export const AGE_MAX = 16;
 
