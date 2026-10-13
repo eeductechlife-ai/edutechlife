@@ -70,4 +70,17 @@ describe('supabase/migrations: versiones', () => {
     expect(sql).not.toMatch(/FOR (INSERT|UPDATE|DELETE|ALL)/);
     expect(sql).not.toMatch(/TO anon/);
   });
+
+  it('102 permite leads sin nombre (boletín) o sin correo (con teléfono), sin perder RLS', () => {
+    const file = files.find((f) => f.startsWith('102_'));
+    expect(file).toBeTruthy();
+    const sql = fs.readFileSync(path.join(MIGRATIONS_DIR, file), 'utf8');
+    expect(sql).toMatch(/ALTER COLUMN nombre DROP NOT NULL/);
+    expect(sql).toMatch(/ALTER COLUMN email DROP NOT NULL/);
+    expect(sql).toContain("CHECK (nombre IS NOT NULL OR fuente = 'boletin')");
+    expect(sql).toContain('CHECK (email IS NOT NULL OR telefono IS NOT NULL)');
+    expect(sql).toMatch(/IF NOT EXISTS/);
+    expect(sql).not.toMatch(/DISABLE ROW LEVEL SECURITY|GRANT/);
+  });
 });
+

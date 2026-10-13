@@ -8,7 +8,13 @@ const express = require('express');
 
 const supabasePath = require.resolve('../../db/supabase');
 const insert = vi.fn();
-const mockSupabase = { from: vi.fn(() => ({ insert })) };
+const listQuery = { select: vi.fn(), order: vi.fn(), limit: vi.fn() };
+listQuery.select.mockReturnValue(listQuery);
+listQuery.order.mockReturnValue(listQuery);
+const mockSupabase = {
+  from: vi.fn(() => ({ insert, select: listQuery.select })),
+  auth: { getUser: vi.fn() },
+};
 delete require.cache[supabasePath];
 require.cache[supabasePath] = { id: supabasePath, filename: supabasePath, loaded: true, exports: mockSupabase };
 
@@ -126,5 +132,69 @@ describe('POST /api/leads', () => {
     } finally {
       process.env.NODE_ENV = prev;
     }
+  });
+
+  test('Nico: solo teléfono (sin correo) → 201', async () => {
+    await request(app)
+      .post('/api/leads')
+      .send(leadValido({ email: '', fuente: 'nico', telefono: '3001234567' }))
+      .expect(201);
+    expect(insert.mock.calls[0][0].email).toBeNull();
+  });
+
+  test('sin correo ni teléfono → 400', async () => {
+    await request(app).post('/api/leads').send(leadValido({ email: '', telefono: '' })).expect(400);
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  test('boletín: solo correo y perfil, sin nombre → 201', async () => {
+    await request(app)
+      .post('/api/leads')
+      .send({ email: 'ana@ejemplo.co', perfil: 'docente', fuente: 'boletin', autorizacion_datos: true })
+      .expect(201);
+    expect(insert.mock.calls[0][0]).toMatchObject({ nombre: null, fuente: 'boletin', perfil: 'docente' });
+  });
+
+  test('boletín sin correo → 400', async () => {
+    await request(app)
+      .post('/api/leads')
+      .send({ telefono: '3001234567', fuente: 'boletin', autorizacion_datos: true })
+      .expect(400);
+  });
+});
+
+describe('GET /api/leads (panel admin)', () => {
+  let app;
+  const admin = (role) =>
+    mockSupabase.auth.getUser.mockResolvedValue({
+      data: { user: { id: 'u1', email: 'a@test', app_metadata: { role } } },
+      error: null,
+    });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    listQuery.select.mockReturnValue(listQuery);
+    listQuery.order.mockReturnValue(listQuery);
+    listQuery.limit.mockResolvedValue({ data: [{ id: 'l1', nombre: 'Ana' }], error: null });
+    app = express();
+    app.use(express.json());
+    app.use('/api/leads', leadRoutes);
+  });
+
+  test('sin token → 401', async () => {
+    await request(app).get('/api/leads').expect(401);
+  });
+
+  test('content_creator no ve datos personales → 403', async () => {
+    admin('content_creator');
+    await request(app).get('/api/leads').set('Authorization', 'Bearer t').expect(403);
+    expect(listQuery.select).not.toHaveBeenCalled();
+  });
+
+  test('admin → 200 con los leads más recientes', async () => {
+    admin('admin');
+    const res = await request(app).get('/api/leads').set('Authorization', 'Bearer t').expect(200);
+    expect(res.body.leads).toEqual([{ id: 'l1', nombre: 'Ana' }]);
+    expect(listQuery.order).toHaveBeenCalledWith('created_at', { ascending: false });
   });
 });
