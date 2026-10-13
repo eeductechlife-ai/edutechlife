@@ -10,14 +10,16 @@ enseñen bien y mejoren cada día hasta sentirse de **nivel profesional** frente
 | `qa-tutores-ia` | Evalúa a Valerio, Dani, Nico, Max y Valeria: pedagogía, español, seguridad infantil, alucinaciones |
 | `qa-rendimiento-seo` | Lighthouse, Core Web Vitals, accesibilidad (axe), SEO técnico, enlaces rotos |
 | `qa-seguridad-datos` | Seguridad, RLS de Supabase, datos de menores, dependencias vulnerables |
+| `ops-plataforma` | Chequeo diario de salud de producción: disponibilidad, errores, CI/CD, despliegues, costos de IA |
+| `curador-academico` | Vigencia y rigor del contenido de IALab, alineación curricular de IngenIA (MEN/DBA), nuevo contenido |
 | `producto-radar-pro` | Califica qué tan profesional es el producto del día frente a los mejores del mundo y mantiene `ROADMAP-PRO.md` |
-| `dev-mejorador` | Corrige los hallazgos en una rama propia y abre un Pull Request para el CEO |
+| `dev-mejorador` | Corrige los hallazgos en una rama propia y abre un Pull Request para el CEO (compartido con Comercial) |
 
 ## Rotación diaria (un producto foco por día, más un chequeo rápido general)
 | Día | Foco |
 |---|---|
-| Lunes | IALab (curso, OVAs, Valerio, certificados) |
-| Martes | IngenIA (niños, padres, Dani, misiones) |
+| Lunes | IALab (curso, OVAs, Valerio, certificados) + `curador-academico` |
+| Martes | IngenIA (niños, padres, Dani, misiones) + `curador-academico` (alineación curricular) |
 | Miércoles | Diagnóstico VAK (flujo completo + PDF) y Automatización (ROI, Architect) |
 | Jueves | edutechlife.co: portada, landings, registro, login, móvil |
 | Viernes | Seguridad + rendimiento de todo el ecosistema |
@@ -26,7 +28,8 @@ enseñen bien y mejoren cada día hasta sentirse de **nivel profesional** frente
 
 ## Procedimiento diario
 1. Leer `docs/agentes/CONOCIMIENTO-EDUTECHLIFE.md`, `APRENDIZAJES.md`, `BACKLOG.md` y `docs/agentes/FEEDBACK-CEO.md`.
-2. Lanzar en paralelo los subagentes que tocan hoy, cada uno con: el foco del día, qué ya está en el backlog (para no repetir) y los aprendizajes relevantes.
+2. Todos los días, primero `ops-plataforma` (salud de producción); si reporta P0, ese es el foco del día.
+   Luego lanzar en paralelo los subagentes que tocan hoy, cada uno con: el foco del día, qué ya está en el backlog (para no repetir) y los aprendizajes relevantes.
 3. Consolidar hallazgos en `BACKLOG.md` con severidad:
    - **P0** el usuario no puede registrarse, pagar, entrar o aprender; datos expuestos. → avisar al CEO de inmediato.
    - **P1** función rota o tutor que responde mal. **P2** visual/UX. **P3** mejora o idea.

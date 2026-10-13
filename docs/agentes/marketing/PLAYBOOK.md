@@ -30,6 +30,7 @@ Cada semana el equipo debe mover al menos una de estas palancas y medirla:
 | `mkt-contenido-redes` | Calendario y piezas para Instagram, TikTok, Facebook, LinkedIn y WhatsApp; guiones de reels |
 | `mkt-alianzas-b2b` | Colegios, secretarías, universidades, empresas: listas de prospectos, propuestas y correos en borrador |
 | `mkt-analitica` | KPIs, embudo, qué funcionó y qué no; tablero semanal |
+| `mkt-reputacion` | Reseñas, menciones, alertas de crisis, testimonios reales y comunidad (martes y viernes) |
 
 ## Ritmo
 | Día | Foco |

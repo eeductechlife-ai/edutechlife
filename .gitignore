@@ -41,3 +41,7 @@ docs/agentes/informes-ceo/
 docs/agentes/FEEDBACK-CEO.md
 docs/agentes/EVOLUCION.md
 docs/agentes/RADAR-TENDENCIAS.md
+docs/agentes/comercial/*
+!docs/agentes/comercial/PLAYBOOK.md
+docs/agentes/administracion/*
+!docs/agentes/administracion/PLAYBOOK.md

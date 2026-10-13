@@ -10,12 +10,14 @@ no con conocimiento viejo.
      seguridad infantil y regulación de IA y datos en Colombia.
    - `mkt-inteligencia-mercado`: tendencias de marketing digital y redes (formatos, algoritmos, búsqueda con IA, WhatsApp),
      movimientos de competidores, educación en Colombia (MEN, calendario, convocatorias) y noticias del Eje Cafetero.
-   A ambos pídeles: solo fuentes de los últimos 60 días, con URL y fecha; nada de memoria sin verificar.
+   - `cumplimiento-legal`: cambios normativos recientes en Colombia sobre datos personales, menores, consumidor, publicidad e IA.
+   - `licitaciones-publicas`: convocatorias y procesos públicos nuevos relevantes.
+   A todos pídeles: solo fuentes de los últimos 60 días, con URL y fecha; nada de memoria sin verificar.
 2. Reescribe `docs/agentes/RADAR-TENDENCIAS.md` con este formato (máximo 30 ítems; elimina lo que tenga más de 60 días o ya no aplique):
    ```
    # Radar de tendencias — semana del AAAA-MM-DD
    ## Las 3 cosas que más importan esta semana
-   ## IA y producto        | Tendencia | Fuente y fecha | Qué significa para Edutechlife | Acción | Dueño (calidad/marketing) |
+   ## IA y producto        | Tendencia | Fuente y fecha | Qué significa para Edutechlife | Acción | Dueño (calidad/marketing/comercial/administración) |
    ## Marketing y redes    | ...
    ## Educación Colombia y región | ...
    ## Regulación           | ...

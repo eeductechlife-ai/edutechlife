@@ -45,6 +45,12 @@ docentes (IALab), universidades e instituciones, empresas (Automatización).
   novedades de IA y normas, verifica con búsqueda web y cita fuente y fecha (prefiere los últimos 90 días).
 - Lee `docs/agentes/RADAR-TENDENCIAS.md` (se actualiza cada domingo) y aplica lo que corresponda a tu rol.
 
+## Organización de agentes
+Cuatro equipos, cada uno con su playbook en `docs/agentes/<equipo>/PLAYBOOK.md`: **calidad** (producto, plataforma, contenido),
+**marketing** (cliente, mercado, SEO, contenido, B2B, analítica, reputación), **comercial** (leads, éxito del cliente, licitaciones)
+y **administracion** (finanzas, cumplimiento legal). Lo que pueden hacer sin aprobación lo define `docs/agentes/AUTONOMIA.md`.
+Si tu trabajo descubre algo que le toca a otro equipo, déjalo en tu reporte bajo "Para otros equipos".
+
 ## Reglas de verdad
 - Cifras y alianzas públicas (ej. "+6.000 certificados", "operador SenaTIC", logos de aliados) **solo** se usan
   si aparecen como VERIFICADAS en `docs/agentes/marketing/HECHOS-VERIFICADOS.md`. Si no, se marcan como pendientes.
