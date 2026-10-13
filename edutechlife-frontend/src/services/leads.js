@@ -77,3 +77,15 @@ export async function submitLead(datos) {
   if (res.status === 400) throw new LeadSubmitError("invalido");
   throw new LeadSubmitError("servidor");
 }
+
+/** Panel admin: últimos leads. Requiere el token de una sesión con rol admin. */
+export async function fetchLeadsAdmin(token) {
+  const res = await fetch(`${API_BASE_URL}/api/leads`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (res.status === 401 || res.status === 403)
+    throw new LeadSubmitError("permiso");
+  if (!res.ok) throw new LeadSubmitError("servidor");
+  const { leads } = await res.json();
+  return leads || [];
+}

@@ -5,6 +5,9 @@ import { useTranslation } from "../i18n/I18nProvider";
 import { track } from "../lib/analytics";
 import useFocusTrap from "../hooks/useFocusTrap";
 import useBodyScrollLock from "../hooks/useBodyScrollLock";
+import useLeadSubmit from "../hooks/useLeadSubmit";
+import LeadConsent from "./leads/LeadConsent";
+import LeadProfileSelect from "./leads/LeadProfileSelect";
 
 const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
   const { t } = useTranslation();
@@ -13,7 +16,8 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
     email: "",
     telefono: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const lead = useLeadSubmit("demo_movil");
+  const isSubmitting = lead.sending;
 
   const handleChange = (e) => {
     setFormData({
@@ -30,15 +34,16 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
       return;
     }
 
-    setIsSubmitting(true);
-
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    onSubmit({
+    const datos = {
       ...formData,
-      interes: context?.interest || "general",
-      tema: context?.topic || "",
-    });
+      producto_interes: context?.interest || "demo",
+      mensaje: context?.topic || null,
+    };
+    // onSubmit es opcional: el modal guarda el lead por sí mismo. Antes lo
+    // exigía y AppLayout no lo pasaba, así que el envío lanzaba TypeError.
+    const ok = await lead.submit(datos, e.currentTarget);
+    if (!ok) return;
+    onSubmit?.(datos);
 
     track("lead_captured", {
       source: "lead_capture_modal",
@@ -47,7 +52,11 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
     });
 
     setFormData({ nombre: "", email: "", telefono: "" });
-    setIsSubmitting(false);
+  };
+
+  const handleClose = () => {
+    lead.reset();
+    onClose();
   };
 
   const getContextMessage = () => {
@@ -79,7 +88,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={handleClose}
             style={{
               position: "fixed",
               inset: 0,
@@ -113,7 +122,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
             }}
           >
             <button
-              onClick={onClose}
+              onClick={handleClose}
               aria-label="Cerrar"
               style={{
                 position: "absolute",
@@ -167,171 +176,218 @@ const LeadCaptureModal = ({ isOpen, onClose, onSubmit, context }) => {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.75rem",
-                }}
-              >
-                <div>
-                  <label
-                    htmlFor="lead-nombre"
-                    style={{
-                      display: "block",
-                      marginBottom: "0.25rem",
-                      fontSize: "0.875rem",
-                      color: "#004B63",
-                      fontWeight: "500",
-                    }}
-                  >
-                    {t("leadCapture.name_label")}
-                  </label>
-                  <input
-                    type="text"
-                    id="lead-nombre"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleChange}
-                    placeholder={t("leadCapture.name_placeholder")}
-                    style={{
-                      width: "100%",
-                      padding: "0.75rem 1rem",
-                      border: "1px solid #E2E8F0",
-                      borderRadius: "8px",
-                      fontSize: "0.9rem",
-                      outline: "none",
-                      transition: "border-color 0.2s",
-                    }}
-                    onFocus={(e) => (e.target.style.borderColor = "#4DA8C4")}
-                    onBlur={(e) => (e.target.style.borderColor = "#E2E8F0")}
-                    autoComplete="name"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="lead-email"
-                    style={{
-                      display: "block",
-                      marginBottom: "0.25rem",
-                      fontSize: "0.875rem",
-                      color: "#004B63",
-                      fontWeight: "500",
-                    }}
-                  >
-                    {t("leadCapture.email_label")}
-                  </label>
-                  <input
-                    type="email"
-                    id="lead-email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder={t("leadCapture.email_placeholder")}
-                    style={{
-                      width: "100%",
-                      padding: "0.75rem 1rem",
-                      border: "1px solid #E2E8F0",
-                      borderRadius: "8px",
-                      fontSize: "0.9rem",
-                      outline: "none",
-                      transition: "border-color 0.2s",
-                    }}
-                    onFocus={(e) => (e.target.style.borderColor = "#4DA8C4")}
-                    onBlur={(e) => (e.target.style.borderColor = "#E2E8F0")}
-                    autoComplete="email"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="lead-telefono"
-                    style={{
-                      display: "block",
-                      marginBottom: "0.25rem",
-                      fontSize: "0.875rem",
-                      color: "#004B63",
-                      fontWeight: "500",
-                    }}
-                  >
-                    {t("leadCapture.phone_label")}
-                  </label>
-                  <input
-                    type="tel"
-                    id="lead-telefono"
-                    name="telefono"
-                    value={formData.telefono}
-                    onChange={handleChange}
-                    placeholder={t("leadCapture.phone_placeholder")}
-                    style={{
-                      width: "100%",
-                      padding: "0.75rem 1rem",
-                      border: "1px solid #E2E8F0",
-                      borderRadius: "8px",
-                      fontSize: "0.9rem",
-                      outline: "none",
-                      transition: "border-color 0.2s",
-                    }}
-                    onFocus={(e) => (e.target.style.borderColor = "#4DA8C4")}
-                    onBlur={(e) => (e.target.style.borderColor = "#E2E8F0")}
-                    autoComplete="tel"
-                  />
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  gap: "0.75rem",
-                  marginTop: "1.25rem",
-                }}
-              >
+            {lead.status === "sent" ? (
+              <div role="status" style={{ textAlign: "center" }}>
+                <p style={{ fontWeight: 700, color: "#004B63", margin: 0 }}>
+                  {t("contact.thanks_title")}
+                </p>
+                <p style={{ fontSize: "0.875rem", color: "#64748B" }}>
+                  {t("contact.thanks_desc")}
+                </p>
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={handleClose}
                   style={{
-                    flex: 1,
-                    padding: "0.75rem",
-                    border: "1px solid #E2E8F0",
-                    borderRadius: "8px",
-                    background: "white",
-                    color: "#64748B",
-                    fontSize: "0.9rem",
-                    fontWeight: "500",
-                    cursor: "pointer",
-                    transition: "all 0.2s",
-                  }}
-                >
-                  {t("leadCapture.not_now")}
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  style={{
-                    flex: 1,
-                    padding: "0.75rem",
+                    marginTop: "0.75rem",
+                    padding: "0.6rem 1.5rem",
                     border: "none",
                     borderRadius: "8px",
-                    background: isSubmitting
-                      ? "#94A3B8"
-                      : "linear-gradient(135deg, #004B63 0%, #006080 100%)",
+                    background: "#004B63",
                     color: "white",
-                    fontSize: "0.9rem",
-                    fontWeight: "600",
-                    cursor: isSubmitting ? "not-allowed" : "pointer",
-                    transition: "all 0.2s",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "0.5rem",
+                    cursor: "pointer",
                   }}
                 >
-                  {isSubmitting
-                    ? t("leadCapture.sending")
-                    : t("leadCapture.share_data")}
+                  {t("common.close")}
                 </button>
               </div>
-            </form>
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.75rem",
+                  }}
+                >
+                  <div>
+                    <label
+                      htmlFor="lead-nombre"
+                      style={{
+                        display: "block",
+                        marginBottom: "0.25rem",
+                        fontSize: "0.875rem",
+                        color: "#004B63",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {t("leadCapture.name_label")}
+                    </label>
+                    <input
+                      type="text"
+                      id="lead-nombre"
+                      name="nombre"
+                      value={formData.nombre}
+                      onChange={handleChange}
+                      placeholder={t("leadCapture.name_placeholder")}
+                      style={{
+                        width: "100%",
+                        padding: "0.75rem 1rem",
+                        border: "1px solid #E2E8F0",
+                        borderRadius: "8px",
+                        fontSize: "0.9rem",
+                        outline: "none",
+                        transition: "border-color 0.2s",
+                      }}
+                      onFocus={(e) => (e.target.style.borderColor = "#4DA8C4")}
+                      onBlur={(e) => (e.target.style.borderColor = "#E2E8F0")}
+                      autoComplete="name"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="lead-email"
+                      style={{
+                        display: "block",
+                        marginBottom: "0.25rem",
+                        fontSize: "0.875rem",
+                        color: "#004B63",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {t("leadCapture.email_label")}
+                    </label>
+                    <input
+                      type="email"
+                      id="lead-email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder={t("leadCapture.email_placeholder")}
+                      required
+                      style={{
+                        width: "100%",
+                        padding: "0.75rem 1rem",
+                        border: "1px solid #E2E8F0",
+                        borderRadius: "8px",
+                        fontSize: "0.9rem",
+                        outline: "none",
+                        transition: "border-color 0.2s",
+                      }}
+                      onFocus={(e) => (e.target.style.borderColor = "#4DA8C4")}
+                      onBlur={(e) => (e.target.style.borderColor = "#E2E8F0")}
+                      autoComplete="email"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="lead-telefono"
+                      style={{
+                        display: "block",
+                        marginBottom: "0.25rem",
+                        fontSize: "0.875rem",
+                        color: "#004B63",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {t("leadCapture.phone_label")}
+                    </label>
+                    <input
+                      type="tel"
+                      id="lead-telefono"
+                      name="telefono"
+                      value={formData.telefono}
+                      onChange={handleChange}
+                      placeholder={t("leadCapture.phone_placeholder")}
+                      style={{
+                        width: "100%",
+                        padding: "0.75rem 1rem",
+                        border: "1px solid #E2E8F0",
+                        borderRadius: "8px",
+                        fontSize: "0.9rem",
+                        outline: "none",
+                        transition: "border-color 0.2s",
+                      }}
+                      onFocus={(e) => (e.target.style.borderColor = "#4DA8C4")}
+                      onBlur={(e) => (e.target.style.borderColor = "#E2E8F0")}
+                      autoComplete="tel"
+                    />
+                  </div>
+                  <LeadProfileSelect
+                    id="lead-perfil"
+                    lead={lead}
+                    labelStyle={{
+                      display: "block",
+                      marginBottom: "0.25rem",
+                      fontSize: "0.875rem",
+                      color: "#004B63",
+                      fontWeight: "500",
+                    }}
+                    selectStyle={{
+                      width: "100%",
+                      padding: "0.75rem 1rem",
+                      border: "1px solid #E2E8F0",
+                      borderRadius: "8px",
+                      fontSize: "0.9rem",
+                      background: "white",
+                    }}
+                  />
+                  <LeadConsent id="lead-autorizacion" lead={lead} />
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "0.75rem",
+                    marginTop: "1.25rem",
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    style={{
+                      flex: 1,
+                      padding: "0.75rem",
+                      border: "1px solid #E2E8F0",
+                      borderRadius: "8px",
+                      background: "white",
+                      color: "#64748B",
+                      fontSize: "0.9rem",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                    }}
+                  >
+                    {t("leadCapture.not_now")}
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    style={{
+                      flex: 1,
+                      padding: "0.75rem",
+                      border: "none",
+                      borderRadius: "8px",
+                      background: isSubmitting
+                        ? "#94A3B8"
+                        : "linear-gradient(135deg, #004B63 0%, #006080 100%)",
+                      color: "white",
+                      fontSize: "0.9rem",
+                      fontWeight: "600",
+                      cursor: isSubmitting ? "not-allowed" : "pointer",
+                      transition: "all 0.2s",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "0.5rem",
+                    }}
+                  >
+                    {isSubmitting
+                      ? t("leadCapture.sending")
+                      : t("leadCapture.share_data")}
+                  </button>
+                </div>
+              </form>
+            )}
 
             <p
               style={{

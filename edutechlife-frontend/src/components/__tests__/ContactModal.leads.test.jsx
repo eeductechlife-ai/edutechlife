@@ -14,6 +14,9 @@ const llenar = () => {
   fireEvent.change(screen.getByLabelText("contact.email_label_form"), {
     target: { value: "ana@ejemplo.co" },
   });
+  fireEvent.change(screen.getByLabelText("leadForm.profile_label"), {
+    target: { value: "padre" },
+  });
 };
 const enviar = () =>
   fireEvent.submit(
@@ -46,6 +49,7 @@ describe("ContactModal → /api/leads", () => {
       nombre: "Ana Gómez",
       email: "ana@ejemplo.co",
       fuente: "contacto_header",
+      perfil: "padre",
       autorizacion_datos: true,
     });
     // Ya no se guarda en el navegador del visitante.
@@ -76,6 +80,22 @@ describe("ContactModal → /api/leads", () => {
       expect(screen.getByRole("alert")).toHaveTextContent(
         "leadForm.error_consentimiento",
       ),
+    );
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("sin elegir «Soy…» no envía nada", async () => {
+    render(<ContactModal isOpen onClose={() => {}} />);
+    fireEvent.change(screen.getByLabelText("contact.full_name_label"), {
+      target: { value: "Ana Gómez" },
+    });
+    fireEvent.click(
+      screen.getByRole("checkbox", { name: /leadForm.consent_text/ }),
+    );
+    enviar();
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "leadForm.error_perfil",
     );
     expect(fetchMock).not.toHaveBeenCalled();
   });

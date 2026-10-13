@@ -6,6 +6,7 @@ import useFocusTrap from "../hooks/useFocusTrap";
 import useBodyScrollLock from "../hooks/useBodyScrollLock";
 import useLeadSubmit from "../hooks/useLeadSubmit";
 import LeadConsent from "./leads/LeadConsent";
+import LeadProfileSelect from "./leads/LeadProfileSelect";
 
 const ContactModal = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
@@ -420,6 +421,13 @@ const ContactModal = ({ isOpen, onClose }) => {
                       placeholder={t("contact.phone_placeholder")}
                     />
                   </div>
+
+                  <LeadProfileSelect
+                    id="contact-perfil"
+                    lead={lead}
+                    labelClassName="block text-sm font-semibold text-[#004B63] mb-1"
+                    selectClassName="w-full px-4 py-2.5 border-2 border-gray-200 rounded-brand-xl focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none transition-all bg-white text-[#004B63] text-sm"
+                  />
 
                   <div>
                     <label

@@ -1,19 +1,24 @@
 /**
  * POST /api/leads
  * Recibe los leads de los formularios públicos del sitio, los guarda en la
- * tabla `leads` (migración 100, con la service role) y avisa por correo.
+ * tabla `leads` (migraciones 100 y 102, con la service role) y avisa por correo.
  * Público: sin sesión. Protegido con rate limit por IP y un campo trampa.
+ *
+ * GET /api/leads
+ * Lista para el panel admin. Solo app_metadata.role = 'admin' (content_creator
+ * no: son datos personales).
  */
 
 const { Router } = require('express');
 const supabase = require('../db/supabase');
 const { leadLimiter } = require('../middleware/rateLimiter');
+const { requireAdmin } = require('../middleware/adminAuth');
 const { notifyNewLead } = require('../services/leadNotification');
 const logger = require('../utils/logger');
 
 const router = Router();
 
-const FUENTES = ['contacto_header', 'contacto_footer', 'metodo', 'automatizacion', 'demo_movil', 'nico'];
+const FUENTES = ['contacto_header', 'contacto_footer', 'metodo', 'automatizacion', 'demo_movil', 'nico', 'boletin'];
 const PERFILES = ['padre', 'docente', 'colegio', 'empresa', 'estudiante', 'otro'];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^[0-9+()\-.\s]{7,30}$/;
@@ -24,20 +29,26 @@ function validarLead(body) {
   if (b.autorizacion_datos !== true) {
     return { error: 'Debes autorizar el tratamiento de tus datos personales para que podamos contactarte.' };
   }
+  if (!FUENTES.includes(b.fuente)) {
+    return { error: 'Formulario de origen no reconocido.' };
+  }
+  const boletin = b.fuente === 'boletin';
+  // El boletín solo pide correo; los demás formularios piden nombre.
   const nombre = texto(b.nombre, 200);
-  if (!nombre || nombre.length < 2 || nombre.length > 120) {
+  if ((!boletin || nombre) && (!nombre || nombre.length < 2 || nombre.length > 120)) {
     return { error: 'Escribe tu nombre (entre 2 y 120 caracteres).' };
   }
-  const email = texto(b.email, 300)?.toLowerCase();
-  if (!email || email.length > 254 || !EMAIL_RE.test(email)) {
+  const email = texto(b.email, 300)?.toLowerCase() || null;
+  if (email && (email.length > 254 || !EMAIL_RE.test(email))) {
     return { error: 'Escribe un correo electrónico válido.' };
   }
   const telefono = texto(b.telefono, 60);
   if (telefono && !PHONE_RE.test(telefono)) {
     return { error: 'Escribe un teléfono válido: solo números, espacios y +.' };
   }
-  if (!FUENTES.includes(b.fuente)) {
-    return { error: 'Formulario de origen no reconocido.' };
+  // Nico pide WhatsApp y deja el correo opcional; el boletín exige correo.
+  if (!email && (boletin || !telefono)) {
+    return { error: 'Escribe un correo electrónico válido.' };
   }
   return {
     lead: {
@@ -83,6 +94,22 @@ router.post('/', leadLimiter, async (req, res) => {
     logger.error('[leads] falló el aviso por correo', { message: err.message })
   );
   return res.status(201).json({ ok: true });
+});
+
+router.get('/', requireAdmin, async (req, res) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Solo un administrador puede ver los leads.' });
+  }
+  const { data, error } = await supabase
+    .from('leads')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(500);
+  if (error) {
+    logger.error('[leads] no se pudieron leer los leads', { code: error.code });
+    return res.status(500).json({ error: 'No se pudieron cargar los leads.' });
+  }
+  return res.json({ leads: data || [] });
 });
 
 module.exports = router;

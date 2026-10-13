@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Icon } from "../utils/iconMapping.jsx";
 import { useTranslation } from "../i18n/I18nProvider";
+import useLeadSubmit from "../hooks/useLeadSubmit";
+import LeadConsent from "./leads/LeadConsent";
+import LeadProfileSelect from "./leads/LeadProfileSelect";
 
 export default function MetodoLeadModal({ show, onClose }) {
   const { t } = useTranslation();
@@ -11,30 +14,29 @@ export default function MetodoLeadModal({ show, onClose }) {
     interes: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const lead = useLeadSubmit("metodo");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const leadData = {
-      nombre: formData.nombre,
-      email: formData.email,
-      telefono: formData.telefono,
-      interes: formData.interes || "Transformación Educativa",
-      tema: "Comenzar Mi Transformación - Método",
-    };
-    const existing = JSON.parse(
-      localStorage.getItem("edutechlife_leads") || "[]",
+    const ok = await lead.submit(
+      {
+        nombre: formData.nombre,
+        email: formData.email,
+        telefono: formData.telefono,
+        producto_interes: formData.interes || "Transformación Educativa",
+      },
+      e.currentTarget,
     );
-    existing.push({ ...leadData, timestamp: new Date().toISOString() });
-    localStorage.setItem("edutechlife_leads", JSON.stringify(existing));
-    setSubmitted(true);
+    if (ok) setSubmitted(true);
   };
 
   const handleClose = () => {
     setSubmitted(false);
+    lead.reset();
     setFormData({ nombre: "", email: "", telefono: "", interes: "" });
     onClose();
   };
@@ -137,6 +139,12 @@ export default function MetodoLeadModal({ show, onClose }) {
                   placeholder={t("metodo.form_phone_placeholder")}
                 />
               </div>
+              <LeadProfileSelect
+                id="metodo-perfil"
+                lead={lead}
+                labelClassName="block text-sm font-semibold text-petroleum mb-1.5"
+                selectClassName="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-light focus:border-primary-light outline-none transition-all bg-white text-petroleum text-sm"
+              />
               <div>
                 <label className="block text-sm font-semibold text-petroleum mb-1.5">
                   {t("metodo.form_interest_label")}
@@ -166,16 +174,15 @@ export default function MetodoLeadModal({ show, onClose }) {
                   <option value="Otro">{t("metodo.form_option_other")}</option>
                 </select>
               </div>
+              <LeadConsent id="metodo-autorizacion" lead={lead} />
               <button
                 type="submit"
-                className="w-full py-3.5 bg-gradient-to-r from-petroleum to-primary-light text-white font-bold rounded-xl hover:shadow-premium-lg transition-all duration-300 flex items-center justify-center gap-2"
+                disabled={lead.sending}
+                className="w-full py-3.5 bg-gradient-to-r from-petroleum to-primary-light text-white font-bold rounded-xl hover:shadow-premium-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 <Icon name="fa-paper-plane" className="text-sm" />
-                {t("metodo.form_submit")}
+                {lead.sending ? t("leadForm.sending") : t("metodo.form_submit")}
               </button>
-              <p className="text-xs text-gray-400 text-center">
-                {t("metodo.form_privacy")}
-              </p>
             </form>
           )}
         </div>
