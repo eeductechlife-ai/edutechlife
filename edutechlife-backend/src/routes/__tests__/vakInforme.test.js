@@ -36,7 +36,7 @@ const informeValido = (extra = {}) => ({
   email: '  Laura@Ejemplo.CO ',
   perfil: 'padre',
   autorizacion_datos: true,
-  pdf_base64: pdfBase64(1000),
+  pdf_base64: pdfBase64(3000),
   sitio_web: '',
   ...extra,
 });
@@ -91,6 +91,14 @@ describe('POST /api/vak/informe', () => {
     const noPdf = Buffer.from('<html>hola</html>').toString('base64');
     const res = await request(app).post('/api/vak/informe').send(informeValido({ pdf_base64: noPdf })).expect(400);
     expect(res.body.error).toMatch(/PDF/);
+    expect(insert).not.toHaveBeenCalled();
+    expect(mockEmail.sendEmail).not.toHaveBeenCalled();
+  });
+
+  test('PDF vacío (solo estructura, 45 bytes) → 400 sin guardar ni enviar', async () => {
+    const vacio = Buffer.from('%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%%EOF\n').toString('base64');
+    const res = await request(app).post('/api/vak/informe').send(informeValido({ pdf_base64: vacio })).expect(400);
+    expect(res.body.error).toMatch(/vacío/);
     expect(insert).not.toHaveBeenCalled();
     expect(mockEmail.sendEmail).not.toHaveBeenCalled();
   });
