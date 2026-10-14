@@ -143,6 +143,7 @@ const GenericSignUpRedirect = () => {
  */
 const PlanesPage = lazy(() => import("../components/pages/PlanesPage"));
 const PrivacidadPage = lazy(() => import("../components/pages/PrivacidadPage"));
+const TerminosPage = lazy(() => import("../components/pages/TerminosPage"));
 
 const AppRoutes = () => {
   const { t } = useTranslation();
@@ -499,6 +500,15 @@ const AppRoutes = () => {
           element={
             <Suspense fallback={<PageLoader message={t("common.loading")} />}>
               <PrivacidadPage />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="terms"
+          element={
+            <Suspense fallback={<PageLoader message={t("common.loading")} />}>
+              <TerminosPage />
             </Suspense>
           }
         />
