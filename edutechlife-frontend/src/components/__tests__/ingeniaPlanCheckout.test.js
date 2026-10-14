@@ -1,8 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import {
   elegirPlanIngenIA,
-  INGENIA_SIGNUP_FOR_PLAN,
+  resolveLandingPlanId,
 } from "../ingenia/ingeniaPlanCheckout";
+
+describe("resolveLandingPlanId", () => {
+  it("mapea las tarjetas de la landing a los ids del backend", () => {
+    expect(resolveLandingPlanId("base")).toBe("smartboard_premium");
+    expect(resolveLandingPlanId("personalizado")).toBe(
+      "ingenia_acompanamiento",
+    );
+    expect(resolveLandingPlanId("gratis")).toBe("gratis");
+  });
+});
 
 describe("elegirPlanIngenIA", () => {
   let deps;
@@ -13,79 +23,114 @@ describe("elegirPlanIngenIA", () => {
       startCheckout: vi.fn().mockResolvedValue({
         url: "https://checkout.wompi.co/p/abc",
       }),
-      navigate: vi.fn(),
+      onSignIn: vi.fn(),
       onRegister: vi.fn(),
+      onValoracion: vi.fn(),
       redirect: vi.fn(),
       onError: vi.fn(),
       logError: vi.fn(),
     };
   });
 
-  it("sin sesión en plan de pago: va a registro con returnTo a la landing y no cobra", async () => {
-    deps.isSignedIn = false;
-    await elegirPlanIngenIA({ planId: "base", ...deps });
+  describe("plan Base (smartboard_premium)", () => {
+    it("con sesión: pide el checkout y redirige a Wompi", async () => {
+      await elegirPlanIngenIA({ planId: "smartboard_premium", ...deps });
 
-    expect(deps.navigate).toHaveBeenCalledWith(
-      "/sign-up/ingenia?returnTo=/conoce-ingenia",
+      expect(deps.startCheckout).toHaveBeenCalledWith("smartboard_premium");
+      expect(deps.redirect).toHaveBeenCalledWith(
+        "https://checkout.wompi.co/p/abc",
+      );
+      expect(deps.onSignIn).not.toHaveBeenCalled();
+      expect(deps.onRegister).not.toHaveBeenCalled();
+    });
+
+    it("sin sesión: va a registro/ingreso y no cobra", async () => {
+      deps.isSignedIn = false;
+      await elegirPlanIngenIA({ planId: "smartboard_premium", ...deps });
+
+      expect(deps.onSignIn).toHaveBeenCalledTimes(1);
+      expect(deps.startCheckout).not.toHaveBeenCalled();
+      expect(deps.redirect).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("plan Fundador (ingenia_fundador)", () => {
+    it("con sesión: pide el checkout del Fundador y redirige a Wompi", async () => {
+      await elegirPlanIngenIA({ planId: "ingenia_fundador", ...deps });
+
+      expect(deps.startCheckout).toHaveBeenCalledWith("ingenia_fundador");
+      expect(deps.redirect).toHaveBeenCalledWith(
+        "https://checkout.wompi.co/p/abc",
+      );
+    });
+
+    it("sin sesión: va a registro/ingreso y no cobra", async () => {
+      deps.isSignedIn = false;
+      await elegirPlanIngenIA({ planId: "ingenia_fundador", ...deps });
+
+      expect(deps.onSignIn).toHaveBeenCalledTimes(1);
+      expect(deps.startCheckout).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("planes personalizados: valoración gratis antes de cualquier cobro", () => {
+    it.each(["ingenia_acompanamiento", "ingenia_intensivo"])(
+      "%s con sesión: va a la valoración y no llama al checkout",
+      async (planId) => {
+        await elegirPlanIngenIA({ planId, ...deps });
+
+        expect(deps.onValoracion).toHaveBeenCalledTimes(1);
+        expect(deps.startCheckout).not.toHaveBeenCalled();
+        expect(deps.redirect).not.toHaveBeenCalled();
+        expect(deps.onSignIn).not.toHaveBeenCalled();
+      },
     );
-    expect(INGENIA_SIGNUP_FOR_PLAN).toBe(
-      "/sign-up/ingenia?returnTo=/conoce-ingenia",
-    );
-    expect(deps.startCheckout).not.toHaveBeenCalled();
-    expect(deps.redirect).not.toHaveBeenCalled();
-  });
 
-  it("con sesión en plan Base: pide el checkout del plan del backend y redirige a Wompi", async () => {
-    await elegirPlanIngenIA({ planId: "base", ...deps });
+    it.each(["ingenia_acompanamiento", "ingenia_intensivo"])(
+      "%s sin sesión: va a la valoración, sin pedir ingreso",
+      async (planId) => {
+        deps.isSignedIn = false;
+        await elegirPlanIngenIA({ planId, ...deps });
 
-    expect(deps.startCheckout).toHaveBeenCalledWith("smartboard_premium");
-    expect(deps.redirect).toHaveBeenCalledWith(
-      "https://checkout.wompi.co/p/abc",
-    );
-    expect(deps.navigate).not.toHaveBeenCalled();
-    expect(deps.onRegister).not.toHaveBeenCalled();
-  });
-
-  it("con sesión en plan Personalizado: pide el checkout de Acompañamiento", async () => {
-    await elegirPlanIngenIA({ planId: "personalizado", ...deps });
-
-    expect(deps.startCheckout).toHaveBeenCalledWith("ingenia_acompanamiento");
-    expect(deps.redirect).toHaveBeenCalledWith(
-      "https://checkout.wompi.co/p/abc",
+        expect(deps.onValoracion).toHaveBeenCalledTimes(1);
+        expect(deps.onSignIn).not.toHaveBeenCalled();
+        expect(deps.startCheckout).not.toHaveBeenCalled();
+      },
     );
   });
 
-  it("si el checkout falla: avisa con onError y conserva el registro del error", async () => {
-    const error = new Error("Wompi caído");
-    deps.startCheckout.mockRejectedValue(error);
-    await elegirPlanIngenIA({ planId: "base", ...deps });
+  describe("errores del checkout", () => {
+    it("si el checkout falla: avisa con onError y conserva el registro del error", async () => {
+      const error = new Error("Wompi caído");
+      deps.startCheckout.mockRejectedValue(error);
+      await elegirPlanIngenIA({ planId: "smartboard_premium", ...deps });
 
-    expect(deps.onError).toHaveBeenCalledTimes(1);
-    expect(deps.logError).toHaveBeenCalledWith("Error:", error);
-    expect(deps.redirect).not.toHaveBeenCalled();
+      expect(deps.onError).toHaveBeenCalledTimes(1);
+      expect(deps.logError).toHaveBeenCalledWith("Error:", error);
+      expect(deps.redirect).not.toHaveBeenCalled();
+    });
+
+    it("si la respuesta no trae URL: avisa con onError y no redirige", async () => {
+      deps.startCheckout.mockResolvedValue({});
+      await elegirPlanIngenIA({ planId: "smartboard_premium", ...deps });
+
+      expect(deps.onError).toHaveBeenCalledTimes(1);
+      expect(deps.redirect).not.toHaveBeenCalled();
+    });
   });
 
-  it("si la respuesta no trae URL: avisa con onError y no redirige", async () => {
-    deps.startCheckout.mockResolvedValue({});
-    await elegirPlanIngenIA({ planId: "base", ...deps });
+  describe("otros planes", () => {
+    it.each([true, false])(
+      "plan sin pago directo (isSignedIn=%s): mantiene el registro de siempre",
+      async (isSignedIn) => {
+        deps.isSignedIn = isSignedIn;
+        await elegirPlanIngenIA({ planId: "gratis", ...deps });
 
-    expect(deps.onError).toHaveBeenCalledTimes(1);
-    expect(deps.redirect).not.toHaveBeenCalled();
-  });
-
-  it("plan sin pago directo (gratis o sin id conocido): mantiene el registro de siempre", async () => {
-    await elegirPlanIngenIA({ planId: "gratis", ...deps });
-
-    expect(deps.onRegister).toHaveBeenCalledTimes(1);
-    expect(deps.startCheckout).not.toHaveBeenCalled();
-    expect(deps.navigate).not.toHaveBeenCalled();
-  });
-
-  it("plan sin pago directo también en modo sin sesión: registro de siempre", async () => {
-    deps.isSignedIn = false;
-    await elegirPlanIngenIA({ planId: "gratis", ...deps });
-
-    expect(deps.onRegister).toHaveBeenCalledTimes(1);
-    expect(deps.navigate).not.toHaveBeenCalled();
+        expect(deps.onRegister).toHaveBeenCalledTimes(1);
+        expect(deps.startCheckout).not.toHaveBeenCalled();
+        expect(deps.onSignIn).not.toHaveBeenCalled();
+        expect(deps.onValoracion).not.toHaveBeenCalled();
+      },
+    );
   });
 });

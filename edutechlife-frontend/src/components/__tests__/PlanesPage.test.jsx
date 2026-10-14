@@ -55,6 +55,13 @@ const PLANS = [
     features: ["Acceso completo"],
   },
   {
+    id: "ingenia_intensivo",
+    name: "Intensivo",
+    price: 2490000,
+    currency: "cop",
+    features: ["Sesiones con coach"],
+  },
+  {
     id: "global",
     name: "Global",
     price: 1000,
@@ -180,6 +187,23 @@ describe("PlanesPage: botón Suscribirse", () => {
     expect(mockStartCheckout).not.toHaveBeenCalled();
     expect(mockNavigate).not.toHaveBeenCalled();
   });
+
+  it.each([true, false])(
+    "plan Intensivo (personalizado, isSignedIn=%s): lleva a la valoración gratis y no inicia el pago",
+    async (isSignedIn) => {
+      mockAuth.isSignedIn = isSignedIn;
+      renderPage();
+
+      const botones = await screen.findAllByRole("button", {
+        name: "Suscribirse",
+      });
+      fireEvent.click(botones[2]);
+
+      expect(mockNavigate).toHaveBeenCalledWith("/conoce-ingenia#valoracion");
+      expect(mockStartCheckout).not.toHaveBeenCalled();
+      expect(window.location.href).toBe("");
+    },
+  );
 
   it.each(["es", "en", "pt"])(
     "en %s muestra el aviso de plan no disponible y el de error de pago",
