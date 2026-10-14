@@ -10,7 +10,6 @@ const PUBLIC_ROUTES = [
   { path: '/ialab-academic', name: 'catálogo de IALab', title: /IALab Academic/i },
   { path: '/conoce-ingenia', name: 'qué es IngenIA', title: /IngenIA/i },
   { path: '/planes', name: 'planes', title: /planes/i },
-  { path: '/neuroentorno', name: 'NeuroEntorno', title: /NeuroEntorno/i },
   { path: '/proyectos', name: 'proyectos nacionales', title: /Proyectos/i },
   { path: '/consultoria', name: 'consultoría educativa', title: /Consultor[ií]a/i },
   { path: '/consultoria-b2b', name: 'consultoría B2B', title: /B2B/i },

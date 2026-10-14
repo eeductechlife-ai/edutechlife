@@ -41,9 +41,6 @@ const IngenIAKidsDashboard = lazy(
 );
 const NotFoundPage = lazy(() => import("../components/pages/NotFoundPage"));
 const AdminPage = lazy(() => import("../components/pages/AdminPage"));
-const NeuroEntornoPage = lazy(
-  () => import("../components/pages/NeuroEntornoPage"),
-);
 const ProyectosNacionalPage = lazy(
   () => import("../components/pages/ProyectosNacionalPage"),
 );
@@ -140,7 +137,7 @@ const GenericSignUpRedirect = () => {
  * Configuración de rutas principales de la aplicación
  *
  * Estructura:
- * - Rutas públicas: /, /neuroentorno, /proyectos, etc.
+ * - Rutas públicas: /, /proyectos, etc.
  * - Rutas protegidas: /ialab, /ingenia, /admin (requieren autenticación + rol)
  * - Rutas de autenticación: /auth-router (redirección inteligente)
  */
@@ -191,17 +188,6 @@ const AppRoutes = () => {
         />
 
         <Route path="auth-router" element={<AuthRouter />} />
-
-        <Route
-          path="neuroentorno"
-          element={
-            <Suspense
-              fallback={<PageLoader message={t("page_loader.neuro")} />}
-            >
-              <NeuroEntornoPage />
-            </Suspense>
-          }
-        />
 
         <Route
           path="proyectos"

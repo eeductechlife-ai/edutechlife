@@ -30,7 +30,6 @@
   "routes": {
     "public": [
       "/",
-      "/neuroentorno",
       "/proyectos",
       "/consultoria",
       "/consultoria-b2b",

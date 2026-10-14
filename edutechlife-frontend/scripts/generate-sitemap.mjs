@@ -8,7 +8,6 @@ const BASE = 'https://edutechlife.co'
 
 const ROUTES = [
   { loc: '/', priority: 1.0, changefreq: 'weekly' },
-  { loc: '/neuroentorno', priority: 0.8, changefreq: 'monthly' },
   { loc: '/proyectos', priority: 0.8, changefreq: 'monthly' },
   { loc: '/consultoria', priority: 0.7, changefreq: 'monthly' },
   { loc: '/consultoria-b2b', priority: 0.7, changefreq: 'monthly' },

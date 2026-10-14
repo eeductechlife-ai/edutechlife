@@ -53,11 +53,6 @@ export const certificationsContent = {
       descricao: "Certificação em lousas interativas inteligentes",
       nivel: "Intermediário",
     },
-    {
-      titulo: "Neuroambiente Educacional",
-      descricao: "Design de ambientes de aprendizagem baseados em neurociência",
-      nivel: "Avançado",
-    },
   ],
   calloutTitle: "Interessado em se certificar?",
   calloutDesc:

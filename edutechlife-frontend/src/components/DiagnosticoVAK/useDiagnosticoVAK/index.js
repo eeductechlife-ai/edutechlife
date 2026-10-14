@@ -16,7 +16,7 @@ import {
 const isTypingTarget = (el) =>
   !!el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA");
 
-export default function useDiagnosticoVAK({ onNavigate }) {
+export default function useDiagnosticoVAK() {
   const { t } = useTranslation();
   const { clearStudentInfo } = useStudent();
   const { supabase, userId } = useSupabase();
@@ -211,10 +211,6 @@ export default function useDiagnosticoVAK({ onNavigate }) {
         toggleHighContrast();
         return;
       }
-      if (e.key === "Escape" && onNavigate) {
-        onNavigate("neuroentorno");
-        return;
-      }
       if (phase === "test" && !isTypingTarget(e.target)) {
         const option =
           ageQuestions[currentQuestion]?.options[Number(e.key) - 1];
@@ -228,7 +224,7 @@ export default function useDiagnosticoVAK({ onNavigate }) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, currentQuestion, ageQuestions, answers, onNavigate]);
+  }, [phase, currentQuestion, ageQuestions, answers]);
 
   const listenToQuestion = () => {
     const q = ageQuestions[currentQuestion];

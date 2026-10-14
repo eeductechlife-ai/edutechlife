@@ -53,7 +53,7 @@ export function watchPage(page: Page): PageWatch {
  * Deja que la página cargue y la observa unos segundos antes de dar nada por
  * bueno. Sustituye a `waitForLoadState('networkidle')`: hay páginas que nunca
  * llegan a «red inactiva» (conexiones abiertas, vídeo, analítica), y un fallo
- * al renderizar un componente cargado de forma diferida (p. ej. /neuroentorno)
+ * al renderizar un componente cargado de forma diferida (p. ej. /vak)
  * ocurre 1-2 s DESPUÉS de la carga, cuando «red inactiva» ya pasó.
  */
 export async function settle(page: Page, ms = 3_000): Promise<void> {
