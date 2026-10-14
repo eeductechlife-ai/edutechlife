@@ -68,7 +68,9 @@ function validarInforme(body) {
     return { status: 400, error: 'El informe llegó vacío. Abre la vista previa y vuelve a intentarlo.' };
   }
 
-  return { datos: { nombre, email, perfil: b.perfil, pdfB64 } };
+  // Nombre del estudiante: opcional, solo para el texto del correo (no se guarda).
+  const nombreEstudiante = texto(b.nombre_estudiante, 60);
+  return { datos: { nombre, email, perfil: b.perfil, pdfB64, nombreEstudiante } };
 }
 
 router.post('/', vakInformeIpLimiter, async (req, res) => {
@@ -114,7 +116,7 @@ router.post('/', vakInformeIpLimiter, async (req, res) => {
     return res.status(500).json({ error: 'No pudimos enviar el informe. Intenta de nuevo en unos minutos.' });
   }
 
-  const correo = construirCorreoInforme();
+  const correo = construirCorreoInforme({ nombreEstudiante: datos.nombreEstudiante });
   const envio = await sendEmail(
     datos.email,
     correo.subject,
