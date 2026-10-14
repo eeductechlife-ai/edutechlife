@@ -1,5 +1,5 @@
 -- ============================================================================
--- 104_aviso_padre_login.sql
+-- 106_aviso_padre_login.sql
 -- Registro anti-spam del aviso al padre/acudiente cuando un menor inicia
 -- sesión en IngenIA (services/avisoPadreLogin.js). Máximo un correo por niño
 -- cada 24 horas.
