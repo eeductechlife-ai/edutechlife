@@ -64,13 +64,20 @@ export async function generatePDF({ diagnosis, t, setError, setPdfLoading }) {
  * Usa la vista previa ya en pantalla. Escala y calidad más bajas que la descarga
  * para mantenerlo bajo el límite de 2 MB del envío.
  */
+// Un PDF real con contenido pesa mucho más que esto; por debajo es una hoja vacía.
+const MIN_PDF_BYTES = 2048;
+
 export async function generarInformePDF() {
   const el = document.getElementById("document-preview-content");
   if (!el || el.innerHTML.length < 100) {
     throw new Error("Abre la vista previa del informe antes de enviarlo.");
   }
+  // Si el contenido no se ve (animación de entrada o panel oculto), html2canvas sale en blanco.
+  if (el.getBoundingClientRect().height === 0) {
+    throw new Error("La vista previa aún no está visible. Espera un momento e intenta de nuevo.");
+  }
   const { default: html2pdf } = await import("html2pdf.js");
-  return html2pdf()
+  const blob = await html2pdf()
     .set({
       margin: [15, 15, 15, 15],
       image: { type: "jpeg", quality: 0.9 },
@@ -86,4 +93,8 @@ export async function generarInformePDF() {
     })
     .from(el)
     .outputPdf("blob");
+  if (blob.size < MIN_PDF_BYTES) {
+    throw new Error("No se pudo generar el informe. Intenta de nuevo.");
+  }
+  return blob;
 }

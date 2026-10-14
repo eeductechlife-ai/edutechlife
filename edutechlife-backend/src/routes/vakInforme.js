@@ -22,6 +22,7 @@ const router = Router();
 
 const PERFILES_ADULTOS = ['padre', 'docente', 'colegio', 'empresa', 'otro'];
 const MAX_PDF_BYTES = 2 * 1024 * 1024;
+const MIN_PDF_BYTES = 2048;
 const MAX_ENVIOS_POR_CORREO_DIA = 3;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const BASE64_RE = /^[A-Za-z0-9+/]+={0,2}$/;
@@ -61,6 +62,10 @@ function validarInforme(body) {
   }
   if (pdf.subarray(0, 5).toString('latin1') !== '%PDF-') {
     return { status: 400, error: 'El archivo no es un PDF válido.' };
+  }
+  // Una hoja sin contenido pesa unos pocos bytes: no se envía un informe vacío.
+  if (pdf.length < MIN_PDF_BYTES) {
+    return { status: 400, error: 'El informe llegó vacío. Abre la vista previa y vuelve a intentarlo.' };
   }
 
   return { datos: { nombre, email, perfil: b.perfil, pdfB64 } };
