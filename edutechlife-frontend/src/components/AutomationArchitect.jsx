@@ -19,7 +19,6 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
   const [activeStep, setActiveStep] = useState(1);
   const [formData, setFormData] = useState({
     empresa: "",
-    sector: "",
     empleados: 50,
     procesos: [],
     objetivos: "",
@@ -91,7 +90,6 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
   const resetForm = () => {
     setFormData({
       empresa: "",
-      sector: "",
       empleados: 50,
       procesos: [],
       objetivos: "",
@@ -293,7 +291,7 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
                 onClick={() => setActiveStep(2)}
                 disabled={
                   !formData.empresa ||
-                  !formData.sector ||
+                  !formData.industria ||
                   formData.procesos.length === 0
                 }
               >
@@ -461,7 +459,10 @@ const AutomationArchitect = ({ onBack, embedded = false }) => {
                 <div className="aa-summary-item">
                   <span>{t("automation.architect.summary_sector")}</span>
                   <strong>
-                    {formData.sector || t("automation.architect.not_specified")}
+                    {industrias.find((i) => i.id === formData.industria)
+                      ?.label ||
+                      formData.industria ||
+                      t("automation.architect.not_specified")}
                   </strong>
                 </div>
                 <div className="aa-summary-item">
