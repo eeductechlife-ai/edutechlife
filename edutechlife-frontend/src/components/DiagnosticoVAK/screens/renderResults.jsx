@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Eye, RotateCcw, Rocket } from "lucide-react";
-import { STYLE_INSIGHTS } from "../vakStyles";
+import { STYLE_INSIGHTS, getTipsPadres } from "../vakStyles";
 import ResultFeedback from "../components/ResultFeedback";
 
 const ORDER = ["visual", "auditivo", "kinestesico"];
@@ -128,6 +128,16 @@ export default function renderResults({
           <p className="!m-0 mt-1 text-base font-semibold text-[#7C2D12]">
             {main.challenge}
           </p>
+        </section>
+        <section className="rounded-2xl bg-white border border-[#B2D8E5] p-4">
+          <h2 className="!m-0 text-sm font-bold uppercase tracking-wider text-[#0B7285]">
+            {t("vak.ui.pdf_parent_tips")}
+          </h2>
+          <ul className="!m-0 mt-2 pl-5 list-disc space-y-1.5 text-base text-[#1E293B]">
+            {getTipsPadres(diagnosis.predominantStyle).map((tip) => (
+              <li key={tip}>{tip}</li>
+            ))}
+          </ul>
         </section>
       </div>
 
