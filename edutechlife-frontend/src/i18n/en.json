@@ -6111,5 +6111,16 @@
   "school.vak_kinesthetic": "Kinesthetic",
   "school.vak_none": "Not assessed",
   "ingenia.landing_testimonials_title_line1": "What",
-  "ingenia.landing_testimonials_title_line2": "parents say"
+  "ingenia.landing_testimonials_title_line2": "parents say",
+  "push_padres.title": "Alerts on your phone",
+  "push_padres.desc": "Turn on alerts on your phone to know when your child is active in IngenIA. Tap the button and accept the browser permission.",
+  "push_padres.button": "Turn on alerts on my phone",
+  "push_padres.activating": "Turning on…",
+  "push_padres.status_on": "On: you will get an alert when your child signs in.",
+  "push_padres.status_off": "Pending: alerts are not turned on for this device yet.",
+  "push_padres.status_blocked": "Alerts are blocked in your browser. Enable them in the site settings and try again.",
+  "push_padres.status_unsupported": "This browser does not support push alerts. Try an updated Chrome or Safari.",
+  "push_padres.permission_pending": "Accept the browser permission to finish turning them on.",
+  "push_padres.error_prefix": "We could not turn on alerts:",
+  "push_padres.no_auth": "Sign in again to turn on alerts."
 }

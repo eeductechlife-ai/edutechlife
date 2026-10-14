@@ -6111,5 +6111,16 @@
   "school.vak_kinesthetic": "Cinestésico",
   "school.vak_none": "Sem diagnóstico",
   "ingenia.landing_testimonials_title_line1": "O que dizem",
-  "ingenia.landing_testimonials_title_line2": "os pais"
+  "ingenia.landing_testimonials_title_line2": "os pais",
+  "push_padres.title": "Avisos no seu celular",
+  "push_padres.desc": "Ative os avisos no seu celular para saber quando seu filho/a está ativo no IngenIA. Toque no botão e aceite a permissão do navegador.",
+  "push_padres.button": "Ativar avisos no meu celular",
+  "push_padres.activating": "Ativando…",
+  "push_padres.status_on": "Ativado: você receberá um aviso quando seu filho/a fizer login.",
+  "push_padres.status_off": "Pendente: os avisos ainda não estão ativos neste dispositivo.",
+  "push_padres.status_blocked": "Os avisos estão bloqueados no navegador. Ative-os nas configurações do site e tente de novo.",
+  "push_padres.status_unsupported": "Este navegador não permite avisos push. Tente o Chrome ou o Safari atualizados.",
+  "push_padres.permission_pending": "Aceite a permissão do navegador para concluir a ativação.",
+  "push_padres.error_prefix": "Não conseguimos ativar os avisos:",
+  "push_padres.no_auth": "Entre na sua conta de novo para ativar os avisos."
 }
