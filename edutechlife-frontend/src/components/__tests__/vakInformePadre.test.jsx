@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import VakEnviarInforme from "../DiagnosticoVAK/VakEnviarInforme";
 import IngenIAValoracion from "../ingenia/IngenIAValoracion";
@@ -45,8 +45,14 @@ describe("VakEnviarInforme (PDF adjunto al correo del adulto)", () => {
     localStorage.clear();
     sessionStorage.clear();
     vi.restoreAllMocks();
+    generarInformePDF.mockClear();
     generarInformePDF.mockResolvedValue(pdfFalso());
     fetchMock = vi.spyOn(globalThis, "fetch");
+  });
+
+  // Sin restaurar, el spy de fetch conserva llamadas y rompe la prueba de IngenIAValoracion.
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it("envía un PDF válido en base64 y solo datos del adulto", async () => {
@@ -110,6 +116,55 @@ describe("VakEnviarInforme (PDF adjunto al correo del adulto)", () => {
     expect(
       screen.getByRole("checkbox", { name: /leadForm.consent_text/ }),
     ).toBeRequired();
+  });
+
+  it("la casilla de autorización viene desmarcada (Ley 1581, no premarcada)", () => {
+    render(<VakEnviarInforme />);
+    expect(
+      screen.getByRole("checkbox", { name: /leadForm.consent_text/ }),
+    ).not.toBeChecked();
+  });
+
+  it("sin autorización no genera el PDF ni llama al backend, aunque el formulario se envíe", async () => {
+    const { container } = render(<VakEnviarInforme />);
+    fireEvent.change(screen.getByLabelText("vak.informe.name_label"), {
+      target: { value: "Laura Ortiz" },
+    });
+    fireEvent.change(screen.getByLabelText("vak.informe.email_label"), {
+      target: { value: "laura@ejemplo.co" },
+    });
+    fireEvent.change(screen.getByLabelText("leadForm.profile_label"), {
+      target: { value: "padre" },
+    });
+    // fireEvent.submit salta la validación nativa de `required`: el guard de JS debe frenar el envío.
+    fireEvent.submit(container.querySelector("form"));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "leadForm.error_consentimiento",
+    );
+    expect(generarInformePDF).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("precarga el nombre del adulto que ya escribió en el resultado", () => {
+    render(<VakEnviarInforme nombreInicial="  Laura Ortiz  " />);
+    expect(screen.getByLabelText("vak.informe.name_label")).toHaveValue(
+      "Laura Ortiz",
+    );
+  });
+
+  it("si el envío falla, el formulario queda disponible para reintentar", async () => {
+    fetchMock.mockRejectedValue(new TypeError("Failed to fetch"));
+    const { container } = render(<VakEnviarInforme />);
+    llenarInforme(container);
+
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "vak.informe.submit" }),
+    ).toBeEnabled();
+    expect(
+      screen.queryByText("vak.informe.sent_title"),
+    ).not.toBeInTheDocument();
   });
 });
 

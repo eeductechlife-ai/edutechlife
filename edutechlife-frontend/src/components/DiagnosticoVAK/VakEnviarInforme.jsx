@@ -24,10 +24,14 @@ const blobABase64 = (blob) =>
 /**
  * Envía el informe PDF (generado en el navegador) como adjunto al correo del adulto.
  * No pide datos del niño. Vive junto a la vista previa, donde existe el PDF.
+ * `nombreInicial` es el nombre que el adulto ya escribió en la pantalla de resultado.
  */
-export default function VakEnviarInforme() {
+export default function VakEnviarInforme({ nombreInicial = "" } = {}) {
   const { t } = useTranslation();
-  const [campos, setCampos] = useState({ nombre: "", email: "" });
+  const [campos, setCampos] = useState({
+    nombre: String(nombreInicial || "").trim().slice(0, 120),
+    email: "",
+  });
   const [perfil, setPerfil] = useState("");
   const [consent, setConsent] = useState(false);
   const [estado, setEstado] = useState("idle"); // idle | sending | sent | error
@@ -35,6 +39,12 @@ export default function VakEnviarInforme() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Sin autorización no se genera ni se envía nada (no depende solo de `required`).
+    if (!consent) {
+      setEstado("error");
+      setErrorMsg(t("leadForm.error_consentimiento"));
+      return;
+    }
     setEstado("sending");
     setErrorMsg("");
     try {
