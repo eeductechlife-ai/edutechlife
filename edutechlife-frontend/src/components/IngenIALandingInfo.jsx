@@ -28,7 +28,11 @@ import IngenIAFinalSection from "./ingenia/IngenIAFinalSection";
 import IngenIAWhatsappCta from "./ingenia/IngenIAWhatsappCta";
 import IngenIAMobileBar from "./ingenia/IngenIAMobileBar";
 import IngenIAValoracion from "./ingenia/IngenIAValoracion";
-import { elegirPlanIngenIA } from "./ingenia/ingeniaPlanCheckout";
+import {
+  elegirPlanIngenIA,
+  resolveLandingPlanId,
+  INGENIA_SIGNUP_FOR_PLAN,
+} from "./ingenia/ingeniaPlanCheckout";
 import "./ingenia/ingenia-theme.css";
 
 // Anclas de cada sección. El wrapper usa un id con prefijo para NO chocar con
@@ -43,6 +47,13 @@ const SECTION_ANCHORS = [
 ];
 
 const anchorId = (anchor) => `ingenia-sec-${anchor}`;
+
+// Bloque de valoración gratis (antes de «Planes»): destino de los planes personalizados.
+const VALORACION_ANCHOR = "valoracion";
+const scrollToValoracion = () =>
+  document
+    .getElementById(VALORACION_ANCHOR)
+    ?.scrollIntoView({ behavior: "smooth", block: "start" });
 
 const getStepLabels = (t) => [
   t("ingenia.landing_step_que_es"),
@@ -134,18 +145,23 @@ const IngenIALandingInfo = ({ onNavigate }) => {
     else navigate("/sign-up/ingenia");
   }, [onNavigate, navigate, variant, activeStep, stepLabels]);
 
-  // Botón "Elegir" de un plan: los de pago van al checkout de Wompi; el resto, al registro.
+  // Botón "Elegir" de un plan: Base y Fundador van a Wompi; Personalizado, a la
+  // valoración gratis (sin cobro); el resto, al registro de siempre.
   const { isSignedIn } = useAuthIdentity();
   const [planError, setPlanError] = useState("");
   const handlePlanSelect = useCallback(
     (plan) => {
       setPlanError("");
       return elegirPlanIngenIA({
-        planId: plan.id,
+        planId: resolveLandingPlanId(plan.id),
         isSignedIn,
         startCheckout,
-        navigate: (to) => (onNavigate ? onNavigate(to) : navigate(to)),
+        onSignIn: () =>
+          onNavigate
+            ? onNavigate(INGENIA_SIGNUP_FOR_PLAN)
+            : navigate(INGENIA_SIGNUP_FOR_PLAN),
         onRegister: handleCta,
+        onValoracion: () => scrollToValoracion(),
         redirect: (url) => {
           window.location.href = url;
         },
@@ -154,6 +170,11 @@ const IngenIALandingInfo = ({ onNavigate }) => {
     },
     [isSignedIn, onNavigate, navigate, handleCta, t],
   );
+
+  // Si llegan con #valoracion (desde /planes), lleva al formulario al montar.
+  useEffect(() => {
+    if (window.location.hash === `#${VALORACION_ANCHOR}`) scrollToValoracion();
+  }, []);
 
   const sections = [
     <IngenIAQueEsSection key="que-es" t={t} vakStyles={vakStyles} />,

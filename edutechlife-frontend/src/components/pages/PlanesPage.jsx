@@ -4,6 +4,7 @@ import { useAuthIdentity } from "../../hooks/useAuthIdentity";
 import { getPlans, startCheckout } from "../../services/stripeClient";
 import SEO from "../SEO";
 import { useTranslation } from "../../i18n/I18nProvider";
+import { INGENIA_VALORACION_PLAN_IDS } from "../ingenia/ingeniaPlanCheckout";
 
 const STRIPE_ENABLED = !!import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 // Los planes en pesos se cobran con Wompi (el backend decide si está activo).
@@ -77,6 +78,11 @@ const PlanesPage = () => {
 
   const handleSelect = async (plan) => {
     setCheckoutMessage("");
+    // Personalizado e Intensivo: primero valoración gratis, sin cobro directo.
+    if (INGENIA_VALORACION_PLAN_IDS.has(plan.id)) {
+      navigate("/conoce-ingenia#valoracion");
+      return;
+    }
     if (!canPay(plan)) {
       setCheckoutMessage(t("planes.checkout_unavailable"));
       return;

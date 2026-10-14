@@ -9,8 +9,9 @@ export default function IngenIAValoracion() {
   const { t } = useTranslation();
   return (
     <section
+      id="valoracion"
       aria-labelledby="ingenia-val-titulo"
-      className="mx-auto max-w-3xl px-4 py-8"
+      className="mx-auto max-w-3xl scroll-mt-20 px-4 py-8"
     >
       <div className="rounded-3xl border border-[#7B2FF7]/10 bg-[#F7F5FF] p-6 sm:p-8">
         <h3
