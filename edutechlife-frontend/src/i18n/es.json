@@ -3484,7 +3484,7 @@
   "automation.roi.slider_empleados": "Empleados",
   "automation.roi.slider_horas": "Horas manuales/semana/persona",
   "automation.roi.slider_eficiencia": "Eficiencia esperada con IA",
-  "automation.roi.disclaimer": "Los cálculos se basan en estándares de industria y casos reales de automatización.",
+  "automation.roi.disclaimer": "Estimación orientativa en COP: ahorro anual = costo operativo anual × eficiencia × 60 %; payback = inversión ÷ ahorro anual × 12 meses.",
   "automation.roi.metric_inversion": "Inversión",
   "automation.roi.metric_ahorro": "Ahorro Anual",
   "automation.roi.metric_roi": "ROI",

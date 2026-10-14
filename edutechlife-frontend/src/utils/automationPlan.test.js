@@ -3,6 +3,7 @@ import {
   buildPlanRequest,
   ensurePlanAviso,
   PLAN_AVISO,
+  PLAN_MAX_TOKENS,
   SYSTEM_PROMPT,
 } from "./automationPlan";
 
@@ -19,8 +20,10 @@ const form = {
 describe("buildPlanRequest", () => {
   it("formato de mensajes con >= 2000 tokens", () => {
     const { messages, options } = buildPlanRequest(form, { nombre: "Arq" });
+    expect(Array.isArray(messages)).toBe(true);
     expect(messages[0].role).toBe("system");
     expect(options.maxTokens).toBeGreaterThanOrEqual(2000);
+    expect(PLAN_MAX_TOKENS).toBe(2000);
   });
   it("delimita datos del cliente, limita longitud y neutraliza cierre de etiqueta", () => {
     const user = buildPlanRequest(form, null).messages[1].content;

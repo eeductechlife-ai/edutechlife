@@ -2,6 +2,12 @@ import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "../i18n/I18nProvider";
 import IngenIATilt3D from "./ingenia/IngenIATilt3D";
+import {
+  calcularROI,
+  formatCOP,
+  formatDecimal,
+  formatInt,
+} from "../utils/roiCalculator";
 
 const AutomationROICalculator = ({ onGeneratePlan }) => {
   const { t } = useTranslation();
@@ -16,31 +22,7 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
   const update = (field, value) =>
     setInputs((prev) => ({ ...prev, [field]: value }));
 
-  const results = useMemo(() => {
-    const costoAnualOperativo = inputs.costosOperativos * 12;
-    const ahorroPotencial =
-      costoAnualOperativo * (inputs.eficiencia / 100) * 0.7;
-    const inversion = inputs.empleados * 1200 + inputs.ingresos * 0.03;
-    const ahorroAnual =
-      ahorroPotencial + inputs.horasManuales * inputs.empleados * 40 * 12 * 0.5;
-    const roi = ahorroAnual > 0 ? (ahorroAnual - inversion) / inversion : 0;
-    const payback = ahorroAnual > 0 ? inversion / ahorroAnual : 0;
-    const productividadGanada =
-      (inputs.horasManuales * inputs.empleados * 4 * 12 * inputs.eficiencia) /
-      100;
-
-    return {
-      inversion: Math.round(inversion),
-      ahorroAnual: Math.round(ahorroAnual),
-      roi: Math.round(roi * 10) / 10,
-      payback: Math.round(payback * 10) / 10,
-      productividadGanada: Math.round(productividadGanada),
-      costoActual: costoAnualOperativo,
-      costoFuturo: Math.round(
-        costoAnualOperativo * (1 - (inputs.eficiencia / 100) * 0.6),
-      ),
-    };
-  }, [inputs]);
+  const results = useMemo(() => calcularROI(inputs), [inputs]);
 
   const Slider = ({
     label,
@@ -56,7 +38,7 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
       <div className="flex items-center justify-between mb-2">
         <label className="text-sm font-semibold text-slate-600">{label}</label>
         <span className="text-sm font-bold text-petroleum">
-          {value.toLocaleString()}
+          {formatInt(value)}
           {unit}
         </span>
       </div>
@@ -110,7 +92,7 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
           </div>
         </div>
         <div className="text-2xl md:text-3xl font-black" style={{ color }}>
-          ${value?.toLocaleString()}
+          {value}
         </div>
         {sub && <div className="text-xs text-slate-400 mt-1">{sub}</div>}
       </motion.div>
@@ -199,14 +181,14 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
             <MetricCard
               label={t("automation.roi.metric_inversion")}
-              value={results.inversion}
+              value={formatCOP(results.inversion)}
               color="#4DA8C4"
               delay={0}
               icon="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
             <MetricCard
               label={t("automation.roi.metric_ahorro")}
-              value={results.ahorroAnual}
+              value={formatCOP(results.ahorroAnual)}
               color="#10B981"
               delay={0.1}
               icon="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
@@ -215,15 +197,15 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
             <MetricCard
               label={t("automation.roi.metric_roi")}
-              value={results.roi}
-              sub={`${results.roi}x ${t("automation.roi.retorno")}`}
+              value={`${formatDecimal(results.roi)}x`}
+              sub={t("automation.roi.retorno")}
               color="#004B63"
               delay={0.2}
               icon="M13 10V3L4 14h7v7l9-11h-7z"
             />
             <MetricCard
               label={t("automation.roi.metric_payback")}
-              value={results.payback}
+              value={formatDecimal(results.payback)}
               sub={t("automation.roi.meses")}
               color="#66CCCC"
               delay={0.3}
@@ -241,7 +223,7 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
                 <div className="flex justify-between text-xs text-slate-500 mb-1">
                   <span>{t("automation.roi.costo_actual")}</span>
                   <span className="font-semibold text-petroleum">
-                    ${results.costoActual?.toLocaleString()}
+                    {formatCOP(results.costoActual)}
                   </span>
                 </div>
                 <div className="w-full bg-white/70 rounded-full h-2">
@@ -255,7 +237,7 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
                 <div className="flex justify-between text-xs text-slate-500 mb-1">
                   <span>{t("automation.roi.costo_futuro")}</span>
                   <span className="font-semibold text-success">
-                    ${results.costoFuturo?.toLocaleString()}
+                    {formatCOP(results.costoFuturo)}
                   </span>
                 </div>
                 <div className="w-full bg-white/70 rounded-full h-2">
@@ -277,7 +259,7 @@ const AutomationROICalculator = ({ onGeneratePlan }) => {
                   {t("automation.roi.productividad")}
                 </span>
                 <span className="text-sm font-bold text-[#10B981]">
-                  {results.productividadGanada?.toLocaleString()}{" "}
+                  {formatInt(results.productividadGanada)}{" "}
                   {t("automation.roi.hrs_anio")}
                 </span>
               </div>
