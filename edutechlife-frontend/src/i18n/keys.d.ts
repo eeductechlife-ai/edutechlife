@@ -5497,6 +5497,8 @@ export type TranslationKeys = {
   "peer_review.submitted": string;
   "peer_review.submitting": string;
   "peer_review.title": string;
+  "planes.checkout_error": string;
+  "planes.checkout_unavailable": string;
   "pomodoro.focus": string;
   "pomodoro.long_break": string;
   "pomodoro.minutes_focused": string;
@@ -11632,6 +11634,8 @@ const translationKeySet: Record<string, true> = {
   "peer_review.submitted": true,
   "peer_review.submitting": true,
   "peer_review.title": true,
+  "planes.checkout_error": true,
+  "planes.checkout_unavailable": true,
   "pomodoro.focus": true,
   "pomodoro.long_break": true,
   "pomodoro.minutes_focused": true,

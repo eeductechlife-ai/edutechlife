@@ -6122,5 +6122,7 @@
   "push_padres.status_unsupported": "This browser does not support push alerts. Try an updated Chrome or Safari.",
   "push_padres.permission_pending": "Accept the browser permission to finish turning them on.",
   "push_padres.error_prefix": "We could not turn on alerts:",
-  "push_padres.no_auth": "Sign in again to turn on alerts."
+  "push_padres.no_auth": "Sign in again to turn on alerts.",
+  "planes.checkout_unavailable": "This plan is not available for online payment.",
+  "planes.checkout_error": "We couldn't open the payment. Please try again or message us on WhatsApp."
 }

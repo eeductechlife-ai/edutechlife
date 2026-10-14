@@ -6122,5 +6122,7 @@
   "push_padres.status_unsupported": "Este navegador no permite avisos push. Prueba con Chrome o Safari actualizados.",
   "push_padres.permission_pending": "Acepta el permiso del navegador para terminar la activación.",
   "push_padres.error_prefix": "No pudimos activar los avisos:",
-  "push_padres.no_auth": "Inicia sesión de nuevo para activar los avisos."
+  "push_padres.no_auth": "Inicia sesión de nuevo para activar los avisos.",
+  "planes.checkout_unavailable": "Este plan no está disponible para pagar en línea.",
+  "planes.checkout_error": "No pudimos abrir el pago. Intenta de nuevo o escríbenos por WhatsApp."
 }
