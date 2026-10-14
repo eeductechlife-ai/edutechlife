@@ -11,9 +11,14 @@ const parentInsightsRoutes = require('./parent-insights');
 const gamificationRoutes = require('./gamification');
 const scanRoutes = require('./scan');
 const videoRoutes = require('./videos');
+const autorizacionPadresRoutes = require('./autorizacion-padres');
+const { requireAutorizacionPadres } = require('../../middleware/autorizacionPadres');
 
 const router = Router();
 
+// Solo activo con CONSENTIMIENTO_PADRES encendida; va antes de las demás rutas.
+router.use(requireAutorizacionPadres());
+router.use(autorizacionPadresRoutes);
 router.use(coreRoutes);
 router.use(chatRoutes);
 router.use(daniPhotoRoutes);

@@ -6,6 +6,7 @@ import { PageLoader } from "../LoadingScreen";
 import { useTranslation } from "../../i18n/I18nProvider";
 import SEO from "../SEO";
 import { API_BASE_URL as API_BASE } from "../../config/api";
+import AutorizacionPadresGate from "../kids-dashboard/AutorizacionPadresGate";
 
 const IngenIAKidsDashboard = lazy(
   () => import("../kids-dashboard/IngenIAKidsDashboard"),
@@ -81,11 +82,14 @@ const IngenIALandingPage = () => {
         title={t("seo.ingenia_kids.title")}
         description={t("seo.ingenia_kids.desc")}
       />
-      <IngenIAKidsProvider>
-        <Suspense fallback={<PageLoader message={t("ingenia.loading")} />}>
-          <IngenIAKidsDashboard />
-        </Suspense>
-      </IngenIAKidsProvider>
+      {/* La puerta va fuera del provider: el provider ya pide datos al montarse. */}
+      <AutorizacionPadresGate>
+        <IngenIAKidsProvider>
+          <Suspense fallback={<PageLoader message={t("ingenia.loading")} />}>
+            <IngenIAKidsDashboard />
+          </Suspense>
+        </IngenIAKidsProvider>
+      </AutorizacionPadresGate>
     </>
   );
 };
