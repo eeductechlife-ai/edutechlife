@@ -1,6 +1,7 @@
 const supabase = require('../db/supabase');
 const { createSessionClient } = require('../db/sessionClient');
 const mfaService = require('./mfaService');
+const autorizacionPadres = require('./autorizacionPadres');
 
 /**
  * Sign up a new user with email + password
@@ -67,6 +68,12 @@ async function signUp({ email, password, username, firstName, lastName, userType
           user_type: userType,
           account_type: accountType,
           clerk_id: userId,
+          // Solo con CONSENTIMIENTO_PADRES encendida: las cuentas nuevas de
+          // IngenIA requieren autorización de padre/madre. Sin la variable el
+          // payload es idéntico al de antes.
+          ...(accountType === 'smartboard' && autorizacionPadres.estaActivo()
+            ? { autorizacion_padres_requerida: true }
+            : {}),
         },
       ])
       .select()
