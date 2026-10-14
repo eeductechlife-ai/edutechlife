@@ -266,7 +266,7 @@ const DocumentPreviewScreen = ({
       />
 
       <div className="mx-auto mt-8 max-w-md px-4 pb-8">
-        <VakEnviarInforme />
+        <VakEnviarInforme nombreInicial={parentName} />
       </div>
     </motion.div>
   );
