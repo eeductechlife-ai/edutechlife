@@ -49,7 +49,7 @@ describe("Nico captura de datos: consentimiento obligatorio", () => {
     const r = avanzarCaptura(capturaInicial(), "quiero que me contacten");
     expect(r.estado.paso).toBe("consentimiento");
     expect(r.respuesta).toContain("Ley 1581 de 2012");
-    expect(r.enlace.url).toBe("/privacy");
+    expect(r.enlace.url).toBe("/privacidad");
     expect(r.estado.datos).toEqual({});
   });
 
