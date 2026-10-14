@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useAuthIdentity } from "../../hooks/useAuthIdentity";
-import { getPlans, createCheckoutSession } from "../../services/stripeClient";
+import { getPlans, startCheckout } from "../../services/stripeClient";
 import SEO from "../SEO";
 import { useTranslation } from "../../i18n/I18nProvider";
 
 const STRIPE_ENABLED = !!import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+// Los planes en pesos se cobran con Wompi (el backend decide si está activo).
+const canPay = (plan) => STRIPE_ENABLED || plan.currency === "cop";
 
 const PlanCard = ({ plan, onSelect, isAuthenticated }) => {
   const isFree = plan.price === 0;
@@ -36,16 +38,16 @@ const PlanCard = ({ plan, onSelect, isAuthenticated }) => {
       </ul>
       <button
         onClick={onSelect}
-        disabled={isFree || !isAuthenticated || !STRIPE_ENABLED}
+        disabled={isFree || !isAuthenticated || !canPay(plan)}
         className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all ${
-          plan.id === "pro"
+          plan.id === "pro" || (!isFree && !isEnterprise && canPay(plan))
             ? "bg-[#004B63] text-white hover:bg-[#003A4E]"
             : isEnterprise
               ? "bg-gray-100 text-[#004B63] hover:bg-gray-200"
               : "bg-gray-100 text-gray-400 cursor-not-allowed"
         }`}
       >
-        {!STRIPE_ENABLED
+        {!canPay(plan)
           ? "Próximamente"
           : isFree
             ? "Plan actual"
@@ -70,10 +72,10 @@ const PlanesPage = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleSelect = async (planId) => {
-    if (!isSignedIn || !STRIPE_ENABLED) return;
+  const handleSelect = async (plan) => {
+    if (!isSignedIn || !canPay(plan)) return;
     try {
-      const { url } = await createCheckoutSession(planId);
+      const { url } = await startCheckout(plan.id);
       if (url) window.location.href = url;
     } catch (err) {
       console.error("Error:", err);
@@ -109,7 +111,7 @@ const PlanesPage = () => {
                 <PlanCard
                   key={plan.id}
                   plan={plan}
-                  onSelect={() => handleSelect(plan.id)}
+                  onSelect={() => handleSelect(plan)}
                   isAuthenticated={isSignedIn}
                 />
               ))}

@@ -65,6 +65,9 @@ const IngenIAInfoPage = lazy(
 const IngenIAParentDashboard = lazy(
   () => import("../components/pages/ingenIAParentDashboard"),
 );
+const SchoolOverviewPage = lazy(
+  () => import("../components/pages/SchoolOverviewPage"),
+);
 const IngenIAStatsPage = lazy(
   () => import("../components/pages/IngenIAStatsPage"),
 );
@@ -412,6 +415,19 @@ const AppRoutes = () => {
                 <AdminDashboard />
               </Suspense>
             </AdminRoute>
+          }
+        />
+
+        <Route
+          path="ingenia/colegio"
+          element={
+            <RoleProtectedRoute requiredRole="colegio">
+              <SectionErrorBoundary name="SchoolOverview">
+                <Suspense fallback={<IngenIASkeleton />}>
+                  <SchoolOverviewPage />
+                </Suspense>
+              </SectionErrorBoundary>
+            </RoleProtectedRoute>
           }
         />
 

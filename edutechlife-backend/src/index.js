@@ -3,6 +3,7 @@ const { setupTelemetry } = require('./lib/telemetry');
 setupTelemetry();
 
 const app = require('./app');
+const { startPaidPlanExpiry } = require('./services/paidPlans');
 const PORT = process.env.PORT || 3001;
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
@@ -15,6 +16,8 @@ if (!DEEPSEEK_API_KEY || DEEPSEEK_API_KEY === 'your_api_key_here') {
 async function startServer() {
   // Initialize Redis (non-blocking; logs warning if unavailable)
   await app.initializeRedis();
+
+  startPaidPlanExpiry();
 
   app.listen(PORT, () => {
     console.log('Server running on http://localhost:' + PORT);

@@ -30,6 +30,35 @@ export async function createCheckoutSession(planId) {
   return res.json();
 }
 
+/**
+ * Inicia el pago de un plan: primero Wompi (pesos, PSE, Nequi, tarjeta) y, si
+ * el backend responde que Wompi no está configurado (503) o el plan no es en
+ * pesos, cae a Stripe. Devuelve { url } para redirigir.
+ */
+export async function startCheckout(planId) {
+  const token = await getAuthToken();
+  if (!token) throw new Error("No autenticado");
+
+  try {
+    const res = await fetch(`${API_BASE}/api/payments/wompi/checkout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ planId }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.url) return data;
+    }
+  } catch {
+    /* sin conexión con Wompi: se intenta Stripe */
+  }
+
+  return createCheckoutSession(planId);
+}
+
 async function getAuthToken() {
   if (typeof window === "undefined") return null;
 

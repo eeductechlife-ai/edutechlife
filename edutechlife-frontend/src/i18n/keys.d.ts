@@ -198,7 +198,6 @@ export type TranslationKeys = {
   "automation.architect.components_title": string;
   "automation.architect.custom_arch": string;
   "automation.architect.datos_empresa": string;
-  "automation.architect.frameworks_label": string;
   "automation.architect.desc": string;
   "automation.architect.download": string;
   "automation.architect.empleados_label": string;
@@ -207,6 +206,7 @@ export type TranslationKeys = {
   "automation.architect.empresa_placeholder": string;
   "automation.architect.error_generating": string;
   "automation.architect.executive_summary": string;
+  "automation.architect.frameworks_label": string;
   "automation.architect.generar_plan": string;
   "automation.architect.generated_by_ai": string;
   "automation.architect.generating": string;
@@ -920,6 +920,7 @@ export type TranslationKeys = {
   "hero.cta_conoce_ingenia": string;
   "hero.cta_ingenia": string;
   "hero.cta_ver_soluciones": string;
+  "hero.ialab_audience": string;
   "hero.ialab_chip": string;
   "hero.ialab_cta": string;
   "hero.ialab_fact_1": string;
@@ -932,6 +933,7 @@ export type TranslationKeys = {
   "hero.ialab_subtitle": string;
   "hero.ialab_title": string;
   "hero.ialab_video_label": string;
+  "hero.ingenia_audience": string;
   "hero.ingenia_chip": string;
   "hero.ingenia_cta": string;
   "hero.ingenia_fact_1": string;
@@ -3123,6 +3125,8 @@ export type TranslationKeys = {
   "ingenia.landing_cta_how": string;
   "ingenia.landing_cta_start": string;
   "ingenia.landing_cta_try": string;
+  "ingenia.landing_faq_show_all": string;
+  "ingenia.landing_faq_show_less": string;
   "ingenia.landing_faq_title": string;
   "ingenia.landing_faq_title_highlight": string;
   "ingenia.landing_hero_brain_label": string;
@@ -3856,6 +3860,23 @@ export type TranslationKeys = {
   "leadCapture.sending": string;
   "leadCapture.share_data": string;
   "leadCapture.title": string;
+  "leadForm.consent_link": string;
+  "leadForm.consent_text": string;
+  "leadForm.error_consentimiento": string;
+  "leadForm.error_invalido": string;
+  "leadForm.error_limite": string;
+  "leadForm.error_perfil": string;
+  "leadForm.error_red": string;
+  "leadForm.error_servidor": string;
+  "leadForm.profile_colegio": string;
+  "leadForm.profile_docente": string;
+  "leadForm.profile_empresa": string;
+  "leadForm.profile_estudiante": string;
+  "leadForm.profile_label": string;
+  "leadForm.profile_otro": string;
+  "leadForm.profile_padre": string;
+  "leadForm.profile_placeholder": string;
+  "leadForm.sending": string;
   "leaderboard.badges": string;
   "leaderboard.empty": string;
   "leaderboard.empty_hint": string;
@@ -5722,6 +5743,32 @@ export type TranslationKeys = {
   "scanner.subject_math": string;
   "scanner.subject_science": string;
   "scanner.summary_title": string;
+  "school.code_already_linked": string;
+  "school.code_desc": string;
+  "school.code_failed": string;
+  "school.code_invalid": string;
+  "school.code_label": string;
+  "school.code_placeholder": string;
+  "school.code_submit": string;
+  "school.code_success": string;
+  "school.code_title": string;
+  "school.col_active": string;
+  "school.col_group": string;
+  "school.col_students": string;
+  "school.groups_empty": string;
+  "school.groups_title": string;
+  "school.panel_desc": string;
+  "school.panel_error": string;
+  "school.panel_forbidden": string;
+  "school.panel_title": string;
+  "school.students_active": string;
+  "school.students_total": string;
+  "school.vak_auditory": string;
+  "school.vak_kinesthetic": string;
+  "school.vak_none": string;
+  "school.vak_title": string;
+  "school.vak_visual": string;
+  "school.your_school": string;
   "seo.automation.desc": string;
   "seo.automation.title": string;
   "seo.certificate_verify.desc": string;
@@ -5877,12 +5924,12 @@ export type TranslationKeys = {
   "streak.tier_imparable": string;
   "streak.xp": string;
   "streak.you": string;
-  streak_ctx_0: string;
-  streak_ctx_1: string;
-  streak_ctx_2: string;
-  streak_ctx_3: string;
-  streak_ctx_5: string;
-  streak_ctx_7: string;
+  "streak_ctx_0": string;
+  "streak_ctx_1": string;
+  "streak_ctx_2": string;
+  "streak_ctx_3": string;
+  "streak_ctx_5": string;
+  "streak_ctx_7": string;
   "study_groups.create": string;
   "study_groups.create_first": string;
   "study_groups.form_desc_placeholder": string;
@@ -5902,11 +5949,11 @@ export type TranslationKeys = {
   "summary.stat_days": string;
   "summary.stat_points": string;
   "summary.stat_sessions": string;
-  time_avg: string;
-  time_days_active: string;
-  time_title: string;
-  time_today: string;
-  time_week: string;
+  "time_avg": string;
+  "time_days_active": string;
+  "time_title": string;
+  "time_today": string;
+  "time_week": string;
   "vak.informe.desc": string;
   "vak.informe.email_label": string;
   "vak.informe.name_label": string;
@@ -6269,7 +6316,6 @@ const translationKeySet: Record<string, true> = {
   "automation.architect.components_title": true,
   "automation.architect.custom_arch": true,
   "automation.architect.datos_empresa": true,
-  "automation.architect.frameworks_label": true,
   "automation.architect.desc": true,
   "automation.architect.download": true,
   "automation.architect.empleados_label": true,
@@ -6278,6 +6324,7 @@ const translationKeySet: Record<string, true> = {
   "automation.architect.empresa_placeholder": true,
   "automation.architect.error_generating": true,
   "automation.architect.executive_summary": true,
+  "automation.architect.frameworks_label": true,
   "automation.architect.generar_plan": true,
   "automation.architect.generated_by_ai": true,
   "automation.architect.generating": true,
@@ -6991,6 +7038,7 @@ const translationKeySet: Record<string, true> = {
   "hero.cta_conoce_ingenia": true,
   "hero.cta_ingenia": true,
   "hero.cta_ver_soluciones": true,
+  "hero.ialab_audience": true,
   "hero.ialab_chip": true,
   "hero.ialab_cta": true,
   "hero.ialab_fact_1": true,
@@ -7003,6 +7051,7 @@ const translationKeySet: Record<string, true> = {
   "hero.ialab_subtitle": true,
   "hero.ialab_title": true,
   "hero.ialab_video_label": true,
+  "hero.ingenia_audience": true,
   "hero.ingenia_chip": true,
   "hero.ingenia_cta": true,
   "hero.ingenia_fact_1": true,
@@ -9194,6 +9243,8 @@ const translationKeySet: Record<string, true> = {
   "ingenia.landing_cta_how": true,
   "ingenia.landing_cta_start": true,
   "ingenia.landing_cta_try": true,
+  "ingenia.landing_faq_show_all": true,
+  "ingenia.landing_faq_show_less": true,
   "ingenia.landing_faq_title": true,
   "ingenia.landing_faq_title_highlight": true,
   "ingenia.landing_hero_brain_label": true,
@@ -9259,6 +9310,12 @@ const translationKeySet: Record<string, true> = {
   "ingenia.landing_what_desc2": true,
   "ingenia.landing_what_title_line1": true,
   "ingenia.landing_what_title_line2": true,
+  "ingenia.lead_child_notice": true,
+  "ingenia.lead_contact_label": true,
+  "ingenia.lead_name_label": true,
+  "ingenia.lead_sent_desc": true,
+  "ingenia.lead_sent_title": true,
+  "ingenia.lead_submit": true,
   "ingenia.learning_stats": true,
   "ingenia.level": true,
   "ingenia.level_label": true,
@@ -9284,6 +9341,8 @@ const translationKeySet: Record<string, true> = {
   "ingenia.missions_label": true,
   "ingenia.missions_view_title": true,
   "ingenia.mobile_nav": true,
+  "ingenia.mobile_try": true,
+  "ingenia.mobile_wa": true,
   "ingenia.nav_label": true,
   "ingenia.no_access": true,
   "ingenia.no_points_data": true,
@@ -9418,8 +9477,14 @@ const translationKeySet: Record<string, true> = {
   "ingenia.vak_report": true,
   "ingenia.vak_techniques": true,
   "ingenia.vak_title": true,
+  "ingenia.val_desc": true,
+  "ingenia.val_title": true,
   "ingenia.valeria_ready": true,
   "ingenia.view_all": true,
+  "ingenia.wa_btn": true,
+  "ingenia.wa_desc": true,
+  "ingenia.wa_message": true,
+  "ingenia.wa_title": true,
   "ingenia.weekly_activity": true,
   "ingenia.your_subjects": true,
   "kid.a11y.skip_to_content": true,
@@ -9913,6 +9978,23 @@ const translationKeySet: Record<string, true> = {
   "leadCapture.sending": true,
   "leadCapture.share_data": true,
   "leadCapture.title": true,
+  "leadForm.consent_link": true,
+  "leadForm.consent_text": true,
+  "leadForm.error_consentimiento": true,
+  "leadForm.error_invalido": true,
+  "leadForm.error_limite": true,
+  "leadForm.error_perfil": true,
+  "leadForm.error_red": true,
+  "leadForm.error_servidor": true,
+  "leadForm.profile_colegio": true,
+  "leadForm.profile_docente": true,
+  "leadForm.profile_empresa": true,
+  "leadForm.profile_estudiante": true,
+  "leadForm.profile_label": true,
+  "leadForm.profile_otro": true,
+  "leadForm.profile_padre": true,
+  "leadForm.profile_placeholder": true,
+  "leadForm.sending": true,
   "leaderboard.badges": true,
   "leaderboard.empty": true,
   "leaderboard.empty_hint": true,
@@ -11779,6 +11861,32 @@ const translationKeySet: Record<string, true> = {
   "scanner.subject_math": true,
   "scanner.subject_science": true,
   "scanner.summary_title": true,
+  "school.code_already_linked": true,
+  "school.code_desc": true,
+  "school.code_failed": true,
+  "school.code_invalid": true,
+  "school.code_label": true,
+  "school.code_placeholder": true,
+  "school.code_submit": true,
+  "school.code_success": true,
+  "school.code_title": true,
+  "school.col_active": true,
+  "school.col_group": true,
+  "school.col_students": true,
+  "school.groups_empty": true,
+  "school.groups_title": true,
+  "school.panel_desc": true,
+  "school.panel_error": true,
+  "school.panel_forbidden": true,
+  "school.panel_title": true,
+  "school.students_active": true,
+  "school.students_total": true,
+  "school.vak_auditory": true,
+  "school.vak_kinesthetic": true,
+  "school.vak_none": true,
+  "school.vak_title": true,
+  "school.vak_visual": true,
+  "school.your_school": true,
   "seo.automation.desc": true,
   "seo.automation.title": true,
   "seo.certificate_verify.desc": true,
@@ -11934,12 +12042,12 @@ const translationKeySet: Record<string, true> = {
   "streak.tier_imparable": true,
   "streak.xp": true,
   "streak.you": true,
-  streak_ctx_0: true,
-  streak_ctx_1: true,
-  streak_ctx_2: true,
-  streak_ctx_3: true,
-  streak_ctx_5: true,
-  streak_ctx_7: true,
+  "streak_ctx_0": true,
+  "streak_ctx_1": true,
+  "streak_ctx_2": true,
+  "streak_ctx_3": true,
+  "streak_ctx_5": true,
+  "streak_ctx_7": true,
   "study_groups.create": true,
   "study_groups.create_first": true,
   "study_groups.form_desc_placeholder": true,
@@ -11959,11 +12067,18 @@ const translationKeySet: Record<string, true> = {
   "summary.stat_days": true,
   "summary.stat_points": true,
   "summary.stat_sessions": true,
-  time_avg: true,
-  time_days_active: true,
-  time_title: true,
-  time_today: true,
-  time_week: true,
+  "time_avg": true,
+  "time_days_active": true,
+  "time_title": true,
+  "time_today": true,
+  "time_week": true,
+  "vak.informe.desc": true,
+  "vak.informe.email_label": true,
+  "vak.informe.name_label": true,
+  "vak.informe.sent_desc": true,
+  "vak.informe.sent_title": true,
+  "vak.informe.submit": true,
+  "vak.informe.title": true,
   "vak.ui.accept_and_continue": true,
   "vak.ui.accept_data_policy": true,
   "vak.ui.accessibility_title": true,

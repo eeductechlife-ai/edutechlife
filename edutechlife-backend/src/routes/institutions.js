@@ -2,6 +2,12 @@ const { Router } = require('express');
 const supabase = require('../db/supabase');
 const { requireAdmin } = require('../middleware/adminAuth');
 const { requireAuth } = require('../middleware/auth');
+const { assertStudentAccess } = require('../middleware/ownership');
+const {
+  generateCode,
+  joinSchoolWithCode,
+  getSchoolOverview,
+} = require('../services/schoolService');
 
 const router = Router();
 
@@ -88,6 +94,109 @@ router.get('/my', requireAuth, async (req, res) => {
 
   if (error) return res.status(500).json({ error: error.message });
   res.json({ institution: data });
+});
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// Dar Premium a estudiantes o nombrar rectores: solo admin (no content_creator).
+function requireFullAdmin(req, res, next) {
+  if (req.user?.role !== 'admin') return res.status(403).json({ error: 'Solo administradores' });
+  next();
+}
+
+/**
+ * POST /api/institutions/join
+ * Padre (o el propio estudiante): liga al estudiante a su colegio con el
+ * código que entregó el colegio. Body: { studentId, code }.
+ */
+router.post('/join', requireAuth, async (req, res) => {
+  const { studentId, code } = req.body || {};
+  if (!studentId || !UUID_RE.test(String(studentId))) {
+    return res.status(400).json({ error: 'studentId requerido' });
+  }
+  if (!code || typeof code !== 'string') return res.status(400).json({ error: 'Código requerido' });
+
+  // El panel de padres guarda a veces el auth_id del niño en vez de students.id.
+  const { data: student } = await supabase
+    .from('students')
+    .select('id')
+    .or(`id.eq.${studentId},auth_id.eq.${studentId}`)
+    .limit(1)
+    .maybeSingle();
+  if (!student) return res.status(404).json({ error: 'Estudiante no encontrado' });
+
+  const access = await assertStudentAccess(req, student.id);
+  if (!access.ok) {
+    return res.status(access.status === 404 ? 404 : 403).json({ error: 'No autorizado para este estudiante' });
+  }
+
+  const result = await joinSchoolWithCode({ studentId: access.studentId, code });
+  if (result.error) return res.status(result.status).json({ error: result.error });
+  res.json(result);
+});
+
+/**
+ * GET /api/institutions/my/overview
+ * Rector o docente: resumen agregado de su colegio por grupo.
+ */
+router.get('/my/overview', requireAuth, async (req, res) => {
+  const result = await getSchoolOverview(req.userId);
+  if (result.error) return res.status(result.status).json({ error: result.error });
+  res.json(result);
+});
+
+/**
+ * POST /api/institutions/:id/codes
+ * Admin: crea un código de colegio. Body: { grupo?, max_uses, expires_at? }.
+ */
+router.post('/:id/codes', requireAdmin, requireFullAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { grupo, max_uses: maxUses, expires_at: expiresAt } = req.body || {};
+  if (!UUID_RE.test(id)) return res.status(400).json({ error: 'id no válido' });
+  if (!Number.isInteger(maxUses) || maxUses < 1 || maxUses > 5000) {
+    return res.status(400).json({ error: 'max_uses debe ser un entero entre 1 y 5000' });
+  }
+  if (grupo != null && (typeof grupo !== 'string' || grupo.trim().length > 40)) {
+    return res.status(400).json({ error: 'grupo no válido' });
+  }
+  if (expiresAt != null && Number.isNaN(Date.parse(expiresAt))) {
+    return res.status(400).json({ error: 'expires_at no es una fecha' });
+  }
+
+  const { data, error } = await supabase
+    .from('institution_codes')
+    .insert({
+      code: generateCode(),
+      institution_id: id,
+      grupo: grupo ? grupo.trim() : null,
+      max_uses: maxUses,
+      expires_at: expiresAt || null,
+    })
+    .select('code, grupo, max_uses, uses, expires_at')
+    .single();
+  if (error) return res.status(500).json({ error: error.message });
+  res.status(201).json(data);
+});
+
+/**
+ * POST /api/institutions/:id/members
+ * Admin: nombra rector o docente a un usuario. Body: { user_id, rol }.
+ */
+router.post('/:id/members', requireAdmin, requireFullAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { user_id: userId, rol } = req.body || {};
+  if (!UUID_RE.test(id) || !UUID_RE.test(String(userId || ''))) {
+    return res.status(400).json({ error: 'id y user_id deben ser UUID' });
+  }
+  if (!['rector', 'docente'].includes(rol)) {
+    return res.status(400).json({ error: "rol debe ser 'rector' o 'docente'" });
+  }
+
+  const { error } = await supabase
+    .from('institution_members')
+    .upsert({ institution_id: id, user_id: userId, rol }, { onConflict: 'institution_id,user_id' });
+  if (error) return res.status(500).json({ error: error.message });
+  res.status(201).json({ institution_id: id, user_id: userId, rol });
 });
 
 module.exports = router;

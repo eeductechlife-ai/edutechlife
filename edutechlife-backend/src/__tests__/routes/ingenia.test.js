@@ -37,6 +37,12 @@ require.cache[supabasePath] = {
   exports: mockSupabase,
 };
 
+// getStudentMastery usa su propio cliente de Supabase: sin este stub el reporte
+// semanal sale a la red y la prueba se cuelga cuando la red de CI está lenta.
+const masteryPath = require.resolve('../../services/competencyMastery');
+const realMastery = require(masteryPath);
+require.cache[masteryPath].exports = { ...realMastery, getStudentMastery: vi.fn().mockResolvedValue([]) };
+
 function createApp() {
   const app = express();
   app.use(express.json({ limit: '8mb' }));
@@ -181,7 +187,7 @@ describe('Ingenia POST /weekly-report', () => {
 
   it('returns 404 when no parent email is registered', async () => {
     // 1) kid data blob · 2) students resolve (auth_id → id) · 3) parent_consents (no email).
-    // Nota: getStudentMastery usa su propio cliente (no consume los mocks de aquí).
+    // getStudentMastery está stubbeado arriba (no consume los mocks de aquí).
     mockSupabase.from
       .mockReturnValueOnce({
         select: vi.fn().mockReturnThis(),
