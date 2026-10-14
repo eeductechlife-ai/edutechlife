@@ -8,6 +8,13 @@ const { sendCrisisAlert, logCrisisIncident } = require('../../services/emailServ
 const { loadStudentContext, buildSystemPrompt: buildOrchestratorPrompt } = require('../../services/daniOrchestrator');
 const { validateInput, detectEmotionalState, sanitizeOutput } = require('../../services/aiSafetyGateway');
 const { createMemoriaFilter, parseMemoria, buildMemoryRow, saveDaniMemory } = require('../../services/daniMemory');
+const {
+  pseudonimoActivo,
+  prepararPseudonimo,
+  pseudonimoFallido,
+  redactarContenido,
+  redactarProfundo,
+} = require('../../services/daniPseudonimo');
 
 const router = Router();
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
@@ -43,6 +50,42 @@ function sanitizeClientMessages(messages) {
   return (messages || []).map((m) =>
     m.role === 'system' ? { role: 'user', content: m.content } : m,
   );
+}
+
+/**
+ * Con DANI_PSEUDONIMO=true, el contexto del orquestador no lleva el colegio y el
+ * nombre del niño se sustituye por su código antes de construir el prompt.
+ */
+function ctxParaModelo(ctx, pseudo) {
+  return {
+    ...ctx,
+    profile: ctx.profile
+      ? { ...ctx.profile, name: pseudo ? pseudo.nombreEnPrompt : ctx.profile.name, school: null }
+      : ctx.profile,
+    memory: redactarProfundo(ctx.memory, pseudo),
+    activePlan: redactarProfundo(ctx.activePlan, pseudo),
+  };
+}
+
+/**
+ * /chat/stream no recibe studentId: el perfil se busca por el usuario autenticado.
+ * Si el perfil no se puede leer, no se sabe qué ocultar: se marca sinPerfil para
+ * descartar también el contexto que manda el cliente.
+ */
+async function pseudonimoDelUsuario(userId) {
+  try {
+    const { data, error } = await supabase
+      .from('students')
+      .select('id, name')
+      .eq('auth_id', userId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!data) return null;
+    return prepararPseudonimo({ studentId: data.id, name: data.name });
+  } catch (e) {
+    console.warn('[DaniPseudonimo] no se pudo leer el perfil; el contexto del cliente no se envía:', e.message);
+    return { ...pseudonimoFallido(), sinPerfil: true };
+  }
 }
 
 router.post('/chat', requireAuth, requireVerifiedParentalConsent, async (req, res) => {
@@ -95,6 +138,9 @@ router.post('/chat/stream', requireAuth, requireVerifiedParentalConsent, async (
   // Detect crisis indicators
   const crisisDetection = detectCrisis(lastUserMessage, language);
 
+  // Con DANI_PSEUDONIMO=true el nombre del niño no sale del servidor.
+  const pseudo = pseudonimoActivo() ? await pseudonimoDelUsuario(userId) : null;
+
   let streamClosed = false;
   req.on('close', () => {
     streamClosed = true;
@@ -145,20 +191,32 @@ router.post('/chat/stream', requireAuth, requireVerifiedParentalConsent, async (
     }
   }
 
-  const systemPrompt = context
-    ? `${DANI_SYSTEM_PROMPT}\n\nContexto actual:\n${context}`
+  const contextoModelo = !pseudo ? context : pseudo.sinPerfil ? undefined : redactarProfundo(context, pseudo);
+  let systemPrompt = contextoModelo
+    ? `${DANI_SYSTEM_PROMPT}\n\nContexto actual:\n${contextoModelo}`
     : DANI_SYSTEM_PROMPT;
+  if (pseudo) systemPrompt += `\n\n${pseudo.instruccion}`;
 
+  const mensajesModelo = sanitizeClientMessages(messages);
   const msgs = [
     { role: 'system', content: systemPrompt },
-    ...sanitizeClientMessages(messages),
+    ...(pseudo
+      ? mensajesModelo.map((m) => ({ ...m, content: redactarContenido(m.content, pseudo) }))
+      : mensajesModelo),
   ];
 
   try {
+    const restaurador = pseudo ? pseudo.restorer() : null;
     await chatStream(DEEPSEEK_API_KEY, { messages: msgs }, (chunk) => {
       if (streamClosed) return;
-      res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
+      const texto = restaurador ? restaurador.push(chunk) : chunk;
+      if (!texto) return;
+      res.write(`data: ${JSON.stringify({ chunk: texto })}\n\n`);
     });
+    if (restaurador) {
+      const resto = restaurador.flush();
+      if (resto && !streamClosed) res.write(`data: ${JSON.stringify({ chunk: resto })}\n\n`);
+    }
 
     if (streamClosed) return;
     if (crisisDetection.level !== 'none') {
@@ -319,9 +377,16 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
   }
 
   // 4. Build system prompt (observable: no fallos silenciosos)
+  // Con DANI_PSEUDONIMO=true el prompt no lleva nombre real, apellidos ni colegio.
+  const seudoOn = pseudonimoActivo();
+  const pseudo = seudoOn ? prepararPseudonimo({ studentId, name: ctx.profile?.name }) : null;
   let systemPrompt;
   try {
-    systemPrompt = buildOrchestratorPrompt(ctx, { socraticMode, documentContext });
+    systemPrompt = buildOrchestratorPrompt(seudoOn ? ctxParaModelo(ctx, pseudo) : ctx, {
+      socraticMode,
+      documentContext: seudoOn ? redactarProfundo(documentContext, pseudo) : documentContext,
+    });
+    if (pseudo) systemPrompt += `\n\n${pseudo.instruccion}`;
   } catch (e) {
     console.error('[Dani2 Prompt build failed]', e.stack || e.message);
     console.error('[Dani2 ctx sample]', JSON.stringify(ctx).slice(0, 600));
@@ -346,11 +411,17 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
       : m
   );
 
-  const msgs = [
-    { role: 'system', content: systemPrompt },
-    ...safeHistory,
-    { role: 'user', content: sanitized },
-  ];
+  const msgs = pseudo
+    ? [
+        { role: 'system', content: systemPrompt },
+        ...safeHistory.map((m) => ({ ...m, content: pseudo.redact(m.content) })),
+        { role: 'user', content: pseudo.redact(sanitized) },
+      ]
+    : [
+        { role: 'system', content: systemPrompt },
+        ...safeHistory,
+        { role: 'user', content: sanitized },
+      ];
 
   // 6. Crisis detection (existing service)
   const crisisDetection = detectCrisis(sanitized, 'es');
@@ -392,21 +463,27 @@ router.post('/dani/chat', requireAuth, requireVerifiedParentalConsent, async (re
   try {
     let fullResponse = '';
     const memoriaFilter = createMemoriaFilter();
+    // Con seudónimo, el código que escribe el modelo vuelve a ser el nombre antes de mostrarse.
+    const restaurador = pseudo ? pseudo.restorer() : null;
     const emit = (text) => {
       if (!text || streamClosed) return;
       fullResponse += text;
       res.write(`data: ${JSON.stringify({ chunk: text })}\n\n`);
     };
+    const emitirVisible = (texto) => emit(restaurador ? restaurador.push(texto) : texto);
     await chatStream(DEEPSEEK_API_KEY, { messages: msgs, temperature: 0.65, maxTokens: 450 }, (chunk) => {
       if (streamClosed) return;
-      emit(memoriaFilter.push(sanitizeOutput(chunk)));
+      emitirVisible(memoriaFilter.push(sanitizeOutput(chunk)));
     });
-    emit(memoriaFilter.flush());
+    emitirVisible(memoriaFilter.flush());
+    if (restaurador) emit(restaurador.flush());
 
     // Long-term memory: model-reported facts + this turn's detected mood.
+    // La memoria se guarda con el nombre real, como hasta ahora.
+    const memoriaTexto = pseudo ? pseudo.restore(memoriaFilter.memoria()) : memoriaFilter.memoria();
     saveDaniMemory(
       supabase,
-      buildMemoryRow(studentId, ctx.memory, parseMemoria(memoriaFilter.memoria()), emotional.state)
+      buildMemoryRow(studentId, ctx.memory, parseMemoria(memoriaTexto), emotional.state)
     ).catch((e) => console.error('[Dani2] memory save failed:', e.message));
 
     if (streamClosed) return;
