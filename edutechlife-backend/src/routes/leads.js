@@ -18,7 +18,7 @@ const logger = require('../utils/logger');
 
 const router = Router();
 
-const FUENTES = ['contacto_header', 'contacto_footer', 'metodo', 'automatizacion', 'demo_movil', 'nico', 'boletin'];
+const FUENTES = ['contacto_header', 'contacto_footer', 'metodo', 'automatizacion', 'demo_movil', 'nico', 'boletin', 'ingenia_hero'];
 const PERFILES = ['padre', 'docente', 'colegio', 'empresa', 'estudiante', 'otro'];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^[0-9+()\-.\s]{7,30}$/;

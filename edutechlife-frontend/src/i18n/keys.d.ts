@@ -3187,6 +3187,12 @@ export type TranslationKeys = {
   "ingenia.landing_what_desc2": string;
   "ingenia.landing_what_title_line1": string;
   "ingenia.landing_what_title_line2": string;
+  "ingenia.lead_child_notice": string;
+  "ingenia.lead_contact_label": string;
+  "ingenia.lead_name_label": string;
+  "ingenia.lead_sent_desc": string;
+  "ingenia.lead_sent_title": string;
+  "ingenia.lead_submit": string;
   "ingenia.learning_stats": string;
   "ingenia.level": string;
   "ingenia.level_label": string;
@@ -3212,6 +3218,8 @@ export type TranslationKeys = {
   "ingenia.missions_label": string;
   "ingenia.missions_view_title": string;
   "ingenia.mobile_nav": string;
+  "ingenia.mobile_try": string;
+  "ingenia.mobile_wa": string;
   "ingenia.nav_label": string;
   "ingenia.no_access": string;
   "ingenia.no_points_data": string;
@@ -3348,6 +3356,10 @@ export type TranslationKeys = {
   "ingenia.vak_title": string;
   "ingenia.valeria_ready": string;
   "ingenia.view_all": string;
+  "ingenia.wa_btn": string;
+  "ingenia.wa_desc": string;
+  "ingenia.wa_message": string;
+  "ingenia.wa_title": string;
   "ingenia.weekly_activity": string;
   "ingenia.your_subjects": string;
   "kid.a11y.skip_to_content": string;
