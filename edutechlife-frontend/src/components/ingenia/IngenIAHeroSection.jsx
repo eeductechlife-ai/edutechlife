@@ -10,9 +10,6 @@ IngenIAHeroSection.propTypes = {
   t: PropTypes.func.isRequired,
   onBack: PropTypes.func,
   inView: PropTypes.bool,
-  countStudents: PropTypes.number,
-  countImprovement: PropTypes.number,
-  countHours: PropTypes.number,
   handleCta: PropTypes.func.isRequired,
 };
 
@@ -22,34 +19,26 @@ const springUp = (delay = 0) => ({
   transition: { type: "spring", stiffness: 100, damping: 18, delay },
 });
 
-export default function IngenIAHeroSection({
-  t,
-  onBack,
-  inView,
-  countStudents,
-  countImprovement,
-  countHours,
-  handleCta,
-}) {
+export default function IngenIAHeroSection({ t, onBack, inView, handleCta }) {
   const prefersReducedMotion = useReducedMotion();
 
   const STATS = [
     {
-      value: `+${countStudents.toLocaleString()}`,
+      value: "+1.000",
       label: t("ingenia.landing_stat_students"),
       icon: "fa-graduation-cap",
       color: "text-petroleum",
     },
     {
-      value: `${countImprovement}%`,
-      label: t("ingenia.landing_stat_improvement"),
-      icon: "fa-chart-line",
+      value: t("ingenia.landing_stat_trial_value"),
+      label: t("ingenia.landing_stat_trial_label"),
+      icon: "fa-calendar-check",
       color: "text-primary-light",
     },
     {
-      value: `+${countHours.toLocaleString()}`,
-      label: t("ingenia.landing_stat_hours"),
-      icon: "fa-clock",
+      value: t("ingenia.landing_stat_guarantee_value"),
+      label: t("ingenia.landing_stat_guarantee_label"),
+      icon: "fa-shield-halved",
       color: "text-mint",
     },
   ];

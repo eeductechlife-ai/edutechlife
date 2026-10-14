@@ -21,7 +21,6 @@ const CourseCard = ({ course, isSignedIn }) => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
   const config = statusConfig[course.status];
-  const fullStars = Math.floor(course.rating);
   const badgeLabels = {
     active: t("ialab.course_card.status_active"),
     "coming-soon": t("ialab.course_card.status_coming_soon"),
@@ -100,25 +99,6 @@ const CourseCard = ({ course, isSignedIn }) => {
             <h3 className="font-display text-base font-bold text-white leading-tight line-clamp-2">
               {course.title}
             </h3>
-          </div>
-
-          <div className="relative z-10 flex items-center gap-2 text-white/70 text-[11px] md:text-xs">
-            <div className="flex items-center gap-0.5">
-              {[1, 2, 3, 4, 5].map((s) => (
-                <Icon
-                  key={s}
-                  name="fa-star"
-                  className={`w-3 h-3 ${s <= fullStars ? "text-amber-400" : "text-white/20"}`}
-                />
-              ))}
-            </div>
-            <span className="font-semibold text-white text-xs">
-              {course.rating}
-            </span>
-            <span className="text-white/50">•</span>
-            <span>
-              {t("ialab.course_card.students", { count: course.students })}
-            </span>
           </div>
         </div>
 

@@ -403,7 +403,7 @@ console.log(data);`,
         faqs: [
           {
             q: "How do I contact support?",
-            a: "Via live chat (available 24/7), email at support@edutechlife.com, or through the form in the Help Center.",
+            a: "Via live chat, email at support@edutechlife.com, or through the form in the Help Center.",
           },
           {
             q: "Do you offer training for institutions?",

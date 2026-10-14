@@ -224,7 +224,7 @@ const PricingPage = memo(() => {
             ¿Preguntas sobre tu suscripción?
           </h3>
           <p className="mb-6 text-white/90">
-            Nuestro equipo de soporte está disponible 24/7 para ayudarte
+            Nuestro equipo de soporte está disponible para ayudarte
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}

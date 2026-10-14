@@ -258,15 +258,6 @@ const ContactModal = ({ isOpen, onClose }) => {
                         {t("contact.closed")}
                       </span>
                     </div>
-                    <div
-                      className="flex justify-between pt-1 border-t"
-                      style={{ borderColor: "#CBD5E1" }}
-                    >
-                      <span style={{ color: "#004B63", fontWeight: "600" }}>
-                        {t("contact.live_chat")}
-                      </span>
-                      <span style={{ color: "#16A34A" }}>24/7</span>
-                    </div>
                   </div>
                 </div>
 

@@ -210,14 +210,6 @@ const MainBody = ({ t, locale, isActive, stats, statsRef }) => {
             {stats.students.toLocaleString(locale)}+
           </dd>
         </div>
-        <div className="flex flex-col-reverse border-l border-petroleum/15 pl-6">
-          <dt className="text-xs font-medium text-slate-500 sm:text-sm">
-            {t("hero.stat_anios_experiencia")}
-          </dt>
-          <dd className="font-display text-2xl font-black tracking-[-0.03em] text-petroleum [font-variant-numeric:tabular-nums] sm:text-[1.75rem]">
-            {stats.years}+
-          </dd>
-        </div>
       </dl>
     </div>
   );
@@ -311,7 +303,6 @@ const Hero = memo(() => {
 
   const stats = {
     students: useAnimatedCounter(6000, 1800, statsVisible),
-    years: useAnimatedCounter(10, 2200, statsVisible),
   };
 
   const handlePointerMove = (e) => {

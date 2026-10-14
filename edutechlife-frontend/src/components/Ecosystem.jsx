@@ -14,21 +14,13 @@ const Ecosystem = memo(() => {
       title: "Laboratorio IA",
       subtitle: "Certificación Profesional",
       desc: "Aprende inteligencia artificial, crea prompts y obtén tu certificación.",
-      stats: [
-        { num: "5", label: "Módulos" },
-        { num: "100%", label: "Online" },
-      ],
     },
     {
       id: "consultoria",
       icon: "fa-handshake",
       title: "Consultoría B2B y Automatización",
       subtitle: "Pilar 3",
-      desc: "Transformación digital, agentes IA personalizados y ROI garantizado.",
-      stats: [
-        { num: "100+", label: "Instituciones" },
-        { num: "3x", label: "ROI Promedio" },
-      ],
+      desc: "Transformación digital, agentes IA personalizados y automatización.",
     },
   ];
 

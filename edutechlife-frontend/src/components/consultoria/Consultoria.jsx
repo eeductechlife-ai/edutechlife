@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
-import { useTranslation } from '../../i18n/I18nProvider';
-import { Icon } from '../../utils/iconMapping.jsx';
-import { servicios, casosExito } from './consultingData';
-import useContactForm from './useContactForm';
-import ServiceTabs from './components/ServiceTabs';
+import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "../../i18n/I18nProvider";
+import { Icon } from "../../utils/iconMapping.jsx";
+import { servicios, casosExito } from "./consultingData";
+import useContactForm from "./useContactForm";
+import ServiceTabs from "./components/ServiceTabs";
 
 const Consultoria = ({ onBack, onNavigate }) => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState('servicios');
+  const [activeTab, setActiveTab] = useState("servicios");
   const [selectedCase, setSelectedCase] = useState(null);
   const [demoRequested, setDemoRequested] = useState(false);
   const [roiData, setRoiData] = useState({
@@ -15,18 +15,26 @@ const Consultoria = ({ onBack, onNavigate }) => {
     horasAhorradas: 2,
     costoHora: 50000,
     mesesProyecto: 12,
-    costoImplementacion: 15000000
+    costoImplementacion: 15000000,
   });
   const [roiResult, setRoiResult] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [animatedValues, setAnimatedValues] = useState(null);
   const roiRef = useRef(null);
 
-  const { contactForm, setContactForm, submitted, setSubmitted, formErrors, setFormErrors, handleSubmit } = useContactForm(t);
+  const {
+    contactForm,
+    setContactForm,
+    submitted,
+    setSubmitted,
+    formErrors,
+    setFormErrors,
+    handleSubmit,
+  } = useContactForm(t);
 
   useEffect(() => {
-    if (activeTab === 'roi' && roiRef.current) {
-      roiRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (activeTab === "roi" && roiRef.current) {
+      roiRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [activeTab]);
 
@@ -39,14 +47,24 @@ const Consultoria = ({ onBack, onNavigate }) => {
     setIsCalculating(true);
     setAnimatedValues(null);
 
-    const { empleados, horasAhorradas, costoHora, mesesProyecto, costoImplementacion } = roiData;
+    const {
+      empleados,
+      horasAhorradas,
+      costoHora,
+      mesesProyecto,
+      costoImplementacion,
+    } = roiData;
     const diasLaborales = 22;
-    const ahorromensual = empleados * horasAhorradas * costoHora * diasLaborales;
+    const ahorromensual =
+      empleados * horasAhorradas * costoHora * diasLaborales;
     const ahorroTotal = ahorromensual * mesesProyecto;
     const gananciaNeta = ahorroTotal - costoImplementacion;
-    const roi = ((gananciaNeta) / costoImplementacion) * 100;
+    const roi = (gananciaNeta / costoImplementacion) * 100;
     const payback = (costoImplementacion / ahorromensual).toFixed(1);
-    const eficiencia = Math.min(100, ((ahorroTotal / costoImplementacion) * 100).toFixed(1));
+    const eficiencia = Math.min(
+      100,
+      ((ahorroTotal / costoImplementacion) * 100).toFixed(1),
+    );
 
     setTimeout(() => {
       setRoiResult({
@@ -56,7 +74,7 @@ const Consultoria = ({ onBack, onNavigate }) => {
         roi: Math.max(0, roi).toFixed(0),
         paybackMeses: payback,
         eficiencia: eficiencia,
-        inversion: costoImplementacion
+        inversion: costoImplementacion,
       });
       setIsCalculating(false);
       animateNumbers();
@@ -76,7 +94,7 @@ const Consultoria = ({ onBack, onNavigate }) => {
       setAnimatedValues({
         ahorroMensual: Math.round(targetValues.ahorroMensual * eased),
         gananciaNeta: Math.round(targetValues.gananciaNeta * eased),
-        roi: (targetValues.roi * eased).toFixed(0)
+        roi: (targetValues.roi * eased).toFixed(0),
       });
 
       if (progress < 1) {
@@ -88,7 +106,7 @@ const Consultoria = ({ onBack, onNavigate }) => {
   };
 
   const handleRoiChange = (field, value) => {
-    setRoiData(prev => ({ ...prev, [field]: Number(value) }));
+    setRoiData((prev) => ({ ...prev, [field]: Number(value) }));
     setRoiResult(null);
     setAnimatedValues(null);
   };
@@ -98,45 +116,67 @@ const Consultoria = ({ onBack, onNavigate }) => {
       <header className="pillar-header">
         <button onClick={onBack} className="back-btn">
           <Icon name="fa-arrow-left" />
-          <span>{t('consultoria.back')}</span>
+          <span>{t("consultoria.back")}</span>
         </button>
-        <div className="pillar-badge" style={{ background: 'linear-gradient(135deg, #66CCCC, #4DA8C4)' }}>
+        <div
+          className="pillar-badge"
+          style={{ background: "linear-gradient(135deg, #66CCCC, #4DA8C4)" }}
+        >
           <Icon name="fa-building" />
-          <span>{t('consultoria.pilar_03')}</span>
+          <span>{t("consultoria.pilar_03")}</span>
         </div>
       </header>
 
-      <div className="pillar-hero" style={{ background: 'linear-gradient(135deg, #0B2A3A 0%, #004B63 50%, #0B2A3A 100%)' }}>
+      <div
+        className="pillar-hero"
+        style={{
+          background:
+            "linear-gradient(135deg, #0B2A3A 0%, #004B63 50%, #0B2A3A 100%)",
+        }}
+      >
         <div className="pillar-hero-content">
-          <div className="pillar-kicker">{t('consultoria.hero_kicker')}</div>
-          <h1 className="pillar-title" style={{ color: 'white' }}>{t('consultoria.hero_title')}</h1>
-          <p className="pillar-subtitle" style={{ color: 'rgba(255,255,255,0.8)' }}>
-            {t('consultoria.hero_subtitle')}
+          <div className="pillar-kicker">{t("consultoria.hero_kicker")}</div>
+          <h1 className="pillar-title" style={{ color: "white" }}>
+            {t("consultoria.hero_title")}
+          </h1>
+          <p
+            className="pillar-subtitle"
+            style={{ color: "rgba(255,255,255,0.8)" }}
+          >
+            {t("consultoria.hero_subtitle")}
           </p>
           <div className="cta-buttons">
-            <button className="cta-primary" onClick={() => setActiveTab('contacto')}>
-              <span>{t('consultoria.cta_quote')}</span>
+            <button
+              className="cta-primary"
+              onClick={() => setActiveTab("contacto")}
+            >
+              <span>{t("consultoria.cta_quote")}</span>
               <Icon name="fa-arrow-right" />
             </button>
-            <button className="cta-secondary" onClick={() => setActiveTab('casos')}>
-              <Icon name="fa-play" />
-              <span>{t('consultoria.cta_cases')}</span>
-            </button>
+            {casosExito.length > 0 && (
+              <button
+                className="cta-secondary"
+                onClick={() => setActiveTab("casos")}
+              >
+                <Icon name="fa-play" />
+                <span>{t("consultoria.cta_cases")}</span>
+              </button>
+            )}
           </div>
         </div>
         <div className="pillar-hero-visual">
           <div className="consulting-visual">
             <div className="cv-card">
               <Icon name="fa-robot" />
-              <span>{t('consultoria.visual_card_agent')}</span>
+              <span>{t("consultoria.visual_card_agent")}</span>
             </div>
             <div className="cv-card">
               <Icon name="fa-users-cog" />
-              <span>{t('consultoria.visual_card_training')}</span>
+              <span>{t("consultoria.visual_card_training")}</span>
             </div>
             <div className="cv-card">
               <Icon name="fa-chart-pie" />
-              <span>{t('consultoria.visual_card_metrics')}</span>
+              <span>{t("consultoria.visual_card_metrics")}</span>
             </div>
           </div>
         </div>

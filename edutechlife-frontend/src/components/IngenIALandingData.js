@@ -403,7 +403,7 @@ const BENEFICIOS_HIJO_ES = [
   {
     icon: "fa-chart-line",
     title: "Mejora de calificaciones",
-    desc: "Promedio: +2 puntos en 3 meses. Tu hijo alcanza sus objetivos académicos con un plan diseñado solo para él.",
+    desc: "Tu hijo alcanza sus objetivos académicos con un plan diseñado solo para él.",
   },
   {
     icon: "fa-heart",
@@ -422,7 +422,7 @@ const BENEFICIOS_HIJO_ES = [
   },
   {
     icon: "fa-robot",
-    title: "Disponible 24/7",
+    title: "Disponible cuando lo necesites",
     desc: "Tutor Dani (IA) + Coach humano. Estudia cuando quiera: mañana, noche o fin de semana. Apoyo constante.",
   },
   {
@@ -436,7 +436,7 @@ const BENEFICIOS_HIJO_EN = [
   {
     icon: "fa-chart-line",
     title: "Grade improvement",
-    desc: "Average: +2 points in 3 months. Your child reaches academic goals with a plan designed just for them.",
+    desc: "Your child reaches academic goals with a plan designed just for them.",
   },
   {
     icon: "fa-heart",
@@ -455,7 +455,7 @@ const BENEFICIOS_HIJO_EN = [
   },
   {
     icon: "fa-robot",
-    title: "Available 24/7",
+    title: "Available whenever you need",
     desc: "Tutor Dani (AI) + Human coach. Study whenever: mornings, evenings, weekends. Constant support.",
   },
   {
@@ -484,7 +484,7 @@ const BENEFICIOS_HIJO_PT = [
   {
     icon: "fa-robot",
     title: "Coach virtual Dani",
-    desc: "Um tutor com IA disponível 24/7 que o orienta, responde dúvidas e o incentiva em cada etapa.",
+    desc: "Um tutor com IA disponível quando você precisar, que o orienta, responde dúvidas e o incentiva em cada etapa.",
   },
   {
     icon: "fa-user-graduate",

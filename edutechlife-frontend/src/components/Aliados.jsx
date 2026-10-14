@@ -1,17 +1,6 @@
 import { memo, useState, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  GraduationCap,
-  Globe,
-  Building2,
-  Search,
-  Cloud,
-  Award,
-  FlaskConical,
-  Laptop,
-  Cpu,
-  Sparkles,
-} from "lucide-react";
+import { Building2, Cpu, Globe } from "lucide-react";
 import { useTranslation } from "../i18n/I18nProvider";
 
 const Aliados = memo(() => {
@@ -21,90 +10,36 @@ const Aliados = memo(() => {
   const marqueeRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
 
+  // Únicas entidades autorizadas para mostrarse (decisión del CEO, 2026-10-13).
+  // Ver docs/agentes/marketing/HECHOS-VERIFICADOS.md.
   const aliados = [
     {
       id: 1,
-      name: "SENA",
-      category: t("aliados.category_sena"),
-      icon: GraduationCap,
+      name: "MinTIC",
+      category: t("aliados.category_mintic"),
+      icon: Cpu,
       color: "#004B63",
     },
     {
       id: 2,
-      name: "UNESCO",
-      category: t("aliados.category_unesco"),
+      name: "OIT",
+      category: t("aliados.category_oit"),
       icon: Globe,
       color: "#4DA8C4",
     },
     {
       id: 3,
-      name: "Ministerio",
-      category: t("aliados.category_ministerio"),
+      name: "Alcaldía de Manizales",
+      category: t("aliados.category_alcaldia"),
       icon: Building2,
       color: "#66CCCC",
     },
     {
       id: 4,
-      name: "Google",
-      category: t("aliados.category_google"),
-      icon: Search,
+      name: "Alcaldía de Villamaría",
+      category: t("aliados.category_alcaldia"),
+      icon: Building2,
       color: "#004B63",
-    },
-    {
-      id: 5,
-      name: "Microsoft",
-      category: t("aliados.category_microsoft"),
-      icon: Cloud,
-      color: "#4DA8C4",
-    },
-    {
-      id: 6,
-      name: "AWS",
-      category: t("aliados.category_aws"),
-      icon: Cloud,
-      color: "#66CCCC",
-    },
-    {
-      id: 7,
-      name: "ICETEX",
-      category: t("aliados.category_icetex"),
-      icon: Award,
-      color: "#004B63",
-    },
-    {
-      id: 8,
-      name: "Colciencias",
-      category: t("aliados.category_colciencias"),
-      icon: FlaskConical,
-      color: "#4DA8C4",
-    },
-    {
-      id: 9,
-      name: "Apple",
-      category: t("aliados.category_apple"),
-      icon: Laptop,
-      color: "#66CCCC",
-    },
-    {
-      id: 10,
-      name: "IBM",
-      category: t("aliados.category_ibm"),
-      icon: Cpu,
-      color: "#004B63",
-    },
-    {
-      id: 11,
-      name: "Coursera",
-      category: t("aliados.category_coursera"),
-      icon: Sparkles,
-      color: "#4DA8C4",
-    },
-    {
-      id: 12,
-      name: "Steam",
-      category: t("aliados.category_steam"),
-      icon: Cpu,
-      color: "#66CCCC",
     },
   ];
 

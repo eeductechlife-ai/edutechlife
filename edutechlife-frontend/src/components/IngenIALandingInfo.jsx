@@ -180,8 +180,8 @@ const IngenIALandingInfo = ({ onNavigate }) => {
 
   const seoDescriptions = [
     "Descubre cómo IngenIA combina IA, ADN de Aprendizaje y coaches humanos para crear una experiencia única de aprendizaje.",
-    "Mejora académica del 94%, confianza recuperada, y reportes semanales para padres. Beneficios reales comprobados.",
-    "Sistema adaptativo que ajusta el ritmo de aprendizaje. Paso a paso, sin presión, con éxito garantizado.",
+    "Confianza, motivación y reportes semanales para padres. Beneficios pensados para cada niño.",
+    "Sistema adaptativo que ajusta el ritmo de aprendizaje. Paso a paso, sin presión.",
     "2 planes simples: Starter y Premium. Elige el que mejor se adapte a tus necesidades y presupuesto.",
     "Historias reales de padres: mejoras de calificaciones, confianza y amor por aprender. Testimonios verificados.",
     "Respuestas a tus preguntas: prueba gratuita de 7 días, cancela cuando quieras, no se requiere tarjeta.",
