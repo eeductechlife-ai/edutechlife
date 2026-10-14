@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Contrast } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +20,11 @@ import "./DiagnosticoVAK.css";
 const DiagnosticoVAK = () => {
   const navigate = useNavigate();
   const reduceMotion = useReducedMotion();
+  // En móvil la tarjeta aparece de inmediato: la entrada animada la dejaba en blanco.
+  const [isMobile] = useState(
+    () => window.matchMedia?.("(max-width: 767px)")?.matches ?? false,
+  );
+  const skipEntrance = reduceMotion || isMobile;
   const {
     t,
     phase,
@@ -149,7 +155,7 @@ const DiagnosticoVAK = () => {
         </div>
 
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          initial={skipEntrance ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-4 md:p-6"
         >
@@ -164,7 +170,7 @@ const DiagnosticoVAK = () => {
             <AnimatePresence mode="wait">
               <motion.div
                 key={phase}
-                initial={reduceMotion ? false : { opacity: 0, x: 24 }}
+                initial={skipEntrance ? false : { opacity: 0, x: 24 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -24 }}
                 transition={{ duration: 0.25 }}
@@ -179,6 +185,7 @@ const DiagnosticoVAK = () => {
                     questionsTotal: resumeOffer
                       ? getQuestionsByAge(resumeOffer.studentAge).length
                       : 0,
+                    skipEntrance,
                   })}
                 {phase === "calibration" &&
                   renderCalibration({
@@ -196,6 +203,7 @@ const DiagnosticoVAK = () => {
                     moodFeedbackText,
                     handleMoodSelect,
                     submitCalibration,
+                    skipEntrance,
                   })}
                 {phase === "test" &&
                   renderTest({
