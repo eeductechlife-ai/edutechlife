@@ -84,6 +84,38 @@ describe("STYLE_INSIGHTS", () => {
   });
 });
 
+describe("preferencias actuales, no rasgos fijos", () => {
+  const RASGO_FIJO =
+    /^(Necesita|Se siente|Puede distraerse|Recuerda con facilidad|Recuerda mejor|Prefiere|Se expresa|Piensa|Suele|Entiende|Usen|Organicen|Refuercen|Inviten|Reduzcan|Tengan|Dejen|Permitan|Incluyan|Enseñen|Animen|Lean|Graben|Conversen|Inventen|Si le ayuda|Expliquen|Usa|Estudia|Haz)/;
+
+  test.each(STYLES)(
+    "ninguna característica de %s es un rasgo fijo",
+    (style) => {
+      getCaracteristicasEstilo(style).forEach((item) =>
+        expect(item).not.toMatch(RASGO_FIJO),
+      );
+    },
+  );
+
+  test.each(STYLES)(
+    "ningún consejo para padres de %s es una orden",
+    (style) => {
+      getTipsPadres(style).forEach((tip) =>
+        expect(tip).not.toMatch(RASGO_FIJO),
+      );
+    },
+  );
+
+  test.each(STYLES)(
+    "los consejos de %s sugieren combinar modalidades",
+    (style) => {
+      expect(getTipsPadres(style).some((tip) => /combin/i.test(tip))).toBe(
+        true,
+      );
+    },
+  );
+});
+
 describe("clinical and career language", () => {
   const everything = JSON.stringify([
     STYLE_MAP,
