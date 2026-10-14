@@ -2,6 +2,7 @@ const { Router } = require('express');
 const supabase = require('../../db/supabase');
 const authService = require('../../services/authService');
 const { resolveEmailFromIdentifier } = require('./helpers');
+const { avisarInicioSesionMenor } = require('../../services/avisoPadreLogin');
 
 const router = Router();
 
@@ -103,6 +104,10 @@ router.post('/login', async (req, res) => {
     // timetable and other IngenIA features work. Handles accounts created
     // before the signup route started auto-creating this row.
     if (result.user?.id) {
+      // Aviso al padre si el niño es menor (máximo uno cada 24 h). No se espera
+      // y nunca lanza: el inicio de sesión no depende del correo.
+      avisarInicioSesionMenor(result.user.id).catch(() => {});
+
       (async () => {
         try {
           const { data: profile } = await supabase
