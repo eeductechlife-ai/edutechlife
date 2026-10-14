@@ -25,8 +25,9 @@ const blobABase64 = (blob) =>
  * Envía el informe PDF (generado en el navegador) como adjunto al correo del adulto.
  * No pide datos del niño. Vive junto a la vista previa, donde existe el PDF.
  * `nombreInicial` es el nombre que el adulto ya escribió en la pantalla de resultado.
+ * `nombreEstudiante` solo viaja en el correo; el backend no lo guarda.
  */
-export default function VakEnviarInforme({ nombreInicial = "" } = {}) {
+export default function VakEnviarInforme({ nombreInicial = "", nombreEstudiante = "" } = {}) {
   const { t } = useTranslation();
   const [campos, setCampos] = useState({
     nombre: String(nombreInicial || "").trim().slice(0, 120),
@@ -59,6 +60,7 @@ export default function VakEnviarInforme({ nombreInicial = "" } = {}) {
         nombre: campos.nombre.trim(),
         email: campos.email.trim(),
         perfil,
+        nombre_estudiante: String(nombreEstudiante || "").trim().slice(0, 60),
         pdf_base64,
         autorizacion_datos: true,
         sitio_web: e.currentTarget?.elements?.sitio_web?.value || "",

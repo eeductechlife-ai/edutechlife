@@ -79,12 +79,25 @@ describe('POST /api/vak/informe', () => {
   test('el correo no lleva nombre del niño ni campos extra', async () => {
     await request(app)
       .post('/api/vak/informe')
-      .send(informeValido({ nombre_nino: 'Juanito Pérez', nombre_estudiante: 'Juanito Pérez' }))
+      .send(informeValido({ nombre_nino: 'Juanito Pérez', nombre_estudiante_extra: 'Juanito Pérez' }))
       .expect(201);
 
     const [, asunto, html, texto] = mockEmail.sendEmail.mock.calls[0];
     expect(`${asunto} ${html} ${texto}`).not.toMatch(/Juanito|Pérez/);
     expect(JSON.stringify(insert.mock.calls[0][0])).not.toMatch(/Juanito|nombre_nino|nombre_estudiante/);
+  });
+
+  test('el nombre del estudiante va en el correo, pero no se guarda', async () => {
+    await request(app)
+      .post('/api/vak/informe')
+      .send(informeValido({ nombre_estudiante: 'Sofía <b>' }))
+      .expect(201);
+
+    const [, , html, texto] = mockEmail.sendEmail.mock.calls[0];
+    expect(texto).toMatch(/Sofía <b>/);
+    expect(html).toMatch(/Sofía &lt;b&gt;/);
+    expect(html).not.toMatch(/<b>/);
+    expect(JSON.stringify(insert.mock.calls[0][0])).not.toMatch(/Sofía/);
   });
 
   test('un archivo que no es PDF → 400 sin guardar ni enviar', async () => {
