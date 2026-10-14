@@ -3555,6 +3555,7 @@
   "automation.lead.success_desc": "An automation specialist will contact you within 24 hours to schedule your free consultation.",
   "automation.architect.badge": "AUTOMATION ARCHITECT",
   "automation.architect.title": "Design Your Enterprise AI Ecosystem",
+  "automation.architect.frameworks_label": "Reference frameworks (aligned with, not certified)",
   "automation.architect.desc": "Create a personalized automation plan with architecture, implementation phases, estimated ROI, and international standards for your company.",
   "automation.architect.step_diagnosis": "Diagnosis",
   "automation.architect.step_architecture": "Architecture",

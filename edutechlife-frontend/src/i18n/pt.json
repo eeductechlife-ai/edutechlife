@@ -3511,6 +3511,7 @@
   "automation.lead.success_desc": "Um especialista em automação entrará em contato com você nas próximas 24 horas para agendar sua consultoria gratuita.",
   "automation.architect.badge": "ARQUITETO DE AUTOMAÇÃO",
   "automation.architect.title": "Projete seu Ecossistema de IA Empresarial",
+  "automation.architect.frameworks_label": "Marcos de referência (alinhado com, sem certificação)",
   "automation.architect.desc": "Crie um plano personalizado de automação com arquitetura, fases de implementação, ROI estimado e padrões internacionais para sua empresa.",
   "automation.architect.step_diagnosis": "Diagnóstico",
   "automation.architect.step_architecture": "Arquitetura",
