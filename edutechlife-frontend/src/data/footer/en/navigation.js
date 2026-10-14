@@ -53,11 +53,6 @@ export const certificationsContent = {
       descripcion: "Certification in intelligent interactive whiteboards",
       nivel: "Intermediate",
     },
-    {
-      titulo: "Educational Neuro-Environment",
-      descripcion: "Design of neuroscience-based learning environments",
-      nivel: "Advanced",
-    },
   ],
   calloutTitle: "Interested in getting certified?",
   calloutDesc:

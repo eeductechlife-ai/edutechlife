@@ -28,10 +28,6 @@
       "destination": "/index.html"
     },
     {
-      "source": "/neuroentorno",
-      "destination": "/index.html"
-    },
-    {
       "source": "/proyectos",
       "destination": "/index.html"
     },
@@ -194,6 +190,11 @@
     }
   ],
   "redirects": [
+    {
+      "source": "/neuroentorno",
+      "destination": "/vak",
+      "statusCode": 301
+    },
     {
       "source": "/conoce-smartboard",
       "destination": "/conoce-ingenia",

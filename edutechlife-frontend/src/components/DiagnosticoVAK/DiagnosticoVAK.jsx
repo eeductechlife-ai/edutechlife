@@ -16,7 +16,7 @@ import renderResults from "./screens/renderResults";
 import { getIconComponent } from "./getIconComponent";
 import "./DiagnosticoVAK.css";
 
-const DiagnosticoVAK = ({ onNavigate }) => {
+const DiagnosticoVAK = () => {
   const navigate = useNavigate();
   const reduceMotion = useReducedMotion();
   const {
@@ -64,7 +64,7 @@ const DiagnosticoVAK = ({ onNavigate }) => {
     toggleHighContrast,
     setHookVolume,
     generatePDF,
-  } = useDiagnosticoVAK({ onNavigate });
+  } = useDiagnosticoVAK();
 
   const practiceInIngenIA = () => {
     track(EVENTS.VAK_RESULT_CTA, {

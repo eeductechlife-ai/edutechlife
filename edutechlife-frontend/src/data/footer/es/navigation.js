@@ -53,11 +53,6 @@ export const certificationsContent = {
       descripcion: "Certificación en pizarras interactivas inteligentes",
       nivel: "Intermedio",
     },
-    {
-      titulo: "Neuroentorno Educativo",
-      descripcion: "Diseño de ambientes de aprendizaje basados en neurociencia",
-      nivel: "Avanzado",
-    },
   ],
   calloutTitle: "¿Interesado en certificarte?",
   calloutDesc:

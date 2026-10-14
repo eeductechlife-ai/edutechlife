@@ -43,7 +43,7 @@ const socialLinks = [
 
 const toolLinks = [
   { label: "IA Lab con MAX", view: "ialab", key: "footer.ialab" },
-  { label: "IngenIA", view: "neuroentorno", key: "footer.ingenia" },
+  { label: "IngenIA", view: "ingenia", key: "footer.ingenia" },
   { label: "ADN de Aprendizaje", view: "vak", key: "footer.vak" },
   { label: "ROI Calculator", view: "consultoria", key: "footer.roi" },
   {
@@ -119,9 +119,11 @@ export default function Footer() {
     if (emailError) setEmailError(false);
   };
 
+  // Las vistas del pie son rutas reales (/ingenia, /vak, /ialab...). El evento
+  // «navigate» que se disparaba antes no tenía ningún oyente: los enlaces no hacían nada.
   const navigateTo = (view) => {
     if (view) {
-      window.dispatchEvent(new CustomEvent("navigate", { detail: view }));
+      window.location.assign(`/${view}`);
     }
   };
 

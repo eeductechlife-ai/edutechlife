@@ -9,17 +9,6 @@ const Ecosystem = memo(() => {
 
   const pilares = [
     {
-      id: "neuroentorno",
-      icon: "fa-brain",
-      title: "NeuroEntornos Escolares",
-      subtitle: "Pilar 1",
-      desc: "ADN de Aprendizaje, IA Lab con MAX, IngenIA y herramientas neuropedagógicas.",
-      stats: [
-        { num: "6,000+", label: "Estudiantes" },
-        { num: "98%", label: "Efectividad" },
-      ],
-    },
-    {
       id: "ialab",
       icon: "fa-robot",
       title: "Laboratorio IA",
@@ -44,14 +33,6 @@ const Ecosystem = memo(() => {
   ];
 
   const cards = [
-    {
-      bg: "from-primary-light/20",
-      border: "border-primary-light/30",
-      img: "/images/eco-neuro.webp",
-      titleKey: "ecosystem.card_1_title",
-      descKey: "ecosystem.card_1_desc",
-      delay: 0.1,
-    },
     {
       bg: "from-mint/20",
       border: "border-mint/30",
@@ -116,7 +97,7 @@ const Ecosystem = memo(() => {
           </p>
         </motion.div>
 
-        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-4 md:gap-6 -mx-6 px-6 lg:-mx-8 lg:px-8 md:mx-0 md:px-0 pb-3 md:pb-0 md:grid-cols-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-4 md:gap-6 -mx-6 px-6 lg:-mx-8 lg:px-8 md:mx-0 md:px-0 pb-3 md:pb-0 md:grid-cols-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {cards.map((card, i) => (
             <motion.div
               key={i}

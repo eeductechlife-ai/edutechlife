@@ -10,7 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const distDir = path.resolve(__dirname, '../dist')
 
 const PUBLIC_ROUTES = [
-  '/', '/neuroentorno', '/proyectos', '/consultoria', '/consultoria-b2b',
+  '/', '/proyectos', '/consultoria', '/consultoria-b2b',
   '/automation', '/vak', '/vak-simple', '/vak-premium', '/ialab-academic',
   '/conoce-ingenia', '/ingenia', '/ingenia/padres',
   '/sign-up/ialab', '/sign-up/ingenia', '/login',
