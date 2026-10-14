@@ -68,6 +68,10 @@
       "destination": "/index.html"
     },
     {
+      "source": "/terms",
+      "destination": "/index.html"
+    },
+    {
       "source": "/conoce-ingenia",
       "destination": "/index.html"
     },
